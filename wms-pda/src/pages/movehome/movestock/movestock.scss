@@ -1,0 +1,153 @@
+page-movestock {
+  .nav-tile {
+    position: absolute;
+    bottom: 0;
+  }
+  .nav-tile ul {
+    width: auto;
+    display: inline-block;
+  }
+  .title-ms,
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+  .title-ms ul li {
+    list-style: none;
+    float: left;
+    padding: 0.5rem 0;
+  }
+  .title-ms ul .l-width1 {
+    width: 50%;
+  }
+  .title-ms ul .l-width2 {
+    width: 100%;
+  }
+  .title-ms ul li .s-label {
+    font-size: 12px;
+    color: #797979;
+  }
+  .ion-title {
+    text-align: center;
+  }
+  .list_item {
+    margin-top: 5px;
+  }
+  .list-ios {
+    margin: 15px 0 32px;
+  }
+  .list_item_div item-inner {
+    border-bottom: 0px solid #c8c7cc;
+  }
+  .title-bt {
+    height: 60px;
+    background-color: #33cbcc;
+    font-size: 14px;
+    color: white;
+  }
+  .order-number {
+    float: left;
+    margin-left: 15px;
+    margin-top: 5px;
+  }
+  .order-info {
+    float: right;
+    margin-right: 15px;
+    //margin-top: 5px;
+  }
+  .order {
+    width: 100%;
+    height: 30px;
+  }
+  .title-ms {
+    width: 100%;
+    height: auto;
+    background: white;
+    // margin: 5px 0;
+    font-size: 14px;
+    border-top: 5px solid $bgcolor;
+    border-bottom: 10px solid $bgcolor;
+  }
+  /*input右边图标*/
+  .item-ios ion-avatar {
+    min-width: 0px;
+    min-height: 0px;
+  }
+  .item-ios ion-avatar ion-img,
+  .item-ios ion-avatar img {
+    border-radius: 0;
+    overflow: hidden;
+    width: 30px;
+    height: 24px;
+  }
+  /*列表设置*/
+  .item-ios {
+    font-size: 14px !important;
+  }
+  .item-block {
+    height: 35px;
+    min-height: 30px;
+  }
+  .item-inner .iconfont {
+    font-size: 18px;
+  }
+  /*列表右侧线间距*/
+  .item-ios.item-block .item-inner {
+    margin-right: 5%;
+  }
+  /*滚动条设置*/
+  .no-scroll .scroll-content {
+    overflow: hidden;
+    height: 500px;
+  }
+
+  .title-ms-info {
+    margin-left: 20px;
+    padding: 10px 0 10px 0;
+  }
+  .title-font-small {
+    font-size: 12px;
+    color: #797979;
+    position: relative;
+  }
+  .title-font-small div {
+    margin-top: 5px;
+  }
+  .received {
+    position: absolute;
+    right: 20px;
+    bottom: 3%;
+    font-size: 14px;
+    font-weight: bolder;
+    color: #008080;
+  }
+  .btn-box {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    button {
+      // width:calc(50% - 32px);
+      // //   margin:0 16px;
+      // }
+      width: 50%;
+    }
+  }
+  .button-ios {
+    border-radius: 0px;
+    margin: 0;
+    padding: 0;
+  }
+  .item-ios {
+    font-size: 18px;
+  }
+  ion-label {
+    width: 70px;
+    text-align: justify;
+    text-align-last: justify;
+    flex: none !important;
+  }
+  .list_item ion-select {
+    width: 100%;
+    max-width: 100%;
+  }
+}

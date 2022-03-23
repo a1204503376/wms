@@ -1,0 +1,203 @@
+// http://ionicframework.com/docs/theming/
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
+@import "../assets/fonts/iconfont.scss";
+.title_f_name {
+  color: #d7d7d7;
+  font-size: 12px;
+}
+/*栅格样式*/
+.login_content {
+  position: relative;
+  height: 100%;
+  padding-top: 6px;
+  background-color: $bgcolor;
+}
+.logon_ionic {
+  //border: 1px solid #d7d7d7;
+  height: 100px;
+  text-align: center;
+}
+.logon_ionic ion-img {
+  text-align: center;
+  width: 60px;
+  height: 60px;
+  margin-top: 10px;
+}
+.logon_ionic span {
+  display: block;
+  text-align: center;
+  //line-height: 100px;
+  color: #7f7f7f;
+  margin-top: 10px;
+  font-weight: bold;
+}
+.logon_ionic ion-icon {
+  font-size: 40px;
+  color: $titlecolor;
+  margin-top: 5px;
+}
+.logon_ionic span:first-child {
+  border: 1px solid $titlecolor;
+  margin-top: 3px;
+  width: 20px;
+  margin: 0 auto;
+  border-radius: 30px;
+}
+ion-header {
+  background-color: #33cbcc;
+}
+// .modal-wrapper {
+//   left: 0 !important;
+//   top: 0 !important;
+//   border-radius: 0 !important;
+//   //width: 375px;
+//   height: 100%;
+// }
+/*导航指引*/
+.nav-tile {
+  width: 100%;
+  height: 30px;
+  background-color: #33cbcc;
+  color: white;
+}
+.nav-tile ul {
+  width: 100%;
+  height: 20px;
+  padding-left: 15px;
+  //margin-top: 0px;
+}
+.nav-tile ul li {
+  float: left;
+  list-style-type: none;
+  margin-right: 5px;
+}
+.nav-tile ul li ion-icon {
+  margin-top: 3px;
+}
+/*画线专用*/
+@for $i from 1 through 3 {
+  .centerdiv_one_x_#{$i} {
+    width: 2em * $i;
+  }
+}
+.centerdiv_one_y {
+  width: 1px;
+  height: 100%;
+  border-right: 1px solid #e0e0e0;
+  position: absolute;
+  left: 33%;
+}
+.centerdiv_one_y_one {
+  width: 1px;
+  height: 100%;
+  border-right: 1px solid #e0e0e0;
+  position: absolute;
+  margin-left: 66%;
+}
+.centerdiv_one_x {
+  width: 100%;
+  height: 6px;
+  border-bottom: 1px solid #e0e0e0;
+  position: absolute;
+  top: 21%;
+}
+.centerdiv_one_x::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 6px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-top: 105px;
+}
+.centerdiv_one_x::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 6px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-top: 105px;
+}
+.picker-ios .picker-wrapper {
+  background: $titlecolor;
+}
+.picker-ios .picker-button,
+.picker-ios .picker-button.activated {
+  color: #000000;
+}
+.picker-ios .picker-toolbar {
+  border-bottom: 0;
+}
+body {
+  min-width: 320px;
+  max-width: 375px;
+  height: 667px;
+  left: 50%;
+  transform: translate(-50%);
+  z-index: 10001;
+  box-shadow: 2px 2px 4px #a0a0a0, -2px -2px 4px #a0a0a0;
+}
+html {
+  // width: 375px !important;
+  // height: 667px;
+  // left: 50%;
+  // transform: translate(-50%);
+  // z-index: 10001;
+  // box-shadow: 2px 2px 4px #a0a0a0, -2px -2px 4px #a0a0a0;
+}
+// ion-label {
+//   width: 70px;
+//   text-align: justify;
+//   text-align-last: justify;
+//   flex: none !important;
+// }
+ion-datetime {
+  width: 100%;
+}
+.iconfont {
+  font-size: 14px;
+}
+.toolbar-ios-wmscolor .toolbar-title-ios,
+.toolbar-ios-wmscolor .bar-button-clear-ios,
+.toolbar-ios-wmscolor .bar-button-default-ios {
+  color: #fff !important;
+}
+/*input右边图标*/
+.item-ios ion-avatar {
+  min-width: 0px;
+  min-height: 0px;
+}
+.item-ios ion-avatar ion-img,
+.item-ios ion-avatar img {
+  border-radius: 0;
+  overflow: hidden;
+  width: 30px;
+  height: 24px;
+}
+/*列表设置*/
+.item-ios {
+  font-size: 14px !important;
+}
+.item-block {
+  height: 35px;
+  min-height: 30px;
+}
+.item-inner .iconfont {
+  font-size: 18px;
+}
+/*列表右侧线间距*/
+.item-ios.item-block .item-inner {
+  margin-right: 5%;
+}

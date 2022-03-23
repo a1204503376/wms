@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>执行拣货</ion-title>
+  </ion-navbar>
+  <ion-grid style="color: white;">
+    <ion-row>
+      <ion-col>
+        <div class="nav-tile">
+          <crumbs></crumbs>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+<ion-content scroll="false">
+  <ion-item>
+    <div class="header-box">
+      <div class="row1">
+        <div class="left">
+          <span>{{wellenNo}}</span>
+          <span>{{soBillNo}}</span>
+        </div>
+        <div class="right">
+          <span>计划量：{{planQty}}</span>
+          <span>已拣量：{{scanQty}}</span>
+        </div>
+      </div>
+    </div>
+  </ion-item>
+
+  <ion-scroll class="list-box" direction="y">
+    <ion-list>
+      <ion-item  >
+        <ion-label>落放位置：</ion-label>
+        <ion-input maxlength='30' [(ngModel)]="locCode" type="text" ></ion-input>
+        <ion-avatar item-end>
+          <ion-icon class="iconfont iconsaomiao"></ion-icon>
+        </ion-avatar>
+      </ion-item>
+      <ion-item *ngFor="let item of pickPlans" (click)="itemClick(item)">
+        <div class="item-box">
+          <div class="left">
+            <div class="row1">
+              <div class="left">
+                  <span>{{item.skuName}}</span>
+                  <span>{{item.skuCode}}</span>
+              </div>
+              <div class="right">
+                <span>计划数量：{{item.pickPlanQty}}</span>
+                <span>待拣数量：{{item.unPlanQty}}</span>
+              </div>
+            </div>
+            <div class="row3">
+              <div class="left">
+                <span>库位：</span><span>{{item.locCode}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="right">
+            <ion-icon name="arrow-forward"></ion-icon>
+          </div>
+        </div>
+      </ion-item>
+    </ion-list>
+  </ion-scroll>
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button ion-button class="btn-l" (click)="backClick()"> 返回[Esc]</button>
+    <button ion-button class="btn-d" (click)="submitClick()"> 拣货[Ent]</button>
+  </div>
+</ion-footer>

@@ -1,0 +1,83 @@
+page-stockhome {
+  .title-bt {
+    height: 30px;
+    background-color: $titlecolor;
+    font-size: 14px;
+    color: white;
+  }
+  .ion-title {
+    text-align: center;
+  }
+  .factory {
+    float: left;
+    width: 49%;
+    padding-left: 5%;
+  }
+  .finish_task {
+    float: right;
+    width: 49%;
+    padding-left: 10%;
+  }
+  .centerdiv {
+    float: left;
+    width: 1px;
+    height: 70%;
+    border-right: 1px solid #00ffff;
+  }
+  /*栅格样式*/
+  ion-row ion-col {
+    border-bottom: 5px solid $bgcolor;
+    border-right: 5px solid $bgcolor;
+    padding-top: 10px;
+    height: 111px;
+  }
+  .login_content {
+    position: relative;
+    height: 100%;
+  }
+  .logon_ionic {
+    //border: 1px solid #d7d7d7;
+    height: 100px;
+    text-align: center;
+  }
+  .logon_ionic ion-img {
+    text-align: center;
+    width: 60px;
+    height: 60px;
+    margin-top: 10px;
+  }
+  .logon_ionic span {
+    display: block;
+    text-align: center;
+    //line-height: 100px;
+    color: #7f7f7f;
+    margin-top: 10px;
+  }
+  .logon_ionic ion-icon {
+    font-size: 50px;
+    color: $titlecolor;
+    margin-top: 10px;
+  }
+  /*导航指引*/
+  .nav-tile {
+    width: 100%;
+    height: 30px;
+    background-color: $titlecolor;
+    color: white;
+  }
+  .nav-tile ul {
+    width: 100%;
+    height: 20px;
+    padding-left: 15px;
+    margin-top: 0px;
+  }
+  .nav-tile ul li {
+    float: left;
+    list-style-type: none;
+    margin-right: 5px;
+  }
+  .nav-tile ul li ion-icon {
+    margin-top: 3px;
+  }
+
+}

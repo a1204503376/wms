@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.system.mapper.UserRegisterMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="userRegisterResultMap" type="org.nodes.wms.core.system.entity.UserRegister">
+        <id column="lur_id" property="lurId"/>
+        <result column="user_id" property="userId"/>
+        <result column="user_code" property="userCode"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_type" property="userType"/>
+        <result column="mobile_phone" property="mobilePhone"/>
+        <result column="domain_user" property="domainUser"/>
+        <result column="online_terminal" property="onlineTerminal"/>
+        <result column="token" property="token"/>
+        <result column="ip_address" property="ipAddress"/>
+        <result column="mac_address" property="macAddress"/>
+        <result column="last_login_time" property="lastLoginTime"/>
+        <result column="login_status" property="loginStatus"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectUserRegisterPage" resultMap="userRegisterResultMap">
+        select * from log_user_register where 1=1
+    </select>
+
+    <select id="selectUserRegisterToday" resultMap="userRegisterResultMap">
+        SELECT * FROM log_user_register WHERE user_id=#{userId}  and  date(last_login_time)=date_format(NOW(),'%Y-%m-%d')  ORDER BY last_login_time DESC;
+    </select>
+
+    <select id="selectUserRegisterTomonth" resultMap="userRegisterResultMap">
+     SELECT * FROM log_user_register WHERE user_id=#{userId}  and  DATE_FORMAT(last_login_time, '%Y%m') = DATE_FORMAT(#{time}, '%Y%m') ORDER BY last_login_time DESC;
+    </select>
+</mapper>

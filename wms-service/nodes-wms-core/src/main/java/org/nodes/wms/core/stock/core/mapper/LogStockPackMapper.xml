@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.stock.core.mapper.LogStockPackMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="stockPackResultMap" type="org.nodes.wms.core.stock.core.entity.LogStockPack">
+        <id column="lsp_id" property="lspId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="status" property="status"/>
+        <result column="wlsp_id" property="wlspId"/>
+        <result column="group_id" property="groupId"/>
+        <result column="wh_id" property="whId"/>
+        <result column="zone_id" property="zoneId"/>
+        <result column="loc_id" property="locId"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="sku_code" property="skuCode"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="wsp_id" property="wspId"/>
+        <result column="sku_level" property="skuLevel"/>
+        <result column="stock_lpn_code" property="stockLpnCode"/>
+        <result column="stock_box_code" property="stockBoxCode"/>
+        <result column="proc_type" property="procType"/>
+        <result column="stock_lot" property="stockLot"/>
+        <result column="qty" property="qty"/>
+        <result column="proc_qty" property="procQty"/>
+        <result column="box_code" property="boxCode"/>
+        <result column="proc_time" property="procTime"/>
+        <result column="proc_user" property="procUser"/>
+        <result column="system_proc_id" property="systemProcId"/>
+    </resultMap>
+
+
+    <!-- 尾箱打包日志表分页  -->
+    <select id="selectStockPackPage" resultMap="stockPackResultMap">
+        select * from log_stock_pack
+    </select>
+
+</mapper>

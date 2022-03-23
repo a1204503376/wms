@@ -1,0 +1,21 @@
+package $!{package.Service};
+
+import $!{package.Entity}.$!{entity};
+#set($voPackage=$package.Entity.replace("entity","vo"))
+import $!{voPackage}.$!{entity}VO;
+import $!{superServiceClassPackage};
+import com.baomidou.mybatisplus.core.metadata.IPage;
+
+/**
+ * $!{table.comment} 服务类
+ *
+ * @author $!{author}
+ * @since $!{date}
+ */
+#if($!{kotlin})
+interface $!{table.serviceName} : $!{superServiceClass}<$!{entity}>
+#else
+public interface $!{table.serviceName} extends $!{superServiceClass}<$!{entity}> {
+
+}
+#end

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.strategy.mapper.MissionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="missionResultMap" type="org.nodes.wms.core.strategy.entity.Mission">
+        <result column="id" property="id"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="mission_level" property="missionLevel"/>
+        <result column="mission_type" property="missionType"/>
+        <result column="push_way" property="pushWay"/>
+        <result column="is_synthesize_task" property="isSynthesizeTask"/>
+        <result column="is_exceedcount_segment" property="isExceedcountSegment"/>
+        <result column="count_way" property="countWay"/>
+        <result column="mission_synergy_floor" property="missionSynergyFloor"/>
+        <result column="mission_alone_upper" property="missionAloneUpper"/>
+        <result column="mission_segment_upper" property="missionSegmentUpper"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+
+</mapper>

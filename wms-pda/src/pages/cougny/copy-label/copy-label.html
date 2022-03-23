@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>
+      复制标签
+    </ion-title>
+  </ion-navbar>
+  <div class="nav-tile"> 
+    <crumbs></crumbs>
+  </div>
+</ion-header>
+<ion-content no-bounce>
+  
+  <div class="list_item">
+    <ion-item >
+      <ion-label>箱码：</ion-label>
+      <ion-input (keyup)="scanModelChange($event)" type="text" [(ngModel)]="scanView"></ion-input>
+    </ion-item>
+    <ion-item >
+      <ion-label>打印数量：</ion-label>
+      <ion-input  type="number" [(ngModel)]="copyNum"></ion-input>
+    </ion-item>
+  </div>
+
+  <page-check-in-box-label-type  [ruleCode]='ruleCode' (outer)="runParent($event)" #labelTypecom>
+
+  </page-check-in-box-label-type>
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button no-dbl-click ion-button block class="btn-l" (tap)="btnOk()">
+      打印标签[Ent]
+    </button>
+  </div>
+
+</ion-footer>

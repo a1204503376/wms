@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.warehouse.mapper.LpnMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="lpnResultMap" type="org.nodes.wms.core.warehouse.entity.Lpn">
+        <id column="lpn_id" property="lpnId"/>
+        <result column="lpn_code" property="lpnCode"/>
+        <result column="lpn_name" property="lpnName"/>
+        <result column="lpn_type" property="lpnType"/>
+        <result column="lpn_weight" property="lpnWeight"/>
+        <result column="lpn_pin1" property="lpnPin1"/>
+        <result column="lpn_pin2" property="lpnPin2"/>
+        <result column="lpn_pin3" property="lpnPin3"/>
+        <result column="lpn_pin4" property="lpnPin4"/>
+    </resultMap>
+
+</mapper>

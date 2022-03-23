@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.instock.asn.mapper.SnMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="snResultMap" type="org.nodes.wms.core.instock.asn.entity.Sn">
+        <id column="sn_detail_id" property="snDetailId"/>
+        <result column="sn_detail_code" property="snDetailCode"/>
+        <result column="asn_bill_id" property="asnBillId"/>
+        <result column="asn_detail_id" property="asnDetailId"/>
+        <result column="sn_status" property="snStatus"/>
+        <result column="box_code" property="boxCode"/>
+    </resultMap>
+</mapper>

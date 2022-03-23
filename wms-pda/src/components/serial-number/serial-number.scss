@@ -1,0 +1,40 @@
+serial-number {
+  .item-ios {
+    font-size: 18px;
+  }
+  .list_item_serial {
+    height: 5rem;
+    .list_item_title {
+      border-bottom: 3px solid $bgcolor;
+      display: flex;
+      justify-content: space-evenly;
+      margin-top: 10px;
+    }
+    span:first-child {
+      display: inline-block;
+      b {
+        color: orange;
+      }
+      border-bottom: 3px solid #008080;
+    }
+    span:last-child {
+      display: inline-block;
+      b {
+        color: $titlecolor;
+      }
+    }
+    span {
+      margin-top: 3px;
+      padding-bottom: 0.5rem;
+    }
+    div {
+      height: 3rem;
+    }
+    .list_item_div item-inner {
+      border-bottom: 0px solid #c8c7cc;
+    }
+  }
+  .list_item_div ion-label {
+    width: 700px !important;
+  }
+}

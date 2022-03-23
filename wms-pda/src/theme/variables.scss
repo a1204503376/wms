@@ -1,0 +1,209 @@
+// Ionic Variables and Theming. For more info, please see:
+// http://ionicframework.com/docs/theming/
+
+// Font path is used to include ionicons,
+// roboto, and noto sans fonts
+$font-path: "../assets/fonts";
+
+// The app direction is used to include
+// rtl styles in your app. For more info, please see:
+// http://ionicframework.com/docs/theming/rtl-support/
+$app-direction: ltr;
+
+@import "ionic.globals";
+
+// Shared Variables
+// --------------------------------------------------
+// To customize the look and feel of this app, you can override
+// the Sass variables found in Ionic's source scss files.
+// To view all the possible Ionic variables, see:
+// http://ionicframework.com/docs/theming/overriding-ionic-variables/
+
+// Named Color Variables
+// --------------------------------------------------
+// Named colors makes it easy to reuse colors on various components.
+// It's highly recommended to change the default colors
+// to match your app's branding. Ionic uses a Sass map of
+// colors so you can add, rename and remove colors as needed.
+// The "primary" color is the only required color in the map.
+
+$colors: (
+  primary: #488aff,
+  wmscolor: #33cbcc,
+  secondary: #32db64,
+  danger: #f53d3d,
+  light: #f4f4f4,
+  dark: #222,
+  bgcolor: #d7d7d7,
+  default:#33cbcc,
+  red:#FF0000,
+  orange:#FF7F00,
+  yellow:#FFFF00,
+  green:#00FF00,
+  cyan:#00FFFF,
+  blue:#0000FF,
+  purple:#8B00FF
+);
+
+$color-primary:#33cbcc;
+$color-red:#FF0000;
+$color-orange:#FF7F00;
+$color-yellow:#FFFF00;
+$color-green:#00FF00;
+$color-cyan:#00FFFF; 
+$color-blue:#0000FF;
+$color-purple:#8B00FF;
+
+/*浅色系*/
+$color-primary-l:#04DFDF;
+$color-red-l:#ff2828;
+$color-orange-l:#ff9328;
+$color-yellow-l:#ffff28;
+$color-green-l:#28ff28;
+$color-cyan-l:#28ffff; 
+$color-blue-l:#2828ff;
+$color-purple-l:#9d28ff;
+
+/*深色系*/
+$color-primary-d:#00BFBF;
+$color-red-d:#da0000;
+$color-orange-d:#da6c00;
+$color-yellow-d:#dada00;
+$color-green-d:#00b500;
+$color-cyan-d:#00dada; 
+$color-blue-d:#0000b5;
+$color-purple-d:#6300b5;
+ 
+ 
+@mixin color_primary($color){/*通过该函数设置字体颜色，后期方便统一管理；*/
+  background-color: $color;
+  [data-theme="red"] & {
+    background-color:$color-red;
+  }
+  [data-theme="orange"] & {
+    background-color:$color-orange;
+  }
+  [data-theme="yellow"] & {
+    background-color:$color-yellow;
+  }
+  [data-theme="green"] & {
+    background-color:$color-green;
+  }
+  [data-theme="cyan"] & {
+    background-color:$color-cyan;
+  }
+  [data-theme="blue"] & {
+    background-color:$color-blue;
+  } 
+  [data-theme="purple"] & {
+    background-color:$color-purple;
+  } 
+}
+@mixin color_primary_l($color){/*通过该函数设置字体颜色，后期方便统一管理；*/
+  background-color: $color;
+  [data-theme="red"] & {
+    background-color:$color-red-l;
+  }
+  [data-theme="orange"] & {
+    background-color:$color-orange-l;
+  }
+  [data-theme="yellow"] & {
+    background-color:$color-yellow-l;
+  }
+  [data-theme="green"] & {
+    background-color:$color-green-l;
+  }
+  [data-theme="cyan"] & {
+    background-color:$color-cyan-l;
+  }
+  [data-theme="blue"] & {
+    background-color:$color-blue-l;
+  } 
+  [data-theme="purple"] & {
+    background-color:$color-purple-l;
+  } 
+}
+@mixin color_primary_d($color){/*通过该函数设置字体颜色，后期方便统一管理；*/
+  background-color: $color;
+  [data-theme="red"] & {
+    background-color:$color-red-d;
+  }
+  [data-theme="orange"] & {
+    background-color:$color-orange-d;
+  }
+  [data-theme="yellow"] & {
+    background-color:$color-yellow-d;
+  }
+  [data-theme="green"] & {
+    background-color:$color-green-d;
+  }
+  [data-theme="cyan"] & {
+    background-color:$color-cyan-d;
+  }
+  [data-theme="blue"] & {
+    background-color:$color-blue-d;
+  } 
+  [data-theme="purple"] & {
+    background-color:$color-purple-d;
+  } 
+}
+
+// App iOS Variables
+// --------------------------------------------------
+// iOS only Sass variables can go here
+
+// App Material Design Variables
+// --------------------------------------------------
+// Material Design only Sass variables can go here
+
+// App Windows Variables
+// --------------------------------------------------
+// Windows only Sass variables can go here
+
+// App Theme
+// --------------------------------------------------
+// Ionic apps can have different themes applied, which can
+// then be future customized. This import comes last
+// so that the above variables are used and Ionic's
+// default are overridden.
+
+@import "ionic.theme.default";
+
+// Ionicons
+// --------------------------------------------------
+// The premium icon font for Ionic. For more info, please see:
+// http://ionicframework.com/docs/ionicons/
+
+@import "ionic.ionicons";
+
+// Fonts
+// --------------------------------------------------
+
+@import "roboto";
+@import "noto-sans";
+//背景灰
+$bgcolor:#f4f4f4;
+//字体灰
+$font888383:#888383;
+//head蓝
+$titlecolor:#33cbcc;
+$fontblue: #00BFBF;
+//清除专用
+.clearfix:after {
+  content: "";
+  display: block;
+  height: 0px;
+  clear: both;
+}
+.header-ios,.header-ios>div,.toolbar-ios>div,.searchbar-ios,.nav-tile,.button-ios-wmscolor{
+    @include color_primary($color-primary);
+}
+.button-ios.btn-l{
+  @include color_primary_l($color-primary-l);
+}
+.button-ios.btn-d{
+  @include color_primary_d($color-primary-d);
+}
+.button-ios.btn-rd{
+  @include color_primary_d($color-red-d);
+}

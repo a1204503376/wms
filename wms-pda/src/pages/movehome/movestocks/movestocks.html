@@ -1,0 +1,133 @@
+<ion-header>
+    <ion-navbar color="wmscolor">
+        <ion-title (click)="expression()">
+            多拖移动
+            <!-- <div class="title_f_name">(青啤五厂)</div> -->
+        </ion-title>
+        <ion-buttons end (click)="detailed()">
+            <button ion-button icon-only>
+                <ion-icon name="menu"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+    <div class="title-bt">
+        <div class="order" *ngIf="stocksSelect==1&&recList==0">
+            <ion-item class="item-top">
+                <ion-input type="text" placeholder="库位"></ion-input>
+                <ion-avatar item-start>
+                    <ion-icon name="search"></ion-icon>
+                </ion-avatar>
+                <ion-avatar item-end (click)="setServerIp()">
+                    <ion-icon class="iconfont icon-saomiao"></ion-icon>
+                </ion-avatar>
+            </ion-item>
+        </div>
+        <div class="nav-tile">
+            <!-- <ul>
+                <li>首页</li>
+                <li>
+                    <ion-icon class="iconfont icon-arr-right"></ion-icon>
+                </li>
+                <li>移动</li>
+                <li>
+                    <ion-icon class="iconfont icon-arr-right"></ion-icon>
+                </li>
+                <li>多拖移动</li>
+            </ul> -->
+            <crumbs></crumbs>
+            <div class="order-info">公共库</div>
+        </div>
+    </div>
+</ion-header>
+<ion-content>
+    <div *ngIf="stocksSelect==0">
+        <div class="list_item">
+            <ion-item>
+                <ion-label>库 房：</ion-label>
+                <ion-input type="text"></ion-input>
+                <ion-select [(ngModel)]="gaming">
+                    <ion-option selected:disabled value="001">公共库</ion-option>
+                    <ion-option value="002">备件库</ion-option>
+                    <ion-option value="003">电机库</ion-option>
+                    <ion-option value="004">设备库</ion-option>
+                </ion-select>
+            </ion-item>
+        </div>
+    </div>
+    <div *ngIf="stocksSelect==1">
+        <div class="title-ms clearfix">
+            <div class="title-ms-info" *ngIf="recList==1">
+                <ul>
+                    <li class="l-width2">
+                        <span class="s-label">原库位：</span>
+                        <span class="s-text">LOC-01-01-001</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="list_original" *ngIf="recList==0">
+            <ul>
+                <li class="l-width2">
+                    <span class="s-label">原容器：</span>
+                    <span class="s-text">LPN0000001</span>
+                </li>
+                <li class="l-width2">
+                    <span class="s-label">原容器：</span>
+                    <span class="s-text">LPN0000001</span>
+                </li>
+                <li class="l-width2">
+                    <span class="s-label">原容器：</span>
+                    <span class="s-text">LPN0000001</span>
+                </li>
+                <li class="l-width2">
+                    <span class="s-label">原容器：</span>
+                    <span class="s-text">LPN0000001</span>
+                </li>
+                <li class="l-width2">
+                    <span class="s-label">原容器：</span>
+                    <span class="s-text">LPN0000001</span>
+                </li>
+                <li class="l-width2">
+                    <span class="s-label">原容器：</span>
+                    <span class="s-text">LPN0000001</span>
+                </li>
+                <li class="l-width2">
+                    <span class="s-label">原容器：</span>
+                    <span class="s-text">LPN0000001</span>
+                </li>
+                <li class="l-width2">
+                    <span class="s-label">原容器：</span>
+                    <span class="s-text">LPN0000001</span>
+                </li>
+                <li class="l-width2">
+                    <span class="s-label">原容器：</span>
+                    <span class="s-text">LPN0000001</span>
+                </li>
+                <li class="l-width2">
+                    <span class="s-label">原容器：</span>
+                    <span class="s-text">LPN0000001</span>
+                </li>
+            </ul>
+        </div>
+        <div class="list_item" *ngIf="recList==1">
+            <ion-item>
+                <ion-label>目标库位：</ion-label>
+                <ion-input type="text"></ion-input>
+                <ion-avatar item-end (click)="setServerIp()">
+                    <ion-icon class="iconfont icon-saomiao"></ion-icon>
+                </ion-avatar>
+            </ion-item>
+        </div>
+    </div>
+</ion-content>
+<ion-footer>
+    <div class="btn-box">
+        <button ion-button block class="btn-l" (click)="btnOk()">
+            返回[Esc]
+        </button>
+        <button ion-button block class="btn-d" (click)="exit()">
+            提交[Ent]
+        </button>
+    </div>
+
+</ion-footer>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.stock.core.mapper.StockLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="stockLogResultMap" type="org.nodes.wms.core.stock.core.entity.StockLog">
+        <id column="wlsl_id" property="wlslId"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="stock_id" property="stockId"/>
+        <result column="wh_id" property="whId"/>
+        <result column="wh_code" property="whCode"/>
+        <result column="wh_name" property="whName"/>
+        <result column="loc_id" property="locId"/>
+        <result column="loc_code" property="locCode"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="sku_code" property="skuCode"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="wsp_id" property="wspId"/>
+        <result column="wsp_name" property="wspName"/>
+        <result column="sku_level" property="skuLevel"/>
+        <result column="stock_qty" property="stockQty"/>
+        <result column="occupy_qty" property="occupyQty"/>
+        <result column="on_shelf_qty" property="onShelfQty"/>
+        <result column="pick_qty" property="pickQty"/>
+        <result column="count_occupy_qty" property="countOccupyQty"/>
+        <result column="lpn_code" property="lpnCode"/>
+        <result column="lot_number" property="lotNumber"/>
+        <result column="pro_type" property="proType"/>
+        <result column="system_proc_id" property="systemProcId"/>
+        <result column="bill_detail_id" property="billDetailId"/>
+        <result column="proc_time" property="procTime"/>
+        <result column="wo_id" property="woId"/>
+        <result column="box_code" property="boxCode"/>
+        <result column="so_bill_id" property="soBillId"/>
+        <result column="wellen_id" property="wellenId"/>
+        <result column="stock_status" property="stockStatus"/>
+    </resultMap>
+
+    <!-- 库位热力值映射结果 -->
+    <resultMap id="locRateResultMap" type="org.nodes.wms.core.stock.core.vo.LocRateRltVO">
+        <result column="wh_id" property="whId"/>
+        <result column="wh_name" property="whName"/>
+        <result column="zone_id" property="zoneId"/>
+        <result column="zone_name" property="zoneName"/>
+        <result column="loc_id" property="locId"/>
+        <result column="loc_code" property="locCode"/>
+        <result column="rate" property="rate"/>
+    </resultMap>
+
+    <select id="selectSkuCount" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT sku_id)
+            FROM wms_stock_log
+            WHERE stock_qty - pick_qty &lt;&gt; 0 AND (
+                   (create_time &gt;= #{begin} AND create_time &lt;= #{end})
+                OR (update_time &gt;= #{begin} AND update_time &lt;= #{end})
+            )
+    </select>
+
+    <select id="selectLocCount" resultType="java.lang.Integer">
+         SELECT COUNT(DISTINCT loc_id)
+            FROM wms_stock_log
+            WHERE stock_qty - pick_qty &lt;&gt; 0 AND (
+                   (create_time &gt;= #{begin} AND create_time &lt;= #{end})
+                OR (update_time &gt;= #{begin} AND update_time &lt;= #{end})
+            )
+    </select>
+
+    <select id="selectLocRate" resultMap="locRateResultMap">
+        SELECT wsl.wh_id, ww.wh_name, wl.zone_id, wz.zone_name, wsl.loc_id, wl.loc_code, COUNT(1) rate
+            FROM wms_stock_log wsl
+            INNER JOIN wms_location wl ON wl.loc_id = wsl.loc_id
+            INNER JOIN wms_zone wz ON wz.zone_id = wl.zone_id AND wl.wh_id = wz.wh_id
+            INNER JOIN wms_warehouse ww ON ww.wh_id = wz.wh_id
+            WHERE (wsl.create_time &gt;= NOW() AND wsl.create_time &lt;= NOW())
+                OR (wsl.update_time &gt;= NOW() AND wsl.update_time &lt;= NOW())
+            GROUP by wsl.wh_id, wl.zone_id, wsl.loc_id
+            ORDER by wsl.wh_id, wl.zone_id, wsl.loc_id
+    </select>
+
+</mapper>

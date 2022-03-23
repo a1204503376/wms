@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.instock.purchase.mapper.PoHeaderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="poHeaderResultMap" type="org.nodes.wms.core.instock.purchase.entity.PoHeader">
+        <id column="po_bill_id" property="poBillId"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="wh_id" property="whId"/>
+        <result column="wh_code" property="whCode"/>
+        <result column="wo_id" property="woId"/>
+        <result column="owner_code" property="ownerCode"/>
+        <result column="po_bill_no" property="poBillNo"/>
+        <result column="po_bill_state" property="poBillState"/>
+        <result column="bill_group_id" property="billGroupId"/>
+        <result column="bill_type_cd" property="billTypeCd"/>
+        <result column="bill_key" property="billKey"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="last_update_date" property="lastUpdateDate"/>
+        <result column="pre_create_date" property="preCreateDate"/>
+        <result column="bill_type" property="billType"/>
+        <result column="scheduled_arrival_date" property="scheduledArrivalDate"/>
+        <result column="actual_arrival_date" property="actualArrivalDate"/>
+        <result column="finish_date" property="finishDate"/>
+        <result column="instore_type" property="instoreType"/>
+        <result column="ship_no" property="shipNo"/>
+        <result column="s_code" property="sCode"/>
+        <result column="s_name" property="sName"/>
+        <result column="s_address" property="sAddress"/>
+        <result column="contact" property="contact"/>
+        <result column="phone" property="phone"/>
+        <result column="so_bill_no" property="soBillNo"/>
+        <result column="asn_bill_remark" property="asnBillRemark"/>
+        <result column="sync_state" property="syncState"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="dept_code" property="deptCode"/>
+        <result column="dept_name" property="deptName"/>
+        <result column="create_type" property="createType"/>
+        <result column="attribute1" property="attribute1"/>
+        <result column="attribute2" property="attribute2"/>
+        <result column="attribute3" property="attribute3"/>
+        <result column="attribute4" property="attribute4"/>
+        <result column="attribute5" property="attribute5"/>
+        <result column="attribute6" property="attribute6"/>
+        <result column="attribute7" property="attribute7"/>
+        <result column="attribute8" property="attribute8"/>
+        <result column="attribute9" property="attribute9"/>
+        <result column="attribute10" property="attribute10"/>
+        <result column="attribute11" property="attribute11"/>
+        <result column="attribute12" property="attribute12"/>
+        <result column="attribute13" property="attribute13"/>
+        <result column="attribute14" property="attribute14"/>
+        <result column="attribute15" property="attribute15"/>
+        <result column="attribute16" property="attribute16"/>
+        <result column="attribute17" property="attribute17"/>
+        <result column="attribute18" property="attribute18"/>
+        <result column="attribute19" property="attribute19"/>
+        <result column="attribute20" property="attribute20"/>
+        <result column="attribute21" property="attribute21"/>
+        <result column="attribute22" property="attribute22"/>
+        <result column="attribute23" property="attribute23"/>
+        <result column="attribute24" property="attribute24"/>
+        <result column="attribute25" property="attribute25"/>
+        <result column="attribute26" property="attribute26"/>
+        <result column="attribute27" property="attribute27"/>
+        <result column="attribute28" property="attribute28"/>
+        <result column="attribute29" property="attribute29"/>
+        <result column="attribute30" property="attribute30"/>
+        <result column="post_user" property="postUser"/>
+        <result column="post_time" property="postTime"/>
+        <result column="post_state" property="postState"/>
+    </resultMap>
+
+
+</mapper>

@@ -1,0 +1,170 @@
+page-takeawayintray {
+  .ion-title {
+    text-align: center;
+  }
+  .list_item {
+    margin-top: 5px;
+  }
+  .title-bt {
+    height: 60px;
+    background-color: $titlecolor;
+    font-size: 14px;
+    color: white;
+  }
+  .order-number {
+    float: left;
+    margin-left: 15px;
+    margin-top: 5px;
+  }
+  .order-info {
+    float: right;
+    margin-right: 15px;
+    margin-top: 5px;
+  }
+  .order {
+    width: 100%;
+    height: 30px;
+  }
+  .title-ms {
+    width: 100%;
+    background: white;
+    font-size: 14px;
+    border-top: 5px solid $bgcolor;
+    border-bottom: 10px solid $bgcolor;
+  }
+  /*input右边图标*/
+  .item-ios ion-avatar {
+    min-width: 0px;
+    min-height: 0px;
+  }
+  .item-ios ion-avatar ion-img,
+  .item-ios ion-avatar img {
+    border-radius: 0;
+    overflow: hidden;
+    width: 30px;
+    height: 24px;
+  }
+  /*列表设置*/
+  .item-ios {
+    font-size: 14px !important;
+  }
+  .list_box{
+    .item-block {
+      height: 50px;
+    }
+  }
+  .item-inner .iconfont {
+    font-size: 18px;
+  }
+  /*列表右侧线间距*/
+  .item-ios.item-block .item-inner {
+    margin-right: 5%;
+  }
+  .scroll-content{
+    overflow-x: no;
+    overflow-y: hidden;
+  }
+  /*滚动条设置*/
+  .no-scroll .scroll-content {
+    overflow: hidden;
+    height: 500px;
+  }
+  .list_item_div  ion-label{
+    width: 700px !important;
+  }
+  .list_header{
+    height: 35px;
+    text-align: center;
+    line-height: 35px;
+    background-color: gainsboro;
+  }
+  .title-ms-info {
+    margin-left: 20px;
+    padding: 10px 0 10px 0;
+    position: relative;
+  }
+  .title-font-small {
+    font-size: 12px;
+    color: $font888383;
+    position: relative;
+  }
+  .title-font-small div {
+    margin-top: 5px;
+  }
+  .title-font-s4 {
+    font-style: italic;
+  }
+  .received-scan {
+    position: absolute;
+    right: 10%;
+    top: 30%;
+    font-weight: bolder;
+    color: #008080;
+  }
+  .received-plan {
+    position: absolute;
+    right: 10%;
+    top: 55%;
+    font-weight: bolder;
+    color: #008080;
+  }
+  .received-total {
+    position: absolute;
+    right: 10%;
+    top: 75%;
+    font-weight: bolder;
+    color: #008080;
+  }
+  .btn-box {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    button {
+      // width:calc(50% - 32px);
+      // //   margin:0 16px;
+      // }
+      width: 50%;
+    }
+  }
+  .button-ios {
+    border-radius: 0px;
+    margin: 0;
+    padding: 0;
+  }
+  .item-ios {
+    font-size: 18px;
+  }
+  .list_item_serial {
+    .list_item_title {
+      border-bottom: 3px solid $bgcolor;
+      display: flex;
+      justify-content: space-evenly;
+    }
+    span:first-child {
+      display: inline-block;
+      b {
+        color: orange;
+      }
+      border-bottom: 3px solid #008080;
+    }
+    span:last-child {
+      display: inline-block;
+      b {
+        color: $titlecolor;
+      }
+    }
+    span {
+      margin-top: 3px;
+      padding-bottom: 0.5rem;
+    }
+    div {
+      height: 3rem;
+    }
+   
+  }
+ 
+
+  .list_item_div ion-label {
+    width: 700px !important;
+  }
+}

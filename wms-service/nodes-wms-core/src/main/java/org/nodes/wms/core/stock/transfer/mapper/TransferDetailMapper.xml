@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.stock.transfer.mapper.TransferDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="transferDetailResultMap" type="org.nodes.wms.core.stock.transfer.entity.TransferDetail">
+        <id column="transfer_detail_id" property="transferDetailId"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="transfer_bill_id" property="transferBillId"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="wsp_id" property="wspId"/>
+        <result column="sku_level" property="skuLevel"/>
+        <result column="source_loc_id" property="sourceLocId"/>
+        <result column="target_loc_id" property="targetLocId"/>
+        <result column="plan_qty" property="planQty"/>
+        <result column="trans_qty" property="transQty"/>
+        <result column="wsu_code" property="wsuCode"/>
+        <result column="wsu_name" property="wsuName"/>
+    </resultMap>
+
+
+</mapper>

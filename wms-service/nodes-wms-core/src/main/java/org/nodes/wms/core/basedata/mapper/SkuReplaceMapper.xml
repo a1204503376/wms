@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.basedata.mapper.SkuReplaceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="skuReplaceResultMap" type="org.nodes.wms.core.basedata.entity.SkuReplace">
+        <id column="wsrep_id" property="wsrepId"/>
+        <result column="status" property="status"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="wh_id" property="whId"/>
+        <result column="wsp_id" property="wspId"/>
+        <result column="wsu_id" property="wsuId"/>
+        <result column="qty" property="qty"/>
+        <result column="wsrep_sku_id" property="wsrepSkuId"/>
+        <result column="wsrep_wsp_id" property="wsrepWspId"/>
+        <result column="wsrep_wsu_id" property="wsrepWsuId"/>
+        <result column="wsrep_qty" property="wsrepQty"/>
+        <result column="wsrep_order" property="wsrepOrder"/>
+    </resultMap>
+    <select id="selectSkuReplacBySkuId" resultMap="skuReplaceResultMap">
+        select * from wms_sku_replace where 1=1 and sku_id = #{skuId} order by wsrep_order
+    </select>
+</mapper>

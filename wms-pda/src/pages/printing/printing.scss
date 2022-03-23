@@ -1,0 +1,21 @@
+page-printing {
+  .btn-box {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    button {
+      // width:calc(50% - 32px);
+      // //   margin:0 16px;
+      // }
+      width: 50%;
+    }
+  }
+  .button-ios {
+    border-radius: 0px;
+    margin: 0;
+    padding: 0;
+  }
+  .item-ios {
+    font-size: 18px;
+  }
+}

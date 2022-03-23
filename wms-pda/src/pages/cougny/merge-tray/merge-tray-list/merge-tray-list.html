@@ -1,0 +1,85 @@
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>
+      拼托
+      <!-- <div class="title_f_name">(青啤五厂)</div> -->
+    </ion-title>
+    <!-- <ion-buttons end (click)="detailed()">
+          <button ion-button icon-only>
+              <ion-icon name="menu"></ion-icon>
+          </button>
+      </ion-buttons> -->
+  </ion-navbar>
+  <div class="title-bt">
+    <div class="nav-tile">
+      <div class="order-info">任务进度{{resultList.finish}}/{{resultList.total}}</div>
+      <!-- <ul>
+        <li>首页</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>任务查看</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>拼托任务</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>托盘详情</li>
+      </ul> -->
+      <crumbs></crumbs>
+    </div>
+  </div>
+</ion-header>
+<ion-content>
+  <div>
+    <!-- 物品选显卡 -->
+    <div class="title-ms clearfix">
+      <div class="title-ms-info clearfix">
+        <div>单据编码：{{resultList.soBillNo}}</div>
+        <div>单据类型：{{resultList.billTypeName}}</div>
+        <div>客&emsp;&emsp;户：{{resultList.clientName}}</div>
+        <div *ngIf="isShow">托盘数:{{resultList.lpnList.length}}</div>
+        <div *ngIf="!isShow">总箱数:{{resultListlpnItem.detailList.length}}</div>
+        <div>{{resultList.whName}}</div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <!-- 已拼托盘-->
+    <div *ngIf="isShow" class="list_item_serial clearfix">
+      <div class="list_item_title">
+        <span [ngStyle]="{'border-bottom':'3px solid #008080'}" (click)="isTitle(true)">已拼托盘(<b>1</b>)</span>
+        <!-- <span [ngStyle]="{'border-bottom':isTilebool === false ? '3px solid #008080' : '0' }"
+          (click)="isTitle(false)">已收序列号(<b>2</b>)</span> -->
+      </div>
+      <div class="list_item_ls clearfix" (click)="lpnListOnClick(item)" *ngFor="let item of resultList.lpnList">
+        <div>{{item.lpnCode}}</div>
+        <div>{{item.weight}}</div>
+        <div> {{item.length}} *{{item.width}} *{{item.height}}</div>
+        <div><b style="color: orange;">{{item.detailList.length}}</b>箱</div>
+        <div>
+          <ion-icon name="arrow-forward"></ion-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 箱码列表 -->
+  <div *ngIf="!isShow">
+    <div class="list_item_ls_box clearfix" *ngFor="let item of resultListlpnItem.detailList">
+      <div>{{item.skuName}}</div>
+      <div>{{item.skuCode}}</div>
+      <div><b style="color: orange;">{{item.pickQty}}</b>{{item.wsuName}}</div>
+    </div>
+  </div>
+
+
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button no-dbl-click ion-button block class="btn-l" (tap)="exit()">
+      返回[Esc]
+    </button>
+  </div>
+</ion-footer>

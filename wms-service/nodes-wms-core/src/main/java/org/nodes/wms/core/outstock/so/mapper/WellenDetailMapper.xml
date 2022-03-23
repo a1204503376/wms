@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.outstock.so.mapper.WellenDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="wellenDetailResultMap" type="org.nodes.wms.core.outstock.so.entity.WellenDetail">
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="wellen_detail_id" property="wellenDetailId"/>
+        <result column="wellen_id" property="wellenId"/>
+        <result column="so_bill_id" property="soBillId"/>
+        <result column="so_bill_no" property="soBillNo"/>
+        <result column="so_detail_id" property="soDetailId"/>
+        <result column="bill_type_cd" property="billTypeCd"/>
+    </resultMap>
+    <resultMap id="WellenSoHeaderResultMap" type="org.nodes.wms.core.outstock.so.vo.WellenSoHeaderVo">
+        <result column="wellen_id" property="wellenId"/>
+        <association property="soHeader" resultMap="org.nodes.wms.core.outstock.so.mapper.SoHeaderMapper.headerResultMap"/>
+    </resultMap>
+    <select id="getSoHeaderByWellenIds" resultMap="WellenSoHeaderResultMap" >
+        SELECT
+        sh.*,
+        swd.wellen_id
+        FROM
+        so_header sh,
+        so_wellen_detail swd
+        WHERE
+        sh.so_bill_no = swd.so_bill_no
+        AND swd.wellen_id IN
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

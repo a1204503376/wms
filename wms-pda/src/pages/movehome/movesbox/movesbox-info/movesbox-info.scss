@@ -1,0 +1,24 @@
+page-movesbox-info {
+    .btn-box {
+        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+        button {
+            width: 50%;
+        }
+    }
+    .button-ios {
+        border-radius: 0px;
+        margin: 0;
+        padding: 0;
+    }
+    .item-block {
+        height: 45px;
+    }
+    .modal-wrapper {
+        z-index: 10 !important;
+        height: 100% !important;
+        height: 100% !important;
+        contain: strict;
+    }
+}

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.core.base.mapper.TenantMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="tenantResultMap" type="org.nodes.core.base.entity.Tenant">
+        <result column="id" property="id"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="tenant_name" property="tenantName"/>
+        <result column="linkman" property="linkman"/>
+        <result column="contact_number" property="contactNumber"/>
+        <result column="address" property="address"/>
+    </resultMap>
+
+
+    <select id="selectTenantPage" resultMap="tenantResultMap">
+        select * from blade_tenant where 1=1
+    </select>
+
+    <select id="getTenantNames" resultType="java.lang.String">
+        SELECT
+        tenant_name
+        FROM
+        blade_tenant
+        WHERE
+        tenant_id IN
+        <foreach collection="array" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+        and 1=1
+    </select>
+</mapper>

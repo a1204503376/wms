@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.allot.mapper.AllotHeaderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="allotHeaderResultMap" type="org.nodes.wms.core.allot.entity.AllotHeader">
+        <id column="allot_bill_id" property="allotBillId"/>
+        <result column="allot_bill_no" property="allotBillNo"/>
+        <result column="allot_bill_state" property="allotBillState"/>
+        <result column="bill_key" property="billKey"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="allot_remark" property="allotRemark"/>
+        <result column="last_update_date" property="lastUpdateDate"/>
+        <result column="pre_create_date" property="preCreateDate"/>
+        <result column="wo_id" property="woId"/>
+        <result column="source_wh_id" property="sourceWhId"/>
+        <result column="source_wh_code" property="sourceWhCode"/>
+        <result column="target_wh_id" property="targetWhId"/>
+        <result column="target_wh_code" property="targetWhCode"/>
+        <result column="source_zone_type" property="sourceZoneType"/>
+        <result column="asn_bill_id" property="asnBillId"/>
+        <result column="so_bill_id" property="soBillId"/>
+        <result column="allot_bill_remark" property="allotBillRemark"/>
+        <result column="sync_state" property="syncState"/>
+    </resultMap>
+
+
+</mapper>

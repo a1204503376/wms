@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-plugin-seuic-autoid9" version="1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>Autoid9Plugin</name>
+    <js-module name="Autoid9Plugin" src="www/autoid9Plugin.js">
+        <clobbers target="cordova.plugins.autoid9Plugin" />
+    </js-module>
+  <platform name="android">
+
+    <config-file parent="/*" target="res/xml/config.xml">
+      <feature name="Autoid9Plugin">
+        <param name="android-package" value="com.nodes.plugin.Autoid9Plugin" />
+      </feature>
+    </config-file>
+
+    <config-file target="AndroidManifest.xml" parent="/*">
+      <uses-permission android:name="com.honeywell.decode.permission.DECODE" />
+  </config-file>
+
+  <framework src="src/android/plugin.gradle" custom="true" type="gradleReference" />
+
+    <source-file src="src/android/Autoid9Plugin.java" target-dir="src/com/nodes/plugin/Autoid9Plugin" />
+    <source-file src="src/android/DataReceiver.java" target-dir="src/com/nodes/plugin/Autoid9Plugin" />
+    <resource-file src="src/android/libs/scanlib.aar" target="libs/scanlib.aar" />
+  </platform>
+</plugin>

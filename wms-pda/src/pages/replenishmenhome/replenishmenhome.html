@@ -1,0 +1,126 @@
+<!--
+  Generated template for the ReplenishmenhomePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="wmscolor">
+    <ion-title>补货任务</ion-title>
+    <ion-buttons end (click)="finishDetailed()">
+      <button ion-button icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <div class="title-bt">
+    <div class="order">
+      <div class="order-info">单据拣货进度 {{result.finish}}/{{result.total}}</div>
+    </div>
+    <div class="nav-tile">
+      <!-- <ul>
+        <li>首页</li>
+        <li>
+          <ion-icon class="iconfont iconicon_arr_right"></ion-icon>
+        </li>
+        <li>任务查看</li>
+        <li>
+          <ion-icon class="iconfont iconicon_arr_right"></ion-icon>
+        </li>
+        <li>补货任务</li>
+      </ul> -->
+      <crumbs></crumbs>
+    </div>
+  </div>
+</ion-header>
+
+
+<ion-content>
+  <!-- 物品选显卡 -->
+  <div class="title-ms clearfix" (click)="noFinishDetailed()">
+    <div class="title-ms-info">
+      <div>
+        <label>{{selectModel.skuName}}</label>
+      </div>
+      <div>
+        <label>{{selectModel.skuCode}}</label>
+      </div>
+      <div>
+        <label
+          *ngIf="selectModel.skuLotValList[0].skuLotValue!=null&&selectModel.skuLotValList[0].skuLotValue!='';else lot1">
+          {{selectModel.skuLotValList[0].skuLotValue}}</label>
+      </div>
+      <ng-template #lot1>
+        <div>
+          <label>暂无批属性1</label>
+        </div>
+      </ng-template>
+      <div>
+        <label
+          *ngIf="selectModel.skuLotValList[1].skuLotValue!=null&&selectModel.skuLotValList[1].skuLotValue!='';else lot2">
+          {{selectModel.skuLotValList[1].skuLotValue}}</label>
+      </div>
+      <ng-template #lot2>
+        <div>
+          <label>暂无批属性2</label>
+        </div>
+      </ng-template>
+      <div class="specs_code">
+        拣货规格：<span style="color: black;">{{selectModel.skuSpec}}</span>
+      </div>
+      <div class="ionic_right">
+        <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+      </div>
+      <div class="received-scan">
+        补货数量: <span style="color: #F59A23;"> {{selectModel.transQty +'/'+selectModel.planQty}}</span>
+      </div>
+    </div>
+  </div>
+  <!-- 输入列表 -->
+  <div *ngIf="IsShow">
+    <ion-item>
+      <ion-label>箱码：</ion-label>
+      <ion-input (keyup)="scanModelChange($event)" type="text" [(ngModel)]="scanView"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>原库位：</ion-label>
+      <ion-input [disabled]='true' maxlength='30' type="text" [(ngModel)]="selectModel.sourceLocCode"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+  </div>
+
+  <!-- 目标库位 -->
+  <div *ngIf="!IsShow">
+    <div class="p-select">
+      <div class="p-box">
+        <label class="p-label">目标库位：</label>
+        <!-- <p-dropdown class="drop-down" #ploc [options]="locations" [(ngModel)]="loc" editable="true"></p-dropdown> -->
+        <p-dropdown [style]="{'width':'100%'}" [options]="locList" [(ngModel)]="locCode" editable="true"
+          placeholder="请选择"></p-dropdown>
+      </div>
+    </div>
+  </div>
+
+  <!-- 输入列表 -->
+  <div [hidden]="!IsShow">
+    <page-check-in-box-label-type #labelTypecom>
+    </page-check-in-box-label-type>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <div class="btn-box">
+    <button no-dbl-click ion-button block class="btn-l" (tap)="exit()">
+      返回[Esc]
+    </button>
+    <button no-dbl-click ion-button block class="btn-d" (tap)="btnOk()">
+      {{IsShow?'下一步':'确定'}}[Ent]
+    </button>
+  </div>
+</ion-footer>

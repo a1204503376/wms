@@ -1,0 +1,32 @@
+<!--
+  Generated template for the TaskviewPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>按件拣货
+      <!-- <div class="title_f_name">(青啤五厂)</div> -->
+    </ion-title>
+  </ion-navbar>
+  <ion-searchbar (keydown)="keyEnter($event)" debounce="1000" Description='primary' [(ngModel)]="wellenNo"
+    placeholder="波次编码">
+  </ion-searchbar>
+  <div class="nav-tile">
+    <!-- <ul>
+      <li>首页</li>
+      <li>
+        <ion-icon class="iconfont iconicon_arr_right"></ion-icon>
+      </li>
+      <li>拣货</li>
+      <li>
+        <ion-icon class="iconfont iconicon_arr_right"></ion-icon>
+      </li>
+      <li>按件拣货</li>
+    </ul> -->
+    <crumbs></crumbs>
+  </div>
+</ion-header>
+<ion-content>
+</ion-content>

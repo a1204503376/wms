@@ -1,0 +1,116 @@
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>
+      按箱收货<div class="title_f_name">({{result.whName}})</div>
+    </ion-title>
+    <ion-buttons end (click)="detailed()">
+      <button ion-button icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <div class="title-bt">
+    <div class="order">
+      <div class="order-number">{{orderNo||asnBillNo}}</div>
+      <div class="order-info">单据收货进度 {{finish}}/{{count}}</div>
+    </div>
+    <!-- <div class="nav-tile clearfix">
+      <ul>
+        <li>首页</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>收货</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>按箱收货</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>执行收货</li>
+      </ul>
+    </div> -->
+    <div class="nav-tile">
+      <crumbs></crumbs>
+    </div>
+  </div>
+</ion-header>
+<ion-content no-bounce>
+  <!-- <div class="title-ms clearfix">
+    <div class="title-ms-info">
+      <div class="title-font-s1">
+        <label>{{skuName}}</label>
+      </div>
+      <div class="title-font-small">
+        <div *ngIf="skuSpec!=''&& skuSpec!=null" class="title-font-s2">
+          <label>收货规格：</label>
+          <label style="color: black;">{{skuSpec}}</label>
+        </div>
+        <div *ngIf="detailStatus!=''&& detailStatus!=null" class="title-font-s3">
+          <label>状 态:</label>
+          <label style="color: black;">{{detailStatus}}</label>
+        </div>
+        <div class="title-font-s4">
+          <label>{{sname}}</label>
+        </div>
+      </div>
+      <div *ngIf="scanQtyName!=''&& scanQtyName!=null" class="received-scan">
+        已接收: <span style="color: #F59A23;"> {{scanQtyName ==''?'0':scanQtyName}}</span>
+      </div>
+      <div *ngIf="planQtyName!=''&& planQtyName!=null" class="received-plan">
+        计划量: <span style="color: #F59A23;"> {{planQtyName ==''?'0':planQtyName}}</span>
+      </div>
+      <div *ngIf="totalPlanQty>0" class="received-total">
+        <span style="color: #F59A23;"> {{totalScanQty}}/{{totalPlanQty}}</span>
+      </div>
+    </div>
+  </div> -->
+  <div class="list_item" style="margin-top: 20px;">
+    <ion-item>
+      <ion-label>箱号：</ion-label>
+      <ion-input maxlength='30' type="text" [(ngModel)]="boxCode" (keyup)="boxCode_KeyDown($event)"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <!-- <ion-item *ngIf="scanModelFlag">
+      <ion-label>箱码：</ion-label>
+      <ion-input (keyup)="scanModelChange($event)" type="text" [(ngModel)]="scanView"></ion-input>
+
+    </ion-item> -->
+  </div>
+
+  <page-check-in-box-label-type [asnBillNo]='asnBillNo' [ruleCode]='ruleCode' (outer)="runParent($event)" #labelTypecom>
+  </page-check-in-box-label-type>
+  <div >
+    <div class="list_header">
+      <span>已扫描箱号</span>
+    </div>
+    <ion-list>
+      <ion-scroll scrollY="true" style="height:38rem;">
+        <ion-item-sliding *ngFor="let item of boxItems">
+          <ion-item>
+            <h2>{{item}}</h2>
+          </ion-item>
+          <ion-item-options side="right">
+            <button (click)="removeItem(item)" ion-button color="danger">
+              删除
+            </button>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-scroll>
+    </ion-list>
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button no-dbl-click ion-button block class="btn-l" (tap)="exit()">
+      返回[Esc]
+    </button>
+    <button no-dbl-click ion-button block class="btn-d" (tap)="btnOk()">
+      提交[Ent]
+    </button>
+  </div>
+
+</ion-footer>

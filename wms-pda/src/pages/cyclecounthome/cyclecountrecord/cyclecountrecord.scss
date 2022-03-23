@@ -1,0 +1,25 @@
+page-cyclecountrecord {
+  .content-ios {
+    background-color: $bgcolor;
+    margin-top: 5px;
+  }
+  .item-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 5px;
+    background-color: white;
+    .item-row { 
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      span:first-child{
+        flex-grow: 1;
+        white-space: pre-wrap;
+        overflow: auto;
+        word-break: break-all; 
+      }
+    }
+  }
+}

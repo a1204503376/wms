@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.common.mapper.FunctionCountMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="functionCountResultMap" type="org.nodes.wms.core.common.entity.FunctionCount">
+        <result column="id" property="id"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="method" property="method"/>
+        <result column="name" property="name"/>
+        <result column="count" property="count"/>
+        <result column="remark" property="remark"/>
+        <result column="attribute1" property="attribute1"/>
+        <result column="attribute2" property="attribute2"/>
+        <result column="attribute3" property="attribute3"/>
+        <result column="attribute4" property="attribute4"/>
+        <result column="attribute5" property="attribute5"/>
+        <result column="attribute6" property="attribute6"/>
+    </resultMap>
+
+
+</mapper>

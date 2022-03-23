@@ -1,0 +1,12 @@
+<ul >
+   <ng-container *ngFor="let item of alls">
+      <li *ngIf="item&&item.id!='_';else elseBlock" (click)="toPush(item)"> 
+         {{item.name}} 
+      </li>
+      <ng-template #elseBlock>
+      <li>
+         <ion-icon class="iconfont iconicon_arr_right"></ion-icon>
+      </li>
+      </ng-template>
+   </ng-container>
+</ul>

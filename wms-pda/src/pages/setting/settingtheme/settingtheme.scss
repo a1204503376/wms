@@ -1,0 +1,12 @@
+page-settingtheme {
+    .btn-box {
+        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+        height: 49px !important;
+        button {
+            width: 100%;
+            border-radius:0 !important;
+        }
+    }
+}

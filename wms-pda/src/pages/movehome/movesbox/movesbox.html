@@ -1,0 +1,165 @@
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>
+      按箱移动
+      <!-- <div class="title_f_name">(欣天新)</div> -->
+    </ion-title>
+  </ion-navbar>
+  <div class="title-bt">
+    <div class="nav-tile">
+      <!-- <ul>
+        <li>首页</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>移动</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>物品移动</li>
+      </ul> -->
+      <crumbs></crumbs>
+    </div>
+  </div>
+</ion-header>
+<ion-content>
+
+
+  <!-- 头部列表 -->
+  <div class="head_lable" *ngIf="isShow">
+    <ion-item>
+      <ion-label>原库位：</ion-label>
+      <ion-input type="text" [(ngModel)]="sourceLocCode"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item >
+      <ion-label>原容器：</ion-label>
+      <ion-input type="text" [(ngModel)]="sourceLpnCode"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>物&emsp;品：</ion-label>
+      <ion-input [disabled]='true' type="text" [(ngModel)]="skuStockItem.skuName"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>数&emsp;量：</ion-label>
+      <ion-input  type="number" [(ngModel)]="skuStockItem.moveQty"></ion-input>
+      <ion-select [disabled]='true' [(ngModel)]="skuStockItem.wsuName" cancelText="取消">
+        <ion-option [value]="skuStockItem.wsuName">{{skuStockItem.wsuName}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>扫&emsp;描：</ion-label>
+      <ion-input (keyup)="scanModelChange($event)" [(ngModel)]="scanView" type="text"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+
+  </div>
+  <!-- 序列号明细 -->
+  <div class="list_item_serial">
+    <div class="list_item_title">
+      <!-- <span [ngStyle]="{'border-bottom':isTilebool === false ? '3px solid #008080' : '0' }"
+              (click)="isTitle(false)">已收序列号(<b>{{InNumberLength}}</b>)</span> -->
+      <span *ngIf="isShow; else elseBlock" (click)="onIsShowClick()">
+        <ion-icon name="md-arrow-dropup"></ion-icon>
+      </span>
+
+      <ng-template #elseBlock>
+        <span (click)="onIsShowClick()">
+          <ion-icon name="md-arrow-dropdown"></ion-icon>
+        </span>
+
+      </ng-template>
+      <span [ngStyle]="{'border-bottom': '3px solid #008080' }"
+        (click)="isTitle(true)">已扫物品(<b>{{skuStockList.length}}</b>)</span>
+      <span>
+        <button ion-button icon-only (click)="presentPopover($event)">
+          <ion-icon name="md-more"></ion-icon>
+        </button>
+
+      </span>
+    </div>
+  </div>
+
+  <ion-list class="list_item_div">
+
+    <ion-scroll scrollY="true" >
+      <!--接货列表-->
+      <ion-item-sliding *ngFor="let skuStockItem of skuStockList">
+        <ion-item>
+          <ion-checkbox [(ngModel)]="skuStockItem.isCheck"></ion-checkbox>
+          <ion-label>
+            <div class="title-ms clearfix">
+              <div class="title-ms-info clearfix">
+                <div>
+                  <span>物&emsp;&emsp;品：</span>
+                  <span>{{skuStockItem.skuName}}</span>
+                </div>
+                <div>
+                  <span>原&ensp;库&ensp;位：</span>
+                  <span>{{skuStockItem.sourceLocCode}}</span>
+                </div>
+                <div *ngFor="let item of skuStockItem.skuLotValList">
+                  <span *ngIf="item.skuLotValue!=''">{{item.skuLotLabel}}：</span>
+                  <span *ngIf="item.skuLotValue!=''">{{item.skuLotValue}}</span>
+                </div>
+                <div [ngStyle]="{color: skuStockItem.isWarning?'red':''}" class="number-msg">
+                  <span>数量：</span>
+                  <span>{{skuStockItem.moveQty + skuStockItem.wsuName}}
+                  </span>
+                </div>
+                <div [ngStyle]="{'position': skuStockItem.stockList[0].skuSpec.length>=6?'static':'absolute'}"
+                  class="spec-msg">
+                  <span>规格：</span>
+                  <span>{{skuStockItem.stockList[0].skuSpec}}</span>
+                  <span *ngIf="skuStockItem.stockList.length>=2" class="spec-msg-dropdown"
+                    (tap)="specOnclick(skuStockItem)">
+                    <ion-icon name="md-arrow-dropdown"></ion-icon>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </ion-label>
+        </ion-item>
+        <ion-item-options side="right">
+          <button (tap)="removeItem(skuStockItem)" ion-button color="danger">
+            删除
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-scroll>
+  </ion-list>
+
+  <!-- 转移至 -->
+  <!-- <div class="list_item" *ngIf="IsShow==IsSkuMove">
+    <ion-item>
+      <ion-label>目标库位：</ion-label>
+      <ion-input [(ngModel)]="targetLocCode" type="text"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+
+    </ion-item>
+  </div> -->
+
+
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button no-dbl-click ion-button block class="btn-l" (tap)="exit()">
+      返回[Esc]
+    </button>
+    <button no-dbl-click ion-button block class="btn-d" (tap)="btnOk()">
+      转移至[Ent]
+    </button>
+  </div>
+</ion-footer>

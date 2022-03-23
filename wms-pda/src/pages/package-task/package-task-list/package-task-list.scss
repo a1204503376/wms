@@ -1,0 +1,121 @@
+page-package-task-list {
+    .content-ios {
+        background-color: $bgcolor;
+        margin-top: 5px;
+    }
+    .title-ms-info {
+        margin-top: 5px;
+    }
+    .selected {
+        border-bottom: 3px solid $titlecolor;
+    }
+    .sub_header1 {
+        height: 4rem;
+        line-height: 4rem;
+        width: 100%;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        z-index: 2;
+        background: #fff;
+        div {
+            flex: 1;
+            text-align: center;
+        }
+    }
+    .searchbar-ios {
+        background-color: $titlecolor;
+        border-bottom: none;
+    }
+    .searchbar-ios .searchbar-input {
+        border-radius: 0px;
+    }
+    .title-ms {
+        position: relative;
+        background-color: white;
+    }
+    .title-font-s1 {
+        //height: 40px;
+        padding: 1% 0% 1% 13%;
+        div {
+            text-align: left;
+        }
+        div:nth-child(2) {
+            font-size: 10px;
+            color: #7b7474;
+        }
+        p {
+            font-size: 10px;
+        }
+    }
+    .title-ms-info .button-ios {
+        position: absolute;
+        top: 5%;
+        left: 3%;
+        height: 20px;
+        font-size: 10px;
+        width: 20px;
+        color: #fff;
+        background-color: #33cbcc;
+    }
+    .title-ms-info {
+        position: relative;
+        div:nth-child(3) {
+            color: #008080;
+            position: absolute;
+            bottom: 1rem;
+            right: 40px;
+            font-weight: bold;
+        }
+        .ionic_right {
+            position: absolute;
+            right: 0rem;
+            bottom: 0rem;
+            ion-icon {
+                font-size: 5rem;
+                color: #c2bdbd;
+            }
+        }
+    }
+    .btn-box {
+        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+        button {
+            width: 50%;
+        }
+    }
+    .button-ios {
+        border-radius: 0px;
+        margin: 0;
+        padding: 0;
+    }
+    .item-ios {
+        padding-bottom: 3px;
+    }
+    page-check-in-box-label-type {
+        .item-block {
+            height: 100%;
+        }
+    }
+    .item-block {
+        height: 60px;
+    }
+    .nav_Info {
+        .item-ios.item-block .item-inner {
+            border-bottom: 0px !important;
+        }
+    }
+    .footer_total {
+        height: 3rem;
+        background-color: white;
+        text-align: right;
+        font-weight: bold;
+        color: #00bfbf;
+        padding-right: 3rem;
+        line-height: 3rem;
+    }
+    .list-ios ion-item-sliding {
+        background-color: #fff;
+        margin-top: 1rem;
+    }
+}

@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>静态盘点
+      <!-- <div class="title_f_name">(青啤五厂)</div> -->
+    </ion-title>
+    <!-- <ion-buttons end (click)="detailed()">
+      <button ion-button icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons> -->
+  </ion-navbar>
+  <ion-searchbar [(ngModel)]="asnBillNo" debounce="1000" (keydown)="keyEnter($event)" Description='primary'
+    placeholder="盘点编号">
+  </ion-searchbar>
+  <!-- <ion-input  [(ngModel)]="asnBillNo"  (keyup)="keyEnter($event)" type="text"> -->
+  <!-- </ion-input> -->
+  <div class="nav-tile">
+    <!-- <ul>
+      <li>首页</li>
+      <li>
+        <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+      </li>
+      <li>盘点</li>
+      <li>
+        <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+      </li>
+      <li>静态盘点</li>
+    </ul> -->
+    <crumbs></crumbs>
+  </div>
+</ion-header>
+<ion-content>
+  <!-- <button ion-button icon-start>
+    <ion-icon name="home"></ion-icon>
+  </button> -->
+  <!-- <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]; let _i = index" class="title-ms">
+    <div class="title-ms-info" (click)="itemInfo()">
+      <button ion-button color="dark">1</button>
+      <div class="title-font-s1">
+        <div>ASN00000000001</div>
+        <span>已经完成明细 <b style="color: #F59A23;">5</b> <b style="color: 008080;">/10</b></span>
+      </div>
+      <div class="title-font-s2">
+        <div>1号仓库</div>
+        <div>供应商：霍尼韦尔技术股份有限公司</div>
+        <div>货 主：北京节点通信息科技有限公司</div>
+      </div>
+    </div>
+  </div> -->
+</ion-content>

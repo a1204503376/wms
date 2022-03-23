@@ -1,0 +1,43 @@
+<ion-content>
+  <div class="topdiv" (click)="isAddress()">
+    <ion-icon [name]="loginSetIcon"></ion-icon>
+  </div>
+  <div class="logodiv">
+    <img src="assets/imgs/login.png" style="width: 100px;height: 100px;">
+    <h3>仓储管理系统</h3>
+    <h5>{{version}}</h5>
+  </div>
+  <div class="logindiv">
+    <ion-item>
+      <ion-avatar item-start>
+        <ion-icon name="contact"></ion-icon>
+      </ion-avatar>
+      <ion-input type="text" #user placeholder="请输入账号" [(ngModel)]="username" (keyup)="keyEnter($event)" >
+      </ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-avatar item-start>
+        <ion-icon name="lock"></ion-icon>
+      </ion-avatar>
+      <ion-input type="password" #pwd placeholder="请输入密码" [(ngModel)]="password" (keyup)="onLogin($event)" ></ion-input>
+    </ion-item>
+    <ion-item *ngIf="isTenantId">
+      <ion-avatar item-start>
+        <ion-icon [name]="loginSetIcon"></ion-icon>
+      </ion-avatar>
+      <ion-input type="text"  placeholder="请输入租户ID" [(ngModel)]="tenantId"></ion-input>
+    </ion-item>
+    <ion-item >
+      <ion-avatar item-start>
+        <ion-icon [name]="loginSetIcon"></ion-icon>
+      </ion-avatar>
+      <ion-input type="text" placeholder="请输入地址" [(ngModel)]="ipaddress" (ionBlur)="TextBlur(8)"></ion-input>
+    </ion-item>
+  </div>
+  <div class="btn-box">
+    <button no-dbl-click ion-button small color="wmscolor" (tap)="loginIn()">登&emsp;&emsp;&emsp;录</button>
+    <button ion-button small color="dark" (tap)="exit()" style="border:1px solid black"
+      clear>退&emsp;&emsp;&emsp;出</button>
+  </div>
+  <div id='ceshi' class="bottomdiv">版权©：北京节点通网络技术有限公司</div>
+</ion-content>

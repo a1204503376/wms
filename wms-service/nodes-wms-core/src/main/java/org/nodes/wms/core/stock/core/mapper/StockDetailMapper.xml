@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.stock.core.mapper.StockDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="stockDetailResultMap" type="org.nodes.wms.core.stock.core.entity.StockDetail">
+        <result column="id" property="id"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="stock_id" property="stockId"/>
+        <result column="loc_id" property="locId"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="wsp_id" property="wspId"/>
+        <result column="lpn_code" property="lpnCode"/>
+        <result column="box_code" property="boxCode"/>
+        <result column="stock_qty" property="stockQty"/>
+        <result column="pick_qty" property="pickQty"/>
+        <result column="lot_number" property="lotNumber"/>
+        <result column="bill_detail_id" property="billDetailId"/>
+        <result column="so_bill_id" property="soBillId"/>
+        <result column="wellen_id" property="wellenId"/>
+    </resultMap>
+    <resultMap id="stockDetailVoResultMap" type="org.nodes.wms.core.stock.core.vo.StockDetailVo">
+        <result column="id" property="id"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="stock_id" property="stockId"/>
+        <result column="loc_id" property="locId"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="sku_code" property="skuCode"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="wsp_id" property="wspId"/>
+        <result column="wsp_name" property="wspName"/>
+        <result column="um_code" property="umCode"/>
+        <result column="lpn_code" property="lpnCode"/>
+        <result column="box_code" property="boxCode"/>
+        <result column="stock_qty" property="stockQty"/>
+        <result column="pick_qty" property="pickQty"/>
+        <result column="lot_number" property="lotNumber"/>
+        <result column="bill_detail_id" property="billDetailId"/>
+        <result column="so_bill_id" property="soBillId"/>
+        <result column="so_bill_no" property="soBillNo"/>
+        <result column="wellen_id" property="wellenId"/>
+    </resultMap>
+    <select id="selectStockDetailsByStockId"  resultMap="stockDetailVoResultMap">
+        SELECT
+            wsd.* ,
+            wsp.wsp_name,
+            wspd.wsu_name,
+            ws.sku_code,
+            ws.sku_name,
+            ws.stock_status,
+            sh.so_bill_no
+        FROM
+            wms_stock_detail wsd
+                LEFT JOIN wms_stock ws ON wsd.stock_id = ws.stock_id
+                LEFT JOIN wms_sku_package wsp on wsd.wsp_id = wsp.wsp_id
+                LEFT JOIN wms_sku_package_detail wspd on wsd.wsp_id = wspd.wsp_id
+                LEFT JOIN so_header sh on wsd.so_bill_id  = sh.so_bill_id
+        WHERE
+            wsd.stock_id = #{stockId}
+          and wspd.sku_level = 1
+    </select>
+
+
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.basedata.mapper.SkuTypeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="skuTypeResultMap" type="org.nodes.wms.core.basedata.entity.SkuType">
+        <id column="sku_type_id" property="skuTypeId"/>
+        <result column="type_pre_id" property="typePreId"/>
+        <result column="type_name" property="typeName"/>
+        <result column="type_code" property="typeCode"/>
+        <result column="wo_id" property="woId"/>
+        <result column="grade_num" property="gradeNum"/>
+        <result column="type_path" property="typePath"/>
+        <result column="type_remark" property="typeRemark"/>
+        <result column="attribute1" property="attribute1"/>
+        <result column="attribute2" property="attribute2"/>
+        <result column="attribute3" property="attribute3"/>
+        <result column="attribute4" property="attribute4"/>
+        <result column="attribute5" property="attribute5"/>
+        <result column="attribute6" property="attribute6"/>
+        <result column="attribute7" property="attribute7"/>
+        <result column="attribute8" property="attribute8"/>
+        <result column="attribute9" property="attribute9"/>
+        <result column="attribute10" property="attribute10"/>
+        <result column="attribute11" property="attribute11"/>
+        <result column="attribute12" property="attribute12"/>
+        <result column="attribute13" property="attribute13"/>
+        <result column="attribute14" property="attribute14"/>
+        <result column="attribute15" property="attribute15"/>
+        <result column="attribute16" property="attribute16"/>
+        <result column="attribute17" property="attribute17"/>
+        <result column="attribute18" property="attribute18"/>
+        <result column="attribute19" property="attribute19"/>
+        <result column="attribute20" property="attribute20"/>
+        <result column="attribute21" property="attribute21"/>
+        <result column="attribute22" property="attribute22"/>
+        <result column="attribute23" property="attribute23"/>
+        <result column="attribute24" property="attribute24"/>
+        <result column="attribute25" property="attribute25"/>
+        <result column="attribute26" property="attribute26"/>
+        <result column="attribute27" property="attribute27"/>
+        <result column="attribute28" property="attribute28"/>
+        <result column="attribute29" property="attribute29"/>
+        <result column="attribute30" property="attribute30"/>
+    </resultMap>
+
+    <resultMap id="treeNodeResultMap" type="org.springblade.core.tool.node.TreeNode">
+        <id column="sku_type_id" property="skuTypeId"/>
+        <result column="type_pre_id" property="typePreId"/>
+        <result column="title" property="title"/>
+        <result column="value" property="value"/>
+        <result column="key" property="key"/>
+    </resultMap>
+
+    <select id="tree" resultMap="treeNodeResultMap" resultType="org.nodes.wms.core.basedata.vo.SkuTypeVO">
+        select sku_type_id as id,
+        type_pre_id as parent_id,
+        type_name as title,
+        sku_type_id as "value",
+        sku_type_id as "key",
+        wo_id
+        from wms_sku_type
+        where 1=1
+        <if test="skuTypeId != null and skuTypeId != ''">
+            and sku_type_id = #{skuTypeId}
+        </if>
+        <if test="typePreId != null and typePreId != ''">
+            and type_pre_id = #{typePreId}
+        </if>
+        <if test="woId != null and woId != ''">
+            and wo_id = #{woId}
+        </if>
+
+    </select>
+</mapper>

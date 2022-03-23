@@ -1,0 +1,47 @@
+#数据源配置
+spring:
+  redis:
+    ##redis 单机环境配置
+    host: 127.0.0.1
+    port: 6379
+    password:
+    # 公司服务器 161 BETA
+    #    database: 1
+    # 公司服务器 161 RELEASE
+    #    database:2
+    # 公司服务器 161 DEV
+    database: 10
+    ssl: false
+    ##redis 集群环境配置
+    #cluster:
+    #  nodes: 127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003
+    #  commandTimeout: 5000
+  datasource:
+    # 公司服务器 161 BETA
+    #    url: jdbc:mysql://192.168.1.161:3306/wms3.1_beta?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    #    username: root
+    #    password: NOdes705
+    # 公司服务器 161 RELEASE
+    #    url: jdbc:mysql://192.168.1.161:3306/wms3.1_release?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    #    username: root
+    #    password: NOdes705
+    # 公司服务器 161 Development
+    url: jdbc:mysql://192.168.1.161:3306/wms3.1_dev?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    username: root
+    password: NOdes705
+    #    url: jdbc:mysql://127.0.0.1:3306/wms3.1?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    #    username: root
+    #    password: 8238982
+    # 阿里云 116
+#    url: jdbc:mysql://114.215.69.116:9249/wms3_dev?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+#    username: NodesDep
+#    password: Nodes@2064b0
+
+#blade配置
+blade:
+  prop:
+    upload-domain: http://114.215.129.212:8888
+    remote-mode: true
+    log-mode: true
+server:
+  port: 8088

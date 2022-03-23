@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.outstock.so.mapper.WellenMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="wellenResultMap" type="org.nodes.wms.core.outstock.so.entity.Wellen">
+        <result column="status" property="status"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="wellen_id" property="wellenId"/>
+        <result column="wellen_no" property="wellenNo"/>
+        <result column="wellen_state" property="wellenState"/>
+        <result column="wellen_item1" property="wellenItem1"/>
+        <result column="wellen_item2" property="wellenItem2"/>
+        <result column="wellen_item3" property="wellenItem3"/>
+        <result column="wellen_item4" property="wellenItem4"/>
+        <result column="wellen_item5" property="wellenItem5"/>
+        <result column="wellen_item6" property="wellenItem6"/>
+        <result column="wellen_item7" property="wellenItem7"/>
+        <result column="wellen_item8" property="wellenItem8"/>
+        <result column="wellen_item9" property="wellenItem9"/>
+        <result column="wellen_item10" property="wellenItem10"/>
+        <result column="wh_id" property="whId"/>
+        <result column="bill_multiple" property="billMultiple"/>
+    </resultMap>
+    <!-- 通过编码查询波次 -->
+    <select id="selectWellenListByNo" resultType="org.nodes.wms.core.outstock.so.entity.Wellen">
+        select * from so_wellen where wellen_no = #{wellenNo} and  ( wellen_state = 20 or wellen_state = 30 )
+    </select>
+</mapper>

@@ -1,0 +1,96 @@
+<ion-header id="head" #deliveryhead>
+  <ion-navbar color="wmscolor">
+    <ion-title>
+      单据绑定
+    </ion-title>
+  </ion-navbar>
+  <div class="title-bt">
+    <div class="nav-tile">
+      <crumbs></crumbs>
+    </div>
+  </div>
+</ion-header>
+<ion-content overflow-scroll="true">
+  <div class="header-item-box" *ngIf="isShow">
+    <div class="item">
+      <div class="row">
+        <span>波次号：9999999</span>
+        <span>三号打印机</span>
+      </div>
+      <div class="row">
+        <span>订单数：5</span>
+        <span>分配量：27</span>
+      </div>
+      <div class="row">
+        <span>订单行：2</span>
+        <span>拣货量：2</span>
+      </div>
+    </div>
+  </div>
+  <div class="list_item_serial">
+    <div class="list_item_title">
+      <span>
+        订单数(<b>{{scanModelRecords.length}}</b>)
+      </span>
+      <span *ngIf="isShow; else elseBlock" (click)="onIsShowClick()" style="padding-right: 30px;">
+        <ion-icon name="md-arrow-dropup"></ion-icon>
+      </span>
+      <ng-template #elseBlock>
+        <span (click)="onIsShowClick()" style="padding-right: 30px;">
+          <ion-icon name="md-arrow-dropdown"></ion-icon>
+        </span>
+      </ng-template>
+      <span>
+        <button ion-button icon-only (click)="presentPopover($event)">
+          <ion-icon name="md-more"></ion-icon>
+        </button>
+      </span>
+    </div>
+  </div>
+
+  <ion-list class="list_item_div">
+    <ion-scroll scrollY="true" [ngStyle]="{'height':scrollHeight+'px'}">
+      <ion-item-sliding *ngFor="let item of [1,2,3];let i = index">
+        <ion-item button  >
+          <div class="item-box">
+            <div class="left">
+              <ion-item>
+                <ion-checkbox ></ion-checkbox>
+              </ion-item>
+            </div>
+            <div class="right">
+              <div class="row">
+                <span>SO00000000000001</span>
+                <div>
+                  <span class="tag">未</span>
+                  <span>未完成</span>
+                </div>
+              </div>
+              <div class="row">
+                <span>订单行数：1</span>
+                <span>分配量：20</span>
+              </div>
+              <div class="row">
+                <span>完成行数：0</span>
+                <span>拣货量：0</span>
+              </div>
+            </div>
+          </div>
+        </ion-item>
+        <ion-item-options side="right">
+          <button (tap)="printItem(item)" ion-button style="background-color: #00BFBF;">
+            打印
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-scroll>
+  </ion-list>
+
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button no-dbl-click ion-button block class="btn-l" (tap)="exit()">
+      返回[Esc]
+    </button>
+  </div>
+</ion-footer>

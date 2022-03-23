@@ -1,0 +1,116 @@
+<ion-header>
+    <ion-navbar color="wmscolor">
+        <ion-title>库存查询
+            <!-- <div class="title_f_name">(青啤五厂)</div> -->
+        </ion-title>
+        <ion-buttons end (click)="pritIsShow()">
+            <button ion-button icon-only>
+                <ion-icon name="menu"></ion-icon>
+                打印
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+    <!-- <ion-searchbar [(ngModel)]="searchQuery" (keyup)="keyEnter($event)" Description='primary' *ngIf="paramValue==0"
+        placeholder="库位/托盘/SKU/批次号/序列号">
+        <ion-icon class="iconfont icon-saomiao"></ion-icon>
+    </ion-searchbar> -->
+    <ion-searchbar [(ngModel)]="searchQuery" (keyup)="keyEnter($event)" Description='primary' 
+        placeholder="库位/SKU/批次号">
+        <ion-icon class="iconfont icon-saomiao"></ion-icon>
+    </ion-searchbar>
+    <div class="nav-tile">
+        <!-- <ul>
+            <li>首页</li>
+            <li>
+                <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+            </li>
+            <li>库存</li>
+            <li>
+                <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+            </li>
+            <li>库存查询</li>
+        </ul> -->
+        <crumbs></crumbs>
+    </div>
+    <div class="sub_header1" >
+        <div (click)="sortAsc('sku_id')">物品排序</div>
+        <!-- <div *ngIf="paramValue==0" (click)="sortAsc('lpn_code')">托盘排序</div> -->
+        <div (click)="sortAsc('loc_id')">库位排序</div>
+        <div (click)="sortAsc('wh_id')">库房排序</div>
+        <div style="flex:0.2" *ngIf="isMore" (click)="presentPopover($event)"> 
+            <ion-icon ios="md-more" md="md-more"></ion-icon>
+        </div>
+    </div>
+   
+    <!-- <div class="sub_header1" *ngIf="sysparms!=''">
+        <div (click)="sortAsc('sku_id')">物品排序</div>
+        <div (click)="sortAsc('loc_id')">库位排序</div>
+        <div (click)="sortAsc('wh_id')">库房排序</div>
+    </div> -->
+</ion-header>
+<ion-content>
+    <ion-list>
+        <div *ngIf="stockVOList&&stockVOList.length>0" style="text-align: right;">
+            <span>汇总数量：</span>
+            <span>{{stockVOList[0].totalQty}}</span>
+        </div>
+        <div class="list-item-box" *ngFor="let stockVO of stockVOList;" (click)="itemInfo(stockVO)">
+            <div class="list-item-wapper">   
+            <div class="left">
+                    <ul>
+                        <li><span class="bold title">{{stockVO.skuName}}</span></li>
+                        <li><span class="gray">规格：{{stockVO.skuSpec}}</span></li>
+                        <li><span class="gray">库位：</span>{{stockVO.locCode}}</li>
+                        <!-- <li *ngIf="paramValue==0"><span class="gray">容器：</span>{{stockVO.lpnCode}}</li> -->
+                        <li><span class="gray">货主：</span><span>{{stockVO.ownerName}}</span></li>
+                        <li *ngIf="stockVO.skuLot2!=''&&stockVO.skuLot2!=' '"><span>{{stockVO.skuLot2}}</span></li>
+                        <li *ngIf="stockVO.skuLot4!=''&&stockVO.skuLot4!=' '"><span>{{stockVO.skuLot4}}</span></li>
+                    </ul>
+                </div>
+                <div class="right">
+                    <ul>
+                        <li>{{stockVO.whName}}</li>
+                        <li>总&ensp;&ensp;量：<span style="color: orange;">{{stockVO.stockQty}}</span></li>
+                        <li>可用量：<span style="color: orange;">{{stockVO.availableQty}}</span></li>
+                        <li>计量单位：{{stockVO.wsuName}}</li>
+                        <li *ngIf="isCheck" class="last"><ion-checkbox  slot="end" [(ngModel)]="stockVO.CheckStock"></ion-checkbox></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </ion-list>
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content
+          loadingSpinner="bubbles"
+          loadingText="加载更多...">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    <!-- <div *ngFor="let stockVO of stockVOList;" class="title-ms">
+        <div class="title-ms-info" (click)="itemInfo(stockVO)">
+            <ul>
+                <li class="l-width2"><span class="bold title">{{stockVO.sku.skuName}}</span></li>
+                <li class="l-width1"><span class="gray">规格：{{stockVO.skuPackageVO.spec}}</span></li>
+                <li class="l-width1"><span class="s-right">{{stockVO.warehouse.whName}}</span></li>
+                <li class="l-width1"><span class="gray">库位：</span>{{stockVO.location.locCode}}</li>
+                <li class="l-width1"><span class="bold cyan">总量：</span><span
+                        class="bold orange">{{stockVO.stockQty}}</span></li>
+                <li class="l-width1"><span class="gray">容器：</span>{{stockVO.lpnCode}}</li>
+                <li class="l-width1"><span class="gray">可用量：</span>{{stockVO.availableQty}}</li>
+                <li class="l-width2"><span class="gray">货主：</span>{{stockVO.ownerName}}</li>
+            </ul>
+            <ion-icon name="arrow-forward" class="icon-right" *ngIf="stockVO.sku.isSn==1"></ion-icon>
+        </div>
+    </div> -->
+</ion-content>
+<ion-footer>
+    <div class="btn-box">
+        <button (click)="exit()" ion-button block class="btn-l">
+            返回[Esc]
+        </button>
+        <button (click)="btnOk()" ion-button block class="btn-d">
+            <!-- {{buttonEnt}}[Ent] -->
+            补打标签[Ent]
+        </button>
+    </div>
+
+</ion-footer>

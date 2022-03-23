@@ -1,0 +1,92 @@
+<ion-header>
+
+  <ion-navbar color="wmscolor">
+    <ion-title>绑定容器</ion-title>
+  </ion-navbar>
+  <ion-grid style="color: white;">
+    <ion-row>
+      <ion-col>
+        <div class="nav-tile">
+          <crumbs></crumbs>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <sub-header>
+    <ion-item>
+      <div class="sub-header-box">
+        <div class="left">
+          <span>SO99999999999999996</span>
+          <span>订单行数：1</span>
+          <span>完成行数：0</span>
+          <span>客户：北京节点通</span>
+        </div>
+        <div class="right">
+          <span>未完成</span>
+          <span>已完成容器数：10</span>
+          <span>当前绑定容器：0</span>
+        </div>
+      </div>
+    </ion-item>
+  </sub-header>
+</ion-header>
+<ion-content>
+<ion-grid class="grid-box">
+  <ion-row>
+    <ion-col class="col-state-bind">1</ion-col>
+    <ion-col class="col-state-bind">2</ion-col>
+    <ion-col class="col-state-bind">3</ion-col>
+    <ion-col class="col-state-bind">4</ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col class="col-state-default">5</ion-col>
+    <ion-col class="col-state-default">6</ion-col>
+    <ion-col class="col-state-default">7</ion-col>
+    <ion-col class="col-state-default">8</ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col class="col-state-default">9</ion-col>
+    <ion-col class="col-state-default">10</ion-col>
+    <ion-col class="col-state-default">11</ion-col>
+    <ion-col class="col-state-default">12</ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col class="col-state-default">13</ion-col>
+    <ion-col class="col-state-default">14</ion-col>
+    <ion-col class="col-state-default">15</ion-col>
+    <ion-col class="col-state-default">16</ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col class="col-state-default">17</ion-col>
+    <ion-col class="col-state-default">18</ion-col>
+    <ion-col class="col-state-default">19</ion-col>
+    <ion-col class="col-state-default">20</ion-col>
+  </ion-row>
+</ion-grid>
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button ion-button class="btn-l"> 返回[Esc]</button>
+    <button ion-button class="btn-d"> 确认[Ent]</button>
+  </div>
+</ion-footer>
+<ion-menu [content]="content" side="right" type="overlay">
+  <ion-header>
+    <ion-toolbar color="wmscolor">
+      <ion-title>选择操作</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <button ion-item (click)="openPage(homePage)">
+        打印设置
+      </button>
+      <button ion-item (click)="openPage(friendsPage)">
+        单据绑定
+      </button>
+      <button ion-item (click)="openPage(eventsPage)">
+        拣货记录
+      </button>
+    </ion-list>
+  </ion-content>
+</ion-menu>

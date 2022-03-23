@@ -1,0 +1,145 @@
+<!--
+  Generated template for the ShipmentLpnPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>托盘发运
+      <!-- <div class="title_f_name">(青啤五厂)</div> -->
+    </ion-title>
+    <!-- <ion-buttons end (click)="detailed()">
+      <button ion-button icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons> -->
+  </ion-navbar>
+  <ion-searchbar *ngIf="IsShow===ShipmentLpnView" [(ngModel)]="LpnCode" (keyup)="LpnCode_Enter($event)"
+    Description='primary' placeholder="托盘ID/LPN">
+  </ion-searchbar>
+  <div class="nav-tile">
+    <!-- <ul>
+      <li>首页</li>
+      <li>
+        <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+      </li>
+      <li>发运</li>
+      <li>
+        <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+      </li>
+      <li>托盘发运</li>
+    </ul> -->
+    <crumbs></crumbs>
+  </div>
+</ion-header>
+
+<ion-content>
+  <!-- 车牌 -->
+  <div *ngIf="IsShow===truckView" class="truck-nav">
+    <ion-item>
+      <ion-label>装车牌：</ion-label>
+      <ion-input maxlength='60' (keyup)="keyEnter($event)" [(ngModel)]="loadId" type="text"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>车牌号：</ion-label>
+      <ion-input maxlength='30' [(ngModel)]="plateNumber" type="text"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>司机：</ion-label>
+      <ion-input maxlength='60' [(ngModel)]="driverName" type="text"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>电话：</ion-label>
+      <ion-input maxlength='20' [(ngModel)]="driverPhone" type="text"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>运单号：</ion-label>
+      <ion-input maxlength='60' [(ngModel)]="truckHeaderWaybill" type="text"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+  </div>
+
+  <div *ngIf="IsShow===ShipmentLpnView">
+    <div class="nav-header">
+      <div>
+        <b>{{truckCode}}</b>
+      </div>
+      <div>
+        {{driverName}}&nbsp;{{driverPhone}}
+      </div>
+      <div>
+        {{plateNumber}}
+      </div>
+    </div>
+    <ion-list no-lines class="list_item_div">
+      <ion-item-sliding *ngFor="let item of ShipmenArray" class="title-ms">
+        <ion-item  style="height: auto;">
+          <div class="title-ms-info">
+            <div class="title-font">
+              <div><a>{{item.stockPdaVO.lpnCode}}</a></div>
+              <div style="color:orange;">物品种类:{{item.stockPdaVO.skuCount}}</div>
+              <div>暂存区:{{item.stockPdaVO.locCode}}</div>
+            </div>
+            <!-- <div class="ionic_right">
+              <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+            </div> -->
+          </div>
+          <span class="span-top">{{item.stockPdaVO.whName}}</span>
+          <span class="span-bt">{{item.stockPdaVO.scanQty}}{{item.stockPdaVO.wsuName}}</span>
+        </ion-item>
+        <ion-item-options side="right">
+          <button (click)="removeItem(item)" ion-button color="danger">
+            删除
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+    <!-- <div *ngFor="let item of ShipmenArray" class="title-ms">
+      <div class="title-ms-info">
+        <div class="title-font">
+          <div><a>{{item.stockPdaVO.lpnCode}}</a></div>
+          <div style="color:orange;">物品种类:{{item.stockPdaVO.skuCount}}</div>
+          <div>暂存区:{{item.stockPdaVO.locCode}}</div>
+        </div>
+        <div class="ionic_right">
+          <ion-icon class="iconfont icon-xiangyou"></ion-icon>
+        </div>
+      </div>
+      <span class="span-top">{{item.stockPdaVO.whName}}</span>
+      <span class="span-bt">{{item.stockPdaVO.occupyQty}}{{item.stockPdaVO.wsuName}}</span>
+    </div> -->
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="btn-box" *ngIf="IsShow===truckView">
+    <button no-dbl-click ion-button block class="btn-l" (tap)="exit()">
+      返回[Esc]
+    </button>
+    <button no-dbl-click ion-button block class="btn-d" (tap)="nextBtnOk()">
+      下一步[→]
+    </button>
+  </div>
+  <div class="btn-box" *ngIf="IsShow===ShipmentLpnView">
+    <button no-dbl-click ion-button block class="btn-l" (tap)="exit()">
+      上一步[←]
+    </button>
+    <button no-dbl-click ion-button block class="btn-d" (tap)="btnOk()">
+      发运[Ent]
+    </button>
+  </div>
+</ion-footer>

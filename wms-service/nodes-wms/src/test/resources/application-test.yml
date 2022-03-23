@@ -1,0 +1,39 @@
+#数据源配置
+spring:
+  redis:
+    ##redis 单机环境配置
+    host: 127.0.0.1
+    #    host: 10.10.30.225
+#    host: 114.215.69.116
+    port: 6379
+    password:
+    database: 2
+    ssl: false
+    ##redis 集群环境配置
+    #cluster:
+    #  nodes: 127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003
+    #  commandTimeout: 5000
+  datasource:
+    # 公司服务器 221
+    #    url: jdbc:mysql://127.0.0.1:3306/wms3.1?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    #    username: root
+    #    password: 8238982
+    #    url: jdbc:mysql://192.168.1.221:3306/wms31?useSSL=false&useUnicode=true&chgetPickInfoByBoxaracterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    #    username: nodes
+    #    password: nodes
+    url: jdbc:mysql://192.168.1.221:3306/wms31?useSSL=false&useUnicode=true&chgetPickInfoByBoxaracterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    # 阿里云 116
+#    url: jdbc:mysql://114.215.69.116:9249/wms3.1?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+#    username: NodesDep
+#    password: Nodes@2064b0
+
+#blade配置
+blade:
+  prop:
+    upload-domain: http://114.215.129.212:8888
+    remote-mode: true
+    log-mode: true
+server:
+  port: 8088

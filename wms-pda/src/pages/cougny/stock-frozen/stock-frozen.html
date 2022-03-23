@@ -1,0 +1,72 @@
+<ion-header>
+
+  <ion-navbar color="wmscolor">
+    <ion-title>库存冻结</ion-title>
+    <!-- <ion-buttons end (click)="finishDetailed()">
+      <button ion-button icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons> -->
+  </ion-navbar>
+  <ion-grid style="color: white;">
+    <ion-row>
+      <ion-col>
+        <ion-searchbar [(ngModel)]="searchQuery" (keyup)="keyEnter($event)" placeholder="请扫描库位|物料">
+          <ion-icon class="iconfont icon-saomiao"></ion-icon>
+        </ion-searchbar>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div class="nav-tile">
+          <crumbs></crumbs>
+        </div>
+      </ion-col>
+      <ion-col text-right col-1 class="col-more">
+          <div (click)="presentPopover($event)"> 
+            <ion-icon ios="md-more" md="md-more"></ion-icon>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let stockVO of stockVOList">
+      <div class="item-box">
+          <div class="left">
+            <ion-item>
+              <ion-checkbox  [(ngModel)]="stockVO.CheckStock" ></ion-checkbox>
+            </ion-item>
+          </div>
+          <div class="right">
+              <div class="left">
+                <span>{{stockVO.skuName}}</span>
+                <span>规格：{{stockVO.skuSpec}}</span>
+                <!-- <span>容器：{{stockVO.lpnCode}}</span> -->
+                <!-- <span *ngIf="paramValue==0">容器：{{stockVO.lpnCode}}</span> -->
+                <div *ngFor="let skuLot of range(stockVO)">
+                  <span>{{skuLot}}</span>
+                </div>
+              </div>
+              <div  class="right">
+                <span>{{stockVO.whName}}</span>
+                <span>总  量:{{stockVO.stockQty}}</span>
+                <span>可用量：{{stockVO.availableQty}}</span>
+                <span>计量单位：{{stockVO.wsuName}}</span>
+                <button ion-button (click)="singleClick(stockVO)" *ngIf="!lockFlag"
+                  [ngClass]="{'frozen-off':stockVO.stockStatus==0,'frozen-on':stockVO.stockStatus==1}" >
+                  {{stockVO.stockStatus==0?'冻结':'解冻'}}
+                </button>
+              </div> 
+          </div>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button ion-button  [ngClass]="{'btn-l':locFrozenFlag==false,'btn-d':locFrozenFlag==true}" (click)="multClick(1)">库位冻结/解冻</button>
+    <button ion-button *ngIf="!lockFlag" [ngClass]="{'btn-l':multFrozenFlag==false,'btn-d':multFrozenFlag==true}" (click)="multClick(0)">批量冻结/解冻</button>
+  </div>
+</ion-footer>

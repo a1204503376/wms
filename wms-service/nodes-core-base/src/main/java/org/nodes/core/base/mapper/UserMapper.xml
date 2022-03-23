@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.core.base.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="userResultMap" type="org.nodes.core.base.entity.User">
+        <result column="id" property="id"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="account" property="account"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="real_name" property="realName"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
+        <result column="birthday" property="birthday"/>
+        <result column="sex" property="sex"/>
+        <result column="role_id" property="roleId"/>
+        <result column="dept_id" property="deptId"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="baseColumnList">
+        select id,
+        create_user AS createUser,
+        create_time AS createTime,
+        update_user AS updateUser,
+        update_time AS updateTime,
+        status,
+        is_deleted AS isDeleted,
+        account, password, name, real_name, email, phone, birthday, sex, role_id, dept_id
+    </sql>
+
+    <select id="selectUserPage" resultMap="userResultMap">
+        select * from blade_user where 1=1
+    </select>
+
+    <select id="getUser" resultMap="userResultMap">
+        SELECT
+            *
+        FROM
+            blade_user
+        WHERE
+            tenant_id = #{param1} and account = #{param2} and password = #{param3} and is_deleted = 0
+    </select>
+
+    <!-- 任务分配用户列表 -->
+    <select id="selectUserListForTask" resultMap="userResultMap">
+        SELECT * FROM (
+            SELECT case when t.c is NULL THEN 0 ELSE t.c END bc ,bu.* FROM blade_user bu
+                LEFT JOIN (
+                    SELECT *,count(close_time) c FROM tsk_task_history WHERE close_time IS NOT NULL AND user_id is not null AND TO_DAYS(close_time) = TO_DAYS(NOW()) GROUP BY user_id
+                    ) tth ON bu.id = tth.user_id
+                LEFT JOIN ( SELECT * FROM (SELECT user_id,count(task_id) c FROM tsk_task GROUP BY user_id ) tt ) t ON bu.id=t.user_id
+                    WHERE bu.role_id IN ( SELECT id FROM blade_role WHERE id IN (SELECT role_id FROM tsk_role_task) )
+                    AND id in (SELECT user_id FROM log_user_register WHERE lur_id in (SELECT MAX(lur_id) FROM log_user_register GROUP BY user_id) AND login_status = 0 )
+                    GROUP BY bu.id ORDER BY CASE WHEN tth.c is null THEN 0 ELSE tth.c END  ASC ) u  WHERE u.bc &lt; #{taskCount};
+    </select>
+
+
+
+</mapper>

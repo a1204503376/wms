@@ -1,0 +1,17 @@
+{
+  "name": "cordova-plugin-barcodeplugin",
+  "version": "1.0.0",
+  "description": "",
+  "cordova": {
+    "id": "cordova-plugin-barcodeplugin",
+    "platforms": [
+      "android"
+    ]
+  },
+  "keywords": [
+    "barcodeplugin",
+    "cordova-plugin-barcodeplugin"
+  ],
+  "author": "wuhj",
+  "license": "ISC"
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.outstock.loading.mapper.SoTruckDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="soTruckDetailResultMap" type="org.nodes.wms.core.outstock.loading.entity.SoTruckDetail">
+        <id column="truck_detail_id" property="truckDetailId"/>
+        <result column="truck_id" property="truckId"/>
+        <result column="truck_code" property="truckCode"/>
+        <result column="so_bill_id" property="soBillId"/>
+        <result column="lpn_code" property="lpnCode"/>
+        <result column="wellen_id" property="wellenId"/>
+        <result column="truck_detail_waybill" property="truckDetailWaybill"/>
+        <result column="wms_remark_code" property="wmsRemarkCode"/>
+
+    </resultMap>
+
+</mapper>

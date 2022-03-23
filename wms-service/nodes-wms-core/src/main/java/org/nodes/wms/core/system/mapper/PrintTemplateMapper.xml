@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.system.mapper.PrintTemplateMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="printTemplateResultMap" type="org.nodes.wms.core.system.entity.PrintTemplate">
+        <id column="spt_id" property="sptId"/>
+        <result column="wo_id" property="woId"/>
+        <result column="wh_id" property="whId"/>
+        <result column="spt_type" property="sptType"/>
+        <result column="spt_code" property="sptCode"/>
+        <result column="spt_desc" property="sptDesc"/>
+        <result column="spt_ver" property="sptVer"/>
+        <result column="spt_data" property="sptData"/>
+        <result column="spt_remark" property="sptRemark"/>
+        <result column="spt_name" property="sptName"/>
+        <result column="status" property="status"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <!-- 打印模板分页  -->
+    <select id="selectPrintTemplatePage" resultMap="printTemplateResultMap">
+        select * from sys_print_template
+    </select>
+
+</mapper>

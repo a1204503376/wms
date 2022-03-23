@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.count.mapper.CountHeaderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="countHeaderResultMap" type="org.nodes.wms.core.count.entity.CountHeader">
+        <id column="count_bill_id" property="countBillId"/>
+        <result column="count_bill_no" property="countBillNo"/>
+        <result column="wh_id" property="whId"/>
+        <result column="count_bill_state" property="countBillState"/>
+        <result column="count_by" property="countBy"/>
+        <result column="count_remark" property="countRemark"/>
+        <result column="count_tag" property="countTag"/>
+        <result column="creator" property="creator"/>
+        <result column="sync_state" property="syncState"/>
+        <result column="create_time" property="procTime"/>
+        <result column="create_user" property="creator"/>
+
+    </resultMap>
+    <select id="getCountHeaderByNo" resultType="org.nodes.wms.core.count.entity.CountHeader">
+        select * from wms_count_header where count_bill_no = #{billNo}
+    </select>
+
+</mapper>

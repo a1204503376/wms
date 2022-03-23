@@ -1,0 +1,141 @@
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>
+      按箱上架
+      <!-- <div class="title_f_name">(青啤五厂)</div> -->
+    </ion-title>
+  </ion-navbar>
+  <!-- <ion-searchbar [(ngModel)]="searchCode" (keyup)="scanModelChange($event)" Description='primary' placeholder="箱号">
+    <ion-icon class="iconfont iconsaomiao"></ion-icon>
+  </ion-searchbar> -->
+  <div class="nav-tile">
+    <!-- <ul>
+          <li>首页</li>
+          <li>
+            <ion-icon class="iconfont iconicon_arr_right"></ion-icon>
+          </li>
+          <li>按箱上架</li>
+        </ul> -->
+    <crumbs></crumbs>
+  </div>
+</ion-header>
+<ion-content class="no-scroll">
+  <div class="header-box">
+    <div class="left">
+      <span>{{skuCode}}</span>
+      <div>
+        <span>物品名称:</span>
+        <span>{{skuName}}</span>
+      </div>
+      <div>
+        <span>上架库区:</span>
+        <span>{{zoneName}}</span>
+      </div>
+    </div>
+    <div class="right">
+      <span>{{whName}}</span>
+      <div>
+        <span>推荐库位:</span>
+        <span>{{recommendLoc}}</span>
+      </div>
+      <div>
+        <span>待上架数:</span>
+        <span *ngIf="planCount">{{planCount}}{{umName}}</span>
+      </div>
+    </div>
+  </div>
+  <!-- <div>
+    <div class="list_item">
+      <ion-item style="height:40px">
+        <ion-label>库&emsp;&emsp;房：</ion-label>
+        <ion-select [(ngModel)]="warhouserItem" interface="action-sheet" cancelText="取消">
+          <div *ngFor="let Item of WarehouserModel">
+            <ion-option [value]="Item">{{Item.whName}}</ion-option>
+          </div>
+        </ion-select>
+      </ion-item>
+    </div>
+  </div> -->
+
+  <div class="list_item">
+    <!-- <ion-item>
+          <ion-label>当前库位：</ion-label>
+          <ion-input [(ngModel)]="locCode" type="text"></ion-input>
+          <p>Selected Car: {{selectedCar1 || 'none'}}</p>
+          <ion-avatar item-end>
+            <ion-icon class="iconfont iconsaomiao"></ion-icon>
+          </ion-avatar>
+        </ion-item> -->
+    <ion-item style="height: 40px;">
+      <ion-label>箱号：</ion-label>
+      <ion-input maxlength='30' type="text" [(ngModel)]="boxCode"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <div class="p-select">
+      <div class="p-box">
+        <label class="p-label">当前库位：</label>
+        <!-- <p-dropdown class="drop-down" #ploc [options]="locations" [(ngModel)]="loc" editable="true"></p-dropdown> -->
+        <p-dropdown [style]="{'width':'100%'}" [options]="locList" [(ngModel)]="locCode" editable="true"
+          placeholder="请选择"></p-dropdown>
+      </div>
+    </div>
+
+    <ion-item style="height: 40px;">
+      <ion-label>目标库位：</ion-label>
+      <ion-input [(ngModel)]="targetlocCode" type="text"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+
+    <ion-item *ngIf="scanModel" style="height: 40px;">
+      <ion-label style="opacity: 100;">上架数量：</ion-label>
+      <ion-input maxlength='30' type="number" [(ngModel)]="scanModel.qty">
+      </ion-input>
+      <ion-select disabled [(ngModel)]="umName" cancelText="取消">
+        <ion-option [value]="umName">{{umName}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <!-- <ion-list style="flex-grow: 1;display: flex;flex-direction: column;margin:0">
+      <ion-list-header>
+        所在库位列表
+      </ion-list-header>
+      <ion-scroll scrollY="true" style="flex-grow: 1;">
+        <ion-item *ngFor="let item of items">
+          <div class="nodes-list-item">
+            <div class="left">
+              <span>{{item.zoneName}}</span>
+              <span>{{item.skuName}}</span>
+              <span>{{item.skuCode}}</span>
+            </div>
+            <div class="right">
+              <span>
+                {{item.locCode}}
+              </span>
+              <span>
+                {{item.availableQty}}
+              </span>
+            </div>
+          </div>
+        </ion-item>
+      </ion-scroll>
+    </ion-list> -->
+  </div>
+  <!-- <h3>Editable</h3>
+    <p-dropdown [options]="cars" [(ngModel)]="selectedCar1" editable="true" placeholder="Select a Brand"></p-dropdown>
+    <p>Selected Car: {{selectedCar1 || 'none'}}</p> -->
+  <!-- <p-calendar [(ngModel)]="value"></p-calendar> -->
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button no-dbl-click ion-button block class="btn-l" (tap)="exit()">
+      返回[Esc]
+    </button>
+    <button no-dbl-click ion-button block class="btn-d" (tap)="btnOk()">
+      提交[Ent]
+    </button>
+  </div>
+
+</ion-footer>

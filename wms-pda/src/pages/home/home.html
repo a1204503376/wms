@@ -1,0 +1,50 @@
+<!--
+  Generated template for the HomePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>首页
+      <!-- <div class="title_f_name">(青啤五厂)</div> -->
+    </ion-title>
+    <ion-buttons class="user_btn" start (click)="userSetting()">
+      <button ion-button icon-only>
+        <ion-icon class="iconfont iconyonghufangkeshu"></ion-icon>
+        {{nickName}}
+      </button>
+    </ion-buttons>
+    <ion-buttons end (click)="detailed()">
+      <button ion-button icon-only>
+        <ion-icon class="iconfont iconHome_icon_tuichu"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <div class="title-bt-after"></div>
+  <!-- <div class="title-bt">
+    <div class="factory">
+      <span>待完成任务：200</span>
+    </div>
+
+    <div class="centerdiv"></div>
+    <div class="finish_task">
+      <span>已完成任务：200</span>
+    </div>
+  </div> -->
+</ion-header>
+<ion-content>
+  <div class="login_content">
+    <ion-row>
+      <ion-col col-4 *ngFor="let item of menuRole; let _i = index">
+        <div *ngIf="item.source!=''" class="logon_ionic" (click)="expression(item)">
+          <span>{{_i+1}}</span>
+          <ion-icon class="{{item.source}}"></ion-icon>
+          <span>{{item.name}}</span>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <!-- <serial-number></serial-number> -->
+</ion-content>

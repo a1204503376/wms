@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.stock.core.mapper.SerialMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="serialResultMap" type="org.nodes.wms.core.stock.core.entity.Serial">
+        <id column="serial_id" property="serialId"/>
+        <result column="stock_id" property="stockId"/>
+        <result column="wh_id" property="whId"/>
+        <result column="serial_number" property="serialNumber"/>
+        <result column="serial_state" property="serialState"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="sku_code" property="skuCode"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="lot_number" property="lotNumber"/>
+        <result column="system_proc_id" property="systemProcId"/>
+    </resultMap>
+    <!-- 查询库存内的序列号 -->
+    <select id="selectSerialFromStock" resultMap="serialResultMap">
+        SELECT * FROM wms_serial WHERE stock_id in
+                                       (
+                                           SELECT stock_id FROM wms_stock
+                                           WHERE lpn_code = #{lpnCode}
+                                             AND sku_id = #{skuId}
+                                       )
+                                   AND serial_number = #{serialNumber}
+    </select>
+</mapper>

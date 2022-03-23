@@ -1,0 +1,90 @@
+<ion-header>
+
+  <ion-navbar color="wmscolor">
+    <ion-title>批量拣货</ion-title>
+      <button ion-button icon-only menuToggle #content end [root]="rootPage">
+        <ion-icon name="menu"></ion-icon>
+      </button>
+  </ion-navbar>
+  <ion-grid style="color: white;">
+    <ion-row>
+      <ion-col>
+        <div class="nav-tile">
+          <crumbs></crumbs>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <sub-header>
+    <ion-item>
+      <div class="sub-header-box">
+        <div class="left">
+          <span>哇哈哈 500ml 促销装</span>
+          <span>库位：01-01-01-01</span>
+          <span>规格：1-24</span>
+        </div>
+        <div class="right">
+          <span>未绑定</span>
+          <span>计划量：10瓶</span>
+          <span>已拣量：5瓶</span>
+        </div>
+      </div>
+    </ion-item>
+  </sub-header>
+</ion-header>
+<ion-content>
+<ion-grid>
+  <ion-row class="body-item-box-2">
+    <ion-col>
+        <page-check-in-box-label-type [asnBillNo]='asnBillNo' [ruleCode]='ruleCode' (outer)="runParent($event)" #labelTypecom>
+        </page-check-in-box-label-type>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<ion-grid class="grid-box">
+  <ion-row>
+    <ion-col class="col-state-bind">1</ion-col>
+    <ion-col class="col-state-bind">2</ion-col>
+    <ion-col class="col-state-bind">3</ion-col>
+    <ion-col class="col-state-bind">4</ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col class="col-state-default">5</ion-col>
+    <ion-col class="col-state-default">6</ion-col>
+    <ion-col class="col-state-default">7</ion-col>
+    <ion-col class="col-state-default">8</ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col class="col-state-default">9</ion-col>
+    <ion-col class="col-state-default">10</ion-col>
+    <ion-col class="col-state-default">11</ion-col>
+    <ion-col class="col-state-default">12</ion-col>
+  </ion-row>
+</ion-grid>
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button ion-button class="btn-l"> 返回[Esc]</button>
+    <button ion-button class="btn-d"> 确认[Ent]</button>
+  </div>
+</ion-footer>
+<ion-menu [content]="content" side="right" type="overlay">
+  <ion-header>
+    <ion-toolbar color="wmscolor">
+      <ion-title>选择操作</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <button ion-item (click)="openPage(homePage)">
+        打印设置
+      </button>
+      <button ion-item (click)="openPage(friendsPage)">
+        单据绑定
+      </button>
+      <button ion-item (click)="openPage(eventsPage)">
+        拣货记录
+      </button>
+    </ion-list>
+  </ion-content>
+</ion-menu>

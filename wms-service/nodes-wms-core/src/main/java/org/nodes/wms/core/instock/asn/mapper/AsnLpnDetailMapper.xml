@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.instock.asn.mapper.AsnLpnDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="lpnDetailResultMap" type="org.nodes.wms.core.instock.asn.entity.AsnLpnDetail">
+        <id column="asn_lpn_id" property="asnLpnId"/>
+        <result column="asn_bill_id" property="asnBillId"/>
+        <result column="asn_bill_no" property="asnBillNo"/>
+        <result column="asn_detail_id" property="asnDetailId"/>
+        <result column="sn_detail_code" property="snDetailCode"/>
+        <result column="lpn_code" property="lpnCode"/>
+        <result column="lpn_qty" property="lpnQty"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="wsp_id" property="wspId"/>
+        <result column="sku_level" property="skuLevel"/>
+        <result column="um_code" property="umCode"/>
+        <result column="um_name" property="umName"/>
+        <result column="sku_spec" property="skuSpec"/>
+        <result column="lpn_status" property="lpnStatus"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectLpnDetailPage" resultMap="lpnDetailResultMap">
+        select * from asn_lpn_detail where 1=1
+    </select>
+
+</mapper>

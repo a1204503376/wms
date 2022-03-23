@@ -1,0 +1,34 @@
+page-checkinhome {
+  .title-bt {
+    height: 30px;
+    background-color: $titlecolor;
+    font-size: 14px;
+    color: white;
+    .factory {
+      float: left;
+      width: 49%;
+      padding-left: 4%;
+    }
+  }
+  .ion-title {
+    text-align: center;
+  }
+  .finish_task {
+    float: right;
+    width: 49%;
+    padding-left: 10%;
+  }
+  .centerdiv {
+    float: left;
+    width: 1px;
+    height: 70%;
+    border-right: 1px solid #00ffff;
+  }
+  ion-row ion-col {
+    border-bottom: 5px solid $bgcolor;
+    border-right: 5px solid $bgcolor;
+    padding-top: 10px;
+    height: 111px;
+    background-color: white;
+  }
+}

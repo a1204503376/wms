@@ -1,0 +1,40 @@
+package $!{package.ServiceImpl};
+
+import $!{package.Entity}.$!{entity};
+#set($voPackage=$package.Entity.replace("entity","vo"))
+import $!{voPackage}.$!{entity}VO;
+import $!{package.Mapper}.$!{table.mapperName};
+import $!{package.Service}.$!{table.serviceName};
+import $!{superServiceImplClassPackage};
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.springblade.core.tool.utils.Func;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+#if($!{cfg.hasWrapper})
+import $!{wrapperPackage}.$!{entity}Wrapper;
+#end
+/**
+ * $!{table.comment} 服务实现类
+ *
+ * @author $!{author}
+ * @since $!{date}
+ */
+@Service
+@Primary
+@Transactional(propagation = Propagation.NESTED,isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
+#if($!{kotlin})
+open class $!{table.serviceImplName}<M extends $!{table.mapperName}, T extends $!{entity}> : $!{superServiceImplClass}<$!{table.mapperName}, $!{entity}>(), $!{table.serviceName} {
+
+
+    }
+#else
+public class $!{table.serviceImplName}<M extends $!{table.mapperName}, T extends $!{entity}>
+    extends $!{superServiceImplClass}<$!{table.mapperName}, $!{entity}>
+    implements $!{table.serviceName} {
+
+}
+#end

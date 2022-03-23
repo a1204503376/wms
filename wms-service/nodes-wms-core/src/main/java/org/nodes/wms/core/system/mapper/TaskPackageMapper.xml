@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.system.mapper.TaskPackageMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="taskPackageResultMap" type="org.nodes.wms.core.system.entity.TaskPackage">
+        <id column="ttp_id" property="ttpId"/>
+        <result column="wh_id" property="whId"/>
+        <result column="task_type_cd" property="taskTypeCd"/>
+        <result column="task_proc_type" property="taskProcType"/>
+        <result column="task_data_id" property="taskDataId"/>
+        <result column="ttp_create_time" property="ttpCreateTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+</mapper>

@@ -1,0 +1,131 @@
+page-skulist-modal {
+  .item-ios {
+    padding-left: 0;
+    h2 {
+      margin: 0 0 2px 15px;
+    }
+    span {
+      margin: 0 0 2px 15px;
+    }
+  }
+  .item-ios.item-block .item-inner {
+    padding-right: 8px;
+    padding-right: 8px;
+    border-bottom: 5px solid $bgcolor !important;
+  }
+  .item-block {
+    height: 100%;
+  }
+  ion-label {
+    // width: 70px;
+    // text-align: left;
+    // -moz-text-align-last: justify;
+    // text-align-last: left;
+    h2 {
+      margin: 0px 0 2px 15px;
+    }
+  }
+  .selected {
+    background-color: #488aff;
+  }
+  .content-ios {
+    background: rgba(0, 0, 0, 0.3);
+    color: #000;
+    ion-list {
+      margin: 5% 10%;
+      width: 80%;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      .list-header-ios {
+        color: #000;
+        font-size: 1.4rem;
+      }
+    }
+    ion-item-group:after,
+    ion-item-group:before {
+      content: "";
+      display: block;
+      clear: both;
+    }
+    ion-item-group {
+      background: #fff;
+      //padding: 10px 12px;
+    }
+    ion-item-group span:last-child {
+      display: inline-block;
+      float: right;
+    }
+    ion-item-group:first-child {
+      font-size: 2.1rem;
+      font-weight: bold;
+      height: 55px;
+      line-height: 42px;
+      text-align: center;
+      //border-bottom: 1px solid #e0e0e0;
+    }
+    .item-inner {
+      margin-right: 0 !important;
+    }
+    ion-item-group:nth-child(2) {
+      ion-item:first-child {
+        .item-inner {
+          border-top: 10px solid $bgcolor !important;
+        }
+      }
+      ion-scroll {
+        height: 320px;
+        ion-item {
+          font-size: 1rem;
+        }
+        h2 {
+          color: $fontblue;
+        }
+        span {
+          color: black;
+          font-weight: bold;
+          font-size: 1.3rem;
+        }
+        .owner-div span {
+          color: $font888383;
+        }
+      }
+    }
+
+    ion-item-group:last-child {
+      padding: 0;
+      button.button-ios {
+        padding: 0;
+        margin: 0;
+        width: 50%;
+        font-size: 1.8rem;
+        float: left;
+        border-radius: 0;
+        height: 45px;
+      }
+      button:first-child.button-ios {
+        background: #f06455;
+        color: #fff;
+        border: 1px solid #f06455;
+      }
+      button:first-child.button-ios.activated {
+        background: #fff;
+        color: #f06455;
+      }
+      button:last-child.button-ios {
+        background: #0091bd;
+        color: #fff;
+        border: 1px solid #0091bd;
+      }
+      button:last-child.button-ios.activated {
+        background: #fff;
+        color: #0091bd;
+      }
+    }
+  }
+  .scroll-content {
+  }
+  // ion-label{
+  //   flex: 1 !important;
+  // }
+}

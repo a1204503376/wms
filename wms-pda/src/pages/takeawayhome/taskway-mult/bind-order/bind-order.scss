@@ -1,0 +1,277 @@
+page-bind-order {
+    .header-item-box{
+        background-color: white;
+        border-bottom: .55px solid #c8c7cc;
+        >.item{
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            >.row{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+        
+    }
+    .content-ios {
+        background-color: $bgcolor;
+    }
+    .selected {
+        border-bottom: 5px solid #33cbcc !important;
+    }
+    .scroll-content {
+        // overflow-y: hidden;
+        display: flex;
+        flex-direction: column;
+        height: inherit;
+        padding-top: 88px;
+        padding-bottom: 45px;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+       
+    }
+    .list-ios ion-item-options {
+        padding-top: 3px;
+        
+    }
+    .list-ios ion-item-options .button{
+        width: 60px;
+    }
+    .list-ios ion-item-options .button:last-child{
+        padding: 0;
+    }
+    .nodes-item{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        font-size: 12px;
+        .left{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .left-2{
+                display: flex;
+                flex-direction: column;
+                white-space: pre-wrap;
+                overflow: auto;
+                word-break: break-all;
+                >div{
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+        }
+        .right{
+            >div{
+                font-weight: bold;
+                color: black;
+            }
+        }
+    }
+    // .title-ms {
+    //     width: 100%;
+    //     height: auto;
+    //     background: white;
+    //     font-size: 14px;
+    //     border-top: 5px solid $bgcolor;
+    //     border-bottom: 5px solid $bgcolor;
+    // }
+    .btn-box {
+        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .button-ios {
+        border-radius: 0px;
+        margin: 0;
+        padding: 0;
+    }
+    // ion-label {
+    //     width: 70px;
+    //     text-align: justify;
+    //     text-align-last: justify;
+    //     flex: none !important;
+    // }
+    .head_lable {
+        margin-bottom: 1rem;
+    }
+    /*已扫描物品*/
+    .list_item_serial {
+        background-color: white;
+        border-bottom: 0.55px solid #c8c7cc;
+        .list_item_title {
+            height: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 10px;
+        }
+        span:first-child {
+            display: inline-block;
+            b {
+                color: orange;
+            }
+            ion-icon {
+                font-size: 3rem;
+            }
+        }
+        span:nth-child(2) {
+            ion-icon {
+                font-size: 3rem;
+                color: #666666;
+            }
+        }
+        span:last-child {
+            display: inline-block;
+            b {
+                color: $titlecolor;
+            }
+            ion-icon {
+                font-size: 1.7rem;
+                color: #666666;
+            }
+            .button-ios {
+                height: 100%;
+                background-color: white;
+            }
+        }
+        div {
+            height: 3rem;
+        }
+        .list_item_div item-inner {
+            border-bottom: 0px solid #c8c7cc;
+        }
+    }
+    .list-ios ion-item-sliding {
+        background-color: $bgcolor !important;
+    }
+    .list_item_div {
+        flex-grow: 1;
+        margin: 0;
+        height: 100%;
+      
+        .label-ios{
+            margin: 0;
+        }
+        .item-box{
+            display: flex;
+            flex-direction: row;
+            padding: 10px;
+            .tag{
+                background-color: #00BFBF;
+                color:white;
+                padding: 2px;
+                border-radius: 5px;
+            }
+            .item-ios{
+                padding:0 !important;
+            }
+            .checkbox-ios{
+                margin: 0 !important;
+            }
+            >.left{
+                align-self: center;
+                margin-right: 5px;
+               .item-inner {
+                    border-bottom: 0 !important;
+                }
+            }
+            >.right{
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+                >.row{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                }
+            }
+        }
+        .item-block {
+            height: 100%;
+            width: 100%;
+            min-height: 30px;
+        }
+        ion-item-options{
+            padding: 0;
+        }
+        .checkbox-ios .checkbox-checked{
+            border-color: $color-primary-d;
+            background-color:$color-primary-d;
+        }
+        .item-ios{
+            padding:0 !important;
+        }
+        .item-inner {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        ion-scroll{
+            height: 100%;
+        }
+        ion-scroll.scroll-y .scroll-content{
+            padding: 0 ;
+        }
+        .scroll-zoom-wrapper{
+            height: 100%;
+        }
+    }
+    .title-ms {
+        position: relative;
+        background-color: white;
+    }
+    .title-ms-info .button-ios {
+        position: absolute;
+        top: 5%;
+        left: 3%;
+        height: 20px;
+        font-size: 10px;
+        width: 20px;
+        color: #fff;
+        background-color: #33cbcc;
+    }
+    .title-ms-info {
+        position: relative;
+        font-size: 12px;
+        div {
+            margin-top: 5px;
+        }
+        span:nth-child(1) {
+            color: $font888383;
+        }
+        .spec-msg {
+            color: #008080;
+            //position: absolute;
+            bottom: 0rem;
+            right: 1rem;
+            font-weight: bold;
+        }
+        .number-msg {
+            color: #008080;
+            position: absolute;
+            bottom: 2rem;
+            right: 0rem;
+            font-weight: bold;
+        }
+        .spec-msg-dropdown {
+            color: black;
+        }
+    }
+    // 修改checkbox样式
+    .item.item-ios .checkbox-ios {
+        position: static;
+        display: block;
+        margin: 8px 13px 8px 2px;
+    }
+    // @media only screen and (min-height: 768px) and (min-width: 768px) {
+    //     .modal-wrapper {
+    //         z-index: 10;
+    //         height: 100%;
+    //         contain: strict;
+    //     }
+    // }
+    ion-label {
+        opacity: 1 !important;
+    }
+}

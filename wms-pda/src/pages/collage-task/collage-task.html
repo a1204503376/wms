@@ -1,0 +1,140 @@
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>
+      拼托任务
+      <!-- <div class="title_f_name">(青啤五厂)</div> -->
+    </ion-title>
+    <!-- <ion-buttons end (click)="detailed()">
+          <button ion-button icon-only>
+              <ion-icon name="menu"></ion-icon>
+          </button>
+      </ion-buttons> -->
+  </ion-navbar>
+  <div class="title-bt">
+    <div class="nav-tile">
+      <div class="order-info">任务进度{{scanModelList.length+ resultList.finish}}/{{resultList.total}}</div>
+      <crumbs></crumbs>
+      <!-- <ul>
+        <li>首页</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>任务查看</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>拼托任务</li>
+      </ul> -->
+    </div>
+  </div>
+</ion-header>
+<ion-content>
+  <div>
+    <!-- 物品选显卡 -->
+    <div class="title-ms clearfix" (click)="handItemClick()">
+      <div class="title-ms-info clearfix">
+        <div>单据编码：{{resultList.soBillNo}}</div>
+        <div>单据类型：{{resultList.billTypeName}}</div>
+        <div>客&emsp;&emsp;户：{{resultList.clientName}}</div>
+        <div *ngIf="isShow">托盘数:{{resultList.lpnList.length}}</div>
+        <div *ngIf="!isShow">总箱数:{{scanModelList.length}}</div>
+        <div>{{resultList.whName}}</div>
+        <div class="ionic_right">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 扫描界面 -->
+  <div *ngIf="isShow">
+    <!-- <ion-item> -->
+      <div class="list_header_box">
+        <ion-label>箱码：</ion-label>
+        <ion-input type="text" (keyup)="scanModelChange($event)" [(ngModel)]="scanView"></ion-input>
+        <ion-avatar item-end>
+          <ion-icon class="iconfont iconsaomiao"></ion-icon>
+        </ion-avatar>
+      </div>
+    
+    <!-- </ion-item> -->
+    <!-- 箱码列表 -->
+    <div style="margin-top: 1px;">
+      <ion-list class="list_item_div" *ngIf="scanModelList.length>0">
+        <ion-scroll scrollY="true" style="height:35rem;">
+          <ion-item-sliding *ngFor="let item of scanModelList">
+            <ion-item>
+              <div class="list_item_ls_box ">
+                <div class="left">
+                  <span>{{item.skuname}}</span>
+                  <span>{{item.skucode}}</span>
+                </div>
+                <div class="right">
+                  <span>{{item.qty}}{{item.um}}</span>
+                </div>
+              </div>
+            </ion-item>
+            <ion-item-options side="right">
+              <button (click)="removeItem(item)" ion-button color="danger">
+                删除
+              </button>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-scroll>
+      </ion-list>
+    </div>
+  </div>
+  <!-- 托盘输入界面 -->
+  <div *ngIf="!isShow">
+    <ion-item>
+      <ion-label>卡板号：</ion-label>
+      <ion-input type="text" [(ngModel)]="lpnCode"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>卡板长：</ion-label>
+      <ion-input type="number" (keyup)="scanModelChange($event)" [(ngModel)]="length"></ion-input>
+      <ion-avatar item-end>
+        米
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>卡板宽：</ion-label>
+      <ion-input type="number" (keyup)="scanModelChange($event)" [(ngModel)]="width"></ion-input>
+      <ion-avatar item-end>
+        米
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>卡板高：</ion-label>
+      <ion-input type="number" (keyup)="scanModelChange($event)" [(ngModel)]="height"></ion-input>
+      <ion-avatar item-end>
+        米
+      </ion-avatar>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>重量：</ion-label>
+      <ion-input type="number" (keyup)="scanModelChange($event)" [(ngModel)]="weight"></ion-input>
+      <ion-avatar item-end>
+        公斤
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>备注：</ion-label>
+      <ion-textarea placeholder="请输入备注" [(ngModel)]="remaker"></ion-textarea>
+    </ion-item>
+  </div>
+
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button no-dbl-click ion-button block class="btn-l" (tap)="exit()">
+      返回[Esc]
+    </button>
+    <button no-dbl-click ion-button block class="btn-d" (tap)="btnOk()">
+      <span *ngIf="!isShow">提交[Ent]</span><span *ngIf="isShow">下一步[Ent]</span>
+    </button>
+  </div>
+</ion-footer>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin id="cordova-plugin-barcodeplugin" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+	<name>
+		BarCodePlugin
+	</name>
+	<js-module name="BarCodePlugin" src="www/barCodePlugin.js">
+		<clobbers target="cordova.plugins.barCodePlugin" />
+	</js-module>
+	<platform name="android">
+		<config-file parent="/*" target="res/xml/config.xml">
+			<feature name="BarCodePlugin">
+				<param name="android-package" value="com.nodes.plugin.BarCodePlugin" />
+				<param name="onload" value="true" />
+			</feature>
+		</config-file>
+		<config-file parent="/*" target="AndroidManifest.xml">
+		</config-file>
+		 <framework src="src/android/plugin.gradle" custom="true" type="gradleReference" />
+		<source-file src="src/android/BarCodePlugin.java" target-dir="src/com/nodes/plugin/" />
+		<resource-file src="src/android/libs/DataCollection.aar" target="libs/DataCollection.aar" />
+	</platform>
+</plugin>

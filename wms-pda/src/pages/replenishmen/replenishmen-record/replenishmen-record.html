@@ -1,0 +1,60 @@
+<ion-header>
+
+  <ion-navbar color="wmscolor">
+    <ion-title>{{!flag?'补货明细':'补货记录'}}</ion-title>
+  </ion-navbar>
+  <ion-grid style="color: white;">
+    <ion-row>
+      <ion-col>
+        <div class="nav-tile">
+          <crumbs></crumbs>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+<ion-content>
+  <ion-list >
+    <ion-item *ngFor="let item of result.detailList; let i = index" (click)="headSelected(item)" 
+    [ngClass]="{selected:item.selected}">
+      <div class="item-box">
+        <div class="row1">
+          <div class="left">
+            <div class="tag-num">{{(i+1)<10?'0'+(i+1):(i+1)}}</div>
+            <div class="right">
+              <span>{{item.skuName}}</span>
+              <span>{{item.skuCode}}</span>
+            </div>
+          </div>
+          <div class="right">
+            <span>规格:</span><span>{{item.skuSpec}}</span>
+          </div>
+          
+        </div>
+        <div class="row2">
+          <span>源库位：</span><span>{{item.fromLocName}}</span>
+        </div>
+        <div  class="row3">
+          <div class="left">
+            <div *ngFor="let skuLot of range(item)">
+              <span>{{skuLot}}</span>
+            </div>
+          </div>
+          <div class="right">
+            <span>补货数量：</span><span>{{item.realQty}}/{{item.relQty}}  {{item.umName}}</span>
+          </div>
+        </div>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button ion-button block class="btn-l" (tap)="exit()">
+      返回[Esc]
+    </button>
+    <button *ngIf="!flag" ion-button block class="btn-d" (tap)="btnOk()">
+      确定[Ent]
+    </button>
+  </div>
+</ion-footer>

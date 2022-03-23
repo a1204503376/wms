@@ -1,0 +1,72 @@
+<!--
+  Generated template for the MovesboxInfoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>
+      按箱移动
+      <div class="title_f_name">(欣天新)</div>
+    </ion-title>
+  </ion-navbar>
+  <div class="title-bt">
+    <div class="nav-tile">
+      <!-- <ul>
+        <li>首页</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>移动</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>物品移动</li>
+      </ul> -->
+      <!-- <crumbs></crumbs> -->
+    </div>
+  </div>
+</ion-header>
+<ion-content>
+    <ion-item >
+      <ion-label>目标容器：</ion-label>
+    <ion-input type="text" [(ngModel)]="targetLpnCode"></ion-input>
+    <ion-avatar item-end>
+      <ion-icon class="iconfont iconsaomiao"></ion-icon>
+    </ion-avatar>
+  </ion-item>
+  <ion-item>
+    <ion-label>目标库位：</ion-label>
+    <ion-input type="text" [(ngModel)]="targetLocCode"></ion-input>
+    <ion-avatar item-end>
+      <ion-icon class="iconfont iconsaomiao"></ion-icon>
+    </ion-avatar>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>原始库位：</ion-label>
+    <ion-input readonly type="text" [(ngModel)]="sourceLocCode"></ion-input>
+    <ion-avatar item-end>
+      <ion-icon class="iconfont iconsaomiao"></ion-icon>
+    </ion-avatar>
+  </ion-item>
+
+  <ion-item >
+    <ion-label>原始容器：</ion-label>
+    <ion-input readonly="readonly"  type="text" [(ngModel)]="sourceLpnCode"></ion-input>
+    <ion-avatar item-end>
+      <ion-icon class="iconfont iconsaomiao"></ion-icon>
+    </ion-avatar>
+  </ion-item>
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button ion-button block class="btn-l" (click)="exit()">
+      返回[Esc]
+    </button>
+    <button ion-button block class="btn-d" (click)="btnOk()">
+      确认[Ent]
+    </button>
+  </div>
+</ion-footer>

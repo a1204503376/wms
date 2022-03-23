@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.statistics.mapper.StatisticsMapper">
+
+    <resultMap id="skuOutstockSummaryResultMap" type="org.nodes.wms.statistics.vo.SkuOutstockSummaryVO">
+
+    </resultMap>
+
+    <select id="selectSkuOutstockSummary" resultMap="skuOutstockSummaryResultMap">
+        SELECT LSP.WH_ID,
+           WW.WH_NAME,
+           WS.SKU_ID,
+           WS.SKU_CODE,
+           WS.SKU_NAME,
+           LSP.QTY,
+           LSP.WSU_NAME
+        FROM wms_sku WS
+                 INNER JOIN (SELECT LSP.WH_ID, LSP.SKU_ID, SUM(LSP.PICK_REAL_QTY) QTY, LSP.WSU_NAME
+                             FROM log_so_pick LSP
+                             GROUP BY LSP.WH_ID, LSP.SKU_ID, LSP.PICK_REAL_QTY, LSP.WSU_NAME) LSP ON LSP.SKU_ID = WS.SKU_ID
+                 LEFT JOIN wms_warehouse WW ON WW.WH_ID = LSP.WH_ID
+        ORDER BY LSP.WH_ID, LSP.QTY DESC
+        LIMIT 200
+    </select>
+</mapper>

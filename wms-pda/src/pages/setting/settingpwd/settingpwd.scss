@@ -1,0 +1,52 @@
+page-settingpwd {
+    /*导航指引*/
+    .nav-tile {
+        width: 100%;
+        height: 30px;
+        background-color: #33cbcc;
+        color: white;
+        ul {
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+            padding-left: 15px;
+            margin-top: 0px;
+            li {
+                float: left;
+                list-style-type: none;
+                margin-right: 5px;
+                ion-icon {
+                    margin-top: 3px;
+                }
+            }
+        }
+    }
+    .setting-password {
+        padding-top: 2rem;
+        .item-input ion-label {
+            width: 100px;
+        }
+        ul {
+            li {
+                list-style: none;
+                height: 4rem;
+                line-height: 4rem;
+                span {
+                    width: 90%;
+                    display: inline-block;
+                    border-bottom: 1px solid #ccc;
+                }
+            }
+        }
+    }
+    .btn-box {
+        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+        height: 49px !important;
+        button {
+            width: 50%;
+            border-radius:0 !important;
+        }
+    }
+}

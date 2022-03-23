@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.basedata.mapper.SkuBomMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="skuBomResultMap" type="org.nodes.wms.core.basedata.entity.SkuBom">
+        <result column="id" property="id"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="wo_id" property="woId"/>
+        <result column="owner_code" property="ownerCode"/>
+        <result column="owner_name" property="ownerName"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="sku_code" property="skuCode"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="wsu_code" property="wsuCode"/>
+        <result column="wsu_name" property="wsuName"/>
+        <result column="join_sku_id" property="joinSkuId"/>
+        <result column="join_sku_code" property="joinSkuCode"/>
+        <result column="join_sku_name" property="joinSkuName"/>
+        <result column="qty" property="qty"/>
+        <result column="join_wsu_code" property="joinWsuCode"/>
+        <result column="join_wsu_name" property="joinWsuName"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+
+</mapper>

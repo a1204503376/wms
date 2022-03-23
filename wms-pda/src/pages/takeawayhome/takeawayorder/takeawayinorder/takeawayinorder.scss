@@ -1,0 +1,134 @@
+page-takeawayinorder {
+  .nav-tile {
+    height: auto;
+    ul{
+        margin: 0; 
+        padding-left: 0;
+    }
+}
+::-webkit-scrollbar {
+    display: none;
+}
+.list-box{
+    position: absolute;
+    top: 5.8rem !important;
+    .scroll-content{
+        overflow-y: scroll;
+    }
+    bottom:0;
+    left:0;
+    right:0;
+}
+.header-box{
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    >.row1{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        >.left{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+        >.right{
+            text-align: right;
+            padding-right: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+    }
+    >.row2{
+        display: flex;
+        flex-direction: column;
+    }
+}
+.searchbar-ios {
+    background-color: #33cbcc;
+    border-bottom: none;
+  }
+.searchbar-ios .searchbar-input {
+border-radius: 0px;
+}
+.scroll-content{
+    margin-top: calc();
+}
+.list-ios{
+    margin: 0;
+}
+.item-block{
+    height: auto;
+    min-height: auto;
+    padding: 0;
+}
+.item-ios.item-block .item-inner{
+    margin:0;
+    padding: 0;
+}
+.label-ios{
+    margin: 10px;
+}
+.header-item-box{
+    
+    height: 100px;
+    width: 100%;
+}
+.item-box{
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+>.left{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding-right: 10px;
+    >.row1{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        >.left{
+            display: flex;
+            flex-direction: column;
+        }
+       >.right{
+            display: flex;
+            flex-direction: column;
+       }
+    }
+    >.row3{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        >.left{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+        }
+        >.right{
+          display: flex;
+          flex-direction: column;
+        }
+    }
+}
+>.right{
+    align-self: center;
+    ion-icon{
+        font-size: 3em ;
+        color: #D7D7D7;
+    }
+}
+}
+.btn-box {
+    display: flex;
+    flex-direction: row;
+    button {
+        flex-grow: 1;
+    }
+    .button-ios{
+        border-radius: 0;
+        margin: 0;
+    }
+}
+}

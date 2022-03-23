@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.stock.transfer.mapper.TransferDetailItemMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="transferDetailItemResultMap" type="org.nodes.wms.core.stock.transfer.entity.TransferDetailItem">
+        <id column="wtdi_id" property="wtdiId"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="transfer_header_id" property="transferHeaderId"/>
+        <result column="transfer_detail_id" property="transferDetailId"/>
+        <result column="bill_id" property="billId"/>
+        <result column="detail_id" property="detailId"/>
+        <result column="qty" property="qty"/>
+    </resultMap>
+</mapper>

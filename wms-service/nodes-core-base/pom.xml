@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>Nodes-Tool</artifactId>
+        <groupId>org.nodes</groupId>
+        <version>3.2.7-RELEASE</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>nodes-core-base</artifactId>
+    <name>${project.artifactId}</name>
+    <version>${project.parent.version}</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <mybatis.plus.version>3.4.2</mybatis.plus.version>
+    </properties>
+
+    <dependencies>
+        <!-- BladeX -->
+        <dependency>
+            <groupId>org.springblade</groupId>
+            <artifactId>blade-core-secure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springblade</groupId>
+            <artifactId>blade-starter-log</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springblade</groupId>
+            <artifactId>blade-starter-mybatis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springblade</groupId>
+            <artifactId>blade-starter-report</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springblade</groupId>
+            <artifactId>blade-starter-social</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springblade</groupId>
+            <artifactId>blade-starter-swagger</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springblade</groupId>
+            <artifactId>blade-starter-redis</artifactId>
+        </dependency>
+        <!-- Nodes -->
+        <dependency>
+            <groupId>org.nodes</groupId>
+            <artifactId>nodes-core-tool</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springblade</groupId>
+            <artifactId>blade-starter-datascope</artifactId>
+        </dependency>
+    </dependencies>
+</project>

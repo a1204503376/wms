@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.strategy.mapper.InstockConfigLotMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="instockConfigLotResultMap" type="org.nodes.wms.core.strategy.entity.InstockConfigLot">
+        <id column="ssicl_id" property="ssiclId"/>
+        <result column="ssid_id" property="ssidId"/>
+        <result column="sku_lot_number" property="skuLotNumber"/>
+        <result column="sku_lot_operation" property="skuLotOperation"/>
+        <result column="sku_lot_val1" property="skuLotVal1"/>
+        <result column="sku_lot_val2" property="skuLotVal2"/>
+        <result column="sku_lot_val3" property="skuLotVal3"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+</mapper>

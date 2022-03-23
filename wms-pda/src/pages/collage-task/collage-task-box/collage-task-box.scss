@@ -1,0 +1,150 @@
+page-collage-task-box {
+    .selected {
+        background-color: #488aff;
+        color: white !important;
+    }
+    .title-ms {
+        width: 100%;
+        height: auto;
+        background: white;
+        // margin: 5px 0;
+        font-size: 14px;
+        border-top: 5px solid $bgcolor;
+        border-bottom: 5px solid $bgcolor;
+    }
+    /*input右边图标*/
+    .item-ios ion-avatar {
+        min-width: 0px;
+        min-height: 0px;
+    }
+    .item-ios ion-avatar ion-img,
+    .item-ios ion-avatar img {
+        border-radius: 0;
+        overflow: hidden;
+        width: 30px;
+        height: 24px;
+    }
+    /*列表设置*/
+    .item-ios {
+        font-size: 14px !important;
+    }
+    .item-block {
+        height: 35px;
+        min-height: 30px;
+    }
+    .item-inner .iconfont {
+        font-size: 18px;
+    }
+    /*列表右侧线间距*/
+    .item-ios.item-block .item-inner {
+        margin-right: 5%;
+    }
+    /*滚动条设置*/
+    .no-scroll .scroll-content {
+        overflow: hidden;
+        height: 500px;
+    }
+
+    .my-list-header{
+        display: flex;
+        flex-direction: row;
+        padding: 5px 10px;
+        border-bottom: 0.5px solid $bgcolor ;
+        span{
+            margin-left: 5px;
+        }
+    }
+    .list-item{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 10px;
+        align-items: center;
+        border-bottom: 5px solid $bgcolor;
+        .list-item-left{
+            margin-left: 5px;
+            flex-grow: 1;
+            display: inherit;
+            flex-direction: column;
+            :nth-child(2){
+                margin-top: 5px;
+            }
+        }
+        
+    }
+    
+
+    .title-ms-info {
+        position: relative;
+        margin-left: 20px;
+        padding: 10px 0 10px 0;
+        // div:nth-child(2){
+        // }
+        div {
+            color: $font888383;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        div:nth-child(4) {
+            position: absolute;
+            top: 1rem;
+            right: 5rem;
+            font-weight: bold;
+            color: orange;
+        }
+        div:nth-child(5) {
+            position: absolute;
+            bottom: 1rem;
+            right: 5rem;
+            font-weight: bold;
+        }
+        .ionic_right {
+            position: absolute;
+            right: 0.6rem;
+            bottom: 1.5rem;
+            ion-icon {
+                font-size: 7rem;
+                color: #c2bdbd;
+            }
+        }
+    }
+    .btn-box {
+        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+        button {
+            width: 50%;
+        }
+    }
+    ion-label {
+        width: 70px;
+        text-align: justify;
+        text-align-last: justify;
+        flex: none !important;
+    }
+    .button-ios {
+        border-radius: 0px;
+        margin: 0;
+        padding: 0;
+    }
+    .order-info {
+        float: right;
+        margin-right: 15px;
+        //margin-top: 5px;
+    }
+
+    .list_item_ls_box {
+        position: relative;
+        margin-left: 3rem;
+        color: $font888383;
+        border-bottom: 3px solid $bgcolor;
+        div {
+            padding: 3px;
+        }
+        div:nth-child(3) {
+            position: absolute;
+            top: 1rem;
+            right: 3rem;
+        }
+    }
+}

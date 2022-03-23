@@ -1,0 +1,128 @@
+<ion-header>
+
+  <ion-navbar color="wmscolor">
+    <ion-title>补货任务</ion-title>
+    <ion-buttons end (click)="finishDetailed()">
+      <button ion-button icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-grid style="color: white;">
+    <ion-row>
+      <ion-col>
+        <div class="nav-tile">
+          <crumbs></crumbs>
+        </div>
+      </ion-col>
+      <ion-col text-right col-4>
+        任务进度:{{result.finish}}/{{result.total}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+<ion-content>
+  <ion-grid>
+    <ion-row class="body-item-box-1">
+      <ion-col>
+        <div class="header-item-box" (click)="noFinishDetailed()">
+          <div class="left">
+            <div class="row1">
+              <div class="left">
+                <span>{{currentDetail.skuName}}</span>
+                <span>{{currentDetail.skuCode}}</span>
+              </div>
+              <div class="right">
+                <span>规格:{{currentDetail.skuSpec}}</span>
+              </div>
+            </div>
+            <div class="row2">
+              <div class="left">
+                <div *ngFor="let skuLot of range(currentDetail)">
+                  <span>{{skuLot}}</span>
+                </div>
+              </div>
+              <div class="right">
+                <span>补货数量：{{currentDetail.realQty}}/{{currentDetail.relQty}}  {{currentDetail.umName}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="right">
+            <ion-icon name="arrow-forward"></ion-icon>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="body-item-box-2" [hidden]="!IsShow">
+      <ion-col>
+        <ion-item>
+          <ion-label>计划原库区：</ion-label>
+          <ion-input disabled [(ngModel)]="currentDetail.fromZoneName" type="text"></ion-input>
+      </ion-item>
+        <ion-item>
+          <ion-label>计划原库位：</ion-label>
+          <ion-input disabled maxlength='30' type="text" [(ngModel)]="currentDetail.fromLocName"></ion-input>
+        </ion-item>
+        <ion-item >
+          <ion-label>计划原容器：</ion-label>
+          <ion-input disabled maxlength='30' type="text" [(ngModel)]="currentDetail.fromLpnName"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>计划目标库区：</ion-label>
+          <ion-input disabled [(ngModel)]="currentDetail.toZoneName" type="text"></ion-input>
+      </ion-item>
+        <ion-item>
+          <ion-label>计划目标库位：</ion-label>
+          <ion-input disabled maxlength='30' type="text" [(ngModel)]="currentDetail.toLocName"></ion-input>
+        </ion-item>
+          <ion-item >
+            <ion-label>计划目标容器：</ion-label>
+            <ion-input disabled maxlength='30' type="text" [(ngModel)]="currentDetail.toLpnName"></ion-input>
+        </ion-item>
+          <ion-item>
+            <ion-label>箱&nbsp;&nbsp;&nbsp;&nbsp;码：</ion-label>
+            <ion-input (keyup)="scanModelChange($event)" type="text" [(ngModel)]="scanView"></ion-input>
+            <ion-avatar item-end>
+              <ion-icon class="iconfont iconsaomiao"></ion-icon>
+            </ion-avatar>
+          </ion-item>
+          <div [hidden]="!IsShow">
+          <page-check-in-box-label-type  #labelTypecom>
+          </page-check-in-box-label-type>
+          </div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="body-item-box-2" *ngIf="!IsShow">
+      <ion-col>
+        <div class="p-select">
+          <div class="p-box">
+            <label class="p-label">目标库区：</label>
+            <p-dropdown [style]="{'width':'100%'}" [options]="zoneList" [(ngModel)]="zoneId" editable="true"
+              placeholder="请选择"></p-dropdown>
+          </div>
+        </div>
+          <ion-item>
+            <ion-label>目标库位：</ion-label>
+            <ion-input [(ngModel)]="targetLocCode" type="text"></ion-input>
+            <ion-avatar item-end>
+                <ion-icon class="iconfont iconsaomiao"></ion-icon>
+            </ion-avatar>
+        </ion-item>
+        <ion-item >
+          <ion-label>目标容器：</ion-label>
+          <ion-input [(ngModel)]="targetLpnCode" type="text"></ion-input>
+          <ion-avatar item-end>
+              <ion-icon class="iconfont iconsaomiao"></ion-icon>
+          </ion-avatar>
+      </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+ 
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button ion-button class="btn-l" (tap)="exit()"> 返回[Esc]</button>
+    <button ion-button class="btn-d" (tap)="btnOk()"> {{IsShow?'下一步':'确定'}}[Ent]</button>
+  </div>
+</ion-footer>

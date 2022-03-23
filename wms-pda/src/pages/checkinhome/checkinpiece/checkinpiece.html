@@ -1,0 +1,79 @@
+<!--
+  Generated template for the TaskviewPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>按件收货
+      <!-- <div class="title_f_name">(青啤五厂)</div> -->
+    </ion-title>
+    <!-- <ion-buttons end (click)="detailed()">
+      <button ion-button icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons> -->
+  </ion-navbar>
+  <ion-searchbar [(ngModel)]="orderNo" debounce="1000" (keydown)="keyEnter($event)" Description='primary'
+    placeholder="订单编号(WMS单号|上位系统单号)">
+  </ion-searchbar>
+  <!-- <ion-input  [(ngModel)]="asnBillNo"  (keyup)="keyEnter($event)" type="text"> -->
+  <!-- </ion-input> -->
+  <!-- <div class="nav-tile">
+    <ul>
+      <li>首页</li>
+      <li>
+        <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+      </li>
+      <li>收货</li>
+      <li>
+        <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+      </li>
+      <li>按件收货</li>
+    </ul>
+  </div> -->
+  <div class="nav-tile"> 
+  <crumbs></crumbs>
+  </div>
+</ion-header>
+<ion-content>
+
+  <div class="nodes-list-box">
+    <div class="nodes-list-item-box" *ngFor="let record of records" (click)="onClick(record)" >
+      <div class="left">
+        <span>{{record.asnBillNo}}</span>
+        <span *ngIf="record.orderNo&&record.orderNo.length>0">{{record.orderNo}}</span>
+        <span>{{record.sname}}</span>
+      </div>
+      <div class="right">
+        <span>{{record.whName}}</span>
+        <span>{{record.billTypeName}}</span>
+      </div>
+    </div>
+  </div>
+  
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="加载更多...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  <!-- <button ion-button icon-start>
+    <ion-icon name="home"></ion-icon>
+  </button> -->
+  <!-- <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]; let _i = index" class="title-ms">
+    <div class="title-ms-info" (click)="itemInfo()">
+      <button ion-button color="dark">1</button>
+      <div class="title-font-s1">
+        <div>ASN00000000001</div>
+        <span>已经完成明细 <b style="color: #F59A23;">5</b> <b style="color: 008080;">/10</b></span>
+      </div>
+      <div class="title-font-s2">
+        <div>1号仓库</div>
+        <div>供应商：霍尼韦尔技术股份有限公司</div>
+        <div>货 主：北京节点通信息科技有限公司</div>
+      </div>
+    </div>
+  </div> -->
+</ion-content>

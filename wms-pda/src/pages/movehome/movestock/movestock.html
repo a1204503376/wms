@@ -1,0 +1,98 @@
+<ion-header>
+    <ion-navbar color="wmscolor">
+        <ion-title>
+            托盘移动
+            <!-- <div class="title_f_name">(青啤五厂)</div> -->
+        </ion-title>
+        <!-- <ion-buttons end (click)="detailed()">
+            <button ion-button icon-only>
+                <ion-icon name="menu"></ion-icon>
+            </button>
+        </ion-buttons> -->
+    </ion-navbar>
+    <div class="title-bt">
+        <div class="nav-tile">
+            <!-- <ul>
+                <li>首页</li>
+                <li>
+                    <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+                </li>
+                <li>移动</li>
+                <li>
+                    <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+                </li>
+                <li>托盘移动</li>
+            </ul> -->
+            <crumbs></crumbs>
+            <div class="order-info">{{whName}}</div>
+        </div>
+    </div>
+</ion-header>
+<ion-content>
+    <div *ngIf="isShow=='warehouse'">
+        <div class="list_item">
+            <ion-item>
+                <ion-label>库 房：</ion-label>
+                <ion-select (ionChange)="toggle()" [(ngModel)]="warhouserItem" interface="action-sheet" cancelText="取消">
+                    <div *ngFor="let Item of warhouser">
+                        <ion-option [value]="Item">{{Item.whName}}</ion-option>
+                    </div>
+                </ion-select>
+            </ion-item>
+        </div>
+    </div>
+    <div *ngIf="isShow=='before'||isShow=='target'">
+        <div class="title-ms clearfix">
+            <div class="title-ms-info">
+                <ul>
+                    <li class="l-width2">
+                        <span class="s-label">原库位：</span>
+                        <span class="s-text">{{IsbeforeLocCode}}</span>
+                    </li>
+                    <li class="l-width2">
+                        <span class="s-label">原容器：</span>
+                        <span class="s-text">{{IsbeforelpnCode}}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="list_item" *ngIf="isShow=='before'">
+            <ion-item>
+                <ion-label>原库位：</ion-label>
+                <ion-input #vbeforeLocCode (keyup)="beforeLocCode_KeyDown($event)" type="text"
+                    [(ngModel)]="beforeLocCode"></ion-input>
+                <ion-avatar item-end>
+                    <ion-icon class="iconfont iconsaomiao"></ion-icon>
+                </ion-avatar>
+            </ion-item>
+            <ion-item>
+                <ion-label>原容器：</ion-label>
+                <ion-input (keyup)="beforelpnCode_KeyDown($event)" type="text" #vbeforelpnCode
+                    [(ngModel)]="beforelpnCode"></ion-input>
+                <ion-avatar item-end>
+                    <ion-icon class="iconfont iconsaomiao"></ion-icon>
+                </ion-avatar>
+            </ion-item>
+        </div>
+        <div class="list_item" *ngIf="isShow=='target'">
+            <ion-item>
+                <ion-label>目标库位：</ion-label>
+                <ion-input [(ngModel)]="targetLocCode" type="text"></ion-input>
+                <ion-avatar item-end>
+                    <ion-icon class="iconfont iconsaomiao"></ion-icon>
+                </ion-avatar>
+            </ion-item>
+        </div>
+    </div>
+</ion-content>
+<ion-footer>
+    <div class="btn-box">
+        <button ion-button block class="btn-l" (click)="exit()">
+            返回[Esc]
+        </button>
+        <button ion-button block class="btn-d" (click)="btnOk()">
+            提交[Ent]
+        </button>
+    </div>
+
+</ion-footer>

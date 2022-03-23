@@ -1,0 +1,105 @@
+page-bind-lpn {
+    .nav-tile {
+        height: auto;
+        ul{
+            margin: 0; 
+        }
+    }
+   
+    sub-header{
+        .label-ios{
+            margin: 0 0 10px 0;
+            padding-top: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+            border-top: 5px #c8c7cc solid;
+        }
+    }
+    .body-item-box-2{
+        .item-ios{
+            padding-left: 0 !important;
+        }
+        .item-ios.item-block .item-inner{
+            margin-right: 0 !important;
+            padding-right: 0 !important;
+        }
+    }
+    .grid-box{
+        .row{
+            // margin-bottom: 5px;
+        }
+        .col{
+            height: 87px;
+            // margin-right: 5px;
+        }
+        .col-state-off{
+            background-color: white;
+        }
+        .col-state-default{
+            background-color: gray;
+        }
+        .col-state-bind{
+            background-color: #33cbcc;
+        }
+    }
+    .sub-header-box{
+        background-color: white;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+            >.left{
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+            }
+            >.right{
+                text-align: left;
+                padding-right: 15px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+            }
+       
+    }
+    .searchbar-ios {
+        background-color: #33cbcc;
+        border-bottom: none;
+      }
+    .searchbar-ios .searchbar-input {
+    border-radius: 0px;
+    }
+    .scroll-content{
+        margin-top: calc();
+    }
+    .list-ios{
+        margin: 0;
+    }
+    .item-block{
+        height: auto;
+        min-height: auto;
+        padding: 0;
+    }
+    .item-ios.item-block .item-inner{
+        margin:0;
+        padding: 0;
+    }
+    .label-ios{
+        margin: 10px;
+    }
+    .header-item-box{
+        
+        height: 100px;
+        width: 100%;
+    }
+    .btn-box {
+        display: flex;
+        flex-direction: row;
+        button {
+            flex-grow: 1;
+        }
+        .button-ios{
+            border-radius: 0;
+            margin: 0;
+        }
+    }
+}

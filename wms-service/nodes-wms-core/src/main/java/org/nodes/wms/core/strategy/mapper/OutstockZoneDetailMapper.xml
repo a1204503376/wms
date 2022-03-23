@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.strategy.mapper.OutstockZoneDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="outstockZoneDetailResultMap" type="org.nodes.wms.core.strategy.entity.OutstockZoneDetail">
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="stozd_id" property="stozdId"/>
+        <result column="wh_id" property="whId"/>
+        <result column="ssod_id" property="ssodId"/>
+        <result column="source_zone_id" property="sourceZoneId"/>
+        <result column="sku_level" property="skuLevel"/>
+    </resultMap>
+
+</mapper>

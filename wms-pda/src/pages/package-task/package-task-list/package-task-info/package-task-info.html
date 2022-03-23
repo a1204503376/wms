@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>
+      打包任务<div class="title_f_name"></div>
+    </ion-title>
+    <!-- <ion-buttons end (click)="detailed()">
+          <button ion-button icon-only>
+              <ion-icon name="menu"></ion-icon>
+          </button>
+      </ion-buttons> -->
+  </ion-navbar>
+  <div class="title-bt">
+    <div class="nav-tile">
+      <!-- <div class="order-info">任务进度{{}}/{{}}</div> -->
+      <!-- <ul>
+        <li>首页</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>任务查看</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>打包任务</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>任务明细</li>
+      </ul> -->
+      <crumbs></crumbs>
+    </div>
+  </div>
+</ion-header>
+<ion-content>
+
+  <div>
+    <!-- 已拼托盘-->
+    <div class="list_item_serial clearfix">
+      <div class="list_item_title">
+        <span [ngStyle]="{'border-bottom':isTilebool === true ? '3px solid #008080' : '0' }"
+          (click)="isTitle(true)">已打包</span>
+        <span [ngStyle]="{'border-bottom':isTilebool === false ? '3px solid #008080' : '0' }"
+          (click)="isTitle(false)">未打包</span>
+      </div>
+      <!--接货列表-->
+      <div *ngFor="let taskItem of stockPackVOList; let i = index" class="title-ms clearfix">
+        <div class="title-ms-info clearfix">
+          <button ion-button color="dark">{{i+1}}</button>
+          <div class="title-font-s1">
+            <div *ngIf="taskItem.skuName!=''; else elseBlock">{{taskItem.skuName}}</div>
+            <ng-template #elseBlock>
+              <div>暂无名称</div>
+            </ng-template>
+            <div>
+              {{taskItem.skuCode}}
+            </div>
+            <p>
+              <b style="color: #7b7474;">库位</b>：{{taskItem.locCode}}
+            </p>
+          </div>
+          <div>
+            尾箱数量:<b style="color: orange;">{{taskItem.packQty}}</b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button ion-button block class="btn-l" (click)="exit()">
+      返回[Esc]
+    </button>
+  </div>
+</ion-footer>

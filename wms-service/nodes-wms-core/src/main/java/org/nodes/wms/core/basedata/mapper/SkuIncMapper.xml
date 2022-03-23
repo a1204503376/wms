@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.basedata.mapper.SkuIncMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="skuIncResultMap" type="org.nodes.wms.core.basedata.entity.SkuInc">
+        <id column="wssup_id" property="wssupId"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="wh_id" property="whId"/>
+        <result column="pe_id" property="peId"/>
+        <result column="wsp_id" property="wspId"/>
+        <result column="wssup_order" property="wssupOrder"/>
+        <result column="attribute1" property="attribute1"/>
+        <result column="attribute2" property="attribute2"/>
+        <result column="attribute3" property="attribute3"/>
+        <result column="attribute4" property="attribute4"/>
+        <result column="attribute5" property="attribute5"/>
+        <result column="attribute6" property="attribute6"/>
+        <result column="attribute7" property="attribute7"/>
+        <result column="attribute8" property="attribute8"/>
+        <result column="attribute9" property="attribute9"/>
+        <result column="attribute10" property="attribute10"/>
+    </resultMap>
+    <select id="selectSkuIncBySkuId" resultMap="skuIncResultMap">
+        select * from wms_sku_inc where 1=1 and sku_id = #{skuId}
+    </select>
+</mapper>

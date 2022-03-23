@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.outstock.so.mapper.SoHeaderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="headerResultMap" type="org.nodes.wms.core.outstock.so.entity.SoHeader">
+        <id column="so_bill_id" property="soBillId"/>
+        <result column="wh_id" property="whId"/>
+        <result column="wh_code" property="whCode"/>
+        <result column="wo_id" property="woId"/>
+        <result column="owner_code" property="ownerCode"/>
+        <result column="so_bill_no" property="soBillNo"/>
+        <result column="so_bill_state" property="soBillState"/>
+        <result column="bill_group_id" property="billGroupId"/>
+        <result column="bill_type_cd" property="billTypeCd"/>
+        <result column="bill_key" property="billKey"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="so_remark" property="soRemark"/>
+        <result column="last_update_date" property="lastUpdateDate"/>
+        <result column="pre_create_date" property="preCreateDate"/>
+        <result column="finish_date" property="finishDate"/>
+        <result column="transport_code" property="transportCode"/>
+        <result column="outstock_type" property="outstockType"/>
+        <result column="address" property="address"/>
+        <result column="contact" property="contact"/>
+        <result column="phone" property="phone"/>
+        <result column="express_code" property="expressCode"/>
+        <result column="express_name" property="expressName"/>
+        <result column="express_phone" property="expressPhone"/>
+        <result column="express_address" property="expressAddress"/>
+        <result column="express_x" property="expressX"/>
+        <result column="express_y" property="expressY"/>
+        <result column="so_bill_remark" property="soBillRemark"/>
+        <result column="bill_creator" property="billCreator"/>
+        <result column="sync_state" property="syncState"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="dept_code" property="deptCode"/>
+        <result column="dept_name" property="deptName"/>
+        <result column="post_user" property="postUser"/>
+        <result column="post_time" property="postTime"/>
+        <result column="post_state" property="postState"/>
+    </resultMap>
+
+    <!-- 物品发货频率映射结果 -->
+    <resultMap id="outstockSkuResultMap" type="org.nodes.wms.core.outstock.so.vo.OutstockSkuRltVO">
+        <result column="sku_id" property="skuId"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="rate" property="rate"/>
+    </resultMap>
+
+    <select id="selectFinishBillCount" resultType="java.lang.Integer">
+        select count(1) from so_header
+            where DATE_FORMAT(finish_date, '%Y%m%d') = DATE_FORMAT(#{dateTime}, '%Y%m%d')
+    </select>
+
+    <select id="selectFinishSkuCount" resultType="java.lang.Integer">
+        select count(distinct sd.sku_id) from so_header sh
+            inner join so_detail sd on sd.so_bill_id = sh.so_bill_id
+            where date_format(sh.finish_date, '%Y%m%d') = date_format(#{dateTime}, '%Y%m%d')
+    </select>
+
+    <select id="selectBillCount" resultType="org.nodes.wms.core.outstock.so.dto.SoBillCountDTO">
+        SELECT sh.wh_id, ww.wh_name, sd.sku_id, sd.sku_code, sd.sku_name, SUM(sd.surplus_qty) qty,
+            IFNULL(ws.stock_qty, 0) stock_qty
+          FROM so_header sh
+          inner JOIN so_detail sd ON sd.so_bill_id = sh.so_bill_id AND sd.surplus_qty > 0
+          LEFT JOIN wms_warehouse ww ON ww.wh_id = sh.wh_id
+          LEFT JOIN (SELECT ws.wh_id, ws.sku_id,
+                        SUM(ws.stock_qty - ws.pick_qty - ws.occupy_qty) stock_qty
+                      FROM wms_stock ws
+                      GROUP by ws.wh_id, ws.sku_id) ws ON ws.wh_id = sh.wh_id AND ws.sku_id = sd.sku_id
+          WHERE sh.scheduled_outstock_time is NULL and sh.so_bill_state = '10'
+          GROUP by sh.wh_id, ww.wh_name, sd.sku_id, sd.sku_code, sd.sku_name
+          ORDER by sh.wh_id, sd.sku_id
+    </select>
+
+    <select id="selectAllSku" resultMap="org.nodes.wms.core.basedata.mapper.SkuMapper.skuResultMap">
+        SELECT ws.*
+            FROM so_header sh
+            INNER JOIN so_detail sd ON sd.so_bill_id = sh.so_bill_id
+            INNER JOIN wms_sku ws ON ws.sku_id = sd.sku_id
+            WHERE sh.create_time &gt;= #{begin} and sh.create_time &lt;= #{end}
+            GROUP by ws.sku_id
+    </select>
+
+
+    <select id="selectOutstockSku" resultMap="outstockSkuResultMap">
+        select sd.sku_id, sd.sku_name, COUNT(1) rate
+            from so_header sh
+            inner join so_detail sd on sd.so_bill_id = sh.so_bill_id
+            where sh.finish_date is not null and sh.finish_date &gt;= #{begin} and sh.finish_date &lt;= #{end}
+            GROUP by sd.sku_id, sd.sku_name
+            ORDER by rate desc
+    </select>
+
+</mapper>

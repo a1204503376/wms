@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>按单收货</ion-title>
+    <ion-buttons end (click)="finishDetailed()">
+      <button ion-button icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-grid style="color: white;">
+    <ion-row>
+      <ion-col>
+        <div class="nav-tile">
+          <crumbs></crumbs>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+<ion-content scroll="false">
+  <ion-item>
+    <div class="header-box" style="height: 95px;">
+      <div class="row1">
+        <div class="left">
+          <span>{{result.asnBillNo}}</span>
+          <span *ngIf="result.orderNo&&result.orderNo!=''">{{result.orderNo}}</span>
+        </div>
+        <div class="right">
+          <span>{{result.whName}}</span>
+          <span>{{result.instoreTypeName}}</span>
+        </div>
+      </div>
+      <div class="row2">
+        <span>{{result.ownerName}}</span>
+        <span>{{result.sname}}</span>
+      </div>
+    </div>
+  </ion-item>
+
+  <ion-scroll class="list-box" direction="y">
+    <ion-list>
+      <!-- <ion-item  >
+        <ion-label>容器：</ion-label>
+        <ion-input maxlength='30' [(ngModel)]="lpnCode" type="text" ></ion-input>
+        <ion-avatar item-end>
+          <ion-icon class="iconfont iconsaomiao"></ion-icon>
+        </ion-avatar>
+      </ion-item> -->
+      <ion-item *ngFor="let item of result.asnDetailList" (click)="itemClick(item)">
+        <div class="item-box">
+          <div class="left">
+            <div class="row1">
+              <div class="left">
+                <div class="right">
+                  <span>{{item.skuName}}</span>
+                  <span>{{item.skuCode}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="row3">
+              <div class="left">
+                <span>收货库位：</span><span>STAGE</span>
+              </div>
+              <div class="right">
+                <span>数量：</span><span> {{item.planQty}}{{item.umName}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="right">
+            <ion-icon name="arrow-forward"></ion-icon>
+          </div>
+        </div>
+      </ion-item>
+    </ion-list>
+  </ion-scroll>
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button ion-button class="btn-l" (click)="backClick()"> 返回[Esc]</button>
+    <button ion-button class="btn-d" (click)="submitClick()"> 收货[Ent]</button>
+  </div>
+</ion-footer>

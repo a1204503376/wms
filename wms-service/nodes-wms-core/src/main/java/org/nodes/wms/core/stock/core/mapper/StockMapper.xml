@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.stock.core.mapper.StockMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="stockResultMap" type="org.nodes.wms.core.stock.core.entity.Stock">
+        <id column="stock_id" property="stockId"/>
+        <result column="wh_id" property="whId"/>
+        <result column="zone_id" property="zoneId"/>
+        <result column="loc_id" property="locId"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="wsp_id" property="wspId"/>
+        <result column="sku_level" property="skuLevel"/>
+        <result column="stock_qty" property="stockQty"/>
+        <result column="occupy_qty" property="occupyQty"/>
+        <!--        <result column="on_shelf_qty" property="onShelfQty"/>-->
+        <result column="pick_qty" property="pickQty"/>
+        <result column="count_occupy_qty" property="countOccupyQty"/>
+        <result column="stock_status" property="stockStatus"/>
+        <result column="last_in_time" property="lastInTime"/>
+        <result column="last_out_time" property="lastOutTime"/>
+        <result column="lot_number" property="lotNumber"/>
+        <result column="sku_lot1" property="skuLot1"/>
+        <result column="sku_lot2" property="skuLot2"/>
+        <result column="sku_lot3" property="skuLot3"/>
+        <result column="sku_lot4" property="skuLot4"/>
+        <result column="sku_lot5" property="skuLot5"/>
+        <result column="sku_lot6" property="skuLot6"/>
+        <result column="sku_lot7" property="skuLot7"/>
+        <result column="sku_lot8" property="skuLot8"/>
+        <result column="sku_lot9" property="skuLot9"/>
+        <result column="sku_lot10" property="skuLot10"/>
+        <result column="sku_lot11" property="skuLot11"/>
+        <result column="sku_lot12" property="skuLot12"/>
+        <result column="sku_lot13" property="skuLot13"/>
+        <result column="sku_lot14" property="skuLot14"/>
+        <result column="sku_lot15" property="skuLot15"/>
+        <result column="sku_lot16" property="skuLot16"/>
+        <result column="sku_lot17" property="skuLot17"/>
+        <result column="sku_lot18" property="skuLot18"/>
+        <result column="sku_lot19" property="skuLot19"/>
+        <result column="sku_lot20" property="skuLot20"/>
+        <result column="sku_lot21" property="skuLot21"/>
+        <result column="sku_lot22" property="skuLot22"/>
+        <result column="sku_lot23" property="skuLot23"/>
+        <result column="sku_lot24" property="skuLot24"/>
+        <result column="sku_lot25" property="skuLot25"/>
+        <result column="sku_lot26" property="skuLot26"/>
+        <result column="sku_lot27" property="skuLot27"/>
+        <result column="sku_lot28" property="skuLot28"/>
+        <result column="sku_lot29" property="skuLot29"/>
+        <result column="sku_lot30" property="skuLot30"/>
+        <result column="wo_id" property="woId"/>
+    </resultMap>
+
+    <!-- 不在安全库存范围内人物品库存映射结果 -->
+    <resultMap id="unsafeStockResultMap" type="org.nodes.wms.core.stock.core.vo.UnsafeStockSkuVO">
+        <result column="wh_id" property="whId"/>
+        <result column="wh_name" property="whName"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="sku_code" property="skuCode"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="stock_qty" property="stockQty"/>
+        <result column="low_storage" property="lowStorage"/>
+        <result column="high_storage" property="highStorage"/>
+    </resultMap>
+
+    <select id="selectStockByLoc" resultType="org.nodes.wms.core.stock.core.entity.Stock">
+        SELECT
+        st.*
+        FROM
+        wms_stock st,
+        wms_sku sku
+        WHERE
+        st.sku_id = sku.sku_id
+        <if test="abc !=null">
+            AND sku.abc = #{abc}
+        </if>
+        <if test="locIds !=null and locIds.size>0">
+            AND st.loc_id in
+            <foreach item="item" index="index" collection="locIds"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="skuIds !=null and skuIds.size>0">
+            AND st.sku_id in
+            <foreach item="item" index="index" collection="skuIds"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+    <select id="selectUnsafeStock" resultMap="unsafeStockResultMap">
+        SELECT SUM_STOCK.WH_ID,
+               WW.WH_NAME,
+               WS.SKU_ID,
+               WS.SKU_CODE,
+               WS.SKU_NAME,
+               SUM_STOCK.STOCK_QTY,
+               IFNULL(WSI.low_storage, 0)  LOW_STORAGE,
+               IFNULL(WSI.high_storage, 0) HIGH_STORAGE
+        FROM wms_sku WS
+                 INNER JOIN (SELECT WS.WH_ID, WS.SKU_ID, SUM(WS.STOCK_QTY - WS.PICK_QTY) STOCK_QTY
+                             FROM wms_stock WS
+                             WHERE WS.STOCK_QTY - WS.PICK_QTY > 0
+                             GROUP BY WS.WH_ID, WS.SKU_ID) SUM_STOCK ON SUM_STOCK.SKU_ID = WS.SKU_ID
+                 LEFT JOIN wms_sku_instock WSI ON WSI.SKU_ID = SUM_STOCK.SKU_ID AND WSI.WH_ID = SUM_STOCK.WH_ID
+                 LEFT JOIN wms_warehouse WW ON WW.WH_ID = SUM_STOCK.WH_ID
+        WHERE SUM_STOCK.STOCK_QTY &lt; IFNULL(WSI.low_storage, 0)
+           OR SUM_STOCK.STOCK_QTY &gt; IFNULL(WSI.high_storage, 0) LIMIT 200
+    </select>
+    <select id="getAccountsWithAsn" resultType="org.nodes.wms.core.stock.core.vo.AccountsVo">
+        SELECT
+        l.asn_bill_no as bill_no,
+        u.name as opt_user,
+        l.acl_qty AS opt_qty,
+        l.update_time AS opt_time
+        FROM
+        asn_container_log l,blade_user u
+        <where>
+            l.update_user = u.id
+            <if test="skuIds!=null and skuIds.size() > 0">
+                AND l.sku_id IN
+                <foreach item="item" index="index" collection="skuIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="startTime!=null and startTime!='' and endTime !=null and endTime!=''">
+                AND DATE_FORMAT(from_unixtime(l.update_time), '%Y-%m-%d') between #{startTime} and #{endTime}
+            </if>
+        </where>
+    </select>
+    <select id="getAccountsWithPick" resultType="org.nodes.wms.core.stock.core.vo.AccountsVo">
+        SELECT
+        p.so_bill_no AS bill_no,
+        u.name AS opt_user,
+        p.pick_real_qty AS opt_qty,
+        p.update_time AS opt_time
+        FROM
+        log_so_pick p,blade_user u
+        <where>
+            p.update_user = u.id
+            <if test="skuIds!=null and skuIds.size() > 0">
+                AND p.sku_id IN
+                <foreach item="item" index="index" collection="skuIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="startTime!=null and startTime!='' and endTime !=null and endTime!=''">
+                AND DATE_FORMAT(from_unixtime(p.update_time), '%Y-%m-%d') between #{startTime} and #{endTime}
+            </if>
+        </where>
+    </select>
+    <select id="getStockListBySkuAndLoc" resultType="org.nodes.wms.core.stock.core.entity.Stock">
+        SELECT ws.*
+        FROM wms_stock ws,
+             wms_location l,
+             wms_zone z
+        WHERE ws.loc_id = l.loc_id
+          and ws.sku_id = #{skuId}
+          and ws.zone_id = z.zone_id
+          and l.loc_code = #{locCode}
+          and z.zone_type not in (70, 72, 73, 74)
+    </select>
+    <select id="getStockListBylpnAndbox" resultType="org.nodes.wms.core.stock.core.entity.StockDetail">
+        SELECT
+        sd.*
+        FROM
+        wms_stock_detail sd,
+        wms_location l ,
+        wms_zone z
+        WHERE
+        sd.loc_id = l.loc_id
+        and sd.sku_id = #{skuId}
+        and sd.zone_id = z.zone_id
+        and l.loc_code =#{locCode}
+        <if test="lpnCode!=null and lpnCode!=''">
+            and sd.lpn_code = #{lpnCode}
+        </if>
+        <if test="boxCode!=null and boxCode!=''">
+            and sd.box_code = #{boxCode}
+        </if>
+        and z.zone_type not in(70,72,73,74)
+    </select>
+</mapper>

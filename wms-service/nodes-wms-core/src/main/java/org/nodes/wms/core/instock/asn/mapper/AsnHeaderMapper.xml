@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.instock.asn.mapper.AsnHeaderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="headerResultMap" type="org.nodes.wms.core.instock.asn.entity.AsnHeader">
+        <id column="asn_bill_id" property="asnBillId"/>
+        <result column="wh_id" property="whId"/>
+        <result column="wh_code" property="whCode"/>
+        <result column="wo_id" property="woId"/>
+        <result column="owner_code" property="ownerCode"/>
+        <result column="asn_bill_no" property="asnBillNo"/>
+        <result column="asn_bill_state" property="asnBillState"/>
+        <result column="bill_group_id" property="billGroupId"/>
+        <result column="bill_type_cd" property="billTypeCd"/>
+        <result column="bill_key" property="billKey"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="last_update_date" property="lastUpdateDate"/>
+        <result column="pre_create_date" property="preCreateDate"/>
+        <result column="bill_type" property="billType"/>
+        <result column="scheduled_arrival_date" property="scheduledArrivalDate"/>
+        <result column="actual_arrival_date" property="actualArrivalDate"/>
+        <result column="finish_date" property="finishDate"/>
+        <result column="instore_type" property="instoreType"/>
+        <result column="ship_no" property="shipNo"/>
+        <result column="contact" property="contact"/>
+        <result column="phone" property="phone"/>
+        <result column="so_bill_no" property="soBillNo"/>
+        <result column="asn_bill_remark" property="asnBillRemark"/>
+        <result column="sync_state" property="syncState"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="dept_code" property="deptCode"/>
+        <result column="dept_name" property="deptName"/>
+        <result column="create_type" property="createType"/>
+        <result column="post_user" property="postUser"/>
+        <result column="post_time" property="postTime"/>
+        <result column="post_state" property="postState"/>
+    </resultMap>
+
+    <select id="selectFinishBillCount" resultType="java.util.HashMap">
+        select count(1) counts,create_dept from asn_header
+            where DATE_FORMAT(finish_date, '%Y%m%d') = DATE_FORMAT(#{dateTime}, '%Y%m%d')
+    </select>
+
+    <select id="selectFinishSkuCount" resultType="java.util.HashMap">
+        select count(distinct ad.sku_id) counts,ah.create_dept from asn_header ah
+            inner join asn_detail ad on ad.asn_bill_id = ah.asn_bill_id
+            where date_format(ah.finish_date, '%Y%m%d') = date_format(#{dateTime}, '%Y%m%d')
+    </select>
+
+</mapper>

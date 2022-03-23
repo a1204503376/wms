@@ -1,0 +1,91 @@
+page-stock-frozen {
+    ion-header{
+        .col{
+            padding: 0;
+        }
+        .col-more{
+            display: flex;
+            justify-content: center;
+            >div{
+                align-self: center;
+            }
+        }
+    }
+    .nav-tile {
+        height: auto;
+        ul{
+            margin: 0; 
+        }
+    }
+    .searchbar-ios {
+        background-color: #33cbcc;
+        border-bottom: none;
+      }
+    .searchbar-ios .searchbar-input {
+    border-radius: 0px;
+    }
+    .list-ios{
+        margin: 0;
+    }
+    .item-block{
+        height: auto;
+        min-height: auto;
+        padding: 0;
+    }
+    .item.item-ios .checkbox-ios {
+        margin: 5px;
+    }
+    .checkbox-ios .checkbox-checked{
+        border-color: $color-primary-d;
+        background-color:$color-primary-d;
+    }
+    .item-ios.item-block .item-inner{
+        margin:0;
+        padding: 0;
+    }
+    .label-ios{
+        margin: 10px;
+    }
+   .item-box{
+    display: flex;
+    flex-direction: row;
+    >.left{
+        align-self: center;
+    }
+    .frozen-on{
+        background-color:#00BFBF !important;
+    }
+    .frozen-off{
+        background-color:#04DFDF !important;
+    }
+    >.right{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        flex-grow: 1;
+        >.left{
+            display: flex;
+            flex-direction: column;
+        }
+        >.right{
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            .button-ios{
+                background-color: $color-primary-l
+            }
+        }
+    }
+   }
+    .btn-box {
+        display: flex;
+        flex-direction: row;
+        button {
+            flex-grow: 1;
+        }
+        .button-ios{
+            border-radius: 0;
+            margin: 0;
+        }
+    }
+}

@@ -1,0 +1,238 @@
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title (click)="expression()">
+      按件收货<div class="title_f_name">({{result.whName}})</div>
+    </ion-title>
+    <ion-buttons end (click)="detailed()">
+      <button ion-button icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <div class="title-bt">
+    <div class="order">
+      <div class="order-number">{{asnBillNo}}</div>
+      <div class="order-info">单据收货进度 {{finish}}/{{count}}</div>
+    </div>
+    <!-- <div class="nav-tile clearfix">
+      <ul>
+        <li>首页</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>收货</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>按件收货</li>
+        <li>
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </li>
+        <li>执行收货</li>
+      </ul>
+    </div> -->
+    <div class="nav-tile"> 
+    <crumbs></crumbs>
+    </div>
+  </div>
+</ion-header>
+<ion-content no-bounce>
+  <div class="title-ms clearfix">
+    <div class="title-ms-info">
+      <div class="title-font-s1">
+        <label>{{skuName}}</label>
+      </div>
+      <div class="title-font-small">
+        <div class="title-font-s2">
+          <label>收货规格：</label>
+          <label style="color: black;">{{skuSpec}}</label>
+        </div>
+        <div class="title-font-s3">
+          <label>状 态:</label>
+          <label style="color: black;">{{detailStatus}}</label>
+        </div>
+        <div class="title-font-s4">
+          <label>{{sname}}</label>
+        </div>
+
+      </div>
+      <div *ngIf="scanQtyName!=''&& scanQtyName!=null" class="received-scan">
+        已接收: <span style="color: #F59A23;"> {{scanQtyName ==''?'0':scanQtyName}}</span>
+      </div>
+      <div *ngIf="planQtyName!=''&& planQtyName!=null" class="received-plan">
+        计划量: <span style="color: #F59A23;"> {{planQtyName ==''?'0':planQtyName}}</span>
+      </div>
+    </div>
+  </div>
+  <!-- 批次 -->
+  <div class="list_item" *ngIf="isSn===0">
+    <ion-item >
+      <ion-label>容器：</ion-label>
+      <ion-input maxlength='30' type="text" [(ngModel)]="lpnCode"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>箱号：</ion-label>
+      <ion-input  type="text" [(ngModel)]="boxCode"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>物品：</ion-label>
+      <ion-input (keyup)="skuCode_KeyDown($event)" [(ngModel)]="skuCode" type="text"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label> 数量：</ion-label>
+      <ion-input type="number" [(ngModel)]="scanQtynum"></ion-input>
+      <ion-select (ionChange)="togglePage()" [(ngModel)]="skuPackageDetailsItem" interface="action-sheet"
+        [compareWith]="compareFn" cancelText="取消">
+        <div *ngFor="let skuPackage of skuPackageDetails">
+          <ion-option [value]="skuPackage">{{skuPackage.wsuName}}</ion-option>
+        </div>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>库位：</ion-label>
+      <ion-input type="text" [(ngModel)]="locCode"></ion-input>
+      <ion-avatar item-end (click)="setServerIp()">
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+
+    <div *ngFor="let item of skuConfig">
+      <ion-item *ngIf="item.skuLotDisp===1">
+        <ion-label>{{item.skuLotLabel}}：</ion-label>
+        <ion-input maxlength="{{item.skuLen !=(null||undefined)?item.skuLen:999}}" *ngIf="item.CtlLotEditBoole"
+          type="text" [(ngModel)]="item.LotValue">
+        </ion-input>
+        <ion-avatar *ngIf="item.CtlLotEditBoole" item-end>
+          <ion-icon class="iconfont iconsaomiao"></ion-icon>
+        </ion-avatar>
+        <ion-datetime [(ngModel)]="item.LotValue" *ngIf="!item.CtlLotEditBoole" cancelText="取 消" doneText="确 定"
+          min="1999-01-01" max="2039-12-31"
+          pickerFormat="{{item.skuLotMixMask !=(null||undefined)?item.skuLotMixMask:'yyyymmdd'}}"
+          displayFormat="{{item.skuLotMixMask !=(null||undefined)?item.skuLotMixMask:'yyyymmdd'}}">
+        </ion-datetime>
+        <ion-avatar *ngIf="!item.CtlLotEditBoole" item-end>
+          <ion-icon class="iconfont iconrili"></ion-icon>
+        </ion-avatar>
+      </ion-item>
+    </div>
+  </div>
+  <!-- 序列号 -->
+  <div class="list_item" *ngIf="isSn===1">
+    <ion-item >
+      <ion-label>容器：</ion-label>
+      <ion-input maxlength='30' [(ngModel)]="lpnCode" type="text" (blur)="scrollToTop()"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>序列号：</ion-label>
+      <ion-input (keyup)="serialNumber_KeyDown($event)" maxlength='50' [(ngModel)]="serialNumberMode" type="text">
+      </ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item on-tap="numclick()">
+      <ion-label>数量：</ion-label>
+      <ion-input [disabled]='true' type="text" readonly="readonly" value='{{ScanNumberLength + " /" +InNumberLength}}'>
+      </ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconicon_arr_right"></ion-icon>
+      </ion-avatar>
+      <button ion-button>
+        Right Icon
+        <ion-icon class="iconfont iconicon_arr_right"></ion-icon>
+      </button>
+    </ion-item>
+    <ion-item>
+      <ion-label>库位：</ion-label>
+      <ion-input [(ngModel)]="locCode" type="text"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <div *ngFor="let item of skuConfig">
+      <ion-item *ngIf="item.skuLotDisp===1">
+        <ion-label>{{item.skuLotLabel}}：</ion-label>
+        <ion-input maxlength="{{item.skuLen !=(null||undefined)?item.skuLen:999}}" *ngIf="item.CtlLotEditBoole"
+          type="text" [(ngModel)]="item.LotValue">
+        </ion-input>
+        <ion-avatar *ngIf="item.CtlLotEditBoole" item-end>
+          <ion-icon class="iconfont iconsaomiao"></ion-icon>
+        </ion-avatar>
+        <ion-datetime [(ngModel)]="item.LotValue" *ngIf="!item.CtlLotEditBoole" cancelText="取 消" doneText="确 定"
+          min="1999-01-01" max="2039-12-31"
+          pickerFormat="{{item.skuLotMixMask !=(null||undefined)?item.skuLotMixMask:'yyyymmdd'}}"
+          displayFormat="{{item.skuLotMixMask !=(null||undefined)?item.skuLotMixMask:'yyyymmdd'}}">
+        </ion-datetime>
+        <ion-avatar *ngIf="!item.CtlLotEditBoole" item-end>
+          <ion-icon class="iconfont iconrili"></ion-icon>
+        </ion-avatar>
+      </ion-item>
+    </div>
+  </div>
+
+  <!-- 序列号明细 -->
+  <div class="list_item_serial" *ngIf="isSn===3">
+    <div class="list_item_title">
+      <span [ngStyle]="{'border-bottom':isTilebool === true ? '3px solid #008080' : '0' }"
+        (click)="isTitle(true)">已扫序列号(<b>{{ScanNumberLength}}</b>)</span>
+      <span [ngStyle]="{'border-bottom':isTilebool === false ? '3px solid #008080' : '0' }"
+        (click)="isTitle(false)">已收序列号(<b>{{InNumberLength}}</b>)</span>
+    </div>
+
+  </div>
+
+  <!-- 已扫描序列号 -->
+  <div *ngIf="NumberListFalag==1 && isSn==3 ">
+    <ion-list class="list_item_div">
+      <ion-scroll scrollY="true" style="height:35rem;">
+        <ion-item-sliding *ngFor="let item of serialNumber">
+          <ion-item>
+            <h2>{{item}}</h2>
+          </ion-item>
+          <ion-item-options side="right">
+            <button (click)="removeItem(item)" ion-button color="danger">
+              删除
+            </button>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-scroll>
+    </ion-list>
+  </div>
+
+  <!-- 已收序列号 -->
+  <div *ngIf="NumberListFalag==2 && isSn==3 ">
+    <ion-list class="list_item_div">
+      <ion-scroll scrollY="true" style="height:35rem;">
+        <ion-item-sliding *ngFor="let item of Sn">
+          <ion-item>
+            <h2>{{item.snDetailCode}}</h2>
+          </ion-item>
+        </ion-item-sliding>
+      </ion-scroll>
+    </ion-list>
+  </div>
+
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button no-dbl-click ion-button block class="btn-l" (tap)="exit()">
+      返回[Esc]
+    </button>
+    <button no-dbl-click ion-button block class="btn-d" (tap)="btnOk()">
+      提交[Ent]
+    </button>
+  </div>
+
+</ion-footer>

@@ -1,0 +1,316 @@
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>
+      按箱执行拣货
+      <!-- <div class="title_f_name">(青啤五厂)</div> -->
+    </ion-title>
+    <ion-buttons end (click)="detailed()">
+      <button ion-button icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <div class="title-bt">
+    <div class="order">
+      <div class="order-number">{{orderNo||sobillNo}}</div>
+      <div class="order-info">单据拣货进度 {{finish}}/{{count}}</div>
+    </div>
+    <div class="nav-tile">
+      <!-- <ul>
+        <li>首页</li>
+        <li>
+          <ion-icon class="iconfont iconicon_arr_right"></ion-icon>
+        </li>
+        <li>拣货</li>
+        <li>
+          <ion-icon class="iconfont iconicon_arr_right"></ion-icon>
+        </li>
+        <li>按箱拣货</li>
+        <li>
+          <ion-icon class="iconfont iconicon_arr_right"></ion-icon>
+        </li>
+        <li>按箱执行拣货</li>
+      </ul> -->
+      <crumbs></crumbs>
+      <button ion-button icon-only (click)="presentPopover($event)" *ngIf="IsShow===IsSkuList">
+        <ion-icon name="md-more"></ion-icon>
+      </button>
+    </div>
+  </div>
+</ion-header>
+
+<ion-content class="no-scroll" overflow-scroll="true" style="overflow: hidden">
+  <!-- 物品选显卡 -->
+  <!-- <div class="title-ms clearfix" *ngIf="IsShow===IsSku||IsShow===IsSkuSerial||IsShow===IsSkuSerialInfo"
+    (tap)="onClickItem()">
+    <div class="title-ms-info">
+      <div class="title-font-s1">
+        <label>{{skuName}}</label>
+      </div>
+      <div class="title-font-small">
+        <div>
+          <label>{{skuCode}}</label>
+        </div>
+        <div>
+          <label>{{lotNumberTitle}}</label>
+        </div>
+
+        <div class="specs_code">
+          拣货规格：<span style="color: black;">{{skuSpec}}</span>
+        </div>
+        <div class="ionic_right">
+          <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="realQtyName!=''&& realQtyName!=null " [ngStyle]="{'font-size':setNameLineClass()}"
+      class="received-scan">
+      已拣货: <span style="color: #F59A23;"> {{realQtyName ==''?'0':realQtyName}}</span>
+    </div>
+    <div *ngIf="planQtyName!=''&& planQtyName!=null " [ngStyle]="{'font-size':setNameLineScanClass()}"
+      class="received-plan">
+      计划量: <span style="color: #F59A23;"> {{planQtyName ==''?'0':planQtyName}}</span>
+    </div>
+  </div> -->
+  <div class="top-plan" *ngIf="IsShow===IsSku||IsShow===IsSkuSerial||IsShow===IsSkuSerialInfo"
+  (tap)="onClickItem()">
+    <div class="top-plan_1">
+      <span>{{skuName}}</span>
+      <span>{{skuCode}}</span> 
+      <span>{{sourceLocCode}}</span> 
+      <span>{{transportDate}}</span>
+      <span *ngIf="skuLot&&skuLot.skuLot2">{{skuLot.skuLot2}}</span> 
+      <span *ngIf="skuLot&&skuLot.skuLot4">{{skuLot.skuLot4}}</span> 
+      <span>{{cName}}</span>
+    </div>
+    <div class="top-plan_2">
+      <div class="top-plan_2_1">
+        <span >拣货规格:<span style="color: black;">{{skuSpec}}</span></span>
+        <span *ngIf="realQtyName!=''&& realQtyName!=null "
+              [ngStyle]="{'font-size':setNameLineClass()}"
+        >已拣货:<span style="color: #F59A23;">{{realQtyName ==''?'0':realQtyName}}</span></span>
+        <span *ngIf="planQtyName!=''&& planQtyName!=null " 
+              [ngStyle]="{'font-size':setNameLineScanClass()}"
+        >计划量:<span style="color: #F59A23;">{{planQtyName ==''?'0':planQtyName}}</span></span>
+        <div *ngIf="totalPlanQty>0" class="received-total">
+          <span style="color: #F59A23;"> {{totalScanQty}}/{{totalPlanQty}}</span>
+        </div>
+      </div>
+      <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+    </div>
+    
+  </div> 
+  <!-- 批次号物品 -->
+  <div class="list_item" [hidden]="IsShow!=IsSku">
+    <div>
+      <ion-item>
+        <ion-label>箱号：</ion-label>
+        <ion-input  [(ngModel)]="scanView" type="text"></ion-input>
+        <ion-avatar item-end>
+          <ion-icon class="iconfont iconsaomiao"></ion-icon>
+        </ion-avatar>
+      </ion-item>
+      <ion-item>
+        <ion-label>原货位：</ion-label>
+        <ion-input  [(ngModel)]="sourceLocCode1" type="text"></ion-input>
+        <ion-avatar item-end>
+          <ion-icon class="iconfont iconsaomiao"></ion-icon>
+        </ion-avatar>
+      </ion-item>
+      <ion-item >
+        <ion-label>原容器：</ion-label>
+        <ion-input maxlength='30' [disabled]='true' [(ngModel)]="sourceLpnCode" type="text"></ion-input>
+        <ion-avatar item-end (click)="setServerIp()">
+          <ion-icon class="iconfont iconsaomiao"></ion-icon>
+        </ion-avatar>
+      </ion-item>
+      <ion-item>
+        <ion-label>落放位置：</ion-label>
+        <ion-input [disabled]='true' [(ngModel)]="targetLocCode" type="text"></ion-input>
+        <ion-avatar item-end>
+          <ion-icon class="iconfont iconsaomiao"></ion-icon>
+        </ion-avatar>
+      </ion-item>
+    </div>
+    <page-check-in-box-label-type #labelTypecom>
+
+    </page-check-in-box-label-type>
+  </div>
+
+  <!-- 序列号 -->
+  <div class="list_item" *ngIf="IsShow==IsSkuSerial">
+    <ion-item >
+      <ion-label>拣货容器：</ion-label>
+      <ion-input maxlength='30' type="text" [(ngModel)]="targetLpnCode"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>原货位：</ion-label>
+      <ion-input [disabled]='true' [(ngModel)]="sourceLocCode" type="text"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item >
+      <ion-label>原容器：</ion-label>
+      <ion-input maxlength='30' [disabled]='true' [(ngModel)]="sourceLpnCode" type="text"></ion-input>
+      <ion-avatar item-end (click)="setServerIp()">
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>序列号：</ion-label>
+      <ion-input type="text" maxlength='100' (keyup)="SkuSerial_KeyDown($event)" [(ngModel)]="serialNumberMode">
+      </ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>批次号：</ion-label>
+      <ion-input [(ngModel)]="lotNumber" type="text"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item (click)="numclick()">
+      <ion-label>数量：</ion-label>
+      <ion-input [disabled]='true' type="text" readonly="readonly" value='{{ScanNumberLength + " /" +InNumberLength}}'>
+      </ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconicon_arr_right"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item>
+      <ion-label>落放位置：</ion-label>
+      <ion-input [(ngModel)]="targetLocCode" type="text"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+  </div>
+  <!-- 序列号明细 -->
+  <div class="list_item_serial" *ngIf="IsShow===IsSkuSerialInfo">
+    <div class="list_item_title">
+      <span [ngStyle]="{'border-bottom':isTilebool === true ? '3px solid #008080' : '0' }"
+        (click)="isTitle(true)">已扫序列号(<b>{{ScanNumberLength}}</b>)</span>
+      <span [ngStyle]="{'border-bottom':isTilebool === false ? '3px solid #008080' : '0' }"
+        (click)="isTitle(false)">已拣序列号(<b>{{InNumberLength}}</b>)</span>
+    </div>
+
+  </div>
+
+  <!-- 已扫描序列号 -->
+  <div *ngIf="NumberListFalag==1 && IsShow===IsSkuSerialInfo ">
+    <ion-list class="list_item_div">
+      <ion-scroll scrollY="true" style="height:35rem;">
+        <ion-item-sliding *ngFor="let item of serialNumber">
+          <ion-item>
+            <h2>{{item}}</h2>
+          </ion-item>
+          <ion-item-options side="right">
+            <button (click)="removeItem(item)" ion-button color="danger">
+              删除
+            </button>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-scroll>
+    </ion-list>
+  </div>
+
+  <!-- 已收序列号 -->
+  <div *ngIf="NumberListFalag==2 && IsShow===IsSkuSerialInfo ">
+    <ion-list class="list_item_div">
+      <ion-scroll scrollY="true" style="height:35rem;">
+        <ion-item-sliding *ngFor="let item of InserialNumber">
+          <ion-item>
+            <h2>{{item}}</h2>
+          </ion-item>
+        </ion-item-sliding>
+      </ion-scroll>
+    </ion-list>
+  </div>
+
+
+  <!-- 物品列表 -->
+  <div class="title-ms-list" *ngIf="IsShow===IsSkuList">
+    <ion-list>
+      <ion-item-sliding *ngFor="let item of pickPlansList;let i = index"  >
+        <ion-item  style="height: auto !important;" (click)="headSelected(item)"
+        [ngClass]="{selected:pickPlansModelTemp.pickPlanId == item.pickPlanId}">
+          <div class="nodes-list-item">
+            <div class="left">
+              <div class="chk_wrapper">
+                <input type="checkbox" id="{{'checkbox_'+i}}" class="chk_1" [(ngModel)]="item.isCheck">
+                <label for="{{'checkbox_'+i}}"></label>
+              </div>
+              <div class="left-2">
+                <span>{{item.skuName}}</span>
+                <span>{{item.skuCode}}</span>
+                <span>{{item.sourceLocCode}}</span>
+                <span  *ngIf="item.skuLot.skuLot2!=''">{{item.skuLot.skuLot2}}</span>
+                <span  *ngIf="item.skuLot.skuLot4!=''">{{item.skuLot.skuLot4}}</span>
+              </div>
+              
+            </div>
+            <div class="right">
+              <div>
+                <span>拣货规格：</span>
+                <span>{{item.skuSpec}}</span>
+              </div>
+              <div>
+                <span>已拣货:</span>
+                <span style="color: #F59A23;">{{item.realCountQty}}/{{item.planCountQty}}</span>
+              </div>
+            </div>
+          </div>
+        </ion-item>
+        <ion-item-options side="right">
+          <button ion-button color="secondary" (click)="complatedClick1(item)">
+            <ion-icon name="checkmark" md="md-checkmark"></ion-icon>
+            完成
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+    <!-- <div class="title-ms-info-list" [ngClass]="{selected:pickPlansModelTemp.pickPlanId == item.pickPlanId}"
+      (click)="headSelected(item)" *ngFor="let item of pickPlansList">
+      <div class="title-font-s1">
+        <label>{{item.skuName}}</label>
+      </div>
+      <div class="title-font-small">
+        <div>
+          <label>{{item.skuCode}}</label>
+        </div>
+        <div>
+          <label>原库位:{{item.sourceLocCode}}</label>
+        </div>
+        <div>
+          <label style="color: black;" *ngIf="item.skuLot.skuLot4!=''">
+            {{item.skuLot.skuLot4}}
+          </label>
+        </div>
+        <div class="list_specs_code">
+          拣货规格：<span style="color: black;">{{item.skuSpec}}</span>
+        </div>
+        <div class="list_received">
+          已拣货: <span style="color: #F59A23;">{{item.realCountQty}}</span>/{{item.planCountQty}}
+        </div>
+      </div>
+    </div> -->
+  </div>
+
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button no-dbl-click ion-button block class="btn-l" (tap)="exit()">
+      返回[Esc]
+    </button>
+    <button no-dbl-click ion-button block class="btn-d" (tap)="btnOk()">
+      提交[Ent]
+    </button>
+  </div>
+
+</ion-footer>

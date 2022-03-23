@@ -1,0 +1,39 @@
+<ion-content>
+  <ion-list>
+    <ion-item-group>
+      请选择
+    </ion-item-group>
+    <ion-item-group>
+      <ion-scroll zooming="true" scrollY="true">
+        <ion-item *ngFor="let item of records" (click)="headSelected(item)" [ngClass]="{selected:item.selected}">
+          <div class="nodes-item">
+            <div>
+              <span>物料编号：</span>
+              <span>{{item.skuCode}}</span>
+            </div>
+            <div>
+              <span>物料名称：</span>
+              <span>{{item.skuName}}</span>
+            </div>
+            <div>
+              <span>拣货数量：</span>
+              <span>{{item.qty}}</span>
+            </div>
+            <div>
+              <span>客户名称：</span>
+              <span>{{item.cname}}</span>
+            </div>
+            <div>
+              <span>客户地址：</span>
+              <span>{{item.address}}</span>
+            </div>
+          </div>
+        </ion-item>
+      </ion-scroll>
+    </ion-item-group>
+    <ion-item-group>
+      <button ion-button (click)="dismiss()">取消</button>
+      <button ion-button (click)="submitdata()">确认</button>
+    </ion-item-group>
+  </ion-list>
+</ion-content>

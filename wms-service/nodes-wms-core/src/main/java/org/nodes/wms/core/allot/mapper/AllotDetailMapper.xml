@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.allot.mapper.AllotDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="allotDetailResultMap" type="org.nodes.wms.core.allot.entity.AllotDetail">
+        <id column="allot_detail_id" property="allotDetailId"/>
+        <result column="allot_bill_id" property="allotBillId"/>
+        <result column="allot_line_no" property="allotLineNo"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="wsp_id" property="wspId"/>
+        <result column="sku_level" property="skuLevel"/>
+        <result column="sku_code" property="skuCode"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="sku_spec" property="skuSpec"/>
+        <result column="convert_qty" property="convertQty"/>
+        <result column="um_code" property="umCode"/>
+        <result column="um_name" property="umName"/>
+        <result column="base_um_code" property="baseUmCode"/>
+        <result column="base_um_name" property="baseUmName"/>
+        <result column="allot_plan_qty" property="allotPlanQty"/>
+        <result column="allot_out_qty" property="allotOutQty"/>
+        <result column="allot_in_qty" property="allotInQty"/>
+        <result column="status" property="status"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+</mapper>

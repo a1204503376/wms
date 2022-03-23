@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.warehouse.mapper.LocationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="locationResultMap" type="org.nodes.wms.core.warehouse.entity.Location">
+        <id column="loc_id" property="locId"/>
+        <result column="zone_id" property="zoneId"/>
+        <result column="wh_id" property="whId"/>
+        <result column="loc_code" property="locCode"/>
+        <result column="loc_type" property="locType"/>
+        <result column="loc_category" property="locCategory"/>
+        <result column="loc_handling" property="locHandling"/>
+        <result column="allocation_zone" property="allocationZone"/>
+        <result column="loc_flag" property="locFlag"/>
+        <result column="abc" property="abc"/>
+        <result column="lock_flag" property="lockFlag"/>
+        <result column="loc_status" property="locStatus"/>
+        <result column="logic_allocation" property="logicAllocation"/>
+        <result column="loc_length" property="locLength"/>
+        <result column="loc_wide" property="locWide"/>
+        <result column="loc_high" property="locHigh"/>
+        <result column="loc_level" property="locLevel"/>
+        <result column="orientation" property="orientation"/>
+        <result column="capacity" property="capacity"/>
+        <result column="load_weight" property="loadWeight"/>
+        <result column="item_num" property="itemNum"/>
+        <result column="tray_num" property="trayNum"/>
+        <result column="share_width" property="shareWidth"/>
+        <result column="share_weight" property="shareWeight"/>
+        <result column="loc_sku_mix" property="locSkuMix"/>
+        <result column="count_bill_no" property="countBillNo"/>
+        <result column="loc_lot_no_mix" property="locLotNoMix"/>
+        <result column="loc_lot_mix1" property="locLotMix1"/>
+        <result column="loc_lot_mix2" property="locLotMix2"/>
+        <result column="loc_lot_mix3" property="locLotMix3"/>
+        <result column="loc_lot_mix4" property="locLotMix4"/>
+        <result column="loc_lot_mix5" property="locLotMix5"/>
+        <result column="loc_lot_mix6" property="locLotMix6"/>
+        <result column="loc_lot_mix7" property="locLotMix7"/>
+        <result column="loc_lot_mix8" property="locLotMix8"/>
+        <result column="loc_lot_mix9" property="locLotMix9"/>
+        <result column="loc_lot_mix10" property="locLotMix10"/>
+        <result column="loc_lot_mix11" property="locLotMix11"/>
+        <result column="loc_lot_mix12" property="locLotMix12"/>
+        <result column="loc_lot_mix13" property="locLotMix13"/>
+        <result column="loc_lot_mix14" property="locLotMix14"/>
+        <result column="loc_lot_mix15" property="locLotMix15"/>
+        <result column="loc_lot_mix16" property="locLotMix16"/>
+        <result column="loc_lot_mix17" property="locLotMix17"/>
+        <result column="loc_lot_mix18" property="locLotMix18"/>
+        <result column="loc_lot_mix19" property="locLotMix19"/>
+        <result column="loc_lot_mix20" property="locLotMix20"/>
+        <result column="loc_lot_mix21" property="locLotMix21"/>
+        <result column="loc_lot_mix22" property="locLotMix22"/>
+        <result column="loc_lot_mix23" property="locLotMix23"/>
+        <result column="loc_lot_mix24" property="locLotMix24"/>
+        <result column="loc_lot_mix25" property="locLotMix25"/>
+        <result column="loc_lot_mix26" property="locLotMix26"/>
+        <result column="loc_lot_mix27" property="locLotMix27"/>
+        <result column="loc_lot_mix28" property="locLotMix28"/>
+        <result column="loc_lot_mix29" property="locLotMix29"/>
+        <result column="loc_lot_mix30" property="locLotMix30"/>
+        <result column="last_cycle_date" property="lastCycleDate"/>
+        <result column="last_loc_count_date" property="lastLocCountDate"/>
+        <result column="max_tray_num" property="maxTrayNum"/>
+        <result column="fictitious_lpn" property="fictitiousLpn"/>
+    </resultMap>
+    <update id="updateLoctionBillNo">
+         update wms_location
+            set count_bill_no = #{countBillNo}
+            where loc_id = #{locId}
+    </update>
+    <update id="deletLoctionBillNo">
+        update wms_location
+            set count_bill_no = ""
+            where count_bill_no = #{countBillNo}
+    </update>
+
+    <!--  清空锁定状态  -->
+    <update id="updateLocLockFlagToNullById">
+        update wms_location set lock_flag = null where loc_id = #{locId}
+    </update>
+
+</mapper>

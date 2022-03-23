@@ -1,0 +1,33 @@
+{
+
+  "name": "cordova-plugin-seuic-autoid9",
+
+  "version": "1.0.0",
+
+  "description": "a cordova plugin, a JS version of autoid9",
+
+  "cordova": {
+
+    "id": "cordova-plugin-seuic-autoid9",
+
+    "platforms": [
+
+      "android"
+
+    ]
+
+  },
+
+  "keywords": [
+
+    "autoid9",
+
+    "cordova-plugin-seuic-autoid9"
+
+  ],
+
+  "author": "notes",
+
+  "license": "MIT"
+
+}

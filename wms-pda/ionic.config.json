@@ -1,0 +1,7 @@
+{
+  "name": "autoid9",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}

@@ -1,0 +1,79 @@
+<ion-header>
+
+  <ion-navbar color="wmscolor" #nav>
+    <ion-title>修改明细</ion-title>
+    <!-- <ion-buttons end (click)="finishDetailed()">
+      <button ion-button icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons> -->
+  </ion-navbar>
+  <ion-grid style="color: white;">
+    <ion-row>
+      <ion-col>
+        <div style="display: flex;flex-direction: row;justify-content: space-between;">
+          <span>{{result.asnBillNo}}</span>
+          <span>收货行数：{{result.asnLineNo}}</span>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div class="nav-tile">
+          <crumbs></crumbs>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+<ion-content>
+  <div style="display: flex;flex-direction: column;">
+    <ion-item>
+      <div class="sub-header-box">
+        <div class="row1">
+          <div class="left">
+            <span>{{result.skuName}}</span>
+            <span>{{result.skuCode}}</span>
+          </div>
+          <div class="right">
+            <span>收货规格：{{result.skuSpec}}</span>
+            <span>计划数量：{{result.planQty}}{{result.umName}}</span>
+            <span>已收数量：{{result.scanQty}}{{result.umName}}</span>
+          </div>
+        </div>
+        <div class="row2">
+          <span>状态：{{result.detailStatusName}}</span>
+        </div>
+      </div>
+    </ion-item>
+    <ion-scroll class="list-box" direction="y">
+      <ion-list>
+        <ion-item>
+          <ion-label>库位编码：</ion-label>
+          <ion-input maxlength='30' type="text" [(ngModel)]="result.locCode" disabled>
+          </ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label id="qtylabel">收货数量：</ion-label>
+          <ion-input maxlength='30' type="number" [(ngModel)]="result.planQty" (ngModelChange)="change($event)">
+          </ion-input>
+          <ion-select [(ngModel)]="result.umCode" cancelText="取消" disabled>
+            <ion-option [value]="result.umCode">{{result.umName}}</ion-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngFor="let skulot of skulots">
+          <ion-label>{{skulot.skuLotName}}：</ion-label>
+          <ion-input maxlength='30' type="text" [(ngModel)]="skulot.skuLotValue" disabled>
+          </ion-input>
+        </ion-item>
+      </ion-list>
+    </ion-scroll>
+  </div>
+  
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button ion-button class="btn-l" (click)="backClick()"> 返回[Esc]</button>
+    <button ion-button class="btn-d" (click)="submitClick()"> 提交[Ent]</button>
+  </div>
+</ion-footer>

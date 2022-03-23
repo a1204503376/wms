@@ -1,0 +1,111 @@
+<ion-header >
+  <ion-navbar color="wmscolor">
+    <ion-title (click)="expression()">
+      拣货记录
+      <!-- <div class="title_f_name">(青啤五厂)</div> -->
+    </ion-title>
+  </ion-navbar>
+  <div class="title-bt"> 
+    <div class="order">
+     <div class="order-number">{{orderNo||sobillNo}}</div>
+     <div class="order-info">单据收货进度 {{finish}}/{{count}}</div>
+    </div>
+    <div class="nav-tile">
+      <!-- <ul>
+        <li>首页</li>
+        <li><ion-icon class="iconfont icon-arr-right"></ion-icon></li>
+        <li>拣货</li>
+        <li><ion-icon class="iconfont icon-arr-right"></ion-icon></li>
+        <li>按件拣货</li>
+        <li><ion-icon class="iconfont icon-arr-right"></ion-icon></li>
+        <li>执行拣货</li>
+        <li><ion-icon class="iconfont icon-arr-right"></ion-icon></li>
+        <li>拣货记录</li>
+        
+    </ul> -->
+    <crumbs></crumbs>
+ </div>
+  </div>
+</ion-header>
+<ion-content  class="no-scroll">
+  <div class="total-title" >
+    <div *ngFor="let item of groupRecords">
+      <div *ngIf="item.totalPlanQty>0" class="box">
+        <span>【{{item.skuName}}】</span>
+        <span>{{item.totalScanQty}}/{{item.totalPlanQty}}</span>
+      </div>
+    </div>
+</div>
+  <div  *ngFor="let item of pickPlans" style="margin-top: 10px;">
+    <div class="nodes-list-item">
+      <span>{{item.skuName}}</span>
+      <div  class="item-bottom">
+        <div class="item-bottom-left">
+          <div>
+            <span>落放位置:</span>
+            <span>PACK</span>
+          </div>
+          <!-- <div>
+            <span>容&emsp;&emsp;器:</span>
+            <span>{{item.sourceLpnCode}}</span>
+          </div> -->
+          <div>
+            <span>库&emsp;&emsp;位:</span>
+            <span>{{item.sourceLocCode}}</span>
+          </div>
+          <div *ngFor="let skuLot of range(item.skuLot)">
+            <span>{{skuLot}}</span>
+          </div>
+        </div>
+        <div class="item-bottom-right">
+          <div>
+            <span>已经拣货:</span>
+            <span>{{item.realCountQty}}</span><span>/{{item.planCountQty}}</span>
+          </div>
+          <div>
+            <span>拣货人: </span>
+            <span>{{item.userName}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ <!-- <div  *ngFor="let item of pickPlans" class="title-ms">
+   <div class="title-ms-info">
+    <div class="title-font-s1">
+      <label >{{item.skuName}}</label>
+     </div>
+     <div class="title-font-small">
+      <div>
+        <label>落放位置:</label>
+        <label style="color: black;">PACK</label>
+       </div>
+       <div>
+        <label>容&emsp;&emsp;器:</label>
+        <label style="color: black;">{{item.sourceLpnCode}}</label>
+       </div>
+       <div class="title-font-s4">
+        <label >{{item.skuLot.skuLot1}}</label>
+       </div>
+       <div class="title-font-s4">
+        <label >{{item.skuLot.skuLot2}}</label>
+       </div>
+       <div class="received"> 
+         已经拣货: <span style="color: #F59A23;">{{item.realCountQty}}</span>/{{item.planCountQty}}
+       </div>
+       <div class="consignee"> 
+        拣货人: <span style="color: #F59A23;">{{item.userName}}</span>
+      </div>
+     
+     </div>
+   </div>
+ </div> -->
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button ion-button block class="btn-l" (click)="exit()">
+      返回[Esc]
+    </button>
+  </div>
+
+</ion-footer>

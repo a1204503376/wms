@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.stock.core.mapper.LotLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="lotLogResultMap" type="org.nodes.wms.core.stock.core.entity.LotLog">
+        <id column="wlll_id" property="wlllId"/>
+        <result column="lot_id" property="lotId"/>
+        <result column="wh_id" property="whId"/>
+        <result column="lot_number" property="lotNumber"/>
+        <result column="lot_status" property="lotStatus"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="sku_code" property="skuCode"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="sku_lot1" property="skuLot1"/>
+        <result column="sku_lot2" property="skuLot2"/>
+        <result column="sku_lot3" property="skuLot3"/>
+        <result column="sku_lot4" property="skuLot4"/>
+        <result column="sku_lot5" property="skuLot5"/>
+        <result column="sku_lot6" property="skuLot6"/>
+        <result column="sku_lot7" property="skuLot7"/>
+        <result column="sku_lot8" property="skuLot8"/>
+        <result column="sku_lot9" property="skuLot9"/>
+        <result column="sku_lot10" property="skuLot10"/>
+        <result column="sku_lot11" property="skuLot11"/>
+        <result column="sku_lot12" property="skuLot12"/>
+        <result column="sku_lot13" property="skuLot13"/>
+        <result column="sku_lot14" property="skuLot14"/>
+        <result column="sku_lot15" property="skuLot15"/>
+        <result column="sku_lot16" property="skuLot16"/>
+        <result column="sku_lot17" property="skuLot17"/>
+        <result column="sku_lot18" property="skuLot18"/>
+        <result column="sku_lot19" property="skuLot19"/>
+        <result column="sku_lot20" property="skuLot20"/>
+        <result column="sku_lot21" property="skuLot21"/>
+        <result column="sku_lot22" property="skuLot22"/>
+        <result column="sku_lot23" property="skuLot23"/>
+        <result column="sku_lot24" property="skuLot24"/>
+        <result column="sku_lot25" property="skuLot25"/>
+        <result column="sku_lot26" property="skuLot26"/>
+        <result column="sku_lot27" property="skuLot27"/>
+        <result column="sku_lot28" property="skuLot28"/>
+        <result column="sku_lot29" property="skuLot29"/>
+        <result column="sku_lot30" property="skuLot30"/>
+        <result column="pro_type" property="proType"/>
+        <result column="system_proc_id" property="systemProcId"/>
+        <result column="proc_time" property="procTime"/>
+    </resultMap>
+</mapper>

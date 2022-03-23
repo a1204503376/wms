@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.warehouse.mapper.PlatformInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="platformInfoResultMap" type="org.nodes.wms.core.warehouse.entity.PlatformInfo">
+        <id column="spi_id" property="spiId"/>
+        <result column="platform_type" property="platformType"/>
+        <result column="platform_code" property="platformCode"/>
+        <result column="wh_id" property="whId"/>
+        <result column="platform_name" property="platformName"/>
+        <result column="platform_capacity" property="platformCapacity"/>
+    </resultMap>
+
+</mapper>

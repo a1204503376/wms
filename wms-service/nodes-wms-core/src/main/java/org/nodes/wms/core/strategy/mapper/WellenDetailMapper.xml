@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.strategy.mapper.WellenDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="wellenDetailResultMap" type="org.nodes.wms.core.strategy.entity.WellenDetail">
+        <result column="id" property="id"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="wellen_id" property="wellenId"/>
+        <result column="bill_field" property="billField"/>
+        <result column="operation" property="operation"/>
+        <result column="value1" property="value1"/>
+        <result column="value2" property="value2"/>
+        <result column="criteria" property="criteria"/>
+    </resultMap>
+
+
+</mapper>

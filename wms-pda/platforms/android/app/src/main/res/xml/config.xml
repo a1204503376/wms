@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.notes.autoid9" version="1.0.22" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <feature name="Permissions">
+        <param name="android-package" value="com.android.plugins.Permissions" />
+    </feature>
+    <feature name="AppVersion">
+        <param name="android-package" value="uk.co.whiteoctober.cordova.AppVersion" />
+    </feature>
+    <feature name="BarCodePlugin">
+        <param name="android-package" value="com.nodes.plugin.BarCodePlugin" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Device">
+        <param name="android-package" value="org.apache.cordova.device.Device" />
+    </feature>
+    <feature name="File">
+        <param name="android-package" value="org.apache.cordova.file.FileUtils" />
+        <param name="onload" value="true" />
+    </feature>
+    <allow-navigation href="cdvfile:*" />
+    <feature name="FileOpener2">
+        <param name="android-package" value="io.github.pwlin.cordova.plugins.fileopener2.FileOpener2" />
+    </feature>
+    <feature name="FileTransfer">
+        <param name="android-package" value="org.apache.cordova.filetransfer.FileTransfer" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="StatusBar">
+        <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Whitelist">
+        <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Toast">
+        <param name="android-package" value="nl.xservices.plugins.Toast" />
+    </feature>
+    <feature name="SQLitePlugin">
+        <param name="android-package" value="io.sqlc.SQLitePlugin" />
+    </feature>
+    <feature name="CDVIonicKeyboard">
+        <param name="android-package" onload="true" value="io.ionic.keyboard.CDVIonicKeyboard" />
+    </feature>
+    <name>仓储管理系统</name>
+    <description>WMS PDA</description>
+    <author email="crc@nodes.com.cn" href="http://www.nodes.com.cn/">Notes dev Team</author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <allow-intent href="market:*" />
+    <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
+    <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
+    <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
+    <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
+    <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
+    <splash density="land-ldpi" src="resources/android/splash/drawable-land-ldpi-screen.png" />
+    <splash density="land-mdpi" src="resources/android/splash/drawable-land-mdpi-screen.png" />
+    <splash density="land-hdpi" src="resources/android/splash/drawable-land-hdpi-screen.png" />
+    <splash density="land-xhdpi" src="resources/android/splash/drawable-land-xhdpi-screen.png" />
+    <splash density="land-xxhdpi" src="resources/android/splash/drawable-land-xxhdpi-screen.png" />
+    <splash density="land-xxxhdpi" src="resources/android/splash/drawable-land-xxxhdpi-screen.png" />
+    <splash density="port-ldpi" src="resources/android/splash/drawable-port-ldpi-screen.png" />
+    <splash density="port-mdpi" src="resources/android/splash/drawable-port-mdpi-screen.png" />
+    <splash density="port-hdpi" src="resources/android/splash/drawable-port-hdpi-screen.png" />
+    <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
+    <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
+    <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
+    <preference name="loglevel" value="DEBUG" />
+    <preference name="ScrollEnabled" value="false" />
+    <preference name="android-minSdkVersion" value="19" />
+    <preference name="BackupWebStorage" value="none" />
+    <preference name="SplashMaintainAspectRatio" value="true" />
+    <preference name="FadeSplashScreenDuration" value="300" />
+    <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="SplashShowOnlyFirstTime" value="false" />
+    <preference name="ShowSplashScreen" value="true" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="2000" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="CordovaWebViewEngine" value="CDVUIWebViewEngine" />
+    <preference name="KeyboardDisplayRequiresUserAction" value="true" />
+</widget>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.basedata.mapper.SkuInstockMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="skuInstockResultMap" type="org.nodes.wms.core.basedata.entity.SkuInstock">
+        <id column="wsi_id" property="wsiId"/>
+        <result column="status" property="status"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="wh_id" property="whId"/>
+        <result column="wo_id" property="woId"/>
+        <result column="ssi_id" property="ssiId"/>
+        <result column="ssi_proc_type" property="ssiProcType"/>
+        <result column="zone_id" property="zoneId"/>
+        <result column="loc_id" property="locId"/>
+        <result column="wsp_id" property="wspId"/>
+        <result column="sku_level" property="skuLevel"/>
+        <result column="qc_zone_id" property="qcZoneId"/>
+        <result column="qc_loc_id" property="qcLocId"/>
+        <result column="unqualifly_zone_id" property="unqualiflyZoneId"/>
+        <result column="unqualifly_loc_id" property="unqualiflyLocId"/>
+        <result column="return_zone_id" property="returnZoneId"/>
+        <result column="return_loc_id" property="returnLocId"/>
+        <result column="pick_zone_id" property="pickZoneId"/>
+        <result column="pick_loc_id" property="pickLocId"/>
+        <result column="low_storage" property="lowStorage"/>
+        <result column="high_storage" property="highStorage"/>
+    </resultMap>
+</mapper>

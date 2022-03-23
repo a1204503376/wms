@@ -1,0 +1,167 @@
+page-setting {
+    
+    .setting-box{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 40px;
+        .header{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            img{
+                width: 85px;
+                height: 85px;
+            }
+            .header-right{
+                margin-left: 10px;
+                display: flex;
+                flex-direction: column;
+                align-content: space-between;
+                font-weight: bold;
+                .header-right-line-01{
+                    margin-bottom: 20px;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    span:nth-of-type(2){
+                        background-color: #33cbcc;
+                        color: white;
+                        padding: 1px 2px;
+                        border-radius: 3px; 
+                    }
+                }
+                
+            }
+        }
+        .setting-list{
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            .setting-item{
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                border-bottom: 1px solid #ccc;
+                padding: 7px;
+                align-items: center;
+                img{
+                    width: 30px;
+                    height: 30px;
+                }
+                span:nth-of-type(1){
+                    margin-left: 10px;
+                    margin-right: 130px;
+                }
+                span:nth-of-type(2){
+                    text-align: center;
+                    background-color: #33cbcc;
+                    width: 25px;
+                    height: 25px;
+                    line-height: 25px;
+                    border-radius: 25px; 
+                    color: white;
+                }
+            }
+           
+        }
+        .setting-version{
+            margin-top: 50px;
+            display: flex; 
+            flex-direction: row;
+            justify-content: center; 
+        }
+    }
+    /*导航指引*/
+    .nav-tile {
+        width: 100%;
+        height: 30px;
+        background-color: #33cbcc;
+        color: white;
+        ul {
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+            padding-left: 15px;
+            margin-top: 0px;
+            li {
+                float: left;
+                list-style-type: none;
+                margin-right: 5px;
+                ion-icon {
+                    margin-top: 3px;
+                }
+            }
+        }
+    }
+    .user-info {
+        width: 100%;
+        height: 8rem;
+        padding-top: 2rem;
+        .user-img {
+            display: inline-block;
+            width: 30%;
+            text-align: right;
+            padding-right: 2rem;
+            .icon-Shape {
+                font-size: 50px;
+                color: #64cbcd;
+                margin-top: 10px;
+            }
+        }
+        .user-text {
+            display: inline-block;
+            width: 69%;
+            font-weight: bold;
+            span {
+                display: inline-block;
+                margin: 0.5rem 0;
+            }
+            .user-name {
+                width: 50%;
+            }
+            .user-loginDate {
+                width: 100%;
+            }
+            .user-checkIn {
+                background-color: #64cbcd;
+                color: #fff;
+                width: 5rem;
+                height: 2rem;
+                text-align: center;
+            }
+        }
+    }
+    .user-setting {
+        padding-top: 2rem;
+        ul {
+            li {
+                list-style: none;
+                height: 4rem;
+                line-height: 4rem;
+                ion-icon {
+                    color: #64cbcd;
+                    margin-right: 1rem;
+                    font-size: 2rem;
+                }
+                span {
+                    width: 70%;
+                    display: inline-block;
+                    border-bottom: 1px solid #ccc;
+                }
+            }
+        }
+    }
+    .btn-box {
+        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+        button {
+            width: 100%;
+        }
+        .button-ios.btn-l{
+            margin: 0 !important;
+        }
+    }
+}

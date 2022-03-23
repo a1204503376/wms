@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="chrome=1" http-equiv="X-UA-Compatible"/>
+    <meta content="webkit" name="renderer">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link href="<%= BASE_URL %>cdn/element-ui/2.15.7/theme-chalk/index.css" rel="stylesheet">
+    <link href="<%= BASE_URL %>cdn/animate/3.5.2/animate.css" rel="stylesheet">
+    <link href="<%= BASE_URL %>cdn/iconfont/index.css" rel="stylesheet">
+    <link href="<%= BASE_URL %>cdn/iconfont/avue/iconfont.css" rel="stylesheet">
+    <link href="<%= BASE_URL %>cdn/iconfont/saber/iconfont.css" rel="stylesheet">
+    <link href="<%= BASE_URL %>cdn/avue/2.8.25/index.css" rel="stylesheet">
+    <script src="<%= BASE_URL %>cdn/xlsx/FileSaver.min.js"></script>
+    <script src="<%= BASE_URL %>cdn/xlsx/xlsx.full.min.js"></script>
+    <link href="<%= BASE_URL %>favicon.ico" rel="icon">
+    <title>Nodes 仓储管理系统</title>
+    <style>
+        html,
+        body,
+        #app {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .avue-home {
+            background-color: #303133;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .avue-home__main {
+            user-select: none;
+            width: 100%;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .avue-home__footer {
+            width: 100%;
+            flex-grow: 0;
+            text-align: center;
+            padding: 1em 0;
+        }
+
+        .avue-home__footer > a {
+            font-size: 12px;
+            color: #ABABAB;
+            text-decoration: none;
+        }
+
+        .avue-home__loading {
+            height: 32px;
+            width: 32px;
+            margin-bottom: 20px;
+        }
+
+        .avue-home__title {
+            color: #FFF;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .avue-home__sub-title {
+            color: #ABABAB;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+<noscript>
+    <strong>
+        很抱歉，如果没有 JavaScript 支持，Nodes仓储管理系统 将不能正常工作。请启用浏览器的 JavaScript 然后继续。
+    </strong>
+</noscript>
+<div id="app">
+    <div class="avue-home">
+        <div class="avue-home__main">
+            <img alt="loading" class="avue-home__loading" src="<%= BASE_URL %>svg/loading-spin.svg">
+            <div class="avue-home__title">
+                正在加载资源
+            </div>
+            <div class="avue-home__sub-title d">
+                初次加载资源可能需要较多时间 请耐心等待
+            </div>
+        </div>
+        <div class="avue-home__footer">
+            <a href="http://www.nodes.com.cn" target="_blank">
+                http://www.nodes.com.cn </a>
+        </div>
+    </div>
+</div>
+<!-- built files will be auto injected -->
+<script charset="utf-8" src="<%= BASE_URL %>util/aes.js"></script>
+<!--<script charset="utf-8" src="<%= BASE_URL %>cdn/vue/2.6.10/vue.min.js"></script>-->
+<script charset="utf-8" src="<%= BASE_URL %>cdn/vue/2.6.10/vue.js"></script>
+<script charset="utf-8" src="<%= BASE_URL %>cdn/vuex/3.1.1/vuex.min.js"></script>
+<script charset="utf-8" src="<%= BASE_URL %>cdn/vue-router/3.0.1/vue-router.min.js"></script>
+<script charset="utf-8" src="<%= BASE_URL %>cdn/axios/1.0.0/axios.min.js"></script>
+<script charset="utf-8" src="<%= BASE_URL %>cdn/element-ui/2.15.7/index.js"></script>
+<script charset="utf-8" src="<%= BASE_URL %>cdn/avue/2.8.25/avue.min.js"></script>
+</body>
+
+</html>

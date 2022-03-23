@@ -1,0 +1,20 @@
+page-bind-printter {
+    .nav-tile {
+        height: auto;
+        ul{
+            margin: 0; 
+        }
+    }
+    
+    .btn-box {
+        display: flex;
+        flex-direction: row;
+        button {
+            flex-grow: 1;
+        }
+        .button-ios{
+            border-radius: 0;
+            margin: 0;
+        }
+    }
+}

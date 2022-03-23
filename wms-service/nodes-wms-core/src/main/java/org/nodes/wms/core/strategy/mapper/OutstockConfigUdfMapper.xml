@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.strategy.mapper.OutstockConfigUdfMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="outstockConfigUdfResultMap" type="org.nodes.wms.core.strategy.entity.OutstockConfigUdf">
+        <id column="ssocu_id" property="ssocuId"/>
+        <result column="ssod_id" property="ssodId"/>
+        <result column="bill_udf_number" property="billUdfNumber"/>
+        <result column="bill_udf_operation" property="billUdfOperation"/>
+        <result column="bill_udf_val1" property="billUdfVal1"/>
+        <result column="bill_udf_val2" property="billUdfVal2"/>
+        <result column="bill_udf_val3" property="billUdfVal3"/>
+        <result column="is_active" property="isActive"/>
+        <result column="data_type" property="dataType"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.outstock.so.mapper.PickPlanMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="pickPlanResultMap" type="org.nodes.wms.core.outstock.so.entity.PickPlan">
+        <result column="pick_plan_id" property="pickPlanId"/>
+        <result column="wellen_id" property="wellenId"/>
+        <result column="loc_id" property="locId"/>
+        <result column="loc_code" property="locCode"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="sku_code" property="skuCode"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="rep_sku_id" property="repSkuId"/>
+        <result column="rep_sku_code" property="repSkuCode"/>
+        <result column="rep_sku_name" property="repSkuName"/>
+        <result column="lot_number" property="lotNumber"/>
+        <result column="lpn_code" property="lpnCode"/>
+        <result column="wsp_id" property="wspId"/>
+        <result column="sku_level" property="skuLevel"/>
+        <result column="pick_plan_qty" property="pickPlanQty"/>
+        <result column="pick_real_qty" property="pickRealQty"/>
+        <result column="task_id" property="taskId"/>
+    </resultMap>
+    <!-- 通过任务id查询按件拣货单据信息 -->
+    <select id="selectPickPlanListForPickByTaskId" resultMap="pickPlanResultMap">
+
+        SELECT * FROM so_pick_plan WHERE pick_plan_qty <![CDATA[ > ]]> pick_real_qty
+
+        <if test="taskId!=null and taskId!=''">
+            AND task_id = #{taskId}
+        </if>
+
+        <if test="wellenId!=null and wellenId!=''">
+            AND wellen_id = #{wellenId}
+        </if>
+        ORDER BY loc_code ASC
+
+    </select>
+    <select id="selectPickPlanListForPickByWellenId" resultMap="pickPlanResultMap">
+
+        SELECT * FROM so_pick_plan WHERE pick_plan_qty <![CDATA[ > ]]> pick_real_qty
+
+        <if test="taskId!=null and taskId!=''">
+            AND task_id = #{taskId}
+        </if>
+        <if test="soBillNo!=null and taskId!=''">
+            AND so_bill_no = #{soBillNo}
+        </if>
+        <if test="wellenId!=null and wellenId!=''">
+            AND wellen_id = #{wellenId}
+        </if>
+        ORDER BY loc_code ASC
+
+    </select>
+</mapper>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.strategy.mapper.OutstockMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="outstockResultMap" type="org.nodes.wms.core.strategy.entity.Outstock">
+        <id column="sso_id" property="ssoId"/>
+        <result column="sso_code" property="ssoCode"/>
+        <result column="sso_name" property="ssoName"/>
+        <result column="wh_id" property="whId"/>
+        <result column="is_default" property="isDefault"/>
+    </resultMap>
+</mapper>

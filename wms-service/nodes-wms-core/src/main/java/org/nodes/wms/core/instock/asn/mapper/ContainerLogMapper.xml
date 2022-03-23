@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.instock.asn.mapper.ContainerLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="containerLogResultMap" type="org.nodes.wms.core.instock.asn.entity.ContainerLog">
+        <id column="acl_id" property="aclId"/>
+        <result column="asn_bill_id" property="asnBillId"/>
+        <result column="asn_bill_no" property="asnBillNo"/>
+        <result column="asn_detail_id" property="asnDetailId"/>
+        <result column="sn_detail_code" property="snDetailCode"/>
+        <result column="lpn_code" property="lpnCode"/>
+        <result column="box_code" property="boxCode"/>
+        <result column="loc_id" property="locId"/>
+        <result column="loc_code" property="locCode"/>
+        <result column="acl_qty" property="aclQty"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="wsp_id" property="wspId"/>
+        <result column="sku_level" property="skuLevel"/>
+        <result column="acl_status" property="aclStatus"/>
+        <result column="lot_number" property="lotNumber"/>
+        <result column="sku_spec" property="skuSpec"/>
+        <result column="plan_qty" property="planQty"/>
+    </resultMap>
+
+</mapper>

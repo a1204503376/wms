@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.count.mapper.CountDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="countDetailResultMap" type="org.nodes.wms.core.count.entity.CountDetail">
+        <id column="count_detail_id" property="countDetailId"/>
+        <result column="count_bill_id" property="countBillId"/>
+        <result column="count_bill_no" property="countBillNo"/>
+        <result column="loc_id" property="locId"/>
+        <result column="loc_code" property="locCode"/>
+        <result column="loc_state" property="locState"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="sku_code" property="skuCode"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="task_group" property="taskGroup"/>
+        <result column="user_name" property="userName"/>
+        <result column="proc_time" property="procTime"/>
+
+    </resultMap>
+    <delete id="removeByIdsNew">
+        delete  from wms_count_detail where count_bill_id= #{ids}
+    </delete>
+
+
+    <select id="selectCountDetailPage" resultMap="countDetailResultMap">
+        select * from wms_count_detail where 1=1
+    </select>
+    <select id="selectOccupyCountDetailByLocCodes"
+            resultType="org.nodes.wms.core.count.entity.CountDetail">
+        SELECT
+            cd.*
+        FROM
+            wms_count_header ch,
+            wms_count_detail cd
+        WHERE
+            ch.count_bill_id = cd.count_bill_id
+          AND ( ch.count_bill_state = 10 OR ch.count_bill_state = 20 )
+          AND
+            cd.loc_id IN
+            <foreach collection="list" item="locCodes" index="index" open="(" close=")" separator=",">
+                #{locIds}
+            </foreach>
+    </select>
+    <select id="selectOccupyCountDetailBySkuCodes"
+            resultType="org.nodes.wms.core.count.entity.CountDetail">
+        SELECT
+        cd.*
+        FROM
+        wms_count_header ch,
+        wms_count_detail cd
+        WHERE
+        ch.count_bill_id = cd.count_bill_id
+        AND ( ch.count_bill_state = 10 OR ch.count_bill_state = 20 )
+        AND
+        cd.sku_id IN
+        <foreach collection="list" item="skuCodes" index="index" open="(" close=")" separator=",">
+            #{skuIds}
+        </foreach>
+    </select>
+    <select id="querySkuQty" resultType="org.nodes.wms.core.stock.core.vo.CountSkuQtyVO">
+        SELECT
+        sum(stock.stock_qty) qty,
+        stock.sku_id,
+        sku.sku_code,
+        <foreach item="item" index="index" collection="map"
+                 open="" separator="," close="">
+            stock.${index}
+        </foreach>
+        FROM
+        wms_stock stock,wms_sku sku
+        WHERE
+        <if test="skuIds !=null and skuIds.size>0">
+            stock.sku_id in
+            <foreach item="item" index="index" collection="skuIds"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        AND
+        </if>
+              stock.sku_id = sku.sku_id
+        GROUP BY
+        stock.sku_id,
+        <foreach item="item" index="index" collection="map"
+                 open="" separator="," close="">
+            stock.${index}
+        </foreach>
+
+    </select>
+
+</mapper>

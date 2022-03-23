@@ -1,0 +1,81 @@
+page-checkin-detailed {
+      .title-ms::before {
+        display: block;
+        border-bottom: 5px solid $bgcolor;
+        width: 100%;
+        content: "";
+      }
+      .ion-title {
+        text-align: center;
+      }
+      .total-title{
+        position:relative;
+        right: 10px;
+        text-align: right;
+      }
+      .title-bt {
+        height: 30px;
+        background-color: #33cbcc;
+        font-size: 14px;
+        color: white;
+      }
+      .order-number {
+        float: left;
+        margin-left: 15px;
+        margin-top: 5px;
+      }
+      .order-info {
+        float: right;
+        margin-right: 15px;
+        margin-top: 5px;
+      }
+      .order {
+        width: 100%;
+        height: 30px;
+      }
+      .title-ms {
+        width: 100%;
+        height: 110px;
+        background: white;
+        // margin: 5px 0;
+        font-size: 14px;
+      }    
+      .title-ms-info {
+        margin-left: 20px;
+        padding-top: 10px;
+      }
+      .title-font-small {
+        font-size: 12px;
+        color: #797979;
+        position: relative;
+      }
+      .title-font-small div {
+        margin-top: 5px;
+      }
+      .title-font-s4 {
+        font-style: italic;
+      }
+      .received {
+        position: absolute;
+        right: 15%;
+        top: -25%;
+        font-size: 16px;
+        font-weight: bolder;
+        color: #008080;
+      }
+      .consignee {
+        position: absolute;
+        right: 15%;
+        bottom: 5px;
+        font-size: 14px;
+      }
+      .ionic_right{
+        position: absolute;
+        right: 0%;
+        bottom: 50%;
+        .iconfont{
+          font-size: 50px;
+          color: #c2bdbd;
+        }
+      } 
+}

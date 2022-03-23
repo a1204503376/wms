@@ -1,0 +1,12 @@
+page-shipmenthome {
+  .ion-title {
+    text-align: center;
+  }
+  ion-row ion-col {
+    border-bottom: 5px solid $bgcolor;
+    border-right: 5px solid $bgcolor;
+    padding-top: 10px;
+    height: 111px;
+    background-color: white;
+  }
+}

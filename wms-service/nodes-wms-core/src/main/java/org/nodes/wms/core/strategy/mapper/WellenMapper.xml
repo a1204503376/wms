@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.strategy.mapper.WellenMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="wellenResultMap" type="org.nodes.wms.core.strategy.entity.Wellen">
+        <result column="id" property="id"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="bill_upper" property="billUpper"/>
+        <result column="bill_lower" property="billLower"/>
+        <result column="rows_upper" property="rowsUpper"/>
+        <result column="rows_lower" property="rowsLower"/>
+        <result column="sku_upper" property="skuUpper"/>
+        <result column="sku_lower" property="skuLower"/>
+        <result column="volume_upper" property="volumeUpper"/>
+        <result column="volume_lower" property="volumeLower"/>
+        <result column="weight_upper" property="weightUpper"/>
+        <result column="weight_lower" property="weightLower"/>
+        <result column="unit_number_upper" property="unitNumberUpper"/>
+        <result column="unit_number_lower" property="unitNumberLower"/>
+    </resultMap>
+
+
+</mapper>

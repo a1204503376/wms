@@ -1,0 +1,24 @@
+<ion-item (click)="onPick('allCheck')">
+  <ion-icon name="pie-chart-outline"></ion-icon>
+  <ion-label>全选</ion-label>
+</ion-item>
+<ion-item (click)="onPick('clearCheck')">
+  <ion-icon name="pulse-outline"></ion-icon>
+  <ion-label>取消全选</ion-label>
+</ion-item>
+<ion-item (click)="onPick('show')" *ngIf="isShow11">
+  <ion-icon name="bar-chart-outline"></ion-icon>
+  <ion-label>显示已扫物料</ion-label>
+</ion-item>
+<ion-item (click)="onPick('hide')" *ngIf="isShow12">
+  <ion-icon name="bar-chart-outline"></ion-icon>
+  <ion-label>显示当前物料</ion-label>
+</ion-item>
+<ion-item (click)="onPick('del')" *ngIf="isShow">
+  <ion-icon name="bar-chart-outline"></ion-icon>
+  <ion-label>删除选中</ion-label>
+</ion-item>
+<ion-item (click)="onPick('complated')" *ngIf="isShow1">
+  <ion-icon name="bar-chart-outline"></ion-icon>
+  <ion-label>完成</ion-label>
+</ion-item>

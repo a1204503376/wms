@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.warehouse.mapper.ZoneMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="zoneResultMap" type="org.nodes.wms.core.warehouse.entity.Zone">
+        <id column="zone_id" property="zoneId"/>
+        <result column="wh_id" property="whId"/>
+        <result column="zone_code" property="zoneCode"/>
+        <result column="zone_name" property="zoneName"/>
+        <result column="zone_type" property="zoneType"/>
+<!--        <result column="is_active" property="isActive"/>-->
+<!--        <result column="data_type" property="dataType"/>-->
+    </resultMap>
+
+</mapper>

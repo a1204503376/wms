@@ -1,0 +1,86 @@
+page-replenishmen {
+    .nav-tile {
+        height: auto;
+        ul{
+            margin: 0; 
+        }
+    }
+    .grid {
+        padding: 5px 0 !important;
+    }
+    .header-item-box{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        >.left{
+            flex-grow: 1;
+            padding-right: 1rem;
+            .row1{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                >.left{
+                   display: flex;
+                   flex-direction: column;
+                }
+                >.right{
+                   align-self: flex-end;
+                }
+           }
+           .row2{
+               display: flex;
+               flex-direction: row;
+               justify-content: space-between;
+               >.left{
+                   display: flex;
+                   flex-direction: column;
+               }
+               >.right{
+                   align-self: center;
+               }
+           }
+        }
+        >.right{
+            align-self: center;
+            >ion-icon{
+                font-size: 4em;
+                color: #D7D7D7;
+            }
+        }
+        
+    }
+    
+    .body-item-box-1{
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-bottom: 5px;
+    }
+    .body-item-box-2{
+        border-top: 0.5rem #D7D7D7 solid;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-bottom: 5px;
+        // ion-label{
+        //     color: #AAAAAA;
+        //     font-size: 2rem;
+        // }
+        .item-ios{
+            padding-left: 0 !important;
+        }
+        .item-ios.item-block .item-inner{
+            margin-right: 0 !important;
+            padding-right: 0 !important;
+        }
+    }
+    .btn-box {
+        display: flex;
+        flex-direction: row;
+        button {
+            flex-grow: 1;
+        }
+        .button-ios{
+            border-radius: 0;
+            margin: 0;
+        }
+    }
+}

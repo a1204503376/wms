@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>库内
+    </ion-title>
+  </ion-navbar>
+  <div class="nav-tile"> 
+    <crumbs></crumbs>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="login_content">
+    <ion-row>
+      <ion-col col-4 *ngFor="let item of menuRole; let _i = index">
+        <div  *ngIf="item.source!=''" class="logon_ionic" (click)="expression(item)">
+          <ion-icon class="{{item.source}}"></ion-icon>
+          <span>{{item.name}}</span>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

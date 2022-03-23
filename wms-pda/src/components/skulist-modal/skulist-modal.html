@@ -1,0 +1,22 @@
+<ion-content>
+  <ion-list>
+    <ion-item-group>
+      物品选择
+    </ion-item-group>
+    <ion-item-group>
+      <ion-scroll zooming="true" scrollY="true">
+        <ion-item *ngFor="let item of skuList" (click)="headSelected(item)"
+          [ngClass]="{selected:skuListItem.skuId == item.skuId}">
+          <h2><b>{{item.skuName}}</b></h2>
+          <span>{{item.ownerName}}</span><span>{{item.skuId}}</span>
+          <div *ngIf="item.skuSpec!=null&&item.wspName!=null" class="owner-div">
+            <span>{{item.skuSpec}}</span><span>{{item.wspName}}</span></div>
+        </ion-item>
+      </ion-scroll>
+    </ion-item-group>
+    <ion-item-group>
+      <button ion-button (click)="dismiss()">取消</button>
+      <button ion-button (click)="submitdata()">确认</button>
+    </ion-item-group>
+  </ion-list>
+</ion-content>

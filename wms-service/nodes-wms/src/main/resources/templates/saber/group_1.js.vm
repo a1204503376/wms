@@ -1,0 +1,19 @@
+
+
+export const group = {
+    column: [
+        #foreach($field in $!{table.fields})
+            #if($!{field.name}!=$!{cfg.tenantColumn})
+                {
+                    label: "$!{field.comment}",
+                    prop: "$!{field.propertyName}",
+                    rules: [{
+                        required: true,
+                        message: "请输入$!{field.comment}",
+                        trigger: "blur"
+                    }]
+                },
+            #end
+        #end
+    ]
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.system.mapper.UpdateVerMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="updateVerResultMap" type="org.nodes.wms.core.system.entity.UpdateVer">
+        <id column="suv_id" property="suvId"/>
+        <result column="ver_num" property="verNum"/>
+        <result column="ver_name" property="verName"/>
+        <result column="module_type" property="moduleType"/>
+        <result column="update_url" property="updateUrl"/>
+        <result column="update_remark" property="updateRemark"/>
+        <result column="ver_update_time" property="verUpdateTime"/>
+        <result column="update_type" property="updateType"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectUpdateVerPage" resultMap="updateVerResultMap">
+        select * from sys_update_ver where 1=1
+    </select>
+
+</mapper>

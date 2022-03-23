@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.common.mapper.ContactsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="contactsResultMap" type="org.nodes.wms.core.common.entity.Contacts">
+        <id column="pc_id" property="pcId"/>
+        <result column="data_id" property="dataId"/>
+        <result column="contacts_data_type" property="contactsDataType"/>
+        <result column="contacts_name" property="contactsName"/>
+        <result column="contacts_email" property="contactsEmail"/>
+        <result column="contacts_number" property="contactsNumber"/>
+        <result column="contacts_fax" property="contactsFax"/>
+        <result column="default_flag" property="defaultFlag"/>
+    </resultMap>
+
+</mapper>

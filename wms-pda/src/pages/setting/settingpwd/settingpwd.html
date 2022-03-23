@@ -1,0 +1,59 @@
+<ion-header>
+    <ion-navbar color="wmscolor">
+        <ion-title>修改密码
+            <!-- <div class="title_f_name">(青啤五厂)</div> -->
+        </ion-title>
+    </ion-navbar>
+    <div class="nav-tile">
+        <!-- <ul>
+            <li>首页</li>
+            <li>
+                <ion-icon class="iconfont iconicon_arr_right"></ion-icon>
+            </li>
+            <li>个人设置</li>
+            <li>
+                <ion-icon class="iconfont iconicon_arr_right"></ion-icon>
+            </li>
+            <li>修改密码</li>
+        </ul> -->
+        <crumbs></crumbs>
+    </div>
+</ion-header>
+<ion-content>
+    <div class="setting-password">
+        <ion-item>
+            <ion-label>原始密码：</ion-label>
+            <ion-input [(ngModel)]="oldPassword" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>新密码：</ion-label>
+            <ion-input [(ngModel)]="newPassword" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>确认密码：</ion-label>
+            <ion-input [(ngModel)]="newPassword1" type="text"></ion-input>
+        </ion-item>
+    </div>
+</ion-content>
+
+<ion-footer>
+    <div class="btn-box">
+      <button no-dbl-click ion-button block class="btn-l" (click)="back()">
+        返回[Esc]
+      </button>
+      <button no-dbl-click ion-button block class="btn-d" (click)="btnOk()">
+        确认[Ent]
+      </button>
+    </div>
+  </ion-footer>
+
+<!-- <ion-footer>
+    <div class="btn-box">
+        <button ion-button block class="btn-l" (click)="back()">
+            返回[Esc]
+        </button>
+        <button ion-button block class="btn-d" (click)="btnOk()">
+            确认[Ent]
+        </button>
+    </div>
+</ion-footer> -->

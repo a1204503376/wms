@@ -1,0 +1,38 @@
+<ion-content>
+  <ion-list>
+    <ion-item-group>
+       请选择
+    </ion-item-group>
+    <ion-item-group>
+      <ion-searchbar (ionInput)="getItems($event)" placeholder="输入料号"></ion-searchbar>
+      
+        <div  *ngIf="records&&records.length>0;else elseBlock">
+          <ion-scroll zooming="true" scrollY="true">
+          <ion-item *ngFor="let item of records" (click)="headSelected(item)" 
+          [ngClass]="{selected:item.selected}">
+            <div class="nodes-item">
+              <div>
+                <span>{{item.skuCode}}</span>
+                <span *ngIf="item.mode=='1'">{{item.qty}}</span> 
+              </div>
+              <div *ngIf="item.mode=='1'">
+                <div *ngFor="let item1 of fillskulots(item)" >
+                  <span *ngIf="item1!=''">{{item1}}</span>
+                </div>
+              </div>
+            </div>
+          </ion-item>
+        </ion-scroll>
+        </div>
+        <ng-template #elseBlock>
+          <div class="nodata">
+            <span>暂无数据</span>
+          </div>
+        </ng-template>
+    </ion-item-group>
+    <ion-item-group>
+      <button ion-button (click)="dismiss()">取消</button>
+      <button ion-button (click)="submitdata()">确认</button>
+    </ion-item-group>
+  </ion-list>
+</ion-content>

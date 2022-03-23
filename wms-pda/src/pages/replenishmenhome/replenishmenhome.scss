@@ -1,0 +1,156 @@
+page-replenishmenhome {
+    .title-bt {
+        height: 60px;
+        background-color: #33cbcc;
+        font-size: 14px;
+        color: white;
+        .order-info {
+            float: right;
+            margin-right: 15px;
+            margin-top: 5px;
+        }
+        .order {
+            width: 100%;
+            height: 30px;
+        }
+    }
+
+    .title-ms {
+        width: 100%;
+        background: white;
+        font-size: 14px;
+        border-top: 5px solid $bgcolor;
+        border-bottom: 10px solid $bgcolor;
+        position: relative;
+        div:nth-child(1) {
+            // width: 250px;
+            // overflow: hidden;
+            // text-overflow: ellipsis;
+            // white-space: nowrap;
+        }
+        .title-ms-info {
+            margin-left: 20px;
+            padding: 15px 0 10px 0;
+            position: relative;
+            div {
+                width: 120px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            div:nth-child(2) {
+                color: $font888383;
+                font-size: 12px;
+            }
+            div:nth-child(3) {
+                margin: 10px 0;
+                font-size: 12px;
+            }
+            div:nth-child(4) {
+                font-size: 12px;
+            }
+            .specs_code {
+                width: 150px;
+                position: absolute;
+                right: 3rem;
+                top: 2rem;
+                font-size: 12px;
+                color: #797979;
+            }
+            .received-scan {
+                width: 150px;
+                position: absolute;
+                right: 3rem;
+                bottom: 3rem;
+                font-weight: bolder;
+                color: #008080;
+                font-size: 16px;
+            }
+            .ionic_right {
+                width: 50px;
+                position: absolute;
+                right: -1rem;
+                top: 4rem;
+                .iconfont {
+                    font-size: 40px;
+                    color: #c2bdbd;
+                }
+            }
+        }
+    }
+
+    ion-label {
+        width: 70px;
+        text-align: justify;
+        text-align-last: justify;
+        flex: none !important;
+        opacity: 1 !important;
+    }
+    .nav-tile ul {
+        margin-top: 3px;
+    }
+    .btn-box {
+        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+        button {
+            width: 50%;
+        }
+    }
+    .button-ios {
+        border-radius: 0px;
+        margin: 0;
+        padding: 0;
+    }
+    .p-select {
+        width: 100%;
+        padding-left: 16px;
+        .p-box {
+            width: 95%;
+            height: 40px;
+            font-size: 1.7rem;
+            display: flex;
+            flex: 1;
+            align-items: center;
+            align-self: stretch;
+            text-overflow: ellipsis;
+            border-bottom: 0.55px solid #c8c7cc;
+            padding-right: 8px;
+            button {
+                padding: 0 1em;
+                height: 28px;
+                font-size: 1.5rem;
+                margin: 0.8rem 0.2rem;
+            }
+            .toggle-ios {
+                margin: 0 15px;
+            }
+        }
+        .p-label {
+            margin: 11px 8px 11px 0;
+            display: block;
+            // flex: 1;
+            font-size: 14px;
+        }
+        ion-input {
+            width: calc(100% - 100px);
+        }
+        p-dropdown {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 70%;
+            margin-left: 14px;
+        }
+        .item-ios [item-right],
+        .item-ios [item-end] {
+            margin: 0;
+        }
+        .line-h {
+            margin: 0;
+        }
+    }
+    .ui-dropdown {
+        border: 0;
+    }
+}

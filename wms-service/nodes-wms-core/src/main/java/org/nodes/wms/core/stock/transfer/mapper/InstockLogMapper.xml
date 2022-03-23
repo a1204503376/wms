@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.stock.transfer.mapper.TransferHeaderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="transferHeaderResultMap" type="org.nodes.wms.core.stock.transfer.entity.TransferHeader">
+        <id column="transfer_bill_id" property="transferBillId"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="wh_id" property="whId"/>
+        <result column="wh_code" property="whCode"/>
+        <result column="wh_name" property="whName"/>
+        <result column="bill_type" property="billType"/>
+        <result column="bill_state" property="billState"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+</mapper>

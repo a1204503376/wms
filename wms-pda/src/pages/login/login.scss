@@ -1,0 +1,66 @@
+page-login {
+  /*列表右侧线间距*/
+  .item-ios.item-block .item-inner {
+    margin-right: 5%;
+    margin-left: -35px;
+  }
+  .text-input-ios {
+    margin: 11px 8px 11px 35px;
+    width: 90% !important;
+  }
+  /*input右边图标*/
+  .item-ios ion-avatar {
+    min-width: 0px;
+    min-height: 0px;
+  }
+
+  .topdiv {
+    text-align: right;
+    padding: 10px 10px 0px 0px;
+    ion-icon {
+      font-size: 30px;
+    }
+  }
+  .bottomdiv {
+    text-align: center;
+    margin-top: 20px;
+  }
+  .logodiv {
+    text-align: center;
+    display: block;
+    flex-wrap: wrap;
+    margin-top: 0.8rem;
+    h3 {
+      font-size: 20px;
+      font-weight: 900;
+    }
+    h5 {
+      font-size: 14px;
+    }
+  }
+  .logindiv {
+    display: block;
+    width: 100%;
+    content: "";
+    text-align: center;
+    margin-top: 2rem;
+  }
+  .btn-box {
+    text-align: center;
+    display: block;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    button {
+      width: 80%;
+      height: 3rem;
+    }
+  }
+  /*列表设置*/
+  .item-ios {
+    font-size: 16px !important;
+  }
+  .item-block {
+    height: 100%;
+    min-height: 30px;
+  }
+}

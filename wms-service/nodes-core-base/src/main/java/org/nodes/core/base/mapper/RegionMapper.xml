@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.core.base.mapper.RegionMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="regionResultMap" type="org.nodes.core.base.entity.Region">
+        <result column="code" property="code"/>
+        <result column="parent_code" property="parent_code"/>
+        <result column="ancestors" property="ancestors"/>
+        <result column="name" property="name"/>
+        <result column="province_code" property="province_code"/>
+        <result column="province_name" property="province_name"/>
+        <result column="city_code" property="city_code"/>
+        <result column="city_name" property="city_name"/>
+        <result column="district_code" property="district_code"/>
+        <result column="district_name" property="district_name"/>
+        <result column="town_code" property="town_code"/>
+        <result column="town_name" property="town_name"/>
+        <result column="village_code" property="village_code"/>
+        <result column="village_name" property="village_name"/>
+        <result column="region_level" property="region_level"/>
+        <result column="sort" property="sort"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+</mapper>

@@ -1,0 +1,139 @@
+<ion-header id="head" #deliveryhead>
+  <ion-navbar color="wmscolor">
+    <ion-title>
+      随机盘点
+    </ion-title>
+  </ion-navbar>
+  <div class="title-bt">
+    <div class="nav-tile">
+      <crumbs></crumbs>
+    </div>
+  </div>
+</ion-header>
+<ion-content overflow-scroll="true">
+  <div class="head_lable" *ngIf="isShow">
+    <ion-item>
+      <ion-label>库&emsp;位：</ion-label>
+      <ion-input (blur)="scrollToTop()" type="text" [(ngModel)]="sourceLocCode"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+ 
+    <ion-item>
+      <ion-label>料&emsp;号：</ion-label>
+      <ion-input (blur)="scrollToTop()" type="text" [(ngModel)]="scanModel.skucode"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <!-- <ion-item >
+      <ion-label>容器：</ion-label>
+      <ion-input maxlength='30' [(ngModel)]="lpnCode" type="text"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item> -->
+    <ion-item>
+      <ion-label>数&emsp;量：</ion-label>
+      <ion-input (blur)="scrollToTop()"  type="number" [(ngModel)]="scanModel.qty" (ionChange)="changeQty()"></ion-input>
+      <ion-select [disabled]='true' [(ngModel)]="scanModel.um" cancelText="取消">
+        <ion-option [value]="scanModel.um">{{scanModel.um}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>扫&emsp;描：</ion-label>
+      <ion-input (blur)="scrollToTop()" (keyup)="scanModelChange($event)" [(ngModel)]="scanView" type="text"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+
+  </div>
+  <!-- 序列号明细 -->
+  <div class="list_item_serial">
+    <div class="list_item_title">
+      <span *ngIf="isShow; else elseBlock" (click)="onIsShowClick()">
+        <ion-icon name="md-arrow-dropup"></ion-icon>
+      </span>
+
+      <ng-template #elseBlock>
+        <span (click)="onIsShowClick()">
+          <ion-icon name="md-arrow-dropdown"></ion-icon>
+        </span>
+
+      </ng-template>
+      <div>
+        <span [ngStyle]="{'border-bottom': '3px solid #008080' }">
+          已扫物品(<b>{{scanModelRecords.length}}</b>)
+        </span>
+        <span *ngIf="isShowCurrentTotal"> 
+          &nbsp;&nbsp;&nbsp;&nbsp;汇总:<span style="color: orange;">{{currentTotal}}</span>
+        </span>
+      </div>
+      <span>
+        <button ion-button icon-only (click)="presentPopover($event)">
+          <ion-icon name="md-more"></ion-icon>
+        </button>
+
+      </span>
+    </div>
+  </div>
+
+  <ion-list class="list_item_div">
+
+    <ion-scroll scrollY="true" [ngStyle]="{'height':scrollHeight+'px'}">
+      <!--接货列表-->
+      <ion-item-sliding *ngFor="let item of scanModelRecords;let i = index">
+        <ion-item button (click)="itemClick(item)" [ngClass]="{selected:item.selected}" *ngIf="item.show">
+          <ion-label>
+          <div class="nodes-item">
+            <div class="left">
+              <div class="chk_wrapper">
+                <input type="checkbox" id="{{'checkbox_'+i}}" class="chk_1" [(ngModel)]="item.isCheck">
+                <label for="{{'checkbox_'+i}}"></label>
+              </div>
+              <div class="left-2">
+                <div>
+                  <span>{{item.skucode}}</span>
+                  <span>{{item.skuname}}</span> 
+                  <span >{{item.lpncode}}</span> 
+                </div>
+                <div *ngFor="let item1 of item.skulots">
+                  <span *ngIf="item1!=''">{{item1}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="right">
+              <div>
+                <span>数量：</span>
+                <span>{{item.qty + item.um}}
+                </span>
+              </div>
+            </div>
+          </div>
+          </ion-label>
+        </ion-item>
+        <ion-item-options side="right">
+          <!-- <button (tap)="updateItem(item)" ion-button color="success">
+            编辑
+          </button> -->
+          <button (tap)="removeItem(item)" ion-button color="danger">
+            删除
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-scroll>
+  </ion-list>
+
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button no-dbl-click ion-button block class="btn-l" (tap)="exit()">
+      返回[Esc]
+    </button>
+    <button no-dbl-click ion-button block class="btn-d" (tap)="btnOk()">
+      提交[Ent]
+    </button>
+  </div>
+</ion-footer>

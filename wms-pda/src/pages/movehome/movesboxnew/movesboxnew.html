@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>
+      按箱移动
+      <!-- <div class="title_f_name">(青啤五厂)</div> -->
+    </ion-title>
+  </ion-navbar>
+  <!-- <ion-searchbar [(ngModel)]="searchCode" (keyup)="scanModelChange($event)" Description='primary' placeholder="箱号">
+    <ion-icon class="iconfont iconsaomiao"></ion-icon>
+  </ion-searchbar> -->
+  <div class="nav-tile">
+    <!-- <ul>
+          <li>首页</li>
+          <li>
+            <ion-icon class="iconfont iconicon_arr_right"></ion-icon>
+          </li>
+          <li>按箱上架</li>
+        </ul> -->
+    <crumbs></crumbs>
+  </div>
+</ion-header>
+<ion-content class="no-scroll">
+    <ion-item style="height: 40px;">
+      <ion-label>箱号：</ion-label>
+      <ion-input maxlength='30' type="text" [(ngModel)]="boxCode" (keyup)="boxCode_KeyDown($event)"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <ion-item style="height: 40px;">
+      <ion-label>目标库位：</ion-label>
+      <ion-input [(ngModel)]="targetlocCode" type="text"></ion-input>
+      <ion-avatar item-end>
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+      </ion-avatar>
+    </ion-item>
+    <div class="list_header">
+      <span>已扫描箱号</span>
+    </div>
+    <ion-list>
+      <ion-scroll scrollY="true" style="height:38rem;">
+        <ion-item-sliding *ngFor="let item of boxItems">
+          <ion-item>
+              <ion-checkbox slot="start" [(ngModel)]="item.isChecked"></ion-checkbox>
+              <ion-label>
+                <div class="box-item">
+                  <span>箱号:{{item.boxCode}}</span>
+                  <span>物料编码:{{item.skuCode}}</span>
+                  <span>原库位:{{item.sourceLocCode}}</span>
+                </div>
+              </ion-label>
+             
+          </ion-item>
+          <ion-item-options side="right">
+            <button (click)="removeItem(item)" ion-button color="danger">
+              删除
+            </button>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-scroll>
+    </ion-list>
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button no-dbl-click ion-button block class="btn-l" (tap)="exit()">
+      返回[Esc]
+    </button>
+    <button no-dbl-click ion-button block class="btn-d" (tap)="btnOk()">
+      提交[Ent]
+    </button>
+  </div>
+
+</ion-footer>

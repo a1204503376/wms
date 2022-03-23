@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.basedata.mapper.SkuOutstockMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="skuOutstockResultMap" type="org.nodes.wms.core.basedata.entity.SkuOutstock">
+        <id column="wso_id" property="wsoId"/>
+        <result column="status" property="status"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="wh_id" property="whId"/>
+        <result column="wo_id" property="woId"/>
+        <result column="sso_id" property="ssoId"/>
+        <result column="ssp_id" property="sspId"/>
+        <result column="turnover_type1" property="turnoverType1"/>
+        <result column="turnover_item1" property="turnoverItem1"/>
+        <result column="turnover_type2" property="turnoverType2"/>
+        <result column="turnover_item2" property="turnoverItem2"/>
+        <result column="turnover_type3" property="turnoverType3"/>
+        <result column="turnover_item3" property="turnoverItem3"/>
+        <result column="loc_id" property="locId"/>
+        <result column="wsp_id" property="wspId"/>
+        <result column="sku_level" property="skuLevel"/>
+        <result column="qc_zone_id" property="qcZoneId"/>
+        <result column="qc_loc_id" property="qcLocId"/>
+        <result column="unqualifly_zone_id" property="unqualiflyZoneId"/>
+        <result column="unqualifly_loc_id" property="unqualiflyLocId"/>
+        <result column="first_so_zone_id" property="firstSoZoneId"/>
+    </resultMap>
+
+</mapper>

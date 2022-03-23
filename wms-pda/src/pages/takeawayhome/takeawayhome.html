@@ -1,0 +1,45 @@
+<!--
+  Generated template for the HomePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>拣货
+      <!-- <div class="title_f_name">(青啤五厂)</div> -->
+    </ion-title>
+  </ion-navbar>
+  <!-- <div class="title-bt">
+    <div class="factory">
+      <span>待完成任务：200</span>
+    </div>
+
+    <div class="centerdiv"></div>
+    <div class="finish_task">
+      <span>已完成任务：200</span>
+    </div>
+  </div> -->
+  <div class="nav-tile">
+    <!-- <ul>
+      <li>首页</li>
+      <li>
+        <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+      </li>
+      <li>拣货</li>
+    </ul> -->
+    <crumbs></crumbs>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="login_content">
+    <ion-row>
+      <ion-col col-4 *ngFor="let item of menuRole; let _i = index">
+        <div *ngIf="item.source!=''" class="logon_ionic" (click)="expression(item)">
+          <ion-icon class="{{item.source}}"></ion-icon>
+          <span>{{item.name}}</span>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

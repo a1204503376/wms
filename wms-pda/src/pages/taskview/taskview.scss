@@ -1,0 +1,139 @@
+page-taskview {
+  .fab-ios {
+    color: #fff;
+    background-color: $titlecolor;
+    opacity: 0.7;
+  }
+  .content-ios {
+    background-color: $bgcolor;
+    margin-top: 5px;
+  }
+  .title-ms-info {
+    margin-top: 5px;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    // padding: 10px;
+  }
+  .selected {
+    border-bottom: 3px solid $titlecolor;
+  }
+  .sub_header1 {
+    height: 4rem;
+    line-height: 4rem;
+    // position: fixed;
+    /* top: 4.3rem; */
+    width: 100%;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    z-index: 2;
+    background: #fff;
+    div {
+      flex: 1;
+      text-align: center;
+    }
+  }
+  .searchbar-ios {
+    background-color: $titlecolor;
+    border-bottom: none;
+  }
+  .searchbar-ios .searchbar-input {
+    border-radius: 0px;
+  }
+  .title-ms {
+    position: relative;
+    background-color: white;
+  }
+  .box{
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    justify-items: flex-end;
+    margin-bottom: 10px;
+    padding: 10px;
+    span{
+      align-self: flex-end;
+    }
+  }
+  .title-font-s1 {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: row;
+    // height: 40px;
+    div {
+      // float: left;
+      margin-left: 10px;
+      border: 2px solid $titlecolor;
+      // margin: 3% 0 0 15%;
+      padding: 3px; 
+      border-radius: 5px;
+      width: 100px;
+      text-align: center;
+      font-size: 14px;
+    }
+    :nth-last-child(1) {
+      position: absolute;
+      right: 20px;
+      padding: 3px;
+      color: $titlecolor;
+      font-size: 16px;
+    }
+  }
+  .title-font-s2 {
+    margin-top: 10px;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: row;
+    justify-content: space-between;
+    // height: 40px;
+    // color: $font888383;
+    // font-style: italic;
+    // div {
+    //   float: left;
+    //   margin: 3% 0 0 10%;
+    //   border-radius: 5px;
+    //   text-align: center;
+    // }
+    span{
+      font-size: 14px;
+      padding: 3px;
+      text-align: center;
+      color: $font888383;
+      font-style: italic;
+    }
+    :nth-child(1){
+      font-style: italic;
+      border-radius: 5px;
+      margin-left: 30px;
+    }
+    :nth-child(2){
+      margin-left: 10px;
+      padding-top: 5px;
+    }
+    // :nth-last-child(1) {
+    //   padding-top: 5px;;
+    //   position: absolute;
+    //   right: 20px;
+    // }
+  }
+  .ionic_right {
+    position: absolute;
+    right: 0%;
+    bottom: 20%;
+    .iconfont {
+      font-size: 40px;
+      color: #c2bdbd;
+    }
+  }
+  .title-ms-info .button-ios {
+    // position: absolute;
+    // top: 5%;
+    // left: 3%;
+    /* border-radius: 100%; */
+    height: 20px;
+    font-size: 10px;
+    width: 20px;
+    color: #fff;
+    background-color: #33cbcc;
+  }
+}

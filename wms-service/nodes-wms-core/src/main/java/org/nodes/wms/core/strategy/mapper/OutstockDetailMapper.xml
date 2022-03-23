@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.strategy.mapper.OutstockDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="outstockDetailResultMap" type="org.nodes.wms.core.strategy.entity.OutstockDetail">
+        <id column="ssod_id" property="ssodId"/>
+        <result column="sso_id" property="ssoId"/>
+        <result column="outstock_function" property="outstockFunction"/>
+        <result column="over_count_flag" property="overCountFlag"/>
+        <result column="ssod_proc_order" property="ssodProcOrder"/>
+        <result column="is_active" property="isActive"/>
+        <result column="data_type" property="dataType"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+</mapper>

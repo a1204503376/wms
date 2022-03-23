@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-navbar color="wmscolor">
+    <ion-title>单据详情
+      <!-- <div class="title_f_name">(青啤五厂)</div> -->
+    </ion-title>
+  </ion-navbar>
+  <!-- <div class="nav-tile">
+    <ul>
+      <li>首页</li>
+      <li>
+        <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+      </li>
+      <li>发运</li>
+      <li>
+        <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+      </li>
+      <li>托盘发运</li>
+      <li>
+        <ion-icon class="iconfont  iconicon_arr_right"></ion-icon>
+      </li>
+      <li>单据详情</li>
+    </ul>
+  </div> -->
+</ion-header>
+<ion-content>
+  <div class="title-ms-nav">
+    <div class="title-ms-info">
+      <div class="title-font">
+        <div><a>{{resultInfo.lpnCode}}</a></div>
+        <div style="color:orange;">物品种类:{{resultInfo.skuCount}}</div>
+        <div>暂存区:{{resultInfo.locCode}}</div>
+      </div>
+    </div>
+    <span class="span-top">{{resultInfo.whName}}</span>
+    <span class="span-bt">{{resultInfo.scanQty}}{{resultInfo.wsuName}}</span>
+  </div>
+
+  <div class="title-ms" *ngFor="let item of result.stockPdaVOList">
+    <div class="title-ms-info">
+      <div class="title-font">
+        <div>{{item.skuName}}</div>
+        <!-- <div>{{item.billDetailId}}</div> -->
+        <div>物品规格:{{item.skuSpec}}</div>
+        <div>{{result.address}}</div>
+        <div>{{result.contact}} &nbsp;{{result.phone}}</div>
+      </div>
+    </div>
+    <span class="span-top"> {{item.stockQty}}{{item.wsuName}} </span>
+    <span class="span-bt">{{item.locCode}}</span>
+  </div>
+
+</ion-content>
+<ion-footer>
+  <div class="btn-box">
+    <button ion-button block class="btn-l" (click)="dismiss()">
+      返回[Esc]
+    </button>
+  </div>
+</ion-footer>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.instock.asn.mapper.RegisterMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="registerResultMap" type="org.nodes.wms.core.instock.asn.entity.Register">
+        <id column="asnr_id" property="asnrId"/>
+        <result column="wh_id" property="whId"/>
+        <result column="asn_bill_id" property="asnBillId"/>
+        <result column="dc_id" property="dcId"/>
+        <result column="spi_id" property="spiId"/>
+        <result column="platform_code" property="platformCode"/>
+        <result column="platform_name" property="platformName"/>
+        <result column="uninstall_driver_name" property="uninstallDriverName"/>
+        <result column="driver_name" property="driverName"/>
+        <result column="driver_phone" property="driverPhone"/>
+        <result column="plate_number" property="plateNumber"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+</mapper>

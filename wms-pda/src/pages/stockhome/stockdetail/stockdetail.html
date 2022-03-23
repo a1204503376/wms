@@ -1,0 +1,70 @@
+<ion-header>
+    <ion-navbar color="wmscolor">
+        <ion-title (click)="expression()">
+            库存查询
+            <!-- <div class="title_f_name">(青啤五厂)</div> -->
+        </ion-title>
+        <ion-buttons end (click)="detailed()">
+            <button ion-button icon-only>
+                <ion-icon name="menu"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+    <div class="title-bt">
+        <div class="nav-tile">
+            <!-- <ul>
+                <li>首页</li>
+                <li>
+                    <ion-icon class="iconfont icon-arr-right"></ion-icon>
+                </li>
+                <li>库存</li>
+                <li>
+                    <ion-icon class="iconfont icon-arr-right"></ion-icon>
+                </li>
+                <li>库存查询</li>
+            </ul> -->
+            <crumbs></crumbs>
+        </div>
+    </div>
+</ion-header>
+<ion-content>
+    <div class="title-ms clearfix">
+        <div class="title-ms-info">
+            <ul>
+                <li class="l-width2">
+                    <span class="bold title s-text">{{stockVO.sku.skuName}}</span>
+                </li>
+                <li class="l-width1">
+                    <span class="s-label">规格：</span>
+                    <span class="s-text">{{stockVO.skuPackageVO.spec}}</span>
+                </li>
+                <li class="l-width1"><span class="s-right s-text">{{stockVO.warehouse.whName}}</span></li>
+                <li class="l-width1">
+                    <span class="s-label">库位：</span>
+                    <span class="s-text">{{stockVO.location.locCode}}</span>
+                </li>
+                <li class="l-width1">
+                    <span class="bold cyan s-label">总量：</span>
+                    <span class="bold orange s-text">{{stockVO.stockQty}}</span>
+                </li>
+                <li class="l-width1">
+                    <span class="s-label">容器：</span>
+                    <span class="s-text">{{stockVO.lpnCode}}</span>
+                </li>
+                <li class="l-width1">
+                    <span class="s-label">可用量：</span>
+                    <span class="s-text">{{stockVO.availableQty}}</span>
+                </li>
+                <li class="l-width2">
+                    <span class="s-label">货主：</span>
+                    <span class="s-text">{{stockVO.ownerName}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="list_item">
+        <ion-item *ngFor="let serial of serialList;">
+            <ion-input type="text" value="serial.serialNumber"></ion-input>
+        </ion-item>
+    </div>
+</ion-content>

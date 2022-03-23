@@ -1,0 +1,72 @@
+<ion-header>
+    <ion-navbar color="wmscolor">
+        <ion-title>个人设置
+            <!-- <div class="title_f_name">(青啤五厂)</div> -->
+        </ion-title>
+    </ion-navbar>
+    <div class="nav-tile">
+        <!-- <ul>
+            <li>首页</li>
+            <li>
+                <ion-icon class="iconfont iconicon_arr_right"></ion-icon>
+            </li>
+            <li>个人设置</li>
+        </ul> -->
+        <crumbs></crumbs>
+    </div>
+</ion-header>
+<ion-content>
+    <div class="setting-box">
+        <div class="header">
+            <img src="assets/imgs/default_header.png" alt="">
+            <div class="header-right">
+                <div class="header-right-line-01">
+                    <span>{{username}}</span>
+                    <span>{{signStatus}}</span>
+                </div>
+                <span class="header-right-line-02">登录时间：{{logintime}}</span>
+            </div>
+        </div>
+        <div class="setting-list">
+            <div class="setting-item" (click)="uptPwd()">
+                <img src="assets/imgs/icon_edit_password.png" alt="">
+                <span>修改密码</span>
+                <span>1</span>
+            </div>
+            <div class="setting-item" (click)="setTheme()">
+                <img src="assets/imgs/icon_edit_color.png" alt="">
+                <span>主题颜色</span>
+                <span>2</span>
+            </div>
+        </div>
+        <div class="setting-version" *ngIf="version&&version.length>0">
+            <span>当前版本:{{version}}</span>
+        </div>
+    </div>
+    <!-- <div class="user-info">
+        <div class="user-img">
+            <ion-icon class="iconfont icon-Shape"></ion-icon>
+        </div>
+        <div class="user-text"><span class="user-name">{{username}}</span><span class="user-checkIn">{{signStatus}}</span><span
+                class="user-loginDate">登录时间：{{logintime}}</span></div>
+    </div>
+    <div class="user-setting">
+        <ul>
+            <li (click)="uptPwd()">
+                <ion-icon ios="ios-create-outline"></ion-icon><span>修改密码</span>
+                <ion-icon ios="ios-arrow-forward-outline"></ion-icon>
+            </li>
+            <li (click)="setTheme()">
+                <ion-icon ios="ios-color-palette-outline"></ion-icon><span>主题颜色</span>
+                <ion-icon ios="ios-arrow-forward-outline"></ion-icon>
+            </li>
+        </ul>
+    </div> -->
+</ion-content>
+<ion-footer>
+    <div class="btn-box">
+        <button ion-button block class="btn-l" (click)="exit()">
+            重新登录
+        </button>
+    </div>
+</ion-footer>

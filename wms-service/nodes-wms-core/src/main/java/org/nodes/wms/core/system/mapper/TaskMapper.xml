@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.core.system.mapper.TaskMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="taskResultMap" type="org.nodes.wms.core.system.entity.Task">
+        <id column="task_id" property="taskId"/>
+        <result column="ttp_id" property="ttpId"/>
+        <result column="wh_id" property="whId"/>
+        <result column="task_type_cd" property="taskTypeCd"/>
+        <result column="task_proc_type" property="taskProcType"/>
+        <result column="bill_type_cd" property="billTypeCd"/>
+        <result column="bill_id" property="billId"/>
+        <result column="bill_no" property="billNo"/>
+        <result column="wwa_id" property="wwaId"/>
+        <result column="user_id" property="userId"/>
+        <result column="user_code" property="userCode"/>
+        <result column="user_name" property="userName"/>
+        <result column="task_qty" property="taskQty"/>
+        <result column="task_group" property="taskGroup"/>
+        <result column="task_remark" property="taskRemark"/>
+        <result column="allot_time" property="allotTime"/>
+        <result column="confirm_date" property="confirmDate"/>
+        <result column="begin_time" property="beginTime"/>
+        <result column="close_time" property="closeTime"/>
+        <result column="task_state" property="taskState"/>
+    </resultMap>
+    <select id="getTakesBybillNo" resultType="org.nodes.wms.core.system.entity.Task">
+        SELECT
+            DISTINCT
+            t.*,
+            h.so_bill_no
+        FROM
+            tsk_task t,
+            so_wellen sw,
+            so_wellen_detail swd,
+            so_header h
+        WHERE
+            t.bill_no = sw.wellen_no
+          AND sw.wellen_id = swd.wellen_id
+          AND swd.so_bill_no = h.so_bill_no
+          AND h.so_bill_no in(select so_bill_no from so_header where order_no like #{billNo} or so_bill_no like #{billNo} )
+    </select>
+</mapper>

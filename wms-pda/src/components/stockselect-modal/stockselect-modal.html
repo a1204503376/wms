@@ -1,0 +1,32 @@
+<ion-content>
+  <ion-list>
+    <ion-item-group>
+       请选择
+    </ion-item-group>
+    <ion-item-group>
+      <ion-scroll zooming="true" scrollY="true">
+        <ion-item *ngFor="let item of records" (click)="headSelected(item)" 
+        [ngClass]="{selected:item.selected}">
+          <div class="nodes-item">
+            <div>
+              <span>上位单号：</span>
+              <span>{{item.orderNo}}</span>
+            </div>
+            <div>
+              <span>单据编号：</span>
+              <span>{{item.soBillNo}}</span> 
+            </div>
+            <div>
+              <span>客户名称：</span>
+              <span>{{item.enterpriseName}}</span>
+            </div>
+          </div>
+        </ion-item>
+      </ion-scroll>
+    </ion-item-group>
+    <ion-item-group>
+      <button ion-button (click)="dismiss()">取消</button>
+      <button ion-button (click)="submitdata()">确认</button>
+    </ion-item-group>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,76 @@
+<ion-header>
+    <ion-navbar color="wmscolor">
+        <ion-title>
+            整托上架
+            <!-- <div class="title_f_name">(青啤五厂)</div> -->
+        </ion-title>
+    </ion-navbar>
+    <ion-searchbar [(ngModel)]="searchCode" (keyup)="keyEnter($event)" Description='primary' placeholder="托盘/LPN">
+        <ion-icon class="iconfont iconsaomiao"></ion-icon>
+    </ion-searchbar>
+    <div class="nav-tile">
+        <!-- <ul>
+          <li>首页</li>
+          <li>
+            <ion-icon class="iconfont iconicon_arr_right"></ion-icon>
+          </li>
+          <li>上架</li>
+        </ul> -->
+        <crumbs></crumbs>
+    </div>
+</ion-header>
+<ion-content class="no-scroll">
+    <div class="title-ms clearfix">
+        <div class="title-ms-info">
+            <div class="title-font-small">
+                <div class="received_lpn">
+                    {{lpnCode}}
+                </div>
+                <div class="title-font-s2">
+                    <label>当前货位:</label>
+                    <label>{{locCode}}</label>
+                </div>
+                <div class="title-font-s3">
+                    <label>上架库区:</label>
+                    <label>{{zoneName}}</label>
+                </div>
+                <div>
+                    <span>推荐库位:</span>
+                    <span>{{islocCode}}</span>
+                </div>
+                <div>
+                    <label style="color: black;">{{whName}}</label>
+                </div>
+
+                <div class="received_num">
+                    数量: {{typeCount}}
+                </div>
+                <!-- 1号仓库 -->
+                <div class="ware_house">
+                    <!-- {{whName}} -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="list_item">
+        <ion-item>
+            <ion-label>库 位：</ion-label>
+            <ion-input (keyup)="islocCode_KeyDown($event)" [ngModel]="islocCode" type="text" #targetLocCodeComp></ion-input>
+            <ion-avatar item-end>
+                <ion-icon class="iconfont iconsaomiao"></ion-icon>
+            </ion-avatar>
+        </ion-item>
+    </div>
+</ion-content>
+<ion-footer>
+    <div class="btn-box">
+        <button no-dbl-click ion-button block class="btn-l" (tap)="exit()">
+            返回[Esc]
+        </button>
+        <button no-dbl-click ion-button block class="btn-d" (tap)="btnOk()">
+            提交[Ent]
+        </button>
+    </div>
+
+</ion-footer>

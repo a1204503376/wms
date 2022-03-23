@@ -1,0 +1,63 @@
+page-takeaway {
+    .list_item::before {
+        display: block;
+        border-bottom: 5px solid #f1dcdc;
+        width: 100%;
+        content: "";
+    }
+    .title-ms::before {
+        display: block;
+        border-bottom: 5px solid #f1dcdc;
+        width: 100%;
+        content: "";
+    }
+    .ion-title {
+        text-align: center;
+    }
+    .title-bt {
+        height: 60px;
+        background-color: #33cbcc;
+        font-size: 14px;
+        color: white;
+    }
+    .order-number {
+        float: left;
+        margin-left: 15px;
+        margin-top: 5px;
+    }
+    .order-info {
+        float: right;
+        margin-right: 15px;
+        margin-top: 5px;
+    }
+    .nav-tile {
+        width: 100%;
+        height: 30px;
+    }
+    .nav-tile ul {
+        width: 100%;
+        height: 20px;
+        padding-left: 15px;
+        margin-top: 5px;
+    }
+    .nav-tile ul li {
+        float: left;
+        list-style-type: none;
+        margin-right: 5px;
+    }
+    .order {
+        width: 100%;
+        height: 30px;
+    }
+    .nav-tile ul li ion-icon {
+        margin-top: 3px;
+    }
+    .content-tile {
+        flex-wrap: wrap;
+    }
+    .content-tile-detail {
+        width: 100%;
+        flex-wrap: nowrap;
+        display: flex;
+    }
+}
