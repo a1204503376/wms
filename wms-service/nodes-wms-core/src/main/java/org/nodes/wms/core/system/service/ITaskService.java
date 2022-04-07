@@ -1,9 +1,11 @@
 
 package org.nodes.wms.core.system.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.nodes.wms.core.system.dto.TaskDTO;
 import org.nodes.wms.core.system.entity.Task;
 import org.nodes.wms.core.system.enums.TaskTypeEnum;
+import org.nodes.wms.core.system.vo.TaskVO;
 import org.springblade.core.mp.base.BaseService;
 
 import java.util.List;
@@ -97,4 +99,18 @@ public interface ITaskService extends BaseService<Task> {
 	 * @return
 	 */
 	List<Task> getTakesBybillNo(String billNo);
+	/**
+	 * 查询任务
+	 *
+	 * @param queryWrapper
+	 * @return
+	 */
+	List<TaskVO> list(QueryWrapper<Task> queryWrapper);
+	/**
+	 * 获取任务详细信息
+	 *
+	 * @param taskId 任务ID
+	 * @return 任务
+	 */
+	TaskVO getDetail(Long taskId);
 }

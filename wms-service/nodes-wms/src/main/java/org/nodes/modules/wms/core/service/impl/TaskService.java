@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.NodesUtil;
-import org.nodes.modules.wms.core.service.ITaskService;
 import org.nodes.wms.core.relenishment.entity.RelDetail;
 import org.nodes.wms.core.relenishment.enums.RelStateEnum;
 import org.nodes.wms.core.relenishment.service.IRelDetailService;
@@ -12,6 +11,7 @@ import org.nodes.wms.core.relenishment.wrapper.RelDetailWrapper;
 import org.nodes.wms.core.system.entity.Task;
 import org.nodes.wms.core.system.enums.TaskTypeEnum;
 import org.nodes.wms.core.system.mapper.TaskMapper;
+import org.nodes.wms.core.system.service.ITaskService;
 import org.nodes.wms.core.system.service.impl.TaskServiceImpl;
 import org.nodes.wms.core.system.vo.TaskVO;
 import org.nodes.wms.core.system.wrapper.TaskWrapper;
@@ -55,7 +55,7 @@ import java.util.stream.Collectors;
  * description: TaskService
  */
 @Service
-@Primary
+
 @Transactional(propagation = Propagation.NESTED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
 public class TaskService extends TaskServiceImpl<TaskMapper, Task> implements ITaskService {
 

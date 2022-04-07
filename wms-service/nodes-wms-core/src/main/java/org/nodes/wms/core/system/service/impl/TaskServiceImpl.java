@@ -13,6 +13,7 @@ import org.nodes.wms.core.outstock.so.entity.SoHeader;
 import org.nodes.wms.core.outstock.so.service.ISoHeaderService;
 import org.nodes.wms.core.outstock.so.service.IWellenDetailService;
 import org.nodes.wms.core.outstock.so.vo.WellenSoHeaderVo;
+import org.nodes.wms.core.system.vo.TaskVO;
 import org.springblade.core.log.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.nodes.core.base.entity.User;
@@ -52,7 +53,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.net.ServerSocket;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -388,5 +389,15 @@ public class TaskServiceImpl<M extends TaskMapper, T extends Task>
 	@Override
 	public List<Task> getTakesBybillNo(String billNo) {
 		return baseMapper.getTakesBybillNo("%" + billNo + "%");
+	}
+
+	@Override
+	public List<TaskVO> list(QueryWrapper<Task> queryWrapper) {
+		return null;
+	}
+
+	@Override
+	public TaskVO getDetail(Long taskId) {
+		return null;
 	}
 }
