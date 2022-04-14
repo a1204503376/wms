@@ -26,7 +26,7 @@
         <module>nodes-core-tool</module>
         <module>nodes-wms-core</module>
         <module>nodes-wms-report</module>
-<!--        <module>nodes-wms</module>-->
+        <module>nodes-wms</module>
     </modules>
 
     <dependencyManagement>
