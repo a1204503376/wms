@@ -2,22 +2,6 @@ package org.nodes.wms.core.instock.asn.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import org.codehaus.jackson.map.BeanProperty;
-import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
-import org.nodes.wms.core.basedata.entity.SkuInstock;
-import org.nodes.wms.core.basedata.service.ISkuService;
-import org.nodes.wms.core.instock.asn.vo.BoxItemVo;
-import org.nodes.wms.core.stock.core.entity.StockDetail;
-import org.nodes.wms.core.stock.core.service.IStockDetailService;
-import org.nodes.wms.core.strategy.service.IInstockService;
-import org.nodes.wms.core.strategy.vo.InstockExecuteVO;
-import org.nodes.wms.core.instock.asn.entity.AsnDetail;
-import org.nodes.wms.core.instock.asn.service.IAsnDetailService;
-import org.nodes.wms.core.warehouse.service.ILocationService;
-import org.nodes.wms.core.warehouse.service.IWarehouseService;
-import org.nodes.wms.core.warehouse.service.IZoneService;
-import org.springblade.core.log.exception.ServiceException;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.ParamCache;
 import org.nodes.core.constant.DictConstant;
@@ -27,37 +11,44 @@ import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
 import org.nodes.wms.core.basedata.enums.SkuLevelEnum;
-import org.nodes.wms.core.stock.core.dto.StockMoveDTO;
-import org.nodes.wms.core.stock.core.entity.Stock;
-import org.nodes.wms.core.stock.core.enums.EventTypeEnum;
-import org.nodes.wms.core.stock.core.enums.StockStatusEnum;
-import org.nodes.wms.core.stock.core.service.IStockService;
-import org.nodes.wms.core.stock.core.wrapper.StockWrapper;
-import org.nodes.wms.core.warehouse.cache.LocationCache;
-import org.nodes.wms.core.warehouse.cache.WarehouseCache;
-import org.nodes.wms.core.warehouse.cache.ZoneCache;
-import org.nodes.wms.core.warehouse.entity.Location;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
-import org.nodes.wms.core.warehouse.entity.Zone;
-import org.nodes.wms.core.warehouse.enums.ZoneVirtualTypeEnum;
 import org.nodes.wms.core.instock.asn.dto.PutawayByBoxQueryDTO;
+import org.nodes.wms.core.instock.asn.entity.AsnDetail;
 import org.nodes.wms.core.instock.asn.entity.AsnHeader;
 import org.nodes.wms.core.instock.asn.mapper.AsnHeaderMapper;
+import org.nodes.wms.core.instock.asn.service.IAsnDetailService;
 import org.nodes.wms.core.instock.asn.service.IPutawayByBoxService;
+import org.nodes.wms.core.instock.asn.vo.BoxItemVo;
 import org.nodes.wms.core.instock.asn.vo.PutawayByBoxSubimitVO;
 import org.nodes.wms.core.log.system.dto.SystemProcDTO;
 import org.nodes.wms.core.log.system.entity.SystemProc;
 import org.nodes.wms.core.log.system.enums.ActionEnum;
 import org.nodes.wms.core.log.system.enums.SystemProcTypeEnum;
 import org.nodes.wms.core.log.system.service.ISystemProcService;
+import org.nodes.wms.core.stock.core.dto.StockMoveDTO;
+import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.core.stock.core.entity.StockDetail;
+import org.nodes.wms.core.stock.core.enums.EventTypeEnum;
+import org.nodes.wms.core.stock.core.enums.StockStatusEnum;
+import org.nodes.wms.core.stock.core.service.IStockDetailService;
+import org.nodes.wms.core.stock.core.service.IStockService;
+import org.nodes.wms.core.stock.core.wrapper.StockWrapper;
 import org.nodes.wms.core.stock.transfer.entity.TransferRecord;
 import org.nodes.wms.core.stock.transfer.enums.TransferTypeEnum;
 import org.nodes.wms.core.stock.transfer.service.ITransferRecordService;
+import org.nodes.wms.core.strategy.service.IInstockService;
+import org.nodes.wms.core.strategy.vo.InstockExecuteVO;
+import org.nodes.wms.core.warehouse.cache.LocationCache;
+import org.nodes.wms.core.warehouse.cache.WarehouseCache;
+import org.nodes.wms.core.warehouse.entity.Location;
+import org.nodes.wms.core.warehouse.entity.Warehouse;
+import org.nodes.wms.core.warehouse.entity.Zone;
+import org.nodes.wms.core.warehouse.enums.ZoneVirtualTypeEnum;
+import org.nodes.wms.core.warehouse.service.IZoneService;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;
-import org.springblade.core.tool.utils.StringPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -66,8 +57,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 按箱收货实现类
@@ -161,8 +154,8 @@ public class PutawayByBoxServiceImpl<E extends AsnHeaderMapper, T extends AsnHea
 		Stock stock = list.get(0);
 		IStockDetailService stockDetailService = SpringUtil.getBean(IStockDetailService.class);
 		StockDetail stockDetail = stockDetailService.list(Condition.getQueryWrapper(new StockDetail())
-			.lambda()
-			.in(StockDetail::getStockId, NodesUtil.toList(list, Stock::getStockId)))
+				.lambda()
+				.in(StockDetail::getStockId, NodesUtil.toList(list, Stock::getStockId)))
 			.stream().findFirst().orElse(null);
 		if (Func.isEmpty(stockDetail)) {
 			return InstockExecuteVO.EMPTY;
@@ -235,8 +228,8 @@ public class PutawayByBoxServiceImpl<E extends AsnHeaderMapper, T extends AsnHea
 
 		//查询出来库存中在当前容器里的所有状态正常的物品
 		Stock stock = stockService.list(Condition.getQueryWrapper(new Stock())
-			.lambda()
-			.eq(Stock::getStockId, putawayByBoxSubimitVO.getStockId()))
+				.lambda()
+				.eq(Stock::getStockId, putawayByBoxSubimitVO.getStockId()))
 			.stream().findFirst().orElse(null);
 		if (Func.isEmpty(stock)) {
 			throw new ServiceException("该库存不存在或者已上架");

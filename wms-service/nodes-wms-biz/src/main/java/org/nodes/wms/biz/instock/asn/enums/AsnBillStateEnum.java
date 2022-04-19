@@ -1,17 +1,14 @@
-package org.nodes.wms.core.instock.asn.enums;
+package org.nodes.wms.biz.instock.asn.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.StringPool;
 
 /**
- * @program: WmsCore
- * @description: 入库单状态枚举
- * @author: pengwei
- * @create: 2020-04-17 09:06
+ * ASN单状态
  **/
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum AsnBillStateEnum {
 
 	CREATE(10, "单据创建"),
@@ -23,8 +20,8 @@ public enum AsnBillStateEnum {
 	;
 
 
-	Integer index;
-	String name;
+	private final Integer index;
+	private final String name;
 
 	public static String valueOf(Integer index) {
 		switch (index) {

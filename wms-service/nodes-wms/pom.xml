@@ -136,6 +136,16 @@
             <artifactId>nodes-wms-core</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.nodes</groupId>
+            <artifactId>nodes-wms-biz</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.nodes</groupId>
+            <artifactId>nodes-wms-dao</artifactId>
+            <scope>compile</scope>
+        </dependency>
         <!-- Mybatis-Plus -->
         <dependency>
             <groupId>com.baomidou</groupId>

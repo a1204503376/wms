@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.nodes.wms.core.instock.asn.entity.AsnHeader;
 import org.springblade.core.datascope.annotation.DataAuth;
 import org.springblade.core.datascope.enums.DataScopeEnum;
-import org.springframework.context.annotation.Primary;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -15,7 +14,6 @@ import java.util.Map;
  * @author zx
  * @since 2019-12-12
  */
-@Primary
 public interface AsnHeaderMapper extends BaseMapper<AsnHeader> {
 	/**
 	 * 查询已完成订单量
@@ -24,7 +22,7 @@ public interface AsnHeaderMapper extends BaseMapper<AsnHeader> {
 	 * @return 订单量
 	 */
 	@DataAuth(type = DataScopeEnum.OWN_DEPT_CHILD)
-	Map<String,Object> selectFinishBillCount(LocalDateTime date);
+	Map<String, Object> selectFinishBillCount(LocalDateTime date);
 
 	/**
 	 * 查询已完成订单的物品总数
@@ -33,5 +31,5 @@ public interface AsnHeaderMapper extends BaseMapper<AsnHeader> {
 	 * @return 物品总数
 	 */
 	@DataAuth(type = DataScopeEnum.OWN_DEPT_CHILD)
-	Map<String,Object> selectFinishSkuCount(LocalDateTime dateTime);
+	Map<String, Object> selectFinishSkuCount(LocalDateTime dateTime);
 }

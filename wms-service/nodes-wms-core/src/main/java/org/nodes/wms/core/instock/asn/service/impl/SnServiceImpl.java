@@ -43,14 +43,14 @@ public class SnServiceImpl<M extends SnMapper, T extends Sn>
 		List<AsnDetail> list = asnDetailMapper.selectList(Condition.getQueryWrapper(asnDetail));
 		String asnDetailIds = "";
 		for (AsnDetail detail : list) {
-			asnDetailIds += detail.getAsnDetailId()+",";
+			asnDetailIds += detail.getAsnDetailId() + ",";
 		}
-		asnDetailIds = asnDetailIds.substring(0,asnDetailIds.length()-1);
+		asnDetailIds = asnDetailIds.substring(0, asnDetailIds.length() - 1);
 		Sn sn = new Sn();
 		sn.setAsnBillId(snVO.getAsnBillId());
 		sn.setSnStatus(snVO.getSnStatus());
 		return super.list(Condition.getQueryWrapper(sn).lambda()
-				.apply("asn_detail_id in ("+ asnDetailIds+")"));
+			.apply("asn_detail_id in (" + asnDetailIds + ")"));
 
 	}
 }

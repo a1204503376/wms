@@ -10,7 +10,8 @@ import lombok.Data;
  * @create 20200402
  */
 @Data
-public class BillCountVO {
+public class
+BillCountVO {
 	/**
 	 * 当日已完成订单总量
 	 */

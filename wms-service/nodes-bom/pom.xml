@@ -46,6 +46,18 @@
             </dependency>
             <dependency>
                 <groupId>org.nodes</groupId>
+                <artifactId>nodes-wms-dao</artifactId>
+                <version>${nodes.tool.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.nodes</groupId>
+                <artifactId>nodes-wms-biz</artifactId>
+                <version>${nodes.tool.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.nodes</groupId>
                 <artifactId>nodes-wms-core</artifactId>
                 <version>${nodes.tool.version}</version>
                 <scope>provided</scope>
@@ -71,18 +83,18 @@
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-micro-spring-boot-starter</artifactId>
                 <version>2.0.8</version>
-<!--                <version>${knife4j.version}</version>-->
+                <!--                <version>${knife4j.version}</version>-->
             </dependency>
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-aggregation-spring-boot-starter</artifactId>
                 <version>2.0.8</version>
-<!--                <version>${knife4j.version}</version>-->
+                <!--                <version>${knife4j.version}</version>-->
             </dependency>
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-spring-ui</artifactId>
-<!--                <version>${knife4j.version}</version>-->
+                <!--                <version>${knife4j.version}</version>-->
                 <version>2.0.8</version>
             </dependency>
             <dependency>

@@ -6,6 +6,11 @@ import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.mapper.SkuMapper;
 import org.nodes.wms.core.basedata.service.ISkuLogService;
+import org.nodes.wms.core.basedata.vo.IdleSkuInfoVO;
+import org.nodes.wms.core.instock.asn.mapper.AsnHeaderMapper;
+import org.nodes.wms.core.outstock.so.dto.SoBillCountDTO;
+import org.nodes.wms.core.outstock.so.mapper.SoHeaderMapper;
+import org.nodes.wms.core.outstock.so.vo.OutstockSkuRltVO;
 import org.nodes.wms.core.stock.core.entity.Stock;
 import org.nodes.wms.core.stock.core.mapper.StockLogMapper;
 import org.nodes.wms.core.stock.core.mapper.StockMapper;
@@ -15,20 +20,13 @@ import org.nodes.wms.core.system.entity.Task;
 import org.nodes.wms.core.system.mapper.TaskMapper;
 import org.nodes.wms.core.system.vo.TaskVO;
 import org.nodes.wms.core.system.wrapper.TaskWrapper;
-import org.nodes.wms.core.instock.asn.mapper.AsnHeaderMapper;
-import org.nodes.wms.core.basedata.vo.IdleSkuInfoVO;
-import org.nodes.wms.core.outstock.so.dto.SoBillCountDTO;
-import org.nodes.wms.core.outstock.so.mapper.SoHeaderMapper;
-import org.nodes.wms.core.outstock.so.vo.OutstockSkuRltVO;
 import org.nodes.wms.statistics.dto.IdleSkuDTO;
 import org.nodes.wms.statistics.mapper.StatisticsMapper;
 import org.nodes.wms.statistics.service.IStatisticsService;
 import org.nodes.wms.statistics.vo.*;
-
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.ObjectUtil;
-
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -56,7 +54,7 @@ import java.util.stream.Collectors;
 public class StatisticsService implements IStatisticsService {
 
 	SoHeaderMapper soHeaderMapper;
-	AsnHeaderMapper asnHeaderMapper;
+	AsnHeaderMapper asnHeaderMapper1;
 	SkuMapper skuMapper;
 	StockMapper stockMapper;
 	StockLogMapper stockLogMapper;
@@ -99,17 +97,17 @@ public class StatisticsService implements IStatisticsService {
 
 		BillCountRltVO asnBillCountRlt = new BillCountRltVO();
 		// 获取今天已完成订单量
-		Map<String, Object> map = asnHeaderMapper.selectFinishBillCount(today);
+		Map<String, Object> map = asnHeaderMapper1.selectFinishBillCount(today);
 //		int billCountToday = asnHeaderMapper.selectFinishBillCount(today);
 		Integer billCountToday = 0;
-		if(Func.isNotEmpty(map)&&Func.isNotEmpty(map.get("counts"))){
+		if (Func.isNotEmpty(map) && Func.isNotEmpty(map.get("counts"))) {
 			billCountToday = ((Long) map.get("counts")).intValue();
 		}
 		asnBillCountRlt.setBillCountToday(billCountToday);
 		// 获取昨天已完成订单量
-		Map<String, Object> map1  = asnHeaderMapper.selectFinishBillCount(yesterday);
+		Map<String, Object> map1 = asnHeaderMapper1.selectFinishBillCount(yesterday);
 		Integer billCountYesterday = 0;
-		if(Func.isNotEmpty(map1)&&Func.isNotEmpty(map1.get("counts"))){
+		if (Func.isNotEmpty(map1) && Func.isNotEmpty(map1.get("counts"))) {
 			billCountYesterday = ((Long) map1.get("counts")).intValue();
 		}
 		asnBillCountRlt.setBillCountYesterday(billCountYesterday);
@@ -122,10 +120,10 @@ public class StatisticsService implements IStatisticsService {
 			asnBillCountRlt.setRate(new Double(growthRate).intValue());
 		}
 		// 获取今天已完成入库单的物品总数
-		Map<String, Object> map2 = asnHeaderMapper.selectFinishSkuCount(today);
+		Map<String, Object> map2 = asnHeaderMapper1.selectFinishSkuCount(today);
 		asnBillCountRlt.setSkuCountToday(0);
-		if(Func.isNotEmpty(map2)&&Func.isNotEmpty(map2.get("counts"))){
-			asnBillCountRlt.setSkuCountToday( ((Long) map2.get("counts")).intValue());
+		if (Func.isNotEmpty(map2) && Func.isNotEmpty(map2.get("counts"))) {
+			asnBillCountRlt.setSkuCountToday(((Long) map2.get("counts")).intValue());
 		}
 		return asnBillCountRlt;
 	}
@@ -304,7 +302,7 @@ public class StatisticsService implements IStatisticsService {
 	public List<TaskVO> unExecTaskInfo() {
 		List<Task> taskList = new ArrayList<>();
 		taskMapper.selectList(Condition.getQueryWrapper(new Task())
-			.lambda().isNull(Task::getBeginTime)).stream()
+				.lambda().isNull(Task::getBeginTime)).stream()
 			.collect(Collectors.groupingBy(Task::getTaskTypeCd))
 			.forEach((taskTypeCd, list) -> {
 				Task task = new Task();

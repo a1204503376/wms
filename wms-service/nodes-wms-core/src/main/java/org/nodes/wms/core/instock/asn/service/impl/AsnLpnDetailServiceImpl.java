@@ -1,27 +1,10 @@
-
 package org.nodes.wms.core.instock.asn.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
-import org.nodes.core.tool.utils.NodesUtil;
-import org.nodes.wms.core.basedata.service.IOwnerService;
-import org.nodes.wms.core.basedata.service.ISkuPackageService;
-import org.nodes.wms.core.basedata.service.ISkuService;
-import org.nodes.wms.core.stock.core.entity.StockDetail;
-import org.nodes.wms.core.stock.core.service.IStockDetailService;
-import org.nodes.wms.core.system.entity.Task;
-import org.nodes.wms.core.system.service.ITaskService;
-import org.nodes.wms.core.instock.inventory.entity.AsnInventory;
-import org.nodes.wms.core.instock.inventory.service.IAsnInventoryService;
-import org.nodes.wms.core.instock.purchase.service.IPoDetailService;
-import org.nodes.wms.core.warehouse.service.IWarehouseService;
-import org.springblade.core.log.exception.ServiceException;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.tool.cache.SerialNoCache;
-import org.nodes.wms.core.basedata.cache.OwnerCache;
+import org.nodes.wms.biz.instock.asn.enums.AsnBillStateEnum;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
@@ -32,20 +15,10 @@ import org.nodes.wms.core.basedata.entity.SkuPackage;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
 import org.nodes.wms.core.basedata.enums.SkuLevelEnum;
 import org.nodes.wms.core.basedata.enums.SkuLogTypeEnum;
+import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.basedata.service.ISkuLogService;
-import org.nodes.wms.core.stock.core.dto.StockAddDTO;
-import org.nodes.wms.core.stock.core.dto.StockMoveDTO;
-import org.nodes.wms.core.stock.core.entity.Stock;
-import org.nodes.wms.core.stock.core.enums.EventTypeEnum;
-import org.nodes.wms.core.stock.core.service.IStockService;
-import org.nodes.wms.core.utils.SkuLotUtil;
-import org.nodes.wms.core.warehouse.cache.LocationCache;
-import org.nodes.wms.core.warehouse.cache.WarehouseCache;
-import org.nodes.wms.core.warehouse.entity.Location;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
 import org.nodes.wms.core.instock.asn.dto.AsnDTO;
 import org.nodes.wms.core.instock.asn.entity.*;
-import org.nodes.wms.core.instock.asn.enums.AsnBillStateEnum;
 import org.nodes.wms.core.instock.asn.enums.AsnDetailStatusEnum;
 import org.nodes.wms.core.instock.asn.mapper.AsnHeaderMapper;
 import org.nodes.wms.core.instock.asn.mapper.AsnLpnDetailMapper;
@@ -53,11 +26,29 @@ import org.nodes.wms.core.instock.asn.service.*;
 import org.nodes.wms.core.instock.asn.vo.AsnDetailMinVO;
 import org.nodes.wms.core.instock.asn.vo.AsnHeaderVO;
 import org.nodes.wms.core.instock.asn.vo.AsnLpnDetailVO;
+import org.nodes.wms.core.instock.inventory.entity.AsnInventory;
+import org.nodes.wms.core.instock.inventory.service.IAsnInventoryService;
+import org.nodes.wms.core.instock.purchase.service.IPoDetailService;
 import org.nodes.wms.core.log.system.dto.SystemProcDTO;
 import org.nodes.wms.core.log.system.enums.ActionEnum;
 import org.nodes.wms.core.log.system.enums.DataTypeEnum;
 import org.nodes.wms.core.log.system.enums.SystemProcTypeEnum;
 import org.nodes.wms.core.log.system.service.ISystemProcService;
+import org.nodes.wms.core.stock.core.dto.StockAddDTO;
+import org.nodes.wms.core.stock.core.dto.StockMoveDTO;
+import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.core.stock.core.entity.StockDetail;
+import org.nodes.wms.core.stock.core.enums.EventTypeEnum;
+import org.nodes.wms.core.stock.core.service.IStockDetailService;
+import org.nodes.wms.core.stock.core.service.IStockService;
+import org.nodes.wms.core.system.entity.Task;
+import org.nodes.wms.core.system.service.ITaskService;
+import org.nodes.wms.core.utils.SkuLotUtil;
+import org.nodes.wms.core.warehouse.cache.LocationCache;
+import org.nodes.wms.core.warehouse.cache.WarehouseCache;
+import org.nodes.wms.core.warehouse.entity.Location;
+import org.nodes.wms.core.warehouse.entity.Warehouse;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.secure.BladeUser;
@@ -100,7 +91,7 @@ public class AsnLpnDetailServiceImpl<M extends AsnLpnDetailMapper, T extends Asn
 	@Autowired
 	IContainerLogService containerLogService;
 	@Autowired
-	AsnHeaderMapper asnHeaderMapper;
+	AsnHeaderMapper asnHeaderMapper1;
 	@Autowired
 	ISnService snService;
 	@Autowired
@@ -306,7 +297,7 @@ public class AsnLpnDetailServiceImpl<M extends AsnLpnDetailMapper, T extends Asn
 		//通过单据编号查询单据信息
 		QueryWrapper<AsnHeader> ahqw = new QueryWrapper<>();
 		ahqw.lambda().eq(AsnHeader::getAsnBillNo, asnDTO.getAsnBillNo());
-		AsnHeader asnHeader1 = asnHeaderMapper.selectOne(ahqw);
+		AsnHeader asnHeader1 = asnHeaderMapper1.selectOne(ahqw);
 		if (Func.isEmpty(asnHeader1)) {
 			throw new ServiceException("入库单不存在(单号:" + asnDTO.getAsnBillNo() + ")！");
 		}
