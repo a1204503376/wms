@@ -2,11 +2,11 @@
 spring:
   redis:
     ##redis 单机环境配置
-    host: 192.168.190.10
+    host: 127.0.0.1
     #redis 端口
     port: 6379
     #redis 密码
-    password: Poiuy123
+    password:
     #redis 数据库
     database: 10
     ssl: false
@@ -16,11 +16,11 @@ spring:
     #  commandTimeout: 5000
   #数据源配置
   datasource:
-    url: jdbc:mysql://192.168.190.10:3306/wms_dev?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://127.0.0.1:3306/wms_dev?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
     #MySQL账号
     username: root
     #MySQL密码
-    password: root
+    password: 123456
 
 #blade配置
 blade:
