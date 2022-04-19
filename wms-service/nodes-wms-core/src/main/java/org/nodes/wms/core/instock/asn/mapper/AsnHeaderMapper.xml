@@ -38,14 +38,16 @@
     </resultMap>
 
     <select id="selectFinishBillCount" resultType="java.util.HashMap">
-        select count(1) counts,create_dept from asn_header
-            where DATE_FORMAT(finish_date, '%Y%m%d') = DATE_FORMAT(#{dateTime}, '%Y%m%d')
+        select count(1) counts, create_dept
+        from asn_header
+        where DATE_FORMAT(finish_date, '%Y%m%d') = DATE_FORMAT(#{dateTime}, '%Y%m%d')
     </select>
 
     <select id="selectFinishSkuCount" resultType="java.util.HashMap">
-        select count(distinct ad.sku_id) counts,ah.create_dept from asn_header ah
-            inner join asn_detail ad on ad.asn_bill_id = ah.asn_bill_id
-            where date_format(ah.finish_date, '%Y%m%d') = date_format(#{dateTime}, '%Y%m%d')
+        select count(distinct ad.sku_id) counts, ah.create_dept
+        from asn_header ah
+                 inner join asn_detail ad on ad.asn_bill_id = ah.asn_bill_id
+        where date_format(ah.finish_date, '%Y%m%d') = date_format(#{dateTime}, '%Y%m%d')
     </select>
 
 </mapper>

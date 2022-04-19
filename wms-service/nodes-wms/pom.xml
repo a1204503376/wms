@@ -136,6 +136,16 @@
             <artifactId>nodes-wms-core</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.nodes</groupId>
+            <artifactId>nodes-wms-biz</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.nodes</groupId>
+            <artifactId>nodes-wms-dao</artifactId>
+            <scope>compile</scope>
+        </dependency>
         <!-- Mybatis-Plus -->
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -315,6 +325,38 @@
             </activation>
             <properties>
                 <profileActive>dev</profileActive>
+            </properties>
+            <build>
+                <plugins>
+                    <!-- 打source包 -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <configuration>
+                            <attach>true</attach>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <!--本地环境-->
+            <id>local</id>
+            <activation>
+                <!--本地环境是否默认-->
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <profileActive>local</profileActive>
             </properties>
             <build>
                 <plugins>

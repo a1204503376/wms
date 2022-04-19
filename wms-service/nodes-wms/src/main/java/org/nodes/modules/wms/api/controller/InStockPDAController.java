@@ -1,4 +1,3 @@
-
 package org.nodes.modules.wms.api.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -13,7 +12,7 @@ import lombok.AllArgsConstructor;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.validation.Add;
 import org.nodes.core.tool.validation.Pda;
-import org.nodes.wms.core.basedata.cache.SkuCache;
+import org.nodes.wms.biz.instock.asn.enums.AsnBillStateEnum;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.service.ISkuLotService;
 import org.nodes.wms.core.basedata.service.ISkuService;
@@ -23,14 +22,11 @@ import org.nodes.wms.core.instock.asn.entity.AsnHeader;
 import org.nodes.wms.core.instock.asn.entity.AsnLpnDetail;
 import org.nodes.wms.core.instock.asn.entity.ContainerLog;
 import org.nodes.wms.core.instock.asn.entity.Sn;
-import org.nodes.wms.core.instock.asn.enums.AsnBillStateEnum;
 import org.nodes.wms.core.instock.asn.service.*;
 import org.nodes.wms.core.instock.asn.vo.*;
 import org.nodes.wms.core.instock.asn.wrapper.AsnHeaderWrapper;
 import org.nodes.wms.core.instock.asn.wrapper.ContainerLogWrapper;
 import org.springblade.core.boot.ctrl.BladeController;
-import org.springblade.core.datascope.annotation.DataAuth;
-import org.springblade.core.datascope.enums.DataScopeEnum;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -163,6 +159,7 @@ public class InStockPDAController extends BladeController {
 	public R AsnHeaderSubmitPutaway(@Valid InStockSubmitVO inStockSubmitVO) {
 		return R.status(asnHeaderService.submitPutaway(inStockSubmitVO));
 	}
+
 	/**
 	 * 批量按托上架提交
 	 *
@@ -172,7 +169,7 @@ public class InStockPDAController extends BladeController {
 	@ApiLog("PDA-批量按托上架提交")
 	@PostMapping(value = "/submitPutawayNew")
 	@ApiOperation(value = "批量按托上架提交", notes = "传入stock")
-	public R submitPutawayNew(@Valid @RequestBody  PutawayByTranSubmitVO putawayByTranSubmitVO) {
+	public R submitPutawayNew(@Valid @RequestBody PutawayByTranSubmitVO putawayByTranSubmitVO) {
 		return R.status(asnHeaderService.submitPutawayNew(putawayByTranSubmitVO));
 	}
 
@@ -210,6 +207,7 @@ public class InStockPDAController extends BladeController {
 		asnHeaderService.submitAsnTray(asnDTO);
 		return R.success("");
 	}
+
 	/**
 	 * 收货序列号验证
 	 */
@@ -220,24 +218,26 @@ public class InStockPDAController extends BladeController {
 	public R isHasSerial(AsnDTO asnDTO) {
 		return R.status(asnHeaderService.instockHasSerial(asnDTO));
 	}
+
 	/**
-	 *按单收货提交
+	 * 按单收货提交
 	 */
 	@ApiLog("PDA-按单收货提交")
 	@PostMapping("/submitAsnHeaderWithOrder")
 	@ApiOperation(value = "按单收货提交", notes = "传入单据编号")
-	public R submitAsnHeaderWithOrder(@Valid @RequestBody AsnHeaderOrderDto asnHeaderOrderDto){
+	public R submitAsnHeaderWithOrder(@Valid @RequestBody AsnHeaderOrderDto asnHeaderOrderDto) {
 		asnHeaderService.submitAsnHeaderWithOrder(asnHeaderOrderDto);
 		return R.status(true);
 	}
+
 	/**
-	 *按单收货获取订单详情
+	 * 按单收货获取订单详情
 	 */
 	@ApiLog("PDA-按单收货获取订单详情")
 	@GetMapping("/getAsnHeaderAndDetails")
 	@ApiOperation(value = "按单收货获取订单详情", notes = "传入单据编号")
 	@ApiImplicitParams(@ApiImplicitParam(name = "asnBillNo", dataType = "String", paramType = "query"))
-	public R getAsnHeaderAndDetails(@NotEmpty(message = "订单号不能为空！") @RequestParam  String asnBillNo){
+	public R getAsnHeaderAndDetails(@NotEmpty(message = "订单号不能为空！") @RequestParam String asnBillNo) {
 		AsnHeaderVO asnHeader = asnHeaderService.getAsnHeaderAndDetails(asnBillNo);
 		return R.data(asnHeader);
 	}
@@ -287,8 +287,8 @@ public class InStockPDAController extends BladeController {
 			//List<Sku> skus = SkuCache.listByCode(asnHeaderBoxQueryDTO.getSkuCode());
 			ISkuService skuService = SpringUtil.getBean(ISkuService.class);
 			List<Sku> skus = skuService.list(Condition.getQueryWrapper(new Sku())
-			.lambda()
-			.eq(Sku::getSkuCode,asnHeaderBoxQueryDTO.getSkuCode())
+				.lambda()
+				.eq(Sku::getSkuCode, asnHeaderBoxQueryDTO.getSkuCode())
 			).stream().collect(Collectors.toList());
 			if (Func.isNotEmpty(skus)) {
 				//批属性规则
@@ -310,7 +310,7 @@ public class InStockPDAController extends BladeController {
 	@PostMapping(value = "/submitAsnHeaderForBox")
 	@ApiOperationSupport(order = 19)
 	@ApiOperation(value = "按箱收货提交", notes = "传入物品参数")
-	public R<AsnByBoxSubmitVO> submitAsnHeaderForBox( @RequestBody AsnByBoxSubmitDTO asnByBoxSubmitDTO) {
+	public R<AsnByBoxSubmitVO> submitAsnHeaderForBox(@RequestBody AsnByBoxSubmitDTO asnByBoxSubmitDTO) {
 //		return R.data(asnByBoxService.submitAsnHeader(boxSubmit));
 		return R.data(asnByBoxService.submit(asnByBoxSubmitDTO));
 	}
@@ -339,6 +339,7 @@ public class InStockPDAController extends BladeController {
 	public R submitPutawayForBox(@Validated({Add.class}) @RequestBody PutawayByBoxSubimitVO putawayByBoxSubimitVO) {
 		return R.status(putawayByBoxService.submitPutaway(putawayByBoxSubimitVO));
 	}
+
 	/**
 	 * 新按箱上架提交
 	 *
@@ -352,6 +353,7 @@ public class InStockPDAController extends BladeController {
 	public R submitPutawayForBoxNew(@Validated({Pda.class}) @RequestBody PutawayByBoxSubimitVO putawayByBoxSubimitVO) {
 		return R.status(putawayByBoxService.submitPutawayNew(putawayByBoxSubimitVO));
 	}
+
 	/**
 	 * 按箱上架-根据箱号获取推荐信息
 	 *
@@ -378,6 +380,7 @@ public class InStockPDAController extends BladeController {
 	public R submitMoveForBoxNew(@Validated({Pda.class}) @RequestBody PutawayByBoxSubimitVO putawayByBoxSubimitVO) {
 		return R.status(putawayByBoxService.submitMoveForBoxNew(putawayByBoxSubimitVO));
 	}
+
 	/**
 	 * 按箱移动-根据箱号获取箱号信息
 	 *
@@ -435,8 +438,8 @@ public class InStockPDAController extends BladeController {
 			//List<Sku> skuList = SkuCache.listByCode(containerLog.getSkuCode());
 			ISkuService skuService = SpringUtil.getBean(ISkuService.class);
 			List<Sku> skuList = skuService.list(Condition.getQueryWrapper(new Sku())
-			.lambda()
-			.eq(Sku::getSkuCode,containerLog.getSkuCode())
+				.lambda()
+				.eq(Sku::getSkuCode, containerLog.getSkuCode())
 			).stream().collect(Collectors.toList());
 			if (ObjectUtil.isNotEmpty(skuList)) {
 				containerLogQueryWrapper.in("sku_id", NodesUtil.toList(skuList, Sku::getSkuId));

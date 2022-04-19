@@ -27,6 +27,8 @@
         <module>nodes-wms-core</module>
         <module>nodes-wms-report</module>
         <module>nodes-wms</module>
+	    <module>nodes-wms-dao</module>
+        <module>nodes-wms-biz</module>
     </modules>
 
     <dependencyManagement>

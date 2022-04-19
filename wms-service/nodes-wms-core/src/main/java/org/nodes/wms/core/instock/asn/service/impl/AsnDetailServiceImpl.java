@@ -6,8 +6,6 @@ import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuPackage;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
-import org.nodes.wms.core.basedata.service.ISkuPackageService;
-import org.nodes.wms.core.basedata.service.ISkuService;
 import org.nodes.wms.core.instock.asn.dto.AsnDetailDTO;
 import org.nodes.wms.core.instock.asn.entity.AsnDetail;
 import org.nodes.wms.core.instock.asn.entity.Sn;
@@ -18,7 +16,6 @@ import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.Func;
-import org.springblade.core.tool.utils.SpringUtil;
 import org.springblade.core.tool.utils.StringPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -50,7 +47,7 @@ public class AsnDetailServiceImpl<M extends AsnDetailMapper, T extends AsnDetail
 	@Override
 	public boolean saveOrUpdate(AsnDetailDTO asnDetail) {
 		//上位系统单据明细唯一标识
-		if (Func.isEmpty(asnDetail.getAsnBillDetailKey())){
+		if (Func.isEmpty(asnDetail.getAsnBillDetailKey())) {
 			asnDetail.setAsnBillDetailKey(asnDetail.getAsnLineNo());
 		}
 		//物品
@@ -139,7 +136,7 @@ public class AsnDetailServiceImpl<M extends AsnDetailMapper, T extends AsnDetail
 	@Override
 	public boolean saveOrUpdateByAllot(AsnDetailDTO asnDetail) {
 		//上位系统单据明细唯一标识
-		if (Func.isEmpty(asnDetail.getAsnBillDetailKey())){
+		if (Func.isEmpty(asnDetail.getAsnBillDetailKey())) {
 			asnDetail.setAsnBillDetailKey(asnDetail.getAsnLineNo());
 		}
 		//物品

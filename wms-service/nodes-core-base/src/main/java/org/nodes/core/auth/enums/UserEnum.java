@@ -26,7 +26,8 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum UserEnum {
+public enum
+UserEnum {
 
 	/**
 	 * web

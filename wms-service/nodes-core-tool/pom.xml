@@ -28,11 +28,6 @@
             <groupId>org.springblade</groupId>
             <artifactId>blade-starter-http</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>cn.hutool</groupId>-->
-<!--            <artifactId>hutool-all</artifactId>-->
-<!--            <version>5.7.2</version>-->
-<!--        </dependency>-->
         <!-- Apache Lang3 -->
         <dependency>
             <groupId>org.apache.commons</groupId>

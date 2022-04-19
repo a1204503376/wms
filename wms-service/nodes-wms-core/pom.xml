@@ -38,5 +38,9 @@
             <groupId>org.nodes</groupId>
             <artifactId>nodes-core-base</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.nodes</groupId>
+            <artifactId>nodes-wms-biz</artifactId>
+        </dependency>
     </dependencies>
 </project>
