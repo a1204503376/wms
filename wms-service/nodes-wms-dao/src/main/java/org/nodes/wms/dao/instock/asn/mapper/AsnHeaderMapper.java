@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
-import org.nodes.wms.dao.instock.asn.entitits.AsnHeader;
+import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.springframework.stereotype.Repository;
 
 /**

@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
-import org.nodes.wms.dao.instock.asn.entitits.AsnDetail;
-import org.nodes.wms.dao.instock.asn.entitits.AsnHeader;
+import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
+import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 
 /**
  * ASN单据 DAO接口
