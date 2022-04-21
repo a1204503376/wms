@@ -1,5 +1,8 @@
 package org.nodes.core.tool.constant;
 
+/**
+ * WMS系统API路径常量类
+ */
 public class WmsApiPath {
 
 	/**
