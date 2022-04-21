@@ -50,7 +50,6 @@ public class CustomersTest {
 		customersRequest.setCode("114");
 		customersRequest.setName("历史");
 		int count = customersBiz.save(customersRequest);
-		System.out.println("count的值为。。。。。。。。"+count);
 		Assertions.assertEquals(1, count);
 
 	}

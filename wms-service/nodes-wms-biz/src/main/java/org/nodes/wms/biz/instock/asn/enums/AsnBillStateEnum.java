@@ -18,11 +18,8 @@ public enum AsnBillStateEnum {
 	REPEAL(90, "已撤销"),
 	CANCEL(91, "已取消"),
 	;
-
-
 	private final Integer index;
 	private final String name;
-
 	public static String valueOf(Integer index) {
 		switch (index) {
 			case 10:

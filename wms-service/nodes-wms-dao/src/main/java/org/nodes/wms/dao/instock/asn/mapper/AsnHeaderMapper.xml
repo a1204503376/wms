@@ -10,9 +10,10 @@
         FROM asn_header h
                  INNER JOIN asn_detail d
                             on h.asn_bill_id = d.asn_bill_id
+                            where
             ${ew.customSqlSegment}
     </select>
-    
+
     <select id="getAsnPage" resultType="org.nodes.wms.dao.instock.asn.dto.output.PageResponse">
         SELECT
         h.asn_bill_id,
