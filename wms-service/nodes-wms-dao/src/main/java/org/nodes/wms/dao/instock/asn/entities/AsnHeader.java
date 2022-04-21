@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.instock.asn.entitits;
+package org.nodes.wms.dao.instock.asn.entities;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

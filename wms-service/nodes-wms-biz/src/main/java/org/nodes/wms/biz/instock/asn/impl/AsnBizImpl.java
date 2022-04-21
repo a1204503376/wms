@@ -9,8 +9,8 @@ import org.nodes.wms.dao.instock.asn.AsnDao;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
-import org.nodes.wms.dao.instock.asn.entitits.AsnDetail;
-import org.nodes.wms.dao.instock.asn.entitits.AsnHeader;
+import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
+import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.springframework.stereotype.Service;
 
 /**
