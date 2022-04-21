@@ -1,7 +1,7 @@
 package org.nodes.wms.dao.instock.asn.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.nodes.wms.dao.instock.asn.entitits.AsnDetail;
+import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.springframework.stereotype.Repository;
 
 /**

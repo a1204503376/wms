@@ -1,6 +1,6 @@
 package org.nodes.wms.biz.application;
 
-import org.nodes.wms.dao.application.dto.ReceiveForAsnRequest;
+import org.nodes.wms.dao.application.dto.input.ReceiveForAsnRequest;
 
 /**
  * 收货管理
