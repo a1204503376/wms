@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.dao.basics.suppliers.mapper.SuppliersMapper">
+    <update id="logicDeleteByIds">
+        UPDATE basics_suppliers SET is_deleted = 1 WHERE id IN
+        <foreach collection="ids" close=")" open="(" item="id" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="selectPageSuppliers"
+            resultType="org.nodes.wms.dao.basics.suppliers.dto.output.SuppliersPageResponse">
+        SELECT id,
+        code,
+        name,
+        simple_name,
+        wo_id,
+        remark,
+        status,
+        create_user,
+        create_time,
+        update_user,
+        update_time
+        FROM basics_suppliers
+        <where>
+            <if test=" query.name !=null and query.name != '' ">
+                <bind name="nameLike" value=" '%'+query.name+'%' "/>
+                AND name LIKE #{nameLike}
+                <!--AND name LIKE concat('%',#{query.name},'%')-->
+            </if>
+            <if test=" query.simpleName !=null and query.simpleName != '' ">
+                <bind name="simpleNameLike" value=" '%'+query.simpleName+'%' "/>
+                AND name LIKE #{simpleNameLike}
+                <!--AND simpleName LIKE concat('%',#{query.simpleName},'%')-->
+            </if>
+            <if test=" query.code !=null and query.code != '' ">
+                AND code = #{query.code}
+            </if>
+            <if test=" query.createTimeBegin !=null ">
+                AND create_time &gt;= #{query.createTimeBegin}
+            </if>
+            <if test=" query.createTimeEnd !=null ">
+                AND create_time &gt;= #{query.createTimeEnd}
+            </if>
+            <if test=" query.updateTimeBegin !=null ">
+                AND update_time &gt;= #{query.updateTimeBegin}
+            </if>
+            <if test=" query.updateTimeEnd !=null ">
+                AND update_time &gt;= #{query.updateTimeEnd}
+            </if>
+        </where>
+        AND is_deleted = 0
+        <if test=" page.orders ==null or page.orders.size() ==0 ">
+            ORDER BY create_time ASC
+        </if>
+    </select>
+</mapper>
