@@ -1,33 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.nodes.wms.dao.basics.customers.mapper.CustomersMapper">
+<mapper namespace="org.nodes.wms.dao.basics.carriers.mapper.CarriersMapper">
     <update id="updateByIds">
-        update basics_customers set is_deleted = '1'
+        update basics_carriers set is_deleted = '1'
         where id in
         <foreach item="id" collection="deleteRequest.list" open="(" close=")" separator=",">
             #{id}
-         </foreach>
+        </foreach>
     </update>
 
-    <select id="getCustomersPage" resultType="org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse">
+    <select id="getCarriersPage" resultType="org.nodes.wms.dao.basics.carriers.dto.output.CarriersResponse">
         select
         id,
         code,
         name,
         simple_name,
         wo_id,
-        country,
-        province,
-        city,
-        address,
-        zip_code,
         remark,
         create_time,
         create_user,
         update_user,
         update_time,
         status
-        from basics_customers c
+        from basics_carriers c
         <where>
             <if test="query.code!=null and query.code != ''">
                 AND c.code LIKE concat('%',#{query.code},'%')
@@ -50,7 +45,7 @@
             <if test="query.updateTimeEnd!=null and query.updateTimeEnd!= ''">
                 AND c.update_time  &lt;= #{query.updateTimeEnd}
             </if>
-              AND c.is_deleted = '0'
+            AND c.is_deleted = '0'
         </where>
 
         <if test="page.orders==null or page.orders.size()==0">
@@ -60,6 +55,6 @@
     </select>
 
     <select id="selectByCode" resultType="java.lang.String">
-        select code  from basics_customers where code = #{code}
+        select code  from basics_Carriers where code = #{code}
     </select>
 </mapper>

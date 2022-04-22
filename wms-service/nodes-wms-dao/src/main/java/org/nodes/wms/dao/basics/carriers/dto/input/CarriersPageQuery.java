@@ -1,22 +1,22 @@
-package org.nodes.wms.dao.basics.customers.dto.input;
+package org.nodes.wms.dao.basics.carriers.dto.input;
 
 import lombok.Data;
 
 /**
- * 客户表 分页参数
+ * 承运商表 分页参数
  **/
 @Data
-public class CustomersPageQuery {
+public class CarriersPageQuery {
 	/**
-	 * 客户编码
+	 * 承运商编码
 	 */
 	private String code;
 	/**
-	 * 客户名称
+	 * 承运商名称
 	 */
 	private String name;
 	/**
-	 * 客户简称
+	 * 承运商简称
 	 */
 	private String  simpleName;
 	/**

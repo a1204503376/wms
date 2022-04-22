@@ -1,4 +1,4 @@
-package org.nodes.wms.controller.basics;
+package org.nodes.wms.controller.basics.customers;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_ROOT_URL +"customers")
 public class CustomersController {
-
 	private  final CustomersBiz customersBiz;
 	/**
 	 * 客户管理分页查询
@@ -28,6 +27,7 @@ public class CustomersController {
 	@GetMapping("/page")
 	public R<Object> page(@RequestParam CustomersPageQuery customersPageQuery, Query query) {
 		IPage<CustomersResponse> pages = customersBiz.page(Condition.getPage(query),customersPageQuery);
+
 		return R.data(pages);
 	}
 	/**

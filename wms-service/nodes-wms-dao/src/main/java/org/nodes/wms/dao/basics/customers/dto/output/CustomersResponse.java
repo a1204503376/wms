@@ -14,12 +14,9 @@ import java.util.Date;
 
 /**
  * 客户表 返回前端视图类
- * @Author penghao
- * @Date 2022/4/20
  **/
 @Data
 public class CustomersResponse {
-	//客户编码、客户名称、客户简称、货主、国家、省、城市、街道、邮编、启用、备注、创建时间、创建人、更新时间、更新人。
 	/**
 	 * 客户ID
 	 */
@@ -64,11 +61,6 @@ public class CustomersResponse {
 	 * 备注
 	 */
 	private String  remark;
-	/**
-	 * 租户ID
-	 */
-	private String  tenantId;
-
 	/**
 	 * 创建人
 	 */

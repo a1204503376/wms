@@ -19,9 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CustomersDaoImpl implements CustomersDao {
-     //private final AsnHeaderMapper asnHeaderRepository;
 	 private final CustomersMapper customersMapper;
-
 	@Override
 	public Page<CustomersResponse> getCustomersPage(IPage<?> page, CustomersPageQuery customersPageQuery) {
 

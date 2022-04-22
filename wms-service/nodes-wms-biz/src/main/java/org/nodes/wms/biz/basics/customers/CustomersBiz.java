@@ -19,14 +19,16 @@ public interface CustomersBiz {
 	 * 分页查询
     **/
 	Page<CustomersResponse> page(IPage<CustomersResponse> page, CustomersPageQuery customersPageQuery);
-
+	/**
+	 *  保存
+	 **/
 	int save(CustomersRequest customersRequest);
-
+	/**
+	 *  修改
+	 **/
 	int update(CustomersRequest customersRequest);
-
+	/**
+	 *  逻辑删除
+	 **/
 	int delete(DeleteRequest deleteRequest);
-
-
-	// 新增 修改 删除 状态变更 。。。
-
 }

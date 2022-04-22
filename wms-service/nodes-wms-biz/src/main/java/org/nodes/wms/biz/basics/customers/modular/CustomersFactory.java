@@ -3,7 +3,9 @@ package org.nodes.wms.biz.basics.customers.modular;
 import org.nodes.wms.dao.basics.customers.dto.input.CustomersRequest;
 import org.nodes.wms.dao.basics.customers.entities.BasicsCustomers;
 import org.springframework.stereotype.Service;
-
+/**
+ * 客户管理工厂类
+ */
 @Service
 public class CustomersFactory {
 	public BasicsCustomers createCustomers(CustomersRequest customersRequest) {
