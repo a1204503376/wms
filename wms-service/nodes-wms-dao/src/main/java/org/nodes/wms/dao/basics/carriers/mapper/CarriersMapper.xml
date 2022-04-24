@@ -1,29 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.basics.carriers.mapper.CarriersMapper">
-    <update id="updateByIds">
-        update basics_carriers set is_deleted = '1'
-        where id in
-        <foreach item="id" collection="deleteRequest.list" open="(" close=")" separator=",">
-            #{id}
-        </foreach>
-    </update>
 
-    <select id="getCarriersPage" resultType="org.nodes.wms.dao.basics.carriers.dto.output.CarriersResponse">
+    <select id="getPage" resultType="org.nodes.wms.dao.basics.carriers.dto.output.CarriersResponse">
         select
-        id,
-        code,
-        name,
-        simple_name,
-        wo_id,
-        remark,
-        create_time,
-        create_user,
-        update_user,
-        update_time,
-        status
+        c.id,
+        c.code,
+        c.name,
+        c.simple_name,
+        c.wo_id,
+        c.remark,
+        c.create_time,
+        user1.real_name create_user,
+        user2.real_name update_user,
+        c.update_time,
+        c.status
         from basics_carriers c
+        LEFT JOIN blade_user user1 ON user1.id = c.create_user
+        LEFT JOIN blade_user user2 ON user2.id = c.update_user
         <where>
+            AND c.is_deleted = '0'
             <if test="query.code!=null and query.code != ''">
                 AND c.code LIKE concat('%',#{query.code},'%')
             </if>
@@ -33,19 +29,18 @@
             <if test="query.simpleName!=null and query.simpleName != ''">
                 AND c.simple_name LIKE concat('%',#{query.simpleName},'%')
             </if>
-            <if test="query.createTimeBegin!=null and query.createTimeBegin!= ''">
+            <if test="query.createTimeBegin!=null">
                 AND c.create_time  &gt;= #{query.createTimeBegin}
             </if>
-            <if test="query.createTimeEnd!=null and query.createTimeEnd!= ''">
+            <if test="query.createTimeEnd!=null">
                 AND c.create_time  &lt;= #{query.createTimeEnd}
             </if>
-            <if test="query.updateTimeBegin!=null and query.updateTimeBegin!= ''">
+            <if test="query.updateTimeBegin!=null">
                 AND c.update_time  &gt;= #{query.updateTimeBegin}
             </if>
-            <if test="query.updateTimeEnd!=null and query.updateTimeEnd!= ''">
+            <if test="query.updateTimeEnd!=null">
                 AND c.update_time  &lt;= #{query.updateTimeEnd}
             </if>
-            AND c.is_deleted = '0'
         </where>
 
         <if test="page.orders==null or page.orders.size()==0">
@@ -54,7 +49,4 @@
 
     </select>
 
-    <select id="selectByCode" resultType="java.lang.String">
-        select code  from basics_Carriers where code = #{code}
-    </select>
 </mapper>

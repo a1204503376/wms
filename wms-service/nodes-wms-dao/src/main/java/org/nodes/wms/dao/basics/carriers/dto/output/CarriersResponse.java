@@ -36,7 +36,7 @@ public class CarriersResponse {
 	/**
 	 * 创建人
 	 */
-	private Long createUser;
+	private String createUser;
 	/**
 	 * 创建时间
 	 */
@@ -44,7 +44,7 @@ public class CarriersResponse {
 	/**
 	 * 更新人
 	 */
-	private Long updateUser;
+	private String updateUser;
 	/**
 	 * 更新时间
 	 */

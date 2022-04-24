@@ -1,28 +1,25 @@
 package org.nodes.basics.customers;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.velocity.util.ArrayListWrapper;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.nodes.wms.biz.basics.customers.impl.CustomersBizImpl;
-import org.nodes.wms.biz.instock.asn.impl.AsnBizImpl;
 import org.nodes.wms.dao.basics.customers.dto.input.CustomersPageQuery;
 import org.nodes.wms.dao.basics.customers.dto.input.CustomersRequest;
-import org.nodes.wms.dao.basics.customers.dto.input.DeleteRequest;
+import org.nodes.wms.dao.basics.customers.dto.input.DeleteCustomersRequest;
 import org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse;
-import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
-import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
-import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.test.BladeBootTest;
 import org.springblade.core.test.BladeSpringRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RunWith(BladeSpringRunner.class)
@@ -33,45 +30,36 @@ public class CustomersTest {
 	private CustomersBizImpl customersBiz;
 
 	@Test
-	public void test01() {
+	public void test01() throws ParseException {
 		CustomersPageQuery customersPageQuery = new CustomersPageQuery();
         Query query = new Query();
         query.setAscs("updateTime");
-		IPage<CustomersResponse> page = Condition.getPage(query);
-		customersPageQuery.setCreateTimeBegin("2022-1-1");
-		customersPageQuery.setCreateTimeEnd("2022-5-1");
-		IPage<CustomersResponse> cusPage = customersBiz.page(page,customersPageQuery);
-		Assertions.assertEquals(4, cusPage.getTotal());
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date1 = simpleDateFormat.parse("2022-1-1");
+		Date date2 =  simpleDateFormat.parse("2022-5-1");
+		customersPageQuery.setCreateTimeBegin(date1);
+		customersPageQuery.setCreateTimeEnd(date2);
+		IPage<CustomersResponse> cusPage = customersBiz.getPage(query,customersPageQuery);
+		Assertions.assertEquals(8, cusPage.getTotal());
 	}
 
 	@Test
 	public void test02() {
 		CustomersRequest customersRequest = new CustomersRequest();
-		customersRequest.setCode("114");
+		customersRequest.setCode("12");
 		customersRequest.setName("历史");
-		int count = customersBiz.save(customersRequest);
-		Assertions.assertEquals(1, count);
-
+		Assertions.assertEquals(true, customersBiz.saveCustomers(customersRequest));
 	}
 
 	@Test
 	public void test03() {
-		DeleteRequest deleteRequest = new DeleteRequest();
-		List list = new ArrayList();
-		list.add(4);
-		list.add(5);
+		DeleteCustomersRequest deleteRequest = new DeleteCustomersRequest();
+		List list = new ArrayList<Long>();
+		list.add(4l);
+		list.add(5l);
 		deleteRequest.setList(list);
-		int count = customersBiz.delete(deleteRequest);
-		Assertions.assertEquals(1, count);
+		Assertions.assertEquals(true,customersBiz.remove(deleteRequest));
 	}
 
-	@Test
-	public void test04() {
-		CustomersRequest customersRequest = new CustomersRequest();
-		customersRequest.setId(5l);
-		customersRequest.setCode("14");
-		customersRequest.setName("历史");
-		int count = customersBiz.update(customersRequest);
-		Assertions.assertEquals(1, count);
-	}
+
 }
