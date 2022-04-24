@@ -2,34 +2,100 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.instock.asn.mapper.AsnHeaderMapper">
 
-    <select id="getAsnPageForWrapper" resultType="org.nodes.wms.dao.instock.asn.dto.output.PageResponse">
+    <select id="selectPageAsnBill" resultType="org.nodes.wms.dao.instock.asn.dto.output.PageResponse">
         SELECT h.asn_bill_id,
                h.asn_bill_no,
-               d.sku_code,
-               h.create_time
+               h.asn_bill_state,
+               h.create_type,
+               h.s_code,
+               h.s_name,
+               h.external_order_no,
+               h.external_create_user,
+               h.wh_code,
+               h.asn_bill_remark,
+               h.create_time,
+               h.create_user,
+               h.update_time
         FROM asn_header h
-                 INNER JOIN asn_detail d
-                            on h.asn_bill_id = d.asn_bill_id
-                            where
+                 LEFT JOIN asn_detail d
+                           on h.asn_bill_id = d.asn_bill_id
             ${ew.customSqlSegment}
+
     </select>
 
-    <select id="getAsnPage" resultType="org.nodes.wms.dao.instock.asn.dto.output.PageResponse">
+    <select id="selectAsnDetailById"
+            resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse"
+            resultMap="asnDetailMap">
         SELECT
-        h.asn_bill_id,
-        h.asn_bill_no,
-        d.sku_code,
-        h.create_time
-        FROM asn_header h
-        INNER JOIN asn_detail d
-        on h.asn_bill_id = d.asn_bill_id
-        <where>
-            <if test="query.asnBillNo!=null and query.asnBillNo != ''">
-                AND h.asn_bill_no LIKE concat('%',#{query.asnBillNo},'%')
-            </if>
-            <if test="query.skuCode!=null and query.skuCode != ''">
-                AND d.sku_code LIKE concat('%',#{query.skuCode},'%')
-            </if>
-        </where>
+            h.asn_bill_id,
+            h.asn_bill_no,
+            h.create_type,
+            h.s_code,
+            h.s_name,
+            h.asn_bill_remark,
+            h.create_time,
+            h.create_user,
+            w.wh_code,
+            w.wh_name,
+            d.asn_line_no,
+            d.sku_code,
+            d.sku_name,
+            d.um_name,
+            d.plan_qty,
+            d.scan_qty,
+            d.remark,
+            d.detail_status,
+            r.receive_no,
+            r.bill_state,
+            r.remark as receive_remark,
+            r.create_time as receive_create_time,
+            r.create_user as receive_create_user,
+            r.update_time as receive_update_time,
+            r.update_user as receive_update_time
+        FROM
+            asn_header h
+                LEFT JOIN asn_detail d ON h.asn_bill_id = d.asn_bill_id
+                LEFT JOIN wms_warehouse w ON h.wh_id = w.wh_id
+                LEFT JOIN receive_header r ON h.asn_bill_id = r.asn_bill_id
+        WHERE h.asn_bill_id = #{id}
     </select>
+    <select id="selectCountForReceiveDetailByAsnDetaillId" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM receive_detail WHERE asn_detail_id = #{asnDetailId}
+    </select>
+
+    <resultMap id="asnDetailMap" type="org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse">
+        <id column="asn_bill_id" property="asnBillId"/>
+        <result column="asn_bill_no" property="asnBillNo"/>
+        <result column="create_type" property="createType"/>
+        <result column="s_code" property="sCode"/>
+        <result column="s_name" property="sName"/>
+        <result column="asn_bill_remark" property="asnBillRemark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="wh_code" property="whCode"/>
+        <result column="wh_name" property="whName"/>
+
+        <collection property="asnDetails" ofType="org.nodes.wms.dao.instock.asn.entities.AsnDetail">
+            <id column="asn_detail_id" property="asnDetailId"/>
+            <result column="asn_line_no" property="asnLineNo"/>
+            <result column="sku_code" property="skuCode"/>
+            <result column="sku_name" property="skuName"/>
+            <result column="um_name" property="umName"/>
+            <result column="plan_qty" property="planQty"/>
+            <result column="scan_qty" property="scanQty"/>
+            <result column="remark" property="remark"/>
+            <result column="detail_status" property="detailStatus"/>
+        </collection>
+
+        <collection property="receiveHeaders" ofType="org.nodes.wms.dao.instock.receive.entities.ReceiveHeader">
+            <id column="receive_id" property="receiveId"/>
+            <result column="receive_no" property="receiveNo"/>
+            <result column="bill_state" property="billState"/>
+            <result column="remark" property="remark"/>
+            <result column="receive_create_time" property="createTime"/>
+            <result column="receive_create_user" property="createUser"/>
+            <result column="receive_create_time" property="updateTime"/>
+            <result column="receive_create_user" property="updateUser"/>
+        </collection>
+    </resultMap>
 </mapper>

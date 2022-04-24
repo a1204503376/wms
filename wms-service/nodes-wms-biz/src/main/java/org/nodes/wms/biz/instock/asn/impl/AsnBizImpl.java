@@ -7,11 +7,14 @@ import org.nodes.wms.biz.instock.asn.AsnBiz;
 import org.nodes.wms.biz.instock.asn.modular.AsnFactory;
 import org.nodes.wms.dao.instock.asn.AsnDao;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnRequest;
+import org.nodes.wms.dao.instock.asn.dto.input.DeleteRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * ASN单 业务类
@@ -24,14 +27,9 @@ public class AsnBizImpl implements AsnBiz {
 	private final AsnFactory asnFactory;
 
 	@Override
-	public Page<PageResponse> getAsnPageForWrapper(IPage<?> page,
-												   PageParamsQuery pageParamsQuery) {
-		return asnDao.getAsnPageForWrapper(page, pageParamsQuery);
-	}
-
-	@Override
-	public Page<PageResponse> getAsnPage(IPage<?> page, PageParamsQuery pageParamsQuery) {
-		return asnDao.getAsnPage(page, pageParamsQuery);
+	public Page<PageResponse> getPageAsnBill(IPage<?> page,
+											 PageParamsQuery pageParamsQuery) {
+		return asnDao.selectPageAsnBill(page, pageParamsQuery);
 	}
 
 	@Override
@@ -39,5 +37,25 @@ public class AsnBizImpl implements AsnBiz {
 		AsnHeader asnHeader = asnFactory.createAsnHeader(asnRequest);
 		AsnDetail asnDetail = asnFactory.createAsnDetail(asnRequest);
 		asnDao.addAsnHeaderAndAsnDetail(asnHeader, asnDetail);
+	}
+
+	@Override
+	public AsnDetailResponse getAsnDetail(DeleteRequest deleteRequest) {
+		return asnDao.selectAsnDetailByAsnBillId(deleteRequest);
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public boolean removeAsnBillAndReceiveBill(DeleteRequest deleteRequest) {
+		AsnDetailResponse asnDetailResponse = asnDao.selectAsnDetailByAsnBillId(deleteRequest);
+
+		Boolean hasAsnBillIdFlag = asnDao.hasAsnBillIdForReceiveBill(deleteRequest.getAsnBillId());
+
+		Boolean delAsnHeaderFlag = asnDao.deleteAsnHeaderById(deleteRequest.getAsnBillId());
+		Boolean delAsnDetailFlag = asnDao.deleteAsnDetailById(deleteRequest.getAsnBillId());
+		Boolean delReceiveHeaderFlag = asnDao.deleteReceiveHeaderById(deleteRequest.getAsnBillId());
+		Boolean delReceiveDetailFlag = asnDao.deleteReceiveDetailById(deleteRequest.getAsnBillId());
+
+		return true;
 	}
 }
