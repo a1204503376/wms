@@ -2,14 +2,17 @@ package org.nodes.wms.controller.basics;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.suppliers.SuppliersBiz;
 import org.nodes.wms.dao.basics.suppliers.dto.input.DeleteSuppliersRequest;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SuppliersPageQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SuppliersRequest;
+import org.nodes.wms.dao.basics.suppliers.dto.output.SuppliersPageResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
+import org.springframework.context.annotation.Primary;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,34 +23,28 @@ import org.springframework.web.bind.annotation.*;
  **/
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/suppliers")
+@RequestMapping(WmsApiPath.WMS_ROOT_URL + "/suppliers")
+@Primary
 public class SuppliersController {
 	private final SuppliersBiz suppliersBiz;
 
-	@GetMapping("/page")
-	public R<Object> list(Query query, @RequestParam SuppliersPageQuery suppliersPageQuery) {
-		IPage<?> suppliersList = suppliersBiz.getPageSuppliers(Condition.getPage(query), suppliersPageQuery);
-		return R.data(suppliersList);
+	@PostMapping("/page")
+	public R<IPage<SuppliersPageResponse>> page(Query query, @RequestParam SuppliersPageQuery suppliersPageQuery) {
+		IPage<SuppliersPageResponse> pageResponse = suppliersBiz.getPage(Condition.getPage(query), suppliersPageQuery);
+		return R.data(pageResponse);
 	}
 
-	@ApiLog("新增供应商")
-	@PostMapping("/save")
-	public R<Object> save(@RequestParam SuppliersRequest suppliersRequest) {
-		boolean state = suppliersBiz.saveSuppliers(suppliersRequest);
+	@ApiLog("供应商管理-新增")
+	@PostMapping("/add")
+	public R<Boolean> add(@RequestParam SuppliersRequest suppliersRequest) {
+		Boolean state = suppliersBiz.newSuppliers(suppliersRequest);
 		return R.status(state);
 	}
 
-	@ApiLog("修改供应商")
-	@PostMapping("/update")
-	public R<Object> update(@RequestParam SuppliersRequest suppliersRequest) {
-		boolean state = suppliersBiz.updateSuppliersById(suppliersRequest);
-		return R.status(state);
-	}
-
-	@ApiLog("删除供应商")
-	@GetMapping("/delete")
-	public R delete(@RequestParam DeleteSuppliersRequest deleteSuppliersRequest){
-		boolean state = suppliersBiz.removeSuppliersByIds(deleteSuppliersRequest);
+	@ApiLog("供应商管理-删除")
+	@GetMapping("/remove")
+	public R<Boolean> remove(@RequestParam DeleteSuppliersRequest deleteSuppliersRequest){
+		Boolean state = suppliersBiz.removeByIds(deleteSuppliersRequest);
 		return R.status(state);
 	}
 }

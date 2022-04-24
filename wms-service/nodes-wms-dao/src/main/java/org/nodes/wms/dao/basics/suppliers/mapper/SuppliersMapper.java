@@ -26,13 +26,4 @@ public interface SuppliersMapper extends BaseMapper<Suppliers> {
 	 * @return Page<SuppliersPageResponse>
 	 */
 	Page<SuppliersPageResponse> selectPageSuppliers(IPage<?> page, @Param("query") SuppliersPageQuery suppliersPagesQuery);
-
-	/**
-	 * 通过id逻辑批量删除
-	 *
-	 ** @param ids: id数组
-	 ** @return void
-	 */
-
-	Integer logicDeleteByIds(Long[] ids);
 }

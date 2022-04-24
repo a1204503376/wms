@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springblade.core.mp.base.BaseEntity;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 供应商实体
  *
@@ -26,11 +28,13 @@ public class Suppliers extends BaseEntity {
 	/**
 	 * 供应商编码
 	 */
+	@NotNull(message = "供应商编码不能为空")
 	private String code;
 
 	/**
 	 * 供应商名称
 	 */
+	@NotNull(message = "供应商名称不能为空")
 	private String name;
 
 	/**

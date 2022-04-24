@@ -12,7 +12,7 @@ import org.nodes.wms.dao.basics.suppliers.dto.input.SuppliersPageQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SuppliersRequest;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SuppliersPageResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Suppliers;
-import org.springblade.core.tool.utils.Func;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 /**
@@ -30,8 +30,8 @@ public class SuppliersBizImpl implements SuppliersBiz {
 	private final SuppliersFactory suppliersFactory;
 
 	@Override
-	public Page<SuppliersPageResponse> getPageSuppliers(IPage<?> page, SuppliersPageQuery suppliersPageQuery) {
-		return suppliersDao.queryPageSuppliers(page, suppliersPageQuery);
+	public Page<SuppliersPageResponse> getPage(IPage<?> page, SuppliersPageQuery suppliersPageQuery) {
+		return suppliersDao.selectPage(page, suppliersPageQuery);
 	}
 
 	/**
@@ -42,32 +42,17 @@ public class SuppliersBizImpl implements SuppliersBiz {
 	 */
 
 	@Override
-	public Boolean saveSuppliers(SuppliersRequest suppliersRequest) {
-		if (Func.isEmpty(suppliersRequest.getCode())) {
-			throw new SerialException("供应商编码为空");
-		}
-		Integer codeExistCount = suppliersDao.findSupplierCodeExist(suppliersRequest.getCode());
-		if (codeExistCount > 0) {
+	public Boolean newSuppliers(SuppliersRequest suppliersRequest) {
+		Integer codeCount = suppliersDao.selectCountSupplierCode(suppliersRequest.getCode());
+		if (codeCount > 0) {
 			throw new SerialException("供应商编码["+suppliersRequest.getCode()+"]已存在");
 		}
-		if (Func.isEmpty(suppliersRequest.getName())){
-			throw new SerialException("供应商名称为空");
-		}
 		Suppliers suppliers = suppliersFactory.createSuppliers(suppliersRequest);
-		Integer count = suppliersDao.addSuppliers(suppliers);
-		return count > 0;
+		return suppliersDao.addSuppliers(suppliers);
 	}
 
 	@Override
-	public Boolean updateSuppliersById(SuppliersRequest suppliersRequest) {
-		Suppliers suppliers = suppliersFactory.createSuppliers(suppliersRequest);
-		Integer count = suppliersDao.updateSuppliers(suppliers);
-		return count > 0;
-	}
-
-	@Override
-	public Boolean removeSuppliersByIds(DeleteSuppliersRequest deleteSuppliersRequest) {
-		Integer count = suppliersDao.deleteSuppliersById(deleteSuppliersRequest.getIds());
-		return count > 0;
+	public Boolean removeByIds(DeleteSuppliersRequest deleteSuppliersRequest) {
+		return suppliersDao.deleteSuppliersByIds(deleteSuppliersRequest.getIds());
 	}
 }

@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -31,7 +33,7 @@ import java.util.Random;
 @RunWith(BladeSpringRunner.class)
 @BladeBootTest(appName = "wms3.3-test", profile = "test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class suppliersTest {
+public class SuppliersTest {
 
 	@Autowired
 	private SuppliersBizImpl suppliersBiz;
@@ -52,55 +54,36 @@ public class suppliersTest {
 		IPage<Object> page = Condition.getPage(query);
 //		IPage<?> page = new Page<>(1, 10);
 
-		Page<SuppliersPageResponse> pageSuppliers = suppliersBiz.getPageSuppliers(page, suppliersPageQuery);
+		Page<SuppliersPageResponse> pageSuppliers = suppliersBiz.getPage(page, suppliersPageQuery);
 		System.out.println(pageSuppliers.getRecords());
 		Assertions.assertEquals(1, pageSuppliers.getTotal());
 	}
 
 	@Test
-	public void deleteByBatchIdTest(){
-		Long[] ids = {1517042468103733249L,1517042468103733250L};
+	public void deleteByBatchIdTest() {
+		List<Long> ids = new ArrayList<>();
+		ids.add(1517056812761829377L);
+		ids.add(1517042468103733250L);
 		DeleteSuppliersRequest deleteSuppliersRequest = new DeleteSuppliersRequest();
 		deleteSuppliersRequest.setIds(ids);
-		Boolean deleteBoolean = suppliersBiz.removeSuppliersByIds(deleteSuppliersRequest);
+		Boolean deleteBoolean = suppliersBiz.removeByIds(deleteSuppliersRequest);
 		Assertions.assertTrue(deleteBoolean);
 	}
 
 	@Test
-	public void  saveTest(){
+	public void saveTest() {
 		Random random = new Random();
 		SuppliersRequest suppliersRequest = new SuppliersRequest();
-		suppliersRequest.setCode(System.nanoTime()+random.nextInt()+"");
-		suppliersRequest.setCreateDept(50124324543L);
+		suppliersRequest.setCode(System.nanoTime() + random.nextInt() + "");
+//		suppliersRequest.setCode("375410144335001");
 		suppliersRequest.setName("供应商ZZZZ001");
 		suppliersRequest.setRemark("无DDDDWWWW");
 		suppliersRequest.setStatus(0);
-		suppliersRequest.setCreateUser(60L);
 		suppliersRequest.setSimpleName("001");
-		suppliersRequest.setTenantId(3000000000L);
-		suppliersRequest.setUpdateUser(60000000000L);
 		suppliersRequest.setWoId(4000000001213L);
-		suppliersRequest.setIsDeleted(0);
-		Boolean saveBoolean = suppliersBiz.saveSuppliers(suppliersRequest);
+		Boolean saveBoolean = suppliersBiz.newSuppliers(suppliersRequest);
 		Assertions.assertTrue(saveBoolean);
 
 	}
-
-	@Test
-	public void updateTest(){
-		SuppliersRequest suppliersRequest = new SuppliersRequest();
-		suppliersRequest.setId(1517049840066936834L);
-		suppliersRequest.setCode("BBBBBBBB100");
-		suppliersRequest.setCreateDept(99999999L);
-		suppliersRequest.setName("供应商B432001");
-		suppliersRequest.setRemark("无芜湖");
-		suppliersRequest.setStatus(0);
-		suppliersRequest.setCreateUser(66666666L);
-		suppliersRequest.setSimpleName("001");
-		suppliersRequest.setTenantId(33333333L);
-		suppliersRequest.setUpdateUser(6666600000L);
-		suppliersRequest.setWoId(404040404044L);
-		Boolean updateBealean = suppliersBiz.updateSuppliersById(suppliersRequest);
-		Assertions.assertTrue(updateBealean);
-	}
 }
+

@@ -18,30 +18,21 @@ public interface SuppliersBiz {
 	 * @param suppliersPageQuery : 分页请求参数
 	 * @return Page<SuppliersPageResponse>
 	 */
-	Page<SuppliersPageResponse> getPageSuppliers(IPage<?> page, SuppliersPageQuery suppliersPageQuery);
+	Page<SuppliersPageResponse> getPage(IPage<?> page, SuppliersPageQuery suppliersPageQuery);
 
 	/**
 	 *  新增供应商信息
 	 *
-	 ** @param suppliersRequest:
-	 ** @return java.lang.Integer
+	 * @param suppliersRequest:
+	 * @return java.lang.Integer
 	 */
-	Boolean saveSuppliers(SuppliersRequest suppliersRequest);
+	Boolean newSuppliers(SuppliersRequest suppliersRequest);
 
 	/**
-	 * 修改供应商信息
-	 *
-	 ** @param suppliersRequest:
-	 ** @return java.lang.Boolean
-	 */
-
-	Boolean updateSuppliersById(SuppliersRequest suppliersRequest);
-
-	/**
-	 * 删除供应商信息
+	 * 根据id批量删除供应商信息
 	 * <p>
 	 * * @param deleteSuppliersRequest :
 	 * * @return java.lang.Integer
 	 */
-	Boolean removeSuppliersByIds(DeleteSuppliersRequest deleteSuppliersRequest);
+	Boolean removeByIds(DeleteSuppliersRequest deleteSuppliersRequest);
 }
