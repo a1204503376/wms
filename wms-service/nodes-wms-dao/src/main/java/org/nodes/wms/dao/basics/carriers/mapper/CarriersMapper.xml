@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.dao.basics.carriers.mapper.CarriersMapper">
+    <update id="updateByIds">
+        update basics_carriers set is_deleted = '1'
+        where id in
+        <foreach item="id" collection="deleteRequest.list" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="getCarriersPage" resultType="org.nodes.wms.dao.basics.carriers.dto.output.CarriersResponse">
+        select
+        id,
+        code,
+        name,
+        simple_name,
+        wo_id,
+        remark,
+        create_time,
+        create_user,
+        update_user,
+        update_time,
+        status
+        from basics_carriers c
+        <where>
+            <if test="query.code!=null and query.code != ''">
+                AND c.code LIKE concat('%',#{query.code},'%')
+            </if>
+            <if test="query.name!=null and query.name != ''">
+                AND c.name LIKE concat('%',#{query.name},'%')
+            </if>
+            <if test="query.simpleName!=null and query.simpleName != ''">
+                AND c.simple_name LIKE concat('%',#{query.simpleName},'%')
+            </if>
+            <if test="query.createTimeBegin!=null and query.createTimeBegin!= ''">
+                AND c.create_time  &gt;= #{query.createTimeBegin}
+            </if>
+            <if test="query.createTimeEnd!=null and query.createTimeEnd!= ''">
+                AND c.create_time  &lt;= #{query.createTimeEnd}
+            </if>
+            <if test="query.updateTimeBegin!=null and query.updateTimeBegin!= ''">
+                AND c.update_time  &gt;= #{query.updateTimeBegin}
+            </if>
+            <if test="query.updateTimeEnd!=null and query.updateTimeEnd!= ''">
+                AND c.update_time  &lt;= #{query.updateTimeEnd}
+            </if>
+            AND c.is_deleted = '0'
+        </where>
+
+        <if test="page.orders==null or page.orders.size()==0">
+            order by create_time desc
+        </if>
+
+    </select>
+
+    <select id="selectByCode" resultType="java.lang.String">
+        select code  from basics_Carriers where code = #{code}
+    </select>
+</mapper>
