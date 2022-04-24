@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 public class CustomersFactory {
 	public BasicsCustomers createCustomers(CustomersRequest customersRequest) {
 		BasicsCustomers basicsCustomers = new BasicsCustomers();
-		basicsCustomers.setId(customersRequest.getId());
 		basicsCustomers.setCode(customersRequest.getCode());
 		basicsCustomers.setName(customersRequest.getName());
 		basicsCustomers.setSimpleName(customersRequest.getSimpleName());

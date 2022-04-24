@@ -6,13 +6,15 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.carriers.CarriersBiz;
 import org.nodes.wms.biz.basics.carriers.modular.CarriersFactory;
 import org.nodes.wms.dao.basics.carriers.CarriersDao;
-import org.nodes.wms.dao.basics.carriers.dto.input.CarriersDeleteRequest;
+import org.nodes.wms.dao.basics.carriers.dto.input.DeleteCarriersRequest;
 import org.nodes.wms.dao.basics.carriers.dto.input.CarriersPageQuery;
 import org.nodes.wms.dao.basics.carriers.dto.input.CarriersRequest;
 import org.nodes.wms.dao.basics.carriers.dto.output.CarriersResponse;
 import org.nodes.wms.dao.basics.carriers.entites.BasicsCarriers;
+import org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse;
 import org.springblade.core.log.exception.ServiceException;
-import org.springblade.core.tool.utils.Func;
+import org.springblade.core.mp.support.Condition;
+import org.springblade.core.mp.support.Query;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,40 +25,25 @@ import org.springframework.stereotype.Service;
 public class CarriersBizImpl implements CarriersBiz {
 	private  final CarriersDao carriersDao;
 	private  final CarriersFactory carriersFactory;
-
 	@Override
-	public Page<CarriersResponse> page(IPage<CarriersResponse> page, CarriersPageQuery carriersPageQuery) {
-
-		return carriersDao.getcarriersPage(page,carriersPageQuery);
+	public Page<CarriersResponse> getPage(Query query, CarriersPageQuery carriersPageQuery) {
+		IPage<CustomersResponse> page = Condition.getPage(query);
+		return carriersDao.selectPage(page,carriersPageQuery);
 	}
 
 	@Override
-	public int save(CarriersRequest carriersRequest) {
+	public boolean saveCarriers(CarriersRequest carriersRequest) {
 		BasicsCarriers basicscarriers = carriersFactory.createCarriers(carriersRequest);
-		String code =  carriersDao.findByCode(basicscarriers.getCode());
-		if(Func.isNotEmpty(code)){
-			throw new ServiceException("承运商编码重复");
+		boolean code =  carriersDao.findByCode(basicscarriers.getCode());
+		boolean hasCode = carriersDao.findByCode(basicscarriers.getCode());
+		if(hasCode){
+			throw new ServiceException("客户编码重复");
 		}
 
-		return  carriersDao.save(basicscarriers);
+		return  carriersDao.insert(basicscarriers);
 	}
-
 	@Override
-	public int update(CarriersRequest carriersRequest) {
-		BasicsCarriers basicscarriers = carriersFactory.createCarriers(carriersRequest);
-		if(Func.isEmpty(basicscarriers.getId())){
-			throw new ServiceException("ID不能为空");
-		}
-		String code =  carriersDao.findByCode(basicscarriers.getCode());
-		if(Func.isNotEmpty(code)){
-			throw new ServiceException("承运商编码重复");
-		}
-
-		return carriersDao.update(basicscarriers);
-	}
-
-	@Override
-	public int delete(CarriersDeleteRequest deleteRequest) {
+	public boolean remove(DeleteCarriersRequest deleteRequest) {
 		return carriersDao.delete(deleteRequest);
 	}
 }

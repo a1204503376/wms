@@ -1,6 +1,11 @@
 package org.nodes.wms.dao.basics.customers.dto.input;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.Range;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * 客户管理接收类
  **/
@@ -13,10 +18,12 @@ public class CustomersRequest {
 	/**
 	 * 客户编码
 	 */
+	@NotNull(message = "客户编码不能为空")
 	private String code;
 	/**
 	 * 客户名称
 	 */
+	@NotNull(message = "客户名称不能为空")
 	private String name;
 	/**
 	 * 客户简称
@@ -25,6 +32,7 @@ public class CustomersRequest {
 	/**
 	 * 业务状态
 	 */
+	@Size(min = 0,max = 1,message = "状态范围为0-1")
 	private Integer status;
 	/**
 	 * 货主ID

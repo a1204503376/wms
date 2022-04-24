@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 public class CarriersFactory {
 	public BasicsCarriers createCarriers(CarriersRequest carriersRequest) {
 		BasicsCarriers basicsCarriers = new BasicsCarriers();
-		basicsCarriers.setId(carriersRequest.getId());
 		basicsCarriers.setCode(carriersRequest.getCode());
 		basicsCarriers.setName(carriersRequest.getName());
 		basicsCarriers.setSimpleName(carriersRequest.getSimpleName());

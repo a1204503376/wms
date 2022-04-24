@@ -64,7 +64,7 @@ public class CustomersResponse {
 	/**
 	 * 创建人
 	 */
-	private Long createUser;
+	private String createUser;
 	/**
 	 * 创建时间
 	 */
@@ -72,7 +72,7 @@ public class CustomersResponse {
 	/**
 	 * 更新人
 	 */
-	private Long updateUser;
+	private String updateUser;
 	/**
 	 * 更新时间
 	 */

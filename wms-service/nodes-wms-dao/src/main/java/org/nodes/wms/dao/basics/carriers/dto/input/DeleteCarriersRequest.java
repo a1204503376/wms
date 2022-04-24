@@ -7,6 +7,6 @@ import java.util.List;
  * 承运商管理删除接收类
  **/
 @Data
-public class CarriersDeleteRequest {
+public class DeleteCarriersRequest {
 	private List<Long> list;
 }
