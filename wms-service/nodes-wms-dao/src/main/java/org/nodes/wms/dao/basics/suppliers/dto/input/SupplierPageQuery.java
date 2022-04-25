@@ -8,7 +8,7 @@ import java.util.Date;
  * 供应商 分页参数
  */
 @Data
-public class SuppliersPageQuery {
+public class SupplierPageQuery {
 	/**
 	 * 供应商编码
 	 */

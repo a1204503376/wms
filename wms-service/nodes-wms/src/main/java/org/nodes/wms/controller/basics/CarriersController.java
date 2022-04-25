@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.carriers.CarriersBiz;
 import org.nodes.wms.dao.basics.carriers.dto.input.DeleteCarriersRequest;
-import org.nodes.wms.dao.basics.carriers.dto.input.CarriersPageQuery;
-import org.nodes.wms.dao.basics.carriers.dto.input.CarriersRequest;
-import org.nodes.wms.dao.basics.carriers.dto.output.CarriersResponse;
+import org.nodes.wms.dao.basics.carriers.dto.input.CarrierPageQuery;
+import org.nodes.wms.dao.basics.carriers.dto.input.newCarrierRequest;
+import org.nodes.wms.dao.basics.carriers.dto.output.CarrierResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
@@ -22,18 +22,18 @@ public class CarriersController {
 	/**
 	 * 承运商管理分页查询
 	 */
-	@GetMapping("/queryPage")
-	public R<IPage<CarriersResponse>> queryPage(@RequestParam CarriersPageQuery carriersPageQuery, Query query) {
-		IPage<CarriersResponse> pages = carriersBiz.getPage(query,carriersPageQuery);
+	@GetMapping("/page")
+	public R<IPage<CarrierResponse>> page(@RequestParam CarrierPageQuery carrierPageQuery, Query query) {
+		IPage<CarrierResponse> pages = carriersBiz.getPage(query, carrierPageQuery);
 		return R.data(pages);
 	}
 	/**
 	 * 承运商管理新增
 	 */
 	@ApiLog("承运商管理-新增")
-	@PostMapping("/newCarriersRequest")
-	public R newCarriersRequest (@RequestParam CarriersRequest carriersRequest) {
-		return R.status(carriersBiz.saveCarriers(carriersRequest));
+	@PostMapping("/newCarrier")
+	public R newCarrier(@RequestParam newCarrierRequest newCarrierRequest) {
+		return R.status(carriersBiz.newCarrier(newCarrierRequest));
 	}
 	/**
 	 * 承运商管理删除

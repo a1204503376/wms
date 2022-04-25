@@ -34,13 +34,5 @@ public interface AsnHeaderMapper extends BaseMapper<AsnHeader> {
 	 * @param id: ASN单id
 	 * @return DetailResponse
 	 */
-	AsnDetailResponse selectAsnDetailById(List<Long> id);
-
-	/**
-	 * 查询收货单中是否存在含有Asn单明细id的记录
-	 *
-	 * @param asnDetailId: ASN单明细id
-	 * @return java.lang.Integer
-	 */
-	Integer selectCountForReceiveDetailByAsnDetaillId(List<Long> asnDetailId);
+	AsnDetailResponse selectAsnContactDetailByAsnBillId(List<Long> id);
 }
