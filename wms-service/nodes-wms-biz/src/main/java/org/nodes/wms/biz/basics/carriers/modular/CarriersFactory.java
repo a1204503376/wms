@@ -1,6 +1,6 @@
 package org.nodes.wms.biz.basics.carriers.modular;
 
-import org.nodes.wms.dao.basics.carriers.dto.input.CarriersRequest;
+import org.nodes.wms.dao.basics.carriers.dto.input.newCarrierRequest;
 import org.nodes.wms.dao.basics.carriers.entites.BasicsCarriers;
 import org.springframework.stereotype.Service;
 
@@ -9,14 +9,14 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CarriersFactory {
-	public BasicsCarriers createCarriers(CarriersRequest carriersRequest) {
+	public BasicsCarriers createCarriers(newCarrierRequest newCarrierRequest) {
 		BasicsCarriers basicsCarriers = new BasicsCarriers();
-		basicsCarriers.setCode(carriersRequest.getCode());
-		basicsCarriers.setName(carriersRequest.getName());
-		basicsCarriers.setSimpleName(carriersRequest.getSimpleName());
-		basicsCarriers.setStatus(carriersRequest.getStatus());
-		basicsCarriers.setWoId(carriersRequest.getWoId());
-		basicsCarriers.setRemark(carriersRequest.getRemark());
+		basicsCarriers.setCode(newCarrierRequest.getCode());
+		basicsCarriers.setName(newCarrierRequest.getName());
+		basicsCarriers.setSimpleName(newCarrierRequest.getSimpleName());
+		basicsCarriers.setStatus(newCarrierRequest.getStatus());
+		basicsCarriers.setWoId(newCarrierRequest.getWoId());
+		basicsCarriers.setRemark(newCarrierRequest.getRemark());
 		return  basicsCarriers;
 	}
 }

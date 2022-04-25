@@ -8,7 +8,7 @@ import java.util.Date;
  * 承运商表 分页参数
  **/
 @Data
-public class CarriersPageQuery {
+public class CarrierPageQuery {
 	/**
 	 * 承运商编码
 	 */

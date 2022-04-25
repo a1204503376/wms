@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.basics.carriers.CarriersDao;
 import org.nodes.wms.dao.basics.carriers.dto.input.DeleteCarriersRequest;
-import org.nodes.wms.dao.basics.carriers.dto.input.CarriersPageQuery;
-import org.nodes.wms.dao.basics.carriers.dto.output.CarriersResponse;
+import org.nodes.wms.dao.basics.carriers.dto.input.CarrierPageQuery;
+import org.nodes.wms.dao.basics.carriers.dto.output.CarrierResponse;
 import org.nodes.wms.dao.basics.carriers.entites.BasicsCarriers;
 import org.nodes.wms.dao.basics.carriers.mapper.CarriersMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -20,9 +20,9 @@ import org.springframework.stereotype.Service;
 public class CarriersDaoImpl extends BaseServiceImpl<CarriersMapper,BasicsCarriers> implements CarriersDao {
 	private final CarriersMapper carriersMapper;
 	@Override
-	public Page<CarriersResponse> selectPage(IPage<?> page, CarriersPageQuery carriersPageQuery) {
+	public Page<CarrierResponse> selectPage(IPage<?> page, CarrierPageQuery carrierPageQuery) {
 
-		return carriersMapper.getPage(page, carriersPageQuery);
+		return carriersMapper.getPage(page, carrierPageQuery);
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class CarriersDaoImpl extends BaseServiceImpl<CarriersMapper,BasicsCarrie
 
 
 	@Override
-	public boolean findByCode(String code) {
+	public boolean isExistCarrierCode(String code) {
 		LambdaQueryWrapper<BasicsCarriers> lambdaQueryWrapper = new LambdaQueryWrapper();
 		lambdaQueryWrapper.eq(BasicsCarriers::getCode,code);
 		int count = super.count(lambdaQueryWrapper);

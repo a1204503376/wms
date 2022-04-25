@@ -8,7 +8,7 @@ import java.util.Date;
  * 承运商返回前端视图类
  **/
 @Data
-public class CarriersResponse {
+public class CarrierResponse {
 	/**
 	 * 承运商ID
 	 */

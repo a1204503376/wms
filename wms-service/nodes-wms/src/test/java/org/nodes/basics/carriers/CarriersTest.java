@@ -8,9 +8,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.nodes.wms.biz.basics.carriers.impl.CarriersBizImpl;
 import org.nodes.wms.dao.basics.carriers.dto.input.DeleteCarriersRequest;
-import org.nodes.wms.dao.basics.carriers.dto.input.CarriersPageQuery;
-import org.nodes.wms.dao.basics.carriers.dto.input.CarriersRequest;
-import org.nodes.wms.dao.basics.carriers.dto.output.CarriersResponse;
+import org.nodes.wms.dao.basics.carriers.dto.input.CarrierPageQuery;
+import org.nodes.wms.dao.basics.carriers.dto.input.newCarrierRequest;
+import org.nodes.wms.dao.basics.carriers.dto.output.CarrierResponse;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.test.BladeBootTest;
 import org.springblade.core.test.BladeSpringRunner;
@@ -29,25 +29,25 @@ public class CarriersTest {
 	private CarriersBizImpl carriersBiz;
 	@Test
 	public void test01() throws ParseException {
-		CarriersPageQuery carriersPageQuery = new CarriersPageQuery();
+		CarrierPageQuery carrierPageQuery = new CarrierPageQuery();
 		Query query = new Query();
 		query.setAscs("updateTime");
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date1 = simpleDateFormat.parse("2022-1-1");
 		Date date2 =  simpleDateFormat.parse("2022-5-1");
-		carriersPageQuery.setCreateTimeBegin(date1);
-		carriersPageQuery.setCreateTimeEnd(date2);
-		carriersPageQuery.setName("张三");
-		IPage<CarriersResponse> cusPage = carriersBiz.getPage(query,carriersPageQuery);
+		carrierPageQuery.setCreateTimeBegin(date1);
+		carrierPageQuery.setCreateTimeEnd(date2);
+		carrierPageQuery.setName("张三");
+		IPage<CarrierResponse> cusPage = carriersBiz.getPage(query, carrierPageQuery);
 		Assertions.assertEquals(1, cusPage.getTotal());
 	}
 
 	@Test
 	public void test02() {
-		CarriersRequest carriersRequest = new CarriersRequest();
-		carriersRequest.setCode("12");
-		carriersRequest.setName("王五");
-		Assertions.assertEquals(true, carriersBiz.saveCarriers(carriersRequest));
+		newCarrierRequest newCarrierRequest = new newCarrierRequest();
+		newCarrierRequest.setCode("12");
+		newCarrierRequest.setName("王五");
+		Assertions.assertEquals(true, carriersBiz.newCarrier(newCarrierRequest));
 	}
 
 	@Test
