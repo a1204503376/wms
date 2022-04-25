@@ -1,15 +1,14 @@
 package org.nodes.core.base.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.ParamCache;
-import org.nodes.core.base.mapper.UserMapper;
 import org.nodes.core.constant.DictConstant;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
-import org.springblade.core.mp.support.Condition;
 import org.springblade.core.secure.utils.SecureUtil;
 import org.springblade.core.tool.utils.Func;
 import org.nodes.core.base.entity.Dict;
@@ -18,7 +17,6 @@ import org.nodes.core.base.enums.ParamEnum;
 import org.nodes.core.base.mapper.ParamMapper;
 import org.nodes.core.base.service.IDictService;
 import org.nodes.core.base.service.IParamService;
-import org.springblade.core.tool.utils.SpringUtil;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -43,6 +41,8 @@ public class ParamServiceImpl <M extends ParamMapper, T extends Param> extends B
 
 	IDictService dictService;
 
+	private final ParamMapper paramMapper;
+
 	@Override
 	public boolean changeVisible(Long id, Integer type) {
 		if (SecureUtil.isDeveloper()) {
@@ -50,6 +50,13 @@ public class ParamServiceImpl <M extends ParamMapper, T extends Param> extends B
 		} else {
 			throw new ServiceException("您没有权限操作！");
 		}
+	}
+
+	@Override
+	public Param selectByKey(String key) {
+		QueryWrapper<Param> queryWrapper = Wrappers.query();
+		queryWrapper.eq("param_key",key);
+		return paramMapper.selectOne(queryWrapper);
 	}
 
 	@Override
