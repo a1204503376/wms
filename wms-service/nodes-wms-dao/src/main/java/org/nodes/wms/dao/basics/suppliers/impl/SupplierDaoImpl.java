@@ -4,11 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.wms.dao.basics.suppliers.SuppliersDao;
+import org.nodes.wms.dao.basics.suppliers.SupplierDao;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
-import org.nodes.wms.dao.basics.suppliers.entities.Suppliers;
-import org.nodes.wms.dao.basics.suppliers.mapper.SuppliersMapper;
+import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
+import org.nodes.wms.dao.basics.suppliers.mapper.SupplierMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -19,18 +19,18 @@ import java.util.List;
  **/
 @Service
 @RequiredArgsConstructor
-public class SuppliersDaoImpl extends BaseServiceImpl<SuppliersMapper,Suppliers> implements SuppliersDao {
+public class SupplierDaoImpl extends BaseServiceImpl<SupplierMapper, Supplier> implements SupplierDao {
 
-	private final SuppliersMapper suppliersMapper;
+	private final SupplierMapper supplierMapper;
 
 	@Override
-	public Page<SupplierPageResponse> selectPage(IPage<?> page, SupplierPageQuery suppliersPagesQuery) {
-		return suppliersMapper.selectPageSuppliers(page, suppliersPagesQuery);
+	public Page<SupplierPageResponse> selectPage(IPage<?> page, SupplierPageQuery supplierPagesQuery) {
+		return supplierMapper.selectPageSupplier(page, supplierPagesQuery);
 	}
 
 	@Override
-	public Boolean insert(Suppliers suppliers) {
-		return super.save(suppliers);
+	public Boolean insert(Supplier supplier) {
+		return super.save(supplier);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class SuppliersDaoImpl extends BaseServiceImpl<SuppliersMapper,Suppliers>
 	@Override
 	public boolean isExistSupplierCode(String code) {
 		return super.getBaseMapper()
-			.selectCount(new LambdaQueryWrapper<Suppliers>()
-				.eq(Suppliers::getCode,code)) > 0;
+			.selectCount(new LambdaQueryWrapper<Supplier>()
+				.eq(Supplier::getCode,code)) > 0;
 	}
 }

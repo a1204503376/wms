@@ -64,7 +64,7 @@ public class AsnTest {
 		List<Long> idList = new ArrayList<>();
 		idList.add(123456L);
 		deleteRequest.setAsnBillId(idList);
-		AsnDetailResponse asnDetailResponse = asnBiz.getAsnDetail(deleteRequest);
+		AsnDetailResponse asnDetailResponse = asnBiz.getAsnContactDetail(deleteRequest);
 		System.out.println(asnDetailResponse);
 //		Assertions.assertEquals(1,asnDetailResponse);
 	}

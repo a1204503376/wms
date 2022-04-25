@@ -6,15 +6,14 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.springblade.core.mp.base.BaseEntity;
 
-import java.util.Date;
-
 /**
- * 通知日志类
+ * 审计日志类
+ *
  * @author 王智勇
  */
 @Data
-@TableName("log_message")
-public class LogMessage extends BaseEntity {
+@TableName("log_action")
+public class LogAction extends BaseEntity {
 
 	/**
 	 * 主键ID
@@ -23,28 +22,38 @@ public class LogMessage extends BaseEntity {
 	private Long id;
 
 	/**
-	 * 需要通知的用户id，为空则是通知所有人
+	 * 操作人员账号
 	 */
-	private Long userId;
+	private String userAccount;
 
 	/**
-	 * 通知内容
+	 * 操作人员真实名称
+	 */
+	private String userRealName;
+
+	/**
+	 * 操作类型
+	 */
+	private Integer type;
+
+	/**
+	 * 目标单据id,可能为空
+	 */
+	private Long billId;
+
+	/**
+	 * 目标单据编码,可能为空
+	 */
+	private String billNo;
+
+	/**
+	 * 操作内容
 	 */
 	private String log;
 
 	/**
-	 * 已读(0:未读,1:已读)
-	 */
-	private Integer readed;
-
-	/**
-	 * 失效日期，只有通知所有人时不为空
-	 */
-	private Date expirationDate;
-
-	/**
 	 * 租户id
 	 */
-	private Long tenantId;
+	private String tenantId;
 
 }
