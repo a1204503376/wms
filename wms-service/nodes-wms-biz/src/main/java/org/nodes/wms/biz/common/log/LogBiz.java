@@ -4,6 +4,10 @@ import org.nodes.wms.dao.common.log.dto.AuditLogRequest;
 import org.nodes.wms.dao.common.log.dto.NoticeMessageRequest;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 
+/**
+ * 日志业务层端口
+ * @author 王智勇
+ */
 public interface LogBiz {
 
 	/**
