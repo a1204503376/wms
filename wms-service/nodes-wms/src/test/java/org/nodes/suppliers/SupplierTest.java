@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.nodes.wms.biz.basics.suppliers.impl.SupplierBizImpl;
 import org.nodes.wms.dao.basics.suppliers.dto.input.AddSupplierRequest;
+import org.nodes.wms.dao.basics.suppliers.dto.input.RemoveRequest;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.springblade.core.mp.support.Condition;
@@ -61,9 +62,11 @@ public class SupplierTest {
 	@Test
 	public void deleteByBatchIdTest() {
 		List<Long> ids = new ArrayList<>();
+		RemoveRequest removeRequest = new RemoveRequest();
+		removeRequest.setIds(ids);
 //		ids.add(1517056812761829377L);
 //		ids.add(1517042468103733250L);
-		Boolean deleteBoolean = supplierBiz.removeByIds(ids);
+		Boolean deleteBoolean = supplierBiz.removeByIds(removeRequest);
 		Assertions.assertTrue(deleteBoolean);
 	}
 
