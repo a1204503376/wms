@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
-import org.nodes.wms.dao.basics.suppliers.entities.Suppliers;
+import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -16,13 +16,13 @@ import org.springframework.stereotype.Repository;
  * @date 2022-04-20 10:49
  **/
 @Repository
-public interface SuppliersMapper extends BaseMapper<Suppliers> {
+public interface SupplierMapper extends BaseMapper<Supplier> {
 	/**
 	 * 分页查询供应商
 	 *
 	 * @param page: 分页对象
-	 * @param suppliersPagesQuery: 分页参数
-	 * @return Page<SuppliersPageResponse>
+	 * @param supplierPagesQuery: 分页参数
+	 * @return Page<SupplierPageResponse>
 	 */
-	Page<SupplierPageResponse> selectPageSuppliers(IPage<?> page, @Param("query") SupplierPageQuery suppliersPagesQuery);
+	Page<SupplierPageResponse> selectPageSupplier(IPage<?> page, @Param("query") SupplierPageQuery supplierPagesQuery);
 }
