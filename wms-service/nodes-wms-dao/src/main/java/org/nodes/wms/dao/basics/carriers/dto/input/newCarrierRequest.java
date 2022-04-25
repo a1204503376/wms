@@ -9,11 +9,7 @@ import javax.validation.constraints.Size;
  * 承运商管理接收类
  **/
 @Data
-public class CarriersRequest {
-	/**
-	 * 承运商ID
-	 */
-	private Long id;
+public class newCarrierRequest {
 	/**
 	 * 承运商编码
 	 */
@@ -31,7 +27,6 @@ public class CarriersRequest {
 	/**
 	 * 业务状态
 	 */
-	@Size(min = 0,max = 1,message = "状态范围为0-1")
 	private Integer status;
 	/**
 	 * 货主ID

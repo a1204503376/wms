@@ -11,7 +11,7 @@ import java.util.Date;
  * 供应商单创建请求对象
  */
 @Data
-public class SuppliersRequest {
+public class AddSupplierRequest {
 	/**
 	 * 供应商编码
 	 */

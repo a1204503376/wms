@@ -2,10 +2,10 @@ package org.nodes.wms.biz.basics.carriers;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.carriers.dto.input.DeleteCarriersRequest;
-import org.nodes.wms.dao.basics.carriers.dto.input.CarriersPageQuery;
+import org.nodes.wms.dao.basics.carriers.dto.input.CarrierPageQuery;
 import org.springblade.core.mp.support.Query;
-import org.nodes.wms.dao.basics.carriers.dto.input.CarriersRequest;
-import org.nodes.wms.dao.basics.carriers.dto.output.CarriersResponse;
+import org.nodes.wms.dao.basics.carriers.dto.input.newCarrierRequest;
+import org.nodes.wms.dao.basics.carriers.dto.output.CarrierResponse;
 
 
 /**
@@ -15,11 +15,11 @@ public interface CarriersBiz {
 	/**
 	 * 分页查询
 	 **/
-	Page<CarriersResponse> getPage(Query query, CarriersPageQuery carriersPageQuery);
+	Page<CarrierResponse> getPage(Query query, CarrierPageQuery carrierPageQuery);
 	/**
 	 *  保存
 	 **/
-	boolean saveCarriers(CarriersRequest carriersRequest);
+	boolean newCarrier(newCarrierRequest newCarrierRequest);
 	/**
 	 *  逻辑删除
 	 **/

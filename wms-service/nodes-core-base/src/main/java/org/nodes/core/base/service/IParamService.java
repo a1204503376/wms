@@ -16,10 +16,8 @@
  */
 package org.nodes.core.base.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springblade.core.mp.base.BaseService;
 import org.nodes.core.base.entity.Param;
-import org.nodes.core.base.vo.ParamVO;
 
 /**
  * 服务类
@@ -30,10 +28,19 @@ public interface IParamService extends BaseService<Param> {
 
 	/**
 	 * 控制参数显隐
-	 * @param id
-	 * @param type
-	 * @return
+	 * @param id ID
+	 * @param type 类型
+	 * @return  boolean
 	 */
 	boolean changeVisible(Long id, Integer type);
+
+	/**
+	 * 根据格式键查询值
+	 *
+	 * @author Nodes
+	 * 	 @param key  键
+	 * 	 @return  Param
+	 */
+	Param selectByKey(String key);
 
 }

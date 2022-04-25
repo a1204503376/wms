@@ -10,7 +10,7 @@ import java.util.Date;
  * ASN单分页结果
  */
 @Data
-public class SuppliersPageResponse {
+public class SupplierPageResponse {
 	/**
 	 * 供应商id
 	 */

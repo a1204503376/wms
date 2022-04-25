@@ -1,6 +1,6 @@
 package org.nodes.wms.biz.basics.suppliers.modular;
 
-import org.nodes.wms.dao.basics.suppliers.dto.input.SuppliersRequest;
+import org.nodes.wms.dao.basics.suppliers.dto.input.AddSupplierRequest;
 import org.nodes.wms.dao.basics.suppliers.entities.Suppliers;
 import org.springframework.stereotype.Service;
 
@@ -13,15 +13,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class SuppliersFactory {
 
-	public Suppliers createSuppliers(SuppliersRequest suppliersRequest){
+	public Suppliers createSuppliers(AddSupplierRequest addSupplierRequest){
 		Suppliers suppliers = new Suppliers();
-		suppliers.setCode(suppliersRequest.getCode());
-		suppliers.setName(suppliersRequest.getName());
-		suppliers.setSimpleName(suppliersRequest.getSimpleName());
-		suppliers.setWoId(suppliersRequest.getWoId());
-		suppliers.setRemark(suppliersRequest.getRemark());
+		suppliers.setCode(addSupplierRequest.getCode());
+		suppliers.setName(addSupplierRequest.getName());
+		suppliers.setSimpleName(addSupplierRequest.getSimpleName());
+		suppliers.setWoId(addSupplierRequest.getWoId());
+		suppliers.setRemark(addSupplierRequest.getRemark());
 		suppliers.setTenantId(suppliers.getTenantId());
-		suppliers.setStatus(suppliersRequest.getStatus());
+		suppliers.setStatus(addSupplierRequest.getStatus());
 		return suppliers;
 	}
 }

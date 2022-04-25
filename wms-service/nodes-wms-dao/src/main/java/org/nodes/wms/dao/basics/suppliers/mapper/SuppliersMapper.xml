@@ -3,7 +3,7 @@
 <mapper namespace="org.nodes.wms.dao.basics.suppliers.mapper.SuppliersMapper">
 
     <select id="selectPageSuppliers"
-            resultType="org.nodes.wms.dao.basics.suppliers.dto.output.SuppliersPageResponse">
+            resultType="org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse">
         SELECT s.id,
         s.code,
         s.name,
