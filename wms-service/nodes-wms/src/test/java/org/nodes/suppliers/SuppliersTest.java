@@ -9,9 +9,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.nodes.wms.biz.basics.suppliers.impl.SuppliersBizImpl;
 import org.nodes.wms.dao.basics.suppliers.dto.input.DeleteSuppliersRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.input.SuppliersPageQuery;
-import org.nodes.wms.dao.basics.suppliers.dto.input.SuppliersRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.output.SuppliersPageResponse;
+import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
+import org.nodes.wms.dao.basics.suppliers.dto.input.AddSupplierRequest;
+import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.test.BladeBootTest;
@@ -40,11 +40,11 @@ public class SuppliersTest {
 
 	@Test
 	public void selectTest() throws ParseException {
-		SuppliersPageQuery suppliersPageQuery = new SuppliersPageQuery();
+		SupplierPageQuery supplierPageQuery = new SupplierPageQuery();
 //		suppliersPageQuery.setCode("123");
-		suppliersPageQuery.setName("001");
+		supplierPageQuery.setName("001");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		suppliersPageQuery.setCreateTimeBegin(sdf.parse("2022-04-21 15:00:00"));
+		supplierPageQuery.setCreateTimeBegin(sdf.parse("2022-04-21 15:00:00"));
 //		OrderItem orderItem = new OrderItem();
 //		orderItem.setColumn("id");
 //		orderItem.setAsc(false);
@@ -54,7 +54,7 @@ public class SuppliersTest {
 		IPage<Object> page = Condition.getPage(query);
 //		IPage<?> page = new Page<>(1, 10);
 
-		Page<SuppliersPageResponse> pageSuppliers = suppliersBiz.getPage(page, suppliersPageQuery);
+		Page<SupplierPageResponse> pageSuppliers = suppliersBiz.getPage(page, supplierPageQuery);
 		System.out.println(pageSuppliers.getRecords());
 		Assertions.assertEquals(1, pageSuppliers.getTotal());
 	}
@@ -73,15 +73,15 @@ public class SuppliersTest {
 	@Test
 	public void saveTest() {
 		Random random = new Random();
-		SuppliersRequest suppliersRequest = new SuppliersRequest();
-		suppliersRequest.setCode(System.nanoTime() + random.nextInt() + "");
+		AddSupplierRequest addSupplierRequest = new AddSupplierRequest();
+		addSupplierRequest.setCode(System.nanoTime() + random.nextInt() + "");
 //		suppliersRequest.setCode("375410144335001");
-		suppliersRequest.setName("供应商ZZZZ001");
-		suppliersRequest.setRemark("无DDDDWWWW");
-		suppliersRequest.setStatus(0);
-		suppliersRequest.setSimpleName("001");
-		suppliersRequest.setWoId(4000000001213L);
-		Boolean saveBoolean = suppliersBiz.newSuppliers(suppliersRequest);
+		addSupplierRequest.setName("供应商ZZZZ001");
+		addSupplierRequest.setRemark("无DDDDWWWW");
+		addSupplierRequest.setStatus(0);
+		addSupplierRequest.setSimpleName("001");
+		addSupplierRequest.setWoId(4000000001213L);
+		Boolean saveBoolean = suppliersBiz.newSupplier(addSupplierRequest);
 		Assertions.assertTrue(saveBoolean);
 
 	}

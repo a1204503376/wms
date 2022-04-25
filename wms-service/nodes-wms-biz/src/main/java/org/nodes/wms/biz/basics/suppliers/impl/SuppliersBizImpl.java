@@ -2,17 +2,16 @@ package org.nodes.wms.biz.basics.suppliers.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.jsonwebtoken.io.SerialException;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.suppliers.SuppliersBiz;
 import org.nodes.wms.biz.basics.suppliers.modular.SuppliersFactory;
 import org.nodes.wms.dao.basics.suppliers.SuppliersDao;
 import org.nodes.wms.dao.basics.suppliers.dto.input.DeleteSuppliersRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.input.SuppliersPageQuery;
-import org.nodes.wms.dao.basics.suppliers.dto.input.SuppliersRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.output.SuppliersPageResponse;
+import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
+import org.nodes.wms.dao.basics.suppliers.dto.input.AddSupplierRequest;
+import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Suppliers;
-import org.springframework.context.annotation.Primary;
+import org.springblade.core.log.exception.ServiceException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -30,8 +29,8 @@ public class SuppliersBizImpl implements SuppliersBiz {
 	private final SuppliersFactory suppliersFactory;
 
 	@Override
-	public Page<SuppliersPageResponse> getPage(IPage<?> page, SuppliersPageQuery suppliersPageQuery) {
-		return suppliersDao.selectPage(page, suppliersPageQuery);
+	public Page<SupplierPageResponse> getPage(IPage<?> page, SupplierPageQuery supplierPageQuery) {
+		return suppliersDao.selectPage(page, supplierPageQuery);
 	}
 
 	/**
@@ -42,17 +41,17 @@ public class SuppliersBizImpl implements SuppliersBiz {
 	 */
 
 	@Override
-	public Boolean newSuppliers(SuppliersRequest suppliersRequest) {
-		Integer codeCount = suppliersDao.selectCountSupplierCode(suppliersRequest.getCode());
-		if (codeCount > 0) {
-			throw new SerialException("供应商编码["+suppliersRequest.getCode()+"]已存在");
+	public Boolean newSupplier(AddSupplierRequest addSupplierRequest) {
+		boolean isExist = suppliersDao.isExistSupplierCode(addSupplierRequest.getCode());
+		if (isExist) {
+			throw new ServiceException("新增供应商失败,供应商编码["+ addSupplierRequest.getCode()+"]已存在");
 		}
-		Suppliers suppliers = suppliersFactory.createSuppliers(suppliersRequest);
-		return suppliersDao.addSuppliers(suppliers);
+		Suppliers suppliers = suppliersFactory.createSuppliers(addSupplierRequest);
+		return suppliersDao.insert(suppliers);
 	}
 
 	@Override
 	public Boolean removeByIds(DeleteSuppliersRequest deleteSuppliersRequest) {
-		return suppliersDao.deleteSuppliersByIds(deleteSuppliersRequest.getIds());
+		return suppliersDao.delete(deleteSuppliersRequest.getIds());
 	}
 }

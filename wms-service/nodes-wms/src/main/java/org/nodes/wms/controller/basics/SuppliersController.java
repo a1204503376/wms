@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.suppliers.SuppliersBiz;
 import org.nodes.wms.dao.basics.suppliers.dto.input.DeleteSuppliersRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.input.SuppliersPageQuery;
-import org.nodes.wms.dao.basics.suppliers.dto.input.SuppliersRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.output.SuppliersPageResponse;
+import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
+import org.nodes.wms.dao.basics.suppliers.dto.input.AddSupplierRequest;
+import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -29,15 +29,15 @@ public class SuppliersController {
 	private final SuppliersBiz suppliersBiz;
 
 	@PostMapping("/page")
-	public R<IPage<SuppliersPageResponse>> page(Query query, @RequestParam SuppliersPageQuery suppliersPageQuery) {
-		IPage<SuppliersPageResponse> pageResponse = suppliersBiz.getPage(Condition.getPage(query), suppliersPageQuery);
+	public R<IPage<SupplierPageResponse>> page(Query query, @RequestParam SupplierPageQuery supplierPageQuery) {
+		IPage<SupplierPageResponse> pageResponse = suppliersBiz.getPage(Condition.getPage(query), supplierPageQuery);
 		return R.data(pageResponse);
 	}
 
 	@ApiLog("供应商管理-新增")
-	@PostMapping("/add")
-	public R<Boolean> add(@RequestParam SuppliersRequest suppliersRequest) {
-		Boolean state = suppliersBiz.newSuppliers(suppliersRequest);
+	@PostMapping("/newSupplier")
+	public R<Boolean> newSupplier(@RequestParam AddSupplierRequest addSupplierRequest) {
+		Boolean state = suppliersBiz.newSupplier(addSupplierRequest);
 		return R.status(state);
 	}
 
