@@ -2,6 +2,8 @@ package org.nodes.wms.dao.basics.customers.dto.input;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * 客户表 分页参数
  **/
@@ -22,23 +24,17 @@ public class CustomersPageQuery {
 	/**
 	 * 创建时间开始
 	 */
-	private String  createTimeBegin;
+	private Date  createTimeBegin;
 	/**
 	 * 创建时间结束
 	 */
-	private String  createTimeEnd;
+	private Date createTimeEnd;
 	/**
 	 * 更新时间开始
 	 */
-	private String  updateTimeBegin;
+	private Date updateTimeBegin;
 	/**
 	 * 更新时间结束
 	 */
-	private String  updateTimeEnd;
-
-
-
-
-
-
+	private Date  updateTimeEnd;
 }

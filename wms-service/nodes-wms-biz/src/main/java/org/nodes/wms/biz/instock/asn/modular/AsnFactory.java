@@ -14,15 +14,15 @@ public class AsnFactory {
 
 	public AsnHeader createAsnHeader(AsnRequest asnRequest) {
 		AsnHeader asnHeader = new AsnHeader();
-		asnHeader.setAsnBillNo(asnRequest.getSkuCode());
-		asnHeader.setAsnBillNo(asnRequest.getSkuName());
+		asnHeader.setAsnBillNo(asnRequest.getAsnBillNo());
+//		asnHeader.setAsnBillState(asnRequest.getAsnBillState());
 		return asnHeader;
 	}
 
 	public AsnDetail createAsnDetail(AsnRequest asnRequest) {
 		AsnDetail asnDetail = new AsnDetail();
-		asnDetail.setAsnBillNo(asnRequest.getSkuCode());
-		asnDetail.setAsnBillNo(asnRequest.getSkuName());
+		asnDetail.setAsnBillNo(asnRequest.getAsnBillNo());
+//		asnDetail.setAsnBillNo(asnRequest.getSkuName());
 		return asnDetail;
 	}
 }

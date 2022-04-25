@@ -15,7 +15,6 @@ public class SuppliersFactory {
 
 	public Suppliers createSuppliers(SuppliersRequest suppliersRequest){
 		Suppliers suppliers = new Suppliers();
-		suppliers.setId(suppliersRequest.getId());
 		suppliers.setCode(suppliersRequest.getCode());
 		suppliers.setName(suppliersRequest.getName());
 		suppliers.setSimpleName(suppliersRequest.getSimpleName());
@@ -23,12 +22,6 @@ public class SuppliersFactory {
 		suppliers.setRemark(suppliersRequest.getRemark());
 		suppliers.setTenantId(suppliers.getTenantId());
 		suppliers.setStatus(suppliersRequest.getStatus());
-		suppliers.setCreateUser(suppliersRequest.getCreateUser());
-		suppliers.setCreateDept(suppliersRequest.getCreateDept());
-		suppliers.setCreateTime(suppliersRequest.getCreateTime());
-		suppliers.setUpdateUser(suppliersRequest.getUpdateUser());
-		suppliers.setUpdateTime(suppliersRequest.getUpdateTime());
-		suppliers.setIsDeleted(suppliersRequest.getIsDeleted());
 		return suppliers;
 	}
 }

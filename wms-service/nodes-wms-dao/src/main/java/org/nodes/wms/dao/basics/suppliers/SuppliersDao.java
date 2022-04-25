@@ -6,6 +6,8 @@ import org.nodes.wms.dao.basics.suppliers.dto.input.SuppliersPageQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SuppliersPageResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Suppliers;
 
+import java.util.List;
+
 /**
  * 供应商 Dao 接口
  */
@@ -18,7 +20,7 @@ public interface SuppliersDao {
 	 * @param suppliersPageQuery : 分页请求参数
 	 * @return Page
 	 */
-	Page<SuppliersPageResponse> queryPageSuppliers(IPage<?> page, SuppliersPageQuery suppliersPageQuery);
+	Page<SuppliersPageResponse> selectPage(IPage<?> page, SuppliersPageQuery suppliersPageQuery);
 
 	/**
 	 * 新增一条供应商信息
@@ -26,7 +28,7 @@ public interface SuppliersDao {
 	 * @param suppliers:
 	 * @return java.lang.Integer
 	 */
-	Integer addSuppliers(Suppliers suppliers);
+	Boolean addSuppliers(Suppliers suppliers);
 
 	/**
 	 * 根据Id逻辑删除供应商信息
@@ -34,15 +36,7 @@ public interface SuppliersDao {
 	 * @param ids
 	 * @return java.lang.Integer
 	 */
-	Integer deleteSuppliersById(Long[] ids);
-
-	/**
-	 * 根据Id修改供应商信息
-	 *
-	 * @param suppliers:
-	 * @return void
-	 */
-	Integer updateSuppliers(Suppliers suppliers);
+	Boolean deleteSuppliersByIds(List<Long> ids);
 
 	/**
 	 * 查询供应商code是否存在
@@ -51,5 +45,5 @@ public interface SuppliersDao {
 	 ** @return java.util.List<org.nodes.wms.dao.basics.suppliers.entities.Suppliers>
 	 */
 
-	Integer findSupplierCodeExist(String code);
+	Integer selectCountSupplierCode(String code);
 }

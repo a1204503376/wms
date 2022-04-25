@@ -2,6 +2,8 @@ package org.nodes.wms.dao.basics.suppliers.dto.input;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * 删除请求参数类
  *
@@ -10,5 +12,5 @@ import lombok.Data;
  **/
 @Data
 public class DeleteSuppliersRequest {
-	private Long[] ids;
+	private List<Long> ids;
 }

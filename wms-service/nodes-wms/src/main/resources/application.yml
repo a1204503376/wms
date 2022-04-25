@@ -217,3 +217,7 @@ blade:
     #排除多租户逻辑
     exclude-tables:
       - blade_user
+
+wms:
+  # 项目名称
+  projectName: wms33

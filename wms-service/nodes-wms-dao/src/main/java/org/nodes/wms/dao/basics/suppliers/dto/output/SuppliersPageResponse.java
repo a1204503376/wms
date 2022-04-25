@@ -67,16 +67,6 @@ public class SuppliersPageResponse {
 	private Date createTime;
 
 	/**
-	 * 更新人
-	 */
-	private Long updateUser;
-
-	/**
-	 * 更新时间
-	 */
-	private Date updateTime;
-
-	/**
 	 * 删除标记(0:有效，1:删除)
 	 */
 	private Integer isDeleted;

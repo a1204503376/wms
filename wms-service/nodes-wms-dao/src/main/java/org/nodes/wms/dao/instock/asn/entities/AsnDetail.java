@@ -104,9 +104,9 @@ public class AsnDetail extends BaseSkuLotEntity {
 	 */
 	private BigDecimal detailAmount;
 	/**
-	 * 上位系统备注
+	 * 备注
 	 */
-	private String asnDetailRemark;
+	private String remark;
 	/**
 	 * 接收状态
 	 */
