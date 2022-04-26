@@ -2,12 +2,13 @@ package org.nodes.wms.dao.basics.suppliers.dto.input;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * 供应商单创建请求对象
  */
 @Data
-public class AddSupplierRequest {
+public class AddSupplierRequest implements Serializable {
 	/**
 	 * 供应商编码
 	 */

@@ -2,13 +2,14 @@ package org.nodes.wms.dao.basics.suppliers.dto.input;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 供应商 分页参数
  */
 @Data
-public class SupplierPageQuery {
+public class SupplierPageQuery implements Serializable {
 	/**
 	 * 供应商编码
 	 */
