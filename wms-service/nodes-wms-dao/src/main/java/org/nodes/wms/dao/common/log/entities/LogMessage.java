@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import org.springblade.core.mp.base.BaseEntity;
+import org.springblade.core.tenant.mp.TenantEntity;
 
 import java.util.Date;
 
@@ -14,7 +14,7 @@ import java.util.Date;
  */
 @Data
 @TableName("log_message")
-public class LogMessage extends BaseEntity {
+public class LogMessage extends TenantEntity {
 
 	/**
 	 * 主键ID
@@ -42,9 +42,5 @@ public class LogMessage extends BaseEntity {
 	 */
 	private Date expirationDate;
 
-	/**
-	 * 租户id
-	 */
-	private Long tenantId;
 
 }

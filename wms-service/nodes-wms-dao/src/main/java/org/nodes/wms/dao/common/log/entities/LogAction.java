@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import org.springblade.core.mp.base.BaseEntity;
+import org.springblade.core.tenant.mp.TenantEntity;
 
 /**
  * 审计日志类
@@ -13,7 +13,7 @@ import org.springblade.core.mp.base.BaseEntity;
  */
 @Data
 @TableName("log_action")
-public class LogAction extends BaseEntity {
+public class LogAction extends TenantEntity {
 
 	/**
 	 * 主键ID
@@ -51,9 +51,5 @@ public class LogAction extends BaseEntity {
 	 */
 	private String log;
 
-	/**
-	 * 租户id
-	 */
-	private String tenantId;
 
 }
