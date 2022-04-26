@@ -1,13 +1,13 @@
 package org.nodes.wms.dao.common.entitits;
 
 import lombok.Data;
-import org.springblade.core.mp.base.BaseEntity;
+import org.springblade.core.tenant.mp.TenantEntity;
 
 /**
  * 批属性基类
  */
 @Data
-public class BaseSkuLotEntity extends BaseEntity {
+public class BaseSkuLotEntity extends TenantEntity {
 
 	/**
 	 * 批属性1
