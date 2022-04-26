@@ -1,6 +1,6 @@
 package org.nodes.wms.biz.basics.customers.modular;
 
-import org.nodes.wms.dao.basics.customers.dto.input.CustomersRequest;
+import org.nodes.wms.dao.basics.customers.dto.input.newCustomerRequest;
 import org.nodes.wms.dao.basics.customers.entities.BasicsCustomers;
 import org.springframework.stereotype.Service;
 /**
@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CustomersFactory {
-	public BasicsCustomers createCustomers(CustomersRequest customersRequest) {
+	public BasicsCustomers createCustomers(newCustomerRequest newCustomerRequest) {
 		BasicsCustomers basicsCustomers = new BasicsCustomers();
-		basicsCustomers.setCode(customersRequest.getCode());
-		basicsCustomers.setName(customersRequest.getName());
-		basicsCustomers.setSimpleName(customersRequest.getSimpleName());
-		basicsCustomers.setStatus(customersRequest.getStatus());
-		basicsCustomers.setWoId(customersRequest.getWoId());
-		basicsCustomers.setZipCode(customersRequest.getZipCode());
-		basicsCustomers.setRemark(customersRequest.getRemark());
+		basicsCustomers.setCode(newCustomerRequest.getCode());
+		basicsCustomers.setName(newCustomerRequest.getName());
+		basicsCustomers.setSimpleName(newCustomerRequest.getSimpleName());
+		basicsCustomers.setStatus(newCustomerRequest.getStatus());
+		basicsCustomers.setWoId(newCustomerRequest.getWoId());
+		basicsCustomers.setZipCode(newCustomerRequest.getZipCode());
+		basicsCustomers.setRemark(newCustomerRequest.getRemark());
 		return  basicsCustomers;
 	}
 }

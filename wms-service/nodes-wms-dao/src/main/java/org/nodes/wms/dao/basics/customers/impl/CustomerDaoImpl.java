@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.wms.dao.basics.customers.CustomersDao;
-import org.nodes.wms.dao.basics.customers.dto.input.CustomersPageQuery;
-import org.nodes.wms.dao.basics.customers.dto.input.DeleteCustomersRequest;
+import org.nodes.wms.dao.basics.customers.CustomerDao;
+import org.nodes.wms.dao.basics.customers.dto.input.CustomerPageQuery;
+import org.nodes.wms.dao.basics.customers.dto.input.DeleteCustomerRequest;
 import org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse;
 import org.nodes.wms.dao.basics.customers.entities.BasicsCustomers;
 import org.nodes.wms.dao.basics.customers.mapper.CustomersMapper;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class CustomersDaoImpl extends BaseServiceImpl<CustomersMapper,BasicsCustomers> implements CustomersDao {
+public class CustomerDaoImpl extends BaseServiceImpl<CustomersMapper,BasicsCustomers> implements CustomerDao {
 	 private final CustomersMapper customersMapper;
 
 	@Override
@@ -28,21 +28,21 @@ public class CustomersDaoImpl extends BaseServiceImpl<CustomersMapper,BasicsCust
 
 
 	@Override
-	public boolean findByCode(String code) {
-		LambdaQueryWrapper<BasicsCustomers> lambdaQueryWrapper = new LambdaQueryWrapper();
+	public boolean isExistCustomerCode(String code) {
+		LambdaQueryWrapper<BasicsCustomers> lambdaQueryWrapper = new LambdaQueryWrapper<BasicsCustomers>();
 		lambdaQueryWrapper.eq(BasicsCustomers::getCode,code);
 		int count = super.count(lambdaQueryWrapper);
 		return count>0;
 	}
 
 	@Override
-	public boolean delete(DeleteCustomersRequest deleteRequest) {
+	public boolean delete(DeleteCustomerRequest deleteRequest) {
 		return super.deleteLogic(deleteRequest.getList());
 	}
 
 	@Override
-	public Page<CustomersResponse> selectPage(IPage<CustomersResponse> page, CustomersPageQuery customersPageQuery) {
-		return  customersMapper.getPage(page, customersPageQuery);
+	public Page<CustomersResponse> selectPage(IPage<CustomersResponse> page, CustomerPageQuery customerPageQuery) {
+		return  customersMapper.getPage(page, customerPageQuery);
 	}
 
 

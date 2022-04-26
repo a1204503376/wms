@@ -8,7 +8,7 @@ import java.util.Date;
  * 客户表 分页参数
  **/
 @Data
-public class CustomersPageQuery {
+public class CustomerPageQuery {
 	/**
 	 * 客户编码
 	 */

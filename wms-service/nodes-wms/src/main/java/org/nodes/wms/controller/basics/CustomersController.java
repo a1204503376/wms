@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.customers.CustomersBiz;
-import org.nodes.wms.dao.basics.customers.dto.input.CustomersPageQuery;
-import org.nodes.wms.dao.basics.customers.dto.input.CustomersRequest;
-import org.nodes.wms.dao.basics.customers.dto.input.DeleteCustomersRequest;
+import org.nodes.wms.dao.basics.customers.dto.input.CustomerPageQuery;
+import org.nodes.wms.dao.basics.customers.dto.input.newCustomerRequest;
+import org.nodes.wms.dao.basics.customers.dto.input.DeleteCustomerRequest;
 import org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
@@ -24,8 +24,8 @@ public class CustomersController {
 	 * 客户管理分页查询
 	 */
 	@GetMapping("/queryPage")
-	public R<IPage<CustomersResponse>>  queryPage(@RequestParam CustomersPageQuery customersPageQuery, Query query) {
-		IPage<CustomersResponse> pages = customersBiz.getPage(query,customersPageQuery);
+	public R<IPage<CustomersResponse>>  page(@RequestParam CustomerPageQuery customerPageQuery, Query query) {
+		IPage<CustomersResponse> pages = customersBiz.getPage(customerPageQuery,query);
 		return R.data(pages);
 	}
 	/**
@@ -33,8 +33,8 @@ public class CustomersController {
 	 */
 	@ApiLog("客户管理-新增")
 	@PostMapping("/add")
-	public R newCustomer(@RequestParam CustomersRequest customersRequest) {
-		return R.status(customersBiz.saveCustomers(customersRequest));
+	public R<Boolean> newCustomer(@RequestParam newCustomerRequest newCustomerRequest) {
+		return R.status(customersBiz.newCustomers(newCustomerRequest));
 	}
 
 	/**
@@ -42,7 +42,7 @@ public class CustomersController {
 	 */
 	@ApiLog("客户管理-逻辑删除")
 	@PostMapping("/delete")
-	public R delete(@RequestParam DeleteCustomersRequest deleteRequest) {
+	public R<Boolean> delete(@RequestParam DeleteCustomerRequest deleteRequest) {
 		return R.status(customersBiz.remove(deleteRequest));
 	}
 }

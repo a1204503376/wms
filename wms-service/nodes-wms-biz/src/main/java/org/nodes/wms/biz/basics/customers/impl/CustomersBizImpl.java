@@ -5,10 +5,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.customers.CustomersBiz;
 import org.nodes.wms.biz.basics.customers.modular.CustomersFactory;
-import org.nodes.wms.dao.basics.customers.CustomersDao;
-import org.nodes.wms.dao.basics.customers.dto.input.CustomersPageQuery;
-import org.nodes.wms.dao.basics.customers.dto.input.CustomersRequest;
-import org.nodes.wms.dao.basics.customers.dto.input.DeleteCustomersRequest;
+import org.nodes.wms.dao.basics.customers.CustomerDao;
+import org.nodes.wms.dao.basics.customers.dto.input.CustomerPageQuery;
+import org.nodes.wms.dao.basics.customers.dto.input.newCustomerRequest;
+import org.nodes.wms.dao.basics.customers.dto.input.DeleteCustomerRequest;
 import org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse;
 import org.nodes.wms.dao.basics.customers.entities.BasicsCustomers;
 import org.springblade.core.log.exception.ServiceException;
@@ -22,28 +22,27 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CustomersBizImpl implements CustomersBiz {
-	private  final CustomersDao customersDao;
+	private  final CustomerDao customerDao;
 	private  final CustomersFactory customersFactory;
 
 	@Override
-	public Page<CustomersResponse> getPage(Query query, CustomersPageQuery customersPageQuery) {
+	public Page<CustomersResponse> getPage(CustomerPageQuery customerPageQuery,Query query) {
 		IPage<CustomersResponse> page = Condition.getPage(query);
-		return customersDao.selectPage(page,customersPageQuery);
+		return customerDao.selectPage(page, customerPageQuery);
 	}
 
 	@Override
-	public boolean saveCustomers(CustomersRequest customersRequest) {
-		BasicsCustomers basicsCustomers = customersFactory.createCustomers(customersRequest);
-		boolean hasCode =  customersDao.findByCode(basicsCustomers.getCode());
-		if(hasCode){
-			throw new ServiceException("客户编码重复");
+	public boolean newCustomers(newCustomerRequest newCustomerRequest) {
+		boolean isExist = customerDao.isExistCustomerCode(newCustomerRequest.getCode());
+		if(isExist){
+			throw new ServiceException("新增客户失败，客户编码重复");
 		}
-
-		return  customersDao.insert(basicsCustomers);
+		BasicsCustomers basicsCustomers = customersFactory.createCustomers(newCustomerRequest);
+		return  customerDao.insert(basicsCustomers);
 	}
 
 	@Override
-	public boolean remove(DeleteCustomersRequest deleteRequest) {
-		return customersDao.delete(deleteRequest);
+	public boolean remove(DeleteCustomerRequest deleteRequest) {
+		return customerDao.delete(deleteRequest);
 	}
 }
