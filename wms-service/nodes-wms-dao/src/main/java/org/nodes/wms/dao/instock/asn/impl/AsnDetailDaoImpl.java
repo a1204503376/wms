@@ -33,4 +33,9 @@ public class AsnDetailDaoImpl
 	public List<Long> selectAsnDetailIdListByAsnBillId(List<Long> asnBillIdList) {
 		return asnDetailMapper.selectAsnDetailId(asnBillIdList);
 	}
+
+	@Override
+	public Boolean addAsnDetail(AsnDetail asnDetail) {
+		return super.save(asnDetail);
+	}
 }

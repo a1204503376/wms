@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.instock.asn;
 
+import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
+
 import java.util.List;
 
 /**
@@ -15,7 +17,6 @@ public interface AsnDetailDao {
 	 */
 	Boolean deleteAsnDetailByAsnBillId(List<Long> asnBillIdList);
 
-
 	/**
 	 * 根据Asn单id查询Asn单明细id集合
 	 *
@@ -23,4 +24,12 @@ public interface AsnDetailDao {
 	 * @return java.util.List<java.lang.Long>
 	 */
 	List<Long> selectAsnDetailIdListByAsnBillId(List<Long> asnBillIdList);
+
+	/**
+	 * 新增Asn明细信息
+	 *
+	 * @param asnDetail: Asn单明细对象
+	 * @return java.lang.Boolean
+	 */
+	public Boolean addAsnDetail(AsnDetail asnDetail);
 }

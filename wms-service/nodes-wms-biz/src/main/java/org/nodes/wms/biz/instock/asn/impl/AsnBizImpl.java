@@ -7,14 +7,16 @@ import org.nodes.wms.biz.instock.asn.AsnBiz;
 import org.nodes.wms.biz.instock.asn.modular.AsnFactory;
 import org.nodes.wms.dao.instock.asn.AsnDetailDao;
 import org.nodes.wms.dao.instock.asn.AsnHeaderDao;
+import org.nodes.wms.dao.instock.asn.dto.input.AddAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
-import org.nodes.wms.dao.instock.asn.dto.input.AsnRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailByEditResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,13 +38,6 @@ public class AsnBizImpl implements AsnBiz {
 	}
 
 	@Override
-	public void save(AsnRequest asnRequest) {
-		AsnHeader asnHeader = asnFactory.createAsnHeader(asnRequest);
-		AsnDetail asnDetail = asnFactory.createAsnDetail(asnRequest);
-		asnHeaderDao.addAsnHeaderAndAsnDetail(asnHeader, asnDetail);
-	}
-
-	@Override
 	public AsnDetailResponse getAsnContactDetail(AsnBillIdRequest asnBillIdRequest) {
 		return asnHeaderDao.selectAsnContactDetailByAsnBillId(asnBillIdRequest.getAsnBillId());
 	}
@@ -60,5 +55,20 @@ public class AsnBizImpl implements AsnBiz {
 	@Override
 	public List<Long> getAsnDetailIdList(List<Long> asnBillIdList) {
 		return asnDetailDao.selectAsnDetailIdListByAsnBillId(asnBillIdList);
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public Boolean add(AddAsnBillRequest addAsnBillRequest) {
+		AsnHeader asnHeader = asnFactory.createAsnHeader(addAsnBillRequest);
+		boolean header = asnHeaderDao.insertAsnHeader(asnHeader);
+		AsnDetail asnDetail = asnFactory.createAsnDetail(addAsnBillRequest,asnHeader.getAsnBillId());
+		boolean detail = asnDetailDao.addAsnDetail(asnDetail);
+		return true;
+	}
+
+	@Override
+	public AsnDetailByEditResponse getAsnHeaderAndAsnDetail(AsnBillIdRequest asnBillIdRequest) {
+		return new AsnDetailByEditResponse();
 	}
 }

@@ -32,5 +32,5 @@ public interface AsnHeaderMapper extends BaseMapper<AsnHeader> {
 	 * @param asnBillId
 	 * @return DetailResponse
 	 */
-	AsnDetailResponse selectAsnContactDetailByAsnBillId(Long asnBillId);
+	AsnDetailResponse selectAsnContactDetail(Long asnBillId);
 }

@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.nodes.wms.biz.application.AsnManageBiz;
 import org.nodes.wms.biz.instock.asn.impl.AsnBizImpl;
+import org.nodes.wms.dao.instock.asn.dto.input.AddAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
@@ -19,6 +20,7 @@ import org.springblade.core.test.BladeBootTest;
 import org.springblade.core.test.BladeSpringRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -72,9 +74,30 @@ public class AsnTest {
 	}
 
 	@Test
-	public void DeleteTest(){
+	public void deleteTest(){
 		List<Long> idList = new ArrayList<>();
 		idList.add(1234568L);
 		asnManageBiz.remove(idList);
+	}
+
+	@Test
+	public void insertTest(){
+		AddAsnBillRequest addAsnBillRequest = new AddAsnBillRequest();
+		addAsnBillRequest.setCreateType(10);
+		addAsnBillRequest.setSCode("gys1001");
+		addAsnBillRequest.setSkuName("供应商1001");
+		addAsnBillRequest.setWhId(10000L);
+		addAsnBillRequest.setAsnBillRemark("ASN头备注");
+
+		addAsnBillRequest.setAsnLineNo("1");
+		addAsnBillRequest.setSkuCode("wp10");
+		addAsnBillRequest.setSkuName("物品10号");
+		addAsnBillRequest.setUmCode("kg");
+		addAsnBillRequest.setUmName("千克");
+		addAsnBillRequest.setBaseUmCode("g");
+		addAsnBillRequest.setBaseUmName("克");
+		addAsnBillRequest.setPlanQty(BigDecimal.valueOf(66));
+		addAsnBillRequest.setRemark("ASN明细备注");
+		asnBiz.add(addAsnBillRequest);
 	}
 }
