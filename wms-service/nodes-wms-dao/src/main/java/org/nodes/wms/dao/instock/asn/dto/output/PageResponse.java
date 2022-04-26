@@ -2,13 +2,14 @@ package org.nodes.wms.dao.instock.asn.dto.output;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * ASN单分页结果
  */
 @Data
-public class PageResponse {
+public class PageResponse implements Serializable {
 	/**
 	 * ASN单ID
 	 */

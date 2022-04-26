@@ -5,9 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springblade.core.mp.base.BaseEntity;
-
-import javax.validation.constraints.NotNull;
+import org.springblade.core.tenant.mp.TenantEntity;
 
 /**
  * 供应商实体
@@ -18,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @EqualsAndHashCode
 @TableName("basics_suppliers")
-public class Suppliers extends BaseEntity {
+public class Supplier extends TenantEntity {
 	/**
 	 * 供应商id
 	 */
@@ -28,13 +26,11 @@ public class Suppliers extends BaseEntity {
 	/**
 	 * 供应商编码
 	 */
-	@NotNull(message = "供应商编码不能为空")
 	private String code;
 
 	/**
 	 * 供应商名称
 	 */
-	@NotNull(message = "供应商名称不能为空")
 	private String name;
 
 	/**
@@ -51,9 +47,4 @@ public class Suppliers extends BaseEntity {
 	 * 备注
 	 */
 	private String remark;
-
-	/**
-	 * 租户id
-	 */
-	private Long tenantId;
 }

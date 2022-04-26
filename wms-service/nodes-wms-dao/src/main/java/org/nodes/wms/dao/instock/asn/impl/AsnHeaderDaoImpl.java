@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.wms.dao.instock.asn.AsnDao;
-import org.nodes.wms.dao.instock.asn.dto.input.DeleteRequest;
+import org.nodes.wms.dao.instock.asn.AsnDetailDao;
+import org.nodes.wms.dao.instock.asn.AsnHeaderDao;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
@@ -24,7 +24,11 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class AsnDaoImpl extends BaseServiceImpl<AsnHeaderMapper,AsnHeader> implements AsnDao {
+public class AsnHeaderDaoImpl
+	extends BaseServiceImpl<AsnHeaderMapper,AsnHeader>
+	implements AsnHeaderDao {
+
+	private final AsnDetailDao asnDetailDao;
 
 	private final AsnHeaderMapper asnHeaderRepository;
 
@@ -51,33 +55,14 @@ public class AsnDaoImpl extends BaseServiceImpl<AsnHeaderMapper,AsnHeader> imple
 	}
 
 	@Override
-	public AsnDetailResponse selectAsnDetailByAsnBillId(DeleteRequest deleteRequest) {
-		return asnHeaderRepository.selectAsnDetailById(deleteRequest.getAsnBillId());
+	public AsnDetailResponse selectAsnContactDetailByAsnBillId(Long asnBillId) {
+		return asnHeaderRepository.selectAsnContactDetailByAsnBillId(asnBillId);
 	}
 
 	@Override
-	public Boolean deleteAsnHeaderById(List<Long> id) {
-		return super.deleteLogic(id);
+	public Boolean deleteAsnHeaderById(List<Long> idList) {
+		return super.deleteLogic(idList);
 	}
 
-	@Override
-	public Boolean deleteAsnDetailById(List<Long> id) {
-		return super.deleteLogic(id);
-	}
 
-	@Override
-	public Boolean deleteReceiveHeaderById(List<Long> id) {
-		return super.deleteLogic(id);
-	}
-
-	@Override
-	public Boolean deleteReceiveDetailById(List<Long> id) {
-		return super.deleteLogic(id);
-	}
-
-	@Override
-	public Boolean hasAsnBillIdForReceiveBill(List<Long> asnDetailId) {
-		Integer count = asnHeaderRepository.selectCountForReceiveDetailByAsnDetaillId(asnDetailId);
-		return count > 0;
-	}
 }

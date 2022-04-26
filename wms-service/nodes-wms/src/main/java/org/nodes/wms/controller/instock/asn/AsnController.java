@@ -3,7 +3,9 @@ package org.nodes.wms.controller.instock.asn;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.wms.biz.application.AsnManageBiz;
 import org.nodes.wms.biz.instock.asn.AsnBiz;
+import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.DeleteRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
@@ -11,8 +13,9 @@ import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
-import org.springframework.context.annotation.Primary;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * ASN单管理API
@@ -27,6 +30,8 @@ public class AsnController {
 
 	private final AsnBiz asnBiz;
 
+	private final AsnManageBiz asnManageBiz;
+
 	@PostMapping("/page")
 	public R<Object> page(Query query, @RequestParam PageParamsQuery pageParamsQuery) {
 		Page<PageResponse> asnPage = asnBiz.getPageAsnBill(Condition.getPage(query), pageParamsQuery);
@@ -34,14 +39,14 @@ public class AsnController {
 	}
 
 	@GetMapping("/detail")
-	public R<Object> getAsnDetail(@RequestParam DeleteRequest deleteRequest) {
-		AsnDetailResponse asnDetailResponse = asnBiz.getAsnDetail(deleteRequest);
+	public R<Object> getAsnContactDetail(@Valid @RequestParam AsnBillIdRequest asnBillIdRequest) {
+		AsnDetailResponse asnDetailResponse = asnBiz.getAsnContactDetail(asnBillIdRequest);
 		return R.data(asnDetailResponse);
 	}
 
-	@GetMapping("/delete")
-	public R<Object> remove(@RequestParam DeleteRequest deleteRequest) {
-		boolean delete = asnBiz.removeAsnBillAndReceiveBill(deleteRequest);
+	@GetMapping("/remove")
+	public R<Object> remove(@Valid @RequestParam DeleteRequest deleteRequest) {
+		boolean delete = asnManageBiz.remove(deleteRequest.getAsnBillId());
 		return R.status(delete);
 	}
 }

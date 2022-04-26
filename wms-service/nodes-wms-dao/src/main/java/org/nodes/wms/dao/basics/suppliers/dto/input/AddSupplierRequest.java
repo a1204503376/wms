@@ -1,25 +1,24 @@
 package org.nodes.wms.dao.basics.suppliers.dto.input;
-
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import io.swagger.models.auth.In;
 import lombok.Data;
 
-import java.util.Date;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * 供应商单创建请求对象
  */
 @Data
-public class AddSupplierRequest {
+public class AddSupplierRequest implements Serializable {
 	/**
 	 * 供应商编码
 	 */
+	@NotNull(message = "供应商编码不能为空")
 	private String code;
 
 	/**
 	 * 供应商名称
 	 */
+	@NotNull(message = "供应商名称不能为空")
 	private String name;
 
 	/**

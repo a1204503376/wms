@@ -2,7 +2,6 @@ package org.nodes.wms.dao.instock.asn;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.nodes.wms.dao.instock.asn.dto.input.DeleteRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
@@ -15,7 +14,7 @@ import java.util.List;
  * ASN单据 DAO接口
  */
 @SuppressWarnings("AlibabaClassMustHaveAuthor")
-public interface AsnDao {
+public interface AsnHeaderDao {
 
 	/**
 	 * 分页查询
@@ -37,48 +36,18 @@ public interface AsnDao {
 	/**
 	 * 获取ASN单详细信息
 	 *
-	 * @param deleteRequest: ASN单id
+	 * @param id: ASN单id集合
 	 * @return org.nodes.wms.dao.instock.asn.dto.output.DetailResponse
 	 */
-	AsnDetailResponse selectAsnDetailByAsnBillId(DeleteRequest deleteRequest);
+	AsnDetailResponse selectAsnContactDetailByAsnBillId(Long id);
 
 	/**
 	 * 根据Asn单id 删除ASN单头表信息
 	 *
-	 * @param id: Asn单id
+	 * @param idList: Asn单id集合
 	 * @return java.lang.Integer
 	 */
-	Boolean deleteAsnHeaderById(List<Long> id);
+	Boolean deleteAsnHeaderById(List<Long> idList);
 
-	/**
-	 * 根据Asn单id 删除ASN单详细信息
-	 *
-	 * @param id: Asn单id
-	 * @return boolean
-	 */
-	Boolean deleteAsnDetailById(List<Long> id);
 
-	/**
-	 * 根据Asn单id 删除收货单头表信息
-	 *
-	 * @param id: Asn单id
-	 * @return java.lang.Integer
-	 */
-	Boolean deleteReceiveHeaderById(List<Long> id);
-
-	/**
-	 * 根据Asn单id 删除收货单明细信息
-	 *
-	 * @param id: Asn单id
-	 * @return java.lang.Integer
-	 */
-	Boolean deleteReceiveDetailById(List<Long> id);
-
-	/**
-	 * 查找收货单表中是否有Asn单id的记录
-	 *
-	 * @param asnDetailId:
-	 * @return java.lang.Boolean
-	 */
-	Boolean hasAsnBillIdForReceiveBill(List<Long> asnDetailId);
 }

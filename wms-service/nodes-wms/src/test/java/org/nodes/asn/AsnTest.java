@@ -7,8 +7,9 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.nodes.wms.biz.application.AsnManageBiz;
 import org.nodes.wms.biz.instock.asn.impl.AsnBizImpl;
-import org.nodes.wms.dao.instock.asn.dto.input.DeleteRequest;
+import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
@@ -34,8 +35,11 @@ public class AsnTest {
 	@Autowired
 	private AsnBizImpl asnBiz;
 
+	@Autowired
+	private AsnManageBiz asnManageBiz;
+
 	@Test
-	public void test022() throws ParseException {
+	public void selectTest() throws ParseException {
 		IPage<?> page = new Page<>(1, 10);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		PageParamsQuery pageParamsQuery = new PageParamsQuery();
@@ -60,12 +64,17 @@ public class AsnTest {
 
 	@Test
 	public void getAsnDetailByIdTest(){
-		DeleteRequest deleteRequest = new DeleteRequest();
-		List<Long> idList = new ArrayList<>();
-		idList.add(123456L);
-		deleteRequest.setAsnBillId(idList);
-		AsnDetailResponse asnDetailResponse = asnBiz.getAsnDetail(deleteRequest);
+		AsnBillIdRequest asnBillIdRequest = new AsnBillIdRequest();
+		asnBillIdRequest.setAsnBillId(123456789L);
+		AsnDetailResponse asnDetailResponse = asnBiz.getAsnContactDetail(asnBillIdRequest);
 		System.out.println(asnDetailResponse);
 //		Assertions.assertEquals(1,asnDetailResponse);
+	}
+
+	@Test
+	public void DeleteTest(){
+		List<Long> idList = new ArrayList<>();
+		idList.add(1234568L);
+		asnManageBiz.remove(idList);
 	}
 }

@@ -1,10 +1,10 @@
 package org.nodes.wms.dao.instock.asn.dto.output;
 
 import lombok.Data;
-import lombok.ToString;
 import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * @date 2022-04-22 14:03
  **/
 @Data
-public class AsnDetailResponse {
+public class AsnDetailResponse implements Serializable {
 
 	/**
 	 * 主键
