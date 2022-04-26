@@ -3,7 +3,8 @@ package org.nodes.wms.biz.common.log.impl;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.common.log.impl.modular.LogFactory;
-import org.nodes.wms.dao.common.log.LogDao;
+import org.nodes.wms.dao.common.log.LogActionDao;
+import org.nodes.wms.dao.common.log.LogMessageDao;
 import org.nodes.wms.dao.common.log.dto.AuditLogRequest;
 import org.nodes.wms.dao.common.log.dto.NoticeMessageRequest;
 import org.nodes.wms.dao.common.log.entities.LogAction;
@@ -24,8 +25,8 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class LogBizImpl implements LogBiz {
 	private final LogFactory logFactory;
-	private final LogDao logDao;
-
+	private final LogMessageDao logMessageDao;
+    private final LogActionDao actionDao;
 	/**
 	 * 实现通知日志智能存储
 	 *
@@ -37,7 +38,7 @@ public class LogBizImpl implements LogBiz {
 			noticeMessageRequest.setExpirationDate(DateUtil.plusDays(new Date(), 7));
 		}
 		Collection<LogMessage> logMessage = logFactory.createLogMessage(noticeMessageRequest);
-		logDao.addLogMessage(logMessage);
+		logMessageDao.addLogMessage(logMessage);
 	}
 
 	/**
@@ -49,7 +50,7 @@ public class LogBizImpl implements LogBiz {
 	@Override
 	public void auditLog(AuditLogType type, String log) {
 		LogAction logAction = logFactory.createLogAction(type, log);
-		logDao.addLogAction(logAction);
+		actionDao.addLogAction(logAction);
 	}
 
 	/**
@@ -63,7 +64,7 @@ public class LogBizImpl implements LogBiz {
 	@Override
 	public void auditLog(AuditLogType type, Long billId, String billNo, String log) {
 		LogAction logAction = logFactory.createLogAction(type, billId, billNo, log);
-		logDao.addLogAction(logAction);
+		actionDao.addLogAction(logAction);
 	}
 
 	/**
@@ -74,7 +75,7 @@ public class LogBizImpl implements LogBiz {
 	@Override
 	public void auditLog(AuditLogRequest auditLogRequest) {
 		LogAction logAction = logFactory.createLogAction(auditLogRequest);
-		logDao.addLogAction(logAction);
+		actionDao.addLogAction(logAction);
 	}
 
 }

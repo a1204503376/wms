@@ -1,7 +1,7 @@
 package org.nodes.wms.dao.common.log.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.wms.dao.common.log.LogDao;
+import org.nodes.wms.dao.common.log.LogMessageDao;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.entities.LogMessage;
 import org.nodes.wms.dao.common.log.mapper.LogActionMapper;
@@ -19,9 +19,7 @@ import java.util.Collection;
 @Repository
 @Service
 @RequiredArgsConstructor
-public class LogDaoImpl extends BaseServiceImpl<LogMessageMapper, LogMessage> implements LogDao {
-
-	private final LogActionMapper logActionMapper;
+public class LogMessageDaoImpl extends BaseServiceImpl<LogMessageMapper, LogMessage> implements LogMessageDao {
 
 	/**
 	 * 添加LogMessage日志
@@ -33,13 +31,4 @@ public class LogDaoImpl extends BaseServiceImpl<LogMessageMapper, LogMessage> im
 		return super.saveBatch(messageCollection);
 	}
 
-	/**
-	 * 添加审计日志添加对象
-	 * @param logAction 日志审批对象
-	 * @return 是否成功
-	 */
-	@Override
-	public Boolean addLogAction(LogAction logAction) {
-		return logActionMapper.insert(logAction)>0;
-	}
 }
