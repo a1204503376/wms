@@ -23,6 +23,8 @@ import java.util.Date;
 public class NoGeneraRulesUtil {
 	private final NumberFormat numberFormat = NumberFormat.getNumberInstance();
 	private static final String DEFAULT_RULE = "YYYYMMXXXXX";
+	private static final String DEFAULT_PROJECT_NAME = "WMS";
+	private static final String SERIAL_PLACEHOLDER = "X";
 
 	private RedisUtil redisUtil;
 
@@ -35,12 +37,19 @@ public class NoGeneraRulesUtil {
 	 * @return 编码
 	 */
 	public String generateCode(String projectName, String prefix, String rule) {
-		//1生成 key WMS:NO:A20220422
-		String redisKey = createRedisKey(projectName, prefix, rule);
-		//2获取 编号 1
-		Long serialNo = nextSerialNo(redisKey);
-		//根据规则补0 返回编码
-		return generateCodeFormat(redisKey, serialNo, rule);
+		if (Func.isEmpty(prefix)){
+			throw new ServiceException("编码生成失败,编码前缀不能为空");
+		}
+		if (Func.isEmpty(projectName)){
+			projectName = DEFAULT_PROJECT_NAME;
+		}
+		if (Func.isEmpty(rule)){
+			rule = DEFAULT_RULE;
+		}
+
+		String noSubject = generateNoSubject(prefix, rule);
+		Long serialNo = nextSerialNo(projectName, noSubject);
+		return generateCodeFormat(noSubject, serialNo, rule);
 	}
 
 
@@ -58,68 +67,50 @@ public class NoGeneraRulesUtil {
 	}
 
 	/**
-	 * 生成RedisKey
-	 *
-	 * @param projectName 项目名
-	 * @param prefix      前缀
-	 * @param rule        规则
-	 * @return RedisKey
+	 * 获取编码的主体部分（由前缀和日期组成）
+	 * @return
 	 */
-	private String createRedisKey(String projectName, String prefix, String rule) {
-		String dateString;
-		//判断项目名称是否存在，不存在则使用默认的项目名
-		if (!Func.isNotEmpty(projectName)) {
-			projectName = "WMS";
+	private String generateNoSubject(String prefix, String rule){
+		if (rule.indexOf(SERIAL_PLACEHOLDER) < 0){
+			throw new ServiceException("编码生成失败，编码规则不符合规定，要求必须存在序列且序号是在编码的结束部分");
 		}
-		//判断规则是否存在，不存在则使用默认的规则
-		if (!Func.isNotEmpty(rule)) {
-			rule = DEFAULT_RULE;
-		}
-		//获取日期格式规则
-		String rules = rule.substring(0, rule.indexOf("X"));
-		//判断当前规则生成对应的时间字符串
-		dateString = DateUtil.format(new Date(), rules);
-		//生成字符串模板Key  例如WMS:NO:A20220422
-		return projectName + ":NO:" + prefix + dateString;
 
+		//获取日期格式规则
+		String rules = rule.substring(0, rule.indexOf(SERIAL_PLACEHOLDER));
+		//判断当前规则生成对应的时间字符串
+		String dateString = DateUtil.format(new Date(), rules);
+		return String.format("%s%s", prefix, dateString);
 	}
 
 	/**
-	 * 下一个Redis里面存储的值,不存在则创建，默认为一。存在则加一
-	 * @param key Redis的键
-	 * @return Redis存储的数据
+	 * 同一类型的编码序号递增
+	 * @param projectName
+	 * @param noSubject
+	 * @return
 	 */
-	private Long nextSerialNo(String key) {
-		try {
-			boolean exist = redisUtil.hasKey(key);
-			if (!exist) {
-				redisUtil.set(key, "1");
-			} else {
-				redisUtil.incr(key, 1L);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return Long.parseLong(redisUtil.get(key).toString());
+	private long nextSerialNo(String projectName, String noSubject) {
+		String redisKey = String.format("%s:NO:%s", projectName, noSubject);
+
+		return redisUtil.incr(redisKey, 1L);
 	}
 
-	private String generateCodeFormat(String key, Long serialNo, String rule) {
-		int ruleLenghts = rule.substring(rule.indexOf("X")).length();
-		if (ruleLenghts == serialNo.toString().length()) {
-			return key + serialNo;
-		} else if (ruleLenghts < serialNo.toString().length()) {
-			throw new ServiceException("超出格式限制");
-		}
-		//设置补0规则去掉,分割
+	/**
+	 * 生成编码，编码格式：编码前缀（固定） + 日期 + 序号
+	 * @param noSubject 编码主体
+	 * @param serialNo 序号
+	 * @param rule 编码规则
+	 * @return
+	 */
+	private String generateCodeFormat(String noSubject, Long serialNo, String rule) {
+		// 根据规则解析序号的长度
+		int legthOfSerial = rule.substring(rule.indexOf("X")).length();
+		// 格式化序号
+		numberFormat.setMinimumIntegerDigits(legthOfSerial);
 		numberFormat.setGroupingUsed(false);
-		//获取传过来的规则后面有几个X
-		int length = ruleLenghts - serialNo.toString().length();
-		//把要补全0的个数传输进框架自带的补0方法里
-		numberFormat.setMinimumIntegerDigits(length);
-		//生成要补全0的字符串
-		String zeroFill = numberFormat.format(0L);
-		return key + zeroFill + serialNo;
+		String serialFormat = numberFormat.format(serialNo);
+		// 生成编码
+		String result = String.format("%s%s", noSubject, serialFormat);
+		return result;
 	}
-
 
 }
