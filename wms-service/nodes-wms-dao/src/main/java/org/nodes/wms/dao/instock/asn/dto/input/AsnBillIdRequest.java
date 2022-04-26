@@ -4,20 +4,15 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.List;
 
 /**
- * Asn单请求参数ID
+ * Asn单主键id 参数类
  *
  * @author 彭永程
- * @date 2022-04-22 14:20
+ * @date 2022-04-25 14:44
  **/
 @Data
-public class DeleteRequest implements Serializable {
-
-	/**
-	 * 主键id
-	 */
+public class AsnBillIdRequest implements Serializable {
 	@NotNull(message = "Asn单id不能为空")
-	private List<Long> asnBillId;
+	private Long asnBillId;
 }

@@ -11,8 +11,6 @@ import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 /**
  * 收货单头表 Mapper 接口
  */
@@ -29,10 +27,10 @@ public interface AsnHeaderMapper extends BaseMapper<AsnHeader> {
 	Page<PageResponse> selectPageAsnBill(IPage<?> page, @Param(Constants.WRAPPER) Wrapper<?> wrapper);
 
 	/**
-	 * 获取ASN单和对应的收货单信息
+	 * 获取ASN单信息和对应的收货单信息
 	 *
-	 * @param id: ASN单id
+	 * @param asnBillId
 	 * @return DetailResponse
 	 */
-	AsnDetailResponse selectAsnContactDetailByAsnBillId(List<Long> id);
+	AsnDetailResponse selectAsnContactDetailByAsnBillId(Long asnBillId);
 }

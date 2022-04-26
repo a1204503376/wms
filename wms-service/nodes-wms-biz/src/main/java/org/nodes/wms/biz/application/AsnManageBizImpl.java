@@ -24,7 +24,7 @@ public class AsnManageBizImpl implements AsnManageBiz {
 		// 1.删除ASN头表
 		Boolean delAsnBillFlag = asnBiz.removeAsnBillById(asnBillIdList);
 		// 2.删除ASN明细表
-		Boolean delAsnDetailFlag = asnBiz.removeAsnDetailById(asnBillIdList);
+		Boolean delAsnDetailFlag = asnBiz.removeAsnDetailByAsnBillId(asnBillIdList);
 		// 3.删除收货单头表 (传asnBillIdList)
 
 		// 4.根据asnBillIdList查询到asn明细单传asnDetailIdList

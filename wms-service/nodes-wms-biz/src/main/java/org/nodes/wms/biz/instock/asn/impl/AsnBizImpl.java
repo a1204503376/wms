@@ -7,8 +7,8 @@ import org.nodes.wms.biz.instock.asn.AsnBiz;
 import org.nodes.wms.biz.instock.asn.modular.AsnFactory;
 import org.nodes.wms.dao.instock.asn.AsnDetailDao;
 import org.nodes.wms.dao.instock.asn.AsnHeaderDao;
+import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnRequest;
-import org.nodes.wms.dao.instock.asn.dto.input.DeleteRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
@@ -26,7 +26,6 @@ import java.util.List;
 public class AsnBizImpl implements AsnBiz {
 
 	private final AsnHeaderDao asnHeaderDao;
-
 	private final AsnDetailDao asnDetailDao;
 	private final AsnFactory asnFactory;
 
@@ -44,8 +43,8 @@ public class AsnBizImpl implements AsnBiz {
 	}
 
 	@Override
-	public AsnDetailResponse getAsnContactDetail(DeleteRequest deleteRequest) {
-		return asnHeaderDao.selectAsnContactDetailByAsnBillId(deleteRequest.getAsnBillId());
+	public AsnDetailResponse getAsnContactDetail(AsnBillIdRequest asnBillIdRequest) {
+		return asnHeaderDao.selectAsnContactDetailByAsnBillId(asnBillIdRequest.getAsnBillId());
 	}
 
 	@Override
@@ -54,8 +53,8 @@ public class AsnBizImpl implements AsnBiz {
 	}
 
 	@Override
-	public Boolean removeAsnDetailById(List<Long> asnBillIdList) {
-		return asnHeaderDao.deleteAsnDetailByAsnBillId(asnBillIdList);
+	public Boolean removeAsnDetailByAsnBillId(List<Long> asnBillIdList) {
+		return asnDetailDao.deleteAsnDetailByAsnBillId(asnBillIdList);
 	}
 
 	@Override

@@ -55,8 +55,8 @@ public class AsnHeaderDaoImpl
 	}
 
 	@Override
-	public AsnDetailResponse selectAsnContactDetailByAsnBillId(List<Long> idList) {
-		return asnHeaderRepository.selectAsnContactDetailByAsnBillId(idList);
+	public AsnDetailResponse selectAsnContactDetailByAsnBillId(Long asnBillId) {
+		return asnHeaderRepository.selectAsnContactDetailByAsnBillId(asnBillId);
 	}
 
 	@Override
@@ -64,8 +64,5 @@ public class AsnHeaderDaoImpl
 		return super.deleteLogic(idList);
 	}
 
-	@Override
-	public Boolean deleteAsnDetailByAsnBillId(List<Long> idList) {
-		return super.deleteLogic(idList);
-	}
+
 }

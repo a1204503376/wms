@@ -59,9 +59,6 @@
                 LEFT JOIN receive_header r ON h.asn_bill_id = r.asn_bill_id
         WHERE h.asn_bill_id = #{id}
     </select>
-    <select id="selectCountForReceiveDetailByAsnDetaillId" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM receive_detail WHERE asn_detail_id = #{asnDetailId}
-    </select>
 
     <resultMap id="asnDetailMap" type="org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse">
         <id column="asn_bill_id" property="asnBillId"/>
