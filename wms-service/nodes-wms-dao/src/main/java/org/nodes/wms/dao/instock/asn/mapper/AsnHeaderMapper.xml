@@ -23,7 +23,7 @@
 
     </select>
 
-    <select id="selectAsnContactDetailByAsnBillId"
+    <select id="selectAsnContactDetail"
             resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse"
             resultMap="asnDetailMap">
         SELECT

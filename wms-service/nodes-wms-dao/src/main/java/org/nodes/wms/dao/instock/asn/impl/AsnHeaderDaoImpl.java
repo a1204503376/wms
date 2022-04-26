@@ -10,7 +10,6 @@ import org.nodes.wms.dao.instock.asn.AsnHeaderDao;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
-import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.nodes.wms.dao.instock.asn.mapper.AsnHeaderMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -50,13 +49,13 @@ public class AsnHeaderDaoImpl
 	}
 
 	@Override
-	public void addAsnHeaderAndAsnDetail(AsnHeader asnHeader, AsnDetail asnDetail) {
-
+	public Boolean insertAsnHeader(AsnHeader asnHeader) {
+		return super.save(asnHeader);
 	}
 
 	@Override
 	public AsnDetailResponse selectAsnContactDetailByAsnBillId(Long asnBillId) {
-		return asnHeaderRepository.selectAsnContactDetailByAsnBillId(asnBillId);
+		return asnHeaderRepository.selectAsnContactDetail(asnBillId);
 	}
 
 	@Override
