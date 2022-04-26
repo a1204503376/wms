@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springblade.core.mp.base.BaseEntity;
+import org.springblade.core.tenant.mp.TenantEntity;
 
 /**
  * 供应商实体
@@ -16,7 +16,7 @@ import org.springblade.core.mp.base.BaseEntity;
 @Data
 @EqualsAndHashCode
 @TableName("basics_suppliers")
-public class Supplier extends BaseEntity {
+public class Supplier extends TenantEntity {
 	/**
 	 * 供应商id
 	 */

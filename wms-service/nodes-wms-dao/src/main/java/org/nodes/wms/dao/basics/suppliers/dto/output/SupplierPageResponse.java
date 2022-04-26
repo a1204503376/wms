@@ -1,16 +1,15 @@
 package org.nodes.wms.dao.basics.suppliers.dto.output;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * ASN单分页结果
  */
 @Data
-public class SupplierPageResponse {
+public class SupplierPageResponse implements Serializable {
 	/**
 	 * 供应商id
 	 */

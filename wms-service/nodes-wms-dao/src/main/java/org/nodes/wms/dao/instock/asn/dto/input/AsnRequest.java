@@ -2,13 +2,14 @@ package org.nodes.wms.dao.instock.asn.dto.input;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * ASN单创建请求对象
  */
 @Data
-public class AsnRequest {
+public class AsnRequest implements Serializable {
 
 	/**
 	 * asn单据编码

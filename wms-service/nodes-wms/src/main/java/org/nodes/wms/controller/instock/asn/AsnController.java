@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.application.AsnManageBiz;
 import org.nodes.wms.biz.instock.asn.AsnBiz;
+import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.DeleteRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
@@ -13,6 +14,8 @@ import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * ASN单管理API
@@ -36,13 +39,13 @@ public class AsnController {
 	}
 
 	@GetMapping("/detail")
-	public R<Object> getAsnContactDetail(@RequestParam DeleteRequest deleteRequest) {
-		AsnDetailResponse asnDetailResponse = asnBiz.getAsnContactDetail(deleteRequest);
+	public R<Object> getAsnContactDetail(@Valid @RequestParam AsnBillIdRequest asnBillIdRequest) {
+		AsnDetailResponse asnDetailResponse = asnBiz.getAsnContactDetail(asnBillIdRequest);
 		return R.data(asnDetailResponse);
 	}
 
-	@GetMapping("/delete")
-	public R<Object> remove(@RequestParam DeleteRequest deleteRequest) {
+	@GetMapping("/remove")
+	public R<Object> remove(@Valid @RequestParam DeleteRequest deleteRequest) {
 		boolean delete = asnManageBiz.remove(deleteRequest.getAsnBillId());
 		return R.status(delete);
 	}

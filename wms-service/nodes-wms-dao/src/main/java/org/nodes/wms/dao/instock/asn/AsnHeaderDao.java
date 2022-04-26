@@ -36,10 +36,10 @@ public interface AsnHeaderDao {
 	/**
 	 * 获取ASN单详细信息
 	 *
-	 * @param idList: ASN单id集合
+	 * @param id: ASN单id集合
 	 * @return org.nodes.wms.dao.instock.asn.dto.output.DetailResponse
 	 */
-	AsnDetailResponse selectAsnContactDetailByAsnBillId(List<Long> idList);
+	AsnDetailResponse selectAsnContactDetailByAsnBillId(Long id);
 
 	/**
 	 * 根据Asn单id 删除ASN单头表信息
@@ -49,12 +49,5 @@ public interface AsnHeaderDao {
 	 */
 	Boolean deleteAsnHeaderById(List<Long> idList);
 
-	/**
-	 * 根据Asn单id 删除ASN单详细信息
-	 *
-	 * @param idList: Asn单id集合
-	 * @return boolean
-	 */
-	Boolean deleteAsnDetailByAsnBillId(List<Long> idList);
 
 }

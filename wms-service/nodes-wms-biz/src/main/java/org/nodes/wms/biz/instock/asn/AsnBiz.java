@@ -2,8 +2,8 @@ package org.nodes.wms.biz.instock.asn;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnRequest;
-import org.nodes.wms.dao.instock.asn.dto.input.DeleteRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
@@ -32,10 +32,10 @@ public interface AsnBiz {
 	/**
 	 * 获取ASN头表、ASN明细信息
 	 *
-	 * @param deleteRequest:
+	 * @param asnBillIdRequest:
 	 * @return org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse
 	 */
-	AsnDetailResponse getAsnContactDetail(DeleteRequest deleteRequest);
+	AsnDetailResponse getAsnContactDetail(AsnBillIdRequest asnBillIdRequest);
 
 	/**
 	 * 根据Asn单id删除Asn单头表信息
@@ -48,10 +48,10 @@ public interface AsnBiz {
 	/**
 	 * 根据Asn单id删除Asn单明细信息
 	 *
-	 * @param asnBillIdList: Asn单id
+	 * @param asnBillIdList: Asn单id集合
 	 * @return java.lang.Boolean
 	 */
-	Boolean removeAsnDetailById(List<Long> asnBillIdList);
+	Boolean removeAsnDetailByAsnBillId(List<Long> asnBillIdList);
 
 	/**
 	 * 根据Asn单id查询Asn单明细id

@@ -8,6 +8,15 @@ import java.util.List;
 public interface AsnDetailDao {
 
 	/**
+	 * 根据Asn单id 删除ASN单详细信息
+	 *
+	 * @param asnBillIdList: Asn单id集合
+	 * @return boolean
+	 */
+	Boolean deleteAsnDetailByAsnBillId(List<Long> asnBillIdList);
+
+
+	/**
 	 * 根据Asn单id查询Asn单明细id集合
 	 *
 	 * @param asnBillIdList:
