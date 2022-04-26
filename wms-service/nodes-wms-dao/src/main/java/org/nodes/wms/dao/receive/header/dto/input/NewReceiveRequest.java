@@ -10,6 +10,6 @@ import java.util.List;
  **/
 @Data
 public class NewReceiveRequest {
-	private NewReceiveRequest newReceiveRequest;
+	private NewHeaderRequest newHeaderRequest;
 	private List<NewDetailRequest> newDetailRequests;
 }

@@ -3,7 +3,9 @@ package org.nodes.wms.biz.receive.header.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.BigDecimalUtil;
+import org.nodes.wms.biz.common.utils.NoGeneratorUtil;
 import org.nodes.wms.biz.receive.header.ReceiveBiz;
+import org.nodes.wms.biz.receive.header.modular.ReceiveFactory;
 import org.nodes.wms.dao.receive.detail.DetailDao;
 import org.nodes.wms.dao.receive.detail.dto.input.DetailRequest;
 import org.nodes.wms.dao.receive.detail.dto.output.DetailResponse;
@@ -12,6 +14,7 @@ import org.nodes.wms.dao.receive.header.dto.input.HeaderPageQuery;
 import org.nodes.wms.dao.receive.header.dto.input.NewReceiveRequest;
 import org.nodes.wms.dao.receive.header.dto.output.HeaderDetailResponse;
 import org.nodes.wms.dao.receive.header.dto.output.HeaderResponse;
+import org.nodes.wms.dao.receive.header.entities.ReceiveHeader;
 import org.nodes.wms.dao.receive.log.LogDao;
 import org.nodes.wms.dao.receive.log.dto.output.LogResponse;
 import org.springblade.core.log.exception.ServiceException;
@@ -32,6 +35,8 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	private  final HeaderDao headerDao;
 	private  final DetailDao detailDao;
 	private  final LogDao logDao;
+	private  final NoGeneratorUtil noGeneratorUtil;
+	private final ReceiveFactory receiveFactory;
 	@Override
 	public IPage<HeaderResponse> getPage(HeaderPageQuery headerPageQuery, Query query) {
 		IPage<HeaderResponse> page = Condition.getPage(query);
@@ -85,7 +90,12 @@ public class ReceiveBizImpl implements ReceiveBiz {
 
 	@Override
 	public boolean newReceive(NewReceiveRequest newReceiveRequest) {
+		//创建保存实体类
+        ReceiveHeader receiveHeader = receiveFactory.createReceiveHeader(newReceiveRequest.getNewHeaderRequest());
+        //设置收货单编码
+        receiveHeader.setReceiveNo(noGeneratorUtil.createReceiveBillNo());
+        headerDao.insert(receiveHeader);
 
-		return false;
+		return true;
 	}
 }

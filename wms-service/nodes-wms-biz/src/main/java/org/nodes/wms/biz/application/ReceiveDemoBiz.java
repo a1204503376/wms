@@ -5,7 +5,7 @@ import org.nodes.wms.dao.application.dto.input.ReceiveForAsnRequest;
 /**
  * 收货管理
  */
-public interface ReceiveBiz {
+public interface ReceiveDemoBiz {
 
 	/**
 	 * 手持收货信息采集

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class ReceiveBizImpl implements ReceiveBiz {
+public class ReceiveDemoBizImpl implements ReceiveDemoBiz {
 
 	private final AsnBiz asnBiz;
 //	private final OutBiz outBiz;

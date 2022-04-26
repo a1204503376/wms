@@ -40,7 +40,7 @@ public class ReceiveController {
 	@ApiLog("收货管理-新增")
 	@PostMapping("/new")
 	public R<Boolean> newReceive(@Valid @RequestParam NewReceiveRequest newReceiveRequest) {
-         return    R.status(receiveBiz.newReceive(newReceiveRequest));
+         return  R.status(receiveBiz.newReceive(newReceiveRequest));
 	}
 
 

@@ -47,4 +47,9 @@ public class HeaderDaoImpl  extends BaseServiceImpl<HeaderMapper,ReceiveHeader> 
 		return super.update(lambdaQueryWrapper);
 	}
 
+	@Override
+	public boolean insert(ReceiveHeader receiveHeader) {
+		return super.save(receiveHeader);
+	}
+
 }
