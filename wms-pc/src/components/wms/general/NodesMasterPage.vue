@@ -21,24 +21,24 @@
         <div v-if="expandMore">
             <slot name="expandSearch"></slot>
         </div>
-        <el-row>
-            <el-col :lg="18" :md="16" :xl="21">
+        <el-row style="margin-bottom: 5px;" type="flex">
+            <el-col :lg="18" :md="16" :xl="21" style="margin-bottom: 0;">
                 <div class="d-div-left">
                     <slot name="batchBtn"></slot>
                 </div>
             </el-col>
-            <el-col :lg="6" :md="8" :xl="3">
+            <el-col :lg="6" :md="8" :xl="3" style="margin-bottom: 0;">
                 <div class="d-div-right">
                     <slot name="tableTool"></slot>
                 </div>
             </el-col>
         </el-row>
-        <el-row type="flex">
+        <el-row style="margin-top: 0;margin-bottom: 0;" type="flex">
             <el-col :span="24">
                 <slot name="table"></slot>
             </el-col>
         </el-row>
-        <el-row justify="end" type="flex">
+        <el-row justify="end" type="flex" style="margin-top: 0;margin-bottom: 0;">
             <slot name="page"></slot>
         </el-row>
     </basic-container>
@@ -84,8 +84,10 @@ export default {
             this.$nextTick(() => {
                 let height;
                 if (this.config.showPage) {
+                    console.log('innerHeight', window.innerHeight);
                     height = window.innerHeight - 100;
                 } else {
+                    console.log('notPage', window.innerHeight);
                     height = window.innerHeight - 50;
                 }
                 document.getElementById('container').style.height = `${height}px`;

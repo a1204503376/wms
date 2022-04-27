@@ -79,7 +79,7 @@
                 </el-row>
             </template>
             <template v-slot:searchBtn>
-                <el-button type="primary" @click="onSubmit">查找123</el-button>
+                <el-button type="primary" @click="onSubmit">查找</el-button>
                 <el-button>重置</el-button>
             </template>
             <template v-slot:batchBtn>
@@ -133,7 +133,6 @@
                     highlight-current-row
                     show-summary
                     size="mini"
-                    style="width: 100%"
                     @sort-change="onSortChange">
                     <el-table-column
                         fixed
@@ -204,7 +203,8 @@ export default {
     data() {
         return {
             masterConfig: {
-                showExpandBtn: true
+                showExpandBtn: true,
+                showPage: true
             },
             searchForm: {
                 skuCode: '',
@@ -311,11 +311,11 @@ export default {
     created() {
         console.log('我是子类');
     },
-    methods:{
-        onSubmit(){
+    methods: {
+        onSubmit() {
 
         },
-        onRemove(){
+        onRemove() {
             console.log('批量删除了');
         },
         getSummaries(param) {
