@@ -111,7 +111,7 @@
                     :current-page="page.currentPage"
                     :hide-on-single-page="hideOnSinglePage"
                     :page-size="page.pageSize"
-                    :page-sizes="[3,20, 50, 100]"
+                    :page-sizes="[20, 50, 100]"
                     :total="page.total"
                     background
                     layout="total, sizes, prev, pager, next, jumper"
@@ -205,13 +205,6 @@ export default {
                         label: '更新时间'
                     },
                 ]
-            },
-            page: {
-                total: 0,
-                pageSize: 3,
-                currentPage: 1,
-                ascs: "", //正序字段集合
-                descs: "", //倒序字段集合
             },
         }
     },
