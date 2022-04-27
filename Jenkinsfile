@@ -1,19 +1,19 @@
 pipeline {
     agent any
     tools {
-        maven 'maven3'
+        maven 'mvn3'
         jdk 'jdk8'
-        nodejs 'nodesjs10.23'
+        nodejs 'node10'
     }
     stages {
         stage('checkout') {
             steps {
-                git credentialsId: 'git212', url: 'http://admin@114.215.129.212:23001/r/wms3.1.git'
+                git credentialsId: 'localhost', url: 'ssh://liumh@114.215.129.212/wms3.3_dev.git'
             }
         }
-        stage('buildWmsUI') {
+        stage('buildWmsPC') {
             steps {
-                dir('SourceCode/WmsUI') {
+                dir('wms-pc') {
                     sh 'npm config set registry https://registry.npm.taobao.org'
                     sh 'npm config get registry'
                     sh 'npm install'
@@ -21,19 +21,10 @@ pipeline {
                 }
             }
         }
-        stage('buildWmsPda') {
-            steps {
-                dir('SourceCode/WmsPda') {
-                    sh 'npm config set registry https://registry.npm.taobao.org'
-                    sh 'npm config get registry'
-                    sh 'npm install'
-                    sh 'npm run build'
-                }
-            }
-        }
+        
         stage('buildService') {
             steps {
-                dir('SourceCode/nodes-tool') {
+                dir('wms-service') {
                     sh 'mvn clean install package -Dmaven.test.skip=true'
                 }
             }
