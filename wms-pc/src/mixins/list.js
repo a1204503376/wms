@@ -22,8 +22,8 @@ export const listMixin = {
             },
             page: {
                 total: 0,
-                pageSize: 20,
-                currentPage: 1,
+                size: 20,
+                current: 1,
                 ascs: "", //正序字段集合
                 descs: "", //倒序字段集合
             },
@@ -67,11 +67,11 @@ export const listMixin = {
             }
         },
         handleSizeChange(val) {
-            this.page.pageSize = val;
+            this.page.size = val;
             this.getTableData();
         },
         handleCurrentChange(val) {
-            this.page.currentPage = val;
+            this.page.current = val;
             this.getTableData();
         },
         setColumnList(columnList, data, flag) {
