@@ -1,0 +1,18 @@
+$width120: 120px;
+$width170: 170px;
+.d-input {
+    width: $width120;
+    margin-bottom: 0;
+}
+
+.d-select {
+    width: $width170;
+}
+
+.d-div-left {
+    float: left;
+}
+
+.d-div-right {
+    float: right;
+}

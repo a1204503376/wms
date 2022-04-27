@@ -183,9 +183,9 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 		if (Func.isNotEmpty(ids)) {
 			List<Long> idList = Arrays.stream(ids.split(",")).map(Long::valueOf).collect(Collectors.toList());
 			List<String> billStateList = new ArrayList<>();
-			billStateList.add(AsnBillStateEnum.EXECUTING.getIndex() + "");
-			billStateList.add(AsnBillStateEnum.CREATE.getIndex() + "");
-			billStateList.add(AsnBillStateEnum.PART.getIndex() + "");
+			billStateList.add(AsnBillStateEnum.EXECUTING.getCode() + "");
+			billStateList.add(AsnBillStateEnum.CREATE.getCode() + "");
+			billStateList.add(AsnBillStateEnum.PART.getCode() + "");
 
 			if (Func.isNotEmpty(idList)) {
 				for (Long id : idList) {
@@ -363,7 +363,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 			throw new ServiceException("货主不存在或者已删除");
 		}
 		asnHeader.setOwnerCode(owner.getOwnerCode());
-		asnHeader.setAsnBillState(AsnBillStateEnum.CREATE.getIndex());//单据状态
+		asnHeader.setAsnBillState(AsnBillStateEnum.CREATE.getCode());//单据状态
 
 		//上位系统单据唯一标识
 		if (Func.isEmpty(asnHeader.getBillKey())) {
@@ -387,7 +387,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 				.eq(AsnHeader::getAsnBillNo, asnHeader.getAsnBillNo())) > 0) {
 				asnHeader.setAsnBillNo(AsnCache.getAsnBillNo());
 			}
-			asnHeader.setAsnBillState(AsnBillStateEnum.CREATE.getIndex());
+			asnHeader.setAsnBillState(AsnBillStateEnum.CREATE.getCode());
 			asnHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());
 		}
 		if (Func.isEmpty(asnHeader.getAsnBillNo())) {
@@ -398,7 +398,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 				.eq(StockDetail::getSoBillId, asnHeader.getAsnBillId())
 				.gt(StockDetail::getUnreceivedQty, BigDecimal.ZERO));
 			//保存明细表
-			if (AsnBillStateEnum.CREATE.getIndex().equals(asnHeader.getAsnBillState())) {
+			if (AsnBillStateEnum.CREATE.getCode().equals(asnHeader.getAsnBillState())) {
 				List<AsnDetailDTO> detailList = asnHeader.getAsnDetailList();
 				for (AsnDetailDTO detail : detailList) {
 					detail.setAsnBillId(asnHeader.getAsnBillId());
@@ -437,7 +437,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 			throw new ServiceException("货主不存在或者已删除");
 		}
 		asnHeader.setOwnerCode(owner.getOwnerCode());
-		asnHeader.setAsnBillState(AsnBillStateEnum.CREATE.getIndex());//单据状态
+		asnHeader.setAsnBillState(AsnBillStateEnum.CREATE.getCode());//单据状态
 
 		//上位系统单据唯一标识
 		if (Func.isEmpty(asnHeader.getBillKey())) {
@@ -461,7 +461,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 				.eq(AsnHeader::getAsnBillNo, asnHeader.getAsnBillNo())) > 0) {
 				asnHeader.setAsnBillNo(AsnCache.getAsnBillNo());
 			}
-			asnHeader.setAsnBillState(AsnBillStateEnum.CREATE.getIndex());
+			asnHeader.setAsnBillState(AsnBillStateEnum.CREATE.getCode());
 			asnHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());
 		}
 		if (Func.isEmpty(asnHeader.getAsnBillNo())) {
@@ -469,7 +469,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 		}
 		if (super.saveOrUpdate(asnHeader)) {
 			//保存明细表
-			if (AsnBillStateEnum.CREATE.getIndex().equals(asnHeader.getAsnBillState())) {
+			if (AsnBillStateEnum.CREATE.getCode().equals(asnHeader.getAsnBillState())) {
 				List<AsnDetailDTO> detailList = asnHeader.getAsnDetailList();
 				for (AsnDetailDTO detail : detailList) {
 					detail.setAsnBillId(asnHeader.getAsnBillId());
@@ -497,7 +497,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 			if (Func.isEmpty(asnHeader)) {
 				throw new ServiceException("单据不存在！");
 			}
-			if (!AsnBillStateEnum.CREATE.getIndex().equals(asnHeader.getAsnBillState())) {
+			if (!AsnBillStateEnum.CREATE.getCode().equals(asnHeader.getAsnBillState())) {
 				throw new ServiceException(
 					String.format("单据[%s]为%s状态不可删除",
 						asnHeader.getAsnBillNo(),
@@ -533,7 +533,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 			throw new ServiceException("调拨入货单不允许编辑! ");
 		}
 		// 验证入库单状态
-		boolean result = AsnBillStateEnum.CREATE.getIndex().equals(asnHeader.getAsnBillState());
+		boolean result = AsnBillStateEnum.CREATE.getCode().equals(asnHeader.getAsnBillState());
 //			|| AsnBillStateEnum.EXECUTING.getIndex().equals(asnHeader.getAsnBillState())
 //			|| AsnBillStateEnum.PART.getIndex().equals(asnHeader.getAsnBillState());
 
@@ -554,7 +554,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 	@Override
 	public List<AsnHeader> listForPDA(AsnHeader asnHeader) {
 		List<AsnHeader> list = baseMapper.selectList(Condition.getQueryWrapper(asnHeader).lambda()
-			.ne(AsnHeader::getAsnBillState, AsnBillStateEnum.COMPLETED.getIndex()));
+			.ne(AsnHeader::getAsnBillState, AsnBillStateEnum.COMPLETED.getCode()));
 		return list;
 	}
 
@@ -660,9 +660,9 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 		if (Func.isEmpty(asnHeader)) {
 			throw new ServiceException("订单不存在(订单编号:" + asnHeaderOrderDto.getAsnBillNo() + ")");
 		}
-		if (asnHeader.getAsnBillState() == AsnBillStateEnum.COMPLETED.getIndex()) {
+		if (asnHeader.getAsnBillState() == AsnBillStateEnum.COMPLETED.getCode()) {
 			throw new ServiceException("该单据已完成或者已关闭");
-		} else if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.CANCEL.getIndex())) {
+		} else if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.CANCEL.getCode())) {
 			throw new ServiceException("订单：" + asnHeader.getAsnBillNo() + " 已取消，请停止收货！");
 		}
 		//判断库位是否存在
@@ -819,9 +819,9 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 		AsnHeader asnHeader = super.getOne(Condition.getQueryWrapper(new AsnHeader())
 			.lambda()
 			.eq(AsnHeader::getAsnBillNo, dto.getAsnBillNo()));
-		if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.COMPLETED.getIndex())) {
+		if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.COMPLETED.getCode())) {
 			throw new ServiceException("该单据已完成或者已关闭");
-		} else if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.CANCEL.getIndex())) {
+		} else if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.CANCEL.getCode())) {
 			throw new ServiceException("订单：" + asnHeader.getAsnBillNo() + " 已取消，请停止收货！");
 		}
 		dto.setSName(asnHeader.getSName());
@@ -1022,9 +1022,9 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 		AsnHeader asnHeader = super.getOne(Condition.getQueryWrapper(new AsnHeader())
 			.lambda()
 			.eq(AsnHeader::getAsnBillNo, dto.getAsnBillNo()));
-		if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.COMPLETED.getIndex())) {
+		if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.COMPLETED.getCode())) {
 			throw new ServiceException("该单据已完成或者已关闭");
-		} else if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.CANCEL.getIndex())) {
+		} else if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.CANCEL.getCode())) {
 			throw new ServiceException("订单：" + asnHeader.getAsnBillNo() + " 已取消，请停止收货！");
 		}
 		AsnInventory asnInventory = null;
@@ -1857,9 +1857,9 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 			systemProcParam.setBillNo(asnHeader.getAsnBillNo());
 			systemProcParam.setWhId(asnHeader.getWhId());
 			SystemProc systemProc = systemProcService.create(systemProcParam);
-			if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.CREATE.getIndex())) {
+			if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.CREATE.getCode())) {
 
-			} else if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.EXECUTING.getIndex())) {
+			} else if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.EXECUTING.getCode())) {
 				// 清空该订单已收货的库存
 				List<ContainerLog> containerLogList = containerLogService.list(
 					Condition.getQueryWrapper(new ContainerLog())
@@ -1883,7 +1883,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 					stockReduce.setEventType(EventTypeEnum.InstockCancel);
 					stockService.subtract(stockReduce);
 				}
-			} else if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.COMPLETED.getIndex())) {
+			} else if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.COMPLETED.getCode())) {
 				throw new ServiceException(String.format("订单：%s 已收货完成，拒绝执行取消操作！", asnHeader.getAsnBillNo()));
 			} else {
 				String asnBillState = DictCache.getValue(DictConstant.ASN_BILL_STATE, asnHeader.getAsnBillState());
@@ -1912,7 +1912,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 			throw new ServiceException("订单ID：" + asnBillId + " 不存在！");
 		}
 		// 当订单状态已经 = 已取消  则不允许再进行任何修改订单状态操作
-		if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.CANCEL.getIndex())) {
+		if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.CANCEL.getCode())) {
 			throw new ServiceException("订单：" + asnHeader.getAsnBillNo() + " 已取消，拒绝当前操作！");
 		}
 		if (asnBillState.equals(AsnBillStateEnum.EXECUTING)) {
@@ -1924,7 +1924,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 			// 修改单据完成时间
 			asnHeader.setFinishDate(LocalDateTime.now());
 		}
-		asnHeader.setAsnBillState(asnBillState.getIndex());
+		asnHeader.setAsnBillState(asnBillState.getCode());
 		// 修改订单主表订单状态
 		super.updateById(asnHeader);
 		IAllotHeaderService allotHeaderService = SpringUtil.getBean(IAllotHeaderService.class);
@@ -1964,7 +1964,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 					continue;
 				}
 				// 判断入库单是否已经进行了
-				if (!asnHeader.getAsnBillState().equals(AsnBillStateEnum.CREATE.getIndex())) {
+				if (!asnHeader.getAsnBillState().equals(AsnBillStateEnum.CREATE.getCode())) {
 					validResult.addError("asnBillNo", "当前入库单[" + snExcel.getAsnBillNo() + "] 已经进行或完成，不允许导入序列号");
 					returnErrors(dataVerifyList, dataVerify, validResult);
 					continue;

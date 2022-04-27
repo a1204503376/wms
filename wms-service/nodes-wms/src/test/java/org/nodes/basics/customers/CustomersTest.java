@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.nodes.wms.biz.basics.customers.impl.CustomersBizImpl;
-import org.nodes.wms.dao.basics.customers.dto.input.CustomersPageQuery;
-import org.nodes.wms.dao.basics.customers.dto.input.CustomersRequest;
-import org.nodes.wms.dao.basics.customers.dto.input.DeleteCustomersRequest;
+import org.nodes.wms.dao.basics.customers.dto.input.CustomerPageQuery;
+import org.nodes.wms.dao.basics.customers.dto.input.newCustomerRequest;
+import org.nodes.wms.dao.basics.customers.dto.input.DeleteCustomerRequest;
 import org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.test.BladeBootTest;
@@ -31,30 +31,30 @@ public class CustomersTest {
 
 	@Test
 	public void test01() throws ParseException {
-		CustomersPageQuery customersPageQuery = new CustomersPageQuery();
+		CustomerPageQuery customerPageQuery = new CustomerPageQuery();
         Query query = new Query();
         query.setAscs("updateTime");
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date1 = simpleDateFormat.parse("2022-1-1");
 		Date date2 =  simpleDateFormat.parse("2022-5-1");
-		customersPageQuery.setCreateTimeBegin(date1);
-		customersPageQuery.setCreateTimeEnd(date2);
-		IPage<CustomersResponse> cusPage = customersBiz.getPage(query,customersPageQuery);
+		customerPageQuery.setCreateTimeBegin(date1);
+		customerPageQuery.setCreateTimeEnd(date2);
+		IPage<CustomersResponse> cusPage = customersBiz.getPage(customerPageQuery,query);
 		Assertions.assertEquals(8, cusPage.getTotal());
 	}
 
 	@Test
 	public void test02() {
-		CustomersRequest customersRequest = new CustomersRequest();
-		customersRequest.setCode("12");
-		customersRequest.setName("历史");
-		Assertions.assertEquals(true, customersBiz.saveCustomers(customersRequest));
+		newCustomerRequest newCustomerRequest = new newCustomerRequest();
+		newCustomerRequest.setCode("12");
+		newCustomerRequest.setName("历史");
+		Assertions.assertEquals(true, customersBiz.newCustomers(newCustomerRequest));
 	}
 
 	@Test
 	public void test03() {
-		DeleteCustomersRequest deleteRequest = new DeleteCustomersRequest();
-		List list = new ArrayList<Long>();
+		DeleteCustomerRequest deleteRequest = new DeleteCustomerRequest();
+		List<Long> list = new ArrayList<Long>();
 		list.add(4l);
 		list.add(5l);
 		deleteRequest.setList(list);

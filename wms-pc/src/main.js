@@ -20,7 +20,6 @@ import './styles/common.scss';
 import basicBlock from './components/basic-block/main';
 import basicContainer from './components/basic-container/main';
 import thirdRegister from './components/third-register/main';
-// import avueUeditor from 'avue-plugin-ueditor';
 import website from '@/config/website';
 import crudCommon from '@/mixins/crud';
 

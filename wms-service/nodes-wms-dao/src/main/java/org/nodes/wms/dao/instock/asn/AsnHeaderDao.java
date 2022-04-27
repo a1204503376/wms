@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
-import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 
 import java.util.List;
@@ -29,14 +28,14 @@ public interface AsnHeaderDao {
 	 * 保存ASN单头表和明细
 	 *
 	 * @param asnHeader ASN单头表实体
-	 * @param asnDetail ASN单明细实体
+	 * @return
 	 */
-	void addAsnHeaderAndAsnDetail(AsnHeader asnHeader, AsnDetail asnDetail);
+	Boolean insertAsnHeader(AsnHeader asnHeader);
 
 	/**
 	 * 获取ASN单详细信息
 	 *
-	 * @param id: ASN单id集合
+	 * @param id: Asn单id
 	 * @return org.nodes.wms.dao.instock.asn.dto.output.DetailResponse
 	 */
 	AsnDetailResponse selectAsnContactDetailByAsnBillId(Long id);

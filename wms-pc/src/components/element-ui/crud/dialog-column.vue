@@ -1,44 +1,44 @@
 <template>
     <el-drawer
+        v-loading="loading.content"
+        :before-close="beforeClose"
+        :modal-append-to-body="false"
+        :size="isMobile ? '100%' : '50%'"
+        :visible.sync="visible"
         lock-scroll
         title="列显隐"
-        :modal-append-to-body="false"
-        :visible.sync="visible"
-        :size="isMobile ? '100%' : '50%'"
-        :before-close="beforeClose"
-        v-loading="true"
         @open="onOpen"
         @opened="onOpened">
         <el-scrollbar style="height:calc(100% - 140px);">
-            <el-table ref="table"
-                      class="dialog-column-table"
-                      size="small"
-                      row-key="name"
-                      border
+            <el-table :key="Math.random()"
+                      ref="table"
                       v-loading="loading.content"
-                      :key="Math.random()"
-                      :data="list">
+                      :data="list"
+                      border
+                      class="dialog-column-table"
+                      row-key="name"
+                      size="small">
                 <af-table-column
-                    type="index"
                     align="center"
+                    type="index"
                     width="50">
                 </af-table-column>
                 <template v-for="col in this.columns">
-                    <af-table-column align="center"
-                                     :width="col.width"
-                                     header-align="center"
+                    <af-table-column :label="col.label"
                                      :prop="col.prop"
-                                     :label="col.label">
+                                     :width="col.width"
+                                     align="center"
+                                     header-align="center">
                         <template slot-scope="scope">
                             <template v-if="col.type === 'input'">
                                 <el-input
-                                    :placeholder="!col.readonly ? '请输入' : ''"
                                     v-model="scope.row[col.prop]"
-                                    clearable
-                                    size="small"
                                     :maxlength="col.maxlength"
                                     :minlength="col.minlength"
+                                    :placeholder="!col.readonly ? '请输入' : ''"
+                                    clearable
                                     show-word-limit
+                                    size="small"
                                 >
                                 </el-input>
                             </template>
@@ -47,10 +47,10 @@
                                              size="small"></el-checkbox>
                             </template>
                             <template v-else-if="col.type === 'slider'">
-                                <el-slider :min="0"
+                                <el-slider v-model="scope.row[col.prop]"
                                            :max="2000"
-                                           size="small"
-                                           v-model="scope.row[col.prop]"></el-slider>
+                                           :min="0"
+                                           size="small"></el-slider>
                             </template>
                             <template v-else>
                                 {{ scope.row[col.prop] }}
@@ -61,7 +61,7 @@
             </el-table>
         </el-scrollbar>
         <div class="dialog-column-footer">
-            <el-button type="primary" size="small" @click="onSave" :loading="loading.saveBtn">保存</el-button>
+            <el-button :loading="loading.saveBtn" size="small" type="primary" @click="onSave">保存</el-button>
             <el-button size="small" @click="beforeClose">关闭</el-button>
         </div>
     </el-drawer>
@@ -69,20 +69,23 @@
 
 <script>
 
-import {setStore, getStore} from '@/util/store';
-import request from '@/router/axios';
+import {getStore, setStore} from '@/util/store';
 import Sortable from 'sortablejs';
+import {submit} from "@/api/core/column";
+import {menuMixin} from "@/mixins/menu";
+import func from "@/util/func";
 
 export default {
     name: "dialog-column",
+    mixins: [menuMixin],
     props: {
         visible: {type: Boolean, default: false},
         dataSource: {
-            type: Array, default: function () {
+            type: Array,
+            default: function () {
                 return [];
             }
-        },
-        saveUrl: {type: String, default: undefined}
+        }
     },
     computed: {
         isMobile() {
@@ -136,8 +139,7 @@ export default {
                 content: false,
                 saveBtn: false
             },
-            crudColumn: getStore({name: "crudColumn"}) || [],
-            menuAll: getStore({name: 'menuAll'}) || [],
+            crudColumn: getStore({name: "crudColumn"}) || []
         }
     },
     methods: {
@@ -153,8 +155,8 @@ export default {
                     let arr = this.list; // 获取表数据
                     // 数据处理，获取最新的表格数据
                     arr.splice(e.newIndex, 0, arr.splice(e.oldIndex, 1)[0]);
-                    arr.forEach((value, index)=>{
-                        value.order = index;
+                    arr.forEach((value, index) => {
+                        value.sort = index;
                     });
                     this.$nextTick(function () {
                         this.list = arr;
@@ -167,27 +169,19 @@ export default {
             this.list = [];
             if (this.dataSource) {
                 this.dataSource.forEach(item => {
+                    // "0":是,"1":否
                     let row = {
                         prop: item.prop,
                         label: item.label,
-                        aliasName: item.aliasName,
-                        hide: item.hide,
-                        fixed: item.fixed,
-                        width: item.width,
-                        order: this.dataSource.indexOf(item)
+                        aliasName: func.strDefaultEmpty(item.aliasName),
+                        hide: func.toBoolean(item.hide),
+                        fixed: func.toBoolean(item.fixed),
+                        width: func.toInt(item.width, 200),
+                        sort: func.toInt(item.sort, this.dataSource.indexOf(item))
                     }
                     this.list.push(row);
                 });
             }
-        },
-        getMenu(menuList, route) {
-            return menuList.find(u => {
-                if (u.name == route.name && u.path == route.path) {
-                    return u;
-                } else if (u.children && u.children.length > 0) {
-                    return this.getMenu(u.children, route);
-                }
-            });
         },
         onOpen() {
             this.init();
@@ -196,7 +190,7 @@ export default {
             this.rowDrop();
         },
         onSave() {
-            let menu = this.getMenu(this.menuAll, this.$route);
+            let menu = this.getMenu();
             if (!menu) {
                 this.$message.error('获取功能菜单失败! ');
                 return;
@@ -204,51 +198,50 @@ export default {
             this.loading.content = true;
             this.loading.saveBtn = true;
             let columnList = Object.assign([], this.list);
-            columnList.sort((a, b)=>{
-                let x = a['order'];
-                let y = b['order'];
+            columnList.sort((a, b) => {
+                let x = a['sort'];
+                let y = b['sort'];
                 return ((x < y) ? -1 : (x > y) ? 1 : 0);
             });
             // 开始封装数据
+            columnList.forEach(d => {
+                d.menuId = menu.id
+            });
+            // 缓存本地的数据格式
             let column = {
                 menuId: menu.id,
-                menuName: menu.name,
                 columnList: columnList
-            };
-            let loading_count = 0;
-            if (this.saveUrl) {
-                loading_count++;
-                request({
-                    url: this.saveUrl,
-                    method: 'post',
-                    data: column
-                }).then(res => {
-                }).finally(() => {
-                    loading_count--;
-                })
             }
+            let loadingCount = 0;
+
+            loadingCount++;
+            submit(columnList).then(res => {
+            }).finally(() => {
+                loadingCount--;
+            })
+
             let self = this;
             let interval = setInterval(function () {
-                if (loading_count !== 0) {
+                if (loadingCount !== 0) {
                     return;
                 }
                 clearInterval(interval);
                 let index = self.crudColumn.findIndex(u => {
-                    return u.menuId == menu.id;
+                    return u.menuId === menu.id;
                 });
                 if (index < 0) {
                     self.crudColumn.push(column);
                 } else {
                     self.crudColumn.splice(index, 1, column);
                 }
-                setStore({name: 'crudColumn', content: self.crudColumn, type:'session'});
+                setStore({name: 'crudColumn', content: self.crudColumn, type: 'session'});
                 self.loading.content = false;
                 self.loading.saveBtn = false;
-                self.beforeClose();
+                self.beforeClose(column);
             });
         },
-        beforeClose() {
-            this.$emit('close');
+        beforeClose(column) {
+            this.$emit('close',column);
         }
     }
 }

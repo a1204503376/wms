@@ -7,7 +7,7 @@ export default class func {
      * @param val
      * @returns {boolean}
      */
-    static notEmpty(val) {
+    static isNotEmpty(val) {
         return !this.isEmpty(val);
     }
 
@@ -26,14 +26,35 @@ export default class func {
      * @returns {boolean}
      */
     static isEmpty(val) {
-        if (
-            val === null ||
-            typeof val === 'undefined' ||
-            (typeof val === 'string' && val === '' && val !== 'undefined')
-        ) {
-            return true;
+        return this.isUndefined(val) ||
+            (this.isStr(val) && val === '' && val !== 'undefined') ||
+            (this.isArray(val) && val.length === 0);
+    }
+
+    /**
+     * 对string参数进行判断
+     * 为空，返回默认值
+     * 否则，返回当前值
+     * @param val
+     * @param defaultValue
+     * @returns {string}
+     */
+    static strDefault(val, defaultValue) {
+        if (this.isEmpty(val)) {
+            return defaultValue === undefined ? '' : defaultValue;
         }
-        return false;
+        return val;
+    }
+
+    /**
+     * 对string参数进行判断
+     * 为空，返回空字符串
+     * 否则，返回当前值
+     * @param val
+     * @returns {string}
+     */
+    static strDefaultEmpty(val) {
+        return this.strDefault(val, '');
     }
 
     /**
@@ -48,6 +69,15 @@ export default class func {
         }
         const num = parseInt(val, 0);
         return Number.isNaN(num) ? (defaultValue === undefined ? -1 : defaultValue) : num;
+    }
+
+    /**
+     * 强转boolean型
+     * @param val
+     * @returns {boolean}
+     */
+    static toBoolean(val) {
+        return !!val;
     }
 
     /**
@@ -106,6 +136,6 @@ export default class func {
      * @returns {boolean}
      */
     static isStr(obj) {
-        return typeof(obj) === 'string';
+        return typeof (obj) === 'string';
     }
 }

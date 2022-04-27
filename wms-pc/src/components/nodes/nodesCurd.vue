@@ -1,63 +1,57 @@
 <template>
     <div id="nodes_form_container" ref="container">
-        <!--        <tableColumn-->
-        <!--            :tableColumnVisible="dialogFilterColumn.visible"-->
-        <!--            :tableColumnData="filterColumnList"-->
-        <!--            @tableColumnDialogClose="filterColumnClose"-->
-        <!--            @tableColumnCheckboxChange="filterColumnChange"-->
-        <!--        ></tableColumn>-->
-        <dialog-column :visible="dialogFilterColumn.visible"
-                       :data-source="filterColumnList"
+        <dialog-column :data-source="filterColumnList"
+                       :visible="dialogFilterColumn.visible"
                        save-url='/api/nodesCurdColumn/submit'
                        @close="filterColumnClose"></dialog-column>
         <search-panel
             ref="searchPanel"
-            :visible="searchPanel.visible"
             :column="searchPanel.column"
+            :visible="searchPanel.visible"
             @dialogResult="searchPanelCallback"
         ></search-panel>
         <editDialog
             ref="dialogEdit"
             v-model="form"
-            :title="dialogEdit.title"
-            :visible="dialogEdit.visible"
-            :isNew="dialogEdit.isNew"
-            :isView="dialogEdit.isView"
-            :isEdit="dialogEdit.isEdit"
+            :dataSource="dialogEdit.dataSource"
             :group="dialogEdit.group"
             :groupButton="option.groupButton"
-            :dataSource="dialogEdit.dataSource"
-            :width="dialogEdit.width"
-            :saveBtn="option.saveBtn"
+            :isEdit="dialogEdit.isEdit"
+            :isNew="dialogEdit.isNew"
+            :isView="dialogEdit.isView"
             :root="$parent"
+            :saveBtn="option.saveBtn"
+            :title="dialogEdit.title"
+            :visible="dialogEdit.visible"
+            :width="dialogEdit.width"
             @callback="callbackEdit"
             @change="dialogEditChange"
+            @updateGroup="updateGroup"
             @before-open="beforeOpen"
             @dynamic-before-edit="dynamicBeforeEdit"
             @dynamic-saved="dynamicSaved"
-            @updateGroup="updateGroup"
         ></editDialog>
         <el-row :gutter="20" type="flex">
             <el-col :span="12">
                 <div class="menu_left">
                     <template v-if="permission.add">
                         <el-button
-                            type="primary"
-                            icon="el-icon-plus"
-                            @click="onNew(undefined)"
-                            size="mini"
                             v-show="option.newBtn"
+                            icon="el-icon-plus"
+                            size="mini"
+                            type="primary"
+                            @click="onNew(undefined)"
                         >新增
                         </el-button>
                     </template>
                     <template v-if="permission.delete">
                         <el-button
-                            type="danger"
-                            plain
-                            icon="el-icon-delete"
-                            size="mini"
-                            @click="onMultiDel"
                             v-show="option.multiDelBtn"
+                            icon="el-icon-delete"
+                            plain
+                            size="mini"
+                            type="danger"
+                            @click="onMultiDel"
                         >删除
                         </el-button>
                     </template>
@@ -70,46 +64,46 @@
                     <slot name="menuRight"></slot>
                     <el-tooltip
                         v-if="option.columnBtn === undefined ? true : option.columnBtn"
-                        class="item"
                         :enterable="false"
-                        effect="dark"
+                        class="item"
                         content="显隐"
+                        effect="dark"
                         placement="top"
                     >
                         <el-button
+                            circle
                             icon="el-icon-menu"
                             size="mini"
-                            circle
                             @click="filterColumn"
                         ></el-button>
                     </el-tooltip>
                     <el-tooltip
                         v-if="option.search === undefined ? true : option.search"
-                        class="item"
                         :enterable="false"
-                        effect="dark"
+                        class="item"
                         content="搜索"
+                        effect="dark"
                         placement="top"
                     >
                         <el-button
+                            circle
                             icon="el-icon-search"
                             size="mini"
-                            circle
                             @click="onSearch"
                         ></el-button>
                     </el-tooltip>
                     <el-tooltip
                         v-if="option.refresh === undefined ? true : option.refresh"
-                        class="item"
                         :enterable="false"
-                        effect="dark"
+                        class="item"
                         content="刷新"
+                        effect="dark"
                         placement="top"
                     >
                         <el-button
+                            circle
                             icon="el-icon-refresh"
                             size="mini"
-                            circle
                             @click="refresh"
                         ></el-button>
                     </el-tooltip>
@@ -121,61 +115,57 @@
                 <div id="myTable-box" class="myTable-box">
                     <rowSearch
                         v-if="option.columnFilter"
+                        :columnOperate="columnOperate"
                         :columns="option.column"
                         :option="option"
                         :top="rowSearchTop"
-                        :columnOperate="columnOperate"
                         @filterable="filterable"
                     />
                     <div class="table-content-box">
                         <el-table
                             ref="table"
-                            class="nodes-curd-table"
+                            v-loading="tableLoading"
                             :data="props.tableData"
+                            :default-sort="{ prop: 'amount', order: 'descending' }"
+                            :header-cell-style="{ background: 'none' }"
+                            :height="contentHeight"
+                            :load="loadList"
+                            :row-key="option.rowKey"
+                            :show-summary="option.showSummary"
+                            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+                            border
+                            class="nodes-curd-table"
+                            element-loading-spinner="el-icon-loading"
+                            element-loading-text="数据正在加载中"
+                            highlight-current-row
+                            lazy
                             size="mini"
                             style="width: 100%; margin-top: 10px"
-                            border
                             @header-dragend="headerDragend"
-                            :height="contentHeight"
-                            v-loading="tableLoading"
-                            :show-summary="option.showSummary"
-                            element-loading-text="数据正在加载中"
-                            element-loading-spinner="el-icon-loading"
-                            highlight-current-row
                             @selection-change="selectionChange"
-                            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-                            :row-key="option.rowKey"
-                            lazy
-                            :load="loadList"
-                            :header-cell-style="{ background: 'none' }"
                             @sort-change="changeTableSort"
                             @row-click="rowClick"
-                            :default-sort="{ prop: 'amount', order: 'descending' }"
                         >
                             <el-table-column
                                 v-if="option.selection === undefined ? true : false"
+                                fixed
                                 type="selection"
                                 width="50"
-                                fixed
                             ></el-table-column>
-                            <!--                    <el-table-column-->
-                            <!--                            type="index"-->
-                            <!--                            label="序号"-->
-                            <!--                            :width="columnIndex.width"></el-table-column>-->
                             <template v-for="(item, index) in option.column">
                                 <el-table-column
                                     v-if="!item.hide"
                                     :key="index"
-                                    :label="item.aliasName || item.label"
-                                    :prop="item.prop"
-                                    :min-width="item.width"
                                     :align="item.align"
-                                    :sortable="item.sortable"
-                                    show-overflow-tooltip
-                                    filter-placement="bottom-end"
                                     :column-key="item.prop"
-                                    :sort-by="[item.sortProp ? item.sortProp : item.prop]"
                                     :fixed="item.fixed"
+                                    :label="item.aliasName || item.label"
+                                    :min-width="item.width"
+                                    :prop="item.prop"
+                                    :sort-by="[item.sortProp ? item.sortProp : item.prop]"
+                                    :sortable="item.sortable"
+                                    filter-placement="bottom-end"
+                                    show-overflow-tooltip
                                 >
                                     <template slot-scope="scope">
                                         <span v-if="item.slot">
@@ -184,8 +174,8 @@
                                         <!-- 查看 -->
                                         <span v-else-if="item.view ">
                                           <el-button
-                                              type="text"
                                               size="medium"
+                                              type="text"
                                               @click="onView(scope.row, scope.$index)"
                                           >{{ scope.row[item.prop] }}</el-button
                                           >
@@ -195,31 +185,31 @@
                                     <template v-for="childItem in item.children">
                                         <el-table-column
                                             v-if="!childItem.hide"
-                                            :label="childItem.label"
-                                            :prop="childItem.prop"
                                             :key="childItem.label"
-                                            :min-width="childItem.width"
-                                            show-overflow-tooltip
-                                            filter-placement="bottom-end"
                                             :column-key="childItem.prop"
+                                            :label="childItem.label"
+                                            :min-width="childItem.width"
+                                            :prop="childItem.prop"
+                                            filter-placement="bottom-end"
+                                            show-overflow-tooltip
                                         ></el-table-column>
                                     </template>
                                 </el-table-column>
                             </template>
                             <el-table-column
                                 v-if="option.menu"
+                                :align="columnOperate.align"
                                 :fixed="columnOperate.fixed"
                                 :label="columnOperate.label"
-                                :align="columnOperate.align"
                                 :width="columnOperate.width"
                             >
                                 <template slot-scope="scope">
                                     <slot name="menu" v-bind="scope"></slot>
                                     <el-dropdown
-                                        trigger="click"
-                                        @command="executeCommand($event, scope.row, scope.$index)"
                                         v-if="permission"
                                         class="btn"
+                                        trigger="click"
+                                        @command="executeCommand($event, scope.row, scope.$index)"
                                     >
                                         <span class="el-dropdown-link">
                                           更多
@@ -272,24 +262,24 @@
         </el-row>
         <el-row
             :gutter="20"
-            type="flex"
             justify="space-between"
             style="flex-grow: 1; padding-bottom: 10px"
+            type="flex"
         >
             <el-col :span="8" class="stockcount">
                 <slot name="stock"></slot>
             </el-col>
-            <el-col :span="16" :gutter="20" class="pageData" v-if="option.page">
+            <el-col v-if="option.page" :gutter="20" :span="16" class="pageData">
                 <el-pagination
+                    :current-page="page.currentPage"
+                    :page-size="page.pageSize"
+                    :page-sizes="[20, 50, 100]"
+                    :total="page.total"
                     background
+                    layout="total, sizes, prev, pager, next, jumper"
+                    @hideSingleOnPage="hideOnSinglePage"
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    @hideSingleOnPage="hideOnSinglePage"
-                    :current-page="page.currentPage"
-                    :page-sizes="[20, 50, 100]"
-                    :page-size="page.pageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="page.total"
                 ></el-pagination>
             </el-col>
         </el-row>
@@ -301,9 +291,9 @@ import tableColumn from "@/components/nodes/tableColumn";
 import searchPanel from "@/components/nodes/searchPanel";
 import editDialog from "@/components/nodes/editDialog";
 import dialogColumn from "@/components/element-ui/crud/dialog-column";
-import {mapState, mapMutations, mapGetters} from "vuex";
+import {mapGetters, mapState} from "vuex";
 import rowSearch from "./rowSearch";
-import {setStore, getStore} from '@/util/store';
+import {getStore} from '@/util/store';
 import Sortable from 'sortablejs';
 
 let timer = null;
@@ -469,7 +459,7 @@ export default {
             self.autoColumnWidth();
             self.autoTableHeight();
             if (self.$refs.table) {
-                self.$nextTick(()=>{
+                self.$nextTick(() => {
                     self.$refs.table.doLayout();
                 });
             }
@@ -1027,11 +1017,11 @@ export default {
             });
 
             this.option.column.sort((a, b) => {
-                let x = a['order'];
-                let y = b['order'];
+                let x = a['sort'];
+                let y = b['sort'];
                 return ((x < y) ? -1 : (x > y) ? 1 : 0);
             });
-            this.$nextTick(()=>{
+            this.$nextTick(() => {
                 this.$refs.table.doLayout();
             });
         },

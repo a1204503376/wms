@@ -42,7 +42,7 @@ import org.nodes.wms.core.instock.asn.cache.AsnCache;
 import org.nodes.wms.core.instock.asn.entity.AsnDetail;
 import org.nodes.wms.core.instock.asn.entity.AsnHeader;
 import org.nodes.wms.core.instock.asn.enums.AsnDetailStatusEnum;
-import org.nodes.wms.core.instock.asn.enums.InstoreTypeEnum;
+import org.nodes.wms.biz.instock.asn.enums.InStorageTypeEnum;
 import org.nodes.wms.core.instock.asn.service.IAsnDetailService;
 import org.nodes.wms.core.instock.asn.service.IAsnHeaderService;
 import org.nodes.wms.core.instock.asn.vo.AsnDetailVO;
@@ -684,9 +684,9 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper, T extends Count
 						}
 					}
 					asnHeader.setBillKey(countHeader.getCountBillNo());
-					asnHeader.setAsnBillState(AsnBillStateEnum.COMPLETED.getIndex());
+					asnHeader.setAsnBillState(AsnBillStateEnum.COMPLETED.getCode());
 					asnHeader.setBillTypeCd(ParamCache.getValue(ParamEnum.COUNT_PROFIT_TYPECD.getKey()));
-					asnHeader.setInstoreType(InstoreTypeEnum.Normal.getIndex());
+					asnHeader.setInstoreType(InStorageTypeEnum.Normal.getCode());
 					asnHeader.setScheduledArrivalDate(LocalDateTime.now());
 					asnHeader.setSCode(warehouse.getWhCode());
 					asnHeader.setSName(warehouse.getWhName());

@@ -2,9 +2,10 @@ package org.nodes.wms.biz.instock.asn;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.instock.asn.dto.input.AddAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
-import org.nodes.wms.dao.instock.asn.dto.input.AsnRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailByEditResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 
@@ -24,10 +25,6 @@ public interface AsnBiz {
 	 */
 	Page<PageResponse> getPageAsnBill(IPage<?> page,
 									  PageParamsQuery pageParamsQuery);
-
-	// 新增 修改 删除 状态变更 。。。
-
-	void save(AsnRequest asnRequest);
 
 	/**
 	 * 获取ASN头表、ASN明细信息
@@ -60,4 +57,20 @@ public interface AsnBiz {
 	 * @return java.util.List<java.lang.Long>
 	 */
 	List<Long> getAsnDetailIdList(List<Long> asnBillIdList);
+
+	/**
+	 * 新增Asn单
+	 *
+	 * @param addAsnBillRequest: Asn单创建对象
+	 * @return java.lang.Boolean
+	 */
+    Boolean add(AddAsnBillRequest addAsnBillRequest);
+
+	/**
+	 * 编辑-获取Asn单头表和Asn明细信息
+	 *
+	 * @param asnBillIdRequest: Asn单id请求对象
+	 * @return void
+	 */
+	AsnDetailByEditResponse getAsnHeaderAndAsnDetail(AsnBillIdRequest asnBillIdRequest);
 }

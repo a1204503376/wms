@@ -52,7 +52,7 @@ public class RegisterServiceImpl<M extends RegisterMapper, T extends Register>
 		AsnHeader asnHeader = asnHeaderService.getById(register.getAsnBillId());
 		if (Func.isEmpty(asnHeader)) {
 			throw new ServiceException("指定入库单不存在（ID：" + register.getAsnBillId() + "）！");
-		} else if (asnHeader.getAsnBillState() >= AsnBillStateEnum.COMPLETED.getIndex()) {
+		} else if (asnHeader.getAsnBillState() >= AsnBillStateEnum.COMPLETED.getCode()) {
 			throw new ServiceException("该单据不可登记！");
 		}
 		// 修改订单状态

@@ -57,7 +57,7 @@
 }
 
 .el-main {
-    padding: 0 !important;
+    padding: 0;
 }
 
 .el-dropdown-menu__item--divided:before, .el-menu, .el-menu--horizontal > .el-menu-item:not(.is-disabled):focus, .el-menu--horizontal > .el-menu-item:not(.is-disabled):hover, .el-menu--horizontal > .el-submenu .el-submenu__title:hover {
@@ -112,4 +112,17 @@
 
 .el-form-item {
     margin-bottom: 14px;
+}
+
+.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+    margin-bottom: 0;
+}
+
+.el-header {
+    padding: 0 !important;
+}
+
+// 解决：固定列太多，超过横向滚动调的长度时无法滚动的问题
+.el-table--scrollable-x .el-table__body-wrapper {
+    z-index: 1;
 }

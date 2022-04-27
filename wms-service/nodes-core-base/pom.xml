@@ -49,14 +49,14 @@
             <groupId>org.springblade</groupId>
             <artifactId>blade-starter-redis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springblade</groupId>
+            <artifactId>blade-starter-datascope</artifactId>
+        </dependency>
         <!-- Nodes -->
         <dependency>
             <groupId>org.nodes</groupId>
             <artifactId>nodes-core-tool</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springblade</groupId>
-            <artifactId>blade-starter-datascope</artifactId>
         </dependency>
     </dependencies>
 </project>

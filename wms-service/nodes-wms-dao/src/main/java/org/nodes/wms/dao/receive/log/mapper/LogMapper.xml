@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.dao.receive.log.mapper.LogMapper">
+    <select id="selectByDetailIds" resultType="org.nodes.wms.dao.receive.log.dto.output.LogResponse">
+        SELECT
+            rl.id,
+            rl.line_no,
+            rl.sku_code,
+            rl.sku_name,
+            rl.qty,
+            rd.um_name
+        FROM
+            receive_log rl
+        LEFT JOIN receive_detail rd
+        ON rl.receive_detail_id = rd.receive_detail_id
+        where rl.receive_detail_id in
+        <foreach collection="detailIds" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </select>
+</mapper>

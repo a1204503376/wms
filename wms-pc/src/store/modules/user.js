@@ -8,7 +8,6 @@ import {loginByUsername, loginBySocial, getUserInfo, logout, refreshToken, getBu
 import {getTopMenu, getRoutes} from '@/api/core/menu'
 import {getList as getParamList} from '@/api/core/param'
 import md5 from 'js-md5'
-import {getColumnList} from '@/api/core/column'
 
 function addPath(ele, first) {
     const menu = website.menu;
@@ -218,10 +217,6 @@ const user = {
                 })
             })
         },
-        //获取列显隐数据
-        GetColumnList() {
-
-        }
     },
     mutations: {
         SET_TOKEN: (state, token) => {

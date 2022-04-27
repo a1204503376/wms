@@ -678,8 +678,8 @@ export default {
                 })
             });
             this.option.column.sort((a, b) => {
-                let x = a['order'];
-                let y = b['order'];
+                let x = a['sort'];
+                let y = b['sort'];
                 return ((x < y) ? -1 : (x > y) ? 1 : 0);
             });
             let column_back = this.deepClone(this.option.column);

@@ -89,7 +89,7 @@ public class PoHeaderServiceImpl<M extends PoHeaderMapper, T extends PoHeader>
 			throw new ServiceException("货主不存在或者已删除");
 		}
 		poHeader.setOwnerCode(owner.getOwnerCode());
-		poHeader.setPoBillState(AsnBillStateEnum.CREATE.getIndex());//单据状态
+		poHeader.setPoBillState(AsnBillStateEnum.CREATE.getCode());//单据状态
 
 		//上位系统单据唯一标识
 		if (Func.isEmpty(poHeader.getBillKey())) {
@@ -113,12 +113,12 @@ public class PoHeaderServiceImpl<M extends PoHeaderMapper, T extends PoHeader>
 				.eq(PoHeader::getPoBillNo, poHeader.getPoBillNo())) > 0) {
 				poHeader.setPoBillNo(AsnCache.getPoBillNo());
 			}
-			poHeader.setPoBillState(AsnBillStateEnum.CREATE.getIndex());
+			poHeader.setPoBillState(AsnBillStateEnum.CREATE.getCode());
 			poHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());
 		}
 		if (super.saveOrUpdate(poHeader)) {
 			//保存明细表
-			if (AsnBillStateEnum.CREATE.getIndex().equals(poHeader.getPoBillState())) {
+			if (AsnBillStateEnum.CREATE.getCode().equals(poHeader.getPoBillState())) {
 				poDetailService.remove(Condition.getQueryWrapper(new PoDetail()).lambda()
 					.eq(PoDetail::getPoBillId, poHeader.getPoBillId()));
 				List<PoDetailDTO> detailList = poHeader.getDetailList();
