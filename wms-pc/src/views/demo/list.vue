@@ -146,11 +146,12 @@
             </template>
             <template v-slot:page>
                 <el-pagination
-                    :current-page="page.currentPage"
-                    :page-size="page.pageSize"
+                    :current-page="page.current"
+                    :page-size="page.size"
                     :page-sizes="[20, 50, 100]"
                     :total="page.total"
                     background
+                    v-bind="page"
                     layout="total, sizes, prev, pager, next, jumper"
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange">
@@ -321,8 +322,8 @@ export default {
             }
             let length = fill.length;
             this.page.total = length;
-            let offset = (this.page.currentPage - 1) * this.page.pageSize;
-            let number = offset + this.page.pageSize;
+            let offset = (this.page.current - 1) * this.page.size;
+            let number = offset + this.page.size;
             this.table.data = (number >= length)
                 ? fill.slice(offset, length)
                 : fill.slice(offset, number);
