@@ -9,8 +9,12 @@ export const listMixin = {
     data() {
         return {
             masterConfig: {},
-            searchForm: {
-
+            form: {
+                params: {},
+                events: {
+                    search: this.onSearch,
+                    reset: this.onReset
+                }
             },
             table: {
                 columnList: [],
@@ -32,11 +36,7 @@ export const listMixin = {
     computed: {
         ...mapGetters(["permission"]),
         permissionList() {
-            return {
-            };
-        },
-        hideOnSinglePage: function () {
-            return this.page.total <= this.page.pageSize
+            return {};
         }
     },
     created() {
@@ -44,36 +44,14 @@ export const listMixin = {
     },
     methods: {
         getTableData() {
-            // API调用:post(this.searchFrom)
-            function getRandomInt(min, max) {
-                min = Math.ceil(min);
-                max = Math.floor(max);
-                return Math.floor(Math.random() * (max - min)) + min; //不含最大值，含最小值
-            }
-
-            let fill = [];
-            for (let i = 0; i < 101; i++) {
-                // 模拟表格数据
-                let item = {
-                    date: `${getRandomInt(2018, 2022)}-${getRandomInt(1, 12)}-${getRandomInt(1, 28)}`,
-                    name: "王小虎" + getRandomInt(1, 101),
-                    wages: getRandomInt(3000, 15000),
-                    address: `上海市普陀区金沙江路 ${getRandomInt(100, 2000)} 弄`
-                };
-                fill.push(item);
-            }
-            let length = fill.length;
-            this.page.total = length;
-            let offset = (this.page.currentPage - 1) * this.page.pageSize;
-            let number = offset + this.page.pageSize;
-            this.table.data = (number >= length)
-                ? fill.slice(offset, length)
-                : fill.slice(offset, number);
         },
-        onRefresh() {
+        onSearch() {
             this.getTableData();
         },
-        onSubmit() {
+        onReset() {
+
+        },
+        onRefresh() {
             this.getTableData();
         },
         onSortChange(column, prop, order) {

@@ -1,86 +1,73 @@
 <template>
-    <el-form ref="searchForm"
-             v-model="searchForm"
-             :inline="true"
-             label-position="right"
-             label-width="60"
-             size="mini">
-        <nodes-master-page :configure="masterConfig">
+    <div id="list">
+        <nodes-master-page :configure="masterConfig" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-form-item label="物品编码">
-                    <el-input v-model="searchForm.skuCode" class="d-input"></el-input>
+                    <el-input v-model="form.params.skuCode" class="d-input"></el-input>
                 </el-form-item>
                 <el-form-item label="状态">
-                    <nodes-asn-bill-state v-model="searchForm.asnState"></nodes-asn-bill-state>
+                    <nodes-asn-bill-state v-model="form.params.asnState"></nodes-asn-bill-state>
                 </el-form-item>
                 <el-form-item label="入库方式">
-                    <nodes-in-storage-type v-model="searchForm.inStorageType"
+                    <nodes-in-storage-type v-model="form.params.inStorageType"
                                            style="width: 180px"></nodes-in-storage-type>
                 </el-form-item>
             </template>
             <template v-slot:expandSearch>
                 <el-row type="flex">
                     <el-col :span="24">
-                        <el-form-item label="创建日期">
-                            <nodes-date-range v-model="searchForm.createDateRange"></nodes-date-range>
+                        <el-form-item label="物品编码">
+                            <el-input v-model="form.params.skuCode" class="d-input"></el-input>
+                        </el-form-item>
+                        <el-form-item label="物品编码">
+                            <el-input v-model="form.params.skuCode" class="d-input"></el-input>
+                        </el-form-item>
+                        <el-form-item label="物品编码">
+                            <el-input v-model="form.params.skuCode" class="d-input"></el-input>
                         </el-form-item>
 
                         <el-form-item label="物品编码">
-                            <el-input v-model="searchForm.skuCode" class="d-input"></el-input>
-                        </el-form-item>
-                        <el-form-item label="物品编码">
-                            <el-input v-model="searchForm.skuCode" class="d-input"></el-input>
-                        </el-form-item>
-                        <el-form-item label="物品编码">
-                            <el-input v-model="searchForm.skuCode" class="d-input"></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="物品编码">
-                            <el-input v-model="searchForm.skuCode" class="d-input"></el-input>
+                            <el-input v-model="form.params.skuCode" class="d-input"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row type="flex">
                     <el-col :span="24">
                         <el-form-item label="创建日期">
-                            <nodes-date-range v-model="searchForm.createDateRange"></nodes-date-range>
+                            <nodes-date-range v-model="form.params.createDateRange"></nodes-date-range>
                         </el-form-item>
 
                         <el-form-item label="物品编码">
-                            <el-input v-model="searchForm.skuCode" class="d-input"></el-input>
+                            <el-input v-model="form.params.skuCode" class="d-input"></el-input>
                         </el-form-item>
 
                         <el-form-item label="创建日期">
-                            <nodes-date-range v-model="searchForm.createDateRange"></nodes-date-range>
+                            <nodes-date-range v-model="form.params.createDateRange"></nodes-date-range>
                         </el-form-item>
                         <el-form-item label="物品编码">
-                            <el-input v-model="searchForm.skuCode" class="d-input"></el-input>
+                            <el-input v-model="form.params.skuCode" class="d-input"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row type="flex">
                     <el-col :span="24">
                         <el-form-item label="创建日期">
-                            <nodes-date-range v-model="searchForm.createDateRange"></nodes-date-range>
+                            <nodes-date-range v-model="form.params.createDateRange"></nodes-date-range>
                         </el-form-item>
 
                         <el-form-item label="物品编码">
-                            <el-input v-model="searchForm.skuCode" class="d-input"></el-input>
+                            <el-input v-model="form.params.skuCode" class="d-input"></el-input>
                         </el-form-item>
 
                         <el-form-item label="创建日期">
-                            <nodes-date-range v-model="searchForm.createDateRange"></nodes-date-range>
+                            <nodes-date-range v-model="form.params.createDateRange"></nodes-date-range>
                         </el-form-item>
 
                         <el-form-item label="物品编码">
-                            <el-input v-model="searchForm.skuCode" class="d-input"></el-input>
+                            <el-input v-model="form.params.skuCode" class="d-input"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
-            </template>
-            <template v-slot:searchBtn>
-                <el-button type="primary" @click="onSubmit">查找</el-button>
-                <el-button>重置</el-button>
             </template>
             <template v-slot:batchBtn>
                 <el-button size="mini" type="primary" @click="onRemove">删除</el-button>
@@ -160,7 +147,6 @@
             <template v-slot:page>
                 <el-pagination
                     :current-page="page.currentPage"
-                    :hide-on-single-page="hideOnSinglePage"
                     :page-size="page.pageSize"
                     :page-sizes="[20, 50, 100]"
                     :total="page.total"
@@ -175,7 +161,7 @@
             v-bind="columnShowHide"
             @close="onColumnShowHide">
         </dialog-column>
-    </el-form>
+    </div>
 </template>
 
 <script>
@@ -206,11 +192,13 @@ export default {
                 showExpandBtn: true,
                 showPage: true
             },
-            searchForm: {
-                skuCode: '',
-                asnState: [10, 30, 20],
-                inStorageType: [20],
-                createDateRange: ['2022-01-01', '2022-03-01']
+            form: {
+                params: {
+                    skuCode: '',
+                    asnState: [10, 30, 20],
+                    inStorageType: [20],
+                    createDateRange: ['2022-01-01', '2022-03-01']
+                }
             },
             table: {
                 columnList: [
@@ -309,11 +297,41 @@ export default {
         }
     },
     created() {
-        console.log('我是子类');
+        this.getTableData();
     },
     methods: {
-        onSubmit() {
+        getTableData() {
+            // API调用:post(this.searchFrom)
+            function getRandomInt(min, max) {
+                min = Math.ceil(min);
+                max = Math.floor(max);
+                return Math.floor(Math.random() * (max - min)) + min; //不含最大值，含最小值
+            }
 
+            let fill = [];
+            for (let i = 0; i < 101; i++) {
+                // 模拟表格数据
+                let item = {
+                    date: `${getRandomInt(2018, 2022)}-${getRandomInt(1, 12)}-${getRandomInt(1, 28)}`,
+                    name: "王小虎" + getRandomInt(1, 101),
+                    wages: getRandomInt(3000, 15000),
+                    address: `上海市普陀区金沙江路 ${getRandomInt(100, 2000)} 弄`
+                };
+                fill.push(item);
+            }
+            let length = fill.length;
+            this.page.total = length;
+            let offset = (this.page.currentPage - 1) * this.page.pageSize;
+            let number = offset + this.page.pageSize;
+            this.table.data = (number >= length)
+                ? fill.slice(offset, length)
+                : fill.slice(offset, number);
+        },
+        onSearch() {
+            console.log(this.form.params);
+        },
+        onReset() {
+            console.log('重置表单');
         },
         onRemove() {
             console.log('批量删除了');
