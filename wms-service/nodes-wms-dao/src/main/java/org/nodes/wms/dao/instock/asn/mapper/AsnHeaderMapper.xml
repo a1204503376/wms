@@ -37,6 +37,7 @@
             h.create_user,
             w.wh_code,
             w.wh_name,
+            d.asn_detail_id,
             d.asn_line_no,
             d.sku_code,
             d.sku_name,
@@ -45,6 +46,7 @@
             d.scan_qty,
             d.remark,
             d.detail_status,
+            r.receive_id,
             r.receive_no,
             r.bill_state,
             r.remark as receive_remark,
@@ -72,7 +74,7 @@
         <result column="wh_code" property="whCode"/>
         <result column="wh_name" property="whName"/>
 
-        <collection property="asnDetails" ofType="org.nodes.wms.dao.instock.asn.entities.AsnDetail">
+        <collection property="asnDetails" ofType="org.nodes.wms.dao.instock.asn.dto.output.AsnPropertyDetailResponse">
             <id column="asn_detail_id" property="asnDetailId"/>
             <result column="asn_line_no" property="asnLineNo"/>
             <result column="sku_code" property="skuCode"/>
@@ -84,11 +86,11 @@
             <result column="detail_status" property="detailStatus"/>
         </collection>
 
-        <collection property="receiveHeaders" ofType="org.nodes.wms.dao.instock.receive.entities.ReceiveHeader">
+        <collection property="receiveHeaders" ofType="org.nodes.wms.dao.instock.asn.dto.output.AsnPropertyReceiveResponse">
             <id column="receive_id" property="receiveId"/>
             <result column="receive_no" property="receiveNo"/>
             <result column="bill_state" property="billState"/>
-            <result column="remark" property="remark"/>
+            <result column="receive_remark" property="remark"/>
             <result column="receive_create_time" property="createTime"/>
             <result column="receive_create_user" property="createUser"/>
             <result column="receive_create_time" property="updateTime"/>

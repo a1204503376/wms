@@ -1,8 +1,7 @@
 package org.nodes.wms.dao.instock.asn.dto.output;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
-import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
-import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,6 +19,7 @@ public class AsnDetailResponse implements Serializable {
 	/**
 	 * 主键
 	 */
+	@TableId
 	private Long asnBillId;
 
 	/**
@@ -60,12 +60,12 @@ public class AsnDetailResponse implements Serializable {
 	/**
 	 * Asn单明细集合
 	 */
-	private List<AsnDetail>  asnDetails;
+	private List<AsnPropertyDetailResponse>  asnDetails;
 
 	/**
 	 * 收货单头表信息集合
 	 */
-	private List<ReceiveHeader> receiveHeaders;
+	private List<AsnPropertyReceiveResponse> receiveHeaders;
 
 	/**
 	 * 库房编码

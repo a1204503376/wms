@@ -29,7 +29,7 @@ public interface AsnHeaderMapper extends BaseMapper<AsnHeader> {
 	/**
 	 * 获取ASN单信息和对应的收货单信息
 	 *
-	 * @param asnBillId
+	 * @param asnBillId:Asn单id
 	 * @return DetailResponse
 	 */
 	AsnDetailResponse selectAsnContactDetail(Long asnBillId);

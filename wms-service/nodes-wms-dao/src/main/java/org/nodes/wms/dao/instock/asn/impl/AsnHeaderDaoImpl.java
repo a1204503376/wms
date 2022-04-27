@@ -62,6 +62,4 @@ public class AsnHeaderDaoImpl
 	public Boolean deleteAsnHeaderById(List<Long> idList) {
 		return super.deleteLogic(idList);
 	}
-
-
 }
