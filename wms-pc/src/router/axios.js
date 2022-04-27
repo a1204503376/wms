@@ -1,3 +1,5 @@
+// noinspection JSUnresolvedFunction,JSUnresolvedVariable
+
 /**
  * 全站http配置
  *
@@ -44,8 +46,26 @@ axios.interceptors.request.use(config => {
         config.headers["Content-Type"] = "text/plain";
     }
     //headers中配置serialize为true开启序列化
-    if (config.method === 'post' && meta.isSerialize === true) {
-        config.data = serialize(config.data);
+    if (config.method === 'post') {
+         if (config.data ){
+             let dateRangeParams = {};
+             for (let item of Object.keys(config.data)){
+                 let suffix = 'DateRange';
+                 let value = config.data[item];
+                 if (item.endsWith(suffix)
+                     && func.isArray(value)
+                     && value.length === 2
+                 ){
+                     let prefixItem = item.substring(0,item.indexOf(suffix));
+                     dateRangeParams[`${prefixItem}Begin`] = value[0];
+                     dateRangeParams[`${prefixItem}End`] = value[1];
+                 }
+             }
+             config.data = Object.assign(dateRangeParams,config.data);
+         }
+        if (meta.isSerialize === true) {
+            config.data = serialize(config.data);
+        }
     }
     return config
 }, error => {
