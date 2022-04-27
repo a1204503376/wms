@@ -31,7 +31,7 @@ public class SupplierController {
 	private final SupplierBiz supplierBiz;
 
 	@PostMapping("/page")
-	public R<IPage<SupplierPageResponse>> page(Query query, @RequestParam SupplierPageQuery supplierPageQuery) {
+	public R<IPage<SupplierPageResponse>> page(Query query, @RequestBody SupplierPageQuery supplierPageQuery) {
 		IPage<SupplierPageResponse> pageResponse = supplierBiz.getPage(Condition.getPage(query), supplierPageQuery);
 		return R.data(pageResponse);
 	}

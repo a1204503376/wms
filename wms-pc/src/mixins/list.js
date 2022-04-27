@@ -40,8 +40,6 @@ export const listMixin = {
         }
     },
     created() {
-        console.log('我是夫类');
-        this.getTableData();
         this.getCrudColumnList();
     },
     methods: {

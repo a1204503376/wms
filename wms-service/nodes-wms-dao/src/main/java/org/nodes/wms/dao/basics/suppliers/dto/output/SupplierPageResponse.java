@@ -46,16 +46,6 @@ public class SupplierPageResponse implements Serializable {
 	private Integer status;
 
 	/**
-	 * 租户id
-	 */
-	private Long tenantId;
-
-	/**
-	 * 创建部门
-	 */
-	private Long createDept;
-
-	/**
 	 * 创建人
 	 */
 	private Long createUser;
@@ -66,8 +56,7 @@ public class SupplierPageResponse implements Serializable {
 	private Date createTime;
 
 	/**
-	 * 删除标记(0:有效，1:删除)
+	 * 更新时间
 	 */
-	private Integer isDeleted;
-
+	private Date updateTime;
 }
