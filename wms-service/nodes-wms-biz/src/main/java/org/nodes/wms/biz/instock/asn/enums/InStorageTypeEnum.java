@@ -9,41 +9,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ASN单状态
- **/
+ * 入库方式
+ */
 @Getter
 @RequiredArgsConstructor
-public enum AsnBillStateEnum
-	implements IPairs<Integer,String,AsnBillStateEnum> {
+public enum InStorageTypeEnum
+	implements IPairs<Integer, String, InStorageTypeEnum> {
 
 	/**
-	 * ASN单新建时的状态
+	 * 常规入库
 	 */
-	CREATE(10, "新建"),
-
-	EXECUTING(20,"处理中"),
-
+	Normal(10, "常规入库"),
 	/**
-	 *
+	 * 无单据入库
 	 */
-	PART(30, "部分收货"),
-
-	COMPLETED(40, "全部收货"),
-
-	CANCEL(91, "已取消"),
+	NO_BILL(20, "无单据入库"),
+	/**
+	 * 越库入库
+	 */
+	CROSS(30, "越库入库"),
 	;
 
 	private final Integer code;
 	private final String desc;
 
 	@Override
-	public AsnBillStateEnum get() {
+	public InStorageTypeEnum get() {
 		return this;
 	}
 
 	@Override
 	public Integer key() {
-		return this.code;
+		return this.getCode();
 	}
 
 	@Override
@@ -53,7 +50,7 @@ public enum AsnBillStateEnum
 
 	public static List<StateGeneralResponse> getList() {
 		List<StateGeneralResponse> list = new ArrayList<>();
-		for (AsnBillStateEnum item : values()) {
+		for (InStorageTypeEnum item : values()) {
 			StateGeneralResponse stateGeneralResponse = new StateGeneralResponse();
 			stateGeneralResponse.setLabel(item.desc);
 			stateGeneralResponse.setValue(item.code);

@@ -6,7 +6,17 @@ package org.nodes.core.tool.constant;
 public class WmsApiPath {
 
 	/**
-	 * WMS根路径
+	 * 根路径
 	 */
-	public final static String WMS_ROOT_URL = "/api/wms/";
+	public final static String WMS_ROOT_URL = "/wms/";
+
+	/**
+	 * 状态
+	 */
+	public final static String STATE_URL = WmsApiPath.WMS_ROOT_URL+"state";
+
+	/**
+	 * 列显隐
+	 */
+	public final static String NODES_CURD_COLUMN_URL = WmsApiPath.WMS_ROOT_URL+"nodesCurdColumn";
 }

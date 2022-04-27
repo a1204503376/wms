@@ -19,7 +19,7 @@ import org.nodes.wms.core.instock.asn.cache.AsnCache;
 import org.nodes.wms.core.instock.asn.entity.AsnDetail;
 import org.nodes.wms.core.instock.asn.entity.AsnHeader;
 import org.nodes.wms.core.instock.asn.enums.AsnDetailStatusEnum;
-import org.nodes.wms.core.instock.asn.enums.InstoreTypeEnum;
+import org.nodes.wms.biz.instock.asn.enums.InStorageTypeEnum;
 import org.nodes.wms.core.instock.asn.enums.SyncStateEnum;
 import org.nodes.wms.core.instock.asn.service.IAsnDetailService;
 import org.nodes.wms.core.instock.asn.service.IAsnHeaderService;
@@ -116,7 +116,7 @@ public class StockServiceImpl implements StockService {
 						break;
 					}
 				}
-				asnHeader.setAsnBillState(AsnBillStateEnum.COMPLETED.getIndex());//单据状态
+				asnHeader.setAsnBillState(AsnBillStateEnum.COMPLETED.getCode());//单据状态
 				asnHeader.setBillTypeCd(ParamCache.getValue(ParamEnum.COUNT_PROFIT_TYPECD.getKey()));//单据种类编码
 				asnHeader.setBillKey(asnHeader.getAsnBillNo());//上位系统单据唯一标识
 				asnHeader.setLastUpdateDate(now);
@@ -124,7 +124,7 @@ public class StockServiceImpl implements StockService {
 				asnHeader.setScheduledArrivalDate(now);
 				asnHeader.setActualArrivalDate(now);
 				asnHeader.setFinishDate(now);
-				asnHeader.setInstoreType(InstoreTypeEnum.Normal.getIndex());//入库方式
+				asnHeader.setInstoreType(InStorageTypeEnum.Normal.getCode());//入库方式
 				asnHeader.setSCode(warehouse.getWhCode());
 				asnHeader.setSName(warehouse.getWhName());
 				asnHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());//同步状态

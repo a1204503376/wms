@@ -165,10 +165,10 @@ public class AsnLpnDetailServiceImpl<M extends AsnLpnDetailMapper, T extends Asn
 		List<Long> longListIds = Func.toLongList(asnBillIds);
 		for (Long ids : longListIds) {
 			AsnHeader asnHeader = asnHeaderService.getById(ids);
-			if (!asnHeader.getAsnBillState().equals(AsnBillStateEnum.CREATE.getIndex())) {
+			if (!asnHeader.getAsnBillState().equals(AsnBillStateEnum.CREATE.getCode())) {
 				throw new ServiceException(String.format(
 					"只有订单状态为[%s] 的入库单才允许执行此操作，当前状态[%s]! ",
-					AsnBillStateEnum.CREATE.getName(), AsnBillStateEnum.valueOf(asnHeader.getAsnBillState())));
+					AsnBillStateEnum.CREATE.getDesc(), AsnBillStateEnum.valueOf(AsnBillStateEnum.class, asnHeader.getAsnBillState().toString())));
 			}
 			AsnDetail paramDetail = new AsnDetail();
 			paramDetail.setAsnBillId(asnHeader.getAsnBillId());
@@ -301,7 +301,7 @@ public class AsnLpnDetailServiceImpl<M extends AsnLpnDetailMapper, T extends Asn
 		if (Func.isEmpty(asnHeader1)) {
 			throw new ServiceException("入库单不存在(单号:" + asnDTO.getAsnBillNo() + ")！");
 		}
-		if (asnHeader1.getAsnBillState().equals(AsnBillStateEnum.CANCEL.getIndex())) {
+		if (asnHeader1.getAsnBillState().equals(AsnBillStateEnum.CANCEL.getCode())) {
 			throw new ServiceException("订单：" + asnHeader1.getAsnBillNo() + " 已取消，请停止收货！");
 		}
 		AsnInventory asnInventory = null;

@@ -32,6 +32,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * author: pengwei
@@ -76,9 +77,8 @@ public class SkuService extends org.nodes.wms.core.basedata.service.impl.SkuServ
 		// 判断物品是否有未处理完的入库明细
 		List<AsnHeader> asnHeaderList = asnHeaderService.list(Condition.getQueryWrapper(new AsnHeader()).lambda()
 			.notIn(AsnHeader::getAsnBillState,
-				AsnBillStateEnum.COMPLETED.getIndex(),
-				AsnBillStateEnum.REPEAL.getIndex(),
-				AsnBillStateEnum.CANCEL.getIndex()));
+				AsnBillStateEnum.COMPLETED.getCode(),
+				AsnBillStateEnum.CANCEL.getCode()));
 		QueryWrapper<AsnDetail> asnDetailQueryWrapper = Condition.getQueryWrapper(new AsnDetail());
 		asnDetailQueryWrapper.lambda()
 			.gt(AsnDetail::getSurplusQty, BigDecimal.ZERO)
@@ -108,11 +108,11 @@ public class SkuService extends org.nodes.wms.core.basedata.service.impl.SkuServ
 	public boolean updateById(SkuDTO entity) {
 		// 修改物品信息，验证
 		Sku skuOld = super.getById(entity.getSkuId());
-		if (Func.isNotEmpty(entity.getWspId()) && skuOld.getWspId() != entity.getWspId()) {
+		if (Func.isNotEmpty(entity.getWspId()) && !Objects.equals(skuOld.getWspId(), entity.getWspId())) {
 			// 验证入库
 			List<AsnHeader> asnHeaderList = asnHeaderService.list(Condition.getQueryWrapper(new AsnHeader())
 				.lambda()
-				.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.EXECUTING.getIndex()));
+				.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.EXECUTING.getCode()));
 			if (Func.isNotEmpty(asnHeaderList)) {
 				List<AsnDetail> asnDetailList = asnDetailService.list(Condition.getQueryWrapper(new AsnDetail())
 					.lambda()
@@ -140,7 +140,7 @@ public class SkuService extends org.nodes.wms.core.basedata.service.impl.SkuServ
 			// 处理创建状态的入库单明细
 			asnHeaderList = asnHeaderService.list(Condition.getQueryWrapper(new AsnHeader())
 				.lambda()
-				.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.CREATE.getIndex()));
+				.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.CREATE.getCode()));
 			if (Func.isNotEmpty(asnHeaderList)) {
 				List<AsnDetail> asnDetailList = asnDetailService.list(Condition.getQueryWrapper(new AsnDetail())
 					.lambda()
@@ -182,7 +182,7 @@ public class SkuService extends org.nodes.wms.core.basedata.service.impl.SkuServ
 		// 验证入库
 		List<AsnHeader> asnHeaderList = asnHeaderService.list(Condition.getQueryWrapper(new AsnHeader())
 			.lambda()
-			.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.EXECUTING.getIndex()));
+			.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.EXECUTING.getCode()));
 		if (Func.isNotEmpty(asnHeaderList)) {
 			List<AsnDetail> asnDetailList = asnDetailService.list(Condition.getQueryWrapper(new AsnDetail())
 				.lambda()

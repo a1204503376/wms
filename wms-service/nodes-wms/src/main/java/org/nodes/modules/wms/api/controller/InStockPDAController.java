@@ -409,11 +409,11 @@ public class InStockPDAController extends BladeController {
 						.or()
 						.like(AsnHeader::getOrderNo, orderNo)
 				).and(q ->
-					q.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.CREATE.getIndex())
+					q.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.CREATE.getCode())
 						.or()
-						.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.EXECUTING.getIndex())
+						.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.EXECUTING.getCode())
 						.or()
-						.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.PART.getIndex())
+						.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.PART.getCode())
 				));
 			return R.data(AsnHeaderWrapper.build().pageVO(page));
 		}

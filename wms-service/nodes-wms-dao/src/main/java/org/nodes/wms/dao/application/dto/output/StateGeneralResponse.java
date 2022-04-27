@@ -3,11 +3,13 @@ package org.nodes.wms.dao.application.dto.output;
 import lombok.Data;
 
 /**
- * 状态
- * 返回给前端下拉框使用的对象
+ * 通用状态返回对象
+ * 使用场景：
+ * 1.前端下拉框使用
  */
 @Data
-public class StateResponse {
+public class StateGeneralResponse {
+
 	/**
 	 * 标签
 	 */
@@ -16,5 +18,5 @@ public class StateResponse {
 	 * 值
 	 * 一般对应数据存储的状态值
 	 */
-	private String value;
+	private Integer value;
 }
