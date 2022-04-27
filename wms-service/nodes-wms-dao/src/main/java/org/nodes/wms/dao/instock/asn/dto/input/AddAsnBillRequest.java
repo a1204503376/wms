@@ -12,6 +12,9 @@ import java.math.BigDecimal;
  */
 @Data
 public class AddAsnBillRequest implements Serializable {
+
+	private static final long serialVersionUID = 4274547396438773726L;
+
 	/**
 	 * 单据类型
 	 */

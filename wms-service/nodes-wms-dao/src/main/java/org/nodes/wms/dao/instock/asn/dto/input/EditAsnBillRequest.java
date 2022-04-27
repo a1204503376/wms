@@ -15,6 +15,8 @@ import java.math.BigDecimal;
 @Data
 public class EditAsnBillRequest implements Serializable {
 
+	private static final long serialVersionUID = -6185516788898062120L;
+
 	/**
 	 * Asn单id
 	 */

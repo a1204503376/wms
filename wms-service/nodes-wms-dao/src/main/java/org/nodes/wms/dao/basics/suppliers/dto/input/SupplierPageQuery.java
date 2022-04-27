@@ -10,6 +10,9 @@ import java.util.Date;
  */
 @Data
 public class SupplierPageQuery implements Serializable {
+
+	private static final long serialVersionUID = -6301958926592865063L;
+
 	/**
 	 * 供应商编码
 	 */

@@ -10,6 +10,9 @@ import java.util.Date;
  */
 @Data
 public class PageResponse implements Serializable {
+
+	private static final long serialVersionUID = 8705509654116950416L;
+
 	/**
 	 * ASN单ID
 	 */

@@ -16,6 +16,8 @@ import java.util.Date;
 @EqualsAndHashCode
 public class AsnPropertyReceiveResponse implements Serializable {
 
+	private static final long serialVersionUID = -2138640940190251249L;
+
 	/**
 	 * 收货单主键id
 	 */

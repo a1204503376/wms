@@ -15,6 +15,8 @@ import java.util.List;
 @Data
 public class DeleteRequest implements Serializable {
 
+	private static final long serialVersionUID = 3964587884943011146L;
+
 	/**
 	 * 主键id
 	 */

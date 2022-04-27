@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 @EqualsAndHashCode
 public class AsnPropertyDetailResponse implements Serializable {
 
+	private static final long serialVersionUID = 1959979521968969432L;
+
 	/**
 	 * ASN单明细ID
 	 */

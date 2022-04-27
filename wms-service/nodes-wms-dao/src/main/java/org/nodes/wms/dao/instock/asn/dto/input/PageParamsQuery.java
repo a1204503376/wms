@@ -10,6 +10,9 @@ import java.util.Date;
  */
 @Data
 public class PageParamsQuery implements Serializable {
+
+	private static final long serialVersionUID = 1599695543698915713L;
+
 	/**
 	 * asn单据编码
 	 */

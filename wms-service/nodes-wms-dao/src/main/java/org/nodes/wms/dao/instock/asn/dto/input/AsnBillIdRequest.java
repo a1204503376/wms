@@ -13,6 +13,9 @@ import java.io.Serializable;
  **/
 @Data
 public class AsnBillIdRequest implements Serializable {
+
+	private static final long serialVersionUID = 4945960289253418906L;
+
 	@NotNull(message = "Asn单id不能为空")
 	private Long asnBillId;
 }

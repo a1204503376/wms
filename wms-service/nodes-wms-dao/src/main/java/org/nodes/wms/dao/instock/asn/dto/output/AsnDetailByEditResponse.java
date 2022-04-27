@@ -13,6 +13,8 @@ import java.io.Serializable;
 @Data
 public class AsnDetailByEditResponse implements Serializable {
 
+	private static final long serialVersionUID = 2926311540120578861L;
+
 	/**
 	 * Asn单id
 	 */

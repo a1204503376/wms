@@ -16,6 +16,7 @@ import java.util.List;
 @Data
 public class AsnDetailResponse implements Serializable {
 
+	private static final long serialVersionUID = -9097169466236888793L;
 	/**
 	 * 主键
 	 */
