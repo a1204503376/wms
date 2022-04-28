@@ -3,6 +3,7 @@ import func from "@/util/func";
 import {getCrudColumnResponseList} from "@/api/core/column";
 import {deepClone} from "@/util/util";
 import {mapGetters} from "vuex";
+import item from "@/views/wms/billing/item";
 
 export const listMixin = {
     mixins: [menuMixin],
@@ -49,7 +50,26 @@ export const listMixin = {
             this.getTableData();
         },
         onReset() {
-
+            this.restoreDefaults();
+        },
+        restoreDefaults(){
+            function recursionObject(obj) {
+                for (let key of Object.keys(obj)) {
+                    let value = obj[key];
+                    if (func.isNumber(value)) {
+                        obj[key] = 0;
+                    } else if (func.isArray(value)) {
+                        obj[key] = [];
+                    } else if (func.isStr(value)) {
+                        obj[key] = '';
+                    } else if (func.isBoolean(value)) {
+                        obj[key] = false;
+                    } else if (func.isObject(value)) {
+                        recursionObject(value);
+                    }
+                }
+            }
+            recursionObject(this.form.params);
         },
         onRefresh() {
             this.getTableData();
