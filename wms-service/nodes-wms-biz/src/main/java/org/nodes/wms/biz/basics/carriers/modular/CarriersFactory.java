@@ -1,6 +1,6 @@
 package org.nodes.wms.biz.basics.carriers.modular;
 
-import org.nodes.wms.dao.basics.carriers.dto.input.newCarrierRequest;
+import org.nodes.wms.dao.basics.carriers.dto.input.NewCarrierRequest;
 import org.nodes.wms.dao.basics.carriers.entites.BasicsCarriers;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CarriersFactory {
-	public BasicsCarriers createCarriers(newCarrierRequest newCarrierRequest) {
+	public BasicsCarriers createCarriers(NewCarrierRequest newCarrierRequest) {
 		BasicsCarriers basicsCarriers = new BasicsCarriers();
 		basicsCarriers.setCode(newCarrierRequest.getCode());
 		basicsCarriers.setName(newCarrierRequest.getName());

@@ -9,7 +9,7 @@ import org.junit.runners.MethodSorters;
 import org.nodes.wms.biz.basics.carriers.impl.CarriersBizImpl;
 import org.nodes.wms.dao.basics.carriers.dto.input.DeleteCarriersRequest;
 import org.nodes.wms.dao.basics.carriers.dto.input.CarrierPageQuery;
-import org.nodes.wms.dao.basics.carriers.dto.input.newCarrierRequest;
+import org.nodes.wms.dao.basics.carriers.dto.input.NewCarrierRequest;
 import org.nodes.wms.dao.basics.carriers.dto.output.CarrierResponse;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.test.BladeBootTest;
@@ -44,7 +44,7 @@ public class CarriersTest {
 
 	@Test
 	public void test02() {
-		newCarrierRequest newCarrierRequest = new newCarrierRequest();
+		NewCarrierRequest newCarrierRequest = new NewCarrierRequest();
 		newCarrierRequest.setCode("12");
 		newCarrierRequest.setName("王五");
 		Assertions.assertEquals(true, carriersBiz.newCarrier(newCarrierRequest));
