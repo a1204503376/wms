@@ -35,8 +35,8 @@ export const listMixin = {
     },
     computed: {
         ...mapGetters(["permission"]),
-        permissionList() {
-            return {};
+        permissionObj(){
+            return {}
         }
     },
     created() {

@@ -16,7 +16,12 @@
                     <div class="d-div-right">
                         <el-form-item>
                             <slot name="searchBtn"></slot>
-                            <el-button native-type="submit" type="primary" @click="onSearch">查找</el-button>
+                            <el-button v-if="permission.search"
+                            native-type="submit" 
+                            type="primary" 
+                            @click="onSearch">
+                            查找
+                            </el-button>
                             <el-button @click="onReset">重置</el-button>
                             <el-button v-if="config.showExpandBtn"
                                        :icon="expandMore ?'el-icon-arrow-up':'el-icon-arrow-down'" type="text"
@@ -68,7 +73,8 @@ export default {
                     showPage: true
                 }
             }
-        }
+        },
+        permission:{type:Object,required:true}
     },
     data() {
         return {
