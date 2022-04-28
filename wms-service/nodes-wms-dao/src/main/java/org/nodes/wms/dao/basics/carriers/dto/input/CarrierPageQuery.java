@@ -1,14 +1,24 @@
 package org.nodes.wms.dao.basics.carriers.dto.input;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
+import org.springblade.core.tool.utils.DateUtil;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 承运商表 分页参数
  **/
 @Data
-public class CarrierPageQuery {
+public class CarrierPageQuery implements Serializable {
+
+	private static final long serialVersionUID = 3575200749615041207L;
 	/**
 	 * 承运商编码
 	 */
@@ -24,17 +34,25 @@ public class CarrierPageQuery {
 	/**
 	 * 创建时间开始
 	 */
+	@JsonFormat(pattern = DateUtil.PATTERN_DATE)
+	@DateTimeFormat(pattern = DateUtil.PATTERN_DATE)
 	private Date createTimeBegin;
 	/**
 	 * 创建时间结束
 	 */
+	@JsonFormat(pattern = DateUtil.PATTERN_DATE)
+	@DateTimeFormat(pattern = DateUtil.PATTERN_DATE)
 	private Date createTimeEnd;
 	/**
 	 * 更新时间开始
 	 */
+	@JsonFormat(pattern = DateUtil.PATTERN_DATE)
+	@DateTimeFormat(pattern = DateUtil.PATTERN_DATE)
 	private Date  updateTimeBegin;
 	/**
 	 * 更新时间结束
 	 */
+	@JsonFormat(pattern = DateUtil.PATTERN_DATE)
+	@DateTimeFormat(pattern = DateUtil.PATTERN_DATE)
 	private Date  updateTimeEnd;
 }
