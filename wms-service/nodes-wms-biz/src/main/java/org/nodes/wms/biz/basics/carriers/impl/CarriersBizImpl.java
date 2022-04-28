@@ -8,7 +8,7 @@ import org.nodes.wms.biz.basics.carriers.modular.CarriersFactory;
 import org.nodes.wms.dao.basics.carriers.CarriersDao;
 import org.nodes.wms.dao.basics.carriers.dto.input.DeleteCarriersRequest;
 import org.nodes.wms.dao.basics.carriers.dto.input.CarrierPageQuery;
-import org.nodes.wms.dao.basics.carriers.dto.input.newCarrierRequest;
+import org.nodes.wms.dao.basics.carriers.dto.input.NewCarrierRequest;
 import org.nodes.wms.dao.basics.carriers.dto.output.CarrierResponse;
 import org.nodes.wms.dao.basics.carriers.entites.BasicsCarriers;
 import org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse;
@@ -32,7 +32,7 @@ public class CarriersBizImpl implements CarriersBiz {
 	}
 
 	@Override
-	public boolean newCarrier(newCarrierRequest newCarrierRequest) {
+	public boolean newCarrier(NewCarrierRequest newCarrierRequest) {
 		boolean isExist = carriersDao.isExistCarrierCode(newCarrierRequest.getCode());
 		if(isExist){
 			throw new ServiceException("新增承运商失败，编码重复");

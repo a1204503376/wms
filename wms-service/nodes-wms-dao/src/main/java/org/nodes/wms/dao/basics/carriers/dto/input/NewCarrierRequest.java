@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
  * 承运商管理接收类
  **/
 @Data
-public class newCarrierRequest {
+public class NewCarrierRequest {
 	/**
 	 * 承运商编码
 	 */

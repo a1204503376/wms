@@ -5,7 +5,7 @@ import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.carriers.CarriersBiz;
 import org.nodes.wms.dao.basics.carriers.dto.input.DeleteCarriersRequest;
 import org.nodes.wms.dao.basics.carriers.dto.input.CarrierPageQuery;
-import org.nodes.wms.dao.basics.carriers.dto.input.newCarrierRequest;
+import org.nodes.wms.dao.basics.carriers.dto.input.NewCarrierRequest;
 import org.nodes.wms.dao.basics.carriers.dto.output.CarrierResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
@@ -22,8 +22,8 @@ public class CarriersController {
 	/**
 	 * 承运商管理分页查询
 	 */
-	@GetMapping("/page")
-	public R<IPage<CarrierResponse>> page(@RequestParam CarrierPageQuery carrierPageQuery, Query query) {
+	@PostMapping("/page")
+	public R<IPage<CarrierResponse>> page(@RequestBody CarrierPageQuery carrierPageQuery, Query query) {
 		IPage<CarrierResponse> pages = carriersBiz.getPage(query, carrierPageQuery);
 		return R.data(pages);
 	}
@@ -32,7 +32,7 @@ public class CarriersController {
 	 */
 	@ApiLog("承运商管理-新增")
 	@PostMapping("/newCarrier")
-	public R newCarrier(@RequestParam newCarrierRequest newCarrierRequest) {
+	public R newCarrier(@RequestBody NewCarrierRequest newCarrierRequest) {
 		return R.status(carriersBiz.newCarrier(newCarrierRequest));
 	}
 	/**
@@ -40,7 +40,7 @@ public class CarriersController {
 	 */
 	@ApiLog("承运商管理-逻辑删除")
 	@PostMapping("/delete")
-	public R delete(@RequestParam DeleteCarriersRequest deleteRequest) {
+	public R delete(@RequestBody DeleteCarriersRequest deleteRequest) {
 		return R.status(carriersBiz.remove(deleteRequest));
 	}
 }

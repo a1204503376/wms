@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.carriers.dto.input.DeleteCarriersRequest;
 import org.nodes.wms.dao.basics.carriers.dto.input.CarrierPageQuery;
 import org.springblade.core.mp.support.Query;
-import org.nodes.wms.dao.basics.carriers.dto.input.newCarrierRequest;
+import org.nodes.wms.dao.basics.carriers.dto.input.NewCarrierRequest;
 import org.nodes.wms.dao.basics.carriers.dto.output.CarrierResponse;
 
 
@@ -19,7 +19,7 @@ public interface CarriersBiz {
 	/**
 	 *  保存
 	 **/
-	boolean newCarrier(newCarrierRequest newCarrierRequest);
+	boolean newCarrier(NewCarrierRequest newCarrierRequest);
 	/**
 	 *  逻辑删除
 	 **/
