@@ -54,7 +54,10 @@ export const listMixin = {
         onRefresh() {
             this.getTableData();
         },
-        onSortChange(column, prop, order) {
+        onSortChange(column) {
+            let prop = column.prop;
+            let order = column.order;
+            console.log(column);
             if (order === "ascending") {
                 this.page.ascs = prop;
                 this.page.descs = "";
@@ -65,6 +68,7 @@ export const listMixin = {
                 this.page.ascs = "";
                 this.page.descs = "";
             }
+            this.getTableData();
         },
         handleSizeChange(val) {
             this.page.size = val;
