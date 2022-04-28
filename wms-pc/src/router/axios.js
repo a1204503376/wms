@@ -17,6 +17,7 @@ import website from '@/config/website';
 import {Base64} from 'js-base64';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
+import func from '@/util/func'
 
 //默认超时时间
 axios.defaults.timeout = 1000 * 60;
