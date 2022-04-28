@@ -2,6 +2,7 @@
     <nodes-select
         v-model="val"
         :data-source="dataSource"
+        v-bind="$attrs"
     >
     </nodes-select>
 </template>
@@ -11,14 +12,14 @@ import NodesSelect from "@/components/wms/general/NodesSelect";
 import {stateService} from "@/api/wms/state/asnBillState";
 
 export default {
-    name: "NodesInStorageType",
+    name: "NodesInStoreMode",
     components: {NodesSelect},
     model: {
         prop: 'selectVal',
         event: 'selectValChange'
     },
     props: {
-        selectVal: Array
+        selectVal: [Array, Number]
     },
     data() {
         return {
