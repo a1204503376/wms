@@ -70,9 +70,9 @@ public class CarrierExcelResponse implements Serializable {
 	private Date updateTime;
 
 	/**
-	 * 业务状态
+	 * 是否启用
 	 */
 	@ColumnWidth(15)
-	@ExcelProperty({"业务状态"})
+	@ExcelProperty({"是否启用"})
 	private String status;
 }
