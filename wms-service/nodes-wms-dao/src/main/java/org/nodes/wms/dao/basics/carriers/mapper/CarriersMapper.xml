@@ -50,7 +50,7 @@
         </if>
 
     </select>
-    <select id="getExcel"  resultType="org.nodes.wms.dao.basics.carriers.dto.output.CarrierExcelResponse">
+    <select id="getCarriers"  resultType="org.nodes.wms.dao.basics.carriers.dto.output.CarrierExcelResponse">
         select
         carriers.code,
         carriers.name,

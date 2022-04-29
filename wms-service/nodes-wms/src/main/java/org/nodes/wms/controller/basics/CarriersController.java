@@ -56,7 +56,7 @@ public class CarriersController {
 	@ApiLog("承运商管理-导出承运商")
 	@PostMapping("/excel")
 	public void excel(@ApiIgnore @RequestBody HashMap<String, Object> params, HttpServletResponse response) {
-		carriersBiz.excel(params,response);
+		carriersBiz.exportExcel(params,response);
 	}
 
 

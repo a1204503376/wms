@@ -56,8 +56,8 @@ public class CarriersDaoImpl extends BaseServiceImpl<CarriersMapper, BasicsCarri
 	 * @param params   查询条件
 	 */
 	@Override
-	public List<CarrierExcelResponse> exportExcel(HashMap<String, Object> params) {
-		return carriersMapper.getExcel(params);
+	public List<CarrierExcelResponse> getCarriers(HashMap<String, Object> params) {
+		return carriersMapper.getCarriers(params);
 	}
 
 	/**

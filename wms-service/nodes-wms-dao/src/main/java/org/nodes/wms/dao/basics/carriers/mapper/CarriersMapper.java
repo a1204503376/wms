@@ -18,5 +18,5 @@ import java.util.List;
  */
 public interface CarriersMapper  extends BaseMapper<BasicsCarriers> {
 	Page<CarrierResponse> getPage(IPage<?> page, @Param("query") CarrierPageQuery carrierPageQuery);
-	List<CarrierExcelResponse> getExcel(@Param("query") HashMap<String, Object> params);
+	List<CarrierExcelResponse> getCarriers(@Param("query") HashMap<String, Object> params);
 }

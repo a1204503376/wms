@@ -54,8 +54,8 @@ public class CarriersBizImpl implements CarriersBiz {
 	}
 
 	@Override
-	public void excel(HashMap<String, Object> params, HttpServletResponse response) {
-		List<CarrierExcelResponse> basicsCarriersList = carriersDao.exportExcel(params);
+	public void exportExcel(HashMap<String, Object> params, HttpServletResponse response) {
+		List<CarrierExcelResponse> basicsCarriersList = carriersDao.getCarriers(params);
 		ExcelUtil.export(response, "承运商", "承运商位数据表", basicsCarriersList, CarrierExcelResponse.class);
 	}
 

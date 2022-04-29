@@ -33,7 +33,7 @@ public interface CarriersBiz {
 	 * @param params 查询条件
 	 * @param response 响应对象
 	 */
-	void excel(HashMap<String, Object> params, HttpServletResponse response);
+	void exportExcel(HashMap<String, Object> params, HttpServletResponse response);
 	/**
 	 * 根据ID修改状态
 	 * @param updateStatusRequest 内含id与状态

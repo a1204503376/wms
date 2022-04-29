@@ -35,7 +35,7 @@ public interface CarriersDao {
 	 * 导出Excel
 	 * @param params 查询条件
 	 **/
-	List<CarrierExcelResponse> exportExcel(HashMap<String, Object> params);
+	List<CarrierExcelResponse> getCarriers(HashMap<String, Object> params);
 
 	/**
 	 * 根据ID修改状态
