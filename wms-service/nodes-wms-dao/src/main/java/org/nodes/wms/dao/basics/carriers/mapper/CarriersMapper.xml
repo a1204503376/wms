@@ -50,5 +50,34 @@
         </if>
 
     </select>
+    <select id="getExcel"  resultType="org.nodes.wms.dao.basics.carriers.dto.output.CarrierExcelResponse">
+        select
+        carriers.code,
+        carriers.name,
+        carriers.simple_name,
+        owners.owner_name,
+        carriers.remark,
+        carriers.create_time,
+        user1.real_name create_user,
+        user2.real_name update_user,
+        carriers.update_time,
+        (CASE when carriers.status=1 Then '启用' Else '未启用' End) status
+        from basics_carriers carriers
+        LEFT JOIN blade_user user1 ON user1.id = carriers.create_user
+        LEFT JOIN blade_user user2 ON user2.id = carriers.update_user
+        LEFT JOIN wms_owner owners on owners.wo_id=carriers.wo_id
+        <where>
+            AND carriers.is_deleted = '0'
+            <if test="query.code!=null and query.code != ''">
+                AND carriers.code LIKE concat('%',#{query.code},'%')
+            </if>
+            <if test="query.name!=null and query.name != ''">
+                AND carriers.name LIKE concat('%',#{query.name},'%')
+            </if>
+            <if test="query.simpleName!=null and query.simpleName != ''">
+                AND carriers.simple_name LIKE concat('%',#{query.simpleName},'%')
+            </if>
+        </where>
 
+    </select>
 </mapper>

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.carriers.dto.input.CarrierPageQuery;
 import org.nodes.wms.dao.basics.carriers.dto.input.DeleteCarriersRequest;
+import org.nodes.wms.dao.basics.carriers.dto.output.CarrierExcelResponse;
 import org.nodes.wms.dao.basics.carriers.dto.output.CarrierResponse;
 import org.nodes.wms.dao.basics.carriers.entites.BasicsCarriers;
 
@@ -34,7 +35,7 @@ public interface CarriersDao {
 	 * 导出Excel
 	 * @param params 查询条件
 	 **/
-	List<BasicsCarriers> exportExcel(HashMap<String, Object> params);
+	List<CarrierExcelResponse> exportExcel(HashMap<String, Object> params);
 
 	/**
 	 * 根据ID修改状态

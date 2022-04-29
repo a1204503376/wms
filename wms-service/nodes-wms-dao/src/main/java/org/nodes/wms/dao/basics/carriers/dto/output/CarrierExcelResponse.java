@@ -15,12 +15,6 @@ public class CarrierExcelResponse implements Serializable {
 
 	private static final long serialVersionUID = -7014238386876740344L;
 	/**
-	 * 承运商ID
-	 */
-	@ColumnWidth(15)
-	@ExcelProperty({"承运商表ID"})
-	private Long id;
-	/**
 	 * 承运商编码
 	 */
 	@ColumnWidth(15)
@@ -39,9 +33,11 @@ public class CarrierExcelResponse implements Serializable {
 	@ExcelProperty({"承运商简称"})
 	private String  simpleName;
 	/**
-	 * 货主ID
+	 * 货主名称
 	 */
-	private String  woId;
+	@ColumnWidth(16)
+	@ExcelProperty({"货主名称"})
+	private String  ownerName;
 	/**
 	 * 备注
 	 */
@@ -49,7 +45,34 @@ public class CarrierExcelResponse implements Serializable {
 	@ExcelProperty({"备注"})
 	private String  remark;
 	/**
+	 * 创建人
+	 */
+	@ColumnWidth(15)
+	@ExcelProperty({"创建人"})
+	private String createUser;
+	/**
+	 * 创建时间
+	 */
+	@ColumnWidth(18)
+	@ExcelProperty({"创建时间"})
+	private Date createTime;
+	/**
+	 * 更新人
+	 */
+	@ColumnWidth(15)
+	@ExcelProperty({"更新人"})
+	private String updateUser;
+	/**
+	 * 更新时间
+	 */
+	@ColumnWidth(18)
+	@ExcelProperty({"更新时间"})
+	private Date updateTime;
+
+	/**
 	 * 业务状态
 	 */
-	private Integer status;
+	@ColumnWidth(15)
+	@ExcelProperty({"业务状态"})
+	private String status;
 }

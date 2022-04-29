@@ -108,14 +108,14 @@ import fileDownload from "js-file-download";
                         </el-table-column>
                     </template>
                     <el-table-column
-                        label="是否启用">
+                        label="是否启用" width="170">
                         <template slot-scope="scope">
                             <el-switch
                                 v-model="scope.row.status"
                                 active-color="#409EFF"
                                 inactive-color="#ff4949"
-                                active-text="开"
-                                inactive-text="关"
+                                active-text="启用"
+                                inactive-text="未启用"
                                 :active-value="1"
                                 :inactive-value="-1"
                                 @change="switchChange(scope.row)">

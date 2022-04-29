@@ -7,11 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.basics.carriers.CarriersDao;
 import org.nodes.wms.dao.basics.carriers.dto.input.DeleteCarriersRequest;
 import org.nodes.wms.dao.basics.carriers.dto.input.CarrierPageQuery;
+import org.nodes.wms.dao.basics.carriers.dto.output.CarrierExcelResponse;
 import org.nodes.wms.dao.basics.carriers.dto.output.CarrierResponse;
 import org.nodes.wms.dao.basics.carriers.entites.BasicsCarriers;
 import org.nodes.wms.dao.basics.carriers.mapper.CarriersMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
-import org.springblade.core.mp.support.Condition;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -56,8 +56,8 @@ public class CarriersDaoImpl extends BaseServiceImpl<CarriersMapper, BasicsCarri
 	 * @param params   查询条件
 	 */
 	@Override
-	public List<BasicsCarriers> exportExcel(HashMap<String, Object> params) {
-        return super.list(Condition.getQueryWrapper(params, BasicsCarriers.class));
+	public List<CarrierExcelResponse> exportExcel(HashMap<String, Object> params) {
+		return carriersMapper.getExcel(params);
 	}
 
 	/**
