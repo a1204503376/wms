@@ -1,3 +1,4 @@
+import fileDownload from "js-file-download";
 <template>
     <el-form ref="searchForm"
              v-model="form"
@@ -21,7 +22,8 @@
                 <el-row type="flex">
                     <el-col :span="24">
                         <el-form-item label="创建日期">
-                            <nodes-date-range v-model="form.params.createTimeDateRange" value-fomat="yyyy-MM-dd"></nodes-date-range>
+                            <nodes-date-range v-model="form.params.createTimeDateRange"
+                                              value-fomat="yyyy-MM-dd"></nodes-date-range>
                         </el-form-item>
                         <el-form-item label="修改日期">
                             <nodes-date-range v-model="form.params.updateTimeDateRange"></nodes-date-range>
@@ -69,7 +71,7 @@
                     effect="dark"
                     placement="top"
                 >
-                    <el-button circle icon="el-icon-download" size="mini"></el-button>
+                    <el-button circle icon="el-icon-download" size="mini" @click="excelCarrier"></el-button>
                 </el-tooltip>
             </template>
             <template v-slot:table>
@@ -105,11 +107,27 @@
                             v-bind="column">
                         </el-table-column>
                     </template>
+                    <el-table-column
+                        label="是否启用">
+                        <template slot-scope="scope">
+                            <el-switch
+                                v-model="scope.row.status"
+                                active-color="#409EFF"
+                                inactive-color="#ff4949"
+                                active-text="开"
+                                inactive-text="关"
+                                :active-value="1"
+                                :inactive-value="-1"
+                                @change="switchChange(scope.row)">
+                            </el-switch>
+                        </template>
+
+
+                    </el-table-column>
                 </el-table>
             </template>
             <template v-slot:page>
                 <el-pagination
-                    :hide-on-single-page="hideOnSinglePage"
                     :page-size="page.size"
                     :page-sizes="[20, 50, 100]"
                     :total="page.total"
@@ -121,10 +139,6 @@
                 </el-pagination>
             </template>
         </nodes-master-page>
-        <dialog-column
-            v-bind="columnShowHide"
-            @close="onColumnShowHide">
-        </dialog-column>
     </el-form>
 </template>
 
@@ -132,11 +146,9 @@
 
 
     import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
-    import NodesAsnBillState from "@/components/wms/select/NodesAsnBillState";
-    import NodesInStorageType from "@/components/wms/select/NodesInStorageType";
     import NodesDateRange from "@/components/wms/general/NodesDateRange";
     import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
-    import DialogColumn from "@/components/element-ui/crud/dialog-column";
+    import fileDownload from "js-file-download";
     import {listMixin} from "@/mixins/list";
     // eslint-disable-next-line no-unused-vars
     import {
@@ -145,15 +157,14 @@
         newCarrier,
         // eslint-disable-next-line no-unused-vars
         deleteCarrier,
+        excelCarrier,
+        updateCarrier,
     } from "@/api/wms/basics/Carrier.js";
 
     export default {
-        name: "basics",
+        name: "carrier",
         components: {
-            DialogColumn,
             NodesSearchInput,
-            NodesInStorageType,
-            NodesAsnBillState,
             NodesMasterPage,
             NodesDateRange
         },
@@ -169,13 +180,18 @@
                     showExpandBtn: true
                 },
                 params: {},
+                excelParams: {
+                    code: '',//承运商编码
+                    name: '',//承运商名称
+                    simpleName: '',//承运商简称
+                },
                 form: {
                     params: {
                         code: '',//承运商编码
                         name: '',//承运商名称
                         simpleName: '',//承运商简称
-                        createTimeDateRange:['',''],//创建时间开始 创建时间结束
-                        updateTimeDateRange:['',''],//更新时间开始 更新时间结束
+                        createTimeDateRange: ['', ''],//创建时间开始 创建时间结束
+                        updateTimeDateRange: ['', ''],//更新时间开始 更新时间结束
                     }
                 },
                 table: {
@@ -189,20 +205,32 @@
                             label: '承运商名称'
                         },
                         {
-                            prop: 'name',
+                            prop: 'simpleName',
                             label: '承运商简称'
                         },
                         {
-                            prop: 'woId',
+                            prop: 'ownerName',
                             label: '货主编码'
-                        },
-                        {
-                            prop: 'status',
-                            label: '是否启用'
                         },
                         {
                             prop: 'remark',
                             label: '备注'
+                        },
+                        {
+                            prop: 'createTime',
+                            label: '创建时间'
+                        },
+                        {
+                            prop: 'createUser',
+                            label: '创建人'
+                        },
+                        {
+                            prop: 'updateTime',
+                            label: '修改时间'
+                        },
+                        {
+                            prop: 'updateUser',
+                            label: '修改人'
                         }
                     ]
                 },
@@ -230,14 +258,25 @@
 
         },
         methods: {
-            onReset() {
-                this.form.params.code = '';//承运商编码
-                this.form.params.name = '';//承运商名称
-                this.form.params.simpleName = '';//承运商简称
-                this.form.params.createTimeBegin = '';//创建时间开始
-                this.form.params.createTimeEnd = '';//创建时间结束
-                this.form.params.updateTimeBegin = '';//更新时间开始
-                this.form.params.updateTimeEnd = '';//更新时间结束
+            switchChange(row) {
+                let parpams = {
+                    id: row.id,
+                    status: row.status
+                }
+                updateCarrier(parpams).then((res) => {
+                    if (res.data.code == 200) {
+                        this.$message({
+                            type: "success",
+                            message: res.data.msg
+                        });
+                        this.getTableData();
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: res.data.msg
+                        });
+                    }
+                });
             },
             hideOnSinglePage() {
             },
@@ -247,6 +286,15 @@
             selectionClear() {
                 this.selectionList = [];
                 this.$refs.table.toggleSelection();
+            },
+            excelCarrier() {
+                var that = this;
+                that.excelParams.code = this.form.params.code;
+                that.excelParams.name = this.form.params.name;
+                that.excelParams.simpleName = this.form.params.simpleName;
+                excelCarrier(that.excelParams).then((res) => {
+                    fileDownload(res.data, "物品分类.xlsx");
+                });
             },
             getTableData() {
                 var that = this;
@@ -260,7 +308,7 @@
                 });
             },
             onRemove() {
-                this.$confirm("确定删除供应商编码为" + this.codes+ "的数据吗?", {
+                this.$confirm("确定删除供应商编码为" + this.codes + "的数据吗?", {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning"

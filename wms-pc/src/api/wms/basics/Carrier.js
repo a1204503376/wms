@@ -30,3 +30,19 @@ export const deleteCarrier = (deleteRequest) => {
     })
 }
 
+export const excelCarrier = (params) => {
+    return request({
+        url: '/api/wms/carriers/excel',
+        method: 'post',
+        data: params,
+        responseType: 'blob'
+    })
+}
+
+export const updateCarrier = (updateStatusRequest) => {
+    return request({
+        url: '/api/wms/carriers/updateStatusById',
+        method: 'post',
+        data: updateStatusRequest
+    })
+}
