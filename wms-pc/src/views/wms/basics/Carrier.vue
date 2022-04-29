@@ -108,21 +108,15 @@ import fileDownload from "js-file-download";
                         </el-table-column>
                     </template>
                     <el-table-column
-                        label="是否启用" width="170">
+                        label="是否启用">
                         <template slot-scope="scope">
-                            <el-switch
-                                v-model="scope.row.status"
-                                active-color="#409EFF"
-                                inactive-color="#ff4949"
-                                active-text="启用"
-                                inactive-text="未启用"
-                                :active-value="1"
-                                :inactive-value="-1"
-                                @change="switchChange(scope.row)">
-                            </el-switch>
+                            <span v-if="scope.row.status>0">
+                                <el-tag type="success">关</el-tag>
+                            </span>
+                            <span v-if="scope.row.status<0">
+                                <el-tag type="danger">开</el-tag>
+                            </span>
                         </template>
-
-
                     </el-table-column>
                 </el-table>
             </template>
@@ -258,26 +252,6 @@ import fileDownload from "js-file-download";
 
         },
         methods: {
-            switchChange(row) {
-                let parpams = {
-                    id: row.id,
-                    status: row.status
-                }
-                updateCarrier(parpams).then((res) => {
-                    if (res.data.code == 200) {
-                        this.$message({
-                            type: "success",
-                            message: res.data.msg
-                        });
-                        this.getTableData();
-                    } else {
-                        this.$message({
-                            type: "error",
-                            message: res.data.msg
-                        });
-                    }
-                });
-            },
             hideOnSinglePage() {
             },
             selectionChange(row) {
