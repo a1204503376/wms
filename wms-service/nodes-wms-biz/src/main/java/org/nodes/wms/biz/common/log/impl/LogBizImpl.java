@@ -38,7 +38,7 @@ public class LogBizImpl implements LogBiz {
 			noticeMessageRequest.setExpirationDate(DateUtil.plusDays(new Date(), 7));
 		}
 		Collection<LogMessage> logMessage = logFactory.createLogMessage(noticeMessageRequest);
-		logMessageDao.addLogMessage(logMessage);
+		logMessageDao.insertLogMessage(logMessage);
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class LogBizImpl implements LogBiz {
 	@Override
 	public void auditLog(AuditLogType type, String log) {
 		LogAction logAction = logFactory.createLogAction(type, log);
-		actionDao.addLogAction(logAction);
+		actionDao.insertLogAction(logAction);
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class LogBizImpl implements LogBiz {
 	@Override
 	public void auditLog(AuditLogType type, Long billId, String billNo, String log) {
 		LogAction logAction = logFactory.createLogAction(type, billId, billNo, log);
-		actionDao.addLogAction(logAction);
+		actionDao.insertLogAction(logAction);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class LogBizImpl implements LogBiz {
 	@Override
 	public void auditLog(AuditLogRequest auditLogRequest) {
 		LogAction logAction = logFactory.createLogAction(auditLogRequest);
-		actionDao.addLogAction(logAction);
+		actionDao.insertLogAction(logAction);
 	}
 
 }

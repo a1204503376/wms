@@ -15,5 +15,5 @@ public interface LogMessageDao {
 	 * @param messageCollection LogMessage
 	 * @return 是否成功
 	 */
-    Boolean addLogMessage(Collection<LogMessage> messageCollection);
+    Boolean insertLogMessage(Collection<LogMessage> messageCollection);
 }

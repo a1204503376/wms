@@ -24,7 +24,7 @@ public class LogActionDaoImpl  extends BaseServiceImpl<LogActionMapper, LogActio
 	 * @return 是否成功
 	 */
 	@Override
-	public Boolean addLogAction(LogAction logAction) {
+	public Boolean insertLogAction(LogAction logAction) {
 		return super.save(logAction);
 	}
 

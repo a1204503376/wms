@@ -12,5 +12,5 @@ public interface LogActionDao {
 	 * @param logAction 日志审批对象
 	 * @return 是否成功
 	 */
-	Boolean addLogAction(LogAction logAction);
+	Boolean insertLogAction(LogAction logAction);
 }

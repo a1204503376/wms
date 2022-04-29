@@ -27,7 +27,7 @@ public class LogMessageDaoImpl extends BaseServiceImpl<LogMessageMapper, LogMess
 	 * @return 是否成功
 	 */
 	@Override
-	public Boolean addLogMessage(Collection<LogMessage> messageCollection) {
+	public Boolean insertLogMessage(Collection<LogMessage> messageCollection) {
 		return super.saveBatch(messageCollection);
 	}
 
