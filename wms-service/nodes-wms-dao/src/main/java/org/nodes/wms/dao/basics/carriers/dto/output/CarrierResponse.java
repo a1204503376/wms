@@ -30,6 +30,14 @@ public class CarrierResponse {
 	 */
 	private String  woId;
 	/**
+	 * 货主名称
+	 */
+	private String ownerName;
+	/**
+	 * 业务状态
+	 */
+	private Integer status;
+	/**
 	 * 备注
 	 */
 	private String  remark;
@@ -49,8 +57,4 @@ public class CarrierResponse {
 	 * 更新时间
 	 */
 	private Date updateTime;
-	/**
-	 * 业务状态
-	 */
-	private Integer status;
 }

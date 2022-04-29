@@ -6,11 +6,17 @@ import org.nodes.wms.biz.basics.carriers.CarriersBiz;
 import org.nodes.wms.dao.basics.carriers.dto.input.DeleteCarriersRequest;
 import org.nodes.wms.dao.basics.carriers.dto.input.CarrierPageQuery;
 import org.nodes.wms.dao.basics.carriers.dto.input.NewCarrierRequest;
+import org.nodes.wms.dao.basics.carriers.dto.input.UpdateStatusRequest;
 import org.nodes.wms.dao.basics.carriers.dto.output.CarrierResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+
 /**
  *  承运商管理API
  */
@@ -43,4 +49,24 @@ public class CarriersController {
 	public R delete(@RequestBody DeleteCarriersRequest deleteRequest) {
 		return R.status(carriersBiz.remove(deleteRequest));
 	}
+
+	/**
+	 * 承运商管理删除
+	 */
+	@ApiLog("承运商管理-导出承运商")
+	@PostMapping("/excel")
+	public void excel(@ApiIgnore @RequestBody HashMap<String, Object> params, HttpServletResponse response) {
+		carriersBiz.excel(params,response);
+	}
+
+
+	/**
+	 * 承运商管理根据id修改状态
+	 */
+	@ApiLog("承运商管理-修改状态")
+	@PostMapping("/updateStatusById")
+	public R delete(@RequestBody UpdateStatusRequest updateStatusRequest) {
+		return R.status(carriersBiz.updateStatusById(updateStatusRequest));
+	}
+
 }

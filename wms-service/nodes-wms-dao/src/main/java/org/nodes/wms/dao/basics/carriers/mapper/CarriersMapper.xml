@@ -9,6 +9,7 @@
         c.name,
         c.simple_name,
         c.wo_id,
+        owners.owner_name,
         c.remark,
         c.create_time,
         user1.real_name create_user,
@@ -18,6 +19,7 @@
         from basics_carriers c
         LEFT JOIN blade_user user1 ON user1.id = c.create_user
         LEFT JOIN blade_user user2 ON user2.id = c.update_user
+        LEFT JOIN wms_owner owners on owners.wo_id=c.wo_id
         <where>
             AND c.is_deleted = '0'
             <if test="query.code!=null and query.code != ''">

@@ -9,13 +9,22 @@ import org.nodes.wms.dao.basics.carriers.CarriersDao;
 import org.nodes.wms.dao.basics.carriers.dto.input.DeleteCarriersRequest;
 import org.nodes.wms.dao.basics.carriers.dto.input.CarrierPageQuery;
 import org.nodes.wms.dao.basics.carriers.dto.input.NewCarrierRequest;
+import org.nodes.wms.dao.basics.carriers.dto.input.UpdateStatusRequest;
 import org.nodes.wms.dao.basics.carriers.dto.output.CarrierResponse;
 import org.nodes.wms.dao.basics.carriers.entites.BasicsCarriers;
 import org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse;
+import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.tool.utils.BeanUtil;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * 承运商管理业务类
@@ -44,5 +53,30 @@ public class CarriersBizImpl implements CarriersBiz {
 	@Override
 	public boolean remove(DeleteCarriersRequest deleteRequest) {
 		return carriersDao.delete(deleteRequest);
+	}
+
+	@Override
+	public void excel(HashMap<String, Object> params, HttpServletResponse response) {
+		List<BasicsCarriers> basicsCarriersList = carriersDao.exportExcel(params);
+		List<CarrierResponse> carrierExcelList=new ArrayList<>();
+		if(Func.isNotEmpty(basicsCarriersList)){
+			for (BasicsCarriers basicsCarriers:basicsCarriersList)
+			{
+				CarrierResponse carrierExcel= BeanUtil.copy(basicsCarriers,CarrierResponse.class);
+				carrierExcelList.add(carrierExcel);
+			}
+		}
+		ExcelUtil.export(response, "承运商", "承运商位数据表", carrierExcelList, CarrierResponse.class);
+	}
+
+	/**
+	 * 根据id修改启用状态
+	 * @param updateStatusRequest 内含id与状态
+	 * @return 是否成功
+	 */
+	@Override
+	public Boolean updateStatusById(UpdateStatusRequest updateStatusRequest) {
+		BasicsCarriers carriers = carriersFactory.createCarriers(updateStatusRequest);
+		return carriersDao.updateStatus(carriers);
 	}
 }
