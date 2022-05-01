@@ -19,4 +19,9 @@ public class WmsApiPath {
 	 * 列显隐
 	 */
 	public final static String NODES_CURD_COLUMN_URL = WmsApiPath.WMS_ROOT_URL+"nodesCurdColumn";
+
+	/**
+	 * 系统字典
+	 */
+	public static final String DICTIONARY_URL = WmsApiPath.WMS_ROOT_URL + "dictionary";
 }

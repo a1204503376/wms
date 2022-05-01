@@ -132,7 +132,7 @@
 
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesAsnBillState from "@/components/wms/select/NodesAsnBillState";
-import NodesInStorageType from "@/components/wms/select/NodesInStorageType";
+import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
@@ -144,7 +144,7 @@ export default {
     components: {
         DialogColumn,
         NodesSearchInput,
-        NodesInStorageType,
+        NodesInStoreMode,
         NodesAsnBillState,
         NodesMasterPage,
         NodesDateRange
@@ -209,7 +209,7 @@ export default {
         }
     },
     created() {
-        
+
     },
     methods:{
          getTableData() {

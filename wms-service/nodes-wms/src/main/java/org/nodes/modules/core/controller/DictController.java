@@ -17,9 +17,9 @@
 package org.nodes.modules.core.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.*;
-import lombok.AllArgsConstructor;
-import org.nodes.core.base.cache.DictCache;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
 import org.nodes.core.base.entity.Dict;
 import org.nodes.core.base.service.IDictService;
 import org.nodes.core.base.vo.DictVO;
@@ -41,7 +41,6 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -50,14 +49,12 @@ import static org.springblade.core.cache.constant.CacheConstant.DICT_CACHE;
 import static org.springblade.core.cache.constant.CacheConstant.SYS_CACHE;
 
 /**
- * 控制器
+ * 字典 控制器
  *
- * @author Nodes
  */
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping(AppConstant.APPLICATION_SYSTEM_NAME + "/dict")
-@Api(value = "字典", tags = "字典")
 public class DictController extends BladeController {
 
 	private IDictService dictService;

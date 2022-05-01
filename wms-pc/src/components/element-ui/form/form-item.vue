@@ -20,21 +20,6 @@
                                  :option="col['$option']"
                                  @selection-change="(val)=>onDynamicSelectChange(val, col)"
                     ></nodes-table>
-                    <!--                    <edit-table v-model="form[col.prop]"-->
-                    <!--                                :ref="'dynamic_' + col.prop"-->
-                    <!--                                :option="col['_option']"-->
-                    <!--                                :owner="form"-->
-                    <!--                                :form="owner"-->
-                    <!--                                :root="root"-->
-                    <!--                                :height="col.height"-->
-                    <!--                                :row-class-name="({row, rowIndex})=>col.rowClassName && col.rowClassName(row, rowIndex)"-->
-                    <!--                                @before-add="(row)=>dynamicBeforeAdd(row, col)"-->
-                    <!--                                @before-edit="dynamicBeforeEdit($event, col.prop)"-->
-                    <!--                                @saved="(row, index)=> dynamicSaved(row, col.prop, {col, index})"-->
-                    <!--                                @deleted="(row, rowIndex, prop)=>dynamicDeleted(-->
-                    <!--                                                                                                row, rowIndex, col)"-->
-                    <!--                                @selection-change="dynamicSelectionChange($event, col)"-->
-                    <!--                    ></edit-table>-->
                 </template>
                 <!-- 按钮 -->
                 <template v-else-if="col.type === 'button'">

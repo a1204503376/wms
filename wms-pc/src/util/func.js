@@ -1,3 +1,5 @@
+import {getObjType} from "@/util/util";
+
 /**
  * 通用工具类
  */
@@ -137,5 +139,63 @@ export default class func {
      */
     static isStr(obj) {
         return typeof (obj) === 'string';
+    }
+
+    /**
+     * 判断对象是否为数值
+     * @param obj
+     * @returns {boolean}
+     */
+    static isNumber(obj){
+        return  getObjType(obj) === 'number';
+    }
+
+    /**
+     * 判断对象是否为Boolean
+     * @param obj
+     * @returns {boolean}
+     */
+    static isBoolean(obj){
+        return  getObjType(obj) === 'boolean';
+    }
+
+    /**
+     * 判断对象是否为Object
+     * @param obj
+     * @returns {boolean}
+     */
+    static isObject(obj){
+        return  getObjType(obj) === 'object';
+    }
+
+    static recursionObject(obj, that, target) {
+        if (this.isArray(obj)){
+            obj.forEach((item)=>{
+                this.recursionObject(item,that,target);
+            });
+        }
+        for (let key of Object.keys(obj)) {
+            let value = obj[key];
+            if (this.isNumber(value)
+                || this.isStr(value)
+                || this.isBoolean(value)
+            ) {
+                that.$set(target, key, value);
+            } else if (this.isArray(value)) {
+                if (value.length > 0 && this.isObject(value[0])) {
+                    value.forEach((item) => {
+                        this.recursionObject(value, that, item);
+                    })
+                } else {
+                    // 先删除数据内容，然后再加入，保证响应式
+                    that.form.params[key].splice(0, target[key].length)
+                    value.forEach((item, index) => {
+                        that.$set(target[key], index, item);
+                    })
+                }
+            } else if (this.isObject(value)) {
+                this.recursionObject(value, that, target[key]);
+            }
+        }
     }
 }

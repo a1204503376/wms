@@ -1,16 +1,19 @@
 <template>
     <div id="list">
-        <nodes-master-page :configure="masterConfig" v-on="form.events">
+        <nodes-master-page :configure="masterConfig" :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-form-item label="物品编码">
                     <el-input v-model="form.params.skuCode" class="d-input"></el-input>
+                </el-form-item>
+                <el-form-item label="a.b">
+                    <el-input v-model="form.params.a.b" class="d-input"></el-input>
                 </el-form-item>
                 <el-form-item label="状态">
                     <nodes-asn-bill-state v-model="form.params.asnState"></nodes-asn-bill-state>
                 </el-form-item>
                 <el-form-item label="入库方式">
-                    <nodes-in-storage-type v-model="form.params.inStorageType"
-                                           style="width: 180px"></nodes-in-storage-type>
+                    <nodes-in-store-mode v-model="form.params.inStorageType"
+                                         style="width: 180px"></nodes-in-store-mode>
                 </el-form-item>
             </template>
             <template v-slot:expandSearch>
@@ -70,7 +73,7 @@
                 </el-row>
             </template>
             <template v-slot:batchBtn>
-                <el-button size="mini" type="primary" @click="onRemove">删除</el-button>
+                <el-button size="mini" type="primary" @click="onAdd">新增</el-button>
                 <el-button size="mini" type="primary">冻结</el-button>
             </template>
             <template v-slot:tableTool>
@@ -151,17 +154,19 @@
                     :page-sizes="[20, 50, 100]"
                     :total="page.total"
                     background
-                    v-bind="page"
                     layout="total, sizes, prev, pager, next, jumper"
+                    v-bind="page"
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>
-        <dialog-column
-            v-bind="columnShowHide"
-            @close="onColumnShowHide">
-        </dialog-column>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
     </div>
 </template>
 
@@ -170,9 +175,8 @@
 
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesAsnBillState from "@/components/wms/select/NodesAsnBillState";
-import NodesInStorageType from "@/components/wms/select/NodesInStorageType";
+import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
-import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import {listMixin} from "@/mixins/list";
 
@@ -180,8 +184,7 @@ export default {
     name: "list",
     components: {
         DialogColumn,
-        NodesSearchInput,
-        NodesInStorageType,
+        NodesInStoreMode,
         NodesAsnBillState,
         NodesMasterPage,
         NodesDateRange
@@ -198,7 +201,10 @@ export default {
                     skuCode: '',
                     asnState: [10, 30, 20],
                     inStorageType: [20],
-                    createDateRange: ['2022-01-01', '2022-03-01']
+                    createDateRange: ['2022-01-01', '2022-03-01'],
+                    a: {
+                        b: 123
+                    }
                 }
             },
             table: {
@@ -215,15 +221,13 @@ export default {
                     },
                     {
                         prop: 'wages',
-                        label: '工资'
+                        label: '工资',
+                        // left/center/right
+                        align: 'right'
                     },
                     {
                         prop: 'date',
                         label: '日期'
-                    },
-                    {
-                        prop: 'address',
-                        label: '地址'
                     },
                     {
                         prop: 'address',
@@ -331,11 +335,22 @@ export default {
         onSearch() {
             console.log(this.form.params);
         },
-        onReset() {
-            console.log('重置表单');
-        },
-        onRemove() {
-            console.log('批量删除了');
+        onAdd() {
+            let requestParams = {
+                type: 'NEW',
+                id: 0,
+                parent: {
+                    path: this.$route.path,
+                    name: this.$route.name
+                }
+            };
+            this.$router.push({
+                name: 'demoEdit',
+                params: requestParams,
+                meta: {
+                    parent: this
+                }
+            });
         },
         getSummaries(param) {
             const {columns, data} = param;
