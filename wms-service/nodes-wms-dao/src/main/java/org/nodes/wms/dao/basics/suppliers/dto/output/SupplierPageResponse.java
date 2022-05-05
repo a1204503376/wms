@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.basics.suppliers.dto.output;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,6 +18,7 @@ public class SupplierPageResponse implements Serializable {
 	/**
 	 * 供应商id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long id;
 
 	/**
@@ -34,9 +37,9 @@ public class SupplierPageResponse implements Serializable {
 	private String simpleName;
 
 	/**
-	 * 货主id
+	 * 货主
 	 */
-	private Long woId;
+	private String ownerName;
 
 	/**
 	 * 备注

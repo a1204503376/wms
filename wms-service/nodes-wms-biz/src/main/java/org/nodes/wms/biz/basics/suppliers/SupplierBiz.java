@@ -7,6 +7,8 @@ import org.nodes.wms.dao.basics.suppliers.dto.input.RemoveRequest;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 供应商 业务类
  */
@@ -35,4 +37,13 @@ public interface SupplierBiz {
 	 * @return java.lang.Integer
 	 */
 	Boolean removeByIds(RemoveRequest removeRequest);
+
+	/**
+	 * 后台报表导出
+	 *
+	 * @param supplierPageQuery : 条件参数
+	 * @param httpServletResponse:
+	 * @return SupplierPageResponse
+	 */
+	void exportSupplier(SupplierPageQuery supplierPageQuery, HttpServletResponse httpServletResponse);
 }

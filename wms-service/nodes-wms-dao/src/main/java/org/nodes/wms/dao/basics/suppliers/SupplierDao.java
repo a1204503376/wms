@@ -3,6 +3,7 @@ package org.nodes.wms.dao.basics.suppliers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
+import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierExportResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 
@@ -45,4 +46,12 @@ public interface SupplierDao {
 	 ** @return boolean
 	 */
 	boolean isExistSupplierCode(String code);
+
+	/**
+	 * 根据参数条件查询供应商信息
+	 *
+	 * @param supplierPageQuery: 条件参数
+	 * @return java.util.List<Supplier>
+	 */
+	List<SupplierExportResponse> selectByConditions(SupplierPageQuery supplierPageQuery);
 }

@@ -12,9 +12,9 @@ import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
-import org.springframework.context.annotation.Primary;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 /**
@@ -26,7 +26,6 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_ROOT_URL + "suppliers")
-@Primary
 public class SupplierController {
 	private final SupplierBiz supplierBiz;
 
@@ -44,9 +43,14 @@ public class SupplierController {
 	}
 
 	@ApiLog("供应商管理-删除")
-	@GetMapping("/remove")
-	public R<Boolean> remove(@Valid @RequestParam RemoveRequest removeRequest){
+	@PostMapping("/remove")
+	public R<Boolean> remove(@Valid @RequestBody RemoveRequest removeRequest){
 		Boolean state = supplierBiz.removeByIds(removeRequest);
 		return R.status(state);
+	}
+
+	@PostMapping("/export")
+	public void export(@RequestBody SupplierPageQuery supplierPageQuery, HttpServletResponse httpServletResponse){
+		supplierBiz.exportSupplier(supplierPageQuery,httpServletResponse);
 	}
 }

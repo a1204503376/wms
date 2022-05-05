@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.springblade.core.tenant.mp.TenantEntity;
 
 /**
@@ -14,9 +13,11 @@ import org.springblade.core.tenant.mp.TenantEntity;
  * @date 2022-04-20 10:49
  **/
 @Data
-@EqualsAndHashCode
 @TableName("basics_suppliers")
 public class Supplier extends TenantEntity {
+
+	private static final long serialVersionUID = -6391666448993812899L;
+
 	/**
 	 * 供应商id
 	 */

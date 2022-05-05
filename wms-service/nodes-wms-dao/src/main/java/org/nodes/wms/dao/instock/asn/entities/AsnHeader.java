@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 @TableName(value = "asn_header")
 public class AsnHeader extends TenantEntity {
 
+	private static final long serialVersionUID = -7111744736263197174L;
+
 	/**
 	 * 主键
 	 */

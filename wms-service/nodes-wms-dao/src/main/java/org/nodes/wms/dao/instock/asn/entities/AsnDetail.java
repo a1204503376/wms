@@ -14,6 +14,9 @@ import java.math.BigDecimal;
 @Data
 @TableName("asn_detail")
 public class AsnDetail extends BaseSkuLotEntity {
+
+	private static final long serialVersionUID = -8540649823396732815L;
+
 	/**
 	 * ASN单明细ID
 	 */

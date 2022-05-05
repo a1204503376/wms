@@ -5,14 +5,20 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.suppliers.SupplierBiz;
 import org.nodes.wms.biz.basics.suppliers.modular.SupplierFactory;
+import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.dao.basics.suppliers.SupplierDao;
 import org.nodes.wms.dao.basics.suppliers.dto.input.AddSupplierRequest;
 import org.nodes.wms.dao.basics.suppliers.dto.input.RemoveRequest;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
+import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierExportResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
+import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 供应商业务
@@ -27,6 +33,8 @@ public class SupplierBizImpl implements SupplierBiz {
 	private final SupplierDao supplierDao;
 
 	private final SupplierFactory supplierFactory;
+
+	private final LogBiz logBiz;
 
 	@Override
 	public Page<SupplierPageResponse> getPage(IPage<?> page, SupplierPageQuery supplierPageQuery) {
@@ -52,5 +60,11 @@ public class SupplierBizImpl implements SupplierBiz {
 	@Override
 	public Boolean removeByIds(RemoveRequest removeRequest) {
 		return supplierDao.delete(removeRequest.getIds());
+	}
+
+	@Override
+	public void exportSupplier(SupplierPageQuery supplierPageQuery, HttpServletResponse httpServletResponse) {
+		List<SupplierExportResponse> supplierExportResponse = supplierDao.selectByConditions(supplierPageQuery);
+		ExcelUtil.export(httpServletResponse, "供应商", "供应商数据报表", supplierExportResponse, SupplierExportResponse.class);
 	}
 }
