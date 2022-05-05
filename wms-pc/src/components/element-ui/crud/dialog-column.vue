@@ -29,10 +29,10 @@
                                      :width="col.width"
                                      align="center"
                                      header-align="center">
-                        <template slot-scope="scope">
+                        <template v-slot="{row}">
                             <template v-if="col.type === 'input'">
                                 <el-input
-                                    v-model="scope.row[col.prop]"
+                                    v-model="row[col.prop]"
                                     :maxlength="col.maxlength"
                                     :minlength="col.minlength"
                                     :placeholder="!col.readonly ? '请输入' : ''"
@@ -43,17 +43,27 @@
                                 </el-input>
                             </template>
                             <template v-else-if="col.type === 'checkbox'">
-                                <el-checkbox v-model="scope.row[col.prop]"
+                                <el-checkbox v-model="row[col.prop]"
                                              size="small"></el-checkbox>
                             </template>
-                            <template v-else-if="col.type === 'slider'">
-                                <el-slider v-model="scope.row[col.prop]"
-                                           :max="2000"
-                                           :min="0"
-                                           size="small"></el-slider>
+                            <template v-else-if="col.type === 'inputNumber'">
+                                <el-input-number v-model="row[col.prop]"
+                                                 :max="2000"
+                                                 :min="1"
+                                                 controls-position="right"
+                                                 size="small">
+                                </el-input-number>
+                            </template>
+                            <template v-else-if="col.type === 'select'">
+                                <el-select v-model="row[col.prop]"
+                                           size="small">
+                                    <el-option value="left" label="居左"></el-option>
+                                    <el-option value="center" label="居中"></el-option>
+                                    <el-option value="right" label="居右"></el-option>
+                                </el-select>
                             </template>
                             <template v-else>
-                                {{ scope.row[col.prop] }}
+                                {{ row[col.prop] }}
                             </template>
                         </template>
                     </af-table-column>
@@ -62,7 +72,7 @@
         </el-scrollbar>
         <div class="dialog-column-footer">
             <el-button :loading="loading.saveBtn" size="small" type="primary" @click="onSave">保存</el-button>
-            <el-button size="small" @click="beforeClose">关闭</el-button>
+            <el-button size="small" @click="beforeClose('')">关闭</el-button>
         </div>
     </el-drawer>
 </template>
@@ -74,6 +84,7 @@ import Sortable from 'sortablejs';
 import {submit} from "@/api/core/column";
 import {menuMixin} from "@/mixins/menu";
 import func from "@/util/func";
+import {deepClone} from "@/util/util";
 
 export default {
     name: "dialog-column",
@@ -108,31 +119,37 @@ export default {
                     label: '列名',
                     prop: 'label',
                     type: 'text',
-                    width: 100,
+                    width: 150,
                 },
                 {
                     label: '别名',
                     prop: 'aliasName',
                     type: 'input',
-                    width: 120
+                    width: 150
                 },
                 {
                     label: '隐藏',
                     prop: 'hide',
                     type: 'checkbox',
-                    width: 50
+                    width: 80
                 },
                 {
                     label: '冻结',
                     prop: 'fixed',
                     type: 'checkbox',
-                    width: 50
+                    width: 80
                 },
                 {
-                    label: '宽度',
-                    prop: 'width',
-                    type: 'slider'
+                    label: '对齐方式',
+                    prop: 'align',
+                    type: 'select',
+                    width: 100
                 },
+                {
+                    label: '宽度(px)',
+                    prop: 'width',
+                    type: 'inputNumber'
+                }
             ],
             list: [],
             loading: {
@@ -141,6 +158,13 @@ export default {
             },
             crudColumn: getStore({name: "crudColumn"}) || []
         }
+    },
+    created() {
+        console.log('created');
+        this.init();
+    },
+    destroyed() {
+        console.log('destroyed');
     },
     methods: {
         rowDrop() {
@@ -156,7 +180,7 @@ export default {
                     // 数据处理，获取最新的表格数据
                     arr.splice(e.newIndex, 0, arr.splice(e.oldIndex, 1)[0]);
                     arr.forEach((value, index) => {
-                        value.sort = index;
+                        value.order = index;
                     });
                     this.$nextTick(function () {
                         this.list = arr;
@@ -166,9 +190,11 @@ export default {
             });
         },
         init() {
-            this.list = [];
-            if (this.dataSource) {
-                this.dataSource.forEach(item => {
+            let tempData = func.isNotEmpty(this.dataSource)
+                ? this.dataSource
+                : this.$parent['getColumnDataSource'];
+            if (tempData) {
+                tempData.forEach(item => {
                     // "0":是,"1":否
                     let row = {
                         prop: item.prop,
@@ -177,16 +203,19 @@ export default {
                         hide: func.toBoolean(item.hide),
                         fixed: func.toBoolean(item.fixed),
                         width: func.toInt(item.width, 200),
-                        sort: func.toInt(item.sort, this.dataSource.indexOf(item))
+                        align: func.strDefault(item.align, 'left'),
+                        order: func.toInt(item.order, this.dataSource.indexOf(item))
                     }
                     this.list.push(row);
                 });
             }
         },
         onOpen() {
+            console.log('onOpen');
             this.init();
         },
         onOpened() {
+            console.log('onOpened');
             this.rowDrop();
         },
         onSave() {
@@ -197,10 +226,10 @@ export default {
             }
             this.loading.content = true;
             this.loading.saveBtn = true;
-            let columnList = Object.assign([], this.list);
+            let columnList = deepClone(this.list);
             columnList.sort((a, b) => {
-                let x = a['sort'];
-                let y = b['sort'];
+                let x = a['order'];
+                let y = b['order'];
                 return ((x < y) ? -1 : (x > y) ? 1 : 0);
             });
             // 开始封装数据
@@ -241,7 +270,7 @@ export default {
             });
         },
         beforeClose(column) {
-            this.$emit('close',column);
+            this.$emit('close', column);
         }
     }
 }

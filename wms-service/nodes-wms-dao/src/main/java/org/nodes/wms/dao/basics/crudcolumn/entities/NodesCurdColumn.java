@@ -61,5 +61,8 @@ public class NodesCurdColumn extends TenantEntity {
 	 */
 	private Integer width;
 
-
+	/**
+	 * 对齐方式 left/center/right
+	 */
+	private String align;
 }

@@ -3,7 +3,6 @@ import func from "@/util/func";
 import {getCrudColumnResponseList} from "@/api/core/column";
 import {deepClone} from "@/util/util";
 import {mapGetters} from "vuex";
-import item from "@/views/wms/billing/item";
 
 export const listMixin = {
     mixins: [menuMixin],
@@ -12,6 +11,7 @@ export const listMixin = {
             masterConfig: {},
             form: {
                 params: {},
+                deepCloneParams: {},
                 events: {
                     search: this.onSearch,
                     reset: this.onReset
@@ -36,14 +36,20 @@ export const listMixin = {
     },
     computed: {
         ...mapGetters(["permission"]),
-        permissionObj(){
-            return {}
+        permissionObj() {
+            return {
+                search: true
+            }
         }
     },
     created() {
         this.getCrudColumnList();
+        this.copyInitialValue();
     },
     methods: {
+        copyInitialValue() {
+            this.form.deepCloneParams = deepClone(this.form.params);
+        },
         getTableData() {
         },
         onSearch() {
@@ -52,24 +58,8 @@ export const listMixin = {
         onReset() {
             this.restoreDefaults();
         },
-        restoreDefaults(){
-            function recursionObject(obj) {
-                for (let key of Object.keys(obj)) {
-                    let value = obj[key];
-                    if (func.isNumber(value)) {
-                        obj[key] = 0;
-                    } else if (func.isArray(value)) {
-                        obj[key] = [];
-                    } else if (func.isStr(value)) {
-                        obj[key] = '';
-                    } else if (func.isBoolean(value)) {
-                        obj[key] = false;
-                    } else if (func.isObject(value)) {
-                        recursionObject(value);
-                    }
-                }
-            }
-            recursionObject(this.form.params);
+        restoreDefaults() {
+            func.recursionObject(deepClone(this.form.deepCloneParams), this, this.form.params);
         },
         onRefresh() {
             this.getTableData();
@@ -99,31 +89,54 @@ export const listMixin = {
             this.getTableData();
         },
         setColumnList(columnList, data, flag) {
-            columnList.forEach(d => {
+            if (func.isEmpty(data)) {
+                return;
+            }
+            let deepCloneColumnList = deepClone(columnList);
+            // this.columnShowHide.dataSource = this.getColumnDataSource();
+            deepCloneColumnList.forEach(d => {
                 let find = data.find(m => m['prop'] === d['prop']);
-                if (flag === 'configColumn') {
-                    d['aliasName'] = find['aliasName'];
-                    d['sort'] = find['sort'];
-                } else {
-                    d['label'] = func.strDefault(find['aliasName'], d['label']);
+                if (!find) {
+                    return;
                 }
-                d['width'] = func.toInt(find['width'], 0);
-                d['hide'] = find['hide'];
-                d['fixed'] = find['fixed'];
-
+                Object.assign(d, {
+                    aliasName: find.aliasName,
+                    width: func.toInt(find.width, 0),
+                    hide: find.hide,
+                    fixed: find.fixed,
+                    align: find.align,
+                    order: find.order
+                });
             });
+            // 1. 显隐列组件赋值的列名称已本地配置的label为主，优先处理
+            if (flag === 'init') {
+                this.columnShowHide.dataSource = deepClone(deepCloneColumnList);
+            }
+            // 2. 再处理本地label是否采用别名
+            deepCloneColumnList.forEach(d => {
+                let find = data.find(m => m['prop'] === d['prop']);
+                if (!find) {
+                    return;
+                }
+                Object.assign(d, {
+                    label: func.strDefault(find.aliasName, d.label)
+                });
+            });
+
+            func.recursionObject(deepCloneColumnList, this, this.table.columnList);
+            this.table.columnList.sort((a, b) => {
+                let x = a['order'], y = b['order'];
+                return ((x < y) ? -1 : (x > y) ? 1 : 0);
+            });
+        },
+        getColumnDataSource: function () {
+            return this.table.columnList;
         },
         getCrudColumnList() {
             let menu = this.getMenu();
             getCrudColumnResponseList(menu.id)
-                .then((response) => {
-                    let {data} = response.data;
-                    let deepCloneColumnList = deepClone(this.table.columnList);
-                    if (func.isNotEmpty(data)) {
-                        this.setColumnList(deepCloneColumnList, data, 'configColumn');
-                        this.setColumnList(this.table.columnList, data);
-                    }
-                    this.columnShowHide.dataSource = deepCloneColumnList;
+                .then(({data: {data}}) => {
+                    this.setColumnList(this.table.columnList, data, 'init');
                 });
         },
         onColumnShowHide(column) {
@@ -131,22 +144,11 @@ export const listMixin = {
             !this.columnShowHide.visible && this.updateColumn(column);
         },
         updateColumn(columnObj) {
-            let crudColumn = this.$store.getters.crudColumn;
-            let menu = this.getMenu();
-            if (!menu) {
+            if (!func.isObject(columnObj)
+                || func.isEmpty(columnObj['columnList'])) {
                 return;
             }
-            let column = columnObj || crudColumn.find(u => {
-                return u.menuId = menu.id;
-            });
-            if (!column || !column.columnList) {
-                return;
-            }
-            this.setColumnList(this.table.columnList, column.columnList);
-            this.table.columnList.sort((a, b) => {
-                let x = a['sort'], y = b['sort'];
-                return ((x < y) ? -1 : (x > y) ? 1 : 0);
-            });
+            this.setColumnList(this.table.columnList, columnObj.columnList);
             this.$nextTick(() => {
                 this.$refs.table.doLayout();
             });

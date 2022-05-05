@@ -2,7 +2,7 @@
     <el-select
         v-model="val"
         :multiple="multiple"
-        class="d-select"
+        style="width:100%;"
         collapse-tags
         placeholder="请选择"
         size="mini"
@@ -18,6 +18,8 @@
 
 <script>
 
+import func from "@/util/func";
+
 export default {
     name: "NodesSelect",
     model: {
@@ -25,13 +27,18 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Number, Array],
+        selectVal: [Number, Array, String],
         multiple: {type: Boolean, required: false, default: true},
         dataSource: {type: Array, required: true}
     },
     data() {
         return {
             val: this.selectVal
+        }
+    },
+    created() {
+        if (func.isNumber(this.val)){
+            this.val = undefined;
         }
     },
     methods: {

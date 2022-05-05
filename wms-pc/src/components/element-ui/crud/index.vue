@@ -1,31 +1,31 @@
 <template>
-    <span>
+    <div>
         <!-- 头部菜单 -->
         <header-menu ref="headerMenu">
             <template slot="menuLeft"
                       slot-scope="scope">
-                <slot v-bind="scope" name="menuLeft"></slot>
+                <slot name="menuLeft" v-bind="scope"></slot>
             </template>
             <template slot="menuRight"
                       slot-scope="scope">
-                <slot v-bind="scope" name="menuRight"></slot>
+                <slot name="menuRight" v-bind="scope"></slot>
             </template>
         </header-menu>
         <slot name="header"></slot>
         <el-table
             v-if="reload"
-            v-loading="tableLoading"
             ref="table"
-            lazy
+            v-loading="tableLoading"
             :border="tableOption.border !== false"
             :data="data"
             :height="tableHeight"
-            :screenHeight="screenHeight"
+            :load="loadList"
             :max-height="isAutoHeight ? tableHeight : tableOption.maxHeight"
+            :row-key="option.rowKey"
+            :screenHeight="screenHeight"
             :size="config.controlSize"
             :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-            :row-key="option.rowKey"
-            :load="loadList"
+            lazy
             @selection-change="selectionChange"
             @cell-click="onCellClick"
             @cell-dblclick="onCellDblClick"
@@ -46,10 +46,9 @@
                     :columnOption="option.column"
                     :tableOption="tableOption">
                 <template v-for="item in option.column"
-                          slot-scope="scope"
-                          :slot="item.prop">
-                    <slot v-bind="scope"
-                          :name="item.prop"></slot>
+                          :slot="item.prop"
+                          slot-scope="scope">
+                    <slot :name="item.prop" v-bind="scope"></slot>
                 </template>
                 <column-default ref="columnDefault"
                                 slot="header"
@@ -66,13 +65,13 @@
                              :tableOption="tableOption">
                     <template slot="menu"
                               slot-scope="scope">
-                        <slot v-bind="scope"
-                              name="menu"></slot>
+                        <slot name="menu"
+                              v-bind="scope"></slot>
                     </template>
                     <template slot="menuBtn"
                               slot-scope="scope">
-                        <slot v-bind="scope"
-                              name="menuBtn"></slot>
+                        <slot name="menuBtn"
+                              v-bind="scope"></slot>
                     </template>
                 </column-menu>
             </column>
@@ -85,11 +84,13 @@
             </template>
         </table-page>
         <!-- 列显隐 -->
-        <dialog-column ref="dialogColumn"
-                       :data-source="dialogColumn.list"
-                       :visible="dialogColumn.visible"
-                       save-url='/api/nodesCurdColumn/submit'
-                       @close="onDialogColumnClose"></dialog-column>
+        <div v-if="dialogColumn.visible">
+            <dialog-column ref="dialogColumn"
+                           :data-source="dialogColumn.list"
+                           :visible="dialogColumn.visible"
+                           @close="onDialogColumnClose">
+            </dialog-column>
+        </div>
         <!-- 二级弹框 -->
         <editDialog
             ref="dialogEdit"
@@ -123,7 +124,7 @@
             @callback="callbackEdit"
             @before-open="beforeOpen"
         ></nodes-dialog>
-    </span>
+    </div>
 </template>
 
 <script>
@@ -136,7 +137,7 @@ import columnDefault from "./column-default";
 import columnMenu from "./column-menu";
 import dialogColumn from "./dialog-column";
 import editDialog from "@/components/nodes/editDialog";
-import {setStore, getStore} from '@/util/store';
+import {getStore} from '@/util/store';
 import selectTableUser from "../select/select-table-user";
 import selectTree from "../select/select-tree";
 import dialogView from "./dialog-view";
@@ -327,8 +328,8 @@ export default {
         }
         window.onunload = e => {
             let tagList = that.$store.getters.tagList;
-            tagList.forEach(tag=>{
-                if (tag && tag.value && tag.value.indexOf('/form/index')  > -1) {
+            tagList.forEach(tag => {
+                if (tag && tag.value && tag.value.indexOf('/form/index') > -1) {
                     that.$router.$avueRouter.closeTag(tag.value);
                 }
             });
@@ -386,12 +387,6 @@ export default {
                 return {};
             }
         },
-        // page: {
-        //     type: Object,
-        //     default() {
-        //         return {};
-        //     }
-        // },
         sortBy: Function,
         sortOrders: Array,
         sortMethod: Function,
@@ -574,7 +569,7 @@ export default {
                     this.dialogEdit.group,
                     this.dialogEdit.dataSource,
                     this.$route.name);
-            } else if (this.type == 'copy'){
+            } else if (this.type == 'copy') {
                 this.$refs.nodesDialog.open(this.option.group, this.dialogEdit.dataSource, this.type, this.$route.name, -1);
             }
         },
@@ -660,7 +655,7 @@ export default {
                 return;
             }
             let column = crudColumn.find(u => {
-                return u.menuId == menu.id;
+                return u.menuId === menu.id;
             });
             if (!column || !column.columnList) {
                 return;
@@ -673,7 +668,8 @@ export default {
                     col.aliasName = config.aliasName;
                     col.hide = config.hide;
                     col.fixed = config.fixed;
-                    col.width = config.width == 0 ? undefined : config.width;
+                    col.align = config.align;
+                    col.width = config.width === 0 ? undefined : config.width;
                     col.order = config.order;
                 })
             });

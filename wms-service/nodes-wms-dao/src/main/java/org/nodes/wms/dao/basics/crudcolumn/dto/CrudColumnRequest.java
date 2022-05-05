@@ -25,23 +25,21 @@ public class CrudColumnRequest implements Serializable {
 	/**
 	 * 排序
 	 */
-	private Integer sort;
+	private Integer order;
 
+	private Integer sort;
 	/**
 	 * 字段名
 	 */
 	private String prop;
-
 	/**
 	 * 列名
 	 */
 	private String label;
-
 	/**
 	 * 别名
 	 */
 	private String aliasName;
-
 	/**
 	 * 是否隐藏，true：是  false：否
 	 */
@@ -50,9 +48,16 @@ public class CrudColumnRequest implements Serializable {
 	 * 是否冻结，true：是  false：否
 	 */
 	private Boolean fixed;
-
 	/**
 	 * 宽度
 	 */
 	private Integer width;
+	/**
+	 * 对齐方式 left/center/right
+	 */
+	private String align;
+
+	public Integer getSort() {
+		return this.order;
+	}
 }

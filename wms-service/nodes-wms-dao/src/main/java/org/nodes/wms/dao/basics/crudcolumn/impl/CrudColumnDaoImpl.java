@@ -40,6 +40,7 @@ public class CrudColumnDaoImpl
 				NodesCurdColumn::getHide,
 				NodesCurdColumn::getFixed,
 				NodesCurdColumn::getWidth,
+				NodesCurdColumn::getAlign,
 				NodesCurdColumn::getSort));
 	}
 
