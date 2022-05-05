@@ -24,4 +24,9 @@ public class WmsApiPath {
 	 * 系统字典
 	 */
 	public static final String DICTIONARY_URL = WmsApiPath.WMS_ROOT_URL + "dictionary";
+
+	/**
+	 * 库房
+	 */
+	public static final String WAREHOUSE_URL = WmsApiPath.WMS_ROOT_URL +"/warehouse/warehouse";
 }
