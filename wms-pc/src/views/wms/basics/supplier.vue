@@ -23,8 +23,8 @@
         </el-row>
       </template>
       <template v-slot:batchBtn>
-        <el-button size="mini" type="primary" icon="el-icon-plus">新增</el-button>
-        <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="onRemove">删除</el-button>
+        <el-button size="mini" type="primary" icon="el-icon-plus" v-if="permissionObj.add">新增</el-button>
+        <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="onRemove" v-if="permissionObj.delete">删除</el-button>
       </template>
       <template v-slot:tableTool>
         <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
@@ -153,7 +153,9 @@ export default {
   computed: {
     permissionObj() {
       return {
-        search: this.vaildData(this.permission.supplier_select, false)
+        search: this.vaildData(this.permission.supplier_search, false),
+        add: this.vaildData(this.permission.supplier_add, false),
+        delete: this.vaildData(this.permission.supplier_delete, false)
       }
     }
   },
