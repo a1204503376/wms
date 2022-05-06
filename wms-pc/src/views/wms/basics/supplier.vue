@@ -45,9 +45,6 @@
           show-summary size="mini" style="width: 100%" @sort-change="onSortChange">
           <el-table-column fixed type="selection" width="50">
           </el-table-column>
-          <el-table-column fixed sortable type="index">
-            <template slot="header"> # </template>
-          </el-table-column>
           <template v-for="(column, index) in table.columnList">
             <el-table-column v-if="!column.hide" :key="index" show-overflow-tooltip v-bind="column">
             </el-table-column>
@@ -56,7 +53,9 @@
             :filters="[{ text: '是', value: 1 }, { text: '否', value: -1 }]" :filter-method="filterTag"
             filter-placement="bottom-end">
             <template slot-scope="scope">
-              <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'" disable-transitions>{{ scope.row.status === 1 ? '是' : '否' }}
+              <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'" disable-transitions>{{ scope.row.status ===
+                  1 ? '是' : '否'
+              }}
               </el-tag>
             </template>
           </el-table-column>
@@ -76,8 +75,8 @@
 
 <script>
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
-import NodesAsnBillState from "@/components/wms/select/NodesAsnBillState";
-import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
+// import NodesAsnBillState from "@/components/wms/select/NodesAsnBillState";
+// import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
@@ -91,8 +90,8 @@ export default {
   components: {
     DialogColumn,
     NodesSearchInput,
-    NodesInStoreMode,
-    NodesAsnBillState,
+    // NodesInStoreMode,
+    // NodesAsnBillState,
     NodesMasterPage,
     NodesDateRange,
   },
@@ -154,18 +153,19 @@ export default {
   computed: {
     permissionObj() {
       return {
-        search: this.vaildData(this.permission.supplier_view, false)
+        search: this.vaildData(this.permission.supplier_select, false)
       }
     }
   },
   created() { },
   methods: {
     getTableData() {
-      page(this.page.current, this.page.size, this.page.descs, this.page.ascs, this.form.params)
+      page(this.page, this.form.params)
         .then((res) => {
           let pageObj = res.data.data;
           this.table.data = pageObj.records;
           this.page.total = pageObj.total;
+          console.log(pageObj);
         })
         .catch((e) => {
           console.log(e);
@@ -202,7 +202,6 @@ export default {
           });
           remove(removeObj)
             .then((res) => {
-              console.log(res);
               this.$message({
                 type: "success",
                 message: res.data.msg,
