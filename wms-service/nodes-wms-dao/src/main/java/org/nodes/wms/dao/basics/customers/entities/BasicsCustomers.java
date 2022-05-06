@@ -5,12 +5,14 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.springblade.core.mp.base.BaseEntity;
+import org.springblade.core.tenant.mp.TenantEntity;
+
 /**
  * 客户表 实体类
  **/
 @Data
 @TableName("basics_customers")
-public class BasicsCustomers extends BaseEntity {
+public class BasicsCustomers extends TenantEntity {
 	/**
 	 * 客户表ID
 	 */

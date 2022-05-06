@@ -8,6 +8,8 @@ import org.nodes.wms.dao.basics.customers.dto.input.CustomerPageQuery;
 import org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse;
 import org.nodes.wms.dao.basics.customers.entities.BasicsCustomers;
 
+import java.util.List;
+
 
 /**
  * 客户管理 Mapper 接口
@@ -15,4 +17,5 @@ import org.nodes.wms.dao.basics.customers.entities.BasicsCustomers;
 public interface CustomersMapper extends BaseMapper<BasicsCustomers> {
 	Page<CustomersResponse> getPage(IPage<?> page,@Param("query") CustomerPageQuery customerPageQuery);
 
+    List<CustomersResponse> getCustomerResponseByQuery(@Param("query") CustomerPageQuery customerPageQuery);
 }

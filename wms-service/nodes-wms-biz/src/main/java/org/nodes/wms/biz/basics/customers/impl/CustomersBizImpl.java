@@ -11,10 +11,14 @@ import org.nodes.wms.dao.basics.customers.dto.input.newCustomerRequest;
 import org.nodes.wms.dao.basics.customers.dto.input.DeleteCustomerRequest;
 import org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse;
 import org.nodes.wms.dao.basics.customers.entities.BasicsCustomers;
+import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 客户管理 业务类
@@ -44,5 +48,11 @@ public class CustomersBizImpl implements CustomersBiz {
 	@Override
 	public boolean remove(DeleteCustomerRequest deleteRequest) {
 		return customerDao.delete(deleteRequest);
+	}
+
+	@Override
+	public void exportExcel(CustomerPageQuery customerPageQuery, HttpServletResponse response) {
+		List<CustomersResponse> customersResponseList = customerDao.getCustomerResponseByQuery(customerPageQuery);
+		ExcelUtil.export(response, "客户", "客户数据表", customersResponseList, CustomersResponse.class);
 	}
 }

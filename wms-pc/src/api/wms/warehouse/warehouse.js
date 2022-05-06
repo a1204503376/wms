@@ -59,3 +59,10 @@ export const exportFile = (data) => {
     responseType: 'blob'
   })
 }
+
+export const getWarehouseSelectResponseList = () => {
+    return request({
+        url: '/api/wms/warehouse/warehouse/getWarehouseSelectResponseList',
+        method: 'get'
+    })
+}

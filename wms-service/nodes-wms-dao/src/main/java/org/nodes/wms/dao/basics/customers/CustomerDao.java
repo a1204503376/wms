@@ -7,6 +7,8 @@ import org.nodes.wms.dao.basics.customers.dto.input.DeleteCustomerRequest;
 import org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse;
 import org.nodes.wms.dao.basics.customers.entities.BasicsCustomers;
 
+import java.util.List;
+
 /**
  * 客户表 DAO 接口
  */
@@ -29,5 +31,5 @@ public interface CustomerDao {
 	boolean delete(DeleteCustomerRequest deleteRequest);
 
 
-
+    List<CustomersResponse> getCustomerResponseByQuery(CustomerPageQuery customerPageQuery);
 }

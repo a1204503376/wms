@@ -13,6 +13,8 @@ import org.nodes.wms.dao.basics.customers.mapper.CustomersMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 客户表 DAO 实现类
  */
@@ -29,7 +31,7 @@ public class CustomerDaoImpl extends BaseServiceImpl<CustomersMapper,BasicsCusto
 
 	@Override
 	public boolean isExistCustomerCode(String code) {
-		LambdaQueryWrapper<BasicsCustomers> lambdaQueryWrapper = new LambdaQueryWrapper<BasicsCustomers>();
+		LambdaQueryWrapper<BasicsCustomers> lambdaQueryWrapper = new LambdaQueryWrapper<>();
 		lambdaQueryWrapper.eq(BasicsCustomers::getCode,code);
 		int count = super.count(lambdaQueryWrapper);
 		return count>0;
@@ -37,7 +39,12 @@ public class CustomerDaoImpl extends BaseServiceImpl<CustomersMapper,BasicsCusto
 
 	@Override
 	public boolean delete(DeleteCustomerRequest deleteRequest) {
-		return super.deleteLogic(deleteRequest.getList());
+		return super.deleteLogic(deleteRequest.getIds());
+	}
+
+	@Override
+	public List<CustomersResponse> getCustomerResponseByQuery(CustomerPageQuery customerPageQuery) {
+		return customersMapper.getCustomerResponseByQuery(customerPageQuery);
 	}
 
 	@Override
