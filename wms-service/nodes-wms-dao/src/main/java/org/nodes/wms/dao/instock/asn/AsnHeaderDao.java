@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnExportResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 
@@ -20,15 +21,15 @@ public interface AsnHeaderDao {
 	 *
 	 * @param page            分页对象
 	 * @param pageParamsQuery 分页请求参数
-	 * @return IPage<PageResponse>
+	 * @return Page<PageResponse>
 	 */
 	Page<PageResponse> selectPageAsnBill(IPage<?> page, PageParamsQuery pageParamsQuery);
 
 	/**
-	 * 保存ASN单头表和明细
+	 * 新增ASN单头表信息和明细
 	 *
 	 * @param asnHeader ASN单头表实体
-	 * @return
+	 * @return true:新增成功 , false:新增失败
 	 */
 	Boolean insertAsnHeader(AsnHeader asnHeader);
 
@@ -36,7 +37,7 @@ public interface AsnHeaderDao {
 	 * 获取ASN单详细信息
 	 *
 	 * @param id: Asn单id
-	 * @return org.nodes.wms.dao.instock.asn.dto.output.DetailResponse
+	 * @return AsnDetailResponse
 	 */
 	AsnDetailResponse selectAsnContactDetailByAsnBillId(Long id);
 
@@ -44,9 +45,15 @@ public interface AsnHeaderDao {
 	 * 根据Asn单id 删除ASN单头表信息
 	 *
 	 * @param idList: Asn单id集合
-	 * @return java.lang.Integer
+	 * @return true:删除成功 ,false:删除失败
 	 */
 	Boolean deleteAsnHeaderById(List<Long> idList);
 
-
+	/**
+	 * Excel 导出(导出当前查询条件)
+	 *
+	 * @param pageParamsQuery: 查询条件
+	 * @return List<AsnExportResponse>
+	 */
+    List<AsnExportResponse> listByParamsQuery(PageParamsQuery pageParamsQuery);
 }

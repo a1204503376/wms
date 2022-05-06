@@ -30,7 +30,7 @@ public class SupplierController {
 	private final SupplierBiz supplierBiz;
 
 	@PostMapping("/page")
-	public R<IPage<SupplierPageResponse>> page(Query query, @RequestBody SupplierPageQuery supplierPageQuery) {
+	public R<IPage<SupplierPageResponse>> page(@RequestBody Query query, @RequestBody SupplierPageQuery supplierPageQuery) {
 		IPage<SupplierPageResponse> pageResponse = supplierBiz.getPage(Condition.getPage(query), supplierPageQuery);
 		return R.data(pageResponse);
 	}
@@ -50,7 +50,7 @@ public class SupplierController {
 	}
 
 	@PostMapping("/export")
-	public void export(@RequestBody SupplierPageQuery supplierPageQuery, HttpServletResponse httpServletResponse){
-		supplierBiz.exportSupplier(supplierPageQuery,httpServletResponse);
+	public void export(@RequestBody SupplierPageQuery supplierPageQuery, HttpServletResponse response){
+		supplierBiz.exportSupplier(supplierPageQuery,response);
 	}
 }

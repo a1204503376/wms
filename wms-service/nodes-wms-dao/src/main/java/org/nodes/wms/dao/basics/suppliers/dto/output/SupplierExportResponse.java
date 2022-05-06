@@ -9,9 +9,6 @@ import java.util.Date;
 
 /**
  * 供应商导出模板类
- *
- * @author 彭永程
- * @date 2022-04-29 13:26
  **/
 @Data
 public class SupplierExportResponse implements Serializable {

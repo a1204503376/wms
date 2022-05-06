@@ -9,9 +9,6 @@ import java.util.List;
 
 /**
  * Asn 单详细信息
- *
- * @author 彭永程
- * @date 2022-04-22 14:03
  **/
 @Data
 public class AsnDetailResponse implements Serializable {

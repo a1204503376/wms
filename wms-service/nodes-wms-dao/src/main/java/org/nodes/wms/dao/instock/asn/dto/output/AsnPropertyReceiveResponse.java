@@ -1,19 +1,14 @@
 package org.nodes.wms.dao.instock.asn.dto.output;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 返回对象-Asn单集合属性ReceiveHeader
- *
- * @author 彭永程
- * @date 2022-04-27 10:25
  **/
 @Data
-@EqualsAndHashCode
 public class AsnPropertyReceiveResponse implements Serializable {
 
 	private static final long serialVersionUID = -2138640940190251249L;

@@ -26,24 +26,23 @@ public interface SupplierBiz {
 	 *  新增供应商信息
 	 *
 	 * @param addSupplierRequest:
-	 * @return java.lang.Integer
+	 * @return  true:新增成功 ,false:新增失败
 	 */
-	Boolean newSupplier(AddSupplierRequest addSupplierRequest);
+	boolean newSupplier(AddSupplierRequest addSupplierRequest);
 
 	/**
 	 * 根据id批量删除供应商信息
 	 *
 	 * @param removeRequest : 供应商id集合对象
-	 * @return java.lang.Integer
+	 * @return true:删除成功 ,false:删除失败
 	 */
-	Boolean removeByIds(RemoveRequest removeRequest);
+	boolean removeByIds(RemoveRequest removeRequest);
 
 	/**
-	 * 后台报表导出
+	 * Excel 导出(导出当前查询条件)
 	 *
 	 * @param supplierPageQuery : 条件参数
-	 * @param httpServletResponse:
-	 * @return SupplierPageResponse
+	 * @param response:
 	 */
-	void exportSupplier(SupplierPageQuery supplierPageQuery, HttpServletResponse httpServletResponse);
+	void exportSupplier(SupplierPageQuery supplierPageQuery, HttpServletResponse response);
 }

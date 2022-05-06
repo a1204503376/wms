@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * ASN单据 分页参数
@@ -14,14 +15,14 @@ public class PageParamsQuery implements Serializable {
 	private static final long serialVersionUID = 1599695543698915713L;
 
 	/**
-	 * asn单据编码
+	 * Asn单据编码
 	 */
 	private String asnBillNo;
 
 	/**
-	 * asn单据状态
+	 * Asn单据状态
 	 */
-	private String[] asnBillState;
+	private List<String> asnBillState;
 
 	/**
 	 * 创建日期 开始

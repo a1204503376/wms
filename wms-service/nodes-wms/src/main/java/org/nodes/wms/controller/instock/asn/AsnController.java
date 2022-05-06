@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.application.AsnManageBiz;
 import org.nodes.wms.biz.instock.asn.AsnBiz;
-import org.nodes.wms.dao.instock.asn.dto.input.AddAsnBillRequest;
-import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
-import org.nodes.wms.dao.instock.asn.dto.input.DeleteRequest;
-import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
+import org.nodes.wms.dao.instock.asn.dto.input.*;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailByEditResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
@@ -17,6 +14,7 @@ import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 /**
@@ -35,7 +33,7 @@ public class AsnController {
 	private final AsnManageBiz asnManageBiz;
 
 	@PostMapping("/page")
-	public R<Page<PageResponse>> page(Query query, @RequestParam PageParamsQuery pageParamsQuery) {
+	public R<Page<PageResponse>> page(@RequestBody Query query, @RequestBody PageParamsQuery pageParamsQuery) {
 		Page<PageResponse> asnPage = asnBiz.getPageAsnBill(Condition.getPage(query), pageParamsQuery);
 		return R.data(asnPage);
 	}
@@ -57,14 +55,20 @@ public class AsnController {
 		return R.data(asnBiz.getAsnHeaderAndAsnDetail(asnBillIdRequest));
 	}
 
-	@GetMapping("/edit")
-	public R<Boolean> edit(@Valid @RequestParam AsnBillIdRequest asnBillIdRequest){
- 		return R.status(true);
+	@PostMapping("/edit")
+	public R<Boolean> edit(@Valid @RequestBody EditAsnBillRequest editAsnBillRequest){
+		boolean edit = asnBiz.edit(editAsnBillRequest);
+ 		return R.status(edit);
 	}
 
-	@GetMapping("/remove")
-	public R<Boolean> remove(@Valid @RequestParam DeleteRequest deleteRequest) {
-		boolean delete = asnManageBiz.remove(deleteRequest.getAsnBillId());
+	@PostMapping("/remove")
+	public R<Boolean> remove(@Valid @RequestBody DeleteRequest deleteRequest) {
+		boolean delete = asnManageBiz.remove(deleteRequest.getAsnBillIds());
 		return R.status(delete);
+	}
+
+	@PostMapping("/export")
+	public void export(@RequestBody PageParamsQuery pageParamsQuery, HttpServletResponse httpServletResponse){
+		asnBiz.exportAsnBill(pageParamsQuery,httpServletResponse);
 	}
 }

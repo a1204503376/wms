@@ -19,7 +19,39 @@
         FROM asn_header h
                  LEFT JOIN asn_detail d
                            on h.asn_bill_id = d.asn_bill_id
-            ${ew.customSqlSegment}
+        <where>
+            <if test="params.asnBillNo != null and params.asnBillNo != ''">
+                AND h.asn_bill_no = #{params.asnBillNo}
+            </if>
+            <if test="params.skuCode != null and params.skuCode != ''">
+                AND d.sku_code = #{params.skuCode}
+            </if>
+            <if test="params.asnBillState != null and params.asnBillState.size >0">
+                AND h.asn_bill_state IN
+                <foreach collection="params.asnBillState" separator="," item="item" open="(" close=")">
+                     #{item}
+                </foreach>
+            </if>
+            <if test="params.createTimeBegin != null ">
+                AND h.create_time &gt;= #{params.createTimeBegin}
+            </if>
+            <if test="params.createTimeEnd != null">
+                AND h.create_time &lt;= #{params.createTimeEnd}
+            </if>
+            <if test="params.suppliers != null and params.suppliers != ''">
+                AND (h.s_code LIKE concat('%',#{params.suppliers},'%') OR h.s_name LIKE concat('%',#{params.suppliers},'%'))
+            </if>
+            <if test="params.externalOrderNo != null and params.externalOrderNo != ''">
+                AND h.external_order_no = #{params.externalOrderNo}
+            </if>
+            <if test="params.externalCreateUser != null and params.externalCreateUser != ''">
+                AND h.external_create_user = #{params.externalCreateUser}
+            </if>
+            <if test="params.whCode != null and params.whCode != ''">
+                AND h.wh_code = #{params.whCode}
+            </if>
+        </where>
+        <!--    ${ew.customSqlSegment} -->
 
     </select>
 
@@ -97,4 +129,56 @@
             <result column="receive_create_user" property="updateUser"/>
         </collection>
     </resultMap>
+
+    <select id="selectAsnBillList" resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnExportResponse">
+        SELECT
+            h.asn_bill_id,
+            h.asn_bill_no,
+            h.asn_bill_state,
+            h.create_type,
+            h.s_code,
+            h.s_name,
+            h.external_order_no,
+            h.external_create_user,
+            h.wh_code,
+            h.asn_bill_remark,
+            h.create_time,
+            h.create_user,
+            h.update_time
+        FROM asn_header h
+        LEFT JOIN asn_detail d
+        on h.asn_bill_id = d.asn_bill_id
+        <where>
+            <if test="params.asnBillNo != null and params.asnBillNo != ''">
+                AND h.asn_bill_no = #{params.asn_bill_no}
+            </if>
+            <if test="params.skuCode != null and params.skuCode != ''">
+                AND d.sku_code = #{params.sku_code}
+            </if>
+            <if test="params.asnBillState != null and params.asnBillState != ''">
+                AND  h.asn_bill_state in
+                <foreach collection="params.asnBillState" separator="," item="item" open="(" close="">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="params.createTimeBegin != null ">
+                AND h.create_time &gt;= #{params.createTimeBegin}
+            </if>
+            <if test="params.createTimeEnd != null">
+                AND h.create_time &lt;= #{params.createTimeEnd}
+            </if>
+            <if test="params.suppliers != null and params.suppliers != ''">
+                AND (h.s_code LIKE #{params.suppliers} OR h.s_name LIKE #{params.suppliers})
+            </if>
+            <if test="params.externalOrderNo != null and params.externalOrderNo != ''">
+                AND h.external_order_no = #{params.external_order_no}
+            </if>
+            <if test="params.externalCreateUser != null and params.externalCreateUser != ''">
+                AND h.external_create_user = #{params.external_create_user}
+            </if>
+            <if test="params.whCode != null and params.whCode != ''">
+                AND h.wh_code = #{params.wh_code}
+            </if>
+        </where>
+    </select>
 </mapper>

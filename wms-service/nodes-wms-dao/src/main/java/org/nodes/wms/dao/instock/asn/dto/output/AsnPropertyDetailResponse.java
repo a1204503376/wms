@@ -1,19 +1,14 @@
 package org.nodes.wms.dao.instock.asn.dto.output;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * 返回对象-Asn单集合属性Asn单明细
- *
- * @author 彭永程
- * @date 2022-04-27 10:32
  **/
 @Data
-@EqualsAndHashCode
 public class AsnPropertyDetailResponse implements Serializable {
 
 	private static final long serialVersionUID = 1959979521968969432L;

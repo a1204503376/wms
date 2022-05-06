@@ -6,9 +6,6 @@ import java.io.Serializable;
 
 /**
  * 编辑返回对象
- *
- * @author 彭永程
- * @date 2022-04-26 18:11
  **/
 @Data
 public class AsnDetailByEditResponse implements Serializable {

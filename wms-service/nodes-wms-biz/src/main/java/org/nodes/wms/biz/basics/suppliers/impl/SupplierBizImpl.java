@@ -15,6 +15,7 @@ import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -41,14 +42,8 @@ public class SupplierBizImpl implements SupplierBiz {
 		return supplierDao.selectPage(page, supplierPageQuery);
 	}
 
-	/**
-	 * 新增供应商信息
-	 * <p>
-	 * * @param addSupplierRequest: 供应商新增对象
-	 * * @return java.lang.Boolean
-	 */
 	@Override
-	public Boolean newSupplier(AddSupplierRequest addSupplierRequest) {
+	public boolean newSupplier(AddSupplierRequest addSupplierRequest) {
 		boolean isExist = supplierDao.isExistSupplierCode(addSupplierRequest.getCode());
 		if (isExist) {
 			throw new ServiceException("新增供应商失败,供应商编码["+ addSupplierRequest.getCode()+"]已存在");
@@ -58,13 +53,15 @@ public class SupplierBizImpl implements SupplierBiz {
 	}
 
 	@Override
-	public Boolean removeByIds(RemoveRequest removeRequest) {
+	public boolean removeByIds(RemoveRequest removeRequest) {
 		return supplierDao.delete(removeRequest.getIds());
 	}
 
 	@Override
-	public void exportSupplier(SupplierPageQuery supplierPageQuery, HttpServletResponse httpServletResponse) {
-		List<SupplierExportResponse> supplierExportResponse = supplierDao.selectByConditions(supplierPageQuery);
-		ExcelUtil.export(httpServletResponse, "供应商", "供应商数据报表", supplierExportResponse, SupplierExportResponse.class);
+	public void exportSupplier(SupplierPageQuery supplierPageQuery, HttpServletResponse response) {
+		List<Supplier> supplierList = supplierDao.listBySupplierPageQuery(supplierPageQuery);
+		List<SupplierExportResponse> supplierExportResponseList = Func.copy(supplierList, SupplierExportResponse.class);
+
+		ExcelUtil.export(response, "供应商", "供应商数据报表", supplierExportResponseList, SupplierExportResponse.class);
 	}
 }

@@ -8,9 +8,6 @@ import java.math.BigDecimal;
 
 /**
  * Asn单编辑参数
- *
- * @author 彭永程
- * @date 2022-04-26 15:29
  **/
 @Data
 public class EditAsnBillRequest implements Serializable {
@@ -57,6 +54,16 @@ public class EditAsnBillRequest implements Serializable {
 	private String asnBillRemark;
 
 	/**
+	 * 物品编码
+	 */
+	private String skuCode;
+
+	/**
+	 *物品名称
+	 */
+	private String skuName;
+
+	/**
 	 * 计量单位编码
 	 */
 	private String umCode;
@@ -80,6 +87,11 @@ public class EditAsnBillRequest implements Serializable {
 	 * 计划数量
 	 */
 	private BigDecimal planQty;
+
+	/**
+	 * 已收数量
+	 */
+	private BigDecimal scanQty;
 
 	/**
 	 * 备注

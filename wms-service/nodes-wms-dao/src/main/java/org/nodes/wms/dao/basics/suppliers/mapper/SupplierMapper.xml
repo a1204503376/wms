@@ -52,6 +52,7 @@
             ORDER BY create_time DESC
         </if>
     </select>
+
     <select id="selectListByWrapper"
             resultType="org.nodes.wms.dao.basics.suppliers.dto.output.SupplierExportResponse">
         SELECT

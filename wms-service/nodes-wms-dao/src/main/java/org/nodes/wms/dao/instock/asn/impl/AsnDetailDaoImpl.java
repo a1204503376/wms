@@ -6,15 +6,14 @@ import org.nodes.wms.dao.instock.asn.AsnDetailDao;
 import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.nodes.wms.dao.instock.asn.mapper.AsnDetailMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
- * @author 彭永程
- * @date 2022-04-25 9:48
- **/
-@Service
+ *  Asn单明细 Dao 实现类
+ */
+@Repository
 @RequiredArgsConstructor
 public class AsnDetailDaoImpl
 	extends BaseServiceImpl<AsnDetailMapper, AsnDetail>
