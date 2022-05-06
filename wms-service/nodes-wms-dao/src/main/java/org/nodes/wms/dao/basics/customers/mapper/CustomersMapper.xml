@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.basics.customers.mapper.CustomersMapper">
-
-    <select id="getPage" resultType="org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse">
+    <sql id="customerList">
         select
         c.id,
         c.code,
@@ -45,13 +44,19 @@
             <if test="query.updateTimeEnd!=null">
                 AND c.update_time  &lt;= #{query.updateTimeEnd}
             </if>
-              AND c.is_deleted = '0'
+            AND c.is_deleted = '0'
         </where>
+    </sql>
 
+    <select id="getPage" resultType="org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse">
+        <include refid="customerList"></include>
         <if test="page.orders==null or page.orders.size()==0">
             order by c.create_time desc
         </if>
+    </select>
 
+    <select id="getCustomerResponseByQuery" resultType="org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse">
+        <include refid="customerList"></include>
     </select>
 
 </mapper>

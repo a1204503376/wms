@@ -7,6 +7,8 @@ import org.nodes.wms.dao.basics.customers.dto.input.DeleteCustomerRequest;
 import org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse;
 import org.springblade.core.mp.support.Query;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 客户管理业务层接口
  */
@@ -23,4 +25,7 @@ public interface CustomersBiz {
 	 *  逻辑删除
 	 **/
 	boolean remove(DeleteCustomerRequest deleteRequest);
+
+	void exportExcel(CustomerPageQuery customerPageQuery, HttpServletResponse response);
+
 }

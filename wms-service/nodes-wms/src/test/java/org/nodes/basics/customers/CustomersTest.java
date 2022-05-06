@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.nodes.wms.biz.basics.customers.impl.CustomersBizImpl;
+import org.nodes.wms.dao.basics.customers.CustomerDao;
 import org.nodes.wms.dao.basics.customers.dto.input.CustomerPageQuery;
 import org.nodes.wms.dao.basics.customers.dto.input.newCustomerRequest;
 import org.nodes.wms.dao.basics.customers.dto.input.DeleteCustomerRequest;
@@ -16,6 +17,7 @@ import org.springblade.core.test.BladeBootTest;
 import org.springblade.core.test.BladeSpringRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import java.util.List;
 public class CustomersTest {
 	@Autowired
 	private CustomersBizImpl customersBiz;
+	private CustomerDao customerDao;
 
 	@Test
 	public void test01() throws ParseException {
@@ -54,10 +57,10 @@ public class CustomersTest {
 	@Test
 	public void test03() {
 		DeleteCustomerRequest deleteRequest = new DeleteCustomerRequest();
-		List<Long> list = new ArrayList<Long>();
+		List<Long> list = new ArrayList<>();
 		list.add(4l);
 		list.add(5l);
-		deleteRequest.setList(list);
+		deleteRequest.setIds(list);
 		Assertions.assertEquals(true,customersBiz.remove(deleteRequest));
 	}
 
