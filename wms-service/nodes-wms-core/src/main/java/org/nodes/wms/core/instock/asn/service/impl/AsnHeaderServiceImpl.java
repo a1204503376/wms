@@ -103,6 +103,8 @@ import org.springblade.core.secure.BladeUser;
 import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.core.tool.jackson.JsonUtil;
 import org.springblade.core.tool.utils.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -127,31 +129,47 @@ import java.util.stream.Collectors;
  */
 @Service
 @Primary
-@RequiredArgsConstructor
 @Transactional(propagation = Propagation.NESTED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
 public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader> extends AbsBaseAsnHeaderService<AsnHeaderMapper, AsnHeader> implements IAsnHeaderService {
+	@Autowired
+	IAsnDetailService asnDetailService;
+	@Autowired
+	IPoDetailService poDetailService;
+	@Autowired
+	IContainerLogService containerLogService;
+	@Autowired
+	ISystemProcService systemProcService;
+	@Autowired
+	IStockService stockService;
+	@Autowired
+	IStockDetailService stockDetailService;
+	@Autowired
+	ITaskService taskService;
+	@Autowired
+	ISkuLogService skuLogService;
+	@Autowired
+	ITransferRecordService transferRecordService;
+	@Autowired
+	AsnDetailMapper asnDetailMapper;
+	@Autowired
+	ISnService snService;
+	@Autowired
+	ISkuUmService skuUmService;
+	@Autowired
+	ISkuLotService skuLotService;
+	@Autowired
+	AsnLpnDetailMapper asnLpnDetailMapper;
+	@Autowired
+	IInstockService instockService;
+	@Autowired
+	IAsnInventoryService asnInventoryService;
+	@Autowired
+	@Qualifier("lpnPutWayMoveService")
+	IStockMoveService stockMoveService;
 
-	final IAsnDetailService asnDetailService;
-	final IPoDetailService poDetailService;
-	final IContainerLogService containerLogService;
-	final ISystemProcService systemProcService;
-	final IStockService stockService;
-	final IStockDetailService stockDetailService;
-	final ITaskService taskService;
-	final ISkuLogService skuLogService;
-	final ITransferRecordService transferRecordService;
-	final AsnDetailMapper asnDetailMapper;
-	final ISnService snService;
-	final ISkuUmService skuUmService;
-	final ISkuLotService skuLotService;
-	final AsnLpnDetailMapper asnLpnDetailMapper;
-	final IInstockService instockService;
-	final IAsnInventoryService asnInventoryService;
-	final IStockMoveService stockMoveService;
-
-	final
+	@Autowired
 	IDeptService deptService;
-	final
+	@Autowired
 	ISkuPackageService skuPackageService;
 
 	/**
