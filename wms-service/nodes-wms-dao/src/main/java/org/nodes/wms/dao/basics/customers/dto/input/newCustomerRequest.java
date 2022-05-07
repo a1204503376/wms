@@ -5,12 +5,14 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 /**
  * 客户管理接收类
  **/
 @Data
-public class newCustomerRequest {
+public class newCustomerRequest implements Serializable {
+	private static final long serialVersionUID = 3518961513626458788L;
 	/**
 	 * 客户ID
 	 */
