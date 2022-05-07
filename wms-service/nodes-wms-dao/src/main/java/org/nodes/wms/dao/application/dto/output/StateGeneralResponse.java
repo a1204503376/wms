@@ -8,15 +8,7 @@ import lombok.Data;
  * 1.前端下拉框使用
  */
 @Data
-public class StateGeneralResponse {
+public class StateGeneralResponse extends ElementUiSelectResponse<Integer> {
 
-	/**
-	 * 标签
-	 */
-	private String label;
-	/**
-	 * 值
-	 * 一般对应数据存储的状态值
-	 */
-	private Integer value;
+
 }

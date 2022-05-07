@@ -2,15 +2,14 @@ package org.nodes.wms.biz.application;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.instock.asn.AsnBiz;
-import org.nodes.wms.biz.receive.header.ReceiveBiz;
+import org.nodes.wms.biz.instock.receive.header.ReceiveBiz;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
- * @author 彭永程
- * @date 2022-04-25 10:20
+ * ASN单管理和收货单管理 业务接口实习
  **/
 @Service
 @RequiredArgsConstructor

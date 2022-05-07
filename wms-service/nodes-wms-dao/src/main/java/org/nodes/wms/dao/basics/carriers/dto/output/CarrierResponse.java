@@ -2,13 +2,15 @@ package org.nodes.wms.dao.basics.carriers.dto.output;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 承运商返回前端视图类
  **/
 @Data
-public class CarrierResponse {
+public class CarrierResponse implements Serializable {
+	private static final long serialVersionUID = -2879832294012470398L;
 	/**
 	 * 承运商ID
 	 */

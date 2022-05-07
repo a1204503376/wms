@@ -56,8 +56,8 @@ public class WarehouseController extends BladeController {
 	 */
 	@GetMapping("getWarehouseSelectResponseList")
 	public R<List<WarehouseResponse>> getWarehouseSelectResponseList(){
-         List<WarehouseResponse> WarehouseResponseList =  warehouseBiz.getWarehouseSelectResponseList();
-		 return R.data(WarehouseResponseList);
+         List<WarehouseResponse> warehouseResponseList =  warehouseBiz.getWarehouseSelectResponseList();
+		 return R.data(warehouseResponseList);
 	}
 
 	/**

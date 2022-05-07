@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.dao.instock.receive.header.mapper.ReceiveHeaderMapper">
+    <select id="getPage" resultType="org.nodes.wms.dao.instock.receive.header.dto.output.ReceiveHeaderResponse">
+        select
+        h.receive_id,
+        h.receive_no,
+        h.asn_bill_no,
+        h.wh_code,
+        h.bill_state,
+        h.s_code,
+        h.s_name,
+        h.external_order_no,
+        h.external_last_update_date,
+        h.external_create_user,
+        h.create_time,
+        h.update_time,
+        user1.real_name create_user,
+        user2.real_name update_user
+        from receive_header h
+        LEFT JOIN blade_user user1 ON user1.id = h.create_user
+        LEFT JOIN blade_user user2 ON user2.id = h.update_user
+        LEFT JOIN receive_detail d on h.receive_id = d.receive_id
+        <where>
+            AND h.is_deleted = '0'
+            <if test="query.receiveNo!=null and query.receiveNo != ''">
+                AND h.receive_no LIKE concat('%',#{query.receiveNo},'%')
+            </if>
+            <if test="query.billStates!=null and query.billStates.size()>0">
+                AND  h.bill_state in
+                <foreach collection="query.billStates" item="billStates" index="index" open="(" close=")" separator=",">
+                    #{billStates}
+                </foreach>
+            </if>
+            <if test="query.skuCode!=null and query.skuCode != ''">
+                AND d.sku_code LIKE concat('%',#{query.skuCode},'%')
+            </if>
+            <if test="query.externalOrderNo!=null and query.externalOrderNo != ''">
+                AND h.external_order_no LIKE concat('%',#{query.externalOrderNo},'%')
+            </if>
+            <if test="query.asnBillNo!=null and query.asnBillNo != ''">
+                AND h.asn_bill_no LIKE concat('%',#{query.asnBillNo},'%')
+            </if>
+
+            <if test="query.whCodes!=null and query.whCodes.size()>0">
+                AND  h.wh_code in
+                <foreach collection="query.whCodes" item="whCodes" index="index" open="(" close=")" separator=",">
+                    #{whCodes}
+                </foreach>
+            </if>
+
+
+            <if test="query.createTimeBegin!=null">
+                AND h.create_time  &gt;= #{query.createTimeBegin}
+            </if>
+            <if test="query.createTimeEnd!=null">
+                AND h.create_time  &lt;= #{query.createTimeEnd}
+            </if>
+            <if test="query.externalCreateUser!=null and query.externalCreateUser != ''">
+                AND h.external_create_user LIKE concat('%',#{query.externalCreateUser},'%')
+            </if>
+            <if test="query.sCode!=null and query.sCode != ''">
+                AND h.s_code LIKE concat('%',#{query.sCode},'%')
+            </if>
+        </where>
+        group  by  h.receive_id
+        <if test="page.orders==null or page.orders.size()==0">
+            order by h.create_time desc
+        </if>
+
+    </select>
+    <select id="selectHeaderById" resultType="org.nodes.wms.dao.instock.receive.header.dto.output.ReceiveHeaderResponse">
+        SELECT
+            receive_no,
+            bill_state,
+            wh_code,
+            owner_code,
+            bill_type_cd,
+            instore_type,
+            asn_bill_no,
+            s_code,
+            s_name,
+            remark
+            from receive_header
+            where receive_id = #{id}
+    </select>
+
+
+</mapper>
