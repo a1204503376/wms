@@ -1,527 +1,299 @@
 <template>
-    <basic-container>
-        <nodes-crud
-            ref="table"
-            v-model="form"
-            :option="option"
-            :data="data"
-            :table-loading="loading"
-            :before-open="beforeOpen"
-            :permission="permissionList"
-            @on-load="onLoad"
-            @row-save="rowSave"
-            @on-del="onDel"
-            @on-multi-del="onMultiDel"
-            @selection-change="selectionChange"
-            @search-change="searchChange"
-            @menu-command="menuCommand"
-        >
-            <template slot="menuLeft">
-                <span class="dropdownPanel">
-                    <el-dropdown trigger="click" @command="handleCommand">
-                        <el-button type="primary" size="mini">
-                            <i class="el-icon-edit-outline"></i>
-                            操作
-                            <i class="el-icon-arrow-down el-icon--right"></i>
-                        </el-button>
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-if="permission.header_creatLpn" command="1">生成LPN</el-dropdown-item>
-                            <el-dropdown-item v-if="permission.header_viewLpn" command="2">查看LPN</el-dropdown-item>
-                            <el-dropdown-item v-if="permission.header_importSerial" command="4">导入序列号</el-dropdown-item>
-                            <el-dropdown-item v-if="permission.header_cancel" command="5" divided>取消订单</el-dropdown-item>
-                            <el-dropdown-item v-if="permission.header_import" command="6" icon="el-icon-upload2" divided>导入</el-dropdown-item>
-                            <el-dropdown-item v-if="permission.header_export" command="7" icon="el-icon-download">导出</el-dropdown-item>
-                            <el-dropdown-item v-if="permission.header_print" command="8" divided>打印箱贴</el-dropdown-item>
-                            <el-dropdown-item v-if="permission.header_dataBack" command="9" divided>数据回传</el-dropdown-item>
-                        </el-dropdown-menu>
-                  </el-dropdown>
-                </span>
-                <el-button type="primary" icon="el-icon-check" size="mini"
-                           style="margin-left:0px;margin-right:10px;"
-                           v-if="permission.header_close"
-                           @click="finishAsnBill">关闭单据
-                </el-button>
+    <div id="asnHeader">
+        <nodes-master-page :configure="masterConfig" :permission="permissionObj" v-on="form.events">
+            <template v-slot:searchFrom>
+                <el-form-item label="ASN单编码">
+                    <el-input v-model="form.params.asnBillNo" class="d-input"></el-input>
+                </el-form-item>
+                <el-form-item label="物品编码">
+                    <el-input v-model="form.params.skuCode" class="d-input"></el-input>
+                </el-form-item>
+                <el-form-item label="状态">
+                    <nodes-asn-bill-state v-model="form.params.asnBillState"></nodes-asn-bill-state>
+                </el-form-item>
             </template>
-        </nodes-crud>
-        <lpn-detail-dialog
-            :isShowDialog="lpnDetailDialog.visible"
-            :billIds="lpnDetailDialog.billIds"
-            @child-cancel="hideLPN"
-        ></lpn-detail-dialog>
-        <!-- 序列号导入 -->
-        <file-upload :visible="fileUploadSerial.visible"
-                     template-url="/api/wms/instock/asnHeader/sn/export-template"
-                     file-name="订单序列号"
-                     @callback="callbackFileUploadSerial"></file-upload>
-        <data-verify
-            :visible="dataVerifySerial.visible"
-            :dataSource="dataVerifySerial.dataSource"
-            :uploadUrl="dataVerifySerial.uploadUrl"
-            :dataVerifyUrl="dataVerifySerial.dataVerifyUrl"
-            @callback="callbackDataVerifySerial"
-        ></data-verify>
-        <!-- 入库单导入 -->
-        <file-upload
-            :visible="fileUpload.visible"
-            template-url="/api//wms/instock/asnHeader/export-template"
-            file-name="入库单"
-            @callback="callbackFileUpload"
-        ></file-upload>
-        <data-verify
-            :visible="dataVerify.visible"
-            :dataSource="dataVerify.dataSource"
-            uploadUrl="/api/wms/instock/asnHeader/import-data"
-            dataVerifyUrl="/api/wms/instock/asnHeader/import-valid"
-            @callback="callbackDataVerify"
-        ></data-verify>
-        <!-- 序列号 -->
-        <serial :visible="serial.visible"
-                :dataSource="serial.dataSource"
-                @callback="callbackSerial"></serial>
-        <!-- 到货登记 -->
-        <register-dialog
-            :visible="registerDialog.visible"
-            :data-source="registerDialog.dataSource"
-            :selectionList="selectionList"
-            @callback="callbackRegisterDialog"
-        ></register-dialog>
-    </basic-container>
+            <template v-slot:expandSearch>
+                <el-row type="flex">
+                    <el-col :span="24">
+                        <el-form-item label="创建日期">
+                            <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
+                        </el-form-item>
+                        <el-form-item label="供应商">
+                            <el-input v-model="form.params.suppliers" class="d-input"></el-input>
+                        </el-form-item>
+                        <el-form-item label="上游编码">
+                            <el-input v-model="form.params.externalOrderNo" class="d-input"></el-input>
+                        </el-form-item>
+                        <el-form-item label="上游创建人">
+                            <el-input v-model="form.params.externalCreateUser" class="d-input"></el-input>
+                        </el-form-item>
+                        <el-form-item label="仓库编码">
+                            <el-input v-model="form.params.whCode" class="d-input"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </template>
+            <template v-slot:batchBtn>
+                <el-button size="mini" type="primary" icon="el-icon-plus" @click="onAdd">新增</el-button>
+                <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="onRemove">删除</el-button>
+            </template>
+            <template v-slot:tableTool>
+                <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
+                    <el-button circle icon="el-icon-refresh" size="mini" @click="onRefresh"></el-button>
+                </el-tooltip>
+                <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">
+                    <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
+                </el-tooltip>
+                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
+                    <el-button circle icon="el-icon-bottom" size="mini"></el-button>
+                </el-tooltip>
+                <el-tooltip :enterable="false" class="item" content="服务端导出" effect="dark" placement="top">
+                    <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
+                </el-tooltip>
+            </template>
+            <template v-slot:table>
+                <el-table ref="table" :data="table.data" :summary-method="getSummaries" border highlight-current-row
+                    show-summary size="mini" @sort-change="onSortChange">
+                    <el-table-column fixed type="selection" width="50">
+                    </el-table-column>
+                    <template v-for="(column, index) in table.columnList">
+                        <el-table-column v-if="!column.hide" :key="index" show-overflow-tooltip v-bind="column">
+                        </el-table-column>
+                    </template>
+                     <el-table-column prop="asnBillState" :formatter="formatAsnBillState" label="状态" align="center">
+                    </el-table-column>
+                    <el-table-column fixed="right" label="操作" width="100">
+                        <template slot-scope="scope">
+                            <el-button @click="view(scope.row)" type="text" size="small">查看</el-button>
+                            <el-button type="text" size="small">编辑</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </template>
+            <template v-slot:page>
+                <el-pagination :current-page="page.current" :page-size="page.size" :page-sizes="[20, 50, 100]"
+                    :total="page.total" background layout="total, sizes, prev, pager, next, jumper" v-bind="page"
+                    @size-change="handleSizeChange" @current-change="handleCurrentChange">
+                </el-pagination>
+            </template>
+        </nodes-master-page>
+        <div v-if="columnShowHide.visible">
+            <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
+            </dialog-column>
+        </div>
+    </div>
 </template>
-<script>
-import {
-    getPage,
-    add,
-    remove,
-    getDetail,
-    creatLpn,
-    finishAsnBill,
-    canEdit,
-    cancel,
-    exportFile,
-    printBoxLabel,
-} from "@/api/wms/instock/asnHeader";
-import {getParamValue} from "@/util/param";
-import {option} from "./asnHeader/option.js";
-import fileUpload from "@/components/nodes/fileUpload";
-import dataVerify from "@/components/nodes/dataVerify";
-import fileDownload from "js-file-download";
-import serial from "./asnHeader/serial";
-import registerDialog from "./asnHeader/registerDialog";
-import lpnDetailDialog from "./asnHeader/lpnDetailDialog";
-import {mapGetters} from "vuex";
 
+<script>
+
+
+import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
+import NodesAsnBillState from "@/components/wms/select/NodesAsnBillState";
+import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
+import NodesDateRange from "@/components/wms/general/NodesDateRange";
+import DialogColumn from "@/components/element-ui/crud/dialog-column";
+import { listMixin } from "@/mixins/list";
+import { getPage, remove } from "@/api/wms/instock/asnHeader";
 
 export default {
-    name: "instocks",
+    name: "asnHeader",
     components: {
-        fileUpload,
-        dataVerify,
-        serial,
-        registerDialog,
-        lpnDetailDialog,
+        DialogColumn,
+        NodesInStoreMode,
+        NodesAsnBillState,
+        NodesMasterPage,
+        NodesDateRange
     },
+    mixins: [listMixin],
     data() {
         return {
-            loading: false,
-            data: [],
-            form: {},
-            selectionList: [],
-            serial: {
-                visible: false,
-                dataSource: ''
+            masterConfig: {
+                showExpandBtn: true,
+                showPage: true
             },
-            lpnDetailDialog: {
-                billIds: "", //选中的订单Ids
-                visible: false
+            form: {
+                params: {
+                    asnBillNo: '',
+                    skuCode: '',
+                    asnBillState: [10, 20, 30],
+                    createTimeDateRange: ['', ''],
+                    suppliers: '',
+                    externalOrderNo: '',
+                    externalCreateUser: '',
+                    whCode: ''
+                }
             },
-            registerDialog: {
-                visible: false,
-                dataSource: undefined
+            tempParams: {
+                asnBillNo: '',
+                skuCode: '',
+                asnBillState: [],
+                createTimeDateRange: [],
+                suppliers: '',
+                externalOrderNo: '',
+                externalCreateUser: '',
+                whCode: ''
             },
-            option: option,
-            searchData: {},
-            fileUpload: {
-                visible: false
+            table: {
+                columnList: [
+                    {
+                        prop: 'asnBillNo',
+                        label: 'ASN单编码',
+                        width: 140,
+                        sortable: 'custom'
+                    },
+                    {
+                        prop: 'createType',
+                        label: '单据类型'
+                    },
+                    {
+                        prop: 'scode',
+                        label: '供应商编码'
+                    },
+                    {
+                        prop: 'sname',
+                        label: '供应商名称',
+                    },
+                    {
+                        prop: 'externalOrderNo',
+                        label: '上游编码'
+                    },
+                    {
+                        prop: 'externalCreateUser',
+                        label: '上游创建人'
+                    },
+                    {
+                        prop: 'whCode',
+                        label: '仓库编码'
+                    },
+                    {
+                        prop: 'asnBillRemark',
+                        label: '备注'
+                    },
+                    {
+                        prop: 'createTime',
+                        width: 130,
+                        label: '创建时间'
+                    },
+                    {
+                        prop: 'createUser',
+                        label: '创建人'
+                    },
+                    {
+                        prop: 'updateTime',
+                        width: 130,
+                        label: '更新时间'
+                    },
+                ]
             },
-            dataVerify: {
-                visible: false,
-                dataSource: {},
-            },
-            fileUploadSerial: {
-                visible: false
-            },
-            dataVerifySerial: {
-                visible: false,
-                dataSource: {},
-                dataVerifyUrl: "/api/wms/instock/asnHeader/sn/import-valid",
-                uploadUrl: "/api/wms/instock/asnHeader/sn/import-data"
-            },
-            callbackDialog: {
-                visible: false,
-                ids: ''
-            },
-            barcodeDialog: {
-                visible: false,
-                data: {}
-            }
-        };
-    },
-    computed: {
-        ...mapGetters(["permission"]),
-        permissionList() {
-            return {
-                add: this.vaildData(this.permission.header_add, false),
-                view: this.vaildData(this.permission.header_view, false),
-                delete: this.vaildData(this.permission.header_delete, false),
-                edit: this.vaildData(this.permission.header_edit, false),
-                导入: this.vaildData(this.permission.header_import, false),
-                导出: this.vaildData(this.permission.header_export, false),
-                到货登记: this.vaildData(this.permission.header_registerDialog, false),
-                导入序列号: this.vaildData(this.permission.header_importSerial, false),
-                取消订单: this.vaildData(this.permission.header_cancel, false),
-                打印箱贴: this.vaildData(this.permission.header_print, false),
-                数据回传: this.vaildData(this.permission.header_dataBack, false),
-                关闭单据: this.vaildData(this.permission.header_close, false),
-                生成LPN: this.vaildData(this.permission.header_creatLpn, false),
-                查看LPN: this.vaildData(this.permission.header_viewLpn, false),
-                复制: this.vaildData(this.permission.header_copy, false),
-            }
-        },
-        ids() {
-            let ids = [];
-            this.selectionList.forEach(ele => {
-                ids.push(ele.asnBillId);
-            });
-            return ids.join(",");
-        },
-    },
-    mounted() {
-        // 获取批属性数量
-        let column = this.option.group[1].column[0];
-        for (let i = 1; i <= getParamValue(this.$param.system.lotCount); i++) {
-            let skuLot = {
-                label: "批属性" + i,
-                prop: "skuLot" + i,
-                hide: false,
-                width: 200,
-                maxlength: 200,
-                valueFormat: 'yyyyMMdd'
-            };
-            let filterList = column.children.filter(child => {
-                return child.prop === skuLot.prop;
-            });
-            if (!filterList || filterList.length === 0) {
-                column.children.push(skuLot);
-            }
         }
+    },
+    created() {
+        // this.tempParams = JSON.parse(JSON.stringify(this.form.params)); 
     },
     methods: {
-        //默认渲染数据
-        onLoad(page, params = {}) {
-            this.loading = true;
-            getPage(
-                page.currentPage,
-                page.pageSize,
-                Object.assign(params, this.query)
-            ).then(res => {
-                const data = res.data.data;
-                page.total = data.total;
-                this.data = data.records;
-                this.loading = false;
-                this.selectionClear();
-            });
-        },
-        rowSave(row, loading, done, type) {
-            if (["edit", undefined].includes(type)) {
-                if (row.asnDetailList) {
-                    row.asnDetailList.forEach(detail => {
-                        if (type === undefined) {
-                            detail.asnDetailId = undefined;
-                        }
-                    });
-                }
-            }
-            add(row).then(
-                () => {
-                    loading();
-                    this.$refs.table.onLoad();
-                    this.$message.success("操作成功！");
-                },
-                error => {
-                    done();
-                }
-            );
-        },
-        onDel(row, index) {
-            this.$confirm("确定删除当前数据？", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning"
-            }).then(() => {
-                remove(row.asnBillId).then(() => {
-                    this.$refs.table.onLoad();
-                    this.$message({
-                        type: "success",
-                        message: "操作成功!"
-                    });
+        getTableData() {
+            getPage(this.page, this.form.params)
+                .then((res) => {
+                    let pageObj = res.data.data;
+                    this.table.data = pageObj.records;
+                    this.page.total = pageObj.total;
+                })
+                .catch((e) => {
+                    console.log(e);
                 });
-            });
         },
-        onMultiDel() {
-            if (!this.selectionList || this.selectionList.length == 0) {
-                this.$message.warning("至少选择一条数据！");
+        formatAsnBillState(row, column, cellValue) {
+            // if(cellValue == 10){
+            //     return '新建'
+            // }else if(cellValue==3){
+            //     return '停用'
+            // }
+            switch (cellValue) {
+                case 10: return '新建';
+                case 20: return '处理中';
+                case 30: return '部分收货';
+                case 40: return '全部收货';
+                case 90: return '已撤销';
+                default: break;
+            }
+        },
+        view() {
+            
+        },
+        getSummaries() {
+
+        },
+        onRemove() {
+            let rows = this.$refs.table.selection;
+            if (rows.length <= 0) {
+                this.$message({
+                    message: "警告，至少选择一条记录",
+                    type: "warning",
+                });
                 return;
             }
-            this.$confirm("确定将选择数据删除?", {
+            this.$confirm("此操作将删除, 是否删除?", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
-                type: "warning"
-            }).then(() => {
-                remove(this.ids).then(() => {
-                    this.$refs.table.onLoad();
-                    this.$message({
-                        type: "success",
-                        message: "操作成功!"
-                    });
-                    this.$refs.table.toggleSelection();
-                });
-            });
-        },
-        selectionChange(val) {
-            this.selectionList = val;
-        },
-        selectionClear() {
-            this.selectionList = [];
-            this.$refs.table.toggleSelection();
-        },
-        finishAsnBill() {
-            if (!this.selectionList || this.selectionList.length == 0) {
-                this.$message.warning("至少选择一个任务才能执行此操作！");
-                return;
-            }
-            this.$confirm("确定将选择数据完成收货吗?", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning"
+                type: "warning",
             })
                 .then(() => {
-                    return finishAsnBill(this.ids);
-                })
-                .then(() => {
-                    this.$refs.table.onLoad();
-                    this.$message({
-                        type: "success",
-                        message: "完成收货成功!"
+                    let removeObj = {
+                        asnBillIds: []
+                    };
+                    rows.forEach((item) => {
+                        removeObj.asnBillIds.push(item.asnBillId);
                     });
-                });
-        },
-        handleCommand(cmd) {
-            let tag = parseInt(cmd);
-            if (4 != tag && tag != 6 && tag != 7) {
-                if (!this.selectionList || this.selectionList.length == 0) {
-                    this.$message.warning("至少选择一个任务才能执行此操作！");
-                    return;
-                }
-            }
-            switch (tag) {
-                case 1:
-                    this.$confirm("确定将选择数据生成LPN吗?", {
-                        confirmButtonText: "确定",
-                        cancelButtonText: "取消",
-                        type: "warning"
-                    })
-                        .then(() => {
-                            this.loading = true;
-                            return creatLpn(this.ids);
-                        })
-                        .then(() => {
-
-                            this.$refs.table.onLoad();
+                    remove(removeObj)
+                        .then((res) => {
                             this.$message({
                                 type: "success",
-                                message: "生成LPN成功!"
+                                message: res.data.msg,
                             });
-                        }).finally(() => {
-                        this.loading = false;
-                    });
-                    break;
-                case 2:
-                    this.lpnDetailDialog.billIds = this.ids;
-                    this.lpnDetailDialog.visible = true;
-                    break;
-                case 4:
-                    this.fileUploadSerial.visible = true;
-                    break;
-                case 5:
-                    this.$confirm("确定取消当前勾选入库单？", {
-                        confirmButtonText: "确定",
-                        cancelButtonText: "取消",
-                        type: "warning"
-                    })
-                        .then(() => {
-                            this.loading = true;
-                            cancel(this.ids).then(res => {
-                                this.$refs.table.onLoad();
-                                this.$message.success('操作成功！');
-                            }).finally(() => {
-                                this.loading = false;
-                            });
-                        }).catch(() => {
-                        this.loading = false;
-                    });
-                    break;
-
-                case 6:
-                    this.fileUpload.visible = true;
-                    break;
-                case 7:
-                    this.loading = true;
-                    exportFile(this.searchData)
-                        .then((res) => {
-                            this.$message.success("操作成功，正在下载中...");
-                            fileDownload(res.data, "入库单.xlsx");
+                            this.getTableData();
                         })
-                        .catch(() => {
-                            this.$message.error("系统模板目录配置有误或文件不存在");
-                        })
-                        .finally(() => {
-                            this.loading = false;
+                        .catch((e) => {
+                            console.log(e);
                         });
-                    break;
-                case 8:
-                    this.loading = true;
-                    printBoxLabel(this.ids).then(res => {
-                        this.$message.success('操作成功！');
-                    }).finally(() => {
-                        this.loading = false;
-                    });
-                    break;
-                case 9:
-                    this.callbackDialog.ids = this.ids;
-                    this.callbackDialog.visible = true;
-            }
+                })
         },
-        hideLPN() {
-            this.lpnDetailDialog.visible = false;
-        },
-        callbackRegisterDialog(data) {
-            this.registerDialog.visible = data.visible;
-            if (data.success) {
-                this.$message.success('操作成功！');
-                this.$refs.table.onLoad();
-            }
-        },
-        beforeOpen(done, type, finish) {
-            if (["edit", "view", undefined].includes(type)) {
-                if (type === "edit") {
-                    if (this.form.asnBillId) {
-                        canEdit(this.form.asnBillId)
-                            .then(res => {
-                                if (res.data.data) {
-                                    this.getAsnHeaderDetail(done, type);
-                                } else {
-                                    this.$message.warning("当前入库单不允许编辑！");
-                                    finish();
-                                }
-                            })
-                            .catch(() => {
-                                finish();
-                            });
-                    }
-                } else {
-                    this.getAsnHeaderDetail(done, type);
-                }
-            }
-        },
-        getAsnHeaderDetail(done, type) {
-            if (!this.form.asnBillId) {
-                return;
-            }
-            getDetail(this.form.asnBillId)
-                .then(res => {
-                    if (res.data.data.asnDetailList && res.data.data.asnDetailList.length > 0) {
-                        // 替换所有物品显示数量
-                        res.data.data.asnDetailList.forEach(detail => {
-                            if (type === undefined) {
-                                detail.scanQty = 0;
-                                detail.scanQtyName= 0;
-                            }
-                        });
-                    }
-                    if (type === undefined) {
-                        res.data.data.asnBillId = undefined;
-                    }
-                    this.form = res.data.data;
-                }).finally(() => {
-                    done();
+        exportData() {
+            this.loading = true;
+            exportFile(this.form.params)
+                .then((res) => {
+                    this.$message.success("操作成功，正在下载中...");
+                    fileDownload(res.data, "ASN单.xlsx");
+                })
+                .catch(() => {
+                    this.$message.error("系统模板目录配置有误或文件不存在");
+                })
+                .finally(() => {
+                    this.loading = false;
                 });
         },
-        callbackFileUpload(res) {
-            this.fileUpload.visible = res.visible;
-            if (res.result) {
-                this.dataVerify.dataSource = res.data;
-                this.dataVerify.visible = true;
-            }
-        }
-        ,
-        callbackDataVerify(res) {
-            this.dataVerify.visible = res.visible;
-            if (res.result) {
-                this.$message.success("导入成功！");
-                this.$refs.table.onLoad();
-            }
+        filterTag(value, row, column) {
+            return row.status === value;
         },
-        // 入库单序列号文件上传回调
-        callbackFileUploadSerial(res) {
-            this.fileUploadSerial.visible = res.visible;
-            if (res.result) {
-                this.dataVerifySerial.dataSource = res.data;
-                this.dataVerifySerial.visible = true;
-            }
+        onReset() {
+            //  this.form.params = JSON.parse(JSON.stringify(this.tempParams)); 
         },
-        callbackDataVerifySerial(res) {
-            this.dataVerifySerial.visible = res.visible;
-            if (res.result) {
-                this.$message.success("导入成功！");
-            }
+        onAdd() {
+            let requestParams = {
+                type: 'NEW',
+                id: 0,
+                parent: {
+                    path: this.$route.path,
+                    name: this.$route.name
+                }
+            };
+            this.$router.push({
+                name: 'demoEdit',
+                params: requestParams,
+                meta: {
+                    parent: this
+                }
+            });
         },
-        callbackSerial(res) {
-            this.serial.visible = res.visible;
-        },
-        searchChange(data) {
-            this.searchData = data;
-        },
-        callbackCallbackDialog(res) {
-            this.callbackDialog.visible = res.visible;
-            this.$refs.table.onLoad();
-        },
-        menuCommand(cmd, row, index) {
-            switch (cmd) {
-                case 1:// 复制
-                    this.$refs.table.onShowData(row, index, 'copy');
-                    break;
-                case 2:// 到货登记
-                    if (row.asnBillState < 40) {
-                        this.registerDialog.dataSource = Object.assign({}, row);
-                        this.registerDialog.visible = true;
-
-                    } else {
-                        this.$message.warning("该单据不可登记！");
-                        return;
-                    }
-                    break;
-            }
-        }
     }
-};
+}
 </script>
-<style lang="scss">
-
-.dropdownPanel {
-    margin-right: 10px;
-}
-
-.notice {
-    height: 100%;
-}
-</style>
