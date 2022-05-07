@@ -26,6 +26,11 @@ public class WmsApiPath {
 	public static final String DICTIONARY_URL = WmsApiPath.WMS_ROOT_URL + "dictionary";
 
 	/**
+	 * 物品
+	 */
+	public static final String SKU_URL = WmsApiPath.WMS_ROOT_URL + "basedata/sku";
+
+	/**
 	 * 库房
 	 */
 	public static final String WAREHOUSE_URL = WmsApiPath.WMS_ROOT_URL +"/warehouse/warehouse";

@@ -2,10 +2,10 @@
     <el-select
         v-model="val"
         :multiple="multiple"
-        style="width:100%;"
         collapse-tags
         placeholder="请选择"
         size="mini"
+        style="width:100%;"
         @change="onChange">
         <el-option
             v-for="item in dataSource"
@@ -37,8 +37,8 @@ export default {
         }
     },
     created() {
-        if (func.isNumber(this.val)){
-            this.val = undefined;
+        if (func.isNumber(this.val) && this.val <= 0) {
+            this.val = '';
         }
     },
     methods: {

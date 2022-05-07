@@ -129,7 +129,7 @@ export default class func {
      * @returns {boolean}
      */
     static isArray(obj) {
-        return obj instanceof Array;
+        return Array.isArray(obj);
     }
 
     /**

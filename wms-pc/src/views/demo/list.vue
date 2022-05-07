@@ -145,6 +145,14 @@
                             v-bind="column">
                         </el-table-column>
                     </template>
+                    <el-table-column
+                        fixed="right"
+                        label="操作"
+                        width="100">
+                        <template v-slot="{row}">
+                            <el-button size="mini" type="text" @click="onEdit(row)">编辑</el-button>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </template>
             <template v-slot:page>
@@ -317,6 +325,7 @@ export default {
             for (let i = 0; i < 101; i++) {
                 // 模拟表格数据
                 let item = {
+                    id: i + 1,
                     date: `${getRandomInt(2018, 2022)}-${getRandomInt(1, 12)}-${getRandomInt(1, 28)}`,
                     name: "王小虎" + getRandomInt(1, 101),
                     wages: getRandomInt(3000, 15000),
@@ -336,19 +345,20 @@ export default {
             console.log(this.form.params);
         },
         onAdd() {
-            let requestParams = {
-                type: 'NEW',
-                id: 0,
-                parent: {
-                    path: this.$route.path,
-                    name: this.$route.name
-                }
-            };
             this.$router.push({
                 name: 'demoEdit',
-                params: requestParams,
-                meta: {
-                    parent: this
+                params: {
+                    type: 'add',
+                    id: '0'
+                }
+            });
+        },
+        onEdit(row) {
+            this.$router.push({
+                name: 'demoEdit',
+                params: {
+                    type: 'edit',
+                    id: row.id.toString()
                 }
             });
         },
