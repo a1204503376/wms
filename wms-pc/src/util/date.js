@@ -1,3 +1,5 @@
+import func from '@/util/func';
+
 export const calcDate = (date1, date2) => {
   let date3 = date2 - date1;
 
@@ -26,8 +28,12 @@ export const calcDate = (date1, date2) => {
  * 日期格式化
  */
 export function dateFormat(date, format) {
+  if(!func.isStr(date)){
+    return;
+  }
   format = format || 'yyyy-MM-dd hh:mm:ss';
   if (date !== 'Invalid Date') {
+    date = new Date(date);
     let o = {
       "M+": date.getMonth() + 1, //month
       "d+": date.getDate(), //day

@@ -17,7 +17,8 @@ import website from '@/config/website';
 import {Base64} from 'js-base64';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
-import func from '@/util/func'
+import func from '@/util/func';
+import {dateFormat} from "@/util/date";
 
 //默认超时时间
 axios.defaults.timeout = 1000 * 60;
@@ -46,13 +47,15 @@ function processingDate(obj) {
             if (key.endsWith(suffix)
                 && func.isArray(value)
                 && value.length === 2
+                && func.isNotEmpty(value[0])
+                && func.isNotEmpty(value[1])
             ) {
                 let prefixItem = key.substring(0, key.indexOf(suffix));
-                dateRangeParams[`${prefixItem}Begin`] = dateFormat(value[0]);
-                dateRangeParams[`${prefixItem}End`] = dateFormat(value[1]);
+                dateRangeParams[`${prefixItem}Begin`] = dateFormat(`${value[0]} 00:00:00`);
+                dateRangeParams[`${prefixItem}End`] = dateFormat(`${value[1]} 23:59:59`);
             }
         }
-        Object.assign(dateRangeParams, obj);
+        Object.assign(obj, dateRangeParams);
     }
 }
 
