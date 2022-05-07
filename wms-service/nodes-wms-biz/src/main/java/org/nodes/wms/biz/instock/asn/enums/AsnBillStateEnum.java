@@ -17,20 +17,24 @@ public enum AsnBillStateEnum
 	implements IPairs<Integer,String,AsnBillStateEnum> {
 
 	/**
-	 * ASN单新建时的状态
+	 *未收货
 	 */
-	CREATE(10, "新建"),
-
-	EXECUTING(20,"处理中"),
+	NOT_RECEIPT(10, "未收货"),
 
 	/**
-	 *
+	 * 部分收货
 	 */
-	PART(30, "部分收货"),
+	PART(20,"部分收货"),
 
-	COMPLETED(40, "全部收货"),
+	/**
+	 * 全部收货
+	 */
+	COMPLETED(30, "全部收货"),
 
-	CANCEL(91, "已取消"),
+	/**
+	 * 已取消
+	 */
+	CANCEL(90, "已取消"),
 	;
 
 	private final Integer code;

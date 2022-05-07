@@ -112,7 +112,7 @@ public class SkuService extends org.nodes.wms.core.basedata.service.impl.SkuServ
 			// 验证入库
 			List<AsnHeader> asnHeaderList = asnHeaderService.list(Condition.getQueryWrapper(new AsnHeader())
 				.lambda()
-				.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.EXECUTING.getCode()));
+				.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.PART.getCode()));
 			if (Func.isNotEmpty(asnHeaderList)) {
 				List<AsnDetail> asnDetailList = asnDetailService.list(Condition.getQueryWrapper(new AsnDetail())
 					.lambda()
@@ -140,7 +140,7 @@ public class SkuService extends org.nodes.wms.core.basedata.service.impl.SkuServ
 			// 处理创建状态的入库单明细
 			asnHeaderList = asnHeaderService.list(Condition.getQueryWrapper(new AsnHeader())
 				.lambda()
-				.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.CREATE.getCode()));
+				.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.NOT_RECEIPT.getCode()));
 			if (Func.isNotEmpty(asnHeaderList)) {
 				List<AsnDetail> asnDetailList = asnDetailService.list(Condition.getQueryWrapper(new AsnDetail())
 					.lambda()
@@ -182,7 +182,7 @@ public class SkuService extends org.nodes.wms.core.basedata.service.impl.SkuServ
 		// 验证入库
 		List<AsnHeader> asnHeaderList = asnHeaderService.list(Condition.getQueryWrapper(new AsnHeader())
 			.lambda()
-			.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.EXECUTING.getCode()));
+			.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.PART.getCode()));
 		if (Func.isNotEmpty(asnHeaderList)) {
 			List<AsnDetail> asnDetailList = asnDetailService.list(Condition.getQueryWrapper(new AsnDetail())
 				.lambda()

@@ -49,7 +49,7 @@ mybatis-plus:
   mapper-locations: classpath:org/springblade/**/mapper/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
   typeAliasesPackage: org.springblade.**.entity
-  #typeEnumsPackage: org.springblade.dashboard.entity.enums
+  typeEnumsPackage: org.nodes.wms.dao.**.enums.*
   global-config:
     # 关闭MP3.0自带的banner
     banner: false

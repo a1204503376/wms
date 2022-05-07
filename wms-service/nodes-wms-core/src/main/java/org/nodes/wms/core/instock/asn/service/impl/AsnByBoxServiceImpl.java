@@ -335,7 +335,7 @@ public class AsnByBoxServiceImpl extends AbsBaseAsnHeaderService<AsnHeaderMapper
 				ifFinish = false;
 			}
 		}
-		billState = ifFinish ? AsnBillStateEnum.COMPLETED.getCode() : AsnBillStateEnum.EXECUTING.getCode();
+		billState = ifFinish ? AsnBillStateEnum.COMPLETED.getCode() : AsnBillStateEnum.PART.getCode();
 		//修改值
 		AsnHeader update = new AsnHeader();
 		update.setAsnBillState(billState);
@@ -828,7 +828,7 @@ public class AsnByBoxServiceImpl extends AbsBaseAsnHeaderService<AsnHeaderMapper
 		}).count();
 
 		if (unReceiveCount != 0) {
-			this.updateAsnBillState(asnHeader.getAsnBillId(), AsnBillStateEnum.EXECUTING);
+			this.updateAsnBillState(asnHeader.getAsnBillId(), AsnBillStateEnum.PART);
 		} else {
 			this.updateAsnBillState(asnHeader.getAsnBillId(), AsnBillStateEnum.COMPLETED);
 		}
@@ -851,7 +851,7 @@ public class AsnByBoxServiceImpl extends AbsBaseAsnHeaderService<AsnHeaderMapper
 		if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.CANCEL.getCode())) {
 			throw new ServiceException("订单：" + asnHeader.getAsnBillNo() + " 已取消，拒绝当前操作！");
 		}
-		if (asnBillState.equals(AsnBillStateEnum.EXECUTING)) {
+		if (asnBillState.equals(AsnBillStateEnum.PART)) {
 			// 修改实际到货时间
 			if (Func.isEmpty(asnHeader.getActualArrivalDate())) {
 				asnHeader.setActualArrivalDate(LocalDateTime.now());
@@ -867,7 +867,7 @@ public class AsnByBoxServiceImpl extends AbsBaseAsnHeaderService<AsnHeaderMapper
 		if (AsnBillStateEnum.COMPLETED.equals(asnBillState)) {
 			// 更新调拨单状态
 			allotHeaderService.updateBillState(asnHeader.getOrderNo(), AllotBillStateEnum.COMPLETED);
-		} else if (AsnBillStateEnum.EXECUTING.equals(asnBillState)) {
+		} else if (AsnBillStateEnum.PART.equals(asnBillState)) {
 			allotHeaderService.updateBillState(asnHeader.getOrderNo(), AllotBillStateEnum.INSTOCKING);
 		}
 		return asnHeader;

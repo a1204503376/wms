@@ -26,7 +26,7 @@ public class AsnFactory {
 		asnHeader.setSCode(addAsnBillRequest.getSCode());
 		asnHeader.setSName(addAsnBillRequest.getSName());
 		asnHeader.setWhId(addAsnBillRequest.getWhId());
-		asnHeader.setAsnBillState(AsnBillStateEnum.CREATE.getCode());
+		asnHeader.setAsnBillState(AsnBillStateEnum.NOT_RECEIPT.getCode());
 		asnHeader.setAsnBillRemark(addAsnBillRequest.getAsnBillRemark());
 		return asnHeader;
 

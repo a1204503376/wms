@@ -56,7 +56,7 @@ public class RegisterServiceImpl<M extends RegisterMapper, T extends Register>
 			throw new ServiceException("该单据不可登记！");
 		}
 		// 修改订单状态
-		asnHeaderService.updateAsnBillState(asnHeader.getAsnBillId(), AsnBillStateEnum.EXECUTING);
+		asnHeaderService.updateAsnBillState(asnHeader.getAsnBillId(), AsnBillStateEnum.PART);
 		// 创建收货清单
 		AsnInventory asnInventory = BeanUtil.copy(asnHeader, AsnInventory.class);
 		asnInventory.setAsnBillNo(AsnCache.getInventoryNo());

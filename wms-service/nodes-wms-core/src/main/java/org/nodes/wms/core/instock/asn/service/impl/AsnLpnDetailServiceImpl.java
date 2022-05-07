@@ -165,10 +165,10 @@ public class AsnLpnDetailServiceImpl<M extends AsnLpnDetailMapper, T extends Asn
 		List<Long> longListIds = Func.toLongList(asnBillIds);
 		for (Long ids : longListIds) {
 			AsnHeader asnHeader = asnHeaderService.getById(ids);
-			if (!asnHeader.getAsnBillState().equals(AsnBillStateEnum.CREATE.getCode())) {
+			if (!asnHeader.getAsnBillState().equals(AsnBillStateEnum.NOT_RECEIPT.getCode())) {
 				throw new ServiceException(String.format(
 					"只有订单状态为[%s] 的入库单才允许执行此操作，当前状态[%s]! ",
-					AsnBillStateEnum.CREATE.getDesc(), AsnBillStateEnum.valueOf(AsnBillStateEnum.class, asnHeader.getAsnBillState().toString())));
+					AsnBillStateEnum.NOT_RECEIPT.getDesc(), AsnBillStateEnum.valueOf(AsnBillStateEnum.class, asnHeader.getAsnBillState().toString())));
 			}
 			AsnDetail paramDetail = new AsnDetail();
 			paramDetail.setAsnBillId(asnHeader.getAsnBillId());
