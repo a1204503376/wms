@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.dao.basics.sku.mapper.SkuMapper">
+
+	<select id="listTop10BySkuCodeSkuName" resultType="org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse">
+		SELECT sku_id,
+		       sku_code,
+		       sku_name
+		FROM wms_sku
+		WHERE sku_code LIKE CONCAT('%', #{skuCode}, '%')
+		   OR sku_name LIKE CONCAT('%', #{skuName}, '%')
+		ORDER BY update_time DESC
+		LIMIT 10
+	</select>
+
+</mapper>

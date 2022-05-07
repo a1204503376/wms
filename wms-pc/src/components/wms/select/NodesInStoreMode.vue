@@ -19,7 +19,7 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Array, Number]
+        selectVal: [Number, Array, String]
     },
     data() {
         return {
