@@ -185,6 +185,7 @@ export default {
 
     },
     methods: {
+        // 过滤空白行
         filterBlankRow(row) {
             return !(
                 (func.isEmpty(row.sku.skuId)
@@ -195,15 +196,15 @@ export default {
             );
         },
         getDescriptor() {
-            const skuErrorMsg = '请选择物料';
+            const skuErrorMsg = '请选择物料123';
             return {
                 sku: {
                     type: 'object',
                     required: true,
                     fields: {
-                        skuId: {type: 'string', required: true, message: skuErrorMsg},
-                        skuCode: {type: 'string', required: true, message: skuErrorMsg},
-                        skuName: {type: 'string', required: true, message: skuErrorMsg},
+                        skuId: { required: true, message: skuErrorMsg},
+                        skuCode: { required: true, message: skuErrorMsg},
+                        skuName: { required: true, message: skuErrorMsg},
                     }
                 },
                 skuLot1: {

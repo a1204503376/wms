@@ -348,7 +348,6 @@ export default {
             this.$router.push({
                 name: 'demoEdit',
                 params: {
-                    type: 'add',
                     id: '0'
                 }
             });
@@ -357,7 +356,6 @@ export default {
             this.$router.push({
                 name: 'demoEdit',
                 params: {
-                    type: 'edit',
                     id: row.id.toString()
                 }
             });

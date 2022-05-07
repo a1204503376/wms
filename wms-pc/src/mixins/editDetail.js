@@ -14,7 +14,6 @@ export const editDetailMixin = {
     },
     computed: {
         isEdit: function () {
-            console.log(this.id);
             return func.isStr(this.id) && func.isNotEmpty(this.id) && this.id !== '0';
         }
     },
