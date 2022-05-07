@@ -31,7 +31,7 @@ public interface AsnHeaderDao {
 	 * @param asnHeader ASN单头表实体
 	 * @return true:新增成功 , false:新增失败
 	 */
-	Boolean insertAsnHeader(AsnHeader asnHeader);
+	boolean insertAsnHeader(AsnHeader asnHeader);
 
 	/**
 	 * 获取ASN单详细信息
@@ -47,7 +47,7 @@ public interface AsnHeaderDao {
 	 * @param idList: Asn单id集合
 	 * @return true:删除成功 ,false:删除失败
 	 */
-	Boolean deleteAsnHeaderById(List<Long> idList);
+	boolean deleteAsnHeaderById(List<Long> idList);
 
 	/**
 	 * Excel 导出(导出当前查询条件)

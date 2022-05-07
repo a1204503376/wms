@@ -3,7 +3,7 @@ package org.nodes.wms.biz.application;
 import java.util.List;
 
 /**
- * ASN单管理
+ * ASN单管理与收货单管理 业务接口
  **/
 public interface AsnManageBiz {
 

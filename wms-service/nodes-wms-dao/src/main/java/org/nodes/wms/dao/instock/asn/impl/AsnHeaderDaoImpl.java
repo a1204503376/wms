@@ -32,7 +32,7 @@ public class AsnHeaderDaoImpl
 	}
 
 	@Override
-	public Boolean insertAsnHeader(AsnHeader asnHeader) {
+	public boolean insertAsnHeader(AsnHeader asnHeader) {
 		return super.save(asnHeader);
 	}
 
@@ -42,7 +42,7 @@ public class AsnHeaderDaoImpl
 	}
 
 	@Override
-	public Boolean deleteAsnHeaderById(List<Long> idList) {
+	public boolean deleteAsnHeaderById(List<Long> idList) {
 		return super.deleteLogic(idList);
 	}
 

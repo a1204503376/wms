@@ -1,8 +1,6 @@
 package org.nodes.wms.dao.basics.suppliers.dto.input;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -33,28 +31,20 @@ public class SupplierPageQuery implements Serializable {
 	/**
 	 * 创建时间 开始
 	 */
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createTimeBegin;
 
 	/**
 	 * 创建时间 结束
 	 */
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createTimeEnd;
 
 	/**
 	 * 更新时间 开始
 	 */
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date updateTimeBegin;
 
 	/**
 	 * 更新时间 结束
 	 */
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date updateTimeEnd;
 }

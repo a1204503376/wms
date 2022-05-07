@@ -2,15 +2,15 @@ package org.nodes.wms.biz.application;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.instock.asn.AsnBiz;
-import org.nodes.wms.biz.receive.header.ReceiveBiz;
+import org.nodes.wms.biz.instock.receive.header.ReceiveBiz;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
- * @author 彭永程
- * @date 2022-04-25 10:20
+ * Asn单管理和收货单管理 业务接口实现
+ *
  **/
 @Service
 @RequiredArgsConstructor
@@ -23,9 +23,11 @@ public class AsnManageBizImpl implements AsnManageBiz {
 	@Override
 	public boolean remove(List<Long> asnBillIdList) {
 		// 1.删除ASN头表
-		Boolean delAsnBillFlag = asnBiz.removeAsnBillById(asnBillIdList);
+		boolean delAsnBillFlag = asnBiz.removeAsnBillById(asnBillIdList);
 		// 2.删除ASN明细表
-		Boolean delAsnDetailFlag = asnBiz.removeAsnDetailByAsnBillId(asnBillIdList);
+		boolean delAsnDetailFlag = asnBiz.removeAsnDetailByAsnBillId(asnBillIdList);
+
+		//3+4+5 = 在收货管理那边 删除收货头表+明细表
 		// 3.删除收货单头表 (传asnBillIdList)
 
 		// 4.根据asnBillIdList查询到asn明细单传asnDetailIdList
