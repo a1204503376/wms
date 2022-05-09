@@ -12,11 +12,6 @@ export const editDetailMixin = {
             }
         }
     },
-    computed: {
-        isEdit: function () {
-            return func.isStr(this.id) && func.isNotEmpty(this.id) && this.id !== '0';
-        }
-    },
     created() {
         if (!this.isEdit) {
             this.batchAddToRows();
@@ -25,9 +20,10 @@ export const editDetailMixin = {
         }
     },
     watch: {
-        $route(to, from) {
-            if (to.matched && func.isArray(to.matched) && to.matched.length >= 2 && to.matched[1].name === 'demoEdit') {
-                let type = to.params.type;
+        $route(to) {
+            if (to.matched && func.isArray(to.matched)
+                && to.matched.length >= 2
+                && to.matched[1].name === 'demoEdit') {
                 if (this.isEdit) {
                     this.initTableData();
                 }
