@@ -22,7 +22,7 @@ public class NoticeMessageRequest {
 	private Date expirationDate;
 
 	/**
-	 * 需要通知的用户列表
+	 * 需要通知的用户列表，为空表示所有人都可以查看
 	 */
 	private List<BladeUser> noticeUserList;
 }
