@@ -11,9 +11,9 @@
         o.owner_name,
         s.remark,
         s.status,
-        user1.real_name as create_name,
+        user1.real_name as createUser,
         s.create_time,
-        user2.real_name as update_name,
+        user2.real_name as updateUser,
         s.update_time
         FROM basics_suppliers s
         LEFT JOIN blade_user user1 ON user1.id = s.create_user
@@ -61,12 +61,11 @@
              s.simple_name,
              o.owner_name,
              s.remark,
-             s.status,
-             s.create_user,
+             IF(s.status = 1 ,'启用' ,'未启用') as status,
              s.create_time,
              s.update_time,
-             user1.real_name as create_name,
-             user2.real_name as update_name
+             user1.real_name as createUser,
+             user2.real_name as updateUser
         FROM basics_suppliers s
         LEFT JOIN blade_user user1 ON user1.id = s.create_user
         LEFT JOIN blade_user user2 ON user2.id = s.update_user

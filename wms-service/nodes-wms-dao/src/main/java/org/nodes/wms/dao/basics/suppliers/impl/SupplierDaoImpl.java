@@ -1,12 +1,14 @@
 package org.nodes.wms.dao.basics.suppliers.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.basics.suppliers.SupplierDao;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
+import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierExportResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 import org.nodes.wms.dao.basics.suppliers.mapper.SupplierMapper;
@@ -47,15 +49,16 @@ public class SupplierDaoImpl extends BaseServiceImpl<SupplierMapper, Supplier> i
 
 
 	@Override
-	public List<Supplier> listBySupplierPageQuery(SupplierPageQuery supplierPageQuery) {
-		LambdaQueryWrapper<Supplier> queryWrapper = Wrappers.lambdaQuery(Supplier.class);
-		queryWrapper.like(Func.isNotBlank(supplierPageQuery.getName()),Supplier::getName,supplierPageQuery.getName())
-			.like(Func.isNotBlank(supplierPageQuery.getSimpleName()),Supplier::getSimpleName,supplierPageQuery.getSimpleName())
-			.like(Func.isNotBlank(supplierPageQuery.getCode()),Supplier::getCode,supplierPageQuery.getCode())
-			.ge(Func.isNotEmpty(supplierPageQuery.getCreateTimeBegin()),Supplier::getCreateTime,supplierPageQuery.getCreateTimeBegin())
-			.le(Func.isNotEmpty(supplierPageQuery.getCreateTimeEnd()),Supplier::getCreateTime,supplierPageQuery.getCreateTimeBegin())
-			.ge(Func.isNotEmpty(supplierPageQuery.getUpdateTimeBegin()),Supplier::getUpdateTime,supplierPageQuery.getUpdateTimeBegin())
-			.le(Func.isNotEmpty(supplierPageQuery.getUpdateTimeEnd()),Supplier::getUpdateTime,supplierPageQuery.getUpdateTimeEnd());
-		return super.list(queryWrapper);
+	public List<SupplierExportResponse> listBySupplierPageQuery(SupplierPageQuery supplierPageQuery) {
+		QueryWrapper<SupplierExportResponse> queryWrapper = Wrappers.query();
+		queryWrapper
+			.like(Func.isNotBlank(supplierPageQuery.getName()),"s.name",supplierPageQuery.getName())
+			.like(Func.isNotBlank(supplierPageQuery.getSimpleName()),"s.simpleName",supplierPageQuery.getSimpleName())
+			.like(Func.isNotBlank(supplierPageQuery.getCode()),"s.code",supplierPageQuery.getCode())
+			.ge(Func.isNotEmpty(supplierPageQuery.getCreateTimeBegin()),"s.create_time",supplierPageQuery.getCreateTimeBegin())
+			.le(Func.isNotEmpty(supplierPageQuery.getCreateTimeEnd()),"s.create_time",supplierPageQuery.getCreateTimeBegin())
+			.ge(Func.isNotEmpty(supplierPageQuery.getUpdateTimeBegin()),"s.update_time",supplierPageQuery.getUpdateTimeBegin())
+			.le(Func.isNotEmpty(supplierPageQuery.getUpdateTimeEnd()),"s.update_time",supplierPageQuery.getUpdateTimeEnd());
+		return super.baseMapper.selectListByWrapper(queryWrapper);
 	}
 }

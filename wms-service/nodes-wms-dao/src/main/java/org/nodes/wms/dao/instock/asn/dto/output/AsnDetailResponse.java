@@ -53,7 +53,7 @@ public class AsnDetailResponse implements Serializable {
 	/**
 	 * 创建人
 	 */
-	private Long createUser;
+	private String createUser;
 
 	/**
 	 * Asn单明细集合
