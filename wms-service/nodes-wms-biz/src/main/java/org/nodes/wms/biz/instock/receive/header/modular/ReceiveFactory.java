@@ -1,8 +1,8 @@
 package org.nodes.wms.biz.instock.receive.header.modular;
 
 
-import org.nodes.wms.dao.instock.receive.header.dto.input.NewReceiveHeaderRequest;
-import org.nodes.wms.dao.instock.receive.header.entities.ReceiveHeader;
+import org.nodes.wms.dao.instock.receive.dto.input.NewReceiveHeaderRequest;
+import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,9 +16,9 @@ public class ReceiveFactory {
 		receiveHeader.setWhId(newReceiveHeaderRequest.getWhId());
 		receiveHeader.setWhCode(newReceiveHeaderRequest.getWhCode());
 		receiveHeader.setBillTypeCd(newReceiveHeaderRequest.getBillTypeCd());
-		receiveHeader.setSCode(newReceiveHeaderRequest.getSCode());
-		receiveHeader.setSName(newReceiveHeaderRequest.getSName());
-		receiveHeader.setInstoreType(newReceiveHeaderRequest.getInstoreType());
+		receiveHeader.setSupplierCode(newReceiveHeaderRequest.getSupplierCode());
+		receiveHeader.setSupplierName(newReceiveHeaderRequest.getSupplierName());
+		receiveHeader.setInStoreType(newReceiveHeaderRequest.getInStoreType());
 		receiveHeader.setWoId(newReceiveHeaderRequest.getWoId());
 		receiveHeader.setOwnerCode(newReceiveHeaderRequest.getOwnerCode());
 		receiveHeader.setRemark(newReceiveHeaderRequest.getRemark());

@@ -4,7 +4,8 @@ export const page = (page, params) => {
     return request({
         url: '/api/wms/receive/page',
         method: 'post',
-        data:page,params
+        params: page,
+        data: params
     })
 }
 
@@ -13,10 +14,7 @@ export const remove = (nums) => {
     return request({
         url: '/api/wms/receive/delete',
         method: 'post',
-        data: nums,
-        params: {
-
-        }
+        data: nums
     })
 }
 
@@ -24,9 +22,22 @@ export const close = (nums) => {
     return request({
         url: '/api/wms/receive/editBillState',
         method: 'post',
-        data: nums,
-        params: {
+        data: nums
+    })
+}
 
-        }
+export const exportFile = (data) => {
+    return request({
+        url: '/api/wms/receive/export',
+        method: 'post',
+        data: data,
+        responseType: 'blob'
+    })
+}
+
+export const getReceiveStateList = () => {
+    return request({
+        url: '/api/wms/receive/getReceiveStateList',
+        method: 'get'
     })
 }
