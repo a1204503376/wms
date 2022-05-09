@@ -10,7 +10,7 @@ import java.util.List;
  * 收货单头表 分页参数
  **/
 @Data
-public class ReceiveHeaderPageQuery implements Serializable {
+public class ReceivePageQuery implements Serializable {
 	private static final long serialVersionUID = 3344143975728396364L;
 	/**
 	 * 收货单编码

@@ -2,7 +2,7 @@ package org.nodes.wms.dao.instock.receive;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
-import org.nodes.wms.dao.instock.receive.dto.input.ReceiveHeaderPageQuery;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 
 import java.util.List;
@@ -15,10 +15,10 @@ public interface ReceiveHeaderDao {
 	 * 分页查询
 	 *
 	 * @param page            分页对象
-	 * @param receiveHeaderPageQuery 分页请求参数
+	 * @param receivePageQuery 分页请求参数
 	 * @return IPage<PageResponse>
 	 */
-	IPage<ReceiveHeaderResponse> selectPage(IPage<ReceiveHeaderResponse>page, ReceiveHeaderPageQuery receiveHeaderPageQuery);
+	IPage<ReceiveHeaderResponse> selectPage(IPage<ReceiveHeaderResponse>page, ReceivePageQuery receivePageQuery);
 
 	boolean delete(Long receiveId);
 
@@ -28,5 +28,5 @@ public interface ReceiveHeaderDao {
 
 	boolean insert(ReceiveHeader receiveHeader);
 
-    List<ReceiveHeaderResponse> getReceiveHeaderResponseByQuery(ReceiveHeaderPageQuery receiveHeaderPageQuery);
+    List<ReceiveHeaderResponse> getReceiveHeaderResponseByQuery(ReceivePageQuery receivePageQuery);
 }

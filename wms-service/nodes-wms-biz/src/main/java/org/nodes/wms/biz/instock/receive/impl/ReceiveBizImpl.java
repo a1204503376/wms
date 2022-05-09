@@ -1,16 +1,16 @@
-package org.nodes.wms.biz.instock.receive.header.impl;
+package org.nodes.wms.biz.instock.receive.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.common.utils.NoGeneratorUtil;
-import org.nodes.wms.biz.instock.receive.header.ReceiveBiz;
-import org.nodes.wms.biz.instock.receive.header.modular.ReceiveFactory;
+import org.nodes.wms.biz.instock.receive.ReceiveBiz;
+import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
 import org.nodes.wms.dao.instock.receive.ReceiveDetailDao;
 import org.nodes.wms.dao.instock.receive.ReceiveHeaderDao;
 import org.nodes.wms.dao.instock.receive.dto.input.NewReceiveRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailRequest;
-import org.nodes.wms.dao.instock.receive.dto.input.ReceiveHeaderPageQuery;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveResponse;
@@ -41,9 +41,9 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	private final ReceiveFactory receiveFactory;
 
 	@Override
-	public IPage<ReceiveHeaderResponse> getPage(ReceiveHeaderPageQuery receiveHeaderPageQuery, Query query) {
+	public IPage<ReceiveHeaderResponse> getPage(ReceivePageQuery receivePageQuery, Query query) {
 		IPage<ReceiveHeaderResponse> page = Condition.getPage(query);
-		IPage<ReceiveHeaderResponse> responsePage  =  receiveHeaderDao.selectPage(page, receiveHeaderPageQuery);
+		IPage<ReceiveHeaderResponse> responsePage  =  receiveHeaderDao.selectPage(page, receivePageQuery);
 		List<ReceiveHeaderResponse> receiveHeaderResponseList = responsePage.getRecords();
 
 		for(int i=0;i<receiveHeaderResponseList.size();i++){
@@ -76,7 +76,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	}
 
 	@Override
-	public ReceiveResponse detail(Long receiveId) {
+	public ReceiveResponse getReceivedetail(Long receiveId) {
 		//查询收货单头表
 		ReceiveHeaderResponse receiveHeaderResponse = receiveHeaderDao.selectHeaderById(receiveId);
 		//查询收货单头表关联明细
@@ -89,8 +89,8 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	}
 
 	@Override
-	public boolean editBillState(Long receiveDetailId) {
-		return receiveHeaderDao.updateBillStateById(receiveDetailId);
+	public boolean editBillState(Long receiveId) {
+		return receiveHeaderDao.updateBillStateById(receiveId);
 	}
 
 
@@ -106,8 +106,8 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	}
 
 	@Override
-	public void exportExcel(ReceiveHeaderPageQuery receiveHeaderPageQuery, HttpServletResponse response) {
-		List<ReceiveHeaderResponse> receiveHeaderResponseList = receiveHeaderDao.getReceiveHeaderResponseByQuery(receiveHeaderPageQuery);
+	public void exportExcel(ReceivePageQuery receivePageQuery, HttpServletResponse response) {
+		List<ReceiveHeaderResponse> receiveHeaderResponseList = receiveHeaderDao.getReceiveHeaderResponseByQuery(receivePageQuery);
 		for(int i=0;i<receiveHeaderResponseList.size();i++){
 			String billState = receiveHeaderResponseList.get(i).getBillState().getDesc();
 			receiveHeaderResponseList.get(i).setBillStateDesc(billState);

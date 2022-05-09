@@ -1,4 +1,4 @@
-package org.nodes.wms.biz.instock.receive.header.modular;
+package org.nodes.wms.biz.instock.receive.modular;
 
 
 import org.nodes.wms.dao.instock.receive.dto.input.NewReceiveHeaderRequest;

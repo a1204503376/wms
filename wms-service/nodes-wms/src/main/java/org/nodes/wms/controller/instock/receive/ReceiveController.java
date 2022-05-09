@@ -3,11 +3,11 @@ package org.nodes.wms.controller.instock.receive;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
-import org.nodes.wms.biz.instock.receive.header.ReceiveBiz;
+import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.dao.application.dto.output.ReceiveBillStateResponse;
 import org.nodes.wms.dao.instock.receive.dto.input.NewReceiveRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveHeaderIdRequest;
-import org.nodes.wms.dao.instock.receive.dto.input.ReceiveHeaderPageQuery;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveResponse;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveBillStateEnum;
@@ -34,8 +34,8 @@ public class ReceiveController {
 	 * 收货管理分页查询
 	 */
 	@PostMapping("/page")
-	public R<IPage<ReceiveHeaderResponse>> page(@Valid @RequestBody ReceiveHeaderPageQuery receiveHeaderPageQuery, Query query) {
-		IPage<ReceiveHeaderResponse> pages = receiveBiz.getPage(receiveHeaderPageQuery, query);
+	public R<IPage<ReceiveHeaderResponse>> page(@Valid @RequestBody ReceivePageQuery receivePageQuery, Query query) {
+		IPage<ReceiveHeaderResponse> pages = receiveBiz.getPage(receivePageQuery, query);
 		return R.data(pages);
 	}
 
@@ -61,11 +61,10 @@ public class ReceiveController {
 	/**
 	 * 查看收货单明细
 	 */
-	@GetMapping("/detail")
-	public R<ReceiveResponse> detail(@Valid @RequestParam ReceiveHeaderIdRequest headerIdRequest) {
-		return R.data(receiveBiz.detail(headerIdRequest.getReceiveId()));
+	@GetMapping("/getReceivedetail")
+	public R<ReceiveResponse> getReceivedetail(@Valid @RequestParam ReceiveHeaderIdRequest headerIdRequest) {
+		return R.data(receiveBiz.getReceivedetail(headerIdRequest.getReceiveId()));
 	}
-
 
 
 
@@ -82,8 +81,8 @@ public class ReceiveController {
 	 * 导出
 	 */
 	@PostMapping("export")
-	public void export(@RequestBody ReceiveHeaderPageQuery receiveHeaderPageQuery, HttpServletResponse response) {
-		receiveBiz.exportExcel(receiveHeaderPageQuery, response);
+	public void export(@RequestBody ReceivePageQuery receivePageQuery, HttpServletResponse response) {
+		receiveBiz.exportExcel(receivePageQuery, response);
 	}
 	/**
 	 * 获取收货单状态集合

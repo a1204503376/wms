@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.mapper.ReceiveHeaderMapper;
 import org.nodes.wms.dao.instock.receive.ReceiveHeaderDao;
-import org.nodes.wms.dao.instock.receive.dto.input.ReceiveHeaderPageQuery;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
@@ -22,8 +22,8 @@ import java.util.List;
 public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, ReceiveHeader>  implements ReceiveHeaderDao {
 	private final ReceiveHeaderMapper receiveHeaderMapper;
 	@Override
-	public IPage<ReceiveHeaderResponse> selectPage(IPage<ReceiveHeaderResponse> page, ReceiveHeaderPageQuery receiveHeaderPageQuery) {
-		return receiveHeaderMapper.getPage(page, receiveHeaderPageQuery);
+	public IPage<ReceiveHeaderResponse> selectPage(IPage<ReceiveHeaderResponse> page, ReceivePageQuery receivePageQuery) {
+		return receiveHeaderMapper.getPage(page, receivePageQuery);
 	}
 
 	@Override
@@ -52,8 +52,8 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 	}
 
 	@Override
-	public List<ReceiveHeaderResponse> getReceiveHeaderResponseByQuery(ReceiveHeaderPageQuery receiveHeaderPageQuery) {
-		return receiveHeaderMapper.getReceiveHeaderResponseByQuery(receiveHeaderPageQuery);
+	public List<ReceiveHeaderResponse> getReceiveHeaderResponseByQuery(ReceivePageQuery receivePageQuery) {
+		return receiveHeaderMapper.getReceiveHeaderResponseByQuery(receivePageQuery);
 	}
 
 }
