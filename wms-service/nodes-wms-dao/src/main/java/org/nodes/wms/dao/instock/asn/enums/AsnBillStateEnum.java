@@ -1,5 +1,7 @@
-package org.nodes.wms.biz.instock.asn.enums;
+package org.nodes.wms.dao.instock.asn.enums;
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.enums.IPairs;
@@ -9,38 +11,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 入库方式
- */
+ * ASN单状态
+ **/
 @Getter
 @RequiredArgsConstructor
-public enum InStorageTypeEnum
-	implements IPairs<Integer, String, InStorageTypeEnum> {
+public enum AsnBillStateEnum
+	implements IPairs<Integer,String,AsnBillStateEnum> {
 
 	/**
-	 * 常规入库
+	 *未收货
 	 */
-	Normal(10, "常规入库"),
+	NOT_RECEIPT(10, "未收货"),
+
 	/**
-	 * 无单据入库
+	 * 部分收货
 	 */
-	NO_BILL(20, "无单据入库"),
+	PART(20,"部分收货"),
+
 	/**
-	 * 越库入库
+	 * 全部收货
 	 */
-	CROSS(30, "越库入库"),
+	COMPLETED(30, "全部收货"),
+
+	/**
+	 * 已取消
+	 */
+	CANCEL(90, "已取消"),
 	;
 
+	@EnumValue
+	@JsonValue
 	private final Integer code;
 	private final String desc;
 
 	@Override
-	public InStorageTypeEnum get() {
+	public AsnBillStateEnum get() {
 		return this;
 	}
 
 	@Override
 	public Integer key() {
-		return this.getCode();
+		return this.code;
 	}
 
 	@Override
@@ -50,7 +61,7 @@ public enum InStorageTypeEnum
 
 	public static List<StateGeneralResponse> getList() {
 		List<StateGeneralResponse> list = new ArrayList<>();
-		for (InStorageTypeEnum item : values()) {
+		for (AsnBillStateEnum item : values()) {
 			StateGeneralResponse stateGeneralResponse = new StateGeneralResponse();
 			stateGeneralResponse.setLabel(item.desc);
 			stateGeneralResponse.setValue(item.code);

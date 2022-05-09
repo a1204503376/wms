@@ -42,5 +42,9 @@
             <groupId>org.nodes</groupId>
             <artifactId>nodes-wms-biz</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.nodes</groupId>
+            <artifactId>nodes-wms-dao</artifactId>
+        </dependency>
     </dependencies>
 </project>

@@ -1,4 +1,4 @@
-package org.nodes.wms.biz.instock.asn.enums;
+package org.nodes.wms.dao.instock.asn.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,45 +9,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ASN单状态
- **/
+ * 入库方式
+ */
 @Getter
 @RequiredArgsConstructor
-public enum AsnBillStateEnum
-	implements IPairs<Integer,String,AsnBillStateEnum> {
+public enum InStorageTypeEnum
+	implements IPairs<Integer, String, InStorageTypeEnum> {
 
 	/**
-	 *未收货
+	 * 常规入库
 	 */
-	NOT_RECEIPT(10, "未收货"),
-
+	Normal(10, "常规入库"),
 	/**
-	 * 部分收货
+	 * 无单据入库
 	 */
-	PART(20,"部分收货"),
-
+	NO_BILL(20, "无单据入库"),
 	/**
-	 * 全部收货
+	 * 越库入库
 	 */
-	COMPLETED(30, "全部收货"),
-
-	/**
-	 * 已取消
-	 */
-	CANCEL(90, "已取消"),
+	CROSS(30, "越库入库"),
 	;
 
 	private final Integer code;
 	private final String desc;
 
 	@Override
-	public AsnBillStateEnum get() {
+	public InStorageTypeEnum get() {
 		return this;
 	}
 
 	@Override
 	public Integer key() {
-		return this.code;
+		return this.getCode();
 	}
 
 	@Override
@@ -57,7 +50,7 @@ public enum AsnBillStateEnum
 
 	public static List<StateGeneralResponse> getList() {
 		List<StateGeneralResponse> list = new ArrayList<>();
-		for (AsnBillStateEnum item : values()) {
+		for (InStorageTypeEnum item : values()) {
 			StateGeneralResponse stateGeneralResponse = new StateGeneralResponse();
 			stateGeneralResponse.setLabel(item.desc);
 			stateGeneralResponse.setValue(item.code);
