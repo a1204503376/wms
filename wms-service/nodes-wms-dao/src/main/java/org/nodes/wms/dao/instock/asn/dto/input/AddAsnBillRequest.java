@@ -19,19 +19,19 @@ public class AddAsnBillRequest implements Serializable {
 	 * 单据类型
 	 */
 	@NotNull(message = "单据类型不能为空")
-	private Integer createType;
+	private String billTypeCd;
 
 	/**
 	 * 供应商编码
 	 */
 	@NotNull(message = "供应商编码不能为空")
-	private String sCode;
+	private String supplierCode;
 
 	/**
 	 * 供应商名称
 	 */
 	@NotNull(message = "供应商名称不能为空")
-	private String sName;
+	private String supplierName;
 
 	/**
 	 * 仓库编码

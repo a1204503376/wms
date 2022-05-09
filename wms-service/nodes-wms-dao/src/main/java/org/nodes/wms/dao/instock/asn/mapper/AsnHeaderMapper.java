@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnBillExportResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnExportResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.springframework.stereotype.Repository;
@@ -42,5 +42,5 @@ public interface AsnHeaderMapper extends BaseMapper<AsnHeader> {
 	 * @param pageParamsQuery:
 	 * @return List<AsnExportResponse>
 	 */
-	List<AsnExportResponse> selectAsnBillList(PageParamsQuery pageParamsQuery);
+	List<AsnBillExportResponse> selectAsnBillList(@Param("params") PageParamsQuery pageParamsQuery);
 }

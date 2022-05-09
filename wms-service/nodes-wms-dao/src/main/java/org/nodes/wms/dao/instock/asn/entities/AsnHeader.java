@@ -4,9 +4,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import org.nodes.wms.dao.instock.asn.enums.AsnBillStateEnum;
 import org.springblade.core.tenant.mp.TenantEntity;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * ASN单据头表 实体
@@ -22,34 +23,42 @@ public class AsnHeader extends TenantEntity {
 	 */
 	@TableId(value = "asn_bill_id", type = IdType.ASSIGN_ID)
 	private Long asnBillId;
+
 	/**
 	 * 库房ID
 	 */
 	private Long whId;
+
 	/**
 	 * 库房编码
 	 */
 	private String whCode;
+
 	/**
 	 * 货主ID
 	 */
 	private Long woId;
+
 	/**
 	 * 货主编码
 	 */
 	private String ownerCode;
+
 	/**
 	 * 单据编码
 	 */
 	private String asnBillNo;
+
 	/**
 	 * 单据状态
 	 */
-	private Integer asnBillState;
+	private AsnBillStateEnum asnBillState;
+
 	/**
 	 * 组合单据ID
 	 */
 	private Long billGroupId;
+
 	/**
 	 * 单据种类编码
 	 */
@@ -58,101 +67,100 @@ public class AsnHeader extends TenantEntity {
 	/**
 	 * 上位系统单据唯一标识
 	 */
-	private String billKey;
+	private String externalBillKey;
+
 	/**
 	 * 上位系统单编号
 	 */
-	private String orderNo;
+	private String externalOrderNo;
+
 	/**
 	 * 上位系统最后更新时间
 	 */
-	private LocalDateTime lastUpdateDate;
+	private Date externalLastUpdateDate;
+
 	/**
 	 * 上位系统订单创建时间
 	 */
-	private LocalDateTime preCreateDate;
+	private Date externalPreCreateDate;
+
 	/**
 	 * 上位系统单据类型
 	 */
-	private String billType;
+	private String externalBillType;
+
+	/**
+	 * 上位系统单据创建人
+	 */
+	private String externalCreateUser;
+
 	/**
 	 * 预计到货时间
 	 */
-	private LocalDateTime scheduledArrivalDate;
+	private Date scheduledArrivalDate;
+
 	/**
 	 * 实际到货时间
 	 */
-	private LocalDateTime actualArrivalDate;
+	private Date actualArrivalDate;
+
 	/**
 	 * 单据完成时间
 	 */
-	private LocalDateTime finishDate;
+	private Date finishDate;
+
 	/**
 	 * 入库方式
 	 */
 	private Integer instoreType;
-	/**
-	 * 运单编号
-	 */
-	private String shipNo;
+
 	/**
 	 * 供应商编码
 	 */
-	private String sCode;
+	private String supplierCode;
+
 	/**
 	 * 供应商名称
 	 */
-	private String sName;
+	private String supplierName;
+
 	/**
 	 * 供应商地址
 	 */
 	private String sAddress;
+
 	/**
 	 * 供应商联系人
 	 */
 	private String contact;
+
 	/**
 	 * 供应商联系电话
 	 */
 	private String phone;
-	/**
-	 * 出库单编码
-	 */
-	private String soBillNo;
+
 	/**
 	 * WMS备注
 	 */
 	private String asnBillRemark;
-	/**
-	 * 同步状态
-	 */
-	private Integer syncState;
+
 	/**
 	 * 部门ID
 	 */
 	private Long deptId;
+
 	/**
 	 * 部门编码
 	 */
 	private String deptCode;
+
 	/**
 	 * 部门名称
 	 */
 	private String deptName;
+
 	/**
 	 * 创建类型
 	 */
 	private Integer createType;
-	/**
-	 * 过账人员
-	 */
-	private Long postUser;
-	/**
-	 * 过账时间
-	 */
-	private LocalDateTime postTime;
-	/**
-	 * 过账方式
-	 */
-	private Integer postState;
 }

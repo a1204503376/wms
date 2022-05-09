@@ -3,8 +3,8 @@ package org.nodes.wms.dao.instock.asn;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnBillExportResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnExportResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 
@@ -55,5 +55,5 @@ public interface AsnHeaderDao {
 	 * @param pageParamsQuery: 查询条件
 	 * @return List<AsnExportResponse>
 	 */
-    List<AsnExportResponse> listByParamsQuery(PageParamsQuery pageParamsQuery);
+    List<AsnBillExportResponse> listByParamsQuery(PageParamsQuery pageParamsQuery);
 }

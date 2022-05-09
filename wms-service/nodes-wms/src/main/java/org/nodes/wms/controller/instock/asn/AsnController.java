@@ -9,6 +9,7 @@ import org.nodes.wms.dao.instock.asn.dto.input.*;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailByEditResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
+import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
@@ -33,7 +34,7 @@ public class AsnController {
 	private final AsnManageBiz asnManageBiz;
 
 	@PostMapping("/page")
-	public R<Page<PageResponse>> page(@RequestBody Query query, @RequestBody PageParamsQuery pageParamsQuery) {
+	public R<Page<PageResponse>> page(Query query, @RequestBody PageParamsQuery pageParamsQuery) {
 		Page<PageResponse> asnPage = asnBiz.getPageAsnBill(Condition.getPage(query), pageParamsQuery);
 		return R.data(asnPage);
 	}
@@ -44,6 +45,7 @@ public class AsnController {
 		return R.data(asnDetailResponse);
 	}
 
+	@ApiLog("ASN单管理-新增")
 	@PostMapping("/add")
 	public R<Boolean> add(@Valid @RequestParam AddAsnBillRequest addAsnBillRequest){
 		boolean add = asnBiz.add(addAsnBillRequest);
@@ -55,12 +57,14 @@ public class AsnController {
 		return R.data(asnBiz.getAsnHeaderAndAsnDetail(asnBillIdRequest));
 	}
 
+	@ApiLog("ASN单管理-编辑")
 	@PostMapping("/edit")
 	public R<Boolean> edit(@Valid @RequestBody EditAsnBillRequest editAsnBillRequest){
 		boolean edit = asnBiz.edit(editAsnBillRequest);
  		return R.status(edit);
 	}
 
+	@ApiLog("ASN单管理-删除")
 	@PostMapping("/remove")
 	public R<Boolean> remove(@Valid @RequestBody DeleteRequest deleteRequest) {
 		boolean delete = asnManageBiz.remove(deleteRequest.getAsnBillIds());

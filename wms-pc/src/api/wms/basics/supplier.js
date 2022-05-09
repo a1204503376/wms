@@ -4,7 +4,8 @@ export const page = (page, params) => {
     return request({
         url: '/api/wms/suppliers/page',
         method: 'post',
-        data: page,params
+        params:page,
+        data: params
     })
 }
 

@@ -28,17 +28,17 @@ public class AsnDetailResponse implements Serializable {
 	/**
 	 * 单据类型
 	 */
-	private Integer createType;
+	private String billTypeName;
 
 	/**
 	 * 供应商编码
 	 */
-	private String sCode;
+	private String supplierCode;
 
 	/**
 	 * 供应商名称
 	 */
-	private String sName;
+	private String supplierName;
 
 	/**
 	 * 备注
@@ -58,12 +58,12 @@ public class AsnDetailResponse implements Serializable {
 	/**
 	 * Asn单明细集合
 	 */
-	private List<AsnPropertyDetailResponse>  asnDetails;
+	private List<AsnPropertyDetailResponse>  asnDetailList;
 
 	/**
 	 * 收货单头表信息集合
 	 */
-	private List<AsnPropertyReceiveResponse> receiveHeaders;
+	private List<AsnPropertyReceiveResponse> receiveHeaderList;
 
 	/**
 	 * 库房编码
