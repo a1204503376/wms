@@ -8,7 +8,6 @@ export const listMixin = {
     mixins: [menuMixin],
     data() {
         return {
-            masterConfig: {},
             form: {
                 params: {},
                 deepCloneParams: {},
