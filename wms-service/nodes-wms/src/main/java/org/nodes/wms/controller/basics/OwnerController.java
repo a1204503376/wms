@@ -1,18 +1,21 @@
-package org.nodes.modules.wms.basedata.controller;
+package org.nodes.wms.controller.basics;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.core.tool.entity.DataVerify;
+import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.core.basedata.dto.OwnerDTO;
 import org.nodes.wms.core.basedata.entity.Owner;
 import org.nodes.wms.core.basedata.excel.OwnerExcel;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.basedata.vo.OwnerVO;
 import org.nodes.wms.core.basedata.wrapper.OwnerWrapper;
+import org.nodes.wms.dao.basics.owner.dto.OwnerSelectResponse;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
@@ -37,12 +40,20 @@ import java.util.List;
  * @create 20191205
  */
 @RestController
-@AllArgsConstructor
-@RequestMapping("/wms/basedata/owner")
+@RequiredArgsConstructor
+@RequestMapping(WmsApiPath.WMS_ROOT_URL + "owner")
 @Api(value = "货主管理", tags = "货主管理")
 public class OwnerController extends BladeController {
 
-	IOwnerService ownerService;
+	private final IOwnerService ownerService;
+
+	private final OwnerBiz ownerBiz;
+
+	@GetMapping("/ownerSelect")
+	public R<List<OwnerSelectResponse>> getOwnerSelectResponseList(){
+		List<OwnerSelectResponse> ownerSelectResponseList = ownerBiz.getOwnerSelectResponseList();
+		return R.data(ownerSelectResponseList);
+	}
 
 	/**
 	 * @program 货主ID
