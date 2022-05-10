@@ -1,4 +1,6 @@
 package org.nodes.wms.dao.basics.suppliers.dto.input;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -32,6 +34,7 @@ public class AddSupplierRequest implements Serializable {
 	/**
 	 * 货主id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long woId;
 
 	/**
@@ -40,7 +43,7 @@ public class AddSupplierRequest implements Serializable {
 	private String remark;
 
 	/**
-	 * 是否启用(0:启用,-1:未启用)
+	 * 是否启用(1:启用,-1:未启用)
 	 */
 	private Integer status;
 }

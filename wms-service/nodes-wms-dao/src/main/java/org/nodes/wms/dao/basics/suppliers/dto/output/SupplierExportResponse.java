@@ -51,18 +51,18 @@ public class SupplierExportResponse implements Serializable {
 	private String remark;
 
 	/**
-	 * 是否启用(0:启用,-1:未启用)
+	 * 是否启用(1:启用,-1:未启用)
 	 */
 	@ColumnWidth(15)
 	@ExcelProperty({"供应商信息", "是否启用"})
-	private Integer status;
+	private String status;
 
 	/**
 	 * 创建人
 	 */
 	@ColumnWidth(15)
 	@ExcelProperty({"供应商信息", "创建人"})
-	private Long createUser;
+	private String createUser;
 
 	/**
 	 * 创建时间

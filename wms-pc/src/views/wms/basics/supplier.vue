@@ -8,7 +8,6 @@
                 <el-form-item label="供应商名称">
                     <el-input v-model="form.params.name"></el-input>
                 </el-form-item>
-
             </template>
             <template v-slot:expandSearch>
                 <el-row type="flex">
@@ -63,7 +62,7 @@
                             v-bind="column">
                         </el-table-column>
                     </template>
-                    <el-table-column                             label="启用"
+                    <el-table-column label="启用"
                                      prop="status"
                                      width="100">
                         <template v-slot="{row}">
@@ -73,14 +72,6 @@
                                     1 ? '是' : '否'
                                 }}
                             </el-tag>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        fixed="right"
-                        label="操作"
-                        width="100">
-                        <template v-slot="{row}">
-                            <el-button size="mini" type="text" @click="onEdit(row)">编辑</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -171,6 +162,13 @@ export default {
             },
         };
     },
+    watch: {
+        $route(to) {
+            if(to.query && to.query.isRefresh === 'true'){
+                this.refreshTable();
+            }
+        }
+    },
     computed: {
         permissionObj() {
             return {
@@ -187,11 +185,13 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
-                    console.log(pageObj);
                 })
-                .catch((e) => {
-                    console.log(e);
+                .catch(() => {
+                    this.$message.error("查找失败");
                 });
+        },
+        refreshTable(){
+            this.getTableData();
         },
         onReset() {
             this.form.params = {
@@ -263,14 +263,6 @@ export default {
                 }
             });
         },
-        onEdit(row) {
-            this.$router.push({
-                name: 'supplierEdit',
-                params: {
-                    id: row.id.toString()
-                }
-            });
-        }
     },
 };
 </script>

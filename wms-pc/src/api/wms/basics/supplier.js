@@ -26,3 +26,11 @@ export const exportFile = (params) => {
     })
 }
 
+export const add = (params) => {
+    return request({
+        url: '/api/wms/suppliers/newSupplier',
+        method: 'post',
+        data: params,
+    })
+}
+

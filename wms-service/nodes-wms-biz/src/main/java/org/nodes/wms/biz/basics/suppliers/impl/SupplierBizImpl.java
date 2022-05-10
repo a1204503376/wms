@@ -15,7 +15,6 @@ import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
-import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -59,9 +58,7 @@ public class SupplierBizImpl implements SupplierBiz {
 
 	@Override
 	public void exportSupplier(SupplierPageQuery supplierPageQuery, HttpServletResponse response) {
-		List<Supplier> supplierList = supplierDao.listBySupplierPageQuery(supplierPageQuery);
-		List<SupplierExportResponse> supplierExportResponseList = Func.copy(supplierList, SupplierExportResponse.class);
-
-		ExcelUtil.export(response, "供应商", "供应商数据报表", supplierExportResponseList, SupplierExportResponse.class);
+		List<SupplierExportResponse> supplierList = supplierDao.listBySupplierPageQuery(supplierPageQuery);
+		ExcelUtil.export(response, "供应商", "供应商数据报表", supplierList, SupplierExportResponse.class);
 	}
 }

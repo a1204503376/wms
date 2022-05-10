@@ -54,7 +54,7 @@ public class SupplierPageResponse implements Serializable {
 	/**
 	 * 创建人
 	 */
-	private Long createUser;
+	private String createUser;
 
 	/**
 	 * 创建时间
