@@ -37,14 +37,14 @@ public class SupplierController {
 
 	@ApiLog("供应商管理-新增")
 	@PostMapping("/newSupplier")
-	public R<Boolean> newSupplier(@Valid @RequestParam AddSupplierRequest addSupplierRequest) {
+	public R<Boolean> newSupplier(@Valid @RequestBody AddSupplierRequest addSupplierRequest) {
 		boolean state = supplierBiz.newSupplier(addSupplierRequest);
 		return R.status(state);
 	}
 
 	@ApiLog("供应商管理-删除")
 	@PostMapping("/remove")
-	public R<Boolean> remove(@Valid @RequestBody RemoveRequest removeRequest){
+	public R<Boolean> remove(@Valid @RequestParam RemoveRequest removeRequest){
 		boolean state = supplierBiz.removeByIds(removeRequest);
 		return R.status(state);
 	}
