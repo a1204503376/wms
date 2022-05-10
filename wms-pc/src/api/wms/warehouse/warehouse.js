@@ -62,7 +62,7 @@ export const exportFile = (data) => {
 
 export const getWarehouseSelectResponseList = () => {
     return request({
-        url: '/api/wms/warehouse/warehouse/getWarehouseSelectResponseList',
+        url: '/api/wms/warehouse/getWarehouseSelectResponseList',
         method: 'get'
     })
 }

@@ -1,7 +1,7 @@
 package org.nodes.wms.dao.basics.warehouse.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.wms.dao.application.dto.output.WarehouseResponse;
+import org.nodes.wms.dao.basics.warehouse.dto.output.WarehouseResponse;
 import org.nodes.wms.dao.basics.warehouse.WarehouseDao;
 import org.nodes.wms.dao.basics.warehouse.mapper.WarehouseMapper;
 import org.springframework.stereotype.Service;

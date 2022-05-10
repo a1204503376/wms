@@ -3,10 +3,11 @@
 <mapper namespace="org.nodes.wms.dao.basics.warehouse.mapper.WarehouseMapper">
 
 
-    <select id="getWarehouseSelectResponseList" resultType="org.nodes.wms.dao.application.dto.output.WarehouseResponse">
+    <select id="getWarehouseSelectResponseList" resultType="org.nodes.wms.dao.basics.warehouse.dto.output.WarehouseResponse">
         SELECT
-            wh_code value,
-            wh_name label
+            wh_id,
+            wh_code,
+            wh_name
         FROM
             wms_warehouse
     </select>

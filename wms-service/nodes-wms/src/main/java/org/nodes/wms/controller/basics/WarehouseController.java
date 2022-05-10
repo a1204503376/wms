@@ -13,7 +13,7 @@ import org.nodes.wms.core.warehouse.excel.WarehouseExcel;
 import org.nodes.wms.core.warehouse.service.IWarehouseService;
 import org.nodes.wms.core.warehouse.vo.WarehouseVO;
 import org.nodes.wms.core.warehouse.wrapper.WarehouseWrapper;
-import org.nodes.wms.dao.application.dto.output.WarehouseResponse;
+import org.nodes.wms.dao.basics.warehouse.dto.output.WarehouseResponse;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.excel.util.ExcelUtil;
