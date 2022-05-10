@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.instock.asn.dto.output;
 
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -17,7 +18,7 @@ public class AsnDetailResponse implements Serializable {
 	/**
 	 * 主键
 	 */
-	@TableId
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long asnBillId;
 
 	/**

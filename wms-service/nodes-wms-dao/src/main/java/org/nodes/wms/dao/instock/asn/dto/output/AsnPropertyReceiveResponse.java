@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.instock.asn.dto.output;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,6 +18,7 @@ public class AsnPropertyReceiveResponse implements Serializable {
 	/**
 	 * 收货单主键id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long receiveId;
 
 	/**

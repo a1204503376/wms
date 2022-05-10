@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.basics.crudcolumn.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,11 +17,13 @@ public class CrudColumnRequest implements Serializable {
 	/**
 	 * 菜单id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long menuId;
 
 	/**
 	 * 用户id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long userId;
 
 	/**
