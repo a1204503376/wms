@@ -2,8 +2,13 @@
     <nodes-select
         v-model="val"
         :data-source="dataSource"
-    >
+        value-key="whCode"
+        label-name="whName"
+        value-name="whCode"
+        :is-custom-template="true">
     </nodes-select>
+
+
 </template>
 
 <script>
@@ -18,12 +23,14 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: Array
+        selectVal: [Array,Object],
+        multiple: {type: Boolean, required: false, default: false}
     },
     data() {
         return {
             val: this.selectVal,
             dataSource: []
+
         }
     },
     watch: {
