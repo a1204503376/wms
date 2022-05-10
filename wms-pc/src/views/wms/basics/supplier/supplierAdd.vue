@@ -36,11 +36,11 @@
                     </el-row>
                     <el-row>
                         <el-col :span="8">
-                            <el-form-item label="货主编码" prop="woId">
-                                <nodes-in-store-mode
-                                    v-model="form.params.woId"
-                                    :multiple="false">
-                                </nodes-in-store-mode>
+                            <el-form-item label="货主" prop="woId">
+                                <nodes-owner
+                                    v-model="form.params.owner"
+                                    >
+                                </nodes-owner>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -91,11 +91,13 @@ import NodesSku from "@/components/wms/select/NodesSku";
 import NodesLineNumber from "@/components/wms/table/NodesLineNumber";
 import {editMixin} from "@/mixins/edit";
 import {add} from "@/api/wms/basics/supplier"
+import NodesOwner from "@/components/wms/select/NodesOwner";
+import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 // import func from "@/util/func";
 
 export default {
     name: "add",
-    components: {NodesLineNumber, NodesSku, NodesInStoreType, NodesInStoreMode},
+    components: {NodesWarehouse, NodesOwner, NodesLineNumber, NodesSku, NodesInStoreType, NodesInStoreMode},
     mixins: [editMixin],
     data() {
         return {
@@ -106,7 +108,9 @@ export default {
                     name: '',
                     simpleName: '',
                     status: 1,
-                    woId: null,
+                    owner:{
+                        woId: '',
+                    },
                     remark: ''
                 },
                 rules: {
@@ -140,13 +144,13 @@ export default {
                     ],
                     woId: [
                         {
-                            message: '请输入货主编码',
+                            message: '请选择货主',
                             trigger: 'blur'
                         }
                     ],
                     remark: [
                         {
-                            message: '请输入简称',
+                            message: '请填写备注',
                             trigger: 'blur'
                         }
                     ],
@@ -156,7 +160,15 @@ export default {
     },
     methods: {
         submitFormParams() {
-            add(this.form.params)
+            let addSupplierRequest = {
+                woId:this.form.params.owner.woId,
+                code:this.form.params.code,
+                name:this.form.params.name,
+                simpleName:this.form.params.simpleName,
+                status:this.form.params.status,
+                remark:this.form.params.remark
+            };
+            add(addSupplierRequest)
                 .then(()=>{
                    this.$message.success("新增成功");
                    this.$router.push({
