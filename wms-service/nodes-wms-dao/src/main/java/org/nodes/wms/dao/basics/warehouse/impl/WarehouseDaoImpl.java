@@ -1,9 +1,9 @@
-package org.nodes.wms.dao.warehouse.impl;
+package org.nodes.wms.dao.basics.warehouse.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.application.dto.output.WarehouseResponse;
-import org.nodes.wms.dao.warehouse.WarehouseDao;
-import org.nodes.wms.dao.warehouse.mapper.WarehousesMapper;
+import org.nodes.wms.dao.basics.warehouse.WarehouseDao;
+import org.nodes.wms.dao.basics.warehouse.mapper.WarehouseMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +14,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class WarehouseDaoImpl implements WarehouseDao {
-	private final WarehousesMapper warehousesMapper;
+	private final WarehouseMapper warehouseMapper;
 	@Override
 	public List<WarehouseResponse> getWarehouseSelectResponseList() {
-		return warehousesMapper.getWarehouseSelectResponseList();
+		return warehouseMapper.getWarehouseSelectResponseList();
 	}
 }

@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.warehouse;
+package org.nodes.wms.dao.basics.warehouse;
 
 import org.nodes.wms.dao.application.dto.output.WarehouseResponse;
 

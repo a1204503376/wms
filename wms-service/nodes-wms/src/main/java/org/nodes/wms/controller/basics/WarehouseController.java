@@ -1,15 +1,11 @@
-package org.nodes.wms.controller.warehouse;
+package org.nodes.wms.controller.basics;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.core.tool.entity.DataVerify;
-import org.nodes.wms.biz.warehouse.WarehouseBiz;
+import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
 import org.nodes.wms.core.warehouse.dto.WarehouseDTO;
 import org.nodes.wms.core.warehouse.entity.Warehouse;
@@ -36,7 +32,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.nodes.wms.core.warehouse.cache.LocationCache.LOCATION_CACHE;
 import static org.nodes.wms.core.warehouse.cache.WarehouseCache.WAREHOUSE_CACHE;
 
 /**
@@ -45,7 +40,7 @@ import static org.nodes.wms.core.warehouse.cache.WarehouseCache.WAREHOUSE_CACHE;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(WmsApiPath.WAREHOUSE_URL)
+@RequestMapping(WmsApiPath.WMS_ROOT_URL +"warehouse")
 public class WarehouseController extends BladeController {
 
 	private IWarehouseService warehouseService;
