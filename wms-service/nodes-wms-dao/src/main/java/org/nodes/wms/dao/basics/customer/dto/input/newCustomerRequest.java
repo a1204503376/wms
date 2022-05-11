@@ -1,10 +1,8 @@
-package org.nodes.wms.dao.basics.customers.dto.input;
+package org.nodes.wms.dao.basics.customer.dto.input;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**

@@ -13,7 +13,7 @@ import org.nodes.wms.dao.basics.carriers.dto.input.UpdateStatusRequest;
 import org.nodes.wms.dao.basics.carriers.dto.output.CarrierExcelResponse;
 import org.nodes.wms.dao.basics.carriers.dto.output.CarrierResponse;
 import org.nodes.wms.dao.basics.carriers.entites.BasicsCarriers;
-import org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse;
+import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -34,7 +34,7 @@ public class CarriersBizImpl implements CarriersBiz {
 	private  final CarriersFactory carriersFactory;
 	@Override
 	public Page<CarrierResponse> getPage(Query query, CarrierPageQuery carrierPageQuery) {
-		IPage<CustomersResponse> page = Condition.getPage(query);
+		IPage<CustomerResponse> page = Condition.getPage(query);
 		return carriersDao.selectPage(page, carrierPageQuery);
 	}
 
