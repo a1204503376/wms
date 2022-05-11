@@ -36,7 +36,6 @@ export default {
     },
     watch: {
         val(newVal) {
-            debugger;
             let result = newVal;
             if (func.isArray(newVal)) {
                 result = newVal.map(d => d.woId);
