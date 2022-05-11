@@ -35,7 +35,7 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: Object
+        selectVal: [Array, String]
     },
     data() {
         return {
