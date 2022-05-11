@@ -52,9 +52,9 @@ export default {
             debugger;
             let result = newVal;
             if (func.isArray(newVal)) {
-                result = newVal.map(d => d.code);
+                result = newVal.map(d => d.id);
             } else if (func.isObject(newVal)) {
-                result = newVal.code
+                result = newVal.id
             }
             this.$emit('selectValChange', result);
         }

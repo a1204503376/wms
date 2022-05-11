@@ -22,82 +22,107 @@ public class AsnDetail extends BaseSkuLotEntity {
 	 */
 	@TableId(type = IdType.ASSIGN_ID)
 	private Long asnDetailId;
+
 	/**
 	 * ASN单ID
 	 */
 	private Long asnBillId;
+
+	/**
+	 * 供应商id
+	 */
+	private Long supplierId;
+
 	/**
 	 * 单据编码
 	 */
 	private String asnBillNo;
+
 	/**
 	 * 订单行号
 	 */
 	private String asnLineNo;
+
 	/**
 	 * 上位系统单据明细唯一标识
 	 */
 	private String asnBillDetailKey;
+
 	/**
 	 * 物品ID
 	 */
 	private Long skuId;
+
 	/**
 	 * 包装ID
 	 */
 	private Long wspId;
+
 	/**
 	 * 层级
 	 */
 	private Integer skuLevel;
+
 	/**
 	 * 物品编码
 	 */
 	private String skuCode;
+
 	/**
 	 * 物品名称
 	 */
 	private String skuName;
+
 	/**
 	 * 规格
 	 */
 	private String skuSpec;
+
 	/**
 	 * 换算倍率
 	 */
 	private Integer convertQty;
+
 	/**
 	 * 计量单位编码
 	 */
 	private String umCode;
+
 	/**
 	 * 计量单位名称
 	 */
 	private String umName;
+
 	/**
 	 * 基础计量单位编码
 	 */
 	private String baseUmCode;
+
 	/**
 	 * 基础计量单位名称
 	 */
 	private String baseUmName;
+
 	/**
 	 * 计划数量
 	 */
 	private BigDecimal planQty;
+
 	/**
 	 * 实际数量
 	 */
 	private BigDecimal scanQty;
+
 	/**
 	 * 剩余数量
 	 */
 	private BigDecimal surplusQty;
+
 	/**
 	 * ASN库房
 	 */
 	private String incomeWhCode;
+
 	/**
 	 * 单价
 	 */
