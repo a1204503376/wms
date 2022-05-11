@@ -2,10 +2,10 @@ package org.nodes.wms.biz.instock.asn.modular;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.common.utils.NoGeneratorUtil;
-import org.nodes.wms.biz.instock.asn.enums.AsnBillStateEnum;
 import org.nodes.wms.dao.instock.asn.dto.input.AddAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
+import org.nodes.wms.dao.instock.asn.enums.AsnBillStateEnum;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,12 +21,11 @@ public class AsnFactory {
 	public AsnHeader createAsnHeader(AddAsnBillRequest addAsnBillRequest) {
 		AsnHeader asnHeader = new AsnHeader();
 		asnHeader.setAsnBillNo(noGeneratorUtil.createAsnBillNo());
-//		asnHeader.setBillTypeCd();
-		asnHeader.setCreateType(addAsnBillRequest.getCreateType());
-		asnHeader.setSCode(addAsnBillRequest.getSCode());
-		asnHeader.setSName(addAsnBillRequest.getSName());
+		asnHeader.setBillTypeCd(addAsnBillRequest.getBillTypeCd());
+		asnHeader.setSupplierCode(addAsnBillRequest.getSupplierCode());
+		asnHeader.setSupplierName(addAsnBillRequest.getSupplierName());
 		asnHeader.setWhId(addAsnBillRequest.getWhId());
-		asnHeader.setAsnBillState(AsnBillStateEnum.NOT_RECEIPT.getCode());
+		asnHeader.setAsnBillState(AsnBillStateEnum.NOT_RECEIPT);
 		asnHeader.setAsnBillRemark(addAsnBillRequest.getAsnBillRemark());
 		return asnHeader;
 
@@ -36,7 +35,7 @@ public class AsnFactory {
 		AsnDetail asnDetail = new AsnDetail();
 		asnDetail.setAsnBillId(asnBillId);
 		asnDetail.setAsnLineNo(addAsnBillRequest.getAsnLineNo());
-		asnDetail.setSkuCode(addAsnBillRequest.getSCode());
+		asnDetail.setSkuCode(addAsnBillRequest.getSkuCode());
 		asnDetail.setUmCode(addAsnBillRequest.getUmCode());
 		asnDetail.setBaseUmCode(addAsnBillRequest.getBaseUmCode());
 		asnDetail.setBaseUmName(addAsnBillRequest.getUmName());

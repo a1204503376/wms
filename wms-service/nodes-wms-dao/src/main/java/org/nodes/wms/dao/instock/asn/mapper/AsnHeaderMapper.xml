@@ -4,32 +4,41 @@
 
     <select id="selectPageAsnBill" resultType="org.nodes.wms.dao.instock.asn.dto.output.PageResponse">
         SELECT h.asn_bill_id,
-               h.asn_bill_no,
-               h.asn_bill_state,
-               h.create_type,
-               h.s_code,
-               h.s_name,
-               h.external_order_no,
-               h.external_create_user,
-               h.wh_code,
-               h.asn_bill_remark,
-               h.create_time,
-               h.create_user,
-               h.update_time
+        h.asn_bill_no,
+        h.asn_bill_state,
+        b.bill_type_name as billTypeName,
+        h.supplier_code,
+        h.supplier_name,
+        h.external_order_no,
+        h.external_create_user,
+        w.wh_name as whName,
+        h.asn_bill_remark,
+        h.create_time,
+        u.real_name as createUser,
+        h.update_time
         FROM asn_header h
-                 LEFT JOIN asn_detail d
-                           on h.asn_bill_id = d.asn_bill_id
+        LEFT JOIN asn_detail d
+        ON h.asn_bill_id = d.asn_bill_id
+        LEFT JOIN blade_user u
+        ON h.create_user = u.id
+        LEFT JOIN wms_bill_type b
+        ON h.bill_type_cd = b.bill_type_cd
+        LEFT JOIN wms_warehouse w
+        ON h.wh_id = w.wh_id
         <where>
+            h.is_deleted = 0
             <if test="params.asnBillNo != null and params.asnBillNo != ''">
                 AND h.asn_bill_no = #{params.asnBillNo}
             </if>
-            <if test="params.skuCode != null and params.skuCode != ''">
-                AND d.sku_code = #{params.skuCode}
+            <if test="params.sku != null">
+                <if test="params.sku.skuCode != null and params.sku.skuCode != ''">
+                    AND d.sku_code = #{params.sku.skuCode}
+                </if>
             </if>
-            <if test="params.asnBillState != null and params.asnBillState.size >0">
+            <if test="params.asnBillStateList != null and params.asnBillStateList.size >0">
                 AND h.asn_bill_state IN
-                <foreach collection="params.asnBillState" separator="," item="item" open="(" close=")">
-                     #{item}
+                <foreach collection="params.asnBillStateList" separator="," item="item" open="(" close=")">
+                    #{item}
                 </foreach>
             </if>
             <if test="params.createTimeBegin != null ">
@@ -38,8 +47,9 @@
             <if test="params.createTimeEnd != null">
                 AND h.create_time &lt;= #{params.createTimeEnd}
             </if>
-            <if test="params.suppliers != null and params.suppliers != ''">
-                AND (h.s_code LIKE concat('%',#{params.suppliers},'%') OR h.s_name LIKE concat('%',#{params.suppliers},'%'))
+            <if test="params.supplier != null and params.supplier != ''">
+                AND (h.supplier_code LIKE concat('%',#{params.supplier},'%') OR h.supplier_name LIKE
+                concat('%',#{params.supplier},'%'))
             </if>
             <if test="params.externalOrderNo != null and params.externalOrderNo != ''">
                 AND h.external_order_no = #{params.externalOrderNo}
@@ -47,66 +57,69 @@
             <if test="params.externalCreateUser != null and params.externalCreateUser != ''">
                 AND h.external_create_user = #{params.externalCreateUser}
             </if>
-            <if test="params.whCode != null and params.whCode != ''">
-                AND h.wh_code = #{params.whCode}
+            <if test="params.whCodeList != null and params.whCodeList.size >0">
+                AND h.wh_code IN
+                <foreach collection="params.whCodeList" open="(" close=")" separator="," item="item">
+                    #{item}
+                </foreach>
             </if>
         </where>
-        <!--    ${ew.customSqlSegment} -->
 
     </select>
 
     <select id="selectAsnContactDetail"
             resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse"
             resultMap="asnDetailMap">
-        SELECT
-            h.asn_bill_id,
-            h.asn_bill_no,
-            h.create_type,
-            h.s_code,
-            h.s_name,
-            h.asn_bill_remark,
-            h.create_time,
-            h.create_user,
-            w.wh_code,
-            w.wh_name,
-            d.asn_detail_id,
-            d.asn_line_no,
-            d.sku_code,
-            d.sku_name,
-            d.um_name,
-            d.plan_qty,
-            d.scan_qty,
-            d.remark,
-            d.detail_status,
-            r.receive_id,
-            r.receive_no,
-            r.bill_state,
-            r.remark as receive_remark,
-            r.create_time as receive_create_time,
-            r.create_user as receive_create_user,
-            r.update_time as receive_update_time,
-            r.update_user as receive_update_time
-        FROM
-            asn_header h
-                LEFT JOIN asn_detail d ON h.asn_bill_id = d.asn_bill_id
-                LEFT JOIN wms_warehouse w ON h.wh_id = w.wh_id
-                LEFT JOIN receive_header r ON h.asn_bill_id = r.asn_bill_id
-        WHERE h.asn_bill_id = #{id}
+        SELECT h.asn_bill_id,
+               h.asn_bill_no,
+               b.bill_type_name as billTypeName,
+               h.supplier_code,
+               h.supplier_name,
+               h.asn_bill_remark,
+               h.create_time,
+               h.create_user,
+               w.wh_code ,
+               w.wh_name,
+               d.asn_detail_id,
+               d.asn_line_no,
+               d.sku_code,
+               d.sku_name,
+               d.um_name,
+               d.plan_qty,
+               d.scan_qty,
+               d.remark,
+               d.detail_status,
+               r.receive_id,
+               r.receive_no,
+               r.bill_state,
+               r.remark      as receive_remark,
+               r.create_time as receive_create_time,
+               u1.real_name as receive_create_user,
+               r.update_time as receive_update_time,
+               u2.real_name as receive_update_time
+        FROM asn_header h
+                 LEFT JOIN asn_detail d ON h.asn_bill_id = d.asn_bill_id
+                 LEFT JOIN wms_warehouse w ON h.wh_id = w.wh_id
+                 LEFT JOIN receive_header r ON h.asn_bill_id = r.asn_bill_id
+                 LEFT JOIN wms_bill_type b ON h.bill_type_cd = b.bill_type_cd
+                 LEFT JOIN blade_user u1 ON h.create_user = u1.id
+                 LEFT JOIN blade_user u2 ON h.create_user = u2.id
+        WHERE h.asn_bill_id = #{id} and h.is_deleted = 0
     </select>
 
     <resultMap id="asnDetailMap" type="org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse">
         <id column="asn_bill_id" property="asnBillId"/>
         <result column="asn_bill_no" property="asnBillNo"/>
-        <result column="create_type" property="createType"/>
-        <result column="s_code" property="sCode"/>
-        <result column="s_name" property="sName"/>
+        <result column="bill_type_cd" property="billTypeCd"/>
+        <result column="supplier_code" property="supplierCode"/>
+        <result column="supplier_name" property="supplierName"/>
         <result column="asn_bill_remark" property="asnBillRemark"/>
         <result column="create_time" property="createTime"/>
         <result column="create_user" property="createUser"/>
         <result column="wh_code" property="whCode"/>
         <result column="wh_name" property="whName"/>
 
-        <collection property="asnDetails" ofType="org.nodes.wms.dao.instock.asn.dto.output.AsnPropertyDetailResponse">
+        <collection property="asnDetailList" ofType="org.nodes.wms.dao.instock.asn.dto.output.AsnPropertyDetailResponse">
             <id column="asn_detail_id" property="asnDetailId"/>
             <result column="asn_line_no" property="asnLineNo"/>
             <result column="sku_code" property="skuCode"/>
@@ -118,7 +131,8 @@
             <result column="detail_status" property="detailStatus"/>
         </collection>
 
-        <collection property="receiveHeaders" ofType="org.nodes.wms.dao.instock.asn.dto.output.AsnPropertyReceiveResponse">
+        <collection property="receiveHeaderList"
+                    ofType="org.nodes.wms.dao.instock.asn.dto.output.AsnPropertyReceiveResponse">
             <id column="receive_id" property="receiveId"/>
             <result column="receive_no" property="receiveNo"/>
             <result column="bill_state" property="billState"/>
@@ -130,34 +144,45 @@
         </collection>
     </resultMap>
 
-    <select id="selectAsnBillList" resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnExportResponse">
+    <select id="selectAsnBillList" resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnBillExportResponse">
         SELECT
-            h.asn_bill_id,
-            h.asn_bill_no,
-            h.asn_bill_state,
-            h.create_type,
-            h.s_code,
-            h.s_name,
-            h.external_order_no,
-            h.external_create_user,
-            h.wh_code,
-            h.asn_bill_remark,
-            h.create_time,
-            h.create_user,
-            h.update_time
+        h.asn_bill_id,
+        h.asn_bill_no,
+        h.asn_bill_state,
+        b.bill_type_name as billTypeName,
+        h.supplier_code,
+        h.supplier_name,
+        h.external_order_no,
+        u2.real_name as externalCreateUser,
+        w.wh_name as whName,
+        h.asn_bill_remark,
+        h.create_time,
+        u1.real_name as createUser,
+        h.update_time
         FROM asn_header h
         LEFT JOIN asn_detail d
-        on h.asn_bill_id = d.asn_bill_id
+        ON h.asn_bill_id = d.asn_bill_id
+        LEFT JOIN blade_user u1
+        ON h.create_user = u1.id
+        LEFT JOIN blade_user u2
+        ON h.create_user = u2.id
+        LEFT JOIN wms_bill_type b
+        ON h.bill_type_cd = b.bill_type_cd
+        LEFT JOIN wms_warehouse w
+        ON h.wh_id = w.wh_id
         <where>
+            h.is_deleted = 0
             <if test="params.asnBillNo != null and params.asnBillNo != ''">
                 AND h.asn_bill_no = #{params.asn_bill_no}
             </if>
-            <if test="params.skuCode != null and params.skuCode != ''">
-                AND d.sku_code = #{params.sku_code}
+            <if test="params.sku != null">
+                <if test="params.sku.skuCode != null and params.sku.skuCode != ''">
+                    AND d.sku_code = #{params.sku.skuCode}
+                </if>
             </if>
-            <if test="params.asnBillState != null and params.asnBillState != ''">
-                AND  h.asn_bill_state in
-                <foreach collection="params.asnBillState" separator="," item="item" open="(" close="">
+            <if test="params.asnBillStateList != null and params.asnBillStateList.size >0">
+                AND h.asn_bill_state in
+                <foreach collection="params.asnBillStateList" separator="," item="item" open="(" close=")">
                     #{item}
                 </foreach>
             </if>
@@ -167,8 +192,9 @@
             <if test="params.createTimeEnd != null">
                 AND h.create_time &lt;= #{params.createTimeEnd}
             </if>
-            <if test="params.suppliers != null and params.suppliers != ''">
-                AND (h.s_code LIKE #{params.suppliers} OR h.s_name LIKE #{params.suppliers})
+            <if test="params.supplier != null and params.supplier != ''">
+                AND (h.supplier_code LIKE concat('%',#{params.supplier},'%') OR h.supplier_name LIKE
+                concat('%',#{params.supplier},'%'))
             </if>
             <if test="params.externalOrderNo != null and params.externalOrderNo != ''">
                 AND h.external_order_no = #{params.external_order_no}
@@ -176,8 +202,11 @@
             <if test="params.externalCreateUser != null and params.externalCreateUser != ''">
                 AND h.external_create_user = #{params.external_create_user}
             </if>
-            <if test="params.whCode != null and params.whCode != ''">
-                AND h.wh_code = #{params.wh_code}
+            <if test="params.whCodeList != null and params.whCodeList.size >0">
+                AND h.wh_code IN
+                <foreach collection="params.whCodeList" open="(" close=")" separator="," item="item">
+                    {#item}
+                </foreach>
             </if>
         </where>
     </select>

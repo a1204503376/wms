@@ -4,7 +4,8 @@ export const getPage = (page, params) => {
     return request({
         url: '/api/wms/asn/page',
         method: 'post',
-        data: params,page
+        params:page,
+        data: params
     })
 }
 

@@ -1,9 +1,9 @@
-
 package org.nodes.modules.wms.allot.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.*;
-import lombok.AllArgsConstructor;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.nodes.wms.core.allot.cache.AllotCache;
 import org.nodes.wms.core.allot.dto.AllotHeaderDTO;
 import org.nodes.wms.core.allot.entity.AllotHeader;
@@ -123,6 +123,7 @@ public class AllotHeaderController extends BladeController {
 
 	/**
 	 * 调拨单 是否允许编辑
+	 *
 	 * @param allotBillId
 	 * @return
 	 */

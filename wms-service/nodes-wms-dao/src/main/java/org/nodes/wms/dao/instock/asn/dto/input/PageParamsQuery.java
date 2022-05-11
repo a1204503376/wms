@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.instock.asn.dto.input;
 
 import lombok.Data;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -22,7 +23,7 @@ public class PageParamsQuery implements Serializable {
 	/**
 	 * Asn单据状态
 	 */
-	private List<String> asnBillState;
+	private List<String> asnBillStateList;
 
 	/**
 	 * 创建日期 开始
@@ -37,7 +38,7 @@ public class PageParamsQuery implements Serializable {
 	/**
 	 * 供应商（支持名称和编码的模糊查找）
 	 */
-	private String suppliers;
+	private String supplier;
 
 	/**
 	 * 上游编码
@@ -52,11 +53,10 @@ public class PageParamsQuery implements Serializable {
 	/**
 	 * 仓库编码
 	 */
-	private String whCode;
+	private List<String> whCodeList;
 
 	/**
-	 * 物品编码
+	 * 物品对象(物品id、物品编码、物品名称)
 	 */
-	private String skuCode;
-
+	private Sku sku;
 }

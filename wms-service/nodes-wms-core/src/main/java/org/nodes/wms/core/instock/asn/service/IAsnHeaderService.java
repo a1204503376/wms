@@ -2,7 +2,6 @@ package org.nodes.wms.core.instock.asn.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.core.tool.entity.DataVerify;
-import org.nodes.wms.biz.instock.asn.enums.AsnBillStateEnum;
 import org.nodes.wms.core.instock.asn.dto.AsnDTO;
 import org.nodes.wms.core.instock.asn.dto.AsnHeaderDTO;
 import org.nodes.wms.core.instock.asn.dto.AsnHeaderOrderDto;
@@ -11,6 +10,7 @@ import org.nodes.wms.core.instock.asn.excel.AsnHeaderExcel;
 import org.nodes.wms.core.instock.asn.excel.SnExcel;
 import org.nodes.wms.core.instock.asn.vo.*;
 import org.nodes.wms.core.strategy.vo.InstockExecuteVO;
+import org.nodes.wms.dao.instock.asn.enums.AsnBillStateEnum;
 import org.springblade.core.mp.base.BaseService;
 import org.springblade.core.mp.support.Query;
 

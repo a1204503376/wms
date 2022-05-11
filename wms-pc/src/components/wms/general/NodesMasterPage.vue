@@ -17,8 +17,8 @@
                         <el-form-item>
                             <slot name="searchBtn"></slot>
                             <el-button v-if="permission.search"
-                            native-type="submit" 
-                            type="primary" 
+                            native-type="submit"
+                            type="primary"
                             @click="onSearch">
                             查找
                             </el-button>
@@ -64,23 +64,15 @@
 export default {
     name: "NodesMasterPage",
     props: {
-        configure: {
-            type: Object,
-            required: false,
-            default: () => {
-                return {
-                    showExpandBtn: true,
-                    showPage: true
-                }
-            }
-        },
+        showExpandBtn:{type:Boolean,required:false,default:()=>true},
+        showPage:{type:Boolean,required:false,default:()=>true},
         permission:{type:Object,required:true}
     },
     data() {
         return {
             config: {
-                showExpandBtn: this.configure.showExpandBtn,
-                showPage: this.configure.showPage
+                showExpandBtn: this.showExpandBtn,
+                showPage: this.showPage
             },
             expandMore: false
         }

@@ -4,7 +4,8 @@ export const page = (page, params) => {
     return request({
         url: '/api/wms/suppliers/page',
         method: 'post',
-        data: page,params
+        params:page,
+        data: params
     })
 }
 
@@ -22,6 +23,14 @@ export const exportFile = (params) => {
         method: 'post',
         data: params,
         responseType: 'blob'
+    })
+}
+
+export const add = (params) => {
+    return request({
+        url: '/api/wms/suppliers/newSupplier',
+        method: 'post',
+        data: params,
     })
 }
 

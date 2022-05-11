@@ -192,7 +192,11 @@ export default {
         init() {
             let tempData = func.isNotEmpty(this.dataSource)
                 ? this.dataSource
-                : this.$parent['getColumnDataSource'];
+                : (
+                    func.isFunction(this.$parent['getColumnDataSource'])
+                        ? this.$parent['getColumnDataSource']()
+                        : []
+                );
             if (tempData) {
                 tempData.forEach(item => {
                     // "0":是,"1":否
@@ -244,7 +248,7 @@ export default {
             let loadingCount = 0;
 
             loadingCount++;
-            submit(columnList).then(res => {
+            submit(columnList).then(() => {
             }).finally(() => {
                 loadingCount--;
             })

@@ -1,4 +1,5 @@
 import debounce from "lodash/debounce";
+import func from "@/util/func";
 
 export const editMixin = {
     props: {
@@ -11,6 +12,11 @@ export const editMixin = {
                 params: {},
                 rules: {}
             }
+        }
+    },
+    computed: {
+        isEdit: function () {
+            return func.isStr(this.id) && func.isNotEmpty(this.id) && this.id !== '0';
         }
     },
     created() {

@@ -2,9 +2,9 @@ package org.nodes.wms.controller.state;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
-import org.nodes.wms.biz.instock.asn.enums.AsnBillStateEnum;
-import org.nodes.wms.biz.instock.asn.enums.InStorageTypeEnum;
 import org.nodes.wms.dao.application.dto.output.StateGeneralResponse;
+import org.nodes.wms.dao.instock.asn.enums.AsnBillStateEnum;
+import org.nodes.wms.dao.instock.asn.enums.InStorageTypeEnum;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

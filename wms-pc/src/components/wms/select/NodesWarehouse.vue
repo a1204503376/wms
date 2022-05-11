@@ -2,13 +2,19 @@
     <nodes-select
         v-model="val"
         :data-source="dataSource"
-    >
+        :is-custom-template="true"
+        label-name="whName"
+        value-key="whCode"
+        value-name="whCode">
     </nodes-select>
+
+
 </template>
 
 <script>
 import NodesSelect from "@/components/wms/general/NodesSelect";
 import {getWarehouseSelectResponseList} from "@/api/wms/warehouse/warehouse";
+import func from "@/util/func";
 
 export default {
     name: "NodesWarehouse",
@@ -18,17 +24,24 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: Array
+        selectVal: [Array, String],
+        multiple: {type: Boolean, required: false, default: false}
     },
     data() {
         return {
-            val: this.selectVal,
+            val: {},
             dataSource: []
         }
     },
     watch: {
         val(newVal) {
-            this.$emit('selectValChange', newVal);
+            let result = newVal;
+            if (func.isArray(newVal)) {
+                result = newVal.map(d => d.whId);
+            } else if (func.isObject(newVal)) {
+                result = newVal.whId
+            }
+            this.$emit('selectValChange', result);
         }
     },
     created() {

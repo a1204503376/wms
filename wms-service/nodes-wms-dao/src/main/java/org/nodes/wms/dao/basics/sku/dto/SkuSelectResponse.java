@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.basics.sku.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 /**
@@ -11,6 +13,7 @@ public class SkuSelectResponse {
 	/**
 	 * 物品主键ID
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long skuId;
 
 	/**

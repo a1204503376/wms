@@ -11,9 +11,9 @@ import org.nodes.wms.dao.instock.asn.dto.input.AddAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.EditAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnBillExportResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailByEditResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnExportResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
@@ -38,7 +38,11 @@ public class AsnBizImpl implements AsnBiz {
 	@Override
 	public Page<PageResponse> getPageAsnBill(IPage<?> page,
 											 PageParamsQuery pageParamsQuery) {
-		return asnHeaderDao.selectPageAsnBill(page, pageParamsQuery);
+		Page<PageResponse> pageResponsePage = asnHeaderDao.selectPageAsnBill(page, pageParamsQuery);
+		pageResponsePage.getRecords().forEach(item ->{
+			item.setAsnBillStateValue(item.getAsnBillState().getDesc());
+		});
+		return pageResponsePage;
 	}
 
 	@Override
@@ -68,7 +72,7 @@ public class AsnBizImpl implements AsnBiz {
 		boolean header = asnHeaderDao.insertAsnHeader(asnHeader);
 		AsnDetail asnDetail = asnFactory.createAsnDetail(addAsnBillRequest, asnHeader.getAsnBillId());
 		boolean detail = asnDetailDao.addAsnDetail(asnDetail);
-		return true;
+		return header && detail;
 	}
 
 	@Override
@@ -83,7 +87,10 @@ public class AsnBizImpl implements AsnBiz {
 
 	@Override
 	public void exportAsnBill(PageParamsQuery pageParamsQuery, HttpServletResponse response) {
-		List<AsnExportResponse> asnBillList = asnHeaderDao.listByParamsQuery(pageParamsQuery);
-		ExcelUtil.export(response, "ASD单", "ASN单数据报表", asnBillList,AsnExportResponse.class);
+		List<AsnBillExportResponse> asnBillList = asnHeaderDao.listByParamsQuery(pageParamsQuery);
+		asnBillList.forEach(item ->{
+			item.setAsnBillStateValue(item.getAsnBillState().getDesc());
+		});
+		ExcelUtil.export(response, "ASD单", "ASN单数据报表", asnBillList, AsnBillExportResponse.class);
 	}
 }

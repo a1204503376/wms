@@ -6,7 +6,7 @@
                     <el-input v-model="form.params.receiveNo" class="d-input"></el-input>
                 </el-form-item>
                 <el-form-item label="单据状态">
-                    <nodes-asn-bill-state v-model="form.params.billStates"></nodes-asn-bill-state>
+                    <nodes-receive-bill-state v-model="form.params.billStateList"></nodes-receive-bill-state>
                 </el-form-item>
                 <el-form-item label="物品编码">
                     <el-input v-model="form.params.skuCode" class="d-input"></el-input>
@@ -29,7 +29,7 @@
                         </el-form-item>
 
                         <el-form-item label="供应商编码">
-                            <el-input v-model="form.params.sCode" class="d-input"></el-input>
+                            <el-input v-model="form.params.supplierCode" class="d-input"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -47,7 +47,7 @@
             <template v-slot:batchBtn>
                 <el-button  icon="el-icon-plus" size="mini" type="primary">新增</el-button>
                 <el-button  size="mini" type="danger" @click="onRemove" icon="el-icon-delete"
-                           plain>删除
+                           :plain="false">删除
                 </el-button>
             </template>
             <template v-slot:tableTool>
@@ -85,7 +85,7 @@
                     effect="dark"
                     placement="top"
                 >
-                    <el-button circle icon="el-icon-download" size="mini"></el-button>
+                    <el-button circle icon="el-icon-download" @click="exportData" size="mini"></el-button>
                 </el-tooltip>
             </template>
             <template v-slot:table>
@@ -156,13 +156,16 @@ import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
-import {page,remove,close} from "@/api/wms/instock/receive";
+import {page,remove,close,exportFile} from "@/api/wms/instock/receive";
 import {listMixin} from "@/mixins/list";
+import fileDownload from "js-file-download";
+import NodesReceiveBillState from "../../../components/wms/select/NodesReceiveBillState";
 
 
 export default {
     name: "list",
     components: {
+        NodesReceiveBillState,
         DialogColumn,
         NodesInStoreMode,
         NodesWarehouse,
@@ -180,13 +183,13 @@ export default {
             form: {
                 params: {
                     receiveNo: '',
-                    billStates: [],
+                    billStateList: [],
                     skuCode: '',
                     externalOrderNo: '',
                     asnBillNo: '',
                     whCodes: [],
                     externalCreateUser: '',
-                    sCode: '',
+                    supplierCode: '',
                     createTimeDateRange: '',
                 }
             },
@@ -194,14 +197,20 @@ export default {
             nums:{
                 receiveId:'',
             },
+
             table: {
                 columnList: [
                     {
                         prop: 'receiveNo',
                         label: '收货单编码',
                         width: 120,
-                        sortable: 'custom',
+                        sortable: 'custom'
                     },
+                    {
+                        prop: 'billStateDesc',
+                        label: '单据状态'
+                    },
+
                     {
                         prop: 'asnBillNo',
                         width: 100,
@@ -210,16 +219,15 @@ export default {
                     {
                         prop: 'externalOrderNo',
                         label: '上游编码',
-                        // left/center/right
                         align: 'right'
                     },
                     {
-                        prop: 'scode',
+                        prop: 'supplierCode',
                         width: 100,
                         label: '供应商编码'
                     },
                     {
-                        prop: 'sname',
+                        prop: 'supplierName',
                         width: 100,
                         label: '供应商名称'
                     },
@@ -329,10 +337,16 @@ export default {
                 type: "warning",
             }).then(() => {
                let state = row.billState;
-               if(state==90){
-                   this.$message.error('该收货单已关闭，请勿重复点击');
-                   throw new Error('该收货单已关闭，请勿重复点击');
+                if(state==40){
+                    this.$message.error('该收货单已关闭，请勿重复点击');
+                    throw new Error('该收货单已关闭，请勿重复点击');
+                }
+
+               if(state!=30){
+                   this.$message.error('关闭失败,请先完成收货');
+                   throw new Error('关闭失败,请先完成收货');
                }
+
                 this.nums.receiveId = row.receiveId;
                 close(this.nums)
                     .then(() => {
@@ -343,6 +357,20 @@ export default {
                     .catch(() => {
                     });
             })
+        },
+        exportData() {
+            this.loading = true;
+            exportFile(this.form.params)
+                .then((res) => {
+                    this.$message.success("操作成功，正在下载中...");
+                    fileDownload(res.data, "收货管理列表.xlsx");
+                })
+                .catch(() => {
+                    this.$message.error("系统模板目录配置有误或文件不存在");
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
         onReset() {
             this.form.params = {};

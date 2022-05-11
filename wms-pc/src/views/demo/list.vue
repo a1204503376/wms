@@ -157,10 +157,7 @@
             </template>
             <template v-slot:page>
                 <el-pagination
-                    :current-page="page.current"
-                    :page-size="page.size"
                     :page-sizes="[20, 50, 100]"
-                    :total="page.total"
                     background
                     layout="total, sizes, prev, pager, next, jumper"
                     v-bind="page"
@@ -200,10 +197,6 @@ export default {
     mixins: [listMixin],
     data() {
         return {
-            masterConfig: {
-                showExpandBtn: true,
-                showPage: true
-            },
             form: {
                 params: {
                     skuCode: '',

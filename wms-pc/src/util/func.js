@@ -160,6 +160,15 @@ export default class func {
     }
 
     /**
+     * 判断对象是否为Function
+     * @param obj
+     * @returns {boolean}
+     */
+    static isFunction(obj){
+        return  getObjType(obj) === 'function';
+    }
+
+    /**
      * 判断对象是否为Object
      * @param obj
      * @returns {boolean}

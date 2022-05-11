@@ -6,7 +6,7 @@
                     <el-input v-model="form.params.asnBillNo" class="d-input"></el-input>
                 </el-form-item>
                 <el-form-item label="物品编码">
-                    <el-input v-model="form.params.skuCode" class="d-input"></el-input>
+                    <nodes-sku v-model="form.params.sku" style="width: 120px"></nodes-sku>
                 </el-form-item>
                 <el-form-item label="状态">
                     <nodes-asn-bill-state v-model="form.params.asnBillState"></nodes-asn-bill-state>
@@ -19,7 +19,7 @@
                             <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
                         </el-form-item>
                         <el-form-item label="供应商">
-                            <el-input v-model="form.params.suppliers" class="d-input"></el-input>
+                            <el-input v-model="form.params.supplier" class="d-input"></el-input>
                         </el-form-item>
                         <el-form-item label="上游编码">
                             <el-input v-model="form.params.externalOrderNo" class="d-input"></el-input>
@@ -28,7 +28,7 @@
                             <el-input v-model="form.params.externalCreateUser" class="d-input"></el-input>
                         </el-form-item>
                         <el-form-item label="仓库编码">
-                            <el-input v-model="form.params.whCode" class="d-input"></el-input>
+                            <nodes-warehouse v-model="form.params.whCodeList" ></nodes-warehouse>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -60,8 +60,6 @@
                         <el-table-column v-if="!column.hide" :key="index" show-overflow-tooltip v-bind="column">
                         </el-table-column>
                     </template>
-                     <el-table-column prop="asnBillState" :formatter="formatAsnBillState" label="状态" align="center">
-                    </el-table-column>
                     <el-table-column fixed="right" label="操作" width="100">
                         <template slot-scope="scope">
                             <el-button @click="view(scope.row)" type="text" size="small">查看</el-button>
@@ -92,12 +90,17 @@ import NodesAsnBillState from "@/components/wms/select/NodesAsnBillState";
 import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
+import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
+import NodesSku from "@/components/wms/select/NodesSku";
 import { listMixin } from "@/mixins/list";
-import { getPage, remove } from "@/api/wms/instock/asnHeader";
+import { getPage, remove, exportFile } from "@/api/wms/instock/asnHeader";
+import fileDownload from "js-file-download";
 
 export default {
     name: "asnHeader",
     components: {
+        NodesSku,
+        NodesWarehouse,
         DialogColumn,
         NodesInStoreMode,
         NodesAsnBillState,
@@ -114,24 +117,18 @@ export default {
             form: {
                 params: {
                     asnBillNo: '',
-                    skuCode: '',
+                    sku: {
+                        skuId: '',
+                        skuCode: '',
+                        skuName: ''
+                    },
                     asnBillState: [10, 20, 30],
                     createTimeDateRange: ['', ''],
-                    suppliers: '',
+                    supplier: '',
                     externalOrderNo: '',
                     externalCreateUser: '',
-                    whCode: ''
+                    whCodeList: []
                 }
-            },
-            tempParams: {
-                asnBillNo: '',
-                skuCode: '',
-                asnBillState: [],
-                createTimeDateRange: [],
-                suppliers: '',
-                externalOrderNo: '',
-                externalCreateUser: '',
-                whCode: ''
             },
             table: {
                 columnList: [
@@ -142,15 +139,17 @@ export default {
                         sortable: 'custom'
                     },
                     {
-                        prop: 'createType',
+                        prop: 'billTypeName',
                         label: '单据类型'
                     },
                     {
-                        prop: 'scode',
+                        prop: 'supplierCode',
+                        width: 100,
                         label: '供应商编码'
                     },
                     {
-                        prop: 'sname',
+                        prop: 'supplierName',
+                        width: 100,
                         label: '供应商名称',
                     },
                     {
@@ -159,10 +158,11 @@ export default {
                     },
                     {
                         prop: 'externalCreateUser',
+                        width: 100,
                         label: '上游创建人'
                     },
                     {
-                        prop: 'whCode',
+                        prop: 'whName',
                         label: '仓库编码'
                     },
                     {
@@ -183,12 +183,16 @@ export default {
                         width: 130,
                         label: '更新时间'
                     },
+                     {
+                        prop: 'asnBillStateValue',
+                        label: '状态'
+                    },
                 ]
             },
         }
     },
     created() {
-        // this.tempParams = JSON.parse(JSON.stringify(this.form.params)); 
+
     },
     methods: {
         getTableData() {
@@ -202,23 +206,8 @@ export default {
                     console.log(e);
                 });
         },
-        formatAsnBillState(row, column, cellValue) {
-            // if(cellValue == 10){
-            //     return '新建'
-            // }else if(cellValue==3){
-            //     return '停用'
-            // }
-            switch (cellValue) {
-                case 10: return '新建';
-                case 20: return '处理中';
-                case 30: return '部分收货';
-                case 40: return '全部收货';
-                case 90: return '已撤销';
-                default: break;
-            }
-        },
         view() {
-            
+
         },
         getSummaries() {
 
@@ -271,11 +260,11 @@ export default {
                     this.loading = false;
                 });
         },
-        filterTag(value, row, column) {
+        filterTag(value, row) {
             return row.status === value;
         },
         onReset() {
-            //  this.form.params = JSON.parse(JSON.stringify(this.tempParams)); 
+            console.log("重置了。。。");
         },
         onAdd() {
             let requestParams = {

@@ -34,7 +34,7 @@ public class CustomersController {
 	 * 客户管理分页查询
 	 */
 	@PostMapping("/page")
-	public R<IPage<CustomersResponse>>  page(@RequestBody CustomerPageQuery customerPageQuery,@RequestBody Query query) {
+	public R<IPage<CustomersResponse>>  page(@RequestBody CustomerPageQuery customerPageQuery, Query query) {
 		IPage<CustomersResponse> pages = customersBiz.getPage(customerPageQuery,query);
 		return R.data(pages);
 	}
@@ -43,8 +43,8 @@ public class CustomersController {
 	 * 客户管理新增
 	 */
 	@ApiLog("客户管理-新增")
-	@PostMapping("/add")
-	public R<Boolean> newCustomer(@RequestParam newCustomerRequest newCustomerRequest) {
+	@PostMapping("/newCustomer")
+	public R<Boolean> newCustomer(@RequestBody  newCustomerRequest newCustomerRequest) {
 		return R.status(customersBiz.newCustomers(newCustomerRequest));
 	}
 

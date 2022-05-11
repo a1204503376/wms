@@ -16,6 +16,7 @@ import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -30,7 +31,7 @@ public class CustomersBizImpl implements CustomersBiz {
 	private  final CustomersFactory customersFactory;
 
 	@Override
-	public Page<CustomersResponse> getPage(CustomerPageQuery customerPageQuery,Query query) {
+	public Page<CustomersResponse> getPage(CustomerPageQuery customerPageQuery, Query query) {
 		IPage<CustomersResponse> page = Condition.getPage(query);
 		return customerDao.selectPage(page, customerPageQuery);
 	}

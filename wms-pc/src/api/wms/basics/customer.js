@@ -1,10 +1,11 @@
 import request from '@/router/axios'
 
-export const page = (page, params) => {
+export const page = (params,page,) => {
     return request({
         url: '/api/wms/customer/page',
         method: 'post',
-        data: page,params
+        data: params,
+        params:page,
 
     })
 }
@@ -14,9 +15,6 @@ export const remove = (ids) => {
         url: '/api/wms/customer/delete',
         method: 'post',
         data: ids,
-        params: {
-
-        }
     })
 }
 
@@ -29,3 +27,10 @@ export const exportFile = (data) => {
     })
 }
 
+export const add = (data) => {
+    return request({
+        url: '/api/wms/customer/newCustomer',
+        method: 'post',
+        data: data,
+    })
+}
