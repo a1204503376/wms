@@ -2,6 +2,7 @@
     <nodes-select
         v-model="val"
         :data-source="dataSource"
+        :multiple="true"
     >
     </nodes-select>
 </template>
@@ -9,6 +10,7 @@
 <script>
 import NodesSelect from "@/components/wms/general/NodesSelect";
 import {stateService} from "@/api/wms/state/asnBillState";
+import func from "@/util/func";
 
 export default {
     name: "NodesAsnBillState",
@@ -22,17 +24,30 @@ export default {
     },
     data() {
         return {
-            val: this.selectVal,
+            val: [],
             dataSource: []
         }
     },
     watch: {
         val(newVal) {
-            this.$emit('selectValChange', newVal);
+            let result = newVal;
+            if (func.isArray(newVal)) {
+                result = newVal.map(d => d.value);
+            } else if (func.isObject(newVal)) {
+                result = newVal.value
+            }
+            this.$emit('selectValChange', result);
         }
     },
-    created() {
-        this.getDataSource();
+    async created() {
+        await this.getDataSource();
+        if (func.isNotEmpty(this.selectVal)) {
+            this.dataSource.forEach((item) => {
+                if (this.selectVal.includes(item.value)) {
+                    this.val.push(item);
+                }
+            })
+        }
     },
     methods: {
         async getDataSource() {
