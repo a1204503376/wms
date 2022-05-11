@@ -15,6 +15,7 @@
 <script>
 import NodesSelect from "@/components/wms/general/NodesSelect";
 import {getOwnerSelectResponseList} from "@/api/wms/basics/owner";
+import func from "@/util/func";
 
 export default {
     name: "NodesOwner",
@@ -25,17 +26,24 @@ export default {
     },
     props: {
         // 是否多选 true:多选 默认为单选
-       multiple: {type: Boolean, required: false, default: false}
+       multiple: {type: Boolean, required: false, default:()=>false}
     },
     data() {
         return {
-            val: this.selectVal,
+            val: '',
             dataSource: []
         }
     },
     watch: {
         val(newVal) {
-            this.$emit('selectValChange', newVal);
+            debugger;
+            let result = newVal;
+            if (func.isArray(newVal)) {
+                result = newVal.map(d => d.woId);
+            } else if (func.isObject(newVal)) {
+                result = newVal.woId
+            }
+            this.$emit('selectValChange', result);
         }
     },
     created() {
@@ -46,10 +54,6 @@ export default {
             const response = await getOwnerSelectResponseList();
             this.dataSource = response.data.data;
         },
-        onChange(val) {
-            console.log(val);
-            this.$emit('selectValChange', val);
-        }
     }
 }
 </script>
