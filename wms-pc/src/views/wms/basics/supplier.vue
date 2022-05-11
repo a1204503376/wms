@@ -1,6 +1,6 @@
 <template>
     <div id="supplier">
-        <nodes-master-page :configure="masterConfig" :permission="permissionObj" v-on="form.events">
+        <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-form-item label="供应商编码">
                     <el-input v-model="form.params.code"></el-input>

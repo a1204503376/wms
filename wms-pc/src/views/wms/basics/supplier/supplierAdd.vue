@@ -157,14 +157,6 @@ export default {
     },
     methods: {
         submitFormParams() {
-            // let addSupplierRequest = {
-            //     woId:this.form.params.owner.woId,
-            //     code:this.form.params.code,
-            //     name:this.form.params.name,
-            //     simpleName:this.form.params.simpleName,
-            //     status:this.form.params.status,
-            //     remark:this.form.params.remark
-            // };
             add(this.form.params)
                 .then(()=>{
                    this.$message.success("新增成功");
