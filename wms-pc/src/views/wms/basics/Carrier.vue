@@ -6,7 +6,7 @@ import fileDownload from "js-file-download";
              label-position="right"
              label-width="60"
              size="mini">
-        <nodes-master-page :configure="masterConfig" v-on="form.events">
+        <nodes-master-page :configure="masterConfig"  :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-form-item label="承运商编码">
                     <el-input v-model="form.params.code" class="d-input"></el-input>
@@ -248,6 +248,13 @@ import fileDownload from "js-file-download";
                     codes.push(ele.code);
                 });
                 return codes.join(",");
+            },
+            permissionObj() {
+                return {
+                    search: this.vaildData(this.permission.supplier_search, false),
+                    add: this.vaildData(this.permission.supplier_add, false),
+                    delete: this.vaildData(this.permission.supplier_delete, false)
+                }
             }
 
         },
