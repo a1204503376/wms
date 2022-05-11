@@ -110,9 +110,6 @@ export default {
     mixins: [listMixin],
     data() {
         return {
-            masterConfig: {
-                showExpandBtn: true,
-            },
             form: {
                 params: {
                     code: "",

@@ -57,9 +57,9 @@
             <if test="params.externalCreateUser != null and params.externalCreateUser != ''">
                 AND h.external_create_user = #{params.externalCreateUser}
             </if>
-            <if test="params.whCodeList != null and params.whCodeList.size >0">
-                AND h.wh_code IN
-                <foreach collection="params.whCodeList" open="(" close=")" separator="," item="item">
+            <if test="params.whIdList != null and params.whIdList.size >0">
+                AND h.wh_id IN
+                <foreach collection="params.whIdList" open="(" close=")" separator="," item="item">
                     #{item}
                 </foreach>
             </if>
@@ -110,7 +110,7 @@
     <resultMap id="asnDetailMap" type="org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse">
         <id column="asn_bill_id" property="asnBillId"/>
         <result column="asn_bill_no" property="asnBillNo"/>
-        <result column="bill_type_cd" property="billTypeCd"/>
+        <result column="bill_type_cd" property="billTypeName"/>
         <result column="supplier_code" property="supplierCode"/>
         <result column="supplier_name" property="supplierName"/>
         <result column="asn_bill_remark" property="asnBillRemark"/>
@@ -202,9 +202,9 @@
             <if test="params.externalCreateUser != null and params.externalCreateUser != ''">
                 AND h.external_create_user = #{params.external_create_user}
             </if>
-            <if test="params.whCodeList != null and params.whCodeList.size >0">
-                AND h.wh_code IN
-                <foreach collection="params.whCodeList" open="(" close=")" separator="," item="item">
+            <if test="params.whIdList != null and params.whIdList.size >0">
+                AND h.wh_id IN
+                <foreach collection="params.whIdList" open="(" close=")" separator="," item="item">
                     {#item}
                 </foreach>
             </if>

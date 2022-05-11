@@ -38,8 +38,7 @@
                         <el-col :span="8">
                             <el-form-item label="货主" prop="woId">
                                 <nodes-owner
-                                    v-model="form.params.owner"
-                                    >
+                                    v-model="form.params.woId">
                                 </nodes-owner>
                             </el-form-item>
                         </el-col>
@@ -108,9 +107,7 @@ export default {
                     name: '',
                     simpleName: '',
                     status: 1,
-                    owner:{
                         woId: '',
-                    },
                     remark: ''
                 },
                 rules: {
@@ -160,15 +157,15 @@ export default {
     },
     methods: {
         submitFormParams() {
-            let addSupplierRequest = {
-                woId:this.form.params.owner.woId,
-                code:this.form.params.code,
-                name:this.form.params.name,
-                simpleName:this.form.params.simpleName,
-                status:this.form.params.status,
-                remark:this.form.params.remark
-            };
-            add(addSupplierRequest)
+            // let addSupplierRequest = {
+            //     woId:this.form.params.owner.woId,
+            //     code:this.form.params.code,
+            //     name:this.form.params.name,
+            //     simpleName:this.form.params.simpleName,
+            //     status:this.form.params.status,
+            //     remark:this.form.params.remark
+            // };
+            add(this.form.params)
                 .then(()=>{
                    this.$message.success("新增成功");
                    this.$router.push({
