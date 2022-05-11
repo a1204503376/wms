@@ -1,7 +1,7 @@
 package org.nodes.wms.biz.basics.customers.modular;
 
-import org.nodes.wms.dao.basics.customers.dto.input.newCustomerRequest;
-import org.nodes.wms.dao.basics.customers.entities.BasicsCustomers;
+import org.nodes.wms.dao.basics.customer.dto.input.newCustomerRequest;
+import org.nodes.wms.dao.basics.customer.entities.BasicsCustomers;
 import org.springframework.stereotype.Service;
 /**
  * 客户管理工厂类

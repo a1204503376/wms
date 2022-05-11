@@ -5,18 +5,19 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.customers.CustomersBiz;
 import org.nodes.wms.biz.basics.customers.modular.CustomersFactory;
-import org.nodes.wms.dao.basics.customers.CustomerDao;
-import org.nodes.wms.dao.basics.customers.dto.input.CustomerPageQuery;
-import org.nodes.wms.dao.basics.customers.dto.input.newCustomerRequest;
-import org.nodes.wms.dao.basics.customers.dto.input.DeleteCustomerRequest;
-import org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse;
-import org.nodes.wms.dao.basics.customers.entities.BasicsCustomers;
+import org.nodes.wms.dao.basics.customer.CustomerDao;
+import org.nodes.wms.dao.basics.customer.dto.input.CustomerPageQuery;
+import org.nodes.wms.dao.basics.customer.dto.input.CustomerSelectQuery;
+import org.nodes.wms.dao.basics.customer.dto.input.newCustomerRequest;
+import org.nodes.wms.dao.basics.customer.dto.input.DeleteCustomerRequest;
+import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
+import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
+import org.nodes.wms.dao.basics.customer.entities.BasicsCustomers;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -31,8 +32,8 @@ public class CustomersBizImpl implements CustomersBiz {
 	private  final CustomersFactory customersFactory;
 
 	@Override
-	public Page<CustomersResponse> getPage(CustomerPageQuery customerPageQuery, Query query) {
-		IPage<CustomersResponse> page = Condition.getPage(query);
+	public Page<CustomerResponse> getPage(CustomerPageQuery customerPageQuery, Query query) {
+		IPage<CustomerResponse> page = Condition.getPage(query);
 		return customerDao.selectPage(page, customerPageQuery);
 	}
 
@@ -53,7 +54,12 @@ public class CustomersBizImpl implements CustomersBiz {
 
 	@Override
 	public void exportExcel(CustomerPageQuery customerPageQuery, HttpServletResponse response) {
-		List<CustomersResponse> customersResponseList = customerDao.getCustomerResponseByQuery(customerPageQuery);
-		ExcelUtil.export(response, "客户", "客户数据表", customersResponseList, CustomersResponse.class);
+		List<CustomerResponse> customerResponseList = customerDao.getCustomerResponseByQuery(customerPageQuery);
+		ExcelUtil.export(response, "客户", "客户数据表", customerResponseList, CustomerResponse.class);
+	}
+
+	@Override
+	public List<CustomerSelectResponse> getCustomerSelectResponseTop10List(CustomerSelectQuery customerSelectQuery) {
+		return customerDao.listTop10ByCodeName(customerSelectQuery.getKey(), customerSelectQuery.getKey());
 	}
 }

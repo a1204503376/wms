@@ -1,15 +1,9 @@
-package org.nodes.wms.dao.basics.customers.dto.output;
+package org.nodes.wms.dao.basics.customer.dto.output;
 
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,7 +12,7 @@ import java.util.Date;
  * 客户表 返回前端视图类
  **/
 @Data
-public class CustomersResponse implements Serializable {
+public class CustomerResponse implements Serializable {
 
 	private static final long serialVersionUID = 7095933485346837309L;
 

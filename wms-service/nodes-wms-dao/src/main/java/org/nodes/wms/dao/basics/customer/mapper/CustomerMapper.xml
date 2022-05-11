@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.nodes.wms.dao.basics.customers.mapper.CustomersMapper">
+<mapper namespace="org.nodes.wms.dao.basics.customer.mapper.CustomerMapper">
     <sql id="customerList">
         select
         c.id,
@@ -15,8 +15,8 @@
         c.zip_code,
         c.remark,
         c.create_time,
-        user1.real_name create_user,
-        user2.real_name update_user,
+        user1.real_name createUser,
+        user2.real_name updateUser,
         c.update_time,
         c.status
         from basics_customers c
@@ -48,15 +48,29 @@
         </where>
     </sql>
 
-    <select id="getPage" resultType="org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse">
-        <include refid="customerList"></include>
+    <select id="getPage" resultType="org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse">
+        <include refid="customerList"/>
         <if test="page.orders==null or page.orders.size()==0">
             order by c.create_time desc
         </if>
     </select>
 
-    <select id="getCustomerResponseByQuery" resultType="org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse">
-        <include refid="customerList"></include>
+    <select id="getCustomerResponseByQuery" resultType="org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse">
+        <include refid="customerList"/>
+    </select>
+    <select id="listTop10ByCodName"
+            resultType="org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse">
+
+        SELECT id,
+               code,
+               name
+        FROM basics_customers
+        WHERE code LIKE CONCAT('%', #{code}, '%')
+           OR name LIKE CONCAT('%', #{name}, '%')
+        ORDER BY update_time DESC
+        LIMIT 10
+
+
     </select>
 
 </mapper>
