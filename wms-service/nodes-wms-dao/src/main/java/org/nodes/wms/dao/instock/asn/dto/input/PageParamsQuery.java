@@ -23,7 +23,7 @@ public class PageParamsQuery implements Serializable {
 	/**
 	 * Asn单据状态
 	 */
-	private List<String> asnBillStateList;
+	private List<Integer> asnBillStateList;
 
 	/**
 	 * 创建日期 开始
@@ -51,9 +51,9 @@ public class PageParamsQuery implements Serializable {
 	private String externalCreateUser;
 
 	/**
-	 * 仓库编码
+	 * 仓库id
 	 */
-	private List<String> whCodeList;
+	private List<String> whIdList;
 
 	/**
 	 * 物品对象(物品id、物品编码、物品名称)

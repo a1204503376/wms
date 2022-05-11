@@ -1,6 +1,6 @@
 <template>
     <div id="asnHeader">
-        <nodes-master-page :configure="masterConfig" :permission="permissionObj" v-on="form.events">
+        <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-form-item label="ASN单编码">
                     <el-input v-model="form.params.asnBillNo" class="d-input"></el-input>
@@ -9,7 +9,7 @@
                     <nodes-sku v-model="form.params.sku" style="width: 120px"></nodes-sku>
                 </el-form-item>
                 <el-form-item label="状态">
-                    <nodes-asn-bill-state v-model="form.params.asnBillState"></nodes-asn-bill-state>
+                    <nodes-asn-bill-state v-model="form.params.asnBillStateList"></nodes-asn-bill-state>
                 </el-form-item>
             </template>
             <template v-slot:expandSearch>
@@ -27,15 +27,15 @@
                         <el-form-item label="上游创建人">
                             <el-input v-model="form.params.externalCreateUser" class="d-input"></el-input>
                         </el-form-item>
-                        <el-form-item label="仓库编码">
-                            <nodes-warehouse v-model="form.params.whCodeList" ></nodes-warehouse>
+                        <el-form-item label="仓库">
+                            <nodes-warehouse v-model="form.params.whIdList"></nodes-warehouse>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </template>
             <template v-slot:batchBtn>
-                <el-button size="mini" type="primary" icon="el-icon-plus" @click="onAdd">新增</el-button>
-                <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="onRemove">删除</el-button>
+                <el-button icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增</el-button>
+                <el-button icon="el-icon-delete" plain size="mini" type="danger" @click="onRemove">删除</el-button>
             </template>
             <template v-slot:tableTool>
                 <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
@@ -53,25 +53,26 @@
             </template>
             <template v-slot:table>
                 <el-table ref="table" :data="table.data" :summary-method="getSummaries" border highlight-current-row
-                    show-summary size="mini" @sort-change="onSortChange">
+                          size="mini" @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
-                        <el-table-column v-if="!column.hide" :key="index" show-overflow-tooltip v-bind="column">
+                        <el-table-column :key="index" show-overflow-tooltip v-bind="column">
                         </el-table-column>
                     </template>
                     <el-table-column fixed="right" label="操作" width="100">
                         <template slot-scope="scope">
-                            <el-button @click="view(scope.row)" type="text" size="small">查看</el-button>
-                            <el-button type="text" size="small">编辑</el-button>
+                            <el-button size="small" type="text" @click="view(scope.row)">查看</el-button>
+                            <el-button size="small" type="text">编辑</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
             </template>
             <template v-slot:page>
                 <el-pagination :current-page="page.current" :page-size="page.size" :page-sizes="[20, 50, 100]"
-                    :total="page.total" background layout="total, sizes, prev, pager, next, jumper" v-bind="page"
-                    @size-change="handleSizeChange" @current-change="handleCurrentChange">
+                               :total="page.total" background layout="total, sizes, prev, pager, next, jumper"
+                               v-bind="page"
+                               @size-change="handleSizeChange" @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>
@@ -92,8 +93,8 @@ import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesSku from "@/components/wms/select/NodesSku";
-import { listMixin } from "@/mixins/list";
-import { getPage, remove, exportFile } from "@/api/wms/instock/asnHeader";
+import {listMixin} from "@/mixins/list";
+import {exportFile, getPage, remove} from "@/api/wms/instock/asnHeader";
 import fileDownload from "js-file-download";
 
 export default {
@@ -110,10 +111,6 @@ export default {
     mixins: [listMixin],
     data() {
         return {
-            masterConfig: {
-                showExpandBtn: true,
-                showPage: true
-            },
             form: {
                 params: {
                     asnBillNo: '',
@@ -122,12 +119,12 @@ export default {
                         skuCode: '',
                         skuName: ''
                     },
-                    asnBillState: [10, 20, 30],
+                    asnBillStateList: [10 ,20],
                     createTimeDateRange: ['', ''],
                     supplier: '',
                     externalOrderNo: '',
                     externalCreateUser: '',
-                    whCodeList: []
+                    whIdList: []
                 }
             },
             table: {
@@ -183,7 +180,7 @@ export default {
                         width: 130,
                         label: '更新时间'
                     },
-                     {
+                    {
                         prop: 'asnBillStateValue',
                         label: '状态'
                     },
@@ -193,6 +190,15 @@ export default {
     },
     created() {
 
+    },
+    computed: {
+        permissionObj() {
+            return {
+                search: this.vaildData(this.permission.header_search, false),
+                add: this.vaildData(this.permission.header_add, false),
+                delete: this.vaildData(this.permission.header_delete, false)
+            }
+        }
     },
     methods: {
         getTableData() {
