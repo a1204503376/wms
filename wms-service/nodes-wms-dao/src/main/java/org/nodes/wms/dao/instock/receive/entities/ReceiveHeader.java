@@ -71,6 +71,10 @@ public class ReceiveHeader extends BaseSkuLotEntity {
 	 * 入库方式
 	 */
 	private Integer inStoreType;
+	/**
+	 * 供应商id
+	 */
+	private long supplier_id;
 
 	/**
 	 * 供应商编码

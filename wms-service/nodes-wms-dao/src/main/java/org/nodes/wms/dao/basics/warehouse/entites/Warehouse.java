@@ -5,18 +5,15 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.NotNull;
+import org.springblade.core.tenant.mp.TenantEntity;
 
 /**
  * 库房 实体类
  **/
 @Data
 @TableName("wms_warehouse")
-public class Warehouse {
+public class Warehouse extends TenantEntity {
 	/**
 	 * 仓库ID
 	 */

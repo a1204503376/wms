@@ -35,7 +35,7 @@ public class ReceivePageQuery implements Serializable {
 	/**
 	 * 库房编码
 	 */
-	private List<String> whCodes;
+	private List<String> whIds;
 
 	/**
 	 * 创建时间开始
