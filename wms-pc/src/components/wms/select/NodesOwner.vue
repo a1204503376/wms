@@ -8,9 +8,9 @@
         @change="onChange">
         <el-option
             v-for="item in this.dataSource"
-            :key="item.ownerCode"
+            :key="item.woId"
             :label="item.ownerName"
-            :value="item">
+            :value="item.woId">
             <span style="float: left">{{ item.ownerCode }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.ownerName }}</span>
         </el-option>
@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import func from "@/util/func";
 import {getOwnerSelectResponseTop10List} from "@/api/wms/basics/owner";
 
 export default {
@@ -36,17 +35,6 @@ export default {
         return {
             val: this.selectVal,
             dataSource: [],
-        }
-    },
-    watch: {
-        val(newVal) {
-            let result = newVal;
-            if (func.isArray(newVal)) {
-                result = newVal.map(d => d.woId);
-            } else if (func.isObject(newVal)) {
-                result = newVal.woId
-            }
-            this.$emit('selectValChange', result);
         }
     },
     created() {
