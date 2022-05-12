@@ -115,6 +115,11 @@ public class AsnHeader extends TenantEntity {
 	private Integer instoreType;
 
 	/**
+	 * 供应商id
+	 */
+	private Long supplierId;
+
+	/**
 	 * 供应商编码
 	 */
 	private String supplierCode;

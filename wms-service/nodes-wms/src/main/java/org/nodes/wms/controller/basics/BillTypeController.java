@@ -1,20 +1,19 @@
-package org.nodes.modules.wms.basedata.controller;
+package org.nodes.wms.controller.basics;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
-import org.nodes.core.tool.utils.NodesUtil;
-import org.nodes.wms.core.basedata.cache.BillTypeCache;
+import org.nodes.wms.biz.basics.billType.BillTypeBiz;
 import org.nodes.wms.core.basedata.entity.BillType;
-import org.nodes.wms.core.basedata.excel.SkuUmExcel;
 import org.nodes.wms.core.basedata.service.IBillTypeService;
 import org.nodes.wms.core.basedata.vo.BillTypeVo;
 import org.nodes.wms.core.basedata.wrapper.BillTypeWrapper;
+import org.nodes.wms.dao.basics.billType.dto.BillTypeSelectQuery;
+import org.nodes.wms.dao.basics.billType.dto.BillTypeSelectResponse;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.cache.utils.CacheUtil;
-import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -23,12 +22,9 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.nodes.wms.core.basedata.cache.BillTypeCache.BILL_TYPE_CACHE;
 
@@ -46,6 +42,8 @@ import static org.nodes.wms.core.basedata.cache.BillTypeCache.BILL_TYPE_CACHE;
 public class BillTypeController extends BladeController {
 
 	private IBillTypeService billTypeService;
+
+	private BillTypeBiz billTypeBiz;
 
 	/**
 	 * 详情
@@ -103,6 +101,15 @@ public class BillTypeController extends BladeController {
 		return R.status(billTypeService.removeByIds(Func.toLongList(ids)));
 	}
 
+	/**
+	 * 单据类型选择下拉框
+	 * 展示最近10个物品
+	 */
+	@PostMapping("/select")
+	public R<List<BillTypeSelectResponse>> getBillTypeSelectResponseTop10List(@RequestBody BillTypeSelectQuery billTypeSelectQuery){
+		List<BillTypeSelectResponse> selectResponseList = billTypeBiz.getBillTypeSelectResponseTop10List(billTypeSelectQuery);
+		return R.data(selectResponseList);
+	}
 }
 
 

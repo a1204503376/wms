@@ -1,4 +1,4 @@
-import debounce from "lodash/debounce";
+import throttle from "lodash/throttle";
 import func from "@/util/func";
 
 export const editMixin = {
@@ -32,15 +32,24 @@ export const editMixin = {
                 this.submitFormDebounce();
             }
         },
-        // 提交表单防抖
-        submitFormDebounce: debounce(async function () {
+        // 提交表单节流，10s内只执行一次
+        submitFormDebounce: throttle(function () {
             this.loading = true;
-            await this.submitFormParams();
+            this.submitFormParams().then(res => {
+                this.$message.success(res.msg);
+                this.onClose();
+                this.$router.push(res.router);
+            });
             this.loading = false;
-        }, 500),
-        // 该提交函数要求异步，用于统一上述防抖回调函数中的同步代码
-        async submitFormParams() {
-            console.log('提交表单数据', this.form.params);
+        }, 10000, {leading: true, trailing: false}),
+        /**
+         * 提交表单参数到后台程序，处理成功之后需要返回一个对象，包含两个属性：msg和router
+         * @returns {msg: string, router: Object}
+         */
+        submitFormParams() {
+            return new Promise((resolve, reject) => {
+                resolve({msg: '提交成功'});
+            });
         },
         checkForm() {
             let result;

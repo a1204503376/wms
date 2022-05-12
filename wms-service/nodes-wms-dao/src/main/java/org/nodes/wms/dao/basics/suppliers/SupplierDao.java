@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierExportResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
+import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 
 import java.util.List;
@@ -54,4 +55,13 @@ public interface SupplierDao {
 	 * @return List<SupplierExportResponse>
 	 */
 	List<SupplierExportResponse> listBySupplierPageQuery(SupplierPageQuery supplierPageQuery);
+
+	/**
+	 * 根据供应商编码或者供应商名称查询前10个供应商信息
+	 *
+	 * @param code: 供应商编码
+	 * @param name: 供应商名称
+	 * @return List<SupplierSelectResponse>
+	 */
+    List<SupplierSelectResponse> listTop10ByCodeName(String code, String name);
 }

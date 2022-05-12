@@ -55,21 +55,32 @@
 
     <select id="selectListByWrapper"
             resultType="org.nodes.wms.dao.basics.suppliers.dto.output.SupplierExportResponse">
-        SELECT
-             s.code,
-             s.name,
-             s.simple_name,
-             o.owner_name,
-             s.remark,
-             IF(s.status = 1 ,'启用' ,'未启用') as status,
-             s.create_time,
-             s.update_time,
-             user1.real_name as createUser,
-             user2.real_name as updateUser
+        SELECT s.code,
+               s.name,
+               s.simple_name,
+               o.owner_name,
+               s.remark,
+               IF(s.status = 1, '启用', '未启用') as status,
+               s.create_time,
+               s.update_time,
+               user1.real_name               as createUser,
+               user2.real_name               as updateUser
         FROM basics_suppliers s
-        LEFT JOIN blade_user user1 ON user1.id = s.create_user
-        LEFT JOIN blade_user user2 ON user2.id = s.update_user
-        LEFT JOIN wms_owner o ON s.wo_id = o.wo_id
-        ${ew.customSqlSegment}
+                 LEFT JOIN blade_user user1 ON user1.id = s.create_user
+                 LEFT JOIN blade_user user2 ON user2.id = s.update_user
+                 LEFT JOIN wms_owner o ON s.wo_id = o.wo_id
+            ${ew.customSqlSegment}
+    </select>
+
+    <select id="listTop10ByCodeName"
+            resultType="org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse">
+        SELECT id,
+               `code`,
+               `name`
+        FROM basics_suppliers
+        WHERE `code` LIKE CONCAT('%', #{code}, '%')
+           OR `name` LIKE CONCAT('%', #{name}, '%')
+        ORDER BY update_time DESC
+        LIMIT 10
     </select>
 </mapper>

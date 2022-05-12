@@ -5,9 +5,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.suppliers.dto.input.AddSupplierRequest;
 import org.nodes.wms.dao.basics.suppliers.dto.input.RemoveRequest;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
+import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierSelectQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
+import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 供应商 业务类
@@ -45,4 +48,13 @@ public interface SupplierBiz {
 	 * @param response:
 	 */
 	void exportSupplier(SupplierPageQuery supplierPageQuery, HttpServletResponse response);
+
+	/**
+	 * 供应商选择下拉框
+	 * 展示最近10个供应商
+	 *
+	 * @param supplierSelectQuery: 下拉组件搜索条件
+	 * @return List<SupplierSelectResponse>
+	 */
+    List<SupplierSelectResponse> getSupplierSelectResponseTop10List(SupplierSelectQuery supplierSelectQuery);
 }

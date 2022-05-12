@@ -8,9 +8,6 @@ import org.springblade.core.tenant.mp.TenantEntity;
 
 /**
  * 供应商实体
- *
- * @author 彭永程
- * @date 2022-04-20 10:49
  **/
 @Data
 @TableName("basics_suppliers")
