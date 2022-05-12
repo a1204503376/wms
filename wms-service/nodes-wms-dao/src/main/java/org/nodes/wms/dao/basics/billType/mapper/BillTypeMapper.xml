@@ -12,7 +12,7 @@
                 io_type = #{ioType}
             </if>
 		    AND (bill_type_cd LIKE CONCAT('%', #{billTypeCd}, '%')
-		            OR bill_type_name LIKE CONCAT('%', #{billTypeName}, '%')
+		            OR bill_type_name LIKE CONCAT('%', #{billTypeName}, '%'))
         </where>
 		ORDER BY update_time DESC
 		LIMIT 10

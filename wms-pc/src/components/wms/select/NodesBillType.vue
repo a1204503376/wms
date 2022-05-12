@@ -9,10 +9,10 @@
         remote
         reserve-keyword
         size="mini"
-        style="width: 450px"
-        value-key="id"
+        style="width: 300px"
+        value-key="billTypeId"
         :multiple="multiple"
-        :ioType="ioType"
+        :io-type="ioType"
         @change="onChange">
         <el-option
             v-for="item in options"
@@ -41,7 +41,7 @@ export default {
         // 是否多选 true:多选 默认为单选
         multiple: {type: Boolean, required: false, default:()=>false},
         // 查询的单据类型，"":查询所有, "I":查询入库单据类型, "0":查询出库单据类型
-        ioType: {type: String, required: true}
+        ioType: {type: String, required: false, default:()=>''}
     },
     data() {
         return {
@@ -55,9 +55,9 @@ export default {
         val(newVal) {
             let result = newVal;
             if (func.isArray(newVal)) {
-                result = newVal.map(d => d.code);
+                result = newVal.map(d => d.billTypeId);
             } else if (func.isObject(newVal)) {
-                result = newVal.code
+                result = newVal.billTypeId
             }
             this.$emit('selectValChange', result);
         }
@@ -68,8 +68,8 @@ export default {
             if (key !== '') {
                 this.loading = true;
                 let BillTypeSelectQuery = {
-
-                    key
+                    key: key,
+                    ioType: this.ioTypeVal
                 };
                 let {data: {data}} = await getBillTypeSelectResponseTop10List(BillTypeSelectQuery);
                 this.options = data;
