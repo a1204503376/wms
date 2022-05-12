@@ -1,7 +1,7 @@
 import fileDownload from "js-file-download";
 <template>
     <div id='customer'>
-        <nodes-master-page :configure="masterConfig" v-on="form.events" :permission="permissionObj">
+        <nodes-master-page  v-on="form.events" :permission="permissionObj">
             <template v-slot:searchFrom>
                 <el-form-item label="客户编码">
                     <el-input v-model="form.params.code" class="d-input"></el-input>
