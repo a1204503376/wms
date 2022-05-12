@@ -15,6 +15,9 @@
                     <nodes-in-store-mode v-model="form.params.inStorageType"
                                          style="width: 180px"></nodes-in-store-mode>
                 </el-form-item>
+                <el-form-item label="状态">
+                    <nodes-lpn-type-state v-model="form.params.lpnTypeState"></nodes-lpn-type-state>
+                </el-form-item>
             </template>
             <template v-slot:expandSearch>
                 <el-row type="flex">
@@ -181,6 +184,8 @@
 
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesAsnBillState from "@/components/wms/select/NodesAsnBillState";
+// eslint-disable-next-line no-unused-vars
+import NodesLpnTypeState from "@/components/wms/select/NodesLpnTypeState";
 import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
@@ -193,7 +198,8 @@ export default {
         NodesInStoreMode,
         NodesAsnBillState,
         NodesMasterPage,
-        NodesDateRange
+        NodesDateRange,
+        NodesLpnTypeState
     },
     mixins: [listMixin],
     data() {
@@ -203,6 +209,7 @@ export default {
                     skuCode: '',
                     asnState: [10, 30, 20],
                     inStorageType: [20],
+                    lpnTypeState:[],
                     createDateRange: ['2022-01-01', '2022-03-01'],
                     a: {
                         b: 123

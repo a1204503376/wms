@@ -5,6 +5,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.enums.IPairs;
+import org.nodes.wms.dao.application.dto.output.LpnTypeResponse;
+
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * LpnTyp类型
@@ -51,5 +56,16 @@ public enum LpnTypeEnum
 	@Override
 	public String toString() {
 		return this.desc;
+	}
+
+	public static List<LpnTypeResponse> getList() {
+		List<LpnTypeResponse> list = new ArrayList<>();
+		for (LpnTypeEnum item : values()) {
+			LpnTypeResponse lpnTypeEnumResponse = new LpnTypeResponse();
+			lpnTypeEnumResponse.setLabel(item.desc);
+			lpnTypeEnumResponse.setValue(item.code);
+			list.add(lpnTypeEnumResponse);
+		}
+		return list;
 	}
 }
