@@ -15,6 +15,9 @@
                     <nodes-in-store-mode v-model="form.params.inStorageType"
                                          style="width: 180px"></nodes-in-store-mode>
                 </el-form-item>
+                <el-form-item label="状态">
+                    <nodes-lpn-type-state v-model="form.params.lpnTypeState"></nodes-lpn-type-state>
+                </el-form-item>
             </template>
             <template v-slot:expandSearch>
                 <el-row type="flex">
@@ -148,9 +151,10 @@
                     <el-table-column
                         fixed="right"
                         label="操作"
-                        width="100">
+                        width="120">
                         <template v-slot="{row}">
                             <el-button size="mini" type="text" @click="onEdit(row)">编辑</el-button>
+                            <el-button size="mini" type="text" @click="onViewDetails(row)">查看详情</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -180,6 +184,8 @@
 
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesAsnBillState from "@/components/wms/select/NodesAsnBillState";
+// eslint-disable-next-line no-unused-vars
+import NodesLpnTypeState from "@/components/wms/select/NodesLpnTypeState";
 import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
@@ -192,7 +198,8 @@ export default {
         NodesInStoreMode,
         NodesAsnBillState,
         NodesMasterPage,
-        NodesDateRange
+        NodesDateRange,
+        NodesLpnTypeState
     },
     mixins: [listMixin],
     data() {
@@ -202,6 +209,7 @@ export default {
                     skuCode: '',
                     asnState: [10, 30, 20],
                     inStorageType: [20],
+                    lpnTypeState:[],
                     createDateRange: ['2022-01-01', '2022-03-01'],
                     a: {
                         b: 123
@@ -348,6 +356,14 @@ export default {
         onEdit(row) {
             this.$router.push({
                 name: 'demoEdit',
+                params: {
+                    id: row.id.toString()
+                }
+            });
+        },
+        onViewDetails(row){
+            this.$router.push({
+                name: 'DEMO查看详情',
                 params: {
                     id: row.id.toString()
                 }

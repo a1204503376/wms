@@ -2,7 +2,9 @@ package org.nodes.wms.controller.state;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.wms.dao.application.dto.output.LpnTypeResponse;
 import org.nodes.wms.dao.application.dto.output.StateGeneralResponse;
+import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeEnum;
 import org.nodes.wms.dao.instock.asn.enums.AsnBillStateEnum;
 import org.nodes.wms.dao.instock.asn.enums.InStorageTypeEnum;
 import org.springblade.core.tool.api.R;
@@ -35,4 +37,13 @@ public class StateController {
 	public R<List<StateGeneralResponse>> getStorageMethod() {
 		return R.data(InStorageTypeEnum.getList());
 	}
+
+	/**
+	 * @return 获取容器类型
+	 */
+	@PostMapping("getLpnTypeState")
+	public R<List<LpnTypeResponse>> getLpnTypeState(){
+		return R.data(LpnTypeEnum.getList());
+	}
+
 }

@@ -145,19 +145,18 @@ export default {
     },
     methods: {
         submitFormParams() {
-            add(this.form.params)
-                .then(() => {
-                    this.$message.success('新增成功');
-                    this.$router.push(
-                        {
+          return add(this.form.params)
+          .then(res => {
+            return {
+              msg: res.data.msg,
+              router: {
                             path: '/wms/basics/customer',
                             query: {
                                 isRefresh: 'true'
                             }
-                        })
-                }).catch((e) => {
-                this.$message.warning(e);
-            });
+                        }
+            };
+          });
         },
 
     }

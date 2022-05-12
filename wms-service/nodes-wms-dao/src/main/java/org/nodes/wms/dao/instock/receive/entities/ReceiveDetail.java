@@ -114,6 +114,10 @@ public class ReceiveDetail extends BaseSkuLotEntity {
 	 */
 	private String	ownerCode;
 	/**
+	 * 供应商id
+	 */
+	private long supplier_id;
+	/**
 	 *  单价
 	 */
 	private BigDecimal detailPriceDecimal;
