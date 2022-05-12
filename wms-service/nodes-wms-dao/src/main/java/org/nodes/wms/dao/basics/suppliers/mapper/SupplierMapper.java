@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierExportResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
+import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 import org.springframework.stereotype.Repository;
 
@@ -38,4 +39,13 @@ public interface SupplierMapper extends BaseMapper<Supplier> {
 	 * @return SupplierExportResponse
 	 */
     List<SupplierExportResponse> selectListByWrapper(@Param(Constants.WRAPPER) Wrapper<?> wrapper);
+
+	/**
+	 * 根据供应商编码或者供应商名称查询前10个供应商信息
+	 *
+	 * @param code: 供应商编码
+	 * @param name: 供应商名称
+	 * @return List<SupplierSelectResponse>
+	 */
+	List<SupplierSelectResponse> listTop10ByCodeName(@Param("code") String code, @Param("name") String name);
 }

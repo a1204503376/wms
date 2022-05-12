@@ -7,7 +7,9 @@ import org.nodes.wms.biz.basics.suppliers.SupplierBiz;
 import org.nodes.wms.dao.basics.suppliers.dto.input.AddSupplierRequest;
 import org.nodes.wms.dao.basics.suppliers.dto.input.RemoveRequest;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
+import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierSelectQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
+import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 供应商管理API
@@ -25,7 +28,7 @@ import javax.validation.Valid;
  **/
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(WmsApiPath.WMS_ROOT_URL + "suppliers")
+@RequestMapping(WmsApiPath.WMS_ROOT_URL + "supplier")
 public class SupplierController {
 	private final SupplierBiz supplierBiz;
 
@@ -52,5 +55,11 @@ public class SupplierController {
 	@PostMapping("/export")
 	public void export(@RequestBody SupplierPageQuery supplierPageQuery, HttpServletResponse response){
 		supplierBiz.exportSupplier(supplierPageQuery,response);
+	}
+
+	@PostMapping("/select")
+	public R<List<SupplierSelectResponse>> getSupplierSelectResponseTop10List(@RequestBody SupplierSelectQuery supplierSelectQuery){
+		List<SupplierSelectResponse> selectResponseList = supplierBiz.getSupplierSelectResponseTop10List(supplierSelectQuery);
+		return R.data(selectResponseList);
 	}
 }

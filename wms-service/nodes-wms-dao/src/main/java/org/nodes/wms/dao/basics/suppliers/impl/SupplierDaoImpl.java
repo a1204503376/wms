@@ -10,6 +10,7 @@ import org.nodes.wms.dao.basics.suppliers.SupplierDao;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierExportResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
+import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 import org.nodes.wms.dao.basics.suppliers.mapper.SupplierMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -61,4 +62,9 @@ public class SupplierDaoImpl extends BaseServiceImpl<SupplierMapper, Supplier> i
 			.le(Func.isNotEmpty(supplierPageQuery.getUpdateTimeEnd()),"s.update_time",supplierPageQuery.getUpdateTimeEnd());
 		return super.baseMapper.selectListByWrapper(queryWrapper);
 	}
+
+    @Override
+    public List<SupplierSelectResponse> listTop10ByCodeName(String code ,String name) {
+        return super.baseMapper.listTop10ByCodeName(code,name);
+    }
 }

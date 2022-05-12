@@ -10,8 +10,10 @@ import org.nodes.wms.dao.basics.suppliers.SupplierDao;
 import org.nodes.wms.dao.basics.suppliers.dto.input.AddSupplierRequest;
 import org.nodes.wms.dao.basics.suppliers.dto.input.RemoveRequest;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
+import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierSelectQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierExportResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
+import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
@@ -61,4 +63,9 @@ public class SupplierBizImpl implements SupplierBiz {
 		List<SupplierExportResponse> supplierList = supplierDao.listBySupplierPageQuery(supplierPageQuery);
 		ExcelUtil.export(response, "供应商", "供应商数据报表", supplierList, SupplierExportResponse.class);
 	}
+
+    @Override
+    public List<SupplierSelectResponse> getSupplierSelectResponseTop10List(SupplierSelectQuery supplierSelectQuery) {
+		return supplierDao.listTop10ByCodeName(supplierSelectQuery.getKey(),supplierSelectQuery.getKey());
+    }
 }

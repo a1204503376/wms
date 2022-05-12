@@ -41,7 +41,7 @@ import java.util.List;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(WmsApiPath.WMS_ROOT_URL + "owner")
+@RequestMapping("/wms/basedata/owner")
 @Api(value = "货主管理", tags = "货主管理")
 public class OwnerController extends BladeController {
 
