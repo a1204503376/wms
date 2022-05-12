@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.lpntype.modular.LpnTypeFactory;
-import org.nodes.wms.dao.basics.customers.dto.output.CustomersResponse;
 import org.nodes.wms.dao.basics.lpntype.LpnTypeDao;
 import org.nodes.wms.dao.basics.lpntype.dto.input.DeleteLpnTypeRequest;
 import org.nodes.wms.dao.basics.lpntype.dto.input.LpnTypePageQuery;
@@ -38,7 +37,7 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 	 */
 	@Override
 	public IPage<LpnTypePageResponse> getPage(Query query, LpnTypePageQuery lpnTypePageQuery) {
-		IPage<CustomersResponse> page = Condition.getPage(query);
+		IPage<LpnTypePageResponse> page = Condition.getPage(query);
 		return lpnTypeDao.selectPage(page,lpnTypePageQuery);
 	}
 
