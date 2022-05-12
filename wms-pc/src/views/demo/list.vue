@@ -148,9 +148,10 @@
                     <el-table-column
                         fixed="right"
                         label="操作"
-                        width="100">
+                        width="120">
                         <template v-slot="{row}">
                             <el-button size="mini" type="text" @click="onEdit(row)">编辑</el-button>
+                            <el-button size="mini" type="text" @click="onViewDetails(row)">查看详情</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -348,6 +349,14 @@ export default {
         onEdit(row) {
             this.$router.push({
                 name: 'demoEdit',
+                params: {
+                    id: row.id.toString()
+                }
+            });
+        },
+        onViewDetails(row){
+            this.$router.push({
+                name: 'DEMO查看详情',
                 params: {
                     id: row.id.toString()
                 }

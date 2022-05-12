@@ -1,5 +1,5 @@
 
-package org.nodes.modules.wms.warehouse.controller;
+package org.nodes.wms.controller.basics;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.StringPool;
+import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.core.warehouse.cache.LocationCache;
 import org.nodes.wms.core.warehouse.dto.LocationDTO;
 import org.nodes.wms.core.warehouse.entity.Location;
@@ -16,6 +17,10 @@ import org.nodes.wms.core.warehouse.excel.LocationExcel;
 import org.nodes.wms.core.warehouse.service.ILocationService;
 import org.nodes.wms.core.warehouse.vo.LocationVO;
 import org.nodes.wms.core.warehouse.wrapper.LocationWrapper;
+import org.nodes.wms.dao.basics.customer.dto.input.CustomerSelectQuery;
+import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
+import org.nodes.wms.dao.basics.warehouse.dto.input.LocationSelectQuery;
+import org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.excel.util.ExcelUtil;
@@ -52,6 +57,7 @@ import static org.nodes.wms.core.warehouse.cache.LocationCache.LOCATION_CACHE;
 public class LocationController extends BladeController {
 
 	private ILocationService locationService;
+	private LocationBiz locationBiz;
 
 	/**
 	 * 详情
@@ -198,4 +204,13 @@ public class LocationController extends BladeController {
 	public R<Boolean> importData(@RequestBody List<DataVerify> dataVerifyList) {
 		return R.data(locationService.importData(dataVerifyList));
 	}
+
+	/**
+	 * 获取客户下拉列表最近10条数据
+	 */
+	@PostMapping("getLocationSelectResponseTop10List")
+	public R<List<LocationSelectResponse>> getLocationSelectResponseTop10List(@RequestBody LocationSelectQuery locationSelectQuery) {
+		return R.data(locationBiz.getLocationSelectResponseTop10List(locationSelectQuery));
+	}
+
 }
