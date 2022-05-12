@@ -12,6 +12,16 @@ export default [
         }]
     },
     {
+        path: '/selectDetails',
+        component: Layout,
+        children: [{
+            path: 'selectDetails/:id',
+            name: 'DEMO查看详情',
+            props: true,
+            component: () => import('@/views/demo/selectDetails')
+        }]
+    },
+    {
         path: '/supplier',
         component: Layout,
         children: [{
