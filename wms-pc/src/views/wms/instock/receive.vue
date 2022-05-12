@@ -9,8 +9,9 @@
                     <nodes-receive-bill-state v-model="form.params.billStateList"></nodes-receive-bill-state>
                 </el-form-item>
                 <el-form-item label="物品编码">
-                    <el-input v-model="form.params.skuCode" class="d-input"></el-input>
+                    <nodes-sku v-model="form.params.skuIds" style="width: 200px"  :multiple="true"></nodes-sku>
                 </el-form-item>
+
                 <el-form-item label="上游编码">
                     <el-input v-model="form.params.externalOrderNo" class="d-input"></el-input>
                 </el-form-item>
@@ -22,12 +23,11 @@
                             <el-input v-model="form.params.asnBillNo" class="d-input"></el-input>
                         </el-form-item>
                         <el-form-item label="仓库编码">
-                            <nodes-warehouse v-model="form.params.whCodes"></nodes-warehouse>
+                              <nodes-warehouse v-model="form.params.whIds" :multiple="true"></nodes-warehouse>
                         </el-form-item>
                         <el-form-item label="上游创建人">
                             <el-input v-model="form.params.externalCreateUser" class="d-input"></el-input>
                         </el-form-item>
-
                         <el-form-item label="供应商编码">
                             <el-input v-model="form.params.supplierCode" class="d-input"></el-input>
                         </el-form-item>
@@ -92,10 +92,8 @@
                 <el-table
                     ref="table"
                     :data="table.data"
-                    :summary-method="getSummaries"
                     border
                     highlight-current-row
-                    show-summary
                     size="mini"
                     row-key="receiveId"
                     @sort-change="onSortChange">
@@ -160,11 +158,18 @@ import {page,remove,close,exportFile} from "@/api/wms/instock/receive";
 import {listMixin} from "@/mixins/list";
 import fileDownload from "js-file-download";
 import NodesReceiveBillState from "../../../components/wms/select/NodesReceiveBillState";
+import NodesCustomer from "@/components/wms/select/NodesCustomer";
+import NodesLocation from "@/components/wms/select/NodesLocation";
+import NodesSku from "@/components/wms/select/NodesSku";
+
 
 
 export default {
     name: "list",
     components: {
+        NodesSku,
+        NodesLocation,
+        NodesCustomer,
         NodesReceiveBillState,
         DialogColumn,
         NodesInStoreMode,
@@ -182,12 +187,13 @@ export default {
             },
             form: {
                 params: {
+                    code:[],
                     receiveNo: '',
                     billStateList: [],
-                    skuCode: '',
+                    skuIds: [],
                     externalOrderNo: '',
                     asnBillNo: '',
-                    whCodes: [],
+                    whIds: [],
                     externalCreateUser: '',
                     supplierCode: '',
                     createTimeDateRange: '',
@@ -337,12 +343,12 @@ export default {
                 type: "warning",
             }).then(() => {
                let state = row.billState;
-                if(state==40){
+                if(state===40){
                     this.$message.error('该收货单已关闭，请勿重复点击');
                     throw new Error('该收货单已关闭，请勿重复点击');
                 }
 
-               if(state!=30){
+               if(state!==30){
                    this.$message.error('关闭失败,请先完成收货');
                    throw new Error('关闭失败,请先完成收货');
                }

@@ -23,7 +23,7 @@ public class ReceivePageQuery implements Serializable {
 	/**
 	 * 物品编码
 	 */
-	private String  skuCode;
+	private List<Long>  skuIds;
 	/**
 	 * 上位系统单编号
 	 */
@@ -33,9 +33,9 @@ public class ReceivePageQuery implements Serializable {
 	 */
 	private String asnBillNo;
 	/**
-	 * 库房编码
+	 * 库房id
 	 */
-	private List<String> whIds;
+	private List<Long> whIds;
 
 	/**
 	 * 创建时间开始

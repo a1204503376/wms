@@ -36,7 +36,7 @@ export default [
         component: Layout,
         children: [{
             path: 'edit/:id',
-            name: 'customerEdit',
+            name: '新增客户',
             props: true,
             component: () => import('@/views/wms/basics/customer/customerNew')
         }]
@@ -50,5 +50,16 @@ export default [
             props: true,
             component: () => import('@/views/wms/instock/asnHeader/asnAdd')
         }]
+    },
+    {
+        path: '/carrier',
+        component: Layout,
+        children: [{
+            path: 'edit/:id',
+            name: '新增承运商',
+            props: true,
+            component: () => import('@/views/wms/basics/carrier/carrierNew')
+        }]
     }
+
 ]

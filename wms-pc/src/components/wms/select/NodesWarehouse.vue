@@ -12,8 +12,8 @@
             :key="item.whId"
             :label="item.whName"
             :value="item.whId">
-            <span style="float: right">{{ item.whCode }}</span>
-            <span style="float: left; color: #8492a6; font-size: 13px">{{ item.whName }}</span>
+            <span style="float: left">{{ item.whCode }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.whName }}</span>
         </el-option>
     </el-select>
 

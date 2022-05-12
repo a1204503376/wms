@@ -1,6 +1,7 @@
 <template>
     <el-select
         v-model="val"
+        :multiple="multiple"
         :default-first-option="true"
         :loading="loading"
         :remote-method="remoteMethod"
@@ -16,7 +17,7 @@
             v-for="item in options"
             :key="item.skuCode"
             :label="item.skuCode"
-            :value="item">
+            :value="item.skuId">
             <span style="float: left">{{ item.skuCode }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.skuName }}</span>
         </el-option>
@@ -34,7 +35,9 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: Object
+        selectVal: Object,
+        // 单选多选切换，默认为false
+        multiple: {type: Boolean, required: false, default: false}
     },
     data() {
         return {

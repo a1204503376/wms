@@ -6,9 +6,9 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.springblade.core.tool.utils.DateUtil;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 容器管理分页对象
@@ -21,7 +21,7 @@ public class LpnTypePageQuery implements Serializable {
 	 * 容器类型(1:箱,2:托)
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
-	private Integer type;
+	List<Integer> lpnType;
 	/**
 	 * 容器类型编码
 	 */
