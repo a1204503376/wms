@@ -33,7 +33,7 @@ import fileDownload from "js-file-download";
 
             </template>
             <template v-slot:batchBtn>
-                <el-button size="mini" type="primary" @click="onRemove">删除</el-button>
+                <el-button v-if="permissionObj.delete" size="mini" type="primary" @click="onRemove">删除</el-button>
                 <el-button size="mini" type="primary">冻结</el-button>
             </template>
             <template v-slot:tableTool>
@@ -251,9 +251,9 @@ import fileDownload from "js-file-download";
             },
             permissionObj() {
                 return {
-                    search: this.vaildData(this.permission.supplier_search, false),
-                    add: this.vaildData(this.permission.supplier_add, false),
-                    delete: this.vaildData(this.permission.supplier_delete, false)
+                    search: this.vaildData(this.permission.carrier_search, false),
+                    add: this.vaildData(this.permission.carrier_add, false),
+                    delete: this.vaildData(this.permission.carrier_delete, false)
                 }
             }
 
