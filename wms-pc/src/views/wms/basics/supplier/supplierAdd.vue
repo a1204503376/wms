@@ -53,7 +53,7 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="是否启用" prop="status">
-                                <el-radio-group v-model="status" @change="onChangeRadio">
+                                <el-radio-group v-model="this.form.params.status" @change="onChangeRadio">
                                     <el-radio :label=1>是</el-radio>
                                     <el-radio :label=-1>否</el-radio>
                                 </el-radio-group>
@@ -100,14 +100,13 @@ export default {
     mixins: [editMixin],
     data() {
         return {
-            status: 1,
             form: {
                 params: {
                     code: '',
                     name: '',
                     simpleName: '',
                     status: 1,
-                        woId: '',
+                    woId: '',
                     remark: ''
                 },
                 rules: {
