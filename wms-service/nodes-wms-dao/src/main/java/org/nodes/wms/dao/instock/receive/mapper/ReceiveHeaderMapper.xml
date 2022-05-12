@@ -6,7 +6,7 @@
         h.receive_id,
         h.receive_no,
         h.asn_bill_no,
-        h.wh_code,
+        h.wh_id,
         h.bill_state,
         h.supplier_code,
         h.supplier_name,
@@ -41,10 +41,10 @@
             <if test="query.asnBillNo!=null and query.asnBillNo != ''">
                 AND h.asn_bill_no LIKE concat('%',#{query.asnBillNo},'%')
             </if>
-            <if test="query.whCodes!=null and query.whCodes.size()>0">
-                AND  h.wh_code in
-                <foreach collection="query.whCodes" item="whCodes" index="index" open="(" close=")" separator=",">
-                    #{whCodes}
+            <if test="query.whIds!=null and query.whIds.size()>0">
+                AND  h.wh_id in
+                <foreach collection="query.whIds" item="item" index="index" open="(" close=")" separator=",">
+                    #{item}
                 </foreach>
             </if>
             <if test="query.createTimeBegin!=null">
