@@ -1,37 +1,41 @@
 <template>
-    <nodes-select
+    <el-select
         v-model="val"
-        :data-source="dataSource"
-        value-key="woId"
-        value-name="ownerCode"
-        label-name="ownerName"
-        :is-custom-template="true"
         :multiple="multiple"
-       >
-
-    </nodes-select>
+        size="mini"
+        style="width: 340px"
+        value-key="woId"
+        @change="onChange">
+        <el-option
+            v-for="item in this.dataSource"
+            :key="item.ownerCode"
+            :label="item.ownerName"
+            :value="item">
+            <span style="float: left">{{ item.ownerCode }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.ownerName }}</span>
+        </el-option>
+    </el-select>
 </template>
 
 <script>
-import NodesSelect from "@/components/wms/general/NodesSelect";
-import {getOwnerSelectResponseList} from "@/api/wms/basics/owner";
 import func from "@/util/func";
+import {getOwnerSelectResponseTop10List} from "@/api/wms/basics/owner";
 
 export default {
     name: "NodesOwner",
-    components: {NodesSelect},
     model: {
         prop: 'selectVal',
         event: 'selectValChange'
     },
     props: {
+        selectVal: [Object, String, Array],
         // 是否多选 true:多选 默认为单选
-       multiple: {type: Boolean, required: false, default:()=>false}
+        multiple: {type: Boolean, required: false, default: () => false},
     },
     data() {
         return {
-            val: '',
-            dataSource: []
+            val: this.selectVal,
+            dataSource: [],
         }
     },
     watch: {
@@ -50,9 +54,12 @@ export default {
     },
     methods: {
         async getDataSource() {
-            const response = await getOwnerSelectResponseList();
-            this.dataSource = response.data.data;
+            let {data: {data}} = await getOwnerSelectResponseTop10List();
+            this.dataSource = data
         },
+        onChange(val) {
+            this.$emit('selectValChange', val);
+        }
     }
 }
 </script>
