@@ -11,7 +11,7 @@ import fileDownload from "js-file-download";
                 <el-form-item label="容器编码">
                     <el-input v-model="form.params.code" class="d-input"></el-input>
                 </el-form-item>
-                <el-form-item label="状态">
+                <el-form-item label="容器类型">
                     <nodes-lpn-type-state v-model="form.params.lpnType">
                     </nodes-lpn-type-state>
                 </el-form-item>
@@ -31,7 +31,7 @@ import fileDownload from "js-file-download";
 
             </template>
             <template v-slot:batchBtn>
-                <el-button size="mini" type="primary" @click="onRemove">删除</el-button>
+                <el-button v-if="permissionObj.delete" size="mini" type="primary" @click="onRemove">删除</el-button>
                 <el-button size="mini" type="primary">冻结</el-button>
             </template>
             <template v-slot:tableTool>
@@ -233,9 +233,9 @@ import fileDownload from "js-file-download";
             },
             permissionObj() {
                 return {
-                    search: this.vaildData(this.permission.supplier_search, false),
-                    add: this.vaildData(this.permission.supplier_add, false),
-                    delete: this.vaildData(this.permission.supplier_delete, false)
+                    search: this.vaildData(this.permission.lpnType_search, false),
+                    add: this.vaildData(this.permission.lpnType_add, false),
+                    delete: this.vaildData(this.permission.lpnType_delete, false)
                 }
             }
 
@@ -253,13 +253,12 @@ import fileDownload from "js-file-download";
             excelLpnType() {
                 var that = this;
                 that.excelParams.code = this.form.params.code;
-                that.excelParams.type =this.form.params.type.label;
+                that.excelParams.lpnType =this.form.params.lpnType;
                 excelLpnType(that.excelParams).then((res) => {
                     fileDownload(res.data, "容器管理信息.xlsx");
                 });
             },
             getTableData() {
-                console.log(this.form.params)
                 var that = this;
                 that.params = this.form.params;
                 getLpnTypePage(that.params, this.page).then((res) => {
