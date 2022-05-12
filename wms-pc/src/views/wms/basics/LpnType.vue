@@ -8,14 +8,8 @@ import fileDownload from "js-file-download";
              size="mini">
         <nodes-master-page :configure="masterConfig"  :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
-                <el-form-item label="承运商编码">
+                <el-form-item label="容器编码">
                     <el-input v-model="form.params.code" class="d-input"></el-input>
-                </el-form-item>
-                <el-form-item label="承运商名称">
-                    <el-input v-model="form.params.name" class="d-input"></el-input>
-                </el-form-item>
-                <el-form-item label="承运商简称">
-                    <el-input v-model="form.params.simpleName" class="d-input"></el-input>
                 </el-form-item>
             </template>
             <template v-slot:expandSearch>
@@ -71,17 +65,15 @@ import fileDownload from "js-file-download";
                     effect="dark"
                     placement="top"
                 >
-                    <el-button circle icon="el-icon-download" size="mini" @click="excelCarrier"></el-button>
+                    <el-button circle icon="el-icon-download" size="mini" @click="excelLpnType"></el-button>
                 </el-tooltip>
             </template>
             <template v-slot:table>
                 <el-table
                     ref="table"
                     :data="table.data"
-                    :summary-method="getSummaries"
                     border
                     highlight-current-row
-                    show-summary
                     size="mini"
                     style="width: 100%"
                     @sort-change="onSortChange"
@@ -107,17 +99,6 @@ import fileDownload from "js-file-download";
                             v-bind="column">
                         </el-table-column>
                     </template>
-                    <el-table-column
-                        label="是否启用">
-                        <template slot-scope="scope">
-                            <span v-if="scope.row.status>0">
-                                <el-tag type="success">关</el-tag>
-                            </span>
-                            <span v-if="scope.row.status<0">
-                                <el-tag type="danger">开</el-tag>
-                            </span>
-                        </template>
-                    </el-table-column>
                 </el-table>
             </template>
             <template v-slot:page>
@@ -146,17 +127,18 @@ import fileDownload from "js-file-download";
     import {listMixin} from "@/mixins/list";
     // eslint-disable-next-line no-unused-vars
     import {
-        getCarriersPage,
         // eslint-disable-next-line no-unused-vars
-        newCarrier,
+        getLpnTypePage,
         // eslint-disable-next-line no-unused-vars
-        deleteCarrier,
-        excelCarrier,
-        updateCarrier,
-    } from "@/api/wms/basics/Carrier.js";
+        newLpnType,
+        // eslint-disable-next-line no-unused-vars
+        deleteLpnType,
+        // eslint-disable-next-line no-unused-vars
+        excelLpnType
+    } from "@/api/wms/basics/LpnType.js";
 
     export default {
-        name: "carrier",
+        name: "LpnType",
         components: {
             NodesSearchInput,
             NodesMasterPage,
@@ -176,14 +158,10 @@ import fileDownload from "js-file-download";
                 params: {},
                 excelParams: {
                     code: '',//承运商编码
-                    name: '',//承运商名称
-                    simpleName: '',//承运商简称
                 },
                 form: {
                     params: {
                         code: '',//承运商编码
-                        name: '',//承运商名称
-                        simpleName: '',//承运商简称
                         createTimeDateRange: ['', ''],//创建时间开始 创建时间结束
                         updateTimeDateRange: ['', ''],//更新时间开始 更新时间结束
                     }
@@ -192,23 +170,19 @@ import fileDownload from "js-file-download";
                     columnList: [
                         {
                             prop: 'code',
-                            label: '承运商编码'
+                            label: '容器类型编码'
                         },
                         {
-                            prop: 'name',
-                            label: '承运商名称'
+                            prop: 'type',
+                            label: '容器类型'
                         },
                         {
-                            prop: 'simpleName',
-                            label: '承运商简称'
+                            prop: 'lpnNoRule',
+                            label: '编码生成规则'
                         },
                         {
-                            prop: 'ownerName',
-                            label: '货主编码'
-                        },
-                        {
-                            prop: 'remark',
-                            label: '备注'
+                            prop: 'weight',
+                            label: '容器重量（KG）'
                         },
                         {
                             prop: 'createTime',
@@ -268,19 +242,19 @@ import fileDownload from "js-file-download";
                 this.selectionList = [];
                 this.$refs.table.toggleSelection();
             },
-            excelCarrier() {
+            excelLpnType() {
                 var that = this;
                 that.excelParams.code = this.form.params.code;
                 that.excelParams.name = this.form.params.name;
                 that.excelParams.simpleName = this.form.params.simpleName;
-                excelCarrier(that.excelParams).then((res) => {
-                    fileDownload(res.data, "物品分类.xlsx");
+                excelLpnType(that.excelParams).then((res) => {
+                    fileDownload(res.data, "容器管理信息.xlsx");
                 });
             },
             getTableData() {
                 var that = this;
                 that.params = this.form.params
-                getCarriersPage(that.params, this.page).then((res) => {
+                getLpnTypePage(that.params, this.page).then((res) => {
                     this.page.total = res.data.data.total;
                     this.page.currentPage = res.data.data.pages;
                     this.page.current = res.data.data.current;
@@ -289,13 +263,13 @@ import fileDownload from "js-file-download";
                 });
             },
             onRemove() {
-                this.$confirm("确定删除供应商编码为" + this.codes + "的数据吗?", {
+                this.$confirm("确定删除容器编码为" + this.codes + "的数据吗?", {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning"
                 }).then(() => {
                     this.deleteParams.list = this.ids.split(',');
-                    deleteCarrier(this.deleteParams.list).then((res) => {
+                    deleteLpnType(this.deleteParams.list).then((res) => {
                         if (res.data.code == 200) {
                             this.getTableData();
                             this.$message({
@@ -312,35 +286,6 @@ import fileDownload from "js-file-download";
 
                     });
                 });
-            },
-            getSummaries(param) {
-                const {columns, data} = param;
-                const sums = [];
-                columns.forEach((column, index) => {
-                    if (index < 2) {
-                        sums[index] = '';
-                    }
-                    if (index === 2) {
-                        sums[index] = '合计';
-                        return;
-                    }
-                    const values = data.map(item => Number(item[column.property]));
-                    if (!values.every(value => isNaN(value))) {
-                        sums[index] = values.reduce((prev, curr) => {
-                            const value = Number(curr);
-                            if (!isNaN(value)) {
-                                return prev + curr;
-                            } else {
-                                return prev;
-                            }
-                        }, 0);
-                        sums[index] += ' 元';
-                    } else {
-                        sums[index] = '';
-                    }
-                });
-
-                return sums;
             },
         }
     }

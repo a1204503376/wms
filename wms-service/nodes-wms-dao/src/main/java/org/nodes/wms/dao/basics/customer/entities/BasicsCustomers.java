@@ -1,10 +1,9 @@
-package org.nodes.wms.dao.basics.customers.entities;
+package org.nodes.wms.dao.basics.customer.entities;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import org.springblade.core.mp.base.BaseEntity;
 import org.springblade.core.tenant.mp.TenantEntity;
 
 /**

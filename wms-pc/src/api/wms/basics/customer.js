@@ -34,3 +34,13 @@ export const add = (data) => {
         data: data,
     })
 }
+
+export const getCustomerSelectResponseTop10List = (data) => {
+    return request({
+        url: '/api/wms/customer/getCustomerSelectResponseTop10List',
+        method: 'post',
+        data: data
+    })
+}
+
+

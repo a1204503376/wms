@@ -13,30 +13,38 @@
                     <el-row>
                         <h3>客户单-{{ isEdit ? '编辑' : '新增' }}</h3>
                     </el-row>
-                    <el-row>
+
+                        <el-row>
                         <el-col :span="8">
                             <el-form-item label="客户编码" prop="code">
                                 <el-input v-model="form.params.code"></el-input>
                             </el-form-item>
                         </el-col>
+                        </el-row>
+                        <el-row>
                         <el-col :span="8">
                             <el-form-item label="客户名称" prop="name">
                                 <el-input v-model="form.params.name"></el-input>
                             </el-form-item>
                         </el-col>
+                        </el-row>
+                       <el-row>
                         <el-col :span="8">
                             <el-form-item label="客户简称" prop="simpleName">
                                 <el-input v-model="form.params.simpleName"></el-input>
                             </el-form-item>
                         </el-col>
+                       </el-row>
 
-                    </el-row>
+<!--                    TODO 货主组件有问题，稍后修改-->
+<!--                    <el-row>-->
+<!--                        <el-col :span="8">-->
+<!--                            <el-form-item label="货主" prop="woId">-->
+<!--                                <nodes-owner></nodes-owner>-->
+<!--                            </el-form-item>-->
+<!--                        </el-col>-->
+<!--                    </el-row>-->
                     <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="货主" prop="woId">
-                                <el-input v-model="form.params.woId"></el-input>
-                            </el-form-item>
-                        </el-col>
                         <el-col :span="8">
                             <el-form-item label="备注" prop="remark">
                                 <el-input v-model="form.params.remark"></el-input>
@@ -45,10 +53,15 @@
                     </el-row>
                     <el-row>
                         <el-col :span="8">
-                            <el-form-item label="是否启用" prop="remark">
-                                <el-radio v-model="form.params.status" label="1">启用</el-radio>
-                                <el-radio v-model="form.params.status" label="2">不启用</el-radio>
+                            <el-form-item label="是否启用" prop="status">
+
+                                <template>
+                                    <el-radio v-model="form.params.status" :label=1>是</el-radio>
+                                    <el-radio v-model="form.params.status" :label=2>否</el-radio>
+                                </template>
+
                             </el-form-item>
+
                         </el-col>
 
                     </el-row>
@@ -78,6 +91,7 @@
 <script>
 import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
 import NodesInStoreType from "@/components/wms/select/NodesInStoreType";
+import NodesOwner  from "@/components/wms/select/NodesOwner"
 import NodesSku from "@/components/wms/select/NodesSku";
 import NodesLineNumber from "@/components/wms/table/NodesLineNumber";
 import {add} from "@/api/wms/basics/customer";
@@ -85,7 +99,7 @@ import {editMixin} from "@/mixins/edit";
 
 export default {
     name: "new",
-    components: {NodesLineNumber, NodesSku, NodesInStoreType, NodesInStoreMode},
+    components: {NodesOwner, NodesLineNumber, NodesSku, NodesInStoreType, NodesInStoreMode},
     mixins: [editMixin],
     data() {
         return {
@@ -96,7 +110,7 @@ export default {
                     simpleName: '',
                     woId: null,
                     remark: '',
-                    status: ''
+                    status: 1
                 },
                 rules: {
 
@@ -113,7 +127,15 @@ export default {
                             message: '请输入客户名称',
                             trigger: 'blur'
                         }
+                    ],
+                    status: [
+                        {
+                            required: true,
+                            message: '请选择是否启用',
+                            trigger: 'blur'
+                        }
                     ]
+
                 }
             }
         }
@@ -122,7 +144,7 @@ export default {
 
     },
     methods: {
-        onSubmit() {
+        submitFormParams() {
             add(this.form.params)
                 .then(() => {
                     this.$message.success('新增成功');
