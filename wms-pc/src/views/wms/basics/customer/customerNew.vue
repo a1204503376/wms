@@ -35,15 +35,13 @@
                             </el-form-item>
                         </el-col>
                        </el-row>
-
-<!--                    TODO 货主组件有问题，稍后修改-->
-<!--                    <el-row>-->
-<!--                        <el-col :span="8">-->
-<!--                            <el-form-item label="货主" prop="woId">-->
-<!--                                <nodes-owner></nodes-owner>-->
-<!--                            </el-form-item>-->
-<!--                        </el-col>-->
-<!--                    </el-row>-->
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="货主" prop="woId">
+                                <nodes-owner v-model="form.params.woId"></nodes-owner>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="备注" prop="remark">
@@ -94,7 +92,7 @@ import NodesInStoreType from "@/components/wms/select/NodesInStoreType";
 import NodesOwner  from "@/components/wms/select/NodesOwner"
 import NodesSku from "@/components/wms/select/NodesSku";
 import NodesLineNumber from "@/components/wms/table/NodesLineNumber";
-import {add} from "@/api/wms/basics/customer";
+import {addCustomer} from "@/api/wms/basics/customer";
 import {editMixin} from "@/mixins/edit";
 
 export default {
@@ -108,7 +106,7 @@ export default {
                     code: '',
                     name: '',
                     simpleName: '',
-                    woId: null,
+                    woId: '',
                     remark: '',
                     status: 1
                 },
@@ -145,7 +143,7 @@ export default {
     },
     methods: {
         submitFormParams() {
-          return add(this.form.params)
+          return addCustomer(this.form.params)
           .then(res => {
             return {
               msg: res.data.msg,
