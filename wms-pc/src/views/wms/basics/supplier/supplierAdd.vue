@@ -38,7 +38,8 @@
                         <el-col :span="8">
                             <el-form-item label="货主" prop="woId">
                                 <nodes-owner
-                                    v-model="form.params.woId">
+                                    v-model="form.params.woId"
+                                    :multiple="false">
                                 </nodes-owner>
                             </el-form-item>
                         </el-col>
@@ -53,10 +54,8 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="是否启用" prop="status">
-                                <el-radio-group v-model="this.form.params.status" @change="onChangeRadio">
-                                    <el-radio :label=1>是</el-radio>
-                                    <el-radio :label=-1>否</el-radio>
-                                </el-radio-group>
+                                <el-radio v-model="form.params.status" :label=1>是</el-radio>
+                                <el-radio v-model="form.params.status" :label=-1>否</el-radio>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -84,19 +83,14 @@
 </template>
 
 <script>
-import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
-import NodesInStoreType from "@/components/wms/select/NodesInStoreType";
-import NodesSku from "@/components/wms/select/NodesSku";
-import NodesLineNumber from "@/components/wms/table/NodesLineNumber";
+
 import {editMixin} from "@/mixins/edit";
 import {add} from "@/api/wms/basics/supplier"
 import NodesOwner from "@/components/wms/select/NodesOwner";
-import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
-// import func from "@/util/func";
 
 export default {
     name: "add",
-    components: {NodesWarehouse, NodesOwner, NodesLineNumber, NodesSku, NodesInStoreType, NodesInStoreMode},
+    components: {NodesOwner},
     mixins: [editMixin],
     data() {
         return {
@@ -141,7 +135,7 @@ export default {
                     woId: [
                         {
                             message: '请选择货主',
-                            trigger: 'blur'
+                            trigger: 'change'
                         }
                     ],
                     remark: [
@@ -156,23 +150,19 @@ export default {
     },
     methods: {
         submitFormParams() {
-            add(this.form.params)
-                .then(()=>{
-                   this.$message.success("新增成功");
-                   this.$router.push({
-                       path:"/wms/basics/supplier",
-                       query: {
-                           isRefresh:'true'
-                       }
-                   })
-                })
-                .catch((e)=>{
-                    this.$message.error(e);
-                })
+            return add(this.form.params)
+                .then(res => {
+                    return {
+                        msg: res.data.msg,
+                        router: {
+                            path: '/wms/basics/supplier',
+                            query: {
+                                isRefresh: 'true'
+                            }
+                        }
+                    };
+                });
         },
-        onChangeRadio(value) {
-            this.form.params.status = value;
-        }
     }
 }
 </script>
