@@ -13,8 +13,11 @@
             <if test="query.code!=null and query.code != ''">
                 AND l.code LIKE concat('%',#{query.code},'%')
             </if>
-            <if test="query.type!=null and query.type != ''">
-                AND l.type LIKE concat('%',#{query.type},'%')
+            <if test="query.lpnType!=null and query.lpnType.size >0">
+                AND l.type IN
+                <foreach collection="query.lpnType" separator="," item="item" open="(" close=")">
+                    #{item}
+                </foreach>
             </if>
             <if test="query.createTimeBegin!=null">
                 AND l.create_time  &gt;= #{query.createTimeBegin}
@@ -47,8 +50,11 @@
             <if test="query.code!=null and query.code != ''">
                 AND l.code LIKE concat('%',#{query.code},'%')
             </if>
-            <if test="query.type!=null and query.type != ''">
-                AND l.type LIKE concat('%',#{query.type},'%')
+            <if test="query.type!=null and  query.lpnType.size >0">
+                AND l.type IN
+                <foreach collection="query.lpnType" separator="," item="item" open="(" close=")">
+                    #{item}
+                </foreach>
             </if>
             <if test="query.createTimeBegin!=null">
                 AND l.create_time  &gt;= #{query.createTimeBegin}

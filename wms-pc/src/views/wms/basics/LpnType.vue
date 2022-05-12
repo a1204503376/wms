@@ -11,6 +11,10 @@ import fileDownload from "js-file-download";
                 <el-form-item label="容器编码">
                     <el-input v-model="form.params.code" class="d-input"></el-input>
                 </el-form-item>
+                <el-form-item label="容器类型">
+                    <nodes-lpn-type-state v-model="form.params.lpnType">
+                    </nodes-lpn-type-state>
+                </el-form-item>
             </template>
             <template v-slot:expandSearch>
                 <el-row type="flex">
@@ -27,7 +31,7 @@ import fileDownload from "js-file-download";
 
             </template>
             <template v-slot:batchBtn>
-                <el-button size="mini" type="primary" @click="onRemove">删除</el-button>
+                <el-button v-if="permissionObj.delete" size="mini" type="primary" @click="onRemove">删除</el-button>
                 <el-button size="mini" type="primary">冻结</el-button>
             </template>
             <template v-slot:tableTool>
@@ -123,6 +127,8 @@ import fileDownload from "js-file-download";
     import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
     import NodesDateRange from "@/components/wms/general/NodesDateRange";
     import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
+    // eslint-disable-next-line no-unused-vars
+    import NodesLpnTypeState from "@/components/wms/select/NodesLpnTypeState";
     import fileDownload from "js-file-download";
     import {listMixin} from "@/mixins/list";
     // eslint-disable-next-line no-unused-vars
@@ -142,7 +148,8 @@ import fileDownload from "js-file-download";
         components: {
             NodesSearchInput,
             NodesMasterPage,
-            NodesDateRange
+            NodesDateRange,
+            NodesLpnTypeState
         },
         mixins: [listMixin],
         data() {
@@ -162,6 +169,7 @@ import fileDownload from "js-file-download";
                 form: {
                     params: {
                         code: '',//承运商编码
+                        lpnType:[1,2,3],
                         createTimeDateRange: ['', ''],//创建时间开始 创建时间结束
                         updateTimeDateRange: ['', ''],//更新时间开始 更新时间结束
                     }
@@ -225,9 +233,9 @@ import fileDownload from "js-file-download";
             },
             permissionObj() {
                 return {
-                    search: this.vaildData(this.permission.supplier_search, false),
-                    add: this.vaildData(this.permission.supplier_add, false),
-                    delete: this.vaildData(this.permission.supplier_delete, false)
+                    search: this.vaildData(this.permission.lpnType_search, false),
+                    add: this.vaildData(this.permission.lpnType_add, false),
+                    delete: this.vaildData(this.permission.lpnType_delete, false)
                 }
             }
 
@@ -245,15 +253,14 @@ import fileDownload from "js-file-download";
             excelLpnType() {
                 var that = this;
                 that.excelParams.code = this.form.params.code;
-                that.excelParams.name = this.form.params.name;
-                that.excelParams.simpleName = this.form.params.simpleName;
+                that.excelParams.lpnType =this.form.params.lpnType;
                 excelLpnType(that.excelParams).then((res) => {
                     fileDownload(res.data, "容器管理信息.xlsx");
                 });
             },
             getTableData() {
                 var that = this;
-                that.params = this.form.params
+                that.params = this.form.params;
                 getLpnTypePage(that.params, this.page).then((res) => {
                     this.page.total = res.data.data.total;
                     this.page.currentPage = res.data.data.pages;
