@@ -1,9 +1,8 @@
-package org.nodes.wms.dao.basics.carriers.dto.input;
+package org.nodes.wms.dao.basics.carrier.dto.input;
 
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * 承运商管理接收类
@@ -31,7 +30,7 @@ public class NewCarrierRequest {
 	/**
 	 * 货主ID
 	 */
-	private String  woId;
+	private Long  woId;
 	/**
 	 * 备注
 	 */

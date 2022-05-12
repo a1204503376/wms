@@ -32,7 +32,7 @@ public class BasicsCustomers extends TenantEntity {
 	/**
 	 * 货主ID
 	 */
-	private String  woId;
+	private Long  woId;
 	/**
 	 * 国家
 	 */

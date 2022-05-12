@@ -1,5 +1,6 @@
 package org.nodes.wms.dao.basics.customer.dto.output;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -39,8 +40,14 @@ public class CustomerResponse implements Serializable {
 	/**
 	 * 货主ID
 	 */
+	@ExcelIgnore
+	private Long  woId;
+	/**
+	 * 货主名称
+	 */
 	@ExcelProperty("货主")
-	private String  woId;
+	private String ownerName;
+
 	/**
 	 * 国家
 	 */

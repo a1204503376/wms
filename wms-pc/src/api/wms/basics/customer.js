@@ -27,7 +27,7 @@ export const exportFile = (data) => {
     })
 }
 
-export const add = (data) => {
+export const addCustomer = (data) => {
     return request({
         url: '/api/wms/customer/newCustomer',
         method: 'post',

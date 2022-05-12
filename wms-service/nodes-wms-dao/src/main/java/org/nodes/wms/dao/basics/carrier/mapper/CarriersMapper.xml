@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.nodes.wms.dao.basics.carriers.mapper.CarriersMapper">
+<mapper namespace="org.nodes.wms.dao.basics.carrier.mapper.CarriersMapper">
 
-    <select id="getPage" resultType="org.nodes.wms.dao.basics.carriers.dto.output.CarrierResponse">
+    <select id="getPage" resultType="org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse">
         select
         c.id,
         c.code,
@@ -12,8 +12,8 @@
         owners.owner_name,
         c.remark,
         c.create_time,
-        user1.real_name create_user,
-        user2.real_name update_user,
+        user1.real_name createUser,
+        user2.real_name updateUser,
         c.update_time,
         c.status
         from basics_carriers c
@@ -50,7 +50,7 @@
         </if>
 
     </select>
-    <select id="getCarriers"  resultType="org.nodes.wms.dao.basics.carriers.dto.output.CarrierExcelResponse">
+    <select id="getCarriers"  resultType="org.nodes.wms.dao.basics.carrier.dto.output.CarrierExcelResponse">
         select
         carriers.code,
         carriers.name,
@@ -58,8 +58,8 @@
         owners.owner_name,
         carriers.remark,
         carriers.create_time,
-        user1.real_name create_user,
-        user2.real_name update_user,
+        user1.real_name createUser,
+        user2.real_name updateUser,
         carriers.update_time,
         (CASE when carriers.status=1 Then '启用' Else '未启用' End) status
         from basics_carriers carriers
