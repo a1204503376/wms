@@ -8,6 +8,7 @@ import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierSelectQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
+import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -57,4 +58,12 @@ public interface SupplierBiz {
 	 * @return List<SupplierSelectResponse>
 	 */
     List<SupplierSelectResponse> getSupplierSelectResponseTop10List(SupplierSelectQuery supplierSelectQuery);
+
+	/**
+	 * 根据id查找供应商信息
+	 *
+	 * @param id: 供应商id
+	 * @return Supplier
+	 */
+	public Supplier findById(Long id);
 }

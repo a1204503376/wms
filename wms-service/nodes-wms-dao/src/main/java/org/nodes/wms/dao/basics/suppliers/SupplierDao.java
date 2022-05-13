@@ -64,4 +64,12 @@ public interface SupplierDao {
 	 * @return List<SupplierSelectResponse>
 	 */
     List<SupplierSelectResponse> listTop10ByCodeName(String code, String name);
+
+	/**
+	 * 根据id查找供应商信息
+	 *
+	 * @param id: 供应商id
+	 * @return Supplier
+	 */
+    Supplier getById(Long id);
 }
