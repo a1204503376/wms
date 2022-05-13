@@ -50,7 +50,7 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 		boolean existCarrierCode = lpnTypeDao.isExistCarrierCode(lpnTypeRequest.getCode());
 		if(existCarrierCode)
 		{
-			throw new ServiceException("新增容器失败，编码重复");
+			throw new ServiceException("新增容器失败，容器类型编码重复");
 		}
 		return lpnTypeDao.insert(lpnTypeFactory.createLpnType(lpnTypeRequest));
 	}

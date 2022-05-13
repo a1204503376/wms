@@ -12,7 +12,7 @@ import fileDownload from "js-file-download";
                     <el-input v-model="form.params.code" class="d-input"></el-input>
                 </el-form-item>
                 <el-form-item label="容器类型">
-                    <nodes-lpn-type-state v-model="form.params.lpnType">
+                    <nodes-lpn-type-state :multiple="true"  v-model="form.params.lpnType">
                     </nodes-lpn-type-state>
                 </el-form-item>
             </template>
@@ -31,6 +31,7 @@ import fileDownload from "js-file-download";
 
             </template>
             <template v-slot:batchBtn>
+                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增</el-button>
                 <el-button v-if="permissionObj.delete" size="mini" type="primary" @click="onRemove">删除</el-button>
                 <el-button size="mini" type="primary">冻结</el-button>
             </template>
@@ -216,6 +217,9 @@ import fileDownload from "js-file-download";
         created() {
             this.getTableData();
         },
+        activated () {
+            this.getTableData();
+        },
         computed: {
             ids() {
                 let ids = [];
@@ -241,6 +245,14 @@ import fileDownload from "js-file-download";
 
         },
         methods: {
+            onAdd() {
+                this.$router.push({
+                    name: '新增容器',
+                    params: {
+                        id: '0'
+                    }
+                });
+            },
             hideOnSinglePage() {
             },
             selectionChange(row) {

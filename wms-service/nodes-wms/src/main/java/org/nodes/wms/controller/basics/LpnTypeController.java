@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.HashMap;
 
 /**
@@ -42,7 +43,7 @@ public class LpnTypeController {
 	 */
 	@ApiLog("容器管理-新增")
 	@PostMapping("/newLpnType")
-	public R newLpnType(@RequestBody NewLpnTypeRequest lpnTypeRequest) {
+	public R newLpnType(@Valid @RequestBody NewLpnTypeRequest lpnTypeRequest) {
 		return R.status(lpnTypeBiz.newLpnType(lpnTypeRequest));
 	}
 	/**

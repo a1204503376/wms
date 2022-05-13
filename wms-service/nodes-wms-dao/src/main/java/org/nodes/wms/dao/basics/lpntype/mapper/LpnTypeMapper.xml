@@ -50,7 +50,7 @@
             <if test="query.code!=null and query.code != ''">
                 AND l.code LIKE concat('%',#{query.code},'%')
             </if>
-            <if test="query.type!=null and  query.lpnType.size >0">
+            <if test="query.lpnType!=null and  query.lpnType.size >0">
                 AND l.type IN
                 <foreach collection="query.lpnType" separator="," item="item" open="(" close=")">
                     #{item}

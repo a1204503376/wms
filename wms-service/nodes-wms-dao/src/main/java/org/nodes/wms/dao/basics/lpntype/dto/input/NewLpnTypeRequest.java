@@ -1,10 +1,9 @@
 package org.nodes.wms.dao.basics.lpntype.dto.input;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
-import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeEnum;
-
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -17,12 +16,11 @@ public class NewLpnTypeRequest implements Serializable {
 	/**
 	 * 容器类型(1:箱,2:托)
 	 */
-	@NotNull(message = "容器类型不能为空")
-	private LpnTypeEnum type;
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Integer lpnType;
 	/**
 	 * 容器类型编码
 	 */
-	@NotNull(message = "容器类型编码不能为空")
 	private String code;
 	/**
 	 * 容器编码生成规则

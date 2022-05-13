@@ -32,6 +32,21 @@ export default [
         }]
     },
     {
+        path: '/LpnTypeAddOrEdit',
+        component: Layout,
+        children: [{
+            path: 'add/:id',
+            name: '新增容器',
+            props: true,
+            component: () => import('@/views/wms/basics/lpntype/LpnTypeAddOrEdit')
+        },{
+            path: 'edit/:id',
+            name: '编辑容器',
+            props: true,
+            component: () => import('@/views/wms/basics/lpntype/LpnTypeAddOrEdit')
+        }]
+    },
+    {
         path: '/customer',
         component: Layout,
         children: [{

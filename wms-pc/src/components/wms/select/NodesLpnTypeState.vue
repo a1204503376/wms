@@ -2,7 +2,7 @@
     <nodes-select
         v-model="val"
         :data-source="dataSource"
-        :multiple="true"
+        :multiple="multiple"
     >
     </nodes-select>
 </template>
@@ -20,7 +20,9 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: Array
+        selectVal: undefined,
+        // 是否多选 false:单选 默认为多选
+        multiple: {type: Boolean, required: false, default: true},
     },
     data() {
         return {
