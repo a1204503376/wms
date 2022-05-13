@@ -1,22 +1,28 @@
-package org.nodes.wms.dao.basics.lpntype.dto.input;
+package org.nodes.wms.dao.basics.lpntype.dto.output;
 
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * 容器管理添加接收类
+ * 容器管理ById查询返回类
  **/
 @Data
-public class NewLpnTypeRequest implements Serializable {
+public class LpnTypeByIdResponse implements Serializable {
 	private static final long serialVersionUID = -2814681205548453824L;
+
+	/**
+	 * 要查询的容器id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long id;
 	/**
 	 * 容器类型(1:箱,2:托)
 	 */
-	@JsonSerialize(using = ToStringSerializer.class)
 	private Integer lpnType;
 	/**
 	 * 容器类型编码

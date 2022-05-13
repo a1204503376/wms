@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 容器管理返回对象
+ * 容器管理返回Excel导出对象
  */
 @Data
 public class LpnTypeExcelResponse implements Serializable {

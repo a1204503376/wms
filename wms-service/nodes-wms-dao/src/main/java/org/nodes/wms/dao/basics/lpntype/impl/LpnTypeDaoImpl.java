@@ -77,4 +77,24 @@ public class LpnTypeDaoImpl  extends BaseServiceImpl<LpnTypeMapper,LpnType> impl
 	public List<LpnTypeExcelResponse> getLpnTypes(HashMap<String, Object> params) {
 		return lpnTypeMapper.getLpnTypes(params);
 	}
+
+	/**
+	 * 根据id查询对应容器
+	 * @param id 容器id
+	 * @return 容器对象
+	 */
+	@Override
+	public LpnType getById(Long id) {
+		return super.getById(id);
+	}
+
+	/**
+	 * 根据id修改对应容器
+	 * @param lpnType 要修改的容器对象
+	 * @return 是否成功
+	 */
+	@Override
+	public boolean updateById(LpnType lpnType) {
+		return super.updateById(lpnType);
+	}
 }

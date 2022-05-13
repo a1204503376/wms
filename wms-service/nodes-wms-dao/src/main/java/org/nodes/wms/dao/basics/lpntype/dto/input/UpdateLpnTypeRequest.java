@@ -4,15 +4,22 @@ package org.nodes.wms.dao.basics.lpntype.dto.input;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * 容器管理添加接收类
+ * 容器管理修改接收类
  **/
 @Data
-public class NewLpnTypeRequest implements Serializable {
+public class UpdateLpnTypeRequest implements Serializable {
 	private static final long serialVersionUID = -2814681205548453824L;
+
+	/**
+	 * 要修改的容器id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long id;
 	/**
 	 * 容器类型(1:箱,2:托)
 	 */
