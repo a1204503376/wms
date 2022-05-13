@@ -33,8 +33,11 @@ import fileDownload from "js-file-download";
 
             </template>
             <template v-slot:batchBtn>
-                <el-button v-if="permissionObj.delete" size="mini" type="primary" @click="onRemove">删除</el-button>
-                <el-button size="mini" type="primary">冻结</el-button>
+                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
+                </el-button>
+                <el-button v-if="permissionObj.delete" size="mini" type="danger" @click="onRemove" icon="el-icon-delete"
+                           plain>删除
+                </el-button>
             </template>
             <template v-slot:tableTool>
                 <el-tooltip
@@ -78,10 +81,8 @@ import fileDownload from "js-file-download";
                 <el-table
                     ref="table"
                     :data="table.data"
-                    :summary-method="getSummaries"
                     border
                     highlight-current-row
-                    show-summary
                     size="mini"
                     style="width: 100%"
                     @sort-change="onSortChange"
@@ -111,10 +112,10 @@ import fileDownload from "js-file-download";
                         label="是否启用">
                         <template slot-scope="scope">
                             <span v-if="scope.row.status>0">
-                                <el-tag type="success">关</el-tag>
+                                <el-tag type="success">开</el-tag>
                             </span>
                             <span v-if="scope.row.status<0">
-                                <el-tag type="danger">开</el-tag>
+                                <el-tag type="danger">关</el-tag>
                             </span>
                         </template>
                     </el-table-column>
@@ -204,7 +205,7 @@ import fileDownload from "js-file-download";
                         },
                         {
                             prop: 'ownerName',
-                            label: '货主编码'
+                            label: '货主'
                         },
                         {
                             prop: 'remark',
@@ -251,9 +252,9 @@ import fileDownload from "js-file-download";
             },
             permissionObj() {
                 return {
-                    search: this.vaildData(this.permission.carrier_search, false),
-                    add: this.vaildData(this.permission.carrier_add, false),
-                    delete: this.vaildData(this.permission.carrier_delete, false)
+                    search: this.vaildData(this.permission.supplier_search, false),
+                    add: this.vaildData(this.permission.supplier_add, false),
+                    delete: this.vaildData(this.permission.supplier_delete, false)
                 }
             }
 
@@ -288,6 +289,15 @@ import fileDownload from "js-file-download";
                     this.table.data = res.data.data.records;
                 });
             },
+            onAdd() {
+                this.$router.push({
+                    name: '新增承运商',
+                    params: {
+                        id: '0'
+                    }
+                });
+            },
+
             onRemove() {
                 this.$confirm("确定删除供应商编码为" + this.codes + "的数据吗?", {
                     confirmButtonText: "确定",
@@ -313,35 +323,7 @@ import fileDownload from "js-file-download";
                     });
                 });
             },
-            getSummaries(param) {
-                const {columns, data} = param;
-                const sums = [];
-                columns.forEach((column, index) => {
-                    if (index < 2) {
-                        sums[index] = '';
-                    }
-                    if (index === 2) {
-                        sums[index] = '合计';
-                        return;
-                    }
-                    const values = data.map(item => Number(item[column.property]));
-                    if (!values.every(value => isNaN(value))) {
-                        sums[index] = values.reduce((prev, curr) => {
-                            const value = Number(curr);
-                            if (!isNaN(value)) {
-                                return prev + curr;
-                            } else {
-                                return prev;
-                            }
-                        }, 0);
-                        sums[index] += ' 元';
-                    } else {
-                        sums[index] = '';
-                    }
-                });
 
-                return sums;
-            },
         }
     }
 </script>

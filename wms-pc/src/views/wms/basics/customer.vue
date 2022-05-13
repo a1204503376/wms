@@ -164,6 +164,7 @@ export default {
     mixins: [listMixin],
     data() {
         return {
+            woId:"",
             form: {
                 params: {
                     code: "",
@@ -181,7 +182,7 @@ export default {
                     {
                         prop: "code",
                         label: "客户编码",
-                        width: 300,
+                        width: 120,
                         sortable: "custom",
                     },
                     {
@@ -193,8 +194,8 @@ export default {
                         label: "客户简称",
                     },
                     {
-                        prop: "woId",
-                        label: "货主",
+                        prop: 'ownerName',
+                        label: '货主'
                     },
                     {
                         prop: "country",
@@ -235,6 +236,9 @@ export default {
                 ],
             },
         };
+    },
+    created() {
+        this.getTableData();
     },
     computed: {
         permissionObj() {
@@ -298,7 +302,7 @@ export default {
         },
         onAdd() {
             this.$router.push({
-                name: 'customerEdit',
+                name: '新增客户',
                 params: {
                     id: '0'
                 }

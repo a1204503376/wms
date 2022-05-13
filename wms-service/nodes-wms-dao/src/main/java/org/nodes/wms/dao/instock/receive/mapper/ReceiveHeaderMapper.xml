@@ -32,8 +32,11 @@
                     #{item}
                 </foreach>
             </if>
-            <if test="query.skuCode!=null and query.skuCode != ''">
-                AND d.sku_code LIKE concat('%',#{query.skuCode},'%')
+            <if test="query.skuIds != null and query.skuIds.size()>0">
+                AND  d.sku_id in
+                <foreach collection="query.skuIds" item="item"  open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
             </if>
             <if test="query.externalOrderNo!=null and query.externalOrderNo != ''">
                 AND h.external_order_no LIKE concat('%',#{query.externalOrderNo},'%')

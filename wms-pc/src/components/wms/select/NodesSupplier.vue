@@ -15,9 +15,9 @@
         @change="onChange">
         <el-option
             v-for="item in options"
-            :key="item.code"
+            :key="item.id"
             :label="item.name"
-            :value="item">
+            :value="item.id">
             <span style="float: left">{{ item.code }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.name }}</span>
         </el-option>
@@ -27,7 +27,6 @@
 <script>
 import {getSupplierSelectResponseTop10List} from "@/api/wms/basics/supplier";
 import debounce from "lodash/debounce";
-import func from "@/util/func";
 
 export default {
     name: "NodesSupplier",
@@ -45,18 +44,6 @@ export default {
             options: [this.selectVal],
             val: this.selectVal,
             loading: false,
-        }
-    },
-    watch: {
-        val(newVal) {
-            debugger;
-            let result = newVal;
-            if (func.isArray(newVal)) {
-                result = newVal.map(d => d.id);
-            } else if (func.isObject(newVal)) {
-                result = newVal.id
-            }
-            this.$emit('selectValChange', result);
         }
     },
     methods: {

@@ -1,8 +1,9 @@
 <template>
     <el-select
         v-model="val"
-        :multiple="multiple"
         :default-first-option="true"
+        :multiple="multiple"
+        :wh-Id="whId"
         :loading="loading"
         :remote-method="remoteMethod"
         filterable
@@ -10,40 +11,41 @@
         remote
         reserve-keyword
         size="mini"
-        style="width: 450px"
-        value-key="skuCode"
+        style="width: 340px"
+        value-key="zoneId"
         @change="onChange">
         <el-option
             v-for="item in options"
-            :key="item.skuCode"
-            :label="item.skuCode"
-            :value="item.skuId">
-            <span style="float: left">{{ item.skuCode }}</span>
-            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.skuName }}</span>
+            :key="item.zoneId"
+            :label="item.zoneName"
+            :value="item.zoneId">
+            <span style="float: left">{{ item.zoneCode }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.zoneName }}</span>
         </el-option>
     </el-select>
 </template>
 
 <script>
-import {getSkuSelectResponseTop10List} from "@/api/wms/basics/sku";
 import debounce from "lodash/debounce";
+import {getZoneSelectResponseTop10List} from "@/api/wms/basics/zone";
 
 export default {
-    name: "NodesSku",
+    name: "NodesZone",
     model: {
         prop: 'selectVal',
         event: 'selectValChange'
     },
     props: {
-        selectVal: Object,
-        // 单选多选切换，默认为false
-        multiple: {type: Boolean, required: false, default: false}
+        selectVal: [Array, String],
+        whId: {type: [Number,Array], required: false, default:()=>null},
+        multiple: {type: Boolean, required: false, default:()=>false}
     },
     data() {
         return {
             options: [this.selectVal],
             val: this.selectVal,
             loading: false,
+            whIdVal: this.whId
         }
     },
     methods: {
@@ -51,10 +53,11 @@ export default {
         remoteMethod: debounce(async function (key) {
             if (key !== '') {
                 this.loading = true;
-                let skuSelectQuery = {
-                    key
+                let zoneSelectQuery = {
+                    key: key,
+                    whId: this.whIdVal
                 };
-                let {data: {data}} = await getSkuSelectResponseTop10List(skuSelectQuery);
+                let {data: {data}} = await getZoneSelectResponseTop10List(zoneSelectQuery);
                 this.options = data;
                 this.loading = false;
             } else {

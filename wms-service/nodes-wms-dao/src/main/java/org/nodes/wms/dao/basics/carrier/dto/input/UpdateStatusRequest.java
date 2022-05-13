@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.basics.carriers.dto.input;
+package org.nodes.wms.dao.basics.carrier.dto.input;
 
 import lombok.Data;
 

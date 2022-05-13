@@ -14,27 +14,20 @@
                         <h3>客户单-{{ isEdit ? '编辑' : '新增' }}</h3>
                     </el-row>
 
-                        <el-row>
+                    <el-row>
                         <el-col :span="8">
-                            <el-form-item label="客户编码" prop="code">
+                            <el-form-item label="承运商编码" prop="code">
                                 <el-input v-model="form.params.code"></el-input>
                             </el-form-item>
                         </el-col>
-                        </el-row>
-                        <el-row>
+                    </el-row>
+                    <el-row>
                         <el-col :span="8">
-                            <el-form-item label="客户名称" prop="name">
+                            <el-form-item label="承运商名称" prop="name">
                                 <el-input v-model="form.params.name"></el-input>
                             </el-form-item>
                         </el-col>
-                        </el-row>
-                       <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="客户简称" prop="simpleName">
-                                <el-input v-model="form.params.simpleName"></el-input>
-                            </el-form-item>
-                        </el-col>
-                       </el-row>
+                    </el-row>
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="货主" prop="woId">
@@ -87,17 +80,12 @@
 </template>
 
 <script>
-import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
-import NodesInStoreType from "@/components/wms/select/NodesInStoreType";
 import NodesOwner  from "@/components/wms/select/NodesOwner"
-import NodesSku from "@/components/wms/select/NodesSku";
-import NodesLineNumber from "@/components/wms/table/NodesLineNumber";
-import {addCustomer} from "@/api/wms/basics/customer";
+import {addCarrier} from "@/api/wms/basics/Carrier";
 import {editMixin} from "@/mixins/edit";
-
 export default {
     name: "new",
-    components: {NodesOwner, NodesLineNumber, NodesSku, NodesInStoreType, NodesInStoreMode},
+    components: {NodesOwner},
     mixins: [editMixin],
     data() {
         return {
@@ -115,14 +103,14 @@ export default {
                     code: [
                         {
                             required: true,
-                            message: '请输入客户编码',
+                            message: '请输入承运商编码',
                             trigger: 'blur'
                         }
                     ],
                     name: [
                         {
                             required: true,
-                            message: '请输入客户名称',
+                            message: '请输入承运商名称',
                             trigger: 'blur'
                         }
                     ],
@@ -143,18 +131,18 @@ export default {
     },
     methods: {
         submitFormParams() {
-          return addCustomer(this.form.params)
-          .then(res => {
-            return {
-              msg: res.data.msg,
-              router: {
-                            path: '/wms/basics/customer',
+            return addCarrier(this.form.params)
+                .then(res => {
+                    return {
+                        msg: res.data.msg,
+                        router: {
+                            path: '/wms/basics/carrier',
                             query: {
                                 isRefresh: 'true'
                             }
                         }
-            };
-          });
+                    };
+                });
         },
 
     }

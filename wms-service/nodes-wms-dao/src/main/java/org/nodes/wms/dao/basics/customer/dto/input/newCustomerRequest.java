@@ -36,7 +36,7 @@ public class newCustomerRequest implements Serializable {
 	/**
 	 * 货主ID
 	 */
-	private String  woId;
+	private Long  woId;
 	/**
 	 * 邮编
 	 */

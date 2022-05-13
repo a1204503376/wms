@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.nodes.wms.biz.basics.carriers.impl.CarriersBizImpl;
-import org.nodes.wms.dao.basics.carriers.dto.input.DeleteCarriersRequest;
-import org.nodes.wms.dao.basics.carriers.dto.input.CarrierPageQuery;
-import org.nodes.wms.dao.basics.carriers.dto.input.NewCarrierRequest;
-import org.nodes.wms.dao.basics.carriers.dto.output.CarrierResponse;
+import org.nodes.wms.dao.basics.carrier.dto.input.DeleteCarriersRequest;
+import org.nodes.wms.dao.basics.carrier.dto.input.CarrierPageQuery;
+import org.nodes.wms.dao.basics.carrier.dto.input.NewCarrierRequest;
+import org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.test.BladeBootTest;
 import org.springblade.core.test.BladeSpringRunner;
@@ -53,9 +53,9 @@ public class CarriersTest {
 	@Test
 	public void test03() {
 		DeleteCarriersRequest deleteRequest = new DeleteCarriersRequest();
-		List list = new ArrayList<Long>();
-		list.add(4l);
-		list.add(5l);
+		List<Long> list = new ArrayList<Long>();
+		list.add(4L);
+		list.add(5L);
 		deleteRequest.setList(list);
 		Assertions.assertEquals(true,carriersBiz.remove(deleteRequest));
 	}

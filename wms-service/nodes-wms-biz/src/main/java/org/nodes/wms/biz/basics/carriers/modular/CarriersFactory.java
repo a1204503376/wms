@@ -1,8 +1,8 @@
 package org.nodes.wms.biz.basics.carriers.modular;
 
-import org.nodes.wms.dao.basics.carriers.dto.input.NewCarrierRequest;
-import org.nodes.wms.dao.basics.carriers.dto.input.UpdateStatusRequest;
-import org.nodes.wms.dao.basics.carriers.entites.BasicsCarriers;
+import org.nodes.wms.dao.basics.carrier.dto.input.NewCarrierRequest;
+import org.nodes.wms.dao.basics.carrier.dto.input.UpdateStatusRequest;
+import org.nodes.wms.dao.basics.carrier.entites.BasicsCarriers;
 import org.springframework.stereotype.Service;
 
 /**

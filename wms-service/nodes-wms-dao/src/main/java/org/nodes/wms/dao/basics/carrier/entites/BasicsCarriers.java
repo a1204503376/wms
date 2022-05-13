@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.basics.carriers.entites;
+package org.nodes.wms.dao.basics.carrier.entites;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -32,7 +32,7 @@ public class BasicsCarriers extends BaseEntity {
 	/**
 	 * 货主id
 	 */
-	private String woId;
+	private Long woId;
 	/**
 	 * 备注
 	 */

@@ -1,12 +1,12 @@
 package org.nodes.wms.biz.basics.carriers;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.nodes.wms.dao.basics.carriers.dto.input.DeleteCarriersRequest;
-import org.nodes.wms.dao.basics.carriers.dto.input.CarrierPageQuery;
-import org.nodes.wms.dao.basics.carriers.dto.input.UpdateStatusRequest;
+import org.nodes.wms.dao.basics.carrier.dto.input.DeleteCarriersRequest;
+import org.nodes.wms.dao.basics.carrier.dto.input.CarrierPageQuery;
+import org.nodes.wms.dao.basics.carrier.dto.input.UpdateStatusRequest;
 import org.springblade.core.mp.support.Query;
-import org.nodes.wms.dao.basics.carriers.dto.input.NewCarrierRequest;
-import org.nodes.wms.dao.basics.carriers.dto.output.CarrierResponse;
+import org.nodes.wms.dao.basics.carrier.dto.input.NewCarrierRequest;
+import org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;

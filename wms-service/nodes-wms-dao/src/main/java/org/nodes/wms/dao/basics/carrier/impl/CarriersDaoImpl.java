@@ -1,16 +1,16 @@
-package org.nodes.wms.dao.basics.carriers.impl;
+package org.nodes.wms.dao.basics.carrier.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.wms.dao.basics.carriers.CarriersDao;
-import org.nodes.wms.dao.basics.carriers.dto.input.DeleteCarriersRequest;
-import org.nodes.wms.dao.basics.carriers.dto.input.CarrierPageQuery;
-import org.nodes.wms.dao.basics.carriers.dto.output.CarrierExcelResponse;
-import org.nodes.wms.dao.basics.carriers.dto.output.CarrierResponse;
-import org.nodes.wms.dao.basics.carriers.entites.BasicsCarriers;
-import org.nodes.wms.dao.basics.carriers.mapper.CarriersMapper;
+import org.nodes.wms.dao.basics.carrier.CarriersDao;
+import org.nodes.wms.dao.basics.carrier.dto.input.DeleteCarriersRequest;
+import org.nodes.wms.dao.basics.carrier.dto.input.CarrierPageQuery;
+import org.nodes.wms.dao.basics.carrier.dto.output.CarrierExcelResponse;
+import org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse;
+import org.nodes.wms.dao.basics.carrier.entites.BasicsCarriers;
+import org.nodes.wms.dao.basics.carrier.mapper.CarriersMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 

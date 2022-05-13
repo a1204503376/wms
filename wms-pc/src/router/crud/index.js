@@ -26,7 +26,7 @@ export default [
         component: Layout,
         children: [{
             path: 'add/:id',
-            name: 'supplierEdit',
+            name: '新增供应商',
             props: true,
             component: () => import('@/views/wms/basics/supplier/supplierAdd')
         }]
@@ -51,9 +51,30 @@ export default [
         component: Layout,
         children: [{
             path: 'edit/:id',
-            name: 'customerEdit',
+            name: '新增客户',
             props: true,
             component: () => import('@/views/wms/basics/customer/customerNew')
         }]
+    },
+    {
+        path: '/asn',
+        component: Layout,
+        children: [{
+            path: 'add/:id',
+            name: '新增ASN单',
+            props: true,
+            component: () => import('@/views/wms/instock/asnHeader/asnAdd')
+        }]
+    },
+    {
+        path: '/carrier',
+        component: Layout,
+        children: [{
+            path: 'edit/:id',
+            name: '新增承运商',
+            props: true,
+            component: () => import('@/views/wms/basics/carrier/carrierNew')
+        }]
     }
+
 ]

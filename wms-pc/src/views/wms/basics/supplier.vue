@@ -175,6 +175,9 @@ export default {
             }
         }
     },
+    created() {
+        this.getTableData();
+    },
     methods: {
         getTableData() {
             page(this.page, this.form.params)
@@ -183,9 +186,6 @@ export default {
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
                 })
-                .catch(() => {
-                    this.$message.error("查找失败");
-                });
         },
         refreshTable(){
             this.getTableData();
@@ -224,16 +224,7 @@ export default {
                             });
                             this.getTableData();
                         })
-                        .catch((e) => {
-                            console.log(e);
-                        });
                 })
-            // .catch(() => {
-            //   this.$message({
-            //     type: "info",
-            //     message: "已取消删除",
-            //   });
-            // });
         },
         exportData() {
             this.loading = true;
@@ -254,7 +245,7 @@ export default {
         },
         onAdd() {
             this.$router.push({
-                name: 'supplierEdit',
+                name: '新增供应商',
                 params: {
                     id: '0'
                 }

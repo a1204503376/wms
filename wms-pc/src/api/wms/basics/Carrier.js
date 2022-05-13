@@ -46,3 +46,11 @@ export const updateCarrier = (updateStatusRequest) => {
         data: updateStatusRequest
     })
 }
+
+export const addCarrier = (data) => {
+    return request({
+        url: '/api/wms/carriers/newCarrier',
+        method: 'post',
+        data: data,
+    })
+}
