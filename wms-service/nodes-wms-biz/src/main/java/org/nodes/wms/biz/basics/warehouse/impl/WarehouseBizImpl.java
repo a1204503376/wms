@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.dao.basics.warehouse.dto.output.WarehouseResponse;
 import org.nodes.wms.dao.basics.warehouse.WarehouseDao;
+import org.nodes.wms.dao.basics.warehouse.entites.Warehouse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,4 +20,10 @@ public class WarehouseBizImpl implements WarehouseBiz {
 	public List<WarehouseResponse> getWarehouseSelectResponseList() {
 		return warehouseDao.getWarehouseSelectResponseList();
 	}
+
+    @Override
+    public Warehouse findById(Long warehouseId) {
+
+		return warehouseDao.findById(warehouseId);
+    }
 }

@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.basics.warehouse;
 
 import org.nodes.wms.dao.basics.warehouse.dto.output.WarehouseResponse;
+import org.nodes.wms.dao.basics.warehouse.entites.Warehouse;
 
 import java.util.List;
 
@@ -9,4 +10,6 @@ import java.util.List;
  */
 public interface WarehouseDao {
 	List<WarehouseResponse> getWarehouseSelectResponseList();
+
+    Warehouse findById(Long warehouseId);
 }

@@ -22,4 +22,9 @@ public class WarehouseDaoImpl extends BaseServiceImpl<WarehouseMapper, Warehouse
 	public List<WarehouseResponse> getWarehouseSelectResponseList() {
 		return warehouseMapper.getWarehouseSelectResponseList();
 	}
+
+    @Override
+    public Warehouse findById(Long warehouseId) {
+		return super.getById(warehouseId);
+    }
 }
