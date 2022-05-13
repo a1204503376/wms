@@ -18,7 +18,7 @@
             v-for="item in options"
             :key="item.billTypeCd"
             :label="item.billTypeName"
-            :value="item.billTypeId">
+            :value="item.billTypeCd">
             <span style="float: left">{{ item.billTypeCd }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.billTypeName }}</span>
         </el-option>
