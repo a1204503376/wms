@@ -53,11 +53,6 @@ public enum LpnTypeEnum
 		return this.desc;
 	}
 
-	@Override
-	public String toString() {
-		return this.desc;
-	}
-
 	public static List<LpnTypeResponse> getList() {
 		List<LpnTypeResponse> list = new ArrayList<>();
 		for (LpnTypeEnum item : values()) {

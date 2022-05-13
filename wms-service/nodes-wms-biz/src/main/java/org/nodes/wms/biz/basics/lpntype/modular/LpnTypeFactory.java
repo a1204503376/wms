@@ -12,8 +12,14 @@ import org.springframework.stereotype.Service;
 public class LpnTypeFactory {
 	public LpnType createLpnType(NewLpnTypeRequest lpnTypeRequest){
 		LpnType lpnType=new LpnType();
-		lpnType.setType(lpnTypeRequest.getType());
-        lpnType.setLpnNoRule(lpnTypeRequest.getLpnNoRule());
+		LpnTypeEnum[] values = LpnTypeEnum.values();
+		for(LpnTypeEnum lpnTypeEnum:values){
+			if(lpnTypeEnum.key().intValue()== lpnTypeRequest.getLpnType().intValue())
+			{
+				lpnType.setType(lpnTypeEnum);
+			}
+		}
+		lpnType.setLpnNoRule(lpnTypeRequest.getLpnNoRule());
         lpnType.setCode(lpnTypeRequest.getCode());
 		lpnType.setWeight(lpnTypeRequest.getWeight());
 		return lpnType;

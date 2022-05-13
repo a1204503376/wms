@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.basics.lpntype.dto.output;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeEnum;
 
@@ -16,6 +18,7 @@ public class LpnTypePageResponse implements Serializable {
 	/**
 	 * 主键ID
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long id;
 	/**
 	 * 容器类型编码
@@ -32,6 +35,7 @@ public class LpnTypePageResponse implements Serializable {
 	/**
 	 * 容器重量(KG)
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private BigDecimal weight;
 	/**
 	 * 创建人

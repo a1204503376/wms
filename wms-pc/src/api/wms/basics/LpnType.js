@@ -14,9 +14,7 @@ export const newLpnType = (Request) => {
     return request({
         url: '/api/wms/lpnType/newLpnType',
         method: 'post',
-        params: {
-            Request
-        }
+        data: Request
     })
 }
 
