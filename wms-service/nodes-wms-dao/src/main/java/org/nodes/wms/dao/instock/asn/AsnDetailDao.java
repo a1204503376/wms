@@ -28,8 +28,8 @@ public interface AsnDetailDao {
 	/**
 	 * 新增Asn明细信息
 	 *
-	 * @param asnDetail: Asn单明细对象
+	 * @param asnDetailList: Asn单明细集合
 	 * @return true:新增成功, false:新增失败
 	 */
-	public Boolean addAsnDetail(AsnDetail asnDetail);
+	public Boolean addAsnDetail(List<AsnDetail> asnDetailList);
 }

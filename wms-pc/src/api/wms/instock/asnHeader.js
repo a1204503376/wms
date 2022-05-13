@@ -25,6 +25,14 @@ export const exportFile = (params) => {
         responseType: 'blob'
     })
 }
+
+export const add = (params) => {
+    return request({
+        url: '/api/wms/asn/add',
+        method: 'post',
+        data: params,
+    })
+}
 // export const getPage = (current, size, params) => {
 //     return request({
 //         url: '/api/wms/instock/asnHeader/page',

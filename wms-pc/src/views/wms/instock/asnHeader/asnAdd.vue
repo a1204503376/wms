@@ -11,25 +11,47 @@
                          style="margin-left:10px;margin-right:10px;"
                 >
                     <el-row>
-                        <h3>ASN单xxxxx-{{ isEdit ? '编辑' : '新增' }}</h3>
+                        <h3>ASN单-{{ isEdit ? '编辑' : '新增' }}</h3>
                     </el-row>
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="单据类型" prop="billTypeCd">
                                 <nodes-bill-type
                                     v-model="form.params.billTypeCd"
+                                    :multiple="false"
                                     io-type="I"
-                                    :multiple="true"
                                 ></nodes-bill-type>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="入库方式" prop="inStorageMode">
-                                <nodes-in-store-mode
-                                    v-model="form.params.inStorageMode"
-                                    :multiple="false">
-
-                                </nodes-in-store-mode>
+                            <el-form-item label="供应商" prop="supplierId">
+                                <nodes-supplier
+                                    v-model="form.params.supplierId"
+                                    :multiple="false"
+                                    style="width: 300px">
+                                </nodes-supplier>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="仓库" prop="whId">
+                                <nodes-warehouse
+                                    v-model="form.params.whId"
+                                    :multiple="false"
+                                    style="width: 300px"
+                                ></nodes-warehouse>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="备注" prop="asnBillRemark">
+                                <el-input
+                                    v-model="form.params.asnBillRemark"
+                                    :rows=2
+                                    style="width: 300px"
+                                    placeholder="请输入内容"
+                                    type="textarea">
+                                </el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -57,7 +79,7 @@
                                 </el-table-column>
                                 <el-table-column
                                     label="行号"
-                                    prop="lineNumber"
+                                    prop="asnLineNo"
                                     show-overflow-tooltip
                                     type="index"
                                     width="60"
@@ -65,26 +87,39 @@
                                     <template v-slot="scope">
                                         <nodes-line-number
                                             :index="scope.$index"
-                                            @change="(val)=>{ scope.row.lineNumber = val; }"
+                                            @change="(val)=>{ scope.row.asnLineNo = val; }"
                                         >
                                         </nodes-line-number>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
                                     :align="'left'"
-                                    prop="skuCode"
-                                    width="500"
+                                    prop="skuId"
+                                    width="200"
                                 >
                                     <template slot="header">
-                                        <span class="d-table-header-required">物品编码</span>
+                                        <span class="d-table-header-required">物品</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <nodes-sku
-                                            v-model="row.sku"
+                                            style="width: 180px"
+                                            v-model="row.skuId"
                                             @selectValChange="onChangeSku"
                                         >
-
                                         </nodes-sku>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    prop="umCode"
+                                >
+                                    <template slot="header">
+                                        <span class="d-table-header-required">计量单位</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input-number
+                                            v-model="row.umCode"
+                                            controls-position="right"
+                                            size="mini"></el-input-number>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -101,13 +136,13 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    prop="skuLot1"
+                                    prop="remark"
                                 >
                                     <template slot="header">
-                                        <span class="d-table-header-required">批属性</span>
+                                        <span>备注</span>
                                     </template>
                                     <template v-slot="{row}">
-                                        <el-input v-model="row.skuLot1" size="mini"></el-input>
+                                        <el-input v-model="row.remark" size="mini"></el-input>
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -137,91 +172,100 @@
 </template>
 
 <script>
-import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
-import NodesInStoreType from "@/components/wms/select/NodesInStoreType";
 import NodesSku from "@/components/wms/select/NodesSku";
 import NodesLineNumber from "@/components/wms/table/NodesLineNumber";
 import {editDetailMixin} from "@/mixins/editDetail";
 import func from "@/util/func";
 import NodesBillType from "@/components/wms/select/NodesBillType";
+import NodesSupplier from "@/components/wms/select/NodesSupplier";
+import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
+import {add} from '@/api/wms/instock/asnHeader';
 
 export default {
     name: "edit",
-    components: {NodesBillType, NodesLineNumber, NodesSku, NodesInStoreType, NodesInStoreMode},
+    components: {
+        NodesWarehouse, NodesSupplier, NodesBillType, NodesLineNumber, NodesSku
+    },
     mixins: [editDetailMixin],
     data() {
         return {
             form: {
                 params: {
-                    billTypeCd: [],
-                    inStorageMode: '',
+                    billTypeCd: '',
+                    supplierId: '',
+                    whId: '',
+                    asnBillRemark: '',
+                    asnDetailList: []
                 },
                 rules: {
-                    asnBillNo: [
+                    billTypeCd: [
                         {
                             required: true,
-                            message: '请输入活动名称',
-                            trigger: 'blur'
-                        }
-                    ],
-                    inStorageMode: [
-                        {
-                            type: 'number',
-                            required: true,
-                            message: '请选择入库方式',
+                            message: '请选择单据类型',
                             trigger: 'change'
                         }
-                    ]
+                    ],
+                    supplierId: [
+                        {
+                            message: '请选择供应商',
+                            trigger: 'change'
+                        }
+                    ],
                 }
-            }
+            },
         }
-    },
-    created() {
-
     },
     methods: {
         // 过滤空白行
         filterBlankRow(row) {
             return !(
-                (func.isEmpty(row.sku.skuId)
-                    && func.isEmpty(row.sku.skuCode)
-                    && func.isEmpty(row.sku.skuName))
+                func.isEmpty(row.skuId)
                 && row.planQty === 0
-                && row.skuLot1 === '100'
+                && row.umCode === 0
             );
         },
         getDescriptor() {
-            const skuErrorMsg = '请选择物料123';
             return {
-                sku: {
-                    type: 'object',
+                skuId: {
                     required: true,
-                    fields: {
-                        skuId: { required: true, message: skuErrorMsg},
-                        skuCode: { required: true, message: skuErrorMsg},
-                        skuName: { required: true, message: skuErrorMsg},
-                    }
+                    message: '请选择物品',
                 },
-                skuLot1: {
+                planQty: {
                     required: true,
-                    message: '批属性不允许为空'
+                    type: 'number',
+                    message: '请填写计划',
+                    trigger: 'blur'
                 }
             };
         },
         createRowObj() {
             return {
-                lineNumber: '',
-                sku: {
-                    skuId: '',
-                    skuCode: '',
-                    skuName: ''
-                },
+                asnLineNo: '',
+                skuId: '',
+                umCode: '',
                 planQty: 0,
-                skuLot1: '100'
+                remark: '',
+                supplierId: ''
             }
         },
         onChangeSku(val) {
-            console.log(val)
+            val;
+        },
+        submitFormParams() {
+            this.form.params.asnDetailList = this.table.postData;
+
+            return add(this.form.params)
+                .then(res => {
+                    return {
+                        msg: res.data.msg,
+                        router: {
+                            path: '/wms/instock/asnHeader',
+                            query: {
+                                isRefresh: 'true'
+                            }
+                        }
+                    }
+                })
         }
     }
 }

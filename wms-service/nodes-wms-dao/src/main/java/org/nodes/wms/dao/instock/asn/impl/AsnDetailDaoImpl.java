@@ -34,7 +34,7 @@ public class AsnDetailDaoImpl
 	}
 
 	@Override
-	public Boolean addAsnDetail(AsnDetail asnDetail) {
-		return super.save(asnDetail);
+	public Boolean addAsnDetail(List<AsnDetail> asnDetailList) {
+		return super.saveBatch(asnDetailList);
 	}
 }
