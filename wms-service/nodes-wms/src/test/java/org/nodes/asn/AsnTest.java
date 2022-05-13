@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * ASN单模块测试类
  */
 @RunWith(BladeSpringRunner.class)
 @BladeBootTest(appName = "wms3.3-test", profile = "test")
@@ -52,8 +52,8 @@ public class AsnTest {
 //		pageParamsQuery.setCreateTimeEnd(sdf.parse("2022-04-28"));
 //		pageParamsQuery.setExternalOrderNo("2222223");
 //		pageParamsQuery.setExternalCreateUser("管理员4");
-		pageParamsQuery.setWhCode("库房编码002");
-		pageParamsQuery.setSuppliers("供应商");
+//		pageParamsQuery.setWhIdList("库房编码002");
+		pageParamsQuery.setSupplier("供应商");
 
 		Query query = new Query();
 		query.setDescs("asn_bill_id");
@@ -83,8 +83,8 @@ public class AsnTest {
 	@Test
 	public void insertTest(){
 		AddAsnBillRequest addAsnBillRequest = new AddAsnBillRequest();
-		addAsnBillRequest.setCreateType(10);
-		addAsnBillRequest.setSCode("gys1001");
+		addAsnBillRequest.setBillTypeCd("10");
+		addAsnBillRequest.setSupplierCode("gys1001");
 		addAsnBillRequest.setSkuName("供应商1001");
 		addAsnBillRequest.setWhId(10000L);
 		addAsnBillRequest.setAsnBillRemark("ASN头备注");
