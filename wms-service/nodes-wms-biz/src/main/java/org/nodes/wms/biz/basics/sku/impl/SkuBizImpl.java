@@ -5,6 +5,7 @@ import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.dao.basics.sku.SkuDao;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectQuery;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,4 +23,9 @@ public class SkuBizImpl implements SkuBiz {
 	public List<SkuSelectResponse> getSkuSelectResponseTop10List(SkuSelectQuery skuSelectQuery) {
 		return skuDao.listTop10BySkuCodeSkuName(skuSelectQuery.getKey(), skuSelectQuery.getKey());
 	}
+
+    @Override
+    public Sku findById(Long skuId) {
+        return skuDao.getById(skuId);
+    }
 }

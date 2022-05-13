@@ -16,4 +16,12 @@ public interface OwnerDao {
 	 * @return List<OwnerSelectResponse>
 	 */
 	List<Owner> selectOwnerSelectResponseList();
+
+	/**
+	 * 根据id查找货主信息
+	 *
+	 * @param woId: 货主id
+	 * @return Owner
+	 */
+    Owner getById(Long woId);
 }

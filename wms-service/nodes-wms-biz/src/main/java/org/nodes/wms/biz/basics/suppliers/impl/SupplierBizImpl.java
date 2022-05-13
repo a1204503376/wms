@@ -68,4 +68,9 @@ public class SupplierBizImpl implements SupplierBiz {
     public List<SupplierSelectResponse> getSupplierSelectResponseTop10List(SupplierSelectQuery supplierSelectQuery) {
 		return supplierDao.listTop10ByCodeName(supplierSelectQuery.getKey(),supplierSelectQuery.getKey());
     }
+
+    @Override
+    public Supplier findById(Long id) {
+        return supplierDao.getById(id);
+    }
 }

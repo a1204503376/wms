@@ -67,4 +67,9 @@ public class SupplierDaoImpl extends BaseServiceImpl<SupplierMapper, Supplier> i
     public List<SupplierSelectResponse> listTop10ByCodeName(String code ,String name) {
         return super.baseMapper.listTop10ByCodeName(code,name);
     }
+
+    @Override
+    public Supplier getById(Long id) {
+        return super.getById(id);
+    }
 }

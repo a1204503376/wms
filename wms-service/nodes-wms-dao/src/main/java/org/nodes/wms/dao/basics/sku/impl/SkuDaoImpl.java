@@ -21,4 +21,9 @@ public class SkuDaoImpl
 	public List<SkuSelectResponse> listTop10BySkuCodeSkuName(String skuCode, String skuName) {
 		return super.baseMapper.listTop10BySkuCodeSkuName(skuCode, skuName);
 	}
+
+    @Override
+    public Sku getById(Long skuId) {
+        return super.getById(skuId);
+    }
 }

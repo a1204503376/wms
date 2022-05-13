@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.basics.owner.OwnerDao;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.dao.basics.owner.mapper.OwnerMapper;
+import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,14 +16,18 @@ import java.util.List;
  **/
 @Repository
 @RequiredArgsConstructor
-public class OwnerDaoImpl implements OwnerDao {
+public class OwnerDaoImpl extends BaseServiceImpl<OwnerMapper, Owner> implements OwnerDao {
 
-	private final OwnerMapper ownerRepository;
 	@Override
 	public List<Owner> selectOwnerSelectResponseList() {
 		LambdaQueryWrapper<Owner> queryWrapper = Wrappers.lambdaQuery();
 		queryWrapper
 			.select(Owner::getWoId,Owner::getOwnerCode,Owner::getOwnerName);
-		return ownerRepository.selectList(queryWrapper);
+		return super.baseMapper.selectList(queryWrapper);
 	}
+
+    @Override
+    public Owner getById(Long woId) {
+        return super.getById(woId);
+    }
 }

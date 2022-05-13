@@ -1,10 +1,12 @@
 package org.nodes.wms.dao.instock.asn.dto.input;
 
 import lombok.Data;
+import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.List;
 
 
 /**
@@ -22,16 +24,10 @@ public class AddAsnBillRequest implements Serializable {
 	private String billTypeCd;
 
 	/**
-	 * 供应商编码
+	 * 供应商id
 	 */
-	@NotNull(message = "供应商编码不能为空")
-	private String supplierCode;
-
-	/**
-	 * 供应商名称
-	 */
-	@NotNull(message = "供应商名称不能为空")
-	private String supplierName;
+	@NotNull(message = "供应商id不能为空")
+	private Long supplierId;
 
 	/**
 	 * 仓库编码
@@ -39,54 +35,14 @@ public class AddAsnBillRequest implements Serializable {
 	private Long whId;
 
 	/**
-	 * 备注
+	 * ASN单备注
 	 */
 	private String asnBillRemark;
 
 	/**
-	 * 行号
+	 * ASN单明细
 	 */
-	private String asnLineNo;
-
-	/**
-	 * 物品编码
-	 */
-	@NotNull(message="物品编码不能为空")
-	private String skuCode;
-
-	/**
-	 * 物品编码
-	 */
-	private String skuName;
-
-	/**
-	 * 计量单位编码
-	 */
-	private String umCode;
-
-	/**
-	 * 计量单位名称
-	 */
-	private String umName;
-
-	/**
-	 * 基础计量单位编码
-	 */
-	private String baseUmCode;
-
-	/**
-	 * 基础计量单位名称
-	 */
-	private String baseUmName;
-
-	/**
-	 * 计划数量
-	 */
-	@NotNull(message="计划数量不能为空")
-	private BigDecimal planQty;
-
-	/**
-	 * 备注
-	 */
-	private String remark;
+	@NotNull(message = "ASN单明细不能为空")
+	@Size(min = 1,message = "ASN单明细不能为空")
+	private List<AsnDetail> asnDetailList;
 }

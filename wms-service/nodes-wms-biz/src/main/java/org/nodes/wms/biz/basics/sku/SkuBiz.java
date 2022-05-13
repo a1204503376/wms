@@ -2,6 +2,7 @@ package org.nodes.wms.biz.basics.sku;
 
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectQuery;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 
 import java.util.List;
 
@@ -18,4 +19,12 @@ public interface SkuBiz {
 	 * @return List<SkuSelectResponse>
 	 */
 	List<SkuSelectResponse> getSkuSelectResponseTop10List(SkuSelectQuery skuSelectQuery);
+
+	/**
+	 * 根据id查询物品信息
+	 *
+	 * @param skuId: 物品id
+	 * @return Sku
+	 */
+	Sku findById(Long skuId);
 }

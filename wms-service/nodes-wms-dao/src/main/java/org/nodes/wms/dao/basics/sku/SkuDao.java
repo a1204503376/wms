@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.basics.sku;
 
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 
 import java.util.List;
 
@@ -17,4 +18,12 @@ public interface SkuDao {
 	 * @return List<SkuSelectResponse>
 	 */
 	List<SkuSelectResponse> listTop10BySkuCodeSkuName(String skuCode, String skuName);
+
+	/**
+	 * 根据id查找物品信息
+	 *
+	 * @param skuId: 物品id
+	 * @return Sku
+	 */
+    Sku getById(Long skuId);
 }

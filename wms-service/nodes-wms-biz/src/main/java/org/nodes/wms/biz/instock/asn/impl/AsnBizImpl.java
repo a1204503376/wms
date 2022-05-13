@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,10 +69,19 @@ public class AsnBizImpl implements AsnBiz {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Boolean add(AddAsnBillRequest addAsnBillRequest) {
+		// 创建ASN单头表实体，新增ASN单头表数据
 		AsnHeader asnHeader = asnFactory.createAsnHeader(addAsnBillRequest);
 		boolean header = asnHeaderDao.insertAsnHeader(asnHeader);
-		AsnDetail asnDetail = asnFactory.createAsnDetail(addAsnBillRequest, asnHeader.getAsnBillId());
-		boolean detail = asnDetailDao.addAsnDetail(asnDetail);
+
+		// 从请求参数中获取ASN单明细数据，并创建多个ASN单明细实体
+		List<AsnDetail> asnDetailList = addAsnBillRequest.getAsnDetailList();
+		List<AsnDetail> details = new ArrayList<>();
+		for (AsnDetail asnDetail : asnDetailList) {
+			AsnDetail detail = asnFactory.createAsnDetail(addAsnBillRequest, asnHeader, asnDetail);
+				details.add(detail);
+		}
+		// 新增ASN单明细数据
+		boolean detail = asnDetailDao.addAsnDetail(details);
 		return header && detail;
 	}
 

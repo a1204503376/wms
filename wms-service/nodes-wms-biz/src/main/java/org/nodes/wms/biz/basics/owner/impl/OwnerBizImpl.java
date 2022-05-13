@@ -25,4 +25,9 @@ public class OwnerBizImpl implements OwnerBiz {
 		List<Owner> ownerList = ownerDao.selectOwnerSelectResponseList();
 		return Func.copy(ownerList, OwnerSelectResponse.class);
 	}
+
+    @Override
+    public Owner findById(Long woId) {
+        return ownerDao.getById(woId);
+    }
 }

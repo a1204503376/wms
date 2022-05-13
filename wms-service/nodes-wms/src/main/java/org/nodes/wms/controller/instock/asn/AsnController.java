@@ -47,7 +47,7 @@ public class AsnController {
 
 	@ApiLog("ASN单管理-新增")
 	@PostMapping("/add")
-	public R<Boolean> add(@Valid @RequestParam AddAsnBillRequest addAsnBillRequest){
+	public R<Boolean> add(@Valid @RequestBody AddAsnBillRequest addAsnBillRequest){
 		boolean add = asnBiz.add(addAsnBillRequest);
 		return R.status(add);
 	}

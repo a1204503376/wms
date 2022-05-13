@@ -42,11 +42,6 @@ public class Sku extends TenantEntity {
 	private Long wspId;
 
 	/**
-	 * 包装名称
-	 */
-	private String wspName;
-
-	/**
 	 * 物品批属性设置ID
 	 */
 	private Long wslId;
@@ -72,6 +67,11 @@ public class Sku extends TenantEntity {
 	private String skuNameS;
 
 	/**
+	 * 物品名称（英文）
+	 */
+	private String skuNameEn;
+
+	/**
 	 * 物品说明
 	 */
 	private String skuRemark;
@@ -90,6 +90,11 @@ public class Sku extends TenantEntity {
 	 * 存货类型
 	 */
 	private Integer skuStorageType;
+
+	/**
+	 * abc分类；对应字典code=abc
+	 */
+	private Integer abc;
 
 	/**
 	 * 体积
@@ -120,6 +125,11 @@ public class Sku extends TenantEntity {
 	 * 温度下限
 	 */
 	private BigDecimal skuTempLowerLimit;
+
+	/**
+	 * 物品标准价
+	 */
+	private BigDecimal skuPrice;
 
 	/**
 	 * 保质期有无
@@ -165,4 +175,30 @@ public class Sku extends TenantEntity {
 	 * 序列号管理（1：序列号管理  0：非序列号管理）
 	 */
 	private Integer isSn;
+
+	/**
+	 * 存货类型
+	 */
+	private Integer inventoryType;
+
+	/**
+	 * 总货架寿命
+	 */
+	private Integer totalShelf;
+
+	/**
+	 * 附件
+	 */
+	private Integer appendix;
+
+	/**
+	 * 安全库存
+	 */
+	private BigDecimal safeStock;
+
+	/**
+	 * 最低储量
+	 */
+	private BigDecimal minimumReserves;
+
 }
