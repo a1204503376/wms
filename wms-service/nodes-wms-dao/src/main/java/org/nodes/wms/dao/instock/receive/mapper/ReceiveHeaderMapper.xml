@@ -32,9 +32,9 @@
                     #{item}
                 </foreach>
             </if>
-            <if test="query.skuIds!=null and query.skuIds != ''">
+            <if test="query.skuIds != null and query.skuIds.size()>0">
                 AND  d.sku_id in
-                <foreach collection="query.skuIds" item="item" index="index" open="(" close=")" separator=",">
+                <foreach collection="query.skuIds" item="item"  open="(" close=")" separator=",">
                     #{item}
                 </foreach>
             </if>
