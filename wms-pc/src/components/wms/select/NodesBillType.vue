@@ -18,7 +18,7 @@
             v-for="item in options"
             :key="item.billTypeCd"
             :label="item.billTypeName"
-            :value="item">
+            :value="item.billTypeId">
             <span style="float: left">{{ item.billTypeCd }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.billTypeName }}</span>
         </el-option>
@@ -28,7 +28,6 @@
 <script>
 import {getBillTypeSelectResponseTop10List} from "@/api/wms/basics/billType";
 import debounce from "lodash/debounce";
-import func from "@/util/func";
 
 export default {
     name: "NodesBillType",
@@ -49,17 +48,6 @@ export default {
             val: this.selectVal,
             ioTypeVal: this.ioType,
             loading: false,
-        }
-    },
-    watch: {
-        val(newVal) {
-            let result = newVal;
-            if (func.isArray(newVal)) {
-                result = newVal.map(d => d.billTypeId);
-            } else if (func.isObject(newVal)) {
-                result = newVal.billTypeId
-            }
-            this.$emit('selectValChange', result);
         }
     },
     methods: {

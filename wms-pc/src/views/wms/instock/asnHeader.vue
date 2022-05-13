@@ -52,7 +52,7 @@
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table" :data="table.data" :summary-method="getSummaries" border highlight-current-row
+                <el-table ref="table" :data="table.data" border highlight-current-row
                           size="mini" @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
@@ -119,7 +119,7 @@ export default {
                         skuCode: '',
                         skuName: ''
                     },
-                    asnBillStateList: [10 ,20],
+                    asnBillStateList: [10, 20],
                     createTimeDateRange: ['', ''],
                     supplier: '',
                     externalOrderNo: '',
@@ -189,7 +189,7 @@ export default {
         }
     },
     created() {
-
+        this.getTableData();
     },
     computed: {
         permissionObj() {
@@ -208,14 +208,8 @@ export default {
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
                 })
-                .catch((e) => {
-                    console.log(e);
-                });
         },
         view() {
-
-        },
-        getSummaries() {
 
         },
         onRemove() {
@@ -247,9 +241,6 @@ export default {
                             });
                             this.getTableData();
                         })
-                        .catch((e) => {
-                            console.log(e);
-                        });
                 })
         },
         exportData() {
@@ -273,21 +264,12 @@ export default {
             console.log("重置了。。。");
         },
         onAdd() {
-            let requestParams = {
-                type: 'NEW',
-                id: 0,
-                parent: {
-                    path: this.$route.path,
-                    name: this.$route.name
-                }
-            };
             this.$router.push({
-                name: 'demoEdit',
-                params: requestParams,
-                meta: {
-                    parent: this
+                name: '新增ASN单',
+                params: {
+                    id: '0'
                 }
-            });
+            })
         },
     }
 }

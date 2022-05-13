@@ -2,6 +2,8 @@
     <el-select
         v-model="val"
         :default-first-option="true"
+        :multiple="multiple"
+        :wh-Id="whId"
         :loading="loading"
         :remote-method="remoteMethod"
         filterable
@@ -9,34 +11,33 @@
         remote
         reserve-keyword
         size="mini"
-        style="width: 450px"
-        value-key="id"
-        :multiple="multiple"
+        style="width: 340px"
+        value-key="zoneId"
         @change="onChange">
         <el-option
             v-for="item in options"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id">
-            <span style="float: left">{{ item.code }}</span>
-            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.name }}</span>
+            :key="item.zoneId"
+            :label="item.zoneName"
+            :value="item.zoneId">
+            <span style="float: left">{{ item.zoneCode }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.zoneName }}</span>
         </el-option>
     </el-select>
 </template>
 
 <script>
-import {getSupplierSelectResponseTop10List} from "@/api/wms/basics/supplier";
 import debounce from "lodash/debounce";
+import {getZoneSelectResponseTop10List} from "@/api/wms/basics/zone";
 
 export default {
-    name: "NodesSupplier",
+    name: "NodesZone",
     model: {
         prop: 'selectVal',
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Object,String,Array],
-        // 是否多选 true:多选 默认为单选
+        selectVal: [Array, String],
+        whId: {type: [Number,Array], required: false, default:()=>null},
         multiple: {type: Boolean, required: false, default:()=>false}
     },
     data() {
@@ -44,6 +45,7 @@ export default {
             options: [this.selectVal],
             val: this.selectVal,
             loading: false,
+            whIdVal: this.whId
         }
     },
     methods: {
@@ -51,10 +53,11 @@ export default {
         remoteMethod: debounce(async function (key) {
             if (key !== '') {
                 this.loading = true;
-                let supplierSelectQuery = {
-                    key
+                let zoneSelectQuery = {
+                    key: key,
+                    whId: this.whIdVal
                 };
-                let {data: {data}} = await getSupplierSelectResponseTop10List(supplierSelectQuery);
+                let {data: {data}} = await getZoneSelectResponseTop10List(zoneSelectQuery);
                 this.options = data;
                 this.loading = false;
             } else {

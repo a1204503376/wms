@@ -1,27 +1,28 @@
 
-package org.nodes.modules.wms.warehouse.controller;
+package org.nodes.wms.controller.basics;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import io.swagger.annotations.*;
-import lombok.AllArgsConstructor;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.entity.DataVerify;
+import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.core.warehouse.dto.ZoneDTO;
 import org.nodes.wms.core.warehouse.entity.Zone;
 import org.nodes.wms.core.warehouse.excel.ZoneExcel;
 import org.nodes.wms.core.warehouse.service.IZoneService;
 import org.nodes.wms.core.warehouse.vo.ZoneVO;
 import org.nodes.wms.core.warehouse.wrapper.ZoneWrapper;
-import org.springblade.core.boot.ctrl.BladeController;
+import org.nodes.wms.dao.basics.zone.dto.ZoneSelectQuery;
+import org.nodes.wms.dao.basics.zone.dto.ZoneSelectResponse;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
-import org.springblade.core.tool.constant.BladeConstant;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,12 +42,13 @@ import java.util.Map;
  * @since 2019-12-06
  */
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/wms/warehouse/zone")
-@Api(value = "库区管理", tags = "库区管理")
-public class ZoneController extends BladeController {
+public class ZoneController {
 
-	private IZoneService zoneService;
+	private final IZoneService zoneService;
+
+	private final ZoneBiz zoneBiz;
 
 	/**
 	 * 详情
@@ -144,5 +146,11 @@ public class ZoneController extends BladeController {
 	@ApiOperation(value = "导入数据")
 	public R<Boolean> importData(@RequestBody List<DataVerify> dataVerifyList) {
 		return R.data(zoneService.importData(dataVerifyList));
+	}
+
+	@PostMapping("/select")
+	public R<List<ZoneSelectResponse>> getZoneSelectResponseTop10List(@RequestBody ZoneSelectQuery zoneSelectQuery){
+		List<ZoneSelectResponse> zoneSelectResponseList = zoneBiz.getZoneSelectResponseTop10List(zoneSelectQuery);
+		return R.data(zoneSelectResponseList);
 	}
 }
