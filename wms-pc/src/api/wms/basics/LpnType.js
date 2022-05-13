@@ -37,3 +37,19 @@ export const excelLpnType = (params) => {
         responseType: 'blob'
     })
 }
+
+export const updateLpnTypeById = (Request) => {
+    return request({
+        url: '/api/wms/lpnType/updateLpnTypeById',
+        method: 'post',
+        data:Request
+    })
+}
+
+export const getLpnTypeById = (Request) => {
+    return request({
+        url: '/api/wms/lpnType/getLpnTypeById',
+        method: 'post',
+        data:Request
+    })
+}

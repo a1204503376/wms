@@ -4,9 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
-import org.nodes.wms.dao.basics.lpntype.dto.input.DeleteLpnTypeRequest;
-import org.nodes.wms.dao.basics.lpntype.dto.input.LpnTypePageQuery;
-import org.nodes.wms.dao.basics.lpntype.dto.input.NewLpnTypeRequest;
+import org.nodes.wms.dao.basics.lpntype.dto.input.*;
+import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeByIdResponse;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypePageResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
@@ -38,6 +37,7 @@ public class LpnTypeController {
 		IPage<LpnTypePageResponse> pages = lpnTypeBiz.getPage(query, lpnTypePageQuery);
 		return R.data(pages);
 	}
+
 	/**
 	 * 容器管理新增
 	 */
@@ -46,6 +46,7 @@ public class LpnTypeController {
 	public R newLpnType(@Valid @RequestBody NewLpnTypeRequest lpnTypeRequest) {
 		return R.status(lpnTypeBiz.newLpnType(lpnTypeRequest));
 	}
+
 	/**
 	 * 容器管理删除
 	 */
@@ -55,7 +56,6 @@ public class LpnTypeController {
 		return R.status(lpnTypeBiz.remove(deleteLpnTypeRequest));
 	}
 
-
 	/**
 	 * 容器导出
 	 */
@@ -63,5 +63,23 @@ public class LpnTypeController {
 	@PostMapping("/excel")
 	public void excel(@ApiIgnore @RequestBody HashMap<String, Object> params, HttpServletResponse response) {
 		lpnTypeBiz.exportExcel(params,response);
+	}
+
+	/**
+	 * 容器管理删除
+	 */
+	@ApiLog("容器管理-修改容器")
+	@PostMapping("/updateLpnTypeById")
+	public R updateLpnTypeById(@RequestBody UpdateLpnTypeRequest lpnTypeRequest) {
+		return R.status(lpnTypeBiz.updateLpnTypeById(lpnTypeRequest));
+	}
+
+	/**
+	 * 容器管理删除
+	 */
+	@ApiLog("容器管理-查找容器")
+	@PostMapping("/getLpnTypeById")
+	public R<LpnTypeByIdResponse> getLpnTypeById(@RequestBody LpnTypeByIdRequest lpnTypeRequest) {
+		return R.data(lpnTypeBiz.getLpnTypeById(lpnTypeRequest));
 	}
 }

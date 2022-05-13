@@ -1,8 +1,6 @@
 package org.nodes.wms.dao.basics.lpntype;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.basics.lpntype.dto.input.DeleteLpnTypeRequest;
 import org.nodes.wms.dao.basics.lpntype.dto.input.LpnTypePageQuery;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeExcelResponse;
@@ -28,21 +26,21 @@ public interface LpnTypeDao {
 	/**
 	 * 新增容器
 	 * @param lpnType 容器实体
-	 * @return
+	 * @return 是否成功
 	 */
 	boolean insert(LpnType lpnType);
 
 	/**
 	 * 判断当前容器对象是否存在
-	 * @param code
-	 * @return
+	 * @param code 容器类型编码
+	 * @return 是否成功
 	 */
 	boolean isExistCarrierCode(String code);
 
 	/**
 	 * 批量或者单个容器对象
-	 * @param deleteRequest
-	 * @return
+	 * @param deleteRequest 删除容器请求对象
+	 * @return 是否成功
 	 */
 	boolean delete(DeleteLpnTypeRequest deleteRequest);
 
@@ -53,4 +51,17 @@ public interface LpnTypeDao {
 	 */
 	List<LpnTypeExcelResponse> getLpnTypes(HashMap<String, Object> params);
 
+	/**
+	 * 根据id查询对应容器
+	 * @param id 容器id
+	 * @return 容器对象
+	 */
+	LpnType getById(Long id);
+
+	/**
+	 * 根据id修改对应容器
+	 * @param lpnType 要修改的容器对象
+	 * @return 是否成功
+	 */
+	boolean updateById(LpnType lpnType);
 }

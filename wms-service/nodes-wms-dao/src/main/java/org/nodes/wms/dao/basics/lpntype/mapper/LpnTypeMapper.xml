@@ -13,11 +13,8 @@
             <if test="query.code!=null and query.code != ''">
                 AND l.code LIKE concat('%',#{query.code},'%')
             </if>
-            <if test="query.lpnType!=null and query.lpnType.size >0">
-                AND l.type IN
-                <foreach collection="query.lpnType" separator="," item="item" open="(" close=")">
-                    #{item}
-                </foreach>
+            <if test="query.lpnType!=null and query.lpnType!=''">
+                AND l.type = #{query.lpnType}
             </if>
             <if test="query.createTimeBegin!=null">
                 AND l.create_time  &gt;= #{query.createTimeBegin}
@@ -39,7 +36,7 @@
     </select>
 
     <select id="getLpnTypes" resultType="org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypePageResponse">
-        select l.id, l.wh_id, l.code, l.type, l.lpn_no_rule , l.weight, l.tenant_id, l.create_dept, l.create_time ,l.update_time, l.status, l.is_deleted,
+        select l.code, l.type, l.lpn_no_rule , l.weight, l.tenant_id, l.create_dept, l.create_time ,l.update_time, l.status, l.is_deleted,
         user1.real_name create_user,
         user2.real_name update_user
         from wms_lpn_type l
@@ -50,11 +47,8 @@
             <if test="query.code!=null and query.code != ''">
                 AND l.code LIKE concat('%',#{query.code},'%')
             </if>
-            <if test="query.lpnType!=null and  query.lpnType.size >0">
-                AND l.type IN
-                <foreach collection="query.lpnType" separator="," item="item" open="(" close=")">
-                    #{item}
-                </foreach>
+            <if test="query.lpnType!=null and query.lpnType!=''">
+                AND l.type =  #{query.lpnType}
             </if>
             <if test="query.createTimeBegin!=null">
                 AND l.create_time  &gt;= #{query.createTimeBegin}

@@ -3,13 +3,16 @@ package org.nodes.wms.dao.basics.lpntype.dto.input;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
- * 容器管理删除接收类
+ * 容器管理根据id查询接收类
  **/
 @Data
-public class DeleteLpnTypeRequest implements Serializable {
+public class LpnTypeByIdRequest implements Serializable {
 	private static final long serialVersionUID = 1968426677200511256L;
-	private List<Long> list;
+
+	/**
+	 * 要查询的容器id
+	 */
+	private Long id;
 }

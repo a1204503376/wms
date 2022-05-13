@@ -5,9 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.lpntype.modular.LpnTypeFactory;
 import org.nodes.wms.dao.basics.lpntype.LpnTypeDao;
-import org.nodes.wms.dao.basics.lpntype.dto.input.DeleteLpnTypeRequest;
-import org.nodes.wms.dao.basics.lpntype.dto.input.LpnTypePageQuery;
-import org.nodes.wms.dao.basics.lpntype.dto.input.NewLpnTypeRequest;
+import org.nodes.wms.dao.basics.lpntype.dto.input.*;
+import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeByIdResponse;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeExcelResponse;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypePageResponse;
 import org.springblade.core.excel.util.ExcelUtil;
@@ -64,9 +63,33 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 		return lpnTypeDao.delete(deleteRequest);
 	}
 
+	/**
+	 * @param params   查询条件
+	 * @param response 响应对象
+	 */
 	@Override
 	public void exportExcel(HashMap<String, Object> params, HttpServletResponse response) {
 		List<LpnTypeExcelResponse> lpntype = lpnTypeDao.getLpnTypes(params);
 		ExcelUtil.export(response, "容器管理", "容器管理数据表", lpntype, LpnTypeExcelResponse.class);
+	}
+
+	/**
+	 * 容器ById查询
+	 * @param lpnTypeByIdRequest 容器ById请求对象
+	 * @return 容器ById查询返回对象
+	 */
+	@Override
+	public LpnTypeByIdResponse getLpnTypeById(LpnTypeByIdRequest lpnTypeByIdRequest) {
+		return lpnTypeFactory.createLpnTypeByIdResponse(lpnTypeDao.getById(lpnTypeByIdRequest.getId()));
+	}
+
+	/**
+	 * 根据id修改容器
+	 * @param lpnTypeRequest 修改请求对象
+	 * @return 是否成功
+	 */
+	@Override
+	public boolean updateLpnTypeById(UpdateLpnTypeRequest lpnTypeRequest) {
+		return lpnTypeDao.updateById(lpnTypeFactory.createLpnType(lpnTypeRequest));
 	}
 }

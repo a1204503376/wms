@@ -65,12 +65,18 @@
     import {
         // eslint-disable-next-line no-unused-vars
         newLpnType,
+        // eslint-disable-next-line no-unused-vars
+        updateLpnTypeById,
+        // eslint-disable-next-line no-unused-vars
+        getLpnTypeById,
     } from "@/api/wms/basics/LpnType.js";
     import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
     // eslint-disable-next-line no-unused-vars
     import NodesLpnTypeState from "@/components/wms/select/NodesLpnTypeState";
+    // import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
     // eslint-disable-next-line no-unused-vars
     import Schema from 'async-validator';
+    // eslint-disable-next-line no-unused-vars
     import func from "../../../../util/func";
 
     export default {
@@ -120,7 +126,19 @@
                 },
             }
         },
+        activated () {
+          if(this.isEdit){
+              this.getLpnTypeById();
+          }
+        },
         methods: {
+            getLpnTypeById(){
+                // eslint-disable-next-line no-unused-vars
+                let params={id:this.id};
+                  getLpnTypeById(params).then((res) => {
+                      this.form.params=res.data.data;
+                  })
+            },
             lpnNoRuleRate (rule, value, callback) {
                 // eslint-disable-next-line no-unused-vars
                 var stringValue=value;
@@ -143,19 +161,33 @@
                 }
             },
             submitFormParams() {
-                        newLpnType(this.form.params)
-                            .then((res) => {
-                                this.$message.success(res.data.msg);
-                                this.loading=false;
-                                this.onClose();
-                                this.$router.push({
-                                    path: "/wms/basics/LpnType",
-                                    query: {
-                                        isRefresh: 'true'
-                                    }
-                                })
+                if(this.isEdit) {
+                    updateLpnTypeById(this.form.params).then((res) => {
+                        this.$message.success(res.data.msg);
+                        this.loading = false;
+                        this.onClose();
+                        this.$router.push({
+                            path: "/wms/basics/LpnType",
+                            query: {
+                                isRefresh: 'true'
+                            }
+                        })
+                    })
+                 }
+                else {
+                    newLpnType(this.form.params)
+                        .then((res) => {
+                            this.$message.success(res.data.msg);
+                            this.loading = false;
+                            this.onClose();
+                            this.$router.push({
+                                path: "/wms/basics/LpnType",
+                                query: {
+                                    isRefresh: 'true'
+                                }
                             })
-
+                        })
+                }
 
             },
             onChangeRadio(value) {

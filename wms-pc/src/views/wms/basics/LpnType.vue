@@ -12,7 +12,7 @@ import fileDownload from "js-file-download";
                     <el-input v-model="form.params.code" class="d-input"></el-input>
                 </el-form-item>
                 <el-form-item label="容器类型">
-                    <nodes-lpn-type-state :multiple="true"  v-model="form.params.lpnType">
+                    <nodes-lpn-type-state :multiple="false"  v-model="form.params.lpnType">
                     </nodes-lpn-type-state>
                 </el-form-item>
             </template>
@@ -104,6 +104,14 @@ import fileDownload from "js-file-download";
                             v-bind="column">
                         </el-table-column>
                     </template>
+                    <el-table-column
+                        fixed="right"
+                        label="操作"
+                        width="120">
+                        <template v-slot="{row}">
+                            <el-button size="mini" type="text" @click="onEdit(row)">编辑</el-button>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </template>
             <template v-slot:page>
@@ -170,7 +178,7 @@ import fileDownload from "js-file-download";
                 form: {
                     params: {
                         code: '',//承运商编码
-                        lpnType:[1,2,3],
+                        lpnType:'',
                         createTimeDateRange: ['', ''],//创建时间开始 创建时间结束
                         updateTimeDateRange: ['', ''],//更新时间开始 更新时间结束
                     }
@@ -245,6 +253,14 @@ import fileDownload from "js-file-download";
 
         },
         methods: {
+            onEdit(row){
+                this.$router.push({
+                    name: '编辑容器',
+                    params: {
+                        id: row.id
+                    }
+                });
+            },
             onAdd() {
                 this.$router.push({
                     name: '新增容器',
