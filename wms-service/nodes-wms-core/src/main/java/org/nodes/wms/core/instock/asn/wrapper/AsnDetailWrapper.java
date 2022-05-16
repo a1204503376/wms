@@ -1,22 +1,17 @@
 package org.nodes.wms.core.instock.asn.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.core.tool.utils.StringPool;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
-import org.nodes.wms.core.basedata.cache.SkuTypeCache;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuPackage;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
 import org.nodes.wms.core.basedata.entity.SkuType;
 import org.nodes.wms.core.basedata.enums.SkuLevelEnum;
 import org.nodes.wms.core.basedata.service.ISkuLotService;
-import org.nodes.wms.core.basedata.service.ISkuPackageService;
-import org.nodes.wms.core.basedata.service.ISkuService;
 import org.nodes.wms.core.basedata.service.ISkuTypeService;
 import org.nodes.wms.core.basedata.vo.SkuLotConfigVO;
 import org.nodes.wms.core.instock.asn.dto.AsnDetailDTO;
@@ -24,7 +19,6 @@ import org.nodes.wms.core.instock.asn.entity.AsnDetail;
 import org.nodes.wms.core.instock.asn.vo.AsnDetailVO;
 import org.nodes.wms.core.instock.purchase.dto.PoDetailDTO;
 import org.springblade.core.mp.support.BaseEntityWrapper;
-import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.ObjectUtil;
@@ -67,7 +61,7 @@ public class AsnDetailWrapper extends BaseEntityWrapper<AsnDetail, AsnDetailVO> 
 				ISkuTypeService skuTypeService = SpringUtil.getBean(ISkuTypeService.class);
 				SkuType skuType = skuTypeService.getById(sku.getSkuTypeId());
 				if (Func.isNotEmpty(skuType)) {
-					asnDetailVO.setSkuType(skuType.getTypeName());
+//					asnDetailVO.setSkuType(skuType.getTypeName());
 				}
 			}
 			if (Func.isNotEmpty(entity.getImportSn())) {
@@ -110,7 +104,7 @@ public class AsnDetailWrapper extends BaseEntityWrapper<AsnDetail, AsnDetailVO> 
 	public AsnDetailDTO entityDTO(PoDetailDTO poDetail) {
 		AsnDetailDTO asnDetail = BeanUtil.copy(poDetail, AsnDetailDTO.class);
 		if (Func.isNotEmpty(asnDetail)) {
-			asnDetail.setAsnBillDetailKey(Func.toStr(poDetail.getPoDetailId()));
+//			asnDetail.setAsnBillDetailKey(Func.toStr(poDetail.getPoDetailId()));
 		}
 		return asnDetail;
 	}

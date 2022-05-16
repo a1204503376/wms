@@ -47,9 +47,9 @@ public class AsnDetailServiceImpl<M extends AsnDetailMapper, T extends AsnDetail
 	@Override
 	public boolean saveOrUpdate(AsnDetailDTO asnDetail) {
 		//上位系统单据明细唯一标识
-		if (Func.isEmpty(asnDetail.getAsnBillDetailKey())) {
-			asnDetail.setAsnBillDetailKey(asnDetail.getAsnLineNo());
-		}
+//		if (Func.isEmpty(asnDetail.getAsnBillDetailKey())) {
+//			asnDetail.setAsnBillDetailKey(asnDetail.getAsnLineNo());
+//		}
 		//物品
 		Sku sku = SkuCache.getById(asnDetail.getSkuId());
 		if (Func.isEmpty(sku)) {
@@ -136,9 +136,9 @@ public class AsnDetailServiceImpl<M extends AsnDetailMapper, T extends AsnDetail
 	@Override
 	public boolean saveOrUpdateByAllot(AsnDetailDTO asnDetail) {
 		//上位系统单据明细唯一标识
-		if (Func.isEmpty(asnDetail.getAsnBillDetailKey())) {
-			asnDetail.setAsnBillDetailKey(asnDetail.getAsnLineNo());
-		}
+//		if (Func.isEmpty(asnDetail.getAsnBillDetailKey())) {
+//			asnDetail.setAsnBillDetailKey(asnDetail.getAsnLineNo());
+//		}
 		//物品
 		Sku sku = SkuCache.getById(asnDetail.getSkuId());
 		if (Func.isEmpty(sku)) {

@@ -311,7 +311,8 @@ public class AsnLpnDetailServiceImpl<M extends AsnLpnDetailMapper, T extends Asn
 				.eq(AsnInventory::getAsnBillNo, task.getTaskRemark()));
 		}
 		//供应商 用于清点记录
-		asnDTO.setSName(asnHeader1.getSName());
+//		asnDTO.setSName(asnHeader1.getSName());
+		asnDTO.setSName(asnHeader1.getSupplierName());
 
 		if (Func.isNotEmpty(asnDTO.getLocCode())) {
 			//更新容器明细信息
