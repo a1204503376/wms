@@ -33,7 +33,7 @@ public interface SkuBiz {
 	 * @param skuUmSelectQuery: 物品id
 	 * @return void
 	 */
-    List<SkuUmSelectResponse> getSkuPackageDetailBySkuId(SkuUmSelectQuery skuUmSelectQuery);
+    List<SkuUmSelectResponse> getSkuUmSelectResponseListBySkuId(SkuUmSelectQuery skuUmSelectQuery);
 
 	/**
 	 * 根据物品id查询包装明细

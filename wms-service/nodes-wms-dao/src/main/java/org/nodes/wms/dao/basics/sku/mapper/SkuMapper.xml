@@ -22,7 +22,7 @@
             temp2.wsu_name
         FROM
             wms_sku s
-                LEFT JOIN (
+                INNER JOIN (
                 SELECT
                     temp1.sku_level,
                     temp1.wsp_id,
