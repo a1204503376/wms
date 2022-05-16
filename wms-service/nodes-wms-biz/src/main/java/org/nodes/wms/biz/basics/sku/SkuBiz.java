@@ -2,6 +2,7 @@ package org.nodes.wms.biz.basics.sku;
 
 import org.nodes.wms.dao.basics.sku.dto.*;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
+import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 
 import java.util.List;
 
@@ -42,4 +43,11 @@ public interface SkuBiz {
 	 * @return List<SkuPackageDetailResponse>
 	 */
 	List<SkuPackageDetailResponse> getSkuPackDetailListBySkuId(SkuPackageDetailQuery skuPackageDetailQuery);
+
+	/**
+	 * 根据计量单位编码查询计量单位实体
+	 * @param skuUmCode:计量单位
+	 * @return SkuUm
+	 */
+	SkuUm findSkuUmByUmCode(String skuUmCode);
 }

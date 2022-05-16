@@ -62,5 +62,13 @@
                            ON s.wsp_id = p.wsp_id
         WHERE s.sku_id = #{skuId}
     </select>
+    <select id="getSkuUmByUmCode" resultType="org.nodes.wms.dao.basics.sku.entities.SkuUm">
+        select
+        wsu_id,
+        wsu_code,
+        wsu_name
+       from wms_sku_um
+       where wsu_code = #{skuUmCode}
+    </select>
 
 </mapper>
