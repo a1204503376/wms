@@ -69,6 +69,15 @@ public class CarriersDaoImpl extends BaseServiceImpl<CarriersMapper, BasicsCarri
 	public Boolean updateStatus(BasicsCarriers basicsCarriers) {
 		return super.updateById(basicsCarriers);
 	}
+
+	/**
+	 *  无条件的查询
+	 * @return 承运商集合
+	 */
+	@Override
+	public List<BasicsCarriers> getCarrierUnconditional() {
+		return super.list();
+	}
 }
 
 
