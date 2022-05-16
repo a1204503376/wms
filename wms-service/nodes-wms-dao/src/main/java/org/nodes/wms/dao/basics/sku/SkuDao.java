@@ -1,9 +1,9 @@
 package org.nodes.wms.dao.basics.sku;
 
-import org.nodes.wms.dao.basics.sku.dto.SkuPackageDetailResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate;
 
 import java.util.List;
 
@@ -43,5 +43,5 @@ public interface SkuDao {
 	 * @param skuId: 物品id
 	 * @return List<SkuPackageDetailResponse>
 	 */
-	List<SkuPackageDetailResponse> listSkuPackDetailBySkuId(Long skuId);
+	SkuPackageAggregate getSkuPackageAggregateBySkuId(Long skuId);
 }

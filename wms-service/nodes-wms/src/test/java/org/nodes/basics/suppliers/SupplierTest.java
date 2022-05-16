@@ -1,4 +1,4 @@
-package org.nodes.suppliers;
+package org.nodes.basics.suppliers;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -26,9 +26,6 @@ import java.util.Random;
 
 /**
  * 供应商单元测试
- *
- * @author 彭永程
- * @date 2022-04-21 9:54
  **/
 @RunWith(BladeSpringRunner.class)
 @BladeBootTest(appName = "wms3.3-test", profile = "test")
