@@ -80,4 +80,15 @@
         </where>
 
     </select>
+    <select id="getCarrierUnconditional" resultType="org.nodes.wms.dao.basics.carrier.dto.output.CarrierDropDownResponse">
+         select code,name from basics_carriers
+         <where>
+             AND is_deleted = '0'
+             <if test="query.nameOrCode!=null and query.nameOrCode != ''">
+                 AND code LIKE concat('%',#{query.nameOrCode},'%') or name LIKE concat('%',#{query.nameOrCode},'%')
+             </if>
+         </where>
+        order by create_time desc
+        limit 20
+    </select>
 </mapper>

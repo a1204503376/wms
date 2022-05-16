@@ -75,6 +75,16 @@ export default [
             props: true,
             component: () => import('@/views/wms/basics/carrier/carrierNew')
         }]
+    },
+    {
+        path: '/receive',
+        component: Layout,
+        children: [{
+            path: 'add/:id',
+            name: '新增收货单',
+            props: true,
+            component: () => import('@/views/wms/instock/receive/receiveNew')
+        }]
     }
 
 ]

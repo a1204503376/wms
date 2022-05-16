@@ -5,7 +5,10 @@ import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.dao.basics.sku.SkuDao;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectQuery;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate;
+import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,4 +31,20 @@ public class SkuBizImpl implements SkuBiz {
     public Sku findById(Long skuId) {
         return skuDao.getById(skuId);
     }
+
+    @Override
+    public List<SkuUmSelectResponse> findSkuUmSelectResponseListBySkuId(Long skuId) {
+        return skuDao.listSkuUmBySkuId(skuId);
+    }
+
+    @Override
+    public SkuPackageAggregate findSkuPackageAggregateBySkuId(Long skuId) {
+        return skuDao.getSkuPackageAggregateBySkuId(skuId);
+    }
+
+	@Override
+	public SkuUm findSkuUmByUmCode(String skuUmCode) {
+		return skuDao.getSkuUmByUmCode(skuUmCode);
+	}
+
 }

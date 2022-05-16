@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.dao.basics.bom.mapper.WmsSkuBomMapper">
+
+    <select id="getPage" resultType="org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomResponse">
+        select
+        bom.id,bom.owner_code, bom.owner_name, bom.sku_code, bom.sku_name, bom.wsu_code, bom.wsu_name, bom.join_sku_id, bom.join_sku_code, bom.join_sku_name, bom.qty, bom.join_wsu_code, bom.join_wsu_name,bom.update_time,
+        user1.real_name updateUser
+        from wms_sku_bom bom
+        LEFT JOIN blade_user user1 ON user1.id = bom.update_user
+        LEFT JOIN wms_owner owners on owners.wo_id=bom.wo_id
+        <where>
+            AND bom.is_deleted = '0'
+            <if test="query.joinSkuCode!=null and query.joinSkuCode != ''">
+                AND bom.join_sku_code = #{query.joinSkuCode}
+            </if>
+            <if test="query.skuCode!=null and query.skuCode != ''">
+                AND bom.sku_code = #{query.skuCode}
+            </if>
+            <if test="query.woId!=null and query.woId != ''">
+                AND bom.wo_id = #{query.woId}
+            </if>
+            <if test="query.updateTimeBegin!=null and query.updateTimeEnd!=null">
+                AND bom.update_time between #{query.updateTimeBegin} and #{query.updateTimeEnd}
+            </if>
+        </where>
+        <if test="page.orders==null or page.orders.size()==0">
+            order by bom.create_time desc
+        </if>
+    </select>
+
+    <select id="getWmsSkuBomList" resultType="org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomExcelResponse">
+        select
+        bom.id,bom.owner_code, bom.owner_name, bom.sku_code, bom.sku_name, bom.wsu_code, bom.wsu_name, bom.join_sku_id, bom.join_sku_code, bom.join_sku_name, bom.qty, bom.join_wsu_code, bom.join_wsu_name,bom.update_time,
+        user1.real_name updateUser
+        from wms_sku_bom bom
+        LEFT JOIN blade_user user1 ON user1.id = bom.update_user
+        LEFT JOIN wms_owner owners on owners.wo_id=bom.wo_id
+        <where>
+            AND bom.is_deleted = '0'
+            <if test="query.joinSkuCode!=null and query.joinSkuCode != ''">
+                AND bom.join_sku_code = #{query.joinSkuCode}
+            </if>
+            <if test="query.skuCode!=null and query.skuCode != ''">
+                AND bom.sku_code = #{query.skuCode}
+            </if>
+            <if test="query.woId!=null and query.woId != ''">
+                AND bom.wo_id = #{query.woId}
+            </if>
+            <if test="query.updateTimeBegin!=null and query.updateTimeEnd!=null">
+                AND bom.update_time between #{query.updateTimeBegin} and #{query.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+</mapper>

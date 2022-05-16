@@ -54,3 +54,21 @@ export const addCarrier = (data) => {
         data: data,
     })
 }
+
+class CarrierService {
+    async getStateList(url,data) {
+        const response = await request({
+            url: url,
+            method: 'post',
+            data:data
+        })
+        return response.data.data;
+    }
+
+    async getDropDown(data) {
+        return await this.getStateList('/api/wms/carriers/getDropDown',data);
+    }
+
+
+}
+export const carrierService =new CarrierService();

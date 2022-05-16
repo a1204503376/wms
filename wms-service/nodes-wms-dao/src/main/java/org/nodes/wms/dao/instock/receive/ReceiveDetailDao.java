@@ -2,6 +2,7 @@ package org.nodes.wms.dao.instock.receive;
 
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailRequest;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailResponse;
+import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface ReceiveDetailDao {
 	boolean delete(List<Long> ids);
 
 	List<Long> selectDetailIdByReceiveId(Long receiveId);
+
+	boolean insert(ReceiveDetail receiveDetail);
 }

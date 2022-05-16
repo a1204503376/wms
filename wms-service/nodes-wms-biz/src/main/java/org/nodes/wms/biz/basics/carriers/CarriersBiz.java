@@ -1,15 +1,14 @@
 package org.nodes.wms.biz.basics.carriers;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.nodes.wms.dao.basics.carrier.dto.input.DeleteCarriersRequest;
-import org.nodes.wms.dao.basics.carrier.dto.input.CarrierPageQuery;
-import org.nodes.wms.dao.basics.carrier.dto.input.UpdateStatusRequest;
+import org.nodes.wms.dao.basics.carrier.dto.input.*;
+import org.nodes.wms.dao.basics.carrier.dto.output.CarrierDropDownResponse;
 import org.springblade.core.mp.support.Query;
-import org.nodes.wms.dao.basics.carrier.dto.input.NewCarrierRequest;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -40,4 +39,10 @@ public interface CarriersBiz {
 	 * @return 是否成功
 	 */
 	Boolean updateStatusById(UpdateStatusRequest updateStatusRequest);
+
+	/**
+	 * 获取承运商下拉框
+	 * @return 承运商集合
+	 */
+	List<CarrierDropDownResponse> getDropDown(CarrierDropDownRequest carrierDropDownRequest);
 }

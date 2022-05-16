@@ -14,6 +14,8 @@ import org.nodes.wms.core.basedata.vo.SkuVO;
 import org.nodes.wms.core.basedata.wrapper.SkuWrapper;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectQuery;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectQuery;
+import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
@@ -139,4 +141,14 @@ public class SkuController {
 	public R<Boolean> importData(@RequestBody List<DataVerify> dataVerifyList) {
 		return R.data(skuService.importData(dataVerifyList));
 	}
+
+	/**
+	 * 计量单位下拉组件数据源: 根据物品id查询所有计量单位
+	 */
+	@PostMapping("/findSkuUmSelectResponseListBySkuId")
+	public R<List<SkuUmSelectResponse>> findSkuUmSelectResponseListBySkuId(@RequestBody SkuUmSelectQuery skuUmSelectQuery){
+		List<SkuUmSelectResponse> umList = skuBiz.findSkuUmSelectResponseListBySkuId(skuUmSelectQuery.getSkuId());
+		return R.data(umList);
+	}
+
 }

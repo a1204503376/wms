@@ -28,7 +28,7 @@ public class ReceiveDetail extends BaseSkuLotEntity {
 	/**
 	 * 收货单单据编码
 	 */
-	private Long receiveNo;
+	private String receiveNo;
 	/**
 	 * ASN单明细id
 	 */
@@ -49,6 +49,10 @@ public class ReceiveDetail extends BaseSkuLotEntity {
 	 * 物品编码
 	 */
 	private String  skuCode;
+	/**
+	 * 物品名称
+	 */
+	private String  skuName;
 	/**
 	 * 计划数量
 	 */
@@ -116,7 +120,7 @@ public class ReceiveDetail extends BaseSkuLotEntity {
 	/**
 	 * 供应商id
 	 */
-	private long supplier_id;
+	private long supplierId;
 	/**
 	 *  单价
 	 */

@@ -6,10 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.carriers.CarriersBiz;
 import org.nodes.wms.biz.basics.carriers.modular.CarriersFactory;
 import org.nodes.wms.dao.basics.carrier.CarriersDao;
-import org.nodes.wms.dao.basics.carrier.dto.input.DeleteCarriersRequest;
-import org.nodes.wms.dao.basics.carrier.dto.input.CarrierPageQuery;
-import org.nodes.wms.dao.basics.carrier.dto.input.NewCarrierRequest;
-import org.nodes.wms.dao.basics.carrier.dto.input.UpdateStatusRequest;
+import org.nodes.wms.dao.basics.carrier.dto.input.*;
+import org.nodes.wms.dao.basics.carrier.dto.output.CarrierDropDownResponse;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierExcelResponse;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse;
 import org.nodes.wms.dao.basics.carrier.entites.BasicsCarriers;
@@ -18,6 +16,7 @@ import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.tool.utils.BeanUtil;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -68,5 +67,14 @@ public class CarriersBizImpl implements CarriersBiz {
 	public Boolean updateStatusById(UpdateStatusRequest updateStatusRequest) {
 		BasicsCarriers carriers = carriersFactory.createCarriers(updateStatusRequest);
 		return carriersDao.updateStatus(carriers);
+	}
+
+	/**
+	 * 获取承运商下拉框
+	 * @return 承运商集合
+	 */
+	@Override
+	public List<CarrierDropDownResponse> getDropDown(CarrierDropDownRequest carrierDropDownRequest) {
+		return carriersDao.getCarrierUnconditional(carrierDropDownRequest);
 	}
 }

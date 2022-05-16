@@ -38,4 +38,9 @@ public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, R
 		return receiveDetailMapper.selectDetailIdByReceiveId(receiveId);
 	}
 
+    @Override
+    public boolean insert(ReceiveDetail receiveDetail) {
+		return super.save(receiveDetail);
+    }
+
 }
