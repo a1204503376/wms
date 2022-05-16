@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.basics.carrier.CarriersDao;
+import org.nodes.wms.dao.basics.carrier.dto.input.CarrierDropDownRequest;
 import org.nodes.wms.dao.basics.carrier.dto.input.DeleteCarriersRequest;
 import org.nodes.wms.dao.basics.carrier.dto.input.CarrierPageQuery;
+import org.nodes.wms.dao.basics.carrier.dto.output.CarrierDropDownResponse;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierExcelResponse;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse;
 import org.nodes.wms.dao.basics.carrier.entites.BasicsCarriers;
@@ -75,8 +77,8 @@ public class CarriersDaoImpl extends BaseServiceImpl<CarriersMapper, BasicsCarri
 	 * @return 承运商集合
 	 */
 	@Override
-	public List<BasicsCarriers> getCarrierUnconditional() {
-		return super.list();
+	public List<CarrierDropDownResponse> getCarrierUnconditional(CarrierDropDownRequest carrierDropDownRequest) {
+		return carriersMapper.getCarrierUnconditional(carrierDropDownRequest);
 	}
 }
 

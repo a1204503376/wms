@@ -3,10 +3,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.carriers.CarriersBiz;
-import org.nodes.wms.dao.basics.carrier.dto.input.DeleteCarriersRequest;
-import org.nodes.wms.dao.basics.carrier.dto.input.CarrierPageQuery;
-import org.nodes.wms.dao.basics.carrier.dto.input.NewCarrierRequest;
-import org.nodes.wms.dao.basics.carrier.dto.input.UpdateStatusRequest;
+import org.nodes.wms.dao.basics.carrier.dto.input.*;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierDropDownResponse;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse;
 import org.springblade.core.log.annotation.ApiLog;
@@ -76,7 +73,7 @@ public class CarriersController {
 	 * 承运商管理分页查询
 	 */
 	@PostMapping("/getDropDown")
-	public R<List<CarrierDropDownResponse>> getDropDown() {
-		return R.data(carriersBiz.getDropDown());
+	public R<List<CarrierDropDownResponse>> getDropDown(@RequestBody CarrierDropDownRequest carrierDropDownRequest) {
+		return R.data(carriersBiz.getDropDown(carrierDropDownRequest));
 	}
 }

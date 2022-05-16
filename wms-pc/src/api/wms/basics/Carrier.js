@@ -56,16 +56,17 @@ export const addCarrier = (data) => {
 }
 
 class CarrierService {
-    async getStateList(url) {
+    async getStateList(url,data) {
         const response = await request({
             url: url,
-            method: 'post'
+            method: 'post',
+            data:data
         })
         return response.data.data;
     }
 
-    async getDropDown() {
-        return await this.getStateList('/api/wms/carriers/getDropDown');
+    async getDropDown(data) {
+        return await this.getStateList('/api/wms/carriers/getDropDown',data);
     }
 
 

@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.carriers.CarriersBiz;
 import org.nodes.wms.biz.basics.carriers.modular.CarriersFactory;
 import org.nodes.wms.dao.basics.carrier.CarriersDao;
-import org.nodes.wms.dao.basics.carrier.dto.input.DeleteCarriersRequest;
-import org.nodes.wms.dao.basics.carrier.dto.input.CarrierPageQuery;
-import org.nodes.wms.dao.basics.carrier.dto.input.NewCarrierRequest;
-import org.nodes.wms.dao.basics.carrier.dto.input.UpdateStatusRequest;
+import org.nodes.wms.dao.basics.carrier.dto.input.*;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierDropDownResponse;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierExcelResponse;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse;
@@ -77,8 +74,7 @@ public class CarriersBizImpl implements CarriersBiz {
 	 * @return 承运商集合
 	 */
 	@Override
-	public List<CarrierDropDownResponse> getDropDown() {
-		List<BasicsCarriers> carrierUnconditional = carriersDao.getCarrierUnconditional();
-		return BeanUtil.copy(carrierUnconditional, CarrierDropDownResponse.class);
+	public List<CarrierDropDownResponse> getDropDown(CarrierDropDownRequest carrierDropDownRequest) {
+		return carriersDao.getCarrierUnconditional(carrierDropDownRequest);
 	}
 }

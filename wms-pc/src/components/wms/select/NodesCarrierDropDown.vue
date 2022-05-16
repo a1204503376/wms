@@ -7,6 +7,12 @@
         :multiple="multiple"
         size="mini"
         style="width:100%;"
+        :default-first-option="true"
+        :loading="loading"
+        :remote-method="remoteMethod"
+        remote
+        reserve-keyword
+        value-key="skuCode"
         @change="onChange">
         <el-option
             v-for="item in dataSource"
@@ -23,6 +29,7 @@
 <script>
     // eslint-disable-next-line no-unused-vars
     import {carrierService} from "@/api/wms/basics/Carrier";
+    import debounce from "lodash/debounce";
 
 
     export default {
@@ -49,12 +56,22 @@
             }
         },
         async created() {
-            await this.getDataSource();
+            await this.remoteMethod();
         },
         methods: {
-            async getDataSource() {
-                this.dataSource =await carrierService.getDropDown();
-            },
+            // 防抖 在等待时间到达前的请求全部取消，保留最后一次
+            remoteMethod: debounce(async function (key) {
+                if (key !== '') {
+                    this.loading = true;
+                    let DropDownSelectQuery = {
+                        nameOrCode:key
+                    };
+                    this.dataSource  = await carrierService.getDropDown(DropDownSelectQuery);
+                    this.loading = false;
+                } else {
+                    this.options = [];
+                }
+            }, 500),
             onChange(val) {
                 this.$emit('selectValChange', val);
             }
