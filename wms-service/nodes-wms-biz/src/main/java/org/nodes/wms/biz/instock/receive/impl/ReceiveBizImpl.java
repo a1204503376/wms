@@ -10,10 +10,12 @@ import org.nodes.wms.dao.instock.receive.ReceiveDetailDao;
 import org.nodes.wms.dao.instock.receive.ReceiveHeaderDao;
 import org.nodes.wms.dao.instock.receive.dto.input.NewReceiveRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailRequest;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceiveNewDetailRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveResponse;
+import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveBillStateEnum;
 import org.springblade.core.excel.util.ExcelUtil;
@@ -37,7 +39,6 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	private final ReceiveHeaderDao receiveHeaderDao;
 	private final ReceiveDetailDao receiveDetailDao;
 
-	private final NoGeneratorUtil noGeneratorUtil;
 	private final ReceiveFactory receiveFactory;
 
 	@Override
@@ -95,13 +96,19 @@ public class ReceiveBizImpl implements ReceiveBiz {
 
 
 	@Override
+	@Transactional
 	public boolean newReceive(NewReceiveRequest newReceiveRequest) {
 		//创建保存实体类
 		ReceiveHeader receiveHeader = receiveFactory.createReceiveHeader(newReceiveRequest.getNewReceiveHeaderRequest());
-		//设置收货单编码
-		receiveHeader.setReceiveNo(noGeneratorUtil.createReceiveBillNo());
 		receiveHeaderDao.insert(receiveHeader);
-
+      //获取明细集合
+       List<ReceiveNewDetailRequest> receiveNewDetailRequestList = newReceiveRequest.getReceiveNewDetailRequestList();
+	  //遍历保存
+	   for(int i=0;i<receiveNewDetailRequestList.size();i++){
+		   ReceiveNewDetailRequest receiveNewDetailRequest = receiveNewDetailRequestList.get(i);
+		  ReceiveDetail receiveDetail = receiveFactory.createReceiveDetail(receiveNewDetailRequest,receiveHeader.getReceiveId(),receiveHeader.getReceiveNo());
+		  receiveDetailDao.insert(receiveDetail);
+	  }
 		return true;
 	}
 

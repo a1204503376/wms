@@ -41,3 +41,11 @@ export const getReceiveStateList = () => {
         method: 'get'
     })
 }
+
+export const addReceive = (data) => {
+    return request({
+        url: '/api/wms/receive/new',
+        method: 'post',
+        data: data,
+    })
+}

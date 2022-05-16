@@ -45,7 +45,7 @@
 
             </template>
             <template v-slot:batchBtn>
-                <el-button  icon="el-icon-plus" size="mini" type="primary">新增</el-button>
+                <el-button  icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增</el-button>
                 <el-button  size="mini" type="danger" @click="onRemove" icon="el-icon-delete"
                            :plain="false">删除
                 </el-button>
@@ -277,7 +277,7 @@ export default {
         }
     },
     created() {
-
+        this.getTableData();
     },
     methods: {
         getTableData() {
@@ -291,25 +291,17 @@ export default {
                 });
         },
         onAdd() {
-            let requestParams = {
-                type: 'NEW',
-                id: 0,
-                parent: {
-                    path: this.$route.path,
-                    name: this.$route.name
-                }
-            };
             this.$router.push({
-                name: 'demoEdit',
-                params: requestParams,
-                meta: {
-                    parent: this
+                name: '新增收货单',
+                params: {
+                    id: '0'
                 }
             });
         },
         handleClick(row){
 
 },
+
         onRemove() {
             this.$confirm("确定删除当前数据？", {
                 confirmButtonText: "确定",
