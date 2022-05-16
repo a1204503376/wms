@@ -10,7 +10,8 @@ import org.nodes.core.constant.DictConstant;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.ValidationUtil;
-import org.nodes.wms.core.basedata.cache.*;
+import org.nodes.wms.core.basedata.cache.SkuCache;
+import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.core.basedata.dto.SkuDTO;
 import org.nodes.wms.core.basedata.dto.SkuIncDTO;
 import org.nodes.wms.core.basedata.dto.SkuReplaceDTO;
@@ -29,20 +30,16 @@ import org.nodes.wms.core.basedata.wrapper.SkuLotWrapper;
 import org.nodes.wms.core.basedata.wrapper.SkuWrapper;
 import org.nodes.wms.core.stock.core.entity.Stock;
 import org.nodes.wms.core.stock.core.service.IStockService;
-import org.nodes.wms.core.strategy.cache.InstockCache;
-import org.nodes.wms.core.strategy.cache.OutstockCache;
 import org.nodes.wms.core.strategy.entity.Instock;
 import org.nodes.wms.core.strategy.entity.Outstock;
 import org.nodes.wms.core.strategy.service.IInstockService;
 import org.nodes.wms.core.strategy.service.IOutstockService;
-import org.nodes.wms.core.warehouse.cache.WarehouseCache;
 import org.nodes.wms.core.warehouse.entity.Warehouse;
 import org.nodes.wms.core.warehouse.service.IWarehouseService;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
-import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.core.tool.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -51,8 +48,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestParam;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
@@ -158,9 +153,6 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 		}
 		if (Func.isNotEmpty(sku.getAbc())) {
 			skuQueryWrapper.lambda().eq(Sku::getAbc, sku.getAbc());
-		}
-		if (Func.isNotEmpty(sku.getAttribute1())) {
-			skuQueryWrapper.lambda().eq(Sku::getAttribute1, sku.getAttribute1());
 		}
 //		if (!NodesUtil.isAllNull(sku)&& skuQueryWrapper.isEmptyOfWhere()) {
 //			skuQueryWrapper.apply("1 <> 1");
@@ -566,7 +558,6 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 				skuDTO.setSkuGrossWeight(new BigDecimal(skuExcel.getSkuGrossWeight()));
 				skuDTO.setSkuTareWeight(new BigDecimal(skuExcel.getSkuTareWeight()));
 				skuDTO.setSkuVolume(new BigDecimal(skuExcel.getSkuVolume()));
-				skuDTO.setAttribute2(skuExcel.getBoxNum());
 				skuDTO.setSkuBarcodeList(skuExcel.getSkuBarcodeList());
 				skuDTO.setSkuRemark(skuExcel.getRemarks());
 				Dict dict = DictCache.list(DictConstant.INVENTORY_TYPE).stream().filter(u->{
@@ -574,7 +565,6 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 				}).findFirst().orElse(null);
 				skuDTO.setSkuStorageType(Func.isEmpty(dict) ? null : dict.getDictKey());
 				skuDTO.setQualityHours(Integer.valueOf(skuExcel.getShelfLife()));
-				skuDTO.setAttribute3(skuExcel.getShelfLifeVal());
 				// 开始效验数据
 				ValidationUtil.ValidResult validResult = ValidationUtil.validateBean(skuExcel);
 				List<Owner> owners = ownerList.stream()
@@ -868,8 +858,6 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 			skuExportDTO.setRemarks(sku.getSkuRemark());
 			skuExportDTO.setSkuBarcodeList(sku.getSkuBarcodeList());
 			skuExportDTO.setShelfLife(sku.getQualityHours().toString());
-			skuExportDTO.setShelfLifeVal(sku.getAttribute3());
-			skuExportDTO.setBoxNum(sku.getAttribute2());
 			//当前物品的替代物品集合
 			List<SkuReplace> skuReplaces = skuReplaceList.stream().filter(skuReplace ->
 				skuReplace.getSkuId().equals(sku.getSkuId())).collect(Collectors.toList());
