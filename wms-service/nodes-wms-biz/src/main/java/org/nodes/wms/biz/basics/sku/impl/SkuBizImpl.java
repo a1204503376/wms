@@ -7,6 +7,8 @@ import org.nodes.wms.dao.basics.sku.dto.SkuSelectQuery;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate;
+import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
