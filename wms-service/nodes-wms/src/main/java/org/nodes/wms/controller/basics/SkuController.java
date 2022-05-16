@@ -143,8 +143,8 @@ public class SkuController {
 	 * 计量单位下拉组件数据源: 根据物品id查询所有计量单位
 	 */
 	@PostMapping("/getSkuUmSelectResponseListBySkuId")
-	public R<List<SkuUmSelectResponse>> getSkuUmSelectResponseListBySkuId(@RequestParam SkuUmSelectQuery skuUmSelectQuery){
-		List<SkuUmSelectResponse> umList = skuBiz.getSkuPackageDetailBySkuId(skuUmSelectQuery);
+	public R<List<SkuUmSelectResponse>> getSkuUmSelectResponseListBySkuId(@RequestBody SkuUmSelectQuery skuUmSelectQuery){
+		List<SkuUmSelectResponse> umList = skuBiz.getSkuUmSelectResponseListBySkuId(skuUmSelectQuery);
 		return R.data(umList);
 	}
 
@@ -152,7 +152,7 @@ public class SkuController {
 	 * 根据物品id查询所有包装明细
 	 */
 	@PostMapping("/getPackageDetailBySkuId")
-	public R<List<SkuPackageDetailResponse>> getSkuPackDetailListBySkuId(@RequestParam SkuPackageDetailQuery skuPackageDetailQuery){
+	public R<List<SkuPackageDetailResponse>> getSkuPackDetailListBySkuId(@RequestBody SkuPackageDetailQuery skuPackageDetailQuery){
 		List<SkuPackageDetailResponse> packageDetailResponseList = skuBiz.getSkuPackDetailListBySkuId(skuPackageDetailQuery);
 		return R.data(packageDetailResponseList);
 	}

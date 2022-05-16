@@ -30,8 +30,8 @@ public class SkuDaoImpl
     }
 
     @Override
-    public List<SkuUmSelectResponse> listSkuPackageDetailBySkuId(Long skuId) {
-        return super.baseMapper.listSkuPackageDetailBySkuId(skuId);
+    public List<SkuUmSelectResponse> listSkuUmBySkuId(Long skuId) {
+        return super.baseMapper.listSkuUmBySkuId(skuId);
     }
 
 	@Override
