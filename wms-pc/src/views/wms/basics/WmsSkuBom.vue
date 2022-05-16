@@ -63,7 +63,7 @@ import fileDownload from "js-file-download";
                     effect="dark"
                     placement="top"
                 >
-                    <el-button circle icon="el-icon-download" size="mini" @click="excelCarrier"></el-button>
+                    <el-button circle icon="el-icon-download" size="mini" @click="excel"></el-button>
                 </el-tooltip>
             </template>
             <template v-slot:table>
@@ -129,6 +129,7 @@ import fileDownload from "js-file-download";
     // eslint-disable-next-line no-unused-vars
     import {
         getWmsSkuBomPage,
+        excel
     } from "@/api/wms/basics/WmsSkuBom.js";
 
     export default {
@@ -250,13 +251,11 @@ import fileDownload from "js-file-download";
                 this.selectionList = [];
                 this.$refs.table.toggleSelection();
             },
-            excelCarrier() {
+            excel() {
                 var that = this;
-                that.excelParams.code = this.form.params.code;
-                that.excelParams.name = this.form.params.name;
-                that.excelParams.simpleName = this.form.params.simpleName;
-                excelCarrier(that.excelParams).then((res) => {
-                    fileDownload(res.data, "物品分类.xlsx");
+                that.excelParams= this.form.params;
+                excel(that.excelParams).then((res) => {
+                    fileDownload(res.data, "物料清单.xlsx");
                 });
             },
             getTableData() {
