@@ -1,7 +1,9 @@
 package org.nodes.wms.dao.basics.sku.impl;
 
 import org.nodes.wms.dao.basics.sku.SkuDao;
+import org.nodes.wms.dao.basics.sku.dto.SkuPackageDetailResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.sku.mapper.SkuMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -26,4 +28,14 @@ public class SkuDaoImpl
     public Sku getById(Long skuId) {
         return super.getById(skuId);
     }
+
+    @Override
+    public List<SkuUmSelectResponse> listSkuPackageDetailBySkuId(Long skuId) {
+        return super.baseMapper.listSkuPackageDetailBySkuId(skuId);
+    }
+
+	@Override
+	public List<SkuPackageDetailResponse> listSkuPackDetailBySkuId(Long skuId) {
+		return super.baseMapper.listSkuPackDetailBySkuId(skuId);
+	}
 }

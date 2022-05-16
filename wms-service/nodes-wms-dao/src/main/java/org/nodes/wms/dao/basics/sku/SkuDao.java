@@ -1,6 +1,8 @@
 package org.nodes.wms.dao.basics.sku;
 
+import org.nodes.wms.dao.basics.sku.dto.SkuPackageDetailResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 
 import java.util.List;
@@ -26,4 +28,20 @@ public interface SkuDao {
 	 * @return Sku
 	 */
     Sku getById(Long skuId);
+
+	/**
+	 * 根据物品id查询所有计量单位，基础计量单位放第一个
+	 *
+	 * @param skuId: 物品id
+	 * @return SkuUmSelectResponse>
+	 */
+    List<SkuUmSelectResponse> listSkuPackageDetailBySkuId(Long skuId);
+
+	/**
+	 * 根据物品id查询包装明细
+	 *
+	 * @param skuId: 物品id
+	 * @return List<SkuPackageDetailResponse>
+	 */
+	List<SkuPackageDetailResponse> listSkuPackDetailBySkuId(Long skuId);
 }
