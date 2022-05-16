@@ -29,7 +29,19 @@ public interface SkuMapper extends BaseMapper<Sku> {
 	 */
 	List<SkuSelectResponse> listTop10BySkuCodeSkuName(@Param("skuCode") String skuCode, @Param("skuName") String skuName);
 
-    List<SkuUmSelectResponse> listSkuPackageDetailBySkuId(@Param("skuId") Long skuId);
+	/**
+	 * 根据物品id查询所有的计量单位
+	 *
+	 * @param skuId: 物品id
+	 * @return List<SkuUmSelectResponse>
+	 */
+    List<SkuUmSelectResponse> listSkuUmBySkuId(@Param("skuId") Long skuId);
 
+	/**
+	 * 根据物品id查询所有的包装关系
+	 *
+	 * @param skuId: 物品id
+	 * @return List<SkuPackageDetailResponse>
+	 */
 	List<SkuPackageDetailResponse> listSkuPackDetailBySkuId(@Param("skuId") Long skuId);
 }

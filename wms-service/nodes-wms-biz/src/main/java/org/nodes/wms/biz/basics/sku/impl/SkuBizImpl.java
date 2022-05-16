@@ -29,8 +29,8 @@ public class SkuBizImpl implements SkuBiz {
     }
 
     @Override
-    public List<SkuUmSelectResponse> getSkuPackageDetailBySkuId(SkuUmSelectQuery skuUmSelectQuery) {
-        return skuDao.listSkuPackageDetailBySkuId(skuUmSelectQuery.getSkuId());
+    public List<SkuUmSelectResponse> getSkuUmSelectResponseListBySkuId(SkuUmSelectQuery skuUmSelectQuery) {
+        return skuDao.listSkuUmBySkuId(skuUmSelectQuery.getSkuId());
     }
 
     @Override
