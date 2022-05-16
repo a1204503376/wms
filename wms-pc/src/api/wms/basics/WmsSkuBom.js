@@ -9,3 +9,13 @@ export const getWmsSkuBomPage = (PageQuery, query) => {
 
     })
 }
+
+
+export const excel = (params) => {
+    return request({
+        url: '/api/wms/WmsSkuBom/excel',
+        method: 'post',
+        data: params,
+        responseType: 'blob'
+    })
+}
