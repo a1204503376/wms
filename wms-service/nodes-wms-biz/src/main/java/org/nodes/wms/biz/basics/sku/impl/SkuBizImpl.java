@@ -3,8 +3,7 @@ package org.nodes.wms.biz.basics.sku.impl;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.dao.basics.sku.SkuDao;
-import org.nodes.wms.dao.basics.sku.dto.SkuSelectQuery;
-import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.*;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +26,15 @@ public class SkuBizImpl implements SkuBiz {
     @Override
     public Sku findById(Long skuId) {
         return skuDao.getById(skuId);
+    }
+
+    @Override
+    public List<SkuUmSelectResponse> getSkuPackageDetailBySkuId(SkuUmSelectQuery skuUmSelectQuery) {
+        return skuDao.listSkuPackageDetailBySkuId(skuUmSelectQuery.getSkuId());
+    }
+
+    @Override
+    public List<SkuPackageDetailResponse> getSkuPackDetailListBySkuId(SkuPackageDetailQuery skuPackageDetailQuery) {
+        return skuDao.listSkuPackDetailBySkuId(skuPackageDetailQuery.getSkuId());
     }
 }

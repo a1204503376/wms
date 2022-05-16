@@ -13,4 +13,54 @@
 		LIMIT 10
 	</select>
 
+    <select id="listSkuPackageDetailBySkuId" resultType="org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse">
+        SELECT
+            temp2.sku_level,
+            s.sku_type_id,
+            temp2.wsu_id,
+            temp2.wsu_code,
+            temp2.wsu_name
+        FROM
+            wms_sku s
+                LEFT JOIN (
+                SELECT
+                    temp1.sku_level,
+                    temp1.wsp_id,
+                    temp1.wsu_id,
+                    temp1.wsu_code,
+                    temp1.wsu_name
+                FROM
+                    wms_sku_package p
+                        LEFT JOIN (
+                        SELECT
+                            pd.sku_level,
+                            pd.wsp_id,
+                            um.wsu_id,
+                            um.wsu_code,
+                            um.wsu_name
+                        FROM
+                            wms_sku_package_detail pd
+                                LEFT JOIN wms_sku_um um ON pd.wsu_id = um.wsu_id
+                    ) AS temp1 ON p.wsp_id = temp1.wsp_id
+            ) AS temp2 ON s.wsp_id = temp2.wsp_id WHERE sku_id = #{skuId} ORDER BY sku_level
+    </select>
+
+    <select id="listSkuPackDetailBySkuId"
+            resultType="org.nodes.wms.dao.basics.sku.dto.SkuPackageDetailResponse">
+        SELECT
+            pd.wspd_id,
+            pd.wsp_id,
+            pd.sku_level,
+            pd.wsu_id,
+            pd.wsu_code,
+            pd.wsu_name,
+            pd.convert_qty
+        FROM wms_sku_package p
+                 LEFT JOIN wms_sku_package_detail pd
+                           ON p.wsp_id = pd.wsp_id
+                 LEFT JOIN wms_sku s
+                           ON s.wsp_id = p.wsp_id
+        WHERE s.sku_id = #{skuId}
+    </select>
+
 </mapper>
