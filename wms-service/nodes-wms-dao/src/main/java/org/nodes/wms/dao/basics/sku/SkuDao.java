@@ -33,9 +33,9 @@ public interface SkuDao {
 	 * 根据物品id查询所有计量单位，基础计量单位放第一个
 	 *
 	 * @param skuId: 物品id
-	 * @return SkuUmSelectResponse>
+	 * @return List<SkuUmSelectResponse>
 	 */
-    List<SkuUmSelectResponse> listSkuPackageDetailBySkuId(Long skuId);
+    List<SkuUmSelectResponse> listSkuUmBySkuId(Long skuId);
 
 	/**
 	 * 根据物品id查询包装明细
