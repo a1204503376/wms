@@ -43,4 +43,11 @@ public interface CarriersDao {
 	 * @return 是否成功
 	 */
 	Boolean updateStatus(BasicsCarriers basicsCarriers);
+
+
+	/**
+	 * 无条件的查询
+	 * @return 承运商集合
+	 */
+    List<BasicsCarriers> getCarrierUnconditional();
 }

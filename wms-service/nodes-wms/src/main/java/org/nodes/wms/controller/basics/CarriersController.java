@@ -7,6 +7,7 @@ import org.nodes.wms.dao.basics.carrier.dto.input.DeleteCarriersRequest;
 import org.nodes.wms.dao.basics.carrier.dto.input.CarrierPageQuery;
 import org.nodes.wms.dao.basics.carrier.dto.input.NewCarrierRequest;
 import org.nodes.wms.dao.basics.carrier.dto.input.UpdateStatusRequest;
+import org.nodes.wms.dao.basics.carrier.dto.output.CarrierDropDownResponse;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
@@ -16,6 +17,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *  承运商管理API
@@ -69,4 +71,12 @@ public class CarriersController {
 		return R.status(carriersBiz.updateStatusById(updateStatusRequest));
 	}
 
+
+	/**
+	 * 承运商管理分页查询
+	 */
+	@PostMapping("/getDropDown")
+	public R<List<CarrierDropDownResponse>> getDropDown() {
+		return R.data(carriersBiz.getDropDown());
+	}
 }
