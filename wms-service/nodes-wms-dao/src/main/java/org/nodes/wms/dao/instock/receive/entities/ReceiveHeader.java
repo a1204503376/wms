@@ -74,7 +74,7 @@ public class ReceiveHeader extends BaseSkuLotEntity {
 	/**
 	 * 供应商id
 	 */
-	private long supplier_id;
+	private long supplierId;
 
 	/**
 	 * 供应商编码

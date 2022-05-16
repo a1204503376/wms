@@ -17,10 +17,10 @@ public class ReceiveNewDetailRequest implements Serializable {
 	 */
 	private String  lineNo;
 	/**
-	 * 物品编码
+	 * 物品ID
 	 */
-	@NotNull(message = "物品编码不能为空")
-	private String  skuCode;
+	@NotNull(message = "物品ID不能为空")
+	private Long  skuId;
 	/**
 	 * 计划数量
 	 */
