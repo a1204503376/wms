@@ -7,8 +7,6 @@ import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuPackage;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
-import org.nodes.wms.core.basedata.service.ISkuPackageService;
-import org.nodes.wms.core.basedata.service.ISkuService;
 import org.nodes.wms.core.instock.asn.entity.AsnDetail;
 import org.nodes.wms.core.instock.purchase.dto.PoDetailDTO;
 import org.nodes.wms.core.instock.purchase.entity.PoDetail;
@@ -16,11 +14,10 @@ import org.nodes.wms.core.instock.purchase.mapper.PoDetailMapper;
 import org.nodes.wms.core.instock.purchase.service.IPoDetailService;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
-import org.springblade.core.tool.utils.SpringUtil;
+import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.StringPool;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
-import org.springblade.core.tool.utils.Func;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -120,8 +117,8 @@ public class PoDetailServiceImpl<M extends PoDetailMapper, T extends PoDetail>
 		updateWrapper.lambda()
 			.set(PoDetail::getScanQty, asnDetail.getScanQty())
 			.set(PoDetail::getSurplusQty, asnDetail.getSurplusQty())
-			.eq(PoDetail::getPoLineNo, asnDetail.getAsnLineNo())
-			.eq(PoDetail::getPoDetailId, asnDetail.getAsnBillDetailKey());
+			.eq(PoDetail::getPoLineNo, asnDetail.getAsnLineNo());
+//			.eq(PoDetail::getPoDetailId, asnDetail.getAsnBillDetailKey());
 		return super.update(updateWrapper);
 	}
 }
