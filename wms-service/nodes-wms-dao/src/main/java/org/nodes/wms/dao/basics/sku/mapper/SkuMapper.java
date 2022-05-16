@@ -3,10 +3,12 @@ package org.nodes.wms.dao.basics.sku.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+import org.nodes.wms.dao.basics.sku.dto.SkuPackageDetailResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate;
+import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -44,4 +46,6 @@ public interface SkuMapper extends BaseMapper<Sku> {
 	 * @return SkuPackageAggregate: 包装和包装明细聚合对象
 	 */
 	SkuPackageAggregate getSkuPackageAggregateBySkuId(@Param("skuId") Long skuId);
+
+	SkuUm getSkuUmByUmCode(@Param("skuUmCode") String skuUmCode);
 }

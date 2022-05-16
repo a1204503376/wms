@@ -5,6 +5,7 @@ import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate;
+import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 
 import java.util.List;
 
@@ -45,4 +46,11 @@ public interface SkuBiz {
 	 * @return List<SkuPackageDetailResponse>
 	 */
 	SkuPackageAggregate findSkuPackageAggregateBySkuId(Long skuId);
+
+	/**
+	 * 根据计量单位编码查询计量单位实体
+	 * @param skuUmCode:计量单位
+	 * @return SkuUm
+	 */
+	SkuUm findSkuUmByUmCode(String skuUmCode);
 }
