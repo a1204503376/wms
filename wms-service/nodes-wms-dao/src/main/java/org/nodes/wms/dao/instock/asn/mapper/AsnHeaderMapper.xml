@@ -30,10 +30,11 @@
             <if test="params.asnBillNo != null and params.asnBillNo != ''">
                 AND h.asn_bill_no = #{params.asnBillNo}
             </if>
-            <if test="params.sku != null">
-                <if test="params.sku.skuCode != null and params.sku.skuCode != ''">
-                    AND d.sku_code = #{params.sku.skuCode}
-                </if>
+            <if test="params.skuIdList != null and params.skuIdList.size >0">
+                    AND d.sku_code IN
+                <foreach collection="params.skuIdList" open="(" close=")" separator="," item="item">
+                    #{item}
+                </foreach>
             </if>
             <if test="params.asnBillStateList != null and params.asnBillStateList.size >0">
                 AND h.asn_bill_state IN
@@ -62,6 +63,9 @@
                 <foreach collection="params.whIdList" open="(" close=")" separator="," item="item">
                     #{item}
                 </foreach>
+            </if>
+            <if test=" page.orders == null or page.orders.size == 0 ">
+                ORDER BY create_time DESC
             </if>
         </where>
 

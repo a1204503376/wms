@@ -6,6 +6,7 @@ import org.nodes.wms.biz.basics.suppliers.SupplierBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.biz.common.utils.NoGeneratorUtil;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
+import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 import org.nodes.wms.dao.basics.warehouse.entites.Warehouse;
 import org.nodes.wms.dao.instock.asn.dto.input.AddAsnBillRequest;
@@ -63,11 +64,13 @@ public class AsnFactory {
 		asnDetail.setSkuCode(sku.getSkuCode());
 		asnDetail.setSkuName(sku.getSkuName());
 		asnDetail.setWspId(sku.getWspId());
-		asnDetail.setUmCode("123");
-		asnDetail.setUmName("计量单位123");
-		asnDetail.setBaseUmName("基础计量单位123");
-		asnDetail.setBaseUmCode("123");
-		asnDetail.setPlanQty(new BigDecimal(0));
+		asnDetail.setUmCode(asnDetailObj.getUmCode());
+
+		SkuUm skuUm = skuBiz.findSkuUmByUmCode(asnDetailObj.getUmCode());
+		asnDetail.setUmName(skuUm.getWsuName());
+		asnDetail.setBaseUmName(skuUm.getWsuName());
+		asnDetail.setBaseUmCode(skuUm.getWsuCode());
+		asnDetail.setPlanQty(asnDetailObj.getPlanQty());
 		asnDetail.setScanQty(new BigDecimal(0));
 		asnDetail.setSurplusQty(new BigDecimal(0));
 		return asnDetail;
