@@ -1,7 +1,10 @@
 package org.nodes.wms.biz.basics.sku;
 
-import org.nodes.wms.dao.basics.sku.dto.*;
+import org.nodes.wms.dao.basics.sku.dto.SkuSelectQuery;
+import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate;
 import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 
 import java.util.List;
@@ -31,18 +34,18 @@ public interface SkuBiz {
 	/**
 	 * 根据物品id查询所有计量单位，基础计量单位放第一个
 	 *
-	 * @param skuUmSelectQuery: 物品id
-	 * @return void
+	 * @param skuId: 物品id
+	 * @return List<SkuUmSelectResponse>
 	 */
-    List<SkuUmSelectResponse> getSkuUmSelectResponseListBySkuId(SkuUmSelectQuery skuUmSelectQuery);
+    List<SkuUmSelectResponse> findSkuUmSelectResponseListBySkuId(Long skuId);
 
 	/**
 	 * 根据物品id查询包装明细
 	 *
-	 * @param skuPackageDetailQuery: 物品id
+	 * @param skuId: 物品id
 	 * @return List<SkuPackageDetailResponse>
 	 */
-	List<SkuPackageDetailResponse> getSkuPackDetailListBySkuId(SkuPackageDetailQuery skuPackageDetailQuery);
+	SkuPackageAggregate findSkuPackageAggregateBySkuId(Long skuId);
 
 	/**
 	 * 根据计量单位编码查询计量单位实体

@@ -7,6 +7,7 @@ import org.nodes.wms.dao.basics.sku.dto.SkuPackageDetailResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate;
 import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.springframework.stereotype.Repository;
 
@@ -39,12 +40,12 @@ public interface SkuMapper extends BaseMapper<Sku> {
     List<SkuUmSelectResponse> listSkuUmBySkuId(@Param("skuId") Long skuId);
 
 	/**
-	 * 根据物品id查询所有的包装关系
+	 * 根据物品id查询包装和包装明细
 	 *
 	 * @param skuId: 物品id
-	 * @return List<SkuPackageDetailResponse>
+	 * @return SkuPackageAggregate: 包装和包装明细聚合对象
 	 */
-	List<SkuPackageDetailResponse> listSkuPackDetailBySkuId(@Param("skuId") Long skuId);
+	SkuPackageAggregate getSkuPackageAggregateBySkuId(@Param("skuId") Long skuId);
 
 	SkuUm getSkuUmByUmCode(@Param("skuUmCode") String skuUmCode);
 }

@@ -1,9 +1,9 @@
 package org.nodes.wms.dao.basics.sku.impl;
 
 import org.nodes.wms.dao.basics.sku.SkuDao;
-import org.nodes.wms.dao.basics.sku.dto.SkuPackageDetailResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.dao.basics.sku.mapper.SkuMapper;
@@ -36,8 +36,8 @@ public class SkuDaoImpl
     }
 
 	@Override
-	public List<SkuPackageDetailResponse> listSkuPackDetailBySkuId(Long skuId) {
-		return super.baseMapper.listSkuPackDetailBySkuId(skuId);
+	public SkuPackageAggregate getSkuPackageAggregateBySkuId(Long skuId) {
+		return super.baseMapper.getSkuPackageAggregateBySkuId(skuId);
 	}
 
 	@Override
