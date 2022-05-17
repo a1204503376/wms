@@ -35,7 +35,7 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Object,String],
+        selectVal: [Array,String],
         // 单选多选切换，默认为false
         multiple: {type: Boolean, required: false, default: false}
     },
