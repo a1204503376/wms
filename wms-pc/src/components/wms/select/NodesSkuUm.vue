@@ -3,7 +3,6 @@
         v-model="val"
         collapse-tags
         placeholder="请选择"
-        :multiple="multiple"
         size="mini"
         style="width:100%;"
         @change="onChange"
@@ -21,10 +20,13 @@
 
 <script>
 
-import {getSkuUmSelectResponseListBySkuId} from "@/api/wms/basics/skuUm";
+import {findSkuUmSelectResponseListBySkuId} from "@/api/wms/basics/skuUm";
 import func from "@/util/func";
 
-
+/**
+ * 新建时，根据skuID获取所有的计量单位并默认显示第一个
+ * 编辑的时候默认绑定计量单位编码，获得焦点的时候获取该物料的所有计量单位
+ */
 export default {
     name: "NodesSkuUm",
     model: {
@@ -32,9 +34,7 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Array, String],
-        // 单选多选切换，默认为false
-        multiple: {type: Boolean, required: false, default: false},
+        selectVal: [String],
       //物料编码,新增和编辑时将其设置为当前行的skuId
         skuId:{type: String, required: false}
     },
@@ -44,30 +44,29 @@ export default {
             dataSource: []
         }
     },
-
-    watch: {
-        skuId() {
-            this.getDataSource(this.skuId).then(res => {
-               this.selectVal = this.dataSource[0].wsuCode
-            });
-
+    watch:{
+        skuId: async function(){
+            await this.getDataSource(this.skuId);
+            if(this.dataSource.length>0) {
+                this.val = this.dataSource[0].wsuCode;
+                this.onChange(this.val);
+            }
         },
-        selectVal(newVal) {
-            this.val=newVal;
-        }
-
     },
     methods: {
         async getDataSource(skuId) {
             let skuUmSelectQuery = {
                 skuId
             };
-            const response = await getSkuUmSelectResponseListBySkuId(skuUmSelectQuery);
+            const response = await findSkuUmSelectResponseListBySkuId(skuUmSelectQuery);
             this.dataSource = response.data.data;
         },
         onChange(val) {
             this.$emit('selectValChange', val);
         },
+        /**
+         * 编辑的时候获取所有的计量单位
+         */
         onFocus(){
           if(func.isEmpty(this.dataSource) && func.isNotEmpty(this.skuId)){
               this.getDataSource(this.skuId);
