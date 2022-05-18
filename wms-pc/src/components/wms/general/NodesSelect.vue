@@ -12,7 +12,7 @@
             v-for="item in dataSource"
             :key="item.value"
             :label="item[labelName]"
-            :value="item">
+            :value="item.value">
             <span style="float: right" v-if="isCustomTemplate">{{ item[labelName] }}</span>
             <span style="float: left; color: #8492a6; font-size: 13px" v-if="isCustomTemplate">{{ item[valueName] }}</span>
         </el-option>
@@ -48,6 +48,11 @@ export default {
     data() {
         return {
             val: this.selectVal
+        }
+    },
+    watch: {
+        selectVal(newVal) {
+            this.val=newVal;
         }
     },
     created() {

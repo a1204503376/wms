@@ -19,7 +19,9 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Number, Array, String]
+        selectVal: [Number, Array, String],
+        //是否有默认值 true:有默认值  默认为false 编辑时将其设置为true
+        defaultValue:{type:Boolean,required: false,default: () => false}
     },
     data() {
         return {
@@ -29,11 +31,17 @@ export default {
     },
     watch: {
         val(newVal) {
-            this.$emit('selectValChange', newVal);
-        }
+            this.selectVal = newVal
+        },
+        selectVal(newVal) {
+            this.val=newVal;
+            }
     },
-    created() {
-        this.getDataSource();
+    async created() {
+        await this.getDataSource()
+        if(this.defaultValue){
+            this.val = this.dataSource[0].value
+        }
     },
     methods: {
         async getDataSource() {
