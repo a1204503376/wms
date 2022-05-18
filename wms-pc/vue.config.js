@@ -18,8 +18,7 @@ module.exports = {
     },
     css: {
         extract: {
-            ignoreOrder: true,
-            extract: false
+            ignoreOrder: true
         }
     },
     //开发模式反向代理配置，生产模式请使用Nginx部署并配置反向代理
