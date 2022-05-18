@@ -8,6 +8,7 @@ import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.springframework.stereotype.Repository;
 
@@ -48,4 +49,6 @@ public interface SkuMapper extends BaseMapper<Sku> {
 	SkuPackageAggregate getSkuPackageAggregateBySkuId(@Param("skuId") Long skuId);
 
 	SkuUm getSkuUmByUmCode(@Param("skuUmCode") String skuUmCode);
+
+    SkuPackageDetail getBaseSkuPackageDetail(@Param("skuId")Long skuId);
 }

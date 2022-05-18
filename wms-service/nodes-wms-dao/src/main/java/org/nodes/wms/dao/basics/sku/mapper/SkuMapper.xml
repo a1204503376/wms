@@ -103,6 +103,35 @@
        from wms_sku_um
        where wsu_code = #{skuUmCode}
     </select>
+    <select id="getBaseSkuPackageDetail" resultType="org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail">
+        select
+            wspd.wsp_id,
+            wspd.sku_level,
+            wspd.wsu_id,
+            wspd.wsu_code,
+            wspd.wsu_name,
+            wspd.convert_qty,
+            wspd.lpn_weight,
+            wspd.lpn_length,
+            wspd.lpn_width,
+            wspd.lpn_height,
+            wspd.filter_value,
+            wspd.indicator_digit,
+            wspd.sku_spec,
+            wspd.status as wspdStatus,
+            wspd.tenant_id,
+            wspd.create_dept,
+            wspd.create_user,
+            wspd.create_time,
+            wspd.update_user,
+            wspd.update_time,
+            wspd.is_deleted
+          from wms_sku ws,wms_sku_package_detail wspd
+         where ws.wsp_id = wspd.wsp_id
+         and ws.sku_id = #{skuId}
+        and wspd.sku_level = 1
+
+    </select>
 
     <resultMap id="skuPackageAndDetailMapping" type="org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate">
         <id column="wsp_id" property="id"/>
