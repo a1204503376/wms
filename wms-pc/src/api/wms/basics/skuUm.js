@@ -1,8 +1,8 @@
 import request from "@/router/axios";
 
-export const getSkuUmSelectResponseListBySkuId = (data) => {
+export const findSkuUmSelectResponseListBySkuId = (data) => {
     return request({
-        url: '/api/wms/basedata/sku/getSkuUmSelectResponseListBySkuId',
+        url: '/api/wms/basedata/sku/findSkuUmSelectResponseListBySkuId',
         method: 'post',
         data: data
     })
