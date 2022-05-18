@@ -7,4 +7,18 @@
             #{item}
         </foreach>
     </select>
+
+    <select id="selectAsnDetailByAsnBillId"
+            resultType="org.nodes.wms.dao.instock.asn.entities.AsnDetail">
+        SELECT asn_detail_id,
+               asn_line_no,
+               sku_id,
+               sku_code,
+               sku_name,
+               plan_qty,
+               scan_qty,
+               remark
+        FROM asn_detail
+        WHERE asn_bill_id = #{asnBillId} AND is_deleted = 0
+    </select>
 </mapper>

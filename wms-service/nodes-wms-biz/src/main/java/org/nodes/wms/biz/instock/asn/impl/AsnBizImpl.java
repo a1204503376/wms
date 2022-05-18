@@ -11,10 +11,7 @@ import org.nodes.wms.dao.instock.asn.dto.input.AddAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.EditAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnBillExportResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailByEditResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.*;
 import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.springblade.core.excel.util.ExcelUtil;
@@ -62,11 +59,6 @@ public class AsnBizImpl implements AsnBiz {
 	}
 
 	@Override
-	public List<Long> getAsnDetailIdList(List<Long> asnBillIdList) {
-		return asnDetailDao.selectAsnDetailIdListByAsnBillId(asnBillIdList);
-	}
-
-	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Boolean add(AddAsnBillRequest addAsnBillRequest) {
 		// 创建ASN单头表实体，新增ASN单头表数据
@@ -86,8 +78,20 @@ public class AsnBizImpl implements AsnBiz {
 	}
 
 	@Override
-	public AsnDetailByEditResponse getAsnHeaderAndAsnDetail(AsnBillIdRequest asnBillIdRequest) {
-		return new AsnDetailByEditResponse();
+	public AsnBillByEditResponse findAsnHeaderAndAsnDetail(Long asnBillId) {
+		// 获取ASN头表信息
+		AsnHeader asnHeader = asnHeaderDao.getAsnHeaderByAsnBillId(asnBillId);
+		// 获取ASN明细信息
+		List<AsnDetail> asnDetailList = asnDetailDao.getAsnDetailByAsnBillId(asnBillId);
+		// 获取头表dto
+		AsnHeaderEditResponse headerEditResponse = asnFactory.createAsnHeaderEditResponse(asnHeader);
+		// 获取明细dto
+		List<AsnDetailEditResponse> detailEditResponse = asnFactory.createAsnDetailEditResponse(asnDetailList);
+
+		AsnBillByEditResponse result = new AsnBillByEditResponse();
+		result.setAsnHeaderEditResponse(headerEditResponse);
+		result.setAsnDetailEditResponseList(detailEditResponse);
+		return result;
 	}
 
 	@Override

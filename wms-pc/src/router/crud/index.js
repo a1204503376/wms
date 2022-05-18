@@ -70,10 +70,10 @@ export default [
         path: '/asn',
         component: Layout,
         children: [{
-            path: 'edit/:id',
+            path: 'edit/:asnBillId',
             name: '编辑ASN单',
             props: true,
-            component: () => import('@/views/wms/instock/asnHeader/asnAdd')
+            component: () => import('@/views/wms/instock/asnHeader/asnEdit')
         }]
     },
     {

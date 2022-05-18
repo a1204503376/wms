@@ -24,11 +24,9 @@ public class AsnHeaderDaoImpl
 	extends BaseServiceImpl<AsnHeaderMapper,AsnHeader>
 	implements AsnHeaderDao {
 
-	private final AsnHeaderMapper asnHeaderMapper;
-
 	@Override
 	public Page<PageResponse> selectPageAsnBill(IPage<?> page, PageParamsQuery pageParamsQuery) {
-		return asnHeaderMapper.selectPageAsnBill(page, pageParamsQuery);
+		return super.baseMapper.selectPageAsnBill(page, pageParamsQuery);
 	}
 
 	@Override
@@ -38,7 +36,7 @@ public class AsnHeaderDaoImpl
 
 	@Override
 	public AsnDetailResponse selectAsnContactDetailByAsnBillId(Long asnBillId) {
-		return asnHeaderMapper.selectAsnContactDetail(asnBillId);
+		return super.baseMapper.selectAsnContactDetail(asnBillId);
 	}
 
 	@Override
@@ -48,6 +46,11 @@ public class AsnHeaderDaoImpl
 
 	@Override
 	public List<AsnBillExportResponse> listByParamsQuery(PageParamsQuery pageParamsQuery) {
-		return asnHeaderMapper.selectAsnBillList(pageParamsQuery);
+		return super.baseMapper.selectAsnBillList(pageParamsQuery);
+	}
+
+	@Override
+	public AsnHeader getAsnHeaderByAsnBillId(Long asnBillId) {
+		return super.baseMapper.selectAsnHeaderByAsnBillId(asnBillId);
 	}
 }
