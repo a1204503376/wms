@@ -102,12 +102,12 @@ public class BillTypeController extends BladeController {
 	}
 
 	/**
-	 * 单据类型选择下拉框
-	 * 展示最近10个物品
+	 * 单据类型选择下拉框数据源，根据ioType查询
+	 * ioType  ”I“：入库，”O“：出库  “”：全部
 	 */
 	@PostMapping("/select")
-	public R<List<BillTypeSelectResponse>> getBillTypeSelectResponseTop10List(@RequestBody BillTypeSelectQuery billTypeSelectQuery){
-		List<BillTypeSelectResponse> selectResponseList = billTypeBiz.getBillTypeSelectResponseTop10List(billTypeSelectQuery);
+	public R<List<BillTypeSelectResponse>> findBillTypeSelectResponseList(@RequestBody BillTypeSelectQuery billTypeSelectQuery){
+		List<BillTypeSelectResponse> selectResponseList = billTypeBiz.findBillTypeSelectResponseList(billTypeSelectQuery.getIoType());
 		return R.data(selectResponseList);
 	}
 }

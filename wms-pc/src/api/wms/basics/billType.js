@@ -1,10 +1,10 @@
 
 import request from '@/router/axios'
 
-export const getBillTypeSelectResponseTop10List = (data) => {
+export const getBillTypeSelectResponseList = (data) => {
     return request({
         url: '/api/wms/basedata/billtype/select',
         method: 'post',
-        data:data
+        data: data
     })
 }

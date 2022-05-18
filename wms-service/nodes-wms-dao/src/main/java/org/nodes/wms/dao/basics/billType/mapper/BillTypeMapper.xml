@@ -2,20 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.basics.billType.mapper.BillTypeMapper">
 
-	<select id="listTop10ByBillTypeCdBillTypeName" resultType="org.nodes.wms.dao.basics.billType.dto.BillTypeSelectResponse">
+	<select id="listByIoType" resultType="org.nodes.wms.dao.basics.billType.dto.BillTypeSelectResponse">
 		SELECT bill_type_id,
                bill_type_cd,
                bill_type_name
 		FROM wms_bill_type
 		<where>
-		    <if test="ioType != null and ioType !=''">
+		    <if test="ioType != null and ioType != ''">
                 io_type = #{ioType}
             </if>
-		    AND (bill_type_cd LIKE CONCAT('%', #{billTypeCd}, '%')
-		            OR bill_type_name LIKE CONCAT('%', #{billTypeName}, '%'))
         </where>
 		ORDER BY update_time DESC
-		LIMIT 10
 	</select>
-
 </mapper>
