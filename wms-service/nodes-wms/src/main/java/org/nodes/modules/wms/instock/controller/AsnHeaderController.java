@@ -1,24 +1,19 @@
 package org.nodes.modules.wms.instock.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.nodes.core.tool.entity.DataVerify;
-import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
 import org.nodes.wms.core.instock.asn.cache.AsnCache;
 import org.nodes.wms.core.instock.asn.dto.AsnHeaderDTO;
-import org.nodes.wms.core.instock.asn.entity.AsnDetail;
 import org.nodes.wms.core.instock.asn.entity.AsnHeader;
 import org.nodes.wms.core.instock.asn.excel.AsnHeaderExcel;
 import org.nodes.wms.core.instock.asn.excel.SnExcel;
 import org.nodes.wms.core.instock.asn.service.IAsnHeaderService;
 import org.nodes.wms.core.instock.asn.vo.AsnHeaderVO;
 import org.nodes.wms.core.instock.asn.wrapper.AsnHeaderWrapper;
-import org.nodes.wms.core.strategy.factory.IFunctionCode;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
@@ -26,7 +21,6 @@ import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
-import org.springblade.core.tool.utils.SpringUtil;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
@@ -81,8 +75,8 @@ public class AsnHeaderController extends BladeController {
 	@ApiOperation(value = "分页", notes = "传入入库单查询条件,分页信息")
 	public R<IPage<AsnHeaderVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
 		IPage<AsnHeader> page = asnHeaderService.page(Condition.getPage(query), Condition.getQueryWrapper(params, AsnHeader.class)
-			.lambda()
-			.orderByDesc(AsnHeader::getPreCreateDate));
+			.lambda());
+//			.orderByDesc(AsnHeader::getPreCreateDate));
 		return R.data(AsnHeaderWrapper.build().pageVO(page));
 	}
 	/**

@@ -1,7 +1,6 @@
 package org.nodes.wms.dao.instock.asn.dto.input;
 
 import lombok.Data;
-import org.nodes.wms.dao.basics.sku.entities.Sku;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -56,7 +55,8 @@ public class PageParamsQuery implements Serializable {
 	private List<String> whIdList;
 
 	/**
-	 * 物品对象(物品id、物品编码、物品名称)
+	 * 物品id集合
+	 *
 	 */
-	private Sku sku;
+	private List<Long> skuIdList;
 }

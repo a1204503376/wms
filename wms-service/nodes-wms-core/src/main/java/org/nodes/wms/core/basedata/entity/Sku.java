@@ -1,20 +1,18 @@
 
 package org.nodes.wms.core.basedata.entity;
 
-import java.math.BigDecimal;
-
 import com.baomidou.mybatisplus.annotation.*;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import lombok.Data;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-import org.nodes.wms.core.common.entity.AttributeBase;
+import org.springblade.core.tenant.mp.TenantEntity;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 /**
  * 物品实体类
@@ -26,7 +24,7 @@ import javax.validation.constraints.NotNull;
 @TableName("wms_sku")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(value = "Sku对象", description = "物品")
-public class Sku extends AttributeBase {
+public class Sku extends TenantEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -61,8 +59,8 @@ public class Sku extends AttributeBase {
 	/**
 	 * 包装名称
 	 */
-	@ApiModelProperty("包装名称")
-	private String wspName;
+//	@ApiModelProperty("包装名称")
+//	private String wspName;
 	/**
 	 * 物品批属性设置ID
 	 */

@@ -4,6 +4,7 @@ import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 
 import java.util.List;
@@ -52,4 +53,6 @@ public interface SkuDao {
 	 * @return SkuUm
 	 */
 	SkuUm getSkuUmByUmCode(String skuUmCode);
+
+    SkuPackageDetail getBaseSkuPackageDetail(Long skuId);
 }

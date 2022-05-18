@@ -19,18 +19,15 @@
         LEFT JOIN blade_user user1 ON user1.id = s.create_user
         LEFT JOIN blade_user user2 ON user2.id = s.update_user
         LEFT JOIN wms_owner o ON o.wo_id = s.wo_id
-
         <where>
             AND s.is_deleted = 0
             <if test=" query.name !=null and query.name != '' ">
                 <bind name="nameLike" value=" '%'+query.name+'%' "/>
                 AND s.name LIKE #{nameLike}
-                <!--AND name LIKE concat('%',#{query.name},'%')-->
             </if>
             <if test=" query.simpleName !=null and query.simpleName != '' ">
                 <bind name="simpleNameLike" value=" '%'+query.simpleName+'%' "/>
                 AND s.name LIKE #{simpleNameLike}
-                <!--AND simpleName LIKE concat('%',#{query.simpleName},'%')-->
             </if>
             <if test=" query.code !=null and query.code != '' ">
                 AND s.code LIKE concat( '%' + #{query.code} + '%' )
@@ -48,7 +45,7 @@
                 AND s.update_time &gt;= #{query.updateTimeEnd}
             </if>
         </where>
-        <if test=" page.orders ==null or page.orders.size() ==0 ">
+        <if test=" page.orders ==null or page.orders.size ==0 ">
             ORDER BY create_time DESC
         </if>
     </select>

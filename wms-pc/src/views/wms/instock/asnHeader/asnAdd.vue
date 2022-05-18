@@ -79,7 +79,7 @@
                                 </el-table-column>
                                 <el-table-column
                                     label="行号"
-                                    prop="asnLineNo"
+                                    prop="lineNumber"
                                     show-overflow-tooltip
                                     type="index"
                                     width="60"
@@ -116,10 +116,10 @@
                                         <span class="d-table-header-required">计量单位</span>
                                     </template>
                                     <template v-slot="{row}">
-                                        <el-input-number
+                                        <nodes-sku-um
                                             v-model="row.umCode"
-                                            controls-position="right"
-                                            size="mini"></el-input-number>
+                                            :sku-id="row.skuId"
+                                        ></nodes-sku-um>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -180,10 +180,12 @@ import NodesBillType from "@/components/wms/select/NodesBillType";
 import NodesSupplier from "@/components/wms/select/NodesSupplier";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import {add} from '@/api/wms/instock/asnHeader';
+import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
 
 export default {
     name: "edit",
     components: {
+        NodesSkuUm,
         NodesWarehouse, NodesSupplier, NodesBillType, NodesLineNumber, NodesSku
     },
     mixins: [editDetailMixin],
@@ -205,12 +207,6 @@ export default {
                             trigger: 'change'
                         }
                     ],
-                    supplierId: [
-                        {
-                            message: '请选择供应商',
-                            trigger: 'change'
-                        }
-                    ],
                 }
             },
         }
@@ -221,7 +217,7 @@ export default {
             return !(
                 func.isEmpty(row.skuId)
                 && row.planQty === 0
-                && row.umCode === 0
+                && func.isEmpty(row.umCode)
             );
         },
         getDescriptor() {
@@ -233,7 +229,7 @@ export default {
                 planQty: {
                     required: true,
                     type: 'number',
-                    message: '请填写计划',
+                    message: '请填写计划数量',
                     trigger: 'blur'
                 }
             };
@@ -245,15 +241,13 @@ export default {
                 umCode: '',
                 planQty: 0,
                 remark: '',
-                supplierId: ''
             }
         },
         onChangeSku(val) {
-            val;
+            console.log(val);
         },
         submitFormParams() {
             this.form.params.asnDetailList = this.table.postData;
-
             return add(this.form.params)
                 .then(res => {
                     return {

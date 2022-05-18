@@ -67,6 +67,26 @@ export default [
         }]
     },
     {
+        path: '/asn',
+        component: Layout,
+        children: [{
+            path: 'edit/:id',
+            name: '编辑ASN单',
+            props: true,
+            component: () => import('@/views/wms/instock/asnHeader/asnAdd')
+        }]
+    },
+    {
+        path: '/asn',
+        component: Layout,
+        children: [{
+            path: 'detail/:id',
+            name: 'ASN单明细',
+            props: true,
+            component: () => import('@/views/wms/instock/asnHeader/asnAdd')
+        }]
+    },
+    {
         path: '/carrier',
         component: Layout,
         children: [{

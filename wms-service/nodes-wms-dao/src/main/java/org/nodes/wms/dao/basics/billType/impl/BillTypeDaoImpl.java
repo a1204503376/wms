@@ -19,7 +19,7 @@ public class BillTypeDaoImpl
 
 	@Override
 	public List<BillTypeSelectResponse>
-	listTop10ByBillTypeCdBillTypeName(String ioType, String billTypeCd, String billTypeName) {
-		return super.baseMapper.listTop10ByBillTypeCdBillTypeName(ioType,billTypeCd, billTypeName);
+    listByIoType(String ioType) {
+		return super.baseMapper.listByIoType(ioType);
 	}
 }

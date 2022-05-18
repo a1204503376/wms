@@ -11,7 +11,6 @@ import org.nodes.core.constant.CommonConstant;
 import org.nodes.core.tool.cache.SerialNoCache;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.NodesUtil;
-import org.nodes.wms.core.allot.enums.AllotBillStateEnum;
 import org.nodes.wms.core.allot.service.IAllotHeaderService;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
@@ -496,7 +495,7 @@ public class AsnByBoxServiceImpl extends AbsBaseAsnHeaderService<AsnHeaderMapper
 			throw new ServiceException("订单：" + asnHeader.getAsnBillNo() + " 已取消，请停止收货！");
 		}
 		//供应商 用于清点记录
-		asnHeaderBoxDTO.setSName(asnHeader.getSName());
+//		asnHeaderBoxDTO.setSName(asnHeader.getSName());
 		AsnInventory asnInventory = null;
 		Task task = taskService.getById(asnHeaderBoxDTO.getTaskId());
 		if (Func.isNotEmpty(task)) {
@@ -866,9 +865,9 @@ public class AsnByBoxServiceImpl extends AbsBaseAsnHeaderService<AsnHeaderMapper
 		IAllotHeaderService allotHeaderService = SpringUtil.getBean(IAllotHeaderService.class);
 		if (AsnBillStateEnum.COMPLETED.equals(asnBillState)) {
 			// 更新调拨单状态
-			allotHeaderService.updateBillState(asnHeader.getOrderNo(), AllotBillStateEnum.COMPLETED);
+//			allotHeaderService.updateBillState(asnHeader.getOrderNo(), AllotBillStateEnum.COMPLETED);
 		} else if (AsnBillStateEnum.PART.equals(asnBillState)) {
-			allotHeaderService.updateBillState(asnHeader.getOrderNo(), AllotBillStateEnum.INSTOCKING);
+//			allotHeaderService.updateBillState(asnHeader.getOrderNo(), AllotBillStateEnum.INSTOCKING);
 		}
 		return asnHeader;
 	}

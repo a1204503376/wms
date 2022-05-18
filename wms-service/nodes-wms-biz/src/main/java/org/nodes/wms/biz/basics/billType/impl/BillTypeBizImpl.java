@@ -19,9 +19,9 @@ public class BillTypeBizImpl implements BillTypeBiz {
 	private final BillTypeDao billTypeDao;
 
 	@Override
-	public List<BillTypeSelectResponse> getBillTypeSelectResponseTop10List(BillTypeSelectQuery billTypeSelectQuery) {
-		return billTypeDao.listTop10ByBillTypeCdBillTypeName(
-			billTypeSelectQuery.getIoType(), billTypeSelectQuery.getKey(),billTypeSelectQuery.getKey()
+	public List<BillTypeSelectResponse> findBillTypeSelectResponseList(String ioType) {
+		return billTypeDao.listByIoType(
+			ioType
 		);
 	}
 }

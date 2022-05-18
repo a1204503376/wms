@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-import org.nodes.wms.core.common.entity.AttributeBase;
+import org.springblade.core.tenant.mp.TenantEntity;
 import org.springblade.core.tool.utils.DateUtil;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -30,7 +30,7 @@ import java.time.LocalDateTime;
 @Data
 @TableName(value = "asn_header")
 @ApiModel(value = "AsnHeader对象", description = "收货单头表")
-public class AsnHeader extends AttributeBase implements Serializable {
+public class AsnHeader extends TenantEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	public static final String INSTORE_TYPE_KEY = "instore_type";
@@ -97,15 +97,18 @@ public class AsnHeader extends AttributeBase implements Serializable {
 	/**
 	 * 上位系统单据唯一标识
 	 */
-	@ApiModelProperty(value = "上位系统单据唯一标识")
-	@Length(max = 100, message = "上位系统单据唯一标识最大长度为100位")
-	private String billKey;
+//	@ApiModelProperty(value = "上位系统单据唯一标识")
+//	@Length(max = 100, message = "上位系统单据唯一标识最大长度为100位")
+//	private String billKey;
+	private String externalBillKey;
+
 	/**
 	 * 上位系统单编号
 	 */
 	@ApiModelProperty(value = "上位系统单编号")
 	@Length(max = 30, message = "上位系统单编号最大长度为30位")
-	private String orderNo;
+//	private String orderNo;
+	private String externalOrderNo;
 	/**
 	 * 上位系统最后更新时间
 	 */
@@ -114,7 +117,8 @@ public class AsnHeader extends AttributeBase implements Serializable {
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	@ApiModelProperty(value = "上位系统最后更新时间")
-	private LocalDateTime lastUpdateDate;
+//	private LocalDateTime lastUpdateDate;
+	private LocalDateTime externalLastUpdateDate;
 	/**
 	 * 上位系统订单创建时间
 	 */
@@ -123,13 +127,15 @@ public class AsnHeader extends AttributeBase implements Serializable {
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	@ApiModelProperty(value = "上位系统订单创建时间")
-	private LocalDateTime preCreateDate;
+//	private LocalDateTime preCreateDate;
+	private LocalDateTime externalPreCreateDate;
 	/**
 	 * 上位系统单据类型
 	 */
 	@ApiModelProperty(value = "上位系统单据类型")
 	@Length(max = 30, message = "上位系统单据类型最大长度为30位")
-	private String billType;
+//	private String billType;
+	private String externalBillType;
 	/**
 	 * 预计到货时间
 	 */
@@ -167,45 +173,50 @@ public class AsnHeader extends AttributeBase implements Serializable {
 	/**
 	 * 运单编号
 	 */
-	@ApiModelProperty(value = "运单编号")
-	@Length(max = 50, message = "运单编号最大长度为50位")
-	private String shipNo;
+//	@ApiModelProperty(value = "运单编号")
+//	@Length(max = 50, message = "运单编号最大长度为50位")
+//	private String shipNo;
 	/**
 	 * 供应商编码
 	 */
 	@ApiModelProperty(value = "供应商编码")
 	@Length(max = 50, message = "供应商编码最大长度为50位")
-	private String sCode;
+//	private String sCode;
+	private String supplierCode;
 	/**
 	 * 供应商名称
 	 */
 	@ApiModelProperty(value = "供应商名称")
 	@Length(max = 300, message = "供应商名称最大长度为300位")
-	private String sName;
+//	private String sName;
+	private String supplierName;
 	/**
 	 * 供应商地址
 	 */
 	@ApiModelProperty(value = "供应商地址")
 	@Length(max = 500, message = "供应商地址最大长度为500位")
-	private String sAddress;
+//	private String sAddress;
+	private String supplierAddress;
 	/**
 	 * 供应商联系人
 	 */
 	@ApiModelProperty(value = "供应商联系人")
 	@Length(max = 50, message = "最大长度为50位")
-	private String contact;
+//	private String contact;
+	private String supplierContact;
 	/**
 	 * 供应商联系电话
 	 */
 	@ApiModelProperty(value = "供应商联系电话")
 	@Length(max = 50, message = "供应商联系电话最大长度为50位")
-	private String phone;
+//	private String phone;
+	private String supplierPhone;
 	/**
 	 * 出库单编码
 	 */
-	@ApiModelProperty(value = "出库单编码")
-	@Length(max = 60, message = "出库单编码最大长度为六十位")
-	private String soBillNo;
+//	@ApiModelProperty(value = "出库单编码")
+//	@Length(max = 60, message = "出库单编码最大长度为六十位")
+//	private String soBillNo;
 	/**
 	 * WMS备注
 	 */
@@ -215,27 +226,27 @@ public class AsnHeader extends AttributeBase implements Serializable {
 	/**
 	 * 同步状态
 	 */
-	@ApiModelProperty(value = "同步状态编码")
-	//@NotNull(message = "同步状态不能为空")
-	private Integer syncState;
+//	@ApiModelProperty(value = "同步状态编码")
+//	//@NotNull(message = "同步状态不能为空")
+//	private Integer syncState;
 	/**
 	 * 部门ID
 	 */
-	@ApiModelProperty(value = "部门ID")
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long deptId;
+//	@ApiModelProperty(value = "部门ID")
+//	@JsonSerialize(using = ToStringSerializer.class)
+//	private Long deptId;
 	/**
 	 * 部门编码
 	 */
-	@ApiModelProperty(value = "部门编码")
-	@Length(max = 30, message = "部门编码最大长度为30位")
-	private String deptCode;
+//	@ApiModelProperty(value = "部门编码")
+//	@Length(max = 30, message = "部门编码最大长度为30位")
+//	private String deptCode;
 	/**
 	 * 部门名称
 	 */
-	@ApiModelProperty(value = "部门名称")
-	@Length(max = 200, message = "部门名称最大长度为200位")
-	private String deptName;
+//	@ApiModelProperty(value = "部门名称")
+//	@Length(max = 200, message = "部门名称最大长度为200位")
+//	private String deptName;
 	/**
 	 * 创建类型
 	 */
@@ -244,21 +255,21 @@ public class AsnHeader extends AttributeBase implements Serializable {
 	/**
 	 * 过账人员
 	 */
-	@ApiModelProperty("过账人员")
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long postUser;
+//	@ApiModelProperty("过账人员")
+//	@JsonSerialize(using = ToStringSerializer.class)
+//	private Long postUser;
 	/**
 	 * 过账时间
 	 */
-	@ApiModelProperty("过账时间")
-	@JsonFormat(pattern = DateUtil.PATTERN_DATETIME)
-	@DateTimeFormat(pattern = DateUtil.PATTERN_DATETIME)
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-	private LocalDateTime postTime;
+//	@ApiModelProperty("过账时间")
+//	@JsonFormat(pattern = DateUtil.PATTERN_DATETIME)
+//	@DateTimeFormat(pattern = DateUtil.PATTERN_DATETIME)
+//	@JsonSerialize(using = LocalDateTimeSerializer.class)
+//	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+//	private LocalDateTime postTime;
 	/**
 	 * 过账方式
 	 */
-	@ApiModelProperty("过账方式")
-	private Integer postState;
+//	@ApiModelProperty("过账方式")
+//	private Integer postState;
 }

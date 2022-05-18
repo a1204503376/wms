@@ -407,7 +407,7 @@ public class InStockPDAController extends BladeController {
 				.and(q ->
 					q.like(AsnHeader::getAsnBillNo, orderNo)
 						.or()
-						.like(AsnHeader::getOrderNo, orderNo)
+//						.like(AsnHeader::getOrderNo, orderNo)
 				).and(q ->
 					q.eq(AsnHeader::getAsnBillState, AsnBillStateEnum.NOT_RECEIPT.getCode())
 						.or()
