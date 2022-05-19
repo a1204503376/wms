@@ -3,6 +3,7 @@ package org.nodes.wms.biz.instock.receive;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
 import org.nodes.wms.dao.instock.receive.dto.input.NewReceiveRequest;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveEditResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.springblade.core.mp.support.Query;
@@ -56,4 +57,11 @@ public interface ReceiveBiz {
 	 * @param response : 响应对象
 	 */
     void exportExcel(ReceivePageQuery receivePageQuery, HttpServletResponse response);
+
+	/**
+	 * 过去编辑页面返回对象
+	 * @param receiveId 收货单id
+	 * @return ReceiveEditResponse
+	 */
+	ReceiveEditResponse getEditReceiveResponse(Long receiveId);
 }

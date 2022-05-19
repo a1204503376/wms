@@ -49,3 +49,11 @@ export const addReceive = (data) => {
         data: data,
     })
 }
+
+export const getEditReceiveById = (data) => {
+    return request({
+        url: '/api/wms/receive/getEditReceiveById',
+        method: 'post',
+        data: data,
+    })
+}

@@ -17,7 +17,7 @@
             v-for="item in options"
             :key="item.id"
             :label="item.name"
-            :value="item.id">
+            :value="item">
             <span style="float: left">{{ item.code }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.name }}</span>
         </el-option>
@@ -46,9 +46,15 @@ export default {
             loading: false,
         }
     },
+    watch: {
+        selectVal(newVal) {
+            this.val=newVal;
+        },
+
+    },
     methods: {
         // 防抖 在等待时间到达前的请求全部取消，保留最后一次
-        remoteMethod: debounce(async function (key) {
+          remoteMethod: debounce(async function (key) {
             if (key !== '') {
                 this.loading = true;
                 let supplierSelectQuery = {

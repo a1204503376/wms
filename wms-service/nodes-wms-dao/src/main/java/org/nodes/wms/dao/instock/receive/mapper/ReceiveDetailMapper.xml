@@ -28,8 +28,20 @@
         select
          receive_detail_id
         from receive_detail
-        where  receive_id = #{id}
 
+
+    </select>
+    <select id="selectReceiveDetailById"
+            resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailEditResponse">
+         select
+          receive_detail_id,
+          sku_id,
+          plan_qty,
+          um_code,
+          sku_spec,
+          remark
+          from receive_detail
+         where  receive_id = #{id}
     </select>
 
 </mapper>

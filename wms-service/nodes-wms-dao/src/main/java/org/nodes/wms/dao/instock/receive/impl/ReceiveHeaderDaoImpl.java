@@ -3,6 +3,7 @@ package org.nodes.wms.dao.instock.receive.impl;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderEditResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.mapper.ReceiveHeaderMapper;
 import org.nodes.wms.dao.instock.receive.ReceiveHeaderDao;
@@ -55,5 +56,11 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 	public List<ReceiveHeaderResponse> getReceiveHeaderResponseByQuery(ReceivePageQuery receivePageQuery) {
 		return receiveHeaderMapper.getReceiveHeaderResponseByQuery(receivePageQuery);
 	}
+
+    @Override
+    public ReceiveHeader selectReceiveHeaderById(Long receiveId) {
+		return super.getById(receiveId);
+
+    }
 
 }
