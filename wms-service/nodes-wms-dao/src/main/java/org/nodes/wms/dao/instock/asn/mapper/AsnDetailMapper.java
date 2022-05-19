@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.instock.asn.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +19,12 @@ public interface AsnDetailMapper extends BaseMapper<AsnDetail> {
 	 * @return java.util.List<java.lang.Long>
 	 */
 	List<Long> selectAsnDetailId(List<Long> asnBillIdList);
+
+	/**
+	 * 根据Asn单id查询Asn单明细
+	 *
+	 * @param asnBillId: ASN单id
+	 * @return List<AsnDetail>
+	 */
+	List<AsnDetail> selectAsnDetailByAsnBillId(@Param("asnBillId") Long asnBillId);
 }

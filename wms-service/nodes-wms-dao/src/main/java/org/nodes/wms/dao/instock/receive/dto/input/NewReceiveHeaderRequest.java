@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.instock.receive.dto.input;
 
 import lombok.Data;
+import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierSelectRequest;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -24,9 +25,10 @@ public class NewReceiveHeaderRequest implements Serializable {
 	private String billTypeCd;
 
 	/**
-	 * 供应商ID
+	 * 供应商下拉框对象
 	 */
-	private Long supplierId;
+	private SupplierSelectRequest supplier;
+
 	/**
 	 * 入库方式
 	 */

@@ -44,15 +44,11 @@ export default {
             dataSource: []
         }
     },
-    watch: {
-        selectVal(newVal) {
-            this.val=newVal;
-        }
-    },
     async created() {
         await this.getDataSource()
         if(this.defaultValue){
             this.val = this.dataSource[0].whId
+            this.onChange(this.val);
         }
     },
     methods: {

@@ -19,22 +19,25 @@ public class AsnDetailDaoImpl
 	extends BaseServiceImpl<AsnDetailMapper, AsnDetail>
 	implements AsnDetailDao {
 
-	private final AsnDetailMapper asnDetailMapper;
-
 	@Override
 	public Boolean deleteAsnDetailByAsnBillId(List<Long> asnBillIdList) {
 		LambdaQueryWrapper<AsnDetail> lambdaQueryWrapper = new LambdaQueryWrapper<>();
 		lambdaQueryWrapper.in(AsnDetail::getAsnBillId,asnBillIdList);
-		return asnDetailMapper.delete(lambdaQueryWrapper) > 0;
+		return super.baseMapper.delete(lambdaQueryWrapper) > 0;
 	}
 
 	@Override
 	public List<Long> selectAsnDetailIdListByAsnBillId(List<Long> asnBillIdList) {
-		return asnDetailMapper.selectAsnDetailId(asnBillIdList);
+		return super.baseMapper.selectAsnDetailId(asnBillIdList);
 	}
 
 	@Override
 	public Boolean addAsnDetail(List<AsnDetail> asnDetailList) {
 		return super.saveBatch(asnDetailList);
+	}
+
+	@Override
+	public List<AsnDetail> getAsnDetailByAsnBillId(Long asnBillId) {
+		return super.baseMapper.selectAsnDetailByAsnBillId(asnBillId);
 	}
 }

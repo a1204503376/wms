@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.instock.receive;
 
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailRequest;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailEditResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 
@@ -20,4 +21,6 @@ public interface ReceiveDetailDao {
 	List<Long> selectDetailIdByReceiveId(Long receiveId);
 
 	boolean insert(ReceiveDetail receiveDetail);
+
+	List<ReceiveDetail> selectReceiveDetailById(Long receiveId);
 }

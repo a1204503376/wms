@@ -72,7 +72,6 @@
     </select>
 
     <select id="selectAsnContactDetail"
-            resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse"
             resultMap="asnDetailMap">
         SELECT h.asn_bill_id,
                h.asn_bill_no,
@@ -213,5 +212,20 @@
                 </foreach>
             </if>
         </where>
+    </select>
+
+    <select id="selectAsnHeaderByAsnBillId"
+            resultType="org.nodes.wms.dao.instock.asn.entities.AsnHeader">
+        SELECT
+            asn_bill_id,
+            asn_bill_no,
+            wh_id,
+            bill_type_cd,
+            supplier_id,
+            supplier_code,
+            supplier_name,
+            asn_bill_remark
+        FROM asn_header
+        WHERE asn_bill_id = #{asnBillId} AND is_deleted = 0
     </select>
 </mapper>

@@ -26,7 +26,6 @@ public class AddAsnBillRequest implements Serializable {
 	/**
 	 * 供应商id
 	 */
-	@NotNull(message = "供应商id不能为空")
 	private Long supplierId;
 
 	/**

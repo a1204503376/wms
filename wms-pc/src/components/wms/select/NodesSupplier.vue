@@ -17,7 +17,7 @@
             v-for="item in options"
             :key="item.id"
             :label="item.name"
-            :value="item.id">
+            :value="item">
             <span style="float: left">{{ item.code }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.name }}</span>
         </el-option>
@@ -44,6 +44,11 @@ export default {
             options: [this.selectVal],
             val: this.selectVal,
             loading: false,
+        }
+    },
+    watch: {
+        selectVal(newVal) {
+            this.val = newVal;
         }
     },
     methods: {

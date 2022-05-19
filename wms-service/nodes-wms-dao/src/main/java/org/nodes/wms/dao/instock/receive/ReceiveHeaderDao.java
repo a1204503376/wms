@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.instock.receive;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderEditResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
@@ -29,4 +30,6 @@ public interface ReceiveHeaderDao {
 	boolean insert(ReceiveHeader receiveHeader);
 
     List<ReceiveHeaderResponse> getReceiveHeaderResponseByQuery(ReceivePageQuery receivePageQuery);
+
+	ReceiveHeader selectReceiveHeaderById(Long receiveId);
 }

@@ -80,7 +80,7 @@ public class ReceiveDetail extends BaseSkuLotEntity {
 	/**
 	 * 规格
 	 */
-	private BigDecimal skuSpec;
+	private String skuSpec;
 	/**
 	 * 换算倍率
 	 */
@@ -124,7 +124,7 @@ public class ReceiveDetail extends BaseSkuLotEntity {
 	/**
 	 *  单价
 	 */
-	private BigDecimal detailPriceDecimal;
+	private BigDecimal detailPrice;
 	/**
 	 * 明细总金额
 	 */

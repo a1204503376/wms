@@ -60,7 +60,7 @@ export default [
         path: '/asn',
         component: Layout,
         children: [{
-            path: 'add/:id',
+            path: 'add/:asnBillId',
             name: '新增ASN单',
             props: true,
             component: () => import('@/views/wms/instock/asnHeader/asnAdd')
@@ -70,10 +70,10 @@ export default [
         path: '/asn',
         component: Layout,
         children: [{
-            path: 'edit/:id',
+            path: 'edit/:asnBillId',
             name: '编辑ASN单',
             props: true,
-            component: () => import('@/views/wms/instock/asnHeader/asnAdd')
+            component: () => import('@/views/wms/instock/asnHeader/asnEdit')
         }]
     },
     {
@@ -99,12 +99,20 @@ export default [
     {
         path: '/receive',
         component: Layout,
-        children: [{
+        children: [
+            {
             path: 'add/:id',
             name: '新增收货单',
             props: true,
             component: () => import('@/views/wms/instock/receive/receiveNew')
-        }]
-    }
+         },
+            {
+                path: 'edit/:id/:receiveId',
+                name: '编辑收货单',
+                props: true,
+                component: () => import('@/views/wms/instock/receive/receiveEdit')
+            }
+        ]
+    },
 
 ]
