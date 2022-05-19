@@ -68,8 +68,8 @@ export default {
          * 编辑的时候获取所有的计量单位
          */
         onFocus(){
-          if(func.isEmpty(this.dataSource) && func.isNotEmpty(this.sku)){
-              this.getDataSource(this.sku);
+          if(func.isEmpty(this.dataSource) && func.isNotEmpty(this.sku.id)){
+              this.getDataSource(this.sku.id);
           }
         }
 
