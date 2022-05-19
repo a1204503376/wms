@@ -3,7 +3,7 @@
         <el-container id="container" v-loading="loading">
             <el-main style="overflow: hidden;overflow-y: scroll;">
                 <el-form ref="form"
-                         :model="form.params"
+                         :model="form.params.newReceiveHeaderRequest"
                          :rules="form.rules"
                          label-position="right"
                          label-width="120px"
@@ -20,7 +20,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="单据类型" >
+                            <el-form-item label="单据类型"  prop="billTypeCd" >
                                 <nodes-bill-type v-model="form.params.newReceiveHeaderRequest.billTypeCd" ></nodes-bill-type>
                             </el-form-item>
                         </el-col>
@@ -42,14 +42,14 @@
 
                         <el-col :span="8">
                             <el-form-item label="货主">
-                                <nodes-owner v-model="form.params.newReceiveHeaderRequest.woId"></nodes-owner>
+                                <nodes-owner v-model="form.params.newReceiveHeaderRequest.woId" :default-value="true"></nodes-owner>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="备注" >
-                                <el-input type="textarea" v-model="form.params.newReceiveHeaderRequest.remark"></el-input>
+                                <el-input type="textarea" v-model="form.params.newReceiveHeaderRequest.remark"  style="width: 1055px"></el-input>
                             </el-form-item>
 
                         </el-col>
@@ -93,7 +93,7 @@
                                 <el-table-column
                                     :align="'left'"
                                     prop="skuCode"
-                                    width="300"
+                                    width="230"
                                 >
                                     <template slot="header">
                                         <span class="d-table-header-required">物品编码</span>
@@ -101,6 +101,7 @@
                                     <template v-slot="{row}">
                                         <nodes-sku
                                             v-model="row.sku"
+                                            style="width: 180px;"
                                             @selectValChange="onChangeSku(row)"
                                         >
 
@@ -129,6 +130,7 @@
                                     <template v-slot="{row}">
                                         <el-input-number
                                             v-model="row.planQty"
+                                            :min="0"
                                             controls-position="right"
                                             size="mini"></el-input-number>
                                     </template>
@@ -171,7 +173,7 @@
                                         <el-input v-model="row.remark" size="mini"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column>
+                                <el-table-column  width="100">
                                     <template slot="header">
                                         <span class="d-table-header-required">操作</span>
                                     </template>
@@ -255,15 +257,15 @@ export default {
                     receiveNewDetailRequestList:[]
 
                 },
-                rules: {
-                    billTypeCd: [
-                        {
-                            required: true,
-                            message: '请输入单据类型',
-                            trigger: 'blur'
-                        }
-                    ],
-                }
+                 rules: {
+                     billTypeCd: [
+                         {
+                             required: true,
+                             message: '请选择单据类型',
+                             trigger: 'change'
+                         }
+                     ],
+                 }
             }
         }
     },
@@ -291,8 +293,10 @@ export default {
                         skuId: { required: true, message: skuErrorMsg},
                         skuCode: { required: true, message: skuErrorMsg},
                         skuName: { required: true, message: skuErrorMsg},
+
                     }
                 },
+                planQty:{type:'Number',validator: (rule, value) => value>0, message:'计划数量不能为0'}
 
             };
         },

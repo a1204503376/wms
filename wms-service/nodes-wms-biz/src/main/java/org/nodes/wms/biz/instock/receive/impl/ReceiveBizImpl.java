@@ -94,7 +94,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 
 	@Override
 	@Transactional
-	public boolean newReceive(NewReceiveRequest newReceiveRequest) {
+	public ReceiveHeader newReceive(NewReceiveRequest newReceiveRequest) {
 		//创建保存实体类
 		ReceiveHeader receiveHeader = receiveFactory.createReceiveHeader(newReceiveRequest.getNewReceiveHeaderRequest());
 		receiveHeaderDao.insert(receiveHeader);
@@ -102,10 +102,10 @@ public class ReceiveBizImpl implements ReceiveBiz {
        List<ReceiveNewDetailRequest> receiveNewDetailRequestList = newReceiveRequest.getReceiveNewDetailRequestList();
 	  //遍历保存
 		for (ReceiveNewDetailRequest receiveNewDetailRequest : receiveNewDetailRequestList) {
-			ReceiveDetail receiveDetail = receiveFactory.createReceiveDetail(receiveNewDetailRequest, receiveHeader.getReceiveId(), receiveHeader.getReceiveNo());
+			ReceiveDetail receiveDetail = receiveFactory.createReceiveDetail(receiveNewDetailRequest, receiveHeader);
 			receiveDetailDao.insert(receiveDetail);
 		}
-		return true;
+		return receiveHeader;
 	}
 
 	@Override

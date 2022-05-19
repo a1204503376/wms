@@ -11,6 +11,7 @@ import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveEditResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveResponse;
+import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveBillStateEnum;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
@@ -45,8 +46,9 @@ public class ReceiveController {
 	 */
 	@ApiLog("收货管理-新增")
 	@PostMapping("/new")
-	public R<Boolean> newReceive(@Valid @RequestBody NewReceiveRequest newReceiveRequest) {
-		return R.status(receiveBiz.newReceive(newReceiveRequest));
+	public R<String> newReceive(@Valid @RequestBody NewReceiveRequest newReceiveRequest) {
+		ReceiveHeader receiveHeader = receiveBiz.newReceive(newReceiveRequest);
+		return R.success("单号:"+receiveHeader.getReceiveNo()+"保存成功");
 	}
 
 
