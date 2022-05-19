@@ -9,6 +9,7 @@ import org.nodes.wms.dao.instock.asn.dto.input.*;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnBillByEditResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
+import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -47,9 +48,9 @@ public class AsnController {
 
 	@ApiLog("ASN单管理-新增")
 	@PostMapping("/add")
-	public R<Boolean> add(@Valid @RequestBody AddAsnBillRequest addAsnBillRequest){
-		boolean add = asnBiz.add(addAsnBillRequest);
-		return R.status(add);
+	public R<String> add(@Valid @RequestBody AddAsnBillRequest addAsnBillRequest){
+		AsnHeader asnHeader = asnBiz.add(addAsnBillRequest);
+		return R.success("新增ASN单成功，ASN单编码:"+asnHeader.getAsnBillNo());
 	}
 
 	@PostMapping ("/detailByEdit")

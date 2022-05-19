@@ -58,6 +58,15 @@
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
+<!--                        <el-table-column v-if="column.prop === 'asnBillNo'" :key="index" show-overflow-tooltip v-bind="column">-->
+<!--                                <el-link-->
+<!--                                    href="www.baidu.com"-->
+<!--                                    :underline="false"-->
+<!--                                    type="primary"-->
+<!--                                    target="_blank">{{index}}-->
+<!--                                </el-link>-->
+<!--                        </el-table-column>-->
+                        <!--                                    :to="{name: 'detail',query:{id:table.data[index].asnBillId}}"-->
                         <el-table-column :key="index" show-overflow-tooltip v-bind="column">
 <!--                            <router-link-->
 <!--                                :underline="false"-->
@@ -273,7 +282,7 @@ export default {
             this.$router.push({
                 name: '新增ASN单',
                 params: {
-                    id: '0'
+                    asnBillId: '0'
                 }
             })
         },
@@ -281,7 +290,7 @@ export default {
             this.$router.push({
                 name: '编辑ASN单',
                 params: {
-                    id: row.asnBillId
+                    asnBillId: row.asnBillId
                 }
             })
         }

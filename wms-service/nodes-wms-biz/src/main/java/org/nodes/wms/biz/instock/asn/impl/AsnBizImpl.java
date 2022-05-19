@@ -60,10 +60,10 @@ public class AsnBizImpl implements AsnBiz {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public boolean add(AddAsnBillRequest addAsnBillRequest) {
+	public AsnHeader add(AddAsnBillRequest addAsnBillRequest) {
 		// 创建ASN单头表实体，新增ASN单头表数据
 		AsnHeader asnHeader = asnFactory.createAsnHeader(addAsnBillRequest);
-		boolean header = asnHeaderDao.insertAsnHeader(asnHeader);
+		asnHeaderDao.insertAsnHeader(asnHeader);
 
 		// 从请求参数中获取ASN单明细数据，并创建多个ASN单明细实体
 		List<AsnDetail> asnDetailList = addAsnBillRequest.getAsnDetailList();
@@ -73,8 +73,8 @@ public class AsnBizImpl implements AsnBiz {
 				details.add(detail);
 		}
 		// 新增ASN单明细数据
-		boolean detail = asnDetailDao.addAsnDetail(details);
-		return header && detail;
+		asnDetailDao.insertAsnDetail(details);
+		return asnHeader;
 	}
 
 	@Override

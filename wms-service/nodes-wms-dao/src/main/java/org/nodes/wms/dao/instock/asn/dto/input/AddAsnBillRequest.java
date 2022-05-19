@@ -29,9 +29,14 @@ public class AddAsnBillRequest implements Serializable {
 	private Long supplierId;
 
 	/**
-	 * 仓库编码
+	 * 仓库id
 	 */
 	private Long whId;
+
+	/**
+	 * 货主id
+	 */
+	private Long woId;
 
 	/**
 	 * ASN单备注

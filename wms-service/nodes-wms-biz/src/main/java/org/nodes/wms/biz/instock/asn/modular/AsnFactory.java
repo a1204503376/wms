@@ -1,10 +1,12 @@
 package org.nodes.wms.biz.instock.asn.modular;
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.suppliers.SupplierBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.biz.common.utils.NoGeneratorUtil;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.*;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
@@ -38,11 +40,15 @@ public class AsnFactory {
 
 	private final WarehouseBiz warehouseBiz;
 
+	private final OwnerBiz ownerBiz;
+
 	public AsnHeader createAsnHeader(AddAsnBillRequest addAsnBillRequest) {
 		// 根据供应商id获取供应商信息
 		Supplier supplier = supplierBiz.findById(addAsnBillRequest.getSupplierId());
 		// 根据库房id获取库房信息
 		Warehouse warehouse = warehouseBiz.findById(addAsnBillRequest.getWhId());
+		// 根据货主id获取货主信息
+		Owner owner = ownerBiz.findById(addAsnBillRequest.getWoId());
 
 		AsnHeader asnHeader = new AsnHeader();
 		// ASN单id
@@ -63,6 +69,12 @@ public class AsnFactory {
 		asnHeader.setWhId(warehouse.getWhId());
 		// 库房编码
 		asnHeader.setWhCode(warehouse.getWhCode());
+		// 货主id
+		asnHeader.setWoId(owner.getWoId());
+		// 货主编码
+		asnHeader.setOwnerCode(owner.getOwnerCode());
+		// 入库方式，默认为常规入库
+		asnHeader.setInstoreType(10);
 		return asnHeader;
 	}
 
@@ -97,8 +109,6 @@ public class AsnFactory {
 		SkuPackageDetail skuPackageDetail = skuPackageAggregate.findSkuPackageDetail(asnDetailObj.getUmCode());
 		// 从聚合类对象中获取 基础包装明细信息
 		SkuPackageDetail baseSkuPackageDetail = skuPackageAggregate.findBaseSkuPackageDetail();
-		//
-		SkuPackage skuPackage = skuPackageAggregate.getSkuPackage();
 
 		// 包装id
 		asnDetail.setWspId(skuPackageDetail.getWspId());
@@ -121,8 +131,11 @@ public class AsnFactory {
 		// 实收数量
 		asnDetail.setScanQty(new BigDecimal(0));
 		// 剩余数量
-		asnDetail.setSurplusQty(new BigDecimal(0));
-
+		asnDetail.setSurplusQty(asnDetailObj.getPlanQty());
+		// 库房id
+		asnDetail.setWhId(asnHeaderObj.getWhId());
+		// 备注
+		asnDetail.setRemark(asnDetailObj.getRemark());
 		return asnDetail;
 	}
 

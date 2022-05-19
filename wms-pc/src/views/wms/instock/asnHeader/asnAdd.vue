@@ -29,7 +29,7 @@
                                 <nodes-supplier
                                     v-model="form.params.supplier"
                                     :multiple="false"
-                                    style="width: 300px">
+                                    >
                                 </nodes-supplier>
                             </el-form-item>
                         </el-col>
@@ -45,12 +45,23 @@
                     </el-row>
                     <el-row>
                         <el-col :span="8">
+                            <el-form-item label="货主" prop="ownerId">
+                                <nodes-owner
+                                    v-model="form.params.woId"
+                                    :multiple="false"
+                                    :default-value="true"
+                                ></nodes-owner>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
                             <el-form-item label="备注" prop="asnBillRemark">
                                 <el-input
                                     v-model="form.params.asnBillRemark"
                                     :rows=2
                                     placeholder="请输入内容"
-                                    style="width: 300px"
+                                    style="width: 1213px"
                                     type="textarea">
                                 </el-input>
                             </el-form-item>
@@ -163,6 +174,14 @@
                                         <el-input v-model="row.remark" size="mini"></el-input>
                                     </template>
                                 </el-table-column>
+                                <el-table-column width="100px" align="center">
+                                    <template slot="header" >
+                                        <span>操作</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-link  @click.native.prevent="deleteRow(row.$index, table.data)" type="primary">删除</el-link>
+                                    </template>
+                                </el-table-column>
                             </el-table>
                         </el-col>
                     </el-row>
@@ -199,10 +218,12 @@ import NodesSupplier from "@/components/wms/select/NodesSupplier";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import {add} from '@/api/wms/instock/asnHeader';
 import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
+import NodesOwner from "@/components/wms/select/NodesOwner";
 
 export default {
     name: "edit",
     components: {
+        NodesOwner,
         NodesSkuUm,
         NodesWarehouse, NodesSupplier, NodesBillType, NodesLineNumber, NodesSku
     },
@@ -218,6 +239,7 @@ export default {
                         name: '',
                     },
                     whId: '',
+                    woId: '',
                     asnBillRemark: '',
                 },
                 rules: {
@@ -276,6 +298,9 @@ export default {
                 remark: '',
             }
         },
+        deleteRow(index, rows) {
+            rows.splice(index, 1);
+        },
         onChangeSku(val) {
         },
         submitFormParams() {
@@ -295,7 +320,8 @@ export default {
                 billTypeCd: params.billTypeCd,
                 supplierId: params.supplier.id,
                 whId: params.whId,
-                asnBillRemark:params.asnBillRemark,
+                woId: params.woId,
+                asnBillRemark: params.asnBillRemark,
                 asnDetailList: asnDetailArray,
             }
             return add(data)
