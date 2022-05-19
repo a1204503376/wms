@@ -39,6 +39,11 @@ export default {
             dataSource: [],
         }
     },
+    watch: {
+        selectVal(newVal) {
+            this.val=newVal;
+        },
+    },
     async created() {
         await this.getDataSource();
         if(this.defaultValue){

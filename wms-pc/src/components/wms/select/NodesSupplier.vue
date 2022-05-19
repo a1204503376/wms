@@ -27,6 +27,7 @@
 <script>
 import {getSupplierSelectResponseTop10List} from "@/api/wms/basics/supplier";
 import debounce from "lodash/debounce";
+import func from "@/util/func";
 
 export default {
     name: "NodesSupplier",
@@ -41,14 +42,21 @@ export default {
     },
     data() {
         return {
-            options: [this.selectVal],
+            options: [],
             val: this.selectVal,
             loading: false,
+            num:1
         }
     },
     watch: {
         selectVal(newVal) {
             this.val = newVal;
+            if(this.num ===1) {
+                if (JSON.stringify(this.options).indexOf(JSON.stringify(newVal)) === -1) {
+                    this.options.push(newVal)
+                    this.num=0;
+                }
+            }
         }
     },
     methods: {

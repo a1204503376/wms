@@ -262,7 +262,8 @@ export default {
                 sku: {
                     skuId: '',
                     skuCode: '',
-                    skuName: ''
+                    skuName: '',
+                    skuSpec:''
                 },
                 umCode: '',
                 planQty: 1,
