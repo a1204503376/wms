@@ -286,6 +286,13 @@ export default {
             },
         }
     },
+    watch: {
+        $route(to) {
+            if(to.query && to.query.isRefresh === 'true'){
+                this.getTableData();
+            }
+        }
+    },
     created() {
         this.getTableData();
     },
