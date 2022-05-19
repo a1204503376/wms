@@ -3,7 +3,7 @@
         v-model="val"
         :multiple="multiple"
         size="mini"
-        style="width: 340px"
+        style="width:100%;"
         value-key="woId"
         @change="onChange">
         <el-option

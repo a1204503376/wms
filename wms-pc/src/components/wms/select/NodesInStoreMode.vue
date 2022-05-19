@@ -4,7 +4,7 @@
         v-model="val"
         :multiple="multiple"
         size="mini"
-        style="width: 340px"
+        style="width:100%;"
         value-key="value"
         @change="onChange">
         <el-option
