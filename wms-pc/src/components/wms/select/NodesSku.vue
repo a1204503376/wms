@@ -35,13 +35,13 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Array,String,Object],
+        selectVal: [Array,Object],
         // 单选多选切换，默认为false
         multiple: {type: Boolean, required: false, default: false}
     },
     data() {
         return {
-            options: [this.selectVal],
+            options: [],
             val: this.selectVal,
             loading: false,
         }

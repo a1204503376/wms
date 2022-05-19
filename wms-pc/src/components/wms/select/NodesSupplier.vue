@@ -48,13 +48,12 @@ export default {
     },
     watch: {
         selectVal(newVal) {
-            this.val=newVal;
-        },
-
+            this.val = newVal;
+        }
     },
     methods: {
         // 防抖 在等待时间到达前的请求全部取消，保留最后一次
-          remoteMethod: debounce(async function (key) {
+        remoteMethod: debounce(async function (key) {
             if (key !== '') {
                 this.loading = true;
                 let supplierSelectQuery = {

@@ -56,4 +56,12 @@ public interface AsnHeaderDao {
 	 * @return List<AsnExportResponse>
 	 */
     List<AsnBillExportResponse> listByParamsQuery(PageParamsQuery pageParamsQuery);
+
+	/**
+	 * 根据ASN单id查询ASN单头表信息
+	 *
+	 * @param asnBillId: ASN单id
+	 * @return AsnDetailByEditResponse
+	 */
+	AsnHeader getAsnHeaderByAsnBillId(Long asnBillId);
 }

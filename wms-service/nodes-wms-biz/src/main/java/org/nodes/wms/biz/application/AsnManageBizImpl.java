@@ -30,9 +30,6 @@ public class AsnManageBizImpl implements AsnManageBiz {
 		//3+4+5 = 在收货管理那边 删除收货头表+明细表
 		// 3.删除收货单头表 (传asnBillIdList)
 
-		// 4.根据asnBillIdList查询到asn明细单传asnDetailIdList
-		List<Long> asnDetailIdList = asnBiz.getAsnDetailIdList(asnBillIdList);
-		// 5.删除收货单明细表(传asnDetailIdList)
 		return true;
 	}
 }

@@ -6,7 +6,7 @@ import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.application.AsnManageBiz;
 import org.nodes.wms.biz.instock.asn.AsnBiz;
 import org.nodes.wms.dao.instock.asn.dto.input.*;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailByEditResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnBillByEditResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.springblade.core.log.annotation.ApiLog;
@@ -52,9 +52,9 @@ public class AsnController {
 		return R.status(add);
 	}
 
-	@GetMapping("/detailByEdit")
-	public R<AsnDetailByEditResponse> detailByEdit(@Valid @RequestParam AsnBillIdRequest asnBillIdRequest){
-		return R.data(asnBiz.getAsnHeaderAndAsnDetail(asnBillIdRequest));
+	@PostMapping ("/detailByEdit")
+	public R<AsnBillByEditResponse> detailByEdit(@Valid @RequestBody AsnBillIdRequest asnBillIdRequest){
+		return R.data(asnBiz.findAsnHeaderAndAsnDetail(asnBillIdRequest.getAsnBillId()));
 	}
 
 	@ApiLog("ASN单管理-编辑")
