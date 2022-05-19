@@ -41,7 +41,7 @@ export default {
     },
     data() {
         return {
-            options: [],
+            options: [this.selectVal],
             val: this.selectVal,
             loading: false,
         }

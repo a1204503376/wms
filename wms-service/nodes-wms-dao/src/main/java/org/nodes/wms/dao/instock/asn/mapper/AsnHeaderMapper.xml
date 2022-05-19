@@ -17,8 +17,6 @@
         u.real_name as createUser,
         h.update_time
         FROM asn_header h
-        LEFT JOIN asn_detail d
-        ON h.asn_bill_id = d.asn_bill_id
         LEFT JOIN blade_user u
         ON h.create_user = u.id
         LEFT JOIN wms_bill_type b

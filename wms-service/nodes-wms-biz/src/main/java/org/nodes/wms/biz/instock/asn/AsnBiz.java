@@ -9,6 +9,7 @@ import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnBillByEditResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
+import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -56,9 +57,9 @@ public interface AsnBiz {
 	 * 新增Asn单
 	 *
 	 * @param addAsnBillRequest: Asn单创建对象
-	 * @return true:新增成功, false:新增失败
+	 * @return AsnHeader
 	 */
-    boolean add(AddAsnBillRequest addAsnBillRequest);
+    AsnHeader add(AddAsnBillRequest addAsnBillRequest);
 
 	/**
 	 * 编辑-根据ASN单id获取Asn单头表和Asn明细信息
