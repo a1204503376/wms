@@ -60,7 +60,7 @@ export default [
         path: '/asn',
         component: Layout,
         children: [{
-            path: 'add/:id',
+            path: 'add/:asnBillId',
             name: '新增ASN单',
             props: true,
             component: () => import('@/views/wms/instock/asnHeader/asnAdd')

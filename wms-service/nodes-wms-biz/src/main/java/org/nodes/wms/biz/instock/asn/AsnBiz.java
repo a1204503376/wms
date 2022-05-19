@@ -42,7 +42,7 @@ public interface AsnBiz {
 	 * @param asnBillIdList: Asn单id
 	 * @return true:删除成功, false:删除失败
 	 */
-	Boolean removeAsnBillById(List<Long> asnBillIdList);
+	boolean removeAsnBillById(List<Long> asnBillIdList);
 
 	/**
 	 * 根据Asn单id删除Asn单明细信息
@@ -50,7 +50,7 @@ public interface AsnBiz {
 	 * @param asnBillIdList: Asn单id集合
 	 * @return true:删除成功, false:删除失败
 	 */
-	Boolean removeAsnDetailByAsnBillId(List<Long> asnBillIdList);
+	boolean removeAsnDetailByAsnBillId(List<Long> asnBillIdList);
 
 	/**
 	 * 新增Asn单
@@ -58,7 +58,7 @@ public interface AsnBiz {
 	 * @param addAsnBillRequest: Asn单创建对象
 	 * @return true:新增成功, false:新增失败
 	 */
-    Boolean add(AddAsnBillRequest addAsnBillRequest);
+    boolean add(AddAsnBillRequest addAsnBillRequest);
 
 	/**
 	 * 编辑-根据ASN单id获取Asn单头表和Asn明细信息
@@ -81,7 +81,6 @@ public interface AsnBiz {
 	 *
 	 * @param pageParamsQuery: 条件参数
 	 * @param response:
-	 * @return void
 	 */
 	void exportAsnBill(PageParamsQuery pageParamsQuery, HttpServletResponse response);
 }

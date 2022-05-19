@@ -49,18 +49,18 @@ public class AsnBizImpl implements AsnBiz {
 	}
 
 	@Override
-	public Boolean removeAsnBillById(List<Long> asnBillIdList) {
+	public boolean removeAsnBillById(List<Long> asnBillIdList) {
 		return asnHeaderDao.deleteAsnHeaderById(asnBillIdList);
 	}
 
 	@Override
-	public Boolean removeAsnDetailByAsnBillId(List<Long> asnBillIdList) {
+	public boolean removeAsnDetailByAsnBillId(List<Long> asnBillIdList) {
 		return asnDetailDao.deleteAsnDetailByAsnBillId(asnBillIdList);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Boolean add(AddAsnBillRequest addAsnBillRequest) {
+	public boolean add(AddAsnBillRequest addAsnBillRequest) {
 		// 创建ASN单头表实体，新增ASN单头表数据
 		AsnHeader asnHeader = asnFactory.createAsnHeader(addAsnBillRequest);
 		boolean header = asnHeaderDao.insertAsnHeader(asnHeader);
