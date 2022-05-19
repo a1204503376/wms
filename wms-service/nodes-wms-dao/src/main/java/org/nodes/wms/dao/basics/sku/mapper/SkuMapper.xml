@@ -5,7 +5,8 @@
 	<select id="listTop10BySkuCodeSkuName" resultType="org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse">
 		SELECT sku_id,
 		       sku_code,
-		       sku_name
+		       sku_name,
+		       sku_spec
 		FROM wms_sku
 		WHERE sku_code LIKE CONCAT('%', #{skuCode}, '%')
 		   OR sku_name LIKE CONCAT('%', #{skuName}, '%')

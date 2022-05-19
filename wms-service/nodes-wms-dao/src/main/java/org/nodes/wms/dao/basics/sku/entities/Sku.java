@@ -200,5 +200,9 @@ public class Sku extends TenantEntity {
 	 * 最低储量
 	 */
 	private BigDecimal minimumReserves;
+	/**
+	 * 物品型号
+	 */
+	private String skuSpec;
 
 }

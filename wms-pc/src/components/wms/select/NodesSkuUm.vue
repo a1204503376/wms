@@ -35,8 +35,8 @@ export default {
     },
     props: {
         selectVal: [String],
-      //物料编码,新增和编辑时将其设置为当前行的skuId
-        skuId:{type: String, required: false}
+      //物料编码,新增和编辑时将其设置为当前行的sku对象
+        sku:{type: Object, required: false}
     },
     data() {
         return {
@@ -45,8 +45,8 @@ export default {
         }
     },
     watch:{
-        skuId: async function(){
-            await this.getDataSource(this.skuId);
+        sku: async function(){
+            await this.getDataSource(this.sku.skuId);
             if(this.dataSource.length>0) {
                 this.val = this.dataSource[0].wsuCode;
                 this.onChange(this.val);
@@ -68,8 +68,8 @@ export default {
          * 编辑的时候获取所有的计量单位
          */
         onFocus(){
-          if(func.isEmpty(this.dataSource) && func.isNotEmpty(this.skuId)){
-              this.getDataSource(this.skuId);
+          if(func.isEmpty(this.dataSource) && func.isNotEmpty(this.sku)){
+              this.getDataSource(this.sku);
           }
         }
 
