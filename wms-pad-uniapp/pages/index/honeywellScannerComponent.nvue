@@ -1,0 +1,40 @@
+<template>
+	<div>
+		<div>
+		<honeywell-scanner ref="honeywell-scanner" v-model="form.honeywellCode" type="input"
+			style="width:200;height:100;background-color: #007AFF;" @click="honeywellScannerClick"
+			@onDecoded="onDecoded">
+		</honeywell-scanner>
+        </div>
+		<input type="text" v-model="form.honeywellCode" placeholder="请输入扫描二维码或条形码" class="ipt" placeholder-class="hold"
+			@blur="handleInputCheck" readonly=""/>
+
+		<div style="width:270;height:1000;background-color: #8A6DE9;">
+			{{form.honeywellCode}}
+		</div>
+
+	</div>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				form: {
+					honeywellCode: ''
+				}
+			}
+		},
+		onLoad() {},
+		methods: {
+			//扫码回调事件 e.detail.scannerResult
+			onDecoded(e) {
+				//你要做的操作 e.detail.code 返回状态   e.detail.scannerResult解码的值
+
+			},
+			honeywellScannerClick(e) {
+				this.$refs.honeywell - scanner.clearTel();
+			}
+		}
+	}
+</script>
