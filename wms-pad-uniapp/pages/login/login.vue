@@ -2,8 +2,6 @@
 	<view class="content">
 		<u-toast ref="uToast" />
 		<div class="topdiv" @click="isAddress" style="height: 50rpx;">
-			<image src="../../static/images/tabbar/manage_selected.png"
-				style="width: 50rpx;height: 100%;margin-left: 650rpx;margin-top: 0rpx;"></image>
 		</div>
 		<view class="top">
 			<div class="logodiv">
