@@ -18,8 +18,8 @@ module.exports = {
 	successCode: 200,
 	// 登录失效code
 	invalidCode: 401,
-	// 客户端ID
+	// 客户端ID,对应数据库blade_client表中的client_id字段
 	clientId: 'saber',
-	// 客户端密钥
+	// 客户端密钥,对应数据库blade_client表中的client_secret字段
 	clientSecret: 'saber_secret'
 }

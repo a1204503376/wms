@@ -37,7 +37,7 @@ http.interceptors.request.use((config) => { // 可使用async await 做异步操
 	/**
 	 /* 演示
 	 if (!token) { // 如果token不存在，return Promise.reject(config) 会取消本次请求
-	    return Promise.reject(config)
+		return Promise.reject(config)
 	  }
 	 **/
 	return config
@@ -45,19 +45,19 @@ http.interceptors.request.use((config) => { // 可使用async await 做异步操
 	return Promise.reject(config)
 })
 http.interceptors.response.use((response) => {
-	debugger
-	// 若有数据返回则通过
-	if (response.data.access_token || response.data.key) {
-		return response.data
-	}
-	// 服务端返回的状态码不等于200，则reject()
-	if (response.data.code !== 200) {
+	// TODO 针对401认证失败的情况，需要跳转到登录页面
+
+	// 对错误信息进行统一拦截response.data.access_token || response.data.key
+	if (response.data.code !== 200 || response.error_code) {
+		const errMsg = reponse.data.msg || response.data.error_description || '未知错误，来自api拦截器';
+		uni.$u.toast(errMsg);
 		return Promise.reject(response);
 	}
+
 	return response.data;
-}, (response) => {
-	debugger
-	uni.$u.toast('校验通过')
-	return Promise.reject(response)
+}, (response) => { // statusCode !== 200 时候的错误处理
+	const errMsg = reponse.data.msg || response.data.error_description || '未知错误，来自api拦截器';
+	uni.$u.toast(errMsg);
+	return Promise.reject(response);
 })
 export default http;
