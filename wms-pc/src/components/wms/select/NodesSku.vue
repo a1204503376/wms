@@ -17,7 +17,7 @@
             v-for="item in options"
             :key="item.skuCode"
             :label="item.skuCode"
-            :value="item.skuId">
+            :value="item">
             <span style="float: left">{{ item.skuCode }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.skuName }}</span>
         </el-option>
@@ -35,16 +35,28 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Object,String],
+
+        selectVal: [Array,Object],
         // 单选多选切换，默认为false
         multiple: {type: Boolean, required: false, default: false}
     },
     data() {
         return {
-            options: [this.selectVal],
+            options: [],
             val: this.selectVal,
             loading: false,
+            num:1
         }
+    },
+
+    watch: {
+        selectVal(newVal) {
+            this.val=newVal;
+            if(this.num ===1) {
+                this.options.push(newVal)
+                this.num=0;
+                }
+        },
     },
     methods: {
         // 防抖 在等待时间到达前的请求全部取消，保留最后一次

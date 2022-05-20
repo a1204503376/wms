@@ -3,6 +3,8 @@ package org.nodes.wms.dao.instock.receive.dto.output;
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveBillStateEnum;
 
@@ -18,6 +20,7 @@ public class ReceiveHeaderResponse implements Serializable {
 	 * 收货单主键id
 	 */
 	@ExcelIgnore
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long receiveId;
 	/**
 	 * 收货单编码
@@ -49,6 +52,7 @@ public class ReceiveHeaderResponse implements Serializable {
 	 * 货主编码
 	 */
 	@ExcelProperty("货主编码")
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long ownerCode;
 	/**
 	 * 入库方式

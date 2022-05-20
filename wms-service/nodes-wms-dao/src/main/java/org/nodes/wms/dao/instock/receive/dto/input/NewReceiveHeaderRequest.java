@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.instock.receive.dto.input;
 
 import lombok.Data;
+import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierSelectRequest;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -18,23 +19,16 @@ public class NewReceiveHeaderRequest implements Serializable {
 	private Long whId;
 
 	/**
-	 * 库房编码
-	 */
-	private String whCode;
-	/**
 	 * 单据种类编码
 	 */
 	@NotNull(message = "单据类型不能为空")
 	private String billTypeCd;
-	/**
-	 * 供应商编码
-	 */
-	private String supplierCode;
 
 	/**
-	 * 供应商名称
+	 * 供应商下拉框对象
 	 */
-	private String supplierName;
+	private SupplierSelectRequest supplier;
+
 	/**
 	 * 入库方式
 	 */
@@ -44,10 +38,6 @@ public class NewReceiveHeaderRequest implements Serializable {
 	 */
 	private Long woId;
 
-	/**
-	 * 货主编码
-	 */
-	private String ownerCode;
 	/**
 	 * 备注
 	 */

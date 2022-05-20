@@ -12,7 +12,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.nodes.core.tool.validation.Excel;
-import org.nodes.wms.core.common.entity.AttributeBase;
+import org.springblade.core.tenant.mp.TenantEntity;
 
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
@@ -27,7 +27,7 @@ import java.math.BigDecimal;
 @TableName("wms_sku_type")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(value = "物品分类对象", description = "物品分类对象")
-public class SkuType extends AttributeBase {
+public class SkuType extends TenantEntity {
 
 	/**
 	 * 物品分类ID

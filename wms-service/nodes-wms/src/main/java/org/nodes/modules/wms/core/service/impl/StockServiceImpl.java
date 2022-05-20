@@ -118,16 +118,16 @@ public class StockServiceImpl implements StockService {
 				}
 				asnHeader.setAsnBillState(AsnBillStateEnum.COMPLETED.getCode());//单据状态
 				asnHeader.setBillTypeCd(ParamCache.getValue(ParamEnum.COUNT_PROFIT_TYPECD.getKey()));//单据种类编码
-				asnHeader.setBillKey(asnHeader.getAsnBillNo());//上位系统单据唯一标识
-				asnHeader.setLastUpdateDate(now);
-				asnHeader.setPreCreateDate(now);
+//				asnHeader.setBillKey(asnHeader.getAsnBillNo());//上位系统单据唯一标识
+//				asnHeader.setLastUpdateDate(now);
+//				asnHeader.setPreCreateDate(now);
 				asnHeader.setScheduledArrivalDate(now);
 				asnHeader.setActualArrivalDate(now);
 				asnHeader.setFinishDate(now);
 				asnHeader.setInstoreType(InStorageTypeEnum.Normal.getCode());//入库方式
-				asnHeader.setSCode(warehouse.getWhCode());
-				asnHeader.setSName(warehouse.getWhName());
-				asnHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());//同步状态
+//				asnHeader.setSCode(warehouse.getWhCode());
+//				asnHeader.setSName(warehouse.getWhName());
+//				asnHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());//同步状态
 				asnHeader.setCreateType(CreateTypeEnum.INNER.getIndex());//创建类型
 				asnHeader.setAsnDetailList(new ArrayList<>());
 
@@ -155,7 +155,7 @@ public class StockServiceImpl implements StockService {
 
 				AsnDetailVO asnDetail = new AsnDetailVO();
 				asnDetail.setAsnLineNo(numberFormat.format(lineNo));//订单行号
-				asnDetail.setAsnBillDetailKey(asnDetail.getAsnLineNo());//上位系统单据明细唯一标识
+//				asnDetail.setAsnBillDetailKey(asnDetail.getAsnLineNo());//上位系统单据明细唯一标识
 				asnDetail.setSkuId(sku.getSkuId());//物品id
 				asnDetail.setWspId(skuPackage.getWspId());//包装id
 				asnDetail.setSkuLevel(SkuLevelEnum.Base.getIndex());//层级

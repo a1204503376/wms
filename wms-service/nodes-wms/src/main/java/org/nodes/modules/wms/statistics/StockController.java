@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.nodes.modules.wms.basedata.service.ISkuService;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.stock.core.dto.StockDTO;
@@ -20,7 +19,6 @@ import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.Func;
-import org.springblade.core.tool.utils.SpringUtil;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -86,8 +84,8 @@ public class StockController extends BladeController {
 				Sku sku = SkuCache.getById(stockVO.getSkuId());
 				if (!Func.isNull(sku)
 					&& Func.isNotEmpty(sku.getQualityHours())
-					&& Func.isNotEmpty(sku.getAttribute3())) {
-					int threshold = Integer.valueOf(sku.getAttribute3()).intValue();
+					) {
+					int threshold = 0;
 					int quality = Integer.valueOf(sku.getQualityHours());
 					double i = quality * (Double.valueOf(threshold) / 100);
 					Date validTimeDate = DateUtil.parse(validTime, DateUtil.PATTERN_DATE);

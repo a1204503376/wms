@@ -16,15 +16,10 @@ import java.util.List;
 public interface BillTypeMapper extends BaseMapper<BillType> {
 
 	/**
-	 * 根据单据类型编码或者单据类型名称查询前10个单据类型信息
+	 * 根据ioType查询单据类型信息
 	 *
 	 * @param ioType 类型模式
-	 * @param billTypeCd 单据类型编码
-	 * @param billTypeName 单据类型名称
 	 * @return List<BillSelectResponse>
 	 */
-	List<BillTypeSelectResponse> listTop10ByBillTypeCdBillTypeName(
-		@Param("ioType") String ioType,
-		@Param("billTypeCd") String billTypeCd,
-		@Param("billTypeName") String billTypeName);
+	List<BillTypeSelectResponse> listByIoType(@Param("ioType") String ioType);
 }

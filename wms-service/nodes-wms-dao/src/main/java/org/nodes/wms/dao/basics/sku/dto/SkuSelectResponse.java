@@ -25,4 +25,9 @@ public class SkuSelectResponse {
 	 * 物品名称
 	 */
 	private String skuName;
+	/**
+	 * 物品型号
+	 */
+	private String skuSpec;
+
 }

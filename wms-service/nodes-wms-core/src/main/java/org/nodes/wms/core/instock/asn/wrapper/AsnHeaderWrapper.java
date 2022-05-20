@@ -1,34 +1,26 @@
 package org.nodes.wms.core.instock.asn.wrapper;
 
-import com.sun.xml.bind.v2.model.core.ID;
-import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.entity.User;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.UserCache;
-import org.nodes.core.base.service.IDictService;
-import org.nodes.core.base.service.IUserService;
+import org.nodes.core.base.entity.User;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.wms.core.basedata.cache.BillTypeCache;
-import org.nodes.wms.core.basedata.cache.EnterpriseCache;
-import org.nodes.wms.core.basedata.cache.OwnerCache;
 import org.nodes.wms.core.basedata.entity.BillType;
-import org.nodes.wms.core.basedata.entity.Enterprise;
 import org.nodes.wms.core.basedata.entity.Owner;
-import org.nodes.wms.core.basedata.service.IEnterpriseService;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.instock.asn.dto.AsnDetailDTO;
 import org.nodes.wms.core.instock.asn.dto.AsnHeaderDTO;
 import org.nodes.wms.core.instock.asn.entity.AsnHeader;
 import org.nodes.wms.core.instock.asn.vo.AsnHeaderMinVO;
 import org.nodes.wms.core.instock.asn.vo.AsnHeaderVO;
-import org.nodes.wms.core.warehouse.cache.WarehouseCache;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
 import org.nodes.wms.core.instock.purchase.dto.PoDetailDTO;
 import org.nodes.wms.core.instock.purchase.dto.PoHeaderDTO;
-import org.nodes.wms.core.warehouse.service.IWarehouseService;
+import org.nodes.wms.core.warehouse.cache.WarehouseCache;
+import org.nodes.wms.core.warehouse.entity.Warehouse;
 import org.springblade.core.mp.support.BaseEntityWrapper;
-import org.springblade.core.mp.support.Condition;
-import org.springblade.core.tool.utils.*;
+import org.springblade.core.tool.utils.BeanUtil;
+import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.SpringUtil;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -60,7 +52,7 @@ public class AsnHeaderWrapper extends BaseEntityWrapper<AsnHeader, AsnHeaderVO> 
 		asnHeaderVO.setInstoreTypeName(DictCache.getValue(DictConstant.INSTORE_TYPE, asnHeaderVO.getInstoreType()));
 		asnHeaderVO.setCreateTypeName(DictCache.getValue(DictConstant.CREATE_TYPE, asnHeaderVO.getCreateType()));
 		//同步状态名称
-		asnHeaderVO.setSyncStateName(DictCache.getValue(DictConstant.SYNC_STATE, asnHeaderVO.getSyncState()));
+//		asnHeaderVO.setSyncStateName(DictCache.getValue(DictConstant.SYNC_STATE, asnHeaderVO.getSyncState()));
 		//货主名称
 		if (Func.isNotEmpty(asnHeaderVO.getWoId())) {
 			IOwnerService ownerService = SpringUtil.getBean(IOwnerService.class);
@@ -85,31 +77,31 @@ public class AsnHeaderWrapper extends BaseEntityWrapper<AsnHeader, AsnHeaderVO> 
 			}
 		}
 		//过账类型
-		asnHeaderVO.setPostStateCd(DictCache.getValue("post_state", asnHeaderVO.getPostState()));
-		//过账人
-		if (Func.isNotEmpty(asnHeaderVO.getPostUser())) {
-			User user = UserCache.getById(asnHeaderVO.getPostUser());
-			if (Func.isNotEmpty(user)) {
-				asnHeaderVO.setPostUserCd(user.getName());
-			}
-		}
+//		asnHeaderVO.setPostStateCd(DictCache.getValue("post_state", asnHeaderVO.getPostState()));
+//		//过账人
+//		if (Func.isNotEmpty(asnHeaderVO.getPostUser())) {
+//			User user = UserCache.getById(asnHeaderVO.getPostUser());
+//			if (Func.isNotEmpty(user)) {
+//				asnHeaderVO.setPostUserCd(user.getName());
+//			}
+//		}
 		//库房名称
 		Warehouse warehouse = WarehouseCache.getById(asnHeaderVO.getWhId());
 		if (Func.isNotEmpty(warehouse) && Func.isNotEmpty(warehouse.getWhName())) {
 			asnHeaderVO.setWhName(warehouse.getWhName());
 		}
 		//供应商ID
-		if (Func.isNotEmpty(asnHeaderVO.getSCode())) {
-			IEnterpriseService enterpriseService = SpringUtil.getBean(IEnterpriseService.class);
-			//Enterprise enterprise = enterpriseService.getByCode(asnHeaderDTO.getSCode());
-			Enterprise enterprise = enterpriseService.list(Condition.getQueryWrapper(new Enterprise())
-				.lambda()
-				.eq(Enterprise::getEnterpriseCode, asnHeaderVO.getSCode()))
-				.stream().findFirst().orElse(null);
-			if (ObjectUtil.isNotEmpty(enterprise)) {
-				asnHeaderVO.setSId(enterprise.getPeId());
-			}
-		}
+//		if (Func.isNotEmpty(asnHeaderVO.getSCode())) {
+//			IEnterpriseService enterpriseService = SpringUtil.getBean(IEnterpriseService.class);
+//			//Enterprise enterprise = enterpriseService.getByCode(asnHeaderDTO.getSCode());
+//			Enterprise enterprise = enterpriseService.list(Condition.getQueryWrapper(new Enterprise())
+//				.lambda()
+//				.eq(Enterprise::getEnterpriseCode, asnHeaderVO.getSCode()))
+//				.stream().findFirst().orElse(null);
+//			if (ObjectUtil.isNotEmpty(enterprise)) {
+//				asnHeaderVO.setSId(enterprise.getPeId());
+//			}
+//		}
 		User user = UserCache.getById(asnHeaderVO.getCreateUser());
 		if (Func.isNotEmpty(user)) {
 			asnHeaderVO.setCreateUserName(user.getName());
@@ -122,7 +114,7 @@ public class AsnHeaderWrapper extends BaseEntityWrapper<AsnHeader, AsnHeaderVO> 
 		AsnHeaderDTO asnHeader = BeanUtil.copy(poHeader, AsnHeaderDTO.class);
 
 		if (Func.isNotEmpty(asnHeader)) {
-			asnHeader.setOrderNo(poHeader.getPoBillNo());
+//			asnHeader.setOrderNo(poHeader.getPoBillNo());
 			if (Func.isNotEmpty(poHeader.getDetailList())) {
 				asnHeader.setAsnDetailList(new ArrayList<>());
 				for (PoDetailDTO poDetail : poHeader.getDetailList()) {
@@ -157,7 +149,7 @@ public class AsnHeaderWrapper extends BaseEntityWrapper<AsnHeader, AsnHeaderVO> 
 			}
 		}
 		//供应商名称
-		vo.setSName(asnHeader.getSName());
+//		vo.setSName(asnHeader.getSName());
 		//库房名称
 		Warehouse warehouse = WarehouseCache.getById(asnHeader.getWhId());
 		if (Func.isNotEmpty(warehouse) && Func.isNotEmpty(warehouse.getWhName())) {

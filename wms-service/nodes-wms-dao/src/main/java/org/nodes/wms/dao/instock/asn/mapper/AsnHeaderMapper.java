@@ -32,15 +32,23 @@ public interface AsnHeaderMapper extends BaseMapper<AsnHeader> {
 	 * 获取ASN单信息和对应的收货单信息
 	 *
 	 * @param asnBillId:Asn单id
-	 * @return DetailResponse
+	 * @return AsnDetailResponse
 	 */
 	AsnDetailResponse selectAsnContactDetail(Long asnBillId);
 
 	/**
 	 * 查询ASN单信息
 	 *
-	 * @param pageParamsQuery:
+	 * @param pageParamsQuery: 条件参数
 	 * @return List<AsnExportResponse>
 	 */
 	List<AsnBillExportResponse> selectAsnBillList(@Param("params") PageParamsQuery pageParamsQuery);
+
+	/**
+	 * 根据ASN单id查询ASN单头表信息
+	 *
+	 * @param asnBillId:
+	 * @return AsnHeader
+	 */
+	AsnHeader selectAsnHeaderByAsnBillId(@Param("asnBillId") Long asnBillId);
 }

@@ -34,7 +34,9 @@ export default {
     props: {
         selectVal: [Array, String],
         // 单选多选切换，默认为false
-        multiple: {type: Boolean, required: false, default: false}
+        multiple: {type: Boolean, required: false, default: false},
+        //是否有默认值 true:有默认值  默认为false 编辑时将其设置为true
+        defaultValue:{type:Boolean,required: false,default: () => false}
     },
     data() {
         return {
@@ -43,7 +45,11 @@ export default {
         }
     },
     async created() {
-        await this.getDataSource();
+        await this.getDataSource()
+        if(this.defaultValue){
+            this.val = this.dataSource[0].whId
+            this.onChange(this.val);
+        }
     },
     methods: {
         async getDataSource() {

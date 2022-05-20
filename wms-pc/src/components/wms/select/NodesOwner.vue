@@ -3,7 +3,7 @@
         v-model="val"
         :multiple="multiple"
         size="mini"
-        style="width: 340px"
+        style="width: 300px"
         value-key="woId"
         @change="onChange">
         <el-option
@@ -30,6 +30,8 @@ export default {
         selectVal: [Object, String, Array],
         // 是否多选 true:多选 默认为单选
         multiple: {type: Boolean, required: false, default: () => false},
+        //是否有默认值 true:有默认值  默认为false 编辑时将其设置为true
+        defaultValue:{type:Boolean, required: false, default: () => false}
     },
     data() {
         return {
@@ -37,8 +39,17 @@ export default {
             dataSource: [],
         }
     },
-    created() {
-        this.getDataSource();
+    watch: {
+        selectVal(newVal) {
+            this.val=newVal;
+        },
+    },
+    async created() {
+        await this.getDataSource();
+        if(this.defaultValue){
+            this.val = this.dataSource[0].woId
+            this.onChange(this.val);
+        }
     },
     methods: {
         async getDataSource() {

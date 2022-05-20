@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.ParamCache;
-import org.nodes.core.base.cache.SysCache;
 import org.nodes.core.base.entity.Dept;
 import org.nodes.core.base.entity.Dict;
 import org.nodes.core.base.entity.Param;
@@ -21,7 +20,6 @@ import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.ValidationUtil;
 import org.nodes.core.tool.validation.Excel;
-import org.nodes.wms.core.allot.enums.AllotBillStateEnum;
 import org.nodes.wms.core.allot.service.IAllotHeaderService;
 import org.nodes.wms.core.basedata.cache.BillTypeCache;
 import org.nodes.wms.core.basedata.cache.SkuCache;
@@ -41,7 +39,6 @@ import org.nodes.wms.core.instock.asn.dto.AsnHeaderDTO;
 import org.nodes.wms.core.instock.asn.dto.AsnHeaderOrderDto;
 import org.nodes.wms.core.instock.asn.entity.*;
 import org.nodes.wms.core.instock.asn.enums.AsnDetailStatusEnum;
-import org.nodes.wms.core.instock.asn.enums.SyncStateEnum;
 import org.nodes.wms.core.instock.asn.excel.AsnHeaderExcel;
 import org.nodes.wms.core.instock.asn.excel.SnExcel;
 import org.nodes.wms.core.instock.asn.mapper.AsnDetailMapper;
@@ -340,11 +337,11 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 	public boolean saveOrUpdate(AsnHeaderDTO asnHeader) {
 
 		//机构对象
-		Dept dept = SysCache.getDept(asnHeader.getDeptId());
-		if (Func.isNotEmpty(dept)) {
-			asnHeader.setDeptCode(dept.getDeptCode());//机构编码
-			asnHeader.setDeptName(dept.getDeptName());//机构名称
-		}
+//		Dept dept = SysCache.getDept(asnHeader.getDeptId());
+//		if (Func.isNotEmpty(dept)) {
+//			asnHeader.setDeptCode(dept.getDeptCode());//机构编码
+//			asnHeader.setDeptName(dept.getDeptName());//机构名称
+//		}
 		if (Func.isEmpty(asnHeader.getAsnDetailList())) {
 			throw new ServiceException(String.format("至少有一条收货明细"));
 		}
@@ -364,17 +361,17 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 		asnHeader.setAsnBillState(AsnBillStateEnum.NOT_RECEIPT.getCode());//单据状态
 
 		//上位系统单据唯一标识
-		if (Func.isEmpty(asnHeader.getBillKey())) {
-			asnHeader.setBillKey(asnHeader.getAsnBillNo());
-		}
-		//上位系统最后更新时间
-		if (Func.isEmpty(asnHeader.getLastUpdateDate())) {
-			asnHeader.setLastUpdateDate(LocalDateTime.now());
-		}
-		//上位系统订单创建时间
-		if (Func.isEmpty(asnHeader.getPreCreateDate())) {
-			asnHeader.setPreCreateDate(LocalDateTime.now());
-		}
+//		if (Func.isEmpty(asnHeader.getBillKey())) {
+//			asnHeader.setBillKey(asnHeader.getAsnBillNo());
+//		}
+//		//上位系统最后更新时间
+//		if (Func.isEmpty(asnHeader.getLastUpdateDate())) {
+//			asnHeader.setLastUpdateDate(LocalDateTime.now());
+//		}
+//		//上位系统订单创建时间
+//		if (Func.isEmpty(asnHeader.getPreCreateDate())) {
+//			asnHeader.setPreCreateDate(LocalDateTime.now());
+//		}
 		//创建类型
 		if (Func.isEmpty(asnHeader.getCreateType())) {
 			asnHeader.setCreateType(10);
@@ -386,7 +383,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 				asnHeader.setAsnBillNo(AsnCache.getAsnBillNo());
 			}
 			asnHeader.setAsnBillState(AsnBillStateEnum.NOT_RECEIPT.getCode());
-			asnHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());
+//			asnHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());
 		}
 		if (Func.isEmpty(asnHeader.getAsnBillNo())) {
 			asnHeader.setAsnBillNo(AsnCache.getAsnBillNo());
@@ -414,11 +411,11 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 	public boolean saveOrUpdateByAllot(AsnHeaderDTO asnHeader) {
 
 		//机构对象
-		Dept dept = SysCache.getDept(asnHeader.getDeptId());
-		if (Func.isNotEmpty(dept)) {
-			asnHeader.setDeptCode(dept.getDeptCode());//机构编码
-			asnHeader.setDeptName(dept.getDeptName());//机构名称
-		}
+//		Dept dept = SysCache.getDept(asnHeader.getDeptId());
+//		if (Func.isNotEmpty(dept)) {
+//			asnHeader.setDeptCode(dept.getDeptCode());//机构编码
+//			asnHeader.setDeptName(dept.getDeptName());//机构名称
+//		}
 		if (Func.isEmpty(asnHeader.getAsnDetailList())) {
 			throw new ServiceException(String.format("至少有一条收货明细"));
 		}
@@ -438,17 +435,17 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 		asnHeader.setAsnBillState(AsnBillStateEnum.NOT_RECEIPT.getCode());//单据状态
 
 		//上位系统单据唯一标识
-		if (Func.isEmpty(asnHeader.getBillKey())) {
-			asnHeader.setBillKey(asnHeader.getAsnBillNo());
-		}
-		//上位系统最后更新时间
-		if (Func.isEmpty(asnHeader.getLastUpdateDate())) {
-			asnHeader.setLastUpdateDate(LocalDateTime.now());
-		}
-		//上位系统订单创建时间
-		if (Func.isEmpty(asnHeader.getPreCreateDate())) {
-			asnHeader.setPreCreateDate(LocalDateTime.now());
-		}
+//		if (Func.isEmpty(asnHeader.getBillKey())) {
+//			asnHeader.setBillKey(asnHeader.getAsnBillNo());
+//		}
+//		//上位系统最后更新时间
+//		if (Func.isEmpty(asnHeader.getLastUpdateDate())) {
+//			asnHeader.setLastUpdateDate(LocalDateTime.now());
+//		}
+//		//上位系统订单创建时间
+//		if (Func.isEmpty(asnHeader.getPreCreateDate())) {
+//			asnHeader.setPreCreateDate(LocalDateTime.now());
+//		}
 		//创建类型
 		if (Func.isEmpty(asnHeader.getCreateType())) {
 			asnHeader.setCreateType(10);
@@ -460,7 +457,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 				asnHeader.setAsnBillNo(AsnCache.getAsnBillNo());
 			}
 			asnHeader.setAsnBillState(AsnBillStateEnum.NOT_RECEIPT.getCode());
-			asnHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());
+//			asnHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());
 		}
 		if (Func.isEmpty(asnHeader.getAsnBillNo())) {
 			asnHeader.setAsnBillNo(AsnCache.getAsnBillNo());
@@ -822,7 +819,8 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 		} else if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.CANCEL.getCode())) {
 			throw new ServiceException("订单：" + asnHeader.getAsnBillNo() + " 已取消，请停止收货！");
 		}
-		dto.setSName(asnHeader.getSName());
+//		dto.setSName(asnHeader.getSName());
+		dto.setSName(asnHeader.getSupplierName());
 		Location location = checkLoc(dto.getWhId(), dto.getLocCode());
 		dto.setLocId(location.getLocId());
 		List<String> lpnCodes = dto.getLpnCodes();
@@ -1032,7 +1030,8 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 				.eq(AsnInventory::getAsnBillNo, task.getTaskRemark()));
 		}
 		//供应商名 用于清点记录
-		dto.setSName(asnHeader.getSName());
+//		dto.setSName(asnHeader.getSName());
+		dto.setSName(asnHeader.getSupplierName());
 		//校验库
 //		Warehouse warehouse = WarehouseCache.getById(dto.getWhId());
 //		if (Func.isEmpty(warehouse)) {
@@ -1926,12 +1925,12 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 		// 修改订单主表订单状态
 		super.updateById(asnHeader);
 		IAllotHeaderService allotHeaderService = SpringUtil.getBean(IAllotHeaderService.class);
-		if (AsnBillStateEnum.COMPLETED.equals(asnBillState)) {
-			// 更新调拨单状态
-			allotHeaderService.updateBillState(asnHeader.getOrderNo(), AllotBillStateEnum.COMPLETED);
-		} else if (AsnBillStateEnum.PART.equals(asnBillState)) {
-			allotHeaderService.updateBillState(asnHeader.getOrderNo(), AllotBillStateEnum.INSTOCKING);
-		}
+//		if (AsnBillStateEnum.COMPLETED.equals(asnBillState)) {
+//			// 更新调拨单状态
+//			allotHeaderService.updateBillState(asnHeader.getOrderNo(), AllotBillStateEnum.COMPLETED);
+//		} else if (AsnBillStateEnum.PART.equals(asnBillState)) {
+//			allotHeaderService.updateBillState(asnHeader.getOrderNo(), AllotBillStateEnum.INSTOCKING);
+//		}
 		return asnHeader;
 	}
 
@@ -2114,15 +2113,15 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 			}).findFirst().orElse(null);
 			AsnHeaderExcel asnExportDTO = new AsnHeaderExcel();
 			asnExportDTO.setAsnBillNo(asnHeader.getAsnBillNo());
-			asnExportDTO.setContact(asnHeader.getContact());
-			asnExportDTO.setPhone(asnHeader.getPhone());
-			asnExportDTO.setSuAddress(asnHeader.getSAddress());
-			asnExportDTO.setDeptCode(asnHeader.getDeptCode());
-			asnExportDTO.setDeptName(asnHeader.getDeptName());
-			asnExportDTO.setAsnRemark(asnHeader.getAsnBillRemark());
-			asnExportDTO.setOrderNo(asnHeader.getOrderNo());
-			asnExportDTO.setSuCode(asnHeader.getSCode());
-			asnExportDTO.setSuName(asnHeader.getSName());
+//			asnExportDTO.setContact(asnHeader.getContact());
+//			asnExportDTO.setPhone(asnHeader.getPhone());
+//			asnExportDTO.setSuAddress(asnHeader.getSAddress());
+//			asnExportDTO.setDeptCode(asnHeader.getDeptCode());
+//			asnExportDTO.setDeptName(asnHeader.getDeptName());
+//			asnExportDTO.setAsnRemark(asnHeader.getAsnBillRemark());
+//			asnExportDTO.setOrderNo(asnHeader.getOrderNo());
+//			asnExportDTO.setSuCode(asnHeader.getSCode());
+//			asnExportDTO.setSuName(asnHeader.getSName());
 			asnExportDTO.setScheduledArrivalDate(Date.from(asnHeader.getScheduledArrivalDate().atZone(ZoneId.systemDefault()).toInstant()));
 			//货主
 			if (Func.isNotEmpty(owner)) {
@@ -2166,8 +2165,8 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 					copy.setScanQty(asnDetail.getScanQty());
 					copy.setSurplusQty(asnDetail.getSurplusQty());
 //					asnExportDTO.setDetailAmount(asnDetail.getDetailAmount());
-					copy.setAsnBillDetailKey(asnDetail.getAsnBillDetailKey());
-					copy.setAsnDetailRemark(asnDetail.getAsnDetailRemark());
+//					copy.setAsnBillDetailKey(asnDetail.getAsnBillDetailKey());
+//					copy.setAsnDetailRemark(asnDetail.getAsnDetailRemark());
 					// 处理批属性
 					for (int j = 1; j <= ParamCache.LOT_COUNT; j++) {
 						copy.skuLotSet(j, asnDetail.skuLotGet(j));
@@ -2315,17 +2314,17 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 						return u.getDeptCode().equals(asnHeaderExcel.getDeptCode());
 					}).findFirst().orElse(null);
 					if (Func.isNotEmpty(dept)) {
-						asnHeaderDTO.setDeptId(dept.getId());
-						asnHeaderDTO.setDeptCode(dept.getDeptCode());
-						asnHeaderDTO.setDeptName(dept.getDeptName());
+//						asnHeaderDTO.setDeptId(dept.getId());
+//						asnHeaderDTO.setDeptCode(dept.getDeptCode());
+//						asnHeaderDTO.setDeptName(dept.getDeptName());
 					}
 					asnHeaderDTO.setCreateUser(AuthUtil.getUserId());
-					asnHeaderDTO.setContact(asnHeaderExcel.getContact());
-					asnHeaderDTO.setPhone(asnHeaderExcel.getPhone());
-					asnHeaderDTO.setSAddress(asnHeaderExcel.getSuAddress());
+//					asnHeaderDTO.setContact(asnHeaderExcel.getContact());
+//					asnHeaderDTO.setPhone(asnHeaderExcel.getPhone());
+//					asnHeaderDTO.setSAddress(asnHeaderExcel.getSuAddress());
 					asnHeaderDTO.setAsnBillRemark(asnHeaderExcel.getAsnBillRemark());
-					asnHeaderDTO.setOrderNo(asnHeaderExcel.getOrderNo());
-					asnHeaderDTO.setSCode(asnHeaderExcel.getSuCode());
+//					asnHeaderDTO.setOrderNo(asnHeaderExcel.getOrderNo());
+//					asnHeaderDTO.setSCode(asnHeaderExcel.getSuCode());
 					asnHeaderDTO.setSName(asnHeaderExcel.getSuName());
 					asnHeaderDTO.setScheduledArrivalDateCd(asnHeaderExcel.getScheduledArrivalDate());
 
@@ -2443,19 +2442,19 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 			if (Func.isNotEmpty(billType)) {
 				asnHeaderDTO.setBillTypeCd(billType.getBillTypeCd());
 			}
-			if (Func.isNotEmpty(asnHeaderDTO.getSCode())) {
-				//供应商
-				IEnterpriseService enterpriseService = SpringUtil.getBean(IEnterpriseService.class);
-				//Enterprise enterprise = enterpriseService.getByCode(asnHeaderDTO.getSCode());
-				Enterprise enterprise = enterpriseService.list(Condition.getQueryWrapper(new Enterprise())
-						.lambda()
-						.eq(Enterprise::getEnterpriseCode, asnHeaderDTO.getSCode()))
-					.stream().findFirst().orElse(null);
-
-				if (enterprise != null) {
-					asnHeaderDTO.setSName(enterprise.getEnterpriseName());
-				}
-			}
+//			if (Func.isNotEmpty(asnHeaderDTO.getSCode())) {
+//				//供应商
+//				IEnterpriseService enterpriseService = SpringUtil.getBean(IEnterpriseService.class);
+//				//Enterprise enterprise = enterpriseService.getByCode(asnHeaderDTO.getSCode());
+//				Enterprise enterprise = enterpriseService.list(Condition.getQueryWrapper(new Enterprise())
+//						.lambda()
+//						.eq(Enterprise::getEnterpriseCode, asnHeaderDTO.getSCode()))
+//					.stream().findFirst().orElse(null);
+//
+//				if (enterprise != null) {
+//					asnHeaderDTO.setSName(enterprise.getEnterpriseName());
+//				}
+//			}
 			Query tmpQuery = new Query();
 			tmpQuery.setCurrent(1);
 			tmpQuery.setSize(1);
@@ -2553,9 +2552,9 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 		if (Func.isNotEmpty(asnHeader.getAsnBillNo())) {
 			queryWrapper.like(AsnHeader::getAsnBillNo, asnHeader.getAsnBillNo());
 		}
-		if (Func.isNotEmpty(asnHeader.getOrderNo())) {
-			queryWrapper.like(AsnHeader::getOrderNo, asnHeader.getOrderNo());
-		}
+//		if (Func.isNotEmpty(asnHeader.getOrderNo())) {
+//			queryWrapper.like(AsnHeader::getOrderNo, asnHeader.getOrderNo());
+//		}
 		if (Func.isNotEmpty(asnHeader.getBillTypeCd())) {
 			queryWrapper.eq(AsnHeader::getBillTypeCd, asnHeader.getBillTypeCd());
 		}

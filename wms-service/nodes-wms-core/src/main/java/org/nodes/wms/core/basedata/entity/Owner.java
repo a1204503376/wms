@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.nodes.core.tool.validation.Excel;
-import org.nodes.wms.core.common.entity.AttributeBase;
+import org.springblade.core.tenant.mp.TenantEntity;
 
 import javax.validation.constraints.NotBlank;
 
@@ -24,7 +24,7 @@ import javax.validation.constraints.NotBlank;
 @TableName("wms_owner")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(value = "Owner对象", description = "Owner对象")
-public class Owner extends AttributeBase {
+public class Owner extends TenantEntity {
 
 	private static final long serialVersionUID = 1L;
 	public static final int DATA_TYPE = 3;

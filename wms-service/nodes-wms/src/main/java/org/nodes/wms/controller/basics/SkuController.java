@@ -12,7 +12,10 @@ import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.excel.SkuExcel;
 import org.nodes.wms.core.basedata.vo.SkuVO;
 import org.nodes.wms.core.basedata.wrapper.SkuWrapper;
-import org.nodes.wms.dao.basics.sku.dto.*;
+import org.nodes.wms.dao.basics.sku.dto.SkuSelectQuery;
+import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectQuery;
+import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
@@ -142,18 +145,10 @@ public class SkuController {
 	/**
 	 * 计量单位下拉组件数据源: 根据物品id查询所有计量单位
 	 */
-	@PostMapping("/getSkuUmSelectResponseListBySkuId")
-	public R<List<SkuUmSelectResponse>> getSkuUmSelectResponseListBySkuId(@RequestBody SkuUmSelectQuery skuUmSelectQuery){
-		List<SkuUmSelectResponse> umList = skuBiz.getSkuUmSelectResponseListBySkuId(skuUmSelectQuery);
+	@PostMapping("/findSkuUmSelectResponseListBySkuId")
+	public R<List<SkuUmSelectResponse>> findSkuUmSelectResponseListBySkuId(@RequestBody SkuUmSelectQuery skuUmSelectQuery){
+		List<SkuUmSelectResponse> umList = skuBiz.findSkuUmSelectResponseListBySkuId(skuUmSelectQuery.getSkuId());
 		return R.data(umList);
 	}
 
-	/**
-	 * 根据物品id查询所有包装明细
-	 */
-	@PostMapping("/getPackageDetailBySkuId")
-	public R<List<SkuPackageDetailResponse>> getSkuPackDetailListBySkuId(@RequestBody SkuPackageDetailQuery skuPackageDetailQuery){
-		List<SkuPackageDetailResponse> packageDetailResponseList = skuBiz.getSkuPackDetailListBySkuId(skuPackageDetailQuery);
-		return R.data(packageDetailResponseList);
-	}
 }

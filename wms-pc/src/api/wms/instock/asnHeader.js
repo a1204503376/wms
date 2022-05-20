@@ -33,6 +33,14 @@ export const add = (params) => {
         data: params,
     })
 }
+
+export const detailByEdit = (asdBillIdObj) => {
+    return request({
+        url: '/api/wms/asn/detailByEdit',
+        method: 'post',
+        data: asdBillIdObj
+    })
+}
 // export const getPage = (current, size, params) => {
 //     return request({
 //         url: '/api/wms/instock/asnHeader/page',

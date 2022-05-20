@@ -683,20 +683,20 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper, T extends Count
 							break;
 						}
 					}
-					asnHeader.setBillKey(countHeader.getCountBillNo());
+//					asnHeader.setBillKey(countHeader.getCountBillNo());
 					asnHeader.setAsnBillState(AsnBillStateEnum.COMPLETED.getCode());
 					asnHeader.setBillTypeCd(ParamCache.getValue(ParamEnum.COUNT_PROFIT_TYPECD.getKey()));
 					asnHeader.setInstoreType(InStorageTypeEnum.Normal.getCode());
 					asnHeader.setScheduledArrivalDate(LocalDateTime.now());
-					asnHeader.setSCode(warehouse.getWhCode());
-					asnHeader.setSName(warehouse.getWhName());
+//					asnHeader.setSCode(warehouse.getWhCode());
+//					asnHeader.setSName(warehouse.getWhName());
 					asnHeader.setAsnDetailList(new ArrayList<>());
 					asnHeader.setFinishDate(now);
 					asnHeader.setScheduledArrivalDate(now);
 					asnHeader.setActualArrivalDate(now);
-					asnHeader.setLastUpdateDate(now);
-					asnHeader.setPreCreateDate(now);
-					asnHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());
+//					asnHeader.setLastUpdateDate(now);
+//					asnHeader.setPreCreateDate(now);
+//					asnHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());
 					asnHeader.setCreateType(CreateTypeEnum.INNER.getIndex());
 
 					Integer lineNo = 1;
@@ -727,7 +727,7 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper, T extends Count
 						}
 						AsnDetailVO asnDetail = new AsnDetailVO();
 						asnDetail.setAsnLineNo(numberFormat.format(lineNo));
-						asnDetail.setAsnBillDetailKey(asnDetail.getAsnLineNo());
+//						asnDetail.setAsnBillDetailKey(asnDetail.getAsnLineNo());
 						asnDetail.setSkuId(countReport.getSkuId());
 						asnDetail.setSkuCode(countReport.getSkuCode());
 						asnDetail.setSkuName(countReport.getSkuName());

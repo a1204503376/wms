@@ -1,6 +1,9 @@
 package org.nodes.wms.dao.instock.receive.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
+import org.nodes.wms.dao.basics.customer.entities.BasicsCustomers;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailEditResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.mapper.ReceiveDetailMapper;
 import org.nodes.wms.dao.instock.receive.ReceiveDetailDao;
@@ -37,5 +40,17 @@ public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, R
 	public List<Long> selectDetailIdByReceiveId(Long receiveId) {
 		return receiveDetailMapper.selectDetailIdByReceiveId(receiveId);
 	}
+
+    @Override
+    public boolean insert(ReceiveDetail receiveDetail) {
+		return super.save(receiveDetail);
+    }
+
+    @Override
+    public List<ReceiveDetail> selectReceiveDetailById(Long receiveId) {
+		 LambdaQueryWrapper<ReceiveDetail> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+		lambdaQueryWrapper.eq(ReceiveDetail::getReceiveId,receiveId);
+		return super.list(lambdaQueryWrapper);
+    }
 
 }

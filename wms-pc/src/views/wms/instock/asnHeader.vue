@@ -3,7 +3,8 @@
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-form-item label="ASN单编码">
-                    <el-input v-model="form.params.asnBillNo" class="d-input"></el-input>
+                    <el-input v-model="form.params.asnBillNo" class="d-input">
+                    </el-input>
                 </el-form-item>
                 <el-form-item label="物品编码">
                     <nodes-sku v-model="form.params.sku" style="width: 120px"></nodes-sku>
@@ -57,13 +58,27 @@
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
+<!--                        <el-table-column v-if="column.prop === 'asnBillNo'" :key="index" show-overflow-tooltip v-bind="column">-->
+<!--                                <el-link-->
+<!--                                    href="www.baidu.com"-->
+<!--                                    :underline="false"-->
+<!--                                    type="primary"-->
+<!--                                    target="_blank">{{index}}-->
+<!--                                </el-link>-->
+<!--                        </el-table-column>-->
+                        <!--                                    :to="{name: 'detail',query:{id:table.data[index].asnBillId}}"-->
                         <el-table-column :key="index" show-overflow-tooltip v-bind="column">
+<!--                            <router-link-->
+<!--                                :underline="false"-->
+<!--                                :to="home"-->
+<!--                                v-if="column.prop === 'asnBillNo'"-->
+<!--                                target="_blank">{{table.data[index].asnBillId}}-->
+<!--                            </router-link>-->
                         </el-table-column>
                     </template>
                     <el-table-column fixed="right" label="操作" width="100">
                         <template slot-scope="scope">
-                            <el-button size="small" type="text" @click="view(scope.row)">查看</el-button>
-                            <el-button size="small" type="text">编辑</el-button>
+                            <el-button size="small" @click="onEdit(scope.row)" type="text">编辑</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -133,7 +148,7 @@ export default {
                         prop: 'asnBillNo',
                         label: 'ASN单编码',
                         width: 140,
-                        sortable: 'custom'
+                        sortable: 'custom',
                     },
                     {
                         prop: 'billTypeName',
@@ -267,10 +282,18 @@ export default {
             this.$router.push({
                 name: '新增ASN单',
                 params: {
-                    id: '0'
+                    asnBillId: '0'
                 }
             })
         },
+        onEdit(row) {
+            this.$router.push({
+                name: '编辑ASN单',
+                params: {
+                    asnBillId: row.asnBillId
+                }
+            })
+        }
     }
 }
 </script>

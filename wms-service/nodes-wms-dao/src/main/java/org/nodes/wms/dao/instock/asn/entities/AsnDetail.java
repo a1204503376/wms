@@ -119,34 +119,40 @@ public class AsnDetail extends BaseSkuLotEntity {
 	private BigDecimal surplusQty;
 
 	/**
-	 * ASN库房
+	 * 库房id
 	 */
-	private String incomeWhCode;
+	private Long whId;
 
 	/**
 	 * 单价
 	 */
 	private BigDecimal detailPrice;
+
 	/**
 	 * 明细总金额
 	 */
 	private BigDecimal detailAmount;
+
 	/**
 	 * 备注
 	 */
 	private String remark;
+
 	/**
 	 * 接收状态
 	 */
 	private Integer detailStatus;
+
 	/**
 	 * 上位系统单据唯一标识
 	 */
 	private String billKey;
+
 	/**
 	 * 上位系统单编号
 	 */
 	private String orderNo;
+
 	/**
 	 * 序列号导入状态
 	 */

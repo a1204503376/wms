@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.instock.receive.dto.input;
 
 import lombok.Data;
+import org.nodes.wms.dao.basics.sku.dto.SkuSelectRequest;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -15,12 +16,12 @@ public class ReceiveNewDetailRequest implements Serializable {
 	/**
 	 * 订单行号
 	 */
-	private String  lineNo;
+	private String  lineNumber;
 	/**
-	 * 物品编码
+	 * 物品下拉框对象
 	 */
-	@NotNull(message = "物品编码不能为空")
-	private String  skuCode;
+	@NotNull(message = "物品ID不能为空")
+	private SkuSelectRequest sku;
 	/**
 	 * 计划数量
 	 */

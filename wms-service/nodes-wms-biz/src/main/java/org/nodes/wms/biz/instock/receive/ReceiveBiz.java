@@ -3,8 +3,10 @@ package org.nodes.wms.biz.instock.receive;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
 import org.nodes.wms.dao.instock.receive.dto.input.NewReceiveRequest;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveEditResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
+import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -48,7 +50,7 @@ public interface ReceiveBiz {
 	 * @param newReceiveRequest :新增收货单dto
 	 * @return true:新增成功, false:新增失败
 	 */
-	boolean newReceive(NewReceiveRequest newReceiveRequest);
+	ReceiveHeader newReceive(NewReceiveRequest newReceiveRequest);
 
 	/**
 	 * 导出收货单列表
@@ -56,4 +58,11 @@ public interface ReceiveBiz {
 	 * @param response : 响应对象
 	 */
     void exportExcel(ReceivePageQuery receivePageQuery, HttpServletResponse response);
+
+	/**
+	 * 过去编辑页面返回对象
+	 * @param receiveId 收货单id
+	 * @return ReceiveEditResponse
+	 */
+	ReceiveEditResponse getEditReceiveResponse(Long receiveId);
 }

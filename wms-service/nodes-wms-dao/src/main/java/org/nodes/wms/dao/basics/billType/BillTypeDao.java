@@ -10,12 +10,10 @@ import java.util.List;
 public interface BillTypeDao {
 
 	/**
-	 * 根据单据类型编码或者单据类型名称查询前10个单据类型信息
+	 * 根据ioType查询单据类型信息
 	 *
-	 * @param ioType       类型模式 i:入库 o:出库 ‘’全部
-	 * @param billTypeCode 单据类型编码
-	 * @param billTypeName 单据类型名称
+	 * @param ioType 类型模式 i:入库 o:出库 ‘’全部
 	 * @return List<BillTypeSelectResponse>
 	 */
-	List<BillTypeSelectResponse> listTop10ByBillTypeCdBillTypeName(String ioType,String billTypeCode, String billTypeName);
+	List<BillTypeSelectResponse> listByIoType(String ioType);
 }

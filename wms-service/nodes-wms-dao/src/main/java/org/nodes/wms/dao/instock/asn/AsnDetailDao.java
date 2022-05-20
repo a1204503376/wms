@@ -31,5 +31,13 @@ public interface AsnDetailDao {
 	 * @param asnDetailList: Asn单明细集合
 	 * @return true:新增成功, false:新增失败
 	 */
-	public Boolean addAsnDetail(List<AsnDetail> asnDetailList);
+	public Boolean insertAsnDetail(List<AsnDetail> asnDetailList);
+
+	/**
+	 * 根据ASN单id 查询ASN单明细信息集合
+	 *
+	 * @param asnBillId: Asn单id
+	 * @return List<AsnDetailEditResponse>
+	 */
+	public List<AsnDetail> getAsnDetailByAsnBillId(Long asnBillId);
 }

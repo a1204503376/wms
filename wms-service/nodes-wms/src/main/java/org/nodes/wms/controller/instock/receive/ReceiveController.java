@@ -6,10 +6,12 @@ import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.dao.application.dto.output.ReceiveBillStateResponse;
 import org.nodes.wms.dao.instock.receive.dto.input.NewReceiveRequest;
-import org.nodes.wms.dao.instock.receive.dto.input.ReceiveHeaderIdRequest;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceiveIdRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveEditResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveResponse;
+import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveBillStateEnum;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
@@ -44,8 +46,9 @@ public class ReceiveController {
 	 */
 	@ApiLog("收货管理-新增")
 	@PostMapping("/new")
-	public R<Boolean> newReceive(@Valid @RequestBody NewReceiveRequest newReceiveRequest) {
-		return R.status(receiveBiz.newReceive(newReceiveRequest));
+	public R<String> newReceive(@Valid @RequestBody NewReceiveRequest newReceiveRequest) {
+		ReceiveHeader receiveHeader = receiveBiz.newReceive(newReceiveRequest);
+		return R.success("单号:"+receiveHeader.getReceiveNo()+"保存成功");
 	}
 
 
@@ -54,18 +57,24 @@ public class ReceiveController {
 	 */
 	@ApiLog("收货管理-逻辑删除")
 	@PostMapping("/delete")
-	public R<Boolean> delete(@Valid @RequestBody ReceiveHeaderIdRequest headerIdRequest) {
+	public R<Boolean> delete(@Valid @RequestBody ReceiveIdRequest headerIdRequest) {
 		return R.status(receiveBiz.remove(headerIdRequest.getReceiveId()));
 	}
 
 	/**
 	 * 查看收货单明细
 	 */
-	@GetMapping("/getReceivedetail")
-	public R<ReceiveResponse> getReceivedetail(@Valid @RequestParam ReceiveHeaderIdRequest headerIdRequest) {
-		return R.data(receiveBiz.getReceivedetail(headerIdRequest.getReceiveId()));
+	@PostMapping("/getReceiveById")
+	public R<ReceiveResponse> getReceiveById(@Valid @RequestBody ReceiveIdRequest receiveIdRequest) {
+		return R.data(receiveBiz.getReceivedetail(receiveIdRequest.getReceiveId()));
 	}
-
+	/**
+	 * 编辑页面数据回显
+	 */
+	@PostMapping("/getEditReceiveById")
+	public R<ReceiveEditResponse> getEditReceiveById(@Valid @RequestBody ReceiveIdRequest receiveIdRequest) {
+		return R.data(receiveBiz.getEditReceiveResponse(receiveIdRequest.getReceiveId()));
+	}
 
 
 	/**
@@ -73,7 +82,7 @@ public class ReceiveController {
 	 */
 	@ApiLog("收货管理-修改状态")
 	@PostMapping("/editBillState")
-	public R<Boolean> editBillState(@Valid @RequestBody ReceiveHeaderIdRequest headerIdRequest) {
+	public R<Boolean> editBillState(@Valid @RequestBody ReceiveIdRequest headerIdRequest) {
 		return R.status(receiveBiz.editBillState(headerIdRequest.getReceiveId()));
 	}
 

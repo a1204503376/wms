@@ -3,8 +3,13 @@ package org.nodes.wms.biz.basics.sku.impl;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.dao.basics.sku.SkuDao;
-import org.nodes.wms.dao.basics.sku.dto.*;
+import org.nodes.wms.dao.basics.sku.dto.SkuSelectQuery;
+import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
+import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,12 +34,23 @@ public class SkuBizImpl implements SkuBiz {
     }
 
     @Override
-    public List<SkuUmSelectResponse> getSkuUmSelectResponseListBySkuId(SkuUmSelectQuery skuUmSelectQuery) {
-        return skuDao.listSkuUmBySkuId(skuUmSelectQuery.getSkuId());
+    public List<SkuUmSelectResponse> findSkuUmSelectResponseListBySkuId(Long skuId) {
+        return skuDao.listSkuUmBySkuId(skuId);
     }
 
     @Override
-    public List<SkuPackageDetailResponse> getSkuPackDetailListBySkuId(SkuPackageDetailQuery skuPackageDetailQuery) {
-        return skuDao.listSkuPackDetailBySkuId(skuPackageDetailQuery.getSkuId());
+    public SkuPackageAggregate findSkuPackageAggregateBySkuId(Long skuId) {
+        return skuDao.getSkuPackageAggregateBySkuId(skuId);
     }
+
+	@Override
+	public SkuUm findSkuUmByUmCode(String skuUmCode) {
+		return skuDao.getSkuUmByUmCode(skuUmCode);
+	}
+
+    @Override
+    public SkuPackageDetail findBaseSkuPackageDetail(Long skuId) {
+        return skuDao.getBaseSkuPackageDetail(skuId);
+    }
+
 }

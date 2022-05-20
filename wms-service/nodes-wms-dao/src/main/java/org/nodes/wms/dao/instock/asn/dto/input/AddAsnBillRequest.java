@@ -26,13 +26,17 @@ public class AddAsnBillRequest implements Serializable {
 	/**
 	 * 供应商id
 	 */
-	@NotNull(message = "供应商id不能为空")
 	private Long supplierId;
 
 	/**
-	 * 仓库编码
+	 * 仓库id
 	 */
 	private Long whId;
+
+	/**
+	 * 货主id
+	 */
+	private Long woId;
 
 	/**
 	 * ASN单备注

@@ -1,18 +1,13 @@
 <template>
     <el-select
         v-model="val"
-        :default-first-option="true"
-        :loading="loading"
-        :remote-method="remoteMethod"
+        :io-type="ioType"
+        :multiple="multiple"
         filterable
-        placeholder="请输入关键词"
-        remote
-        reserve-keyword
+        placeholder="请选择"
         size="mini"
         style="width: 300px"
         value-key="billTypeId"
-        :multiple="multiple"
-        :io-type="ioType"
         @change="onChange">
         <el-option
             v-for="item in options"
@@ -26,8 +21,7 @@
 </template>
 
 <script>
-import {getBillTypeSelectResponseTop10List} from "@/api/wms/basics/billType";
-import debounce from "lodash/debounce";
+import {getBillTypeSelectResponseList} from "@/api/wms/basics/billType";
 
 export default {
     name: "NodesBillType",
@@ -36,36 +30,36 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Object,String,Array],
+        selectVal: [Object, String, Array, Number],
         // 是否多选 true:多选 默认为单选
-        multiple: {type: Boolean, required: false, default:()=>false},
+        multiple: {type: Boolean, required: false, default: () => false},
         // 查询的单据类型，"":查询所有, "I":查询入库单据类型, "0":查询出库单据类型
-        ioType: {type: String, required: false, default:()=>''}
+        ioType: {type: String, required: false, default: () => ''}
     },
     data() {
         return {
             options: [this.selectVal],
             val: this.selectVal,
             ioTypeVal: this.ioType,
-            loading: false,
         }
     },
+    watch: {
+        selectVal(newVal) {
+            this.val=newVal;
+        }
+    },
+    created() {
+        this.getDataSource();
+    },
     methods: {
-        // 防抖 在等待时间到达前的请求全部取消，保留最后一次
-        remoteMethod: debounce(async function (key) {
-            if (key !== '') {
-                this.loading = true;
-                let BillTypeSelectQuery = {
-                    key: key,
-                    ioType: this.ioTypeVal
-                };
-                let {data: {data}} = await getBillTypeSelectResponseTop10List(BillTypeSelectQuery);
-                this.options = data;
-                this.loading = false;
-            } else {
-                this.options = [];
-            }
-        }, 500),
+        async getDataSource() {
+            let billTypeSelectQuery = {
+                ioType: this.ioTypeVal
+            };
+            let {data: {data}} = await getBillTypeSelectResponseList(billTypeSelectQuery);
+            this.options = data;
+            this.loading = false;
+        },
         onChange(val) {
             this.$emit('selectValChange', val);
         }

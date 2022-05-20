@@ -6,7 +6,7 @@
         h.receive_id,
         h.receive_no,
         h.asn_bill_no,
-        h.wh_id,
+        h.wh_code,
         h.bill_state,
         h.supplier_code,
         h.supplier_name,

@@ -5,7 +5,8 @@
 	<select id="listTop10BySkuCodeSkuName" resultType="org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse">
 		SELECT sku_id,
 		       sku_code,
-		       sku_name
+		       sku_name,
+		       sku_spec
 		FROM wms_sku
 		WHERE sku_code LIKE CONCAT('%', #{skuCode}, '%')
 		   OR sku_name LIKE CONCAT('%', #{skuName}, '%')
@@ -44,23 +45,142 @@
                     ) AS temp1 ON p.wsp_id = temp1.wsp_id
             ) AS temp2 ON s.wsp_id = temp2.wsp_id WHERE sku_id = #{skuId} ORDER BY sku_level
     </select>
-
-    <select id="listSkuPackDetailBySkuId"
-            resultType="org.nodes.wms.dao.basics.sku.dto.SkuPackageDetailResponse">
+    <select id="getSkuPackageAggregateBySkuId"
+            resultMap="skuPackageAndDetailMapping">
         SELECT
+            p.wsp_id,
+            p.wh_id,
+            p.wsp_name,
+            p.spec,
+            p.online_package,
+            p.package_type,
+            p.pallet_box_level,
+            p.pallet_level,
+            p.lpn_weight,
+            p.lpn_height,
+            p.lpn_length,
+            p.lpn_width,
+            p.is_default,
+            p.status,
+            p.tenant_id,
+            p.create_dept,
+            p.create_user,
+            p.create_time,
+            p.update_user,
+            p.update_time,
+            p.is_deleted,
             pd.wspd_id,
-            pd.wsp_id,
+            pd.wsp_id as pdWspId,
             pd.sku_level,
             pd.wsu_id,
             pd.wsu_code,
             pd.wsu_name,
-            pd.convert_qty
+            pd.convert_qty,
+            pd.lpn_weight pdLpnWeight,
+            pd.lpn_length pdLpnLength,
+            pd.lpn_width pdLpnWidth,
+            pd.lpn_height pdLpnHeight,
+            pd.filter_value,
+            pd.indicator_digit,
+            pd.sku_spec,
+            pd.status as pdStatus,
+            pd.tenant_id as pdTenantId,
+            pd.create_dept as pdCreateDept,
+            pd.create_user as pdCreateUser,
+            pd.create_time as pdCreateTime,
+            pd.update_user as pdUpdateUser,
+            pd.update_time as pdUpdateTime,
+            pd.is_deleted as pdIsDeleted
         FROM wms_sku_package p
-                 LEFT JOIN wms_sku_package_detail pd
-                           ON p.wsp_id = pd.wsp_id
-                 LEFT JOIN wms_sku s
-                           ON s.wsp_id = p.wsp_id
+        LEFT JOIN wms_sku_package_detail pd ON pd.wsp_id = p.wsp_id
+        INNER JOIN wms_sku s ON s.wsp_id = p.wsp_id
         WHERE s.sku_id = #{skuId}
     </select>
+    <select id="getSkuUmByUmCode" resultType="org.nodes.wms.dao.basics.sku.entities.SkuUm">
+        select
+        wsu_id,
+        wsu_code,
+        wsu_name
+       from wms_sku_um
+       where wsu_code = #{skuUmCode}
+    </select>
+    <select id="getBaseSkuPackageDetail" resultType="org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail">
+        select
+            wspd.wsp_id,
+            wspd.sku_level,
+            wspd.wsu_id,
+            wspd.wsu_code,
+            wspd.wsu_name,
+            wspd.convert_qty,
+            wspd.lpn_weight,
+            wspd.lpn_length,
+            wspd.lpn_width,
+            wspd.lpn_height,
+            wspd.filter_value,
+            wspd.indicator_digit,
+            wspd.sku_spec,
+            wspd.status as wspdStatus,
+            wspd.tenant_id,
+            wspd.create_dept,
+            wspd.create_user,
+            wspd.create_time,
+            wspd.update_user,
+            wspd.update_time,
+            wspd.is_deleted
+          from wms_sku ws,wms_sku_package_detail wspd
+         where ws.wsp_id = wspd.wsp_id
+         and ws.sku_id = #{skuId}
+        and wspd.sku_level = 1
+
+    </select>
+
+    <resultMap id="skuPackageAndDetailMapping" type="org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate">
+        <id column="wsp_id" property="id"/>
+        <association property="skuPackage" javaType="org.nodes.wms.dao.basics.sku.entities.SkuPackage">
+            <id column="wsp_id" property="wspId"/>
+            <result column="wh_id" property="whId"/>
+            <result column="wsp_name" property="wspName"/>
+            <result column="spec" property="spec"/>
+            <result column="online_package" property="onlinePackage"/>
+            <result column="package_type" property="packageType"/>
+            <result column="pallet_box_level" property="palletBoxLevel"/>
+            <result column="pallet_level" property="palletLevel"/>
+            <result column="lpn_weight" property="lpnWeight"/>
+            <result column="lpn_height" property="lpnHeight"/>
+            <result column="lpn_length" property="lpnLength"/>
+            <result column="lpn_width" property="lpnWidth"/>
+            <result column="is_default" property="isDefault"/>
+            <result column="status" property="status"/>
+            <result column="tenant_id" property="tenantId"/>
+            <result column="create_dept" property="createDept"/>
+            <result column="create_time" property="createTime"/>
+            <result column="update_user" property="updateUser"/>
+            <result column="update_time" property="updateTime"/>
+            <result column="is_deleted" property="isDeleted"/>
+        </association>
+        <collection property="skuPackageDetailList" ofType="org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail">
+            <id column="wspd_id" property="wspdId"/>
+            <result column="pdWspId" property="wspId"/>
+            <result column="sku_level" property="skuLevel"/>
+            <result column="wsu_id" property="wsuId"/>
+            <result column="wsu_code" property="wsuCode"/>
+            <result column="wsu_name" property="wsuName"/>
+            <result column="convert_qty" property="convertQty"/>
+            <result column="pdLpnWeight" property="lpnWeight"/>
+            <result column="pdLpnLength" property="lpnLength"/>
+            <result column="pdLpnWidth" property="lpnWidth"/>
+            <result column="pdLpnHeight" property="lpnHeight"/>
+            <result column="filter_value" property="filterValue"/>
+            <result column="indicator_digit" property="indicatorDigit"/>
+            <result column="sku_spec" property="skuSpec"/>
+            <result column="pdStatus" property="status"/>
+            <result column="pdTenantId" property="tenantId"/>
+            <result column="pdCreateDept" property="createDept"/>
+            <result column="pdCreateTime" property="createTime"/>
+            <result column="pdUpdateUser" property="updateUser"/>
+            <result column="pdUpdateTime" property="updateTime"/>
+            <result column="pdIsDeleted" property="isDeleted"/>
+        </collection>
+    </resultMap>
 
 </mapper>

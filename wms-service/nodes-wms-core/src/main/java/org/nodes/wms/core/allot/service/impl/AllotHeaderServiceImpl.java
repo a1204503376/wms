@@ -2,12 +2,10 @@
 package org.nodes.wms.core.allot.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.nodes.core.base.cache.ParamCache;
 import org.nodes.core.base.cache.SysCache;
 import org.nodes.core.base.entity.Dept;
-import org.nodes.core.base.service.IDeptService;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.allot.cache.AllotCache;
 import org.nodes.wms.core.allot.dto.AllotHeaderDTO;
@@ -21,11 +19,8 @@ import org.nodes.wms.core.allot.service.IAllotHeaderService;
 import org.nodes.wms.core.allot.vo.AllotHeaderVO;
 import org.nodes.wms.core.allot.wrapper.AllotDetailWrapper;
 import org.nodes.wms.core.allot.wrapper.AllotHeaderWrapper;
-import org.nodes.wms.core.basedata.cache.OwnerCache;
 import org.nodes.wms.core.basedata.entity.Owner;
 import org.nodes.wms.core.basedata.service.IOwnerService;
-import org.nodes.wms.core.common.cache.AddressCache;
-import org.nodes.wms.core.common.cache.ContactsCache;
 import org.nodes.wms.core.common.entity.Address;
 import org.nodes.wms.core.common.entity.Contacts;
 import org.nodes.wms.core.common.service.IAddressService;
@@ -42,7 +37,6 @@ import org.nodes.wms.core.outstock.so.service.ISoHeaderService;
 import org.nodes.wms.core.outstock.so.service.ISoPickService;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
 import org.nodes.wms.core.warehouse.entity.Warehouse;
-import org.nodes.wms.core.warehouse.service.IWarehouseService;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
@@ -257,22 +251,22 @@ public class AllotHeaderServiceImpl<M extends AllotHeaderMapper, T extends Allot
 		IOwnerService ownerService = SpringUtil.getBean(IOwnerService.class);
 		Owner owner = ownerService.getById(allotHeader.getWoId());
 		if (Func.isNotEmpty(owner)) {
-			asnHeader.setSCode(owner.getOwnerCode());
+//			asnHeader.setSCode(owner.getOwnerCode());
 			asnHeader.setSName(owner.getOwnerName());
 		}
 		asnHeader.setBillTypeCd("109");
-		asnHeader.setBillKey(allotHeader.getAllotBillNo());
-		asnHeader.setOrderNo(allotHeader.getAllotBillNo());
-		asnHeader.setLastUpdateDate(LocalDateTime.now());
-		asnHeader.setPreCreateDate(LocalDateTime.now());
+//		asnHeader.setBillKey(allotHeader.getAllotBillNo());
+//		asnHeader.setOrderNo(allotHeader.getAllotBillNo());
+//		asnHeader.setLastUpdateDate(LocalDateTime.now());
+//		asnHeader.setPreCreateDate(LocalDateTime.now());
 		asnHeader.setScheduledArrivalDate(LocalDateTime.now());
 		asnHeader.setInstoreType(10);
 		asnHeader.setAsnBillRemark(allotHeader.getAllotRemark());
 		Dept dept = SysCache.getDept(Func.toLong(AuthUtil.getDeptId()));
 		if (Func.isNotEmpty(dept)) {
-			asnHeader.setDeptId(dept.getId());
-			asnHeader.setDeptCode(dept.getDeptCode());
-			asnHeader.setDeptName(dept.getDeptName());
+//			asnHeader.setDeptId(dept.getId());
+//			asnHeader.setDeptCode(dept.getDeptCode());
+//			asnHeader.setDeptName(dept.getDeptName());
 		}
 		// 设置地址
 		//List<Address> addressList = AddressCache.list(allotHeader.getTargetWhId(), Warehouse.DATA_TYPE);
@@ -283,15 +277,15 @@ public class AllotHeaderServiceImpl<M extends AllotHeaderMapper, T extends Allot
 			.eq(Address::getAddressDataType,Warehouse.DATA_TYPE)
 		);
 		if (Func.isNotEmpty(addressList)) {
-			for (Address address : addressList) {
-				if (new Integer(1).equals(address.getDefaultFlag())) {
-					asnHeader.setSAddress(address.getAddress());
-					break;
-				}
-			}
-			if (Func.isEmpty(asnHeader.getSAddress())) {
-				asnHeader.setSAddress(addressList.get(0).getAddress());
-			}
+//			for (Address address : addressList) {
+//				if (new Integer(1).equals(address.getDefaultFlag())) {
+//					asnHeader.setSAddress(address.getAddress());
+//					break;
+//				}
+//			}
+//			if (Func.isEmpty(asnHeader.getSAddress())) {
+//				asnHeader.setSAddress(addressList.get(0).getAddress());
+//			}
 		}
 		// 设置联系人
 		IContactsService contactsService = SpringUtil.getBean(IContactsService.class);
@@ -302,18 +296,18 @@ public class AllotHeaderServiceImpl<M extends AllotHeaderMapper, T extends Allot
 		.eq(Contacts::getContactsDataType,Warehouse.DATA_TYPE)
 		);
 		if (Func.isNotEmpty(contactsList)) {
-			for (Contacts contact : contactsList) {
-				if (new Integer(1).equals(contact.getDefaultFlag())) {
-					asnHeader.setContact(contact.getContactsName());
-					asnHeader.setPhone(contact.getContactsNumber());
-					break;
-				}
-			}
-			if (Func.isEmpty(asnHeader.getContact()) && Func.isEmpty(asnHeader.getPhone())) {
-				Contacts contacts = contactsList.get(0);
-				asnHeader.setContact(contacts.getContactsName());
-				asnHeader.setPhone(contacts.getContactsNumber());
-			}
+//			for (Contacts contact : contactsList) {
+//				if (new Integer(1).equals(contact.getDefaultFlag())) {
+//					asnHeader.setContact(contact.getContactsName());
+//					asnHeader.setPhone(contact.getContactsNumber());
+//					break;
+//				}
+//			}
+//			if (Func.isEmpty(asnHeader.getContact()) && Func.isEmpty(asnHeader.getPhone())) {
+//				Contacts contacts = contactsList.get(0);
+//				asnHeader.setContact(contacts.getContactsName());
+//				asnHeader.setPhone(contacts.getContactsNumber());
+//			}
 		}
 		List<SoDetail> soDetails = soDetailService.list(Wrappers.lambdaQuery(SoDetail.class).eq(SoDetail::getSoBillId, allotHeader.getSoBillId()));
 		List<SoPick> detailList = soPickService.list(Wrappers.lambdaQuery(SoPick.class).eq(SoPick::getSoBillId, allotHeader.getSoBillId()));
@@ -360,22 +354,22 @@ public class AllotHeaderServiceImpl<M extends AllotHeaderMapper, T extends Allot
 		IOwnerService ownerService = SpringUtil.getBean(IOwnerService.class);
 		Owner owner = ownerService.getById(allotHeader.getWoId());
 		if (Func.isNotEmpty(owner)) {
-			asnHeader.setSCode(owner.getOwnerCode());
+//			asnHeader.setSCode(owner.getOwnerCode());
 			asnHeader.setSName(owner.getOwnerName());
 		}
 		asnHeader.setBillTypeCd("109");
-		asnHeader.setBillKey(allotHeader.getAllotBillNo());
-		asnHeader.setOrderNo(allotHeader.getAllotBillNo());
-		asnHeader.setLastUpdateDate(LocalDateTime.now());
-		asnHeader.setPreCreateDate(LocalDateTime.now());
+//		asnHeader.setBillKey(allotHeader.getAllotBillNo());
+//		asnHeader.setOrderNo(allotHeader.getAllotBillNo());
+//		asnHeader.setLastUpdateDate(LocalDateTime.now());
+//		asnHeader.setPreCreateDate(LocalDateTime.now());
 		asnHeader.setScheduledArrivalDate(LocalDateTime.now());
 		asnHeader.setInstoreType(10);
 		asnHeader.setAsnBillRemark(allotHeader.getAllotRemark());
 		Dept dept = SysCache.getDept(Func.toLong(AuthUtil.getDeptId()));
 		if (Func.isNotEmpty(dept)) {
-			asnHeader.setDeptId(dept.getId());
-			asnHeader.setDeptCode(dept.getDeptCode());
-			asnHeader.setDeptName(dept.getDeptName());
+//			asnHeader.setDeptId(dept.getId());
+//			asnHeader.setDeptCode(dept.getDeptCode());
+//			asnHeader.setDeptName(dept.getDeptName());
 		}
 		// 设置地址
 		//List<Address> addressList = AddressCache.list(allotHeader.getSourceWhId(), Warehouse.DATA_TYPE);
@@ -386,15 +380,15 @@ public class AllotHeaderServiceImpl<M extends AllotHeaderMapper, T extends Allot
 			.eq(Address::getAddressDataType,Warehouse.DATA_TYPE)
 		);
 		if (Func.isNotEmpty(addressList)) {
-			for (Address address : addressList) {
-				if (new Integer(1).equals(address.getDefaultFlag())) {
-					asnHeader.setSAddress(address.getAddress());
-					break;
-				}
-			}
-			if (Func.isEmpty(asnHeader.getSAddress())) {
-				asnHeader.setSAddress(addressList.get(0).getAddress());
-			}
+//			for (Address address : addressList) {
+//				if (new Integer(1).equals(address.getDefaultFlag())) {
+//					asnHeader.setSAddress(address.getAddress());
+//					break;
+//				}
+//			}
+//			if (Func.isEmpty(asnHeader.getSAddress())) {
+//				asnHeader.setSAddress(addressList.get(0).getAddress());
+//			}
 		}
 		// 设置联系人
 		IContactsService contactsService = SpringUtil.getBean(IContactsService.class);
@@ -406,16 +400,16 @@ public class AllotHeaderServiceImpl<M extends AllotHeaderMapper, T extends Allot
 		if (Func.isNotEmpty(contactsList)) {
 			for (Contacts contact : contactsList) {
 				if (new Integer(1).equals(contact.getDefaultFlag())) {
-					asnHeader.setContact(contact.getContactsName());
-					asnHeader.setPhone(contact.getContactsNumber());
+//					asnHeader.setContact(contact.getContactsName());
+//					asnHeader.setPhone(contact.getContactsNumber());
 					break;
 				}
 			}
-			if (Func.isEmpty(asnHeader.getContact()) && Func.isEmpty(asnHeader.getPhone())) {
-				Contacts contacts = contactsList.get(0);
-				asnHeader.setContact(contacts.getContactsName());
-				asnHeader.setPhone(contacts.getContactsNumber());
-			}
+//			if (Func.isEmpty(asnHeader.getContact()) && Func.isEmpty(asnHeader.getPhone())) {
+//				Contacts contacts = contactsList.get(0);
+//				asnHeader.setContact(contacts.getContactsName());
+//				asnHeader.setPhone(contacts.getContactsNumber());
+//			}
 		}
 		// 查询出调拨出库单明细
 		List<SoDetail> soDetailList = soDetailService.list(Condition.getQueryWrapper(new SoDetail())

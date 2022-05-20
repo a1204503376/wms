@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.nodes.wms.dao.common.entitits.BaseSkuLotEntity;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveBillStateEnum;
+import org.springblade.core.tenant.mp.TenantEntity;
 
 import java.util.Date;
 
@@ -14,7 +15,7 @@ import java.util.Date;
  **/
 @Data
 @TableName("receive_header")
-public class ReceiveHeader extends BaseSkuLotEntity {
+public class ReceiveHeader extends TenantEntity {
 
 	/**
 	 * 收货单主键id
@@ -74,7 +75,7 @@ public class ReceiveHeader extends BaseSkuLotEntity {
 	/**
 	 * 供应商id
 	 */
-	private long supplier_id;
+	private long supplierId;
 
 	/**
 	 * 供应商编码
@@ -91,15 +92,7 @@ public class ReceiveHeader extends BaseSkuLotEntity {
 	 */
 	private String supplierAddress;
 
-	/**
-	 * 供应商联系人
-	 */
-	private String contact;
 
-	/**
-	 * 供应商联系电话
-	 */
-	private String phone;
 
 	/**
 	 * 部门id

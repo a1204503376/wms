@@ -11,7 +11,7 @@
                          style="margin-left:10px;margin-right:10px;"
                 >
                     <el-row>
-                        <h3>ASN单-{{ isEdit ? '编辑' : '新增' }}</h3>
+                        <h3>ASN单新增</h3>
                     </el-row>
                     <el-row>
                         <el-col :span="8">
@@ -20,15 +20,16 @@
                                     v-model="form.params.billTypeCd"
                                     :multiple="false"
                                     io-type="I"
+                                    :default-value="true"
                                 ></nodes-bill-type>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="供应商" prop="supplierId">
+                            <el-form-item label="供应商" prop="supplier">
                                 <nodes-supplier
-                                    v-model="form.params.supplierId"
+                                    v-model="form.params.supplier"
                                     :multiple="false"
-                                    style="width: 300px">
+                                    >
                                 </nodes-supplier>
                             </el-form-item>
                         </el-col>
@@ -44,12 +45,23 @@
                     </el-row>
                     <el-row>
                         <el-col :span="8">
+                            <el-form-item label="货主" prop="ownerId">
+                                <nodes-owner
+                                    v-model="form.params.woId"
+                                    :multiple="false"
+                                    :default-value="true"
+                                ></nodes-owner>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
                             <el-form-item label="备注" prop="asnBillRemark">
                                 <el-input
                                     v-model="form.params.asnBillRemark"
                                     :rows=2
-                                    style="width: 300px"
                                     placeholder="请输入内容"
+                                    style="width: 1213px"
                                     type="textarea">
                                 </el-input>
                             </el-form-item>
@@ -79,7 +91,7 @@
                                 </el-table-column>
                                 <el-table-column
                                     label="行号"
-                                    prop="asnLineNo"
+                                    prop="lineNumber"
                                     show-overflow-tooltip
                                     type="index"
                                     width="60"
@@ -87,26 +99,43 @@
                                     <template v-slot="scope">
                                         <nodes-line-number
                                             :index="scope.$index"
-                                            @change="(val)=>{ scope.row.asnLineNo = val; }"
+                                            @change="(val)=>{ scope.row.lineNumber = val; }"
                                         >
                                         </nodes-line-number>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
                                     :align="'left'"
-                                    prop="skuId"
+                                    prop="sku"
                                     width="200"
                                 >
                                     <template slot="header">
-                                        <span class="d-table-header-required">物品</span>
+                                        <span class="d-table-header-required">物品编码</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <nodes-sku
+                                            v-model="row.sku"
                                             style="width: 180px"
-                                            v-model="row.skuId"
                                             @selectValChange="onChangeSku"
                                         >
                                         </nodes-sku>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    :align="'left'"
+                                    prop="sku"
+                                    width="200"
+                                >
+                                    <template slot="header">
+                                        <span>物品名称</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input
+                                            v-model="row.sku.skuName"
+                                            style="width: 180px;height: 1px"
+                                            :disabled="true"
+                                        >
+                                        </el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -116,10 +145,10 @@
                                         <span class="d-table-header-required">计量单位</span>
                                     </template>
                                     <template v-slot="{row}">
-                                        <el-input-number
+                                        <nodes-sku-um
                                             v-model="row.umCode"
-                                            controls-position="right"
-                                            size="mini"></el-input-number>
+                                            :sku="row.sku"
+                                        ></nodes-sku-um>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -143,6 +172,14 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input v-model="row.remark" size="mini"></el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column width="100px" align="center">
+                                    <template slot="header" >
+                                        <span>操作</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-link  @click.native.prevent="deleteRow(row.$index, table.data)" type="primary">删除</el-link>
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -180,10 +217,14 @@ import NodesBillType from "@/components/wms/select/NodesBillType";
 import NodesSupplier from "@/components/wms/select/NodesSupplier";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import {add} from '@/api/wms/instock/asnHeader';
+import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
+import NodesOwner from "@/components/wms/select/NodesOwner";
 
 export default {
     name: "edit",
     components: {
+        NodesOwner,
+        NodesSkuUm,
         NodesWarehouse, NodesSupplier, NodesBillType, NodesLineNumber, NodesSku
     },
     mixins: [editDetailMixin],
@@ -192,22 +233,20 @@ export default {
             form: {
                 params: {
                     billTypeCd: '',
-                    supplierId: '',
+                    supplier: {
+                        id: '',
+                        code: '',
+                        name: '',
+                    },
                     whId: '',
+                    woId: '',
                     asnBillRemark: '',
-                    asnDetailList: []
                 },
                 rules: {
                     billTypeCd: [
                         {
                             required: true,
                             message: '请选择单据类型',
-                            trigger: 'change'
-                        }
-                    ],
-                    supplierId: [
-                        {
-                            message: '请选择供应商',
                             trigger: 'change'
                         }
                     ],
@@ -219,42 +258,73 @@ export default {
         // 过滤空白行
         filterBlankRow(row) {
             return !(
-                func.isEmpty(row.skuId)
-                && row.planQty === 0
-                && row.umCode === 0
+                func.isEmpty(row.sku.skuId) &&
+                func.isEmpty(row.sku.skuCode) &&
+                func.isEmpty(row.sku.skuName) &&
+                row.planQty === 0 &&
+                func.isEmpty(row.umCode)
             );
         },
         getDescriptor() {
+            let skuErrorMsg = '请选择物品';
             return {
-                skuId: {
+                sku: {
+                    type: 'object',
                     required: true,
-                    message: '请选择物品',
+                    fields: {
+                        skuId: {required: true, message: skuErrorMsg},
+                        skuCode: {required: true, message: skuErrorMsg},
+                        skuName: {required: true, message: skuErrorMsg}
+                    }
                 },
                 planQty: {
                     required: true,
                     type: 'number',
-                    message: '请填写计划',
+                    message: '请填写计划数量',
                     trigger: 'blur'
                 }
             };
         },
         createRowObj() {
             return {
-                asnLineNo: '',
-                skuId: '',
+                lineNumber: '',
+                sku: {
+                    skuId: '',
+                    skuCode: '',
+                    skuName: '',
+                },
                 umCode: '',
                 planQty: 0,
                 remark: '',
-                supplierId: ''
             }
         },
+        deleteRow(index, rows) {
+            rows.splice(index, 1);
+        },
         onChangeSku(val) {
-            val;
         },
         submitFormParams() {
-            this.form.params.asnDetailList = this.table.postData;
-
-            return add(this.form.params)
+            let asnDetailArray = [];
+            let postData = this.table.postData;
+            let params = this.form.params;
+            postData.forEach((value)=>{
+                asnDetailArray.push({
+                    asnLineNo: value.lineNumber,
+                    skuId: value.sku.skuId,
+                    umCode: value.umCode,
+                    planQty: value.planQty,
+                    remark: value.remark,
+                })
+            })
+            let data = {
+                billTypeCd: params.billTypeCd,
+                supplierId: params.supplier.id,
+                whId: params.whId,
+                woId: params.woId,
+                asnBillRemark: params.asnBillRemark,
+                asnDetailList: asnDetailArray,
+            }
+            return add(data)
                 .then(res => {
                     return {
                         msg: res.data.msg,

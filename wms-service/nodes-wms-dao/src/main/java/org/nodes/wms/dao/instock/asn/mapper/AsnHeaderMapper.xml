@@ -17,8 +17,6 @@
         u.real_name as createUser,
         h.update_time
         FROM asn_header h
-        LEFT JOIN asn_detail d
-        ON h.asn_bill_id = d.asn_bill_id
         LEFT JOIN blade_user u
         ON h.create_user = u.id
         LEFT JOIN wms_bill_type b
@@ -30,10 +28,11 @@
             <if test="params.asnBillNo != null and params.asnBillNo != ''">
                 AND h.asn_bill_no = #{params.asnBillNo}
             </if>
-            <if test="params.sku != null">
-                <if test="params.sku.skuCode != null and params.sku.skuCode != ''">
-                    AND d.sku_code = #{params.sku.skuCode}
-                </if>
+            <if test="params.skuIdList != null and params.skuIdList.size >0">
+                    AND d.sku_code IN
+                <foreach collection="params.skuIdList" open="(" close=")" separator="," item="item">
+                    #{item}
+                </foreach>
             </if>
             <if test="params.asnBillStateList != null and params.asnBillStateList.size >0">
                 AND h.asn_bill_state IN
@@ -63,12 +62,14 @@
                     #{item}
                 </foreach>
             </if>
+            <if test=" page.orders == null or page.orders.size == 0 ">
+                ORDER BY create_time DESC
+            </if>
         </where>
 
     </select>
 
     <select id="selectAsnContactDetail"
-            resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse"
             resultMap="asnDetailMap">
         SELECT h.asn_bill_id,
                h.asn_bill_no,
@@ -209,5 +210,20 @@
                 </foreach>
             </if>
         </where>
+    </select>
+
+    <select id="selectAsnHeaderByAsnBillId"
+            resultType="org.nodes.wms.dao.instock.asn.entities.AsnHeader">
+        SELECT
+            asn_bill_id,
+            asn_bill_no,
+            wh_id,
+            bill_type_cd,
+            supplier_id,
+            supplier_code,
+            supplier_name,
+            asn_bill_remark
+        FROM asn_header
+        WHERE asn_bill_id = #{asnBillId} AND is_deleted = 0
     </select>
 </mapper>

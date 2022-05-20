@@ -1,19 +1,18 @@
 
 package org.nodes.wms.core.basedata.entity;
 
-import java.math.BigDecimal;
-
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import lombok.Data;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.nodes.wms.core.common.entity.AttributeBase;
+import lombok.Data;
+import org.springblade.core.mp.base.BaseEntity;
+
+import java.math.BigDecimal;
 
 /**
  * 包装ID实体类
@@ -25,7 +24,7 @@ import org.nodes.wms.core.common.entity.AttributeBase;
 @TableName("wms_sku_package")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(value = "SkuPackage对象", description = "包装ID")
-public class SkuPackage extends AttributeBase {
+public class SkuPackage extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 

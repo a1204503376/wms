@@ -45,7 +45,7 @@
 
             </template>
             <template v-slot:batchBtn>
-                <el-button  icon="el-icon-plus" size="mini" type="primary">新增</el-button>
+                <el-button  icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增</el-button>
                 <el-button  size="mini" type="danger" @click="onRemove" icon="el-icon-delete"
                            :plain="false">删除
                 </el-button>
@@ -104,22 +104,32 @@
                     </el-table-column>
 
                     <template v-for="(column,index) in table.columnList">
+                        <el-table-column sortable="custom" prop="receiveNo" label="收货单编码" width="150"  v-if="index===0"  show-overflow-tooltip >
+                            <template slot-scope="scope">
+                                <el-link href="https://element.eleme.io" target="_blank" type="primary">{{scope.row.receiveNo}}</el-link>
+                            </template>
+                        </el-table-column>
+
                         <el-table-column
-                            v-if="!column.hide"
+                            v-if="!column.hide && index!=0"
                             :key="index"
                             show-overflow-tooltip
-                            v-bind="column">
+                            v-bind="column"
+                        >
                         </el-table-column>
                     </template>
+
                     <el-table-column
                         fixed="right"
                         label="操作"
                         width="100">
                         <template slot-scope="scope">
-                            <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
+                            <el-button @click="handleClick(scope.row)" type="text" size="small" >编辑</el-button>
                             <el-button @click="onClose(scope.row)" type="text" size="small" >关闭</el-button>
                         </template>
                     </el-table-column>
+
+
                 </el-table>
             </template>
             <template v-slot:page>
@@ -276,8 +286,15 @@ export default {
             },
         }
     },
+    watch: {
+        $route(to) {
+            if(to.query && to.query.isRefresh === 'true'){
+                this.getTableData();
+            }
+        }
+    },
     created() {
-
+        this.getTableData();
     },
     methods: {
         getTableData() {
@@ -291,25 +308,23 @@ export default {
                 });
         },
         onAdd() {
-            let requestParams = {
-                type: 'NEW',
-                id: 0,
-                parent: {
-                    path: this.$route.path,
-                    name: this.$route.name
-                }
-            };
             this.$router.push({
-                name: 'demoEdit',
-                params: requestParams,
-                meta: {
-                    parent: this
+                name: '新增收货单',
+                params: {
+                    id: '0'
                 }
             });
         },
         handleClick(row){
+            this.$router.push({
+                name: '编辑收货单',
+                params: {
+                    id: '0',
+                    receiveId:row.receiveId
+                }
+            });
+        },
 
-},
         onRemove() {
             this.$confirm("确定删除当前数据？", {
                 confirmButtonText: "确定",
