@@ -1,114 +1,67 @@
 <template>
 	<view class="content">
 		<u-toast ref="uToast" />
-		<div class="topdiv" @click="isAddress" style="height: 50rpx;">
-		</div>
+		<view @click="gotoAddress" style="height: 50rpx;width: 50rpx;z-index: 999;position:  relative top: 0px right:422rpx font-size: 0 display: block;">
+		   <image src="/static/images/setting.png" style="width: 100%;height: 100%;" mode="widthFix"></image>
+		</view>
 		<view class="top">
 			<div class="logodiv">
 				<image src="/static/images/login.png" style="width: 100px;height: 100px;" mode="widthFix"></image>
 			</div>
-			<view class="cell">
-				<view class="name">账号</view>
-				<view class="input-box">
-					<input type="text" v-model="username" placeholder="请输入账号" class="ipt" placeholder-class="hold"
-						@blur="handleInputCheck" />
-				</view>
+			<view>
+			<u--form>
+				<u-form-item label="账号" >
+					<u--input placeholder="请输入账号" v-model="username" border="none"></u--input>
+				</u-form-item>
+				<u-form-item label="密码" >
+					<u--input placeholder="请输入密码" type="password" v-model="password" border="none"></u--input>
+				</u-form-item>
+			</u--form>
 			</view>
-			<view class="cell">
-				<view class="name">密码</view>
-				<view class="input-box">
-					<input type="password" v-model="password" placeholder="请输入密码" class="ipt" placeholder-class="hold"
-						@blur="handleInputCheck" />
-				</view>
-			</view>
-			<view class="cell">
-				<div v-show="addressDisplay">
-					<view class="name">地址</view>
-					<view class="input-box">
-						<input type="text" v-model="address" placeholder="请输入地址" class="ipt" placeholder-class="hold" />
-					</view>
-				</div>
-			</view>
-			<button class="submit" @click="submit" :disabled="disabled">登录</button>
+			<button class="submit" @click="submit">登录</button>
 			<button class="quit" @click="quitApp">退出</button>
 		</view>
 	</view>
 </template>
 
 <script>
-	import {
-		apiUrl
-	} from '@/common/setting'
+	import setting from '@/common/setting'
 	import md5 from '@/utils/md5.js'
 	import api from '@/api/user.js'
-	import func from '../../utils/func.js'
+	import func from '@/utils/func.js'
+	import {
+		options
+	} from '@/http/config.js';
+
 	export default {
 		data() {
 			return {
-				tenantId: '000000',
-				username: 'admin',
-				password: '123456',
-				address: apiUrl,
+				tenantId: setting.tenantId,
+				username: uni.getStorageSync('username') || '',
+				password: '',
 				addressDisplay: true,
-				disabled: true,
-				//验证码的值
-				code: "",
-				//验证码的索引
-				key: "",
-				type: "account",
 			};
 		},
-		created() {
-			this.getCaptcha();
-		},
+
 		methods: {
-			getCaptcha() {
-				this.$u.api.getCaptcha().then(data => {
-					this.key = data.key;
-				})
-			},
 			submit() {
-
-				let _this = this
-
-				// uni.showToast({
-				// 	title: '请填写员工工号',
-				// 	icon: 'none',
-				// 	duration: 2000
-				// });
-
 				api.token(this.tenantId, this.username, md5(this.password), this.type).then(data => {
-					debugger
-					_this.$refs.uToast.show({
-						title: '登录成功',
-						type: 'success',
-						duration: 500
-					})
-
-					if (!data.access_token) {
-
-						uni.$u.toast('校验通过')
-						return;
-					}
 					uni.setStorageSync('accessToken', data.access_token)
-					// this.$u.api.list();
+
+					uni.setStorageSync('username', this.username)
 					uni.navigateTo({
-						url: '../index/honeywellScannerComponent'
+						url: '/pages/index/honeywellScannerComponent'
 					});
 				})
-			},
-			handleInputCheck() {
-				this.disabled = false
 			},
 			quitApp() {
 				plus.runtime.quit();
 			},
-			isAddress() {
-				if (this.addressDisplay) {
-					this.addressDisplay = false
-					return;
-				}
-				this.addressDisplay = true
+			gotoAddress() {
+				uni.navigateTo({
+					url: '/pages/reviseIp/reviseIp'
+				});
+
 			}
 		}
 	};

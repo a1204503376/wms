@@ -8,8 +8,10 @@ module.exports = {
 	logo: '/static/images/logo.png',
 	// 版本号
 	version: '1.0.0',
+	// 租户
+	tenantId: '000000',
 	// api请求地址url
-	apiUrl: 'http://localhost:8088',
+	apiUrl: uni.getStorageSync('address') || 'http://localhost:8088',
 	// 后端数据的接收方式application/json;charset=UTF-8或者application/x-www-form-urlencoded;charset=UTF-8
 	contentType: 'application/json;charset=UTF-8',
 	// 后端返回状态码

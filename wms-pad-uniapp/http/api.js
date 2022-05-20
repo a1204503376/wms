@@ -47,16 +47,17 @@ http.interceptors.request.use((config) => { // 可使用async await 做异步操
 http.interceptors.response.use((response) => {
 	// TODO 针对401认证失败的情况，需要跳转到登录页面
 
-	// 对错误信息进行统一拦截response.data.access_token || response.data.key
-	if (response.data.code !== 200 || response.error_code) {
-		const errMsg = reponse.data.msg || response.data.error_description || '未知错误，来自api拦截器';
+	// 对错误信息进行统一拦截
+	const statusCode = response.data.code || response.statusCode;
+	if (statusCode !== 200 || response.data.error_code) {
+		const errMsg = response.data.msg || response.data.error_description || '未知错误，来自api拦截器';
 		uni.$u.toast(errMsg);
 		return Promise.reject(response);
 	}
 
 	return response.data;
 }, (response) => { // statusCode !== 200 时候的错误处理
-	const errMsg = reponse.data.msg || response.data.error_description || '未知错误，来自api拦截器';
+	let errMsg = response.data?.msg || response.data?.error_description || '未知错误，来自api拦截器';
 	uni.$u.toast(errMsg);
 	return Promise.reject(response);
 })
