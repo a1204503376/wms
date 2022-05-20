@@ -35,25 +35,28 @@ export default {
         event: 'selectValChange'
     },
     props: {
+
         selectVal: [Array,Object],
         // 单选多选切换，默认为false
         multiple: {type: Boolean, required: false, default: false}
     },
     data() {
         return {
-            options: [this.selectVal],
+            options: [],
             val: this.selectVal,
             loading: false,
+            num:1
         }
     },
+
     watch: {
         selectVal(newVal) {
             this.val=newVal;
+            if(this.num ===1) {
+                this.options.push(newVal)
+                this.num=0;
+                }
         },
-        val(newVal){
-            this.selectVal = newVal;
-        }
-
     },
     methods: {
         // 防抖 在等待时间到达前的请求全部取消，保留最后一次
