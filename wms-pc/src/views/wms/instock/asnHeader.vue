@@ -155,6 +155,10 @@ export default {
                         label: '单据类型'
                     },
                     {
+                        prop: 'asnBillStateValue',
+                        label: '单据状态'
+                    },
+                    {
                         prop: 'supplierCode',
                         width: 100,
                         label: '供应商编码'
@@ -195,16 +199,19 @@ export default {
                         width: 130,
                         label: '更新时间'
                     },
-                    {
-                        prop: 'asnBillStateValue',
-                        label: '状态'
-                    },
                 ]
             },
         }
     },
     created() {
         this.getTableData();
+    },
+    watch: {
+        $route(to) {
+            if(to.query && to.query.isRefresh === 'true'){
+                this.refreshTable();
+            }
+        }
     },
     computed: {
         permissionObj() {
@@ -223,6 +230,9 @@ export default {
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
                 })
+        },
+        refreshTable(){
+            this.getTableData();
         },
         view() {
 
@@ -287,6 +297,10 @@ export default {
             })
         },
         onEdit(row) {
+            if(row.asnBillStateValue !== '未收货'){
+                this.$message.warning("操作失败，改ASN单已收货");
+                return;
+            }
             this.$router.push({
                 name: '编辑ASN单',
                 params: {

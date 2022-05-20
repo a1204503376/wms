@@ -17,20 +17,20 @@ export const remove = (removeObj) => {
     })
 }
 
-export const exportFile = (params) => {
+export const exportFile = (data) => {
     return request({
         url: '/api/wms/asn/export',
         method: 'post',
-        data: params,
+        data: data,
         responseType: 'blob'
     })
 }
 
-export const add = (params) => {
+export const add = (data) => {
     return request({
         url: '/api/wms/asn/add',
         method: 'post',
-        data: params,
+        data: data,
     })
 }
 
@@ -39,6 +39,14 @@ export const detailByEdit = (asdBillIdObj) => {
         url: '/api/wms/asn/detailByEdit',
         method: 'post',
         data: asdBillIdObj
+    })
+}
+
+export const edit = (data) => {
+    return request({
+        url: '/api/wms/asn/edit',
+        method: 'post',
+        data: data,
     })
 }
 // export const getPage = (current, size, params) => {

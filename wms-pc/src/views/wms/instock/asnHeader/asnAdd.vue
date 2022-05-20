@@ -29,6 +29,7 @@
                                 <nodes-supplier
                                     v-model="form.params.supplier"
                                     :multiple="false"
+                                    style="width: 300px"
                                     >
                                 </nodes-supplier>
                             </el-form-item>
@@ -123,7 +124,7 @@
                                 </el-table-column>
                                 <el-table-column
                                     :align="'left'"
-                                    prop="sku"
+                                    prop="skuName"
                                     width="200"
                                 >
                                     <template slot="header">
@@ -138,9 +139,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column
-                                    prop="umCode"
-                                >
+                                <el-table-column prop="umCode" width="120">
                                     <template slot="header">
                                         <span class="d-table-header-required">计量单位</span>
                                     </template>
@@ -148,18 +147,30 @@
                                         <nodes-sku-um
                                             v-model="row.umCode"
                                             :sku="row.sku"
+                                            style="width: 100px"
                                         ></nodes-sku-um>
                                     </template>
                                 </el-table-column>
-                                <el-table-column
-                                    prop="planQty"
-                                >
+                                <el-table-column :align="'left'" prop="skuSpec">
+                                    <template slot="header">
+                                        <span class="d-table-header-required">规格</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input
+                                            size=mini
+                                            v-model="row.sku.skuSpec"
+                                            :disabled="true">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="planQty" width="150">
                                     <template slot="header">
                                         <span class="d-table-header-required">计划数量</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input-number
                                             v-model="row.planQty"
+                                            :min="0"
                                             controls-position="right"
                                             size="mini"></el-input-number>
                                     </template>
@@ -171,7 +182,7 @@
                                         <span>备注</span>
                                     </template>
                                     <template v-slot="{row}">
-                                        <el-input v-model="row.remark" size="mini"></el-input>
+                                        <el-input v-model.trim="row.remark" size="mini"></el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column width="100px" align="center">
@@ -274,15 +285,16 @@ export default {
                     fields: {
                         skuId: {required: true, message: skuErrorMsg},
                         skuCode: {required: true, message: skuErrorMsg},
-                        skuName: {required: true, message: skuErrorMsg}
+                        skuName: {required: true, message: skuErrorMsg},
+                        skuSpec: {required: true, message: skuErrorMsg}
                     }
                 },
                 planQty: {
                     required: true,
-                    type: 'number',
-                    message: '请填写计划数量',
+                    type: 'Number',
+                    validator: (rule, value) => value>0, message:'计划数量不能为0',
                     trigger: 'blur'
-                }
+                },
             };
         },
         createRowObj() {
@@ -292,6 +304,7 @@ export default {
                     skuId: '',
                     skuCode: '',
                     skuName: '',
+                    skuSpec: '',
                 },
                 umCode: '',
                 planQty: 0,

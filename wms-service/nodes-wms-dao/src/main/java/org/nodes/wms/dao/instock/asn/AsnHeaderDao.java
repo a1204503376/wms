@@ -26,12 +26,12 @@ public interface AsnHeaderDao {
 	Page<PageResponse> selectPageAsnBill(IPage<?> page, PageParamsQuery pageParamsQuery);
 
 	/**
-	 * 新增ASN单头表信息和明细
+	 * 新增/修改 ASN单头表信息和明细
 	 *
 	 * @param asnHeader ASN单头表实体
 	 * @return true:新增成功 , false:新增失败
 	 */
-	boolean insertAsnHeader(AsnHeader asnHeader);
+	boolean saveOrUpdateAsnHeader(AsnHeader asnHeader);
 
 	/**
 	 * 获取ASN单详细信息

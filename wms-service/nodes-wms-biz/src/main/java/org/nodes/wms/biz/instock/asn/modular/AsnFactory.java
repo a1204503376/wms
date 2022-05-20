@@ -8,16 +8,21 @@ import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.biz.common.utils.NoGeneratorUtil;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
-import org.nodes.wms.dao.basics.sku.entities.*;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
+import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 import org.nodes.wms.dao.basics.warehouse.entites.Warehouse;
-import org.nodes.wms.dao.instock.asn.dto.input.AddAsnBillRequest;
+import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
+import org.nodes.wms.dao.instock.asn.dto.input.AsnDetailRequest;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailEditResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnHeaderEditResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.nodes.wms.dao.instock.asn.enums.AsnBillStateEnum;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -42,23 +47,28 @@ public class AsnFactory {
 
 	private final OwnerBiz ownerBiz;
 
-	public AsnHeader createAsnHeader(AddAsnBillRequest addAsnBillRequest) {
+	// 新增时，创建头表对象
+	public AsnHeader createAsnHeader(AddOrEditAsnBillRequest addOrEditAsnBillRequest) {
 		// 根据供应商id获取供应商信息
-		Supplier supplier = supplierBiz.findById(addAsnBillRequest.getSupplierId());
+		Supplier supplier = supplierBiz.findById(addOrEditAsnBillRequest.getSupplierId());
 		// 根据库房id获取库房信息
-		Warehouse warehouse = warehouseBiz.findById(addAsnBillRequest.getWhId());
+		Warehouse warehouse = warehouseBiz.findById(addOrEditAsnBillRequest.getWhId());
 		// 根据货主id获取货主信息
-		Owner owner = ownerBiz.findById(addAsnBillRequest.getWoId());
+		Owner owner = ownerBiz.findById(addOrEditAsnBillRequest.getWoId());
 
 		AsnHeader asnHeader = new AsnHeader();
 		// ASN单id
+		if (Func.isNotEmpty(addOrEditAsnBillRequest.getAsnBillId())) {
+			asnHeader.setAsnBillId(addOrEditAsnBillRequest.getAsnBillId());
+		}
+		// ASN单编码
 		asnHeader.setAsnBillNo(noGeneratorUtil.createAsnBillNo());
 		// 单据类型编码
-		asnHeader.setBillTypeCd(addAsnBillRequest.getBillTypeCd());
+		asnHeader.setBillTypeCd(addOrEditAsnBillRequest.getBillTypeCd());
 		// 单据状态
 		asnHeader.setAsnBillState(AsnBillStateEnum.NOT_RECEIPT);
 		// 备注
-		asnHeader.setAsnBillRemark(addAsnBillRequest.getAsnBillRemark());
+		asnHeader.setAsnBillRemark(addOrEditAsnBillRequest.getAsnBillRemark());
 		// 供应商id
 		asnHeader.setSupplierId(supplier.getId());
 		// 供应商编码
@@ -78,9 +88,12 @@ public class AsnFactory {
 		return asnHeader;
 	}
 
-	public AsnDetail createAsnDetail(
-		AddAsnBillRequest addAsnBillRequest, AsnHeader asnHeaderObj, AsnDetail asnDetailObj) {
+	private AsnDetail getAsnDetail(AsnHeader asnHeaderObj, AsnDetailRequest asnDetailObj) {
 		AsnDetail asnDetail = new AsnDetail();
+		// 明细id
+		if(Func.isNotEmpty(asnDetailObj.getAsnDetailId())){
+			asnDetail.setAsnDetailId(asnDetailObj.getAsnDetailId());
+		}
 		// 行号
 		asnDetail.setAsnLineNo(asnDetailObj.getAsnLineNo());
 		// ASN单id
@@ -88,7 +101,7 @@ public class AsnFactory {
 		// ASN单编码
 		asnDetail.setAsnBillNo(asnHeaderObj.getAsnBillNo());
 		// 供应商id
-		asnDetail.setSupplierId(addAsnBillRequest.getSupplierId());
+		asnDetail.setSupplierId(asnHeaderObj.getSupplierId());
 		// 根据物品id查找物品信息
 		Sku sku = skuBiz.findById(asnDetailObj.getSkuId());
 		// 物品id
@@ -97,6 +110,8 @@ public class AsnFactory {
 		asnDetail.setSkuCode(sku.getSkuCode());
 		// 物品名称
 		asnDetail.setSkuName(sku.getSkuName());
+		// 物品规格
+		asnDetail.setSkuSpec(sku.getSkuSpec());
 
 		// 根据计量单位编码 获取计量单位信息
 		SkuUm skuUm = skuBiz.findSkuUmByUmCode(asnDetailObj.getUmCode());
@@ -114,8 +129,6 @@ public class AsnFactory {
 		asnDetail.setWspId(skuPackageDetail.getWspId());
 		// 层级
 		asnDetail.setSkuLevel(skuPackageDetail.getSkuLevel());
-		// 规格
-		asnDetail.setSkuSpec(skuPackageDetail.getSkuSpec());
 		// 换算倍率
 		asnDetail.setConvertQty(skuPackageDetail.getConvertQty());
 		// 计量单位编码
@@ -139,7 +152,7 @@ public class AsnFactory {
 		return asnDetail;
 	}
 
-    public AsnHeaderEditResponse createAsnHeaderEditResponse(AsnHeader asnHeader) {
+	public AsnHeaderEditResponse createAsnHeaderEditResponse(AsnHeader asnHeader) {
 		AsnHeaderEditResponse headerResponse = new AsnHeaderEditResponse();
 		SupplierSelectResponse supplierResponse = new SupplierSelectResponse();
 		supplierResponse.setId(asnHeader.getSupplierId());
@@ -153,7 +166,7 @@ public class AsnFactory {
 		headerResponse.setSupplierSelectResponse(supplierResponse);
 		headerResponse.setAsnBillRemark(asnHeader.getAsnBillRemark());
 		return headerResponse;
-    }
+	}
 
 	public List<AsnDetailEditResponse> createAsnDetailEditResponse(List<AsnDetail> asnDetailList) {
 		List<AsnDetailEditResponse> detailResponseList = new ArrayList<>();
@@ -164,6 +177,7 @@ public class AsnFactory {
 			skuSelectResponse.setSkuId(item.getSkuId());
 			skuSelectResponse.setSkuCode(item.getSkuCode());
 			skuSelectResponse.setSkuName(item.getSkuName());
+			skuSelectResponse.setSkuSpec(item.getSkuSpec());
 
 			detailResponse.setAsnDetailId(item.getAsnDetailId());
 			detailResponse.setAsnLineNo(item.getAsnLineNo());
@@ -174,5 +188,10 @@ public class AsnFactory {
 			detailResponseList.add(detailResponse);
 		});
 		return detailResponseList;
+	}
+
+	//创建明细对象
+	public AsnDetail createAsnDetail(AsnHeader asnHeaderObj, AsnDetailRequest asnDetailObj) {
+		return getAsnDetail(asnHeaderObj, asnDetailObj);
 	}
 }

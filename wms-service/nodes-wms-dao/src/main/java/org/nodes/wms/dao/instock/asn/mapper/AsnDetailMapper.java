@@ -13,14 +13,6 @@ import java.util.List;
 @Repository("asnDetailRepository")
 public interface AsnDetailMapper extends BaseMapper<AsnDetail> {
 	/**
-	 * 根据Asn单id查询Asn单明细id
-	 *
-	 * @param asnBillIdList:
-	 * @return java.util.List<java.lang.Long>
-	 */
-	List<Long> selectAsnDetailId(List<Long> asnBillIdList);
-
-	/**
 	 * 根据Asn单id查询Asn单明细
 	 *
 	 * @param asnBillId: ASN单id

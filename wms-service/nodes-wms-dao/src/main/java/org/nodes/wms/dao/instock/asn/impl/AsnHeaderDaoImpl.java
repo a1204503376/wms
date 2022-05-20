@@ -30,8 +30,8 @@ public class AsnHeaderDaoImpl
 	}
 
 	@Override
-	public boolean insertAsnHeader(AsnHeader asnHeader) {
-		return super.save(asnHeader);
+	public boolean saveOrUpdateAsnHeader(AsnHeader asnHeader) {
+		return super.saveOrUpdate(asnHeader);
 	}
 
 	@Override

@@ -15,6 +15,7 @@
                sku_id,
                sku_code,
                sku_name,
+               sku_spec,
                plan_qty,
                scan_qty,
                remark

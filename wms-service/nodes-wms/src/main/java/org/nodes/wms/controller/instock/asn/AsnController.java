@@ -3,9 +3,13 @@ package org.nodes.wms.controller.instock.asn;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.tool.validation.Update;
 import org.nodes.wms.biz.application.AsnManageBiz;
 import org.nodes.wms.biz.instock.asn.AsnBiz;
-import org.nodes.wms.dao.instock.asn.dto.input.*;
+import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
+import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
+import org.nodes.wms.dao.instock.asn.dto.input.DeleteRequest;
+import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnBillByEditResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
@@ -14,6 +18,7 @@ import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -48,9 +53,9 @@ public class AsnController {
 
 	@ApiLog("ASN单管理-新增")
 	@PostMapping("/add")
-	public R<String> add(@Valid @RequestBody AddAsnBillRequest addAsnBillRequest){
-		AsnHeader asnHeader = asnBiz.add(addAsnBillRequest);
-		return R.success("新增ASN单成功，ASN单编码:"+asnHeader.getAsnBillNo());
+	public R<String> add(@Valid @RequestBody AddOrEditAsnBillRequest addOrEditAsnBillRequest){
+		AsnHeader asnHeader = asnBiz.add(addOrEditAsnBillRequest);
+		return R.success("新增ASN单成功，ASN单编码: "+asnHeader.getAsnBillNo());
 	}
 
 	@PostMapping ("/detailByEdit")
@@ -60,9 +65,9 @@ public class AsnController {
 
 	@ApiLog("ASN单管理-编辑")
 	@PostMapping("/edit")
-	public R<Boolean> edit(@Valid @RequestBody EditAsnBillRequest editAsnBillRequest){
-		boolean edit = asnBiz.edit(editAsnBillRequest);
- 		return R.status(edit);
+	public R<String> edit(@Validated({ Update.class }) @RequestBody AddOrEditAsnBillRequest addOrEditAsnBillRequest){
+		AsnHeader asnHeader = asnBiz.edit(addOrEditAsnBillRequest);
+ 		return R.success("修改ASN单成功，ASN单编码: "+asnHeader.getAsnBillNo());
 	}
 
 	@ApiLog("ASN单管理-删除")
