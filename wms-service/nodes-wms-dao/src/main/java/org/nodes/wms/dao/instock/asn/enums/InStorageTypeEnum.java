@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.instock.asn.enums;
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.enums.IPairs;
@@ -29,7 +31,8 @@ public enum InStorageTypeEnum
 	 */
 	CROSS(30, "越库入库"),
 	;
-
+	@EnumValue
+	@JsonValue
 	private final Integer code;
 	private final String desc;
 
