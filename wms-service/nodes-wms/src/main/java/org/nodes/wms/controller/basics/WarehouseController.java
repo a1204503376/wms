@@ -40,7 +40,7 @@ import static org.nodes.wms.core.warehouse.cache.WarehouseCache.WAREHOUSE_CACHE;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(WmsApiPath.WMS_ROOT_URL +"warehouse")
+@RequestMapping(WmsApiPath.WMS_ROOT_URL +"warehouse/warehouse")
 public class WarehouseController extends BladeController {
 
 	private IWarehouseService warehouseService;
