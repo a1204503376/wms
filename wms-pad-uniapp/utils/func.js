@@ -6,8 +6,8 @@ const install = (Vue, vm) => {
 		vm.$u.vuex('userInfo', userInfo)
 		vm.$u.vuex('accessToken', userInfo.access_token)
 		vm.$u.vuex('isLogin', true)
-		uni.switchTab({
-			url: '/pages/home/home'
+		uni.redirectTo({
+			url: '/pages/index/honeywellScannerComponent'
 		})
 	}
 

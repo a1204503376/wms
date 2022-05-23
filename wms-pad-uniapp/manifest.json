@@ -45,6 +45,44 @@
             /* SDK配置 */
             "sdkConfigs" : {
                 "ad" : {}
+            },
+            "splashscreen" : {
+                "androidStyle" : "common",
+                "android" : {
+                    "hdpi" : "",
+                    "xhdpi" : "",
+                    "xxhdpi" : ""
+                },
+                "iosStyle" : "common",
+                "ios" : {
+                    "iphone" : {
+                        "portrait-896h@3x" : "",
+                        "landscape-896h@3x" : "",
+                        "portrait-896h@2x" : "",
+                        "landscape-896h@2x" : "",
+                        "iphonex" : "",
+                        "iphonexl" : "",
+                        "retina55" : "",
+                        "retina55l" : "",
+                        "retina47" : "",
+                        "retina47l" : "",
+                        "retina40" : "",
+                        "retina40l" : "",
+                        "retina35" : ""
+                    },
+                    "ipad" : {
+                        "portrait-1366h@2x" : "",
+                        "landscape-1366h@2x" : "",
+                        "portrait-1194h@2x" : "",
+                        "landscape-1194h@2x" : "",
+                        "portrait-1112h@2x" : "",
+                        "landscape-1112h@2x" : "",
+                        "portrait-retina7" : "",
+                        "landscape-retina7" : "",
+                        "portrait7" : "",
+                        "landscape7" : ""
+                    }
+                }
             }
         }
     },

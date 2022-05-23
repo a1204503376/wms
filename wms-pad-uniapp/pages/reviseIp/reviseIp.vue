@@ -13,7 +13,7 @@
 				</u--form>
 				<view class="input-box">
 				</view>
-				<button class="submit" @click="submit">修改请求地址</button>
+				<button class="submit" @click="submit">配置请求地址</button>
 			</div>
 		</view>
 	</view>
