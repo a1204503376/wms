@@ -15,6 +15,7 @@ import org.nodes.wms.dao.instock.asn.dto.output.*;
 import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.springblade.core.excel.util.ExcelUtil;
+import org.springblade.core.log.exception.ServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,7 +96,14 @@ public class AsnBizImpl implements AsnBiz {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public AsnHeader edit(AddOrEditAsnBillRequest addOrEditAsnBillRequest) {
+		// 根据ASN单id 获取ASN单实体对象，验证该ASN单状态是否 是已收货
+		AsnHeader header = asnHeaderDao.getAsnHeaderByAsnBillId(addOrEditAsnBillRequest.getAsnBillId());
+		if (header.getAsnBillState().getCode() != 10) {
+			throw new ServiceException("编辑ASN单失败，该ASN单已收货，单据编码:"+header.getAsnBillNo());
+		}
+
 		// 创建ASN单头表实体，修改ASN单头表数据
 		AsnHeader asnHeader = asnFactory.createAsnHeader(addOrEditAsnBillRequest);
 		asnHeaderDao.saveOrUpdateAsnHeader(asnHeader);
@@ -104,10 +112,6 @@ public class AsnBizImpl implements AsnBiz {
 		List<AsnDetailRequest> asnDetailList = addOrEditAsnBillRequest.getAsnDetailList();
 		List<AsnDetail> details = new ArrayList<>();
 		for (AsnDetailRequest asnDetail : asnDetailList) {
-			// 如果明细中包含已删除的行，则跳过当前行的新增或修改
-//			if (editAsnBillRequest.getRemoveIdList().contains(asnDetail.getAsnDetailId())) {
-//				continue;
-//			}
 			AsnDetail detail = asnFactory.createAsnDetail(asnHeader, asnDetail);
 			details.add(detail);
 		}
@@ -116,6 +120,9 @@ public class AsnBizImpl implements AsnBiz {
 
 		//删除ASN单明细数据
 		asnDetailDao.deleteByIds(addOrEditAsnBillRequest.getRemoveIdList());
+
+		//设置ASN单编码用于前端编码提示
+		asnHeader.setAsnBillNo(header.getAsnBillNo());
 		return asnHeader;
 	}
 

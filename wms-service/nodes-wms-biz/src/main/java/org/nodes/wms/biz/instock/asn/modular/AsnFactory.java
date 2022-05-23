@@ -60,13 +60,14 @@ public class AsnFactory {
 		// ASN单id
 		if (Func.isNotEmpty(addOrEditAsnBillRequest.getAsnBillId())) {
 			asnHeader.setAsnBillId(addOrEditAsnBillRequest.getAsnBillId());
+		}else{
+			// ASN单编码
+			asnHeader.setAsnBillNo(noGeneratorUtil.createAsnBillNo());
+			// 单据状态
+			asnHeader.setAsnBillState(AsnBillStateEnum.NOT_RECEIPT);
 		}
-		// ASN单编码
-		asnHeader.setAsnBillNo(noGeneratorUtil.createAsnBillNo());
 		// 单据类型编码
 		asnHeader.setBillTypeCd(addOrEditAsnBillRequest.getBillTypeCd());
-		// 单据状态
-		asnHeader.setAsnBillState(AsnBillStateEnum.NOT_RECEIPT);
 		// 备注
 		asnHeader.setAsnBillRemark(addOrEditAsnBillRequest.getAsnBillRemark());
 		// 供应商id

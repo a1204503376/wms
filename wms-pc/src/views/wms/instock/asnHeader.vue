@@ -29,7 +29,10 @@
                             <el-input v-model="form.params.externalCreateUser" class="d-input"></el-input>
                         </el-form-item>
                         <el-form-item label="仓库">
-                            <nodes-warehouse v-model="form.params.whIdList"></nodes-warehouse>
+                            <nodes-warehouse
+                                v-model="form.params.whIdList"
+                                :multiple="true"
+                            ></nodes-warehouse>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -57,27 +60,22 @@
                           size="mini" @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
-                    <template v-for="(column, index) in table.columnList">
-<!--                        <el-table-column v-if="column.prop === 'asnBillNo'" :key="index" show-overflow-tooltip v-bind="column">-->
-<!--                                <el-link-->
-<!--                                    href="www.baidu.com"-->
-<!--                                    :underline="false"-->
-<!--                                    type="primary"-->
-<!--                                    target="_blank">{{index}}-->
-<!--                                </el-link>-->
-<!--                        </el-table-column>-->
-                        <!--                                    :to="{name: 'detail',query:{id:table.data[index].asnBillId}}"-->
-                        <el-table-column :key="index" show-overflow-tooltip v-bind="column">
-<!--                            <router-link-->
-<!--                                :underline="false"-->
-<!--                                :to="home"-->
-<!--                                v-if="column.prop === 'asnBillNo'"-->
-<!--                                target="_blank">{{table.data[index].asnBillId}}-->
-<!--                            </router-link>-->
+                    <template v-for="(column, index) in table.columnList" >
+                        <el-table-column v-if="column.prop === 'asnBillNo'" :key="index" show-overflow-tooltip v-bind="column">
+                            <template v-slot="scope">
+                                <el-link
+                                    @click="onView(scope.row)"
+                                    :underline="false"
+                                    type="primary"
+                                    target="_blank">{{scope.row.asnBillNo}}
+                                </el-link>
+                                </template>
+                        </el-table-column>
+                        <el-table-column v-if="column.prop !== 'asnBillNo'" :key="index" show-overflow-tooltip v-bind="column">
                         </el-table-column>
                     </template>
                     <el-table-column fixed="right" label="操作" width="100">
-                        <template slot-scope="scope">
+                        <template v-slot="scope">
                             <el-button size="small" @click="onEdit(scope.row)" type="text">编辑</el-button>
                         </template>
                     </el-table-column>
@@ -234,9 +232,6 @@ export default {
         refreshTable(){
             this.getTableData();
         },
-        view() {
-
-        },
         onRemove() {
             let rows = this.$refs.table.selection;
             if (rows.length <= 0) {
@@ -307,7 +302,15 @@ export default {
                     asnBillId: row.asnBillId
                 }
             })
-        }
+        },
+        onView(row) {
+            this.$router.push({
+                name: 'ASN单详情',
+                params: {
+                    asnBillId: row.asnBillId
+                }
+            })
+        },
     }
 }
 </script>

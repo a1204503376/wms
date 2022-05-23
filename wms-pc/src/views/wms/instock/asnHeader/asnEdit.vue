@@ -147,9 +147,9 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.sku.skuSpec"
-                                            :disabled="true">
+                                            :disabled="true"
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -171,10 +171,10 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input-number
-                                            :min = "table.data.scanQty"
                                             v-model="row.planQty"
                                             controls-position="right"
-                                            size="mini"></el-input-number>
+                                            size="mini"
+                                            ></el-input-number>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="scanQty" width="120">
@@ -237,7 +237,7 @@ import NodesLineNumber from "@/components/wms/table/NodesLineNumber";
 import {editDetailMixin} from "@/mixins/editDetail";
 import func from "@/util/func";
 import NodesAsnBillState from "@/components/wms/select/NodesAsnBillState";
-import {edit, detailByEdit} from "@/api/wms/instock/asnHeader"
+import {detailByEdit, edit} from "@/api/wms/instock/asnHeader"
 import NodesBillType from "@/components/wms/select/NodesBillType";
 import NodesSupplier from "@/components/wms/select/NodesSupplier";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
@@ -259,6 +259,7 @@ export default {
     },
     data() {
         return {
+            removeRowId: [],
             form: {
                 params: {
                     asnBillNo: '',
@@ -272,9 +273,6 @@ export default {
                     woId: '',
                     asnBillRemark: ''
                 },
-                removeRowId: [],
-                addRowId: [],
-                editRowId: [],
                 rules: {
                     billTypeCd: [
                         {
@@ -328,7 +326,7 @@ export default {
                 planQty: {
                     required: true,
                     type: 'Number',
-                    validator: (rule, value) => value>0, message:'计划数量不能为0',
+                    validator: (rule, value) => value > 0, message: '计划数量不能为0',
                     trigger: 'blur'
                 },
             };
@@ -345,6 +343,7 @@ export default {
                     this.table.data = rows.filter(function (value) {
                         return value !== row;
                     })
+                    this.removeRowId.push(row.asnDetailId)
                     console.log(this.table.data);
                 }
                 this.$message({
@@ -418,11 +417,13 @@ export default {
             })
             let data = {
                 asnBillId: this.asnBillId,
+                asnBillNo: params.asnBillNo,
                 billTypeCd: params.billTypeCd,
                 supplierId: params.supplier.id,
                 whId: params.whId,
                 woId: params.woId,
                 asnBillRemark: params.asnBillRemark,
+                removeIdList: this.removeRowId,
                 asnDetailList: asnDetailArray,
             }
             return edit(data)

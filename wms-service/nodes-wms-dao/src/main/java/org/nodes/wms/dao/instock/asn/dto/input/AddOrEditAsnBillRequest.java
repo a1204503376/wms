@@ -28,6 +28,11 @@ public class AddOrEditAsnBillRequest implements Serializable {
 	private List<Long> removeIdList;
 
 	/**
+	 * ASN单编码
+	 */
+	private String asnBillNo;
+
+	/**
 	 * 单据类型
 	 */
 	@NotNull(message = "单据类型不能为空")
