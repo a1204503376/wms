@@ -52,6 +52,9 @@ export default {
                 this.onChange(this.val);
             }
         },
+        selectVal(newVal){
+            this.val = newVal;
+        }
     },
     methods: {
         async getDataSource(skuId) {
