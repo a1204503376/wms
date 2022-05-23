@@ -13,7 +13,7 @@
 				</u--form>
 				<view class="input-box">
 				</view>
-				<button class="submit" @click="submit">配置请求地址</button>
+				<button class="submit" @click="submit">确认</button>
 			</div>
 		</view>
 	</view>
@@ -27,10 +27,16 @@
 				address: setting.apiUrl,
 			}
 		},
+		onLoad() {
+		uni.$u.func.title("配置");
+		},
 		methods: {
 			submit() {
 				if (this.address == setting.apiUrl) {
-					 uni.$u.toast('请修改请求地址');
+						//uni.navigateBack()//默认delta:1
+						uni.navigateBack({
+							delta:1,//返回层数，2则上上页
+						})
 	                 return;
 				}
                 uni.$u.toast('修改配置中，修改配置完成自动退出');
