@@ -49,6 +49,14 @@ export const edit = (data) => {
         data: data,
     })
 }
+
+export const detail = (data) => {
+    return request({
+        url: '/api/wms/asn/detail',
+        method: 'post',
+        data: data,
+    })
+}
 // export const getPage = (current, size, params) => {
 //     return request({
 //         url: '/api/wms/instock/asnHeader/page',

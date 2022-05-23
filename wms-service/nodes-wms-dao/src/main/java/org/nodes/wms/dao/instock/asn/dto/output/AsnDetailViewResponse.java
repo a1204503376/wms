@@ -8,10 +8,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * 返回对象-Asn单集合属性Asn单明细
+ * 查看明细-ASN单明细表返回对象
  **/
 @Data
-public class AsnPropertyDetailResponse implements Serializable {
+public class AsnDetailViewResponse implements Serializable {
 
 	private static final long serialVersionUID = 1959979521968969432L;
 
@@ -37,6 +37,11 @@ public class AsnPropertyDetailResponse implements Serializable {
 	private String skuName;
 
 	/**
+	 * 物品规格
+	 */
+	private String skuSpec;
+
+	/**
 	 * 计量单位名称
 	 */
 	private String umName;
@@ -50,6 +55,11 @@ public class AsnPropertyDetailResponse implements Serializable {
 	 * 实际数量
 	 */
 	private BigDecimal scanQty;
+
+	/**
+	 * 剩余数量
+	 */
+	private BigDecimal surplusQty;
 
 	/**
 	 * 备注

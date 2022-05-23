@@ -3,10 +3,9 @@ package org.nodes.wms.biz.instock.asn;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
-import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnBillByEditResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnBillViewResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 
@@ -29,12 +28,12 @@ public interface AsnBiz {
 									  PageParamsQuery pageParamsQuery);
 
 	/**
-	 * 获取ASN头表、ASN明细信息
+	 * 根据ASN单id获取ASN单头表信息、ASN单明细信息、收货单头表信息
 	 *
-	 * @param asnBillIdRequest:
-	 * @return AsnDetailResponse
+	 * @param asnBillId: ASN单id
+	 * @return AsnBillViewResponse
 	 */
-	AsnDetailResponse getAsnContactDetail(AsnBillIdRequest asnBillIdRequest);
+	AsnBillViewResponse findAsnBillViewDetailByAsnBillId(Long asnBillId);
 
 	/**
 	 * 根据Asn单id删除Asn单头表信息

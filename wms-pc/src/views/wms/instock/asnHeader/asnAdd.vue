@@ -314,7 +314,7 @@ export default {
         deleteRow(index, rows) {
             rows.splice(index, 1);
         },
-        onChangeSku(val) {
+        onChangeSku() {
         },
         submitFormParams() {
             let asnDetailArray = [];

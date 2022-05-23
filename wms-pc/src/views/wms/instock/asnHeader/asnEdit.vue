@@ -171,6 +171,7 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input-number
+                                            :min="0"
                                             v-model="row.planQty"
                                             controls-position="right"
                                             size="mini"
@@ -392,11 +393,11 @@ export default {
                     skuSpec: '',
                 },
                 planQty: 0,
-                sScanQty: '',
+                sScanQty: 0,
                 remark: '',
             }
         },
-        onChangeSku(val) {
+        onChangeSku() {
         },
         refreshTable() {
             this.getDataSource();

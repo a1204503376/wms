@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnBillExportResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnBillViewResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 
@@ -37,9 +37,9 @@ public interface AsnHeaderDao {
 	 * 获取ASN单详细信息
 	 *
 	 * @param id: Asn单id
-	 * @return AsnDetailResponse
+	 * @return AsnBillViewResponse
 	 */
-	AsnDetailResponse selectAsnContactDetailByAsnBillId(Long id);
+	AsnBillViewResponse getAsnBillViewDetailById(Long id);
 
 	/**
 	 * 根据Asn单id 删除ASN单头表信息

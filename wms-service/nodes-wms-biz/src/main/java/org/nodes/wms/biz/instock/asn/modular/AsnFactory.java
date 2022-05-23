@@ -57,10 +57,13 @@ public class AsnFactory {
 		Owner owner = ownerBiz.findById(addOrEditAsnBillRequest.getWoId());
 
 		AsnHeader asnHeader = new AsnHeader();
-		// ASN单id
+		// ASN单id为空表示新增操作，否则为编辑操作
 		if (Func.isNotEmpty(addOrEditAsnBillRequest.getAsnBillId())) {
+			// ASN单id
 			asnHeader.setAsnBillId(addOrEditAsnBillRequest.getAsnBillId());
-		}else{
+			// ASN单编码
+			asnHeader.setAsnBillNo(addOrEditAsnBillRequest.getAsnBillNo());
+		} else {
 			// ASN单编码
 			asnHeader.setAsnBillNo(noGeneratorUtil.createAsnBillNo());
 			// 单据状态
@@ -89,11 +92,55 @@ public class AsnFactory {
 		return asnHeader;
 	}
 
-	private AsnDetail getAsnDetail(AsnHeader asnHeaderObj, AsnDetailRequest asnDetailObj) {
+	public AsnHeaderEditResponse createAsnHeaderEditResponse(AsnHeader asnHeader) {
+		AsnHeaderEditResponse headerResponse = new AsnHeaderEditResponse();
+		SupplierSelectResponse supplierResponse = new SupplierSelectResponse();
+		supplierResponse.setId(asnHeader.getSupplierId());
+		supplierResponse.setCode(asnHeader.getSupplierCode());
+		supplierResponse.setName(asnHeader.getSupplierName());
+		// 头表返回对象 赋值
+		headerResponse.setAsnBillId(asnHeader.getAsnBillId());
+		headerResponse.setAsnBillNo(asnHeader.getAsnBillNo());
+		headerResponse.setBillTypeCd(asnHeader.getBillTypeCd());
+		headerResponse.setWhId(asnHeader.getWhId());
+		headerResponse.setSupplierSelectResponse(supplierResponse);
+		headerResponse.setAsnBillRemark(asnHeader.getAsnBillRemark());
+		return headerResponse;
+	}
+
+	public List<AsnDetailEditResponse> createAsnDetailEditResponse(List<AsnDetail> asnDetailList) {
+		List<AsnDetailEditResponse> detailResponseList = new ArrayList<>();
+		//遍历实体集合，给dto赋值
+		asnDetailList.forEach(item -> {
+			AsnDetailEditResponse detailResponse = new AsnDetailEditResponse();
+			SkuSelectResponse skuSelectResponse = new SkuSelectResponse();
+			skuSelectResponse.setSkuId(item.getSkuId());
+			skuSelectResponse.setSkuCode(item.getSkuCode());
+			skuSelectResponse.setSkuName(item.getSkuName());
+			skuSelectResponse.setSkuSpec(item.getSkuSpec());
+
+			detailResponse.setAsnDetailId(item.getAsnDetailId());
+			detailResponse.setAsnLineNo(item.getAsnLineNo());
+			detailResponse.setSkuSelectResponse(skuSelectResponse);
+			detailResponse.setPlanQty(item.getPlanQty());
+			detailResponse.setScanQty(item.getScanQty());
+			detailResponse.setRemark(item.getRemark());
+			detailResponseList.add(detailResponse);
+		});
+		return detailResponseList;
+	}
+
+	//创建明细对象
+	public AsnDetail createAsnDetail(AsnHeader asnHeaderObj, AsnDetailRequest asnDetailObj) {
 		AsnDetail asnDetail = new AsnDetail();
 		// 明细id
-		if(Func.isNotEmpty(asnDetailObj.getAsnDetailId())){
+		if (Func.isNotEmpty(asnDetailObj.getAsnDetailId())) {
 			asnDetail.setAsnDetailId(asnDetailObj.getAsnDetailId());
+		} else {
+			// 实收数量
+			asnDetail.setScanQty(new BigDecimal(0));
+			// 剩余数量
+			asnDetail.setSurplusQty(asnDetailObj.getPlanQty());
 		}
 		// 行号
 		asnDetail.setAsnLineNo(asnDetailObj.getAsnLineNo());
@@ -142,57 +189,10 @@ public class AsnFactory {
 		asnDetail.setBaseUmName(baseSkuPackageDetail.getWsuName());
 		// 计划数量
 		asnDetail.setPlanQty(asnDetailObj.getPlanQty());
-		// 实收数量
-		asnDetail.setScanQty(new BigDecimal(0));
-		// 剩余数量
-		asnDetail.setSurplusQty(asnDetailObj.getPlanQty());
 		// 库房id
 		asnDetail.setWhId(asnHeaderObj.getWhId());
 		// 备注
 		asnDetail.setRemark(asnDetailObj.getRemark());
 		return asnDetail;
-	}
-
-	public AsnHeaderEditResponse createAsnHeaderEditResponse(AsnHeader asnHeader) {
-		AsnHeaderEditResponse headerResponse = new AsnHeaderEditResponse();
-		SupplierSelectResponse supplierResponse = new SupplierSelectResponse();
-		supplierResponse.setId(asnHeader.getSupplierId());
-		supplierResponse.setCode(asnHeader.getSupplierCode());
-		supplierResponse.setName(asnHeader.getSupplierName());
-		// 头表返回对象 赋值
-		headerResponse.setAsnBillId(asnHeader.getAsnBillId());
-		headerResponse.setAsnBillNo(asnHeader.getAsnBillNo());
-		headerResponse.setBillTypeCd(asnHeader.getBillTypeCd());
-		headerResponse.setWhId(asnHeader.getWhId());
-		headerResponse.setSupplierSelectResponse(supplierResponse);
-		headerResponse.setAsnBillRemark(asnHeader.getAsnBillRemark());
-		return headerResponse;
-	}
-
-	public List<AsnDetailEditResponse> createAsnDetailEditResponse(List<AsnDetail> asnDetailList) {
-		List<AsnDetailEditResponse> detailResponseList = new ArrayList<>();
-		//遍历实体集合，给dto赋值
-		asnDetailList.forEach(item -> {
-			AsnDetailEditResponse detailResponse = new AsnDetailEditResponse();
-			SkuSelectResponse skuSelectResponse = new SkuSelectResponse();
-			skuSelectResponse.setSkuId(item.getSkuId());
-			skuSelectResponse.setSkuCode(item.getSkuCode());
-			skuSelectResponse.setSkuName(item.getSkuName());
-			skuSelectResponse.setSkuSpec(item.getSkuSpec());
-
-			detailResponse.setAsnDetailId(item.getAsnDetailId());
-			detailResponse.setAsnLineNo(item.getAsnLineNo());
-			detailResponse.setSkuSelectResponse(skuSelectResponse);
-			detailResponse.setPlanQty(item.getPlanQty());
-			detailResponse.setScanQty(item.getScanQty());
-			detailResponse.setRemark(item.getRemark());
-			detailResponseList.add(detailResponse);
-		});
-		return detailResponseList;
-	}
-
-	//创建明细对象
-	public AsnDetail createAsnDetail(AsnHeader asnHeaderObj, AsnDetailRequest asnDetailObj) {
-		return getAsnDetail(asnHeaderObj, asnDetailObj);
 	}
 }

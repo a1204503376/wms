@@ -69,79 +69,102 @@
 
     </select>
 
-    <select id="selectAsnContactDetail"
-            resultMap="asnDetailMap">
+    <select id="selectAsnBillViewDetailById"
+            resultMap="asnViewDetailMap">
         SELECT h.asn_bill_id,
                h.asn_bill_no,
-               b.bill_type_name as billTypeName,
+               b.bill_type_name,
                h.supplier_code,
                h.supplier_name,
                h.asn_bill_remark,
                h.create_time,
-               h.create_user,
+               u1.real_name as headerCreateUser,
                w.wh_code ,
                w.wh_name,
+               o.owner_name,
                d.asn_detail_id,
                d.asn_line_no,
                d.sku_code,
                d.sku_name,
+               d.sku_spec,
                d.um_name,
                d.plan_qty,
                d.scan_qty,
+               d.surplus_qty,
                d.remark,
                d.detail_status,
-               r.receive_id,
-               r.receive_no,
-               r.bill_state,
-               r.remark      as receive_remark,
-               r.create_time as receive_create_time,
-               u1.real_name as receive_create_user,
-               r.update_time as receive_update_time,
-               u2.real_name as receive_update_time
+               temp.receive_id,
+               temp.receive_no,
+               temp.bill_state,
+               temp.receiveRemark,
+               temp.receiveCreateTime,
+               temp.receiveCreateUser,
+               temp.receiveUpdateTime,
+               temp.receiveUpdateUser
         FROM asn_header h
                  LEFT JOIN asn_detail d ON h.asn_bill_id = d.asn_bill_id
-                 LEFT JOIN wms_warehouse w ON h.wh_id = w.wh_id
-                 LEFT JOIN receive_header r ON h.asn_bill_id = r.asn_bill_id
-                 LEFT JOIN wms_bill_type b ON h.bill_type_cd = b.bill_type_cd
-                 LEFT JOIN blade_user u1 ON h.create_user = u1.id
-                 LEFT JOIN blade_user u2 ON h.create_user = u2.id
+                 Inner JOIN wms_warehouse w ON h.wh_id = w.wh_id
+                 Inner JOIN wms_bill_type b ON h.bill_type_cd = b.bill_type_cd
+                 Inner JOIN wms_owner o ON h.wo_id = o.wo_id
+                 Inner JOIN blade_user u1 ON h.create_user = u1.id
+                 LEFT JOIN (
+                    SELECT
+                        r.asn_bill_id,
+                        r.receive_id,
+                        r.receive_no,
+                        r.bill_state,
+                        r.remark as receiveRemark,
+                        r.create_time as receiveCreateTime,
+                        r.update_time as receiveUpdateTime,
+                        u2.real_name as receiveCreateUser,
+                        u3.real_name as receiveUpdateUser
+                    FROM receive_header r
+                        LEFT JOIN blade_user u2 ON r.create_user = u2.create_user
+                        LEFT JOIN blade_user u3 ON r.update_user = u3.update_user
+                 ) as temp ON temp.asn_bill_id = h.asn_bill_id
         WHERE h.asn_bill_id = #{id} and h.is_deleted = 0
     </select>
 
-    <resultMap id="asnDetailMap" type="org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse">
+    <resultMap id="asnViewDetailMap" type="org.nodes.wms.dao.instock.asn.dto.output.AsnBillViewResponse">
         <id column="asn_bill_id" property="asnBillId"/>
-        <result column="asn_bill_no" property="asnBillNo"/>
-        <result column="bill_type_cd" property="billTypeName"/>
-        <result column="supplier_code" property="supplierCode"/>
-        <result column="supplier_name" property="supplierName"/>
-        <result column="asn_bill_remark" property="asnBillRemark"/>
-        <result column="create_time" property="createTime"/>
-        <result column="create_user" property="createUser"/>
-        <result column="wh_code" property="whCode"/>
-        <result column="wh_name" property="whName"/>
-
-        <collection property="asnDetailList" ofType="org.nodes.wms.dao.instock.asn.dto.output.AsnPropertyDetailResponse">
+        <association property="asnHeaderViewResponse"
+                     javaType="org.nodes.wms.dao.instock.asn.dto.output.AsnHeaderViewResponse">
+            <id column="asn_bill_id" property="asnBillId"/>
+            <result column="asn_bill_no" property="asnBillNo"/>
+            <result column="bill_type_name" property="billTypeName"/>
+            <result column="supplier_code" property="supplierCode"/>
+            <result column="supplier_name" property="supplierName"/>
+            <result column="asn_bill_remark" property="asnBillRemark"/>
+            <result column="create_time" property="createTime"/>
+            <result column="headerCreateUser" property="createUser"/>
+            <result column="wh_code" property="whCode"/>
+            <result column="wh_name" property="whName"/>
+            <result column="owner_name" property="ownerName"/>
+        </association>
+        <collection property="asnDetailViewResponse"
+                    ofType="org.nodes.wms.dao.instock.asn.dto.output.AsnDetailViewResponse">
             <id column="asn_detail_id" property="asnDetailId"/>
             <result column="asn_line_no" property="asnLineNo"/>
             <result column="sku_code" property="skuCode"/>
             <result column="sku_name" property="skuName"/>
+            <result column="sku_spec" property="skuSpec"/>
             <result column="um_name" property="umName"/>
             <result column="plan_qty" property="planQty"/>
             <result column="scan_qty" property="scanQty"/>
+            <result column="surplus_qty" property="surplusQty"/>
             <result column="remark" property="remark"/>
             <result column="detail_status" property="detailStatus"/>
         </collection>
-
-        <collection property="receiveHeaderList"
-                    ofType="org.nodes.wms.dao.instock.asn.dto.output.AsnPropertyReceiveResponse">
+        <collection property="asnReceiveViewResponse"
+                    ofType="org.nodes.wms.dao.instock.asn.dto.output.AsnReceiveViewResponse">
             <id column="receive_id" property="receiveId"/>
             <result column="receive_no" property="receiveNo"/>
             <result column="bill_state" property="billState"/>
-            <result column="receive_remark" property="remark"/>
-            <result column="receive_create_time" property="createTime"/>
-            <result column="receive_create_user" property="createUser"/>
-            <result column="receive_create_time" property="updateTime"/>
-            <result column="receive_create_user" property="updateUser"/>
+            <result column="receiveRemark" property="remark"/>
+            <result column="receiveCreateTime" property="createTime"/>
+            <result column="receiveCreateUser" property="createUser"/>
+            <result column="receiveUpdateTime" property="updateTime"/>
+            <result column="receiveUpdateUser" property="updateUser"/>
         </collection>
     </resultMap>
 
@@ -218,6 +241,7 @@
             asn_bill_id,
             asn_bill_no,
             wh_id,
+            asn_bill_state,
             bill_type_cd,
             supplier_id,
             supplier_code,

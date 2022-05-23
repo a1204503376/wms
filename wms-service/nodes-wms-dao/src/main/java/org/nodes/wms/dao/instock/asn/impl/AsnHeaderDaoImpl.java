@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.instock.asn.AsnHeaderDao;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnBillExportResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnBillViewResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.nodes.wms.dao.instock.asn.mapper.AsnHeaderMapper;
@@ -35,8 +35,8 @@ public class AsnHeaderDaoImpl
 	}
 
 	@Override
-	public AsnDetailResponse selectAsnContactDetailByAsnBillId(Long asnBillId) {
-		return super.baseMapper.selectAsnContactDetail(asnBillId);
+	public AsnBillViewResponse getAsnBillViewDetailById(Long asnBillId) {
+		return super.baseMapper.selectAsnBillViewDetailById(asnBillId);
 	}
 
 	@Override

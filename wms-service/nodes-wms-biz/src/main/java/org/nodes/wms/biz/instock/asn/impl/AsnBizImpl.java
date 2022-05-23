@@ -8,7 +8,6 @@ import org.nodes.wms.biz.instock.asn.modular.AsnFactory;
 import org.nodes.wms.dao.instock.asn.AsnDetailDao;
 import org.nodes.wms.dao.instock.asn.AsnHeaderDao;
 import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
-import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnDetailRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.*;
@@ -45,8 +44,8 @@ public class AsnBizImpl implements AsnBiz {
 	}
 
 	@Override
-	public AsnDetailResponse getAsnContactDetail(AsnBillIdRequest asnBillIdRequest) {
-		return asnHeaderDao.selectAsnContactDetailByAsnBillId(asnBillIdRequest.getAsnBillId());
+	public AsnBillViewResponse findAsnBillViewDetailByAsnBillId(Long asnBillId) {
+		return asnHeaderDao.getAsnBillViewDetailById(asnBillId);
 	}
 
 	@Override

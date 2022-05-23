@@ -11,7 +11,7 @@ import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.DeleteRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnBillByEditResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnBillViewResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.springblade.core.log.annotation.ApiLog;
@@ -19,7 +19,10 @@ import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -45,10 +48,10 @@ public class AsnController {
 		return R.data(asnPage);
 	}
 
-	@GetMapping("/detail")
-	public R<AsnDetailResponse> getAsnContactDetail(@Valid @RequestParam AsnBillIdRequest asnBillIdRequest) {
-		AsnDetailResponse asnDetailResponse = asnBiz.getAsnContactDetail(asnBillIdRequest);
-		return R.data(asnDetailResponse);
+	@PostMapping("/detail")
+	public R<AsnBillViewResponse> asnBillViewDetail(@Valid @RequestBody AsnBillIdRequest asnBillIdRequest) {
+		AsnBillViewResponse asnBillViewResponse = asnBiz.findAsnBillViewDetailByAsnBillId(asnBillIdRequest.getAsnBillId());
+		return R.data(asnBillViewResponse);
 	}
 
 	@ApiLog("ASN单管理-新增")
