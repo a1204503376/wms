@@ -27,7 +27,7 @@
 		, {
 			"path": "pages/reviseIp/reviseIp",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "配置",
 				"enablePullDownRefresh": false
 			}
 

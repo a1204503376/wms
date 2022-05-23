@@ -28,9 +28,15 @@
 			}
 		},
 		onLoad() {
-		uni.$u.func.title("配置");
+			uni.$u.func.registerScanner(this.scannerCallback);
+		},
+		onUnload() {		
+			uni.$u.func.unRegisterScanner();
 		},
 		methods: {
+			scannerCallback(data) {
+				this.address=data
+			},
 			submit() {
 				if (this.address == setting.apiUrl) {
 						//uni.navigateBack()//默认delta:1

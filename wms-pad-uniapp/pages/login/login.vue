@@ -52,13 +52,18 @@
 			};
 		},
 		onLoad() {
-			uni.$u.func.registerScanner(this.callback);
+			let subNVue = uni.getSubNVueById('honeywellScannerComponent');
+			subNVue.hide();
+			// uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
 		},
+		onShow(){
+			uni.$u.func.registerScanner(this.scannerCallback);
+		},
 		methods: {
-			callback(data) {
+			scannerCallback(data) {
 				let userInfoList = data.split('@');
 				if (userInfoList.length != 2) {
 					this.username = data
