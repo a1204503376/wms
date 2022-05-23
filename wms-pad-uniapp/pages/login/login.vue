@@ -51,12 +51,14 @@
 			subNVue.show();
 			uni.$on('drawer-page', (data) => {
 				if (tool.isNotEmpty(data)) {
-					let arr = data.split('@');
-					this.username = arr[0];
-					this.password = arr[1];
-					return
+					let userInfoList = data.split('@');
+					if (userInfoList.length != 2) {
+						this.username = data
+						return
+					}
+					this.username = userInfoList[0];
+					this.password = userInfoList[1];
 				}
-				this.username = data
 			})
 		},
 		onUnload() {
@@ -68,7 +70,7 @@
 					uni.setStorageSync('accessToken', data.access_token)
 					uni.setStorageSync('username', this.username)
 					uni.$u.func.login({
-						userInfo: this.username,
+						userInfo: data,
 						accessToken: data.access_token
 					});
 				})
