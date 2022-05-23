@@ -29,7 +29,7 @@
 				//你要做的操作 e.detail.code 返回状态   e.detail.scannerResult解码的值
             	//获取当前子窗体的唯一id
 				const subNVue = uni.getCurrentSubNVue()
-			    uni.$emit('drawer-page', e.detail.scannerResult);
+			    uni.$emit('on-scanner-data', e.detail.scannerResult);
 			},
 			honeywellScannerClick(e) {
 				

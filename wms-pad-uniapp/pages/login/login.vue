@@ -4,7 +4,10 @@
 		<view class="top">
 			<div class="logodiv">
 				<image src="/static/images/login.png" style="width: 100px;height: 100px;" mode="widthFix"></image>
+				<h2>{{name}}</h2>
+				<h5>{{pdaVersion}}</h5>	
 			</div>
+		
 			<view>
 				<u--form>
 					<u-form-item>
@@ -44,28 +47,33 @@
 				username: uni.getStorageSync('username') || '',
 				password: '',
 				addressDisplay: true,
+				name:setting.name,
+				pdaVersion:setting.version
 			};
 		},
 		onLoad() {
-			let subNVue = uni.getSubNVueById('honeywellScannerComponent');
-			subNVue.show();
-			uni.$on('drawer-page', (data) => {
-				if (tool.isNotEmpty(data)) {
-					let userInfoList = data.split('@');
-					if (userInfoList.length != 2) {
-						this.username = data
-						return
-					}
-					this.username = userInfoList[0];
-					this.password = userInfoList[1];
-				}
-			})
+			uni.$u.func.registerScanner(this.callback);
 		},
 		onUnload() {
-			uni.$off('drawer-page')
+			uni.$u.func.unRegisterScanner();
 		},
 		methods: {
+			callback(data) {
+				let userInfoList = data.split('@');
+				if (userInfoList.length != 2) {
+					this.username = data
+					return
+				}
+				this.username = userInfoList[0];
+				this.password = userInfoList[1];
+			},
 			submit() {
+				if(tool.isEmpty(this.username)||tool.isEmpty(this.password)){
+					this.$u.func.showToast({
+						title: '登录失败,用户名或密码不能为空',
+					})
+					return;
+				}
 				api.token(this.tenantId, this.username, md5(this.password), this.type).then(data => {
 					uni.setStorageSync('accessToken', data.access_token)
 					uni.setStorageSync('username', this.username)
@@ -205,7 +213,7 @@
 		}
 
 		.submit {
-			margin: 60rpx 90rpx 0;
+			margin: 30rpx 90rpx 0;
 			border: none;
 			width: 572rpx;
 			height: 86rpx;
@@ -233,7 +241,7 @@
 		}
 
 		.quit {
-			margin: 60rpx 90rpx 0;
+			margin: 30rpx 90rpx 0;
 			border: none;
 			width: 572rpx;
 			height: 86rpx;

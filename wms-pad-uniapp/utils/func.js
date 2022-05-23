@@ -4,10 +4,10 @@ const install = (Vue, vm) => {
 	// 登录操作
 	const login = (userInfo) => {
 		vm.$u.vuex('userInfo', userInfo)
-		vm.$u.vuex('accessToken', userInfo.access_token)
+		vm.$u.vuex('accessToken', userInfo.accessToken)
 		vm.$u.vuex('isLogin', true)
 		uni.redirectTo({
-			url: '/pages/index/honeywellScannerComponent'
+			url: '/pages/menu/home/home'
 		})
 	}
 
@@ -21,7 +21,7 @@ const install = (Vue, vm) => {
 		vm.$u.vuex('accessToken', '')
 		vm.$u.vuex('isLogin', false)
 		uni.redirectTo({
-			url: '/pages/login/login-account'
+			url: '/pages/login/login'
 		})
 	}
 
@@ -29,7 +29,7 @@ const install = (Vue, vm) => {
 	const checkLogin = (e = {}) => {
 		if (!vm.isLogin) {
 			uni.navigateTo({
-				url: '/pages/login/login-account'
+				url: '/pages/login/login'
 			})
 			return false
 		}
@@ -45,7 +45,7 @@ const install = (Vue, vm) => {
 			})
 			setTimeout(() => {
 				uni.navigateTo({
-					url: '/pages/login/login-account'
+					url: '/pages/login/login'
 				})
 			}, 500)
 			return false
@@ -114,6 +114,20 @@ const install = (Vue, vm) => {
 			})
 		}
 	}
+	
+	// 注册扫码组件
+	const registerScanner = (callback) => {
+		let subNVue = uni.getSubNVueById('honeywellScannerComponent');
+		subNVue.show();
+		uni.$on('on-scanner-data', (data) => {
+			callback(data)
+		})
+	}
+	
+	// 移除扫码组件注册
+	const unRegisterScanner = () => {
+		uni.$off('on-scanner-data')
+	}
 
 	// 将定义的方法挂载，使用this.$u.func.xx调用
 	Vue.prototype.$u.func = {
@@ -123,7 +137,9 @@ const install = (Vue, vm) => {
 		checkLogin,
 		paramsToObj,
 		refreshPage,
-		showToast
+		showToast,
+		registerScanner,
+		unRegisterScanner
 	}
 }
 export default {
