@@ -1,7 +1,7 @@
 package org.nodes.wms.dao.instock.receive;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderEditResponse;
+import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
@@ -21,9 +21,9 @@ public interface ReceiveHeaderDao {
 	 */
 	IPage<ReceiveHeaderResponse> selectPage(IPage<ReceiveHeaderResponse>page, ReceivePageQuery receivePageQuery);
 
-	boolean delete(Long receiveId);
+	boolean delete(List<Long> receiveIdList);
 
-	ReceiveHeaderResponse selectHeaderById(Long receiveId);
+	DetailReceiveHeaderResponse selectHeaderById(Long receiveId);
 
 	boolean updateBillStateById(Long receiveDetailId);
 
@@ -32,4 +32,8 @@ public interface ReceiveHeaderDao {
     List<ReceiveHeaderResponse> getReceiveHeaderResponseByQuery(ReceivePageQuery receivePageQuery);
 
 	ReceiveHeader selectReceiveHeaderById(Long receiveId);
+
+	void updateReceive(ReceiveHeader receiveHeader);
+
+	ReceiveHeader selectBillStateById(Long receiveId);
 }

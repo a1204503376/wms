@@ -11,6 +11,6 @@ import java.util.List;
 @Data
 public class ReceiveResponse implements Serializable {
 	private static final long serialVersionUID = -1690606023140560102L;
-	private ReceiveHeaderResponse receiveHeaderResponse;
-	private List<ReceiveDetailResponse> detailList;
+	private DetailReceiveHeaderResponse receiveHeaderResponse;
+	private List<DetailReceiveDetailResponse> detailList;
 }

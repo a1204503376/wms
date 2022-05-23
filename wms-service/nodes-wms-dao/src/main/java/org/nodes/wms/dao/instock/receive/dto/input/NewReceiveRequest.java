@@ -12,5 +12,5 @@ import java.util.List;
 public class NewReceiveRequest implements Serializable {
 	private static final long serialVersionUID = 676133696090864158L;
 	private NewReceiveHeaderRequest newReceiveHeaderRequest;
-	private List<ReceiveNewDetailRequest> receiveNewDetailRequestList;
+	private List<NewReceiveDetailRequest> newReceiveDetailRequestList;
 }

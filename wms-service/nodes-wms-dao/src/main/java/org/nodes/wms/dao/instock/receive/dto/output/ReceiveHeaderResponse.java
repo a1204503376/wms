@@ -11,7 +11,7 @@ import org.nodes.wms.dao.instock.receive.enums.ReceiveBillStateEnum;
 import java.io.Serializable;
 import java.util.Date;
 /**
- * 收货单头表 返回前端视图类
+ * 收货单列表页面收货单头表 返回前端视图类
  **/
 @Data
 public class ReceiveHeaderResponse implements Serializable {
@@ -52,8 +52,7 @@ public class ReceiveHeaderResponse implements Serializable {
 	 * 货主编码
 	 */
 	@ExcelProperty("货主编码")
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long ownerCode;
+	private String ownerCode;
 	/**
 	 * 入库方式
 	 */

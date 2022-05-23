@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.instock.receive.mapper.ReceiveDetailMapper">
 
-    <select id="selectDetailById" resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailResponse">
+    <select id="selectDetailById" resultType="org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailResponse">
         SELECT
             line_no,
             sku_code,
@@ -11,7 +11,7 @@
             scan_qty,
             surplus_qty,
             um_name,
-            status,
+            detail_status,
             sku_spec,
             remark
         from receive_detail
@@ -28,11 +28,12 @@
         select
          receive_detail_id
         from receive_detail
+        where receive_id  = #{id}
 
 
     </select>
     <select id="selectReceiveDetailById"
-            resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailEditResponse">
+            resultType="org.nodes.wms.dao.instock.receive.dto.output.EditReceiveDetailResponse">
          select
           receive_detail_id,
           sku_id,

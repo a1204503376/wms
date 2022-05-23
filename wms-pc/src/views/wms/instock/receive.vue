@@ -106,7 +106,7 @@
                     <template v-for="(column,index) in table.columnList">
                         <el-table-column sortable="custom" prop="receiveNo" label="收货单编码" width="150"  v-if="index===0"  show-overflow-tooltip >
                             <template slot-scope="scope">
-                                <el-link href="https://element.eleme.io" target="_blank" type="primary">{{scope.row.receiveNo}}</el-link>
+                                <el-link  @click="onViewDetails(scope.row.receiveId)" target="_blank" type="primary">{{scope.row.receiveNo}}</el-link>
                             </template>
                         </el-table-column>
 
@@ -211,7 +211,7 @@ export default {
             },
             billState:"",
             nums:{
-                receiveId:'',
+                receiveIdList:[],
             },
 
             table: {
@@ -297,6 +297,14 @@ export default {
         this.getTableData();
     },
     methods: {
+        onViewDetails(id){
+            this.$router.push({
+                name: '收货单详情',
+                params: {
+                    receiveId: id.toString()
+                }
+            });
+        },
         getTableData() {
             page(this.page, this.form.params)
                 .then((res) => {
@@ -331,24 +339,13 @@ export default {
                 cancelButtonText: "取消",
                 type: "warning",
             }).then(() => {
-                let a = 1;
                 this.$refs.table.selection.forEach(e => {
-                    if(a>1) {
-                        this.$message.error('暂不支持批量删除');
-                        throw new Error('暂不支持批量删除');
-                    }
-                    this.nums.receiveId = e.receiveId
-                    a++;
+                    this.nums.receiveIdList.push(e.receiveId)
                 })
                 remove(this.nums)
                     .then(() => {
-                        this.$message.success('删除成功');
                         this.getTableData();
                     })
-                    .catch(() => {
-                    });
-
-
             })
         },
         onClose(row) {

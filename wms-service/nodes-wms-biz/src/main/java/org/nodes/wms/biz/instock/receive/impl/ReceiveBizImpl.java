@@ -7,10 +7,7 @@ import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
 import org.nodes.wms.dao.instock.receive.ReceiveDetailDao;
 import org.nodes.wms.dao.instock.receive.ReceiveHeaderDao;
-import org.nodes.wms.dao.instock.receive.dto.input.NewReceiveRequest;
-import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailRequest;
-import org.nodes.wms.dao.instock.receive.dto.input.ReceiveNewDetailRequest;
-import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
+import org.nodes.wms.dao.instock.receive.dto.input.*;
 import org.nodes.wms.dao.instock.receive.dto.output.*;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
@@ -19,6 +16,7 @@ import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,34 +52,41 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		return responsePage;
 	}
 
-	@Override
-	@Transactional
-	public boolean remove(Long receiveId) {
-		//获取关联明细表的集合
-		List<ReceiveDetailRequest> receiveDetailRequestList = receiveDetailDao.selectDetailByHeaderId(receiveId);
-		List<Long> ids = new ArrayList<>();
-		BigDecimal bigDecimal = new BigDecimal(0);
-		//遍历实收数量，如果大于0则不允许删除
-		for (ReceiveDetailRequest receiveDetailRequest : receiveDetailRequestList) {
-			if (BigDecimalUtil.gt(receiveDetailRequest.getScanQty(), bigDecimal)) {
-				throw new ServiceException("删除收货单失败，已收货单据不允许删除");
-			}
-			ids.add(receiveDetailRequest.getReceiveDetailId());
-		}
-		//删除明细
-		receiveDetailDao.delete(ids);
-		return receiveHeaderDao.delete(receiveId);
-	}
+
 
 	@Override
-	public ReceiveResponse getReceivedetail(Long receiveId) {
+	@Transactional
+	public boolean remove(List<Long> receiveIdList) {
+		for (Long aLong : receiveIdList) {
+			ReceiveHeader receiveHeader = receiveHeaderDao.selectBillStateById(aLong);
+			if (!receiveHeader.getBillState().getDesc().equals("10")) {
+				throw new ServiceException("删除失败,单号：" + receiveHeader.getReceiveNo() + "已进行收货");
+			}
+			//获取关联明细集合
+			List<Long> receiveDetailIdList = receiveDetailDao.selectDetailIdByReceiveId(aLong);
+			//删除明细
+			receiveDetailDao.delete(receiveDetailIdList);
+		}
+		//删除头表
+		return receiveHeaderDao.delete(receiveIdList);
+	}
+
+
+
+
+	@Override
+	public ReceiveResponse getReceiveDetail(Long receiveId) {
 		//查询收货单头表
-		ReceiveHeaderResponse receiveHeaderResponse = receiveHeaderDao.selectHeaderById(receiveId);
+		DetailReceiveHeaderResponse detailReceiveHeaderResponse = receiveHeaderDao.selectHeaderById(receiveId);
+		//设置单据状态描述
+		detailReceiveHeaderResponse.setBillStateDesc(detailReceiveHeaderResponse.getBillState().getDesc());
+        //设置入库方式描述
+		detailReceiveHeaderResponse.setInStoreTypeDesc(detailReceiveHeaderResponse.getInStoreType().getDesc());
 		//查询收货单头表关联明细
-		List<ReceiveDetailResponse> detailList = receiveDetailDao.selectDetailById(receiveId);
+		List<DetailReceiveDetailResponse> detailList = receiveDetailDao.selectDetailById(receiveId);
 		//拼接成一个返回对象
 		ReceiveResponse receiveResponse = new ReceiveResponse();
-		receiveResponse.setReceiveHeaderResponse(receiveHeaderResponse);
+		receiveResponse.setReceiveHeaderResponse(detailReceiveHeaderResponse);
 		receiveResponse.setDetailList(detailList);
 		return receiveResponse;
 	}
@@ -99,10 +104,10 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		ReceiveHeader receiveHeader = receiveFactory.createReceiveHeader(newReceiveRequest.getNewReceiveHeaderRequest());
 		receiveHeaderDao.insert(receiveHeader);
       //获取明细集合
-       List<ReceiveNewDetailRequest> receiveNewDetailRequestList = newReceiveRequest.getReceiveNewDetailRequestList();
+       List<NewReceiveDetailRequest> newReceiveDetailRequestList = newReceiveRequest.getNewReceiveDetailRequestList();
 	  //遍历保存
-		for (ReceiveNewDetailRequest receiveNewDetailRequest : receiveNewDetailRequestList) {
-			ReceiveDetail receiveDetail = receiveFactory.createReceiveDetail(receiveNewDetailRequest, receiveHeader);
+		for (NewReceiveDetailRequest newReceiveDetailRequest : newReceiveDetailRequestList) {
+			ReceiveDetail receiveDetail = receiveFactory.createReceiveDetail(newReceiveDetailRequest, receiveHeader);
 			receiveDetailDao.insert(receiveDetail);
 		}
 		return receiveHeader;
@@ -119,23 +124,51 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	}
 
 	@Override
-	public ReceiveEditResponse getEditReceiveResponse(Long receiveId) {
+	public EditReceiveResponse getEditReceiveResponse(Long receiveId) {
 		//查询收货单头表
 		ReceiveHeader receiveHeader =receiveHeaderDao.selectReceiveHeaderById(receiveId);
         //创建返回编辑页面对象
-		ReceiveHeaderEditResponse receiveHeaderEditResponse = receiveFactory.createReceiveHeaderEditResponse(receiveHeader);
+		EditReceiveHeaderResponse receiveHeaderEditResponse = receiveFactory.createReceiveHeaderEditResponse(receiveHeader);
 		 //查询收货单头表关联明细
 		List<ReceiveDetail> receiveDetailList = receiveDetailDao.selectReceiveDetailById(receiveId);
 		//将明细实体转换成dto添加到集合中
-		List<ReceiveDetailEditResponse> receiveDetailEditResponseList  = new ArrayList<>();
+		List<EditReceiveDetailResponse> editReceiveDetailResponseList = new ArrayList<>();
 		for (ReceiveDetail receiveDetail : receiveDetailList) {
-			ReceiveDetailEditResponse receiveDetailEditResponse = receiveFactory.createReceiveDetailEditResponse(receiveDetail);
-			receiveDetailEditResponseList.add(receiveDetailEditResponse);
+			EditReceiveDetailResponse editReceiveDetailResponse = receiveFactory.createReceiveDetailEditResponse(receiveDetail);
+			editReceiveDetailResponseList.add(editReceiveDetailResponse);
 		}
 		//拼接成一个返回对象
-		ReceiveEditResponse receiveEditResponse = new ReceiveEditResponse();
-		receiveEditResponse.setReceiveHeaderResponse(receiveHeaderEditResponse);
-		receiveEditResponse.setReceiveDetailResponseList(receiveDetailEditResponseList);
-	   return receiveEditResponse;
+		EditReceiveResponse editReceiveResponse = new EditReceiveResponse();
+		editReceiveResponse.setReceiveHeaderResponse(receiveHeaderEditResponse);
+		editReceiveResponse.setReceiveDetailResponseList(editReceiveDetailResponseList);
+	   return editReceiveResponse;
+	}
+
+	@Override
+	@Transactional
+	public String editReceive(EditReceiveRequest editReceiveRequest) {
+		//查询收货单头表实体
+		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(editReceiveRequest.getEditReceiveHeaderRequest().getReceiveId());
+		//判断当前收货单实体的收货状态
+		if(receiveHeader.getBillState().getCode() !=10){
+			throw new ServiceException("编辑失败，该收货单已进行收货");
+		}
+		String receiveNo = receiveHeader.getReceiveNo();
+		//删除收货单明细集合
+		if(Func.isNotEmpty(editReceiveRequest.getEditReceiveHeaderRequest().getReceiveDetailIdList())){
+			List<Long> receiveDetailIdList  = editReceiveRequest.getEditReceiveHeaderRequest().getReceiveDetailIdList();
+			receiveDetailDao.delete(receiveDetailIdList);
+		}
+		//创建收货单头表保存实体类
+		receiveHeader = receiveFactory.createEditReceiveHeader(editReceiveRequest.getEditReceiveHeaderRequest());
+		//创建收货单明细保存集合
+		List<EditReceiveDetailRequest> editReceiveDetailRequestList = editReceiveRequest.getEditReceiveDetailRequestList();
+		for (EditReceiveDetailRequest editReceiveDetailRequest : editReceiveDetailRequestList) {
+			ReceiveDetail receiveDetail = receiveFactory.createEditReceiveDetail(editReceiveDetailRequest, receiveHeader);
+				receiveDetailDao.saveOrUpdateReceive(receiveDetail);
+		}
+		receiveHeaderDao.updateReceive(receiveHeader);
+
+		return receiveNo;
 	}
 }

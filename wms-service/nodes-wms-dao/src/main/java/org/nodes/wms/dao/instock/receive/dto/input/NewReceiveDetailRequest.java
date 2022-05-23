@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * 新建收货单明细接收类
  **/
 @Data
-public class ReceiveNewDetailRequest implements Serializable {
+public class NewReceiveDetailRequest implements Serializable {
 	private static final long serialVersionUID = 8039767137023774339L;
 	/**
 	 * 订单行号

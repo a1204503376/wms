@@ -225,8 +225,7 @@ import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesBillType from "@/components/wms/select/NodesBillType";
 import NodesSupplier from "@/components/wms/select/NodesSupplier";
 import NodesOwner from "@/components/wms/select/NodesOwner";
-import {addCustomer} from "@/api/wms/basics/customer";
-import {addReceive, remove} from "@/api/wms/instock/receive";
+import {addReceive} from "@/api/wms/instock/receive";
 import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
 
 export default {
@@ -322,6 +321,10 @@ export default {
                 type: "warning",
             }).then(() => {
                 rows.splice(index, 1);
+                let a;
+                // for(a=index;a<rows.length;a++){
+                //     rows[a].lineNumber = rows[a].lineNumber -10
+                // }
             })
 
         },
