@@ -3,7 +3,7 @@ package org.nodes.wms.dao.instock.receive.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.ibatis.annotations.Param;
-import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderEditResponse;
+import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
@@ -16,7 +16,7 @@ import java.util.List;
 public interface ReceiveHeaderMapper extends BaseMapper<ReceiveHeader> {
     IPage<ReceiveHeaderResponse> getPage(IPage<ReceiveHeaderResponse> page, @Param("query") ReceivePageQuery receivePageQuery);
 
-	ReceiveHeaderResponse selectHeaderById(@Param("id")Long receiveId);
+	DetailReceiveHeaderResponse selectHeaderById(@Param("id")Long receiveId);
 
 	List<ReceiveHeaderResponse> getReceiveHeaderResponseByQuery(@Param("query") ReceivePageQuery receivePageQuery);
 

@@ -11,23 +11,23 @@
                          style="margin-left:10px;margin-right:10px;"
                 >
                     <el-row>
-                        <h3>收货单-{{ isEdit ? '编辑' : '新增' }}</h3>
+                        <h3>收货单-编辑</h3>
                     </el-row>
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="库房">
-                                <nodes-warehouse v-model="form.params.newReceiveHeaderRequest.whId" :default-value="true"></nodes-warehouse>
+                                <nodes-warehouse v-model="form.params.editReceiveHeaderRequest.whId" :default-value="true"></nodes-warehouse>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="单据类型">
                                 <nodes-bill-type
-                                    v-model="form.params.newReceiveHeaderRequest.billTypeCd"></nodes-bill-type>
+                                    v-model="form.params.editReceiveHeaderRequest.billTypeCd"></nodes-bill-type>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="供应商">
-                                <nodes-supplier v-model="form.params.newReceiveHeaderRequest.supplier"
+                                <nodes-supplier v-model="form.params.editReceiveHeaderRequest.supplier"
                                                 style="width: 200px"></nodes-supplier>
                             </el-form-item>
                         </el-col>
@@ -36,7 +36,7 @@
                         <el-col :span="8">
                             <el-form-item label="入库方式">
                                 <nodes-in-store-mode
-                                    v-model="form.params.newReceiveHeaderRequest.inStoreType"
+                                    v-model="form.params.editReceiveHeaderRequest.inStoreType"
                                     :multiple="false">
                                 </nodes-in-store-mode>
                             </el-form-item>
@@ -44,12 +44,12 @@
 
                         <el-col :span="8">
                             <el-form-item label="货主">
-                                <nodes-owner v-model="form.params.newReceiveHeaderRequest.woId"></nodes-owner>
+                                <nodes-owner v-model="form.params.editReceiveHeaderRequest.woId"></nodes-owner>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="备注">
-                                <el-input v-model="form.params.newReceiveHeaderRequest.remark"></el-input>
+                                <el-input v-model="form.params.editReceiveHeaderRequest.remark"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -85,7 +85,7 @@
                                     <template v-slot="scope">
                                         <nodes-line-number
                                             :index="scope.$index"
-                                            @change="(val)=>{ scope.row.lineNo = val; }"
+                                            @change="(val)=>{ scope.row.lineNumber = val; }"
                                         >
                                         </nodes-line-number>
                                     </template>
@@ -93,7 +93,7 @@
                                 <el-table-column
                                     :align="'left'"
                                     prop="skuCode"
-                                    width="500"
+                                    width="230"
                                 >
                                     <template slot="header">
                                         <span class="d-table-header-required">物品编码</span>
@@ -101,11 +101,38 @@
                                     <template v-slot="{row}">
                                         <nodes-sku
                                             v-model="row.sku"
+                                            style="width: 180px;"
                                             @selectValChange="onChangeSku(row)"
                                         >
 
                                         </nodes-sku>
 
+                                    </template>
+                                </el-table-column>
+                                <el-table-column>
+                                    <template slot="header">
+                                        <span class="d-table-header-required">物料名称</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input
+                                            size=mini
+                                            v-model="row.sku.skuName"
+                                            :disabled="true">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    :align="'left'"
+                                >
+                                    <template slot="header">
+                                        <span class="d-table-header-required">规格</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input
+                                            size=mini
+                                            v-model="row.sku.skuSpec"
+                                            :disabled="true">
+                                        </el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -119,6 +146,19 @@
                                             v-model="row.planQty"
                                             controls-position="right"
                                             size="mini"></el-input-number>
+                                    </template>
+                                </el-table-column>
+
+                                <el-table-column>
+                                    <template slot="header">
+                                        <span class="d-table-header-required">实收数量</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input
+                                            size=mini
+                                            v-model="row.scanQty"
+                                            :disabled="true">
+                                        </el-input>
                                     </template>
                                 </el-table-column>
 
@@ -137,15 +177,29 @@
 
 
                                 <el-table-column
-                                    prop="skuLot1"
                                 >
                                     <template slot="header">
                                         <span class="d-table-header-required">备注</span>
                                     </template>
                                     <template v-slot="{row}">
-                                        <el-input v-model="row.remark" size="mini"></el-input>
+                                        <el-input v-model.trim="row.remark" size="mini"></el-input>
                                     </template>
                                 </el-table-column>
+
+                                <el-table-column  width="100">
+                                    <template slot="header">
+                                        <span class="d-table-header-required">操作</span>
+                                    </template>
+                                    <template slot-scope="scope">
+                                        <el-button
+                                            @click.native.prevent="deleteRow(scope.$index, table.data)"
+                                            type="text"
+                                            size="small">
+                                            删除
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+
                             </el-table>
                         </el-col>
                     </el-row>
@@ -183,12 +237,13 @@ import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesBillType from "@/components/wms/select/NodesBillType";
 import NodesSupplier from "@/components/wms/select/NodesSupplier";
 import NodesOwner from "@/components/wms/select/NodesOwner";
-import {addReceive, getEditReceiveById} from "@/api/wms/instock/receive";
+import {addReceive, editReceive, getEditReceiveById} from "@/api/wms/instock/receive";
 import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
 
 export default {
     props: {
-        receiveId: {type: String}
+        receiveId: {type: String},
+       updateLine: {type: Boolean, required: false, default:()=>true}
     },
     name: "edit",
     components: {
@@ -203,7 +258,7 @@ export default {
             refresh: true,
             form: {
                 params: {
-                    newReceiveHeaderRequest: {
+                    editReceiveHeaderRequest: {
                         inStoreType: '',
                         billTypeCd: '',
                         whId: '',
@@ -214,9 +269,10 @@ export default {
                         },
                         woId: '',
                         remark: '',
+                        receiveDetailIdList:[]
 
                     },
-                    receiveNewDetailRequestList: []
+                    editReceiveDetailRequestList: []
 
                 },
                 rules: {
@@ -231,10 +287,25 @@ export default {
             }
         }
     },
-    created() {
+     created() {
         this.getTableData()
     },
+    watch: {
+        $route() {
+                this.getTableData();
+        }
+    },
     methods: {
+        // 过滤空白行
+        filterBlankRow(row) {
+            return !(
+                (func.isEmpty(row.sku.skuId)
+                    && func.isEmpty(row.sku.skuCode)
+                    && func.isEmpty(row.sku.skuName))
+                && row.planQty === 0
+            );
+        },
+
         getTableData() {
             let skuUmSelectQuery = {
                 receiveId: this.receiveId
@@ -242,7 +313,7 @@ export default {
             getEditReceiveById(skuUmSelectQuery)
                 .then((res) => {
                     let pageObj = res.data.data;
-                    this.form.params.newReceiveHeaderRequest = pageObj.receiveHeaderResponse;
+                    this.form.params.editReceiveHeaderRequest = pageObj.receiveHeaderResponse;
                     this.table.data = pageObj.receiveDetailResponseList;
                 })
                 .catch(() => {
@@ -258,7 +329,7 @@ export default {
         },
         createRowObj() {
             return {
-                lineNo: '',
+                lineNumber: '',
                 sku: {
                     skuId: '',
                     skuCode: '',
@@ -266,16 +337,34 @@ export default {
                     skuSpec:''
                 },
                 umCode: '',
-                planQty: 1,
-                remark: '',
+                receiveDetailId:'',
+                planQty: 0,
+                scanQty:'',
+                remark: ''
             }
         },
         onChangeSku(row) {
 
         },
+        deleteRow(index, rows) {
+            this.$confirm("确定删除当前行？", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+            }).then(() => {
+               if(func.isNotEmpty(rows[index].receiveDetailId)) {
+                 this.form.params.editReceiveHeaderRequest.receiveDetailIdList.push(rows[index].receiveDetailId)
+               }
+
+
+                rows.splice(index, 1);
+            })
+
+        },
+
         submitFormParams() {
-            this.form.params.receiveNewDetailRequestList = this.table.postData
-            return addReceive(this.form.params)
+            this.form.params.editReceiveDetailRequestList = this.table.postData
+            return editReceive(this.form.params)
                 .then(res => {
                     return {
                         msg: res.data.msg,

@@ -1,9 +1,11 @@
 package org.nodes.wms.dao.instock.receive.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import lombok.RequiredArgsConstructor;
-import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderEditResponse;
+import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.mapper.ReceiveHeaderMapper;
 import org.nodes.wms.dao.instock.receive.ReceiveHeaderDao;
@@ -28,14 +30,12 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 	}
 
 	@Override
-	public boolean delete(Long receiveId) {
-		List<Long> list = new ArrayList<>();
-		list.add(receiveId);
-		return  super.deleteLogic(list);
+	public boolean delete(List<Long> receiveIdList) {
+		return  super.deleteLogic(receiveIdList);
 	}
 
 	@Override
-	public ReceiveHeaderResponse selectHeaderById(Long receiveId) {
+	public DetailReceiveHeaderResponse selectHeaderById(Long receiveId) {
 		return receiveHeaderMapper.selectHeaderById(receiveId);
 	}
 
@@ -61,6 +61,19 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
     public ReceiveHeader selectReceiveHeaderById(Long receiveId) {
 		return super.getById(receiveId);
 
+    }
+
+    @Override
+    public void updateReceive(ReceiveHeader receiveHeader) {
+        super.saveOrUpdate(receiveHeader);
+
+    }
+
+    @Override
+    public ReceiveHeader selectBillStateById(Long receiveId) {
+		LambdaQueryWrapper<ReceiveHeader> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+		lambdaQueryWrapper.select(ReceiveHeader::getBillState,ReceiveHeader::getReceiveNo).eq(ReceiveHeader::getReceiveId,receiveId);
+		return super.getOne(lambdaQueryWrapper);
     }
 
 }
