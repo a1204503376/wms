@@ -4,20 +4,13 @@
 		{
 			"path": "pages/login/login",
 			"style": {
-				"navigationBarTitleText": ""
-				// ,
-				// "app-plus": {
-				// 	"titleNView": {
-				// 		"buttons": [{
-				// 			"text": "提交",
-				// 			"type": "none",
-				// 			"color": "#007AFF",
-				// 			"background": "#000000",
-				// 			"fontSize": "16px",
-				// 			"float": "right"
-				// 		} ]
-				// 	}
-				// }
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"subNVues": [{
+						"id": "honeywellScannerComponent",
+						"path": "pages/index/honeywellScannerComponent"
+					}]
+				}
 			}
 
 		},
@@ -31,16 +24,22 @@
 
 
 
-	    ,{
-            "path" : "pages/reviseIp/reviseIp",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+		, {
+			"path": "pages/reviseIp/reviseIp",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/menu/home/home",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

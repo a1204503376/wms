@@ -1,24 +1,31 @@
 <template>
 	<view class="content">
 		<u-toast ref="uToast" />
-		<view @click="gotoAddress" style="height: 50rpx;width: 50rpx;z-index: 999;position:  relative top: 0px right:422rpx font-size: 0 display: block;">
-		   <image src="/static/images/setting.png" style="width: 100%;height: 100%;" mode="widthFix"></image>
-		</view>
 		<view class="top">
 			<div class="logodiv">
 				<image src="/static/images/login.png" style="width: 100px;height: 100px;" mode="widthFix"></image>
+				<h2>{{name}}</h2>
+				<h5>{{pdaVersion}}</h5>	
 			</div>
+		
 			<view>
-			<u--form>
-				<u-form-item label="账号" >
-					<u--input placeholder="请输入账号" v-model="username" border="none"></u--input>
-				</u-form-item>
-				<u-form-item label="密码" >
-					<u--input placeholder="请输入密码" type="password" v-model="password" border="none"></u--input>
-				</u-form-item>
-			</u--form>
+				<u--form>
+					<u-form-item>
+						<template>
+							<u-icon size="40" name="account-fill"></u-icon>
+							<u--input placeholder="请输入账号" v-model="username" border="none"></u--input>
+						</template>
+					</u-form-item>
+					<u-form-item>
+						<template>
+							<u-icon size="40" name="lock-fill"></u-icon>
+							<u--input placeholder="请输入密码" type="password" v-model="password" border="none"></u--input>
+						</template>
+					</u-form-item>
+				</u--form>
 			</view>
 			<button class="submit" @click="submit">登录</button>
+			<button class="quit" @click="gotoAddress">配置</button>
 			<button class="quit" @click="quitApp">退出</button>
 		</view>
 	</view>
@@ -28,7 +35,7 @@
 	import setting from '@/common/setting'
 	import md5 from '@/utils/md5.js'
 	import api from '@/api/user.js'
-	import func from '@/utils/func.js'
+	import tool from '@/utils/tool.js'
 	import {
 		options
 	} from '@/http/config.js';
@@ -40,17 +47,39 @@
 				username: uni.getStorageSync('username') || '',
 				password: '',
 				addressDisplay: true,
+				name:setting.name,
+				pdaVersion:setting.version
 			};
 		},
-
+		onLoad() {
+			uni.$u.func.registerScanner(this.callback);
+		},
+		onUnload() {
+			uni.$u.func.unRegisterScanner();
+		},
 		methods: {
+			callback(data) {
+				let userInfoList = data.split('@');
+				if (userInfoList.length != 2) {
+					this.username = data
+					return
+				}
+				this.username = userInfoList[0];
+				this.password = userInfoList[1];
+			},
 			submit() {
+				if(tool.isEmpty(this.username)||tool.isEmpty(this.password)){
+					this.$u.func.showToast({
+						title: '登录失败,用户名或密码不能为空',
+					})
+					return;
+				}
 				api.token(this.tenantId, this.username, md5(this.password), this.type).then(data => {
 					uni.setStorageSync('accessToken', data.access_token)
-
 					uni.setStorageSync('username', this.username)
-					uni.navigateTo({
-						url: '/pages/index/honeywellScannerComponent'
+					uni.$u.func.login({
+						userInfo: data,
+						accessToken: data.access_token
 					});
 				})
 			},
@@ -68,6 +97,10 @@
 </script>
 
 <style lang="scss">
+	span {
+		font-size: 50rpx;
+	}
+
 	.logodiv {
 		text-align: center;
 		display: block;
@@ -180,7 +213,7 @@
 		}
 
 		.submit {
-			margin: 60rpx 90rpx 0;
+			margin: 30rpx 90rpx 0;
 			border: none;
 			width: 572rpx;
 			height: 86rpx;
@@ -208,7 +241,7 @@
 		}
 
 		.quit {
-			margin: 60rpx 90rpx 0;
+			margin: 30rpx 90rpx 0;
 			border: none;
 			width: 572rpx;
 			height: 86rpx;
