@@ -3,7 +3,7 @@
  */
 module.exports = {
 	// 应用名
-	name: 'Rider',
+	name: 'WMS3.3',
 	// 应用logo，支持本地路径和网络路径
 	logo: '/static/images/logo.png',
 	// 版本号

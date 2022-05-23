@@ -118,7 +118,7 @@ const install = (Vue, vm) => {
 	// 注册扫码组件
 	const registerScanner = (callback) => {
 		let subNVue = uni.getSubNVueById('honeywellScannerComponent');
-		subNVue.show();
+		subNVue.hide();
 		uni.$on('on-scanner-data', (data) => {
 			callback(data)
 		})
