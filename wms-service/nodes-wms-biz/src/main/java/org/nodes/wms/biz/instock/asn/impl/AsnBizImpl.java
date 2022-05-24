@@ -7,14 +7,14 @@ import org.nodes.wms.biz.instock.asn.AsnBiz;
 import org.nodes.wms.biz.instock.asn.modular.AsnFactory;
 import org.nodes.wms.dao.instock.asn.AsnDetailDao;
 import org.nodes.wms.dao.instock.asn.AsnHeaderDao;
-import org.nodes.wms.dao.instock.asn.dto.input.AddAsnBillRequest;
-import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
-import org.nodes.wms.dao.instock.asn.dto.input.EditAsnBillRequest;
+import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
+import org.nodes.wms.dao.instock.asn.dto.input.AsnDetailRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.*;
 import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.springblade.core.excel.util.ExcelUtil;
+import org.springblade.core.log.exception.ServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,15 +37,15 @@ public class AsnBizImpl implements AsnBiz {
 	public Page<PageResponse> getPageAsnBill(IPage<?> page,
 											 PageParamsQuery pageParamsQuery) {
 		Page<PageResponse> pageResponsePage = asnHeaderDao.selectPageAsnBill(page, pageParamsQuery);
-		pageResponsePage.getRecords().forEach(item ->{
+		pageResponsePage.getRecords().forEach(item -> {
 			item.setAsnBillStateValue(item.getAsnBillState().getDesc());
 		});
 		return pageResponsePage;
 	}
 
 	@Override
-	public AsnDetailResponse getAsnContactDetail(AsnBillIdRequest asnBillIdRequest) {
-		return asnHeaderDao.selectAsnContactDetailByAsnBillId(asnBillIdRequest.getAsnBillId());
+	public AsnBillViewResponse findAsnBillViewDetailByAsnBillId(Long asnBillId) {
+		return asnHeaderDao.getAsnBillViewDetailById(asnBillId);
 	}
 
 	@Override
@@ -60,20 +60,20 @@ public class AsnBizImpl implements AsnBiz {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public AsnHeader add(AddAsnBillRequest addAsnBillRequest) {
+	public AsnHeader add(AddOrEditAsnBillRequest addOrEditAsnBillRequest) {
 		// 创建ASN单头表实体，新增ASN单头表数据
-		AsnHeader asnHeader = asnFactory.createAsnHeader(addAsnBillRequest);
-		asnHeaderDao.insertAsnHeader(asnHeader);
+		AsnHeader asnHeader = asnFactory.createAsnHeader(addOrEditAsnBillRequest);
+		asnHeaderDao.saveOrUpdateAsnHeader(asnHeader);
 
-		// 从请求参数中获取ASN单明细数据，并创建多个ASN单明细实体
-		List<AsnDetail> asnDetailList = addAsnBillRequest.getAsnDetailList();
+		// 从请数中获取ASN单明细数据，并创建多个ASN单明细实体
+		List<AsnDetailRequest> asnDetailList = addOrEditAsnBillRequest.getAsnDetailList();
 		List<AsnDetail> details = new ArrayList<>();
-		for (AsnDetail asnDetail : asnDetailList) {
-			AsnDetail detail = asnFactory.createAsnDetail(addAsnBillRequest, asnHeader, asnDetail);
-				details.add(detail);
+		for (AsnDetailRequest asnDetail : asnDetailList) {
+			AsnDetail detail = asnFactory.createAsnDetail(asnHeader, asnDetail);
+			details.add(detail);
 		}
 		// 新增ASN单明细数据
-		asnDetailDao.insertAsnDetail(details);
+		asnDetailDao.saveOrUpdateAsnDetail(details);
 		return asnHeader;
 	}
 
@@ -95,14 +95,40 @@ public class AsnBizImpl implements AsnBiz {
 	}
 
 	@Override
-	public boolean edit(EditAsnBillRequest editAsnBillRequest) {
-		return false;
+	@Transactional(rollbackFor = Exception.class)
+	public AsnHeader edit(AddOrEditAsnBillRequest addOrEditAsnBillRequest) {
+		// 根据ASN单id 获取ASN单实体对象，验证该ASN单状态是否 是已收货
+		AsnHeader header = asnHeaderDao.getAsnHeaderByAsnBillId(addOrEditAsnBillRequest.getAsnBillId());
+		if (header.getAsnBillState().getCode() != 10) {
+			throw new ServiceException("编辑ASN单失败，该ASN单已收货，单据编码:"+header.getAsnBillNo());
+		}
+
+		// 创建ASN单头表实体，修改ASN单头表数据
+		AsnHeader asnHeader = asnFactory.createAsnHeader(addOrEditAsnBillRequest);
+		asnHeaderDao.saveOrUpdateAsnHeader(asnHeader);
+
+		// 从参数中获取ASN单明细数据，并创建多个ASN单明细实体
+		List<AsnDetailRequest> asnDetailList = addOrEditAsnBillRequest.getAsnDetailList();
+		List<AsnDetail> details = new ArrayList<>();
+		for (AsnDetailRequest asnDetail : asnDetailList) {
+			AsnDetail detail = asnFactory.createAsnDetail(asnHeader, asnDetail);
+			details.add(detail);
+		}
+		// 新增/修改 ASN单明细数据
+		asnDetailDao.saveOrUpdateAsnDetail(details);
+
+		//删除ASN单明细数据
+		asnDetailDao.deleteByIds(addOrEditAsnBillRequest.getRemoveIdList());
+
+		//设置ASN单编码用于前端编码提示
+		asnHeader.setAsnBillNo(header.getAsnBillNo());
+		return asnHeader;
 	}
 
 	@Override
 	public void exportAsnBill(PageParamsQuery pageParamsQuery, HttpServletResponse response) {
 		List<AsnBillExportResponse> asnBillList = asnHeaderDao.listByParamsQuery(pageParamsQuery);
-		asnBillList.forEach(item ->{
+		asnBillList.forEach(item -> {
 			item.setAsnBillStateValue(item.getAsnBillState().getDesc());
 		});
 		ExcelUtil.export(response, "ASD单", "ASN单数据报表", asnBillList, AsnBillExportResponse.class);

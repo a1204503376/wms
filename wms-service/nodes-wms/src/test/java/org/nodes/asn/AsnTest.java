@@ -9,10 +9,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.nodes.wms.biz.application.AsnManageBiz;
 import org.nodes.wms.biz.instock.asn.impl.AsnBizImpl;
-import org.nodes.wms.dao.instock.asn.dto.input.AddAsnBillRequest;
-import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
+import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnBillViewResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -64,11 +63,9 @@ public class AsnTest {
 	}
 
 	@Test
-	public void getAsnDetailByIdTest(){
-		AsnBillIdRequest asnBillIdRequest = new AsnBillIdRequest();
-		asnBillIdRequest.setAsnBillId(123456789L);
-		AsnDetailResponse asnDetailResponse = asnBiz.getAsnContactDetail(asnBillIdRequest);
-		System.out.println(asnDetailResponse);
+	public void findAsnBillViewDetailByIdTest(){
+		AsnBillViewResponse asnBillViewResponse = asnBiz.findAsnBillViewDetailByAsnBillId(1527561895219900417L);
+//		System.out.println(asnDetailResponse);
 //		Assertions.assertEquals(1,asnDetailResponse);
 	}
 
@@ -81,7 +78,7 @@ public class AsnTest {
 
 	@Test
 	public void insertTest(){
-		AddAsnBillRequest addAsnBillRequest = new AddAsnBillRequest();
+		AddOrEditAsnBillRequest addAsnBillRequest = new AddOrEditAsnBillRequest();
 //		addAsnBillRequest.setBillTypeCd("10");
 //		addAsnBillRequest.setSupplierCode("gys1001");
 //		addAsnBillRequest.setSkuName("供应商1001");

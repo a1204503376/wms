@@ -18,13 +18,13 @@ public class AsnDetail extends BaseSkuLotEntity {
 	private static final long serialVersionUID = -8540649823396732815L;
 
 	/**
-	 * ASN单明细ID
+	 * ASN单明细id
 	 */
 	@TableId(type = IdType.ASSIGN_ID)
 	private Long asnDetailId;
 
 	/**
-	 * ASN单ID
+	 * ASN单id
 	 */
 	private Long asnBillId;
 
@@ -42,11 +42,6 @@ public class AsnDetail extends BaseSkuLotEntity {
 	 * 订单行号
 	 */
 	private String asnLineNo;
-
-	/**
-	 * 上位系统单据明细唯一标识
-	 */
-	private String asnBillDetailKey;
 
 	/**
 	 * 物品ID
@@ -142,16 +137,6 @@ public class AsnDetail extends BaseSkuLotEntity {
 	 * 接收状态
 	 */
 	private Integer detailStatus;
-
-	/**
-	 * 上位系统单据唯一标识
-	 */
-	private String billKey;
-
-	/**
-	 * 上位系统单编号
-	 */
-	private String orderNo;
 
 	/**
 	 * 序列号导入状态

@@ -29,7 +29,10 @@
                             <el-input v-model="form.params.externalCreateUser" class="d-input"></el-input>
                         </el-form-item>
                         <el-form-item label="仓库">
-                            <nodes-warehouse v-model="form.params.whIdList"></nodes-warehouse>
+                            <nodes-warehouse
+                                v-model="form.params.whIdList"
+                                :multiple="true"
+                            ></nodes-warehouse>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -57,27 +60,22 @@
                           size="mini" @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
-                    <template v-for="(column, index) in table.columnList">
-<!--                        <el-table-column v-if="column.prop === 'asnBillNo'" :key="index" show-overflow-tooltip v-bind="column">-->
-<!--                                <el-link-->
-<!--                                    href="www.baidu.com"-->
-<!--                                    :underline="false"-->
-<!--                                    type="primary"-->
-<!--                                    target="_blank">{{index}}-->
-<!--                                </el-link>-->
-<!--                        </el-table-column>-->
-                        <!--                                    :to="{name: 'detail',query:{id:table.data[index].asnBillId}}"-->
-                        <el-table-column :key="index" show-overflow-tooltip v-bind="column">
-<!--                            <router-link-->
-<!--                                :underline="false"-->
-<!--                                :to="home"-->
-<!--                                v-if="column.prop === 'asnBillNo'"-->
-<!--                                target="_blank">{{table.data[index].asnBillId}}-->
-<!--                            </router-link>-->
+                    <template v-for="(column, index) in table.columnList" >
+                        <el-table-column v-if="column.prop === 'asnBillNo'" :key="index" show-overflow-tooltip v-bind="column">
+                            <template v-slot="scope">
+                                <el-link
+                                    @click="onView(scope.row)"
+                                    :underline="false"
+                                    type="primary"
+                                    target="_blank">{{scope.row.asnBillNo}}
+                                </el-link>
+                                </template>
+                        </el-table-column>
+                        <el-table-column v-if="column.prop !== 'asnBillNo'" :key="index" show-overflow-tooltip v-bind="column">
                         </el-table-column>
                     </template>
                     <el-table-column fixed="right" label="操作" width="100">
-                        <template slot-scope="scope">
+                        <template v-slot="scope">
                             <el-button size="small" @click="onEdit(scope.row)" type="text">编辑</el-button>
                         </template>
                     </el-table-column>
@@ -155,6 +153,10 @@ export default {
                         label: '单据类型'
                     },
                     {
+                        prop: 'asnBillStateValue',
+                        label: '单据状态'
+                    },
+                    {
                         prop: 'supplierCode',
                         width: 100,
                         label: '供应商编码'
@@ -195,16 +197,19 @@ export default {
                         width: 130,
                         label: '更新时间'
                     },
-                    {
-                        prop: 'asnBillStateValue',
-                        label: '状态'
-                    },
                 ]
             },
         }
     },
     created() {
         this.getTableData();
+    },
+    watch: {
+        $route(to) {
+            if(to.query && to.query.isRefresh === 'true'){
+                this.refreshTable();
+            }
+        }
     },
     computed: {
         permissionObj() {
@@ -224,8 +229,8 @@ export default {
                     this.page.total = pageObj.total;
                 })
         },
-        view() {
-
+        refreshTable(){
+            this.getTableData();
         },
         onRemove() {
             let rows = this.$refs.table.selection;
@@ -287,13 +292,25 @@ export default {
             })
         },
         onEdit(row) {
+            if(row.asnBillStateValue !== '未收货'){
+                this.$message.warning("操作失败，改ASN单已收货");
+                return;
+            }
             this.$router.push({
                 name: '编辑ASN单',
                 params: {
                     asnBillId: row.asnBillId
                 }
             })
-        }
+        },
+        onView(row) {
+            this.$router.push({
+                name: 'ASN单详情',
+                params: {
+                    asnBillId: row.asnBillId
+                }
+            })
+        },
     }
 }
 </script>

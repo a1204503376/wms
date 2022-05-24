@@ -15,15 +15,7 @@ public interface AsnDetailDao {
 	 * @param asnBillIdList: Asn单id集合
 	 * @return true:删除成功, false:删除失败
 	 */
-	Boolean deleteAsnDetailByAsnBillId(List<Long> asnBillIdList);
-
-	/**
-	 * 根据Asn单id查询Asn单明细id集合
-	 *
-	 * @param asnBillIdList:
-	 * @return List<Long>
-	 */
-	List<Long> selectAsnDetailIdListByAsnBillId(List<Long> asnBillIdList);
+	boolean deleteAsnDetailByAsnBillId(List<Long> asnBillIdList);
 
 	/**
 	 * 新增Asn明细信息
@@ -31,7 +23,7 @@ public interface AsnDetailDao {
 	 * @param asnDetailList: Asn单明细集合
 	 * @return true:新增成功, false:新增失败
 	 */
-	public Boolean insertAsnDetail(List<AsnDetail> asnDetailList);
+	boolean saveOrUpdateAsnDetail(List<AsnDetail> asnDetailList);
 
 	/**
 	 * 根据ASN单id 查询ASN单明细信息集合
@@ -39,5 +31,12 @@ public interface AsnDetailDao {
 	 * @param asnBillId: Asn单id
 	 * @return List<AsnDetailEditResponse>
 	 */
-	public List<AsnDetail> getAsnDetailByAsnBillId(Long asnBillId);
+	List<AsnDetail> getAsnDetailByAsnBillId(Long asnBillId);
+
+	/**
+	 * 根据id批量删除ASN单明细
+	 *
+	 * @param removeIdList: ASN单明细id
+	 */
+	void deleteByIds(List<Long> removeIdList);
 }

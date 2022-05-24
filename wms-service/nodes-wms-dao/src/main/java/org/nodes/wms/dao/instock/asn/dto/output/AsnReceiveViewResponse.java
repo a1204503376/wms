@@ -8,10 +8,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 返回对象-Asn单集合属性ReceiveHeader
+ * 查看明细-收货单头表返回对象
  **/
 @Data
-public class AsnPropertyReceiveResponse implements Serializable {
+public class AsnReceiveViewResponse implements Serializable {
 
 	private static final long serialVersionUID = -2138640940190251249L;
 

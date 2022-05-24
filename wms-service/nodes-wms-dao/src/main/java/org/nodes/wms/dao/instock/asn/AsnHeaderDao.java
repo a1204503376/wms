@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnBillExportResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnBillViewResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 
@@ -26,20 +26,20 @@ public interface AsnHeaderDao {
 	Page<PageResponse> selectPageAsnBill(IPage<?> page, PageParamsQuery pageParamsQuery);
 
 	/**
-	 * 新增ASN单头表信息和明细
+	 * 新增/修改 ASN单头表信息和明细
 	 *
 	 * @param asnHeader ASN单头表实体
 	 * @return true:新增成功 , false:新增失败
 	 */
-	boolean insertAsnHeader(AsnHeader asnHeader);
+	boolean saveOrUpdateAsnHeader(AsnHeader asnHeader);
 
 	/**
 	 * 获取ASN单详细信息
 	 *
 	 * @param id: Asn单id
-	 * @return AsnDetailResponse
+	 * @return AsnBillViewResponse
 	 */
-	AsnDetailResponse selectAsnContactDetailByAsnBillId(Long id);
+	AsnBillViewResponse getAsnBillViewDetailById(Long id);
 
 	/**
 	 * 根据Asn单id 删除ASN单头表信息

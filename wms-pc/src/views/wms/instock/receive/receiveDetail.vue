@@ -128,6 +128,7 @@ import {editDetailMixin} from "@/mixins/editDetail";
 // eslint-disable-next-line no-unused-vars
 import {listMixin} from "@/mixins/list";
 import {getReceiveDetailById} from "@/api/wms/instock/receive";
+import func from "@/util/func";
 
 export default {
     props: {
@@ -210,14 +211,19 @@ export default {
 
         }
     },
-    mounted() {
-
+    watch:{
+       receiveId(){
+           this.getTableData();
+       }
     },
     created() {
         this.getTableData();
     },
     methods: {
         getTableData() {
+            if(func.isEmpty(this.receiveId)){
+                return;
+            }
            let ReceiveIdRequest  = {
                 receiveId: this.receiveId
             }

@@ -80,10 +80,10 @@ export default [
         path: '/asn',
         component: Layout,
         children: [{
-            path: 'detail/:id',
-            name: 'ASN单明细',
+            path: 'detail/:asnBillId',
+            name: 'ASN单详情',
             props: true,
-            component: () => import('@/views/wms/instock/asnHeader/asnAdd')
+            component: () => import('@/views/wms/instock/asnHeader/asnDetail')
         }]
     },
     {

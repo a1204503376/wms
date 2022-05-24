@@ -20,24 +20,24 @@ public class AsnDetailDaoImpl
 	implements AsnDetailDao {
 
 	@Override
-	public Boolean deleteAsnDetailByAsnBillId(List<Long> asnBillIdList) {
+	public boolean deleteAsnDetailByAsnBillId(List<Long> asnBillIdList) {
 		LambdaQueryWrapper<AsnDetail> lambdaQueryWrapper = new LambdaQueryWrapper<>();
 		lambdaQueryWrapper.in(AsnDetail::getAsnBillId,asnBillIdList);
 		return super.baseMapper.delete(lambdaQueryWrapper) > 0;
 	}
 
 	@Override
-	public List<Long> selectAsnDetailIdListByAsnBillId(List<Long> asnBillIdList) {
-		return super.baseMapper.selectAsnDetailId(asnBillIdList);
-	}
-
-	@Override
-	public Boolean insertAsnDetail(List<AsnDetail> asnDetailList) {
-		return super.saveBatch(asnDetailList);
+	public boolean saveOrUpdateAsnDetail(List<AsnDetail> asnDetailList) {
+		return super.saveOrUpdateBatch(asnDetailList);
 	}
 
 	@Override
 	public List<AsnDetail> getAsnDetailByAsnBillId(Long asnBillId) {
 		return super.baseMapper.selectAsnDetailByAsnBillId(asnBillId);
 	}
+
+    @Override
+    public void deleteByIds(List<Long> removeIdList) {
+        super.removeByIds(removeIdList);
+    }
 }

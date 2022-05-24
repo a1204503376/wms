@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnBillExportResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnBillViewResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.springframework.stereotype.Repository;
@@ -32,9 +32,9 @@ public interface AsnHeaderMapper extends BaseMapper<AsnHeader> {
 	 * 获取ASN单信息和对应的收货单信息
 	 *
 	 * @param asnBillId:Asn单id
-	 * @return AsnDetailResponse
+	 * @return AsnBillViewResponse
 	 */
-	AsnDetailResponse selectAsnContactDetail(Long asnBillId);
+	AsnBillViewResponse selectAsnBillViewDetailById(Long asnBillId);
 
 	/**
 	 * 查询ASN单信息

@@ -6,28 +6,28 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
- * Asn 单详细信息
+ * 查看明细-ASN单头表返回对象
  **/
 @Data
-public class AsnDetailResponse implements Serializable {
+public class AsnHeaderViewResponse implements Serializable {
 
-	private static final long serialVersionUID = -9097169466236888793L;
+	private static final long serialVersionUID = 9035568602666392913L;
+
 	/**
-	 * 主键
+	 * ASN单头表id
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long asnBillId;
 
 	/**
-	 * Asn单编码
+	 * 单据编码
 	 */
 	private String asnBillNo;
 
 	/**
-	 * 单据类型
+	 * 单据类型名称
 	 */
 	private String billTypeName;
 
@@ -42,11 +42,6 @@ public class AsnDetailResponse implements Serializable {
 	private String supplierName;
 
 	/**
-	 * 备注
-	 */
-	private String asnBillRemark;
-
-	/**
 	 * 创建时间
 	 */
 	private Date createTime;
@@ -57,22 +52,23 @@ public class AsnDetailResponse implements Serializable {
 	private String createUser;
 
 	/**
-	 * Asn单明细集合
-	 */
-	private List<AsnPropertyDetailResponse>  asnDetailList;
-
-	/**
-	 * 收货单头表信息集合
-	 */
-	private List<AsnPropertyReceiveResponse> receiveHeaderList;
-
-	/**
-	 * 库房编码
+	 * 仓库编码
 	 */
 	private String whCode;
 
 	/**
-	 * 库房名称
+	 * 仓库名称
 	 */
 	private String whName;
+
+	/**
+	 * 货主名称
+	 */
+	private String ownerName;
+
+	/**
+	 * 备注
+	 */
+	private String asnBillRemark;
 }
+
