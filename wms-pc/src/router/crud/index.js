@@ -111,6 +111,12 @@ export default [
                 name: '编辑收货单',
                 props: true,
                 component: () => import('@/views/wms/instock/receive/receiveEdit')
+            },
+            {
+                path: 'detail/:receiveId',
+                name: '收货单详情',
+                props: true,
+                component: () => import('@/views/wms/instock/receive/receiveDetail')
             }
         ]
     },

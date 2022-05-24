@@ -55,11 +55,6 @@ const install = (Vue, vm) => {
 		})
 	}
 
-	const title = (title) => {
-		uni.setNavigationBarTitle({
-			title
-		})
-	}
 	// URL参数转对象
 	const paramsToObj = (url) => {
 		if (url.indexOf('?') != -1) {
@@ -119,11 +114,18 @@ const install = (Vue, vm) => {
 			})
 		}
 	}
-
+	
+	let hasRegisterScanner = false;
 	// 注册扫码组件
 	const registerScanner = (callback) => {
-		let subNVue = uni.getSubNVueById('honeywellScannerComponent');
-		subNVue.hide();
+		debugger
+		if (hasRegisterScanner){
+			uni.$off('on-scanner-data')
+		}
+		
+		hasRegisterScanner = true;
+		console.log(hasRegisterScanner)
+		
 		uni.$on('on-scanner-data', (data) => {
 			callback(data)
 		})
@@ -131,6 +133,9 @@ const install = (Vue, vm) => {
 
 	// 移除扫码组件注册
 	const unRegisterScanner = () => {
+		debugger
+		hasRegisterScanner = false;
+		console.log(hasRegisterScanner)
 		uni.$off('on-scanner-data')
 	}
 
@@ -144,8 +149,7 @@ const install = (Vue, vm) => {
 		refreshPage,
 		showToast,
 		registerScanner,
-		unRegisterScanner,
-		title
+		unRegisterScanner
 	}
 }
 export default {

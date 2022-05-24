@@ -1,15 +1,17 @@
 package org.nodes.wms.biz.instock.receive;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.nodes.wms.dao.instock.receive.dto.input.EditReceiveRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
 import org.nodes.wms.dao.instock.receive.dto.input.NewReceiveRequest;
-import org.nodes.wms.dao.instock.receive.dto.output.ReceiveEditResponse;
+import org.nodes.wms.dao.instock.receive.dto.output.EditReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 收货单业务层接口
@@ -25,17 +27,17 @@ public interface ReceiveBiz {
 
 	/**
 	 * 根据收货单ID删除收货单(逻辑删除)
-	 * @param receiveId :收货单ID
+	 * @param receiveIdList :收货单ID集合
 	 * @return true:删除成功, false:删除失败
 	 */
-	boolean remove(Long receiveId);
+	boolean remove(List<Long> receiveIdList);
 
 	/**
 	 * 根据收货单ID获取收货单明细
 	 * @param receiveId :收货单ID
 	 * @return ReceiveResponse:收货单明细返回对象
 	 */
-	ReceiveResponse getReceivedetail(Long receiveId);
+	ReceiveResponse getReceiveDetail(Long receiveId);
 
 	/**
 	 * 根据收货单ID修改收货单状态
@@ -64,5 +66,7 @@ public interface ReceiveBiz {
 	 * @param receiveId 收货单id
 	 * @return ReceiveEditResponse
 	 */
-	ReceiveEditResponse getEditReceiveResponse(Long receiveId);
+	EditReceiveResponse getEditReceiveResponse(Long receiveId);
+
+	String editReceive(EditReceiveRequest editReceiveRequest);
 }

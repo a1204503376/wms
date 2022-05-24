@@ -44,7 +44,15 @@ export const getReceiveStateList = () => {
 
 export const addReceive = (data) => {
     return request({
-        url: '/api/wms/receive/new',
+        url: '/api/wms/receive/newReceive',
+        method: 'post',
+        data: data,
+    })
+}
+
+export const editReceive = (data) => {
+    return request({
+        url: '/api/wms/receive/editReceive',
         method: 'post',
         data: data,
     })
@@ -57,3 +65,11 @@ export const getEditReceiveById = (data) => {
         data: data,
     })
 }
+export const getReceiveDetailById = (data) => {
+    return request({
+        url: '/api/wms/receive/getReceiveDetailById',
+        method: 'post',
+        data: data,
+    })
+}
+

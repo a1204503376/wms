@@ -4,13 +4,18 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
-import org.nodes.wms.dao.basics.sku.entities.Sku;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
-public class ReceiveDetailEditResponse {
-
+public class EditReceiveDetailResponse implements Serializable {
+	private static final long serialVersionUID = -1896492170322284739L;
+	/**
+	 * 收货单明细id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long receiveDetailId;
 	/**
 	 * sku下拉框对象
 	 */
@@ -19,6 +24,10 @@ public class ReceiveDetailEditResponse {
 	 * 计划数量
 	 */
 	private BigDecimal planQty;
+	/**
+	 * 实收数量
+	 */
+	private BigDecimal scanQty;
 
 	/**
 	 * 计量单位编码
@@ -32,4 +41,8 @@ public class ReceiveDetailEditResponse {
 	 * 备注
 	 */
 	private String remark;
+	/**
+	 * 行号
+	 */
+   private  String lineNumber;
 }

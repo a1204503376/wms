@@ -72,20 +72,23 @@
             order by h.create_time desc
         </if>
     </select>
-    <select id="selectHeaderById" resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse">
+    <select id="selectHeaderById" resultType="org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveHeaderResponse">
         SELECT
-            receive_no,
-            bill_state,
-            wh_code,
-            owner_code,
-            bill_type_cd,
-            in_store_type,
-            asn_bill_no,
-            supplier_code,
-            supplier_name,
-            remark
-            from receive_header
-            where receive_id = #{id}
+            rh.receive_no,
+            rh.asn_bill_no,
+            rh.bill_state,
+            rh.wh_code,
+            rh.owner_code,
+            rh.bill_type_cd,
+            wbt.bill_type_name,
+            rh.in_store_type,
+            rh.asn_bill_no,
+            rh.supplier_code,
+            rh.supplier_name,
+            rh.remark
+            from receive_header rh,wms_bill_type wbt
+            where  rh.bill_type_cd = wbt.bill_type_cd
+            and    receive_id = #{id}
     </select>
     <select id="getReceiveHeaderResponseByQuery"
             resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse">
