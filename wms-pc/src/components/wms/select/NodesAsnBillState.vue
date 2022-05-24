@@ -30,13 +30,7 @@ export default {
     },
     watch: {
         val(newVal) {
-            let result = newVal;
-            if (func.isArray(newVal)) {
-                result = newVal.map(d => d.value);
-            } else if (func.isObject(newVal)) {
-                result = newVal.value
-            }
-            this.$emit('selectValChange', result);
+            this.$emit('selectValChange', newVal.map(d => d.value));
         }
     },
     async created() {
@@ -44,7 +38,7 @@ export default {
         if (func.isNotEmpty(this.selectVal)) {
             this.dataSource.forEach((item) => {
                 if (this.selectVal.includes(item.value)) {
-                    this.val.push(item);
+                    this.val.push(item.value);
                 }
             })
         }
