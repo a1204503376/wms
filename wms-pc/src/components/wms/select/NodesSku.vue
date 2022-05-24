@@ -6,7 +6,7 @@
         :loading="loading"
         :remote-method="remoteMethod"
         filterable
-        placeholder="请输入关键词"
+        placeholder="请输入物品编码或名称"
         remote
         reserve-keyword
         size="mini"
@@ -27,6 +27,7 @@
 <script>
 import {getSkuSelectResponseTop10List} from "@/api/wms/basics/sku";
 import debounce from "lodash/debounce";
+import func from "@/util/func";
 
 export default {
     name: "NodesSku",
@@ -35,7 +36,6 @@ export default {
         event: 'selectValChange'
     },
     props: {
-
         selectVal: [Array,Object],
         // 单选多选切换，默认为false
         multiple: {type: Boolean, required: false, default: false}
@@ -45,20 +45,29 @@ export default {
             options: [],
             val: this.selectVal,
             loading: false,
-            num:1
+            isEdit: func.isNotEmpty(this.selectVal)
         }
     },
-
     watch: {
-        selectVal(newVal) {
-            this.val=newVal;
-            if(this.num ===1) {
-                this.options.push(newVal)
-                this.num=0;
-                }
-        },
+        selectVal(){
+            this.setDefaultByProps();
+        }
+    },
+    created() {
+        this.setDefaultByProps();
     },
     methods: {
+        setDefaultByProps(){
+            if (!this.isEdit){
+                return;
+            }
+
+            let currentSku = this.options.find(item => item.skuId === this.selectVal.skuId);
+            if (func.isEmpty(currentSku)){
+                this.options.push(this.selectVal);
+            }
+            this.val = this.selectVal;
+        },
         // 防抖 在等待时间到达前的请求全部取消，保留最后一次
         remoteMethod: debounce(async function (key) {
             if (key !== '') {
