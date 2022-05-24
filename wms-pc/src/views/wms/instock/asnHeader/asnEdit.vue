@@ -43,6 +43,7 @@
                                 <nodes-warehouse
                                     v-model="form.params.whId"
                                     :multiple="false"
+                                    :default-value="true"
                                     style="width: 300px"
                                 ></nodes-warehouse>
                             </el-form-item>
@@ -368,7 +369,7 @@ export default {
                     this.form.params.asnBillRemark = headerData.asnBillRemark;
                     let newDetailData = [];
                     detailData.forEach((value) => {
-                            let sku = {
+                            let detail = {
                                 asnDetailId: value.asnDetailId,
                                 asnLineNo: value.asnLineNo,
                                 sku: value.skuSelectResponse,
@@ -376,7 +377,7 @@ export default {
                                 scanQty: value.scanQty,
                                 remark: value.remark
                             }
-                            newDetailData.push(sku);
+                            newDetailData.push(detail);
                         }
                     )
                     this.table.data = newDetailData;

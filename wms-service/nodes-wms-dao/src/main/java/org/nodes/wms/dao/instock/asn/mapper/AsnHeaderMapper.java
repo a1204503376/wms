@@ -6,7 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnBillExportResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnBillViewResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailViewResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnHeaderViewResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.springframework.stereotype.Repository;
@@ -29,14 +30,6 @@ public interface AsnHeaderMapper extends BaseMapper<AsnHeader> {
 	Page<PageResponse> selectPageAsnBill(IPage<?> page, @Param("params") PageParamsQuery pageParamsQuery);
 
 	/**
-	 * 获取ASN单信息和对应的收货单信息
-	 *
-	 * @param asnBillId:Asn单id
-	 * @return AsnBillViewResponse
-	 */
-	AsnBillViewResponse selectAsnBillViewDetailById(Long asnBillId);
-
-	/**
 	 * 查询ASN单信息
 	 *
 	 * @param pageParamsQuery: 条件参数
@@ -51,4 +44,20 @@ public interface AsnHeaderMapper extends BaseMapper<AsnHeader> {
 	 * @return AsnHeader
 	 */
 	AsnHeader selectAsnHeaderByAsnBillId(@Param("asnBillId") Long asnBillId);
+
+	/**
+	 * 查看明细-根据ASN单id查询ASN单头表信息
+	 *
+	 * @param id:Asn单id
+	 * @return AsnHeaderViewResponse
+	 */
+	AsnHeaderViewResponse selectAsnHeaderViewById(Long id);
+
+	/**
+	 * 查看明细-根据ASN单id查询ASN单明细表信息
+	 *
+	 * @param asnBillId:Asn单id
+	 * @return AsnDetailViewResponse
+	 */
+	List<AsnDetailViewResponse> selectAsnDetailViewByAsnBillId(Long asnBillId);
 }
