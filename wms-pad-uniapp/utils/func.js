@@ -1,16 +1,25 @@
+import api from '@/api/user.js'
 // 全局公共方法
 const install = (Vue, vm) => {
 
-	// 登录操作
+	// 登录成功之后的操作
 	const login = (userInfo) => {
+		uni.setStorageSync('username', userInfo.account)
 		vm.$u.vuex('userInfo', userInfo)
-		vm.$u.vuex('accessToken', userInfo.accessToken)
+		vm.$u.vuex('accessToken', userInfo.access_token)
+		vm.$u.vuex('refreshToken', userInfo.refresh_token)
+		vm.$u.vuex('expiresIn', userInfo.expires_in)
 		vm.$u.vuex('isLogin', true)
-		uni.redirectTo({
-			url: '/pages/menu/home/home'
+		api.getMenuList().then(data => {
+			uni.setStorageSync('menuList', data.data)
+			uni.hideLoading();
+			uni.redirectTo({
+				url: '/pages/menu/home/home'
+			})
 		})
+		
 	}
-
+	
 	// 退出登录
 	const logout = () => {
 		vm.$u.vuex('userInfo', {
@@ -20,6 +29,10 @@ const install = (Vue, vm) => {
 		})
 		vm.$u.vuex('accessToken', '')
 		vm.$u.vuex('isLogin', false)
+		vm.$u.vuex('userInfo', '')
+		vm.$u.vuex('refreshToken', '')
+		vm.$u.vuex('expiresIn', '')
+		uni.setStorageSync('menuList', '')
 		uni.redirectTo({
 			url: '/pages/login/login'
 		})
@@ -118,14 +131,10 @@ const install = (Vue, vm) => {
 	let hasRegisterScanner = false;
 	// 注册扫码组件
 	const registerScanner = (callback) => {
-		debugger
 		if (hasRegisterScanner){
 			uni.$off('on-scanner-data')
 		}
-		
 		hasRegisterScanner = true;
-		console.log(hasRegisterScanner)
-		
 		uni.$on('on-scanner-data', (data) => {
 			callback(data)
 		})
@@ -133,9 +142,7 @@ const install = (Vue, vm) => {
 
 	// 移除扫码组件注册
 	const unRegisterScanner = () => {
-		debugger
 		hasRegisterScanner = false;
-		console.log(hasRegisterScanner)
 		uni.$off('on-scanner-data')
 	}
 
