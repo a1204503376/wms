@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnBillExportResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailViewResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnHeaderViewResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.*;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.springframework.stereotype.Repository;
 
@@ -60,4 +57,12 @@ public interface AsnHeaderMapper extends BaseMapper<AsnHeader> {
 	 * @return AsnDetailViewResponse
 	 */
 	List<AsnDetailViewResponse> selectAsnDetailViewByAsnBillId(Long asnBillId);
+
+	/**
+	 * 根据ASN单id查询审计日志
+	 *
+	 * @param id: ASD单id
+	 * @return ListAsnLogActionViewResponse>
+	 */
+	List<AsnLogActionViewResponse> selectLogActionById(Long id);
 }

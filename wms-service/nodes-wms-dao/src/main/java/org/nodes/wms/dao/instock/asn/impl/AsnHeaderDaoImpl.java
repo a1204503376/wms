@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.instock.asn.AsnHeaderDao;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnBillExportResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailViewResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnHeaderViewResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.*;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.nodes.wms.dao.instock.asn.mapper.AsnHeaderMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -57,5 +54,10 @@ public class AsnHeaderDaoImpl
 
 	public List<AsnDetailViewResponse> getAsnDetailViewByAsnBillId(Long asnBillId) {
 		return super.baseMapper.selectAsnDetailViewByAsnBillId(asnBillId);
+	}
+
+	@Override
+	public List<AsnLogActionViewResponse> getLogActionById(Long id) {
+		return super.baseMapper.selectLogActionById(id);
 	}
 }

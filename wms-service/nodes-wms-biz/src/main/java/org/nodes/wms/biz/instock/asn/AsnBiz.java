@@ -6,6 +6,7 @@ import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnBillByEditResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnBillViewResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnLogActionViewResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 
@@ -82,4 +83,12 @@ public interface AsnBiz {
 	 * @param response:
 	 */
 	void exportAsnBill(PageParamsQuery pageParamsQuery, HttpServletResponse response);
+
+	/**
+	 * 根据ASN单id查询审计日志
+	 *
+	 * @param asnBillId: ASN单id
+	 * @return List<AsnLogActionViewResponse>
+	 */
+	List<AsnLogActionViewResponse> findAsnLogActionById(Long asnBillId);
 }

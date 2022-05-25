@@ -3,6 +3,7 @@ package org.nodes.wms.biz.instock.asn.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.asn.AsnBiz;
 import org.nodes.wms.biz.instock.asn.modular.AsnFactory;
 import org.nodes.wms.dao.instock.asn.AsnDetailDao;
@@ -32,6 +33,8 @@ public class AsnBizImpl implements AsnBiz {
 	private final AsnHeaderDao asnHeaderDao;
 	private final AsnDetailDao asnDetailDao;
 	private final AsnFactory asnFactory;
+
+	private final LogBiz logBiz;
 
 	@Override
 	public Page<PageResponse> getPageAsnBill(IPage<?> page,
@@ -138,4 +141,9 @@ public class AsnBizImpl implements AsnBiz {
 		});
 		ExcelUtil.export(response, "ASD单", "ASN单数据报表", asnBillList, AsnBillExportResponse.class);
 	}
+
+    @Override
+    public List<AsnLogActionViewResponse> findAsnLogActionById(Long asnBillId) {
+        return asnHeaderDao.getLogActionById(asnBillId);
+    }
 }

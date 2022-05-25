@@ -3,10 +3,7 @@ package org.nodes.wms.dao.instock.asn;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnBillExportResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailViewResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnHeaderViewResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.*;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 
 import java.util.List;
@@ -73,4 +70,12 @@ public interface AsnHeaderDao {
 	 * @return List<AsnDetailViewResponse>
 	 */
 	List<AsnDetailViewResponse> getAsnDetailViewByAsnBillId(Long asnBillId);
+
+	/**
+	 * 根据ASN单id获取审计日志
+	 *
+	 * @param id: ASN单id
+	 * @return List<AsnLogActionViewResponse>
+	 */
+    List<AsnLogActionViewResponse> getLogActionById(Long id);
 }
