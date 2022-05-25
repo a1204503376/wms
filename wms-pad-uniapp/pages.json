@@ -57,7 +57,7 @@
             "path" : "pages/userSetting/userSetting",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "个人中心",
                 "enablePullDownRefresh": false
             }
             

@@ -108,5 +108,14 @@
     "uniStatistics" : {
         "enable" : false
     },
-    "vueVersion" : "2"
+    "vueVersion" : "2",
+    "h5" : {
+        "router" : {
+            "base" : "./",
+            "mode" : "hash"
+        },
+        "devServer" : {
+            "https" : false
+        }
+    }
 }
