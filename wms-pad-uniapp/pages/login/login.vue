@@ -1,5 +1,5 @@
 <template>
-	<view class="content">
+	<view class="content" >
 		<u-toast ref="uToast" />
 		<view class="top">
 			<div class="logodiv">
@@ -13,13 +13,13 @@
 					<u-form-item>
 						<template>
 							<u-icon size="40" name="account-fill"></u-icon>
-							<u--input placeholder="请输入账号" v-model="username" border="none"></u--input>
+							<u--input placeholder="请输入账号" v-model="username" border="none"  confirm-type="search" @confirm="submit()"></u--input>
 						</template>
 					</u-form-item>
 					<u-form-item>
 						<template>
 							<u-icon size="40" name="lock-fill"></u-icon>
-							<u--input placeholder="请输入密码" type="password" v-model="password" border="none"></u--input>
+							<u--input placeholder="请输入密码" type="password" v-model="password" border="none"  confirm-type="search" @confirm="submit()"></u--input>
 						</template>
 					</u-form-item>
 				</u--form>
@@ -45,7 +45,8 @@
 			return {
 				tenantId: setting.tenantId,
 				username: uni.getStorageSync('username') || '',
-				password: '',
+				// TODO 测试时默认密码,正式需要删除
+				password: '123456',
 				addressDisplay: true,
 				name:setting.name,
 				pdaVersion:setting.version
@@ -54,7 +55,6 @@
 		onLoad() {
 			let subNVue = uni.getSubNVueById('honeywellScannerComponent');
 			subNVue.hide();
-			// uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -79,13 +79,11 @@
 					})
 					return;
 				}
+				uni.showLoading({
+					title:'登录中'
+				})
 				api.token(this.tenantId, this.username, md5(this.password), this.type).then(data => {
-					uni.setStorageSync('accessToken', data.access_token)
-					uni.setStorageSync('username', this.username)
-					uni.$u.func.login({
-						userInfo: data,
-						accessToken: data.access_token
-					});
+					uni.$u.func.login(data);
 				})
 			},
 			quitApp() {
