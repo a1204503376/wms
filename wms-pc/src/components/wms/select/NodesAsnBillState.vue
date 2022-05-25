@@ -30,7 +30,7 @@ export default {
     },
     watch: {
         val(newVal) {
-            this.$emit('selectValChange', newVal.map(d => d.value));
+            this.$emit('selectValChange', newVal);
         }
     },
     async created() {

@@ -18,14 +18,14 @@
                             <el-form-item label="ASN单编码" prop="asnBillNo">
                                 <el-input v-model="form.params.asnBillNo"
                                           :readonly="true"
-                                          style="width: 300px;"
+                                          style="width: 250px;"
                                 >
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="单据类型" prop="billTypeCd">
-                                <nodes-bill-type v-model="form.params.billTypeCd">
+                                <nodes-bill-type v-model="form.params.billTypeCd" style="width: 250px">
                                 </nodes-bill-type>
                             </el-form-item>
                         </el-col>
@@ -34,31 +34,33 @@
                                 <nodes-supplier
                                     v-model="form.params.supplier"
                                     :multiple="false"
-                                    style="width: 300px">
+                                    style="width: 250px">
                                 </nodes-supplier>
                             </el-form-item>
                         </el-col>
+                    </el-row>
+                    <el-row>
                         <el-col :span="8">
                             <el-form-item label="仓库" prop="whId">
                                 <nodes-warehouse
                                     v-model="form.params.whId"
-                                    :multiple="false"
                                     :default-value="true"
-                                    style="width: 300px"
+                                    :multiple="false"
+                                    style="width: 250px;"
                                 ></nodes-warehouse>
                             </el-form-item>
                         </el-col>
-                        <el-row>
-                            <el-col :span="8">
-                                <el-form-item label="货主" prop="ownerId">
-                                    <nodes-owner
-                                        v-model="form.params.woId"
-                                        :default-value="true"
-                                        :multiple="false"
-                                    ></nodes-owner>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
+
+                        <el-col :span="8">
+                            <el-form-item label="货主" prop="ownerId">
+                                <nodes-owner
+                                    v-model="form.params.woId"
+                                    :default-value="true"
+                                    :multiple="false"
+                                    style="width: 250px;"
+                                ></nodes-owner>
+                            </el-form-item>
+                        </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="8">
@@ -67,7 +69,7 @@
                                     v-model="form.params.asnBillRemark"
                                     :rows=2
                                     placeholder="请输入内容"
-                                    style="width: 1213px"
+                                    style="width: 1070px"
                                     type="textarea">
                                 </el-input>
                             </el-form-item>
@@ -172,11 +174,11 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input-number
-                                            :min="0"
                                             v-model="row.planQty"
+                                            :min="0"
                                             controls-position="right"
                                             size="mini"
-                                            ></el-input-number>
+                                        ></el-input-number>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="scanQty" width="120">
@@ -299,7 +301,7 @@ export default {
         this.getDataSource();
     },
     watch: {
-        $route() {
+        asnBillId() {
             this.refreshTable();
         }
     },
@@ -355,6 +357,9 @@ export default {
             })
         },
         getDataSource() {
+            if (func.isEmpty(this.asnBillId)) {
+                return;
+            }
             let asdBillIdObj = {
                 asnBillId: this.asnBillId
             }
