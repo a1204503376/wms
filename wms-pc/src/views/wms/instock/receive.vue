@@ -3,33 +3,34 @@
         <nodes-master-page :configure="masterConfig" :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-form-item label="收货单编码">
-                    <el-input v-model="form.params.receiveNo" class="d-input"></el-input>
+                    <el-input v-model="form.params.receiveNo" class="d-input"  :clearable="true"></el-input>
                 </el-form-item>
                 <el-form-item label="单据状态">
                     <nodes-receive-bill-state v-model="form.params.billStateList"></nodes-receive-bill-state>
                 </el-form-item>
                 <el-form-item label="物品编码">
-                    <nodes-sku v-model="form.params.skuIds" style="width: 200px"  :multiple="true"></nodes-sku>
+                    <nodes-sku-by-query v-model="form.params.skuIds" style="width: 200px"></nodes-sku-by-query>
+
                 </el-form-item>
 
                 <el-form-item label="上游编码">
-                    <el-input v-model="form.params.externalOrderNo" class="d-input"></el-input>
+                    <el-input v-model="form.params.externalOrderNo" class="d-input" :clearable="true"></el-input>
                 </el-form-item>
             </template>
             <template v-slot:expandSearch>
                 <el-row type="flex">
                     <el-col :span="24">
                         <el-form-item label="ASN单编码">
-                            <el-input v-model="form.params.asnBillNo" class="d-input"></el-input>
+                            <el-input v-model="form.params.asnBillNo" class="d-input" :clearable="true"></el-input>
                         </el-form-item>
                         <el-form-item label="仓库编码">
                               <nodes-warehouse v-model="form.params.whIds" :multiple="true"></nodes-warehouse>
                         </el-form-item>
                         <el-form-item label="上游创建人">
-                            <el-input v-model="form.params.externalCreateUser" class="d-input"></el-input>
+                            <el-input v-model="form.params.externalCreateUser" class="d-input" :clearable="true"></el-input>
                         </el-form-item>
                         <el-form-item label="供应商编码">
-                            <el-input v-model="form.params.supplierCode" class="d-input"></el-input>
+                            <el-input v-model="form.params.supplierCode" class="d-input" :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -37,7 +38,7 @@
                     <el-col :span="24">
 
                         <el-form-item label="创建日期">
-                            <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
+                            <nodes-date-range v-model="form.params.createTimeDateRange" ></nodes-date-range>
                         </el-form-item>
 
                     </el-col>
@@ -171,12 +172,14 @@ import NodesReceiveBillState from "../../../components/wms/select/NodesReceiveBi
 import NodesCustomer from "@/components/wms/select/NodesCustomer";
 import NodesLocation from "@/components/wms/select/NodesLocation";
 import NodesSku from "@/components/wms/select/NodesSku";
+import NodesSkuByQuery from "@/components/wms/select/NodesSkuByQuery";
 
 
 
 export default {
     name: "list",
     components: {
+        NodesSkuByQuery,
         NodesSku,
         NodesLocation,
         NodesCustomer,
@@ -306,6 +309,7 @@ export default {
             });
         },
         getTableData() {
+
             page(this.page, this.form.params)
                 .then((res) => {
                     let pageObj = res.data.data;
@@ -344,6 +348,7 @@ export default {
                 })
                 remove(this.nums)
                     .then(() => {
+                        this.$message.success('删除成功');
                         this.getTableData();
                     })
             })
