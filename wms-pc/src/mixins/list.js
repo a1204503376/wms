@@ -32,7 +32,8 @@ export const listMixin = {
                 visible: false,
                 dataSource: []
             },
-            sheet:[
+            exportExcelName: '',
+            exportExcelSheet:[
                 {
                     tHeader:[],
                     table:[],
@@ -176,7 +177,7 @@ export const listMixin = {
             }).join(",").split(",");
             this.sheet[0].sheetName =  sheetName || "sheet1"
             let localStr = nowDateFormat("yyyyMMddhhmm")
-            this.$refs.excelExport.filename = filename + localStr || localStr
+            this.exportExcelName = filename + localStr || localStr;
             this.sheet[0].tHeader.forEach((value, index) => {
                 let s = String.fromCharCode("A".charCodeAt(0) + index);
                 let cell = {
