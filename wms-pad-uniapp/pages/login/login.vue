@@ -10,15 +10,15 @@
 
 			<view>
 				<u--form>
-					<u-form-item>
-						<template>
+					<u-form-item >
+						<template >
 							<u-icon size="40" name="account-fill"></u-icon>
 							<u--input placeholder="请输入账号" v-model="username" border="none" :focus="userNameFocus"
 								@confirm="confirm"></u--input>
 						</template>
 					</u-form-item>
 					<u-form-item>
-						<template>
+						<template >
 							<u-icon size="40" name="lock-fill"></u-icon>
 							<u--input placeholder="请输入密码" type="password" v-model="password" border="none"
 								:focus="passwordFocus" confirm-type="search" @confirm="submit()"></u--input>

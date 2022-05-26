@@ -1,4 +1,4 @@
-	span {
+span {
 		font-size: 50rpx;
 	}
 
@@ -112,9 +112,9 @@
 				color: #000000;
 			}
 		}
-
 		button {
-			margin: 30rpx 90rpx 0;
+			text-align: center;
+			margin-top: 90rpx;
 			border: none;
 			width: 572rpx;
 			height: 86rpx;
@@ -139,23 +139,8 @@
 		}
 
 		.quit {
-			margin: 30rpx 90rpx 0;
-			border: none;
-			width: 572rpx;
-			height: 86rpx;
-			line-height: 86rpx;
-			box-sizing: border-box;
-			border-radius: 15rpx;
 			background-color: #ADADAD;
 			color: #ffffff;
-
-			&::after {
-				content: none;
-			}
-
-			&::before {
-				content: none;
-			}
 		}
 
 		.tip {
