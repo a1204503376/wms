@@ -14,7 +14,6 @@ const install = (Vue, vm) => {
 			data.data.forEach((item, index) => {
 				if(item.systemTypeName=='PDA'){
 				uni.setStorageSync('menuList', item.children)
-				  console.log('item'+JSON.stringify(item.children))
 				}
 			})
 			uni.hideLoading();

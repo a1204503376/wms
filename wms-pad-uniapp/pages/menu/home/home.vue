@@ -37,7 +37,6 @@
 			let that = this;
 			uni.getSystemInfo({
 				success(e) {
-					console.log(e);
 					let {
 						windowWidth,
 						windowHeight,
