@@ -3,7 +3,7 @@
 		<u-toast ref="uToast" />
 		<view class="top">
 			<div class="logodiv">
-				<image src="/static/images/login.png" style="width: 100px;height: 100px;" mode="widthFix"></image>
+				<image :src="logoImgSrc" style="width: 100px;height: 100px;" mode="widthFix"></image>
 				<h2>{{name}}</h2>
 				<h5>{{pdaVersion}}</h5>	
 			</div>
@@ -54,7 +54,8 @@
 				name:setting.name,
 				pdaVersion:setting.version,
 				userNameFocus:false,
-				passwordFocus:false
+				passwordFocus:false,
+				logoImgSrc: setting.logo
 			};
 		},
 		onLoad() {

@@ -18,10 +18,6 @@ const app = new Vue({
 	...App
 })
 
-// 接口集中管理
-import httpInstall from '@/http/install.js'
-Vue.use(httpInstall, app)
-
 // 公共函数
 import globalFunc from '@/utils/func.js'
 Vue.use(globalFunc, app);

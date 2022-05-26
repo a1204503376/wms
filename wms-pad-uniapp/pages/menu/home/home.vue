@@ -2,10 +2,9 @@
 	<view class="container">
 			<u-navbar :leftText="username" leftIcon="account-fill" :leftIconSize="40" @leftClick="userSetting"
 				rightIcon="setting-fill" :rightIconSize="80" @rightClick="goOut" :fixed="false" :autoBack="false"
-				title="主页" :class="vuex_theme">
+				title="主页" :bgColor="bgcolor">
 				<!-- <image slot="right" src="/static/images/home/message.png" class="message-icon" mode="widthFix"></image> -->
 			</u-navbar>
-
 		<swiper id="swiperBox" :style="{ height: swiperHeight + 'px' }" :current="current" @change="tabsChange">
 			<swiper-item class="swiper-item">
 				<scroll-view scroll-y style="width: 100%;height: 100%;" @scrolltolower="onreachBottom">
@@ -38,6 +37,7 @@
 				menuList: [],
 				username: uni.getStorageSync('username'),
 				backgroundColor: uni.getStorageSync('backgroundColor') || '#14b9c8',
+				bgcolor: vuex_theme
 			};
 		},
 		onReady() {
@@ -61,6 +61,8 @@
 		},
 		onLoad() {
 			uni.$u.func.registerScanner(this.scannerCallback);
+			
+			plus.navigator.setStatusBarBackground("#4CD964");
 			plus.key.addEventListener('keydown', function(KeyEvent) {
 				this.$u.func.showToast({
 					title: "按下了键：" + JSON.stringify(KeyEvent),
@@ -98,8 +100,13 @@
 </script>
 
 <style lang="scss">
+	.container {
+		min-height: 100vh;
+		overflow: hidden;
+	}
+	
 	.swiper-box {
-		height: 100vh;
+		height: 400vh;
 	}
 
 	.message-icon {
