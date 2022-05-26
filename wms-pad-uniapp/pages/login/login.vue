@@ -2,32 +2,32 @@
 	<view class="content">
 		<u-toast ref="uToast" />
 		<view class="top">
-			<div class="logodiv">
+			<view class="logodiv">
 				<image :src="logoImgSrc" style="width: 100px;height: 100px;" mode="widthFix"></image>
 				<h2>{{name}}</h2>
 				<h5>{{pdaVersion}}</h5>
-			</div>
+			</view>
 
 			<view>
 				<u--form>
-					<u-form-item >
-						<template >
+					<u-form-item>
+						<template>
 							<u-icon size="40" name="account-fill"></u-icon>
 							<u--input placeholder="请输入账号" v-model="username" border="none" :focus="userNameFocus"
-								@confirm="confirm"></u--input>
+								@confirm="nextFocusToPassword"></u--input>
 						</template>
 					</u-form-item>
 					<u-form-item>
-						<template >
+						<template>
 							<u-icon size="40" name="lock-fill"></u-icon>
 							<u--input placeholder="请输入密码" type="password" v-model="password" border="none"
-								:focus="passwordFocus" confirm-type="search" @confirm="submit()"></u--input>
+								:focus="passwordFocus" @confirm="submit()"></u--input>
 						</template>
 					</u-form-item>
 				</u--form>
 			</view>
 			<view>
-				<button :class="vuex_theme" @click="submit">登录</button>
+				<button class="submit_button" @click="submit">登录</button>
 				<button class="quit" @click="gotoAddress">配置</button>
 				<button class="quit" @click="quitApp">退出</button>
 			</view>
@@ -49,8 +49,8 @@
 		data() {
 			return {
 				tenantId: setting.tenantId,
-				username: uni.getStorageSync('username') || '',
-				// TODO 测试时默认密码,正式需要删除
+				username: uni.getStorageSync('username') || 'admin',
+				// TODO 测试时默认密码,正式需要删除,上面的admin
 				password: '123456',
 				addressDisplay: true,
 				name: setting.name,
@@ -61,7 +61,6 @@
 			};
 		},
 		onLoad() {
-			let backColor
 			let subNVue = uni.getSubNVueById('honeywellScannerComponent');
 			subNVue.hide();
 		},
@@ -72,7 +71,7 @@
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {
-			confirm() {
+			nextFocusToPassword() {
 				uni.hideKeyboard(); //隐藏软键盘				
 				this.passwordFocus = true;
 			},
@@ -114,4 +113,5 @@
 
 <style lang="scss">
 	@import 'login.scss';
+	@import '@/static/common.scss';
 </style>

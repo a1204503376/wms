@@ -40,9 +40,7 @@ const store = new Vuex.Store({
 		accessToken: lifeData.accessToken ? lifeData.accessToken : '',
 		isLogin: lifeData.isLogin ? lifeData.isLogin : false,
 		// 如果version无需保存到本地永久存储，无需lifeData.version方式
-		version: '1.0.0',
-		//全局CSS样式
-		vuex_theme: uni.getStorageSync('vuex_theme') ? uni.getStorageSync('vuex_theme') : 'light'
+		version: '1.0.0'
 	},
 	mutations: {
 		$uStore(state, payload) {
@@ -64,11 +62,6 @@ const store = new Vuex.Store({
 			}
 			// 保存变量到本地，见顶部函数定义
 			saveLifeData(saveKey, state[saveKey])
-		},
-		//存储全局CSS样式
-		changeTheme(state, theme) {
-			state.vuex_theme = theme;
-			uni.setStorageSync('vuex_theme', theme);
 		}
 	}
 })

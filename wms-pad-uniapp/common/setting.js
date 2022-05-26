@@ -19,5 +19,7 @@ module.exports = {
 	// 客户端ID,对应数据库blade_client表中的client_id字段
 	clientId: 'saber',
 	// 客户端密钥,对应数据库blade_client表中的client_secret字段
-	clientSecret: 'saber_secret'
+	clientSecret: 'saber_secret',
+	// 自定义导航栏的颜色
+	customNavigationBarBackgroundColor: '#33cbcc'
 }
