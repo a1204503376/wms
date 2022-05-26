@@ -1,19 +1,26 @@
 <template>
-
+  
 	<view>
-		<div class="logodiv">
-			<image src="/static/images/login.png" style="width: 100px;height: 100px;" mode="widthFix"></image>
-		</div>
-		<view class="cell">
-			<div>
+		<view class="user-box">
+			<view class="aa">
+				<img src="/static/images/login.png"/>
+			</view>
+			<view class="user-name" style=" font-weight: bolder">用户名：{{ username }} <br/><br/>登录时间:2022.5.25</view>
+		</view>
+		
+
+		<view class="cell" style="margin-left: 10%;margin-right: 10%;">
+			
+			<div @click="submit">
+				<br/><br/>
 				<u--form>
-					<u-form-item label="用户名" borderBottom labelWidth="60">
-						<u--input v-model="username" border="none"></u--input>
+					<u-form-item  borderBottom labelWidth="60">
+						<u-icon name="edit-pen" size="28"></u-icon>
+						<text style="font-size: 100%;">修改密码</text>
 					</u-form-item>
 				</u--form>
-				<view class="input-box">
-				</view>
-				<button class="submit" @click="submit">确认</button>
+			
+				
 			</div>
 		</view>
 	</view>
@@ -38,39 +45,29 @@
 			},
 			submit() {
 				
+				uni.$u.func.route('/pages/userSetting/pwdSetting');
 			}
 		}
 	}
 </script>
 
 <style>
-	.submit {
-		margin: 60rpx 90rpx 0;
-		border: none;
-		width: 572rpx;
-		height: 86rpx;
-		line-height: 86rpx;
-		box-sizing: border-box;
-		border-radius: 15rpx;
-		background-color: #14b9c8;
-		color: #ffffff;
-
-		&::after {
-			content: none;
-		}
-
-		&::before {
-			content: none;
-		}
-
-		&[disabled='true'] {
-			background: #e4e4e4;
-			font-size: 36rpx;
-			font-family: Source Han Sans CN;
-			font-weight: 500;
-			color: #ffffff;
-		}
-	}
+	.aa{
+	
+				width:80px;
+				height:80px;
+				margin-left: 15%;
+				border-radius:50%;
+				overflow:hidden;
+			}
+			.aa img{
+			position: relative ;
+	    top: 50%;
+	    left: 50%;
+	    transform: translate(-50%, -50%);
+				margin:0 auto;
+				  height:100%;
+			}
 
 	.logodiv {
 		text-align: center;
@@ -85,6 +82,68 @@
 
 		h5 {
 			font-size: 14px;
+		}
+	}
+	.user-name {
+		 font-weight: bolder;
+		margin-top: 20rpx;
+		margin-right: 50rpx;
+		font-size: 36rpx;
+		font-family: Source Han Sans CN;
+		font-weight: 500;
+		
+	}
+		
+	.user-box {
+		display: flex;
+		justify-content: space-between;
+		padding: 20rpx 20rpx 0 64rpx;
+		margin-top: 76rpx;
+	
+		.left {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			border-radius:100%
+	
+			.avatar {
+				border-radius: 50px;
+			
+			}
+	
+		
+			.tag {
+				margin-top: 20rpx;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding: 5rpx 16rpx;
+				border: 1px solid #f5f5f5;
+				border-radius: 7rpx;
+	
+				font-size: 19rpx;
+				font-family: Source Han Sans CN;
+				font-weight: 300;
+				color: #ffffff;
+			}
+		}
+	
+		.edit-btn {
+			margin-top: 20rpx;
+			flex-shrink: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+	
+			width: 165rpx;
+			height: 54rpx;
+			border: 2rpx solid #f5f5f5;
+			border-radius: 11rpx;
+	
+			font-size: 27rpx;
+			font-family: Source Han Sans CN;
+			font-weight: 400;
+			color: #ffffff;
 		}
 	}
 </style>
