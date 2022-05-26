@@ -28,8 +28,20 @@ const getMenuList = () => {
 		}
 	})
 }
-
+const updatePassword = (id,oldPassword,newPassword,newPassword1) => {
+	return http.request({
+		url: '/api/ApiPDA/UpdatePassword',
+		method: 'POST',
+		params: {
+			id,
+			oldPassword,
+			newPassword,
+			newPassword1,
+		}
+	})
+}
 export default {
 	token,
-	getMenuList
+	getMenuList,
+	updatePassword
 }

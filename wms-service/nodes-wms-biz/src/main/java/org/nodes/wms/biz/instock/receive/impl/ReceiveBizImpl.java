@@ -57,13 +57,13 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	@Override
 	@Transactional
 	public boolean remove(List<Long> receiveIdList) {
-		for (Long aLong : receiveIdList) {
-			ReceiveHeader receiveHeader = receiveHeaderDao.selectBillStateById(aLong);
-			if (!receiveHeader.getBillState().getDesc().equals("10")) {
+		for (Long receiveId : receiveIdList) {
+			ReceiveHeader receiveHeader = receiveHeaderDao.selectBillStateById(receiveId);
+			if ( receiveHeader.getBillState().getCode()!=10) {
 				throw new ServiceException("删除失败,单号：" + receiveHeader.getReceiveNo() + "已进行收货");
 			}
 			//获取关联明细集合
-			List<Long> receiveDetailIdList = receiveDetailDao.selectDetailIdByReceiveId(aLong);
+			List<Long> receiveDetailIdList = receiveDetailDao.selectDetailIdByReceiveId(receiveId);
 			//删除明细
 			receiveDetailDao.delete(receiveDetailIdList);
 		}

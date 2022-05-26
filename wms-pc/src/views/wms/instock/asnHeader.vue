@@ -52,7 +52,7 @@
                     <el-button circle icon="el-icon-download" size="mini" @click="onExportData"></el-button>
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
-                    <excel-export :sheet="sheet" :filename="filename" style="display: inline-block;margin-left: 10px">
+                    <excel-export ref="excelExport" :sheet="sheet" style="display: inline-block;margin-left: 10px">
                         <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
                         </el-button>
                     </excel-export>

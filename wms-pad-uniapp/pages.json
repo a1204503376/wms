@@ -45,13 +45,27 @@
 				}
 			}
 
-		}, {
-			"path": "pages/userSetting/userSetting",
-			"style": {
-				"navigationBarTitleText": "个人中心",
-				"enablePullDownRefresh": false,
-				"backgroundColor":"vuex_theme"
-			}
+		}
+	    ,{
+            "path" : "pages/userSetting/userSetting",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "个人中心",
+                "enablePullDownRefresh": false,
+				"navigationBarBackgroundColor": "#009FCC"
+            }
+
+        },
+		{
+		    "path" : "pages/userSetting/pwdSetting",
+		    "style" :
+		    {
+		        "navigationBarTitleText": "修改密码",
+		       "enablePullDownRefresh": false,
+
+			   "navigationBarBackgroundColor": "#009FCC"
+		    }
+
 		}
     ],
 	"globalStyle": {

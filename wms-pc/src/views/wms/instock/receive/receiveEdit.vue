@@ -47,9 +47,11 @@
                                 <nodes-owner v-model="form.params.editReceiveHeaderRequest.woId"></nodes-owner>
                             </el-form-item>
                         </el-col>
+                    </el-row>
+                    <el-row>
                         <el-col :span="8">
                             <el-form-item label="备注">
-                                <el-input v-model="form.params.editReceiveHeaderRequest.remark"></el-input>
+                                <el-input type="textarea" v-model="form.params.editReceiveHeaderRequest.remark" style="width: 1055px"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -180,7 +182,7 @@
                                 <el-table-column
                                 >
                                     <template slot="header">
-                                        <span class="d-table-header-required">备注</span>
+                                        <span >备注</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input v-model.trim="row.remark" size="mini"></el-input>
@@ -189,7 +191,7 @@
 
                                 <el-table-column  width="100">
                                     <template slot="header">
-                                        <span class="d-table-header-required">操作</span>
+                                        <span >操作</span>
                                     </template>
                                     <template slot-scope="scope">
                                         <el-button
