@@ -6,6 +6,7 @@ const install = (Vue, vm) => {
 	const login = (userInfo) => {
 		uni.setStorageSync('username', userInfo.account)
 		uni.setStorageSync('signStatus',false)
+		uni.setStorageSync('loginTime',new Date())
 		vm.$u.vuex('userInfo', userInfo)
 		vm.$u.vuex('accessToken', userInfo.access_token)
 		vm.$u.vuex('refreshToken', userInfo.refresh_token)
