@@ -5,6 +5,7 @@
         :default-first-option="true"
         :loading="loading"
         :remote-method="remoteMethod"
+        :collapse-tags="true"
         filterable
         placeholder="请输入物品编码或名称"
         remote

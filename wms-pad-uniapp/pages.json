@@ -1,6 +1,5 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-
 		{
 			"path": "pages/login/login",
 			"style": {
@@ -9,14 +8,13 @@
 					"subNVues": [{
 						"id": "honeywellScannerComponent",
 						"path": "pages/index/honeywellScannerComponent",
-						"style":{
-							"width":"0px",
-							"height":"0px"
+						"style": {
+							"width": "0px",
+							"height": "0px"
 						}
 					}]
 				}
 			}
-
 		},
 		{
 			"path": "pages/index/honeywellScannerComponent",
@@ -24,17 +22,12 @@
 				"navigationBarTitleText": ""
 			}
 
-		}
-
-
-
-		, {
+		}, {
 			"path": "pages/reviseIp/reviseIp",
 			"style": {
-				"navigationBarTitleText": "配置",
-				"enablePullDownRefresh": false
+			"enablePullDownRefresh": false,
+			"navigationStyle": "custom"
 			}
-
 		}, {
 			"path": "pages/menu/home/home",
 			"style": {
@@ -44,9 +37,9 @@
 					"subNVues": [{
 						"id": "honeywellScannerComponent",
 						"path": "pages/index/honeywellScannerComponent",
-						"style":{
-							"width":"0px",
-							"height":"0px"
+						"style": {
+							"width": "0px",
+							"height": "0px"
 						}
 					}]
 				}
@@ -61,18 +54,18 @@
                 "enablePullDownRefresh": false,
 				"navigationBarBackgroundColor": "#009FCC"
             }
-            
+
         },
 		{
 		    "path" : "pages/userSetting/pwdSetting",
-		    "style" :                                                                                    
+		    "style" :
 		    {
 		        "navigationBarTitleText": "修改密码",
 		       "enablePullDownRefresh": false,
-		      
+
 			   "navigationBarBackgroundColor": "#009FCC"
 		    }
-		    
+
 		}
     ],
 	"globalStyle": {

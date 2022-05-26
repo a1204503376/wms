@@ -177,6 +177,15 @@ export default class func {
         return  getObjType(obj) === 'object';
     }
 
+    /**
+     * 判断对象是否为date
+     * @param obj
+     * @returns {boolean}
+     */
+    static isDate(obj){
+        return  getObjType(obj) === 'date';
+    }
+
     static recursionObject(obj, that, target) {
         if (this.isArray(obj)){
             obj.forEach((item)=>{
