@@ -31,7 +31,12 @@
 				<button class="quit" @click="gotoAddress">配置</button>
 				<button class="quit" @click="quitApp">退出</button>
 			</view>
-
+			
+			<view class="logodiv">
+				<p>
+					@copyright 2022 北京节点通网络技术有限公司
+				</p>
+			</view>
 		</view>
 	</view>
 </template>
@@ -41,10 +46,7 @@
 	import md5 from '@/utils/md5.js'
 	import api from '@/api/user.js'
 	import tool from '@/utils/tool.js'
-	import {
-		options
-	} from '@/http/config.js';
-
+	
 	export default {
 		data() {
 			return {

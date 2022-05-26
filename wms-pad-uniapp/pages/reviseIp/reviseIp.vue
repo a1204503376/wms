@@ -19,11 +19,13 @@
 </template>
 
 <script>
-	import setting from '@/common/setting'
+	import setting from '@/common/setting.js'
+	
 	export default {
 		data() {
 			return {
-				address: setting.apiUrl,
+				address: this.$store.state.baseUrl || setting.apiUrl,
+				oldAddress: this.$store.state.baseUrl || setting.apiUrl
 			}
 		},
 		onLoad() {
@@ -37,13 +39,13 @@
 				this.address=data
 			},
 			submit() {
-				if (this.address == setting.apiUrl) {
+				if (this.address === this.oldAddress) {
 					uni.$u.func.navigateBack();
 					return;
 				}
                 
                 setting.apiUrl = this.address;
-                uni.setStorageSync('address', this.address)
+				this.$u.vuex('baseUrl', this.address);
 				uni.$u.toast('修改配置中，修改配置完成自动退出');
                 plus.runtime.quit();
 			}

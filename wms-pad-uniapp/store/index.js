@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import setting from '@/common/setting.js'
 Vue.use(Vuex)
 
 let lifeData = {};
@@ -12,7 +13,7 @@ try {
 }
 
 // 需要永久存储，且下次APP启动需要取出的，在state中的变量名
-let saveStateKeys = ['userInfo', 'accessToken', 'isLogin'];
+let saveStateKeys = ['baseUrl'];
 
 // 保存变量到本地存储中
 const saveLifeData = function(key, value) {
@@ -28,6 +29,7 @@ const saveLifeData = function(key, value) {
 		uni.setStorageSync('lifeData', tmp);
 	}
 }
+
 const store = new Vuex.Store({
 	// 下面这些值仅为示例，使用过程中请删除
 	state: {
@@ -39,8 +41,7 @@ const store = new Vuex.Store({
 		},
 		accessToken: lifeData.accessToken ? lifeData.accessToken : '',
 		isLogin: lifeData.isLogin ? lifeData.isLogin : false,
-		// 如果version无需保存到本地永久存储，无需lifeData.version方式
-		version: '1.0.0'
+		baseUrl: lifeData.baseUrl || setting.apiUrl
 	},
 	mutations: {
 		$uStore(state, payload) {
