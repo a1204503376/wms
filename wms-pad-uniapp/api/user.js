@@ -18,7 +18,7 @@ const token = (tenantId, username, password, type) => {
 
 
 // 获取PDA菜单
-const routes = () => {
+const getMenuList = () => {
 	return http.request({
 		url: '/api/ApiPDA/routes',
 		method: 'GET',
@@ -31,5 +31,5 @@ const routes = () => {
 
 export default {
 	token,
-	routes
+	getMenuList
 }

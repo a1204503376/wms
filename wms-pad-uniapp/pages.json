@@ -8,7 +8,11 @@
 				"app-plus": {
 					"subNVues": [{
 						"id": "honeywellScannerComponent",
-						"path": "pages/index/honeywellScannerComponent"
+						"path": "pages/index/honeywellScannerComponent",
+						"style":{
+							"width":"0px",
+							"height":"0px"
+						}
 					}]
 				}
 			}
@@ -34,12 +38,31 @@
 		}, {
 			"path": "pages/menu/home/home",
 			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"app-plus": {
+					"subNVues": [{
+						"id": "honeywellScannerComponent",
+						"path": "pages/index/honeywellScannerComponent",
+						"style":{
+							"width":"0px",
+							"height":"0px"
+						}
+					}]
+				}
 			}
 
 		}
-	],
+	    ,{
+            "path" : "pages/userSetting/userSetting",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "个人中心",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

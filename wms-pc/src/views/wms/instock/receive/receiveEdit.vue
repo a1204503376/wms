@@ -101,6 +101,7 @@
                                     <template v-slot="{row}">
                                         <nodes-sku
                                             v-model="row.sku"
+                                            :sku-object="row.sku"
                                             style="width: 180px;"
                                             @selectValChange="onChangeSku(row)"
                                         >
@@ -243,7 +244,6 @@ import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
 export default {
     props: {
         receiveId: {type: String},
-       updateLine: {type: Boolean, required: false, default:()=>true}
     },
     name: "edit",
     components: {
@@ -287,13 +287,13 @@ export default {
             }
         }
     },
-     created() {
-        this.getTableData()
-    },
-    watch: {
-        $route() {
-                this.getTableData();
+    watch:{
+        receiveId(){
+            this.getTableData()
         }
+    },
+    created() {
+        this.getTableData();
     },
     methods: {
         // 过滤空白行
@@ -307,6 +307,10 @@ export default {
         },
 
         getTableData() {
+            if (func.isEmpty(this.receiveId)){
+                return;
+            }
+
             let skuUmSelectQuery = {
                 receiveId: this.receiveId
             };
