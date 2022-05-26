@@ -1,17 +1,23 @@
 <template>
-	<view class="container"  confirm-type="search" @confirm="submit()">
-		<u-navbar :leftText="username" leftIcon="account-fill" :leftIconSize="40" @leftClick="userSetting" rightIcon="setting-fill"  :rightIconSize="80" @rightClick="goOut" :fixed="false" :autoBack="false" title="主页" bgColor="#14b9c8">
-			<!-- <image slot="right" src="/static/images/home/message.png" class="message-icon" mode="widthFix"></image> -->
-		</u-navbar>
+	<view class="container">
+			<u-navbar :leftText="username" leftIcon="account-fill" :leftIconSize="40" @leftClick="userSetting"
+				rightIcon="setting-fill" :rightIconSize="80" @rightClick="goOut" :fixed="false" :autoBack="false"
+				title="主页" :class="vuex_theme">
+				<!-- <image slot="right" src="/static/images/home/message.png" class="message-icon" mode="widthFix"></image> -->
+			</u-navbar>
+
 		<swiper id="swiperBox" :style="{ height: swiperHeight + 'px' }" :current="current" @change="tabsChange">
 			<swiper-item class="swiper-item">
 				<scroll-view scroll-y style="width: 100%;height: 100%;" @scrolltolower="onreachBottom">
 					<view class="content">
 						<u-grid :col="3" :border="true">
-							<u-grid-item v-for="(_item, _index) in menuList" :key="_index"  :customStyle="{height:220+'rpx'}">
+							<u-grid-item v-for="(_item, _index) in menuList" :key="_index"
+								:customStyle="{height:220+'rpx'}">
 								<navigator :url=" _item.path" hover-class="none" class="gitem">
 									<u-icon :name="_item.source" size="60"></u-icon>
-									<view class="name"><h2>{{ _item.name }}【{{_index+1}}】</h2></view>
+									<view class="name">
+										<h2>{{ _item.name }}【{{_index+1}}】</h2>
+									</view>
 								</navigator>
 							</u-grid-item>
 						</u-grid>
@@ -30,7 +36,8 @@
 				swiperHeight: 0,
 				current: 0,
 				menuList: [],
-				username:uni.getStorageSync('username')
+				username: uni.getStorageSync('username'),
+				backgroundColor: uni.getStorageSync('backgroundColor') || '#14b9c8',
 			};
 		},
 		onReady() {
@@ -53,7 +60,15 @@
 			});
 		},
 		onLoad() {
-		uni.$u.func.registerScanner(this.scannerCallback);
+			uni.$u.func.registerScanner(this.scannerCallback);
+			plus.key.addEventListener('keydown', function(KeyEvent) {
+				this.$u.func.showToast({
+					title: "按下了键：" + JSON.stringify(KeyEvent),
+				})
+				this.$u.func.showToast({
+					title: "按下了键：" + KeyEvent.keyCode,
+				})
+			});
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -63,14 +78,14 @@
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {
-			userSetting(){
+			userSetting() {
 				uni.$u.func.route('/pages/userSetting/userSetting');
 			},
-			goOut(){
+			goOut() {
 				uni.$u.func.logout();
 			},
 			scannerCallback(data) {
-				this.username=data
+				this.username = data
 			},
 			tabsChange(e) {
 				this.current = e.detail.current;

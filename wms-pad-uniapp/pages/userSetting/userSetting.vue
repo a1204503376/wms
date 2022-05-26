@@ -43,7 +43,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.submit {
 		margin: 60rpx 90rpx 0;
 		border: none;
