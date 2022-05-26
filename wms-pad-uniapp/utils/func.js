@@ -5,6 +5,7 @@ const install = (Vue, vm) => {
 	// 登录成功之后的操作
 	const login = (userInfo) => {
 		uni.setStorageSync('username', userInfo.account)
+		uni.setStorageSync('signStatus',false)
 		vm.$u.vuex('userInfo', userInfo)
 		vm.$u.vuex('accessToken', userInfo.access_token)
 		vm.$u.vuex('refreshToken', userInfo.refresh_token)

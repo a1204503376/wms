@@ -13,20 +13,23 @@
 					<u-form-item>
 						<template>
 							<u-icon size="40" name="account-fill"></u-icon>
-							<u--input placeholder="请输入账号" v-model="username" border="none"  confirm-type="search" @confirm="submit()"></u--input>
+							<u--input placeholder="请输入账号" v-model="username" border="none"  :focus="userNameFocus" @confirm="confirm"></u--input>
 						</template>
 					</u-form-item>
 					<u-form-item>
 						<template>
 							<u-icon size="40" name="lock-fill"></u-icon>
-							<u--input placeholder="请输入密码" type="password" v-model="password" border="none"  confirm-type="search" @confirm="submit()"></u--input>
+							<u--input placeholder="请输入密码" type="password" v-model="password" border="none" :focus="passwordFocus" confirm-type="search" @confirm="submit()"></u--input>
 						</template>
 					</u-form-item>
 				</u--form>
 			</view>
-			<button class="submit" @click="submit">登录</button>
-			<button class="quit" @click="gotoAddress">配置</button>
-			<button class="quit" @click="quitApp">退出</button>
+			<view >
+				<button :class="vuex_theme" @click="submit">登录</button>
+				<button class="quit" @click="gotoAddress">配置</button>
+				<button class="quit" @click="quitApp">退出</button>
+			</view>
+			
 		</view>
 	</view>
 </template>
@@ -49,10 +52,13 @@
 				password: '123456',
 				addressDisplay: true,
 				name:setting.name,
-				pdaVersion:setting.version
+				pdaVersion:setting.version,
+				userNameFocus:false,
+				passwordFocus:false
 			};
 		},
 		onLoad() {
+			let backColor
 			let subNVue = uni.getSubNVueById('honeywellScannerComponent');
 			subNVue.hide();
 		},
@@ -63,6 +69,10 @@
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {
+			confirm(){
+						uni.hideKeyboard();	//隐藏软键盘				
+						this.passwordFocus = true;
+					 },
 			scannerCallback(data) {
 				let userInfoList = data.split('@');
 				if (userInfoList.length != 2) {
@@ -215,7 +225,7 @@
 			}
 		}
 
-		.submit {
+		button {
 			margin: 30rpx 90rpx 0;
 			border: none;
 			width: 572rpx;
@@ -223,9 +233,6 @@
 			line-height: 86rpx;
 			box-sizing: border-box;
 			border-radius: 15rpx;
-			background-color: #14b9c8;
-			color: #ffffff;
-
 			&::after {
 				content: none;
 			}

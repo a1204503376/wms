@@ -1,6 +1,9 @@
 <template>
 
 	<view>
+		<u-navbar  @leftClick="navigateBack"  :fixed="false" :autoBack="false" title="配置">
+			<!-- <image slot="right" src="/static/images/home/message.png" class="message-icon" mode="widthFix"></image> -->
+		</u-navbar>
 		<div class="logodiv">
 			<image src="/static/images/login.png" style="width: 100px;height: 100px;" mode="widthFix"></image>
 		</div>
@@ -13,7 +16,7 @@
 				</u--form>
 				<view class="input-box">
 				</view>
-				<button class="submit" @click="submit">确认</button>
+				<button  :class="vuex_theme" @click="submit">确认</button>
 			</div>
 		</view>
 	</view>
@@ -37,6 +40,11 @@
 			scannerCallback(data) {
 				this.address=data
 			},
+			navigateBack(){
+				uni.navigateBack({
+					delta:1,//返回层数，2则上上页
+				})
+			},
 			submit() {
 				if (this.address == setting.apiUrl) {
 						//uni.navigateBack()//默认delta:1
@@ -54,8 +62,8 @@
 	}
 </script>
 
-<style>
-	.submit {
+<style lang="scss">
+	button {
 		margin: 60rpx 90rpx 0;
 		border: none;
 		width: 572rpx;
@@ -63,8 +71,6 @@
 		line-height: 86rpx;
 		box-sizing: border-box;
 		border-radius: 15rpx;
-		background-color: #14b9c8;
-		color: #ffffff;
 
 		&::after {
 			content: none;
