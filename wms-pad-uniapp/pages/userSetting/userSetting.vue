@@ -5,7 +5,8 @@
 			<view class="aa">
 				<img src="/static/images/login.png"/>
 			</view>
-			<view class="user-name" style=" font-weight: bolder">用户名：{{ username }} <br/><br/>登录时间:2022.5.25</view>
+			<view class="user-name"  format="yyyy/MM/dd" style=" font-weight: bolder">用户名：{{ username }} <br/><br/>登录时间:{{loginTime}}</view>
+		  
 		</view>
 		
 
@@ -31,6 +32,7 @@
 		data() {
 			return {
 				username: uni.getStorageSync('username'),
+				loginTime: uni.getStorageSync('loginTime')
 			}
 		},
 		onLoad() {
@@ -44,8 +46,7 @@
 				this.address=data
 			},
 			submit() {
-				
-				uni.$u.func.route('/pages/userSetting/pwdSetting');
+			  uni.$u.func.route('/pages/userSetting/pwdSetting');
 			}
 		}
 	}
@@ -100,50 +101,8 @@
 		padding: 20rpx 20rpx 0 64rpx;
 		margin-top: 76rpx;
 	
-		.left {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			border-radius:100%
-	
-			.avatar {
-				border-radius: 50px;
-			
-			}
-	
 		
-			.tag {
-				margin-top: 20rpx;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				padding: 5rpx 16rpx;
-				border: 1px solid #f5f5f5;
-				border-radius: 7rpx;
 	
-				font-size: 19rpx;
-				font-family: Source Han Sans CN;
-				font-weight: 300;
-				color: #ffffff;
-			}
-		}
 	
-		.edit-btn {
-			margin-top: 20rpx;
-			flex-shrink: 0;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-	
-			width: 165rpx;
-			height: 54rpx;
-			border: 2rpx solid #f5f5f5;
-			border-radius: 11rpx;
-	
-			font-size: 27rpx;
-			font-family: Source Han Sans CN;
-			font-weight: 400;
-			color: #ffffff;
-		}
 	}
 </style>

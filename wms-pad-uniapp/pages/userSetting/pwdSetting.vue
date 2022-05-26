@@ -5,13 +5,13 @@
 	<view style="margin-top: 5%;margin-left:5%;margin-right: 5%;">
 		<u--form labelPosition="left" :model="form" :rules="rules" ref="uForm">
 			<u-form-item prop="userInfo.oldPassword" borderBottom ref="item1">
-				<u--input v-model="form.userInfo.oldPassword" border="none" placeholder="请输入原始密码" @confirm="doSearch"></u--input>
+				<u--input v-model="form.userInfo.oldPassword" :focus="oldPwdFocus" border="none" placeholder="请输入原始密码" @confirm="oldPwd"></u--input>
 			</u-form-item>
 			<u-form-item prop="userInfo.newPassword" borderBottom ref="item1">
-				<u--input v-model="form.userInfo.newPassword" border="none" placeholder="请输入新密码" ></u--input>
+				<u--input v-model="form.userInfo.newPassword" :focus="newPwdFocus" border="none" placeholder="请输入新密码" @confirm="newPwd" ></u--input>
 			</u-form-item>
 			<u-form-item prop="userInfo.newPassword1" borderBottom ref="item1">
-				<u--input v-model="form.userInfo.newPassword1" border="none" placeholder="请输入确认密码"></u--input>
+				<u--input v-model="form.userInfo.newPassword1" border="none" :focus="newPwd1Focus" placeholder="请输入确认密码" @confirm="submit"></u--input>
 			</u-form-item>
 
 		</u--form>
@@ -30,6 +30,9 @@
 	export default {
 		data() {
 			return {
+				oldPwdFocus:false,
+				newPwdFocus:false,
+				newPwd1Focus:false,
 				form: {
 					userInfo: {
 						id: uni.getStorageSync('userInfo').user_id,
@@ -63,17 +66,14 @@
 			};
 		},
 		methods: {
-			doSearch(){
-				
-             let inputs =uni.createSelectorQuery("#input");
-				let b = JSON.stringify(inputs) 
-
-				         
-				                    inputs[1].focus();
-				               
-				                 
-				     
-				alert(b)
+			oldPwd(){
+			uni.hideKeyboard();	//隐藏软键盘				
+			this.newPwdFocus = true
+			},
+			newPwd(){
+				uni.hideKeyboard();	//隐藏软键盘
+				this.newPwdFocus = false
+				this.newPwd1Focus = true
 			},
 				navigateBack(){
 							uni.navigateBack({
@@ -81,11 +81,7 @@
 							})
 						},
 			submit() {
-      // uni.$u.func.showToast({title: '登录失败,用户名或密码不能为空'})
-				// api.updatePassword(this.form.userInfo.id, this.form.userInfo.oldPassword,this.form.userInfo.newPassword, this.form.userInfo.newPassword1).then(data => {
-				// 	this.$u.func.logout()
-				// 	 uni.$u.func.route('/pages/login/login');
-				// })
+                 this.newPwd1Focus = false;
 				this.$refs.uForm.validate().then(res => {
 					api.updatePassword(
 						this.form.userInfo.id,
