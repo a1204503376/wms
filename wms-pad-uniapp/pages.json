@@ -29,7 +29,7 @@
 			"navigationStyle": "custom"
 			}
 		}, {
-			"path": "pages/menu/home/home",
+			"path": "pages/home/home",
 			"style": {
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom",

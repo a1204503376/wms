@@ -1,4 +1,41 @@
 
+.container {
+		min-height: 100vh;
+		overflow: hidden;
+	}
+
+	.swiper-box {
+		height: 400vh;
+	}
+
+	.message-icon {
+		width: 32rpx;
+		height: auto;
+		margin-right: 27rpx;
+	}
+
+	.tab {
+		margin-bottom: 10rpx;
+	}
+
+	.gitem {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+
+		.img {
+			width: 54rpx;
+			height: auto;
+			margin-bottom: 26rpx;
+		}
+
+		font-size: 28rpx;
+		font-family: PingFang SC;
+		font-weight: bold;
+		color: #030305;
+		line-height: 36rpx;
+	}
 .menu{
 }
 

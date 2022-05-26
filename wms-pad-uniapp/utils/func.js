@@ -1,4 +1,5 @@
 import api from '@/api/user.js'
+import tool from '@/utils/tool.js'
 // 全局公共方法
 const install = (Vue, vm) => {
 
@@ -6,7 +7,7 @@ const install = (Vue, vm) => {
 	const login = (userInfo) => {
 		uni.setStorageSync('username', userInfo.account)
 		uni.setStorageSync('signStatus',false)
-		uni.setStorageSync('loginTime',new Date())
+		uni.setStorageSync('loginTime',new Date().toLocaleDateString())
 		vm.$u.vuex('userInfo', userInfo)
 		vm.$u.vuex('accessToken', userInfo.access_token)
 		vm.$u.vuex('refreshToken', userInfo.refresh_token)
@@ -20,7 +21,7 @@ const install = (Vue, vm) => {
 			})
 			uni.hideLoading();
 			uni.redirectTo({
-				url: '/pages/menu/home/home'
+				url: '/pages/home/home'
 			})
 		})
 		
