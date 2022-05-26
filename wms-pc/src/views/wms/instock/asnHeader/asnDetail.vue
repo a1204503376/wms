@@ -58,11 +58,6 @@
                                 @sort-change="onSortChange">
                                 <el-table-column
                                     fixed
-                                    type="selection"
-                                    width="50">
-                                </el-table-column>
-                                <el-table-column
-                                    fixed
                                     sortable
                                     type="index">
                                     <template slot="header">
@@ -90,11 +85,6 @@
                                         highlight-current-row
                                         size="mini"
                                         @sort-change="onSortChange">
-                                        <el-table-column
-                                            fixed
-                                            type="selection"
-                                            width="50">
-                                        </el-table-column>
                                         <el-table-column
                                             fixed
                                             sortable
@@ -145,9 +135,8 @@ import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
 import NodesSku from "@/components/wms/select/NodesSku";
 import NodesLineNumber from "@/components/wms/table/NodesLineNumber";
 import {editDetailMixin} from "@/mixins/editDetail";
-// eslint-disable-next-line no-unused-vars
 import {listMixin} from "@/mixins/list";
-import {detail} from "@/api/wms/instock/asnHeader"
+import {detail, getLog} from "@/api/wms/instock/asnHeader"
 
 export default {
     name: "selectDetails",
@@ -186,29 +175,37 @@ export default {
                     {
                         prop: 'skuCode',
                         label: '物品编码',
-                        width: 300,
+                        width: 140,
                         sortable: 'custom'
                     },
                     {
                         prop: 'skuName',
+                        width: 230,
                         label: '物品名称'
                     },
                     {
                         prop: 'skuSpec',
+                        width: 100,
                         label: '规格',
-                        align: 'right'
+                        align: 'center'
                     },
                     {
                         prop: 'umName',
-                        label: '计量单位'
+                        width: 100,
+                        label: '计量单位',
+                        align: 'center'
                     },
                     {
                         prop: 'planQty',
-                        label: '计划数量'
+                        width: 100,
+                        label: '计划数量',
+                        align: 'center'
                     },
                     {
                         prop: 'scanQty',
-                        label: '实收数量'
+                        width: 100,
+                        label: '实收数量',
+                        align: 'center'
                     },
                     {
                         prop: 'remark',
@@ -236,32 +233,35 @@ export default {
             //log日志的行对象
             logColumnList: [
                 {
-                    prop: 'name',
-                    label: '姓名',
+                    prop: 'userAccount',
+                    label: '操作人账号',
                     width: 300,
                     sortable: 'custom'
                 },
                 {
-                    prop: 'date',
-                    label: '日期'
+                    prop: 'userRealName',
+                    label: '操作人名称'
                 },
                 {
-                    prop: 'wages',
-                    label: '工资',
-                    // left/center/right
+                    prop: 'type',
+                    label: '操作类型',
                     align: 'right'
                 },
                 {
-                    prop: 'date',
-                    label: '日期'
+                    prop: 'billId',
+                    label: '目标单据id'
                 },
                 {
-                    prop: 'address',
-                    label: '地址'
+                    prop: 'billNo',
+                    label: '目标单据编码'
                 },
                 {
-                    prop: 'address',
-                    label: '日志'
+                    prop: 'log',
+                    label: '操作内容'
+                },
+                {
+                    prop: 'updateTime',
+                    label: '变更时间'
                 },
             ],
             //收货记录的行对象
@@ -306,7 +306,15 @@ export default {
         //获取日志的数据
         this.getLog();
     },
+    watch: {
+        asnBillId() {
+            this.refreshTable();
+        }
+    },
     methods: {
+        refreshTable() {
+            this.getTableData();
+        },
         getTableData() {
             // API调用:post(this.searchFrom)
             let asnBillIdObj = {
@@ -326,32 +334,14 @@ export default {
         },
         //获取日志数据---跟后台交互
         getLog() {
-            // API调用:post(this.searchFrom)
-            function getRandomInt(min, max) {
-                min = Math.ceil(min);
-                max = Math.floor(max);
-                return Math.floor(Math.random() * (max - min)) + min; //不含最大值，含最小值
+            let asnBillIdObj = {
+                asnBillId: this.asnBillId
             }
-
-            let fill = [];
-            for (let i = 0; i < 101; i++) {
-                // 模拟表格数据
-                let item = {
-                    id: i + 1,
-                    date: `${getRandomInt(2018, 2022)}-${getRandomInt(1, 12)}-${getRandomInt(1, 28)}`,
-                    name: "王小虎日志" + getRandomInt(1, 101),
-                    wages: getRandomInt(3000, 15000),
-                    address: `上海市普陀区金沙江路 ${getRandomInt(100, 2000)} 弄`
-                };
-                fill.push(item);
-            }
-            let length = fill.length;
-            this.publicTable.page.total = length;
-            let offset = (this.publicTable.page.current - 1) * this.publicTable.page.size;
-            let number = offset + this.publicTable.page.size;
-            this.publicTable.data = (number >= length)
-                ? fill.slice(offset, length)
-                : fill.slice(offset, number);
+            getLog(asnBillIdObj)
+                .then((res)=>{
+                    let logData = res.data.data;
+                    this.publicTable.data = logData;
+                })
         },
         //获取收货记录数据---跟后台交互
         getReceivingRecord() {

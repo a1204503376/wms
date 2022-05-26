@@ -5,7 +5,7 @@
         :loading="loading"
         :remote-method="remoteMethod"
         filterable
-        placeholder="请输入关键词"
+        placeholder="请输入供应商编码或名称"
         remote
         reserve-keyword
         size="mini"
@@ -45,21 +45,28 @@ export default {
             options: [],
             val: this.selectVal,
             loading: false,
-            num:1
+            isEdit: func.isNotEmpty(this.selectVal)
         }
     },
+    created() {
+        this.setDefaultByProps();
+    },
     watch: {
-        selectVal(newVal) {
-            this.val = newVal;
-            if(this.num ===1) {
-                if (JSON.stringify(this.options).indexOf(JSON.stringify(newVal)) === -1) {
-                    this.options.push(newVal)
-                    this.num=0;
-                }
-            }
+        selectVal(){
+            this.setDefaultByProps();
         }
     },
     methods: {
+        setDefaultByProps(){
+            if (!this.isEdit){
+                return;
+            }
+            let currentSupplier = this.options.find(item => item.id === this.selectVal.id);
+            if (func.isEmpty(currentSupplier)){
+                this.options.push(this.selectVal);
+            }
+            this.val = this.selectVal;
+        },
         // 防抖 在等待时间到达前的请求全部取消，保留最后一次
         remoteMethod: debounce(async function (key) {
             if (key !== '') {

@@ -3,6 +3,7 @@ package org.nodes.wms.biz.instock.asn.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.asn.AsnBiz;
 import org.nodes.wms.biz.instock.asn.modular.AsnFactory;
 import org.nodes.wms.dao.instock.asn.AsnDetailDao;
@@ -33,6 +34,8 @@ public class AsnBizImpl implements AsnBiz {
 	private final AsnDetailDao asnDetailDao;
 	private final AsnFactory asnFactory;
 
+	private final LogBiz logBiz;
+
 	@Override
 	public Page<PageResponse> getPageAsnBill(IPage<?> page,
 											 PageParamsQuery pageParamsQuery) {
@@ -45,7 +48,12 @@ public class AsnBizImpl implements AsnBiz {
 
 	@Override
 	public AsnBillViewResponse findAsnBillViewDetailByAsnBillId(Long asnBillId) {
-		return asnHeaderDao.getAsnBillViewDetailById(asnBillId);
+		AsnHeaderViewResponse asnHeaderViewResponse = asnHeaderDao.getAsnHeaderViewById(asnBillId);
+		List<AsnDetailViewResponse> asnDetailViewResponseList = asnHeaderDao.getAsnDetailViewByAsnBillId(asnBillId);
+		AsnBillViewResponse asnBillViewResponse = new AsnBillViewResponse();
+		asnBillViewResponse.setAsnHeaderViewResponse(asnHeaderViewResponse);
+		asnBillViewResponse.setAsnDetailViewResponse(asnDetailViewResponseList);
+		return asnBillViewResponse;
 	}
 
 	@Override
@@ -65,7 +73,7 @@ public class AsnBizImpl implements AsnBiz {
 		AsnHeader asnHeader = asnFactory.createAsnHeader(addOrEditAsnBillRequest);
 		asnHeaderDao.saveOrUpdateAsnHeader(asnHeader);
 
-		// 从请数中获取ASN单明细数据，并创建多个ASN单明细实体
+		// 从参数中获取ASN单明细数据，并创建多个ASN单明细实体
 		List<AsnDetailRequest> asnDetailList = addOrEditAsnBillRequest.getAsnDetailList();
 		List<AsnDetail> details = new ArrayList<>();
 		for (AsnDetailRequest asnDetail : asnDetailList) {
@@ -133,4 +141,9 @@ public class AsnBizImpl implements AsnBiz {
 		});
 		ExcelUtil.export(response, "ASD单", "ASN单数据报表", asnBillList, AsnBillExportResponse.class);
 	}
+
+    @Override
+    public List<AsnLogActionViewResponse> findAsnLogActionById(Long asnBillId) {
+        return asnHeaderDao.getLogActionById(asnBillId);
+    }
 }

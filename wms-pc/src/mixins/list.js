@@ -1,5 +1,6 @@
 import {menuMixin} from "@/mixins/menu";
 import func from "@/util/func";
+import {nowDateFormat} from "@/util/date"
 import {getCrudColumnResponseList} from "@/api/core/column";
 import {deepClone} from "@/util/util";
 import {mapGetters} from "vuex";
@@ -30,7 +31,16 @@ export const listMixin = {
             columnShowHide: {
                 visible: false,
                 dataSource: []
-            }
+            },
+            sheet:[
+                {
+                    tHeader:[],
+                    table:[],
+                    keys:[],
+                    sheetName: "",
+                    cellStyle: [],
+                }
+            ]
         }
     },
     computed: {
@@ -151,6 +161,37 @@ export const listMixin = {
             this.$nextTick(() => {
                 this.$refs.table.doLayout();
             });
-        }
+        },
+        // 本地导出
+        exportCurrentDataToExcel(sheetName, filename) {
+            if (func.isEmpty(this.table.data)) {
+                return;
+            }
+            this.sheet[0].tHeader = this.table.columnList.map((item) => {
+                return item.label;
+            }).join(",").split(",");
+            this.sheet[0].table = this.table.data;
+            this.sheet[0].keys = this.table.columnList.map((item) => {
+                return item.prop;
+            }).join(",").split(",");
+            this.sheet[0].sheetName =  sheetName || "sheet1"
+            let localStr = nowDateFormat("yyyyMMddhhmm")
+            this.filename = filename + localStr || localStr
+            this.sheet[0].tHeader.forEach((value, index) => {
+                let s = String.fromCharCode("A".charCodeAt(0) + index);
+                let cell = {
+                    cell: s + 1,
+                    font: {
+                        name: '宋体',
+                        sz: 14,
+                        bold: true,
+                    },
+                    fill: {
+                        fgColor: {rgb: "c0c0c0"},
+                    }
+                };
+                this.sheet[0].cellStyle.push(cell);
+            })
+        },
     }
 }

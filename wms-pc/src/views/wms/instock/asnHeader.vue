@@ -3,14 +3,14 @@
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-form-item label="ASN单编码">
-                    <el-input v-model="form.params.asnBillNo" class="d-input">
+                    <el-input v-model="form.params.asnBillNo" :clearable="true" style="width: 200px" class="d-input">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="物品编码">
-                    <nodes-sku v-model="form.params.sku" style="width: 120px"></nodes-sku>
+                    <nodes-sku v-model="form.params.sku" :multiple="true" style="width: 200px"></nodes-sku>
                 </el-form-item>
                 <el-form-item label="状态">
-                    <nodes-asn-bill-state v-model="form.params.asnBillStateList"></nodes-asn-bill-state>
+                    <nodes-asn-bill-state v-model="form.params.asnBillStateList" style="width: 200px"></nodes-asn-bill-state>
                 </el-form-item>
             </template>
             <template v-slot:expandSearch>
@@ -20,13 +20,13 @@
                             <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
                         </el-form-item>
                         <el-form-item label="供应商">
-                            <el-input v-model="form.params.supplier" class="d-input"></el-input>
+                            <el-input v-model="form.params.supplier" :clearable="true" class="d-input"></el-input>
                         </el-form-item>
                         <el-form-item label="上游编码">
-                            <el-input v-model="form.params.externalOrderNo" class="d-input"></el-input>
+                            <el-input v-model="form.params.externalOrderNo" :clearable="true" class="d-input"></el-input>
                         </el-form-item>
                         <el-form-item label="上游创建人">
-                            <el-input v-model="form.params.externalCreateUser" class="d-input"></el-input>
+                            <el-input v-model="form.params.externalCreateUser" :clearable="true" class="d-input"></el-input>
                         </el-form-item>
                         <el-form-item label="仓库">
                             <nodes-warehouse
@@ -48,12 +48,16 @@
                 <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">
                     <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
                 </el-tooltip>
-                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
-                    <el-button circle icon="el-icon-bottom" size="mini"></el-button>
-                </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="服务端导出" effect="dark" placement="top">
-                    <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
+                    <el-button circle icon="el-icon-download" size="mini" @click="onExportData"></el-button>
                 </el-tooltip>
+                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
+                    <excel-export :sheet="sheet" :filename="filename" style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
+                        </el-button>
+                    </excel-export>
+                </el-tooltip>
+
             </template>
             <template v-slot:table>
                 <el-table ref="table" :data="table.data" border highlight-current-row
@@ -107,8 +111,10 @@ import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesSku from "@/components/wms/select/NodesSku";
 import {listMixin} from "@/mixins/list";
-import {exportFile, getPage, remove} from "@/api/wms/instock/asnHeader";
+import {exportData, getPage, remove} from "@/api/wms/instock/asnHeader";
 import fileDownload from "js-file-download";
+import {ExcelExport} from 'pikaz-excel-js'
+
 
 export default {
     name: "asnHeader",
@@ -119,7 +125,8 @@ export default {
         NodesInStoreMode,
         NodesAsnBillState,
         NodesMasterPage,
-        NodesDateRange
+        NodesDateRange,
+        ExcelExport
     },
     mixins: [listMixin],
     data() {
@@ -145,64 +152,69 @@ export default {
                     {
                         prop: 'asnBillNo',
                         label: 'ASN单编码',
-                        width: 140,
                         sortable: 'custom',
                     },
                     {
                         prop: 'billTypeName',
-                        label: '单据类型'
+                        label: '单据类型',
+                        sortable: 'custom',
                     },
                     {
                         prop: 'asnBillStateValue',
-                        label: '单据状态'
+                        label: '单据状态',
+                        sortable: 'custom',
                     },
                     {
                         prop: 'supplierCode',
-                        width: 100,
-                        label: '供应商编码'
+                        label: '供应商编码',
+                        sortable: 'custom',
                     },
                     {
                         prop: 'supplierName',
-                        width: 100,
                         label: '供应商名称',
+                        sortable: 'custom',
                     },
                     {
                         prop: 'externalOrderNo',
-                        label: '上游编码'
+                        label: '上游编码',
+                        sortable: 'custom',
                     },
                     {
                         prop: 'externalCreateUser',
-                        width: 100,
-                        label: '上游创建人'
+                        label: '上游创建人',
+                        sortable: 'custom',
                     },
                     {
                         prop: 'whName',
-                        label: '仓库编码'
+                        label: '仓库编码',
+                        sortable: 'custom',
                     },
                     {
                         prop: 'asnBillRemark',
-                        label: '备注'
+                        label: '备注',
+                        sortable: 'custom',
                     },
                     {
                         prop: 'createTime',
-                        width: 130,
-                        label: '创建时间'
+                        label: '创建时间',
+                        sortable: 'custom',
                     },
                     {
                         prop: 'createUser',
-                        label: '创建人'
+                        label: '创建人',
+                        sortable: 'custom',
                     },
                     {
                         prop: 'updateTime',
-                        width: 130,
-                        label: '更新时间'
+                        label: '更新时间',
+                        sortable: 'custom',
                     },
                 ]
             },
         }
     },
-    created() {
-        this.getTableData();
+    async created() {
+        await this.getTableData();
     },
     watch: {
         $route(to) {
@@ -221,15 +233,15 @@ export default {
         }
     },
     methods: {
-        getTableData() {
-            getPage(this.page, this.form.params)
+        async getTableData() {
+           await getPage(this.page, this.form.params)
                 .then((res) => {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
                 })
         },
-        refreshTable(){
+        refreshTable() {
             this.getTableData();
         },
         onRemove() {
@@ -263,9 +275,9 @@ export default {
                         })
                 })
         },
-        exportData() {
+        onExportData() {
             this.loading = true;
-            exportFile(this.form.params)
+            exportData(this.form.params)
                 .then((res) => {
                     this.$message.success("操作成功，正在下载中...");
                     fileDownload(res.data, "ASN单.xlsx");
@@ -282,6 +294,9 @@ export default {
         },
         onReset() {
             console.log("重置了。。。");
+        },
+        onExportLocalData() {
+            this.exportCurrentDataToExcel("ASN单","ASN单");
         },
         onAdd() {
             this.$router.push({

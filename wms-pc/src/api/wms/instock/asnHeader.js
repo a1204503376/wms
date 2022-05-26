@@ -17,7 +17,7 @@ export const remove = (removeObj) => {
     })
 }
 
-export const exportFile = (data) => {
+export const exportData = (data) => {
     return request({
         url: '/api/wms/asn/export',
         method: 'post',
@@ -57,6 +57,15 @@ export const detail = (data) => {
         data: data,
     })
 }
+
+export const getLog = (data) => {
+    return request({
+        url: '/api/wms/asn/log',
+        method: 'post',
+        data: data,
+    })
+}
+
 // export const getPage = (current, size, params) => {
 //     return request({
 //         url: '/api/wms/instock/asnHeader/page',

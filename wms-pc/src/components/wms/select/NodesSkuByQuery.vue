@@ -1,11 +1,10 @@
 <template>
     <el-select
         v-model="val"
-        :multiple="multiple"
+        :multiple="true"
         :default-first-option="true"
         :loading="loading"
         :remote-method="remoteMethod"
-        :collapse-tags="true"
         filterable
         placeholder="请输入物品编码或名称"
         remote
@@ -18,7 +17,7 @@
             v-for="item in options"
             :key="item.skuCode"
             :label="item.skuCode"
-            :value="item">
+            :value="item.skuId">
             <span style="float: left">{{ item.skuCode }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.skuName }}</span>
         </el-option>
@@ -37,38 +36,17 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Array,Object],
-        // 单选多选切换，默认为false
-        multiple: {type: Boolean, required: false, default: false}
+        selectVal: [Array],
     },
     data() {
         return {
             options: [],
             val: this.selectVal,
             loading: false,
-            isEdit: func.isNotEmpty(this.selectVal)
         }
-    },
-    watch: {
-        selectVal(){
-            this.setDefaultByProps();
-        }
-    },
-    created() {
-        this.setDefaultByProps();
     },
     methods: {
-        setDefaultByProps(){
-            if (!this.isEdit){
-                return;
-            }
 
-            let currentSku = this.options.find(item => item.skuId === this.selectVal.skuId);
-            if (func.isEmpty(currentSku)){
-                this.options.push(this.selectVal);
-            }
-            this.val = this.selectVal;
-        },
         // 防抖 在等待时间到达前的请求全部取消，保留最后一次
         remoteMethod: debounce(async function (key) {
             if (key !== '') {

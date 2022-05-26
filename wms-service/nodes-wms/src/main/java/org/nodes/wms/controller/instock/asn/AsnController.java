@@ -12,6 +12,7 @@ import org.nodes.wms.dao.instock.asn.dto.input.DeleteRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnBillByEditResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnBillViewResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnLogActionViewResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.springblade.core.log.annotation.ApiLog;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * ASN单管理API
@@ -52,6 +54,12 @@ public class AsnController {
 	public R<AsnBillViewResponse> asnBillViewDetail(@Valid @RequestBody AsnBillIdRequest asnBillIdRequest) {
 		AsnBillViewResponse asnBillViewResponse = asnBiz.findAsnBillViewDetailByAsnBillId(asnBillIdRequest.getAsnBillId());
 		return R.data(asnBillViewResponse);
+	}
+
+	@PostMapping("/log")
+	public R<List<AsnLogActionViewResponse>> log(@Valid @RequestBody AsnBillIdRequest asnBillIdRequest){
+		List<AsnLogActionViewResponse> logActionList = asnBiz.findAsnLogActionById(asnBillIdRequest.getAsnBillId());
+		return R.data(logActionList);
 	}
 
 	@ApiLog("ASN单管理-新增")

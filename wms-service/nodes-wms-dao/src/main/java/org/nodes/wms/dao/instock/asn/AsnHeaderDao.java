@@ -3,9 +3,7 @@ package org.nodes.wms.dao.instock.asn;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnBillExportResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnBillViewResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.*;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 
 import java.util.List;
@@ -34,14 +32,6 @@ public interface AsnHeaderDao {
 	boolean saveOrUpdateAsnHeader(AsnHeader asnHeader);
 
 	/**
-	 * 获取ASN单详细信息
-	 *
-	 * @param id: Asn单id
-	 * @return AsnBillViewResponse
-	 */
-	AsnBillViewResponse getAsnBillViewDetailById(Long id);
-
-	/**
 	 * 根据Asn单id 删除ASN单头表信息
 	 *
 	 * @param idList: Asn单id集合
@@ -53,7 +43,7 @@ public interface AsnHeaderDao {
 	 * Excel 导出(导出当前查询条件)
 	 *
 	 * @param pageParamsQuery: 查询条件
-	 * @return List<AsnExportResponse>
+	 * @return List<AsnBillExportResponse>
 	 */
     List<AsnBillExportResponse> listByParamsQuery(PageParamsQuery pageParamsQuery);
 
@@ -61,7 +51,31 @@ public interface AsnHeaderDao {
 	 * 根据ASN单id查询ASN单头表信息
 	 *
 	 * @param asnBillId: ASN单id
-	 * @return AsnDetailByEditResponse
+	 * @return AsnHeader
 	 */
 	AsnHeader getAsnHeaderByAsnBillId(Long asnBillId);
+
+	/**
+	 * 查看明细-根据ASN单id获取ASN单头表信息
+	 *
+	 * @param id: Asn单id
+	 * @return AsnHeaderViewResponse
+	 */
+	AsnHeaderViewResponse getAsnHeaderViewById(Long id);
+
+	/**
+	 * 查看明细-根据ASN单id获取ASN单详细信息
+	 *
+	 * @param asnBillId: Asn单id
+	 * @return List<AsnDetailViewResponse>
+	 */
+	List<AsnDetailViewResponse> getAsnDetailViewByAsnBillId(Long asnBillId);
+
+	/**
+	 * 根据ASN单id获取审计日志
+	 *
+	 * @param id: ASN单id
+	 * @return List<AsnLogActionViewResponse>
+	 */
+    List<AsnLogActionViewResponse> getLogActionById(Long id);
 }
