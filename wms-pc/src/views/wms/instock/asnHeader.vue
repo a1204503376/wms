@@ -48,12 +48,16 @@
                 <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">
                     <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
                 </el-tooltip>
-                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
-                    <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData"></el-button>
-                </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="服务端导出" effect="dark" placement="top">
                     <el-button circle icon="el-icon-download" size="mini" @click="onExportData"></el-button>
                 </el-tooltip>
+                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
+                    <excel-export :sheet="sheet" :filename="filename" style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
+                        </el-button>
+                    </excel-export>
+                </el-tooltip>
+
             </template>
             <template v-slot:table>
                 <el-table ref="table" :data="table.data" border highlight-current-row
@@ -109,6 +113,8 @@ import NodesSku from "@/components/wms/select/NodesSku";
 import {listMixin} from "@/mixins/list";
 import {exportData, getPage, remove} from "@/api/wms/instock/asnHeader";
 import fileDownload from "js-file-download";
+import {ExcelExport} from 'pikaz-excel-js'
+
 
 export default {
     name: "asnHeader",
@@ -119,7 +125,8 @@ export default {
         NodesInStoreMode,
         NodesAsnBillState,
         NodesMasterPage,
-        NodesDateRange
+        NodesDateRange,
+        ExcelExport
     },
     mixins: [listMixin],
     data() {
@@ -206,8 +213,8 @@ export default {
             },
         }
     },
-    created() {
-        this.getTableData();
+    async created() {
+        await this.getTableData();
     },
     watch: {
         $route(to) {
@@ -226,9 +233,8 @@ export default {
         }
     },
     methods: {
-        getTableData() {
-            console.log(this.form.params);
-            getPage(this.page, this.form.params)
+        async getTableData() {
+           await getPage(this.page, this.form.params)
                 .then((res) => {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
@@ -290,7 +296,7 @@ export default {
             console.log("重置了。。。");
         },
         onExportLocalData() {
-
+            this.exportCurrentDataToExcel("ASN单","ASN单");
         },
         onAdd() {
             this.$router.push({
