@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.nodes.wms.core.common.entity.AttributeBase;
+import org.springblade.core.mp.base.BaseEntity;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -23,7 +24,7 @@ import java.io.Serializable;
 @Data
 @TableName("wms_warehouse")
 @ApiModel(value = "Warehouse对象", description = "仓库")
-public class Warehouse extends AttributeBase implements Serializable {
+public class Warehouse extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	public static final int DATA_TYPE = 2;
