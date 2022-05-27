@@ -4,74 +4,69 @@
 			"path": "pages/login/login",
 			"style": {
 				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
 				"app-plus": {
-					"subNVues": [{
-						"id": "honeywellScannerComponent",
-						"path": "pages/index/honeywellScannerComponent",
-						"style": {
-							"width": "0px",
-							"height": "0px"
+					"subNVues": [
+						{
+							"id": "honeywellScannerComponent",
+							"path": "components/honeywellScannerComponent",
+							"style": {
+								"width": "0px",
+								"height": "0px"
+							}
 						}
-					}]
+					]
 				}
 			}
 		},
 		{
-			"path": "pages/index/honeywellScannerComponent",
+			"path": "components/honeywellScannerComponent",
 			"style": {
 				"navigationBarTitleText": ""
 			}
-
-		}, {
+		},
+		{
 			"path": "pages/reviseIp/reviseIp",
 			"style": {
-			"enablePullDownRefresh": false,
-			"navigationStyle": "custom"
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": "配置"
 			}
-		}, {
+		},
+		{
 			"path": "pages/home/home",
 			"style": {
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom",
 				"app-plus": {
-					"subNVues": [{
-						"id": "honeywellScannerComponent",
-						"path": "pages/index/honeywellScannerComponent",
-						"style": {
-							"width": "0px",
-							"height": "0px"
+					"subNVues": [
+						{
+							"id": "honeywellScannerComponent",
+							"path": "components/honeywellScannerComponent",
+							"style": {
+								"width": "0px",
+								"height": "0px"
+							}
 						}
-					}]
+					]
 				}
 			}
-
-		}
-	    ,{
-            "path" : "pages/userSetting/userSetting",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "个人中心",
-                "enablePullDownRefresh": false,
-				"navigationBarBackgroundColor": "#009FCC"
-            }
-
-        },
+		},
 		{
-		    "path" : "pages/userSetting/pwdSetting",
-		    "style" :
-		    {
-		        "navigationBarTitleText": "修改密码",
-		       "enablePullDownRefresh": false,
-
-			   "navigationBarBackgroundColor": "#009FCC"
-		    }
-
+			"path": "pages/userSetting/userSetting",
+			"style": {
+				"navigationBarTitleText": "个人中心",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/userSetting/pwdSetting",
+			"style": {
+				"navigationBarTitleText": "修改密码",
+				"enablePullDownRefresh": false
+			}
 		}
-    ],
+	],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarBackgroundColor": "#33cbcc"
 	}
 }

@@ -74,6 +74,12 @@ const install = (Vue, vm) => {
 			url: url
 		})
 	}
+	
+	const navigateBack = () => {
+		uni.navigateBack({
+			delta:1,//返回层数，2则上上页
+		})
+	}
 
 	// URL参数转对象
 	const paramsToObj = (url) => {
@@ -158,6 +164,7 @@ const install = (Vue, vm) => {
 		login,
 		logout,
 		route,
+		navigateBack,
 		checkLogin,
 		paramsToObj,
 		refreshPage,

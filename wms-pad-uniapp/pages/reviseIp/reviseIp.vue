@@ -1,14 +1,10 @@
 <template>
-
 	<view>
-		<u-navbar  @leftClick="navigateBack"  :fixed="false" :autoBack="false" title="配置">
-			<!-- <image slot="right" src="/static/images/home/message.png" class="message-icon" mode="widthFix"></image> -->
-		</u-navbar>
-		<div class="logodiv">
+		<view class="logodiv">
 			<image src="/static/images/login.png" style="width: 100px;height: 100px;" mode="widthFix"></image>
-		</div>
+		</view>
 		<view class="cell">
-			<div>
+			<view>
 				<u--form>
 					<u-form-item label="地址" borderBottom>
 						<u--input v-model="address" border="none"></u--input>
@@ -16,18 +12,20 @@
 				</u--form>
 				<view class="input-box">
 				</view>
-				<button  :class="vuex_theme" @click="submit">确认</button>
-			</div>
+				<button class="submit_button" @click="submit">确认</button>
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
-	import setting from '@/common/setting'
+	import setting from '@/common/setting.js'
+	
 	export default {
 		data() {
 			return {
-				address: setting.apiUrl,
+				address: this.$store.state.baseUrl || setting.apiUrl,
+				oldAddress: this.$store.state.baseUrl || setting.apiUrl
 			}
 		},
 		onLoad() {
@@ -40,22 +38,15 @@
 			scannerCallback(data) {
 				this.address=data
 			},
-			navigateBack(){
-				uni.navigateBack({
-					delta:1,//返回层数，2则上上页
-				})
-			},
 			submit() {
-				if (this.address == setting.apiUrl) {
-						//uni.navigateBack()//默认delta:1
-						uni.navigateBack({
-							delta:1,//返回层数，2则上上页
-						})
-	                 return;
+				if (this.address === this.oldAddress) {
+					uni.$u.func.navigateBack();
+					return;
 				}
-                uni.$u.toast('修改配置中，修改配置完成自动退出');
+                
                 setting.apiUrl = this.address;
-                uni.setStorageSync('address', this.address)
+				this.$u.vuex('baseUrl', this.address);
+				uni.$u.toast('修改配置中，修改配置完成自动退出');
                 plus.runtime.quit();
 			}
 		}
@@ -64,4 +55,5 @@
 
 <style lang="scss">
 	@import 'reviseIp.scss';
+	@import '@/static/common.scss';
 </style>

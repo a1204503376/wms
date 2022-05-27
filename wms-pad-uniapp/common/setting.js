@@ -11,7 +11,7 @@ module.exports = {
 	// 租户
 	tenantId: '000000',
 	// api请求地址url
-	apiUrl: uni.getStorageSync('address') || 'http://localhost:8088',
+	apiUrl: 'http://localhost:8088',
 	// 后端数据的接收方式application/json;charset=UTF-8或者application/x-www-form-urlencoded;charset=UTF-8
 	contentType: 'application/json;charset=UTF-8',
 	// 操作正常code
@@ -19,5 +19,7 @@ module.exports = {
 	// 客户端ID,对应数据库blade_client表中的client_id字段
 	clientId: 'saber',
 	// 客户端密钥,对应数据库blade_client表中的client_secret字段
-	clientSecret: 'saber_secret'
+	clientSecret: 'saber_secret',
+	// 自定义导航栏的颜色
+	customNavigationBarBackgroundColor: '#33cbcc'
 }
