@@ -14,11 +14,14 @@ const install = (Vue, vm) => {
 		vm.$u.vuex('expiresIn', userInfo.expires_in)
 		vm.$u.vuex('isLogin', true)
 		api.getMenuList().then(data => {
-			data.data.forEach((item, index) => {
-				if(item.systemTypeName=='PDA'){
-				uni.setStorageSync('menuList', item.children)
-				}
-			})
+			if (tool.isNotEmpty(data.data) && tool.isArray(data.data)){
+				data.data.forEach((item, index) => {
+					if(item.systemTypeName=='PDA'){
+					uni.setStorageSync('menuList', item.children)
+					}
+				})
+			}
+
 			uni.hideLoading();
 			uni.redirectTo({
 				url: '/pages/home/home'
