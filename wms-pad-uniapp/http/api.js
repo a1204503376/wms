@@ -1,6 +1,7 @@
 import {
 	clientId,
-	clientSecret
+	clientSecret,
+	successCode
 } from '@/common/setting'
 import {
 	options
@@ -49,7 +50,7 @@ http.interceptors.response.use((response) => {
 
 	// 对错误信息进行统一拦截
 	const statusCode = response.data.code || response.statusCode;
-	if (statusCode !== 200 || response.data.error_code) {
+	if (statusCode !== successCode || response.data.error_code) {
 		const errMsg = response.data.msg || response.data.error_description || '未知错误,可能是网络连接失败导致,来自api拦截器';
 		uni.$u.toast(errMsg);
 		return Promise.reject(response);

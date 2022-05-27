@@ -66,20 +66,17 @@ import fileDownload from "js-file-download";
                 <el-tooltip
                     :enterable="false"
                     class="item"
-                    content="本地导出"
-                    effect="dark"
-                    placement="top"
-                >
-                    <el-button circle icon="el-icon-bottom" size="mini"></el-button>
-                </el-tooltip>
-                <el-tooltip
-                    :enterable="false"
-                    class="item"
                     content="服务端导出"
                     effect="dark"
                     placement="top"
                 >
                     <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
+                </el-tooltip>
+                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
+                    <excel-export ref="excelExport" :sheet="sheet" style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
+                        </el-button>
+                    </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
@@ -148,6 +145,7 @@ import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import {listMixin} from "@/mixins/list";
 import {exportFile, page, remove} from "@/api/wms/basics/customer";
 import fileDownload from "js-file-download";
+import {ExcelExport} from 'pikaz-excel-js';
 
 
 
@@ -160,6 +158,7 @@ export default {
         NodesAsnBillState,
         NodesMasterPage,
         NodesDateRange,
+        ExcelExport
     },
     mixins: [listMixin],
     data() {
@@ -241,6 +240,9 @@ export default {
         this.getTableData();
     },
     computed: {
+        onExportLocalData() {
+            this.exportCurrentDataToExcel("客户表","客户表");
+        },
         permissionObj() {
             return {
                 search: this.vaildData(this.permission.customer_view, false),

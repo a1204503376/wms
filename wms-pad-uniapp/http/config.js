@@ -4,7 +4,7 @@ import {
 } from '@/common/setting'
 
 var options = {
-	baseURL: apiUrl,
+	baseURL: uni.getStorageSync('baseUrl') || apiUrl,
 	header: {
 		'Content-Type': contentType,
 		'User-Type': 'pda',

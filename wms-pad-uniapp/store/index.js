@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import setting from '@/common/setting.js'
 Vue.use(Vuex)
 
 let lifeData = {};
@@ -12,7 +13,7 @@ try {
 }
 
 // 需要永久存储，且下次APP启动需要取出的，在state中的变量名
-let saveStateKeys = ['userInfo', 'accessToken', 'isLogin'];
+let saveStateKeys = ['baseUrl', 'userName', 'accessToken'];
 
 // 保存变量到本地存储中
 const saveLifeData = function(key, value) {
@@ -28,21 +29,23 @@ const saveLifeData = function(key, value) {
 		uni.setStorageSync('lifeData', tmp);
 	}
 }
+
 const store = new Vuex.Store({
-	// 下面这些值仅为示例，使用过程中请删除
 	state: {
-		// 如果上面从本地获取的lifeData对象下有对应的属性，就赋值给state中对应的变量
-		userInfo: lifeData.userInfo ? lifeData.userInfo : {
-			avatar: '',
-			nick_name: '游客',
-			tenant_id: '暂无'
-		},
-		accessToken: lifeData.accessToken ? lifeData.accessToken : '',
-		isLogin: lifeData.isLogin ? lifeData.isLogin : false,
-		// 如果version无需保存到本地永久存储，无需lifeData.version方式
-		version: '1.0.0',
-		//全局CSS样式
-		vuex_theme: uni.getStorageSync('vuex_theme') ? uni.getStorageSync('vuex_theme') : 'light'
+		// api请求地址
+		baseUrl: lifeData.baseUrl || setting.apiUrl,
+		// 用户信息，对象：account，userName，userId,loginTime
+		user: lifeData.userName ? {userName: lifeData.userName} : {},
+		// 用户是否登录
+		isLogin: false,
+		accessToken: '',
+		refreshToken: '',
+		// token失效时间
+		expiresIn: '',
+		// 签到状态
+		signStatus: false,
+		// 菜单列表
+		menuList:{}
 	},
 	mutations: {
 		$uStore(state, payload) {
@@ -64,11 +67,6 @@ const store = new Vuex.Store({
 			}
 			// 保存变量到本地，见顶部函数定义
 			saveLifeData(saveKey, state[saveKey])
-		},
-		//存储全局CSS样式
-		changeTheme(state, theme) {
-			state.vuex_theme = theme;
-			uni.setStorageSync('vuex_theme', theme);
 		}
 	}
 })

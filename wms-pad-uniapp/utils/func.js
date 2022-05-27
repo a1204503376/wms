@@ -1,4 +1,5 @@
 import api from '@/api/user.js'
+import tool from '@/utils/tool.js'
 // 全局公共方法
 const install = (Vue, vm) => {
 
@@ -6,20 +7,24 @@ const install = (Vue, vm) => {
 	const login = (userInfo) => {
 		uni.setStorageSync('username', userInfo.account)
 		uni.setStorageSync('signStatus',false)
+		uni.setStorageSync('loginTime',new Date().toLocaleDateString())
 		vm.$u.vuex('userInfo', userInfo)
 		vm.$u.vuex('accessToken', userInfo.access_token)
 		vm.$u.vuex('refreshToken', userInfo.refresh_token)
 		vm.$u.vuex('expiresIn', userInfo.expires_in)
 		vm.$u.vuex('isLogin', true)
 		api.getMenuList().then(data => {
-			data.data.forEach((item, index) => {
-				if(item.systemTypeName=='PDA'){
-				uni.setStorageSync('menuList', item.children)
-				}
-			})
+			if (tool.isNotEmpty(data.data) && tool.isArray(data.data)){
+				data.data.forEach((item, index) => {
+					if(item.systemTypeName=='PDA'){
+					uni.setStorageSync('menuList', item.children)
+					}
+				})
+			}
+
 			uni.hideLoading();
 			uni.redirectTo({
-				url: '/pages/menu/home/home'
+				url: '/pages/home/home'
 			})
 		})
 		
@@ -70,6 +75,12 @@ const install = (Vue, vm) => {
 		}
 		uni.navigateTo({
 			url: url
+		})
+	}
+	
+	const navigateBack = () => {
+		uni.navigateBack({
+			delta:1,//返回层数，2则上上页
 		})
 	}
 
@@ -156,6 +167,7 @@ const install = (Vue, vm) => {
 		login,
 		logout,
 		route,
+		navigateBack,
 		checkLogin,
 		paramsToObj,
 		refreshPage,

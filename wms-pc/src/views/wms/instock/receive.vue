@@ -73,20 +73,17 @@
                 <el-tooltip
                     :enterable="false"
                     class="item"
-                    content="本地导出"
-                    effect="dark"
-                    placement="top"
-                >
-                    <el-button circle icon="el-icon-bottom" size="mini"></el-button>
-                </el-tooltip>
-                <el-tooltip
-                    :enterable="false"
-                    class="item"
                     content="服务端导出"
                     effect="dark"
                     placement="top"
                 >
                     <el-button circle icon="el-icon-download" @click="exportData" size="mini"></el-button>
+                </el-tooltip>
+                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
+                    <excel-export ref="excelExport" :sheet="sheet" style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
+                        </el-button>
+                    </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
@@ -173,6 +170,7 @@ import NodesCustomer from "@/components/wms/select/NodesCustomer";
 import NodesLocation from "@/components/wms/select/NodesLocation";
 import NodesSku from "@/components/wms/select/NodesSku";
 import NodesSkuByQuery from "@/components/wms/select/NodesSkuByQuery";
+import {ExcelExport} from 'pikaz-excel-js';
 
 
 
@@ -189,7 +187,8 @@ export default {
         NodesWarehouse,
         NodesAsnBillState,
         NodesMasterPage,
-        NodesDateRange
+        NodesDateRange,
+        ExcelExport
     },
     mixins: [listMixin],
     data() {
@@ -300,6 +299,9 @@ export default {
         this.getTableData();
     },
     methods: {
+        onExportLocalData() {
+            this.exportCurrentDataToExcel("收货单","收货单");
+        },
         onViewDetails(id){
             this.$router.push({
                 name: '收货单详情',
@@ -381,6 +383,7 @@ export default {
                     });
             })
         },
+
         exportData() {
             this.loading = true;
             exportFile(this.form.params)

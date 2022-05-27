@@ -1,0 +1,77 @@
+.container {
+	min-height: 100vh;
+	overflow: hidden;
+}
+
+.swiper-box {
+	height: 400vh;
+}
+
+.message-icon {
+	width: 32rpx;
+	height: auto;
+	margin-right: 27rpx;
+}
+
+.tab {
+	margin-bottom: 10rpx;
+}
+
+.gitem {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+
+	.img {
+		width: 54rpx;
+		height: auto;
+		margin-bottom: 26rpx;
+	}
+
+	font-size: 28rpx;
+	font-family: PingFang SC;
+	font-weight: bold;
+	color: #030305;
+	line-height: 36rpx;
+}
+
+.menu {}
+
+.menu .menu-item {
+	border-bottom: 1px solid $theme-backgroup-color;
+	border-right: 1px solid $theme-backgroup-color;
+	padding-top: 10px;
+	height: 250rpx;
+	background-color: white;
+}
+
+.menu .menu-item .menu-number {
+	display: block;
+	text-align: center;
+	//line-height: 100px;
+	color: #7f7f7f;
+	margin-top: 10px;
+	font-weight: bold;
+	border: 1px solid $theme-backgroup-color;
+	margin-top: 3px;
+	width: 20px;
+	margin: 0 auto;
+	border-radius: 30px;
+}
+
+.menu .menu-item .menu-icon {
+	// font-size: 80rpx;
+	font-size: 40px;
+	color: $theme-backgroup-color;
+	margin-top: 5px;
+}
+
+.menu .menu-item .menu-text {
+	display: block;
+	text-align: center;
+	//line-height: 100px;
+	color: #7f7f7f;
+	margin-top: 10px;
+	font-weight: bold;
+}

@@ -61,20 +61,17 @@ import fileDownload from "js-file-download";
                 <el-tooltip
                     :enterable="false"
                     class="item"
-                    content="本地导出"
-                    effect="dark"
-                    placement="top"
-                >
-                    <el-button circle icon="el-icon-bottom" size="mini"></el-button>
-                </el-tooltip>
-                <el-tooltip
-                    :enterable="false"
-                    class="item"
                     content="服务端导出"
                     effect="dark"
                     placement="top"
                 >
                     <el-button circle icon="el-icon-download" size="mini" @click="excelCarrier"></el-button>
+                </el-tooltip>
+                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
+                    <excel-export ref="excelExport" :sheet="sheet" style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
+                        </el-button>
+                    </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
@@ -145,6 +142,7 @@ import fileDownload from "js-file-download";
     import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
     import fileDownload from "js-file-download";
     import {listMixin} from "@/mixins/list";
+    import {ExcelExport} from 'pikaz-excel-js';
     // eslint-disable-next-line no-unused-vars
     import {
         getCarriersPage,
@@ -161,7 +159,8 @@ import fileDownload from "js-file-download";
         components: {
             NodesSearchInput,
             NodesMasterPage,
-            NodesDateRange
+            NodesDateRange,
+            ExcelExport
         },
         mixins: [listMixin],
         data() {
@@ -260,6 +259,9 @@ import fileDownload from "js-file-download";
 
         },
         methods: {
+            onExportLocalData() {
+                this.exportCurrentDataToExcel("承运商表","承运商表");
+            },
             hideOnSinglePage() {
             },
             selectionChange(row) {

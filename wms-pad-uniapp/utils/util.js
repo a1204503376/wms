@@ -66,12 +66,6 @@ export const toggleGrayMode = (status) => {
         document.body.className = document.body.className.replace(' grayMode', '');
     }
 };
-/**
- * 设置主题
- */
-export const setTheme = (name) => {
-    document.body.className = name;
-}
 
 /**
  * 加密处理
