@@ -73,20 +73,26 @@ public class AsnFactory {
 		asnHeader.setBillTypeCd(addOrEditAsnBillRequest.getBillTypeCd());
 		// 备注
 		asnHeader.setAsnBillRemark(addOrEditAsnBillRequest.getAsnBillRemark());
-		// 供应商id
-		asnHeader.setSupplierId(supplier.getId());
-		// 供应商编码
-		asnHeader.setSupplierCode(supplier.getCode());
-		// 供应商名称
-		asnHeader.setSupplierName(supplier.getName());
-		// 库房id
-		asnHeader.setWhId(warehouse.getWhId());
-		// 库房编码
-		asnHeader.setWhCode(warehouse.getWhCode());
-		// 货主id
-		asnHeader.setWoId(owner.getWoId());
-		// 货主编码
-		asnHeader.setOwnerCode(owner.getOwnerCode());
+		if (Func.isNotEmpty(supplier)) {
+			// 供应商id
+			asnHeader.setSupplierId(supplier.getId());
+			// 供应商编码
+			asnHeader.setSupplierCode(supplier.getCode());
+			// 供应商名称
+			asnHeader.setSupplierName(supplier.getName());
+		}
+		if (Func.isNotEmpty(warehouse)) {
+			// 库房id
+			asnHeader.setWhId(warehouse.getWhId());
+			// 库房编码
+			asnHeader.setWhCode(warehouse.getWhCode());
+		}
+		if (Func.isNotEmpty(owner)) {
+			// 货主id
+			asnHeader.setWoId(owner.getWoId());
+			// 货主编码
+			asnHeader.setOwnerCode(owner.getOwnerCode());
+		}
 		// 入库方式，默认为常规入库
 		asnHeader.setInstoreType(10);
 		return asnHeader;

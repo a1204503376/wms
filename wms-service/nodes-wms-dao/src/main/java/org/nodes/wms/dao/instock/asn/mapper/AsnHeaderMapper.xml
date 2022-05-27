@@ -3,33 +3,33 @@
 <mapper namespace="org.nodes.wms.dao.instock.asn.mapper.AsnHeaderMapper">
 
     <select id="selectPageAsnBill" resultType="org.nodes.wms.dao.instock.asn.dto.output.PageResponse">
-        SELECT h.asn_bill_id,
+        SELECT DISTINCT
+        h.asn_bill_id,
         h.asn_bill_no,
         h.asn_bill_state,
         b.bill_type_name as billTypeName,
         h.supplier_code,
         h.supplier_name,
         h.external_order_no,
-        h.external_create_user,
+        u2.real_name as externalCreateUser,
         w.wh_name as whName,
         h.asn_bill_remark,
         h.create_time,
-        u.real_name as createUser,
+        u1.real_name as createUser,
         h.update_time
         FROM asn_header h
-        LEFT JOIN blade_user u
-        ON h.create_user = u.id
-        LEFT JOIN wms_bill_type b
-        ON h.bill_type_cd = b.bill_type_cd
-        LEFT JOIN wms_warehouse w
-        ON h.wh_id = w.wh_id
+        LEFT JOIN asn_detail d ON h.asn_bill_id = d.asn_bill_id
+        LEFT JOIN blade_user u1 ON h.create_user = u1.id
+        LEFT JOIN blade_user u2 ON h.external_create_user = u2.id
+        LEFT JOIN wms_bill_type b ON h.bill_type_cd = b.bill_type_cd
+        LEFT JOIN wms_warehouse w ON h.wh_id = w.wh_id
         <where>
             h.is_deleted = 0
             <if test="params.asnBillNo != null and params.asnBillNo != ''">
                 AND h.asn_bill_no = #{params.asnBillNo}
             </if>
             <if test="params.skuIdList != null and params.skuIdList.size >0">
-                AND d.sku_code IN
+                AND d.sku_id IN
                 <foreach collection="params.skuIdList" open="(" close=")" separator="," item="item">
                     #{item}
                 </foreach>
@@ -70,7 +70,7 @@
     </select>
 
     <select id="selectAsnBillList" resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnBillExportResponse">
-        SELECT
+        SELECT DISTINCT
         h.asn_bill_id,
         h.asn_bill_no,
         h.asn_bill_state,
@@ -87,7 +87,7 @@
         FROM asn_header h
         LEFT JOIN asn_detail d ON h.asn_bill_id = d.asn_bill_id
         LEFT JOIN blade_user u1 ON h.create_user = u1.id
-        LEFT JOIN blade_user u2 ON h.create_user = u2.id
+        LEFT JOIN blade_user u2 ON h.external_create_user = u2.id
         LEFT JOIN wms_bill_type b ON h.bill_type_cd = b.bill_type_cd
         LEFT JOIN wms_warehouse w ON h.wh_id = w.wh_id
         <where>
@@ -96,7 +96,7 @@
                 AND h.asn_bill_no = #{params.asn_bill_no}
             </if>
             <if test="params.skuIdList != null and params.skuIdList.size >0">
-                AND d.sku_code IN
+                AND d.sku_id IN
                 <foreach collection="params.skuIdList" separator="," item="item" close=")" open="(">
                     #{item}
                 </foreach>
@@ -168,34 +168,33 @@
           and h.is_deleted = 0
     </select>
 
-    <select id="selectAsnDetailViewByAsnBillId" resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnDetailViewResponse">
-        SELECT
-            asn_detail_id,
-            asn_line_no,
-            sku_code,
-            sku_name,
-            sku_spec,
-            um_name,
-            plan_qty,
-            scan_qty,
-            surplus_qty,
-            remark,
-            detail_status
+    <select id="selectAsnDetailViewByAsnBillId"
+            resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnDetailViewResponse">
+        SELECT asn_detail_id,
+               asn_line_no,
+               sku_code,
+               sku_name,
+               sku_spec,
+               um_name,
+               plan_qty,
+               scan_qty,
+               surplus_qty,
+               remark,
+               detail_status
         FROM asn_detail
         WHERE asn_bill_id = #{asnBillId}
     </select>
 
     <select id="selectLogActionById"
             resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnLogActionViewResponse">
-        SELECT
-            id,
-            user_account,
-            user_real_name,
-            type,
-            bill_id,
-            bill_no,
-            log,
-           update_time
+        SELECT id,
+               user_account,
+               user_real_name,
+               type,
+               bill_id,
+               bill_no,
+               log,
+               update_time
         FROM log_action
         WHERE bill_id = #{id}
     </select>

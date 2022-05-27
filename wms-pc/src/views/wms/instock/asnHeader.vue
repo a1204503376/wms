@@ -7,7 +7,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="物品编码">
-                    <nodes-sku v-model="form.params.sku" :multiple="true" style="width: 200px"></nodes-sku>
+                    <nodes-sku-by-query v-model="form.params.skuIdList" :multiple="true" style="width: 200px"></nodes-sku-by-query>
                 </el-form-item>
                 <el-form-item label="状态">
                     <nodes-asn-bill-state v-model="form.params.asnBillStateList" style="width: 200px"></nodes-asn-bill-state>
@@ -52,9 +52,8 @@
                     <el-button circle icon="el-icon-download" size="mini" @click="onExportData"></el-button>
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
-                    <excel-export ref="excelExport" :sheet="sheet" style="display: inline-block;margin-left: 10px">
-                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
-                        </el-button>
+                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet" style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData" />
                     </excel-export>
                 </el-tooltip>
 
@@ -65,7 +64,7 @@
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList" >
-                        <el-table-column v-if="column.prop === 'asnBillNo'" :key="index" show-overflow-tooltip v-bind="column">
+                        <el-table-column v-if="!column.hide && column.prop === 'asnBillNo'" :key="index" show-overflow-tooltip v-bind="column">
                             <template v-slot="scope">
                                 <el-link
                                     @click="onView(scope.row)"
@@ -75,7 +74,7 @@
                                 </el-link>
                                 </template>
                         </el-table-column>
-                        <el-table-column v-if="column.prop !== 'asnBillNo'" :key="index" show-overflow-tooltip v-bind="column">
+                        <el-table-column v-if="!column.hide && column.prop !== 'asnBillNo'" :key="index" show-overflow-tooltip v-bind="column">
                         </el-table-column>
                     </template>
                     <el-table-column fixed="right" label="操作" width="100">
@@ -110,6 +109,7 @@ import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesSku from "@/components/wms/select/NodesSku";
+import NodesSkuByQuery from "@/components/wms/select/NodesSkuByQuery";
 import {listMixin} from "@/mixins/list";
 import {exportData, getPage, remove} from "@/api/wms/instock/asnHeader";
 import fileDownload from "js-file-download";
@@ -126,6 +126,7 @@ export default {
         NodesAsnBillState,
         NodesMasterPage,
         NodesDateRange,
+        NodesSkuByQuery,
         ExcelExport
     },
     mixins: [listMixin],
@@ -134,11 +135,7 @@ export default {
             form: {
                 params: {
                     asnBillNo: '',
-                    sku: {
-                        skuId: '',
-                        skuCode: '',
-                        skuName: ''
-                    },
+                    skuIdList: [],
                     asnBillStateList: [10, 20],
                     createTimeDateRange: ['', ''],
                     supplier: '',
@@ -293,7 +290,14 @@ export default {
             return row.status === value;
         },
         onReset() {
-            console.log("重置了。。。");
+            this.form.params.asnBillNo = ''
+            this.form.params.skuIdList = []
+            this.form.params.asnBillStateList = [10, 20]
+            this.form.params.createTimeDateRange = ['', '']
+            this.form.params.supplier = ''
+            this.form.params.externalOrderNo = ''
+            this.form.params.externalCreateUser = ''
+            this.form.params.whIdList = []
         },
         onExportLocalData() {
             this.exportCurrentDataToExcel("ASN单","ASN单");
