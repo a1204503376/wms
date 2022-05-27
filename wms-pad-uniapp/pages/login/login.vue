@@ -1,7 +1,13 @@
 <template>
-	<view class="content">
-		<u-toast ref="uToast" />
+	<view>
+		
+	<u-navbar :leftIconSize="0"  rightIcon="setting" :rightIconSize="40" @rightClick="gotoAddress" :fixed="false"
+		:autoBack="false" :bgColor="navigationBarBackgroundColor"
+		titleStyle="color:#ffffff;font-size:21px">
+	</u-navbar>
+	<view  class="content">
 		<view class="top">
+		
 			<view class="logodiv">
 				<image :src="logoImgSrc" style="width: 100px;height: 100px;" mode="widthFix"></image>
 				<h2>{{name}}</h2>
@@ -28,15 +34,18 @@
 			</view>
 			<view>
 				<button class="submit-button" @click="submit">登录</button>
-				<button class="quit" @click="gotoAddress">配置</button>
 				<button class="quit" @click="quitApp">退出</button>
 			</view>
 			
 			<view class="logodiv">
 				<p>
-					@copyright 2022 北京节点通网络技术有限公司
+					@copyright 2022 
+				</p>
+				<p>
+					北京节点通网络技术有限公司
 				</p>
 			</view>
+		</view>
 		</view>
 	</view>
 </template>
@@ -50,6 +59,7 @@
 	export default {
 		data() {
 			return {
+				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				tenantId: setting.tenantId,
 				username: this.$store.state.userName || 'admin',
 				// TODO 测试时默认密码,正式需要删除,上面的admin
