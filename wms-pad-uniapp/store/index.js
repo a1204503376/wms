@@ -13,7 +13,7 @@ try {
 }
 
 // 需要永久存储，且下次APP启动需要取出的，在state中的变量名
-let saveStateKeys = ['baseUrl'];
+let saveStateKeys = ['baseUrl', 'userName'];
 
 // 保存变量到本地存储中
 const saveLifeData = function(key, value) {
@@ -31,17 +31,21 @@ const saveLifeData = function(key, value) {
 }
 
 const store = new Vuex.Store({
-	// 下面这些值仅为示例，使用过程中请删除
 	state: {
-		// 如果上面从本地获取的lifeData对象下有对应的属性，就赋值给state中对应的变量
-		userInfo: lifeData.userInfo ? lifeData.userInfo : {
-			avatar: '',
-			nick_name: '游客',
-			tenant_id: '暂无'
-		},
-		accessToken: lifeData.accessToken ? lifeData.accessToken : '',
-		isLogin: lifeData.isLogin ? lifeData.isLogin : false,
-		baseUrl: lifeData.baseUrl || setting.apiUrl
+		// api请求地址
+		baseUrl: lifeData.baseUrl || setting.apiUrl,
+		// 用户信息，对象：account，userName，userId,loginTime
+		user: lifeData.userName ? {userName: lifeData.userName} : {},
+		// 用户是否登录
+		isLogin: false,
+		accessToken: '',
+		refreshToken: '',
+		// token失效时间
+		expiresIn: '',
+		// 签到状态
+		signStatus: false,
+		// 菜单列表
+		menuList:{}
 	},
 	mutations: {
 		$uStore(state, payload) {
