@@ -21,8 +21,8 @@
 		</view>
 		<view>
 
-			<u-button class="bt-1" type="primary" @click="navigateBack" text="返回[Esc]"></u-button>
-			<u-button class="bt-2" type="primary" @click="submit" text="确认[Ent]"></u-button>
+			<u-button class="bottom-esc-button" type="primary" @click="navigateBack" text="返回[Esc]"></u-button>
+			<u-button class="bottom-submit-button" type="primary" @click="submit" text="确认[Ent]"></u-button>
 		</view>
 
 	</view>
@@ -79,9 +79,7 @@
 				this.newPwd1Focus = true
 			},
 			navigateBack() {
-				uni.navigateBack({
-					delta: 1, //返回层数，2则上上页
-				})
+				this.$u.func.navigateBack();
 			},
 			submit() {
 				this.newPwd1Focus = false;
@@ -102,5 +100,5 @@
 	};
 </script>
 <style lang="scss">
-	@import 'pwdSetting.scss';
+	@import '@/static/common.scss';
 </style>
