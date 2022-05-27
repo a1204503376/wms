@@ -35,11 +35,13 @@
                 <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">
                     <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
                 </el-tooltip>
-                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
-                    <el-button circle icon="el-icon-bottom" size="mini"></el-button>
-                </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="服务端导出" effect="dark" placement="top">
                     <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
+                </el-tooltip>
+                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
+                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet" style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData" />
+                    </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
@@ -97,6 +99,7 @@ import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import {listMixin} from "@/mixins/list";
 import {exportFile, page, remove} from "@/api/wms/basics/supplier";
 import fileDownload from "js-file-download";
+import {ExcelExport} from 'pikaz-excel-js'
 
 
 export default {
@@ -106,6 +109,7 @@ export default {
         NodesSearchInput,
         NodesMasterPage,
         NodesDateRange,
+        ExcelExport
     },
     mixins: [listMixin],
     data() {
@@ -239,6 +243,9 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
+        },
+        onExportLocalData() {
+            this.exportCurrentDataToExcel("供应商","供应商")
         },
         filterTag(value, row) {
             return row.status === value;
