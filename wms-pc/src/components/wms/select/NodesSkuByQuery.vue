@@ -5,6 +5,7 @@
         :default-first-option="true"
         :loading="loading"
         :remote-method="remoteMethod"
+        :collapse-tags="true"
         filterable
         placeholder="请输入物品编码或名称"
         remote
@@ -27,7 +28,6 @@
 <script>
 import {getSkuSelectResponseTop10List} from "@/api/wms/basics/sku";
 import debounce from "lodash/debounce";
-import func from "@/util/func";
 
 export default {
     name: "NodesSku",

@@ -87,10 +87,8 @@ export default {
             this.$nextTick(() => {
                 let height;
                 if (this.config.showPage) {
-                    console.log('innerHeight', window.innerHeight);
                     height = window.innerHeight - 100;
                 } else {
-                    console.log('notPage', window.innerHeight);
                     height = window.innerHeight - 50;
                 }
                 document.getElementById('container').style.height = `${height}px`;

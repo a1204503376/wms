@@ -4,9 +4,16 @@
 }
 
 .bottom-submit-button{
-	
+	width: 50%;
+	position: fixed;
+	bottom: 0;
+	margin-left: 49%;
+	background-color: $theme-backgroup-color;
 }
 
 .bottom-esc-button{
-	
+	width: 50%;
+	position: fixed;
+	bottom: 0;
+	background-color: $theme-second-backgroup-color;
 }
