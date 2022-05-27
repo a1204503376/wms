@@ -64,6 +64,13 @@
 				"navigationBarTitleText": "修改密码",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			"path": "pages/userSetting/signSetting",
+			"style": {
+				"navigationBarTitleText": "签到",
+				"enablePullDownRefresh": false
+			}
 		}
 	],
 	"globalStyle": {
