@@ -10,6 +10,7 @@ import org.junit.runners.MethodSorters;
 import org.nodes.wms.biz.application.AsnManageBiz;
 import org.nodes.wms.biz.instock.asn.impl.AsnBizImpl;
 import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
+import org.nodes.wms.dao.instock.asn.dto.input.AsnDetailRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnBillViewResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
@@ -19,6 +20,7 @@ import org.springblade.core.test.BladeBootTest;
 import org.springblade.core.test.BladeSpringRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,7 +66,7 @@ public class AsnTest {
 
 	@Test
 	public void findAsnBillViewDetailByIdTest(){
-		AsnBillViewResponse asnBillViewResponse = asnBiz.findAsnBillViewDetailByAsnBillId(1527561895219900417L);
+		AsnBillViewResponse asnBillViewResponse = asnBiz.findAsnBillViewDetailByAsnBillId(1527561445477265410L);
 //		System.out.println(asnDetailResponse);
 //		Assertions.assertEquals(1,asnDetailResponse);
 	}
@@ -78,22 +80,25 @@ public class AsnTest {
 
 	@Test
 	public void insertTest(){
-		AddOrEditAsnBillRequest addAsnBillRequest = new AddOrEditAsnBillRequest();
-//		addAsnBillRequest.setBillTypeCd("10");
-//		addAsnBillRequest.setSupplierCode("gys1001");
-//		addAsnBillRequest.setSkuName("供应商1001");
-//		addAsnBillRequest.setWhId(10000L);
-//		addAsnBillRequest.setAsnBillRemark("ASN头备注");
-//
-//		addAsnBillRequest.setAsnLineNo("1");
-//		addAsnBillRequest.setSkuCode("wp10");
-//		addAsnBillRequest.setSkuName("物品10号");
-//		addAsnBillRequest.setUmCode("kg");
-//		addAsnBillRequest.setUmName("千克");
-//		addAsnBillRequest.setBaseUmCode("g");
-//		addAsnBillRequest.setBaseUmName("克");
-//		addAsnBillRequest.setPlanQty(BigDecimal.valueOf(66));
-//		addAsnBillRequest.setRemark("ASN明细备注");
-		asnBiz.add(addAsnBillRequest);
+		AddOrEditAsnBillRequest addOrEditAsnBillRequest = new AddOrEditAsnBillRequest();
+		for (int i = 0; i < 99; i++) {
+			addOrEditAsnBillRequest.setBillTypeCd("10");
+			addOrEditAsnBillRequest.setSupplierId(2L);
+			addOrEditAsnBillRequest.setWhId(1L);
+			addOrEditAsnBillRequest.setAsnBillRemark("ASN头备注");
+
+			List<AsnDetailRequest> list = new ArrayList<>();
+			for (int j = 0; j < 2; j++) {
+				AsnDetailRequest asnDetailRequest = new AsnDetailRequest();
+				asnDetailRequest.setAsnLineNo("10");
+				asnDetailRequest.setRemark("明细备注");
+				asnDetailRequest.setPlanQty(new BigDecimal(0));
+				asnDetailRequest.setSkuId(1464200583655456770L);
+				asnDetailRequest.setUmCode("WF");
+				list.add(asnDetailRequest);
+			}
+			addOrEditAsnBillRequest.setAsnDetailList(list);
+			asnBiz.add(addOrEditAsnBillRequest);
+		}
 	}
 }
