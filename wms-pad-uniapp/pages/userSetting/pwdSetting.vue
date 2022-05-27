@@ -1,7 +1,5 @@
 <template>
 	<view>
-		<!-- <u-navbar  @leftClick="navigateBack" : :fixed="false" :autoBack="false" title="修改密码" >
-		    </u-navbar> -->
 		<view style="margin-top: 5%;margin-left:5%;margin-right: 5%;">
 			<u--form labelPosition="left" :model="form" :rules="rules" ref="uForm">
 				<u-form-item prop="userInfo.oldPassword" borderBottom ref="item1">
@@ -16,15 +14,12 @@
 					<u--input v-model="form.userInfo.newPassword1" border="none" :focus="newPwd1Focus"
 						placeholder="请输入确认密码" @confirm="submit"></u--input>
 				</u-form-item>
-
 			</u--form>
 		</view>
 		<view>
-
 			<u-button class="bottom-esc-button" type="primary" @click="navigateBack" text="返回[Esc]"></u-button>
 			<u-button class="bottom-submit-button" type="primary" @click="submit" text="确认[Ent]"></u-button>
 		</view>
-
 	</view>
 </template>
 <script>
@@ -89,10 +84,7 @@
 						md5(this.form.userInfo.oldPassword),
 						md5(this.form.userInfo.newPassword),
 						md5(this.form.userInfo.newPassword1)).then(data => {
-
 						this.navigateBack();
-
-
 					})
 				})
 			}
