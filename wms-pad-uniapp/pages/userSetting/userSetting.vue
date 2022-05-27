@@ -2,8 +2,9 @@
 	<view>
 		<view class="user-box">
 			<view class="user">
-				<img src="/static/images/login.png" />
+				<u--image  width="80px" height="80px" src="/static/images/login.png"></u--image>
 			</view>
+			
 			<view class="user-name" format="yyyy/MM/dd" style=" font-weight: bolder">用户名：{{ username }}
 				<br /><br />登录时间:{{loginTime}}
 			</view>
@@ -29,8 +30,8 @@
 	export default {
 		data() {
 			return {
-				username: uni.getStorageSync('username'),
-				loginTime: uni.getStorageSync('loginTime')
+				username: this.$store.state.userName,
+				loginTime: this.$store.state.loginTime
 			}
 		},
 		methods: {
