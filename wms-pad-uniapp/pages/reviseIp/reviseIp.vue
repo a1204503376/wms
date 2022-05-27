@@ -12,7 +12,7 @@
 				</u--form>
 				<view class="input-box">
 				</view>
-				<button class="submit_button" @click="submit">确认</button>
+				<button class="submit-button" @click="submit">确认</button>
 			</view>
 		</view>
 	</view>

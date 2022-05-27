@@ -27,7 +27,7 @@
 				</u--form>
 			</view>
 			<view>
-				<button class="submit_button" @click="submit">登录</button>
+				<button class="submit-button" @click="submit">登录</button>
 				<button class="quit" @click="gotoAddress">配置</button>
 				<button class="quit" @click="quitApp">退出</button>
 			</view>
@@ -63,8 +63,10 @@
 			};
 		},
 		onLoad() {
+			// #ifdef APP-PLUS
 			let subNVue = uni.getSubNVueById('honeywellScannerComponent');
 			subNVue.hide();
+			// #endif
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
