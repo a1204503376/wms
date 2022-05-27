@@ -5,44 +5,21 @@ const install = (Vue, vm) => {
 
 	// 登录成功之后的操作
 	const login = (userInfo) => {
-		uni.setStorageSync('username', userInfo.account)
-		uni.setStorageSync('signStatus',false)
-		uni.setStorageSync('loginTime',new Date().toLocaleDateString())
-		vm.$u.vuex('userInfo', userInfo)
+		vm.$u.vuex('userName', userInfo.account)
+		vm.$u.vuex('loginTime',new Date().toLocaleDateString())
 		vm.$u.vuex('accessToken', userInfo.access_token)
 		vm.$u.vuex('refreshToken', userInfo.refresh_token)
 		vm.$u.vuex('expiresIn', userInfo.expires_in)
 		vm.$u.vuex('isLogin', true)
-		api.getMenuList().then(data => {
-			if (tool.isNotEmpty(data.data) && tool.isArray(data.data)){
-				data.data.forEach((item, index) => {
-					if(item.systemTypeName=='PDA'){
-					uni.setStorageSync('menuList', item.children)
-					}
-				})
-			}
-
-			uni.hideLoading();
-			uni.redirectTo({
-				url: '/pages/home/home'
-			})
+		uni.hideLoading();
+		uni.redirectTo({
+			url: '/pages/home/home'
 		})
-		
 	}
 	
 	// 退出登录
 	const logout = () => {
-		vm.$u.vuex('userInfo', {
-			avatar: '',
-			nick_name: '游客',
-			tenant_id: '暂无'
-		})
 		vm.$u.vuex('accessToken', '')
-		vm.$u.vuex('isLogin', false)
-		vm.$u.vuex('userInfo', '')
-		vm.$u.vuex('refreshToken', '')
-		vm.$u.vuex('expiresIn', '')
-		uni.setStorageSync('menuList', '')
 		uni.redirectTo({
 			url: '/pages/login/login'
 		})

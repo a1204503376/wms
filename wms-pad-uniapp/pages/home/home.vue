@@ -22,14 +22,15 @@
 <script>
 	import api from '@/api/user.js'
 	import setting from '@/common/setting'
+	import tool from '@/utils/tool.js'
 	export default {
 		data() {
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				swiperHeight: 0,
 				current: 0,
-				menuList: [],
-				username: uni.getStorageSync('username')
+				menuList: this.$store.state.menuList,
+				username: this.$store.state.userName
 			};
 		},
 		onReady() {
@@ -52,7 +53,22 @@
 			});
 		},
 		onLoad() {
+			// debugger
+			uni.showLoading({
+				title: '加载中'
+			})
 			uni.$u.func.registerScanner(this.scannerCallback);
+			api.getMenuList().then(data => {
+				if (tool.isNotEmpty(data.data) && tool.isArray(data.data)){
+					data.data.forEach((item, index) => {
+						if(item.systemTypeName=='PDA'){
+						 this.menuList=item.children;
+						 vm.$u.vuex('menuList', item.children);
+						}
+					})
+				}	
+			})
+			uni.hideLoading();
 			plus.key.addEventListener('keydown', function(KeyEvent) {
 				this.$u.func.showToast({
 					title: "按下了键：" + JSON.stringify(KeyEvent),
@@ -60,13 +76,12 @@
 				this.$u.func.showToast({
 					title: "按下了键：" + KeyEvent.keyCode,
 				})
-			});
+			});	
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
 		},
 		onShow() {
-			this.menuList = uni.getStorageSync('menuList');
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {

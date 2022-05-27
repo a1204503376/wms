@@ -51,7 +51,7 @@
 		data() {
 			return {
 				tenantId: setting.tenantId,
-				username: uni.getStorageSync('username') || 'admin',
+				username: this.$store.state.userName || 'admin',
 				// TODO 测试时默认密码,正式需要删除,上面的admin
 				password: '123456',
 				addressDisplay: true,
@@ -61,6 +61,16 @@
 				passwordFocus: false,
 				logoImgSrc: setting.logo
 			};
+		},
+		onReady() {
+			//App自动跟新判断
+			// #ifdef APP-PLUS
+			console.log('APP-PLUS')
+			// #endif
+
+			// #ifdef H5
+			console.log('APP-PLUS')
+			// #endif
 		},
 		onLoad() {
 			// #ifdef APP-PLUS
