@@ -1,7 +1,6 @@
 <template>
 	<view class="container">
-				<u-navbar  leftIcon="arrow-left" :leftIconSize="20" leftIconColor="#fff"
-			@leftClick="closePage" :fixed="false"
+		<u-navbar leftIcon="arrow-left" :leftIconSize="20" leftIconColor="#fff" @leftClick="closePage" :fixed="false"
 			:autoBack="false" :title="title" :bgColor="navigationBarBackgroundColor"
 			titleStyle="color:#ffffff;font-size:21px">
 		</u-navbar>
@@ -30,14 +29,14 @@
 				current: 0,
 				childrenMenu: uni.getStorageSync('childrenMenu'),
 				username: this.$store.state.userName,
-				title:''
+				title: ''
 			};
 		},
 		onReady() {
-		
+
 		},
 		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
-			this.title=option.title; 
+			this.title = option.title;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -48,7 +47,7 @@
 		methods: {
 			navTo(menu) {
 				//跳转页面
-				uni.$u.func.route(menu.path+'?title='+menu.name);
+				uni.$u.func.route(menu.path + '?title=' + menu.name);
 			},
 			closePage() {
 				uni.$u.func.navigateBack();

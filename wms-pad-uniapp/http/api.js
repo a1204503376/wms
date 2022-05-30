@@ -16,6 +16,7 @@ http.interceptors.request.use((config) => { // 可使用async await 做异步操
 	let accessToken = uni.getStorageSync('accessToken');
 	if (accessToken) {
 		config.header['Blade-Auth'] = 'bearer ' + accessToken;
+		config.header['Access-Control-Allow-Origin']='*'
 	}
 	if (config.text === true) {
 		config.headers["Content-Type"] = "text/plain";

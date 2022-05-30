@@ -60,15 +60,6 @@ public class UpdateVer implements Serializable {
 	@ApiModelProperty(value = "更新备注")
 	private String updateRemark;
 	/**
-	 * 版本更新时间
-	 */
-	@ApiModelProperty(value = "版本更新时间")
-	@JsonFormat(pattern = DateUtil.PATTERN_DATETIME)
-	@DateTimeFormat(pattern = DateUtil.PATTERN_DATETIME)
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-	private LocalDateTime verUpdateTime;
-	/**
 	 * 更新类型
 	 */
 	@ApiModelProperty(value = "更新类型")
