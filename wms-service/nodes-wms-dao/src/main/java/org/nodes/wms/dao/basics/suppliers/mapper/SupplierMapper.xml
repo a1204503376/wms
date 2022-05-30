@@ -30,19 +30,19 @@
                 AND s.name LIKE #{simpleNameLike}
             </if>
             <if test=" query.code !=null and query.code != '' ">
-                AND s.code LIKE concat( '%' + #{query.code} + '%' )
+                AND s.code LIKE concat( '%' , #{query.code} , '%' )
             </if>
             <if test=" query.createTimeBegin !=null ">
                 AND s.create_time &gt;= #{query.createTimeBegin}
             </if>
             <if test=" query.createTimeEnd !=null ">
-                AND s.create_time &gt;= #{query.createTimeEnd}
+                AND s.create_time &lt;= #{query.createTimeEnd}
             </if>
             <if test=" query.updateTimeBegin !=null ">
                 AND s.update_time &gt;= #{query.updateTimeBegin}
             </if>
             <if test=" query.updateTimeEnd !=null ">
-                AND s.update_time &gt;= #{query.updateTimeEnd}
+                AND s.update_time &lt;= #{query.updateTimeEnd}
             </if>
         </where>
         <if test=" page.orders ==null or page.orders.size ==0 ">

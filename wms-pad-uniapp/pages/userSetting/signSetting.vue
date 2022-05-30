@@ -1,7 +1,9 @@
 <template>
 	<view class="parentClass">
-		<br /><br />
-		<view class="dateClass"> {{date}} </view>
+		<br />
+		<view class="date">
+			{{date}}
+		</view>
 		<view>
 			<view class="bigRound">
 				<view class="smallRound" @click="onClick">
@@ -9,8 +11,11 @@
 				</view>
 			</view>
 		</view>
-		<view>
-			<p>签到状态</p>
+		<view id="footer">
+			<view class="signType">
+				签到状态
+				<!-- <u--text text="签到状态" size="18px" :bold="true" margin="10px"></u--text> -->
+			</view>
 			<view id="line"></view>
 		</view>
 		<!-- <view class="u-page">
@@ -30,10 +35,9 @@
 	export default {
 		data() {
 			return {
-				date: new Date(),
+				date: '',
 				type: "签到",
-				list: [
-					{
+				list: [{
 						icon: "我是头像",
 						name: "小王",
 						createTime: '2022-05-26 17:24:33',
@@ -80,8 +84,8 @@
 				this.type = this.type === "签到" ? "签退" : "签到"
 			},
 			// 列表触底触发的事件
-			scrolltolower(){
-				
+			scrolltolower() {
+
 			},
 			// 时间格式化
 			dateFormat() {
@@ -116,7 +120,7 @@
 		}
 	}
 </script>
-	
+
 <style lang="scss">
 	@import 'signSetting.scss';
 </style>

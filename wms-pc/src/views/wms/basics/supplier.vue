@@ -3,10 +3,10 @@
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-form-item label="供应商编码">
-                    <el-input v-model="form.params.code"></el-input>
+                    <el-input :clearable="true" v-model.trim="form.params.code"></el-input>
                 </el-form-item>
                 <el-form-item label="供应商名称">
-                    <el-input v-model="form.params.name"></el-input>
+                    <el-input :clearable="true" v-model.trim="form.params.name"></el-input>
                 </el-form-item>
             </template>
             <template v-slot:expandSearch>
@@ -198,8 +198,8 @@ export default {
             this.form.params = {
                 name: '',
                 code: '',
-                createTimeDateRange: [],
-                updateTimeDateRange: []
+                createTimeDateRange: ["",""],
+                updateTimeDateRange: ["",""]
             }
         },
         onRemove() {

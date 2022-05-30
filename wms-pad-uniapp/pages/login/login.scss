@@ -6,7 +6,7 @@ span {
 	text-align: center;
 	display: block;
 	flex-wrap: wrap;
-	margin-top: 0.8rem;
+	margin-top: 0.5rem;
 
 	h3 {
 		font-size: 20px;
@@ -31,7 +31,7 @@ span {
 }
 
 .content {
-	display: flex;
+	// display: flex;
 	flex-direction: column;
 	justify-content: space-around;
 	align-items: center;
@@ -46,7 +46,6 @@ span {
 	.logo {
 		display: block;
 		width: 281rpx;
-		height: auto;
 		margin: 0 auto 120rpx;
 	}
 
@@ -115,7 +114,7 @@ span {
 
 	button {
 		text-align: center;
-		margin-top: 90rpx;
+		margin-top: 60rpx;
 		border: none;
 		width: 572rpx;
 		height: 86rpx;
