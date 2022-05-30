@@ -40,8 +40,42 @@ const updatePassword = (id,oldPassword,newPassword,newPassword1) => {
 		}
 	})
 }
+
+//签到
+const sign = (loginStatus,token,suoId) => {
+	return http.request({
+		url: '/api/ApiPDA/userOnlinesubmit',
+		method: 'post',
+		data:{
+			loginStatus,
+			suoId,
+			token
+		} 
+	})
+}
+
+const userOnlineList = (user) => {
+	return http.request({
+		url: '/api/ApiPDA/userOnlineList',
+		method: 'get',
+		params: user
+	})
+	
+}
+
+const userRegisterList = () => {
+	return http.request({
+		url: '/api/ApiPDA/userRegisterList',
+		method: 'get',
+	})
+}
+
+
 export default {
 	token,
 	getMenuList,
-	updatePassword
+	updatePassword,
+	userOnlineList,
+	userRegisterList,
+	sign
 }
