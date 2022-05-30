@@ -1,21 +1,15 @@
-.user {
-	width:80px;
-	height:80px;
-	margin-left:15%;
-	border-radius:50%;
-	overflow:hidden;
+
+  .demo-layout {
+	height:25px;
+	border-radius:4px;
 }
-.user-name {
+.bg-purple {
 	font-weight:bolder;
-	margin-top:20rpx;
-	margin-right:50rpx;
-	font-size:36rpx;
-	font-family:Source Han Sans CN;
-	font-weight:500;
 }
-.user-box {
-	display:flex;
-	justify-content:space-between;
-	padding:20rpx 20rpx 0 64rpx;
-	margin-top:76rpx;
+.bg-purple-font {
+	background-color:$theme-backgroup-color;
+	height:20px;
+	color:white;
+	width:58px;
+	font-size:100%;
 }
