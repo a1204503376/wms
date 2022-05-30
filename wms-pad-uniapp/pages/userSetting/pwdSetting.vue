@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view @keyup.esc="esc">
 		<view style="margin-top: 5%;margin-left:5%;margin-right: 5%;">
 			<u--form labelPosition="left" :model="form" :rules="rules" ref="uForm">
 				<u-form-item prop="userInfo.oldPassword" borderBottom ref="item1">
@@ -64,6 +64,9 @@
 			};
 		},
 		methods: {
+			esc(){
+				this.navigateBack()
+			},
 			oldPwd() {
 				uni.hideKeyboard(); //隐藏软键盘				
 				this.newPwdFocus = true

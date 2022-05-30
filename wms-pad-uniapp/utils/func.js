@@ -11,6 +11,7 @@ const install = (Vue, vm) => {
 		vm.$u.vuex('refreshToken', userInfo.refresh_token)
 		vm.$u.vuex('expiresIn', userInfo.expires_in)
 		vm.$u.vuex('isLogin', true)
+		vm.$u.vuex('userId', userInfo.user_id)
 		uni.hideLoading();
 		uni.redirectTo({
 			url: '/pages/home/home'
