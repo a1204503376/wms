@@ -41,14 +41,20 @@
 					if (tool.isEmpty(res.data)) {
 						this.loginStatus = "1";
 					} else {
-						this.loginStatus = res.data[res.data.length-1].loginStatus;
+						this.loginStatus = res.data[res.data.length - 1].loginStatus;
 					}
 				})
 			},
 			// 1签到  0签退
 			onSign() {
 				api.sign(this.loginStatus, this.$store.state.accessToken, this.$store.state.userId).then((res) => {
-					this.loginStatus === "1" ? this.loginStatus="0" : this.loginStatus="1";
+					if (this.loginStatus === "1") {
+						this.loginStatus = "0";
+						this.$store.state.signStatus = "true";
+					} else {
+						this.loginStatus = "1";
+						this.$store.state.signStatus = "false";
+					}
 				})
 			},
 		},
