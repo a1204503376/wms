@@ -41,8 +41,8 @@ const updatePassword = (id,oldPassword,newPassword,newPassword1) => {
 	})
 }
 
-// 获取版本号
-const UpdateVerDetail = () => {
+// 检查跟新
+const CheckUpdate = () => {
 	return http.request({
 		url: '/api/ApiPDA/UpdateVerDetail',
 		method: 'POST',
