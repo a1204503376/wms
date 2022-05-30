@@ -1,7 +1,27 @@
 <script>
+	import api from '@/api/user.js'
+	import setting from '@/common/setting'
 	export default {
 		onLaunch: function() {
-			console.log('App Launch')
+			// #ifdef APP-PLUS
+			//App自动跟新判断
+			api.UpdateVerDetail().then(data => {
+				if (data.data.verName != setting.version) {
+					uni.showModal({ //提醒用户更新  
+						title: "更新提示",
+						content: '是否更新',
+						showCancel: false,
+						success: (res) => {
+							if (res.confirm) {
+								// this.doUpData(data.data.updateUrl)
+								// this.showdownLine = true
+								plus.runtime.openURL(data.data.updateUrl)
+							}
+						}
+					})
+				}
+			})
+			// #endif
 		},
 		onShow: function() {
 			console.log('App Show')
@@ -15,5 +35,5 @@
 <style lang="scss">
 	/* 注意要写在第一行，同时给style标签加入lang="scss"属性 */
 	@import "@/uni_modules/uview-ui/index.scss";
-	@import url("./common/icon/iconfont.scss");	
+	@import url("./static/icon/iconfont.scss");	
 </style>

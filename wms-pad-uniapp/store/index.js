@@ -34,8 +34,11 @@ const store = new Vuex.Store({
 	state: {
 		// api请求地址
 		baseUrl: lifeData.baseUrl || setting.apiUrl,
-		// 用户信息，对象：account，userName，userId,loginTime
-		user: lifeData.userName ? {userName: lifeData.userName} : {},
+		userName: lifeData.userName ? lifeData.userName : '',
+		account: '',
+		userId: '',
+		// 登录时间
+		loginTime: '',
 		// 用户是否登录
 		isLogin: false,
 		accessToken: '',

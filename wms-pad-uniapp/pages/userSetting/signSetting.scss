@@ -1,0 +1,48 @@
+.parentClass {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: $theme-backgroup-color;
+}
+
+.bigRound {
+	display: block;
+	border-radius: 50%;
+	width: 170px;
+	height: 170px;
+	background-color: #baeeef;
+	font-size: 35px;
+	margin: 15px auto;
+}
+
+.smallRound {
+	position: relative;
+	display: block;
+	border-radius: 50%;
+	width: 150px;
+	height: 150px;
+	background-color: $theme-fore-color;
+	top: 10px;
+	left: 10px;
+	text-align: center;
+	line-height: 150px;
+	color: $theme-backgroup-color;;
+}
+
+.signType {
+	color: $theme-fore-color;
+	font-weight: bold;
+	font-size: 18px;
+	margin: 10px;
+}
+.date {
+	color: $theme-fore-color;
+	font-weight: bold;
+	font-size: 16px;
+	text-align: center;
+}
+#footer #line {
+	width: 100%;
+	height: 1px;
+	border-top: solid $theme-fore-color;
+}

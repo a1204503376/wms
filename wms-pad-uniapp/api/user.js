@@ -16,7 +16,6 @@ const token = (tenantId, username, password, type) => {
 	})
 }
 
-
 // 获取PDA菜单
 const getMenuList = () => {
 	return http.request({
@@ -28,6 +27,7 @@ const getMenuList = () => {
 		}
 	})
 }
+
 const updatePassword = (id,oldPassword,newPassword,newPassword1) => {
 	return http.request({
 		url: '/api/ApiPDA/UpdatePassword',
@@ -40,8 +40,20 @@ const updatePassword = (id,oldPassword,newPassword,newPassword1) => {
 		}
 	})
 }
+
+// 获取版本号
+const UpdateVerDetail = () => {
+	return http.request({
+		url: '/api/ApiPDA/UpdateVerDetail',
+		method: 'POST',
+		data: {
+			updateVer:''
+		}
+	})
+}
 export default {
 	token,
 	getMenuList,
-	updatePassword
+	updatePassword,
+	UpdateVerDetail
 }
