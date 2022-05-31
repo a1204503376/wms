@@ -128,7 +128,7 @@ public class HoneywellScannerBroadcasts extends HoneywellScanner {
         /**
          * Get the result of decoded data
          */
-        public static final String ACTION_BARCODE_DATA = "com.nodes.plugin.honeywell.scanner.action.BARCODE_DATA";
+        public static final String ACTION_BARCODE_DATA = "INTERMEC";
 
         /**
          * Honeywell DataCollection Intent API

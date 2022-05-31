@@ -22,13 +22,13 @@ const getMenuList = () => {
 		url: '/api/ApiPDA/routes',
 		method: 'GET',
 		params: {
-			user: '',
-			topMenuId: '',
+			user:'',
+			topMenuId:'',
 		}
 	})
 }
 
-const updatePassword = (id, oldPassword, newPassword, newPassword1) => {
+const updatePassword = (id,oldPassword,newPassword,newPassword1) => {
 	return http.request({
 		url: '/api/ApiPDA/UpdatePassword',
 		method: 'POST',
@@ -47,7 +47,7 @@ const UpdateVerDetail = () => {
 		url: '/api/ApiPDA/UpdateVerDetail',
 		method: 'POST',
 		data: {
-			updateVer: ''
+			updateVer:''
 		}
 	})
 }

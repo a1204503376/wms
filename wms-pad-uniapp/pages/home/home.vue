@@ -14,6 +14,7 @@
 				</view>
 			</u-grid-item>
 		</u-grid>
+		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
 	</view>
 </template>
 
@@ -21,7 +22,11 @@
 	import api from '@/api/user.js'
 	import setting from '@/common/setting'
 	import tool from '@/utils/tool.js'
+	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {
+		components: {
+			keyboardListener
+		},
 		data() {
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
@@ -35,7 +40,6 @@
 
 		},
 		onLoad() {
-			// debugger
 			uni.showLoading({
 				title: '加载中'
 			})
@@ -50,18 +54,6 @@
 				}
 			})
 			uni.hideLoading();
-			//App自动跟新判断
-			// #ifdef APP-PLUS
-			plus.key.addEventListener('keydown', function(KeyEvent) {
-				this.$u.func.showToast({
-					title: "按下了键：" + JSON.stringify(KeyEvent),
-				})
-				this.$u.func.showToast({
-					title: "按下了键：" + KeyEvent.keyCode,
-				})
-			});
-			// #endif
-
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -70,6 +62,11 @@
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {
+			emitKeyDown(e) {
+				if (e.key >= 1 && e.key <= 9) {
+					this.navTo(this.menuLists[e.key - 1])
+				}
+			},
 			navTo(menu) {
 				if (tool.isNotEmpty(menu.children) && menu.children.length > 0) {
 					uni.setStorageSync('childrenMenu', menu.children)
