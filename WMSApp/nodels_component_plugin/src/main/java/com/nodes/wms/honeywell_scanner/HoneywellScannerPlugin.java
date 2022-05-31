@@ -1,9 +1,9 @@
-package com.nodes.dml.honeywell_scanner;
+package com.nodes.wms.honeywell_scanner;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import com.nodes.dml.HoneywellScannerComponent;
+import com.nodes.wms.HoneywellScannerComponent;
 
 public class HoneywellScannerPlugin implements ScannerCallBack {
 

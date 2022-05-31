@@ -1,4 +1,4 @@
-package com.nodes.dml.honeywell_scanner;
+package com.nodes.wms.honeywell_scanner;
 
 import android.content.Context;
 

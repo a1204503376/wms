@@ -5,7 +5,7 @@
         {
           "type": "module",
           "name": "dml-module1",
-          "class": "com.nodes.dml.TestModule"
+          "class": "com.nodes.wms.TestModule"
         }
       ]
     },
@@ -14,7 +14,7 @@
         {
           "type": "component",
           "name": "honeywell-scanner",
-          "class": "com.nodes.dml.HoneywellScannerComponent"
+          "class": "com.nodes.wms.HoneywellScannerComponent"
         }
       ]
     }
