@@ -101,10 +101,35 @@ export default class tool {
      * @param format
      * @returns {null}
      */
-    static format(date, format = 'YYYY-MM-DD HH:mm:ss') {
-		debugger
-        return date ? date.format(format) : null;
-    }
+    static format(dt, args) {
+            if(args == 'yyyy-M-d') {// yyyy-M-d
+            let year = dt.getFullYear();
+            let month = dt.getMonth() + 1;
+            let date = dt.getDate();
+            return `${year}-${month}-${date}`;
+        } else if(args == 'yyyy-M-d H:m:s'){// yyyy-M-d H:m:s
+            let year = dt.getFullYear();
+            let month = dt.getMonth() + 1;
+            let date = dt.getDate();
+            let hour = dt.getHours();
+            let minute = dt.getMinutes();
+            let second = dt.getSeconds();
+            return `${year}-${month}-${date} ${hour}:${minute}:${second}`;
+        } else if(args == 'yyyy-MM-dd') {// yyyy-MM-dd
+            let year = dt.getFullYear();
+            let month = (dt.getMonth() + 1).toString().padStart(2,'0');
+            let date = dt.getDate().toString().padStart(2,'0');
+            return `${year}-${month}-${date}`;
+        } else {// yyyy-MM-dd HH:mm:ss
+            let year = dt.getFullYear();
+            let month = (dt.getMonth() + 1).toString().padStart(2,'0');
+            let date = dt.getDate().toString().padStart(2,'0');
+            let hour = dt.getHours().toString().padStart(2,'0');
+            let minute = dt.getMinutes().toString().padStart(2,'0');
+            let second = dt.getSeconds().toString().padStart(2,'0');
+            return `${year}-${month}-${date} ${hour}:${minute}:${second}`;
+        }
+        }
 
     /**
      * 根据逗号联合
