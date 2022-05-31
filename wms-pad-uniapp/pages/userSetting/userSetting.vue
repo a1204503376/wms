@@ -23,7 +23,7 @@
 
 		</u-row>
 
-		<view style="margin-left: 10%;margin-right: 10%;">
+		<view class="pwd">
 			<br /><br />
 			<u--form>
 				<u-form-item borderBottom labelWidth="60" @click="toPwdSetting">
@@ -38,11 +38,17 @@
 				</u-form-item>
 			</u--form>
 		</view>
+		<view >
+		<u-button class="logout-bt" type="primary" @click="logout" text="退出登录"></u-button>
+		</view>
 	</view>
 </template>
 <script>
 	export default {
 		methods: {
+			logout(){
+				this.$u.func.logout();
+			},
 			toPwdSetting() {
 				uni.$u.func.route('/pages/userSetting/pwdSetting');
 			},

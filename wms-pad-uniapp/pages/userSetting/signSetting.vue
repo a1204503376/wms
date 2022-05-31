@@ -7,7 +7,7 @@
 				</view>
 				
 			</view>
-			<view style="color: white;margin-top: 15%;">
+			<view class="sing-status">
 			{{signStatus === 1 ? "最后签到时间:" : "最后签退时间:"}}{{lastSignTime}}
 			</view>
 		</view>
