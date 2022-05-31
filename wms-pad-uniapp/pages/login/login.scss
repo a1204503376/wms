@@ -1,12 +1,20 @@
 span {
 	font-size: 50rpx;
 }
-
+.title{
+	text-align: center;
+	display: block;
+	flex-wrap: wrap;
+	position: fixed;
+	margin-left: 23%;
+	bottom: 0;
+	
+}
 .logodiv {
 	text-align: center;
 	display: block;
 	flex-wrap: wrap;
-	margin-top: 8rem;
+	margin-top: 0.5rem;
 	h3 {
 		font-size: 20px;
 		font-weight: 900;
