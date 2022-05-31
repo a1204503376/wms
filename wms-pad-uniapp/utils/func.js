@@ -6,7 +6,7 @@ const install = (Vue, vm) => {
 	// 登录成功之后的操作
 	const login = (userInfo) => {
 		vm.$u.vuex('userName', userInfo.account)
-		vm.$u.vuex('loginTime',new Date().toLocaleDateString())
+		vm.$u.vuex('loginTime', tool.format(new Date(),'YYYY-MM-DD HH:mm:ss'))
 		vm.$u.vuex('accessToken', userInfo.access_token)
 		vm.$u.vuex('refreshToken', userInfo.refresh_token)
 		vm.$u.vuex('expiresIn', userInfo.expires_in)
