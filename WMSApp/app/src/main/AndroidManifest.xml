@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="com.nodes.dml">
+          package="com.nodes.wms">
 
 	<supports-screens
 			android:anyDensity="true"
@@ -89,7 +89,7 @@
 		</activity>
 		<meta-data
 				android:name="dcloud_appkey"
-				android:value="ae0ee29059ea95e29159323321a4f058"/>
+				android:value="83d53c23dc65a5cfacfef8659e2af046"/>
 
 	</application>
 

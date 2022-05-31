@@ -1,4 +1,4 @@
-package com.nodes.dml;
+package com.nodes.wms;
 
 import io.dcloud.feature.uniapp.common.UniModule;
 

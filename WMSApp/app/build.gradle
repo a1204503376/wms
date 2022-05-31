@@ -4,7 +4,7 @@ android {
     compileSdkVersion 30
     buildToolsVersion '30.0.3'
     defaultConfig {
-        applicationId "com.nodes.dml"
+        applicationId "com.nodes.wms"
         minSdkVersion 25
         targetSdkVersion 30
         versionCode 1
@@ -25,10 +25,10 @@ android {
     // SHA1: BB:22:5B:14:AC:2C:62:A8:67:1F:06:C7:3C:B2:DA:C0:C1:95:A9:DF
     signingConfigs {
         config {
-            keyAlias '__uni__ef20d67'
-            keyPassword 'gPfbxcH9'
-            storeFile file('__UNI__EF20D67.keystore')
-            storePassword 'gPfbxcH9'
+            keyAlias '__uni__28da5fc'
+            keyPassword 'vSS4ULDl'
+            storeFile file('__UNI__28DA5FC.keystore')
+            storePassword 'vSS4ULDl'
             v1SigningEnabled true
             v2SigningEnabled true
         }

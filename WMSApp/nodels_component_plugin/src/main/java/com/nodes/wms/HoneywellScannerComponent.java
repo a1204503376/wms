@@ -1,9 +1,9 @@
-package com.nodes.dml;
+package com.nodes.wms;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.widget.TextView;
-import com.nodes.dml.honeywell_scanner.HoneywellScannerPlugin;
+import com.nodes.wms.honeywell_scanner.HoneywellScannerPlugin;
 import io.dcloud.feature.uniapp.UniSDKInstance;
 import io.dcloud.feature.uniapp.annotation.UniJSMethod;
 import io.dcloud.feature.uniapp.ui.action.AbsComponentData;
