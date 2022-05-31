@@ -55,5 +55,5 @@ export default {
 	token,
 	getMenuList,
 	updatePassword,
-	UpdateVerDetail
+	CheckUpdate
 }
