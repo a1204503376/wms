@@ -1,0 +1,12 @@
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "DmlPlugin-Hello"
+include ':app'
+include ':dmlplugin_module'
+include ':honeywell'
+include ':dmlplugin_component'

@@ -1,0 +1,22 @@
+{
+  "nativePlugins": [
+    {
+      "plugins": [
+        {
+          "type": "module",
+          "name": "dml-module1",
+          "class": "com.nodes.dml.TestModule"
+        }
+      ]
+    },
+    {
+      "plugins": [
+        {
+          "type": "component",
+          "name": "honeywell-scanner",
+          "class": "com.nodes.dml.HoneywellScannerComponent"
+        }
+      ]
+    }
+  ]
+}
