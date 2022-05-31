@@ -22,13 +22,13 @@ const getMenuList = () => {
 		url: '/api/ApiPDA/routes',
 		method: 'GET',
 		params: {
-			user:'',
-			topMenuId:'',
+			user: '',
+			topMenuId: '',
 		}
 	})
 }
 
-const updatePassword = (id,oldPassword,newPassword,newPassword1) => {
+const updatePassword = (id, oldPassword, newPassword, newPassword1) => {
 	return http.request({
 		url: '/api/ApiPDA/UpdatePassword',
 		method: 'POST',
@@ -47,13 +47,34 @@ const UpdateVerDetail = () => {
 		url: '/api/ApiPDA/UpdateVerDetail',
 		method: 'POST',
 		data: {
-			updateVer:''
+			updateVer: ''
 		}
+	})
+}
+//获取签到状态
+const getLoginStatus = () => {
+	return http.request({
+		url: '/api/ApiPDA/getLoginStatus',
+		method: 'GET',
+	})
+}
+
+const editUserLoginStatus = (loginStatus,token) => {
+	return http.request({
+		url: '/api/ApiPDA/editUserLoginStatus',
+		method: 'POST',
+		data: {
+				loginStatus,
+				token,
+			}
+		
 	})
 }
 export default {
 	token,
 	getMenuList,
+	editUserLoginStatus,
 	updatePassword,
+	getLoginStatus,
 	UpdateVerDetail
 }
