@@ -97,8 +97,8 @@ export default class tool {
 
     /**
      * date类转为字符串格式
-     * @param date
-     * @param format
+     * @param dt 时间
+     * @param args 格式化字符串
      * @returns {null}
      */
     static format(dt, args) {
