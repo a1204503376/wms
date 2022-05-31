@@ -1,6 +1,5 @@
 <template>
 	<view>
-
 		<u-navbar :leftIconSize="0" rightIcon="setting" :rightIconSize="40" @rightClick="gotoAddress" :fixed="false"
 			:autoBack="false" :bgColor="navigationBarBackgroundColor" titleStyle="color:#ffffff;font-size:21px">
 		</u-navbar>
@@ -39,13 +38,9 @@
 					<button class="quit" @click="quitApp">退出</button>
 				</view>
 
-				<view class="logodiv">
-					<p>
-						@copyright 2022
-					</p>
-					<p>
-						北京节点通网络技术有限公司
-					</p>
+				<view class="title" >
+						@copyright 2022<br/>北京节点通网络技术有限公司
+					
 				</view>
 			</view>
 		</view>
@@ -94,52 +89,6 @@
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {
-			doUpData(Url) {
-				// uni.showLoading({
-				// 	title: '更新中……'
-				// })
-				const downloadTask = uni.downloadFile({ //执行下载
-					url: Url, //下载地址
-					timeout: 1000 * 30, //30秒超时时间
-					success: downloadResult => { //下载成功
-						this.showdownLine = false
-						uni.hideLoading();
-						if (downloadResult.statusCode == 200) {
-							plus.runtime.install( //安装软件
-								downloadResult.tempFilePath, {
-									force: true
-								},
-								function(res) {
-									plus.runtime.restart();
-								}
-							);
-						}
-					},
-					fail: err => {
-						uni.hideLoading();
-						this.showdownLine = false
-						this.$u.toast(err.errMsg)
-						console.log(err)
-					},
-					complete: com => {
-						console.log(com)
-					}
-				});
-
-				// 下载进度
-				downloadTask.onProgressUpdate(res => {
-					// this.$u.toast(res.progress)
-					this.downloadNum = res.progress
-					// console.log('下载进度' + res.progress);
-					// console.log('已经下载的数据长度' + res.totalBytesWritten);
-					// console.log('预期需要下载的数据总长度' + res.totalBytesExpectedToWrite);
-
-					// 满足测试条件，取消下载任务。
-					// if (res.progress > 50) {
-					// 	downloadTask.abort();
-					// }
-				});
-			},
 			nextFocusToPassword() {
 				uni.hideKeyboard(); //隐藏软键盘				
 				this.passwordFocus = true;

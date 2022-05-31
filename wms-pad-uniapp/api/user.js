@@ -51,9 +51,30 @@ const UpdateVerDetail = () => {
 		}
 	})
 }
+//获取签到状态
+const getLoginStatus = () => {
+	return http.request({
+		url: '/api/ApiPDA/getLoginStatus',
+		method: 'GET',
+	})
+}
+
+const editUserLoginStatus = (loginStatus,token) => {
+	return http.request({
+		url: '/api/ApiPDA/editUserLoginStatus',
+		method: 'POST',
+		data: {
+				loginStatus,
+				token,
+			}
+		
+	})
+}
 export default {
 	token,
 	getMenuList,
+	editUserLoginStatus,
 	updatePassword,
+	getLoginStatus,
 	UpdateVerDetail
 }

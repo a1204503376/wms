@@ -5,16 +5,15 @@
 		onLaunch: function() {
 			// #ifdef APP-PLUS
 			//App自动跟新判断
-			api.UpdateVerDetail().then(data => {
+			api.CheckUpdate().then(data => {
 				if (data.data.verName != setting.version) {
-					uni.showModal({ //提醒用户更新  
+					uni.showModal({
+						//提醒用户更新  
 						title: "更新提示",
 						content: '是否更新',
 						showCancel: false,
 						success: (res) => {
 							if (res.confirm) {
-								// this.doUpData(data.data.updateUrl)
-								// this.showdownLine = true
 								plus.runtime.openURL(data.data.updateUrl)
 							}
 						}

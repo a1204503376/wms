@@ -6,12 +6,16 @@ const install = (Vue, vm) => {
 	// 登录成功之后的操作
 	const login = (userInfo) => {
 		vm.$u.vuex('userName', userInfo.account)
-		vm.$u.vuex('loginTime',new Date().toLocaleDateString())
+		vm.$u.vuex('loginTime', tool.format(new Date(),'YYYY-MM-DD HH:mm:ss'))
 		vm.$u.vuex('accessToken', userInfo.access_token)
 		vm.$u.vuex('refreshToken', userInfo.refresh_token)
 		vm.$u.vuex('expiresIn', userInfo.expires_in)
 		vm.$u.vuex('isLogin', true)
 		vm.$u.vuex('userId', userInfo.user_id)
+		api.getLoginStatus().then((res) => {
+			vm.$u.vuex('signStatus', res.data.loginStatus)
+			vm.$u.vuex('lastSignTime', res.data.lastLoginTime)
+		})  
 		uni.hideLoading();
 		uni.redirectTo({
 			url: '/pages/home/home'
