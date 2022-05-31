@@ -5,7 +5,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "DmlPlugin-Hello"
+rootProject.name = "WMSApp"
 include ':app'
 include ':nodels_module_plugin'
 include ':nodels_honeywell'
