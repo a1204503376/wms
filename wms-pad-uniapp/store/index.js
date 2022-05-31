@@ -46,7 +46,9 @@ const store = new Vuex.Store({
 		// token失效时间
 		expiresIn: '',
 		// 签到状态
-		signStatus: false,
+		signStatus:0,
+		//最后签到/签退时间
+		lastSignTime:'',
 		// 菜单列表
 		menuList:{}
 	},
