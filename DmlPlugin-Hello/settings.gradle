@@ -7,6 +7,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "DmlPlugin-Hello"
 include ':app'
-include ':dmlplugin_module'
-include ':honeywell'
-include ':dmlplugin_component'
+include ':nodels_module_plugin'
+include ':nodels_honeywell'
+include ':nodels_component_plugin'

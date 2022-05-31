@@ -75,8 +75,8 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.1.46.android'
 
     // 添加uni-app插件
-    implementation project(':dmlplugin_module')
-    implementation project(':dmlplugin_component')
-    implementation project(':honeywell')
+    implementation project(':nodels_module_plugin')
+    implementation project(':nodels_component_plugin')
+    implementation project(':nodels_honeywell')
 //    implementation project(':uniplugin_richalert')
 }
