@@ -1,10 +1,10 @@
-package org.nodes.wms.pdaDao.User.impl;
+package org.nodes.wms.dao.User.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.wms.pdaDao.User.UserRegisterDao;
-import org.nodes.wms.pdaDao.User.dto.output.UserLoginStatusResponse;
-import org.nodes.wms.pdaDao.User.entites.UserRegister;
-import org.nodes.wms.pdaDao.User.mapper.UserRegisterMapper;
+import org.nodes.wms.dao.User.UserRegisterDao;
+import org.nodes.wms.dao.User.dto.output.UserLoginStatusResponse;
+import org.nodes.wms.dao.User.entites.UserRegister;
+import org.nodes.wms.dao.User.mapper.UserRegisterMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package org.nodes.wms.pdaDao.User.dto.input;
+package org.nodes.wms.dao.User.dto.input;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
