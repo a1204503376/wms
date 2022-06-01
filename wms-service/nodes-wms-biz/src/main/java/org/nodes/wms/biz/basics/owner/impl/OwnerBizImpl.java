@@ -30,4 +30,9 @@ public class OwnerBizImpl implements OwnerBiz {
     public Owner findById(Long woId) {
         return ownerDao.getById(woId);
     }
+
+    @Override
+    public Owner findByCode(String ownerCode) {
+        return ownerDao.getByCode(ownerCode);
+    }
 }

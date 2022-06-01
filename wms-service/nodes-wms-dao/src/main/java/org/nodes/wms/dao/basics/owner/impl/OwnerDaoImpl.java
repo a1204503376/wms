@@ -30,4 +30,11 @@ public class OwnerDaoImpl extends BaseServiceImpl<OwnerMapper, Owner> implements
     public Owner getById(Long woId) {
         return super.getById(woId);
     }
+
+    @Override
+    public Owner getByCode(String ownerCode) {
+		LambdaQueryWrapper<Owner> lambdaQueryWrapper = Wrappers.lambdaQuery();
+		lambdaQueryWrapper.eq(Owner::getOwnerCode,ownerCode);
+        return super.getOne(lambdaQueryWrapper);
+    }
 }
