@@ -1,8 +1,7 @@
-package org.nodes.wms.pdaBiz.user;
+package org.nodes.wms.biz.user;
 
-import org.nodes.wms.pdaDao.User.dto.input.EditUserLoginStatusRequest;
-import org.nodes.wms.pdaDao.User.dto.output.UserLoginStatusResponse;
-import org.nodes.wms.pdaDao.User.entites.UserRegister;
+import org.nodes.wms.dao.User.dto.input.EditUserLoginStatusRequest;
+import org.nodes.wms.dao.User.dto.output.UserLoginStatusResponse;
 import org.springblade.core.secure.BladeUser;
 
 /**
@@ -14,5 +13,9 @@ public interface UserBiz {
 	 */
     UserLoginStatusResponse EditUserLoginStatus(EditUserLoginStatusRequest editUserLoginStatusRequest);
 
+	/**
+	 * 手持获取用户签到状态
+	 * @param user 用户信息
+	 */
 	UserLoginStatusResponse getLoginStatus(BladeUser user);
 }

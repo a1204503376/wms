@@ -1,4 +1,4 @@
-package org.nodes.wms.pdaDao.User.enums;
+package org.nodes.wms.dao.User.enums;
 
 /**
  * @description 平台枚举
@@ -13,7 +13,7 @@ public enum PlatformEnum {
 	private int index;
 	private String name;
 
-	private PlatformEnum(String name, int index) {
+	 PlatformEnum(String name, int index) {
 		this.name = name;
 		this.index = index;
 	}

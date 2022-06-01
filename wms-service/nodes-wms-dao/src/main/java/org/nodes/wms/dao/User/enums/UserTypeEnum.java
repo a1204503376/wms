@@ -1,4 +1,4 @@
-package org.nodes.wms.pdaDao.User.enums;
+package org.nodes.wms.dao.User.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +11,6 @@ public enum UserTypeEnum {
 	CUSTOM(1, "自定义用户")
 	;
 
-	Integer index;
-	String name;
+	final Integer index;
+	final String name;
 }

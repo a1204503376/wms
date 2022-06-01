@@ -4,12 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.suppliers.SupplierBiz;
-import org.nodes.wms.dao.basics.suppliers.dto.input.AddSupplierRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.input.RemoveRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
-import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierSelectQuery;
+import org.nodes.wms.dao.basics.suppliers.dto.input.*;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
+import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -40,9 +38,9 @@ public class SupplierController {
 
 	@ApiLog("供应商管理-新增")
 	@PostMapping("/newSupplier")
-	public R<Boolean> newSupplier(@Valid @RequestBody AddSupplierRequest addSupplierRequest) {
-		boolean state = supplierBiz.newSupplier(addSupplierRequest);
-		return R.status(state);
+	public R<String> newSupplier(@Valid @RequestBody AddSupplierRequest addSupplierRequest) {
+		Supplier supplier = supplierBiz.newSupplier(addSupplierRequest);
+		return R.success("新增成功，供应商编码:"+supplier.getCode());
 	}
 
 	@ApiLog("供应商管理-删除")
@@ -55,6 +53,13 @@ public class SupplierController {
 	@PostMapping("/export")
 	public void export(@RequestBody SupplierPageQuery supplierPageQuery, HttpServletResponse response){
 		supplierBiz.exportSupplier(supplierPageQuery,response);
+	}
+
+	@ApiLog("供应商管理-导入")
+	@PostMapping("/import")
+	public R<String> importExcel(@Valid @RequestBody SupplierImportRequest supplierImportRequest){
+		boolean tag = supplierBiz.importExcel(supplierImportRequest.getAddSupplierList());
+		return tag ? R.success("导入成功！") : R.fail("导入失败！");
 	}
 
 	@PostMapping("/select")

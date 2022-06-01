@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.nodes.wms.pdaDao.User.mapper.UserRegisterMapper">
+<mapper namespace="org.nodes.wms.dao.User.mapper.UserRegisterMapper">
 
     <select id="selectLoginStatusByUserId"
-            resultType="org.nodes.wms.pdaDao.User.dto.output.UserLoginStatusResponse">
+            resultType="org.nodes.wms.dao.User.dto.output.UserLoginStatusResponse">
         SELECT
             login_status,
             last_login_time

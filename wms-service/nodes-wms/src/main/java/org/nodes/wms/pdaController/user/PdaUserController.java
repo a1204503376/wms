@@ -1,9 +1,9 @@
 package org.nodes.wms.pdaController.user;
 
 import lombok.AllArgsConstructor;
-import org.nodes.wms.pdaBiz.user.UserBiz;
-import org.nodes.wms.pdaDao.User.dto.input.EditUserLoginStatusRequest;
-import org.nodes.wms.pdaDao.User.dto.output.UserLoginStatusResponse;
+import org.nodes.wms.biz.user.UserBiz;
+import org.nodes.wms.dao.User.dto.input.EditUserLoginStatusRequest;
+import org.nodes.wms.dao.User.dto.output.UserLoginStatusResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.secure.BladeUser;
 import org.springblade.core.secure.utils.AuthUtil;

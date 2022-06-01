@@ -1,4 +1,4 @@
-package org.nodes.wms.pdaDao.User.entites;
+package org.nodes.wms.dao.User.entites;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

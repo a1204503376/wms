@@ -4,6 +4,7 @@ import {nowDateFormat} from "@/util/date"
 import {getCrudColumnResponseList} from "@/api/core/column";
 import {deepClone} from "@/util/util";
 import {mapGetters} from "vuex";
+import {importFile} from "@/api/wms/basics/supplier";
 
 export const listMixin = {
     mixins: [menuMixin],
@@ -192,6 +193,28 @@ export const listMixin = {
                     }
                 };
                 this.exportExcelSheet[0].cellStyle.push(cell);
+            })
+        },
+        // 导入
+        onImport(data,conversionObject){
+            if(func.isEmpty(data)){
+                return;
+            }
+            let excelData = data[0].data;
+            let paramDataList = [];
+            excelData.map( item => {
+                const paramData = {};
+                const itemKeys = Object.keys(item);
+                itemKeys.forEach(itemKey => {
+                    const enKey = conversionObject[itemKey]
+                    paramData[enKey] = item[itemKey]
+                })
+                paramDataList.push(paramData);
+            } )
+            importFile(paramDataList).then((res)=>{
+                let msg = res.data.msg;
+                this.$message.success(msg);
+                this.refreshTable();
             })
         },
     }

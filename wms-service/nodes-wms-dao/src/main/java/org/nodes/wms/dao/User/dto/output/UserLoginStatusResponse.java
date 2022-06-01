@@ -1,4 +1,4 @@
-package org.nodes.wms.pdaDao.User.dto.output;
+package org.nodes.wms.dao.User.dto.output;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
