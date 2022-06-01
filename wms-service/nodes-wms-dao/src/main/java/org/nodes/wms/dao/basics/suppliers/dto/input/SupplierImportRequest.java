@@ -19,4 +19,9 @@ public class SupplierImportRequest implements Serializable {
 	 */
 	@NotNull(message = "文件中还没有数据")
 	private List<AddSupplierRequest> addSupplierList;
+
+	/**
+	 * 导入的文件
+	 */
+//	MultipartFile file;
 }

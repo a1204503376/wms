@@ -2,10 +2,8 @@ package org.nodes.wms.biz.basics.suppliers;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.nodes.wms.dao.basics.suppliers.dto.input.AddSupplierRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.input.RemoveRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
-import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierSelectQuery;
+import org.nodes.core.tool.entity.DataVerify;
+import org.nodes.wms.dao.basics.suppliers.dto.input.*;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
@@ -74,4 +72,12 @@ public interface SupplierBiz {
 	 * @return true: 导入成功， false: 导入失败
 	 */
     boolean importExcel(List<AddSupplierRequest> addSupplierList);
+
+	/**
+	 * 校验excel文件
+	 *
+	 * @param importExcelList: 校验数据集合
+	 * @return List<DataVerify> 校验返回对象集合
+	 */
+	List<DataVerify> validExcel(List<SupplierImportExcelRequest> importExcelList);
 }

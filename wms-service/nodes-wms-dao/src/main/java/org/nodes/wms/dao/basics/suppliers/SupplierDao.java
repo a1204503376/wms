@@ -79,5 +79,5 @@ public interface SupplierDao {
 	 * @param supplierList : 新增供应商对象集合
 	 * @return true: 导入成功， false: 导入失败
 	 */
-    boolean upload(List<Supplier> supplierList);
+    boolean importExcel(List<Supplier> supplierList);
 }

@@ -3,19 +3,24 @@ package org.nodes.wms.controller.basics;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.wms.biz.basics.suppliers.SupplierBiz;
 import org.nodes.wms.dao.basics.suppliers.dto.input.*;
+import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierExportResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
+import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,8 +60,22 @@ public class SupplierController {
 		supplierBiz.exportSupplier(supplierPageQuery,response);
 	}
 
+	@GetMapping("export-template")
+	public void exportTemplate(HttpServletResponse response) {
+		List<SupplierExportResponse> supplierExportResponseList = new ArrayList<>();
+		ExcelUtil.export(response, "供应商", "供应商数据表", supplierExportResponseList, SupplierExportResponse.class);
+	}
+
+	@ApiLog("供应商管理-导入校验")
+	@PostMapping("/import-valid")
+	public R<List<DataVerify>> importValid(MultipartFile file){
+		List<SupplierImportExcelRequest> importExcelList = ExcelUtil.read(file, SupplierImportExcelRequest.class);
+		List<DataVerify> dataVerifyList = supplierBiz.validExcel(importExcelList);
+		return R.data(dataVerifyList);
+	}
+
 	@ApiLog("供应商管理-导入")
-	@PostMapping("/import")
+	@PostMapping("/import-data")
 	public R<String> importExcel(@Valid @RequestBody SupplierImportRequest supplierImportRequest){
 		boolean tag = supplierBiz.importExcel(supplierImportRequest.getAddSupplierList());
 		return tag ? R.success("导入成功！") : R.fail("导入失败！");
