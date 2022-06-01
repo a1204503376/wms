@@ -13,7 +13,7 @@ export const remove = (removeObj) => {
     return request({
         url: '/api/wms/supplier/remove',
         method: 'post',
-        data:removeObj
+        data: removeObj
     })
 }
 
@@ -23,6 +23,16 @@ export const exportFile = (params) => {
         method: 'post',
         data: params,
         responseType: 'blob'
+    })
+}
+
+export const importFile = (data) => {
+    return request({
+        url: '/api/wms/supplier/import',
+        method: 'post',
+        data: {
+            addSupplierList: data
+        }
     })
 }
 
