@@ -202,6 +202,11 @@ export default class tool {
     static isObject(obj){
         return  getObjType(obj) === 'object';
     }
+	
+	//去除所有空格
+	  static clearSpace(value) {
+	    return value.replace(/\s*/g, "");
+	  }
 
     static recursionObject(obj, that, target) {
         if (this.isArray(obj)){
