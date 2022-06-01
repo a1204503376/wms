@@ -47,8 +47,6 @@ http.interceptors.request.use((config) => { // 可使用async await 做异步操
 	return Promise.reject(config)
 })
 http.interceptors.response.use((response) => {
-	// TODO 针对401认证失败的情况，需要跳转到登录页面
-
 	// 对错误信息进行统一拦截
 	const statusCode = response.data.code || response.statusCode;
 	if (statusCode !== successCode || response.data.error_code) {
@@ -59,7 +57,19 @@ http.interceptors.response.use((response) => {
 
 	return response.data;
 }, (response) => { // statusCode !== 200 时候的错误处理
-	let errMsg = response.data?.msg || response.data?.error_description || '未知错误,可能是网络连接失败导致,来自api拦截器';
+	if(response.statusCode ===401){
+		uni.$u.toast('登录已过期，需要重新登录');
+		 setTimeout(function() {
+		     uni.$u.func.route('/pages/login/login')    
+		     }, 1000);
+		return
+	}
+
+
+	let errMsg = response.data?.msg 
+	|| response.data?.error_description 
+	|| response.errMsg
+	|| '未知错误,可能是网络连接失败导致,来自api拦截器';
 	uni.$u.toast(errMsg);
 	return Promise.reject(response);
 })

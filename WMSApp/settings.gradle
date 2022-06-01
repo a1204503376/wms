@@ -1,0 +1,12 @@
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "WMSApp"
+include ':app'
+include ':nodels_module_plugin'
+include ':nodels_honeywell'
+include ':nodels_component_plugin'

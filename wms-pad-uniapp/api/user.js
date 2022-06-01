@@ -41,8 +41,8 @@ const updatePassword = (id,oldPassword,newPassword,newPassword1) => {
 	})
 }
 
-// 检查跟新
-const CheckUpdate = () => {
+// 获取版本号
+const UpdateVerDetail = () => {
 	return http.request({
 		url: '/api/ApiPDA/UpdateVerDetail',
 		method: 'POST',
@@ -51,9 +51,30 @@ const CheckUpdate = () => {
 		}
 	})
 }
+//获取签到状态
+const getLoginStatus = () => {
+	return http.request({
+		url: '/api/ApiPDA/getLoginStatus',
+		method: 'GET',
+	})
+}
+
+const editUserLoginStatus = (loginStatus,token) => {
+	return http.request({
+		url: '/api/ApiPDA/editUserLoginStatus',
+		method: 'POST',
+		data: {
+				loginStatus,
+				token,
+			}
+		
+	})
+}
 export default {
 	token,
 	getMenuList,
+	editUserLoginStatus,
 	updatePassword,
-	CheckUpdate
+	getLoginStatus,
+	UpdateVerDetail
 }

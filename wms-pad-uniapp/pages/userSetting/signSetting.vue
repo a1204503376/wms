@@ -1,15 +1,14 @@
 <template>
 	<view class="parentClass">
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
 		<view>
 			<view class="bigRound">
-				<view class="smallRound" @click="onSign">
-					<span>{{loginStatus === "1" ? "签到" : "签退"}}</span>
+				<view class="smallRound" @click="editUserLoginStatus" >
+					<span>{{signStatus === 1 ? "签退" : "签到"}}</span>
 				</view>
+				
+			</view>
+			<view class="sing-status">
+			{{signStatus === 1 ? "最后签到时间:" : "最后签退时间:"}}{{lastSignTime}}
 			</view>
 		</view>
 	</view>
@@ -18,43 +17,15 @@
 <script>
 	import api from '@/api/user.js'
 	import tool from "@/utils/tool.js"
-	export default {
-		data() {
-			return {
-				type: "",
-				loginStatus: ""
-			}
-		},
-		created() {
-			this.getUserOnlineList();
-			this.getUserRegisterList();
-		},
+	export default {	
 		methods: {
-			getUserOnlineList() {
-				let user = {
-					userId: this.$store.state.userId
-				}
-				api.userOnlineList(user).then((res) => {})
-			},
-			getUserRegisterList() {
-				api.userRegisterList().then((res) => {
-					if (tool.isEmpty(res.data)) {
-						this.loginStatus = "1";
-					} else {
-						this.loginStatus = res.data[res.data.length - 1].loginStatus;
-					}
-				})
-			},
 			// 1签到  0签退
-			onSign() {
-				api.sign(this.loginStatus, this.$store.state.accessToken, this.$store.state.userId).then((res) => {
-					if (this.loginStatus === "1") {
-						this.loginStatus = "0";
-						this.$store.state.signStatus = "true";
-					} else {
-						this.loginStatus = "1";
-						this.$store.state.signStatus = "false";
-					}
+			editUserLoginStatus() {
+				api.editUserLoginStatus(this.signStatus,this.$store.state.accessToken)
+				.then((res) => {
+					this.$u.vuex('signStatus', res.data.loginStatus);
+					 this.$u.vuex('lastSignTime', res.data.lastLoginTime);
+					
 				})
 			},
 		},

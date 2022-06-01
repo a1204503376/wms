@@ -1,0 +1,4 @@
+com.honeywell.aidc
+drawable barcode_example_icon
+drawable ic_launcher
+string app_name

@@ -38,13 +38,9 @@
 					<button class="quit" @click="quitApp">退出</button>
 				</view>
 
-				<view class="logodiv">
-					<p>
-						@copyright 2022
-					</p>
-					<p>
-						北京节点通网络技术有限公司
-					</p>
+				<view class="title" >
+						@copyright 2022<br/>北京节点通网络技术有限公司
+					
 				</view>
 			</view>
 		</view>
