@@ -1,8 +1,5 @@
 <template>
 	<view>
-		<u-navbar :leftIconSize="0" rightIcon="setting" :rightIconSize="40" @rightClick="gotoAddress" :fixed="false"
-			:autoBack="false" :bgColor="navigationBarBackgroundColor" titleStyle="color:#ffffff;font-size:21px">
-		</u-navbar>
 		<view class="content">
 			<view class="progress" v-if="showdownLine">
 				<u-line-progress :striped="true" :percent="downloadNum" :striped-active="true"></u-line-progress>
@@ -38,9 +35,9 @@
 					<button class="quit" @click="quitApp">退出</button>
 				</view>
 
-				<view class="title" >
-						@copyright 2022<br/>北京节点通网络技术有限公司
-					
+				<view class="title">
+					@copyright 2022<br />北京节点通网络技术有限公司
+
 				</view>
 			</view>
 		</view>
@@ -70,6 +67,11 @@
 				downloadNum: null,
 				showdownLine: false,
 			};
+		},
+		onNavigationBarButtonTap() {
+			uni.navigateTo({
+				url: '/pages/reviseIp/reviseIp'
+			});
 		},
 		onReady() {
 
