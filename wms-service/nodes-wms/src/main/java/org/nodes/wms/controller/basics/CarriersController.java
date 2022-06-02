@@ -1,4 +1,5 @@
 package org.nodes.wms.controller.basics;
+
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
@@ -6,13 +7,16 @@ import org.nodes.wms.biz.basics.carriers.CarriersBiz;
 import org.nodes.wms.dao.basics.carrier.dto.input.*;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierDropDownResponse;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse;
+import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -75,5 +79,19 @@ public class CarriersController {
 	@PostMapping("/getDropDown")
 	public R<List<CarrierDropDownResponse>> getDropDown(@RequestBody CarrierDropDownRequest carrierDropDownRequest) {
 		return R.data(carriersBiz.getDropDown(carrierDropDownRequest));
+	}
+
+	@GetMapping("/export-template")
+	public void exportTemplate(HttpServletResponse response){
+		List<CarrierExcelRequest> importExcelList = new ArrayList<>();
+		ExcelUtil.export(response, "承运商", "承运商数据表", importExcelList, CarrierExcelRequest.class);
+	}
+
+	@ApiLog("承运商管理-导入")
+	@PostMapping("/import-data")
+	public R<String> importData(MultipartFile file){
+		List<CarrierExcelRequest> importDataList = ExcelUtil.read(file, CarrierExcelRequest.class);
+		boolean importFlag = carriersBiz.importExcel(importDataList);
+		return importFlag ? R.success("导入成功") : R.fail("导入失败");
 	}
 }

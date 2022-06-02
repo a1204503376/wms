@@ -16,7 +16,6 @@ import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
-import org.springblade.core.tool.utils.BeanUtil;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -77,4 +76,10 @@ public class CarriersBizImpl implements CarriersBiz {
 	public List<CarrierDropDownResponse> getDropDown(CarrierDropDownRequest carrierDropDownRequest) {
 		return carriersDao.getCarrierUnconditional(carrierDropDownRequest);
 	}
+
+    @Override
+    public boolean importExcel(List<CarrierExcelRequest> importDataList) {
+		List<BasicsCarriers> carrierList = carriersFactory.createCarrierListForImport(importDataList);
+		return carriersDao.importExcel(importDataList);
+    }
 }
