@@ -3,7 +3,7 @@ package org.nodes.wms.core.basedata.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.common.entity.Address;
 import org.nodes.wms.core.common.entity.Contacts;
 import org.nodes.wms.core.common.dto.AddressDTO;

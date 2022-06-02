@@ -4,7 +4,7 @@ import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.entity.Dict;
 import org.nodes.core.base.service.IDictService;
 import org.nodes.wms.core.basedata.cache.OwnerCache;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.system.entity.PrintTemplate;
 import org.nodes.wms.core.system.vo.PrintTemplateVO;

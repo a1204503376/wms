@@ -7,6 +7,7 @@ import org.nodes.wms.core.basedata.entity.*;
 import org.nodes.wms.core.basedata.mapper.SkuMapper;
 import org.nodes.wms.core.basedata.service.*;
 import org.nodes.wms.core.basedata.mapper.SkuBomMapper;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.tool.utils.SpringUtil;
 import org.springframework.context.annotation.Primary;

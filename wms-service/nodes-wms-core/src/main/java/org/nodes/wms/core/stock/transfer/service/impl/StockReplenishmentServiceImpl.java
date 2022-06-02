@@ -6,7 +6,7 @@ import org.nodes.core.base.cache.ParamCache;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.core.basedata.cache.OwnerCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.entity.SkuPackage;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.basedata.service.ISkuLotService;

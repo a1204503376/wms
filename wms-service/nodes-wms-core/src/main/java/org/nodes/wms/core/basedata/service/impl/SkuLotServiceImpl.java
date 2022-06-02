@@ -13,7 +13,7 @@ import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuLotCache;
 import org.nodes.wms.core.basedata.cache.SkuLotValCache;
 import org.nodes.wms.core.basedata.dto.SkuLotDTO;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuLot;
 import org.nodes.wms.core.basedata.entity.SkuLotVal;

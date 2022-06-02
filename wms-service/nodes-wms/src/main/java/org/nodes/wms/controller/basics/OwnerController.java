@@ -10,7 +10,7 @@ import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.core.basedata.dto.OwnerDTO;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.excel.OwnerExcel;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.basedata.vo.OwnerVO;

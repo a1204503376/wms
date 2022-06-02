@@ -6,7 +6,7 @@ import org.nodes.core.base.entity.User;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.wms.core.basedata.cache.BillTypeCache;
 import org.nodes.wms.core.basedata.entity.BillType;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.instock.asn.dto.AsnDetailDTO;
 import org.nodes.wms.core.instock.asn.dto.AsnHeaderDTO;

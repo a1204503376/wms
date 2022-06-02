@@ -17,7 +17,7 @@ import org.nodes.wms.core.basedata.cache.EnterpriseCache;
 import org.nodes.wms.core.basedata.cache.OwnerCache;
 import org.nodes.wms.core.basedata.dto.EnterpriseDTO;
 import org.nodes.wms.core.basedata.entity.Enterprise;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.entity.SkuInc;
 import org.nodes.wms.core.basedata.excel.EnterpriseExcel;
 import org.nodes.wms.core.basedata.mapper.EnterpriseMapper;
