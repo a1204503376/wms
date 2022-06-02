@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.basics.bom.dto.input.WmsSkuBomPageQuery;
 import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomExcelResponse;
 import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomResponse;
-import org.nodes.wms.dao.basics.bom.entites.WmsSkuBom;
+import org.nodes.wms.dao.basics.bom.entites.SkuBom;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * 物料清单 Mapper 接口
  */
-public interface WmsSkuBomMapper extends BaseMapper<WmsSkuBom> {
+public interface WmsSkuBomMapper extends BaseMapper<SkuBom> {
 	/**
 	 * 分页查询
 	 * @param page 底部分页参数

@@ -3,7 +3,7 @@
 <mapper namespace="org.nodes.wms.core.basedata.mapper.SkuBomMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="skuBomResultMap" type="org.nodes.wms.core.basedata.entity.SkuBom">
+    <resultMap id="skuBomResultMap" type="org.nodes.wms.dao.basics.bom.entites.SkuBom">
         <result column="id" property="id"/>
         <result column="create_dept" property="createDept"/>
         <result column="create_user" property="createUser"/>

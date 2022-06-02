@@ -1,6 +1,6 @@
 package org.nodes.wms.core.basedata.vo;
 
-import org.nodes.wms.core.basedata.entity.SkuBom;
+import org.nodes.wms.dao.basics.bom.entites.SkuBom;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import io.swagger.annotations.ApiModel;

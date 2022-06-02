@@ -7,7 +7,7 @@ import org.nodes.wms.dao.basics.bom.WmsSkuBomDao;
 import org.nodes.wms.dao.basics.bom.dto.input.WmsSkuBomPageQuery;
 import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomExcelResponse;
 import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomResponse;
-import org.nodes.wms.dao.basics.bom.entites.WmsSkuBom;
+import org.nodes.wms.dao.basics.bom.entites.SkuBom;
 import org.nodes.wms.dao.basics.bom.mapper.WmsSkuBomMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class WmsSkuBomDaoImpl extends BaseServiceImpl<WmsSkuBomMapper, WmsSkuBom> implements WmsSkuBomDao {
+public class WmsSkuBomDaoImpl extends BaseServiceImpl<WmsSkuBomMapper, SkuBom> implements WmsSkuBomDao {
 	private final WmsSkuBomMapper skuBomMapper;
 	/**
 	 * 分页查询

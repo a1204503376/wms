@@ -2,7 +2,7 @@ package org.nodes.wms.core.basedata.wrapper;
 
 import org.springblade.core.mp.support.BaseEntityWrapper;
 import org.springblade.core.tool.utils.BeanUtil;
-import org.nodes.wms.core.basedata.entity.SkuBom;
+import org.nodes.wms.dao.basics.bom.entites.SkuBom;
 import org.nodes.wms.core.basedata.vo.SkuBomVO;
 
 
