@@ -29,10 +29,10 @@ public interface SupplierBiz {
 	/**
 	 *  新增供应商信息
 	 *
-	 * @param addSupplierRequest:
-	 * @return  true:新增成功 ,false:新增失败
+	 * @param addSupplierRequest: 新增供应商dto对象
+	 * @return Supplier: 供应商实体
 	 */
-	boolean newSupplier(AddSupplierRequest addSupplierRequest);
+	Supplier newSupplier(AddSupplierRequest addSupplierRequest);
 
 	/**
 	 * 根据id批量删除供应商信息
@@ -66,4 +66,12 @@ public interface SupplierBiz {
 	 * @return Supplier
 	 */
 	public Supplier findById(Long id);
+
+	/**
+	 * Excel 导入
+	 *
+	 * @param addSupplierList: 新增供应商对象集合
+	 * @return true: 导入成功， false: 导入失败
+	 */
+    boolean importExcel(List<AddSupplierRequest> addSupplierList);
 }

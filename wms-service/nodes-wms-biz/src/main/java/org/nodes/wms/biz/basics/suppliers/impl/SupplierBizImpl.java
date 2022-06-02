@@ -44,13 +44,14 @@ public class SupplierBizImpl implements SupplierBiz {
 	}
 
 	@Override
-	public boolean newSupplier(AddSupplierRequest addSupplierRequest) {
+	public Supplier newSupplier(AddSupplierRequest addSupplierRequest) {
 		boolean isExist = supplierDao.isExistSupplierCode(addSupplierRequest.getCode());
 		if (isExist) {
 			throw new ServiceException("新增供应商失败,供应商编码["+ addSupplierRequest.getCode()+"]已存在");
 		}
 		Supplier supplier = supplierFactory.createSupplier(addSupplierRequest);
-		return supplierDao.insert(supplier);
+		supplierDao.insert(supplier);
+		return supplier;
 	}
 
 	@Override
@@ -73,4 +74,10 @@ public class SupplierBizImpl implements SupplierBiz {
     public Supplier findById(Long id) {
         return supplierDao.getById(id);
     }
+
+    @Override
+    public boolean upload(List<AddSupplierRequest> addSupplierList) {
+		List<Supplier> supplierList = supplierFactory.createSupplierListForUpload(addSupplierList);
+		return supplierDao.upload(supplierList);
+	}
 }

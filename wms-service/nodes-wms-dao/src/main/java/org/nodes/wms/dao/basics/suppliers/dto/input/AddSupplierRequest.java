@@ -1,4 +1,5 @@
 package org.nodes.wms.dao.basics.suppliers.dto.input;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
@@ -45,5 +46,11 @@ public class AddSupplierRequest implements Serializable {
 	/**
 	 * 是否启用(1:启用,-1:未启用)
 	 */
+	@NotNull(message = "启用状态不能为空")
 	private Integer status;
+
+	/**
+	 * 货主编码  导入excel时，传入货主编码
+	 */
+	private String ownerCode;
 }
