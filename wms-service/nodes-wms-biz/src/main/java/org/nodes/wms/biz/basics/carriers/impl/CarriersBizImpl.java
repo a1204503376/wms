@@ -80,6 +80,6 @@ public class CarriersBizImpl implements CarriersBiz {
     @Override
     public boolean importExcel(List<CarrierExcelRequest> importDataList) {
 		List<BasicsCarriers> carrierList = carriersFactory.createCarrierListForImport(importDataList);
-		return carriersDao.importExcel(importDataList);
+		return carriersDao.importExcel(carrierList);
     }
 }

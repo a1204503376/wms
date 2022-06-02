@@ -27,7 +27,7 @@
                 <el-button v-if="permissionObj.delete" icon="el-icon-delete" plain size="mini" type="danger"
                            @click="onRemove">删除
                 </el-button>
-                <el-button v-if="permissionObj.delete" icon="el-icon-upload2" plain size="mini"
+                <el-button v-if="permissionObj.import" icon="el-icon-upload2" plain size="mini"
                            @click="onUpload">导入
                 </el-button>
                 <file-upload

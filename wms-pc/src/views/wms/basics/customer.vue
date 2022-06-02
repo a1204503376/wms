@@ -32,7 +32,7 @@ import fileDownload from "js-file-download";
                 <el-button v-if="permissionObj.delete" icon="el-icon-delete" plain size="mini" type="danger"
                            @click="onRemove">删除
                 </el-button>
-                <el-button v-if="permissionObj.delete" icon="el-icon-upload2" plain size="mini"
+                <el-button v-if="permissionObj.import" icon="el-icon-upload2" plain size="mini"
                            @click="onUpload">导入
                 </el-button>
                 <file-upload
@@ -258,6 +258,7 @@ export default {
                 search: this.vaildData(this.permission.customer_view, false),
                 add: this.vaildData(this.permission.customer_add, false),
                 delete: this.vaildData(this.permission.customer_delete, false),
+                import: this.vaildData(this.permission.supplier_import, false)
             }
         }
     },

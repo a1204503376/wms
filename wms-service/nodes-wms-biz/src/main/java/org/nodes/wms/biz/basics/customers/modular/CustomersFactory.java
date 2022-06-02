@@ -5,7 +5,6 @@ import org.nodes.core.enums.StatusEnum;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.dao.basics.customer.CustomerDao;
 import org.nodes.wms.dao.basics.customer.dto.input.CustomerImportRequest;
-import org.nodes.wms.dao.basics.customer.dto.input.newCustomerRequest;
 import org.nodes.wms.dao.basics.customer.dto.input.NewCustomerRequest;
 import org.nodes.wms.dao.basics.customer.entities.BasicsCustomers;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
@@ -23,12 +22,11 @@ import java.util.List;
 @RequiredArgsConstructor
 
 public class CustomersFactory {
-	public BasicsCustomers createCustomers(NewCustomerRequest newCustomerRequest) {
 	private final OwnerBiz ownerBiz;
 
 	private final CustomerDao customerDao;
 
-	public BasicsCustomers createCustomers(newCustomerRequest newCustomerRequest) {
+	public BasicsCustomers createCustomers(NewCustomerRequest newCustomerRequest) {
 		BasicsCustomers basicsCustomers = new BasicsCustomers();
 		basicsCustomers.setCode(newCustomerRequest.getCode());
 		basicsCustomers.setName(newCustomerRequest.getName());
