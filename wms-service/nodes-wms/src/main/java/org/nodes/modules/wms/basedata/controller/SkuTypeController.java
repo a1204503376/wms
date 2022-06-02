@@ -12,7 +12,7 @@ import org.nodes.core.constant.CommonConstant;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.basedata.dto.SkuTypeDTO;
-import org.nodes.wms.core.basedata.entity.SkuType;
+import org.nodes.wms.dao.basics.sku.entities.SkuType;
 import org.nodes.wms.core.basedata.excel.SkuTypeExcel;
 import org.nodes.wms.core.basedata.service.ISkuTypeService;
 import org.nodes.wms.core.basedata.vo.SkuTypeVO;

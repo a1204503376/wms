@@ -13,7 +13,7 @@ import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuTypeCache;
 import org.nodes.wms.dao.basics.billType.entities.BillType;
 import org.nodes.wms.core.basedata.entity.Sku;
-import org.nodes.wms.core.basedata.entity.SkuType;
+import org.nodes.wms.dao.basics.sku.entities.SkuType;
 import org.nodes.wms.core.basedata.service.ISkuTypeService;
 import org.nodes.wms.core.strategy.cache.InstockCache;
 import org.nodes.wms.core.strategy.cache.InstockConfigCache;

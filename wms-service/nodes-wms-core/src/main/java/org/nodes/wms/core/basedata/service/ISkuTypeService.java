@@ -2,7 +2,7 @@ package org.nodes.wms.core.basedata.service;
 
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.wms.core.basedata.dto.SkuTypeDTO;
-import org.nodes.wms.core.basedata.entity.SkuType;
+import org.nodes.wms.dao.basics.sku.entities.SkuType;
 import org.nodes.wms.core.basedata.excel.SkuTypeExcel;
 import org.nodes.wms.core.basedata.vo.SkuTypeVO;
 import org.springblade.core.mp.base.BaseService;

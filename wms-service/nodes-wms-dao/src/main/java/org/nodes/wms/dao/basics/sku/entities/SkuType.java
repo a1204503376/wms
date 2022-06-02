@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import org.springblade.core.tenant.mp.TenantEntity;
+
+import java.math.BigDecimal;
 
 /**
  * 物品分类实体类
@@ -11,7 +14,7 @@ import lombok.Data;
 
 @Data
 @TableName("wms_sku_type")
-public class SkuType {
+public class SkuType extends TenantEntity {
 
 	/**
 	 * 物品分类id
@@ -22,7 +25,7 @@ public class SkuType {
 	/**
 	 * 上位物品分类id
 	 */
-	private String typePreId;
+	private Long typePreId;
 
 	/**
 	 * 物品分类名称
@@ -37,12 +40,12 @@ public class SkuType {
 	/**
 	 * 货主id
 	 */
-	private String woId;
+	private Long woId;
 
 	/**
 	 * 绩效系数
 	 */
-	private String gradeNum;
+	private BigDecimal gradeNum;
 
 	/**
 	 * 物品分类路径

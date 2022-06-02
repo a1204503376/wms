@@ -31,6 +31,7 @@ import org.nodes.wms.core.common.enums.DefaultFlagEnum;
 import org.nodes.wms.core.common.service.IAddressService;
 import org.nodes.wms.core.common.service.IContactsService;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
+import org.nodes.wms.dao.basics.sku.entities.SkuType;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;

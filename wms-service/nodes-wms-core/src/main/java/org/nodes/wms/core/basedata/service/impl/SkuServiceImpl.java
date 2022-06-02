@@ -37,6 +37,7 @@ import org.nodes.wms.core.strategy.service.IOutstockService;
 import org.nodes.wms.core.warehouse.entity.Warehouse;
 import org.nodes.wms.core.warehouse.service.IWarehouseService;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
+import org.nodes.wms.dao.basics.sku.entities.SkuType;
 import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
