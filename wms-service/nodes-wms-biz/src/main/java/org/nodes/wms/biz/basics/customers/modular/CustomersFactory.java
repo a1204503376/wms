@@ -1,6 +1,6 @@
 package org.nodes.wms.biz.basics.customers.modular;
 
-import org.nodes.wms.dao.basics.customer.dto.input.newCustomerRequest;
+import org.nodes.wms.dao.basics.customer.dto.input.NewCustomerRequest;
 import org.nodes.wms.dao.basics.customer.entities.BasicsCustomers;
 import org.springframework.stereotype.Service;
 /**
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CustomersFactory {
-	public BasicsCustomers createCustomers(newCustomerRequest newCustomerRequest) {
+	public BasicsCustomers createCustomers(NewCustomerRequest newCustomerRequest) {
 		BasicsCustomers basicsCustomers = new BasicsCustomers();
 		basicsCustomers.setCode(newCustomerRequest.getCode());
 		basicsCustomers.setName(newCustomerRequest.getName());

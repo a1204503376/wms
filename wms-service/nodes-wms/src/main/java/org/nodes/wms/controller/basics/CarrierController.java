@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_ROOT_URL +"carriers")
-public class CarriersController {
+public class CarrierController {
 	private  final CarriersBiz carriersBiz;
 	/**
 	 * 承运商管理分页查询

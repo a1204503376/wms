@@ -3,7 +3,7 @@ package org.nodes.wms.biz.basics.customers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.customer.dto.input.CustomerPageQuery;
 import org.nodes.wms.dao.basics.customer.dto.input.CustomerSelectQuery;
-import org.nodes.wms.dao.basics.customer.dto.input.newCustomerRequest;
+import org.nodes.wms.dao.basics.customer.dto.input.NewCustomerRequest;
 import org.nodes.wms.dao.basics.customer.dto.input.DeleteCustomerRequest;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
@@ -23,7 +23,7 @@ public interface CustomersBiz {
 	/**
 	 *  保存
 	 **/
-	boolean newCustomers(newCustomerRequest newCustomerRequest);
+	boolean newCustomers(NewCustomerRequest newCustomerRequest);
 	/**
 	 *  逻辑删除
 	 **/

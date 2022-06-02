@@ -9,7 +9,7 @@ import org.junit.runners.MethodSorters;
 import org.nodes.wms.biz.basics.customers.impl.CustomersBizImpl;
 import org.nodes.wms.dao.basics.customer.CustomerDao;
 import org.nodes.wms.dao.basics.customer.dto.input.CustomerPageQuery;
-import org.nodes.wms.dao.basics.customer.dto.input.newCustomerRequest;
+import org.nodes.wms.dao.basics.customer.dto.input.NewCustomerRequest;
 import org.nodes.wms.dao.basics.customer.dto.input.DeleteCustomerRequest;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
 import org.springblade.core.mp.support.Query;
@@ -47,7 +47,7 @@ public class CustomersTest {
 
 	@Test
 	public void test02() {
-		newCustomerRequest newCustomerRequest = new newCustomerRequest();
+		NewCustomerRequest newCustomerRequest = new NewCustomerRequest();
 		newCustomerRequest.setCode("12");
 		newCustomerRequest.setName("历史");
 		Assertions.assertEquals(true, customersBiz.newCustomers(newCustomerRequest));

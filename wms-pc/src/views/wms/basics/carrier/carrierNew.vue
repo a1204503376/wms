@@ -11,7 +11,7 @@
                          style="margin-left:10px;margin-right:10px;"
                 >
                     <el-row>
-                        <h3>客户单-{{ isEdit ? '编辑' : '新增' }}</h3>
+                        <h3>承运商-{{ isEdit ? '编辑' : '新增' }}</h3>
                     </el-row>
 
                     <el-row>
@@ -25,6 +25,13 @@
                         <el-col :span="8">
                             <el-form-item label="承运商名称" prop="name">
                                 <el-input v-model="form.params.name"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="承运商简称" >
+                                <el-input v-model="form.params.simpleName"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>

@@ -6,7 +6,7 @@ import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.customers.CustomersBiz;
 import org.nodes.wms.dao.basics.customer.dto.input.CustomerPageQuery;
 import org.nodes.wms.dao.basics.customer.dto.input.CustomerSelectQuery;
-import org.nodes.wms.dao.basics.customer.dto.input.newCustomerRequest;
+import org.nodes.wms.dao.basics.customer.dto.input.NewCustomerRequest;
 import org.nodes.wms.dao.basics.customer.dto.input.DeleteCustomerRequest;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_ROOT_URL +"customer")
-public class CustomersController {
+public class CustomerController {
 
 	private  final CustomersBiz customersBiz;
 
@@ -42,7 +42,7 @@ public class CustomersController {
 	 */
 	@ApiLog("客户管理-新增")
 	@PostMapping("/newCustomer")
-	public R<Boolean> newCustomer(@RequestBody  newCustomerRequest newCustomerRequest) {
+	public R<Boolean> newCustomer(@RequestBody NewCustomerRequest newCustomerRequest) {
 		return R.status(customersBiz.newCustomers(newCustomerRequest));
 	}
 
