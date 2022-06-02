@@ -2,7 +2,7 @@ package org.nodes.wms.core.basedata.cache;
 
 
 import org.nodes.wms.core.basedata.dto.SkuUmDTO;
-import org.nodes.wms.core.basedata.entity.SkuUm;
+import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.core.basedata.service.ISkuUmService;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.tool.utils.Func;

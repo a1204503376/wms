@@ -4,7 +4,7 @@ package org.nodes.wms.core.basedata.vo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import io.swagger.annotations.ApiModel;
-import org.nodes.wms.core.basedata.entity.SkuUm;
+import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 
 /**
  * 计量单位 视图实体类

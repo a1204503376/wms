@@ -1,7 +1,7 @@
 package org.nodes.wms.core.billing.service.impl;
 
 import org.nodes.wms.core.basedata.cache.SkuUmCache;
-import org.nodes.wms.core.basedata.entity.SkuUm;
+import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.core.basedata.service.ISkuUmService;
 import org.nodes.wms.core.billing.cache.BillingItemCache;
 import org.nodes.wms.core.billing.dto.BillingRuleDetailDTO;

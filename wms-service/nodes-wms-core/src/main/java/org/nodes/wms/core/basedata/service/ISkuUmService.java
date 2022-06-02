@@ -4,7 +4,7 @@ package org.nodes.wms.core.basedata.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.wms.core.basedata.dto.SkuUmDTO;
-import org.nodes.wms.core.basedata.entity.SkuUm;
+import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.core.basedata.excel.SkuUmExcel;
 import org.nodes.wms.core.basedata.vo.SkuUmVO;
 import org.springblade.core.mp.base.BaseService;

@@ -3,7 +3,7 @@
 <mapper namespace="org.nodes.wms.core.basedata.mapper.SkuUmMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="skuUmResultMap" type="org.nodes.wms.core.basedata.entity.SkuUm">
+    <resultMap id="skuUmResultMap" type="org.nodes.wms.dao.basics.sku.entities.SkuUm">
         <id column="wsu_id" property="wsuId"/>
         <result column="wsu_code" property="wsuCode"/>
         <result column="wsu_name" property="wsuName"/>
