@@ -3,10 +3,8 @@ package org.nodes.wms.controller.basics;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
-import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.wms.biz.basics.suppliers.SupplierBiz;
 import org.nodes.wms.dao.basics.suppliers.dto.input.*;
-import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierExportResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
@@ -60,25 +58,24 @@ public class SupplierController {
 		supplierBiz.exportSupplier(supplierPageQuery,response);
 	}
 
-	@GetMapping("export-template")
-	public void exportTemplate(HttpServletResponse response) {
-		List<SupplierExportResponse> supplierExportResponseList = new ArrayList<>();
-		ExcelUtil.export(response, "供应商", "供应商数据表", supplierExportResponseList, SupplierExportResponse.class);
-	}
+//	@ApiLog("供应商管理-导入")
+//	@PostMapping("/import-data")
+//	public R<String> importExcel(@Valid @RequestBody SupplierImportRequest supplierImportRequest){
+//		boolean tag = supplierBiz.importExcel(supplierImportRequest.getAddSupplierList());
+//		return tag ? R.success("导入成功！") : R.fail("导入失败！");
+//	}
 
-	@ApiLog("供应商管理-导入校验")
-	@PostMapping("/import-valid")
-	public R<List<DataVerify>> importValid(MultipartFile file){
-		List<SupplierImportExcelRequest> importExcelList = ExcelUtil.read(file, SupplierImportExcelRequest.class);
-		List<DataVerify> dataVerifyList = supplierBiz.validExcel(importExcelList);
-		return R.data(dataVerifyList);
+	@GetMapping("/export-template")
+	public void exportTemplate(HttpServletResponse response){
+		List<SupplierImportExcelRequest> importExcelList = new ArrayList<>();
+		ExcelUtil.export(response, "供应商", "供应商数据表", importExcelList, SupplierImportExcelRequest.class);
 	}
-
 	@ApiLog("供应商管理-导入")
 	@PostMapping("/import-data")
-	public R<String> importExcel(@Valid @RequestBody SupplierImportRequest supplierImportRequest){
-		boolean tag = supplierBiz.importExcel(supplierImportRequest.getAddSupplierList());
-		return tag ? R.success("导入成功！") : R.fail("导入失败！");
+	public R<String> importExcel(MultipartFile file){
+		List<SupplierImportExcelRequest> importExcelList = ExcelUtil.read(file, SupplierImportExcelRequest.class);
+		boolean importFlag = supplierBiz.importExcel(importExcelList);
+		return importFlag ? R.success("导入成功") : R.fail("导入失败");
 	}
 
 	@PostMapping("/select")

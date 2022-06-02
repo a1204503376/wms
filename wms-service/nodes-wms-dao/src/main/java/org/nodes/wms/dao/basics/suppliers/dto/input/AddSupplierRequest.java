@@ -48,9 +48,4 @@ public class AddSupplierRequest implements Serializable {
 	 */
 	@NotNull(message = "启用状态不能为空")
 	private Integer status;
-
-	/**
-	 * 货主编码  导入excel时，传入货主编码
-	 */
-	private String ownerCode;
 }

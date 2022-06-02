@@ -2,7 +2,6 @@ package org.nodes.wms.biz.basics.suppliers;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.wms.dao.basics.suppliers.dto.input.*;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
@@ -68,16 +67,8 @@ public interface SupplierBiz {
 	/**
 	 * Excel 导入
 	 *
-	 * @param addSupplierList: 新增供应商对象集合
+	 * @param importExcelList: 导入excel数据集合
 	 * @return true: 导入成功， false: 导入失败
 	 */
-    boolean importExcel(List<AddSupplierRequest> addSupplierList);
-
-	/**
-	 * 校验excel文件
-	 *
-	 * @param importExcelList: 校验数据集合
-	 * @return List<DataVerify> 校验返回对象集合
-	 */
-	List<DataVerify> validExcel(List<SupplierImportExcelRequest> importExcelList);
+    boolean importExcel(List<SupplierImportExcelRequest> importExcelList);
 }

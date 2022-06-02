@@ -3,9 +3,6 @@ package org.nodes.wms.biz.basics.suppliers.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.enums.StatusEnum;
-import org.nodes.core.tool.entity.DataVerify;
-import org.nodes.core.tool.utils.ValidationUtil;
 import org.nodes.wms.biz.basics.suppliers.SupplierBiz;
 import org.nodes.wms.biz.basics.suppliers.modular.SupplierFactory;
 import org.nodes.wms.biz.common.log.LogBiz;
@@ -17,11 +14,9 @@ import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
-import org.springblade.core.tool.utils.StringUtil;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -78,47 +73,8 @@ public class SupplierBizImpl implements SupplierBiz {
     }
 
     @Override
-    public boolean importExcel(List<AddSupplierRequest> addSupplierList) {
-		List<Supplier> supplierList = supplierFactory.createSupplierListForUpload(addSupplierList);
+    public boolean importExcel(List<SupplierImportExcelRequest> importExcelList) {
+		List<Supplier> supplierList = supplierFactory.createSupplierListForUpload(importExcelList);
 		return supplierDao.importExcel(supplierList);
-	}
-
-	@Override
-	public List<DataVerify> validExcel(List<SupplierImportExcelRequest> importExcelList) {
-
-		List<DataVerify> dataVerifyList = new ArrayList<>();
-		int index = 1;
-		for (SupplierImportExcelRequest excelData : importExcelList
-			 ) {
-			DataVerify dataVerify = new DataVerify();
-			dataVerify.setIndex(index);
-			// 开始效验数据
-			ValidationUtil.ValidResult validResult = ValidationUtil.validateBean(excelData);
-			// TODO 根据供应商编码查询供应商信息 模块之间的引用如何处理
-//			if (Func.isNotEmpty(addSupplier.getOwnerCode())){
-//				Owner owner = ownerBiz.findByCode(addSupplier.getOwnerCode());
-//				if(Func.isEmpty(owner)){
-//					throw new ServiceException("导入失败，不存在货主编码："+addSupplier.getOwnerCode());
-//				} else {
-//					supplier.setWoId(owner.getWoId());
-//				}
-//			}
-			boolean isExist = supplierDao.isExistSupplierCode(excelData.getCode());
-			if (isExist) {
-				validResult.addError("code","导入失败，供应商编码["+ excelData.getCode()+"]已存在");
-			}
-			if (!excelData.getStatus().equals(StatusEnum.ON.getIndex())
-				&& !excelData.getStatus().equals(StatusEnum.OFF.getIndex())){
-				throw new ServiceException("导入失败，启用状态只能为1(启用)或者0(禁用)");
-			}
-
-			if(validResult.hasErrors()){
-				dataVerify.setMessage(StringUtil.join(validResult.getAllErrors()));
-			}
-			dataVerifyList.add(dataVerify);
-
-			index++;
-		}
-		return dataVerifyList;
 	}
 }
