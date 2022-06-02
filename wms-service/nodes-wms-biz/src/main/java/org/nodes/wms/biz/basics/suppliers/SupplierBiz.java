@@ -67,8 +67,8 @@ public interface SupplierBiz {
 	/**
 	 * Excel 导入
 	 *
-	 * @param importExcelList: 导入excel数据集合
+	 * @param importDataList: 导入excel数据集合
 	 * @return true: 导入成功， false: 导入失败
 	 */
-    boolean importExcel(List<SupplierImportExcelRequest> importExcelList);
+    boolean importExcel(List<SupplierImportRequest> importDataList);
 }

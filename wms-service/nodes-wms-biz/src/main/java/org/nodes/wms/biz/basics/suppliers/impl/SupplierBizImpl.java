@@ -73,8 +73,8 @@ public class SupplierBizImpl implements SupplierBiz {
     }
 
     @Override
-    public boolean importExcel(List<SupplierImportExcelRequest> importExcelList) {
-		List<Supplier> supplierList = supplierFactory.createSupplierListForUpload(importExcelList);
+    public boolean importExcel(List<SupplierImportRequest> importDataList) {
+		List<Supplier> supplierList = supplierFactory.createSupplierListForImport(importDataList);
 		return supplierDao.importExcel(supplierList);
 	}
 }

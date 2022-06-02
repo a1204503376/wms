@@ -6,7 +6,7 @@ import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.dao.basics.suppliers.SupplierDao;
 import org.nodes.wms.dao.basics.suppliers.dto.input.AddSupplierRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierImportExcelRequest;
+import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierImportRequest;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
@@ -40,33 +40,33 @@ public class SupplierFactory {
 		return supplier;
 	}
 
-    public List<Supplier> createSupplierListForUpload(List<SupplierImportExcelRequest> importExcelList) {
+    public List<Supplier> createSupplierListForImport(List<SupplierImportRequest> importDataList) {
 		List<Supplier> supplierList = new ArrayList<>();
-		for (SupplierImportExcelRequest excelData: importExcelList) {
+		for (SupplierImportRequest data: importDataList) {
 			Supplier supplier = new Supplier();
 			// 根据供应商编码查询供应商信息
-			if (Func.isNotEmpty(excelData.getOwnerCode())){
-				Owner owner = ownerBiz.findByCode(excelData.getOwnerCode());
+			if (Func.isNotEmpty(data.getOwnerCode())){
+				Owner owner = ownerBiz.findByCode(data.getOwnerCode());
 				if(Func.isEmpty(owner)){
-					throw new ServiceException("导入失败，不存在货主编码："+excelData.getOwnerCode());
+					throw new ServiceException("导入失败，不存在货主编码："+data.getOwnerCode());
 				} else {
 					supplier.setWoId(owner.getWoId());
 				}
 			}
-			boolean isExist = supplierDao.isExistSupplierCode(excelData.getCode());
+			boolean isExist = supplierDao.isExistSupplierCode(data.getCode());
 			if (isExist) {
-				throw new ServiceException("导入失败，供应商编码["+ excelData.getCode()+"]已存在");
+				throw new ServiceException("导入失败，供应商编码["+ data.getCode()+"]已存在");
 			}
-			supplier.setCode(excelData.getCode());
-			supplier.setName(excelData.getName());
-			supplier.setSimpleName(excelData.getSimpleName());
-			supplier.setRemark(excelData.getRemark());
+			supplier.setCode(data.getCode());
+			supplier.setName(data.getName());
+			supplier.setSimpleName(data.getSimpleName());
+			supplier.setRemark(data.getRemark());
 
-			if (!excelData.getStatus().equals(StatusEnum.ON.getIndex())
-				&& !excelData.getStatus().equals(StatusEnum.OFF.getIndex())){
+			if (!data.getStatus().equals(StatusEnum.ON.getIndex())
+				&& !data.getStatus().equals(StatusEnum.OFF.getIndex())){
 				throw new ServiceException("导入失败，启用状态只能为1(启用)或者0(禁用)");
 			}
-			supplier.setStatus(excelData.getStatus());
+			supplier.setStatus(data.getStatus());
 			supplierList.add(supplier);
 		}
 		return supplierList;

@@ -58,23 +58,16 @@ public class SupplierController {
 		supplierBiz.exportSupplier(supplierPageQuery,response);
 	}
 
-//	@ApiLog("供应商管理-导入")
-//	@PostMapping("/import-data")
-//	public R<String> importExcel(@Valid @RequestBody SupplierImportRequest supplierImportRequest){
-//		boolean tag = supplierBiz.importExcel(supplierImportRequest.getAddSupplierList());
-//		return tag ? R.success("导入成功！") : R.fail("导入失败！");
-//	}
-
 	@GetMapping("/export-template")
 	public void exportTemplate(HttpServletResponse response){
-		List<SupplierImportExcelRequest> importExcelList = new ArrayList<>();
-		ExcelUtil.export(response, "供应商", "供应商数据表", importExcelList, SupplierImportExcelRequest.class);
+		List<SupplierImportRequest> importDataList = new ArrayList<>();
+		ExcelUtil.export(response, "供应商", "供应商数据表", importDataList, SupplierImportRequest.class);
 	}
 	@ApiLog("供应商管理-导入")
 	@PostMapping("/import-data")
 	public R<String> importExcel(MultipartFile file){
-		List<SupplierImportExcelRequest> importExcelList = ExcelUtil.read(file, SupplierImportExcelRequest.class);
-		boolean importFlag = supplierBiz.importExcel(importExcelList);
+		List<SupplierImportRequest> importDataList = ExcelUtil.read(file, SupplierImportRequest.class);
+		boolean importFlag = supplierBiz.importExcel(importDataList);
 		return importFlag ? R.success("导入成功") : R.fail("导入失败");
 	}
 
