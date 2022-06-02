@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import io.swagger.annotations.ApiModel;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.common.vo.AddressVO;
 import org.nodes.wms.core.common.vo.ContactsVO;
 

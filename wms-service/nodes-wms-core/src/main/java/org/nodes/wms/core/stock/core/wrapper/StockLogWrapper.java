@@ -9,7 +9,7 @@ import org.nodes.core.base.service.IDictService;
 import org.nodes.core.base.service.IUserService;
 import org.nodes.wms.core.basedata.cache.OwnerCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.stock.core.entity.StockLog;

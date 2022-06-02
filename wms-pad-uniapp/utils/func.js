@@ -1,10 +1,11 @@
 import api from '@/api/user.js'
 import tool from '@/utils/tool.js'
+import BarcodeRules from '@/common/BarcodeRules'
 // 全局公共方法
 const install = (Vue, vm) => {
 
 	// 登录成功之后的操作
-	const login = (userInfo) => {
+	const  login = (userInfo) => {
 		vm.$u.vuex('userName', userInfo.account)
 		vm.$u.vuex('loginTime', tool.format(new Date(),'YYYY-MM-DD HH:mm:ss'))
 		vm.$u.vuex('accessToken', userInfo.access_token)
@@ -16,6 +17,9 @@ const install = (Vue, vm) => {
 			vm.$u.vuex('signStatus', res.data.loginStatus)
 			vm.$u.vuex('lastSignTime', res.data.lastLoginTime)
 		})  
+		BarcodeRules.barcodeRules().then((res)=>{
+			vm.$u.vuex('barcodeRules', res.data)
+		})
 		uni.hideLoading();
 		uni.redirectTo({
 			url: '/pages/home/home'

@@ -7,7 +7,7 @@ import org.nodes.core.constant.DictConstant;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.basedata.dto.OwnerDTO;
 import org.nodes.wms.core.basedata.entity.Enterprise;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.excel.OwnerExcel;
 import org.nodes.wms.core.basedata.vo.OwnerVO;
 import org.nodes.wms.core.common.cache.AddressCache;

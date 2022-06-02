@@ -50,7 +50,8 @@ const store = new Vuex.Store({
 		//最后签到/签退时间
 		lastSignTime:'',
 		// 菜单列表
-		menuList:{}
+		menuList:{},
+		barcodeRules:''
 	},
 	mutations: {
 		$uStore(state, payload) {

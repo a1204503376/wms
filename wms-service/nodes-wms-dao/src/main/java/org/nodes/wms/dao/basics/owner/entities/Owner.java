@@ -14,6 +14,7 @@ import org.springblade.core.tenant.mp.TenantEntity;
 public class Owner extends TenantEntity {
 
 	private static final long serialVersionUID = -4755521835893759438L;
+	public static final int DATA_TYPE = 3;
 
 	/**
 	 * 货主ID

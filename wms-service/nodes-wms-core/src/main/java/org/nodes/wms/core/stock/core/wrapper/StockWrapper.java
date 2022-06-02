@@ -5,7 +5,7 @@ import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.entity.Dict;
 import org.nodes.core.base.service.IDictService;
 import org.nodes.wms.core.basedata.cache.*;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
 import org.nodes.wms.core.basedata.entity.SkuType;
