@@ -3,7 +3,7 @@
 <mapper namespace="org.nodes.wms.core.basedata.mapper.BillTypeMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="billTypeResultMap" type="org.nodes.wms.core.basedata.entity.BillType">
+    <resultMap id="billTypeResultMap" type="org.nodes.wms.dao.basics.billType.entities.BillType">
         <id column="bill_type_id" property="billTypeId"/>
         <result column="bill_type_cd" property="billTypeCd"/>
         <result column="bill_type_name" property="billTypeName"/>

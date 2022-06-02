@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.nodes.wms.biz.basics.billType.BillTypeBiz;
-import org.nodes.wms.core.basedata.entity.BillType;
+import org.nodes.wms.dao.basics.billType.entities.BillType;
 import org.nodes.wms.core.basedata.service.IBillTypeService;
 import org.nodes.wms.core.basedata.vo.BillTypeVo;
 import org.nodes.wms.core.basedata.wrapper.BillTypeWrapper;

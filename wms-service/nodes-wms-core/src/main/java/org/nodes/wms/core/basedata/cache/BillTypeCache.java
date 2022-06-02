@@ -1,6 +1,6 @@
 package org.nodes.wms.core.basedata.cache;
 
-import org.nodes.wms.core.basedata.entity.BillType;
+import org.nodes.wms.dao.basics.billType.entities.BillType;
 import org.nodes.wms.core.basedata.service.IBillTypeService;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.mp.support.Condition;

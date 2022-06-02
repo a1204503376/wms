@@ -7,7 +7,7 @@ import org.nodes.core.constant.DictConstant;
 import org.nodes.wms.core.basedata.cache.BillTypeCache;
 import org.nodes.wms.core.basedata.cache.EnterpriseCache;
 import org.nodes.wms.core.basedata.cache.OwnerCache;
-import org.nodes.wms.core.basedata.entity.BillType;
+import org.nodes.wms.dao.basics.billType.entities.BillType;
 import org.nodes.wms.core.basedata.entity.Enterprise;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.service.IEnterpriseService;

@@ -75,9 +75,10 @@ public class SupplierBizImpl implements SupplierBiz {
         return supplierDao.getById(id);
     }
 
-    @Override
-    public boolean upload(List<AddSupplierRequest> addSupplierList) {
-		List<Supplier> supplierList = supplierFactory.createSupplierListForUpload(addSupplierList);
-		return supplierDao.upload(supplierList);
+	@Override
+	public boolean importExcel(List<AddSupplierRequest> addSupplierList) {
+		return false;
 	}
+
+
 }
