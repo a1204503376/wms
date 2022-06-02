@@ -6,12 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.customers.CustomersBiz;
 import org.nodes.wms.biz.basics.customers.modular.CustomersFactory;
 import org.nodes.wms.dao.basics.customer.CustomerDao;
-import org.nodes.wms.dao.basics.customer.dto.input.CustomerPageQuery;
-import org.nodes.wms.dao.basics.customer.dto.input.CustomerSelectQuery;
-import org.nodes.wms.dao.basics.customer.dto.input.newCustomerRequest;
-import org.nodes.wms.dao.basics.customer.dto.input.DeleteCustomerRequest;
-import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
+import org.nodes.wms.dao.basics.customer.dto.input.*;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
+import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 import org.nodes.wms.dao.basics.customer.entities.BasicsCustomers;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
@@ -62,4 +59,10 @@ public class CustomersBizImpl implements CustomersBiz {
 	public List<CustomerSelectResponse> getCustomerSelectResponseTop10List(CustomerSelectQuery customerSelectQuery) {
 		return customerDao.listTop10ByCodeName(customerSelectQuery.getKey(), customerSelectQuery.getKey());
 	}
+
+    @Override
+    public boolean importExcel(List<CustomerImportRequest> importDataList) {
+		List<BasicsCustomers> customerList = customersFactory.createCustomerListForImport(importDataList);
+        return customerDao.importExcel(customerList);
+    }
 }

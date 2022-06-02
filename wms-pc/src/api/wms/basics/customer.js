@@ -6,7 +6,6 @@ export const page = (params,page,) => {
         method: 'post',
         data: params,
         params:page,
-
     })
 }
 
@@ -38,6 +37,14 @@ export const addCustomer = (data) => {
 export const getCustomerSelectResponseTop10List = (data) => {
     return request({
         url: '/api/wms/customer/getCustomerSelectResponseTop10List',
+        method: 'post',
+        data: data
+    })
+}
+
+export const importFile = (data) => {
+    return request({
+        url: '/api/wms/customer/import-data',
         method: 'post',
         data: data
     })
