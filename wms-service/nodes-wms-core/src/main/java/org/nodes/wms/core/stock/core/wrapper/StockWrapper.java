@@ -8,7 +8,7 @@ import org.nodes.wms.core.basedata.cache.*;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
-import org.nodes.wms.core.basedata.entity.SkuType;
+import org.nodes.wms.dao.basics.sku.entities.SkuType;
 import org.nodes.wms.core.basedata.service.*;
 import org.nodes.wms.core.basedata.vo.SkuPackageVO;
 import org.nodes.wms.core.basedata.wrapper.SkuPackageWrapper;

@@ -13,7 +13,7 @@ import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.core.basedata.cache.SkuUmCache;
 import org.nodes.wms.core.basedata.dto.SkuUmDTO;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
-import org.nodes.wms.core.basedata.entity.SkuUm;
+import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.core.basedata.excel.SkuUmExcel;
 import org.nodes.wms.core.basedata.mapper.SkuUmMapper;
 import org.nodes.wms.core.basedata.service.ISkuUmService;

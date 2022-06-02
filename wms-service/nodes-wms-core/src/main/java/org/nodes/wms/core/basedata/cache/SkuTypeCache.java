@@ -1,7 +1,7 @@
 package org.nodes.wms.core.basedata.cache;
 
 import org.nodes.wms.core.basedata.dto.SkuTypeDTO;
-import org.nodes.wms.core.basedata.entity.SkuType;
+import org.nodes.wms.dao.basics.sku.entities.SkuType;
 import org.nodes.wms.core.basedata.service.ISkuTypeService;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.tool.utils.Func;

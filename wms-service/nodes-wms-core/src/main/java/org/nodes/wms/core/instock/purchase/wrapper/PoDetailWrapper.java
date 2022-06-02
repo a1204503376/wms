@@ -12,7 +12,7 @@ import org.nodes.wms.core.basedata.cache.SkuTypeCache;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuPackage;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
-import org.nodes.wms.core.basedata.entity.SkuType;
+import org.nodes.wms.dao.basics.sku.entities.SkuType;
 import org.nodes.wms.core.basedata.service.ISkuPackageService;
 import org.nodes.wms.core.basedata.service.ISkuService;
 import org.nodes.wms.core.basedata.service.ISkuTypeService;

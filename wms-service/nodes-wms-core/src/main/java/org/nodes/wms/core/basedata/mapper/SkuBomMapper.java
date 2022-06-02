@@ -1,6 +1,6 @@
 package org.nodes.wms.core.basedata.mapper;
 
-import org.nodes.wms.core.basedata.entity.SkuBom;
+import org.nodes.wms.dao.basics.bom.entites.SkuBom;
 import org.nodes.wms.core.basedata.vo.SkuBomVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;

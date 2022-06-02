@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  */
 @Data
 @TableName("wms_sku_bom")
-public class WmsSkuBom extends TenantEntity implements Serializable {
+public class SkuBom extends TenantEntity implements Serializable {
 	private static final long serialVersionUID = -7884571229295209020L;
 
 	/**

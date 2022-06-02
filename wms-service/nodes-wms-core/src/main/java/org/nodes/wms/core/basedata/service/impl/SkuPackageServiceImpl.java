@@ -19,7 +19,7 @@ import org.nodes.wms.core.basedata.dto.SkuPackageDetailDTO;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuPackage;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
-import org.nodes.wms.core.basedata.entity.SkuUm;
+import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.core.basedata.excel.SkuPackageExcel;
 import org.nodes.wms.core.basedata.mapper.SkuPackageMapper;
 import org.nodes.wms.core.basedata.service.ISkuPackageDetailService;
