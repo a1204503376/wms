@@ -28,11 +28,9 @@ export const exportFile = (params) => {
 
 export const importFile = (data) => {
     return request({
-        url: '/api/wms/supplier/import',
+        url: '/api/wms/supplier/import-data',
         method: 'post',
-        data: {
-            addSupplierList: data
-        }
+        data: data
     })
 }
 

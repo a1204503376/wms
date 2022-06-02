@@ -74,7 +74,7 @@ public class SupplierDaoImpl extends BaseServiceImpl<SupplierMapper, Supplier> i
     }
 
     @Override
-    public boolean upload(List<Supplier> supplierList) {
+    public boolean importExcel(List<Supplier> supplierList) {
 		return super.saveBatch(supplierList);
 	}
 }

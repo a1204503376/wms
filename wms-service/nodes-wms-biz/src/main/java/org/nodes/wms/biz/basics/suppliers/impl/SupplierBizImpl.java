@@ -7,10 +7,7 @@ import org.nodes.wms.biz.basics.suppliers.SupplierBiz;
 import org.nodes.wms.biz.basics.suppliers.modular.SupplierFactory;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.dao.basics.suppliers.SupplierDao;
-import org.nodes.wms.dao.basics.suppliers.dto.input.AddSupplierRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.input.RemoveRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
-import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierSelectQuery;
+import org.nodes.wms.dao.basics.suppliers.dto.input.*;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierExportResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
@@ -75,10 +72,9 @@ public class SupplierBizImpl implements SupplierBiz {
         return supplierDao.getById(id);
     }
 
-	@Override
-	public boolean importExcel(List<AddSupplierRequest> addSupplierList) {
-		return false;
+    @Override
+    public boolean importExcel(List<SupplierImportRequest> importDataList) {
+		List<Supplier> supplierList = supplierFactory.createSupplierListForImport(importDataList);
+		return supplierDao.importExcel(supplierList);
 	}
-
-
 }

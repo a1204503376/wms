@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 供应商导入Excel模板类
  **/
 @Data
-public class SupplierImportRequest implements Serializable {
+public class SupplierImportExcelRequest implements Serializable {
 
 	private static final long serialVersionUID = 8048740360278948493L;
 
