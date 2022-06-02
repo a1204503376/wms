@@ -9,12 +9,8 @@ import java.io.Serializable;
  * 客户管理接收类
  **/
 @Data
-public class newCustomerRequest implements Serializable {
+public class NewCustomerRequest implements Serializable {
 	private static final long serialVersionUID = 3518961513626458788L;
-	/**
-	 * 客户ID
-	 */
-	private Long id;
 	/**
 	 * 客户编码
 	 */

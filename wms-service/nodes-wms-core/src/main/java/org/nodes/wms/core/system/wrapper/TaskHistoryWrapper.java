@@ -4,7 +4,7 @@ import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.entity.Dict;
 import org.nodes.core.base.service.IDictService;
 import org.nodes.wms.core.basedata.cache.BillTypeCache;
-import org.nodes.wms.core.basedata.entity.BillType;
+import org.nodes.wms.dao.basics.billType.entities.BillType;
 import org.nodes.wms.core.system.entity.TaskHistory;
 import org.nodes.wms.core.system.vo.TaskHistoryVO;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;

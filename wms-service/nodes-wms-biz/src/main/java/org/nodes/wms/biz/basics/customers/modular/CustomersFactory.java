@@ -6,6 +6,7 @@ import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.dao.basics.customer.CustomerDao;
 import org.nodes.wms.dao.basics.customer.dto.input.CustomerImportRequest;
 import org.nodes.wms.dao.basics.customer.dto.input.newCustomerRequest;
+import org.nodes.wms.dao.basics.customer.dto.input.NewCustomerRequest;
 import org.nodes.wms.dao.basics.customer.entities.BasicsCustomers;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.springblade.core.log.exception.ServiceException;
@@ -22,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 
 public class CustomersFactory {
+	public BasicsCustomers createCustomers(NewCustomerRequest newCustomerRequest) {
 	private final OwnerBiz ownerBiz;
 
 	private final CustomerDao customerDao;

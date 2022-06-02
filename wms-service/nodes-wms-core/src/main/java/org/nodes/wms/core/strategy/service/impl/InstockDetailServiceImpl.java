@@ -11,7 +11,7 @@ import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.basedata.cache.BillTypeCache;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuTypeCache;
-import org.nodes.wms.core.basedata.entity.BillType;
+import org.nodes.wms.dao.basics.billType.entities.BillType;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuType;
 import org.nodes.wms.core.basedata.service.ISkuTypeService;

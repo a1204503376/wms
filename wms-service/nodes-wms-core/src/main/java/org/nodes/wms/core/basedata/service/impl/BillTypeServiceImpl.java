@@ -3,7 +3,7 @@ package org.nodes.wms.core.basedata.service.impl;
 import lombok.AllArgsConstructor;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.basedata.cache.BillTypeCache;
-import org.nodes.wms.core.basedata.entity.BillType;
+import org.nodes.wms.dao.basics.billType.entities.BillType;
 import org.nodes.wms.core.basedata.mapper.BillTypeMapper;
 import org.nodes.wms.core.basedata.service.IBillTypeService;
 import org.nodes.wms.core.instock.asn.entity.AsnHeader;
