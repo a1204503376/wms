@@ -1,6 +1,6 @@
 package org.nodes.wms.core.basedata.service;
 
-import org.nodes.wms.core.basedata.entity.SkuBom;
+import org.nodes.wms.dao.basics.bom.entites.SkuBom;
 import org.nodes.wms.core.basedata.vo.SkuBomVO;
 import org.springblade.core.mp.base.BaseService;
 import com.baomidou.mybatisplus.core.metadata.IPage;

@@ -1,6 +1,6 @@
 package org.nodes.wms.core.basedata.service;
 
-import org.nodes.wms.core.basedata.entity.BillType;
+import org.nodes.wms.dao.basics.billType.entities.BillType;
 import org.springblade.core.mp.base.BaseService;
 
 import javax.servlet.http.HttpServletResponse;

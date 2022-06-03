@@ -1,8 +1,8 @@
 package org.nodes.wms.core.basedata.dto;
 
-import org.nodes.wms.core.basedata.entity.SkuBom;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.nodes.wms.dao.basics.bom.entites.SkuBom;
 
 /**
  * 物料清单数据传输对象实体类

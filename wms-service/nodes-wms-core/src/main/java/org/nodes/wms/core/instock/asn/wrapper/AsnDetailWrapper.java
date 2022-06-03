@@ -9,7 +9,7 @@ import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuPackage;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
-import org.nodes.wms.core.basedata.entity.SkuType;
+import org.nodes.wms.dao.basics.sku.entities.SkuType;
 import org.nodes.wms.core.basedata.enums.SkuLevelEnum;
 import org.nodes.wms.core.basedata.service.ISkuLotService;
 import org.nodes.wms.core.basedata.service.ISkuTypeService;

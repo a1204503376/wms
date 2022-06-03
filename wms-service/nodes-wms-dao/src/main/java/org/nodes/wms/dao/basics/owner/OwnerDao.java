@@ -24,4 +24,12 @@ public interface OwnerDao {
 	 * @return Owner
 	 */
     Owner getById(Long woId);
+
+	/**
+	 * 根据编码查找货主信息
+	 *
+	 * @param ownerCode: 货主编码
+	 * @return Owner
+	 */
+    Owner getByCode(String ownerCode);
 }

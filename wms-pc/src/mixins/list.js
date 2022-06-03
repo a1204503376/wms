@@ -4,6 +4,7 @@ import {nowDateFormat} from "@/util/date"
 import {getCrudColumnResponseList} from "@/api/core/column";
 import {deepClone} from "@/util/util";
 import {mapGetters} from "vuex";
+import {importFile} from "@/api/wms/basics/supplier";
 
 export const listMixin = {
     mixins: [menuMixin],
@@ -194,5 +195,14 @@ export const listMixin = {
                 this.exportExcelSheet[0].cellStyle.push(cell);
             })
         },
+        onUpload() {
+            this.fileUpload.visible = true;
+        },
+        getFormData(res){
+            let file = res.data.localFile.file;
+            let param = new FormData();
+            param.append("file", file);
+            return param;
+        }
     }
 }

@@ -1,7 +1,7 @@
 import fileDownload from "js-file-download";
 <template>
     <div id='customer'>
-        <nodes-master-page  v-on="form.events" :permission="permissionObj">
+        <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-form-item label="客户编码">
                     <el-input v-model="form.params.code" class="d-input"></el-input>
@@ -12,7 +12,6 @@ import fileDownload from "js-file-download";
                 <el-form-item label="客户简称">
                     <el-input v-model="form.params.simpleName" class="d-input"></el-input>
                 </el-form-item>
-
             </template>
             <template v-slot:expandSearch>
                 <el-row type="flex">
@@ -30,9 +29,18 @@ import fileDownload from "js-file-download";
             <template v-slot:batchBtn>
                 <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
                 </el-button>
-                <el-button v-if="permissionObj.delete" size="mini" type="danger" @click="onRemove" icon="el-icon-delete"
-                           plain>删除
+                <el-button v-if="permissionObj.delete" icon="el-icon-delete" plain size="mini" type="danger"
+                           @click="onRemove">删除
                 </el-button>
+                <el-button v-if="permissionObj.import" icon="el-icon-upload2" plain size="mini"
+                           @click="onUpload">导入
+                </el-button>
+                <file-upload
+                    :visible="fileUpload.visible"
+                    file-name="客户"
+                    template-url="/api/wms/customer/export-template"
+                    @callback="callbackFileUpload"
+                ></file-upload>
             </template>
             <template v-slot:tableTool>
                 <el-tooltip
@@ -73,7 +81,7 @@ import fileDownload from "js-file-download";
                     <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
-                    <excel-export ref="excelExport" :sheet="sheet" style="display: inline-block;margin-left: 10px">
+                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet" style="display: inline-block;margin-left: 10px">
                         <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
                         </el-button>
                     </excel-export>
@@ -85,10 +93,10 @@ import fileDownload from "js-file-download";
                     :data="table.data"
                     border
                     highlight-current-row
+                    row-key="id"
                     size="mini"
                     style="width: 100%"
                     @sort-change="onSortChange"
-                    row-key="id"
                 >
                     <el-table-column fixed type="selection" width="50"></el-table-column>
                     <el-table-column fixed sortable type="index">
@@ -121,8 +129,8 @@ import fileDownload from "js-file-download";
                 <el-pagination
                     :page-sizes="[20, 50, 100]"
                     background
-                    v-bind="page"
                     layout="total, sizes, prev, pager, next, jumper"
+                    v-bind="page"
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                 >
@@ -143,9 +151,10 @@ import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import {listMixin} from "@/mixins/list";
-import {exportFile, page, remove} from "@/api/wms/basics/customer";
+import {exportFile, page, remove, importFile} from "@/api/wms/basics/customer";
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js';
+import fileUpload from "@/components/nodes/fileUpload";
 
 
 
@@ -158,12 +167,13 @@ export default {
         NodesAsnBillState,
         NodesMasterPage,
         NodesDateRange,
-        ExcelExport
+        ExcelExport,
+        fileUpload,
     },
     mixins: [listMixin],
     data() {
         return {
-            woId:"",
+            woId: "",
             form: {
                 params: {
                     code: "",
@@ -234,40 +244,41 @@ export default {
                     },
                 ],
             },
+            fileUpload: {
+                visible: false,
+            }
         };
     },
     created() {
         this.getTableData();
     },
     computed: {
-        onExportLocalData() {
-            this.exportCurrentDataToExcel("客户表","客户表");
-        },
         permissionObj() {
             return {
                 search: this.vaildData(this.permission.customer_view, false),
                 add: this.vaildData(this.permission.customer_add, false),
                 delete: this.vaildData(this.permission.customer_delete, false),
+                import: this.vaildData(this.permission.supplier_import, false)
             }
         }
     },
     watch: {
         $route(to) {
-            if(to.query && to.query.isRefresh === 'true'){
+            if (to.query && to.query.isRefresh === 'true') {
                 this.refreshTable();
             }
         }
     },
     methods: {
         getTableData() {
-            page(this.form.params,this.page)
+            page(this.form.params, this.page)
                 .then((res) => {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
                 });
         },
-        refreshTable(){
+        refreshTable() {
             this.getTableData();
         },
         exportData() {
@@ -287,6 +298,9 @@ export default {
         onSubmit() {
             this.getTableData();
 
+        },
+        onExportLocalData() {
+            this.exportCurrentDataToExcel("客户表", "客户表");
         },
         onReset() {
             this.form.params = {
@@ -310,9 +324,7 @@ export default {
                 }
             });
         },
-
         onRemove() {
-
             this.$confirm("确定删除当前数据？", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -322,7 +334,6 @@ export default {
                 this.$refs.table.selection.forEach(e => {
                     this.deleteCustomerRequest.ids.push(e.id)
                 })
-
                 remove(this.deleteCustomerRequest)
                     .then(() => {
                         this.$message.success('删除成功');
@@ -330,11 +341,19 @@ export default {
                     })
                     .catch(() => {
                     });
-
-
             })
         },
-
+        callbackFileUpload(res) {
+            this.fileUpload.visible = false;
+            if (!res.result) {
+                return;
+            }
+            let param = this.getFormData(res);
+            importFile(param).then((res) => {
+                this.$message.success(res.data.msg);
+                this.refreshTable();
+            })
+        },
     },
 };
 </script>

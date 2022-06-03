@@ -19,7 +19,7 @@ import org.nodes.wms.core.allot.service.IAllotHeaderService;
 import org.nodes.wms.core.allot.vo.AllotHeaderVO;
 import org.nodes.wms.core.allot.wrapper.AllotDetailWrapper;
 import org.nodes.wms.core.allot.wrapper.AllotHeaderWrapper;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.common.entity.Address;
 import org.nodes.wms.core.common.entity.Contacts;

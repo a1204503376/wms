@@ -17,7 +17,7 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.nodes.wms.core.basedata.entity.SkuBom;
+import org.nodes.wms.dao.basics.bom.entites.SkuBom;
 import org.nodes.wms.core.basedata.vo.SkuBomVO;
 import org.nodes.wms.core.basedata.wrapper.SkuBomWrapper;
 import org.nodes.wms.core.basedata.dto.SkuBomDTO;

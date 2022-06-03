@@ -25,10 +25,10 @@ public interface SupplierDao {
 	Page<SupplierPageResponse> selectPage(IPage<?> page, SupplierPageQuery supplierPageQuery);
 
 	/**
-	 * 新增一条供应商信息
+	 * 新增供应商信息
 	 *
-	 * @param supplier:供应商对象
-	 * @return java.lang.Integer
+	 * @param supplier: 供应商对象
+	 * @return true: 新增成功，false: 新增失败
 	 */
 	boolean insert(Supplier supplier);
 
@@ -72,4 +72,12 @@ public interface SupplierDao {
 	 * @return Supplier
 	 */
     Supplier getById(Long id);
+
+	/**
+	 * Excel 导入
+	 *
+	 * @param supplierList : 新增供应商对象集合
+	 * @return true: 导入成功， false: 导入失败
+	 */
+    boolean importExcel(List<Supplier> supplierList);
 }

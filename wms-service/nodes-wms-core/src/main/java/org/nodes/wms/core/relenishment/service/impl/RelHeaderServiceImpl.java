@@ -11,7 +11,7 @@ import org.nodes.core.tool.cache.SerialNoCache;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.StringPool;
 import org.nodes.wms.core.basedata.cache.OwnerCache;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.relenishment.dto.RelHeaderDTO;
 import org.nodes.wms.core.relenishment.entity.RelDetail;

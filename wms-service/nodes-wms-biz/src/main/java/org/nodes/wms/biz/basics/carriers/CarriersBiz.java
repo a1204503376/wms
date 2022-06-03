@@ -3,8 +3,8 @@ package org.nodes.wms.biz.basics.carriers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.carrier.dto.input.*;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierDropDownResponse;
-import org.springblade.core.mp.support.Query;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse;
+import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -45,4 +45,12 @@ public interface CarriersBiz {
 	 * @return 承运商集合
 	 */
 	List<CarrierDropDownResponse> getDropDown(CarrierDropDownRequest carrierDropDownRequest);
+
+	/**
+	 * 导入
+	 *
+	 * @param importDataList: excel中的数据集合
+	 * @return true: 导入成功，false: 导入失败
+	 */
+    boolean importExcel(List<CarrierExcelRequest> importDataList);
 }

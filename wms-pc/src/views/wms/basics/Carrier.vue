@@ -6,7 +6,7 @@ import fileDownload from "js-file-download";
              label-position="right"
              label-width="60"
              size="mini">
-        <nodes-master-page :configure="masterConfig"  :permission="permissionObj" v-on="form.events">
+        <nodes-master-page :configure="masterConfig" :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-form-item label="承运商编码">
                     <el-input v-model="form.params.code" class="d-input"></el-input>
@@ -35,9 +35,18 @@ import fileDownload from "js-file-download";
             <template v-slot:batchBtn>
                 <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
                 </el-button>
-                <el-button v-if="permissionObj.delete" size="mini" type="danger" @click="onRemove" icon="el-icon-delete"
-                           plain>删除
+                <el-button v-if="permissionObj.delete" icon="el-icon-delete" plain size="mini" type="danger"
+                           @click="onRemove">删除
                 </el-button>
+                <el-button v-if="permissionObj.import" icon="el-icon-upload2" plain size="mini"
+                           @click="onUpload">导入
+                </el-button>
+                <file-upload
+                    :visible="fileUpload.visible"
+                    file-name="承运商"
+                    template-url="/api/wms/carriers/export-template"
+                    @callback="callbackFileUpload"
+                ></file-upload>
             </template>
             <template v-slot:tableTool>
                 <el-tooltip
@@ -68,7 +77,7 @@ import fileDownload from "js-file-download";
                     <el-button circle icon="el-icon-download" size="mini" @click="excelCarrier"></el-button>
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
-                    <excel-export ref="excelExport" :sheet="sheet" style="display: inline-block;margin-left: 10px">
+                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet" style="display: inline-block;margin-left: 10px">
                         <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
                         </el-button>
                     </excel-export>
@@ -136,196 +145,204 @@ import fileDownload from "js-file-download";
 
 <script>
 
+import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
+import NodesDateRange from "@/components/wms/general/NodesDateRange";
+import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
+import fileDownload from "js-file-download";
+import {listMixin} from "@/mixins/list";
+import {ExcelExport} from 'pikaz-excel-js';
+// eslint-disable-next-line no-unused-vars
+import {deleteCarrier, excelCarrier, getCarriersPage, importFile} from "@/api/wms/basics/Carrier.js";
+import fileUpload from "@/components/nodes/fileUpload";
 
-    import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
-    import NodesDateRange from "@/components/wms/general/NodesDateRange";
-    import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
-    import fileDownload from "js-file-download";
-    import {listMixin} from "@/mixins/list";
-    import {ExcelExport} from 'pikaz-excel-js';
-    // eslint-disable-next-line no-unused-vars
-    import {
-        getCarriersPage,
-        // eslint-disable-next-line no-unused-vars
-        newCarrier,
-        // eslint-disable-next-line no-unused-vars
-        deleteCarrier,
-        excelCarrier,
-        updateCarrier,
-    } from "@/api/wms/basics/Carrier.js";
 
-    export default {
-        name: "carrier",
-        components: {
-            NodesSearchInput,
-            NodesMasterPage,
-            NodesDateRange,
-            ExcelExport
-        },
-        mixins: [listMixin],
-        data() {
-            return {
-                selectionList: [],
+export default {
+    name: "carrier",
+    components: {
+        NodesSearchInput,
+        NodesMasterPage,
+        NodesDateRange,
+        ExcelExport,
+        fileUpload
+    },
+    mixins: [listMixin],
+    data() {
+        return {
+            selectionList: [],
 
-                deleteParams: {
-                    list: []
-                },
-                masterConfig: {
-                    showExpandBtn: true
-                },
-                params: {},
-                excelParams: {
+            deleteParams: {
+                list: []
+            },
+            masterConfig: {
+                showExpandBtn: true
+            },
+            params: {},
+            excelParams: {
+                code: '',//承运商编码
+                name: '',//承运商名称
+                simpleName: '',//承运商简称
+            },
+            form: {
+                params: {
                     code: '',//承运商编码
                     name: '',//承运商名称
                     simpleName: '',//承运商简称
-                },
-                form: {
-                    params: {
-                        code: '',//承运商编码
-                        name: '',//承运商名称
-                        simpleName: '',//承运商简称
-                        createTimeDateRange: ['', ''],//创建时间开始 创建时间结束
-                        updateTimeDateRange: ['', ''],//更新时间开始 更新时间结束
-                    }
-                },
-                table: {
-                    columnList: [
-                        {
-                            prop: 'code',
-                            label: '承运商编码'
-                        },
-                        {
-                            prop: 'name',
-                            label: '承运商名称'
-                        },
-                        {
-                            prop: 'simpleName',
-                            label: '承运商简称'
-                        },
-                        {
-                            prop: 'ownerName',
-                            label: '货主'
-                        },
-                        {
-                            prop: 'remark',
-                            label: '备注'
-                        },
-                        {
-                            prop: 'createTime',
-                            label: '创建时间'
-                        },
-                        {
-                            prop: 'createUser',
-                            label: '创建人'
-                        },
-                        {
-                            prop: 'updateTime',
-                            label: '修改时间'
-                        },
-                        {
-                            prop: 'updateUser',
-                            label: '修改人'
-                        }
-                    ]
-                },
-            }
-        },
-
-        created() {
-            this.getTableData();
-        },
-        computed: {
-            ids() {
-                let ids = [];
-                this.selectionList.forEach(ele => {
-                    ids.push(ele.id);
-                });
-                return ids.join(",");
-            },
-            codes() {
-                let codes = [];
-                this.selectionList.forEach(ele => {
-                    codes.push(ele.code);
-                });
-                return codes.join(",");
-            },
-            permissionObj() {
-                return {
-                    search: this.vaildData(this.permission.supplier_search, false),
-                    add: this.vaildData(this.permission.supplier_add, false),
-                    delete: this.vaildData(this.permission.supplier_delete, false)
+                    createTimeDateRange: ['', ''],//创建时间开始 创建时间结束
+                    updateTimeDateRange: ['', ''],//更新时间开始 更新时间结束
                 }
+            },
+            table: {
+                columnList: [
+                    {
+                        prop: 'code',
+                        label: '承运商编码'
+                    },
+                    {
+                        prop: 'name',
+                        label: '承运商名称'
+                    },
+                    {
+                        prop: 'simpleName',
+                        label: '承运商简称'
+                    },
+                    {
+                        prop: 'ownerName',
+                        label: '货主'
+                    },
+                    {
+                        prop: 'remark',
+                        label: '备注'
+                    },
+                    {
+                        prop: 'createTime',
+                        label: '创建时间'
+                    },
+                    {
+                        prop: 'createUser',
+                        label: '创建人'
+                    },
+                    {
+                        prop: 'updateTime',
+                        label: '修改时间'
+                    },
+                    {
+                        prop: 'updateUser',
+                        label: '修改人'
+                    }
+                ]
+            },
+            fileUpload: {
+                visible: false,
             }
+        }
+    },
 
+    created() {
+        this.getTableData();
+    },
+    computed: {
+        ids() {
+            let ids = [];
+            this.selectionList.forEach(ele => {
+                ids.push(ele.id);
+            });
+            return ids.join(",");
         },
-        methods: {
-            onExportLocalData() {
-                this.exportCurrentDataToExcel("承运商表","承运商表");
-            },
-            hideOnSinglePage() {
-            },
-            selectionChange(row) {
-                this.selectionList = row;
-            },
-            selectionClear() {
-                this.selectionList = [];
-                this.$refs.table.toggleSelection();
-            },
-            excelCarrier() {
-                var that = this;
-                that.excelParams.code = this.form.params.code;
-                that.excelParams.name = this.form.params.name;
-                that.excelParams.simpleName = this.form.params.simpleName;
-                excelCarrier(that.excelParams).then((res) => {
-                    fileDownload(res.data, "物品分类.xlsx");
-                });
-            },
-            getTableData() {
-                var that = this;
-                that.params = this.form.params
-                getCarriersPage(that.params, this.page).then((res) => {
-                    this.page.total = res.data.data.total;
-                    this.page.currentPage = res.data.data.pages;
-                    this.page.current = res.data.data.current;
-                    this.page.size = res.data.data.size;
-                    this.table.data = res.data.data.records;
-                });
-            },
-            onAdd() {
-                this.$router.push({
-                    name: '新增承运商',
-                    params: {
-                        id: '0'
+        codes() {
+            let codes = [];
+            this.selectionList.forEach(ele => {
+                codes.push(ele.code);
+            });
+            return codes.join(",");
+        },
+        permissionObj() {
+            return {
+                search: this.vaildData(this.permission.supplier_search, false),
+                add: this.vaildData(this.permission.supplier_add, false),
+                delete: this.vaildData(this.permission.supplier_delete, false),
+                import: this.vaildData(this.permission.supplier_import, false)
+            }
+        }
+
+    },
+    methods: {
+        onExportLocalData() {
+            this.exportCurrentDataToExcel("承运商表", "承运商表");
+        },
+        hideOnSinglePage() {
+        },
+        selectionChange(row) {
+            this.selectionList = row;
+        },
+        selectionClear() {
+            this.selectionList = [];
+            this.$refs.table.toggleSelection();
+        },
+        excelCarrier() {
+            var that = this;
+            that.excelParams.code = this.form.params.code;
+            that.excelParams.name = this.form.params.name;
+            that.excelParams.simpleName = this.form.params.simpleName;
+            excelCarrier(that.excelParams).then((res) => {
+                fileDownload(res.data, "物品分类.xlsx");
+            });
+        },
+        getTableData() {
+            var that = this;
+            that.params = this.form.params
+            getCarriersPage(that.params, this.page).then((res) => {
+                this.page.total = res.data.data.total;
+                this.page.currentPage = res.data.data.pages;
+                this.page.current = res.data.data.current;
+                this.page.size = res.data.data.size;
+                this.table.data = res.data.data.records;
+            });
+        },
+        refreshTable(){
+            this.getTableData()
+        },
+        onAdd() {
+            this.$router.push({
+                name: '新增承运商',
+                params: {
+                    id: '0'
+                }
+            });
+        },
+        onRemove() {
+            this.$confirm("确定删除供应商编码为" + this.codes + "的数据吗?", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            }).then(() => {
+                this.deleteParams.list = this.ids.split(',');
+                deleteCarrier(this.deleteParams.list).then((res) => {
+                    if (res.data.code == 200) {
+                        this.getTableData();
+                        this.$message({
+                            type: "success",
+                            message: "操作成功!"
+                        });
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: "操作失败!"
+                        });
                     }
                 });
-            },
-
-            onRemove() {
-                this.$confirm("确定删除供应商编码为" + this.codes + "的数据吗?", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning"
-                }).then(() => {
-                    this.deleteParams.list = this.ids.split(',');
-                    deleteCarrier(this.deleteParams.list).then((res) => {
-                        if (res.data.code == 200) {
-                            this.getTableData();
-                            this.$message({
-                                type: "success",
-                                message: "操作成功!"
-                            });
-                        } else {
-                            this.$message({
-                                type: "error",
-                                message: "操作失败!"
-                            });
-                        }
-
-
-                    });
-                });
-            },
-
-        }
+            });
+        },
+        callbackFileUpload(res) {
+            this.fileUpload.visible = false;
+            if (!res.result) {
+                return;
+            }
+            let param = this.getFormData(res);
+            importFile(param).then((res) => {
+                this.$message.success(res.data.msg);
+                this.refreshTable();
+            })
+        },
     }
+}
 </script>

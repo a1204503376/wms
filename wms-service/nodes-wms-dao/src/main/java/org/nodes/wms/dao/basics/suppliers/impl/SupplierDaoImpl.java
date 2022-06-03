@@ -72,4 +72,9 @@ public class SupplierDaoImpl extends BaseServiceImpl<SupplierMapper, Supplier> i
     public Supplier getById(Long id) {
         return super.getById(id);
     }
+
+    @Override
+    public boolean importExcel(List<Supplier> supplierList) {
+		return super.saveBatch(supplierList);
+	}
 }

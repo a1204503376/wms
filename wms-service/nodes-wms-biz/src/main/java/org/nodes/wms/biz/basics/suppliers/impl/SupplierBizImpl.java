@@ -7,10 +7,7 @@ import org.nodes.wms.biz.basics.suppliers.SupplierBiz;
 import org.nodes.wms.biz.basics.suppliers.modular.SupplierFactory;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.dao.basics.suppliers.SupplierDao;
-import org.nodes.wms.dao.basics.suppliers.dto.input.AddSupplierRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.input.RemoveRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
-import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierSelectQuery;
+import org.nodes.wms.dao.basics.suppliers.dto.input.*;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierExportResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
@@ -44,13 +41,14 @@ public class SupplierBizImpl implements SupplierBiz {
 	}
 
 	@Override
-	public boolean newSupplier(AddSupplierRequest addSupplierRequest) {
+	public Supplier newSupplier(AddSupplierRequest addSupplierRequest) {
 		boolean isExist = supplierDao.isExistSupplierCode(addSupplierRequest.getCode());
 		if (isExist) {
 			throw new ServiceException("新增供应商失败,供应商编码["+ addSupplierRequest.getCode()+"]已存在");
 		}
 		Supplier supplier = supplierFactory.createSupplier(addSupplierRequest);
-		return supplierDao.insert(supplier);
+		supplierDao.insert(supplier);
+		return supplier;
 	}
 
 	@Override
@@ -73,4 +71,10 @@ public class SupplierBizImpl implements SupplierBiz {
     public Supplier findById(Long id) {
         return supplierDao.getById(id);
     }
+
+    @Override
+    public boolean importExcel(List<SupplierImportRequest> importDataList) {
+		List<Supplier> supplierList = supplierFactory.createSupplierListForImport(importDataList);
+		return supplierDao.importExcel(supplierList);
+	}
 }

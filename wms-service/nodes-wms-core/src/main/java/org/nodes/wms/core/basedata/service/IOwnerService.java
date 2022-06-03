@@ -3,7 +3,7 @@ package org.nodes.wms.core.basedata.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.wms.core.basedata.dto.OwnerDTO;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.excel.OwnerExcel;
 import org.nodes.wms.core.basedata.vo.OwnerVO;
 import org.springblade.core.mp.base.BaseService;

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.core.basedata.entity.SkuType;
+import org.nodes.wms.dao.basics.sku.entities.SkuType;
 import org.springblade.core.tool.node.INode;
 
 import java.util.ArrayList;

@@ -17,7 +17,7 @@ import org.nodes.core.constant.DictConstant;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.core.allot.enums.AllotBillStateEnum;
 import org.nodes.wms.core.allot.service.IAllotHeaderService;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.basedata.service.ISkuIncService;
 import org.nodes.wms.core.stock.core.dto.StockOccupySubtractDTO;

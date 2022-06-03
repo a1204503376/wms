@@ -3,10 +3,10 @@
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-form-item label="供应商编码">
-                    <el-input :clearable="true" v-model.trim="form.params.code"></el-input>
+                    <el-input v-model.trim="form.params.code" :clearable="true"></el-input>
                 </el-form-item>
                 <el-form-item label="供应商名称">
-                    <el-input :clearable="true" v-model.trim="form.params.name"></el-input>
+                    <el-input v-model.trim="form.params.name" :clearable="true"></el-input>
                 </el-form-item>
             </template>
             <template v-slot:expandSearch>
@@ -27,6 +27,15 @@
                 <el-button v-if="permissionObj.delete" icon="el-icon-delete" plain size="mini" type="danger"
                            @click="onRemove">删除
                 </el-button>
+                <el-button v-if="permissionObj.import" icon="el-icon-upload2" plain size="mini"
+                           @click="onUpload">导入
+                </el-button>
+                <file-upload
+                    :visible="fileUpload.visible"
+                    file-name="供应商"
+                    template-url="/api/wms/supplier/export-template"
+                    @callback="callbackFileUpload"
+                ></file-upload>
             </template>
             <template v-slot:tableTool>
                 <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
@@ -39,8 +48,9 @@
                     <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
-                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet" style="display: inline-block;margin-left: 10px">
-                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData" />
+                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
+                                  style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData"/>
                     </excel-export>
                 </el-tooltip>
             </template>
@@ -97,9 +107,10 @@ import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import {listMixin} from "@/mixins/list";
-import {exportFile, page, remove} from "@/api/wms/basics/supplier";
+import {exportFile, importFile, page, remove} from "@/api/wms/basics/supplier";
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js'
+import fileUpload from "@/components/nodes/fileUpload";
 
 
 export default {
@@ -109,7 +120,8 @@ export default {
         NodesSearchInput,
         NodesMasterPage,
         NodesDateRange,
-        ExcelExport
+        ExcelExport,
+        fileUpload,
     },
     mixins: [listMixin],
     data() {
@@ -161,11 +173,14 @@ export default {
                     },
                 ],
             },
+            fileUpload: {
+                visible: false,
+            }
         };
     },
     watch: {
         $route(to) {
-            if(to.query && to.query.isRefresh === 'true'){
+            if (to.query && to.query.isRefresh === 'true') {
                 this.refreshTable();
             }
         }
@@ -175,7 +190,8 @@ export default {
             return {
                 search: this.vaildData(this.permission.supplier_search, false),
                 add: this.vaildData(this.permission.supplier_add, false),
-                delete: this.vaildData(this.permission.supplier_delete, false)
+                delete: this.vaildData(this.permission.supplier_delete, false),
+                import: this.vaildData(this.permission.supplier_import, false)
             }
         }
     },
@@ -191,15 +207,15 @@ export default {
                     this.page.total = pageObj.total;
                 })
         },
-        refreshTable(){
+        refreshTable() {
             this.getTableData();
         },
         onReset() {
             this.form.params = {
                 name: '',
                 code: '',
-                createTimeDateRange: ["",""],
-                updateTimeDateRange: ["",""]
+                createTimeDateRange: ["", ""],
+                updateTimeDateRange: ["", ""]
             }
         },
         onRemove() {
@@ -245,7 +261,18 @@ export default {
                 });
         },
         onExportLocalData() {
-            this.exportCurrentDataToExcel("供应商","供应商")
+            this.exportCurrentDataToExcel("供应商", "供应商")
+        },
+        callbackFileUpload(res) {
+            this.fileUpload.visible = false;
+            if (!res.result) {
+                return;
+            }
+            let param = this.getFormData(res);
+            importFile(param).then((res) => {
+                this.$message.success(res.data.msg);
+                this.refreshTable();
+            })
         },
         filterTag(value, row) {
             return row.status === value;
