@@ -1,12 +1,14 @@
 package org.nodes.wms.biz.basics.customers;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.basics.customer.dto.input.*;
 import org.nodes.wms.dao.basics.customer.dto.input.CustomerPageQuery;
 import org.nodes.wms.dao.basics.customer.dto.input.CustomerSelectQuery;
 import org.nodes.wms.dao.basics.customer.dto.input.NewCustomerRequest;
 import org.nodes.wms.dao.basics.customer.dto.input.DeleteCustomerRequest;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
+import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -36,4 +38,12 @@ public interface CustomersBiz {
 	 *  获取客户下拉列别十条数据
 	 **/
 	List<CustomerSelectResponse> getCustomerSelectResponseTop10List(CustomerSelectQuery customerSelectQuery);
+
+	/**
+	 * 导入
+	 *
+	 * @param importDataList: 导入的数据集合
+	 * @return true: 导入成功， false：导入失败
+	 **/
+    boolean importExcel(List<CustomerImportRequest> importDataList);
 }

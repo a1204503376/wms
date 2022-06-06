@@ -55,6 +55,15 @@ export const addCarrier = (data) => {
     })
 }
 
+export const importFile = (data) => {
+    return request({
+        url: '/api/wms/carriers/import-data',
+        method: 'post',
+        data: data,
+    })
+}
+
+
 class CarrierService {
     async getStateList(url,data) {
         const response = await request({
@@ -68,7 +77,5 @@ class CarrierService {
     async getDropDown(data) {
         return await this.getStateList('/api/wms/carriers/getDropDown',data);
     }
-
-
 }
 export const carrierService =new CarrierService();

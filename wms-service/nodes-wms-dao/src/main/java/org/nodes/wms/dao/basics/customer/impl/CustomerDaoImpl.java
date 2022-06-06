@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.basics.customer.CustomerDao;
 import org.nodes.wms.dao.basics.customer.dto.input.CustomerPageQuery;
 import org.nodes.wms.dao.basics.customer.dto.input.DeleteCustomerRequest;
-import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
+import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 import org.nodes.wms.dao.basics.customer.entities.BasicsCustomers;
 import org.nodes.wms.dao.basics.customer.mapper.CustomerMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -53,10 +53,13 @@ public class CustomerDaoImpl extends BaseServiceImpl<CustomerMapper,BasicsCustom
 		return super.baseMapper.listTop10ByCodName(code, name);
 	}
 
-	@Override
+    @Override
 	public Page<CustomerResponse> selectPage(IPage<CustomerResponse> page, CustomerPageQuery customerPageQuery) {
 		return  customerMapper.getPage(page, customerPageQuery);
 	}
 
-
+	@Override
+    public boolean importExcel(List<BasicsCustomers> customerList) {
+        return super.saveBatch(customerList);
+    }
 }
