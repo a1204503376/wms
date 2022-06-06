@@ -3,7 +3,7 @@ package org.nodes.wms.core.outstock.loading.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.nodes.wms.core.basedata.cache.OwnerCache;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.outstock.loading.entity.SoTruckDetail;
 import org.nodes.wms.core.outstock.loading.mapper.SoTruckDetailMapper;

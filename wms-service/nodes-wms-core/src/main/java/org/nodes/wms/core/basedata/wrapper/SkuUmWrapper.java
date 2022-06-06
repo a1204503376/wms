@@ -2,7 +2,7 @@ package org.nodes.wms.core.basedata.wrapper;
 
 
 import org.nodes.wms.core.basedata.dto.SkuUmDTO;
-import org.nodes.wms.core.basedata.entity.SkuUm;
+import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.core.basedata.excel.SkuUmExcel;
 import org.nodes.wms.core.basedata.vo.SkuUmVO;
 import org.springblade.core.mp.support.BaseEntityWrapper;

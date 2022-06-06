@@ -52,4 +52,12 @@ public interface CarriersDao {
 	 * @return 承运商集合
 	 */
     List<CarrierDropDownResponse> getCarrierUnconditional(CarrierDropDownRequest carrierDropDownRequest);
+
+	/**
+	 * 导入
+	 *
+	 * @param importDataList: Excel中导入的数据
+	 * @return true: 导入成功，false: 导入失败
+	 */
+    boolean importExcel(List<BasicsCarriers> importDataList);
 }

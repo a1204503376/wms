@@ -7,7 +7,7 @@ import org.nodes.core.constant.DictConstant;
 import org.nodes.wms.core.allot.entity.AllotHeader;
 import org.nodes.wms.core.allot.vo.AllotHeaderVO;
 import org.nodes.wms.core.basedata.cache.OwnerCache;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
 import org.nodes.wms.core.warehouse.entity.Warehouse;

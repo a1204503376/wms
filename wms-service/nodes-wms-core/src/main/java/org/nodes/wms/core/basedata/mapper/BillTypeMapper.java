@@ -1,7 +1,7 @@
 package org.nodes.wms.core.basedata.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.nodes.wms.core.basedata.entity.BillType;
+import org.nodes.wms.dao.basics.billType.entities.BillType;
 import org.springframework.context.annotation.Primary;
 
 /**

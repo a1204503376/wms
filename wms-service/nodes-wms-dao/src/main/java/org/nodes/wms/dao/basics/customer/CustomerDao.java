@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.customer.dto.input.CustomerPageQuery;
 import org.nodes.wms.dao.basics.customer.dto.input.DeleteCustomerRequest;
-import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
+import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 import org.nodes.wms.dao.basics.customer.entities.BasicsCustomers;
 
 import java.util.List;
@@ -35,4 +35,12 @@ public interface CustomerDao {
     List<CustomerResponse> getCustomerResponseByQuery(CustomerPageQuery customerPageQuery);
 
     List<CustomerSelectResponse> listTop10ByCodeName(String code, String name);
+
+	/**
+	 * 导入
+	 *
+	 * @param customerList: 客户数据集合
+	 * @return true: 导入成功，false:导入是啊比
+	 */
+    boolean importExcel(List<BasicsCustomers> customerList);
 }

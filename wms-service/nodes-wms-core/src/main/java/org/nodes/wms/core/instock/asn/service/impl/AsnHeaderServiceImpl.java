@@ -90,6 +90,8 @@ import org.nodes.wms.core.warehouse.service.ILocationService;
 import org.nodes.wms.core.warehouse.service.ILpnService;
 import org.nodes.wms.core.warehouse.service.IWarehouseService;
 import org.nodes.wms.core.warehouse.service.IZoneService;
+import org.nodes.wms.dao.basics.billType.entities.BillType;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.dao.instock.asn.enums.AsnBillStateEnum;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;

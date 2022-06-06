@@ -8,7 +8,7 @@ import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.basedata.cache.OwnerCache;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
-import org.nodes.wms.core.basedata.entity.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
 import org.nodes.wms.core.basedata.service.IOwnerService;

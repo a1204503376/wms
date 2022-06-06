@@ -1,38 +1,36 @@
-package org.nodes.wms.dao.basics.suppliers.dto.input;
+package org.nodes.wms.dao.basics.carrier.dto.input;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import lombok.Data;
 
-import java.io.Serializable;
-
 /**
- * 供应商导入Excel模板类
+ * 承运商导入Excel模板类
  **/
 @Data
-public class SupplierImportRequest implements Serializable {
+public class CarrierExcelRequest {
 
 	private static final long serialVersionUID = 8048740360278948493L;
 
 	/**
-	 * 供应商编码
+	 * 承运商编码
 	 */
 	@ColumnWidth(15)
-	@ExcelProperty({"供应商编码"})
+	@ExcelProperty({"承运商编码"})
 	private String code;
 
 	/**
-	 * 供应商名称
+	 * 承运商名称
 	 */
 	@ColumnWidth(15)
-	@ExcelProperty({"供应商名称"})
+	@ExcelProperty({"承运商名称"})
 	private String name;
 
 	/**
-	 * 供应商简称
+	 * 承运商简称
 	 */
 	@ColumnWidth(15)
-	@ExcelProperty({"供应商简称"})
+	@ExcelProperty({"承运商简称"})
 	private String simpleName;
 
 	/**
