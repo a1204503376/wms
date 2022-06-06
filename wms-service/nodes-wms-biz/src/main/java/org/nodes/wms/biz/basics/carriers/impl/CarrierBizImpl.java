@@ -16,6 +16,7 @@ import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -79,6 +80,9 @@ public class CarrierBizImpl implements CarrierBiz {
 
     @Override
     public boolean importExcel(List<CarrierExcelRequest> importDataList) {
+		if(Func.isEmpty(importDataList)){
+			throw new ServiceException("导入失败，没有可导入的数据");
+		}
 		List<BasicsCarrier> carrierList = carriersFactory.createCarrierListForImport(importDataList);
 		return carriersDao.importExcel(carrierList);
     }

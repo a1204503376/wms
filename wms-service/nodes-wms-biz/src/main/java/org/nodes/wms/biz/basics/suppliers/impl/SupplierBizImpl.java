@@ -14,6 +14,7 @@ import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -78,6 +79,9 @@ public class SupplierBizImpl implements SupplierBiz {
 
     @Override
     public boolean importExcel(List<SupplierImportRequest> importDataList) {
+		if(Func.isEmpty(importDataList)){
+			throw new ServiceException("导入失败，没有可导入的数据");
+		}
 		List<Supplier> supplierList = supplierFactory.createSupplierListForImport(importDataList);
 		return supplierDao.importExcel(supplierList);
 	}

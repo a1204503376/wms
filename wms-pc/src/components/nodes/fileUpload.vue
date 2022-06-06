@@ -6,6 +6,7 @@ import fileDownload from "js-file-download";
         :close-on-click-modal="false"
         width="500"
         @close="cancel"
+        :before-close="cancel"
         append-to-body
     >
         <div class="el-dialog__body" align="center">

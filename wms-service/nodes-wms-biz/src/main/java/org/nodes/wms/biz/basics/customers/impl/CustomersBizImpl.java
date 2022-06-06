@@ -7,17 +7,14 @@ import org.nodes.wms.biz.basics.customers.CustomersBiz;
 import org.nodes.wms.biz.basics.customers.modular.CustomersFactory;
 import org.nodes.wms.dao.basics.customer.CustomerDao;
 import org.nodes.wms.dao.basics.customer.dto.input.*;
-import org.nodes.wms.dao.basics.customer.dto.input.CustomerPageQuery;
-import org.nodes.wms.dao.basics.customer.dto.input.CustomerSelectQuery;
-import org.nodes.wms.dao.basics.customer.dto.input.NewCustomerRequest;
-import org.nodes.wms.dao.basics.customer.dto.input.DeleteCustomerRequest;
-import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
 import org.nodes.wms.dao.basics.customer.entities.BasicsCustomer;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -64,11 +61,14 @@ public class CustomersBizImpl implements CustomersBiz {
 		return customerDao.listTop10ByCodeName(customerSelectQuery.getKey(), customerSelectQuery.getKey());
 	}
 
-    @Override
-    public boolean importExcel(List<CustomerImportRequest> importDataList) {
+	@Override
+	public boolean importExcel(List<CustomerImportRequest> importDataList) {
+		if(Func.isEmpty(importDataList)){
+			throw new ServiceException("导入失败，没有可导入的数据");
+		}
 		List<BasicsCustomer> customerList = customersFactory.createCustomerListForImport(importDataList);
-        return customerDao.importExcel(customerList);
-    }
+		return customerDao.importExcel(customerList);
+	}
 
 	@Override
 	public BasicsCustomer findCustomerById(Long id) {

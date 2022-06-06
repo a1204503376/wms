@@ -38,10 +38,16 @@ public class CustomersFactory {
 		return basicsCustomer;
 	}
 
-    public List<BasicsCustomer> createCustomerListForImport(List<CustomerImportRequest> importDataList) {
+	public List<BasicsCustomer> createCustomerListForImport(List<CustomerImportRequest> importDataList) {
 		List<BasicsCustomer> customerList = new ArrayList<>();
 		for (CustomerImportRequest data: importDataList) {
 			BasicsCustomer customer = new BasicsCustomer();
+			if(Func.isEmpty(data.getCode())){
+				throw new ServiceException("导入失败，客户编码不能为空");
+			}
+			if(Func.isEmpty(data.getName())){
+				throw new ServiceException("导入失败，客户名称不能为空");
+			}
 			// 根据客户编码查询客户信息
 			if (Func.isNotEmpty(data.getOwnerCode())){
 				Owner owner = ownerBiz.findByCode(data.getOwnerCode());
@@ -53,20 +59,23 @@ public class CustomersFactory {
 			}
 			boolean isExist = customerDao.isExistCustomerCode(data.getCode());
 			if (isExist) {
-				throw new ServiceException("导入失败，客户编码["+ data.getCode()+"]已存在");
+				throw new ServiceException("导入失败，客户编码["+data.getCode()+"]已存在");
 			}
 			customer.setCode(data.getCode());
 			customer.setName(data.getName());
 			customer.setSimpleName(data.getSimpleName());
 			customer.setRemark(data.getRemark());
 
+			if(Func.isEmpty(data.getStatus())){
+				throw new ServiceException("导入失败，启用状态不能为空");
+			}
 			if (!data.getStatus().equals(StatusEnum.ON.getIndex())
 				&& !data.getStatus().equals(StatusEnum.OFF.getIndex())){
-				throw new ServiceException("导入失败，启用状态只能为1(启用)或者0(禁用)");
+				throw new ServiceException("导入失败，启用状态只能为1(启用)或者-1(禁用)");
 			}
 			customer.setStatus(data.getStatus());
 			customerList.add(customer);
 		}
 		return customerList;
-    }
+	}
 }
