@@ -5,6 +5,7 @@ import org.nodes.wms.biz.basics.billType.BillTypeBiz;
 import org.nodes.wms.dao.basics.billType.BillTypeDao;
 import org.nodes.wms.dao.basics.billType.dto.BillTypeSelectQuery;
 import org.nodes.wms.dao.basics.billType.dto.BillTypeSelectResponse;
+import org.nodes.wms.dao.basics.billType.entities.BillType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,5 +24,16 @@ public class BillTypeBizImpl implements BillTypeBiz {
 		return billTypeDao.listByIoType(
 			ioType
 		);
+	}
+
+    @Override
+    public BillType findBillTypeById(Long billTypeId) {
+        return billTypeDao.getBillTypeById(billTypeId);
+
+    }
+
+	@Override
+	public BillType findBillTypeByCode(String billTypeCd) {
+		return billTypeDao.getBillTypeByCode(billTypeCd);
 	}
 }

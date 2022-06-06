@@ -64,4 +64,18 @@ public interface LpnTypeDao {
 	 * @return 是否成功
 	 */
 	boolean updateById(LpnType lpnType);
+
+	/**
+	 * 根据容器类型id获取容器类型实体
+	 * @param id 容器类型id
+	 * @return LpnType 容器类型实体
+	 */
+    LpnType getLpnTypeById(Long id);
+
+	/**
+	 * 根据容器类型编码获取容器类型实体
+	 * @param code 容器类型编码
+	 * @return  LpnType 容器类型实体
+	 */
+	LpnType getLpnTypeByCode(String code);
 }

@@ -97,4 +97,14 @@ public class LpnTypeDaoImpl  extends BaseServiceImpl<LpnTypeMapper,LpnType> impl
 	public boolean updateById(LpnType lpnType) {
 		return super.updateById(lpnType);
 	}
+
+	@Override
+	public LpnType getLpnTypeById(Long id) {
+		return super.getById(id);
+	}
+
+	@Override
+    public LpnType getLpnTypeByCode(String code) {
+		return super.getOne(new LambdaQueryWrapper<LpnType>().eq(LpnType::getCode,code));
+    }
 }

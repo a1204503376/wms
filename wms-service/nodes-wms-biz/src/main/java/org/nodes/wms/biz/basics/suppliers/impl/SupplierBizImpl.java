@@ -24,7 +24,6 @@ import java.util.List;
  * 供应商业务
  *
  * @author 彭永程
- * @date 2022-04-20 10:57
  **/
 @Service
 @RequiredArgsConstructor
@@ -71,6 +70,11 @@ public class SupplierBizImpl implements SupplierBiz {
     @Override
     public Supplier findById(Long id) {
         return supplierDao.getById(id);
+    }
+
+    @Override
+    public Supplier findByCode(String code) {
+		return supplierDao.getByCode(code);
     }
 
     @Override

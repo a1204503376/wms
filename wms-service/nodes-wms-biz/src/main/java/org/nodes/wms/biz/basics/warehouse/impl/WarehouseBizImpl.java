@@ -26,4 +26,9 @@ public class WarehouseBizImpl implements WarehouseBiz {
 
 		return warehouseDao.findById(warehouseId);
     }
+
+    @Override
+    public Warehouse findByCode(String whCode) {
+        return warehouseDao.findByCode(whCode);
+    }
 }

@@ -27,7 +27,7 @@ public class BillType extends TenantEntity {
 	private String billTypeCd;
 
 	/**
-	 * 单据类型编码
+	 * 单据类型名称
 	 */
 	private String billTypeName;
 

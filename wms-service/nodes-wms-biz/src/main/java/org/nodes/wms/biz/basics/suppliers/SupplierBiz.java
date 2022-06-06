@@ -62,7 +62,14 @@ public interface SupplierBiz {
 	 * @param id: 供应商id
 	 * @return Supplier
 	 */
-	public Supplier findById(Long id);
+	Supplier findById(Long id);
+
+	/**
+	 * 根据供应商编码获取供应商实体
+	 * @param code 供应商编码
+	 * @return Supplier
+	 */
+	Supplier findByCode(String code);
 
 	/**
 	 * Excel 导入

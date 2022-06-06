@@ -9,6 +9,7 @@ import org.nodes.wms.dao.basics.lpntype.dto.input.*;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeByIdResponse;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeExcelResponse;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypePageResponse;
+import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -91,5 +92,15 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 	@Override
 	public boolean updateLpnTypeById(UpdateLpnTypeRequest lpnTypeRequest) {
 		return lpnTypeDao.updateById(lpnTypeFactory.createLpnType(lpnTypeRequest));
+	}
+
+    @Override
+    public LpnType findLpnTypeById(Long id) {
+		return lpnTypeDao.getLpnTypeById(id);
+    }
+
+	@Override
+	public LpnType findLpnTypeByCode(String code) {
+		return lpnTypeDao.getLpnTypeByCode(code);
 	}
 }

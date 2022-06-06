@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.basics.customer.dto.input.CustomerPageQuery;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
-import org.nodes.wms.dao.basics.customer.entities.BasicsCustomers;
+import org.nodes.wms.dao.basics.customer.entities.BasicsCustomer;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 客户管理 Mapper 接口
  */
-public interface CustomerMapper extends BaseMapper<BasicsCustomers> {
+public interface CustomerMapper extends BaseMapper<BasicsCustomer> {
 	Page<CustomerResponse> getPage(IPage<?> page, @Param("query") CustomerPageQuery customerPageQuery);
 
     List<CustomerResponse> getCustomerResponseByQuery(@Param("query") CustomerPageQuery customerPageQuery);

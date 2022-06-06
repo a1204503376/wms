@@ -11,7 +11,8 @@ import org.springblade.core.mp.base.BaseEntity;
  **/
 @Data
 @TableName("basics_carriers")
-public class BasicsCarriers extends BaseEntity {
+public class BasicsCarrier extends BaseEntity {
+	private static final long serialVersionUID = -1091858350663621722L;
 	/**
 	 * 承运商表ID
 	 */

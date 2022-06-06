@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.basics.billType;
 
 import org.nodes.wms.dao.basics.billType.dto.BillTypeSelectResponse;
+import org.nodes.wms.dao.basics.billType.entities.BillType;
 
 import java.util.List;
 
@@ -16,4 +17,18 @@ public interface BillTypeDao {
 	 * @return List<BillTypeSelectResponse>
 	 */
 	List<BillTypeSelectResponse> listByIoType(String ioType);
+
+	/**
+	 * 根据单据类型id获取单据类型实体
+	 * @param billTypeId 单据类型id
+	 * @return BillType 单据类型实体
+	 */
+	BillType getBillTypeById(Long billTypeId);
+
+	/**
+	 * 根据单据类型编码获取单据类型实体
+	 * @param billTypeCd 单据类型编码
+	 * @return BillType 单据类型实体
+	 */
+	BillType getBillTypeByCode(String billTypeCd);
 }

@@ -12,4 +12,11 @@ public interface WarehouseDao {
 	List<WarehouseResponse> getWarehouseSelectResponseList();
 
     Warehouse findById(Long warehouseId);
+
+	/**
+	 * 根据仓库编码获取仓库实体
+	 * @param whCode 仓库编码
+	 * @return Warehouse
+	 */
+	Warehouse findByCode(String whCode);
 }

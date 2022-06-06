@@ -3,13 +3,12 @@ package org.nodes.wms.biz.basics.sku.impl;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.dao.basics.sku.SkuDao;
+import org.nodes.wms.dao.basics.sku.SkuTypeDao;
+import org.nodes.wms.dao.basics.sku.SkuUmDao;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectQuery;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
-import org.nodes.wms.dao.basics.sku.entities.Sku;
-import org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate;
-import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
-import org.nodes.wms.dao.basics.sku.entities.SkuUm;
+import org.nodes.wms.dao.basics.sku.entities.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +21,8 @@ import java.util.List;
 public class SkuBizImpl implements SkuBiz {
 
 	private final SkuDao skuDao;
+	private final SkuTypeDao skuTypeDao;
+	private final SkuUmDao skuUmDao;
 
 	@Override
 	public List<SkuSelectResponse> getSkuSelectResponseTop10List(SkuSelectQuery skuSelectQuery) {
@@ -34,6 +35,21 @@ public class SkuBizImpl implements SkuBiz {
     }
 
     @Override
+    public Sku findByCode(String skuCode) {
+		return skuDao.getSkuByCode(skuCode);
+    }
+
+	@Override
+	public SkuType findSkuTypeById(Long skuTypeId) {
+		return  skuTypeDao.getSkuTypeById(skuTypeId);
+	}
+
+	@Override
+	public SkuType findSkuTypeByCode(String typeCode) {
+		return skuTypeDao.getSkuTypeByCode(typeCode);
+	}
+
+	@Override
     public List<SkuUmSelectResponse> findSkuUmSelectResponseListBySkuId(Long skuId) {
         return skuDao.listSkuUmBySkuId(skuId);
     }
@@ -48,7 +64,12 @@ public class SkuBizImpl implements SkuBiz {
 		return skuDao.getSkuUmByUmCode(skuUmCode);
 	}
 
-    @Override
+	@Override
+	public SkuUm findSkuUmById(Long wsuId) {
+		return skuUmDao.getSkuUmById(wsuId);
+	}
+
+	@Override
     public SkuPackageDetail findBaseSkuPackageDetail(Long skuId) {
         return skuDao.getBaseSkuPackageDetail(skuId);
     }

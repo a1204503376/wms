@@ -11,7 +11,7 @@ import org.nodes.wms.dao.basics.carrier.dto.input.DeleteCarriersRequest;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierDropDownResponse;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierExcelResponse;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse;
-import org.nodes.wms.dao.basics.carrier.entites.BasicsCarriers;
+import org.nodes.wms.dao.basics.carrier.entites.BasicsCarrier;
 import org.nodes.wms.dao.basics.carrier.mapper.CarriersMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class CarriersDaoImpl extends BaseServiceImpl<CarriersMapper, BasicsCarriers> implements CarriersDao {
+public class CarriersDaoImpl extends BaseServiceImpl<CarriersMapper, BasicsCarrier> implements CarriersDao {
 	private final CarriersMapper carriersMapper;
 
 	@Override
@@ -34,15 +34,15 @@ public class CarriersDaoImpl extends BaseServiceImpl<CarriersMapper, BasicsCarri
 	}
 
 	@Override
-	public boolean insert(BasicsCarriers basicscarriers) {
+	public boolean insert(BasicsCarrier basicscarriers) {
 		return super.save(basicscarriers);
 	}
 
 
 	@Override
 	public boolean isExistCarrierCode(String code) {
-		LambdaQueryWrapper<BasicsCarriers> lambdaQueryWrapper = new LambdaQueryWrapper();
-		lambdaQueryWrapper.eq(BasicsCarriers::getCode, code);
+		LambdaQueryWrapper<BasicsCarrier> lambdaQueryWrapper = new LambdaQueryWrapper();
+		lambdaQueryWrapper.eq(BasicsCarrier::getCode, code);
 		int count = super.count(lambdaQueryWrapper);
 		return count > 0;
 	}
@@ -64,12 +64,12 @@ public class CarriersDaoImpl extends BaseServiceImpl<CarriersMapper, BasicsCarri
 
 	/**
 	 * 根据ID修改状态
-	 * @param basicsCarriers 内含id与状态
+	 * @param basicsCarrier 内含id与状态
 	 * @return 是否成功
 	 */
 	@Override
-	public Boolean updateStatus(BasicsCarriers basicsCarriers) {
-		return super.updateById(basicsCarriers);
+	public Boolean updateStatus(BasicsCarrier basicsCarrier) {
+		return super.updateById(basicsCarrier);
 	}
 
 	/**
@@ -82,8 +82,18 @@ public class CarriersDaoImpl extends BaseServiceImpl<CarriersMapper, BasicsCarri
 	}
 
     @Override
-    public boolean importExcel(List<BasicsCarriers> importDataList) {
+    public boolean importExcel(List<BasicsCarrier> importDataList) {
         return super.saveBatch(importDataList);
+	}
+
+	@Override
+	public BasicsCarrier getCarrierById(Long id) {
+		return super.getById(id);
+	}
+
+	@Override
+	public BasicsCarrier getCarrierByCode(String code) {
+		return super.getOne(new LambdaQueryWrapper<BasicsCarrier>().eq(BasicsCarrier::getCode,code));
 	}
 }
 
