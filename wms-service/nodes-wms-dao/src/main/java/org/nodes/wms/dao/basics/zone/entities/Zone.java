@@ -18,7 +18,7 @@ public class Zone extends TenantEntity {
 	/**
 	 * 库区id
 	 */
-	@TableId(value = "bill_type_id", type = IdType.ASSIGN_ID)
+	@TableId(value = "zone_id", type = IdType.ASSIGN_ID)
 	private Long zoneId;
 
 	/**
