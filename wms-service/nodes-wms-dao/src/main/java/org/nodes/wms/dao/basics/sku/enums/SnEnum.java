@@ -1,4 +1,4 @@
-package org.nodes.wms.core.basedata.enums;
+package org.nodes.wms.dao.basics.sku.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

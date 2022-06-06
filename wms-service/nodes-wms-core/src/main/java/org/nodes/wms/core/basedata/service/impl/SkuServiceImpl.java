@@ -16,7 +16,7 @@ import org.nodes.wms.core.basedata.dto.SkuDTO;
 import org.nodes.wms.core.basedata.dto.SkuIncDTO;
 import org.nodes.wms.core.basedata.dto.SkuReplaceDTO;
 import org.nodes.wms.core.basedata.entity.*;
-import org.nodes.wms.core.basedata.enums.SnEnum;
+import org.nodes.wms.dao.basics.sku.enums.SnEnum;
 import org.nodes.wms.core.basedata.excel.SkuExcel;
 import org.nodes.wms.core.basedata.mapper.SkuMapper;
 import org.nodes.wms.core.basedata.service.*;

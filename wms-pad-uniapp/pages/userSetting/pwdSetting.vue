@@ -16,9 +16,14 @@
 				</u-form-item>
 			</u--form>
 		</view>
-		<view>
-			<u-button class="bottom-esc-button" type="primary" @click="navigateBack" text="返回[Esc]"></u-button>
-			<u-button class="bottom-submit-button" type="primary" @click="submit" text="确认[Ent]"></u-button>
+
+		<view class="footer">
+			<button class="btn-cancle" @click="esc()">
+				返回
+			</button>
+			<button class="btn-submit" @click="submit()">
+				确定
+			</button>
 		</view>
 	</view>
 </template>
@@ -64,7 +69,7 @@
 			};
 		},
 		methods: {
-			esc(){
+			esc() {
 				this.navigateBack()
 			},
 			oldPwd() {
@@ -95,5 +100,4 @@
 	};
 </script>
 <style lang="scss">
-	@import '@/static/common.scss';
 </style>

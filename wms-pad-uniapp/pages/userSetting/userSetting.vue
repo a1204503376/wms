@@ -38,8 +38,9 @@
 				</u-form-item>
 			</u--form>
 		</view>
-		<view >
-		<u-button class="logout-bt" type="primary" @click="logout" text="退出登录"></u-button>
+		
+		<view class="footer">
+			<button class="btn-submit" @click="logout">退出登录</button>
 		</view>
 	</view>
 </template>

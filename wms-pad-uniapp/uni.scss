@@ -82,3 +82,7 @@ $uni-font-size-paragraph:15px;
 $theme-backgroup-color: #33cbcc; // 背景色或图标颜色
 $theme-second-backgroup-color: #04DFDF; // 次要的背景色
 $theme-fore-color: #ffffff; // 搭配背景色的字体颜色
+$theme-font-size: 40rpx; // 字体大小
+
+/* 引入通用css定义，此处必须在文件末尾，否则会编译报错 */
+@import '@/static/common.scss';
