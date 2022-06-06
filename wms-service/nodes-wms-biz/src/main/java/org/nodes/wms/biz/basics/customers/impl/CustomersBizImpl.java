@@ -13,8 +13,7 @@ import org.nodes.wms.dao.basics.customer.dto.input.NewCustomerRequest;
 import org.nodes.wms.dao.basics.customer.dto.input.DeleteCustomerRequest;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
-import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
-import org.nodes.wms.dao.basics.customer.entities.BasicsCustomers;
+import org.nodes.wms.dao.basics.customer.entities.BasicsCustomer;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -45,8 +44,8 @@ public class CustomersBizImpl implements CustomersBiz {
 		if(isExist){
 			throw new ServiceException("新增客户失败，客户编码重复");
 		}
-		BasicsCustomers basicsCustomers = customersFactory.createCustomers(newCustomerRequest);
-		return  customerDao.insert(basicsCustomers);
+		BasicsCustomer basicsCustomer = customersFactory.createCustomers(newCustomerRequest);
+		return  customerDao.insert(basicsCustomer);
 	}
 
 	@Override
@@ -67,7 +66,18 @@ public class CustomersBizImpl implements CustomersBiz {
 
     @Override
     public boolean importExcel(List<CustomerImportRequest> importDataList) {
-		List<BasicsCustomers> customerList = customersFactory.createCustomerListForImport(importDataList);
+		List<BasicsCustomer> customerList = customersFactory.createCustomerListForImport(importDataList);
         return customerDao.importExcel(customerList);
     }
+
+	@Override
+	public BasicsCustomer findCustomerById(Long id) {
+		return customerDao.getCustomerById(id);
+
+	}
+
+	@Override
+	public BasicsCustomer findCustomerByCode(String code) {
+		return customerDao.getCustomerByCode(code);
+	}
 }

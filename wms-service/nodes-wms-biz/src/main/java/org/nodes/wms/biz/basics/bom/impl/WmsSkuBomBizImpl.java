@@ -7,6 +7,7 @@ import org.nodes.wms.dao.basics.bom.WmsSkuBomDao;
 import org.nodes.wms.dao.basics.bom.dto.input.WmsSkuBomPageQuery;
 import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomExcelResponse;
 import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomResponse;
+import org.nodes.wms.dao.basics.bom.entites.SkuBom;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -43,4 +44,9 @@ public class WmsSkuBomBizImpl implements WmsSkuBomBiz {
 		List<WmsSkuBomExcelResponse> wmsSkuBomList = skuBomDao.getWmsSkuBomList(params);
 		ExcelUtil.export(response, "物料清单", "物料清单数据表",wmsSkuBomList,WmsSkuBomExcelResponse.class);
 	}
+
+    @Override
+    public SkuBom findSkuBomById(Long id) {
+		return skuBomDao.getSkuBomById(id);
+    }
 }

@@ -9,7 +9,7 @@ import org.nodes.wms.dao.basics.carrier.dto.input.DeleteCarriersRequest;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierDropDownResponse;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierExcelResponse;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse;
-import org.nodes.wms.dao.basics.carrier.entites.BasicsCarriers;
+import org.nodes.wms.dao.basics.carrier.entites.BasicsCarrier;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +27,7 @@ public interface CarriersDao {
 	 */
 	Page<CarrierResponse> selectPage(IPage<?> page, CarrierPageQuery carrierPageQuery);
 
-	boolean insert(BasicsCarriers basicscarriers);
+	boolean insert(BasicsCarrier basicscarriers);
 
 	boolean isExistCarrierCode(String code);
 
@@ -41,10 +41,10 @@ public interface CarriersDao {
 
 	/**
 	 * 根据ID修改状态
-	 * @param basicsCarriers 内含id与状态
+	 * @param basicsCarrier 内含id与状态
 	 * @return 是否成功
 	 */
-	Boolean updateStatus(BasicsCarriers basicsCarriers);
+	Boolean updateStatus(BasicsCarrier basicsCarrier);
 
 
 	/**
@@ -59,5 +59,19 @@ public interface CarriersDao {
 	 * @param importDataList: Excel中导入的数据
 	 * @return true: 导入成功，false: 导入失败
 	 */
-    boolean importExcel(List<BasicsCarriers> importDataList);
+    boolean importExcel(List<BasicsCarrier> importDataList);
+
+	/**
+	 * 根据承运商id获取承运商实体
+	 * @param id 承运商id
+	 * @return BasicsCarrier 承运商实体
+	 */
+	BasicsCarrier getCarrierById(Long id);
+
+	/**
+	 * 根据承运商编码获取承运商实体
+	 * @param code 承运商编码
+	 * @return BasicsCarrier 承运商实体
+	 */
+	BasicsCarrier getCarrierByCode(String code);
 }

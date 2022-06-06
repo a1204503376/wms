@@ -2,10 +2,7 @@ package org.nodes.wms.dao.basics.sku;
 
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
-import org.nodes.wms.dao.basics.sku.entities.Sku;
-import org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate;
-import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
-import org.nodes.wms.dao.basics.sku.entities.SkuUm;
+import org.nodes.wms.dao.basics.sku.entities.*;
 
 import java.util.List;
 
@@ -55,4 +52,11 @@ public interface SkuDao {
 	SkuUm getSkuUmByUmCode(String skuUmCode);
 
     SkuPackageDetail getBaseSkuPackageDetail(Long skuId);
+
+	/**
+	 * 根据物品编码查询物品实体
+	 * @param skuCode 物品编码
+	 */
+    Sku getSkuByCode(String skuCode);
+
 }

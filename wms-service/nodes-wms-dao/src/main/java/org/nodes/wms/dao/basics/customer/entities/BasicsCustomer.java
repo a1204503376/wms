@@ -11,7 +11,8 @@ import org.springblade.core.tenant.mp.TenantEntity;
  **/
 @Data
 @TableName("basics_customers")
-public class BasicsCustomers extends TenantEntity {
+public class BasicsCustomer extends TenantEntity {
+	private static final long serialVersionUID = 4500435308488858917L;
 	/**
 	 * 客户表ID
 	 */

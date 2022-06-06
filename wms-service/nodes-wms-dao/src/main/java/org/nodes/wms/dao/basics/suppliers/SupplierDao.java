@@ -80,4 +80,11 @@ public interface SupplierDao {
 	 * @return true: 导入成功， false: 导入失败
 	 */
     boolean importExcel(List<Supplier> supplierList);
+
+	/**
+	 * 根据供应商编码获取供应商实体
+	 * @param code 供应商编码
+	 * @return Supplier
+	 */
+	Supplier getByCode(String code);
 }

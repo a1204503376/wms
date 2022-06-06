@@ -3,10 +3,7 @@ package org.nodes.wms.biz.basics.sku;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectQuery;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
-import org.nodes.wms.dao.basics.sku.entities.Sku;
-import org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate;
-import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
-import org.nodes.wms.dao.basics.sku.entities.SkuUm;
+import org.nodes.wms.dao.basics.sku.entities.*;
 
 import java.util.List;
 
@@ -33,6 +30,26 @@ public interface SkuBiz {
 	Sku findById(Long skuId);
 
 	/**
+	 * 根据物品编码查询物品实 体
+	 * @param skuCode 物品编码
+	 * @return Sku 物品实体
+	 */
+	Sku findByCode(String skuCode);
+
+	/**
+	 * 根据物品分类id获取物品分类实体
+	 * @param skuTypeId 物品分类id
+	 * @return SkuType
+	 */
+	SkuType findSkuTypeById(Long skuTypeId);
+
+	/**
+	 * 根据物品分类编码获取物品分类实体
+	 * @param typeCode 物品分类编码
+	 * @return SkuType
+	 */
+    SkuType findSkuTypeByCode(String typeCode);
+	/**
 	 * 根据物品id查询所有计量单位，基础计量单位放第一个
 	 *
 	 * @param skuId: 物品id
@@ -54,6 +71,13 @@ public interface SkuBiz {
 	 * @return SkuUm
 	 */
 	SkuUm findSkuUmByUmCode(String skuUmCode);
+
+	/**
+	 * 根据计量单位id获取计量单位实体
+	 * @param wsuId 计量单位id
+	 * @return SkuUm
+	 */
+	SkuUm findSkuUmById( Long wsuId);
 
 	/**
 	 * 根据物料获取基础包装信息

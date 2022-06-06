@@ -3,14 +3,14 @@ package org.nodes.wms.biz.basics.carriers.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.wms.biz.basics.carriers.CarriersBiz;
+import org.nodes.wms.biz.basics.carriers.CarrierBiz;
 import org.nodes.wms.biz.basics.carriers.modular.CarriersFactory;
 import org.nodes.wms.dao.basics.carrier.CarriersDao;
 import org.nodes.wms.dao.basics.carrier.dto.input.*;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierDropDownResponse;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierExcelResponse;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse;
-import org.nodes.wms.dao.basics.carrier.entites.BasicsCarriers;
+import org.nodes.wms.dao.basics.carrier.entites.BasicsCarrier;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class CarriersBizImpl implements CarriersBiz {
+public class CarrierBizImpl implements CarrierBiz {
 	private  final CarriersDao carriersDao;
 	private  final CarriersFactory carriersFactory;
 	@Override
@@ -43,7 +43,7 @@ public class CarriersBizImpl implements CarriersBiz {
 			throw new ServiceException("新增承运商失败，编码重复");
 		}
 
-		BasicsCarriers basicscarriers = carriersFactory.createCarriers(newCarrierRequest);
+		BasicsCarrier basicscarriers = carriersFactory.createCarriers(newCarrierRequest);
 		return  carriersDao.insert(basicscarriers);
 	}
 	@Override
@@ -64,7 +64,7 @@ public class CarriersBizImpl implements CarriersBiz {
 	 */
 	@Override
 	public Boolean updateStatusById(UpdateStatusRequest updateStatusRequest) {
-		BasicsCarriers carriers = carriersFactory.createCarriers(updateStatusRequest);
+		BasicsCarrier carriers = carriersFactory.createCarriers(updateStatusRequest);
 		return carriersDao.updateStatus(carriers);
 	}
 
@@ -79,7 +79,18 @@ public class CarriersBizImpl implements CarriersBiz {
 
     @Override
     public boolean importExcel(List<CarrierExcelRequest> importDataList) {
-		List<BasicsCarriers> carrierList = carriersFactory.createCarrierListForImport(importDataList);
+		List<BasicsCarrier> carrierList = carriersFactory.createCarrierListForImport(importDataList);
 		return carriersDao.importExcel(carrierList);
     }
+
+	@Override
+	public BasicsCarrier findCarrierById(Long id) {
+		return carriersDao.getCarrierById(id);
+
+	}
+
+	@Override
+	public BasicsCarrier findCarrierByCode(String code) {
+		return carriersDao.getCarrierByCode(code);
+	}
 }

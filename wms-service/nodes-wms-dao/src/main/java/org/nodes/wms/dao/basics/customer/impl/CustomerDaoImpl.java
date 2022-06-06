@@ -9,7 +9,7 @@ import org.nodes.wms.dao.basics.customer.dto.input.CustomerPageQuery;
 import org.nodes.wms.dao.basics.customer.dto.input.DeleteCustomerRequest;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
-import org.nodes.wms.dao.basics.customer.entities.BasicsCustomers;
+import org.nodes.wms.dao.basics.customer.entities.BasicsCustomer;
 import org.nodes.wms.dao.basics.customer.mapper.CustomerMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
@@ -21,19 +21,19 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class CustomerDaoImpl extends BaseServiceImpl<CustomerMapper,BasicsCustomers> implements CustomerDao {
+public class CustomerDaoImpl extends BaseServiceImpl<CustomerMapper, BasicsCustomer> implements CustomerDao {
 	 private final CustomerMapper customerMapper;
 
 	@Override
-	public boolean insert(BasicsCustomers basicsCustomers) {
-		return super.save(basicsCustomers);
+	public boolean insert(BasicsCustomer basicsCustomer) {
+		return super.save(basicsCustomer);
 	}
 
 
 	@Override
 	public boolean isExistCustomerCode(String code) {
-		LambdaQueryWrapper<BasicsCustomers> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-		lambdaQueryWrapper.eq(BasicsCustomers::getCode,code);
+		LambdaQueryWrapper<BasicsCustomer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+		lambdaQueryWrapper.eq(BasicsCustomer::getCode,code);
 		int count = super.count(lambdaQueryWrapper);
 		return count>0;
 	}
@@ -59,7 +59,17 @@ public class CustomerDaoImpl extends BaseServiceImpl<CustomerMapper,BasicsCustom
 	}
 
 	@Override
-    public boolean importExcel(List<BasicsCustomers> customerList) {
+    public boolean importExcel(List<BasicsCustomer> customerList) {
         return super.saveBatch(customerList);
     }
+
+	@Override
+	public BasicsCustomer getCustomerById(Long id) {
+		return super.getById(id);
+	}
+
+	@Override
+	public BasicsCustomer getCustomerByCode(String code) {
+		return super.getOne(new LambdaQueryWrapper<BasicsCustomer>().eq(BasicsCustomer::getCode,code));
+	}
 }

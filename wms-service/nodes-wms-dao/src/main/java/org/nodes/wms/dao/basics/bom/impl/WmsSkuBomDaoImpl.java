@@ -41,4 +41,9 @@ public class WmsSkuBomDaoImpl extends BaseServiceImpl<WmsSkuBomMapper, SkuBom> i
 	public List<WmsSkuBomExcelResponse> getWmsSkuBomList(HashMap<String, Object> params) {
 		return skuBomMapper.getWmsSkuBomList(params);
 	}
+
+    @Override
+    public SkuBom getSkuBomById(Long id) {
+		return super.getById(id);
+    }
 }

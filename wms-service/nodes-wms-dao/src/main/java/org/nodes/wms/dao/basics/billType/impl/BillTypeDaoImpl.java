@@ -1,5 +1,6 @@
 package org.nodes.wms.dao.basics.billType.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.nodes.wms.dao.basics.billType.BillTypeDao;
 import org.nodes.wms.dao.basics.billType.dto.BillTypeSelectResponse;
 import org.nodes.wms.dao.basics.billType.entities.BillType;
@@ -21,5 +22,15 @@ public class BillTypeDaoImpl
 	public List<BillTypeSelectResponse>
     listByIoType(String ioType) {
 		return super.baseMapper.listByIoType(ioType);
+	}
+
+    @Override
+    public BillType getBillTypeById(Long billTypeId) {
+	   return super.getById(billTypeId);
+    }
+
+	@Override
+	public BillType getBillTypeByCode(String billTypeCd) {
+		return super.getOne(new LambdaQueryWrapper<BillType>().eq(BillType::getBillTypeCd,billTypeCd));
 	}
 }

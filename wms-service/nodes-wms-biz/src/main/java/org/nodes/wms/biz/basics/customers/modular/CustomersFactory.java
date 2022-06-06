@@ -6,7 +6,7 @@ import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.dao.basics.customer.CustomerDao;
 import org.nodes.wms.dao.basics.customer.dto.input.CustomerImportRequest;
 import org.nodes.wms.dao.basics.customer.dto.input.NewCustomerRequest;
-import org.nodes.wms.dao.basics.customer.entities.BasicsCustomers;
+import org.nodes.wms.dao.basics.customer.entities.BasicsCustomer;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
@@ -26,22 +26,22 @@ public class CustomersFactory {
 
 	private final CustomerDao customerDao;
 
-	public BasicsCustomers createCustomers(NewCustomerRequest newCustomerRequest) {
-		BasicsCustomers basicsCustomers = new BasicsCustomers();
-		basicsCustomers.setCode(newCustomerRequest.getCode());
-		basicsCustomers.setName(newCustomerRequest.getName());
-		basicsCustomers.setSimpleName(newCustomerRequest.getSimpleName());
-		basicsCustomers.setStatus(newCustomerRequest.getStatus());
-		basicsCustomers.setWoId(newCustomerRequest.getWoId());
-		basicsCustomers.setZipCode(newCustomerRequest.getZipCode());
-		basicsCustomers.setRemark(newCustomerRequest.getRemark());
-		return  basicsCustomers;
+	public BasicsCustomer createCustomers(NewCustomerRequest newCustomerRequest) {
+		BasicsCustomer basicsCustomer = new BasicsCustomer();
+		basicsCustomer.setCode(newCustomerRequest.getCode());
+		basicsCustomer.setName(newCustomerRequest.getName());
+		basicsCustomer.setSimpleName(newCustomerRequest.getSimpleName());
+		basicsCustomer.setStatus(newCustomerRequest.getStatus());
+		basicsCustomer.setWoId(newCustomerRequest.getWoId());
+		basicsCustomer.setZipCode(newCustomerRequest.getZipCode());
+		basicsCustomer.setRemark(newCustomerRequest.getRemark());
+		return basicsCustomer;
 	}
 
-    public List<BasicsCustomers> createCustomerListForImport(List<CustomerImportRequest> importDataList) {
-		List<BasicsCustomers> customerList = new ArrayList<>();
+    public List<BasicsCustomer> createCustomerListForImport(List<CustomerImportRequest> importDataList) {
+		List<BasicsCustomer> customerList = new ArrayList<>();
 		for (CustomerImportRequest data: importDataList) {
-			BasicsCustomers customer = new BasicsCustomers();
+			BasicsCustomer customer = new BasicsCustomer();
 			// 根据客户编码查询客户信息
 			if (Func.isNotEmpty(data.getOwnerCode())){
 				Owner owner = ownerBiz.findByCode(data.getOwnerCode());

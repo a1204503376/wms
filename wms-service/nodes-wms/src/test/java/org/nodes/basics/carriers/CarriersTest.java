@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.nodes.wms.biz.basics.carriers.impl.CarriersBizImpl;
+import org.nodes.wms.biz.basics.carriers.impl.CarrierBizImpl;
 import org.nodes.wms.dao.basics.carrier.dto.input.DeleteCarriersRequest;
 import org.nodes.wms.dao.basics.carrier.dto.input.CarrierPageQuery;
 import org.nodes.wms.dao.basics.carrier.dto.input.NewCarrierRequest;
@@ -26,7 +26,7 @@ import java.util.List;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CarriersTest {
 	@Autowired
-	private CarriersBizImpl carriersBiz;
+	private CarrierBizImpl carriersBiz;
 	@Test
 	public void test01() throws ParseException {
 		CarrierPageQuery carrierPageQuery = new CarrierPageQuery();
