@@ -4,7 +4,6 @@ import {nowDateFormat} from "@/util/date"
 import {getCrudColumnResponseList} from "@/api/core/column";
 import {deepClone} from "@/util/util";
 import {mapGetters} from "vuex";
-import {importFile} from "@/api/wms/basics/supplier";
 
 export const listMixin = {
     mixins: [menuMixin],

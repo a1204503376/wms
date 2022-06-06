@@ -33,7 +33,7 @@
                             <el-form-item label="承运商简称" >
                                 <el-input v-model="form.params.simpleName"></el-input>
                             </el-form-item>
-                        </el-col>
+                        </el-col>yy
                     </el-row>
                     <el-row>
                         <el-col :span="8">

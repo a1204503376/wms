@@ -3,6 +3,7 @@ package org.nodes.wms.biz.basics.bom;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.bom.dto.input.WmsSkuBomPageQuery;
 import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomResponse;
+import org.nodes.wms.dao.basics.bom.entites.SkuBom;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -27,4 +28,11 @@ public interface WmsSkuBomBiz {
 	 * @param response 响应对象
 	 */
 	void exportExcel(HashMap<String, Object> params, HttpServletResponse response);
+
+	/**
+	 * 根据物料清单id获取物料清单实体
+	 * @param id  物料清单id
+	 * @return SkuBom 物料清单实体
+	 */
+	SkuBom findSkuBomById(Long id);
 }

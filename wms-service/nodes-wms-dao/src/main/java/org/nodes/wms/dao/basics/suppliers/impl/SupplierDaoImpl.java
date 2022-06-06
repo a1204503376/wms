@@ -77,4 +77,9 @@ public class SupplierDaoImpl extends BaseServiceImpl<SupplierMapper, Supplier> i
     public boolean importExcel(List<Supplier> supplierList) {
 		return super.saveBatch(supplierList);
 	}
+
+    @Override
+    public Supplier getByCode(String code) {
+		return super.getOne(new LambdaQueryWrapper<Supplier>().eq(Supplier::getCode,code));
+    }
 }

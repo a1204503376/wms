@@ -2,6 +2,7 @@ package org.nodes.wms.dao.basics.zone;
 
 
 import org.nodes.wms.dao.basics.zone.dto.ZoneSelectResponse;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 
 import java.util.List;
 
@@ -19,4 +20,12 @@ public interface ZoneDao {
 	 * @return List<zoneSelectResponse>
 	 */
 	List<ZoneSelectResponse> listTop10ByWhIdZoneCodeZoneName(String whId, String zoneCode,String zoneName);
+
+	/**
+	 * 根据库区编码查询库区信息
+	 *
+	 * @param zoneCode: 库区编码
+	 * @return Zone
+	 */
+    Zone getZoneByCode(String zoneCode);
 }

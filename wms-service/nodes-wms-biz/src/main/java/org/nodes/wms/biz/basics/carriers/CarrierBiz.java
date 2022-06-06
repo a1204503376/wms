@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.carrier.dto.input.*;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierDropDownResponse;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse;
+import org.nodes.wms.dao.basics.carrier.entites.BasicsCarrier;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * 承运商业务层接口
  */
-public interface CarriersBiz {
+public interface CarrierBiz {
 	/**
 	 * 分页查询
 	 **/
@@ -53,4 +54,18 @@ public interface CarriersBiz {
 	 * @return true: 导入成功，false: 导入失败
 	 */
     boolean importExcel(List<CarrierExcelRequest> importDataList);
+
+	/**
+	 * 根据承运商id获取承运商实体
+	 * @param id 承运商id
+	 * @return BasicsCarrier 承运商实体
+	 */
+	BasicsCarrier findCarrierById(Long id);
+
+	/**
+	 * 根据承运商编码获取承运商实体
+	 * @param code 承运商编码
+	 * @return BasicsCarrier 承运商实体
+	 */
+	BasicsCarrier findCarrierByCode(String code);
 }

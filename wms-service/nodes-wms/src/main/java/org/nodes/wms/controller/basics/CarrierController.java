@@ -3,7 +3,7 @@ package org.nodes.wms.controller.basics;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
-import org.nodes.wms.biz.basics.carriers.CarriersBiz;
+import org.nodes.wms.biz.basics.carriers.CarrierBiz;
 import org.nodes.wms.dao.basics.carrier.dto.input.*;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierDropDownResponse;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse;
@@ -27,13 +27,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_ROOT_URL +"carriers")
 public class CarrierController {
-	private  final CarriersBiz carriersBiz;
+	private  final CarrierBiz carrierBiz;
 	/**
 	 * 承运商管理分页查询
 	 */
 	@PostMapping("/page")
 	public R<IPage<CarrierResponse>> page(@RequestBody CarrierPageQuery carrierPageQuery, Query query) {
-		IPage<CarrierResponse> pages = carriersBiz.getPage(query, carrierPageQuery);
+		IPage<CarrierResponse> pages = carrierBiz.getPage(query, carrierPageQuery);
 		return R.data(pages);
 	}
 	/**
@@ -42,7 +42,7 @@ public class CarrierController {
 	@ApiLog("承运商管理-新增")
 	@PostMapping("/newCarrier")
 	public R newCarrier(@RequestBody NewCarrierRequest newCarrierRequest) {
-		return R.status(carriersBiz.newCarrier(newCarrierRequest));
+		return R.status(carrierBiz.newCarrier(newCarrierRequest));
 	}
 	/**
 	 * 承运商管理删除
@@ -50,7 +50,7 @@ public class CarrierController {
 	@ApiLog("承运商管理-逻辑删除")
 	@PostMapping("/delete")
 	public R delete(@RequestBody DeleteCarriersRequest deleteRequest) {
-		return R.status(carriersBiz.remove(deleteRequest));
+		return R.status(carrierBiz.remove(deleteRequest));
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class CarrierController {
 	@ApiLog("承运商管理-导出承运商")
 	@PostMapping("/excel")
 	public void excel(@ApiIgnore @RequestBody HashMap<String, Object> params, HttpServletResponse response) {
-		carriersBiz.exportExcel(params,response);
+		carrierBiz.exportExcel(params,response);
 	}
 
 
@@ -69,7 +69,7 @@ public class CarrierController {
 	@ApiLog("承运商管理-修改状态")
 	@PostMapping("/updateStatusById")
 	public R delete(@RequestBody UpdateStatusRequest updateStatusRequest) {
-		return R.status(carriersBiz.updateStatusById(updateStatusRequest));
+		return R.status(carrierBiz.updateStatusById(updateStatusRequest));
 	}
 
 
@@ -78,7 +78,7 @@ public class CarrierController {
 	 */
 	@PostMapping("/getDropDown")
 	public R<List<CarrierDropDownResponse>> getDropDown(@RequestBody CarrierDropDownRequest carrierDropDownRequest) {
-		return R.data(carriersBiz.getDropDown(carrierDropDownRequest));
+		return R.data(carrierBiz.getDropDown(carrierDropDownRequest));
 	}
 
 	@GetMapping("/export-template")
@@ -91,7 +91,7 @@ public class CarrierController {
 	@PostMapping("/import-data")
 	public R<String> importData(MultipartFile file){
 		List<CarrierExcelRequest> importDataList = ExcelUtil.read(file, CarrierExcelRequest.class);
-		boolean importFlag = carriersBiz.importExcel(importDataList);
+		boolean importFlag = carrierBiz.importExcel(importDataList);
 		return importFlag ? R.success("导入成功") : R.fail("导入失败");
 	}
 }

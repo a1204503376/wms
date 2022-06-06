@@ -1,4 +1,4 @@
-package org.nodes.wms.core.basedata.enums;
+package org.nodes.wms.dao.basics.billType.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

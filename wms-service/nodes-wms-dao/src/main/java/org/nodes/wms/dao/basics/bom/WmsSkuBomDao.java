@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.basics.bom.dto.input.WmsSkuBomPageQuery;
 import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomExcelResponse;
 import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomResponse;
+import org.nodes.wms.dao.basics.bom.entites.SkuBom;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,4 +29,11 @@ public interface WmsSkuBomDao {
 	 * @return WmsSkuBom集合
 	 */
 	List<WmsSkuBomExcelResponse> getWmsSkuBomList(HashMap<String, Object> params);
+
+	/**
+	 * 根据物料清单id获取物料清单实体
+	 * @param id 物料清单id
+	 * @return SkuBom 物料清单实体
+	 */
+    SkuBom getSkuBomById(Long id);
 }

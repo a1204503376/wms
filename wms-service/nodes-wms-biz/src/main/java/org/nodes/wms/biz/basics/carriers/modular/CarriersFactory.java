@@ -7,7 +7,7 @@ import org.nodes.wms.dao.basics.carrier.CarriersDao;
 import org.nodes.wms.dao.basics.carrier.dto.input.CarrierExcelRequest;
 import org.nodes.wms.dao.basics.carrier.dto.input.NewCarrierRequest;
 import org.nodes.wms.dao.basics.carrier.dto.input.UpdateStatusRequest;
-import org.nodes.wms.dao.basics.carrier.entites.BasicsCarriers;
+import org.nodes.wms.dao.basics.carrier.entites.BasicsCarrier;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
@@ -27,28 +27,33 @@ public class CarriersFactory {
 
 	private final CarriersDao carrierDao;
 
-	public BasicsCarriers createCarriers(NewCarrierRequest newCarrierRequest) {
-		BasicsCarriers basicsCarriers = new BasicsCarriers();
-		basicsCarriers.setCode(newCarrierRequest.getCode());
-		basicsCarriers.setName(newCarrierRequest.getName());
-		basicsCarriers.setSimpleName(newCarrierRequest.getSimpleName());
-		basicsCarriers.setStatus(newCarrierRequest.getStatus());
-		basicsCarriers.setWoId(newCarrierRequest.getWoId());
-		basicsCarriers.setRemark(newCarrierRequest.getRemark());
-		return  basicsCarriers;
+	public BasicsCarrier createCarriers(NewCarrierRequest newCarrierRequest) {
+		BasicsCarrier BasicsCarrier = new BasicsCarrier();
+		BasicsCarrier.setCode(newCarrierRequest.getCode());
+		BasicsCarrier.setName(newCarrierRequest.getName());
+		BasicsCarrier.setSimpleName(newCarrierRequest.getSimpleName());
+		BasicsCarrier.setStatus(newCarrierRequest.getStatus());
+		BasicsCarrier.setWoId(newCarrierRequest.getWoId());
+		BasicsCarrier.setRemark(newCarrierRequest.getRemark());
+		return  BasicsCarrier;
 	}
-	public BasicsCarriers createCarriers(UpdateStatusRequest updateStatusRequest) {
-		BasicsCarriers basicsCarriers = new BasicsCarriers();
-		basicsCarriers.setStatus(updateStatusRequest.getStatus());
-        basicsCarriers.setId(updateStatusRequest.getId());
-		return  basicsCarriers;
+	public BasicsCarrier createCarriers(UpdateStatusRequest updateStatusRequest) {
+		BasicsCarrier BasicsCarrier = new BasicsCarrier();
+		BasicsCarrier.setStatus(updateStatusRequest.getStatus());
+        BasicsCarrier.setId(updateStatusRequest.getId());
+		return  BasicsCarrier;
 	}
 
-
-    public List<BasicsCarriers> createCarrierListForImport(List<CarrierExcelRequest> importDataList) {
-		List<BasicsCarriers> carrierList = new ArrayList<>();
+    public List<BasicsCarrier> createCarrierListForImport(List<CarrierExcelRequest> importDataList) {
+		List<BasicsCarrier> carrierList = new ArrayList<>();
 		for (CarrierExcelRequest data: importDataList) {
-			BasicsCarriers carrier = new BasicsCarriers();
+			BasicsCarrier carrier = new BasicsCarrier();
+			if(Func.isEmpty(data.getCode())){
+				throw new ServiceException("导入失败，承运商编码不能为空");
+			}
+			if(Func.isEmpty(data.getName())){
+				throw new ServiceException("导入失败，承运商名称不能为空");
+			}
 			// 根据承运商编码查询承运商信息
 			if (Func.isNotEmpty(data.getOwnerCode())){
 				Owner owner = ownerBiz.findByCode(data.getOwnerCode());
@@ -60,16 +65,19 @@ public class CarriersFactory {
 			}
 			boolean isExist = carrierDao.isExistCarrierCode(data.getCode());
 			if (isExist) {
-				throw new ServiceException("导入失败，承运商编码["+ data.getCode()+"]已存在");
+				throw new ServiceException("导入失败，承运商编码["+data.getCode()+"]已存在");
 			}
 			carrier.setCode(data.getCode());
 			carrier.setName(data.getName());
 			carrier.setSimpleName(data.getSimpleName());
 			carrier.setRemark(data.getRemark());
 
+			if(Func.isEmpty(data.getStatus())){
+				throw new ServiceException("导入失败，启用状态不能为空");
+			}
 			if (!data.getStatus().equals(StatusEnum.ON.getIndex())
 				&& !data.getStatus().equals(StatusEnum.OFF.getIndex())){
-				throw new ServiceException("导入失败，启用状态只能为1(启用)或者0(禁用)");
+				throw new ServiceException("导入失败，启用状态只能为1(启用)或者-1(禁用)");
 			}
 			carrier.setStatus(data.getStatus());
 			carrierList.add(carrier);

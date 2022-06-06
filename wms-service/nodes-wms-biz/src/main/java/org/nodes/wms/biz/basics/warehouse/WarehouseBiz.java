@@ -21,4 +21,11 @@ public interface WarehouseBiz {
 	 * @return  仓库实体
 	 */
 	Warehouse findById(Long warehouseId);
+
+	/**
+	 * 根据仓库编码获取仓库实体
+	 * @param whCode 仓库实体
+	 * @return Warehouse 仓库实体
+	 */
+	Warehouse findByCode(String whCode);
 }

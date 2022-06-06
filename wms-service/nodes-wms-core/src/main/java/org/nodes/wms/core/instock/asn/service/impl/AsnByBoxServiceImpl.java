@@ -19,7 +19,7 @@ import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuLotVal;
 import org.nodes.wms.core.basedata.entity.SkuPackage;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
-import org.nodes.wms.core.basedata.enums.SkuLevelEnum;
+import org.nodes.wms.dao.basics.sku.enums.SkuLevelEnum;
 import org.nodes.wms.core.basedata.service.ISkuLogService;
 import org.nodes.wms.core.basedata.service.ISkuLotService;
 import org.nodes.wms.core.basedata.service.ISkuLotValService;

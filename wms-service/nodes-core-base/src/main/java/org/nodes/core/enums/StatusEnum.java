@@ -13,7 +13,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum StatusEnum {
 
-	OFF(0, "禁用"),
+	OFF(-1, "禁用"),
 	ON(1, "启用"),
 	;
 

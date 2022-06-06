@@ -1,5 +1,6 @@
 package org.nodes.wms.dao.basics.warehouse.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.basics.warehouse.WarehouseDao;
 import org.nodes.wms.dao.basics.warehouse.dto.output.WarehouseResponse;
@@ -26,5 +27,10 @@ public class WarehouseDaoImpl extends BaseServiceImpl<WarehouseMapper, Warehouse
     @Override
     public Warehouse findById(Long warehouseId) {
 		return super.getById(warehouseId);
+    }
+
+    @Override
+    public Warehouse findByCode(String whCode) {
+		return super.getOne(new LambdaQueryWrapper<Warehouse>().eq(Warehouse::getWhCode,whCode));
     }
 }

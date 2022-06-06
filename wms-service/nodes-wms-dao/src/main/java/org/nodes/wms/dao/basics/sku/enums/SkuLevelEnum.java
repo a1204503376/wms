@@ -1,4 +1,4 @@
-package org.nodes.wms.core.basedata.enums;
+package org.nodes.wms.dao.basics.sku.enums;
 /**
  * @description 包装层级
  *

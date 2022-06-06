@@ -31,9 +31,6 @@ import java.util.List;
 
 /**
  * ASN单管理API
- *
- * @author 彭永程
- * @date 2022-04-22 9:22
  **/
 @RestController
 @RequiredArgsConstructor
