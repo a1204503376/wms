@@ -15,12 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 供应商 工厂
- * 用于创建供应商实体
- * @author 彭永程
- * @date 2022-04-20 13:47
- **/
 @Service
 @RequiredArgsConstructor
 public class SupplierFactory {
