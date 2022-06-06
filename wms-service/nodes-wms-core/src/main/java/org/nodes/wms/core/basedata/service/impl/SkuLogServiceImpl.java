@@ -1,19 +1,16 @@
 package org.nodes.wms.core.basedata.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import lombok.AllArgsConstructor;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.dto.SkuLogDTO;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuLog;
-import org.nodes.wms.core.basedata.enums.SkuLogTypeEnum;
+import org.nodes.wms.dao.basics.sku.enums.SkuLogTypeEnum;
 import org.nodes.wms.core.basedata.mapper.SkuLogMapper;
 import org.nodes.wms.core.basedata.service.ISkuLogService;
-import org.nodes.wms.core.basedata.service.ISkuService;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.Func;
-import org.springblade.core.tool.utils.SpringUtil;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;

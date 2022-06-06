@@ -1,20 +1,17 @@
 package org.nodes.wms.core.basedata.wrapper;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.core.basedata.dto.SkuPackageDTO;
 import org.nodes.wms.core.basedata.dto.SkuPackageDetailDTO;
 import org.nodes.wms.core.basedata.entity.SkuPackage;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
-import org.nodes.wms.core.basedata.enums.SkuLevelEnum;
+import org.nodes.wms.dao.basics.sku.enums.SkuLevelEnum;
 import org.nodes.wms.core.basedata.excel.SkuPackageExcel;
-import org.nodes.wms.core.basedata.service.ISkuPackageDetailService;
 import org.nodes.wms.core.basedata.vo.SkuPackageDetailVO;
 import org.nodes.wms.core.basedata.vo.SkuPackageVO;
 import org.springblade.core.mp.support.BaseEntityWrapper;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
-import org.springblade.core.tool.utils.SpringUtil;
 
 import java.util.ArrayList;
 import java.util.List;

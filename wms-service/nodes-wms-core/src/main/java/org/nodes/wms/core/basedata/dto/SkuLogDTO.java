@@ -1,7 +1,7 @@
 package org.nodes.wms.core.basedata.dto;
 
 import lombok.Data;
-import org.nodes.wms.core.basedata.enums.SkuLogTypeEnum;
+import org.nodes.wms.dao.basics.sku.enums.SkuLogTypeEnum;
 
 import javax.validation.constraints.NotNull;
 

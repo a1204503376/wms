@@ -6,22 +6,18 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.nodes.wms.core.basedata.dto.SkuDTO;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuLot;
-import org.nodes.wms.core.basedata.enums.SkuLevelEnum;
+import org.nodes.wms.dao.basics.sku.enums.SkuLevelEnum;
 import org.nodes.wms.core.basedata.service.*;
-import org.nodes.wms.core.stock.core.entity.StockDetail;
-import org.nodes.wms.core.warehouse.service.ILocationService;
-import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.nodes.core.base.cache.ParamCache;
 import org.nodes.core.tool.entity.SkuLotBaseEntity;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.basedata.cache.SkuCache;
-import org.nodes.wms.core.basedata.cache.SkuLotCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.core.basedata.dto.SkuLogDTO;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
-import org.nodes.wms.core.basedata.enums.SkuLogTypeEnum;
+import org.nodes.wms.dao.basics.sku.enums.SkuLogTypeEnum;
 import org.nodes.wms.core.basedata.wrapper.SkuLotWrapper;
 import org.nodes.wms.core.stock.core.entity.Stock;
 import org.nodes.wms.core.stock.core.entity.StockOccupy;
@@ -65,8 +61,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static org.nodes.wms.core.warehouse.cache.LocationCache.LOCATION_CACHE;
 
 /**
  * 按箱拣货 服务实现类

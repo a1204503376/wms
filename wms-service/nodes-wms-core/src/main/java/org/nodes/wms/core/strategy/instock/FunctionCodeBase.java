@@ -1,17 +1,14 @@
 package org.nodes.wms.core.strategy.instock;
 
-import org.aspectj.bridge.ILifecycleAware;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
-import org.nodes.wms.core.basedata.enums.SkuLevelEnum;
-import org.nodes.wms.core.basedata.service.ISkuService;
+import org.nodes.wms.dao.basics.sku.enums.SkuLevelEnum;
 import org.nodes.wms.core.stock.core.entity.Stock;
 import org.nodes.wms.core.stock.core.service.IStockService;
-import org.nodes.wms.core.strategy.cache.InstockCache;
 import org.nodes.wms.core.strategy.entity.Instock;
 import org.nodes.wms.core.strategy.entity.InstockDetail;
 import org.nodes.wms.core.strategy.enums.LocSortModeEnum;
@@ -19,7 +16,6 @@ import org.nodes.wms.core.strategy.enums.LocSortTypeEnum;
 import org.nodes.wms.core.strategy.service.IInstockService;
 import org.nodes.wms.core.strategy.vo.InstockExecuteVO;
 import org.nodes.wms.core.warehouse.cache.LocationCache;
-import org.nodes.wms.core.warehouse.cache.ZoneCache;
 import org.nodes.wms.core.warehouse.entity.Location;
 import org.nodes.wms.core.warehouse.entity.Zone;
 import org.nodes.wms.core.warehouse.service.ILocationService;

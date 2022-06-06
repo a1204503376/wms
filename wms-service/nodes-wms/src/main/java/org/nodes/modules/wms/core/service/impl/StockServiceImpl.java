@@ -11,7 +11,7 @@ import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuPackage;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
-import org.nodes.wms.core.basedata.enums.SkuLevelEnum;
+import org.nodes.wms.dao.basics.sku.enums.SkuLevelEnum;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.common.enums.CreateTypeEnum;
 import org.nodes.wms.core.instock.asn.cache.AsnCache;
