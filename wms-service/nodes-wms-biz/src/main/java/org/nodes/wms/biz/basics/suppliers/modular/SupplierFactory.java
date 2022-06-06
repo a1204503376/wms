@@ -44,6 +44,12 @@ public class SupplierFactory {
 		List<Supplier> supplierList = new ArrayList<>();
 		for (SupplierImportRequest data: importDataList) {
 			Supplier supplier = new Supplier();
+			if(Func.isEmpty(data.getCode())){
+				throw new ServiceException("导入失败，供应商编码不能为空");
+			}
+			if(Func.isEmpty(data.getName())){
+				throw new ServiceException("导入失败，供应商名称不能为空");
+			}
 			// 根据供应商编码查询供应商信息
 			if (Func.isNotEmpty(data.getOwnerCode())){
 				Owner owner = ownerBiz.findByCode(data.getOwnerCode());
@@ -55,16 +61,19 @@ public class SupplierFactory {
 			}
 			boolean isExist = supplierDao.isExistSupplierCode(data.getCode());
 			if (isExist) {
-				throw new ServiceException("导入失败，供应商编码["+ data.getCode()+"]已存在");
+				throw new ServiceException("导入失败，供应商编码["+data.getCode()+"]已存在");
 			}
 			supplier.setCode(data.getCode());
 			supplier.setName(data.getName());
 			supplier.setSimpleName(data.getSimpleName());
 			supplier.setRemark(data.getRemark());
 
+			if(Func.isEmpty(data.getStatus())){
+				throw new ServiceException("导入失败，启用状态不能为空");
+			}
 			if (!data.getStatus().equals(StatusEnum.ON.getIndex())
 				&& !data.getStatus().equals(StatusEnum.OFF.getIndex())){
-				throw new ServiceException("导入失败，启用状态只能为1(启用)或者0(禁用)");
+				throw new ServiceException("导入失败，启用状态只能为1(启用)或者-1(禁用)");
 			}
 			supplier.setStatus(data.getStatus());
 			supplierList.add(supplier);

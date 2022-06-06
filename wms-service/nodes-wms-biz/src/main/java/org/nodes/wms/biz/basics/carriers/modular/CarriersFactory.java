@@ -44,11 +44,16 @@ public class CarriersFactory {
 		return  basicsCarriers;
 	}
 
-
     public List<BasicsCarriers> createCarrierListForImport(List<CarrierExcelRequest> importDataList) {
 		List<BasicsCarriers> carrierList = new ArrayList<>();
 		for (CarrierExcelRequest data: importDataList) {
 			BasicsCarriers carrier = new BasicsCarriers();
+			if(Func.isEmpty(data.getCode())){
+				throw new ServiceException("导入失败，承运商编码不能为空");
+			}
+			if(Func.isEmpty(data.getName())){
+				throw new ServiceException("导入失败，承运商名称不能为空");
+			}
 			// 根据承运商编码查询承运商信息
 			if (Func.isNotEmpty(data.getOwnerCode())){
 				Owner owner = ownerBiz.findByCode(data.getOwnerCode());
@@ -60,16 +65,19 @@ public class CarriersFactory {
 			}
 			boolean isExist = carrierDao.isExistCarrierCode(data.getCode());
 			if (isExist) {
-				throw new ServiceException("导入失败，承运商编码["+ data.getCode()+"]已存在");
+				throw new ServiceException("导入失败，承运商编码["+data.getCode()+"]已存在");
 			}
 			carrier.setCode(data.getCode());
 			carrier.setName(data.getName());
 			carrier.setSimpleName(data.getSimpleName());
 			carrier.setRemark(data.getRemark());
 
+			if(Func.isEmpty(data.getStatus())){
+				throw new ServiceException("导入失败，启用状态不能为空");
+			}
 			if (!data.getStatus().equals(StatusEnum.ON.getIndex())
 				&& !data.getStatus().equals(StatusEnum.OFF.getIndex())){
-				throw new ServiceException("导入失败，启用状态只能为1(启用)或者0(禁用)");
+				throw new ServiceException("导入失败，启用状态只能为1(启用)或者-1(禁用)");
 			}
 			carrier.setStatus(data.getStatus());
 			carrierList.add(carrier);
