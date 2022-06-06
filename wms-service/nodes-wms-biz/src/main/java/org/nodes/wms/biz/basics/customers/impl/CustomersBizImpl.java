@@ -8,6 +8,7 @@ import org.nodes.wms.biz.basics.customers.modular.CustomersFactory;
 import org.nodes.wms.dao.basics.customer.CustomerDao;
 import org.nodes.wms.dao.basics.customer.dto.input.*;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
+import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 import org.nodes.wms.dao.basics.customer.entities.BasicsCustomer;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
