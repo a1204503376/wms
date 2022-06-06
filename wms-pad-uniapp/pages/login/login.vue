@@ -133,5 +133,4 @@
 
 <style lang="scss">
 	@import 'login.scss';
-	@import '@/static/common.scss';
 </style>
