@@ -39,7 +39,7 @@ export default [
             name: '新增容器',
             props: true,
             component: () => import('@/views/wms/basics/lpntype/LpnTypeAddOrEdit')
-        },{
+        }, {
             path: 'edit/:id',
             name: '编辑容器',
             props: true,
@@ -59,32 +59,25 @@ export default [
     {
         path: '/asn',
         component: Layout,
-        children: [{
-            path: 'add/:asnBillId',
-            name: '新增ASN单',
-            props: true,
-            component: () => import('@/views/wms/instock/asnHeader/asnAdd')
-        }]
-    },
-    {
-        path: '/asn',
-        component: Layout,
-        children: [{
-            path: 'edit/:asnBillId',
-            name: '编辑ASN单',
-            props: true,
-            component: () => import('@/views/wms/instock/asnHeader/asnEdit')
-        }]
-    },
-    {
-        path: '/asn',
-        component: Layout,
-        children: [{
-            path: 'detail/:asnBillId',
-            name: 'ASN单详情',
-            props: true,
-            component: () => import('@/views/wms/instock/asnHeader/asnDetail')
-        }]
+        children: [
+            {
+                path: 'add/:asnBillId',
+                name: '新增ASN单',
+                props: true,
+                component: () => import('@/views/wms/instock/asnHeader/asnAdd')
+            },
+            {
+                path: 'edit/:asnBillId',
+                name: '编辑ASN单',
+                props: true,
+                component: () => import('@/views/wms/instock/asnHeader/asnEdit')
+            },
+            {
+                path: 'detail/:asnBillId',
+                name: 'ASN单详情',
+                props: true,
+                component: () => import('@/views/wms/instock/asnHeader/asnDetail')
+            }]
     },
     {
         path: '/carrier',
@@ -101,11 +94,11 @@ export default [
         component: Layout,
         children: [
             {
-            path: 'add/:id',
-            name: '新增收货单',
-            props: true,
-            component: () => import('@/views/wms/instock/receive/receiveNew')
-         },
+                path: 'add/:id',
+                name: '新增收货单',
+                props: true,
+                component: () => import('@/views/wms/instock/receive/receiveNew')
+            },
             {
                 path: 'edit/:id/:receiveId',
                 name: '编辑收货单',
@@ -120,5 +113,27 @@ export default [
             }
         ]
     },
-
+    {
+        path: '/location',
+        component: Layout,
+        children: [
+            {
+                path: 'add/:locationId',
+                name: '新增库位',
+                props: true,
+                component: () => import('@/views/wms/warehouse/location/LocationAdd')
+            },
+            {
+                path: 'edit/:locationId',
+                name: '编辑库位',
+                props: true,
+                // component: () => import('@/views/wms/warehouse/location/LocationEdit')
+            },
+            {
+                path: 'detail/:locationId',
+                name: '库位详情',
+                props: true,
+                // component: () => import('@/views/wms/warehouse/location/LocationDetail')
+            }]
+    },
 ]
