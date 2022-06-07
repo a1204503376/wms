@@ -30,10 +30,8 @@ export const getLocationSelectResponseTop10List = (data) => {
 export const exportFile = (data) => {
     return request({
         url: '/api/wms/warehouse/location/export',
-        method: 'get',
-        params: {
-            ...data
-        },
+        method: 'post',
+        data: data,
         responseType: 'blob'
     })
 }
