@@ -5,10 +5,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.poi.ss.formula.functions.T;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationExcelRequest;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageQuery;
-import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationSelectQuery;
+import org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -38,4 +39,12 @@ public interface LocationBiz {
 	 * @return IPage<LocationPageResponse>
 	 */
 	Page<LocationPageResponse> page(IPage<T> page, LocationPageQuery locationPageQuery);
+
+	/**
+	 * 导出
+	 *
+	 * @param locationPageQuery: 条件
+	 * @param response: 响应信息
+	 */
+	void exportExcel(LocationPageQuery locationPageQuery, HttpServletResponse response);
 }

@@ -7,9 +7,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.basics.warehouse.LocationDao;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageQuery;
-import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageResponse;
+import org.nodes.wms.dao.basics.warehouse.dto.output.LocationExcelResponse;
+import org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse;
-import org.nodes.wms.dao.basics.warehouse.entites.Location;
+import org.nodes.wms.dao.basics.warehouse.entities.Location;
 import org.nodes.wms.dao.basics.warehouse.mapper.LocationMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
@@ -42,5 +43,10 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	@Override
 	public Page<LocationPageResponse> selectPage(IPage<?> page, LocationPageQuery locationPageQuery) {
 		return super.baseMapper.listByPage(page, locationPageQuery);
+	}
+
+	@Override
+	public List<LocationExcelResponse> selectListByQuery(LocationPageQuery locationPageQuery) {
+		return super.baseMapper.listByQuery(locationPageQuery);
 	}
 }

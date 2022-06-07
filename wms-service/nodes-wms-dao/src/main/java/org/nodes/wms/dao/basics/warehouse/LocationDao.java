@@ -3,9 +3,10 @@ package org.nodes.wms.dao.basics.warehouse;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageQuery;
-import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageResponse;
+import org.nodes.wms.dao.basics.warehouse.dto.output.LocationExcelResponse;
+import org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse;
-import org.nodes.wms.dao.basics.warehouse.entites.Location;
+import org.nodes.wms.dao.basics.warehouse.entities.Location;
 
 import java.util.List;
 
@@ -39,4 +40,12 @@ public interface LocationDao {
 	 * @return Page<LocationPageResponse>
 	 */
 	Page<LocationPageResponse> selectPage(IPage<?> page, LocationPageQuery locationPageQuery);
+
+	/**
+	 * 根据若干条件查询库位信息
+	 *
+	 * @param locationPageQuery: 条件
+	 * @return List<Location>
+	 */
+	List<LocationExcelResponse> selectListByQuery(LocationPageQuery locationPageQuery);
 }

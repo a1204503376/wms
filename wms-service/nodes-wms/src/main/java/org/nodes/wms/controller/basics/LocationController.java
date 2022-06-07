@@ -7,8 +7,8 @@ import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationExcelRequest;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageQuery;
-import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationSelectQuery;
+import org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
@@ -61,16 +61,6 @@ public class LocationController {
 //	public R<List<LocationVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
 //		List<Location> list = locationService.list(Condition.getQueryWrapper(params, Location.class));
 //		return R.data(LocationWrapper.build().listVO(list));
-//	}
-
-	/**
-	 * 分页
-	 */
-//	@GetMapping("/page")
-//	@ApiOperation(value = "分页", notes = "传入location")
-//	public R<IPage<LocationVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
-//		IPage<Location> pages = locationService.page(Condition.getPage(query), Condition.getQueryWrapper(params, Location.class));
-//		return R.data(LocationWrapper.build().pageVO(pages));
 //	}
 
 	/**
@@ -146,12 +136,10 @@ public class LocationController {
 	/**
 	 * 导出
 	 */
-//	@ApiLog("库位-导出")
-//	@GetMapping("export")
-//	@ApiOperation(value = "导出", notes = "查询条件")
-//	public void export(@ApiIgnore @RequestParam HashMap<String, Object> params, HttpServletResponse response) {
-//		locationService.exportExcel(params, response);
-//	}
+	@PostMapping("/export")
+	public void export(@RequestBody LocationPageQuery locationPageQuery,HttpServletResponse response) {
+		locationBiz.exportExcel(locationPageQuery, response);
+	}
 
 	/**
 	 * 导出模板
