@@ -54,7 +54,4 @@ public class LpnTypePageResponse implements Serializable {
 	 */
 	private Date updateTime;
 
-	public String getType() {
-		return type.value();
-	}
 }
