@@ -5,6 +5,7 @@ import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.dao.basics.zone.ZoneDao;
 import org.nodes.wms.dao.basics.zone.dto.ZoneSelectQuery;
 import org.nodes.wms.dao.basics.zone.dto.ZoneSelectResponse;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,4 +32,9 @@ public class ZoneBizImpl implements ZoneBiz {
 			zoneSelectQuery.getKey(),
 			zoneSelectQuery.getKey());
 	}
+
+    @Override
+    public Zone findByCode(String zoneCode) {
+        return zoneRepository.getZoneByCode(zoneCode);
+    }
 }

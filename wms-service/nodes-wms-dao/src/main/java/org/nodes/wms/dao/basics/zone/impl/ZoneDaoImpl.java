@@ -1,5 +1,6 @@
 package org.nodes.wms.dao.basics.zone.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.nodes.wms.dao.basics.zone.ZoneDao;
 import org.nodes.wms.dao.basics.zone.dto.ZoneSelectResponse;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
@@ -22,4 +23,9 @@ public class ZoneDaoImpl
 	listTop10ByWhIdZoneCodeZoneName(String whId, String zoneCode, String zoneName) {
 		return super.baseMapper.listTop10ByWhIdZoneCodeZoneName(whId, zoneCode, zoneName);
 	}
+
+    @Override
+    public Zone getZoneByCode(String zoneCode) {
+        return super.getOne(new LambdaQueryWrapper<Zone>().eq(Zone::getZoneCode,zoneCode));
+    }
 }

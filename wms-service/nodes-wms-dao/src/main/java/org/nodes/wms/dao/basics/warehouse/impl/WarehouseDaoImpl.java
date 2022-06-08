@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.basics.warehouse.WarehouseDao;
 import org.nodes.wms.dao.basics.warehouse.dto.output.WarehouseResponse;
-import org.nodes.wms.dao.basics.warehouse.entites.Warehouse;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.nodes.wms.dao.basics.warehouse.mapper.WarehouseMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;

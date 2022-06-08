@@ -1,7 +1,7 @@
 package org.nodes.wms.dao.basics.warehouse;
 
 import org.nodes.wms.dao.basics.warehouse.dto.output.WarehouseResponse;
-import org.nodes.wms.dao.basics.warehouse.entites.Warehouse;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 
 import java.util.List;
 

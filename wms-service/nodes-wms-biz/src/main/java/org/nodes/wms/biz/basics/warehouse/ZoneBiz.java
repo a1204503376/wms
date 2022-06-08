@@ -2,6 +2,7 @@ package org.nodes.wms.biz.basics.warehouse;
 
 import org.nodes.wms.dao.basics.zone.dto.ZoneSelectQuery;
 import org.nodes.wms.dao.basics.zone.dto.ZoneSelectResponse;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 
 import java.util.List;
 
@@ -16,4 +17,12 @@ public interface ZoneBiz {
 	 * @return 库位下拉列表集合
 	 */
 	List<ZoneSelectResponse> getZoneSelectResponseTop10List(ZoneSelectQuery zoneSelectQuery);
+
+	/**
+	 * 根据库区编码查询库区信息
+	 *
+	 * @param zoneCode: 库区编码
+	 * @return Zone
+	 */
+    Zone findByCode(String zoneCode);
 }

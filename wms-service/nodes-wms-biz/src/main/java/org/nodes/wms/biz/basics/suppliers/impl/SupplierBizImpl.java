@@ -22,8 +22,6 @@ import java.util.List;
 
 /**
  * 供应商业务
- *
- * @author 彭永程
  **/
 @Service
 @RequiredArgsConstructor

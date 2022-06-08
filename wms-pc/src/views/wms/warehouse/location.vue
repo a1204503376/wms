@@ -1,383 +1,322 @@
 <template>
-    <basic-container>
-        <nodes-crud
-                ref="table"
-                v-model="form"
-                :option="option"
-                :data="data"
-                :table-loading="loading"
-                :before-open="beforeOpen"
-                :permission="permissionList"
-                @on-load="onLoad"
-                @row-save="rowSave"
-                @on-del="onDel"
-                @on-multi-del="onMultiDel"
-                @selection-change="selectionChange"
-                @search-change="searchChange"
-        >
-            <template slot="menuLeft">
-                <el-dropdown trigger="click" @command="handleCommand">
-                    <el-button type="primary" size="mini">
-                        <i class="el-icon-edit-outline"></i>
-                        操作
-                        <i class="el-icon-arrow-down el-icon--right"></i>
-                    </el-button>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item v-if="permission.location_printLabel" command="0" icon="el-icon-printer">打印标签</el-dropdown-item>
-                        <el-dropdown-item v-if="permission.location_import" command="1" icon="el-icon-upload2" divided>导入</el-dropdown-item>
-                        <el-dropdown-item v-if="permission.location_export" command="2" icon="el-icon-download">导出</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
+    <div id="location">
+        <nodes-master-page :permission="permissionObj" v-on="form.events">
+            <template v-slot:searchFrom>
+                <el-form-item label="库位编码">
+                    <el-input v-model.trim="form.params.code" :clearable="true"></el-input>
+                </el-form-item>
+                <el-form-item label="库位名称">
+                    <el-input v-model.trim="form.params.name" :clearable="true"></el-input>
+                </el-form-item>
             </template>
-        </nodes-crud>
-        <file-upload
-            :visible="fileUpload.visible"
-            template-url="/api/wms/warehouse/location/export-template"
-            file-name="库位"
-            @callback="callbackFileUpload"
-        ></file-upload>
-        <data-verify
-            :visible="dataVerify.visible"
-            :dataSource="dataVerify.dataSource"
-            uploadUrl="/api/wms/warehouse/location/import-data"
-            dataVerifyUrl="/api/wms/warehouse/location/import-valid"
-            @callback="callbackDataVerify"
-        ></data-verify>
-    </basic-container>
+            <template v-slot:expandSearch>
+                <el-row type="flex">
+                    <el-col :span="24">
+                        <el-form-item label="创建日期">
+                            <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
+                        </el-form-item>
+                        <el-form-item label="更新日期">
+                            <nodes-date-range v-model="form.params.updateTimeDateRange"></nodes-date-range>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </template>
+            <template v-slot:batchBtn>
+                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
+                </el-button>
+                <el-button v-if="permissionObj.delete" icon="el-icon-delete" plain size="mini" type="danger"
+                           @click="onRemove">删除
+                </el-button>
+                <el-button v-if="permissionObj.import" icon="el-icon-upload2" plain size="mini"
+                           @click="onUpload">导入
+                </el-button>
+                <file-upload
+                    :visible="fileUpload.visible"
+                    file-name="库位"
+                    template-url="/api/wms/warehouse/location/export-template"
+                    @callback="callbackFileUpload"
+                ></file-upload>
+            </template>
+            <template v-slot:tableTool>
+                <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
+                    <el-button circle icon="el-icon-refresh" size="mini" @click="onRefresh"></el-button>
+                </el-tooltip>
+                <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">
+                    <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
+                </el-tooltip>
+                <el-tooltip :enterable="false" class="item" content="服务端导出" effect="dark" placement="top">
+                    <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
+                </el-tooltip>
+                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
+                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
+                                  style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData"/>
+                    </excel-export>
+                </el-tooltip>
+            </template>
+            <template v-slot:table>
+                <el-table ref="table"
+                          :data="table.data"
+                          border
+                          highlight-current-row
+                          size="mini"
+                          style="width: 100%"
+                          @sort-change="onSortChange">
+                    <el-table-column
+                        fixed
+                        type="selection"
+                        width="50">
+                    </el-table-column>
+                    <template v-for="(column, index) in table.columnList">
+                        <el-table-column
+                            :key="index"
+                            show-overflow-tooltip
+                            v-bind="column">
+                        </el-table-column>
+                    </template>
+                    <el-table-column label="启用"
+                                     prop="status"
+                                     width="100">
+                        <template v-slot="{row}">
+                            <el-tag :type="row.status === 1 ? 'success' : 'danger'"
+                                    disable-transitions>{{
+                                    row.status ===
+                                    1 ? '是' : '否'
+                                }}
+                            </el-tag>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </template>
+            <template v-slot:page>
+                <el-pagination :current-page="page.current" :page-size="page.size" :page-sizes="[20, 50, 100]"
+                               :total="page.total" background layout="total, sizes, prev, pager, next, jumper"
+                               v-bind="page"
+                               @size-change="handleSizeChange" @current-change="handleCurrentChange">
+                </el-pagination>
+            </template>
+        </nodes-master-page>
+        <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
+        </dialog-column>
+    </div>
 </template>
+
 <script>
-    import {getPage, add, remove, getDetail, print, exportFile} from "@/api/wms/warehouse/location";
-    import {getDetail as getParamDetail} from "@/api/core/param";
-    import {getList as getZoneList} from "@/api/wms/warehouse/zone";
-    import {group as group_1} from "./location/group_1";
-    import {group as group_2} from "./location/group_2";
-    import {group as group_3} from "./location/group_3";
-    import fileDownload from "js-file-download";
+import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
+import NodesDateRange from "@/components/wms/general/NodesDateRange";
+import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
+import DialogColumn from "@/components/element-ui/crud/dialog-column";
+import {listMixin} from "@/mixins/list";
+import {exportFile, importFile, getPage, remove} from "@/api/wms/basics/location";
+import fileDownload from "js-file-download";
+import {ExcelExport} from 'pikaz-excel-js'
+import fileUpload from "@/components/nodes/fileUpload";
 
-    import fileUpload from "@/components/nodes/fileUpload";
-    import dataVerify from "@/components/nodes/dataVerify";
-    import {mapGetters} from "vuex";
-
-    export default {
-        name: "location",
-        components: {
-            fileUpload,
-            dataVerify
-        },
-        data() {
+export default {
+    name: "location",
+    components: {
+        DialogColumn,
+        NodesSearchInput,
+        NodesMasterPage,
+        NodesDateRange,
+        ExcelExport,
+        fileUpload,
+    },
+    mixins: [listMixin],
+    data() {
+        return {
+            form: {
+                params: {
+                    code: "",
+                    name: "",
+                    createTimeDateRange: ["", ""],
+                    updateTimeDateRange: ["", ""],
+                },
+            },
+            table: {
+                columnList: [
+                    {
+                        prop: "locCode",
+                        label: "库位编码",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "whName",
+                        label: "所属库房",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "zoneName",
+                        label: "所属库区",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "locType",
+                        label: "应用类型",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "locCategory",
+                        width: 130,
+                        label: "应用种类",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "locHandling",
+                        width: 130,
+                        label: "库位处理",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "logicAllocation",
+                        width: 130,
+                        label: "路线顺序",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "abc",
+                        width: 130,
+                        label: "ABC分类",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "locColumn",
+                        width: 130,
+                        label: "货架列",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "locBank",
+                        width: 130,
+                        label: "货架排",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "putOrder",
+                        width: 130,
+                        label: "上架顺序",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "lpnType",
+                        width: 130,
+                        label: "适用的容器类型",
+                        sortable: "custom",
+                    },
+                ],
+            },
+            fileUpload: {
+                visible: false,
+            }
+        };
+    },
+    watch: {
+        $route(to) {
+            if (to.query && to.query.isRefresh === 'true') {
+                this.refreshTable();
+            }
+        }
+    },
+    computed: {
+        permissionObj() {
             return {
-                loading: false,
-                selectionList: [], //选中的数据
-                sptList: [], //模板数据
-                form: {},
-                data: [],
-                fileUpload: {
-                    visible: false
-                },
-                dataVerify: {
-                    visible: false,
-                    dataSource: {}
-                },
-                option: {
-                    newBtn: true,
-                    multiDelBtn: true,
-                    viewBtn: true,
-                    editBtn: true,
-                    delBtn: true,
-                    menu: true,
-                    custom: false,
-                    column: [
-                        {
-                            label: "库位编码",
-                            prop: "locCode",
-                            search: true,
-                            view: true,
-                            sortable: true,
-                            placeholder: '支持模糊查询',
-                        },
-                        {
-                            label: "所属库房",
-                            prop: "whId",
-                            search: true,
-                            type: "select",
-                            dicUrl: "/api/wms/warehouse/warehouse/list",
-                            props: {label: "whName", value: "whId"},
-                            cascaderItem: ['zoneId'],
-                            change: function (val, obj, col) {
-                                if (!val) {
-                                    return;
-                                }
-                                getZoneList(val).then(res => {
-                                    if (col && col.cascader) {
-                                        col.cascader.forEach(item => {
-                                            if (item.prop === 'zoneId') {
-                                                item.dataSource = res.data.data;
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        },
-                        {
-                            label: "所属库区",
-                            prop: "zoneId",
-                            search: true,
-                            dataSource: [],
-                            type: "select",
-                            dicUrl: "/api/wms/warehouse/zone/list",
-                            props: {
-                                label: "zoneName",
-                                value: "zoneId"
-                            }
-                        },
-                        {
-                            label: "应用类型",
-                            prop: "locType",
-                            search: true,
-                            type: "select",
-                            dicUrl: "/api/blade-system/dict/dictionary?code=" + this.$dict.locType,
-                            props: {
-                                label: "dictValue",
-                                value: "dictKey"
-                            }
-                        },
-                        {
-                            label: "库位种类",
-                            prop: "locCategory",
-                            search: true,
-                            type: "select",
-                            dicUrl: "/api/blade-system/dict/dictionary?code=" + this.$dict.locCategory,
-                            props: {
-                                label: "dictValue",
-                                value: "dictKey"
-                            }
-                        },
-                        {
-                            label: "库位容量",
-                            prop: "capacity",
-                        },
-                        {
-                            label: "库位处理",
-                            prop: "locHandling",
-                            type:'select',
-                            dicUrl: "/api/blade-system/dict/dictionary?code=" + this.$dict.locHandling,
-                            props: {
-                                label: "dictValue",
-                                value: "dictKey"
-                            }
-                        },
-                        {
-                            label: "路线顺序",
-                            prop: "logicAllocation",
-                            sortable: true,
-                        },
-                        {
-                            label: "ABC分类",
-                            prop: "abc",
-                            type:'select',
-                            dicUrl: "/api/blade-system/dict/dictionary?code=" + this.$dict.abc,
-                            props: {
-                                label: "dictValue",
-                                value: "dictKey"
-                            }
-                        },
-                    ],
-                    group: []
-                },
-                searchData: {}
-            };
+                search: this.vaildData(this.permission.location_search, false),
+                add: this.vaildData(this.permission.location_add, false),
+                delete: this.vaildData(this.permission.location_delete, false),
+                import: this.vaildData(this.permission.location_import, false)
+            }
+        }
+    },
+    created() {
+        this.getTableData();
+    },
+    methods: {
+        getTableData() {
+            getPage(this.page, this.form.params)
+                .then((res) => {
+                    let pageObj = res.data.data;
+                    this.table.data = pageObj.records;
+                    this.page.total = pageObj.total;
+                })
         },
-        computed: {
-            ...mapGetters(["permission"]),
-            permissionList() {
-                return {
-                    add: this.vaildData(this.permission.location_add, false),
-                    view: this.vaildData(this.permission.location_view, false),
-                    delete: this.vaildData(this.permission.location_delete, false),
-                    edit: this.vaildData(this.permission.location_edit, false),
-                    导入: this.vaildData(this.permission.location_import, false),
-                    导出: this.vaildData(this.permission.location_export, false),
-                    打印标签: this.vaildData(this.permission.location_printLabel, false),
-                }
-            },
-            ids() {
-                let ids = [];
-                this.selectionList.forEach(ele => {
-                    ids.push(ele.locId);
-                });
-                return ids.join(",");
-            },
+        refreshTable() {
+            this.getTableData();
         },
-        mounted() {
-            this.option.group.push(group_1);
-            this.option.group.push(group_2);
-            this.option.group.push(group_3);
-            // 获取批属性数量
-            getParamDetail({paramKey: "account:lotCount"}).then(res => {
-                for (let i = 1; i <= res.data.paramValue; i++) {
-                    let skuLot = {
-                        label: "混放批属性" + i,
-                        prop: "locLotMix" + i,
-                        hide: false,
-                        width: 120,
-                        type: "select",
-                        dicData: [
-                            {
-                                label: "允许",
-                                value: "2"
-                            },
-                            {
-                                label: "不允许",
-                                value: "1"
-                            }
-                        ]
+        onReset() {
+            this.form.params = {
+                name: '',
+                code: '',
+                createTimeDateRange: ["", ""],
+                updateTimeDateRange: ["", ""]
+            }
+        },
+        onRemove() {
+            let rows = this.$refs.table.selection;
+            if (rows.length <= 0) {
+                this.$message.warning("警告，至少选择一条记录");
+                return;
+            }
+            this.$confirm("此操作将删除, 是否删除?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+            })
+                .then(() => {
+                    let removeObj = {
+                        ids: []
                     };
-                    this.option.group[2].column.push(skuLot);
+                    rows.forEach((item) => {
+                        removeObj.ids.push(item.id);
+                    });
+                    remove(removeObj)
+                        .then((res) => {
+                            this.$message({
+                                type: "success",
+                                message: res.data.msg,
+                            });
+                            this.getTableData();
+                        })
+                })
+        },
+        exportData() {
+            this.loading = true;
+            exportFile(this.form.params)
+                .then((res) => {
+                    this.$message.success("操作成功，正在下载中...");
+                    fileDownload(res.data, "库位.xlsx");
+                })
+                .catch(() => {
+                    this.$message.error("系统模板目录配置有误或文件不存在");
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        onExportLocalData() {
+            this.exportCurrentDataToExcel("库位", "库位")
+        },
+        callbackFileUpload(res) {
+            this.fileUpload.visible = false;
+            if (!res.result) {
+                return;
+            }
+            let param = this.getFormData(res);
+            importFile(param).then((res) => {
+                this.$message.success(res.data.msg);
+                this.refreshTable();
+            })
+        },
+        filterTag(value, row) {
+            return row.status === value;
+        },
+        onAdd() {
+            this.$router.push({
+                name: '新增库位',
+                params: {
+                    id: '0'
                 }
             });
         },
-        methods: {
-            //默认渲染数据
-            onLoad(page, params = {}) {
-                this.loading = true;
-                getPage(
-                    page.currentPage,
-                    page.pageSize,
-                    Object.assign(params, this.query)
-                ).then(res => {
-                    var data = res.data.data;
-                    page.total = data.total;
-                    this.data = data.records;
-                    this.loading = false;
-                    this.selectionClear();
-                });
-            },
-            beforeOpen(done, type, finish) {
-                if (type === 'edit' && this.form.locType === 40) {
-                    this.$message.warning('虚拟库位不允许编辑！');
-                    finish();
-                }
-                if (type === 'edit' && this.form.locFlag === 20) {
-                    this.$message.warning('该库区使用状态为冻结！');
-                    finish();
-                }
-                if (["edit", "view"].includes(type)) {
-                    getDetail(this.form.locId)
-                        .then(res => {
-                            this.form = res.data.data;
-                        })
-                        .finally(() => {
-                            done();
-                        });
-                }
-            },
-            rowSave(row, loading, done, type) {
-                add(row).then(
-                    () => {
-                        loading();
-                        this.$refs.table.onLoad();
-                        this.$message.success("操作成功！");
-                    },
-                    error => {
-                        done();
-                    }
-                );
-            },
-            onDel(row, index) {
-                this.$confirm("确定删除当前数据？", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning"
-                }).then(() => {
-                    remove(row.locId).then(() => {
-                        this.$refs.table.onLoad();
-                        this.$message({
-                            type: "success",
-                            message: "操作成功!"
-                        });
-                    });
-                });
-            },
-            onMultiDel() {
-                if (!this.selectionList || this.selectionList.length == 0) {
-                    this.$message.warning("至少选择一条数据！");
-                    return;
-                }
-                this.$confirm("确定将选择数据删除?", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning"
-                }).then(() => {
-                    remove(this.ids).then(() => {
-                        this.$refs.table.onLoad();
-                        this.$message({
-                            type: "success",
-                            message: "操作成功!"
-                        });
-                        this.$refs.table.toggleSelection();
-                    });
-                });
-            },
-            //选中的数据
-            selectionChange(list) {
-                this.selectionList = list;
-            },
-            selectionClear() {
-                this.selectionList = [];
-                this.$refs.table.toggleSelection();
-            },
-            handlePrint() {
-                if (!this.selectionList || this.selectionList.length == 0) {
-                    this.$message.warning("至少选择一条数据！");
-                    return;
-                }
-                this.loading = true;
-                print(this.ids).then(res => {
-                    this.$message.success("操作成功！");
-                }).finally(() => {
-                    this.loading = false;
-                });
-            },
-            handleCommand(cmd) {
-                switch (parseInt(cmd)) {
-                    case 0:
-                        this.handlePrint();
-                        break;
-                    case 1:
-                        this.fileUpload.visible = true;
-                        break;
-                    case 2:
-                        this.loading = true;
-                        exportFile(this.searchData).then(res => {
-                            this.$message.success('操作成功，正在下载中...');
-                            fileDownload(res.data, "库位.xlsx");
-                        }).catch(() => {
-                            this.$message.error("系统模板目录配置有误或文件不存在");
-                        }).finally(() => {
-                            this.loading = false;
-                        });
-                        break;
-                }
-            },
-            callbackFileUpload(res) {
-                this.fileUpload.visible = res.visible;
-                if (res.result) {
-                    this.dataVerify.dataSource = res.data;
-                    this.dataVerify.visible = true;
-                }
-            },
-            callbackDataVerify(res) {
-                this.dataVerify.visible = res.visible;
-                if (res.result) {
-                    this.$message.success("导入成功！");
-                    this.$refs.table.onLoad();
-                }
-            },
-            searchChange(data) {
-                this.searchData = data;
-            }
-        }
-    };
+    },
+};
 </script>
-<style lang="scss">
-</style>

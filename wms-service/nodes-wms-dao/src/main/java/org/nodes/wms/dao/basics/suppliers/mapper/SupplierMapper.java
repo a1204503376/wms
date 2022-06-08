@@ -17,9 +17,6 @@ import java.util.List;
 
 /**
  * 供应商表 mapper  接口
- *
- * @author 彭永程
- * @date 2022-04-20 10:49
  **/
 @Repository
 public interface SupplierMapper extends BaseMapper<Supplier> {

@@ -1,10 +1,8 @@
-package org.nodes.wms.dao.basics.warehouse.entites;
+package org.nodes.wms.dao.basics.warehouse.entities;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.springblade.core.tenant.mp.TenantEntity;
 
@@ -13,46 +11,50 @@ import java.time.LocalDateTime;
 
 /**
  * 库位管理 实体类
- *
- * @author zhongls
- * @since 2019-12-11
  */
 @Data
 @TableName("wms_location")
 public class Location extends TenantEntity {
 
+	private static final long serialVersionUID = -1439112217262101365L;
+
 	/**
 	 * 库位ID
 	 */
-	@JsonSerialize(using = ToStringSerializer.class)
 	@TableId(value = "loc_id", type = IdType.ASSIGN_ID)
 	private Long locId;
+
 	/**
 	 * 库区ID
 	 */
-	@JsonSerialize(using = ToStringSerializer.class)
 	private Long zoneId;
+
 	/**
 	 * 库房ID
 	 */
-	@JsonSerialize(using = ToStringSerializer.class)
 	private Long whId;
+
 	/**
 	 * 库位编码
 	 */
 	private String locCode;
+
 	/**
 	 * 库位类型
 	 */
 	private Integer locType;
+//	private LocTypeEnum locType;
+
 	/**
 	 * 库位种类
 	 */
 	private Integer locCategory;
+
 	/**
 	 * 库位处理
 	 */
 	private Integer locHandling;
+
 	/**
 	 * 分配区
 	 */
@@ -68,15 +70,16 @@ public class Location extends TenantEntity {
 	 */
 	private Integer abc;
 
-
 	/**
 	 * 库存差异是否自动冻结货位
 	 */
 	private String lockFlag;
+
 	/**
 	 * 状态
 	 */
 	private Integer locStatus;
+
 	/**
 	 * 路线顺序
 	 */
@@ -86,70 +89,112 @@ public class Location extends TenantEntity {
 	 * 长
 	 */
 	private BigDecimal locLength;
+
 	/**
 	 * 宽
 	 */
 	private BigDecimal locWide;
+
 	/**
 	 * 高
 	 */
 	private BigDecimal locHigh;
+
 	/**
 	 * 货架层
 	 */
 	private String locLevel;
+
 	/**
 	 * X坐标
 	 */
 	private Integer xCode;
+
 	/**
 	 * Y坐标
 	 */
 	private Integer yCode;
+
 	/**
 	 * Z坐标
 	 */
 	private Integer zCode;
+
+	/**
+	 * 校验位数
+	 */
+	private String checkDigit;
+
+	/**
+	 * 货架列
+	 */
+	private String locColumn;
+
+	/**
+	 * 货架排
+	 */
+	private String locBank;
+
+	/**
+	 * 上架顺序
+	 */
+	private Integer putOrder;
+
+	/**
+	 * 适用的容器类型
+	 */
+	private Long lpnTypeId;
+
 	/**
 	 * 定方位
 	 */
 	private String orientation;
+
 	/**
 	 * 容量
 	 */
 	private BigDecimal capacity;
+
 	/**
 	 * 载重量
 	 */
 	private BigDecimal loadWeight;
+
 	/**
 	 * 最大存放件数
 	 */
 	private Integer itemNum;
+
 	/**
 	 * 最大存放托数
 	 */
 	private Integer trayNum;
+
 	/**
 	 * 盘点单编码
 	 */
 	private String countBillNo;
+
 	/**
 	 * 库位共享宽度
 	 */
 	private String shareWidth;
+
 	/**
 	 * 库位共享重量
 	 */
 	private String shareWeight;
+
 	/**
 	 * 混放货品
 	 */
 	private String locSkuMix;
+
 	/**
 	 * 混放批号
 	 */
 	private String locLotNoMix;
+
 	/**
 	 * 混放批属性1
 	 */
@@ -275,6 +320,7 @@ public class Location extends TenantEntity {
 	 * 上次库位盘点发布时间
 	 */
 	private LocalDateTime lastCycleDate;
+
 	/**
 	 * 上次盘点货位日期
 	 */
