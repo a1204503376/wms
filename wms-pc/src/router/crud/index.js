@@ -120,5 +120,21 @@ export default [
             }
         ]
     },
-
+    {
+        path: '/crontabTask',
+        component: Layout,
+        children: [{
+            path: 'add',
+            name: '新增定时任务',
+            props: true,
+            component: () => import('@/views/crontab/task/crontabTaskNew.vue')
+        },
+            {
+                path: 'edit/:id',
+                name: '编辑定时任务',
+                props: true,
+                component: () => import('@/views/crontab/task/crontabTaskEdit.vue')
+            },
+        ]
+    },
 ]
