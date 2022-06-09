@@ -53,3 +53,11 @@ export const getLpnTypeById = (Request) => {
         data:Request
     })
 }
+
+export const getLpnTypeSelectList = () => {
+    return request({
+        url: '/api/wms/lpnType/getLpnTypeSelectList',
+        method: 'get',
+    })
+}
+

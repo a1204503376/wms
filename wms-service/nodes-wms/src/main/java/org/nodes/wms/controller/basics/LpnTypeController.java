@@ -7,18 +7,17 @@ import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.dao.basics.lpntype.dto.input.*;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeByIdResponse;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypePageResponse;
+import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeSelectResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * 容器管理API
@@ -66,7 +65,7 @@ public class LpnTypeController {
 	}
 
 	/**
-	 * 容器管理删除
+	 * 容器管理修改
 	 */
 	@ApiLog("容器管理-修改容器")
 	@PostMapping("/updateLpnTypeById")
@@ -75,11 +74,17 @@ public class LpnTypeController {
 	}
 
 	/**
-	 * 容器管理删除
+	 * 容器管理查找
 	 */
 	@ApiLog("容器管理-查找容器")
 	@PostMapping("/getLpnTypeById")
 	public R<LpnTypeByIdResponse> getLpnTypeById(@RequestBody LpnTypeByIdRequest lpnTypeRequest) {
 		return R.data(lpnTypeBiz.getLpnTypeById(lpnTypeRequest));
 	}
+
+	@GetMapping("/getLpnTypeSelectList")
+	public R<List<LpnTypeSelectResponse>> getLpnTypeSelectList(){
+		return R.data(lpnTypeBiz.findLpnTypeSelectList());
+	}
+
 }

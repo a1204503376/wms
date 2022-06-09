@@ -8,9 +8,11 @@ import org.nodes.wms.dao.basics.lpntype.dto.input.DeleteLpnTypeRequest;
 import org.nodes.wms.dao.basics.lpntype.dto.input.LpnTypePageQuery;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeExcelResponse;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypePageResponse;
+import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeSelectResponse;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.basics.lpntype.mapper.LpnTypeMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -106,5 +108,11 @@ public class LpnTypeDaoImpl  extends BaseServiceImpl<LpnTypeMapper,LpnType> impl
 	@Override
     public LpnType getLpnTypeByCode(String code) {
 		return super.getOne(new LambdaQueryWrapper<LpnType>().eq(LpnType::getCode,code));
+    }
+
+    @Override
+    public List<LpnTypeSelectResponse> getLpnTypeSelectList() {
+		List<LpnType> lpnTypeList = super.list(new LambdaQueryWrapper<LpnType>().select(LpnType::getId, LpnType::getCode));
+		return Func.copy(lpnTypeList, LpnTypeSelectResponse.class);
     }
 }

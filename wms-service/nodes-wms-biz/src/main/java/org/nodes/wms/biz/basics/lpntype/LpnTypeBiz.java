@@ -4,11 +4,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.wms.dao.basics.lpntype.dto.input.*;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeByIdResponse;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypePageResponse;
+import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeSelectResponse;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * 容器对象Biz
@@ -71,4 +73,11 @@ public interface LpnTypeBiz {
 	 * @return  LpnType 容器类型实体
 	 */
 	LpnType findLpnTypeByCode(String code);
+
+	/**
+	 *  获取容器类型下拉组件数据
+	 *
+	 * @return List<LpnTypeSelectResponse>
+	 */
+    List<LpnTypeSelectResponse> findLpnTypeSelectList();
 }
