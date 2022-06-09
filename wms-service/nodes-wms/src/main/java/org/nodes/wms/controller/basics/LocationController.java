@@ -10,6 +10,7 @@ import org.nodes.wms.dao.basics.warehouse.dto.input.LocationAddOrEditRequest;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationExcelRequest;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageQuery;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationSelectQuery;
+import org.nodes.wms.dao.basics.warehouse.dto.output.LocationDetailResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationEditResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse;
@@ -48,16 +49,11 @@ public class LocationController {
 	/**
 	 * 详情
 	 */
-//	@ApiLog("库位-详情")
-//	@GetMapping("/detail")
-//	@ApiOperation(value = "详情", notes = "传入location")
-//	public R<LocationVO> detail(Location location){
-//		if (Func.isEmpty(location)){
-//			throw new ServiceException("传参Location为空");
-//		}
-//		Location detail = LocationCache.getById(location.getLocId());
-//		return R.data(LocationWrapper.build().entityVO(detail));
-//	}
+	@GetMapping("/detail")
+	public R<LocationDetailResponse> detail(@RequestParam Long locId){
+		LocationDetailResponse detail = locationBiz.getLocationDetailById(locId);
+		return R.data(detail);
+	}
 
 	/**
 	 * 列表
@@ -86,7 +82,7 @@ public class LocationController {
 	 */
 //	@ApiLog("库位-删除")
 //	@PostMapping("/remove")
-//	public R<String> remove(@RequestBody String ids) {
+//	public R<String> remove(@RequestBody LocationRemoveRequest locationRemoveRequest) {
 //		ILocationService locationService = SpringUtil.getBean(ILocationService.class);
 //		List<Location> locationList = locationService.listByIds(Func.toLongList(ids));
 //		for (Location location : locationList) {

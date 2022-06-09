@@ -7,6 +7,7 @@ import org.nodes.wms.dao.basics.warehouse.dto.input.LocationAddOrEditRequest;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationExcelRequest;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageQuery;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationSelectQuery;
+import org.nodes.wms.dao.basics.warehouse.dto.output.LocationDetailResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationEditResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse;
@@ -74,4 +75,12 @@ public interface LocationBiz {
 	 * @return Location
 	 */
 	Location edit(LocationAddOrEditRequest locationAddOrEditRequest);
+
+	/**
+	 * 查看详情
+	 *
+	 * @param locId: 库位id
+	 * @return LocationDetailResponse
+	 */
+	LocationDetailResponse getLocationDetailById(Long locId);
 }

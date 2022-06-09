@@ -3,6 +3,7 @@ package org.nodes.wms.dao.basics.warehouse;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageQuery;
+import org.nodes.wms.dao.basics.warehouse.dto.output.LocationDetailResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationExcelResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse;
@@ -63,4 +64,12 @@ public interface LocationDao {
 	 * @return Location
 	 */
     Location getLocationById(Long id);
+
+	/**
+	 * 根据库位id查找库位详情信息
+	 *
+	 * @param id: 库位id
+	 * @return LocationDetailResponse
+	 */
+	LocationDetailResponse getDetailById(Long id);
 }

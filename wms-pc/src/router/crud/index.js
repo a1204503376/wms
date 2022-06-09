@@ -150,7 +150,7 @@ export default [
                 path: 'detail/:locId',
                 name: '库位详情',
                 props: true,
-                // component: () => import('@/views/wms/warehouse/location/LocationDetail')
+                component: () => import('@/views/wms/warehouse/location/LocationDetail')
             }]
     },
 ]

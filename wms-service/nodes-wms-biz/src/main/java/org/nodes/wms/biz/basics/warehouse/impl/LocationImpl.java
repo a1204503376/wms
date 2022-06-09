@@ -11,10 +11,7 @@ import org.nodes.wms.dao.basics.warehouse.dto.input.LocationAddOrEditRequest;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationExcelRequest;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageQuery;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationSelectQuery;
-import org.nodes.wms.dao.basics.warehouse.dto.output.LocationEditResponse;
-import org.nodes.wms.dao.basics.warehouse.dto.output.LocationExcelResponse;
-import org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse;
-import org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse;
+import org.nodes.wms.dao.basics.warehouse.dto.output.*;
 import org.nodes.wms.dao.basics.warehouse.entities.Location;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
@@ -84,5 +81,13 @@ public class LocationImpl implements LocationBiz {
 		Location location = locationFactory.createLocation(locationAddOrEditRequest);
 		locationDao.saveOrUpdateLocation(location);
 		return location;
+	}
+
+	@Override
+	public LocationDetailResponse getLocationDetailById(Long locId) {
+		if (Func.isEmpty(locId)){
+			throw new ServiceException("库位id为空");
+		}
+		return locationDao.getDetailById(locId);
 	}
 }

@@ -48,4 +48,27 @@
     <select id="listByQuery" resultType="org.nodes.wms.dao.basics.warehouse.dto.output.LocationExcelResponse">
         <include refid="tableList"/>
     </select>
+    <select id="selectDetailById"
+            resultType="org.nodes.wms.dao.basics.warehouse.dto.output.LocationDetailResponse">
+            SELECT
+                l.loc_code,
+                w.wh_name,
+                z.zone_name,
+                l.loc_type,
+                l.loc_category,
+                l.loc_handling,
+                l.abc,
+                l.loc_flag,
+                l.check_digit,
+                l.logic_allocation,
+                l.loc_bank,
+                l.loc_column,
+                l.put_order,
+                lt.code as lpnTypeCode
+            FROM wms_location l
+            LEFT JOIN wms_zone z ON l.zone_id = z.zone_id
+            LEFT JOIN wms_warehouse w ON l.wh_id = w.wh_id
+            LEFT JOIN wms_lpn_type lt ON l.lpn_type_id = lt.id
+            WHERE l.loc_id = #{id}
+    </select>
 </mapper>

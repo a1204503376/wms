@@ -35,6 +35,16 @@ export const detailByEdit = (locId) => {
     })
 }
 
+export const detail = (locId) => {
+    return request({
+        url: '/api/wms/warehouse/location/detail',
+        method: 'get',
+        params:{
+            locId
+        }
+    })
+}
+
 export const remove = (ids) => {
     return request({
         url: '/api/wms/warehouse/location/remove',

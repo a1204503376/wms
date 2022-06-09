@@ -277,12 +277,11 @@
 <script>
 
 import {editMixin} from "@/mixins/edit";
-import {edit} from "@/api/wms/basics/location"
+import {detailByEdit, edit} from "@/api/wms/basics/location"
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesZone from "@/components/wms/select/NodesZone";
 import NodesDictionary from "@/components/wms/select/NodesDictionary";
 import func from "@/util/func";
-import {detailByEdit} from "@/api/wms/basics/location";
 import NodesLpnType from "@/components/wms/select/NodesLpnType";
 
 export default {
@@ -379,9 +378,7 @@ export default {
             }
             detailByEdit(this.locId)
                 .then((res) => {
-                    let data = res.data.data;
-                    this.form.params = data
-                    console.log(data);
+                    this.form.params = res.data.data
                 })
         },
         submitFormParams() {
