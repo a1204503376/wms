@@ -12,7 +12,7 @@
         reserve-keyword
         size="mini"
         style="width: 288px"
-        value-key="zoneCode"
+        value-key="zoneId"
         @change="onChange">
         <el-option
             v-for="item in options"
@@ -43,9 +43,10 @@ export default {
     },
     data() {
         return {
-            options: [this.selectVal],
+            options: [],
             val: this.selectVal,
             loading: false,
+            isEdit: func.isNotEmpty(this.selectVal),
             whIdVal: this.whId
         }
     },
@@ -62,7 +63,7 @@ export default {
             if (!this.isEdit){
                 return;
             }
-            let currentZone = this.options.find(item => item.id === this.selectVal.id);
+            let currentZone = this.options.find(item => item.id === this.selectVal.zoneId);
             if (func.isEmpty(currentZone)){
                 this.options.push(this.selectVal);
             }

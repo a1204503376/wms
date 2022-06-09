@@ -29,7 +29,7 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Array, String],
+        selectVal: [Array, Number, String],
         //是否有默认值 true:有默认值  默认为false 编辑时将其设置为true
         defaultValue:{type:Boolean, required: false,default: () => false},
         // 单选多选切换，默认为false
