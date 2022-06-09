@@ -48,4 +48,19 @@ public interface LocationDao {
 	 * @return List<Location>
 	 */
 	List<LocationExcelResponse> selectListByQuery(LocationPageQuery locationPageQuery);
+
+	/**
+	 * 保存
+	 *
+	 * @param location: 库位对象
+	 */
+    void saveOrUpdateLocation(Location location);
+
+	/**
+	 * 根据id查找库位信息
+	 *
+	 * @param id: 库位id
+	 * @return Location
+	 */
+    Location getLocationById(Long id);
 }

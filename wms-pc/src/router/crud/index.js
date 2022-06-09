@@ -135,19 +135,19 @@ export default [
         component: Layout,
         children: [
             {
-                path: 'add/:locationId',
+                path: 'add/:locId',
                 name: '新增库位',
                 props: true,
                 component: () => import('@/views/wms/warehouse/location/LocationAdd')
             },
             {
-                path: 'edit/:locationId',
+                path: 'edit/:locId',
                 name: '编辑库位',
                 props: true,
-                // component: () => import('@/views/wms/warehouse/location/LocationEdit')
+                component: () => import('@/views/wms/warehouse/location/LocationEdit')
             },
             {
-                path: 'detail/:locationId',
+                path: 'detail/:locId',
                 name: '库位详情',
                 props: true,
                 // component: () => import('@/views/wms/warehouse/location/LocationDetail')

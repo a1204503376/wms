@@ -7,9 +7,11 @@ import org.apache.poi.ss.formula.functions.T;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.modular.LocationFactory;
 import org.nodes.wms.dao.basics.warehouse.LocationDao;
+import org.nodes.wms.dao.basics.warehouse.dto.input.LocationAddOrEditRequest;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationExcelRequest;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageQuery;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationSelectQuery;
+import org.nodes.wms.dao.basics.warehouse.dto.output.LocationEditResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationExcelResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse;
@@ -62,5 +64,25 @@ public class LocationImpl implements LocationBiz {
 			item.setLpnTypeDesc(item.getLpnType().getDesc());
 		});
 		ExcelUtil.export(response,"库位","库位数据表",locationList,LocationExcelResponse.class);
+	}
+
+	@Override
+	public Location add(LocationAddOrEditRequest locationAddOrEditRequest) {
+		Location location = locationFactory.createLocation(locationAddOrEditRequest);
+		locationDao.saveOrUpdateLocation(location);
+		return location;
+	}
+
+	@Override
+	public LocationEditResponse findLocationById(Long locId) {
+		Location location = locationDao.getLocationById(locId);
+		return locationFactory.createLocationEditResponse(location);
+	}
+
+	@Override
+	public Location edit(LocationAddOrEditRequest locationAddOrEditRequest) {
+		Location location = locationFactory.createLocation(locationAddOrEditRequest);
+		locationDao.saveOrUpdateLocation(location);
+		return location;
 	}
 }

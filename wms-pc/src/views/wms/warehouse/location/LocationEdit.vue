@@ -17,8 +17,8 @@
                         <el-col :span="8">
                             <el-form-item label="库位编码" prop="locCode">
                                 <el-input
-                                    placeholder="请输入内容"
                                     v-model="form.params.locCode"
+                                    placeholder="请输入内容"
                                     type="text"
                                 ></el-input>
                             </el-form-item>
@@ -56,9 +56,9 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="库位处理" prop="locHandLing">
+                            <el-form-item label="库位处理" prop="locHandling">
                                 <nodes-dictionary
-                                    v-model="form.params.locHandLing"
+                                    v-model="form.params.locHandling"
                                     code="loc_handling"
                                 ></nodes-dictionary>
                             </el-form-item>
@@ -138,9 +138,9 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="容器类型" prop="lpnType">
+                            <el-form-item label="容器类型" prop="lpnTypeId">
                                 <nodes-lpn-type
-                                    v-model="form.params.lpnType"
+                                    v-model="form.params.lpnTypeId"
                                 >
                                 </nodes-lpn-type>
                             </el-form-item>
@@ -277,31 +277,40 @@
 <script>
 
 import {editMixin} from "@/mixins/edit";
-import {add} from "@/api/wms/basics/location"
+import {edit} from "@/api/wms/basics/location"
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesZone from "@/components/wms/select/NodesZone";
 import NodesDictionary from "@/components/wms/select/NodesDictionary";
+import func from "@/util/func";
+import {detailByEdit} from "@/api/wms/basics/location";
 import NodesLpnType from "@/components/wms/select/NodesLpnType";
 
 export default {
     name: "add",
-    components: {NodesLpnType, NodesDictionary, NodesZone, NodesWarehouse},
+    components: {NodesDictionary, NodesZone, NodesWarehouse, NodesLpnType},
     mixins: [editMixin],
+    props: {
+        locId: {type: String, required: true}
+    },
     data() {
         return {
             form: {
                 params: {
                     locCode: '',
                     whId: '',
-                    zone: {},
-                    locType: null,
-                    locCategory: null,
-                    locHandLing: null,
+                    zone: {
+                        zoneId: '',
+                        zoneCode: '',
+                        zoneName: ''
+                    },
+                    locType: '',
+                    locCategory: '',
+                    locHandling: '',
                     checkDigit: '',
                     logicAllocation: '',
-                    locFlag: null,
-                    abc: null,
-                    lpnType: '',
+                    locFlag: '',
+                    abc: '',
+                    lpnTypeId: '',
                     locHigh: '',
                     locLength: '',
                     locWide: '',
@@ -352,9 +361,31 @@ export default {
             },
         }
     },
+    created() {
+        this.getDataSource();
+    },
+    watch: {
+        locId() {
+            this.refreshTable();
+        }
+    },
     methods: {
+        refreshTable() {
+            this.getDataSource();
+        },
+        getDataSource() {
+            if (func.isEmpty(this.locId)) {
+                return;
+            }
+            detailByEdit(this.locId)
+                .then((res) => {
+                    let data = res.data.data;
+                    this.form.params = data
+                    console.log(data);
+                })
+        },
         submitFormParams() {
-            return add(this.form.params)
+            return edit(this.form.params)
                 .then(res => {
                     return {
                         msg: res.data.msg,

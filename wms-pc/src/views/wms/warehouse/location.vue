@@ -3,10 +3,7 @@
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-form-item label="库位编码">
-                    <el-input v-model.trim="form.params.code" :clearable="true"></el-input>
-                </el-form-item>
-                <el-form-item label="库位名称">
-                    <el-input v-model.trim="form.params.name" :clearable="true"></el-input>
+                    <el-input v-model.trim="form.params.locCode" :clearable="true"></el-input>
                 </el-form-item>
             </template>
             <template v-slot:expandSearch>
@@ -67,11 +64,18 @@
                         type="selection"
                         width="50">
                     </el-table-column>
-                    <template v-for="(column, index) in table.columnList">
-                        <el-table-column
-                            :key="index"
-                            show-overflow-tooltip
-                            v-bind="column">
+                    <template v-for="(column, index) in table.columnList" >
+                        <el-table-column v-if="!column.hide && column.prop === 'locCode'" :key="index" show-overflow-tooltip v-bind="column">
+                            <template v-slot="scope">
+                                <el-link
+                                    @click="onView(scope.row)"
+                                    :underline="false"
+                                    type="primary"
+                                    target="_blank">{{scope.row.locCode}}
+                                </el-link>
+                            </template>
+                        </el-table-column>
+                        <el-table-column v-if="!column.hide && column.prop !== 'locCode'" :key="index" show-overflow-tooltip v-bind="column">
                         </el-table-column>
                     </template>
                     <el-table-column label="启用"
@@ -84,6 +88,11 @@
                                     1 ? '是' : '否'
                                 }}
                             </el-tag>
+                        </template>
+                    </el-table-column>
+                    <el-table-column fixed="right" label="操作" width="100">
+                        <template v-slot="scope">
+                            <el-button size="small" @click="onEdit(scope.row)" type="text">编辑</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -152,13 +161,13 @@ export default {
                     },
                     {
                         prop: "locType",
-                        label: "应用类型",
+                        label: "库位类型",
                         sortable: "custom",
                     },
                     {
                         prop: "locCategory",
                         width: 130,
-                        label: "应用种类",
+                        label: "库位种类",
                         sortable: "custom",
                     },
                     {
@@ -313,9 +322,25 @@ export default {
             this.$router.push({
                 name: '新增库位',
                 params: {
-                    id: '0'
+                    locId: '0'
                 }
             });
+        },
+        onEdit(row) {
+            this.$router.push({
+                name: '编辑库位',
+                params: {
+                    locId: row.locId
+                }
+            })
+        },
+        onView(row) {
+            this.$router.push({
+                name: '库位详情',
+                params: {
+                    locId: row.locId
+                }
+            })
         },
     },
 };

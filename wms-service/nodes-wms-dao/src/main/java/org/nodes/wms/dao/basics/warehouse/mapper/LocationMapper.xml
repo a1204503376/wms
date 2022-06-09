@@ -14,6 +14,7 @@
 
     <sql id="tableList">
         SELECT
+        l.loc_id,
         l.loc_code,
         w.wh_name as whName,
         z.zone_name as zoneName,

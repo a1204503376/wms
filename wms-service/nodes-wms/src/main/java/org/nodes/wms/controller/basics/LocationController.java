@@ -4,20 +4,27 @@ package org.nodes.wms.controller.basics;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.tool.validation.Update;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
+import org.nodes.wms.dao.basics.warehouse.dto.input.LocationAddOrEditRequest;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationExcelRequest;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageQuery;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationSelectQuery;
+import org.nodes.wms.dao.basics.warehouse.dto.output.LocationEditResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse;
+import org.nodes.wms.dao.basics.warehouse.entities.Location;
 import org.springblade.core.excel.util.ExcelUtil;
+import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,15 +71,14 @@ public class LocationController {
 //	}
 
 	/**
-	 * 新增或修改
+	 * 新增
 	 */
-//	@ApiLog("库位-提交")
-//	@PostMapping("/submit")
-//	@ApiOperation(value = "新增或修改", notes = "传入location")
-//	public R submit(@Valid @RequestBody Location location) {
-//		CacheUtil.clear(LOCATION_CACHE);
-//		return R.status(locationService.saveOrUpdate(location));
-//	}
+	@ApiLog("库位-新增")
+	@PostMapping("/add")
+	public R<String> add(@Valid @RequestBody LocationAddOrEditRequest locationAddOrEditRequest) {
+		Location location = locationBiz.add(locationAddOrEditRequest);
+		return R.success("新增库位成功，库位编码:" + location.getLocCode());
+	}
 
 
 	/**
@@ -80,8 +86,7 @@ public class LocationController {
 	 */
 //	@ApiLog("库位-删除")
 //	@PostMapping("/remove")
-//	@ApiOperation(value = "删除", notes = "传入ids")
-//	public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
+//	public R<String> remove(@RequestBody String ids) {
 //		ILocationService locationService = SpringUtil.getBean(ILocationService.class);
 //		List<Location> locationList = locationService.listByIds(Func.toLongList(ids));
 //		for (Location location : locationList) {
@@ -93,6 +98,17 @@ public class LocationController {
 //		CacheUtil.clear(LOCATION_CACHE);
 //		return R.status(locationService.removeByIds(Func.toLongList(ids)));
 //	}
+
+	@GetMapping("/detailByEdit")
+	public R<LocationEditResponse> detailByEdit(@RequestParam Long locId){
+		return R.data(locationBiz.findLocationById(locId));
+	}
+
+	@PostMapping("/edit")
+	public R<String> edit(@Validated({ Update.class }) @RequestBody LocationAddOrEditRequest locationAddOrEditRequest){
+		Location location = locationBiz.edit(locationAddOrEditRequest);
+		return R.success("编辑成功，库位编码为：" + location.getLocCode());
+	}
 
 	/**
 	 * 锁定库位

@@ -3,6 +3,8 @@ package org.nodes.wms.dao.basics.warehouse.dto.output;
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeEnum;
 import org.nodes.wms.dao.basics.warehouse.enums.AbcEnum;
@@ -20,6 +22,13 @@ import java.io.Serializable;
 public class LocationPageResponse implements Serializable {
 
 	private static final long serialVersionUID = 1943526496365753566L;
+
+	/**
+	 * 库位主键id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	@ExcelIgnore
+	private Long locId;
 
 	/**
 	 * 库位编码

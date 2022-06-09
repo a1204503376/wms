@@ -49,4 +49,14 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	public List<LocationExcelResponse> selectListByQuery(LocationPageQuery locationPageQuery) {
 		return super.baseMapper.listByQuery(locationPageQuery);
 	}
+
+    @Override
+    public void saveOrUpdateLocation(Location location) {
+		super.saveOrUpdate(location);
+    }
+
+    @Override
+    public Location getLocationById(Long id) {
+        return super.getById(id);
+    }
 }

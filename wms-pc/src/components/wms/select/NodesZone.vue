@@ -63,7 +63,7 @@ export default {
             if (!this.isEdit){
                 return;
             }
-            let currentZone = this.options.find(item => item.id === this.selectVal.zoneId);
+            let currentZone = this.options.find(item => item.zoneId === this.selectVal.zoneId);
             if (func.isEmpty(currentZone)){
                 this.options.push(this.selectVal);
             }
