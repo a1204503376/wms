@@ -28,4 +28,9 @@ public class ZoneDaoImpl
     public Zone getZoneByCode(String zoneCode) {
         return super.getOne(new LambdaQueryWrapper<Zone>().eq(Zone::getZoneCode,zoneCode));
     }
+
+    @Override
+    public Zone getZoneById(Long zoneId) {
+        return super.getById(zoneId);
+    }
 }

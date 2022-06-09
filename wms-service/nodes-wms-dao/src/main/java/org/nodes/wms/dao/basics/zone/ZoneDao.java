@@ -28,4 +28,12 @@ public interface ZoneDao {
 	 * @return Zone
 	 */
     Zone getZoneByCode(String zoneCode);
+
+	/**
+	 * 根据库区id查询库区信息
+	 *
+	 * @param zoneId: 库区编码
+	 * @return Zone
+	 */
+    Zone getZoneById(Long zoneId);
 }

@@ -25,4 +25,12 @@ public interface ZoneBiz {
 	 * @return Zone
 	 */
     Zone findByCode(String zoneCode);
+
+	/**
+	 * 根据库区id查询库区信息
+	 *
+	 * @param zoneId: 库区id
+	 * @return Zone
+	 */
+    Zone findById(Long zoneId);
 }
