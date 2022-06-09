@@ -39,7 +39,7 @@ export default [
             name: '新增容器',
             props: true,
             component: () => import('@/views/wms/basics/lpntype/LpnTypeAddOrEdit')
-        }, {
+        },{
             path: 'edit/:id',
             name: '编辑容器',
             props: true,
@@ -111,6 +111,23 @@ export default [
                 props: true,
                 component: () => import('@/views/wms/instock/receive/receiveDetail')
             }
+        ]
+    },
+    {
+        path: '/crontabTask',
+        component: Layout,
+        children: [{
+            path: 'add',
+            name: '新增定时任务',
+            props: true,
+            component: () => import('@/views/crontab/task/crontabTaskNew.vue')
+        },
+            {
+                path: 'edit/:id',
+                name: '编辑定时任务',
+                props: true,
+                component: () => import('@/views/crontab/task/crontabTaskEdit.vue')
+            },
         ]
     },
     {

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 任务计划表 服务实现类
@@ -62,5 +63,10 @@ public class SchemeServiceImpl<M extends SchemeMapper, T extends Scheme>
 		//	SchemeCache.removeByIds(idList);
 		}
 		return result;
+	}
+
+	@Override
+	public List<Scheme> getSchemeList() {
+		return super.list();
 	}
 }

@@ -153,7 +153,6 @@ export default {
             checkTask(
                 this.ids
             ).then(data => {
-                debugger
                 if (data.data.data) {
                     this.relTaskRequst();
                 } else {

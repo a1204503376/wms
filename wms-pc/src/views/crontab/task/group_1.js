@@ -11,33 +11,34 @@ export const group = {
             maxlength: 200
         },
         {
-            label: "APP ID",
-            prop: "appid",
-            rules: [{
-                required: true,
-                message: "请输入0为外部调用",
-                trigger: "blur"
-            }]
-        },
-        {
             label: "url",
             prop: "url",
             rules: [{
                 required: true,
-                message: "请输入url,如果是内部调用，请填写path即可，http_method=0时，请填写绝对路径",
+                message: "请输入url",
                 trigger: "blur"
             }],
             maxlength: 200
         },
         {
             label: "请求方法",
-            prop: "httpMethod",
-            maxlength: 50
+            prop: "method",
+            maxlength: 50,
+            rules: [{
+                required: true,
+                message: "请输入请求方法",
+                trigger: "blur"
+            }],
         },
         {
-            label: "请求参数",
-            prop: "params",
-            maxlength: 2000
+            label: "cron表达式",
+            prop: "cron",
+            maxlength: 2000,
+            rules: [{
+                required: true,
+                message: "请输入cron表达式",
+                trigger: "blur"
+            }],
         },
     ]
 }
