@@ -44,7 +44,6 @@
                             <el-form-item label="仓库" prop="whId">
                                 <nodes-warehouse
                                     v-model="form.params.whId"
-                                    :default-value="true"
                                     :multiple="false"
                                     style="width: 250px;"
                                 ></nodes-warehouse>

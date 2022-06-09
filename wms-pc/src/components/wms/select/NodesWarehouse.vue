@@ -51,6 +51,11 @@ export default {
             this.onChange(this.val);
         }
     },
+    watch:{
+        selectVal(newVal){
+            this.val = newVal;
+        }
+    },
     methods: {
         async getDataSource() {
             const response = await getWarehouseSelectResponseList();

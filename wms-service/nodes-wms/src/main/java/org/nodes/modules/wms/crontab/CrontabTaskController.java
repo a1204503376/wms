@@ -86,10 +86,14 @@ public class CrontabTaskController extends BladeController {
 	 */
 	@PostMapping("/remove")
 	@ApiOperation(value = "任务表删除", notes = "传入ids")
-	public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
+	public R remove(@ApiParam(value = "主键集合", required = true) @RequestBody List<Long> ids) {
 		CacheUtil.clear(CRONTAB_TASK_CACHE);
-		return R.status(taskService.removeByIds(Func.toLongList(ids)));
+		return R.status(taskService.removeByIds(ids));
 	}
-
+    @GetMapping("/detailById")
+	public  R<CrontabTaskVO>  detailById(Long id){
+		CrontabTask detail =  taskService.getById(id);
+		return R.data(CrontabTaskWrapper.build().entityVO(detail));
+	}
 
 }

@@ -1,5 +1,7 @@
 package org.nodes.wms.core.crontab.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import lombok.AllArgsConstructor;
 import org.nodes.wms.core.crontab.cache.CrontabTaskCache;
 import org.nodes.wms.core.crontab.entity.CrontabTask;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 任务表 服务实现类
@@ -63,4 +66,17 @@ public class CrontabTaskServiceImpl<M extends CrontabTaskMapper, T extends Cront
 		}
 		return result;
 	}
+
+	@Override
+	public List<CrontabTask> getCrontabTaskList() {
+		return super.list(new LambdaQueryWrapper<CrontabTask>().eq(CrontabTask::getEnabled,1));
+	}
+
+	@Override
+	public void EditEnabledById(Long id, int num) {
+		super.update(new LambdaUpdateWrapper<CrontabTask>()
+			.set(CrontabTask::getEnabled,num)
+			.eq(CrontabTask::getId,id));
+	}
+
 }

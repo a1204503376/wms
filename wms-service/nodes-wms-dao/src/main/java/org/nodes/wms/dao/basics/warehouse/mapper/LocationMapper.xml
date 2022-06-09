@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.basics.warehouse.mapper.LocationMapper">
 
-
     <select id="listTop10ByCode"
             resultType="org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse">
         SELECT loc_id,
@@ -11,6 +10,41 @@
         WHERE loc_code LIKE CONCAT('%', #{locCode}, '%')
         ORDER BY update_time DESC
         LIMIT 10
+    </select>
 
+    <sql id="tableList">
+        SELECT
+        l.loc_code,
+        w.wh_name as whName,
+        z.zone_name as zoneName,
+        l.loc_type,
+        l.loc_category,
+        l.loc_handling,
+        l.abc,
+        l.logic_allocation,
+        l.loc_level,
+        l.loc_column,
+        l.loc_bank,
+        l.put_order,
+        t.type as lpnType,
+        l.status
+        FROM wms_location l
+        LEFT JOIN wms_warehouse w ON w.wh_id = l.wh_id
+        LEFT JOIN wms_zone z ON z.zone_id = l.zone_id
+        LEFT JOIN wms_lpn_type t ON t.id = l.lpn_type_id
+        <where>
+            l.is_deleted = 0
+        </where>
+    </sql>
+
+    <select id="listByPage" resultType="org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse">
+        <include refid="tableList"/>
+        <if test=" page.orders == null or page.orders.size == 0 ">
+            ORDER BY l.create_time DESC
+        </if>
+    </select>
+
+    <select id="listByQuery" resultType="org.nodes.wms.dao.basics.warehouse.dto.output.LocationExcelResponse">
+        <include refid="tableList"/>
     </select>
 </mapper>

@@ -7,18 +7,18 @@
         :loading="loading"
         :remote-method="remoteMethod"
         filterable
-        placeholder="请输入关键词"
+        placeholder="请输入库区编码或库区名称"
         remote
         reserve-keyword
         size="mini"
-        style="width: 340px"
-        value-key="zoneId"
+        style="width: 288px"
+        value-key="zoneCode"
         @change="onChange">
         <el-option
             v-for="item in options"
             :key="item.zoneId"
             :label="item.zoneName"
-            :value="item.zoneId">
+            :value="item">
             <span style="float: left">{{ item.zoneCode }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.zoneName }}</span>
         </el-option>
@@ -28,6 +28,7 @@
 <script>
 import debounce from "lodash/debounce";
 import {getZoneSelectResponseTop10List} from "@/api/wms/basics/zone";
+import func from "@/util/func";
 
 export default {
     name: "NodesZone",
@@ -36,7 +37,7 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Array, String],
+        selectVal: [Object, Array, String],
         whId: {type: [Number,Array], required: false, default:()=>null},
         multiple: {type: Boolean, required: false, default:()=>false}
     },
@@ -48,7 +49,25 @@ export default {
             whIdVal: this.whId
         }
     },
+    created() {
+        this.setDefaultByProps();
+    },
+    watch: {
+        selectVal(){
+            this.setDefaultByProps();
+        }
+    },
     methods: {
+        setDefaultByProps(){
+            if (!this.isEdit){
+                return;
+            }
+            let currentZone = this.options.find(item => item.id === this.selectVal.id);
+            if (func.isEmpty(currentZone)){
+                this.options.push(this.selectVal);
+            }
+            this.val = this.selectVal;
+        },
         // 防抖 在等待时间到达前的请求全部取消，保留最后一次
         remoteMethod: debounce(async function (key) {
             if (key !== '') {

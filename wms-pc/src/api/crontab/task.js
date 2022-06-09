@@ -12,6 +12,32 @@ export const getPage = (current, size, params) => {
   })
 }
 
+export const start =(data) =>{
+    return request({
+        url: '/api/wms/task/start',
+        method: 'post',
+        data: data
+    })
+}
+export const execute =(data) =>{
+    return request({
+        url: '/api/wms/task/execute',
+        method: 'post',
+        data: data
+    })
+}
+
+export const stop =(id) =>{
+    return request({
+        url: '/api/wms/task/cancel',
+        method: 'get',
+        params: {
+            id
+        }
+    })
+}
+
+
 export const getDetail = (id) => {
   return request({
     url: '/api/wms/crontab/task/detail',
@@ -26,9 +52,7 @@ export const remove = (ids) => {
   return request({
     url: '/api/wms/crontab/task/remove',
     method: 'post',
-    params: {
-      ids,
-    }
+    data: ids
   })
 }
 
@@ -39,4 +63,13 @@ export const submit = (row) => {
     data: row
   })
 }
+export const detailById = (id) => {
+    return request({
+        url: '/api/wms/crontab/task/detailById',
+        method: 'get',
+
+    })
+}
+
+
 

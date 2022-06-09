@@ -56,6 +56,16 @@ public class CrontabTask extends TenantEntity implements Serializable {
 	@ApiModelProperty(value = "请求参数")
 	@TableField(updateStrategy = FieldStrategy.IGNORED)
 	private String params;
-
-
+	/**
+	 * 启动状态
+	 */
+	private Integer enabled;
+	/**
+	 * 请求方法
+	 */
+	private String method;
+	/**
+	 * cron表达式
+	 */
+	private String cron;
 }

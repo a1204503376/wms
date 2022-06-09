@@ -39,12 +39,12 @@ public class SystemScheduleTask implements SchedulingConfigurer {
 
 	@Override
 	public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
-		scheduledTaskRegistrar.addTriggerTask(
-			() -> doBiz(),
-			triggerContext -> {
-				return new CronTrigger(this.getCron()).nextExecutionTime(triggerContext);
-			}
-		);
+//		scheduledTaskRegistrar.addTriggerTask(
+//			() -> doBiz(),
+//			triggerContext -> {
+//				return new CronTrigger(this.getCron()).nextExecutionTime(triggerContext);
+//			}
+//		);
 	}
 
 	/**

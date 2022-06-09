@@ -71,7 +71,7 @@ export default {
     },
     created() {
         //实时检测刷新token
-        this.refreshToken();
+        // this.refreshToken();
         // 注册快捷键
         document.addEventListener('keydown', this.handleKeyDown)
         document.addEventListener('keyup', this.handleKeyUp)
@@ -131,22 +131,23 @@ export default {
         },
         // 定时检测token
         refreshToken() {
-            this.refreshTime = setInterval(() => {
+            let that = this;
+            this.refreshTime = setInterval(function(){
                 const token = getStore({
                     name: "token",
                     debug: true
                 }) || {};
                 const date = calcDate(token.datetime, new Date().getTime());
                 if (validatenull(date)) return;
-                if (date.seconds >= this.website.tokenTime && !this.refreshLock) {
-                    this.refreshLock = true;
-                    this.$store
+                if (date.seconds >= that.website.tokenTime && !that.refreshLock) {
+                    that.refreshLock = true;
+                    that.$store
                         .dispatch("refreshToken")
                         .then(() => {
-                            this.refreshLock = false;
+                            that.refreshLock = false;
                         })
                         .catch(() => {
-                            this.refreshLock = false;
+                            that.refreshLock = false;
                         });
                 }
             }, 10000);
