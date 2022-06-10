@@ -149,8 +149,8 @@ public class ZoneController {
 	}
 
 	@PostMapping("/select")
-	public R<List<ZoneSelectResponse>> getZoneSelectResponseTop10List(@RequestBody ZoneSelectQuery zoneSelectQuery){
-		List<ZoneSelectResponse> zoneSelectResponseList = zoneBiz.getZoneSelectResponseTop10List(zoneSelectQuery);
+	public R<List<ZoneSelectResponse>> getZoneSelectData(@RequestBody ZoneSelectQuery zoneSelectQuery){
+		List<ZoneSelectResponse> zoneSelectResponseList = zoneBiz.getZoneSelectData(zoneSelectQuery.getWhIdList());
 		return R.data(zoneSelectResponseList);
 	}
 }

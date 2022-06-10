@@ -12,14 +12,12 @@ import java.util.List;
 public interface ZoneDao {
 
 	/**
-	 * 根据库区编码或者库区名称查询前10个库区信息
+	 * 根据库房id查询所有库区下拉数据
 	 *
-	 * @param whId       库房id   id为空:查询所有库区 否则查询id指定库房下的库区
-	 * @param zoneCode 库区编码
-	 * @param zoneName 库区名称
+	 * @param whIdList       库房id集合
 	 * @return List<zoneSelectResponse>
 	 */
-	List<ZoneSelectResponse> listTop10ByWhIdZoneCodeZoneName(String whId, String zoneCode,String zoneName);
+	List<ZoneSelectResponse> listSelectByWhIdList(List<Long> whIdList);
 
 	/**
 	 * 根据库区编码查询库区信息

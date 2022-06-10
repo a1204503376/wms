@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.basics.zone.mapper.ZoneMapper">
-    <select id="listTop10ByWhIdZoneCodeZoneName" resultType="org.nodes.wms.dao.basics.zone.dto.ZoneSelectResponse">
-        SELECT zone_id,
-        zone_code,
-        zone_name
+    <select id="listSelectByWhIdList" resultType="org.nodes.wms.dao.basics.zone.dto.ZoneSelectResponse">
+        SELECT
+            zone_id,
+            zone_code,
+            zone_name
         FROM wms_zone
         <where>
-            <if test="whId != null and whId !=''">
-                wh_id = #{whId}
+            <if test="whIdList != null and whIdList !=''">
+                wh_id IN
+               <foreach collection="whIdList" separator="," item="item" close=")" open="(">
+                   #{item}
+               </foreach>
             </if>
-            AND (zone_code LIKE CONCAT('%', #{zoneCode}, '%')
-            OR zone_name LIKE CONCAT('%', #{zoneName}, '%'))
         </where>
         ORDER BY update_time DESC
-        LIMIT 10
     </select>
 </mapper>

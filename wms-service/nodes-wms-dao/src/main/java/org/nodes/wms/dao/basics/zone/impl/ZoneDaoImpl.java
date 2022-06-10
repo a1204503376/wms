@@ -18,10 +18,8 @@ public class ZoneDaoImpl
 	extends BaseServiceImpl<ZoneMapper, Zone>
 	implements ZoneDao {
 
-	@Override
-	public List<ZoneSelectResponse>
-	listTop10ByWhIdZoneCodeZoneName(String whId, String zoneCode, String zoneName) {
-		return super.baseMapper.listTop10ByWhIdZoneCodeZoneName(whId, zoneCode, zoneName);
+	public List<ZoneSelectResponse> listSelectByWhIdList(List<Long> whIdList) {
+		return super.baseMapper.listSelectByWhIdList(whIdList);
 	}
 
     @Override
