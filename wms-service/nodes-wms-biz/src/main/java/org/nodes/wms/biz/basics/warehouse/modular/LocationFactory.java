@@ -12,7 +12,6 @@ import org.nodes.wms.dao.basics.warehouse.dto.input.LocationExcelRequest;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationEditResponse;
 import org.nodes.wms.dao.basics.warehouse.entities.Location;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
-import org.nodes.wms.dao.basics.zone.dto.ZoneSelectResponse;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
@@ -143,7 +142,7 @@ public class LocationFactory {
 		}
 
 //		location.setWhId(locationAddOrEditRequest.getWhId());
-		location.setZoneId(locationAddOrEditRequest.getZone().getZoneId());
+//		location.setZoneId(locationAddOrEditRequest.getZoneId());
 //		location.setLocType(locationAddOrEditRequest.getLocType());
 //		location.setLocCategory(locationAddOrEditRequest.getLocCategory());
 //		location.setLocHandling(locationAddOrEditRequest.getLocHandling());
@@ -176,15 +175,8 @@ public class LocationFactory {
 	 */
 	public LocationEditResponse createLocationEditResponse(Location location) {
 		LocationEditResponse locationEditResponse = new LocationEditResponse();
-		ZoneSelectResponse zoneSelectResponse = new ZoneSelectResponse();
-		// 根据库区id获取库区实体
-		Zone zone = zoneBiz.findById(location.getZoneId());
-		// 库区实体复制给库区dto
-		Func.copy(zone,zoneSelectResponse);
-
 		// 库位实体复制给库位dto
 		Func.copy(location,locationEditResponse);
-		locationEditResponse.setZone(zoneSelectResponse);
 		return locationEditResponse;
 	}
 }

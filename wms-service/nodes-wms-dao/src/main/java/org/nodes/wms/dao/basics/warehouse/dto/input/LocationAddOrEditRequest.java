@@ -2,7 +2,6 @@ package org.nodes.wms.dao.basics.warehouse.dto.input;
 
 import lombok.Data;
 import org.nodes.core.tool.validation.Update;
-import org.nodes.wms.dao.basics.zone.dto.ZoneSelectResponse;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -38,7 +37,7 @@ public class LocationAddOrEditRequest implements Serializable {
 	 * 库区下拉选择对象
 	 */
 	@NotNull(message = "库区不能为空")
-	private ZoneSelectResponse zone;
+	private Long zoneId;
 
 	/**
 	 * 库位类型

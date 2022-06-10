@@ -58,6 +58,7 @@ export default {
     },
     methods: {
         setDefaultByProps(){
+            this.val = this.selectVal;
             if (!this.isEdit){
                 return;
             }
@@ -65,7 +66,6 @@ export default {
             if (func.isEmpty(currentSupplier)){
                 this.options.push(this.selectVal);
             }
-            this.val = this.selectVal;
         },
         // 防抖 在等待时间到达前的请求全部取消，保留最后一次
         remoteMethod: debounce(async function (key) {

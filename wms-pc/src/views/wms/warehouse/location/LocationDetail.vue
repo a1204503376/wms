@@ -1,7 +1,7 @@
 <template>
     <basic-container>
         <el-container id="container" v-loading="loading">
-            <el-main style="overflow: hidden;overflow-y: scroll;">
+            <el-main style="overflow: hidden;overflow-y: scroll;height: 100%">
                 <el-form ref="form"
                          :model="form.params"
                          label-position="right"
@@ -158,6 +158,15 @@
                     </el-row>
                 </el-form>
             </el-main>
+            <el-footer>
+                <el-row style="margin-top: 10px;line-height:60px;text-align:right;">
+                    <el-button
+                        :loading="loading"
+                        @click="onClose"
+                    >关 闭
+                    </el-button>
+                </el-row>
+            </el-footer>
         </el-container>
     </basic-container>
 </template>

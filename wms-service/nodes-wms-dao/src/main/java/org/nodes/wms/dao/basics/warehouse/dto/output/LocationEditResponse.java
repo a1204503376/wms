@@ -3,7 +3,6 @@ package org.nodes.wms.dao.basics.warehouse.dto.output;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
-import org.nodes.wms.dao.basics.zone.dto.ZoneSelectResponse;
 
 import java.math.BigDecimal;
 
@@ -35,13 +34,13 @@ public class LocationEditResponse {
 	/**
 	 * 库区下拉选择对象
 	 */
-	private ZoneSelectResponse zone;
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long zoneId;
 
 	/**
 	 * 库位类型
 	 */
 	private Integer locType;
-
 
 	/**
 	 * 库位种类

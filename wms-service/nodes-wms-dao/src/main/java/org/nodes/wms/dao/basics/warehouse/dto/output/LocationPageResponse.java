@@ -6,11 +6,6 @@ import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
-import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeEnum;
-import org.nodes.wms.dao.basics.warehouse.enums.AbcEnum;
-import org.nodes.wms.dao.basics.warehouse.enums.LocCategoryEnum;
-import org.nodes.wms.dao.basics.warehouse.enums.LocHandLingEnum;
-import org.nodes.wms.dao.basics.warehouse.enums.LocTypeEnum;
 
 import java.io.Serializable;
 
@@ -33,61 +28,61 @@ public class LocationPageResponse implements Serializable {
 	/**
 	 * 库位编码
 	 */
-	@ExcelProperty(value = "库位编码", order = Integer.MIN_VALUE)
+	@ExcelProperty("库位编码")
 	private String locCode;
 
 	/**
 	 * 库房名称
 	 */
-	@ExcelProperty(value = "库房", order = Integer.MIN_VALUE)
+	@ExcelProperty("库房")
 	private String whName;
 
 	/**
 	 * 库区名称
 	 */
-	@ExcelProperty(value = "库区", order = Integer.MIN_VALUE)
+	@ExcelProperty("库区")
 	private String zoneName;
 
 	/**
-	 * 库位类型
+	 * 库区类型名称
 	 */
-	@ExcelIgnore
-	private LocTypeEnum locType;
+	@ExcelProperty("库位类型")
+	private String locType;
 
 	/**
-	 * 库位种类
+	 * 库位种类名称
 	 */
-	@ExcelIgnore
-	private LocCategoryEnum locCategory;
+	@ExcelProperty("库位种类")
+	private String locCategory;
 
 	/**
-	 * 库位处理
+	 * 库位处理名称
 	 */
-	@ExcelIgnore
-	private LocHandLingEnum locHandling;
+	@ExcelProperty("库位处理")
+	private String locHandling;
 
 	/**
-	 * abc名称
+	 * abc分类名称
 	 */
-	@ExcelIgnore
-	private AbcEnum abc;
+	@ExcelProperty("ABC分类")
+	private String abc;
 
 	/**
 	 * 路线顺序
 	 */
-	@ExcelProperty(value = "路线顺序")
+	@ExcelProperty("路线顺序")
 	private Integer logicAllocation;
 
 	/**
 	 * 货架层
 	 */
-	@ExcelProperty(value = "货架层")
+	@ExcelProperty("货架层")
 	private String locLevel;
 
 	/**
 	 * 货架列
 	 */
-	@ExcelProperty(value = "货架列")
+	@ExcelProperty("货架列")
 	private String locColumn;
 
 	/**
@@ -103,14 +98,14 @@ public class LocationPageResponse implements Serializable {
 	private Integer putOrder;
 
 	/**
-	 * 适用的容器类型
+	 * 适用的容器类型编码
 	 */
-	@ExcelIgnore
-	private LpnTypeEnum lpnType;
+	@ExcelProperty("适用的容器类型")
+	private String lpnTypeCode;
 
 	/**
 	 * 是否启用
 	 */
 	@ExcelProperty("是否启用")
-	private Integer status;
+	private String status;
 }

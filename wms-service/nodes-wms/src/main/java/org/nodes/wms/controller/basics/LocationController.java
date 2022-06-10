@@ -87,6 +87,7 @@ public class LocationController {
 		return R.data(locationBiz.findLocationById(locId));
 	}
 
+	@ApiLog("库位-编辑")
 	@PostMapping("/edit")
 	public R<String> edit(@Validated({ Update.class }) @RequestBody LocationAddOrEditRequest locationAddOrEditRequest){
 		Location location = locationBiz.edit(locationAddOrEditRequest);
@@ -150,7 +151,7 @@ public class LocationController {
 	}
 
 	/**
-	 * 导入验证通过的数据
+	 * 导入数据
 	 */
 	@PostMapping("import-data")
 	public R<String> importData(MultipartFile file) {

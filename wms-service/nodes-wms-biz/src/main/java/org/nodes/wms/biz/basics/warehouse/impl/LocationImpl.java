@@ -54,13 +54,6 @@ public class LocationImpl implements LocationBiz {
 	@Override
 	public void exportExcel(LocationPageQuery locationPageQuery, HttpServletResponse response) {
 		List<LocationExcelResponse> locationList = locationDao.selectListByQuery(locationPageQuery);
-		locationList.forEach(item -> {
-			item.setLocTypeDesc(item.getLpnType().getDesc());
-			item.setLocCategoryDesc(item.getLocCategory().getDesc());
-			item.setLocHandlingDesc(item.getLocHandling().getDesc());
-			item.setAbcDesc(item.getAbc().getDesc());
-			item.setLpnTypeDesc(item.getLpnType().getDesc());
-		});
 		ExcelUtil.export(response, "库位", "库位数据表", locationList, LocationExcelResponse.class);
 	}
 

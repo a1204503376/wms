@@ -3,6 +3,7 @@
     <el-select
         v-model="val"
         :multiple="multiple"
+        collapse-tags
         size="mini"
         style="width:100%;"
         :code="code"
@@ -13,8 +14,8 @@
             :key="item.dictKey"
             :label="item.dictValue"
             :value="item.dictKey">
-            <span style="float: left">{{ item.dictKey }}</span>
-            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.dictValue }}</span>
+            <span style="float: left">{{ item.dictValue }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.dictKey }}</span>
         </el-option>
     </el-select>
 </template>

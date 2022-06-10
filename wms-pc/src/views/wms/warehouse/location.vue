@@ -2,19 +2,64 @@
     <div id="location">
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
-                <el-form-item label="库位编码">
-                    <el-input v-model.trim="form.params.locCode" :clearable="true"></el-input>
-                </el-form-item>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="库位编码">
+                            <el-input
+                                placeholder="请输入编码"
+                                style="width: 200px"
+                                v-model.trim="form.params.locCode"
+                                :clearable="true"
+                            ></el-input>
+                        </el-form-item>
+                        <el-form-item label="所属库房">
+                            <nodes-warehouse
+                                style="width: 200px"
+                                :multiple="true"
+                                v-model="form.params.whIdList"
+                            ></nodes-warehouse>
+                        </el-form-item>
+                        <el-form-item label="所属库区">
+                            <nodes-zone
+                                style="width: 200px"
+                                :multiple="true"
+                                v-model="form.params.zoneIdList"
+                            ></nodes-zone>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="库位类型">
+                            <nodes-dictionary
+                                style="width: 200px"
+                                :multiple="true"
+                                v-model="form.params.locTypeList"
+                                code="loc_type"
+                            ></nodes-dictionary>
+                        </el-form-item>
+                        <el-form-item label="库位种类">
+                            <nodes-dictionary
+                                style="width: 200px"
+                                :multiple="true"
+                                v-model="form.params.locCategoryList"
+                                code="loc_category"
+                            ></nodes-dictionary>
+                        </el-form-item>
+                        <el-form-item label="库位处理">
+                            <nodes-dictionary
+                                style="width: 200px"
+                                :multiple="true"
+                                v-model="form.params.locHandlingList"
+                                code="loc_handling"
+                            ></nodes-dictionary>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </template>
             <template v-slot:expandSearch>
                 <el-row type="flex">
                     <el-col :span="24">
-                        <el-form-item label="创建日期">
-                            <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
-                        </el-form-item>
-                        <el-form-item label="更新日期">
-                            <nodes-date-range v-model="form.params.updateTimeDateRange"></nodes-date-range>
-                        </el-form-item>
                     </el-col>
                 </el-row>
             </template>
@@ -64,35 +109,40 @@
                         type="selection"
                         width="50">
                     </el-table-column>
-                    <template v-for="(column, index) in table.columnList" >
-                        <el-table-column v-if="!column.hide && column.prop === 'locCode'" :key="index" show-overflow-tooltip v-bind="column">
+                    <template v-for="(column, index) in table.columnList">
+                        <el-table-column width="140" v-if="!column.hide && column.prop === 'locCode'" :key="index"
+                                         show-overflow-tooltip v-bind="column">
                             <template v-slot="scope">
                                 <el-link
-                                    @click="onView(scope.row)"
                                     :underline="false"
+                                    target="_blank"
                                     type="primary"
-                                    target="_blank">{{scope.row.locCode}}
+                                    @click="onView(scope.row)">{{ scope.row.locCode }}
                                 </el-link>
                             </template>
                         </el-table-column>
-                        <el-table-column v-if="!column.hide && column.prop !== 'locCode'" :key="index" show-overflow-tooltip v-bind="column">
+                        <el-table-column
+                            min-width="140"
+                            v-if="!column.hide && column.prop !== 'locCode' && column.prop !== 'status'"
+                            :key="index"
+                            show-overflow-tooltip
+                            v-bind="column"
+                        ></el-table-column>
+                        <el-table-column
+                            v-if="!column.hide && column.prop === 'status'"
+                            :key="index"
+                            show-overflow-tooltip
+                            v-bind="column"
+                        ><template v-slot="{row}">
+                                <el-tag :type="row.status === '是' ? 'success' : 'danger'"
+                                        disable-transitions>{{ row.status }}
+                                </el-tag>
+                            </template>
                         </el-table-column>
                     </template>
-                    <el-table-column label="启用"
-                                     prop="status"
-                                     width="100">
-                        <template v-slot="{row}">
-                            <el-tag :type="row.status === 1 ? 'success' : 'danger'"
-                                    disable-transitions>{{
-                                    row.status ===
-                                    1 ? '是' : '否'
-                                }}
-                            </el-tag>
-                        </template>
-                    </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="100">
+                    <el-table-column fixed="right" label="操作" align="center" width="100">
                         <template v-slot="scope">
-                            <el-button size="small" @click="onEdit(scope.row)" type="text">编辑</el-button>
+                            <el-button size="small" type="text" @click="onEdit(scope.row)">编辑</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -116,14 +166,20 @@ import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import {listMixin} from "@/mixins/list";
-import {exportFile, importFile, getPage, remove} from "@/api/wms/basics/location";
+import {exportFile, getPage, importFile, remove} from "@/api/wms/basics/location";
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js'
 import fileUpload from "@/components/nodes/fileUpload";
+import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
+import NodesZone from "@/components/wms/select/NodesZone";
+import NodesDictionary from "@/components/wms/select/NodesDictionary";
 
 export default {
     name: "location",
     components: {
+        NodesDictionary,
+        NodesZone,
+        NodesWarehouse,
         DialogColumn,
         NodesSearchInput,
         NodesMasterPage,
@@ -136,10 +192,12 @@ export default {
         return {
             form: {
                 params: {
-                    code: "",
-                    name: "",
-                    createTimeDateRange: ["", ""],
-                    updateTimeDateRange: ["", ""],
+                    locCode: '',
+                    whIdList: [],
+                    zoneIdList:[],
+                    locTypeList: [],
+                    locCategoryList: [],
+                    locHandlingList: [],
                 },
             },
             table: {
@@ -166,51 +224,49 @@ export default {
                     },
                     {
                         prop: "locCategory",
-                        width: 130,
                         label: "库位种类",
                         sortable: "custom",
                     },
                     {
                         prop: "locHandling",
-                        width: 130,
                         label: "库位处理",
                         sortable: "custom",
                     },
                     {
                         prop: "logicAllocation",
-                        width: 130,
                         label: "路线顺序",
                         sortable: "custom",
                     },
                     {
                         prop: "abc",
-                        width: 130,
                         label: "ABC分类",
                         sortable: "custom",
                     },
                     {
                         prop: "locColumn",
-                        width: 130,
                         label: "货架列",
                         sortable: "custom",
                     },
                     {
                         prop: "locBank",
-                        width: 130,
                         label: "货架排",
                         sortable: "custom",
                     },
                     {
                         prop: "putOrder",
-                        width: 130,
                         label: "上架顺序",
                         sortable: "custom",
                     },
                     {
-                        prop: "lpnType",
-                        width: 130,
+                        prop: "lpnTypeCode",
                         label: "适用的容器类型",
                         sortable: "custom",
+                    },
+                    {
+                        prop: "status",
+                        width: "80",
+                        align: "center",
+                        label: "启用",
                     },
                 ],
             },
@@ -253,10 +309,12 @@ export default {
         },
         onReset() {
             this.form.params = {
-                name: '',
-                code: '',
-                createTimeDateRange: ["", ""],
-                updateTimeDateRange: ["", ""]
+                locCode: '',
+                whIdList: [],
+                zoneIdList: [],
+                locTypeList: [],
+                locCategoryList: [],
+                locHandlingList: []
             }
         },
         onRemove() {
