@@ -115,13 +115,13 @@ import fileDownload from "js-file-download";
                         </el-table-column>
                     </template>
                     <el-table-column
-                        label="是否启用">
+                        label="启用">
                         <template slot-scope="scope">
                             <span v-if="scope.row.status>0">
-                                <el-tag type="success">开</el-tag>
+                                <el-tag type="success">是</el-tag>
                             </span>
                             <span v-if="scope.row.status<0">
-                                <el-tag type="danger">关</el-tag>
+                                <el-tag type="danger">否</el-tag>
                             </span>
                         </template>
                     </el-table-column>
