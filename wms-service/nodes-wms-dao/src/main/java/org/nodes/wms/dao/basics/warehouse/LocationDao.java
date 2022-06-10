@@ -72,4 +72,12 @@ public interface LocationDao {
 	 * @return LocationDetailResponse
 	 */
 	LocationDetailResponse getDetailById(Long id);
+
+	/**
+	 * 根据id集合删除库位信息
+	 *
+	 * @param idList: 库位id集合
+	 * @return true: 删除成功, false: 删除失败
+	 */
+	boolean removeByIdList(List<Long> idList);
 }

@@ -65,4 +65,9 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	public LocationDetailResponse getDetailById(Long id) {
 		return super.baseMapper.selectDetailById(id);
 	}
+
+	@Override
+	public boolean removeByIdList(List<Long> idList) {
+		return super.deleteLogic(idList);
+	}
 }

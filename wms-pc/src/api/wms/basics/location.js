@@ -45,13 +45,11 @@ export const detail = (locId) => {
     })
 }
 
-export const remove = (ids) => {
+export const remove = (removeObj) => {
     return request({
         url: '/api/wms/warehouse/location/remove',
         method: 'post',
-        params: {
-            ids,
-        }
+        data: removeObj
     })
 }
 

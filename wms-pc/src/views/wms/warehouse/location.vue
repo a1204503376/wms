@@ -272,11 +272,12 @@ export default {
             })
                 .then(() => {
                     let removeObj = {
-                        ids: []
+                        idList: []
                     };
                     rows.forEach((item) => {
-                        removeObj.ids.push(item.id);
+                        removeObj.idList.push(item.locId);
                     });
+                    console.log(removeObj);
                     remove(removeObj)
                         .then((res) => {
                             this.$message({

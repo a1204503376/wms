@@ -83,4 +83,12 @@ public interface LocationBiz {
 	 * @return LocationDetailResponse
 	 */
 	LocationDetailResponse getLocationDetailById(Long locId);
+
+	/**
+	 * 批量删除
+	 *
+	 * @param idList: 库位id集合
+	 * @return true: 删除成功, false: 删除失败
+	 */
+	boolean remove(List<Long> idList);
 }

@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.core.tool.validation.Update;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
-import org.nodes.wms.dao.basics.warehouse.dto.input.LocationAddOrEditRequest;
-import org.nodes.wms.dao.basics.warehouse.dto.input.LocationExcelRequest;
-import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageQuery;
-import org.nodes.wms.dao.basics.warehouse.dto.input.LocationSelectQuery;
+import org.nodes.wms.dao.basics.warehouse.dto.input.*;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationDetailResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationEditResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse;
@@ -37,7 +34,6 @@ import java.util.List;
 @RequestMapping(WmsApiPath.WMS_ROOT_URL +"warehouse/location")
 public class LocationController {
 
-//	private ILocationService locationService;
 	private final LocationBiz locationBiz;
 
 	@PostMapping("/page")
@@ -76,24 +72,15 @@ public class LocationController {
 		return R.success("新增库位成功，库位编码:" + location.getLocCode());
 	}
 
-
 	/**
 	 * 删除
 	 */
-//	@ApiLog("库位-删除")
-//	@PostMapping("/remove")
-//	public R<String> remove(@RequestBody LocationRemoveRequest locationRemoveRequest) {
-//		ILocationService locationService = SpringUtil.getBean(ILocationService.class);
-//		List<Location> locationList = locationService.listByIds(Func.toLongList(ids));
-//		for (Location location : locationList) {
-//			// 判断是否真实库位
-//			if (!AuthUtil.isDeveloper() && ZoneVirtualTypeEnum.isVirtual(location.getLocCode())) {
-//				throw new ServiceException(String.format("库位[%s]是系统生成虚拟库区不可删除", location.getLocCode()));
-//			}
-//		}
-//		CacheUtil.clear(LOCATION_CACHE);
-//		return R.status(locationService.removeByIds(Func.toLongList(ids)));
-//	}
+	@ApiLog("库位-删除")
+	@PostMapping("/remove")
+	public R<String> remove(@Valid @RequestBody LocationRemoveRequest locationRemoveRequest) {
+		boolean remove = locationBiz.remove(locationRemoveRequest.getIdList());
+		return remove ? R.success("删除成功") : R.fail("删除失败");
+	}
 
 	@GetMapping("/detailByEdit")
 	public R<LocationEditResponse> detailByEdit(@RequestParam Long locId){
