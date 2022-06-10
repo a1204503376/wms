@@ -32,17 +32,17 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="库位类型：">
-                                {{ form.params.locTypeDesc }}
+                                {{ form.params.locType }}
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="库位种类：">
-                                {{ form.params.locCategoryDesc }}
+                                {{ form.params.locCategory }}
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="库位处理：">
-                                {{ form.params.locHandlingDesc }}
+                                {{ form.params.locHandling }}
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -53,24 +53,24 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="线路顺序：" >
+                            <el-form-item label="线路顺序：">
                                 {{ form.params.logicAllocation }}
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="使用状态：">
-                                {{ form.params.locFlagDesc }}
+                                {{ form.params.locFlag }}
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="ABC分类：">
-                                {{ form.params.abcDesc }}
+                                {{ form.params.abc }}
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="货架列：" >
+                            <el-form-item label="货架列：">
                                 {{ form.params.locColumn }}
                             </el-form-item>
                         </el-col>
@@ -88,7 +88,7 @@
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="容器类型：">
-                                {{ form.params.lpnTypeId }}
+                                {{ form.params.lpnTypeCode }}
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -158,21 +158,6 @@
                     </el-row>
                 </el-form>
             </el-main>
-            <el-footer>
-                <el-row style="margin-top: 10px;line-height:60px;text-align:right;">
-                    <el-button
-                        :loading="loading"
-                        type="primary"
-                        @click="onSubmit"
-                    >保 存
-                    </el-button>
-                    <el-button
-                        :loading="loading"
-                        @click="onClose"
-                    >关 闭
-                    </el-button>
-                </el-row>
-            </el-footer>
         </el-container>
     </basic-container>
 </template>

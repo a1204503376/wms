@@ -31,27 +31,27 @@ public class LocationDetailResponse implements Serializable {
 	/**
 	 * 库位类型名称
 	 */
-	private String locTypeDesc;
+	private String locType;
 
 	/**
 	 * 库位种类名称
 	 */
-	private String locCategoryDesc;
+	private String locCategory;
 
 	/**
 	 * 库位处理名称
 	 */
-	private String locHandlingDesc;
+	private String locHandling;
 
 	/**
 	 * abc分类名称
 	 */
-	private String abcDesc;
+	private String abc;
 
 	/**
 	 * 使用状态名称
 	 */
-	private String locFlagDesc;
+	private String locFlag;
 
 	/**
 	 * 校验数位
@@ -126,10 +126,10 @@ public class LocationDetailResponse implements Serializable {
 	/**
 	 * 混放货品
 	 */
-	private String locSkuMixDesc;
+	private String locSkuMix;
 
 	/**
 	 * 混放批号
 	 */
-	private String locLotNoMixDesc;
+	private String locLotNoMix;
 }
