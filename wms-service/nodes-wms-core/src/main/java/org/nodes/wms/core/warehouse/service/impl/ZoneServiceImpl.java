@@ -9,11 +9,11 @@ import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.StringPool;
 import org.nodes.core.tool.utils.ValidationUtil;
+import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
 import org.nodes.wms.core.warehouse.cache.ZoneCache;
 import org.nodes.wms.core.warehouse.dto.ZoneDTO;
 import org.nodes.wms.core.warehouse.entity.Location;
 import org.nodes.wms.core.warehouse.enums.LocTypeEnum;
-import org.nodes.wms.core.warehouse.enums.ZoneTypeEnum;
 import org.nodes.wms.core.warehouse.excel.ZoneExcel;
 import org.nodes.wms.core.warehouse.mapper.ZoneMapper;
 import org.nodes.wms.core.warehouse.service.ILocationService;
@@ -21,6 +21,7 @@ import org.nodes.wms.core.warehouse.service.IWarehouseService;
 import org.nodes.wms.core.warehouse.service.IZoneService;
 import org.nodes.wms.core.warehouse.vo.ZoneVO;
 import org.nodes.wms.core.warehouse.wrapper.ZoneWrapper;
+import org.nodes.wms.dao.application.dto.output.DictionaryResponse;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.springblade.core.excel.util.ExcelUtil;
@@ -240,14 +241,27 @@ public class ZoneServiceImpl<M extends ZoneMapper, T extends Zone>
 			dataVerify.setIndex(index);
 			// 封装成DTO
 			ZoneDTO zoneDTO = ZoneWrapper.build().entityDTO(zoneExcel);
-			if (!zoneExcel.getStatus().equals(String.valueOf(StatusEnum.ON.getIndex()))
+			if ( Func.isNotEmpty(zoneExcel.getStatus())
+				&& !zoneExcel.getStatus().equals(String.valueOf(StatusEnum.ON.getIndex()))
 				&& !zoneExcel.getStatus().equals(String.valueOf(StatusEnum.OFF.getIndex()))) {
 				throw new ServiceException("导入失败，启用状态只能为1(启用)或者-1(禁用)");
 			}
-			zoneDTO.setStatus(Integer.parseInt(zoneExcel.getStatus()));
-			ZoneTypeEnum[] zoneTypeEnums = ZoneTypeEnum.values();
-			List<String> typeIndexList = Arrays.stream(zoneTypeEnums).map(item -> item.getIndex().toString()).collect(Collectors.toList());
-			if (typeIndexList.contains(zoneExcel.getZoneType())) {
+			Integer status = Func.isEmpty(zoneExcel.getStatus()) ? null : Integer.parseInt(zoneExcel.getStatus());
+			zoneDTO.setStatus(status);
+//			ZoneTypeEnum[] zoneTypeEnums = ZoneTypeEnum.values();
+//			List<String> typeIndexList = Arrays.stream(zoneTypeEnums).map(item -> item.getIndex().toString()).collect(Collectors.toList());
+//			if (typeIndexList.contains(zoneExcel.getZoneType())) {
+//				zoneDTO.setZoneType(Integer.parseInt(zoneExcel.getZoneType()));
+//			} else {
+//				throw new ServiceException("导入失败，库区类型编码不存在");
+//			}
+			if (Func.isEmpty(zoneExcel.getZoneType())){
+				throw new ServiceException("导入失败，库区类型编码不能为空");
+			}
+			DictionaryBiz dictionaryBiz = SpringUtil.getBean(DictionaryBiz.class);
+			List<DictionaryResponse> zoneTypeList = dictionaryBiz.getDictionaryResponseList("zone_type");
+			List<String> keyList = zoneTypeList.stream().map(item -> item.getDictKey().toString()).collect(Collectors.toList());
+			if (keyList.contains(zoneExcel.getZoneType())) {
 				zoneDTO.setZoneType(Integer.parseInt(zoneExcel.getZoneType()));
 			} else {
 				throw new ServiceException("导入失败，库区类型编码不存在");
