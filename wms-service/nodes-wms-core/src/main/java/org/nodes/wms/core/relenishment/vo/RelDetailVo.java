@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.nodes.wms.core.basedata.vo.SkuLotConfigVO;
 import org.nodes.wms.core.relenishment.entity.RelDetail;
-import org.nodes.wms.core.warehouse.entity.Zone;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 
 import java.util.List;
 

@@ -1,9 +1,7 @@
 package org.nodes.wms.core.strategy.instock.impl;
 
 import org.nodes.core.base.cache.ParamCache;
-import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.stock.core.entity.Stock;
-import org.nodes.wms.core.strategy.cache.InstockCache;
 import org.nodes.wms.core.strategy.entity.Instock;
 import org.nodes.wms.core.strategy.entity.InstockDetail;
 import org.nodes.wms.core.strategy.enums.MixModeEnum;
@@ -13,13 +11,11 @@ import org.nodes.wms.core.strategy.service.IInstockService;
 import org.nodes.wms.core.strategy.vo.InstockExecuteVO;
 import org.nodes.wms.core.warehouse.cache.LocationCache;
 import org.nodes.wms.core.warehouse.entity.Location;
-import org.nodes.wms.core.warehouse.entity.Zone;
-import org.nodes.wms.core.warehouse.service.ILocationService;
 import org.nodes.wms.core.warehouse.service.IZoneService;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;
-import org.springblade.core.tool.utils.StringUtil;
 import org.springframework.context.annotation.Primary;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;

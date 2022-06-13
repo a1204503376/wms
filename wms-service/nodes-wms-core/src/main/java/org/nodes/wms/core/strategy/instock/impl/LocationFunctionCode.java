@@ -1,11 +1,9 @@
 package org.nodes.wms.core.strategy.instock.impl;
 
 import org.nodes.core.tool.utils.StringPool;
-import org.nodes.wms.core.basedata.cache.SkuInstockCache;
 import org.nodes.wms.core.basedata.entity.SkuInstock;
 import org.nodes.wms.core.basedata.service.ISkuInstockService;
 import org.nodes.wms.core.stock.core.entity.Stock;
-import org.nodes.wms.core.strategy.cache.InstockCache;
 import org.nodes.wms.core.strategy.entity.Instock;
 import org.nodes.wms.core.strategy.entity.InstockDetail;
 import org.nodes.wms.core.strategy.instock.FunctionCodeBase;
@@ -13,11 +11,9 @@ import org.nodes.wms.core.strategy.instock.IFunctionCode;
 import org.nodes.wms.core.strategy.service.IInstockService;
 import org.nodes.wms.core.strategy.vo.InstockExecuteVO;
 import org.nodes.wms.core.warehouse.cache.LocationCache;
-import org.nodes.wms.core.warehouse.cache.ZoneCache;
 import org.nodes.wms.core.warehouse.entity.Location;
-import org.nodes.wms.core.warehouse.entity.Zone;
-import org.nodes.wms.core.warehouse.service.ILocationService;
 import org.nodes.wms.core.warehouse.service.IZoneService;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.Func;

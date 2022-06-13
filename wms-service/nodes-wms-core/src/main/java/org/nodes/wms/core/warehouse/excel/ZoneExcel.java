@@ -41,5 +41,5 @@ public class ZoneExcel {
 	 */
 	@ColumnWidth(15)
 	@ExcelProperty({"是否启用"})
-	private String isActive;
+	private String status;
 }
