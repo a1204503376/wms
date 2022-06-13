@@ -226,61 +226,79 @@ export default {
                     },
                     {
                         prop: 'billStateDesc',
-                        label: '单据状态'
+                        label: '单据状态',
+                        sortable: 'custom',
+                        width: 120,
                     },
 
                     {
                         prop: 'asnBillNo',
                         width: 100,
-                        label: 'ASN单编码'
+                        label: 'ASN单编码',
+                        sortable: 'custom'
                     },
                     {
                         prop: 'externalOrderNo',
                         label: '上游编码',
+                        width: 100,
+                        sortable: 'custom',
                         align: 'right'
                     },
                     {
                         prop: 'supplierCode',
-                        width: 100,
-                        label: '供应商编码'
+                        label: '供应商编码',
+                        width: 250,
+                        sortable: 'custom',
+                        align: 'right'
                     },
                     {
                         prop: 'supplierName',
                         width: 100,
+                        sortable: 'custom',
                         label: '供应商名称'
                     },
                     {
                         prop: 'whCode',
+                        sortable: 'custom',
+                        width: 120,
                         label: '仓库编码'
                     },
                     {
                         prop: 'createTime',
+                        sortable: 'custom',
                         label: '创建日期'
                     },
                     {
                         prop: 'createUser',
+                        sortable: 'custom',
                         label: '创建人'
                     },
                     {
                         prop: 'externalPreCreateDate',
+                        sortable: 'custom',
                         width: 120,
                         label: '上游创建时间'
                     },
                     {
                         prop: 'externalCreateUser',
-                        width: 100,
+                        width: 150,
+                        sortable: 'custom',
                         label: '上游创建人'
                     },
                     {
                         prop: 'updateUser',
+                        sortable: 'custom',
+                        width: 150,
                         label: '更新人'
                     },
                     {
                         prop: 'updateTime',
+                        sortable: 'custom',
                         label: '更新时间'
                     },
                     {
                         prop: 'remark',
+                        sortable: 'custom',
                         label: '消息'
                     },
 

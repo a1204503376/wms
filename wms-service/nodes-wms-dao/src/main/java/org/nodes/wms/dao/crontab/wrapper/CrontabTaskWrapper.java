@@ -1,7 +1,7 @@
-package org.nodes.wms.core.crontab.wrapper;
+package org.nodes.wms.dao.crontab.wrapper;
 
-import org.nodes.wms.core.crontab.entity.CrontabTask;
-import org.nodes.wms.core.crontab.vo.CrontabTaskVO;
+import org.nodes.wms.dao.crontab.entity.CrontabTask;
+import org.nodes.wms.dao.crontab.vo.CrontabTaskVO;
 import org.springblade.core.mp.support.BaseEntityWrapper;
 import org.springblade.core.tool.utils.BeanUtil;
 

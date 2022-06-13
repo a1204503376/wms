@@ -1,15 +1,11 @@
 package org.nodes.wms.core.crontab.cache;
 
-import org.nodes.core.enums.StatusEnum;
-import org.nodes.wms.core.crontab.entity.Scheme;
+import org.nodes.wms.dao.crontab.entity.Scheme;
 import org.nodes.wms.core.crontab.service.ISchemeService;
 import org.springblade.core.cache.utils.CacheUtil;
-import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;
 
-import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @program: WmsCore

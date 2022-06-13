@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.springblade.core.tenant.mp.TenantEntity;
 
 /**
@@ -15,6 +16,7 @@ import org.springblade.core.tenant.mp.TenantEntity;
 @TableName("log_action")
 public class LogAction extends TenantEntity {
 
+	private static final long serialVersionUID = -2029269185139790925L;
 	/**
 	 * 主键ID
 	 */
@@ -34,7 +36,7 @@ public class LogAction extends TenantEntity {
 	/**
 	 * 操作类型
 	 */
-	private Integer type;
+	private AuditLogType type;
 
 	/**
 	 * 目标单据id,可能为空

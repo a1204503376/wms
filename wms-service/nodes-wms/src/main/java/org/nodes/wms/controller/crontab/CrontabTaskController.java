@@ -1,21 +1,25 @@
-package org.nodes.modules.wms.crontab;
+package org.nodes.wms.controller.crontab;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
-import org.nodes.wms.core.crontab.dto.CrontabTaskDTO;
-import org.nodes.wms.core.crontab.entity.CrontabTask;
-import org.nodes.wms.core.crontab.service.ICrontabTaskService;
-import org.nodes.wms.core.crontab.vo.CrontabTaskVO;
-import org.nodes.wms.core.crontab.wrapper.CrontabTaskWrapper;
+import org.nodes.wms.biz.common.log.LogBiz;
+import org.nodes.wms.dao.common.log.dto.LogPageQuery;
+import org.nodes.wms.dao.common.log.dto.LogResponse;
+import org.nodes.wms.dao.common.log.entities.LogAction;
+import org.nodes.wms.dao.crontab.dto.CrontabTaskDTO;
+import org.nodes.wms.dao.crontab.entity.CrontabTask;
+import org.nodes.wms.biz.crontab.ICrontabTaskService;
+import org.nodes.wms.dao.crontab.vo.CrontabTaskVO;
+import org.nodes.wms.dao.crontab.wrapper.CrontabTaskWrapper;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
-import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -37,7 +41,8 @@ import static org.nodes.wms.core.crontab.cache.CrontabTaskCache.CRONTAB_TASK_CAC
 @Api(value = "任务表", tags = "任务表接口")
 public class CrontabTaskController extends BladeController {
 
-	private ICrontabTaskService taskService;
+	private final ICrontabTaskService taskService;
+	private final LogBiz logBiz;
 
 	/**
 	 * 任务表详情
@@ -69,17 +74,26 @@ public class CrontabTaskController extends BladeController {
 		return R.data(CrontabTaskWrapper.build().pageVO(pages));
 	}
 
-
 	/**
-	 * 任务表新增或修改
+	 * 任务表新增
 	 */
-	@PostMapping("/submit")
+	@PostMapping("/newCrontabTask")
 	@ApiOperation(value = "任务表新增或修改", notes = "传入task")
-	public R submit(@Valid @RequestBody CrontabTask crontabTask) {
+	public R newCrontabTask(@Valid @RequestBody CrontabTask crontabTask) {
 		CacheUtil.clear(CRONTAB_TASK_CACHE);
-		return R.status(taskService.saveOrUpdate(crontabTask));
-	}
 
+		return R.status(taskService.newCrontabTask(crontabTask));
+	}
+	/**
+	 * 任务表修改
+	 */
+	@PostMapping("/editCrontabTask")
+	@ApiOperation(value = "任务表新增或修改", notes = "传入task")
+	public R editCrontabTask(@Valid @RequestBody CrontabTask crontabTask) {
+		CacheUtil.clear(CRONTAB_TASK_CACHE);
+
+		return R.status(taskService.editCrontabTask(crontabTask));
+	}
 
 	/**
 	 * 任务表删除
@@ -88,12 +102,16 @@ public class CrontabTaskController extends BladeController {
 	@ApiOperation(value = "任务表删除", notes = "传入ids")
 	public R remove(@ApiParam(value = "主键集合", required = true) @RequestBody List<Long> ids) {
 		CacheUtil.clear(CRONTAB_TASK_CACHE);
-		return R.status(taskService.removeByIds(ids));
+		return R.status(taskService.deleteByIds(ids));
 	}
     @GetMapping("/detailById")
 	public  R<CrontabTaskVO>  detailById(Long id){
 		CrontabTask detail =  taskService.getById(id);
 		return R.data(CrontabTaskWrapper.build().entityVO(detail));
+	}
+	@PostMapping("/getLogById")
+	public  R<Page<LogResponse>>  getLogById(@RequestBody  LogPageQuery logPageQuery, Query query){
+		return R.data(logBiz.getPage(logPageQuery,query));
 	}
 
 }

@@ -8,12 +8,6 @@
                 <el-form-item label="url">
                     <el-input v-model="form.params.url" class="d-input"  :clearable="true" style="width: 220px"></el-input>
                 </el-form-item>
-                <el-form-item label="请求方法">
-                    <el-input v-model="form.params.method" class="d-input"  :clearable="true"></el-input>
-                </el-form-item>
-                <el-form-item label="cron表达式" >
-                    <el-input v-model="form.params.cron" class="d-input" style="width: 180px"  :clearable="true"></el-input>
-                </el-form-item>
 
             </template>
             <template v-slot:batchBtn>
@@ -66,13 +60,14 @@
                     <el-table-column
                         fixed="right"
                         label="操作"
-                        width="180"
+                        width="250"
                     >
                         <template slot-scope="scope">
                             <el-button @click="handleClick(scope.row)" type="text" size="small" >编辑</el-button>
                             <el-button @click="onStart(scope.row)" type="text" size="small" >启动</el-button>
                             <el-button @click="onStop(scope.row)" type="text" size="small" >停止</el-button>
                             <el-button @click="onExecute(scope.row)" type="text" size="small" >执行一次</el-button>
+                            <el-button @click="onLog(scope.row)" type="text" size="small" >日志</el-button>
                         </template>
                     </el-table-column>
 
@@ -134,8 +129,6 @@ export default {
                 params: {
                     crontabTaskName:'',
                     url:'',
-                    method:'',
-                    cron:'',
                 }
             },
 
@@ -211,6 +204,15 @@ export default {
         onAdd() {
             this.$router.push({
                 name: '新增定时任务',
+            });
+        },
+        onLog(row) {
+            this.$router.push({
+                name: '任务日志',
+                params: {
+                    id: row.id,
+                    crontabTaskName: row.crontabTaskName
+                }
             });
         },
         handleClick(row){

@@ -59,7 +59,7 @@ public class LogFactory {
 	 */
 	public LogAction createLogAction(AuditLogType type, String log){
 		LogAction logAction=new LogAction();
-		logAction.setType(type.getIndex());
+		logAction.setType(type);
         logAction.setLog(log);
 		logAction.setUserAccount(AuthUtil.getUserAccount());
 		logAction.setUserRealName(AuthUtil.getUserName());
@@ -76,7 +76,7 @@ public class LogFactory {
 	 */
 	public LogAction  createLogAction(AuditLogType type, Long billId, String billNo, String log){
 		LogAction logAction=new LogAction();
-		logAction.setType(type.getIndex());
+		logAction.setType(type);
 		logAction.setBillId(billId);
 		logAction.setBillNo(billNo);
 		logAction.setLog(log);
@@ -84,6 +84,25 @@ public class LogFactory {
 		logAction.setUserRealName(AuthUtil.getUserName());
 		return logAction;
 	}
+	/**
+	 * 构造审计日志对象
+	 * @param type 类型
+	 * @param billId 单据id
+	 * @param log 内容
+	 * @return 审计日志对象
+	 */
+	public LogAction  createLogAction(AuditLogType type, Long billId,String log){
+		LogAction logAction=new LogAction();
+		logAction.setType(type);
+		logAction.setBillId(billId);
+		logAction.setLog(log);
+		logAction.setUserAccount(AuthUtil.getUserAccount());
+		logAction.setUserRealName(AuthUtil.getUserName());
+		return logAction;
+	}
+
+
+
 
 	/**
 	 * 构造审计日志对象
@@ -92,13 +111,23 @@ public class LogFactory {
 	 */
 	public LogAction createLogAction(AuditLogRequest auditLogRequest){
 		LogAction logAction=new LogAction();
-		logAction.setType(auditLogRequest.getType().getIndex());
+		logAction.setType(auditLogRequest.getType());
 		logAction.setLog(auditLogRequest.getLog());
 		logAction.setBillId(auditLogRequest.getBillId());
 		logAction.setBillNo(auditLogRequest.getBillNo());
 		logAction.setUserAccount(auditLogRequest.getActionUser().getUserName());
 		logAction.setUserAccount(AuthUtil.getUserAccount());
 		logAction.setUserRealName(AuthUtil.getUserName());
+		return logAction;
+	}
+
+	public LogAction createLogAction(String userName, AuditLogType cronTask, Long id, String log) {
+		LogAction logAction=new LogAction();
+		logAction.setType(cronTask);
+		logAction.setBillId(id);
+		logAction.setLog(log);
+		logAction.setUserAccount(userName);
+		logAction.setUserRealName(userName);
 		return logAction;
 	}
 }
