@@ -1,23 +1,17 @@
 package org.nodes.wms.core.system.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.core.tool.utils.StringPool;
 import org.nodes.wms.core.basedata.cache.BillTypeCache;
-import org.nodes.wms.dao.basics.billType.entities.BillType;
 import org.nodes.wms.core.system.entity.Task;
 import org.nodes.wms.core.system.vo.TaskVO;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
-import org.nodes.wms.core.warehouse.service.IWarehouseService;
+import org.nodes.wms.dao.basics.billType.entities.BillType;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.mp.support.BaseEntityWrapper;
-import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.BeanUtil;
-import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.ObjectUtil;
-import org.springblade.core.tool.utils.SpringUtil;
 
 /**
  * @author pengwei

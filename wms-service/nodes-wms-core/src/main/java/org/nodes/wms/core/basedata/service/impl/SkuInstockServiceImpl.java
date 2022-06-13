@@ -1,23 +1,18 @@
 
 package org.nodes.wms.core.basedata.service.impl;
 
-import org.checkerframework.checker.units.qual.C;
 import org.nodes.wms.core.basedata.cache.SkuCache;
-import org.nodes.wms.core.basedata.cache.SkuInstockCache;
 import org.nodes.wms.core.basedata.entity.Sku;
 import org.nodes.wms.core.basedata.entity.SkuInstock;
 import org.nodes.wms.core.basedata.mapper.SkuInstockMapper;
 import org.nodes.wms.core.basedata.service.ISkuInstockService;
-import org.nodes.wms.core.basedata.service.ISkuService;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
-import org.nodes.wms.core.warehouse.service.IWarehouseService;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.ObjectUtil;
-import org.springblade.core.tool.utils.SpringUtil;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;

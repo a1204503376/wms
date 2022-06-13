@@ -2,31 +2,27 @@
 package org.nodes.wms.core.basedata.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
+import org.nodes.wms.core.basedata.entity.SkuOutstock;
 import org.nodes.wms.core.basedata.entity.SkuPackage;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
-import org.nodes.wms.core.basedata.entity.SkuOutstock;
-import org.nodes.wms.core.basedata.service.ISkuPackageService;
 import org.nodes.wms.core.basedata.vo.SkuOutstockVO;
-import org.nodes.wms.core.strategy.cache.OutstockCache;
 import org.nodes.wms.core.strategy.entity.Outstock;
 import org.nodes.wms.core.strategy.service.IOutstockService;
 import org.nodes.wms.core.warehouse.cache.LocationCache;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
-import org.nodes.wms.core.warehouse.cache.ZoneCache;
 import org.nodes.wms.core.warehouse.entity.Location;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
 import org.nodes.wms.core.warehouse.entity.Zone;
 import org.nodes.wms.core.warehouse.service.ILocationService;
-import org.nodes.wms.core.warehouse.service.IWarehouseService;
 import org.nodes.wms.core.warehouse.service.IZoneService;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.mp.support.BaseEntityWrapper;
-import org.springblade.core.mp.support.Condition;
-import org.springblade.core.tool.utils.*;
+import org.springblade.core.tool.utils.BeanUtil;
+import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.ObjectUtil;
+import org.springblade.core.tool.utils.SpringUtil;
 
 /**
  * 物品出库设置包装类,返回视图层所需的字段
