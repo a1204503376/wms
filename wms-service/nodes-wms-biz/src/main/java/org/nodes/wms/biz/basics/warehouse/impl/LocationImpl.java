@@ -16,10 +16,12 @@ import org.nodes.wms.dao.basics.warehouse.entities.Location;
 import org.nodes.wms.dao.basics.warehouse.enums.LocTypeEnum;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
+import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,7 +56,7 @@ public class LocationImpl implements LocationBiz {
 	@Override
 	public void exportExcel(LocationPageQuery locationPageQuery, HttpServletResponse response) {
 		List<LocationExcelResponse> locationList = locationDao.selectListByQuery(locationPageQuery);
-		ExcelUtil.export(response, "库位", "库位数据表", locationList, LocationExcelResponse.class);
+		ExcelUtil.export(response, "库位"+ DateUtil.formatDateTimeMini(new Date()), "库位数据表", locationList, LocationExcelResponse.class);
 	}
 
 	@Override
