@@ -19,5 +19,4 @@ public class LocationSelectResponse {
 	 * 库位编码
 	 */
 	private String locCode;
-
 }

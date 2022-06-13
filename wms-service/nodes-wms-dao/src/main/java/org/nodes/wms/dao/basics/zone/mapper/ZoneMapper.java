@@ -16,15 +16,10 @@ import java.util.List;
 public interface ZoneMapper extends BaseMapper<Zone> {
 
 	/**
-	 * 根据库区编码或者库区名称查询前10个库区信息
+	 * 根据库房id集合获取所有库区下拉数据
 	 *
-	 * @param whId 类型模式
-	 * @param zoneCode 库区编码
-	 * @param zoneName 库区名称
+	 * @param whIdList 库房id
 	 * @return List<ZoneSelectResponse>
 	 */
-	List<ZoneSelectResponse> listTop10ByWhIdZoneCodeZoneName(
-		@Param("whId") String whId,
-		@Param("zoneCode") String zoneCode,
-		@Param("zoneName") String zoneName);
+	List<ZoneSelectResponse> listSelectByWhIdList(@Param("whIdList") List<Long> whIdList);
 }

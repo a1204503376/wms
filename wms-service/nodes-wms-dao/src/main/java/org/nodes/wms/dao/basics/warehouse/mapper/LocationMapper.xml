@@ -14,26 +14,64 @@
 
     <sql id="tableList">
         SELECT
+        l.loc_id,
         l.loc_code,
         w.wh_name as whName,
         z.zone_name as zoneName,
-        l.loc_type,
-        l.loc_category,
-        l.loc_handling,
-        l.abc,
+        d1.dict_value                         as locType,
+        d2.dict_value                         as locCategory,
+        d3.dict_value                         as locHandling,
+        d4.dict_value                         as abc,
         l.logic_allocation,
         l.loc_level,
         l.loc_column,
         l.loc_bank,
         l.put_order,
-        t.type as lpnType,
-        l.status
+        lt.code as lpnTypeCode,
+        IF(l.status = 1, '是', '否')    as status
         FROM wms_location l
         LEFT JOIN wms_warehouse w ON w.wh_id = l.wh_id
         LEFT JOIN wms_zone z ON z.zone_id = l.zone_id
-        LEFT JOIN wms_lpn_type t ON t.id = l.lpn_type_id
+        LEFT JOIN wms_lpn_type lt ON lt.id = l.lpn_type_id
+        LEFT JOIN blade_dict d1 ON l.loc_type = d1.dict_key and d1.code = 'loc_type'
+        LEFT JOIN blade_dict d2 ON l.loc_category = d2.dict_key and d2.code = 'loc_category'
+        LEFT JOIN blade_dict d3 ON l.loc_handling = d3.dict_key and d3.code = 'loc_handling'
+        LEFT JOIN blade_dict d4 ON l.abc = d4.dict_key and d4.code = 'abc'
         <where>
             l.is_deleted = 0
+            <if test=" param.locCode != null and param.locCode !='' ">
+                AND l.loc_code LIKE CONCAT('%', #{param.locCode}, '%')
+            </if>
+            <if test=" param.whIdList != null and param.whIdList.size > 0 ">
+                AND l.wh_id IN
+                <foreach collection="param.whIdList" open="(" close=")" item="item" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test=" param.zoneIdList != null and param.zoneIdList.size > 0 ">
+                AND l.zone_id IN
+                <foreach collection="param.zoneIdList" open="(" close=")" item="item" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test=" param.locTypeList != null and param.locTypeList.size > 0 ">
+                AND l.loc_type IN
+                <foreach collection="param.locTypeList" open="(" close=")" item="item" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test=" param.locCategoryList != null and param.locCategoryList.size > 0 ">
+                AND l.loc_category IN
+                <foreach collection="param.locCategoryList" open="(" close=")" item="item" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test=" param.locHandlingList != null and param.locHandlingList.size > 0 ">
+                AND l.loc_type IN
+                <foreach collection="param.locHandlingList" open="(" close=")" item="item" separator=",">
+                    #{item}
+                </foreach>
+            </if>
         </where>
     </sql>
 
@@ -46,5 +84,45 @@
 
     <select id="listByQuery" resultType="org.nodes.wms.dao.basics.warehouse.dto.output.LocationExcelResponse">
         <include refid="tableList"/>
+    </select>
+
+    <select id="selectDetailById"
+            resultType="org.nodes.wms.dao.basics.warehouse.dto.output.LocationDetailResponse">
+        SELECT l.loc_code,
+               w.wh_name,
+               z.zone_name,
+               d1.dict_value                         as locType,
+               d2.dict_value                         as locCategory,
+               d3.dict_value                         as locHandling,
+               d4.dict_value                         as abc,
+               d5.dict_value                         as locFlag,
+               l.loc_flag,
+               l.check_digit,
+               l.logic_allocation,
+               l.loc_bank,
+               l.loc_column,
+               l.put_order,
+               lt.code                               as lpnTypeCode,
+               l.loc_length,
+               l.loc_wide,
+               l.loc_high,
+               l.capacity,
+               l.load_weight,
+               l.loc_level,
+               l.item_num,
+               l.tray_num,
+               IF(l.loc_sku_mix = 1, '启用', '未启用')    as locSkuMix,
+               IF(l.loc_lot_no_mix = 1, '启用', '未启用') as locLotNoMix
+        FROM wms_location l
+                 LEFT JOIN wms_zone z ON l.zone_id = z.zone_id
+                 LEFT JOIN wms_warehouse w ON l.wh_id = w.wh_id
+                 LEFT JOIN wms_lpn_type lt ON l.lpn_type_id = lt.id
+                 LEFT JOIN blade_dict d1 ON l.loc_type = d1.dict_key and d1.code = 'loc_type'
+                 LEFT JOIN blade_dict d2 ON l.loc_category = d2.dict_key and d2.code = 'loc_category'
+                 LEFT JOIN blade_dict d3 ON l.loc_handling = d3.dict_key and d3.code = 'loc_handling'
+                 LEFT JOIN blade_dict d4 ON l.abc = d4.dict_key and d4.code = 'abc'
+                 LEFT JOIN blade_dict d5 ON l.loc_flag = d5.dict_key and d5.code = 'loc_flag'
+        WHERE l.loc_id = #{id}
+        ORDER BY l.create_time DESC
     </select>
 </mapper>

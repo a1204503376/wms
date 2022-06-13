@@ -3,6 +3,7 @@
     <el-select
         v-model="val"
         :multiple="multiple"
+        collapse-tags
         size="mini"
         style="width:100%;"
         :code="code"
@@ -13,8 +14,8 @@
             :key="item.dictKey"
             :label="item.dictValue"
             :value="item.dictKey">
-            <span style="float: left">{{ item.dictKey }}</span>
-            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.dictValue }}</span>
+            <span style="float: left">{{ item.dictValue }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.dictKey }}</span>
         </el-option>
     </el-select>
 </template>
@@ -29,7 +30,7 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Array, String],
+        selectVal: [Array, Number, String],
         //是否有默认值 true:有默认值  默认为false 编辑时将其设置为true
         defaultValue:{type:Boolean, required: false,default: () => false},
         // 单选多选切换，默认为false

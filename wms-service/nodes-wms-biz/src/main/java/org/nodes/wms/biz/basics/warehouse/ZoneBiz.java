@@ -1,6 +1,5 @@
 package org.nodes.wms.biz.basics.warehouse;
 
-import org.nodes.wms.dao.basics.zone.dto.ZoneSelectQuery;
 import org.nodes.wms.dao.basics.zone.dto.ZoneSelectResponse;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 
@@ -11,12 +10,12 @@ import java.util.List;
  */
 public interface ZoneBiz {
 	/**
-	 * 获取库区下拉列表最近十条数据
+	 * 根据库房id集合获取所有库区下拉数据
 	 *
-	 * @param zoneSelectQuery 前端传传入查询条件
+	 * @param whIdList 库房id集合
 	 * @return 库位下拉列表集合
 	 */
-	List<ZoneSelectResponse> getZoneSelectResponseTop10List(ZoneSelectQuery zoneSelectQuery);
+	List<ZoneSelectResponse> getZoneSelectData(List<Long> whIdList);
 
 	/**
 	 * 根据库区编码查询库区信息
@@ -25,4 +24,12 @@ public interface ZoneBiz {
 	 * @return Zone
 	 */
     Zone findByCode(String zoneCode);
+
+	/**
+	 * 根据库区id查询库区信息
+	 *
+	 * @param zoneId: 库区id
+	 * @return Zone
+	 */
+    Zone findById(Long zoneId);
 }

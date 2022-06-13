@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageQuery;
+import org.nodes.wms.dao.basics.warehouse.dto.output.LocationDetailResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationExcelResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse;
@@ -33,4 +34,12 @@ public interface LocationMapper extends BaseMapper<Location> {
 	 * @return List<Location>
 	 */
 	List<LocationExcelResponse> listByQuery(@Param("param") LocationPageQuery locationPageQuery);
+
+	/**
+	 * 根据库位id查找库位详情信息
+	 *
+	 * @param id: 库位id
+	 * @return LocationDetailResponse
+	 */
+    LocationDetailResponse selectDetailById(Long id);
 }

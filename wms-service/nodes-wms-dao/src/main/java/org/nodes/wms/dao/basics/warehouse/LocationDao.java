@@ -3,6 +3,7 @@ package org.nodes.wms.dao.basics.warehouse;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageQuery;
+import org.nodes.wms.dao.basics.warehouse.dto.output.LocationDetailResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationExcelResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse;
@@ -48,4 +49,35 @@ public interface LocationDao {
 	 * @return List<Location>
 	 */
 	List<LocationExcelResponse> selectListByQuery(LocationPageQuery locationPageQuery);
+
+	/**
+	 * 保存
+	 *
+	 * @param location: 库位对象
+	 */
+    void saveOrUpdateLocation(Location location);
+
+	/**
+	 * 根据id查找库位信息
+	 *
+	 * @param id: 库位id
+	 * @return Location
+	 */
+    Location getLocationById(Long id);
+
+	/**
+	 * 根据库位id查找库位详情信息
+	 *
+	 * @param id: 库位id
+	 * @return LocationDetailResponse
+	 */
+	LocationDetailResponse getDetailById(Long id);
+
+	/**
+	 * 根据id集合删除库位信息
+	 *
+	 * @param idList: 库位id集合
+	 * @return true: 删除成功, false: 删除失败
+	 */
+	boolean removeByIdList(List<Long> idList);
 }

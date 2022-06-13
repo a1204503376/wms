@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.basics.warehouse.LocationDao;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageQuery;
+import org.nodes.wms.dao.basics.warehouse.dto.output.LocationDetailResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationExcelResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse;
@@ -48,5 +49,25 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	@Override
 	public List<LocationExcelResponse> selectListByQuery(LocationPageQuery locationPageQuery) {
 		return super.baseMapper.listByQuery(locationPageQuery);
+	}
+
+    @Override
+    public void saveOrUpdateLocation(Location location) {
+		super.saveOrUpdate(location);
+    }
+
+    @Override
+    public Location getLocationById(Long id) {
+        return super.getById(id);
+    }
+
+	@Override
+	public LocationDetailResponse getDetailById(Long id) {
+		return super.baseMapper.selectDetailById(id);
+	}
+
+	@Override
+	public boolean removeByIdList(List<Long> idList) {
+		return super.deleteLogic(idList);
 	}
 }

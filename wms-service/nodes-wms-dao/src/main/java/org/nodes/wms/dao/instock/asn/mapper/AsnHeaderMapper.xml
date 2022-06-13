@@ -160,10 +160,10 @@
                w.wh_name,
                o.owner_name
         FROM asn_header h
-                 Inner JOIN wms_warehouse w ON h.wh_id = w.wh_id
-                 Inner JOIN wms_bill_type b ON h.bill_type_cd = b.bill_type_cd
-                 Inner JOIN wms_owner o ON h.wo_id = o.wo_id
-                 Inner JOIN blade_user `user` ON h.create_user = `user`.id
+                 LEFT JOIN wms_warehouse w ON h.wh_id = w.wh_id
+                 LEFT JOIN wms_bill_type b ON h.bill_type_cd = b.bill_type_cd
+                 LEFT JOIN wms_owner o ON h.wo_id = o.wo_id
+                 LEFT JOIN blade_user `user` ON h.create_user = `user`.id
         WHERE h.asn_bill_id = #{id}
           and h.is_deleted = 0
     </select>

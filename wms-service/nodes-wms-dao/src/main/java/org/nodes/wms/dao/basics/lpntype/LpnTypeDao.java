@@ -5,6 +5,7 @@ import org.nodes.wms.dao.basics.lpntype.dto.input.DeleteLpnTypeRequest;
 import org.nodes.wms.dao.basics.lpntype.dto.input.LpnTypePageQuery;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeExcelResponse;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypePageResponse;
+import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeSelectResponse;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 
 import java.util.HashMap;
@@ -78,4 +79,11 @@ public interface LpnTypeDao {
 	 * @return  LpnType 容器类型实体
 	 */
 	LpnType getLpnTypeByCode(String code);
+
+	/**
+	 *  获取容器类型下拉组件数据
+	 *
+	 * @return List<LpnTypeSelectResponse>
+	 */
+    List<LpnTypeSelectResponse> getLpnTypeSelectList();
 }

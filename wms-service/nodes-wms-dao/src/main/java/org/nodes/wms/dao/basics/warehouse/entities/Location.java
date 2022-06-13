@@ -43,7 +43,6 @@ public class Location extends TenantEntity {
 	 * 库位类型
 	 */
 	private Integer locType;
-//	private LocTypeEnum locType;
 
 	/**
 	 * 库位种类
@@ -61,7 +60,7 @@ public class Location extends TenantEntity {
 	private String allocationZone;
 
 	/**
-	 * 使用状态
+	 * 库位标志
 	 */
 	private Integer locFlag;
 

@@ -7,19 +7,21 @@ import org.apache.poi.ss.formula.functions.T;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.modular.LocationFactory;
 import org.nodes.wms.dao.basics.warehouse.LocationDao;
+import org.nodes.wms.dao.basics.warehouse.dto.input.LocationAddOrEditRequest;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationExcelRequest;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageQuery;
 import org.nodes.wms.dao.basics.warehouse.dto.input.LocationSelectQuery;
-import org.nodes.wms.dao.basics.warehouse.dto.output.LocationExcelResponse;
-import org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse;
-import org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse;
+import org.nodes.wms.dao.basics.warehouse.dto.output.*;
 import org.nodes.wms.dao.basics.warehouse.entities.Location;
+import org.nodes.wms.dao.basics.warehouse.enums.LocTypeEnum;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
+import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,13 +56,46 @@ public class LocationImpl implements LocationBiz {
 	@Override
 	public void exportExcel(LocationPageQuery locationPageQuery, HttpServletResponse response) {
 		List<LocationExcelResponse> locationList = locationDao.selectListByQuery(locationPageQuery);
-		locationList.forEach(item->{
-			item.setLocTypeDesc(item.getLpnType().getDesc());
-			item.setLocCategoryDesc(item.getLocCategory().getDesc());
-			item.setLocHandlingDesc(item.getLocHandling().getDesc());
-			item.setAbcDesc(item.getAbc().getDesc());
-			item.setLpnTypeDesc(item.getLpnType().getDesc());
-		});
-		ExcelUtil.export(response,"库位","库位数据表",locationList,LocationExcelResponse.class);
+		ExcelUtil.export(response, "库位"+ DateUtil.formatDateTimeMini(new Date()), "库位数据表", locationList, LocationExcelResponse.class);
+	}
+
+	@Override
+	public Location add(LocationAddOrEditRequest locationAddOrEditRequest) {
+		Location location = locationFactory.createLocation(locationAddOrEditRequest);
+		locationDao.saveOrUpdateLocation(location);
+		return location;
+	}
+
+	@Override
+	public LocationEditResponse findLocationById(Long locId) {
+		Location location = locationDao.getLocationById(locId);
+		return locationFactory.createLocationEditResponse(location);
+	}
+
+	@Override
+	public Location edit(LocationAddOrEditRequest locationAddOrEditRequest) {
+		Location location = locationFactory.createLocation(locationAddOrEditRequest);
+		locationDao.saveOrUpdateLocation(location);
+		return location;
+	}
+
+	@Override
+	public LocationDetailResponse getLocationDetailById(Long locId) {
+		if (Func.isEmpty(locId)) {
+			throw new ServiceException("库位id为空");
+		}
+		return locationDao.getDetailById(locId);
+	}
+
+	@Override
+	public boolean remove(List<Long> idList) {
+		for (Long id : idList
+		) {
+			Location location = locationDao.getLocationById(id);
+			if (location.getLocType().equals(LocTypeEnum.Virtual.key())) {
+				throw new ServiceException("库位[%s]是系统生成虚拟库区不可删除"+location.getLocCode());
+			}
+		}
+		return locationDao.removeByIdList(idList);
 	}
 }

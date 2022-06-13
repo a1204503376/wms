@@ -17,8 +17,9 @@
                         <el-col :span="8">
                             <el-form-item label="库位编码" prop="locCode">
                                 <el-input
+                                    :clearable="true"
                                     v-model="form.params.locCode"
-                                    placeholder="请输入内容"
+                                    placeholder="请输入编码"
                                     type="text"
                                 ></el-input>
                             </el-form-item>
@@ -68,9 +69,10 @@
                         <el-col :span="8">
                             <el-form-item label="校验数位" prop="checkDigit">
                                 <el-input
+                                    :clearable="true"
                                     v-model="form.params.checkDigit"
                                     maxlength="50"
-                                    placeholder="请输入内容"
+                                    placeholder="请输入校验数位"
                                     show-word-limit
                                     type="text"
                                 >
@@ -128,22 +130,31 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="长度" prop="locLength">
-                                <el-input v-model="form.params.locLength" placeholder="请输入内容">
-                                    <template slot="append">mm</template>
+                                <el-input
+                                    v-model="form.params.locLength"
+                                    placeholder="请输入长度"
+                                    :clearable="true"
+                                ><template slot="append">mm</template>
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="高度" prop="locHigh">
-                                <el-input v-model="form.params.locHigh" placeholder="请输入内容">
-                                    <template slot="append">mm</template>
+                                <el-input
+                                    v-model="form.params.locHigh"
+                                    placeholder="请输入高度"
+                                    :clearable="true"
+                                ><template slot="append">mm</template>
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="宽度" prop="locWide">
-                                <el-input v-model="form.params.locWide" placeholder="请输入内容">
-                                    <template slot="append">mm</template>
+                                <el-input
+                                    :clearable="true"
+                                    v-model="form.params.locWide"
+                                    placeholder="请输入宽度"
+                                ><template slot="append">mm</template>
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -152,9 +163,10 @@
                         <el-col :span="8">
                             <el-form-item label="货架层" prop="locLevel">
                                 <el-input
+                                    :clearable="true"
                                     v-model="form.params.locLevel"
                                     maxlength="50"
-                                    placeholder="请输入内容"
+                                    placeholder="请输入货架层"
                                     show-word-limit
                                     type="text"
                                 >
@@ -164,9 +176,10 @@
                         <el-col :span="8">
                             <el-form-item label="货架列" prop="locColumn">
                                 <el-input
+                                    :clearable="true"
                                     v-model="form.params.locColumn"
                                     maxlength="50"
-                                    placeholder="请输入内容"
+                                    placeholder="请输入货架列"
                                     show-word-limit
                                     type="text"
                                 ></el-input>
@@ -175,9 +188,10 @@
                         <el-col :span="8">
                             <el-form-item label="货架排" prop="locBank">
                                 <el-input
+                                    :clearable="true"
                                     v-model="form.params.locBank"
                                     maxlength="50"
-                                    placeholder="请输入内容"
+                                    placeholder="请输入货架排"
                                     show-word-limit
                                     type="text"
                                 ></el-input>
@@ -187,15 +201,21 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="容量" prop="capacity">
-                                <el-input v-model="form.params.capacity" placeholder="请输入内容">
-                                    <template slot="append">mm³</template>
+                                <el-input
+                                    v-model="form.params.capacity"
+                                    placeholder="请输入容量"
+                                    :clearable="true"
+                                ><template slot="append">mm³</template>
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="载重量" prop="loadWeight">
-                                <el-input v-model="form.params.loadWeight" placeholder="请输入内容">
-                                    <template slot="append">kg</template>
+                                <el-input
+                                    v-model="form.params.loadWeight"
+                                    placeholder="请输入载重量"
+                                    :clearable="true"
+                                ><template slot="append">kg</template>
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -277,16 +297,20 @@
 <script>
 
 import {editMixin} from "@/mixins/edit";
-import {add} from "@/api/wms/basics/location"
+import {detailByEdit, edit} from "@/api/wms/basics/location"
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesZone from "@/components/wms/select/NodesZone";
 import NodesDictionary from "@/components/wms/select/NodesDictionary";
+import func from "@/util/func";
 import NodesLpnType from "@/components/wms/select/NodesLpnType";
 
 export default {
     name: "add",
-    components: {NodesLpnType, NodesDictionary, NodesZone, NodesWarehouse},
+    components: {NodesDictionary, NodesZone, NodesWarehouse, NodesLpnType},
     mixins: [editMixin],
+    props: {
+        locId: {type: String, required: true}
+    },
     data() {
         return {
             form: {
@@ -294,13 +318,13 @@ export default {
                     locCode: '',
                     whId: '',
                     zoneId: '',
-                    locType: null,
-                    locCategory: null,
-                    locHandling: null,
+                    locType: '',
+                    locCategory: '',
+                    locHandling: '',
                     checkDigit: '',
                     logicAllocation: '',
-                    locFlag: null,
-                    abc: null,
+                    locFlag: '',
+                    abc: '',
                     lpnTypeId: '',
                     locHigh: '',
                     locLength: '',
@@ -352,19 +376,40 @@ export default {
             },
         }
     },
+    created() {
+        this.getDataSource();
+    },
+    watch: {
+        locId() {
+            this.refreshTable();
+        }
+    },
     methods: {
+        refreshTable() {
+            this.getDataSource();
+        },
+        getDataSource() {
+            if (func.isEmpty(this.locId)) {
+                return;
+            }
+            detailByEdit(this.locId)
+                .then((res) => {
+                    this.form.params = res.data.data
+                })
+        },
         submitFormParams() {
-            return add(this.form.params).then(res => {
-                return {
-                    msg: res.data.msg,
-                    router: {
-                        path: '/wms/warehouse/location',
-                        query: {
-                            isRefresh: 'true'
+            return edit(this.form.params)
+                .then(res => {
+                    return {
+                        msg: res.data.msg,
+                        router: {
+                            path: '/wms/warehouse/location',
+                            query: {
+                                isRefresh: 'true'
+                            }
                         }
-                    }
-                };
-            });
+                    };
+                });
         },
     }
 }
