@@ -1,9 +1,9 @@
-package org.nodes.wms.core.crontab.vo;
+package org.nodes.wms.dao.crontab.vo;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.core.crontab.entity.CrontabTask;
+import org.nodes.wms.dao.crontab.entity.CrontabTask;
 
 /**
  * 任务表视图实体类

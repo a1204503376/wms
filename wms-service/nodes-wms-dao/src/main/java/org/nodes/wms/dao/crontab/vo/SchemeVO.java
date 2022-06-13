@@ -1,10 +1,10 @@
-package org.nodes.wms.core.crontab.vo;
+package org.nodes.wms.dao.crontab.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.core.crontab.entity.Scheme;
+import org.nodes.wms.dao.crontab.entity.Scheme;
 
 /**
  * 任务计划表视图实体类

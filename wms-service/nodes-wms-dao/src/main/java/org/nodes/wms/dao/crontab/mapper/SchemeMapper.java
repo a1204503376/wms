@@ -1,7 +1,7 @@
-package org.nodes.wms.core.crontab.mapper;
+package org.nodes.wms.dao.crontab.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.nodes.wms.core.crontab.entity.Scheme;
+import org.nodes.wms.dao.crontab.entity.Scheme;
 import org.springframework.context.annotation.Primary;
 
 /**

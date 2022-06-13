@@ -69,7 +69,7 @@
 
 <script>
 
-import {submit} from "@/api/crontab/task";
+import {newCrontabTask} from "@/api/crontab/task";
 import {editMixin} from "@/mixins/edit";
 
 export default {
@@ -125,7 +125,7 @@ export default {
     },
     methods: {
         submitFormParams() {
-          return submit(this.form.params)
+          return newCrontabTask(this.form.params)
           .then(res => {
             return {
               msg: res.data.msg,

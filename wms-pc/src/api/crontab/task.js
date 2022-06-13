@@ -48,6 +48,15 @@ export const getDetail = (id) => {
   })
 }
 
+export const getLog = (data,page) => {
+    return request({
+        url: '/api/wms/crontab/task/getLogById',
+        method: 'post',
+        params: page,
+        data:data
+    })
+}
+
 export const remove = (ids) => {
   return request({
     url: '/api/wms/crontab/task/remove',
@@ -56,13 +65,23 @@ export const remove = (ids) => {
   })
 }
 
-export const submit = (row) => {
-  return request({
-    url: '/api/wms/crontab/task/submit',
-    method: 'post',
-    data: row
-  })
+export const newCrontabTask = (row) => {
+    return request({
+        url: '/api/wms/crontab/task/newCrontabTask',
+        method: 'post',
+        data: row
+    })
 }
+
+export const editCrontabTask = (row) => {
+    return request({
+        url: '/api/wms/crontab/task/editCrontabTask',
+        method: 'post',
+        data: row
+    })
+}
+
+
 export const detailById = (id) => {
     return request({
         url: '/api/wms/crontab/task/detailById',

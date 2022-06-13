@@ -128,6 +128,12 @@ export default [
                 props: true,
                 component: () => import('@/views/crontab/task/crontabTaskEdit.vue')
             },
+            {
+                path: 'log/:id/:crontabTaskName',
+                name: '任务日志',
+                props: true,
+                component: () => import('@/views/crontab/task/crontabTaskLog.vue')
+            },
         ]
     },
     {

@@ -69,10 +69,9 @@
 
 <script>
 
-import {getDetail, submit} from "@/api/crontab/task";
+import {getDetail, editCrontabTask} from "@/api/crontab/task";
 import {editMixin} from "@/mixins/edit";
-import func from "@/util/func";
-import {getEditReceiveById} from "@/api/wms/instock/receive";
+
 
 export default {
     props: {
@@ -134,7 +133,7 @@ export default {
     },
     methods: {
         submitFormParams() {
-          return submit(this.form.params)
+          return editCrontabTask(this.form.params)
           .then(res => {
             return {
               msg: res.data.msg,

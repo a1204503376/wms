@@ -1,4 +1,4 @@
-package org.nodes.wms.core.crontab.entity;
+package org.nodes.wms.dao.crontab.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

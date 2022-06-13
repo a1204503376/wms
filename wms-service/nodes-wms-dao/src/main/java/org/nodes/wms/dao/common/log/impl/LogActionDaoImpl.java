@@ -1,13 +1,20 @@
 package org.nodes.wms.dao.common.log.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 
 import org.nodes.wms.dao.common.log.LogActionDao;
+import org.nodes.wms.dao.common.log.dto.LogPageQuery;
+import org.nodes.wms.dao.common.log.dto.LogResponse;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.mapper.LogActionMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**
@@ -28,4 +35,14 @@ public class LogActionDaoImpl  extends BaseServiceImpl<LogActionMapper, LogActio
 		return super.save(logAction);
 	}
 
+    @Override
+    public List<LogAction> findLogByBillId(Long billId) {
+        return super.list(new LambdaQueryWrapper<LogAction>()
+			.eq(LogAction::getBillId,billId).eq(LogAction::getType,106));
+    }
+
+	@Override
+	public Page<LogResponse> getPage(LogPageQuery logPageQuery, IPage<LogAction> page) {
+		return super.baseMapper.getPage(logPageQuery,page);
+	}
 }

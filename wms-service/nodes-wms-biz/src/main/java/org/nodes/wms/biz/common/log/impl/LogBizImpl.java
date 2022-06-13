@@ -1,21 +1,28 @@
 package org.nodes.wms.biz.common.log.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.common.log.impl.modular.LogFactory;
 import org.nodes.wms.dao.common.log.LogActionDao;
 import org.nodes.wms.dao.common.log.LogMessageDao;
 import org.nodes.wms.dao.common.log.dto.AuditLogRequest;
+import org.nodes.wms.dao.common.log.dto.LogPageQuery;
+import org.nodes.wms.dao.common.log.dto.LogResponse;
 import org.nodes.wms.dao.common.log.dto.NoticeMessageRequest;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.entities.LogMessage;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
+import org.springblade.core.mp.support.Condition;
+import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 日志实现类，实现通知日志和审计日志的存储
@@ -67,6 +74,12 @@ public class LogBizImpl implements LogBiz {
 		actionDao.insertLogAction(logAction);
 	}
 
+	@Override
+	public void auditLog(AuditLogType type, Long billId, String log) {
+		LogAction logAction = logFactory.createLogAction(type, billId, log);
+		actionDao.insertLogAction(logAction);
+	}
+
 	/**
 	 * 审计日志 审计请求对象存储
 	 *
@@ -77,5 +90,24 @@ public class LogBizImpl implements LogBiz {
 		LogAction logAction = logFactory.createLogAction(auditLogRequest);
 		actionDao.insertLogAction(logAction);
 	}
+
+	@Override
+	public List<LogAction> getLogByBillId(Long billId) {
+		return actionDao.findLogByBillId(billId);
+	}
+
+	@Override
+	public void auditLog(String userName, AuditLogType cronTask, Long id, String log) {
+		LogAction logAction = logFactory.createLogAction(userName,cronTask,id,log);
+		actionDao.insertLogAction(logAction);
+	}
+
+	@Override
+	public Page<LogResponse> getPage(LogPageQuery logPageQuery, Query query) {
+		IPage<LogAction> page = Condition.getPage(query);
+		return actionDao.getPage(logPageQuery,page);
+	}
+
+
 
 }

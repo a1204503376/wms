@@ -17,6 +17,7 @@ import java.util.Date;
 @TableName("receive_header")
 public class ReceiveHeader extends TenantEntity {
 
+	private static final long serialVersionUID = 6132977341273179994L;
 	/**
 	 * 收货单主键id
 	 */
@@ -91,8 +92,6 @@ public class ReceiveHeader extends TenantEntity {
 	 * 供应商地址
 	 */
 	private String supplierAddress;
-
-
 
 	/**
 	 * 部门id

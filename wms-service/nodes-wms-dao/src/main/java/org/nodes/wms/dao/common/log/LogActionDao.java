@@ -1,6 +1,12 @@
 package org.nodes.wms.dao.common.log;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.common.log.dto.LogPageQuery;
+import org.nodes.wms.dao.common.log.dto.LogResponse;
 import org.nodes.wms.dao.common.log.entities.LogAction;
+
+import java.util.List;
 
 /**
  * 审计日志Dao
@@ -13,4 +19,20 @@ public interface LogActionDao {
 	 * @return 是否成功
 	 */
 	Boolean insertLogAction(LogAction logAction);
+
+	/**
+	 * 根据billId获取日志集合
+	 * @param billId
+	 * @return
+	 */
+	List<LogAction> findLogByBillId(Long billId);
+
+	/**
+	 * 根据billId获取日志分页列表
+	 *
+	 * @param logPageQuery
+	 * @param page         日子分页参数
+	 * @return
+	 */
+	Page<LogResponse> getPage(LogPageQuery logPageQuery, IPage<LogAction> page);
 }
