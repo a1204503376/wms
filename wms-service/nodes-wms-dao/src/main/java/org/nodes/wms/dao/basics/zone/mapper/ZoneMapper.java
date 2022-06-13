@@ -22,4 +22,13 @@ public interface ZoneMapper extends BaseMapper<Zone> {
 	 * @return List<ZoneSelectResponse>
 	 */
 	List<ZoneSelectResponse> listSelectByWhIdList(@Param("whIdList") List<Long> whIdList);
+
+	/**
+	 * 根据库区编码和库房编码查询库区信息
+	 *
+	 * @param code: 库区编码
+	 * @param whCode: 库房编码
+	 * @return Zone
+	 */
+    Zone selectZoneByCodeWhCode(@Param("code") String code, @Param("whCode") String whCode);
 }

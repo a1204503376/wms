@@ -31,4 +31,9 @@ public class ZoneDaoImpl
     public Zone getZoneById(Long zoneId) {
         return super.getById(zoneId);
     }
+
+    @Override
+    public Zone getZoneByCodeWhCode(String code, String whCode) {
+        return super.baseMapper.selectZoneByCodeWhCode(code,whCode);
+    }
 }
