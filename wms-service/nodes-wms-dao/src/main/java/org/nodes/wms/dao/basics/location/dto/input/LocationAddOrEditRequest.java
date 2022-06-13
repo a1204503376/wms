@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.basics.warehouse.dto.input;
+package org.nodes.wms.dao.basics.location.dto.input;
 
 import lombok.Data;
 import org.nodes.core.tool.validation.Update;

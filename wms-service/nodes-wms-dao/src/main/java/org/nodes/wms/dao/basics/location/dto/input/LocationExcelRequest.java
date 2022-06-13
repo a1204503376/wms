@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.basics.warehouse.dto.input;
+package org.nodes.wms.dao.basics.location.dto.input;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;

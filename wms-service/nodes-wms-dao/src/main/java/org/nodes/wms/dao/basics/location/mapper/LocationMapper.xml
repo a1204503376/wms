@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.nodes.wms.dao.basics.warehouse.mapper.LocationMapper">
+<mapper namespace="org.nodes.wms.dao.basics.location.mapper.LocationMapper">
 
     <select id="listTop10ByCode"
-            resultType="org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse">
+            resultType="org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse">
         SELECT loc_id,
                loc_code
         FROM wms_location
@@ -75,19 +75,19 @@
         </where>
     </sql>
 
-    <select id="listByPage" resultType="org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse">
+    <select id="listByPage" resultType="org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse">
         <include refid="tableList"/>
         <if test=" page.orders == null or page.orders.size == 0 ">
             ORDER BY l.create_time DESC
         </if>
     </select>
 
-    <select id="listByQuery" resultType="org.nodes.wms.dao.basics.warehouse.dto.output.LocationExcelResponse">
+    <select id="listByQuery" resultType="org.nodes.wms.dao.basics.location.dto.output.LocationExcelResponse">
         <include refid="tableList"/>
     </select>
 
     <select id="selectDetailById"
-            resultType="org.nodes.wms.dao.basics.warehouse.dto.output.LocationDetailResponse">
+            resultType="org.nodes.wms.dao.basics.location.dto.output.LocationDetailResponse">
         SELECT l.loc_code,
                w.wh_name,
                z.zone_name,

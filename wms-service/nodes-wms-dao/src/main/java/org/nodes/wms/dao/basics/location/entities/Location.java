@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.basics.warehouse.entities;
+package org.nodes.wms.dao.basics.location.entities;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
