@@ -1,7 +1,7 @@
 package org.nodes.wms.core.warehouse.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springframework.context.annotation.Primary;
 
 /**

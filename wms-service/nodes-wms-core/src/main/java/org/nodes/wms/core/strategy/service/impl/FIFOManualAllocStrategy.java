@@ -1,13 +1,10 @@
 package org.nodes.wms.core.strategy.service.impl;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import org.nodes.wms.core.outstock.so.enums.CreatePickPlanByWellenTypeEnum;
 import org.nodes.wms.core.stock.core.entity.Stock;
 import org.nodes.wms.core.strategy.dto.ManualAllocRequestDTO;
 import org.nodes.wms.core.strategy.service.IManualAllocStrategy;
-import org.nodes.wms.core.warehouse.cache.ZoneCache;
-import org.nodes.wms.core.warehouse.entity.Zone;
 import org.nodes.wms.core.warehouse.service.IZoneService;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;
 import org.springframework.context.annotation.Primary;

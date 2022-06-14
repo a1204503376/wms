@@ -1,10 +1,12 @@
 import request from '@/router/axios'
 
-export const getZoneSelectResponseTop10List = (data) => {
+export const getZoneSelectResponse = (data) => {
     return request({
         url: '/api/wms/warehouse/zone/select',
         method: 'post',
-        data: data
+        data: {
+            data
+        }
     })
 }
 

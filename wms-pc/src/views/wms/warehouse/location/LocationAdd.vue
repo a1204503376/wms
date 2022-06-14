@@ -15,81 +15,110 @@
                     </el-row>
                     <el-row>
                         <el-col :span="8">
-                            <el-form-item label="库位编码" prop="code">
-                                <el-input v-model="form.params.code"></el-input>
+                            <el-form-item label="库位编码" prop="locCode">
+                                <el-input
+                                    v-model="form.params.locCode"
+                                    placeholder="请输入内容"
+                                    type="text"
+                                ></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="库房" prop="name">
-                                <el-input v-model="form.params.name"></el-input>
+                            <el-form-item label="库房" prop="whId">
+                                <nodes-warehouse
+                                    v-model="form.params.whId"
+                                ></nodes-warehouse>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="库区" prop="simpleName">
-                                <el-input v-model="form.params.simpleName"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="应用类型" prop="code">
-                                <el-input v-model="form.params.code"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="库位种类" prop="name">
-                                <el-input v-model="form.params.name"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="库位处理" prop="simpleName">
-                                <el-input v-model="form.params.simpleName"></el-input>
+                            <el-form-item label="库区" prop="zoneId">
+                                <nodes-zone
+                                    v-model="form.params.zoneId"
+                                ></nodes-zone>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="8">
-                            <el-form-item label="校验数位" prop="code">
-                                <el-input v-model="form.params.code"></el-input>
+                            <el-form-item label="库位类型" prop="locType">
+                                <nodes-dictionary
+                                    v-model="form.params.locType"
+                                    code="loc_type"
+                                ></nodes-dictionary>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="线路顺序" prop="name">
-                                <el-input v-model="form.params.name"></el-input>
+                            <el-form-item label="库位种类" prop="locCategory">
+                                <nodes-dictionary
+                                    v-model="form.params.locCategory"
+                                    code="loc_category"
+                                ></nodes-dictionary>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="使用状态" prop="simpleName">
-                                <el-input v-model="form.params.simpleName"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="ABC" prop="code">
-                                <el-input v-model="form.params.code"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="货架列" prop="name">
-                                <el-input v-model="form.params.name"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="货架排" prop="simpleName">
-                                <el-input v-model="form.params.simpleName"></el-input>
+                            <el-form-item label="库位处理" prop="locHandling">
+                                <nodes-dictionary
+                                    v-model="form.params.locHandling"
+                                    code="loc_handling"
+                                ></nodes-dictionary>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="8">
-                            <el-form-item label="上架顺序" prop="name">
-                                <el-input v-model="form.params.name"></el-input>
+                            <el-form-item label="校验数位" prop="checkDigit">
+                                <el-input
+                                    v-model="form.params.checkDigit"
+                                    maxlength="50"
+                                    placeholder="请输入内容"
+                                    show-word-limit
+                                    type="text"
+                                >
+                                </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="适用的类型容器" prop="code">
-                                <el-input v-model="form.params.code"></el-input>
+                            <el-form-item label="线路顺序" prop="logicAllocation">
+                                <el-input-number
+                                    v-model="form.params.logicAllocation"
+                                    :min="0"
+                                    controls-position="right"
+                                    style="width: 288px"></el-input-number>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="使用状态" prop="locFlag">
+                                <nodes-dictionary
+                                    v-model="form.params.locFlag"
+                                    code="loc_flag">
+                                </nodes-dictionary>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="ABC分类" prop="abc">
+                                <nodes-dictionary
+                                    v-model="form.params.abc"
+                                    code="abc"
+                                ></nodes-dictionary>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="上架顺序" prop="putOrder">
+                                <el-input-number
+                                    v-model="form.params.putOrder"
+                                    :min="0"
+                                    controls-position="right"
+                                    style="width: 288px"></el-input-number>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="容器类型" prop="lpnTypeId">
+                                <nodes-lpn-type
+                                    v-model="form.params.lpnTypeId"
+                                >
+                                </nodes-lpn-type>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -98,56 +127,96 @@
                     </el-row>
                     <el-row>
                         <el-col :span="8">
-                            <el-form-item label="长度" prop="woId">
-                                <nodes-owner
-                                    v-model="form.params.woId"
-                                    :multiple="false">
-                                </nodes-owner>
+                            <el-form-item label="长度" prop="locLength">
+                                <el-input v-model="form.params.locLength" placeholder="请输入内容">
+                                    <template slot="append">mm</template>
+                                </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="高度" prop="remark">
-                                <el-input v-model="form.params.remark"></el-input>
+                            <el-form-item label="高度" prop="locHigh">
+                                <el-input v-model="form.params.locHigh" placeholder="请输入内容">
+                                    <template slot="append">mm</template>
+                                </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="宽度" prop="status">
-                                <el-radio v-model="form.params.status" :label=1>是</el-radio>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="容量" prop="woId">
-                                <nodes-owner
-                                    v-model="form.params.woId"
-                                    :multiple="false">
-                                </nodes-owner>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="载重量" prop="remark">
-                                <el-input v-model="form.params.remark"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="货架层" prop="status">
-                                <el-radio v-model="form.params.status" :label=1>是</el-radio>
+                            <el-form-item label="宽度" prop="locWide">
+                                <el-input v-model="form.params.locWide" placeholder="请输入内容">
+                                    <template slot="append">mm</template>
+                                </el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="8">
-                            <el-form-item label="最大件数" prop="woId">
-                                <nodes-owner
-                                    v-model="form.params.woId"
-                                    :multiple="false">
-                                </nodes-owner>
+                            <el-form-item label="货架层" prop="locLevel">
+                                <el-input
+                                    v-model="form.params.locLevel"
+                                    maxlength="50"
+                                    placeholder="请输入内容"
+                                    show-word-limit
+                                    type="text"
+                                >
+                                </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="最大托数" prop="remark">
-                                <el-input v-model="form.params.remark"></el-input>
+                            <el-form-item label="货架列" prop="locColumn">
+                                <el-input
+                                    v-model="form.params.locColumn"
+                                    maxlength="50"
+                                    placeholder="请输入内容"
+                                    show-word-limit
+                                    type="text"
+                                ></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="货架排" prop="locBank">
+                                <el-input
+                                    v-model="form.params.locBank"
+                                    maxlength="50"
+                                    placeholder="请输入内容"
+                                    show-word-limit
+                                    type="text"
+                                ></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="容量" prop="capacity">
+                                <el-input v-model="form.params.capacity" placeholder="请输入内容">
+                                    <template slot="append">mm³</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="载重量" prop="loadWeight">
+                                <el-input v-model="form.params.loadWeight" placeholder="请输入内容">
+                                    <template slot="append">kg</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="最大件数" prop="itemNum">
+                                <el-input-number
+                                    v-model="form.params.itemNum"
+                                    :min="0"
+                                    controls-position="right"
+                                    style="width: 288px"></el-input-number>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="最大托数" prop="trayNum">
+                                <el-input-number
+                                    v-model="form.params.trayNum"
+                                    :min="0"
+                                    controls-position="right"
+                                    style="width: 288px"></el-input-number>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -156,16 +225,31 @@
                     </el-row>
                     <el-row>
                         <el-col :span="8">
-                            <el-form-item label="混放物品" prop="woId">
-                                <nodes-owner
-                                    v-model="form.params.woId"
-                                    :multiple="false">
-                                </nodes-owner>
+                            <el-form-item label="混放物品" prop="locSkuMix">
+                                <el-select v-model="form.params.locSkuMix" clearable placeholder="请选择"
+                                           style="width: 288px;">
+                                    <el-option
+                                        v-for="item in form.mixOptions"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                        <span style="float: left">{{ item.label }}</span>
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="混放批号" prop="remark">
-                                <el-input v-model="form.params.remark"></el-input>
+                            <el-form-item label="混放批号" prop="locLotNoMix">
+                                <el-select v-model="form.params.locLotNoMix" clearable placeholder="请选择"
+                                           style="width: 288px;">
+                                    <el-option
+                                        v-for="item in form.mixOptions"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                        <span style="float: left">{{ item.label }}</span>
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -193,64 +277,94 @@
 <script>
 
 import {editMixin} from "@/mixins/edit";
-import {add} from "@/api/wms/basics/supplier"
-import NodesOwner from "@/components/wms/select/NodesOwner";
+import {add} from "@/api/wms/basics/location"
+import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
+import NodesZone from "@/components/wms/select/NodesZone";
+import NodesDictionary from "@/components/wms/select/NodesDictionary";
+import NodesLpnType from "@/components/wms/select/NodesLpnType";
 
 export default {
     name: "add",
-    components: {NodesOwner},
+    components: {NodesLpnType, NodesDictionary, NodesZone, NodesWarehouse},
     mixins: [editMixin],
     data() {
         return {
             form: {
                 params: {
-                    code: '',
-                    name: '',
-                    simpleName: '',
-                    status: 1,
-                    woId: '',
-                    remark: ''
+                    locCode: '',
+                    whId: '',
+                    zoneId: '',
+                    locType: null,
+                    locCategory: null,
+                    locHandling: null,
+                    checkDigit: '',
+                    logicAllocation: '',
+                    locFlag: null,
+                    abc: null,
+                    lpnTypeId: '',
+                    locHigh: '',
+                    locLength: '',
+                    locWide: '',
+                    capacity: '',
+                    loadWeight: '',
+                    locLevel: '',
+                    locBank: '',
+                    locColumn: '',
+                    putOrder: 0,
+                    itemNum: 0,
+                    trayNum: 0,
+                    locSkuMix: '',
+                    locLotNoMix: ''
                 },
                 rules: {
-                    code: [
+                    locCode: [
                         {
                             required: true,
                             message: '请输入库位编码',
                             trigger: 'blur'
                         }
                     ],
-                    name: [
+                    whCode: [
                         {
                             required: true,
                             message: '请选择库房',
                             trigger: 'change'
                         }
                     ],
-                    simpleName: [
+                    zoneId: [
                         {
                             required: true,
                             message: '请选择库区',
                             trigger: 'change'
                         }
                     ],
-                }
+                },
+                mixOptions: [
+                    {
+                        label: '允许',
+                        value: "1"
+                    },
+                    {
+                        label: '不允许',
+                        value: "0"
+                    }
+                ]
             },
         }
     },
     methods: {
         submitFormParams() {
-            return add(this.form.params)
-                .then(res => {
-                    return {
-                        msg: res.data.msg,
-                        router: {
-                            path: '/wms/basics/supplier',
-                            query: {
-                                isRefresh: 'true'
-                            }
+            return add(this.form.params).then(res => {
+                return {
+                    msg: res.data.msg,
+                    router: {
+                        path: '/wms/warehouse/location',
+                        query: {
+                            isRefresh: 'true'
                         }
-                    };
-                });
+                    }
+                };
+            });
         },
     }
 }

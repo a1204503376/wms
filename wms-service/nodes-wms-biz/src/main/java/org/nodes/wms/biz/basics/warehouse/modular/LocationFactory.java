@@ -5,10 +5,12 @@ import org.nodes.core.enums.StatusEnum;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
+import org.nodes.wms.dao.basics.location.LocationDao;
+import org.nodes.wms.dao.basics.location.dto.input.LocationAddOrEditRequest;
+import org.nodes.wms.dao.basics.location.dto.input.LocationExcelRequest;
+import org.nodes.wms.dao.basics.location.dto.output.LocationEditResponse;
+import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
-import org.nodes.wms.dao.basics.warehouse.LocationDao;
-import org.nodes.wms.dao.basics.warehouse.dto.input.LocationExcelRequest;
-import org.nodes.wms.dao.basics.warehouse.entities.Location;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.springblade.core.log.exception.ServiceException;
@@ -111,5 +113,70 @@ public class LocationFactory {
 			locationList.add(location);
 		}
 		return locationList;
+	}
+
+	public Location createLocation(LocationAddOrEditRequest locationAddOrEditRequest) {
+		Location location = new Location();
+//		if (Func.isEmpty(locationAddRequest.getStatus())) {
+//			throw new ServiceException("新增失败，启用状态不能为空");
+//		}
+		// 判断启用状态
+//		if (!locationAddRequest.getStatus().equals(StatusEnum.ON.getIndex())
+//			&& !locationAddRequest.getStatus().equals(StatusEnum.OFF.getIndex())) {
+//			throw new ServiceException("新增失败，启用状态只能为1(启用)或者-1(禁用)");
+//		} else {
+//			location.setStatus(locationAddRequest.getStatus());
+//		}
+		Func.copy(locationAddOrEditRequest,location);
+		// 根据id是否为空判断是(新增/编辑)操作
+		if (Func.isNotEmpty(locationAddOrEditRequest.getLocId())){
+			location.setLocId(locationAddOrEditRequest.getLocId());
+		} else {
+			// 判断库位编码是否已存在
+			boolean isExist = locationDao.isExistLocationCode(locationAddOrEditRequest.getLocCode());
+			if (isExist) {
+				throw new ServiceException("编辑失败，库位编码[" + locationAddOrEditRequest.getLocCode() + "]已存在");
+			} else {
+				location.setLocCode(locationAddOrEditRequest.getLocCode());
+			}
+		}
+
+//		location.setWhId(locationAddOrEditRequest.getWhId());
+//		location.setZoneId(locationAddOrEditRequest.getZoneId());
+//		location.setLocType(locationAddOrEditRequest.getLocType());
+//		location.setLocCategory(locationAddOrEditRequest.getLocCategory());
+//		location.setLocHandling(locationAddOrEditRequest.getLocHandling());
+//		location.setCheckDigit(locationAddOrEditRequest.getCheckDigit());
+//		location.setLogicAllocation(locationAddOrEditRequest.getLogicAllocation());
+//		location.setAbc(locationAddOrEditRequest.getAbc());
+//		location.setLocFlag(locationAddOrEditRequest.getLocFlag());
+//		location.setLocLength(locationAddOrEditRequest.getLocLength());
+//		location.setLocWide(locationAddOrEditRequest.getLocWide());
+//		location.setLocHigh(locationAddOrEditRequest.getLocHigh());
+//		location.setLocLevel(locationAddOrEditRequest.getLocLevel());
+//		location.setLocColumn(locationAddOrEditRequest.getLocColumn());
+//		location.setLocBank(locationAddOrEditRequest.getLocBank());
+//		location.setPutOrder(locationAddOrEditRequest.getPutOrder());
+//		location.setCapacity(locationAddOrEditRequest.getCapacity());
+//		location.setLoadWeight(locationAddOrEditRequest.getLoadWeight());
+//		location.setItemNum(locationAddOrEditRequest.getItemNum());
+//		location.setTrayNum(locationAddOrEditRequest.getTrayNum());
+//		location.setLocSkuMix(locationAddOrEditRequest.getLocSkuMix());
+//		location.setLocLotNoMix(locationAddOrEditRequest.getLocLotNoMix());
+
+		return location;
+	}
+
+	/**
+	 * 生成编辑返回dto
+	 *
+	 * @param location: 库位实体
+	 * @return null
+	 */
+	public LocationEditResponse createLocationEditResponse(Location location) {
+		LocationEditResponse locationEditResponse = new LocationEditResponse();
+		// 库位实体复制给库位dto
+		Func.copy(location,locationEditResponse);
+		return locationEditResponse;
 	}
 }

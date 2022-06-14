@@ -34,4 +34,9 @@ public class WmsApiPath {
 	 * 库房
 	 */
 	public static final String WAREHOUSE_URL = WmsApiPath.WMS_ROOT_URL +"/warehouse/warehouse";
+
+	/**
+	 * 手持前缀
+	 */
+	public static final String WMS_PDA_API="/api/ApiPDA";
 }

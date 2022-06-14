@@ -9,6 +9,7 @@ import org.nodes.wms.dao.instock.receive.ReceiveDetailDao;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailRequest;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailResponse;
 import org.springblade.core.mp.base.BaseServiceImpl;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 /**
  * 收货单明细 DAO 实现类
  */
-@Service
+@Repository
 @RequiredArgsConstructor
 public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, ReceiveDetail>  implements ReceiveDetailDao {
 	private final ReceiveDetailMapper receiveDetailMapper;

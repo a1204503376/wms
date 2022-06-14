@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.nodes.wms.core.common.vo.AddressVO;
 import org.nodes.wms.core.common.vo.ContactsVO;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 
 import java.util.List;
 

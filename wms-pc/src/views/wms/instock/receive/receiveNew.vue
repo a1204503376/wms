@@ -253,7 +253,7 @@ export default {
                         woId: '',
                         remark: '',
                     },
-                    receiveNewDetailRequestList:[]
+                    newReceiveDetailRequestList:[]
 
                 },
                  rules: {
@@ -333,7 +333,7 @@ export default {
 
         },
         submitFormParams() {
-            this.form.params.receiveNewDetailRequestList = this.table.postData
+            this.form.params.newReceiveDetailRequestList = this.table.postData
             return addReceive(this.form.params)
                 .then(res => {
                     return {

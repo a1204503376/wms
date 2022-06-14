@@ -2,18 +2,15 @@ package org.nodes.wms.core.stock.core.wrapper;
 
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.entity.Sku;
-import org.nodes.wms.core.basedata.service.ISkuService;
 import org.nodes.wms.core.stock.core.entity.Serial;
 import org.nodes.wms.core.stock.core.entity.Stock;
 import org.nodes.wms.core.stock.core.entity.StockDetail;
 import org.nodes.wms.core.stock.core.vo.SerialVO;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
-import org.nodes.wms.core.warehouse.service.IWarehouseService;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.mp.support.BaseEntityWrapper;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
-import org.springblade.core.tool.utils.SpringUtil;
 
 /**
  * 序列号封装类

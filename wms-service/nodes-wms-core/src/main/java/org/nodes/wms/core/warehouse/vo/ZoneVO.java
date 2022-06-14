@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.core.warehouse.entity.Zone;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 
 /**
  * 库区管理 视图实体类

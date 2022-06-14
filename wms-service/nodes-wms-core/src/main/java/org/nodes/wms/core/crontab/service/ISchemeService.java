@@ -1,6 +1,6 @@
 package org.nodes.wms.core.crontab.service;
 
-import org.nodes.wms.core.crontab.entity.Scheme;
+import org.nodes.wms.dao.crontab.entity.Scheme;
 import org.springblade.core.mp.base.BaseService;
 
 import java.util.List;

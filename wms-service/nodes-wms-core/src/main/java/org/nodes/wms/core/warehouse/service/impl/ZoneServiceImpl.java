@@ -1,24 +1,19 @@
-
 package org.nodes.wms.core.warehouse.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
 import org.nodes.core.constant.DictConstant;
+import org.nodes.core.enums.StatusEnum;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
+import org.nodes.core.tool.utils.StringPool;
 import org.nodes.core.tool.utils.ValidationUtil;
-import org.nodes.wms.core.strategy.wrapper.InstockWrapper;
-import org.nodes.wms.core.warehouse.cache.LocationCache;
-import org.nodes.wms.core.warehouse.cache.WarehouseCache;
 import org.nodes.wms.core.warehouse.cache.ZoneCache;
 import org.nodes.wms.core.warehouse.dto.ZoneDTO;
 import org.nodes.wms.core.warehouse.entity.Location;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
-import org.nodes.wms.core.warehouse.entity.Zone;
 import org.nodes.wms.core.warehouse.enums.LocTypeEnum;
+import org.nodes.wms.core.warehouse.enums.ZoneTypeEnum;
 import org.nodes.wms.core.warehouse.excel.ZoneExcel;
 import org.nodes.wms.core.warehouse.mapper.ZoneMapper;
 import org.nodes.wms.core.warehouse.service.ILocationService;
@@ -26,18 +21,19 @@ import org.nodes.wms.core.warehouse.service.IWarehouseService;
 import org.nodes.wms.core.warehouse.service.IZoneService;
 import org.nodes.wms.core.warehouse.vo.ZoneVO;
 import org.nodes.wms.core.warehouse.wrapper.ZoneWrapper;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
+import org.springblade.core.tool.constant.BladeConstant;
 import org.springblade.core.tool.utils.*;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
@@ -219,6 +215,8 @@ public class ZoneServiceImpl<M extends ZoneMapper, T extends Zone>
 			if (Func.isNotEmpty(zoneType)) {
 				zoneExcel.setZoneType(zoneType);
 			}
+			String status = zone.getStatus().equals(BladeConstant.DB_STATUS_NORMAL) ? StringPool.CHS_YES : StringPool.CHS_NO;
+			zoneExcel.setStatus(status);
 			//封装所属库房
 			if (Func.isNotEmpty(warehouseList)) {
 				zoneExcel.setWhCode(warehouseList.get(0).getWhCode());
@@ -242,6 +240,18 @@ public class ZoneServiceImpl<M extends ZoneMapper, T extends Zone>
 			dataVerify.setIndex(index);
 			// 封装成DTO
 			ZoneDTO zoneDTO = ZoneWrapper.build().entityDTO(zoneExcel);
+			if (!zoneExcel.getStatus().equals(String.valueOf(StatusEnum.ON.getIndex()))
+				&& !zoneExcel.getStatus().equals(String.valueOf(StatusEnum.OFF.getIndex()))) {
+				throw new ServiceException("导入失败，启用状态只能为1(启用)或者-1(禁用)");
+			}
+			zoneDTO.setStatus(Integer.parseInt(zoneExcel.getStatus()));
+			ZoneTypeEnum[] zoneTypeEnums = ZoneTypeEnum.values();
+			List<String> typeIndexList = Arrays.stream(zoneTypeEnums).map(item -> item.getIndex().toString()).collect(Collectors.toList());
+			if (typeIndexList.contains(zoneExcel.getZoneType())) {
+				zoneDTO.setZoneType(Integer.parseInt(zoneExcel.getZoneType()));
+			} else {
+				throw new ServiceException("导入失败，库区类型编码不存在");
+			}
 			//查询所属库房是否存在
 			//Warehouse warehouse = WarehouseCache.getByCode(zoneExcel.getWhCode());
 			IWarehouseService warehouseService = SpringUtil.getBean(IWarehouseService.class);

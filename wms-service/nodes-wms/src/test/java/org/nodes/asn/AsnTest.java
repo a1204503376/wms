@@ -18,12 +18,14 @@ import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.test.BladeBootTest;
 import org.springblade.core.test.BladeSpringRunner;
+import org.springblade.core.tool.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -100,5 +102,10 @@ public class AsnTest {
 			addOrEditAsnBillRequest.setAsnDetailList(list);
 			asnBiz.add(addOrEditAsnBillRequest);
 		}
+	}
+
+	@Test
+	public void DateUtilTest(){
+		System.out.println(DateUtil.formatDateTimeMini(new Date()));
 	}
 }

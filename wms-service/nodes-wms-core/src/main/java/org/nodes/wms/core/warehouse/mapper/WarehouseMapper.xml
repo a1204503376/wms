@@ -3,7 +3,7 @@
 <mapper namespace="org.nodes.wms.core.warehouse.mapper.WarehouseMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="warehouseResultMap" type="org.nodes.wms.core.warehouse.entity.Warehouse">
+    <resultMap id="warehouseResultMap" type="org.nodes.wms.dao.basics.warehouse.entities.Warehouse">
         <id column="wh_id" property="whId"/>
         <result column="wh_code" property="whCode"/>
         <result column="wh_name" property="whName"/>

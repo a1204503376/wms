@@ -2,4 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.common.log.mapper.LogActionMapper">
 
+    <select id="getPage" resultType="org.nodes.wms.dao.common.log.dto.LogResponse">
+         select
+            la.user_account,
+            la.user_real_name,
+            la.log,
+            la.create_time,
+            ct.crontab_task_name
+         from log_action la,crontab_task ct
+        <where>
+            <if test="query.billId!=null and query.billDate != ''">
+                AND la.bill_id LIKE concat('%',#{query.billId},'%')
+            </if>
+            <if test="query.userAccount!=null and query.userAccount != ''">
+                AND la.user_account LIKE concat('%',#{query.userAccount},'%')
+            </if>
+            <if test="query.createTimeBegin!=null">
+                AND la.create_time  &gt;= #{query.createTimeBegin}
+            </if>
+            <if test="query.createTimeEnd!=null">
+                AND la.create_time  &lt;= #{query.createTimeEnd}
+            </if>
+            <if test="query.crontabTaskName!=null">
+                AND ct.crontab_task_name  LIKE concat('%',#{query.crontabTaskName},'%')
+            </if>
+            And la.bill_id = ct.id
+            AND type = 106
+        </where>
+        order by la.create_time desc
+    </select>
+
 </mapper>

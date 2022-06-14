@@ -1,24 +1,19 @@
+
 <template>
     <el-select
         v-model="val"
-        :default-first-option="true"
         :multiple="multiple"
-        :wh-Id="whId"
-        :loading="loading"
-        :remote-method="remoteMethod"
-        filterable
-        placeholder="请输入库区编码或库区名称"
-        remote
-        reserve-keyword
+        collapse-tags
         size="mini"
-        style="width: 288px"
-        value-key="zoneCode"
+        style="width:100%;"
+        value-key="zoneId"
+        :wh-id-list="whIdList"
         @change="onChange">
         <el-option
-            v-for="item in options"
+            v-for="item in this.dataSource"
             :key="item.zoneId"
             :label="item.zoneName"
-            :value="item">
+            :value="item.zoneId">
             <span style="float: left">{{ item.zoneCode }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.zoneName }}</span>
         </el-option>
@@ -26,9 +21,7 @@
 </template>
 
 <script>
-import debounce from "lodash/debounce";
-import {getZoneSelectResponseTop10List} from "@/api/wms/basics/zone";
-import func from "@/util/func";
+import {getZoneSelectResponse} from "@/api/wms/basics/zone";
 
 export default {
     name: "NodesZone",
@@ -37,52 +30,37 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Object, Array, String],
-        whId: {type: [Number,Array], required: false, default:()=>null},
-        multiple: {type: Boolean, required: false, default:()=>false}
+        selectVal: [Array, Number, String],
+        //是否有默认值 true:有默认值  默认为false 编辑时将其设置为true
+        defaultValue:{type:Boolean, required: false,default: () => false},
+        // 单选多选切换，默认为false
+        multiple: {type: Boolean, required: false, default: () => false},
+        // 库房id集合 ,可根据库房id查询该库房下的所有库区  默认为null查询所有库区
+        whIdList: {type: [Number, Array, String], required: false, default: ()=> null}
     },
     data() {
         return {
-            options: [this.selectVal],
             val: this.selectVal,
-            loading: false,
-            whIdVal: this.whId
+            dataSource: []
         }
     },
-    created() {
-        this.setDefaultByProps();
-    },
     watch: {
-        selectVal(){
-            this.setDefaultByProps();
+        selectVal(newVal) {
+            this.val = newVal;
+        },
+    },
+    async created() {
+        await this.getDataSource()
+        if(this.defaultValue){
+            this.val = this.dataSource[0].zoneId
+            this.onChange(this.val);
         }
     },
     methods: {
-        setDefaultByProps(){
-            if (!this.isEdit){
-                return;
-            }
-            let currentZone = this.options.find(item => item.id === this.selectVal.id);
-            if (func.isEmpty(currentZone)){
-                this.options.push(this.selectVal);
-            }
-            this.val = this.selectVal;
+        async getDataSource() {
+            let {data: {data}} = await getZoneSelectResponse(this.whIdList)
+            this.dataSource = data;
         },
-        // 防抖 在等待时间到达前的请求全部取消，保留最后一次
-        remoteMethod: debounce(async function (key) {
-            if (key !== '') {
-                this.loading = true;
-                let zoneSelectQuery = {
-                    key: key,
-                    whId: this.whIdVal
-                };
-                let {data: {data}} = await getZoneSelectResponseTop10List(zoneSelectQuery);
-                this.options = data;
-                this.loading = false;
-            } else {
-                this.options = [];
-            }
-        }, 500),
         onChange(val) {
             this.$emit('selectValChange', val);
         }

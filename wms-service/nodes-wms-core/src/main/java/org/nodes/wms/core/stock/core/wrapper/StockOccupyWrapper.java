@@ -2,18 +2,15 @@
 package org.nodes.wms.core.stock.core.wrapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.github.classgraph.json.Id;
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
 import org.nodes.wms.core.stock.core.entity.StockOccupy;
 import org.nodes.wms.core.stock.core.vo.StockOccupyVO;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
-import org.nodes.wms.core.warehouse.service.IWarehouseService;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.mp.support.BaseEntityWrapper;
-import org.springblade.core.mp.support.Condition;
-import org.springblade.core.tool.utils.*;
+import org.springblade.core.tool.utils.BeanUtil;
+import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.ObjectUtil;
 
 /**
  * 库存占用表包装类,返回视图层所需的字段

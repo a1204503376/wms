@@ -1,15 +1,12 @@
 package org.nodes.wms.core.warehouse.wrapper;
 
-import org.nodes.wms.core.outstock.so.dto.SavePickPlanDetailDTO;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
 import org.nodes.wms.core.warehouse.entity.WorkArea;
-import org.nodes.wms.core.warehouse.service.IWarehouseService;
 import org.nodes.wms.core.warehouse.vo.WorkAreaVO;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.mp.support.BaseEntityWrapper;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
-import org.springblade.core.tool.utils.SpringUtil;
 
 public class WorkareaWrapper extends BaseEntityWrapper<WorkArea, WorkAreaVO> {
 

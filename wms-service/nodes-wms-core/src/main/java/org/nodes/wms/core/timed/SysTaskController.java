@@ -1,10 +1,13 @@
 package org.nodes.wms.core.timed;
 
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;
 import org.nodes.core.tool.constant.WmsApiPath;
-import org.nodes.wms.core.crontab.entity.CrontabTask;
-import org.nodes.wms.core.crontab.service.ICrontabTaskService;
+import org.nodes.wms.biz.common.log.LogBiz;
+import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
+import org.nodes.wms.dao.crontab.entity.CrontabTask;
+import org.nodes.wms.biz.crontab.ICrontabTaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springblade.core.log.exception.ServiceException;
@@ -27,8 +30,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 
+/**
+ * 定时任务控制器
+ */
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_ROOT_URL +"task")
 public class SysTaskController implements SchedulingConfigurer {
 
@@ -40,8 +47,10 @@ public class SysTaskController implements SchedulingConfigurer {
 
 	private static Map<Long,ScheduledFuture<?>> scheduledFutureMap = new HashMap<>();
 
-	@Resource
-	private  ICrontabTaskService crontabTaskService;
+
+	private  final  ICrontabTaskService crontabTaskService;
+
+	private final LogBiz logBiz;
 	//从数据库里取得所有要执行的定时任务
 	private List<CrontabTask> getAllTasks() throws Exception {
 		return crontabTaskService.getCrontabTaskList();
@@ -158,12 +167,12 @@ public class SysTaskController implements SchedulingConfigurer {
 	public  void start(@RequestBody  CrontabTask task){
 		if(task.getEnabled() == 0) {
 			checkOneData(task);
-			crontabTaskService.EditEnabledById(task.getId(), 1);
+			crontabTaskService.startCrontabTask(task.getId());
 		}
 		ScheduledFuture<?> scheduledFuture = threadPoolTaskScheduler.schedule(getRunnable(task),getTrigger(task));
 		scheduledFutureMap.put(task.getId(),scheduledFuture);
 		logger.info("启动定时任务" + task.getId() );
-
+		logBiz.auditLog(AuditLogType.CRON_TASK,task.getId(),"启动任务");
 	}
 
 	/**
@@ -177,9 +186,8 @@ public class SysTaskController implements SchedulingConfigurer {
 			scheduledFuture.cancel(Boolean.FALSE);
 		}
 		scheduledFutureMap.remove(id);
-		crontabTaskService.EditEnabledById(id,0);
-		logger.info("取消定时任务" + id);
-
+		crontabTaskService.stopCrontabTask(id);
+		logBiz.auditLog(AuditLogType.CRON_TASK,id,"取消任务");
 	}
 
 	/**
@@ -192,6 +200,7 @@ public class SysTaskController implements SchedulingConfigurer {
 			Object obj = SpringUtil.getBean(Class.forName(task.getUrl()));
 			Method method = obj.getClass().getMethod(task.getMethod());
 			method.invoke(obj);
+			logBiz.auditLog(AuditLogType.CRON_TASK,task.getId(),"执行一次");
 		} catch (InvocationTargetException e) {
 			logger.error("定时任务执行错误，反射异常:"+task.getUrl()+";"+task.getMethod()+";"+ e.getMessage());
 		} catch (Exception e) {
@@ -199,18 +208,7 @@ public class SysTaskController implements SchedulingConfigurer {
 		}
 	}
 
-	/**
-	 * 编辑
-	 * @param task
-	 * @param
-	 */
-	@GetMapping("/reset")
-	public  void reset(CrontabTask task){
-		logger.info("修改定时任务开始" + task.getId() );
-	     cancel(task.getId());
-	     start(task);
-		logger.info("修改定时任务结束" + task.getId());
-	}
+
 
 }
 

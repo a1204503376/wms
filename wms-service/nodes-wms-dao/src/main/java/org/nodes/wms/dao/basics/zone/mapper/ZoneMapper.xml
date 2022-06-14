@@ -1,19 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.basics.zone.mapper.ZoneMapper">
-    <select id="listTop10ByWhIdZoneCodeZoneName" resultType="org.nodes.wms.dao.basics.zone.dto.ZoneSelectResponse">
-        SELECT zone_id,
-        zone_code,
-        zone_name
+    <select id="listSelectByWhIdList" resultType="org.nodes.wms.dao.basics.zone.dto.ZoneSelectResponse">
+        SELECT
+            zone_id,
+            zone_code,
+            zone_name
         FROM wms_zone
         <where>
-            <if test="whId != null and whId !=''">
-                wh_id = #{whId}
+            <if test="whIdList != null and whIdList !=''">
+                wh_id IN
+               <foreach collection="whIdList" separator="," item="item" close=")" open="(">
+                   #{item}
+               </foreach>
             </if>
-            AND (zone_code LIKE CONCAT('%', #{zoneCode}, '%')
-            OR zone_name LIKE CONCAT('%', #{zoneName}, '%'))
         </where>
         ORDER BY update_time DESC
-        LIMIT 10
+    </select>
+    <select id="selectZoneByCodeWhCode" resultType="org.nodes.wms.dao.basics.zone.entities.Zone">
+        SELECT
+            z.zone_id,
+            z.wh_id,
+            z.zone_code,
+            z.zone_name,
+            z.zone_type,
+            z.status,
+            z.tenant_id,
+            z.create_dept,
+            z.create_user,
+            z.create_time,
+            z.update_user,
+            z.update_time,
+            z.is_deleted
+        FROM wms_zone z
+        LEFT JOIN wms_warehouse w ON w.wh_id = z.wh_id
+        <where>
+            <if test="code!=null and code!=''">
+               AND z.zone_code = #{code}
+            </if>
+            <if test="whCode!=null and whCode!=''">
+               AND w.wh_code = #{whCode}
+            </if>
+        </where>
     </select>
 </mapper>

@@ -2,15 +2,12 @@ package org.nodes.wms.core.warehouse.cache;
 
 
 import org.nodes.wms.core.warehouse.dto.WarehouseDTO;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
 import org.nodes.wms.core.warehouse.service.IWarehouseService;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;
-
-import java.io.Serializable;
-import java.util.*;
 
 import static org.nodes.core.base.cache.CacheNames.NODES_FLASH;
 
