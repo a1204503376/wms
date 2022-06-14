@@ -13,6 +13,7 @@ import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,39 +39,48 @@ public class SupplierController {
 
 	@ApiLog("供应商管理-新增")
 	@PostMapping("/newSupplier")
-	public R<String> newSupplier(@Valid @RequestBody AddSupplierRequest addSupplierRequest) {
-		Supplier supplier = supplierBiz.newSupplier(addSupplierRequest);
-		return R.success("新增成功，供应商编码:"+supplier.getCode());
+	public R<String> newSupplier(@Valid @RequestBody AddOrEditSupplierRequest addOrEditSupplierRequest) {
+		Supplier supplier = supplierBiz.newSupplier(addOrEditSupplierRequest);
+		return R.success("新增成功，供应商编码:" + supplier.getCode());
 	}
 
 	@ApiLog("供应商管理-删除")
 	@PostMapping("/remove")
-	public R<Boolean> remove(@Valid @RequestParam RemoveRequest removeRequest){
-		boolean state = supplierBiz.removeByIds(removeRequest);
+	public R<Boolean> remove(@Valid @RequestBody RemoveRequest removeRequest) {
+		boolean state = supplierBiz.removeByIdList(removeRequest.getIdList());
 		return R.status(state);
 	}
 
 	@PostMapping("/export")
-	public void export(@RequestBody SupplierPageQuery supplierPageQuery, HttpServletResponse response){
-		supplierBiz.exportSupplier(supplierPageQuery,response);
+	public void export(@RequestBody SupplierPageQuery supplierPageQuery, HttpServletResponse response) {
+		supplierBiz.exportSupplier(supplierPageQuery, response);
 	}
 
 	@GetMapping("/export-template")
-	public void exportTemplate(HttpServletResponse response){
+	public void exportTemplate(HttpServletResponse response) {
 		List<SupplierImportRequest> importDataList = new ArrayList<>();
 		ExcelUtil.export(response, "供应商", "供应商数据表", importDataList, SupplierImportRequest.class);
 	}
+
 	@ApiLog("供应商管理-导入")
 	@PostMapping("/import-data")
-	public R<String> importExcel(MultipartFile file){
+	public R<String> importExcel(MultipartFile file) {
 		List<SupplierImportRequest> importDataList = ExcelUtil.read(file, SupplierImportRequest.class);
 		boolean importFlag = supplierBiz.importExcel(importDataList);
 		return importFlag ? R.success("导入成功") : R.fail("导入失败");
 	}
 
 	@PostMapping("/select")
-	public R<List<SupplierSelectResponse>> getSupplierSelectResponseTop10List(@RequestBody SupplierSelectQuery supplierSelectQuery){
+	public R<List<SupplierSelectResponse>> getSupplierSelectResponseTop10List(@RequestBody SupplierSelectQuery supplierSelectQuery) {
 		List<SupplierSelectResponse> selectResponseList = supplierBiz.getSupplierSelectResponseTop10List(supplierSelectQuery);
 		return R.data(selectResponseList);
+	}
+
+	@ApiLog("供应商管理-新增或修改")
+	@PostMapping("/save")
+	public R<String> save(@Valid @RequestBody AddOrEditSupplierRequest addOrEditSupplierRequest) {
+		Supplier supplier = supplierBiz.save(addOrEditSupplierRequest);
+		return R.success(String.format("[%s]成功，供应商编码：[%s]"
+			, (Func.isEmpty(supplier.getId()) ? "新增" : "修改"), supplier.getCode()));
 	}
 }
