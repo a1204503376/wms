@@ -7,19 +7,19 @@ import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.common.log.impl.modular.LogFactory;
 import org.nodes.wms.dao.common.log.LogActionDao;
 import org.nodes.wms.dao.common.log.LogMessageDao;
-import org.nodes.wms.dao.common.log.dto.AuditLogRequest;
-import org.nodes.wms.dao.common.log.dto.LogPageQuery;
-import org.nodes.wms.dao.common.log.dto.LogResponse;
-import org.nodes.wms.dao.common.log.dto.NoticeMessageRequest;
+import org.nodes.wms.dao.common.log.dto.*;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.entities.LogMessage;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.tool.utils.DateTimeUtil;
 import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
+import org.springframework.util.unit.DataUnit;
 
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -107,6 +107,23 @@ public class LogBizImpl implements LogBiz {
 		IPage<LogAction> page = Condition.getPage(query);
 		return actionDao.getPage(logPageQuery,page);
 	}
+
+    @Override
+    public Integer getLogMsgCount() {
+        return logMessageDao.getLogMsgCount();
+    }
+
+	@Override
+	public List<LogMessageResponse> getLogMsgList(Long num) {
+			return logMessageDao.getLogMsgList(num, DateUtil.formatDate(new Date()));
+	}
+
+
+	@Override
+	public void editLogMsgReaded(Long num, Long id) {
+		logMessageDao.updateLogMsgReaded(num,id);
+	}
+
 
 
 

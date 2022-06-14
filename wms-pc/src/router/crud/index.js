@@ -159,4 +159,15 @@ export default [
                 component: () => import('@/views/wms/warehouse/location/LocationDetail')
             }]
     },
+
+    {
+        path: '/logMessage',
+        component: Layout,
+        children: [{
+            path: 'list',
+            name: '消息列表',
+            props: true,
+            component: () => import('@/views/wms/log/logMessage')
+        }]
+    },
 ]
