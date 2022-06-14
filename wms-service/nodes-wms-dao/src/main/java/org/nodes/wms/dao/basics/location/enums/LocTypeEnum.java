@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.basics.warehouse.enums;
+package org.nodes.wms.dao.basics.location.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;

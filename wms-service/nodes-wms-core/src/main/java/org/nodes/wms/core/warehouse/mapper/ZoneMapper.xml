@@ -3,7 +3,7 @@
 <mapper namespace="org.nodes.wms.core.warehouse.mapper.ZoneMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="zoneResultMap" type="org.nodes.wms.core.warehouse.entity.Zone">
+    <resultMap id="zoneResultMap" type="org.nodes.wms.dao.basics.zone.entities.Zone">
         <id column="zone_id" property="zoneId"/>
         <result column="wh_id" property="whId"/>
         <result column="zone_code" property="zoneCode"/>

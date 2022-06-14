@@ -2,20 +2,17 @@ package org.nodes.wms.core.stock.core.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.UserCache;
-import org.nodes.core.base.entity.Dict;
 import org.nodes.core.base.entity.User;
-import org.nodes.core.base.service.IDictService;
-import org.nodes.core.base.service.IUserService;
 import org.nodes.wms.core.stock.core.entity.Serial;
 import org.nodes.wms.core.stock.core.entity.SerialLog;
 import org.nodes.wms.core.stock.core.enums.SerialLogProcTypeEnum;
 import org.nodes.wms.core.stock.core.vo.SerialLogVO;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
-import org.nodes.wms.core.warehouse.service.IWarehouseService;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.mp.support.BaseEntityWrapper;
-import org.springblade.core.mp.support.Condition;
-import org.springblade.core.tool.utils.*;
+import org.springblade.core.tool.utils.BeanUtil;
+import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.ObjectUtil;
 
 /**
  * 序列号日志封装类

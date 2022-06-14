@@ -1,15 +1,15 @@
-package org.nodes.wms.dao.basics.warehouse.mapper;
+package org.nodes.wms.dao.basics.location.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
-import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageQuery;
-import org.nodes.wms.dao.basics.warehouse.dto.output.LocationDetailResponse;
-import org.nodes.wms.dao.basics.warehouse.dto.output.LocationExcelResponse;
-import org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse;
-import org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse;
-import org.nodes.wms.dao.basics.warehouse.entities.Location;
+import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
+import org.nodes.wms.dao.basics.location.dto.output.LocationDetailResponse;
+import org.nodes.wms.dao.basics.location.dto.output.LocationExcelResponse;
+import org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse;
+import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
+import org.nodes.wms.dao.basics.location.entities.Location;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

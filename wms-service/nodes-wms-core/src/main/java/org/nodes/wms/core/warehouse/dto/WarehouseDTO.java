@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.nodes.wms.core.common.entity.Address;
 import org.nodes.wms.core.common.entity.Contacts;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 
 import java.util.ArrayList;
 import java.util.List;

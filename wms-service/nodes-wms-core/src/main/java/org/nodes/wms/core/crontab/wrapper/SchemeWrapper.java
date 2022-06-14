@@ -6,7 +6,7 @@ import org.nodes.wms.dao.crontab.entity.CrontabTask;
 import org.nodes.wms.dao.crontab.entity.Scheme;
 import org.nodes.wms.dao.crontab.vo.SchemeVO;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.mp.support.BaseEntityWrapper;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;

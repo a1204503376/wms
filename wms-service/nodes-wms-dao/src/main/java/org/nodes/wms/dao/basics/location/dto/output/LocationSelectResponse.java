@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.basics.warehouse.dto.output;
+package org.nodes.wms.dao.basics.location.dto.output;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;

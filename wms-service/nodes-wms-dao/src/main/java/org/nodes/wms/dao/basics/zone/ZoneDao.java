@@ -34,4 +34,13 @@ public interface ZoneDao {
 	 * @return Zone
 	 */
     Zone getZoneById(Long zoneId);
+
+	/**
+	 * 根据库区编码和库房编码查询库区信息
+	 *
+	 * @param code: 库区编码
+	 * @param whCode: 库房编码
+	 * @return Zone
+	 */
+    Zone getZoneByCodeWhCode(String code, String whCode);
 }

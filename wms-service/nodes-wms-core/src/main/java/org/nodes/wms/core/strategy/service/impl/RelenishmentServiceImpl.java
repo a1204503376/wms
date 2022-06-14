@@ -2,11 +2,8 @@
 package org.nodes.wms.core.strategy.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import org.nodes.wms.core.basedata.cache.SkuInstockCache;
 import org.nodes.wms.core.basedata.entity.SkuInstock;
 import org.nodes.wms.core.basedata.service.ISkuInstockService;
-import org.nodes.wms.core.strategy.cache.RelenishmentCache;
-import org.nodes.wms.core.strategy.cache.RelenishmentDetailCache;
 import org.nodes.wms.core.strategy.dto.RelenishmentDTO;
 import org.nodes.wms.core.strategy.dto.RelenishmentDetailDTO;
 import org.nodes.wms.core.strategy.entity.Relenishment;
@@ -18,8 +15,7 @@ import org.nodes.wms.core.strategy.vo.RelenishmentVO;
 import org.nodes.wms.core.strategy.wrapper.RelenishmentDetailWrapper;
 import org.nodes.wms.core.strategy.wrapper.RelenishmentWrapper;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
-import org.nodes.wms.core.warehouse.service.IWarehouseService;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;

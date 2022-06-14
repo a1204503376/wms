@@ -1,18 +1,18 @@
-package org.nodes.wms.dao.basics.warehouse.impl;
+package org.nodes.wms.dao.basics.location.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.wms.dao.basics.warehouse.LocationDao;
-import org.nodes.wms.dao.basics.warehouse.dto.input.LocationPageQuery;
-import org.nodes.wms.dao.basics.warehouse.dto.output.LocationDetailResponse;
-import org.nodes.wms.dao.basics.warehouse.dto.output.LocationExcelResponse;
-import org.nodes.wms.dao.basics.warehouse.dto.output.LocationPageResponse;
-import org.nodes.wms.dao.basics.warehouse.dto.output.LocationSelectResponse;
-import org.nodes.wms.dao.basics.warehouse.entities.Location;
-import org.nodes.wms.dao.basics.warehouse.mapper.LocationMapper;
+import org.nodes.wms.dao.basics.location.LocationDao;
+import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
+import org.nodes.wms.dao.basics.location.dto.output.LocationDetailResponse;
+import org.nodes.wms.dao.basics.location.dto.output.LocationExcelResponse;
+import org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse;
+import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
+import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.basics.location.mapper.LocationMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
 

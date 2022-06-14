@@ -2,25 +2,19 @@ package org.nodes.wms.core.warehouse.wrapper;
 
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
-import org.nodes.wms.core.warehouse.cache.ZoneCache;
 import org.nodes.wms.core.warehouse.dto.LocationDTO;
 import org.nodes.wms.core.warehouse.entity.Location;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
-import org.nodes.wms.core.warehouse.entity.Zone;
 import org.nodes.wms.core.warehouse.excel.LocationExcel;
-import org.nodes.wms.core.warehouse.service.IWarehouseService;
 import org.nodes.wms.core.warehouse.service.IZoneService;
 import org.nodes.wms.core.warehouse.vo.LocationVO;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.springblade.core.mp.support.BaseEntityWrapper;
-import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;
-import org.springblade.core.tool.utils.StringPool;
 
 public class LocationWrapper extends BaseEntityWrapper<Location, LocationVO> {
 

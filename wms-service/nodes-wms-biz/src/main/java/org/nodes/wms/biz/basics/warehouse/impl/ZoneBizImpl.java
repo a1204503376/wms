@@ -29,6 +29,11 @@ public class ZoneBizImpl implements ZoneBiz {
     }
 
     @Override
+    public Zone findByCodeWhCode(String zoneCode, String whCode) {
+        return zoneRepository.getZoneByCodeWhCode(zoneCode,whCode);
+    }
+
+    @Override
     public Zone findById(Long zoneId) {
         return zoneRepository.getZoneById(zoneId);
     }

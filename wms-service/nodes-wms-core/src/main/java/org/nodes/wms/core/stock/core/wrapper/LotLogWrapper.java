@@ -1,21 +1,16 @@
 
 package org.nodes.wms.core.stock.core.wrapper;
 
-import com.sun.xml.bind.v2.model.core.ID;
-import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.entity.User;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.UserCache;
-import org.nodes.core.base.service.IDictService;
-import org.nodes.core.base.service.IUserService;
+import org.nodes.core.base.entity.User;
 import org.nodes.wms.core.stock.core.entity.LotLog;
 import org.nodes.wms.core.stock.core.vo.LotLogVO;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
-import org.nodes.wms.core.warehouse.service.IWarehouseService;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.mp.support.BaseEntityWrapper;
-import org.springblade.core.mp.support.Condition;
-import org.springblade.core.tool.utils.*;
+import org.springblade.core.tool.utils.BeanUtil;
+import org.springblade.core.tool.utils.ObjectUtil;
 
 /**
  * 批次号日志包装类,返回视图层所需的字段

@@ -1,27 +1,19 @@
 
 package org.nodes.wms.core.basedata.wrapper;
 
-import com.sun.xml.bind.v2.model.core.ID;
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.wms.core.basedata.entity.SkuInstock;
 import org.nodes.wms.core.basedata.vo.SkuInstockVO;
-import org.nodes.wms.core.strategy.cache.InstockCache;
 import org.nodes.wms.core.strategy.entity.Instock;
 import org.nodes.wms.core.strategy.service.IInstockService;
 import org.nodes.wms.core.warehouse.cache.LocationCache;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
-import org.nodes.wms.core.warehouse.cache.ZoneCache;
 import org.nodes.wms.core.warehouse.entity.Location;
-import org.nodes.wms.core.warehouse.entity.Warehouse;
-import org.nodes.wms.core.warehouse.entity.Zone;
-import org.nodes.wms.core.warehouse.service.ILocationService;
-import org.nodes.wms.core.warehouse.service.IWarehouseService;
 import org.nodes.wms.core.warehouse.service.IZoneService;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.springblade.core.mp.support.BaseEntityWrapper;
-import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.ObjectUtil;

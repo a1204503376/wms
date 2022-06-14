@@ -26,6 +26,15 @@ public interface ZoneBiz {
     Zone findByCode(String zoneCode);
 
 	/**
+	 * 根据库区编码和库房编码查询库区信息
+	 *
+	 * @param zoneCode: 库区编码
+	 * @param whCode: 库房编码
+	 * @return Zone
+	 */
+	Zone findByCodeWhCode(String zoneCode, String whCode);
+
+	/**
 	 * 根据库区id查询库区信息
 	 *
 	 * @param zoneId: 库区id

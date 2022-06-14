@@ -1,24 +1,17 @@
-package org.nodes.wms.dao.basics.warehouse.dto.output;
+package org.nodes.wms.dao.basics.location.dto.output;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * 库位编辑返回dto对象
+ * 库区详情返回dto对象
  **/
 @Data
-public class LocationEditResponse {
+public class LocationDetailResponse implements Serializable {
 
-	private static final long serialVersionUID = -2480210232385700445L;
-
-	/**
-	 * 库位id
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long locId;
+	private static final long serialVersionUID = 1011909727744315333L;
 
 	/**
 	 * 库位编码
@@ -26,41 +19,39 @@ public class LocationEditResponse {
 	private String locCode;
 
 	/**
-	 * 库房编码
+	 * 库房名称
 	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long whId;
+	private String whName;
 
 	/**
-	 * 库区下拉选择对象
+	 * 库区名称
 	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long zoneId;
+	private String zoneName;
 
 	/**
-	 * 库位类型
+	 * 库位类型名称
 	 */
-	private Integer locType;
+	private String locType;
 
 	/**
-	 * 库位种类
+	 * 库位种类名称
 	 */
-	private Integer locCategory;
+	private String locCategory;
 
 	/**
-	 * 库位处理
+	 * 库位处理名称
 	 */
-	private Integer locHandling;
+	private String locHandling;
 
 	/**
-	 * abc分类
+	 * abc分类名称
 	 */
-	private Integer abc;
+	private String abc;
 
 	/**
-	 * 使用状态
+	 * 使用状态名称
 	 */
-	private Integer locFlag;
+	private String locFlag;
 
 	/**
 	 * 校验数位
@@ -88,10 +79,9 @@ public class LocationEditResponse {
 	private Integer putOrder;
 
 	/**
-	 * 适用容器类型id
+	 * 适用容器类型编码
 	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long lpnTypeId;
+	private String lpnTypeCode;
 
 	/**
 	 * 高度
