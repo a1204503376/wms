@@ -1,6 +1,7 @@
 package org.nodes.wms.pdaController.user;
 
 import lombok.AllArgsConstructor;
+import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.user.UserBiz;
 import org.nodes.wms.dao.User.dto.input.EditUserLoginStatusRequest;
 import org.nodes.wms.dao.User.dto.output.UserLoginStatusResponse;
@@ -18,7 +19,7 @@ import javax.validation.Valid;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/ApiPDA")
+@RequestMapping(WmsApiPath.WMS_PDA_API)
 public class PdaUserController {
     private final UserBiz userBiz;
 	@ApiLog("PDA-人员签到")
