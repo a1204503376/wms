@@ -3,11 +3,10 @@
 <mapper namespace="org.nodes.wms.core.basedata.mapper.SkuIncMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="skuIncResultMap" type="org.nodes.wms.core.basedata.entity.SkuInc">
+    <resultMap id="skuIncResultMap" type="org.nodes.wms.dao.basics.sku.entities.SkuInc">
         <id column="wssup_id" property="wssupId"/>
         <result column="sku_id" property="skuId"/>
         <result column="sku_name" property="skuName"/>
-        <result column="wh_id" property="whId"/>
         <result column="pe_id" property="peId"/>
         <result column="wsp_id" property="wspId"/>
         <result column="wssup_order" property="wssupOrder"/>

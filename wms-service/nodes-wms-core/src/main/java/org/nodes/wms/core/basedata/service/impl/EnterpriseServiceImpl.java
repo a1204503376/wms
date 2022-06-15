@@ -1,32 +1,25 @@
 
 package org.nodes.wms.core.basedata.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.sun.xml.bind.v2.model.core.ID;
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.ValidationUtil;
 import org.nodes.core.tool.validation.Group;
 import org.nodes.wms.core.basedata.cache.EnterpriseCache;
-import org.nodes.wms.core.basedata.cache.OwnerCache;
 import org.nodes.wms.core.basedata.dto.EnterpriseDTO;
 import org.nodes.wms.core.basedata.entity.Enterprise;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
-import org.nodes.wms.core.basedata.entity.SkuInc;
+import org.nodes.wms.dao.basics.sku.entities.SkuInc;
 import org.nodes.wms.core.basedata.excel.EnterpriseExcel;
 import org.nodes.wms.core.basedata.mapper.EnterpriseMapper;
 import org.nodes.wms.core.basedata.service.IEnterpriseService;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.basedata.service.ISkuIncService;
 import org.nodes.wms.core.basedata.wrapper.EnterpriseWrapper;
-import org.nodes.wms.core.common.cache.AddressCache;
-import org.nodes.wms.core.common.cache.ContactsCache;
 import org.nodes.wms.core.common.entity.Address;
 import org.nodes.wms.core.common.entity.Contacts;
 import org.nodes.wms.core.common.enums.DefaultFlagEnum;
@@ -43,8 +36,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;

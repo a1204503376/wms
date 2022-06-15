@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.basics.sku.dto;
+package org.nodes.wms.dao.basics.sku.dto.input;
 
 import lombok.Data;
 

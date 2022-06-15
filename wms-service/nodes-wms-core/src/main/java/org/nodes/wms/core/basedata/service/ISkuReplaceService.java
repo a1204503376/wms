@@ -1,7 +1,7 @@
 
 package org.nodes.wms.core.basedata.service;
 
-import org.nodes.wms.core.basedata.entity.SkuReplace;
+import org.nodes.wms.dao.basics.sku.entities.SkuReplace;
 import org.nodes.wms.core.basedata.vo.SkuReplaceVO;
 import org.springblade.core.mp.base.BaseService;
 

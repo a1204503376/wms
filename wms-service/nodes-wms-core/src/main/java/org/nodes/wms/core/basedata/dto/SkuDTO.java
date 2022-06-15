@@ -5,8 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
-import org.nodes.wms.core.basedata.entity.SkuInc;
-import org.nodes.wms.core.basedata.entity.SkuReplace;
+import org.nodes.wms.dao.basics.sku.entities.SkuInc;
+import org.nodes.wms.dao.basics.sku.entities.SkuReplace;
 
 import java.util.List;
 
