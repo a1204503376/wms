@@ -81,4 +81,17 @@ public class CustomersBizImpl implements CustomersBiz {
 	public BasicsCustomer findCustomerByCode(String code) {
 		return customerDao.getCustomerByCode(code);
 	}
+
+    @Override
+    public String saveOrUpdate(NewCustomerRequest newCustomerRequest) {
+		boolean isExist = customerDao.isExistCustomerCode(newCustomerRequest.getCode());
+		BasicsCustomer basicsCustomer = customersFactory.createCustomer(newCustomerRequest);
+		if(isExist){
+			customerDao.update(basicsCustomer);
+			return "客户编码"+basicsCustomer.getCode()+"修改成功";
+		}
+
+		 customerDao.insert(basicsCustomer);
+       return "客户编码"+basicsCustomer.getCode()+"保存成功";
+    }
 }

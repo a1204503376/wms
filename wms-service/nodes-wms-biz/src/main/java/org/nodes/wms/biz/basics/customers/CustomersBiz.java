@@ -8,7 +8,6 @@ import org.nodes.wms.dao.basics.customer.dto.input.NewCustomerRequest;
 import org.nodes.wms.dao.basics.customer.dto.input.DeleteCustomerRequest;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
-import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 import org.nodes.wms.dao.basics.customer.entities.BasicsCustomer;
 import org.springblade.core.mp.support.Query;
 
@@ -62,4 +61,10 @@ public interface CustomersBiz {
 	 */
 	BasicsCustomer findCustomerByCode(String code);
 
+	/**
+	 * 客户新增或修改api
+	 * @param newCustomerRequest
+	 * @return
+	 */
+    String saveOrUpdate(NewCustomerRequest newCustomerRequest);
 }

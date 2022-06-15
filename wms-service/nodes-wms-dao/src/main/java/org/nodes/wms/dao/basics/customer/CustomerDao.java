@@ -57,4 +57,10 @@ public interface CustomerDao {
 	 * @return  BasicsCustomer 客户实体
 	 */
 	BasicsCustomer getCustomerByCode(String code);
+
+	/**
+	 * 修改客户api
+	 * @param basicsCustomer
+	 */
+	void update(BasicsCustomer basicsCustomer);
 }

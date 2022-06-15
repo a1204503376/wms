@@ -78,4 +78,12 @@ public class CustomersFactory {
 		}
 		return customerList;
 	}
+	public BasicsCustomer createCustomer(NewCustomerRequest newCustomerRequest) {
+		BasicsCustomer basicsCustomer = new BasicsCustomer();
+		basicsCustomer.setCode(newCustomerRequest.getCode());
+		basicsCustomer.setName(newCustomerRequest.getName());
+		return basicsCustomer;
+	}
+
+
 }

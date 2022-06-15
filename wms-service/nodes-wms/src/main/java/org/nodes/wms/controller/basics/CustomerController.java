@@ -11,7 +11,6 @@ import org.nodes.wms.dao.basics.customer.dto.input.NewCustomerRequest;
 import org.nodes.wms.dao.basics.customer.dto.input.DeleteCustomerRequest;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
-import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,5 +90,11 @@ public class CustomerController {
 	@PostMapping("getCustomerSelectResponseTop10List")
 	public R<List<CustomerSelectResponse>> getCustomerSelectResponseTop10List(@RequestBody CustomerSelectQuery customerSelectQuery) {
 		return R.data(customersBiz.getCustomerSelectResponseTop10List(customerSelectQuery));
+	}
+	@ApiLog("客户管理-新增或修改")
+	@PostMapping("/saveOrUpdate")
+	public R<String> saveOrUpdate(@Valid @RequestBody NewCustomerRequest newCustomerRequest) {
+		String msg  = customersBiz.saveOrUpdate(newCustomerRequest);
+		return R.success(msg);
 	}
 }
