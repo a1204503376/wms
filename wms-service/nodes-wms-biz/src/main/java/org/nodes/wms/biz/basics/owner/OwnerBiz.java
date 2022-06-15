@@ -23,7 +23,7 @@ public interface OwnerBiz {
 	 * @param woId: 货主id
 	 * @return Owner
 	 */
-	public Owner findById(Long woId);
+	Owner findById(Long woId);
 
 	/**
 	 * 根据编码查找货主信息

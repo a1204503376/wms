@@ -8,8 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.nodes.wms.biz.basics.suppliers.impl.SupplierBizImpl;
-import org.nodes.wms.dao.basics.suppliers.dto.input.AddSupplierRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.input.RemoveRequest;
+import org.nodes.wms.dao.basics.suppliers.dto.input.AddOrEditSupplierRequest;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.springblade.core.mp.support.Condition;
@@ -59,26 +58,40 @@ public class SupplierTest {
 	@Test
 	public void deleteByBatchIdTest() {
 		List<Long> ids = new ArrayList<>();
-		RemoveRequest removeRequest = new RemoveRequest();
-		removeRequest.setIds(ids);
 //		ids.add(1517056812761829377L);
 //		ids.add(1517042468103733250L);
-		Boolean deleteBoolean = supplierBiz.removeByIds(removeRequest);
+		boolean deleteBoolean = supplierBiz.removeByIdList(ids);
 		Assertions.assertTrue(deleteBoolean);
+	}
+
+	@Test
+	public void insertTest() {
+		Random random = new Random();
+		AddOrEditSupplierRequest addOrEditSupplierRequest = new AddOrEditSupplierRequest();
+		addOrEditSupplierRequest.setCode(System.nanoTime() + random.nextInt() + "");
+//		supplierRequest.setCode("375410144335001");
+		addOrEditSupplierRequest.setName("供应商ZZZZ001");
+		addOrEditSupplierRequest.setRemark("无DDDDWWWW");
+		addOrEditSupplierRequest.setStatus(0);
+		addOrEditSupplierRequest.setSimpleName("001");
+		addOrEditSupplierRequest.setWoId(4000000001213L);
+		supplierBiz.newSupplier(addOrEditSupplierRequest);
+		//Assertions.assertTrue(saveBoolean);
+
 	}
 
 	@Test
 	public void saveTest() {
 		Random random = new Random();
-		AddSupplierRequest addSupplierRequest = new AddSupplierRequest();
-		addSupplierRequest.setCode(System.nanoTime() + random.nextInt() + "");
-//		supplierRequest.setCode("375410144335001");
-		addSupplierRequest.setName("供应商ZZZZ001");
-		addSupplierRequest.setRemark("无DDDDWWWW");
-		addSupplierRequest.setStatus(0);
-		addSupplierRequest.setSimpleName("001");
-		addSupplierRequest.setWoId(4000000001213L);
-		supplierBiz.newSupplier(addSupplierRequest);
+		AddOrEditSupplierRequest addOrEditSupplierRequest = new AddOrEditSupplierRequest();
+		addOrEditSupplierRequest.setId(1536637391215792129L);
+		addOrEditSupplierRequest.setCode(System.nanoTime() + random.nextInt() + "");
+		addOrEditSupplierRequest.setName("供应商ABCDEFG");
+		addOrEditSupplierRequest.setRemark("0614新增或修改接口测试-修改");
+		addOrEditSupplierRequest.setStatus(1);
+		addOrEditSupplierRequest.setSimpleName("ABCDEFG");
+		addOrEditSupplierRequest.setWoId(1530073756668657666L);
+		supplierBiz.save(addOrEditSupplierRequest);
 		//Assertions.assertTrue(saveBoolean);
 
 	}

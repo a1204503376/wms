@@ -3,6 +3,8 @@ package org.nodes.wms.dao.basics.owner.entities;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.springblade.core.tenant.mp.TenantEntity;
 
@@ -20,6 +22,7 @@ public class Owner extends TenantEntity {
 	 * 货主ID
 	 */
 	@TableId(value = "wo_id", type = IdType.ASSIGN_ID)
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long woId;
 
 	/**

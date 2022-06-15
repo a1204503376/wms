@@ -2,6 +2,7 @@ package org.nodes.wms.biz.basics.warehouse;
 
 import org.nodes.wms.dao.basics.warehouse.dto.output.WarehouseResponse;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
+import org.springblade.core.secure.BladeUser;
 
 import java.util.List;
 
@@ -28,4 +29,9 @@ public interface WarehouseBiz {
 	 * @return Warehouse 仓库实体
 	 */
 	Warehouse findByCode(String whCode);
+
+	/**
+	 * @return 根据权限返回当前用户能看到的系统
+	 */
+	List<Warehouse> getWarehouseByUserId(BladeUser user);
 }
