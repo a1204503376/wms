@@ -4,13 +4,18 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.nodes.core.tool.enums.IPairs;
+import org.nodes.wms.dao.application.dto.output.AuditLogTypeResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 审计日志类型
  */
 @Getter
 @AllArgsConstructor
-public enum AuditLogType {
+public enum AuditLogType implements IPairs<Integer,String, AuditLogType> {
 
 	USER_LOGIN(101, "用户登录"),
 	INSTOCK_BILL(102, "入库单单据操作"),
@@ -20,8 +25,33 @@ public enum AuditLogType {
 	CRON_TASK(106,"定时任务操作");
 
 	@EnumValue
-	@JsonValue
 	Integer index;
+	@JsonValue
 	String desc;
 
+	@Override
+	public AuditLogType get() {
+		return this;
+	}
+
+	@Override
+	public Integer key() {
+		return this.index;
+	}
+
+	@Override
+	public String value() {
+		return this.desc;
+	}
+
+	public static List<AuditLogTypeResponse> getList() {
+		List<AuditLogTypeResponse> list = new ArrayList<>();
+		for (AuditLogType item : values()) {
+			AuditLogTypeResponse auditLogTypeResponse = new AuditLogTypeResponse();
+			auditLogTypeResponse.setLabel(item.desc);
+			auditLogTypeResponse.setValue(item.index);
+			list.add(auditLogTypeResponse);
+		}
+		return list;
+	}
 }
