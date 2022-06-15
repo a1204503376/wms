@@ -16,10 +16,11 @@ import java.math.BigDecimal;
 @TableName("wms_sku_type")
 public class SkuType extends TenantEntity {
 
+	private static final long serialVersionUID = -3599575852441635890L;
 	/**
 	 * 物品分类id
 	 */
-	@TableId(value = "skuTypeId", type = IdType.ASSIGN_ID)
+	@TableId(value = "sku_type_id", type = IdType.ASSIGN_ID)
 	private Long skuTypeId;
 
 	/**

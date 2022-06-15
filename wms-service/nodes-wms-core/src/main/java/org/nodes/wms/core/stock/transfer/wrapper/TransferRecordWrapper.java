@@ -1,31 +1,22 @@
 
 package org.nodes.wms.core.stock.transfer.wrapper;
 
-import io.github.classgraph.json.Id;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.UserCache;
-import org.nodes.core.base.entity.Dict;
 import org.nodes.core.base.entity.User;
-import org.nodes.core.base.service.IDictService;
-import org.nodes.core.base.service.IUserService;
 import org.nodes.core.constant.DictConstant;
-import org.nodes.wms.core.basedata.cache.OwnerCache;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
-import org.nodes.wms.core.basedata.entity.Sku;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.entity.SkuPackage;
 import org.nodes.wms.core.basedata.service.IOwnerService;
-import org.nodes.wms.core.basedata.service.ISkuPackageService;
-import org.nodes.wms.core.basedata.service.ISkuService;
 import org.nodes.wms.core.stock.transfer.entity.TransferRecord;
 import org.nodes.wms.core.stock.transfer.vo.TransferRecordVO;
 import org.springblade.core.mp.support.BaseEntityWrapper;
-import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;
-import org.springblade.core.tool.utils.StringPool;
 
 /**
  * 移动记录表包装类,返回视图层所需的字段

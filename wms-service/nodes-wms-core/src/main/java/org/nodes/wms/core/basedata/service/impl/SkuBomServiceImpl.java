@@ -1,6 +1,5 @@
 package org.nodes.wms.core.basedata.service.impl;
 
-import org.nodes.wms.core.basedata.cache.OwnerCache;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.core.basedata.entity.*;
@@ -9,6 +8,7 @@ import org.nodes.wms.core.basedata.service.*;
 import org.nodes.wms.core.basedata.mapper.SkuBomMapper;
 import org.nodes.wms.dao.basics.bom.entites.SkuBom;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.tool.utils.SpringUtil;
 import org.springframework.context.annotation.Primary;

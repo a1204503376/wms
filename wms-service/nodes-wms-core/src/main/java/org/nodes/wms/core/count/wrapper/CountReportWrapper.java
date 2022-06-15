@@ -5,7 +5,7 @@ import org.nodes.wms.core.stock.core.service.IStockDetailService;
 import org.springblade.core.log.exception.ServiceException;
 import org.nodes.core.base.cache.ParamCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
-import org.nodes.wms.core.basedata.entity.Sku;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
 import org.nodes.wms.core.stock.core.entity.Stock;
 import org.nodes.wms.core.count.entity.CountHeader;

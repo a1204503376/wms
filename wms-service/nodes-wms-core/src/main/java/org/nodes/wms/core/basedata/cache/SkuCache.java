@@ -1,7 +1,7 @@
 package org.nodes.wms.core.basedata.cache;
 
 import org.nodes.wms.core.basedata.dto.SkuDTO;
-import org.nodes.wms.core.basedata.entity.Sku;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.service.ISkuService;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.log.exception.ServiceException;
@@ -9,8 +9,6 @@ import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;
 
 import java.io.Serializable;
-import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.nodes.core.base.cache.CacheNames.NODES_FLASH;
 
