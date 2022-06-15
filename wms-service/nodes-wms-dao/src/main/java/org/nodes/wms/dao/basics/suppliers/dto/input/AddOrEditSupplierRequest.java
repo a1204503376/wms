@@ -11,9 +11,14 @@ import java.io.Serializable;
  * 供应商单创建请求对象
  */
 @Data
-public class AddSupplierRequest implements Serializable {
+public class AddOrEditSupplierRequest implements Serializable {
 
 	private static final long serialVersionUID = -743345718924445728L;
+
+	/**
+	 * 供应商id
+	 */
+	private Long id;
 
 	/**
 	 * 供应商编码

@@ -45,7 +45,7 @@ public class SupplierDaoImpl extends BaseServiceImpl<SupplierMapper, Supplier> i
 	public boolean isExistSupplierCode(String code) {
 		return super.getBaseMapper()
 			.selectCount(new LambdaQueryWrapper<Supplier>()
-				.eq(Supplier::getCode,code)) > 0;
+				.eq(Supplier::getCode, code)) > 0;
 	}
 
 
@@ -53,33 +53,38 @@ public class SupplierDaoImpl extends BaseServiceImpl<SupplierMapper, Supplier> i
 	public List<SupplierExportResponse> listBySupplierPageQuery(SupplierPageQuery supplierPageQuery) {
 		QueryWrapper<SupplierExportResponse> queryWrapper = Wrappers.query();
 		queryWrapper
-			.like(Func.isNotBlank(supplierPageQuery.getName()),"s.name",supplierPageQuery.getName())
-			.like(Func.isNotBlank(supplierPageQuery.getSimpleName()),"s.simpleName",supplierPageQuery.getSimpleName())
-			.like(Func.isNotBlank(supplierPageQuery.getCode()),"s.code",supplierPageQuery.getCode())
-			.ge(Func.isNotEmpty(supplierPageQuery.getCreateTimeBegin()),"s.create_time",supplierPageQuery.getCreateTimeBegin())
-			.le(Func.isNotEmpty(supplierPageQuery.getCreateTimeEnd()),"s.create_time",supplierPageQuery.getCreateTimeBegin())
-			.ge(Func.isNotEmpty(supplierPageQuery.getUpdateTimeBegin()),"s.update_time",supplierPageQuery.getUpdateTimeBegin())
-			.le(Func.isNotEmpty(supplierPageQuery.getUpdateTimeEnd()),"s.update_time",supplierPageQuery.getUpdateTimeEnd());
+			.like(Func.isNotBlank(supplierPageQuery.getName()), "s.name", supplierPageQuery.getName())
+			.like(Func.isNotBlank(supplierPageQuery.getSimpleName()), "s.simpleName", supplierPageQuery.getSimpleName())
+			.like(Func.isNotBlank(supplierPageQuery.getCode()), "s.code", supplierPageQuery.getCode())
+			.ge(Func.isNotEmpty(supplierPageQuery.getCreateTimeBegin()), "s.create_time", supplierPageQuery.getCreateTimeBegin())
+			.le(Func.isNotEmpty(supplierPageQuery.getCreateTimeEnd()), "s.create_time", supplierPageQuery.getCreateTimeBegin())
+			.ge(Func.isNotEmpty(supplierPageQuery.getUpdateTimeBegin()), "s.update_time", supplierPageQuery.getUpdateTimeBegin())
+			.le(Func.isNotEmpty(supplierPageQuery.getUpdateTimeEnd()), "s.update_time", supplierPageQuery.getUpdateTimeEnd());
 		return super.baseMapper.selectListByWrapper(queryWrapper);
 	}
 
-    @Override
-    public List<SupplierSelectResponse> listTop10ByCodeName(String code ,String name) {
-        return super.baseMapper.listTop10ByCodeName(code,name);
-    }
+	@Override
+	public List<SupplierSelectResponse> listTop10ByCodeName(String code, String name) {
+		return super.baseMapper.listTop10ByCodeName(code, name);
+	}
 
-    @Override
-    public Supplier getById(Long id) {
-        return super.getById(id);
-    }
+	@Override
+	public Supplier getById(Long id) {
+		return super.getById(id);
+	}
 
-    @Override
-    public boolean importExcel(List<Supplier> supplierList) {
+	@Override
+	public boolean importExcel(List<Supplier> supplierList) {
 		return super.saveBatch(supplierList);
 	}
 
-    @Override
-    public Supplier getByCode(String code) {
-		return super.getOne(new LambdaQueryWrapper<Supplier>().eq(Supplier::getCode,code));
-    }
+	@Override
+	public Supplier getByCode(String code) {
+		return super.getOne(new LambdaQueryWrapper<Supplier>().eq(Supplier::getCode, code));
+	}
+
+	@Override
+	public void saveSupplier(Supplier supplier) {
+		super.saveOrUpdate(supplier);
+	}
 }
