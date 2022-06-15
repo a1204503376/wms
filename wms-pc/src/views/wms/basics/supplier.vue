@@ -231,11 +231,8 @@ export default {
             })
                 .then(() => {
                     let removeObj = {
-                        ids: []
+                        idList: rows.map(item=>item.id)
                     };
-                    rows.forEach((item) => {
-                        removeObj.ids.push(item.id);
-                    });
                     remove(removeObj)
                         .then((res) => {
                             this.$message({

@@ -18,7 +18,7 @@ public interface SupplierDao {
 	/**
 	 * 分页查询供应商信息
 	 *
-	 * @param page : 分页对象
+	 * @param page              : 分页对象
 	 * @param supplierPageQuery : 分页请求参数
 	 * @return Page<SupplierPageResponse>
 	 */
@@ -42,9 +42,9 @@ public interface SupplierDao {
 
 	/**
 	 * 查询供应商code是否存在
-	 *
-	 ** @param code:供应商编码
-	 ** @return boolean
+	 * <p>
+	 * * @param code:供应商编码
+	 * * @return boolean
 	 */
 	boolean isExistSupplierCode(String code);
 
@@ -63,7 +63,7 @@ public interface SupplierDao {
 	 * @param name: 供应商名称
 	 * @return List<SupplierSelectResponse>
 	 */
-    List<SupplierSelectResponse> listTop10ByCodeName(String code, String name);
+	List<SupplierSelectResponse> listTop10ByCodeName(String code, String name);
 
 	/**
 	 * 根据id查找供应商信息
@@ -71,7 +71,7 @@ public interface SupplierDao {
 	 * @param id: 供应商id
 	 * @return Supplier
 	 */
-    Supplier getById(Long id);
+	Supplier getById(Long id);
 
 	/**
 	 * Excel 导入
@@ -79,12 +79,20 @@ public interface SupplierDao {
 	 * @param supplierList : 新增供应商对象集合
 	 * @return true: 导入成功， false: 导入失败
 	 */
-    boolean importExcel(List<Supplier> supplierList);
+	boolean importExcel(List<Supplier> supplierList);
 
 	/**
 	 * 根据供应商编码获取供应商实体
+	 *
 	 * @param code 供应商编码
 	 * @return Supplier
 	 */
 	Supplier getByCode(String code);
+
+	/**
+	 * 新增或修改供应商
+	 *
+	 * @param supplier: 供应商对象
+	 */
+	void saveSupplier(Supplier supplier);
 }

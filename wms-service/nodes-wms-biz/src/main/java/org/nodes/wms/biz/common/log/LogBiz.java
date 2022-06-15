@@ -1,10 +1,7 @@
 package org.nodes.wms.biz.common.log;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.nodes.wms.dao.common.log.dto.AuditLogRequest;
-import org.nodes.wms.dao.common.log.dto.LogPageQuery;
-import org.nodes.wms.dao.common.log.dto.LogResponse;
-import org.nodes.wms.dao.common.log.dto.NoticeMessageRequest;
+import org.nodes.wms.dao.common.log.dto.*;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.springblade.core.mp.support.Query;
@@ -74,7 +71,22 @@ public interface LogBiz {
 	 *
 	 * @param logPageQuery 日志分页查询参数
 	 * @param query        分页参数
-	 * @return
 	 */
 	Page<LogResponse> getPage(LogPageQuery logPageQuery, Query query);
+
+	/**
+	 * 获取消息总条数
+	 */
+	Integer getLogMsgCount();
+
+	/**
+	 * 根据消息已读状态获取消息列表
+	 * @param num  消息是否已读
+	 */
+	List<LogMessageResponse> getLogMsgList(Long num);
+
+	/**
+	 * 修改已读状态
+	 */
+	void editLogMsgReaded(Long num,Long id);
 }

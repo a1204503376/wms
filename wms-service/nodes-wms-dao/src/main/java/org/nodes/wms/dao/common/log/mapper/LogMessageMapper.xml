@@ -2,4 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.common.log.mapper.LogMessageMapper">
 
+    <select id="getLogMsgList" resultType="org.nodes.wms.dao.common.log.dto.LogMessageResponse">
+       select
+         id,
+         wh_id,
+         log,
+         create_time,
+         readed
+       from log_message
+       <where>
+           <if test="num==0 ||  num==1">
+             AND  readed = #{num}
+           </if>
+           <if test="date !=null">
+             AND  expiration_date  >= #{date}
+           </if>
+       </where>
+    </select>
 </mapper>
