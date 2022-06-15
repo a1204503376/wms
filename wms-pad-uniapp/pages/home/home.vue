@@ -1,8 +1,8 @@
 <template>
 	<view class="container">
 		<u-navbar :leftText="username" leftIcon="account-fill" :leftIconSize="40" leftIconColor="#fff"
-			@leftClick="userSetting" rightIcon="close" :rightIconSize="40" @rightClick="goOut" :fixed="false"
-			:autoBack="false" title="主页" :bgColor="navigationBarBackgroundColor"
+			@leftClick="userSetting" :rightText="title" :rightIconSize="40" @rightClick="goOut" :fixed="false"
+			:autoBack="false"  :bgColor="navigationBarBackgroundColor"
 			titleStyle="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u-grid class="menu" col="3">
@@ -22,6 +22,7 @@
 	import api from '@/api/user.js'
 	import setting from '@/common/setting'
 	import tool from '@/utils/tool.js'
+	import warehouse from '@/api/warehouse.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {
 		components: {
@@ -33,7 +34,8 @@
 				swiperHeight: 0,
 				current: 0,
 				menuLists: [],
-				username: this.$store.state.userName
+				username: this.$store.state.userName,
+				title:''
 			};
 		},
 		onReady() {
@@ -60,6 +62,15 @@
 		},
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
+			warehouse.getWarehouseList().then(data=>{
+				if(data.data.length>1&&uni.getStorageSync('warehouse').whName==undefined)
+				{
+				  	uni.$u.func.route('/pages/userSetting/warehouseSetting');
+				}
+				else{
+					this.title=uni.getStorageSync('warehouse').whName;	
+				}
+			})
 		},
 		methods: {
 			emitKeyDown(e) {
