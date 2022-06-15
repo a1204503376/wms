@@ -1,4 +1,4 @@
-package org.nodes.wms.biz.basics.customers;
+package org.nodes.wms.biz.basics.customer;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.customer.dto.input.*;
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * 客户管理业务层接口
  */
-public interface CustomersBiz {
+public interface CustomerBiz {
 	/**
 	 * 分页查询
     **/

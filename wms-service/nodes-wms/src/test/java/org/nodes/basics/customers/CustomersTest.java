@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.nodes.wms.biz.basics.customers.impl.CustomersBizImpl;
+import org.nodes.wms.biz.basics.customer.impl.CustomerBizImpl;
 import org.nodes.wms.dao.basics.customer.CustomerDao;
 import org.nodes.wms.dao.basics.customer.dto.input.CustomerPageQuery;
 import org.nodes.wms.dao.basics.customer.dto.input.NewCustomerRequest;
@@ -28,7 +28,7 @@ import java.util.List;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CustomersTest {
 	@Autowired
-	private CustomersBizImpl customersBiz;
+	private CustomerBizImpl customersBiz;
 	private CustomerDao customerDao;
 
 	@Test

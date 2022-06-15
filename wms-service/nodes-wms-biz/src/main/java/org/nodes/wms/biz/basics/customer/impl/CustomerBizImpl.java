@@ -1,10 +1,10 @@
-package org.nodes.wms.biz.basics.customers.impl;
+package org.nodes.wms.biz.basics.customer.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.wms.biz.basics.customers.CustomersBiz;
-import org.nodes.wms.biz.basics.customers.modular.CustomersFactory;
+import org.nodes.wms.biz.basics.customer.CustomerBiz;
+import org.nodes.wms.biz.basics.customer.modular.CustomersFactory;
 import org.nodes.wms.dao.basics.customer.CustomerDao;
 import org.nodes.wms.dao.basics.customer.dto.input.*;
 import org.nodes.wms.dao.basics.customer.dto.output.CustomerResponse;
@@ -14,7 +14,6 @@ import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
-import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +25,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class CustomersBizImpl implements CustomersBiz {
+public class CustomerBizImpl implements CustomerBiz {
 	private  final CustomerDao customerDao;
 	private  final CustomersFactory customersFactory;
 

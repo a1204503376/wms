@@ -3,7 +3,7 @@ package org.nodes.wms.controller.basics;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
-import org.nodes.wms.biz.basics.customers.CustomersBiz;
+import org.nodes.wms.biz.basics.customer.CustomerBiz;
 import org.nodes.wms.dao.basics.customer.dto.input.*;
 import org.nodes.wms.dao.basics.customer.dto.input.CustomerPageQuery;
 import org.nodes.wms.dao.basics.customer.dto.input.CustomerSelectQuery;
@@ -31,14 +31,14 @@ import java.util.List;
 @RequestMapping(WmsApiPath.WMS_ROOT_URL +"customer")
 public class CustomerController {
 
-	private  final CustomersBiz customersBiz;
+	private  final CustomerBiz customerBiz;
 
 	/**
 	 * 客户管理分页查询
 	 */
 	@PostMapping("/page")
 	public R<IPage<CustomerResponse>>  page(@RequestBody CustomerPageQuery customerPageQuery, Query query) {
-		IPage<CustomerResponse> pages = customersBiz.getPage(customerPageQuery,query);
+		IPage<CustomerResponse> pages = customerBiz.getPage(customerPageQuery,query);
 		return R.data(pages);
 	}
 
@@ -48,7 +48,7 @@ public class CustomerController {
 	@ApiLog("客户管理-新增")
 	@PostMapping("/newCustomer")
 	public R<Boolean> newCustomer(@RequestBody NewCustomerRequest newCustomerRequest) {
-		return R.status(customersBiz.newCustomers(newCustomerRequest));
+		return R.status(customerBiz.newCustomers(newCustomerRequest));
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class CustomerController {
 	@PostMapping("/delete")
 	public R<Boolean> delete(@RequestBody DeleteCustomerRequest deleteRequest) {
 		System.out.println(deleteRequest);
-		return R.status(customersBiz.remove(deleteRequest));
+		return R.status(customerBiz.remove(deleteRequest));
 	}
 
 	/**
@@ -66,20 +66,20 @@ public class CustomerController {
 	 */
 	@PostMapping("export")
 	public void export( @RequestBody CustomerPageQuery customerPageQuery, HttpServletResponse response) {
-		customersBiz.exportExcel(customerPageQuery, response);
+		customerBiz.exportExcel(customerPageQuery, response);
 	}
 
 	@GetMapping("/export-template")
 	public void exportTemplate(HttpServletResponse response){
 		List<CustomerImportRequest> importExcelList = new ArrayList<>();
-		ExcelUtil.export(response, "供应商", "供应商数据表", importExcelList, CustomerImportRequest.class);
+		ExcelUtil.export(response, "客户", "客户数据表", importExcelList, CustomerImportRequest.class);
 	}
 
 	@ApiLog("客户管理-导入")
 	@PostMapping("/import-data")
 	public R<String> importData(MultipartFile file){
 		List<CustomerImportRequest> importDataList = ExcelUtil.read(file, CustomerImportRequest.class);
-		boolean importFlag = customersBiz.importExcel(importDataList);
+		boolean importFlag = customerBiz.importExcel(importDataList);
 		return importFlag ? R.success("导入成功") : R.fail("导入失败");
 	}
 
@@ -89,12 +89,12 @@ public class CustomerController {
 	 */
 	@PostMapping("getCustomerSelectResponseTop10List")
 	public R<List<CustomerSelectResponse>> getCustomerSelectResponseTop10List(@RequestBody CustomerSelectQuery customerSelectQuery) {
-		return R.data(customersBiz.getCustomerSelectResponseTop10List(customerSelectQuery));
+		return R.data(customerBiz.getCustomerSelectResponseTop10List(customerSelectQuery));
 	}
 	@ApiLog("客户管理-新增或修改")
 	@PostMapping("/saveOrUpdate")
 	public R<String> saveOrUpdate(@Valid @RequestBody NewCustomerRequest newCustomerRequest) {
-		String msg  = customersBiz.saveOrUpdate(newCustomerRequest);
+		String msg  = customerBiz.saveOrUpdate(newCustomerRequest);
 		return R.success(msg);
 	}
 }

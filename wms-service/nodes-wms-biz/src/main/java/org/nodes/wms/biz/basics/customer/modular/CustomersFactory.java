@@ -1,4 +1,4 @@
-package org.nodes.wms.biz.basics.customers.modular;
+package org.nodes.wms.biz.basics.customer.modular;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.enums.StatusEnum;
