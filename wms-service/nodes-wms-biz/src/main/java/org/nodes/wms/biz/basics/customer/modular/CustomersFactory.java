@@ -1,4 +1,4 @@
-package org.nodes.wms.biz.basics.customers.modular;
+package org.nodes.wms.biz.basics.customer.modular;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.enums.StatusEnum;
@@ -78,4 +78,12 @@ public class CustomersFactory {
 		}
 		return customerList;
 	}
+	public BasicsCustomer createCustomer(NewCustomerRequest newCustomerRequest) {
+		BasicsCustomer basicsCustomer = new BasicsCustomer();
+		basicsCustomer.setCode(newCustomerRequest.getCode());
+		basicsCustomer.setName(newCustomerRequest.getName());
+		return basicsCustomer;
+	}
+
+
 }

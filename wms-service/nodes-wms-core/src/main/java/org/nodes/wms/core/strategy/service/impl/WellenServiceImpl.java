@@ -1,7 +1,7 @@
 package org.nodes.wms.core.strategy.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import org.nodes.wms.core.basedata.entity.Sku;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.mapper.SkuMapper;
 import org.nodes.wms.core.strategy.dto.WellenDTO;
 import org.nodes.wms.core.strategy.dto.WellenDetailDTO;

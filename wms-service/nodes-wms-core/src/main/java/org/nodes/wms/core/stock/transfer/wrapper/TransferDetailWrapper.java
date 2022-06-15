@@ -2,19 +2,15 @@ package org.nodes.wms.core.stock.transfer.wrapper;
 
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
-import org.nodes.wms.core.basedata.entity.Sku;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.entity.SkuPackage;
-import org.nodes.wms.core.basedata.service.ISkuPackageService;
-import org.nodes.wms.core.basedata.service.ISkuService;
 import org.nodes.wms.core.warehouse.cache.LocationCache;
 import org.nodes.wms.core.warehouse.entity.Location;
 import org.nodes.wms.core.stock.transfer.entity.TransferDetail;
 import org.nodes.wms.core.stock.transfer.vo.TransferDetailVO;
-import org.nodes.wms.core.warehouse.service.ILocationService;
 import org.springblade.core.mp.support.BaseEntityWrapper;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
-import org.springblade.core.tool.utils.SpringUtil;
 
 
 /**

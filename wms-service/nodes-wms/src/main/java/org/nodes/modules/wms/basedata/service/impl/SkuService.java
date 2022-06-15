@@ -6,7 +6,7 @@ import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.modules.wms.basedata.service.ISkuService;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.dto.SkuDTO;
-import org.nodes.wms.core.basedata.entity.Sku;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.mapper.SkuMapper;
 import org.nodes.wms.core.instock.asn.entity.AsnDetail;
 import org.nodes.wms.core.instock.asn.entity.AsnHeader;

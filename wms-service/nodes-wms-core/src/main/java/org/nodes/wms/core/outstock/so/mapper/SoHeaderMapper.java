@@ -2,7 +2,7 @@ package org.nodes.wms.core.outstock.so.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-import org.nodes.wms.core.basedata.entity.Sku;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.outstock.so.dto.SoBillCountDTO;
 import org.nodes.wms.core.outstock.so.entity.SoHeader;
 import org.nodes.wms.core.outstock.so.vo.OutstockSkuRltVO;

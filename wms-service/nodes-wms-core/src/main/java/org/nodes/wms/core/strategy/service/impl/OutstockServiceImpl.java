@@ -10,7 +10,7 @@ import org.nodes.core.base.cache.ParamCache;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.core.tool.entity.SkuLotBaseEntity;
 import org.nodes.core.tool.utils.NodesUtil;
-import org.nodes.wms.core.basedata.entity.Sku;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.entity.SkuOutstock;
 import org.nodes.wms.core.basedata.service.ISkuOutstockService;
 import org.nodes.wms.core.outstock.so.dto.CreatePickPlanByWellenDTO;

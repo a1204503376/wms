@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.validation.Add;
 import org.nodes.core.tool.validation.Pda;
-import org.nodes.wms.core.basedata.entity.Sku;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.service.ISkuLotService;
 import org.nodes.wms.core.basedata.service.ISkuService;
 import org.nodes.wms.core.basedata.vo.SkuLotConfigVO;

@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.basics.customer.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -72,4 +73,11 @@ public class CustomerDaoImpl extends BaseServiceImpl<CustomerMapper, BasicsCusto
 	public BasicsCustomer getCustomerByCode(String code) {
 		return super.getOne(new LambdaQueryWrapper<BasicsCustomer>().eq(BasicsCustomer::getCode,code));
 	}
+
+    @Override
+    public void update(BasicsCustomer basicsCustomer) {
+            super.update(new LambdaUpdateWrapper<BasicsCustomer>()
+			.eq(BasicsCustomer::getCode,basicsCustomer.getCode())
+			.set(BasicsCustomer::getName,basicsCustomer.getName()));
+    }
 }
