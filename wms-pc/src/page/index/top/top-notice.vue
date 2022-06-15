@@ -1,8 +1,11 @@
 <template>
     <div slot="reference">
-      <el-badge :value="this.msgNum" >
+      <el-badge :value="this.msgNum"  v-if="this.msgNum>0" >
         <i class="el-icon-bell" @click="msgList"></i>
       </el-badge>
+        <el-badge   v-if="this.msgNum<=0" >
+            <i class="el-icon-bell" @click="msgList"></i>
+        </el-badge>
     </div>
 </template>
 
