@@ -46,6 +46,7 @@ import org.nodes.wms.core.warehouse.entity.Location;
 import org.nodes.wms.core.warehouse.enums.ZoneTypeEnum;
 import org.nodes.wms.core.warehouse.service.ILocationService;
 import org.nodes.wms.core.warehouse.service.IZoneService;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;

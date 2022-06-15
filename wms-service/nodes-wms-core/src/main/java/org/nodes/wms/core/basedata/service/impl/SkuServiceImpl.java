@@ -35,6 +35,7 @@ import org.nodes.wms.core.strategy.service.IInstockService;
 import org.nodes.wms.core.strategy.service.IOutstockService;
 import org.nodes.wms.core.warehouse.service.IWarehouseService;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.sku.entities.SkuType;
 import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.dao.basics.sku.enums.SnEnum;

@@ -58,13 +58,7 @@ import fileDownload from "js-file-download";
                 >
                     <el-button circle icon="el-icon-refresh" size="mini" @click="onRefresh"></el-button>
                 </el-tooltip>
-                <el-tooltip
-                    :enterable="false"
-                    class="item"
-                    content="显隐"
-                    effect="dark"
-                    placement="top"
-                >
+                <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">
                     <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
                 </el-tooltip>
                 <el-tooltip
@@ -138,9 +132,13 @@ import fileDownload from "js-file-download";
                     @current-change="handleCurrentChange"
                 >
                 </el-pagination>
+                <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
+                </dialog-column>
             </template>
         </nodes-master-page>
+
     </el-form>
+
 </template>
 
 <script>
@@ -148,6 +146,7 @@ import fileDownload from "js-file-download";
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
+import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import fileDownload from "js-file-download";
 import {listMixin} from "@/mixins/list";
 import {ExcelExport} from 'pikaz-excel-js';
@@ -159,6 +158,7 @@ import fileUpload from "@/components/nodes/fileUpload";
 export default {
     name: "carrier",
     components: {
+        DialogColumn,
         NodesSearchInput,
         NodesMasterPage,
         NodesDateRange,

@@ -3,7 +3,7 @@
 <mapper namespace="org.nodes.wms.core.basedata.mapper.SkuMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="skuResultMap" type="org.nodes.wms.core.basedata.entity.Sku">
+    <resultMap id="skuResultMap" type="org.nodes.wms.dao.basics.sku.entities.Sku">
         <id column="sku_id" property="skuId"/>
         <result column="wo_id" property="woId"/>
         <result column="sku_type_id" property="skuTypeId"/>

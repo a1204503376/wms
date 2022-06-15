@@ -2,7 +2,7 @@
 package org.nodes.wms.core.basedata.service.impl;
 
 import org.nodes.wms.core.basedata.cache.SkuCache;
-import org.nodes.wms.core.basedata.entity.Sku;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.entity.SkuInstock;
 import org.nodes.wms.core.basedata.mapper.SkuInstockMapper;
 import org.nodes.wms.core.basedata.service.ISkuInstockService;

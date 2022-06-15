@@ -3,7 +3,6 @@ package org.nodes.wms.dao.basics.sku.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
-import org.nodes.wms.dao.basics.sku.dto.SkuPackageDetailResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.Sku;

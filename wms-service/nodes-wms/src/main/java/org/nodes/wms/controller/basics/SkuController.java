@@ -8,7 +8,7 @@ import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.modules.wms.basedata.service.ISkuService;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.core.basedata.dto.SkuDTO;
-import org.nodes.wms.core.basedata.entity.Sku;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.excel.SkuExcel;
 import org.nodes.wms.core.basedata.vo.SkuVO;
 import org.nodes.wms.core.basedata.wrapper.SkuWrapper;

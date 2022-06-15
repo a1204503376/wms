@@ -14,6 +14,7 @@
 				<view class="demo-layout bg-purple-font">
 					{{signStatus === 1 ? "已签到" : "未签到"}}</view>
 			</u-col>
+			
 
 		</u-row>
 		<u-row>
@@ -37,6 +38,12 @@
 					<text style="font-size: 100%;">签到</text>
 				</u-form-item>
 			</u--form>
+			<u--form>
+				<u-form-item borderBottom labelWidth="60"  @click="setWarehouse">
+					<u-icon name="home-fill" size="28"></u-icon>
+					<text style="font-size: 100%;">库位选择</text>
+				</u-form-item>
+			</u--form>
 		</view>
 		
 		<view class="footer">
@@ -45,7 +52,20 @@
 	</view>
 </template>
 <script>
+	import warehouse from '@/api/warehouse.js'
 	export default {
+		data() {
+			return{
+				warehouseList:[],
+				show:false,
+			};
+		},
+		onLoad() {
+			warehouse.getWarehouseList().then(data=>{
+				this.warehouseList=data;
+				console.log(this.warehouseList)
+			})
+		},
 		methods: {
 			logout(){
 				this.$u.func.logout();
@@ -55,7 +75,11 @@
 			},
 			sign() {
 				uni.$u.func.route('/pages/userSetting/signSetting');
+			},
+			setWarehouse(){
+				uni.$u.func.route('/pages/userSetting/warehouseSetting');
 			}
+				
 		}
 	}
 </script>

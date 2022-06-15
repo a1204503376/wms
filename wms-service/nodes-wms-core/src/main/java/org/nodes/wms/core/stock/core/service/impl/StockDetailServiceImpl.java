@@ -1,17 +1,12 @@
 package org.nodes.wms.core.stock.core.service.impl;
 
-import com.baomidou.mybatisplus.core.injector.methods.SelectOne;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import io.swagger.models.auth.In;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.NodesUtil;
-import org.nodes.core.tool.utils.StringPool;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
-import org.nodes.wms.core.basedata.entity.Sku;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
-import org.nodes.wms.core.basedata.service.ISkuService;
 import org.nodes.wms.core.log.system.dto.SystemProcDTO;
 import org.nodes.wms.core.log.system.entity.SystemProc;
 import org.nodes.wms.core.log.system.enums.DataTypeEnum;
@@ -31,7 +26,6 @@ import org.nodes.wms.core.stock.core.service.IStockService;
 import org.nodes.wms.core.stock.core.vo.StockDetailVo;
 import org.nodes.wms.core.warehouse.cache.LocationCache;
 import org.nodes.wms.core.warehouse.entity.Location;
-import org.nodes.wms.core.warehouse.service.ILocationService;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
@@ -49,7 +43,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 

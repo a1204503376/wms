@@ -19,4 +19,16 @@ public interface WarehouseDao {
 	 * @return Warehouse
 	 */
 	Warehouse findByCode(String whCode);
+
+	/**
+	 * @return 所有库房的集合
+	 */
+	List<Warehouse> list();
+
+	/**
+	 * 根据机构ID集合查询库房集合
+	 * @param deptIds 机构ID集合
+	 * @return 库房集合
+	 */
+	List<Warehouse> getListByDeptId(List<Long> deptIds);
 }

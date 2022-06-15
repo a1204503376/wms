@@ -2,7 +2,7 @@
 package org.nodes.wms.core.stock.core.wrapper;
 
 import org.nodes.core.base.cache.ParamCache;
-import org.nodes.wms.core.basedata.entity.Sku;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.stock.core.dto.LotDTO;
 import org.nodes.wms.core.stock.core.dto.StockAddDTO;
 import org.nodes.wms.core.stock.core.entity.Lot;
