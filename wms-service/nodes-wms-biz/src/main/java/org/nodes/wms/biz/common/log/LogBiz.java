@@ -6,6 +6,7 @@ import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.springblade.core.mp.support.Query;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -89,4 +90,18 @@ public interface LogBiz {
 	 * 修改已读状态
 	 */
 	void editLogMsgReaded(Long num,Long id);
+
+	/**
+	 * 业务日志分页查询
+	 * @param logActionPageQuery 业务日志查询条件
+	 * @param query 分页参数
+	 * @return 业务日志响应对象
+	 */
+	Page<LogActionPageResponse> getLists(LogActionPageQuery logActionPageQuery,Query query);
+
+	/**
+	 * @param logActionPageQuery 请求参数
+	 * @param response 返回数据
+	 */
+	void exportActionLists(LogActionPageQuery logActionPageQuery, HttpServletResponse response);
 }

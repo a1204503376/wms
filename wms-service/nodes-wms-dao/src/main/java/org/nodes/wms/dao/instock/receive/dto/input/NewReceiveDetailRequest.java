@@ -1,7 +1,7 @@
 package org.nodes.wms.dao.instock.receive.dto.input;
 
 import lombok.Data;
-import org.nodes.wms.dao.basics.sku.dto.SkuSelectRequest;
+import org.nodes.wms.dao.basics.sku.dto.input.SkuSelectRequest;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;

@@ -1,5 +1,5 @@
 
-package org.nodes.wms.core.basedata.entity;
+package org.nodes.wms.dao.basics.sku.entities;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -18,9 +18,6 @@ import java.math.BigDecimal;
 
 /**
  * 物品替代实体类
- *
- * @author pengwei
- * @since 2019-12-23
  */
 @Data
 @TableName("wms_sku_replace")
@@ -34,7 +31,6 @@ public class SkuReplace extends TenantEntity {
 	/**
 	 * 物品替代ID
 	 */
-	@ApiModelProperty(value = "物品替代ID")
 	@TableId(value = "wsrep_id", type = IdType.ASSIGN_ID)
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long wsrepId;
@@ -42,7 +38,6 @@ public class SkuReplace extends TenantEntity {
 	 * 物品ID
 	 */
 	@NotNull()
-	@ApiModelProperty(value = "物品ID")
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long skuId;
 
@@ -50,53 +45,45 @@ public class SkuReplace extends TenantEntity {
 	 * 包装ID
 	 */
 	@NotNull
-	@ApiModelProperty(value = "包装ID")
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long wspId;
 	/**
 	 * 计量单位ID
 	 */
 	@NotNull
-	@ApiModelProperty(value = "计量单位ID")
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long wsuId;
 	/**
 	 * 物品数量
 	 */
 	@NotNull
-	@ApiModelProperty(value = "物品数量")
 	private BigDecimal qty;
 	/**
 	 * 替代物品ID
 	 */
 	@NotNull
-	@ApiModelProperty(value = "替代物品ID")
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long wsrepSkuId;
 	/**
 	 * 替代包装ID
 	 */
 	@NotNull
-	@ApiModelProperty(value = "替代包装ID")
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long wsrepWspId;
 	/**
 	 * 替代计量单位ID
 	 */
 	@NotNull
-	@ApiModelProperty(value = "替代计量单位ID")
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long wsrepWsuId;
 	/**
 	 * 替代数量
 	 */
 	@NotNull
-	@ApiModelProperty(value = "替代数量")
 	private BigDecimal wsrepQty;
 
 	/**
 	 * 顺序
 	 */
-	@ApiModelProperty(value = "顺序")
 	private Integer wsrepOrder;
 }

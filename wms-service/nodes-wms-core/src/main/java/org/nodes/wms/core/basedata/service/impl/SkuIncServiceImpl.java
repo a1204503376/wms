@@ -1,7 +1,7 @@
 
 package org.nodes.wms.core.basedata.service.impl;
 
-import org.nodes.wms.core.basedata.entity.SkuInc;
+import org.nodes.wms.dao.basics.sku.entities.SkuInc;
 import org.nodes.wms.core.basedata.mapper.SkuIncMapper;
 import org.nodes.wms.core.basedata.service.ISkuIncService;
 import org.nodes.wms.core.basedata.vo.SkuIncVO;

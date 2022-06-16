@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<u-navbar :leftText="username" leftIcon="account-fill" :leftIconSize="40" leftIconColor="#fff"
-			@leftClick="userSetting" :rightText="title" :rightIconSize="40" @rightClick="goOut" :fixed="false"
+			@leftClick="userSetting" :rightText="title" :fixed="false"
 			:autoBack="false"  :bgColor="navigationBarBackgroundColor"
 			titleStyle="color:#ffffff;font-size:21px">
 		</u-navbar>
@@ -68,6 +68,9 @@
 				  	uni.$u.func.route('/pages/userSetting/warehouseSetting');
 				}
 				else{
+					uni.setStorageSync('warehouse',data.data[0]);
+					warehouse.warehouseChange(this.warehouse).then(data => {
+					})
 					this.title=uni.getStorageSync('warehouse').whName;	
 				}
 			})

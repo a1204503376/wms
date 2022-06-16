@@ -1,7 +1,7 @@
 
 package org.nodes.wms.core.basedata.service.impl;
 
-import org.nodes.wms.core.basedata.entity.SkuReplace;
+import org.nodes.wms.dao.basics.sku.entities.SkuReplace;
 import org.nodes.wms.core.basedata.mapper.SkuReplaceMapper;
 import org.nodes.wms.core.basedata.service.ISkuReplaceService;
 import org.nodes.wms.core.basedata.vo.SkuReplaceVO;

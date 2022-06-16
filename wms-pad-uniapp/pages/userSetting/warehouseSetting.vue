@@ -45,7 +45,6 @@
 			submit() {
 				uni.setStorageSync('warehouse', this.warehouse);
 				warehouse.warehouseChange(this.warehouse).then(data => {
-				  console.log(data);
 			    })
 				uni.$u.func.navigateBack();
 			},
