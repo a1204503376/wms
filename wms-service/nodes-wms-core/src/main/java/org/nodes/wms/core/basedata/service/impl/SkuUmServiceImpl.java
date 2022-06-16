@@ -3,7 +3,11 @@ package org.nodes.wms.core.basedata.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import lombok.RequiredArgsConstructor;
 import org.nodes.wms.core.basedata.service.ISkuPackageDetailService;
+import org.nodes.wms.dao.basics.customer.entities.BasicsCustomer;
+import org.nodes.wms.dao.basics.sku.SkuUmDao;
+import org.nodes.wms.dao.basics.sku.dto.input.SkuUmAddOrEditRequest;
 import org.springblade.core.log.exception.ServiceException;
 import lombok.AllArgsConstructor;
 import org.nodes.core.tool.entity.DataVerify;
@@ -46,11 +50,12 @@ import java.util.stream.Collectors;
  */
 @Service
 @Primary
+@RequiredArgsConstructor
 @Transactional(propagation = Propagation.NESTED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
 public class SkuUmServiceImpl<M extends SkuUmMapper, T extends SkuUm>
 	extends BaseServiceImpl<SkuUmMapper, SkuUm>
 	implements ISkuUmService {
-
+    private final SkuUmDao skuUmDao;
 	@Override
 	public boolean removeByIds(Collection<? extends Serializable> idList) {
 		ISkuPackageDetailService skuPackageDetailService = SpringUtil.getBean(ISkuPackageDetailService.class);
@@ -235,7 +240,24 @@ public class SkuUmServiceImpl<M extends SkuUmMapper, T extends SkuUm>
 		return sb.toString();
 	}
 
-	@Override
+    @Override
+    public String addOrEdit(SkuUmAddOrEditRequest skuUmAddOrEditRequest) {
+		boolean isExist = skuUmDao.isExistUmCode(skuUmAddOrEditRequest.getWsuCode());
+		SkuUm skuUm = new SkuUm();
+		skuUm.setWsuName(skuUmAddOrEditRequest.getWsuName());
+		skuUm.setWsuCode(skuUmAddOrEditRequest.getWsuCode());
+		if(isExist){
+			skuUmDao.update(skuUm);
+			return "计量单位编码"+skuUm.getWsuCode()+"修改成功";
+		}
+
+		skuUmDao.insert(skuUm);
+		return "客户编码"+skuUm.getWsuCode()+"保存成功";
+
+
+    }
+
+    @Override
 	public boolean importData(List<DataVerify> dataVerifyList) {
 		if (Func.isEmpty(dataVerifyList)) {
 			throw new ServiceException("没有数据可以保存！");

@@ -10,6 +10,8 @@ import org.nodes.wms.core.basedata.excel.SkuUmExcel;
 import org.nodes.wms.core.basedata.service.ISkuUmService;
 import org.nodes.wms.core.basedata.vo.SkuUmVO;
 import org.nodes.wms.core.basedata.wrapper.SkuUmWrapper;
+import org.nodes.wms.dao.basics.customer.dto.input.NewCustomerRequest;
+import org.nodes.wms.dao.basics.sku.dto.input.SkuUmAddOrEditRequest;
 import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.excel.util.ExcelUtil;
@@ -134,4 +136,14 @@ public class SkuUmController extends BladeController {
 	public R<Boolean> importData(@RequestBody List<DataVerify> dataVerifyList) {
 		return R.data(skuUmService.importData(dataVerifyList));
 	}
+	/**
+	 * 新增或修改api
+	 */
+	@ApiLog("客户管理-新增或修改")
+	@PostMapping("/addOrEdit")
+	public R<String> addOrEdit(@Valid @RequestBody SkuUmAddOrEditRequest skuUmAddOrEditRequest) {
+		String msg  = skuUmService.addOrEdit(skuUmAddOrEditRequest);
+		return R.success(msg);
+	}
+
 }
