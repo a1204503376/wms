@@ -32,4 +32,83 @@
         order by la.create_time desc
     </select>
 
+    <select id="getLists" resultType="org.nodes.wms.dao.common.log.dto.LogActionPageResponse">
+        select log.id,log.user_account,log.user_real_name,log.type,log.bill_id,log.bill_no,log.log,log.status,log.tenant_id,log.create_dept,log.create_time,log.update_time,
+               user1.real_name createUser,
+               user2.real_name updateUser
+        from log_action log
+                 LEFT JOIN blade_user user1 ON user1.id = log.create_user
+                 LEFT JOIN blade_user user2 ON user2.id = log.update_user
+        <where>
+            <if test="query.userAccount!=null and query.userAccount != ''">
+                AND log.user_account LIKE concat('%',#{query.userAccount},'%')
+            </if>
+            <if test="query.userRealName!=null and query.userRealName != ''">
+                AND log.user_real_name LIKE concat('%',#{query.userRealName},'%')
+            </if>
+            <if test="query.type!=null and query.type.size>0">
+                AND log.type IN
+                <foreach collection="query.type" open="(" close=")" item="item" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="query.billId!=null and query.billDate != ''">
+                AND log.bill_id LIKE concat('%',#{query.billId},'%')
+            </if>
+            <if test="query.billNo!=null and query.billNo != ''">
+                AND log.bill_no LIKE concat('%',#{query.billNo},'%')
+            </if>
+            <if test="query.log!=null and query.log != ''">
+                AND log.log LIKE concat('%',#{query.log},'%')
+            </if>
+            <if test="query.createTimeBegin!=null and query.createTimeEnd!=null">
+                AND log.create_time between #{query.createTimeBegin} and #{query.createTimeEnd}
+            </if>
+            <if test="query.updateTimeBegin!=null and query.updateTimeEnd!=null">
+                AND log.update_time between #{query.updateTimeBegin} and #{query.updateTimeEnd}
+            </if>
+        </where>
+        <if test="page.orders==null or page.orders.size()==0">
+            order by log.create_time desc
+        </if>
+    </select>
+
+    <select id="getActionLists" resultType="org.nodes.wms.dao.common.log.dto.LogActionExcelResponse">
+        select log.id,log.user_account,log.user_real_name,log.type,log.bill_id,log.bill_no,log.log,log.status,log.tenant_id,log.create_dept,log.create_time,log.update_time,
+        user1.real_name createUser,
+        user2.real_name updateUser
+        from log_action log
+        LEFT JOIN blade_user user1 ON user1.id = log.create_user
+        LEFT JOIN blade_user user2 ON user2.id = log.update_user
+        <where>
+            <if test="query.userAccount!=null and query.userAccount != ''">
+                AND log.user_account LIKE concat('%',#{query.userAccount},'%')
+            </if>
+            <if test="query.userRealName!=null and query.userRealName != ''">
+                AND log.user_real_name LIKE concat('%',#{query.userRealName},'%')
+            </if>
+            <if test="query.type!=null and query.type.size>0">
+                AND log.type IN
+                <foreach collection="query.type" open="(" close=")" item="item" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="query.billId!=null and query.billDate != ''">
+                AND log.bill_id LIKE concat('%',#{query.billId},'%')
+            </if>
+            <if test="query.billNo!=null and query.billNo != ''">
+                AND log.bill_no LIKE concat('%',#{query.billNo},'%')
+            </if>
+            <if test="query.log!=null and query.log != ''">
+                AND log.log LIKE concat('%',#{query.log},'%')
+            </if>
+            <if test="query.createTimeBegin!=null and query.createTimeEnd!=null">
+                AND log.create_time between #{query.createTimeBegin} and #{query.createTimeEnd}
+            </if>
+            <if test="query.updateTimeBegin!=null and query.updateTimeEnd!=null">
+                AND log.update_time between #{query.updateTimeBegin} and #{query.updateTimeEnd}
+            </if>
+        </where>
+            order by log.create_time desc
+    </select>
 </mapper>
