@@ -1,8 +1,10 @@
-package org.nodes.wms.dao.basics.sku.entities;
+package org.nodes.wms.dao.basics.skuType.entities;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.springblade.core.tenant.mp.TenantEntity;
 
@@ -21,6 +23,7 @@ public class SkuType extends TenantEntity {
 	 * 物品分类id
 	 */
 	@TableId(value = "sku_type_id", type = IdType.ASSIGN_ID)
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long skuTypeId;
 
 	/**

@@ -1,18 +1,16 @@
-package org.nodes.modules.wms.basedata.controller;
+package org.nodes.wms.controller.basics;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.CommonConstant;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
+import org.nodes.wms.biz.basics.skuType.SkuTypeBiz;
 import org.nodes.wms.core.basedata.dto.SkuTypeDTO;
-import org.nodes.wms.dao.basics.sku.entities.SkuType;
+import org.nodes.wms.dao.basics.skuType.dto.input.SkuTypeAddOrEditRequest;
+import org.nodes.wms.dao.basics.skuType.entities.SkuType;
 import org.nodes.wms.core.basedata.excel.SkuTypeExcel;
 import org.nodes.wms.core.basedata.service.ISkuTypeService;
 import org.nodes.wms.core.basedata.vo.SkuTypeVO;
@@ -23,7 +21,6 @@ import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
-import org.springblade.core.tool.constant.BladeConstant;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,10 +28,10 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author wanglei
@@ -43,15 +40,16 @@ import java.util.stream.Collectors;
  * @create 20191128
  */
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/wms/basedata/skutype")
-@Api(value = "物品分类", tags = "物品分类")
 public class SkuTypeController extends BladeController {
 
 	/**
 	 * 物品分类服务接口
 	 */
-	private ISkuTypeService skuTypeService;
+	private final ISkuTypeService skuTypeService;
+
+	private final SkuTypeBiz skuTypeBiz;
 
 	/**
 	 * 详情
@@ -188,5 +186,14 @@ public class SkuTypeController extends BladeController {
 	@ApiOperation(value = "导入数据")
 	public R<Boolean> importData(@RequestBody List<DataVerify> dataVerifyList) {
 		return R.data(skuTypeService.importData(dataVerifyList));
+	}
+
+	@ApiLog("物品分类管理-新增或修改")
+	@PostMapping("/save")
+	public R<String> save(@Valid @RequestBody SkuTypeAddOrEditRequest skuTypeAddOrEditRequest){
+		SkuType skuType = skuTypeBiz.save(skuTypeAddOrEditRequest);
+		return R.success(String.format("%s成功，分类编码：%s",
+			Func.isEmpty(skuTypeAddOrEditRequest.getSkuTypeId()) ? "新增" : "修改",
+			skuType.getTypeCode()));
 	}
 }

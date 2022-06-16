@@ -25,7 +25,7 @@ import org.nodes.wms.core.warehouse.cache.WarehouseCache;
 import org.nodes.wms.core.warehouse.entity.Location;
 import org.nodes.wms.core.warehouse.service.IZoneService;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
-import org.nodes.wms.dao.basics.sku.entities.SkuType;
+import org.nodes.wms.dao.basics.skuType.entities.SkuType;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.springblade.core.mp.support.BaseEntityWrapper;

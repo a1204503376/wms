@@ -9,7 +9,7 @@ import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.entity.SkuPackage;
 import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
-import org.nodes.wms.dao.basics.sku.entities.SkuType;
+import org.nodes.wms.dao.basics.skuType.entities.SkuType;
 import org.nodes.wms.core.basedata.service.ISkuTypeService;
 import org.springblade.core.mp.support.BaseEntityWrapper;
 import org.springblade.core.tool.utils.BeanUtil;
