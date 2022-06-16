@@ -50,8 +50,7 @@ public class Sku extends TenantEntity {
 	/**
 	 * 包装名称
 	 */
-//	@ApiModelProperty("包装名称")
-//	private String wspName;
+	private String wspName;
 	/**
 	 * 物品批属性设置ID
 	 */

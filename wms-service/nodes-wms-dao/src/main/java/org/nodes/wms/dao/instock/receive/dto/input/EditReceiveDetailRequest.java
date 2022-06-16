@@ -3,8 +3,7 @@ package org.nodes.wms.dao.instock.receive.dto.input;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
-import org.nodes.wms.dao.basics.sku.dto.SkuSelectRequest;
-import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.input.SkuSelectRequest;
 
 import java.math.BigDecimal;
 

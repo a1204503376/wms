@@ -2,7 +2,7 @@
 package org.nodes.wms.core.basedata.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.nodes.wms.core.basedata.entity.SkuInc;
+import org.nodes.wms.dao.basics.sku.entities.SkuInc;
 import org.springframework.context.annotation.Primary;
 
 import java.util.List;

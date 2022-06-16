@@ -18,7 +18,7 @@ public class SkuUm extends TenantEntity {
 	/**
 	 * 计量单位id
 	 */
-	@TableId(value = "wsuId", type = IdType.ASSIGN_ID)
+	@TableId(value = "wsu_id", type = IdType.ASSIGN_ID)
 	private Long wsuId;
 
 	/**

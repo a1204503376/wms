@@ -2,8 +2,9 @@ package org.nodes.wms.dao.basics.sku.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.nodes.wms.dao.basics.sku.SkuDao;
-import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
-import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.input.SkuAddOrEditRequest;
+import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.*;
 import org.nodes.wms.dao.basics.sku.mapper.SkuMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -41,7 +42,6 @@ public class SkuDaoImpl
 
 	@Override
 	public SkuUm getSkuUmByUmCode(String skuUmCode) {
-
 		return super.baseMapper.getSkuUmByUmCode(skuUmCode);
 	}
 
@@ -54,5 +54,15 @@ public class SkuDaoImpl
     public Sku getSkuByCode(String skuCode) {
 		return super.getOne(new LambdaQueryWrapper<Sku>().eq(Sku::getSkuCode,skuCode));
     }
+
+	@Override
+	public void saveSku(Sku sku) {
+		super.saveOrUpdate(sku);
+	}
+
+	@Override
+	public SkuPackage getSkuPackageByWspId(Long wspId) {
+		return super.baseMapper.selectSkuPackageByWspId(wspId);
+	}
 
 }

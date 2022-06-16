@@ -1,8 +1,9 @@
 package org.nodes.wms.biz.basics.sku;
 
-import org.nodes.wms.dao.basics.sku.dto.SkuSelectQuery;
-import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
-import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.input.SkuAddOrEditRequest;
+import org.nodes.wms.dao.basics.sku.dto.input.SkuSelectQuery;
+import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.*;
 
 import java.util.List;
@@ -86,4 +87,19 @@ public interface SkuBiz {
 	 */
 	SkuPackageDetail findBaseSkuPackageDetail(Long skuId);
 
+	/**
+	 * 新增或编辑物品
+	 *
+	 * @param skuAddOrEditRequest: 物品新增或编辑dto对象
+	 * @return Sku
+	 */
+	Sku save(SkuAddOrEditRequest skuAddOrEditRequest);
+
+	/**
+	 * 根据包装id获取包装信息
+	 *
+	 * @param wspId: 包装id
+	 * @return SkuPackage
+	 */
+	SkuPackage findSkuPackageByWspId(Long wspId);
 }
