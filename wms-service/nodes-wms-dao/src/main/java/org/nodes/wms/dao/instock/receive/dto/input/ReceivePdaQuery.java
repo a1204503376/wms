@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class ReceivePdaQuery implements Serializable {
 	private static final long serialVersionUID = 7752254814035478515L;
 	/**
-	 * 收货单编码
+	 * 收货单编码或者上游编码
 	 */
-	private String receiveNo;
+	private String no;
 }

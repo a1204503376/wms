@@ -104,10 +104,8 @@
         from receive_header h
                  LEFT JOIN wms_bill_type b ON  h.bill_type_cd = b.bill_type_cd
       <where>
-          <if test="query.receiveNo!=null and query.receiveNo != ''">
-              AND h.receive_no LIKE concat('%',#{query.receiveNo},'%')
-              OR  h.external_order_no LIKE concat('%',#{query.receiveNo},'%')
-          </if>
+              AND h.receive_no LIKE concat('%',#{query.no},'%')
+              OR  h.external_order_no LIKE concat('%',#{query.no},'%')
       </where>
         group by h.receive_id,b.bill_type_name
         order by h.create_time

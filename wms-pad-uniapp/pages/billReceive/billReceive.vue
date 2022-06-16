@@ -2,7 +2,7 @@
 	<view>
 		<u-divider text=""></u-divider>
 		<template>
-			<u-search placeholder="请输入收货单编码/上游编码" v-model="params.receiveNo" :show-action="false" @custom="search"
+			<u-search placeholder="请输入收货单编码/上游编码" v-model="params.no" :show-action="false" @custom="search"
 				@search="search">
 			</u-search>
 		</template>
@@ -41,13 +41,10 @@
 		data() {
 			return {
 				params: {
-					receiveNo: '',
+					no: '',
 				},
 				receiveList: [],
 			}
-		},
-		onLoad() {
-			this.search();
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -67,8 +64,8 @@
 			clickItem(item) {
 				uni.$u.func.route('/pages/billReceive/billReceivePageTwo?receive=' + JSON.stringify(item));
 			},
-			scannerCallback(data) {
-				this.params.receiveNo = data;
+			scannerCallback(no) {
+				this.params.no = no;
 				this.search();
 			},
 			emitKeyDown(e) {

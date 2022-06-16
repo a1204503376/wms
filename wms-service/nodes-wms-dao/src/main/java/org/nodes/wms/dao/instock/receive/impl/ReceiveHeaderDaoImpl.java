@@ -12,7 +12,9 @@ import org.nodes.wms.dao.instock.receive.mapper.ReceiveHeaderMapper;
 import org.nodes.wms.dao.instock.receive.ReceiveHeaderDao;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -78,6 +80,10 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 
 	@Override
 	public List<ReceiveHeaderPdaResponse> getReceiveList(ReceivePdaQuery receivePdaQuery) {
+		if(Func.isEmpty(receivePdaQuery.getNo()))
+		{
+			throw new ServiceException("必须输入收货单编码或上游编码");
+		}
 		return receiveHeaderMapper.getReceiveList(receivePdaQuery);
 	}
 

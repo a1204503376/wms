@@ -1,11 +1,11 @@
 import http from '@/http/api.js'
 
 
-const getReceiveList =(receive)=>{
+const getReceiveList =(params)=>{
 	return http.request({
 		url: '/api/ApiPDA/receive/list',
 		method: 'POST',
-		data:receive
+		data:params
 	
 	})
 }
