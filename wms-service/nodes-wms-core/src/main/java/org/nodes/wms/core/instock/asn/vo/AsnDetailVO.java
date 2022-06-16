@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.core.basedata.vo.SkuLotConfigVO;
 import org.nodes.wms.core.instock.asn.entity.AsnDetail;
 

@@ -16,7 +16,7 @@ import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.core.basedata.dto.SkuLogDTO;
-import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.dao.basics.sku.enums.SkuLogTypeEnum;
 import org.nodes.wms.core.basedata.wrapper.SkuLotWrapper;
 import org.nodes.wms.core.stock.core.entity.Stock;

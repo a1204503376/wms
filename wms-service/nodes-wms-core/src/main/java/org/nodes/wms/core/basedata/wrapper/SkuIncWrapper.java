@@ -4,7 +4,7 @@ package org.nodes.wms.core.basedata.wrapper;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.core.basedata.entity.Enterprise;
 import org.nodes.wms.dao.basics.sku.entities.SkuInc;
-import org.nodes.wms.core.basedata.entity.SkuPackage;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackage;
 import org.nodes.wms.core.basedata.service.IEnterpriseService;
 import org.nodes.wms.core.basedata.vo.SkuIncVO;
 import org.springblade.core.mp.support.BaseEntityWrapper;
