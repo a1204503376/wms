@@ -174,4 +174,10 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	public List<ReceiveHeaderPdaResponse> getReceiveListByReceiveNo(ReceivePdaQuery receivePdaQuery) {
 		return receiveHeaderDao.getReceiveList(receivePdaQuery);
 	}
+
+	@Override
+	public List<DetailReceiveDetailPdaResponse> getDetailListByReceiveId(ReceiveDetailPdaQuery receiveDetailPdaQuery) {
+		return receiveDetailDao.selectDetailListByReceiveId(receiveDetailPdaQuery);
+	}
+
 }
