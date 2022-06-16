@@ -1,7 +1,9 @@
 package org.nodes.wms.dao.instock.receive;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceivePdaQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveHeaderResponse;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderPdaResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
@@ -36,4 +38,13 @@ public interface ReceiveHeaderDao {
 	void updateReceive(ReceiveHeader receiveHeader);
 
 	ReceiveHeader selectBillStateById(Long receiveId);
+
+	/**
+	 * 获取收货单列表页面收货单头
+	 * @param receivePdaQuery 请求参数
+	 * @return IPage<PageResponse>
+	 */
+	List<ReceiveHeaderPdaResponse> getReceiveList(ReceivePdaQuery receivePdaQuery);
+
+
 }
