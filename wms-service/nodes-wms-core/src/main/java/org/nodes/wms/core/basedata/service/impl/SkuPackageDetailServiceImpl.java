@@ -1,6 +1,6 @@
 package org.nodes.wms.core.basedata.service.impl;
 
-import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.core.basedata.mapper.SkuPackageDetailMapper;
 import org.nodes.wms.core.basedata.service.ISkuPackageDetailService;
 import org.springblade.core.mp.base.BaseServiceImpl;

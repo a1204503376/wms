@@ -12,4 +12,23 @@ public interface SkuUmDao {
 	 * @return  SkuUm
 	 */
 	SkuUm getSkuUmById(Long wsuId);
+
+	/**
+	 * 查询计量单位编码是否存在
+	 * @param wsuCode   计量单位编码
+	 * @return
+	 */
+	boolean isExistUmCode(String wsuCode);
+
+	/**
+	 * 计量单位修改
+	 * @param skuUm   计量单位实体
+	 */
+	void update(SkuUm skuUm);
+
+	/**
+	 * 计量单位保存
+	 * @param skuUm 计量单位实体
+	 */
+	void insert(SkuUm skuUm);
 }

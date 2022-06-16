@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.nodes.core.base.cache.ParamCache;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
-import org.nodes.wms.core.basedata.entity.SkuPackage;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackage;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.basedata.service.ISkuLotService;
 import org.nodes.wms.core.basedata.vo.SkuLotConfigVO;

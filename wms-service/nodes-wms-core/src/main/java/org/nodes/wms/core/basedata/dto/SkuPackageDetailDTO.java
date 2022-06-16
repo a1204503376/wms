@@ -3,7 +3,7 @@ package org.nodes.wms.core.basedata.dto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 
 /**
  * 数据传输对象实体类

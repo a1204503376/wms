@@ -3,7 +3,7 @@ package org.nodes.wms.core.stock.transfer.wrapper;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
-import org.nodes.wms.core.basedata.entity.SkuPackage;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackage;
 import org.nodes.wms.core.warehouse.cache.LocationCache;
 import org.nodes.wms.core.warehouse.entity.Location;
 import org.nodes.wms.core.stock.transfer.entity.TransferDetail;
