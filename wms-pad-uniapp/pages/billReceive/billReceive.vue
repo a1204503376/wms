@@ -57,12 +57,12 @@
 				receive.getReceiveList(this.params).then(data => {
 					this.receiveList = data.data;
 					if (data.data.length == 1) {
-						uni.$u.func.route('/pages/billReceive/billReceivePageTwo?receive=' + JSON.stringify(data.data[0]));
+						uni.$u.func.route('/pages/billReceive/billReceivePageTwo',data.data[0]);
 					}
 				})
 			},
 			clickItem(item) {
-				uni.$u.func.route('/pages/billReceive/billReceivePageTwo?receive=' + JSON.stringify(item));
+				uni.$u.func.route('/pages/billReceive/billReceivePageTwo',item);
 			},
 			scannerCallback(no) {
 				this.params.no = no;
