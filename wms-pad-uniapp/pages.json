@@ -85,12 +85,27 @@
 		}, {
 			"path": "pages/userSetting/warehouseSetting",
 			"style": {
-			"navigationBarTitleText": "选择库房",
-			"enablePullDownRefresh": false
+				"navigationBarTitleText": "选择库房",
+				"enablePullDownRefresh": false
 			}
 		}
-		
-		
+
+
+		, {
+			"path": "pages/billReceive/billReceive",
+			"style": {
+				"navigationBarTitleText": "按件收货",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/billReceive/billReceivePageTwo",
+			"style": {
+				"navigationBarTitleText": "按件收货2",
+				"enablePullDownRefresh": false
+			}
+
+		}
 	],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#33cbcc"

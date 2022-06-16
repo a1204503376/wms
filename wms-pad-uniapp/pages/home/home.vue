@@ -69,7 +69,7 @@
 				}
 				else{
 					uni.setStorageSync('warehouse',data.data[0]);
-					warehouse.warehouseChange(this.warehouse).then(data => {
+					warehouse.warehouseChange(data.data[0]).then(data => {
 					})
 					this.title=uni.getStorageSync('warehouse').whName;	
 				}
