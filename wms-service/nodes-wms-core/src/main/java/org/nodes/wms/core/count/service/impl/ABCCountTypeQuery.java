@@ -1,23 +1,16 @@
 package org.nodes.wms.core.count.service.impl;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.basedata.cache.SkuCache;
-import org.nodes.wms.core.basedata.entity.Sku;
-import org.nodes.wms.core.basedata.service.ISkuService;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.stock.core.entity.Stock;
 import org.nodes.wms.core.count.entity.CountDetail;
 import org.nodes.wms.core.count.enums.CountByEnum;
 import org.nodes.wms.core.count.vo.CountHeaderVO;
 import org.nodes.wms.core.warehouse.entity.Location;
-import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.Func;
-import org.springblade.core.tool.utils.SpringUtil;
-import org.springblade.core.tool.utils.StringPool;
-import org.springframework.context.annotation.Primary;
 
 import java.util.Comparator;
 import java.util.Iterator;

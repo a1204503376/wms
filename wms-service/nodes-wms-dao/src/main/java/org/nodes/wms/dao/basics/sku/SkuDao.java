@@ -1,7 +1,8 @@
 package org.nodes.wms.dao.basics.sku;
 
-import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
-import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.input.SkuAddOrEditRequest;
+import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.*;
 
 import java.util.List;
@@ -59,4 +60,19 @@ public interface SkuDao {
 	 */
     Sku getSkuByCode(String skuCode);
 
+	/**
+	 * 新增或修改物品信息
+	 *
+	 * @param sku: 物品对象
+	 * @return void
+	 */
+	void saveSku(Sku sku);
+
+	/**
+	 * 根据包装id获取包装信息
+	 *
+	 * @param wspId: 包装id
+	 * @return SkuPackage
+	 */
+	SkuPackage getSkuPackageByWspId(Long wspId);
 }

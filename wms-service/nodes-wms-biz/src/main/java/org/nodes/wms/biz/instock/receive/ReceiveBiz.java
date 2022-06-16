@@ -1,12 +1,8 @@
 package org.nodes.wms.biz.instock.receive;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.nodes.wms.dao.instock.receive.dto.input.EditReceiveRequest;
-import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
-import org.nodes.wms.dao.instock.receive.dto.input.NewReceiveRequest;
-import org.nodes.wms.dao.instock.receive.dto.output.EditReceiveResponse;
-import org.nodes.wms.dao.instock.receive.dto.output.ReceiveResponse;
-import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
+import org.nodes.wms.dao.instock.receive.dto.input.*;
+import org.nodes.wms.dao.instock.receive.dto.output.*;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.springblade.core.mp.support.Query;
 
@@ -69,4 +65,17 @@ public interface ReceiveBiz {
 	EditReceiveResponse getEditReceiveResponse(Long receiveId);
 
 	String editReceive(EditReceiveRequest editReceiveRequest);
+
+
+	/**
+	 * PDA获取收货单列表
+	 * @param receivePdaQuery :收货单分页查询条件对象
+	 */
+	List<ReceiveHeaderPdaResponse> getReceiveListByReceiveNo(ReceivePdaQuery receivePdaQuery);
+
+	/**
+	 * @param receiveDetailPdaQuery 收货单接收前端请求条件
+	 * @return 收货单明细表集合
+	 */
+	List<DetailReceiveDetailPdaResponse> getDetailListByReceiveId(ReceiveDetailPdaQuery receiveDetailPdaQuery);
 }

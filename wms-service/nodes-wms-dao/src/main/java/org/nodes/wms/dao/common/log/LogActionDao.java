@@ -2,8 +2,7 @@ package org.nodes.wms.dao.common.log;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.nodes.wms.dao.common.log.dto.LogPageQuery;
-import org.nodes.wms.dao.common.log.dto.LogResponse;
+import org.nodes.wms.dao.common.log.dto.*;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 
 import java.util.List;
@@ -35,4 +34,20 @@ public interface LogActionDao {
 	 * @return
 	 */
 	Page<LogResponse> getPage(LogPageQuery logPageQuery, IPage<LogAction> page);
+
+	/**
+	 * 业务日志分页查询
+	 * @param logActionPageQuery 业务日志查询条件
+	 * @param page 分页参数
+	 * @return 业务日志响应对象
+	 */
+	Page<LogActionPageResponse> getLists(LogActionPageQuery logActionPageQuery, IPage<LogAction> page);
+
+	/**
+	 * 获取业务日志集合
+	 * @param logActionPageQuery 导出条件
+	 * @return 业务日志集合
+	 */
+	List<LogActionExcelResponse> getActionLists(LogActionPageQuery logActionPageQuery);
+
 }

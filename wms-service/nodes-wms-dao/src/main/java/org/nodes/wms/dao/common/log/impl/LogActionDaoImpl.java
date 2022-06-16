@@ -6,8 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 
 import org.nodes.wms.dao.common.log.LogActionDao;
-import org.nodes.wms.dao.common.log.dto.LogPageQuery;
-import org.nodes.wms.dao.common.log.dto.LogResponse;
+import org.nodes.wms.dao.common.log.dto.*;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.mapper.LogActionMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -44,5 +43,20 @@ public class LogActionDaoImpl  extends BaseServiceImpl<LogActionMapper, LogActio
 	@Override
 	public Page<LogResponse> getPage(LogPageQuery logPageQuery, IPage<LogAction> page) {
 		return super.baseMapper.getPage(logPageQuery,page);
+	}
+
+	/**
+	 * @param logActionPageQuery 业务日志查询条件
+	 * @param page               分页参数
+	 * @return 业务日志响应对象
+	 */
+	@Override
+	public Page<LogActionPageResponse> getLists(LogActionPageQuery logActionPageQuery, IPage<LogAction> page) {
+		return super.baseMapper.getLists(logActionPageQuery,page);
+	}
+
+	@Override
+	public List<LogActionExcelResponse> getActionLists(LogActionPageQuery logActionPageQuery) {
+		return super.baseMapper.getActionLists(logActionPageQuery);
 	}
 }

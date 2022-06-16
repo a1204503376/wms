@@ -2,9 +2,11 @@ package org.nodes.wms.controller.state;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.wms.dao.application.dto.output.AuditLogTypeResponse;
 import org.nodes.wms.dao.application.dto.output.LpnTypeResponse;
 import org.nodes.wms.dao.application.dto.output.StateGeneralResponse;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeEnum;
+import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.instock.asn.enums.AsnBillStateEnum;
 import org.nodes.wms.dao.instock.asn.enums.InStorageTypeEnum;
 import org.springblade.core.tool.api.R;
@@ -44,6 +46,12 @@ public class StateController {
 	@PostMapping("getLpnTypeState")
 	public R<List<LpnTypeResponse>> getLpnTypeState(){
 		return R.data(LpnTypeEnum.getList());
+	}
+
+	@PostMapping("getAuditLogTypeState")
+	public R<List<AuditLogTypeResponse>> getAuditLogType()
+	{
+		return R.data(AuditLogType.getList());
 	}
 
 }

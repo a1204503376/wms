@@ -19,7 +19,7 @@
         user1.real_name createUser,
         user2.real_name updateUser,
         c.update_time,
-        c.status
+        IF(c.status = 1, '启用', '未启用') as status
         from basics_customers c
         LEFT JOIN blade_user user1 ON user1.id = c.create_user
         LEFT JOIN blade_user user2 ON user2.id = c.update_user

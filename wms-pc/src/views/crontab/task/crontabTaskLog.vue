@@ -130,7 +130,8 @@ export default {
         }
     },
     watch:{
-        id(){
+        crontabTaskName(){
+            this.form.params.crontabTaskName = this.crontabTaskName;
             this.getTableData()
         }
     },
@@ -143,7 +144,6 @@ export default {
                 .then((res) => {
                     const data = res.data.data;
                     this.table.data = data.records;
-                    this.table.data.crontabTaskName = this.id;
                     this.page.total = data.total;
                 })
         },

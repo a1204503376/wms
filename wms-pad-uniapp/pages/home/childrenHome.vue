@@ -47,7 +47,7 @@
 		methods: {
 			navTo(menu) {
 				//跳转页面
-				uni.$u.func.route(menu.path + '?title=' + menu.name);
+				uni.$u.func.route(menu.path);
 			},
 			closePage() {
 				uni.$u.func.navigateBack();

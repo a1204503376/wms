@@ -3,7 +3,7 @@ package org.nodes.wms.core.count.wrapper;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
-import org.nodes.wms.core.basedata.entity.SkuPackage;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackage;
 import org.nodes.wms.core.count.dto.CountRecordDTO;
 import org.nodes.wms.core.count.entity.CountRecord;
 import org.nodes.wms.core.count.vo.CountRecordVO;

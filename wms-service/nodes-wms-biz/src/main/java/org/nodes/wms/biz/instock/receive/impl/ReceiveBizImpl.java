@@ -2,7 +2,6 @@ package org.nodes.wms.biz.instock.receive.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
 import org.nodes.wms.dao.instock.receive.ReceiveDetailDao;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -171,4 +169,15 @@ public class ReceiveBizImpl implements ReceiveBiz {
 
 		return receiveNo;
 	}
+
+	@Override
+	public List<ReceiveHeaderPdaResponse> getReceiveListByReceiveNo(ReceivePdaQuery receivePdaQuery) {
+		return receiveHeaderDao.getReceiveList(receivePdaQuery);
+	}
+
+	@Override
+	public List<DetailReceiveDetailPdaResponse> getDetailListByReceiveId(ReceiveDetailPdaQuery receiveDetailPdaQuery) {
+		return receiveDetailDao.selectDetailListByReceiveId(receiveDetailPdaQuery);
+	}
+
 }

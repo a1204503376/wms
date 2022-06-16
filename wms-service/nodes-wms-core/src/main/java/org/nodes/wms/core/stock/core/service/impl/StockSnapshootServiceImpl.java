@@ -1,8 +1,7 @@
 package org.nodes.wms.core.stock.core.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import org.nodes.wms.core.basedata.entity.Sku;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.mapper.SkuMapper;
 import org.nodes.wms.core.common.entity.FunctionCount;
 import org.nodes.wms.core.common.service.IFunctionCountService;

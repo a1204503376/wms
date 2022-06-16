@@ -11,15 +11,14 @@ import org.nodes.wms.dao.common.log.dto.*;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.entities.LogMessage;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
+import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
-import org.springblade.core.tool.utils.DateTimeUtil;
 import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
-import org.springframework.util.unit.DataUnit;
 
-import java.text.SimpleDateFormat;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -124,7 +123,23 @@ public class LogBizImpl implements LogBiz {
 		logMessageDao.updateLogMsgReaded(num,id);
 	}
 
+	/**
+	 * 业务日志分页查询
+	 * @param logActionPageQuery 业务日志查询条件
+	 * @param query 分页参数
+	 * @return 业务日志响应对象
+	 */
+	@Override
+	public Page<LogActionPageResponse> getLists(LogActionPageQuery logActionPageQuery, Query query) {
+		IPage<LogAction> page = Condition.getPage(query);
+		return actionDao.getLists(logActionPageQuery,page);
+	}
 
+	@Override
+	public void exportActionLists(LogActionPageQuery logActionPageQuery, HttpServletResponse response) {
+		List<LogActionExcelResponse> actionLists = actionDao.getActionLists(logActionPageQuery);
+		ExcelUtil.export(response, "业务日志", "业务日志数据表",actionLists, LogActionExcelResponse.class);
+	}
 
 
 }

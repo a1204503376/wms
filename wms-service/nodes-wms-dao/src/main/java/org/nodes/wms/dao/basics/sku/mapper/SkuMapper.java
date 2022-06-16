@@ -3,13 +3,9 @@ package org.nodes.wms.dao.basics.sku.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
-import org.nodes.wms.dao.basics.sku.dto.SkuPackageDetailResponse;
-import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
-import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
-import org.nodes.wms.dao.basics.sku.entities.Sku;
-import org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate;
-import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
-import org.nodes.wms.dao.basics.sku.entities.SkuUm;
+import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse;
+import org.nodes.wms.dao.basics.sku.entities.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -51,4 +47,12 @@ public interface SkuMapper extends BaseMapper<Sku> {
 	SkuUm getSkuUmByUmCode(@Param("skuUmCode") String skuUmCode);
 
     SkuPackageDetail getBaseSkuPackageDetail(@Param("skuId")Long skuId);
+
+	/**
+	 * 根据包装id查询包装信息
+	 *
+	 * @param wspId: 包装id
+	 * @return SkuPackage
+	 */
+	SkuPackage selectSkuPackageByWspId(@Param("wspId") Long wspId);
 }

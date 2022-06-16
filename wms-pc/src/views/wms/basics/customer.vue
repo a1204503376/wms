@@ -115,10 +115,10 @@ import fileDownload from "js-file-download";
                                      prop="status"
                                      width="100">
                         <template v-slot="{row}">
-                            <el-tag :type="row.status === 1 ? 'success' : 'danger'"
+                            <el-tag :type="row.status === '启用' ? 'success' : 'danger'"
                                     disable-transitions>{{
                                     row.status ===
-                                    1 ? '是' : '否'
+                                    '启用' ? '是' : '否'
                                 }}
                             </el-tag>
                         </template>

@@ -4,6 +4,7 @@ package org.nodes.wms.core.basedata.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.wms.core.basedata.dto.SkuUmDTO;
+import org.nodes.wms.dao.basics.sku.dto.input.SkuUmAddOrEditRequest;
 import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.core.basedata.excel.SkuUmExcel;
 import org.nodes.wms.core.basedata.vo.SkuUmVO;
@@ -62,4 +63,11 @@ public interface ISkuUmService extends BaseService<SkuUm> {
 	boolean importData(List<DataVerify> dataVerifyList);
 
 	String convert(Long wspId, int skuLevel, BigDecimal qty);
+
+	/**
+	 * 计量单位新增或修改api
+	 * @param skuUmAddOrEditRequest
+	 * @return
+	 */
+	String addOrEdit(SkuUmAddOrEditRequest skuUmAddOrEditRequest);
 }

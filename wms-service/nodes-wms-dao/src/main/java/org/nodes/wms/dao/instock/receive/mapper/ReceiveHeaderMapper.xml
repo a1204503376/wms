@@ -95,4 +95,20 @@
         <include refid="ReceiveHeader"/>
     </select>
 
+    <select id="getReceiveList" resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderPdaResponse">
+        select
+            h.receive_id,
+            h.receive_no,
+            h.supplier_name,
+            b.bill_type_name
+        from receive_header h
+                 LEFT JOIN wms_bill_type b ON  h.bill_type_cd = b.bill_type_cd
+      <where>
+              AND h.receive_no LIKE concat('%',#{query.no},'%')
+              OR  h.external_order_no LIKE concat('%',#{query.no},'%')
+      </where>
+        group by h.receive_id,b.bill_type_name
+        order by h.create_time
+    </select>
+
 </mapper>

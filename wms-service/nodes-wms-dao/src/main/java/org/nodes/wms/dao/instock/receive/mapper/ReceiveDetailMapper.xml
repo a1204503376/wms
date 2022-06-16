@@ -45,4 +45,17 @@
          where  receive_id = #{id}
     </select>
 
+    <select id="selectDetailListByReceiveId" resultType="org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailPdaResponse">
+        select receive_detail_id,sku_code,plan_qty from receive_detail
+        <where>
+            surplus_qty>0 and is_deleted=0
+            <if test="query.skuCode!=null and query.skuCode != ''">
+                AND sku_code LIKE concat('%',#{query.skuCode},'%')
+            </if>
+            <if test="query.receiveId!=null and query.receiveId != ''">
+                AND receive_id = #{query.receiveId}
+            </if>
+        </where>
+       order by create_time desc
+    </select>
 </mapper>

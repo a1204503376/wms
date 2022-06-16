@@ -3,22 +3,18 @@ package org.nodes.wms.core.basedata.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.ValidationUtil;
 import org.nodes.core.tool.validation.Excel;
-import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
-import org.nodes.wms.core.basedata.cache.SkuUmCache;
 import org.nodes.wms.core.basedata.dto.SkuPackageDTO;
 import org.nodes.wms.core.basedata.dto.SkuPackageDetailDTO;
-import org.nodes.wms.core.basedata.entity.Sku;
-import org.nodes.wms.core.basedata.entity.SkuPackage;
-import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackage;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.core.basedata.excel.SkuPackageExcel;
 import org.nodes.wms.core.basedata.mapper.SkuPackageMapper;
@@ -40,8 +36,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
@@ -460,8 +454,6 @@ public class SkuPackageServiceImpl<M extends SkuPackageMapper, T extends SkuPack
 					skuPackageExportDTO.setLpnWeight1(skuPackageDetail.getLpnWeight());
 					skuPackageExportDTO.setLpnWidth1(skuPackageDetail.getLpnWidth());
 					skuPackageExportDTO.setLpnLength1(skuPackageDetail.getLpnLength());
-					skuPackageExportDTO.setAttribute2(skuPackageDetail.getAttribute2());
-					skuPackageExportDTO.setAttribute3(skuPackageDetail.getAttribute3());
 				}
 				//将包装明细装入新list
 				skuPackageExportList.add(skuPackageExportDTO);

@@ -4,7 +4,7 @@ package org.nodes.wms.core.basedata.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.core.basedata.entity.SkuReplace;
+import org.nodes.wms.dao.basics.sku.entities.SkuReplace;
 
 /**
  * 物品替代数据传输对象实体类

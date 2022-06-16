@@ -8,16 +8,18 @@ import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.modules.wms.basedata.service.ISkuService;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.core.basedata.dto.SkuDTO;
-import org.nodes.wms.core.basedata.entity.Sku;
+import org.nodes.wms.dao.basics.sku.dto.input.SkuAddOrEditRequest;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.excel.SkuExcel;
 import org.nodes.wms.core.basedata.vo.SkuVO;
 import org.nodes.wms.core.basedata.wrapper.SkuWrapper;
-import org.nodes.wms.dao.basics.sku.dto.SkuSelectQuery;
-import org.nodes.wms.dao.basics.sku.dto.SkuSelectResponse;
-import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectQuery;
-import org.nodes.wms.dao.basics.sku.dto.SkuUmSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.input.SkuSelectQuery;
+import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.input.SkuUmSelectQuery;
+import org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.excel.util.ExcelUtil;
+import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
@@ -151,4 +153,11 @@ public class SkuController {
 		return R.data(umList);
 	}
 
+	@ApiLog("供应商管理-新增或修改")
+	@PostMapping("/save")
+	public R<String> save(@Valid @RequestBody SkuAddOrEditRequest skuAddOrEditRequest) {
+		Sku sku = skuBiz.save(skuAddOrEditRequest);
+		return R.success(String.format("[%s]成功，物品编码：[%s]"
+			, (Func.isEmpty(skuAddOrEditRequest.getSkuId()) ? "新增" : "修改"), sku.getSkuCode()));
+	}
 }
