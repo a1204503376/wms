@@ -68,6 +68,9 @@
 				  	uni.$u.func.route('/pages/userSetting/warehouseSetting');
 				}
 				else{
+					uni.setStorageSync('warehouse',data.data[0]);
+					warehouse.warehouseChange(this.warehouse).then(data => {
+					})
 					this.title=uni.getStorageSync('warehouse').whName;	
 				}
 			})
