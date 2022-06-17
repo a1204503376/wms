@@ -374,9 +374,6 @@ export default {
                 this.refreshTable();
             })
         },
-        filterTag(value, row) {
-            return row.status === value;
-        },
         onAdd() {
             this.$router.push({
                 name: '新增库位',
