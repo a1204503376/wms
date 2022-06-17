@@ -116,7 +116,6 @@
                                     <template v-slot="{row}">
                                         <nodes-sku
                                             v-model="row.sku"
-                                            style="width: 180px"
                                             @selectValChange="onChangeSku"
                                         >
                                         </nodes-sku>
@@ -132,14 +131,14 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
+                                            size=mini
                                             v-model="row.sku.skuName"
-                                            style="width: 180px;height: 1px"
                                             :disabled="true"
                                         >
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="umCode" width="120">
+                                <el-table-column prop="umCode" width="122">
                                     <template slot="header">
                                         <span class="d-table-header-required">计量单位</span>
                                     </template>
@@ -163,7 +162,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="planQty" width="150">
+                                <el-table-column prop="planQty" width="152">
                                     <template slot="header">
                                         <span class="d-table-header-required">计划数量</span>
                                     </template>

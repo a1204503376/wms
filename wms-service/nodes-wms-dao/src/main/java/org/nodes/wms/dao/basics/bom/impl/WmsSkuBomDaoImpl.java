@@ -46,4 +46,16 @@ public class WmsSkuBomDaoImpl extends BaseServiceImpl<WmsSkuBomMapper, SkuBom> i
     public SkuBom getSkuBomById(Long id) {
 		return super.getById(id);
     }
+
+	/**
+	 * 新增或修改物料清单
+	 *
+	 * @param skuBom : 物料清单对象
+	 * @return SkuBom
+	 */
+	@Override
+	public SkuBom saveSkuBom(SkuBom skuBom) {
+		super.saveOrUpdate(skuBom);
+		return skuBom;
+	}
 }

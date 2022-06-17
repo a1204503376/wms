@@ -5,6 +5,7 @@ import org.nodes.wms.dao.basics.sku.dto.input.SkuSelectQuery;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.*;
+import org.nodes.wms.dao.basics.skuType.entities.SkuType;
 
 import java.util.List;
 

@@ -3,7 +3,7 @@
 <mapper namespace="org.nodes.wms.core.basedata.mapper.SkuTypeMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="skuTypeResultMap" type="org.nodes.wms.dao.basics.sku.entities.SkuType">
+    <resultMap id="skuTypeResultMap" type="org.nodes.wms.dao.basics.skuType.entities.SkuType">
         <id column="sku_type_id" property="skuTypeId"/>
         <result column="type_pre_id" property="typePreId"/>
         <result column="type_name" property="typeName"/>
@@ -16,7 +16,7 @@
     </resultMap>
 
     <resultMap id="treeNodeResultMap" type="org.springblade.core.tool.node.TreeNode">
-   
+
         <result column="title" property="title"/>
         <result column="value" property="value"/>
         <result column="key" property="key"/>

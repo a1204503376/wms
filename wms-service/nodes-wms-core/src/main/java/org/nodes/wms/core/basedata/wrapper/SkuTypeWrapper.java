@@ -1,11 +1,9 @@
 package org.nodes.wms.core.basedata.wrapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.nodes.wms.core.basedata.cache.OwnerCache;
-import org.nodes.wms.core.basedata.cache.SkuTypeCache;
 import org.nodes.wms.core.basedata.dto.SkuTypeDTO;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
-import org.nodes.wms.dao.basics.sku.entities.SkuType;
+import org.nodes.wms.dao.basics.skuType.entities.SkuType;
 import org.nodes.wms.core.basedata.excel.SkuTypeExcel;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.basedata.service.ISkuTypeService;

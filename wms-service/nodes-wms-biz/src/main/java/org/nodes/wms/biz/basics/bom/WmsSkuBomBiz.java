@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.basics.bom;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.basics.bom.dto.input.SkuBomAddOrEditRequest;
 import org.nodes.wms.dao.basics.bom.dto.input.WmsSkuBomPageQuery;
 import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomResponse;
 import org.nodes.wms.dao.basics.bom.entites.SkuBom;
@@ -35,4 +36,12 @@ public interface WmsSkuBomBiz {
 	 * @return SkuBom 物料清单实体
 	 */
 	SkuBom findSkuBomById(Long id);
+
+	/**
+	 * 新增或保存
+	 *
+	 * @param skuBomAddOrEditRequest: 新增或修改dto对象
+	 * @return SkuBom
+	 */
+    SkuBom save(SkuBomAddOrEditRequest skuBomAddOrEditRequest);
 }
