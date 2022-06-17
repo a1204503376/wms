@@ -3,6 +3,7 @@ package org.nodes.wms.dao.basics.skuType.entities;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
  **/
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @TableName("wms_sku_type")
 public class SkuType extends TenantEntity {
 
@@ -64,10 +66,10 @@ public class SkuType extends TenantEntity {
 	/**
 	 * 数据类型
 	 */
-	private String dataType;
+	private Integer dataType;
 
 	/**
 	 * 排序
 	 */
-	private String sort;
+	private Integer sort;
 }
