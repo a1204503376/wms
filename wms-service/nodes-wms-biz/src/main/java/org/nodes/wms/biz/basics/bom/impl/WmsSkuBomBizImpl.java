@@ -3,7 +3,9 @@ package org.nodes.wms.biz.basics.bom.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.bom.WmsSkuBomBiz;
+import org.nodes.wms.biz.basics.bom.modular.SkuBomFactory;
 import org.nodes.wms.dao.basics.bom.WmsSkuBomDao;
+import org.nodes.wms.dao.basics.bom.dto.input.SkuBomAddOrEditRequest;
 import org.nodes.wms.dao.basics.bom.dto.input.WmsSkuBomPageQuery;
 import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomExcelResponse;
 import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomResponse;
@@ -24,6 +26,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WmsSkuBomBizImpl implements WmsSkuBomBiz {
 	private final WmsSkuBomDao skuBomDao;
+
+	private final SkuBomFactory skuBomFactory;
 	/**
 	 * 分页查询
 	 * @param query 底部分页参数
@@ -48,5 +52,11 @@ public class WmsSkuBomBizImpl implements WmsSkuBomBiz {
     @Override
     public SkuBom findSkuBomById(Long id) {
 		return skuBomDao.getSkuBomById(id);
+    }
+
+    @Override
+    public SkuBom save(SkuBomAddOrEditRequest skuBomAddOrEditRequest) {
+		SkuBom skuBom = skuBomFactory.createSkuBom(skuBomAddOrEditRequest);
+		return skuBomDao.saveSkuBom(skuBom);
     }
 }

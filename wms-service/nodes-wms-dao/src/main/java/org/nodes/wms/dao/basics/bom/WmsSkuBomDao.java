@@ -36,4 +36,12 @@ public interface WmsSkuBomDao {
 	 * @return SkuBom 物料清单实体
 	 */
     SkuBom getSkuBomById(Long id);
+
+	/**
+	 * 新增或修改物料清单
+	 *
+	 * @param skuBom: 物料清单对象
+	 * @return SkuBom
+	 */
+    SkuBom saveSkuBom(SkuBom skuBom);
 }
