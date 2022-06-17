@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.wms.core.basedata.dto.SkuPackageDTO;
-import org.nodes.wms.core.basedata.entity.SkuPackage;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackage;
 import org.nodes.wms.core.basedata.excel.SkuPackageExcel;
 import org.nodes.wms.core.basedata.service.ISkuPackageService;
 import org.nodes.wms.core.basedata.vo.SkuPackageVO;

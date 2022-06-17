@@ -3,16 +3,18 @@ package org.nodes.wms.core.basedata.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import lombok.RequiredArgsConstructor;
 import org.nodes.wms.core.basedata.service.ISkuPackageDetailService;
+import org.nodes.wms.dao.basics.sku.SkuUmDao;
+import org.nodes.wms.dao.basics.sku.dto.input.SkuUmAddOrEditRequest;
 import org.springblade.core.log.exception.ServiceException;
-import lombok.AllArgsConstructor;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.ValidationUtil;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.core.basedata.cache.SkuUmCache;
 import org.nodes.wms.core.basedata.dto.SkuUmDTO;
-import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.core.basedata.excel.SkuUmExcel;
 import org.nodes.wms.core.basedata.mapper.SkuUmMapper;
@@ -20,7 +22,6 @@ import org.nodes.wms.core.basedata.service.ISkuUmService;
 import org.nodes.wms.core.basedata.vo.SkuUmVO;
 import org.nodes.wms.core.basedata.wrapper.SkuUmWrapper;
 import org.springblade.core.excel.util.ExcelUtil;
-import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.*;
@@ -29,8 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
@@ -46,11 +45,12 @@ import java.util.stream.Collectors;
  */
 @Service
 @Primary
+@RequiredArgsConstructor
 @Transactional(propagation = Propagation.NESTED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
 public class SkuUmServiceImpl<M extends SkuUmMapper, T extends SkuUm>
 	extends BaseServiceImpl<SkuUmMapper, SkuUm>
 	implements ISkuUmService {
-
+    private final SkuUmDao skuUmDao;
 	@Override
 	public boolean removeByIds(Collection<? extends Serializable> idList) {
 		ISkuPackageDetailService skuPackageDetailService = SpringUtil.getBean(ISkuPackageDetailService.class);
@@ -235,7 +235,24 @@ public class SkuUmServiceImpl<M extends SkuUmMapper, T extends SkuUm>
 		return sb.toString();
 	}
 
-	@Override
+    @Override
+    public String addOrEdit(SkuUmAddOrEditRequest skuUmAddOrEditRequest) {
+		boolean isExist = skuUmDao.isExistUmCode(skuUmAddOrEditRequest.getWsuCode());
+		SkuUm skuUm = new SkuUm();
+		skuUm.setWsuName(skuUmAddOrEditRequest.getWsuName());
+		skuUm.setWsuCode(skuUmAddOrEditRequest.getWsuCode());
+		if(isExist){
+			skuUmDao.update(skuUm);
+			return "计量单位编码"+skuUm.getWsuCode()+"修改成功";
+		}
+
+		skuUmDao.insert(skuUm);
+		return "客户编码"+skuUm.getWsuCode()+"保存成功";
+
+
+    }
+
+    @Override
 	public boolean importData(List<DataVerify> dataVerifyList) {
 		if (Func.isEmpty(dataVerifyList)) {
 			throw new ServiceException("没有数据可以保存！");

@@ -63,7 +63,6 @@
 		onLoad() {
 			warehouse.getWarehouseList().then(data=>{
 				this.warehouseList=data;
-				console.log(this.warehouseList)
 			})
 		},
 		methods: {

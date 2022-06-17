@@ -9,7 +9,7 @@ import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
-import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.core.instock.asn.dto.PutawayByBoxQueryDTO;
 import org.nodes.wms.core.instock.asn.entity.AsnDetail;
 import org.nodes.wms.core.instock.asn.entity.AsnHeader;

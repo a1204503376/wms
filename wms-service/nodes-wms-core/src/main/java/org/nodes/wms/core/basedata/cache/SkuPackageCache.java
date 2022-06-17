@@ -1,14 +1,10 @@
 package org.nodes.wms.core.basedata.cache;
 
 import org.nodes.wms.core.basedata.dto.SkuPackageDTO;
-import org.nodes.wms.core.basedata.entity.SkuPackage;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackage;
 import org.nodes.wms.core.basedata.service.ISkuPackageService;
 import org.springblade.core.cache.utils.CacheUtil;
-import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;
-
-import java.io.Serializable;
-import java.util.*;
 
 import static org.nodes.core.base.cache.CacheNames.NODES_FLASH;
 

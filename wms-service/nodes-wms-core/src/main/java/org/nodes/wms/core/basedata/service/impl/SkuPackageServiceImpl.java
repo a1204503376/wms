@@ -13,8 +13,8 @@ import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.core.basedata.dto.SkuPackageDTO;
 import org.nodes.wms.core.basedata.dto.SkuPackageDetailDTO;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
-import org.nodes.wms.core.basedata.entity.SkuPackage;
-import org.nodes.wms.core.basedata.entity.SkuPackageDetail;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackage;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.core.basedata.excel.SkuPackageExcel;
 import org.nodes.wms.core.basedata.mapper.SkuPackageMapper;
@@ -454,8 +454,6 @@ public class SkuPackageServiceImpl<M extends SkuPackageMapper, T extends SkuPack
 					skuPackageExportDTO.setLpnWeight1(skuPackageDetail.getLpnWeight());
 					skuPackageExportDTO.setLpnWidth1(skuPackageDetail.getLpnWidth());
 					skuPackageExportDTO.setLpnLength1(skuPackageDetail.getLpnLength());
-					skuPackageExportDTO.setAttribute2(skuPackageDetail.getAttribute2());
-					skuPackageExportDTO.setAttribute3(skuPackageDetail.getAttribute3());
 				}
 				//将包装明细装入新list
 				skuPackageExportList.add(skuPackageExportDTO);

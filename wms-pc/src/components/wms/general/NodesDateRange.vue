@@ -24,6 +24,11 @@ export default {
     props:{
         dateRange:[]
     },
+    watch: {
+      dateRange(newVal){
+          this.value = newVal;
+      }
+    },
     data() {
         return {
             value:this.dateRange,

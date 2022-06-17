@@ -50,7 +50,10 @@ const install = (Vue, vm) => {
 	}
 
 	// 跳转路由前检查登录状态
-	const route = (url) => {
+	const route = (url,param) => {
+		if(tool.isNotEmpty(param)){
+			url+='?param='+JSON.stringify(param);
+		}
 		if (!vm.isLogin) {
 			uni.showToast({
 				title: '请先登录',

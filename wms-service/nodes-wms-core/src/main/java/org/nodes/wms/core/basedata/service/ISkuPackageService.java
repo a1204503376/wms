@@ -4,11 +4,9 @@ package org.nodes.wms.core.basedata.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.wms.core.basedata.dto.SkuPackageDTO;
-import org.nodes.wms.core.basedata.entity.SkuPackage;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackage;
 import org.nodes.wms.core.basedata.excel.SkuPackageExcel;
 import org.springblade.core.mp.base.BaseService;
-import org.springframework.web.bind.annotation.RequestParam;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
