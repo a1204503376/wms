@@ -264,7 +264,7 @@ export default {
             removeRowId: [],
             form: {
                 params: {
-                    asnBillNo: '',
+                    lineNumber: '',
                     billTypeCd: '',
                     supplier: {
                         id: '',
@@ -346,7 +346,6 @@ export default {
                         return value !== row;
                     })
                     this.removeRowId.push(row.asnDetailId)
-                    console.log(this.table.data);
                 }
                 this.$message({
                     type: 'success',
@@ -374,7 +373,7 @@ export default {
                     detailData.forEach((value) => {
                             let detail = {
                                 asnDetailId: value.asnDetailId,
-                                asnLineNo: value.asnLineNo,
+                                lineNumber: value.asnLineNo,
                                 sku: value.skuSelectResponse,
                                 planQty: value.planQty,
                                 scanQty: value.scanQty,
@@ -389,7 +388,7 @@ export default {
         createRowObj() {
             return {
                 asnDetailId: '',
-                asnLineNo: '',
+                lineNumber: '',
                 sku: {
                     skuId: '',
                     skuCode: '',
