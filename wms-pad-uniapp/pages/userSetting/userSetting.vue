@@ -47,7 +47,7 @@
 		</view>
 		
 		<view class="footer">
-			<button class="btn-submit" @click="logout">退出登录</button>
+			<view class="btn-submit" @click="logout">退出登录</view>
 		</view>
 	</view>
 </template>
