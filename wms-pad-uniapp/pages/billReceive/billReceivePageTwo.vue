@@ -1,10 +1,9 @@
 <template>
 	<view>
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
-		<u-divider text=""></u-divider>
 		<u--form labelPosition="left" :model="params">
 			<u-form-item label="物品"  borderBottom >
-				<u--input v-model="params.skuCode" border="none"></u--input>
+				<u--input v-model="params.skuCode"></u--input>
 			</u-form-item>
 		</u--form>
 		<u-divider text="未收货列表"></u-divider>
@@ -14,16 +13,11 @@
 			<u-list-item v-for="(item, index) in receiveDetailList" :key="index">
 				<view @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="6">
+						<u-col span="10">
 							<view class="demo-layout bg-purple-light">{{index+1}}-{{item.skuCode}}</view>
 						</u-col>
-						<u-col span="6">
-							<view class="demo-layout bg-purple">{{item.planQty}}</view>
-						</u-col>
-					</u-row>
-					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="12">
-							<view class="demo-layout bg-purple">{{item.supplierName}}</view>
+						<u-col span="2">
+							<view class="demo-layout bg-purple">{{item.surplusQty}}</view>
 						</u-col>
 					</u-row>
 					<u-divider text=""></u-divider>
@@ -31,6 +25,11 @@
 			</u-list-item>
 		</u-list>
 		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
+		<view class="footer">
+			<view class="btn-cancle" @click="esc()">
+				返回
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -62,11 +61,19 @@
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {
+			esc() {
+				this.$u.func.navigateBack();
+			},
             getReceiveDetailList(){
 				receive.getReceiveDetailList(this.params).then(data => {
 						this.receiveDetailList=data.data;
-						console.log(data.data)
+					    if(data.data.length==1){
+						 uni.$u.func.route('/pages/billReceive/billReceivePageThree', data.data[0]);	
+						}
 				})
+			},
+			clickItem(row){
+				 uni.$u.func.route('/pages/billReceive/billReceivePageThree',row);
 			},
 			scannerCallback(no) {
 				this.params.skuCode = no;

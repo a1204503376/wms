@@ -24,7 +24,7 @@ public class DetailReceiveDetailPdaResponse implements Serializable {
 	 */
 	private String skuCode;
 	/**
-	 * 计划数量
+	 * 剩余数量
 	 */
-	private BigDecimal planQty;
+	private BigDecimal surplusQty;
 }
