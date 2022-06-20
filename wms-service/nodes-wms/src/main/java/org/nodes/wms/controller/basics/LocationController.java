@@ -38,7 +38,7 @@ public class LocationController {
 
 	@PostMapping("/page")
 	public R<Page<LocationPageResponse>> page(Query query, @RequestBody LocationPageQuery locationPageQuery){
-		Page<LocationPageResponse> pageResponse = locationBiz.page(Condition.getPage(query), locationPageQuery);
+		Page<LocationPageResponse> pageResponse = locationBiz.page(query, locationPageQuery);
 		return R.data(pageResponse);
 	}
 
