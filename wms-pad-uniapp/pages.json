@@ -85,7 +85,7 @@
 		}, {
 			"path": "pages/userSetting/warehouseSetting",
 			"style": {
-				"navigationBarTitleText": "选择库房",
+				"navigationBarTitleText": "切换库房",
 				"enablePullDownRefresh": false
 			}
 		}
