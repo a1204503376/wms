@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.dao.common.log.mapper.LogErrorMapper">
+    <sql id="LogError">
+        select
+        server_host,
+        server_ip,
+        env,
+        method,
+        request_uri,
+        user_agent,
+        stack_trace,
+        exception_name,
+        message,
+        line_number,
+        method_class,
+        file_name,
+        params,
+        create_by,
+        create_time
+        from blade_log_error
+        <where>
+            <if test="query.method != null and query.method != ''">
+                AND method LIKE concat('%',#{query.method},'%')
+            </if>
+            <if test="query.requestUri != null and query.requestUri != ''">
+                AND request_uri LIKE concat('%',#{query.requestUri},'%')
+            </if>
+            <if test="query.requestUri != null and query.requestUri != ''">
+                AND request_uri LIKE concat('%',#{query.requestUri},'%')
+            </if>
+            <if test="query.createTimeBegin!=null">
+                AND create_time  &gt;= #{query.createTimeBegin}
+            </if>
+            <if test="query.createTimeEnd!=null">
+                AND create_time  &lt;= #{query.createTimeEnd}
+            </if>
+        </where>
+    </sql>
+
+    <select id="getPage" resultType="org.nodes.wms.dao.common.log.dto.output.LogErrorPageResponse">
+        <include refid="LogError"/>
+        <if test="page.orders==null or page.orders.size()==0">
+            order by create_time desc
+        </if>
+    </select>
+
+    <select id="getLogErrorResponseByQuery"
+            resultType="org.nodes.wms.dao.common.log.dto.output.LogErrorPageResponse">
+        <include refid="LogError"/>
+        order by create_time desc
+    </select>
+</mapper>

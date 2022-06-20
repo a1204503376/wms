@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.common.log.dto;
+package org.nodes.wms.dao.common.log.dto.output;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;

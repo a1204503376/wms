@@ -1,12 +1,9 @@
 package org.nodes.wms.dao.common.log;
 
-import org.bouncycastle.util.test.FixedSecureRandom;
-import org.nodes.wms.dao.common.log.dto.LogMessageResponse;
-import org.nodes.wms.dao.common.log.entities.LogAction;
+import org.nodes.wms.dao.common.log.dto.output.LogMessageResponse;
 import org.nodes.wms.dao.common.log.entities.LogMessage;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**

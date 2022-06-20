@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.common.log.dto;
+package org.nodes.wms.dao.common.log.dto.input;
 
 import lombok.Data;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;

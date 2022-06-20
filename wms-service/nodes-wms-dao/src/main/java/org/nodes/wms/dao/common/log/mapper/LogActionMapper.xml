@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.common.log.mapper.LogActionMapper">
 
-    <select id="getPage" resultType="org.nodes.wms.dao.common.log.dto.LogResponse">
+    <select id="getPage" resultType="org.nodes.wms.dao.common.log.dto.output.LogResponse">
          select
             la.user_account,
             la.user_real_name,
@@ -32,7 +32,7 @@
         order by la.create_time desc
     </select>
 
-    <select id="getLists" resultType="org.nodes.wms.dao.common.log.dto.LogActionPageResponse">
+    <select id="getLists" resultType="org.nodes.wms.dao.common.log.dto.output.LogActionPageResponse">
         select log.id,log.user_account,log.user_real_name,log.type,log.bill_id,log.bill_no,log.log,log.status,log.tenant_id,log.create_dept,log.create_time,log.update_time,
                user1.real_name createUser,
                user2.real_name updateUser
@@ -73,7 +73,7 @@
         </if>
     </select>
 
-    <select id="getActionLists" resultType="org.nodes.wms.dao.common.log.dto.LogActionExcelResponse">
+    <select id="getActionLists" resultType="org.nodes.wms.dao.common.log.dto.output.LogActionExcelResponse">
         select log.id,log.user_account,log.user_real_name,log.type,log.bill_id,log.bill_no,log.log,log.status,log.tenant_id,log.create_dept,log.create_time,log.update_time,
         user1.real_name createUser,
         user2.real_name updateUser

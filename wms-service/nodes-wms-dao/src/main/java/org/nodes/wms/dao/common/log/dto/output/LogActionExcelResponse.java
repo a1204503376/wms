@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.common.log.dto;
+package org.nodes.wms.dao.common.log.dto.output;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
