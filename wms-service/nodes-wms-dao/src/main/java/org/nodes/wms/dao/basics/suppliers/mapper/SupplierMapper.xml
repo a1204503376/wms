@@ -11,9 +11,9 @@
         o.owner_name,
         s.remark,
         s.status,
-        user1.real_name as createUser,
+        user1.real_name as create_user,
         s.create_time,
-        user2.real_name as updateUser,
+        user2.real_name as update_user,
         s.update_time
         FROM basics_suppliers s
         LEFT JOIN blade_user user1 ON user1.id = s.create_user
