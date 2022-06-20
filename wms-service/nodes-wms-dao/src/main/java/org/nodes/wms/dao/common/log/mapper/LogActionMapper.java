@@ -5,7 +5,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.nodes.wms.dao.common.log.dto.*;
+import org.nodes.wms.dao.common.log.dto.input.LogActionPageQuery;
+import org.nodes.wms.dao.common.log.dto.input.LogPageQuery;
+import org.nodes.wms.dao.common.log.dto.output.LogActionExcelResponse;
+import org.nodes.wms.dao.common.log.dto.output.LogActionPageResponse;
+import org.nodes.wms.dao.common.log.dto.output.LogResponse;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +23,12 @@ import java.util.List;
 @Repository
 @Mapper
 public interface LogActionMapper extends BaseMapper<LogAction> {
+	/**
+	 * 定时任务获取日志分页
+	 * @param logPageQuery 查询参数
+	 * @param page 分页参数
+	 * @return
+	 */
     Page<LogResponse> getPage(@Param("query") LogPageQuery logPageQuery, IPage<LogAction> page);
 
 	/**

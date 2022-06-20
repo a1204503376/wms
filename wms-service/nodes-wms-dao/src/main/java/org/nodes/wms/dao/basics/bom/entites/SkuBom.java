@@ -3,6 +3,8 @@ package org.nodes.wms.dao.basics.bom.entites;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.springblade.core.tenant.mp.TenantEntity;
 
@@ -21,10 +23,12 @@ public class SkuBom extends TenantEntity implements Serializable {
 	 * 主键id
 	 */
 	@TableId(type = IdType.ASSIGN_ID)
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long id;
 	/**
 	 * 货主ID
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long woId;
 	/**
 	 * 货主编码
@@ -37,6 +41,7 @@ public class SkuBom extends TenantEntity implements Serializable {
 	/**
 	 * 物品ID
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long skuId;
 	/**
 	 * 物品编码
@@ -57,6 +62,7 @@ public class SkuBom extends TenantEntity implements Serializable {
 	/**
 	 * 组合物品ID
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long joinSkuId;
 	/**
 	 * 组合物品编码

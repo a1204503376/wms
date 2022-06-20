@@ -6,11 +6,14 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.common.log.impl.modular.LogFactory;
 import org.nodes.wms.dao.common.log.LogActionDao;
+import org.nodes.wms.dao.common.log.LogErrorDao;
 import org.nodes.wms.dao.common.log.LogMessageDao;
-import org.nodes.wms.dao.common.log.dto.*;
+import org.nodes.wms.dao.common.log.dto.input.*;
+import org.nodes.wms.dao.common.log.dto.output.*;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.entities.LogMessage;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -33,6 +36,7 @@ public class LogBizImpl implements LogBiz {
 	private final LogFactory logFactory;
 	private final LogMessageDao logMessageDao;
     private final LogActionDao actionDao;
+	private final LogErrorDao logErrorDao;
 	/**
 	 * 实现通知日志智能存储
 	 *
@@ -139,6 +143,18 @@ public class LogBizImpl implements LogBiz {
 	public void exportActionLists(LogActionPageQuery logActionPageQuery, HttpServletResponse response) {
 		List<LogActionExcelResponse> actionLists = actionDao.getActionLists(logActionPageQuery);
 		ExcelUtil.export(response, "业务日志", "业务日志数据表",actionLists, LogActionExcelResponse.class);
+	}
+
+	@Override
+	public IPage<LogErrorPageResponse> getLogErrorPage(LogErrorPageQuery logErrorPageQuery, Query query) {
+		IPage<LogErrorPageResponse> page = Condition.getPage(query);
+          return  logErrorDao.selectPage(logErrorPageQuery,page);
+	}
+
+	@Override
+	public void exportLogErrorExcel(LogErrorPageQuery logErrorPageQuery, HttpServletResponse response) {
+		List<LogErrorPageResponse> logErrorResponseList = logErrorDao.getLogErrorResponseByQuery(logErrorPageQuery);
+		ExcelUtil.export(response, "异常日志", "异常日志数据表", logErrorResponseList, LogErrorPageResponse.class);
 	}
 
 

@@ -6,7 +6,7 @@ import org.nodes.core.tool.utils.StringPool;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
-import org.nodes.wms.dao.basics.sku.entities.SkuType;
+import org.nodes.wms.dao.basics.skuType.entities.SkuType;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.basedata.service.ISkuTypeService;
 import org.nodes.wms.core.basedata.vo.SkuPackageVO;

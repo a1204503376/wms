@@ -50,6 +50,8 @@ export default {
             if(this.dataSource.length>0) {
                 this.val = this.dataSource[0].wsuCode;
                 this.onChange(this.val);
+            }else {
+                this.onChange('');
             }
         },
         selectVal(newVal){

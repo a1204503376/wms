@@ -3,6 +3,7 @@
         v-model="val"
         :data-source="dataSource"
         :multiple="true"
+        @change="onChange"
     >
     </nodes-select>
 </template>
@@ -29,8 +30,8 @@ export default {
         }
     },
     watch: {
-        val(newVal) {
-            this.$emit('selectValChange', newVal);
+        selectVal(newVal){
+            this.val = newVal
         }
     },
     async created() {
@@ -46,6 +47,9 @@ export default {
     methods: {
         async getDataSource() {
             this.dataSource = await stateService.getAsnBillState();
+        },
+        onChange(val) {
+            this.$emit('selectValChange', val);
         }
     }
 }

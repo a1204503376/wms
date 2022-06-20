@@ -80,9 +80,8 @@
                     <el-button circle icon="el-icon-download" @click="exportData" size="mini"></el-button>
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
-                    <excel-export ref="excelExport" :sheet="sheet" style="display: inline-block;margin-left: 10px">
-                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
-                        </el-button>
+                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet" style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData" />
                     </excel-export>
                 </el-tooltip>
             </template>
@@ -102,7 +101,7 @@
                     </el-table-column>
 
                     <template v-for="(column,index) in table.columnList">
-                        <el-table-column sortable="custom" prop="receiveNo" label="收货单编码" width="150"  v-if="index===0"  show-overflow-tooltip >
+                        <el-table-column sortable="custom" prop="receiveNo" label="收货单编码" width="150"  v-if="!column.hide && index===0"  show-overflow-tooltip >
                             <template slot-scope="scope">
                                 <el-link  @click="onViewDetails(scope.row.receiveId)" target="_blank" type="primary">{{scope.row.receiveNo}}</el-link>
                             </template>
@@ -230,7 +229,6 @@ export default {
                         sortable: 'custom',
                         width: 120,
                     },
-
                     {
                         prop: 'asnBillNo',
                         width: 100,

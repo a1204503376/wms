@@ -120,7 +120,6 @@
                                     <template v-slot="{row}">
                                         <nodes-sku
                                             v-model="row.sku"
-                                            style="width: 180px"
                                             @selectValChange="onChangeSku"
                                         >
                                         </nodes-sku>
@@ -128,7 +127,7 @@
                                 </el-table-column>
                                 <el-table-column
                                     :align="'left'"
-                                    prop="sku"
+                                    prop="skuName"
                                     width="200"
                                 >
                                     <template slot="header">
@@ -138,7 +137,7 @@
                                         <el-input
                                             v-model="row.sku.skuName"
                                             :disabled="true"
-                                            style="width: 180px;height: 1px"
+                                            size=mini
                                         >
                                         </el-input>
                                     </template>
@@ -155,7 +154,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="umCode" width="120">
+                                <el-table-column prop="umCode" width="121">
                                     <template slot="header">
                                         <span class="d-table-header-required">计量单位</span>
                                     </template>
@@ -167,7 +166,7 @@
                                         ></nodes-sku-um>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="planQty" width="150">
+                                <el-table-column prop="planQty" width="152">
                                     <template slot="header">
                                         <span class="d-table-header-required">计划数量</span>
                                     </template>
@@ -265,7 +264,7 @@ export default {
             removeRowId: [],
             form: {
                 params: {
-                    asnBillNo: '',
+                    lineNumber: '',
                     billTypeCd: '',
                     supplier: {
                         id: '',
@@ -347,7 +346,6 @@ export default {
                         return value !== row;
                     })
                     this.removeRowId.push(row.asnDetailId)
-                    console.log(this.table.data);
                 }
                 this.$message({
                     type: 'success',
@@ -375,7 +373,7 @@ export default {
                     detailData.forEach((value) => {
                             let detail = {
                                 asnDetailId: value.asnDetailId,
-                                asnLineNo: value.asnLineNo,
+                                lineNumber: value.asnLineNo,
                                 sku: value.skuSelectResponse,
                                 planQty: value.planQty,
                                 scanQty: value.scanQty,
@@ -390,7 +388,7 @@ export default {
         createRowObj() {
             return {
                 asnDetailId: '',
-                asnLineNo: '',
+                lineNumber: '',
                 sku: {
                     skuId: '',
                     skuCode: '',

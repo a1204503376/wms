@@ -1,33 +1,26 @@
 <template>
-    <el-select
+    <el-autocomplete
         v-model="val"
-        :multiple="multiple"
-        :default-first-option="true"
-        :loading="loading"
-        :remote-method="remoteMethod"
-        :collapse-tags="true"
-        filterable
+        :clearable="true"
+        :debounce="800"
+        :fetch-suggestions="querySearchAsync"
+        :hide-loading="true"
+        :highlight-first-item="true"
+        :trigger-on-focus="false"
         placeholder="请输入物品编码或名称"
-        remote
-        reserve-keyword
+        popper-class="popper-auto"
         size="mini"
-        style="width: 450px"
-        value-key="skuCode"
-        @change="onChange">
-        <el-option
-            v-for="item in options"
-            :key="item.skuCode"
-            :label="item.skuCode"
-            :value="item">
-            <span style="float: left">{{ item.skuCode }}</span>
+        @change="onChange"
+        @select="handleSelect">
+        <template v-slot="{ item }">
+            <span style="float: left">{{ item.skuCode }}</span>&nbsp;&nbsp;
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.skuName }}</span>
-        </el-option>
-    </el-select>
+        </template>
+    </el-autocomplete>
 </template>
 
 <script>
 import {getSkuSelectResponseTop10List} from "@/api/wms/basics/sku";
-import debounce from "lodash/debounce";
 import func from "@/util/func";
 
 export default {
@@ -37,20 +30,19 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Array,Object],
+        selectVal: [Array, String, Object],
         // 单选多选切换，默认为false
-        multiple: {type: Boolean, required: false, default: false}
+        multiple: {type: Boolean, required: false, default: false},
     },
     data() {
         return {
-            options: [],
-            val: this.selectVal,
-            loading: false,
-            isEdit: func.isNotEmpty(this.selectVal)
+            val: '',
+            isEdit: func.isNotEmpty(this.selectVal),
+            data: []
         }
     },
     watch: {
-        selectVal(){
+        selectVal() {
             this.setDefaultByProps();
         }
     },
@@ -58,38 +50,65 @@ export default {
         this.setDefaultByProps();
     },
     methods: {
-        setDefaultByProps(){
-            if (!this.isEdit){
+        setDefaultByProps() {
+            this.val = this.selectVal.skuCode;
+            if (!this.isEdit) {
                 return;
             }
-
-            let currentSku = this.options.find(item => item.skuId === this.selectVal.skuId);
-            if (func.isEmpty(currentSku)){
-                this.options.push(this.selectVal);
+            let currentSku = this.data.find(item => item.skuId === this.selectVal.skuId);
+            if (func.isEmpty(currentSku)) {
+                this.data.push(this.selectVal);
             }
-            this.val = this.selectVal;
         },
-        // 防抖 在等待时间到达前的请求全部取消，保留最后一次
-        remoteMethod: debounce(async function (key) {
-            if (key !== '') {
-                this.loading = true;
-                let skuSelectQuery = {
-                    key
-                };
-                let {data: {data}} = await getSkuSelectResponseTop10List(skuSelectQuery);
-                this.options = data;
-                this.loading = false;
-            } else {
-                this.options = [];
-            }
-        }, 500),
+        // 输入值后失去焦点
         onChange(val) {
-            this.$emit('selectValChange', val);
+            if (!this.data.map((item) => item.skuCode).includes(this.val)) {
+                this.$emit('selectValChange', {});
+            }
+
+            for (let i = 0; i < this.data.length; i++) {
+                if (this.data[i].skuCode === val) {
+                    this.$emit('selectValChange', this.data[i]);
+                    return;
+                }
+            }
+        },
+        // 异步请求下拉数据
+        async querySearchAsync(queryString, cb) {
+            if (queryString === '') {
+                cb([]);
+                return;
+            }
+            let param = {
+                key: queryString
+            }
+            let {data: {data}} = await getSkuSelectResponseTop10List(param);
+            cb(data);
+            this.data = data;
+        },
+        handleSelect(item) {
+            this.$emit('selectValChange', item);
+        },
+    },
+}
+</script>
+<style>
+.popper-auto {
+    width: auto!important ;
+    li {
+        line-height: normal!important;
+        padding: 7px;
+        .name {
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+        .addr {
+            font-size: 12px;
+            color: #b4b4b4;
+        }
+        .highlighted .addr {
+            color: #ddd;
         }
     }
 }
-</script>
-
-<style scoped>
-
 </style>

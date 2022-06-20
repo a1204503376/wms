@@ -6,7 +6,7 @@
 				@search="search">
 			</u-search>
 		</template>
-		<u-list>
+		<u-list style="height: 990rpx;">
 			<u-divider text=""></u-divider>
 			<u-list-item v-for="(item, index) in receiveList" :key="index">
 				<view @click="clickItem(item)">
@@ -28,6 +28,11 @@
 			</u-list-item>
 		</u-list>
 		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
+		<view class="footer">
+			<view class="btn-cancle" @click="esc()">
+				返回
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -53,16 +58,19 @@
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {
+			esc() {
+				this.$u.func.navigateBack();
+			},
 			search() {
 				receive.getReceiveList(this.params).then(data => {
 					this.receiveList = data.data;
 					if (data.data.length == 1) {
-						uni.$u.func.route('/pages/billReceive/billReceivePageTwo',data.data[0]);
+						uni.$u.func.route('/pages/billReceive/billReceivePageTwo', data.data[0]);
 					}
 				})
 			},
 			clickItem(item) {
-				uni.$u.func.route('/pages/billReceive/billReceivePageTwo',item);
+				uni.$u.func.route('/pages/billReceive/billReceivePageTwo', item);
 			},
 			scannerCallback(no) {
 				this.params.no = no;
@@ -78,5 +86,7 @@
 </script>
 
 <style>
-
+	.uniList {
+		height: 990rpx;
+	}
 </style>

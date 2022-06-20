@@ -1,7 +1,7 @@
 package org.nodes.wms.biz.common.log.impl.modular;
 
-import org.nodes.wms.dao.common.log.dto.AuditLogRequest;
-import org.nodes.wms.dao.common.log.dto.NoticeMessageRequest;
+import org.nodes.wms.dao.common.log.dto.input.AuditLogRequest;
+import org.nodes.wms.dao.common.log.dto.input.NoticeMessageRequest;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.entities.LogMessage;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;

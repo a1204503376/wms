@@ -13,7 +13,7 @@
 		</view>
 		
 		<view class="footer">
-			<button class="btn-submit" @click="submit">确认</button>
+			<view class="btn-submit" @click="submit">确认</view>
 		</view>
 	</view>
 </template>

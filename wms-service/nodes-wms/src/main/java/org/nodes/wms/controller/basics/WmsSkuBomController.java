@@ -7,8 +7,11 @@ import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.bom.WmsSkuBomBiz;
 import org.nodes.wms.dao.basics.bom.dto.input.WmsSkuBomPageQuery;
 import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomResponse;
+import org.nodes.wms.dao.basics.bom.entites.SkuBom;
+import org.nodes.wms.dao.basics.bom.dto.input.SkuBomAddOrEditRequest;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +20,7 @@ import org.springblade.core.tool.api.R;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.HashMap;
 
 @RestController
@@ -45,4 +49,11 @@ public class WmsSkuBomController {
 		skuBomBiz.exportExcel(params,response);
 	}
 
+	@ApiLog("物品清单管理-新增或修改")
+	@PostMapping("/save")
+	public R<String> save(@Valid @RequestBody SkuBomAddOrEditRequest skuBomAddOrEditRequest){
+		SkuBom skuBom = skuBomBiz.save(skuBomAddOrEditRequest);
+		return R.success(String.format("%s成功",
+			Func.isEmpty(skuBomAddOrEditRequest.getId()) ? "新增" : "修改"));
+	}
 }

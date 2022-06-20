@@ -7,15 +7,15 @@
 	position: fixed;
 	left: 0;
 	bottom: 0;
-	z-index: 98;
-	height: 140rpx;
 	width: 100%;
 	display: flex;
-	flex-direction: row;
-	// justify-content: space-between;
-	// align-items: stretch;
-	padding: 0;
-	
+	// flex-direction: row;
+	// // justify-content: space-between;
+	// // align-items: stretch;
+	// padding: 0;
+	// color: #fff;
+	// line-height: 100rpx;
+	// flex: 0 0 100rpx;
 	.btn-submit {
 		font-size: $theme-font-size;
 		text-align: center;

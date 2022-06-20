@@ -1,9 +1,8 @@
 package org.nodes.wms.core.strategy.wrapper;
 
 import org.nodes.wms.core.basedata.cache.BillTypeCache;
-import org.nodes.wms.core.basedata.cache.SkuTypeCache;
 import org.nodes.wms.dao.basics.billType.entities.BillType;
-import org.nodes.wms.dao.basics.sku.entities.SkuType;
+import org.nodes.wms.dao.basics.skuType.entities.SkuType;
 import org.nodes.wms.core.basedata.service.ISkuTypeService;
 import org.nodes.wms.core.strategy.entity.InstockConfig;
 import org.nodes.wms.core.strategy.vo.InstockConfigVO;
