@@ -1,10 +1,8 @@
 
 package org.nodes.wms.core.system.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.nodes.wms.core.system.entity.UpdateVer;
-import org.nodes.wms.core.system.vo.UpdateVerVO;
+import org.nodes.wms.dao.system.updateVer.entities.UpdateVer;
 
 /**
  *  服务类
