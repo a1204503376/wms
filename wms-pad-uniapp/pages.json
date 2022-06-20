@@ -105,6 +105,14 @@
 				"enablePullDownRefresh": false
 			}
 
+		},
+		{
+			"path": "pages/billReceive/billReceivePageThree",
+			"style": {
+				"navigationBarTitleText": "按件收货3",
+				"enablePullDownRefresh": false
+			}
+		
 		}
 	],
 	"globalStyle": {

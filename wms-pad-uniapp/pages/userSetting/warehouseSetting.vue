@@ -11,12 +11,12 @@
 			</radio-group>
 		</view>
 		<view class="footer">
-			<button class="btn-cancle" @click="esc()">
+			<view class="btn-cancle" @click="esc()">
 				返回
-			</button>
-			<button class="btn-submit" @click="submit()">
+			</view>
+			<view class="btn-submit" @click="submit()">
 				确定
-			</button>
+			</view>
 		</view>
 	</view>
 </template>
