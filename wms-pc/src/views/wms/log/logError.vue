@@ -100,11 +100,8 @@
 
 
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
-import NodesAsnBillState from "@/components/wms/select/NodesAsnBillState";
-import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
-import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
-import {remove,close} from "@/api/wms/instock/receive";
+import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import {page,exportFile} from"@/api/wms/log/logError";
 import {listMixin} from "@/mixins/list";
 import fileDownload from "js-file-download";
@@ -117,8 +114,8 @@ import {ExcelExport} from 'pikaz-excel-js';
 export default {
     name: "list",
     components: {
-        NodesInStoreMode,
         NodesMasterPage,
+        DialogColumn,
         NodesDateRange,
         ExcelExport
     },
