@@ -6,7 +6,7 @@
                  label-width="60"
                  size="mini"
                  @submit.native.prevent>
-            <el-row type="flex">
+            <el-row type="flex" v-if="showSearchForm">
                 <el-col :lg="18" :md="20" :xl="20">
                     <div class="d-div-left">
                         <slot name="searchFrom"></slot>
@@ -66,7 +66,8 @@ export default {
     props: {
         showExpandBtn:{type:Boolean,required:false,default:()=>true},
         showPage:{type:Boolean,required:false,default:()=>true},
-        permission:{type:Object,required:true}
+        permission:{type:Object,required:true},
+        showSearchForm:{type:Boolean,required:false,default:()=>true}
     },
     data() {
         return {
