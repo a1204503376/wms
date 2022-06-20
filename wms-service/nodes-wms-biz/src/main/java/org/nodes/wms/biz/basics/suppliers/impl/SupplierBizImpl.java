@@ -62,7 +62,7 @@ public class SupplierBizImpl implements SupplierBiz {
 	@Override
 	public void exportSupplier(SupplierPageQuery supplierPageQuery, HttpServletResponse response) {
 		List<SupplierExportResponse> supplierList = supplierDao.listBySupplierPageQuery(supplierPageQuery);
-		ExcelUtil.export(response, "供应商" + DateUtil.formatDateTimeMini(new Date()), "供应商数据报表", supplierList, SupplierExportResponse.class);
+		ExcelUtil.export(response, "供应商", "供应商数据报表", supplierList, SupplierExportResponse.class);
 	}
 
 	@Override
