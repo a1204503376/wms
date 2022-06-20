@@ -94,7 +94,6 @@ import fileDownload from "js-file-download";
                     </el-table-column>
                     <el-table-column
                         fixed
-                        sortable
                         type="index">
                         <template slot="header">
                             #
@@ -110,7 +109,7 @@ import fileDownload from "js-file-download";
                     </template>
                     <el-table-column
                         label="启用">
-                        <template slot-scope="scope">
+                        <template v-slot="scope">
                             <span v-if="scope.row.status>0">
                                 <el-tag type="success">是</el-tag>
                             </span>
@@ -195,39 +194,48 @@ export default {
                 columnList: [
                     {
                         prop: 'code',
+                        sortable: 'custom',
                         label: '承运商编码'
                     },
                     {
                         prop: 'name',
-                        label: '承运商名称'
+                        label: '承运商名称',
+                        sortable: 'custom',
                     },
                     {
                         prop: 'simpleName',
-                        label: '承运商简称'
+                        label: '承运商简称',
+                        sortable: 'custom',
                     },
                     {
                         prop: 'ownerName',
-                        label: '货主'
+                        label: '货主',
+                        sortable: 'custom',
                     },
                     {
                         prop: 'remark',
-                        label: '备注'
+                        label: '备注',
+                        sortable: 'custom',
                     },
                     {
                         prop: 'createTime',
-                        label: '创建时间'
+                        label: '创建时间',
+                        sortable: 'custom',
                     },
                     {
                         prop: 'createUser',
-                        label: '创建人'
+                        label: '创建人',
+                        sortable: 'custom',
                     },
                     {
                         prop: 'updateTime',
-                        label: '修改时间'
+                        label: '修改时间',
+                        sortable: 'custom',
                     },
                     {
                         prop: 'updateUser',
-                        label: '修改人'
+                        label: '修改人',
+                        sortable: 'custom',
                     }
                 ]
             },

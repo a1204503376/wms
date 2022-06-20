@@ -33,12 +33,12 @@
                             <el-form-item label="承运商简称" >
                                 <el-input v-model="form.params.simpleName"></el-input>
                             </el-form-item>
-                        </el-col>yy
+                        </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="货主" prop="woId">
-                                <nodes-owner v-model="form.params.woId"></nodes-owner>
+                                <nodes-owner style="width: 288.5px" v-model="form.params.woId"></nodes-owner>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -52,16 +52,12 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="是否启用" prop="status">
-
                                 <template>
                                     <el-radio v-model="form.params.status" :label=1>是</el-radio>
                                     <el-radio v-model="form.params.status" :label=2>否</el-radio>
                                 </template>
-
                             </el-form-item>
-
                         </el-col>
-
                     </el-row>
                 </el-form>
             </el-main>
@@ -106,7 +102,6 @@ export default {
                     status: 1
                 },
                 rules: {
-
                     code: [
                         {
                             required: true,
