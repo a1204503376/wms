@@ -16,8 +16,8 @@
         c.zip_code,
         c.remark,
         c.create_time,
-        user1.real_name createUser,
-        user2.real_name updateUser,
+        user1.real_name as create_user,
+        user2.real_name as update_user,
         c.update_time,
         IF(c.status = 1, '启用', '未启用') as status
         from basics_customers c
