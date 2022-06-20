@@ -1,6 +1,6 @@
 <template>
     <div id="list">
-        <nodes-master-page :configure="masterConfig" :permission="permissionObj" v-on="form.events">
+        <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-form-item label="物品编码">
                     <el-input v-model="form.params.skuCode" class="d-input"></el-input>

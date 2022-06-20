@@ -258,7 +258,7 @@ export default {
                 if (loadingCount !== 0) {
                     return;
                 }
-                clearInterval(interval);
+
                 let index = self.crudColumn.findIndex(u => {
                     return u.menuId === menu.id;
                 });
@@ -271,6 +271,7 @@ export default {
                 self.loading.content = false;
                 self.loading.saveBtn = false;
                 self.beforeClose(column);
+                clearInterval(interval);
             });
         },
         beforeClose(column) {
