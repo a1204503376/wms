@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.dao.common.log.dto.input.LogActionPageQuery;
+import org.nodes.wms.dao.common.log.dto.input.LogApiPageQuery;
 import org.nodes.wms.dao.common.log.dto.input.LogErrorPageQuery;
 import org.nodes.wms.dao.common.log.dto.output.LogActionPageResponse;
+import org.nodes.wms.dao.common.log.dto.output.LogApiPageResponse;
 import org.nodes.wms.dao.common.log.dto.output.LogErrorPageResponse;
 import org.nodes.wms.dao.common.log.dto.output.LogMessageResponse;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
@@ -96,5 +98,9 @@ public class LogController {
 		logBiz.exportLogErrorExcel(logErrorPageQuery, response);
 	}
 
-
+	@PostMapping("/logApiPage")
+	public R<IPage<LogApiPageResponse>> logApiPage(@RequestBody LogApiPageQuery logApiPageQuery, Query query) {
+		IPage<LogApiPageResponse> pages = logBiz.getLogApiPage(logApiPageQuery, query);
+		return R.data(pages);
+	}
 }

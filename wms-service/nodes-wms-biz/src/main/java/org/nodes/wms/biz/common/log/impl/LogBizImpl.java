@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.common.log.impl.modular.LogFactory;
 import org.nodes.wms.dao.common.log.LogActionDao;
+import org.nodes.wms.dao.common.log.LogApiDao;
 import org.nodes.wms.dao.common.log.LogErrorDao;
 import org.nodes.wms.dao.common.log.LogMessageDao;
 import org.nodes.wms.dao.common.log.dto.input.*;
@@ -37,6 +38,9 @@ public class LogBizImpl implements LogBiz {
 	private final LogMessageDao logMessageDao;
     private final LogActionDao actionDao;
 	private final LogErrorDao logErrorDao;
+
+	private final LogApiDao logApiDao;
+
 	/**
 	 * 实现通知日志智能存储
 	 *
@@ -157,5 +161,10 @@ public class LogBizImpl implements LogBiz {
 		ExcelUtil.export(response, "异常日志", "异常日志数据表", logErrorResponseList, LogErrorPageResponse.class);
 	}
 
+    @Override
+    public IPage<LogApiPageResponse> getLogApiPage(LogApiPageQuery logApiPageQuery, Query query) {
+		IPage<LogApiPageResponse> page = Condition.getPage(query);
+		return logApiDao.selectPage(logApiPageQuery,page);
+    }
 
 }
