@@ -6,7 +6,7 @@
 				<u--input v-model="params.skuCode"></u--input>
 			</u-form-item>
 		</u--form>
-		<u-divider text="未收货列表"></u-divider>
+		<u-divider text="未收货列表" textSize="25" style="line-height: 10rpx !important;"></u-divider>
 		<u-divider text=""></u-divider>
 		<!-- ${index + 1} -->
 		<u-list>
@@ -67,9 +67,6 @@
             getReceiveDetailList(){
 				receive.getReceiveDetailList(this.params).then(data => {
 						this.receiveDetailList=data.data;
-					    if(data.data.length==1){
-						 uni.$u.func.route('/pages/billReceive/billReceivePageThree', data.data[0]);	
-						}
 				})
 			},
 			clickItem(row){
