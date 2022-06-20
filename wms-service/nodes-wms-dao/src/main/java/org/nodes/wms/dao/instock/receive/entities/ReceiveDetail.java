@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.models.auth.In;
 import lombok.Data;
 import org.nodes.wms.dao.common.entitits.BaseSkuLotEntity;
+import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
 
 import java.math.BigDecimal;
 
@@ -40,7 +41,7 @@ public class ReceiveDetail extends BaseSkuLotEntity {
 	/**
 	 * 接收状态
 	 */
-	private Integer  detailStatus;
+	private ReceiveDetailStatusEnum detailStatus;
 	/**
 	 * 物品ID
 	 */

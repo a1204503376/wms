@@ -29,7 +29,6 @@ public class SkuBom extends TenantEntity implements Serializable {
 	 * 货主ID
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
-
 	private Long woId;
 	/**
 	 * 货主编码

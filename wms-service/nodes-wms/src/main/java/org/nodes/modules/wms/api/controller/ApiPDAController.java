@@ -65,6 +65,7 @@ import org.nodes.wms.core.warehouse.service.ILocationService;
 import org.nodes.wms.core.warehouse.service.IWarehouseService;
 import org.nodes.wms.dao.basics.sku.enums.SkuLevelEnum;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
+import org.nodes.wms.dao.system.updateVer.entities.UpdateVer;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.log.exception.ServiceException;

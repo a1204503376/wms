@@ -173,6 +173,7 @@ import fileUpload from "@/components/nodes/fileUpload";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesZone from "@/components/wms/select/NodesZone";
 import NodesDictionary from "@/components/wms/select/NodesDictionary";
+import {nowDateFormat} from "@/util/date";
 
 export default {
     name: "location",
@@ -351,7 +352,7 @@ export default {
             exportFile(this.form.params)
                 .then((res) => {
                     this.$message.success("操作成功，正在下载中...");
-                    fileDownload(res.data, "库位.xlsx");
+                    fileDownload(res.data, `库位${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
                 })
                 .catch(() => {
                     this.$message.error("系统模板目录配置有误或文件不存在");
@@ -373,9 +374,6 @@ export default {
                 this.$message.success(res.data.msg);
                 this.refreshTable();
             })
-        },
-        filterTag(value, row) {
-            return row.status === value;
         },
         onAdd() {
             this.$router.push({

@@ -286,9 +286,6 @@ export default {
                     this.loading = false;
                 });
         },
-        filterTag(value, row) {
-            return row.status === value;
-        },
         onReset() {
             this.form.params.asnBillNo = ''
             this.form.params.skuIdList = []

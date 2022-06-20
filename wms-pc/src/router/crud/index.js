@@ -39,7 +39,7 @@ export default [
             name: '新增容器',
             props: true,
             component: () => import('@/views/wms/basics/lpntype/LpnTypeAddOrEdit')
-        },{
+        }, {
             path: 'edit/:id',
             name: '编辑容器',
             props: true,
@@ -170,4 +170,15 @@ export default [
             component: () => import('@/views/wms/log/logMessage')
         }]
     },
+    {
+        path: '/updateVer',
+        component: Layout,
+        children: [
+            {
+                path: 'edit/:suvId',
+                name: '系统版本-编辑',
+                props: true,
+                component: () => import('@/views/wms/system/updateVer/updateVerEdit')
+            }]
+    }
 ]

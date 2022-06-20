@@ -111,6 +111,7 @@ import {exportFile, importFile, page, remove} from "@/api/wms/basics/supplier";
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js'
 import fileUpload from "@/components/nodes/fileUpload";
+import {nowDateFormat} from "@/util/date";
 
 
 export default {
@@ -248,7 +249,7 @@ export default {
             exportFile(this.form.params)
                 .then((res) => {
                     this.$message.success("操作成功，正在下载中...");
-                    fileDownload(res.data, "供应商.xlsx");
+                    fileDownload(res.data, `供应商${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
                 })
                 .catch(() => {
                     this.$message.error("系统模板目录配置有误或文件不存在");

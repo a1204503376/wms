@@ -1,12 +1,10 @@
 
 package org.nodes.wms.core.system.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.nodes.wms.core.system.entity.UpdateVer;
-import org.nodes.wms.core.system.mapper.UpdateVerMapper;
+import org.nodes.wms.dao.system.updateVer.entities.UpdateVer;
+import org.nodes.wms.dao.system.updateVer.mapper.UpdateVerMapper;
 import org.nodes.wms.core.system.service.IUpdateVerService;
-import org.nodes.wms.core.system.vo.UpdateVerVO;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
