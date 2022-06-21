@@ -6,8 +6,7 @@
 				<u--input v-model="params.skuCode"></u--input>
 			</u-form-item>
 		</u--form>
-		<u-divider text="未收货列表" textSize="25" style="line-height: 10rpx !important;"></u-divider>
-		<u-divider text=""></u-divider>
+		<h3 align="center">未收货列表</h3>
 		<!-- ${index + 1} -->
 		<u-list>
 			<u-list-item v-for="(item, index) in receiveDetailList" :key="index">
