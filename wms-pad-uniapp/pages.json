@@ -85,14 +85,14 @@
 		}, {
 			"path": "pages/userSetting/warehouseSetting",
 			"style": {
-				"navigationBarTitleText": "选择库房",
+				"navigationBarTitleText": "切换库房",
 				"enablePullDownRefresh": false
 			}
 		}
 
 
 		, {
-			"path": "pages/billReceive/billReceive",
+			"path": "pages/billReceive/receiptHeaderEnquiry",
 			"style": {
 				"navigationBarTitleText": "按件收货",
 				"enablePullDownRefresh": false

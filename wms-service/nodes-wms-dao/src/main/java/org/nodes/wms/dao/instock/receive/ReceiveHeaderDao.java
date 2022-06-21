@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.instock.receive;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePdaQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderPdaResponse;
@@ -44,7 +45,7 @@ public interface ReceiveHeaderDao {
 	 * @param receivePdaQuery 请求参数
 	 * @return IPage<PageResponse>
 	 */
-	List<ReceiveHeaderPdaResponse> getReceiveList(ReceivePdaQuery receivePdaQuery);
+	Page<ReceiveHeaderPdaResponse> getReceiveList(ReceivePdaQuery receivePdaQuery, IPage<ReceiveHeader> page);
 
 
 }

@@ -1,9 +1,9 @@
 <template>
 	<view class="container">
-		<u-navbar :leftText="username" leftIcon="account-fill" :leftIconSize="40" leftIconColor="#fff"
-			@leftClick="userSetting" :rightText="title" :fixed="false"
-			:autoBack="false"  :bgColor="navigationBarBackgroundColor"
-			titleStyle="color:#ffffff;font-size:21px">
+		<u-navbar :leftText="title" leftIcon="account-fill" :leftIconSize="40" leftIconColor="#fff"
+			@leftClick="userSetting" :rightText="username" :fixed="false" :autoBack="false"
+			:bgColor="navigationBarBackgroundColor" titleStyle="color:#ffffff;font-size:21px"
+			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u-grid class="menu" col="3">
 			<u-grid-item class="menu-item" v-for="(menu, index2) in menuLists" :key="menu.code" @click="navTo(menu)">
@@ -35,45 +35,27 @@
 				current: 0,
 				menuLists: [],
 				username: this.$store.state.userName,
-				title:''
+				title: ''
 			};
-		},
-		onReady() {
-
 		},
 		onLoad() {
 			uni.showLoading({
 				title: '加载中'
 			})
-			uni.$u.func.registerScanner(this.scannerCallback);
 			api.getMenuList().then(data => {
 				if (tool.isNotEmpty(data.data) && tool.isArray(data.data)) {
 					data.data.forEach((item, index) => {
 						if (item.systemTypeName == 'PDA') {
 							this.menuLists = item.children;
+							uni.hideLoading();
 						}
 					})
 				}
 			})
-			uni.hideLoading();
-		},
-		onUnload() {
-			uni.$u.func.unRegisterScanner();
+			
 		},
 		onShow() {
-			uni.$u.func.registerScanner(this.scannerCallback);
-			warehouse.getWarehouseList().then(data=>{
-				if(data.data.length>1&&uni.getStorageSync('warehouse').whName==undefined)
-				{
-				  	uni.$u.func.route('/pages/userSetting/warehouseSetting');
-				}
-				else{
-					uni.setStorageSync('warehouse',data.data[0]);
-					warehouse.warehouseChange(data.data[0]).then(data => {
-					})
-					this.title=uni.getStorageSync('warehouse').whName;	
-				}
-			})
+			this.title = uni.getStorageSync('warehouse').whName;
 		},
 		methods: {
 			emitKeyDown(e) {
@@ -97,9 +79,6 @@
 			goOut() {
 				uni.$u.func.logout();
 			},
-			scannerCallback(data) {
-				this.username = data
-			}
 		}
 	};
 </script>

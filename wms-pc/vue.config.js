@@ -17,9 +17,7 @@ module.exports = {
         entry.add('classlist-polyfill').end();
     },
     css: {
-        extract: {
-            ignoreOrder: true
-        }
+        extract: false,
     },
     //开发模式反向代理配置，生产模式请使用Nginx部署并配置反向代理
     devServer: {

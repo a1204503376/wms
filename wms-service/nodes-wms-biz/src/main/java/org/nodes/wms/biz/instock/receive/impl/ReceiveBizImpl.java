@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.instock.receive.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
@@ -171,8 +172,9 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	}
 
 	@Override
-	public List<ReceiveHeaderPdaResponse> getReceiveListByReceiveNo(ReceivePdaQuery receivePdaQuery) {
-		return receiveHeaderDao.getReceiveList(receivePdaQuery);
+	public Page<ReceiveHeaderPdaResponse> getReceiveListByReceiveNo(ReceivePdaQuery receivePdaQuery, Query query) {
+		IPage<ReceiveHeader> page = Condition.getPage(query);
+		return receiveHeaderDao.getReceiveList(receivePdaQuery,page);
 	}
 
 	@Override

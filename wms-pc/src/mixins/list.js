@@ -118,10 +118,8 @@ export const listMixin = {
                     order: find.order
                 });
             });
-            // 1. 显隐列组件赋值的列名称已本地配置的label为主，优先处理
-            if (flag === 'init') {
-                this.columnShowHide.dataSource = deepClone(deepCloneColumnList);
-            }
+            // 显隐列组件赋值的列名称已本地配置的label为主，优先处理
+            this.columnShowHide.dataSource = deepClone(deepCloneColumnList);
             // 2. 再处理本地label是否采用别名
             deepCloneColumnList.forEach(d => {
                 let find = data.find(m => m['prop'] === d['prop']);
@@ -132,7 +130,6 @@ export const listMixin = {
                     label: func.strDefault(find.aliasName, d.label)
                 });
             });
-
             func.recursionObject(deepCloneColumnList, this, this.table.columnList);
             this.table.columnList.sort((a, b) => {
                 let x = a['order'], y = b['order'];

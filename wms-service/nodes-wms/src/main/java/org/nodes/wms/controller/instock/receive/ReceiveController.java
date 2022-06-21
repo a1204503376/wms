@@ -1,9 +1,11 @@
 package org.nodes.wms.controller.instock.receive;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
+import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.dao.application.dto.output.ReceiveBillStateResponse;
 import org.nodes.wms.dao.instock.receive.dto.input.*;
 import org.nodes.wms.dao.instock.receive.dto.output.EditReceiveResponse;
@@ -11,6 +13,8 @@ import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveBillStateEnum;
+import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
+import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
@@ -29,6 +33,7 @@ import java.util.List;
 @RequestMapping(WmsApiPath.WMS_ROOT_URL + "receive")
 public class ReceiveController {
 	private final ReceiveBiz receiveBiz;
+	private final ReceiveLogBiz receiveLogBiz;
 
 	/**
 	 * 收货管理分页查询
@@ -110,4 +115,13 @@ public class ReceiveController {
 	public R<List<ReceiveBillStateResponse>> getReceiveStateList() {
 		return R.data(ReceiveBillStateEnum.getList());
 	}
+
+	/**
+	 * 根据收货单id获取清点记录集合
+	 * @param receiveId 收货单id
+	 */
+	@GetMapping("/getReceiveLogList")
+	public R<List<ReceiveLogResponse>> getReceiveList(Long receiveId){
+		return R.data(receiveLogBiz.getReceiveLogList(receiveId));
+   }
 }

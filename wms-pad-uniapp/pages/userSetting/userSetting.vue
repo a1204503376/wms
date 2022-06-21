@@ -41,7 +41,7 @@
 			<u--form>
 				<u-form-item borderBottom labelWidth="60"  @click="setWarehouse">
 					<u-icon name="home-fill" size="28"></u-icon>
-					<text style="font-size: 100%;">库位选择</text>
+					<text style="font-size: 100%;">切换库房</text>
 				</u-form-item>
 			</u--form>
 		</view>

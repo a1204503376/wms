@@ -1,7 +1,6 @@
 <template>
 	<view>
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
-		<u-divider text=""></u-divider>
 		<u--form labelPosition="left" :model="params">
 			<u-form-item label="物品" borderBottom>
 				<u--input v-model="params.skuCode"></u--input>
