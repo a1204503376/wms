@@ -93,7 +93,7 @@
                                 <el-table-column
                                     :align="'left'"
                                     prop="skuCode"
-                                    width="230"
+                                    width="195"
                                 >
                                     <template slot="header">
                                         <span class="d-table-header-required">物品编码</span>
@@ -101,15 +101,16 @@
                                     <template v-slot="{row}">
                                         <nodes-sku
                                             v-model="row.sku"
-                                            style="width: 180px;"
+                                            style="width: 170px;"
                                             @selectValChange="onChangeSku(row)"
+
                                         >
 
                                         </nodes-sku>
 
                                     </template>
                                 </el-table-column>
-                                <el-table-column>
+                                <el-table-column  width="125">
                                 <template slot="header">
                                     <span class="d-table-header-required">物料名称</span>
                                 </template>
@@ -123,6 +124,7 @@
                                 </el-table-column>
                                 <el-table-column
                                     prop="planQty"
+                                    width="120"
                                 >
                                     <template slot="header">
                                         <span class="d-table-header-required">计划数量</span>
@@ -130,6 +132,7 @@
                                     <template v-slot="{row}">
                                         <el-input-number
                                             v-model="row.planQty"
+                                            style="width: 80px"
                                             :min="0"
                                             controls-position="right"
                                             size="mini"></el-input-number>
@@ -139,7 +142,7 @@
                                 <el-table-column
                                     :align="'left'"
                                     prop="skuCode"
-
+                                    width="110"
                                 >
                                     <template slot="header">
                                         <span class="d-table-header-required">计量单位</span>
@@ -161,6 +164,66 @@
                                             size=mini
                                             v-model="row.sku.skuSpec"
                                             :disabled="true">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column>
+                                    <template slot="header">
+                                        <span >生产批次</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input
+                                            size=mini
+                                            v-model="row.skuLot1"
+                                           >
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column>
+                                    <template slot="header">
+                                        <span >客户</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input
+                                            size=mini
+                                            v-model="row.skuLot4"
+                                        >
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column>
+                                    <template slot="header">
+                                        <span >钢背批次</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input
+                                            size=mini
+                                            v-model="row.skuLot5"
+                                        >
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column>
+                                    <template slot="header">
+                                        <span >摩擦块批次</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input
+                                            size=mini
+                                            v-model="row.skuLot6"
+                                        >
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column>
+                                    <template slot="header">
+                                        <span >CRCC</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input
+                                            size=mini
+                                            v-model="row.skuLot8"
+                                        >
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -311,7 +374,12 @@ export default {
                 umCode:'',
                 planQty: 0,
                 remark:'',
-                skuSpec:''
+                skuSpec:'',
+                skuLot1:'',
+                skuLot4:'',
+                skuLot5:'',
+                skuLot6:'',
+                skuLot8:'',
             }
         },
         deleteRow(index, rows) {

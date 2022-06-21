@@ -147,6 +147,16 @@ public class ReceiveFactory {
 		receiveDetail.setWhCode(receiveHeader.getWhCode());
 		//设置货主id
 		receiveDetail.setWoId(receiveHeader.getWoId());
+		//设置生产批次
+		receiveDetail.setSkuLot1(newReceiveDetailRequest.getSkuLot1());
+		//设置客户
+		receiveDetail.setSkuLot4(newReceiveDetailRequest.getSkuLot4());
+		//设置钢背批次
+		receiveDetail.setSkuLot5(newReceiveDetailRequest.getSkuLot5());
+		//设置摩擦块批次
+		receiveDetail.setSkuLot6(newReceiveDetailRequest.getSkuLot6());
+		//设置CRCC
+		receiveDetail.setSkuLot8(newReceiveDetailRequest.getSkuLot8());
 		return receiveDetail;
 	}
 
