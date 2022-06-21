@@ -6,9 +6,9 @@
 				<u--input v-model="params.skuCode"></u--input>
 			</u-form-item>
 		</u--form>
-		<h3 align="center">未收货列表</h3>
+		<h4 align="center">未收货列表</h4>
 		<!-- ${index + 1} -->
-		<u-list>
+		<u-list style="height: 960rpx;">
 			<u-list-item v-for="(item, index) in receiveDetailList" :key="index">
 				<view @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
