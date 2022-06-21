@@ -92,7 +92,7 @@
 
 
 		, {
-			"path": "pages/billReceive/billReceive",
+			"path": "pages/billReceive/receiptHeaderEnquiry",
 			"style": {
 				"navigationBarTitleText": "按件收货",
 				"enablePullDownRefresh": false
