@@ -25,6 +25,5 @@ public class LogApiDaoImpl extends BaseServiceImpl<LogApiMapper, LogApi> impleme
     @Override
     public List<LogApiPageResponse> getLogApiResponseByQuery(LogApiPageQuery logApiPageQuery) {
         return super.baseMapper.getLogApiResponseByQuery(logApiPageQuery);
-
     }
 }

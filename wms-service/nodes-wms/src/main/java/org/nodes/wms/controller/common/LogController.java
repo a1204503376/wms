@@ -98,9 +98,17 @@ public class LogController {
 		logBiz.exportLogErrorExcel(logErrorPageQuery, response);
 	}
 
+	/**
+	 * 请求日志分页查询
+	 */
 	@PostMapping("/logApiPage")
 	public R<IPage<LogApiPageResponse>> logApiPage(@RequestBody LogApiPageQuery logApiPageQuery, Query query) {
 		IPage<LogApiPageResponse> pages = logBiz.getLogApiPage(logApiPageQuery, query);
 		return R.data(pages);
+	}
+
+	@PostMapping("logApiExport")
+	public void logApiExport(@RequestBody LogApiPageQuery logApiPageQuery, HttpServletResponse response) {
+		logBiz.exportLogApiExcel(logApiPageQuery, response);
 	}
 }

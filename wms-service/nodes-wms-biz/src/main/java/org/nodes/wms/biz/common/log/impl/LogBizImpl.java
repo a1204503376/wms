@@ -20,6 +20,7 @@ import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.StringUtil;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -167,4 +168,13 @@ public class LogBizImpl implements LogBiz {
 		return logApiDao.selectPage(logApiPageQuery,page);
     }
 
+	@Override
+	public void exportLogApiExcel(LogApiPageQuery logApiPageQuery, HttpServletResponse response) {
+		List<LogApiPageResponse> logApiResponseList = logApiDao.getLogApiResponseByQuery(logApiPageQuery);
+		logApiResponseList.forEach(item->{
+			item.setParams(StringUtil.sub(item.getParams(),0,32767));
+			item.setData(StringUtil.sub(item.getParams(),0,32767));
+		});
+		ExcelUtil.export(response, "请求日志", "请求日志数据表", logApiResponseList, LogApiPageResponse.class);
+	}
 }

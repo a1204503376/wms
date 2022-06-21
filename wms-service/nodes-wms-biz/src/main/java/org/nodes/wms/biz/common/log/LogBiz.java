@@ -131,4 +131,12 @@ public interface LogBiz {
 	 * @return IPage<LogApiPageResponse>
 	 */
 	IPage<LogApiPageResponse> getLogApiPage(LogApiPageQuery logApiPageQuery, Query query);
+
+	/**
+	 * 导出请求日志
+	 *
+	 * @param logApiPageQuery: 导出时的条件dto对象
+	 * @param response: 响应对象
+	 */
+	void exportLogApiExcel(LogApiPageQuery logApiPageQuery, HttpServletResponse response);
 }

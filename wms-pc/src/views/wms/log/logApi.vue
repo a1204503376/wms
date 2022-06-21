@@ -209,7 +209,7 @@ export default {
             exportFile(this.form.params)
                 .then((res) => {
                     this.$message.success("操作成功，正在下载中...");
-                    fileDownload(res.data, `日志${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
+                    fileDownload(res.data, `请求日志${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
                 })
                 .catch(() => {
                     this.$message.error("系统模板目录配置有误或文件不存在");
