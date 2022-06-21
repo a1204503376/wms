@@ -3,6 +3,7 @@ package org.nodes.wms.dao.instock.receive.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePdaQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveHeaderResponse;
@@ -79,12 +80,12 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
     }
 
 	@Override
-	public List<ReceiveHeaderPdaResponse> getReceiveList(ReceivePdaQuery receivePdaQuery) {
+	public Page<ReceiveHeaderPdaResponse> getReceiveList(ReceivePdaQuery receivePdaQuery, IPage<ReceiveHeader> page) {
 		if(Func.isEmpty(receivePdaQuery.getNo()))
 		{
 			throw new ServiceException("必须输入收货单编码或上游编码");
 		}
-		return receiveHeaderMapper.getReceiveList(receivePdaQuery);
+		return receiveHeaderMapper.getReceiveList(receivePdaQuery,page);
 	}
 
 }
