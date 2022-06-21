@@ -76,7 +76,7 @@
 				})
 			},500),
 			clickItem(item) {
-				uni.$u.func.route('/pages/billReceive/billReceivePageTwo', item);
+				uni.$u.func.route('/pages/billReceive/receiptDetailEnquiry', item);
 			},
 			scannerCallback(no) {
 				this.params.no = no;
@@ -102,8 +102,5 @@
 </script>
 
 <style>
-	.textClass {
-		margin-left: 35px!important;
-	}
-	
+@import 'receiptHeaderEnquiry.scss';
 </style>
