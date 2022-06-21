@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="uni-list">
-			<radio-group @change="radioChange" :model="whId">
+			<radio-group @change="radioChange" :model="whId" style="transform: scale(0.9);margin-top: -100rpx;">
 				<label class="uni-list-cell uni-list-cell-pd" v-for="(item, index) in warehouseList" :key="item.whId">
 					<view>{{item.whName}}</view>
 					<view>
@@ -44,9 +44,10 @@
 			},
 			submit() {
 				uni.setStorageSync('warehouse', this.warehouse);
-				warehouse.warehouseChange(this.warehouse).then(data => {
-			    })
-				uni.$u.func.navigateBack();
+				warehouse.warehouseChange(this.warehouse).then(data => {})
+				uni.redirectTo({
+					url: '/pages/home/home'
+				})
 			},
 			radioChange(row) {
 				this.warehouse = row.detail.value;
@@ -55,5 +56,5 @@
 	};
 </script>
 <style lang="scss">
-@import 'warehouseSetting.scss';
+	@import 'warehouseSetting.scss';
 </style>

@@ -12,15 +12,15 @@
 				<view @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
 						<u-col span="6">
-							<view class="demo-layout bg-purple-light">{{item.receiveNo}}</view>
+							<u--text class="demo-layout bg-purple-light" v-text="item.receiveNo"></u--text>
 						</u-col>
 						<u-col span="6">
-							<view class="demo-layout bg-purple">{{item.billTypeName}}</view>
+							<u--text class="demo-layout bg-purple" v-text="item.billTypeName"></u--text>
 						</u-col>
 					</u-row>
 					<u-row customStyle="margin-bottom: 10px">
 						<u-col span="12">
-							<view class="demo-layout bg-purple">{{item.supplierName}}</view>
+							<u--text class="demo-layout bg-purple" v-text="item.supplierName"></u--text>
 						</u-col>
 					</u-row>
 					<u-divider text=""></u-divider>
@@ -64,9 +64,6 @@
 			search() {
 				receive.getReceiveList(this.params).then(data => {
 					this.receiveList = data.data;
-					if (data.data.length == 1) {
-						uni.$u.func.route('/pages/billReceive/billReceivePageTwo', data.data[0]);
-					}
 				})
 			},
 			clickItem(item) {
