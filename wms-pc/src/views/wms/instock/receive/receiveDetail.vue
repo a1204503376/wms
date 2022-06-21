@@ -162,6 +162,50 @@ export default {
                     billTypeName:'',
                 }
             },
+            receiveDetailList: [
+                {
+                    prop: 'lineNo',
+                    label: '行号',
+                },
+                {
+                    prop: 'skuCode',
+                    label: '物品编码'
+                },
+                {
+                    prop: 'skuName',
+                    label: '物品名称',
+                    // left/center/right
+                    align: 'right'
+                },
+                {
+                    prop: 'planQty',
+                    label: '计划数量'
+                },
+                {
+                    prop: 'scanQty',
+                    label: '已收数量'
+                },
+                {
+                    prop: 'surplusQty',
+                    label: '剩余数量'
+                },
+                {
+                    prop: 'umName',
+                    label: '计量单位'
+                },
+                {
+                    prop: 'detailStatus',
+                    label: '状态'
+                },
+                {
+                    prop: 'skuSpec',
+                    label: '包装规格'
+                },
+                {
+                    prop: 'remark',
+                    label: '备注'
+                },
+            ],
             table: {
                 columnList: [
                     {
