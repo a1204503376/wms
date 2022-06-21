@@ -19,7 +19,7 @@ public interface WarehouseBiz {
 	/**
 	 * 根据仓库Id获取仓库实体
 	 * @param warehouseId  仓库Id
-	 * @return  仓库实体
+	 * @return Warehouse 仓库实体
 	 */
 	Warehouse findById(Long warehouseId);
 
@@ -34,4 +34,26 @@ public interface WarehouseBiz {
 	 * @return 根据权限返回当前用户能看到的系统
 	 */
 	List<Warehouse> getWarehouseByUserId(BladeUser user);
+
+	/**
+	 * 新增库房之后初始化库区、库位
+	 * 默认创建如下虚拟库位：STAGE（入库集货区）、QC（入库检验区）、
+	 *    PICKTO（出库集货区）、PACK（打包区）、UNKNOWN（未知库位）、
+	 *    INTRANSIT（库内虚拟区）；默认的库位编码为库房编码加上述库位编码，中间用-隔开
+	 * @param warehouse: 库房对象
+	 */
+	void afterNewWarehouse(Warehouse warehouse);
+
+	/**
+	 * 授权
+	 *
+	 * @param authorizeString: 原始json字符
+	 * @return String 加密之后的字符
+	 */
+	String authorized(String authorizeString);
+
+	/**
+	 * 验证仓库的授权，如果验证失败，则抛出异常
+	 */
+	void valiAuthorization();
 }
