@@ -20,8 +20,8 @@
 			event: 'selectValChange'
 		},
 		watch: {
-			dataSource: {
-				handler() {
+			selectVal: {
+				handler(selectVal) {
 					this.dataSource = this.selectVal;
 					this.getDataSource();
 				},

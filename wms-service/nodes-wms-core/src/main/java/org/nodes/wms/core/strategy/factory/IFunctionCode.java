@@ -1,7 +1,7 @@
 package org.nodes.wms.core.strategy.factory;
 
 import org.nodes.wms.core.basedata.entity.SkuOutstock;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.strategy.entity.OutstockDetail;
 
 import java.math.BigDecimal;

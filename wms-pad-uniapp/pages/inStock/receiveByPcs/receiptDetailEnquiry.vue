@@ -12,7 +12,7 @@
 			<u-list-item v-for="(item, index) in receiveDetailList" :key="index">
 				<view @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="10">
+						<u-col span="10" class="textAlignClass">
 							<view class="demo-layout bg-purple-light">{{index+1}}-{{item.skuCode}}</view>
 						</u-col>
 						<u-col span="2">
@@ -69,7 +69,7 @@
 				})
 			},
 			clickItem(row){
-				 uni.$u.func.route('/pages/inStock/receiveByPcs/billReceivePageThree',row);
+				 uni.$u.func.route('/pages/inStock/receiveByPcs/ReceiveByPiece',row);
 			},
 			scannerCallback(no) {
 				this.params.skuCode = no;

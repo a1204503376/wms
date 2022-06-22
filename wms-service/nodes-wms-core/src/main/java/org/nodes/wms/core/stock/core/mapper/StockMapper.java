@@ -2,7 +2,7 @@
 package org.nodes.wms.core.stock.core.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.entity.StockDetail;
 import org.nodes.wms.core.stock.core.vo.AccountsVo;
 import org.nodes.wms.core.stock.core.vo.UnsafeStockSkuVO;

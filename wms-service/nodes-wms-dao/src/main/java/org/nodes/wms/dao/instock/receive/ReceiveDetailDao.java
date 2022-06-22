@@ -34,4 +34,10 @@ public interface ReceiveDetailDao {
 	 * @return 收货单明细表集合
 	 */
 	List<DetailReceiveDetailPdaResponse> selectDetailListByReceiveId(@Param("query") ReceiveDetailPdaQuery receiveDetailPdaQuery);
+
+	/**
+	 * @param receiveDetailId 收货明细单主键id
+	 * @return  pda收货页面获取收货的详细信息
+	 */
+	ReceiveDetail getDetailByReceiveDetailId(Long receiveDetailId);
 }

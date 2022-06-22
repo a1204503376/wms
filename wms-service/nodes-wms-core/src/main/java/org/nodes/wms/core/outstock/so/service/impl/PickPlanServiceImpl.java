@@ -48,7 +48,7 @@ import org.nodes.wms.core.outstock.so.vo.*;
 import org.nodes.wms.core.outstock.so.wrapper.PickPlanWrapper;
 import org.nodes.wms.core.stock.core.dto.StockMoveDTO;
 import org.nodes.wms.core.stock.core.dto.StockOccupyDTO;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.entity.StockDetail;
 import org.nodes.wms.core.stock.core.entity.StockOccupy;
 import org.nodes.wms.core.stock.core.enums.EventTypeEnum;

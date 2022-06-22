@@ -1,6 +1,6 @@
 package org.nodes.wms.core.stock.transfer.service;
 
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.outstock.so.entity.SoDetail;
 import org.nodes.wms.core.stock.transfer.entity.TransferDetail;
 import org.nodes.wms.core.stock.transfer.entity.TransferHeader;

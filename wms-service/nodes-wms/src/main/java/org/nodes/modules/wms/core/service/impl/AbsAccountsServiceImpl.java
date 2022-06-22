@@ -3,7 +3,7 @@ package org.nodes.modules.wms.core.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.modules.wms.core.service.IAccountService;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.service.IStockService;
 import org.nodes.wms.core.stock.core.vo.AccountsVo;
 import org.springblade.core.tool.utils.Func;

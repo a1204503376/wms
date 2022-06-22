@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import org.nodes.modules.wms.core.service.StockService;
 import org.nodes.modules.wms.core.service.impl.AccountsQueryUtil;
 import org.nodes.wms.core.basedata.service.ISkuPackageDetailService;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.service.IStockDetailService;
 import org.nodes.wms.core.stock.core.service.IStockService;
 import org.nodes.wms.core.stock.core.vo.AccountsVo;

@@ -1,6 +1,6 @@
 package org.nodes.modules.wms.core.service;
 
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 
 import java.util.List;
 

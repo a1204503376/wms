@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.nodes.core.tool.jackson.BigDecimalSerializer;
 import org.nodes.core.tool.utils.StringPool;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.tool.utils.Func;
 
 import javax.validation.constraints.Min;

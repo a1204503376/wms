@@ -25,7 +25,7 @@ import org.nodes.wms.core.outstock.so.vo.NeedSkuDetailVO;
 import org.nodes.wms.core.outstock.so.vo.NeedSkuVO;
 import org.nodes.wms.core.outstock.so.vo.SoDetailVO;
 import org.nodes.wms.core.outstock.so.wrapper.SoDetailWrapper;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.service.IStockService;
 import org.nodes.wms.core.stock.transfer.dto.ReplenishTaskDTO;
 import org.nodes.wms.core.stock.transfer.entity.TransferDetail;

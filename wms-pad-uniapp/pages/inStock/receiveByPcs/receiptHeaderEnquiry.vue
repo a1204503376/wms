@@ -11,7 +11,7 @@
 			<u-list-item v-for="(item, index) in receiveList" :key="item.receiveNo">
 				<view @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="6" class="textClass">
+						<u-col span="6" class="textAlignClass">
 							<u--text class="demo-layout bg-purple-light" v-text="item.receiveNo"></u--text>
 						</u-col>
 						<u-col span="6" >
@@ -19,7 +19,7 @@
 						</u-col>
 					</u-row>
 					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="12" class="textClass">
+						<u-col span="12" class="textAlignClass">
 							<u--text class="demo-layout bg-purple" v-text="item.supplierName"></u--text>
 						</u-col>
 					</u-row>
@@ -102,5 +102,5 @@
 </script>
 
 <style>
-@import 'receiptHeaderEnquiry.scss';
+
 </style>

@@ -107,7 +107,7 @@
 
 		},
 		{
-			"path": "pages/inStock/receiveByPcs/billReceivePageThree",
+			"path": "pages/inStock/receiveByPcs/ReceiveByPiece",
 			"style": {
 				"navigationBarTitleText": "按件收货",
 				"enablePullDownRefresh": false

@@ -41,7 +41,7 @@ import org.nodes.wms.core.outstock.so.vo.MergeTraySkuVo;
 import org.nodes.wms.core.stock.core.dto.StockDTO;
 import org.nodes.wms.core.stock.core.dto.StockFrozenDTO;
 import org.nodes.wms.core.stock.core.entity.Serial;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.enums.FrozenTypeEnum;
 import org.nodes.wms.core.stock.core.service.ISerialService;
 import org.nodes.wms.core.stock.core.service.IStockService;

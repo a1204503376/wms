@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  **/
 @Data
 public class ReceiveDetailByReceiveIdPdaResponse implements Serializable {
-	private static final long serialVersionUID = -589778228328274800L;
+	private static final long serialVersionUID = -2558857301381666186L;
 	/**
 	 * 物料编码
 	 */
@@ -33,34 +33,9 @@ public class ReceiveDetailByReceiveIdPdaResponse implements Serializable {
 	 */
 	private String skuLot1;
 	/**
-	 * 计划数量
-	 */
-	private BigDecimal planQty;
-	/**
-	 * 实收数量
-	 */
-	private BigDecimal scanQty;
-
-	/**
 	 * 计量单位
 	 */
 	private String umName;
-	/**
-	 * 规格
-	 */
-	private String skuSpec;
-	/**
-	 * 备注
-	 */
-	private String remark;
-	/**
-	 * 行号
-	 */
-	private String lineNo;
-	/**
-	 * 状态
-	 */
-	private Integer detailStatus;
 	/**
 	 * 是否序列号管理 （1：序列号管理  0：非序列号管理）
 	 */

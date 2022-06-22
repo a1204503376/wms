@@ -1,7 +1,7 @@
 package org.nodes.wms.core.stock.core.service.impl;
 
 import lombok.Data;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.service.IStockMoveService;
 import org.springframework.context.annotation.Primary;
 

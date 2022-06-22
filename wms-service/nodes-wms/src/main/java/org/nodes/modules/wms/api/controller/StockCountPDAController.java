@@ -2,7 +2,6 @@
 package org.nodes.modules.wms.api.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springblade.core.log.exception.ServiceException;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
@@ -11,7 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.nodes.wms.core.stock.core.dto.StockQueryDTO;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.service.IStockService;
 import org.nodes.wms.core.stock.core.vo.SerialVO;
 import org.nodes.wms.core.count.dto.RandomCheckSubmitDTO;

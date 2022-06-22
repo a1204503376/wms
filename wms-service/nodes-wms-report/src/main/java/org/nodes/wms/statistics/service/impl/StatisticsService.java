@@ -10,7 +10,7 @@ import org.nodes.wms.core.instock.asn.mapper.AsnHeaderMapper;
 import org.nodes.wms.core.outstock.so.dto.SoBillCountDTO;
 import org.nodes.wms.core.outstock.so.mapper.SoHeaderMapper;
 import org.nodes.wms.core.outstock.so.vo.OutstockSkuRltVO;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.mapper.StockLogMapper;
 import org.nodes.wms.core.stock.core.mapper.StockMapper;
 import org.nodes.wms.core.stock.core.vo.LocRateRltVO;

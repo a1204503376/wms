@@ -1,9 +1,8 @@
 package org.nodes.wms.core.stock.core.dto;
 
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import org.nodes.core.tool.utils.StringPool;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.tool.utils.Func;
 
 import javax.validation.constraints.Min;

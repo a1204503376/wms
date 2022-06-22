@@ -1,5 +1,5 @@
 
-package org.nodes.wms.core.stock.core.entity;
+package org.nodes.wms.dao.stock.entities;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

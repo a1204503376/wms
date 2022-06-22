@@ -32,7 +32,7 @@ import org.nodes.wms.core.outstock.so.service.ISoDetailService;
 import org.nodes.wms.core.outstock.so.service.ISoHeaderService;
 import org.nodes.wms.core.outstock.so.vo.SoDetailVO;
 import org.nodes.wms.core.outstock.so.vo.SoHeaderVO;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.service.IStockService;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
 import org.nodes.wms.dao.basics.owner.entities.Owner;

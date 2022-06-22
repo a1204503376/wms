@@ -7,7 +7,7 @@ import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.stock.core.dto.StockAddDTO;
 import org.nodes.wms.core.stock.core.dto.StockSubtractDTO;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.service.IStockMoveService;
 import org.nodes.wms.core.stock.core.vo.StockSubtractVO;
 import org.nodes.wms.core.stock.core.wrapper.StockWrapper;
