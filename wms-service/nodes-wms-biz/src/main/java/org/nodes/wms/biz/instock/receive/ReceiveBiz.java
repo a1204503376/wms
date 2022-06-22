@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.instock.receive;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.input.*;
 import org.nodes.wms.dao.instock.receive.dto.output.*;
@@ -72,7 +73,7 @@ public interface ReceiveBiz {
 	 * PDA获取收货单列表
 	 * @param receivePdaQuery :收货单分页查询条件对象
 	 */
-	List<ReceiveHeaderPdaResponse> getReceiveListByReceiveNo(ReceivePdaQuery receivePdaQuery);
+	Page<ReceiveHeaderPdaResponse> getReceiveListByReceiveNo(ReceivePdaQuery receivePdaQuery, Query query);
 
 	/**
 	 * @param receiveDetailPdaQuery 收货单接收前端请求条件

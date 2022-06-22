@@ -6,6 +6,7 @@ import org.nodes.wms.dao.common.log.dto.input.*;
 import org.nodes.wms.dao.common.log.dto.output.*;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -75,7 +76,7 @@ public interface LogBiz {
 	 * @param logPageQuery 日志分页查询参数
 	 * @param query        分页参数
 	 */
-	Page<LogTaskResponse> getPage(LogPageQuery logPageQuery, Query query);
+	Page<LogResponse> getPage(LogPageQuery logPageQuery, Query query);
 
 	/**
 	 * 获取消息总条数
@@ -108,7 +109,7 @@ public interface LogBiz {
 	void exportActionLists(LogActionPageQuery logActionPageQuery, HttpServletResponse response);
 
 	/**
-	 * 获取异常日志分页
+	 * 获取异常日志分宜
 	 * @param logErrorPageQuery 查询参数
 	 * @param query  分页参数
 	 * @return
@@ -117,10 +118,27 @@ public interface LogBiz {
 
 	/**
 	 * 异常日志导出功能
-	 * @param logErrorPageQuery 查询参数
+	 * @param logErrorPageQuery
 	 * @param response
 	 */
 	void exportLogErrorExcel(LogErrorPageQuery logErrorPageQuery, HttpServletResponse response);
+
+	/**
+	 * 请求日志分页查询
+	 *
+	 * @param logApiPageQuery: 分页查询条件dto对象
+	 * @param query: 分页参数
+	 * @return IPage<LogApiPageResponse>
+	 */
+	IPage<LogApiPageResponse> getLogApiPage(LogApiPageQuery logApiPageQuery, Query query);
+
+	/**
+	 * 导出请求日志
+	 *
+	 * @param logApiPageQuery: 导出时的条件dto对象
+	 * @param response: 响应对象
+	 */
+	void exportLogApiExcel(LogApiPageQuery logApiPageQuery, HttpServletResponse response);
 
 	List<LogReceiveResponse> getLogByReceiveId(Long receiveId);
 }

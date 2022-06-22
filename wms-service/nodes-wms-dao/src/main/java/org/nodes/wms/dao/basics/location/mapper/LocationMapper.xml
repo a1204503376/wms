@@ -18,17 +18,17 @@
         l.loc_code,
         w.wh_name as whName,
         z.zone_name as zoneName,
-        d1.dict_value                         as locType,
-        d2.dict_value                         as locCategory,
-        d3.dict_value                         as locHandling,
-        d4.dict_value                         as abc,
+        d1.dict_value as locType,
+        d2.dict_value as locCategory,
+        d3.dict_value as locHandling,
+        d4.dict_value as abc,
         l.logic_allocation,
         l.loc_level,
         l.loc_column,
         l.loc_bank,
         l.put_order,
-        lt.code as lpnTypeCode,
-        IF(l.status = 1, '是', '否')    as status
+        lt.code as lpn_type_code,
+        IF(l.status = 1, '是', '否') as status
         FROM wms_location l
         LEFT JOIN wms_warehouse w ON w.wh_id = l.wh_id
         LEFT JOIN wms_zone z ON z.zone_id = l.zone_id

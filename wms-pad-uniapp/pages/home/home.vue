@@ -38,33 +38,24 @@
 				title: ''
 			};
 		},
-		onReady() {
-
-		},
 		onLoad() {
 			uni.showLoading({
 				title: '加载中'
 			})
-			uni.$u.func.registerScanner(this.scannerCallback);
 			api.getMenuList().then(data => {
 				if (tool.isNotEmpty(data.data) && tool.isArray(data.data)) {
 					data.data.forEach((item, index) => {
 						if (item.systemTypeName == 'PDA') {
 							this.menuLists = item.children;
+							uni.hideLoading();
 						}
 					})
 				}
 			})
 			
 		},
-		onUnload() {
-			uni.$u.func.unRegisterScanner();
-		},
 		onShow() {
-			uni.$u.func.registerScanner(this.scannerCallback);
 			this.title = uni.getStorageSync('warehouse').whName;
-			uni.hideLoading();
-	
 		},
 		methods: {
 			emitKeyDown(e) {

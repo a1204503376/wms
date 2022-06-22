@@ -67,6 +67,14 @@
                         type="selection"
                         width="50">
                     </el-table-column>
+                    <el-table-column
+                        fixed
+                        sortable
+                        type="index">
+                        <template slot="header">
+                            #
+                        </template>
+                    </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column
                             :key="index"
@@ -145,32 +153,39 @@ export default {
                     {
                         prop: "name",
                         label: "供应商名称",
+                        sortable: "custom"
                     },
                     {
                         prop: "simpleName",
                         label: "供应商简称",
+                        sortable: "custom"
                     },
                     {
                         prop: "ownerName",
                         label: "货主",
+                        sortable: "custom"
                     },
                     {
                         prop: "remark",
                         label: "备注",
+                        sortable: "custom"
                     },
                     {
                         prop: "createTime",
                         width: 130,
                         label: "创建时间",
+                        sortable: "custom"
                     },
                     {
                         prop: "createUser",
                         label: "创建人",
+                        sortable: "custom"
                     },
                     {
                         prop: "updateTime",
                         width: 130,
                         label: "更新时间",
+                        sortable: "custom"
                     },
                 ],
             },
@@ -271,9 +286,6 @@ export default {
                 this.$message.success(res.data.msg);
                 this.refreshTable();
             })
-        },
-        filterTag(value, row) {
-            return row.status === value;
         },
         onAdd() {
             this.$router.push({

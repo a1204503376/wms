@@ -36,11 +36,10 @@ import static org.nodes.wms.core.warehouse.cache.WarehouseCache.WAREHOUSE_CACHE;
 
 /**
  * 仓库管理 API
- *
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(WmsApiPath.WMS_ROOT_URL +"warehouse/warehouse")
+@RequestMapping(WmsApiPath.WMS_ROOT_URL + "warehouse/warehouse")
 public class WarehouseController extends BladeController {
 
 	private final IWarehouseService warehouseService;
@@ -50,9 +49,9 @@ public class WarehouseController extends BladeController {
 	 * 获取库房下拉框集合
 	 */
 	@GetMapping("getWarehouseSelectResponseList")
-	public R<List<WarehouseResponse>> getWarehouseSelectResponseList(){
-         List<WarehouseResponse> warehouseResponseList =  warehouseBiz.getWarehouseSelectResponseList();
-		 return R.data(warehouseResponseList);
+	public R<List<WarehouseResponse>> getWarehouseSelectResponseList() {
+		List<WarehouseResponse> warehouseResponseList = warehouseBiz.getWarehouseSelectResponseList();
+		return R.data(warehouseResponseList);
 	}
 
 	/**
@@ -96,7 +95,6 @@ public class WarehouseController extends BladeController {
 		return R.status(warehouseService.saveOrUpdate(warehouseDTO));
 	}
 
-
 	/**
 	 * 删除 仓库
 	 */
@@ -138,5 +136,13 @@ public class WarehouseController extends BladeController {
 	@PostMapping("import-data")
 	public R<Boolean> importData(@RequestBody List<DataVerify> dataVerifyList) {
 		return R.data(warehouseService.importData(dataVerifyList));
+	}
+
+	/**
+	 * 仓库授权
+	 */
+	@GetMapping("/authorization")
+	public void authorization(@RequestParam String authorizationValue) {
+		String encryptValue = warehouseBiz.authorized(authorizationValue);
 	}
 }

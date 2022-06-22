@@ -99,7 +99,7 @@ import fileDownload from "js-file-download";
                     @sort-change="onSortChange"
                 >
                     <el-table-column fixed type="selection" width="50"></el-table-column>
-                    <el-table-column fixed sortable type="index">
+                    <el-table-column fixed type="index">
                         <template slot="header"> #</template>
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
@@ -197,50 +197,62 @@ export default {
                     {
                         prop: "name",
                         label: "客户名称",
+                        sortable: "custom",
                     },
                     {
                         prop: "simpleName",
                         label: "客户简称",
+                        sortable: "custom",
                     },
                     {
                         prop: 'ownerName',
-                        label: '货主'
+                        label: '货主',
+                        sortable: "custom",
                     },
                     {
                         prop: "country",
                         label: "国家",
+                        sortable: "custom",
                     },
                     {
                         prop: "province",
                         label: "省",
+                        sortable: "custom",
                     },
                     {
                         prop: "city",
                         label: "城市",
+                        sortable: "custom",
                     },
                     {
                         prop: "address",
                         label: "街道",
+                        sortable: "custom",
                     },
                     {
                         prop: "zipCode",
                         label: "邮编",
+                        sortable: "custom"
                     },
                     {
                         prop: "remark",
                         label: "备注",
+                        sortable: "custom",
                     },
                     {
                         prop: "createTime",
                         label: "创建时间",
+                        sortable: "custom",
                     },
                     {
                         prop: "createUser",
                         label: "创建人",
+                        sortable: "custom",
                     },
                     {
                         prop: "updateTime",
                         label: "更新时间",
+                        sortable: "custom",
                     },
                 ],
             },
