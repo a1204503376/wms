@@ -59,7 +59,7 @@
 					umName:undefined,
 					skuLot1:undefined,
 					boxCode:undefined,
-					locCode:undefined
+					locCode:'STAGE'
 				},
 				receiveDetailId: '',
 				receiveDetailList: [],
@@ -78,10 +78,12 @@
 		},
 		methods: {
 			submit() {
+				this.params.locCode=uni.getStorageSync('warehouse').whCode+this.params.locCode;
 				if(this.params.isSn==1){
 					uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', this.params);
 				    return;
 				}
+				console.log(this.params.locCode)
 				//提交表单数据 收货
 			},
 			getDetailByDetailId() {
@@ -90,7 +92,7 @@
 				};
 				receive.getDetailByDetailId(params).then(data => {
 					this.params = data.data;
-					console.log(this.params)
+					this.params.locCode = 'STAGE';
 				})
 			},
 			esc() {
