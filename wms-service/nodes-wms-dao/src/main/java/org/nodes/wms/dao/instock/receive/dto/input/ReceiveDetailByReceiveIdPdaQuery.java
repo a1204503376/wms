@@ -10,8 +10,8 @@ import lombok.Data;
 @Data
 public class ReceiveDetailByReceiveIdPdaQuery {
 	/**
-	 * 收货单主键ID
+	 * 收货明细单主键id
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
-	private Long receiveId;
+	private Long receiveDetailId;
 }

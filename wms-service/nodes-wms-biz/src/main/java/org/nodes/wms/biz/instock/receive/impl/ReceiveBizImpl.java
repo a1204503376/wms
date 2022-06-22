@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
+import org.nodes.wms.dao.basics.sku.SkuDao;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.instock.receive.ReceiveDetailDao;
@@ -19,6 +21,7 @@ import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +38,7 @@ import java.util.List;
 public class ReceiveBizImpl implements ReceiveBiz {
 	private final ReceiveHeaderDao receiveHeaderDao;
 	private final ReceiveDetailDao receiveDetailDao;
-
+	private final SkuDao skuDao;
 	private final ReceiveFactory receiveFactory;
 
 	private final LogBiz logBiz;
@@ -194,5 +197,14 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	@Override
 	public List<LogReceiveResponse> getLogList(Long receiveId) {
 		return logBiz.getLogByReceiveId(receiveId);
+	}
+
+	@Override
+	public ReceiveDetailByReceiveIdPdaResponse selectDetailByReceiveDetailId(ReceiveDetailByReceiveIdPdaQuery receiveIdPdaQuery) {
+		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveIdPdaQuery.getReceiveDetailId());
+		ReceiveDetailByReceiveIdPdaResponse response = BeanUtil.copy(detail, ReceiveDetailByReceiveIdPdaResponse.class);
+		Sku sku = skuDao.getById(detail.getSkuId());
+		response.setIsSn(sku.getIsSn());
+		return response;
 	}
 }
