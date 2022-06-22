@@ -1,6 +1,5 @@
 package org.nodes.wms.dao.basics.sku;
 
-import org.nodes.wms.dao.basics.sku.dto.input.SkuAddOrEditRequest;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.*;
@@ -75,4 +74,10 @@ public interface SkuDao {
 	 * @return SkuPackage
 	 */
 	SkuPackage getSkuPackageByWspId(Long wspId);
+
+	/**
+	 * 获取sku的List集合
+	 * @return sku的List集合
+	 */
+	List<Sku> getSkuList();
 }

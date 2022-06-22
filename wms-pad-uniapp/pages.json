@@ -92,14 +92,14 @@
 
 
 		, {
-			"path": "pages/billReceive/receiptHeaderEnquiry",
+			"path": "pages/inStock/receiveByPcs/receiptHeaderEnquiry",
 			"style": {
 				"navigationBarTitleText": "按件收货",
 				"enablePullDownRefresh": false
 			}
 
 		}, {
-			"path": "pages/billReceive/receiptDetailEnquiry",
+			"path": "pages/inStock/receiveByPcs/receiptDetailEnquiry",
 			"style": {
 				"navigationBarTitleText": "按件收货",
 				"enablePullDownRefresh": false
@@ -107,7 +107,7 @@
 
 		},
 		{
-			"path": "pages/billReceive/billReceivePageThree",
+			"path": "pages/inStock/receiveByPcs/billReceivePageThree",
 			"style": {
 				"navigationBarTitleText": "按件收货",
 				"enablePullDownRefresh": false

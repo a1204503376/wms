@@ -74,7 +74,7 @@ public class LogFactory {
 	 * @param log 内容
 	 * @return 审计日志对象
 	 */
-	public LogAction  createLogAction(AuditLogType type, Long billId, String billNo, String log){
+	public LogAction createLogAction(AuditLogType type, Long billId, String billNo, String log){
 		LogAction logAction=new LogAction();
 		logAction.setType(type);
 		logAction.setBillId(billId);

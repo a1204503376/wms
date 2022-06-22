@@ -76,7 +76,7 @@
 				})
 			},500),
 			clickItem(item) {
-				uni.$u.func.route('/pages/billReceive/receiptDetailEnquiry', item);
+				uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', item);
 			},
 			scannerCallback(no) {
 				this.params.no = no;

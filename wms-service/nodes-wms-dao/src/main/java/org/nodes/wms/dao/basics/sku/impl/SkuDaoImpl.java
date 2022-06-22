@@ -1,8 +1,8 @@
 package org.nodes.wms.dao.basics.sku.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.nodes.wms.dao.basics.sku.SkuDao;
-import org.nodes.wms.dao.basics.sku.dto.input.SkuAddOrEditRequest;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.*;
@@ -63,6 +63,13 @@ public class SkuDaoImpl
 	@Override
 	public SkuPackage getSkuPackageByWspId(Long wspId) {
 		return super.baseMapper.selectSkuPackageByWspId(wspId);
+	}
+
+	@Override
+	public List<Sku> getSkuList() {
+		QueryWrapper<Sku> skuQueryWrapper = new QueryWrapper<>();
+		skuQueryWrapper.select("distinct sku_spec");
+		return super.list(skuQueryWrapper);
 	}
 
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.common.log.mapper.LogActionMapper">
 
-    <select id="getPage" resultType="org.nodes.wms.dao.common.log.dto.output.LogResponse">
+    <select id="getPage" resultType="org.nodes.wms.dao.common.log.dto.output.LogTaskResponse">
          select
             la.user_account,
             la.user_real_name,
@@ -110,5 +110,16 @@
             </if>
         </where>
             order by log.create_time desc
+    </select>
+
+    <select id="findLogByReceiveId" resultType="org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse">
+    select
+     user_account,
+    user_real_name,
+    type,
+    log,
+    create_time
+    from log_action
+   where bill_id = #{receiveId}
     </select>
 </mapper>

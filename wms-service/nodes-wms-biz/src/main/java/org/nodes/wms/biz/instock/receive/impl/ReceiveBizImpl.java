@@ -3,8 +3,11 @@ package org.nodes.wms.biz.instock.receive.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
+import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
+import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.instock.receive.ReceiveDetailDao;
 import org.nodes.wms.dao.instock.receive.ReceiveHeaderDao;
 import org.nodes.wms.dao.instock.receive.dto.input.*;
@@ -34,6 +37,8 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	private final ReceiveDetailDao receiveDetailDao;
 
 	private final ReceiveFactory receiveFactory;
+
+	private final LogBiz logBiz;
 
 	@Override
 	public IPage<ReceiveHeaderResponse> getPage(ReceivePageQuery receivePageQuery, Query query) {
@@ -65,6 +70,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			List<Long> receiveDetailIdList = receiveDetailDao.selectDetailIdByReceiveId(receiveId);
 			//删除明细
 			receiveDetailDao.delete(receiveDetailIdList);
+			logBiz.auditLog(AuditLogType.RECEIVE_BILL,receiveId, "删除收货单");
 		}
 		//删除头表
 		return receiveHeaderDao.delete(receiveIdList);
@@ -92,7 +98,9 @@ public class ReceiveBizImpl implements ReceiveBiz {
 
 	@Override
 	public boolean editBillState(Long receiveId) {
-		return receiveHeaderDao.updateBillStateById(receiveId);
+		receiveHeaderDao.updateBillStateById(receiveId);
+		logBiz.auditLog(AuditLogType.RECEIVE_BILL,receiveId, "关闭收货单");
+		return true;
 	}
 
 
@@ -102,6 +110,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		//创建保存实体类
 		ReceiveHeader receiveHeader = receiveFactory.createReceiveHeader(newReceiveRequest.getNewReceiveHeaderRequest());
 		receiveHeaderDao.insert(receiveHeader);
+		logBiz.auditLog(AuditLogType.RECEIVE_BILL,receiveHeader.getReceiveId(), "新建收货单");
       //获取明细集合
        List<NewReceiveDetailRequest> newReceiveDetailRequestList = newReceiveRequest.getNewReceiveDetailRequestList();
 	  //遍历保存
@@ -167,7 +176,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 				receiveDetailDao.saveOrUpdateReceive(receiveDetail);
 		}
 		receiveHeaderDao.updateReceive(receiveHeader);
-
+		logBiz.auditLog(AuditLogType.RECEIVE_BILL, receiveHeader.getReceiveId(),receiveHeader.getReceiveNo(),"编辑收货单");
 		return receiveNo;
 	}
 
@@ -182,4 +191,8 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		return receiveDetailDao.selectDetailListByReceiveId(receiveDetailPdaQuery);
 	}
 
+	@Override
+	public List<LogReceiveResponse> getLogList(Long receiveId) {
+		return logBiz.getLogByReceiveId(receiveId);
+	}
 }

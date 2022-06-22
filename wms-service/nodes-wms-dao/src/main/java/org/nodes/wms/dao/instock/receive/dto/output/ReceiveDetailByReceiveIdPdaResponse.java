@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  * 查看详情页面收货单明细表返回前端视图类
  **/
 @Data
-public class DetailReceiveDetailResponse implements Serializable {
+public class ReceiveDetailByReceiveIdPdaResponse implements Serializable {
 	private static final long serialVersionUID = -589778228328274800L;
 	/**
 	 * 物料编码
@@ -21,6 +21,18 @@ public class DetailReceiveDetailResponse implements Serializable {
 	 */
 	private String skuCode;
 	/**
+	 * 型号
+	 */
+	private String skuLot2;
+	/**
+	 * 剩余数量
+	 */
+	private BigDecimal surplusQty;
+	/**
+	 * 生产批次
+	 */
+	private String skuLot1;
+	/**
 	 * 计划数量
 	 */
 	private BigDecimal planQty;
@@ -28,10 +40,6 @@ public class DetailReceiveDetailResponse implements Serializable {
 	 * 实收数量
 	 */
 	private BigDecimal scanQty;
-	/**
-	 * 剩余数量
-	 */
-	private BigDecimal surplusQty;
 
 	/**
 	 * 计量单位
@@ -54,23 +62,7 @@ public class DetailReceiveDetailResponse implements Serializable {
 	 */
 	private Integer detailStatus;
 	/**
-	 * 生产批次
+	 * 是否序列号管理 （1：序列号管理  0：非序列号管理）
 	 */
-	private String skuLot1;
-	/**
-	 * 客户
-	 */
-	private String skuLot4;
-	/**
-	 * 钢背批次
-	 */
-	private String skuLot5;
-	/**
-	 * 摩擦块批次
-	 */
-	private String  skuLot6;
-	/**
-	 * CRCC
-	 */
-	private String skuLot8;
+	private Integer isSn;
 }

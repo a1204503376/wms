@@ -3,7 +3,7 @@ import http from '@/http/api.js'
 
 const getReceiveList =(data,params)=>{
 	return http.request({
-		url: '/api/ApiPDA/receive/list',
+		url: '/api/ApiPDA/receiveByPcs/list',
 		method: 'POST',
 		data:data,
 		params:params
@@ -13,7 +13,7 @@ const getReceiveList =(data,params)=>{
 
 const getReceiveDetailList =(data)=>{
 	return http.request({
-		url: '/api/ApiPDA/receive/findDetailListByReceiveId',
+		url: '/api/ApiPDA/receiveByPcs/findDetailListByReceiveId',
 		method: 'POST',
 		data:data
 	})

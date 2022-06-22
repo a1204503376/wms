@@ -2,6 +2,7 @@ package org.nodes.wms.biz.instock.receive;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.input.*;
 import org.nodes.wms.dao.instock.receive.dto.output.*;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
@@ -79,4 +80,10 @@ public interface ReceiveBiz {
 	 * @return 收货单明细表集合
 	 */
 	List<DetailReceiveDetailPdaResponse> getDetailListByReceiveId(ReceiveDetailPdaQuery receiveDetailPdaQuery);
+
+	/**
+	 * 根据收货单id获取操作日志
+	 * @param receiveId 收货单id
+	 */
+	List<LogReceiveResponse> getLogList(Long receiveId);
 }
