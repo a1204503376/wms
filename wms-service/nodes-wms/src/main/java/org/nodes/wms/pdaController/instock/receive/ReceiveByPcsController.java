@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.dao.instock.receive.dto.input.*;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailByReceiveIdPdaResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailPdaResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderPdaResponse;
+import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,7 @@ public class ReceiveByPcsController {
 	/**
 	 * PDA收货管理查询
 	 */
+	@ApiLog("PDA收货管理查询")
 	@PostMapping("/list")
 	public R<Page<ReceiveHeaderPdaResponse>> list(@RequestBody ReceivePdaQuery receivePdaQuery, Query query) {
 		Page<ReceiveHeaderPdaResponse> pages = receiveBiz.getReceiveListByReceiveNo(receivePdaQuery,query);
@@ -41,4 +44,24 @@ public class ReceiveByPcsController {
 		List<DetailReceiveDetailPdaResponse> listByReceiveId = receiveBiz.getDetailListByReceiveId(receiveDetailPdaQuery);
 		return R.data(listByReceiveId);
 	}
+
+	/**
+	 * @param receiveDetailByReceiveIdPdaQuery 请求参数
+	 * @return 当前收货单详情，以及他是否是序列号管理 isSn
+	 */
+	@PostMapping("findDetailByReceiveId")
+	public R<ReceiveDetailByReceiveIdPdaResponse> findDetailByReceiveId(@RequestBody ReceiveDetailByReceiveIdPdaQuery receiveDetailByReceiveIdPdaQuery)
+	{
+		return null;
+	}
+
+	/**
+	 * @param pdaByPieceReceiveQuery PDA按件收货请求参数
+	 * @return 是否成功
+	 */
+	@PostMapping("pdaByPieceReceive")
+	public R pdaByPieceReceive(@RequestBody PdaByPieceReceiveQuery pdaByPieceReceiveQuery){
+		return null;
+	}
+
 }
