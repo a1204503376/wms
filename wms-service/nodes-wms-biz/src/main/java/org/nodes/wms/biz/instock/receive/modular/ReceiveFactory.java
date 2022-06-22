@@ -215,6 +215,12 @@ public class ReceiveFactory {
 		editReceiveDetailResponse.setRemark(receiveDetail.getRemark());
 		//设置收货单明细id
 		editReceiveDetailResponse.setReceiveDetailId(receiveDetail.getReceiveDetailId());
+		//设置批属性
+		editReceiveDetailResponse.setSkuLot1(receiveDetail.getSkuLot1());
+		editReceiveDetailResponse.setSkuLot4(receiveDetail.getSkuLot4());
+		editReceiveDetailResponse.setSkuLot5(receiveDetail.getSkuLot5());
+		editReceiveDetailResponse.setSkuLot6(receiveDetail.getSkuLot6());
+		editReceiveDetailResponse.setSkuLot8(receiveDetail.getSkuLot8());
 		return editReceiveDetailResponse;
 	}
 
@@ -314,6 +320,12 @@ public class ReceiveFactory {
 		receiveDetail.setWhCode(receiveHeader.getWhCode());
 		//设置货主id
 		receiveDetail.setWoId(receiveHeader.getWoId());
+		//设置批属性信息
+		receiveDetail.setSkuLot1(editReceiveDetailRequest.getSkuLot1());
+		receiveDetail.setSkuLot4(editReceiveDetailRequest.getSkuLot4());
+		receiveDetail.setSkuLot5(editReceiveDetailRequest.getSkuLot5());
+		receiveDetail.setSkuLot6(editReceiveDetailRequest.getSkuLot6());
+		receiveDetail.setSkuLot8(editReceiveDetailRequest.getSkuLot8());
 		return receiveDetail;
 	}
 }
