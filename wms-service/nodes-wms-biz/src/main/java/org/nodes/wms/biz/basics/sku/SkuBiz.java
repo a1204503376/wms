@@ -2,6 +2,7 @@ package org.nodes.wms.biz.basics.sku;
 
 import org.nodes.wms.dao.basics.sku.dto.input.SkuAddOrEditRequest;
 import org.nodes.wms.dao.basics.sku.dto.input.SkuSelectQuery;
+import org.nodes.wms.dao.basics.sku.dto.output.PdaSkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.*;
@@ -103,4 +104,10 @@ public interface SkuBiz {
 	 * @return SkuPackage
 	 */
 	SkuPackage findSkuPackageByWspId(Long wspId);
+
+	/**
+	 * 获取SKU的规格型号PDA下拉框的数据
+	 * @return SKU的规格型号PDA下拉框的数据
+	 */
+	List<PdaSkuSelectResponse> getSkuDropDownBox();
 }
