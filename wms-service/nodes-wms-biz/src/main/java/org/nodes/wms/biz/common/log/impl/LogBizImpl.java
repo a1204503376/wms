@@ -13,7 +13,6 @@ import org.nodes.wms.dao.common.log.dto.output.*;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.entities.LogMessage;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
-import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -106,7 +105,7 @@ public class LogBizImpl implements LogBiz {
 	}
 
 	@Override
-	public Page<LogResponse> getPage(LogPageQuery logPageQuery, Query query) {
+	public Page<LogTaskResponse> getPage(LogPageQuery logPageQuery, Query query) {
 		IPage<LogAction> page = Condition.getPage(query);
 		return actionDao.getPage(logPageQuery,page);
 	}
@@ -155,6 +154,11 @@ public class LogBizImpl implements LogBiz {
 	public void exportLogErrorExcel(LogErrorPageQuery logErrorPageQuery, HttpServletResponse response) {
 		List<LogErrorPageResponse> logErrorResponseList = logErrorDao.getLogErrorResponseByQuery(logErrorPageQuery);
 		ExcelUtil.export(response, "异常日志", "异常日志数据表", logErrorResponseList, LogErrorPageResponse.class);
+	}
+
+	@Override
+	public List<LogReceiveResponse> getLogByReceiveId(Long receiveId) {
+		return actionDao.findLogByReceiveId(receiveId);
 	}
 
 

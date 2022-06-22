@@ -13,7 +13,12 @@
             um_name,
             detail_status,
             sku_spec,
-            remark
+            remark,
+            sku_lot1,
+            sku_lot4,
+            sku_lot5,
+            sku_lot6,
+            sku_lot8
         from receive_detail
         where receive_id = #{id}
     </select>

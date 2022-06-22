@@ -53,4 +53,24 @@ public class DetailReceiveDetailResponse implements Serializable {
 	 * 状态
 	 */
 	private Integer detailStatus;
+	/**
+	 * 生产批次
+	 */
+	private String skuLot1;
+	/**
+	 * 客户
+	 */
+	private String skuLot4;
+	/**
+	 * 钢背批次
+	 */
+	private String skuLot5;
+	/**
+	 * 摩擦块批次
+	 */
+	private String  skuLot6;
+	/**
+	 * CRCC
+	 */
+	private String skuLot8;
 }

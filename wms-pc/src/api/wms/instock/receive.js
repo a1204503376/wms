@@ -72,4 +72,22 @@ export const getReceiveDetailById = (data) => {
         data: data,
     })
 }
+export const getReceiveLogList = (receiveId) => {
+    return request({
+        url: '/api/wms/receive/getReceiveLogList',
+        method: 'get',
+        params:{
+            receiveId,
+        }
+    })
+}
 
+export const getLogList = (receiveId) => {
+    return request({
+        url: '/api/wms/receive/getLogList',
+        method: 'get',
+        params:{
+            receiveId,
+        }
+    })
+}
