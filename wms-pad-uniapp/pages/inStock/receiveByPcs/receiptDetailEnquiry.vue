@@ -69,7 +69,7 @@
 				})
 			},
 			clickItem(row){
-				 uni.$u.func.route('/pages/billReceive/billReceivePageThree',row);
+				 uni.$u.func.route('/pages/inStock/receiveByPcs/billReceivePageThree',row);
 			},
 			scannerCallback(no) {
 				this.params.skuCode = no;
