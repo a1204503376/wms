@@ -2,29 +2,29 @@
 	<view>
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
 		<u--form labelPosition="left" :model="params">
-			<u-form-item label="物品" borderBottom class="textClass" labelWidth="140rpx">
+			<u-form-item label="物品" borderBottom class="textAlignClass" labelWidth="140rpx">
 				<u--input v-model="params.skuCode"></u--input>
 			</u-form-item>
-			<u-form-item label="名称" borderBottom class="textClass" labelWidth="140rpx">
+			<u-form-item label="名称" borderBottom class="textAlignClass" labelWidth="140rpx">
 				<u--input v-model="params.skuName"></u--input>
 			</u-form-item>
-			<u-form-item label="型号" borderBottom class="textClass" labelWidth="140rpx">
+			<u-form-item label="型号" borderBottom class="textAlignClass" labelWidth="140rpx">
 				<uni-select v-model="params.skuLot2"></uni-select>
 			</u-form-item>
-			<u-form-item label="数量" borderBottom class="textClass" labelWidth="140rpx">
+			<u-form-item label="数量" borderBottom class="textAlignClass" labelWidth="140rpx">
 				<u--input v-model="params.surplusQty"></u--input>
 				<!-- <u-number-box v-model="params.skuCode" @change="valChange"></u-number-box> -->
 			</u-form-item>
-			<u-form-item label="UOM" borderBottom class="textClass" labelWidth="140rpx">
+			<u-form-item label="UOM" borderBottom class="textAlignClass" labelWidth="140rpx">
 				<u--input v-model="params.umName" :disabled="true"></u--input>
 			</u-form-item>
-			<u-form-item label="生产批次" borderBottom class="textClass" labelWidth="140rpx">
+			<u-form-item label="生产批次" borderBottom class="textAlignClass" labelWidth="140rpx">
 				<u--input v-model="params.skuLot1"></u--input>
 			</u-form-item>
-			<u-form-item label="箱码" borderBottom class="textClass" labelWidth="140rpx">
+			<u-form-item label="箱码" borderBottom class="textAlignClass" labelWidth="140rpx">
 				<u--input v-model="params.boxCode"></u--input>
 			</u-form-item>
-			<u-form-item label="LOC" borderBottom class="textClass" labelWidth="140rpx">
+			<u-form-item label="LOC" borderBottom class="textAlignClass" labelWidth="140rpx">
 				<u--input v-model="params.locCode"></u--input>
 			</u-form-item>
 		</u--form>
@@ -109,5 +109,5 @@
 </script>
 
 <style>
-	@import 'receiptHeaderEnquiry.scss';
+	
 </style>
