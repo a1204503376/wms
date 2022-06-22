@@ -12,8 +12,8 @@
         owners.owner_name,
         c.remark,
         c.create_time,
-        user1.real_name createUser,
-        user2.real_name updateUser,
+        user1.real_name as create_user,
+        user2.real_name as update_user,
         c.update_time,
         c.status
         from basics_carriers c
@@ -46,7 +46,7 @@
         </where>
 
         <if test="page.orders==null or page.orders.size()==0">
-            order by create_time desc
+            order by c.create_time desc
         </if>
 
     </select>

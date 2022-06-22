@@ -1,11 +1,13 @@
 package org.nodes.wms.pdaController.instock.receive;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.dao.instock.receive.dto.input.*;
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailPdaResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderPdaResponse;
+import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +27,8 @@ public class PdaReceiveController {
 	 * PDA收货管理查询
 	 */
 	@PostMapping("/list")
-	public R<List<ReceiveHeaderPdaResponse>> list(@RequestBody ReceivePdaQuery receivePdaQuery) {
-		List<ReceiveHeaderPdaResponse> pages = receiveBiz.getReceiveListByReceiveNo(receivePdaQuery);
+	public R<Page<ReceiveHeaderPdaResponse>> list(@RequestBody ReceivePdaQuery receivePdaQuery, Query query) {
+		Page<ReceiveHeaderPdaResponse> pages = receiveBiz.getReceiveListByReceiveNo(receivePdaQuery,query);
 		return R.data(pages);
 	}
 

@@ -10,7 +10,8 @@ import org.nodes.wms.dao.common.log.dto.input.LogActionPageQuery;
 import org.nodes.wms.dao.common.log.dto.input.LogPageQuery;
 import org.nodes.wms.dao.common.log.dto.output.LogActionExcelResponse;
 import org.nodes.wms.dao.common.log.dto.output.LogActionPageResponse;
-import org.nodes.wms.dao.common.log.dto.output.LogResponse;
+import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
+import org.nodes.wms.dao.common.log.dto.output.LogTaskResponse;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.mapper.LogActionMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -41,11 +42,11 @@ public class LogActionDaoImpl  extends BaseServiceImpl<LogActionMapper, LogActio
     @Override
     public List<LogAction> findLogByBillId(Long billId) {
         return super.list(new LambdaQueryWrapper<LogAction>()
-			.eq(LogAction::getBillId,billId).eq(LogAction::getType,106));
+			.eq(LogAction::getBillId,billId).eq(LogAction::getType,billId));
     }
 
 	@Override
-	public Page<LogResponse> getPage(LogPageQuery logPageQuery, IPage<LogAction> page) {
+	public Page<LogTaskResponse> getPage(LogPageQuery logPageQuery, IPage<LogAction> page) {
 		return super.baseMapper.getPage(logPageQuery,page);
 	}
 
@@ -62,5 +63,10 @@ public class LogActionDaoImpl  extends BaseServiceImpl<LogActionMapper, LogActio
 	@Override
 	public List<LogActionExcelResponse> getActionLists(LogActionPageQuery logActionPageQuery) {
 		return super.baseMapper.getActionLists(logActionPageQuery);
+	}
+
+	@Override
+	public List<LogReceiveResponse> findLogByReceiveId(Long receiveId) {
+		return super.baseMapper.findLogByReceiveId(receiveId);
 	}
 }

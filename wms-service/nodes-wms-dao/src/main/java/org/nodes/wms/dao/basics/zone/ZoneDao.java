@@ -14,7 +14,7 @@ public interface ZoneDao {
 	/**
 	 * 根据库房id查询所有库区下拉数据
 	 *
-	 * @param whIdList       库房id集合
+	 * @param whIdList 库房id集合
 	 * @return List<zoneSelectResponse>
 	 */
 	List<ZoneSelectResponse> listSelectByWhIdList(List<Long> whIdList);
@@ -25,7 +25,7 @@ public interface ZoneDao {
 	 * @param zoneCode: 库区编码
 	 * @return Zone
 	 */
-    Zone getZoneByCode(String zoneCode);
+	Zone getZoneByCode(String zoneCode);
 
 	/**
 	 * 根据库区id查询库区信息
@@ -33,14 +33,22 @@ public interface ZoneDao {
 	 * @param zoneId: 库区编码
 	 * @return Zone
 	 */
-    Zone getZoneById(Long zoneId);
+	Zone getZoneById(Long zoneId);
 
 	/**
 	 * 根据库区编码和库房编码查询库区信息
 	 *
-	 * @param code: 库区编码
+	 * @param code:   库区编码
 	 * @param whCode: 库房编码
 	 * @return Zone
 	 */
-    Zone getZoneByCodeWhCode(String code, String whCode);
+	Zone getZoneByCodeWhCode(String code, String whCode);
+
+	/**
+	 * 新增或修改库区
+	 *
+	 * @param zone: 库区对象
+	 * @return Zone
+	 */
+	Zone saveOrUpdateZone(Zone zone);
 }

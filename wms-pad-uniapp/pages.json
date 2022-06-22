@@ -92,16 +92,16 @@
 
 
 		, {
-			"path": "pages/billReceive/billReceive",
+			"path": "pages/billReceive/receiptHeaderEnquiry",
 			"style": {
 				"navigationBarTitleText": "按件收货",
 				"enablePullDownRefresh": false
 			}
 
 		}, {
-			"path": "pages/billReceive/billReceivePageTwo",
+			"path": "pages/billReceive/receiptDetailEnquiry",
 			"style": {
-				"navigationBarTitleText": "按件收货2",
+				"navigationBarTitleText": "按件收货",
 				"enablePullDownRefresh": false
 			}
 
@@ -109,7 +109,7 @@
 		{
 			"path": "pages/billReceive/billReceivePageThree",
 			"style": {
-				"navigationBarTitleText": "按件收货3",
+				"navigationBarTitleText": "按件收货",
 				"enablePullDownRefresh": false
 			}
 		

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.dao.instock.receiveLog.mapper.ReceiveLogMapper">
+
+
+    <select id="selectReceiveLogList"
+            resultType="org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse">
+    select
+     line_No,
+      qty,
+     lpn_code,
+     box_code,
+	 sn_code,
+	 loc_code,
+	 sku_code,
+	 sku_code,
+	 sku_level,
+	 sku_spec,
+	 wh_code,
+	 owner_code,
+	 create_user,
+     create_time
+     from receive_log
+    where receive_id = #{receiveId}
+    </select>
+</mapper>

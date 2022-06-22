@@ -267,6 +267,7 @@ export default {
                         prop: "status",
                         width: "80",
                         align: "center",
+                        sortable: "custom",
                         label: "启用",
                     },
                 ],
@@ -336,7 +337,6 @@ export default {
                     rows.forEach((item) => {
                         removeObj.idList.push(item.locId);
                     });
-                    console.log(removeObj);
                     remove(removeObj)
                         .then((res) => {
                             this.$message({

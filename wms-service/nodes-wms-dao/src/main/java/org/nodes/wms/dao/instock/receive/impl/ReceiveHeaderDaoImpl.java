@@ -3,6 +3,7 @@ package org.nodes.wms.dao.instock.receive.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePdaQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveHeaderResponse;
@@ -15,6 +16,7 @@ import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.tool.utils.Func;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +24,7 @@ import java.util.List;
 /**
  * 收货单 DAO 实现类
  */
-@Service
+@Repository
 @RequiredArgsConstructor
 public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, ReceiveHeader>  implements ReceiveHeaderDao {
 	private final ReceiveHeaderMapper receiveHeaderMapper;
@@ -79,12 +81,12 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
     }
 
 	@Override
-	public List<ReceiveHeaderPdaResponse> getReceiveList(ReceivePdaQuery receivePdaQuery) {
+	public Page<ReceiveHeaderPdaResponse> getReceiveList(ReceivePdaQuery receivePdaQuery, IPage<ReceiveHeader> page) {
 		if(Func.isEmpty(receivePdaQuery.getNo()))
 		{
 			throw new ServiceException("必须输入收货单编码或上游编码");
 		}
-		return receiveHeaderMapper.getReceiveList(receivePdaQuery);
+		return receiveHeaderMapper.getReceiveList(receivePdaQuery,page);
 	}
 
 }

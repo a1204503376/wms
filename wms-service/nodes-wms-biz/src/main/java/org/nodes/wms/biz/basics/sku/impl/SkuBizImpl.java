@@ -6,16 +6,19 @@ import org.nodes.wms.biz.basics.sku.modular.SkuFactory;
 import org.nodes.wms.dao.basics.sku.*;
 import org.nodes.wms.dao.basics.sku.dto.input.SkuAddOrEditRequest;
 import org.nodes.wms.dao.basics.sku.dto.input.SkuSelectQuery;
+import org.nodes.wms.dao.basics.sku.dto.output.PdaSkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.*;
 import org.nodes.wms.dao.basics.skuType.SkuTypeDao;
 import org.nodes.wms.dao.basics.skuType.entities.SkuType;
+import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 物品 业务层实现类
@@ -112,5 +115,13 @@ public class SkuBizImpl implements SkuBiz {
 	@Override
 	public SkuPackage findSkuPackageByWspId(Long wspId) {
 		return skuDao.getSkuPackageByWspId(wspId);
+	}
+
+	@Override
+	public List<PdaSkuSelectResponse> getSkuDropDownBox() {
+		List<Sku> skuList = skuDao.getSkuList();
+		List<PdaSkuSelectResponse> responseList = BeanUtil.copy(skuList, PdaSkuSelectResponse.class);
+		responseList=responseList.stream().distinct().filter(item -> Func.isNotEmpty(item.getLabel())).collect(Collectors.toList());
+		return responseList;
 	}
 }

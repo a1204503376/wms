@@ -9,7 +9,8 @@ import org.nodes.wms.dao.common.log.dto.input.LogActionPageQuery;
 import org.nodes.wms.dao.common.log.dto.input.LogPageQuery;
 import org.nodes.wms.dao.common.log.dto.output.LogActionExcelResponse;
 import org.nodes.wms.dao.common.log.dto.output.LogActionPageResponse;
-import org.nodes.wms.dao.common.log.dto.output.LogResponse;
+import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
+import org.nodes.wms.dao.common.log.dto.output.LogTaskResponse;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.springframework.stereotype.Repository;
 
@@ -19,9 +20,6 @@ import java.util.List;
  * 审计日志mapper
  * @author 王智勇
  */
-@SuppressWarnings("ALL")
-@Repository
-@Mapper
 public interface LogActionMapper extends BaseMapper<LogAction> {
 	/**
 	 * 定时任务获取日志分页
@@ -29,7 +27,7 @@ public interface LogActionMapper extends BaseMapper<LogAction> {
 	 * @param page 分页参数
 	 * @return
 	 */
-    Page<LogResponse> getPage(@Param("query") LogPageQuery logPageQuery, IPage<LogAction> page);
+    Page<LogTaskResponse> getPage(@Param("query") LogPageQuery logPageQuery, IPage<LogAction> page);
 
 	/**
 	 * 业务日志分页查询
@@ -45,4 +43,10 @@ public interface LogActionMapper extends BaseMapper<LogAction> {
 	 * @return 业务日志集合
 	 */
 	List<LogActionExcelResponse> getActionLists(@Param("query") LogActionPageQuery logActionPageQuery);
+
+	/**
+	 * 根据收货单id获取日志列表
+	 * @param receiveId 收货单id
+	 */
+	List<LogReceiveResponse> findLogByReceiveId(Long receiveId);
 }
