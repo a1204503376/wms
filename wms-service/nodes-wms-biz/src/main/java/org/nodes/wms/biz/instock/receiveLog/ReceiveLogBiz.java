@@ -1,5 +1,6 @@
 package org.nodes.wms.biz.instock.receiveLog;
 
+import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
 
 import java.util.List;
@@ -13,4 +14,5 @@ public interface ReceiveLogBiz {
 	 * @param receiveId 收货单id
 	 */
 	List<ReceiveLogResponse> getReceiveLogList(Long receiveId);
+
 }

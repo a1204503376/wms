@@ -13,6 +13,7 @@ import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.ValidationUtil;
 import org.nodes.core.utils.TokenUtil;
+import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.core.common.entity.Address;
 import org.nodes.wms.core.common.entity.Contacts;
 import org.nodes.wms.core.common.enums.DefaultFlagEnum;
@@ -79,10 +80,15 @@ public class WarehouseServiceImpl<M extends WarehouseMapper, T extends Warehouse
 	IPlatformInfoService platformInfoService;
 	@Autowired
 	IWorkAreaService workAreaService;
+	@Autowired
+	WarehouseBiz warehouseBiz;
 
 
 	@Override
 	public boolean save(WarehouseDTO whDTO) {
+
+		// 校验授权个数
+		warehouseBiz.valiAuthorization();
 
 		IContactsService contactsService = SpringUtil.getBean(IContactsService.class);
 		IAddressService addressService = SpringUtil.getBean(IAddressService.class);
@@ -105,24 +111,24 @@ public class WarehouseServiceImpl<M extends WarehouseMapper, T extends Warehouse
 		if (this.save((Warehouse) whDTO)) {
 			//WarehouseCache.saveOrUpdate(whDTO);
 		}
-		//region 新增库房时自动生成入库暂存区stage、出库暂存区pick、包装暂存区pack、移动暂存区move
+		//STAGE（入库集货区）、QC（入库检验区）、
+		//PICKTO（出库集货区）、PACK（打包区）、UNKNOWN（未知库位）、
+		//INTRANSIT（库内虚拟区）；默认的库位编码为库房编码加上述库位编码，中间用-隔开
 		//1.生成入库暂存区
-		Long stageZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.Stage);
-
+		// Long stageZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.Stage);
 		//2.生成出库暂存区
-		Long pickZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.Pick);
-
+		//Long pickZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.Pick);
 		//3.生成包装暂存区
-		Long packZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.Pack);
-
+		//Long packZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.Pack);
 		//4.生成移动暂存区
-		Long moveZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.Move);
+		//Long moveZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.Move);
 
 		//5.更新库房初时暂存区
-		whDTO.setStage(stageZoneId);
-		whDTO.setPick(pickZoneId);
-		whDTO.setPack(packZoneId);
-		whDTO.setMove(moveZoneId);
+//		whDTO.setStage(stageZoneId);
+//		whDTO.setPick(pickZoneId);
+//		whDTO.setPack(packZoneId);
+//		whDTO.setMove(moveZoneId);
+		warehouseBiz.afterNewWarehouse(whDTO);
 		boolean saveInitZoneIsSucceed = super.updateById(whDTO);
 		if (!saveInitZoneIsSucceed) {
 			throw new ServiceException("库房初始暂存区关联失败！");
@@ -645,7 +651,7 @@ public class WarehouseServiceImpl<M extends WarehouseMapper, T extends Warehouse
 	}
 
 	@Override
-	public boolean removeByIds(List<Long> ids){
+	public boolean removeByIds(List<Long> ids) {
 		/*if(super.removeByIds(ids)){
 			//删除库房下关联的库区
 			boolean deleteZone = zoneService.remove(Condition.getQueryWrapper(new Zone())
@@ -657,29 +663,28 @@ public class WarehouseServiceImpl<M extends WarehouseMapper, T extends Warehouse
 				.in(Location::getWhId,ids));
 		}*/
 
-		for(long id : ids){
+		for (long id : ids) {
 			List<Zone> zoneList = zoneService.list(Condition.getQueryWrapper(new Zone())
-			.lambda()
-			.eq(Zone::getWhId,id)
-			.ne(Zone::getZoneType, ZoneTypeEnum.VIRTUAL.getIndex()));
+				.lambda()
+				.eq(Zone::getWhId, id)
+				.ne(Zone::getZoneType, ZoneTypeEnum.VIRTUAL.getIndex()));
 
 			List<Location> locationList = locationService.list(Condition.getQueryWrapper(new Location())
-			.lambda()
-			.eq(Location::getWhId,ids)
-			.ne(Location::getLocType,LocTypeEnum.Virtual.getIndex()));
+				.lambda()
+				.eq(Location::getWhId, ids)
+				.ne(Location::getLocType, LocTypeEnum.Virtual.getIndex()));
 
-			if(Func.isEmpty(zoneList) && Func.isEmpty(locationList)){
+			if (Func.isEmpty(zoneList) && Func.isEmpty(locationList)) {
 				super.removeById(id);
 				zoneService.remove(Condition.getQueryWrapper(new Zone())
-				.lambda()
-				.eq(Zone::getWhId,id));
+					.lambda()
+					.eq(Zone::getWhId, id));
 				locationService.remove(Condition.getQueryWrapper(new Location())
-				.lambda()
-				.eq(Location::getWhId,id));
-			}
-			else{
+					.lambda()
+					.eq(Location::getWhId, id));
+			} else {
 				Warehouse warehouse = super.getById(id);
-				throw new ServiceException(String.format("[名称：%s] 库房的库区或库位被占用，不允许删除",warehouse.getWhName()));
+				throw new ServiceException(String.format("[名称：%s] 库房的库区或库位被占用，不允许删除", warehouse.getWhName()));
 			}
 		}
 		return true;

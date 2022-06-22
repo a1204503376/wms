@@ -1,6 +1,6 @@
 <template>
     <div id="updateVer">
-        <nodes-master-page :permission="permissionObj" v-on="form.events">
+        <nodes-master-page :permission="permissionObj" v-on="form.events" :showSearchForm="false">
             <template v-slot:tableTool>
                 <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
                     <el-button circle icon="el-icon-refresh" size="mini" @click="onRefresh"></el-button>

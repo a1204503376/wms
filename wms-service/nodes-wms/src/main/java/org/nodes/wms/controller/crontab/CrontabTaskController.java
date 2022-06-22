@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.dao.common.log.dto.input.LogPageQuery;
-import org.nodes.wms.dao.common.log.dto.output.LogResponse;
+import org.nodes.wms.dao.common.log.dto.output.LogTaskResponse;
 import org.nodes.wms.dao.crontab.dto.CrontabTaskDTO;
 import org.nodes.wms.dao.crontab.entity.CrontabTask;
 import org.nodes.wms.biz.crontab.ICrontabTaskService;
@@ -109,7 +109,7 @@ public class CrontabTaskController extends BladeController {
 		return R.data(CrontabTaskWrapper.build().entityVO(detail));
 	}
 	@PostMapping("/getLogById")
-	public  R<Page<LogResponse>>  getLogById(@RequestBody  LogPageQuery logPageQuery, Query query){
+	public  R<Page<LogTaskResponse>>  getLogById(@RequestBody  LogPageQuery logPageQuery, Query query){
 		return R.data(logBiz.getPage(logPageQuery,query));
 	}
 

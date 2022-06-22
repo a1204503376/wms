@@ -26,15 +26,15 @@ public class WarehouseDaoImpl extends BaseServiceImpl<WarehouseMapper, Warehouse
 		return warehouseMapper.getWarehouseSelectResponseList();
 	}
 
-    @Override
-    public Warehouse findById(Long warehouseId) {
+	@Override
+	public Warehouse findById(Long warehouseId) {
 		return super.getById(warehouseId);
-    }
+	}
 
-    @Override
-    public Warehouse findByCode(String whCode) {
-		return super.getOne(new LambdaQueryWrapper<Warehouse>().eq(Warehouse::getWhCode,whCode));
-    }
+	@Override
+	public Warehouse findByCode(String whCode) {
+		return super.getOne(new LambdaQueryWrapper<Warehouse>().eq(Warehouse::getWhCode, whCode));
+	}
 
 	@Override
 	public List<Warehouse> list() {
@@ -43,17 +43,22 @@ public class WarehouseDaoImpl extends BaseServiceImpl<WarehouseMapper, Warehouse
 
 	/**
 	 * 根据机构ID集合查询库房集合
+	 *
 	 * @param deptIds 机构ID集合
 	 * @return 库房集合
 	 */
 	@Override
 	public List<Warehouse> getListByDeptId(List<Long> deptIds) {
-		if(Func.isEmpty(deptIds))
-		{
+		if (Func.isEmpty(deptIds)) {
 			return null;
 		}
-		LambdaQueryWrapper<Warehouse> lambdaQueryWrapper= Wrappers.lambdaQuery(Warehouse.class);
-		lambdaQueryWrapper.in(Warehouse::getDeptId,deptIds);
+		LambdaQueryWrapper<Warehouse> lambdaQueryWrapper = Wrappers.lambdaQuery(Warehouse.class);
+		lambdaQueryWrapper.in(Warehouse::getDeptId, deptIds);
 		return super.list(lambdaQueryWrapper);
+	}
+
+	@Override
+	public int countWarehouse() {
+		return super.count();
 	}
 }

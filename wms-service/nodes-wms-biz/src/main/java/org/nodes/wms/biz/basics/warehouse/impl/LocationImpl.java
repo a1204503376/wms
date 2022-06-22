@@ -1,9 +1,12 @@
 package org.nodes.wms.biz.basics.warehouse.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.formula.functions.T;
+
+import org.springblade.core.mp.support.Query;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.modular.LocationFactory;
 import org.nodes.wms.dao.basics.location.LocationDao;
@@ -16,7 +19,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.enums.LocTypeEnum;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
-import org.springblade.core.tool.utils.DateUtil;
+import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +52,8 @@ public class LocationImpl implements LocationBiz {
 	}
 
 	@Override
-	public Page<LocationPageResponse> page(IPage<T> page, LocationPageQuery locationPageQuery) {
+	public Page<LocationPageResponse> page(Query query, LocationPageQuery locationPageQuery) {
+		IPage<T> page = Condition.getPage(query);
 		return locationDao.selectPage(page, locationPageQuery);
 	}
 

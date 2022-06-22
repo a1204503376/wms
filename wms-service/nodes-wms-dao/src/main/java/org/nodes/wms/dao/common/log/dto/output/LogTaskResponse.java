@@ -7,10 +7,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 日志分页列表返货前端视图图
+ * 定时任务日志分页列表返货前端视图图
  */
 @Data
-public class LogResponse implements Serializable {
+public class LogTaskResponse implements Serializable {
 
 	private static final long serialVersionUID = 8658238171114149673L;
 	/**

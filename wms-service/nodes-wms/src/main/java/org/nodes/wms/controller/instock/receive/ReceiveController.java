@@ -7,6 +7,7 @@ import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.dao.application.dto.output.ReceiveBillStateResponse;
+import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.input.*;
 import org.nodes.wms.dao.instock.receive.dto.output.EditReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
@@ -121,7 +122,12 @@ public class ReceiveController {
 	 * @param receiveId 收货单id
 	 */
 	@GetMapping("/getReceiveLogList")
-	public R<List<ReceiveLogResponse>> getReceiveList(Long receiveId){
+	public R<List<ReceiveLogResponse>> getReceiveLogList(Long receiveId){
 		return R.data(receiveLogBiz.getReceiveLogList(receiveId));
    }
+
+	@GetMapping("/getLogList")
+	public R<List<LogReceiveResponse>> getLogList(Long receiveId){
+		return R.data(receiveBiz.getLogList(receiveId));
+	}
 }

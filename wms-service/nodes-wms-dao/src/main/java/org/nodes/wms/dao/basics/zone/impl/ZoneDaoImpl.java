@@ -22,18 +22,24 @@ public class ZoneDaoImpl
 		return super.baseMapper.listSelectByWhIdList(whIdList);
 	}
 
-    @Override
-    public Zone getZoneByCode(String zoneCode) {
-        return super.getOne(new LambdaQueryWrapper<Zone>().eq(Zone::getZoneCode,zoneCode));
-    }
+	@Override
+	public Zone getZoneByCode(String zoneCode) {
+		return super.getOne(new LambdaQueryWrapper<Zone>().eq(Zone::getZoneCode, zoneCode));
+	}
 
-    @Override
-    public Zone getZoneById(Long zoneId) {
-        return super.getById(zoneId);
-    }
+	@Override
+	public Zone getZoneById(Long zoneId) {
+		return super.getById(zoneId);
+	}
 
-    @Override
-    public Zone getZoneByCodeWhCode(String code, String whCode) {
-        return super.baseMapper.selectZoneByCodeWhCode(code,whCode);
-    }
+	@Override
+	public Zone getZoneByCodeWhCode(String code, String whCode) {
+		return super.baseMapper.selectZoneByCodeWhCode(code, whCode);
+	}
+
+	@Override
+	public Zone saveOrUpdateZone(Zone zone) {
+		super.saveOrUpdate(zone);
+		return zone;
+	}
 }

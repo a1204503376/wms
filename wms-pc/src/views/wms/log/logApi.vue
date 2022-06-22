@@ -2,40 +2,15 @@
     <div id="supplier">
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
-                <el-form-item label="供应商编码">
-                    <el-input v-model.trim="form.params.code" :clearable="true"></el-input>
+                <el-form-item label="日志标题">
+                    <el-input v-model.trim="form.params.title" :clearable="true"></el-input>
                 </el-form-item>
-                <el-form-item label="供应商名称">
-                    <el-input v-model.trim="form.params.name" :clearable="true"></el-input>
+                <el-form-item label="请求URI">
+                    <el-input v-model.trim="form.params.requestUri" :clearable="true"></el-input>
                 </el-form-item>
-            </template>
-            <template v-slot:expandSearch>
-                <el-row type="flex">
-                    <el-col :span="24">
-                        <el-form-item label="创建日期">
-                            <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
-                        </el-form-item>
-                        <el-form-item label="更新日期">
-                            <nodes-date-range v-model="form.params.updateTimeDateRange"></nodes-date-range>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </template>
-            <template v-slot:batchBtn>
-                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
-                </el-button>
-                <el-button v-if="permissionObj.delete" icon="el-icon-delete" plain size="mini" type="danger"
-                           @click="onRemove">删除
-                </el-button>
-                <el-button v-if="permissionObj.import" icon="el-icon-upload2" plain size="mini"
-                           @click="onUpload">导入
-                </el-button>
-                <file-upload
-                    :visible="fileUpload.visible"
-                    file-name="供应商"
-                    template-url="/api/wms/supplier/export-template"
-                    @callback="callbackFileUpload"
-                ></file-upload>
+                <el-form-item label="创建日期">
+                    <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
+                </el-form-item>
             </template>
             <template v-slot:tableTool>
                 <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
@@ -82,18 +57,6 @@
                             v-bind="column">
                         </el-table-column>
                     </template>
-                    <el-table-column label="启用"
-                                     prop="status"
-                                     width="100">
-                        <template v-slot="{row}">
-                            <el-tag :type="row.status === 1 ? 'success' : 'danger'"
-                                    disable-transitions>{{
-                                    row.status ===
-                                    1 ? '是' : '否'
-                                }}
-                            </el-tag>
-                        </template>
-                    </el-table-column>
                 </el-table>
             </template>
             <template v-slot:page>
@@ -115,7 +78,7 @@ import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import {listMixin} from "@/mixins/list";
-import {exportFile, importFile, page, remove} from "@/api/wms/basics/supplier";
+import {exportFile, page} from "@/api/wms/log/logApi"
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js'
 import fileUpload from "@/components/nodes/fileUpload";
@@ -137,56 +100,69 @@ export default {
         return {
             form: {
                 params: {
-                    code: "",
-                    name: "",
+                    title: "",
+                    requestUri: "",
                     createTimeDateRange: ["", ""],
-                    updateTimeDateRange: ["", ""],
                 },
             },
             table: {
                 columnList: [
                     {
-                        prop: "code",
-                        label: "供应商编码",
+                        prop: "title",
+                        label: "日志标题",
                         sortable: "custom",
                     },
                     {
-                        prop: "name",
-                        label: "供应商名称",
-                        sortable: "custom"
+                        prop: "requestUri",
+                        label: "请求Uri",
+                        sortable: "custom",
                     },
                     {
-                        prop: "simpleName",
-                        label: "供应商简称",
-                        sortable: "custom"
+                        prop: "method",
+                        label: "操作方式",
+                        sortable: "custom",
                     },
                     {
-                        prop: "ownerName",
-                        label: "货主",
-                        sortable: "custom"
+                        prop: "methodClass",
+                        label: "方法类",
+                        sortable: "custom",
                     },
                     {
-                        prop: "remark",
-                        label: "备注",
-                        sortable: "custom"
+                        prop: "methodName",
+                        label: "方法名",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "serverHost",
+                        label: "服务器名",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "serverIp",
+                        label: "服务器ip地址",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "params",
+                        label: "操作提交的数据",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "data",
+                        label: "响应的数据",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "createBy",
+                        label: "创建人",
+                        sortable: "custom",
                     },
                     {
                         prop: "createTime",
-                        width: 130,
                         label: "创建时间",
-                        sortable: "custom"
+                        sortable: "custom",
                     },
-                    {
-                        prop: "createUser",
-                        label: "创建人",
-                        sortable: "custom"
-                    },
-                    {
-                        prop: "updateTime",
-                        width: 130,
-                        label: "更新时间",
-                        sortable: "custom"
-                    },
+
                 ],
             },
             fileUpload: {
@@ -205,14 +181,9 @@ export default {
         permissionObj() {
             return {
                 search: this.vaildData(this.permission.supplier_search, false),
-                add: this.vaildData(this.permission.supplier_add, false),
-                delete: this.vaildData(this.permission.supplier_delete, false),
                 import: this.vaildData(this.permission.supplier_import, false)
             }
         }
-    },
-    created() {
-        this.getTableData();
     },
     methods: {
         getTableData() {
@@ -228,43 +199,17 @@ export default {
         },
         onReset() {
             this.form.params = {
-                name: '',
-                code: '',
+                requestUri: '',
+                title: '',
                 createTimeDateRange: ["", ""],
-                updateTimeDateRange: ["", ""]
             }
-        },
-        onRemove() {
-            let rows = this.$refs.table.selection;
-            if (rows.length <= 0) {
-                this.$message.warning("警告，至少选择一条记录");
-                return;
-            }
-            this.$confirm("此操作将删除, 是否删除?", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning",
-            })
-                .then(() => {
-                    let removeObj = {
-                        idList: rows.map(item=>item.id)
-                    };
-                    remove(removeObj)
-                        .then((res) => {
-                            this.$message({
-                                type: "success",
-                                message: res.data.msg,
-                            });
-                            this.getTableData();
-                        })
-                })
         },
         exportData() {
             this.loading = true;
             exportFile(this.form.params)
                 .then((res) => {
                     this.$message.success("操作成功，正在下载中...");
-                    fileDownload(res.data, `供应商${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
+                    fileDownload(res.data, `请求日志${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
                 })
                 .catch(() => {
                     this.$message.error("系统模板目录配置有误或文件不存在");
@@ -274,26 +219,7 @@ export default {
                 });
         },
         onExportLocalData() {
-            this.exportCurrentDataToExcel("供应商", "供应商")
-        },
-        callbackFileUpload(res) {
-            this.fileUpload.visible = false;
-            if (!res.result) {
-                return;
-            }
-            let param = this.getFormData(res);
-            importFile(param).then((res) => {
-                this.$message.success(res.data.msg);
-                this.refreshTable();
-            })
-        },
-        onAdd() {
-            this.$router.push({
-                name: '新增供应商',
-                params: {
-                    id: '0'
-                }
-            });
+            this.exportCurrentDataToExcel("请求日志", "请求日志")
         },
     },
 };
