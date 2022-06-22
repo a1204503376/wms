@@ -6,37 +6,35 @@
 				<u--input v-model="params.skuCode"></u--input>
 			</u-form-item>
 			<u-form-item label="名称" borderBottom class="textClass" labelWidth="140rpx">
-				<u--input v-model="params.skuCode"></u--input>
+				<u--input v-model="params.skuName"></u--input>
 			</u-form-item>
 			<u-form-item label="型号" borderBottom class="textClass" labelWidth="140rpx">
-				<!-- 		<view @click="show = true" style="width: 100%;">
-				<u--input v-model="params.skuCode" :disabled="true"></u--input>
-			    <u-picker v-model="params.skuCode"  :show="show" :columns="columns" keyName="label" @close="close" @cancel="close" @confirm="confirm"></u-picker>
-				</view> -->
-				<uni-select v-model="params.skuCode"></uni-select>
+				<uni-select v-model="params.skuLot2"></uni-select>
 			</u-form-item>
 			<u-form-item label="数量" borderBottom class="textClass" labelWidth="140rpx">
-				<u--input v-model="params.skuCode"></u--input>
+				<u--input v-model="params.surplusQty"></u--input>
 				<!-- <u-number-box v-model="params.skuCode" @change="valChange"></u-number-box> -->
 			</u-form-item>
 			<u-form-item label="UOM" borderBottom class="textClass" labelWidth="140rpx">
-				<u--input v-model="params.skuCode" :disabled="true"></u--input>
+				<u--input v-model="params.umName" :disabled="true"></u--input>
 			</u-form-item>
 			<u-form-item label="生产批次" borderBottom class="textClass" labelWidth="140rpx">
-				<u--input v-model="params.skuCode"></u--input>
+				<u--input v-model="params.skuLot1"></u--input>
 			</u-form-item>
-			<u-form-item label="LPN" borderBottom class="textClass" labelWidth="140rpx">
-				<u--input v-model="params.skuCode"></u--input>
+			<u-form-item label="箱码" borderBottom class="textClass" labelWidth="140rpx">
+				<u--input v-model="params.boxCode"></u--input>
 			</u-form-item>
 			<u-form-item label="LOC" borderBottom class="textClass" labelWidth="140rpx">
-				<u--input v-model="params.skuCode"></u--input>
+				<u--input v-model="params.locCode"></u--input>
 			</u-form-item>
 		</u--form>
-			<button @click="aa()"> 1234567</button>
 		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
 				返回
+			</view>
+			<view class="btn-submit" @click="submit()">
+				确定
 			</view>
 		</view>
 	</view>
@@ -54,16 +52,23 @@
 		data() {
 			return {
 				params: {
-					skuSpec:'CR110',
-					receiveId: '',
-					skuCode: 'CR110',
+					skuCode:undefined,
+					skuName:undefined,
+					skuLot2:undefined,
+					surplusQty:undefined,
+					umName:undefined,
+					skuLot1:undefined,
+					boxCode:undefined,
+					locCode:undefined
 				},
+				receiveDetailId: '',
 				receiveDetailList: [],
 			}
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
-			console.log(parse)
+			this.receiveDetailId = parse.receiveDetailId;
+			this.getDetailByDetailId();
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -72,16 +77,21 @@
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {
-			aa(){
-				console.log(this.params.skuCode)
+			submit() {
+				if(this.params.isSn==1){
+					uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', this.params);
+				    return;
+				}
+				//提交表单数据 收货
 			},
-			confirm(row) {
-				console.log(row.value[0].label)
-				this.params.skuCode = row.value[0].label;
-				this.show = false;
-			},
-			close() {
-				this.show = false;
+			getDetailByDetailId() {
+				let params = {
+					receiveDetailId: this.receiveDetailId
+				};
+				receive.getDetailByDetailId(params).then(data => {
+					this.params = data.data;
+					console.log(this.params)
+				})
 			},
 			esc() {
 				this.$u.func.navigateBack();
