@@ -22,7 +22,7 @@ import org.nodes.wms.core.outstock.so.service.ISoHeaderService;
 import org.nodes.wms.core.stock.core.dto.StockMoveByBoxQueryDTO;
 import org.nodes.wms.core.stock.core.dto.StockMoveByBoxSubmitDTO;
 import org.nodes.wms.core.stock.core.dto.StockMoveDTO;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.entity.StockDetail;
 import org.nodes.wms.core.stock.core.enums.EventTypeEnum;
 import org.nodes.wms.core.stock.core.enums.StockStatusEnum;

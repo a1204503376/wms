@@ -1,31 +1,19 @@
 package org.nodes.wms.core.stock.core.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import lombok.Data;
-import org.nodes.core.base.cache.ParamCache;
-import org.nodes.core.base.enums.ParamEnum;
-import org.nodes.core.tool.utils.NodesUtil;
-import org.nodes.wms.core.stock.core.entity.Serial;
-import org.nodes.wms.core.stock.core.entity.Stock;
-import org.nodes.wms.core.stock.core.enums.StockProcTypeEnum;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.enums.StockStatusEnum;
 import org.nodes.wms.core.stock.core.service.IStockMoveService;
 import org.nodes.wms.core.warehouse.cache.LocationCache;
 import org.nodes.wms.core.warehouse.entity.Location;
-import org.nodes.wms.core.warehouse.service.ILocationService;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.ObjectUtil;
-import org.springblade.core.tool.utils.SpringUtil;
-import org.springblade.core.tool.utils.StringUtil;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**

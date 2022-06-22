@@ -13,7 +13,7 @@ import org.nodes.wms.dao.basics.sku.enums.SkuLevelEnum;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.relenishment.entity.RelDetail;
 import org.nodes.wms.core.relenishment.enums.RelStateEnum;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.strategy.entity.RelenishmentDetail;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.Func;

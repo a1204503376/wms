@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import org.nodes.core.tool.jackson.BigDecimalSerializer;
 import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.core.stock.core.entity.Serial;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.warehouse.entity.Location;
 
 import java.math.BigDecimal;

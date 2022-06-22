@@ -8,7 +8,7 @@ import org.nodes.core.constant.DictConstant;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.count.entity.CountDetail;
 import org.nodes.wms.core.count.enums.ChangeTypeEnum;
 import org.nodes.wms.core.count.enums.CountByEnum;

@@ -2,7 +2,7 @@ package org.nodes.wms.core.strategy.instock.impl;
 
 import org.nodes.core.base.cache.ParamCache;
 import org.nodes.core.tool.utils.NodesUtil;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.strategy.entity.Instock;
 import org.nodes.wms.core.strategy.entity.InstockDetail;
 import org.nodes.wms.core.strategy.enums.MixModeEnum;

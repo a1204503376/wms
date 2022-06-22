@@ -1,7 +1,6 @@
 package org.nodes.wms.core.strategy.service.impl;
 
-import org.nodes.wms.core.stock.core.entity.Stock;
-import org.nodes.wms.core.strategy.dto.LocationLotManualAllocRequestDTO;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.strategy.dto.ManualAllocRequestDTO;
 import org.nodes.wms.core.strategy.service.IManualAllocStrategy;
 import org.springblade.core.tool.utils.StringUtil;
@@ -9,7 +8,6 @@ import org.springframework.context.annotation.Primary;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**

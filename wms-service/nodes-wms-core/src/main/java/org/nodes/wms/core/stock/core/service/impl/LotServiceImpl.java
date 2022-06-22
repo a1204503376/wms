@@ -3,8 +3,6 @@ package org.nodes.wms.core.stock.core.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.nodes.core.base.cache.ParamCache;
-import org.nodes.core.tool.utils.BigDecimalUtil;
-import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.log.system.dto.SystemProcDTO;
 import org.nodes.wms.core.log.system.enums.ActionEnum;
 import org.nodes.wms.core.log.system.enums.DataTypeEnum;
@@ -13,18 +11,15 @@ import org.nodes.wms.core.log.system.service.ISystemProcService;
 import org.nodes.wms.core.stock.core.cache.LotCache;
 import org.nodes.wms.core.stock.core.dto.LotDTO;
 import org.nodes.wms.core.stock.core.entity.Lot;
-import org.nodes.wms.core.stock.core.entity.Stock;
 import org.nodes.wms.core.stock.core.enums.StockStatusEnum;
 import org.nodes.wms.core.stock.core.mapper.LotMapper;
 import org.nodes.wms.core.stock.core.service.ILotLogService;
 import org.nodes.wms.core.stock.core.service.ILotService;
-import org.nodes.wms.core.stock.core.service.IStockService;
 import org.nodes.wms.core.stock.core.wrapper.LotWrapper;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.Func;
-import org.springblade.core.tool.utils.SpringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -32,11 +27,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 批次号 服务实现类

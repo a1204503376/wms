@@ -24,7 +24,7 @@ import org.nodes.wms.core.basedata.service.ISkuPackageDetailService;
 import org.nodes.wms.core.basedata.service.ISkuService;
 import org.nodes.wms.core.stock.core.dto.StockDTO;
 import org.nodes.wms.core.stock.core.entity.Serial;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.entity.StockOccupy;
 import org.nodes.wms.core.stock.core.enums.StockOccupyTypeEnum;
 import org.nodes.wms.core.stock.core.service.ILotService;

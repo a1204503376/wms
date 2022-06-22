@@ -3,7 +3,7 @@ package org.nodes.wms.core.strategy.instock.impl;
 import org.nodes.core.tool.utils.StringPool;
 import org.nodes.wms.core.basedata.entity.SkuInstock;
 import org.nodes.wms.core.basedata.service.ISkuInstockService;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.strategy.entity.Instock;
 import org.nodes.wms.core.strategy.entity.InstockDetail;
 import org.nodes.wms.core.strategy.instock.FunctionCodeBase;

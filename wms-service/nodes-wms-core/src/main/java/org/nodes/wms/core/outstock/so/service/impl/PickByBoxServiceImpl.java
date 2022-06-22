@@ -19,7 +19,7 @@ import org.nodes.wms.core.basedata.dto.SkuLogDTO;
 import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.dao.basics.sku.enums.SkuLogTypeEnum;
 import org.nodes.wms.core.basedata.wrapper.SkuLotWrapper;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.entity.StockOccupy;
 import org.nodes.wms.core.stock.core.enums.StockOccupyTypeEnum;
 import org.nodes.wms.core.stock.core.service.IStockOccupyService;
