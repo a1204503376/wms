@@ -5,7 +5,7 @@ import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.mapper.SkuMapper;
 import org.nodes.wms.core.common.entity.FunctionCount;
 import org.nodes.wms.core.common.service.IFunctionCountService;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.mapper.StockSnapshootMapper;
 import org.nodes.wms.core.stock.core.service.IStockService;
 import org.nodes.wms.core.stock.core.service.IStockSnapshootService;

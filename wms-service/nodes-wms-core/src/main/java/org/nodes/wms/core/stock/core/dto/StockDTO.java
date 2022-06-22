@@ -4,7 +4,7 @@ package org.nodes.wms.core.stock.core.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 
 /**
  * 库存数据传输对象实体类

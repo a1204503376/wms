@@ -16,7 +16,7 @@ import org.nodes.wms.core.stock.core.dto.StockDTO;
 import org.nodes.wms.core.stock.core.dto.StockMoveDTO;
 import org.nodes.wms.core.stock.core.dto.StockSubtractDTO;
 import org.nodes.wms.core.stock.core.entity.Lot;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.service.ILotService;
 import org.nodes.wms.core.stock.core.service.IStockMoveService;
 import org.nodes.wms.core.stock.core.vo.StockVO;

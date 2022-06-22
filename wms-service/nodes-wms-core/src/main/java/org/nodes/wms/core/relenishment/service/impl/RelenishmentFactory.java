@@ -14,7 +14,7 @@ import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.relenishment.entity.RelDetail;
 import org.nodes.wms.core.relenishment.enums.RelStateEnum;
 import org.nodes.wms.core.relenishment.service.IFunctionCode;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.service.IStockService;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;

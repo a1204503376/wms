@@ -8,7 +8,7 @@ import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.sku.entities.SkuPackage;
 import org.nodes.wms.core.basedata.service.IOwnerService;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.entity.StockSnapshoot;
 import org.nodes.wms.core.stock.core.vo.StockSnapshootVO;
 import org.nodes.wms.core.warehouse.cache.LocationCache;

@@ -3,7 +3,7 @@
 <mapper namespace="org.nodes.wms.core.stock.core.mapper.StockMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="stockResultMap" type="org.nodes.wms.core.stock.core.entity.Stock">
+    <resultMap id="stockResultMap" type="org.nodes.wms.dao.stock.entities.Stock">
         <id column="stock_id" property="stockId"/>
         <result column="wh_id" property="whId"/>
         <result column="zone_id" property="zoneId"/>
@@ -65,7 +65,7 @@
         <result column="high_storage" property="highStorage"/>
     </resultMap>
 
-    <select id="selectStockByLoc" resultType="org.nodes.wms.core.stock.core.entity.Stock">
+    <select id="selectStockByLoc" resultType="org.nodes.wms.dao.stock.entities.Stock">
         SELECT
         st.*
         FROM
@@ -152,7 +152,7 @@
             </if>
         </where>
     </select>
-    <select id="getStockListBySkuAndLoc" resultType="org.nodes.wms.core.stock.core.entity.Stock">
+    <select id="getStockListBySkuAndLoc" resultType="org.nodes.wms.dao.stock.entities.Stock">
         SELECT ws.*
         FROM wms_stock ws,
              wms_location l,

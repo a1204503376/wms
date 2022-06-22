@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.core.stock.core.dto.StockOccupyDTO;
 import org.nodes.wms.core.stock.core.dto.StockOccupySubtractDTO;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.entity.StockOccupy;
 import org.nodes.wms.core.stock.core.enums.StockOccupyTypeEnum;
 import org.nodes.wms.core.stock.core.enums.StockProcTypeEnum;

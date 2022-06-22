@@ -11,7 +11,7 @@ import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.entity.SkuOutstock;
 import org.nodes.wms.dao.basics.skuType.entities.SkuType;
 import org.nodes.wms.core.common.entity.AttributeBase;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.strategy.entity.Outstock;
 import org.nodes.wms.core.strategy.entity.OutstockConfig;
 import org.nodes.wms.core.strategy.entity.OutstockConfigUdf;

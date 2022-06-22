@@ -16,7 +16,7 @@ import org.nodes.wms.core.basedata.service.ISkuOutstockService;
 import org.nodes.wms.core.outstock.so.dto.CreatePickPlanByWellenDTO;
 import org.nodes.wms.core.outstock.so.entity.SoDetail;
 import org.nodes.wms.core.outstock.so.entity.SoHeader;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.enums.StockStatusEnum;
 import org.nodes.wms.core.stock.core.service.IStockService;
 import org.nodes.wms.core.strategy.dto.ManualAllocRequestDTO;

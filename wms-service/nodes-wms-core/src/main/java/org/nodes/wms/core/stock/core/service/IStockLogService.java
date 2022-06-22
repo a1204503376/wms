@@ -1,7 +1,7 @@
 
 package org.nodes.wms.core.stock.core.service;
 
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.entity.StockDetail;
 import org.nodes.wms.core.stock.core.entity.StockLog;
 import org.nodes.wms.core.stock.core.enums.StockProcTypeEnum;

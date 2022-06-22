@@ -9,7 +9,7 @@ import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.sku.entities.SkuPackage;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.stock.core.entity.ErpStock;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.vo.ErpStockVO;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
 import org.nodes.wms.dao.basics.owner.entities.Owner;

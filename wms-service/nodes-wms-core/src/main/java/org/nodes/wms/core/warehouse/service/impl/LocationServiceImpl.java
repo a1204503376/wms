@@ -10,7 +10,7 @@ import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.PrintServiceUtil;
 import org.nodes.core.tool.utils.ValidationUtil;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.service.IStockService;
 import org.nodes.wms.core.warehouse.cache.LocationCache;
 import org.nodes.wms.core.warehouse.dto.LocationDTO;

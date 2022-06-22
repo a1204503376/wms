@@ -61,7 +61,7 @@ import org.nodes.wms.core.stock.core.dto.StockOccupyDTO;
 import org.nodes.wms.core.stock.core.dto.StockOccupySubtractDTO;
 import org.nodes.wms.core.stock.core.dto.StockSubtractDTO;
 import org.nodes.wms.core.stock.core.entity.Serial;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.entity.StockOccupy;
 import org.nodes.wms.core.stock.core.enums.EventTypeEnum;
 import org.nodes.wms.core.stock.core.enums.StockOccupyTypeEnum;

@@ -1,7 +1,7 @@
 package org.nodes.wms.core.stock.transfer.service;
 
 import org.nodes.wms.core.stock.core.dto.StockMoveByBoxQueryDTO;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.vo.StockSkuMoveSubmitVO;
 import org.nodes.wms.core.stock.core.vo.StockSkuMoveVO;
 import org.springblade.core.mp.base.BaseService;

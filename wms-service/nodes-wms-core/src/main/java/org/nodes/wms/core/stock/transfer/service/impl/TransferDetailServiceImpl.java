@@ -5,7 +5,7 @@ import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.core.stock.core.dto.StockOccupyDTO;
-import org.nodes.wms.core.stock.core.entity.Stock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.enums.StockOccupyTypeEnum;
 import org.nodes.wms.core.stock.core.service.IStockOccupyService;
 import org.nodes.wms.core.outstock.so.entity.SoDetail;
