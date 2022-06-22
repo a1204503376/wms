@@ -95,7 +95,7 @@
                                 <el-table-column
                                     :align="'left'"
                                     prop="skuCode"
-                                    width="230"
+                                    width="200"
                                 >
                                     <template slot="header">
                                         <span class="d-table-header-required">物品编码</span>
@@ -104,7 +104,7 @@
                                         <nodes-sku
                                             v-model="row.sku"
                                             :sku-object="row.sku"
-                                            style="width: 180px;"
+                                            style="width: 170px;"
                                             @selectValChange="onChangeSku(row)"
                                         >
 
@@ -112,7 +112,7 @@
 
                                     </template>
                                 </el-table-column>
-                                <el-table-column>
+                                <el-table-column width="120">
                                     <template slot="header">
                                         <span class="d-table-header-required">物料名称</span>
                                     </template>
@@ -126,6 +126,7 @@
                                 </el-table-column>
                                 <el-table-column
                                     :align="'left'"
+                                    width="100"
                                 >
                                     <template slot="header">
                                         <span class="d-table-header-required">规格</span>
@@ -140,6 +141,7 @@
                                 </el-table-column>
                                 <el-table-column
                                     prop="planQty"
+                                    width="130"
                                 >
                                     <template slot="header">
                                         <span class="d-table-header-required">计划数量</span>
@@ -148,6 +150,7 @@
                                         <el-input-number
                                             v-model="row.planQty"
                                             controls-position="right"
+                                            style="width: 100px"
                                             size="mini"></el-input-number>
                                     </template>
                                 </el-table-column>
@@ -168,6 +171,7 @@
                                 <el-table-column
                                     :align="'left'"
                                     prop="skuCode"
+                                    width="100"
 
                                 >
                                     <template slot="header">
@@ -177,9 +181,58 @@
                                         <nodes-sku-um v-model="row.umCode" :sku="row.sku"></nodes-sku-um>
                                     </template>
                                 </el-table-column>
-
-
                                 <el-table-column
+                                    width="130"
+                                >
+                                    <template slot="header">
+                                        <span >生产批次</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input v-model="row.skuLot1" size="mini"></el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    width="130"
+                                >
+                                    <template slot="header">
+                                        <span >客户</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input v-model="row.skuLot4" size="mini"></el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    width="130"
+                                >
+                                    <template slot="header">
+                                        <span >钢背批次</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input v-model="row.skuLot5" size="mini"></el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    width="130"
+                                >
+                                    <template slot="header">
+                                        <span >摩擦块批次</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input v-model="row.skuLot6" size="mini"></el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    width="130"
+                                >
+                                    <template slot="header">
+                                        <span >CRCC</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input v-model="row.skuLot8" size="mini"></el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    width="130"
                                 >
                                     <template slot="header">
                                         <span >备注</span>
@@ -346,7 +399,12 @@ export default {
                 receiveDetailId:'',
                 planQty: 0,
                 scanQty:'',
-                remark: ''
+                remark: '',
+                skuLot1:'',
+                skuLot4:'',
+                skuLot5:'',
+                skuLot6:'',
+                skuLot8:'',
             }
         },
         onChangeSku(row) {

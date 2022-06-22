@@ -247,13 +247,15 @@ export default {
                 },
                 {
                     prop: 'skuCode',
-                    label: '物品编码'
+                    label: '物品编码',
+                    width: 150,
                 },
                 {
                     prop: 'skuName',
                     label: '物品名称',
                     // left/center/right
-                    align: 'right'
+                    width: 130,
+
                 },
                 {
                     prop: 'planQty',
@@ -277,26 +279,32 @@ export default {
                 },
                 {
                     prop: 'skuLot1',
+                    width: 120,
                     label: '生产批次'
                 },
                 {
                     prop: 'skuLot4',
+                    width: 120,
                     label: '客户'
                 },
                 {
                     prop: 'skuLot5',
+                    width: 120,
                     label: '钢背批次'
                 },
                 {
                     prop: 'skuLot6',
+                    width: 120,
                     label: '摩擦块批次'
                 },
                 {
                     prop: 'skuLot8',
+                    width: 120,
                     label: 'CRCC'
                 },
                 {
                     prop: 'remark',
+                    width: 120,
                     label: '备注'
                 },
             ],

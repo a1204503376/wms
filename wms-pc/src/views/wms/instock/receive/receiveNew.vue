@@ -167,7 +167,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column>
+                                <el-table-column width="130">
                                     <template slot="header">
                                         <span >生产批次</span>
                                     </template>
@@ -179,7 +179,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column>
+                                <el-table-column width="130">
                                     <template slot="header">
                                         <span >客户</span>
                                     </template>
@@ -191,7 +191,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column>
+                                <el-table-column width="130">
                                     <template slot="header">
                                         <span >钢背批次</span>
                                     </template>
@@ -203,7 +203,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column>
+                                <el-table-column width="130">
                                     <template slot="header">
                                         <span >摩擦块批次</span>
                                     </template>
@@ -215,7 +215,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column>
+                                <el-table-column width="130">
                                     <template slot="header">
                                         <span >CRCC</span>
                                     </template>
@@ -228,7 +228,7 @@
                                     </template>
                                 </el-table-column>
 
-                                <el-table-column>
+                                <el-table-column width="130">
                                     <template slot="header">
                                         <span class="d-table-header-required">备注</span>
                                     </template>
