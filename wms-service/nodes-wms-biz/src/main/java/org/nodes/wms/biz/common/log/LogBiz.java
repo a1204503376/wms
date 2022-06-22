@@ -76,7 +76,7 @@ public interface LogBiz {
 	 * @param logPageQuery 日志分页查询参数
 	 * @param query        分页参数
 	 */
-	Page<LogResponse> getPage(LogPageQuery logPageQuery, Query query);
+	Page<LogTaskResponse> getPage(LogPageQuery logPageQuery, Query query);
 
 	/**
 	 * 获取消息总条数
