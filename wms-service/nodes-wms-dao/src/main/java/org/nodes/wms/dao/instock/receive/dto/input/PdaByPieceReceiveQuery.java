@@ -68,4 +68,8 @@ public class PdaByPieceReceiveQuery implements Serializable {
 	 * 箱码
 	 */
 	private String boxCode;
+	/**
+	 * 库位编码
+	 */
+	private String locCode;
 }
