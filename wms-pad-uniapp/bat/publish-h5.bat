@@ -1,0 +1,1 @@
+cli publish --platform h5 --project wms-pad-uniapp
