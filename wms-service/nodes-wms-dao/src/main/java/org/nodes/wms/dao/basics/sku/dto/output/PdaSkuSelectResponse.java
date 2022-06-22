@@ -21,7 +21,7 @@ public class PdaSkuSelectResponse implements Serializable {
 	}
 
 	public Long getId() {
-		return id++;
+		return id;
 	}
 
 	public void setSkuSpec(String skuSpec) {
