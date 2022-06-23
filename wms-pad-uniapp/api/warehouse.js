@@ -7,18 +7,6 @@ const getWarehouseList =()=>{
 	})
 }
 
-const warehouseChange =(warehouse)=>{
-	return http.request({
-		url: '/api/ApiPDA/warehouseChange',
-		method: 'POST',
-		data: {
-			warehouse
-		}
-	})
-}
-
-
 export default {
-	getWarehouseList,
-	warehouseChange
+	getWarehouseList
 }

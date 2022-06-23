@@ -44,7 +44,6 @@
 			},
 			submit() {
 				uni.setStorageSync('warehouse', this.warehouse);
-				warehouse.warehouseChange(this.warehouse).then(data => {})
 				uni.redirectTo({
 					url: '/pages/home/home'
 				})
