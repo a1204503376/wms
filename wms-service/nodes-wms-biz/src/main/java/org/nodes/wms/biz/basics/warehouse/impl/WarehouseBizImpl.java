@@ -86,6 +86,18 @@ public class WarehouseBizImpl implements WarehouseBiz {
 	}
 
 	@Override
+	public List<WarehousePdaResponse> getWarehouseResponseByUser(BladeUser user) {
+		List<Warehouse> warehouseList = getWarehouseByUser(user);
+		if (Func.isEmpty(warehouseList)){
+			return null;
+		}
+
+		List<WarehousePdaResponse> result =
+			BeanUtil.copy(warehouseList, WarehousePdaResponse.class);
+		return result;
+	}
+
+	@Override
 	public void afterNewWarehouse(Warehouse warehouse) {
 		Zone zoneParam = new Zone();
 		zoneParam.setWhId(warehouse.getWhId());

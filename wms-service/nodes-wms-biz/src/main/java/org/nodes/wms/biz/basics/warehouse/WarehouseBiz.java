@@ -38,6 +38,8 @@ public interface WarehouseBiz {
 	 */
 	List<Warehouse> getWarehouseByUser(BladeUser user);
 
+	List<WarehousePdaResponse> getWarehouseResponseByUser(BladeUser user);
+
 	/**
 	 * 新增库房之后初始化库区、库位
 	 * 默认创建如下虚拟库位：STAGE（入库集货区）、QC（入库检验区）、
