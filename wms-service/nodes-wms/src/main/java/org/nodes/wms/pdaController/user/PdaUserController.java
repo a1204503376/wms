@@ -48,7 +48,7 @@ public class PdaUserController {
 	@GetMapping("getWarehouseList")
 	public R<List<Warehouse>> getWarehouseList(){
 		BladeUser user = AuthUtil.getUser();
-		List<Warehouse> warehouseResponseList =  warehouseBiz.getWarehouseByUserId(user);
+		List<Warehouse> warehouseResponseList =  warehouseBiz.getWarehouseByUser(user);
 		return R.data(warehouseResponseList);
 	}
 
