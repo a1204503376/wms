@@ -42,4 +42,13 @@
 //全局文字排布
 .textAlignClass {
 	margin-left: 20rpx!important;
+	margin-top: 0rpx!important;
+	.u-form-item__body__left__content__label{
+		font-size: 40rpx!important;
+	}
+}
+
+//表单输入框 全局样式
+.uni-input-input{
+	font-size: 40rpx!important;
 }
