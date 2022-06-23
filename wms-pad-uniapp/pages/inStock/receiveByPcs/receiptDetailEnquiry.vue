@@ -2,11 +2,11 @@
 	<view>
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
 		<u--form labelPosition="left" :model="params">
-			<u-form-item label="物品"  borderBottom >
-				<u--input v-model="params.skuCode"></u--input>
+			<u-form-item label="物品" borderBottom class="textAlignClass" labelWidth="170rpx">
+				<input v-model="params.skuCode"></input>
 			</u-form-item>
 		</u--form>
-		<h4 align="center">未收货列表</h4>
+		<h4 align="center" style='background-color:#33cbcc'>未收货列表</h4>
 		<!-- ${index + 1} -->
 		<u-list style="height: 960rpx;">
 			<u-list-item v-for="(item, index) in receiveDetailList" :key="index">
