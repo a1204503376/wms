@@ -6,6 +6,7 @@ import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.biz.user.UserBiz;
 import org.nodes.wms.dao.User.dto.input.EditUserLoginStatusRequest;
 import org.nodes.wms.dao.User.dto.output.UserLoginStatusResponse;
+import org.nodes.wms.dao.basics.warehouse.dto.output.WarehousePdaResponse;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.secure.BladeUser;
@@ -46,9 +47,9 @@ public class PdaUserController {
 	 * 获取用户库房
 	 */
 	@GetMapping("getWarehouseList")
-	public R<List<Warehouse>> getWarehouseList(){
+	public R<List<WarehousePdaResponse>> getWarehouseList(){
 		BladeUser user = AuthUtil.getUser();
-		List<Warehouse> warehouseResponseList =  warehouseBiz.getWarehouseByUserId(user);
+		List<WarehousePdaResponse> warehouseResponseList =  warehouseBiz.getWarehouseByUserId(user);
 		return R.data(warehouseResponseList);
 	}
 

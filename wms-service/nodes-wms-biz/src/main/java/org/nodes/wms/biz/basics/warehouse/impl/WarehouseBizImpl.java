@@ -12,6 +12,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.enums.LocTypeEnum;
 import org.nodes.wms.dao.basics.warehouse.SysAuthDao;
 import org.nodes.wms.dao.basics.warehouse.WarehouseDao;
+import org.nodes.wms.dao.basics.warehouse.dto.output.WarehousePdaResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.WarehouseResponse;
 import org.nodes.wms.dao.basics.warehouse.entities.SysAuth;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
@@ -68,7 +69,7 @@ public class WarehouseBizImpl implements WarehouseBiz {
 	}
 
 	@Override
-	public List<Warehouse> getWarehouseByUserId(BladeUser user) {
+	public List<WarehousePdaResponse> getWarehouseByUserId(BladeUser user) {
 		//清空全局的deptVOList
 		deptVOList = new ArrayList<>();
 		//获取全部的机构
@@ -87,7 +88,8 @@ public class WarehouseBizImpl implements WarehouseBiz {
 		List<Long> longList = deptVOList.stream().map(DeptVO::getId).distinct().collect(Collectors.toList());
 		//获取跟当前用户有关系的库房
 		List<Warehouse> warehouseList = warehouseDao.getListByDeptId(longList);
-		return warehouseList;
+		List<WarehousePdaResponse> responses = BeanUtil.copy(warehouseList, WarehousePdaResponse.class);
+		return responses;
 	}
 
 	//递归
