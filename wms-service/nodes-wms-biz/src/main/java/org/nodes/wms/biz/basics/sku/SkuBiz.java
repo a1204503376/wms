@@ -109,5 +109,5 @@ public interface SkuBiz {
 	 * 获取SKU的规格型号PDA下拉框的数据
 	 * @return SKU的规格型号PDA下拉框的数据
 	 */
-	List<PdaSkuSelectResponse> getSkuDropDownBox();
+	List<String> getSkuDropDownBox();
 }

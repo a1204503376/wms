@@ -1,5 +1,6 @@
 package org.nodes.wms.biz.basics.warehouse;
 
+import org.nodes.wms.dao.basics.warehouse.dto.output.WarehousePdaResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.WarehouseResponse;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.secure.BladeUser;

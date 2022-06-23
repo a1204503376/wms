@@ -1,9 +1,8 @@
 <template>
 	<view>
-		<u-divider text=""></u-divider>
 		<template>
 			<u-search placeholder="请输入收货单编码/上游编码" v-model="params.no" :show-action="false" @custom="search"
-				@search="search">
+				@search="search" class="font-in-page">
 			</u-search>
 		</template>
 		<u-list style="height: 990rpx;" pagingEnabled="true" @scrolltolower="scrolltolower">
@@ -11,16 +10,16 @@
 			<u-list-item v-for="(item, index) in receiveList" :key="item.receiveNo">
 				<view @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="6" class="textAlignClass">
+						<u-col span="6" class="left-text-one-line font-in-page">
 							<u--text class="demo-layout bg-purple-light" v-text="item.receiveNo"></u--text>
 						</u-col>
 						<u-col span="6" >
-							<u--text class="demo-layout bg-purple" v-text="item.billTypeName"></u--text>
+							<u--text class="demo-layout bg-purple  font-in-page" v-text="item.billTypeName"></u--text>
 						</u-col>
 					</u-row>
 					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="12" class="textAlignClass">
-							<u--text class="demo-layout bg-purple" v-text="item.supplierName"></u--text>
+						<u-col span="12" class="left-text-one-line">
+							<u--text class="demo-layout bg-purple font-in-page" v-text="item.supplierName"></u--text>
 						</u-col>
 					</u-row>
 					<u-divider text=""></u-divider>
