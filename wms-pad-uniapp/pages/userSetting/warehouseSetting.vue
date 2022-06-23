@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="uni-list">
-			<radio-group @change="radioChange" :model="whId" style="transform: scale(0.9);margin-top: -100rpx;">
+			<radio-group @change="radioChange" :model="whId" style="transform: scale(0.9);">
 				<label class="uni-list-cell uni-list-cell-pd" v-for="(item, index) in warehouseList" :key="item.whId">
 					<view>{{item.whName}}</view>
 					<view>
