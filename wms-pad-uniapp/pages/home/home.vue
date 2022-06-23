@@ -1,8 +1,7 @@
 <template>
 	<view class="container">
-		<u-navbar :leftText="title" leftIcon="account-fill" :leftIconSize="40" leftIconColor="#fff"
-			@leftClick="userSetting" :rightText="username" :fixed="false" :autoBack="false"
-			:bgColor="navigationBarBackgroundColor" titleStyle="color:#ffffff;font-size:21px"
+		<u-navbar :leftText="title" leftIcon="" leftIconColor="#fff" @rightClick="userSetting" :rightIconSize="40"
+			:rightText="username" :fixed="false" :autoBack="false" :bgColor="navigationBarBackgroundColor"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u-grid class="menu" col="3">
@@ -52,7 +51,7 @@
 					})
 				}
 			})
-			
+
 		},
 		onShow() {
 			this.title = uni.getStorageSync('warehouse').whName;
