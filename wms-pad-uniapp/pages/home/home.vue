@@ -1,7 +1,8 @@
 <template>
 	<view class="container">
-		<u-navbar :leftText="title" leftIcon="" leftIconColor="#fff" @rightClick="userSetting" :rightIconSize="40"
-			:rightText="username" :fixed="false" :autoBack="false" :bgColor="navigationBarBackgroundColor"
+		<u-navbar :leftText="username" leftIcon="account-fill" :leftIconSize="40" leftIconColor="#fff"
+			@leftClick="userSetting" :rightText="title" :fixed="false" :autoBack="false"
+			:bgColor="navigationBarBackgroundColor" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u-grid class="menu" col="3">
