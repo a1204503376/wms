@@ -1,30 +1,30 @@
 <template>
 	<view>
 		<u--form>
-			<u-form-item label="物品:"  borderBottom class="textAlignClass" labelWidth="180rpx">
-				<input v-model="params.skuCode" :disabled="true"></input>
+			<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.skuCode" border="0" disabled></u--input>
 			</u-form-item>
-			<u-form-item label="名称:" borderBottom  class="textAlignClass" labelWidth="180rpx">
-				<input v-model="params.skuName" :disabled="true"></input>
+			<u-form-item label="名称" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.skuName" border="0" disabled></u--input>
 			</u-form-item>
-			<u-form-item label="型号:" borderBottom class="textAlignClass" labelWidth="180rpx">
+			<u-form-item label="型号" class="left-text-one-line" labelWidth="100">
 				<uni-select v-model="params.skuLot2"></uni-select>
 			</u-form-item>
-			<u-form-item label="数量:" borderBottom :required="true"  class="textAlignClass" labelWidth="180rpx">
-				<input v-model="params.surplusQty"></input>
+			<u-form-item label="数量" :required="true"  class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.surplusQty"></u--input>
 				<!-- <u-number-box v-model="params.skuCode" @change="valChange"></u-number-box> -->
 			</u-form-item>
-			<u-form-item label="UOM:" borderBottom  class="textAlignClass" labelWidth="180rpx">
-				<input v-model="params.umName" :disabled="true"></input>
+			<u-form-item label="UOM" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.umName" border="0" disabled></u--input>
 			</u-form-item>
-			<u-form-item label="生产批次:" borderBottom :required="true"  class="textAlignClass" labelWidth="180rpx">
-				<input v-model="params.skuLot1"></input>
+			<u-form-item label="生产批次" :required="true"  class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.skuLot1"></u--input>
 			</u-form-item>
-			<u-form-item label="箱码:" borderBottom class="textAlignClass" labelWidth="180rpx">
-				<input v-model="params.boxCode"></input>
+			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.boxCode"></u--input>
 			</u-form-item>
-			<u-form-item label="LOC:" borderBottom :required="true" class="textAlignClass" labelWidth="180rpx">
-				<input v-model="params.locCode"></input>
+			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.locCode"></u--input>
 			</u-form-item>
 		</u--form>
 		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
