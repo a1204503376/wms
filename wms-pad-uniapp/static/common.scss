@@ -39,16 +39,21 @@
 	}
 }
 
-//全局文字排布
-.textAlignClass {
+//行左侧文字样式
+.left-text-one-line {
 	margin-left: 20rpx!important;
 	margin-top: 0rpx!important;
 	.u-form-item__body__left__content__label{
-		font-size: 40rpx!important;
+		font-size: $theme-font-size!important;
 	}
 }
 
-//表单输入框 全局样式
+//表单输入框文字样式
 .uni-input-input{
-	font-size: 40rpx!important;
+	font-size: $theme-font-size!important;
+}
+
+//app页面字体样式
+.font-in-page{
+	font-size: $theme-font-size!important;
 }
