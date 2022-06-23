@@ -22,8 +22,8 @@ public class PdaSkuController {
 	private final SkuBiz skuBiz;
 
 	@GetMapping("/findSkuDropDownBox")
-	public R<List<PdaSkuSelectResponse>> findSkuDropDownBox() {
-		List<PdaSkuSelectResponse> dropDownBox = skuBiz.getSkuDropDownBox();
+	public R<List<String>> findSkuDropDownBox() {
+		List<String> dropDownBox = skuBiz.getSkuDropDownBox();
 		return R.data(dropDownBox);
 	}
 }

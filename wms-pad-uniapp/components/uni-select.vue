@@ -1,9 +1,12 @@
 <template>
 	<view style="width: 100%;height: 100%;">
-		<view @click="show = true" style="width: 100%;height: 100rpx;">
-			<u--input v-model="dataSource" :disabled="true" placeholder="请选择规格型号"></u--input>
-			<u-picker v-model="dataSource" :show="show" :columns="columns" keyName="label" 
-				@cancel="close" @confirm="confirm" :closeOnClickOverlay="true" @close="close"></u-picker>
+		<view class="uni-list-cell-db" style="width: 100%;height: 100%;">
+			<picker style="width: 100%;height: 100%;" v-model="dataSource" :range="columns" value="index"
+				@change="bindPickerChange">
+				<view class="uni-input-input" style="width: 100%;height: 10rpx;">
+					<view style="margin-top: -24rpx; z-index: 99999;">{{dataSource}}</view>
+				</view>
+			</picker>
 		</view>
 	</view>
 </template>
@@ -23,7 +26,6 @@
 			selectVal: {
 				handler(selectVal) {
 					this.dataSource = this.selectVal;
-					this.getDataSource();
 				},
 				immediate: true,
 				deep: true
@@ -33,28 +35,22 @@
 			return {
 				dataSource: '',
 				show: false,
-				columns: [
-					[]
-				],
+				columns: [],
 			};
+		},
+		created() {
+			this.getDataSource();
 		},
 		methods: {
 			getDataSource() {
 				sku.getSkuDropDownBox().then(data => {
-					data.data.forEach((item, index) => {
-						if (this.columns[0].length != data.data.length) {
-							this.columns[0].push(item)
-						}
-					});
+					this.columns = data.data
 				})
 			},
-			confirm(row) {
-				this.dataSource = row.value[0].label;
-				this.show = false;
-				this.$emit('selectValChange', row.value[0].label);
-			},
-			close() {
-				this.show = false;
+			bindPickerChange: function(e) {
+				this.index = e.detail.value
+				this.dataSource = this.columns[e.detail.value]
+				this.$emit('selectValChange', this.columns[e.detail.value]);
 			},
 		}
 	}

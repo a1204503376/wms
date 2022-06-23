@@ -118,10 +118,14 @@ public class SkuBizImpl implements SkuBiz {
 	}
 
 	@Override
-	public List<PdaSkuSelectResponse> getSkuDropDownBox() {
+	public List<String> getSkuDropDownBox() {
 		List<Sku> skuList = skuDao.getSkuList();
-		List<PdaSkuSelectResponse> responseList = BeanUtil.copy(skuList, PdaSkuSelectResponse.class);
-		responseList=responseList.stream().distinct().filter(item -> Func.isNotEmpty(item.getLabel())).collect(Collectors.toList());
-		return responseList;
+		List<String> skuSpecList = skuList
+			.stream()
+			.filter(sku -> Func.isNotEmpty(sku.getSkuSpec()))
+			.map(Sku::getSkuSpec)
+			.distinct()
+			.collect(Collectors.toList());
+		return skuSpecList;
 	}
 }
