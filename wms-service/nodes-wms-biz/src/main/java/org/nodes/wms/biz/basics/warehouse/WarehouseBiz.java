@@ -32,9 +32,13 @@ public interface WarehouseBiz {
 	Warehouse findByCode(String whCode);
 
 	/**
-	 * @return 根据权限返回当前用户能看到的系统
+	 * 根据用户获取有权限查看的库房
+	 * @param user
+	 * @return
 	 */
-	List<WarehousePdaResponse> getWarehouseByUserId(BladeUser user);
+	List<Warehouse> getWarehouseByUser(BladeUser user);
+
+	List<WarehousePdaResponse> getWarehouseResponseByUser(BladeUser user);
 
 	/**
 	 * 新增库房之后初始化库区、库位

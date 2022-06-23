@@ -25,14 +25,16 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping(WmsApiPath.WMS_PDA_API)
 public class PdaUserController {
-    private final UserBiz userBiz;
+	private final UserBiz userBiz;
 	private final WarehouseBiz warehouseBiz;
+
 	@ApiLog("PDA-人员签到")
 	@PostMapping("/editUserLoginStatus")
 	public R<UserLoginStatusResponse> editUserLoginStatus(@Valid @RequestBody EditUserLoginStatusRequest editUserLoginStatusRequest, HttpServletRequest request) {
-		UserLoginStatusResponse userLoginStatusResponse =  userBiz.EditUserLoginStatus(editUserLoginStatusRequest);
+		UserLoginStatusResponse userLoginStatusResponse = userBiz.EditUserLoginStatus(editUserLoginStatusRequest);
 		return R.data(userLoginStatusResponse);
 	}
+
 	/**
 	 * 获取签到状态
 	 */
@@ -47,19 +49,21 @@ public class PdaUserController {
 	 * 获取用户库房
 	 */
 	@GetMapping("getWarehouseList")
-	public R<List<WarehousePdaResponse>> getWarehouseList(){
+	public R<List<WarehousePdaResponse>> getWarehouseList() {
 		BladeUser user = AuthUtil.getUser();
-		List<WarehousePdaResponse> warehouseResponseList =  warehouseBiz.getWarehouseByUserId(user);
+		List<WarehousePdaResponse> warehouseResponseList =
+			warehouseBiz.getWarehouseResponseByUser(user);
 		return R.data(warehouseResponseList);
 	}
 
 	/**
 	 * PDA-切换库房
+	 *
 	 * @param warehouse 库房信息
 	 */
 	@ApiLog("PDA-切换库房")
 	@PostMapping("/warehouseChange")
-	public void warehouseChange(@RequestBody Warehouse warehouse){
+	public void warehouseChange(@RequestBody Warehouse warehouse) {
 
 	}
 

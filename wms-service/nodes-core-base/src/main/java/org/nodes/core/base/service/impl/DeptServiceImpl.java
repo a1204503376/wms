@@ -16,6 +16,7 @@
  */
 package org.nodes.core.base.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -141,6 +142,14 @@ public class DeptServiceImpl <M extends DeptMapper, T extends Dept> extends Base
 	@Override
 	public boolean updateById(DeptDTO deptDTO) {
 		return super.updateById(deptDTO);
+	}
+
+	@Override
+	public List<Dept> getAllChildDept(String deptId) {
+		LambdaQueryWrapper<Dept> lambdaQueryWrapper = Wrappers.lambdaQuery(Dept.class);
+		lambdaQueryWrapper.like(Dept::getAncestors, deptId);
+		List<Dept> deptList = super.list(lambdaQueryWrapper);
+		return deptList;
 	}
 
 }
