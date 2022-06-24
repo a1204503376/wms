@@ -29,12 +29,12 @@
 		</u--form>
 		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
 		<view class="footer">
-			<u-button class="btn-cancle" @click="esc()">
+			<view class="btn-cancle" @click="esc()">
 				返回
-			</u-button>
-			<u-button class="btn-submit" @click="submit()" :throttleTime="1000">
+			</view>
+			<view class="btn-submit" @click="submit()" :throttleTime="1000">
 				确定
-			</u-button>
+			</view>
 		</view>
 	</view>
 </template>
@@ -77,13 +77,15 @@
 		},
 		methods: {
 			submit() {
-				this.params.locCode = uni.getStorageSync('warehouse').whCode + this.params.locCode;
-				if (this.params.isSn == 1) {
-					uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', this.params);
-					return;
-				}
-				console.log(this.params)
-				//提交表单数据 收货
+				uni.$u.throttle(function() {
+					this.params.locCode = uni.getStorageSync('warehouse').whCode + this.params.locCode;
+					if (this.params.isSn == 1) {
+						uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', this.params);
+						return;
+					}
+					console.log(this.params)
+					//提交表单数据 收货
+				}, 1000)
 			},
 			getDetailByDetailId() {
 				let params = {

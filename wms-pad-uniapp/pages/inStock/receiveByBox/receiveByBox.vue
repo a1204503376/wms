@@ -23,6 +23,9 @@
 			<u-form-item label="LPN" :required="true"  class="left-text-one-line" labelWidth="100">
 				<u--input v-model="param.lpnCode"></u--input>
 			</u-form-item>
+			<u-form-item label="型号:" borderBottom class="textAlignClass" labelWidth="180rpx">
+				<uni-select ></uni-select>
+			</u-form-item>
 			
 		</u--form>
 		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
@@ -39,10 +42,11 @@
 
 <script>
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
+	import uniSelect from '@/components/uni-select.vue'
 	export default {
 		components: {
 			keyboardListener,
-		
+			uniSelect
 		},
 		data() {
 			return {

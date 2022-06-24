@@ -18,12 +18,12 @@
 		</view>
 
 		<view class="footer">
-			<u-button class="btn-cancle" @click="esc()">
+			<view class="btn-cancle" @click="esc()">
 				返回
-			</u-button>
-			<u-button class="btn-submit" @click="submit()" :throttleTime="1000">
+			</view>
+			<view class="btn-submit" @click="submit()" :throttleTime="1000">
 				确定
-			</u-button>
+			</view>
 		</view>
 	</view>
 </template>
@@ -85,16 +85,18 @@
 				this.$u.func.navigateBack();
 			},
 			submit() {
-				this.newPwd1Focus = false;
-				this.$refs.uForm.validate().then(res => {
-					api.updatePassword(
-						this.form.userInfo.id,
-						md5(this.form.userInfo.oldPassword),
-						md5(this.form.userInfo.newPassword),
-						md5(this.form.userInfo.newPassword1)).then(data => {
-						this.navigateBack();
-					})
+				uni.$u.throttle(function() {
+					this.newPwd1Focus = false;
+					this.$refs.uForm.validate().then(res => {
+						api.updatePassword(
+							this.form.userInfo.id,
+							md5(this.form.userInfo.oldPassword),
+							md5(this.form.userInfo.newPassword),
+							md5(this.form.userInfo.newPassword1)).then(data => {
+							this.navigateBack();
+							})
 				})
+				}, 1000)
 			}
 		},
 	};

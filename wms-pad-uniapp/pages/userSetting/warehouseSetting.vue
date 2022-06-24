@@ -11,12 +11,12 @@
 			</radio-group>
 		</view>
 		<view class="footer">
-			<u-button class="btn-cancle" @click="esc()">
+			<view class="btn-cancle" @click="esc()">
 				返回
-			</u-button>
-			<u-button class="btn-submit" @click="submit()" :throttleTime="1000">
+			</view>
+			<view class="btn-submit" @click="submit()">
 				确定
-			</u-button>
+			</view>
 		</view>
 	</view>
 </template>
