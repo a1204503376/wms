@@ -35,9 +35,11 @@ NProgress.configure({
 
 function processingDate(obj) {
     if (func.isArray(obj)){
+        let temp=[];
         obj.forEach((item)=>{
-            processingDate(item);
+            temp.push(processingDate(item));
         })
+        return temp;
     }
     if (obj) {
         let dateRangeParams = {};
@@ -55,7 +57,7 @@ function processingDate(obj) {
                 dateRangeParams[`${prefixItem}End`] = dateFormat(`${value[1]} 23:59:59`);
             }
         }
-        Object.assign(obj, dateRangeParams);
+        return  Object.assign({},obj, dateRangeParams);
     }
 }
 
@@ -76,7 +78,7 @@ axios.interceptors.request.use(config => {
     }
     //headers中配置serialize为true开启序列化
     if (config.method === 'post') {
-         processingDate(config.data);
+        config.data = processingDate(config.data);
         if (meta.isSerialize === true) {
             config.data = serialize(config.data);
         }
