@@ -1,15 +1,14 @@
 package org.nodes.wms.biz.basics.warehouse.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.poi.ss.formula.functions.T;
-
-import org.springblade.core.mp.support.Query;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.modular.LocationFactory;
 import org.nodes.wms.dao.basics.location.LocationDao;
+import org.nodes.wms.dao.basics.location.constant.LocationConstant;
 import org.nodes.wms.dao.basics.location.dto.input.LocationAddOrEditRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationExcelRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
@@ -20,11 +19,12 @@ import org.nodes.wms.dao.basics.location.enums.LocTypeEnum;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
+import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.StringUtil;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -96,10 +96,34 @@ public class LocationImpl implements LocationBiz {
 		for (Long id : idList
 		) {
 			Location location = locationDao.getLocationById(id);
-			if (location.getLocType().equals(LocTypeEnum.Virtual.key())) {
-				throw new ServiceException("库位[%s]是系统生成虚拟库区不可删除"+location.getLocCode());
+			String locCode = location.getLocCode();
+			if (location.getLocType().equals(LocTypeEnum.Virtual.key())
+				&& StringUtil.contains(locCode, '-')
+				&& ArrayUtils.contains(LocationConstant.getLocTypes(), StringUtil.subAfter(locCode, "-", true))
+			) {
+				throw new ServiceException(String.format("库位[编码：%s]是系统生成虚拟库位不可删除", location.getLocCode()));
 			}
 		}
 		return locationDao.removeByIdList(idList);
+	}
+
+	@Override
+	public List<Location> getAllStage() {
+		return locationDao.getAllStage();
+	}
+
+	@Override
+	public List<Location> getAllQc() {
+		return locationDao.getAllQc();
+	}
+
+	@Override
+	public List<Location> getAllPickTo() {
+		return locationDao.getAllPickTo();
+	}
+
+	@Override
+	public int countAll() {
+		return locationDao.countAll();
 	}
 }

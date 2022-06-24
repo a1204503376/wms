@@ -273,6 +273,10 @@ export default {
             }
         },
         onDel(row, index) {
+            if (row.zoneType === 70){
+                this.$message.error("删除失败，该库区为系统虚拟库区无法删除");
+                return;
+            }
             this.$confirm("确定删除当前数据？", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -288,9 +292,17 @@ export default {
             });
         },
         onMultiDel() {
-            if (!this.selectionList || this.selectionList.length == 0) {
+            let rows = this.selectionList;
+            if (!rows || rows.length === 0) {
                 this.$message.warning("至少选择一条数据！");
                 return;
+            }
+            for (const i in rows) {
+                let zoneCode = rows[i].zoneCode
+                if (rows[i].zoneType === 70 && zoneCode.substring(zoneCode.lastIndexOf("-")+1) === "VIRTUAL"){
+                    this.$message.error(`删除失败，库区[编码:${zoneCode}，名称:${rows[i].zoneName}]是系统虚拟库区无法删除`);
+                    return;
+                }
             }
             this.$confirm("确定将选择数据删除?", {
                 confirmButtonText: "确定",

@@ -8,6 +8,7 @@ import org.nodes.core.base.service.IDeptService;
 import org.nodes.core.base.vo.DeptVO;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.dao.basics.location.LocationDao;
+import org.nodes.wms.dao.basics.location.constant.LocationConstant;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.enums.LocTypeEnum;
 import org.nodes.wms.dao.basics.warehouse.SysAuthDao;
@@ -114,14 +115,13 @@ public class WarehouseBizImpl implements WarehouseBiz {
 	public void afterNewWarehouse(Warehouse warehouse) {
 		Zone zoneParam = new Zone();
 		zoneParam.setWhId(warehouse.getWhId());
-		zoneParam.setZoneCode(ZoneTypeEnum.VIRTUAL.toString());
+		zoneParam.setZoneCode(warehouse.getWhCode() + "-" + ZoneTypeEnum.VIRTUAL);
 		zoneParam.setZoneName(ZoneTypeEnum.VIRTUAL.getName());
 		zoneParam.setZoneType(ZoneTypeEnum.VIRTUAL.getCode());
 		zoneParam.setCreateDept(warehouse.getDeptId());
 		Zone zone = zoneDao.saveOrUpdateZone(zoneParam);
 
-		String[] codeArray = new String[]{"STAGE", "QC", "PICKTO", "PACK", "UNKNOWN", "INTRANSIT"};
-		Arrays.stream(codeArray).forEach(item -> {
+		Arrays.stream(LocationConstant.getLocTypes()).forEach(item -> {
 			Location locationParam = new Location();
 			locationParam.setWhId(warehouse.getWhId());
 			locationParam.setZoneId(zone.getZoneId());
