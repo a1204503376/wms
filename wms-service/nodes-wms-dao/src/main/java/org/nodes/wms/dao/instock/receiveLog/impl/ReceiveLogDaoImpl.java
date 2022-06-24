@@ -3,6 +3,7 @@ package org.nodes.wms.dao.instock.receiveLog.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.instock.receiveLog.ReceiveLogDao;
+import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.instock.receiveLog.mapper.ReceiveLogMapper;
@@ -21,4 +22,9 @@ public class ReceiveLogDaoImpl extends BaseServiceImpl<ReceiveLogMapper, Receive
 	public List<ReceiveLogResponse> getReceiveLogList(Long receiveId) {
 		return super.baseMapper.selectReceiveLogList(receiveId);
 	}
+
+    @Override
+    public List<ReceiveLogIndexResponse> getReceiveSkuQtyTop10() {
+        return super.baseMapper.selectReceiveSkuQtyTop10();
+    }
 }

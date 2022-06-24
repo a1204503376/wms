@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.dao.outstock.logSoPick.mapper.LogSoPickMapper">
+
+    <select id="selectPickSkuQtyTop10"
+            resultType="org.nodes.wms.dao.outstock.logSoPick.dot.output.LogSoPickIndexResponse">
+        SELECT sku_id,
+               sku_code,
+               sum(pick_real_qty) as pick_real_qty
+        FROM log_so_pick
+        WHERE DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= create_time
+        GROUP BY sku_id,sku_code
+        ORDER BY pick_real_qty DESC
+        limit 10
+    </select>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.dao.stock.mapper.StockMapper">
+
+    <select id="selectStockQtyByLocIdList" resultType="java.util.HashMap">
+        SELECT SUM(stock_qty-pick_qty) AS skuQty, MAX( TIMESTAMPDIFF(DAY, last_in_time, now()) ) AS skuStoreDay
+        FROM wms_stock
+        WHERE
+        stock_qty &gt; pick_qty
+        AND loc_id IN
+        <foreach collection="locIdList" open="(" close=")" item="item" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectStockSkuCountByLocIdList" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT sku_id)
+        FROM wms_stock
+        WHERE stock_qty &gt; pick_qty
+          AND loc_id NOT IN
+        <foreach collection="locIdList" separator="," item="item" close=")" open="(">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

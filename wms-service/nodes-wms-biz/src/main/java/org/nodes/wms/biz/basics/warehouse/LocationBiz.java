@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.basics.warehouse;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.models.auth.In;
 import org.nodes.wms.dao.basics.location.dto.input.LocationAddOrEditRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationExcelRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
@@ -91,4 +92,33 @@ public interface LocationBiz {
 	 * @return true: 删除成功, false: 删除失败
 	 */
 	boolean remove(List<Long> idList);
+
+	/**
+	 * 返回所有的库房的入库集货区
+	 *
+	 * @return List<Location>
+	 */
+	List<Location> getAllStage();
+
+	/**
+	 * 返回所有的库房的入库检验区
+	 *
+	 * @return List<Location>
+	 */
+	List<Location> getAllQc();
+
+	/**
+	 * 返回所有的库房的出库暂存区
+	 *
+	 * @return List<Location>
+	 */
+	List<Location> getAllPickTo();
+
+	/**
+	 * 获取库位总数量
+	 *
+	 * @return int
+	 */
+	int countAll();
+
 }

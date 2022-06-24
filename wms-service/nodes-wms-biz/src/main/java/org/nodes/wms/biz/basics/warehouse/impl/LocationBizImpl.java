@@ -32,7 +32,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class LocationImpl implements LocationBiz {
+public class LocationBizImpl implements LocationBiz {
 	private final LocationDao locationDao;
 
 	private final LocationFactory locationFactory;
