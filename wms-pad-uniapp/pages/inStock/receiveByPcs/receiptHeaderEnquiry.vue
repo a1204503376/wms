@@ -26,7 +26,6 @@
 				</view>
 			</u-list-item>
 		</u-list>
-		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
 				返回
@@ -37,7 +36,6 @@
 
 <script>
 	import receive from '@/api/receiveByPcs.js'
-	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	export default {
 		components: {
@@ -65,7 +63,7 @@
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {
-			codeRules(code) {
+			analysisCode(code) {
 				var barcode = barcodeFunc.parseBarcode(code);
 				var barcodeType = barcodeFunc.BarcodeType;
 				switch (barcode.type) {
@@ -79,7 +77,7 @@
 			},
 			getReceiveList(){
 				this.page.current = 1;
-				this.codeRules(this.params.no);
+				this.analysisCode(this.params.no);
 				receive.getReceiveList(this.params, this.page).then(data => {
 					this.receiveList = data.data.records;
 				})
@@ -91,13 +89,8 @@
 				uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', item);
 			},
 			scannerCallback(no) {
-				codeRules(no);
+				this.analysisCode(no);
 				this.search();
-			},
-			emitKeyDown(e) {
-				if (e.key == 'Enter') {
-					this.search();
-				}
 			},
 			scrolltolower() {
 				this.page.current++;
