@@ -62,7 +62,7 @@
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {
-			codeRules(code) {
+			analysisCode(code) {
 				var barcode = barcodeFunc.parseBarcode(code);
 				var barcodeType = barcodeFunc.BarcodeType;
 				switch (barcode.type) {

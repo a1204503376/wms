@@ -66,7 +66,10 @@
 				switch (barcode.type) {
 					case barcodeType.UnKnow:
 						this.params.no = barcode.content;
-						return barcodeType.UnKnow;
+						break;
+					default:
+					    this.$u.func.showToast({title: '条码识别失败,不支持的条码类型'});
+						break;
 				}
 			},
 			esc() {
