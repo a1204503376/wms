@@ -2,10 +2,10 @@
 	<view>
 		<template>
 			<u-search placeholder="请输入收货单编码/上游编码" v-model="params.no" :show-action="false" @custom="search"
-				@search="search" class="font-in-page">
+				@search="search" class="font-in-page" style="margin: 12rpx">
 			</u-search>
 		</template>
-		<u-list style="height: 990rpx;" pagingEnabled="true" @scrolltolower="scrolltolower">
+		<u-list style="height: 978rpx;" pagingEnabled="true" @scrolltolower="scrolltolower">
 			<u-divider text=""></u-divider>
 			<u-list-item v-for="(item, index) in receiveList" :key="item.receiveNo">
 				<view @click="clickItem(item)">
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-	import receive from '@/api/receiveByPcs.js'
+	import receive from '@/api/inStock/receiveByPcs.js'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	export default {
 		data() {
@@ -107,5 +107,5 @@
 </script>
 
 <style>
-
+	
 </style>

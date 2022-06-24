@@ -34,7 +34,7 @@
 </template>
 
 <script>
-	import receive from '@/api/receiveByPcs.js'
+	import receive from '@/api/inStock/receiveByPcs.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	export default {
@@ -43,16 +43,16 @@
 		},
 		data() {
 			return {
-				params:{
-					receiveId:'',
-					skuCode:'',
+				params: {
+					receiveId: '',
+					skuCode: '',
 				},
-				receiveDetailList:[]
+				receiveDetailList: []
 			}
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
-			this.params.receiveId=parse.receiveId
+			this.params.receiveId = parse.receiveId
 			this.getReceiveDetailList();
 		},
 		onUnload() {
@@ -68,37 +68,31 @@
 				switch (barcode.type) {
 					case barcodeType.UnKnow:
 						this.params.skuCode = barcode.content;
-						return barcodeType.UnKnow;
-					case barcodeType.Loc:
-						console.log(barcode.content);
-						return barcodeType.Loc;
-					case barcodeType.Lpn:
-						console.log(barcode.content);
-						return barcodeType.Lpn;
+						break;
 					case barcodeType.Sku:
 						this.params.skuCode = barcode.content;
-						return barcodeType.Sku;
-					case barcodeType.Serial:
-						console.log(barcode.content);
-						return barcodeType.Serial;
-					case barcodeType.LotNumber:
-						console.log(barcode.content);
-						return barcodeType.LotNumber;
+						break;
+					default:
+						this.$u.func.showToast({
+							title: '条码识别失败,不支持的条码类型'
+						});
+						break;
 				}
 			},
 			esc() {
 				this.$u.func.navigateBack();
 			},
-            getReceiveDetailList(){
+			getReceiveDetailList() {
+				this.analysisCode(this.params.skuCode);
 				receive.getReceiveDetailList(this.params).then(data => {
-						this.receiveDetailList=data.data;
+					this.receiveDetailList = data.data;
 				})
 			},
-			clickItem(row){
-				 uni.$u.func.route('/pages/inStock/receiveByPcs/ReceiveByPiece',row);
+			clickItem(row) {
+				uni.$u.func.route('/pages/inStock/receiveByPcs/ReceiveByPiece', row);
 			},
 			scannerCallback(no) {
-				this.params.skuCode = no;
+				this.analysisCode(no);
 				this.getReceiveDetailList();
 			},
 			emitKeyDown(e) {
