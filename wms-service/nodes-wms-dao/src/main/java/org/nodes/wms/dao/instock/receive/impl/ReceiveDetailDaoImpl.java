@@ -2,15 +2,16 @@ package org.nodes.wms.dao.instock.receive.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
+import org.nodes.wms.dao.instock.receive.ReceiveDetailDao;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailPdaQuery;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailRequest;
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailPdaResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.mapper.ReceiveDetailMapper;
-import org.nodes.wms.dao.instock.receive.ReceiveDetailDao;
-import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailRequest;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 /**
@@ -60,6 +61,11 @@ public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, R
 	@Override
 	public List<DetailReceiveDetailPdaResponse> selectDetailListByReceiveId(ReceiveDetailPdaQuery receiveDetailPdaQuery) {
 		return receiveDetailMapper.selectDetailListByReceiveId(receiveDetailPdaQuery);
+	}
+
+	@Override
+	public ReceiveDetail getDetailByReceiveDetailId(Long receiveDetailId) {
+		return super.baseMapper.selectById(receiveDetailId);
 	}
 
 }

@@ -86,4 +86,17 @@ public interface ReceiveBiz {
 	 * @param receiveId 收货单id
 	 */
 	List<LogReceiveResponse> getLogList(Long receiveId);
+
+	/**
+	 * @param receiveIdPdaQuery 请求参数
+	 * @return 当前收货单详情，以及他是否是序列号管理 isSn
+	 */
+	ReceiveDetailByReceiveIdPdaResponse	selectDetailByReceiveDetailId(ReceiveDetailByReceiveIdPdaQuery receiveIdPdaQuery);
+
+	/**
+	 * 根据箱码获取lpn
+	 * @param boxCode
+	 * @return
+	 */
+	ReceiveDetailLpnPdaResponse getReceiveDetailLpnByBoxCode(String boxCode);
 }

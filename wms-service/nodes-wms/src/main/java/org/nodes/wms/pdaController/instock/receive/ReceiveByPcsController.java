@@ -49,10 +49,11 @@ public class ReceiveByPcsController {
 	 * @param receiveDetailByReceiveIdPdaQuery 请求参数
 	 * @return 当前收货单详情，以及他是否是序列号管理 isSn
 	 */
-	@PostMapping("findDetailByReceiveId")
-	public R<ReceiveDetailByReceiveIdPdaResponse> findDetailByReceiveId(@RequestBody ReceiveDetailByReceiveIdPdaQuery receiveDetailByReceiveIdPdaQuery)
+	@PostMapping("findDetailByReceiveDetailId")
+	public R<ReceiveDetailByReceiveIdPdaResponse> findDetailByReceiveDetailId(@RequestBody ReceiveDetailByReceiveIdPdaQuery receiveDetailByReceiveIdPdaQuery)
 	{
-		return null;
+		ReceiveDetailByReceiveIdPdaResponse detail = receiveBiz.selectDetailByReceiveDetailId(receiveDetailByReceiveIdPdaQuery);
+		return R.data(detail);
 	}
 
 	/**

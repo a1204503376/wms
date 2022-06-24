@@ -1,6 +1,6 @@
-import api from '@/api/user.js'
+import userApi from '@/api/user.js'
 import tool from '@/utils/tool.js'
-import BarcodeRules from '@/common/BarcodeRules'
+import barcodeRulesApi from '@/api/barcodeRules.js'
 import warehouse from '@/api/warehouse.js'
 // 全局公共方法
 const install = (Vue, vm) => {
@@ -15,22 +15,24 @@ const install = (Vue, vm) => {
 		vm.$u.vuex('expiresIn', userInfo.expires_in)
 		vm.$u.vuex('isLogin', true)
 		vm.$u.vuex('userId', userInfo.user_id)
-		api.getLoginStatus().then((res) => {
+		userApi.getSignInStatus().then((res) => {
 			vm.$u.vuex('signStatus', res.data.loginStatus)
 			vm.$u.vuex('lastSignTime', res.data.lastLoginTime)
 		})  
-		BarcodeRules.barcodeRules().then((res)=>{
+		barcodeRulesApi.barcodeRules().then((res)=>{
 			vm.$u.vuex('barcodeRules', res.data)
 		})
 		uni.hideLoading();
 		warehouse.getWarehouseList().then(data => {
 			if (data.data.length > 1 && tool.isEmpty(uni.getStorageSync('warehouse'))) {
 				uni.$u.func.route('/pages/userSetting/warehouseSetting');
+			} else if (tool.isEmpty(data.data[0])){
+				showToast('不能登录，当前用户没有配置有权限的仓库')
 			} else {
 				uni.setStorageSync('warehouse', data.data[0]);
 				uni.redirectTo({
 					url: '/pages/home/home'
-				})	
+				})
 			} 
 		})
 	

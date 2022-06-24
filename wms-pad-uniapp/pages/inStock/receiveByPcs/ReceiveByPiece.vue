@@ -1,0 +1,114 @@
+<template>
+	<view>
+		<u--form>
+			<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.skuCode" border="0" disabled></u--input>
+			</u-form-item>
+			<u-form-item label="名称" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.skuName" border="0" disabled></u--input>
+			</u-form-item>
+			<u-form-item label="型号" class="left-text-one-line" labelWidth="100">
+				<uni-select v-model="params.skuLot2"></uni-select>
+			</u-form-item>
+			<u-form-item label="数量" :required="true" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.surplusQty"></u--input>
+				<!-- <u-number-box v-model="params.skuCode" @change="valChange"></u-number-box> -->
+			</u-form-item>
+			<u-form-item label="UOM" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.umName" border="0" disabled></u--input>
+			</u-form-item>
+			<u-form-item label="生产批次" :required="true" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.skuLot1"></u--input>
+			</u-form-item>
+			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.boxCode"></u--input>
+			</u-form-item>
+			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.locCode"></u--input>
+			</u-form-item>
+		</u--form>
+		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
+		<view class="footer">
+			<u-button class="btn-cancle" @click="esc()">
+				返回
+			</u-button>
+			<u-button class="btn-submit" @click="submit()" :throttleTime="1000">
+				确定
+			</u-button>
+		</view>
+	</view>
+</template>
+
+<script>
+	import receive from '@/api/receiveByPcs.js'
+	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
+	import uniSelect from '@/components/uni-select.vue'
+	export default {
+		components: {
+			keyboardListener,
+			uniSelect
+		},
+		data() {
+			return {
+				params: {
+					skuCode: undefined,
+					skuName: undefined,
+					skuLot2: undefined,
+					surplusQty: undefined,
+					umName: undefined,
+					skuLot1: undefined,
+					boxCode: undefined,
+					locCode: 'STAGE',
+				},
+				receiveDetailId: '',
+				receiveDetailList: [],
+			}
+		},
+		onLoad: function(option) {
+			var parse = JSON.parse(option.param)
+			this.receiveDetailId = parse.receiveDetailId;
+			this.getDetailByDetailId();
+		},
+		onUnload() {
+			uni.$u.func.unRegisterScanner();
+		},
+		onShow() {
+			uni.$u.func.registerScanner(this.scannerCallback);
+		},
+		methods: {
+			submit() {
+				this.params.locCode = uni.getStorageSync('warehouse').whCode + this.params.locCode;
+				if (this.params.isSn == 1) {
+					uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', this.params);
+					return;
+				}
+				console.log(this.params)
+				//提交表单数据 收货
+			},
+			getDetailByDetailId() {
+				let params = {
+					receiveDetailId: this.receiveDetailId
+				};
+				receive.getDetailByDetailId(params).then(data => {
+					this.params = data.data;
+					this.params.locCode = 'STAGE';
+				})
+			},
+			esc() {
+				this.$u.func.navigateBack();
+			},
+			scannerCallback(no) {
+
+			},
+			emitKeyDown(e) {
+				if (e.key == 'Enter') {
+					this.getReceiveDetailList();
+				}
+			}
+		}
+	}
+</script>
+
+<style>
+
+</style>

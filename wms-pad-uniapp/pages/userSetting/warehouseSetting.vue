@@ -1,9 +1,9 @@
 <template>
 	<view>
 		<view class="uni-list">
-			<radio-group @change="radioChange" :model="whId" style="transform: scale(0.9);margin-top: -100rpx;">
+			<radio-group @change="radioChange" :model="whId" style="transform: scale(0.9);">
 				<label class="uni-list-cell uni-list-cell-pd" v-for="(item, index) in warehouseList" :key="item.whId">
-					<view>{{item.whName}}</view>
+					<view class="font-in-page">{{item.whName}}</view>
 					<view>
 						<radio :value="item" :checked="warehouse.whId==item.whId" />
 					</view>
@@ -11,12 +11,12 @@
 			</radio-group>
 		</view>
 		<view class="footer">
-			<view class="btn-cancle" @click="esc()">
+			<u-button class="btn-cancle" @click="esc()">
 				返回
-			</view>
-			<view class="btn-submit" @click="submit()">
+			</u-button>
+			<u-button class="btn-submit" @click="submit()" :throttleTime="1000">
 				确定
-			</view>
+			</u-button>
 		</view>
 	</view>
 </template>
@@ -44,7 +44,6 @@
 			},
 			submit() {
 				uni.setStorageSync('warehouse', this.warehouse);
-				warehouse.warehouseChange(this.warehouse).then(data => {})
 				uni.redirectTo({
 					url: '/pages/home/home'
 				})

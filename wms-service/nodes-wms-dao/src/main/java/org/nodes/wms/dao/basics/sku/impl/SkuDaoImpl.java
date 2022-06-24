@@ -69,6 +69,7 @@ public class SkuDaoImpl
 	public List<Sku> getSkuList() {
 		QueryWrapper<Sku> skuQueryWrapper = new QueryWrapper<>();
 		skuQueryWrapper.select("distinct sku_spec");
+		skuQueryWrapper.isNotNull("sku_spec");
 		return super.list(skuQueryWrapper);
 	}
 

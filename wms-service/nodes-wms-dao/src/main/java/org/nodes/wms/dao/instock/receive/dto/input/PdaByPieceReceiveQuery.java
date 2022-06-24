@@ -64,4 +64,12 @@ public class PdaByPieceReceiveQuery implements Serializable {
 	 * 是否序列号管理 （1：序列号管理  0：非序列号管理）
 	 */
 	private Integer isSn;
+	/**
+	 * 箱码
+	 */
+	private String boxCode;
+	/**
+	 * 库位编码
+	 */
+	private String locCode;
 }

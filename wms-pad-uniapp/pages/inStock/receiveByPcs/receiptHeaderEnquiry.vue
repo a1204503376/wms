@@ -1,9 +1,8 @@
 <template>
 	<view>
-		<u-divider text=""></u-divider>
 		<template>
 			<u-search placeholder="请输入收货单编码/上游编码" v-model="params.no" :show-action="false" @custom="search"
-				@search="search">
+				@search="search" class="font-in-page">
 			</u-search>
 		</template>
 		<u-list style="height: 990rpx;" pagingEnabled="true" @scrolltolower="scrolltolower">
@@ -11,23 +10,22 @@
 			<u-list-item v-for="(item, index) in receiveList" :key="item.receiveNo">
 				<view @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="6" class="textClass">
+						<u-col span="6" class="left-text-one-line font-in-page">
 							<u--text class="demo-layout bg-purple-light" v-text="item.receiveNo"></u--text>
 						</u-col>
-						<u-col span="6" >
-							<u--text class="demo-layout bg-purple" v-text="item.billTypeName"></u--text>
+						<u-col span="6">
+							<u--text class="demo-layout bg-purple  font-in-page" v-text="item.billTypeName"></u--text>
 						</u-col>
 					</u-row>
 					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="12" class="textClass">
-							<u--text class="demo-layout bg-purple" v-text="item.supplierName"></u--text>
+						<u-col span="12" class="left-text-one-line">
+							<u--text class="demo-layout bg-purple font-in-page" v-text="item.supplierName"></u--text>
 						</u-col>
 					</u-row>
 					<u-divider text=""></u-divider>
 				</view>
 			</u-list-item>
 		</u-list>
-		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
 				返回
@@ -37,13 +35,9 @@
 </template>
 
 <script>
-	import receive from '@/api/receive.js'
-	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
-	import debounce from '@/utils/debounce/debounce.js'
+	import receive from '@/api/receiveByPcs.js'
+	import barcodeFunc from '@/common/barcodeFunc.js'
 	export default {
-		components: {
-			keyboardListener
-		},
 		data() {
 			return {
 				params: {
@@ -66,26 +60,37 @@
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {
+			analysisCode(code) {
+				var barcode = barcodeFunc.parseBarcode(code);
+				var barcodeType = barcodeFunc.BarcodeType;
+				switch (barcode.type) {
+					case barcodeType.UnKnow:
+						this.params.no = barcode.content;
+						break;
+					default:
+					    this.$u.func.showToast({title: '条码识别失败,不支持的条码类型'});
+						break;
+				}
+			},
 			esc() {
 				this.$u.func.navigateBack();
 			},
-			search:debounce(function () {
-				this.page.current=1;
+			getReceiveList(){
+				this.page.current = 1;
+				this.analysisCode(this.params.no);
 				receive.getReceiveList(this.params, this.page).then(data => {
 					this.receiveList = data.data.records;
 				})
-			},500),
+			},
+			search(){
+				uni.$u.throttle(this.getReceiveList, 1000)
+			},
 			clickItem(item) {
 				uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', item);
 			},
 			scannerCallback(no) {
-				this.params.no = no;
+				this.analysisCode(no);
 				this.search();
-			},
-			emitKeyDown(e) {
-				if (e.key == 'Enter') {
-					this.search();
-				}
 			},
 			scrolltolower() {
 				this.page.current++;
@@ -102,5 +107,5 @@
 </script>
 
 <style>
-@import 'receiptHeaderEnquiry.scss';
+
 </style>

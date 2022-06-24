@@ -13,7 +13,7 @@ try {
 }
 
 // 需要永久存储，且下次APP启动需要取出的，在state中的变量名
-let saveStateKeys = ['baseUrl', 'userName', 'accessToken','warehouse'];
+let saveStateKeys = ['baseUrl', 'userName', 'accessToken','warehouse','barcodeRules'];
 
 // 保存变量到本地存储中
 const saveLifeData = function(key, value) {
@@ -51,7 +51,8 @@ const store = new Vuex.Store({
 		lastSignTime:'',
 		// 菜单列表
 		menuList:{},
-		barcodeRules:''
+		// 条码规则
+		barcodeRules:{}
 	},
 	mutations: {
 		$uStore(state, payload) {

@@ -107,14 +107,32 @@
 
 		},
 		{
-			"path": "pages/inStock/receiveByPcs/billReceivePageThree",
+			"path": "pages/inStock/receiveByPcs/ReceiveByPiece",
 			"style": {
 				"navigationBarTitleText": "按件收货",
 				"enablePullDownRefresh": false
 			}
 		
 		}
-	],
+	    ,{
+            "path" : "pages/inStock/receiveByBox/receiveDetailLpnQuery",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "按箱收货",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/inStock/receiveByBox/receiveByBox",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "按箱收货",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#33cbcc"
 	}

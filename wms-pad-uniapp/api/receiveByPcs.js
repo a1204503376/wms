@@ -19,7 +19,17 @@ const getReceiveDetailList =(data)=>{
 	})
 }
 
+const getDetailByDetailId =(data)=>{
+	return http.request({
+		url: '/api/ApiPDA/receiveByPcs/findDetailByReceiveDetailId',
+		method: 'POST',
+		data:data
+	})
+}
+
+
 export default {
 	getReceiveList,
-	getReceiveDetailList
+	getReceiveDetailList,
+	getDetailByDetailId
 }

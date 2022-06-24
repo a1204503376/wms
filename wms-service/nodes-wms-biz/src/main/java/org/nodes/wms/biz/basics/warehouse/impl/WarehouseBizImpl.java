@@ -13,6 +13,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.enums.LocTypeEnum;
 import org.nodes.wms.dao.basics.warehouse.SysAuthDao;
 import org.nodes.wms.dao.basics.warehouse.WarehouseDao;
+import org.nodes.wms.dao.basics.warehouse.dto.output.WarehousePdaResponse;
 import org.nodes.wms.dao.basics.warehouse.dto.output.WarehouseResponse;
 import org.nodes.wms.dao.basics.warehouse.entities.SysAuth;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
@@ -23,6 +24,7 @@ import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.secure.BladeUser;
 import org.springblade.core.tool.utils.AesUtil;
 import org.springblade.core.tool.utils.BeanUtil;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -47,10 +49,7 @@ public class WarehouseBizImpl implements WarehouseBiz {
 	private final IDeptService deptService;
 
 	private final String AES_KEY = "mKzlYJ9tOXJn8uG16wTHXbQuD7i0lBF0";
-	/**
-	 * 全局获取DeptVO
-	 */
-	List<DeptVO> deptVOList = new ArrayList<>();
+
 
 	@Override
 	public List<WarehouseResponse> getWarehouseSelectResponseList() {
@@ -69,46 +68,34 @@ public class WarehouseBizImpl implements WarehouseBiz {
 	}
 
 	@Override
-	public List<Warehouse> getWarehouseByUserId(BladeUser user) {
-		//清空全局的deptVOList
-		deptVOList = new ArrayList<>();
-		//获取全部的机构
-		List<Dept> deptList = deptService.list();
-		//根据当前用户查询出当前用户所在的机构
-		Dept byId = deptService.getById(Long.parseLong(user.getDeptId()));
-		//复制当前用户的机构到DeptVO对象
-		DeptVO deptVO = BeanUtil.copy(byId, DeptVO.class);
-		//将当前用户的机构vo对象添加到deptVOList
-		deptVOList.add(deptVO);
-		//将全部的机构的实体类集合都转换成DeptVO
-		List<DeptVO> copy = BeanUtil.copy(deptList, DeptVO.class);
-		//递归获取跟当前用户有关系的机构
-		makeTree(copy, Long.parseLong(user.getDeptId()));
-		//将跟当前用户有关系的机构去重并组成Long类型的集合
-		List<Long> longList = deptVOList.stream().map(DeptVO::getId).distinct().collect(Collectors.toList());
-		//获取跟当前用户有关系的库房
-		List<Warehouse> warehouseList = warehouseDao.getListByDeptId(longList);
+
+	public List<Warehouse> getWarehouseByUser(BladeUser user) {
+		List<Dept> childDeptList = deptService.getAllChildDept(user.getDeptId());
+		List<Long> deptIdList = null;
+		if (Func.isEmpty(childDeptList)){
+			deptIdList = new ArrayList<>();
+		} else {
+			deptIdList = childDeptList.stream()
+				.map(Dept::getId)
+				.distinct()
+				.collect(Collectors.toList());
+		}
+
+		deptIdList.add(Long.parseLong(user.getDeptId()));
+		List<Warehouse> warehouseList = warehouseDao.getListByDeptId(deptIdList);
 		return warehouseList;
 	}
 
-	//递归
-	private List<DeptVO> makeTree(List<DeptVO> departmentList, Long pId) {
-		//子类
-		List<DeptVO> children = departmentList.stream().filter(x -> x.getParentId().longValue() == pId.longValue()).collect(Collectors.toList());
-		//后辈中的非子类
-		List<DeptVO> successor = departmentList.stream().filter(x -> x.getParentId().longValue() != pId.longValue()).collect(Collectors.toList());
-		children.forEach(x ->
-			{
-				deptVOList.add(x);
-				makeTree(successor, x.getId()).forEach(
-					y -> {
-						x.getChildren().add(y);
-						deptVOList.add(y);
-					}
-				);
-			}
-		);
-		return children;
+	@Override
+	public List<WarehousePdaResponse> getWarehouseResponseByUser(BladeUser user) {
+		List<Warehouse> warehouseList = getWarehouseByUser(user);
+		if (Func.isEmpty(warehouseList)){
+			return null;
+		}
+
+		List<WarehousePdaResponse> result =
+			BeanUtil.copy(warehouseList, WarehousePdaResponse.class);
+		return result;
 	}
 
 	@Override
@@ -151,7 +138,7 @@ public class WarehouseBizImpl implements WarehouseBiz {
 		// 库房授权个数
 		int authorizations = jsonObject.getInteger("authorizations");
 		// 库房总数
-		int count = warehouseDao.countWarehouse();
+		int count = warehouseDao.countWarehouse() + 1;
 		if (count >= authorizations) {
 			throw new ServiceException("新增失败，库房数量已达到库房授权数量");
 		}

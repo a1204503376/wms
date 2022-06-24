@@ -52,18 +52,11 @@
 	</view>
 </template>
 <script>
-	import warehouse from '@/api/warehouse.js'
 	export default {
 		data() {
 			return{
-				warehouseList:[],
 				show:false,
 			};
-		},
-		onLoad() {
-			warehouse.getWarehouseList().then(data=>{
-				this.warehouseList=data;
-			})
 		},
 		methods: {
 			logout(){

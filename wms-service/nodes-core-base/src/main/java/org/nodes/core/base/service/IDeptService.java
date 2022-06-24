@@ -62,4 +62,11 @@ public interface IDeptService extends BaseService<Dept> {
 	 */
 	boolean updateById(DeptDTO deptDTO);
 
+	/**
+	 * 获取所有的下属部门,不含本部门
+	 * @param deptId
+	 * @return
+	 */
+	List<Dept> getAllChildDept(String deptId);
+
 }
