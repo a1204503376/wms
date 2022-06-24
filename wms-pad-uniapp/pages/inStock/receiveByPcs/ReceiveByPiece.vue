@@ -10,14 +10,14 @@
 			<u-form-item label="型号" class="left-text-one-line" labelWidth="100">
 				<uni-select v-model="params.skuLot2"></uni-select>
 			</u-form-item>
-			<u-form-item label="数量" :required="true"  class="left-text-one-line" labelWidth="100">
+			<u-form-item label="数量" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.surplusQty"></u--input>
 				<!-- <u-number-box v-model="params.skuCode" @change="valChange"></u-number-box> -->
 			</u-form-item>
 			<u-form-item label="UOM" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.umName" border="0" disabled></u--input>
 			</u-form-item>
-			<u-form-item label="生产批次" :required="true"  class="left-text-one-line" labelWidth="100">
+			<u-form-item label="生产批次" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.skuLot1"></u--input>
 			</u-form-item>
 			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-	import receive from '@/api/receive.js'
+	import receive from '@/api/receiveByPcs.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	import uniSelect from '@/components/uni-select.vue'
 	export default {

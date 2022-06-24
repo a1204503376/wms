@@ -36,9 +36,10 @@
 </template>
 
 <script>
-	import receive from '@/api/receive.js'
+	import receive from '@/api/receiveByPcs.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	import debounce from '@/utils/debounce/debounce.js'
+	import BarCodeService from '@/common/BarCodeService.js'
 	export default {
 		components: {
 			keyboardListener
@@ -63,6 +64,15 @@
 		},
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
+			// UnKnow: 0, // 未知类型
+			// Loc: 10, // 库位
+			// Lpn: 20, // 容器
+			// Sku: 30, // 物品
+			// Serial: 40, // 序列号
+			// LotNumber: 50, // 批次号
+			var Barcode = BarCodeService.parseBarcode('111:10086');
+			
+			console.log(BarCodeService.BarcodeType);
 		},
 		methods: {
 			esc() {
@@ -78,6 +88,7 @@
 				uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', item);
 			},
 			scannerCallback(no) {
+				console.log(BarCodeService.parseBarcode('loc:10086'));
 				this.params.no = no;
 				this.search();
 			},

@@ -2,7 +2,7 @@
 	<view>
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
 		<u--form labelPosition="left" :model="params">
-			<u-form-item label="物品" borderBottom class="left-text-one-line font-in-page" labelWidth="170rpx">
+			<u-form-item label="物品" borderBottom class="left-text-one-line font-in-page" labelWidth="100">
 				<u--input v-model="params.skuCode"></u--input>
 			</u-form-item>
 		</u--form>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-	import receive from '@/api/receive.js'
+	import receive from '@/api/receiveByPcs.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {
 		components: {
