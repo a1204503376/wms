@@ -36,6 +36,7 @@
 <script>
 	import receive from '@/api/receiveByPcs.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
+	import barcodeFunc from '@/common/barcodeFunc.js'
 	export default {
 		components: {
 			keyboardListener
@@ -61,6 +62,30 @@
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {
+			codeRules(code) {
+				var barcode = barcodeFunc.parseBarcode(code);
+				var barcodeType = barcodeFunc.BarcodeType;
+				switch (barcode.type) {
+					case barcodeType.UnKnow:
+						this.params.skuCode = barcode.content;
+						return barcodeType.UnKnow;
+					case barcodeType.Loc:
+						console.log(barcode.content);
+						return barcodeType.Loc;
+					case barcodeType.Lpn:
+						console.log(barcode.content);
+						return barcodeType.Lpn;
+					case barcodeType.Sku:
+						this.params.skuCode = barcode.content;
+						return barcodeType.Sku;
+					case barcodeType.Serial:
+						console.log(barcode.content);
+						return barcodeType.Serial;
+					case barcodeType.LotNumber:
+						console.log(barcode.content);
+						return barcodeType.LotNumber;
+				}
+			},
 			esc() {
 				this.$u.func.navigateBack();
 			},
