@@ -10,18 +10,22 @@
                         <ul class="main_ul">
                             <li>待检区物料数量</li>
                             <li>{{ flowAnalysis.qcSkuQty }}</li>
+                            <span class="um" >PCS</span>
                         </ul>
                         <ul class="main_ul">
                             <li>入库暂存区数量</li>
                             <li>{{ flowAnalysis.stageSkuQty }}</li>
+                            <span class="um" >PCS</span>
                         </ul>
                         <ul class="main_ul">
                             <li>待检区物料存放天数</li>
                             <li>{{ flowAnalysis.qcSkuStoreDay }}</li>
+                            <span class="um" >天</span>
                         </ul>
-                        <ul class="main_ul mouse_over" @click="dullnessDialog()">
+                        <ul class="main_ul">
                             <li>入库暂存区物料存放天数</li>
                             <li>{{ flowAnalysis.stageSkuStoreDay }}</li>
+                            <span class="um" >天</span>
                         </ul>
                     </div>
                 </div>
@@ -36,12 +40,14 @@
                             <ul class="main_ul">
                                 <li>库存物品总数</li>
                                 <li>{{ inventoryAnalysis.stockSkuCount }}</li>
+                                <span class="um" >PSC</span>
                             </ul>
                         </el-col>
                         <el-col :span="12">
                             <ul class="main_ul">
                                 <li>库位占用</li>
-                                <li>{{ inventoryAnalysis.locOccupy }}%</li>
+                                <li>{{ inventoryAnalysis.locOccupy }}</li>
+                                <span class="um" >%</span>
                             </ul>
                         </el-col>
                     </el-row>
@@ -61,6 +67,7 @@
 
 <script>
 import {getInStockRate, getOutStockRate, getStockData} from "@/api/wms/index/index.js";
+import LabelData from "@/views/wms/basedata/enterprise/labelData";
 
 export default {
     name: "index",
@@ -80,7 +87,7 @@ export default {
             barOutStockSku: null,
         };
     },
-    components: {},
+    components: {LabelData},
     created() {
     },
     mounted() {
@@ -106,7 +113,6 @@ export default {
                     data.push(item.skuCode);
                     value.push(item.pickRealQty);
                 });
-                console.log(value);
                 this.barOutStockSku.setOption({
                     title: {
                         top: 10,
@@ -233,20 +239,29 @@ export default {
 
 .main_ul li {
     font-size: 14px;
-    font-weight: 700;
+    /*font-weight: 700;*/
     list-style: none;
     padding: 10px 0;
     line-height: 17px;
 }
 
-.main_ul li:last-child {
-    color: #1e9fff;
+.main_ul li:last-of-type {
+    font-size: 30px;
+    display: inline;
+    font-weight: 600;
+    /*color: #1e9fff;*/
 }
+
+.main_ul .um{
+    margin-left: 10px;
+    font-size: 14px;
+}
+
 
 .echarts-box {
     background: #fff;
     margin-top: 5px;
-    height: 380px;
+    height: 400px;
 }
 
 </style>
