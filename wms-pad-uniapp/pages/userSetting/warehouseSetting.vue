@@ -14,7 +14,7 @@
 			<view class="btn-cancle" @click="esc()">
 				返回
 			</view>
-			<view class="btn-submit" @click="submits()">
+			<view class="btn-submit" @click="submit()">
 				确定
 			</view>
 		</view>
@@ -43,12 +43,10 @@
 				this.$u.func.navigateBack();
 			},
 			submit() {
-				uni.$u.throttle(function() {
-					uni.setStorageSync('warehouse', this.warehouse);
-					uni.redirectTo({
-						url: '/pages/home/home'
-					})
-				}, 1000)
+				uni.setStorageSync('warehouse', this.warehouse);
+				uni.redirectTo({
+					url: '/pages/home/home'
+				})
 			},
 			radioChange(row) {
 				this.warehouse = row.detail.value;
