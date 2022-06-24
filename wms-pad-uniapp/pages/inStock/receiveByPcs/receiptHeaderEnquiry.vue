@@ -13,7 +13,7 @@
 						<u-col span="6" class="left-text-one-line font-in-page">
 							<u--text class="demo-layout bg-purple-light" v-text="item.receiveNo"></u--text>
 						</u-col>
-						<u-col span="6" >
+						<u-col span="6">
 							<u--text class="demo-layout bg-purple  font-in-page" v-text="item.billTypeName"></u--text>
 						</u-col>
 					</u-row>
@@ -38,7 +38,6 @@
 <script>
 	import receive from '@/api/receiveByPcs.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
-	import debounce from '@/utils/debounce/debounce.js'
 	import BarCodeService from '@/common/BarCodeService.js'
 	export default {
 		components: {
@@ -64,32 +63,35 @@
 		},
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
-			// UnKnow: 0, // 未知类型
-			// Loc: 10, // 库位
-			// Lpn: 20, // 容器
-			// Sku: 30, // 物品
-			// Serial: 40, // 序列号
-			// LotNumber: 50, // 批次号
-			var Barcode = BarCodeService.parseBarcode('111:10086');
-			
-			console.log(BarCodeService.BarcodeType);
 		},
 		methods: {
+			codeRules(code) {
+				var barcode = BarCodeService.parseBarcode(code);
+				var barcodeType = BarCodeService.BarcodeType;
+				switch (barcode.type) {
+					case barcodeType.UnKnow:
+						this.params.no = barcode.content;
+						return barcodeType.UnKnow;
+				}
+			},
 			esc() {
 				this.$u.func.navigateBack();
 			},
-			search:debounce(function () {
-				this.page.current=1;
+			getReceiveList(){
+				this.page.current = 1;
+				this.codeRules(this.params.no);
 				receive.getReceiveList(this.params, this.page).then(data => {
 					this.receiveList = data.data.records;
 				})
-			},500),
+			},
+			search(){
+				uni.$u.throttle(this.getReceiveList, 1000)
+			},
 			clickItem(item) {
 				uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', item);
 			},
 			scannerCallback(no) {
-				console.log(BarCodeService.parseBarcode('loc:10086'));
-				this.params.no = no;
+				codeRules(no);
 				this.search();
 			},
 			emitKeyDown(e) {
