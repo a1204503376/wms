@@ -72,6 +72,7 @@
 			  let item = barCodeService.parseBarcode(no)
 			  if(item.type != barCodeService.BarcodeType.UnKnow || item.type != barCodeService.BarcodeType.Lpn){
 				  this.$u.func.showToast({title: '条码识别失败,不支持的条码类型'})
+				  return
 			  }
 	      	this.param.boxCode = item.content;
 	      	this.getReceiveDetailList();
