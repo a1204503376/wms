@@ -29,12 +29,12 @@
 		</u--form>
 		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
 		<view class="footer">
-			<view class="btn-cancle" @click="esc()">
+			<u-button class="btn-cancle" @click="esc()">
 				返回
-			</view>
-			<view class="btn-submit" @click="submit()">
+			</u-button>
+			<u-button class="btn-submit" @click="submit()" :throttleTime="1000">
 				确定
-			</view>
+			</u-button>
 		</view>
 	</view>
 </template>

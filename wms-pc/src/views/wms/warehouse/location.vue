@@ -6,24 +6,24 @@
                     <el-col :span="24">
                         <el-form-item label="库位编码">
                             <el-input
-                                placeholder="请输入编码"
-                                style="width: 200px"
                                 v-model.trim="form.params.locCode"
                                 :clearable="true"
+                                placeholder="请输入编码"
+                                style="width: 200px"
                             ></el-input>
                         </el-form-item>
                         <el-form-item label="所属库房">
                             <nodes-warehouse
-                                style="width: 200px"
-                                :multiple="true"
                                 v-model="form.params.whIdList"
+                                :multiple="true"
+                                style="width: 200px"
                             ></nodes-warehouse>
                         </el-form-item>
                         <el-form-item label="所属库区">
                             <nodes-zone
-                                style="width: 200px"
-                                :multiple="true"
                                 v-model="form.params.zoneIdList"
+                                :multiple="true"
+                                style="width: 200px"
                             ></nodes-zone>
                         </el-form-item>
                     </el-col>
@@ -32,26 +32,26 @@
                     <el-col :span="24">
                         <el-form-item label="库位类型">
                             <nodes-dictionary
-                                style="width: 200px"
-                                :multiple="true"
                                 v-model="form.params.locTypeList"
+                                :multiple="true"
                                 code="loc_type"
+                                style="width: 200px"
                             ></nodes-dictionary>
                         </el-form-item>
                         <el-form-item label="库位种类">
                             <nodes-dictionary
-                                style="width: 200px"
-                                :multiple="true"
                                 v-model="form.params.locCategoryList"
+                                :multiple="true"
                                 code="loc_category"
+                                style="width: 200px"
                             ></nodes-dictionary>
                         </el-form-item>
                         <el-form-item label="库位处理">
                             <nodes-dictionary
-                                style="width: 200px"
-                                :multiple="true"
                                 v-model="form.params.locHandlingList"
+                                :multiple="true"
                                 code="loc_handling"
+                                style="width: 200px"
                             ></nodes-dictionary>
                         </el-form-item>
                     </el-col>
@@ -110,8 +110,8 @@
                         width="50">
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
-                        <el-table-column width="140" v-if="!column.hide && column.prop === 'locCode'" :key="index"
-                                         show-overflow-tooltip v-bind="column">
+                        <el-table-column v-if="!column.hide && column.prop === 'locCode'" :key="index" show-overflow-tooltip
+                                         v-bind="column" width="140">
                             <template v-slot="scope">
                                 <el-link
                                     :underline="false"
@@ -122,9 +122,9 @@
                             </template>
                         </el-table-column>
                         <el-table-column
-                            min-width="140"
                             v-if="!column.hide && column.prop !== 'locCode' && column.prop !== 'status'"
                             :key="index"
+                            min-width="140"
                             show-overflow-tooltip
                             v-bind="column"
                         ></el-table-column>
@@ -133,14 +133,15 @@
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column"
-                        ><template v-slot="{row}">
+                        >
+                            <template v-slot="{row}">
                                 <el-tag :type="row.status === '是' ? 'success' : 'danger'"
                                         disable-transitions>{{ row.status }}
                                 </el-tag>
                             </template>
                         </el-table-column>
                     </template>
-                    <el-table-column fixed="right" label="操作" align="center" width="100">
+                    <el-table-column align="center" fixed="right" label="操作" width="100">
                         <template v-slot="scope">
                             <el-button size="small" type="text" @click="onEdit(scope.row)">编辑</el-button>
                         </template>
@@ -195,7 +196,7 @@ export default {
                 params: {
                     locCode: '',
                     whIdList: [],
-                    zoneIdList:[],
+                    zoneIdList: [],
                     locTypeList: [],
                     locCategoryList: [],
                     locHandlingList: [],
@@ -324,6 +325,14 @@ export default {
             if (rows.length <= 0) {
                 this.$message.warning("警告，至少选择一条记录");
                 return;
+            }
+            for (const i in rows) {
+                let locCode = rows[i].locCode;
+                let locTypeConstant = ["PICKTO", "INTRANSIT", "QC", "UNKNOWN", "STAGE", "PACK"];
+                if (rows[i].locType === "虚拟" && locTypeConstant.includes(locCode.substring(locCode.lastIndexOf("-") + 1))) {
+                    this.$message.error(`删除失败，库位[编码:${locCode}]是系统虚拟库位无法删除`);
+                    return;
+                }
             }
             this.$confirm("此操作将删除, 是否删除?", "提示", {
                 confirmButtonText: "确定",

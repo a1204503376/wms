@@ -24,6 +24,7 @@ import org.nodes.wms.core.warehouse.wrapper.ZoneWrapper;
 import org.nodes.wms.dao.application.dto.output.DictionaryResponse;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
+import org.nodes.wms.dao.basics.zone.enums.ZoneTypeEnum;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -60,7 +61,13 @@ public class ZoneServiceImpl<M extends ZoneMapper, T extends Zone>
 
 		ILocationService locationService = SpringUtil.getBean(ILocationService.class);
 		for (Serializable id : idList) {
-
+			Zone zone = super.getById(id);
+			String zoneCode = zone.getZoneCode();
+			if (ZoneTypeEnum.VIRTUAL.getCode().equals((zone.getZoneType()))
+				&& StringUtil.contains(zoneCode, '-')
+				&& ZoneTypeEnum.VIRTUAL.toString().equals(StringUtil.subAfter(zoneCode, "-", true))) {
+				throw new ServiceException(String.format("删除失败，库区[编码：%s, 名称：%s] 是系统虚拟库区无法删除！", zoneCode, zone.getZoneName()));
+			}
 			/*List<Location> locList = LocationCache.listByZoneId((Long) id)
 				.stream().filter(u -> {
 					return !LocTypeEnum.Virtual.getIndex().equals(u.getLocType());
@@ -75,7 +82,6 @@ public class ZoneServiceImpl<M extends ZoneMapper, T extends Zone>
 			if (Func.isEmpty(locList)) {
 				super.removeById(id);
 			} else {
-				Zone zone = super.getById(id);
 				if (Func.isEmpty(zone)) {
 					throw new ServiceException("该库区已被占用，无法删除！");
 				} else {
@@ -241,7 +247,7 @@ public class ZoneServiceImpl<M extends ZoneMapper, T extends Zone>
 			dataVerify.setIndex(index);
 			// 封装成DTO
 			ZoneDTO zoneDTO = ZoneWrapper.build().entityDTO(zoneExcel);
-			if ( Func.isNotEmpty(zoneExcel.getStatus())
+			if (Func.isNotEmpty(zoneExcel.getStatus())
 				&& !zoneExcel.getStatus().equals(String.valueOf(StatusEnum.ON.getIndex()))
 				&& !zoneExcel.getStatus().equals(String.valueOf(StatusEnum.OFF.getIndex()))) {
 				throw new ServiceException("导入失败，启用状态只能为1(启用)或者-1(禁用)");
@@ -255,7 +261,7 @@ public class ZoneServiceImpl<M extends ZoneMapper, T extends Zone>
 //			} else {
 //				throw new ServiceException("导入失败，库区类型编码不存在");
 //			}
-			if (Func.isEmpty(zoneExcel.getZoneType())){
+			if (Func.isEmpty(zoneExcel.getZoneType())) {
 				throw new ServiceException("导入失败，库区类型编码不能为空");
 			}
 			DictionaryBiz dictionaryBiz = SpringUtil.getBean(DictionaryBiz.class);
