@@ -2,11 +2,10 @@ package org.nodes.wms.dao.instock.receive.dto.output;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
-import org.nodes.wms.dao.instock.receive.enums.ReceiveBillStateEnum;
+import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -41,7 +40,7 @@ public class ReceiveHeaderResponse implements Serializable {
 	 * 单据状态枚举
 	 */
 	@ExcelIgnore
-	private ReceiveBillStateEnum billState;
+	private ReceiveHeaderStateEnum billState;
 	/**
 	 * 单据状态描述
 	 */

@@ -14,8 +14,8 @@ import java.util.List;
  **/
 @Getter
 @RequiredArgsConstructor
-public enum ReceiveBillStateEnum
-	implements IPairs<Integer,String,ReceiveBillStateEnum> {
+public enum ReceiveHeaderStateEnum
+	implements IPairs<Integer,String, ReceiveHeaderStateEnum> {
 
 	/**
 	 *未收货
@@ -49,7 +49,7 @@ public enum ReceiveBillStateEnum
 	private final String desc;
 
 	@Override
-	public ReceiveBillStateEnum get() {
+	public ReceiveHeaderStateEnum get() {
 		return this;
 	}
 
@@ -65,7 +65,7 @@ public enum ReceiveBillStateEnum
 
 	public static List<ReceiveBillStateResponse> getList() {
 		List<ReceiveBillStateResponse> list = new ArrayList<>();
-		for (ReceiveBillStateEnum item : values()) {
+		for (ReceiveHeaderStateEnum item : values()) {
 			ReceiveBillStateResponse receiveBillStateResponse = new ReceiveBillStateResponse();
 			receiveBillStateResponse.setLabel(item.desc);
 			receiveBillStateResponse.setValue(item.code);

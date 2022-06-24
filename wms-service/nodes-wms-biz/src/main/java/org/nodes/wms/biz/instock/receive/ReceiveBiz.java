@@ -92,4 +92,11 @@ public interface ReceiveBiz {
 	 * @return 当前收货单详情，以及他是否是序列号管理 isSn
 	 */
 	ReceiveDetailByReceiveIdPdaResponse	selectDetailByReceiveDetailId(ReceiveDetailByReceiveIdPdaQuery receiveIdPdaQuery);
+
+	/**
+	 * 根据箱码获取lpn
+	 * @param boxCode
+	 * @return
+	 */
+	ReceiveDetailLpnPdaResponse getReceiveDetailLpnByBoxCode(String boxCode);
 }

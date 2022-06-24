@@ -21,7 +21,7 @@ import org.nodes.wms.dao.instock.receive.dto.output.EditReceiveDetailResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.EditReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
-import org.nodes.wms.dao.instock.receive.enums.ReceiveBillStateEnum;
+import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
@@ -82,7 +82,7 @@ public class ReceiveFactory {
 		//设置收货单编码
 		receiveHeader.setReceiveNo(noGeneratorUtil.createReceiveBillNo());
 		//设置收货单状态
-		receiveHeader.setBillState(ReceiveBillStateEnum.NOT_RECEIPT);
+		receiveHeader.setBillState(ReceiveHeaderStateEnum.NOT_RECEIPT);
 
 		return receiveHeader;
 	}
