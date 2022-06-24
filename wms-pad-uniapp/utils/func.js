@@ -1,6 +1,6 @@
 import userApi from '@/api/user.js'
 import tool from '@/utils/tool.js'
-import BarcodeRules from '@/common/BarcodeRules'
+import barcodeRulesApi from '@/api/barcodeRules.js'
 import warehouse from '@/api/warehouse.js'
 // 全局公共方法
 const install = (Vue, vm) => {
@@ -19,7 +19,7 @@ const install = (Vue, vm) => {
 			vm.$u.vuex('signStatus', res.data.loginStatus)
 			vm.$u.vuex('lastSignTime', res.data.lastLoginTime)
 		})  
-		BarcodeRules.barcodeRules().then((res)=>{
+		barcodeRulesApi.barcodeRules().then((res)=>{
 			vm.$u.vuex('barcodeRules', res.data)
 		})
 		uni.hideLoading();
