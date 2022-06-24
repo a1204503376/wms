@@ -38,9 +38,6 @@
 	import receive from '@/api/receiveByPcs.js'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	export default {
-		components: {
-			keyboardListener
-		},
 		data() {
 			return {
 				params: {
