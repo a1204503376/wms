@@ -30,7 +30,7 @@
 </template>
 
 <script>
-	import receive from '@/api/receiveByBox.js'
+	import receive from '@/api/inStock/receiveByBox.js'
 	import barCodeService from '@/common/barcodeFunc.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {

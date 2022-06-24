@@ -27,7 +27,6 @@
 				<u--input v-model="params.locCode"></u--input>
 			</u-form-item>
 		</u--form>
-		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
 				返回
@@ -40,12 +39,11 @@
 </template>
 
 <script>
-	import receive from '@/api/receiveByPcs.js'
-	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
+	import receive from '@/api/inStock/receiveByPcs.js'
 	import uniSelect from '@/components/uni-select.vue'
+	import barcodeFunc from '@/common/barcodeFunc.js'
 	export default {
 		components: {
-			keyboardListener,
 			uniSelect
 		},
 		data() {
@@ -76,6 +74,23 @@
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {
+			analysisCode(code) {
+				var barcode = barcodeFunc.parseBarcode(code);
+				var barcodeType = barcodeFunc.BarcodeType;
+				switch (barcode.type) {
+					case barcodeType.Loc:
+						this.params.locCode = barcode.content;
+						break;
+					case barcodeType.Lpn:
+						this.params.boxCode = barcode.content;
+						break;
+					default:
+						this.$u.func.showToast({
+							title: '条码识别失败,不支持的条码类型'
+						});
+						break;
+				}
+			},
 			submit() {
 				uni.$u.throttle(function() {
 					this.params.locCode = uni.getStorageSync('warehouse').whCode + this.params.locCode;
@@ -92,20 +107,19 @@
 					receiveDetailId: this.receiveDetailId
 				};
 				receive.getDetailByDetailId(params).then(data => {
-					this.params = data.data;
-					this.params.locCode = 'STAGE';
+					this.params.skuCode = data.data.skuCode;
+					this.params.skuName = data.data.skuName;
+					this.params.surplusQty = data.data.surplusQty;
+					this.params.umName = data.data.umName;
+					this.params.skuLot1 = data.data.skuLot1;
+					this.params.boxCode = data.data.boxCode;
 				})
 			},
 			esc() {
 				this.$u.func.navigateBack();
 			},
 			scannerCallback(no) {
-
-			},
-			emitKeyDown(e) {
-				if (e.key == 'Enter') {
-					this.getReceiveDetailList();
-				}
+               this.analysisCode(no);
 			}
 		}
 	}
