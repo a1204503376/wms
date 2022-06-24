@@ -7,6 +7,15 @@ const install = (Vue, vm) => {
 
 	// 登录成功之后的操作
 	const  login = (userInfo) => {
+		userApi.getMenuList().then(data => {
+			if (tool.isNotEmpty(data.data) && tool.isArray(data.data)) {
+				data.data.forEach((item, index) => {
+					if (item.systemTypeName == 'PDA') {
+						uni.setStorageSync('menuLists',item.children)
+					}
+				})
+			}
+		})
 		vm.$u.vuex('userName', userInfo.account)
 		uni.setStorageSync('warehouse',undefined)
 		vm.$u.vuex('loginTime', tool.format(new Date(),'YYYY-MM-DD HH:mm:ss'))

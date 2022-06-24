@@ -39,20 +39,7 @@
 			};
 		},
 		onLoad() {
-			uni.showLoading({
-				title: '加载中'
-			})
-			api.getMenuList().then(data => {
-				if (tool.isNotEmpty(data.data) && tool.isArray(data.data)) {
-					data.data.forEach((item, index) => {
-						if (item.systemTypeName == 'PDA') {
-							this.menuLists = item.children;
-							uni.hideLoading();
-						}
-					})
-				}
-			})
-
+			this.menuLists = uni.getStorageSync('menuLists');
 		},
 		onShow() {
 			this.title = uni.getStorageSync('warehouse').whName;
