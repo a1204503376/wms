@@ -11,12 +11,12 @@
 			</radio-group>
 		</view>
 		<view class="footer">
-			<u-button class="btn-cancle" @click="esc()">
+			<view class="btn-cancle" @click="esc()">
 				返回
-			</u-button>
-			<u-button class="btn-submit" @click="submit()" :throttleTime="1000">
+			</view>
+			<view class="btn-submit" @click="submits()">
 				确定
-			</u-button>
+			</view>
 		</view>
 	</view>
 </template>
@@ -43,10 +43,12 @@
 				this.$u.func.navigateBack();
 			},
 			submit() {
-				uni.setStorageSync('warehouse', this.warehouse);
-				uni.redirectTo({
-					url: '/pages/home/home'
-				})
+				uni.$u.throttle(function() {
+					uni.setStorageSync('warehouse', this.warehouse);
+					uni.redirectTo({
+						url: '/pages/home/home'
+					})
+				}, 1000)
 			},
 			radioChange(row) {
 				this.warehouse = row.detail.value;
