@@ -2,7 +2,7 @@ package org.nodes.wms.dao.instock.receive.dto.output;
 
 import lombok.Data;
 import org.nodes.wms.dao.instock.asn.enums.InStorageTypeEnum;
-import org.nodes.wms.dao.instock.receive.enums.ReceiveBillStateEnum;
+import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 
 import java.io.Serializable;
 
@@ -27,8 +27,8 @@ public class DetailReceiveHeaderResponse implements Serializable {
 	/**
 	 * 单据状态枚举
 	 */
-	private ReceiveBillStateEnum billState;
-	/**
+	private ReceiveHeaderStateEnum billState;
+	/**e
 	 * 单据状态描述
 	 */
 	private String billStateDesc;

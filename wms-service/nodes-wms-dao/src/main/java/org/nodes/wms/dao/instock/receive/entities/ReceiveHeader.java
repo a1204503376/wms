@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import org.nodes.wms.dao.common.entitits.BaseSkuLotEntity;
-import org.nodes.wms.dao.instock.receive.enums.ReceiveBillStateEnum;
+import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 import org.springblade.core.tenant.mp.TenantEntity;
 
 import java.util.Date;
@@ -62,7 +61,7 @@ public class ReceiveHeader extends TenantEntity {
 	/**
 	 * 单据状态
 	 */
-	private ReceiveBillStateEnum billState;
+	private ReceiveHeaderStateEnum billState;
 
 	/**
 	 * 单据种类编码

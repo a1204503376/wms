@@ -38,7 +38,7 @@
 <script>
 	import receive from '@/api/receiveByPcs.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
-	import BarCodeService from '@/common/BarCodeService.js'
+	import BarCodeService from '@/common/barcodeFunc.js'
 	export default {
 		components: {
 			keyboardListener
