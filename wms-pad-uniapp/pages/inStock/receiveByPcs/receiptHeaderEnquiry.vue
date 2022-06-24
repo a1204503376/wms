@@ -38,7 +38,7 @@
 <script>
 	import receive from '@/api/receiveByPcs.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
-	import BarCodeService from '@/common/BarCodeService.js'
+	import barcodeFunc from '@/common/barcodeFunc.js'
 	export default {
 		components: {
 			keyboardListener
@@ -66,8 +66,8 @@
 		},
 		methods: {
 			codeRules(code) {
-				var barcode = BarCodeService.parseBarcode(code);
-				var barcodeType = BarCodeService.BarcodeType;
+				var barcode = barcodeFunc.parseBarcode(code);
+				var barcodeType = barcodeFunc.BarcodeType;
 				switch (barcode.type) {
 					case barcodeType.UnKnow:
 						this.params.no = barcode.content;
