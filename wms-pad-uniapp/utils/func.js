@@ -42,9 +42,6 @@ const install = (Vue, vm) => {
 			else{
 				uni.hideLoading();
 				showToast('不能登录，当前用户没有配置有权限的菜单')
-				uni.redirectTo({
-					url: '/pages/login/login'
-				})
 			}
 		
 		
