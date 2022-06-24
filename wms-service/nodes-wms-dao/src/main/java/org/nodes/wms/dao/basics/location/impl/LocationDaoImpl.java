@@ -70,4 +70,30 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	public boolean removeByIdList(List<Long> idList) {
 		return super.deleteLogic(idList);
 	}
+
+    @Override
+    public List<Location> getAllStage() {
+		LambdaQueryWrapper<Location> queryWrapper = Wrappers.lambdaQuery();
+		queryWrapper.likeLeft(Location::getLocCode,"STAGE");
+        return super.list(queryWrapper);
+    }
+
+	@Override
+	public List<Location> getAllQc() {
+		LambdaQueryWrapper<Location> queryWrapper = Wrappers.lambdaQuery();
+		queryWrapper.likeLeft(Location::getLocCode,"QC");
+		return super.list(queryWrapper);
+	}
+
+	@Override
+	public List<Location> getAllPickTo() {
+		LambdaQueryWrapper<Location> queryWrapper = Wrappers.lambdaQuery();
+		queryWrapper.likeLeft(Location::getLocCode,"PICKTO");
+		return super.list(queryWrapper);
+	}
+
+	@Override
+	public int countAll() {
+		return super.count();
+	}
 }

@@ -1,6 +1,6 @@
 package org.nodes.wms.biz.instock.receiveLog;
 
-import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
+import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
 
 import java.util.List;
@@ -15,4 +15,10 @@ public interface ReceiveLogBiz {
 	 */
 	List<ReceiveLogResponse> getReceiveLogList(Long receiveId);
 
+	/**
+	 * 查找7天内入库量前10的物品
+	 *
+	 * @return List<ReceiveLogIndexResponse>
+	 */
+    List<ReceiveLogIndexResponse> findReceiveSkuQtyTop10();
 }

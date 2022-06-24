@@ -23,7 +23,7 @@ public interface LocationDao {
 	 * @param locationList: 库位数据集合
 	 * @return true: 导入成功，false: 导入失败
 	 */
-    boolean importData(List<Location> locationList);
+	boolean importData(List<Location> locationList);
 
 	/**
 	 * 根据库位编码
@@ -55,7 +55,7 @@ public interface LocationDao {
 	 *
 	 * @param location: 库位对象
 	 */
-    void saveOrUpdateLocation(Location location);
+	void saveOrUpdateLocation(Location location);
 
 	/**
 	 * 根据id查找库位信息
@@ -63,7 +63,7 @@ public interface LocationDao {
 	 * @param id: 库位id
 	 * @return Location
 	 */
-    Location getLocationById(Long id);
+	Location getLocationById(Long id);
 
 	/**
 	 * 根据库位id查找库位详情信息
@@ -80,4 +80,34 @@ public interface LocationDao {
 	 * @return true: 删除成功, false: 删除失败
 	 */
 	boolean removeByIdList(List<Long> idList);
+
+
+	/**
+	 * 查询所有的库房的入库集货区
+	 *
+	 * @return List<Location>
+	 */
+	List<Location> getAllStage();
+
+	/**
+	 * 查询所有的库房的入库检验区
+	 *
+	 * @return List<Location>
+	 */
+	List<Location> getAllQc();
+
+	/**
+	 * 查询所有的库房的出库暂存区
+	 *
+	 * @return List<Location>
+	 */
+	List<Location> getAllPickTo();
+
+	/**
+	 * 获取库位总数量
+	 *
+	 * @return int
+	 */
+    int countAll();
+
 }
