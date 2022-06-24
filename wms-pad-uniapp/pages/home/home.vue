@@ -39,7 +39,7 @@
 			};
 		},
 		onLoad() {
-			this.menuLists = uni.getStorageSync('menuLists');
+			this.menuLists = uni.getStorageSync('menuList');
 		},
 		onShow() {
 			this.title = uni.getStorageSync('warehouse').whName;

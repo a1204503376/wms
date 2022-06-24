@@ -7,15 +7,6 @@ const install = (Vue, vm) => {
 
 	// 登录成功之后的操作
 	const  login = (userInfo) => {
-		userApi.getMenuList().then(data => {
-			if (tool.isNotEmpty(data.data) && tool.isArray(data.data)) {
-				data.data.forEach((item, index) => {
-					if (item.systemTypeName == 'PDA') {
-						uni.setStorageSync('menuLists',item.children)
-					}
-				})
-			}
-		})
 		vm.$u.vuex('userName', userInfo.account)
 		uni.setStorageSync('warehouse',undefined)
 		vm.$u.vuex('loginTime', tool.format(new Date(),'YYYY-MM-DD HH:mm:ss'))
@@ -24,26 +15,41 @@ const install = (Vue, vm) => {
 		vm.$u.vuex('expiresIn', userInfo.expires_in)
 		vm.$u.vuex('isLogin', true)
 		vm.$u.vuex('userId', userInfo.user_id)
-		userApi.getSignInStatus().then((res) => {
-			vm.$u.vuex('signStatus', res.data.loginStatus)
-			vm.$u.vuex('lastSignTime', res.data.lastLoginTime)
-		})  
-		barcodeRulesApi.barcodeRules().then((res)=>{
-			vm.$u.vuex('barcodeRules', res.data)
-		})
-		uni.hideLoading();
-		warehouse.getWarehouseList().then(data => {
-			if (data.data.length > 1 && tool.isEmpty(uni.getStorageSync('warehouse'))) {
-				uni.$u.func.route('/pages/userSetting/warehouseSetting');
-			} else if (tool.isEmpty(data.data[0])){
-				showToast('不能登录，当前用户没有配置有权限的仓库')
-			} else {
-				uni.setStorageSync('warehouse', data.data[0]);
-				uni.redirectTo({
-					url: '/pages/home/home'
+		userApi.getMenuList().then(data => {
+			if (tool.isNotEmpty(data.data)&&data.data[0].children.length>0) {
+				uni.setStorageSync('menuList',data.data[0].children)
+				userApi.getSignInStatus().then((res) => {
+					vm.$u.vuex('signStatus', res.data.loginStatus)
+					vm.$u.vuex('lastSignTime', res.data.lastLoginTime)
+				})  
+				barcodeRulesApi.barcodeRules().then((res)=>{
+					vm.$u.vuex('barcodeRules', res.data)
 				})
-			} 
+				uni.hideLoading();
+				warehouse.getWarehouseList().then(data => {
+					if (data.data.length > 1 && tool.isEmpty(uni.getStorageSync('warehouse'))) {
+						uni.$u.func.route('/pages/userSetting/warehouseSetting');
+					} else if (tool.isEmpty(data.data[0])){
+						showToast('不能登录，当前用户没有配置有权限的仓库')
+					} else {
+						uni.setStorageSync('warehouse', data.data[0]);
+						uni.redirectTo({
+							url: '/pages/home/home'
+						})
+					} 
+				})
+			}
+			else{
+				uni.hideLoading();
+				showToast('不能登录，当前用户没有配置有权限的菜单')
+				uni.redirectTo({
+					url: '/pages/login/login'
+				})
+			}
+		
+		
 		})
+	
 	
 	}
 	
