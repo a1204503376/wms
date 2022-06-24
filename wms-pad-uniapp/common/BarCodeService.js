@@ -35,7 +35,7 @@ const parseBarcode = (barcode) => {
 	return {type: BarcodeType.UnKnow, content: barcode};
 }
 
-const parseLpnBarcode = (barcode) {
+const parseLpnBarcode = (barcode)=> {
 	let scanModel = barcode.split('b:');
 	if (scanModel.length > 1) {
 		return scanModel[1];
@@ -44,7 +44,7 @@ const parseLpnBarcode = (barcode) {
 	return barcode;
 }
 
-const parseLocBarcode = (barcode) {
+const parseLocBarcode = (barcode)=> {
 	let scanModel = barcode.split('loc:');
 	if (scanModel.length > 1) {
 		return scanModel[1];
@@ -53,7 +53,7 @@ const parseLocBarcode = (barcode) {
 	return barcode;
 }
 
-const parseBarcodeByType = (barcodeType, barcode) {
+const parseBarcodeByType = (barcodeType, barcode)=> {
 	switch (barcodeType) {
 		case 10:
 			return parseLocBarcode(barcode);
