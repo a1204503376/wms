@@ -1,11 +1,11 @@
 <template>
     <el-select
         v-model="val"
-        :multiple="true"
+        :collapse-tags="true"
         :default-first-option="true"
         :loading="loading"
+        :multiple="true"
         :remote-method="remoteMethod"
-        :collapse-tags="true"
         filterable
         placeholder="请输入物品编码或名称"
         remote
@@ -45,8 +45,12 @@ export default {
             loading: false,
         }
     },
+    watch: {
+        selectVal(newVal) {
+            this.val = newVal;
+        }
+    },
     methods: {
-
         // 防抖 在等待时间到达前的请求全部取消，保留最后一次
         remoteMethod: debounce(async function (key) {
             if (key !== '') {
