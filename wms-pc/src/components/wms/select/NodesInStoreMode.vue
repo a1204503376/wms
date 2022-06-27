@@ -13,7 +13,7 @@
             :label="item.label"
             :value="item.value">
             <span style="float: left">{{ item.value }}</span>
-            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.lable }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.label}}</span>
         </el-option>
     </el-select>
 </template>
