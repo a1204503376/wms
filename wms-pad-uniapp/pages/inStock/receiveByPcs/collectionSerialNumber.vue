@@ -12,7 +12,7 @@
 			</u-form-item>
 		</u--form>
 		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">
-			序列号列表({{serialNumberList.length}}/{{serialNumberList.length}})</h4>
+			序列号列表({{serialNumberList.length}}/{{params.surplusQty}})</h4>
 		<u-divider text=""></u-divider>
 		<!-- ${index + 1} -->
 		<u-list style="height: 650rpx;">
@@ -101,6 +101,12 @@
 				if (isExist >= 0) {
 					this.$u.func.showToast({
 						title: '序列号已存在'
+					});
+					return;
+				}
+				if(this.serialNumberList.length==this.params.surplusQty){
+					this.$u.func.showToast({
+						title: '序列号已收集完成,请提交数据'
 					});
 					return;
 				}
