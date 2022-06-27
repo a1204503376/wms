@@ -40,4 +40,11 @@ public interface ReceiveDetailDao {
 	 * @return  pda收货页面获取收货的详细信息
 	 */
 	ReceiveDetail getDetailByReceiveDetailId(Long receiveDetailId);
+
+	/**
+	 * 根据id修改收货单详情
+	 * @param detail 收货单详情
+	 * @return 是否成功
+	 */
+	Boolean updateReceiveDetail(ReceiveDetail detail);
 }
