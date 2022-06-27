@@ -174,6 +174,16 @@ const install = (Vue, vm) => {
 		hasRegisterScanner = false;
 		uni.$off('on-scanner-data')
 	}
+	
+	// 对stage、qc的库位进行处理
+	const parseLocCode = (locCode) => {
+		if (locCode === 'STAGE' || locCode === 'QC'){
+			let whCode = uni.getStorageSync('warehouse').whCode;
+			return whCode + '-' + locCode;
+		}
+		
+		return locCode;
+	}
 
 	// 将定义的方法挂载，使用this.$u.func.xx调用
 	Vue.prototype.$u.func = {
@@ -186,7 +196,8 @@ const install = (Vue, vm) => {
 		refreshPage,
 		showToast,
 		registerScanner,
-		unRegisterScanner
+		unRegisterScanner,
+		parseLocCode
 	}
 }
 export default {
