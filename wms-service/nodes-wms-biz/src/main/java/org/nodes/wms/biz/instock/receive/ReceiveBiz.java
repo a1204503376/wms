@@ -98,5 +98,5 @@ public interface ReceiveBiz {
 	 * @param boxCode
 	 * @return
 	 */
-	ReceiveDetailLpnPdaResponse getReceiveDetailLpnByBoxCode(String boxCode);
+	ReceiveDetailLpnPdaDto getReceiveDetailLpnByBoxCode(String boxCode);
 }
