@@ -91,4 +91,11 @@ public interface AsnBiz {
 	 * @return List<AsnLogActionViewResponse>
 	 */
 	List<AsnLogActionViewResponse> findAsnLogActionById(Long asnBillId);
+
+	/**
+	 * 根据asn id删除asn单
+	 * @param asnBillIdList
+	 * @return
+	 */
+	boolean remove(List<Long> asnBillIdList);
 }

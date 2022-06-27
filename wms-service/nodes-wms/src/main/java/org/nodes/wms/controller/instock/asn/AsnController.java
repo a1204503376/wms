@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.core.tool.validation.Update;
-import org.nodes.wms.biz.application.AsnManageBiz;
 import org.nodes.wms.biz.instock.asn.AsnBiz;
 import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
@@ -38,8 +37,6 @@ import java.util.List;
 public class AsnController {
 
 	private final AsnBiz asnBiz;
-
-	private final AsnManageBiz asnManageBiz;
 
 	@PostMapping("/page")
 	public R<Page<PageResponse>> page(Query query, @RequestBody PageParamsQuery pageParamsQuery) {
@@ -81,7 +78,7 @@ public class AsnController {
 	@ApiLog("ASN单管理-删除")
 	@PostMapping("/remove")
 	public R<Boolean> remove(@Valid @RequestBody DeleteRequest deleteRequest) {
-		boolean delete = asnManageBiz.remove(deleteRequest.getAsnBillIds());
+		boolean delete = asnBiz.remove(deleteRequest.getAsnBillIds());
 		return R.status(delete);
 	}
 
