@@ -26,6 +26,7 @@ import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -65,7 +66,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 
 
 	@Override
-	@Transactional
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public boolean remove(List<Long> receiveIdList) {
 		for (Long receiveId : receiveIdList) {
 			ReceiveHeader receiveHeader = receiveHeaderDao.selectBillStateById(receiveId);
@@ -246,6 +247,26 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		//设置总数
 		receiveDetailLpnPdaResponse.setNum(i);
 		return receiveDetailLpnPdaResponse;
+	}
+
+	@Override
+	public void canReceive(Long receiveDetailId, BigDecimal receiveQty) {
+
+	}
+
+	@Override
+	public void updateReceiveDetail(Long receiveDetailId, BigDecimal receiveQty) {
+
+	}
+
+	@Override
+	public void updateReciveHeader(Long receiveHeaderId) {
+
+	}
+
+	@Override
+	public void log(Long receiveHeaderId, String receiveHeaderNo, String log) {
+
 	}
 
 
