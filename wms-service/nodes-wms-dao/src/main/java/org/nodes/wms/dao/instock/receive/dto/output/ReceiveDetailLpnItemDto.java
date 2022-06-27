@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.instock.receive.dto.output;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -24,5 +26,11 @@ public class ReceiveDetailLpnItemDto {
 	/**
 	 * 收货单明细id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long receiveDetailId;
+	/**
+	 * lpn表id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long receiveDetailLpnId;
 }

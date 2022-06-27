@@ -210,18 +210,17 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	}
 
 	@Override
-	public ReceiveDetailLpnPdaDto getReceiveDetailLpnByBoxCode(String boxCode) {
+	public ReceiveDetailLpnPdaResponse getReceiveDetailLpnByBoxCode(String boxCode) {
 		//根据箱码获取lpn实体集合
 		List<ReceiveDetailLpn> receiveDetailLpnList = receiveDetailLpnDao.getReceiveDetailLpnListByBoxCode(boxCode);
 		if(Func.isEmpty(receiveDetailLpnList)){
 			throw  new ServiceException("没有搜索到该箱码");
 		}
-		ReceiveDetailLpnPdaDto receiveDetailLpnPdaResponse = new ReceiveDetailLpnPdaDto();
+		ReceiveDetailLpnPdaResponse receiveDetailLpnPdaResponse = new ReceiveDetailLpnPdaResponse();
 		BigDecimal i = new BigDecimal(0);
 		int a = 1;
 		List<ReceiveDetailLpnItemDto> receiveDetailLpnItemDtoList = new ArrayList<>();
 		ReceiveDetailLpn receiveDetailLpn = receiveDetailLpnList.get(0);
-		receiveDetailLpnPdaResponse.setReceiveDetailLpnId(receiveDetailLpn.getId());
 		receiveDetailLpnPdaResponse.setLpnCode(receiveDetailLpn.getLpnCode());
 		receiveDetailLpnPdaResponse.setBoxCode(receiveDetailLpn.getBoxCode());
 		receiveDetailLpnPdaResponse.setSkuLot1(receiveDetailLpn.getSkuLot1());
@@ -237,6 +236,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			receiveDetailLpnItemDto.setSkuName(item.getSkuName());
 			receiveDetailLpnItemDto.setPlanQty(item.getPlanQty());
 			receiveDetailLpnItemDto.setReceiveDetailId(item.getReceiveDetailId());
+			receiveDetailLpnItemDto.setReceiveDetailLpnId(item.getId());
 			receiveDetailLpnItemDtoList.add(receiveDetailLpnItemDto);
 			//设置总数
 			i = i.add(item.getPlanQty());

@@ -98,6 +98,6 @@ public interface ReceiveBiz {
 	 * @param boxCode
 	 * @return
 	 */
-	ReceiveDetailLpnPdaDto getReceiveDetailLpnByBoxCode(String boxCode);
+	ReceiveDetailLpnPdaResponse getReceiveDetailLpnByBoxCode(String boxCode);
 
 }
