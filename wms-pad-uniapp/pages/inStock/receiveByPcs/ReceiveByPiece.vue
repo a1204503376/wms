@@ -92,13 +92,14 @@
 				}
 			},
 			submit() {
+				var _this = this;
 				uni.$u.throttle(function() {
-					this.params.locCode = uni.getStorageSync('warehouse').whCode + this.params.locCode;
-					if (this.params.isSn == 1) {
-						uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', this.params);
+					_this.params.locCode = uni.getStorageSync('warehouse').whCode + _this.params.locCode;
+					if (_this.params.isSn == 1) {
+						uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', _this.params);
 						return;
 					}
-					console.log(this.params)
+					console.log(_this.params)
 					//提交表单数据 收货
 				}, 1000)
 			},
