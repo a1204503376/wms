@@ -61,7 +61,7 @@ public class ReceiveByPcsController {
 	 * @return 是否成功
 	 */
 	@PostMapping("pdaByPieceReceive")
-	public R pdaByPieceReceive(@RequestBody PdaByPieceReceiveQuery pdaByPieceReceiveQuery){
+	public R pdaByPieceReceive(@RequestBody PdaByPieceReceiveRequest pdaByPieceReceiveQuery){
 		return null;
 	}
 

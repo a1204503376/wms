@@ -131,7 +131,15 @@
                 "enablePullDownRefresh": false
             }
             
-        }
+        },
+		{
+			"path" : "pages/inStock/receiveByPcs/collectionSerialNumber",
+			"style" :                                                                                    
+			{
+			    "navigationBarTitleText": "采集序列号",
+			    "enablePullDownRefresh": false
+			}
+		}
     ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#33cbcc"

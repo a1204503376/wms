@@ -57,6 +57,7 @@
 					skuLot1: undefined,
 					boxCode: undefined,
 					locCode: 'STAGE',
+					isSn:'',
 				},
 				receiveDetailId: '',
 				receiveDetailList: [],
@@ -92,13 +93,15 @@
 				}
 			},
 			submit() {
+				var _this = this;
 				uni.$u.throttle(function() {
-					this.params.locCode = uni.getStorageSync('warehouse').whCode + this.params.locCode;
-					if (this.params.isSn == 1) {
-						uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', this.params);
+					_this.params.locCode = uni.getStorageSync('warehouse').whCode + _this.params.locCode;
+					_this.params.receiveDetailId=_this.receiveDetailId;
+					if (_this.params.isSn == 0) {
+						uni.$u.func.route('/pages/inStock/receiveByPcs/collectionSerialNumber', _this.params);
 						return;
 					}
-					console.log(this.params)
+					console.log(_this.params)
 					//提交表单数据 收货
 				}, 1000)
 			},
@@ -113,6 +116,7 @@
 					this.params.umName = data.data.umName;
 					this.params.skuLot1 = data.data.skuLot1;
 					this.params.boxCode = data.data.boxCode;
+					this.params.isSn=data.data.isSn;
 				})
 			},
 			esc() {
