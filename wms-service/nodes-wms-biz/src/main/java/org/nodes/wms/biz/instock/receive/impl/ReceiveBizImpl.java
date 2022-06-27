@@ -18,6 +18,7 @@ import org.nodes.wms.dao.instock.receive.dto.output.*;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
+import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
@@ -214,8 +215,8 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	public ReceiveDetailLpnPdaResponse getReceiveDetailLpnByBoxCode(String boxCode) {
 		//根据箱码获取lpn实体集合
 		List<ReceiveDetailLpn> receiveDetailLpnList = receiveDetailLpnDao.getReceiveDetailLpnListByBoxCode(boxCode);
-		if(Func.isEmpty(receiveDetailLpnList)){
-			throw  new ServiceException("没有搜索到该箱码");
+		if (Func.isEmpty(receiveDetailLpnList)) {
+			throw new ServiceException("没有搜索到该箱码");
 		}
 		ReceiveDetailLpnPdaResponse receiveDetailLpnPdaResponse = new ReceiveDetailLpnPdaResponse();
 		BigDecimal i = new BigDecimal(0);
@@ -229,9 +230,9 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			//添加sku的dto到集合中
 			ReceiveDetailLpnItemDto receiveDetailLpnItemDto = new ReceiveDetailLpnItemDto();
 			//设置型号
-			if(Func.isNotEmpty(item.getSkuSpec()) && a == 1){
+			if (Func.isNotEmpty(item.getSkuSpec()) && a == 1) {
 				receiveDetailLpnPdaResponse.setSkuLot2(item.getSkuSpec());
-				a=0;
+				a = 0;
 			}
 			receiveDetailLpnItemDto.setSkuCode(item.getSkuCode());
 			receiveDetailLpnItemDto.setSkuName(item.getSkuName());
@@ -242,7 +243,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			//设置总数
 			i = i.add(item.getPlanQty());
 		}
-        //设置sku的dto集合
+		//设置sku的dto集合
 		receiveDetailLpnPdaResponse.setReceiveDetailLpnItemDtoList(receiveDetailLpnItemDtoList);
 		//设置总数
 		receiveDetailLpnPdaResponse.setNum(i);
@@ -251,23 +252,61 @@ public class ReceiveBizImpl implements ReceiveBiz {
 
 	@Override
 	public void canReceive(Long receiveDetailId, BigDecimal receiveQty) {
-
+		if (Func.isEmpty(receiveQty)) {
+			throw new ServiceException("请输入数量");
+		}
+		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveDetailId);
+		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(detail.getReceiveId());
+		if (detail.getDetailStatus() == ReceiveDetailStatusEnum.NOT_RECEIPT || detail.getDetailStatus() == ReceiveDetailStatusEnum.PART) {
+			if (receiveHeader.getBillState() == ReceiveHeaderStateEnum.NOT_RECEIPT || receiveHeader.getBillState() == ReceiveHeaderStateEnum.PART) {
+				int isExcit = detail.getPlanQty().compareTo(detail.getScanQty());
+				if (isExcit == 0) {
+					new ServiceException("该单不可以收货，原因无可收的货物");
+				}
+			} else {
+				new ServiceException("该单不可以收货，原因收货单已经收货完成");
+			}
+		} else {
+			new ServiceException("该单不可以收货，原因收货单明细已经收货完成");
+		}
 	}
 
 	@Override
 	public void updateReceiveDetail(Long receiveDetailId, BigDecimal receiveQty) {
-
+		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveDetailId);
+		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(detail.getReceiveId());
+		BigDecimal sumScanQty = detail.getScanQty().add(receiveQty);
+		int compareTo = detail.getPlanQty().compareTo(sumScanQty);
+		//如果数量不超过计划数量就复制给实收数量
+		if (compareTo >= 0) {
+			detail.setScanQty(sumScanQty);
+			detail.setDetailStatus(ReceiveDetailStatusEnum.PART);
+			if (compareTo == 0) {
+				detail.setDetailStatus(ReceiveDetailStatusEnum.COMPLETED);
+			}
+		} else {
+			new ServiceException("不能超收");
+		}
+		BigDecimal surplusQty = detail.getPlanQty().subtract(sumScanQty);
+		detail.setSurplusQty(surplusQty);
+		receiveDetailDao.updateReceiveDetail(detail);
 	}
 
 	@Override
-	public void updateReciveHeader(Long receiveHeaderId) {
-
+	public void updateReciveHeader(Long receiveDetailId) {
+		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveDetailId);
+		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(detail.getReceiveId());
+		int isExcit = detail.getPlanQty().compareTo(detail.getScanQty());
+		if (isExcit == 0) {
+			receiveHeader.setBillState(ReceiveHeaderStateEnum.COMPLETED);
+		} else if (isExcit == 1) {
+			receiveHeader.setBillState(ReceiveHeaderStateEnum.PART);
+		}
+		receiveHeaderDao.updateReceiveHeader(receiveHeader);
 	}
 
 	@Override
 	public void log(Long receiveHeaderId, String receiveHeaderNo, String log) {
-
+     logBiz.auditLog(AuditLogType.INSTOCK,receiveHeaderId,receiveHeaderNo,log);
 	}
-
-
 }
