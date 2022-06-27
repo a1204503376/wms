@@ -21,7 +21,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nodes.core.base.cache.*;
-import org.nodes.core.base.mapper.UserMapper;
+import org.nodes.core.base.vo.PdaMenuVO;
+import org.nodes.core.base.wrapper.PdaMenuWrapper;
 import org.nodes.core.constant.CommonConstant;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.springblade.core.log.exception.ServiceException;
@@ -34,7 +35,6 @@ import org.springblade.core.tool.constant.RoleConstant;
 import org.springblade.core.tool.node.ForestNodeMerger;
 import org.springblade.core.tool.support.Kv;
 import org.springblade.core.tool.utils.Func;
-import org.springblade.core.tool.utils.SpringUtil;
 import org.springblade.core.tool.utils.StringUtil;
 import org.nodes.core.base.dto.MenuDTO;
 import org.nodes.core.base.entity.*;
@@ -121,7 +121,7 @@ public class MenuServiceImpl <M extends MenuMapper, T extends Menu> extends Serv
 	}
 
 	@Override
-	public List<MenuVO> routesPDA(String roleId, Long topMenuId) {
+	public List<PdaMenuVO> routesPDA(String roleId, Long topMenuId) {
 		if (StringUtil.isBlank(roleId)) {
 			return null;
 		}
@@ -136,6 +136,7 @@ public class MenuServiceImpl <M extends MenuMapper, T extends Menu> extends Serv
 		.lambda()
 		.isNotNull(Menu::getCategory)
 		.eq(Menu::getCategory,1)
+		.eq(Menu::getSystemType,0)
 		.func(i -> {
 			if (!SecureUtil.isDeveloper()){
 				i.isNotNull(Menu::getIsVisible);
@@ -151,7 +152,7 @@ public class MenuServiceImpl <M extends MenuMapper, T extends Menu> extends Serv
 				return u.getSystemType().equals(0);
 			}).collect(Collectors.toList());
 		}
-		return buildRoutes(allMenus, roleMenus);
+		return buildMenus(allMenus, roleMenus);
 	}
 
 	@Override
@@ -170,6 +171,15 @@ public class MenuServiceImpl <M extends MenuMapper, T extends Menu> extends Serv
 		List<Menu> roleMenus = baseMapper.roleMenuExt(Func.toLongList(roleId), topMenuId);
 		return buildRoutes(allMenus, roleMenus);
 	}
+	private List<PdaMenuVO> buildMenus(List<Menu> allMenus, List<Menu> roleMenus) {
+		List<Menu> routes = new LinkedList<>(roleMenus);
+		roleMenus.forEach(roleMenu -> recursion(allMenus, routes, roleMenu));
+		routes.sort(Comparator.comparing(Menu::getSort));
+		List<Menu> collect = routes.stream().filter(x -> Func.equals(x.getCategory(), 1)).collect(Collectors.toList());
+		PdaMenuWrapper pdaMenuWrapper=new PdaMenuWrapper();
+		return pdaMenuWrapper.listNodeVO(collect);
+	}
+
 
 	private List<MenuVO> buildRoutes(List<Menu> allMenus, List<Menu> roleMenus) {
 		List<Menu> routes = new LinkedList<>(roleMenus);

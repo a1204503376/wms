@@ -23,7 +23,7 @@ import org.nodes.core.base.enums.ParamEnum;
 import org.nodes.core.base.service.IMenuService;
 import org.nodes.core.base.service.IParamService;
 import org.nodes.core.base.service.IUserService;
-import org.nodes.core.base.vo.MenuVO;
+import org.nodes.core.base.vo.PdaMenuVO;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.utils.TokenUtil;
 import org.nodes.wms.core.basedata.cache.SkuCache;
@@ -521,8 +521,8 @@ public class ApiPDAController extends BladeController {
 	@GetMapping("/routes")
 	@ApiOperationSupport(order = 5)
 	@ApiOperation(value = "PDA菜单数据", notes = "PDA菜单数据")
-	public R<List<MenuVO>> routes(BladeUser user, Long topMenuId) {
-		List<MenuVO> list = menuService.routesPDA((user == null) ? null : user.getRoleId(), topMenuId);
+	public R<List<PdaMenuVO>> routes(BladeUser user, Long topMenuId) {
+		List<PdaMenuVO> list = menuService.routesPDA((user == null) ? null : user.getRoleId(), topMenuId);
 		return R.data(list);
 	}
 

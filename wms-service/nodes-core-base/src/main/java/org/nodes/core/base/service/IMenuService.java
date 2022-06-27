@@ -16,11 +16,9 @@
  */
 package org.nodes.core.base.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.springblade.core.mp.base.BaseService;
+import org.nodes.core.base.vo.PdaMenuVO;
 import org.springblade.core.secure.BladeUser;
-import org.springblade.core.tool.node.TreeNode;
 import org.springblade.core.tool.support.Kv;
 import org.nodes.core.base.entity.Menu;
 import org.nodes.core.base.vo.MenuVO;
@@ -41,7 +39,7 @@ public interface IMenuService extends IService<Menu> {
 	 * @param topMenuId
 	 * @return
 	 */
-	List<MenuVO> routesPDA(String roleId, Long topMenuId);
+	List<PdaMenuVO> routesPDA(String roleId, Long topMenuId);
 
 	/**
 	 * 菜单树形结构
