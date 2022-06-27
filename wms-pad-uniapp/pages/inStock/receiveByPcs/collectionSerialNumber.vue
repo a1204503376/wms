@@ -17,7 +17,7 @@
 		<!-- ${index + 1} -->
 		<u-list style="height: 650rpx;">
 			<u-list-item v-for="(item, index) in serialNumberList" :key="index">
-				<view @click="clickItem(item)">
+				<view>
 					<u-row customStyle="margin-bottom: 10px">
 						<u-col span="10" class="left-text-one-line">
 							<view class="demo-layout bg-purple-light font-in-page">{{item}}</view>
