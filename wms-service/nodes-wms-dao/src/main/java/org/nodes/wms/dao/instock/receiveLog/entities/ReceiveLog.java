@@ -49,7 +49,7 @@ public class ReceiveLog extends BaseSkuLotEntity {
 	/**
 	 * lpn编码
 	 */
-	private String ipnCode;
+	private String lpnCode;
 	/**
 	 * 箱码
 	 */
