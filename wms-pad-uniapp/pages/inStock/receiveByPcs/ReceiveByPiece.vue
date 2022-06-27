@@ -95,8 +95,9 @@
 				var _this = this;
 				uni.$u.throttle(function() {
 					_this.params.locCode = uni.getStorageSync('warehouse').whCode + _this.params.locCode;
-					if (_this.params.isSn == 1) {
-						uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', _this.params);
+					_this.params.receiveDetailId=_this.receiveDetailId;
+					if (_this.params.isSn == 0) {
+						uni.$u.func.route('/pages/inStock/receiveByPcs/collectionSerialNumber', _this.params);
 						return;
 					}
 					console.log(_this.params)
