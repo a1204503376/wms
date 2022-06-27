@@ -89,6 +89,9 @@
 				}
 				receive.getReceiveDetailList(this.params).then(data => {
 					this.receiveDetailList = data.data;
+					if(data.data.length==1){
+						uni.$u.func.route('/pages/inStock/receiveByPcs/ReceiveByPiece', data.data[0]);
+					}
 				})
 			},
 			clickItem(row) {
