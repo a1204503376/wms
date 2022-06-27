@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.instock;
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
 import org.nodes.wms.dao.instock.receive.dto.output.PdaByPieceReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnPdaResponse;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 public class InStockBizImpl implements InStockBiz {
+	private final ReceiveBiz receiveBiz;
 
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	@Override
