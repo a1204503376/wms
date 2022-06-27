@@ -210,14 +210,15 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	}
 
 	@Override
-	public ReceiveDetailLpnPdaResponse getReceiveDetailLpnByBoxCode(String boxCode) {
+	public ReceiveDetailLpnPdaDto getReceiveDetailLpnByBoxCode(String boxCode) {
 		//根据箱码获取lpn实体集合
 		List<ReceiveDetailLpn> receiveDetailLpnList = receiveDetailLpnDao.getReceiveDetailLpnListByBoxCode(boxCode);
 		if(Func.isEmpty(receiveDetailLpnList)){
 			throw  new ServiceException("没有搜索到该箱码");
 		}
-		ReceiveDetailLpnPdaResponse receiveDetailLpnPdaResponse = new ReceiveDetailLpnPdaResponse();
+		ReceiveDetailLpnPdaDto receiveDetailLpnPdaResponse = new ReceiveDetailLpnPdaDto();
 		BigDecimal i = new BigDecimal(0);
+		int a = 1;
 		List<ReceiveDetailLpnItemDto> receiveDetailLpnItemDtoList = new ArrayList<>();
 		ReceiveDetailLpn receiveDetailLpn = receiveDetailLpnList.get(0);
 		receiveDetailLpnPdaResponse.setId(receiveDetailLpn.getId());
@@ -227,6 +228,11 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		for (ReceiveDetailLpn item : receiveDetailLpnList) {
 			//添加sku的dto到集合中
 			ReceiveDetailLpnItemDto receiveDetailLpnItemDto = new ReceiveDetailLpnItemDto();
+			//设置型号
+			if(Func.isNotEmpty(item.getSkuSpec()) && a == 1){
+				receiveDetailLpnPdaResponse.setSkuLot2(item.getSkuSpec());
+				a=0;
+			}
 			receiveDetailLpnItemDto.setSkuCode(item.getSkuCode());
 			receiveDetailLpnItemDto.setSkuName(item.getSkuName());
 			receiveDetailLpnItemDto.setPlanQty(item.getPlanQty());
