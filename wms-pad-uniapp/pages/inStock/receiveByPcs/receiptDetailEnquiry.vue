@@ -37,6 +37,7 @@
 	import receive from '@/api/inStock/receiveByPcs.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	import barcodeFunc from '@/common/barcodeFunc.js'
+	import tool from '@/utils/tool.js'
 	export default {
 		components: {
 			keyboardListener
@@ -83,7 +84,9 @@
 				this.$u.func.navigateBack();
 			},
 			getReceiveDetailList() {
-				this.analysisCode(this.params.skuCode);
+				if(tool.isNotEmpty(this.params.skuCode)){
+					this.analysisCode(this.params.skuCode);
+				}
 				receive.getReceiveDetailList(this.params).then(data => {
 					this.receiveDetailList = data.data;
 				})
