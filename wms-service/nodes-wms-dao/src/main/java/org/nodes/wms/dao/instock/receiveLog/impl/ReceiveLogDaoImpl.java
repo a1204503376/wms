@@ -1,12 +1,11 @@
 package org.nodes.wms.dao.instock.receiveLog.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.instock.receiveLog.ReceiveLogDao;
-import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageRequest;
+import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageQuery;
+import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogExcelResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
@@ -37,7 +36,13 @@ public class ReceiveLogDaoImpl
 
 	@Override
 	public Page<ReceiveLogPageResponse> page(IPage<?> page,
-											 ReceiveLogPageRequest receiveLogPageRequest) {
-		return super.baseMapper.page(page, receiveLogPageRequest);
+											 ReceiveLogPageQuery receiveLogPageQuery) {
+		return super.baseMapper.page(page, receiveLogPageQuery);
+	}
+
+	@Override
+	public List<ReceiveLogExcelResponse> getReceiveLogListByQuery(
+			ReceiveLogPageQuery receiveLogPageQuery) {
+		return super.baseMapper.selectReceiveLogListByQuery(receiveLogPageQuery);
 	}
 }

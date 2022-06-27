@@ -10,7 +10,7 @@ import java.util.List;
  * 收货清点记录请求dto类
  **/
 @Data
-public class ReceiveLogPageRequest implements Serializable {
+public class ReceiveLogPageQuery implements Serializable {
 
 	private static final long serialVersionUID = -3141574572154946992L;
 
@@ -42,12 +42,12 @@ public class ReceiveLogPageRequest implements Serializable {
 	/**
 	 * 收货人
 	 */
-	private Long createUser;
+	private String createUser;
 
 	/**
 	 * 库位id
 	 */
-	private Long locId;
+	private List<Long> locIdList;
 
 	/**
 	 * 库房id
@@ -57,15 +57,15 @@ public class ReceiveLogPageRequest implements Serializable {
 	/**
 	 * 货主id
 	 */
-	private Long ownerId;
+	private Long woId;
 
 	/**
 	 * 收货时间-开始
 	 */
-	private Date createTimeDateBegin;
+	private Date createTimeBegin;
 
 	/**
 	 * 收货时间-结束
 	 */
-	private Date createTimeDateEnd;
+	private Date createTimeEnd;
 }

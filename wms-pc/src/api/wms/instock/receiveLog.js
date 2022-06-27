@@ -13,6 +13,7 @@ export const exportExcel = (params) => {
     return request({
         url: '/api/wms/receive/exportReceiveLog',
         method: 'post',
-        data: params
+        data: params,
+        responseType: 'blob'
     })
 }

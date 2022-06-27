@@ -2,7 +2,8 @@ package org.nodes.wms.dao.instock.receiveLog;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageRequest;
+import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageQuery;
+import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogExcelResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
@@ -30,8 +31,16 @@ public interface ReceiveLogDao {
 	 * 分页查询
 	 *
 	 * @param page: 分页参数
-	 * @param receiveLogPageRequest: 分页查询条件参数
+	 * @param receiveLogPageQuery: 分页查询条件参数
 	 * @return Page<ReceiveLogPageResponse>
 	 */
-    Page<ReceiveLogPageResponse> page(IPage<?> page, ReceiveLogPageRequest receiveLogPageRequest);
+    Page<ReceiveLogPageResponse> page(IPage<?> page, ReceiveLogPageQuery receiveLogPageQuery);
+
+	/**
+	 * 根据若干条件查询库位信息
+	 *
+	 * @param receiveLogPageQuery: 查询条件
+	 * @return List<ReceiveLogExcelResponse>
+	 */
+	 List<ReceiveLogExcelResponse> getReceiveLogListByQuery(ReceiveLogPageQuery receiveLogPageQuery);
 }

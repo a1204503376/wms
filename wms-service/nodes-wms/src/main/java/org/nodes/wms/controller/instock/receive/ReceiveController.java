@@ -13,7 +13,7 @@ import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
-import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageRequest;
+import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageQuery;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
 import org.springblade.core.log.annotation.ApiLog;
@@ -135,12 +135,12 @@ public class ReceiveController {
 	}
 
 	@PostMapping("/pageReceiveLog")
-	public R<IPage<ReceiveLogPageResponse>> pageReceiveLog(Query query, @RequestBody ReceiveLogPageRequest receiveLogPageRequest) {
-		return R.data(receiveLogBiz.page(query,receiveLogPageRequest));
+	public R<IPage<ReceiveLogPageResponse>> pageReceiveLog(Query query, @RequestBody ReceiveLogPageQuery receiveLogPageQuery) {
+		return R.data(receiveLogBiz.page(query, receiveLogPageQuery));
 	}
 
 	@PostMapping("exportReceiveLog")
-	public void exportReceiveLog(@RequestBody ReceiveLogPageRequest receiveLogPageRequest) {
-
+	public void exportReceiveLog(@RequestBody ReceiveLogPageQuery receiveLogPageQuery, HttpServletResponse response) {
+		receiveLogBiz.exportExcel(receiveLogPageQuery, response);
 	}
 }

@@ -3,29 +3,41 @@
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
-                    <el-col :span="24">
+                    <el-col :span="8">
                         <el-form-item label="收货单编码">
                             <el-input v-model.trim="form.params.receiveNo" :clearable="true"></el-input>
                         </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
                         <el-form-item label="物品编码">
                             <el-input v-model.trim="form.params.skuCode" :clearable="true"></el-input>
                         </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
                         <el-form-item label="箱号">
                             <el-input v-model.trim="form.params.boxCode" :clearable="true"></el-input>
                         </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row type="flex">
+                    <el-col :span="8">
                         <el-form-item label="LPN">
                             <el-input v-model.trim="form.params.lpnCode" :clearable="true"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="序列号">
+                            <el-input v-model.trim="form.params.snCode" :clearable="true"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="收货人">
+                            <el-input v-model.trim="form.params.createUser" :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row type="flex">
                     <el-col :span="24">
-                        <el-form-item label="序列号">
-                            <el-input v-model.trim="form.params.snCode" :clearable="true"></el-input>
-                        </el-form-item>
-                        <el-form-item label="收货人">
-                            <el-input v-model.trim="form.params.createUser" :clearable="true"></el-input>
-                        </el-form-item>
                         <el-form-item label="收货时间">
                             <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
                         </el-form-item>
@@ -35,22 +47,28 @@
             <template v-slot:expandSearch>
                 <el-form-item label="库位">
                     <nodes-location
-                        v-model="form.params.locId"
+                        style="width: 180px"
+                        v-model="form.params.locIdList"
                     ></nodes-location>
                 </el-form-item>
                 <el-form-item label="库房">
                     <nodes-warehouse
-                        v-model="form.params.whId"
+                        :multiple="true"
+                        v-model="form.params.whIdList"
                     ></nodes-warehouse>
                 </el-form-item>
                 <el-form-item label="货主">
                     <nodes-owner
-                        v-model="form.params.ownerId"
+                        style="width: 180px"
+                        v-model="form.params.woId"
                     ></nodes-owner>
                 </el-form-item>
             </template>
             <template v-slot:batchBtn>
-                <el-button v-if="permissionObj.repeal" icon="el-icon-plus" size="mini" type="primary" @click="onRepeal">撤销收货
+                <el-button v-if="permissionObj.repeal"
+                           icon="el-icon-caret-left"
+                           size="mini" type="warning"
+                           @click="onRepeal">撤销收货
                 </el-button>
             </template>
             <template v-slot:tableTool>
@@ -152,9 +170,9 @@ export default {
                     snCode: "",
                     createUser: "",
                     createTimeDateRange: ["", ""],
-                    locId: "",
-                    whId: "",
-                    ownerId: ""
+                    locIdList: [],
+                    whIdList: [],
+                    woId: ""
                 },
             },
             table: {
@@ -312,9 +330,9 @@ export default {
                 snCode: "",
                 createUser: "",
                 createTimeDateRange: ["", ""],
-                locId: "",
-                whId: "",
-                ownerId: ""
+                locIdList: [],
+                whIdList: [],
+                woId: ""
             }
         },
         exportData() {
@@ -322,7 +340,7 @@ export default {
             exportExcel(this.form.params)
                 .then((res) => {
                     this.$message.success("操作成功，正在下载中...");
-                    fileDownload(res.data, `收货单清点记录${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
+                    fileDownload(res.data, `收货记录${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
                 })
                 .catch(() => {
                     this.$message.error("系统模板目录配置有误或文件不存在");
@@ -332,8 +350,12 @@ export default {
                 });
         },
         onExportLocalData() {
-            this.exportCurrentDataToExcel("收货单清点记录", "收货单庆典记录")
+            this.exportCurrentDataToExcel("收货记录", "收货记录")
         },
+        onRepeal(){
+            let rows = this.$refs.table;
+            console.log(rows);
+        }
     },
 };
 </script>

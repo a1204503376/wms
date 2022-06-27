@@ -35,7 +35,7 @@
         limit 10
     </select>
 
-    <select id="page" resultType="org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse">
+    <sql id="receiveLogList">
         SELECT
         rl.id,
         rl.receive_no,
@@ -90,45 +90,56 @@
         <where>
             rl.is_deleted = 0
             <if test="param.receiveNo != null and param.receiveNo != ''">
-                rl.receive_no LIKE CONCAT('%', #{param.receiveNo} ,'%')
+                AND rl.receive_no LIKE CONCAT('%', #{param.receiveNo} ,'%')
             </if>
             <if test="param.skuCode != null and param.skuCode != ''">
-                rl.sku_code LIKE CONCAT('%', #{skuCode} ,'%')
+                AND rl.sku_code LIKE CONCAT('%', #{param.skuCode} ,'%')
             </if>
             <if test="param.boxCode != null and param.boxCode != ''">
-                rl.box_code LIKE CONCAT('%', #{boxCode} ,'%')
+                AND rl.box_code LIKE CONCAT('%', #{param.boxCode} ,'%')
             </if>
             <if test="param.lpnCode != null and param.lpnCode != ''">
-                rl.lpn_code LIKE CONCAT('%', #{lpnCode} ,'%')
+                AND rl.lpn_code LIKE CONCAT('%', #{param.lpnCode} ,'%')
             </if>
             <if test="param.snCode != null and param.snCode != ''">
-                rl.sn_code LIKE CONCAT('%', #{snCode} ,'%')
+                AND rl.sn_code LIKE CONCAT('%', #{param.snCode} ,'%')
             </if>
             <if test="param.createUser != null and param.createUser != ''">
-                `user`.real_name LIKE CONCAT('%', #{createUser} ,'%')
+                AND `user`.real_name LIKE CONCAT('%', #{param.createUser} ,'%')
             </if>
-            <if test="param.locId != null and param.locId != ''">
-                rl.loc_id = #{locId}
+            <if test="param.locIdList != null and param.locIdList.size != 0">
+                AND rl.loc_id IN
+                <foreach collection="param.locIdList" separator="," item="item" close=")" open="(">
+                    #{item}
+                </foreach>
             </if>
             <if test="param.whIdList != null and param.whIdList.size != 0">
-                rl.wh_id IN
+                AND rl.wh_id IN
                 <foreach collection="param.whIdList" open="(" close=")" item="item" separator=",">
                     #{item}
                 </foreach>
             </if>
-            <if test="param.ownerId != null and param.ownerId != ''">
-                rl.owner_id = #{ownerId}
+            <if test="param.woId != null and param.woId != ''">
+                AND rl.wo_id = #{param.woId}
             </if>
-            <if test="param.createTimeDateBegin != null and param.createTimeDateBegin != ''">
-                rl.create_time &gt;= #{createTimeDateBegin}
+            <if test="param.createTimeBegin != null">
+                AND rl.create_time &gt;= #{param.createTimeBegin}
             </if>
-            <if test="param.createTimeDateEnd != null and param.createTimeDateEnd != ''">
-                rl.create_time &lt;= #{createTimeDateEnd}
-            </if>
-            <if test="page.orders != null or page.orders.size != ''">
-                ORDER BY rl.create_time DESC
+            <if test="param.createTimeEnd != null">
+                AND rl.create_time &lt;= #{param.createTimeEnd}
             </if>
         </where>
+    </sql>
 
+    <select id="page" resultType="org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse">
+        <include refid="receiveLogList"/>
+        <if test="page.orders != null or page.orders.size != ''">
+            ORDER BY rl.create_time DESC
+        </if>
+    </select>
+
+    <select id="selectReceiveLogListByQuery"
+            resultType="org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogExcelResponse">
+        <include refid="receiveLogList"/>
     </select>
 </mapper>
