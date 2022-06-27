@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.nodes.wms.biz.application.AsnManageBiz;
 import org.nodes.wms.biz.instock.asn.impl.AsnBizImpl;
 import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnDetailRequest;
@@ -38,9 +37,6 @@ public class AsnTest {
 
 	@Autowired
 	private AsnBizImpl asnBiz;
-
-	@Autowired
-	private AsnManageBiz asnManageBiz;
 
 	@Test
 	public void selectTest() throws ParseException {
@@ -77,7 +73,7 @@ public class AsnTest {
 	public void deleteTest(){
 		List<Long> idList = new ArrayList<>();
 		idList.add(1234568L);
-		asnManageBiz.remove(idList);
+		asnBiz.remove(idList);
 	}
 
 	@Test

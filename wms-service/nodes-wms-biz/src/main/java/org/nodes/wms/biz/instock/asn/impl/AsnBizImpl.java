@@ -146,4 +146,17 @@ public class AsnBizImpl implements AsnBiz {
     public List<AsnLogActionViewResponse> findAsnLogActionById(Long asnBillId) {
         return asnHeaderDao.getLogActionById(asnBillId);
     }
+
+    @Override
+    public boolean remove(List<Long> asnBillIdList) {
+		// 1.删除ASN头表
+		boolean delAsnBillFlag = removeAsnBillById(asnBillIdList);
+		// 2.删除ASN明细表
+		boolean delAsnDetailFlag = removeAsnDetailByAsnBillId(asnBillIdList);
+
+		//3+4+5 = 在收货管理那边 删除收货头表+明细表
+		// 3.删除收货单头表 (传asnBillIdList)
+
+		return true;
+    }
 }

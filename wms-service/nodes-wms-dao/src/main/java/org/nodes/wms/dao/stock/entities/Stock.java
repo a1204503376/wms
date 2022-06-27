@@ -17,13 +17,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.nodes.core.tool.entity.SkuLotBaseEntity;
 import org.nodes.core.tool.jackson.BigDecimalSerializer;
+import org.nodes.wms.dao.common.entitits.BaseSkuLotEntity;
 import org.springblade.core.tool.utils.DateUtil;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * 库存实体类
