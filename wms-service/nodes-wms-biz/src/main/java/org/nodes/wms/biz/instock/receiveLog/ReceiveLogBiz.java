@@ -2,6 +2,7 @@ package org.nodes.wms.biz.instock.receiveLog;
 
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
+import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 
 import java.util.List;
 
@@ -21,4 +22,11 @@ public interface ReceiveLogBiz {
 	 * @return List<ReceiveLogIndexResponse>
 	 */
     List<ReceiveLogIndexResponse> findReceiveSkuQtyTop10();
+
+	/**
+	 * 创建清点记录
+	 * @param receiveLog 外部只需要赋值业务参数
+	 * @return
+	 */
+	ReceiveLog newReceiveLog(ReceiveLog receiveLog);
 }
