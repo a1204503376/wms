@@ -30,8 +30,116 @@
                sum(qty) as qty
         FROM receive_log
         WHERE DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= create_time
-        GROUP BY sku_id,sku_code
+        GROUP BY sku_id, sku_code
         ORDER BY qty DESC
         limit 10
+    </select>
+
+    <sql id="receiveLogList">
+        SELECT
+        rl.id,
+        rl.receive_no,
+        rl.line_no,
+        rl.sku_code,
+        rl.sku_name,
+        rl.qty,
+        wspd.wsu_name,
+        rl.loc_code,
+        wh.wh_name,
+        o.owner_name,
+        rl.lpn_code,
+        rl.box_code,
+        rl.sn_code,
+        `user`.real_name as createUserName,
+        rl.create_time,
+        rl.sku_lot1,
+        rl.sku_lot2,
+        rl.sku_lot3,
+        rl.sku_lot4,
+        rl.sku_lot5,
+        rl.sku_lot6,
+        rl.sku_lot7,
+        rl.sku_lot8,
+        rl.sku_lot9,
+        rl.sku_lot10,
+        rl.sku_lot11,
+        rl.sku_lot12,
+        rl.sku_lot13,
+        rl.sku_lot14,
+        rl.sku_lot15,
+        rl.sku_lot16,
+        rl.sku_lot17,
+        rl.sku_lot18,
+        rl.sku_lot19,
+        rl.sku_lot20,
+        rl.sku_lot21,
+        rl.sku_lot22,
+        rl.sku_lot23,
+        rl.sku_lot24,
+        rl.sku_lot25,
+        rl.sku_lot26,
+        rl.sku_lot27,
+        rl.sku_lot28,
+        rl.sku_lot29,
+        rl.sku_lot30
+        FROM receive_log rl
+        LEFT JOIN wms_sku_package_detail wspd ON wspd.wsp_id = rl.wsp_id
+        LEFT JOIN wms_warehouse wh ON wh.wh_id = rl.wh_id
+        LEFT JOIN wms_owner o ON o.wo_id = rl.wo_id
+        LEFT JOIN blade_user `user` ON `user`.id = rl.create_user
+        <where>
+            rl.is_deleted = 0
+            <if test="param.receiveNo != null and param.receiveNo != ''">
+                AND rl.receive_no LIKE CONCAT('%', #{param.receiveNo} ,'%')
+            </if>
+            <if test="param.skuCode != null and param.skuCode != ''">
+                AND rl.sku_code LIKE CONCAT('%', #{param.skuCode} ,'%')
+            </if>
+            <if test="param.boxCode != null and param.boxCode != ''">
+                AND rl.box_code LIKE CONCAT('%', #{param.boxCode} ,'%')
+            </if>
+            <if test="param.lpnCode != null and param.lpnCode != ''">
+                AND rl.lpn_code LIKE CONCAT('%', #{param.lpnCode} ,'%')
+            </if>
+            <if test="param.snCode != null and param.snCode != ''">
+                AND rl.sn_code LIKE CONCAT('%', #{param.snCode} ,'%')
+            </if>
+            <if test="param.createUser != null and param.createUser != ''">
+                AND `user`.real_name LIKE CONCAT('%', #{param.createUser} ,'%')
+            </if>
+            <if test="param.locIdList != null and param.locIdList.size != 0">
+                AND rl.loc_id IN
+                <foreach collection="param.locIdList" separator="," item="item" close=")" open="(">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="param.whIdList != null and param.whIdList.size != 0">
+                AND rl.wh_id IN
+                <foreach collection="param.whIdList" open="(" close=")" item="item" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="param.woId != null and param.woId != ''">
+                AND rl.wo_id = #{param.woId}
+            </if>
+            <if test="param.createTimeBegin != null">
+                AND rl.create_time &gt;= #{param.createTimeBegin}
+            </if>
+            <if test="param.createTimeEnd != null">
+                AND rl.create_time &lt;= #{param.createTimeEnd}
+            </if>
+        </where>
+    </sql>
+
+    <select id="page" resultType="org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse">
+        <include refid="receiveLogList"/>
+        <if test="page.orders != null or page.orders.size != ''">
+            ORDER BY rl.create_time DESC
+        </if>
+    </select>
+
+    <select id="selectReceiveLogListByQuery"
+            resultType="org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogExcelResponse">
+        <include refid="receiveLogList"/>
     </select>
 </mapper>

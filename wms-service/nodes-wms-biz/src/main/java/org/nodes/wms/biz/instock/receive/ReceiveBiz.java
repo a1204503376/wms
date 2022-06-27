@@ -140,7 +140,7 @@ public interface ReceiveBiz {
 	 *
 	 * @param receiveHeaderId
 	 */
-	void updateReciveHeader(Long receiveHeaderId);
+	void updateReciveHeader(Long receiveDetailId);
 
 	/**
 	 * 记录收货的业务日志

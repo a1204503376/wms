@@ -64,7 +64,7 @@
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList" >
-                        <el-table-column v-if="!column.hide && column.prop === 'asnBillNo'" :key="index" show-overflow-tooltip v-bind="column">
+                        <el-table-column width="150" v-if="!column.hide && column.prop === 'asnBillNo'" :key="index" show-overflow-tooltip v-bind="column">
                             <template v-slot="scope">
                                 <el-link
                                     @click="onView(scope.row)"
@@ -74,10 +74,15 @@
                                 </el-link>
                                 </template>
                         </el-table-column>
-                        <el-table-column v-if="!column.hide && column.prop !== 'asnBillNo'" :key="index" show-overflow-tooltip v-bind="column">
+                        <el-table-column
+                            width="150"
+                            v-if="!column.hide && column.prop !== 'asnBillNo'"
+                            :key="index"
+                            show-overflow-tooltip
+                            v-bind="column">
                         </el-table-column>
                     </template>
-                    <el-table-column fixed="right" label="操作" width="100">
+                    <el-table-column fixed="right" label="操作" width="100" align="center">
                         <template v-slot="scope">
                             <el-button size="small" @click="onEdit(scope.row)" type="text">编辑</el-button>
                         </template>
@@ -159,6 +164,7 @@ export default {
                     {
                         prop: 'asnBillStateValue',
                         label: '单据状态',
+                        // align: "center",
                         sortable: 'custom',
                     },
                     {

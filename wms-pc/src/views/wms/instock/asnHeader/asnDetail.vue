@@ -15,7 +15,7 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="ASN单编码：">
-                                <span>{{form.params.asnBillNo}}</span>
+                                {{form.params.asnBillNo}}
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -54,11 +54,9 @@
                                 :data="table.data"
                                 border
                                 highlight-current-row
-                                size="mini"
-                                @sort-change="onSortChange">
+                                size="mini">
                                 <el-table-column
                                     fixed
-                                    sortable
                                     type="index">
                                     <template slot="header">
                                         #
@@ -83,11 +81,9 @@
                                         :data="publicTable.data"
                                         border
                                         highlight-current-row
-                                        size="mini"
-                                        @sort-change="onSortChange">
+                                        size="mini">
                                         <el-table-column
                                             fixed
-                                            sortable
                                             type="index">
                                             <template slot="header">
                                                 #
@@ -102,14 +98,6 @@
                                             </el-table-column>
                                         </template>
                                     </el-table>
-                                    <el-pagination
-                                        :page-sizes="[20, 50, 100]"
-                                        background
-                                        layout="total, sizes, prev, pager, next, jumper"
-                                        v-bind="page"
-                                        @size-change="handleSizeChange"
-                                        @current-change="handleCurrentChange" style="margin-top: 10px;text-align:right;">
-                                    </el-pagination>
                                 </el-tab-pane>
                             </el-tabs>
                         </template>
@@ -121,8 +109,7 @@
                     <el-button
                         :loading="loading"
                         @click="onClose"
-                    >
-                        关 闭
+                    >关 闭
                     </el-button>
                 </el-row>
             </el-footer>
@@ -131,17 +118,13 @@
 </template>
 
 <script>
-import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
-import NodesSku from "@/components/wms/select/NodesSku";
-import NodesLineNumber from "@/components/wms/table/NodesLineNumber";
 import {editDetailMixin} from "@/mixins/editDetail";
-import {listMixin} from "@/mixins/list";
 import {detail, getLog} from "@/api/wms/instock/asnHeader"
 
 export default {
     name: "selectDetails",
-    components: {NodesLineNumber, NodesSku, NodesInStoreMode},
-    mixins: [editDetailMixin,listMixin],
+    components: {},
+    mixins: [editDetailMixin],
     props: {
         asnBillId: {type: String, required: true},
     },
@@ -176,7 +159,6 @@ export default {
                         prop: 'skuCode',
                         label: '物品编码',
                         width: 140,
-                        sortable: 'custom'
                     },
                     {
                         prop: 'skuName',
@@ -236,7 +218,6 @@ export default {
                     prop: 'userAccount',
                     label: '操作人账号',
                     width: 300,
-                    sortable: 'custom'
                 },
                 {
                     prop: 'userRealName',
@@ -270,7 +251,6 @@ export default {
                     prop: 'name',
                     label: '姓名',
                     width: 300,
-                    sortable: 'custom'
                 },
                 {
                     prop: 'date',
@@ -296,7 +276,8 @@ export default {
                 },
             ]
         }
-    },mounted() {
+    },
+    mounted() {
 
     },
     created() {
@@ -329,9 +310,6 @@ export default {
                     this.table.data = asnDetailList
                 })
         },
-        createRowObj() {
-
-        },
         //获取日志数据---跟后台交互
         getLog() {
             let asnBillIdObj = {
@@ -339,42 +317,17 @@ export default {
             }
             getLog(asnBillIdObj)
                 .then((res)=>{
-                    let logData = res.data.data;
-                    this.publicTable.data = logData;
+                    this.publicTable.data = res.data.data;
                 })
         },
         //获取收货记录数据---跟后台交互
         getReceivingRecord() {
             // API调用:post(this.searchFrom)
-            function getRandomInt(min, max) {
-                min = Math.ceil(min);
-                max = Math.floor(max);
-                return Math.floor(Math.random() * (max - min)) + min; //不含最大值，含最小值
-            }
 
-            let fill = [];
-            for (let i = 0; i < 101; i++) {
-                // 模拟表格数据
-                let item = {
-                    id: i + 1,
-                    date: `${getRandomInt(2018, 2022)}-${getRandomInt(1, 12)}-${getRandomInt(1, 28)}`,
-                    name: "王小虎接收记录" + getRandomInt(1, 101),
-                    wages: getRandomInt(3000, 15000),
-                    address: `上海市普陀区金沙江路 ${getRandomInt(100, 2000)} 弄`
-                };
-                fill.push(item);
-            }
-            let length = fill.length;
-            this.publicTable.page.total = length;
-            let offset = (this.publicTable.page.current - 1) * this.publicTable.page.size;
-            let number = offset + this.publicTable.page.size;
-            this.publicTable.data = (number >= length)
-                ? fill.slice(offset, length)
-                : fill.slice(offset, number);
         },
         //点击Tab的时候进行判断，然后获取对应数据及行对象
         handleClick(tab) {
-            if(tab.name==this.tabList[0].name)
+            if(tab.name===this.tabList[0].name)
             {
                 this.publicTable.columnList=this.logColumnList;
                 this.getLog();
