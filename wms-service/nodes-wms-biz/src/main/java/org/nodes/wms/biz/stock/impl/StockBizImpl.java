@@ -28,7 +28,7 @@ public class StockBizImpl implements StockBiz {
 	private final LocationBiz locationBiz;
 
 	@Override
-	public StockIndexResponse findStockIndexData() {
+	public StockIndexResponse staticsStockDataOnIndexPage() {
 		// 获取所有入库暂存区库位
 		List<Location> allStageList = locationBiz.getAllStage();
 		// 获取所有入库检验区库位
@@ -74,8 +74,4 @@ public class StockBizImpl implements StockBiz {
 		return response;
 	}
 
-	@Override
-	public Integer findStockSkuCountByLocIdList(List<Long> locIdList) {
-		return stockDao.getStockSkuCountByLocIdList(locIdList);
-	}
 }

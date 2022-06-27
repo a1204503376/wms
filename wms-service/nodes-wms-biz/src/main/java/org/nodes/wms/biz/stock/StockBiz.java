@@ -10,18 +10,11 @@ import java.util.Map;
  **/
 public interface StockBiz {
 
-	/**
-	 *
-	 *
-	 * @return
-	 */
-	StockIndexResponse findStockIndexData();
 
 	/**
-	 * 根据库位id查找库存物品总数
-	 *
-	 * @param locIdList: 库位id集合
-	 * @return Integer
+	 * 首页的库存数据统计
+	 * @return
 	 */
-	Integer findStockSkuCountByLocIdList(List<Long> locIdList);
+	StockIndexResponse staticsStockDataOnIndexPage();
+
 }
