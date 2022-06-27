@@ -133,7 +133,7 @@
             
         },
 		{
-			"path" : "pages/inStock/receiveByBox/collectionSerialNumber",
+			"path" : "pages/inStock/receiveByPcs/collectionSerialNumber",
 			"style" :                                                                                    
 			{
 			    "navigationBarTitleText": "采集序列号",
