@@ -12,12 +12,14 @@ import java.util.List;
  */
 @Data
 public class ReceiveDetailLpnPdaDto {
-	private List<ReceiveDetailLpnItemDto> receiveDetailLpnItemDtoList;
-	/**
-	 * 主键id
-	 */
+
 	@JsonSerialize(using = ToStringSerializer.class)
-	private Long id;
+	private Long receiveDetailLpnId;
+
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long reciveHeaderId;
+
+	private List<ReceiveDetailLpnItemDto> receiveDetailLpnItemDtoList;
 
 	/**
 	 * 箱码

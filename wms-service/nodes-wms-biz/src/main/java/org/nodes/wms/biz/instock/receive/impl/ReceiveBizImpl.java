@@ -221,7 +221,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		int a = 1;
 		List<ReceiveDetailLpnItemDto> receiveDetailLpnItemDtoList = new ArrayList<>();
 		ReceiveDetailLpn receiveDetailLpn = receiveDetailLpnList.get(0);
-		receiveDetailLpnPdaResponse.setId(receiveDetailLpn.getId());
+		receiveDetailLpnPdaResponse.setReceiveDetailLpnId(receiveDetailLpn.getId());
 		receiveDetailLpnPdaResponse.setLpnCode(receiveDetailLpn.getLpnCode());
 		receiveDetailLpnPdaResponse.setBoxCode(receiveDetailLpn.getBoxCode());
 		receiveDetailLpnPdaResponse.setSkuLot1(receiveDetailLpn.getSkuLot1());
