@@ -1,23 +1,23 @@
-package org.nodes.wms.dao.instock.receive.dto.output;
+package org.nodes.wms.dao.instock.receive.dto.input;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnItemDto;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * 按箱收货返回
+ * 按箱收货接收前端参数Request
  */
 @Data
-public class ReceiveDetailLpnPdaDto {
-
+public class ReceiveDetailLpnPdaRequest {
+	/**
+	 * 收货单头表id
+	 */
 	@JsonSerialize(using = ToStringSerializer.class)
-	private Long receiveDetailLpnId;
-
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long reciveHeaderId;
+	private Long receiveHeaderId;
 
 	private List<ReceiveDetailLpnItemDto> receiveDetailLpnItemDtoList;
 
@@ -45,4 +45,8 @@ public class ReceiveDetailLpnPdaDto {
 	 * 库位编码
 	 */
 	private String locCode;
+	/**
+	 * 库房id
+	 */
+	private Long whId;
 }
