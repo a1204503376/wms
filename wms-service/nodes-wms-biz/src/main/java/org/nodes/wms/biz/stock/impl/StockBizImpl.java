@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
+import org.nodes.wms.dao.stock.entities.Stock;
+import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.tool.utils.ConvertUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,27 @@ public class StockBizImpl implements StockBiz {
 	private final StockDao stockDao;
 
 	private final LocationBiz locationBiz;
+
+	@Override
+	public void freezeByLoc(StockLogTypeEnum type, Long locId) {
+
+	}
+
+	@Override
+	public void unfreezeByLoc(StockLogTypeEnum type, Long locId) {
+
+	}
+
+	@Override
+	public Stock inStock(StockLogTypeEnum type, ReceiveLog receiveLog) {
+		return null;
+	}
+
+	@Override
+	public Stock moveStock(Stock sourceStock, List<String> serialNoList,
+						   BigDecimal qty, Location targetLocation, StockLogTypeEnum type) {
+		return null;
+	}
 
 	@Override
 	public StockIndexResponse staticsStockDataOnIndexPage() {
