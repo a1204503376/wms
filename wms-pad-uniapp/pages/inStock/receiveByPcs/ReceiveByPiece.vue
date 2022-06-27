@@ -57,6 +57,7 @@
 					skuLot1: undefined,
 					boxCode: undefined,
 					locCode: 'STAGE',
+					isSn:'',
 				},
 				receiveDetailId: '',
 				receiveDetailList: [],
@@ -115,6 +116,7 @@
 					this.params.umName = data.data.umName;
 					this.params.skuLot1 = data.data.skuLot1;
 					this.params.boxCode = data.data.boxCode;
+					this.params.isSn=data.data.isSn;
 				})
 			},
 			esc() {
