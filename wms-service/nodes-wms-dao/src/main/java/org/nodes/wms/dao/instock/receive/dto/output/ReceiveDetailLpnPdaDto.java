@@ -16,6 +16,9 @@ public class ReceiveDetailLpnPdaDto {
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long receiveDetailLpnId;
 
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long reciveHeaderId;
+
 	private List<ReceiveDetailLpnItemDto> receiveDetailLpnItemDtoList;
 
 	/**
