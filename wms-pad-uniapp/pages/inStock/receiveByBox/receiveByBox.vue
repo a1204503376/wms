@@ -56,11 +56,13 @@
 					id:'',
 					receiveDetailId:'',
 					boxCode:'',
+					locCode:'',
 					lpnCode:'',
 					skuLot1:'',
 					skuLot2:'',
 					num:'',
 					receiveDetailLpnItemDtoList:[],
+					
 				},
 			}
 		},
@@ -68,6 +70,7 @@
 			var parse = JSON.parse(option.param)
 			this.param = parse
 			this.param['locCode'] = 'STAGE'
+			this.param['whId'] = uni.getStorageSync('warehouse').whId
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
