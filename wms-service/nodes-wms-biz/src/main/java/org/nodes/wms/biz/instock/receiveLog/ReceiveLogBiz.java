@@ -1,7 +1,12 @@
 package org.nodes.wms.biz.instock.receiveLog;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageRequest;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
+import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
+import org.springblade.core.mp.support.Query;
 
 import java.util.List;
 
@@ -21,4 +26,13 @@ public interface ReceiveLogBiz {
 	 * @return List<ReceiveLogIndexResponse>
 	 */
     List<ReceiveLogIndexResponse> findReceiveSkuQtyTop10();
+
+	/**
+	 * 分页查询
+	 *
+	 * @param query: 分页参数
+	 * @param receiveLogPageRequest: 分页查询条件参数
+	 * @return Page<ReceiveLogPageResponse>
+	 */
+    Page<ReceiveLogPageResponse> page(Query query, ReceiveLogPageRequest receiveLogPageRequest);
 }

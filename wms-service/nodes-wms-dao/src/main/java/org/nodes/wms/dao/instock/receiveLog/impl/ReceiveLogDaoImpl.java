@@ -1,9 +1,14 @@
 package org.nodes.wms.dao.instock.receiveLog.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.instock.receiveLog.ReceiveLogDao;
+import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageRequest;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
+import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.instock.receiveLog.mapper.ReceiveLogMapper;
@@ -17,14 +22,22 @@ import java.util.List;
  */
 @Repository
 @RequiredArgsConstructor
-public class ReceiveLogDaoImpl extends BaseServiceImpl<ReceiveLogMapper, ReceiveLog> implements ReceiveLogDao {
+public class ReceiveLogDaoImpl
+	extends BaseServiceImpl<ReceiveLogMapper, ReceiveLog>
+	implements ReceiveLogDao {
 	@Override
 	public List<ReceiveLogResponse> getReceiveLogList(Long receiveId) {
 		return super.baseMapper.selectReceiveLogList(receiveId);
 	}
 
-    @Override
-    public List<ReceiveLogIndexResponse> getReceiveSkuQtyTop10() {
-        return super.baseMapper.selectReceiveSkuQtyTop10();
-    }
+	@Override
+	public List<ReceiveLogIndexResponse> getReceiveSkuQtyTop10() {
+		return super.baseMapper.selectReceiveSkuQtyTop10();
+	}
+
+	@Override
+	public Page<ReceiveLogPageResponse> page(IPage<?> page,
+											 ReceiveLogPageRequest receiveLogPageRequest) {
+		return super.baseMapper.page(page, receiveLogPageRequest);
+	}
 }

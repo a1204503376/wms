@@ -30,8 +30,105 @@
                sum(qty) as qty
         FROM receive_log
         WHERE DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= create_time
-        GROUP BY sku_id,sku_code
+        GROUP BY sku_id, sku_code
         ORDER BY qty DESC
         limit 10
+    </select>
+
+    <select id="page" resultType="org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse">
+        SELECT
+        rl.id,
+        rl.receive_no,
+        rl.line_no,
+        rl.sku_code,
+        rl.sku_name,
+        rl.qty,
+        wspd.wsu_name,
+        rl.loc_code,
+        wh.wh_name,
+        o.owner_name,
+        rl.lpn_code,
+        rl.box_code,
+        rl.sn_code,
+        `user`.real_name as createUserName,
+        rl.create_time,
+        rl.sku_lot1,
+        rl.sku_lot2,
+        rl.sku_lot3,
+        rl.sku_lot4,
+        rl.sku_lot5,
+        rl.sku_lot6,
+        rl.sku_lot7,
+        rl.sku_lot8,
+        rl.sku_lot9,
+        rl.sku_lot10,
+        rl.sku_lot11,
+        rl.sku_lot12,
+        rl.sku_lot13,
+        rl.sku_lot14,
+        rl.sku_lot15,
+        rl.sku_lot16,
+        rl.sku_lot17,
+        rl.sku_lot18,
+        rl.sku_lot19,
+        rl.sku_lot20,
+        rl.sku_lot21,
+        rl.sku_lot22,
+        rl.sku_lot23,
+        rl.sku_lot24,
+        rl.sku_lot25,
+        rl.sku_lot26,
+        rl.sku_lot27,
+        rl.sku_lot28,
+        rl.sku_lot29,
+        rl.sku_lot30
+        FROM receive_log rl
+        LEFT JOIN wms_sku_package_detail wspd ON wspd.wsp_id = rl.wsp_id
+        LEFT JOIN wms_warehouse wh ON wh.wh_id = rl.wh_id
+        LEFT JOIN wms_owner o ON o.wo_id = rl.wo_id
+        LEFT JOIN blade_user `user` ON `user`.id = rl.create_user
+        <where>
+            rl.is_deleted = 0
+            <if test="param.receiveNo != null and param.receiveNo != ''">
+                rl.receive_no LIKE CONCAT('%', #{param.receiveNo} ,'%')
+            </if>
+            <if test="param.skuCode != null and param.skuCode != ''">
+                rl.sku_code LIKE CONCAT('%', #{skuCode} ,'%')
+            </if>
+            <if test="param.boxCode != null and param.boxCode != ''">
+                rl.box_code LIKE CONCAT('%', #{boxCode} ,'%')
+            </if>
+            <if test="param.lpnCode != null and param.lpnCode != ''">
+                rl.lpn_code LIKE CONCAT('%', #{lpnCode} ,'%')
+            </if>
+            <if test="param.snCode != null and param.snCode != ''">
+                rl.sn_code LIKE CONCAT('%', #{snCode} ,'%')
+            </if>
+            <if test="param.createUser != null and param.createUser != ''">
+                `user`.real_name LIKE CONCAT('%', #{createUser} ,'%')
+            </if>
+            <if test="param.locId != null and param.locId != ''">
+                rl.loc_id = #{locId}
+            </if>
+            <if test="param.whIdList != null and param.whIdList.size != 0">
+                rl.wh_id IN
+                <foreach collection="param.whIdList" open="(" close=")" item="item" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="param.ownerId != null and param.ownerId != ''">
+                rl.owner_id = #{ownerId}
+            </if>
+            <if test="param.createTimeDateBegin != null and param.createTimeDateBegin != ''">
+                rl.create_time &gt;= #{createTimeDateBegin}
+            </if>
+            <if test="param.createTimeDateEnd != null and param.createTimeDateEnd != ''">
+                rl.create_time &lt;= #{createTimeDateEnd}
+            </if>
+            <if test="page.orders != null or page.orders.size != ''">
+                ORDER BY rl.create_time DESC
+            </if>
+        </where>
+
     </select>
 </mapper>

@@ -13,6 +13,8 @@ import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
+import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageRequest;
+import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
@@ -50,7 +52,7 @@ public class ReceiveController {
 	@PostMapping("/newReceive")
 	public R<String> newReceive(@Valid @RequestBody NewReceiveRequest newReceiveRequest) {
 		ReceiveHeader receiveHeader = receiveBiz.newReceive(newReceiveRequest);
-		return R.success("单号:"+receiveHeader.getReceiveNo()+"保存成功");
+		return R.success("单号:" + receiveHeader.getReceiveNo() + "保存成功");
 	}
 
 	/**
@@ -59,8 +61,8 @@ public class ReceiveController {
 	@ApiLog("收货管理-修改")
 	@PostMapping("/editReceive")
 	public R<String> editReceive(@Valid @RequestBody EditReceiveRequest editReceiveRequest) {
-		String receiveNo  = receiveBiz.editReceive(editReceiveRequest);
-		return R.success("单号:"+receiveNo+"修改成功");
+		String receiveNo = receiveBiz.editReceive(editReceiveRequest);
+		return R.success("单号:" + receiveNo + "修改成功");
 	}
 
 	/**
@@ -69,7 +71,7 @@ public class ReceiveController {
 	@ApiLog("收货管理-逻辑删除")
 	@PostMapping("/delete")
 	public R<String> delete(@Valid @RequestBody DeleteReceiveIdRequest deleteReceiveIdRequest) {
-		if(receiveBiz.remove(deleteReceiveIdRequest.getReceiveIdList())){
+		if (receiveBiz.remove(deleteReceiveIdRequest.getReceiveIdList())) {
 			return R.success("删除成功");
 		}
 		return R.fail("删除失败");
@@ -82,6 +84,7 @@ public class ReceiveController {
 	public R<ReceiveResponse> getReceiveDetailById(@Valid @RequestBody ReceiveIdRequest receiveIdRequest) {
 		return R.data(receiveBiz.getReceiveDetail(receiveIdRequest.getReceiveId()));
 	}
+
 	/**
 	 * 编辑页面数据回显
 	 */
@@ -107,6 +110,7 @@ public class ReceiveController {
 	public void export(@RequestBody ReceivePageQuery receivePageQuery, HttpServletResponse response) {
 		receiveBiz.exportExcel(receivePageQuery, response);
 	}
+
 	/**
 	 * 获取收货单状态集合
 	 */
@@ -117,15 +121,26 @@ public class ReceiveController {
 
 	/**
 	 * 根据收货单id获取清点记录集合
+	 *
 	 * @param receiveId 收货单id
 	 */
 	@GetMapping("/getReceiveLogList")
-	public R<List<ReceiveLogResponse>> getReceiveLogList(Long receiveId){
+	public R<List<ReceiveLogResponse>> getReceiveLogList(Long receiveId) {
 		return R.data(receiveLogBiz.getReceiveLogList(receiveId));
-   }
+	}
 
 	@GetMapping("/getLogList")
-	public R<List<LogReceiveResponse>> getLogList(Long receiveId){
+	public R<List<LogReceiveResponse>> getLogList(Long receiveId) {
 		return R.data(receiveBiz.getLogList(receiveId));
+	}
+
+	@PostMapping("/pageReceiveLog")
+	public R<IPage<ReceiveLogPageResponse>> pageReceiveLog(Query query, @RequestBody ReceiveLogPageRequest receiveLogPageRequest) {
+		return R.data(receiveLogBiz.page(query,receiveLogPageRequest));
+	}
+
+	@PostMapping("exportReceiveLog")
+	public void exportReceiveLog(@RequestBody ReceiveLogPageRequest receiveLogPageRequest) {
+
 	}
 }
