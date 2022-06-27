@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  * 查看详情页面收货单明细表返回前端视图类
  **/
 @Data
-public class PdaByPieceReceiveQuery implements Serializable {
+public class PdaByPieceReceiveRequest implements Serializable {
 	/**
 	 * 物料编码
 	 */
