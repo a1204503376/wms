@@ -1,0 +1,36 @@
+
+  .demo-layout {
+	height:25px;
+	border-radius:4px;
+}
+.login-time {
+	font-weight:bolder;
+	margin-left: 38%;
+}
+.bg-purple-font {
+	background-color:$theme-backgroup-color;
+	height:20px;
+	color:white;
+	width:58px;
+	font-size:100%;
+	display: inline-block;
+	margin-top: 38%;
+}
+.user-name{
+	font-weight:bolder;
+	margin-top: 20%;
+	margin-left: 16%;
+}
+.img{
+	margin-left: 35%;
+}
+.pwd{
+	margin-left: 10%;
+	margin-right: 10%;
+}
+.logout-bt{
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+	background-color: $theme-backgroup-color;
+}

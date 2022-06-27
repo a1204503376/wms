@@ -1,0 +1,147 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/login/login",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"subNVues": [{
+						"id": "honeywellScannerComponent",
+						"path": "components/honeywellScannerComponent",
+						"style": {
+							"width": "0px",
+							"height": "0px"
+						}
+					}],
+					"titleNView": {
+						"buttons": [{
+							"text": "\ue892",
+							"fontSrc": "/static/icon/setting.ttf",
+							"fontSize": "22px"
+						}]
+					}
+				}
+			}
+		},
+		{
+			"path": "components/honeywellScannerComponent",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/reviseIp/reviseIp",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": "配置"
+			}
+		},
+		{
+			"path": "pages/home/home",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false,
+				"app-plus": {
+					"subNVues": [{
+						"id": "honeywellScannerComponent",
+						"path": "components/honeywellScannerComponent",
+						"style": {
+							"width": "0px",
+							"height": "0px"
+						}
+					}]
+				}
+			}
+		},
+		{
+			"path": "pages/userSetting/userSetting",
+			"style": {
+				"navigationBarTitleText": "个人中心",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/userSetting/pwdSetting",
+			"style": {
+				"navigationBarTitleText": "修改密码",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/userSetting/signSetting",
+			"style": {
+				"navigationBarTitleText": "签到",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/home/childrenHome",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/userSetting/warehouseSetting",
+			"style": {
+				"navigationBarTitleText": "切换库房",
+				"enablePullDownRefresh": false
+			}
+		}
+
+
+		, {
+			"path": "pages/inStock/receiveByPcs/receiptHeaderEnquiry",
+			"style": {
+				"navigationBarTitleText": "按件收货",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/inStock/receiveByPcs/receiptDetailEnquiry",
+			"style": {
+				"navigationBarTitleText": "按件收货",
+				"enablePullDownRefresh": false
+			}
+
+		},
+		{
+			"path": "pages/inStock/receiveByPcs/ReceiveByPiece",
+			"style": {
+				"navigationBarTitleText": "按件收货",
+				"enablePullDownRefresh": false
+			}
+		
+		}
+	    ,{
+            "path" : "pages/inStock/receiveByBox/receiveDetailLpnQuery",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "按箱收货",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/inStock/receiveByBox/receiveByBox",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "按箱收货",
+                "enablePullDownRefresh": false
+            }
+            
+        },
+		{
+			"path" : "pages/inStock/receiveByPcs/collectionSerialNumber",
+			"style" :                                                                                    
+			{
+			    "navigationBarTitleText": "采集序列号",
+			    "enablePullDownRefresh": false
+			}
+		}
+    ],
+	"globalStyle": {
+		"navigationBarBackgroundColor": "#33cbcc"
+	}
+}
