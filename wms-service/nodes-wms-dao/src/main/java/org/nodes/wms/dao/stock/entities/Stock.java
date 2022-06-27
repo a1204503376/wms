@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.nodes.core.tool.entity.SkuLotBaseEntity;
 import org.nodes.core.tool.jackson.BigDecimalSerializer;
 import org.nodes.wms.dao.common.entitits.BaseSkuLotEntity;
 import org.springblade.core.tool.utils.DateUtil;
@@ -34,7 +35,7 @@ import java.time.LocalDateTime;
 @TableName("wms_stock")
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "WmsStock对象", description = "库存")
-public class Stock extends BaseSkuLotEntity implements Serializable {
+public class Stock extends SkuLotBaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	public static final String STOCK_STATUS = "stock_status";
