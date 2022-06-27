@@ -9,6 +9,7 @@ import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -99,5 +100,27 @@ public interface ReceiveBiz {
 	 * @return
 	 */
 	ReceiveDetailLpnPdaResponse getReceiveDetailLpnByBoxCode(String boxCode);
+
+	/**
+	 * 判断是否可以收货，如果不能收货则抛异常
+	 * @param receiveDetailId 收货单明细id
+	 * @param receiveQty 本次收货数量
+	 */
+	void canReceive(Long receiveDetailId, BigDecimal receiveQty);
+
+	/**
+	 * 收货时更新收货单明细和收货单头表状态
+	 * @param receiveDetailId
+	 * @param receiveQty
+	 */
+	void updateReceiveByInStock(Long receiveDetailId, BigDecimal receiveQty);
+
+	/**
+	 * 记录收货的业务日志
+	 * @param receiveHeaderId 收货单id
+	 * @param receiveHeaderNo 收货单编码
+	 * @param log 日志内容
+	 */
+	void log(Long receiveHeaderId, String receiveHeaderNo, String log);
 
 }

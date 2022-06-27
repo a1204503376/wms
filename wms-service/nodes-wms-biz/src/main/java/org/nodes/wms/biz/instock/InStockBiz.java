@@ -19,5 +19,5 @@ public interface InStockBiz {
 	 * 按件收货
 	 * @param request
 	 */
-	PdaByPieceReceiveResponse ReceiptByPiece(PdaByPieceReceiveRequest request);
+	PdaByPieceReceiveResponse receiptByPiece(PdaByPieceReceiveRequest request);
 }
