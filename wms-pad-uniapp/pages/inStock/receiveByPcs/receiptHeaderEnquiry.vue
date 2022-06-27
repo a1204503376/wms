@@ -5,8 +5,8 @@
 				@search="search" class="font-in-page" style="margin: 12rpx">
 			</u-search>
 		</template>
-		<u-list style="height: 978rpx;" pagingEnabled="true" @scrolltolower="scrolltolower">
-			<u-divider text=""></u-divider>
+		<u-divider text="" style="margin-top:0rpx;"></u-divider>
+		<u-list style="height: 950rpx;" pagingEnabled="true" @scrolltolower="scrolltolower">
 			<u-list-item v-for="(item, index) in receiveList" :key="item.receiveNo">
 				<view @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
@@ -25,6 +25,12 @@
 					<u-divider text=""></u-divider>
 				</view>
 			</u-list-item>
+			<view v-if="loading">
+				<u-loading-icon text="加载中" textSize="18"></u-loading-icon>
+			</view>
+			<view v-if="divider">
+				<u-divider text="没有更多了"></u-divider>
+			</view>
 		</u-list>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
@@ -51,6 +57,8 @@
 					ascs: "", //正序字段集合
 					descs: "", //倒序字段集合
 				},
+				loading:false,
+				divider:false,
 			}
 		},
 		onUnload() {
@@ -76,9 +84,19 @@
 				this.$u.func.navigateBack();
 			},
 			getReceiveList(){
+				this.loading=false;
+				this.divider=false;
+				this.receiveList=[];
 				this.page.current = 1;
 				this.analysisCode(this.params.no);
 				receive.getReceiveList(this.params, this.page).then(data => {
+					if(data.data.records.length>0){
+						this.loading=true;
+						this.divider=false;
+					}else{
+						this.loading=false;
+						this.divider=true;
+					}
 					this.receiveList = data.data.records;
 				})
 			},
@@ -93,8 +111,17 @@
 				this.search();
 			},
 			scrolltolower() {
+				this.loading=false;
+				this.divider=false;
 				this.page.current++;
 				receive.getReceiveList(this.params, this.page).then(data => {
+					if(data.data.records.length>0){
+						this.loading=true;
+						this.divider=false;
+					}else{
+						this.loading=false;
+						this.divider=true;
+					}
 					data.data.records.forEach((item, index) => { //js遍历数组
 						this.receiveList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
 					});
