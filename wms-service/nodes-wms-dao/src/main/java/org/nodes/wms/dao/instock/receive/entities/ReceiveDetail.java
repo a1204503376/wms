@@ -3,9 +3,8 @@ package org.nodes.wms.dao.instock.receive.entities;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.models.auth.In;
 import lombok.Data;
-import org.nodes.wms.dao.common.entitits.BaseSkuLotEntity;
+import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
 
 import java.math.BigDecimal;

@@ -3,8 +3,7 @@ package org.nodes.wms.dao.instock.receiveLog.entities;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
-import org.nodes.wms.dao.common.entitits.BaseSkuLotEntity;
-import org.springblade.core.mp.base.BaseEntity;
+import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
 
 import java.math.BigDecimal;
 /**

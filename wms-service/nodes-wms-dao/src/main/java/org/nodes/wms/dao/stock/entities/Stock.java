@@ -17,7 +17,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.nodes.core.tool.entity.SkuLotBaseEntity;
 import org.nodes.core.tool.jackson.BigDecimalSerializer;
-import org.nodes.wms.dao.common.entitits.BaseSkuLotEntity;
 import org.springblade.core.tool.utils.DateUtil;
 import org.springframework.format.annotation.DateTimeFormat;
 
