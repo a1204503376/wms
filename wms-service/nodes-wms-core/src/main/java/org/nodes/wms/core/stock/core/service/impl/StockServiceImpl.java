@@ -595,7 +595,7 @@ public class StockServiceImpl<M extends StockMapper, T extends Stock>
 			stock.setStockQty(stock.getStockQty().add(stockAdd.getStockQty()));
 			UpdateWrapper<Stock> updateWrapper = new UpdateWrapper<>();
 			updateWrapper.lambda()
-				.set(Stock::getValidTime, stock.getValidTime())
+				//.set(Stock::getValidTime, stock.getValidTime())
 				.set(Stock::getStockQty, stock.getStockQty())
 				.set(Stock::getLastInTime, LocalDateTime.now())
 				.set(Stock::getUpdateTime, LocalDateTime.now())
@@ -606,7 +606,7 @@ public class StockServiceImpl<M extends StockMapper, T extends Stock>
 			stock = StockWrapper.build().entity(stockAdd);
 			stock.setStockQty(stockAdd.getStockQty());
 			stock.setLastInTime(LocalDateTime.now());
-			stock.setValidTime(stockAdd.getValidTime());
+			//stock.setValidTime(stockAdd.getValidTime());
 			// 插入库存信息
 			super.save(stock);
 		}

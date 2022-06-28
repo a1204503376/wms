@@ -47,6 +47,10 @@ public class SkuLotUtil {
 	 * @return 相同返回ture，否则返回false,如果没有skuLot属性也返回false
 	 */
 	public static <T1, T2> boolean compareAllSkuLot(T1 t1, T2 t2) {
+		if (Func.isEmpty(t1) || Func.isEmpty(t2)){
+			return false;
+		}
+
 		String propertyName;
 		for (int i = 0; i < SKULOT_NUMBER; ++i) {
 			propertyName = String.format("%s%d", SKULOT, i + 1);

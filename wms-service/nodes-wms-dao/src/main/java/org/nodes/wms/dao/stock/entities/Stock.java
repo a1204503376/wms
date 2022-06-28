@@ -1,28 +1,25 @@
 
 package org.nodes.wms.dao.stock.entities;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.nodes.core.tool.entity.SkuLotBaseEntity;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * 库存实体类
- *
- * @author pengwei
- * @since 2019-12-24
- */
 @Data
 @TableName("wms_stock")
 @EqualsAndHashCode(callSuper = true)
 public class Stock extends SkuLotBaseEntity implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	public static final String STOCK_STATUS = "stock_status";
+	private static final long serialVersionUID = 5537284380775132619L;
 
 	/**
 	 * 库存ID
@@ -31,29 +28,21 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	private Long stockId;
 
 	/**
-	 * 库房ID
+	 * 库存状态
 	 */
-	private Long whId;
+	private StockStatusEnum stockStatus;
 	/**
-	 * 库房名称
+	 * 层级
 	 */
-	private String whName;
+	private Integer skuLevel;
 	/**
-	 * 库区ID
+	 * 包装名称
 	 */
-	private Long zoneId;
+	private String wspName;
 	/**
-	 * 库区名称
+	 * 包装ID
 	 */
-	private String zoneName;
-	/**
-	 * 库位ID
-	 */
-	private Long locId;
-	/**
-	 * 库位编码
-	 */
-	private String locCode;
+	private Long wspId;
 	/**
 	 * 物品ID
 	 */
@@ -67,39 +56,57 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	 */
 	private String skuName;
 	/**
-	 * 包装ID
+	 * 待上架数量
 	 */
-	private Long wspId;
+	private BigDecimal stayStockQty;
 	/**
-	 * 包装名称
-	 */
-	private String wspName;
-	/**
-	 * 层级
-	 */
-	private Integer skuLevel;
-	/**
-	 * 库存数量
+	 * 上架数量
 	 */
 	private BigDecimal stockQty;
-	/**
-	 * 分配数量
-	 */
-	private BigDecimal occupyQty;
-
 	/**
 	 * 下架数量
 	 */
 	private BigDecimal pickQty;
 	/**
-	 * 盘点占用数量
+	 * 占用数量，不再使用
 	 */
-	@TableField(exist = false)
-	private BigDecimal countOccupyQty;
+	private BigDecimal occupyQty;
 	/**
-	 * 库存状态
+	 * 箱号
 	 */
-	private Integer stockStatus;
+	private String boxCode;
+	/**
+	 * 托盘号
+	 */
+	private String lpnCode;
+	/**
+	 * 库位ID
+	 */
+	private Long locId;
+	/**
+	 * 库位编码
+	 */
+	private String locCode;
+	/**
+	 * 库区ID
+	 */
+	private Long zoneId;
+	/**
+	 * 库区编码
+	 */
+	private String zoneCode;
+	/**
+	 * 库房ID
+	 */
+	private Long whId;
+	/**
+	 * 库房名称
+	 */
+	private String whCode;
+	/**
+	 * 货主ID
+	 */
+	private Long woId;
 	/**
 	 * 最近入库时间(库存数量增加时更新)
 	 */
@@ -112,17 +119,6 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	 * 批次号
 	 */
 	private String lotNumber;
-
-	/**
-	 * 货主ID
-	 */
-	private Long woId;
-
-	/**
-	 * 有效截止日期
-	 */
-	private String validTime;
-
 	/**
 	 * 乐观锁
 	 * 支持的数据类型只有:int,Integer,long,Long,Date,Timestamp,LocalDateTime

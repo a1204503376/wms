@@ -244,11 +244,11 @@ public class StockDetailServiceImpl<M extends StockDetailMapper, T extends Stock
 					return Func.equals(stockDetail.getStockStatus(), StockStatusEnum.NORMAL.getIndex());
 				}).collect(Collectors.toList());
 				if (normalStockDetailList.size() == stockDetailListAll.size()) {
-					stock.setStockStatus(StockStatusEnum.NORMAL.getIndex());
+					//stock.setStockStatus(StockStatusEnum.NORMAL.getIndex());
 				} else if (normalStockDetailList.size() == 0) {
-					stock.setStockStatus(StockStatusEnum.LOCK_FILL.getIndex());
+					//stock.setStockStatus(StockStatusEnum.LOCK_FILL.getIndex());
 				} else {
-					stock.setStockStatus(StockStatusEnum.LOCK_BLOCK.getIndex());
+					//stock.setStockStatus(StockStatusEnum.LOCK_BLOCK.getIndex());
 				}
 				stockService.updateById(stock);
 			});
@@ -309,11 +309,11 @@ public class StockDetailServiceImpl<M extends StockDetailMapper, T extends Stock
 					return Func.equals(stockDetail.getStockStatus(), StockStatusEnum.NORMAL.getIndex());
 				}).collect(Collectors.toList());
 				if (normalStockDetailList.size() == stockDetailListAll.size()) {
-					stock.setStockStatus(StockStatusEnum.NORMAL.getIndex());
+					//stock.setStockStatus(StockStatusEnum.NORMAL.getIndex());
 				} else if (normalStockDetailList.size() == 0) {
-					stock.setStockStatus(StockStatusEnum.LOCK_FILL.getIndex());
+					//stock.setStockStatus(StockStatusEnum.LOCK_FILL.getIndex());
 				} else {
-					stock.setStockStatus(StockStatusEnum.LOCK_BLOCK.getIndex());
+					//stock.setStockStatus(StockStatusEnum.LOCK_BLOCK.getIndex());
 				}
 				stockService.updateById(stock);
 			});
