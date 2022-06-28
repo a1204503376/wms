@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.instock.receiveLog;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
 import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageQuery;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
@@ -30,17 +31,17 @@ public interface ReceiveLogBiz {
 	List<ReceiveLogIndexResponse> findReceiveSkuQtyTop10();
 
 	/**
-	 * 创建清点记录
+	 * 生成清点记录
 	 *
-	 * @param receiveLog 外部只需要赋值业务参数
-	 * @return
+	 * @param request 请求对象
+	 * @return 生成的清点记录
 	 */
-	ReceiveLog newReceiveLog(ReceiveLog receiveLog);
+	ReceiveLog newReceiveLog(PdaByPieceReceiveRequest request);
 
 	/**
 	 * 分页查询
 	 *
-	 * @param query:                 分页参数
+	 * @param query:               分页参数
 	 * @param receiveLogPageQuery: 分页查询条件参数
 	 * @return Page<ReceiveLogPageResponse>
 	 */
@@ -50,7 +51,7 @@ public interface ReceiveLogBiz {
 	 * 导出
 	 *
 	 * @param receiveLogPageQuery: 导出时条件参数
-	 * @param response: 响应对象
+	 * @param response:            响应对象
 	 */
 	void exportExcel(ReceiveLogPageQuery receiveLogPageQuery, HttpServletResponse response);
 }
