@@ -53,6 +53,13 @@ public interface StockBiz {
 					Location targetLocation, StockLogTypeEnum type);
 
 	/**
+	 * 根据想码查询库存
+	 * @param boxCode
+	 * @return
+	 */
+	List<Stock> findStockByBoxCode(String boxCode);
+
+	/**
 	 * 首页的库存数据统计
 	 *
 	 * @return 统计数据
