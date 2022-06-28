@@ -261,13 +261,20 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			if (receiveHeader.getBillState() == ReceiveHeaderStateEnum.NOT_RECEIPT || receiveHeader.getBillState() == ReceiveHeaderStateEnum.PART) {
 				int isExcit = detail.getPlanQty().compareTo(detail.getScanQty());
 				if (isExcit == 0) {
-					new ServiceException("该单不可以收货，原因无可收的货物");
+					throw new ServiceException("该单不可以收货，原因无可收的货物");
+				} else {
+					BigDecimal sumScanQty = detail.getScanQty().add(receiveQty);
+					int compareTo = detail.getPlanQty().compareTo(sumScanQty);
+					//如果数量不超过计划数量就复制给实收数量
+					if (compareTo < 0) {
+						throw new ServiceException("不能超收");
+					}
 				}
 			} else {
-				new ServiceException("该单不可以收货，原因收货单已经收货完成");
+				throw new ServiceException("该单不可以收货，原因收货单已经收货完成");
 			}
 		} else {
-			new ServiceException("该单不可以收货，原因收货单明细已经收货完成");
+			throw new ServiceException("该单不可以收货，原因收货单明细已经收货完成");
 		}
 	}
 
@@ -284,8 +291,6 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			if (compareTo == 0) {
 				detail.setDetailStatus(ReceiveDetailStatusEnum.COMPLETED);
 			}
-		} else {
-			new ServiceException("不能超收");
 		}
 		BigDecimal surplusQty = detail.getPlanQty().subtract(sumScanQty);
 		detail.setSurplusQty(surplusQty);
@@ -306,7 +311,8 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	}
 
 	@Override
-	public void log(Long receiveHeaderId, String receiveHeaderNo, String log) {
-     logBiz.auditLog(AuditLogType.INSTOCK,receiveHeaderId,receiveHeaderNo,log);
+	public void log(Long receiveHeaderId, String log) {
+		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(receiveHeaderId);
+		logBiz.auditLog(AuditLogType.INSTOCK, receiveHeaderId, receiveHeader.getReceiveNo(), log);
 	}
 }

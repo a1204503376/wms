@@ -138,7 +138,7 @@ public interface ReceiveBiz {
 	/**
 	 * 收货之后更新收货单状态，注意该函数要在更新明细之后调用
 	 *
-	 * @param receiveHeaderId
+	 * @param receiveDetailId
 	 */
 	void updateReciveHeader(Long receiveDetailId);
 
@@ -146,9 +146,8 @@ public interface ReceiveBiz {
 	 * 记录收货的业务日志
 	 *
 	 * @param receiveHeaderId 收货单id
-	 * @param receiveHeaderNo 收货单编码
 	 * @param log             日志内容
 	 */
-	void log(Long receiveHeaderId, String receiveHeaderNo, String log);
+	void log(Long receiveHeaderId, String log);
 
 }
