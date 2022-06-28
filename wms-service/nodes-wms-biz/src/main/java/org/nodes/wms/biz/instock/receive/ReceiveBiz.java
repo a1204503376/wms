@@ -210,4 +210,11 @@ public interface ReceiveBiz {
 	 * @param lpn 实体
 	 */
 	void updateReceiveDetailLpn(ReceiveDetailLpn lpn);
+
+	/**
+	 * 根据id获取收货单头表实体
+	 * @param receiveHeaderId 收货单id
+	 * @return  收货单头表实体
+	 */
+	ReceiveHeader getReceiveHeaderById(Long receiveHeaderId);
 }

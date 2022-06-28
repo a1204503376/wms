@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<!--/*@thymesVar id="allTask" type="java.util.ArrayList<com.nodes.job.executor.pojo.entity.Task>"*/-->
+    <div th:each="task:${allTask}">
+        <span th:text="${task.id}"></span>
+        <span th:text="${task.name}"></span>
+        <span th:text="${task.createdDate}"></span>
+        <span th:text="${task.lastUpdatedDate}"></span>
+    </div>
+    <!--/*@thymesVar id="task" type="com.nodes.job.executor.pojo.entity.Task"*/-->
+    <p th:text="${task.name}"></p>
+</body>
+</html>
