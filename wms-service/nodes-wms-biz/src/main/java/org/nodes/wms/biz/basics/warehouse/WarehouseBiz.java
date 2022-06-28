@@ -13,19 +13,29 @@ import java.util.List;
 public interface WarehouseBiz {
 	/**
 	 * 获取仓库下拉组件列表
+	 *
 	 * @return 仓库下拉列表集合
 	 */
 	List<WarehouseResponse> getWarehouseSelectResponseList();
 
 	/**
 	 * 根据仓库Id获取仓库实体
-	 * @param warehouseId  仓库Id
+	 *
+	 * @param warehouseId 仓库Id
 	 * @return Warehouse 仓库实体
 	 */
 	Warehouse findById(Long warehouseId);
 
 	/**
+	 * 获取所有的库房信息
+	 *
+	 * @return
+	 */
+	List<Warehouse> findAll();
+
+	/**
 	 * 根据仓库编码获取仓库实体
+	 *
 	 * @param whCode 仓库实体
 	 * @return Warehouse 仓库实体
 	 */
@@ -33,6 +43,7 @@ public interface WarehouseBiz {
 
 	/**
 	 * 根据用户获取有权限查看的库房
+	 *
 	 * @param user
 	 * @return
 	 */
@@ -43,8 +54,9 @@ public interface WarehouseBiz {
 	/**
 	 * 新增库房之后初始化库区、库位
 	 * 默认创建如下虚拟库位：STAGE（入库集货区）、QC（入库检验区）、
-	 *    PICKTO（出库集货区）、PACK（打包区）、UNKNOWN（未知库位）、
-	 *    INTRANSIT（库内虚拟区）；默认的库位编码为库房编码加上述库位编码，中间用-隔开
+	 * PICKTO（出库集货区）、PACK（打包区）、UNKNOWN（未知库位）、
+	 * INTRANSIT（库内虚拟区）；默认的库位编码为库房编码加上述库位编码，中间用-隔开
+	 *
 	 * @param warehouse: 库房对象
 	 */
 	void afterNewWarehouse(Warehouse warehouse);

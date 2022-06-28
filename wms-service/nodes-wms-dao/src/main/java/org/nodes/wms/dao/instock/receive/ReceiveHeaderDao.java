@@ -48,10 +48,21 @@ public interface ReceiveHeaderDao {
 	Page<ReceiveHeaderPdaResponse> getReceiveList(ReceivePdaQuery receivePdaQuery, IPage<ReceiveHeader> page);
 
 	/**
+	 * 根据用户id获取收货单集合
+	 * @param userId 用户id
+	 * @return 收货单集合
+	 */
+	List<ReceiveHeader> selectReceiveListByNonOrder(Long userId);
+	/**
 	 * 更新收货单头表
 	 * @param header 收货单头表数据
 	 * @return 是否成功
 	 */
 	Boolean updateReceiveHeader(ReceiveHeader header);
 
+	/**
+	 * 保存收货单头表实体
+	 * @param receiveHeader 收货单头表实体
+	 */
+	void saveReceiveHeader(ReceiveHeader receiveHeader);
 }

@@ -32,6 +32,13 @@ public class WarehouseDaoImpl extends BaseServiceImpl<WarehouseMapper, Warehouse
 	}
 
 	@Override
+	public List<Warehouse> findAll() {
+		LambdaQueryWrapper<Warehouse> queryWrapper = new LambdaQueryWrapper<>();
+		queryWrapper.eq(Warehouse::getIsDeleted, 0);
+		return super.list(queryWrapper);
+	}
+
+	@Override
 	public Warehouse findByCode(String whCode) {
 		return super.getOne(new LambdaQueryWrapper<Warehouse>().eq(Warehouse::getWhCode, whCode));
 	}

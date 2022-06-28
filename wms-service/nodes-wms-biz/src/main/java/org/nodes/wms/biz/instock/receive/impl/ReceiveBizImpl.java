@@ -109,6 +109,36 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		return true;
 	}
 
+    @Override
+    public List<ReceiveHeader> getReceiveListByNonOrder(Long userId) {
+        return receiveHeaderDao.selectReceiveListByNonOrder(userId);
+    }
+
+	@Override
+	public void newReceiveHeader(ReceiveHeader receiveHeader) {
+		 receiveHeaderDao.saveReceiveHeader(receiveHeader);
+	}
+
+	@Override
+	public String getReceiveDetailLinNo(Long receiveId) {
+		return receiveDetailDao.selectReceiveDetailLinNo(receiveId);
+	}
+
+	@Override
+	public ReceiveDetailLpn getReceiveDetailLpnById(Long receiveDetailLpnId) {
+		return receiveDetailLpnDao.selectReceiveDetailLpnById(receiveDetailLpnId);
+	}
+
+    @Override
+    public void newReceiveDetail(ReceiveDetail receiveDetail) {
+        receiveDetailDao.saveOrUpdateReceiveDetail(receiveDetail);
+    }
+
+	@Override
+	public void updateReceiveDetailLpn(ReceiveDetailLpn lpn) {
+		receiveDetailLpnDao.updateReceiveDetailLpn(lpn);
+	}
+
 
 	@Override
 	@Transactional
@@ -179,7 +209,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		List<EditReceiveDetailRequest> editReceiveDetailRequestList = editReceiveRequest.getEditReceiveDetailRequestList();
 		for (EditReceiveDetailRequest editReceiveDetailRequest : editReceiveDetailRequestList) {
 			ReceiveDetail receiveDetail = receiveFactory.createEditReceiveDetail(editReceiveDetailRequest, receiveHeader);
-			receiveDetailDao.saveOrUpdateReceive(receiveDetail);
+			receiveDetailDao.saveOrUpdateReceiveDetail(receiveDetail);
 		}
 		receiveHeaderDao.updateReceive(receiveHeader);
 		logBiz.auditLog(AuditLogType.RECEIVE_BILL, receiveHeader.getReceiveId(), receiveHeader.getReceiveNo(), "编辑收货单");
@@ -238,6 +268,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			receiveDetailLpnItemDto.setSkuName(item.getSkuName());
 			receiveDetailLpnItemDto.setPlanQty(item.getPlanQty());
 			receiveDetailLpnItemDto.setReceiveDetailId(item.getReceiveDetailId());
+			receiveDetailLpnItemDto.setSkuId(item.getSkuId());
 			receiveDetailLpnItemDto.setReceiveDetailLpnId(item.getId());
 			receiveDetailLpnItemDtoList.add(receiveDetailLpnItemDto);
 			//设置总数
@@ -261,13 +292,20 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			if (receiveHeader.getBillState() == ReceiveHeaderStateEnum.NOT_RECEIPT || receiveHeader.getBillState() == ReceiveHeaderStateEnum.PART) {
 				int isExcit = detail.getPlanQty().compareTo(detail.getScanQty());
 				if (isExcit == 0) {
-					new ServiceException("该单不可以收货，原因无可收的货物");
+					throw new ServiceException("该单不可以收货，原因无可收的货物");
+				} else {
+					BigDecimal sumScanQty = detail.getScanQty().add(receiveQty);
+					int compareTo = detail.getPlanQty().compareTo(sumScanQty);
+					//如果数量不超过计划数量就复制给实收数量
+					if (compareTo < 0) {
+						throw new ServiceException("不能超收");
+					}
 				}
 			} else {
-				new ServiceException("该单不可以收货，原因收货单已经收货完成");
+				throw new ServiceException("该单不可以收货，原因收货单已经收货完成");
 			}
 		} else {
-			new ServiceException("该单不可以收货，原因收货单明细已经收货完成");
+			throw new ServiceException("该单不可以收货，原因收货单明细已经收货完成");
 		}
 	}
 
@@ -284,8 +322,6 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			if (compareTo == 0) {
 				detail.setDetailStatus(ReceiveDetailStatusEnum.COMPLETED);
 			}
-		} else {
-			new ServiceException("不能超收");
 		}
 		BigDecimal surplusQty = detail.getPlanQty().subtract(sumScanQty);
 		detail.setSurplusQty(surplusQty);
@@ -306,7 +342,20 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	}
 
 	@Override
-	public void log(Long receiveHeaderId, String receiveHeaderNo, String log) {
-     logBiz.auditLog(AuditLogType.INSTOCK,receiveHeaderId,receiveHeaderNo,log);
+	public void log(Long receiveHeaderId, Long receiveDetailId,
+					BigDecimal qty, String skuLotNumber) {
+		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(receiveHeaderId);
+		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveDetailId);
+		logBiz.auditLog(AuditLogType.INSTOCK, receiveHeaderId, receiveHeader.getReceiveNo(), String.format("%s收货%s,批次%s", detail.getLineNo(), qty, skuLotNumber));
+	}
+
+	@Override
+	public ReceiveDetail getDetailByReceiveDetailId(Long receiveDetailId) {
+		return receiveDetailDao.getDetailByReceiveDetailId(receiveDetailId);
+	}
+
+	@Override
+	public ReceiveHeader selectReceiveHeaderById(Long receiveId) {
+		return receiveHeaderDao.selectReceiveHeaderById(receiveId);
 	}
 }

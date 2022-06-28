@@ -1,7 +1,6 @@
 package org.nodes.wms.biz.basics.warehouse;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.swagger.models.auth.In;
 import org.nodes.wms.dao.basics.location.dto.input.LocationAddOrEditRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationExcelRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
@@ -16,9 +15,6 @@ import org.springblade.core.mp.support.Query;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-/**
- * 客户管理业务层接口
- */
 public interface LocationBiz {
 	/**
 	 * 获取库位下拉列表最近十条数据
@@ -39,7 +35,7 @@ public interface LocationBiz {
 	/**
 	 * 分页
 	 *
-	 * @param query 页参数
+	 * @param query              页参数
 	 * @param locationPageQuery: 分页查询条件
 	 * @return IPage<LocationPageResponse>
 	 */
@@ -49,7 +45,7 @@ public interface LocationBiz {
 	 * 导出
 	 *
 	 * @param locationPageQuery: 条件
-	 * @param response: 响应信息
+	 * @param response:          响应信息
 	 */
 	void exportExcel(LocationPageQuery locationPageQuery, HttpServletResponse response);
 
@@ -62,7 +58,7 @@ public interface LocationBiz {
 	Location add(LocationAddOrEditRequest locationAddOrEditRequest);
 
 	/**
-	 * 根据id查找库位信息
+	 * 根据库位id查找库位信息
 	 *
 	 * @param locId: 库位id
 	 * @return LocationPageResponse
@@ -120,5 +116,14 @@ public interface LocationBiz {
 	 * @return int
 	 */
 	int countAll();
+
+	/**
+	 * 根据库位编码获取库位
+	 *
+	 * @param whId    库房id
+	 * @param locCode 库位编码
+	 * @return 库位信息
+	 */
+	Location findLocationByLocCode(Long whId, String locCode);
 
 }

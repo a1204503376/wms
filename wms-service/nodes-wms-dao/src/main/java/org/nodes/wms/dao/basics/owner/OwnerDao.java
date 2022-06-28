@@ -32,4 +32,10 @@ public interface OwnerDao {
 	 * @return Owner
 	 */
     Owner getByCode(String ownerCode);
+
+	/**
+	 * 获取第一条货主信息
+	 * @return
+	 */
+    Owner selectFirstOwner();
 }

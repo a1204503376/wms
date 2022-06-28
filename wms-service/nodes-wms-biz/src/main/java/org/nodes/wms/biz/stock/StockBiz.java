@@ -22,7 +22,7 @@ public interface StockBiz {
 	/**
 	 * 根据库位冻结
 	 *
-	 * @param type 库存移动类型
+	 * @param type  库存移动类型
 	 * @param locId 库位id
 	 */
 	void freezeByLoc(StockLogTypeEnum type, Long locId);
@@ -30,7 +30,7 @@ public interface StockBiz {
 	/**
 	 * 根据库位解冻
 	 *
-	 * @param type 库存移动类型
+	 * @param type  库存移动类型
 	 * @param locId 库位id
 	 */
 	void unfreezeByLoc(StockLogTypeEnum type, Long locId);
@@ -38,8 +38,8 @@ public interface StockBiz {
 	/**
 	 * 收货入库
 	 *
-	 * @param type 入库来源
-	 * @param receiveLog     清点记录
+	 * @param type       入库来源
+	 * @param receiveLog 清点记录
 	 * @return 目标库存
 	 */
 	Stock inStock(StockLogTypeEnum type, ReceiveLog receiveLog);
@@ -51,14 +51,15 @@ public interface StockBiz {
 	 * @param serialNoList   移动的序列号，可能为空
 	 * @param qty            移动数量
 	 * @param targetLocation 目标库位
-	 * @param type 库存移动类型
+	 * @param type           库存移动类型
 	 * @return 目标库存
 	 */
 	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
 					Location targetLocation, StockLogTypeEnum type);
 
 	/**
-	 * 根据想码查询库存
+	 * 根据箱码查询库存
+	 *
 	 * @param boxCode
 	 * @return
 	 */
@@ -74,17 +75,17 @@ public interface StockBiz {
 	/**
 	 * 库存日志分页查询
 	 *
-	 * @param query: 分页参数
+	 * @param query:             分页参数
 	 * @param stockLogPageQuery: 查询条件dto对象
 	 * @return Page<StockLogPageResponse>
 	 */
-    Page<StockLogPageResponse> pageStockLog(Query query, StockLogPageQuery stockLogPageQuery);
+	Page<StockLogPageResponse> pageStockLog(Query query, StockLogPageQuery stockLogPageQuery);
 
 	/**
 	 * 导出
 	 *
 	 * @param stockLogPageQuery: 导出条件dto对象
-	 * @param response: 响应对象
+	 * @param response:          响应对象
 	 */
 	void export(StockLogPageQuery stockLogPageQuery, HttpServletResponse response);
 }

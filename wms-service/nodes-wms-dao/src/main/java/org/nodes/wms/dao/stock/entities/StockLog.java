@@ -1,7 +1,8 @@
 package org.nodes.wms.dao.stock.entities;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import org.nodes.wms.dao.common.entitits.BaseSkuLotEntity;
+import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
 
 import java.math.BigDecimal;
 
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
  * 库存日志实体类
  **/
 @Data
+@TableName("wms_stock_log")
 public class StockLog extends BaseSkuLotEntity {
 
 	private static final long serialVersionUID = 1057813814281261519L;

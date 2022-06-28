@@ -81,33 +81,26 @@ public interface LocationDao {
 	 */
 	boolean removeByIdList(List<Long> idList);
 
-
-	/**
-	 * 查询所有的库房的入库集货区
-	 *
-	 * @return List<Location>
-	 */
-	List<Location> getAllStage();
-
-	/**
-	 * 查询所有的库房的入库检验区
-	 *
-	 * @return List<Location>
-	 */
-	List<Location> getAllQc();
-
-	/**
-	 * 查询所有的库房的出库暂存区
-	 *
-	 * @return List<Location>
-	 */
-	List<Location> getAllPickTo();
-
 	/**
 	 * 获取库位总数量
 	 *
 	 * @return int
 	 */
-    int countAll();
+	int countAll();
+
+	/**
+	 * 根据库位编码获取库位
+	 *
+	 * @param locCode 库位编码
+	 * @return 库位信息
+	 */
+	Location getLocationByLocCode(Long whId, String locCode);
+
+	/**
+	 * 根据库位编码获取库位信息
+	 * @param locCode
+	 * @return
+	 */
+	List<Location> findLocation(List<String> locCode);
 
 }

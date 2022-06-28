@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.input.*;
 import org.nodes.wms.dao.instock.receive.dto.output.*;
+import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
+import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.springblade.core.mp.support.Query;
 
@@ -138,17 +140,74 @@ public interface ReceiveBiz {
 	/**
 	 * 收货之后更新收货单状态，注意该函数要在更新明细之后调用
 	 *
-	 * @param receiveHeaderId
+	 * @param receiveDetailId
 	 */
 	void updateReciveHeader(Long receiveDetailId);
 
 	/**
-	 * 记录收货的业务日志
+	 * 记录收货的业务日志，日志格式：[行号]收货[qty],批次[skuLotNumber]
 	 *
 	 * @param receiveHeaderId 收货单id
-	 * @param receiveHeaderNo 收货单编码
-	 * @param log             日志内容
+	 * @param receiveDetailId 收货单明细
+	 * @param qty             收货数量
+	 * @param skuLotNumber    批次号
 	 */
-	void log(Long receiveHeaderId, String receiveHeaderNo, String log);
+	void log(Long receiveHeaderId, Long receiveDetailId,
+			 BigDecimal qty, String skuLotNumber);
 
+	/**
+	 * 根据收货单id获取收货单详情
+	 *
+	 * @param receiveDetailId 收货单详情的id
+	 * @return 收货单详情
+	 */
+	ReceiveDetail getDetailByReceiveDetailId(Long receiveDetailId);
+
+	/**
+	 * 根据收货单id获取收货单
+	 *
+	 * @param receiveId 收货单id
+	 * @return 收货单数据
+	 */
+	ReceiveHeader selectReceiveHeaderById(Long receiveId);
+
+	/**
+	 * 根据用户id获取收货单集合
+	 * @param userId 用户id
+	 * @return 收货单集合
+	 */
+	List<ReceiveHeader> getReceiveListByNonOrder(Long userId);
+
+	/**
+	 * 保存收货单头表实体
+	 * @param receiveHeader 收货单头表实体
+	 */
+	void newReceiveHeader(ReceiveHeader receiveHeader);
+
+	/**
+	 * 根据收货单id查询明细最新一条明细的订单行号
+	 *
+	 * @param receiveId 收货单id
+	 * @return 最后一条明细的订单行号
+	 */
+	String getReceiveDetailLinNo(Long receiveId);
+
+	/**
+	 * 根据id获取lpn实体
+	 * @param receiveDetailLpnId  id
+	 * @return  lpn实体
+	 */
+	ReceiveDetailLpn getReceiveDetailLpnById(Long receiveDetailLpnId);
+
+	/**
+	 * 新建收货单明细
+	 * @param receiveDetail 收货单明细实体
+	 */
+	void newReceiveDetail(ReceiveDetail receiveDetail);
+
+	/**
+	 * 修改lpn
+	 * @param lpn 实体
+	 */
+	void updateReceiveDetailLpn(ReceiveDetailLpn lpn);
 }
