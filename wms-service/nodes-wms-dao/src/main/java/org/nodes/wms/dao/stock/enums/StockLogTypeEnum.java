@@ -23,8 +23,7 @@ public enum StockLogTypeEnum {
 	STOCK_MOVE_BY_START_OUTSTOCK_TASK(205, "出库任务开始执行"),
 	STOCK_MOVE_BY_END_OUTSTOCK_TASK(206, "出库任务成功执行"),
 
-	OUTSTOCK_BY_PICK(301, "拣货出库")
-	;
+	OUTSTOCK_BY_PICK(301, "拣货出库");
 
 	@EnumValue
 	private final Integer code;
