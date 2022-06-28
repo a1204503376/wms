@@ -12,6 +12,14 @@ import java.math.BigDecimal;
 @Data
 public class PdaByPieceReceiveRequest implements Serializable {
 	/**
+	 * 收货单id
+	 */
+	private Long receiveId;
+	/**
+	 * 收货单详情
+	 */
+	private Long receiveDetailId;
+	/**
 	 * 物料编码
 	 */
 	private String skuName;
