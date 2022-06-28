@@ -143,10 +143,15 @@ public class StockLog extends BaseSkuLotEntity {
 	/**
 	 * 库房id
 	 */
-	private String whId;
+	private Long whId;
 
 	/**
 	 * 货主id
 	 */
-	private String woId;
+	private Long woId;
+
+	/**
+	 * 消息
+	 */
+	private String msg;
 }

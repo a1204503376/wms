@@ -108,10 +108,15 @@ public class StockOccupy extends BaseSkuLotEntity {
 	/**
 	 * 库房id
 	 */
-	private String whId;
+	private Long whId;
 
 	/**
 	 * 货主id
 	 */
-	private String woId;
+	private Long woId;
+
+	/**
+	 * 版本号
+	 */
+	private Integer version;
 }
