@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 查看详情页面收货单明细表返回前端视图类
@@ -80,4 +81,12 @@ public class PdaByPieceReceiveRequest implements Serializable {
 	 * 库位编码
 	 */
 	private String locCode;
+	/**
+	 * 序列号管理
+	 */
+	private List<String> serialNumberList;
+	/**
+	 * 库房编码
+	 */
+	private String whCode;
 }
