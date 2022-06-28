@@ -57,15 +57,17 @@
 					skuLot1: undefined,
 					boxCode: undefined,
 					locCode: 'STAGE',
-					isSn:'',
+					isSn: ''
 				},
 				receiveDetailId: '',
+				receiveId: '',
 				receiveDetailList: [],
 			}
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
 			this.receiveDetailId = parse.receiveDetailId;
+            this.receiveId=parse.receiveId;
 			this.getDetailByDetailId();
 		},
 		onUnload() {
@@ -96,7 +98,8 @@
 				var _this = this;
 				uni.$u.throttle(function() {
 					_this.params.locCode = uni.getStorageSync('warehouse').whCode + _this.params.locCode;
-					_this.params.receiveDetailId=_this.receiveDetailId;
+					_this.params.receiveDetailId = _this.receiveDetailId;
+					_this.params.receiveId = _this.receiveId;
 					if (_this.params.isSn == 0) {
 						uni.$u.func.route('/pages/inStock/receiveByPcs/collectionSerialNumber', _this.params);
 						return;
@@ -116,14 +119,14 @@
 					this.params.umName = data.data.umName;
 					this.params.skuLot1 = data.data.skuLot1;
 					this.params.boxCode = data.data.boxCode;
-					this.params.isSn=data.data.isSn;
+					this.params.isSn = data.data.isSn;
 				})
 			},
 			esc() {
 				this.$u.func.navigateBack();
 			},
 			scannerCallback(no) {
-               this.analysisCode(no);
+				this.analysisCode(no);
 			}
 		}
 	}
