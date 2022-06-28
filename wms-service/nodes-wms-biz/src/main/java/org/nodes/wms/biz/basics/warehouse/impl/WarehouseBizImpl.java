@@ -62,7 +62,12 @@ public class WarehouseBizImpl implements WarehouseBiz {
 		return warehouseDao.findById(warehouseId);
 	}
 
-	@Override
+    @Override
+    public List<Warehouse> findAll() {
+		return warehouseDao.findAll();
+    }
+
+    @Override
 	public Warehouse findByCode(String whCode) {
 		return warehouseDao.findByCode(whCode);
 	}

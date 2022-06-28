@@ -53,7 +53,7 @@ public interface StockBiz {
 					Location targetLocation, StockLogTypeEnum type);
 
 	/**
-	 * 根据想码查询库存
+	 * 根据箱码查询库存
 	 *
 	 * @param boxCode
 	 * @return
@@ -67,12 +67,5 @@ public interface StockBiz {
 	 */
 	StockIndexResponse staticsStockDataOnIndexPage();
 
-	/**
-	 * @param skuCode 物品编码
-	 * @param skuName 物品名称
-	 * @param locCode 库位编码
-	 * @return 库存信息
-	 */
-	Stock findStockBySku(String skuCode, String skuName, String locCode);
 
 }

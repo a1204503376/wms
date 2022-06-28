@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang.NullArgumentException;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePdaQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderPdaResponse;
@@ -27,8 +28,9 @@ import java.util.List;
  */
 @Repository
 @RequiredArgsConstructor
-public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, ReceiveHeader>  implements ReceiveHeaderDao {
+public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, ReceiveHeader> implements ReceiveHeaderDao {
 	private final ReceiveHeaderMapper receiveHeaderMapper;
+
 	@Override
 	public IPage<ReceiveHeaderResponse> selectPage(IPage<ReceiveHeaderResponse> page, ReceivePageQuery receivePageQuery) {
 		return receiveHeaderMapper.getPage(page, receivePageQuery);
@@ -36,7 +38,7 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 
 	@Override
 	public boolean delete(List<Long> receiveIdList) {
-		return  super.deleteLogic(receiveIdList);
+		return super.deleteLogic(receiveIdList);
 	}
 
 	@Override
@@ -62,32 +64,33 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 		return receiveHeaderMapper.getReceiveHeaderResponseByQuery(receivePageQuery);
 	}
 
-    @Override
-    public ReceiveHeader selectReceiveHeaderById(Long receiveId) {
+	@Override
+	public ReceiveHeader selectReceiveHeaderById(Long receiveId) {
+		if (Func.isEmpty(receiveId)) {
+			throw new NullArgumentException("ReceiveHeaderDaoImpl.selectReceiveHeaderById");
+		}
 		return super.getById(receiveId);
+	}
 
-    }
+	@Override
+	public void updateReceive(ReceiveHeader receiveHeader) {
+		super.saveOrUpdate(receiveHeader);
 
-    @Override
-    public void updateReceive(ReceiveHeader receiveHeader) {
-        super.saveOrUpdate(receiveHeader);
+	}
 
-    }
-
-    @Override
-    public ReceiveHeader selectBillStateById(Long receiveId) {
+	@Override
+	public ReceiveHeader selectBillStateById(Long receiveId) {
 		LambdaQueryWrapper<ReceiveHeader> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-		lambdaQueryWrapper.select(ReceiveHeader::getBillState,ReceiveHeader::getReceiveNo).eq(ReceiveHeader::getReceiveId,receiveId);
+		lambdaQueryWrapper.select(ReceiveHeader::getBillState, ReceiveHeader::getReceiveNo).eq(ReceiveHeader::getReceiveId, receiveId);
 		return super.getOne(lambdaQueryWrapper);
-    }
+	}
 
 	@Override
 	public Page<ReceiveHeaderPdaResponse> getReceiveList(ReceivePdaQuery receivePdaQuery, IPage<ReceiveHeader> page) {
-		if(Func.isEmpty(receivePdaQuery.getNo()))
-		{
+		if (Func.isEmpty(receivePdaQuery.getNo())) {
 			throw new ServiceException("必须输入收货单编码或上游编码");
 		}
-		return receiveHeaderMapper.getReceiveList(receivePdaQuery,page);
+		return receiveHeaderMapper.getReceiveList(receivePdaQuery, page);
 	}
 
 	@Override

@@ -69,17 +69,17 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	ReceiveLog createReceiveLog(ReceiveLog receiveLog) {
 		ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(receiveLog.getReceiveDetailId());
 		ReceiveHeader receiveHeader = receiveBiz.selectReceiveHeaderById(receiveLog.getReceiveId());
-		Location location = locationBiz.findLocationByLocCode(receiveLog.getLocCode());
-		Stock stock = stockBiz.findStockBySku(receiveLog.getSkuCode(), receiveLog.getSkuName(), receiveLog.getLocCode());
+		Location location = locationBiz.findLocationByLocCode(0L,receiveLog.getLocCode());
+
 		receiveLog.setReceiveNo(receiveHeader.getReceiveNo());
 		receiveLog.setAsnBillId(receiveHeader.getAsnBillId());
 		receiveLog.setAsnBillNo(receiveHeader.getAsnBillNo());
 		receiveLog.setLineNo(detail.getLineNo());
 		receiveLog.setLocId(location.getLocId());
-		receiveLog.setSkuId(stock.getSkuId());
-		receiveLog.setWspId(stock.getWspId());
-		receiveLog.setSkuLevel(stock.getSkuLevel());
-		receiveLog.setWhId(stock.getWhId());
+		receiveLog.setSkuId(detail.getSkuId());
+		receiveLog.setWspId(detail.getWspId());
+		receiveLog.setSkuLevel(detail.getSkuLevel());
+		receiveLog.setWhId(detail.getWhId());
 		if (Func.isNotEmpty(detail.getWhId()) && Func.isNotEmpty(detail.getOwnerCode())) {
 			receiveLog.setWoId(detail.getWoId());
 			receiveLog.setOwnerCode(detail.getOwnerCode());

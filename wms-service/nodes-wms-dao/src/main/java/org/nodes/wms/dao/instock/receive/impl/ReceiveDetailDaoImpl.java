@@ -2,6 +2,7 @@ package org.nodes.wms.dao.instock.receive.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang.NullArgumentException;
 import org.nodes.wms.dao.instock.receive.ReceiveDetailDao;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailPdaQuery;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailRequest;
@@ -10,6 +11,7 @@ import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.mapper.ReceiveDetailMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,8 +21,9 @@ import java.util.List;
  */
 @Repository
 @RequiredArgsConstructor
-public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, ReceiveDetail>  implements ReceiveDetailDao {
+public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, ReceiveDetail> implements ReceiveDetailDao {
 	private final ReceiveDetailMapper receiveDetailMapper;
+
 	@Override
 	public List<DetailReceiveDetailResponse> selectDetailById(Long receiveId) {
 		return receiveDetailMapper.selectDetailById(receiveId);
@@ -41,17 +44,17 @@ public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, R
 		return receiveDetailMapper.selectDetailIdByReceiveId(receiveId);
 	}
 
-    @Override
-    public boolean insert(ReceiveDetail receiveDetail) {
+	@Override
+	public boolean insert(ReceiveDetail receiveDetail) {
 		return super.save(receiveDetail);
-    }
+	}
 
-    @Override
-    public List<ReceiveDetail> selectReceiveDetailById(Long receiveId) {
-		 LambdaQueryWrapper<ReceiveDetail> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-		lambdaQueryWrapper.eq(ReceiveDetail::getReceiveId,receiveId);
+	@Override
+	public List<ReceiveDetail> selectReceiveDetailById(Long receiveId) {
+		LambdaQueryWrapper<ReceiveDetail> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+		lambdaQueryWrapper.eq(ReceiveDetail::getReceiveId, receiveId);
 		return super.list(lambdaQueryWrapper);
-    }
+	}
 
 	@Override
 	public void saveOrUpdateReceiveDetail(ReceiveDetail receiveDetail) {
@@ -65,6 +68,9 @@ public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, R
 
 	@Override
 	public ReceiveDetail getDetailByReceiveDetailId(Long receiveDetailId) {
+		if (Func.isEmpty(receiveDetailId)) {
+			throw new NullArgumentException("ReceiveDetailDaoImpl.getDetailByReceiveDetailId");
+		}
 		return super.baseMapper.selectById(receiveDetailId);
 	}
 

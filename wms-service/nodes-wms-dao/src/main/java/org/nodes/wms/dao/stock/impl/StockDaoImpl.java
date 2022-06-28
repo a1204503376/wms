@@ -26,14 +26,4 @@ public class StockDaoImpl extends BaseServiceImpl<StockMapper, Stock> implements
 	public Integer getStockSkuCountByLocIdList(List<Long> locIdList) {
 		return super.baseMapper.selectStockSkuCountByLocIdList(locIdList);
 	}
-
-	@Override
-	public Stock getStockBySku(String skuCode, String skuName, String locCode) {
-		LambdaQueryWrapper<Stock> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-		lambdaQueryWrapper
-			.eq(Stock::getSkuCode, skuCode)
-			.eq(Stock::getSkuName, skuName)
-			.eq(Stock::getLocCode, locCode);
-		return super.getOne(lambdaQueryWrapper);
-	}
 }
