@@ -65,10 +65,10 @@ public class StockBizImpl implements StockBiz {
 		// 获取所有出库暂存区库位
 		List<Location> allPickToList = locationBiz.getAllPickTo();
 		// 根据入库暂存区id获取入库暂存区的物品数量和存放天数
-		Map<String,Object> stageStock = stockDao.getStockQtyByLocIdList(
+		Map<String, Object> stageStock = stockDao.getStockQtyByLocIdList(
 			allStageList.stream().map(Location::getLocId).collect(Collectors.toList()));
 		// 根据入库检验区id获取入库检验区的物品数量和存放天数
-		Map<String,Object> qcStock = stockDao.getStockQtyByLocIdList(
+		Map<String, Object> qcStock = stockDao.getStockQtyByLocIdList(
 			allQcList.stream().map(Location::getLocId).collect(Collectors.toList()));
 		// 根据出库暂存区id获取库存中不是入库暂存区的物品总数
 		int stockSkuCount = stockDao.getStockSkuCountByLocIdList(
@@ -77,30 +77,35 @@ public class StockBizImpl implements StockBiz {
 		int locCount = locationBiz.countAll();
 		StockIndexResponse response = new StockIndexResponse();
 
-		if (Func.isNotEmpty(stageStock)){
-			response.setStageSkuQty(ConvertUtil.convert(stageStock.get("skuQty"),BigDecimal.class));
-			response.setStageSkuStoreDay(ConvertUtil.convert(stageStock.get("skuStoreDay"),Integer.class));
+		if (Func.isNotEmpty(stageStock)) {
+			response.setStageSkuQty(ConvertUtil.convert(stageStock.get("skuQty"), BigDecimal.class));
+			response.setStageSkuStoreDay(ConvertUtil.convert(stageStock.get("skuStoreDay"), Integer.class));
 		} else {
 			response.setStageSkuQty(new BigDecimal(0));
 			response.setStageSkuStoreDay(0);
 		}
 
-		if (Func.isNotEmpty(qcStock)){
-			response.setQcSkuQty(ConvertUtil.convert(qcStock.get("skuQty"),BigDecimal.class));
-			response.setQcSkuStoreDay(ConvertUtil.convert(qcStock.get("skuStoreDay"),Integer.class));
-		}else {
+		if (Func.isNotEmpty(qcStock)) {
+			response.setQcSkuQty(ConvertUtil.convert(qcStock.get("skuQty"), BigDecimal.class));
+			response.setQcSkuStoreDay(ConvertUtil.convert(qcStock.get("skuStoreDay"), Integer.class));
+		} else {
 			response.setQcSkuQty(new BigDecimal(0));
 			response.setQcSkuStoreDay(0);
 		}
 
 		response.setStockSkuCount(stockSkuCount);
-		if (new Integer(0).equals(stockSkuCount)){
+		if (new Integer(0).equals(stockSkuCount)) {
 			response.setLocOccupy((double) 0);
-		}else {
+		} else {
 			BigDecimal decimal = new BigDecimal((double) stockSkuCount / locCount * 100);
 			response.setLocOccupy(decimal.setScale(2, RoundingMode.HALF_UP).doubleValue());
 		}
 		return response;
+	}
+
+	@Override
+	public Stock findStockBySku(String skuCode, String skuName, String locCode) {
+		return stockDao.getStockBySku(skuCode, skuName, skuCode);
 	}
 
 }

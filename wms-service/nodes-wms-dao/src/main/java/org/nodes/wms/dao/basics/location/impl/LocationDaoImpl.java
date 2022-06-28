@@ -51,15 +51,15 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 		return super.baseMapper.listByQuery(locationPageQuery);
 	}
 
-    @Override
-    public void saveOrUpdateLocation(Location location) {
+	@Override
+	public void saveOrUpdateLocation(Location location) {
 		super.saveOrUpdate(location);
-    }
+	}
 
-    @Override
-    public Location getLocationById(Long id) {
-        return super.getById(id);
-    }
+	@Override
+	public Location getLocationById(Long id) {
+		return super.getById(id);
+	}
 
 	@Override
 	public LocationDetailResponse getDetailById(Long id) {
@@ -71,29 +71,36 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 		return super.deleteLogic(idList);
 	}
 
-    @Override
-    public List<Location> getAllStage() {
+	@Override
+	public List<Location> getAllStage() {
 		LambdaQueryWrapper<Location> queryWrapper = Wrappers.lambdaQuery();
-		queryWrapper.likeLeft(Location::getLocCode,"STAGE");
-        return super.list(queryWrapper);
-    }
+		queryWrapper.likeLeft(Location::getLocCode, "STAGE");
+		return super.list(queryWrapper);
+	}
 
 	@Override
 	public List<Location> getAllQc() {
 		LambdaQueryWrapper<Location> queryWrapper = Wrappers.lambdaQuery();
-		queryWrapper.likeLeft(Location::getLocCode,"QC");
+		queryWrapper.likeLeft(Location::getLocCode, "QC");
 		return super.list(queryWrapper);
 	}
 
 	@Override
 	public List<Location> getAllPickTo() {
 		LambdaQueryWrapper<Location> queryWrapper = Wrappers.lambdaQuery();
-		queryWrapper.likeLeft(Location::getLocCode,"PICKTO");
+		queryWrapper.likeLeft(Location::getLocCode, "PICKTO");
 		return super.list(queryWrapper);
 	}
 
 	@Override
 	public int countAll() {
 		return super.count();
+	}
+
+	@Override
+	public Location getLocationByLocCode(String locCode) {
+		LambdaQueryWrapper<Location> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+		lambdaQueryWrapper.eq(Location::getLocCode, locCode);
+		return super.getOne(lambdaQueryWrapper);
 	}
 }

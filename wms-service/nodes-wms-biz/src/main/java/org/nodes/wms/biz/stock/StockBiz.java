@@ -17,7 +17,7 @@ public interface StockBiz {
 	/**
 	 * 根据库位冻结
 	 *
-	 * @param type 库存移动类型
+	 * @param type  库存移动类型
 	 * @param locId 库位id
 	 */
 	void freezeByLoc(StockLogTypeEnum type, Long locId);
@@ -25,7 +25,7 @@ public interface StockBiz {
 	/**
 	 * 根据库位解冻
 	 *
-	 * @param type 库存移动类型
+	 * @param type  库存移动类型
 	 * @param locId 库位id
 	 */
 	void unfreezeByLoc(StockLogTypeEnum type, Long locId);
@@ -33,8 +33,8 @@ public interface StockBiz {
 	/**
 	 * 收货入库
 	 *
-	 * @param type 入库来源
-	 * @param receiveLog     清点记录
+	 * @param type       入库来源
+	 * @param receiveLog 清点记录
 	 * @return 目标库存
 	 */
 	Stock inStock(StockLogTypeEnum type, ReceiveLog receiveLog);
@@ -46,7 +46,7 @@ public interface StockBiz {
 	 * @param serialNoList   移动的序列号，可能为空
 	 * @param qty            移动数量
 	 * @param targetLocation 目标库位
-	 * @param type 库存移动类型
+	 * @param type           库存移动类型
 	 * @return 目标库存
 	 */
 	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
@@ -54,6 +54,7 @@ public interface StockBiz {
 
 	/**
 	 * 根据想码查询库存
+	 *
 	 * @param boxCode
 	 * @return
 	 */
@@ -65,5 +66,13 @@ public interface StockBiz {
 	 * @return 统计数据
 	 */
 	StockIndexResponse staticsStockDataOnIndexPage();
+
+	/**
+	 * @param skuCode 物品编码
+	 * @param skuName 物品名称
+	 * @param locCode 库位编码
+	 * @return 库存信息
+	 */
+	Stock findStockBySku(String skuCode, String skuName, String locCode);
 
 }

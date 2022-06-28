@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.input.*;
 import org.nodes.wms.dao.instock.receive.dto.output.*;
+import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.springblade.core.mp.support.Query;
 
@@ -152,5 +153,21 @@ public interface ReceiveBiz {
 	 */
 	void log(Long receiveHeaderId, Long receiveDetailId,
 			 BigDecimal qty, String skuLotNumber);
+
+	/**
+	 * 根据收货单id获取收货单详情
+	 *
+	 * @param receiveDetailId 收货单详情的id
+	 * @return 收货单详情
+	 */
+	ReceiveDetail getDetailByReceiveDetailId(Long receiveDetailId);
+
+	/**
+	 * 根据收货单id获取收货单
+	 *
+	 * @param receiveId 收货单id
+	 * @return 收货单数据
+	 */
+	ReceiveHeader selectReceiveHeaderById(Long receiveId);
 
 }
