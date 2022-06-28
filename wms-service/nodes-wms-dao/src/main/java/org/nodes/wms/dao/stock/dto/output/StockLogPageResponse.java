@@ -1,7 +1,7 @@
 package org.nodes.wms.dao.stock.dto.output;
 
 import lombok.Data;
-import org.nodes.wms.dao.common.entitits.BaseSkuLot;
+import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
