@@ -7,7 +7,7 @@ import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
-import org.nodes.wms.dao.instock.receive.dto.output.PdaByPieceReceiveResponse;
+import org.nodes.wms.dao.instock.receive.dto.output.PdaByPcsReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnItemDto;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
@@ -84,19 +84,26 @@ public class InStockBizImpl implements InStockBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public Boolean receiptByPcs(PdaByPieceReceiveRequest request) {
+	public PdaByPcsReceiveResponse receiptByPcs(PdaByPieceReceiveRequest request) {
 		// 判断业务参数，是否可以正常收货、超收
-		//receiveBiz.canReceive(request.getReceiveDetailId(), request.getSurplusQty());
+		receiveBiz.canReceive(request.getReceiveDetailId(), request.getSurplusQty());
 		// 生成清点记录
 		ReceiveLog receiveLog = receiveLogBiz.newReceiveLog(request);
 		// 调用库存函数
-		stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PCS,receiveLog);
+		stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PCS, receiveLog);
 		// 更新收货单明细状态
 		receiveBiz.updateReceiveDetail(request.getReceiveDetailId(), request.getSurplusQty());
 		// 更新收货单状态
 		receiveBiz.updateReciveHeader(request.getReceiveDetailId());
 		// 记录业务日志
 		receiveBiz.log(request.getReceiveId(), request.getReceiveDetailId(), request.getSurplusQty(), request.getSkuLot1());
-		return true;
+		PdaByPcsReceiveResponse response = new PdaByPcsReceiveResponse();
+		//查询收货是否完成
+		ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(request.getReceiveDetailId());
+		response.setCurrentReceivieIsAccomplish(detail.getDetailStatus().getDesc());
+		//查询当前全部单据收货是否完成
+		ReceiveHeader receiveHeader = receiveBiz.selectReceiveHeaderById(request.getReceiveId());
+		response.setAllReceivieIsAccomplish(receiveHeader.getBillState().getDesc());
+		return response;
 	}
 }
