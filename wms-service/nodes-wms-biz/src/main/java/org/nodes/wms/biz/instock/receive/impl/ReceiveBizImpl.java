@@ -237,14 +237,13 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveIdPdaQuery.getReceiveDetailId());
 		ReceiveDetailByReceiveIdPdaResponse response = BeanUtil.copy(detail, ReceiveDetailByReceiveIdPdaResponse.class);
 		Sku sku = skuDao.getById(detail.getSkuId());
-		if (Func.isNotEmpty(sku)) {
-			if (sku.getIsSn() == 1) {
-				response.setIsSn(true);
-			} else {
-				response.setIsSn(false);
-			}
-		} else {
+		if (response != null) {
 			response.setIsSn(false);
+			if (Func.isNotEmpty(sku)) {
+				if (sku.getIsSn() == BigDecimal.ZERO.intValue()) {
+					response.setIsSn(false);
+				}
+			}
 		}
 
 		return response;
@@ -299,14 +298,14 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(detail.getReceiveId());
 		if (detail.getDetailStatus() == ReceiveDetailStatusEnum.NOT_RECEIPT || detail.getDetailStatus() == ReceiveDetailStatusEnum.PART) {
 			if (receiveHeader.getBillState() == ReceiveHeaderStateEnum.NOT_RECEIPT || receiveHeader.getBillState() == ReceiveHeaderStateEnum.PART) {
-				int isExcit = detail.getPlanQty().compareTo(detail.getScanQty());
-				if (isExcit == 0) {
+				int isExit = detail.getPlanQty().compareTo(detail.getScanQty());
+				if (isExit == BigDecimal.ZERO.intValue()) {
 					throw new ServiceException("该单不可以收货，原因无可收的货物");
 				} else {
 					BigDecimal sumScanQty = detail.getScanQty().add(receiveQty);
 					int compareTo = detail.getPlanQty().compareTo(sumScanQty);
 					//如果数量不超过计划数量就复制给实收数量
-					if (compareTo < 0) {
+					if (compareTo < BigDecimal.ZERO.intValue()) {
 						throw new ServiceException("不能超收");
 					}
 				}
@@ -321,14 +320,13 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	@Override
 	public void updateReceiveDetail(Long receiveDetailId, BigDecimal receiveQty) {
 		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveDetailId);
-		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(detail.getReceiveId());
 		BigDecimal sumScanQty = detail.getScanQty().add(receiveQty);
 		int compareTo = detail.getPlanQty().compareTo(sumScanQty);
 		//如果数量不超过计划数量就复制给实收数量
 		if (compareTo >= 0) {
 			detail.setScanQty(sumScanQty);
 			detail.setDetailStatus(ReceiveDetailStatusEnum.PART);
-			if (compareTo == 0) {
+			if (compareTo == BigDecimal.ZERO.intValue()) {
 				detail.setDetailStatus(ReceiveDetailStatusEnum.COMPLETED);
 			}
 		}
@@ -341,10 +339,10 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	public void updateReciveHeader(Long receiveDetailId) {
 		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveDetailId);
 		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(detail.getReceiveId());
-		int isExcit = detail.getPlanQty().compareTo(detail.getScanQty());
-		if (isExcit == 0) {
+		int isExit = detail.getPlanQty().compareTo(detail.getScanQty());
+		if (isExit == BigDecimal.ZERO.intValue()) {
 			receiveHeader.setBillState(ReceiveHeaderStateEnum.COMPLETED);
-		} else if (isExcit == 1) {
+		} else if (isExit == BigDecimal.ONE.intValue()) {
 			receiveHeader.setBillState(ReceiveHeaderStateEnum.PART);
 		}
 		receiveHeaderDao.updateReceiveHeader(receiveHeader);
