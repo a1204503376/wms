@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.entities.Stock;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.nodes.wms.dao.stock.mapper.StockMapper;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -62,6 +63,35 @@ public class StockDaoImpl extends BaseServiceImpl<StockMapper, Stock> implements
 	}
 
 	@Override
+	public List<Stock> getStock(StockStatusEnum status, Long woId,
+								Long locId, Long skuId, String boxCode, String lpnCode) {
+		if (Func.isNull(woId) || Func.isNull(skuId) || Func.isNull(locId)){
+			throw new ServiceException("库存查询失败,缺失必要参数");
+		}
+
+		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
+		queryWrapper
+			.eq(Stock::getStockStatus, status.getCode())
+			.eq(Stock::getWoId, woId)
+			.eq(Stock::getLocId, locId)
+			.eq(Stock::getSkuId, skuId);
+
+		if (Func.isEmpty(boxCode)){
+			queryWrapper.apply("(box_code is null)");
+		} else {
+			queryWrapper.eq(Stock::getBoxCode, boxCode);
+		}
+
+		if (Func.isEmpty(lpnCode)){
+			queryWrapper.apply("(lpn_code is null)");
+		} else {
+			queryWrapper.eq(Stock::getLpnCode, lpnCode);
+		}
+
+		return super.list(queryWrapper);
+	}
+
+	@Override
 	public List<Stock> getStockByLocId(Long locId) {
 		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
 		queryWrapper.eq(Stock::getLocId, locId);
@@ -69,7 +99,7 @@ public class StockDaoImpl extends BaseServiceImpl<StockMapper, Stock> implements
 	}
 
 	@Override
-	public Stock Save(Stock stock) {
+	public Stock saveNewStock(Stock stock) {
 		if (!super.save(stock)) {
 			throw new ServiceException("库存保存失败,请再次重试");
 		}
@@ -77,7 +107,7 @@ public class StockDaoImpl extends BaseServiceImpl<StockMapper, Stock> implements
 	}
 
 	@Override
-	public Stock update(Stock stock) {
+	public Stock updateStock(Stock stock) {
 		if (Func.isEmpty(stock.getStockId())) {
 			throw new ServiceException("库存保存失败,库位的唯一标识为空");
 		}
@@ -90,7 +120,7 @@ public class StockDaoImpl extends BaseServiceImpl<StockMapper, Stock> implements
 	}
 
 	@Override
-	public Stock update(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
+	public Stock updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
 						BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime) {
 		UpdateWrapper<Stock> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()

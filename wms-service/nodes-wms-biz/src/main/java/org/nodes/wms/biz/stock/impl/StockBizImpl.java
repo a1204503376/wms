@@ -6,6 +6,7 @@ import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.merge.StockMergeStrategy;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
@@ -44,6 +45,7 @@ public class StockBizImpl implements StockBiz {
 	private final ZoneBiz zoneBiz;
 	private final LocationBiz locationBiz;
 	private final SkuBiz skuBiz;
+	private final StockMergeStrategy stockMergeStrategy;
 
 	private final StockLogDao stockLogDao;
 
@@ -94,10 +96,23 @@ public class StockBizImpl implements StockBiz {
 	public Stock inStock(StockLogTypeEnum type, ReceiveLog receiveLog) {
 		Location location = locationBiz.findByLocId(receiveLog.getLocId());
 		canInStockByLocation(location, receiveLog.getSkuId(), receiveLog);
-		Stock stock = createStock(receiveLog, location);
-
-
 		// 形成库存，需要考虑库存合并
+		Stock stock = createStock(receiveLog, location);
+		Stock existStock = stockMergeStrategy.apply(stock);
+		// 本次入库保存的库存对象，如果需要合并则是数据库中保存的stock对象，否则为新的库存对象
+		Stock finalStock = null;
+		if (Func.isNull(existStock)){
+			// 新建库存
+			finalStock = stockDao.saveNewStock(stock);
+		} else {
+			// 合并库存
+			existStock.setStockQty(existStock.getStockQty().add(stock.getStockQty()));
+			existStock.setStayStockQty(existStock.getStayStockQty().add(stock.getStayStockQty()));
+			existStock.setPickQty(existStock.getPickQty().add(stock.getPickQty()));
+			existStock.setOccupyQty(existStock.getOccupyQty().add(stock.getOccupyQty()));
+			existStock.setLastInTime(LocalDateTime.now());
+			finalStock = stockDao.updateStock(existStock);
+		}
 
 		// 形成序列号信息
 

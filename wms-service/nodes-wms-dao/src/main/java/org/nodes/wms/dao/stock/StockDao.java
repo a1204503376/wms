@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.stock;
 
 import org.nodes.wms.dao.stock.entities.Stock;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -46,12 +47,15 @@ public interface StockDao {
 	 */
 	List<Stock> getStockByLpnCode(String lpnCode, List<Long> pickToLocIdList);
 
+	List<Stock> getStock(StockStatusEnum status, Long woId, Long locId,
+						 Long skuId, String boxCode, String lpnCode);
+
 	List<Stock> getStockByLocId(Long locId);
 
-	Stock Save(Stock stock);
+	Stock saveNewStock(Stock stock);
 
-	Stock update(Stock stock);
+	Stock updateStock(Stock stock);
 
-	Stock update(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
+	Stock updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
 				 BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
 }
