@@ -22,5 +22,5 @@ public interface InStockBiz {
 	 *
 	 * @param request
 	 */
-	PdaByPieceReceiveResponse receiptByPcs(PdaByPieceReceiveRequest request);
+	Boolean receiptByPcs(PdaByPieceReceiveRequest request);
 }

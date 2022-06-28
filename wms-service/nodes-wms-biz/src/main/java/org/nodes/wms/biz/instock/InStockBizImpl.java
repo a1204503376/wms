@@ -9,15 +9,14 @@ import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
 import org.nodes.wms.dao.instock.receive.dto.output.PdaByPieceReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnItemDto;
-import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnPdaResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,19 +84,19 @@ public class InStockBizImpl implements InStockBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public PdaByPieceReceiveResponse receiptByPcs(PdaByPieceReceiveRequest request) {
+	public Boolean receiptByPcs(PdaByPieceReceiveRequest request) {
 		// 判断业务参数，是否可以正常收货、超收
 		//receiveBiz.canReceive(request.getReceiveDetailId(), request.getSurplusQty());
 		// 生成清点记录
 		ReceiveLog receiveLog = receiveLogBiz.newReceiveLog(request);
 		// 调用库存函数
-
+		stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PCS,receiveLog);
 		// 更新收货单明细状态
 		receiveBiz.updateReceiveDetail(request.getReceiveDetailId(), request.getSurplusQty());
 		// 更新收货单状态
 		receiveBiz.updateReciveHeader(request.getReceiveDetailId());
 		// 记录业务日志
 		receiveBiz.log(request.getReceiveId(), request.getReceiveDetailId(), request.getSurplusQty(), request.getSkuLot1());
-		return null;
+		return true;
 	}
 }
