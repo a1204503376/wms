@@ -103,9 +103,5 @@ public class StockBizImpl implements StockBiz {
 		return response;
 	}
 
-	@Override
-	public Stock findStockBySku(String skuCode, String skuName, String locCode) {
-		return stockDao.getStockBySku(skuCode, skuName, skuCode);
-	}
 
 }

@@ -128,7 +128,7 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
-	public Location findLocationByLocCode(String locCode) {
-		return locationDao.getLocationByLocCode(locCode);
+	public Location findLocationByLocCode(Long whId, String locCode) {
+		return locationDao.getLocationByLocCode(whId, locCode);
 	}
 }

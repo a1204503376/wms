@@ -123,9 +123,10 @@ public interface LocationBiz {
 
 	/**
 	 * 根据库位编码获取库位
+	 * @param whId 库房id
 	 * @param locCode 库位编码
 	 * @return 库位信息
 	 */
-	Location findLocationByLocCode(String locCode);
+	Location findLocationByLocCode(Long whId, String locCode);
 
 }

@@ -116,6 +116,6 @@ public interface LocationDao {
 	 * @param locCode 库位编码
 	 * @return 库位信息
 	 */
-	Location getLocationByLocCode(String locCode);
+	Location getLocationByLocCode(Long whId, String locCode);
 
 }

@@ -26,11 +26,4 @@ public interface StockDao {
 	 */
 	Integer getStockSkuCountByLocIdList(List<Long> locIdList);
 
-	/**
-	 * @param skuCode 物品编码
-	 * @param skuName 物品名称
-	 * @param locCode 库位编码
-	 * @return 库存信息
-	 */
-	Stock getStockBySku(String skuCode, String skuName, String locCode);
 }

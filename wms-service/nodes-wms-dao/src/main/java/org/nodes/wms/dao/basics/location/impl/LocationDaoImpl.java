@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang.NullArgumentException;
 import org.nodes.wms.dao.basics.location.LocationDao;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
 import org.nodes.wms.dao.basics.location.dto.output.LocationDetailResponse;
@@ -13,7 +14,9 @@ import org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.mapper.LocationMapper;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -98,9 +101,15 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	}
 
 	@Override
-	public Location getLocationByLocCode(String locCode) {
+	public Location getLocationByLocCode(Long whId, String locCode) {
+		if (Func.isEmpty(whId) || Func.isEmpty(locCode)){
+			throw new NullArgumentException("LocationDaoImpl.getLocationByLocCode方法的参数为空");
+		}
+
 		LambdaQueryWrapper<Location> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-		lambdaQueryWrapper.eq(Location::getLocCode, locCode);
+		lambdaQueryWrapper
+			.eq(Location::getLocCode, locCode)
+			.eq(Location::getWhId, whId);
 		return super.getOne(lambdaQueryWrapper);
 	}
 }
