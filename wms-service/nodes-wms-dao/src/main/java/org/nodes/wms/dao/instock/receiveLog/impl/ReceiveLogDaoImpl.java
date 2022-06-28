@@ -51,7 +51,7 @@ public class ReceiveLogDaoImpl
 	@Override
 	public boolean save(ReceiveLog receiveLog) {
 		if(Func.isEmpty(receiveLog)){
-			throw new NullArgumentException("ReceiveLogDaoImpl.save");
+			throw new NullArgumentException("ReceiveLogDaoImpl.save方法的参数为空");
 		}
 		return super.save(receiveLog);
 	}

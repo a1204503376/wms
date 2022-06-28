@@ -33,7 +33,7 @@ public class OwnerDaoImpl extends BaseServiceImpl<OwnerMapper, Owner> implements
 	@Override
 	public Owner getById(Long woId) {
 		if (Func.isEmpty(woId)) {
-			throw new NullArgumentException("OwnerDaoImpl.getById");
+			throw new NullArgumentException("OwnerDaoImpl.getById方法的参数为空");
 		}
 		return super.getById(woId);
 	}
