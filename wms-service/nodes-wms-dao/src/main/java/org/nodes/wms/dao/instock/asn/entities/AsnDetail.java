@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import org.nodes.wms.dao.common.entitits.BaseSkuLotEntity;
+import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
 
 import java.math.BigDecimal;
 

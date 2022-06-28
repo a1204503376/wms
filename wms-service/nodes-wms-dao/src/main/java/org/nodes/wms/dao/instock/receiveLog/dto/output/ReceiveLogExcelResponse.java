@@ -3,7 +3,6 @@ package org.nodes.wms.dao.instock.receiveLog.dto.output;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import lombok.Data;
-import org.nodes.wms.dao.common.entitits.BaseSkuLotEntity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
