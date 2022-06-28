@@ -92,6 +92,19 @@ public class StockBizImpl implements StockBiz {
 		}
 	}
 
+	private void mergeStock(Stock sourceStock, Stock targetStock, LocalDateTime lastIn, LocalDateTime lastOut){
+		targetStock.setStockQty(targetStock.getStockQty().add(sourceStock.getStockQty()));
+		targetStock.setStayStockQty(targetStock.getStayStockQty().add(sourceStock.getStayStockQty()));
+		targetStock.setPickQty(targetStock.getPickQty().add(sourceStock.getPickQty()));
+		targetStock.setOccupyQty(targetStock.getOccupyQty().add(sourceStock.getOccupyQty()));
+		if (!Func.isNull(lastIn)){
+			targetStock.setLastInTime(lastIn);
+		}
+		if (!Func.isNull(lastOut)){
+			targetStock.setLastOutTime(lastOut);
+		}
+	}
+
 	@Override
 	public Stock inStock(StockLogTypeEnum type, ReceiveLog receiveLog) {
 		Location location = locationBiz.findByLocId(receiveLog.getLocId());
@@ -106,11 +119,7 @@ public class StockBizImpl implements StockBiz {
 			finalStock = stockDao.saveNewStock(stock);
 		} else {
 			// 合并库存
-			existStock.setStockQty(existStock.getStockQty().add(stock.getStockQty()));
-			existStock.setStayStockQty(existStock.getStayStockQty().add(stock.getStayStockQty()));
-			existStock.setPickQty(existStock.getPickQty().add(stock.getPickQty()));
-			existStock.setOccupyQty(existStock.getOccupyQty().add(stock.getOccupyQty()));
-			existStock.setLastInTime(LocalDateTime.now());
+			mergeStock(stock, existStock, LocalDateTime.now(), null);
 			finalStock = stockDao.updateStock(existStock);
 		}
 
