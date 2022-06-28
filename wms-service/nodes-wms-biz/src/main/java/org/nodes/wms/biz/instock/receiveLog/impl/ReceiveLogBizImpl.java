@@ -82,8 +82,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	ReceiveLog createReceiveLog(ReceiveLog receiveLog) {
 		ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(receiveLog.getReceiveDetailId());
 		ReceiveHeader receiveHeader = receiveBiz.selectReceiveHeaderById(receiveLog.getReceiveId());
-		Location location = locationBiz.findLocationByLocCode(0L,receiveLog.getLocCode());
-
+		Location location = locationBiz.findLocationByLocCode(receiveLog.getWhId(),receiveLog.getLocCode());
 		receiveLog.setReceiveNo(receiveHeader.getReceiveNo());
 		receiveLog.setAsnBillId(receiveHeader.getAsnBillId());
 		receiveLog.setAsnBillNo(receiveHeader.getAsnBillNo());
