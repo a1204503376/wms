@@ -1,18 +1,27 @@
 package org.nodes.wms.biz.stock.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.stock.StockDao;
+import org.nodes.wms.dao.stock.StockLogDao;
+import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
+import org.nodes.wms.dao.stock.dto.output.StockLogExcelResponse;
+import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
+import org.springblade.core.excel.util.ExcelUtil;
+import org.springblade.core.mp.support.Condition;
+import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.ConvertUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -29,6 +38,8 @@ public class StockBizImpl implements StockBiz {
 	private final StockDao stockDao;
 
 	private final LocationBiz locationBiz;
+
+	private final StockLogDao stockLogDao;
 
 	@Override
 	public void freezeByLoc(StockLogTypeEnum type, Long locId) {
@@ -104,4 +115,16 @@ public class StockBizImpl implements StockBiz {
 	}
 
 
+	@Override
+	public Page<StockLogPageResponse> pageStockLog(Query query,
+												   StockLogPageQuery stockLogPageQuery) {
+		return stockLogDao.page(Condition.getPage(query), stockLogPageQuery);
+	}
+
+	@Override
+	public void export(StockLogPageQuery stockLogPageQuery,
+					   HttpServletResponse response) {
+		List<StockLogExcelResponse> stockLogList = stockLogDao.listByQuery(stockLogPageQuery);
+		ExcelUtil.export(response, "", "", stockLogList, StockLogExcelResponse.class);
+	}
 }
