@@ -57,7 +57,7 @@ public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, R
 	}
 
 	@Override
-	public void saveOrUpdateReceive(ReceiveDetail receiveDetail) {
+	public void saveOrUpdateReceiveDetail(ReceiveDetail receiveDetail) {
 		super.saveOrUpdate(receiveDetail);
 	}
 
@@ -69,7 +69,7 @@ public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, R
 	@Override
 	public ReceiveDetail getDetailByReceiveDetailId(Long receiveDetailId) {
 		if (Func.isEmpty(receiveDetailId)) {
-			throw new NullArgumentException("ReceiveDetailDaoImpl.getDetailByReceiveDetailId");
+			throw new NullArgumentException("ReceiveDetailDaoImpl.getDetailByReceiveDetailId方法的参数为空");
 		}
 		return super.baseMapper.selectById(receiveDetailId);
 	}
@@ -78,5 +78,10 @@ public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, R
 	public Boolean updateReceiveDetail(ReceiveDetail detail) {
 		return super.updateById(detail);
 	}
+
+    @Override
+    public String selectReceiveDetailLinNo(Long receiveId) {
+		return super.baseMapper.selectReceiveDetailLinNo(receiveId);
+    }
 
 }

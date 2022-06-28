@@ -1,4 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.stock.mapper.StockLogMapper">
+
+    <sql id="stockLog">
+        SELECT log_type,
+        source_bill_no,
+        current_stay_stock_qty,
+        current_stock_qty,
+        current_pick_qty,
+        stock_status,
+        sku_level,
+        wsp_name,
+        sku_code,
+        sku_name,
+        stay_stock_qty,
+        stock_qty,
+        pick_qty,
+        box_code,
+        lpn_code,
+        loc_code,
+        zone_code,
+        wh_name,
+        o.owner_name,
+        `user`.name as createUser,
+        sl.create_time,
+        sku_lot1,
+        sku_lot2,
+        sku_lot3,
+        sku_lot4,
+        sku_lot5,
+        sku_lot6,
+        sku_lot7,
+        sku_lot8
+        FROM wms_stock_log sl
+        LEFT JOIN wms_owner o ON o.wo_id = sl.wo_id
+        LEFT JOIN blade_user `user` ON sl.create_user = `user`.id
+        <where>
+            sl.is_deleted = 0
+            <if test="param.skuIdList != null and param.skuIdList.size > 0">
+                AND sl.sku_id IN
+                <foreach collection="param.skuIdList" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="param.locIdList != null and param.locIdList.size > 0">
+                AND sl.loc_id IN
+                <foreach collection="param.locIdList" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="param.zoneIdList != null and param.zoneIdList.size > 0">
+                AND sl.zone_id IN
+                <foreach collection="param.zoneIdList" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="param.whIdList != null and param.whIdList.size > 0">
+                AND sl.wh_id IN
+                <foreach collection="param.whIdList" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="param.logTypeList != null and param.logTypeList.size > 0">
+                AND sl.log_type IN
+                <foreach collection="param.logTypeList" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="param.sourceBillNo != null and param.sourceBillNo != ''">
+                AND sl.source_bill_no LIKE CONCAT('%', #{param.sourceBillNo}, '%')
+            </if>
+            <if test="param.createUser != null and param.createUser != ''">
+                AND `user`.name LIKE CONCAT('%', #{param.createUser}, '%')
+            </if>
+            <if test="param.boxCode != null and param.boxCode != ''">
+                AND sl.box_code LIKE CONCAT('%', #{param.boxCode}, '%')
+            </if>
+            <if test="param.skuLot1 != null and param.skuLot1 != ''">
+                AND sl.sku_lot1 LIKE CONCAT('%', #{param.skuLot1}, '%')
+            </if>
+            <if test="param.createTimeBegin != null">
+                AND sl.create_time &gt;= #{param.createTimeBegin}
+            </if>
+            <if test="param.createTimeEnd != null">
+                AND sl.create_time &lt;= #{param.createTimeEnd}
+            </if>
+        </where>
+    </sql>
+
+    <select id="page" resultType="org.nodes.wms.dao.stock.dto.output.StockLogPageResponse">
+        <include refid="stockLog"/>
+        <if test="page.orders != null or page.orders.size > 0">
+            ORDER BY sl.create_time
+        </if>
+    </select>
+    <select id="listByQuery" resultType="org.nodes.wms.dao.stock.dto.output.StockLogExcelResponse">
+        <include refid="stockLog"/>
+    </select>
+
+
 </mapper>

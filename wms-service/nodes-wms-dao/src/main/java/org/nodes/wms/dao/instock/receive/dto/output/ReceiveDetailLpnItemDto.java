@@ -14,11 +14,17 @@ public class ReceiveDetailLpnItemDto {
 	/**
 	 * 物料编码
 	 */
-	private String SkuCode;
+	private String skuCode;
 	/**
 	 * 物料名称
 	 */
-	private String SkuName;
+	private String skuName;
+	/**
+	 * 物料id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long skuId;
+
 	/**
 	 * 数量
 	 */

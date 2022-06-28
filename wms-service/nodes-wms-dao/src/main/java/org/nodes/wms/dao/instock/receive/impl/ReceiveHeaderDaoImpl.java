@@ -10,6 +10,7 @@ import org.nodes.wms.dao.instock.receive.dto.input.ReceivePdaQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderPdaResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
+import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 import org.nodes.wms.dao.instock.receive.mapper.ReceiveHeaderMapper;
 import org.nodes.wms.dao.instock.receive.ReceiveHeaderDao;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
@@ -66,7 +67,7 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 	@Override
 	public ReceiveHeader selectReceiveHeaderById(Long receiveId) {
 		if (Func.isEmpty(receiveId)) {
-			throw new NullArgumentException("ReceiveHeaderDaoImpl.selectReceiveHeaderById");
+			throw new NullArgumentException("ReceiveHeaderDaoImpl.selectReceiveHeaderById方法的参数为空");
 		}
 		return super.getById(receiveId);
 	}
@@ -96,5 +97,19 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 	public Boolean updateReceiveHeader(ReceiveHeader header) {
 		return super.updateById(header);
 	}
+
+    @Override
+    public List<ReceiveHeader> selectReceiveListByNonOrder(Long userId) {
+		return super.list(new LambdaQueryWrapper<ReceiveHeader>()
+			.eq(ReceiveHeader::getCreateUser,userId)
+			.eq(ReceiveHeader::getInStoreType,20)
+			.in(ReceiveHeader::getBillState,
+				ReceiveHeaderStateEnum.NOT_RECEIPT.getCode(),ReceiveHeaderStateEnum.PART.getCode()));
+    }
+
+    @Override
+    public void saveReceiveHeader(ReceiveHeader receiveHeader) {
+        super.save(receiveHeader);
+    }
 
 }

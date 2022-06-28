@@ -7,6 +7,7 @@ import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogExcelResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
+import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 
 import java.util.List;
 
@@ -43,4 +44,11 @@ public interface ReceiveLogDao {
 	 * @return List<ReceiveLogExcelResponse>
 	 */
 	 List<ReceiveLogExcelResponse> getReceiveLogListByQuery(ReceiveLogPageQuery receiveLogPageQuery);
+
+	/**
+	 * 生成清点记录
+	 * @param receiveLog 清点记录
+	 * @return 是否成功
+	 */
+	boolean save(ReceiveLog receiveLog);
 }

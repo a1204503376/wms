@@ -1,7 +1,9 @@
 package org.nodes.wms.dao.basics.owner.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.wms.dao.basics.owner.OwnerDao;
@@ -31,7 +33,7 @@ public class OwnerDaoImpl extends BaseServiceImpl<OwnerMapper, Owner> implements
 	@Override
 	public Owner getById(Long woId) {
 		if (Func.isEmpty(woId)) {
-			throw new NullArgumentException("OwnerDaoImpl.getById");
+			throw new NullArgumentException("OwnerDaoImpl.getById方法的参数为空");
 		}
 		return super.getById(woId);
 	}
@@ -42,4 +44,9 @@ public class OwnerDaoImpl extends BaseServiceImpl<OwnerMapper, Owner> implements
 		lambdaQueryWrapper.eq(Owner::getOwnerCode, ownerCode);
 		return super.getOne(lambdaQueryWrapper);
 	}
+
+    @Override
+    public Owner selectFirstOwner() {
+		return (Owner) super.list().stream().limit(1);
+    }
 }

@@ -3,6 +3,7 @@ package org.nodes.wms.dao.instock.receiveLog.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang.NullArgumentException;
 import org.nodes.wms.dao.instock.receiveLog.ReceiveLogDao;
 import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageQuery;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogExcelResponse;
@@ -12,6 +13,7 @@ import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.instock.receiveLog.mapper.ReceiveLogMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -44,5 +46,13 @@ public class ReceiveLogDaoImpl
 	public List<ReceiveLogExcelResponse> getReceiveLogListByQuery(
 			ReceiveLogPageQuery receiveLogPageQuery) {
 		return super.baseMapper.selectReceiveLogListByQuery(receiveLogPageQuery);
+	}
+
+	@Override
+	public boolean save(ReceiveLog receiveLog) {
+		if(Func.isEmpty(receiveLog)){
+			throw new NullArgumentException("ReceiveLogDaoImpl.save方法的参数为空");
+		}
+		return super.save(receiveLog);
 	}
 }

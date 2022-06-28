@@ -4,6 +4,10 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.nodes.wms.dao.stock.dto.output.StockLogTypeResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 库存来源类型（库存日志类型）
@@ -29,4 +33,15 @@ public enum StockLogTypeEnum {
 	private final Integer code;
 	@JsonValue
 	private final String desc;
+
+	public static List<StockLogTypeResponse> getList() {
+		List<StockLogTypeResponse> list = new ArrayList<>();
+		for (StockLogTypeEnum item : values()) {
+			StockLogTypeResponse stockLogTypeResponse = new StockLogTypeResponse();
+			stockLogTypeResponse.setLabel(item.desc);
+			stockLogTypeResponse.setValue(item.code);
+			list.add(stockLogTypeResponse);
+		}
+		return list;
+	}
 }

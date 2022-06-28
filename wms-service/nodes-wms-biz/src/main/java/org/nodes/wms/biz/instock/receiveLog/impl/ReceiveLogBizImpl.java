@@ -2,13 +2,20 @@ package org.nodes.wms.biz.instock.receiveLog.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.nodes.wms.biz.basics.owner.OwnerBiz;
+import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
+import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnItemDto;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
+import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receiveLog.ReceiveLogDao;
 import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageQuery;
@@ -36,7 +43,8 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	private final ReceiveLogDao receiveLogDao;
 	private final LocationBiz locationBiz;
 	private final ReceiveBiz receiveBiz;
-	private final StockBiz stockBiz;
+	private final OwnerBiz ownerBiz;
+
 
 	@Override
 	public List<ReceiveLogResponse> getReceiveLogList(Long receiveId) {
@@ -54,7 +62,9 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setReceiveId(request.getReceiveId());
 		receiveLog.setReceiveDetailId(request.getReceiveDetailId());
 		receiveLog.setBoxCode(request.getBoxCode());
-		receiveLog.setSnCode(request.getSerialNumberList().toString());
+		if (request.getIsSn()) {
+			receiveLog.setSnCode(String.join(",", request.getSerialNumberList()));
+		}
 		receiveLog.setWhCode(request.getWhCode());
 		receiveLog.setQty(request.getSurplusQty());
 		// TODO
@@ -63,14 +73,16 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setSkuCode(request.getSkuCode());
 		receiveLog.setSkuName(request.getSkuName());
 		receiveLog.setSkuSpec(request.getSkuLot2());
-		return createReceiveLog(receiveLog);
+		receiveLog.setWhId(request.getWhId());
+		ReceiveLog log = createReceiveLog(receiveLog);
+		receiveLogDao.save(log);
+		return log;
 	}
 
 	ReceiveLog createReceiveLog(ReceiveLog receiveLog) {
 		ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(receiveLog.getReceiveDetailId());
 		ReceiveHeader receiveHeader = receiveBiz.selectReceiveHeaderById(receiveLog.getReceiveId());
-		Location location = locationBiz.findLocationByLocCode(0L,receiveLog.getLocCode());
-
+		Location location = locationBiz.findLocationByLocCode(receiveLog.getWhId(),receiveLog.getLocCode());
 		receiveLog.setReceiveNo(receiveHeader.getReceiveNo());
 		receiveLog.setAsnBillId(receiveHeader.getAsnBillId());
 		receiveLog.setAsnBillNo(receiveHeader.getAsnBillNo());
@@ -79,13 +91,15 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setSkuId(detail.getSkuId());
 		receiveLog.setWspId(detail.getWspId());
 		receiveLog.setSkuLevel(detail.getSkuLevel());
-		receiveLog.setWhId(detail.getWhId());
-		if (Func.isNotEmpty(detail.getWhId()) && Func.isNotEmpty(detail.getOwnerCode())) {
-			receiveLog.setWoId(detail.getWoId());
-			receiveLog.setOwnerCode(detail.getOwnerCode());
+		Owner owner;
+		if (Func.isNotEmpty(detail.getWoId())) {
+			owner = ownerBiz.findById(detail.getWoId());
 		} else {
-			receiveLog.setWoId(receiveHeader.getWoId());
-			receiveLog.setOwnerCode(receiveHeader.getOwnerCode());
+			owner = ownerBiz.findById(receiveHeader.getWoId());
+		}
+		if (Func.isNotEmpty(owner)) {
+			receiveLog.setWoId(owner.getWoId());
+			receiveLog.setOwnerCode(owner.getOwnerCode());
 		}
 		return receiveLog;
 	}
@@ -100,5 +114,24 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		List<ReceiveLogExcelResponse> receiveLogList
 			= receiveLogDao.getReceiveLogListByQuery(receiveLogPageQuery);
 		ExcelUtil.export(response, "收货记录", "收货记录", receiveLogList, ReceiveLogExcelResponse.class);
+	}
+
+	@Override
+	public ReceiveLog newReceiveLog(ReceiveDetailLpnPdaRequest request, ReceiveDetailLpnItemDto item, ReceiveDetailLpn lpn) {
+		ReceiveLog receiveLog = new ReceiveLog();
+		receiveLog.setReceiveId(request.getReceiveHeaderId());
+		receiveLog.setReceiveDetailId(item.getReceiveDetailId());
+		receiveLog.setBoxCode(request.getBoxCode());
+		receiveLog.setSnCode(lpn.getSnCode());
+		receiveLog.setQty(item.getPlanQty());
+		// TODO
+		receiveLog.setLpnCode(request.getLpnCode());
+		receiveLog.setLocCode(request.getLocCode());
+		receiveLog.setSkuCode(item.getSkuCode());
+		receiveLog.setSkuName(item.getSkuName());
+		receiveLog.setSkuSpec(request.getSkuLot2());
+		receiveLog =  createReceiveLog(receiveLog);
+		receiveLogDao.save(receiveLog);
+		return receiveLog;
 	}
 }

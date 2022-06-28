@@ -27,9 +27,18 @@ const getDetailByDetailId =(data)=>{
 	})
 }
 
+const submitReceiptByPcs =(data)=>{
+	return http.request({
+		url: '/api/ApiPDA/receiveByPcs/receiptByPcs',
+		method: 'POST',
+		data:data
+	})
+}
+
 
 export default {
 	getReceiveList,
 	getReceiveDetailList,
-	getDetailByDetailId
+	getDetailByDetailId,
+	submitReceiptByPcs
 }

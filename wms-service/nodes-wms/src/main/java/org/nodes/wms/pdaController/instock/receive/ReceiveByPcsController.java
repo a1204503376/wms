@@ -3,8 +3,10 @@ package org.nodes.wms.pdaController.instock.receive;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.wms.biz.instock.InStockBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.dao.instock.receive.dto.input.*;
+import org.nodes.wms.dao.instock.receive.dto.output.PdaByPcsReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailByReceiveIdPdaResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailPdaResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderPdaResponse;
@@ -24,6 +26,7 @@ import java.util.List;
 @RequestMapping(WmsApiPath.WMS_PDA_API + "/receiveByPcs")
 public class ReceiveByPcsController {
 	private final ReceiveBiz receiveBiz;
+	private final InStockBiz inStockBiz;
 
 	/**
 	 * PDA收货管理查询
@@ -31,7 +34,7 @@ public class ReceiveByPcsController {
 	@ApiLog("PDA收货管理查询")
 	@PostMapping("/list")
 	public R<Page<ReceiveHeaderPdaResponse>> list(@RequestBody ReceivePdaQuery receivePdaQuery, Query query) {
-		Page<ReceiveHeaderPdaResponse> pages = receiveBiz.getReceiveListByReceiveNo(receivePdaQuery,query);
+		Page<ReceiveHeaderPdaResponse> pages = receiveBiz.getReceiveListByReceiveNo(receivePdaQuery, query);
 		return R.data(pages);
 	}
 
@@ -50,8 +53,7 @@ public class ReceiveByPcsController {
 	 * @return 当前收货单详情，以及他是否是序列号管理 isSn
 	 */
 	@PostMapping("findDetailByReceiveDetailId")
-	public R<ReceiveDetailByReceiveIdPdaResponse> findDetailByReceiveDetailId(@RequestBody ReceiveDetailByReceiveIdPdaQuery receiveDetailByReceiveIdPdaQuery)
-	{
+	public R<ReceiveDetailByReceiveIdPdaResponse> findDetailByReceiveDetailId(@RequestBody ReceiveDetailByReceiveIdPdaQuery receiveDetailByReceiveIdPdaQuery) {
 		ReceiveDetailByReceiveIdPdaResponse detail = receiveBiz.selectDetailByReceiveDetailId(receiveDetailByReceiveIdPdaQuery);
 		return R.data(detail);
 	}
@@ -60,9 +62,9 @@ public class ReceiveByPcsController {
 	 * @param pdaByPieceReceiveQuery PDA按件收货请求参数
 	 * @return 是否成功
 	 */
-	@PostMapping("pdaByPieceReceive")
-	public R pdaByPieceReceive(@RequestBody PdaByPieceReceiveRequest pdaByPieceReceiveQuery){
-		return null;
+	@PostMapping("receiptByPcs")
+	public R<PdaByPcsReceiveResponse> receiptByPcs(@RequestBody PdaByPieceReceiveRequest pdaByPieceReceiveQuery) {
+		return R.data(inStockBiz.receiptByPcs(pdaByPieceReceiveQuery));
 	}
 
 }

@@ -9,6 +9,8 @@ import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeEnum;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.instock.asn.enums.AsnBillStateEnum;
 import org.nodes.wms.dao.instock.asn.enums.InStorageTypeEnum;
+import org.nodes.wms.dao.stock.dto.output.StockLogTypeResponse;
+import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,4 +56,8 @@ public class StateController {
 		return R.data(AuditLogType.getList());
 	}
 
+	@PostMapping("getStockLogType")
+	public R<List<StockLogTypeResponse>> getStockLogType(){
+		return R.data(StockLogTypeEnum.getList());
+	}
 }

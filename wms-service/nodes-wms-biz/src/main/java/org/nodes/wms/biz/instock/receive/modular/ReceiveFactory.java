@@ -13,14 +13,15 @@ import org.nodes.wms.dao.basics.sku.entities.SkuPackageAggregate;
 import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
-import org.nodes.wms.dao.instock.receive.dto.input.EditReceiveDetailRequest;
-import org.nodes.wms.dao.instock.receive.dto.input.EditReceiveHeaderRequest;
-import org.nodes.wms.dao.instock.receive.dto.input.NewReceiveDetailRequest;
-import org.nodes.wms.dao.instock.receive.dto.input.NewReceiveHeaderRequest;
+import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
+import org.nodes.wms.dao.instock.receive.dto.input.*;
 import org.nodes.wms.dao.instock.receive.dto.output.EditReceiveDetailResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.EditReceiveHeaderResponse;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnItemDto;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
+import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
+import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
@@ -326,6 +327,102 @@ public class ReceiveFactory {
 		receiveDetail.setSkuLot5(editReceiveDetailRequest.getSkuLot5());
 		receiveDetail.setSkuLot6(editReceiveDetailRequest.getSkuLot6());
 		receiveDetail.setSkuLot8(editReceiveDetailRequest.getSkuLot8());
+		return receiveDetail;
+	}
+
+	/**
+	 * 按箱收货根据前端传入参数创建收货单头表实体
+	 * @param receiveDetailLpnPdaRequest  前端传入参数
+	 * @return
+	 */
+	public ReceiveHeader createReceiveHeader(ReceiveDetailLpnPdaRequest receiveDetailLpnPdaRequest){
+		ReceiveHeader receiveHeader = new ReceiveHeader();
+		//设置收货单编码
+		receiveHeader.setReceiveNo(noGeneratorUtil.createReceiveBillNo());
+		//根据仓库id获取仓库实体
+		Warehouse warehouse = warehouseBiz.findById(receiveDetailLpnPdaRequest.getWhId());
+		//设置仓库id
+		receiveHeader.setWhId(warehouse.getWhId());
+		//设置仓库编码
+		receiveHeader.setWhCode(warehouse.getWhCode());
+		//设置单据类型
+		receiveHeader.setBillTypeCd("OR");
+		//设置入库方式
+		receiveHeader.setInStoreType(20);
+		//获取第一条货主信息
+		Owner owner = ownerBiz.getFirst();
+		//设置货主id
+		receiveHeader.setWoId(owner.getWoId());
+		//设置货主编码
+		receiveHeader.setOwnerCode(owner.getOwnerCode());
+		//设置收货单状态
+		receiveHeader.setBillState(ReceiveHeaderStateEnum.COMPLETED);
+		return receiveHeader;
+	}
+
+	/**
+	 * 按箱收货创建收货单明细
+	 * @param request 前端传入参数
+	 * @param item 物料信息
+	 * @param lpn   lpn实体
+	 * @param receiveHeader 收货单头表实体
+	 * @return  收货单明细实体
+	 */
+
+	public ReceiveDetail createReceiveDetail(ReceiveDetailLpnPdaRequest request, ReceiveDetailLpnItemDto item, ReceiveDetailLpn lpn,ReceiveHeader receiveHeader,int linNo) {
+		ReceiveDetail  receiveDetail  = new ReceiveDetail();
+		//根据仓库id获取仓库实体
+		Warehouse warehouse = warehouseBiz.findById(request.getWhId());
+		//根据物料id获取物料实体
+		Sku sku = skuBiz.findById(item.getSkuId());
+		//设置明细表收货单id
+		receiveDetail.setReceiveId(receiveHeader.getReceiveId());
+		//  设置订单行号
+		receiveDetail.setLineNo(String.valueOf(linNo));
+		//设置物料id
+		receiveDetail.setSkuId(sku.getSkuId());
+		//设置物料编码
+		receiveDetail.setSkuCode(sku.getSkuCode());
+		//设置物料名称
+		receiveDetail.setSkuName(sku.getSkuName());
+		//设置计划数量
+		receiveDetail.setPlanQty(item.getPlanQty());
+		//设置实收数量
+		receiveDetail.setScanQty(item.getPlanQty());
+		//设置剩余数量
+		receiveDetail.setSurplusQty(BigDecimal.valueOf(0));
+		//设置收货单编码
+		receiveDetail.setReceiveNo(receiveHeader.getReceiveNo());
+		//设置包装id
+		receiveDetail.setWspId(sku.getWspId());
+		//设置计量单位编码
+		receiveDetail.setUmCode(lpn.getUmCode());
+		//设置计量单位名称
+		receiveDetail.setUmName(lpn.getUmName());
+		//设置基础计量单位编码
+		receiveDetail.setBaseUmCode(lpn.getBaseUmCode());
+		//设置基础计量单位名称
+		receiveDetail.setBaseUmName(lpn.getBaseUmName());
+		//设置换算倍率
+		receiveDetail.setConvertQty(lpn.getConvertQty());
+		//设置层级
+		receiveDetail.setSkuLevel(lpn.getSkuLevel());
+		//设置规格
+		receiveDetail.setSkuSpec(sku.getSkuSpec());
+		//设置库房id
+		receiveDetail.setWhId(warehouse.getWhId());
+		//设置库房编码
+		receiveDetail.setWhCode(warehouse.getWhCode());
+		//设置货主id
+		receiveDetail.setWoId(lpn.getWoId());
+		//设置货主编码
+		receiveDetail.setOwnerCode(lpn.getOwnerCode());
+		//设置接收状态
+		receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.COMPLETED);
+        //设置批属性信息
+		SkuLotUtil.setAllSkuLot(lpn,receiveDetail);
+		receiveDetail.setSkuLot1(request.getSkuLot1());
+		receiveDetail.setSkuLot2(request.getSkuLot2());
 		return receiveDetail;
 	}
 }

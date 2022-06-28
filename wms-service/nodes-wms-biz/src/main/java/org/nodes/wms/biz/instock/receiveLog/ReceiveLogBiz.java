@@ -2,6 +2,9 @@ package org.nodes.wms.biz.instock.receiveLog;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnItemDto;
+import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageQuery;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
@@ -54,4 +57,14 @@ public interface ReceiveLogBiz {
 	 * @param response:            响应对象
 	 */
 	void exportExcel(ReceiveLogPageQuery receiveLogPageQuery, HttpServletResponse response);
+
+	/**
+	 * 按箱收货生成清点记录
+	 *
+	 * @param request 传入参数
+	 * @param item    明细相关信息
+	 * @param lpn
+	 * @return
+	 */
+	ReceiveLog newReceiveLog(ReceiveDetailLpnPdaRequest request, ReceiveDetailLpnItemDto item, ReceiveDetailLpn lpn);
 }
