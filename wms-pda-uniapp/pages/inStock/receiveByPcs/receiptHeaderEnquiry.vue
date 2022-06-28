@@ -6,6 +6,7 @@
 			</u-search>
 		</template>
 		<u-divider text="" style="margin-top:0rpx;"></u-divider>
+		<u-divider text="暂无数据" v-if="noData"></u-divider>
 		<u-list style="height: 950rpx;" pagingEnabled="true" @scrolltolower="scrolltolower">
 			<u-list-item v-for="(item, index) in receiveList" :key="item.receiveNo">
 				<view @click="clickItem(item)">
@@ -25,12 +26,7 @@
 					<u-divider text=""></u-divider>
 				</view>
 			</u-list-item>
-			<view v-if="loading">
-				<u-loading-icon text="加载中" textSize="18"></u-loading-icon>
-			</view>
-			<view v-if="divider">
-				<u-divider text="没有更多了"></u-divider>
-			</view>
+			<u-loadmore :status="status" v-if="loadmore" />
 		</u-list>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
@@ -43,6 +39,7 @@
 <script>
 	import receive from '@/api/inStock/receiveByPcs.js'
 	import barcodeFunc from '@/common/barcodeFunc.js'
+	import tool from '@/utils/tool.js'
 	export default {
 		data() {
 			return {
@@ -57,8 +54,9 @@
 					ascs: "", //正序字段集合
 					descs: "", //倒序字段集合
 				},
-				loading:false,
-				divider:false,
+				status: 'loadmore',
+				loadmore: false,
+				noData:false,
 			}
 		},
 		onUnload() {
@@ -76,32 +74,36 @@
 						this.params.no = barcode.content;
 						break;
 					default:
-					    this.$u.func.showToast({title: '条码识别失败,不支持的条码类型'});
+						this.$u.func.showToast({
+							title: '条码识别失败,不支持的条码类型'
+						});
 						break;
 				}
 			},
 			esc() {
 				this.$u.func.navigateBack();
 			},
-			getReceiveList(){
-				this.loading=false;
-				this.divider=false;
-				this.receiveList=[];
+			getReceiveList() {
+				this.noData=false;
+				this.receiveList = [];
+				this.loadmore=true;
+				this.status = 'loading';
 				this.page.current = 1;
 				this.analysisCode(this.params.no);
 				receive.getReceiveList(this.params, this.page).then(data => {
-					if(data.data.records.length>0){
-						this.loading=true;
-						this.divider=false;
-					}else{
-						this.loading=false;
-						this.divider=true;
+					if (data.data.records.length > 0) {
+						this.status = 'loading';
+						this.loadmore=true;
+						this.noData=false;
+					} else {
+						this.loadmore=false;
+						this.noData=true;
 					}
 					this.receiveList = data.data.records;
 				})
 			},
-			search(){
-				uni.$u.throttle(this.getReceiveList, 1000)
+			search() {
+				uni.$u.throttle(this.getReceiveList(), 1000)
 			},
 			clickItem(item) {
 				uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', item);
@@ -111,22 +113,19 @@
 				this.search();
 			},
 			scrolltolower() {
-				this.loading=false;
-				this.divider=false;
+				this.loading = false;
+				this.divider = false;
 				this.page.current++;
 				receive.getReceiveList(this.params, this.page).then(data => {
-					if(data.data.records.length>0){
-						this.loading=true;
-						this.divider=false;
-					}else{
-						this.loading=false;
-						this.divider=true;
+					if (data.data.records.length > 0) {
+						this.status = 'loading';
+						data.data.records.forEach((item, index) => { //js遍历数组
+							this.receiveList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
+						});
+						
+					} else {
+						this.status = 'nomore';
 					}
-					data.data.records.forEach((item, index) => { //js遍历数组
-						this.receiveList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
-					});
-
-
 				})
 			}
 		}
@@ -134,5 +133,5 @@
 </script>
 
 <style>
-	
+
 </style>

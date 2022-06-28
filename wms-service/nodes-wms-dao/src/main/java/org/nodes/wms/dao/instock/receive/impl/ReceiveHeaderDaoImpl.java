@@ -89,4 +89,9 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 		return receiveHeaderMapper.getReceiveList(receivePdaQuery,page);
 	}
 
+	@Override
+	public Boolean updateReceiveHeader(ReceiveHeader header) {
+		return super.updateById(header);
+	}
+
 }

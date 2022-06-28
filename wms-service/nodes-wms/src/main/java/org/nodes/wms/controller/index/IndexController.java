@@ -2,11 +2,9 @@ package org.nodes.wms.controller.index;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
-import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
 import org.nodes.wms.biz.stock.StockBiz;
-import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dot.output.LogSoPickIndexResponse;
 import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
@@ -15,11 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 首页API
@@ -37,7 +31,7 @@ public class IndexController {
 
 	@GetMapping("/stockData")
 	public R<StockIndexResponse> stockData(){
-		return R.data(stockBiz.findStockIndexData());
+		return R.data(stockBiz.staticsStockDataOnIndexPage());
 	}
 
 	@GetMapping("/inStockRate")

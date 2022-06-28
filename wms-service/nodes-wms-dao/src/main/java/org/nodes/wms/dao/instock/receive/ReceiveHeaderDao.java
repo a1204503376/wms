@@ -47,5 +47,11 @@ public interface ReceiveHeaderDao {
 	 */
 	Page<ReceiveHeaderPdaResponse> getReceiveList(ReceivePdaQuery receivePdaQuery, IPage<ReceiveHeader> page);
 
+	/**
+	 * 更新收货单头表
+	 * @param header 收货单头表数据
+	 * @return 是否成功
+	 */
+	Boolean updateReceiveHeader(ReceiveHeader header);
 
 }
