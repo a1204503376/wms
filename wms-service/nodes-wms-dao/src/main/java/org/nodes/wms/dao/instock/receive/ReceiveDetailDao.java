@@ -27,7 +27,7 @@ public interface ReceiveDetailDao {
 	List<ReceiveDetail> selectReceiveDetailById(Long receiveId);
 
 
-	void saveOrUpdateReceive(ReceiveDetail receiveDetail);
+	void saveOrUpdateReceiveDetail(ReceiveDetail receiveDetail);
 
 	/**
 	 * @param receiveDetailPdaQuery 收货单接收前端请求条件
@@ -47,4 +47,12 @@ public interface ReceiveDetailDao {
 	 * @return 是否成功
 	 */
 	Boolean updateReceiveDetail(ReceiveDetail detail);
+
+	/**
+	 * 根据收货单id查询最新一条明细的订单行号
+	 *
+	 * @param receiveId 收货单id
+	 * @return 最新一条明细的订单行号
+	 */
+	String selectReceiveDetailLinNo(Long receiveId);
 }

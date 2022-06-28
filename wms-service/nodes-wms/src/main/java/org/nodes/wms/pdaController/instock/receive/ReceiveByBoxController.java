@@ -2,6 +2,7 @@ package org.nodes.wms.pdaController.instock.receive;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.wms.biz.instock.InStockBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnPdaResponse;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(WmsApiPath.WMS_PDA_API + "/receiveByBox")
 public class ReceiveByBoxController {
 	private final ReceiveBiz receiveBiz;
+	private final InStockBiz inStockBiz;
 
 	/**
 	 * PDA按箱收货查询
@@ -33,6 +35,7 @@ public class ReceiveByBoxController {
 	@ApiLog("PDA按箱收货")
 	@PostMapping("/receiveByCode")
 	public String receiveByBoxCode(@RequestBody ReceiveDetailLpnPdaRequest receiveDetailLpnPdaRequest) {
+		inStockBiz.receiveByBoxCode(receiveDetailLpnPdaRequest);
 		return "操作成功";
 	}
 

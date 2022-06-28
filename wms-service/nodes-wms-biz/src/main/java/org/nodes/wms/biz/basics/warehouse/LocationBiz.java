@@ -1,7 +1,6 @@
 package org.nodes.wms.biz.basics.warehouse;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.swagger.models.auth.In;
 import org.nodes.wms.dao.basics.location.dto.input.LocationAddOrEditRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationExcelRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
@@ -16,9 +15,6 @@ import org.springblade.core.mp.support.Query;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-/**
- * 客户管理业务层接口
- */
 public interface LocationBiz {
 	/**
 	 * 获取库位下拉列表最近十条数据
@@ -62,7 +58,7 @@ public interface LocationBiz {
 	Location add(LocationAddOrEditRequest locationAddOrEditRequest);
 
 	/**
-	 * 根据id查找库位信息
+	 * 根据库位id查找库位信息
 	 *
 	 * @param locId: 库位id
 	 * @return LocationPageResponse
@@ -123,7 +119,8 @@ public interface LocationBiz {
 
 	/**
 	 * 根据库位编码获取库位
-	 * @param whId 库房id
+	 *
+	 * @param whId    库房id
 	 * @param locCode 库位编码
 	 * @return 库位信息
 	 */

@@ -14,6 +14,7 @@ import org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.mapper.LocationMapper;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.tool.utils.Func;
@@ -27,6 +28,7 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> implements LocationDao {
+
 	@Override
 	public List<LocationSelectResponse> listTop10ByCode(String code) {
 		return super.baseMapper.listTop10ByCode(code);
@@ -75,27 +77,6 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	}
 
 	@Override
-	public List<Location> getAllStage() {
-		LambdaQueryWrapper<Location> queryWrapper = Wrappers.lambdaQuery();
-		queryWrapper.likeLeft(Location::getLocCode, "STAGE");
-		return super.list(queryWrapper);
-	}
-
-	@Override
-	public List<Location> getAllQc() {
-		LambdaQueryWrapper<Location> queryWrapper = Wrappers.lambdaQuery();
-		queryWrapper.likeLeft(Location::getLocCode, "QC");
-		return super.list(queryWrapper);
-	}
-
-	@Override
-	public List<Location> getAllPickTo() {
-		LambdaQueryWrapper<Location> queryWrapper = Wrappers.lambdaQuery();
-		queryWrapper.likeLeft(Location::getLocCode, "PICKTO");
-		return super.list(queryWrapper);
-	}
-
-	@Override
 	public int countAll() {
 		return super.count();
 	}
@@ -111,5 +92,16 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 			.eq(Location::getLocCode, locCode)
 			.eq(Location::getWhId, whId);
 		return super.getOne(lambdaQueryWrapper);
+	}
+
+	@Override
+	public List<Location> findLocation(List<String> locCode) {
+		if (Func.isEmpty(locCode)){
+			throw new NullArgumentException("LocationDaoImpl.findLocation");
+		}
+
+		LambdaQueryWrapper<Location> queryWrapper = Wrappers.lambdaQuery();
+		queryWrapper.in(Location::getLocCode, locCode);
+		return super.list(queryWrapper);
 	}
 }

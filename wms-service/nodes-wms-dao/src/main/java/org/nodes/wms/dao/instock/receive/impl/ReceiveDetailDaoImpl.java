@@ -57,7 +57,7 @@ public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, R
 	}
 
 	@Override
-	public void saveOrUpdateReceive(ReceiveDetail receiveDetail) {
+	public void saveOrUpdateReceiveDetail(ReceiveDetail receiveDetail) {
 		super.saveOrUpdate(receiveDetail);
 	}
 
@@ -78,5 +78,10 @@ public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, R
 	public Boolean updateReceiveDetail(ReceiveDetail detail) {
 		return super.updateById(detail);
 	}
+
+    @Override
+    public String selectReceiveDetailLinNo(Long receiveId) {
+		return super.baseMapper.selectReceiveDetailLinNo(receiveId);
+    }
 
 }
