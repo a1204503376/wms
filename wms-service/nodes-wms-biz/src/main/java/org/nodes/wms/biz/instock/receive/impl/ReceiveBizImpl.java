@@ -109,14 +109,14 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		return true;
 	}
 
-    @Override
-    public List<ReceiveHeader> getReceiveListByNonOrder(Long userId) {
-        return receiveHeaderDao.selectReceiveListByNonOrder(userId);
-    }
+	@Override
+	public List<ReceiveHeader> getReceiveListByNonOrder(Long userId) {
+		return receiveHeaderDao.selectReceiveListByNonOrder(userId);
+	}
 
 	@Override
 	public void newReceiveHeader(ReceiveHeader receiveHeader) {
-		 receiveHeaderDao.saveReceiveHeader(receiveHeader);
+		receiveHeaderDao.saveReceiveHeader(receiveHeader);
 	}
 
 	@Override
@@ -129,10 +129,10 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		return receiveDetailLpnDao.selectReceiveDetailLpnById(receiveDetailLpnId);
 	}
 
-    @Override
-    public void newReceiveDetail(ReceiveDetail receiveDetail) {
-        receiveDetailDao.saveOrUpdateReceiveDetail(receiveDetail);
-    }
+	@Override
+	public void newReceiveDetail(ReceiveDetail receiveDetail) {
+		receiveDetailDao.saveOrUpdateReceiveDetail(receiveDetail);
+	}
 
 	@Override
 	public void updateReceiveDetailLpn(ReceiveDetailLpn lpn) {
@@ -237,7 +237,16 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveIdPdaQuery.getReceiveDetailId());
 		ReceiveDetailByReceiveIdPdaResponse response = BeanUtil.copy(detail, ReceiveDetailByReceiveIdPdaResponse.class);
 		Sku sku = skuDao.getById(detail.getSkuId());
-		response.setIsSn(sku.getIsSn());
+		if (Func.isNotEmpty(sku)) {
+			if (sku.getIsSn() == 1) {
+				response.setIsSn(true);
+			} else {
+				response.setIsSn(false);
+			}
+		} else {
+			response.setIsSn(false);
+		}
+
 		return response;
 	}
 
