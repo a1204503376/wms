@@ -311,8 +311,10 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	}
 
 	@Override
-	public void log(Long receiveHeaderId, String log) {
+	public void log(Long receiveHeaderId, Long receiveDetailId,
+					BigDecimal qty, String skuLotNumber) {
 		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(receiveHeaderId);
-		logBiz.auditLog(AuditLogType.INSTOCK, receiveHeaderId, receiveHeader.getReceiveNo(), log);
+		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveDetailId);
+		logBiz.auditLog(AuditLogType.INSTOCK, receiveHeaderId, receiveHeader.getReceiveNo(), String.format("%s收货%s,批次%s", detail.getLineNo(), qty, skuLotNumber));
 	}
 }
