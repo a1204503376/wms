@@ -2,6 +2,7 @@ package org.nodes.wms.biz.instock;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
+import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
 import org.nodes.wms.dao.instock.receive.dto.output.PdaByPieceReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnPdaResponse;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class InStockBizImpl implements InStockBiz {
 	private final ReceiveBiz receiveBiz;
+	private final StockBiz stockBiz;
 
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	@Override
@@ -34,13 +36,14 @@ public class InStockBizImpl implements InStockBiz {
 		// 判断业务参数，是否可以正常收货、超收
 		receiveBiz.canReceive(request.getReceiveDetailId(), request.getSurplusQty());
 		// 调用库存函数
+
 		// 生成清点记录
 		// 更新收货单明细状态
 		receiveBiz.updateReceiveDetail(request.getReceiveDetailId(), request.getSurplusQty());
 		// 更新收货单状态
 		receiveBiz.updateReciveHeader(request.getReceiveDetailId());
 		// 记录业务日志
-		receiveBiz.log(request.getReceiveId(), "收货单按件收货");
+		receiveBiz.log(request.getReceiveId(),request.getReceiveDetailId(),request.getSurplusQty(),request.getSkuLot1());
 		return null;
 	}
 }
