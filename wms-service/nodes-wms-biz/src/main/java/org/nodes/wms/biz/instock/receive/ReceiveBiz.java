@@ -143,11 +143,14 @@ public interface ReceiveBiz {
 	void updateReciveHeader(Long receiveDetailId);
 
 	/**
-	 * 记录收货的业务日志
+	 * 记录收货的业务日志，日志格式：[行号]收货[qty],批次[skuLotNumber]
 	 *
 	 * @param receiveHeaderId 收货单id
-	 * @param log             日志内容
+	 * @param receiveDetailId 收货单明细
+	 * @param qty             收货数量
+	 * @param skuLotNumber    批次号
 	 */
-	void log(Long receiveHeaderId, String log);
+	void log(Long receiveHeaderId, Long receiveDetailId,
+			 BigDecimal qty, String skuLotNumber);
 
 }
