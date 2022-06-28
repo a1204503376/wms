@@ -1,7 +1,9 @@
 package org.nodes.wms.dao.basics.owner.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.basics.owner.OwnerDao;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
@@ -36,5 +38,10 @@ public class OwnerDaoImpl extends BaseServiceImpl<OwnerMapper, Owner> implements
 		LambdaQueryWrapper<Owner> lambdaQueryWrapper = Wrappers.lambdaQuery();
 		lambdaQueryWrapper.eq(Owner::getOwnerCode,ownerCode);
         return super.getOne(lambdaQueryWrapper);
+    }
+
+    @Override
+    public Owner selectFirstOwner() {
+		return (Owner) super.list().stream().limit(1);
     }
 }

@@ -15,4 +15,17 @@ public interface ReceiveDetailLpnDao {
 	 * @param boxCode 箱码
 	 */
 	List<ReceiveDetailLpn> getReceiveDetailLpnListByBoxCode(String boxCode);
+
+	/**
+	 * 根据id获取lpn实体
+	 * @param receiveDetailLpnId id
+	 * @return lpn实体
+	 */
+    ReceiveDetailLpn selectReceiveDetailLpnById(Long receiveDetailLpnId);
+
+	/**
+	 * 修改lpn
+ 	 * @param lpn lpn实体
+	 */
+	void updateReceiveDetailLpn(ReceiveDetailLpn lpn);
 }

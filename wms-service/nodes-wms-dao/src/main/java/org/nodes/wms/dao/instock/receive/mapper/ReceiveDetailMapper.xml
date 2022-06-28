@@ -63,4 +63,13 @@
         </where>
        order by create_time desc
     </select>
+    <select id="selectReceiveDetailLinNo" resultType="java.lang.String">
+        select
+            line_no
+           from receive_detail
+         where receive_id = #{receiveId}
+        order by create_time  desc
+        limit 1
+    </select>
+
 </mapper>

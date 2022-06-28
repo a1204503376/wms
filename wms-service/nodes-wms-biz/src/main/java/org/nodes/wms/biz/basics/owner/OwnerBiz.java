@@ -32,4 +32,10 @@ public interface OwnerBiz {
 	 * @return Owner
 	 */
     Owner findByCode(String ownerCode);
+
+	/**
+	 * 获取第一条货主信息
+	 * @return
+	 */
+    Owner getFirst();
 }

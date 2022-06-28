@@ -26,4 +26,6 @@ public interface ReceiveDetailMapper extends BaseMapper<ReceiveDetail> {
 	 * @return 收货单明细表集合
 	 */
 	List<DetailReceiveDetailPdaResponse> selectDetailListByReceiveId(@Param("query") ReceiveDetailPdaQuery receiveDetailPdaQuery);
+
+    String selectReceiveDetailLinNo(Long receiveId);
 }

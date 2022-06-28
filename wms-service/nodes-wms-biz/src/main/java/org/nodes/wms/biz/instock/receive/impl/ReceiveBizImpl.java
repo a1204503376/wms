@@ -109,6 +109,36 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		return true;
 	}
 
+    @Override
+    public List<ReceiveHeader> getReceiveListByNonOrder(Long userId) {
+        return receiveHeaderDao.selectReceiveListByNonOrder(userId);
+    }
+
+	@Override
+	public void newReceiveHeader(ReceiveHeader receiveHeader) {
+		 receiveHeaderDao.saveReceiveHeader(receiveHeader);
+	}
+
+	@Override
+	public String getReceiveDetailLinNo(Long receiveId) {
+		return receiveDetailDao.selectReceiveDetailLinNo(receiveId);
+	}
+
+	@Override
+	public ReceiveDetailLpn getReceiveDetailLpnById(Long receiveDetailLpnId) {
+		return receiveDetailLpnDao.selectReceiveDetailLpnById(receiveDetailLpnId);
+	}
+
+    @Override
+    public void newReceiveDetail(ReceiveDetail receiveDetail) {
+        receiveDetailDao.saveOrUpdateReceiveDetail(receiveDetail);
+    }
+
+	@Override
+	public void updateReceiveDetailLpn(ReceiveDetailLpn lpn) {
+		receiveDetailLpnDao.updateReceiveDetailLpn(lpn);
+	}
+
 
 	@Override
 	@Transactional
@@ -179,7 +209,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		List<EditReceiveDetailRequest> editReceiveDetailRequestList = editReceiveRequest.getEditReceiveDetailRequestList();
 		for (EditReceiveDetailRequest editReceiveDetailRequest : editReceiveDetailRequestList) {
 			ReceiveDetail receiveDetail = receiveFactory.createEditReceiveDetail(editReceiveDetailRequest, receiveHeader);
-			receiveDetailDao.saveOrUpdateReceive(receiveDetail);
+			receiveDetailDao.saveOrUpdateReceiveDetail(receiveDetail);
 		}
 		receiveHeaderDao.updateReceive(receiveHeader);
 		logBiz.auditLog(AuditLogType.RECEIVE_BILL, receiveHeader.getReceiveId(), receiveHeader.getReceiveNo(), "编辑收货单");
@@ -238,6 +268,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			receiveDetailLpnItemDto.setSkuName(item.getSkuName());
 			receiveDetailLpnItemDto.setPlanQty(item.getPlanQty());
 			receiveDetailLpnItemDto.setReceiveDetailId(item.getReceiveDetailId());
+			receiveDetailLpnItemDto.setSkuId(item.getSkuId());
 			receiveDetailLpnItemDto.setReceiveDetailLpnId(item.getId());
 			receiveDetailLpnItemDtoList.add(receiveDetailLpnItemDto);
 			//设置总数
