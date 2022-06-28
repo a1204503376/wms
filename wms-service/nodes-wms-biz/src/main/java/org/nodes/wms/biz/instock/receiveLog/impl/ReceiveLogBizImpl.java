@@ -89,8 +89,10 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		} else {
 			owner = ownerBiz.findById(receiveHeader.getWoId());
 		}
-		receiveLog.setWoId(owner.getWoId());
-		receiveLog.setOwnerCode(owner.getOwnerCode());
+		if (Func.isNotEmpty(owner)) {
+			receiveLog.setWoId(owner.getWoId());
+			receiveLog.setOwnerCode(owner.getOwnerCode());
+		}
 		return receiveLog;
 	}
 
