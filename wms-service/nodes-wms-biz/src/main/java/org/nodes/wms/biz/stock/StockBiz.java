@@ -1,11 +1,16 @@
 package org.nodes.wms.biz.stock;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
+import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
+import org.springblade.core.mp.support.Query;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -66,4 +71,20 @@ public interface StockBiz {
 	 */
 	StockIndexResponse staticsStockDataOnIndexPage();
 
+	/**
+	 * 库存日志分页查询
+	 *
+	 * @param query: 分页参数
+	 * @param stockLogPageQuery: 查询条件dto对象
+	 * @return Page<StockLogPageResponse>
+	 */
+    Page<StockLogPageResponse> pageStockLog(Query query, StockLogPageQuery stockLogPageQuery);
+
+	/**
+	 * 导出
+	 *
+	 * @param stockLogPageQuery: 导出条件dto对象
+	 * @param response: 响应对象
+	 */
+	void export(StockLogPageQuery stockLogPageQuery, HttpServletResponse response);
 }
