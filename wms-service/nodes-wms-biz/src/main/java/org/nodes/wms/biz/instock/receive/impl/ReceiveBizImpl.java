@@ -139,8 +139,13 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		receiveDetailLpnDao.updateReceiveDetailLpn(lpn);
 	}
 
+    @Override
+    public ReceiveHeader getReceiveHeaderById(Long receiveHeaderId) {
+		return receiveHeaderDao.selectReceiveHeaderById(receiveHeaderId);
+    }
 
-	@Override
+
+    @Override
 	@Transactional
 	public ReceiveHeader newReceive(NewReceiveRequest newReceiveRequest) {
 		//创建保存实体类

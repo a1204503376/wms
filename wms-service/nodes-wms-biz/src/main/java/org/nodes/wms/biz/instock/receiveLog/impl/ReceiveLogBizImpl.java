@@ -8,7 +8,10 @@ import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnItemDto;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
+import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receiveLog.ReceiveLogDao;
 import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageQuery;
@@ -17,7 +20,6 @@ import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
-import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -70,7 +72,6 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(receiveLog.getReceiveDetailId());
 		ReceiveHeader receiveHeader = receiveBiz.selectReceiveHeaderById(receiveLog.getReceiveId());
 		Location location = locationBiz.findLocationByLocCode(0L,receiveLog.getLocCode());
-
 		receiveLog.setReceiveNo(receiveHeader.getReceiveNo());
 		receiveLog.setAsnBillId(receiveHeader.getAsnBillId());
 		receiveLog.setAsnBillNo(receiveHeader.getAsnBillNo());
@@ -80,6 +81,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setWspId(detail.getWspId());
 		receiveLog.setSkuLevel(detail.getSkuLevel());
 		receiveLog.setWhId(detail.getWhId());
+		receiveLog.setWhCode(detail.getWhCode());
 		if (Func.isNotEmpty(detail.getWhId()) && Func.isNotEmpty(detail.getOwnerCode())) {
 			receiveLog.setWoId(detail.getWoId());
 			receiveLog.setOwnerCode(detail.getOwnerCode());
@@ -100,5 +102,24 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		List<ReceiveLogExcelResponse> receiveLogList
 			= receiveLogDao.getReceiveLogListByQuery(receiveLogPageQuery);
 		ExcelUtil.export(response, "收货记录", "收货记录", receiveLogList, ReceiveLogExcelResponse.class);
+	}
+
+	@Override
+	public ReceiveLog newReceiveLog(ReceiveDetailLpnPdaRequest request, ReceiveDetailLpnItemDto item, ReceiveDetailLpn lpn) {
+		ReceiveLog receiveLog = new ReceiveLog();
+		receiveLog.setReceiveId(request.getReceiveHeaderId());
+		receiveLog.setReceiveDetailId(item.getReceiveDetailId());
+		receiveLog.setBoxCode(request.getBoxCode());
+		receiveLog.setSnCode(lpn.getSnCode());
+		receiveLog.setQty(item.getPlanQty());
+		// TODO
+		receiveLog.setLpnCode(request.getLpnCode());
+		receiveLog.setLocCode(request.getLocCode());
+		receiveLog.setSkuCode(item.getSkuCode());
+		receiveLog.setSkuName(item.getSkuName());
+		receiveLog.setSkuSpec(request.getSkuLot2());
+		receiveLog =  createReceiveLog(receiveLog);
+		receiveLogDao.save(receiveLog);
+		return receiveLog;
 	}
 }

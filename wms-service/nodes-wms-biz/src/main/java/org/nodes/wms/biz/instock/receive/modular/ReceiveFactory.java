@@ -21,6 +21,7 @@ import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnItemDto;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
+import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
@@ -416,6 +417,8 @@ public class ReceiveFactory {
 		receiveDetail.setWoId(lpn.getWoId());
 		//设置货主编码
 		receiveDetail.setOwnerCode(lpn.getOwnerCode());
+		//设置接收状态
+		receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.COMPLETED);
         //设置批属性信息
 		SkuLotUtil.setAllSkuLot(lpn,receiveDetail);
 		receiveDetail.setSkuLot1(request.getSkuLot1());
