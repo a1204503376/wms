@@ -13,6 +13,8 @@ public interface WarehouseDao {
 
 	Warehouse findById(Long warehouseId);
 
+	List<Warehouse> findAll();
+
 	/**
 	 * 根据仓库编码获取仓库实体
 	 *

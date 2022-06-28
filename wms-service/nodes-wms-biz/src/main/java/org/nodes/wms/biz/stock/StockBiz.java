@@ -53,7 +53,7 @@ public interface StockBiz {
 					Location targetLocation, StockLogTypeEnum type);
 
 	/**
-	 * 根据想码查询库存
+	 * 根据箱码查询库存
 	 *
 	 * @param boxCode
 	 * @return

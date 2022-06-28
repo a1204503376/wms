@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.poi.ss.formula.functions.T;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
+import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.biz.basics.warehouse.modular.LocationFactory;
 import org.nodes.wms.dao.basics.location.LocationDao;
 import org.nodes.wms.dao.basics.location.constant.LocationConstant;
@@ -16,6 +17,7 @@ import org.nodes.wms.dao.basics.location.dto.input.LocationSelectQuery;
 import org.nodes.wms.dao.basics.location.dto.output.*;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.enums.LocTypeEnum;
+import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 库位管理 业务类
@@ -33,8 +36,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class LocationBizImpl implements LocationBiz {
+	private final WarehouseBiz warehouseBiz;
 	private final LocationDao locationDao;
-
 	private final LocationFactory locationFactory;
 
 	@Override
@@ -107,19 +110,29 @@ public class LocationBizImpl implements LocationBiz {
 		return locationDao.removeByIdList(idList);
 	}
 
+	private List<String> getLocCodeOfSystemCreated(String systemCreateCode){
+		List<Warehouse> warehouseList = warehouseBiz.findAll();
+		return warehouseList.stream()
+				.map(item -> String.format("%s-%s", item.getWhCode(), systemCreateCode))
+				.collect(Collectors.toList());
+	}
+
 	@Override
 	public List<Location> getAllStage() {
-		return locationDao.getAllStage();
+		List<String> stageLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_STAGE);
+		return locationDao.findLocation(stageLocCodeList);
 	}
 
 	@Override
 	public List<Location> getAllQc() {
-		return locationDao.getAllQc();
+		List<String> qcLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_QC);
+		return locationDao.findLocation(qcLocCodeList);
 	}
 
 	@Override
 	public List<Location> getAllPickTo() {
-		return locationDao.getAllPickTo();
+		List<String> pickToLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_PICKTO);
+		return locationDao.findLocation(pickToLocCodeList);
 	}
 
 	@Override
