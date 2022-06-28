@@ -52,6 +52,11 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
+	public List<Stock> findStockByBoxCode(String boxCode) {
+		return null;
+	}
+
+	@Override
 	public StockIndexResponse staticsStockDataOnIndexPage() {
 		// 获取所有入库暂存区库位
 		List<Location> allStageList = locationBiz.getAllStage();
