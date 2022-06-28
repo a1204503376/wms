@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 收货单管理业务类
@@ -338,11 +339,12 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	@Override
 	public void updateReciveHeader(Long receiveDetailId) {
 		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveDetailId);
+		List<ReceiveDetail> details = receiveDetailDao.selectReceiveDetailById(detail.getReceiveId());
 		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(detail.getReceiveId());
-		int isExit = detail.getPlanQty().compareTo(detail.getScanQty());
-		if (isExit == BigDecimal.ZERO.intValue()) {
+		List<ReceiveDetail> collect = details.stream().filter(item -> item.getDetailStatus().getCode().equals(ReceiveHeaderStateEnum.COMPLETED.getCode())).collect(Collectors.toList());
+		if (details.size() == collect.size()) {
 			receiveHeader.setBillState(ReceiveHeaderStateEnum.COMPLETED);
-		} else if (isExit == BigDecimal.ONE.intValue()) {
+		} else {
 			receiveHeader.setBillState(ReceiveHeaderStateEnum.PART);
 		}
 		receiveHeaderDao.updateReceiveHeader(receiveHeader);
