@@ -2,7 +2,7 @@ package org.nodes.wms.dao.instock.receiveLog.dto.output;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
-import org.nodes.wms.dao.common.entitits.BaseSkuLotEntity;
+import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

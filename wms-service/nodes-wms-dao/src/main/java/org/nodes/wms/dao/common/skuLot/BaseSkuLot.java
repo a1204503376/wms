@@ -1,15 +1,10 @@
-package org.nodes.wms.dao.common.entitits;
+package org.nodes.wms.dao.common.skuLot;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springblade.core.tenant.mp.TenantEntity;
 
-/**
- * 批属性基类
- */
 @Data
-public class BaseSkuLotEntity extends TenantEntity {
-
+public class BaseSkuLot {
 	/**
 	 * 批属性1
 	 */
