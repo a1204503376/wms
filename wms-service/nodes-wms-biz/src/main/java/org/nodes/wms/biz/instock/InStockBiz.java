@@ -2,8 +2,7 @@ package org.nodes.wms.biz.instock;
 
 import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
-import org.nodes.wms.dao.instock.receive.dto.output.PdaByPieceReceiveResponse;
-import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnPdaResponse;
+import org.nodes.wms.dao.instock.receive.dto.output.PdaByPcsReceiveResponse;
 
 /**
  * 收货相关业务
@@ -22,5 +21,5 @@ public interface InStockBiz {
 	 *
 	 * @param request
 	 */
-	Boolean receiptByPcs(PdaByPieceReceiveRequest request);
+	PdaByPcsReceiveResponse receiptByPcs(PdaByPieceReceiveRequest request);
 }
