@@ -108,6 +108,14 @@ public interface LocationDao {
 	 *
 	 * @return int
 	 */
-    int countAll();
+	int countAll();
+
+	/**
+	 * 根据库位编码获取库位
+	 *
+	 * @param locCode 库位编码
+	 * @return 库位信息
+	 */
+	Location getLocationByLocCode(String locCode);
 
 }

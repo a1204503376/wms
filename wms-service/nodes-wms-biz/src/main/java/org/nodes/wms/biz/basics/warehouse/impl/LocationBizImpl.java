@@ -126,4 +126,9 @@ public class LocationBizImpl implements LocationBiz {
 	public int countAll() {
 		return locationDao.countAll();
 	}
+
+	@Override
+	public Location findLocationByLocCode(String locCode) {
+		return locationDao.getLocationByLocCode(locCode);
+	}
 }

@@ -39,7 +39,7 @@ public interface LocationBiz {
 	/**
 	 * 分页
 	 *
-	 * @param query 页参数
+	 * @param query              页参数
 	 * @param locationPageQuery: 分页查询条件
 	 * @return IPage<LocationPageResponse>
 	 */
@@ -49,7 +49,7 @@ public interface LocationBiz {
 	 * 导出
 	 *
 	 * @param locationPageQuery: 条件
-	 * @param response: 响应信息
+	 * @param response:          响应信息
 	 */
 	void exportExcel(LocationPageQuery locationPageQuery, HttpServletResponse response);
 
@@ -120,5 +120,12 @@ public interface LocationBiz {
 	 * @return int
 	 */
 	int countAll();
+
+	/**
+	 * 根据库位编码获取库位
+	 * @param locCode 库位编码
+	 * @return 库位信息
+	 */
+	Location findLocationByLocCode(String locCode);
 
 }
