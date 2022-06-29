@@ -54,11 +54,11 @@
 				if (tool.isNotEmpty(menu.children) && menu.children.length > 0) {
 					uni.setStorageSync('childrenMenu', menu.children)
 					//有子集的自动跳转统一模板
-					uni.$u.func.route('/pages/home/childrenHome?title=' + menu.name);
+					uni.$u.func.route('/pages/home/childrenHome', menu);
 					return;
 				}
 				//没有子集的跳转到自己的页面
-				uni.$u.func.route(menu.path + '?title=' + menu.name);
+				uni.$u.func.route(menu.path, menu);
 			},
 			userSetting() {
 				uni.$u.func.route('/pages/userSetting/userSetting');
