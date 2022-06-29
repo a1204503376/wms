@@ -3,14 +3,12 @@ package org.nodes.wms.biz.instock.receiveLog.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
-import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
-import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
-import org.nodes.wms.dao.basics.owner.entities.Owner;
+import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnItemDto;
@@ -24,7 +22,6 @@ import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
-import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -32,6 +29,8 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -67,7 +66,6 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		}
 		receiveLog.setWhCode(request.getWhCode());
 		receiveLog.setQty(request.getSurplusQty());
-		// TODO
 		receiveLog.setLpnCode(request.getBoxCode());
 		receiveLog.setLocCode(request.getLocCode());
 		receiveLog.setSkuCode(request.getSkuCode());
@@ -75,6 +73,9 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setSkuSpec(request.getSkuLot2());
 		receiveLog.setWhId(request.getWhId());
 		ReceiveLog log = createReceiveLog(receiveLog);
+		log.setSkuLot1(request.getSkuLot1());
+		log.setSkuLot2(request.getSkuLot2());
+		log.setSkuLot3(DateFormat.getInstance().format(new Date())); //TODO 收货时间
 		receiveLogDao.save(log);
 		return log;
 	}
@@ -82,7 +83,8 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	ReceiveLog createReceiveLog(ReceiveLog receiveLog) {
 		ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(receiveLog.getReceiveDetailId());
 		ReceiveHeader receiveHeader = receiveBiz.selectReceiveHeaderById(receiveLog.getReceiveId());
-		Location location = locationBiz.findLocationByLocCode(receiveLog.getWhId(),receiveLog.getLocCode());
+		SkuLotUtil.setAllSkuLot(receiveLog, detail);
+		Location location = locationBiz.findLocationByLocCode(receiveLog.getWhId(), receiveLog.getLocCode());
 		receiveLog.setReceiveNo(receiveHeader.getReceiveNo());
 		receiveLog.setAsnBillId(receiveHeader.getAsnBillId());
 		receiveLog.setAsnBillNo(receiveHeader.getAsnBillNo());
@@ -125,14 +127,13 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setBoxCode(request.getBoxCode());
 		receiveLog.setSnCode(lpn.getSnCode());
 		receiveLog.setQty(item.getPlanQty());
-		// TODO
 		receiveLog.setLpnCode(request.getLpnCode());
 		receiveLog.setLocCode(request.getLocCode());
 		receiveLog.setSkuCode(item.getSkuCode());
 		receiveLog.setSkuName(item.getSkuName());
 		receiveLog.setSkuSpec(request.getSkuLot2());
 		receiveLog.setWhId(request.getWhId());
-		receiveLog =  createReceiveLog(receiveLog);
+		receiveLog = createReceiveLog(receiveLog);
 		receiveLogDao.save(receiveLog);
 		return receiveLog;
 	}
