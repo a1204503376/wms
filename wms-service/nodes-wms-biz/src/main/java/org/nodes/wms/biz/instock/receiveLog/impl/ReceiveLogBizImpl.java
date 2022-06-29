@@ -92,6 +92,8 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setSkuId(detail.getSkuId());
 		receiveLog.setWspId(detail.getWspId());
 		receiveLog.setSkuLevel(detail.getSkuLevel());
+		receiveLog.setSkuLot1(detail.getSkuLot1());
+		receiveLog.setSkuLot2(detail.getSkuLot2());
 		Owner owner;
 		if (Func.isNotEmpty(detail.getWoId())) {
 			owner = ownerBiz.findById(detail.getWoId());
