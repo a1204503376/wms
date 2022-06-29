@@ -88,6 +88,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setAsnBillNo(receiveHeader.getAsnBillNo());
 		receiveLog.setLineNo(detail.getLineNo());
 		receiveLog.setLocId(location.getLocId());
+		receiveLog.setWhCode(detail.getWhCode());
 		receiveLog.setSkuId(detail.getSkuId());
 		receiveLog.setWspId(detail.getWspId());
 		receiveLog.setSkuLevel(detail.getSkuLevel());
@@ -130,6 +131,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setSkuCode(item.getSkuCode());
 		receiveLog.setSkuName(item.getSkuName());
 		receiveLog.setSkuSpec(request.getSkuLot2());
+		receiveLog.setWhId(request.getWhId());
 		receiveLog =  createReceiveLog(receiveLog);
 		receiveLogDao.save(receiveLog);
 		return receiveLog;

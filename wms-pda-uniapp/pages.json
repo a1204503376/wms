@@ -42,7 +42,6 @@
 			"style": {
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom",
-				"enablePullDownRefresh": false,
 				"app-plus": {
 					"subNVues": [{
 						"id": "honeywellScannerComponent",
@@ -112,35 +111,31 @@
 				"navigationBarTitleText": "按件收货",
 				"enablePullDownRefresh": false
 			}
-		
-		}
-	    ,{
-            "path" : "pages/inStock/receiveByBox/receiveDetailLpnQuery",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "按箱收货",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/inStock/receiveByBox/receiveByBox",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "按箱收货",
-                "enablePullDownRefresh": false
-            }
-            
-        },
+
+		}, {
+			"path": "pages/inStock/receiveByBox/receiveDetailLpnQuery",
+			"style": {
+				"navigationBarTitleText": "按箱收货",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/inStock/receiveByBox/receiveByBox",
+			"style": {
+				"navigationBarTitleText": "按箱收货",
+				"enablePullDownRefresh": false
+			}
+
+		},
 		{
-			"path" : "pages/inStock/receiveByPcs/collectionSerialNumber",
-			"style" :                                                                                    
-			{
-			    "navigationBarTitleText": "采集序列号",
-			    "enablePullDownRefresh": false
+			"path": "pages/inStock/receiveByPcs/collectionSerialNumber",
+			"style": {
+				"navigationBarTitleText": "采集序列号",
+				"enablePullDownRefresh": false
 			}
 		}
-    ],
+	],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#33cbcc"
 	}

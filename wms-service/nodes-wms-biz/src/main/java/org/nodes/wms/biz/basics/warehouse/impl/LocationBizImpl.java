@@ -152,6 +152,10 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isFrozen(Location location) {
+		if (Func.isNull(location.getLocFlag())){
+			return false;
+		}
+
 		if (location.getLocFlag() == 10 || location.getLocFlag() == 20){
 			return true;
 		}
