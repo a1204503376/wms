@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.stock.entities;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.nodes.wms.dao.stock.enums.SerialStateEnum;
@@ -17,6 +19,7 @@ public class Serial extends TenantEntity {
 	/**
 	 * 序列号id
 	 */
+	@TableId(type = IdType.ASSIGN_ID)
 	private Long serialId;
 
 	/**
