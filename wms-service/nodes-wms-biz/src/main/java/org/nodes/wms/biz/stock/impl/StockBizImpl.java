@@ -14,12 +14,15 @@ import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.stock.SerialDao;
+import org.nodes.wms.dao.stock.SerialLogDao;
 import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.StockLogDao;
+import org.nodes.wms.dao.stock.constant.SerialLogConstant;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogExcelResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
+import org.nodes.wms.dao.stock.entities.SerialLog;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.entities.StockLog;
 import org.nodes.wms.dao.stock.enums.SerialStateEnum;
@@ -30,6 +33,7 @@ import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.ConvertUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.StringUtil;
@@ -40,6 +44,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,9 +58,8 @@ public class StockBizImpl implements StockBiz {
 	private final LocationBiz locationBiz;
 	private final SkuBiz skuBiz;
 	private final StockMergeStrategy stockMergeStrategy;
-
 	private final StockLogDao stockLogDao;
-
+	private final SerialLogDao serialLogDao;
 	private final SerialDao serialDao;
 
 	@Override
@@ -68,6 +72,7 @@ public class StockBizImpl implements StockBiz {
 
 	}
 
+	// 库位是否被冻结，库位是否允许混放
 	private <T> void canInStockByLocation(Location location, Long skuId, T skuLotObject) {
 		if (Func.isEmpty(location)) {
 			throw new ServiceException("新增库存失败,库位不存在");
@@ -101,7 +106,9 @@ public class StockBizImpl implements StockBiz {
 		}
 	}
 
-	private void mergeStock(Stock sourceStock, Stock targetStock, LocalDateTime lastIn, LocalDateTime lastOut) {
+	// 讲sourceStock合并到targetStock
+	private void mergeStock(Stock sourceStock, Stock targetStock,
+							LocalDateTime lastIn, LocalDateTime lastOut) {
 		targetStock.setStockQty(targetStock.getStockQty().add(sourceStock.getStockQty()));
 		targetStock.setStayStockQty(targetStock.getStayStockQty().add(sourceStock.getStayStockQty()));
 		targetStock.setPickQty(targetStock.getPickQty().add(sourceStock.getPickQty()));
@@ -123,27 +130,44 @@ public class StockBizImpl implements StockBiz {
 		Stock existStock = stockMergeStrategy.apply(stock);
 		// 本次入库保存的库存对象，如果需要合并则是数据库中保存的stock对象，否则为新的库存对象
 		Stock finalStock = null;
+		StockLog stockLog = null;
 		if (Func.isNull(existStock)) {
 			// 新建库存
 			finalStock = stockDao.saveNewStock(stock);
+			stockLog = createAndSaveStockLog(type, finalStock, receiveLog, "新建库存");
 		} else {
 			// 合并库存
 			mergeStock(stock, existStock, LocalDateTime.now(), null);
 			finalStock = stockDao.updateStock(existStock);
+			stockLog = createAndSaveStockLog(type, finalStock, receiveLog, "合并库存");
 		}
 
 		// 形成序列号信息
+		if (Func.isNotEmpty(receiveLog.getSnCode())){
+			List<String> serialNoList = Arrays.asList(Func.split(receiveLog.getSnCode(), ","));
+			createAndSaveSerial(serialNoList, finalStock, stockLog);
+		}
 
-
-		return null;
+		return finalStock;
 	}
 
-	private StockLog createstockLog(StockLogTypeEnum type, Stock finalStock,
-									ReceiveLog receiveLog, String msg){
-		return null;
+	private StockLog createAndSaveStockLog(StockLogTypeEnum type, Stock finalStock,
+										   ReceiveLog receiveLog, String msg){
+		StockLog stockLog = new StockLog();
+		BeanUtil.copy(finalStock, stockLog);
+		stockLog.setLogType(type.getDesc());
+		stockLog.setSourceBillId(receiveLog.getReceiveId());
+		stockLog.setSourceBillNo(receiveLog.getReceiveNo());
+		stockLog.setLineNo(receiveLog.getLineNo());
+		stockLog.setCurrentStayStockQty(BigDecimal.ZERO);
+		stockLog.setCurrentStockQty(receiveLog.getQty());
+		stockLog.setCurrentPickQty(BigDecimal.ZERO);
+		stockLogDao.save(stockLog);
+		return stockLog;
 	}
 
-	private List<Serial> createStockSerial(List<String> serialNoList, Stock stock){
+	// 生成并保存序列号
+	private List<Serial> createAndSaveSerial(List<String> serialNoList, Stock stock, StockLog stockLog){
 		if (Func.isEmpty(serialNoList) || Func.isNull(stock)){
 			throw new NullArgumentException("保存序列号时参数为空");
 		}
@@ -159,14 +183,16 @@ public class StockBizImpl implements StockBiz {
 		}
 
 		List<Serial> resultStockSerial = new ArrayList<>();
+		List<SerialLog> serialLogList = new ArrayList<>();
 		// 找出已经存在但出库的序列号，该类序列号入库次数加1
 		List<String> outBoundSerialNoList = null;
-		List<Serial> outBoundSerialList = findOutBoundSerial(serialNoList);
+		List<Serial> outBoundSerialList = serialDao.getOutBoundSerialBySerialNo(serialNoList);
 		if (Func.isNotEmpty(outBoundSerialList)){
 			for (Serial serial : outBoundSerialList){
 				updateSerial(serial, stock, serial.getInstockNumber() + 1);
 				outBoundSerialNoList.add(serial.getSerialNumber());
 				resultStockSerial.add(serial);
+				serialLogList.add(createSerialLog(SerialLogConstant.SERIAL_LOG_UPDATE, serial, stock, stockLog));
 			}
 		}
 
@@ -180,9 +206,24 @@ public class StockBizImpl implements StockBiz {
 			stockSerial.setSerialNumber(serialNo);
 			updateSerial(stockSerial, stock, 1);
 			resultStockSerial.add(stockSerial);
+			serialLogList.add(createSerialLog(SerialLogConstant.SERIAL_LOG_NEW, stockSerial, stock, stockLog));
 		}
 
+		serialDao.saveOrUpdateBatch(resultStockSerial);
+		serialLogDao.saveBatch(serialLogList);
 		return resultStockSerial;
+	}
+
+	// 生成序列号日志
+	private SerialLog createSerialLog(int proType, Serial serial, Stock stock, StockLog stockLog){
+		SerialLog serialLog = new SerialLog();
+		BeanUtil.copy(serial, serialLog);
+		serialLog.setBillId(stockLog.getSourceBillId());
+		serialLog.setBillNo(stockLog.getSourceBillNo());
+		serialLog.setLineNo(stockLog.getLineNo());
+		serialLog.setProType(proType);
+		serialLog.setSystemProcId(stockLog.getWlslId());
+		return serialLog;
 	}
 
 	private void updateSerial(Serial serial, Stock stock, int inStockNumber){
@@ -195,13 +236,6 @@ public class StockBizImpl implements StockBiz {
 		serial.setSkuName(stock.getSkuName());
 		serial.setStatus(1);
 	}
-
-	// 查询已经出库的序列号
-	private List<Serial> findOutBoundSerial(List<String> serialNoList){
-		return null;
-	}
-
-
 
 	private Stock createStock(ReceiveLog receiveLog, Location location) {
 		Stock stock = new Stock();
@@ -302,7 +336,6 @@ public class StockBizImpl implements StockBiz {
 		}
 		return response;
 	}
-
 
 	@Override
 	public Page<StockLogPageResponse> pageStockLog(Query query,
