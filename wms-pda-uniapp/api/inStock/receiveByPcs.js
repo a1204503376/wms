@@ -51,6 +51,15 @@ const getStockByBoxCode =(data)=>{
 	})
 }
 
+const getSerialNumberList =(data)=>{
+	return http.request({
+		url: '/api/ApiPDA/receiveByPcs/getSerialNumberList',
+		method: 'POST',
+		data:data
+	})
+}
+
+
 
 
 export default {
@@ -59,5 +68,6 @@ export default {
 	getDetailByDetailId,
 	submitReceiptByPcs,
 	getLocationByLocCode,
-	getStockByBoxCode
+	getStockByBoxCode,
+	getSerialNumberList
 }
