@@ -81,6 +81,12 @@ public class InStockBizImpl implements InStockBiz {
 		for (ReceiveDetailLpnItemDto item : request.getReceiveDetailLpnItemDtoList()) {
 			//根据id获取lpn实体
 			ReceiveDetailLpn lpn = receiveBiz.getReceiveDetailLpnById(item.getReceiveDetailLpnId());
+			//更新lpn表批属性信息
+			lpn.setSkuLot1(request.getSkuLot1());
+			lpn.setSkuLot2(request.getSkuLot2());
+			//更新lpn实收数量
+			lpn.setScanQty(lpn.getScanQty().add(item.getPlanQty()));
+			receiveBiz.updateReceiveDetailLpn(lpn);
 			// 生成清点记录
 			ReceiveLog receiveLog = receiveLogBiz.newReceiveLog(request, item, lpn);
 			// 调用库存函数（for begin：一条执行一次）
