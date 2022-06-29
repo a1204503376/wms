@@ -1,5 +1,9 @@
 <template>
 	<view @keyup.esc="esc">
+		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
+			:bgColor="navigationBarBackgroundColor" title="修改密码" titleStyle="color:#ffffff;font-size:21px"
+			style="color:#ffffff;font-size:21px">
+		</u-navbar>
 		<view style="margin-top: 5%;margin-left:5%;margin-right: 5%;">
 			<u--form labelPosition="left" :model="form" :rules="rules" ref="uForm">
 				<u-form-item prop="userInfo.oldPassword" borderBottom ref="item1">
@@ -28,11 +32,13 @@
 	</view>
 </template>
 <script>
+	import setting from '@/common/setting'
 	import api from '@/api/user.js'
 	import md5 from '@/utils/md5.js'
 	export default {
 		data() {
 			return {
+				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				oldPwdFocus: false,
 				newPwdFocus: false,
 				newPwd1Focus: false,
@@ -70,7 +76,7 @@
 		},
 		methods: {
 			esc() {
-				this.navigateBack()
+				uni.$u.func.route('/pages/userSetting/userSetting');
 			},
 			oldPwd() {
 				uni.hideKeyboard(); //隐藏软键盘				

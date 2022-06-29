@@ -57,22 +57,22 @@
 		{
 			"path": "pages/userSetting/userSetting",
 			"style": {
-				"navigationBarTitleText": "个人中心",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/userSetting/pwdSetting",
 			"style": {
-				"navigationBarTitleText": "修改密码",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/userSetting/signSetting",
 			"style": {
-				"navigationBarTitleText": "签到",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		}, {
 			"path": "pages/home/childrenHome",
@@ -84,8 +84,8 @@
 		}, {
 			"path": "pages/userSetting/warehouseSetting",
 			"style": {
-				"navigationBarTitleText": "切换库房",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		}
 

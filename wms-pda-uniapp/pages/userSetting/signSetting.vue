@@ -1,5 +1,9 @@
 <template>
 	<view class="parentClass">
+		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
+			:bgColor="navigationBarBackgroundColor" title="签到" titleStyle="color:#ffffff;font-size:21px"
+			style="color:#ffffff;font-size:21px">
+		</u-navbar>
 		<view>
 			<view class="bigRound">
 				<view class="smallRound" @click="editUserLoginStatus" >
@@ -15,9 +19,15 @@
 </template>
 
 <script>
+	import setting from '@/common/setting'
 	import api from '@/api/user.js'
 	import tool from "@/utils/tool.js"
-	export default {	
+	export default {
+		data(){
+			return{
+				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
+			}
+		},
 		methods: {
 			// 1签到  0签退
 			editUserLoginStatus() {
@@ -27,6 +37,9 @@
 					 this.$u.vuex('lastSignTime', res.data.lastLoginTime);
 					
 				})
+			},
+			esc() {
+				uni.$u.func.route('/pages/userSetting/userSetting');
 			},
 		},
 	}
