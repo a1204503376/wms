@@ -22,7 +22,6 @@ import org.nodes.wms.dao.stock.dto.output.StockLogExcelResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.entities.StockLog;
-import org.nodes.wms.dao.stock.entities.StockSerial;
 import org.nodes.wms.dao.stock.enums.SerialStateEnum;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
@@ -141,30 +140,30 @@ public class StockBizImpl implements StockBiz {
 
 	private StockLog createstockLog(StockLogTypeEnum type, Stock finalStock,
 									ReceiveLog receiveLog, String msg){
-
+		return null;
 	}
 
-	private List<StockSerial> createStockSerial(List<String> serialNoList, Stock stock){
+	private List<Serial> createStockSerial(List<String> serialNoList, Stock stock){
 		if (Func.isEmpty(serialNoList) || Func.isNull(stock)){
 			throw new NullArgumentException("保存序列号时参数为空");
 		}
 
 		// 判断序列号是否重复
-		List<StockSerial> existSerialList = findSerialBySerialNo(serialNoList);
+		List<Serial> existSerialList = findSerialBySerialNo(serialNoList);
 		if (Func.isNotEmpty(existSerialList)){
 			List<String> existSerialNo = existSerialList.stream()
-				.map(StockSerial::getSerialNumber)
+				.map(Serial::getSerialNumber)
 				.collect(Collectors.toList());
 			throw new ServiceException(String.format("保存序列号失败,%s序列号已在库",
 				StringUtil.join(existSerialNo, ",")));
 		}
 
-		List<StockSerial> resultStockSerial = new ArrayList<>();
+		List<Serial> resultStockSerial = new ArrayList<>();
 		// 找出已经存在但出库的序列号，该类序列号入库次数加1
 		List<String> outBoundSerialNoList = null;
-		List<StockSerial> outBoundSerialList = findOutBoundSerial(serialNoList);
+		List<Serial> outBoundSerialList = findOutBoundSerial(serialNoList);
 		if (Func.isNotEmpty(outBoundSerialList)){
-			for (StockSerial serial : outBoundSerialList){
+			for (Serial serial : outBoundSerialList){
 				updateSerial(serial, stock, serial.getInstockNumber() + 1);
 				outBoundSerialNoList.add(serial.getSerialNumber());
 				resultStockSerial.add(serial);
@@ -177,7 +176,7 @@ public class StockBizImpl implements StockBiz {
 			newSerialNoList.removeAll(outBoundSerialNoList);
 		}
 		for (String serialNo : newSerialNoList){
-			StockSerial stockSerial = new StockSerial();
+			Serial stockSerial = new Serial();
 			stockSerial.setSerialNumber(serialNo);
 			updateSerial(stockSerial, stock, 1);
 			resultStockSerial.add(stockSerial);
@@ -186,7 +185,7 @@ public class StockBizImpl implements StockBiz {
 		return resultStockSerial;
 	}
 
-	private void updateSerial(StockSerial serial, Stock stock, int inStockNumber){
+	private void updateSerial(Serial serial, Stock stock, int inStockNumber){
 		serial.setStockId(stock.getStockId());
 		serial.setWhId(stock.getWhId());
 		serial.setSerialState(SerialStateEnum.IN_STOCK);
@@ -198,7 +197,7 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	// 查询已经出库的序列号
-	private List<StockSerial> findOutBoundSerial(List<String> serialNoList){
+	private List<Serial> findOutBoundSerial(List<String> serialNoList){
 		return null;
 	}
 
