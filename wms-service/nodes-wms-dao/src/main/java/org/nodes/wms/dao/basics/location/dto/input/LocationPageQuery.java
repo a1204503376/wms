@@ -1,5 +1,6 @@
 package org.nodes.wms.dao.basics.location.dto.input;
 
+import io.swagger.models.auth.In;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -42,4 +43,9 @@ public class LocationPageQuery implements Serializable {
 	 * 库位处理
 	 */
 	private List<Integer> locHandlingList;
+
+	/**
+	 * 使用类型
+	 */
+	private List<Integer> locFlagList;
 }
