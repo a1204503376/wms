@@ -17,7 +17,8 @@ import java.util.List;
  * 库存日志dao实现类
  **/
 @Repository
-public class StockLogDaoImpl extends BaseServiceImpl<StockLogMapper, StockLog> implements StockLogDao {
+public class StockLogDaoImpl
+	extends BaseServiceImpl<StockLogMapper, StockLog> implements StockLogDao {
 
 	@Override
 	public Page<StockLogPageResponse> page(IPage<?> page, StockLogPageQuery stockLogPageQuery) {
