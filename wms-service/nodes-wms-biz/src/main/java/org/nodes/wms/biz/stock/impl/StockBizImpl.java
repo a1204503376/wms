@@ -106,7 +106,7 @@ public class StockBizImpl implements StockBiz {
 		}
 	}
 
-	// 讲sourceStock合并到targetStock
+	// 将sourceStock合并到targetStock
 	private void mergeStock(Stock sourceStock, Stock targetStock,
 							LocalDateTime lastIn, LocalDateTime lastOut) {
 		targetStock.setStockQty(targetStock.getStockQty().add(sourceStock.getStockQty()));
@@ -149,6 +149,11 @@ public class StockBizImpl implements StockBiz {
 		}
 
 		return finalStock;
+	}
+
+	@Override
+	public Stock outStockByCancleReceive(StockLogTypeEnum type, ReceiveLog receiveLog) {
+		return null;
 	}
 
 	private StockLog createAndSaveStockLog(StockLogTypeEnum type, Stock finalStock,
@@ -288,6 +293,11 @@ public class StockBizImpl implements StockBiz {
 			.map(Location::getLocId)
 			.collect(Collectors.toList());
 		return stockDao.getStockByBoxCode(boxCode, pickToLocList);
+	}
+
+	@Override
+	public Stock findStockOnStage(ReceiveLog receiveLog) {
+		return null;
 	}
 
 	@Override
