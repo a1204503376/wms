@@ -29,8 +29,9 @@ public enum StockLogTypeEnum {
 
 	OUTSTOCK_BY_PICK(301, "拣货出库");
 
-	@EnumValue
+
 	private final Integer code;
+	@EnumValue
 	@JsonValue
 	private final String desc;
 

@@ -3,16 +3,25 @@ package org.nodes.wms.pdaController.instock.receive;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.instock.InStockBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
+import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.dao.basics.location.dto.input.LocationPdaByPcsRequest;
+import org.nodes.wms.dao.basics.location.dto.output.LocationPdaByPcsResponse;
+import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.instock.receive.dto.input.*;
 import org.nodes.wms.dao.instock.receive.dto.output.PdaByPcsReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailByReceiveIdPdaResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailPdaResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderPdaResponse;
+import org.nodes.wms.dao.stock.dto.input.StockPdaByPcsRequest;
+import org.nodes.wms.dao.stock.dto.output.StockPdaByPcsResponse;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
+import org.springblade.core.tool.utils.BeanUtil;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +36,8 @@ import java.util.List;
 public class ReceiveByPcsController {
 	private final ReceiveBiz receiveBiz;
 	private final InStockBiz inStockBiz;
-
+	private final LocationBiz locationBiz;
+    private final StockBiz stockBiz;
 	/**
 	 * PDA收货管理查询
 	 */
@@ -65,6 +75,28 @@ public class ReceiveByPcsController {
 	@PostMapping("receiptByPcs")
 	public R<PdaByPcsReceiveResponse> receiptByPcs(@RequestBody PdaByPieceReceiveRequest pdaByPieceReceiveQuery) {
 		return R.data(inStockBiz.receiptByPcs(pdaByPieceReceiveQuery));
+	}
+
+	/**
+	 * @param request 请求对象包含参数-库房id-库位编码
+	 * @return 库位
+	 */
+	@PostMapping("findThisLocationByLocCode")
+	public R<LocationPdaByPcsResponse> findThisLocationByLocCode(@RequestBody LocationPdaByPcsRequest request) {
+		Location location = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
+		LocationPdaByPcsResponse locationPdaByPcsResponse = BeanUtil.copy(location, LocationPdaByPcsResponse.class);
+		return R.data(locationPdaByPcsResponse);
+	}
+
+	/**
+	 * @param request 根据箱码查询库存
+	 * @return 库位信息
+	 */
+	@PostMapping("findThisStockByBoxCode")
+	public R<List<StockPdaByPcsResponse>> findThisStockByBoxCode(@RequestBody StockPdaByPcsRequest request) {
+		List<Stock> stockList = stockBiz.findStockByBoxCode(request.getBoxCode());
+		List<StockPdaByPcsResponse> responseList = BeanUtil.copy(stockList, StockPdaByPcsResponse.class);
+		return R.data(responseList);
 	}
 
 }

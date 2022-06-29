@@ -1,5 +1,9 @@
 <template>
 	<view @keyup.esc="esc">
+		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
+			:bgColor="navigationBarBackgroundColor" titleStyle="color:#ffffff;font-size:21px"
+			style="color:#ffffff;font-size:21px">
+		</u-navbar>
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
 		<u--form labelPosition="left">
 			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
@@ -28,12 +32,14 @@
 <script>
 	import receive from '@/api/inStock/receiveByBox.js'
 	import barCodeService from '@/common/barcodeFunc.js'
+	import setting from '@/common/setting'
 	export default {
 		components: {
-			
+
 		},
 		data() {
 			return {
+				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				param: {
 					boxCode: '',
 					num: 0,
@@ -50,7 +56,7 @@
 		},
 		methods: {
 			esc() {
-				this.$u.func.navigateBack();
+				uni.$u.func.route('/pages/home/childrenHome?title=收货');
 			},
 			getReceiveDetailList() {
 				receive.getReceiveDetailLpn(this.param.boxCode).then(res => {
@@ -68,11 +74,13 @@
 				if (item.type == barCodeService.BarcodeType.UnKnow || item.type == barCodeService.BarcodeType.Lpn) {
 					this.param.boxCode = item.content;
 					this.getReceiveDetailList();
-					}else{
-				   this.$u.func.showToast({title: '无法识别,不支持的条码类型'})
+				} else {
+					this.$u.func.showToast({
+						title: '无法识别,不支持的条码类型'
+					})
 					return
 				}
-				
+
 			},
 		}
 	}
