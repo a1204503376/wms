@@ -2,6 +2,7 @@ package org.nodes.wms.dao.instock.receive.dto.output;
 
 
 import lombok.Data;
+import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -52,7 +53,7 @@ public class DetailReceiveDetailResponse implements Serializable {
 	/**
 	 * 状态
 	 */
-	private Integer detailStatus;
+	private ReceiveDetailStatusEnum detailStatus;
 	/**
 	 * 生产批次
 	 */

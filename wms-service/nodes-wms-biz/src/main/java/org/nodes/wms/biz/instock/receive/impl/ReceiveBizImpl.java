@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
+import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.basics.sku.SkuDao;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
@@ -20,6 +21,7 @@ import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -49,6 +51,8 @@ public class ReceiveBizImpl implements ReceiveBiz {
 
 	private final LogBiz logBiz;
 	private final ReceiveDetailLpnDao receiveDetailLpnDao;
+	private final StockBiz stockBiz;
+
 
 	@Override
 	public IPage<ReceiveHeaderResponse> getPage(ReceivePageQuery receivePageQuery, Query query) {
@@ -275,6 +279,10 @@ public class ReceiveBizImpl implements ReceiveBiz {
 
 	@Override
 	public ReceiveDetailLpnPdaResponse getReceiveDetailLpnByBoxCode(String boxCode) {
+		List<Stock> stockList = stockBiz.findStockByBoxCode(boxCode);
+		if(Func.isNotEmpty(stockList)){
+			throw new ServiceException("收货失败,该箱码已在库存中存在");
+		}
 		//根据箱码获取lpn实体集合
 		List<ReceiveDetailLpn> receiveDetailLpnList = receiveDetailLpnDao.getReceiveDetailLpnListByBoxCode(boxCode);
 		if (Func.isEmpty(receiveDetailLpnList)) {
