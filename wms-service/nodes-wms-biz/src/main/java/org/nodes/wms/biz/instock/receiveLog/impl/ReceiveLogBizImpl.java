@@ -25,6 +25,7 @@ import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
@@ -75,7 +76,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		ReceiveLog log = createReceiveLog(receiveLog);
 		log.setSkuLot1(request.getSkuLot1());
 		log.setSkuLot2(request.getSkuLot2());
-		log.setSkuLot3(DateFormat.getInstance().format(new Date())); //TODO 收货时间
+		log.setSkuLot3(DateUtil.formatDateTime(new Date()));
 		receiveLogDao.save(log);
 		return log;
 	}
