@@ -17,7 +17,8 @@ public class ReceiveDetailLpnDaoImpl extends BaseServiceImpl<ReceiveDetailLpnMap
 
 	@Override
 	public List<ReceiveDetailLpn> getReceiveDetailLpnListByBoxCode(String boxCode) {
-		return super.list(new LambdaQueryWrapper<ReceiveDetailLpn>().eq(ReceiveDetailLpn::getBoxCode, boxCode));
+		return super.list(new LambdaQueryWrapper<ReceiveDetailLpn>().eq(ReceiveDetailLpn::getBoxCode, boxCode)
+			.le(ReceiveDetailLpn::getScanQty,0));
 	}
 
     @Override

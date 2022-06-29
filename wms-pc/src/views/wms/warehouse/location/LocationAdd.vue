@@ -17,6 +17,7 @@
                         <el-col :span="8">
                             <el-form-item label="库位编码" prop="locCode">
                                 <el-input
+                                    style="width: 288px"
                                     v-model="form.params.locCode"
                                     placeholder="请输入内容"
                                     type="text"
@@ -26,6 +27,7 @@
                         <el-col :span="8">
                             <el-form-item label="库房" prop="whId">
                                 <nodes-warehouse
+                                    style="width: 288px"
                                     v-model="form.params.whId"
                                 ></nodes-warehouse>
                             </el-form-item>
@@ -33,6 +35,7 @@
                         <el-col :span="8">
                             <el-form-item label="库区" prop="zoneId">
                                 <nodes-zone
+                                    style="width: 288px"
                                     v-model="form.params.zoneId"
                                 ></nodes-zone>
                             </el-form-item>
@@ -116,6 +119,7 @@
                         <el-col :span="8">
                             <el-form-item label="容器类型" prop="lpnTypeId">
                                 <nodes-lpn-type
+                                    style="width: 288px"
                                     v-model="form.params.lpnTypeId"
                                 >
                                 </nodes-lpn-type>
@@ -324,7 +328,7 @@ export default {
                             trigger: 'blur'
                         }
                     ],
-                    whCode: [
+                    whId: [
                         {
                             required: true,
                             message: '请选择库房',
@@ -371,6 +375,11 @@ export default {
 </script>
 
 <style scoped>
+
+.el-input {
+    width: 288px;
+}
+
 .d-table-header-required:before {
     content: "*";
     color: #F56C6C;

@@ -173,6 +173,7 @@ public interface ReceiveBiz {
 
 	/**
 	 * 根据用户id获取收货单集合
+	 *
 	 * @param userId 用户id
 	 * @return 收货单集合
 	 */
@@ -180,6 +181,7 @@ public interface ReceiveBiz {
 
 	/**
 	 * 保存收货单头表实体
+	 *
 	 * @param receiveHeader 收货单头表实体
 	 */
 	void newReceiveHeader(ReceiveHeader receiveHeader);
@@ -194,27 +196,57 @@ public interface ReceiveBiz {
 
 	/**
 	 * 根据id获取lpn实体
-	 * @param receiveDetailLpnId  id
-	 * @return  lpn实体
+	 *
+	 * @param receiveDetailLpnId id
+	 * @return lpn实体
 	 */
 	ReceiveDetailLpn getReceiveDetailLpnById(Long receiveDetailLpnId);
 
 	/**
 	 * 新建收货单明细
+	 *
 	 * @param receiveDetail 收货单明细实体
 	 */
 	void newReceiveDetail(ReceiveDetail receiveDetail);
 
 	/**
 	 * 修改lpn
+	 *
 	 * @param lpn 实体
 	 */
 	void updateReceiveDetailLpn(ReceiveDetailLpn lpn);
 
 	/**
 	 * 根据id获取收货单头表实体
+	 *
 	 * @param receiveHeaderId 收货单id
-	 * @return  收货单头表实体
+	 * @return 收货单头表实体
 	 */
 	ReceiveHeader getReceiveHeaderById(Long receiveHeaderId);
+
+	/**
+	 * @param receiveDetailId 收货单详情
+	 * @param receiveId 收货单
+	 * @return 收货是否完成
+	 */
+	PdaByPcsReceiveResponse checkByPcsReceive(Long receiveDetailId,Long receiveId);
+
+	/**
+	 * 未收货明细分页
+	 *
+	 * @param query:                     分页参数
+	 * @param notReceiveDetailPageQuery: 分页插叙条件
+	 * @return 未收货明细数据
+	 */
+	IPage<NotReceiveDetailResponse> pageNotReceiveDetail(
+		Query query, NotReceiveDetailPageQuery notReceiveDetailPageQuery);
+
+	/**
+	 * 导出未收货明细
+	 *
+	 * @param notReceiveDetailPageQuery: 导出时条件
+	 * @param response:                  响应参数
+	 */
+	void exportNotReceiveDetail(
+		NotReceiveDetailPageQuery notReceiveDetailPageQuery, HttpServletResponse response);
 }

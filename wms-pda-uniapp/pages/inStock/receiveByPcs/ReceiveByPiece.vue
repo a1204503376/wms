@@ -1,5 +1,10 @@
 <template>
 	<view>
+		<u-navbar  leftIconColor="#fff"
+			@leftClick="esc" :fixed="false" :autoBack="false"
+			:bgColor="navigationBarBackgroundColor" title="按件收货" titleStyle="color:#ffffff;font-size:21px"
+			style="color:#ffffff;font-size:21px">
+		</u-navbar>
 		<u--form>
 			<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.skuCode" border="0" disabled></u--input>
@@ -39,6 +44,7 @@
 </template>
 
 <script>
+	import setting from '@/common/setting'
 	import receive from '@/api/inStock/receiveByPcs.js'
 	import uniSelect from '@/components/uni-select.vue'
 	import barcodeFunc from '@/common/barcodeFunc.js'
@@ -49,6 +55,7 @@
 		},
 		data() {
 			return {
+				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
 					skuCode: undefined,
 					skuName: undefined,
@@ -131,7 +138,19 @@
 					_this.params.whCode = uni.getStorageSync('warehouse').whCode;
 					_this.params.whId = uni.getStorageSync('warehouse').whId;
 					receive.submitReceiptByPcs(_this.params).then(data => {
-						console.log(data);
+						if (data.data.currentReceivieIsAccomplish) {
+							//当前收货单详情收货收货完毕
+							_this.$u.func.route(
+								'/pages/inStock/receiveByPcs/receiptDetailEnquiry', {
+									receiveId: _this.receiveId
+								});
+						} else if (data.data.allReceivieIsAccomplish) {
+							//当前收货单收货收货完毕
+							_this.$u.func.route('/pages/inStock/receiveByPcs/receiptHeaderEnquiry');
+						} else {
+							//当前收货单详情收货部分收货,刷新当前页面
+							_this.$u.func.route.refreshPage()
+						}
 					});
 				}, 1000)
 
@@ -151,7 +170,7 @@
 				})
 			},
 			esc() {
-				this.$u.func.navigateBack();
+				uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry',{receiveId:this.receiveId});
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

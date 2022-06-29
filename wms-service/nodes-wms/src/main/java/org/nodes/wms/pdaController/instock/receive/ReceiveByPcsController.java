@@ -17,6 +17,7 @@ import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailPdaRespon
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderPdaResponse;
 import org.nodes.wms.dao.stock.dto.input.StockPdaByPcsRequest;
 import org.nodes.wms.dao.stock.dto.output.StockPdaByPcsResponse;
+import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
@@ -25,6 +26,7 @@ import org.springblade.core.tool.utils.BeanUtil;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -37,7 +39,8 @@ public class ReceiveByPcsController {
 	private final ReceiveBiz receiveBiz;
 	private final InStockBiz inStockBiz;
 	private final LocationBiz locationBiz;
-    private final StockBiz stockBiz;
+	private final StockBiz stockBiz;
+
 	/**
 	 * PDA收货管理查询
 	 */
@@ -98,5 +101,20 @@ public class ReceiveByPcsController {
 		List<StockPdaByPcsResponse> responseList = BeanUtil.copy(stockList, StockPdaByPcsResponse.class);
 		return R.data(responseList);
 	}
+
+	/**
+	 * @param request 收货单序列号集合
+	 * @return 已经存在的序列号集合
+	 */
+	@PostMapping("getSerialNumberList")
+	public R<List<String>> getSerialNumberList(@RequestBody ReceiveSerialNoListRequest request) {
+		List<Serial> serialList = stockBiz.findSerialBySerialNo(request.getSerialNumberList());
+		List<String> serialNumberList = serialList.stream()
+			.map(Serial::getSerialNumber)
+			.distinct()
+			.collect(Collectors.toList());
+		return R.data(serialNumberList);
+	}
+
 
 }

@@ -22,6 +22,7 @@
         d2.dict_value as locCategory,
         d3.dict_value as locHandling,
         d4.dict_value as abc,
+        d5.dict_value as locFlag,
         l.logic_allocation,
         l.loc_level,
         l.loc_column,
@@ -37,6 +38,7 @@
         LEFT JOIN blade_dict d2 ON l.loc_category = d2.dict_key and d2.code = 'loc_category'
         LEFT JOIN blade_dict d3 ON l.loc_handling = d3.dict_key and d3.code = 'loc_handling'
         LEFT JOIN blade_dict d4 ON l.abc = d4.dict_key and d4.code = 'abc'
+        LEFT JOIN blade_dict d5 ON l.loc_flag = d5.dict_key and d5.code = 'loc_flag'
         <where>
             l.is_deleted = 0
             <if test=" param.locCode != null and param.locCode !='' ">
@@ -69,6 +71,12 @@
             <if test=" param.locHandlingList != null and param.locHandlingList.size > 0 ">
                 AND l.loc_type IN
                 <foreach collection="param.locHandlingList" open="(" close=")" item="item" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test=" param.locFlagList != null and param.locFlagList.size > 0 ">
+                AND l.loc_flag IN
+                <foreach collection="param.locFlagList" open="(" close=")" item="item" separator=",">
                     #{item}
                 </foreach>
             </if>

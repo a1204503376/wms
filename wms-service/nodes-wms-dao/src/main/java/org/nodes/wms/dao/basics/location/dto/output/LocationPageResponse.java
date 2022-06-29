@@ -62,6 +62,11 @@ public class LocationPageResponse implements Serializable {
 	private String locHandling;
 
 	/**
+	 * 使用状态
+	 */
+	private String locFlag;
+
+	/**
 	 * abc分类名称
 	 */
 	@ExcelProperty("ABC分类")

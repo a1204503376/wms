@@ -1,12 +1,11 @@
-
 <template>
     <el-select
         v-model="val"
+        :code="code"
         :multiple="multiple"
         collapse-tags
         size="mini"
-        style="width:100%;"
-        :code="code"
+        style="width:288px;"
         value-key="value"
         @change="onChange">
         <el-option
@@ -32,11 +31,11 @@ export default {
     props: {
         selectVal: [Array, Number, String],
         //是否有默认值 true:有默认值  默认为false 编辑时将其设置为true
-        defaultValue:{type:Boolean, required: false,default: () => false},
+        defaultValue: {type: Boolean, required: false, default: () => false},
         // 单选多选切换，默认为false
         multiple: {type: Boolean, required: false, default: false},
         // 字典码 必填
-        code: {type:String, required: true}
+        code: {type: String, required: true}
     },
     data() {
         return {
@@ -46,12 +45,12 @@ export default {
     },
     watch: {
         selectVal(newVal) {
-            this.val=newVal;
+            this.val = newVal;
         },
     },
     async created() {
         await this.getDataSource()
-        if(this.defaultValue){
+        if (this.defaultValue) {
             this.val = this.dataSource[0].dictKey
             this.onChange(this.val);
         }

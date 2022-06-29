@@ -93,23 +93,23 @@
 		, {
 			"path": "pages/inStock/receiveByPcs/receiptHeaderEnquiry",
 			"style": {
-				"navigationBarTitleText": "按件收货",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 
 		}, {
 			"path": "pages/inStock/receiveByPcs/receiptDetailEnquiry",
 			"style": {
-				"navigationBarTitleText": "按件收货",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 
 		},
 		{
 			"path": "pages/inStock/receiveByPcs/ReceiveByPiece",
 			"style": {
-				"navigationBarTitleText": "按件收货",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 
 		}, {
@@ -131,8 +131,8 @@
 		{
 			"path": "pages/inStock/receiveByPcs/collectionSerialNumber",
 			"style": {
-				"navigationBarTitleText": "采集序列号",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		}
 	],

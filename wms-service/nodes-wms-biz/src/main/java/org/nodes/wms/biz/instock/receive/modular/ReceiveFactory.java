@@ -148,6 +148,8 @@ public class ReceiveFactory {
 		receiveDetail.setWhCode(receiveHeader.getWhCode());
 		//设置货主id
 		receiveDetail.setWoId(receiveHeader.getWoId());
+		//设置接收状态
+		 receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.NOT_RECEIPT);
 		//设置生产批次
 		receiveDetail.setSkuLot1(newReceiveDetailRequest.getSkuLot1());
 		//设置客户
