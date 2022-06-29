@@ -170,7 +170,7 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
-	public StockSerial findSerialBySerialNo(List<String> serialNoList) {
+	public List<StockSerial> findSerialBySerialNo(List<String> serialNoList) {
 		return null;
 	}
 

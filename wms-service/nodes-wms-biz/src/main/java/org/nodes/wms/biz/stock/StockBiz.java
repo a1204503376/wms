@@ -63,7 +63,7 @@ public interface StockBiz {
 	 * @param serialNoList 序列号编码
 	 * @return 在库的序列号
 	 */
-	StockSerial findSerialBySerialNo(List<String> serialNoList);
+	List<StockSerial> findSerialBySerialNo(List<String> serialNoList);
 
 	/**
 	 * 根据箱码查询库存
