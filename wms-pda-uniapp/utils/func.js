@@ -80,13 +80,13 @@ const install = (Vue, vm) => {
 				icon: 'none'
 			})
 			setTimeout(() => {
-				uni.navigateTo({
+				uni.reLaunch({
 					url: '/pages/login/login'
 				})
 			}, 500)
 			return false
 		}
-		uni.navigateTo({
+		uni.reLaunch({
 			url: url
 		})
 	}
