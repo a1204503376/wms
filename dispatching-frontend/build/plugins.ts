@@ -1,4 +1,3 @@
-import { resolve } from "path";
 import Unocss from "unocss/vite";
 import vue from "@vitejs/plugin-vue";
 import { viteBuildInfo } from "./info";
@@ -6,8 +5,7 @@ import svgLoader from "vite-svg-loader";
 import legacy from "@vitejs/plugin-legacy";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import { viteMockServe } from "vite-plugin-mock";
-import VueI18n from "@intlify/vite-plugin-vue-i18n";
-// import ElementPlus from "unplugin-element-plus/vite";
+
 import { visualizer } from "rollup-plugin-visualizer";
 import removeConsole from "vite-plugin-remove-console";
 import themePreprocessorPlugin from "@pureadmin/theme";
@@ -18,12 +16,6 @@ export function getPluginsList(command, VITE_LEGACY) {
   const lifecycle = process.env.npm_lifecycle_event;
   return [
     vue(),
-    // https://github.com/intlify/bundle-tools/tree/main/packages/vite-plugin-vue-i18n
-    VueI18n({
-      runtimeOnly: true,
-      compositionOnly: true,
-      include: [resolve("locales/**")]
-    }),
     // jsx、tsx语法支持
     vueJsx(),
     Unocss(),
