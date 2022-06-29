@@ -2,6 +2,7 @@ package org.nodes.wms.biz.stock.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang.NullArgumentException;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
@@ -19,7 +20,9 @@ import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogExcelResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
+import org.nodes.wms.dao.stock.entities.StockLog;
 import org.nodes.wms.dao.stock.entities.StockSerial;
+import org.nodes.wms.dao.stock.enums.SerialStateEnum;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.excel.util.ExcelUtil;
@@ -28,12 +31,14 @@ import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.ConvertUtil;
 import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.StringUtil;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -129,6 +134,71 @@ public class StockBizImpl implements StockBiz {
 
 		return null;
 	}
+
+	private StockLog createstockLog(StockLogTypeEnum type, Stock finalStock,
+									ReceiveLog receiveLog, String msg){
+
+	}
+
+	private List<StockSerial> createStockSerial(List<String> serialNoList, Stock stock){
+		if (Func.isEmpty(serialNoList) || Func.isNull(stock)){
+			throw new NullArgumentException("保存序列号时参数为空");
+		}
+
+		// 判断序列号是否重复
+		List<StockSerial> existSerialList = findSerialBySerialNo(serialNoList);
+		if (Func.isNotEmpty(existSerialList)){
+			List<String> existSerialNo = existSerialList.stream()
+				.map(StockSerial::getSerialNumber)
+				.collect(Collectors.toList());
+			throw new ServiceException(String.format("保存序列号失败,%s序列号已在库",
+				StringUtil.join(existSerialNo, ",")));
+		}
+
+		List<StockSerial> resultStockSerial = new ArrayList<>();
+		// 找出已经存在但出库的序列号，该类序列号入库次数加1
+		List<String> outBoundSerialNoList = null;
+		List<StockSerial> outBoundSerialList = findOutBoundSerial(serialNoList);
+		if (Func.isNotEmpty(outBoundSerialList)){
+			for (StockSerial serial : outBoundSerialList){
+				updateSerial(serial, stock, serial.getInstockNumber() + 1);
+				outBoundSerialNoList.add(serial.getSerialNumber());
+				resultStockSerial.add(serial);
+			}
+		}
+
+		// 针对不存在的序列号则新增序列号
+		List<String> newSerialNoList = serialNoList;
+		if (Func.isNotEmpty(outBoundSerialNoList)) {
+			newSerialNoList.removeAll(outBoundSerialNoList);
+		}
+		for (String serialNo : newSerialNoList){
+			StockSerial stockSerial = new StockSerial();
+			stockSerial.setSerialNumber(serialNo);
+			updateSerial(stockSerial, stock, 1);
+			resultStockSerial.add(stockSerial);
+		}
+
+		return resultStockSerial;
+	}
+
+	private void updateSerial(StockSerial serial, Stock stock, int inStockNumber){
+		serial.setStockId(stock.getStockId());
+		serial.setWhId(stock.getWhId());
+		serial.setSerialState(SerialStateEnum.IN_STOCK);
+		serial.setInstockNumber(inStockNumber);
+		serial.setSkuCode(stock.getSkuCode());
+		serial.setSkuId(stock.getSkuId());
+		serial.setSkuName(stock.getSkuName());
+		serial.setStatus(1);
+	}
+
+	// 查询已经出库的序列号
+	private List<StockSerial> findOutBoundSerial(List<String> serialNoList){
+		return null;
+	}
+
+
 
 	private Stock createStock(ReceiveLog receiveLog, Location location) {
 		Stock stock = new Stock();
