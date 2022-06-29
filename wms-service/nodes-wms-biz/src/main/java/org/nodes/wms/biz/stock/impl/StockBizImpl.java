@@ -19,6 +19,7 @@ import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogExcelResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
+import org.nodes.wms.dao.stock.entities.StockSerial;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.excel.util.ExcelUtil;
@@ -50,7 +51,7 @@ public class StockBizImpl implements StockBiz {
 	private final StockLogDao stockLogDao;
 
 	@Override
-	public void freezeByLoc(StockLogTypeEnum type, Long locId) {
+	public void freezeByLoc(StockLogTypeEnum type, Long locId, String occupyFlag) {
 
 	}
 
@@ -165,6 +166,11 @@ public class StockBizImpl implements StockBiz {
 	@Override
 	public Stock moveStock(Stock sourceStock, List<String> serialNoList,
 						   BigDecimal qty, Location targetLocation, StockLogTypeEnum type) {
+		return null;
+	}
+
+	@Override
+	public StockSerial findSerialBySerialNo(List<String> serialNoList) {
 		return null;
 	}
 
