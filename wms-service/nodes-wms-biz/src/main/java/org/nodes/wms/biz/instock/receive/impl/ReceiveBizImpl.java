@@ -140,10 +140,10 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		receiveDetailLpnDao.updateReceiveDetailLpn(lpn);
 	}
 
-	@Override
-	public ReceiveHeader getReceiveHeaderById(Long receiveHeaderId) {
+    @Override
+    public ReceiveHeader getReceiveHeaderById(Long receiveHeaderId) {
 		return receiveHeaderDao.selectReceiveHeaderById(receiveHeaderId);
-	}
+    }
 
 	@Override
 	public PdaByPcsReceiveResponse checkByPcsReceive(Long receiveDetailId, Long receiveId) {
@@ -163,7 +163,6 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		}
 		return response;
 	}
-
 
 	@Override
 	@Transactional
@@ -270,6 +269,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 				}
 			}
 		}
+
 		return response;
 	}
 
@@ -278,7 +278,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		//根据箱码获取lpn实体集合
 		List<ReceiveDetailLpn> receiveDetailLpnList = receiveDetailLpnDao.getReceiveDetailLpnListByBoxCode(boxCode);
 		if (Func.isEmpty(receiveDetailLpnList)) {
-			throw new ServiceException("没有搜索到该箱码或该箱码已收货");
+			throw new ServiceException("没有搜索到该箱码");
 		}
 		ReceiveDetailLpnPdaResponse receiveDetailLpnPdaResponse = new ReceiveDetailLpnPdaResponse();
 		BigDecimal i = new BigDecimal(0);
@@ -391,4 +391,25 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		return receiveHeaderDao.selectReceiveHeaderById(receiveId);
 	}
 
+	@Override
+	public IPage<NotReceiveDetailResponse> pageNotReceiveDetail(
+		Query query, NotReceiveDetailPageQuery notReceiveDetailPageQuery) {
+		return receiveHeaderDao.pageNotReceiveDetail(
+			Condition.getPage(query),
+			notReceiveDetailPageQuery,
+			ReceiveDetailStatusEnum.NOT_RECEIPT.getCode()
+		);
+	}
+
+	@Override
+	public void exportNotReceiveDetail(
+		NotReceiveDetailPageQuery notReceiveDetailPageQuery, HttpServletResponse response) {
+		List<NotReceiveDetailExcelResponse> notReceiveDetailList = receiveHeaderDao.getNotReceiveDetailListByQuery(
+			notReceiveDetailPageQuery,ReceiveDetailStatusEnum.NOT_RECEIPT.getCode());
+		ExcelUtil.export(
+			response,
+			"未收货明细",
+			"未收货明细",
+			notReceiveDetailList,NotReceiveDetailExcelResponse.class );
+	}
 }

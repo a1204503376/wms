@@ -9,6 +9,7 @@ import org.nodes.wms.dao.application.dto.output.ReceiveBillStateResponse;
 import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.input.*;
 import org.nodes.wms.dao.instock.receive.dto.output.EditReceiveResponse;
+import org.nodes.wms.dao.instock.receive.dto.output.NotReceiveDetailResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
@@ -93,7 +94,6 @@ public class ReceiveController {
 		return R.data(receiveBiz.getEditReceiveResponse(receiveIdRequest.getReceiveId()));
 	}
 
-
 	/**
 	 * 关闭收货单
 	 */
@@ -135,12 +135,26 @@ public class ReceiveController {
 	}
 
 	@PostMapping("/pageReceiveLog")
-	public R<IPage<ReceiveLogPageResponse>> pageReceiveLog(Query query, @RequestBody ReceiveLogPageQuery receiveLogPageQuery) {
+	public R<IPage<ReceiveLogPageResponse>> pageReceiveLog(
+		Query query, @RequestBody ReceiveLogPageQuery receiveLogPageQuery) {
 		return R.data(receiveLogBiz.page(query, receiveLogPageQuery));
 	}
 
-	@PostMapping("exportReceiveLog")
+	@PostMapping("/exportReceiveLog")
 	public void exportReceiveLog(@RequestBody ReceiveLogPageQuery receiveLogPageQuery, HttpServletResponse response) {
 		receiveLogBiz.exportExcel(receiveLogPageQuery, response);
+	}
+
+	@PostMapping("/pageNotReceiveDetail")
+	public R<IPage<NotReceiveDetailResponse>> pageNotReceiveDetail(
+		Query query, @RequestBody NotReceiveDetailPageQuery notReceiveDetailPageQuery) {
+		return R.data(receiveBiz.pageNotReceiveDetail(query, notReceiveDetailPageQuery));
+	}
+
+	@PostMapping("/exportNotReceiveDetail")
+	public void exportNotReceiveDetail(
+		@RequestBody NotReceiveDetailPageQuery notReceiveDetailPageQuery,
+		HttpServletResponse response) {
+		receiveBiz.exportNotReceiveDetail(notReceiveDetailPageQuery, response);
 	}
 }

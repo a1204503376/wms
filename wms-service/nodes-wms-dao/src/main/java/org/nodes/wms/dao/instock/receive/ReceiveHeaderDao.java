@@ -2,12 +2,11 @@ package org.nodes.wms.dao.instock.receive;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.instock.receive.dto.input.NotReceiveDetailPageQuery;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePdaQuery;
-import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveHeaderResponse;
-import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderPdaResponse;
+import org.nodes.wms.dao.instock.receive.dto.output.*;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
-import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 
 import java.util.List;
 
@@ -65,4 +64,25 @@ public interface ReceiveHeaderDao {
 	 * @param receiveHeader 收货单头表实体
 	 */
 	void saveReceiveHeader(ReceiveHeader receiveHeader);
+
+	/**
+	 * 未收货明细分页
+	 *
+	 * @param page: 分页参数
+	 * @param notReceiveDetailPageQuery: 分页查询条件
+	 * @param detailStatus: 接收状态：10未收货
+	 * @return 未收货明细数据
+	 */
+	IPage<NotReceiveDetailResponse> pageNotReceiveDetail(
+		IPage<?> page, NotReceiveDetailPageQuery notReceiveDetailPageQuery, Integer detailStatus);
+
+	/**
+	 * 根据查询条件获取未收货明细数据
+	 *
+	 * @param notReceiveDetailPageQuery: 查询条件对象
+	 * @param detailStatus: 接收状态：10未收货
+	 * @return 未收货明细数据
+	 */
+	List<NotReceiveDetailExcelResponse> getNotReceiveDetailListByQuery(
+		NotReceiveDetailPageQuery notReceiveDetailPageQuery, Integer detailStatus);
 }
