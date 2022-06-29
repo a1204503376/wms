@@ -39,6 +39,11 @@ public class StockLog extends BaseSkuLotEntity {
 	private String sourceBillNo;
 
 	/**
+	 * 来源单据行号
+	 */
+	private String lineNo;
+
+	/**
 	 * 本次操作的待上架数量
 	 */
 	private BigDecimal currentStayStockQty;

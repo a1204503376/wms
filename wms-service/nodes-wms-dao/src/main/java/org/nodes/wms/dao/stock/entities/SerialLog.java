@@ -19,8 +19,6 @@ public class SerialLog extends TenantEntity {
 	@TableId(type = IdType.ASSIGN_ID)
 	private Long wlsnlId;
 
-	private Long serialId;
-
 	private Long stockId;
 
 	private Long billId;
