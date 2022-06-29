@@ -87,7 +87,6 @@ public class LocationExcelRequest implements Serializable {
 	@ExcelProperty("使用状态")
 	private Integer locFlag;
 
-
 	/**
 	 * 路线顺序
 	 */

@@ -56,6 +56,18 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="使用状态">
+                            <nodes-dictionary
+                                v-model="form.params.locFlagList"
+                                :multiple="true"
+                                code="loc_flag"
+                                style="width: 200px"
+                            ></nodes-dictionary>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </template>
             <template v-slot:expandSearch>
                 <el-row type="flex">
@@ -200,6 +212,7 @@ export default {
                     locTypeList: [],
                     locCategoryList: [],
                     locHandlingList: [],
+                    locFlagList: []
                 },
             },
             table: {
@@ -237,6 +250,11 @@ export default {
                     {
                         prop: "logicAllocation",
                         label: "路线顺序",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "locFlag",
+                        label: "使用状态",
                         sortable: "custom",
                     },
                     {
@@ -317,7 +335,8 @@ export default {
                 zoneIdList: [],
                 locTypeList: [],
                 locCategoryList: [],
-                locHandlingList: []
+                locHandlingList: [],
+                locFlagList: []
             }
         },
         onRemove() {

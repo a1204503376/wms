@@ -27,14 +27,14 @@
                 AND h.receive_no LIKE concat('%',#{query.receiveNo},'%')
             </if>
             <if test="query.billStateList != null and query.billStateList.size() > 0">
-                AND  h.bill_state in
+                AND h.bill_state in
                 <foreach collection="query.billStateList" item="item" open="(" close=")" separator=",">
                     #{item}
                 </foreach>
             </if>
             <if test="query.skuIds != null and query.skuIds.size()>0">
-                AND  d.sku_id in
-                <foreach collection="query.skuIds" item="item"  open="(" close=")" separator=",">
+                AND d.sku_id in
+                <foreach collection="query.skuIds" item="item" open="(" close=")" separator=",">
                     #{item}
                 </foreach>
             </if>
@@ -45,16 +45,16 @@
                 AND h.asn_bill_no LIKE concat('%',#{query.asnBillNo},'%')
             </if>
             <if test="query.whIds!=null and query.whIds.size()>0">
-                AND  h.wh_id in
+                AND h.wh_id in
                 <foreach collection="query.whIds" item="item" index="index" open="(" close=")" separator=",">
                     #{item}
                 </foreach>
             </if>
             <if test="query.createTimeBegin!=null">
-                AND h.create_time  &gt;= #{query.createTimeBegin}
+                AND h.create_time &gt;= #{query.createTimeBegin}
             </if>
             <if test="query.createTimeEnd!=null">
-                AND h.create_time  &lt;= #{query.createTimeEnd}
+                AND h.create_time &lt;= #{query.createTimeEnd}
             </if>
             <if test="query.externalCreateUser!=null and query.externalCreateUser != ''">
                 AND h.external_create_user LIKE concat('%',#{query.externalCreateUser},'%')
@@ -63,7 +63,7 @@
                 AND h.supplier_code LIKE concat('%',#{query.sCode},'%')
             </if>
         </where>
-        group  by  h.receive_id
+        group by h.receive_id
     </sql>
 
     <select id="getPage" resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse">
@@ -73,22 +73,22 @@
         </if>
     </select>
     <select id="selectHeaderById" resultType="org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveHeaderResponse">
-        SELECT
-            rh.receive_no,
-            rh.asn_bill_no,
-            rh.bill_state,
-            rh.wh_code,
-            rh.owner_code,
-            rh.bill_type_cd,
-            wbt.bill_type_name,
-            rh.in_store_type,
-            rh.asn_bill_no,
-            rh.supplier_code,
-            rh.supplier_name,
-            rh.remark
-            from receive_header rh,wms_bill_type wbt
-            where  rh.bill_type_cd = wbt.bill_type_cd
-            and    receive_id = #{id}
+        SELECT rh.receive_no,
+               rh.asn_bill_no,
+               rh.bill_state,
+               rh.wh_code,
+               rh.owner_code,
+               rh.bill_type_cd,
+               wbt.bill_type_name,
+               rh.in_store_type,
+               rh.asn_bill_no,
+               rh.supplier_code,
+               rh.supplier_name,
+               rh.remark
+        from receive_header rh,
+             wms_bill_type wbt
+        where rh.bill_type_cd = wbt.bill_type_cd
+          and receive_id = #{id}
     </select>
     <select id="getReceiveHeaderResponseByQuery"
             resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse">
@@ -97,18 +97,83 @@
 
     <select id="getReceiveList" resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderPdaResponse">
         select
-            h.receive_id,
-            h.receive_no,
-            h.supplier_name,
-            b.bill_type_name
+        h.receive_id,
+        h.receive_no,
+        h.supplier_name,
+        b.bill_type_name
         from receive_header h
-                 LEFT JOIN wms_bill_type b ON  h.bill_type_cd = b.bill_type_cd
-      <where>
-              AND h.receive_no LIKE concat('%',#{query.no},'%')
-              OR  h.external_order_no LIKE concat('%',#{query.no},'%')
-      </where>
+        LEFT JOIN wms_bill_type b ON h.bill_type_cd = b.bill_type_cd
+        <where>
+            AND h.receive_no LIKE concat('%',#{query.no},'%')
+            OR h.external_order_no LIKE concat('%',#{query.no},'%')
+        </where>
         group by h.receive_id,b.bill_type_name
         order by h.create_time
+    </select>
+
+    <sql id="notReceiveDetail">
+        SELECT
+        header.receive_id,
+        header.receive_no,
+        billType.bill_type_name,
+        external_order_no,
+        line_no,
+        sku_code,
+        sku_name,
+        plan_qty,
+        scan_qty,
+        surplus_qty,
+        um_name,
+        sku_lot1,
+        sku_lot2,
+        sku_lot3,
+        sku_lot4,
+        sku_lot5,
+        sku_lot6,
+        sku_lot7,
+        sku_lot8,
+        `user`.real_name as create_user,
+        detail.create_time
+        FROM receive_header header
+        LEFT JOIN receive_detail detail ON header.receive_id = detail.receive_id
+        LEFT JOIN wms_bill_type billType ON header.bill_type_cd = billType.bill_type_cd
+        LEFT JOIN blade_user `user` ON header.create_user = `user`.id
+        <where>
+            detail.detail_status = #{detailStatus}
+            <if test="param.receiveNo != null and param.receiveNo != ''">
+                AND header.receive_no LIKE CONCAT('%', #{param.receiveNo} ,'%')
+            </if>
+            <if test="param.billType != null and param.billType != ''">
+                AND header.bill_type_cd = #{param.billType}
+            </if>
+            <if test="param.externalOrderNo != null and param.externalOrderNo != ''">
+                AND header.external_order_no LIKE CONCAT('%', #{param.externalOrderNo} ,'%')
+            </if>
+            <if test="param.skuCode != null and param.skuCode != ''">
+                AND detail.sku_code LIKE CONCAT('%', #{param.skuCode}, '%')
+            </if>
+            <if test="param.createUser != null and param.createUser != ''">
+                AND `user`.real_name LIKE CONCAT('%', #{param.createUser}, '%')
+            </if>
+            <if test="param.createTimeBegin != null">
+                AND detail.create_time &gt;= #{param.createTimeBegin}
+            </if>
+            <if test="param.createTimeEnd != null">
+                AND detail.create_time &lt;= #{param.createTimeEnd}
+            </if>
+        </where>
+    </sql>
+
+    <select id="pageNotReceiveDetail"
+            resultType="org.nodes.wms.dao.instock.receive.dto.output.NotReceiveDetailResponse">
+        <include refid="notReceiveDetail"/>
+        <if test="page.orders != null or page.orders.size > 0">
+            ORDER BY header.create_time , receive_no
+        </if>
+    </select>
+    <select id="listNotReceiveDetailByQuery"
+            resultType="org.nodes.wms.dao.instock.receive.dto.output.NotReceiveDetailExcelResponse">
+        <include refid="notReceiveDetail"/>
     </select>
 
 </mapper>

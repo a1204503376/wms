@@ -6,20 +6,18 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
+import org.nodes.wms.dao.instock.receive.ReceiveHeaderDao;
+import org.nodes.wms.dao.instock.receive.dto.input.NotReceiveDetailPageQuery;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePdaQuery;
-import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveHeaderResponse;
-import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderPdaResponse;
+import org.nodes.wms.dao.instock.receive.dto.output.*;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 import org.nodes.wms.dao.instock.receive.mapper.ReceiveHeaderMapper;
-import org.nodes.wms.dao.instock.receive.ReceiveHeaderDao;
-import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
-import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -98,18 +96,30 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 		return super.updateById(header);
 	}
 
-    @Override
-    public List<ReceiveHeader> selectReceiveListByNonOrder(Long userId) {
+	@Override
+	public List<ReceiveHeader> selectReceiveListByNonOrder(Long userId) {
 		return super.list(new LambdaQueryWrapper<ReceiveHeader>()
-			.eq(ReceiveHeader::getCreateUser,userId)
-			.eq(ReceiveHeader::getInStoreType,20)
+			.eq(ReceiveHeader::getCreateUser, userId)
+			.eq(ReceiveHeader::getInStoreType, 20)
 			.in(ReceiveHeader::getBillState,
-				ReceiveHeaderStateEnum.NOT_RECEIPT.getCode(),ReceiveHeaderStateEnum.PART.getCode()));
-    }
+				ReceiveHeaderStateEnum.NOT_RECEIPT.getCode(), ReceiveHeaderStateEnum.PART.getCode()));
+	}
 
-    @Override
-    public void saveReceiveHeader(ReceiveHeader receiveHeader) {
-        super.save(receiveHeader);
-    }
+	@Override
+	public void saveReceiveHeader(ReceiveHeader receiveHeader) {
+		super.save(receiveHeader);
+	}
+
+	@Override
+	public IPage<NotReceiveDetailResponse> pageNotReceiveDetail(
+		IPage<?> page, NotReceiveDetailPageQuery notReceiveDetailPageQuery,Integer billState) {
+		return super.baseMapper.pageNotReceiveDetail(page, notReceiveDetailPageQuery, billState);
+	}
+
+	@Override
+	public List<NotReceiveDetailExcelResponse> getNotReceiveDetailListByQuery(
+		NotReceiveDetailPageQuery notReceiveDetailPageQuery, Integer billState) {
+		return super.baseMapper.listNotReceiveDetailByQuery(notReceiveDetailPageQuery, billState);
+	}
 
 }
