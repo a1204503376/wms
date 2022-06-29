@@ -278,7 +278,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		//根据箱码获取lpn实体集合
 		List<ReceiveDetailLpn> receiveDetailLpnList = receiveDetailLpnDao.getReceiveDetailLpnListByBoxCode(boxCode);
 		if (Func.isEmpty(receiveDetailLpnList)) {
-			throw new ServiceException("没有搜索到该箱码");
+			throw new ServiceException("没有搜索到该箱码或该箱码已收货");
 		}
 		ReceiveDetailLpnPdaResponse receiveDetailLpnPdaResponse = new ReceiveDetailLpnPdaResponse();
 		BigDecimal i = new BigDecimal(0);
