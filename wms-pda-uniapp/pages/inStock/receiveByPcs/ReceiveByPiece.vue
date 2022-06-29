@@ -31,7 +31,7 @@
 			<view class="btn-cancle" @click="esc()">
 				返回
 			</view>
-			<view class="btn-submit" @click="submit()" :throttleTime="1000">
+			<view class="btn-submit" @click="submit()">
 				确定
 			</view>
 		</view>
@@ -42,6 +42,7 @@
 	import receive from '@/api/inStock/receiveByPcs.js'
 	import uniSelect from '@/components/uni-select.vue'
 	import barcodeFunc from '@/common/barcodeFunc.js'
+	import tool from '@/utils/tool.js'
 	export default {
 		components: {
 			uniSelect
@@ -62,12 +63,14 @@
 				receiveDetailId: '',
 				receiveId: '',
 				receiveDetailList: [],
+				locCode: '',
+				boxCode: ''
 			}
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
 			this.receiveDetailId = parse.receiveDetailId;
-            this.receiveId=parse.receiveId;
+			this.receiveId = parse.receiveId;
 			this.getDetailByDetailId();
 		},
 		onUnload() {
@@ -77,6 +80,19 @@
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {
+			getStockByBoxCode() {
+				let params = {
+					boxCode: this.params.boxCode,
+				};
+				receive.getStockByBoxCode(params).then(data => {
+					if (tool.isEmpty(data.data[0])) {
+						return;
+					}
+					this.params.locCode = data.data[0].locCode;
+					this.locCode = data.data[0].locCode;
+					this.boxCode = data.data[0].boxCode;
+				})
+			},
 			analysisCode(code) {
 				var barcode = barcodeFunc.parseBarcode(code);
 				var barcodeType = barcodeFunc.BarcodeType;
@@ -86,6 +102,7 @@
 						break;
 					case barcodeType.Lpn:
 						this.params.boxCode = barcode.content;
+						this.getStockByBoxCode();
 						break;
 					default:
 						this.$u.func.showToast({
@@ -100,6 +117,12 @@
 					_this.params.locCode = uni.$u.func.parseLocCode(_this.params.locCode);
 					_this.params.receiveDetailId = _this.receiveDetailId;
 					_this.params.receiveId = _this.receiveId;
+					if (tool.isNotEmpty(_this.locCode) && _this.params.locCode != _this.locCode) {
+						_this.$u.func.showToast({
+							title: '该箱已在' + _this.locCode + ',收货时不能移动',
+						});
+						return;
+					}
 					if (_this.params.isSn) {
 						uni.$u.func.route('/pages/inStock/receiveByPcs/collectionSerialNumber', _this.params);
 						return;
@@ -111,6 +134,7 @@
 						console.log(data);
 					});
 				}, 1000)
+
 			},
 			getDetailByDetailId() {
 				let params = {

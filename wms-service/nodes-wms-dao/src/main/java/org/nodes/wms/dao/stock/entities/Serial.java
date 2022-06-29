@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.stock.entities;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.nodes.wms.dao.stock.enums.SerialStateEnum;
@@ -10,13 +12,14 @@ import org.springblade.core.tenant.mp.TenantEntity;
  **/
 @Data
 @TableName("wms_serial")
-public class StockSerial extends TenantEntity {
+public class Serial extends TenantEntity {
 
 	private static final long serialVersionUID = -453322099134024067L;
 
 	/**
 	 * 序列号id
 	 */
+	@TableId(type = IdType.ASSIGN_ID)
 	private Long serialId;
 
 	/**

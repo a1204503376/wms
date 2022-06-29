@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.stock.entities;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
@@ -18,6 +20,7 @@ public class StockLog extends BaseSkuLotEntity {
 	/**
 	 * 库存日志id
 	 */
+	@TableId(type = IdType.ASSIGN_ID)
 	private Long wlslId;
 
 	/**

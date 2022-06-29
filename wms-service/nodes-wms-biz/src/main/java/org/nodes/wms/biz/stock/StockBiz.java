@@ -7,7 +7,7 @@ import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
-import org.nodes.wms.dao.stock.entities.StockSerial;
+import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.mp.support.Query;
 
@@ -63,7 +63,7 @@ public interface StockBiz {
 	 * @param serialNoList 序列号编码
 	 * @return 在库的序列号
 	 */
-	List<StockSerial> findSerialBySerialNo(List<String> serialNoList);
+	List<Serial> findSerialBySerialNo(List<String> serialNoList);
 
 	/**
 	 * 根据箱码查询库存

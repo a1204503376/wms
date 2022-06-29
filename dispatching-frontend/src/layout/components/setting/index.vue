@@ -12,7 +12,6 @@ import {
 import { find } from "lodash-unified";
 import { getConfig } from "/@/config";
 import { useRouter } from "vue-router";
-import panel from "../panel/index.vue";
 import { emitter } from "/@/utils/mitt";
 import { templateRef } from "@vueuse/core";
 import { debounce } from "/@/utils/debounce";
@@ -156,7 +155,7 @@ function onReset() {
       path: "/welcome",
       parentPath: "/",
       meta: {
-        title: "menus.hshome",
+        title: "首页",
         icon: "home-filled"
       }
     }
