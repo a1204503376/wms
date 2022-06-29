@@ -64,6 +64,7 @@ public class LocationPageResponse implements Serializable {
 	/**
 	 * 使用状态
 	 */
+	@ExcelProperty("使用状态")
 	private String locFlag;
 
 	/**
