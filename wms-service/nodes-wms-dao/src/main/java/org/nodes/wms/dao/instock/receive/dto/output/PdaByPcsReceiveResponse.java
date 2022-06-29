@@ -10,8 +10,9 @@ import java.io.Serializable;
  **/
 @Data
 public class PdaByPcsReceiveResponse implements Serializable {
+	private static final long serialVersionUID = -4983690992277737954L;
 	//当前收货是否完成
-	private String currentReceivieIsAccomplish;
+	private Boolean currentReceivieIsAccomplish;
 	//全部收货是否完成
-	private String allReceivieIsAccomplish;
+	private Boolean allReceivieIsAccomplish;
 }
