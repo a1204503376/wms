@@ -1,5 +1,10 @@
 <template>
 	<view>
+		<u-navbar  leftIconColor="#fff"
+			@leftClick="esc" :fixed="false" :autoBack="false"
+			:bgColor="navigationBarBackgroundColor" title="按件收货" titleStyle="color:#ffffff;font-size:21px"
+			style="color:#ffffff;font-size:21px">
+		</u-navbar>
 		<template>
 			<u-search placeholder="请输入收货单编码/上游编码" v-model="params.no" :show-action="false" @custom="search"
 				@search="search" class="font-in-page" style="margin: 12rpx">
@@ -37,12 +42,14 @@
 </template>
 
 <script>
+	import setting from '@/common/setting'
 	import receive from '@/api/inStock/receiveByPcs.js'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
 	export default {
 		data() {
 			return {
+				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
 					no: '',
 				},
@@ -81,7 +88,7 @@
 				}
 			},
 			esc() {
-				this.$u.func.navigateBack();
+				uni.$u.func.route('/pages/home/childrenHome',{name:'收货'});
 			},
 			getReceiveList() {
 				this.noData=false;
