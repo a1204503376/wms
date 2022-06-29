@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,7 @@ public class LocationFactory {
 		List<Location> locationList = new ArrayList<>();
 		for (LocationExcelRequest data : importDataList) {
 			Location location = new Location();
+			Func.copy(data, location);
 			if (Func.isEmpty(data.getLocCode())) {
 				throw new ServiceException("导入失败，库位编码不能为空");
 			}
@@ -48,13 +50,6 @@ public class LocationFactory {
 			if (Func.isEmpty(data.getStatus())) {
 				throw new ServiceException("导入失败，启用状态不能为空");
 			}
-			// 判断库位编码是否已存在
-			boolean isExist = locationDao.isExistLocationCode(data.getLocCode());
-			if (isExist) {
-				throw new ServiceException("导入失败，库位编码[" + data.getLocCode() + "]已存在");
-			} else {
-				location.setLocCode(data.getLocCode());
-			}
 			// 根据库房编码查询库房信息
 			if (Func.isNotEmpty(data.getWhCode())) {
 				Warehouse warehouse = warehouseBiz.findByCode(data.getWhCode());
@@ -63,6 +58,16 @@ public class LocationFactory {
 				} else {
 					location.setWhId(warehouse.getWhId());
 				}
+			}
+			// 判断库位编码是否已存在
+			List<Location> locations = locationDao.getLocationByWhId(location.getWhId());
+			List<String> locCodeList = locations.stream().map(Location::getLocCode).collect(Collectors.toList());
+			if (Func.isNotEmpty(locCodeList) && locCodeList.contains(data.getLocCode())) {
+				throw new ServiceException(
+					String.format(
+						"导入失败，库房[编码：%s]中的库位[编码：%s]已存在",
+						data.getWhCode(), data.getLocCode()
+					));
 			}
 			// 根据库区编码查询库区信息
 			if (Func.isNotEmpty(data.getZoneCode())) {
@@ -86,30 +91,7 @@ public class LocationFactory {
 			if (!data.getStatus().equals(StatusEnum.ON.getIndex())
 				&& !data.getStatus().equals(StatusEnum.OFF.getIndex())) {
 				throw new ServiceException("导入失败，启用状态只能为1(启用)或者-1(禁用)");
-			} else {
-				location.setStatus(data.getStatus());
 			}
-
-			location.setLocType(data.getLocType());
-			location.setLocCategory(data.getLocCategory());
-			location.setLocHandling(data.getLocHandling());
-			location.setCheckDigit(data.getCheckDigit());
-			location.setAbc(data.getAbc());
-			location.setLocFlag(data.getLocFlag());
-			location.setLocLength(data.getLocLength());
-			location.setLocWide(data.getLocWide());
-			location.setLocHigh(data.getLocHigh());
-			location.setLocLevel(data.getLocLevel());
-			location.setLocColumn(data.getLocColumn());
-			location.setLocBank(data.getLocBank());
-			location.setPutOrder(data.getPutOrder());
-			location.setCapacity(data.getCapacity());
-			location.setLoadWeight(data.getLoadWeight());
-			location.setItemNum(data.getItemNum());
-			location.setTrayNum(data.getTrayNum());
-			location.setLocSkuMix(data.getLocSkuMix());
-			location.setLocLotNoMix(data.getLocLotNoMix());
-
 			locationList.add(location);
 		}
 		return locationList;
@@ -124,45 +106,23 @@ public class LocationFactory {
 //		if (!locationAddRequest.getStatus().equals(StatusEnum.ON.getIndex())
 //			&& !locationAddRequest.getStatus().equals(StatusEnum.OFF.getIndex())) {
 //			throw new ServiceException("新增失败，启用状态只能为1(启用)或者-1(禁用)");
-//		} else {
-//			location.setStatus(locationAddRequest.getStatus());
 //		}
-		Func.copy(locationAddOrEditRequest,location);
+		Func.copy(locationAddOrEditRequest, location);
 		// 根据id是否为空判断是(新增/编辑)操作
-		if (Func.isNotEmpty(locationAddOrEditRequest.getLocId())){
+		if (Func.isNotEmpty(locationAddOrEditRequest.getLocId())) {
 			location.setLocId(locationAddOrEditRequest.getLocId());
-		} else {
-			// 判断库位编码是否已存在
-			boolean isExist = locationDao.isExistLocationCode(locationAddOrEditRequest.getLocCode());
-			if (isExist) {
-				throw new ServiceException("编辑失败，库位编码[" + locationAddOrEditRequest.getLocCode() + "]已存在");
-			} else {
-				location.setLocCode(locationAddOrEditRequest.getLocCode());
-			}
 		}
-
-//		location.setWhId(locationAddOrEditRequest.getWhId());
-//		location.setZoneId(locationAddOrEditRequest.getZoneId());
-//		location.setLocType(locationAddOrEditRequest.getLocType());
-//		location.setLocCategory(locationAddOrEditRequest.getLocCategory());
-//		location.setLocHandling(locationAddOrEditRequest.getLocHandling());
-//		location.setCheckDigit(locationAddOrEditRequest.getCheckDigit());
-//		location.setLogicAllocation(locationAddOrEditRequest.getLogicAllocation());
-//		location.setAbc(locationAddOrEditRequest.getAbc());
-//		location.setLocFlag(locationAddOrEditRequest.getLocFlag());
-//		location.setLocLength(locationAddOrEditRequest.getLocLength());
-//		location.setLocWide(locationAddOrEditRequest.getLocWide());
-//		location.setLocHigh(locationAddOrEditRequest.getLocHigh());
-//		location.setLocLevel(locationAddOrEditRequest.getLocLevel());
-//		location.setLocColumn(locationAddOrEditRequest.getLocColumn());
-//		location.setLocBank(locationAddOrEditRequest.getLocBank());
-//		location.setPutOrder(locationAddOrEditRequest.getPutOrder());
-//		location.setCapacity(locationAddOrEditRequest.getCapacity());
-//		location.setLoadWeight(locationAddOrEditRequest.getLoadWeight());
-//		location.setItemNum(locationAddOrEditRequest.getItemNum());
-//		location.setTrayNum(locationAddOrEditRequest.getTrayNum());
-//		location.setLocSkuMix(locationAddOrEditRequest.getLocSkuMix());
-//		location.setLocLotNoMix(locationAddOrEditRequest.getLocLotNoMix());
+		List<Location> locations = locationDao.getLocationByWhId(location.getWhId());
+		Warehouse warehouse = warehouseBiz.findById(location.getWhId());
+		List<String> locCodeList = locations.stream().map(Location::getLocCode).collect(Collectors.toList());
+		if (Func.isNotEmpty(locCodeList) && locCodeList.contains(location.getLocCode())) {
+			throw new ServiceException(
+				String.format(
+					"%s失败，库房[编码：%s]中的库位[编码：%s]已存在",
+					Func.isEmpty(location.getLocId()) ? "新增" : "编辑",
+					warehouse.getWhCode(),
+					locationAddOrEditRequest.getLocCode()));
+		}
 
 		return location;
 	}
@@ -176,7 +136,7 @@ public class LocationFactory {
 	public LocationEditResponse createLocationEditResponse(Location location) {
 		LocationEditResponse locationEditResponse = new LocationEditResponse();
 		// 库位实体复制给库位dto
-		Func.copy(location,locationEditResponse);
+		Func.copy(location, locationEditResponse);
 		return locationEditResponse;
 	}
 }

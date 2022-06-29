@@ -81,6 +81,7 @@
 		
 		methods: {
 			submit() {
+				this.param.locCode=this.$u.func.parseLocCode(this.param.locCode)
 				receive.receiveByCode(this.param).then(res => {
 					uni.$u.func.route('/pages/inStock/receiveByBox/receiveDetailLpnQuery');
 				})

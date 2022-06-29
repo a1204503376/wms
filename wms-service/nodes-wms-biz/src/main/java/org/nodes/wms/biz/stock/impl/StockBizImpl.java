@@ -13,6 +13,7 @@ import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.stock.SerialDao;
 import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.StockLogDao;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
@@ -23,6 +24,7 @@ import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.entities.StockLog;
 import org.nodes.wms.dao.stock.entities.StockSerial;
 import org.nodes.wms.dao.stock.enums.SerialStateEnum;
+import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.excel.util.ExcelUtil;
@@ -54,6 +56,8 @@ public class StockBizImpl implements StockBiz {
 	private final StockMergeStrategy stockMergeStrategy;
 
 	private final StockLogDao stockLogDao;
+
+	private final SerialDao serialDao;
 
 	@Override
 	public void freezeByLoc(StockLogTypeEnum type, Long locId, String occupyFlag) {
@@ -98,15 +102,15 @@ public class StockBizImpl implements StockBiz {
 		}
 	}
 
-	private void mergeStock(Stock sourceStock, Stock targetStock, LocalDateTime lastIn, LocalDateTime lastOut){
+	private void mergeStock(Stock sourceStock, Stock targetStock, LocalDateTime lastIn, LocalDateTime lastOut) {
 		targetStock.setStockQty(targetStock.getStockQty().add(sourceStock.getStockQty()));
 		targetStock.setStayStockQty(targetStock.getStayStockQty().add(sourceStock.getStayStockQty()));
 		targetStock.setPickQty(targetStock.getPickQty().add(sourceStock.getPickQty()));
 		targetStock.setOccupyQty(targetStock.getOccupyQty().add(sourceStock.getOccupyQty()));
-		if (!Func.isNull(lastIn)){
+		if (!Func.isNull(lastIn)) {
 			targetStock.setLastInTime(lastIn);
 		}
-		if (!Func.isNull(lastOut)){
+		if (!Func.isNull(lastOut)) {
 			targetStock.setLastOutTime(lastOut);
 		}
 	}
@@ -120,7 +124,7 @@ public class StockBizImpl implements StockBiz {
 		Stock existStock = stockMergeStrategy.apply(stock);
 		// 本次入库保存的库存对象，如果需要合并则是数据库中保存的stock对象，否则为新的库存对象
 		Stock finalStock = null;
-		if (Func.isNull(existStock)){
+		if (Func.isNull(existStock)) {
 			// 新建库存
 			finalStock = stockDao.saveNewStock(stock);
 		} else {
@@ -240,8 +244,8 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
-	public List<StockSerial> findSerialBySerialNo(List<String> serialNoList) {
-		return null;
+	public List<Serial> findSerialBySerialNo(List<String> serialNoList) {
+		return serialDao.getSerialBySerialNo(serialNoList);
 	}
 
 	@Override
@@ -278,7 +282,7 @@ public class StockBizImpl implements StockBiz {
 			response.setStageSkuQty(ConvertUtil.convert(stageStock.get("skuQty"), BigDecimal.class));
 			response.setStageSkuStoreDay(ConvertUtil.convert(stageStock.get("skuStoreDay"), Integer.class));
 		} else {
-			response.setStageSkuQty(new BigDecimal(0));
+			response.setStageSkuQty(BigDecimal.ZERO);
 			response.setStageSkuStoreDay(0);
 		}
 
@@ -286,7 +290,7 @@ public class StockBizImpl implements StockBiz {
 			response.setQcSkuQty(ConvertUtil.convert(qcStock.get("skuQty"), BigDecimal.class));
 			response.setQcSkuStoreDay(ConvertUtil.convert(qcStock.get("skuStoreDay"), Integer.class));
 		} else {
-			response.setQcSkuQty(new BigDecimal(0));
+			response.setQcSkuQty(BigDecimal.ZERO);
 			response.setQcSkuStoreDay(0);
 		}
 

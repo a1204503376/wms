@@ -1,4 +1,3 @@
-import { $t } from "/@/plugins/i18n";
 const Layout = () => import("/@/layout/index.vue");
 
 const remainingRouter = [
@@ -7,7 +6,7 @@ const remainingRouter = [
     name: "login",
     component: () => import("/@/views/login/index.vue"),
     meta: {
-      title: $t("menus.hslogin"),
+      title: "登陆",
       showLink: false,
       rank: 101
     }
@@ -17,7 +16,7 @@ const remainingRouter = [
     component: Layout,
     meta: {
       icon: "home-filled",
-      title: $t("menus.hshome"),
+      title: "首页",
       showLink: false,
       rank: 104
     },

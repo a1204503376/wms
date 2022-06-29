@@ -103,4 +103,11 @@ public interface LocationDao {
 	 */
 	List<Location> findLocation(List<String> locCode);
 
+	/**
+	 * 根据库房id查询库位
+	 *
+	 * @param whId: 库房id
+	 * @return List<Location>
+	 */
+	List<Location> getLocationByWhId(Long whId);
 }

@@ -104,4 +104,11 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 		queryWrapper.in(Location::getLocCode, locCode);
 		return super.list(queryWrapper);
 	}
+
+	@Override
+	public List<Location> getLocationByWhId(Long whId) {
+		LambdaQueryWrapper<Location> queryWrapper = new LambdaQueryWrapper<>();
+		queryWrapper.eq(Location::getWhId,whId);
+		return super.list(queryWrapper);
+	}
 }

@@ -1,9 +1,7 @@
 package org.nodes.wms.dao.basics.owner.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.wms.dao.basics.owner.OwnerDao;
@@ -14,6 +12,8 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * 货主 Dao实现类
@@ -45,8 +45,9 @@ public class OwnerDaoImpl extends BaseServiceImpl<OwnerMapper, Owner> implements
 		return super.getOne(lambdaQueryWrapper);
 	}
 
-    @Override
-    public Owner selectFirstOwner() {
-		return (Owner) super.list().stream().limit(1);
-    }
+	@Override
+	public Owner selectFirstOwner() {
+		List<Owner> ownerList = list().stream().limit(1).collect(toList());
+		return ownerList.get(0);
+	}
 }

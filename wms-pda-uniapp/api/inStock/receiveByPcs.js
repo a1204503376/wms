@@ -35,10 +35,29 @@ const submitReceiptByPcs =(data)=>{
 	})
 }
 
+const getLocationByLocCode =(data)=>{
+	return http.request({
+		url: '/api/ApiPDA/receiveByPcs/findThisLocationByLocCode',
+		method: 'POST',
+		data:data
+	})
+}
+
+const getStockByBoxCode =(data)=>{
+	return http.request({
+		url: '/api/ApiPDA/receiveByPcs/findThisStockByBoxCode',
+		method: 'POST',
+		data:data
+	})
+}
+
+
 
 export default {
 	getReceiveList,
 	getReceiveDetailList,
 	getDetailByDetailId,
-	submitReceiptByPcs
+	submitReceiptByPcs,
+	getLocationByLocCode,
+	getStockByBoxCode
 }
