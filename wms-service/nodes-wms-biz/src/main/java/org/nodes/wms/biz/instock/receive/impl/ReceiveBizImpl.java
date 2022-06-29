@@ -140,13 +140,32 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		receiveDetailLpnDao.updateReceiveDetailLpn(lpn);
 	}
 
-    @Override
-    public ReceiveHeader getReceiveHeaderById(Long receiveHeaderId) {
+	@Override
+	public ReceiveHeader getReceiveHeaderById(Long receiveHeaderId) {
 		return receiveHeaderDao.selectReceiveHeaderById(receiveHeaderId);
-    }
+	}
+
+	@Override
+	public PdaByPcsReceiveResponse checkByPcsReceive(Long receiveDetailId, Long receiveId) {
+		PdaByPcsReceiveResponse response = new PdaByPcsReceiveResponse();
+		//查询收货是否完成
+		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveDetailId);
+		response.setCurrentReceivieIsAccomplish(false);
+		if (detail.getDetailStatus() == ReceiveDetailStatusEnum.COMPLETED) {
+			response.setCurrentReceivieIsAccomplish(true);
+		}
+
+		//查询当前全部单据收货是否完成
+		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(receiveId);
+		response.setAllReceivieIsAccomplish(false);
+		if (receiveHeader.getBillState() == ReceiveHeaderStateEnum.COMPLETED) {
+			response.setAllReceivieIsAccomplish(true);
+		}
+		return response;
+	}
 
 
-    @Override
+	@Override
 	@Transactional
 	public ReceiveHeader newReceive(NewReceiveRequest newReceiveRequest) {
 		//创建保存实体类
@@ -251,7 +270,6 @@ public class ReceiveBizImpl implements ReceiveBiz {
 				}
 			}
 		}
-
 		return response;
 	}
 
@@ -260,7 +278,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		//根据箱码获取lpn实体集合
 		List<ReceiveDetailLpn> receiveDetailLpnList = receiveDetailLpnDao.getReceiveDetailLpnListByBoxCode(boxCode);
 		if (Func.isEmpty(receiveDetailLpnList)) {
-			throw new ServiceException("没有搜索到该箱码");
+			throw new ServiceException("没有搜索到该箱码或该箱码已收货");
 		}
 		ReceiveDetailLpnPdaResponse receiveDetailLpnPdaResponse = new ReceiveDetailLpnPdaResponse();
 		BigDecimal i = new BigDecimal(0);
@@ -372,4 +390,5 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	public ReceiveHeader selectReceiveHeaderById(Long receiveId) {
 		return receiveHeaderDao.selectReceiveHeaderById(receiveId);
 	}
+
 }

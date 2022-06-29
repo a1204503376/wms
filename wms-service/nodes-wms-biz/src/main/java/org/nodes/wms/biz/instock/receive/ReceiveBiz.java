@@ -217,4 +217,11 @@ public interface ReceiveBiz {
 	 * @return  收货单头表实体
 	 */
 	ReceiveHeader getReceiveHeaderById(Long receiveHeaderId);
+
+	/**
+	 * @param receiveDetailId 收货单详情
+	 * @param receiveId 收货单
+	 * @return 收货是否完成
+	 */
+	PdaByPcsReceiveResponse checkByPcsReceive(Long receiveDetailId,Long receiveId);
 }
