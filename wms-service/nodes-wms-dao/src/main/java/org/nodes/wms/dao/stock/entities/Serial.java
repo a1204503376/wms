@@ -9,8 +9,8 @@ import org.springblade.core.tenant.mp.TenantEntity;
  * 序列号实体类
  **/
 @Data
-@TableName("wms_stock_serial")
-public class StockSerial extends TenantEntity {
+@TableName("wms_serial")
+public class Serial extends TenantEntity {
 
 	private static final long serialVersionUID = -453322099134024067L;
 
