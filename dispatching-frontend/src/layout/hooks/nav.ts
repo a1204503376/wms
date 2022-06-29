@@ -4,10 +4,8 @@ import { getConfig } from "/@/config";
 import { emitter } from "/@/utils/mitt";
 import { routeMetaType } from "../types";
 import { remainingPaths } from "/@/router";
-import { transformI18n } from "/@/plugins/i18n";
 import { storageSession } from "/@/utils/storage";
 import { useAppStoreHook } from "/@/store/modules/app";
-import { useEpThemeStoreHook } from "/@/store/modules/epTheme";
 
 const errorInfo = "当前路由配置不正确，请检查配置";
 
@@ -15,16 +13,6 @@ export function useNav() {
   const pureApp = useAppStoreHook();
   // 用户名
   const username: string = storageSession.getItem("info")?.username;
-
-  // 设置国际化选中后的样式
-  const getDropdownItemStyle = computed(() => {
-    return (locale, t) => {
-      return {
-        background: locale === t ? useEpThemeStoreHook().epThemeColor : "",
-        color: locale === t ? "#f4f4f5" : "#000"
-      };
-    };
-  });
 
   const avatarsStyle = computed(() => {
     return username ? { marginRight: "10px" } : "";
@@ -37,8 +25,8 @@ export function useNav() {
   // 动态title
   function changeTitle(meta: routeMetaType) {
     const Title = getConfig().Title;
-    if (Title) document.title = `${transformI18n(meta.title)} | ${Title}`;
-    else document.title = transformI18n(meta.title);
+    if (Title) document.title = `${meta.title} | ${Title}`;
+    else document.title = meta.title;
   }
 
   // 退出登录
@@ -120,7 +108,6 @@ export function useNav() {
     isCollapse,
     pureApp,
     username,
-    avatarsStyle,
-    getDropdownItemStyle
+    avatarsStyle
   };
 }
