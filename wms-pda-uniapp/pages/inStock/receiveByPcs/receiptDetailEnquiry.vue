@@ -95,10 +95,11 @@
 				}
 				receive.getReceiveDetailList(this.params).then(data => {
 					this.receiveDetailList = data.data;
-					if (data.data.length == 1) {
-						data.data[0].receiveId = this.params.receiveId;
-						uni.$u.func.route('/pages/inStock/receiveByPcs/ReceiveByPiece', data.data[0]);
-					}
+					//TODO
+          // if (data.data.length == 1) {
+					// 	data.data[0].receiveId = this.params.receiveId;
+					// 	uni.$u.func.route('/pages/inStock/receiveByPcs/ReceiveByPiece', data.data[0]);
+					// }
 				})
 			},
 			clickItem(row) {
