@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 收货单管理业务类
@@ -109,14 +110,14 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		return true;
 	}
 
-    @Override
-    public List<ReceiveHeader> getReceiveListByNonOrder(Long userId) {
-        return receiveHeaderDao.selectReceiveListByNonOrder(userId);
-    }
+	@Override
+	public List<ReceiveHeader> getReceiveListByNonOrder(Long userId) {
+		return receiveHeaderDao.selectReceiveListByNonOrder(userId);
+	}
 
 	@Override
 	public void newReceiveHeader(ReceiveHeader receiveHeader) {
-		 receiveHeaderDao.saveReceiveHeader(receiveHeader);
+		receiveHeaderDao.saveReceiveHeader(receiveHeader);
 	}
 
 	@Override
@@ -129,18 +130,23 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		return receiveDetailLpnDao.selectReceiveDetailLpnById(receiveDetailLpnId);
 	}
 
-    @Override
-    public void newReceiveDetail(ReceiveDetail receiveDetail) {
-        receiveDetailDao.saveOrUpdateReceiveDetail(receiveDetail);
-    }
+	@Override
+	public void newReceiveDetail(ReceiveDetail receiveDetail) {
+		receiveDetailDao.saveOrUpdateReceiveDetail(receiveDetail);
+	}
 
 	@Override
 	public void updateReceiveDetailLpn(ReceiveDetailLpn lpn) {
 		receiveDetailLpnDao.updateReceiveDetailLpn(lpn);
 	}
 
+    @Override
+    public ReceiveHeader getReceiveHeaderById(Long receiveHeaderId) {
+		return receiveHeaderDao.selectReceiveHeaderById(receiveHeaderId);
+    }
 
-	@Override
+
+    @Override
 	@Transactional
 	public ReceiveHeader newReceive(NewReceiveRequest newReceiveRequest) {
 		//创建保存实体类
@@ -237,7 +243,15 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveIdPdaQuery.getReceiveDetailId());
 		ReceiveDetailByReceiveIdPdaResponse response = BeanUtil.copy(detail, ReceiveDetailByReceiveIdPdaResponse.class);
 		Sku sku = skuDao.getById(detail.getSkuId());
-		response.setIsSn(sku.getIsSn());
+		if (response != null) {
+			response.setIsSn(false);
+			if (Func.isNotEmpty(sku)) {
+				if (sku.getIsSn() == BigDecimal.ZERO.intValue()) {
+					response.setIsSn(false);
+				}
+			}
+		}
+
 		return response;
 	}
 
@@ -290,14 +304,14 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(detail.getReceiveId());
 		if (detail.getDetailStatus() == ReceiveDetailStatusEnum.NOT_RECEIPT || detail.getDetailStatus() == ReceiveDetailStatusEnum.PART) {
 			if (receiveHeader.getBillState() == ReceiveHeaderStateEnum.NOT_RECEIPT || receiveHeader.getBillState() == ReceiveHeaderStateEnum.PART) {
-				int isExcit = detail.getPlanQty().compareTo(detail.getScanQty());
-				if (isExcit == 0) {
+				int isExit = detail.getPlanQty().compareTo(detail.getScanQty());
+				if (isExit == BigDecimal.ZERO.intValue()) {
 					throw new ServiceException("该单不可以收货，原因无可收的货物");
 				} else {
 					BigDecimal sumScanQty = detail.getScanQty().add(receiveQty);
 					int compareTo = detail.getPlanQty().compareTo(sumScanQty);
 					//如果数量不超过计划数量就复制给实收数量
-					if (compareTo < 0) {
+					if (compareTo < BigDecimal.ZERO.intValue()) {
 						throw new ServiceException("不能超收");
 					}
 				}
@@ -312,14 +326,13 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	@Override
 	public void updateReceiveDetail(Long receiveDetailId, BigDecimal receiveQty) {
 		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveDetailId);
-		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(detail.getReceiveId());
 		BigDecimal sumScanQty = detail.getScanQty().add(receiveQty);
 		int compareTo = detail.getPlanQty().compareTo(sumScanQty);
 		//如果数量不超过计划数量就复制给实收数量
 		if (compareTo >= 0) {
 			detail.setScanQty(sumScanQty);
 			detail.setDetailStatus(ReceiveDetailStatusEnum.PART);
-			if (compareTo == 0) {
+			if (compareTo == BigDecimal.ZERO.intValue()) {
 				detail.setDetailStatus(ReceiveDetailStatusEnum.COMPLETED);
 			}
 		}
@@ -331,11 +344,12 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	@Override
 	public void updateReciveHeader(Long receiveDetailId) {
 		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveDetailId);
+		List<ReceiveDetail> details = receiveDetailDao.selectReceiveDetailById(detail.getReceiveId());
 		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(detail.getReceiveId());
-		int isExcit = detail.getPlanQty().compareTo(detail.getScanQty());
-		if (isExcit == 0) {
+		List<ReceiveDetail> collect = details.stream().filter(item -> item.getDetailStatus().getCode().equals(ReceiveHeaderStateEnum.COMPLETED.getCode())).collect(Collectors.toList());
+		if (details.size() == collect.size()) {
 			receiveHeader.setBillState(ReceiveHeaderStateEnum.COMPLETED);
-		} else if (isExcit == 1) {
+		} else {
 			receiveHeader.setBillState(ReceiveHeaderStateEnum.PART);
 		}
 		receiveHeaderDao.updateReceiveHeader(receiveHeader);

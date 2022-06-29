@@ -67,7 +67,7 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 	@Override
 	public ReceiveHeader selectReceiveHeaderById(Long receiveId) {
 		if (Func.isEmpty(receiveId)) {
-			throw new NullArgumentException("ReceiveHeaderDaoImpl.selectReceiveHeaderById");
+			throw new NullArgumentException("ReceiveHeaderDaoImpl.selectReceiveHeaderById方法的参数为空");
 		}
 		return super.getById(receiveId);
 	}

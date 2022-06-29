@@ -65,6 +65,8 @@ public interface LocationBiz {
 	 */
 	LocationEditResponse findLocationById(Long locId);
 
+	Location findByLocId(long locId);
+
 	/**
 	 * 编辑
 	 *
@@ -125,5 +127,26 @@ public interface LocationBiz {
 	 * @return 库位信息
 	 */
 	Location findLocationByLocCode(Long whId, String locCode);
+
+	/**
+	 * 判断库位是否冻结
+	 * @param location
+	 * @return true：冻结
+	 */
+	boolean isFrozen(Location location);
+
+	/**
+	 * 判断是否允许混放物品
+	 * @param location
+	 * @return true：允许
+	 */
+	boolean isMixSku(Location location);
+
+	/**
+	 *判断是否允许混放批次
+	 * @param location
+	 * @return true：允许
+	 */
+	boolean isMixSkuLot(Location location);
 
 }

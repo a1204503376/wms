@@ -325,5 +325,10 @@ public class Location extends TenantEntity {
 	 */
 	private LocalDateTime lastLocCountDate;
 
+	/**
+	 * 库位占用标记，如果为空或0标识未被占用
+	 */
+	private String occupyFlag;
+
 }
 

@@ -124,7 +124,7 @@ public class StockWrapper extends BaseEntityWrapper<Stock, StockVO> {
 					.subtract(stockVO.getPickQty()));
 			}
 			stockVO.setActualQty(stockVO.getStockQty().subtract(stockVO.getPickQty()));
-			stockVO.setStockStatusDesc(DictCache.getValue(Stock.STOCK_STATUS, stock.getStockStatus()));
+			//stockVO.setStockStatusDesc(DictCache.getValue(Stock.STOCK_STATUS, stock.getStockStatus()));
 			//Lot lot = LotCache.getByLotNumber(stock.getLotNumber());
 			Lot lot = lotService.list(Condition.getQueryWrapper(new Lot())
 				.lambda()
@@ -132,7 +132,7 @@ public class StockWrapper extends BaseEntityWrapper<Stock, StockVO> {
 			).stream().findFirst().orElse(null);
 			if (Func.isNotEmpty(lot)) {
 				stockVO.setLotStatus(lot.getLotStatus());
-				stockVO.setLotStatusDesc(DictCache.getValue(Stock.STOCK_STATUS, lot.getLotStatus()));
+				//stockVO.setLotStatusDesc(DictCache.getValue(Stock.STOCK_STATUS, lot.getLotStatus()));
 			}
 		}
 		return stockVO;

@@ -1339,7 +1339,7 @@ public class PickPlanServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 		Stock paramStock = new Stock();
 		paramStock.setSkuId(pickPlanDTO.getSkuId());
 		paramStock.setLotNumber(pickPlanDTO.getLotNumber());
-		paramStock.setStockStatus(StockStatusEnum.NORMAL.getIndex());
+		//paramStock.setStockStatus(StockStatusEnum.NORMAL);
 		Stock stock = stockService.list(Condition.getQueryWrapper(paramStock))
 			.stream().findFirst().orElse(null);
 

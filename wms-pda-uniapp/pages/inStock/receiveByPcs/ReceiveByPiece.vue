@@ -97,15 +97,19 @@
 			submit() {
 				var _this = this;
 				uni.$u.throttle(function() {
-					_this.params.locCode = uni.getStorageSync('warehouse').whCode + _this.params.locCode;
+					_this.params.locCode = uni.$u.func.parseLocCode(_this.params.locCode);
 					_this.params.receiveDetailId = _this.receiveDetailId;
 					_this.params.receiveId = _this.receiveId;
-					if (_this.params.isSn == 0) {
+					if (_this.params.isSn) {
 						uni.$u.func.route('/pages/inStock/receiveByPcs/collectionSerialNumber', _this.params);
 						return;
 					}
-					console.log(_this.params)
 					//提交表单数据 收货
+					_this.params.whCode = uni.getStorageSync('warehouse').whCode;
+					_this.params.whId = uni.getStorageSync('warehouse').whId;
+					receive.submitReceiptByPcs(_this.params).then(data => {
+						console.log(data);
+					});
 				}, 1000)
 			},
 			getDetailByDetailId() {

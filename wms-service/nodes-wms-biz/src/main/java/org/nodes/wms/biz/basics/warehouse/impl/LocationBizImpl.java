@@ -80,6 +80,11 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
+	public Location findByLocId(long locId) {
+		return locationDao.getLocationById(locId);
+	}
+
+	@Override
 	public Location edit(LocationAddOrEditRequest locationAddOrEditRequest) {
 		Location location = locationFactory.createLocation(locationAddOrEditRequest);
 		locationDao.saveOrUpdateLocation(location);
@@ -143,5 +148,32 @@ public class LocationBizImpl implements LocationBiz {
 	@Override
 	public Location findLocationByLocCode(Long whId, String locCode) {
 		return locationDao.getLocationByLocCode(whId, locCode);
+	}
+
+	@Override
+	public boolean isFrozen(Location location) {
+		if (location.getLocFlag() == 10 || location.getLocFlag() == 20){
+			return true;
+		}
+
+		return Func.isNotEmpty(location.getOccupyFlag()) && !"0".equals(location.getOccupyFlag());
+	}
+
+	@Override
+	public boolean isMixSku(Location location) {
+		if (Func.isEmpty(location.getLocSkuMix())){
+			return true;
+		}
+
+		return "1".equals(location.getLocSkuMix());
+	}
+
+	@Override
+	public boolean isMixSkuLot(Location location) {
+		if (Func.isEmpty(location.getLocLotNoMix())){
+			return true;
+		}
+
+		return "1".equals(location.getLocLotNoMix());
 	}
 }

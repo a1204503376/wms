@@ -7,6 +7,7 @@ import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
+import org.nodes.wms.dao.stock.entities.StockSerial;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.mp.support.Query;
 
@@ -21,11 +22,11 @@ public interface StockBiz {
 
 	/**
 	 * 根据库位冻结
-	 *
 	 * @param type  库存移动类型
 	 * @param locId 库位id
+	 * @param occupyFlag 库位占用标记
 	 */
-	void freezeByLoc(StockLogTypeEnum type, Long locId);
+	void freezeByLoc(StockLogTypeEnum type, Long locId, String occupyFlag);
 
 	/**
 	 * 根据库位解冻
@@ -56,6 +57,13 @@ public interface StockBiz {
 	 */
 	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
 					Location targetLocation, StockLogTypeEnum type);
+
+	/**
+	 * 根据序列号编码获取在库的序列号信息
+	 * @param serialNoList 序列号编码
+	 * @return 在库的序列号
+	 */
+	List<StockSerial> findSerialBySerialNo(List<String> serialNoList);
 
 	/**
 	 * 根据箱码查询库存

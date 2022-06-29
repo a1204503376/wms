@@ -79,7 +79,7 @@ public class StockController extends BladeController {
 		data.getRecords().removeIf(new Predicate<StockVO>() {
 			@Override
 			public boolean test(StockVO stockVO) {
-				String validTime = stockVO.getValidTime();
+				String validTime = "";
 				if (Func.isEmpty(validTime)) return true;
 				Sku sku = SkuCache.getById(stockVO.getSkuId());
 				if (!Func.isNull(sku)

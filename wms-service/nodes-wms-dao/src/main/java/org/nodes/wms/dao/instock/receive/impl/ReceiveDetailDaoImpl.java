@@ -69,7 +69,7 @@ public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, R
 	@Override
 	public ReceiveDetail getDetailByReceiveDetailId(Long receiveDetailId) {
 		if (Func.isEmpty(receiveDetailId)) {
-			throw new NullArgumentException("ReceiveDetailDaoImpl.getDetailByReceiveDetailId");
+			throw new NullArgumentException("ReceiveDetailDaoImpl.getDetailByReceiveDetailId方法的参数为空");
 		}
 		return super.baseMapper.selectById(receiveDetailId);
 	}

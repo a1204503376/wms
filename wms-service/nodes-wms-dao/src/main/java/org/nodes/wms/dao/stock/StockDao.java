@@ -1,7 +1,10 @@
 package org.nodes.wms.dao.stock;
 
 import org.nodes.wms.dao.stock.entities.Stock;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -26,4 +29,33 @@ public interface StockDao {
 	 */
 	Integer getStockSkuCountByLocIdList(List<Long> locIdList);
 
+	/**
+	 * 获取所有库存数据，含冻结的库存。如果出库暂存区为空则表示查询的库存数据包含出库暂存区的
+	 *
+	 * @param boxCode
+	 * @param pickToLocIdList
+	 * @return
+	 */
+	List<Stock> getStockByBoxCode(String boxCode, List<Long> pickToLocIdList);
+
+	/**
+	 * 获取所有库存数据，含冻结的库存。如果出库暂存区为空则表示查询的库存数据包含出库暂存区的
+	 *
+	 * @param lpnCode
+	 * @param pickToLocIdList
+	 * @return
+	 */
+	List<Stock> getStockByLpnCode(String lpnCode, List<Long> pickToLocIdList);
+
+	List<Stock> getStock(StockStatusEnum status, Long woId, Long locId,
+						 Long skuId, String boxCode, String lpnCode);
+
+	List<Stock> getStockByLocId(Long locId);
+
+	Stock saveNewStock(Stock stock);
+
+	Stock updateStock(Stock stock);
+
+	Stock updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
+				 BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
 }

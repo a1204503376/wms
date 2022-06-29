@@ -70,9 +70,9 @@ public class PdaByPieceReceiveRequest implements Serializable {
 	 */
 	private Integer detailStatus;
 	/**
-	 * 是否序列号管理 （1：序列号管理  0：非序列号管理）
+	 * 是否序列号管理 （true：序列号管理  false：非序列号管理）
 	 */
-	private Integer isSn;
+	private Boolean isSn;
 	/**
 	 * 箱码
 	 */

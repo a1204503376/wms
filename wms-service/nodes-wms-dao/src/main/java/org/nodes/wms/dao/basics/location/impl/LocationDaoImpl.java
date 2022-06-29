@@ -97,7 +97,7 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	@Override
 	public List<Location> findLocation(List<String> locCode) {
 		if (Func.isEmpty(locCode)){
-			throw new NullArgumentException("LocationDaoImpl.findLocation");
+			throw new NullArgumentException("LocationDaoImpl.findLocation方法的参数为空");
 		}
 
 		LambdaQueryWrapper<Location> queryWrapper = Wrappers.lambdaQuery();

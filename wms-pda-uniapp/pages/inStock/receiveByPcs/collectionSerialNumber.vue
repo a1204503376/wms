@@ -45,6 +45,7 @@
 <script>
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	import barcodeFunc from '@/common/barcodeFunc.js'
+	import receive from '@/api/inStock/receiveByPcs.js'
 	export default {
 		components: {
 			keyboardListener
@@ -74,9 +75,14 @@
 				this.$u.func.navigateBack();
 			},
 			submit() {
-				var _this=this;
+				var _this = this;
 				uni.$u.throttle(function() {
-				_this.params.serialNumberList=_this.serialNumberList;
+					_this.params.serialNumberList = _this.serialNumberList;
+					_this.params.whCode = uni.getStorageSync('warehouse').whCode;
+					_this.params.whId = uni.getStorageSync('warehouse').whId;
+					receive.submitReceiptByPcs(_this.params).then(data => {
+						console.log(data);
+					});
 				}, 1000)
 			},
 			analysisCode(code) {
@@ -104,7 +110,7 @@
 					});
 					return;
 				}
-				if(this.serialNumberList.length==this.params.surplusQty){
+				if (this.serialNumberList.length == this.params.surplusQty) {
 					this.$u.func.showToast({
 						title: '序列号已收集完成,请提交数据'
 					});

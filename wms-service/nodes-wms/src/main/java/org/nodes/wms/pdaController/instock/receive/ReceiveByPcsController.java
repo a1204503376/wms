@@ -6,6 +6,7 @@ import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.instock.InStockBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.dao.instock.receive.dto.input.*;
+import org.nodes.wms.dao.instock.receive.dto.output.PdaByPcsReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailByReceiveIdPdaResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailPdaResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderPdaResponse;
@@ -62,7 +63,7 @@ public class ReceiveByPcsController {
 	 * @return 是否成功
 	 */
 	@PostMapping("receiptByPcs")
-	public R receiptByPcs(@RequestBody PdaByPieceReceiveRequest pdaByPieceReceiveQuery) {
+	public R<PdaByPcsReceiveResponse> receiptByPcs(@RequestBody PdaByPieceReceiveRequest pdaByPieceReceiveQuery) {
 		return R.data(inStockBiz.receiptByPcs(pdaByPieceReceiveQuery));
 	}
 
