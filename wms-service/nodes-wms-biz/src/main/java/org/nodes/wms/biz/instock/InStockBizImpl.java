@@ -124,13 +124,7 @@ public class InStockBizImpl implements InStockBiz {
 		receiveBiz.updateReciveHeader(request.getReceiveDetailId());
 		// 记录业务日志
 		receiveBiz.log(request.getReceiveId(), request.getReceiveDetailId(), request.getSurplusQty(), request.getSkuLot1());
-		PdaByPcsReceiveResponse response = new PdaByPcsReceiveResponse();
-		//查询收货是否完成
-		ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(request.getReceiveDetailId());
-		response.setCurrentReceivieIsAccomplish(detail.getDetailStatus().getDesc());
-		//查询当前全部单据收货是否完成
-		ReceiveHeader receiveHeader = receiveBiz.selectReceiveHeaderById(request.getReceiveId());
-		response.setAllReceivieIsAccomplish(receiveHeader.getBillState().getDesc());
-		return response;
+        //检查收货是否完成 并返回
+		return receiveBiz.checkByPcsReceive(request.getReceiveDetailId(), receiveLog.getReceiveId());
 	}
 }
