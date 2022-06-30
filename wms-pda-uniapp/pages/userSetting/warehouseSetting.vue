@@ -1,5 +1,9 @@
 <template>
 	<view>
+		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
+			:bgColor="navigationBarBackgroundColor" title="切换库房" titleStyle="color:#ffffff;font-size:21px"
+			style="color:#ffffff;font-size:21px">
+		</u-navbar>
 		<view class="uni-list">
 			<radio-group @change="radioChange" :model="whId" style="transform: scale(0.9);">
 				<label class="uni-list-cell uni-list-cell-pd" v-for="(item, index) in warehouseList" :key="item.whId">
@@ -21,12 +25,15 @@
 	</view>
 </template>
 <script>
+	import setting from '@/common/setting'
 	import api from '@/api/user.js'
 	import md5 from '@/utils/md5.js'
 	import warehouse from '@/api/warehouse.js'
+	import tool from '@/utils/tool.js'
 	export default {
 		data() {
 			return {
+				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				warehouseList: [],
 				warehouse: uni.getStorageSync('warehouse'),
 				whName: uni.getStorageSync('warehouse').whName,
@@ -40,13 +47,15 @@
 		},
 		methods: {
 			esc() {
-				this.$u.func.navigateBack();
+				if (tool.isEmpty(uni.getStorageSync('warehouse'))) {
+					uni.$u.func.route('/pages/login/login');
+					return;
+				}
+				uni.$u.func.route('/pages/userSetting/userSetting');
 			},
 			submit() {
 				uni.setStorageSync('warehouse', this.warehouse);
-				uni.redirectTo({
-					url: '/pages/home/home'
-				})
+				uni.$u.func.route('/pages/home/home');
 			},
 			radioChange(row) {
 				this.warehouse = row.detail.value;

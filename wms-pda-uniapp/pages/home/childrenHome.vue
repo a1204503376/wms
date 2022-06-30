@@ -36,7 +36,8 @@
 
 		},
 		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
-			this.title = option.title;
+		var parse = JSON.parse(option.param)
+		this.title = parse.name;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -50,7 +51,7 @@
 				uni.$u.func.route(menu.path);
 			},
 			closePage() {
-				uni.$u.func.navigateBack();
+				uni.$u.func.route('/pages/home/home');
 			},
 			scannerCallback(data) {
 				this.username = data

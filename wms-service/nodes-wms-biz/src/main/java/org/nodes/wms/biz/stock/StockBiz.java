@@ -46,6 +46,14 @@ public interface StockBiz {
 	Stock inStock(StockLogTypeEnum type, ReceiveLog receiveLog);
 
 	/**
+	 * 撤销收货
+	 * @param type
+	 * @param receiveLog 撤销记录，qty必须是负数
+	 * @return
+	 */
+	Stock outStockByCancleReceive(StockLogTypeEnum type, ReceiveLog receiveLog);
+
+	/**
 	 * 库存移动
 	 *
 	 * @param sourceStock    原库存
@@ -72,6 +80,13 @@ public interface StockBiz {
 	 * @return
 	 */
 	List<Stock> findStockByBoxCode(String boxCode);
+
+	/**
+	 * 根据清点记录查询入库暂存区的库存,如果查询的库存超过两个会报异常
+	 * @param receiveLog
+	 * @return
+	 */
+	Stock findStockOnStage(ReceiveLog receiveLog);
 
 	/**
 	 * 首页的库存数据统计

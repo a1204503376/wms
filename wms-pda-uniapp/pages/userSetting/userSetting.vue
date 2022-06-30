@@ -1,5 +1,9 @@
 <template>
 	<view class="u-page">
+		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
+			:bgColor="navigationBarBackgroundColor" title="个人中心" titleStyle="color:#ffffff;font-size:21px"
+			style="color:#ffffff;font-size:21px">
+		</u-navbar>
 		<u-row customStyle="margin-bottom: 10px;margin-top:30px">
 			<u-col span="4">
 				<view  class="demo-layout img">
@@ -52,13 +56,18 @@
 	</view>
 </template>
 <script>
+	import setting from '@/common/setting'
 	export default {
 		data() {
 			return{
+				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				show:false,
 			};
 		},
 		methods: {
+			esc(){
+				uni.$u.func.route('/pages/home/home');
+			},
 			logout(){
 				this.$u.func.logout();
 			},

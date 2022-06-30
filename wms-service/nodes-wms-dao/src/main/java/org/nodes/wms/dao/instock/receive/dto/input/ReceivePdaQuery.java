@@ -14,4 +14,8 @@ public class ReceivePdaQuery implements Serializable {
 	 * 收货单编码或者上游编码
 	 */
 	private String no;
+	/**
+	 * 库房id
+	 */
+	private Long whId;
 }

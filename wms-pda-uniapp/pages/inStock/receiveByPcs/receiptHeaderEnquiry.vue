@@ -1,7 +1,6 @@
 <template>
 	<view>
-		<u-navbar  leftIconColor="#fff"
-			@leftClick="esc" :fixed="false" :autoBack="false"
+		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
 			:bgColor="navigationBarBackgroundColor" title="按件收货" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
@@ -63,7 +62,7 @@
 				},
 				status: 'loadmore',
 				loadmore: false,
-				noData:false,
+				noData: false,
 			}
 		},
 		onUnload() {
@@ -88,25 +87,31 @@
 				}
 			},
 			esc() {
-				uni.$u.func.route('/pages/home/childrenHome',{name:'收货'});
+				uni.$u.func.route('/pages/home/childrenHome', {
+					name: '收货'
+				});
 			},
 			getReceiveList() {
-				this.noData=false;
+				this.noData = false;
 				this.receiveList = [];
-				this.loadmore=true;
+				this.loadmore = true;
 				this.status = 'loading';
 				this.page.current = 1;
 				this.analysisCode(this.params.no);
+				this.params.whId = uni.getStorageSync('warehouse').whId;
 				receive.getReceiveList(this.params, this.page).then(data => {
 					if (data.data.records.length > 0) {
 						this.status = 'loading';
-						this.loadmore=true;
-						this.noData=false;
+						this.loadmore = true;
+						this.noData = false;
 					} else {
-						this.loadmore=false;
-						this.noData=true;
+						this.loadmore = false;
+						this.noData = true;
 					}
 					this.receiveList = data.data.records;
+					if (this.receiveList.length < 7) {
+						this.loadmore = false;
+					}
 				})
 			},
 			search() {
@@ -123,16 +128,17 @@
 				this.loading = false;
 				this.divider = false;
 				this.page.current++;
+				this.params.whId = uni.getStorageSync('warehouse').whId;
 				receive.getReceiveList(this.params, this.page).then(data => {
 					if (data.data.records.length > 0) {
 						this.status = 'loading';
 						data.data.records.forEach((item, index) => { //js遍历数组
 							this.receiveList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
 						});
-						
 					} else {
 						this.status = 'nomore';
 					}
+
 				})
 			}
 		}
