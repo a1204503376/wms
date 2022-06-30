@@ -73,6 +73,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setSkuName(request.getSkuName());
 		receiveLog.setSkuSpec(request.getSkuLot2());
 		receiveLog.setWhId(request.getWhId());
+		receiveLog.setWsuCode(request.getWsuCode());
 		ReceiveLog log = createReceiveLog(receiveLog);
 		log.setSkuLot1(request.getSkuLot1());
 		log.setSkuLot2(request.getSkuLot2());
