@@ -47,6 +47,15 @@ public interface StockDao {
 	List<Stock> getStockByBoxCode(String boxCode, List<Long> locIdList);
 
 	/**
+	 * 获取所有库存数据，含冻结的库存。如果出库暂存区为空则表示查询的库存数据包含出库暂存区的
+	 *
+	 * @param lpnCode
+	 * @param pickToLocIdList
+	 * @return
+	 */
+	List<Stock> getStockByLpnCodeExcludeLoc(String lpnCode, List<Long> excludeLocIdList);
+
+	/**
 	 * 根据lpn和loc获取指定库存
 	 * @param lpnCode 必填，不能为空
 	 * @param locIdList 可为空
@@ -61,15 +70,6 @@ public interface StockDao {
 	 */
 	List<Stock> getStockOnLpnByBoxCode(String boxCode);
 
-	/**
-	 * 获取所有库存数据，含冻结的库存。如果出库暂存区为空则表示查询的库存数据包含出库暂存区的
-	 *
-	 * @param lpnCode
-	 * @param pickToLocIdList
-	 * @return
-	 */
-	List<Stock> getStockByLpnCodeExcludeLoc(String lpnCode, List<Long> excludeLocIdList);
-
 	List<Stock> getStock(StockStatusEnum status, Long woId, Long locId,
 						 Long skuId, String boxCode, String lpnCode);
 
@@ -79,6 +79,6 @@ public interface StockDao {
 
 	Stock updateStock(Stock stock);
 
-	Stock updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
+	void updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
 				 BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
 }

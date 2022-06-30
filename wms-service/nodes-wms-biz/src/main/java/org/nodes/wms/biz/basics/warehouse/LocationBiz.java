@@ -114,6 +114,27 @@ public interface LocationBiz {
 	List<Location> getAllPickToLocation();
 
 	/**
+	 * 返回所有的库房的打包暂存区
+	 *
+	 * @return List<Location>
+	 */
+	List<Location> getAllPackLocation();
+
+	/**
+	 * 返回所有的库房的未知暂存区
+	 *
+	 * @return List<Location>
+	 */
+	List<Location> getAllUnknownLocation();
+
+	/**
+	 * 返回所有的库房的在途暂存区
+	 *
+	 * @return List<Location>
+	 */
+	List<Location> getAllInTransitLocation();
+
+	/**
 	 * 获取指定库房的入库暂库位
 	 * @param whId
 	 * @return
@@ -121,35 +142,35 @@ public interface LocationBiz {
 	Location getStageLocation(Long whId);
 
 	/**
-	 * 获取库房的质检库位
+	 * 获取指定库房的质检库位
 	 * @param whId
 	 * @return
 	 */
 	Location getQcLocation(Long whId);
 
 	/**
-	 * 获取库房的出库暂库位
+	 * 获取指定库房的出库暂库位
 	 * @param whId
 	 * @return
 	 */
 	Location getPickToLocation(Long whId);
 
 	/**
-	 * 获取库房的打包库位
+	 * 获取指定库房的打包库位
 	 * @param whId
 	 * @return
 	 */
 	Location getPackLocation(Long whId);
 
 	/**
-	 * 获取库房的未知库位
+	 * 获取指定库房的未知库位
 	 * @param whId
 	 * @return
 	 */
 	Location getUnknowLocation(Long whId);
 
 	/**
-	 * 获取库房指定的在途库位
+	 * 获取指定库房指定的在途库位
 	 * @param whId
 	 * @return
 	 */

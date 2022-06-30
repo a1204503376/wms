@@ -49,14 +49,6 @@ public class StockDaoImpl
 		return super.list(queryWrapper);
 	}
 
-	/**
-	 * 根据boxCode获取指定库存
-	 *
-	 * @param boxCode   必填，不能为空
-	 * @param locIdList 可为空
-	 * @return List<Stock>
-	 */
-	// TODO
 	@Override
 	public List<Stock> getStockByBoxCode(String boxCode, List<Long> locIdList) {
 		if (Func.isEmpty(boxCode)) {
@@ -71,14 +63,6 @@ public class StockDaoImpl
 		return super.list(queryWrapper);
 	}
 
-	/**
-	 * 根据lpn和loc获取指定库存
-	 *
-	 * @param lpnCode   必填，不能为空
-	 * @param locIdList 可为空
-	 * @return List<Stock>
-	 */
-	// TODO
 	@Override
 	public List<Stock> getStockByLpnCode(String lpnCode, List<Long> locIdList) {
 		if (Func.isEmpty(lpnCode)) {
@@ -93,13 +77,6 @@ public class StockDaoImpl
 		return super.list(queryWrapper);
 	}
 
-	/**
-	 * 根据箱码查询该LPN上所有的库存，含自身
-	 *
-	 * @param boxCode 必填，不能为空
-	 * @return List<Stock>
-	 */
-	// TODO
 	@Override
 	public List<Stock> getStockOnLpnByBoxCode(String boxCode) {
 		if (Func.isEmpty(boxCode)) {
@@ -188,8 +165,8 @@ public class StockDaoImpl
 	}
 
 	@Override
-	public Stock updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
-							 BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime) {
+	public void updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
+							BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime) {
 		UpdateWrapper<Stock> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
 			.eq(Stock::getStockId, stockId);
@@ -207,7 +184,6 @@ public class StockDaoImpl
 		if (!super.update(stock, updateWrapper)) {
 			throw new ServiceException("库存保存失败,请再次重试");
 		}
-		return null;
 	}
 
 	private LambdaQueryWrapper<Stock> getStockQuery() {
