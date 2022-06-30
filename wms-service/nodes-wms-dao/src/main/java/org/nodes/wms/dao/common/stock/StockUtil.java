@@ -1,5 +1,6 @@
 package org.nodes.wms.dao.common.stock;
 
+import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
@@ -17,7 +18,7 @@ public class StockUtil {
 	 */
 	public static BigDecimal getStockBalance(Stock sotck) {
 		BigDecimal qty = sotck.getStockQty().subtract(sotck.getPickQty());
-		if (qty.compareTo(BigDecimal.ZERO) < 0) {
+		if (!BigDecimalUtil.ge(qty, BigDecimal.ZERO)) {
 			throw new ServiceException("上架数量小于下架数量");
 		}
 		return qty;
@@ -41,7 +42,7 @@ public class StockUtil {
 			qtySubtractMax = qtySubtractMax.add(lowDecimal);
 		}
 
-		if (qtySubtractMax.compareTo(BigDecimal.ZERO) < 0) {
+		if (!BigDecimalUtil.ge(qtySubtractMax, BigDecimal.ZERO)) {
 			throw new ServiceException("上架数量小于下架数量");
 		}
 		return qtySubtractMax;
@@ -55,7 +56,7 @@ public class StockUtil {
 	 */
 	public static BigDecimal getStockEnable(Stock stock) {
 		BigDecimal qty = stock.getStockQty().add(stock.getPickQty()).subtract(stock.getOccupyQty());
-		if (qty.compareTo(BigDecimal.ZERO) < 0) {
+		if (!BigDecimalUtil.ge(qty, BigDecimal.ZERO)) {
 			throw new ServiceException("可用量不足，请及时补充库存");
 		}
 		return qty;
@@ -79,7 +80,7 @@ public class StockUtil {
 			qtySubtractMax = qtySubtractMax.add(lowDecimal);
 		}
 
-		if (qtySubtractMax.compareTo(BigDecimal.ZERO) < 0) {
+		if (!BigDecimalUtil.ge(qtySubtractMax, BigDecimal.ZERO)) {
 			throw new ServiceException("上架数量小于下架数量");
 		}
 		return qtySubtractMax;
