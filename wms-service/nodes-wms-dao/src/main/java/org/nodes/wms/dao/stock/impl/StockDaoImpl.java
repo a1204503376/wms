@@ -49,22 +49,48 @@ public class StockDaoImpl
 		return super.list(queryWrapper);
 	}
 
-	// TODO
 	@Override
 	public List<Stock> getStockByBoxCode(String boxCode, List<Long> locIdList) {
-		return null;
+		if (Func.isEmpty(boxCode)) {
+			throw new NullArgumentException("库存查询失败，按箱码查询库存时箱码为空");
+		}
+
+		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
+		if (Func.isNotEmpty(locIdList)) {
+			queryWrapper.in(Stock::getLocId, locIdList);
+		}
+		queryWrapper.eq(Stock::getBoxCode, boxCode);
+		return super.list(queryWrapper);
 	}
 
-	// TODO
 	@Override
 	public List<Stock> getStockByLpnCode(String lpnCode, List<Long> locIdList) {
-		return null;
+		if (Func.isEmpty(lpnCode)) {
+			throw new NullArgumentException("库存查询失败，按LPN查询库存时LPN为空");
+		}
+
+		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
+		if (Func.isNotEmpty(locIdList)) {
+			queryWrapper.in(Stock::getLocId, locIdList);
+		}
+		queryWrapper.eq(Stock::getLpnCode, lpnCode);
+		return super.list(queryWrapper);
 	}
 
-	// TODO
 	@Override
 	public List<Stock> getStockOnLpnByBoxCode(String boxCode) {
-		return null;
+		if (Func.isEmpty(boxCode)) {
+			throw new NullArgumentException("库存查询失败，按箱码查询库存时箱码为空");
+		}
+		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
+		queryWrapper.eq(Stock::getBoxCode, boxCode);
+		Stock stock = super.getOne(queryWrapper);
+		if (Func.isEmpty(stock.getLpnCode())) {
+			throw new NullArgumentException("库存查询失败，按箱码查询库存时LPN为空");
+		}
+		LambdaQueryWrapper<Stock> stockLambdaQueryWrapper = getStockQuery();
+		stockLambdaQueryWrapper.eq(Stock::getLpnCode, stock.getLpnCode());
+		return super.list(stockLambdaQueryWrapper);
 	}
 
 	@Override
@@ -84,7 +110,7 @@ public class StockDaoImpl
 	@Override
 	public List<Stock> getStock(StockStatusEnum status, Long woId,
 								Long locId, Long skuId, String boxCode, String lpnCode) {
-		if (Func.isNull(woId) || Func.isNull(skuId) || Func.isNull(locId)){
+		if (Func.isNull(woId) || Func.isNull(skuId) || Func.isNull(locId)) {
 			throw new ServiceException("库存查询失败,缺失必要参数");
 		}
 
@@ -95,13 +121,13 @@ public class StockDaoImpl
 			.eq(Stock::getLocId, locId)
 			.eq(Stock::getSkuId, skuId);
 
-		if (Func.isEmpty(boxCode)){
+		if (Func.isEmpty(boxCode)) {
 			queryWrapper.apply("(box_code is null)");
 		} else {
 			queryWrapper.eq(Stock::getBoxCode, boxCode);
 		}
 
-		if (Func.isEmpty(lpnCode)){
+		if (Func.isEmpty(lpnCode)) {
 			queryWrapper.apply("(lpn_code is null)");
 		} else {
 			queryWrapper.eq(Stock::getLpnCode, lpnCode);
@@ -140,7 +166,7 @@ public class StockDaoImpl
 
 	@Override
 	public void updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
-						BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime) {
+							BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime) {
 		UpdateWrapper<Stock> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
 			.eq(Stock::getStockId, stockId);

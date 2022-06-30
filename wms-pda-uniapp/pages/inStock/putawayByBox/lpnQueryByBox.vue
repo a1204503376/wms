@@ -24,6 +24,7 @@
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
+	import putawayByBox from '@/api/inStock/putawayByBox.js'
 	export default {
 		components: {
 			keyboardListener
@@ -34,11 +35,9 @@
 				params: {
 					boxCode: '',
 					whId:uni.getStorageSync('warehouse').whId
-				}
+				},
+				putawayData:{}
 			}
-		},
-		onLoad() {
-
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -47,6 +46,16 @@
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {
+			getPutawayData(){
+				putawayByBox.getPutawayData(this.params).then(data => {
+					if(tool.isEmpty(data.data)){
+						uni.$u.func.showToast({
+							title: '查找不到该箱码的相关信息,请换个箱码后重试'
+						});
+					}
+					this.putawayData=data.data;
+				})
+			},
 			analysisCode(code) {
 				var barcode = barcodeFunc.parseBarcode(code);
 				var barcodeType = barcodeFunc.BarcodeType;
