@@ -101,10 +101,14 @@
 			submit() {
 				var _this = this;
 				uni.$u.throttle(function() {
-					let parms = {
-						serialNumberList: _this.serialNumberList
-					};
-					receive.getSerialNumberList(parms).then(data => {
+					var serialList = [];
+					_this.serialNumberList.forEach((serialNumbers, index) => {
+						serialList.push(serialNumbers.serialNumber)
+					})
+					let params = {
+						serialNumberList: serialList
+					}
+					receive.getSerialNumberList(params).then(data => {
 						if (tool.isEmpty(data.data)) {
 							var serialList = [];
 							_this.serialNumberList.forEach((serialNumbers, index) => {
@@ -114,16 +118,19 @@
 							_this.params.whCode = uni.getStorageSync('warehouse').whCode;
 							_this.params.whId = uni.getStorageSync('warehouse').whId;
 							receive.submitReceiptByPcs(_this.params).then(data => {
-								if (data.data.currentReceivieIsAccomplish) {
+								if (data.data.allReceivieIsAccomplish && data.data
+									.currentReceivieIsAccomplish) {
+									//当前收货单收货收货完毕
+									_this.$u.func.route(
+										'/pages/inStock/receiveByPcs/receiptHeaderEnquiry');
+									return;
+								} else if (data.data.currentReceivieIsAccomplish) {
 									//当前收货单详情收货收货完毕
 									_this.$u.func.route(
 										'/pages/inStock/receiveByPcs/receiptDetailEnquiry', {
 											receiveId: _this.receiveId
 										});
-								} else if (data.data.allReceivieIsAccomplish) {
-									//当前收货单收货收货完毕
-									_this.$u.func.route(
-										'/pages/inStock/receiveByPcs/receiptHeaderEnquiry');
+									return;
 								} else {
 									//当前收货单详情收货部分收货,返回收货单收货页面
 									_this.esc();
@@ -134,25 +141,15 @@
 							_this.$u.func.showToast({
 								title: '序列号已存在'
 							});
-							var serialList = [];
-							_this.serialNumberList.forEach((serialNumbers, index) => {
-								serialList.push(serialNumbers.serialNumber)
-							})
-							let params = {
-								serialNumberList: serialList
-							}
-							receive.getSerialNumberList(params).then(data => {
-								_this.serialNumberList.forEach((serialNumber, index) => {
-									data.data.forEach((serialNumbers, index) => {
-										if (serialNumber.serialNumber ==
-											serialNumbers) {
-											serialNumber.backgroundColor =
-												"background-color: #DD524D;"
-										}
-									});
+							_this.serialNumberList.forEach((serialNumber, index) => {
+								data.data.forEach((serialNumbers, index) => {
+									if (serialNumber.serialNumber ==
+										serialNumbers) {
+										serialNumber.backgroundColor =
+											"background-color: #DD524D;"
+									}
 								});
-							})
-
+							});
 						}
 					});
 				}, 1000)
