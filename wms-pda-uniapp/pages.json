@@ -143,7 +143,14 @@
                 "enablePullDownRefresh": false
             }
             
-        }
+        }, {
+			"path": "pages/inStock/putawayByBox/lpnQueryByBox",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}
     ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#33cbcc"
