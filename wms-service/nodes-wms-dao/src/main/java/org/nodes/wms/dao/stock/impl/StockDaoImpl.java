@@ -139,7 +139,7 @@ public class StockDaoImpl
 	}
 
 	@Override
-	public Stock updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
+	public void updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
 						BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime) {
 		UpdateWrapper<Stock> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
@@ -158,7 +158,6 @@ public class StockDaoImpl
 		if (!super.update(stock, updateWrapper)) {
 			throw new ServiceException("库存保存失败,请再次重试");
 		}
-		return null;
 	}
 
 	private LambdaQueryWrapper<Stock> getStockQuery() {
