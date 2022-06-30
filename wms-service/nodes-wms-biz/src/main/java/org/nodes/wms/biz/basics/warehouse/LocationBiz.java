@@ -1,5 +1,6 @@
 package org.nodes.wms.biz.basics.warehouse;
 
+import ch.qos.logback.classic.spi.LoggerContextAware;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.location.dto.input.LocationAddOrEditRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationExcelRequest;
@@ -96,21 +97,63 @@ public interface LocationBiz {
 	 *
 	 * @return List<Location>
 	 */
-	List<Location> getAllStage();
+	List<Location> getAllStageLocation();
 
 	/**
 	 * 返回所有的库房的入库检验区
 	 *
 	 * @return List<Location>
 	 */
-	List<Location> getAllQc();
+	List<Location> getAllQcLocation();
 
 	/**
 	 * 返回所有的库房的出库暂存区
 	 *
 	 * @return List<Location>
 	 */
-	List<Location> getAllPickTo();
+	List<Location> getAllPickToLocation();
+
+	/**
+	 * 获取指定库房的入库暂库位
+	 * @param whId
+	 * @return
+	 */
+	Location getStageLocation(Long whId);
+
+	/**
+	 * 获取库房的质检库位
+	 * @param whId
+	 * @return
+	 */
+	Location getQcLocation(Long whId);
+
+	/**
+	 * 获取库房的出库暂库位
+	 * @param whId
+	 * @return
+	 */
+	Location getPickToLocation(Long whId);
+
+	/**
+	 * 获取库房的打包库位
+	 * @param whId
+	 * @return
+	 */
+	Location getPackLocation(Long whId);
+
+	/**
+	 * 获取库房的未知库位
+	 * @param whId
+	 * @return
+	 */
+	Location getUnknowLocation(Long whId);
+
+	/**
+	 * 获取库房指定的在途库位
+	 * @param whId
+	 * @return
+	 */
+	Location getInTransitLocation(Long whId);
 
 	/**
 	 * 获取库位总数量

@@ -3,6 +3,7 @@ package org.nodes.wms.biz.stock.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
+import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
@@ -152,7 +153,15 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
-	public Stock outStockByCancleReceive(StockLogTypeEnum type, ReceiveLog receiveLog) {
+	public Stock outStockByCancleReceive(StockLogTypeEnum type, ReceiveLog receiveLog, Stock stock) {
+		if (BigDecimalUtil.ge(receiveLog.getQty(), BigDecimal.ZERO)){
+			throw new ServiceException("撤销收货下架库存失败,清点记录的数量必须是负数");
+		}
+		// 下架库存 TODO
+		BigDecimal cancelQty = receiveLog.getQty().abs();
+		// 生成库存日志
+		// 修改序列号状态和生成序列号日志
+
 		return null;
 	}
 
@@ -288,7 +297,7 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public List<Stock> findStockByBoxCode(String boxCode) {
-		List<Long> pickToLocList = locationBiz.getAllPickTo()
+		List<Long> pickToLocList = locationBiz.getAllPickToLocation()
 			.stream()
 			.map(Location::getLocId)
 			.collect(Collectors.toList());
@@ -297,6 +306,7 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public List<Stock> findStockOnStageByBoxCode(Long whId, String boxCode) {
+
 		return null;
 	}
 
@@ -308,11 +318,11 @@ public class StockBizImpl implements StockBiz {
 	@Override
 	public StockIndexResponse staticsStockDataOnIndexPage() {
 		// 获取所有入库暂存区库位
-		List<Location> allStageList = locationBiz.getAllStage();
+		List<Location> allStageList = locationBiz.getAllStageLocation();
 		// 获取所有入库检验区库位
-		List<Location> allQcList = locationBiz.getAllQc();
+		List<Location> allQcList = locationBiz.getAllQcLocation();
 		// 获取所有出库暂存区库位
-		List<Location> allPickToList = locationBiz.getAllPickTo();
+		List<Location> allPickToList = locationBiz.getAllPickToLocation();
 		// 根据入库暂存区id获取入库暂存区的物品数量和存放天数
 		Map<String, Object> stageStock = stockDao.getStockQtyByLocIdList(
 			allStageList.stream().map(Location::getLocId).collect(Collectors.toList()));

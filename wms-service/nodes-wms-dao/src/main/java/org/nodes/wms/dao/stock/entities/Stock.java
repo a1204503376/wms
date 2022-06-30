@@ -14,6 +14,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * 库存，库存中数量保存的是基础计量单位
+ */
 @Data
 @TableName("wms_stock")
 @EqualsAndHashCode(callSuper = true)

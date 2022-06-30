@@ -46,12 +46,13 @@ public interface StockBiz {
 	Stock inStock(StockLogTypeEnum type, ReceiveLog receiveLog);
 
 	/**
-	 * 撤销收货
+	 * 撤销收货时下架库存
 	 * @param type
 	 * @param receiveLog 撤销记录，qty必须是负数
+	 * @param stock
 	 * @return
 	 */
-	Stock outStockByCancleReceive(StockLogTypeEnum type, ReceiveLog receiveLog);
+	Stock outStockByCancleReceive(StockLogTypeEnum type, ReceiveLog receiveLog, Stock stock);
 
 	/**
 	 * 库存移动

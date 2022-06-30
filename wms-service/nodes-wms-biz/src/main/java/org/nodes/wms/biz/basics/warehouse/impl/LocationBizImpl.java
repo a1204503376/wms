@@ -123,21 +123,51 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
-	public List<Location> getAllStage() {
+	public List<Location> getAllStageLocation() {
 		List<String> stageLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_STAGE);
 		return locationDao.findLocation(stageLocCodeList);
 	}
 
 	@Override
-	public List<Location> getAllQc() {
+	public List<Location> getAllQcLocation() {
 		List<String> qcLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_QC);
 		return locationDao.findLocation(qcLocCodeList);
 	}
 
 	@Override
-	public List<Location> getAllPickTo() {
+	public List<Location> getAllPickToLocation() {
 		List<String> pickToLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_PICKTO);
 		return locationDao.findLocation(pickToLocCodeList);
+	}
+
+	@Override
+	public Location getStageLocation(Long whId) {
+		return null;
+	}
+
+	@Override
+	public Location getQcLocation(Long whId) {
+		return null;
+	}
+
+	@Override
+	public Location getPickToLocation(Long whId) {
+		return null;
+	}
+
+	@Override
+	public Location getPackLocation(Long whId) {
+		return null;
+	}
+
+	@Override
+	public Location getUnknowLocation(Long whId) {
+		return null;
+	}
+
+	@Override
+	public Location getInTransitLocation(Long whId) {
+		return null;
 	}
 
 	@Override

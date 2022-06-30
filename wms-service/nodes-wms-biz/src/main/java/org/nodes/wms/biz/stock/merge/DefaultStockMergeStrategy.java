@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 默认库存合并策略
  * 合并的原则：
- * 货主、物品、库位、状态、箱码、LPNCode、30个批属性相同的才合并
+ * 货主、物品、库位、状态、箱码、LpnCode、30个批属性相同的才合并
  */
 @Service
 @RequiredArgsConstructor
@@ -32,8 +32,9 @@ public class DefaultStockMergeStrategy implements StockMergeStrategy {
 
 	@Override
 	public Stock matchSameStock(ReceiveLog receiveLog) {
-
-		return null;
+		return match(StockStatusEnum.NORMAL, receiveLog.getWoId(),
+			receiveLog.getLocId(), receiveLog.getSkuId(), receiveLog.getBoxCode(),
+			receiveLog.getLpnCode(), receiveLog);
 	}
 
 	private <T> Stock match(StockStatusEnum stockStatus, Long woId, Long locId,
