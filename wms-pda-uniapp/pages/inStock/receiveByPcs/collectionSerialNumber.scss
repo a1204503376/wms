@@ -1,0 +1,19 @@
+  .u-page {
+        padding: 0;
+    }
+
+    .u-demo-block__title {
+        padding: 10px 0 2px 15px;
+    }
+
+    .swipe-action {
+        &__content {
+             padding: 25rpx 0;
+    
+            &__text {
+                 font-size: 15px;
+                 color: $u-main-color;
+                 padding-left: 30rpx;
+             }
+        }
+    }
