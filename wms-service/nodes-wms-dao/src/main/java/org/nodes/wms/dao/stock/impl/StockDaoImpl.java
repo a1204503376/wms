@@ -36,28 +36,46 @@ public class StockDaoImpl
 	}
 
 	@Override
-	public List<Stock> getStockByBoxCode(String boxCode, List<Long> pickToLocIdList) {
+	public List<Stock> getStockByBoxCodeExcludeLoc(String boxCode, List<Long> excludeLocIdList) {
 		if (Func.isEmpty(boxCode)) {
 			throw new NullArgumentException("库存查询失败，按箱码查询库存时箱码为空");
 		}
 
 		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
-		if (Func.isNotEmpty(pickToLocIdList)) {
-			queryWrapper.notIn(Stock::getLocId, pickToLocIdList);
+		if (Func.isNotEmpty(excludeLocIdList)) {
+			queryWrapper.notIn(Stock::getLocId, excludeLocIdList);
 		}
 		queryWrapper.eq(Stock::getBoxCode, boxCode);
 		return super.list(queryWrapper);
 	}
 
+	// TODO
 	@Override
-	public List<Stock> getStockByLpnCode(String lpnCode, List<Long> pickToLocIdList) {
+	public List<Stock> getStockByBoxCode(String boxCode, List<Long> locIdList) {
+		return null;
+	}
+
+	// TODO
+	@Override
+	public List<Stock> getStockByLpnCode(String lpnCode, List<Long> locIdList) {
+		return null;
+	}
+
+	// TODO
+	@Override
+	public List<Stock> getStockOnLpnByBoxCode(String boxCode) {
+		return null;
+	}
+
+	@Override
+	public List<Stock> getStockByLpnCodeExcludeLoc(String lpnCode, List<Long> excludeLocIdList) {
 		if (Func.isEmpty(lpnCode)) {
 			throw new NullArgumentException("库存查询失败，按LPN查询库存时LPN为空");
 		}
 
 		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
-		if (Func.isNotEmpty(pickToLocIdList)) {
-			queryWrapper.notIn(Stock::getLocId, pickToLocIdList);
+		if (Func.isNotEmpty(excludeLocIdList)) {
+			queryWrapper.notIn(Stock::getLocId, excludeLocIdList);
 		}
 		queryWrapper.eq(Stock::getLpnCode, lpnCode);
 		return super.list(queryWrapper);

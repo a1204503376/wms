@@ -301,11 +301,12 @@ public class StockBizImpl implements StockBiz {
 			.stream()
 			.map(Location::getLocId)
 			.collect(Collectors.toList());
-		return stockDao.getStockByBoxCode(boxCode, pickToLocList);
+		return stockDao.getStockByBoxCodeExcludeLoc(boxCode, pickToLocList);
 	}
 
 	@Override
 	public List<Stock> findStockOnStageByBoxCode(Long whId, String boxCode) {
+		Location stage = locationBiz.getStageLocation(whId);
 
 		return null;
 	}
