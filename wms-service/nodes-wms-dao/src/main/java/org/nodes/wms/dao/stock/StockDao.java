@@ -50,7 +50,7 @@ public interface StockDao {
 	 * 获取所有库存数据，含冻结的库存。如果出库暂存区为空则表示查询的库存数据包含出库暂存区的
 	 *
 	 * @param lpnCode
-	 * @param pickToLocIdList
+	 * @param excludeLocIdList
 	 * @return
 	 */
 	List<Stock> getStockByLpnCodeExcludeLoc(String lpnCode, List<Long> excludeLocIdList);

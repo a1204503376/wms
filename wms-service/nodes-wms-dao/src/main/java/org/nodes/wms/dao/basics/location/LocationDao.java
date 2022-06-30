@@ -110,4 +110,11 @@ public interface LocationDao {
 	 * @return List<Location>
 	 */
 	List<Location> getLocationByWhId(Long whId);
+
+	/**
+	 * 更新库位冻结标识
+	 * @param locId
+	 * @param occupyFlag 为空的时候为冻结库位
+	 */
+	void updateOccupyFlag(Long locId, String occupyFlag);
 }

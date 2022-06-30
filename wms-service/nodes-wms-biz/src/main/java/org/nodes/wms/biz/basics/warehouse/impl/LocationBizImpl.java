@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.NullArgumentException;
 import org.apache.poi.ss.formula.functions.T;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
@@ -209,5 +210,24 @@ public class LocationBizImpl implements LocationBiz {
 		}
 
 		return "1".equals(location.getLocLotNoMix());
+	}
+
+    @Override
+    public void freezeByOccupyFlag(Long locId, String occupyFlag) {
+		if (Func.isEmpty(occupyFlag)){
+			throw new NullArgumentException("库内库位冻结时冻结标识为空");
+		}
+        locationDao.updateOccupyFlag(locId, occupyFlag);
+    }
+
+	@Override
+	public void unfreezeByOccupyFlag(Long locId) {
+		locationDao.updateOccupyFlag(locId, null);
+	}
+
+	@Override
+	public boolean isPickToLocation(Location location) {
+		Location pickToLocation = getPickToLocation(location.getWhId());
+		return location.getLocId().equals(pickToLocation.getLocId());
 	}
 }

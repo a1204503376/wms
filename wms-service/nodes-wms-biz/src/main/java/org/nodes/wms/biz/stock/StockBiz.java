@@ -6,8 +6,8 @@ import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
-import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.entities.Serial;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.mp.support.Query;
 
@@ -22,8 +22,9 @@ public interface StockBiz {
 
 	/**
 	 * 根据库位冻结
-	 * @param type  库存移动类型
-	 * @param locId 库位id
+	 *
+	 * @param type       库存移动类型
+	 * @param locId      库位id
 	 * @param occupyFlag 库位占用标记
 	 */
 	void freezeByLoc(StockLogTypeEnum type, Long locId, String occupyFlag);
@@ -47,6 +48,7 @@ public interface StockBiz {
 
 	/**
 	 * 撤销收货时下架库存
+	 *
 	 * @param type
 	 * @param receiveLog 撤销记录，qty必须是负数
 	 * @param stock
@@ -62,13 +64,18 @@ public interface StockBiz {
 	 * @param qty            移动数量
 	 * @param targetLocation 目标库位
 	 * @param type           库存移动类型
+	 * @param billId         操作单id，可为空
+	 * @param billNo         操作单编码，可为空
+	 * @param lineNo         操作单行号，可为空
 	 * @return 目标库存
 	 */
 	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
-					Location targetLocation, StockLogTypeEnum type);
+					Location targetLocation, StockLogTypeEnum type,
+					Long billId, String billNo, String lineNo);
 
 	/**
 	 * 根据序列号编码获取在库的序列号信息
+	 *
 	 * @param serialNoList 序列号编码
 	 * @return 在库的序列号
 	 */
@@ -84,6 +91,7 @@ public interface StockBiz {
 
 	/**
 	 * 根据箱码获取入库暂存区的库区
+	 *
 	 * @param whId
 	 * @param boxCode
 	 * @return
@@ -92,6 +100,7 @@ public interface StockBiz {
 
 	/**
 	 * 根据清点记录查询入库暂存区的库存,如果查询的库存超过两个会报异常
+	 *
 	 * @param receiveLog
 	 * @return
 	 */

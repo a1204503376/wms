@@ -1,10 +1,12 @@
 package org.nodes.wms.dao.common.stock;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
 
+import javax.validation.constraints.Null;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -85,4 +87,21 @@ public class StockUtil {
 		}
 		return qtySubtractMax;
 	}
+
+    public static void resetStockInfo(Stock stock) {
+		if (Func.isNull(stock)){
+			throw new NullArgumentException("重置库存信息失败，object is null");
+		}
+
+		stock.setStockId(null);
+		stock.setStockQty(BigDecimal.ZERO);
+		stock.setPickQty(BigDecimal.ZERO);
+		stock.setStayStockQty(BigDecimal.ZERO);
+		stock.setOccupyQty(BigDecimal.ZERO);
+		stock.setLocId(null);
+		stock.setLocCode(null);
+		stock.setZoneId(null);
+		stock.setZoneCode(null);
+		stock.setVersion(null);
+    }
 }

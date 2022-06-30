@@ -1,7 +1,9 @@
 package org.nodes.wms.dao.stock.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import org.apache.commons.lang.NullArgumentException;
 import org.nodes.wms.dao.stock.SerialDao;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.enums.SerialStateEnum;
@@ -43,6 +45,25 @@ public class SerialDaoImpl extends BaseServiceImpl<SerialMapper, Serial> impleme
 			.eq(Serial::getSerialState, SerialStateEnum.OUT_STOCK.getCode())
 			.in(Serial::getSerialNumber, serialNoList);
 		return super.list(queryWrapper);
+	}
+
+	@Override
+	public void updateSerialState(List<String> serialNoList, SerialStateEnum state, Long stockId) {
+		if (Func.isEmpty(serialNoList)){
+			throw new NullArgumentException("更新序列号状态");
+		}
+
+		UpdateWrapper<Serial> updateWrapper = Wrappers.update();
+		updateWrapper.lambda()
+			.in(Serial::getSerialNumber, serialNoList);
+		Serial serial = new Serial();
+		serial.setSerialState(state);
+		if (!Func.isNull(stockId)){
+			serial.setStockId(stockId);
+		}
+		if (super.update(serial, updateWrapper)){
+			throw new ServiceException("更新序列号状态失败");
+		}
 	}
 
 	private LambdaQueryWrapper<Serial> getLambdaQuery(){

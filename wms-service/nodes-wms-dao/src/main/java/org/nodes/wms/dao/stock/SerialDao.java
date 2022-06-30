@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.stock;
 
 import org.nodes.wms.dao.stock.entities.Serial;
+import org.nodes.wms.dao.stock.enums.SerialStateEnum;
 import org.springblade.core.mp.base.BaseService;
 
 import java.util.List;
@@ -24,4 +25,12 @@ public interface SerialDao extends BaseService<Serial> {
 	 * @return
 	 */
 	List<Serial> getOutBoundSerialBySerialNo(List<String> serialNoList);
+
+	/**
+	 * 更新序列号状态
+	 * @param serialNoList
+	 * @param state
+	 * @param stockId 可为空，如果为空则不需要更新stockid字段
+	 */
+	void updateSerialState(List<String> serialNoList, SerialStateEnum state, Long stockId);
 }
