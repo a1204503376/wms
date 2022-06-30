@@ -3,6 +3,7 @@ package org.nodes.wms.dao.common.stock;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class StockUtil {
 				throw new ServiceException("箱码包装层级不一致");
 			}
 			BigDecimal lowDecimal = stock.getStockQty().add(stock.getPickQty()).subtract(stock.getOccupyQty());
-			qtySubtractMax=qtySubtractMax.add(lowDecimal);
+			qtySubtractMax = qtySubtractMax.add(lowDecimal);
 		}
 
 		if (qtySubtractMax.compareTo(BigDecimal.ZERO) < 0) {
