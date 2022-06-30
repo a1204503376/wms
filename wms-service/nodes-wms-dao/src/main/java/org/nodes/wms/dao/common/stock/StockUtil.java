@@ -18,7 +18,7 @@ public class StockUtil {
 	 */
 	public static BigDecimal getStockBalance(Stock sotck) {
 		BigDecimal qty = sotck.getStockQty().subtract(sotck.getPickQty());
-		if (!BigDecimalUtil.ge(qty, BigDecimal.ZERO)) {
+		if (BigDecimalUtil.ge(BigDecimal.ZERO, qty)) {
 			throw new ServiceException("上架数量小于下架数量");
 		}
 		return qty;
@@ -42,7 +42,7 @@ public class StockUtil {
 			qtySubtractMax = qtySubtractMax.add(lowDecimal);
 		}
 
-		if (!BigDecimalUtil.ge(qtySubtractMax, BigDecimal.ZERO)) {
+		if (BigDecimalUtil.ge(BigDecimal.ZERO, qtySubtractMax)) {
 			throw new ServiceException("上架数量小于下架数量");
 		}
 		return qtySubtractMax;
@@ -56,7 +56,7 @@ public class StockUtil {
 	 */
 	public static BigDecimal getStockEnable(Stock stock) {
 		BigDecimal qty = stock.getStockQty().add(stock.getPickQty()).subtract(stock.getOccupyQty());
-		if (!BigDecimalUtil.ge(qty, BigDecimal.ZERO)) {
+		if (BigDecimalUtil.ge(BigDecimal.ZERO, qty)) {
 			throw new ServiceException("可用量不足，请及时补充库存");
 		}
 		return qty;
@@ -80,7 +80,7 @@ public class StockUtil {
 			qtySubtractMax = qtySubtractMax.add(lowDecimal);
 		}
 
-		if (!BigDecimalUtil.ge(qtySubtractMax, BigDecimal.ZERO)) {
+		if (BigDecimalUtil.ge(BigDecimal.ZERO, qtySubtractMax)) {
 			throw new ServiceException("上架数量小于下架数量");
 		}
 		return qtySubtractMax;
