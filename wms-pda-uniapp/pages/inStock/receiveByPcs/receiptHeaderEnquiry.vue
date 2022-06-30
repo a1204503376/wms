@@ -124,6 +124,7 @@
 				this.loading = false;
 				this.divider = false;
 				this.page.current++;
+				this.params.whId = uni.getStorageSync('warehouse').whId;
 				receive.getReceiveList(this.params, this.page).then(data => {
 					if (data.data.records.length > 0) {
 						this.status = 'loading';
