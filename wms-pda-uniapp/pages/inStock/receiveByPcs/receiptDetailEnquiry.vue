@@ -93,10 +93,11 @@
 				if (tool.isNotEmpty(this.params.skuCode)) {
 					this.analysisCode(this.params.skuCode);
 				}
+				this.params.whId = uni.getStorageSync('warehouse').whId;
 				receive.getReceiveDetailList(this.params).then(data => {
 					this.receiveDetailList = data.data;
 					//TODO
-          // if (data.data.length == 1) {
+					// if (data.data.length == 1) {
 					// 	data.data[0].receiveId = this.params.receiveId;
 					// 	uni.$u.func.route('/pages/inStock/receiveByPcs/ReceiveByPiece', data.data[0]);
 					// }

@@ -18,4 +18,8 @@ public class ReceiveDetailPdaQuery {
 	 * 物品编码
 	 */
 	private String skuCode;
+	/**
+	 * 库房id
+	 */
+	private Long whId;
 }
