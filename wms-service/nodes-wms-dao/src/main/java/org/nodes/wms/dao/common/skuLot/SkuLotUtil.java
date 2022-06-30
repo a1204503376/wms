@@ -47,7 +47,7 @@ public class SkuLotUtil {
 	 * @return 相同返回ture，否则返回false,如果没有skuLot属性也返回false
 	 */
 	public static <T1, T2> boolean compareAllSkuLot(T1 t1, T2 t2) {
-		if (Func.isEmpty(t1) || Func.isEmpty(t2)){
+		if (Func.isEmpty(t1) || Func.isEmpty(t2)) {
 			return false;
 		}
 
@@ -71,6 +71,26 @@ public class SkuLotUtil {
 					return false;
 				}
 			} catch (IllegalAccessException | InvocationTargetException e) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * 判断对象是否有30个skuLot属性
+	 *
+	 * @param object
+	 * @param <T>
+	 * @return true:存在30个批属性
+	 */
+	public static <T> boolean hasSkuLot(T object) {
+		String propertyName;
+		for (int i = 0; i < SKULOT_NUMBER; ++i) {
+			propertyName = String.format("%s%d", SKULOT, i + 1);
+			Property skuLotProperty = ReflectUtil.getProperty(object.getClass(), propertyName);
+			if (Func.isNull(skuLotProperty)) {
 				return false;
 			}
 		}

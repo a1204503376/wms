@@ -82,6 +82,14 @@ public interface StockBiz {
 	List<Stock> findStockByBoxCode(String boxCode);
 
 	/**
+	 * 根据箱码获取入库暂存区的库区
+	 * @param whId
+	 * @param boxCode
+	 * @return
+	 */
+	List<Stock> findStockOnStageByBoxCode(Long whId, String boxCode);
+
+	/**
 	 * 根据清点记录查询入库暂存区的库存,如果查询的库存超过两个会报异常
 	 * @param receiveLog
 	 * @return

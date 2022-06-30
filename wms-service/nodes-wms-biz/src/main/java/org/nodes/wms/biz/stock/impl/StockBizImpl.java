@@ -127,7 +127,7 @@ public class StockBizImpl implements StockBiz {
 		canInStockByLocation(location, receiveLog.getSkuId(), receiveLog);
 		// 形成库存，需要考虑库存合并
 		Stock stock = createStock(receiveLog, location);
-		Stock existStock = stockMergeStrategy.apply(stock);
+		Stock existStock = stockMergeStrategy.matchCanMergeStock(stock);
 		// 本次入库保存的库存对象，如果需要合并则是数据库中保存的stock对象，否则为新的库存对象
 		Stock finalStock = null;
 		StockLog stockLog = null;
@@ -296,8 +296,13 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
-	public Stock findStockOnStage(ReceiveLog receiveLog) {
+	public List<Stock> findStockOnStageByBoxCode(Long whId, String boxCode) {
 		return null;
+	}
+
+	@Override
+	public Stock findStockOnStage(ReceiveLog receiveLog) {
+		return stockMergeStrategy.matchSameStock(receiveLog);
 	}
 
 	@Override
