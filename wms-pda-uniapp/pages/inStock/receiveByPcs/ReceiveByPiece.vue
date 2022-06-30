@@ -1,7 +1,6 @@
 <template>
 	<view>
-		<u-navbar  leftIconColor="#fff"
-			@leftClick="esc" :fixed="false" :autoBack="false"
+		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
 			:bgColor="navigationBarBackgroundColor" title="按件收货" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
@@ -138,18 +137,21 @@
 					_this.params.whCode = uni.getStorageSync('warehouse').whCode;
 					_this.params.whId = uni.getStorageSync('warehouse').whId;
 					receive.submitReceiptByPcs(_this.params).then(data => {
-						if (data.data.currentReceivieIsAccomplish) {
+						if (data.data.allReceivieIsAccomplish && data.data.currentReceivieIsAccomplish) {
+							//当前收货单收货收货完毕
+							_this.$u.func.route('/pages/inStock/receiveByPcs/receiptHeaderEnquiry');
+							return;
+						} else if (data.data.currentReceivieIsAccomplish) {
 							//当前收货单详情收货收货完毕
 							_this.$u.func.route(
 								'/pages/inStock/receiveByPcs/receiptDetailEnquiry', {
 									receiveId: _this.receiveId
 								});
-						} else if (data.data.allReceivieIsAccomplish) {
-							//当前收货单收货收货完毕
-							_this.$u.func.route('/pages/inStock/receiveByPcs/receiptHeaderEnquiry');
+							return;
 						} else {
 							//当前收货单详情收货部分收货,刷新当前页面
 							_this.$u.func.route.refreshPage()
+							return;
 						}
 					});
 				}, 1000)
@@ -170,7 +172,9 @@
 				})
 			},
 			esc() {
-				uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry',{receiveId:this.receiveId});
+				uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', {
+					receiveId: this.receiveId
+				});
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);
