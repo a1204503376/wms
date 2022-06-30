@@ -162,4 +162,8 @@ public class StockLog extends BaseSkuLotEntity {
 	 * 消息
 	 */
 	private String msg;
+	/**
+	 * 计量单位编码
+	 */
+	private String wsuCode;
 }
