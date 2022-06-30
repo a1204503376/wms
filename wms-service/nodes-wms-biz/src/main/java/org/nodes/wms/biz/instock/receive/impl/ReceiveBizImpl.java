@@ -264,6 +264,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	public ReceiveDetailByReceiveIdPdaResponse selectDetailByReceiveDetailId(ReceiveDetailByReceiveIdPdaQuery receiveIdPdaQuery) {
 		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveIdPdaQuery.getReceiveDetailId());
 		ReceiveDetailByReceiveIdPdaResponse response = BeanUtil.copy(detail, ReceiveDetailByReceiveIdPdaResponse.class);
+		response.setWsuCode(detail.getUmCode());
 		Sku sku = skuDao.getById(detail.getSkuId());
 		if (response != null) {
 			response.setIsSn(false);

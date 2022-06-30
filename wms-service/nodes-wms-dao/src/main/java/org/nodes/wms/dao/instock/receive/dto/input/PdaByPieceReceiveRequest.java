@@ -52,7 +52,7 @@ public class PdaByPieceReceiveRequest implements Serializable {
 	/**
 	 * 计量单位
 	 */
-	private String umName;
+	private String wsuCode;
 	/**
 	 * 规格
 	 */

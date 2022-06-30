@@ -107,7 +107,6 @@ public class ReceiveLog extends BaseSkuLotEntity {
 	 * 货主编码
 	 */
 	private String ownerCode;
-
 	/**
 	 * 计量单位编码
 	 */
