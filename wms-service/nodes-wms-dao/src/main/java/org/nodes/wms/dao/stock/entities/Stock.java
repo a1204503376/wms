@@ -120,6 +120,10 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	 */
 	private String lotNumber;
 	/**
+	 * 计量单位编码
+	 */
+	private String wsuCode;
+	/**
 	 * 乐观锁
 	 * 支持的数据类型只有:int,Integer,long,Long,Date,Timestamp,LocalDateTime
 	 * 整数类型下 newVersion = oldVersion + 1
