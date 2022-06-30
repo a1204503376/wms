@@ -135,7 +135,16 @@
 				"navigationStyle": "custom"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/inStock/receiveByBox/receiveDetailLpnListQuery",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "多箱收货",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#33cbcc"
 	}
