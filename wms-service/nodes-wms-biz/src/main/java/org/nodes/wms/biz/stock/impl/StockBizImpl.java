@@ -13,6 +13,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
+import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.stock.SerialDao;
 import org.nodes.wms.dao.stock.SerialLogDao;
@@ -44,10 +45,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,11 +61,13 @@ public class StockBizImpl implements StockBiz {
 	private final SerialLogDao serialLogDao;
 	private final SerialDao serialDao;
 
+	// TODO
 	@Override
 	public void freezeByLoc(StockLogTypeEnum type, Long locId, String occupyFlag) {
 
 	}
 
+	// TODO
 	@Override
 	public void unfreezeByLoc(StockLogTypeEnum type, Long locId) {
 
@@ -157,10 +157,22 @@ public class StockBizImpl implements StockBiz {
 		if (BigDecimalUtil.ge(receiveLog.getQty(), BigDecimal.ZERO)){
 			throw new ServiceException("撤销收货下架库存失败,清点记录的数量必须是负数");
 		}
-		// 下架库存 TODO
+		// 下架库存
 		BigDecimal cancelQty = receiveLog.getQty().abs();
+		if (BigDecimalUtil.gt(cancelQty, StockUtil.getStockEnable(stock))){
+			throw new ServiceException("撤销收货下架库存失败,撤销数量大于可用数量");
+		}
+
+		stock.setPickQty(stock.getPickQty().add(cancelQty));
+		stockDao.updateStock(stock.getStockId(), stock.getStockQty(),
+			stock.getStayStockQty(), stock.getPickQty(), null, null);
 		// 生成库存日志
+		StockLog stockLog = createAndSaveStockLog(type, stock, receiveLog, "撤销收货");
 		// 修改序列号状态和生成序列号日志
+		if (Func.isNotEmpty(receiveLog.getSnCode())){
+			List<String> serialNoList = Arrays.asList(Func.split(receiveLog.getSnCode(), ","));
+			// TODO
+		}
 
 		return null;
 	}
@@ -174,8 +186,15 @@ public class StockBizImpl implements StockBiz {
 		stockLog.setSourceBillNo(receiveLog.getReceiveNo());
 		stockLog.setLineNo(receiveLog.getLineNo());
 		stockLog.setCurrentStayStockQty(BigDecimal.ZERO);
-		stockLog.setCurrentStockQty(receiveLog.getQty());
-		stockLog.setCurrentPickQty(BigDecimal.ZERO);
+		if (BigDecimalUtil.gt(receiveLog.getQty(), BigDecimal.ZERO)){
+			// 收货日志
+			stockLog.setCurrentStockQty(receiveLog.getQty());
+			stockLog.setCurrentPickQty(BigDecimal.ZERO);
+		} else {
+			// 撤销收货日志
+			stockLog.setCurrentStockQty(BigDecimal.ZERO);
+			stockLog.setCurrentPickQty(receiveLog.getQty().abs());
+		}
 		stockLogDao.save(stockLog);
 		return stockLog;
 	}
@@ -284,6 +303,7 @@ public class StockBizImpl implements StockBiz {
 		return stock;
 	}
 
+	// TODO
 	@Override
 	public Stock moveStock(Stock sourceStock, List<String> serialNoList,
 						   BigDecimal qty, Location targetLocation, StockLogTypeEnum type) {
@@ -301,13 +321,13 @@ public class StockBizImpl implements StockBiz {
 			.stream()
 			.map(Location::getLocId)
 			.collect(Collectors.toList());
-		return stockDao.getStockByBoxCode(boxCode, pickToLocList);
+		return stockDao.getStockByBoxCodeExcludeLoc(boxCode, pickToLocList);
 	}
 
 	@Override
 	public List<Stock> findStockOnStageByBoxCode(Long whId, String boxCode) {
-
-		return null;
+		Location stage = locationBiz.getStageLocation(whId);
+		return stockDao.getStockByBoxCode(boxCode, Collections.singletonList(stage.getLocId()));
 	}
 
 	@Override
