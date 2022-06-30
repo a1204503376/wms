@@ -115,11 +115,11 @@ public class LocationBizImpl implements LocationBiz {
 		return locationDao.removeByIdList(idList);
 	}
 
-	private List<String> getLocCodeOfSystemCreated(String systemCreateCode){
+	private List<String> getLocCodeOfSystemCreated(String systemCreateCode) {
 		List<Warehouse> warehouseList = warehouseBiz.findAll();
 		return warehouseList.stream()
-				.map(item -> String.format("%s-%s", item.getWhCode(), systemCreateCode))
-				.collect(Collectors.toList());
+			.map(item -> String.format("%s-%s", item.getWhCode(), systemCreateCode))
+			.collect(Collectors.toList());
 	}
 
 	@Override
@@ -140,34 +140,89 @@ public class LocationBizImpl implements LocationBiz {
 		return locationDao.findLocation(pickToLocCodeList);
 	}
 
+
+	@Override
+	public List<Location> getAllPackLocation() {
+		List<String> packLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_PACK);
+		return locationDao.findLocation(packLocCodeList);
+	}
+
+	@Override
+	public List<Location> getAllUnknownLocation() {
+		List<String> unknownLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_UNKNOWN);
+		return locationDao.findLocation(unknownLocCodeList);
+	}
+
+	@Override
+	public List<Location> getAllInTransitLocation() {
+		List<String> inTransitLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_INTRANSIT);
+		return locationDao.findLocation(inTransitLocCodeList);
+	}
+
 	@Override
 	public Location getStageLocation(Long whId) {
-		return null;
+		if (Func.isEmpty(whId)) {
+			return null;
+		}
+		List<Location> allStageLocation = getAllStageLocation();
+		List<Location> locationList = allStageLocation.stream()
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
 	@Override
 	public Location getQcLocation(Long whId) {
-		return null;
+		if (Func.isEmpty(whId)) {
+			return null;
+		}
+		List<Location> allQcLocation = getAllQcLocation();
+		List<Location> locationList = allQcLocation.stream()
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
 	@Override
 	public Location getPickToLocation(Long whId) {
-		return null;
+		if (Func.isEmpty(whId)) {
+			return null;
+		}
+		List<Location> allPickToLocation = getAllPickToLocation();
+		List<Location> locationList = allPickToLocation.stream()
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
 	@Override
 	public Location getPackLocation(Long whId) {
-		return null;
+		if (Func.isEmpty(whId)) {
+			return null;
+		}
+		List<Location> allPackLocation = getAllPackLocation();
+		List<Location> locationList = allPackLocation.stream()
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
 	@Override
 	public Location getUnknowLocation(Long whId) {
-		return null;
+		if (Func.isEmpty(whId)) {
+			return null;
+		}
+		List<Location> allUnknownLocation = getAllUnknownLocation();
+		List<Location> locationList = allUnknownLocation.stream()
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
 	@Override
 	public Location getInTransitLocation(Long whId) {
-		return null;
+		if (Func.isEmpty(whId)) {
+			return null;
+		}
+		List<Location> allInTransitLocation = getAllInTransitLocation();
+		List<Location> locationList = allInTransitLocation.stream()
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
 	@Override
@@ -182,11 +237,11 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isFrozen(Location location) {
-		if (Func.isNull(location.getLocFlag())){
+		if (Func.isNull(location.getLocFlag())) {
 			return false;
 		}
 
-		if (location.getLocFlag() == 10 || location.getLocFlag() == 20){
+		if (location.getLocFlag() == 10 || location.getLocFlag() == 20) {
 			return true;
 		}
 
@@ -195,7 +250,7 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isMixSku(Location location) {
-		if (Func.isEmpty(location.getLocSkuMix())){
+		if (Func.isEmpty(location.getLocSkuMix())) {
 			return true;
 		}
 
@@ -204,7 +259,7 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isMixSkuLot(Location location) {
-		if (Func.isEmpty(location.getLocLotNoMix())){
+		if (Func.isEmpty(location.getLocLotNoMix())) {
 			return true;
 		}
 
