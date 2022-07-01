@@ -83,6 +83,7 @@ public class InStockBizImpl implements InStockBiz {
 			ReceiveDetailLpn lpn = receiveBiz.getReceiveDetailLpnById(item.getReceiveDetailLpnId());
 			//更新lpn表批属性信息
 			lpn.setSkuLot1(request.getSkuLot1());
+
 			lpn.setSkuLot2(request.getSkuLot2());
 			//更新lpn实收数量
 			lpn.setScanQty(lpn.getScanQty().add(item.getPlanQty()));
