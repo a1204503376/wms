@@ -10,7 +10,6 @@
         remote
         reserve-keyword
         size="mini"
-        style="width: 450px"
         value-key="code"
         @change="onChange">
         <el-option

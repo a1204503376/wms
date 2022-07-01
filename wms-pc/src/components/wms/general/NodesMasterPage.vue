@@ -1,60 +1,64 @@
 <template>
     <basic-container id="container" style="height: inherit; overflow-y: auto">
-        <el-form ref="searchForm"
-                 :inline="true"
-                 label-position="right"
-                 label-width="60"
-                 size="mini"
-                 @submit.native.prevent>
+        <!-- 顶部搜索框布局 -->
+        <el-form ref="searchForm" :inline="true" label-position="right" label-width="60" size="mini"
+            @submit.native.prevent>
+
+            <!-- 顶部搜索框布局:常用搜索框 -->
             <el-row type="flex" v-if="showSearchForm">
-                <el-col :lg="18" :md="20" :xl="20">
-                    <div class="d-div-left">
-                        <slot name="searchFrom"></slot>
-                    </div>
+                <el-col :lg="18" :md="21" :xl="21">
+                    <slot name="searchFrom"></slot>
                 </el-col>
-                <el-col :lg="6" :md="4" :xl="4">
+
+                <el-col :lg="6" :md="3" :xl="3">
                     <div class="d-div-right">
                         <el-form-item>
                             <slot name="searchBtn"></slot>
-                            <el-button v-if="permission.search"
-                            native-type="submit"
-                            type="primary"
-                            @click="onSearch">
-                            查找
+                            <el-button v-if="permission.search" native-type="submit" type="primary" @click="onSearch">
+                                查找
                             </el-button>
                             <el-button @click="onReset">重置</el-button>
-                            <el-button v-if="config.showExpandBtn"
-                                       :icon="expandMore ?'el-icon-arrow-up':'el-icon-arrow-down'" type="text"
-                                       @click="expandMore =!expandMore">{{ expandMore ? '收起' : '展开' }}
+                            <el-button v-if="showExpandBtn"
+                                :icon="expandMore ? 'el-icon-arrow-up' : 'el-icon-arrow-down'" type="text"
+                                @click="expandMore = !expandMore">{{ expandMore ? '收起' : '展开' }}
                             </el-button>
                         </el-form-item>
                     </div>
                 </el-col>
             </el-row>
+
+            <!-- 顶部搜索框布局:非常用搜索框 -->
             <div v-if="expandMore">
                 <slot name="expandSearch"></slot>
             </div>
-            <el-row style="margin-bottom: 5px;" type="flex">
-                <el-col :lg="18" :md="16" :xl="21" style="margin-bottom: 0;">
-                    <div class="d-div-left">
-                        <slot name="batchBtn"></slot>
-                    </div>
-                </el-col>
-                <el-col :lg="6" :md="8" :xl="3" style="margin-bottom: 0;">
-                    <div class="d-div-right">
-                        <slot name="tableTool"></slot>
-                    </div>
-                </el-col>
-            </el-row>
-            <el-row style="margin-top: 0;margin-bottom: 0;" type="flex">
-                <el-col :span="24">
-                    <slot name="table"></slot>
-                </el-col>
-            </el-row>
-            <el-row justify="end" style="margin-top: 0;margin-bottom: 0;" type="flex">
-                <slot name="page"></slot>
-            </el-row>
         </el-form>
+
+        <!-- 中间操作按钮行布局 -->
+        <el-row style="margin-bottom: 5px;" type="flex">
+            <el-col :lg="18" :md="16" :xl="21" style="margin-bottom: 0;">
+                <div class="d-div-left">
+                    <slot name="batchBtn"></slot>
+                </div>
+            </el-col>
+            <el-col :lg="6" :md="8" :xl="3" style="margin-bottom: 0;">
+                <div class="d-div-right">
+                    <slot name="tableTool"></slot>
+                </div>
+            </el-col>
+        </el-row>
+
+        <!-- 页面主体表格布局 -->
+        <el-row style="margin-top: 0;margin-bottom: 0;" type="flex">
+            <el-col :span="24">
+                <slot name="table"></slot>
+            </el-col>
+        </el-row>
+
+        <!-- 页面底部分页栏布局 -->
+        <el-row justify="end" style="margin-top: 0;margin-bottom: 0;" type="flex">
+            <slot name="page"></slot>
+        </el-row>
+
     </basic-container>
 
 </template>
@@ -64,17 +68,13 @@
 export default {
     name: "NodesMasterPage",
     props: {
-        showExpandBtn:{type:Boolean,required:false,default:()=>true},
-        showPage:{type:Boolean,required:false,default:()=>true},
-        permission:{type:Object,required:true},
-        showSearchForm:{type:Boolean,required:false,default:()=>true}
+        showExpandBtn: { type: Boolean, required: false, default: () => true },
+        showPage: { type: Boolean, required: false, default: () => true },
+        permission: { type: Object, required: true },
+        showSearchForm: { type: Boolean, required: false, default: () => true }
     },
     data() {
         return {
-            config: {
-                showExpandBtn: this.showExpandBtn,
-                showPage: this.showPage
-            },
             expandMore: false
         }
     },
@@ -87,7 +87,7 @@ export default {
         autoTableHeight() {
             this.$nextTick(() => {
                 let height;
-                if (this.config.showPage) {
+                if (this.showPage) {
                     height = window.innerHeight - 100;
                 } else {
                     height = window.innerHeight - 50;
@@ -127,9 +127,9 @@ export default {
 }
 
 #nodes_form_container {
-    padding-top: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-top: 1px;
+    padding-left: 1px;
+    padding-right: 1px;
     display: flex;
     height: inherit;
     background: #fff;
@@ -149,6 +149,4 @@ export default {
 .myTable-box .el-table {
     overflow: inherit;
 }
-
-
 </style>

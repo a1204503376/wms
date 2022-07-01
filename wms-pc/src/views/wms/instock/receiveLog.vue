@@ -4,71 +4,74 @@
             <template v-slot:searchFrom>
                 <el-row type="flex">
                     <el-col :span="8">
-                        <el-form-item label="收货单编码">
+                        <el-form-item label="收货单编码" label-width="90px">
                             <el-input v-model.trim="form.params.receiveNo" :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="物品编码">
+                        <el-form-item label="物品编码" label-width="90px">
                             <el-input v-model.trim="form.params.skuCode" :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="箱号">
-                            <el-input v-model.trim="form.params.boxCode" :clearable="true"></el-input>
+                        <el-form-item label="库位" label-width="90px">
+                            <nodes-location v-model="form.params.locIdList"></nodes-location>
                         </el-form-item>
                     </el-col>
                 </el-row>
+
+
+            </template>
+            <template v-slot:expandSearch>
                 <el-row type="flex">
-                    <el-col :span="8">
-                        <el-form-item label="LPN">
+                    <el-col :span="6">
+                        <el-form-item label="LPN" label-width="90px">
                             <el-input v-model.trim="form.params.lpnCode" :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="序列号">
+                    <el-col :span="6">
+                        <el-form-item label="箱号" label-width="90px">
+                            <el-input v-model.trim="form.params.boxCode" :clearable="true"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="序列号" label-width="90px">
                             <el-input v-model.trim="form.params.snCode" :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="收货人">
+                    <el-col :span="6">
+                        <el-form-item label="收货人" label-width="90px">
                             <el-input v-model.trim="form.params.createUser" :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row type="flex">
-                    <el-col :span="24">
-                        <el-form-item label="收货时间">
-                            <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
+                <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="收货时间" label-width="90px">
+                            <nodes-date-range v-model="form.params.createTimeDateRange" style="width: 200px">
+                            </nodes-date-range>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="库位" label-width="90px">
+                            <nodes-location v-model="form.params.locIdList"></nodes-location>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="库房" label-width="90px">
+                            <nodes-warehouse :multiple="true" v-model="form.params.whIdList"></nodes-warehouse>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="货主" label-width="90px">
+                            <nodes-owner style="width: 180px" v-model="form.params.woId"></nodes-owner>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </template>
-            <template v-slot:expandSearch>
-                <el-form-item label="库位">
-                    <nodes-location
-                        style="width: 180px"
-                        v-model="form.params.locIdList"
-                    ></nodes-location>
-                </el-form-item>
-                <el-form-item label="库房">
-                    <nodes-warehouse
-                        :multiple="true"
-                        v-model="form.params.whIdList"
-                    ></nodes-warehouse>
-                </el-form-item>
-                <el-form-item label="货主">
-                    <nodes-owner
-                        style="width: 180px"
-                        v-model="form.params.woId"
-                    ></nodes-owner>
-                </el-form-item>
-            </template>
             <template v-slot:batchBtn>
-                <el-button v-if="permissionObj.repeal"
-                           icon="el-icon-caret-left"
-                           size="mini" type="warning"
-                           @click="onRepeal">撤销收货
+                <el-button v-if="permissionObj.repeal" icon="el-icon-caret-left" size="mini" type="warning"
+                    @click="onRepeal">撤销收货
                 </el-button>
             </template>
             <template v-slot:tableTool>
@@ -83,47 +86,31 @@
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                                  style="display: inline-block;margin-left: 10px">
-                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData"/>
+                        style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData" />
                     </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table"
-                          :data="table.data"
-                          border
-                          highlight-current-row
-                          size="mini"
-                          style="width: 100%"
-                          @sort-change="onSortChange">
-                    <el-table-column
-                        fixed
-                        type="selection"
-                        width="50">
+                <el-table ref="table" :data="table.data" border highlight-current-row size="mini" style="width: 100%"
+                    @sort-change="onSortChange">
+                    <el-table-column fixed type="selection" width="50">
                     </el-table-column>
-                    <el-table-column
-                        fixed
-                        sortable
-                        type="index">
+                    <el-table-column fixed sortable type="index">
                         <template slot="header">
                             #
                         </template>
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
-                        <el-table-column
-                            :key="index"
-                            show-overflow-tooltip
-                            v-bind="column"
-                            width="130">
+                        <el-table-column :key="index" show-overflow-tooltip v-bind="column" width="130">
                         </el-table-column>
                     </template>
                 </el-table>
             </template>
             <template v-slot:page>
                 <el-pagination :current-page="page.current" :page-size="page.size" :page-sizes="[20, 50, 100]"
-                               :total="page.total" background layout="total, sizes, prev, pager, next, jumper"
-                               v-bind="page"
-                               @size-change="handleSizeChange" @current-change="handleCurrentChange">
+                    :total="page.total" background layout="total, sizes, prev, pager, next, jumper" v-bind="page"
+                    @size-change="handleSizeChange" @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>
@@ -137,14 +124,14 @@ import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
-import {listMixin} from "@/mixins/list";
+import { listMixin } from "@/mixins/list";
 import NodesLocation from "@/components/wms/select/NodesLocation";
 import NodesOwner from "@/components/wms/select/NodesOwner";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
-import {getPage,exportExcel} from "@/api/wms/instock/receiveLog"
+import { getPage, exportExcel } from "@/api/wms/instock/receiveLog"
 import fileDownload from "js-file-download";
-import {ExcelExport} from 'pikaz-excel-js'
-import {nowDateFormat} from "@/util/date";
+import { ExcelExport } from 'pikaz-excel-js'
+import { nowDateFormat } from "@/util/date";
 
 export default {
     name: "receiveLog",
@@ -352,7 +339,7 @@ export default {
         onExportLocalData() {
             this.exportCurrentDataToExcel("收货记录", "收货记录")
         },
-        onRepeal(){
+        onRepeal() {
             let rows = this.$refs.table;
             console.log(rows);
         }

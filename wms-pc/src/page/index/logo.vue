@@ -97,7 +97,7 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
-    width: 240px;
+    width: 180px;
     padding-top: 4px;
     //height: 100px;
     //line-height: 100px;

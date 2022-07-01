@@ -384,9 +384,12 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	@Override
 	public void updateReciveHeader(ReceiveHeader receiveHeader, ReceiveDetail detail) {
 		List<ReceiveDetail> details = receiveDetailDao.selectReceiveDetailById(detail.getReceiveId());
-		List<ReceiveDetail> collect = details.stream().filter(item -> item.getDetailStatus().getCode().equals(ReceiveHeaderStateEnum.COMPLETED.getCode())).collect(Collectors.toList());
-		if (details.size() == collect.size()) {
+		List<ReceiveDetail> completed = details.stream().filter(item -> item.getDetailStatus().getCode().equals(ReceiveHeaderStateEnum.COMPLETED.getCode())).collect(Collectors.toList());
+		List<ReceiveDetail> notReceipt = details.stream().filter(item -> item.getDetailStatus().getCode().equals(ReceiveHeaderStateEnum.NOT_RECEIPT.getCode())).collect(Collectors.toList());
+		if (details.size() == completed.size()) {
 			receiveHeader.setBillState(ReceiveHeaderStateEnum.COMPLETED);
+		} else if (details.size() == notReceipt.size()) {
+			receiveHeader.setBillState(ReceiveHeaderStateEnum.NOT_RECEIPT);
 		} else {
 			receiveHeader.setBillState(ReceiveHeaderStateEnum.PART);
 		}
