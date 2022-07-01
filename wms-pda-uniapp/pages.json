@@ -115,6 +115,7 @@
 		}, {
 			"path": "pages/inStock/receiveByBox/receiveDetailLpnQuery",
 			"style": {
+				"navigationBarTitleText": "按箱收货",
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
@@ -122,8 +123,8 @@
 		}, {
 			"path": "pages/inStock/receiveByBox/receiveByBox",
 			"style": {
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "按箱收货",
+				"enablePullDownRefresh": false
 			}
 
 		},

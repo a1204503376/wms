@@ -11,6 +11,7 @@ import org.nodes.wms.core.strategy.mapper.InstockDetailMapper;
 import org.nodes.wms.core.strategy.service.IInstockConfigLotService;
 import org.nodes.wms.core.strategy.service.IInstockConfigService;
 import org.nodes.wms.core.strategy.service.IInstockDetailService;
+import org.nodes.wms.dao.putway.entities.Instock;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
@@ -117,7 +118,7 @@ public class InstockDetailServiceImpl<M extends InstockDetailMapper, T extends I
 
 	@Override
 	public InstockDetail find(@NotNull Instock instock, String billTypeCd, Long skuTypeId,
-							  SkuLotBaseEntity skuLotEntity) {
+                              SkuLotBaseEntity skuLotEntity) {
 		InstockDetail instockDetail = null;
 		IInstockConfigLotService instockConfigLotService = SpringUtil.getBean(IInstockConfigLotService.class);
 		IInstockDetailService instockDetailService = SpringUtil.getBean(IInstockDetailService.class);

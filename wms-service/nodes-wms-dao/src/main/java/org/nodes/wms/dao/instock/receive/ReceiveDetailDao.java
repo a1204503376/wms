@@ -46,7 +46,7 @@ public interface ReceiveDetailDao {
 	 * @param detail 收货单详情
 	 * @return 是否成功
 	 */
-	Boolean updateReceiveDetail(ReceiveDetail detail);
+	void updateReceiveDetail(ReceiveDetail detail);
 
 	/**
 	 * 根据收货单id查询最新一条明细的订单行号

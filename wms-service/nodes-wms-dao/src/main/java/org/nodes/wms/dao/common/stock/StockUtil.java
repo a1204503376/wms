@@ -1,0 +1,107 @@
+package org.nodes.wms.dao.common.stock;
+
+import org.apache.commons.lang.NullArgumentException;
+import org.nodes.core.tool.utils.BigDecimalUtil;
+import org.nodes.wms.dao.stock.entities.Stock;
+import org.springblade.core.log.exception.ServiceException;
+import org.springblade.core.tool.utils.Func;
+
+import javax.validation.constraints.Null;
+import java.math.BigDecimal;
+import java.util.List;
+
+public class StockUtil {
+
+	/**
+	 * 计算库存余额 = stockQty - pickQty
+	 *
+	 * @param sotck
+	 * @return 余额
+	 */
+	public static BigDecimal getStockBalance(Stock sotck) {
+		BigDecimal qty = sotck.getStockQty().subtract(sotck.getPickQty());
+		if (BigDecimalUtil.ge(BigDecimal.ZERO, qty)) {
+			throw new ServiceException("上架数量小于下架数量");
+		}
+		return qty;
+	}
+
+	/**
+	 * 计算库存余额 = stockQty - pickQty。计算库存量的时候需要考虑计量单位
+	 * 如果计算的包装层级不一致则抛异常
+	 *
+	 * @param stockList
+	 * @return 余额
+	 */
+	public static BigDecimal getStockBalance(List<Stock> stockList) {
+		BigDecimal qtySubtractMax = BigDecimal.ZERO;
+		for (Stock stock : stockList
+		) {
+			if (!Func.equals(stockList.get(0).getSkuLevel(), stock.getSkuLevel())) {
+				throw new ServiceException("箱码包装层级不一致");
+			}
+			BigDecimal lowDecimal = stock.getStockQty().subtract(stock.getPickQty());
+			qtySubtractMax = qtySubtractMax.add(lowDecimal);
+		}
+
+		if (BigDecimalUtil.ge(BigDecimal.ZERO, qtySubtractMax)) {
+			throw new ServiceException("上架数量小于下架数量");
+		}
+		return qtySubtractMax;
+	}
+
+	/**
+	 * 计算库存的可用量 = stockQty + pickQty - occupyQty
+	 *
+	 * @param stock
+	 * @return 可用量
+	 */
+	public static BigDecimal getStockEnable(Stock stock) {
+		BigDecimal qty = stock.getStockQty().add(stock.getPickQty()).subtract(stock.getOccupyQty());
+		if (BigDecimalUtil.ge(BigDecimal.ZERO, qty)) {
+			throw new ServiceException("可用量不足，请及时补充库存");
+		}
+		return qty;
+	}
+
+	/**
+	 * 计算库存的可用量 = stockQty + pickQty - occupyQty。计算库存量的时候需要考虑计量单位
+	 * 如果计算的包装层级不一致则抛异常
+	 *
+	 * @param stockList
+	 * @return 可用量
+	 */
+	public static BigDecimal getStockEnable(List<Stock> stockList) {
+		BigDecimal qtySubtractMax = BigDecimal.ZERO;
+		for (Stock stock : stockList
+		) {
+			if (!Func.equals(stockList.get(0).getSkuLevel(), stock.getSkuLevel())) {
+				throw new ServiceException("箱码包装层级不一致");
+			}
+			BigDecimal lowDecimal = stock.getStockQty().add(stock.getPickQty()).subtract(stock.getOccupyQty());
+			qtySubtractMax = qtySubtractMax.add(lowDecimal);
+		}
+
+		if (BigDecimalUtil.ge(BigDecimal.ZERO, qtySubtractMax)) {
+			throw new ServiceException("上架数量小于下架数量");
+		}
+		return qtySubtractMax;
+	}
+
+    public static void resetStockInfo(Stock stock) {
+		if (Func.isNull(stock)){
+			throw new NullArgumentException("重置库存信息失败，object is null");
+		}
+
+		stock.setStockId(null);
+		stock.setStockQty(BigDecimal.ZERO);
+		stock.setPickQty(BigDecimal.ZERO);
+		stock.setStayStockQty(BigDecimal.ZERO);
+		stock.setOccupyQty(BigDecimal.ZERO);
+		stock.setLocId(null);
+		stock.setLocCode(null);
+		stock.setZoneId(null);
+		stock.setZoneCode(null);
+		stock.setVersion(null);
+    }
+}

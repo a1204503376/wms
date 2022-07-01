@@ -5,7 +5,7 @@ import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.wms.core.basedata.entity.SkuInstock;
 import org.nodes.wms.core.basedata.vo.SkuInstockVO;
-import org.nodes.wms.core.strategy.entity.Instock;
+import org.nodes.wms.dao.putway.entities.Instock;
 import org.nodes.wms.core.strategy.service.IInstockService;
 import org.nodes.wms.core.warehouse.cache.LocationCache;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;

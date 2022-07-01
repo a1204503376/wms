@@ -14,6 +14,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * 库存，库存中数量保存的是基础计量单位
+ */
 @Data
 @TableName("wms_stock")
 @EqualsAndHashCode(callSuper = true)
@@ -119,6 +122,10 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	 * 批次号
 	 */
 	private String lotNumber;
+	/**
+	 * 计量单位编码
+	 */
+	private String wsuCode;
 	/**
 	 * 乐观锁
 	 * 支持的数据类型只有:int,Integer,long,Long,Date,Timestamp,LocalDateTime

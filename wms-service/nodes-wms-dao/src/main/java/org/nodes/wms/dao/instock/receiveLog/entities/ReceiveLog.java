@@ -2,6 +2,7 @@ package org.nodes.wms.dao.instock.receiveLog.entities;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
 
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
  * 收货单 清点表
  **/
 @Data
+@TableName("receive_log")
 public class ReceiveLog extends BaseSkuLotEntity {
 	private static final long serialVersionUID = 6947408810253759891L;
 	/**
@@ -105,5 +107,9 @@ public class ReceiveLog extends BaseSkuLotEntity {
 	 * 货主编码
 	 */
 	private String ownerCode;
+	/**
+	 * 计量单位编码
+	 */
+	private String wsuCode;
 }
 

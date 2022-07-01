@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.basics.location.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -110,5 +111,16 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 		LambdaQueryWrapper<Location> queryWrapper = new LambdaQueryWrapper<>();
 		queryWrapper.eq(Location::getWhId,whId);
 		return super.list(queryWrapper);
+	}
+
+	@Override
+	public void updateOccupyFlag(Long locId, String occupyFlag) {
+		UpdateWrapper<Location> updateWrapper = Wrappers.update();
+		updateWrapper.lambda()
+			.eq(Location::getLocId, locId)
+			.set(Location::getOccupyFlag, occupyFlag);
+		if (super.update(updateWrapper)){
+			throw new ServiceException("库位冻结/解冻更新失败");
+		}
 	}
 }

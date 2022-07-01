@@ -30,7 +30,7 @@ import org.nodes.wms.core.basedata.wrapper.SkuLotWrapper;
 import org.nodes.wms.core.basedata.wrapper.SkuWrapper;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.service.IStockService;
-import org.nodes.wms.core.strategy.entity.Instock;
+import org.nodes.wms.dao.putway.entities.Instock;
 import org.nodes.wms.core.strategy.entity.Outstock;
 import org.nodes.wms.core.strategy.service.IInstockService;
 import org.nodes.wms.core.strategy.service.IOutstockService;

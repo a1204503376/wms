@@ -26,7 +26,7 @@ public class NoGeneraRulesUtil {
 	private static final String DEFAULT_PROJECT_NAME = "WMS";
 	private static final String SERIAL_PLACEHOLDER = "X";
 
-	private RedisUtil redisUtil;
+	private final RedisUtil redisUtil;
 
 	/**
 	 * 生成编码
@@ -37,13 +37,13 @@ public class NoGeneraRulesUtil {
 	 * @return 编码
 	 */
 	public String generateCode(String projectName, String prefix, String rule) {
-		if (Func.isEmpty(prefix)){
+		if (Func.isEmpty(prefix)) {
 			throw new ServiceException("编码生成失败,编码前缀不能为空");
 		}
-		if (Func.isEmpty(projectName)){
+		if (Func.isEmpty(projectName)) {
 			projectName = DEFAULT_PROJECT_NAME;
 		}
-		if (Func.isEmpty(rule)){
+		if (Func.isEmpty(rule)) {
 			rule = DEFAULT_RULE;
 		}
 
@@ -68,10 +68,11 @@ public class NoGeneraRulesUtil {
 
 	/**
 	 * 获取编码的主体部分（由前缀和日期组成）
+	 *
 	 * @return
 	 */
-	private String generateNoSubject(String prefix, String rule){
-		if (rule.indexOf(SERIAL_PLACEHOLDER) < 0){
+	private String generateNoSubject(String prefix, String rule) {
+		if (rule.indexOf(SERIAL_PLACEHOLDER) < 0) {
 			throw new ServiceException("编码生成失败，编码规则不符合规定，要求必须存在序列且序号是在编码的结束部分");
 		}
 
@@ -84,6 +85,7 @@ public class NoGeneraRulesUtil {
 
 	/**
 	 * 同一类型的编码序号递增
+	 *
 	 * @param projectName
 	 * @param noSubject
 	 * @return
@@ -96,21 +98,21 @@ public class NoGeneraRulesUtil {
 
 	/**
 	 * 生成编码，编码格式：编码前缀（固定） + 日期 + 序号
+	 *
 	 * @param noSubject 编码主体
-	 * @param serialNo 序号
-	 * @param rule 编码规则
-	 * @return
+	 * @param serialNo  序号
+	 * @param rule      编码规则
+	 * @return 编码
 	 */
 	private String generateCodeFormat(String noSubject, Long serialNo, String rule) {
 		// 根据规则解析序号的长度
-		int legthOfSerial = rule.substring(rule.indexOf("X")).length();
+		int lengthOfSerial = rule.substring(rule.indexOf("X")).length();
 		// 格式化序号
-		numberFormat.setMinimumIntegerDigits(legthOfSerial);
+		numberFormat.setMinimumIntegerDigits(lengthOfSerial);
 		numberFormat.setGroupingUsed(false);
 		String serialFormat = numberFormat.format(serialNo);
 		// 生成编码
-		String result = String.format("%s%s", noSubject, serialFormat);
-		return result;
+		return String.format("%s%s", noSubject, serialFormat);
 	}
 
 }

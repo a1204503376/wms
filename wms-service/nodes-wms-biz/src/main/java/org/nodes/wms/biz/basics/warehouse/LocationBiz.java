@@ -96,21 +96,90 @@ public interface LocationBiz {
 	 *
 	 * @return List<Location>
 	 */
-	List<Location> getAllStage();
+	List<Location> getAllStageLocation();
 
 	/**
 	 * 返回所有的库房的入库检验区
 	 *
 	 * @return List<Location>
 	 */
-	List<Location> getAllQc();
+	List<Location> getAllQcLocation();
 
 	/**
 	 * 返回所有的库房的出库暂存区
 	 *
 	 * @return List<Location>
 	 */
-	List<Location> getAllPickTo();
+	List<Location> getAllPickToLocation();
+
+	/**
+	 * 返回所有的库房的打包暂存区
+	 *
+	 * @return List<Location>
+	 */
+	List<Location> getAllPackLocation();
+
+	/**
+	 * 返回所有的库房的未知暂存区
+	 *
+	 * @return List<Location>
+	 */
+	List<Location> getAllUnknownLocation();
+
+	/**
+	 * 返回所有的库房的在途暂存区
+	 *
+	 * @return List<Location>
+	 */
+	List<Location> getAllInTransitLocation();
+
+	/**
+	 * 获取指定库房的入库暂库位
+	 *
+	 * @param whId
+	 * @return
+	 */
+	Location getStageLocation(Long whId);
+
+	/**
+	 * 获取指定库房的质检库位
+	 *
+	 * @param whId
+	 * @return
+	 */
+	Location getQcLocation(Long whId);
+
+	/**
+	 * 获取指定库房的出库暂库位
+	 *
+	 * @param whId
+	 * @return
+	 */
+	Location getPickToLocation(Long whId);
+
+	/**
+	 * 获取指定库房的打包库位
+	 *
+	 * @param whId
+	 * @return
+	 */
+	Location getPackLocation(Long whId);
+
+	/**
+	 * 获取指定库房的未知库位
+	 *
+	 * @param whId
+	 * @return
+	 */
+	Location getUnknowLocation(Long whId);
+
+	/**
+	 * 获取指定库房指定的在途库位
+	 *
+	 * @param whId
+	 * @return
+	 */
+	Location getInTransitLocation(Long whId);
 
 	/**
 	 * 获取库位总数量
@@ -130,6 +199,7 @@ public interface LocationBiz {
 
 	/**
 	 * 判断库位是否冻结
+	 *
 	 * @param location
 	 * @return true：冻结
 	 */
@@ -137,16 +207,40 @@ public interface LocationBiz {
 
 	/**
 	 * 判断是否允许混放物品
+	 *
 	 * @param location
 	 * @return true：允许
 	 */
 	boolean isMixSku(Location location);
 
 	/**
-	 *判断是否允许混放批次
+	 * 判断是否允许混放批次
+	 *
 	 * @param location
 	 * @return true：允许
 	 */
 	boolean isMixSkuLot(Location location);
 
+	/**
+	 * 冻结库位
+	 *
+	 * @param locId
+	 * @param occupyFlag 自动任务的时候为任务id
+	 */
+	void freezeByOccupyFlag(Long locId, String occupyFlag);
+
+	/**
+	 * 解冻由freezeByOccupyFlag冻结的库位
+	 *
+	 * @param locId
+	 */
+	void unfreezeByOccupyFlag(Long locId);
+
+	/**
+	 * 判断库位是否为出库暂存区
+	 *
+	 * @param location
+	 * @return true：是出库暂存区
+	 */
+	boolean isPickToLocation(Location location);
 }

@@ -19,7 +19,7 @@
 				<!-- <u-number-box v-model="params.skuCode" @change="valChange"></u-number-box> -->
 			</u-form-item>
 			<u-form-item label="UOM" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.umName" border="0" disabled></u--input>
+				<u--input v-model="params.wsuCode" border="0" disabled></u--input>
 			</u-form-item>
 			<u-form-item label="生产批次" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.skuLot1"></u--input>
@@ -60,7 +60,7 @@
 					skuName: undefined,
 					skuLot2: undefined,
 					surplusQty: undefined,
-					umName: undefined,
+					wsuCode: undefined,
 					skuLot1: undefined,
 					boxCode: undefined,
 					locCode: 'STAGE',
@@ -150,7 +150,7 @@
 							return;
 						} else {
 							//当前收货单详情收货部分收货,刷新当前页面
-							_this.$u.func.route.refreshPage()
+							_this.$u.func.refreshPage()
 							return;
 						}
 					});
@@ -165,7 +165,7 @@
 					this.params.skuCode = data.data.skuCode;
 					this.params.skuName = data.data.skuName;
 					this.params.surplusQty = data.data.surplusQty;
-					this.params.umName = data.data.umName;
+					this.params.wsuCode = data.data.wsuCode;
 					this.params.skuLot1 = data.data.skuLot1;
 					this.params.boxCode = data.data.boxCode;
 					this.params.isSn = data.data.isSn;

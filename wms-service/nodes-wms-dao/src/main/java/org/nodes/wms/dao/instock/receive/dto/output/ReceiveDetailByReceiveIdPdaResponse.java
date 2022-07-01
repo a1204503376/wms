@@ -2,6 +2,7 @@ package org.nodes.wms.dao.instock.receive.dto.output;
 
 
 import lombok.Data;
+import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
  * 查看详情页面收货单明细表返回前端视图类
  **/
 @Data
-public class ReceiveDetailByReceiveIdPdaResponse implements Serializable {
+public class ReceiveDetailByReceiveIdPdaResponse extends BaseSkuLot implements Serializable {
 	private static final long serialVersionUID = -2558857301381666186L;
 	/**
 	 * 物料编码
@@ -21,17 +22,9 @@ public class ReceiveDetailByReceiveIdPdaResponse implements Serializable {
 	 */
 	private String skuCode;
 	/**
-	 * 型号
-	 */
-	private String skuLot2;
-	/**
 	 * 剩余数量
 	 */
 	private BigDecimal surplusQty;
-	/**
-	 * 生产批次
-	 */
-	private String skuLot1;
 	/**
 	 * 计量单位
 	 */
@@ -40,4 +33,8 @@ public class ReceiveDetailByReceiveIdPdaResponse implements Serializable {
 	 * 是否序列号管理 （true：序列号管理  false：非序列号管理）
 	 */
 	private Boolean isSn;
+	/**
+	 * 计量单位编码
+	 */
+	private String wsuCode;
 }
