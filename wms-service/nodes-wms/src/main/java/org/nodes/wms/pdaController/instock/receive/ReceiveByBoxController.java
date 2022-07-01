@@ -8,9 +8,8 @@ import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnPdaResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.tool.api.R;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * PDA按箱收货API
@@ -40,6 +39,7 @@ public class ReceiveByBoxController {
 		inStockBiz.receiveByBoxCode(receiveDetailLpnPdaRequest);
 		return "操作成功";
 	}
+
 
 
 }
