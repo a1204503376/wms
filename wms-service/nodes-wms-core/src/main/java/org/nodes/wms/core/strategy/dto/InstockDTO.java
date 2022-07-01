@@ -4,7 +4,7 @@ package org.nodes.wms.core.strategy.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.core.strategy.entity.Instock;
+import org.nodes.wms.dao.putway.entities.Instock;
 
 import java.util.List;
 

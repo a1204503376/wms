@@ -1,12 +1,11 @@
 
 package org.nodes.modules.wms.strategy;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.nodes.wms.core.strategy.dto.InstockDTO;
-import org.nodes.wms.core.strategy.entity.Instock;
+import org.nodes.wms.dao.putway.entities.Instock;
 import org.nodes.wms.core.strategy.service.IInstockService;
 import org.nodes.wms.core.strategy.vo.InstockVO;
 import org.nodes.wms.core.strategy.wrapper.InstockWrapper;
@@ -15,7 +14,6 @@ import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
-import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;

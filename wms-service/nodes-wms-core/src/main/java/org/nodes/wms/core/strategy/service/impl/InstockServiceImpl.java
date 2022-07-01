@@ -9,6 +9,7 @@ import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.entity.SkuInstock;
 import org.nodes.wms.core.basedata.service.ISkuInstockService;
+import org.nodes.wms.dao.putway.entities.Instock;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.strategy.entity.*;
 import org.nodes.wms.core.strategy.instock.InstockFactory;
