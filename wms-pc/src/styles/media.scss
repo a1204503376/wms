@@ -21,7 +21,7 @@
   position: fixed;
   left: 0;
   top: 0;
-  width: 240px;
+  width: 180px;
   height: 100%;
   z-index: 1025;
 }
@@ -43,7 +43,7 @@
 }
 
 .avue-header {
-  padding-left: 240px;
+  padding-left: 180px;
   width: 100%;
   background-color: #fff;
   box-sizing: border-box;
@@ -51,10 +51,10 @@
 
 .avue-main {
   position: absolute;
-  left: 240px;
+  left: 180px;
   padding: 0;
   padding-bottom: 20px;
-  width: calc(100% - 240px);
+  width: calc(100% - 180px);
   height: calc(100% - 64px);
   box-sizing: border-box;
   overflow: hidden;
@@ -112,7 +112,7 @@
 }
 
 @media screen and (max-width: 992px) {
-  $width: 240px;
+  $width: 180px;
   // ele的自适应
   .el-dialog,
   .el-message-box {
