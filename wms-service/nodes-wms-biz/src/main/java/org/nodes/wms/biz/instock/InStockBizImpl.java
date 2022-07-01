@@ -39,7 +39,9 @@ public class InStockBizImpl implements InStockBiz {
 		// 判断业务参数（无单收货除外），是否可以正常收货、超收
 		if (hasReceiveHeaderId) {
 			for (ReceiveDetailLpnItemDto item : request.getReceiveDetailLpnItemDtoList()) {
-				receiveBiz.canReceive(item.getReceiveDetailId(), item.getPlanQty());
+				ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(item.getReceiveDetailId());
+				ReceiveHeader header = receiveBiz.selectReceiveHeaderById(detail.getReceiveId());
+				receiveBiz.canReceive(header, detail, item.getPlanQty());
 			}
 		} else {
 			// 是否无单收货：判断当前用户是否有无单收货且未关闭的单据，如果有则用这个收货单（如果多个取最后一个）并新建收货单明细
@@ -79,29 +81,32 @@ public class InStockBizImpl implements InStockBiz {
 
 		}
 		for (ReceiveDetailLpnItemDto item : request.getReceiveDetailLpnItemDtoList()) {
+			ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(item.getReceiveDetailId());
+			ReceiveHeader header = receiveBiz.selectReceiveHeaderById(detail.getReceiveId());
 			//根据id获取lpn实体
 			ReceiveDetailLpn lpn = receiveBiz.getReceiveDetailLpnById(item.getReceiveDetailLpnId());
 			//更新lpn表批属性信息
 			lpn.setSkuLot1(request.getSkuLot1());
+
 			lpn.setSkuLot2(request.getSkuLot2());
 			//更新lpn实收数量
 			lpn.setScanQty(lpn.getScanQty().add(item.getPlanQty()));
 			receiveBiz.updateReceiveDetailLpn(lpn);
 			// 生成清点记录
-			ReceiveLog receiveLog = receiveLogBiz.newReceiveLog(request, item, lpn);
+			ReceiveLog receiveLog = receiveLogBiz.newReceiveLog(request, item, lpn,header,detail);
 			// 调用库存函数（for begin：一条执行一次）
 			stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_BOX, receiveLog);
 			//有单收货更新头表和明细信息
 			if (hasReceiveHeaderId) {
 				// 更新收货单明细状态（for end：一条执行一次）
-				receiveBiz.updateReceiveDetail(item.getReceiveDetailId(), item.getPlanQty());
+				receiveBiz.updateReceiveDetail(detail, item.getPlanQty());
 				// 更新收货单状态
-				receiveBiz.updateReciveHeader(request.getReceiveHeaderId());
+				receiveBiz.updateReciveHeader(header, detail);
 				// 记录业务日志
-				receiveBiz.log(request.getReceiveHeaderId(), item.getReceiveDetailId(), item.getPlanQty(), request.getSkuLot1());
+				receiveBiz.log(request.getReceiveHeaderId(), item.getReceiveDetailId(), item.getPlanQty(), request.getSkuLot1(), header, detail);
 			} else {
 				// 记录业务日志
-				receiveBiz.log(receiveHeader.getReceiveId(), item.getReceiveDetailId(), item.getPlanQty(), request.getSkuLot1());
+				receiveBiz.log(receiveHeader.getReceiveId(), item.getReceiveDetailId(), item.getPlanQty(), request.getSkuLot1(), header, detail);
 			}
 
 		}
@@ -112,19 +117,21 @@ public class InStockBizImpl implements InStockBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public PdaByPcsReceiveResponse receiptByPcs(PdaByPieceReceiveRequest request) {
+		ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(request.getReceiveDetailId());
+		ReceiveHeader receiveHeader = receiveBiz.selectReceiveHeaderById(request.getReceiveId());
 		// 判断业务参数，是否可以正常收货、超收
-		receiveBiz.canReceive(request.getReceiveDetailId(), request.getSurplusQty());
+		receiveBiz.canReceive(receiveHeader, detail, request.getSurplusQty());
 		// 生成清点记录
-		ReceiveLog receiveLog = receiveLogBiz.newReceiveLog(request);
+		ReceiveLog receiveLog = receiveLogBiz.newReceiveLog(request, receiveHeader, detail);
 		// 调用库存函数
 		stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PCS, receiveLog);
 		// 更新收货单明细状态
-		receiveBiz.updateReceiveDetail(request.getReceiveDetailId(), request.getSurplusQty());
+		receiveBiz.updateReceiveDetail(detail, request.getSurplusQty());
 		// 更新收货单状态
-		receiveBiz.updateReciveHeader(request.getReceiveDetailId());
+		receiveBiz.updateReciveHeader(receiveHeader, detail);
 		// 记录业务日志
-		receiveBiz.log(request.getReceiveId(), request.getReceiveDetailId(), request.getSurplusQty(), request.getSkuLot1());
-        //检查收货是否完成 并返回
+		receiveBiz.log(request.getReceiveId(), request.getReceiveDetailId(), request.getSurplusQty(), request.getSkuLot1(), receiveHeader, detail);
+		//检查收货是否完成 并返回
 		return receiveBiz.checkByPcsReceive(request.getReceiveDetailId(), receiveLog.getReceiveId());
 	}
 }

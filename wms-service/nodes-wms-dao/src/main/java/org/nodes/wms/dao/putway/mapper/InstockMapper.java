@@ -1,17 +1,15 @@
 
-package org.nodes.wms.core.strategy.mapper;
+package org.nodes.wms.dao.putway.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.nodes.wms.dao.putway.entities.Instock;
-import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Repository;
 
 /**
  * 上架策略 Mapper 接口
  *
- * @author liangmei
- * @since 2019-12-09
  */
-@Primary
+@Repository("inStockRepository")
 public interface InstockMapper extends BaseMapper<Instock> {
 
 }

@@ -10,6 +10,7 @@ import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailPdaRespon
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.mapper.ReceiveDetailMapper;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
@@ -75,8 +76,14 @@ public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, R
 	}
 
 	@Override
-	public Boolean updateReceiveDetail(ReceiveDetail detail) {
-		return super.updateById(detail);
+	public void updateReceiveDetail(ReceiveDetail detail) {
+		//TODO
+		if(Func.isEmpty(detail.getReceiveDetailId())){
+          throw new ServiceException("更新收货单明细时,收货单详情ID为空");
+		}
+		if(!super.updateById(detail)){
+			throw new ServiceException("更新收货单明细失败,请重试");
+		}
 	}
 
     @Override

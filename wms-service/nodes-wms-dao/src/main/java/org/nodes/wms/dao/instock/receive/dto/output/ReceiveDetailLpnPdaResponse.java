@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * 按箱收货返回
+ * 按箱收货返回前端response对象
  */
 @Data
 public class ReceiveDetailLpnPdaResponse {

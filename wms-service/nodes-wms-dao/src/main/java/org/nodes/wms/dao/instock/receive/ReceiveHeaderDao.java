@@ -17,11 +17,11 @@ public interface ReceiveHeaderDao {
 	/**
 	 * 分页查询
 	 *
-	 * @param page            分页对象
+	 * @param page             分页对象
 	 * @param receivePageQuery 分页请求参数
 	 * @return IPage<PageResponse>
 	 */
-	IPage<ReceiveHeaderResponse> selectPage(IPage<ReceiveHeaderResponse>page, ReceivePageQuery receivePageQuery);
+	IPage<ReceiveHeaderResponse> selectPage(IPage<ReceiveHeaderResponse> page, ReceivePageQuery receivePageQuery);
 
 	boolean delete(List<Long> receiveIdList);
 
@@ -31,7 +31,7 @@ public interface ReceiveHeaderDao {
 
 	boolean insert(ReceiveHeader receiveHeader);
 
-    List<ReceiveHeaderResponse> getReceiveHeaderResponseByQuery(ReceivePageQuery receivePageQuery);
+	List<ReceiveHeaderResponse> getReceiveHeaderResponseByQuery(ReceivePageQuery receivePageQuery);
 
 	ReceiveHeader selectReceiveHeaderById(Long receiveId);
 
@@ -41,6 +41,7 @@ public interface ReceiveHeaderDao {
 
 	/**
 	 * 获取收货单列表页面收货单头
+	 *
 	 * @param receivePdaQuery 请求参数
 	 * @return IPage<PageResponse>
 	 */
@@ -48,19 +49,23 @@ public interface ReceiveHeaderDao {
 
 	/**
 	 * 根据用户id获取收货单集合
+	 *
 	 * @param userId 用户id
 	 * @return 收货单集合
 	 */
 	List<ReceiveHeader> selectReceiveListByNonOrder(Long userId);
+
 	/**
 	 * 更新收货单头表
+	 *
 	 * @param header 收货单头表数据
 	 * @return 是否成功
 	 */
-	Boolean updateReceiveHeader(ReceiveHeader header);
+	void updateReceiveHeader(ReceiveHeader header);
 
 	/**
 	 * 保存收货单头表实体
+	 *
 	 * @param receiveHeader 收货单头表实体
 	 */
 	void saveReceiveHeader(ReceiveHeader receiveHeader);
@@ -68,9 +73,9 @@ public interface ReceiveHeaderDao {
 	/**
 	 * 未收货明细分页
 	 *
-	 * @param page: 分页参数
+	 * @param page:                      分页参数
 	 * @param notReceiveDetailPageQuery: 分页查询条件
-	 * @param detailStatus: 接收状态：10未收货
+	 * @param detailStatus:              接收状态：10未收货
 	 * @return 未收货明细数据
 	 */
 	IPage<NotReceiveDetailResponse> pageNotReceiveDetail(
@@ -80,7 +85,7 @@ public interface ReceiveHeaderDao {
 	 * 根据查询条件获取未收货明细数据
 	 *
 	 * @param notReceiveDetailPageQuery: 查询条件对象
-	 * @param detailStatus: 接收状态：10未收货
+	 * @param detailStatus:              接收状态：10未收货
 	 * @return 未收货明细数据
 	 */
 	List<NotReceiveDetailExcelResponse> getNotReceiveDetailListByQuery(

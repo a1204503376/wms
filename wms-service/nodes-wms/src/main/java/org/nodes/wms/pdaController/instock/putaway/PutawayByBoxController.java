@@ -26,7 +26,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_PDA_API + "/putaway")
-public class PutawayController {
+public class PutawayByBoxController {
 	private final StockBiz stockBiz;
 
 
