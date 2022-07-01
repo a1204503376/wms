@@ -2,6 +2,7 @@ package org.nodes.wms.biz.instock.receiveLog.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.config.DateTimeFinals;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
@@ -25,13 +26,12 @@ import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
-import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.text.DateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -77,7 +77,8 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		ReceiveLog log = createReceiveLog(receiveLog);
 		log.setSkuLot1(request.getSkuLot1());
 		log.setSkuLot2(request.getSkuLot2());
-		log.setSkuLot3(DateUtil.formatDateTime(new Date()));
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DateTimeFinals.DATE_FORMAT);
+		log.setSkuLot3(LocalDateTime.now().format(formatter));
 		receiveLogDao.save(log);
 		return log;
 	}
