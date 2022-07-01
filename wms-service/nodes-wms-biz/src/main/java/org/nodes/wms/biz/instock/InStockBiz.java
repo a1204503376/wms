@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.instock;
 
 import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaMultiRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
 import org.nodes.wms.dao.instock.receive.dto.output.PdaByPcsReceiveResponse;
 
@@ -22,4 +23,10 @@ public interface InStockBiz {
 	 * @param request
 	 */
 	PdaByPcsReceiveResponse receiptByPcs(PdaByPieceReceiveRequest request);
+
+	/**
+	 * 多箱收货
+	 * @param receiveDetailLpnPdaMultiRequest 前端传入参数
+	 */
+	void receiveByMultiBoxCode(ReceiveDetailLpnPdaMultiRequest receiveDetailLpnPdaMultiRequest);
 }

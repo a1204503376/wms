@@ -6,6 +6,7 @@ import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaMultiRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
 import org.nodes.wms.dao.instock.receive.dto.output.PdaByPcsReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnItemDto;
@@ -87,7 +88,6 @@ public class InStockBizImpl implements InStockBiz {
 			ReceiveDetailLpn lpn = receiveBiz.getReceiveDetailLpnById(item.getReceiveDetailLpnId());
 			//更新lpn表批属性信息
 			lpn.setSkuLot1(request.getSkuLot1());
-
 			lpn.setSkuLot2(request.getSkuLot2());
 			//更新lpn实收数量
 			lpn.setScanQty(lpn.getScanQty().add(item.getPlanQty()));
@@ -133,5 +133,24 @@ public class InStockBizImpl implements InStockBiz {
 		receiveBiz.log(request.getReceiveId(), request.getReceiveDetailId(), request.getSurplusQty(), request.getSkuLot1(), receiveHeader, detail);
 		//检查收货是否完成 并返回
 		return receiveBiz.checkByPcsReceive(request.getReceiveDetailId(), receiveLog.getReceiveId());
+	}
+
+	@Override
+	public void receiveByMultiBoxCode(ReceiveDetailLpnPdaMultiRequest receiveDetailLpnPdaMultiRequest) {
+		// 判断lpnCode是否为空，如果为空则随机生成一个lpnCode
+		if(Func.isEmpty(receiveDetailLpnPdaMultiRequest.getLpnCode())){
+           receiveDetailLpnPdaMultiRequest.setLpnCode(Func.randomUUID());
+		}
+		// 循环调用按箱收货业务方法
+	  for(ReceiveDetailLpnPdaRequest item:receiveDetailLpnPdaMultiRequest.getReceiveDetailLpnPdaRequestList()){
+		   item.setLpnCode(receiveDetailLpnPdaMultiRequest.getLpnCode());
+		   item.setLocCode(receiveDetailLpnPdaMultiRequest.getLocCode());
+		   item.setSkuLot1(receiveDetailLpnPdaMultiRequest.getSkuLot1());
+		   item.setSkuLot2(receiveDetailLpnPdaMultiRequest.getSkuLot2());
+		   item.setWhId(receiveDetailLpnPdaMultiRequest.getWhId());
+		  receiveByBoxCode(item);
+	  }
+
+
 	}
 }
