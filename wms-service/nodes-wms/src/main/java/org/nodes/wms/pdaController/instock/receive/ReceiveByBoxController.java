@@ -10,6 +10,8 @@ import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * PDA按箱收货API
  */
@@ -38,5 +40,6 @@ public class ReceiveByBoxController {
 		inStockBiz.receiveByBoxCode(receiveDetailLpnPdaRequest);
 		return "操作成功";
 	}
+
 
 }

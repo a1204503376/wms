@@ -134,24 +134,21 @@
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
-		}
-	    ,{
-            "path" : "pages/inStock/receiveByBox/receiveDetailLpnListQuery",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "多箱收货",
-                "enablePullDownRefresh": false
-            }
-            
-        }, {
-			"path": "pages/inStock/putawayByBox/lpnQueryByBox",
+		}, {
+			"path": "pages/inStock/receiveByBox/receiveDetailLpnListQuery",
 			"style": {
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+			"enablePullDownRefresh": false,
+			"navigationStyle": "custom"
 			}
 
+		}, {
+			"path": "pages/inStock/receiveByBox/receiveByMultiBox",
+			"style": {
+			"enablePullDownRefresh": false,
+			"navigationStyle": "custom"
+			}
 		}
-    ],
+	],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#33cbcc"
 	}

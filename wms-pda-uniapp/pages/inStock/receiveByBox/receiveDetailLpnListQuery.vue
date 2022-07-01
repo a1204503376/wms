@@ -1,6 +1,9 @@
 <template>
 	<view @keyup.esc="esc">
-	
+	   <u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
+	   	:bgColor="navigationBarBackgroundColor" title="按件收货"  titleStyle="color:#ffffff;font-size:21px"
+	   	style="color:#ffffff;font-size:21px">
+	   </u-navbar>
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
 		<u--form labelPosition="left">
 			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
@@ -21,13 +24,16 @@
 			</u-row>
 			<u-row customStyle="margin-bottom: 10px">
 				<u-col span="6">
-					<view class="demo-layout bg-purple-light">批次:{{item.boxCode}}</view>
+					<view class="demo-layout bg-purple-light">批次:{{item.skuLot1}}</view>
 				</u-col>
 			</u-row>
 		</view>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
 				返回
+			</view>
+			<view class="btn-submit" @click="clickItem()">
+				确定
 			</view>
 		</view>
 	</view>
@@ -37,6 +43,7 @@
 	import receive from '@/api/inStock/receiveByBox.js'
 	import barCodeService from '@/common/barcodeFunc.js'
 	import setting from '@/common/setting'
+	import tool from '@/utils/tool.js'
 	export default {
 		components: {
 
@@ -65,15 +72,28 @@
 			},
 			getReceiveDetailList() {
 				receive.getReceiveDetailLpn(this.param.boxCode).then(res => {
-					this.param = res.data
-					this.detailLpnList.push(this.param);
+					let param = res.data
+				  let currentSku = this.detailLpnList.find(item => item.boxCode === param.boxCode);
+					            if (tool.isNotEmpty(currentSku)) {
+					              this.$u.func.showToast({
+					              	title: '该箱码已存在,请勿重复扫描'
+					              })
+					              return
+					            }
+					this.detailLpnList.push(param);
 				})
 			},
 			deleteItem(index) {
 				this.detailLpnList.splice(index,1)
 			},
 			clickItem() {
-				uni.$u.func.route('/pages/inStock/receiveByBox/receiveByBox', this.param);
+			  if(tool.isEmpty(this.detailLpnList)){
+				this.$u.func.showToast({
+					title: '收货失败,箱码为空'
+				})
+				return
+			  }
+				uni.$u.func.route('/pages/inStock/receiveByBox/receiveByMultiBox', this.detailLpnList);
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)
