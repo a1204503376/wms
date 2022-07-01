@@ -3,6 +3,7 @@ package org.nodes.wms.biz.instock.receive.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
@@ -350,18 +351,33 @@ public class ReceiveBizImpl implements ReceiveBiz {
 
 	@Override
 	public void updateReceiveDetail(ReceiveDetail detail, BigDecimal receiveQty) {
-		BigDecimal sumScanQty = detail.getScanQty().add(receiveQty);
-		int compareTo = detail.getPlanQty().compareTo(sumScanQty);
-		//如果数量不超过计划数量就复制给实收数量
-		if (compareTo >= 0) {
-			detail.setScanQty(sumScanQty);
-			detail.setDetailStatus(ReceiveDetailStatusEnum.PART);
-			if (compareTo == BigDecimal.ZERO.intValue()) {
-				detail.setDetailStatus(ReceiveDetailStatusEnum.COMPLETED);
-			}
-		}
-		BigDecimal surplusQty = detail.getPlanQty().subtract(sumScanQty);
+		//给实收数量赋值
+		BigDecimal scanQty = detail.getScanQty().add(receiveQty);
+		detail.setScanQty(scanQty);
+		//给剩余数量赋值
+		BigDecimal surplusQty = detail.getPlanQty().subtract(scanQty);
 		detail.setSurplusQty(surplusQty);
+
+		//判断当前单据的实收数量是否等于计划量
+		boolean scanQtyEqPlanQty = BigDecimalUtil.eq(detail.getScanQty(), detail.getPlanQty());
+		//判断当前单据的剩余数量是否等于计划量
+		boolean surplusQtyEqPlanQty = BigDecimalUtil.eq(detail.getSurplusQty(), detail.getPlanQty());
+		//判断当前单据的数量是否小于计划量
+		boolean scanQtyLePlanQty = BigDecimalUtil.le(detail.getScanQty(), detail.getPlanQty());
+
+		if (scanQtyEqPlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.PART || scanQtyEqPlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.NOT_RECEIPT) {
+			//如果当前单据的实收数量等于计划量，并且状态等于部分收货或者未收货时
+			detail.setDetailStatus(ReceiveDetailStatusEnum.COMPLETED);
+		} else if (surplusQtyEqPlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.COMPLETED || surplusQtyEqPlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.PART) {
+			//如果当前单据的实收数量等于计划量，并且状态等于部分收货或者收货完成时
+			detail.setDetailStatus(ReceiveDetailStatusEnum.NOT_RECEIPT);
+		} else if (scanQtyLePlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.NOT_RECEIPT || scanQtyLePlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.PART) {
+			//如果当前单据的实收数量是否小于计划量，并且状态等于未收货或者部分收货时
+			detail.setDetailStatus(ReceiveDetailStatusEnum.PART);
+		} else {
+			throw new ServiceException("更新收货单明细表时出现异常");
+		}
+
 		receiveDetailDao.updateReceiveDetail(detail);
 	}
 
