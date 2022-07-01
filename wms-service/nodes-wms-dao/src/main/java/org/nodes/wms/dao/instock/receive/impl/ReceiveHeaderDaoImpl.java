@@ -92,8 +92,14 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 	}
 
 	@Override
-	public Boolean updateReceiveHeader(ReceiveHeader header) {
-		return super.updateById(header);
+	public void updateReceiveHeader(ReceiveHeader header) {
+		//TODO
+		if (Func.isEmpty(header.getReceiveId())) {
+			throw new ServiceException("更细收货单头表时ReceiveId为空");
+		}
+		if (!super.updateById(header)) {
+			throw new ServiceException("更细收货单头表失败,请重试");
+		}
 	}
 
 	@Override
@@ -112,7 +118,7 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 
 	@Override
 	public IPage<NotReceiveDetailResponse> pageNotReceiveDetail(
-		IPage<?> page, NotReceiveDetailPageQuery notReceiveDetailPageQuery,Integer billState) {
+		IPage<?> page, NotReceiveDetailPageQuery notReceiveDetailPageQuery, Integer billState) {
 		return super.baseMapper.pageNotReceiveDetail(page, notReceiveDetailPageQuery, billState);
 	}
 
