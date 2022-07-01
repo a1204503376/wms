@@ -23,7 +23,7 @@
 
             </template>
             <template v-slot:expandSearch>
-                <e-row type="flex">
+                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="LPN" label-width="90px">
                             <el-input v-model.trim="form.params.lpnCode" :clearable="true"></el-input>
@@ -44,7 +44,7 @@
                             <el-input v-model.trim="form.params.createUser" :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
-                </e-row>
+                </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="收货时间" label-width="90px">
