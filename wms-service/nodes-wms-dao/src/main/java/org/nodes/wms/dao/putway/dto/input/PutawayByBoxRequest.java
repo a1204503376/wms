@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.instock.putaway.dto.input;
+package org.nodes.wms.dao.putway.dto.input;
 
 import lombok.Data;
 

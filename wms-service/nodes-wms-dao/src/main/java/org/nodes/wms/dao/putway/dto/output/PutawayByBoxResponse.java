@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.instock.putaway.dto.output;
+package org.nodes.wms.dao.putway.dto.output;
 
 import lombok.Data;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
