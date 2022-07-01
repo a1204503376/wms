@@ -42,7 +42,6 @@ import java.util.List;
 public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	private final ReceiveLogDao receiveLogDao;
 	private final LocationBiz locationBiz;
-	private final ReceiveBiz receiveBiz;
 	private final OwnerBiz ownerBiz;
 
 
@@ -57,7 +56,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	}
 
 	@Override
-	public ReceiveLog newReceiveLog(PdaByPieceReceiveRequest request) {
+	public ReceiveLog newReceiveLog(PdaByPieceReceiveRequest request, ReceiveHeader receiveHeader, ReceiveDetail detail) {
 		ReceiveLog receiveLog = new ReceiveLog();
 		receiveLog.setReceiveId(request.getReceiveId());
 		receiveLog.setReceiveDetailId(request.getReceiveDetailId());
@@ -74,7 +73,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setSkuSpec(request.getSkuLot2());
 		receiveLog.setWhId(request.getWhId());
 		receiveLog.setWsuCode(request.getWsuCode());
-		ReceiveLog log = createReceiveLog(receiveLog);
+		ReceiveLog log = createReceiveLog(receiveLog, receiveHeader, detail);
 		log.setSkuLot1(request.getSkuLot1());
 		log.setSkuLot2(request.getSkuLot2());
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DateTimeFinals.DATE_FORMAT);
@@ -83,9 +82,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		return log;
 	}
 
-	ReceiveLog createReceiveLog(ReceiveLog receiveLog) {
-		ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(receiveLog.getReceiveDetailId());
-		ReceiveHeader receiveHeader = receiveBiz.selectReceiveHeaderById(receiveLog.getReceiveId());
+	ReceiveLog createReceiveLog(ReceiveLog receiveLog, ReceiveHeader receiveHeader, ReceiveDetail detail) {
 		SkuLotUtil.setAllSkuLot(receiveLog, detail);
 		Location location = locationBiz.findLocationByLocCode(receiveLog.getWhId(), receiveLog.getLocCode());
 		receiveLog.setReceiveNo(receiveHeader.getReceiveNo());
@@ -125,7 +122,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	}
 
 	@Override
-	public ReceiveLog newReceiveLog(ReceiveDetailLpnPdaRequest request, ReceiveDetailLpnItemDto item, ReceiveDetailLpn lpn) {
+	public ReceiveLog newReceiveLog(ReceiveDetailLpnPdaRequest request, ReceiveDetailLpnItemDto item, ReceiveDetailLpn lpn, ReceiveHeader receiveHeader, ReceiveDetail detail) {
 		ReceiveLog receiveLog = new ReceiveLog();
 		receiveLog.setReceiveId(request.getReceiveHeaderId());
 		receiveLog.setReceiveDetailId(item.getReceiveDetailId());
@@ -138,7 +135,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setSkuName(item.getSkuName());
 		receiveLog.setSkuSpec(request.getSkuLot2());
 		receiveLog.setWhId(request.getWhId());
-		receiveLog = createReceiveLog(receiveLog);
+		receiveLog = createReceiveLog(receiveLog, receiveHeader, detail);
 		receiveLogDao.save(receiveLog);
 		return receiveLog;
 	}

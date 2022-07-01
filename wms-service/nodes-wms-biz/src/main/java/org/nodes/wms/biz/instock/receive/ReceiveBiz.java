@@ -123,26 +123,26 @@ public interface ReceiveBiz {
 
 	/**
 	 * 判断是否可以收货，如果不能收货则抛异常
-	 *
-	 * @param receiveDetailId 收货单明细id
+	 * @param receiveHeader detail
+	 * @param detail 收货单明细id
 	 * @param receiveQty      本次收货数量
 	 */
-	void canReceive(Long receiveDetailId, BigDecimal receiveQty);
+	void canReceive(ReceiveHeader receiveHeader, ReceiveDetail detail, BigDecimal receiveQty);
 
 	/**
 	 * 收货时更新收货单明细和收货单头表状态
 	 *
-	 * @param receiveDetailId
+	 * @param detail
 	 * @param receiveQty
 	 */
-	void updateReceiveDetail(Long receiveDetailId, BigDecimal receiveQty);
+	void updateReceiveDetail(ReceiveDetail detail, BigDecimal receiveQty);
 
 	/**
 	 * 收货之后更新收货单状态，注意该函数要在更新明细之后调用
-	 *
-	 * @param receiveDetailId
+	 * @param receiveHeader
+	 * @param detail
 	 */
-	void updateReciveHeader(Long receiveDetailId);
+	void updateReciveHeader(ReceiveHeader receiveHeader, ReceiveDetail detail);
 
 	/**
 	 * 记录收货的业务日志，日志格式：[行号]收货[qty],批次[skuLotNumber]
@@ -153,7 +153,7 @@ public interface ReceiveBiz {
 	 * @param skuLotNumber    批次号
 	 */
 	void log(Long receiveHeaderId, Long receiveDetailId,
-			 BigDecimal qty, String skuLotNumber);
+			 BigDecimal qty, String skuLotNumber, ReceiveHeader receiveHeader, ReceiveDetail detail);
 
 	/**
 	 * 根据收货单id获取收货单详情
@@ -226,10 +226,10 @@ public interface ReceiveBiz {
 
 	/**
 	 * @param receiveDetailId 收货单详情
-	 * @param receiveId 收货单
+	 * @param receiveId       收货单
 	 * @return 收货是否完成
 	 */
-	PdaByPcsReceiveResponse checkByPcsReceive(Long receiveDetailId,Long receiveId);
+	PdaByPcsReceiveResponse checkByPcsReceive(Long receiveDetailId, Long receiveId);
 
 	/**
 	 * 未收货明细分页
