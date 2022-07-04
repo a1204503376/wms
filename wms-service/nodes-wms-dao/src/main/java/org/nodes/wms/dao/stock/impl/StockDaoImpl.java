@@ -64,6 +64,20 @@ public class StockDaoImpl
 	}
 
 	@Override
+	public List<Stock> getStockLeftLikeByBoxCode(String boxCode, List<Long> locIdList) {
+		if (Func.isEmpty(boxCode)) {
+			throw new NullArgumentException("库存查询失败，getStockLeftLikeByBoxCode");
+		}
+
+		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
+		if (Func.isNotEmpty(locIdList)) {
+			queryWrapper.in(Stock::getLocId, locIdList);
+		}
+		queryWrapper.likeLeft(Stock::getBoxCode, boxCode);
+		return super.list(queryWrapper);
+	}
+
+	@Override
 	public List<Stock> getStockByLpnCode(String lpnCode, List<Long> locIdList) {
 		if (Func.isEmpty(lpnCode)) {
 			throw new NullArgumentException("库存查询失败，按LPN查询库存时LPN为空");

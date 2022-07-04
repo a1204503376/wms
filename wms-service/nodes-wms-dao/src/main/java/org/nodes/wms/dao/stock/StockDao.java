@@ -47,6 +47,14 @@ public interface StockDao {
 	List<Stock> getStockByBoxCode(String boxCode, List<Long> locIdList);
 
 	/**
+	 * 根据箱号左模糊查找
+	 * @param boxCode 箱号的后几位
+	 * @param locIdList 库位id
+	 * @return 库存
+	 */
+	List<Stock> getStockLeftLikeByBoxCode(String boxCode, List<Long> locIdList);
+
+	/**
 	 * 获取所有库存数据，含冻结的库存。如果出库暂存区为空则表示查询的库存数据包含出库暂存区的
 	 *
 	 * @param lpnCode

@@ -61,7 +61,7 @@ public class SerialDaoImpl extends BaseServiceImpl<SerialMapper, Serial> impleme
 		if (!Func.isNull(stockId)){
 			serial.setStockId(stockId);
 		}
-		if (super.update(serial, updateWrapper)){
+		if (!super.update(serial, updateWrapper)){
 			throw new ServiceException("更新序列号状态失败");
 		}
 	}

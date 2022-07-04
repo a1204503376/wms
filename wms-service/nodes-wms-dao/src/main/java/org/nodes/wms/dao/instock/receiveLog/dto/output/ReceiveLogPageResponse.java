@@ -1,7 +1,12 @@
 package org.nodes.wms.dao.instock.receiveLog.dto.output;
 
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
+import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -16,9 +21,26 @@ public class ReceiveLogPageResponse extends BaseSkuLotEntity implements Serializ
 	private static final long serialVersionUID = -4270898178645936584L;
 
 	/**
+	 * 收货清点记录id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long id;
+
+	/**
+	 * 收货单id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long receiveId;
+
+	/**
 	 * 收货单编码
 	 */
 	private String receiveNo;
+
+	/**
+	 * 收货单状态
+	 */
+	private ReceiveHeaderStateEnum billState;
 
 	/**
 	 * 行号
