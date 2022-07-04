@@ -6,7 +6,7 @@ import org.nodes.core.base.entity.User;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.core.tool.utils.StringPool;
 import org.nodes.modules.wms.log.vo.InstockLogVO;
-import org.nodes.wms.core.strategy.entity.InstockLog;
+import org.nodes.wms.dao.putway.entities.InstockLog;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.mp.support.BaseEntityWrapper;

@@ -2,7 +2,7 @@
 package org.nodes.wms.core.strategy.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.nodes.wms.core.strategy.entity.InstockDetail;
+import org.nodes.wms.dao.putway.entities.InstockDetail;
 import org.springframework.context.annotation.Primary;
 
 /**

@@ -3,7 +3,7 @@
 <mapper namespace="org.nodes.wms.core.strategy.mapper.InstockLogMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="putawayLogResultMap" type="org.nodes.wms.core.strategy.entity.InstockLog">
+    <resultMap id="putawayLogResultMap" type="org.nodes.wms.dao.putway.entities.InstockLog">
         <result column="create_user" property="createUser"/>
         <result column="create_time" property="createTime"/>
         <result column="update_user" property="updateUser"/>

@@ -1,7 +1,6 @@
 package org.nodes.wms.core.strategy.service.impl;
 
-import lombok.AllArgsConstructor;
-import org.nodes.wms.core.strategy.entity.InstockLog;
+import org.nodes.wms.dao.putway.entities.InstockLog;
 import org.nodes.wms.core.strategy.mapper.InstockLogMapper;
 import org.nodes.wms.core.strategy.service.IInstockLogService;
 import org.springblade.core.mp.base.BaseServiceImpl;

@@ -40,10 +40,15 @@
 				whId: uni.getStorageSync('warehouse').whId
 			};
 		},
-		onLoad() {
-			warehouse.getWarehouseList().then(data => {
-				this.warehouseList = data.data;
-			})
+		onLoad: function(option) {
+			var warehouseList = uni.getStorageSync('warehouseList');
+			if (tool.isNotEmpty(warehouseList)) {
+				this.warehouseList = uni.getStorageSync('warehouseList');
+			} else {
+				var parse = JSON.parse(option.param)
+				this.warehouseList = parse;
+			}
+
 		},
 		methods: {
 			esc() {

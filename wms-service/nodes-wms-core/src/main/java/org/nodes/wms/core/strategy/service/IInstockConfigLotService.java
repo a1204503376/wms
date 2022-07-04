@@ -3,7 +3,7 @@ package org.nodes.wms.core.strategy.service;
 
 import org.nodes.core.tool.entity.SkuLotBaseEntity;
 import org.nodes.wms.core.strategy.dto.InstockConfigLotDTO;
-import org.nodes.wms.core.strategy.entity.InstockConfigLot;
+import org.nodes.wms.dao.putway.entities.InstockConfigLot;
 import org.springblade.core.mp.base.BaseService;
 
 import java.util.List;

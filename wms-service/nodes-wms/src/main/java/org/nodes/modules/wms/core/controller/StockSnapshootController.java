@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.wms.core.stock.core.entity.StockSnapshoot;
 
-import org.nodes.wms.core.strategy.dto.StockSnapshootDTO;
+import org.nodes.wms.core.stock.core.dto.StockSnapshootDTO;
 import org.springblade.core.boot.ctrl.BladeController;
 import springfox.documentation.annotations.ApiIgnore;
 

@@ -1,5 +1,5 @@
 
-package org.nodes.wms.core.strategy.entity;
+package org.nodes.wms.dao.putway.entities;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

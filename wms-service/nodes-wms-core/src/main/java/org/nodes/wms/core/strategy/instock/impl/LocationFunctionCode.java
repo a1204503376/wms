@@ -5,7 +5,7 @@ import org.nodes.wms.core.basedata.entity.SkuInstock;
 import org.nodes.wms.core.basedata.service.ISkuInstockService;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.putway.entities.Instock;
-import org.nodes.wms.core.strategy.entity.InstockDetail;
+import org.nodes.wms.dao.putway.entities.InstockDetail;
 import org.nodes.wms.core.strategy.instock.FunctionCodeBase;
 import org.nodes.wms.core.strategy.instock.IFunctionCode;
 import org.nodes.wms.core.strategy.service.IInstockService;

@@ -4,7 +4,7 @@ import org.nodes.wms.core.basedata.cache.BillTypeCache;
 import org.nodes.wms.dao.basics.billType.entities.BillType;
 import org.nodes.wms.dao.basics.skuType.entities.SkuType;
 import org.nodes.wms.core.basedata.service.ISkuTypeService;
-import org.nodes.wms.core.strategy.entity.InstockConfig;
+import org.nodes.wms.dao.putway.entities.InstockConfig;
 import org.nodes.wms.core.strategy.vo.InstockConfigVO;
 import org.springblade.core.mp.support.BaseEntityWrapper;
 import org.springblade.core.tool.utils.BeanUtil;

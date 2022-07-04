@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.core.strategy.entity.InstockConfig;
+import org.nodes.wms.dao.putway.entities.InstockConfig;
 
 /**
  * 上架策略执行条件视图实体类
