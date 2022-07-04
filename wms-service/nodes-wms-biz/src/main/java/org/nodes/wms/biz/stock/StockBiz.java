@@ -14,6 +14,7 @@ import org.springblade.core.mp.support.Query;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 库存业务接口
@@ -90,13 +91,22 @@ public interface StockBiz {
 	List<Stock> findStockByBoxCode(String boxCode);
 
 	/**
-	 * 根据箱码获取入库暂存区的库区
+	 * 根据箱码获取入库暂存区的库存
 	 *
 	 * @param whId
 	 * @param boxCode
 	 * @return
 	 */
 	List<Stock> findStockOnStageByBoxCode(Long whId, String boxCode);
+
+
+	/**
+	 * 天宜定制：根据箱号模糊查询所在LPN上的库存
+	 * @param whId 库房id
+	 * @param boxCode 箱码的后几位
+	 * @return key:lpn编码
+	 */
+	Map<String, List<Stock>> findLpnStockOnStageLeftLikeByBoxCode(Long whId, String boxCode);
 
 	/**
 	 * 根据清点记录查询入库暂存区的库存,如果查询的库存超过两个会报异常
