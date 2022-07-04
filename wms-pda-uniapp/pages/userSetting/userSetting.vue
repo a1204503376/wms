@@ -6,24 +6,26 @@
 		</u-navbar>
 		<u-row customStyle="margin-bottom: 10px;margin-top:30px">
 			<u-col span="4">
-				<view  class="demo-layout img">
+				<view class="demo-layout img">
 					<u--image shape="circle" width="80px" height="80px" src="/static/images/login.png"></u--image>
 				</view>
 			</u-col>
 			<u-col span="4">
 				<view class="demo-layout user-name">
-					{{ userName }}</view>
+					{{ userName }}
+				</view>
 			</u-col>
 			<u-col span="2">
 				<view class="demo-layout bg-purple-font">
-					{{signStatus === 1 ? "已签到" : "未签到"}}</view>
+					{{signStatus === 1 ? "已签到" : "未签到"}}
+				</view>
 			</u-col>
-			
+
 
 		</u-row>
 		<u-row>
 			<u-col span="12">
-		 	<view class="demo-layout login-time">登录时间:{{ loginTime }}</view>
+				<view class="demo-layout login-time">登录时间:{{ loginTime }}</view>
 			</u-col>
 
 		</u-row>
@@ -43,13 +45,13 @@
 				</u-form-item>
 			</u--form>
 			<u--form>
-				<u-form-item borderBottom labelWidth="60"  @click="setWarehouse">
+				<u-form-item borderBottom labelWidth="60" @click="setWarehouse">
 					<u-icon name="home-fill" size="28"></u-icon>
 					<text style="font-size: 100%;">切换库房</text>
 				</u-form-item>
 			</u--form>
 		</view>
-		
+
 		<view class="footer">
 			<view class="btn-submit" @click="logout">退出登录</view>
 		</view>
@@ -59,28 +61,38 @@
 	import setting from '@/common/setting'
 	export default {
 		data() {
-			return{
+			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
-				show:false,
+				show: false,
 			};
 		},
+		onBackPress(event) {
+			// #ifdef APP-PLUS
+			if (event.from === 'backbutton') {
+				this.esc();
+				return true;
+			}
+			// #endif
+		},
 		methods: {
-			esc(){
+			esc() {
 				uni.$u.func.route('/pages/home/home');
 			},
-			logout(){
+			logout() {
 				this.$u.func.logout();
 			},
 			toPwdSetting() {
 				uni.$u.func.route('/pages/userSetting/pwdSetting');
 			},
 			sign() {
-				uni.$u.func.route('/pages/userSetting/signSetting');
+				uni.$u.func.route('/pages/userSetting/signSetting', {
+					path: '/pages/userSetting/userSetting'
+				});
 			},
-			setWarehouse(){
+			setWarehouse() {
 				uni.$u.func.route('/pages/userSetting/warehouseSetting');
 			}
-				
+
 		}
 	}
 </script>

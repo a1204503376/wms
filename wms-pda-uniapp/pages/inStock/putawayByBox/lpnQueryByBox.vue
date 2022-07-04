@@ -34,9 +34,9 @@
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
 					boxCode: '',
-					whId:uni.getStorageSync('warehouse').whId
+					whId: uni.getStorageSync('warehouse').whId
 				},
-				putawayData:{}
+				putawayData: {}
 			}
 		},
 		onUnload() {
@@ -46,14 +46,15 @@
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {
-			getPutawayData(){
+			getPutawayData() {
 				putawayByBox.getPutawayData(this.params).then(data => {
-					if(tool.isEmpty(data.data)){
+					if (tool.isEmpty(data.data)) {
 						uni.$u.func.showToast({
 							title: '查找不到该箱码的相关信息,请换个箱码后重试'
 						});
 					}
-					this.putawayData=data.data;
+					this.putawayData = data.data;
+					//调用库存策略生成库位 将库位值赋值给loc
 				})
 			},
 			analysisCode(code) {
@@ -81,12 +82,12 @@
 			scannerCallback(no) {
 				this.analysisCode(no);
 				//查询方法
-				
+				this.getPutawayData();
 			},
 			emitKeyDown(e) {
 				if (e.key == 'Enter') {
 					//查询方法
-					
+					this.getPutawayData();
 				}
 			}
 		}
