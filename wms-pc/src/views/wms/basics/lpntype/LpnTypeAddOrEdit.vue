@@ -5,33 +5,36 @@
                 <el-form ref="form" :model="form.params" :rules="form.rules" label-position="right" label-width="120px"
                     size="mini" style="margin-left:10px;margin-right:10px;">
                     <el-row>
-                        <h3>容器管理-{{ isEdit ? '编辑' : '新增' }}</h3>
+                        <h3>容器类型管理-{{ isEdit ? '编辑' : '新增' }}</h3>
                     </el-row>
                     <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="容器类型编码" prop="code">
+                        <el-col :span="10">
+                            <el-form-item label="类型编码" prop="code">
                                 <el-input v-model="form.params.code"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="容器类型" prop="lpnType">
+                        <el-col :span="10">
+                            <el-form-item label="类别" prop="lpnType">
                                 <nodes-lpn-type-state :multiple="false" v-model="form.params.lpnType">
                                 </nodes-lpn-type-state>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="容器编码规则" prop="lpnNoRule" >
+                        <el-col :span="10">
+                            <el-form-item label="编码规则" prop="lpnNoRule" >
                                 <el-input v-model="form.params.lpnNoRule" placeholder="填写格式为必须是YyMmDdX"></el-input>
+                                <el-tooltip style="float:right" content="自动生成的容器编码格式：类型编码+规则">
+                                    <i class="el-icon-question"></i>
+                                </el-tooltip>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="容器重量">
+                        <el-col :span="10">
+                            <el-form-item label="重量">
                                 <el-input oninput="value=value.replace(/[^\d.]/g,'')" v-model="form.params.weight">
                                 </el-input>
                             </el-form-item>
