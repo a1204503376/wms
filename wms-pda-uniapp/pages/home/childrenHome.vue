@@ -32,18 +32,23 @@
 				title: ''
 			};
 		},
-		onReady() {
-
-		},
 		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
-		var parse = JSON.parse(option.param)
-		this.title = parse.name;
+			var parse = JSON.parse(option.param)
+			this.title = parse.name;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
 		},
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
+		},
+		onBackPress(event) {
+			// #ifdef APP-PLUS
+			if (event.from === 'backbutton') {
+				this.closePage();
+				return true;
+			}
+			// #endif
 		},
 		methods: {
 			navTo(menu) {

@@ -58,7 +58,9 @@
 					return;
 				}
 				//没有子集的跳转到自己的页面
-				uni.$u.func.route(menu.path, menu);
+				uni.$u.func.route(menu.path, {
+					path: '/pages/home/home'
+				});
 			},
 			userSetting() {
 				uni.$u.func.route('/pages/userSetting/userSetting');
