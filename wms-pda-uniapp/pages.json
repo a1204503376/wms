@@ -148,7 +148,16 @@
 			"navigationStyle": "custom"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/inStock/callAgv/callAgvQuery",
+            "style" :                                                                                    
+            {
+              "enablePullDownRefresh": false,
+              "navigationStyle": "custom"
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#33cbcc"
 	}
