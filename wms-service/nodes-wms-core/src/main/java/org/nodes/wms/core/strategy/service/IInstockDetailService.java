@@ -3,8 +3,8 @@ package org.nodes.wms.core.strategy.service;
 
 import org.nodes.core.tool.entity.SkuLotBaseEntity;
 import org.nodes.wms.core.strategy.dto.InstockDetailDTO;
-import org.nodes.wms.dao.putway.entities.Instock;
-import org.nodes.wms.dao.putway.entities.InstockDetail;
+import org.nodes.wms.dao.putway.entities.StInstock;
+import org.nodes.wms.dao.putway.entities.StInstockDetail;
 import org.springblade.core.mp.base.BaseService;
 
 import javax.validation.constraints.NotNull;
@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
  * @author liangmei
  * @since 2019-12-09
  */
-public interface IInstockDetailService extends BaseService<InstockDetail> {
+public interface IInstockDetailService extends BaseService<StInstockDetail> {
 
 	/**
 	 * 新增上架策略明细
@@ -42,5 +42,5 @@ public interface IInstockDetailService extends BaseService<InstockDetail> {
 	 * @param skuLotEntity 物品批属性
 	 * @return 上架策略明细
 	 */
-	InstockDetail find(@NotNull Instock instock, String billTypeCd, Long skuTypeId, SkuLotBaseEntity skuLotEntity);
+	StInstockDetail find(@NotNull StInstock instock, String billTypeCd, Long skuTypeId, SkuLotBaseEntity skuLotEntity);
 }

@@ -1,7 +1,7 @@
 package org.nodes.wms.core.strategy.service.impl;
 
-import org.nodes.wms.dao.putway.entities.InstockLog;
-import org.nodes.wms.core.strategy.mapper.InstockLogMapper;
+import org.nodes.wms.dao.putway.entities.StInstockLog;
+import org.nodes.wms.dao.putway.mapper.StInstockLogMapper;
 import org.nodes.wms.core.strategy.service.IInstockLogService;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.context.annotation.Primary;
@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Primary
 @Transactional(propagation= Propagation.NESTED,isolation= Isolation.DEFAULT,rollbackFor=Exception.class)
-public class InstockLogServiceImpl<M extends InstockLogMapper, T extends InstockLog>
-	extends BaseServiceImpl<InstockLogMapper, InstockLog>
+public class InstockLogServiceImpl<M extends StInstockLogMapper, T extends StInstockLog>
+	extends BaseServiceImpl<StInstockLogMapper, StInstockLog>
 	implements IInstockLogService {
 
 }

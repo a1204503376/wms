@@ -5,7 +5,7 @@ import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.wms.core.basedata.entity.SkuInstock;
 import org.nodes.wms.core.basedata.vo.SkuInstockVO;
-import org.nodes.wms.dao.putway.entities.Instock;
+import org.nodes.wms.dao.putway.entities.StInstock;
 import org.nodes.wms.core.strategy.service.IInstockService;
 import org.nodes.wms.core.warehouse.cache.LocationCache;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
@@ -42,7 +42,7 @@ public class SkuInstockWrapper extends BaseEntityWrapper<SkuInstock, SkuInstockV
 			}
 			// 上架策略
 			IInstockService instockService = SpringUtil.getBean(IInstockService.class);
-			Instock instock = instockService.getById(skuInstock.getSsiId());
+			StInstock instock = instockService.getById(skuInstock.getSsiId());
 			if (Func.isNotEmpty(instock)) {
 				skuInstockVO.setSsiName(instock.getSsiName());
 			}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.dao.putway.mapper.StInstockMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="instockResultMap" type="org.nodes.wms.dao.putway.entities.StInstock">
+        <id column="ssi_id" property="ssiId"/>
+        <result column="ssi_code" property="ssiCode"/>
+        <result column="ssi_name" property="ssiName"/>
+        <result column="wh_id" property="whId"/>
+        <result column="is_default" property="isDefault"/>
+    </resultMap>
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.dao.putway.mapper.StInstockLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="putawayLogResultMap" type="org.nodes.wms.dao.putway.entities.StInstockLog">
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="ssi_id" property="ssiId"/>
+        <result column="ssi_code" property="ssiCode"/>
+        <result column="ssi_name" property="ssiName"/>
+        <result column="wh_id" property="whId"/>
+        <result column="ssid_proc_order" property="ssidProcOrder"/>
+        <result column="instock_function" property="instockFunction"/>
+        <result column="apl_proc_log" property="aplProcLog"/>
+        <result column="is_success" property="isSuccess"/>
+        <result column="execute_order" property="executeOrder"/>
+    </resultMap>
+</mapper>

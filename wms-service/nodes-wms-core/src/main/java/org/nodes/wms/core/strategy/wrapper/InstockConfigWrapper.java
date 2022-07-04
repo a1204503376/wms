@@ -4,20 +4,20 @@ import org.nodes.wms.core.basedata.cache.BillTypeCache;
 import org.nodes.wms.dao.basics.billType.entities.BillType;
 import org.nodes.wms.dao.basics.skuType.entities.SkuType;
 import org.nodes.wms.core.basedata.service.ISkuTypeService;
-import org.nodes.wms.dao.putway.entities.InstockConfig;
+import org.nodes.wms.dao.putway.entities.StInstockConfig;
 import org.nodes.wms.core.strategy.vo.InstockConfigVO;
 import org.springblade.core.mp.support.BaseEntityWrapper;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.ObjectUtil;
 import org.springblade.core.tool.utils.SpringUtil;
 
-public class InstockConfigWrapper extends BaseEntityWrapper<InstockConfig, InstockConfigVO> {
+public class InstockConfigWrapper extends BaseEntityWrapper<StInstockConfig, InstockConfigVO> {
 	public static InstockConfigWrapper build() {
 		return new InstockConfigWrapper();
 	}
 
 	@Override
-	public InstockConfigVO entityVO(InstockConfig entity) {
+	public InstockConfigVO entityVO(StInstockConfig entity) {
 		InstockConfigVO config = BeanUtil.copy(entity, InstockConfigVO.class);
 
 		if (ObjectUtil.isNotEmpty(config)) {

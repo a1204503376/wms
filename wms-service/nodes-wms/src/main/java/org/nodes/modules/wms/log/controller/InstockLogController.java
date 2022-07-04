@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.nodes.modules.wms.log.vo.InstockLogVO;
 import org.nodes.modules.wms.log.wrapper.InstockLogWrapper;
-import org.nodes.wms.dao.putway.entities.InstockLog;
+import org.nodes.wms.dao.putway.entities.StInstockLog;
 import org.nodes.wms.core.strategy.service.IInstockLogService;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.log.annotation.ApiLog;
@@ -39,7 +39,7 @@ public class InstockLogController extends BladeController {
 	@GetMapping("/page")
 	@ApiOperation(value = "上架记录分页", notes = "传入putawayLog")
 	public R<IPage<InstockLogVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
-		IPage<InstockLog> pages = instockLogService.page(Condition.getPage(query), Condition.getQueryWrapper(params, InstockLog.class));
+		IPage<StInstockLog> pages = instockLogService.page(Condition.getPage(query), Condition.getQueryWrapper(params, StInstockLog.class));
 		return R.data(InstockLogWrapper.build().pageVO(pages));
 	}
 }

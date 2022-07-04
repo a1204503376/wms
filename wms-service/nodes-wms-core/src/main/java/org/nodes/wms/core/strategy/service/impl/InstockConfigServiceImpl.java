@@ -1,8 +1,8 @@
 
 package org.nodes.wms.core.strategy.service.impl;
 
-import org.nodes.wms.dao.putway.entities.InstockConfig;
-import org.nodes.wms.core.strategy.mapper.InstockConfigMapper;
+import org.nodes.wms.dao.putway.entities.StInstockConfig;
+import org.nodes.wms.dao.putway.mapper.StInstockConfigMapper;
 import org.nodes.wms.core.strategy.service.IInstockConfigService;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.context.annotation.Primary;
@@ -23,12 +23,12 @@ import java.util.Collection;
 @Service
 @Primary
 @Transactional(propagation = Propagation.NESTED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
-public class InstockConfigServiceImpl<M extends InstockConfigMapper, T extends InstockConfig>
-	extends BaseServiceImpl<InstockConfigMapper, InstockConfig>
+public class InstockConfigServiceImpl<M extends StInstockConfigMapper, T extends StInstockConfig>
+	extends BaseServiceImpl<StInstockConfigMapper, StInstockConfig>
 	implements IInstockConfigService {
 
 	@Override
-	public boolean save(InstockConfig entity) {
+	public boolean save(StInstockConfig entity) {
 		boolean result = super.save(entity);
 		if (result) {
 			//InstockConfigCache.saveOrUpdate(entity);
@@ -37,7 +37,7 @@ public class InstockConfigServiceImpl<M extends InstockConfigMapper, T extends I
 	}
 
 	@Override
-	public boolean saveBatch(Collection<InstockConfig> entityList, int batchSize) {
+	public boolean saveBatch(Collection<StInstockConfig> entityList, int batchSize) {
 		boolean result = super.saveBatch(entityList, batchSize);
 		if (result) {
 			//entityList.forEach(instockConfig->InstockConfigCache.saveOrUpdate(instockConfig));
@@ -46,7 +46,7 @@ public class InstockConfigServiceImpl<M extends InstockConfigMapper, T extends I
 	}
 
 	@Override
-	public boolean saveOrUpdateBatch(Collection<InstockConfig> entityList, int batchSize) {
+	public boolean saveOrUpdateBatch(Collection<StInstockConfig> entityList, int batchSize) {
 		boolean result =  super.saveOrUpdateBatch(entityList, batchSize);
 		if (result) {
 			//entityList.forEach(instockConfig -> InstockConfigCache.saveOrUpdate(instockConfig));
@@ -55,7 +55,7 @@ public class InstockConfigServiceImpl<M extends InstockConfigMapper, T extends I
 	}
 
 	@Override
-	public boolean updateById(InstockConfig entity) {
+	public boolean updateById(StInstockConfig entity) {
 		boolean result = super.updateById(entity);
 		if (result) {
 			//InstockConfigCache.saveOrUpdate(entity);
