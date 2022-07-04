@@ -1,107 +1,161 @@
+# 项目相关配置
+nodes:
+  # 名称
+  name: Scheduling
+  # 版本
+  version: 4.7.4
+  # 版权年份
+  copyrightYear: 2022
+  # 实例演示开关
+  demoEnabled: true
+  # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
+  profile: D:/ruoyi/uploadPath
+  # 获取ip地址开关
+  addressEnabled: false
+
+# 开发环境配置
 server:
-  port: 8081
+  # 服务器的HTTP端口，默认为80
+  port: 8089
+  servlet:
+    # 应用的访问路径
+    context-path: /
+  tomcat:
+    # tomcat的URI编码
+    uri-encoding: UTF-8
+    # 连接数满后的排队数，默认为100
+    accept-count: 1000
+    threads:
+      # tomcat最大线程数，默认为200
+      max: 800
+      # Tomcat启动初始化的线程数，默认值10
+      min-spare: 100
+
+# 日志配置
+logging:
+  level:
+    com.nodes: debug
+    org.springframework: warn
+
+# 用户配置
+user:
+  password:
+    # 密码错误{maxRetryCount}次锁定10分钟
+    maxRetryCount: 5
+
+# Spring配置
 spring:
-  datasource:
-    name: dataSource
-    type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: 123456
-    # 注意characterEncoding=utf-8 参数,在mysql6~7 版本下不设置like 中文时会无法匹配
-    url: jdbc:mysql://10.168.3.207:3306/scheduling?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true
-    druid:
-      #数据源名称：当存在多个数据源时，设置名字可以很方便的来进行区分,默认自动生成名称，格式是："DataSource-" + System.identityHashCode(this)
-      name: druid-db1
-      initialSize: 10 #初始化时建立物理连接的个数。初始化发生在显示调用init方法，或者第一次getConnection时,默认0
-      maxActive: 200  #最大连接池数量,默认8
-      minIdle: 10     #最小连接池数量
-      maxWait: 60000  #获取连接时最大等待时间,单位毫秒。配置了maxWait之后,缺省启用公平锁,并发效率会有所下降,如果需要可以通过配置useUnfairLock属性为true使用非公平锁。
-      timeBetweenEvictionRunsMillis: 60000 #1)Destroy线程会检测连接的间隔时间2)testWhileIdle的判断依据(详细看testWhileIdle属性的说明)
-      minEvictableIdleTimeMillis: 300000   #设置连接最小可收回空闲时间(毫秒)，默认为 1000L * 60L * 30L
-      maxEvictableIdleTimeMillis: 900000   #设置连接最大可收回空闲时间(毫秒)，默认为 1000L * 60L * 60L * 7
-      validationQuery: SELECT 1 FROM DUAL #用来检测连接是否有效的sql,求是一个查询语句。默认为null，此时testOnBorrow、testOnReturn、testWhileIdle都不会其作用。
-      testWhileIdle: true #申请连接的时候检测,如果空闲时间大于timeBetweenEvictionRunsMillis,执行validationQuery检测连接是否有效,默认为true
-      testOnBorrow: false #申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能,默认false.
-      testOnReturn: false #归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能,默认false.
-      #是否缓存preparedStatement,也就是PSCache。PSCache对支持游标的数据库性能提升巨大,比如说oracle,在mysql下建议关闭。
-      poolPreparedStatements: false
-      #要启用PSCache，必须配置大于0，当大于0时， poolPreparedStatements自动触发修改为true，
-      #在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100
-      maxOpenPreparedStatements: 0
-      #连接池中的 minIdle 数量以内的连接，空闲时间超过 minEvictableIdleTimeMillis，则会执行 keepAlive 操作
-      keepAlive: true
-      maxPoolPreparedStatementPerConnectionSize: 20 #每个连接大小的最大池准备语句数
-      useGlobalDataSourceStat: true #是否使用全局数据源统计,默认false
-      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500 #连接属性
-      #配置监控统计的内置过滤器：stat-监控统计(必须配置，否则监控不到sql)、wall-防御sql注入、log4j2-日志记录框架(值与应用中的日志框架保持一致，如 log4j、log4j、logback、slf4j)
-      filters: stat,wall,slf4j
-      #自定义过滤器配置：stat、slf4j、log4j、log4j2、commons-log、wall
-      #内置Filter都是默认配置，无法满足需求时，则可以自定义 Filter，自定义的过滤器默认都是没有开启的。
-      filter:
-        stat: #状态监控过滤器
-          enabled: true
-          db-type: mysql
-          log-slow-sql: true  #开启慢sql监控，超过指定时间则认为是慢sql，记录到日志中
-          slow-sql-millis: 5000
-        slf4j: #日志监控过滤器，使用slf4j 进行日志输出
-          enabled: true
-          statement-log-error-enabled: true
-          statement-create-after-log-enabled: false
-          statement-close-after-log-enabled: false
-          result-set-open-after-log-enabled: false
-          result-set-close-after-log-enabled: false
-        wall: #防火墙过滤器
-          enabled: true
-          config:
-            delete-allow: false     #不允许删除数据
-            drop-table-allow: false #不允许删除表
-
-      ########## WebStatFilter：web 状态监控过滤器 ##########
-      web-stat-filter:
-        enabled: true
-        url-pattern: /*                 #过滤所有url
-        exclusions: "*.js,*.css,*.gif,*.jpg,*.png,*.ico,/druid/*"   # 排除一些不必要的url
-        session-stat-enable: true       #开启session统计功能
-        session-stat-max-count: 1000    #session的最大个数,默认100
-
-      ########## StatViewServlet(监控页面路径配置)，用于展示Druid的监控统计信息 ##########
-      stat-view-servlet:
-        enabled: true
-        url-pattern: /druid/*           #访问内置监控页面的路径，内置监控页面的首页是 http://127.0.0.1:8080/druid/login.html 或者 /druid/index.html
-        reset-enable: false             #不允许清空统计数据,重新计算
-        login-username: root            #配置监控页面登陆用户
-        login-password: 123456          #配置监控页面登陆密码
-        allow: 127.0.0.1                #允许访问的地址,如果没有配置或者为空，则允许所有访问
-        deny:                           #拒绝访问的地址，deny优先于allow，如果在deny列表中，就算在allow列表中，也会被拒绝
+  # 模板引擎
   thymeleaf:
+    mode: HTML
+    encoding: utf-8
+    # 禁用缓存
     cache: false
-mybatis-plus:
-  # 如果是放在src/main/java目录下 classpath:/com/yourpackage/*/mapper/*Mapper.xml
-  # 如果是放在resource目录 classpath:/mapper/*Mapper.xml
-  mapper-locations: classpath*:com/nodes/scheduling/modules/**/mapper/*.xml
-  #实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.nodes.**
+  # 资源信息
+  messages:
+    # 国际化资源文件路径
+    basename: static/i18n/messages
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  profiles:
+    active: druid
+  # 文件上传
+  servlet:
+    multipart:
+      # 单个文件大小
+      max-file-size: 10MB
+      # 设置总上传的文件大小
+      max-request-size: 20MB
 
+# MyBatis
+mybatis-plus:
+  # 搜索指定包别名
+  typeAliasesPackage: com.nodes.project.**.domain
+  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  mapper-locations: classpath:mybatis/**/*Mapper.xml
+  global-config:
+    db-config:
+      id-type: auto
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+# PageHelper分页插件
+pagehelper:
+  helperDialect: mysql
+  supportMethodsArguments: true
+  params: count=countSql
+
+# Shiro
+shiro:
+  user:
+    # 登录地址
+    loginUrl: /login
+    # 权限认证失败地址
+    unauthorizedUrl: /unauth
+    # 首页地址
+    indexUrl: /index
+    # 验证码类型 math 数组计算 char 字符
+    captchaType: math
+  cookie:
+    # 设置Cookie的域名 默认空，即当前访问的域名
+    domain:
+    # 设置cookie的有效访问路径
+    path: /
+    # 设置HttpOnly属性
+    httpOnly: true
+    # 设置Cookie的过期时间，天为单位
+    maxAge: 30
+    # 设置密钥，务必保持唯一性（生成方式，直接拷贝到main运行即可）Base64.encodeToString(CipherUtils.generateNewKey(128, "AES").getEncoded()) （默认启动生成随机秘钥，随机秘钥会导致之前客户端RememberMe Cookie无效，如设置固定秘钥RememberMe Cookie则有效）
+    cipherKey:
+  session:
+    # Session超时时间，-1代表永不过期（默认30分钟）
+    expireTime: 30
+    # 同步session到数据库的周期（默认1分钟）
+    dbSyncPeriod: 1
+    # 相隔多久检查一次session的有效性，默认就是10分钟
+    validationInterval: 10
+    # 同一个用户最大会话数，比如2的意思是同一个账号允许最多同时两个人登录（默认-1不限制）
+    maxSession: -1
+    # 踢出之前登录的/之后登录的用户，默认踢出之前登录的用户
+    kickoutAfter: false
+  rememberMe:
+    # 是否开启记住我
+    enabled: true
+
+# 防止XSS攻击
+xss:
+  # 过滤开关
+  enabled: true
+  # 排除链接（多个用逗号分隔）
+  excludes: /system/notice/*
+  # 匹配链接
+  urlPatterns: /system/*,/monitor/*,/tool/*
+
+# 代码生成
+gen:
+  # 作者
+  author: ruoyi
+  # 默认生成包路径 system 需改成自己的模块名称 如 system monitor tool
+  packageName: com.nodes.project.system
+  # 自动去除表前缀，默认是true
+  autoRemovePre: true
+  # 表前缀（生成类名不会包含表前缀，多个用逗号分隔）
+  tablePrefix: sys_
+
+# powerJob 配置
 powerjob:
   worker:
+    # akka 工作端口，可选，默认 27777
     akka-port: 27777
+    # 接入应用名称，用于分组隔离，推荐填写 本 Java 项目名称
     app-name: nodes-worker
-    max-appended-wf-context-length: 4096
-    max-result-length: 4096
+    # 调度服务器地址，IP:Port 或 域名，多值逗号分隔
     server-address: 127.0.0.1:7700,127.0.0.1:7701
+    # 持久化方式，可选，默认 disk
     store-strategy: disk
-
-nodes:
-  security:
-    # 允许同一账号多端登录个数
-    maximum: 1
-    # 记住密码
-    remember-key: PEAR_REMEMBER
-    # 不需要权限拦截的接口
-    open-api:
-      - /login/**  # 开放登录接口
-      - /system/captcha/** # 开放验证码接口
-      - /assets/** # 开放静态资源
-      - /admin/** # 开放静态资源
-      - /component/** # 开放静态资源
-      - /favicon.ico # 开放FAVICON
+    # 任务返回结果信息的最大长度，超过这个长度的信息会被截断，默认值 8192
+    max-result-length: 8192
+    # 单个任务追加的工作流上下文最大长度，超过这个长度的会被直接丢弃，默认值 8192
+    max-appended-wf-context-length: 8192
