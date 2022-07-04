@@ -19,7 +19,7 @@ import org.springblade.core.tenant.mp.TenantEntity;
 @Data
 @TableName("st_instock_detail")
 @ApiModel(value = "InstockDetail对象", description = "InstockDetail对象")
-public class InstockDetail extends TenantEntity {
+public class StInstockDetail extends TenantEntity {
 
 	private static final long serialVersionUID = 1L;
 

@@ -4,7 +4,7 @@ package org.nodes.wms.core.strategy.service;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.strategy.dto.InstockDTO;
-import org.nodes.wms.dao.putway.entities.Instock;
+import org.nodes.wms.dao.putway.entities.StInstock;
 import org.nodes.wms.core.strategy.vo.InstockExecuteVO;
 import org.nodes.wms.core.strategy.vo.InstockVO;
 import org.springblade.core.mp.base.BaseService;
@@ -17,7 +17,7 @@ import java.util.List;
  * @author liangmei
  * @since 2019-12-09
  */
-public interface IInstockService extends BaseService<Instock> {
+public interface IInstockService extends BaseService<StInstock> {
 
 	/**
 	 * 新增上架策略
@@ -51,7 +51,7 @@ public interface IInstockService extends BaseService<Instock> {
 	 * @param wrapper 查询条件
 	 * @return 上架策略详情
 	 */
-	InstockVO getOne(Wrapper<Instock> wrapper);
+	InstockVO getOne(Wrapper<StInstock> wrapper);
 
 	/**
 	 * 执行上架策略

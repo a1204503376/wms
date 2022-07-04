@@ -8,8 +8,8 @@ import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.service.IStockService;
-import org.nodes.wms.dao.putway.entities.Instock;
-import org.nodes.wms.dao.putway.entities.InstockDetail;
+import org.nodes.wms.dao.putway.entities.StInstock;
+import org.nodes.wms.dao.putway.entities.StInstockDetail;
 import org.nodes.wms.core.strategy.enums.LocSortModeEnum;
 import org.nodes.wms.core.strategy.enums.LocSortTypeEnum;
 import org.nodes.wms.core.strategy.service.IInstockService;
@@ -46,7 +46,7 @@ public class FunctionCodeBase implements IFunctionCode {
 	protected IStockService stockService = SpringUtil.getBean(IStockService.class);
 
 	@Override
-	public void execute(Stock stock, InstockDetail instockDetail, InstockExecuteVO instockExecute) {
+	public void execute(Stock stock, StInstockDetail instockDetail, InstockExecuteVO instockExecute) {
 
 	}
 
@@ -59,7 +59,7 @@ public class FunctionCodeBase implements IFunctionCode {
 		return zone;
 	}
 
-	protected List<Zone> getTargetZone(Stock stock, InstockDetail instockDetail) {
+	protected List<Zone> getTargetZone(Stock stock, StInstockDetail instockDetail) {
 		// 目标库区列表
 		List<Zone> targetZoneList = new ArrayList<>();
 		IZoneService zoneService = SpringUtil.getBean(IZoneService.class);
@@ -81,10 +81,10 @@ public class FunctionCodeBase implements IFunctionCode {
 		return targetZoneList;
 	}
 
-	protected List<Location> getTargetLocationList(Stock stock, InstockDetail instockDetail,
+	protected List<Location> getTargetLocationList(Stock stock, StInstockDetail instockDetail,
 												   InstockExecuteVO instockExecute) {
 		IInstockService instockService = SpringUtil.getBean(IInstockService.class);
-		Instock instock = instockService.getById(instockDetail.getSsiId());
+		StInstock instock = instockService.getById(instockDetail.getSsiId());
 		// 获取 从库区 信息
 		Zone sourceZone = this.getSourceZone(stock);
 		// 获取 从库位 信息
@@ -137,7 +137,7 @@ public class FunctionCodeBase implements IFunctionCode {
 		return locationList;
 	}
 
-	protected List<Location> filterLocation(List<Location> locationList, InstockDetail instockDetail) {
+	protected List<Location> filterLocation(List<Location> locationList, StInstockDetail instockDetail) {
 		List<Stock> stockList = new ArrayList<>();
 		if (Func.isNotEmpty(locationList)) {
 			stockList = stockService.list(Condition.getQueryWrapper(new Stock())

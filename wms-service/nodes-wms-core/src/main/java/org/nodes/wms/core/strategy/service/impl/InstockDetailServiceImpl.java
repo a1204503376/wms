@@ -6,14 +6,14 @@ import org.nodes.core.tool.entity.SkuLotBaseEntity;
 import org.nodes.wms.dao.basics.skuType.entities.SkuType;
 import org.nodes.wms.core.basedata.service.ISkuTypeService;
 import org.nodes.wms.core.strategy.dto.InstockDetailDTO;
-import org.nodes.wms.core.strategy.mapper.InstockDetailMapper;
+import org.nodes.wms.dao.putway.mapper.StInstockDetailMapper;
 import org.nodes.wms.core.strategy.service.IInstockConfigLotService;
 import org.nodes.wms.core.strategy.service.IInstockConfigService;
 import org.nodes.wms.core.strategy.service.IInstockDetailService;
-import org.nodes.wms.dao.putway.entities.Instock;
-import org.nodes.wms.dao.putway.entities.InstockConfig;
-import org.nodes.wms.dao.putway.entities.InstockConfigLot;
-import org.nodes.wms.dao.putway.entities.InstockDetail;
+import org.nodes.wms.dao.putway.entities.StInstock;
+import org.nodes.wms.dao.putway.entities.StInstockConfig;
+import org.nodes.wms.dao.putway.entities.StInstockConfigLot;
+import org.nodes.wms.dao.putway.entities.StInstockDetail;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
@@ -42,8 +42,8 @@ import java.util.List;
 @Service
 @Primary
 @Transactional(propagation = Propagation.NESTED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
-public class InstockDetailServiceImpl<M extends InstockDetailMapper, T extends InstockDetail>
-	extends BaseServiceImpl<InstockDetailMapper, InstockDetail>
+public class InstockDetailServiceImpl<M extends StInstockDetailMapper, T extends StInstockDetail>
+	extends BaseServiceImpl<StInstockDetailMapper, StInstockDetail>
 	implements IInstockDetailService {
 
 	@Autowired
@@ -52,7 +52,7 @@ public class InstockDetailServiceImpl<M extends InstockDetailMapper, T extends I
 	IInstockConfigService instockConfigService;
 
 	@Override
-	public boolean save(InstockDetail entity) {
+	public boolean save(StInstockDetail entity) {
 		boolean result = super.save(entity);
 		if (result) {
 			//InstockDetailCache.saveOrUpdate(entity);
@@ -61,7 +61,7 @@ public class InstockDetailServiceImpl<M extends InstockDetailMapper, T extends I
 	}
 
 	@Override
-	public boolean updateById(InstockDetail entity) {
+	public boolean updateById(StInstockDetail entity) {
 		boolean result = super.updateById(entity);
 		if (result) {
 			//InstockDetailCache.saveOrUpdate(entity);
@@ -119,29 +119,29 @@ public class InstockDetailServiceImpl<M extends InstockDetailMapper, T extends I
 	}
 
 	@Override
-	public InstockDetail find(@NotNull Instock instock, String billTypeCd, Long skuTypeId,
-                              SkuLotBaseEntity skuLotEntity) {
-		InstockDetail instockDetail = null;
+	public StInstockDetail find(@NotNull StInstock instock, String billTypeCd, Long skuTypeId,
+								SkuLotBaseEntity skuLotEntity) {
+		StInstockDetail instockDetail = null;
 		IInstockConfigLotService instockConfigLotService = SpringUtil.getBean(IInstockConfigLotService.class);
 		IInstockDetailService instockDetailService = SpringUtil.getBean(IInstockDetailService.class);
 		//List<InstockDetail> instockDetailList = InstockDetailCache.list(instock.getSsiId());
-		List<InstockDetail> instockDetailList = instockDetailService.list(Condition.getQueryWrapper(new InstockDetail())
+		List<StInstockDetail> instockDetailList = instockDetailService.list(Condition.getQueryWrapper(new StInstockDetail())
 		.lambda()
-		.eq(InstockDetail::getSsiId,instock.getSsiId())
+		.eq(StInstockDetail::getSsiId,instock.getSsiId())
 		);
 		if (Func.isEmpty(instockDetailList)) {
 			throw new ServiceException("上架策略：" + instock.getSsiName() + " 明细为空！");
 		}
 		IInstockConfigService instockConfigService = SpringUtil.getBean(IInstockConfigService.class);
 		// 按执行顺序排序
-		instockDetailList.sort(Comparator.comparing(InstockDetail::getSsidProcOrder));
+		instockDetailList.sort(Comparator.comparing(StInstockDetail::getSsidProcOrder));
 		// 遍历明细，找到满足条件的策略明细
-		for (InstockDetail item : instockDetailList) {
+		for (StInstockDetail item : instockDetailList) {
 			// 获取执行条件
 			//List<InstockConfig> instockConfigList = InstockConfigCache.listByssidId(item.getSsidId());
-			List<InstockConfig> instockConfigList = instockConfigService.list(Condition.getQueryWrapper(new InstockConfig())
+			List<StInstockConfig> instockConfigList = instockConfigService.list(Condition.getQueryWrapper(new StInstockConfig())
 			.lambda()
-			.eq(InstockConfig::getSsidId,item.getSsidId())
+			.eq(StInstockConfig::getSsidId,item.getSsidId())
 			);
 			// 执行条件为空的情况下，表示忽略（也就是满足）
 			if (Func.isEmpty(instockConfigList)) {
@@ -168,9 +168,9 @@ public class InstockDetailServiceImpl<M extends InstockDetailMapper, T extends I
 			}
 			// 获取批属性设定
 			//List<InstockConfigLot> instockConfigLotList = InstockConfigLotCache.listBySsidId(item.getSsidId());
-			List<InstockConfigLot> instockConfigLotList = instockConfigLotService.list(Condition.getQueryWrapper(new InstockConfigLot())
+			List<StInstockConfigLot> instockConfigLotList = instockConfigLotService.list(Condition.getQueryWrapper(new StInstockConfigLot())
 			.lambda()
-			.eq(InstockConfigLot::getSsidId,item.getSsidId())
+			.eq(StInstockConfigLot::getSsidId,item.getSsidId())
 			);
  			if (!instockConfigLotService.match(instockConfigLotList, skuLotEntity)) {
 				continue;

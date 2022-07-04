@@ -20,7 +20,7 @@ import org.springblade.core.tenant.mp.TenantEntity;
 @Data
 @TableName("st_instock_config_lot")
 @ApiModel(value = "InstockConfigLot对象", description = "InstockConfigLot对象")
-public class InstockConfigLot extends TenantEntity {
+public class StInstockConfigLot extends TenantEntity {
 
 	private static final long serialVersionUID = 1L;
 

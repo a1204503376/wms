@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.dao.putway.entities.InstockConfigLot;
+import org.nodes.wms.dao.putway.entities.StInstockConfigLot;
 
 /**
  * 上架策略批属性设定 视图实体类
@@ -16,7 +16,7 @@ import org.nodes.wms.dao.putway.entities.InstockConfigLot;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "InstockConfigLotVO对象", description = "InstockConfigLotVO对象")
-public class InstockConfigLotVO extends InstockConfigLot {
+public class InstockConfigLotVO extends StInstockConfigLot {
 	private static final long serialVersionUID = 1L;
 
 	/**

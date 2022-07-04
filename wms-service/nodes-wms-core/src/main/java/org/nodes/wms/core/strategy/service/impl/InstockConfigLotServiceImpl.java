@@ -4,8 +4,8 @@ package org.nodes.wms.core.strategy.service.impl;
 import org.nodes.core.tool.entity.SkuLotBaseEntity;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.strategy.dto.InstockConfigLotDTO;
-import org.nodes.wms.dao.putway.entities.InstockConfigLot;
-import org.nodes.wms.core.strategy.mapper.InstockConfigLotMapper;
+import org.nodes.wms.dao.putway.entities.StInstockConfigLot;
+import org.nodes.wms.dao.putway.mapper.StInstockConfigLotMapper;
 import org.nodes.wms.core.strategy.service.IInstockConfigLotService;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.tool.utils.Func;
@@ -29,12 +29,12 @@ import java.util.List;
 @Service
 @Primary
 @Transactional(propagation= Propagation.NESTED,isolation= Isolation.DEFAULT,rollbackFor=Exception.class)
-public class InstockConfigLotServiceImpl<M extends InstockConfigLotMapper, T extends InstockConfigLot>
-	extends BaseServiceImpl<InstockConfigLotMapper, InstockConfigLot>
+public class InstockConfigLotServiceImpl<M extends StInstockConfigLotMapper, T extends StInstockConfigLot>
+	extends BaseServiceImpl<StInstockConfigLotMapper, StInstockConfigLot>
 	implements IInstockConfigLotService {
 
 	@Override
-	public boolean save(InstockConfigLot entity) {
+	public boolean save(StInstockConfigLot entity) {
 		boolean result = super.save(entity);
 		if (result) {
 		//	InstockConfigLotCache.saveOrUpdate(entity);
@@ -43,7 +43,7 @@ public class InstockConfigLotServiceImpl<M extends InstockConfigLotMapper, T ext
 	}
 
 	@Override
-	public boolean saveBatch(Collection<InstockConfigLot> entityList, int batchSize) {
+	public boolean saveBatch(Collection<StInstockConfigLot> entityList, int batchSize) {
 		boolean result = super.saveBatch(entityList, batchSize);
 		if (result) {
 		//	entityList.forEach(instockConfigLot -> InstockConfigLotCache.saveOrUpdate(instockConfigLot));
@@ -52,7 +52,7 @@ public class InstockConfigLotServiceImpl<M extends InstockConfigLotMapper, T ext
 	}
 
 	@Override
-	public boolean saveOrUpdateBatch(Collection<InstockConfigLot> entityList, int batchSize) {
+	public boolean saveOrUpdateBatch(Collection<StInstockConfigLot> entityList, int batchSize) {
 		boolean result =  super.saveOrUpdateBatch(entityList, batchSize);
 		if (result) {
 		//	entityList.forEach(instockConfigLot -> InstockConfigLotCache.saveOrUpdate(instockConfigLot));
@@ -62,7 +62,7 @@ public class InstockConfigLotServiceImpl<M extends InstockConfigLotMapper, T ext
 
 	@Override
 	public boolean updateById(InstockConfigLotDTO instockConfigLotDTO) {
-		boolean result = this.updateById((InstockConfigLot) instockConfigLotDTO);
+		boolean result = this.updateById((StInstockConfigLot) instockConfigLotDTO);
 		if (result) {
 		//	InstockConfigLotCache.saveOrUpdate(instockConfigLotDTO);
 		}
@@ -87,9 +87,9 @@ public class InstockConfigLotServiceImpl<M extends InstockConfigLotMapper, T ext
 		return result;
 	}
 
-	public boolean match(List<InstockConfigLot> instockConfigLotList, SkuLotBaseEntity skuLotEntity) {
+	public boolean match(List<StInstockConfigLot> instockConfigLotList, SkuLotBaseEntity skuLotEntity) {
 		List<Boolean> result = new ArrayList<>();
-		for (InstockConfigLot instockConfigLot : instockConfigLotList) {
+		for (StInstockConfigLot instockConfigLot : instockConfigLotList) {
 			// 获取批属性的值
 			String value = skuLotEntity.skuLotGet(instockConfigLot.getSkuLotNumber());
 			if (Func.isEmpty(value)) {

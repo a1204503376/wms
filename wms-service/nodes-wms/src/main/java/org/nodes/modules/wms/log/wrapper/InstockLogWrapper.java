@@ -6,7 +6,7 @@ import org.nodes.core.base.entity.User;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.core.tool.utils.StringPool;
 import org.nodes.modules.wms.log.vo.InstockLogVO;
-import org.nodes.wms.dao.putway.entities.InstockLog;
+import org.nodes.wms.dao.putway.entities.StInstockLog;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.mp.support.BaseEntityWrapper;
@@ -20,14 +20,14 @@ import org.springblade.core.tool.utils.Func;
  * @author NodeX
  * @since 2020-04-27
  */
-public class InstockLogWrapper extends BaseEntityWrapper<InstockLog, InstockLogVO> {
+public class InstockLogWrapper extends BaseEntityWrapper<StInstockLog, InstockLogVO> {
 
 	public static InstockLogWrapper build() {
 		return new InstockLogWrapper();
 	}
 
 	@Override
-	public InstockLogVO entityVO(InstockLog instockLog) {
+	public InstockLogVO entityVO(StInstockLog instockLog) {
 		InstockLogVO instockLogVO = BeanUtil.copy(instockLog, InstockLogVO.class);
 		//库房名称
 		Warehouse warehouse = WarehouseCache.getById(instockLog.getWhId());

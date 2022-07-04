@@ -30,7 +30,7 @@ import org.nodes.wms.core.basedata.wrapper.SkuLotWrapper;
 import org.nodes.wms.core.basedata.wrapper.SkuWrapper;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.service.IStockService;
-import org.nodes.wms.dao.putway.entities.Instock;
+import org.nodes.wms.dao.putway.entities.StInstock;
 import org.nodes.wms.core.strategy.entity.Outstock;
 import org.nodes.wms.core.strategy.service.IInstockService;
 import org.nodes.wms.core.strategy.service.IOutstockService;
@@ -283,9 +283,9 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 			return Func.equals(u.getIsDefault(), 1);
 		}).findFirst().orElse(null);*/
 
-		Instock instock = instockService.list(Condition.getQueryWrapper(new Instock())
+		StInstock instock = instockService.list(Condition.getQueryWrapper(new StInstock())
 			.lambda()
-			.eq(Instock::getIsDefault, 1)
+			.eq(StInstock::getIsDefault, 1)
 		).stream().findFirst().orElse(null);
 		if (Func.isEmpty(instock)) {
 			// 没有默认的策略，则退出（不生成默认的入库设置了）

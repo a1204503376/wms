@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.nodes.wms.core.strategy.mapper.InstockDetailMapper">
+<mapper namespace="org.nodes.wms.dao.putway.mapper.StInstockDetailMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="instockDetailResultMap" type="org.nodes.wms.dao.putway.entities.InstockDetail">
+    <resultMap id="instockDetailResultMap" type="org.nodes.wms.dao.putway.entities.StInstockDetail">
         <id column="ssid_id" property="ssidId"/>
         <result column="ssi_id" property="ssiId"/>
         <result column="from_zone_id" property="fromZoneId"/>

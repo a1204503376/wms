@@ -1,8 +1,8 @@
 
-package org.nodes.wms.core.strategy.mapper;
+package org.nodes.wms.dao.putway.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.nodes.wms.dao.putway.entities.InstockConfig;
+import org.nodes.wms.dao.putway.entities.StInstockConfig;
 import org.springframework.context.annotation.Primary;
 
 /**
@@ -12,6 +12,6 @@ import org.springframework.context.annotation.Primary;
  * @since 2020-02-14
  */
 @Primary
-public interface InstockConfigMapper extends BaseMapper<InstockConfig> {
+public interface StInstockConfigMapper extends BaseMapper<StInstockConfig> {
 
 }

@@ -23,7 +23,7 @@ import java.io.Serializable;
 @TableName("st_instock_log")
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "InstockLog对象", description = "上架策略执行记录")
-public class InstockLog extends TenantEntity implements Serializable {
+public class StInstockLog extends TenantEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

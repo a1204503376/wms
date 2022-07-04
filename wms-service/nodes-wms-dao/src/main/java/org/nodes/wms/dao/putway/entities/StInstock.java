@@ -22,7 +22,7 @@ import org.springblade.core.tool.utils.StringPool;
 @Data
 @TableName("st_instock")
 @ApiModel(value = "Instock对象", description = "Instock对象")
-public class Instock extends TenantEntity {
+public class StInstock extends TenantEntity {
 
 	private static final long serialVersionUID = 1L;
 	public static final String DATA_TYPE = StringPool.ONE;

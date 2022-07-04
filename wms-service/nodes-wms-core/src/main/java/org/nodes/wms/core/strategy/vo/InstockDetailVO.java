@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.dao.putway.entities.InstockDetail;
+import org.nodes.wms.dao.putway.entities.StInstockDetail;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "InstockDetailVO对象", description = "InstockDetailVO对象")
-public class InstockDetailVO extends InstockDetail {
+public class InstockDetailVO extends StInstockDetail {
 	private static final long serialVersionUID = 1L;
 
 	/**
