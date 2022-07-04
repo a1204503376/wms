@@ -371,7 +371,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		} else if (surplusQtyEqPlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.COMPLETED || surplusQtyEqPlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.PART) {
 			//如果当前单据的实收数量等于计划量，并且状态等于部分收货或者收货完成时
 			detail.setDetailStatus(ReceiveDetailStatusEnum.NOT_RECEIPT);
-		} else if (scanQtyLePlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.NOT_RECEIPT || scanQtyLePlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.PART) {
+		} else if (scanQtyLePlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.NOT_RECEIPT || scanQtyLePlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.PART || scanQtyLePlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.COMPLETED) {
 			//如果当前单据的实收数量是否小于计划量，并且状态等于未收货或者部分收货时
 			detail.setDetailStatus(ReceiveDetailStatusEnum.PART);
 		} else {
