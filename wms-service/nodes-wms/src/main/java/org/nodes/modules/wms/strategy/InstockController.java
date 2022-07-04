@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.nodes.wms.core.strategy.dto.InstockDTO;
-import org.nodes.wms.dao.putway.entities.Instock;
+import org.nodes.wms.dao.putway.entities.StInstock;
 import org.nodes.wms.core.strategy.service.IInstockService;
 import org.nodes.wms.core.strategy.vo.InstockVO;
 import org.nodes.wms.core.strategy.wrapper.InstockWrapper;
@@ -42,7 +42,7 @@ public class InstockController extends BladeController {
 	@ApiLog("上架策略-上架策略详情")
 	@GetMapping("/detail")
 	@ApiOperation(value = "上架策略详情", notes = "传入instock")
-	public R<InstockVO> detail(Instock instock) {
+	public R<InstockVO> detail(StInstock instock) {
 		InstockVO detail = InstockWrapper.build().entityVO(instockService.getOne(Condition.getQueryWrapper(instock)));
 		return R.data(detail);
 	}
@@ -53,8 +53,8 @@ public class InstockController extends BladeController {
 	@ApiLog("上架策略-获取上架策略列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "上架策略分页", notes = "传入instock")
-	public R<List<Instock>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
-		List<Instock> instockList = instockService.list(Condition.getQueryWrapper(params, Instock.class));
+	public R<List<StInstock>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
+		List<StInstock> instockList = instockService.list(Condition.getQueryWrapper(params, StInstock.class));
 		return R.data(instockList);
 	}
 
@@ -65,7 +65,7 @@ public class InstockController extends BladeController {
 	@GetMapping("/page")
 	@ApiOperation(value = "上架策略分页", notes = "传入instock")
 	public R<IPage<InstockVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
-		IPage<Instock> pages = instockService.page(Condition.getPage(query), Condition.getQueryWrapper(params, Instock.class));
+		IPage<StInstock> pages = instockService.page(Condition.getPage(query), Condition.getQueryWrapper(params, StInstock.class));
 		return R.data(InstockWrapper.build().pageVO(pages));
 	}
 

@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.core.strategy.entity.InstockConfig;
+import org.nodes.wms.dao.putway.entities.StInstockConfig;
 
 /**
  * 上架策略执行条件视图实体类
@@ -16,7 +16,7 @@ import org.nodes.wms.core.strategy.entity.InstockConfig;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "InstockConfigVO对象", description = "上架策略执行条件")
-public class InstockConfigVO extends InstockConfig {
+public class InstockConfigVO extends StInstockConfig {
 	private static final long serialVersionUID = 1L;
 	/**
 	 * 单据类型描述

@@ -6,23 +6,32 @@ import fileDownload from "js-file-download";
              label-position="right"
              label-width="60"
              size="mini">
-        <nodes-master-page :configure="masterConfig"  :permission="permissionObj" v-on="form.events">
+        <nodes-master-page :configure="masterConfig" :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
-                <el-form-item label="组合物品编码">
-                    <nodes-sku v-model="form.params.joinSkuCode"></nodes-sku>
-                </el-form-item>
-                <el-form-item label="物品编码">
-                    <nodes-sku v-model="form.params.skuCode"></nodes-sku>
-                </el-form-item>
+                <el-row type="flex">
+                    <el-col :span="8">
+                        <el-form-item label="组合编码" label-width="90px">
+                            <nodes-sku v-model="form.params.joinSkuCode"></nodes-sku>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="物品编码" label-width="90px">
+                            <nodes-sku v-model="form.params.skuCode" style="width: 200px"></nodes-sku>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="货主" label-width="90px">
+                            <nodes-owner v-model="form.params.woId" style="width: 200px"></nodes-owner>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </template>
             <template v-slot:expandSearch>
                 <el-row type="flex">
-                    <el-col :span="24">
-                        <el-form-item label="货主">
-                            <nodes-owner v-model="form.params.woId" ></nodes-owner>
-                        </el-form-item>
-                        <el-form-item label="更新时间">
-                            <nodes-date-range v-model="form.params.updateTimeDateRange"></nodes-date-range>
+                    <el-col :span="6">
+                        <el-form-item label="更新时间" label-width="90px">
+                            <nodes-date-range v-model="form.params.updateTimeDateRange"
+                                              style="width: 200px"></nodes-date-range>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -160,9 +169,9 @@ import fileDownload from "js-file-download";
                 },
                 form: {
                     params: {
-                        joinSkuCode:'',
-                        skuCode:'',
-                        woId:'',
+                        joinSkuCode: '',
+                        skuCode: '',
+                        woId: '',
                         createTimeDateRange: ['', ''],//创建时间开始 创建时间结束
                         updateTimeDateRange: ['', ''],//更新时间开始 更新时间结束
                     }
@@ -253,7 +262,7 @@ import fileDownload from "js-file-download";
             },
             excel() {
                 var that = this;
-                that.excelParams= this.form.params;
+                that.excelParams = this.form.params;
                 excel(that.excelParams).then((res) => {
                     fileDownload(res.data, "物料清单.xlsx");
                 });

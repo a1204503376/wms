@@ -3,7 +3,7 @@ package org.nodes.modules.wms.log.vo;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.core.strategy.entity.InstockLog;
+import org.nodes.wms.dao.putway.entities.StInstockLog;
 
 /**
  * 上架记录视图实体类
@@ -14,7 +14,7 @@ import org.nodes.wms.core.strategy.entity.InstockLog;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "InstockLogVO对象", description = "上架策略执行记录")
-public class InstockLogVO extends InstockLog {
+public class InstockLogVO extends StInstockLog {
 	private static final long serialVersionUID = 1L;
 
 	/**

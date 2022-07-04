@@ -3,7 +3,7 @@ package org.nodes.wms.core.strategy.wrapper;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.core.tool.utils.StringPool;
-import org.nodes.wms.core.strategy.entity.InstockDetail;
+import org.nodes.wms.dao.putway.entities.StInstockDetail;
 import org.nodes.wms.core.strategy.vo.InstockDetailVO;
 import org.nodes.wms.core.warehouse.cache.LocationCache;
 import org.nodes.wms.core.warehouse.entity.Location;
@@ -14,7 +14,7 @@ import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.ObjectUtil;
 import org.springblade.core.tool.utils.SpringUtil;
 
-public class InstockDetailWrapper extends BaseEntityWrapper<InstockDetail, InstockDetailVO> {
+public class InstockDetailWrapper extends BaseEntityWrapper<StInstockDetail, InstockDetailVO> {
 
 	public static final String COMBINE_CONDITION = "combine_condition";
 
@@ -27,7 +27,7 @@ public class InstockDetailWrapper extends BaseEntityWrapper<InstockDetail, Insto
 	}
 
 	@Override
-	public InstockDetailVO entityVO(InstockDetail entity) {
+	public InstockDetailVO entityVO(StInstockDetail entity) {
 		InstockDetailVO instockDetail = BeanUtil.copy(entity, InstockDetailVO.class);
 		if (ObjectUtil.isNotEmpty(instockDetail)) {
 			instockDetail.setInstockFunctionDesc(

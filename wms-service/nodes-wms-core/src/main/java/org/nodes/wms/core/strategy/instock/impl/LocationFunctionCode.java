@@ -4,8 +4,8 @@ import org.nodes.core.tool.utils.StringPool;
 import org.nodes.wms.core.basedata.entity.SkuInstock;
 import org.nodes.wms.core.basedata.service.ISkuInstockService;
 import org.nodes.wms.dao.stock.entities.Stock;
-import org.nodes.wms.dao.putway.entities.Instock;
-import org.nodes.wms.core.strategy.entity.InstockDetail;
+import org.nodes.wms.dao.putway.entities.StInstock;
+import org.nodes.wms.dao.putway.entities.StInstockDetail;
 import org.nodes.wms.core.strategy.instock.FunctionCodeBase;
 import org.nodes.wms.core.strategy.instock.IFunctionCode;
 import org.nodes.wms.core.strategy.service.IInstockService;
@@ -28,9 +28,9 @@ import org.springframework.context.annotation.Primary;
 @Primary
 public class LocationFunctionCode extends FunctionCodeBase implements IFunctionCode {
 	@Override
-	public void execute(Stock stock, InstockDetail instockDetail, InstockExecuteVO instockExecute) {
+	public void execute(Stock stock, StInstockDetail instockDetail, InstockExecuteVO instockExecute) {
 		IInstockService instockService = SpringUtil.getBean(IInstockService.class);
-		Instock instock = instockService.getById(instockDetail.getSsiId());
+		StInstock instock = instockService.getById(instockDetail.getSsiId());
 		Zone zone = null;
 		Location location = null;
 		// 找出物品的入库设置

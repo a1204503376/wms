@@ -3,7 +3,7 @@ package org.nodes.wms.core.strategy.dto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.core.strategy.entity.InstockConfig;
+import org.nodes.wms.dao.putway.entities.StInstockConfig;
 
 /**
  * 上架策略执行条件数据传输对象实体类
@@ -13,7 +13,7 @@ import org.nodes.wms.core.strategy.entity.InstockConfig;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class InstockConfigDTO extends InstockConfig {
+public class InstockConfigDTO extends StInstockConfig {
 	private static final long serialVersionUID = 1L;
 
 }

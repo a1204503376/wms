@@ -2,11 +2,11 @@ package org.nodes.wms.core.strategy.dto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.core.strategy.entity.InstockConfigLot;
+import org.nodes.wms.dao.putway.entities.StInstockConfigLot;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class InstockConfigLotDTO extends InstockConfigLot {
+public class InstockConfigLotDTO extends StInstockConfigLot {
 	private static final long serialVersionUID = 1L;
 
 }

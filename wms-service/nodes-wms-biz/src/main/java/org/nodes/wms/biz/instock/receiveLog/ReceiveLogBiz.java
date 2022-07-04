@@ -69,4 +69,12 @@ public interface ReceiveLogBiz {
 	 * @return
 	 */
 	ReceiveLog newReceiveLog(ReceiveDetailLpnPdaRequest request, ReceiveDetailLpnItemDto item, ReceiveDetailLpn lpn, ReceiveHeader receiveHeader, ReceiveDetail detail);
+
+	/**
+	 * 撤销收货
+	 *
+	 * @param idList: 收货记录id集合
+	 * @return true: 撤销成功，false: 撤销失败
+	 */
+	boolean cancelReceive(List<Long> idList);
 }

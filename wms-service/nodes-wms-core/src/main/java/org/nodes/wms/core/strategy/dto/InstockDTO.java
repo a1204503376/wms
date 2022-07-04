@@ -4,7 +4,7 @@ package org.nodes.wms.core.strategy.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.dao.putway.entities.Instock;
+import org.nodes.wms.dao.putway.entities.StInstock;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class InstockDTO extends Instock {
+public class InstockDTO extends StInstock {
 	private static final long serialVersionUID = 1L;
 
 	/**

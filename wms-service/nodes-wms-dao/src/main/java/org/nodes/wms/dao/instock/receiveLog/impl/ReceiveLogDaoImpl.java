@@ -1,6 +1,8 @@
 package org.nodes.wms.dao.instock.receiveLog.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
@@ -31,7 +33,14 @@ public class ReceiveLogDaoImpl
 		return super.baseMapper.selectReceiveLogList(receiveId);
 	}
 
-	@Override
+    @Override
+    public List<ReceiveLog> getReceiveLogListByIdList(List<Long> idList) {
+		LambdaQueryWrapper<ReceiveLog> queryWrapper = Wrappers.lambdaQuery();
+		queryWrapper.in(ReceiveLog::getId,idList);
+        return super.list(queryWrapper);
+    }
+
+    @Override
 	public List<ReceiveLogIndexResponse> getReceiveSkuQtyTop10() {
 		return super.baseMapper.selectReceiveSkuQtyTop10();
 	}

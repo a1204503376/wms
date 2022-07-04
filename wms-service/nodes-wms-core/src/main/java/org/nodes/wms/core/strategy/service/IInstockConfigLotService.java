@@ -3,7 +3,7 @@ package org.nodes.wms.core.strategy.service;
 
 import org.nodes.core.tool.entity.SkuLotBaseEntity;
 import org.nodes.wms.core.strategy.dto.InstockConfigLotDTO;
-import org.nodes.wms.core.strategy.entity.InstockConfigLot;
+import org.nodes.wms.dao.putway.entities.StInstockConfigLot;
 import org.springblade.core.mp.base.BaseService;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  * @author liangmei
  * @since 2019-12-09
  */
-public interface IInstockConfigLotService extends BaseService<InstockConfigLot> {
+public interface IInstockConfigLotService extends BaseService<StInstockConfigLot> {
 
 	/**
 	 * 修改上架策略批属性设定
@@ -31,5 +31,5 @@ public interface IInstockConfigLotService extends BaseService<InstockConfigLot> 
 	 * @param skuLotEntity         批属性类
 	 * @return 是否匹配
 	 */
-	boolean match(List<InstockConfigLot> instockConfigLotList, SkuLotBaseEntity skuLotEntity);
+	boolean match(List<StInstockConfigLot> instockConfigLotList, SkuLotBaseEntity skuLotEntity);
 }

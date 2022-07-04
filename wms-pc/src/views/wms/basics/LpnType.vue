@@ -6,32 +6,43 @@ import fileDownload from "js-file-download";
              label-position="right"
              label-width="60"
              size="mini">
-        <nodes-master-page :configure="masterConfig"  :permission="permissionObj" v-on="form.events">
+        <nodes-master-page :configure="masterConfig" :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
-                <el-form-item label="容器编码">
-                    <el-input v-model="form.params.code" class="d-input"></el-input>
-                </el-form-item>
-                <el-form-item label="容器类型">
-                    <nodes-lpn-type-state :multiple="false"  v-model="form.params.lpnType">
-                    </nodes-lpn-type-state>
-                </el-form-item>
+                <el-row type="flex">
+                    <el-col :span="8">
+                        <el-form-item label="容器编码" label-width="90px">
+                            <el-input v-model="form.params.code" class="d-input"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="容器类型" label-width="90px">
+                            <nodes-lpn-type-state :multiple="false" v-model="form.params.lpnType">
+                            </nodes-lpn-type-state>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="创建日期" label-width="90px">
+                            <nodes-date-range v-model="form.params.createTimeDateRange"
+                                              value-fomat="yyyy-MM-dd" style="width: 200px"></nodes-date-range>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </template>
             <template v-slot:expandSearch>
                 <el-row type="flex">
-                    <el-col :span="24">
-                        <el-form-item label="创建日期">
-                            <nodes-date-range v-model="form.params.createTimeDateRange"
-                                              value-fomat="yyyy-MM-dd"></nodes-date-range>
-                        </el-form-item>
-                        <el-form-item label="修改日期">
-                            <nodes-date-range v-model="form.params.updateTimeDateRange"></nodes-date-range>
+
+                    <el-col :span="6">
+                        <el-form-item label="修改日期" label-width="90px">
+                            <nodes-date-range v-model="form.params.updateTimeDateRange"
+                                              style="width: 200px"></nodes-date-range>
                         </el-form-item>
                     </el-col>
                 </el-row>
 
             </template>
             <template v-slot:batchBtn>
-                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增</el-button>
+                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
+                </el-button>
                 <el-button v-if="permissionObj.delete" size="mini" type="primary" @click="onRemove">删除</el-button>
                 <el-button size="mini" type="primary">冻结</el-button>
             </template>
@@ -176,7 +187,7 @@ import fileDownload from "js-file-download";
                 form: {
                     params: {
                         code: '',//承运商编码
-                        lpnType:'',
+                        lpnType: '',
                         createTimeDateRange: ['', ''],//创建时间开始 创建时间结束
                         updateTimeDateRange: ['', ''],//更新时间开始 更新时间结束
                     }
@@ -223,7 +234,7 @@ import fileDownload from "js-file-download";
         created() {
             this.getTableData();
         },
-        activated () {
+        activated() {
             this.getTableData();
         },
         computed: {
@@ -251,7 +262,7 @@ import fileDownload from "js-file-download";
 
         },
         methods: {
-            onEdit(row){
+            onEdit(row) {
                 this.$router.push({
                     name: '编辑容器',
                     params: {
@@ -279,7 +290,7 @@ import fileDownload from "js-file-download";
             excelLpnType() {
                 var that = this;
                 that.excelParams.code = this.form.params.code;
-                that.excelParams.lpnType =this.form.params.lpnType;
+                that.excelParams.lpnType = this.form.params.lpnType;
                 excelLpnType(that.excelParams).then((res) => {
                     fileDownload(res.data, "容器管理信息.xlsx");
                 });

@@ -11,7 +11,6 @@
         remote
         reserve-keyword
         size="mini"
-        style="width: 450px"
         value-key="skuCode"
         @change="onChange">
         <el-option

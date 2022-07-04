@@ -1,7 +1,7 @@
 package org.nodes.wms.core.strategy.instock.impl;
 
 import org.nodes.wms.dao.stock.entities.Stock;
-import org.nodes.wms.core.strategy.entity.InstockDetail;
+import org.nodes.wms.dao.putway.entities.StInstockDetail;
 import org.nodes.wms.core.strategy.instock.FunctionCodeBase;
 import org.nodes.wms.core.strategy.instock.IFunctionCode;
 import org.nodes.wms.core.strategy.vo.InstockExecuteVO;
@@ -16,6 +16,6 @@ import org.springframework.context.annotation.Primary;
 public class DefaultFunctionCode extends FunctionCodeBase implements IFunctionCode {
 
 	@Override
-	public void execute(Stock stock, InstockDetail instockDetail, InstockExecuteVO instockExecute) {
+	public void execute(Stock stock, StInstockDetail instockDetail, InstockExecuteVO instockExecute) {
 	}
 }

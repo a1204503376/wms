@@ -1,4 +1,4 @@
-package org.nodes.wms.core.strategy.dto;
+package org.nodes.wms.core.stock.core.dto;
 
 import org.nodes.wms.core.stock.core.entity.StockSnapshoot;
 import lombok.Data;

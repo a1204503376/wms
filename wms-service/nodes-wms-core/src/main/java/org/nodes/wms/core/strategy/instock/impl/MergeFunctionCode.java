@@ -3,8 +3,8 @@ package org.nodes.wms.core.strategy.instock.impl;
 import org.nodes.core.base.cache.ParamCache;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.dao.stock.entities.Stock;
-import org.nodes.wms.dao.putway.entities.Instock;
-import org.nodes.wms.core.strategy.entity.InstockDetail;
+import org.nodes.wms.dao.putway.entities.StInstock;
+import org.nodes.wms.dao.putway.entities.StInstockDetail;
 import org.nodes.wms.core.strategy.enums.MixModeEnum;
 import org.nodes.wms.core.strategy.instock.FunctionCodeBase;
 import org.nodes.wms.core.strategy.instock.IFunctionCode;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Primary
 public class MergeFunctionCode extends FunctionCodeBase implements IFunctionCode {
 	@Override
-	public void execute(Stock stock, InstockDetail instockDetail, InstockExecuteVO instockExecute) {
+	public void execute(Stock stock, StInstockDetail instockDetail, InstockExecuteVO instockExecute) {
 		List<Location> locationList = super.getTargetLocationList(stock, instockDetail, instockExecute);
 		// 筛选出可用的库位(禁用的库位等)
 		locationList = super.filterLocation(locationList, instockDetail);
@@ -105,7 +105,7 @@ public class MergeFunctionCode extends FunctionCodeBase implements IFunctionCode
 			}
 		}
 		IInstockService instockService = SpringUtil.getBean(IInstockService.class);
-		Instock instock = instockService.getById(instockDetail.getSsiId());
+		StInstock instock = instockService.getById(instockDetail.getSsiId());
 		Zone sourceZone = super.getSourceZone(stock);
 		Location sourceLoc = LocationCache.getById(stock.getLocId());
 		List<Zone> targetZoneList = super.getTargetZone(stock, instockDetail);
