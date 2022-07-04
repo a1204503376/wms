@@ -10,17 +10,19 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="物品编码" label-width="90px">
-                            <el-input v-model.trim="form.params.skuCode" :clearable="true"></el-input>
+                            <nodes-sku
+                                v-model="form.params.skuIdList">
+                            </nodes-sku>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="库位" label-width="90px">
-                            <nodes-location v-model="form.params.locIdList"></nodes-location>
+                        <el-form-item label="收货单状态" label-width="90px">
+                            <nodes-receive-bill-state
+                                v-model="form.params.billStateList">
+                            </nodes-receive-bill-state>
                         </el-form-item>
                     </el-col>
                 </el-row>
-
-
             </template>
             <template v-slot:expandSearch>
                 <el-row type="flex">
@@ -59,19 +61,20 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库房" label-width="90px">
-                            <nodes-warehouse :multiple="true" v-model="form.params.whIdList"></nodes-warehouse>
+                            <nodes-warehouse v-model="form.params.whIdList" :multiple="true"></nodes-warehouse>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="货主" label-width="90px">
-                            <nodes-owner style="width: 180px" v-model="form.params.woId"></nodes-owner>
+                            <nodes-owner v-model="form.params.woId"></nodes-owner>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </template>
             <template v-slot:batchBtn>
-                <el-button v-if="permissionObj.repeal" icon="el-icon-caret-left" size="mini" type="warning"
-                    @click="onRepeal">撤销收货
+                <el-button v-if="permissionObj.cancelReceive"
+                           size="mini" type="primary"
+                           @click="cancelReceive">撤销收货
                 </el-button>
             </template>
             <template v-slot:tableTool>
@@ -86,34 +89,109 @@
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                        style="display: inline-block;margin-left: 10px">
-                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData" />
+                                  style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData"/>
                     </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table" :data="table.data" border highlight-current-row size="mini" style="width: 100%"
-                    @sort-change="onSortChange">
-                    <el-table-column fixed type="selection" width="50">
+                <el-table ref="table"
+                          :cell-style="cellStyle"
+                          :data="table.data"
+                          border
+                          highlight-current-row
+                          size="mini"
+                          style="width: 100%"
+                          @sort-change="onSortChange">
+                    <el-table-column
+                        fixed
+                        type="selection"
+                        width="50">
                     </el-table-column>
-                    <el-table-column fixed sortable type="index">
+                    <el-table-column
+                        fixed
+                        sortable
+                        type="index">
                         <template slot="header">
                             #
                         </template>
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
-                        <el-table-column :key="index" show-overflow-tooltip v-bind="column" width="130">
+                        <el-table-column
+                            v-if="!column.hide && column.prop !== 'receiveNo' && column.prop !== 'snCode' "
+                            :key="index"
+                            show-overflow-tooltip
+                            v-bind="column"
+                            width="130">
+                        </el-table-column>
+                        <el-table-column
+                            v-if="!column.hide && column.prop === 'receiveNo' "
+                            :key="index"
+                            show-overflow-tooltip
+                            v-bind="column"
+                            width="130">
+                            <template v-slot="scope">
+                                <el-link
+                                    :underline="false"
+                                    target="_blank"
+                                    type="primary"
+                                    @click="onView(scope.row)">{{ scope.row.receiveNo }}
+                                </el-link>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            v-if="!column.hide && column.prop === 'snCode' "
+                            :key="index"
+                            show-overflow-tooltip
+                            v-bind="column"
+                            width="130">
+                            <template v-slot="scope">
+                                <el-link
+                                    :underline="false"
+                                    type="primary"
+                                    @click="openDialog(scope.row.snCode)"
+                                >{{ scope.row.snCode }}
+                                </el-link>
+                            </template>
                         </el-table-column>
                     </template>
                 </el-table>
             </template>
             <template v-slot:page>
                 <el-pagination :current-page="page.current" :page-size="page.size" :page-sizes="[20, 50, 100]"
-                    :total="page.total" background layout="total, sizes, prev, pager, next, jumper" v-bind="page"
-                    @size-change="handleSizeChange" @current-change="handleCurrentChange">
+                               :total="page.total" background layout="total, sizes, prev, pager, next, jumper"
+                               v-bind="page"
+                               @size-change="handleSizeChange" @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>
+        <template>
+            <el-dialog
+                :append-to-body="true"
+                :visible.sync="snCodeDialog"
+                title="序列号列表"
+                width="250px">
+                <el-table
+                    :border="true"
+                    :data="snCodeList"
+                    max-height="500"
+                >
+                    <el-table-column align="center" fixed type="index">
+                        <template slot="header">
+                            #
+                        </template>
+                    </el-table-column>
+                    <el-table-column align="center" label="序列号" prop="snCode" sortable width="200">
+                        <template v-slot="scope">
+                            {{ scope.row }}
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="snCodeDialog = false">关 闭</el-button>
+                </div>
+            </el-dialog>
+        </template>
         <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
         </dialog-column>
     </div>
@@ -124,18 +202,23 @@ import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
-import { listMixin } from "@/mixins/list";
+import {listMixin} from "@/mixins/list";
 import NodesLocation from "@/components/wms/select/NodesLocation";
 import NodesOwner from "@/components/wms/select/NodesOwner";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
-import { getPage, exportExcel } from "@/api/wms/instock/receiveLog"
+import {cancelReceive, exportExcel, getPage} from "@/api/wms/instock/receiveLog"
 import fileDownload from "js-file-download";
-import { ExcelExport } from 'pikaz-excel-js'
-import { nowDateFormat } from "@/util/date";
+import {ExcelExport} from 'pikaz-excel-js'
+import {nowDateFormat} from "@/util/date";
+import func from "@/util/func";
+import NodesReceiveBillState from "@/components/wms/select/NodesReceiveBillState";
+import NodesSku from "@/components/wms/select/NodesSkuByQuery";
 
 export default {
     name: "receiveLog",
     components: {
+        NodesSku,
+        NodesReceiveBillState,
         NodesWarehouse,
         NodesOwner,
         NodesLocation,
@@ -148,10 +231,13 @@ export default {
     mixins: [listMixin],
     data() {
         return {
+            snCodeDialog: false,
+            snCodeList: [],
             form: {
                 params: {
                     receiveNo: "",
-                    skuCode: "",
+                    skuIdList: [],
+                    billStateList: [],
                     boxCode: "",
                     lpnCode: "",
                     snCode: "",
@@ -168,6 +254,11 @@ export default {
                         prop: "receiveNo",
                         label: "收货单编码",
                         sortable: "custom",
+                    },
+                    {
+                        prop: "billState",
+                        label: "收货单状态",
+                        sortable: "custom"
                     },
                     {
                         prop: "lineNo",
@@ -196,7 +287,7 @@ export default {
                     },
                     {
                         prop: "boxCode",
-                        label: "箱号",
+                        label: "箱码",
                         sortable: "custom"
                     },
                     {
@@ -289,7 +380,7 @@ export default {
         permissionObj() {
             return {
                 search: this.vaildData(this.permission.receiveLog_search, false),
-                repeal: this.vaildData(this.permission.receiveLog_repeal, false),
+                cancelReceive: this.vaildData(this.permission.receiveLog_cancelReceive, false),
             }
         }
     },
@@ -297,6 +388,10 @@ export default {
         this.getTableData();
     },
     methods: {
+        openDialog(snCode) {
+            this.snCodeList = snCode.split(',')
+            this.snCodeDialog = true;
+        },
         getTableData() {
             getPage(this.page, this.form.params)
                 .then((res) => {
@@ -311,7 +406,8 @@ export default {
         onReset() {
             this.form.params = {
                 receiveNo: "",
-                skuCode: "",
+                skuIdList: [],
+                billStateList: [],
                 boxCode: "",
                 lpnCode: "",
                 snCode: "",
@@ -339,10 +435,51 @@ export default {
         onExportLocalData() {
             this.exportCurrentDataToExcel("收货记录", "收货记录")
         },
-        onRepeal() {
-            let rows = this.$refs.table;
-            console.log(rows);
-        }
+        cancelReceive() {
+            this.$confirm("确定撤销选中的记录?", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+            }).then(() => {
+                let rows = this.$refs.table.selection;
+                if (func.isEmpty(rows)) {
+                    this.$message.warning("撤销失败，至少选择一条记录撤销");
+                    return;
+                }
+                let qtyList = rows.map(item => item.qty);
+                for (const i in qtyList) {
+                    if (qtyList[i] < 0) {
+                        this.$message.error("撤销失败，选择的记录中不允许有已撤销的记录")
+                        return;
+                    }
+                }
+                let billStateList = rows.map(item => item.billState);
+                for (const i in billStateList) {
+                    if (billStateList[i] === '未收货') {
+                        this.$message.error("撤销失败，选择的记录中收货单状态只能是部分收获或全部收货")
+                        return;
+                    }
+                }
+                let idList = rows.map(item => item.id);
+                cancelReceive(idList).then((res) => {
+                    this.$message.success(res.data.msg);
+                    this.refreshTable();
+                })
+            });
+        },
+        cellStyle({row, column}) {
+            if (row.qty < 0 && column.property === 'qty') {
+                return "background-color: #FF6666"
+            }
+        },
+        onView(row) {
+            this.$router.push({
+                name: '收货单详情',
+                params: {
+                    receiveId: row.receiveId
+                }
+            })
+        },
     },
 };
 </script>

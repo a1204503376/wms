@@ -446,16 +446,22 @@ public class StockBizImpl implements StockBiz {
 		StockIndexResponse response = new StockIndexResponse();
 
 		if (Func.isNotEmpty(stageStock)) {
-			response.setStageSkuQty(ConvertUtil.convert(stageStock.get("skuQty"), BigDecimal.class));
-			response.setStageSkuStoreDay(ConvertUtil.convert(stageStock.get("skuStoreDay"), Integer.class));
+			response.setStageSkuQty(
+				ConvertUtil.convert(stageStock.get("skuQty"), BigDecimal.class)
+					.setScale(3, RoundingMode.DOWN));
+			response.setStageSkuStoreDay(
+				ConvertUtil.convert(stageStock.get("skuStoreDay"), Integer.class));
 		} else {
 			response.setStageSkuQty(BigDecimal.ZERO);
 			response.setStageSkuStoreDay(0);
 		}
 
 		if (Func.isNotEmpty(qcStock)) {
-			response.setQcSkuQty(ConvertUtil.convert(qcStock.get("skuQty"), BigDecimal.class));
-			response.setQcSkuStoreDay(ConvertUtil.convert(qcStock.get("skuStoreDay"), Integer.class));
+			response.setQcSkuQty(
+				ConvertUtil.convert(qcStock.get("skuQty"), BigDecimal.class)
+					.setScale(3, RoundingMode.DOWN)); //保留三位小数
+			response.setQcSkuStoreDay(
+				ConvertUtil.convert(qcStock.get("skuStoreDay"), Integer.class));
 		} else {
 			response.setQcSkuQty(BigDecimal.ZERO);
 			response.setQcSkuStoreDay(0);

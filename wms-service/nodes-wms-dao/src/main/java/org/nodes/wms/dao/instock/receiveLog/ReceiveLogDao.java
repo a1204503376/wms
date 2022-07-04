@@ -22,6 +22,14 @@ public interface ReceiveLogDao {
 	List<ReceiveLogResponse> getReceiveLogList(Long receiveId);
 
 	/**
+	 * 根据id集合获取收货记录集合
+	 *
+	 * @param idList: id集合
+	 * @return 收货记录集合
+	 */
+	List<ReceiveLog> getReceiveLogListByIdList(List<Long> idList);
+
+	/**
 	 * 获取7天内入库量前10的物品
 	 *
 	 * @return List<ReceiveLogIndexResponse>

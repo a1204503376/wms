@@ -20,16 +20,17 @@ import fileDownload from "js-file-download";
                             </nodes-lpn-type-state>
                         </el-form-item>
                     </el-col>
-                </el-row>
-            </template>
-            <template v-slot:expandSearch>
-                <el-row type="flex">
-                    <el-col :span="6">
+                    <el-col :span="8">
                         <el-form-item label="创建日期" label-width="90px">
                             <nodes-date-range v-model="form.params.createTimeDateRange"
                                               value-fomat="yyyy-MM-dd" style="width: 200px"></nodes-date-range>
                         </el-form-item>
                     </el-col>
+                </el-row>
+            </template>
+            <template v-slot:expandSearch>
+                <el-row type="flex">
+
                     <el-col :span="6">
                         <el-form-item label="修改日期" label-width="90px">
                             <nodes-date-range v-model="form.params.updateTimeDateRange"

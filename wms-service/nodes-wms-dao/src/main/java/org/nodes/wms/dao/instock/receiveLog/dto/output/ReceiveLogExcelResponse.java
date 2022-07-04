@@ -3,6 +3,8 @@ package org.nodes.wms.dao.instock.receiveLog.dto.output;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import lombok.Data;
+import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -22,6 +24,13 @@ public class ReceiveLogExcelResponse implements Serializable {
 	@ExcelProperty("收货单编码")
 	@ColumnWidth(15)
 	private String receiveNo;
+
+	/**
+	 * 收货单状态
+	 */
+	@ExcelProperty("收货单状态")
+	@ColumnWidth(15)
+	private ReceiveHeaderStateEnum billState;
 
 	/**
 	 * 行号

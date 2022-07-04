@@ -14,6 +14,7 @@ import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
+import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveCancelRequest;
 import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageQuery;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
@@ -143,6 +144,12 @@ public class ReceiveController {
 	@PostMapping("/exportReceiveLog")
 	public void exportReceiveLog(@RequestBody ReceiveLogPageQuery receiveLogPageQuery, HttpServletResponse response) {
 		receiveLogBiz.exportExcel(receiveLogPageQuery, response);
+	}
+
+	@PostMapping("/cancelReceive")
+	public R<String> revoke(@RequestBody ReceiveCancelRequest receiveCancelRequest){
+		boolean cancelReceiveSuccess = receiveLogBiz.cancelReceive(receiveCancelRequest.getIdList());
+		return R.success("撤销成功");
 	}
 
 	@PostMapping("/pageNotReceiveDetail")

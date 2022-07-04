@@ -19,15 +19,15 @@ import fileDownload from "js-file-download";
                             <nodes-sku v-model="form.params.skuCode" style="width: 200px"></nodes-sku>
                         </el-form-item>
                     </el-col>
-                </el-row>
-            </template>
-            <template v-slot:expandSearch>
-                <el-row type="flex">
-                    <el-col :span="6">
+                    <el-col :span="8">
                         <el-form-item label="货主" label-width="90px">
                             <nodes-owner v-model="form.params.woId" style="width: 200px"></nodes-owner>
                         </el-form-item>
                     </el-col>
+                </el-row>
+            </template>
+            <template v-slot:expandSearch>
+                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="更新时间" label-width="90px">
                             <nodes-date-range v-model="form.params.updateTimeDateRange"

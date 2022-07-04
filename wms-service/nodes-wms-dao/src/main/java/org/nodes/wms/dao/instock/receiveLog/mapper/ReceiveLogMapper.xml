@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.instock.receiveLog.mapper.ReceiveLogMapper">
 
-
     <select id="selectReceiveLogList"
             resultType="org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse">
         select line_No,
@@ -38,7 +37,9 @@
     <sql id="receiveLogList">
         SELECT
         rl.id,
+        rl.receive_id,
         rl.receive_no,
+        header.bill_state,
         rl.line_no,
         rl.sku_code,
         rl.sku_name,
@@ -83,6 +84,7 @@
         rl.sku_lot29,
         rl.sku_lot30
         FROM receive_log rl
+        LEFT JOIN receive_header header ON header.receive_id = rl.receive_id
         LEFT JOIN wms_sku_package_detail wspd ON wspd.wsp_id = rl.wsp_id
         LEFT JOIN wms_warehouse wh ON wh.wh_id = rl.wh_id
         LEFT JOIN wms_owner o ON o.wo_id = rl.wo_id
@@ -92,8 +94,17 @@
             <if test="param.receiveNo != null and param.receiveNo != ''">
                 AND rl.receive_no LIKE CONCAT('%', #{param.receiveNo} ,'%')
             </if>
-            <if test="param.skuCode != null and param.skuCode != ''">
-                AND rl.sku_code LIKE CONCAT('%', #{param.skuCode} ,'%')
+            <if test="param.billStateList != null and param.billStateList.size > 0">
+                AND header.bill_state IN
+                <foreach collection="param.billStateList" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="param.skuIdList != null and param.skuIdList.size > 0">
+                AND rl.sku_id IN
+                <foreach collection="param.skuIdList" close=")" open="(" separator="," item="item">
+                    #{item}
+                </foreach>
             </if>
             <if test="param.boxCode != null and param.boxCode != ''">
                 AND rl.box_code LIKE CONCAT('%', #{param.boxCode} ,'%')
