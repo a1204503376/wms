@@ -1,8 +1,7 @@
 
 package org.nodes.wms.core.strategy.service.impl;
 
-import org.nodes.wms.core.strategy.cache.InstockConfigCache;
-import org.nodes.wms.core.strategy.entity.InstockConfig;
+import org.nodes.wms.dao.putway.entities.InstockConfig;
 import org.nodes.wms.core.strategy.mapper.InstockConfigMapper;
 import org.nodes.wms.core.strategy.service.IInstockConfigService;
 import org.springblade.core.mp.base.BaseServiceImpl;

@@ -3,7 +3,7 @@ package org.nodes.wms.core.strategy.wrapper;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.constant.DictConstant;
 import org.nodes.core.tool.utils.StringPool;
-import org.nodes.wms.core.strategy.entity.InstockDetail;
+import org.nodes.wms.dao.putway.entities.InstockDetail;
 import org.nodes.wms.core.strategy.vo.InstockDetailVO;
 import org.nodes.wms.core.warehouse.cache.LocationCache;
 import org.nodes.wms.core.warehouse.entity.Location;

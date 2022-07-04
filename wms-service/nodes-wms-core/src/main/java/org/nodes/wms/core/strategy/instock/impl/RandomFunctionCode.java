@@ -3,7 +3,7 @@ package org.nodes.wms.core.strategy.instock.impl;
 import org.nodes.core.base.cache.ParamCache;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.putway.entities.Instock;
-import org.nodes.wms.core.strategy.entity.InstockDetail;
+import org.nodes.wms.dao.putway.entities.InstockDetail;
 import org.nodes.wms.core.strategy.enums.MixModeEnum;
 import org.nodes.wms.core.strategy.instock.FunctionCodeBase;
 import org.nodes.wms.core.strategy.instock.IFunctionCode;

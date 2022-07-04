@@ -3,7 +3,7 @@
 <mapper namespace="org.nodes.wms.core.strategy.mapper.InstockConfigMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="instockConfigResultMap" type="org.nodes.wms.core.strategy.entity.InstockConfig">
+    <resultMap id="instockConfigResultMap" type="org.nodes.wms.dao.putway.entities.InstockConfig">
         <result column="ssic_id" property="ssicId"/>
         <result column="ssid_id" property="ssidId"/>
         <result column="sku_type_id" property="skuTypeId"/>

@@ -4,8 +4,8 @@ package org.nodes.wms.core.strategy.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.core.strategy.entity.InstockConfig;
-import org.nodes.wms.core.strategy.entity.InstockConfigLot;
+import org.nodes.wms.dao.putway.entities.InstockConfig;
+import org.nodes.wms.dao.putway.entities.InstockConfigLot;
 import org.nodes.wms.core.strategy.entity.RelenishmentDetail;
 
 import java.util.List;

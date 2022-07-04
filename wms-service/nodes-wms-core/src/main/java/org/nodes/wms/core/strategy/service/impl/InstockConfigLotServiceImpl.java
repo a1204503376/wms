@@ -3,9 +3,8 @@ package org.nodes.wms.core.strategy.service.impl;
 
 import org.nodes.core.tool.entity.SkuLotBaseEntity;
 import org.nodes.core.tool.utils.NodesUtil;
-import org.nodes.wms.core.strategy.cache.InstockConfigLotCache;
 import org.nodes.wms.core.strategy.dto.InstockConfigLotDTO;
-import org.nodes.wms.core.strategy.entity.InstockConfigLot;
+import org.nodes.wms.dao.putway.entities.InstockConfigLot;
 import org.nodes.wms.core.strategy.mapper.InstockConfigLotMapper;
 import org.nodes.wms.core.strategy.service.IInstockConfigLotService;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -20,7 +19,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  *  上架策略批属性设定 服务实现类

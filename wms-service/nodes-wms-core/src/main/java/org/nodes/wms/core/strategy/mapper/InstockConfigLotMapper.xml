@@ -3,7 +3,7 @@
 <mapper namespace="org.nodes.wms.core.strategy.mapper.InstockConfigLotMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="instockConfigLotResultMap" type="org.nodes.wms.core.strategy.entity.InstockConfigLot">
+    <resultMap id="instockConfigLotResultMap" type="org.nodes.wms.dao.putway.entities.InstockConfigLot">
         <id column="ssicl_id" property="ssiclId"/>
         <result column="ssid_id" property="ssidId"/>
         <result column="sku_lot_number" property="skuLotNumber"/>

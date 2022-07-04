@@ -1,7 +1,7 @@
 package org.nodes.wms.core.strategy.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.nodes.wms.core.strategy.entity.InstockLog;
+import org.nodes.wms.dao.putway.entities.InstockLog;
 import org.springframework.context.annotation.Primary;
 
 /**

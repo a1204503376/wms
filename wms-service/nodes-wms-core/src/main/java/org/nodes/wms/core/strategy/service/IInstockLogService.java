@@ -1,6 +1,6 @@
 package org.nodes.wms.core.strategy.service;
 
-import org.nodes.wms.core.strategy.entity.InstockLog;
+import org.nodes.wms.dao.putway.entities.InstockLog;
 import org.springblade.core.mp.base.BaseService;
 
 /**

@@ -1,12 +1,9 @@
 package org.nodes.wms.core.strategy.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
-import org.nodes.wms.core.strategy.entity.InstockConfigLot;
+import org.nodes.wms.dao.putway.entities.InstockConfigLot;
 import org.nodes.wms.core.strategy.vo.InstockConfigLotVO;
 import org.springblade.core.mp.support.BaseEntityWrapper;
-import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.*;
 
 public class InstockConfigLotWrapper extends BaseEntityWrapper<InstockConfigLot, InstockConfigLotVO> {
