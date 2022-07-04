@@ -2,77 +2,79 @@
     <div id="location">
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="库位编码">
+                <el-row type="flex">
+                    <el-col :span="8">
+                        <el-form-item label="库位编码" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.locCode"
                                 :clearable="true"
-                                placeholder="请输入编码"
-                                style="width: 200px"
+                                placeholder="请输入库位编码"
                             ></el-input>
                         </el-form-item>
-                        <el-form-item label="所属库房">
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="所属库房" label-width="90px">
                             <nodes-warehouse
                                 v-model="form.params.whIdList"
                                 :multiple="true"
-                                style="width: 200px"
                             ></nodes-warehouse>
                         </el-form-item>
-                        <el-form-item label="所属库区">
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="所属库区" label-width="90px">
                             <nodes-zone
                                 v-model="form.params.zoneIdList"
                                 :multiple="true"
-                                style="width: 200px"
+                                skuIdList
                             ></nodes-zone>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="库位类型">
-                            <nodes-dictionary
-                                v-model="form.params.locTypeList"
-                                :multiple="true"
-                                code="loc_type"
-                                style="width: 200px"
-                            ></nodes-dictionary>
-                        </el-form-item>
-                        <el-form-item label="库位种类">
-                            <nodes-dictionary
-                                v-model="form.params.locCategoryList"
-                                :multiple="true"
-                                code="loc_category"
-                                style="width: 200px"
-                            ></nodes-dictionary>
-                        </el-form-item>
-                        <el-form-item label="库位处理">
-                            <nodes-dictionary
-                                v-model="form.params.locHandlingList"
-                                :multiple="true"
-                                code="loc_handling"
-                                style="width: 200px"
-                            ></nodes-dictionary>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="使用状态">
-                            <nodes-dictionary
-                                v-model="form.params.locFlagList"
-                                :multiple="true"
-                                code="loc_flag"
-                                style="width: 200px"
-                            ></nodes-dictionary>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </template>
             <template v-slot:expandSearch>
-                <el-row type="flex">
-                    <el-col :span="24">
+                <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="库位类型" label-width="90px">
+                            <nodes-dictionary
+                                v-model="form.params.locTypeList"
+                                :multiple="true"
+                                code="loc_type"
+                                skuIdList
+                            ></nodes-dictionary>
+                        </el-form-item>
                     </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="库位种类" label-width="90px">
+                            <nodes-dictionary
+                                v-model="form.params.locCategoryList"
+                                :multiple="true"
+                                code="loc_category"
+                                skuIdList
+                            ></nodes-dictionary>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="库位处理" label-width="90px">
+                            <nodes-dictionary
+                                v-model="form.params.locHandlingList"
+                                :multiple="true"
+                                code="loc_handling"
+                                skuIdList
+                            ></nodes-dictionary>
+                        </el-form-item>
+                    </el-col>
+                    <el-row>
+                        <el-col :span="6">
+                            <el-form-item label="使用状态" label-width="90px">
+                                <nodes-dictionary
+                                    v-model="form.params.locFlagList"
+                                    :multiple="true"
+                                    code="loc_flag"
+                                    skuIdList
+                                ></nodes-dictionary>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                 </el-row>
             </template>
             <template v-slot:batchBtn>
@@ -122,7 +124,8 @@
                         width="50">
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
-                        <el-table-column v-if="!column.hide && column.prop === 'locCode'" :key="index" show-overflow-tooltip
+                        <el-table-column v-if="!column.hide && column.prop === 'locCode'" :key="index"
+                                         show-overflow-tooltip
                                          v-bind="column" width="140">
                             <template v-slot="scope">
                                 <el-link

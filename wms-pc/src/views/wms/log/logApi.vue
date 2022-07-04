@@ -2,15 +2,23 @@
     <div id="supplier">
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
-                <el-form-item label="日志标题">
-                    <el-input v-model.trim="form.params.title" :clearable="true"></el-input>
-                </el-form-item>
-                <el-form-item label="请求URI">
-                    <el-input v-model.trim="form.params.requestUri" :clearable="true"></el-input>
-                </el-form-item>
-                <el-form-item label="创建日期">
-                    <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
-                </el-form-item>
+                <el-row type="flex">
+                    <el-col :span="8">
+                        <el-form-item label="日志标题">
+                            <el-input placeholder="请输入日志标题" v-model.trim="form.params.title" :clearable="true"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="请求URI">
+                            <el-input placeholder="请输入请求URI" v-model.trim="form.params.requestUri" :clearable="true"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="创建日期">
+                            <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </template>
             <template v-slot:tableTool>
                 <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
@@ -52,6 +60,7 @@
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column
+                            width="140"
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column">
