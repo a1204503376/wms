@@ -22,10 +22,15 @@ public class ReceiveLogPageQuery implements Serializable {
 	/**
 	 * 物品编码
 	 */
-	private String skuCode;
+	private List<Long> skuIdList;
 
 	/**
-	 * 箱号
+	 * 收货单状态
+	 */
+	private List<Integer> billStateList;
+
+	/**
+	 * 箱码
 	 */
 	private String boxCode;
 

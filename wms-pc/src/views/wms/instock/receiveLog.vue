@@ -202,14 +202,14 @@ import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
-import { listMixin } from "@/mixins/list";
+import {listMixin} from "@/mixins/list";
 import NodesLocation from "@/components/wms/select/NodesLocation";
 import NodesOwner from "@/components/wms/select/NodesOwner";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
-import { cancelReceive, exportExcel, getPage} from "@/api/wms/instock/receiveLog"
+import {cancelReceive, exportExcel, getPage} from "@/api/wms/instock/receiveLog"
 import fileDownload from "js-file-download";
-import { ExcelExport } from 'pikaz-excel-js'
-import { nowDateFormat } from "@/util/date";
+import {ExcelExport} from 'pikaz-excel-js'
+import {nowDateFormat} from "@/util/date";
 import func from "@/util/func";
 import NodesReceiveBillState from "@/components/wms/select/NodesReceiveBillState";
 import NodesSku from "@/components/wms/select/NodesSkuByQuery";
@@ -453,9 +453,16 @@ export default {
                         return;
                     }
                 }
+                let billStateList = rows.map(item => item.billState);
+                for (const i in billStateList) {
+                    if (billStateList[i] === '未收货') {
+                        this.$message.error("撤销失败，选择的记录中收货单状态只能是部分收获或全部收货")
+                        return;
+                    }
+                }
                 let idList = rows.map(item => item.id);
                 cancelReceive(idList).then((res) => {
-                    this.$message.success(res);
+                    this.$message.success(res.data.msg);
                     this.refreshTable();
                 })
             });

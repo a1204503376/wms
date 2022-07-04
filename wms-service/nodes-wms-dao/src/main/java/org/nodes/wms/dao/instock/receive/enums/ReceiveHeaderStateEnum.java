@@ -44,8 +44,8 @@ public enum ReceiveHeaderStateEnum
 	;
 
 	@EnumValue
-	@JsonValue
 	private final Integer code;
+	@JsonValue
 	private final String desc;
 
 	@Override

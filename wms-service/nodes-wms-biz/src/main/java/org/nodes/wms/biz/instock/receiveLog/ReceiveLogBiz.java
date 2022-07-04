@@ -74,7 +74,7 @@ public interface ReceiveLogBiz {
 	 * 撤销收货
 	 *
 	 * @param idList: 收货记录id集合
-	 * @return boolean
+	 * @return true: 撤销成功，false: 撤销失败
 	 */
-	boolean revoke(List<Long> idList);
+	boolean cancelReceive(List<Long> idList);
 }

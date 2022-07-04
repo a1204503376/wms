@@ -17,3 +17,13 @@ export const exportExcel = (params) => {
         responseType: 'blob'
     })
 }
+
+export const cancelReceive= (idList) => {
+    return request({
+        url: '/api/wms/receive/cancelReceive',
+        method: 'post',
+        data: {
+            idList: idList
+        },
+    })
+}

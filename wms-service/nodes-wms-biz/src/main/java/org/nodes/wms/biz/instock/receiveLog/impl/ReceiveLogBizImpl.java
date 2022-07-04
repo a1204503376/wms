@@ -3,10 +3,12 @@ package org.nodes.wms.biz.instock.receiveLog.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.config.DateTimeFinals;
+import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
+import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
@@ -23,16 +25,24 @@ import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.stock.entities.Stock;
+import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.excel.util.ExcelUtil;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 清点记录业务层实现类
@@ -42,7 +52,9 @@ import java.util.List;
 public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	private final ReceiveLogDao receiveLogDao;
 	private final LocationBiz locationBiz;
+	private final ReceiveBiz receiveBiz;
 	private final OwnerBiz ownerBiz;
+	private final StockBiz stockBiz;
 
 
 	@Override
@@ -138,5 +150,78 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog = createReceiveLog(receiveLog, receiveHeader, detail);
 		receiveLogDao.save(receiveLog);
 		return receiveLog;
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public boolean cancelReceive(List<Long> idList) {
+		//根据记录id查询收货记录
+		List<ReceiveLog> receiveLogList = receiveLogDao.getReceiveLogListByIdList(idList);
+		receiveLogList.forEach(item -> {
+			// 判断收货记录中是否存在撤销数为负数的，有就抛异常
+			if (BigDecimalUtil.lt(item.getQty(), BigDecimal.ZERO)) {
+				throw new ServiceException("撤销失败，选择的记录中不允许有已撤销的记录");
+			}
+		});
+		//货主、物品、库位、状态、箱码、LPNCode、30个批属性相同的才合并
+		// 先根据货主、物品、库位、状态、箱码、LPNCode分组
+		Map<String, List<ReceiveLog>> collect = receiveLogList.stream().collect(Collectors.groupingBy(
+			item -> item.getWhId() + "_" + item.getSkuId() + "_" + item.getLocId() + "_" + item.getBoxCode()
+				+ "_" + item.getLpnCode())
+		);
+		List<ReceiveLog> finalReceiveLogList = new ArrayList<>();
+		//遍历分组得到得map
+		for (Map.Entry<String, List<ReceiveLog>> entry : collect.entrySet()
+		) {
+			List<ReceiveLog> value = entry.getValue();
+			//根据货主等字段分组后，若结果只有一条数据，直接加到最终的收货记录集合中
+			if (value.size() == 1) {
+				finalReceiveLogList.add(value.get(0));
+				continue;
+			}
+			// 临时集合接收下面循环时的下标
+			List<Integer> tempList = new ArrayList<>();
+			tempList.add(-1);
+			// 遍历每个分组中的ReceiveLog集合，拿第一个元素和后面的每个元素比较
+			//
+			for (int i = 0; i < value.size() && !tempList.contains(i); i++) {
+				// 设置最终的收货数量为当前元素的数量
+				BigDecimal sumQty = value.get(i).getQty();
+				for (int j = i + 1; j < value.size() && !tempList.contains(j); j++) {
+					boolean flag = SkuLotUtil.compareAllSkuLot(value.get(i), value.get(j));
+					// 校验通过
+					if (flag) {
+						// 最终收货数量为进行比较的两个元素的和
+						sumQty = value.get(i).getQty().add(value.get(j).getQty());
+						// 将比较的元素的下标放入临时集合中，下次遍历时，跳过该元素
+						tempList.add(j);
+					}
+				}
+				// 将比较的元素的下标放入临时集合中，下次遍历时，跳过该元素
+				tempList.add(i);
+				value.get(i).setQty(sumQty);
+				finalReceiveLogList.add(value.get(i));
+			}
+		}
+
+		finalReceiveLogList.forEach(item -> {
+			// 校验是否存在多个库存
+			Stock stock = stockBiz.findStockOnStage(item);
+			// 更新库存
+			item.setQty(item.getQty().negate()); // qty取负数
+			stockBiz.outStockByCancleReceive(StockLogTypeEnum.OUTSTOCK_BY_CANCEL_RECEIVE, item, stock);
+			// 新增撤销收货记录
+			item.setId(null);
+			receiveLogDao.save(item);
+			// 查询收货明细
+			ReceiveDetail receiveDetail = receiveBiz.getDetailByReceiveDetailId(item.getReceiveDetailId());
+			// 更新收货明细
+			receiveBiz.updateReceiveDetail(receiveDetail, item.getQty());
+			// 查询收货头表
+			ReceiveHeader receiveHeader = receiveBiz.getReceiveHeaderById(item.getReceiveId());
+			// 更新收货头表
+			receiveBiz.updateReciveHeader(receiveHeader, receiveDetail);
+		});
+		return true;
 	}
 }
