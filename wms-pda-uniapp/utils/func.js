@@ -70,8 +70,8 @@ const install = (Vue, vm) => {
 		return true
 	}
 
-	// 跳转路由前检查登录状态
-	const route = (url,param) => {
+	// 跳转路由前检查登录状态 有历史路由的跳转
+	const routeNavigateTo = (url,param) => {
 		if(tool.isNotEmpty(param)){
 			url+='?param='+JSON.stringify(param);
 		}
@@ -88,6 +88,28 @@ const install = (Vue, vm) => {
 			return false
 		}
 		uni.navigateTo({
+			url: url
+		})
+	}
+	
+	// 关闭所有页面打开某个页面
+	const routeReLaunch = (url,param) => {
+		if(tool.isNotEmpty(param)){
+			url+='?param='+JSON.stringify(param);
+		}
+		if (!vm.isLogin) {
+			uni.showToast({
+				title: '请先登录',
+				icon: 'none'
+			})
+			setTimeout(() => {
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			}, 500)
+			return false
+		}
+		uni.reLaunch({
 			url: url
 		})
 	}
@@ -190,7 +212,8 @@ const install = (Vue, vm) => {
 	Vue.prototype.$u.func = {
 		login,
 		logout,
-		route,
+		routeNavigateTo,
+		routeReLaunch,
 		navigateBack,
 		checkLogin,
 		paramsToObj,
