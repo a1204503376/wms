@@ -3,6 +3,7 @@ package org.nodes.wms.controller.instock.receive;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.wms.biz.instock.InStockBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.dao.application.dto.output.ReceiveBillStateResponse;
@@ -37,6 +38,7 @@ import java.util.List;
 public class ReceiveController {
 	private final ReceiveBiz receiveBiz;
 	private final ReceiveLogBiz receiveLogBiz;
+	private final InStockBiz inStockBiz;
 
 	/**
 	 * 收货管理分页查询
@@ -148,7 +150,7 @@ public class ReceiveController {
 
 	@PostMapping("/cancelReceive")
 	public R<String> revoke(@RequestBody ReceiveCancelRequest receiveCancelRequest){
-		boolean cancelReceiveSuccess = receiveLogBiz.cancelReceive(receiveCancelRequest.getIdList());
+		inStockBiz.cancelReceive(receiveCancelRequest.getIdList());
 		return R.success("撤销成功");
 	}
 

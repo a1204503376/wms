@@ -64,4 +64,9 @@ public class ReceiveLogDaoImpl
 		}
 		return super.save(receiveLog);
 	}
+
+    @Override
+    public boolean saveBatch(List<ReceiveLog> receiveLogList) {
+		return super.saveBatch(receiveLogList);
+	}
 }
