@@ -53,8 +53,12 @@
 							title: '查找不到该箱码的相关信息,请换个箱码后重试'
 						});
 					}
-					this.putawayData = data.data;
+					this.putawayData.boxCode = data.data.boxCode;
+					this.putawayData.skuLot1 = data.data.skuLot1;
+					this.putawayData.qty = data.data.qty;
 					//调用库存策略生成库位 将库位值赋值给loc
+					this.putawayData.locCode='AA'
+					uni.$u.func.route('/pages/inStock/putawayByBox/putawayByBoxSubmit',this.putawayData);
 				})
 			},
 			analysisCode(code) {
