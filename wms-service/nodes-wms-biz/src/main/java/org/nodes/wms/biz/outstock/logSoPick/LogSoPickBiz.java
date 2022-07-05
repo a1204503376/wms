@@ -1,6 +1,6 @@
 package org.nodes.wms.biz.outstock.logSoPick;
 
-import org.nodes.wms.dao.outstock.logSoPick.dot.output.LogSoPickIndexResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickIndexResponse;
 
 import java.util.List;
 

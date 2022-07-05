@@ -1,5 +1,9 @@
 <template>
 	<view @keyup.esc="esc">
+	<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
+		:bgColor="navigationBarBackgroundColor" title="按箱收货" titleStyle="color:#ffffff;font-size:21px"
+		style="color:#ffffff;font-size:21px">
+	</u-navbar>
 	<!-- 	<v-for="(item,index) in Data"></v-for="(item,index)> -->
 		<u--form>
 			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
@@ -14,7 +18,7 @@
 				</u-form-item>
 				<u-form-item label="数量" class="left-text-one-line" labelWidth="100">
 					<u--input v-model="item.planQty" border="0" disabled></u--input>
-				</u-form-item>	
+				</u-form-item>	 
 				</template>
 				
 			<u-form-item label="生产批次" :required="true"  class="left-text-one-line" labelWidth="100">
@@ -45,12 +49,14 @@
 	import receive from '@/api/inStock/receiveByBox.js'
 	import barCodeService from '@/common/barcodeFunc.js'
 	import uniSelect from '@/components/uni-select.vue'
+	import setting from '@/common/setting'
 	export default {
 		components: {
 			uniSelect
 		},
 		data() {
 			return {
+				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
              	focusNum:0,			 
 				param:{
 					id:'',
@@ -102,7 +108,7 @@
 			 }
 		   },
 			esc() {
-				this.$u.func.navigateBack();
+				uni.$u.func.route('/pages/inStock/receiveByBox/receiveDetailLpnQuery');
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)

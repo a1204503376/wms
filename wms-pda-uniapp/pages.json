@@ -115,7 +115,7 @@
 		}, {
 			"path": "pages/inStock/receiveByBox/receiveDetailLpnQuery",
 			"style": {
-				"navigationBarTitleText": "按箱收货",
+
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
@@ -123,8 +123,8 @@
 		}, {
 			"path": "pages/inStock/receiveByBox/receiveByBox",
 			"style": {
-				"navigationBarTitleText": "按箱收货",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 
 		},
@@ -137,39 +137,53 @@
 		}, {
 			"path": "pages/inStock/receiveByBox/receiveDetailLpnListQuery",
 			"style": {
-			"enablePullDownRefresh": false,
-			"navigationStyle": "custom"
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 
 		}, {
 			"path": "pages/inStock/receiveByBox/receiveByMultiBox",
 			"style": {
-			"enablePullDownRefresh": false,
-			"navigationStyle": "custom"
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/inStock/putawayByBox/lpnQueryByBox",
 			"style": {
-			"enablePullDownRefresh": false,
-			"navigationStyle": "custom"
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/inStock/putawayByBox/putawayByBoxSubmit",
 			"style": {
-			"enablePullDownRefresh": false,
-			"navigationStyle": "custom"
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
+		}, {
+			"path": "pages/inStock/callAgv/callAgvQuery",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/inStock/callAgv/callAgvQueryList",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
 		}
 	    ,{
-            "path" : "pages/inStock/callAgv/callAgvQuery",
-            "style" :
+            "path" : "pages/inStock/callAgv/callAgv",
+            "style" :                                                                                    
             {
-              "enablePullDownRefresh": false,
-              "navigationStyle": "custom"
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
             }
-
+            
         }
     ],
 	"globalStyle": {
