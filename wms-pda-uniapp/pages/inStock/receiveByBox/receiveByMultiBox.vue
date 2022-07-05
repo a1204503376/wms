@@ -88,7 +88,7 @@
 			submit() {
 				this.param.locCode = this.$u.func.parseLocCode(this.param.locCode)
 				receive.receiveByMultiBox(this.param).then(res => {
-					uni.$u.func.route('/pages/inStock/receiveByMultiBox/receiveDetailLpnQuery');
+					uni.$u.func.route('/pages/inStock/receiveByBox/receiveDetailLpnListQuery');
 				})
 			},
 			focus(num) {

@@ -224,4 +224,19 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		});
 		return true;
 	}
+
+	@Override
+	public void canCancelReceive(List<Long> receiveIdList) {
+
+	}
+
+	@Override
+	public List<ReceiveLog> newReceiveLog(List<ReceiveLog> receiveLogList) {
+		return null;
+	}
+
+	@Override
+	public List<ReceiveLog> findReceiveLog(List<Long> receiveIdList) {
+		return null;
+	}
 }

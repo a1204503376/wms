@@ -10,12 +10,12 @@ import fileDownload from "js-file-download";
             <template v-slot:searchFrom>
                 <el-row type="flex">
                     <el-col :span="8">
-                        <el-form-item label="容器编码" label-width="90px">
+                        <el-form-item label="类型编码" label-width="90px">
                             <el-input v-model="form.params.code" class="d-input"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="容器类型" label-width="90px">
+                        <el-form-item label="容器类别" label-width="90px">
                             <nodes-lpn-type-state :multiple="false" v-model="form.params.lpnType">
                             </nodes-lpn-type-state>
                         </el-form-item>
@@ -196,15 +196,15 @@ import fileDownload from "js-file-download";
                     columnList: [
                         {
                             prop: 'code',
-                            label: '容器类型编码'
+                            label: '类型编码'
                         },
                         {
                             prop: 'type',
-                            label: '容器类型'
+                            label: '容器类别'
                         },
                         {
                             prop: 'lpnNoRule',
-                            label: '编码生成规则'
+                            label: '编码规则'
                         },
                         {
                             prop: 'weight',

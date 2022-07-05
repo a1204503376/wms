@@ -410,6 +410,16 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
+	public List<Stock> findLpnStockOnStageLeftLikeByBoxCode(Long whId, String boxCode) {
+		Location stage = locationBiz.getStageLocation(whId);
+		List<Stock> stock = stockDao.getStockLeftLikeByBoxCode(boxCode,
+			Collections.singletonList(stage.getLocId()));
+		// 判断如果是ABC三种箱型，则返回。如果是D箱则需要根据LPN查找
+
+		return null;
+	}
+
+	@Override
 	public Stock findStockOnStage(ReceiveLog receiveLog) {
 		return stockMergeStrategy.matchSameStock(receiveLog);
 	}

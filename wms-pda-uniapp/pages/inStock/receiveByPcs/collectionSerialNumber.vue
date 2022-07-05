@@ -88,6 +88,14 @@
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
+		onBackPress(event) {
+			// #ifdef APP-PLUS
+			if (event.from === 'backbutton') {
+				this.esc();
+				return true;
+			}
+		   // #endif
+		},
 		methods: {
 			remove(index) {
 				this.serialNumberList.splice(index, 1)

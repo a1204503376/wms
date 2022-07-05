@@ -11,7 +11,7 @@
 		</template>
 		<u-divider text="" style="margin-top:0rpx;"></u-divider>
 		<u-divider text="暂无数据" v-if="noData"></u-divider>
-		<u-list style="height: 950rpx;" pagingEnabled="true" @scrolltolower="scrolltolower">
+		<u-list style="height: 950rpx;"  @scrolltolower="scrolltolower">
 			<u-list-item v-for="(item, index) in receiveList" :key="item.receiveNo">
 				<view @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
@@ -70,6 +70,14 @@
 		},
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
+		},
+		onBackPress(event) {
+			// #ifdef APP-PLUS
+			if (event.from === 'backbutton') {
+				this.esc();
+				return true;
+			}
+			// #endif
 		},
 		methods: {
 			analysisCode(code) {
