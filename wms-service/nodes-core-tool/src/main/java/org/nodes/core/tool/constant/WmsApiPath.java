@@ -39,4 +39,9 @@ public class WmsApiPath {
 	 * 手持前缀
 	 */
 	public static final String WMS_PDA_API="/api/ApiPDA";
+
+	/**
+	 * 天宜定制：调度系统api
+	 */
+	public static final String SCHEDULING_SYSTEM_API = WmsApiPath.WMS_ROOT_URL + "scheduling";
 }

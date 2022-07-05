@@ -1,4 +1,4 @@
-package org.nodes.wms.controller.instock.receive;
+package org.nodes.wms.controller.instock;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
