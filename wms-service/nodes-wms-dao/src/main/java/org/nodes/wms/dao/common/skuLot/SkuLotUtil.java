@@ -86,11 +86,7 @@ public class SkuLotUtil {
 			return true;
 		}
 
-		if (Func.isEmpty(t1SkuLot) && Func.isEmpty(t2SkuLot)) {
-			return true;
-		}
-
-		return false;
+		return Func.isEmpty(t1SkuLot) && Func.isEmpty(t2SkuLot);
 	}
 
 	/**
