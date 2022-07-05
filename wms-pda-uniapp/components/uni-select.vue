@@ -3,8 +3,8 @@
 		<view class="uni-list-cell-db" style="width: 100%;height: 100%;">
 			<picker style="width: 100%;height: 100%;" v-model="dataSource" :range="columns" value="index"
 				@change="bindPickerChange">
-				<view class="uni-input-input" style="width: 100%;height: 10rpx;">
-					<view style="margin-top: -24rpx; z-index: 99999;">{{dataSource}}</view>
+				<view class="uni-input-input" style="width: 100%;">
+					<u--input style="margin-top: 0rpx; z-index: 99999;" v-model="dataSource"></u--input>
 				</view>
 			</picker>
 		</view>
