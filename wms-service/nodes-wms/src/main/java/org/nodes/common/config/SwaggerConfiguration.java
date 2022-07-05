@@ -19,7 +19,6 @@ package org.nodes.common.config;
 import com.github.xiaoymin.knife4j.spring.extension.OpenApiExtensionResolver;
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
-import org.nodes.core.tool.constant.AppConstant;
 import org.springblade.core.secure.BladeUser;
 import org.springblade.core.swagger.EnableSwagger;
 import org.springblade.core.swagger.SwaggerProperties;
@@ -137,6 +136,15 @@ public class SwaggerConfiguration {
 		return docket("策略管理", Arrays.asList("org.nodes.modules.wms.strategy"));
 	}
 
+	@Bean
+	public Docket PDADocket(){
+		return docket("PDA接口", Arrays.asList("org.nodes.wms.pdaController"));
+	}
+
+	@Bean
+	public Docket PCDocket(){
+		return docket("PC接口", Arrays.asList("org.nodes.wms.controller"));
+	}
 
 	private Docket docket(String groupName, List<String> basePackages) {
 		return new Docket(DocumentationType.SWAGGER_2)
