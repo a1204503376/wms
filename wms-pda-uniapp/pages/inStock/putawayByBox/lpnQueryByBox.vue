@@ -58,6 +58,7 @@
 					this.putawayData.qty = data.data.qty;
 					//调用库存策略生成库位 将库位值赋值给loc
 					this.putawayData.locCode='AA'
+					this.$destroy('keyboardListener')
 					uni.$u.func.route('/pages/inStock/putawayByBox/putawayByBoxSubmit',this.putawayData);
 				})
 			},
@@ -79,6 +80,7 @@
 				}
 			},
 			esc() {
+				this.$destroy('keyboardListener')
 				uni.$u.func.route('/pages/home/childrenHome', {
 					name: '上架'
 				});

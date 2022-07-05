@@ -82,6 +82,7 @@
 
 			},
 			esc() {
+				this.$destroy('keyboardListener')
 				uni.$u.func.route('/pages/inStock/putawayByBox/lpnQueryByBox');
 			},
 			scannerCallback(no) {

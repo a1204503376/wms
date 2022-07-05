@@ -14,6 +14,7 @@
 				</view>
 			</u-grid-item>
 		</u-grid>
+		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
 	</view>
 </template>
 
@@ -21,7 +22,11 @@
 	import api from '@/api/user.js'
 	import setting from '@/common/setting'
 	import tool from '@/utils/tool.js'
+	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {
+		components: {
+			keyboardListener
+		},
 		data() {
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
@@ -53,13 +58,20 @@
 		methods: {
 			navTo(menu) {
 				//跳转页面
+				this.$destroy('keyboardListener')
 				uni.$u.func.route(menu.path);
 			},
 			closePage() {
+				this.$destroy('keyboardListener')
 				uni.$u.func.route('/pages/home/home');
 			},
 			scannerCallback(data) {
 				this.username = data
+			},
+			emitKeyDown(e) {
+				if (e.key >= 1 && e.key <= 9) {
+					this.navTo(this.childrenMenu[e.key - 1])
+				}
 			}
 		}
 	};

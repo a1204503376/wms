@@ -95,6 +95,7 @@
 				}
 			},
 			esc() {
+				this.$destroy('keyboardListener')
 				uni.$u.func.route('/pages/inStock/receiveByPcs/receiptHeaderEnquiry');
 			},
 			getReceiveDetailList() {
@@ -113,6 +114,7 @@
 			},
 			clickItem(row) {
 				row.receiveId = this.params.receiveId;
+				this.$destroy('keyboardListener')
 				uni.$u.func.route('/pages/inStock/receiveByPcs/ReceiveByPiece', row);
 			},
 			scannerCallback(no) {

@@ -87,7 +87,7 @@ const install = (Vue, vm) => {
 			}, 500)
 			return false
 		}
-		uni.reLaunch({
+		uni.navigateTo({
 			url: url
 		})
 	}
