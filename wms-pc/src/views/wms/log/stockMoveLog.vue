@@ -3,18 +3,22 @@
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
-                    <el-col :span="24">
-                        <el-form-item label="物品">
+                    <el-col :span="8">
+                        <el-form-item label="物品" label-width="90px">
                             <nodes-sku-by-query
                                 style="width: 182px"
                                 v-model="form.params.skuIdList"
                                 :clearable="true"
                             ></nodes-sku-by-query>
                         </el-form-item>
-                        <el-form-item label="单据编码">
-                            <el-input v-model.trim="form.params.sourceBillNo" :clearable="true"></el-input>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="单据编码" label-width="90px">
+                            <el-input placeholder="请输入单据编码" v-model.trim="form.params.sourceBillNo" :clearable="true"></el-input>
                         </el-form-item>
-                        <el-form-item label="移动类型">
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="移动类型" label-width="90px">
                             <nodes-stock-log-type
                                 v-model="form.params.logTypeList"
                                 :multiple="true"
@@ -23,13 +27,17 @@
                     </el-col>
                 </el-row>
                 <el-row type="flex">
-                    <el-col :span="24">
-                        <el-form-item label="创建人">
+                    <el-col :span="8">
+                        <el-form-item label="创建人" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.createUser"
-                                :clearable="true"></el-input>
+                                :clearable="true"
+                                placeholder="请输入创建人"
+                            ></el-input>
                         </el-form-item>
-                        <el-form-item label="创建日期">
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="创建日期" label-width="90px">
                             <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
                         </el-form-item>
                     </el-col>
@@ -37,38 +45,48 @@
             </template>
             <template v-slot:expandSearch>
                 <el-row type="flex">
-                    <el-col :span="24">
-                        <el-form-item label="库位">
+                    <el-col :span="6">
+                        <el-form-item label="库位" label-width="90px">
                             <nodes-location
                                 style="width: 182px"
                                 v-model.trim="form.params.locIdList"
                                 :clearable="true"></nodes-location>
                         </el-form-item>
-                        <el-form-item label="库区">
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="库区" label-width="90px">
                             <nodes-zone
                                 :multiple="true"
                                 v-model="form.params.zoneIdList"
                             ></nodes-zone>
                         </el-form-item>
-                        <el-form-item label="库房">
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="库房" label-width="90px">
                             <nodes-warehouse
                                 :multiple="true"
                                 v-model="form.params.whIdList"
                             ></nodes-warehouse>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row type="flex">
-                    <el-col :span="24">
-                        <el-form-item label="箱码">
+                    <el-col :span="6">
+                        <el-form-item label="箱码" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.boxCode"
-                                :clearable="true"></el-input>
+                                :clearable="true"
+                                placeholder="请输入箱码"
+                            ></el-input>
                         </el-form-item>
-                        <el-form-item label="生产批次">
+                    </el-col>
+                </el-row>
+                <el-row type="flex">
+                    <el-col :span="6">
+                        <el-form-item label="生产批次" label-width="90px">
                             <el-input
-                                v-model="form.params.skuLot1"
-                                :clearable="true"></el-input>
+                                v-model.trim="form.params.skuLot1"
+                                :clearable="true"
+                                placeholder="请输入生产批次"
+                            ></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>

@@ -59,4 +59,12 @@ public interface ReceiveLogDao {
 	 * @return 是否成功
 	 */
 	boolean save(ReceiveLog receiveLog);
+
+	/**
+	 * 批量保存
+	 *
+	 * @param receiveLogList: 清点记录
+	 * @return true保存成功，false保存失败
+	 */
+	boolean saveBatch(List<ReceiveLog> receiveLogList);
 }

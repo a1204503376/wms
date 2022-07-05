@@ -2,33 +2,53 @@
     <div id="asnHeader">
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
-                <el-form-item label="ASN单编码">
-                    <el-input v-model="form.params.asnBillNo" :clearable="true" style="width: 200px" class="d-input">
-                    </el-input>
-                </el-form-item>
-                <el-form-item label="物品编码">
-                    <nodes-sku-by-query v-model="form.params.skuIdList" :multiple="true" style="width: 200px"></nodes-sku-by-query>
-                </el-form-item>
-                <el-form-item label="状态">
-                    <nodes-asn-bill-state v-model="form.params.asnBillStateList" style="width: 200px"></nodes-asn-bill-state>
-                </el-form-item>
+                <el-row type="flex">
+                    <el-col :span="8">
+                        <el-form-item label="ASN单编码" label-width="90px">
+                            <el-input v-model.trim="form.params.asnBillNo"
+                                      placeholder="请输入ASN单编码"
+                                      :clearable="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="物品编码" label-width="90px">
+                            <nodes-sku-by-query v-model="form.params.skuIdList" :multiple="true"></nodes-sku-by-query>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="状态" label-width="90px">
+                            <nodes-asn-bill-state v-model="form.params.asnBillStateList"></nodes-asn-bill-state>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </template>
             <template v-slot:expandSearch>
                 <el-row type="flex">
-                    <el-col :span="24">
-                        <el-form-item label="创建日期">
+                    <el-col :span="6">
+                        <el-form-item label="创建日期" label-width="90px">
                             <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
                         </el-form-item>
-                        <el-form-item label="供应商">
-                            <el-input v-model="form.params.supplier" :clearable="true" class="d-input"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="供应商" label-width="90px">
+                            <el-input placeholder="请输入供应商编码或名称" v-model.trim="form.params.supplier" :clearable="true"></el-input>
                         </el-form-item>
-                        <el-form-item label="上游编码">
-                            <el-input v-model="form.params.externalOrderNo" :clearable="true" class="d-input"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="上游编码" label-width="90px">
+                            <el-input placeholder="请输入上游编码" v-model.trim="form.params.externalOrderNo" :clearable="true"></el-input>
                         </el-form-item>
-                        <el-form-item label="上游创建人">
-                            <el-input v-model="form.params.externalCreateUser" :clearable="true" class="d-input"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="上游创建人" label-width="90px">
+                            <el-input placeholder="请输入上游创建人" v-model.trim="form.params.externalCreateUser" :clearable="true"></el-input>
                         </el-form-item>
-                        <el-form-item label="仓库">
+                    </el-col>
+                </el-row>
+                <el-row type="flex">
+                    <el-col :span="6">
+                        <el-form-item label="仓库" label-width="90px">
                             <nodes-warehouse
                                 v-model="form.params.whIdList"
                                 :multiple="true"
@@ -52,8 +72,9 @@
                     <el-button circle icon="el-icon-download" size="mini" @click="onExportData"></el-button>
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
-                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet" style="display: inline-block;margin-left: 10px">
-                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData" />
+                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
+                                  style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData"/>
                     </excel-export>
                 </el-tooltip>
 
@@ -63,28 +84,29 @@
                           size="mini" @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
-                    <template v-for="(column, index) in table.columnList" >
-                        <el-table-column width="150" v-if="!column.hide && column.prop === 'asnBillNo'" :key="index" show-overflow-tooltip v-bind="column">
+                    <template v-for="(column, index) in table.columnList">
+                        <el-table-column v-if="!column.hide && column.prop === 'asnBillNo'" :key="index" show-overflow-tooltip
+                                         v-bind="column" width="150">
                             <template v-slot="scope">
                                 <el-link
-                                    @click="onView(scope.row)"
                                     :underline="false"
+                                    target="_blank"
                                     type="primary"
-                                    target="_blank">{{scope.row.asnBillNo}}
+                                    @click="onView(scope.row)">{{ scope.row.asnBillNo }}
                                 </el-link>
-                                </template>
+                            </template>
                         </el-table-column>
                         <el-table-column
-                            width="150"
                             v-if="!column.hide && column.prop !== 'asnBillNo'"
                             :key="index"
                             show-overflow-tooltip
-                            v-bind="column">
+                            v-bind="column"
+                            width="150">
                         </el-table-column>
                     </template>
-                    <el-table-column fixed="right" label="操作" width="100" align="center">
+                    <el-table-column align="center" fixed="right" label="操作" width="100">
                         <template v-slot="scope">
-                            <el-button size="small" @click="onEdit(scope.row)" type="text">编辑</el-button>
+                            <el-button size="small" type="text" @click="onEdit(scope.row)">编辑</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -221,7 +243,7 @@ export default {
     },
     watch: {
         $route(to) {
-            if(to.query && to.query.isRefresh === 'true'){
+            if (to.query && to.query.isRefresh === 'true') {
                 this.refreshTable();
             }
         }
@@ -237,7 +259,7 @@ export default {
     },
     methods: {
         async getTableData() {
-           await getPage(this.page, this.form.params)
+            await getPage(this.page, this.form.params)
                 .then((res) => {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
@@ -303,7 +325,7 @@ export default {
             this.form.params.whIdList = []
         },
         onExportLocalData() {
-            this.exportCurrentDataToExcel("ASN单","ASN单");
+            this.exportCurrentDataToExcel("ASN单", "ASN单");
         },
         onAdd() {
             this.$router.push({
@@ -314,7 +336,7 @@ export default {
             })
         },
         onEdit(row) {
-            if(row.asnBillStateValue !== '未收货'){
+            if (row.asnBillStateValue !== '未收货') {
                 this.$message.warning("操作失败，改ASN单已收货");
                 return;
             }

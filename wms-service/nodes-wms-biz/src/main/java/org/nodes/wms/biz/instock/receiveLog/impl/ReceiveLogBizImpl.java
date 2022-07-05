@@ -152,11 +152,10 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		return receiveLog;
 	}
 
+
 	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public boolean cancelReceive(List<Long> idList) {
-		//根据记录id查询收货记录
-		List<ReceiveLog> receiveLogList = receiveLogDao.getReceiveLogListByIdList(idList);
+	public List<ReceiveLog> canCancelReceive(List<Long> receiveIdList) {
+		List<ReceiveLog> receiveLogList = receiveLogDao.getReceiveLogListByIdList(receiveIdList);
 		receiveLogList.forEach(item -> {
 			// 判断收货记录中是否存在撤销数为负数的，有就抛异常
 			if (BigDecimalUtil.lt(item.getQty(), BigDecimal.ZERO)) {
@@ -164,75 +163,49 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 			}
 		});
 		//货主、物品、库位、状态、箱码、LPNCode、30个批属性相同的才合并
-		// 先根据货主、物品、库位、状态、箱码、LPNCode分组
 		Map<String, List<ReceiveLog>> collect = receiveLogList.stream().collect(Collectors.groupingBy(
 			item -> item.getWhId() + "_" + item.getSkuId() + "_" + item.getLocId() + "_" + item.getBoxCode()
 				+ "_" + item.getLpnCode())
 		);
 		List<ReceiveLog> finalReceiveLogList = new ArrayList<>();
-		//遍历分组得到得map
 		for (Map.Entry<String, List<ReceiveLog>> entry : collect.entrySet()
 		) {
 			List<ReceiveLog> value = entry.getValue();
-			//根据货主等字段分组后，若结果只有一条数据，直接加到最终的收货记录集合中
 			if (value.size() == 1) {
 				finalReceiveLogList.add(value.get(0));
 				continue;
 			}
-			// 临时集合接收下面循环时的下标
 			List<Integer> tempList = new ArrayList<>();
 			tempList.add(-1);
-			// 遍历每个分组中的ReceiveLog集合，拿第一个元素和后面的每个元素比较
-			//
 			for (int i = 0; i < value.size() && !tempList.contains(i); i++) {
-				// 设置最终的收货数量为当前元素的数量
 				BigDecimal sumQty = value.get(i).getQty();
 				for (int j = i + 1; j < value.size() && !tempList.contains(j); j++) {
 					boolean flag = SkuLotUtil.compareAllSkuLot(value.get(i), value.get(j));
-					// 校验通过
 					if (flag) {
-						// 最终收货数量为进行比较的两个元素的和
 						sumQty = value.get(i).getQty().add(value.get(j).getQty());
-						// 将比较的元素的下标放入临时集合中，下次遍历时，跳过该元素
 						tempList.add(j);
 					}
 				}
-				// 将比较的元素的下标放入临时集合中，下次遍历时，跳过该元素
 				tempList.add(i);
 				value.get(i).setQty(sumQty);
 				finalReceiveLogList.add(value.get(i));
 			}
 		}
 
-		finalReceiveLogList.forEach(item -> {
-			// 校验是否存在多个库存
-			Stock stock = stockBiz.findStockOnStage(item);
-			// 更新库存
-			item.setQty(item.getQty().negate()); // qty取负数
-			stockBiz.outStockByCancleReceive(StockLogTypeEnum.OUTSTOCK_BY_CANCEL_RECEIVE, item, stock);
-			// 新增撤销收货记录
-			item.setId(null);
-			receiveLogDao.save(item);
-			// 查询收货明细
-			ReceiveDetail receiveDetail = receiveBiz.getDetailByReceiveDetailId(item.getReceiveDetailId());
-			// 更新收货明细
-			receiveBiz.updateReceiveDetail(receiveDetail, item.getQty());
-			// 查询收货头表
-			ReceiveHeader receiveHeader = receiveBiz.getReceiveHeaderById(item.getReceiveId());
-			// 更新收货头表
-			receiveBiz.updateReciveHeader(receiveHeader, receiveDetail);
-		});
-		return true;
-	}
-
-	@Override
-	public void canCancelReceive(List<Long> receiveIdList) {
-
+		return finalReceiveLogList;
 	}
 
 	@Override
 	public List<ReceiveLog> newReceiveLog(List<ReceiveLog> receiveLogList) {
-		return null;
+		receiveLogList.forEach(item->{
+			item.setId(null);
+			item.setQty(item.getQty().negate());
+		});
+		boolean saveSuccess = receiveLogDao.saveBatch(receiveLogList);
+		if(!saveSuccess){
+			throw new ServiceException("生成清点记录失败，请稍后再试");
+		}
+		return receiveLogList;
 	}
 
 	@Override

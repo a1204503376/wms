@@ -4,42 +4,44 @@
             <template v-slot:searchFrom>
                 <el-row type="flex">
                     <el-col :span="8">
-                        <el-form-item label="收货单编码">
-                            <el-input v-model.trim="form.params.receiveNo" :clearable="true"></el-input>
+                        <el-form-item label="收货单编码" label-width="90px">
+                            <el-input placeholder="请输入收货单编码" v-model.trim="form.params.receiveNo" :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="物品编码">
-                            <el-input v-model.trim="form.params.skuCode" :clearable="true"></el-input>
+                        <el-form-item label="物品编码" label-width="90px">
+                            <nodes-sku v-model="form.params.skuIdList" :clearable="true"></nodes-sku>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="单据类型">
+                        <el-form-item label="单据类型" label-width="90px">
                             <nodes-bill-type
                                 v-model="form.params.billType"
                                 :clearable="true"></nodes-bill-type>
                         </el-form-item>
                     </el-col>
                 </el-row>
+            </template>
+            <template v-slot:expandSearch>
                 <el-row type="flex">
-                    <el-col :span="8">
-                        <el-form-item label="上游编码">
-                            <el-input v-model.trim="form.params.externalOrderNo" :clearable="true"></el-input>
+                    <el-col :span="6">
+                        <el-form-item label="上游编码" label-width="90px">
+                            <el-input placeholder="请输入上游编码" v-model.trim="form.params.externalOrderNo" :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="创建人">
-                            <el-input v-model.trim="form.params.createUser" :clearable="true"></el-input>
+                    <el-col :span="6">
+                        <el-form-item label="创建人" label-width="90px">
+                            <el-input placeholder="请输入创建人" v-model.trim="form.params.createUser" :clearable="true"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="创建时间" label-width="90px">
+                            <nodes-date-range
+                                v-model="form.params.createTimeDateRange"
+                            ></nodes-date-range>
                         </el-form-item>
                     </el-col>
                 </el-row>
-            </template>
-            <template v-slot:expandSearch>
-                <el-form-item label="创建时间">
-                    <nodes-date-range
-                        v-model="form.params.createTimeDateRange"
-                    ></nodes-date-range>
-                </el-form-item>
             </template>
             <template v-slot:tableTool>
                 <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
@@ -117,10 +119,12 @@ import {ExcelExport} from 'pikaz-excel-js'
 import {nowDateFormat} from "@/util/date";
 import NodesReceiveBillState from "@/components/wms/select/NodesReceiveBillState";
 import NodesBillType from "@/components/wms/select/NodesBillType";
+import NodesSku from "@/components/wms/select/NodesSkuByQuery";
 
 export default {
     name: "notReceiveDetail",
     components: {
+        NodesSku,
         NodesBillType,
         NodesReceiveBillState,
         NodesWarehouse,
