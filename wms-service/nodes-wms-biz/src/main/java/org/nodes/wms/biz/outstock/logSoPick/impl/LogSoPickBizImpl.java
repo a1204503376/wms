@@ -3,7 +3,7 @@ package org.nodes.wms.biz.outstock.logSoPick.impl;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
 import org.nodes.wms.dao.outstock.logSoPick.LogSoPickDao;
-import org.nodes.wms.dao.outstock.logSoPick.dot.output.LogSoPickIndexResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickIndexResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

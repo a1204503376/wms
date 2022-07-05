@@ -1,7 +1,7 @@
 package org.nodes.wms.dao.outstock.logSoPick.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.nodes.wms.dao.outstock.logSoPick.dot.output.LogSoPickIndexResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickIndexResponse;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.springframework.stereotype.Repository;
 

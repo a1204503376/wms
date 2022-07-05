@@ -3,7 +3,7 @@
 <mapper namespace="org.nodes.wms.dao.outstock.logSoPick.mapper.LogSoPickMapper">
 
     <select id="selectPickSkuQtyTop10"
-            resultType="org.nodes.wms.dao.outstock.logSoPick.dot.output.LogSoPickIndexResponse">
+            resultType="org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickIndexResponse">
         SELECT sku_id,
                sku_code,
                sum(pick_real_qty) as pick_real_qty

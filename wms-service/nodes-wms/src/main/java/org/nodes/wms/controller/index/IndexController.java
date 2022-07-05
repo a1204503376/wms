@@ -6,7 +6,7 @@ import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
-import org.nodes.wms.dao.outstock.logSoPick.dot.output.LogSoPickIndexResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickIndexResponse;
 import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.GetMapping;

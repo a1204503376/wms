@@ -1,7 +1,7 @@
 package org.nodes.wms.dao.outstock.logSoPick.impl;
 
 import org.nodes.wms.dao.outstock.logSoPick.LogSoPickDao;
-import org.nodes.wms.dao.outstock.logSoPick.dot.output.LogSoPickIndexResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickIndexResponse;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.outstock.logSoPick.mapper.LogSoPickMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
