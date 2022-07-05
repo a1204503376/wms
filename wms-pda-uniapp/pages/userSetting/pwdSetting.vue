@@ -74,6 +74,14 @@
 
 			};
 		},
+		onBackPress(event) {
+			// #ifdef APP-PLUS
+			if (event.from === 'backbutton') {
+				this.esc();
+				return true;
+			}
+			// #endif
+		},
 		methods: {
 			esc() {
 				uni.$u.func.route('/pages/userSetting/userSetting');
@@ -100,8 +108,8 @@
 							md5(this.form.userInfo.newPassword),
 							md5(this.form.userInfo.newPassword1)).then(data => {
 							this.navigateBack();
-							})
-				})
+						})
+					})
 				}, 1000)
 			}
 		},

@@ -106,7 +106,7 @@ public interface StockBiz {
 	 * @param boxCode 箱码的后几位
 	 * @return key:lpn编码
 	 */
-	Map<String, List<Stock>> findLpnStockOnStageLeftLikeByBoxCode(Long whId, String boxCode);
+	List<Stock> findLpnStockOnStageLeftLikeByBoxCode(Long whId, String boxCode);
 
 	/**
 	 * 根据清点记录查询入库暂存区的库存,如果查询的库存超过两个会报异常

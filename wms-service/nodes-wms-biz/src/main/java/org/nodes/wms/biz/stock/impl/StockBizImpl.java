@@ -410,7 +410,7 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
-	public Map<String, List<Stock>> findLpnStockOnStageLeftLikeByBoxCode(Long whId, String boxCode) {
+	public List<Stock> findLpnStockOnStageLeftLikeByBoxCode(Long whId, String boxCode) {
 		Location stage = locationBiz.getStageLocation(whId);
 		List<Stock> stock = stockDao.getStockLeftLikeByBoxCode(boxCode,
 			Collections.singletonList(stage.getLocId()));

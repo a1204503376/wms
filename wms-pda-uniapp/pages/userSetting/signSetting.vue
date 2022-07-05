@@ -6,13 +6,13 @@
 		</u-navbar>
 		<view>
 			<view class="bigRound">
-				<view class="smallRound" @click="editUserLoginStatus" >
+				<view class="smallRound" @click="editUserLoginStatus">
 					<span>{{signStatus === 1 ? "签退" : "签到"}}</span>
 				</view>
-				
+
 			</view>
 			<view class="sing-status">
-			{{signStatus === 1 ? "最后签到时间:" : "最后签退时间:"}}{{lastSignTime}}
+				{{signStatus === 1 ? "最后签到时间:" : "最后签退时间:"}}{{lastSignTime}}
 			</view>
 		</view>
 	</view>
@@ -23,23 +23,34 @@
 	import api from '@/api/user.js'
 	import tool from "@/utils/tool.js"
 	export default {
-		data(){
-			return{
+		data() {
+			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 			}
+		},
+		onBackPress(event) {
+			// #ifdef APP-PLUS
+			if (event.from === 'backbutton') {
+				this.esc();
+				return true;
+			}
+			// #endif
+		},
+		onLoad: function(option) {
+			var parse = JSON.parse(option.param)
+			this.path = parse.path;
 		},
 		methods: {
 			// 1签到  0签退
 			editUserLoginStatus() {
-				api.editUserLoginStatus(this.signStatus,this.$store.state.accessToken)
-				.then((res) => {
-					this.$u.vuex('signStatus', res.data.loginStatus);
-					 this.$u.vuex('lastSignTime', res.data.lastLoginTime);
-					
-				})
+				api.editUserLoginStatus(this.signStatus, this.$store.state.accessToken)
+					.then((res) => {
+						this.$u.vuex('signStatus', res.data.loginStatus);
+						this.$u.vuex('lastSignTime', res.data.lastLoginTime);
+					})
 			},
 			esc() {
-				uni.$u.func.route('/pages/userSetting/userSetting');
+				uni.$u.func.route(this.path);
 			},
 		},
 	}

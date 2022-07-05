@@ -50,6 +50,14 @@
 			}
 
 		},
+		onBackPress(event) {
+			// #ifdef APP-PLUS
+			if (event.from === 'backbutton') {
+				this.esc();
+				return true;
+			}
+			// #endif
+		},
 		methods: {
 			esc() {
 				if (tool.isEmpty(uni.getStorageSync('warehouse'))) {
