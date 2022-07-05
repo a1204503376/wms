@@ -1,7 +1,7 @@
 <template>
 	<view @keyup.esc="esc">
 		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
-			:bgColor="navigationBarBackgroundColor" titleStyle="color:#ffffff;font-size:21px"
+			:bgColor="navigationBarBackgroundColor" title="按箱收货" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
