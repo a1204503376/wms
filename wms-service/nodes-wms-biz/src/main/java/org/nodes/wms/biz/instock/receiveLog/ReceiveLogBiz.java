@@ -77,4 +77,10 @@ public interface ReceiveLogBiz {
 	 * @return true: 撤销成功，false: 撤销失败
 	 */
 	boolean cancelReceive(List<Long> idList);
+
+	void canCancelReceive(List<Long> receiveIdList);
+
+	List<ReceiveLog> newReceiveLog(List<ReceiveLog> receiveLogList);
+
+	List<ReceiveLog> findReceiveLog(List<Long> receiveIdList);
 }

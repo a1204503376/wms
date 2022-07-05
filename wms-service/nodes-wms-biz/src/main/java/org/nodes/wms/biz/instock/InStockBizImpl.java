@@ -153,4 +153,20 @@ public class InStockBizImpl implements InStockBiz {
 
 
 	}
+
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public void cancelReceive(List<Long> receiveIdList) {
+		// 是否可以撤销
+		receiveLogBiz.canCancelReceive(receiveIdList);
+		// 生成撤销的清点记录
+		List<ReceiveLog> receiveLogList = receiveLogBiz.findReceiveLog(receiveIdList);
+		List<ReceiveLog> receiveLog = receiveLogBiz.newReceiveLog(receiveLogList);
+		// 下架库存
+
+		// 更新收货单明细
+		// 更新收货单头表信息
+		// 生成业务日志
+	}
 }
