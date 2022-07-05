@@ -1,0 +1,51 @@
+{
+  "id": "3499303",
+  "name": "index",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1983879",
+      "name": "柱状图",
+      "font_class": "zhuzhuangtu",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    },
+    {
+      "icon_id": "14311255",
+      "name": "堆积柱图",
+      "font_class": "duijizhutu",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "20727216",
+      "name": "日历",
+      "font_class": "rili",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "21830933",
+      "name": "日历",
+      "font_class": "rili1",
+      "unicode": "f623",
+      "unicode_decimal": 63011
+    },
+    {
+      "icon_id": "7158868",
+      "name": "库存统计",
+      "font_class": "kucuntongji",
+      "unicode": "e665",
+      "unicode_decimal": 58981
+    },
+    {
+      "icon_id": "7158882",
+      "name": "数量统计",
+      "font_class": "shuliangtongji",
+      "unicode": "e667",
+      "unicode_decimal": 58983
+    }
+  ]
+}

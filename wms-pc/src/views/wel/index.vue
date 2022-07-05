@@ -1,84 +1,89 @@
 <template>
     <div class="index">
-        <el-row :gutter="10" class="detailed">
-            <el-col :span="18">
-                <div class="left_center">
-                    <div class="header">
-                        <p>周转分析</p>
-                    </div>
-                    <div class="main">
-                        <el-row type="flex" style="margin-top: 0;margin-bottom: 0;">
-                            <el-col :span="6">
-                              <span class="icon">
-                                <i class="iconfont icon-shujuzhanshi2" icon-class="shujuzhanshi2"/>
-                              </span>
-                                <ul class="main_ul">
-                                    <li>待检区物料数量</li>
-                                    <li>{{ flowAnalysis.qcSkuQty }}</li>
-                                    <span class="um">PCS</span>
-                                </ul>
-                            </el-col>
-                            <el-col :span="6">
-                              <span class="icon">
-                                <i class="iconfont icon-shujuzhanshi2" icon-class="shujuzhanshi2"/>
-                              </span>
-                                <ul class="main_ul">
-                                    <li>入库暂存区数量</li>
-                                    <li>{{ flowAnalysis.stageSkuQty }}</li>
-                                    <span class="um">PCS</span>
-                                </ul>
-                            </el-col>
-                            <el-col :span="6">
-                              <span class="icon">
-                                <i class="iconfont icon-shujuzhanshi2" icon-class="shujuzhanshi2"/>
-                              </span>
-                                <ul class="main_ul">
-                                    <li>待检区物料存放天数</li>
-                                    <li>{{ flowAnalysis.qcSkuStoreDay }}</li>
-                                    <span class="um">天</span>
-                                </ul>
-                            </el-col>
-                            <el-col :span="6">
-                              <span class="icon">
-                                <i class="iconfont icon-shujuzhanshi2" icon-class="shujuzhanshi2"/>
-                              </span>
-                                <ul class="main_ul">
-                                    <li>入库暂存区物料存放天数</li>
-                                    <li>{{ flowAnalysis.stageSkuStoreDay }}</li>
-                                    <span class="um">天</span>
-                                </ul>
-                            </el-col>
-                        </el-row>
-                    </div>
+        <el-row class="main" type="flex">
+            <el-col :span="5">
+                <div class="main_div1">
+                         <span class="icon">
+                            <i class="iconfont icon-duijizhutu"/>
+                         </span>
+                    <!--                                    {{ flowAnalysis.qcSkuQty }}-->
+                    <span class="val">
+                        12322224.123
+                        <label class="um">PCS</label>
+                    </span>
+                </div>
+                <div class="main_lab">
+                    <span>待检区物料数量</span>
                 </div>
             </el-col>
-            <el-col :span="6">
-                <div class="right_center">
-                    <div class="header">
-                        <p>库存分析</p>
-                    </div>
-                    <el-row>
-                        <el-col :span="12">
-                             <span class="icon">
-                                <i class="iconfont icon-shujuzhanshi2" icon-class="shujuzhanshi2"/>
-                              </span>
-                            <ul class="main_ul">
-                                <li>库存物品总数</li>
-                                <li>{{ inventoryAnalysis.stockSkuCount }}</li>
-                                <span class="um">PSC</span>
-                            </ul>
-                        </el-col>
-                        <el-col :span="12">
-                             <span class="icon">
-                                <i class="iconfont icon-shujuzhanshi2" icon-class="shujuzhanshi2"/>
-                              </span>
-                            <ul class="main_ul">
-                                <li>库位占用</li>
-                                <li>{{ inventoryAnalysis.locOccupy }}</li>
-                                <span class="um">%</span>
-                            </ul>
-                        </el-col>
-                    </el-row>
+            <el-col :span="5">
+                <div class="main_div1">
+                         <span class="icon">
+                            <i class="iconfont icon-zhuzhuangtu"/>
+                         </span>
+                    <span class="val">
+                        {{ flowAnalysis.stageSkuQty }}
+                        <label class="um">PCS</label>
+                    </span>
+                </div>
+                <div class="main_lab">
+                    <span>入库暂存区数量</span>
+                </div>
+            </el-col>
+            <el-col :span="3">
+                <div class="main_div2">
+                         <span class="icon">
+                            <i class="iconfont icon-rili"/>
+                         </span>
+                    <span class="val">
+                        {{ flowAnalysis.qcSkuStoreDay }}
+                        <label class="um">天</label>
+                    </span>
+                </div>
+                <div class="main_lab">
+                    <span>待检区物料存放天数</span>
+                </div>
+            </el-col>
+            <el-col :span="3">
+                <div class="main_div2">
+                         <span class="icon">
+                            <i class="iconfont icon-rili1"/>
+                         </span>
+                    <span class="val">
+                        {{ flowAnalysis.stageSkuStoreDay }}
+                        <label class="um">天</label>
+                    </span>
+                </div>
+                <div class="main_lab">
+                    <span>入库暂存区物料存放天数</span>
+                </div>
+            </el-col>
+            <el-col :span="5">
+                <div class="main_div1">
+                     <span class="icon">
+                        <i class="iconfont icon-kucuntongji"/>
+                     </span>
+                    <span class="val">
+                        {{ inventoryAnalysis.stockSkuCount }}
+                         <label class="um">PCS</label>
+                    </span>
+                </div>
+                <div class="main_lab">
+                    <span>库存物品总数</span>
+                </div>
+            </el-col>
+            <el-col :span="3">
+                <div class="main_div2">
+                         <span class="icon">
+                            <i class="iconfont icon-shuliangtongji"/>
+                         </span>
+                    <span class="val">
+                        {{ inventoryAnalysis.locOccupy }}
+                        <span class="um">%</span>
+                    </span>
+                </div>
+                <div class="main_lab">
+                    <span>库位占用</span>
                 </div>
             </el-col>
         </el-row>
@@ -95,6 +100,7 @@
 
 <script>
 import {getInStockRate, getOutStockRate, getStockData} from "@/api/wms/index/index.js";
+import "../../../public/cdn/iconfont/index/iconfont.css"
 import LabelData from "@/views/wms/basedata/enterprise/labelData";
 
 export default {
@@ -236,58 +242,44 @@ export default {
     padding: 0;
 }
 
-.left_center, .right_center {
+.main {
+    background: #fff;
     min-height: 220px;
 }
 
-.left_center, .right_center, .left_security, .right_storage {
-    background: #fff;
+.main_div1 {
+    border-right:1px solid #ccc;
+    margin: 15% 0 0 10%;
 }
 
-.left_center .header, .right_center .header, .left_security .title, .right_storage .title {
-    font-size: 16px;
-    height: 50px;
-    line-height: 50px;
-    margin-left: 15px;
+.main_div2 {
+    border-right:1px solid #ccc;
+    margin: 26% 0 0 10%;
 }
 
-.left_center .main_ul {
-    /*width: 60%;*/
-    float: left;
-    margin-left: 5%;
-    border-right: none !important;
-}
-
-.right_center .main_ul {
-    /*width: 40%;*/
-    float: left;
-    margin-left: 5%;
-    border-right: none !important;
-}
-
-.main_ul li {
-    font-size: 14px;
-    /*font-weight: 700;*/
-    list-style: none;
-    padding: 10px 0;
-    line-height: 17px;
-}
-
-.main_ul li:last-of-type {
+.main .val {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-left: 5px;
+    line-height: 75px;
     font-size: 30px;
-    display: inline;
     font-weight: 600;
-    /*color: #1e9fff;*/
 }
 
-.main_ul .um {
-    margin-left: 10px;
-    font-size: 14px;
+.main .um {
+    margin-left: 5px;
+    font-size: 15px;
+}
+
+.main_lab {
+    overflow: hidden;
+    text-align: center;
 }
 
 .icon {
     float: left;
-    margin: 5% 0 0 10%;
+    margin: 5% 0 0 0;
     display: block;
     background-color: #f3f6f8;
     width: 50px;
@@ -298,8 +290,7 @@ export default {
 
 .icon i {
     display: block;
-    margin-top: 10%;
-    color: #00a680;
+    margin-top: 13%;
     font-size: 35px;
 }
 
