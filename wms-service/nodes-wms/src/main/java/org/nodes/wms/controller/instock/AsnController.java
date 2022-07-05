@@ -1,4 +1,4 @@
-package org.nodes.wms.controller.instock.asn;
+package org.nodes.wms.controller.instock;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;

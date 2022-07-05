@@ -10,74 +10,73 @@
 				<u--input v-model="param.boxCode" @confirm="getReceiveDetailList"></u--input>
 			</u-form-item>
 		</u--form>
-		<view style="margin-top: 35%;margin-left: 10%;margin-right: 10%;">
+		<view style="margin-top: 35%;margin-left: 5%;margin-right: 5%;">
 		<u-row >
-			<u-col span="4">
-				<view class="demo-layout bg-purple"><u-button text="1" @click="press(1)" style="height: 70px;width: 90%;"></u-button></view>
+			<u-col span="3">
+				<view class="demo-layout bg-purple"><u-button  @click="press('A')" style="height: 70px;width: 90%;font-size: 25px;">A</u-button></view>
 			</u-col>
-			<u-col span="4">
-				<view class="demo-layout bg-purple"><u-button text="2"  @click="press(2)" style="height: 70px;width: 90%;"></u-button></view>
+			<u-col span="3">
+				<view class="demo-layout bg-purple"><u-button @click="press(1)" style="height: 70px;width: 90%;font-size: 25px;">1</u-button></view>
 			</u-col>
-			<u-col span="4">
-				<view class="demo-layout bg-purple"><u-button text="3"  @click="press(3)" style="height: 70px;width: 90%;"></u-button></view>
+			<u-col span="3">
+				<view class="demo-layout bg-purple"><u-button @click="press(2)" style="height: 70px;width: 90%;font-size: 25px;">2</u-button></view>
 			</u-col>
-		</u-row>
-		<u-row customStyle="margin-top: 5%">
-			<u-col span="4">
-				<view class="demo-layout bg-purple"><u-button text="4"  @click="press(4)" style="height: 70px;width: 90%;"></u-button></view>
-			</u-col>
-			<u-col span="4">
-				<view class="demo-layout bg-purple"><u-button text="5"  @click="press(5)"  style="height: 70px;width: 90%;"></u-button></view>
-			</u-col>
-			<u-col span="4">
-				<view class="demo-layout bg-purple"><u-button text="6"  @click="press(6)" style="height: 70px;width: 90%;"></u-button></view>
+			<u-col span="3">
+				<view class="demo-layout bg-purple"><u-button  @click="press(3)" style="height: 70px;width: 90%;font-size: 25px;">3</u-button></view>
 			</u-col>
 		</u-row>
 		<u-row customStyle="margin-top: 5%">
-			<u-col span="4">
-				<view class="demo-layout bg-purple"><u-button text="7"  @click="press(7)" style="height: 70px;width: 90%;"></u-button></view>
+			<u-col span="3">
+				<view class="demo-layout bg-purple"><u-button  @click="press('B')" style="height: 70px;width: 90%;font-size: 25px;">B</u-button></view>
 			</u-col>
-			<u-col span="4">
-				<view class="demo-layout bg-purple"><u-button text="8"  @click="press(8)" style="height: 70px;width: 90%;"></u-button></view>
+			<u-col span="3">
+				<view class="demo-layout bg-purple"><u-button  @click="press(4)" style="height: 70px;width: 90%;font-size: 20px;font-size: 25px;" >4</u-button></view>
 			</u-col>
-			<u-col span="4">
-				<view class="demo-layout bg-purple"><u-button text="9"  @click="press(9)" style="height: 70px;width: 90%;"></u-button></view>
+			<u-col span="3">
+				<view class="demo-layout bg-purple"><u-button   @click="press(5)" style="height: 70px;width: 90%;font-size: 25px;">5</u-button></view>
+			</u-col>
+			<u-col span="3">
+				<view class="demo-layout bg-purple"><u-button   @click="press(6)" style="height: 70px;width: 90%;font-size: 25px;">6</u-button></view>
 			</u-col>
 		</u-row>
 		<u-row customStyle="margin-top: 5%">
-			<u-col span="4">
-				<view class="demo-layout bg-purple"><u-button text="删除"  @click="press(10)"  style="height: 70px;width: 90%;"></u-button></view>
+			<u-col span="3">
+				<view class="demo-layout bg-purple"><u-button @click="press('C')" style="height: 70px;width: 90%;font-size: 25px;">C</u-button></view>
 			</u-col>
-			<u-col span="4">
-				<view class="demo-layout bg-purple"><u-button text="0"  @click="press(0)" style="height: 70px;width: 90%;"></u-button></view>
+			<u-col span="3">
+				<view class="demo-layout bg-purple"><u-button  @click="press(7)" style="height: 70px;width: 90%;font-size: 25px;">7</u-button></view>
 			</u-col>
-			<u-col span="4">
-				<view class="demo-layout bg-purple"><u-button text="提交"  @click="findStockByBoxCode" style="height: 70px;width: 90%;"></u-button></view>
+			<u-col span="3">
+				<view class="demo-layout bg-purple"><u-button   @click="press(8)" style="height: 70px;width: 90%;font-size: 25px;">8</u-button></view>
 			</u-col>
+			<u-col span="3">
+				<view class="demo-layout bg-purple"><u-button   @click="press(9)" style="height: 70px;width: 90%;font-size: 25px;">9</u-button></view>
+			</u-col>
+		</u-row>
+		<u-row customStyle="margin-top: 5%">
+		<u-col span="3">
+			<view class="demo-layout bg-purple"><u-button  @click="press('D')" style="height: 70px;width: 90%;font-size: 25px;">D</u-button></view>
+		</u-col>
+		<u-col span="3">
+			<view class="demo-layout bg-purple"><u-button  @click="press(10)" style="height: 70px;width: 90%;font-size: 25PX;">删除</u-button></view>
+		</u-col>
+		<u-col span="3">
+			<view class="demo-layout bg-purple"><u-button   @click="press(0)" style="height: 70px;width: 90%;font-size: 25px;">0</u-button></view>
+		</u-col>
+	
+			
 		</u-row>
 		
 		</view>
-     <view>
-     	<u-popup :show="show" mode="center"  customStyle="width=100%">
-             <view  v-for="(item, index) in putawayList"  >
-             	<u-row >
-             		<u-col span="5">
-             			<view class="demo-layout bg-purple-light">箱码:{{item.boxCode}}</view>
-             		</u-col>
-             		<u-col span="4">
-             			<view class="demo-layout bg-purple">总数:{{item.qty}}</view>
-             		</u-col>
-             	</u-row>
-         
-             </view>
-     	</u-popup>
-     	
-     </view>
+   
 	  
 	
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
 				返回
+			</view>
+			<view class="btn-submit" @click="findStockByBoxCode()">
+				确定
 			</view>
 		</view>
 	</view>
@@ -94,7 +93,6 @@
 		},
 		data() {
 			return {
-				  show: false,
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				putawayList:[], 
 				param: {
@@ -113,7 +111,7 @@
 		},
 		methods: {
 			esc() {
-				uni.$u.func.route('/pages/home/childrenHome?title=收货');
+				uni.$u.func.route('/pages/home/childrenHome?title=上架');
 			},
 			press(num){
 				if(num==10){
@@ -123,6 +121,7 @@
 			   	this.param.boxCode = this.param.boxCode+num
 			},
 			findStockByBoxCode() {
+				alert("ssss")
 				this.param.whId = uni.getStorageSync('warehouse').whId
 				receive.findStockByBoxCode(this.param).then(res => {
 					this.putawayList = res.data

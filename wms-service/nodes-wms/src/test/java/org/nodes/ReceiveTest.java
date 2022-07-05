@@ -34,6 +34,6 @@ public class ReceiveTest {
 		list.add(1542315575902519298L);
 		list.add(1542460979583410177L);
 		list.add(1542459266365423618L);
-		receiveLogBiz.cancelReceive(list);
+		//receiveLogBiz.cancelReceive(list);
 	}
 }
