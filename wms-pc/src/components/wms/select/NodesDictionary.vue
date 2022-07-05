@@ -5,7 +5,6 @@
         :multiple="multiple"
         collapse-tags
         size="mini"
-        style="width:288px;"
         value-key="value"
         @change="onChange">
         <el-option

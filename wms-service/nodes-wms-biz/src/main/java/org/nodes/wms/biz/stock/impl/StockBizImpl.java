@@ -303,6 +303,7 @@ public class StockBizImpl implements StockBiz {
 		stock.setLastInTime(LocalDateTime.now());
 		stock.setStockStatus(StockStatusEnum.NORMAL);
 		stock.setSkuLevel(receiveLog.getSkuLevel());
+		stock.setWsuCode(receiveLog.getWsuCode());
 		Sku sku = skuBiz.findById(receiveLog.getSkuId());
 		if (Func.isNotEmpty(sku)) {
 			stock.setWspName(sku.getWspName());
@@ -314,6 +315,7 @@ public class StockBizImpl implements StockBiz {
 		stock.setStayStockQty(BigDecimal.ZERO);
 		stock.setStockQty(receiveLog.getQty());
 		stock.setPickQty(BigDecimal.ZERO);
+		stock.setOccupyQty(BigDecimal.ZERO);
 		stock.setBoxCode(receiveLog.getBoxCode());
 		stock.setLpnCode(receiveLog.getLpnCode());
 		stock.setLocCode(receiveLog.getLocCode());

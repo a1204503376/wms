@@ -6,7 +6,6 @@
         filterable
         placeholder="请选择"
         size="mini"
-        style="width: 300px"
         value-key="billTypeId"
         @change="onChange">
         <el-option

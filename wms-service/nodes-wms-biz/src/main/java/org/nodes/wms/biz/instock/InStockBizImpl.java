@@ -14,6 +14,7 @@ import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.core.tool.utils.Func;
@@ -93,7 +94,7 @@ public class InStockBizImpl implements InStockBiz {
 			lpn.setScanQty(lpn.getScanQty().add(item.getPlanQty()));
 			receiveBiz.updateReceiveDetailLpn(lpn);
 			// 生成清点记录
-			ReceiveLog receiveLog = receiveLogBiz.newReceiveLog(request, item, lpn,header,detail);
+			ReceiveLog receiveLog = receiveLogBiz.newReceiveLog(request, item, lpn, header, detail);
 			// 调用库存函数（for begin：一条执行一次）
 			stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_BOX, receiveLog);
 			//有单收货更新头表和明细信息
@@ -138,19 +139,44 @@ public class InStockBizImpl implements InStockBiz {
 	@Override
 	public void receiveByMultiBoxCode(ReceiveDetailLpnPdaMultiRequest receiveDetailLpnPdaMultiRequest) {
 		// 判断lpnCode是否为空，如果为空则随机生成一个lpnCode
-		if(Func.isEmpty(receiveDetailLpnPdaMultiRequest.getLpnCode())){
-           receiveDetailLpnPdaMultiRequest.setLpnCode(Func.randomUUID());
+		if (Func.isEmpty(receiveDetailLpnPdaMultiRequest.getLpnCode())) {
+			receiveDetailLpnPdaMultiRequest.setLpnCode(Func.randomUUID());
 		}
 		// 循环调用按箱收货业务方法
-	  for(ReceiveDetailLpnPdaRequest item:receiveDetailLpnPdaMultiRequest.getReceiveDetailLpnPdaRequestList()){
-		   item.setLpnCode(receiveDetailLpnPdaMultiRequest.getLpnCode());
-		   item.setLocCode(receiveDetailLpnPdaMultiRequest.getLocCode());
-		   item.setSkuLot1(receiveDetailLpnPdaMultiRequest.getSkuLot1());
-		   item.setSkuLot2(receiveDetailLpnPdaMultiRequest.getSkuLot2());
-		   item.setWhId(receiveDetailLpnPdaMultiRequest.getWhId());
-		  receiveByBoxCode(item);
-	  }
+		for (ReceiveDetailLpnPdaRequest item : receiveDetailLpnPdaMultiRequest.getReceiveDetailLpnPdaRequestList()) {
+			item.setLpnCode(receiveDetailLpnPdaMultiRequest.getLpnCode());
+			item.setLocCode(receiveDetailLpnPdaMultiRequest.getLocCode());
+			item.setSkuLot1(receiveDetailLpnPdaMultiRequest.getSkuLot1());
+			item.setSkuLot2(receiveDetailLpnPdaMultiRequest.getSkuLot2());
+			item.setWhId(receiveDetailLpnPdaMultiRequest.getWhId());
+			receiveByBoxCode(item);
+		}
 
 
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public void cancelReceive(List<Long> receiveIdList) {
+		// 是否可以撤销
+		List<ReceiveLog> receiveLogList = receiveLogBiz.canCancelReceive(receiveIdList);
+		// 生成撤销的清点记录
+		List<ReceiveLog> newReceiveLogList = receiveLogBiz.newReceiveLog(receiveLogList);
+		newReceiveLogList.forEach(item -> {
+//			List<ReceiveLog> receiveLogList = receiveLogBiz.findReceiveLog(receiveIdList);
+			// 下架库存
+			Stock stock = stockBiz.findStockOnStage(item);
+			stockBiz.outStockByCancleReceive(StockLogTypeEnum.OUTSTOCK_BY_CANCEL_RECEIVE, item, stock);
+			// 更新收货单明细
+			ReceiveDetail receiveDetail = receiveBiz.getDetailByReceiveDetailId(item.getReceiveDetailId());
+			receiveBiz.updateReceiveDetail(receiveDetail, item.getQty());
+			// 更新收货单头表信息
+			ReceiveHeader receiveHeader = receiveBiz.getReceiveHeaderById(item.getReceiveId());
+			receiveBiz.updateReciveHeader(receiveHeader, receiveDetail);
+			// 生成业务日志
+			receiveBiz.log(
+				receiveHeader.getReceiveId(), receiveDetail.getReceiveDetailId(),
+				item.getQty(), receiveDetail.getSkuLot1(), receiveHeader, receiveDetail);
+		});
 	}
 }

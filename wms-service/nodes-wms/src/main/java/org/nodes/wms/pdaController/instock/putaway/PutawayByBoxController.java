@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.common.stock.StockUtil;
+import org.nodes.wms.dao.putway.dto.input.NewPutawayByBoxlRequest;
 import org.nodes.wms.dao.putway.dto.input.PutawayByBoxDetailRequest;
 import org.nodes.wms.dao.putway.dto.input.PutawayByBoxRequest;
 import org.nodes.wms.dao.putway.dto.output.PutawayByBoxDetailResponse;
@@ -59,6 +60,12 @@ public class PutawayByBoxController {
 		return R.data(response);
 	}
 
+	/**
+	 * @param request 新建按箱上架的请求参数
+	 */
+	public void newPutawayByBox(@RequestBody NewPutawayByBoxlRequest request){
+
+	}
 
 
 

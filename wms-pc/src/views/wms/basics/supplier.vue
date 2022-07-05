@@ -2,20 +2,28 @@
     <div id="supplier">
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
-                <el-form-item label="供应商编码">
-                    <el-input v-model.trim="form.params.code" :clearable="true"></el-input>
-                </el-form-item>
-                <el-form-item label="供应商名称">
-                    <el-input v-model.trim="form.params.name" :clearable="true"></el-input>
-                </el-form-item>
+                <el-row type="flex">
+                    <el-col :span="8">
+                        <el-form-item label="供应商编码" label-width="90px">
+                            <el-input placeholder="请输入供应商编码" v-model.trim="form.params.code" :clearable="true" pla></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="供应商名称" label-width="90px">
+                            <el-input placeholder="请输入供应商名称" v-model.trim="form.params.name" :clearable="true"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </template>
             <template v-slot:expandSearch>
                 <el-row type="flex">
-                    <el-col :span="24">
-                        <el-form-item label="创建日期">
+                    <el-col :span="6">
+                        <el-form-item label="创建日期" label-width="90px">
                             <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
                         </el-form-item>
-                        <el-form-item label="更新日期">
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="更新日期" label-width="90px">
                             <nodes-date-range v-model="form.params.updateTimeDateRange"></nodes-date-range>
                         </el-form-item>
                     </el-col>
@@ -247,7 +255,7 @@ export default {
             })
                 .then(() => {
                     let removeObj = {
-                        idList: rows.map(item=>item.id)
+                        idList: rows.map(item => item.id)
                     };
                     remove(removeObj)
                         .then((res) => {

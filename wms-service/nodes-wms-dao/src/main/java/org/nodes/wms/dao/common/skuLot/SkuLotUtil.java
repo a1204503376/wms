@@ -31,7 +31,7 @@ public class SkuLotUtil {
 				if (Func.isNotEmpty(sourceProperty) && Func.isNotEmpty(targetProperty)) {
 					targetProperty.getWriteMethod().invoke(target, sourceProperty.getReadMethod().invoke(source));
 				}
-			} catch (IllegalAccessException | InvocationTargetException e) {
+			} catch (Throwable e) {
 				e.printStackTrace();
 			}
 		}
@@ -63,11 +63,7 @@ public class SkuLotUtil {
 			try {
 				Object t1SkuLot = t1Property.getReadMethod().invoke(t1);
 				Object t2SkuLot = t2Property.getReadMethod().invoke(t2);
-				if (t1SkuLot != null && t2SkuLot != null) {
-					if (!t1SkuLot.equals(t2SkuLot)) {
-						return false;
-					}
-				} else if (t1SkuLot != null || t2SkuLot != null) {
+				if (!isSame(t1SkuLot, t2SkuLot)) {
 					return false;
 				}
 			} catch (IllegalAccessException | InvocationTargetException e) {
@@ -76,6 +72,25 @@ public class SkuLotUtil {
 		}
 
 		return true;
+	}
+
+	/**
+	 * 判断两个是否相同，如果两个都为空（null和空白字符）或者两个值相等
+	 *
+	 * @param t1SkuLot
+	 * @param t2SkuLot
+	 * @return true：相同
+	 */
+	private static boolean isSame(Object t1SkuLot, Object t2SkuLot) {
+		if (t1SkuLot != null && t1SkuLot.equals(t2SkuLot)) {
+			return true;
+		}
+
+		if (Func.isEmpty(t1SkuLot) && Func.isEmpty(t2SkuLot)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

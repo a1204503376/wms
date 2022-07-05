@@ -5,7 +5,7 @@
                 <el-row type="flex">
                     <el-col :span="8">
                         <el-form-item label="收货单编码" label-width="90px">
-                            <el-input v-model.trim="form.params.receiveNo" :clearable="true"></el-input>
+                            <el-input placeholder="请输入收货单编码" v-model.trim="form.params.receiveNo" :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -28,22 +28,22 @@
                 <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="LPN" label-width="90px">
-                            <el-input v-model.trim="form.params.lpnCode" :clearable="true"></el-input>
+                            <el-input placeholder="请输入LPN" v-model.trim="form.params.lpnCode" :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="箱号" label-width="90px">
-                            <el-input v-model.trim="form.params.boxCode" :clearable="true"></el-input>
+                            <el-input placeholder="请输入箱号" v-model.trim="form.params.boxCode" :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="序列号" label-width="90px">
-                            <el-input v-model.trim="form.params.snCode" :clearable="true"></el-input>
+                            <el-input placeholder="请输入序列号" v-model.trim="form.params.snCode" :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="收货人" label-width="90px">
-                            <el-input v-model.trim="form.params.createUser" :clearable="true"></el-input>
+                            <el-input placeholder="请输入收货人" v-model.trim="form.params.createUser" :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>

@@ -71,10 +71,20 @@ public interface ReceiveLogBiz {
 	ReceiveLog newReceiveLog(ReceiveDetailLpnPdaRequest request, ReceiveDetailLpnItemDto item, ReceiveDetailLpn lpn, ReceiveHeader receiveHeader, ReceiveDetail detail);
 
 	/**
-	 * 撤销收货
+	 * 是否可以撤销
 	 *
-	 * @param idList: 收货记录id集合
-	 * @return true: 撤销成功，false: 撤销失败
+	 * @param receiveIdList: 清点记录id
+	 * @return List<ReceiveLog> 清点记录
 	 */
-	boolean cancelReceive(List<Long> idList);
+	List<ReceiveLog> canCancelReceive(List<Long> receiveIdList);
+
+	/**
+	 * 生成清点记录
+	 *
+	 * @param receiveLogList: 清点记录
+	 * @return List<ReceiveLog> 清点记录
+	 */
+	List<ReceiveLog> newReceiveLog(List<ReceiveLog> receiveLogList);
+
+	List<ReceiveLog> findReceiveLog(List<Long> receiveIdList);
 }
