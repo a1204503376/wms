@@ -102,7 +102,7 @@
 			},
 			esc() {
 				this.$destroy('keyboardListener')
-				uni.$u.func.route('/pages/inStock/receiveByPcs/ReceiveByPiece', {
+				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/ReceiveByPiece', {
 					receiveId: this.receiveId,
 					receiveDetailId: this.receiveDetailId
 				});
@@ -131,13 +131,13 @@
 									.currentReceivieIsAccomplish) {
 									//当前收货单收货收货完毕
 									_this.$destroy('keyboardListener')
-									_this.$u.func.route(
+									_this.$u.func.routeNavigateTo(
 										'/pages/inStock/receiveByPcs/receiptHeaderEnquiry');
 									return;
 								} else if (data.data.currentReceivieIsAccomplish) {
 									//当前收货单详情收货收货完毕
 									_this.$destroy('keyboardListener')
-									_this.$u.func.route(
+									_this.$u.func.routeNavigateTo(
 										'/pages/inStock/receiveByPcs/receiptDetailEnquiry', {
 											receiveId: _this.receiveId
 										});

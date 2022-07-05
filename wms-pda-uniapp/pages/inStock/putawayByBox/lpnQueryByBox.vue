@@ -59,7 +59,7 @@
 					//调用库存策略生成库位 将库位值赋值给loc
 					this.putawayData.locCode='AA'
 					this.$destroy('keyboardListener')
-					uni.$u.func.route('/pages/inStock/putawayByBox/putawayByBoxSubmit',this.putawayData);
+					uni.$u.func.routeNavigateTo('/pages/inStock/putawayByBox/putawayByBoxSubmit',this.putawayData);
 				})
 			},
 			analysisCode(code) {
@@ -81,7 +81,7 @@
 			},
 			esc() {
 				this.$destroy('keyboardListener')
-				uni.$u.func.route('/pages/home/childrenHome', {
+				uni.$u.func.routeNavigateTo('/pages/home/childrenHome', {
 					name: '上架'
 				});
 			},

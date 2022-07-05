@@ -50,7 +50,7 @@
 					})
 			},
 			esc() {
-				uni.$u.func.route(this.path);
+				uni.$u.func.routeNavigateTo(this.path);
 			},
 		},
 	}

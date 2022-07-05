@@ -55,13 +55,13 @@
 					this.$destroy('keyboardListener')
 					uni.setStorageSync('childrenMenu', menu.children)
 					//有子集的自动跳转统一模板
-					uni.$u.func.route('/pages/home/childrenHome', menu);
+					uni.$u.func.routeNavigateTo('/pages/home/childrenHome', menu);
 					return;
 				}
 				else if(tool.isNotEmpty(menu.path)){
 					this.$destroy('keyboardListener')
 					//没有子集的跳转到自己的页面
-					uni.$u.func.route(menu.path, {
+					uni.$u.func.routeNavigateTo(menu.path, {
 						path: '/pages/home/home'
 					});
 				}else{
@@ -73,7 +73,7 @@
 			},
 			userSetting() {
 				this.$destroy('keyboardListener')
-				uni.$u.func.route('/pages/userSetting/userSetting');
+				uni.$u.func.routeNavigateTo('/pages/userSetting/userSetting');
 			},
 			goOut() {
 				uni.$u.func.logout();

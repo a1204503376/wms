@@ -59,11 +59,11 @@
 			navTo(menu) {
 				//跳转页面
 				this.$destroy('keyboardListener')
-				uni.$u.func.route(menu.path);
+				uni.$u.func.routeNavigateTo(menu.path);
 			},
 			closePage() {
 				this.$destroy('keyboardListener')
-				uni.$u.func.route('/pages/home/home');
+				uni.$u.func.routeNavigateTo('/pages/home/home');
 			},
 			scannerCallback(data) {
 				this.username = data

@@ -83,7 +83,7 @@
 			},
 			esc() {
 				this.$destroy('keyboardListener')
-				uni.$u.func.route('/pages/inStock/putawayByBox/lpnQueryByBox');
+				uni.$u.func.routeNavigateTo('/pages/inStock/putawayByBox/lpnQueryByBox');
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

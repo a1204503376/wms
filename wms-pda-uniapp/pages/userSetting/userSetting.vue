@@ -76,21 +76,21 @@
 		},
 		methods: {
 			esc() {
-				uni.$u.func.route('/pages/home/home');
+				uni.$u.func.routeNavigateTo('/pages/home/home');
 			},
 			logout() {
 				this.$u.func.logout();
 			},
 			toPwdSetting() {
-				uni.$u.func.route('/pages/userSetting/pwdSetting');
+				uni.$u.func.routeNavigateTo('/pages/userSetting/pwdSetting');
 			},
 			sign() {
-				uni.$u.func.route('/pages/userSetting/signSetting', {
+				uni.$u.func.routeNavigateTo('/pages/userSetting/signSetting', {
 					path: '/pages/userSetting/userSetting'
 				});
 			},
 			setWarehouse() {
-				uni.$u.func.route('/pages/userSetting/warehouseSetting');
+				uni.$u.func.routeNavigateTo('/pages/userSetting/warehouseSetting');
 			}
 
 		}
