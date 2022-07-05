@@ -3,6 +3,7 @@ package org.nodes.wms.biz.stock;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.putway.dto.output.CallAgvResponse;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
@@ -14,7 +15,6 @@ import org.springblade.core.mp.support.Query;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 库存业务接口
@@ -102,11 +102,12 @@ public interface StockBiz {
 
 	/**
 	 * 天宜定制：根据箱号模糊查询所在LPN上的库存
-	 * @param whId 库房id
+	 *
+	 * @param whId    库房id
 	 * @param boxCode 箱码的后几位
 	 * @return key:lpn编码
 	 */
-	List<Stock> findLpnStockOnStageLeftLikeByBoxCode(Long whId, String boxCode);
+	List<CallAgvResponse> findLpnStockOnStageLeftLikeByBoxCode(Long whId, String boxCode);
 
 	/**
 	 * 根据清点记录查询入库暂存区的库存,如果查询的库存超过两个会报异常
