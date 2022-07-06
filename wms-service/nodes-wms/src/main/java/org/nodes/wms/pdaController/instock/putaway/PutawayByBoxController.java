@@ -44,14 +44,14 @@ public class PutawayByBoxController {
 		List<Stock> stockList = stockBiz.findStockOnStageByBoxCode(request.getWhId(), request.getBoxCode());
 		BigDecimal qty = StockUtil.getStockBalance(stockList);
 		PutawayByBoxResponse response = new PutawayByBoxResponse();
-		if (stockList.get(0).getBoxCode().indexOf(PutwayConstant.BOX_CODE_A) == 0 ||
-			stockList.get(0).getBoxCode().indexOf(PutwayConstant.BOX_CODE_B) == 0 ||
-			stockList.get(0).getBoxCode().indexOf(PutwayConstant.BOX_CODE_C) == 0 ||
-			stockList.get(0).getBoxCode().indexOf(PutwayConstant.BOX_CODE_D) == 0
+		if (stockList.get(BigDecimal.ZERO.intValue()).getBoxCode().indexOf(PutwayConstant.BOX_CODE_A) == BigDecimal.ZERO.intValue() ||
+			stockList.get(BigDecimal.ZERO.intValue()).getBoxCode().indexOf(PutwayConstant.BOX_CODE_B) == BigDecimal.ZERO.intValue() ||
+			stockList.get(BigDecimal.ZERO.intValue()).getBoxCode().indexOf(PutwayConstant.BOX_CODE_C) == BigDecimal.ZERO.intValue() ||
+			stockList.get(BigDecimal.ZERO.intValue()).getBoxCode().indexOf(PutwayConstant.BOX_CODE_D) == BigDecimal.ZERO.intValue()
 		) {
-			response.setLpnCode(stockList.get(0).getLpnCode());
+			response.setLpnCode(stockList.get(BigDecimal.ZERO.intValue()).getLpnCode());
 		}
-		response.setBoxCode(stockList.get(0).getBoxCode());
+		response.setBoxCode(stockList.get(BigDecimal.ZERO.intValue()).getBoxCode());
 		response.setQty(qty);
 		return R.data(response);
 	}

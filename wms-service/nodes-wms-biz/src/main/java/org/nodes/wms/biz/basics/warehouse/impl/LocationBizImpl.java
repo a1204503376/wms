@@ -289,11 +289,11 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public List<Location> findEnableAgvLocation(LpnType lpnType) {
-		return null;
+		return locationDao.getLocationByLpnTypeId(lpnType.getId());
 	}
 
 	@Override
 	public List<Location> getLocationByColumn(Location location) {
-		return null;
+		return locationDao.getLocationByLocColumn(location.getLocColumn());
 	}
 }

@@ -37,7 +37,7 @@ import org.nodes.wms.core.log.system.enums.SystemProcTypeEnum;
 import org.nodes.wms.core.log.system.service.ISystemProcService;
 import org.nodes.wms.core.outstock.so.dto.PickPlanDTO;
 import org.nodes.wms.core.outstock.so.entity.*;
-import org.nodes.wms.core.outstock.so.enums.SoBillStateEnum;
+import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
 import org.nodes.wms.core.outstock.so.enums.WellenStateEnum;
 import org.nodes.wms.core.outstock.so.mapper.PickPlanMapper;
 import org.nodes.wms.core.outstock.so.mapper.SoDetailMapper;
