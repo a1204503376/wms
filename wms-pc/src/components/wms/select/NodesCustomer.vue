@@ -1,16 +1,16 @@
 <template>
     <el-select
         v-model="val"
+        :collapse-tags="true"
         :default-first-option="true"
         :multiple="true"
         :loading="loading"
         :remote-method="remoteMethod"
         filterable
-        placeholder="请输入关键词"
+        placeholder="请输入客户编码或名称"
         remote
         reserve-keyword
         size="mini"
-        style="width: 450px"
         value-key="code"
         @change="onChange">
         <el-option
