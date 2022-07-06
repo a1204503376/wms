@@ -43,9 +43,11 @@
 	import uniSelect from '@/components/uni-select.vue'
 	import setting from '@/common/setting'
 	import tool from '@/utils/tool.js'
+	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {
 		components: {
-			uniSelect
+			uniSelect,
+			keyboardListener
 		},
 		data() {
 			return {
@@ -83,12 +85,19 @@
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
-
+      onBackPress(event) {
+      	// #ifdef APP-PLUS
+      	if (event.from === 'backbutton') {
+      		this.esc();
+      		return true;
+      	}
+      	// #endif
+      },
 		methods: {
 			submit() {
 				this.param.locCode = this.$u.func.parseLocCode(this.param.locCode)
 				receive.receiveByMultiBox(this.param).then(res => {
-					uni.$u.func.route('/pages/inStock/receiveByBox/receiveDetailLpnListQuery');
+					uni.$u.func.routeNavigateTo('/pages/inStock/receiveByBox/receiveDetailLpnListQuery');
 				})
 			},
 			focus(num) {
@@ -107,7 +116,7 @@
 				}
 			},
 			esc() {
-				uni.$u.func.route('/pages/inStock/receiveByBox/receiveDetailLpnListQuery');
+				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByBox/receiveDetailLpnListQuery');
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)

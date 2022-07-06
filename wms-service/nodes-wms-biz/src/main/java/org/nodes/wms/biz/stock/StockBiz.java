@@ -3,6 +3,7 @@ package org.nodes.wms.biz.stock;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.putway.dto.input.CallAgvRequest;
 import org.nodes.wms.dao.putway.dto.output.CallAgvResponse;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
@@ -156,4 +157,10 @@ public interface StockBiz {
 	 * @return true：可用
 	 */
 	boolean judgeEnableOnLocation(Location location);
+
+	/**
+	 * 天宜定制：呼叫Agv
+	 * @param request  前端传入参数
+	 */
+	void callAgv(CallAgvRequest request);
 }

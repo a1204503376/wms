@@ -1,7 +1,7 @@
 <template>
 	<view @keyup.esc="esc">
 	   <u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
-	   	:bgColor="navigationBarBackgroundColor" title="按件收货"  titleStyle="color:#ffffff;font-size:21px"
+	   	:bgColor="navigationBarBackgroundColor" title="多箱收货"  titleStyle="color:#ffffff;font-size:21px"
 	   	style="color:#ffffff;font-size:21px">
 	   </u-navbar>
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
@@ -44,9 +44,10 @@
 	import barCodeService from '@/common/barcodeFunc.js'
 	import setting from '@/common/setting'
 	import tool from '@/utils/tool.js'
+	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {
 		components: {
-
+        keyboardListener
 		},
 		data() {
 			return {
@@ -66,9 +67,17 @@
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
+		onBackPress(event) {
+			// #ifdef APP-PLUS
+			if (event.from === 'backbutton') {
+				this.esc();
+				return true;
+			}
+			// #endif
+		},
 		methods: {
 			esc() {
-				uni.$u.func.route('/pages/home/childrenHome?title=收货');
+				uni.$u.func.routeNavigateTo('/pages/home/childrenHome?title=收货');
 			},
 			getReceiveDetailList() {
 				receive.getReceiveDetailLpn(this.param.boxCode).then(res => {
@@ -93,7 +102,7 @@
 				})
 				return
 			  }
-				uni.$u.func.route('/pages/inStock/receiveByBox/receiveByMultiBox', this.detailLpnList);
+				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByBox/receiveByMultiBox', this.detailLpnList);
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)

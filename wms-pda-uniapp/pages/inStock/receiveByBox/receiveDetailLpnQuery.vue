@@ -7,7 +7,7 @@
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
 		<u--form labelPosition="left">
 			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="param.boxCode"  @confirm="getReceiveDetailList"></u--input>
+				<u--input v-model="param.boxCode" @confirm="getReceiveDetailList"></u--input>
 			</u-form-item>
 		</u--form>
 
@@ -33,9 +33,10 @@
 	import receive from '@/api/inStock/receiveByBox.js'
 	import barCodeService from '@/common/barcodeFunc.js'
 	import setting from '@/common/setting'
+	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {
 		components: {
-
+			keyboardListener
 		},
 		data() {
 			return {
@@ -54,9 +55,17 @@
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
+		onBackPress(event) {
+			// #ifdef APP-PLUS
+			if (event.from === 'backbutton') {
+				this.esc();
+				return true;
+			}
+			// #endif
+		},
 		methods: {
 			esc() {
-				uni.$u.func.route('/pages/home/childrenHome?title=收货');
+				uni.$u.func.routeNavigateTo('/pages/home/childrenHome?title=收货');
 			},
 			getReceiveDetailList() {
 				receive.getReceiveDetailLpn(this.param.boxCode).then(res => {
@@ -67,7 +76,7 @@
 				})
 			},
 			clickItem() {
-				uni.$u.func.route('/pages/inStock/receiveByBox/receiveByBox', this.param);
+				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByBox/receiveByBox', this.param);
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)
