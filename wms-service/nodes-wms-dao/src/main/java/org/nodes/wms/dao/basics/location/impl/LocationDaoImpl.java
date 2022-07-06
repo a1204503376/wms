@@ -123,4 +123,15 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 			throw new ServiceException("库位冻结/解冻更新失败");
 		}
 	}
+
+	@Override
+	public List<Location> getLocationByLpnTypeId(Long lpnTypeId) {
+		if(Func.isEmpty(lpnTypeId)){
+			throw new NullArgumentException("LocationDaoImpl.getLocationByLpnTypeId方法的参数为空");
+		}
+		LambdaQueryWrapper<Location> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+		lambdaQueryWrapper.eq(Location::getLpnTypeId,lpnTypeId);
+		lambdaQueryWrapper.orderByAsc(Location::getPutOrder);
+		return super.list(lambdaQueryWrapper);
+	}
 }

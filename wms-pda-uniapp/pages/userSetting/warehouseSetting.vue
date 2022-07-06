@@ -61,14 +61,14 @@
 		methods: {
 			esc() {
 				if (tool.isEmpty(uni.getStorageSync('warehouse'))) {
-					uni.$u.func.route('/pages/login/login');
+					uni.$u.func.routeNavigateTo('/pages/login/login');
 					return;
 				}
-				uni.$u.func.route('/pages/userSetting/userSetting');
+				uni.$u.func.routeNavigateTo('/pages/userSetting/userSetting');
 			},
 			submit() {
 				uni.setStorageSync('warehouse', this.warehouse);
-				uni.$u.func.route('/pages/home/home');
+				uni.$u.func.routeNavigateTo('/pages/home/home');
 			},
 			radioChange(row) {
 				this.warehouse = row.detail.value;

@@ -138,7 +138,7 @@
 						return;
 					}
 					if (_this.params.isSn) {
-						uni.$u.func.route('/pages/inStock/receiveByPcs/collectionSerialNumber', _this.params);
+						uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/collectionSerialNumber', _this.params);
 						return;
 					}
 					//提交表单数据 收货
@@ -147,11 +147,11 @@
 					receive.submitReceiptByPcs(_this.params).then(data => {
 						if (data.data.allReceivieIsAccomplish && data.data.currentReceivieIsAccomplish) {
 							//当前收货单收货收货完毕
-							_this.$u.func.route('/pages/inStock/receiveByPcs/receiptHeaderEnquiry');
+							_this.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/receiptHeaderEnquiry');
 							return;
 						} else if (data.data.currentReceivieIsAccomplish) {
 							//当前收货单详情收货收货完毕
-							_this.$u.func.route(
+							_this.$u.func.routeNavigateTo(
 								'/pages/inStock/receiveByPcs/receiptDetailEnquiry', {
 									receiveId: _this.receiveId
 								});
@@ -180,7 +180,7 @@
 				})
 			},
 			esc() {
-				uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', {
+				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/receiptDetailEnquiry', {
 					receiveId: this.receiveId
 				});
 			},

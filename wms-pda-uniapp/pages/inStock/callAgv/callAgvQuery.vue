@@ -7,7 +7,7 @@
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
 		<u--form labelPosition="left">
 			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="param.boxCode" @confirm="getReceiveDetailList"></u--input>
+				<u--input v-model="param.boxCode" @confirm="getReceiveDetailList"  disabled="false"></u--input>
 			</u-form-item>
 		</u--form>
 		<view style="margin-top: 35%;margin-left: 5%;margin-right: 5%;">
@@ -75,7 +75,7 @@
 			<view class="btn-cancle" @click="esc()">
 				返回
 			</view>
-			<view class="btn-submit" @click="findStockByBoxCode()">
+			<view class="btn-submit" @click="clickItem()">
 				确定
 			</view>
 		</view>
@@ -87,14 +87,15 @@
 	import barCodeService from '@/common/barcodeFunc.js'
 	import setting from '@/common/setting'
 	import tool from '@/utils/tool.js'
+	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {
 		components: {
-
+              keyboardListener
 		},
 		data() {
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
-				putawayList:[], 
+				stockList:[], 
 				param: {
 					boxCode: '',
                     whId:''
@@ -109,9 +110,17 @@
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
+		onBackPress(event) {
+			// #ifdef APP-PLUS
+			if (event.from === 'backbutton') {
+				this.esc();
+				return true;
+			}
+			// #endif
+		},
 		methods: {
 			esc() {
-				uni.$u.func.route('/pages/home/childrenHome?title=上架');
+				uni.$u.func.routeNavigateTo('/pages/home/childrenHome?title=上架');
 			},
 			press(num){
 				if(num==10){
@@ -121,19 +130,19 @@
 			   	this.param.boxCode = this.param.boxCode+num
 			},
 			findStockByBoxCode() {
-				alert("ssss")
 				this.param.whId = uni.getStorageSync('warehouse').whId
 				receive.findStockByBoxCode(this.param).then(res => {
-					this.putawayList = res.data
-					if(tool.isNotEmpty(this.putawayList)){
-						this.show = true
+					this.stockList = res.data
+					if(tool.isNotEmpty(this.stockList)){
+						this.clickItem()
 					}
 				})
 			},
 			
 			
 			clickItem() {
-				uni.$u.func.route('/pages/inStock/receiveByBox/receiveByBox', this.param);
+				alert("sdssssd")
+				uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgvQueryList', this.param);
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)

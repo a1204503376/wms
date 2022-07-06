@@ -54,11 +54,12 @@
 						});
 					}
 					this.putawayData.boxCode = data.data.boxCode;
-					this.putawayData.skuLot1 = data.data.skuLot1;
+					this.putawayData.lpnCode = data.data.lpnCode;
 					this.putawayData.qty = data.data.qty;
 					//调用库存策略生成库位 将库位值赋值给loc
 					this.putawayData.locCode='AA'
-					uni.$u.func.route('/pages/inStock/putawayByBox/putawayByBoxSubmit',this.putawayData);
+					this.$destroy('keyboardListener')
+					uni.$u.func.routeNavigateTo('/pages/inStock/putawayByBox/putawayByBoxSubmit',this.putawayData);
 				})
 			},
 			analysisCode(code) {
@@ -79,7 +80,8 @@
 				}
 			},
 			esc() {
-				uni.$u.func.route('/pages/home/childrenHome', {
+				this.$destroy('keyboardListener')
+				uni.$u.func.routeNavigateTo('/pages/home/childrenHome', {
 					name: '上架'
 				});
 			},

@@ -10,6 +10,7 @@ import org.nodes.wms.dao.basics.location.dto.output.LocationEditResponse;
 import org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -243,4 +244,18 @@ public interface LocationBiz {
 	 * @return true：是出库暂存区
 	 */
 	boolean isPickToLocation(Location location);
+
+	/**
+	 * 天宜定制：根据容器列别获取agv可用的库位，按照上架顺序返回
+	 * @param lpnType
+	 * @return
+	 */
+    List<Location> findEnableAgvLocation(LpnType lpnType);
+
+	/**
+	 * 获取同列的所有库位
+	 * @param location
+	 * @return
+	 */
+	List<Location> getLocationByColumn(Location location);
 }

@@ -95,7 +95,8 @@
 				}
 			},
 			esc() {
-				uni.$u.func.route('/pages/inStock/receiveByPcs/receiptHeaderEnquiry');
+				this.$destroy('keyboardListener')
+				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/receiptHeaderEnquiry');
 			},
 			getReceiveDetailList() {
 				if (tool.isNotEmpty(this.params.skuCode)) {
@@ -107,13 +108,14 @@
 					//TODO
 					// if (data.data.length == 1) {
 					// 	data.data[0].receiveId = this.params.receiveId;
-					// 	uni.$u.func.route('/pages/inStock/receiveByPcs/ReceiveByPiece', data.data[0]);
+					// 	uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/ReceiveByPiece', data.data[0]);
 					// }
 				})
 			},
 			clickItem(row) {
 				row.receiveId = this.params.receiveId;
-				uni.$u.func.route('/pages/inStock/receiveByPcs/ReceiveByPiece', row);
+				this.$destroy('keyboardListener')
+				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/ReceiveByPiece', row);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

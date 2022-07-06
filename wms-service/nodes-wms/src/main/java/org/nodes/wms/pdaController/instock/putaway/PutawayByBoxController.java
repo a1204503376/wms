@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.common.stock.StockUtil;
+import org.nodes.wms.dao.putway.constant.PutwayConstant;
 import org.nodes.wms.dao.putway.dto.input.NewPutawayByBoxlRequest;
 import org.nodes.wms.dao.putway.dto.input.PutawayByBoxDetailRequest;
 import org.nodes.wms.dao.putway.dto.input.PutawayByBoxRequest;
@@ -33,7 +34,8 @@ public class PutawayByBoxController {
 
 	/**
 	 * PDA根据箱码查询库存
-	 * @param request  包含箱码和库房ID
+	 *
+	 * @param request 包含箱码和库房ID
 	 * @return 上架信息
 	 */
 	@ApiLog("PDA根据箱码查询库存")
@@ -41,9 +43,15 @@ public class PutawayByBoxController {
 	public R<PutawayByBoxResponse> findPutawayDataByBoxCode(@RequestBody PutawayByBoxRequest request) {
 		List<Stock> stockList = stockBiz.findStockOnStageByBoxCode(request.getWhId(), request.getBoxCode());
 		BigDecimal qty = StockUtil.getStockBalance(stockList);
-		PutawayByBoxResponse response=new PutawayByBoxResponse();
-		response.setSkuLot1(stockList.get(0).getLotNumber());
-		response.setBoxCode(stockList.get(0).getBoxCode());
+		PutawayByBoxResponse response = new PutawayByBoxResponse();
+		if (stockList.get(BigDecimal.ZERO.intValue()).getBoxCode().indexOf(PutwayConstant.BOX_CODE_A) == BigDecimal.ZERO.intValue() ||
+			stockList.get(BigDecimal.ZERO.intValue()).getBoxCode().indexOf(PutwayConstant.BOX_CODE_B) == BigDecimal.ZERO.intValue() ||
+			stockList.get(BigDecimal.ZERO.intValue()).getBoxCode().indexOf(PutwayConstant.BOX_CODE_C) == BigDecimal.ZERO.intValue() ||
+			stockList.get(BigDecimal.ZERO.intValue()).getBoxCode().indexOf(PutwayConstant.BOX_CODE_D) == BigDecimal.ZERO.intValue()
+		) {
+			response.setLpnCode(stockList.get(BigDecimal.ZERO.intValue()).getLpnCode());
+		}
+		response.setBoxCode(stockList.get(BigDecimal.ZERO.intValue()).getBoxCode());
 		response.setQty(qty);
 		return R.data(response);
 	}
@@ -63,11 +71,9 @@ public class PutawayByBoxController {
 	/**
 	 * @param request 新建按箱上架的请求参数
 	 */
-	public void newPutawayByBox(@RequestBody NewPutawayByBoxlRequest request){
+	public void newPutawayByBox(@RequestBody NewPutawayByBoxlRequest request) {
 
 	}
-
-
 
 
 }

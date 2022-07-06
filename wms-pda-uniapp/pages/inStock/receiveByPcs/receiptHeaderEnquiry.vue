@@ -95,7 +95,7 @@
 				}
 			},
 			esc() {
-				uni.$u.func.route('/pages/home/childrenHome', {
+				uni.$u.func.routeNavigateTo('/pages/home/childrenHome', {
 					name: '收货'
 				});
 			},
@@ -126,7 +126,7 @@
 				uni.$u.throttle(this.getReceiveList(), 1000)
 			},
 			clickItem(item) {
-				uni.$u.func.route('/pages/inStock/receiveByPcs/receiptDetailEnquiry', item);
+				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/receiptDetailEnquiry', item);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

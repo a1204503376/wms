@@ -1,16 +1,16 @@
 <template>
 	<view @keyup.esc="esc">
 	   <u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
-	   	:bgColor="navigationBarBackgroundColor" title="多箱收货"  titleStyle="color:#ffffff;font-size:21px"
+	   	:bgColor="navigationBarBackgroundColor" title="呼叫AGV"  titleStyle="color:#ffffff;font-size:21px"
 	   	style="color:#ffffff;font-size:21px">
 	   </u-navbar>
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
 		<u--form labelPosition="left">
-			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
+			<u-form-item label="接驳库位" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="param.boxCode"  @confirm="getReceiveDetailList"></u--input>
 			</u-form-item>
 		</u--form>
-<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">未收货列表</h4>
+<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">箱码信息</h4>
     
 		<view style="margin-top: 5%;" v-for="(item, index) in detailLpnList"  >
 			<u-row >
@@ -47,7 +47,7 @@
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {
 		components: {
-        keyboardListener
+            keyboardListener
 		},
 		data() {
 			return {
@@ -64,9 +64,6 @@
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
 		},
-		onShow() {
-			uni.$u.func.registerScanner(this.scannerCallback);
-		},
 		onBackPress(event) {
 			// #ifdef APP-PLUS
 			if (event.from === 'backbutton') {
@@ -74,6 +71,9 @@
 				return true;
 			}
 			// #endif
+		},
+		onShow() {
+			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		methods: {
 			esc() {

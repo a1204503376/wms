@@ -12,7 +12,7 @@
 				<u--input v-model="params.locCode"></u--input>
 			</u-form-item>
 			<u-form-item label="生产批次" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuLot1"></u--input>
+				<u--input v-model="params.lpnCode"></u--input>
 			</u-form-item>
 			<u-form-item label="总数" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.qty" border="0" disabled></u--input>
@@ -82,7 +82,8 @@
 
 			},
 			esc() {
-				uni.$u.func.route('/pages/inStock/putawayByBox/lpnQueryByBox');
+				this.$destroy('keyboardListener')
+				uni.$u.func.routeNavigateTo('/pages/inStock/putawayByBox/lpnQueryByBox');
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);
