@@ -42,7 +42,7 @@ public class PutawayByBoxController {
 		List<Stock> stockList = stockBiz.findStockOnStageByBoxCode(request.getWhId(), request.getBoxCode());
 		BigDecimal qty = StockUtil.getStockBalance(stockList);
 		PutawayByBoxResponse response=new PutawayByBoxResponse();
-		response.setSkuLot1(stockList.get(0).getLotNumber());
+		response.setSkuLot1(stockList.get(0).getSkuLot1());
 		response.setBoxCode(stockList.get(0).getBoxCode());
 		response.setQty(qty);
 		return R.data(response);

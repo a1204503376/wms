@@ -1,18 +1,13 @@
 <template>
 	<view @keyup.esc="esc">
 	   <u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
-	   	:bgColor="navigationBarBackgroundColor" title="多箱收货"  titleStyle="color:#ffffff;font-size:21px"
+	   	:bgColor="navigationBarBackgroundColor" title="呼叫AGV"  titleStyle="color:#ffffff;font-size:21px"
 	   	style="color:#ffffff;font-size:21px">
 	   </u-navbar>
-		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
-		<u--form labelPosition="left">
-			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="param.boxCode"  @confirm="getReceiveDetailList"></u--input>
-			</u-form-item>
-		</u--form>
-<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">未收货列表</h4>
+	
+<h4 align="center" style='background-color:#00FFCC;height: 70rpx;'  class="font-in-page">未上架列表</h4>
     
-		<view style="margin-top: 5%;" v-for="(item, index) in detailLpnList"  >
+		<view style="margin-top: 5%;" v-for="(item, index) in stockList"  >
 			<u-row >
 				<u-col span="5">
 					<view class="demo-layout bg-purple-light">箱码:{{item.boxCode}}</view>
@@ -47,7 +42,7 @@
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {
 		components: {
-        keyboardListener
+           keyboardListener
 		},
 		data() {
 			return {
@@ -56,9 +51,13 @@
 					boxCode: '',
 					num: 0,
 				},
-				detailLpnList:[],
+				stockList:[]
 
 			}
+		},
+		onLoad: function(option) {
+			var parse = JSON.parse(option.param)
+			//this.stockList = parse
 		},
 
 		onUnload() {
@@ -77,7 +76,7 @@
 		},
 		methods: {
 			esc() {
-				uni.$u.func.routeNavigateTo('/pages/home/childrenHome?title=收货');
+				uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgvQuery');
 			},
 			getReceiveDetailList() {
 				receive.getReceiveDetailLpn(this.param.boxCode).then(res => {
@@ -96,13 +95,8 @@
 				this.detailLpnList.splice(index,1)
 			},
 			clickItem() {
-			  if(tool.isEmpty(this.detailLpnList)){
-				this.$u.func.showToast({
-					title: '收货失败,箱码为空'
-				})
-				return
-			  }
-				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByBox/receiveByMultiBox', this.detailLpnList);
+			  
+				uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgv', this.detailLpnList);
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)

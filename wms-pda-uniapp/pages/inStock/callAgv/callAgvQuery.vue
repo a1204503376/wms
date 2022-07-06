@@ -87,14 +87,15 @@
 	import barCodeService from '@/common/barcodeFunc.js'
 	import setting from '@/common/setting'
 	import tool from '@/utils/tool.js'
+	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {
 		components: {
-
+              keyboardListener
 		},
 		data() {
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
-				putawayList:[], 
+				stockList:[], 
 				param: {
 					boxCode: '',
                     whId:''
@@ -109,9 +110,17 @@
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
+		onBackPress(event) {
+			// #ifdef APP-PLUS
+			if (event.from === 'backbutton') {
+				this.esc();
+				return true;
+			}
+			// #endif
+		},
 		methods: {
 			esc() {
-				uni.$u.func.route('/pages/home/childrenHome?title=上架');
+				uni.$u.func.routeNavigateTo('/pages/home/childrenHome?title=上架');
 			},
 			press(num){
 				if(num==10){
@@ -123,8 +132,8 @@
 			findStockByBoxCode() {
 				this.param.whId = uni.getStorageSync('warehouse').whId
 				receive.findStockByBoxCode(this.param).then(res => {
-					this.putawayList = res.data
-					if(tool.isNotEmpty(this.putawayList)){
+					this.stockList = res.data
+					if(tool.isNotEmpty(this.stockList)){
 						this.clickItem()
 					}
 				})
@@ -133,7 +142,7 @@
 			
 			clickItem() {
 				alert("sdssssd")
-				uni.$u.func.route('/pages/inStock/callAgv/callAgvQueryList', this.param);
+				uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgvQueryList', this.param);
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)

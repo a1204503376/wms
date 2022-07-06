@@ -118,6 +118,6 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 
     @Override
     public LpnType findLpnTypeByBoxCode(String boxCode) {
-        return null;
+        return lpnTypeDao.getLpnTypeByCode(boxCode);
     }
 }

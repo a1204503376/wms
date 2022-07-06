@@ -16,6 +16,8 @@ import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.putway.dto.input.CallAgvRequest;
+import org.nodes.wms.dao.putway.dto.output.BoxDto;
 import org.nodes.wms.dao.putway.dto.output.CallAgvResponse;
 import org.nodes.wms.dao.stock.SerialDao;
 import org.nodes.wms.dao.stock.SerialLogDao;
@@ -435,16 +437,20 @@ public class StockBizImpl implements StockBiz {
 		   // 定义一个变量存总数量
 		   BigDecimal qty = BigDecimal.valueOf(0);
 		   // 返回对象中的箱码集合
-		   List<String> box = new ArrayList<>();
+		   List<BoxDto> box = new ArrayList<>();
 		   //如果是D箱型并且之前没有根据lpn查询过则根据lpn查询同一托盘的库存
 		   if(lpnType.equals("D") && !lpnLsit.contains(stock.getLpnCode()) ){
               // 根据lpnCoe获取同一托盘的所有库存
               List<Stock> stocks =  stockDao.getStockByLpnCode(stock.getLpnCode(),Collections.singletonList(stage.getLocId()));
 			  for(Stock stock1: stocks){
+				  BigDecimal num = StockUtil.getStockBalance(stock1);
 				  //遍历相加总数量
-				  qty = qty.add(StockUtil.getStockBalance(stock1));
-                  //将箱码添加到集合中
-				box.add(stock1.getBoxCode());
+				  qty = qty.add(num);
+				  //将箱码添加到集合中
+				BoxDto boxDto = new BoxDto();
+				boxDto.setBoxCode(stock1.getBoxCode());
+				boxDto.setQty(num);
+				box.add(boxDto);
 			  }
 			  //将查询过的lpnCode添加到lpn集合中
 			  lpnLsit.add(stock.getLpnCode());
@@ -452,7 +458,10 @@ public class StockBizImpl implements StockBiz {
 		   // A,B,C箱
 		   if(!lpnType.equals("D")){
 			   qty = qty.add(StockUtil.getStockBalance(stock));
-			   box.add(stock.getBoxCode());
+			   BoxDto boxDto = new BoxDto();
+			   boxDto.setBoxCode(stock.getBoxCode());
+			   boxDto.setQty(qty);
+			   box.add(boxDto);
 		   }
 		   //如果box集合不为空则添加到返回对象集合中
 		   if(Func.isNotEmpty(box)){
@@ -460,7 +469,7 @@ public class StockBizImpl implements StockBiz {
 			   callAgvResponse.setLpnType(lpnType);
 			   callAgvResponse.setQty(qty);
 			   callAgvResponse.setLpnCode(stock.getLpnCode());
-			   callAgvResponse.setBoxCodeList(box);
+			   callAgvResponse.setBoxList(box);
 			   callAgvResponseList.add(callAgvResponse);
 		   }
 
@@ -553,5 +562,10 @@ public class StockBizImpl implements StockBiz {
 			return false;
 		}
 		return !locationBiz.isFrozen(location);
+	}
+
+	@Override
+	public void callAgv(CallAgvRequest request) {
+
 	}
 }

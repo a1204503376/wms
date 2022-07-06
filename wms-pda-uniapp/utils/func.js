@@ -29,7 +29,7 @@ const install = (Vue, vm) => {
 				warehouse.getWarehouseList().then(data => {
 					if (data.data.length > 1 && tool.isEmpty(uni.getStorageSync('warehouse'))) {
 						uni.setStorageSync('warehouseList', data.data);
-						uni.$u.func.route('/pages/userSetting/warehouseSetting',data.data);
+						uni.$u.func.routeNavigateTo('/pages/userSetting/warehouseSetting',data.data);
 					} else if (tool.isEmpty(data.data[0])){
 						showToast('不能登录，当前用户没有配置有权限的仓库')
 					} else {

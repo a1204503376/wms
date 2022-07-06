@@ -3,6 +3,7 @@ package org.nodes.wms.pdaController.instock.putaway;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.dao.putway.dto.input.CallAgvRequest;
 import org.nodes.wms.dao.putway.dto.input.PutawayByBoxRequest;
 import org.nodes.wms.dao.putway.dto.output.CallAgvResponse;
 import org.springblade.core.log.annotation.ApiLog;
@@ -33,6 +34,16 @@ public class CallAgvController {
 	@PostMapping("/findStockByBoxCode")
 	public R<List<CallAgvResponse>> findStockByBoxCode(@RequestBody PutawayByBoxRequest request) {
 		return R.data(stockBiz.findLpnStockOnStageLeftLikeByBoxCode(request.getWhId(), request.getBoxCode()));
+	}
+
+	/**
+	 * 呼叫Agv
+	 * @param request
+	 * @return
+	 */
+	public String callAgv(@RequestBody CallAgvRequest request) {
+		stockBiz.callAgv(request);
+		return "操作成功";
 	}
 
 }
