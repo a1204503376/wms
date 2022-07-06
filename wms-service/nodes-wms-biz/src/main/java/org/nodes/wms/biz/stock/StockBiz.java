@@ -140,4 +140,11 @@ public interface StockBiz {
 	 * @param response:          响应对象
 	 */
 	void export(StockLogPageQuery stockLogPageQuery, HttpServletResponse response);
+
+	/**
+	 * 根据库位获取库位的所有库存
+	 * @param locationList
+	 * @return
+	 */
+	List<Stock> findStockByLocation(List<Location> locationList);
 }

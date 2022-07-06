@@ -18,6 +18,7 @@ import org.nodes.wms.dao.basics.location.dto.input.LocationSelectQuery;
 import org.nodes.wms.dao.basics.location.dto.output.*;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.enums.LocTypeEnum;
+import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
@@ -284,5 +285,15 @@ public class LocationBizImpl implements LocationBiz {
 	public boolean isPickToLocation(Location location) {
 		Location pickToLocation = getPickToLocation(location.getWhId());
 		return location.getLocId().equals(pickToLocation.getLocId());
+	}
+
+	@Override
+	public List<Location> findEnableAgvLocation(LpnType lpnType) {
+		return null;
+	}
+
+	@Override
+	public List<Location> getLocationByColumn(Location location) {
+		return null;
 	}
 }

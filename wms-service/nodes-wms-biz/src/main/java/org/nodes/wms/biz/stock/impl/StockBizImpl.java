@@ -539,4 +539,9 @@ public class StockBizImpl implements StockBiz {
 		List<StockLogExcelResponse> stockLogList = stockLogDao.listByQuery(stockLogPageQuery);
 		ExcelUtil.export(response, "", "", stockLogList, StockLogExcelResponse.class);
 	}
+
+	@Override
+	public List<Stock> findStockByLocation(List<Location> locationList) {
+		return null;
+	}
 }
