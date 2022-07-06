@@ -3,6 +3,7 @@ package org.nodes.wms.biz.putway.strategy;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
+import org.nodes.wms.biz.basics.systemParam.SystemParamBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
@@ -23,14 +24,15 @@ public class TianYiPutwayStrategy {
 	private final LpnTypeBiz lpnTypeBiz;
 	private final LocationBiz locationBiz;
 	private final StockBiz stockBiz;
+	private final SystemParamBiz systemParamBiz;
 
 	public Location run(BigDecimal putwayQty, Stock sourceStock){
 		// 获取要上架库存的箱型
 		LpnType lpnType = lpnTypeBiz.findLpnTypeByBoxCode(sourceStock.getBoxCode());
-		// 根据箱型查询所有可以上架的空库位，要按照上架顺序排序,
+		// 根据箱型查询所有可以上架的空库位(自动存储区的)，要按照上架顺序排序,
 		List<Location> locationList = locationBiz.findEnableAgvLocation(lpnType);
 		// 获取列的最大载重
-		BigDecimal maxLoadWeight = BigDecimal.ZERO;
+		BigDecimal maxLoadWeight = systemParamBiz.findMaxLoadWeightOfColumn();
 		// 根据顺序刷选并返回合格的库位，刷选条件：判断该列的重量是否超过了最大限重
 		for (Location location : locationList){
 			BigDecimal loadWeight = staticsLoadWeightByColumn(location);

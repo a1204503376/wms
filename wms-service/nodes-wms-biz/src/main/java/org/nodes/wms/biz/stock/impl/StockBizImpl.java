@@ -547,6 +547,11 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public boolean judgeEnableOnLocation(Location location) {
-		return false;
+		List<Stock> stock = stockDao.getStockByLocId(location.getLocId());
+		if (Func.isNotEmpty(stock)
+			&& BigDecimalUtil.gt(StockUtil.getStockBalance(stock), BigDecimal.ZERO)){
+			return false;
+		}
+		return !locationBiz.isFrozen(location);
 	}
 }
