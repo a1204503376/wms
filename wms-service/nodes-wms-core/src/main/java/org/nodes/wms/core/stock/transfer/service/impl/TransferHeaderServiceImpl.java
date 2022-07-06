@@ -18,7 +18,7 @@ import org.nodes.wms.core.log.system.service.ISystemProcService;
 import org.nodes.wms.core.outstock.so.dto.NeedSkuDetailQueryDTO;
 import org.nodes.wms.core.outstock.so.entity.SoDetail;
 import org.nodes.wms.core.outstock.so.entity.SoHeader;
-import org.nodes.wms.core.outstock.so.enums.SoBillStateEnum;
+import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
 import org.nodes.wms.core.outstock.so.service.ISoDetailService;
 import org.nodes.wms.core.outstock.so.service.ISoHeaderService;
 import org.nodes.wms.core.outstock.so.vo.NeedSkuDetailVO;

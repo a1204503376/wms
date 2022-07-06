@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.nodes.wms.core.outstock.so.dto.SoHeaderDTO;
 import org.nodes.wms.core.outstock.so.dto.SoHeaderQueryDTO;
 import org.nodes.wms.core.outstock.so.entity.SoHeader;
-import org.nodes.wms.core.outstock.so.enums.SoBillStateEnum;
+import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
 import org.nodes.wms.core.outstock.so.vo.SoHeaderVO;
 import org.springblade.core.mp.support.Query;
 
