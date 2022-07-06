@@ -1,11 +1,18 @@
 <template>
-    <nodes-select
+    <el-select
         v-model="val"
+        :collapse-tags="true"
         :data-source="dataSource"
         :multiple="true"
-        @change="onChange"
-    >
-    </nodes-select>
+        @change="onChange">
+        <el-option
+            v-for="item in dataSource"
+            :key="item.label"
+            :label="item.label"
+            :value="item.value">
+            <span style="float: left">{{ item.label }}</span>
+        </el-option>
+    </el-select>
 </template>
 
 <script>
@@ -30,7 +37,7 @@ export default {
         }
     },
     watch: {
-        selectVal(newVal){
+        selectVal(newVal) {
             this.val = newVal
         }
     },

@@ -6,8 +6,8 @@
                     <el-col :span="8">
                         <el-form-item label="ASN单编码" label-width="90px">
                             <el-input v-model.trim="form.params.asnBillNo"
-                                      placeholder="请输入ASN单编码"
-                                      :clearable="true">
+                                      :clearable="true"
+                                      placeholder="请输入ASN单编码">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -32,17 +32,20 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="供应商" label-width="90px">
-                            <el-input placeholder="请输入供应商编码或名称" v-model.trim="form.params.supplier" :clearable="true"></el-input>
+                            <el-input v-model.trim="form.params.supplier" :clearable="true"
+                                      placeholder="请输入供应商编码或名称"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="上游编码" label-width="90px">
-                            <el-input placeholder="请输入上游编码" v-model.trim="form.params.externalOrderNo" :clearable="true"></el-input>
+                            <el-input v-model.trim="form.params.externalOrderNo" :clearable="true"
+                                      placeholder="请输入上游编码"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="上游创建人" label-width="90px">
-                            <el-input placeholder="请输入上游创建人" v-model.trim="form.params.externalCreateUser" :clearable="true"></el-input>
+                            <el-input v-model.trim="form.params.externalCreateUser" :clearable="true"
+                                      placeholder="请输入上游创建人"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -58,8 +61,11 @@
                 </el-row>
             </template>
             <template v-slot:batchBtn>
-                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增</el-button>
-                <el-button v-if="permissionObj.delete" icon="el-icon-delete" plain size="mini" type="danger" @click="onRemove">删除</el-button>
+                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
+                </el-button>
+                <el-button v-if="permissionObj.delete" icon="el-icon-delete" plain size="mini" type="danger"
+                           @click="onRemove">删除
+                </el-button>
             </template>
             <template v-slot:tableTool>
                 <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
@@ -85,7 +91,8 @@
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
-                        <el-table-column v-if="!column.hide && column.prop === 'asnBillNo'" :key="index" show-overflow-tooltip
+                        <el-table-column v-if="!column.hide && column.prop === 'asnBillNo'" :key="index"
+                                         show-overflow-tooltip
                                          v-bind="column" width="150">
                             <template v-slot="scope">
                                 <el-link
@@ -315,14 +322,16 @@ export default {
                 });
         },
         onReset() {
-            this.form.params.asnBillNo = ''
-            this.form.params.skuIdList = []
-            this.form.params.asnBillStateList = [10, 20]
-            this.form.params.createTimeDateRange = ['', '']
-            this.form.params.supplier = ''
-            this.form.params.externalOrderNo = ''
-            this.form.params.externalCreateUser = ''
-            this.form.params.whIdList = []
+            this.form.params = {
+                asnBillNo: '',
+                skuIdList: [],
+                asnBillStateList: [10, 20],
+                createTimeDateRange: ['', ''],
+                supplier: '',
+                externalOrderNo: '',
+                externalCreateUser: '',
+                whIdList: [],
+            }
         },
         onExportLocalData() {
             this.exportCurrentDataToExcel("ASN单", "ASN单");
