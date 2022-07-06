@@ -54,7 +54,7 @@
 						});
 					}
 					this.putawayData.boxCode = data.data.boxCode;
-					this.putawayData.skuLot1 = data.data.skuLot1;
+					this.putawayData.lpnCode = data.data.lpnCode;
 					this.putawayData.qty = data.data.qty;
 					//调用库存策略生成库位 将库位值赋值给loc
 					this.putawayData.locCode='AA'
