@@ -15,6 +15,7 @@ public class PutwayBizImpl implements PutwayBiz {
 
 	@Override
 	public void addByBoxShelf(NewPutawayByBoxlRequest request) {
-
+		// 调用库存移动，如果关联了序列号需要获取序列号
+		// 生成上架记录
 	}
 }

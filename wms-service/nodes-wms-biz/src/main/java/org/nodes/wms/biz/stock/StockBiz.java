@@ -84,6 +84,13 @@ public interface StockBiz {
 	List<Serial> findSerialBySerialNo(List<String> serialNoList);
 
 	/**
+	 * 根据库存查询所有的序列号
+	 * @param stockId
+	 * @return 序列号
+	 */
+	List<Serial> findSerialByStock(Long stockId);
+
+	/**
 	 * 根据箱码查询库存
 	 *
 	 * @param boxCode
