@@ -200,6 +200,16 @@ public class StockDaoImpl
 		}
 	}
 
+	@Override
+	public List<Stock> getStockByLocIdList(List<Long> locIdList) {
+		if(Func.isEmpty(locIdList)){
+			throw new NullArgumentException("StockDaoImpl.getStockByLocIdList方法的参数为空");
+		}
+		LambdaQueryWrapper<Stock> lambdaQueryWrapper = getStockQuery();
+		lambdaQueryWrapper.in(Stock::getLocId,locIdList);
+		return super.list(lambdaQueryWrapper);
+	}
+
 	private LambdaQueryWrapper<Stock> getStockQuery() {
 		LambdaQueryWrapper<Stock> queryWrapper = Wrappers.lambdaQuery();
 		queryWrapper.apply("stay_stock_qty + stock_qty > pick_qty");
