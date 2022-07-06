@@ -402,6 +402,11 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
+	public List<Serial> findSerialByStock(Long stockId) {
+		return serialDao.getSerialByStockId(stockId);
+	}
+
+	@Override
 	public List<Stock> findStockByBoxCode(String boxCode) {
 		List<Long> pickToLocList = locationBiz.getAllPickToLocation()
 			.stream()

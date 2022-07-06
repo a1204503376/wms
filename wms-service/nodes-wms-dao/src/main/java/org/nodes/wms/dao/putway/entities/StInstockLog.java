@@ -14,7 +14,7 @@ import org.springblade.core.tenant.mp.TenantEntity;
 import java.io.Serializable;
 
 /**
- * 上架记录实体类
+ * 上架策略执行记录
  *
  * @author NodeX
  * @since 2020-04-27
