@@ -3,6 +3,7 @@ package org.nodes.wms.dao.basics.lpntype.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang.NullArgumentException;
 import org.nodes.wms.dao.basics.lpntype.LpnTypeDao;
 import org.nodes.wms.dao.basics.lpntype.dto.input.DeleteLpnTypeRequest;
 import org.nodes.wms.dao.basics.lpntype.dto.input.LpnTypePageQuery;
@@ -107,6 +108,9 @@ public class LpnTypeDaoImpl  extends BaseServiceImpl<LpnTypeMapper,LpnType> impl
 
 	@Override
     public LpnType getLpnTypeByCode(String code) {
+		if(Func.isEmpty(code)){
+			throw new NullArgumentException("LpnTypeDaoImpl.getLpnTypeByCode方法的参数为空");
+		}
 		return super.getOne(new LambdaQueryWrapper<LpnType>().eq(LpnType::getCode,code));
     }
 
