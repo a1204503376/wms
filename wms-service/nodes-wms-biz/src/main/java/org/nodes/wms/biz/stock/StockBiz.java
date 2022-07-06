@@ -3,6 +3,7 @@ package org.nodes.wms.biz.stock;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.putway.dto.input.CallAgvRequest;
 import org.nodes.wms.dao.putway.dto.output.CallAgvResponse;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
@@ -140,4 +141,26 @@ public interface StockBiz {
 	 * @param response:          响应对象
 	 */
 	void export(StockLogPageQuery stockLogPageQuery, HttpServletResponse response);
+
+	/**
+	 * 根据库位获取库位的所有库存
+	 *
+	 * @param locationList
+	 * @return
+	 */
+	List<Stock> findStockByLocation(List<Location> locationList);
+
+	/**
+	 * 判断该库位是否有库存或被冻结
+	 *
+	 * @param location
+	 * @return true：可用
+	 */
+	boolean judgeEnableOnLocation(Location location);
+
+	/**
+	 * 天宜定制：呼叫Agv
+	 * @param request  前端传入参数
+	 */
+	void callAgv(CallAgvRequest request);
 }

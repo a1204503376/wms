@@ -12,10 +12,6 @@ import java.math.BigDecimal;
 @Service
 @RequiredArgsConstructor
 public class PutwayBizImpl implements PutwayBiz {
-	@Override
-	public Location runStrategyOfPutway(BigDecimal putwayQty, Stock sourceStock) {
-		return null;
-	}
 
 	@Override
 	public void addByBoxShelf(NewPutawayByBoxlRequest request) {

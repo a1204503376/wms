@@ -1,17 +1,22 @@
-package org.nodes.wms.dao.putway.dto.output;
+package org.nodes.wms.dao.putway.dto.input;
 
 import lombok.Data;
+import org.nodes.wms.dao.putway.dto.output.BoxDto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * 呼叫Agv返回前端对象
+ * 呼叫Agv接收前端参数dto
  */
 @Data
-public class CallAgvResponse implements Serializable {
-	private static final long serialVersionUID = -7188705174234888929L;
+public class CallAgvRequest implements Serializable {
+	private static final long serialVersionUID = 2699200295053404180L;
+	/**
+	 * 库位id
+	 */
+	private String locId;
 	/**
 	 * 托盘号
 	 */
@@ -28,5 +33,4 @@ public class CallAgvResponse implements Serializable {
 	 * 箱码集合
 	 */
 	List<BoxDto> boxList;
-
 }
