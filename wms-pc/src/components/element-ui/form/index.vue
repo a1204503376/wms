@@ -381,7 +381,7 @@ export default {
                 }
                 let self = this;
                 let interval = setInterval(()=>{
-                    if (valid_count == 0) {
+                    if (valid_count > -1) {
                         if (item_result && item_result.indexOf(false) > -1) {
                             return false;
                         }
