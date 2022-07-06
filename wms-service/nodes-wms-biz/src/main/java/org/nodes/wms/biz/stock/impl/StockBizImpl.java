@@ -544,4 +544,9 @@ public class StockBizImpl implements StockBiz {
 	public List<Stock> findStockByLocation(List<Location> locationList) {
 		return null;
 	}
+
+	@Override
+	public boolean judgeEnableOnLocation(Location location) {
+		return false;
+	}
 }

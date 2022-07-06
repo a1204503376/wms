@@ -143,8 +143,17 @@ public interface StockBiz {
 
 	/**
 	 * 根据库位获取库位的所有库存
+	 *
 	 * @param locationList
 	 * @return
 	 */
 	List<Stock> findStockByLocation(List<Location> locationList);
+
+	/**
+	 * 判断该库位是否有库存或被冻结
+	 *
+	 * @param location
+	 * @return true：可用
+	 */
+	boolean judgeEnableOnLocation(Location location);
 }
