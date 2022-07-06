@@ -58,8 +58,8 @@
                 </el-row>
             </template>
             <template v-slot:batchBtn>
-                <el-button icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增</el-button>
-                <el-button icon="el-icon-delete" plain size="mini" type="danger" @click="onRemove">删除</el-button>
+                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增</el-button>
+                <el-button v-if="permissionObj.delete" icon="el-icon-delete" plain size="mini" type="danger" @click="onRemove">删除</el-button>
             </template>
             <template v-slot:tableTool>
                 <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
