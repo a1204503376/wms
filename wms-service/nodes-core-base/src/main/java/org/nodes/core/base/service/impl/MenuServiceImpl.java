@@ -133,16 +133,17 @@ public class MenuServiceImpl <M extends MenuMapper, T extends Menu> extends Serv
 			return result;
 		}).collect(Collectors.toList());*/
 		List<Menu> allMenus = super.list(Condition.getQueryWrapper(new Menu())
-		.lambda()
-		.isNotNull(Menu::getCategory)
-		.eq(Menu::getCategory,1)
-		.eq(Menu::getSystemType,0)
-		.func(i -> {
-			if (!SecureUtil.isDeveloper()){
-				i.isNotNull(Menu::getIsVisible);
-				i.eq(Menu::getIsVisible,0);
-			}
-		}));
+			.lambda()
+			.isNotNull(Menu::getCategory)
+			.eq(Menu::getCategory,1)
+			.eq(Menu::getSystemType,0)
+			.eq(Menu::getIsVisible, 0)
+			.func(i -> {
+				if (!SecureUtil.isDeveloper()){
+					i.isNotNull(Menu::getIsVisible);
+					i.eq(Menu::getIsVisible,0);
+				}
+			}));
 
 		List<Menu> roleMenus = null;
 		if (SecureUtil.isAdministrator() && Func.isEmpty(topMenuId)) {
