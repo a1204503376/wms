@@ -3,7 +3,6 @@ package org.nodes.wms.dao.outstock.so.entities;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.sun.xml.internal.fastinfoset.stax.events.AttributeBase;
 import lombok.Data;
 import org.springblade.core.mp.base.BaseEntity;
 
