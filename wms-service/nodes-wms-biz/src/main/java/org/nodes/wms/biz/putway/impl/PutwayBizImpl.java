@@ -1,7 +1,6 @@
 package org.nodes.wms.biz.putway.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.base.entity.User;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.putway.PutwayBiz;
 import org.nodes.wms.biz.stock.StockBiz;
@@ -10,7 +9,7 @@ import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.putway.PutawayLogDao;
 import org.nodes.wms.dao.putway.dto.input.CallAgvRequest;
 import org.nodes.wms.dao.putway.dto.input.LpnTypeRequest;
-import org.nodes.wms.dao.putway.dto.input.NewPutawayByBoxlRequest;
+import org.nodes.wms.dao.putway.dto.input.AddByBoxShelfRequest;
 import org.nodes.wms.dao.putway.dto.output.BoxDto;
 import org.nodes.wms.dao.putway.dto.output.LocResponse;
 import org.nodes.wms.dao.putway.entities.PutawayLog;
@@ -35,33 +34,52 @@ public class PutwayBizImpl implements PutwayBiz {
 	private PutawayLogDao putawayLogDao;
 
 	@Override
-	public void addByBoxShelf(NewPutawayByBoxlRequest request) {
+	public void addByBoxShelf(AddByBoxShelfRequest request) {
 		// 调用库存移动，如果关联了序列号需要获取序列号
+		Stock sourceStock = stockBiz.findStockById(request.getStockId());
+		//获取序列号
+		List<Serial> serialList = stockBiz.findSerialByStock(request.getStockId());
+		List<String> serialNoList = new ArrayList<>();
+		if (Func.isNotEmpty(serialList)) {
+			serialNoList = serialList.stream()
+				.map(Serial::getSerialNumber)
+				.collect(Collectors.toList());
+		}
+		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), sourceStock.getLocCode());
+		stockBiz.moveStock(sourceStock, serialNoList, request.getQty(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY, null, null, null);
 		// 生成上架记录
+		PutawayLog putawayLog = new PutawayLog();
+		putawayLog.setLpnCode(request.getLpnCode());
+		putawayLog.setTargetLocCode(targetLocation.getLocCode());
+		putawayLog.setWhId(request.getWhId());
+		putawayLog.setUserName(AuthUtil.getUserName());
+		putawayLog.setUserCode(AuthUtil.getUserAccount());
+		putawayLog.setApiTime(Func.parseDateTime(Func.formatDate(new Date())));
+		putawayLogDao.save(putawayLog);
 	}
 
-    @Override
-    public void callAgv(CallAgvRequest request) {
+	@Override
+	public void callAgv(CallAgvRequest request) {
 		//获取目标库位信息
-		Location  targetLocation = locationBiz.findByLocId(request.getLocId());
+		Location targetLocation = locationBiz.findByLocId(request.getLocId());
 		List<BoxDto> boxDtoList = request.getBoxList();
-		for(BoxDto boxDto:boxDtoList){
+		for (BoxDto boxDto : boxDtoList) {
 			List<Long> stockIdList = boxDto.getStockIdList();
-			for(Long stockId:stockIdList){
+			for (Long stockId : stockIdList) {
 				// 根据id获取库存实体
-              Stock stock = stockBiz.findStockById(stockId);
-			  //获取数量
-			  BigDecimal qty = StockUtil.getStockBalance(stock);
-			    //获取序列号
+				Stock stock = stockBiz.findStockById(stockId);
+				//获取数量
+				BigDecimal qty = StockUtil.getStockBalance(stock);
+				//获取序列号
 				List<Serial> serialList = stockBiz.findSerialByStock(stockId);
 				List<String> serialNoList = new ArrayList<>();
-				if(Func.isNotEmpty(serialList)){
+				if (Func.isNotEmpty(serialList)) {
 					serialNoList = serialList.stream()
 						.map(Serial::getSerialNumber)
 						.collect(Collectors.toList());
 				}
 				// 调用库存移动
-				stockBiz.moveStock(stock,serialNoList,qty,targetLocation, StockLogTypeEnum.STOCK_TO_INSTOCK_RECE,null,null,null);
+				stockBiz.moveStock(stock, serialNoList, qty, targetLocation, StockLogTypeEnum.STOCK_TO_INSTOCK_RECE, null, null, null);
 				// 生成上架记录
 				PutawayLog putawayLog = new PutawayLog();
 				putawayLog.setLpnCode(stock.getLpnCode());
@@ -75,14 +93,14 @@ public class PutwayBizImpl implements PutwayBiz {
 		}
 
 
-    }
+	}
 
 	@Override
 	public List<LocResponse> findLocByLpnType(LpnTypeRequest request) {
 		List<LocResponse> locResponseList = new ArrayList<>();
 		// 根据箱型和库房id获取库位信息
 		List<Location> locationList = locationBiz.findLocationByLpnType(request);
-		for(Location location:locationList){
+		for (Location location : locationList) {
 			LocResponse locResponse = new LocResponse();
 			locResponse.setLocId(location.getLocId());
 			locResponse.setLocCode(location.getLocCode());
