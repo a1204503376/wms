@@ -10,6 +10,7 @@ import org.nodes.wms.dao.basics.location.dto.output.LocationExcelResponse;
 import org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.putway.dto.input.LpnTypeRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -42,4 +43,11 @@ public interface LocationMapper extends BaseMapper<Location> {
 	 * @return LocationDetailResponse
 	 */
     LocationDetailResponse selectDetailById(Long id);
+
+	/**
+	 * 根据库房id和箱型获取库位信息
+	 *
+	 * @param request@return 库位信息
+	 */
+    List<Location> selectLoctionByLpnType(@Param("param") LpnTypeRequest request);
 }

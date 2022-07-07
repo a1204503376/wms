@@ -133,4 +133,13 @@
         WHERE l.loc_id = #{id}
         ORDER BY l.create_time DESC
     </select>
+    <select id="selectLoctionByLpnType" resultType="org.nodes.wms.dao.basics.location.entities.Location">
+            select
+                wl.*
+            from  wms_location wl
+                      left join wms_zone wz on wl.zone_id = wz.zone_id
+                      left join wms_lpn_type wt on wl.lpn_type_id = wt.id
+            where wl.wh_id = #{param.whId} and wz.zone_name  = 'AGV收货接驳区' and wt.code = #{param.lpnType}
+    </select>
+
 </mapper>

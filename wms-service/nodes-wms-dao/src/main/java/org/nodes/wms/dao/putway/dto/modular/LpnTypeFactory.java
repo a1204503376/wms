@@ -1,4 +1,4 @@
-package org.nodes.wms.biz.basics.lpntype.modular;
+package org.nodes.wms.dao.putway.dto.modular;
 
 import org.nodes.wms.dao.basics.lpntype.dto.input.NewLpnTypeRequest;
 import org.nodes.wms.dao.basics.lpntype.dto.input.UpdateLpnTypeRequest;

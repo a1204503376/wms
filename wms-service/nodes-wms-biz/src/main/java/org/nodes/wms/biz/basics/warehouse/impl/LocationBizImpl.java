@@ -20,6 +20,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.enums.LocTypeEnum;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
+import org.nodes.wms.dao.putway.dto.input.LpnTypeRequest;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -294,6 +295,11 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public List<Location> getLocationByColumn(Location location) {
-		return null;
+		return locationDao.getLocationByLocColumn(location.getLocColumn());
 	}
+
+    @Override
+    public List<Location> findLocationByLpnType(LpnTypeRequest request) {
+       return locationDao.getLocationByLpnType(request);
+    }
 }
