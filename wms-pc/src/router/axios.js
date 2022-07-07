@@ -34,15 +34,15 @@ NProgress.configure({
 });
 
 function processingDate(obj) {
-    if (func.isArray(obj)){
-        let temp=[];
-        obj.forEach((item)=>{
+    if (func.isArray(obj)) {
+        let temp = [];
+        obj.forEach((item) => {
             temp.push(processingDate(item));
         })
         return temp;
     }
     if (obj) {
-        let dateRangeParams = {};
+        let dateRangeParams;
         for (let key of Object.keys(obj)) {
             let suffix = 'DateRange';
             let value = obj[key];
@@ -52,12 +52,17 @@ function processingDate(obj) {
                 && func.isNotEmpty(value[0])
                 && func.isNotEmpty(value[1])
             ) {
+                dateRangeParams = {};
                 let prefixItem = key.substring(0, key.indexOf(suffix));
                 dateRangeParams[`${prefixItem}Begin`] = dateFormat(`${value[0]} 00:00:00`);
                 dateRangeParams[`${prefixItem}End`] = dateFormat(`${value[1]} 23:59:59`);
             }
         }
-        return  Object.assign({},obj, dateRangeParams);
+        let flag = func.isEmpty(dateRangeParams);
+        if (flag) {
+            return obj;
+        }
+        return Object.assign({}, obj, dateRangeParams);
     }
 }
 
