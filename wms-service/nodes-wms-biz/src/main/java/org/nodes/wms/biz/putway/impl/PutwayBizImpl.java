@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.putway.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.base.entity.User;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.putway.PutwayBiz;
 import org.nodes.wms.biz.stock.StockBiz;
@@ -12,14 +13,17 @@ import org.nodes.wms.dao.putway.dto.input.LpnTypeRequest;
 import org.nodes.wms.dao.putway.dto.input.NewPutawayByBoxlRequest;
 import org.nodes.wms.dao.putway.dto.output.BoxDto;
 import org.nodes.wms.dao.putway.dto.output.LocResponse;
+import org.nodes.wms.dao.putway.entities.PutawayLog;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
+import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +42,8 @@ public class PutwayBizImpl implements PutwayBiz {
 
     @Override
     public void callAgv(CallAgvRequest request) {
+		//获取目标库位信息
+		Location  targetLocation = locationBiz.findByLocId(request.getLocId());
 		List<BoxDto> boxDtoList = request.getBoxList();
 		for(BoxDto boxDto:boxDtoList){
 			List<Long> stockIdList = boxDto.getStockIdList();
@@ -54,12 +60,17 @@ public class PutwayBizImpl implements PutwayBiz {
 						.map(Serial::getSerialNumber)
 						.collect(Collectors.toList());
 				}
-				//获取库位信息
-				Location targetLocation = locationBiz.findByLocId(stock.getLocId());
 				// 调用库存移动
 				stockBiz.moveStock(stock,serialNoList,qty,targetLocation, StockLogTypeEnum.STOCK_TO_INSTOCK_RECE,null,null,null);
 				// 生成上架记录
-
+				PutawayLog putawayLog = new PutawayLog();
+				putawayLog.setLpnCode(stock.getLpnCode());
+				putawayLog.setTargetLocCode(targetLocation.getLocCode());
+				putawayLog.setWhId(request.getWhId());
+				putawayLog.setUserName(AuthUtil.getUserName());
+				putawayLog.setUserCode(AuthUtil.getUserAccount());
+				putawayLog.setApiTime(Func.parseDateTime(Func.formatDate(new Date())));
+				putawayLogDao.save(putawayLog);
 			}
 		}
 
