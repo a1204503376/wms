@@ -1,7 +1,7 @@
 package org.nodes.wms.core.strategy.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.StringPool;
 import org.nodes.wms.core.strategy.entity.RelenishmentDetail;
 import org.nodes.wms.core.strategy.vo.RelenishmentDetailVO;
@@ -36,7 +36,7 @@ public class RelenishmentDetailWrapper extends BaseEntityWrapper<RelenishmentDet
 			if (ObjectUtil.isNotEmpty(fromZone)) {
 				relenishmentDetail.setFromZoneName(fromZone.getZoneName());
 			}
-			relenishmentDetail.setSkuLevelDesc(DictCache.getValue(DictConstant.SKU_LEVEL,entity.getSkuLevel()));
+			relenishmentDetail.setSkuLevelDesc(DictCache.getValue(DictCodeConstant.SKU_LEVEL,entity.getSkuLevel()));
 			// 从库位
 //			Location fromLoc = LocationCache.getById(entity.getFromLocId());
 //			if (ObjectUtil.isNotEmpty(fromLoc)) {

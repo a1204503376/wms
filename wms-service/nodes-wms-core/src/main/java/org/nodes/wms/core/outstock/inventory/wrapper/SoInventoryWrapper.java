@@ -1,7 +1,7 @@
 package org.nodes.wms.core.outstock.inventory.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.basedata.cache.BillTypeCache;
 import org.nodes.wms.core.basedata.entity.Enterprise;
 import org.nodes.wms.core.basedata.service.IEnterpriseService;
@@ -38,16 +38,16 @@ public class SoInventoryWrapper extends BaseEntityWrapper<SoInventory, SoInvento
 		if (Func.isNotEmpty(soInventoryVO)) {
 			//单据状态名称
 			soInventoryVO.setSoBillStateName(
-				DictCache.getValue(DictConstant.SO_BILL_STATE, soInventoryVO.getSoBillState()));
+				DictCache.getValue(DictCodeConstant.SO_BILL_STATE, soInventoryVO.getSoBillState()));
 			//出库方式名称
 			soInventoryVO.setOutstockTypeName(
-				DictCache.getValue(DictConstant.OUTSTORE_TYPE, soInventoryVO.getOutstockType()));
+				DictCache.getValue(DictCodeConstant.OUTSTORE_TYPE, soInventoryVO.getOutstockType()));
 			//同步状态名称
 			soInventoryVO.setSyncStateName(
-				DictCache.getValue(DictConstant.SYNC_STATE, soInventoryVO.getSyncState()));
+				DictCache.getValue(DictCodeConstant.SYNC_STATE, soInventoryVO.getSyncState()));
 			//创建类型
 			soInventoryVO.setCreateTypeName(
-				DictCache.getValue(DictConstant.CREATE_TYPE, soInventoryVO.getCreateType()));
+				DictCache.getValue(DictCodeConstant.CREATE_TYPE, soInventoryVO.getCreateType()));
 			//货主名称
 			if (Func.isNotEmpty(soInventoryVO.getWoId())) {
 				IOwnerService ownerService = SpringUtil.getBean(IOwnerService.class);
@@ -98,10 +98,10 @@ public class SoInventoryWrapper extends BaseEntityWrapper<SoInventory, SoInvento
 			}
 			//发货方式
 			soInventoryVO.setTransportDesc(
-				DictCache.getValue(DictConstant.SO_TRANSPORT_CODE, soInventoryVO.getTransportCode()));
+				DictCache.getValue(DictCodeConstant.SO_TRANSPORT_CODE, soInventoryVO.getTransportCode()));
 			// 发运状态
 			soInventoryVO.setShipStateDesc(
-				DictCache.getValue(DictConstant.SHIP_STATE, soInventoryVO.getShipState()));
+				DictCache.getValue(DictCodeConstant.SHIP_STATE, soInventoryVO.getShipState()));
 		}
 		return soInventoryVO;
 	}

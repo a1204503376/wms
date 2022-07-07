@@ -2,7 +2,7 @@ package org.nodes.wms.core.count.service.impl;
 
 import org.springblade.core.log.exception.ServiceException;
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
@@ -68,7 +68,7 @@ public class PointToCountTypeQuery extends CountTypeQuery {
 				countHeaderVO.setLocStatusDesc(DictCache.getValue(Location.STATUS, location.getLocStatus()));
 				countHeaderVO.setLastLocCountDate(location.getLastLocCountDate());
 				countHeaderVO.setAbc(location.getAbc());
-				countHeaderVO.setAbcDesc(DictCache.getValue(DictConstant.LOC_ABC, location.getAbc()));
+				countHeaderVO.setAbcDesc(DictCache.getValue(DictCodeConstant.LOC_ABC, location.getAbc()));
 				countHeaderVOList.add(countHeaderVO);
 			});
 		}
@@ -111,7 +111,7 @@ public class PointToCountTypeQuery extends CountTypeQuery {
 					countHeaderVO.setSkuCode(sku.getSkuCode());
 					countHeaderVO.setSkuName(sku.getSkuName());
 					countHeaderVO.setAbc(sku.getAbc());
-					countHeaderVO.setAbcDesc(DictCache.getValue(DictConstant.LOC_ABC, sku.getAbc()));
+					countHeaderVO.setAbcDesc(DictCache.getValue(DictCodeConstant.LOC_ABC, sku.getAbc()));
 					countHeaderVOList.add(countHeaderVO);
 				}
 			}

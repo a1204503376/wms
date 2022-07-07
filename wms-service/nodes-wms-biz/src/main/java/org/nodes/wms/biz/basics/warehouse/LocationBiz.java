@@ -248,13 +248,16 @@ public interface LocationBiz {
 
 	/**
 	 * 天宜定制：根据容器列别获取agv可用的库位，按照上架顺序返回
-	 * @param lpnType
+	 *
+	 * @param lpnType   容器类别
+	 * @param zoneType 库区类型
 	 * @return
 	 */
-    List<Location> findEnableAgvLocation(LpnType lpnType);
+	List<Location> findEnableAgvLocation(LpnType lpnType, String zoneType);
 
 	/**
 	 * 获取同列的所有库位
+	 *
 	 * @param location
 	 * @return
 	 */

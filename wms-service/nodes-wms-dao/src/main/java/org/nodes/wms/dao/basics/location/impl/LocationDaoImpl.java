@@ -125,10 +125,11 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	}
 
 	@Override
-	public List<Location> getLocationByLpnTypeId(Long lpnTypeId) {
+	public List<Location> getLocationByLpnTypeId(Long lpnTypeId, String zoneType) {
 		if (Func.isEmpty(lpnTypeId)) {
 			throw new NullArgumentException("LocationDaoImpl.getLocationByLpnTypeId方法的参数为空");
 		}
+		// TODO 根据库区类型查询查询库位，如果zongType可以为空
 		LambdaQueryWrapper<Location> lambdaQueryWrapper = new LambdaQueryWrapper<>();
 		lambdaQueryWrapper.eq(Location::getLpnTypeId, lpnTypeId);
 		lambdaQueryWrapper.orderByAsc(Location::getPutOrder);

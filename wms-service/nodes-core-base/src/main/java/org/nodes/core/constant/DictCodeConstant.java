@@ -6,7 +6,7 @@ package org.nodes.core.constant;
  * @author zhuangqian
  * @since
  */
-public interface DictConstant {
+public interface DictCodeConstant {
 
 	String SEX_CODE = "sex";
 

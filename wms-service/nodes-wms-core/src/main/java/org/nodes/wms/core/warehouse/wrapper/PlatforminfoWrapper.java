@@ -1,7 +1,7 @@
 package org.nodes.wms.core.warehouse.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
 import org.nodes.wms.core.warehouse.dto.PlatformInfoDTO;
 import org.nodes.wms.core.warehouse.entity.PlatformInfo;
@@ -25,7 +25,7 @@ public class PlatforminfoWrapper extends BaseEntityWrapper<PlatformInfo, Platfor
 			platformInfoVO.setWhName(warehouse.getWhName());
 		}
 		platformInfoVO.setPlatformTypeDesc(
-			DictCache.getValue(DictConstant.PLATFORM_TYPE, platformInfoVO.getPlatformType()));
+			DictCache.getValue(DictCodeConstant.PLATFORM_TYPE, platformInfoVO.getPlatformType()));
 		return platformInfoVO;
 	}
 

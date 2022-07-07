@@ -3,7 +3,7 @@ package org.nodes.wms.core.count.wrapper;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.UserCache;
 import org.nodes.core.base.entity.User;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.count.entity.CountHeader;
 import org.nodes.wms.core.count.vo.CountHeaderVO;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
@@ -45,7 +45,7 @@ public class CountHeaderWrapper extends BaseEntityWrapper<CountHeader, CountHead
 					countHeaderVO.setCreator(user.getName());
 				}
 			}
-			countHeaderVO.setSyncStateDesc(DictCache.getValue(DictConstant.SYNC_STATE, countHeaderVO.getSyncState()));
+			countHeaderVO.setSyncStateDesc(DictCache.getValue(DictCodeConstant.SYNC_STATE, countHeaderVO.getSyncState()));
 		}
 		return countHeaderVO;
 	}

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.PrintServiceUtil;
@@ -261,9 +261,9 @@ public class LocationServiceImpl<M extends LocationMapper, T extends Location>
 				locationExcel.setZoneName(zoneList.get(0).getZoneName());
 			}
 			//应用类型
-			locationExcel.setLocType(Func.toInt(DictCache.getValue(DictConstant.LOC_TYPE, location.getLocType())));
+			locationExcel.setLocType(Func.toInt(DictCache.getValue(DictCodeConstant.LOC_TYPE, location.getLocType())));
 			//库位种类
-			locationExcel.setLocCategory(Func.toInt(DictCache.getValue(DictConstant.LOC_CATEGORY, location.getLocCategory())));
+			locationExcel.setLocCategory(Func.toInt(DictCache.getValue(DictCodeConstant.LOC_CATEGORY, location.getLocCategory())));
 			locationExportList.add(locationExcel);
 
 		}
@@ -305,14 +305,14 @@ public class LocationServiceImpl<M extends LocationMapper, T extends Location>
 			locationDTO.setZoneId(zone.getZoneId());
 			// 开始效验数据
 			ValidationUtil.ValidResult validResult = ValidationUtil.validateBean(locationDTO);
-			long cnt = DictCache.list(DictConstant.LOC_TYPE).stream().filter(u -> {
+			long cnt = DictCache.list(DictCodeConstant.LOC_TYPE).stream().filter(u -> {
 				return Func.equals(u.getDictKey(), Func.toInt(locationExcel.getLocType()));
 			}).count();
 			if (cnt == 0) {
 				validResult.addError("locType", "库位类型[" + locationExcel.getLocType() + "]不存在");
 			}
 			locationDTO.setLocType(locationExcel.getLocType());
-			cnt = DictCache.list(DictConstant.LOC_CATEGORY).stream().filter(u -> {
+			cnt = DictCache.list(DictCodeConstant.LOC_CATEGORY).stream().filter(u -> {
 				return Func.equals(u.getDictKey(), locationExcel.getLocCategory());
 			}).count();
 			if (cnt == 0) {

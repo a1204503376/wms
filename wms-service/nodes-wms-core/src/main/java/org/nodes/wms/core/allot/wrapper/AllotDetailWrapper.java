@@ -1,7 +1,7 @@
 package org.nodes.wms.core.allot.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.allot.entity.AllotDetail;
 import org.nodes.wms.core.allot.vo.AllotDetailVO;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
@@ -32,7 +32,7 @@ public class AllotDetailWrapper extends BaseEntityWrapper<AllotDetail, AllotDeta
 		if (Func.isNotEmpty(skuPackage)) {
 			allotDetailVO.setWspName(skuPackage.getWspName());
 		}
-		String skuLevelName = DictCache.getValue(DictConstant.SKU_LEVEL, entity.getSkuLevel());
+		String skuLevelName = DictCache.getValue(DictCodeConstant.SKU_LEVEL, entity.getSkuLevel());
 		allotDetailVO.setSkuLevelName(skuLevelName);
 		//计划数量
 		if (Func.isNotEmpty(allotDetailVO.getWspId())

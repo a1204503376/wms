@@ -1,14 +1,10 @@
 package org.nodes.wms.core.count.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
-import org.nodes.core.constant.DictConstant;
 import org.nodes.wms.core.count.entity.CountDetail;
 import org.nodes.wms.core.count.vo.CountDetailVO;
 import org.nodes.wms.core.warehouse.entity.Location;
 import org.springblade.core.mp.support.BaseEntityWrapper;
-import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.*;
 
 /**

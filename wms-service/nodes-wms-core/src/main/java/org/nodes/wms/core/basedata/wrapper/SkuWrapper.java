@@ -1,7 +1,7 @@
 package org.nodes.wms.core.basedata.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.StringPool;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
@@ -56,8 +56,8 @@ public class SkuWrapper extends BaseEntityWrapper<Sku, SkuVO> {
 				skuVO.setIsSnDesc(skuVO.getIsSn() != 0 ? StringPool.CHS_YES : StringPool.CHS_NO);
 				skuVO.setSn(skuVO.getIsSn() != 0 ? true : false);
 			}
-			skuVO.setQualityDateTypeCd(DictCache.getValue(DictConstant.QUALITY_TYPE, skuVO.getQualityDateType()));
-			skuVO.setInventoryTypeDesc(DictCache.getValue(DictConstant.INVENTORY_TYPE, skuVO.getSkuStorageType()));
+			skuVO.setQualityDateTypeCd(DictCache.getValue(DictCodeConstant.QUALITY_TYPE, skuVO.getQualityDateType()));
+			skuVO.setInventoryTypeDesc(DictCache.getValue(DictCodeConstant.INVENTORY_TYPE, skuVO.getSkuStorageType()));
 		}
 		return skuVO;
 	}

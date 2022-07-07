@@ -141,4 +141,30 @@ public class DictServiceImpl <M extends DictMapper, T extends Dict> extends Base
 			throw new ServiceException("您没有权限操作！");
 		}
 	}
+
+	@Override
+	public List<Dict> findSonDictByDictCode(String dictCode) {
+		return super.lambdaQuery()
+			.select(Dict::getDictKey, Dict::getDictValue)
+			.eq(Dict::getCode, dictCode)
+			.eq(Dict::getIsSealed, 0)
+			.ne(Dict::getParentId, 0)
+			.list();
+	}
+
+	@Override
+	public Dict findByDictValue(String dictCode, String dictValue) {
+		return super.lambdaQuery()
+			.eq(Dict::getCode, dictCode)
+			.eq(Dict::getDictValue, dictValue)
+			.one();
+	}
+
+	@Override
+	public Dict findByDictKey(String dictCode, String dictKey) {
+		return super.lambdaQuery()
+			.eq(Dict::getCode, dictCode)
+			.eq(Dict::getDictKey, dictKey)
+			.one();
+	}
 }

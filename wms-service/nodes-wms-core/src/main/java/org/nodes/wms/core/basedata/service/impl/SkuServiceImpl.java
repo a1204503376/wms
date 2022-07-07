@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.entity.Dict;
 import org.nodes.core.base.service.IDictService;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.ValidationUtil;
@@ -196,7 +196,7 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 		if (Func.isNotEmpty(skuLotVal)) {
 			skuVo.setSkuLotValName(skuLotVal.getSkuLotValName());
 		}
-		skuVo.setAbcName(DictCache.getValue(DictConstant.LOC_ABC, entity.getAbc()));
+		skuVo.setAbcName(DictCache.getValue(DictCodeConstant.LOC_ABC, entity.getAbc()));
 		return skuVo;
 	}
 
@@ -564,7 +564,7 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 				skuDTO.setSkuVolume(new BigDecimal(skuExcel.getSkuVolume()));
 				skuDTO.setSkuBarcodeList(skuExcel.getSkuBarcodeList());
 				skuDTO.setSkuRemark(skuExcel.getRemarks());
-				Dict dict = DictCache.list(DictConstant.INVENTORY_TYPE).stream().filter(u->{
+				Dict dict = DictCache.list(DictCodeConstant.INVENTORY_TYPE).stream().filter(u->{
 					return Func.equals(u.getDictValue(), skuExcel.getStorageType());
 				}).findFirst().orElse(null);
 				skuDTO.setSkuStorageType(Func.isEmpty(dict) ? null : dict.getDictKey());
@@ -853,12 +853,12 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 			skuExportDTO.setSkuCode(sku.getSkuCode());
 			skuExportDTO.setSkuName(sku.getSkuName());
 			skuExportDTO.setSkuNameS(sku.getSkuNameS());
-			skuExportDTO.setAbc(DictCache.getValue(DictConstant.LOC_ABC, sku.getAbc()));
+			skuExportDTO.setAbc(DictCache.getValue(DictCodeConstant.LOC_ABC, sku.getAbc()));
 			skuExportDTO.setSkuGrossWeight(sku.getSkuGrossWeight().stripTrailingZeros().toPlainString());
 			skuExportDTO.setSkuNetWeight(sku.getSkuNetWeight().stripTrailingZeros().toPlainString());
 			skuExportDTO.setSkuTareWeight(sku.getSkuTareWeight().stripTrailingZeros().toPlainString());
 			skuExportDTO.setSkuVolume(sku.getSkuVolume().stripTrailingZeros().toPlainString());
-			skuExportDTO.setStorageType(DictCache.getValue(DictConstant.INVENTORY_TYPE, sku.getSkuStorageType()));
+			skuExportDTO.setStorageType(DictCache.getValue(DictCodeConstant.INVENTORY_TYPE, sku.getSkuStorageType()));
 			skuExportDTO.setRemarks(sku.getSkuRemark());
 			skuExportDTO.setSkuBarcodeList(sku.getSkuBarcodeList());
 			skuExportDTO.setShelfLife(sku.getQualityHours().toString());

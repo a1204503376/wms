@@ -2,7 +2,7 @@
 package org.nodes.wms.core.outstock.so.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
@@ -68,7 +68,7 @@ public class PickPlanWrapper extends BaseEntityWrapper<PickPlan, PickPlanVO> {
 				List<WellenDetail> wellenDetailList = wellenDetailService.listByWellenId(pickPlan.getWellenId());
 				pickPlanVO.setSoBillNo(NodesUtil.join(wellenDetailList, WellenDetail::getSoBillNo));
 			}
-			pickPlanVO.setSkuLevelName(DictCache.getValue(DictConstant.SKU_LEVEL, pickPlan.getSkuLevel()));
+			pickPlanVO.setSkuLevelName(DictCache.getValue(DictCodeConstant.SKU_LEVEL, pickPlan.getSkuLevel()));
 		}
 		return pickPlanVO;
 	}

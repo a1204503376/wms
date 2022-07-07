@@ -4,7 +4,7 @@ package org.nodes.wms.core.stock.transfer.wrapper;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.UserCache;
 import org.nodes.core.base.entity.User;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
@@ -33,7 +33,7 @@ public class TransferRecordWrapper extends BaseEntityWrapper<TransferRecord, Tra
 	@Override
 	public TransferRecordVO entityVO(TransferRecord transferRecord) {
 		TransferRecordVO transferRecordVO = BeanUtil.copy(transferRecord, TransferRecordVO.class);
-		String transTypeName = DictCache.getValue(DictConstant.TRANSFER_TYPE, transferRecord.getTransferType());
+		String transTypeName = DictCache.getValue(DictCodeConstant.TRANSFER_TYPE, transferRecord.getTransferType());
 		transferRecordVO.setTransferTypeName(transTypeName);
 
 		Sku sku = SkuCache.getById(transferRecord.getSkuId());
@@ -51,7 +51,7 @@ public class TransferRecordWrapper extends BaseEntityWrapper<TransferRecord, Tra
 		if (Func.isNotEmpty(skuPackage)) {
 			transferRecordVO.setWspName(skuPackage.getWspName());
 		}
-		String toSkuLevelName = DictCache.getValue(DictConstant.SKU_LEVEL, transferRecord.getSkuLevel());
+		String toSkuLevelName = DictCache.getValue(DictCodeConstant.SKU_LEVEL, transferRecord.getSkuLevel());
 		transferRecordVO.setSkuLevelName(toSkuLevelName);
 
 		User user = UserCache.getById(transferRecord.getCreateUser());

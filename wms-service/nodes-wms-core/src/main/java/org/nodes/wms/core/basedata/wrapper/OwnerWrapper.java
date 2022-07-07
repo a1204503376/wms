@@ -2,16 +2,12 @@ package org.nodes.wms.core.basedata.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.basedata.dto.OwnerDTO;
-import org.nodes.wms.core.basedata.entity.Enterprise;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.excel.OwnerExcel;
 import org.nodes.wms.core.basedata.vo.OwnerVO;
-import org.nodes.wms.core.common.cache.AddressCache;
-import org.nodes.wms.core.common.cache.ContactsCache;
 import org.nodes.wms.core.common.dto.AddressDTO;
 import org.nodes.wms.core.common.dto.ContactsDTO;
 import org.nodes.wms.core.common.entity.Address;
@@ -22,7 +18,6 @@ import org.nodes.wms.core.common.wrapper.AddressWrapper;
 import org.nodes.wms.core.common.wrapper.ContactsWrapper;
 import org.springblade.core.mp.support.BaseEntityWrapper;
 import org.springblade.core.mp.support.Condition;
-import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;
@@ -74,7 +69,7 @@ public class OwnerWrapper extends BaseEntityWrapper<Owner, OwnerVO> {
 			if (Func.isNotEmpty(address) && !NodesUtil.isAllNull(address)) {
 				address.setAddressDataType(Owner.DATA_TYPE);
 				if (Func.isNotEmpty(ownerExcel) && Func.isNotEmpty(ownerExcel.getAddressTypeDesc())) {
-					Dict dict = DictCache.list(DictConstant.ADDRESS_TYPE).stream().filter(u->{
+					Dict dict = DictCache.list(DictCodeConstant.ADDRESS_TYPE).stream().filter(u->{
 						return Func.equals(u.getDictValue(), ownerExcel.getAddressTypeDesc());
 					}).findFirst().orElse(null);
 					address.setAddressType(Func.isEmpty(dict) ? null : dict.getDictKey());

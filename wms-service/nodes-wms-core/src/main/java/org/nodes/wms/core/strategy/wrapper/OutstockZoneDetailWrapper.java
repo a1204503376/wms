@@ -2,7 +2,7 @@
 package org.nodes.wms.core.strategy.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.strategy.entity.OutstockZoneDetail;
 import org.nodes.wms.core.strategy.vo.OutstockZoneDetailVO;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
@@ -40,9 +40,9 @@ public class OutstockZoneDetailWrapper extends BaseEntityWrapper<OutstockZoneDet
 		if (ObjectUtil.isNotEmpty(zone)) {
 			outstockZoneDetailVO.setZoneType(zone.getZoneType());
 			outstockZoneDetailVO.setZoneName(
-				zone.getZoneName() + "（" + DictCache.getValue(DictConstant.ZONE_TYPE, zone.getZoneType()) + "）");
+				zone.getZoneName() + "（" + DictCache.getValue(DictCodeConstant.ZONE_TYPE, zone.getZoneType()) + "）");
 		}
-		outstockZoneDetailVO.setSkuLevelDesc(DictCache.getValue(DictConstant.SKU_LEVEL, outstockZoneDetail.getSkuLevel()));
+		outstockZoneDetailVO.setSkuLevelDesc(DictCache.getValue(DictCodeConstant.SKU_LEVEL, outstockZoneDetail.getSkuLevel()));
 
 		return outstockZoneDetailVO;
 	}

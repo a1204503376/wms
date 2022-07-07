@@ -4,7 +4,7 @@ import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.SysCache;
 import org.nodes.core.base.entity.Dept;
 import org.nodes.core.base.entity.Dict;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.StringPool;
 import org.nodes.wms.core.common.dto.AddressDTO;
@@ -85,7 +85,7 @@ public class WarehouseWrapper  extends BaseEntityWrapper<Warehouse, WarehouseVO>
 			if (Func.isNotEmpty(address) && !NodesUtil.isAllNull(address)) {
 				address.setAddressDataType(Warehouse.DATA_TYPE);
 				if(Func.isNotEmpty(warehouseExcel)&&Func.isNotEmpty(warehouseExcel.getAddressTypeDesc())){
-					Dict dict = DictCache.list(DictConstant.ADDRESS_TYPE).stream()
+					Dict dict = DictCache.list(DictCodeConstant.ADDRESS_TYPE).stream()
 					.filter(item->{
 						return Func.equals(item.getDictValue(), warehouseExcel.getAddressTypeDesc());
 					}).findFirst().orElse(null);
