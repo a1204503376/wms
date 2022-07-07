@@ -142,12 +142,6 @@ public class LocationExcelRequest implements Serializable {
 	private Integer putOrder;
 
 	/**
-	 * 适用的容器类型
-	 */
-	@ExcelProperty("适用的容器类型")
-	private String lpnTypeCode;
-
-	/**
 	 * 容量
 	 */
 	@ExcelProperty("容量")
@@ -182,13 +176,4 @@ public class LocationExcelRequest implements Serializable {
 	 */
 	@ExcelProperty("混放批号")
 	private String locLotNoMix;
-
-	/**
-	 * 是否启用
-	 */
-	@ColumnWidth(21)
-	@HeadStyle(fillPatternType = FillPatternType.SOLID_FOREGROUND,
-		fillForegroundColor = 10)
-	@ExcelProperty("是否启用")
-	private Integer status;
 }
