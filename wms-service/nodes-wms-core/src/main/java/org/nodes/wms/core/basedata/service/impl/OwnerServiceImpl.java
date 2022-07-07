@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.entity.Region;
 import org.nodes.core.base.service.IRegionService;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.ValidationUtil;
@@ -329,7 +329,7 @@ public class OwnerServiceImpl<M extends OwnerMapper, T extends Owner>
 				// 封装地址数据
 				if (Func.isNotEmpty(address)) {
 					ownerExport.setAddress(address.getAddress());
-					ownerExport.setAddressTypeDesc(DictCache.getValue(DictConstant.ADDRESS_TYPE, address.getAddressType()));
+					ownerExport.setAddressTypeDesc(DictCache.getValue(DictCodeConstant.ADDRESS_TYPE, address.getAddressType()));
 					ownerExport.setLongitude(address.getLongitude());
 					ownerExport.setLatitude(address.getLatitude());
 					if (address.getDefaultFlag().equals(DefaultFlagEnum.TRUE.getIndex())) {

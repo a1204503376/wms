@@ -3,7 +3,7 @@ package org.nodes.wms.core.warehouse.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.enums.StatusEnum;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
@@ -218,7 +218,7 @@ public class ZoneServiceImpl<M extends ZoneMapper, T extends Zone>
 
 			ZoneExcel zoneExcel = BeanUtil.copy(zone, ZoneExcel.class);
 
-			String zoneType = DictCache.getValue(DictConstant.ZONE_TYPE, zone.getZoneType());
+			String zoneType = DictCache.getValue(DictCodeConstant.ZONE_TYPE, zone.getZoneType());
 			if (Func.isNotEmpty(zoneType)) {
 				zoneExcel.setZoneType(zoneType);
 			}

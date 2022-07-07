@@ -3,7 +3,7 @@ package org.nodes.wms.core.outstock.sales.wrapper;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.UserCache;
 import org.nodes.core.base.entity.User;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.basedata.cache.BillTypeCache;
 import org.nodes.wms.core.basedata.entity.Enterprise;
 import org.nodes.wms.core.basedata.service.IEnterpriseService;
@@ -40,16 +40,16 @@ public class SalesHeaderWrapper extends BaseEntityWrapper<SalesHeader, SalesHead
 		if (Func.isNotEmpty(salesHeaderVO)) {
 			//单据状态名称
 			salesHeaderVO.setSoBillStateName(
-				DictCache.getValue(DictConstant.SO_BILL_STATE, salesHeader.getSoBillState()));
+				DictCache.getValue(DictCodeConstant.SO_BILL_STATE, salesHeader.getSoBillState()));
 			//出库方式名称
 			salesHeaderVO.setOutstockTypeName(
-				DictCache.getValue(DictConstant.OUTSTORE_TYPE, salesHeader.getOutstockType()));
+				DictCache.getValue(DictCodeConstant.OUTSTORE_TYPE, salesHeader.getOutstockType()));
 			//同步状态名称
 			salesHeaderVO.setSyncStateName(
-				DictCache.getValue(DictConstant.SYNC_STATE, salesHeader.getSyncState()));
+				DictCache.getValue(DictCodeConstant.SYNC_STATE, salesHeader.getSyncState()));
 			//创建类型
 			salesHeaderVO.setCreateTypeName(
-				DictCache.getValue(DictConstant.CREATE_TYPE, salesHeader.getCreateType()));
+				DictCache.getValue(DictCodeConstant.CREATE_TYPE, salesHeader.getCreateType()));
 			//货主名称
 			if (Func.isNotEmpty(salesHeader.getWoId())) {
 				IOwnerService ownerService = SpringUtil.getBean(IOwnerService.class);
@@ -69,7 +69,7 @@ public class SalesHeaderWrapper extends BaseEntityWrapper<SalesHeader, SalesHead
 			}
 			//过账类型
 			salesHeaderVO.setPostStateCd(
-				DictCache.getValue(DictConstant.POST_STATE, salesHeader.getPostState()));
+				DictCache.getValue(DictCodeConstant.POST_STATE, salesHeader.getPostState()));
 			//过账人
 			if (Func.isNotEmpty(salesHeader.getPostUser())) {
 				User user = UserCache.getById(salesHeader.getPostUser());
@@ -109,10 +109,10 @@ public class SalesHeaderWrapper extends BaseEntityWrapper<SalesHeader, SalesHead
 			}
 			//发货方式
 			salesHeaderVO.setTransportDesc(
-				DictCache.getValue(DictConstant.SO_TRANSPORT_CODE, salesHeader.getTransportCode()));
+				DictCache.getValue(DictCodeConstant.SO_TRANSPORT_CODE, salesHeader.getTransportCode()));
 			// 发运状态
 			salesHeaderVO.setShipStateDesc(
-				DictCache.getValue(DictConstant.SHIP_STATE, salesHeader.getShipState()));
+				DictCache.getValue(DictCodeConstant.SHIP_STATE, salesHeader.getShipState()));
 		}
 		return salesHeaderVO;
 	}

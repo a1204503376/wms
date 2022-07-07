@@ -18,9 +18,9 @@ import java.util.Map;
 public class SystemParamDaoImpl implements SystemParamDao {
 	private final IParamService paramService;
 	/**
-	 * 编辑和删除的时候需要删除缓存中的值
+	 * 编辑和删除的时候需要删除缓存中的值，key：参数key
 	 */
-	private static final Map<String, Param> store = new HashMap<>();
+	private static final Map<String, Param> key2ParamStore = new HashMap<>();
 
 
 	@Override
@@ -30,19 +30,25 @@ public class SystemParamDaoImpl implements SystemParamDao {
 		}
 		Boolean saveOrUpdate = paramService.saveOrUpdate(param);
 		if (saveOrUpdate) {
-			store.put(param.getParamKey(), param);
+			key2ParamStore.remove(param.getParamKey());
 		}
 		return saveOrUpdate;
 	}
 
 	@Override
 	public Param selectByKey(String key) {
-		Param param = store.get(key);
-		if (Func.isEmpty(param)) {
-			return paramService.selectByKey(key);
-		} else {
+		if (Func.isEmpty(key)) {
+			throw new NullArgumentException("SystemParamDaoImpl.selectByKey");
+		}
+
+		Param param = key2ParamStore.get(key);
+		if (Func.isNotEmpty(param)) {
 			return param;
 		}
+
+		param = paramService.selectByKey(key);
+		key2ParamStore.put(key, param);
+		return param;
 	}
 
 	@Override
@@ -53,9 +59,8 @@ public class SystemParamDaoImpl implements SystemParamDao {
 			List<Long> paramListIds = Func.toLongList(ids);
 			lambdaQueryWrapper.in(Param::getId, paramListIds);
 			List<Param> paramList = paramService.list(lambdaQueryWrapper);
-			for (Param params :
-				paramList) {
-				store.put(params.getParamKey(), params);
+			for (Param params : paramList) {
+				key2ParamStore.put(params.getParamKey(), params);
 			}
 		}
 		return logic;

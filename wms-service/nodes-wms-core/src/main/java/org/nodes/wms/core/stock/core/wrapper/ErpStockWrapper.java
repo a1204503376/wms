@@ -2,7 +2,7 @@ package org.nodes.wms.core.stock.core.wrapper;
 
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
@@ -54,7 +54,7 @@ public class ErpStockWrapper extends BaseEntityWrapper<ErpStock, ErpStockVO> {
 				erpStockVO.setWspName(skuPackage.getWspName());
 			}
 			// 层级
-			erpStockVO.setSkuLevelDesc(DictCache.getValue(DictConstant.SKU_LEVEL, entity.getSkuLevel()));
+			erpStockVO.setSkuLevelDesc(DictCache.getValue(DictCodeConstant.SKU_LEVEL, entity.getSkuLevel()));
 			// 货主
 			IOwnerService ownerService = SpringUtil.getBean(IOwnerService.class);
 			Owner owner = ownerService.getById(entity.getWoId());

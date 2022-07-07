@@ -3,7 +3,7 @@ package org.nodes.wms.core.warehouse.wrapper;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.UserCache;
 import org.nodes.core.base.entity.User;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
 import org.nodes.wms.core.warehouse.dto.ZoneDTO;
 import org.nodes.wms.core.warehouse.excel.ZoneExcel;
@@ -41,7 +41,7 @@ public class ZoneWrapper extends BaseEntityWrapper<Zone, ZoneVO> {
 			if (Func.isNotEmpty(warehouse)) {
 				zoneVO.setWhName(warehouse.getWhName());
 			}
-			zoneVO.setZoneTypeDesc(DictCache.getValue(DictConstant.ZONE_TYPE,zone.getZoneType()));
+			zoneVO.setZoneTypeDesc(DictCache.getValue(DictCodeConstant.ZONE_TYPE,zone.getZoneType()));
 		}
 		return zoneVO;
 	}

@@ -2,7 +2,7 @@ package org.nodes.wms.core.utils;
 
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.ParamCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.entity.SkuLotBaseEntity;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.StringPool;
@@ -69,7 +69,7 @@ public class SkuLotUtil {
 				continue;
 			}
 			// 过滤 dict.remark 为空的选项
-			String dictValue = DictCache.getValue(DictConstant.SKU_LOT_VAL, skuLotMaskVal);
+			String dictValue = DictCache.getValue(DictCodeConstant.SKU_LOT_VAL, skuLotMaskVal);
 			if (Func.isEmpty(dictValue)) {
 				continue;
 			}

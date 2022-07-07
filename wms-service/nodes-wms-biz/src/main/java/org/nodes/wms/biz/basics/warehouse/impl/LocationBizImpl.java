@@ -289,8 +289,8 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
-	public List<Location> findEnableAgvLocation(LpnType lpnType) {
-		return locationDao.getLocationByLpnTypeId(lpnType.getId());
+	public List<Location> findEnableAgvLocation(LpnType lpnType, String zoneType) {
+		return locationDao.getLocationByLpnTypeId(lpnType.getId(), zoneType);
 	}
 
 	@Override

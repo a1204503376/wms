@@ -1,13 +1,10 @@
 package org.nodes.wms.core.strategy.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.strategy.entity.OutstockConfigUdf;
 import org.nodes.wms.core.strategy.vo.OutstockConfigUdfVO;
 import org.springblade.core.mp.support.BaseEntityWrapper;
-import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.*;
 
 public class OutstockConfigUdfWrapper extends BaseEntityWrapper<OutstockConfigUdf, OutstockConfigUdfVO> {
@@ -21,7 +18,7 @@ public class OutstockConfigUdfWrapper extends BaseEntityWrapper<OutstockConfigUd
 		if (ObjectUtil.isNotEmpty(outstockConfigUdfVO)) {
 			outstockConfigUdfVO.setBillUdfNumberDesc("自定义属性" + entity.getBillUdfNumber());
 			outstockConfigUdfVO.setBillUdfOperationDesc(
-				DictCache.getValue(DictConstant.BILL_UDF_OPERATION, entity.getBillUdfOperation()));
+				DictCache.getValue(DictCodeConstant.BILL_UDF_OPERATION, entity.getBillUdfOperation()));
 		}
 		return outstockConfigUdfVO;
 	}

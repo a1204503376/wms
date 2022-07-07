@@ -125,9 +125,10 @@ public interface LocationDao {
 	 * 根据容器id获取agv可用的库位，按照上架顺序返回
 	 *
 	 * @param lpnTypeId 容器id
+	 * @param zoneType 库区类型
 	 * @return List<Location>
 	 */
-	List<Location> getLocationByLpnTypeId(Long lpnTypeId);
+	List<Location> getLocationByLpnTypeId(Long lpnTypeId, String zoneType);
 
 	/**
 	 * 根据箱型和库房id获取库位信息VV

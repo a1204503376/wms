@@ -13,6 +13,10 @@ import java.math.BigDecimal;
 public class PutawayByBoxResponse implements Serializable {
 	private static final long serialVersionUID = 6229009210855257224L;
 	/**
+	 * 库存ID
+	 */
+	private Long stockId;
+	/**
 	 * 箱码
 	 */
 	private String boxCode;

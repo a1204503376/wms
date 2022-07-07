@@ -1,5 +1,6 @@
 package org.nodes.wms.biz.basics.dictionary;
 
+import org.nodes.core.base.entity.Dict;
 import org.nodes.wms.dao.application.dto.output.DictionaryResponse;
 
 import java.util.List;
@@ -15,4 +16,10 @@ public interface DictionaryBiz {
 	 * @return List<DictionaryResponse>
 	 */
 	List<DictionaryResponse> getDictionaryResponseList(String code);
+
+	/**
+	 * 获取zone_type中的自动存储区
+	 * @return
+	 */
+	Dict findZoneTypeOfAutoStore();
 }

@@ -20,6 +20,7 @@ public enum StockLogTypeEnum {
 	INSTOCK_BY_BOX(102, "按箱收货-手持"),
 	INSTOCK_BY_MULTI_BOX(103, "多箱收货-手持"),
 	INSTOCK_BY_CANCEL_PICK(104, "撤销拣货"),
+	INSTOCK_BY_PUTAWAY(105,"按箱上架"),
 
 	STOCK_FREEZE(201, "库存冻结"),
 	STOCK_UNFREEZE(202, "库存解冻"),

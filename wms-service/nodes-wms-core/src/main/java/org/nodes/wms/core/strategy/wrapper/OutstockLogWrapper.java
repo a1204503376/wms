@@ -1,7 +1,7 @@
 package org.nodes.wms.core.strategy.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.strategy.entity.OutstockLog;
 import org.nodes.wms.core.strategy.vo.OutstockLogVO;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
@@ -40,7 +40,7 @@ public class OutstockLogWrapper extends BaseEntityWrapper<OutstockLog, OutstockL
 			List<String> descList = new ArrayList<>();
 			List<Integer> valueList = Func.toIntList(outstockLogVO.getOutstockFunction());
 			valueList.forEach(value -> {
-				descList.add(DictCache.getValue(DictConstant.OUTSTOCK_FUNCTION, value));
+				descList.add(DictCache.getValue(DictCodeConstant.OUTSTOCK_FUNCTION, value));
 			});
 
 			outstockLogVO.setOutstockFunctionDesc(Func.join(descList));

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.ParamCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -64,7 +64,7 @@ public class ParamServiceImpl <M extends ParamMapper, T extends Param> extends B
 		boolean result = super.saveOrUpdate(entity);
 		if (entity.getParamKey().equals(ParamEnum.SKU_LOT_COUNT.getKey())) {
 			// 如果修改批属性开放数量，需要修改字典(周转方式)
-			List<Dict> dictList = DictCache.list(DictConstant.TURNOVER_ITEM).stream().filter(u->{
+			List<Dict> dictList = DictCache.list(DictCodeConstant.TURNOVER_ITEM).stream().filter(u->{
 				return u.getDictKey() > ParamCache.LOT_COUNT;
 			}).collect(Collectors.toList());
 			if (Func.isNotEmpty(dictList)) {

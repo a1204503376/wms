@@ -3,7 +3,7 @@ package org.nodes.wms.core.stock.core.wrapper;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.UserCache;
 import org.nodes.core.base.entity.User;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.dao.basics.sku.entities.SkuPackage;
@@ -70,7 +70,7 @@ public class LogStockPackWrapper extends BaseEntityWrapper<LogStockPack, LogStoc
 			if (Func.isNotEmpty(user)) {
 				logStockPack.setProcUserName(user.getRealName());
 			}
-			logStockPack.setProcTypeDesc(DictCache.getValue(DictConstant.STOCK_PACK_STATE,logStockPack.getProcType()));
+			logStockPack.setProcTypeDesc(DictCache.getValue(DictCodeConstant.STOCK_PACK_STATE,logStockPack.getProcType()));
 		}
 		return logStockPack;
 	}
