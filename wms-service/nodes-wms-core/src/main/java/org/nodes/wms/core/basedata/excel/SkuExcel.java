@@ -34,6 +34,12 @@ public class SkuExcel{
 	@ExcelProperty("物品简称")
 	private String skuNameS;
 	/**
+	 * 物品规格型号
+	 */
+	@ColumnWidth(15)
+	@ExcelProperty("规格型号")
+	private String skuSpec;
+	/**
 	 * 货主编码
 	 */
 	@NotBlank(message = "货主编码不能为空！")
@@ -140,6 +146,12 @@ public class SkuExcel{
 	@ColumnWidth(15)
 	@ExcelProperty("序列号")
 	private String isSn;
+	/**
+	 * 是否含有bom
+	 */
+	@ColumnWidth(15)
+	@ExcelProperty("是否含有bom")
+	private String hasBom;
 	/**
 	 * 存货类型
 	 */

@@ -170,4 +170,9 @@ public class Sku extends TenantEntity {
 	 * 序列号管理（1：序列号管理  0：非序列号管理）
 	 */
 	private Integer isSn;
+
+	/**
+	 * 是否含有bom
+	 */
+	private Integer hasBom;
 }
