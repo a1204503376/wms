@@ -3,7 +3,6 @@ package org.nodes.wms.biz.stock;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
-import org.nodes.wms.dao.putway.dto.input.CallAgvRequest;
 import org.nodes.wms.dao.putway.dto.output.CallAgvResponse;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
@@ -115,7 +114,7 @@ public interface StockBiz {
 	 * @param boxCode 箱码的后几位
 	 * @return key:lpn编码
 	 */
-	List<CallAgvResponse> findLpnStockOnStageLeftLikeByBoxCode(Long whId, String boxCode);
+    List<CallAgvResponse> findLpnStockOnStageLeftByCallAgv(Long whId, String boxCode);
 
 	/**
 	 * 根据清点记录查询入库暂存区的库存,如果查询的库存超过两个会报异常
@@ -165,9 +164,5 @@ public interface StockBiz {
 	 */
 	boolean judgeEnableOnLocation(Location location);
 
-	/**
-	 * 天宜定制：呼叫Agv
-	 * @param request  前端传入参数
-	 */
-	void callAgv(CallAgvRequest request);
+
 }
