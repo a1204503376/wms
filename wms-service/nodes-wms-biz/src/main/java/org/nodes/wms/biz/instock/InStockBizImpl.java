@@ -131,7 +131,7 @@ public class InStockBizImpl implements InStockBiz {
 		// 更新收货单状态
 		receiveBiz.updateReciveHeader(receiveHeader, detail);
 		// 记录业务日志
-		receiveBiz.log(request.getReceiveId(), request.getReceiveDetailId(), request.getSurplusQty(), request.getSkuLot1(), receiveHeader, detail);
+		receiveBiz.log(StockLogTypeEnum.INSTOCK_BY_PCS.getDesc(),receiveHeader,detail,receiveLog);
 		//检查收货是否完成 并返回
 		return receiveBiz.checkByPcsReceive(request.getReceiveDetailId(), receiveLog.getReceiveId());
 	}
