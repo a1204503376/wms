@@ -17,7 +17,7 @@ public interface InStockBiz {
 	 *
 	 * @param request
 	 */
-	void receiveByBoxCode(ReceiveDetailLpnPdaRequest request);
+	void receiveByBoxCode(ReceiveDetailLpnPdaRequest request,String logType);
 
 	/**
 	 * 按件收货

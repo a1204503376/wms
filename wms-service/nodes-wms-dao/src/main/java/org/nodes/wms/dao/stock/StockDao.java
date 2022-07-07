@@ -91,4 +91,6 @@ public interface StockDao {
 				 BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
 
 	List<Stock> getStockByLocIdList(List<Long> locIdList);
+
+	Stock getStockById(Long stockId);
 }

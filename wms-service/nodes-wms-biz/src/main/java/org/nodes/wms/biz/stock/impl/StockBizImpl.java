@@ -603,5 +603,10 @@ public class StockBizImpl implements StockBiz {
 		return !locationBiz.isFrozen(location);
 	}
 
+	@Override
+	public Stock findStockById(Long stockId) {
+		return stockDao.getStockById(stockId);
+	}
+
 
 }

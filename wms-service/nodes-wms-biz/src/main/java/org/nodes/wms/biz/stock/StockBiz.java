@@ -163,6 +163,9 @@ public interface StockBiz {
 	 * @return true：可用
 	 */
 	boolean judgeEnableOnLocation(Location location);
-
+	/**
+	 * 根据Id获取库存实体
+	 */
+	Stock findStockById(Long stockId);
 
 }

@@ -47,9 +47,7 @@ public class LocationFactory {
 			if (Func.isEmpty(data.getZoneCode())) {
 				throw new ServiceException("导入失败，库区编码不能为空");
 			}
-			if (Func.isEmpty(data.getStatus())) {
-				throw new ServiceException("导入失败，启用状态不能为空");
-			}
+
 			// 根据库房编码查询库房信息
 			if (Func.isNotEmpty(data.getWhCode())) {
 				Warehouse warehouse = warehouseBiz.findByCode(data.getWhCode());
@@ -78,20 +76,7 @@ public class LocationFactory {
 					location.setZoneId(zone.getZoneId());
 				}
 			}
-			// 根据容器类型编码查询容器类型信息
-			if (Func.isNotEmpty(data.getLpnTypeCode())) {
-				LpnType lpnType = lpnTypeBiz.findLpnTypeByCode(data.getLpnTypeCode());
-				if (Func.isEmpty(lpnType)) {
-					throw new ServiceException("导入失败，不存在容器类型编码：" + data.getLpnTypeCode());
-				} else {
-					location.setLpnTypeId(lpnType.getId());
-				}
-			}
-			// 判断启用状态
-			if (!data.getStatus().equals(StatusEnum.ON.getIndex())
-				&& !data.getStatus().equals(StatusEnum.OFF.getIndex())) {
-				throw new ServiceException("导入失败，启用状态只能为1(启用)或者-1(禁用)");
-			}
+
 			//判断容器类别
 			if (Func.isNotEmpty(data.getLpnSortCode())) {
 				LpnType lpnType = lpnTypeBiz.findLpnTypeByBoxCode(data.getLpnSortCode());

@@ -8,6 +8,7 @@ import org.nodes.wms.dao.instock.receive.dto.output.*;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
+import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -123,9 +124,10 @@ public interface ReceiveBiz {
 
 	/**
 	 * 判断是否可以收货，如果不能收货则抛异常
+	 *
 	 * @param receiveHeader detail
-	 * @param detail 收货单明细id
-	 * @param receiveQty      本次收货数量
+	 * @param detail        收货单明细id
+	 * @param receiveQty    本次收货数量
 	 */
 	void canReceive(ReceiveHeader receiveHeader, ReceiveDetail detail, BigDecimal receiveQty);
 
@@ -139,6 +141,7 @@ public interface ReceiveBiz {
 
 	/**
 	 * 收货之后更新收货单状态，注意该函数要在更新明细之后调用
+	 *
 	 * @param receiveHeader
 	 * @param detail
 	 */
@@ -147,13 +150,13 @@ public interface ReceiveBiz {
 	/**
 	 * 记录收货的业务日志，日志格式：[行号]收货[qty],批次[skuLotNumber]
 	 *
-	 * @param receiveHeaderId 收货单id
-	 * @param receiveDetailId 收货单明细
-	 * @param qty             收货数量
-	 * @param skuLotNumber    批次号
+	 * @param logType       日志头-列如：手持-按件收货
+	 * @param receiveHeader 收货单toubiao
+	 * @param detail        收货单明细
+	 * @param receivelog    清点记录
 	 */
-	void log(Long receiveHeaderId, Long receiveDetailId,
-			 BigDecimal qty, String skuLotNumber, ReceiveHeader receiveHeader, ReceiveDetail detail);
+	void log(String logType, ReceiveHeader receiveHeader,
+			 ReceiveDetail detail, ReceiveLog receivelog);
 
 	/**
 	 * 根据收货单id获取收货单详情
