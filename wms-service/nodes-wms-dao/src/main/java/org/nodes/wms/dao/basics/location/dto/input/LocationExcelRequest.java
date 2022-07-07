@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @Data
 @HeadStyle(fillPatternType = FillPatternType.SOLID_FOREGROUND,
 	fillForegroundColor = 44)
-@HeadFontStyle(fontName="等线" ,bold = false, fontHeightInPoints=16)
+@HeadFontStyle(fontName = "等线", bold = false, fontHeightInPoints = 16)
 @HeadRowHeight(21)
 @ColumnWidth(21)
 public class LocationExcelRequest implements Serializable {
@@ -62,6 +62,12 @@ public class LocationExcelRequest implements Serializable {
 	 */
 	@ExcelProperty("库位种类")
 	private Integer locCategory;
+
+	/**
+	 * 容器类别
+	 */
+	@ExcelProperty("容器类别")
+	private String lpnSortCode;
 
 	/**
 	 * 库位处理

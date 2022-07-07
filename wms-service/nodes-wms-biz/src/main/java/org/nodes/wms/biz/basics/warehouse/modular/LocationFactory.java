@@ -92,6 +92,14 @@ public class LocationFactory {
 				&& !data.getStatus().equals(StatusEnum.OFF.getIndex())) {
 				throw new ServiceException("导入失败，启用状态只能为1(启用)或者-1(禁用)");
 			}
+			//判断容器类别
+			if (Func.isNotEmpty(data.getLpnSortCode())) {
+				LpnType lpnType = lpnTypeBiz.findLpnTypeByBoxCode(data.getLpnSortCode());
+				if (Func.isNotEmpty(lpnType)) {
+					location.setLpnTypeId(lpnType.getId());
+				}
+			}
+
 			locationList.add(location);
 		}
 		return locationList;
