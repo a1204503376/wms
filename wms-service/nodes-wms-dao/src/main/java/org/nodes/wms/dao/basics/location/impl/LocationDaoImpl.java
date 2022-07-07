@@ -29,6 +29,7 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> implements LocationDao {
+	private final LocationMapper locationMapper;
 
 	@Override
 	public List<LocationSelectResponse> listTop10ByCode(String code) {
@@ -129,11 +130,8 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 		if (Func.isEmpty(lpnTypeId)) {
 			throw new NullArgumentException("LocationDaoImpl.getLocationByLpnTypeId方法的参数为空");
 		}
-		// TODO 根据库区类型查询查询库位，如果zongType可以为空
-		LambdaQueryWrapper<Location> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-		lambdaQueryWrapper.eq(Location::getLpnTypeId, lpnTypeId);
-		lambdaQueryWrapper.orderByAsc(Location::getPutOrder);
-		return super.list(lambdaQueryWrapper);
+		//根据库区类型查询查询库位，如果zongType可以为空
+		return locationMapper.getLocationByLpnTypeIdAndZoneType(lpnTypeId, zoneType);
 	}
 
 	@Override

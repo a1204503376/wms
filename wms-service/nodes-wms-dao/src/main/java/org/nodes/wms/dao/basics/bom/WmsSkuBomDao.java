@@ -17,7 +17,8 @@ import java.util.List;
 public interface WmsSkuBomDao {
 	/**
 	 * 分页查询
-	 * @param page 底部分页参数
+	 *
+	 * @param page            底部分页参数
 	 * @param skuBomPageQuery 查询条件
 	 * @return 分页数据
 	 */
@@ -25,6 +26,7 @@ public interface WmsSkuBomDao {
 
 	/**
 	 * 根据条件查询对应的数据
+	 *
 	 * @param params 查询条件
 	 * @return WmsSkuBom集合
 	 */
@@ -32,10 +34,11 @@ public interface WmsSkuBomDao {
 
 	/**
 	 * 根据物料清单id获取物料清单实体
+	 *
 	 * @param id 物料清单id
 	 * @return SkuBom 物料清单实体
 	 */
-    SkuBom getSkuBomById(Long id);
+	SkuBom getSkuBomById(Long id);
 
 	/**
 	 * 新增或修改物料清单
@@ -43,5 +46,13 @@ public interface WmsSkuBomDao {
 	 * @param skuBom: 物料清单对象
 	 * @return SkuBom
 	 */
-    SkuBom saveSkuBom(SkuBom skuBom);
+	SkuBom saveSkuBom(SkuBom skuBom);
+
+	/**
+	 * 删除物料清单
+	 *
+	 * @param ids 物料清单id集合
+	 * @return 是否成功
+	 */
+	Boolean delete(List<Long> ids);
 }

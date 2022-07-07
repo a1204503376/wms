@@ -8,6 +8,15 @@ const getPutawayData =(data)=>{
 	})
 }
 
+const submitPutawayByBox =(data)=>{
+	return http.request({
+		url: '/api/ApiPDA/putaway/submitPutawayByBox',
+		method: 'POST',
+		data:data,
+	})
+}
+
 export default {
-	getPutawayData
+	getPutawayData,
+	submitPutawayByBox
 }

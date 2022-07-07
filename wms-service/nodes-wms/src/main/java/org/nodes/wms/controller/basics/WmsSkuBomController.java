@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.bom.WmsSkuBomBiz;
+import org.nodes.wms.dao.basics.bom.dto.input.DeleteSkuBomByIdsRequest;
 import org.nodes.wms.dao.basics.bom.dto.input.WmsSkuBomPageQuery;
 import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomResponse;
 import org.nodes.wms.dao.basics.bom.entites.SkuBom;
@@ -25,17 +26,19 @@ import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(WmsApiPath.WMS_ROOT_URL +"WmsSkuBom")
+@RequestMapping(WmsApiPath.WMS_ROOT_URL + "WmsSkuBom")
 public class WmsSkuBomController {
 	private final WmsSkuBomBiz skuBomBiz;
+
 	/**
 	 * 分页查询
-	 * @param query 底部分页参数
+	 *
+	 * @param query           底部分页参数
 	 * @param skuBomPageQuery 查询条件
 	 * @return 分页数据
 	 */
 	@PostMapping("/findAllWmsSkuBom")
-	public R<IPage<WmsSkuBomResponse>> findAllWmsSkuBom(@RequestBody WmsSkuBomPageQuery skuBomPageQuery, Query query){
+	public R<IPage<WmsSkuBomResponse>> findAllWmsSkuBom(@RequestBody WmsSkuBomPageQuery skuBomPageQuery, Query query) {
 		Page<WmsSkuBomResponse> skuBomPage = skuBomBiz.getSkuBomPage(query, skuBomPageQuery);
 		return R.data(skuBomPage);
 	}
@@ -46,14 +49,26 @@ public class WmsSkuBomController {
 	@ApiLog("物料清单-导出物料清单")
 	@PostMapping("/excel")
 	public void excel(@ApiIgnore @RequestBody HashMap<String, Object> params, HttpServletResponse response) {
-		skuBomBiz.exportExcel(params,response);
+		skuBomBiz.exportExcel(params, response);
 	}
 
 	@ApiLog("物品清单管理-新增或修改")
 	@PostMapping("/save")
-	public R<String> save(@Valid @RequestBody SkuBomAddOrEditRequest skuBomAddOrEditRequest){
+	public R<String> save(@Valid @RequestBody SkuBomAddOrEditRequest skuBomAddOrEditRequest) {
 		SkuBom skuBom = skuBomBiz.save(skuBomAddOrEditRequest);
 		return R.success(String.format("%s成功",
 			Func.isEmpty(skuBomAddOrEditRequest.getId()) ? "新增" : "修改"));
+	}
+
+	/**
+	 * 物品清单管理-删除
+	 *
+	 * @param request 物料清单删除请求对象
+	 * @return 是否成功
+	 */
+	@ApiLog("物品清单管理-删除")
+	@PostMapping("/delete")
+	public R delete(@RequestBody DeleteSkuBomByIdsRequest request) {
+		return R.status(skuBomBiz.deleteSkuBomByIds(request));
 	}
 }
