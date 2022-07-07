@@ -210,6 +210,11 @@ public class StockDaoImpl
 		return super.list(lambdaQueryWrapper);
 	}
 
+	@Override
+	public Stock getStockById(Long stockId) {
+		return super.getById(stockId);
+	}
+
 	private LambdaQueryWrapper<Stock> getStockQuery() {
 		LambdaQueryWrapper<Stock> queryWrapper = Wrappers.lambdaQuery();
 		queryWrapper.apply("stay_stock_qty + stock_qty > pick_qty");

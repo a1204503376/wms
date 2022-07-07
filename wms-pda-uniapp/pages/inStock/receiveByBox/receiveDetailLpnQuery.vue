@@ -65,7 +65,10 @@
 		},
 		methods: {
 			esc() {
-				uni.$u.func.routeNavigateTo('/pages/home/childrenHome?title=收货');
+				this.$destroy('keyboardListener')
+				uni.$u.func.routeNavigateTo('/pages/home/childrenHome' ,{
+					name: '收货'
+				});
 			},
 			getReceiveDetailList() {
 				receive.getReceiveDetailLpn(this.param.boxCode).then(res => {
@@ -76,6 +79,7 @@
 				})
 			},
 			clickItem() {
+				this.$destroy('keyboardListener')
 				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByBox/receiveByBox', this.param);
 			},
 			scannerCallback(no) {
