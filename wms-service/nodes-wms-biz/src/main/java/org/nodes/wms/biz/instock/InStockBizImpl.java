@@ -35,7 +35,7 @@ public class InStockBizImpl implements InStockBiz {
 
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	@Override
-	public void receiveByBoxCode(ReceiveDetailLpnPdaRequest request) {
+	public void receiveByBoxCode(ReceiveDetailLpnPdaRequest request,String logType) {
 		boolean hasReceiveHeaderId = Func.isNotEmpty(request.getReceiveHeaderId());
 		ReceiveHeader receiveHeader = new ReceiveHeader();
 		// 判断业务参数（无单收货除外），是否可以正常收货、超收
@@ -103,12 +103,13 @@ public class InStockBizImpl implements InStockBiz {
 				receiveBiz.updateReceiveDetail(detail, item.getPlanQty());
 				// 更新收货单状态
 				receiveBiz.updateReciveHeader(header, detail);
-				// 记录业务日志
-				receiveBiz.log(request.getReceiveHeaderId(), item.getReceiveDetailId(), item.getPlanQty(), request.getSkuLot1(), header, detail);
-			} else {
-				// 记录业务日志
-				receiveBiz.log(receiveHeader.getReceiveId(), item.getReceiveDetailId(), item.getPlanQty(), request.getSkuLot1(), header, detail);
 			}
+				// 记录业务日志
+              if(Func.isEmpty(logType)){
+				  //传入参数为空设置为按箱收货类型
+				  logType = StockLogTypeEnum. INSTOCK_BY_BOX.getDesc();
+			  }
+			   receiveBiz.log(logType,header,detail,receiveLog);
 
 		}
 
@@ -149,7 +150,7 @@ public class InStockBizImpl implements InStockBiz {
 			item.setSkuLot1(receiveDetailLpnPdaMultiRequest.getSkuLot1());
 			item.setSkuLot2(receiveDetailLpnPdaMultiRequest.getSkuLot2());
 			item.setWhId(receiveDetailLpnPdaMultiRequest.getWhId());
-			receiveByBoxCode(item);
+			receiveByBoxCode(item,StockLogTypeEnum.INSTOCK_BY_MULTI_BOX.getDesc());
 		}
 
 
@@ -174,9 +175,7 @@ public class InStockBizImpl implements InStockBiz {
 			ReceiveHeader receiveHeader = receiveBiz.getReceiveHeaderById(item.getReceiveId());
 			receiveBiz.updateReciveHeader(receiveHeader, receiveDetail);
 			// 生成业务日志
-			receiveBiz.log(
-				receiveHeader.getReceiveId(), receiveDetail.getReceiveDetailId(),
-				item.getQty(), receiveDetail.getSkuLot1(), receiveHeader, receiveDetail);
+			receiveBiz.log(StockLogTypeEnum.OUTSTOCK_BY_CANCEL_RECEIVE.getDesc(),receiveHeader,receiveDetail,item);
 		});
 	}
 }
