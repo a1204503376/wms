@@ -3,7 +3,7 @@ package org.nodes.wms.biz.basics.lpntype.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
-import org.nodes.wms.biz.basics.lpntype.modular.LpnTypeFactory;
+import org.nodes.wms.dao.putway.dto.modular.LpnTypeFactory;
 import org.nodes.wms.dao.basics.lpntype.LpnTypeDao;
 import org.nodes.wms.dao.basics.lpntype.dto.input.*;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeByIdResponse;

@@ -15,7 +15,7 @@ import org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.mapper.LocationMapper;
-import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
+import org.nodes.wms.dao.putway.dto.input.LpnTypeRequest;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.tool.utils.Func;
@@ -134,4 +134,12 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 		lambdaQueryWrapper.orderByAsc(Location::getPutOrder);
 		return super.list(lambdaQueryWrapper);
 	}
+
+	@Override
+	public List<Location> getLocationByLpnType(LpnTypeRequest request) {
+
+		return super.baseMapper.selectLoctionByLpnType(request);
+	}
+
+
 }

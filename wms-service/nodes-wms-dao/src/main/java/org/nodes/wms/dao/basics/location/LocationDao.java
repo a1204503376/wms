@@ -8,6 +8,7 @@ import org.nodes.wms.dao.basics.location.dto.output.LocationExcelResponse;
 import org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.putway.dto.input.LpnTypeRequest;
 
 import java.util.List;
 
@@ -124,4 +125,12 @@ public interface LocationDao {
 	 * @return List<Location>
 	 */
 	List<Location> getLocationByLpnTypeId(Long lpnTypeId);
+
+	/**
+	 * 根据箱型和库房id获取库位信息VV
+	 *
+	 * @param request 包含库房id和箱型
+	 * @return 库位信息
+	 */
+    List<Location> getLocationByLpnType(LpnTypeRequest request);
 }
