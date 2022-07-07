@@ -1,7 +1,7 @@
 package org.nodes.wms.core.allot.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.allot.entity.AllotHeader;
 import org.nodes.wms.core.allot.vo.AllotHeaderVO;
 import org.nodes.wms.core.basedata.service.IOwnerService;
@@ -35,7 +35,7 @@ public class AllotHeaderWrapper extends BaseEntityWrapper<AllotHeader, AllotHead
 		AllotHeaderVO allotHeaderVO = BeanUtil.copy(entity, AllotHeaderVO.class);
 		IZoneService zoneService = SpringUtil.getBean(IZoneService.class);
 		//单据状态名称
-		allotHeaderVO.setAllotBillStateName(DictCache.getValue(DictConstant.ALLOT_BILL_STATE, allotHeaderVO.getAllotBillState()));
+		allotHeaderVO.setAllotBillStateName(DictCache.getValue(DictCodeConstant.ALLOT_BILL_STATE, allotHeaderVO.getAllotBillState()));
 		//货主名称
 		if (Func.isNotEmpty(allotHeaderVO.getWoId())) {
 			IOwnerService ownerService = SpringUtil.getBean(IOwnerService.class);

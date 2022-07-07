@@ -4,7 +4,7 @@ package org.nodes.wms.core.basedata.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.ValidationUtil;
@@ -304,7 +304,7 @@ public class EnterpriseServiceImpl<M extends EnterpriseMapper, T extends Enterpr
 				// 封装地址数据
 				if (Func.isNotEmpty(address)) {
 					enterpriseExport.setAddress(address.getAddress());
-					String addressType = DictCache.getValue(DictConstant.ADDRESS_TYPE, address.getAddressType());
+					String addressType = DictCache.getValue(DictCodeConstant.ADDRESS_TYPE, address.getAddressType());
 					if (Func.isNotEmpty(addressType)) {
 						enterpriseExport.setAddressTypeDesc(addressType);
 					}
@@ -339,7 +339,7 @@ public class EnterpriseServiceImpl<M extends EnterpriseMapper, T extends Enterpr
 					if (Func.isNotEmpty(enterpriseTypeKeyList)) {
 						List<String> enterpriseTypeList = new ArrayList<>();
 						for (int j = 0; j < enterpriseTypeKeyList.length; j++) {
-							enterpriseTypeList.add(DictCache.getValue(DictConstant.ENTERPRISE_TYPE, enterpriseTypeKeyList[j]));
+							enterpriseTypeList.add(DictCache.getValue(DictCodeConstant.ENTERPRISE_TYPE, enterpriseTypeKeyList[j]));
 						}
 						enterpriseExport.setEnterpriseType(Func.join(enterpriseTypeList));
 					}

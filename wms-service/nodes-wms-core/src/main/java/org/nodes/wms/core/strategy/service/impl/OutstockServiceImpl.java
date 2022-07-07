@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import lombok.extern.slf4j.Slf4j;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.ParamCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.entity.SkuLotBaseEntity;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
@@ -403,7 +403,7 @@ public class OutstockServiceImpl<M extends OutstockMapper, T extends Outstock>
 						List<String> descList = new ArrayList<>();
 						List<Integer> valueList = Func.toIntList(item.getOutstockFunction());
 						valueList.forEach(value -> {
-							descList.add(DictCache.getValue(DictConstant.OUTSTOCK_FUNCTION, value));
+							descList.add(DictCache.getValue(DictCodeConstant.OUTSTOCK_FUNCTION, value));
 						});
 
 						item.setOutstockFunctionDesc(Func.join(descList));
@@ -507,7 +507,7 @@ public class OutstockServiceImpl<M extends OutstockMapper, T extends Outstock>
 				List<String> descList = new ArrayList<>();
 				List<Integer> valueList = Func.toIntList(outstockDetail.getOutstockFunction());
 				valueList.forEach(value -> {
-					descList.add(DictCache.getValue(DictConstant.OUTSTOCK_FUNCTION, value));
+					descList.add(DictCache.getValue(DictCodeConstant.OUTSTOCK_FUNCTION, value));
 				});
 
 				outstockExecute.setOutstockFunctionDesc(Func.join(descList));

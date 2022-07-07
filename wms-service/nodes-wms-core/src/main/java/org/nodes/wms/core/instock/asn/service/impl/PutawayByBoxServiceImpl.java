@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.ParamCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
@@ -181,7 +181,7 @@ public class PutawayByBoxServiceImpl<E extends AsnHeaderMapper, T extends AsnHea
 		//库位状态
 		if (Func.isNotEmpty(location.getLocStatus())) {
 			vo.setLocStatus(location.getLocStatus());
-			vo.setLocStatusName(DictCache.getValue(DictConstant.LOC_STATUS, location.getLocStatus()));
+			vo.setLocStatusName(DictCache.getValue(DictCodeConstant.LOC_STATUS, location.getLocStatus()));
 		}
 
 		if (Func.isNotEmpty(warehouse)) {

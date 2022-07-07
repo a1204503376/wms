@@ -1,7 +1,7 @@
 package org.nodes.wms.core.count.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.dao.basics.sku.entities.SkuPackage;
 import org.nodes.wms.core.count.dto.CountRecordDTO;
@@ -48,7 +48,7 @@ public class CountRecordWrapper extends BaseEntityWrapper<CountRecord, CountReco
 			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			countRecordVO.setProcTimeDesc(dateTimeFormatter.format(countRecordVO.getProcTime()));
 		}
-		countRecordVO.setSkuLevelDesc(DictCache.getValue(DictConstant.SKU_LEVEL, entity.getSkuLevel()));
+		countRecordVO.setSkuLevelDesc(DictCache.getValue(DictCodeConstant.SKU_LEVEL, entity.getSkuLevel()));
 		countRecordVO.setRecordStateDesc(DictCache.getValue("count_record_status", countRecordVO.getRecordState()));
 
 		if (Func.isNotEmpty(countRecordVO.getWhId())) {

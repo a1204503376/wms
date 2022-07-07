@@ -119,7 +119,9 @@
 				}
 			},
 			esc() {
-				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByBox/receiveDetailLpnQuery');
+				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByBox/receiveDetailLpnQuery', {
+					name: '按箱收货'
+				});
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)

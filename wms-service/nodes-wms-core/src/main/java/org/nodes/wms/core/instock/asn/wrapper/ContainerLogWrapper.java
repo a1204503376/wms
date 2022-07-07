@@ -3,7 +3,7 @@ package org.nodes.wms.core.instock.asn.wrapper;
 import org.nodes.core.base.entity.User;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.UserCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.dao.basics.sku.entities.SkuPackage;
@@ -23,8 +23,8 @@ public class ContainerLogWrapper extends BaseEntityWrapper<ContainerLog, Contain
 	public ContainerLogVO entityVO(ContainerLog entity) {
 		ContainerLogVO containerLogVO = BeanUtil.copy(entity, ContainerLogVO.class);
 		if (Func.isNotEmpty(containerLogVO)) {
-			containerLogVO.setSkuLevelDesc(DictCache.getValue(DictConstant.SKU_LEVEL, containerLogVO.getSkuLevel()));
-			containerLogVO.setAclStatusDesc(DictCache.getValue(DictConstant.ACL_STATE, containerLogVO.getAclStatus()));
+			containerLogVO.setSkuLevelDesc(DictCache.getValue(DictCodeConstant.SKU_LEVEL, containerLogVO.getSkuLevel()));
+			containerLogVO.setAclStatusDesc(DictCache.getValue(DictCodeConstant.ACL_STATE, containerLogVO.getAclStatus()));
 			SkuPackage skuPackage = SkuPackageCache.getById(entity.getWspId());
 			if (Func.isNotEmpty(skuPackage)) {
 				containerLogVO.setWspName(skuPackage.getWspName());

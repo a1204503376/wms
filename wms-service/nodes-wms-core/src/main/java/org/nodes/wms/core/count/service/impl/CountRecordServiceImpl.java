@@ -10,7 +10,7 @@ import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.ParamCache;
 import org.nodes.core.base.cache.UserCache;
 import org.nodes.core.base.entity.User;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.basedata.cache.SkuCache;
@@ -336,7 +336,7 @@ public class CountRecordServiceImpl<M extends CountRecordMapper, T extends Count
 			throw new ServiceException(String.format(
 				"盘点单：%s 状态为 ",
 				countHeader.getCountBillNo(),
-				DictCache.getValue(DictConstant.STOCK_COUNT_STATE, countHeader.getCountBillState())));
+				DictCache.getValue(DictCodeConstant.STOCK_COUNT_STATE, countHeader.getCountBillState())));
 		}
 		countDetailService.update(countDetailUpdateWrapper);
 		// 获取库存信息
@@ -605,7 +605,7 @@ public class CountRecordServiceImpl<M extends CountRecordMapper, T extends Count
 			throw new ServiceException(String.format(
 				"盘点单：%s 状态为 %s",
 				countHeader.getCountBillNo(),
-				DictCache.getValue(DictConstant.STOCK_COUNT_STATE, countHeader.getCountBillState())));
+				DictCache.getValue(DictCodeConstant.STOCK_COUNT_STATE, countHeader.getCountBillState())));
 		}
 		// 验证物品是否为序列号管理
 		if (sku.getIsSn() == 1) {

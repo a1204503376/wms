@@ -1,7 +1,7 @@
 package org.nodes.wms.core.system.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.StringPool;
 import org.nodes.wms.core.basedata.cache.BillTypeCache;
 import org.nodes.wms.core.system.entity.Task;
@@ -39,8 +39,8 @@ public class TaskWrapper extends BaseEntityWrapper<Task, TaskVO> {
 			if (ObjectUtil.isNotEmpty(billType)) {
 				taskVO.setBillTypeDesc(billType.getBillTypeName());
 			}
-			taskVO.setTaskProcTypeDesc(DictCache.getValue(DictConstant.TASK_PROC_TYPE, taskVO.getTaskProcType()));
-			taskVO.setTaskTypeDesc(DictCache.getValue(DictConstant.TASK_TYPE, taskVO.getTaskTypeCd()));
+			taskVO.setTaskProcTypeDesc(DictCache.getValue(DictCodeConstant.TASK_PROC_TYPE, taskVO.getTaskProcType()));
+			taskVO.setTaskTypeDesc(DictCache.getValue(DictCodeConstant.TASK_TYPE, taskVO.getTaskTypeCd()));
 			taskVO.setIsAllot(
 				ObjectUtil.isEmpty(taskVO.getUserId()) ? StringPool.CHS_NO : StringPool.CHS_YES);
 		}

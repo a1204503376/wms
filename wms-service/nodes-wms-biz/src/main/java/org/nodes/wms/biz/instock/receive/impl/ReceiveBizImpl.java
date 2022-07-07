@@ -22,6 +22,7 @@ import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
+import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
@@ -397,9 +398,14 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	}
 
 	@Override
-	public void log(Long receiveHeaderId, Long receiveDetailId,
-					BigDecimal qty, String skuLotNumber, ReceiveHeader receiveHeader, ReceiveDetail detail) {
-		logBiz.auditLog(AuditLogType.INSTOCK, receiveHeaderId, receiveHeader.getReceiveNo(), String.format("%s收货%s,批次%s", detail.getLineNo(), qty, skuLotNumber));
+	public void log(String logType, ReceiveHeader receiveHeader,
+					ReceiveDetail detail, ReceiveLog receivelog) {
+		logBiz.auditLog(AuditLogType.INSTOCK,
+			receiveHeader.getReceiveId(),
+			receiveHeader.getReceiveNo(),
+			String.format("[%s]:[%s]行[%s]收[%s],批次[%s]",
+				logType, detail.getLineNo(), detail.getSkuCode()
+				, receivelog.getQty(), receivelog.getSkuLot1()));
 	}
 
 	@Override

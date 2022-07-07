@@ -1,7 +1,7 @@
 package org.nodes.wms.core.outstock.so.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.entity.SkuLotBaseEntity;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
@@ -49,7 +49,7 @@ public class SoPickWrapper extends BaseEntityWrapper<SoPick, SoPickVO> {
 				soPickVO.setWspName(skuPackage.getWspName());
 			}
 		}
-		soPickVO.setSkuLevelName(DictCache.getValue(DictConstant.SKU_LEVEL, soPick.getSkuLevel()));
+		soPickVO.setSkuLevelName(DictCache.getValue(DictCodeConstant.SKU_LEVEL, soPick.getSkuLevel()));
 
 		return soPickVO;
 	}

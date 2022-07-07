@@ -3,7 +3,7 @@ package org.nodes.wms.core.instock.inventory.wrapper;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.UserCache;
 import org.nodes.core.base.entity.User;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.basedata.cache.BillTypeCache;
 import org.nodes.wms.core.basedata.entity.Enterprise;
 import org.nodes.wms.core.basedata.service.IEnterpriseService;
@@ -42,12 +42,12 @@ public class AsnInventoryWrapper extends BaseEntityWrapper<AsnInventory, AsnInve
 		AsnInventoryVO asnInventoryVO = BeanUtil.copy(asnInventory, AsnInventoryVO.class);
 		if (Func.isNotEmpty(asnInventoryVO)) {
 			//单据状态名称
-			asnInventoryVO.setAsnBillStateName(DictCache.getValue(DictConstant.ASN_BILL_STATE, asnInventoryVO.getAsnBillState()));
+			asnInventoryVO.setAsnBillStateName(DictCache.getValue(DictCodeConstant.ASN_BILL_STATE, asnInventoryVO.getAsnBillState()));
 			//入库方式名称
-			asnInventoryVO.setInstoreTypeName(DictCache.getValue(DictConstant.INSTORE_TYPE, asnInventoryVO.getInstoreType()));
-			asnInventoryVO.setCreateTypeName(DictCache.getValue(DictConstant.CREATE_TYPE, asnInventoryVO.getCreateType()));
+			asnInventoryVO.setInstoreTypeName(DictCache.getValue(DictCodeConstant.INSTORE_TYPE, asnInventoryVO.getInstoreType()));
+			asnInventoryVO.setCreateTypeName(DictCache.getValue(DictCodeConstant.CREATE_TYPE, asnInventoryVO.getCreateType()));
 			//同步状态名称
-			asnInventoryVO.setSyncStateName(DictCache.getValue(DictConstant.SYNC_STATE, asnInventoryVO.getSyncState()));
+			asnInventoryVO.setSyncStateName(DictCache.getValue(DictCodeConstant.SYNC_STATE, asnInventoryVO.getSyncState()));
 			//货主名称
 			if (Func.isNotEmpty(asnInventoryVO.getWoId())) {
 				IOwnerService ownerService = SpringUtil.getBean(IOwnerService.class);
@@ -70,7 +70,7 @@ public class AsnInventoryWrapper extends BaseEntityWrapper<AsnInventory, AsnInve
 				}
 			}
 			//过账类型
-			asnInventoryVO.setPostStateCd(DictCache.getValue(DictConstant.POST_STATE, asnInventoryVO.getPostState()));
+			asnInventoryVO.setPostStateCd(DictCache.getValue(DictCodeConstant.POST_STATE, asnInventoryVO.getPostState()));
 			//过账人
 			if (Func.isNotEmpty(asnInventoryVO.getPostUser())) {
 				User user = UserCache.getById(asnInventoryVO.getPostUser());

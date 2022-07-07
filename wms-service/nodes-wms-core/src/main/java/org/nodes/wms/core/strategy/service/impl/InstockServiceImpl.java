@@ -4,7 +4,7 @@ package org.nodes.wms.core.strategy.service.impl;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.entity.SkuInstock;
@@ -333,7 +333,7 @@ public class InstockServiceImpl<M extends StInstockMapper, T extends StInstock>
 				instockExecute.setSsidProcOrder(instockDetail.getSsidProcOrder());
 				instockExecute.setInstockFunction(instockDetail.getInstockFunction());
 				instockExecute.setInstockFunctionDesc(
-					DictCache.getValue(DictConstant.INSTOCK_FUNCTION, instockDetail.getInstockFunction()));
+					DictCache.getValue(DictCodeConstant.INSTOCK_FUNCTION, instockDetail.getInstockFunction()));
 				InstockFactory.getInstance().create(instockDetail.getInstockFunction())
 					.execute(stock, instockDetail, instockExecute);
 				instockExecute.setSuccess(true);

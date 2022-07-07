@@ -22,6 +22,10 @@ public class ReceiveDetailLpn extends SkuLotBaseEntity {
 	@TableId(type = IdType.ASSIGN_ID)
 	private Long id;
 	/**
+	 * 收货单头表id
+	 */
+	private Long receiveHeaderId;
+	/**
 	 * 收货单明细id
 	 */
 	private Long receiveDetailId;

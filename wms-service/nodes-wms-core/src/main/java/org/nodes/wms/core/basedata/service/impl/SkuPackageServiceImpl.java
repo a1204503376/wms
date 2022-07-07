@@ -3,7 +3,7 @@ package org.nodes.wms.core.basedata.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.ValidationUtil;
@@ -127,7 +127,7 @@ public class SkuPackageServiceImpl<M extends SkuPackageMapper, T extends SkuPack
 			} else {
 				levels[i] = detailDTO.getSkuLevel();
 			}
-			String skuLevel = DictCache.getValue(DictConstant.SKU_LEVEL, detailDTO.getSkuLevel());
+			String skuLevel = DictCache.getValue(DictCodeConstant.SKU_LEVEL, detailDTO.getSkuLevel());
 			if (Func.isEmpty(skuLevel)) {
 				throw new ServiceException("层级不存在,只包含:1.基础计量单位;10.内包装;20.箱;30.托盘");
 			}
@@ -186,7 +186,7 @@ public class SkuPackageServiceImpl<M extends SkuPackageMapper, T extends SkuPack
 			if (Func.isEmpty(map.get(detailDTO.getSkuLevel()))) {
 				map.put(detailDTO.getSkuLevel(), detailDTO);
 			} else {
-				String skuLevelDesc = DictCache.getValue(DictConstant.SKU_LEVEL, detailDTO.getSkuLevel());
+				String skuLevelDesc = DictCache.getValue(DictCodeConstant.SKU_LEVEL, detailDTO.getSkuLevel());
 				throw new ServiceException(
 					"包装：" + entity.getWspName() + " 明细层级“" + skuLevelDesc + "”已存在！");
 			}
@@ -207,7 +207,7 @@ public class SkuPackageServiceImpl<M extends SkuPackageMapper, T extends SkuPack
 			if (Func.isEmpty(detailDTO.getWspdId())) { // 新增
 				//判断包装id与层级是否联合唯一
 				if (Func.isNotEmpty(packageDetail)) { // 存在该层级
-					String skuLevelDesc = DictCache.getValue(DictConstant.SKU_LEVEL, detailDTO.getSkuLevel());
+					String skuLevelDesc = DictCache.getValue(DictCodeConstant.SKU_LEVEL, detailDTO.getSkuLevel());
 					throw new ServiceException(
 						"包装：" + entity.getWspName() + " 明细层级“" + skuLevelDesc + "”已存在！");
 				}

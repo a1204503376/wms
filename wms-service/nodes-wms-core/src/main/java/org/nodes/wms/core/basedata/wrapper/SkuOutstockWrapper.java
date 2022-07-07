@@ -2,7 +2,7 @@
 package org.nodes.wms.core.basedata.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.core.basedata.entity.SkuOutstock;
@@ -94,7 +94,7 @@ public class SkuOutstockWrapper extends BaseEntityWrapper<SkuOutstock, SkuOutsto
 				skuOutstockVO.setFirstSoZoneName(firstSoZone.getZoneName());
 			}
 			// 默认出库层级
-			skuOutstockVO.setSkuLevelDesc(DictCache.getValue(DictConstant.SKU_LEVEL, skuOutstock.getSkuLevel()));
+			skuOutstockVO.setSkuLevelDesc(DictCache.getValue(DictCodeConstant.SKU_LEVEL, skuOutstock.getSkuLevel()));
 			// 默认出库库位
 			ILocationService locationService2 = SpringUtil.getBean(ILocationService.class);
 			Location location = locationService2.getById(skuOutstock.getLocId());
@@ -103,23 +103,23 @@ public class SkuOutstockWrapper extends BaseEntityWrapper<SkuOutstock, SkuOutsto
 			}
 			// 周转方式
 			skuOutstockVO.setTurnoverType1Desc(
-				DictCache.getValue(DictConstant.TURNOVER_TYPE, skuOutstock.getTurnoverType1())
+				DictCache.getValue(DictCodeConstant.TURNOVER_TYPE, skuOutstock.getTurnoverType1())
 			);
 			skuOutstockVO.setTurnoverType2Desc(
-				DictCache.getValue(DictConstant.TURNOVER_TYPE, skuOutstock.getTurnoverType2())
+				DictCache.getValue(DictCodeConstant.TURNOVER_TYPE, skuOutstock.getTurnoverType2())
 			);
 			skuOutstockVO.setTurnoverType3Desc(
-				DictCache.getValue(DictConstant.TURNOVER_TYPE, skuOutstock.getTurnoverType3())
+				DictCache.getValue(DictCodeConstant.TURNOVER_TYPE, skuOutstock.getTurnoverType3())
 			);
 			// 周转类型
 			skuOutstockVO.setTurnoverItem1Desc(
-				DictCache.getValue(DictConstant.TURNOVER_ITEM, skuOutstock.getTurnoverItem1())
+				DictCache.getValue(DictCodeConstant.TURNOVER_ITEM, skuOutstock.getTurnoverItem1())
 			);
 			skuOutstockVO.setTurnoverItem2Desc(
-				DictCache.getValue(DictConstant.TURNOVER_ITEM, skuOutstock.getTurnoverItem2())
+				DictCache.getValue(DictCodeConstant.TURNOVER_ITEM, skuOutstock.getTurnoverItem2())
 			);
 			skuOutstockVO.setTurnoverItem3Desc(
-				DictCache.getValue(DictConstant.TURNOVER_ITEM, skuOutstock.getTurnoverItem3())
+				DictCache.getValue(DictCodeConstant.TURNOVER_ITEM, skuOutstock.getTurnoverItem3())
 			);
 		}
 		return skuOutstockVO;

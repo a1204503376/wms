@@ -22,11 +22,11 @@ public interface LocationMapper extends BaseMapper<Location> {
 	/**
 	 * 分页
 	 *
-	 * @param page 分页参数
+	 * @param page               分页参数
 	 * @param locationPageQuery: 分页查询条件
 	 * @return Page<LocationPageResponse>
 	 */
-    Page<LocationPageResponse> listByPage(IPage<?> page, @Param("param") LocationPageQuery locationPageQuery);
+	Page<LocationPageResponse> listByPage(IPage<?> page, @Param("param") LocationPageQuery locationPageQuery);
 
 	/**
 	 * 根据条件查询库位信息
@@ -42,12 +42,22 @@ public interface LocationMapper extends BaseMapper<Location> {
 	 * @param id: 库位id
 	 * @return LocationDetailResponse
 	 */
-    LocationDetailResponse selectDetailById(Long id);
+	LocationDetailResponse selectDetailById(Long id);
 
 	/**
 	 * 根据库房id和箱型获取库位信息
 	 *
 	 * @param request@return 库位信息
 	 */
-    List<Location> selectLoctionByLpnType(@Param("param") LpnTypeRequest request);
+	List<Location> selectLoctionByLpnType(@Param("param") LpnTypeRequest request);
+
+	/**
+	 * 根据库区类型查询查询库位，如果zongType可以为空
+	 *
+	 * @param lpnTypeId 适用的容器类型
+	 * @param zoneType  库区分类
+	 * @return 符合条件的库位
+	 */
+	List<Location> getLocationByLpnTypeIdAndZoneType(Long lpnTypeId, String zoneType);
+
 }

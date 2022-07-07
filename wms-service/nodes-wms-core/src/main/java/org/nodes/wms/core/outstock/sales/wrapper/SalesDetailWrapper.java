@@ -1,7 +1,7 @@
 package org.nodes.wms.core.outstock.sales.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.StringPool;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
@@ -42,7 +42,7 @@ public class SalesDetailWrapper extends BaseEntityWrapper<SalesDetail, SalesDeta
 		SalesDetailVO salesDetailVO = BeanUtil.copy(salesDetail, SalesDetailVO.class);
 		if (Func.isNotEmpty(salesDetailVO)) {
 			//单据状态名称
-			salesDetailVO.setDetailStatusName(DictCache.getValue(DictConstant.OUTSTOCK_STATUS, salesDetailVO.getBillDetailState()));
+			salesDetailVO.setDetailStatusName(DictCache.getValue(DictCodeConstant.OUTSTOCK_STATUS, salesDetailVO.getBillDetailState()));
 			//包装名称
 			SkuPackage skuPackage = SkuPackageCache.getById(salesDetailVO.getWspId());
 			if (Func.isNotEmpty(skuPackage)) {
@@ -56,12 +56,12 @@ public class SalesDetailWrapper extends BaseEntityWrapper<SalesDetail, SalesDeta
 				if (Func.isNotEmpty(skuType)) {
 					salesDetailVO.setSkuType(skuType.getTypeName());
 				}
-				salesDetailVO.setIsSn(DictCache.getValue(DictConstant.IS_SN, sku.getIsSn()));
+				salesDetailVO.setIsSn(DictCache.getValue(DictCodeConstant.IS_SN, sku.getIsSn()));
 			} else {
 				salesDetailVO.setIsSn(StringPool.CHS_NO);
 			}
 			// 包装层级
-			salesDetailVO.setSkuLevelName(DictCache.getValue(DictConstant.SKU_LEVEL, salesDetailVO.getSkuLevel()));
+			salesDetailVO.setSkuLevelName(DictCache.getValue(DictCodeConstant.SKU_LEVEL, salesDetailVO.getSkuLevel()));
 			//计划数量
 			salesDetailVO.setPlanQtyName(SkuPackageDetailCache.convert(salesDetailVO.getWspId(),
 				salesDetailVO.getSkuLevel(), salesDetailVO.getPlanQty()));

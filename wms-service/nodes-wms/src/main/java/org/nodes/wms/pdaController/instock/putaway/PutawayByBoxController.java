@@ -2,13 +2,12 @@ package org.nodes.wms.pdaController.instock.putaway;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.wms.biz.putway.PutwayBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.putway.constant.PutwayConstant;
-import org.nodes.wms.dao.putway.dto.input.NewPutawayByBoxlRequest;
-import org.nodes.wms.dao.putway.dto.input.PutawayByBoxDetailRequest;
+import org.nodes.wms.dao.putway.dto.input.AddByBoxShelfRequest;
 import org.nodes.wms.dao.putway.dto.input.PutawayByBoxRequest;
-import org.nodes.wms.dao.putway.dto.output.PutawayByBoxDetailResponse;
 import org.nodes.wms.dao.putway.dto.output.PutawayByBoxResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.log.annotation.ApiLog;
@@ -30,7 +29,7 @@ import java.util.List;
 @RequestMapping(WmsApiPath.WMS_PDA_API + "/putaway")
 public class PutawayByBoxController {
 	private final StockBiz stockBiz;
-
+	private final PutwayBiz putwayBiz;
 
 	/**
 	 * PDA根据箱码查询库存
@@ -51,28 +50,19 @@ public class PutawayByBoxController {
 		) {
 			response.setLpnCode(stockList.get(BigDecimal.ZERO.intValue()).getLpnCode());
 		}
+		response.setStockId(stockList.get(BigDecimal.ZERO.intValue()).getStockId());
 		response.setBoxCode(stockList.get(BigDecimal.ZERO.intValue()).getBoxCode());
 		response.setQty(qty);
 		return R.data(response);
 	}
 
 	/**
-	 * @param request 条件
-	 * @return 库位信息
-	 */
-	public R<PutawayByBoxDetailResponse> findLocationByBoxCode(@RequestBody PutawayByBoxDetailRequest request) {
-		//TODO 调用根据策略生成库位
-
-		//返回库位信息
-		PutawayByBoxDetailResponse response = new PutawayByBoxDetailResponse();
-		return R.data(response);
-	}
-
-	/**
 	 * @param request 新建按箱上架的请求参数
 	 */
-	public void newPutawayByBox(@RequestBody NewPutawayByBoxlRequest request) {
-
+	@ApiLog("PDA按箱上架")
+	@PostMapping("/submitPutawayByBox")
+	public void submitPutawayByBox(@RequestBody AddByBoxShelfRequest request) {
+		putwayBiz.addByBoxShelf(request);
 	}
 
 

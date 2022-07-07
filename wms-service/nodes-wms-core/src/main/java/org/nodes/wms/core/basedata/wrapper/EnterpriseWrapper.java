@@ -1,20 +1,15 @@
 package org.nodes.wms.core.basedata.wrapper;
 
-import com.sun.xml.bind.v2.model.core.ID;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.NodesUtil;
-import org.nodes.wms.core.basedata.cache.OwnerCache;
 import org.nodes.wms.core.basedata.dto.EnterpriseDTO;
 import org.nodes.wms.core.basedata.entity.Enterprise;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.core.basedata.excel.EnterpriseExcel;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.basedata.vo.EnterpriseVO;
-import org.nodes.wms.core.common.cache.AddressCache;
-import org.nodes.wms.core.common.cache.ContactsCache;
 import org.nodes.wms.core.common.dto.AddressDTO;
 import org.nodes.wms.core.common.dto.ContactsDTO;
 import org.nodes.wms.core.common.entity.Address;
@@ -25,7 +20,6 @@ import org.nodes.wms.core.common.wrapper.AddressWrapper;
 import org.nodes.wms.core.common.wrapper.ContactsWrapper;
 import org.springblade.core.mp.support.BaseEntityWrapper;
 import org.springblade.core.mp.support.Condition;
-import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.core.tool.utils.*;
 
 import java.util.ArrayList;
@@ -56,7 +50,7 @@ public class EnterpriseWrapper extends BaseEntityWrapper<Enterprise, EnterpriseV
 					List<String> enterpriseTypeList = new ArrayList<>();
 					for (int i = 0; i < enterpriseTypeKeyList.length; i++) {
 						enterpriseTypeList.add(
-							DictCache.getValue(DictConstant.ENTERPRISE_TYPE, enterpriseTypeKeyList[i]));
+							DictCache.getValue(DictCodeConstant.ENTERPRISE_TYPE, enterpriseTypeKeyList[i]));
 					}
 					enterpriseVO.setEnterpriseTypeDesc(Func.join(enterpriseTypeList));
 				}
@@ -93,7 +87,7 @@ public class EnterpriseWrapper extends BaseEntityWrapper<Enterprise, EnterpriseV
 			String [] enterpriseTypeValueList = Func.toStrArray(enterpriseExcel.getEnterpriseType());
 			if (Func.isNotEmpty(enterpriseTypeValueList)) {
 				List<Integer> enterpriseTypeKeyList = new ArrayList<>();
-				List<Dict> dictList = DictCache.list(DictConstant.ENTERPRISE_TYPE);
+				List<Dict> dictList = DictCache.list(DictCodeConstant.ENTERPRISE_TYPE);
 				for (int i = 0; i < enterpriseTypeValueList.length; i++) {
 					int finalI = i;
 					Dict dict = dictList.stream().filter(u->{
@@ -114,7 +108,7 @@ public class EnterpriseWrapper extends BaseEntityWrapper<Enterprise, EnterpriseV
 			AddressDTO address = BeanUtil.copy(enterpriseExcel, AddressDTO.class);
 			if (Func.isNotEmpty(address) && !NodesUtil.isAllNull(address)) {
 				if(Func.isNotEmpty(enterpriseExcel)&&Func.isNotEmpty(enterpriseExcel.getAddressTypeDesc())){
-					Dict dict = DictCache.list(DictConstant.ADDRESS_TYPE).stream()
+					Dict dict = DictCache.list(DictCodeConstant.ADDRESS_TYPE).stream()
 					.filter(item->{
 						return Func.equals(item.getDictValue(), enterpriseExcel.getAddressTypeDesc());
 					}).findFirst().orElse(null);

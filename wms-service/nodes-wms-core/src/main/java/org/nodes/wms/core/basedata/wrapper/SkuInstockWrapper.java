@@ -2,7 +2,7 @@
 package org.nodes.wms.core.basedata.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.basedata.entity.SkuInstock;
 import org.nodes.wms.core.basedata.vo.SkuInstockVO;
 import org.nodes.wms.dao.putway.entities.StInstock;
@@ -48,7 +48,7 @@ public class SkuInstockWrapper extends BaseEntityWrapper<SkuInstock, SkuInstockV
 			}
 			// 上架策略执行类型
 			skuInstockVO.setSsiProcTypeName(
-				DictCache.getValue(DictConstant.SSI_PROC_TYPE, skuInstock.getSsiProcType())
+				DictCache.getValue(DictCodeConstant.SSI_PROC_TYPE, skuInstock.getSsiProcType())
 			);
 			// 上架库区
 			IZoneService zoneService = SpringUtil.getBean(IZoneService.class);

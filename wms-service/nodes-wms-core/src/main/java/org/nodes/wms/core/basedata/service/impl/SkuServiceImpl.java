@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.entity.Dict;
 import org.nodes.core.base.service.IDictService;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.ValidationUtil;
@@ -195,7 +195,7 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 		if (Func.isNotEmpty(skuLotVal)) {
 			skuVo.setSkuLotValName(skuLotVal.getSkuLotValName());
 		}
-		skuVo.setAbcName(DictCache.getValue(DictConstant.LOC_ABC, entity.getAbc()));
+		skuVo.setAbcName(DictCache.getValue(DictCodeConstant.LOC_ABC, entity.getAbc()));
 		return skuVo;
 	}
 
@@ -585,7 +585,7 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 					Func.isEmpty(skuExcel.getSkuBarcodeList())
 						? null : skuExcel.getSkuBarcodeList());
 				skuDTO.setSkuRemark(skuExcel.getRemarks());
-				Dict dict = DictCache.list(DictConstant.INVENTORY_TYPE).stream().filter(u -> {
+				Dict dict = DictCache.list(DictCodeConstant.INVENTORY_TYPE).stream().filter(u -> {
 					return Func.equals(u.getDictValue(), skuExcel.getStorageType());
 				}).findFirst().orElse(null);
 				skuDTO.setSkuStorageType(Func.isEmpty(dict) ? null : dict.getDictKey());
@@ -653,10 +653,10 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 				skuDTO.setIsSn(SnEnum.YES.getName().equals(skuExcel.getIsSn()) ?
 					SnEnum.YES.getIndex() : SnEnum.NO.getIndex());
 				// 是否包含bom 只能为 0，1 或者空
-				if (Func.isNotEmpty(skuExcel.getHasBom()) ) {
-					if(!("0".equals(skuExcel.getHasBom()) || "1".equals(skuExcel.getHasBom()))){
+				if (Func.isNotEmpty(skuExcel.getHasBom())) {
+					if (!("0".equals(skuExcel.getHasBom()) || "1".equals(skuExcel.getHasBom()))) {
 						throw new ServiceException("导入失败，是否包含bom只能为0，1或者不填");
-					}else {
+					} else {
 						skuDTO.setHasBom(Integer.parseInt(skuExcel.getHasBom()));
 					}
 				}
@@ -883,13 +883,13 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 			skuExportDTO.setSkuCode(sku.getSkuCode());
 			skuExportDTO.setSkuName(sku.getSkuName());
 			skuExportDTO.setSkuNameS(sku.getSkuNameS());
-			skuExportDTO.setAbc(DictCache.getValue(DictConstant.LOC_ABC, sku.getAbc()));
 			// TODO 物品导出空指针异常
+			skuExportDTO.setAbc(DictCache.getValue(DictCodeConstant.LOC_ABC, sku.getAbc()));
 			skuExportDTO.setSkuGrossWeight(sku.getSkuGrossWeight().stripTrailingZeros().toPlainString());
 			skuExportDTO.setSkuNetWeight(sku.getSkuNetWeight().stripTrailingZeros().toPlainString());
 			skuExportDTO.setSkuTareWeight(sku.getSkuTareWeight().stripTrailingZeros().toPlainString());
 			skuExportDTO.setSkuVolume(sku.getSkuVolume().stripTrailingZeros().toPlainString());
-			skuExportDTO.setStorageType(DictCache.getValue(DictConstant.INVENTORY_TYPE, sku.getSkuStorageType()));
+			skuExportDTO.setStorageType(DictCache.getValue(DictCodeConstant.INVENTORY_TYPE, sku.getSkuStorageType()));
 			skuExportDTO.setRemarks(sku.getSkuRemark());
 			skuExportDTO.setSkuBarcodeList(sku.getSkuBarcodeList());
 			skuExportDTO.setShelfLife(sku.getQualityHours().toString());

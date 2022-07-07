@@ -5,8 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.entity.Dict;
-import org.nodes.core.base.service.IDictService;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.cache.SerialNoCache;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.ValidationUtil;
@@ -30,8 +29,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -91,7 +88,7 @@ public class LpnServiceImpl<M extends LpnMapper, T extends Lpn>
 				LpnExcel lpnExcel = BeanUtil.copy(lpn, LpnExcel.class);
 				//企业类型
 				if (Func.isNotEmpty(lpn.getLpnType())) {
-					Dict dict = DictCache.list(DictConstant.ENTERPRISE_TYPE).stream().filter(u -> {
+					Dict dict = DictCache.list(DictCodeConstant.ENTERPRISE_TYPE).stream().filter(u -> {
 						return Func.equals(u.getDictKey(), lpn.getLpnType());
 					}).findFirst().orElse(null);
 
