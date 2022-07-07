@@ -586,7 +586,11 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public List<Stock> findStockByLocation(List<Location> locationList) {
-		return null;
+		List<Long> locIdList = locationList.stream()
+			.map(Location::getLocId)
+			.distinct()
+			.collect(Collectors.toList());
+		return stockDao.getStockByLocIdList(locIdList);
 	}
 
 	@Override

@@ -99,8 +99,9 @@ public interface LocationDao {
 
 	/**
 	 * 根据库位编码获取库位信息
+	 *
 	 * @param locCode 库位编码
-	 * @return  List<Location>
+	 * @return List<Location>
 	 */
 	List<Location> findLocation(List<String> locCode);
 
@@ -114,13 +115,15 @@ public interface LocationDao {
 
 	/**
 	 * 更新库位冻结标识
-	 * @param locId 库位ID
+	 *
+	 * @param locId      库位ID
 	 * @param occupyFlag 为空的时候为冻结库位
 	 */
 	void updateOccupyFlag(Long locId, String occupyFlag);
 
 	/**
 	 * 根据容器id获取agv可用的库位，按照上架顺序返回
+	 *
 	 * @param lpnTypeId 容器id
 	 * @return List<Location>
 	 */
@@ -133,4 +136,12 @@ public interface LocationDao {
 	 * @return 库位信息
 	 */
     List<Location> getLocationByLpnType(LpnTypeRequest request);
+
+	/**
+	 * 根据当前货架列获取同一列的库位
+	 *
+	 * @param locColumn 货架列
+	 * @return 同一列的库位
+	 */
+	List<Location> getLocationByLocColumn(String locColumn);
 }

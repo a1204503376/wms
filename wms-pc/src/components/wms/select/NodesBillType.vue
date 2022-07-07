@@ -1,6 +1,7 @@
 <template>
     <el-select
         v-model="val"
+        :collapse-tags="true"
         :io-type="ioType"
         :multiple="multiple"
         filterable
@@ -32,7 +33,7 @@ export default {
         selectVal: [Object, String, Array, Number],
         // 是否多选 true:多选 默认为单选
         multiple: {type: Boolean, required: false, default: () => false},
-        // 查询的单据类型，"":查询所有, "I":查询入库单据类型, "0":查询出库单据类型
+        // 查询的单据类型，"":查询所有, "I":查询入库单据类型, "O":查询出库单据类型
         ioType: {type: String, required: false, default: () => ''}
     },
     data() {
@@ -44,7 +45,7 @@ export default {
     },
     watch: {
         selectVal(newVal) {
-            this.val=newVal;
+            this.val = newVal;
         }
     },
     created() {

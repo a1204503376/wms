@@ -28,6 +28,7 @@ import org.nodes.core.base.entity.Param;
 import org.nodes.core.base.service.IParamService;
 import org.nodes.core.base.vo.ParamVO;
 import org.nodes.core.base.wrapper.ParamWrapper;
+import org.nodes.wms.biz.basics.systemParam.SystemParamBiz;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.launch.constant.AppConstant;
@@ -44,8 +45,6 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
-import static org.springblade.core.cache.constant.CacheConstant.MENU_CACHE;
-import static org.springblade.core.cache.constant.CacheConstant.PARAM_CACHE;
 
 /**
  * 控制器
@@ -59,6 +58,8 @@ import static org.springblade.core.cache.constant.CacheConstant.PARAM_CACHE;
 public class ParamController extends BladeController {
 
 	private IParamService paramService;
+	private SystemParamBiz systemParamBiz;
+
 
 	/**
 	 * 详情
@@ -133,7 +134,7 @@ public class ParamController extends BladeController {
 			param.setTenantId(TokenUtil.DEFAULT_TENANT_ID);
 		}
 		ParamCache.reload();
-		return R.status(paramService.saveOrUpdate(param));
+		return R.status(systemParamBiz.saveOrUpdate(param));
 	}
 
 
@@ -145,7 +146,7 @@ public class ParamController extends BladeController {
 	@ApiOperation(value = "逻辑删除", notes = "传入ids")
 	public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
 		ParamCache.reload();
-		return R.status(paramService.deleteLogic(Func.toLongList(ids)));
+		return R.status(systemParamBiz.delete(ids));
 	}
 
 	/**

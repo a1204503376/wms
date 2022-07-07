@@ -1,7 +1,6 @@
 <template>
     <el-select
         v-model="val"
-        :collapse-tags="true"
         :data-source="dataSource"
         :multiple="true"
         @change="onChange">
@@ -11,17 +10,18 @@
             :label="item.label"
             :value="item.value">
             <span style="float: left">{{ item.label }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
         </el-option>
     </el-select>
 </template>
 
 <script>
 import NodesSelect from "@/components/wms/general/NodesSelect";
-import {stateService} from "@/api/wms/state/asnBillState";
+import {getSoBillState} from "@/api/wms/state/soBillState";
 import func from "@/util/func";
 
 export default {
-    name: "NodesAsnBillState",
+    name: "NodesSoBillState",
     components: {NodesSelect},
     model: {
         prop: 'selectVal',
@@ -53,7 +53,8 @@ export default {
     },
     methods: {
         async getDataSource() {
-            this.dataSource = await stateService.getAsnBillState();
+            let {data: {data}} = await getSoBillState();
+            this.dataSource = data;
         },
         onChange(val) {
             this.$emit('selectValChange', val);

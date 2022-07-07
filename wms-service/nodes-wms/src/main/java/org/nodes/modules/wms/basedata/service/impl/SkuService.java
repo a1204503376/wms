@@ -14,7 +14,7 @@ import org.nodes.wms.core.instock.asn.service.IAsnDetailService;
 import org.nodes.wms.core.instock.asn.service.IAsnHeaderService;
 import org.nodes.wms.core.outstock.so.entity.SoDetail;
 import org.nodes.wms.core.outstock.so.entity.SoHeader;
-import org.nodes.wms.core.outstock.so.enums.SoBillStateEnum;
+import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
 import org.nodes.wms.core.outstock.so.service.ISoDetailService;
 import org.nodes.wms.core.outstock.so.service.ISoHeaderService;
 import org.nodes.wms.dao.instock.asn.enums.AsnBillStateEnum;
