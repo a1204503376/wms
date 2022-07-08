@@ -403,7 +403,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		logBiz.auditLog(AuditLogType.INSTOCK,
 			receiveHeader.getReceiveId(),
 			receiveHeader.getReceiveNo(),
-			String.format("[%s]:%行[%s]收[%s],批次[%s]",
+			String.format("[%s]:[%s]行[%s]收[%s],批次[%s]",
 				logType, detail.getLineNo(), detail.getSkuCode()
 				, receivelog.getQty(), receivelog.getSkuLot1()));
 	}

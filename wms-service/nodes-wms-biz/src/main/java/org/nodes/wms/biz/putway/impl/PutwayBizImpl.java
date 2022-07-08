@@ -29,9 +29,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PutwayBizImpl implements PutwayBiz {
-	private LocationBiz locationBiz;
-	private StockBiz stockBiz;
-	private PutawayLogDao putawayLogDao;
+	private final LocationBiz locationBiz;
+	private final StockBiz stockBiz;
+	private final PutawayLogDao putawayLogDao;
 
 	@Override
 	public void addByBoxShelf(AddByBoxShelfRequest request) {

@@ -53,13 +53,10 @@
 							title: '查找不到该箱码的相关信息,请换个箱码后重试'
 						});
 					}
-					this.putawayData.boxCode = data.data.boxCode;
-					this.putawayData.lpnCode = data.data.lpnCode;
-					this.putawayData.qty = data.data.qty;
-					//调用库存策略生成库位 将库位值赋值给loc
-					this.putawayData.locCode='AA'
+					this.putawayData = data.data;
 					this.$destroy('keyboardListener')
-					uni.$u.func.routeNavigateTo('/pages/inStock/putawayByBox/putawayByBoxSubmit',this.putawayData);
+					uni.$u.func.routeNavigateTo('/pages/inStock/putawayByBox/putawayByBoxSubmit', this
+					.putawayData);
 				})
 			},
 			analysisCode(code) {
@@ -92,6 +89,7 @@
 			},
 			emitKeyDown(e) {
 				if (e.key == 'Enter') {
+					this.analysisCode(this.params.boxCode);
 					//查询方法
 					this.getPutawayData();
 				}

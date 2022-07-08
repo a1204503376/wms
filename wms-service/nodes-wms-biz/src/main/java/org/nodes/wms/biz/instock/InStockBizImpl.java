@@ -13,6 +13,7 @@ import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnItemDto;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
+import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
@@ -76,6 +77,8 @@ public class InStockBizImpl implements InStockBiz {
 				receiveBiz.newReceiveDetail(receiveDetail);
 				//更新lpn表的明细id
 				lpn.setReceiveDetailId(receiveDetail.getReceiveDetailId());
+				//更新lpn表头表id
+                lpn.setReceiveHeaderId(receiveHeader.getReceiveId());
 				receiveBiz.updateReceiveDetailLpn(lpn);
 				//设置request的明细id
 				item.setReceiveDetailId(receiveDetail.getReceiveDetailId());
@@ -92,6 +95,8 @@ public class InStockBizImpl implements InStockBiz {
 			lpn.setSkuLot2(request.getSkuLot2());
 			//更新lpn实收数量
 			lpn.setScanQty(lpn.getScanQty().add(item.getPlanQty()));
+			//更新lpn状态
+			lpn.setDetailStatus(ReceiveDetailStatusEnum.COMPLETED);
 			receiveBiz.updateReceiveDetailLpn(lpn);
 			// 生成清点记录
 			ReceiveLog receiveLog = receiveLogBiz.newReceiveLog(request, item, lpn, header, detail);

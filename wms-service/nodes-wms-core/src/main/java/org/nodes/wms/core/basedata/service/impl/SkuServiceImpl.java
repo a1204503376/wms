@@ -16,7 +16,6 @@ import org.nodes.wms.core.basedata.dto.SkuDTO;
 import org.nodes.wms.core.basedata.dto.SkuIncDTO;
 import org.nodes.wms.core.basedata.dto.SkuReplaceDTO;
 import org.nodes.wms.core.basedata.entity.*;
-import org.nodes.wms.dao.basics.sku.entities.SkuPackage;
 import org.nodes.wms.core.basedata.excel.SkuExcel;
 import org.nodes.wms.core.basedata.mapper.SkuMapper;
 import org.nodes.wms.core.basedata.service.*;
@@ -28,9 +27,7 @@ import org.nodes.wms.core.basedata.wrapper.SkuIncWrapper;
 import org.nodes.wms.core.basedata.wrapper.SkuLotValWrapper;
 import org.nodes.wms.core.basedata.wrapper.SkuLotWrapper;
 import org.nodes.wms.core.basedata.wrapper.SkuWrapper;
-import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.service.IStockService;
-import org.nodes.wms.dao.putway.entities.StInstock;
 import org.nodes.wms.core.strategy.entity.Outstock;
 import org.nodes.wms.core.strategy.service.IInstockService;
 import org.nodes.wms.core.strategy.service.IOutstockService;
@@ -40,6 +37,8 @@ import org.nodes.wms.dao.basics.sku.entities.*;
 import org.nodes.wms.dao.basics.sku.enums.SnEnum;
 import org.nodes.wms.dao.basics.skuType.entities.SkuType;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
+import org.nodes.wms.dao.putway.entities.StInstock;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -476,48 +475,60 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 			}
 			//被替代物品包装列表
 			spqw = new QueryWrapper<>();
-			List<String> replaceWspNameList = NodesUtil.toList(dataList, SkuExcel::getReplacePackageName1);
-			spqw.lambda().in(SkuPackage::getWspName, replaceWspNameList);
 			List<SkuPackage> skuReplacePackageList = new ArrayList<>();
-			if (Func.isNotEmpty(replaceWspNameList)) {
-				skuReplacePackageList = skuPackageService.list(spqw);
-			}
-			//被替代物品计量单位
-			List<String> replaceWsuCodeList = NodesUtil.toList(dataList, SkuExcel::getUnitCode);
-			//List<SkuUm> skuReplaceUmList = SkuUmCache.listByCode(replaceWsuCodeList);
-			List<SkuUm> skuReplaceUmList = skuUmService.list(Condition.getQueryWrapper(new SkuUm())
-				.lambda()
-				.in(SkuUm::getWsuCode, replaceWsuCodeList)
-			).stream().collect(Collectors.toList());
-			List<String> replaceWsrepOwnerCodeList = getReplaceWsrepOwnerCodeList(dataList);
-			List<Owner> skuReplaceWsrepOwnerList = ownerService.list().stream().filter(u -> {
-				return replaceWsrepOwnerCodeList.contains(u.getOwnerCode());
-			}).collect(Collectors.toList());
-			//替代物品列表
-			List<String> replaceWsrepSkuCodeList = NodesUtil.toList(
-				dataList, SkuExcel::getReplaceSkuCode);
-			//List<Sku> skuReplaceWsrepSkuList = SkuCache.listByCode(replaceWsrepSkuCodeList);
-			List<Sku> skuReplaceWsrepSkuList = super.list(Condition.getQueryWrapper(new Sku())
-				.lambda()
-				.in(Sku::getSkuCode, replaceWsrepSkuCodeList)
-			).stream().collect(Collectors.toList());
-			//替代物品包装
-			spqw = new QueryWrapper<>();
-			List<String> replaceWsrepWspNameList = NodesUtil.toList(
-				dataList, SkuExcel::getReplacePackageName);
-			spqw.lambda().in(SkuPackage::getWspName, replaceWsrepWspNameList);
+			List<SkuUm> skuReplaceUmList = new ArrayList<>();
+			List<Owner> skuReplaceWsrepOwnerList = new ArrayList<>();
+			List<Sku> skuReplaceWsrepSkuList = new ArrayList<>();
+			List<SkuUm> skuReplaceWsrepUmList = new ArrayList<>();
 			List<SkuPackage> skuReplaceWsrepPackageList = new ArrayList<>();
-			if (Func.isNotEmpty(replaceWsrepWspNameList)) {
-				skuReplaceWsrepPackageList = skuPackageService.list(spqw);
-			}
-			//替代物品计量单位
-			List<String> replaceWsrepWsuCodeList = NodesUtil.toList(
-				dataList, SkuExcel::getReplaceUnitCode);
-			//List<SkuUm> skuReplaceWsrepUmList = SkuUmCache.listByCode(replaceWsrepWsuCodeList);
-			List<SkuUm> skuReplaceWsrepUmList = skuUmService.list(Condition.getQueryWrapper(new SkuUm())
-				.lambda()
-				.in(SkuUm::getWsuCode, replaceWsrepWsuCodeList)
-			).stream().collect(Collectors.toList());
+			List<String> replaceWspNameList = NodesUtil.toList(dataList, SkuExcel::getReplacePackageName1);
+			if (Func.isNotEmpty(replaceWspNameList)) {
+				spqw.lambda().in(SkuPackage::getWspName, replaceWspNameList);
+				if (Func.isNotEmpty(replaceWspNameList)) {
+					skuReplacePackageList = skuPackageService.list(spqw);
+				}
+				//被替代物品计量单位
+				List<String> replaceWsuCodeList = NodesUtil.toList(dataList, SkuExcel::getUnitCode);
+				//List<SkuUm> skuReplaceUmList = SkuUmCache.listByCode(replaceWsuCodeList);
+				skuReplaceUmList = skuUmService.list(Condition.getQueryWrapper(new SkuUm())
+					.lambda()
+					.in(SkuUm::getWsuCode, replaceWsuCodeList)
+				).stream().collect(Collectors.toList());
+
+				// 替代货主编码
+				List<String> replaceWsrepOwnerCodeList = getReplaceWsrepOwnerCodeList(dataList);
+				skuReplaceWsrepOwnerList = ownerService.list().stream().filter(u -> {
+					return replaceWsrepOwnerCodeList.contains(u.getOwnerCode());
+				}).collect(Collectors.toList());
+
+				//替代物品列表
+				List<String> replaceWsrepSkuCodeList = NodesUtil.toList(
+					dataList, SkuExcel::getReplaceSkuCode);
+				//List<Sku> skuReplaceWsrepSkuList = SkuCache.listByCode(replaceWsrepSkuCodeList);
+				skuReplaceWsrepSkuList = super.list(Condition.getQueryWrapper(new Sku())
+					.lambda()
+					.in(Sku::getSkuCode, replaceWsrepSkuCodeList)
+				).stream().collect(Collectors.toList());
+
+				//替代物品包装
+				spqw = new QueryWrapper<>();
+				List<String> replaceWsrepWspNameList = NodesUtil.toList(
+					dataList, SkuExcel::getReplacePackageName);
+				spqw.lambda().in(SkuPackage::getWspName, replaceWsrepWspNameList);
+				skuReplaceWsrepPackageList = new ArrayList<>();
+				if (Func.isNotEmpty(replaceWsrepWspNameList)) {
+					skuReplaceWsrepPackageList = skuPackageService.list(spqw);
+				}
+
+				//替代物品计量单位
+				List<String> replaceWsrepWsuCodeList = NodesUtil.toList(
+					dataList, SkuExcel::getReplaceUnitCode);
+				//List<SkuUm> skuReplaceWsrepUmList = SkuUmCache.listByCode(replaceWsrepWsuCodeList);
+				skuReplaceWsrepUmList = skuUmService.list(Condition.getQueryWrapper(new SkuUm())
+					.lambda()
+					.in(SkuUm::getWsuCode, replaceWsrepWsuCodeList)
+				).stream().collect(Collectors.toList());
+			} // if (Func.isNotEmpty(replaceWspNameList))
 
 			//企业关联的企业集合
 			List<String> enterpriseCodeList = NodesUtil.toList(
@@ -530,7 +541,6 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 					.lambda()
 					.in(Enterprise::getEnterpriseCode, enterpriseCodeList));
 			}
-
 
 			//企业关联的包装集合
 			spqw = new QueryWrapper<>();
@@ -558,17 +568,30 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 				skuDTO.setWspName(skuExcel.getPackageName());
 				skuDTO.setSkuName(skuExcel.getSkuName());
 				skuDTO.setSkuNameS(skuExcel.getSkuNameS());
-				skuDTO.setSkuNetWeight(new BigDecimal(skuExcel.getSkuNetWeight()));
-				skuDTO.setSkuGrossWeight(new BigDecimal(skuExcel.getSkuGrossWeight()));
-				skuDTO.setSkuTareWeight(new BigDecimal(skuExcel.getSkuTareWeight()));
-				skuDTO.setSkuVolume(new BigDecimal(skuExcel.getSkuVolume()));
-				skuDTO.setSkuBarcodeList(skuExcel.getSkuBarcodeList());
+				skuDTO.setSkuSpec(skuExcel.getSkuSpec());
+				skuDTO.setSkuNetWeight(
+					Func.isEmpty(skuExcel.getSkuNetWeight())
+						? null : new BigDecimal(skuExcel.getSkuNetWeight()));
+				skuDTO.setSkuGrossWeight(
+					Func.isEmpty(skuExcel.getSkuGrossWeight())
+						? null : new BigDecimal(skuExcel.getSkuGrossWeight()));
+				skuDTO.setSkuTareWeight(
+					Func.isEmpty(skuExcel.getSkuTareWeight())
+						? null : new BigDecimal(skuExcel.getSkuTareWeight()));
+				skuDTO.setSkuVolume(
+					Func.isEmpty(skuExcel.getSkuVolume())
+						? null : new BigDecimal(skuExcel.getSkuVolume()));
+				skuDTO.setSkuBarcodeList(
+					Func.isEmpty(skuExcel.getSkuBarcodeList())
+						? null : skuExcel.getSkuBarcodeList());
 				skuDTO.setSkuRemark(skuExcel.getRemarks());
-				Dict dict = DictCache.list(DictCodeConstant.INVENTORY_TYPE).stream().filter(u->{
+				Dict dict = DictCache.list(DictCodeConstant.INVENTORY_TYPE).stream().filter(u -> {
 					return Func.equals(u.getDictValue(), skuExcel.getStorageType());
 				}).findFirst().orElse(null);
 				skuDTO.setSkuStorageType(Func.isEmpty(dict) ? null : dict.getDictKey());
-				skuDTO.setQualityHours(Integer.valueOf(skuExcel.getShelfLife()));
+				skuDTO.setQualityHours(
+					Func.isEmpty(skuExcel.getShelfLife()) ?
+						null : Integer.valueOf(skuExcel.getShelfLife()));
 				// 开始效验数据
 				ValidationUtil.ValidResult validResult = ValidationUtil.validateBean(skuExcel);
 				List<Owner> owners = ownerList.stream()
@@ -578,13 +601,13 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 					skuDTO.setWoId(owners.get(0).getWoId());
 					//验证物品是否存在
 					List<Sku> skus = skuList.stream().filter(sku ->
-						sku.getSkuCode().equals(skuExcel.getSkuCode()) &&
-							sku.getWoId().equals(owners.get(0).getWoId()))
+							sku.getSkuCode().equals(skuExcel.getSkuCode()) &&
+								sku.getWoId().equals(owners.get(0).getWoId()))
 						.collect(Collectors.toList());
-					if (Func.isNotEmpty(skus))
+					if (Func.isNotEmpty(skus)) {
 						errorList.add(String.format("编号为%s,货主编号为%s的物品已经存在",
 							skuExcel.getSkuCode(), skuExcel.getOwnerCode()));
-
+					}
 				} else {
 					errorList.add(String.format("编号为%s的货主不存在",
 						skuExcel.getOwnerCode()));
@@ -629,7 +652,14 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 				//是否序列号管理
 				skuDTO.setIsSn(SnEnum.YES.getName().equals(skuExcel.getIsSn()) ?
 					SnEnum.YES.getIndex() : SnEnum.NO.getIndex());
-
+				// 是否包含bom 只能为 0，1 或者空
+				if (Func.isNotEmpty(skuExcel.getHasBom())) {
+					if (!("0".equals(skuExcel.getHasBom()) || "1".equals(skuExcel.getHasBom()))) {
+						throw new ServiceException("导入失败，是否包含bom只能为0，1或者不填");
+					} else {
+						skuDTO.setHasBom(Integer.parseInt(skuExcel.getHasBom()));
+					}
+				}
 				if (Func.isNotEmpty(skuExcel.getReplaceSkuCode())) {
 					SkuReplaceDTO skuReplaceDTO = new SkuReplaceDTO();
 					//替换物品
@@ -650,8 +680,8 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 					}
 					//被替代物品单位
 					List<SkuUm> skuReplaceUms = skuReplaceUmList.stream().filter(skuReplaceUm ->
-						skuReplaceUm.getWsuCode().equals(skuExcel.getUnitCode())
-					)
+							skuReplaceUm.getWsuCode().equals(skuExcel.getUnitCode())
+						)
 						.collect(Collectors.toList());
 					if (Func.isNotEmpty(skuReplaceUms)) {
 						skuReplaceDTO.setWsuId(skuReplaceUms.get(0).getWsuId());
@@ -662,15 +692,15 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 
 					//替代物品货主
 					List<Owner> skuReplaceWsrepOwners = skuReplaceWsrepOwnerList.stream().filter(skuReplaceWsrepOwner ->
-						skuReplaceWsrepOwner.getOwnerCode().equals(skuExcel.getReplaceOwnerCode())
-					)
+							skuReplaceWsrepOwner.getOwnerCode().equals(skuExcel.getReplaceOwnerCode())
+						)
 						.collect(Collectors.toList());
 					if (Func.isNotEmpty(skuReplaceWsrepOwners)) {
 						Long woId = skuReplaceWsrepOwners.get(0).getWoId();
 						//替代物品
 						List<Sku> skuReplaceWsrepSkus = skuReplaceWsrepSkuList.stream().filter(skuReplaceWsrepSku ->
-							skuReplaceWsrepSku.getSkuCode().equals(skuExcel.getReplaceSkuCode()) &&
-								skuReplaceWsrepSku.getWoId().equals(woId))
+								skuReplaceWsrepSku.getSkuCode().equals(skuExcel.getReplaceSkuCode()) &&
+									skuReplaceWsrepSku.getWoId().equals(woId))
 							.collect(Collectors.toList());
 						if (Func.isNotEmpty(skuReplaceWsrepSkus)) {
 							skuReplaceDTO.setWsrepSkuId(skuReplaceWsrepSkus.get(0).getSkuId());
@@ -684,7 +714,7 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 							skuExcel.getReplaceOwnerCode()));
 						//替代物品
 						List<Sku> skuReplaceWsrepSkus = skuReplaceWsrepSkuList.stream().filter(skuReplaceWsrepSku ->
-							skuReplaceWsrepSku.getSkuCode().equals(skuExcel.getReplaceSkuCode()))
+								skuReplaceWsrepSku.getSkuCode().equals(skuExcel.getReplaceSkuCode()))
 							.collect(Collectors.toList());
 						if (Func.isEmpty(skuReplaceWsrepSkus)) {
 							errorList.add(String.format("编号为%s的替代物品不存在",
@@ -693,7 +723,7 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 					}
 					//替代物品包装
 					List<SkuPackage> skuReplaceWsrepPackages = skuReplaceWsrepPackageList.stream().filter(skuReplaceWsrepPackage ->
-						skuReplaceWsrepPackage.getWspName().equals(skuExcel.getReplacePackageName()))
+							skuReplaceWsrepPackage.getWspName().equals(skuExcel.getReplacePackageName()))
 						.collect(Collectors.toList());
 					if (Func.isNotEmpty(skuReplaceWsrepPackages)) {
 						skuReplaceDTO.setWsrepWspId(skuReplaceWsrepPackages.get(0).getWspId());
@@ -702,7 +732,7 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 							skuExcel.getReplacePackageName()));
 					}
 					List<SkuUm> skuReplaceWsrepUms = skuReplaceWsrepUmList.stream().filter(skuReplaceWsrepUm ->
-						skuReplaceWsrepUm.getWsuCode().equals(skuExcel.getReplaceUnitCode()))
+							skuReplaceWsrepUm.getWsuCode().equals(skuExcel.getReplaceUnitCode()))
 						.collect(Collectors.toList());
 					if (Func.isNotEmpty(skuReplaceWsrepUms)) {
 						skuReplaceDTO.setWsrepWsuId(skuReplaceWsrepUms.get(0).getWsuId());
@@ -747,7 +777,7 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 					}
 					//供应商
 					List<Enterprise> skuIncEnterprises = skuIncEnterpriseList.stream().filter(skuIncEnterprise ->
-						skuIncEnterprise.getEnterpriseCode().equals(skuExcel.getEnterpriseCode()))
+							skuIncEnterprise.getEnterpriseCode().equals(skuExcel.getEnterpriseCode()))
 						.collect(Collectors.toList());
 					if (Func.isNotEmpty(skuIncEnterprises)) {
 						skuIncDTO.setPeId(skuIncEnterprises.get(0).getPeId());
@@ -757,7 +787,7 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 					}
 					//供应商包装
 					List<SkuPackage> skuIncPackages = skuIncPackageList.stream().filter(skuIncPackage ->
-						skuIncPackage.getWspName().equals(skuExcel.getEnterprisePackageName()))
+							skuIncPackage.getWspName().equals(skuExcel.getEnterprisePackageName()))
 						.collect(Collectors.toList());
 					if (Func.isNotEmpty(skuIncPackages)) {
 						skuIncDTO.setWspId(skuIncPackages.get(0).getWspId());
@@ -853,6 +883,7 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 			skuExportDTO.setSkuCode(sku.getSkuCode());
 			skuExportDTO.setSkuName(sku.getSkuName());
 			skuExportDTO.setSkuNameS(sku.getSkuNameS());
+			// TODO 物品导出空指针异常
 			skuExportDTO.setAbc(DictCache.getValue(DictCodeConstant.LOC_ABC, sku.getAbc()));
 			skuExportDTO.setSkuGrossWeight(sku.getSkuGrossWeight().stripTrailingZeros().toPlainString());
 			skuExportDTO.setSkuNetWeight(sku.getSkuNetWeight().stripTrailingZeros().toPlainString());
