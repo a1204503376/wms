@@ -1,11 +1,10 @@
 <template>
     <el-select
         v-model="val"
+        :multiple="multiple"
+        :size="size"
         collapse-tags
         placeholder="请选择"
-        :multiple="multiple"
-        size="mini"
-        style="width:100%;"
         @change="onChange">
         <el-option
             v-for="item in dataSource"
@@ -36,23 +35,25 @@ export default {
         // 单选多选切换，默认为false
         multiple: {type: Boolean, required: false, default: false},
         //是否有默认值 true:有默认值  默认为false 编辑时将其设置为true
-        defaultValue:{type:Boolean,required: false,default: () => false}
+        defaultValue: {type: Boolean, required: false, default: () => false},
+        // 组件大小，默认为mini, 支持 medium/small/mini
+        size: {type: String, required: false, default: () => "mini"}
     },
     data() {
         return {
-            val:this.selectVal,
+            val: this.selectVal,
             dataSource: []
         }
     },
     async created() {
         await this.getDataSource()
-        if(this.defaultValue){
+        if (this.defaultValue) {
             this.val = this.dataSource[0].whId
             this.onChange(this.val);
         }
     },
-    watch:{
-        selectVal(newVal){
+    watch: {
+        selectVal(newVal) {
             this.val = newVal;
         }
     },

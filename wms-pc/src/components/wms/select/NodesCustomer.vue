@@ -3,14 +3,14 @@
         v-model="val"
         :collapse-tags="true"
         :default-first-option="true"
-        :multiple="true"
         :loading="loading"
+        :multiple="true"
         :remote-method="remoteMethod"
+        :size="size"
         filterable
         placeholder="请输入客户编码或名称"
         remote
         reserve-keyword
-        size="mini"
         value-key="code"
         @change="onChange">
         <el-option
@@ -35,7 +35,8 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Array, String]
+        selectVal: [Array, String],
+        size: {type: String, required: false, default: () => "mini"}
     },
     data() {
         return {

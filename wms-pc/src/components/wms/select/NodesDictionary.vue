@@ -4,7 +4,7 @@
         :code="code"
         :multiple="multiple"
         collapse-tags
-        size="mini"
+        :size="size"
         value-key="value"
         @change="onChange">
         <el-option
@@ -34,7 +34,9 @@ export default {
         // 单选多选切换，默认为false
         multiple: {type: Boolean, required: false, default: false},
         // 字典码 必填
-        code: {type: String, required: true}
+        code: {type: String, required: true},
+        // 组件大小，默认为mini, 支持 medium/small/mini
+        size: {type: String, required: false, default: () => "mini"}
     },
     data() {
         return {

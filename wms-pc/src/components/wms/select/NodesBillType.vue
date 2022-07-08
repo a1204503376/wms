@@ -6,7 +6,7 @@
         :multiple="multiple"
         filterable
         placeholder="请选择"
-        size="mini"
+        :size="size"
         value-key="billTypeId"
         @change="onChange">
         <el-option
@@ -34,7 +34,9 @@ export default {
         // 是否多选 true:多选 默认为单选
         multiple: {type: Boolean, required: false, default: () => false},
         // 查询的单据类型，"":查询所有, "I":查询入库单据类型, "O":查询出库单据类型
-        ioType: {type: String, required: false, default: () => ''}
+        ioType: {type: String, required: false, default: () => ''},
+        // 组件大小，默认为mini, 支持 medium/small/mini
+        size: {type: String, required: false, default: () => "mini"}
     },
     data() {
         return {

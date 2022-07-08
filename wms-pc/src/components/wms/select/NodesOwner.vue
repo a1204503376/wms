@@ -2,7 +2,7 @@
     <el-select
         v-model="val"
         :multiple="multiple"
-        size="mini"
+        :size="size"
         value-key="woId"
         @change="onChange">
         <el-option
@@ -30,7 +30,9 @@ export default {
         // 是否多选 true:多选 默认为单选
         multiple: {type: Boolean, required: false, default: () => false},
         //是否有默认值 true:有默认值  默认为false 编辑时将其设置为true
-        defaultValue:{type:Boolean, required: false, default: () => false}
+        defaultValue: {type: Boolean, required: false, default: () => false},
+        // 组件大小，默认为mini, 支持 medium/small/mini
+        size: {type: String, required: false, default: () => "mini"}
     },
     data() {
         return {
@@ -40,12 +42,12 @@ export default {
     },
     watch: {
         selectVal(newVal) {
-            this.val=newVal;
+            this.val = newVal;
         },
     },
     async created() {
         await this.getDataSource();
-        if(this.defaultValue){
+        if (this.defaultValue) {
             this.val = this.dataSource[0].woId
             this.onChange(this.val);
         }
