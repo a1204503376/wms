@@ -4,20 +4,20 @@
         :collapse-tags="true"
         :default-first-option="true"
         :loading="loading"
-        :multiple="true"
+        :multiple="multiple"
         :remote-method="remoteMethod"
         :size="size"
         filterable
         placeholder="请输入客户编码或名称"
         remote
         reserve-keyword
-        value-key="code"
+        value-key="id"
         @change="onChange">
         <el-option
             v-for="item in options"
-            :key="item.code"
+            :key="item.id"
             :label="item.name"
-            :value="item.id">
+            :value="item">
             <span style="float: left">{{ item.code }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.name }}</span>
         </el-option>
@@ -27,6 +27,7 @@
 <script>
 import {getCustomerSelectResponseTop10List} from "@/api/wms/basics/customer";
 import debounce from "lodash/debounce";
+import func from "@/util/func";
 
 export default {
     name: "NodesCustomer",
@@ -35,17 +36,34 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Array, String],
-        size: {type: String, required: false, default: () => "mini"}
+        selectVal: [Array, String, Object],
+        size: {type: String, required: false, default: () => "mini"},
+        // 单选多选切换，默认为false
+        multiple: {type: Boolean, required: false, default: false}
     },
     data() {
         return {
-            options: [this.selectVal],
+            options: [],
             val: this.selectVal,
             loading: false,
         }
     },
+    watch: {
+        selectVal(){
+            this.setDefaultByProps();
+        }
+    },
     methods: {
+        setDefaultByProps() {
+            if (!func.isNotEmpty(this.selectVal)) {
+                return;
+            }
+            let currentCustomer = this.options.find(item => item.id === this.selectVal.id);
+            if (func.isEmpty(currentCustomer)) {
+                this.options.push(this.selectVal);
+            }
+            this.val = this.selectVal;
+        },
         // 防抖 在等待时间到达前的请求全部取消，保留最后一次
         remoteMethod: debounce(async function (key) {
             if (key !== '') {
