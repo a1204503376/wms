@@ -3,17 +3,15 @@ package com.nodes.framework.manager;
 import com.nodes.common.utils.Threads;
 import com.nodes.common.utils.spring.SpringUtils;
 
-import java.util.TimerTask;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
  * 异步任务管理器
- * 
+ *
  * @author liuhulu
  */
-public class AsyncManager
-{
+public class AsyncManager {
     /**
      * 操作延迟10毫秒
      */
@@ -27,32 +25,28 @@ public class AsyncManager
     /**
      * 单例模式
      */
-    private AsyncManager()
-    {
+    private AsyncManager() {
     }
 
     private static AsyncManager me = new AsyncManager();
 
-    public static AsyncManager me()
-    {
+    public static AsyncManager me() {
         return me;
     }
 
     /**
      * 执行任务
-     * 
+     *
      * @param task 任务
      */
-    public void execute(TimerTask task)
-    {
+    public void execute(Runnable task) {
         executor.schedule(task, OPERATE_DELAY_TIME, TimeUnit.MILLISECONDS);
     }
 
     /**
      * 停止任务线程池
      */
-    public void shutdown()
-    {
+    public void shutdown() {
         Threads.shutdownAndAwaitTermination(executor);
     }
 }

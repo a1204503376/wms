@@ -5,9 +5,9 @@ import com.nodes.common.utils.text.Convert;
 import com.nodes.project.system.dict.domain.DictData;
 import com.nodes.project.system.dict.mapper.DictDataMapper;
 import com.nodes.project.system.dict.utils.DictUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -17,7 +17,8 @@ import java.util.List;
  */
 @Service
 public class DictDataServiceImpl implements IDictDataService {
-    @Autowired
+
+    @Resource
     private DictDataMapper dictDataMapper;
 
     /**

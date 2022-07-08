@@ -5,16 +5,24 @@ import com.nodes.common.exception.ServiceException;
 import com.nodes.common.utils.ServletUtils;
 import com.nodes.common.utils.security.PermissionUtils;
 import com.nodes.framework.web.domain.AjaxResult;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 全局异常处理器
@@ -51,13 +59,55 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 拦截未知的运行时异常
+     * 参数异常拦截(Get请求 ？拼接形式)
      */
-    @ExceptionHandler(RuntimeException.class)
-    public AjaxResult handleRuntimeException(RuntimeException e, HttpServletRequest request) {
-        String requestURI = request.getRequestURI();
-        log.error("请求地址'{}',发生未知异常.", requestURI, e);
-        return AjaxResult.error(e.getMessage());
+    @ExceptionHandler(BindException.class)
+    public AjaxResult handleBindException(BindException e) {
+        log.error(e.getMessage(), e);
+        String message = getValidExceptionMsg(e.getAllErrors());
+        return AjaxResult.error(message);
+    }
+
+    private String getValidExceptionMsg(List<ObjectError> errors) {
+        if (CollectionUtils.isNotEmpty(errors)) {
+            StringBuilder sb = new StringBuilder();
+            errors.forEach(error -> {
+                if (error instanceof FieldError) {
+                    sb.append(((FieldError) error).getField()).append(":");
+                }
+                sb.append(error.getDefaultMessage()).append(";");
+            });
+            String msg = sb.toString();
+            msg = StringUtils.substring(msg, 0, msg.length() - 1);
+            return msg;
+        }
+        return null;
+    }
+
+    /**
+     * 参数异常拦截 （方法上的）
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public AjaxResult handleConstraintViolationException(ConstraintViolationException e) {
+        log.error(e.getMessage(), e);
+        String message = getConstraintViolationExceptionMsg(e.getConstraintViolations());
+        return AjaxResult.error(message);
+    }
+
+    private String getConstraintViolationExceptionMsg(Set<ConstraintViolation<?>> errors) {
+        if (CollectionUtils.isNotEmpty(errors)) {
+            StringBuilder sb = new StringBuilder();
+            errors.forEach(error -> {
+                if (error instanceof FieldError) {
+                    sb.append(((FieldError) error).getField()).append(":");
+                }
+                sb.append(error.getMessage()).append(";");
+            });
+            String msg = sb.toString();
+            msg = StringUtils.substring(msg, 0, msg.length() - 1);
+            return msg;
+        }
+        return null;
     }
 
     /**
@@ -84,13 +134,13 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 自定义验证异常
+     * 拦截未知的运行时异常
      */
-    @ExceptionHandler(BindException.class)
-    public AjaxResult handleBindException(BindException e) {
-        log.error(e.getMessage(), e);
-        String message = e.getAllErrors().get(0).getDefaultMessage();
-        return AjaxResult.error(message);
+    @ExceptionHandler(RuntimeException.class)
+    public AjaxResult handleRuntimeException(RuntimeException e, HttpServletRequest request) {
+        String requestURI = request.getRequestURI();
+        log.error("请求地址'{}',发生未知异常.", requestURI, e);
+        return AjaxResult.exception(e.getMessage());
     }
 
     /**
