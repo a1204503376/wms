@@ -41,6 +41,15 @@ import fileDownload from "js-file-download";
                 <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
                 </el-button>
                 <el-button v-if="permissionObj.delete" size="mini" type="primary" @click="onRemove">删除</el-button>
+                <el-button v-if="permissionObj.import" icon="el-icon-upload2" plain size="mini"
+                           @click="onUpload">导入
+                </el-button>
+                <file-upload
+                    :visible="fileUpload.visible"
+                    file-name="物料清单"
+                    template-url="/api/wms/WmsSkuBom/export-template"
+                    @callback="callbackFileUpload"
+                ></file-upload>
             </template>
             <template v-slot:tableTool>
                 <el-tooltip
@@ -152,9 +161,12 @@ import {listMixin} from "@/mixins/list";
 import {
     getWmsSkuBomPage,
     excel,
-    deleteWmsSkuBom
+    deleteWmsSkuBom,
+    importData
 } from "@/api/wms/basics/WmsSkuBom.js";
-import func from "../../../util/func";
+import func from "@/util/func";
+import fileUpload from "@/components/nodes/fileUpload";
+import {ExcelExport} from 'pikaz-excel-js';
 
 export default {
     name: "carrier",
@@ -163,11 +175,16 @@ export default {
         NodesMasterPage,
         NodesDateRange,
         NodesOwner,
-        NodesSku
+        NodesSku,
+        fileUpload,
+        ExcelExport
     },
     mixins: [listMixin],
     data() {
         return {
+            fileUpload: {
+                visible: false,
+            },
             selectionList: [],
 
             deleteParams: {
@@ -265,12 +282,24 @@ export default {
             return {
                 search: this.vaildData(this.permission.wmsSkuBom_search, false),
                 add: this.vaildData(this.permission.wmsSkuBom_add, false),
-                delete: this.vaildData(this.permission.wmsSkuBom_delete, false)
+                delete: this.vaildData(this.permission.wmsSkuBom_delete, false),
+                import: this.vaildData(this.permission.wmsSkuBom_import, false)
             }
         }
 
     },
     methods: {
+        callbackFileUpload(res) {
+            this.fileUpload.visible = false;
+            if (!res.result) {
+                return;
+            }
+            let param = this.getFormData(res);
+            importData(param).then((res) => {
+                this.$message.success(res.data.msg);
+                this.getTableData();
+            })
+        },
         onRemove() {
             this.$confirm("确定删除容器编码为" + this.codes + "的数据吗?", {
                 confirmButtonText: "确定",

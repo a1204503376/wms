@@ -1,5 +1,6 @@
 package org.nodes.wms.dao.basics.bom.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -77,5 +78,22 @@ public class WmsSkuBomDaoImpl extends BaseServiceImpl<WmsSkuBomMapper, SkuBom> i
 			throw new NullArgumentException("WmsSkuBomDaoImpl.delete方法的参数为空");
 		}
 		return super.deleteLogic(ids);
+	}
+
+	@Override
+	public Boolean saveSkuBomList(List<SkuBom> skuBomList) {
+		for (SkuBom skuBom : skuBomList) {
+			LambdaQueryWrapper<SkuBom> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+			lambdaQueryWrapper
+				.eq(SkuBom::getJoinSkuId, skuBom.getJoinSkuId())
+				.eq(SkuBom::getSkuId, skuBom.getSkuId())
+				.eq(SkuBom::getWoId, skuBom.getWoId());
+			SkuBom bom = super.getOne(lambdaQueryWrapper);
+			if (!Func.isEmpty(bom)) {
+				skuBom.setId(bom.getId());
+			}
+			super.saveOrUpdate(skuBom);
+		}
+		return true;
 	}
 }

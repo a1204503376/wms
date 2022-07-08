@@ -8,22 +8,24 @@ import org.nodes.wms.biz.basics.bom.WmsSkuBomBiz;
 import org.nodes.wms.dao.basics.bom.dto.input.DeleteSkuBomByIdsRequest;
 import org.nodes.wms.dao.basics.bom.dto.input.FindSkuBomByIdRequset;
 import org.nodes.wms.dao.basics.bom.dto.input.WmsSkuBomPageQuery;
+import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomExcelResponse;
 import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomResponse;
 import org.nodes.wms.dao.basics.bom.entites.SkuBom;
 import org.nodes.wms.dao.basics.bom.dto.input.SkuBomAddOrEditRequest;
+import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.Func;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springblade.core.tool.api.R;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -84,6 +86,27 @@ public class WmsSkuBomController {
 	@PostMapping("/selectSkuBomById")
 	public R<SkuBom> selectSkuBomById(@RequestBody FindSkuBomByIdRequset request) {
 		return R.data(skuBomBiz.findSkuBomById(request.getId()));
+	}
+
+	/**
+	 * 导出 导入模板
+	 *
+	 * @param response 响应对象
+	 * @return 是否成功
+	 */
+	@ApiLog("物品清单管理-导出 导入模板")
+	@GetMapping("/export-template")
+	public void selectSkuBomById(HttpServletResponse response) {
+		List<WmsSkuBomExcelResponse> excelResponses = new ArrayList<>();
+		ExcelUtil.export(response, excelResponses, WmsSkuBomExcelResponse.class);
+	}
+
+	@ApiLog("客户管理-导入")
+	@PostMapping("/import-data")
+	public R<String> importData(MultipartFile file) {
+		List<WmsSkuBomExcelResponse> importDataList = ExcelUtil.read(file, WmsSkuBomExcelResponse.class);
+		boolean importFlag = skuBomBiz.importExcel(importDataList);
+		return importFlag ? R.success("导入成功") : R.fail("导入失败");
 	}
 
 }

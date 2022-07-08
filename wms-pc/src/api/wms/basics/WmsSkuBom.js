@@ -11,7 +11,6 @@ export const getWmsSkuBomPage = (PageQuery, query) => {
 }
 
 
-
 export const excel = (params) => {
     return request({
         url: '/api/wms/WmsSkuBom/excel',
@@ -33,7 +32,7 @@ export const deleteWmsSkuBom = (params) => {
     return request({
         url: '/api/wms/WmsSkuBom/delete',
         method: 'post',
-        data: { ids:params}
+        data: {ids: params}
     })
 }
 
@@ -44,3 +43,12 @@ export const selectSkuBomById = (params) => {
         data: params
     })
 }
+
+export const importData = (data) => {
+    return request({
+        url: '/api/wms/WmsSkuBom/import-data',
+        method: 'post',
+        data: data
+    })
+}
+
