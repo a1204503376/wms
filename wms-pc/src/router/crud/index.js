@@ -180,5 +180,28 @@ export default [
                 props: true,
                 component: () => import('@/views/wms/system/updateVer/updateVerEdit')
             }]
-    }
+    },
+    {
+        path: '/soBill',
+        component: Layout,
+        children: [
+            {
+                path: 'add/:soBillId',
+                name: '新增发货单',
+                props: true,
+                component: () => import('@/views/wms/outstock/soHeader/soBillAdd')
+            },
+            {
+                path: 'edit/:soBillId',
+                name: '编辑发货单',
+                props: true,
+                component: () => import('@/views/wms/outstock/soHeader/soBillEdit')
+            },
+            {
+                path: 'detail/:soBillId',
+                name: '发货单详情',
+                props: true,
+                component: () => import('@/views/wms/outstock/soHeader/soBillDetail')
+            }]
+    },
 ]

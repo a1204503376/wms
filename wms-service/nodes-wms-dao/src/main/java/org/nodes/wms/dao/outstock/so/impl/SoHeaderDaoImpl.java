@@ -20,4 +20,9 @@ public class SoHeaderDaoImpl extends BaseServiceImpl<SoHeaderMapper, SoHeader> i
 	public Page<SoHeaderPageResponse> page(IPage<?> page, SoHeaderPageQuery soHeaderPageQuery) {
 		return super.baseMapper.page(page, soHeaderPageQuery);
 	}
+
+    @Override
+    public boolean saveOrUpdateSoHeader(SoHeader soHeader) {
+        return super.saveOrUpdate(soHeader);
+    }
 }

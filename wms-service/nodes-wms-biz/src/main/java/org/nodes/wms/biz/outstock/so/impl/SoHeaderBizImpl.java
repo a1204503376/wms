@@ -1,15 +1,21 @@
 package org.nodes.wms.biz.outstock.so.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
+import org.nodes.wms.biz.outstock.so.modular.SoBillFactory;
+import org.nodes.wms.dao.outstock.so.SoDetailDao;
 import org.nodes.wms.dao.outstock.so.SoHeaderDao;
+import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
+import org.nodes.wms.dao.outstock.so.entities.SoDetail;
+import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,8 +28,26 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 
 	private final SoHeaderDao soHeaderDao;
 
+	private final SoDetailDao soDetailDao;
+
+	private final SoBillFactory soBillFactory;
+
 	@Override
 	public Page<SoHeaderPageResponse> getPage(Query query, SoHeaderPageQuery soHeaderPageQuery) {
 		return soHeaderDao.page(Condition.getPage(query), soHeaderPageQuery);
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public SoHeader add(SoBillAddOrEditRequest soBillAddOrEditRequest) {
+		SoHeader soHeader = soBillFactory.createSoHeader(soBillAddOrEditRequest);
+		if (!soHeaderDao.saveOrUpdateSoHeader(soHeader)) {
+			throw new ServiceException("新增出库单头表信息失败，请稍后再试");
+		}
+		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader, soBillAddOrEditRequest);
+		if (!soDetailDao.saveOrUpdateBatch(soDetailList)) {
+			throw new ServiceException("新增出库单头表信息失败，请稍后再试");
+		}
+		return soHeader;
 	}
 }

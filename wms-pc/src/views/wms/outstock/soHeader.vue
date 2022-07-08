@@ -41,6 +41,7 @@
                         <el-form-item label="客户" label-width="90px">
                             <nodes-customer
                                 v-model.trim="form.params.customerIdList"
+                                :multiple="true"
                                 placeholder="请输入客户编码或名称"></nodes-customer>
                         </el-form-item>
                     </el-col>

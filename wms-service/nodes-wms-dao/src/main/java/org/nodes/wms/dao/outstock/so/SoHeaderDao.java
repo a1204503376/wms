@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
+import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 
 import java.util.List;
 
@@ -20,4 +21,11 @@ public interface SoHeaderDao {
 	 * @return Page<SoHeaderPageResponse>
 	 */
 	Page<SoHeaderPageResponse> page(IPage<?> page, SoHeaderPageQuery soHeaderPageQuery);
+
+	/**
+	 * 新增或修改出库单头表信息
+	 *
+	 * @param soHeader: 出库单头表对象
+	 */
+    boolean saveOrUpdateSoHeader(SoHeader soHeader);
 }
