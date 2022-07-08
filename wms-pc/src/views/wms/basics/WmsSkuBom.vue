@@ -73,20 +73,23 @@ import fileDownload from "js-file-download";
                 <el-tooltip
                     :enterable="false"
                     class="item"
-                    content="本地导出"
-                    effect="dark"
-                    placement="top"
-                >
-                    <el-button circle icon="el-icon-bottom" size="mini"></el-button>
-                </el-tooltip>
-                <el-tooltip
-                    :enterable="false"
-                    class="item"
                     content="服务端导出"
                     effect="dark"
                     placement="top"
                 >
                     <el-button circle icon="el-icon-download" size="mini" @click="excel"></el-button>
+                </el-tooltip>
+                <el-tooltip
+                    :enterable="false"
+                    class="item"
+                    content="本地导出"
+                    effect="dark"
+                    placement="top"
+                >
+                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet" style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
+                        </el-button>
+                    </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
@@ -211,11 +214,6 @@ export default {
             table: {
                 columnList: [
                     {
-                        prop: 'id',
-                        label: 'ID',
-                        hide: true
-                    },
-                    {
                         prop: 'joinSkuCode',
                         label: '组合物品编码'
                     },
@@ -289,6 +287,9 @@ export default {
 
     },
     methods: {
+        onExportLocalData() {
+            this.exportCurrentDataToExcel("物料清单", "物料清单");
+        },
         callbackFileUpload(res) {
             this.fileUpload.visible = false;
             if (!res.result) {
