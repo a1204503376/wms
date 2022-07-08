@@ -2,7 +2,7 @@ package org.nodes.wms.core.basedata.wrapper;
 
 
 import org.nodes.wms.core.basedata.dto.SkuLotValDTO;
-import org.nodes.wms.core.basedata.entity.SkuLotVal;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotVal;
 import org.nodes.wms.core.basedata.excel.SkuLotValExcel;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.basedata.vo.SkuLotValVO;

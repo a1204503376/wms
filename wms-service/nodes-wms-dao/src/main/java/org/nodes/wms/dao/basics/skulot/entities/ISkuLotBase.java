@@ -1,4 +1,4 @@
-package org.nodes.core.tool.entity;
+package org.nodes.wms.dao.basics.skulot.entities;
 
 /**
  * @author pengwei

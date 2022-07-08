@@ -4,7 +4,7 @@ package org.nodes.wms.core.basedata.vo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import io.swagger.annotations.ApiModel;
-import org.nodes.wms.core.basedata.entity.SkuLotVal;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotVal;
 
 /**
  * 批属性验证视图实体类

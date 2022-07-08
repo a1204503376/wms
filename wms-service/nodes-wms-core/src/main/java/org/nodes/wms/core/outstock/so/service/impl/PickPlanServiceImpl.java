@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.nodes.core.base.cache.ParamCache;
 import org.nodes.core.base.enums.ParamEnum;
-import org.nodes.core.tool.entity.SkuLotBaseEntity;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.allot.enums.AllotBillStateEnum;

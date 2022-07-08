@@ -1,14 +1,12 @@
 package org.nodes.wms.core.basedata.cache;
 
 import org.nodes.wms.core.basedata.dto.SkuLotDTO;
-import org.nodes.wms.core.basedata.entity.SkuLot;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLot;
 import org.nodes.wms.core.basedata.service.ISkuLotService;
 import org.springblade.core.cache.utils.CacheUtil;
-import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 

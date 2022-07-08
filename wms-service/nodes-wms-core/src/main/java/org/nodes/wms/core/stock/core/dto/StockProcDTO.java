@@ -2,7 +2,7 @@ package org.nodes.wms.core.stock.core.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.nodes.core.tool.entity.SkuLotBaseEntity;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.core.stock.core.enums.EventTypeEnum;
 
 import javax.validation.constraints.NotNull;

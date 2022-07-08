@@ -2,12 +2,10 @@ package org.nodes.wms.core.basedata.cache;
 
 import org.nodes.wms.core.basedata.entity.SkuInstock;
 import org.nodes.wms.core.basedata.service.ISkuInstockService;
-import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.function.Predicate;
 
 /**
  * @author pengwei

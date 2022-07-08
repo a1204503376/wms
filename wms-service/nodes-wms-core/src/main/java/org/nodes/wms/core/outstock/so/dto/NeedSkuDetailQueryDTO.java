@@ -2,7 +2,7 @@ package org.nodes.wms.core.outstock.so.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.nodes.core.tool.entity.SkuLotBaseEntity;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 
 /**
  * @author pengwei

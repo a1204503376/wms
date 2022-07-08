@@ -1,8 +1,8 @@
 
-package org.nodes.wms.core.basedata.mapper;
+package org.nodes.wms.dao.basics.skulot.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.nodes.wms.core.basedata.entity.SkuLot;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLot;
 import org.springframework.context.annotation.Primary;
 
 /**
