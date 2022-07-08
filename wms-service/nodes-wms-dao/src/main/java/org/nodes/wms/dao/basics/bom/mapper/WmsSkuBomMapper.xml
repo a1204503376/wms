@@ -51,5 +51,6 @@
                 AND bom.update_time between #{query.updateTimeBegin} and #{query.updateTimeEnd}
             </if>
         </where>
+        order by bom.create_time desc
     </select>
 </mapper>
