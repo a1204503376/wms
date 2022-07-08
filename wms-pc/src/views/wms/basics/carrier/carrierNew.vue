@@ -14,42 +14,42 @@
                         <h3>承运商-{{ isEdit ? '编辑' : '新增' }}</h3>
                     </el-row>
 
-                    <el-row>
+                    <el-row style="margin-top: 20px;">
                         <el-col :span="8">
                             <el-form-item label="承运商编码" prop="code">
                                 <el-input v-model="form.params.code"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row>
+                    <el-row style="margin-top: 20px;">
                         <el-col :span="8">
                             <el-form-item label="承运商名称" prop="name">
                                 <el-input v-model="form.params.name"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row>
+                    <el-row style="margin-top: 20px;">
                         <el-col :span="8">
                             <el-form-item label="承运商简称" >
                                 <el-input v-model="form.params.simpleName"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row>
+                    <el-row style="margin-top: 20px;">
                         <el-col :span="8">
                             <el-form-item label="货主" prop="woId">
                                 <nodes-owner style="width: 288.5px" v-model="form.params.woId"></nodes-owner>
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row>
+                    <el-row style="margin-top: 20px;">
                         <el-col :span="8">
                             <el-form-item label="备注" prop="remark">
                                 <el-input v-model="form.params.remark"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row>
+                    <el-row style="margin-top: 20px;">
                         <el-col :span="8">
                             <el-form-item label="是否启用" prop="status">
                                 <template>

@@ -10,23 +10,31 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public enum JobTypeEnum implements IPairs<Integer, String, JobTypeEnum> {
+public enum JobTypeEnum implements IPairs<String, String, JobTypeEnum> {
     /**
      * 入库
      */
-    STORAGE(1, "入库"),
-    /**
-     * 库内
-     */
-    INSIDE_LIBRARY(2, "库内"),
+    STORAGE("101", "入库"),
     /**
      * 出库
      */
-    OUTBOUND(3, "出库"),
+    OUTBOUND("102", "出库"),
+    /**
+     * 库内D箱 补货
+     */
+    REPLENISHMENT_D_BOXES_IN_WAREHOUSE("301", "库内D箱 补货"),
+    /**
+     * 库内盘点
+     */
+    IN_LIBRARY_INVENTORY("302", "库内盘点"),
+    /**
+     * 库内移位
+     */
+    IN_LIBRARY_SHIFT("303", "库内移位"),
     ;
 
     @EnumValue
-    private final Integer code;
+    private final String code;
 
     private final String desc;
 
@@ -36,7 +44,7 @@ public enum JobTypeEnum implements IPairs<Integer, String, JobTypeEnum> {
     }
 
     @Override
-    public Integer key() {
+    public String key() {
         return code;
     }
 
@@ -45,7 +53,7 @@ public enum JobTypeEnum implements IPairs<Integer, String, JobTypeEnum> {
         return desc;
     }
 
-    public static JobTypeEnum getByKey(Integer key) {
+    public static JobTypeEnum getByKey(String key) {
         for (JobTypeEnum value : values()) {
             if (value.key().equals(key)) {
                 return value;

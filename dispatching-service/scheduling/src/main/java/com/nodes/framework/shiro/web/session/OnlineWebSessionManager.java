@@ -51,10 +51,7 @@ public class OnlineWebSessionManager extends DefaultWebSessionManager {
         if (attributeKeyStr.startsWith("javax.servlet")) {
             return false;
         }
-        if (attributeKeyStr.equals(ShiroConstants.CURRENT_USERNAME)) {
-            return false;
-        }
-        return true;
+        return !attributeKeyStr.equals(ShiroConstants.CURRENT_USERNAME);
     }
 
     @Override
@@ -94,11 +91,11 @@ public class OnlineWebSessionManager extends DefaultWebSessionManager {
             // 永不过期不进行处理
             return;
         }
-        Date expiredDate = DateUtils.addMilliseconds(new Date(), 0 - timeout);
+        Date expiredDate = DateUtils.addMilliseconds(new Date(), -timeout);
         UserOnlineServiceImpl userOnlineService = SpringUtils.getBean(UserOnlineServiceImpl.class);
         List<UserOnline> userOnlineList = userOnlineService.selectOnlineByExpired(expiredDate);
         // 批量过期删除
-        List<String> needOfflineIdList = new ArrayList<String>();
+        List<String> needOfflineIdList = new ArrayList<>();
         for (UserOnline userOnline : userOnlineList) {
             try {
                 SessionKey key = new DefaultSessionKey(userOnline.getSessionId());

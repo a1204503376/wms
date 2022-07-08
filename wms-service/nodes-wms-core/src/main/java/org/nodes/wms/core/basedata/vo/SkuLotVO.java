@@ -4,7 +4,7 @@ package org.nodes.wms.core.basedata.vo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import io.swagger.annotations.ApiModel;
-import org.nodes.wms.core.basedata.entity.SkuLot;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLot;
 
 /**
  * 物品批属性视图实体类

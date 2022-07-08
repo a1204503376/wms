@@ -160,19 +160,20 @@ public class LogAspect {
      * 参数拼装
      */
     private String argsArrayToString(Object[] paramsArray) {
-        String params = "";
+        StringBuilder params = new StringBuilder();
         if (paramsArray != null && paramsArray.length > 0) {
             for (Object o : paramsArray) {
                 if (StringUtils.isNotNull(o) && !isFilterObject(o)) {
                     try {
                         Object jsonObj = JSONObject.toJSONString(o, excludePropertyPreFilter());
-                        params += jsonObj.toString() + " ";
+                        params.append(jsonObj.toString()).append(" ");
                     } catch (Exception e) {
+                        log.error("LOG参数拼接异常", e);
                     }
                 }
             }
         }
-        return params.trim();
+        return params.toString().trim();
     }
 
     /**

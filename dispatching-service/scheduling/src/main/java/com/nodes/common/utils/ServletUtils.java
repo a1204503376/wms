@@ -131,6 +131,9 @@ public class ServletUtils {
         if (StringUtils.inStringIgnoreCase(uri, ".json", ".xml")) {
             return true;
         }
+        if (uri.contains(Constants.API_PATH_PREFIX)) {
+            return true;
+        }
 
         String ajax = request.getParameter("__ajax");
         return StringUtils.inStringIgnoreCase(ajax, "json", "xml");

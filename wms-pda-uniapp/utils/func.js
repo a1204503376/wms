@@ -34,6 +34,7 @@ const install = (Vue, vm) => {
 						showToast('不能登录，当前用户没有配置有权限的仓库')
 					} else {
 						uni.setStorageSync('warehouse', data.data[0]);
+						uni.setStorageSync('warehouseList', data.data);
 						uni.redirectTo({
 							url: '/pages/home/home'
 						})

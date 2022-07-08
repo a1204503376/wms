@@ -2,7 +2,7 @@
 package org.nodes.wms.core.strategy.service.impl;
 
 
-import org.nodes.core.tool.entity.SkuLotBaseEntity;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.basics.skuType.entities.SkuType;
 import org.nodes.wms.core.basedata.service.ISkuTypeService;
 import org.nodes.wms.core.strategy.dto.InstockDetailDTO;

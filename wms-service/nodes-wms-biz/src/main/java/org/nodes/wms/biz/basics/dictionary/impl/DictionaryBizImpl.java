@@ -29,7 +29,7 @@ public class DictionaryBizImpl implements DictionaryBiz {
 	}
 
 	@Override
-	public org.nodes.core.base.entity.Dict findZoneTypeOfAutoStore() {
+	public Dict findZoneTypeOfAutoStore() {
 		return dictService.findByDictValue(DictCodeConstant.ZONE_TYPE, "自动化存储区");
 	}
 

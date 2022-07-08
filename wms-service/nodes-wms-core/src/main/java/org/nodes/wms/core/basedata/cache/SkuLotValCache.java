@@ -1,10 +1,9 @@
 package org.nodes.wms.core.basedata.cache;
 
 import org.nodes.wms.core.basedata.dto.SkuLotValDTO;
-import org.nodes.wms.core.basedata.entity.SkuLotVal;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotVal;
 import org.nodes.wms.core.basedata.service.ISkuLotValService;
 import org.springblade.core.cache.utils.CacheUtil;
-import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;
 
 import java.io.Serializable;
