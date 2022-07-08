@@ -36,7 +36,7 @@ public class ReceiveByBoxController {
 	@ApiLog("PDA按箱收货")
 	@PostMapping("/receiveByCode")
 	public String receiveByBoxCode(@RequestBody ReceiveDetailLpnPdaRequest receiveDetailLpnPdaRequest) {
-		inStockBiz.receiveByBoxCode(receiveDetailLpnPdaRequest);
+		inStockBiz.receiveByBoxCode(receiveDetailLpnPdaRequest,null);
 		return "操作成功";
 	}
 

@@ -11,6 +11,7 @@ import org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
+import org.nodes.wms.dao.putway.dto.input.LpnTypeRequest;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -247,15 +248,25 @@ public interface LocationBiz {
 
 	/**
 	 * 天宜定制：根据容器列别获取agv可用的库位，按照上架顺序返回
-	 * @param lpnType
+	 *
+	 * @param lpnType   容器类别
+	 * @param zoneType 库区类型
 	 * @return
 	 */
-    List<Location> findEnableAgvLocation(LpnType lpnType);
+	List<Location> findEnableAgvLocation(LpnType lpnType, String zoneType);
 
 	/**
 	 * 获取同列的所有库位
+	 *
 	 * @param location
 	 * @return
 	 */
 	List<Location> getLocationByColumn(Location location);
+
+	/**
+	 * 根据箱型和库房id获取库位集合
+	 *
+	 * @param request@return 库位信息
+	 */
+	List<Location> findLocationByLpnType(LpnTypeRequest request);
 }

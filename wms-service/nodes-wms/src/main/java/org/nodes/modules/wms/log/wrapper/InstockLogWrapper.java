@@ -3,7 +3,7 @@ package org.nodes.modules.wms.log.wrapper;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.UserCache;
 import org.nodes.core.base.entity.User;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.StringPool;
 import org.nodes.modules.wms.log.vo.InstockLogVO;
 import org.nodes.wms.dao.putway.entities.StInstockLog;
@@ -36,7 +36,7 @@ public class InstockLogWrapper extends BaseEntityWrapper<StInstockLog, InstockLo
 		}
 		//上架计算代码名称
 		instockLogVO.setInstockFunctionName(
-			DictCache.getValue(DictConstant.INSTOCK_FUNCTION, instockLog.getInstockFunction()));
+			DictCache.getValue(DictCodeConstant.INSTOCK_FUNCTION, instockLog.getInstockFunction()));
 		//是否成功名称
 		if (Func.isNotEmpty(instockLog.getIsSuccess())) {
 			if (instockLog.getIsSuccess() == 1) {

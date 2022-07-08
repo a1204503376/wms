@@ -26,6 +26,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springblade.core.mp.base.BaseEntity;
+import org.springblade.core.tenant.mp.TenantEntity;
 
 import java.io.Serializable;
 
@@ -37,7 +38,7 @@ import java.io.Serializable;
 @Data
 @TableName("blade_dict")
 @ApiModel(value = "Dict对象", description = "Dict对象")
-public class Dict extends BaseEntity implements Serializable {
+public class Dict extends TenantEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -103,10 +104,5 @@ public class Dict extends BaseEntity implements Serializable {
 	 */
 	@ApiModelProperty(value = "是否显示该字典")
 	private Integer isVisible;
-
-	/**
-	 * 租户ID
-	 */
-	@ApiModelProperty("租户ID")
-	private String tenantId;
+	
 }

@@ -3,7 +3,7 @@ package org.nodes.wms.core.instock.asn.wrapper;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.UserCache;
 import org.nodes.core.base.entity.User;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.basedata.cache.BillTypeCache;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.instock.asn.dto.AsnDetailDTO;
@@ -47,10 +47,10 @@ public class AsnHeaderWrapper extends BaseEntityWrapper<AsnHeader, AsnHeaderVO> 
 	public AsnHeaderVO entityVO(AsnHeader entity) {
 		AsnHeaderVO asnHeaderVO = Objects.requireNonNull(BeanUtil.copy(entity, AsnHeaderVO.class));
 		//单据状态名称
-		asnHeaderVO.setAsnBillStateName(DictCache.getValue(DictConstant.ASN_BILL_STATE, asnHeaderVO.getAsnBillState()));
+		asnHeaderVO.setAsnBillStateName(DictCache.getValue(DictCodeConstant.ASN_BILL_STATE, asnHeaderVO.getAsnBillState()));
 		//入库方式名称
-		asnHeaderVO.setInstoreTypeName(DictCache.getValue(DictConstant.INSTORE_TYPE, asnHeaderVO.getInstoreType()));
-		asnHeaderVO.setCreateTypeName(DictCache.getValue(DictConstant.CREATE_TYPE, asnHeaderVO.getCreateType()));
+		asnHeaderVO.setInstoreTypeName(DictCache.getValue(DictCodeConstant.INSTORE_TYPE, asnHeaderVO.getInstoreType()));
+		asnHeaderVO.setCreateTypeName(DictCache.getValue(DictCodeConstant.CREATE_TYPE, asnHeaderVO.getCreateType()));
 		//同步状态名称
 //		asnHeaderVO.setSyncStateName(DictCache.getValue(DictConstant.SYNC_STATE, asnHeaderVO.getSyncState()));
 		//货主名称

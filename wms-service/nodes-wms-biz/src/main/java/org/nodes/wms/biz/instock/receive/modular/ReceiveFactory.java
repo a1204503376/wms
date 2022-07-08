@@ -416,7 +416,7 @@ public class ReceiveFactory {
 		//设置库房编码
 		receiveDetail.setWhCode(warehouse.getWhCode());
 		//设置货主id
-		receiveDetail.setWoId(lpn.getWoId());
+		receiveDetail.setWoId(sku.getWoId());
 		//设置货主编码
 		receiveDetail.setOwnerCode(lpn.getOwnerCode());
 		//设置接收状态

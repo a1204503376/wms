@@ -87,7 +87,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="容器类型：">
+                            <el-form-item label="容器类别：">
                                 {{ form.params.lpnTypeCode }}
                             </el-form-item>
                         </el-col>

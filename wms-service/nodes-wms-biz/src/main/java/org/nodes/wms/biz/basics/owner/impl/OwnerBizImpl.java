@@ -40,4 +40,9 @@ public class OwnerBizImpl implements OwnerBiz {
     public Owner getFirst() {
 		return ownerDao.selectFirstOwner();
     }
+
+	@Override
+	public Owner findByName(String ownerName) {
+		return ownerDao.getByName(ownerName);
+	}
 }

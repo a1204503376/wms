@@ -10,7 +10,7 @@ import org.nodes.core.base.entity.Dept;
 import org.nodes.core.base.entity.Param;
 import org.nodes.core.base.enums.ParamEnum;
 import org.nodes.core.base.service.IDeptService;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.core.allot.enums.AllotBillStateEnum;
 import org.nodes.wms.core.allot.service.IAllotHeaderService;
@@ -29,7 +29,7 @@ import org.nodes.wms.core.outstock.so.entity.SoDetail;
 import org.nodes.wms.core.outstock.so.entity.SoHeader;
 import org.nodes.wms.core.outstock.so.entity.WellenDetail;
 import org.nodes.wms.core.outstock.so.enums.ShipStateEnum;
-import org.nodes.wms.core.outstock.so.enums.SoBillStateEnum;
+import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
 import org.nodes.wms.core.outstock.so.enums.SyncStateEnum;
 import org.nodes.wms.core.outstock.so.mapper.SoHeaderMapper;
 import org.nodes.wms.core.outstock.so.service.ISoDetailService;
@@ -292,7 +292,7 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 			}
 			if (!SoBillStateEnum.CREATE.getIndex().equals(soHeader.getSoBillState())) {
 				throw new ServiceException(String.format("单据[%s]为%s状态不可删除",
-					soHeader.getSoBillNo(), DictCache.getValue(DictConstant.SO_BILL_STATE,soHeader.getSoBillState())));
+					soHeader.getSoBillNo(), DictCache.getValue(DictCodeConstant.SO_BILL_STATE,soHeader.getSoBillState())));
 			}
 			if (soHeader.getBillTypeCd().equals("209")) {
 				throw new ServiceException("调拨发货单不可删除! ");
@@ -459,7 +459,7 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 				// 其它状态的订单暂不支持取消操作
 				throw new ServiceException(
 					"暂不支持订单(" + soHeader.getSoBillNo() + ") 状态(" +
-						DictCache.getValue(DictConstant.SO_BILL_STATE, soHeader.getSoBillState()) + ") 做取消操作！");
+						DictCache.getValue(DictCodeConstant.SO_BILL_STATE, soHeader.getSoBillState()) + ") 做取消操作！");
 			}
 			// 关闭其他关联的任务
 			taskService.closeTask(soBillId, TaskTypeEnum.ALL);

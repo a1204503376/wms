@@ -3,7 +3,7 @@ package org.nodes.wms.biz.basics.lpntype.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
-import org.nodes.wms.biz.basics.lpntype.modular.LpnTypeFactory;
+import org.nodes.wms.dao.putway.dto.modular.LpnTypeFactory;
 import org.nodes.wms.dao.basics.lpntype.LpnTypeDao;
 import org.nodes.wms.dao.basics.lpntype.dto.input.*;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeByIdResponse;
@@ -113,7 +113,13 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 
     @Override
     public LpnTypeCodeEnum parseBoxCode(String boxCode) {
-        return null;
+        LpnTypeCodeEnum[] lpnTypeCodeEnum = LpnTypeCodeEnum.values();
+		for (LpnTypeCodeEnum item:lpnTypeCodeEnum){
+			if(item.getCode().equals(boxCode.substring(0,1))){
+				return item;
+			}
+		}
+	   throw new ServiceException("查询失败,箱码输入错误");
     }
 
     @Override

@@ -11,6 +11,7 @@ import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.merge.StockMergeStrategy;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
@@ -143,6 +144,8 @@ public class StockBizImpl implements StockBiz {
 	public Stock inStock(StockLogTypeEnum type, ReceiveLog receiveLog) {
 		Location location = locationBiz.findByLocId(receiveLog.getLocId());
 		canInStockByLocation(location, receiveLog.getSkuId(), receiveLog);
+		// 验证批属性
+		SkuLotUtil.check(receiveLog, receiveLog.getWoId(), receiveLog.getWhId());
 		// 形成库存，需要考虑库存合并
 		Stock stock = createStock(receiveLog, location);
 		Stock existStock = stockMergeStrategy.matchCanMergeStock(stock);
@@ -191,7 +194,7 @@ public class StockBizImpl implements StockBiz {
 			updateSerialAndSaveLog(serialNoList, SerialStateEnum.OUT_STOCK, stock.getStockId(), stockLog);
 		}
 
-		return null;
+		return stock;
 	}
 
 	private void updateSerialAndSaveLog(List<String> serialNoList, SerialStateEnum state, Long stockId,
@@ -402,6 +405,11 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
+	public List<Serial> findSerialByStock(Long stockId) {
+		return serialDao.getSerialByStockId(stockId);
+	}
+
+	@Override
 	public List<Stock> findStockByBoxCode(String boxCode) {
 		List<Long> pickToLocList = locationBiz.getAllPickToLocation()
 			.stream()
@@ -415,68 +423,94 @@ public class StockBizImpl implements StockBiz {
 		Location stage = locationBiz.getStageLocation(whId);
 		return stockDao.getStockByBoxCode(boxCode, Collections.singletonList(stage.getLocId()));
 	}
-
 	@Override
-	public List<CallAgvResponse> findLpnStockOnStageLeftLikeByBoxCode(Long whId, String boxCode) {
+	public  List<CallAgvResponse> findLpnStockOnStageLeftByCallAgv(Long whId, String boxCode) {
 		//创建返回集合
 		List<CallAgvResponse> callAgvResponseList =  new ArrayList<>();
 		//根据仓库id获取入库暂存区库位
 		Location stage = locationBiz.getStageLocation(whId);
+		//根据箱码和库房id获取入库暂存区库存
+		List<Stock> stockList = findLpnStockOnStageLeft(whId, boxCode,stage);
+		//按lpn编码对查询出的集合进行分组
+		Map<String, List<Stock>> stockMap = stockList.stream().collect(Collectors.groupingBy(Stock::getLpnCode));
+		//遍历分组后的map
+		for (Map.Entry<String, List<Stock>> entry : stockMap.entrySet()) {
+			//取出每个分组里的库存集合
+			List<Stock> stocks = entry.getValue();
+           //获取箱型
+			String lpnType = lpnTypeBiz.parseBoxCode(stocks.get(0).getBoxCode()).getCode();
+			//如果是D箱型则根据lpn查询同一托盘的所有库存
+			if(lpnType.equals(LpnTypeCodeEnum.D.getCode()) ) {
+				// 根据lpnCoe获取同一托盘的所有库存
+				stocks = stockDao.getStockByLpnCode(stocks.get(0).getLpnCode(), Collections.singletonList(stage.getLocId()));
+			}
+			// 创建返回对象并添加到集合中
+			CallAgvResponse callAgvResponse = createCallAgvResponse(stocks,lpnType);
+			callAgvResponseList.add(callAgvResponse);
+		}
+		return callAgvResponseList;
+	}
+
+	private CallAgvResponse createCallAgvResponse(List<Stock> stockList,String lpnType) {
+		//创建返回对象
+		CallAgvResponse callAgvResponse = new CallAgvResponse();
+		callAgvResponse.setLpnType(lpnType);
+		callAgvResponse.setLpnCode(stockList.get(0).getLpnCode());
+        // 初始化总数量
+		BigDecimal qty = new BigDecimal(0);
+		//初始化箱码对象集合
+		List<BoxDto> boxDtoList = new ArrayList<>();
+		//根据箱码对集合进行分组
+		Map<String, List<Stock>> stockMap = stockList.stream().collect(Collectors.groupingBy(Stock::getBoxCode));
+		for (Map.Entry<String, List<Stock>> entry : stockMap.entrySet()) {
+			//取出每个分组里的库存集合
+			List<Stock> stocks = entry.getValue();
+			//创建箱码对象
+			BoxDto boxDto = new BoxDto();
+			//初始化库存id集合
+			List<Long> stockIdList = new ArrayList<>();
+			// 初始化箱码对象数量
+			BigDecimal boxQty = new BigDecimal(0);
+			//遍历集合
+			for(Stock stock:stocks){
+				//数量进行累加
+				boxQty = boxQty.add(StockUtil.getStockBalance(stock));
+				//添加库存id到集合中
+				stockIdList.add(stock.getStockId());
+			}
+			//设置box对象箱码
+			boxDto.setBoxCode(stocks.get(0).getBoxCode());
+			//设置box对象数量
+			boxDto.setQty(boxQty);
+			//设置box对象库存id集合
+			boxDto.setStockIdList(stockIdList);
+			//总数量进行累加
+			qty = qty.add(boxQty);
+			//箱码对象添加到箱码集合中
+			boxDtoList.add(boxDto);
+		}
+		//设置总数量
+		callAgvResponse.setQty(qty);
+		//设置箱码对象集合
+		callAgvResponse.setBoxList(boxDtoList);
+	    return   callAgvResponse;
+	}
+
+	public List<Stock> findLpnStockOnStageLeft(Long whId, String boxCode,Location stage) {
 		//根据箱码和库位查询入库暂存区的库存
 		List<Stock> stockList = stockDao.getStockLeftLikeByBoxCode(boxCode,
 			Collections.singletonList(stage.getLocId()));
 		if(Func.isEmpty(stockList)){
 			throw  new ServiceException("没有查询到相关库存信息");
 		}
-		//新建一个list用来存lpnCode
-       List<String> lpnLsit = new ArrayList<>();
-		//循环遍历库存实体,如果是ABC三种箱型，则直接加入返回集合对象中.如果是D箱型,则根据lpn查找同一拖盘的所有箱码添加到返回集合中
-	   for(Stock stock:stockList){
-		   //箱型
-		   String lpnType = lpnTypeBiz.parseBoxCode(stock.getBoxCode()).getCode();
-		   // 定义一个变量存总数量
-		   BigDecimal qty = BigDecimal.valueOf(0);
-		   // 返回对象中的箱码集合
-		   List<BoxDto> box = new ArrayList<>();
-		   //如果是D箱型并且之前没有根据lpn查询过则根据lpn查询同一托盘的库存
-		   if(lpnType.equals("D") && !lpnLsit.contains(stock.getLpnCode()) ){
-              // 根据lpnCoe获取同一托盘的所有库存
-              List<Stock> stocks =  stockDao.getStockByLpnCode(stock.getLpnCode(),Collections.singletonList(stage.getLocId()));
-			  for(Stock stock1: stocks){
-				  BigDecimal num = StockUtil.getStockBalance(stock1);
-				  //遍历相加总数量
-				  qty = qty.add(num);
-				  //将箱码添加到集合中
-				BoxDto boxDto = new BoxDto();
-				boxDto.setBoxCode(stock1.getBoxCode());
-				boxDto.setQty(num);
-				box.add(boxDto);
-			  }
-			  //将查询过的lpnCode添加到lpn集合中
-			  lpnLsit.add(stock.getLpnCode());
-		   }
-		   // A,B,C箱
-		   if(!lpnType.equals("D")){
-			   qty = qty.add(StockUtil.getStockBalance(stock));
-			   BoxDto boxDto = new BoxDto();
-			   boxDto.setBoxCode(stock.getBoxCode());
-			   boxDto.setQty(qty);
-			   box.add(boxDto);
-		   }
-		   //如果box集合不为空则添加到返回对象集合中
-		   if(Func.isNotEmpty(box)){
-			   CallAgvResponse callAgvResponse = new CallAgvResponse();
-			   callAgvResponse.setLpnType(lpnType);
-			   callAgvResponse.setQty(qty);
-			   callAgvResponse.setLpnCode(stock.getLpnCode());
-			   callAgvResponse.setBoxList(box);
-			   callAgvResponseList.add(callAgvResponse);
-		   }
+		for(Stock stock : stockList){
+			if(Func.isEmpty(stock.getLpnCode())){
+				throw  new ServiceException("查询失败,lpn编码为空");
+			}
+		}
+		return stockList;
 
 	   }
-
-		return  callAgvResponseList;
-	}
 
 	@Override
 	public Stock findStockOnStage(ReceiveLog receiveLog) {
@@ -551,16 +585,27 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public List<Stock> findStockByLocation(List<Location> locationList) {
-		return null;
+		List<Long> locIdList = locationList.stream()
+			.map(Location::getLocId)
+			.distinct()
+			.collect(Collectors.toList());
+		return stockDao.getStockByLocIdList(locIdList);
 	}
 
 	@Override
 	public boolean judgeEnableOnLocation(Location location) {
-		return false;
+		List<Stock> stock = stockDao.getStockByLocId(location.getLocId());
+		if (Func.isNotEmpty(stock)
+			&& BigDecimalUtil.gt(StockUtil.getStockBalance(stock), BigDecimal.ZERO)){
+			return false;
+		}
+		return !locationBiz.isFrozen(location);
 	}
 
 	@Override
-	public void callAgv(CallAgvRequest request) {
-
+	public Stock findStockById(Long stockId) {
+		return stockDao.getStockById(stockId);
 	}
+
+
 }

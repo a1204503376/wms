@@ -89,4 +89,8 @@ public interface StockDao {
 
 	void updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
 				 BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
+
+	List<Stock> getStockByLocIdList(List<Long> locIdList);
+
+	Stock getStockById(Long stockId);
 }

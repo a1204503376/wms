@@ -2,11 +2,10 @@ package org.nodes.wms.biz.common.utils;
 
 
 import lombok.AllArgsConstructor;
-import org.apache.ibatis.jdbc.Null;
 import org.nodes.core.base.entity.Param;
-import org.nodes.core.base.service.IParamService;
 import org.nodes.core.tool.config.NoBillFinals;
 import org.nodes.core.tool.utils.NoGeneraRulesUtil;
+import org.nodes.wms.biz.basics.systemParam.SystemParamBiz;
 import org.nodes.wms.biz.common.config.WMSAppConfig;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Component;
@@ -24,8 +23,8 @@ import org.springframework.stereotype.Component;
 public class NoGeneratorUtil {
 
 	private final NoGeneraRulesUtil noGeneraRulesUtil;
-	private final IParamService paramService;
 	private final WMSAppConfig wmsAppConfig;
+	private final SystemParamBiz systemParamBiz;
 
 	/**
 	 * ASN单编码
@@ -96,7 +95,7 @@ public class NoGeneratorUtil {
 	 * @return 编码
 	 */
 	private String createNo(String prefix, String paramKeyOfRule) {
-		Param param = paramService.selectByKey(paramKeyOfRule);
+		Param param = systemParamBiz.selectByKey(paramKeyOfRule);
 		String role = Func.isNull(param) ? null : param.getParamValue();
 		return noGeneraRulesUtil.generateCode(wmsAppConfig.getProjectName(), prefix, role);
 	}

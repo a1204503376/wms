@@ -3,7 +3,7 @@ package org.nodes.wms.core.instock.purchase.wrapper;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.UserCache;
 import org.nodes.core.base.entity.User;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.basedata.cache.BillTypeCache;
 import org.nodes.wms.core.basedata.entity.Enterprise;
 import org.nodes.wms.core.basedata.service.IEnterpriseService;
@@ -40,15 +40,15 @@ public class PoHeaderWrapper extends BaseEntityWrapper<PoHeader, PoHeaderVO> {
 		if (Func.isNotEmpty(poHeaderVO)) {
 			//单据状态名称
 			poHeaderVO.setPoBillStateName(
-				DictCache.getValue(DictConstant.ASN_BILL_STATE, poHeaderVO.getPoBillState()));
+				DictCache.getValue(DictCodeConstant.ASN_BILL_STATE, poHeaderVO.getPoBillState()));
 			//入库方式名称
 			poHeaderVO.setInstoreTypeName(
-				DictCache.getValue(DictConstant.INSTORE_TYPE, poHeaderVO.getInstoreType()));
+				DictCache.getValue(DictCodeConstant.INSTORE_TYPE, poHeaderVO.getInstoreType()));
 			poHeaderVO.setCreateTypeName(
-				DictCache.getValue(DictConstant.CREATE_TYPE, poHeaderVO.getCreateType()));
+				DictCache.getValue(DictCodeConstant.CREATE_TYPE, poHeaderVO.getCreateType()));
 			//同步状态名称
 			poHeaderVO.setSyncStateName(
-				DictCache.getValue(DictConstant.SYNC_STATE, poHeaderVO.getSyncState()));
+				DictCache.getValue(DictCodeConstant.SYNC_STATE, poHeaderVO.getSyncState()));
 			//货主名称
 			if (Func.isNotEmpty(poHeaderVO.getWoId())) {
 				IOwnerService ownerService = SpringUtil.getBean(IOwnerService.class);
@@ -74,7 +74,7 @@ public class PoHeaderWrapper extends BaseEntityWrapper<PoHeader, PoHeaderVO> {
 			}
 			//过账类型
 			poHeaderVO.setPostStateCd(
-				DictCache.getValue(DictConstant.POST_STATE, poHeaderVO.getPostState()));
+				DictCache.getValue(DictCodeConstant.POST_STATE, poHeaderVO.getPostState()));
 			//过账人
 			if (Func.isNotEmpty(poHeaderVO.getPostUser())) {
 				User user = UserCache.getById(poHeaderVO.getPostUser());

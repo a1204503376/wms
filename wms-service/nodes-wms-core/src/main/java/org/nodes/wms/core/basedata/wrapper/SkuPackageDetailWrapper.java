@@ -1,7 +1,7 @@
 package org.nodes.wms.core.basedata.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.core.basedata.vo.SkuPackageDetailVO;
 import org.springblade.core.mp.support.BaseEntityWrapper;
@@ -24,7 +24,7 @@ public class SkuPackageDetailWrapper extends BaseEntityWrapper<SkuPackageDetail,
 	public SkuPackageDetailVO entityVO(SkuPackageDetail entity) {
 		SkuPackageDetailVO skuPackageDetailVO = BeanUtil.copy(entity, SkuPackageDetailVO.class);
 		if (Func.isNotEmpty(skuPackageDetailVO)) {
-			skuPackageDetailVO.setSkuLevelName(DictCache.getValue(DictConstant.SKU_LEVEL, skuPackageDetailVO.getSkuLevel()));
+			skuPackageDetailVO.setSkuLevelName(DictCache.getValue(DictCodeConstant.SKU_LEVEL, skuPackageDetailVO.getSkuLevel()));
 		}
 		return skuPackageDetailVO;
 	}

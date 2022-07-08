@@ -62,4 +62,27 @@ public interface IDictService extends BaseService<Dict> {
 	 * @return
 	 */
 	boolean changeVisible(Long id, Integer type);
+
+	/**
+	 * 根据字典code获取子级
+	 * @param dictCode
+	 * @return
+	 */
+	List<Dict> findSonDictByDictCode(String dictCode);
+
+	/**
+	 * 根据字典value获取字典
+	 * @param dictCode
+	 * @param dictValue
+	 * @return
+	 */
+	Dict findByDictValue(String dictCode, String dictValue);
+
+	/**
+	 * 根据字典key获取字典
+	 * @param dictCode
+	 * @param dictKey
+	 * @return
+	 */
+	Dict findByDictKey(String dictCode, String dictKey);
 }

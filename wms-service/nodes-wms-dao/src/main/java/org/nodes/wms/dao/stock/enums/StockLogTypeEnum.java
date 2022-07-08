@@ -19,6 +19,8 @@ public enum StockLogTypeEnum {
 	INSTOCK_BY_PCS(101, "按件收货-手持"),
 	INSTOCK_BY_BOX(102, "按箱收货-手持"),
 	INSTOCK_BY_MULTI_BOX(103, "多箱收货-手持"),
+	INSTOCK_BY_CANCEL_PICK(104, "撤销拣货"),
+	INSTOCK_BY_PUTAWAY(105,"按箱上架"),
 
 	STOCK_FREEZE(201, "库存冻结"),
 	STOCK_UNFREEZE(202, "库存解冻"),
@@ -26,6 +28,7 @@ public enum StockLogTypeEnum {
 	STOCK_MOVE_BY_END_INSTOCK_TASK(204, "入库任务成功执行"),
 	STOCK_MOVE_BY_START_OUTSTOCK_TASK(205, "出库任务开始执行"),
 	STOCK_MOVE_BY_END_OUTSTOCK_TASK(206, "出库任务成功执行"),
+	STOCK_TO_INSTOCK_RECE(207, "到入库接驳区"),
 
 	OUTSTOCK_BY_PICK(301, "拣货出库"),
 	OUTSTOCK_BY_CANCEL_RECEIVE(302, "撤销收货");

@@ -61,7 +61,7 @@ http.interceptors.response.use((response) => {
 	if(response.statusCode ===401){
 		uni.$u.toast('登录已过期，需要重新登录');
 		 setTimeout(function() {
-		     uni.$u.func.route('/pages/login/login')    
+		     uni.$u.func.routeNavigateTo('/pages/login/login')    
 		     }, 1000);
 		return
 	}

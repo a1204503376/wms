@@ -2,7 +2,7 @@ package org.nodes.wms.core.stock.core.wrapper;
 
 import net.sf.cglib.beans.BeanCopier;
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
@@ -43,7 +43,7 @@ public class StockSnapshootWrapper extends BaseEntityWrapper<StockSnapshoot, Sto
 	public StockSnapshootVO entityVO(StockSnapshoot stockSnapshoot) {
 		StockSnapshootVO stockSnapshootVO = BeanUtil.copy(stockSnapshoot, StockSnapshootVO.class);
 		if (Func.isNotEmpty(stockSnapshootVO)) {
-			stockSnapshootVO.setSkuLevelName(DictCache.getValue(DictConstant.SKU_LEVEL, stockSnapshootVO.getSkuLevel()));
+			stockSnapshootVO.setSkuLevelName(DictCache.getValue(DictCodeConstant.SKU_LEVEL, stockSnapshootVO.getSkuLevel()));
 		}
 		return stockSnapshootVO;
 	}

@@ -2,6 +2,7 @@ package org.nodes.wms.controller.state;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
 import org.nodes.wms.dao.application.dto.output.AuditLogTypeResponse;
 import org.nodes.wms.dao.application.dto.output.LpnTypeResponse;
 import org.nodes.wms.dao.application.dto.output.StateGeneralResponse;
@@ -9,9 +10,11 @@ import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeEnum;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.instock.asn.enums.AsnBillStateEnum;
 import org.nodes.wms.dao.instock.asn.enums.InStorageTypeEnum;
+import org.nodes.wms.dao.outstock.so.dto.output.SoBillStateResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogTypeResponse;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.tool.api.R;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,5 +62,10 @@ public class StateController {
 	@PostMapping("getStockLogType")
 	public R<List<StockLogTypeResponse>> getStockLogType(){
 		return R.data(StockLogTypeEnum.getList());
+	}
+
+	@GetMapping("/getSoBillState")
+	public R<List<SoBillStateResponse>> getSoBillState(){
+		return R.data(SoBillStateEnum.getList());
 	}
 }

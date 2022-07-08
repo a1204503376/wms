@@ -13,7 +13,7 @@ import org.nodes.core.base.entity.Dict;
 import org.nodes.core.base.entity.Param;
 import org.nodes.core.base.enums.ParamEnum;
 import org.nodes.core.base.service.IDeptService;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.cache.SerialNoCache;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.BigDecimalUtil;
@@ -319,7 +319,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 			//库位状态
 			if (Func.isNotEmpty(location.getLocStatus())) {
 				vo.setLocStatus(location.getLocStatus());
-				vo.setLocStatusName(DictCache.getValue(DictConstant.LOC_STATUS, location.getLocStatus()));
+				vo.setLocStatusName(DictCache.getValue(DictCodeConstant.LOC_STATUS, location.getLocStatus()));
 			}
 		}
 
@@ -500,7 +500,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 				throw new ServiceException(
 					String.format("单据[%s]为%s状态不可删除",
 						asnHeader.getAsnBillNo(),
-						DictCache.getValue(DictConstant.ASN_BILL_STATE, asnHeader.getAsnBillState())));
+						DictCache.getValue(DictCodeConstant.ASN_BILL_STATE, asnHeader.getAsnBillState())));
 			}
 			if (asnHeader.getBillTypeCd().equals("109")) {
 				throw new ServiceException("调拨入货单不可删除! ");
@@ -1887,7 +1887,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 			} else if (asnHeader.getAsnBillState().equals(AsnBillStateEnum.COMPLETED.getCode())) {
 				throw new ServiceException(String.format("订单：%s 已收货完成，拒绝执行取消操作！", asnHeader.getAsnBillNo()));
 			} else {
-				String asnBillState = DictCache.getValue(DictConstant.ASN_BILL_STATE, asnHeader.getAsnBillState());
+				String asnBillState = DictCache.getValue(DictCodeConstant.ASN_BILL_STATE, asnHeader.getAsnBillState());
 				throw new ServiceException(String.format(
 					"订单：%s 当前状态[%s] 不允许执行取消操作！", asnHeader.getAsnBillNo(), asnBillState));
 			}
@@ -2145,7 +2145,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 				asnExportDTO.setBillTypeCd(billType.getBillTypeName());
 			}
 			//入库方式
-			asnExportDTO.setInstoreType(DictCache.getValue(DictConstant.INSTORE_TYPE, asnHeader.getInstoreType()));
+			asnExportDTO.setInstoreType(DictCache.getValue(DictCodeConstant.INSTORE_TYPE, asnHeader.getInstoreType()));
 			int maxLength = 1;
 			if (Func.isNotEmpty(asnDetailList)) {
 				maxLength = asnDetailList.size();
@@ -2202,7 +2202,7 @@ public class AsnHeaderServiceImpl<M extends AsnHeaderMapper, T extends AsnHeader
 				.eq(BillType::getIoType, "I")
 				.in(BillType::getBillTypeName, asnBillTypeCodeList));
 			// 入库方式
-			List<Dict> instoreTypeAllList = DictCache.list(DictConstant.INSTORE_TYPE).stream().filter(u -> {
+			List<Dict> instoreTypeAllList = DictCache.list(DictCodeConstant.INSTORE_TYPE).stream().filter(u -> {
 				return instoreTypeCodeList.contains(String.valueOf(u.getDictValue()));
 			}).collect(Collectors.toList());
 			// 货主

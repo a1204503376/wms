@@ -2,13 +2,13 @@ package org.nodes.wms.core.utils;
 
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.ParamCache;
-import org.nodes.core.constant.DictConstant;
-import org.nodes.core.tool.entity.SkuLotBaseEntity;
+import org.nodes.core.constant.DictCodeConstant;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.StringPool;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
-import org.nodes.wms.core.basedata.entity.SkuLot;
-import org.nodes.wms.core.basedata.entity.SkuLotVal;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLot;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotVal;
 import org.nodes.wms.dao.basics.sku.enums.SkuLotEditTypeEnum;
 import org.nodes.wms.dao.basics.sku.enums.SkuLotMaskEnum;
 import org.nodes.wms.core.basedata.service.ISkuLotService;
@@ -69,7 +69,7 @@ public class SkuLotUtil {
 				continue;
 			}
 			// 过滤 dict.remark 为空的选项
-			String dictValue = DictCache.getValue(DictConstant.SKU_LOT_VAL, skuLotMaskVal);
+			String dictValue = DictCache.getValue(DictCodeConstant.SKU_LOT_VAL, skuLotMaskVal);
 			if (Func.isEmpty(dictValue)) {
 				continue;
 			}
@@ -77,7 +77,7 @@ public class SkuLotUtil {
 			String skuLotMixMask = skuLotVal.skuLotMixMaskGet(i);
 			// 判断 dict.remark 中是否存在. 如果存在还需要找其他对象类
 			if (dictValue.contains(StringPool.DOT)) {
-				// TODO 彭伟：找其他对象属性，后期处理（欣天新用不着）
+
 			} else {
 				if (Func.isNotEmpty(skuLotMixMask) && skuLotMixMask.toLowerCase().contains("yy")) {
 					// 日期类型

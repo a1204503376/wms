@@ -133,4 +133,31 @@
         WHERE l.loc_id = #{id}
         ORDER BY l.create_time DESC
     </select>
+    <select id="selectLoctionByLpnType" resultType="org.nodes.wms.dao.basics.location.entities.Location">
+            select
+                wl.*
+            from  wms_location wl
+                      left join wms_zone wz on wl.zone_id = wz.zone_id
+                      left join wms_lpn_type wt on wl.lpn_type_id = wt.id
+            where wl.wh_id = #{param.whId} and wz.zone_name  = 'AGV收货接驳区' and wt.code = #{param.lpnType}
+    </select>
+
+    <select id="getLocationByLpnTypeIdAndZoneType" resultType="org.nodes.wms.dao.basics.location.entities.Location">
+        select l.loc_id, l.zone_id, l.wh_id, l.loc_code, l.loc_type , l.loc_category, l.loc_handling, l.allocation_zone,
+               l.loc_flag, l.abc , l.lock_flag, l.loc_status, l.logic_allocation, l.loc_length, l.loc_wide , l.loc_high,
+               l.loc_level, l.x_code, l.y_code, l.z_code , l.check_digit, l.loc_column, l.loc_bank, l.put_order, l.lpn_type_id ,
+               l.orientation, l.capacity, l.load_weight, l.item_num, l.tray_num , l.count_bill_no, l.share_width, l.share_weight,
+               l.loc_sku_mix, l.loc_lot_no_mix , l.loc_lot_mix1, l.loc_lot_mix2, l.loc_lot_mix3, l.loc_lot_mix4, l.loc_lot_mix5 ,
+               l.loc_lot_mix6, l.loc_lot_mix7, l.loc_lot_mix8, l.loc_lot_mix9, l.loc_lot_mix10 , l.loc_lot_mix11, l.loc_lot_mix12, l.loc_lot_mix13, l.loc_lot_mix14, l.loc_lot_mix15 , l.loc_lot_mix16, l.loc_lot_mix17, l.loc_lot_mix18, l.loc_lot_mix19, l.loc_lot_mix20 , l.loc_lot_mix21, l.loc_lot_mix22, l.loc_lot_mix23, l.loc_lot_mix24, l.loc_lot_mix25 , l.loc_lot_mix26, l.loc_lot_mix27, l.loc_lot_mix28, l.loc_lot_mix29, l.loc_lot_mix30 , l.last_cycle_date, l.last_loc_count_date, l.occupy_flag, l.tenant_id, l.create_user , l.create_dept, l.create_time, l.update_user, l.update_time, l.status , l.is_deleted from wms_location l LEFT JOIN wms_zone z on l.zone_id=z.zone_id
+        <where>
+            l.is_deleted = 0
+            <if test="lpnTypeId !=null and lpnTypeId != ''">
+                and l.lpn_type_id=#{lpnTypeId}
+            </if>
+            <if test="zoneType !=null and zoneType != ''">
+                and z.zone_type=#{zoneType}
+            </if>
+        </where>
+    </select>
+
 </mapper>

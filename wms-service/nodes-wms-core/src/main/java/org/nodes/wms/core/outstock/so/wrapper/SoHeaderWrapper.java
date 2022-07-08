@@ -3,7 +3,7 @@ package org.nodes.wms.core.outstock.so.wrapper;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.UserCache;
 import org.nodes.core.base.entity.User;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.basedata.cache.BillTypeCache;
 import org.nodes.wms.core.basedata.entity.Enterprise;
 import org.nodes.wms.core.basedata.service.IEnterpriseService;
@@ -48,13 +48,13 @@ public class SoHeaderWrapper extends BaseEntityWrapper<SoHeader, SoHeaderVO> {
 		SoHeaderVO soHeaderVO = Objects.requireNonNull(BeanUtil.copy(entity, SoHeaderVO.class));
 		IWellenDetailService wellenDetailService = SpringUtil.getBean(IWellenDetailService.class);
 		//单据状态名称
-		soHeaderVO.setSoBillStateName(DictCache.getValue(DictConstant.SO_BILL_STATE, soHeaderVO.getSoBillState()));
+		soHeaderVO.setSoBillStateName(DictCache.getValue(DictCodeConstant.SO_BILL_STATE, soHeaderVO.getSoBillState()));
 		//出库方式名称
-		soHeaderVO.setOutstockTypeName(DictCache.getValue(DictConstant.OUTSTORE_TYPE, soHeaderVO.getOutstockType()));
+		soHeaderVO.setOutstockTypeName(DictCache.getValue(DictCodeConstant.OUTSTORE_TYPE, soHeaderVO.getOutstockType()));
 		//同步状态名称
-		soHeaderVO.setSyncStateName(DictCache.getValue(DictConstant.SYNC_STATE, soHeaderVO.getSyncState()));
+		soHeaderVO.setSyncStateName(DictCache.getValue(DictCodeConstant.SYNC_STATE, soHeaderVO.getSyncState()));
 		//创建类型
-		soHeaderVO.setCreateTypeName(DictCache.getValue(DictConstant.CREATE_TYPE, soHeaderVO.getCreateType()));
+		soHeaderVO.setCreateTypeName(DictCache.getValue(DictCodeConstant.CREATE_TYPE, soHeaderVO.getCreateType()));
 		//货主名称
 		if (Func.isNotEmpty(soHeaderVO.getWoId())) {
 			IOwnerService ownerService = SpringUtil.getBean(IOwnerService.class);
@@ -73,7 +73,7 @@ public class SoHeaderWrapper extends BaseEntityWrapper<SoHeader, SoHeaderVO> {
 		}
 
 		//过账类型
-		soHeaderVO.setPostStateCd(DictCache.getValue(DictConstant.POST_STATE, soHeaderVO.getPostState()));
+		soHeaderVO.setPostStateCd(DictCache.getValue(DictCodeConstant.POST_STATE, soHeaderVO.getPostState()));
 		//过账人
 		if (Func.isNotEmpty(soHeaderVO.getPostUser())) {
 			User user = UserCache.getById(soHeaderVO.getPostUser());
@@ -113,9 +113,9 @@ public class SoHeaderWrapper extends BaseEntityWrapper<SoHeader, SoHeaderVO> {
 		}
 		//发货方式
 		soHeaderVO.setTransportDesc(
-			DictCache.getValue(DictConstant.SO_TRANSPORT_CODE, soHeaderVO.getTransportCode()));
+			DictCache.getValue(DictCodeConstant.SO_TRANSPORT_CODE, soHeaderVO.getTransportCode()));
 		// 发运状态
-		soHeaderVO.setShipStateDesc(DictCache.getValue(DictConstant.SHIP_STATE, soHeaderVO.getShipState()));
+		soHeaderVO.setShipStateDesc(DictCache.getValue(DictCodeConstant.SHIP_STATE, soHeaderVO.getShipState()));
 
 		return soHeaderVO;
 	}

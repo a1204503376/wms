@@ -2,7 +2,7 @@ package org.nodes.wms.core.warehouse.wrapper;
 
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
 import org.nodes.wms.core.warehouse.dto.LocationDTO;
 import org.nodes.wms.core.warehouse.entity.Location;
@@ -37,12 +37,12 @@ public class LocationWrapper extends BaseEntityWrapper<Location, LocationVO> {
 			if (Func.isNotEmpty(zone)) {
 				locationVO.setZoneName(zone.getZoneName());
 			}
-			locationVO.setLocTypeDesc(DictCache.getValue(DictConstant.LOC_TYPE, locationVO.getLocType()));
-			locationVO.setLocCategoryDesc(DictCache.getValue(DictConstant.LOC_CATEGORY, locationVO.getLocCategory()));
-			locationVO.setLocHandlingDesc(DictCache.getValue(DictConstant.LOC_HANDLING, locationVO.getLocHandling()));
+			locationVO.setLocTypeDesc(DictCache.getValue(DictCodeConstant.LOC_TYPE, locationVO.getLocType()));
+			locationVO.setLocCategoryDesc(DictCache.getValue(DictCodeConstant.LOC_CATEGORY, locationVO.getLocCategory()));
+			locationVO.setLocHandlingDesc(DictCache.getValue(DictCodeConstant.LOC_HANDLING, locationVO.getLocHandling()));
 			//使用状态
-			locationVO.setLocFlagDesc(DictCache.getValue(DictConstant.LOC_FLAG, locationVO.getLocFlag()));
-			locationVO.setAbcDesc(DictCache.getValue(DictConstant.LOC_ABC, locationVO.getAbc()));
+			locationVO.setLocFlagDesc(DictCache.getValue(DictCodeConstant.LOC_FLAG, locationVO.getLocFlag()));
+			locationVO.setAbcDesc(DictCache.getValue(DictCodeConstant.LOC_ABC, locationVO.getAbc()));
 		}
 		return locationVO;
 	}

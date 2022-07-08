@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import org.nodes.core.tool.entity.SkuLotBaseEntity;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
 
 import java.math.BigDecimal;
@@ -21,6 +21,10 @@ public class ReceiveDetailLpn extends SkuLotBaseEntity {
 	 */
 	@TableId(type = IdType.ASSIGN_ID)
 	private Long id;
+	/**
+	 * 收货单头表id
+	 */
+	private Long receiveHeaderId;
 	/**
 	 * 收货单明细id
 	 */

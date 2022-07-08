@@ -8,16 +8,17 @@
 			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.boxCode" border="0" disabled></u--input>
 			</u-form-item>
-			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
+			<u-form-item label="LOC" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.locCode"></u--input>
 			</u-form-item>
-			<u-form-item label="生产批次" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuLot1"></u--input>
+			<u-form-item label="容器编码" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.lpnCode"></u--input>
 			</u-form-item>
 			<u-form-item label="总数" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.qty" border="0" disabled></u--input>
 			</u-form-item>
 		</u--form>
+		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
 				返回
@@ -31,13 +32,13 @@
 
 <script>
 	import setting from '@/common/setting'
-	import receive from '@/api/inStock/receiveByPcs.js'
-	import uniSelect from '@/components/uni-select.vue'
+	import putawayByBoxs from '@/api/inStock/putawayByBox.js'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
+	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {
 		components: {
-			uniSelect
+			keyboardListener
 		},
 		data() {
 			return {
@@ -60,12 +61,11 @@
 				var barcode = barcodeFunc.parseBarcode(code);
 				var barcodeType = barcodeFunc.BarcodeType;
 				switch (barcode.type) {
-					case barcodeType.Loc:
+					case barcodeType.UnKnow:
 						this.params.locCode = barcode.content;
 						break;
-					case barcodeType.Lpn:
-						this.params.boxCode = barcode.content;
-						this.getStockByBoxCode();
+					case barcodeType.Loc:
+						this.params.locCode = barcode.content;
 						break;
 					default:
 						this.$u.func.showToast({
@@ -77,9 +77,18 @@
 			submit() {
 				var _this = this;
 				uni.$u.throttle(function() {
-					console.log('提交成功')
+					console.log(_this.params)
+					// this.$destroy('keyboardListener')
+					_this.submitPutawayByBox();
 				}, 1000)
 
+			},
+			submitPutawayByBox() {
+				this.params.qty = 1;
+				this.params.whId = uni.getStorageSync('warehouse').whId
+				putawayByBoxs.submitPutawayByBox(this.params).then(data => {
+
+				})
 			},
 			esc() {
 				this.$destroy('keyboardListener')
@@ -87,6 +96,12 @@
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);
+			},
+			emitKeyDown(e) {
+				if (e.key == 'Enter') {
+					this.analysisCode(this.params.locCode);
+					//查询方法
+				}
 			}
 		}
 	}

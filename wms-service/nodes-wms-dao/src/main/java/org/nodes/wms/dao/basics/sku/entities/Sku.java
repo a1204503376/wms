@@ -130,6 +130,11 @@ public class Sku extends TenantEntity {
 	 * 温度下限
 	 */
 	private BigDecimal skuTempLowerLimit;
+
+	/**
+	 * 物料标准价
+	 */
+	private BigDecimal skuPrice;
 	/**
 	 * 保质期有无
 	 */
@@ -170,4 +175,34 @@ public class Sku extends TenantEntity {
 	 * 序列号管理（1：序列号管理  0：非序列号管理）
 	 */
 	private Integer isSn;
+
+	/**
+	 * 是否含有bom
+	 */
+	private Integer hasBom;
+
+	/**
+	 * 存货类型
+	 */
+	private Integer inventoryType;
+
+	/**
+	 * 总货架寿命
+	 */
+	private String totalShelf;
+
+	/**
+	 * 附件
+	 */
+	private String appendix;
+
+	/**
+	 * 安全库存
+	 */
+	private BigDecimal safeStock;
+
+	/**
+	 * 最低储量
+	 */
+	private BigDecimal minimumReserves;
 }

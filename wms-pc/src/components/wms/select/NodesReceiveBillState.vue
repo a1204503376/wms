@@ -29,6 +29,9 @@ export default {
     watch: {
         val(newVal) {
             this.$emit('selectValChange', newVal);
+        },
+        selectVal(newVal){
+            this.val = newVal;
         }
     },
     created() {

@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.putway.dto.input;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.nodes.wms.dao.putway.dto.output.BoxDto;
 
@@ -16,7 +18,13 @@ public class CallAgvRequest implements Serializable {
 	/**
 	 * 库位id
 	 */
-	private String locId;
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long locId;
+	/**
+	 * 库房id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long whId;
 	/**
 	 * 托盘号
 	 */

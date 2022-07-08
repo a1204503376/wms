@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.entity.Dict;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.ValidationUtil;
@@ -104,7 +104,7 @@ public class PlatformInfoServiceImpl<M extends PlatformInfoMapper, T extends Pla
 			Integer maxLength = 1;
 			for (int i = 0; i < maxLength; i++) {
 				PlatformInfoExcel platfromInfoExport = BeanUtil.copy(platformInfo, PlatformInfoExcel.class);
-				Dict dict = DictCache.list(DictConstant.PLATFORM_TYPE).stream().filter(u->{
+				Dict dict = DictCache.list(DictCodeConstant.PLATFORM_TYPE).stream().filter(u->{
 					return Func.equals(u.getDictKey(), platformInfo.getPlatformType());
 				}).findFirst().orElse(null);
 				platfromInfoExport.setPlatformTypeDesc(Func.isEmpty(dict)? StringPool.EMPTY : dict.getDictValue());
@@ -158,7 +158,7 @@ public class PlatformInfoServiceImpl<M extends PlatformInfoMapper, T extends Pla
 			}else{
 				platformInfoDTO.setWhId(warehouse.getWhId());
 			}
-			Dict dict = DictCache.list(DictConstant.PLATFORM_TYPE).stream().filter(u->{
+			Dict dict = DictCache.list(DictCodeConstant.PLATFORM_TYPE).stream().filter(u->{
 				return Func.equals(u.getDictValue(), platformInfoDTO.getPlatformTypeDesc());
 			}).findFirst().orElse(null);
 			platformInfoDTO.setPlatformType(dict.getDictKey());

@@ -15,7 +15,7 @@ import org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.mapper.LocationMapper;
-import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
+import org.nodes.wms.dao.putway.dto.input.LpnTypeRequest;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.tool.utils.Func;
@@ -29,6 +29,7 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> implements LocationDao {
+	private final LocationMapper locationMapper;
 
 	@Override
 	public List<LocationSelectResponse> listTop10ByCode(String code) {
@@ -84,7 +85,7 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 
 	@Override
 	public Location getLocationByLocCode(Long whId, String locCode) {
-		if (Func.isEmpty(whId) || Func.isEmpty(locCode)){
+		if (Func.isEmpty(whId) || Func.isEmpty(locCode)) {
 			throw new NullArgumentException("LocationDaoImpl.getLocationByLocCode方法的参数为空");
 		}
 
@@ -97,7 +98,7 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 
 	@Override
 	public List<Location> findLocation(List<String> locCode) {
-		if (Func.isEmpty(locCode)){
+		if (Func.isEmpty(locCode)) {
 			throw new NullArgumentException("LocationDaoImpl.findLocation方法的参数为空");
 		}
 
@@ -109,7 +110,7 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	@Override
 	public List<Location> getLocationByWhId(Long whId) {
 		LambdaQueryWrapper<Location> queryWrapper = new LambdaQueryWrapper<>();
-		queryWrapper.eq(Location::getWhId,whId);
+		queryWrapper.eq(Location::getWhId, whId);
 		return super.list(queryWrapper);
 	}
 
@@ -119,8 +120,35 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 		updateWrapper.lambda()
 			.eq(Location::getLocId, locId)
 			.set(Location::getOccupyFlag, occupyFlag);
-		if (super.update(updateWrapper)){
+		if (super.update(updateWrapper)) {
 			throw new ServiceException("库位冻结/解冻更新失败");
 		}
 	}
+
+	@Override
+	public List<Location> getLocationByLpnTypeId(Long lpnTypeId, String zoneType) {
+		if (Func.isEmpty(lpnTypeId)) {
+			throw new NullArgumentException("LocationDaoImpl.getLocationByLpnTypeId方法的参数为空");
+		}
+		//根据库区类型查询查询库位，如果zongType可以为空
+		return locationMapper.getLocationByLpnTypeIdAndZoneType(lpnTypeId, zoneType);
+	}
+
+	@Override
+	public List<Location> getLocationByLocColumn(String locColumn) {
+		if (Func.isEmpty(locColumn)) {
+			throw new NullArgumentException("LocationDaoImpl.getLocationByLocColumn方法的参数为空");
+		}
+		LambdaQueryWrapper<Location> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+		lambdaQueryWrapper.eq(Location::getLocColumn, locColumn);
+		return super.list(lambdaQueryWrapper);
+	}
+
+	@Override
+	public List<Location> getLocationByLpnType(LpnTypeRequest request) {
+
+		return super.baseMapper.selectLoctionByLpnType(request);
+	}
+
+
 }

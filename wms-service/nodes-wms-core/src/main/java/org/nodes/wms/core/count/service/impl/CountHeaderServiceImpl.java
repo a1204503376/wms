@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.ParamCache;
 import org.nodes.core.base.enums.ParamEnum;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.cache.SerialNoCache;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.NodesUtil;
@@ -61,6 +61,7 @@ import org.nodes.wms.core.stock.core.dto.StockOccupyDTO;
 import org.nodes.wms.core.stock.core.dto.StockOccupySubtractDTO;
 import org.nodes.wms.core.stock.core.dto.StockSubtractDTO;
 import org.nodes.wms.core.stock.core.entity.Serial;
+import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.entity.StockOccupy;
 import org.nodes.wms.core.stock.core.enums.EventTypeEnum;
@@ -297,8 +298,8 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper, T extends Count
 			countDetailVO.setLocCode(countDetail.getLocCode());
 			countDetailVO.setLocState(countDetail.getLocState());
 			countDetailVO.setLocStatusDesc(DictCache.getValue(Location.STATUS, countDetail.getLocState()));
-			countDetailVO.setCountTagDesc(DictCache.getValue(DictConstant.STOCK_COUNT_TYPE, countHeaderGet.getCountTag()));
-			countDetailVO.setCountBillStateDesc(DictCache.getValue(DictConstant.STOCK_COUNT_STATE, countHeaderGet.getCountBillState()));
+			countDetailVO.setCountTagDesc(DictCache.getValue(DictCodeConstant.STOCK_COUNT_TYPE, countHeaderGet.getCountTag()));
+			countDetailVO.setCountBillStateDesc(DictCache.getValue(DictCodeConstant.STOCK_COUNT_STATE, countHeaderGet.getCountBillState()));
 			countDetailVO.setUserName(countDetail.getUserName());
 			countDetailVO.setLocStatusDesc(DictCache.getValue(Location.STATUS, countDetail.getLocState()));
 
@@ -1613,7 +1614,7 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper, T extends Count
 			}
 			throw new ServiceException(String.format(
 				"盘点单状态不可逆向操作! 当前状态:%s, 期望修改状态:%s。",
-				DictCache.getValue(DictConstant.STOCK_COUNT_STATE, countHeader.getCountBillState()),
+				DictCache.getValue(DictCodeConstant.STOCK_COUNT_STATE, countHeader.getCountBillState()),
 				stockCountStateEnum.getName()));
 		}
 		List<Long> countBillIdList = NodesUtil.toList(countHeaderList, CountHeader::getCountBillId);

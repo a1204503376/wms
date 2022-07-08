@@ -47,7 +47,19 @@ public class SerialDaoImpl extends BaseServiceImpl<SerialMapper, Serial> impleme
 		return super.list(queryWrapper);
 	}
 
-	@Override
+    @Override
+    public List<Serial> getSerialByStockId(Long stockId) {
+		if (Func.isNull(stockId)){
+			throw new NullArgumentException("getSerialByStockId");
+		}
+
+		LambdaQueryWrapper<Serial> queryWrapper = getLambdaQuery();
+		queryWrapper.eq(Serial::getStockId, stockId)
+			.eq(Serial::getSerialState, SerialStateEnum.IN_STOCK.getCode());
+        return super.list(queryWrapper);
+    }
+
+    @Override
 	public void updateSerialState(List<String> serialNoList, SerialStateEnum state, Long stockId) {
 		if (Func.isEmpty(serialNoList)){
 			throw new NullArgumentException("更新序列号状态");

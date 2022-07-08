@@ -115,7 +115,7 @@ public class Menu extends BaseEntity implements Serializable {
 	/**
 	 * 是否显示该菜单
 	 */
-	@ApiModelProperty(value = "是否显示该菜单")
+	@ApiModelProperty(value = "是否显示该菜单，0：显示；1：隐藏")
 	private Integer isVisible;
 
 

@@ -1,7 +1,7 @@
 package org.nodes.wms.core.strategy.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.core.constant.DictConstant;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.StringPool;
 import org.nodes.wms.dao.putway.entities.StInstockDetail;
 import org.nodes.wms.core.strategy.vo.InstockDetailVO;
@@ -31,10 +31,10 @@ public class InstockDetailWrapper extends BaseEntityWrapper<StInstockDetail, Ins
 		InstockDetailVO instockDetail = BeanUtil.copy(entity, InstockDetailVO.class);
 		if (ObjectUtil.isNotEmpty(instockDetail)) {
 			instockDetail.setInstockFunctionDesc(
-				DictCache.getValue(DictConstant.INSTOCK_FUNCTION, instockDetail.getInstockFunction()));
+				DictCache.getValue(DictCodeConstant.INSTOCK_FUNCTION, instockDetail.getInstockFunction()));
 			// 从库区类型
 			instockDetail.setFromZoneTypeName(
-				DictCache.getValue(DictConstant.ZONE_TYPE, instockDetail.getFromZoneType()));
+				DictCache.getValue(DictCodeConstant.ZONE_TYPE, instockDetail.getFromZoneType()));
 			// 从库区
 			IZoneService zoneService = SpringUtil.getBean(IZoneService.class);
 			Zone fromZone = zoneService.getById(entity.getFromZoneId());
@@ -48,7 +48,7 @@ public class InstockDetailWrapper extends BaseEntityWrapper<StInstockDetail, Ins
 			}
 			// 从库区类型
 			instockDetail.setToZoneTypeName(
-				DictCache.getValue(DictConstant.ZONE_TYPE, instockDetail.getToZoneType()));
+				DictCache.getValue(DictCodeConstant.ZONE_TYPE, instockDetail.getToZoneType()));
 			// 至库区
 			Zone toZone = zoneService.getById(entity.getToZoneId());
 			if (ObjectUtil.isNotEmpty(toZone)) {

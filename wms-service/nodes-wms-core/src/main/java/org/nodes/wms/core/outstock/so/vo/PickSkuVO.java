@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.nodes.core.tool.entity.SkuLotBaseEntity;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.core.tool.jackson.BigDecimalSerializer;
-import org.nodes.wms.core.basedata.entity.SkuLot;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLot;
 
 import java.math.BigDecimal;
 import java.util.List;
