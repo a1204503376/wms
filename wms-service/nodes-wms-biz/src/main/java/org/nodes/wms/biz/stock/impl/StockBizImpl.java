@@ -144,6 +144,8 @@ public class StockBizImpl implements StockBiz {
 	public Stock inStock(StockLogTypeEnum type, ReceiveLog receiveLog) {
 		Location location = locationBiz.findByLocId(receiveLog.getLocId());
 		canInStockByLocation(location, receiveLog.getSkuId(), receiveLog);
+		// 验证批属性
+		SkuLotUtil.check(receiveLog, receiveLog.getWoId(), receiveLog.getWhId());
 		// 形成库存，需要考虑库存合并
 		Stock stock = createStock(receiveLog, location);
 		Stock existStock = stockMergeStrategy.matchCanMergeStock(stock);
@@ -192,7 +194,7 @@ public class StockBizImpl implements StockBiz {
 			updateSerialAndSaveLog(serialNoList, SerialStateEnum.OUT_STOCK, stock.getStockId(), stockLog);
 		}
 
-		return null;
+		return stock;
 	}
 
 	private void updateSerialAndSaveLog(List<String> serialNoList, SerialStateEnum state, Long stockId,
@@ -509,9 +511,6 @@ public class StockBizImpl implements StockBiz {
 		return stockList;
 
 	   }
-
-
-
 
 	@Override
 	public Stock findStockOnStage(ReceiveLog receiveLog) {
