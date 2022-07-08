@@ -89,7 +89,7 @@ public class WmsSkuBomDaoImpl extends BaseServiceImpl<WmsSkuBomMapper, SkuBom> i
 				.eq(SkuBom::getSkuId, skuBom.getSkuId())
 				.eq(SkuBom::getWoId, skuBom.getWoId());
 			SkuBom bom = super.getOne(lambdaQueryWrapper);
-			if (!Func.isEmpty(bom)) {
+			if (Func.isNotEmpty(bom)) {
 				skuBom.setId(bom.getId());
 			}
 			super.saveOrUpdate(skuBom);
