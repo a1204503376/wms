@@ -50,4 +50,14 @@ public class OwnerDaoImpl extends BaseServiceImpl<OwnerMapper, Owner> implements
 		List<Owner> ownerList = list().stream().limit(1).collect(toList());
 		return ownerList.get(0);
 	}
+
+	@Override
+	public Owner getByName(String ownerName) {
+		if (Func.isEmpty(ownerName)) {
+			throw new NullArgumentException("OwnerDaoImpl.getByName方法的参数为空");
+		}
+		LambdaQueryWrapper<Owner> lambdaQueryWrapper = Wrappers.lambdaQuery();
+		lambdaQueryWrapper.eq(Owner::getOwnerName, ownerName);
+		return super.getOne(lambdaQueryWrapper);
+	}
 }

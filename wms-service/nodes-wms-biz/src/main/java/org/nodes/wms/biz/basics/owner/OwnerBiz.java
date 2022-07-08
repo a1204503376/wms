@@ -31,11 +31,21 @@ public interface OwnerBiz {
 	 * @param ownerCode: 货主编码
 	 * @return Owner
 	 */
-    Owner findByCode(String ownerCode);
+	Owner findByCode(String ownerCode);
 
 	/**
 	 * 获取第一条货主信息
+	 *
 	 * @return
 	 */
-    Owner getFirst();
+	Owner getFirst();
+
+
+	/**
+	 * 根据名称查找货主信息
+	 *
+	 * @param ownerName: 货主名称
+	 * @return Owner
+	 */
+	Owner findByName(String ownerName);
 }
