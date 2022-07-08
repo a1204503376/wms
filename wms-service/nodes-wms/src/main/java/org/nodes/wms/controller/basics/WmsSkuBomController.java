@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.bom.WmsSkuBomBiz;
 import org.nodes.wms.dao.basics.bom.dto.input.DeleteSkuBomByIdsRequest;
+import org.nodes.wms.dao.basics.bom.dto.input.FindSkuBomByIdRequset;
 import org.nodes.wms.dao.basics.bom.dto.input.WmsSkuBomPageQuery;
 import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomResponse;
 import org.nodes.wms.dao.basics.bom.entites.SkuBom;
@@ -56,7 +57,7 @@ public class WmsSkuBomController {
 	@PostMapping("/save")
 	public R<String> save(@Valid @RequestBody SkuBomAddOrEditRequest skuBomAddOrEditRequest) {
 		SkuBom skuBom = skuBomBiz.save(skuBomAddOrEditRequest);
-		return R.success(String.format("%s成功",
+		return R.success(String.format("%s物品清单成功",
 			Func.isEmpty(skuBomAddOrEditRequest.getId()) ? "新增" : "修改"));
 	}
 
@@ -71,4 +72,18 @@ public class WmsSkuBomController {
 	public R delete(@RequestBody DeleteSkuBomByIdsRequest request) {
 		return R.status(skuBomBiz.deleteSkuBomByIds(request));
 	}
+
+
+	/**
+	 * 物品清单管理-查询物料清单详情
+	 *
+	 * @param request 物料清单ById查询请求对象
+	 * @return 是否成功
+	 */
+	@ApiLog("物品清单管理-查询详情")
+	@PostMapping("/selectSkuBomById")
+	public R<SkuBom> selectSkuBomById(@RequestBody FindSkuBomByIdRequset request) {
+		return R.data(skuBomBiz.findSkuBomById(request.getId()));
+	}
+
 }

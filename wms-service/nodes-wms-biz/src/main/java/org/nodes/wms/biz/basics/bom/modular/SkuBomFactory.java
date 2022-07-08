@@ -23,27 +23,32 @@ public class SkuBomFactory {
 	private final SkuBiz skuBiz;
 
 
-	public SkuBom createSkuBom(SkuBomAddOrEditRequest skuBomAddOrEditRequest){
+	public SkuBom createSkuBom(SkuBomAddOrEditRequest skuBomAddOrEditRequest) {
 		SkuBom skuBom = new SkuBom();
-		Func.copy(skuBomAddOrEditRequest,skuBom);
+		Func.copy(skuBomAddOrEditRequest, skuBom);
 
 		// 根据货主id获取获取编码与名称
-		if(Func.isNotEmpty(skuBom.getWoId())){
+		if (Func.isNotEmpty(skuBom.getWoId())) {
 			Owner owner = ownerBiz.findById(skuBom.getWoId());
 			skuBom.setOwnerCode(owner.getOwnerCode());
 			skuBom.setOwnerName(owner.getOwnerName());
 		}
 		// 根据主物品id获取物品编码与名称
-		if(Func.isNotEmpty(skuBom.getSkuId())){
+		if (Func.isNotEmpty(skuBom.getSkuId())) {
 			Sku sku = skuBiz.findById(skuBom.getSkuId());
 			skuBom.setSkuCode(sku.getSkuCode());
 			skuBom.setSkuName(sku.getSkuName());
+			skuBom.setWsuName(sku.getWspName());
+			skuBom.setWsuCode(sku.getWspName());
+
 		}
 		// 根据组合物品id获取物品编码与名称
-		if(Func.isNotEmpty(skuBom.getJoinSkuId())){
+		if (Func.isNotEmpty(skuBom.getJoinSkuId())) {
 			Sku sku = skuBiz.findById(skuBom.getJoinSkuId());
 			skuBom.setJoinSkuCode(sku.getSkuCode());
 			skuBom.setJoinSkuName(sku.getSkuName());
+			skuBom.setJoinWsuName(sku.getWspName());
+			skuBom.setJoinWsuCode(sku.getWspName());
 		}
 		return skuBom;
 	}

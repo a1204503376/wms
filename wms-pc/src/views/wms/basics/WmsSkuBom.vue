@@ -37,6 +37,11 @@ import fileDownload from "js-file-download";
                 </el-row>
 
             </template>
+            <template v-slot:batchBtn>
+                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
+                </el-button>
+                <el-button v-if="permissionObj.delete" size="mini" type="primary" @click="onRemove">删除</el-button>
+            </template>
             <template v-slot:tableTool>
                 <el-tooltip
                     :enterable="false"
@@ -106,6 +111,14 @@ import fileDownload from "js-file-download";
                             v-bind="column">
                         </el-table-column>
                     </template>
+                    <el-table-column
+                        fixed="right"
+                        label="操作"
+                        width="120">
+                        <template v-slot="{row}">
+                            <el-button size="mini" type="text" @click="onEdit(row)">编辑</el-button>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </template>
             <template v-slot:page>
@@ -127,158 +140,213 @@ import fileDownload from "js-file-download";
 <script>
 
 
-    import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
-    import NodesDateRange from "@/components/wms/general/NodesDateRange";
-    import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
-    import NodesOwner from "@/components/wms/select/NodesOwner";
-    import NodesSku from "@/components/wms/select/NodesSku";
+import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
+import NodesDateRange from "@/components/wms/general/NodesDateRange";
+import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
+import NodesOwner from "@/components/wms/select/NodesOwner";
+import NodesSku from "@/components/wms/select/NodesSku";
 
-    import fileDownload from "js-file-download";
-    import {listMixin} from "@/mixins/list";
-    // eslint-disable-next-line no-unused-vars
-    import {
-        getWmsSkuBomPage,
-        excel
-    } from "@/api/wms/basics/WmsSkuBom.js";
+import fileDownload from "js-file-download";
+import {listMixin} from "@/mixins/list";
+// eslint-disable-next-line no-unused-vars
+import {
+    getWmsSkuBomPage,
+    excel,
+    deleteWmsSkuBom
+} from "@/api/wms/basics/WmsSkuBom.js";
+import func from "../../../util/func";
 
-    export default {
-        name: "carrier",
-        components: {
-            NodesSearchInput,
-            NodesMasterPage,
-            NodesDateRange,
-            NodesOwner,
-            NodesSku
-        },
-        mixins: [listMixin],
-        data() {
-            return {
-                selectionList: [],
+export default {
+    name: "carrier",
+    components: {
+        NodesSearchInput,
+        NodesMasterPage,
+        NodesDateRange,
+        NodesOwner,
+        NodesSku
+    },
+    mixins: [listMixin],
+    data() {
+        return {
+            selectionList: [],
 
-                deleteParams: {
-                    list: []
-                },
-                masterConfig: {
-                    showExpandBtn: true
-                },
-                params: {},
-                excelParams: {
-                    code: '',
-                    name: '',
-                    simpleName: '',
-                },
-                form: {
-                    params: {
-                        joinSkuCode: '',
-                        skuCode: '',
-                        woId: '',
-                        createTimeDateRange: ['', ''],//创建时间开始 创建时间结束
-                        updateTimeDateRange: ['', ''],//更新时间开始 更新时间结束
-                    }
-                },
-                table: {
-                    columnList: [
-                        {
-                            prop: 'joinSkuCode',
-                            label: '组合物品编码'
-                        },
-                        {
-                            prop: 'joinSkuName',
-                            label: '组合物品名称'
-                        },
-                        {
-                            prop: 'skuCode',
-                            label: '物品编码'
-                        },
-                        {
-                            prop: 'skuName',
-                            label: '物品名称'
-                        },
-                        {
-                            prop: 'qty',
-                            label: '数量'
-                        },
-                        {
-                            prop: 'wsuCode',
-                            label: '物品单位编码'
-                        },
-                        {
-                            prop: 'joinWsuCode',
-                            label: '组合单位编码'
-                        },
-                        {
-                            prop: 'ownerName',
-                            label: '货主名称'
-                        },
-                        {
-                            prop: 'updateTime',
-                            label: '修改时间'
-                        },
-                        {
-                            prop: 'updateUser',
-                            label: '修改人'
-                        }
-                    ]
-                },
-            }
-        },
-
-        created() {
-            this.getTableData();
-        },
-        computed: {
-            ids() {
-                let ids = [];
-                this.selectionList.forEach(ele => {
-                    ids.push(ele.id);
-                });
-                return ids.join(",");
+            deleteParams: {
+                list: []
             },
-            codes() {
-                let codes = [];
-                this.selectionList.forEach(ele => {
-                    codes.push(ele.code);
-                });
-                return codes.join(",");
+            masterConfig: {
+                showExpandBtn: true
             },
-            permissionObj() {
-                return {
-                    search: this.vaildData(this.permission.supplier_search, false),
-                    add: this.vaildData(this.permission.supplier_add, false),
-                    delete: this.vaildData(this.permission.supplier_delete, false)
+            params: {},
+            excelParams: {
+                code: '',
+                name: '',
+                simpleName: '',
+            },
+            form: {
+                params: {
+                    joinSkuCode: '',
+                    skuCode: '',
+                    woId: '',
+                    createTimeDateRange: ['', ''],//创建时间开始 创建时间结束
+                    updateTimeDateRange: ['', ''],//更新时间开始 更新时间结束
                 }
-            }
-
-        },
-        methods: {
-            hideOnSinglePage() {
             },
-            selectionChange(row) {
-                this.selectionList = row;
+            table: {
+                columnList: [
+                    {
+                        prop: 'id',
+                        label: 'ID',
+                        hide: true
+                    },
+                    {
+                        prop: 'joinSkuCode',
+                        label: '组合物品编码'
+                    },
+                    {
+                        prop: 'joinSkuName',
+                        label: '组合物品名称'
+                    },
+                    {
+                        prop: 'skuCode',
+                        label: '物品编码'
+                    },
+                    {
+                        prop: 'skuName',
+                        label: '物品名称'
+                    },
+                    {
+                        prop: 'qty',
+                        label: '数量'
+                    },
+                    {
+                        prop: 'wsuCode',
+                        label: '物品单位编码'
+                    },
+                    {
+                        prop: 'joinWsuCode',
+                        label: '组合单位编码'
+                    },
+                    {
+                        prop: 'ownerName',
+                        label: '货主名称'
+                    },
+                    {
+                        prop: 'updateTime',
+                        label: '修改时间'
+                    },
+                    {
+                        prop: 'updateUser',
+                        label: '修改人'
+                    }
+                ]
             },
-            selectionClear() {
-                this.selectionList = [];
-                this.$refs.table.toggleSelection();
-            },
-            excel() {
-                var that = this;
-                that.excelParams = this.form.params;
-                excel(that.excelParams).then((res) => {
-                    fileDownload(res.data, "物料清单.xlsx");
-                });
-            },
-            getTableData() {
-                var that = this;
-                that.params = this.form.params
-                getWmsSkuBomPage(that.params, this.page).then((res) => {
-                    this.page.total = res.data.data.total;
-                    this.page.currentPage = res.data.data.pages;
-                    this.page.current = res.data.data.current;
-                    this.page.size = res.data.data.size;
-                    this.table.data = res.data.data.records;
-                });
-            },
-
         }
+    },
+
+    activated() {
+        this.getTableData();
+    },
+    computed: {
+        ids() {
+            let ids = [];
+            this.selectionList.forEach(ele => {
+                ids.push(ele.id);
+            });
+            return ids.join(",");
+        },
+        codes() {
+            let codes = [];
+            this.selectionList.forEach(ele => {
+                codes.push(ele.joinSkuCode);
+            });
+            return codes.join(",");
+        },
+        permissionObj() {
+            return {
+                search: this.vaildData(this.permission.wmsSkuBom_search, false),
+                add: this.vaildData(this.permission.wmsSkuBom_add, false),
+                delete: this.vaildData(this.permission.wmsSkuBom_delete, false)
+            }
+        }
+
+    },
+    methods: {
+        onRemove() {
+            this.$confirm("确定删除容器编码为" + this.codes + "的数据吗?", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            }).then(() => {
+                this.deleteParams.list = this.ids.split(',');
+                deleteWmsSkuBom(this.deleteParams.list).then((res) => {
+                    if (res.data.code == 200) {
+                        this.getTableData();
+                        this.$message({
+                            type: "success",
+                            message: "操作成功!"
+                        });
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: "操作失败!"
+                        });
+                    }
+
+
+                });
+            });
+        },
+        onAdd() {
+            this.$router.push({
+                name: '新增物料',
+                params: {
+                    id: '0'
+                }
+            });
+        },
+        onEdit(row) {
+            this.$router.push({
+                name: '编辑物料',
+                params: {
+                    id: row.id
+                }
+            });
+        },
+        hideOnSinglePage() {
+        },
+        selectionChange(row) {
+            this.selectionList = row;
+        },
+        selectionClear() {
+            this.selectionList = [];
+            this.$refs.table.toggleSelection();
+        },
+        excel() {
+            var that = this;
+            that.excelParams = this.form.params;
+            excel(that.excelParams).then((res) => {
+                fileDownload(res.data, "物料清单.xlsx");
+            });
+        },
+        getTableData() {
+            var that = this;
+            that.params = this.form.params
+            if (func.isNotEmpty(this.form.params.joinSkuCode.skuCode)) {
+                that.params.joinSkuCode = this.form.params.joinSkuCode.skuCode
+            }
+            // eslint-disable-next-line no-empty
+            if (func.isNotEmpty(this.form.params.skuCode.skuCode)) {
+                that.params.skuCode = this.form.params.skuCode.skuCode
+            }
+            getWmsSkuBomPage(that.params, this.page).then((res) => {
+                this.page.total = res.data.data.total;
+                this.page.currentPage = res.data.data.pages;
+                this.page.current = res.data.data.current;
+                this.page.size = res.data.data.size;
+                this.table.data = res.data.data.records;
+            });
+        },
+
     }
+}
 </script>
