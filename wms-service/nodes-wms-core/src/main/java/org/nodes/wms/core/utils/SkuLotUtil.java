@@ -77,7 +77,7 @@ public class SkuLotUtil {
 			String skuLotMixMask = skuLotVal.skuLotMixMaskGet(i);
 			// 判断 dict.remark 中是否存在. 如果存在还需要找其他对象类
 			if (dictValue.contains(StringPool.DOT)) {
-				// TODO 彭伟：找其他对象属性，后期处理（欣天新用不着）
+
 			} else {
 				if (Func.isNotEmpty(skuLotMixMask) && skuLotMixMask.toLowerCase().contains("yy")) {
 					// 日期类型
