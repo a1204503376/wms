@@ -38,7 +38,7 @@ import org.nodes.wms.core.outstock.so.dto.SavePickPlanDTO;
 import org.nodes.wms.core.outstock.so.dto.SavePickPlanDetailDTO;
 import org.nodes.wms.core.outstock.so.entity.*;
 import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
-import org.nodes.wms.core.outstock.so.enums.SoDetailStateEnum;
+import org.nodes.wms.dao.outstock.so.enums.SoDetailStateEnum;
 import org.nodes.wms.core.outstock.so.enums.WellenStateEnum;
 import org.nodes.wms.core.outstock.so.mapper.PickPlanMapper;
 import org.nodes.wms.core.outstock.so.mapper.SoDetailMapper;

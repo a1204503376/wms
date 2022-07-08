@@ -13,7 +13,7 @@ import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.core.outstock.so.dto.SoDetailDTO;
 import org.nodes.wms.core.outstock.so.entity.SoDetail;
-import org.nodes.wms.core.outstock.so.enums.SoDetailStateEnum;
+import org.nodes.wms.dao.outstock.so.enums.SoDetailStateEnum;
 import org.nodes.wms.core.outstock.so.mapper.SoDetailMapper;
 import org.nodes.wms.core.outstock.so.service.ISoDetailService;
 import org.nodes.wms.core.outstock.so.wrapper.SoDetailWrapper;
