@@ -1,34 +1,25 @@
 <template>
 	<view @keyup.esc="esc">
-	   <u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
-	   	:bgColor="navigationBarBackgroundColor" title="呼叫AGV"  titleStyle="color:#ffffff;font-size:21px"
-	   	style="color:#ffffff;font-size:21px">
-	   </u-navbar>
-	
-<h4 align="center" style='background-color:#00FFCC;height: 70rpx;'  class="font-in-page">未上架列表</h4>
-    
-		<view style="margin-top: 5%;" v-for="(item, index) in stockList"  >
-			<u-row >
-				<u-col span="5">
-					<view class="demo-layout bg-purple-light">箱码:{{item.boxCode}}</view>
-				</u-col>
-				<u-col span="4">
-					<view class="demo-layout bg-purple">总数:{{item.num}}</view>
-				</u-col>
-				<u-col span="3"><u-button text="删除" :hairline="true" @click="deleteItem(index)"></u-button></u-col>
-			</u-row>
-			<u-row customStyle="margin-bottom: 10px">
-				<u-col span="6">
-					<view class="demo-layout bg-purple-light">批次:{{item.skuLot1}}</view>
-				</u-col>
-			</u-row>
+		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
+			:bgColor="navigationBarBackgroundColor" title="选择" titleStyle="color:#ffffff;font-size:21px"
+			style="color:#ffffff;font-size:21px;">
+		</u-navbar>
+		<view style="margin-top: 5%;" v-for="(item, index) in stockList">
+			<template v-for="(itemOne,indexOne) in item.boxList">
+				<u-row @click="clickItem(index)" customStyle="margin-left: 5%;">
+					<u-col span="8">
+						<view class="demo-layout bg-purple-light">{{itemOne.boxCode}}</view>
+					</u-col>
+					<u-col span="4" v-if="indexOne===0">
+						<view class="demo-layout bg-purple-light">总数：{{item.qty}}</view>
+					</u-col>
+				</u-row>
+			</template>
+			<u-divider></u-divider>
 		</view>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
 				返回
-			</view>
-			<view class="btn-submit" @click="clickItem()">
-				确定
 			</view>
 		</view>
 	</view>
@@ -42,7 +33,7 @@
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {
 		components: {
-           keyboardListener
+			keyboardListener
 		},
 		data() {
 			return {
@@ -51,21 +42,17 @@
 					boxCode: '',
 					num: 0,
 				},
-				stockList:[]
+				stockList: []
 
 			}
 		},
 		onLoad: function(option) {
+
 			var parse = JSON.parse(option.param)
-			//this.stockList = parse
+			this.stockList = parse
 		},
 
-		onUnload() {
-			uni.$u.func.unRegisterScanner();
-		},
-		onShow() {
-			uni.$u.func.registerScanner(this.scannerCallback);
-		},
+
 		onBackPress(event) {
 			// #ifdef APP-PLUS
 			if (event.from === 'backbutton') {
@@ -76,41 +63,17 @@
 		},
 		methods: {
 			esc() {
-				uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgvQuery');
+				uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgvQuery', {
+					name: '收货'
+				});
 			},
-			getReceiveDetailList() {
-				receive.getReceiveDetailLpn(this.param.boxCode).then(res => {
-					let param = res.data
-				  let currentSku = this.detailLpnList.find(item => item.boxCode === param.boxCode);
-					            if (tool.isNotEmpty(currentSku)) {
-					              this.$u.func.showToast({
-					              	title: '该箱码已存在,请勿重复扫描'
-					              })
-					              return
-					            }
-					this.detailLpnList.push(param);
-				})
-			},
-			deleteItem(index) {
-				this.detailLpnList.splice(index,1)
-			},
-			clickItem() {
-			  
-				uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgv', this.detailLpnList);
-			},
-			scannerCallback(no) {
-				let item = barCodeService.parseBarcode(no)
-				if (item.type == barCodeService.BarcodeType.UnKnow || item.type == barCodeService.BarcodeType.Lpn) {
-					this.param.boxCode = item.content;
-					this.getReceiveDetailList();
-				} else {
-					this.$u.func.showToast({
-						title: '无法识别,不支持的条码类型'
-					})
-					return
-				}
 
+
+			clickItem(index) {
+				uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgv',this.stockList[index]);
 			},
+
+
 		}
 	}
 </script>

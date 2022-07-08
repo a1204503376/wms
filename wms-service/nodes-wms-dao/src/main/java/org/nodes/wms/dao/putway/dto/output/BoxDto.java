@@ -1,6 +1,8 @@
 package org.nodes.wms.dao.putway.dto.output;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
+import org.nodes.core.tool.jackson.LongArray2StringSerialize;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -23,5 +25,7 @@ public class BoxDto implements Serializable {
 	/**
 	 * 库存id集合
 	 */
+	@JsonSerialize(using = LongArray2StringSerialize.class)
 	private List<Long> stockIdList;
 }
+

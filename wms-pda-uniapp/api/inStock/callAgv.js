@@ -7,7 +7,24 @@ const findStockByBoxCode =(data)=>{
 		data:data,
 	})
 }
+const findLocByLpnType =(data)=>{
+	return http.request({
+		url: '/api/ApiPDA/putaway/findLocByLpnType',
+		method: 'POST',
+		data:data,
+	})
+}
+const callAgv =(data)=>{
+	return http.request({
+		url: '/api/ApiPDA/putaway/callAgv',
+		method: 'POST',
+		data:data,
+	})
+}
+ 
 
 export default {
-	findStockByBoxCode
+	findStockByBoxCode,
+	findLocByLpnType,
+	callAgv
 }
