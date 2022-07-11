@@ -17,9 +17,31 @@
         SELECT COUNT(DISTINCT sku_id)
         FROM wms_stock
         WHERE stock_qty &gt; pick_qty
-          AND loc_id NOT IN
+        AND loc_id NOT IN
         <foreach collection="locIdList" separator="," item="item" close=")" open="(">
             #{item}
         </foreach>
+    </select>
+
+    <select id="getList" resultType="org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse">
+        select stock_id, stock_status, sku_level, wsp_name, wsp_id , sku_id, sku_code, sku_name,
+        stay_stock_qty, stock_qty , pick_qty, occupy_qty, box_code, lpn_code, loc_id , loc_code,
+        zone_id, zone_code, wh_id, wh_code , wo_id, last_in_time, last_out_time, lot_number,
+        wsu_code , version, sku_lot1, sku_lot2, sku_lot3, sku_lot4 , sku_lot5, sku_lot6, sku_lot7,
+        sku_lot8, sku_lot9 , sku_lot10, sku_lot11, sku_lot12, sku_lot13, sku_lot14 , sku_lot15,
+        sku_lot16, sku_lot17, sku_lot18, sku_lot19 , sku_lot20, sku_lot21, sku_lot22, sku_lot23,
+        sku_lot24 , sku_lot25, sku_lot26, sku_lot27, sku_lot28, sku_lot29 , sku_lot30, tenant_id,
+        create_user, create_dept, create_time , update_user, update_time, status, is_deleted
+        from wms_stock
+        <where>
+            <if test="query.no != null and query.no != ''">
+                loc_code LIKE CONCAT('%', #{query.no} ,'%') and is_deleted = 0 and stay_stock_qty + stock_qty > pick_qty
+                and stock_status = 0 or
+                sku_code LIKE CONCAT('%', #{query.no} ,'%') and is_deleted = 0 and stay_stock_qty + stock_qty > pick_qty
+                and stock_status = 0 or
+                box_code LIKE CONCAT('%', #{query.no} ,'%') and is_deleted = 0 and stay_stock_qty + stock_qty > pick_qty
+                and stock_status = 0
+            </if>
+        </where>
     </select>
 </mapper>
