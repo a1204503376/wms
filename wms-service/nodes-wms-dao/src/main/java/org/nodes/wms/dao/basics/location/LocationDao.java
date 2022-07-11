@@ -145,4 +145,12 @@ public interface LocationDao {
 	 * @return 同一列的库位
 	 */
 	List<Location> getLocationByLocColumn(String locColumn);
+
+	/**
+	 * 查找库位列表中指定类型的库位
+	 * @param locIdList
+	 * @param zoneType
+	 * @return
+	 */
+	List<Location> getLocationByZoneType(List<Long> locIdList, Integer zoneType);
 }
