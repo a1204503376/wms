@@ -24,23 +24,22 @@
     </select>
 
     <select id="getList" resultType="org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse">
-        select stock_id, stock_status, sku_level, wsp_name, wsp_id , sku_id, sku_code, sku_name,
-        stay_stock_qty, stock_qty , pick_qty, occupy_qty, box_code, lpn_code, loc_id , loc_code,
-        zone_id, zone_code, wh_id, wh_code , wo_id, last_in_time, last_out_time, lot_number,
-        wsu_code , version, sku_lot1, sku_lot2, sku_lot3, sku_lot4 , sku_lot5, sku_lot6, sku_lot7,
-        sku_lot8, sku_lot9 , sku_lot10, sku_lot11, sku_lot12, sku_lot13, sku_lot14 , sku_lot15,
-        sku_lot16, sku_lot17, sku_lot18, sku_lot19 , sku_lot20, sku_lot21, sku_lot22, sku_lot23,
-        sku_lot24 , sku_lot25, sku_lot26, sku_lot27, sku_lot28, sku_lot29 , sku_lot30, tenant_id,
-        create_user, create_dept, create_time , update_user, update_time, status, is_deleted
-        from wms_stock
+        select s.stock_id, s.stock_status, s.sku_level, s.wsp_name, s.wsp_id , s.sku_id, s.sku_code, s.sku_name,
+        s.stay_stock_qty, s.stock_qty , s.pick_qty, s.occupy_qty, s.box_code, s.lpn_code, s.loc_id , s.loc_code,
+        s.zone_id, s.zone_code, s.wh_id, s.wh_code , s.wo_id, s.last_in_time, s.last_out_time, s.lot_number,
+        s.wsu_code , s.version, s.sku_lot1, s.sku_lot2, s.sku_lot3, s.sku_lot4 , s.sku_lot5, s.sku_lot6, s.sku_lot7,
+        s.sku_lot8, s.sku_lot9 , s.sku_lot10, s.sku_lot11, s.sku_lot12, s.sku_lot13, s.sku_lot14 , s.sku_lot15,
+        s.sku_lot16, s.sku_lot17, s.sku_lot18, s.sku_lot19 , s.sku_lot20, s.sku_lot21, s.sku_lot22, s.sku_lot23,
+        s.sku_lot24 , s.sku_lot25, s.sku_lot26, s.sku_lot27, s.sku_lot28, s.sku_lot29 , s.sku_lot30, o.owner_name as ownerName
+        from wms_stock s left join wms_owner o on s.wo_id = o.wo_id
         <where>
             <if test="query.no != null and query.no != ''">
-                loc_code LIKE CONCAT('%', #{query.no} ,'%') and is_deleted = 0 and stay_stock_qty + stock_qty > pick_qty
+                s.loc_code LIKE CONCAT('%', #{query.no} ,'%') and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty > s.pick_qty
+                and s.stock_status = 0 or
+                s.sku_code LIKE CONCAT('%', #{query.no} ,'%') and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty > s.pick_qty
                 and stock_status = 0 or
-                sku_code LIKE CONCAT('%', #{query.no} ,'%') and is_deleted = 0 and stay_stock_qty + stock_qty > pick_qty
-                and stock_status = 0 or
-                box_code LIKE CONCAT('%', #{query.no} ,'%') and is_deleted = 0 and stay_stock_qty + stock_qty > pick_qty
-                and stock_status = 0
+                s.box_code LIKE CONCAT('%', #{query.no} ,'%') and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty > s.pick_qty
+                and s.stock_status = 0
             </if>
         </where>
     </select>
