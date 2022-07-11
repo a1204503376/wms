@@ -138,7 +138,6 @@
 				    
 					if(tool.isNotEmpty(this.stockList)){
 					  if(this.stockList.length==1){
-						  alert("ssss")
 						  uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgv', this.stockList[0]);
 						  return
 					  }

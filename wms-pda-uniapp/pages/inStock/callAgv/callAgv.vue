@@ -15,8 +15,11 @@
 		<view style="margin-top: 5%;" >
 			<u-row >
 				<template v-for="(item, index) in locList">
-				<u-col span="3" >
-					<u-button style="height: 60px;width: 95%;font-size: 20px;font-size: 40rpx;" @click="change(item)">{{item.locCodeView}}</u-button>
+				<u-col span="3" v-if="item.isEmpty" >
+					<u-button style="height: 60px;width: 95%;font-size: 40rpx;" @click="change(item)">{{item.locCodeView}}</u-button>
+				</u-col>
+				<u-col span="3"  v-if="!item.isEmpty">
+					<u-button style="height: 60px;width: 95%;font-size: 40rpx;" disabled>{{item.locCodeView}}</u-button>
 				</u-col>
 				</template>
 			</u-row>
