@@ -12,15 +12,6 @@
 			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="param.locCode" @focus="focus(1)" @blur="blur(1)" @confirm="change"></u--input>
 			</u-form-item>
-			<template v-for="(item, index) in param.receiveDetailLpnItemDtoList">
-				<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
-					<u--input v-model="item.skuCode" border="0" disabled></u--input>
-				</u-form-item>
-				<u-form-item label="数量" class="left-text-one-line" labelWidth="100">
-					<u--input v-model="item.planQty" border="0" disabled></u--input>
-				</u-form-item>
-			</template>
-
 			<u-form-item label="生产批次" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="param.skuLot1" @focus="focus(2)" @confirm="change" @blur="blur(2)"
 					:focus="this.focusNum == 2"></u--input>
@@ -29,12 +20,19 @@
 				<u--input v-model="param.lpnCode" @focus="focus(3)" @blur="blur(3)" @confirm="change"
 					:focus="this.focusNum == 3"></u--input>
 			</u-form-item>
-
+			
 			<u-form-item label="型号" class="left-text-one-line" labelWidth="100">
 				<uni-select v-model="param.skuLot2"></uni-select>
 			</u-form-item>
-
-
+			<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">物品列表</h4>
+			<template v-for="(item, index) in param.receiveDetailLpnItemDtoList">
+				<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
+					<u--input v-model="item.skuCode" border="0" disabled></u--input>
+				</u-form-item>
+				<u-form-item label="数量" class="left-text-one-line" labelWidth="100">
+					<u--input v-model="item.planQty" border="0" disabled></u--input>
+				</u-form-item>
+			</template>
 		</u--form>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
