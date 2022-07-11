@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(WmsApiPath.WMS_PDA_API + "/receiveByMultiBox")
 public class receiveByMultiBoxCode {
 	private final InStockBiz inStockBiz;
+
 	/**
 	 * PDA多箱收货
 	 */
