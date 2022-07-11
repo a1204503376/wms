@@ -11,6 +11,8 @@ import org.nodes.wms.dao.outstock.so.mapper.SoHeaderMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 发货单Dao接口实现类
  **/
@@ -20,6 +22,16 @@ public class SoHeaderDaoImpl extends BaseServiceImpl<SoHeaderMapper, SoHeader> i
 	@Override
 	public Page<SoHeaderPageResponse> page(IPage<?> page, SoHeaderPageQuery soHeaderPageQuery) {
 		return super.baseMapper.page(page, soHeaderPageQuery);
+	}
+
+	@Override
+	public boolean removeByIdList(List<Long> soBillIdList) {
+		return super.removeByIds(soBillIdList);
+	}
+
+	@Override
+	public SoHeader getById(Long id) {
+		return super.getById(id);
 	}
 
 	@Override

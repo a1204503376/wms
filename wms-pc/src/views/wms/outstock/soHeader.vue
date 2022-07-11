@@ -154,7 +154,7 @@ import {listMixin} from "@/mixins/list";
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js'
 import NodesSoBillState from "@/components/wms/select/NodesSoBillState";
-import {getPage} from "@/api/wms/outstock/soHeader"
+import {getPage, remove} from "@/api/wms/outstock/soHeader"
 import NodesCustomer from "@/components/wms/select/NodesCustomer";
 import NodesBillType from "@/components/wms/select/NodesBillType";
 
@@ -286,23 +286,17 @@ export default {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning",
+            }).then(() => {
+                let soBillIdList = rows.map(item => item.soBillId);
+                remove(soBillIdList)
+                    .then((res) => {
+                        this.$message({
+                            type: "success",
+                            message: res.data.msg,
+                        });
+                        this.getTableData();
+                    })
             })
-                .then(() => {
-                    let removeObj = {
-                        soBillIds: []
-                    };
-                    rows.forEach((item) => {
-                        removeObj.soBillIds.push(item.soBillId);
-                    });
-                    remove(removeObj)
-                        .then((res) => {
-                            this.$message({
-                                type: "success",
-                                message: res.data.msg,
-                            });
-                            this.getTableData();
-                        })
-                })
         },
         onExportData() {
             this.loading = true;
@@ -319,7 +313,7 @@ export default {
                 });
         },
         onReset() {
-            this.form.params={
+            this.form.params = {
                 soBillNo: '',
                 orderNo: '',
                 billTypeCdList: [],

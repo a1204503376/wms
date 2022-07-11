@@ -7,6 +7,8 @@ import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderEditResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 
+import java.util.List;
+
 /**
  * 发货单Dao接口
  **/
@@ -37,4 +39,19 @@ public interface SoHeaderDao {
 	 */
 	SoHeaderEditResponse getSoHeaderEditBySoBillId(Long soBillId);
 
+	/**
+	 * 批量删除
+	 *
+	 * @param soBillIdList: 出库单id
+	 * @return true: 删除成功，false: 删除失败
+	 */
+	boolean removeByIdList(List<Long> soBillIdList);
+
+	/**
+	 * 根据出库单id获取出库单头表信息
+	 *
+	 * @param id: 出库单id
+	 * @return SoHeader 出库单实体
+	 */
+	SoHeader getById(Long id);
 }
