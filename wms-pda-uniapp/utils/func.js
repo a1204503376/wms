@@ -120,6 +120,13 @@ const install = (Vue, vm) => {
 			delta:1,//返回层数，2则上上页
 		})
 	}
+	
+	const navigateBackTo = (delta) => {
+		// TODO 校验必须是大于等于1的整数，如果不是用默认值1
+		uni.navigateBack({
+			delta:delta,
+		})
+	}
 
 	// URL参数转对象
 	const paramsToObj = (url) => {
@@ -216,6 +223,7 @@ const install = (Vue, vm) => {
 		routeNavigateTo,
 		routeReLaunch,
 		navigateBack,
+		navigateBackTo,
 		checkLogin,
 		paramsToObj,
 		refreshPage,
