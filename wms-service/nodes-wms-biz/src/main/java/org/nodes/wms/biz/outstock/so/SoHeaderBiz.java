@@ -8,6 +8,8 @@ import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.springblade.core.mp.support.Query;
 
+import java.util.List;
+
 /**
  * 出库单业务接口
  **/
@@ -31,6 +33,14 @@ public interface SoHeaderBiz {
     SoHeader add(SoBillAddOrEditRequest soBillAddOrEditRequest);
 
 	/**
+	 * 批量删除
+	 *
+	 * @param soBillIdList: 出库单id
+	 * @return true: 删除成功，false: 删除失败
+	 */
+    boolean remove(List<Long> soBillIdList);
+
+	/**
 	 * 编辑出库单
 	 *
 	 * @param soBillAddOrEditRequest: 新增或编辑出库单请求对象
@@ -45,4 +55,5 @@ public interface SoHeaderBiz {
 	 * @return SoBillEditResponse 出库单编辑响应对象
 	 */
 	SoBillEditResponse findSoBillByEdit(Long soBillId);
+
 }

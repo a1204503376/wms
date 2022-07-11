@@ -12,6 +12,7 @@ import org.nodes.wms.dao.outstock.so.dto.output.SoBillEditResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -52,6 +53,17 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		}
 
 		return soHeader;
+	}
+
+	@Override
+	public boolean remove(List<Long> soBillIdList) {
+		soBillIdList.forEach(item -> {
+			SoHeader soHeader = soHeaderDao.getById(item);
+			if (!soHeader.getSoBillState().equals(SoBillStateEnum.NOT.getIndex())) {
+				throw new ServiceException("删除失败,只能删除单据状态为未出库的出库单");
+			}
+		});
+		return soHeaderDao.removeByIdList(soBillIdList);
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import org.nodes.wms.core.outstock.so.service.ISoHeaderService;
 import org.nodes.wms.core.outstock.so.vo.SoHeaderVO;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
+import org.nodes.wms.dao.outstock.so.dto.input.SoBillRemoveRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.SoBillEditResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
@@ -84,12 +85,12 @@ public class SoHeaderController {
 	/**
 	 * 删除
 	 */
-	@ApiLog("出库管理主接口-删除")
-	@PostMapping("/remove")
-	@ApiOperation(value = "删除", notes = "传入ids")
-	public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
-		return R.status(soHeaderService.removeByIds(Func.toLongList(ids)));
-	}
+//	@ApiLog("出库管理主接口-删除")
+//	@PostMapping("/remove")
+//	@ApiOperation(value = "删除", notes = "传入ids")
+//	public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
+//		return R.status(soHeaderService.removeByIds(Func.toLongList(ids)));
+//	}
 
 	/**
 	 * 获得出库单编号
@@ -154,6 +155,13 @@ public class SoHeaderController {
 	public R<String> add(@Valid @RequestBody SoBillAddOrEditRequest soBillAddOrEditRequest) {
 		SoHeader soHeader = soHeaderBiz.add(soBillAddOrEditRequest);
 		return R.success(String.format("新增出库单成功，出库单编码：%s", soHeader.getSoBillNo()));
+	}
+
+	@ApiLog("出库单过滤-删除")
+	@PostMapping("/remove")
+	public R<String> remove(@Valid @RequestBody SoBillRemoveRequest soBillRemoveRequest) {
+		boolean isRemoveSuccess = soHeaderBiz.remove(soBillRemoveRequest.getIdList());
+		return R.success(isRemoveSuccess ? "删除成功" : "删除失败，请稍后再试");
 	}
 
 	@PostMapping("/detailByEdit")

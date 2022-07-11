@@ -19,6 +19,16 @@ export const add = (data) => {
     })
 }
 
+export const remove = (soBillIdList) =>{
+    return request({
+        url: '/api/wms/outstock/soBill/remove',
+        method: 'post',
+        data: {
+            idList: soBillIdList
+        }
+    })
+}
+
 export const detailByEdit = (soBillId) => {
     return request({
         url: '/api/wms/outstock/soBill/detailByEdit',
