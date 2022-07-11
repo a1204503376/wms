@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.outstock.so.impl;
 
 import org.nodes.wms.dao.outstock.so.SoDetailDao;
+import org.nodes.wms.dao.outstock.so.dto.output.SoDetailEditResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.mapper.SoDetailMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -16,5 +17,15 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 	@Override
 	public boolean saveOrUpdateBatch(List<SoDetail> soDetailList) {
 		return super.saveOrUpdateBatch(soDetailList);
+	}
+
+	@Override
+	public List<SoDetailEditResponse> getSoDetailEditBySoBillId(Long soBillId) {
+		return super.baseMapper.selectSoDetailEditBySoBillId(soBillId);
+	}
+
+	@Override
+	public boolean removeByIdList(List<Long> detailIdList) {
+		return super.removeByIds(detailIdList);
 	}
 }

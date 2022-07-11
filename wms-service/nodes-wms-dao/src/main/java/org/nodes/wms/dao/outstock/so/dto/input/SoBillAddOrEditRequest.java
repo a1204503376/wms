@@ -19,7 +19,13 @@ public class SoBillAddOrEditRequest implements Serializable {
 	 * 发货单头表id
 	 */
 	@NotNull(message = "出库单id不能为空", groups = Update.class)
-	private Long soHeaderId;
+	private Long soBillId;
+
+	/**
+	 * 出库单编码
+	 */
+	@NotNull(message = "出库单编码不能为空", groups = Update.class)
+	private String soBillNo;
 
 	/**
 	 * 单据类型
@@ -61,4 +67,9 @@ public class SoBillAddOrEditRequest implements Serializable {
 	 * 发货明细
 	 */
 	private List<SoDetailAddOrEditRequest> soDetailList;
+
+	/**
+	 * 被删除的发货明细id
+	 */
+	private List<Long> removeIdList;
 }

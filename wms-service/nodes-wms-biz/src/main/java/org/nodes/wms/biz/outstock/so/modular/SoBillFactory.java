@@ -24,7 +24,6 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,6 +57,8 @@ public class SoBillFactory {
 			soHeader.setSoBillNo(noGeneratorUtil.createSoBillNo());
 			// 单据状态：10 单据创建
 			soHeader.setSoBillState(SoBillStateEnum.CREATE.getIndex());
+			// 订单状态
+			soHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());
 		}
 		// 库房编码
 		soHeader.setWhCode(warehouse.getWhCode());
@@ -66,14 +67,11 @@ public class SoBillFactory {
 		// 客户编码和名称
 		soHeader.setCustomerCode(customer.getCode());
 		soHeader.setCustomerName(customer.getName());
-		// 订单状态
-		soHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());
 		return soHeader;
 	}
 
-	public List<SoDetail> createSoDetailList(SoHeader soHeader, SoBillAddOrEditRequest soBillAddOrEditRequest) {
-		List<SoDetailAddOrEditRequest> soDetailList = soBillAddOrEditRequest.getSoDetailList();
-		List<SoDetail> soDetailListResult = Func.copy(soDetailList, SoDetail.class);
+	public List<SoDetail> createSoDetailList(SoHeader soHeader, List<SoDetailAddOrEditRequest> soBillAddOrEditRequestList) {
+		List<SoDetail> soDetailListResult = Func.copy(soBillAddOrEditRequestList, SoDetail.class);
 		soDetailListResult.forEach(detail -> {
 			Sku sku = skuBiz.findById(detail.getSkuId());
 			// 根据物品编码获取包装和包装明细信息
@@ -83,6 +81,11 @@ public class SoBillFactory {
 			// 从聚合类对象中获取基础包装明细信息
 			SkuPackageDetail baseSkuPackageDetail = skuPackageAggregate.findBaseSkuPackageDetail();
 
+			// id为空即新增时
+			if (Func.isEmpty(detail.getSoDetailId())) {
+				// 实收数量
+				detail.setScanQty(BigDecimal.ZERO);
+			}
 			// 出库单id，编码，单据类型
 			detail.setSoBillId(soHeader.getSoBillId());
 			detail.setSoBillNo(soHeader.getSoBillNo());
@@ -101,9 +104,8 @@ public class SoBillFactory {
 			// 基础计量单位编码和名称
 			detail.setBaseUmCode(baseSkuPackageDetail.getWsuCode());
 			detail.setBaseUmName(baseSkuPackageDetail.getWsuName());
-			//实收、剩余数量
-			detail.setScanQty(BigDecimal.ZERO);
-			detail.setSurplusQty(detail.getPlanQty());
+			//剩余数量
+			detail.setSurplusQty(detail.getPlanQty().subtract(detail.getPlanQty()));
 			// 发货库房
 			detail.setPickWhCode(soHeader.getWhCode());
 			// 单价
@@ -114,6 +116,7 @@ public class SoBillFactory {
 					null : detail.getDetailPrice().multiply(detail.getPlanQty()));
 			//单据状态
 			detail.setBillDetailState(SoDetailStateEnum.UnAlloc.getIndex());
+			// 批属性 生产批次、专用客户
 		});
 		return soDetailListResult;
 	}

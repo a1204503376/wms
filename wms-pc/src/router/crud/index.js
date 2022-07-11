@@ -187,19 +187,19 @@ export default [
         children: [
             {
                 path: 'add/:soBillId',
-                name: '新增发货单',
+                name: '新增出库单',
                 props: true,
                 component: () => import('@/views/wms/outstock/soHeader/soBillAdd')
             },
             {
                 path: 'edit/:soBillId',
-                name: '编辑发货单',
+                name: '编辑出库单',
                 props: true,
                 component: () => import('@/views/wms/outstock/soHeader/soBillEdit')
             },
             {
                 path: 'detail/:soBillId',
-                name: '发货单详情',
+                name: '出库单详情',
                 props: true,
                 component: () => import('@/views/wms/outstock/soHeader/soBillDetail')
             }]

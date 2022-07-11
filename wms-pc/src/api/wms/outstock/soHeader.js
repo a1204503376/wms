@@ -11,9 +11,27 @@ export const getPage = (params, data) => {
     })
 }
 
-export const add = (data) =>{
+export const add = (data) => {
     return request({
         url: '/api/wms/outstock/soBill/add',
+        method: 'post',
+        data: data
+    })
+}
+
+export const detailByEdit = (soBillId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/detailByEdit',
+        method: 'post',
+        data: {
+            soBillId: soBillId
+        }
+    })
+}
+
+export const edit = (data) => {
+    return request({
+        url: '/api/wms/outstock/soBill/edit',
         method: 'post',
         data: data
     })

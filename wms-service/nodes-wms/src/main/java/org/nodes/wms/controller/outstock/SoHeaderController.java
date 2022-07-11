@@ -6,35 +6,32 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.tool.validation.Update;
 import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
 import org.nodes.wms.core.outstock.so.cache.SoCache;
-import org.nodes.wms.core.outstock.so.dto.SoHeaderDTO;
 import org.nodes.wms.core.outstock.so.service.ISoHeaderService;
 import org.nodes.wms.core.outstock.so.vo.SoHeaderVO;
-import org.nodes.wms.core.outstock.so.wrapper.SoHeaderWrapper;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
+import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
+import org.nodes.wms.dao.outstock.so.dto.output.SoBillEditResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
-import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.log.annotation.ApiLog;
-import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * 出库单API
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(WmsApiPath.WMS_ROOT_URL+"outstock/soBill")
+@RequestMapping(WmsApiPath.WMS_ROOT_URL + "outstock/soBill")
 @Api(value = "出库管理主接口", tags = "出库管理主接口")
 public class SoHeaderController {
 
@@ -152,9 +149,22 @@ public class SoHeaderController {
 		return R.data(soHeaderPageList);
 	}
 
+	@ApiLog("出库单管理-新增")
 	@PostMapping("/add")
-	public R<String> add(@Valid @RequestBody SoBillAddOrEditRequest soBillAddOrEditRequest){
+	public R<String> add(@Valid @RequestBody SoBillAddOrEditRequest soBillAddOrEditRequest) {
 		SoHeader soHeader = soHeaderBiz.add(soBillAddOrEditRequest);
-		return R.success(String.format("新增出库单成功，出库单编码：%s",soHeader.getSoBillNo()));
+		return R.success(String.format("新增出库单成功，出库单编码：%s", soHeader.getSoBillNo()));
+	}
+
+	@PostMapping("/detailByEdit")
+	public R<SoBillEditResponse> detailByEdit(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
+		return R.data(soHeaderBiz.findSoBillByEdit(soBillIdRequest.getSoBillId()));
+	}
+
+	@ApiLog("出库单管理-编辑")
+	@PostMapping("/edit")
+	public R<String> edit(@Validated(Update.class) @RequestBody SoBillAddOrEditRequest soBillAddOrEditRequest) {
+		SoHeader soHeader = soHeaderBiz.edit(soBillAddOrEditRequest);
+		return R.success(String.format("编辑出库单成功，出库单编码：%s", soHeader.getSoBillNo()));
 	}
 }

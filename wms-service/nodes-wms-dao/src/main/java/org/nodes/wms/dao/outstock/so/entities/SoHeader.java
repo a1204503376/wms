@@ -17,7 +17,6 @@ import java.util.Date;
 @TableName("so_header")
 public class SoHeader extends BaseEntity implements Serializable {
 
-
 	private static final long serialVersionUID = -2407858613422203284L;
 
 	/**
@@ -49,12 +48,11 @@ public class SoHeader extends BaseEntity implements Serializable {
 	/**
 	 * 单据编码
 	 */
-
 	private String soBillNo;
+
 	/**
 	 * 单据状态
 	 */
-
 	private Integer soBillState;
 
 	/**
