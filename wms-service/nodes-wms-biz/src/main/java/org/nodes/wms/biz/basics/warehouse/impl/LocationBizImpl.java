@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.poi.ss.formula.functions.T;
+import org.nodes.core.base.entity.Dict;
+import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.biz.basics.warehouse.modular.LocationFactory;
@@ -42,6 +44,7 @@ public class LocationBizImpl implements LocationBiz {
 	private final WarehouseBiz warehouseBiz;
 	private final LocationDao locationDao;
 	private final LocationFactory locationFactory;
+	private final DictionaryBiz dictionaryBiz;
 
 	@Override
 	public List<LocationSelectResponse> getLocationSelectResponseTop10List(LocationSelectQuery locationSelectQuery) {
@@ -298,18 +301,20 @@ public class LocationBizImpl implements LocationBiz {
 		return locationDao.getLocationByLocColumn(location.getLocColumn());
 	}
 
-    @Override
-    public List<Location> findLocationByLpnType(LpnTypeRequest request) {
-       return locationDao.getLocationByLpnType(request);
-    }
+	@Override
+	public List<Location> findLocationByLpnType(LpnTypeRequest request) {
+		return locationDao.getLocationByLpnType(request);
+	}
 
-    @Override
-    public boolean isVirtualLocation(List<Location> locationList) {
+	@Override
+	public boolean isVirtualLocation(List<Location> locationList) {
+		Dict dict = dictionaryBiz.findZoneTypeOfVirtual();
 		// TODO
 		List<Long> locIdList = locationList.stream()
 			.map(Location::getLocId)
 			.distinct()
 			.collect(Collectors.toList());
-		return false;
-    }
+		List<Location> locations = locationDao.getLocationByZoneType(locIdList, dict.getDictKey());
+		return Func.isEmpty(locations);
+	}
 }
