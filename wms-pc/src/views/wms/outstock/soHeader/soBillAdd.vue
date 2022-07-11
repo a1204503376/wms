@@ -7,12 +7,12 @@
                          :rules="form.rules"
                          label-position="right"
                          label-width="120px"
-                         size="mini"
+                         size="medium"
                          style="margin-left:10px;margin-right:10px;">
                     <el-row>
                         <h3>发货单新增</h3>
                     </el-row>
-                    <el-row class="row-bg" type="flex">
+                    <el-row type="flex">
                         <el-col :span="8">
                             <el-form-item label="单据类型" prop="billTypeCd">
                                 <nodes-bill-type
@@ -41,7 +41,7 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row class="row-bg" type="flex">
+                    <el-row type="flex">
                         <el-col :span="8">
                             <el-form-item label="客户" prop="customerId">
                                 <nodes-customer
@@ -69,7 +69,7 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row class="row-bg" type="flex">
+                    <el-row type="flex">
                         <el-col :span="8">
                             <el-form-item label="备注" prop="soBillRemark">
                                 <el-input
@@ -77,7 +77,7 @@
                                     size="medium"
                                     :rows=2
                                     placeholder="请输入内容"
-                                    style="width: 1213px"
+                                    style="width: 1171px"
                                     type="textarea">
                                 </el-input>
                             </el-form-item>
@@ -410,9 +410,5 @@ export default {
     content: "*";
     color: #F56C6C;
     margin-right: 4px;
-}
-
-.row-bg {
-    padding: 10px 0;
 }
 </style>

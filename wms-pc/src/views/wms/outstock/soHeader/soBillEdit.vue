@@ -7,13 +7,12 @@
                          :rules="form.rules"
                          label-position="right"
                          label-width="120px"
-                         size="mini"
-                         style="margin-left:10px;margin-right:10px;"
-                >
+                         size="medium"
+                         style="margin-left:10px;margin-right:10px;">
                     <el-row>
                         <h3>出库单编辑</h3>
                     </el-row>
-                    <el-row class="row-bg" type="flex">
+                    <el-row type="flex">
                         <el-col :span="8">
                             <el-form-item label="出库单编码" prop="soBillNo">
                                 <el-input v-model="form.params.soBillNo"
@@ -24,6 +23,16 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
+                            <el-form-item label="单据类型" prop="billTypeCd">
+                                <nodes-bill-type
+                                    v-model="form.params.billTypeCd"
+                                    :default-value="true"
+                                    io-type="I"
+                                    size="medium"
+                                ></nodes-bill-type>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
                             <el-form-item label="所属库房" prop="whId">
                                 <nodes-warehouse
                                     v-model="form.params.whId"
@@ -31,6 +40,8 @@
                                 ></nodes-warehouse>
                             </el-form-item>
                         </el-col>
+                    </el-row>
+                    <el-row type="flex">
                         <el-col :span="8">
                             <el-form-item label="所属货主" prop="woId">
                                 <nodes-owner
@@ -40,8 +51,6 @@
                                 ></nodes-owner>
                             </el-form-item>
                         </el-col>
-                    </el-row>
-                    <el-row class="row-bg" type="flex">
                         <el-col :span="8">
                             <el-form-item label="客户" prop="customer">
                                 <nodes-customer
@@ -59,6 +68,8 @@
                                 </nodes-dictionary>
                             </el-form-item>
                         </el-col>
+                    </el-row>
+                    <el-row type="flex">
                         <el-col :span="8">
                             <el-form-item label="发货方式" prop="transportCode">
                                 <nodes-dictionary
@@ -66,6 +77,20 @@
                                     code="so_transport_code"
                                     size="medium">
                                 </nodes-dictionary>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row type="flex">
+                        <el-col :span="8">
+                            <el-form-item label="备注" prop="soBillRemark">
+                                <el-input
+                                    v-model="form.params.soBillRemark"
+                                    size="medium"
+                                    :rows=2
+                                    placeholder="请输入内容"
+                                    style="width: 1171px"
+                                    type="textarea">
+                                </el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -447,9 +472,5 @@ export default {
     content: "*";
     color: #F56C6C;
     margin-right: 4px;
-}
-
-.row-bg {
-    padding: 10px 0;
 }
 </style>
