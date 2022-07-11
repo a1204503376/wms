@@ -21,7 +21,7 @@ import org.nodes.wms.core.outstock.so.cache.SoCache;
 import org.nodes.wms.core.outstock.so.dto.SoHeaderDTO;
 import org.nodes.wms.core.outstock.so.enums.ShipStateEnum;
 import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
-import org.nodes.wms.core.outstock.so.enums.SyncStateEnum;
+import org.nodes.wms.dao.outstock.so.enums.SyncStateEnum;
 import org.nodes.wms.core.outstock.so.service.ISoDetailService;
 import org.nodes.wms.core.outstock.so.service.ISoHeaderService;
 import org.nodes.wms.core.outstock.so.wrapper.SoHeaderWrapper;

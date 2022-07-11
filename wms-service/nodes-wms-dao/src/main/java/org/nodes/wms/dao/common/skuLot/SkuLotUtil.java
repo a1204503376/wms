@@ -154,6 +154,10 @@ public class SkuLotUtil {
 	private static <T> boolean isEmpty(Property skuLotProperty, T skuLotObject) {
 		try {
 			String t1SkuLot = (String) (skuLotProperty.getReadMethod().invoke(skuLotObject));
+			if (Func.isNull(t1SkuLot)) {
+				return true;
+			}
+
 			return Func.isEmpty(t1SkuLot.trim());
 		} catch (IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();

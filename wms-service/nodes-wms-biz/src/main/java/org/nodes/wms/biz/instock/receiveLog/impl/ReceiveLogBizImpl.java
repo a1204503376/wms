@@ -25,15 +25,12 @@ import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
-import org.nodes.wms.dao.stock.entities.Stock;
-import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
@@ -95,7 +92,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	}
 
 	ReceiveLog createReceiveLog(ReceiveLog receiveLog, ReceiveHeader receiveHeader, ReceiveDetail detail) {
-		SkuLotUtil.setAllSkuLot(receiveLog, detail);
+		SkuLotUtil.setAllSkuLot(detail, receiveLog);
 		Location location = locationBiz.findLocationByLocCode(receiveLog.getWhId(), receiveLog.getLocCode());
 		receiveLog.setReceiveNo(receiveHeader.getReceiveNo());
 		receiveLog.setAsnBillId(receiveHeader.getAsnBillId());
@@ -106,18 +103,17 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setSkuId(detail.getSkuId());
 		receiveLog.setWspId(detail.getWspId());
 		receiveLog.setSkuLevel(detail.getSkuLevel());
-		receiveLog.setSkuLot1(detail.getSkuLot1());
-		receiveLog.setSkuLot2(detail.getSkuLot2());
 		Owner owner;
 		if (Func.isNotEmpty(detail.getWoId())) {
 			owner = ownerBiz.findById(detail.getWoId());
 		} else {
 			owner = ownerBiz.findById(receiveHeader.getWoId());
 		}
-		if (Func.isNotEmpty(owner)) {
-			receiveLog.setWoId(owner.getWoId());
-			receiveLog.setOwnerCode(owner.getOwnerCode());
+		if (Func.isEmpty(owner)) {
+			throw new ServiceException("货主不存在");
 		}
+		receiveLog.setWoId(owner.getWoId());
+		receiveLog.setOwnerCode(owner.getOwnerCode());
 		return receiveLog;
 	}
 
@@ -145,9 +141,11 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setLocCode(request.getLocCode());
 		receiveLog.setSkuCode(item.getSkuCode());
 		receiveLog.setSkuName(item.getSkuName());
-		receiveLog.setSkuSpec(request.getSkuLot2());
+		receiveLog.setSkuSpec(detail.getSkuSpec());
 		receiveLog.setWhId(request.getWhId());
 		receiveLog = createReceiveLog(receiveLog, receiveHeader, detail);
+		receiveLog.setSkuLot1(request.getSkuLot1());
+		receiveLog.setSkuLot2(request.getSkuLot2());
 		receiveLogDao.save(receiveLog);
 		return receiveLog;
 	}
@@ -197,12 +195,12 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 
 	@Override
 	public List<ReceiveLog> newReceiveLog(List<ReceiveLog> receiveLogList) {
-		receiveLogList.forEach(item->{
+		receiveLogList.forEach(item -> {
 			item.setId(null);
 			item.setQty(item.getQty().negate());
 		});
 		boolean saveSuccess = receiveLogDao.saveBatch(receiveLogList);
-		if(!saveSuccess){
+		if (!saveSuccess) {
 			throw new ServiceException("生成清点记录失败，请稍后再试");
 		}
 		return receiveLogList;

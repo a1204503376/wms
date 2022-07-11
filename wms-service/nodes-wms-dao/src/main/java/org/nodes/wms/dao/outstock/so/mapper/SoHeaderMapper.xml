@@ -68,134 +68,39 @@
 
     </select>
 
-    <select id="selectAsnBillList" resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnBillExportResponse">
-        SELECT DISTINCT
-        h.asn_bill_id,
-        h.asn_bill_no,
-        h.asn_bill_state,
-        b.bill_type_name as billTypeName,
-        h.supplier_code,
-        h.supplier_name,
-        h.external_order_no,
-        u2.real_name as externalCreateUser,
-        w.wh_name as whName,
-        h.asn_bill_remark,
-        h.create_time,
-        u1.real_name as createUser,
-        h.update_time
-        FROM asn_header h
-        LEFT JOIN asn_detail d ON h.asn_bill_id = d.asn_bill_id
-        LEFT JOIN blade_user u1 ON h.create_user = u1.id
-        LEFT JOIN blade_user u2 ON h.external_create_user = u2.id
-        LEFT JOIN wms_bill_type b ON h.bill_type_cd = b.bill_type_cd
-        LEFT JOIN wms_warehouse w ON h.wh_id = w.wh_id
-        <where>
-            h.is_deleted = 0
-            <if test="params.asnBillNo != null and params.asnBillNo != ''">
-                AND h.asn_bill_no = #{params.asn_bill_no}
-            </if>
-            <if test="params.skuIdList != null and params.skuIdList.size >0">
-                AND d.sku_id IN
-                <foreach collection="params.skuIdList" separator="," item="item" close=")" open="(">
-                    #{item}
-                </foreach>
-            </if>
-            <if test="params.asnBillStateList != null and params.asnBillStateList.size >0">
-                AND h.asn_bill_state in
-                <foreach collection="params.asnBillStateList" separator="," item="item" open="(" close=")">
-                    #{item}
-                </foreach>
-            </if>
-            <if test="params.createTimeBegin != null ">
-                AND h.create_time &gt;= #{params.createTimeBegin}
-            </if>
-            <if test="params.createTimeEnd != null">
-                AND h.create_time &lt;= #{params.createTimeEnd}
-            </if>
-            <if test="params.supplier != null and params.supplier != ''">
-                AND (h.supplier_code LIKE concat('%',#{params.supplier},'%') OR h.supplier_name LIKE
-                concat('%',#{params.supplier},'%'))
-            </if>
-            <if test="params.externalOrderNo != null and params.externalOrderNo != ''">
-                AND h.external_order_no = #{params.external_order_no}
-            </if>
-            <if test="params.externalCreateUser != null and params.externalCreateUser != ''">
-                AND h.external_create_user = #{params.external_create_user}
-            </if>
-            <if test="params.whIdList != null and params.whIdList.size >0">
-                AND h.wh_id IN
-                <foreach collection="params.whIdList" open="(" close=")" separator="," item="item">
-                    {#item}
-                </foreach>
-            </if>
-        </where>
-    </select>
-
-    <select id="selectAsnHeaderByAsnBillId" resultType="org.nodes.wms.dao.instock.asn.entities.AsnHeader">
-        SELECT asn_bill_id,
-               asn_bill_no,
-               wh_id,
-               asn_bill_state,
+    <select id="selectSoHeaderEditBySoBillId"
+            resultMap="soHeaderMap">
+        SELECT so_bill_id,
+               so_bill_no,
                bill_type_cd,
-               supplier_id,
-               supplier_code,
-               supplier_name,
-               asn_bill_remark
-        FROM asn_header
-        WHERE asn_bill_id = #{asnBillId}
-          AND is_deleted = 0
+               wh_id,
+               header.wo_id,
+               customer.id,
+               customer.code,
+               customer.name,
+               transport_code,
+               outstock_type,
+               so_bill_remark
+        FROM so_header header
+                 LEFT JOIN basics_customers customer ON customer.code = header.customer_code
+        WHERE header.so_bill_id = #{soBillId}
+          AND header.is_deleted = 0
     </select>
 
-    <select id="selectAsnHeaderViewById" resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnHeaderViewResponse">
-        SELECT h.asn_bill_id,
-               h.asn_bill_no,
-               b.bill_type_name,
-               h.supplier_code,
-               h.supplier_name,
-               h.asn_bill_remark,
-               h.create_time,
-               `user`.real_name as headerCreateUser,
-               w.wh_code,
-               w.wh_name,
-               o.owner_name
-        FROM asn_header h
-                 LEFT JOIN wms_warehouse w ON h.wh_id = w.wh_id
-                 LEFT JOIN wms_bill_type b ON h.bill_type_cd = b.bill_type_cd
-                 LEFT JOIN wms_owner o ON h.wo_id = o.wo_id
-                 LEFT JOIN blade_user `user` ON h.create_user = `user`.id
-        WHERE h.asn_bill_id = #{id}
-          and h.is_deleted = 0
-    </select>
-
-    <select id="selectAsnDetailViewByAsnBillId"
-            resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnDetailViewResponse">
-        SELECT asn_detail_id,
-               asn_line_no,
-               sku_code,
-               sku_name,
-               sku_spec,
-               um_name,
-               plan_qty,
-               scan_qty,
-               surplus_qty,
-               remark,
-               detail_status
-        FROM asn_detail
-        WHERE asn_bill_id = #{asnBillId}
-    </select>
-
-    <select id="selectLogActionById"
-            resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnLogActionViewResponse">
-        SELECT id,
-               user_account,
-               user_real_name,
-               type,
-               bill_id,
-               bill_no,
-               log,
-               update_time
-        FROM log_action
-        WHERE bill_id = #{id}
-    </select>
+    <resultMap id="soHeaderMap" type="org.nodes.wms.dao.outstock.so.dto.output.SoHeaderEditResponse">
+        <id property="soBillId" column="so_bill_id"/>
+        <result property="soBillNo" column="so_bill_no"/>
+        <result property="billTypeCd" column="bill_type_cd"/>
+        <result property="whId" column="wh_id"/>
+        <result property="woId" column="wo_id"/>
+        <result property="transportCode" column="transport_code"/>
+        <result property="outstockType" column="outstock_type"/>
+        <result property="soBillRemark" column="so_bill_remark"/>
+        <association property="customer" javaType="org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse">
+            <id column="id" property="id"/>
+            <result column="code" property="code"/>
+            <result column="name" property="name"/>
+        </association>
+    </resultMap>
 </mapper>
 

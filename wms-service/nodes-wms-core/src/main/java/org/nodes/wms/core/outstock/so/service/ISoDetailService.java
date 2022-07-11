@@ -4,7 +4,7 @@ package org.nodes.wms.core.outstock.so.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.nodes.wms.core.outstock.so.dto.SoDetailDTO;
 import org.nodes.wms.core.outstock.so.entity.SoDetail;
-import org.nodes.wms.core.outstock.so.enums.SoDetailStateEnum;
+import org.nodes.wms.dao.outstock.so.enums.SoDetailStateEnum;
 
 import java.math.BigDecimal;
 

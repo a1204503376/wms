@@ -1,10 +1,13 @@
 package org.nodes.wms.biz.stock;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.putway.dto.output.CallAgvResponse;
+import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
+import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
 import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
 import org.nodes.wms.dao.stock.entities.Serial;
@@ -84,6 +87,7 @@ public interface StockBiz {
 
 	/**
 	 * 根据库存查询所有的序列号
+	 *
 	 * @param stockId
 	 * @return 序列号
 	 */
@@ -114,7 +118,7 @@ public interface StockBiz {
 	 * @param boxCode 箱码的后几位
 	 * @return key:lpn编码
 	 */
-    List<CallAgvResponse> findLpnStockOnStageLeftByCallAgv(Long whId, String boxCode);
+	List<CallAgvResponse> findLpnStockOnStageLeftByCallAgv(Long whId, String boxCode);
 
 	/**
 	 * 根据清点记录查询入库暂存区的库存,如果查询的库存超过两个会报异常
@@ -168,5 +172,14 @@ public interface StockBiz {
 	 * 根据Id获取库存实体
 	 */
 	Stock findStockById(Long stockId);
+
+	/**
+	 * 获取库存分页
+	 *
+	 * @param request Pda根据编码查询库存-请求对象
+	 * @param query   分页条件
+	 * @return Pda根据编码查询库存-响应对象
+	 */
+	IPage<FindAllStockByNoResponse> selectStockList(FindAllStockByNoRequest request, Query query);
 
 }

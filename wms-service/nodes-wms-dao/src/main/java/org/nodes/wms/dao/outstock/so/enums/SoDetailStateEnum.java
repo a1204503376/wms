@@ -1,4 +1,4 @@
-package org.nodes.wms.core.outstock.so.enums;
+package org.nodes.wms.dao.outstock.so.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

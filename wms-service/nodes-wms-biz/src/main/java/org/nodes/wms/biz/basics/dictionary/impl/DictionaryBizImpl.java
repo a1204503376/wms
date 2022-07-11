@@ -33,11 +33,10 @@ public class DictionaryBizImpl implements DictionaryBiz {
 		return dictService.findByDictValue(DictCodeConstant.ZONE_TYPE, "自动化存储区");
 	}
 
-    @Override
-    public Dict findZoneTypeOfVirtual() {
-        // TODO
-		return null;
-    }
+	@Override
+	public Dict findZoneTypeOfVirtual() {
+		return dictService.findByDictValue(DictCodeConstant.ZONE_TYPE, "虚拟库区");
+	}
 
 
 }
