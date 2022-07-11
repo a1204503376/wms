@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -38,7 +39,7 @@ public class SpringSessionValidationScheduler implements SessionValidationSchedu
     /**
      * 会话验证管理器
      */
-    @Autowired
+    @Resource
     @Qualifier("sessionManager")
     @Lazy
     private ValidatingSessionManager sessionManager;
@@ -59,8 +60,6 @@ public class SpringSessionValidationScheduler implements SessionValidationSchedu
      *
      * <p>
      * Unless this method is called, the default value is {@link #DEFAULT_SESSION_VALIDATION_INTERVAL}.
-     *
-     * @param sessionValidationInterval
      */
     public void setSessionValidationInterval(long sessionValidationInterval) {
         this.sessionValidationInterval = sessionValidationInterval;
@@ -80,12 +79,9 @@ public class SpringSessionValidationScheduler implements SessionValidationSchedu
         }
 
         try {
-            executorService.scheduleAtFixedRate(new Runnable() {
-                @Override
-                public void run() {
-                    if (enabled) {
-                        sessionManager.validateSessions();
-                    }
+            executorService.scheduleAtFixedRate(() -> {
+                if (enabled) {
+                    sessionManager.validateSessions();
                 }
             }, 1000, sessionValidationInterval * 60 * 1000, TimeUnit.MILLISECONDS);
 

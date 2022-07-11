@@ -302,4 +302,14 @@ public class LocationBizImpl implements LocationBiz {
     public List<Location> findLocationByLpnType(LpnTypeRequest request) {
        return locationDao.getLocationByLpnType(request);
     }
+
+    @Override
+    public boolean isVirtualLocation(List<Location> locationList) {
+		// TODO
+		List<Long> locIdList = locationList.stream()
+			.map(Location::getLocId)
+			.distinct()
+			.collect(Collectors.toList());
+		return false;
+    }
 }

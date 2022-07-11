@@ -42,7 +42,11 @@ public class AjaxResult extends HashMap<String, Object> {
         /**
          * 错误
          */
-        ERROR(500);
+        ERROR(400),
+        /**
+         * 错误
+         */
+        EXCEPTION(500);
         private final int value;
 
         Type(int value) {
@@ -181,11 +185,42 @@ public class AjaxResult extends HashMap<String, Object> {
     /**
      * 返回错误消息
      *
+     * @param msg 返回内容
+     * @return 警告消息
+     */
+    public static AjaxResult errorParams(String msg, Object... params) {
+        return AjaxResult.error(StringUtils.format(msg, params));
+    }
+
+    /**
+     * 返回错误消息
+     *
      * @param msg  返回内容
      * @param data 数据对象
      * @return 警告消息
      */
     public static AjaxResult error(String msg, Object data) {
         return new AjaxResult(Type.ERROR, msg, data);
+    }
+
+    /**
+     * 返回运行时未知异常消息
+     *
+     * @param msg 返回内容
+     * @return 警告消息
+     */
+    public static AjaxResult exception(String msg) {
+        return exception(msg, null);
+    }
+
+    /**
+     * 返回运行时未知异常消息
+     *
+     * @param msg  返回内容
+     * @param data 数据对象
+     * @return 警告消息
+     */
+    public static AjaxResult exception(String msg, Object data) {
+        return new AjaxResult(Type.EXCEPTION, msg, data);
     }
 }

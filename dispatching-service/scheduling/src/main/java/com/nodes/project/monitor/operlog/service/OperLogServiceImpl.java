@@ -3,9 +3,9 @@ package com.nodes.project.monitor.operlog.service;
 import com.nodes.common.utils.text.Convert;
 import com.nodes.project.monitor.operlog.domain.OperLog;
 import com.nodes.project.monitor.operlog.mapper.OperLogMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Service
 public class OperLogServiceImpl implements IOperLogService {
-    @Autowired
+    @Resource
     private OperLogMapper operLogMapper;
 
     /**

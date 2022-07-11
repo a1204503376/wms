@@ -17,15 +17,21 @@ import java.math.BigDecimal;
 public class PublishJobRequest {
 
     /**
-     * WMS单据主键ID
+     * WMS任务ID
      */
-    @NotNull(message = "WMS单据主键ID不能为空")
-    private Long wmsBillId;
+    @NotNull(message = "WMS任务ID不能为空")
+    private Long wmsTaskId;
 
     /**
-     * WMS单据编号
+     * WMS任务明细ID
      */
-    @NotBlank(message = "WMS单据编号不能为空")
+    @NotNull(message = "WMS任务明细ID不能为空")
+    private Long wmsTaskDetailId;
+
+    /**
+     * WMS单据编码
+     */
+    @NotBlank(message = "WMS单据编码不能为空")
     private String wmsBillNo;
 
     /**
@@ -35,15 +41,9 @@ public class PublishJobRequest {
     private String wmsBillType;
 
     /**
-     * WMS单据明细ID
+     * WMS单据行号
      */
-    @NotNull(message = "WMS单据明细ID不能为空")
-    private Long wmsDetailId;
-
-    /**
-     * WMS行号
-     */
-    @NotBlank(message = "WMS行号不能为空")
+    @NotBlank(message = "WMS单据行号不能为空")
     private String wmsLineNo;
 
     /**
@@ -78,10 +78,11 @@ public class PublishJobRequest {
     private String wmsUmName;
 
     /**
-     * 类型：1=入库，2=库内，3=出库
+     * 类型
      */
-    @EnumValid(target = JobTypeEnum.class, message = "JOB类型只允许：1=入库，2=库内，3=出库")
-    private Integer jobType;
+    @EnumValid(target = JobTypeEnum.class, message = "JOB类型非法")
+    @NotNull(message = "JOB类型不能为空")
+    private String jobTypeCode;
 
     /**
      * 位置起点(库位)

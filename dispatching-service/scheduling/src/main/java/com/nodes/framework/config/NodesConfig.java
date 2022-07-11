@@ -1,5 +1,6 @@
 package com.nodes.framework.config;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -9,10 +10,16 @@ import org.springframework.stereotype.Component;
  * @author dml
  */
 @Component
+@Data
 @ConfigurationProperties(value = NodesConfig.PREFIX)
 public class NodesConfig {
 
-    public static final String PREFIX = "nodes";
+    public static final String PREFIX = "scheduling";
+
+    /**
+     * WMS API
+     */
+    private String wmsUrl;
 
     /**
      * 项目名称
