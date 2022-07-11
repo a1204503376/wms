@@ -18,10 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(WmsApiPath.WMS_PDA_API + "/receiveByMultiBox")
 public class receiveByMultiBoxCode {
 	private final InStockBiz inStockBiz;
+
 	/**
 	 * PDA多箱收货
 	 */
-	@ApiLog("PDA多箱  箱收货")
+	@ApiLog("PDA多箱收货")
 	@PostMapping("/receiveByMultiBoxCode")
 	public String receiveByMultiBoxCode(@RequestBody ReceiveDetailLpnPdaMultiRequest receiveDetailLpnPdaMultiRequest) {
 		inStockBiz.receiveByMultiBoxCode(receiveDetailLpnPdaMultiRequest);

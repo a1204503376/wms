@@ -36,7 +36,7 @@ public class InStockBizImpl implements InStockBiz {
 
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	@Override
-	public void receiveByBoxCode(ReceiveDetailLpnPdaRequest request,String logType) {
+	public void receiveByBoxCode(ReceiveDetailLpnPdaRequest request, String logType) {
 		boolean hasReceiveHeaderId = Func.isNotEmpty(request.getReceiveHeaderId());
 		ReceiveHeader receiveHeader = new ReceiveHeader();
 		// 判断业务参数（无单收货除外），是否可以正常收货、超收
@@ -78,7 +78,7 @@ public class InStockBizImpl implements InStockBiz {
 				//更新lpn表的明细id
 				lpn.setReceiveDetailId(receiveDetail.getReceiveDetailId());
 				//更新lpn表头表id
-                lpn.setReceiveHeaderId(receiveHeader.getReceiveId());
+				lpn.setReceiveHeaderId(receiveHeader.getReceiveId());
 				receiveBiz.updateReceiveDetailLpn(lpn);
 				//设置request的明细id
 				item.setReceiveDetailId(receiveDetail.getReceiveDetailId());
@@ -109,12 +109,12 @@ public class InStockBizImpl implements InStockBiz {
 				// 更新收货单状态
 				receiveBiz.updateReciveHeader(header, detail);
 			}
-				// 记录业务日志
-              if(Func.isEmpty(logType)){
-				  //传入参数为空设置为按箱收货类型
-				  logType = StockLogTypeEnum. INSTOCK_BY_BOX.getDesc();
-			  }
-			   receiveBiz.log(logType,header,detail,receiveLog);
+			// 记录业务日志
+			if (Func.isEmpty(logType)) {
+				//传入参数为空设置为按箱收货类型
+				logType = StockLogTypeEnum.INSTOCK_BY_BOX.getDesc();
+			}
+			receiveBiz.log(logType, header, detail, receiveLog);
 
 		}
 
@@ -137,12 +137,13 @@ public class InStockBizImpl implements InStockBiz {
 		// 更新收货单状态
 		receiveBiz.updateReciveHeader(receiveHeader, detail);
 		// 记录业务日志
-		receiveBiz.log(StockLogTypeEnum.INSTOCK_BY_PCS.getDesc(),receiveHeader,detail,receiveLog);
+		receiveBiz.log(StockLogTypeEnum.INSTOCK_BY_PCS.getDesc(), receiveHeader, detail, receiveLog);
 		//检查收货是否完成 并返回
 		return receiveBiz.checkByPcsReceive(request.getReceiveDetailId(), receiveLog.getReceiveId());
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void receiveByMultiBoxCode(ReceiveDetailLpnPdaMultiRequest receiveDetailLpnPdaMultiRequest) {
 		// 判断lpnCode是否为空，如果为空则随机生成一个lpnCode
 		if (Func.isEmpty(receiveDetailLpnPdaMultiRequest.getLpnCode())) {
@@ -155,7 +156,7 @@ public class InStockBizImpl implements InStockBiz {
 			item.setSkuLot1(receiveDetailLpnPdaMultiRequest.getSkuLot1());
 			item.setSkuLot2(receiveDetailLpnPdaMultiRequest.getSkuLot2());
 			item.setWhId(receiveDetailLpnPdaMultiRequest.getWhId());
-			receiveByBoxCode(item,StockLogTypeEnum.INSTOCK_BY_MULTI_BOX.getDesc());
+			receiveByBoxCode(item, StockLogTypeEnum.INSTOCK_BY_MULTI_BOX.getDesc());
 		}
 
 
@@ -180,7 +181,7 @@ public class InStockBizImpl implements InStockBiz {
 			ReceiveHeader receiveHeader = receiveBiz.getReceiveHeaderById(item.getReceiveId());
 			receiveBiz.updateReciveHeader(receiveHeader, receiveDetail);
 			// 生成业务日志
-			receiveBiz.log(StockLogTypeEnum.OUTSTOCK_BY_CANCEL_RECEIVE.getDesc(),receiveHeader,receiveDetail,item);
+			receiveBiz.log(StockLogTypeEnum.OUTSTOCK_BY_CANCEL_RECEIVE.getDesc(), receiveHeader, receiveDetail, item);
 		});
 	}
 }

@@ -37,6 +37,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -144,8 +145,10 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setSkuSpec(detail.getSkuSpec());
 		receiveLog.setWhId(request.getWhId());
 		receiveLog = createReceiveLog(receiveLog, receiveHeader, detail);
+		receiveLog.setWsuCode(detail.getUmCode());
 		receiveLog.setSkuLot1(request.getSkuLot1());
 		receiveLog.setSkuLot2(request.getSkuLot2());
+		receiveLog.setSkuLot3(Func.formatDate(new Date()));
 		receiveLogDao.save(receiveLog);
 		return receiveLog;
 	}

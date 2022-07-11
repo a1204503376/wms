@@ -126,7 +126,7 @@ public class HoneywellScannerBroadcasts extends HoneywellScanner {
 
     class Constants {
         /**
-         * Get the result of decoded data
+         * Get the result of decoded data 广播名称
          */
         public static final String ACTION_BARCODE_DATA = "INTERMEC";
 
