@@ -1,11 +1,14 @@
 package org.nodes.wms.dao.stock.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.swagger.models.auth.In;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Param;
+import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
+import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,7 +24,7 @@ public interface StockMapper extends BaseMapper<Stock> {
 	 * @param locIdList:
 	 * @return BigDecimal
 	 */
-	HashMap<String,Object> selectStockQtyByLocIdList(List<Long> locIdList);
+	HashMap<String, Object> selectStockQtyByLocIdList(List<Long> locIdList);
 
 	/**
 	 * 根据库位id查询物品总数
@@ -30,4 +33,14 @@ public interface StockMapper extends BaseMapper<Stock> {
 	 * @return Integer
 	 */
 	Integer selectStockSkuCountByLocIdList(List<Long> locIdList);
+
+	/**
+	 * 获取库存分页
+	 *
+	 * @param request Pda根据编码查询库存-请求对象
+	 * @param page    分页条件
+	 * @return Pda根据编码查询库存-响应对象
+	 */
+	Page<FindAllStockByNoResponse> getList(@Param("query") FindAllStockByNoRequest request, IPage<Stock> page);
 }
+

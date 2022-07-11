@@ -6,9 +6,8 @@
                          <span class="icon">
                             <i class="iconfont icon-duijizhutu"/>
                          </span>
-                    <!--                                    {{ flowAnalysis.qcSkuQty }}-->
                     <span class="val">
-                        12322224.123
+                        {{ flowAnalysis.qcSkuQty }}
                         <label class="um">PCS</label>
                     </span>
                 </div>
@@ -101,7 +100,6 @@
 <script>
 import {getInStockRate, getOutStockRate, getStockData} from "@/api/wms/index/index.js";
 import "../../../public/cdn/iconfont/index/iconfont.css"
-import LabelData from "@/views/wms/basedata/enterprise/labelData";
 
 export default {
     name: "index",
@@ -121,7 +119,6 @@ export default {
             barOutStockSku: null,
         };
     },
-    components: {LabelData},
     created() {
     },
     mounted() {
@@ -261,7 +258,7 @@ export default {
     display: block;
     white-space: nowrap;
     overflow: hidden;
-    margin-left: 5px;
+    padding-left: 10px;
     line-height: 75px;
     font-size: 30px;
     font-weight: 600;

@@ -2,9 +2,12 @@ package org.nodes.wms.dao.stock.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.wms.dao.stock.StockDao;
+import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
+import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.nodes.wms.dao.stock.mapper.StockMapper;
@@ -202,17 +205,25 @@ public class StockDaoImpl
 
 	@Override
 	public List<Stock> getStockByLocIdList(List<Long> locIdList) {
-		if(Func.isEmpty(locIdList)){
+		if (Func.isEmpty(locIdList)) {
 			throw new NullArgumentException("StockDaoImpl.getStockByLocIdList方法的参数为空");
 		}
 		LambdaQueryWrapper<Stock> lambdaQueryWrapper = getStockQuery();
-		lambdaQueryWrapper.in(Stock::getLocId,locIdList);
+		lambdaQueryWrapper.in(Stock::getLocId, locIdList);
 		return super.list(lambdaQueryWrapper);
 	}
 
 	@Override
 	public Stock getStockById(Long stockId) {
 		return super.getById(stockId);
+	}
+
+	@Override
+	public IPage<FindAllStockByNoResponse> getStockList(FindAllStockByNoRequest request, IPage<Stock> page) {
+		if (Func.isEmpty(request.getNo())) {
+			throw new NullArgumentException("编码不能为空");
+		}
+		return baseMapper.getList(request, page);
 	}
 
 	private LambdaQueryWrapper<Stock> getStockQuery() {
