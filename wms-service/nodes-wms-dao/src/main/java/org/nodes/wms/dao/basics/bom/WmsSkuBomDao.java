@@ -55,4 +55,12 @@ public interface WmsSkuBomDao {
 	 * @return 是否成功
 	 */
 	Boolean delete(List<Long> ids);
+
+	/**
+	 * 批量保存
+	 *
+	 * @param skuBomList 物料清单集合
+	 * @return 是否成功
+	 */
+	Boolean saveSkuBomList(List<SkuBom> skuBomList);
 }

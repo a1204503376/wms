@@ -159,7 +159,21 @@ export default [
                 component: () => import('@/views/wms/warehouse/location/LocationDetail')
             }]
     },
-
+    {
+        path: '/WmsSkuBomAddOrEdit',
+        component: Layout,
+        children: [{
+            path: 'add/:id',
+            name: '新增物料',
+            props: true,
+            component: () => import('@/views/wms/basics/WmsSkuBom/WmsSkuBomAddOrEdit')
+        }, {
+            path: 'edit/:id',
+            name: '编辑物料',
+            props: true,
+            component: () => import('@/views/wms/basics/WmsSkuBom/WmsSkuBomAddOrEdit')
+        }]
+    },
     {
         path: '/logMessage',
         component: Layout,

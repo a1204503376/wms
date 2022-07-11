@@ -3,13 +3,10 @@ package org.nodes.wms.core.basedata.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.core.tool.entity.DataVerify;
-import org.nodes.wms.core.basedata.dto.SkuLotValDTO;
-import org.nodes.wms.core.basedata.entity.SkuLotVal;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotVal;
 import org.nodes.wms.core.basedata.excel.SkuLotValExcel;
 import org.nodes.wms.core.basedata.vo.SkuLotValVO;
 import org.springblade.core.mp.base.BaseService;
-import org.springframework.web.bind.annotation.RequestParam;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;

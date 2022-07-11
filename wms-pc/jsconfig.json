@@ -1,11 +1,14 @@
 {
+    "allowJs": true,
     "compilerOptions": {
         "baseUrl": "./",
         "paths": {
             "@/*": [
                 "src/*"
             ]
-        }
+        },
+        "target": "ES6",
+        "allowSyntheticDefaultImports": true
     },
     "exclude": [
         "node_modules",

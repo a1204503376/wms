@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.nodes.core.tool.validation.Excel;
-import org.nodes.wms.core.basedata.entity.SkuLot;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLot;
 
 import javax.validation.constraints.NotBlank;
 

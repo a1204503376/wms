@@ -1,7 +1,7 @@
 
 package org.nodes.wms.core.strategy.service;
 
-import org.nodes.core.tool.entity.SkuLotBaseEntity;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.core.strategy.dto.InstockDetailDTO;
 import org.nodes.wms.dao.putway.entities.StInstock;
 import org.nodes.wms.dao.putway.entities.StInstockDetail;

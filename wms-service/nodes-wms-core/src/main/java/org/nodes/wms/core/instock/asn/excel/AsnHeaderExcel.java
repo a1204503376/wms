@@ -5,7 +5,7 @@ import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.nodes.core.tool.entity.ISkuLotBase;
+import org.nodes.wms.dao.basics.skulot.entities.ISkuLotBase;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.StringPool;
 

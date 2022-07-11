@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -44,9 +43,9 @@ public class UserRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {
         User user = ShiroUtils.getSysUser();
         // 角色列表
-        Set<String> roles = new HashSet<String>();
+        Set<String> roles;
         // 功能列表
-        Set<String> menus = new HashSet<String>();
+        Set<String> menus;
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         // 管理员拥有所有权限
         if (user.isAdmin()) {
@@ -75,7 +74,7 @@ public class UserRealm extends AuthorizingRealm {
             password = new String(upToken.getPassword());
         }
 
-        User user = null;
+        User user;
         try {
             user = loginService.login(username, password);
         } catch (CaptchaException e) {
@@ -86,9 +85,7 @@ public class UserRealm extends AuthorizingRealm {
             throw new IncorrectCredentialsException(e.getMessage(), e);
         } catch (UserPasswordRetryLimitExceedException e) {
             throw new ExcessiveAttemptsException(e.getMessage(), e);
-        } catch (UserBlockedException e) {
-            throw new LockedAccountException(e.getMessage(), e);
-        } catch (RoleBlockedException e) {
+        } catch (UserBlockedException | RoleBlockedException e) {
             throw new LockedAccountException(e.getMessage(), e);
         } catch (Exception e) {
             log.info("对用户[" + username + "]进行登录验证..验证未通过{}", e.getMessage());

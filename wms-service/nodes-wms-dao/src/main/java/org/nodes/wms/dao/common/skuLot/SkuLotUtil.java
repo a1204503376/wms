@@ -1,7 +1,12 @@
 package org.nodes.wms.dao.common.skuLot;
 
+import org.nodes.wms.dao.basics.skulot.SkuLotValDao;
+import org.nodes.wms.dao.basics.skulot.constant.SkuLotConstant;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotVal;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.ReflectUtil;
+import org.springblade.core.tool.utils.SpringUtil;
 import org.springframework.core.convert.Property;
 
 import java.lang.reflect.InvocationTargetException;
@@ -97,6 +102,10 @@ public class SkuLotUtil {
 	 * @return true:存在30个批属性
 	 */
 	public static <T> boolean hasSkuLot(T object) {
+		if (Func.isNull(object)) {
+			throw new ServiceException("批属性校验失败，对象为空");
+		}
+
 		String propertyName;
 		for (int i = 0; i < SKULOT_NUMBER; ++i) {
 			propertyName = String.format("%s%d", SKULOT, i + 1);
@@ -108,4 +117,48 @@ public class SkuLotUtil {
 
 		return true;
 	}
+
+	/**
+	 * 校验SKULOT是否符合设置，目前只校验是否必填
+	 *
+	 * @param skuLotObject 含skuLot的对象
+	 * @param woId         货主id，不能为空
+	 * @param whId         库房id，不能为空
+	 * @param <T>          有skulot属性的类
+	 */
+	public static <T> void check(T skuLotObject, Long woId, Long whId) {
+		if (Func.isNull(woId) || Func.isNull(whId) || !hasSkuLot(skuLotObject)) {
+			throw new ServiceException("批属性校验失败，货主和库房编码不能为空,或对象中没有SKULOT属性");
+		}
+
+		SkuLotValDao skuLotValDao = SpringUtil.getBean(SkuLotValDao.class);
+		SkuLotVal skuLotVal = skuLotValDao.getByWhIdAndWoId(whId, woId);
+		if (Func.isNull(skuLotVal)) {
+			return;
+		}
+
+		String propertyName;
+		for (int i = 0; i < SKULOT_NUMBER; ++i) {
+			Integer skuLotMust = skuLotVal.skuLotMustGet(i + 1);
+			if (SkuLotConstant.SKULOT_MUST.equals(skuLotMust)) {
+				propertyName = String.format("%s%d", SKULOT, i + 1);
+				Property skuLotProperty = ReflectUtil.getProperty(skuLotObject.getClass(), propertyName);
+				if (isEmpty(skuLotProperty, skuLotObject)) {
+					throw new ServiceException(
+						String.format("批属性校验失败,批属性%d不能为空", i + 1));
+				}
+			}
+		}
+	}
+
+	private static <T> boolean isEmpty(Property skuLotProperty, T skuLotObject) {
+		try {
+			String t1SkuLot = (String) (skuLotProperty.getReadMethod().invoke(skuLotObject));
+			return Func.isEmpty(t1SkuLot.trim());
+		} catch (IllegalAccessException | InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+
 }

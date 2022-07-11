@@ -10,7 +10,6 @@ $.validator.setDefaults({
 });
 
 function login() {
-    alert("1222");
     $.modal.loading($("#btnSubmit").data("loading"));
     var username = $.common.trim($("input[name='username']").val());
     var password = $.common.trim($("input[name='password']").val());

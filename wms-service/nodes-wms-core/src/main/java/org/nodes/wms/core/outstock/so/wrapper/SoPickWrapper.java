@@ -2,7 +2,7 @@ package org.nodes.wms.core.outstock.so.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.constant.DictCodeConstant;
-import org.nodes.core.tool.entity.SkuLotBaseEntity;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.dao.basics.sku.entities.SkuPackage;

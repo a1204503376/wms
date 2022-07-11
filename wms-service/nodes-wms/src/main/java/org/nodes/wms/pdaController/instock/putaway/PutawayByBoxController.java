@@ -11,7 +11,9 @@ import org.nodes.wms.dao.putway.dto.input.PutawayByBoxRequest;
 import org.nodes.wms.dao.putway.dto.output.PutawayByBoxResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.log.annotation.ApiLog;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.api.R;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +43,9 @@ public class PutawayByBoxController {
 	@PostMapping("/findPutawayDataByBoxCode")
 	public R<PutawayByBoxResponse> findPutawayDataByBoxCode(@RequestBody PutawayByBoxRequest request) {
 		List<Stock> stockList = stockBiz.findStockOnStageByBoxCode(request.getWhId(), request.getBoxCode());
+		if (Func.isEmpty(stockList)) {
+			throw new ServiceException("暂无入库暂存区的库存");
+		}
 		BigDecimal qty = StockUtil.getStockBalance(stockList);
 		PutawayByBoxResponse response = new PutawayByBoxResponse();
 		if (stockList.get(BigDecimal.ZERO.intValue()).getBoxCode().indexOf(PutwayConstant.BOX_CODE_A) == BigDecimal.ZERO.intValue() ||

@@ -2,10 +2,9 @@ package org.nodes.wms.core.basedata.wrapper;
 
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import org.nodes.core.base.cache.ParamCache;
-import org.nodes.wms.core.basedata.cache.OwnerCache;
 import org.nodes.wms.core.basedata.dto.SkuLotDTO;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
-import org.nodes.wms.core.basedata.entity.SkuLot;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLot;
 import org.nodes.wms.core.basedata.excel.SkuLotExcel;
 import org.nodes.wms.core.basedata.service.IOwnerService;
 import org.nodes.wms.core.basedata.vo.SkuLotVO;

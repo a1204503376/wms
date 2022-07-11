@@ -1,5 +1,6 @@
 package org.nodes.wms.biz.stock.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
@@ -25,7 +26,9 @@ import org.nodes.wms.dao.stock.SerialLogDao;
 import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.StockLogDao;
 import org.nodes.wms.dao.stock.constant.SerialLogConstant;
+import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
+import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
 import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogExcelResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
@@ -144,6 +147,8 @@ public class StockBizImpl implements StockBiz {
 	public Stock inStock(StockLogTypeEnum type, ReceiveLog receiveLog) {
 		Location location = locationBiz.findByLocId(receiveLog.getLocId());
 		canInStockByLocation(location, receiveLog.getSkuId(), receiveLog);
+		// 验证批属性
+		SkuLotUtil.check(receiveLog, receiveLog.getWoId(), receiveLog.getWhId());
 		// 形成库存，需要考虑库存合并
 		Stock stock = createStock(receiveLog, location);
 		Stock existStock = stockMergeStrategy.matchCanMergeStock(stock);
@@ -192,7 +197,7 @@ public class StockBizImpl implements StockBiz {
 			updateSerialAndSaveLog(serialNoList, SerialStateEnum.OUT_STOCK, stock.getStockId(), stockLog);
 		}
 
-		return null;
+		return stock;
 	}
 
 	private void updateSerialAndSaveLog(List<String> serialNoList, SerialStateEnum state, Long stockId,
@@ -510,9 +515,6 @@ public class StockBizImpl implements StockBiz {
 
 	   }
 
-
-
-
 	@Override
 	public Stock findStockOnStage(ReceiveLog receiveLog) {
 		return stockMergeStrategy.matchSameStock(receiveLog);
@@ -606,6 +608,12 @@ public class StockBizImpl implements StockBiz {
 	@Override
 	public Stock findStockById(Long stockId) {
 		return stockDao.getStockById(stockId);
+	}
+
+	@Override
+	public IPage<FindAllStockByNoResponse> selectStockList(FindAllStockByNoRequest request, Query query) {
+		IPage<Stock> page = Condition.getPage(query);
+		return stockDao.getStockList(request, page);
 	}
 
 

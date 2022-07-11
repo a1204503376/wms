@@ -114,10 +114,11 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		} else {
 			owner = ownerBiz.findById(receiveHeader.getWoId());
 		}
-		if (Func.isNotEmpty(owner)) {
-			receiveLog.setWoId(owner.getWoId());
-			receiveLog.setOwnerCode(owner.getOwnerCode());
+		if (Func.isEmpty(owner)) {
+			throw new ServiceException("货主不存在");
 		}
+		receiveLog.setWoId(owner.getWoId());
+		receiveLog.setOwnerCode(owner.getOwnerCode());
 		return receiveLog;
 	}
 
@@ -197,12 +198,12 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 
 	@Override
 	public List<ReceiveLog> newReceiveLog(List<ReceiveLog> receiveLogList) {
-		receiveLogList.forEach(item->{
+		receiveLogList.forEach(item -> {
 			item.setId(null);
 			item.setQty(item.getQty().negate());
 		});
 		boolean saveSuccess = receiveLogDao.saveBatch(receiveLogList);
-		if(!saveSuccess){
+		if (!saveSuccess) {
 			throw new ServiceException("生成清点记录失败，请稍后再试");
 		}
 		return receiveLogList;

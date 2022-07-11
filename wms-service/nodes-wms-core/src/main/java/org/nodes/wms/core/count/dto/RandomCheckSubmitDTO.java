@@ -2,7 +2,7 @@ package org.nodes.wms.core.count.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.nodes.core.tool.entity.SkuLotBaseEntity;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;

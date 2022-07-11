@@ -10,6 +10,7 @@ import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.stock.entities.Stock;
+import org.springblade.core.log.exception.ServiceException;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -54,13 +55,17 @@ public class TianYiPutwayStrategy {
 	}
 
 	/**
-	 * 计算库位一列的载重
+	 * 计算库位一列的载重, 虚拟库位不参与计算
 	 *
 	 * @return
 	 */
 	private BigDecimal staticsLoadWeightByColumn(Location location) {
 		// 获取同列的所有库位
 		List<Location> locationList = locationBiz.getLocationByColumn(location);
+		// 虚拟库位不参与计算
+		if (locationBiz.isVirtualLocation(locationList)){
+			throw new ServiceException("虚拟库位不存在载重计算");
+		}
 		// 获取该列的所有库存
 		List<Stock> stockList = stockBiz.findStockByLocation(locationList);
 		// 根据箱型计算总重, 需要注意同一个库位上可能存在多个stock，算重量时只需根据库位计算
@@ -71,8 +76,7 @@ public class TianYiPutwayStrategy {
 				, ArrayList::new));
 		// 库位1：stock1 stock2 库位2：stock3  重量：stock1.箱型重量 + stock3.箱型重量
 		BigDecimal sumWeight = BigDecimal.ZERO;
-		for (Stock stock :
-			stocks) {
+		for (Stock stock : stocks) {
 			LpnType lpnType = lpnTypeBiz.findLpnTypeByBoxCode(stock.getLpnCode());
 			sumWeight = sumWeight.add(lpnType.getWeight());
 		}

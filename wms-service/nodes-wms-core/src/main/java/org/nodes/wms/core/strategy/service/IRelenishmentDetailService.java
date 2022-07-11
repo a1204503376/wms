@@ -1,7 +1,7 @@
 
 package org.nodes.wms.core.strategy.service;
 
-import org.nodes.core.tool.entity.SkuLotBaseEntity;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.core.strategy.dto.RelenishmentDetailDTO;
 import org.nodes.wms.core.strategy.entity.Relenishment;
 import org.nodes.wms.core.strategy.entity.RelenishmentDetail;

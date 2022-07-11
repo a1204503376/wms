@@ -1,6 +1,4 @@
-package org.nodes.core.tool.entity;
-
-import java.math.BigDecimal;
+package org.nodes.wms.dao.basics.skulot.entities;
 
 /**
  * @program: WmsCore
