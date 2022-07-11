@@ -22,5 +22,9 @@ public @interface EnumValid {
 
     Class<?>[] target() default {};
 
-    String validField() default "getCode";
+    /**
+     * 调用的方法名称
+     * 枚举类型需要实现接口：IPairs
+     */
+    String method() default "key";
 }

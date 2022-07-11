@@ -87,28 +87,47 @@ public class Constants {
     public static final String RESOURCE_PREFIX = "/profile";
 
     /**
-     * RMI 远程方法调用
+     * 调度JOB类型
      */
-    public static final String LOOKUP_RMI = "rmi:";
+    public static final String SCHEDULING_JOB_TYPE = "scheduling_job_type";
 
     /**
-     * LDAP 远程方法调用
+     * 调度JOB类型对应的优先级
      */
-    public static final String LOOKUP_LDAP = "ldap:";
+    public static final String SCHEDULING_JOB_PRIORITY = "scheduling_job_priority";
 
     /**
-     * LDAPS 远程方法调用
+     * 调度JOB默认优先级
      */
-    public static final String LOOKUP_LDAPS = "ldaps:";
+    public static final int DEFAULT_PRIORITY = 100;
 
     /**
-     * 定时任务白名单配置（仅允许访问的包名，如其他需要可以自行添加）
+     * 调度JOB最高优先级
      */
-    public static final String[] JOB_WHITELIST_STR = {"com.nodes"};
+    public static final int HIGHEST_PRIORITY = 0;
 
     /**
-     * 定时任务违规的字符
+     * 系统通用API路径前缀
      */
-    public static final String[] JOB_ERROR_STR = {"java.net.URL", "javax.naming.InitialContext", "org.yaml.snakeyaml",
-            "org.springframework", "com.nodes.common.utils.file"};
+    public static final String API_PATH_PREFIX = "/api/";
+
+    /**
+     * AGV API
+     */
+    public static final String API_AGV = API_PATH_PREFIX + "agv";
+
+    /**
+     * WMS API
+     */
+    public static final String API_WMS = API_PATH_PREFIX + "wms";
+
+    /**
+     * WMS API名称
+     */
+    public static final String API_WMS_NAME = "wms_api";
+
+    /**
+     * AGV API名称
+     */
+    public static final String API_AGV_NAME = "agv_api";
 }

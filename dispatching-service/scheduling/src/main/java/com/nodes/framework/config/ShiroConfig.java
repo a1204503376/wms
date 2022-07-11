@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.Resource;
 import javax.servlet.Filter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -45,6 +46,10 @@ import java.util.Map;
  */
 @Configuration
 public class ShiroConfig {
+
+    @Resource
+    private ShiroAnonConfig shiroAnonConfig;
+
     /**
      * Session超时时间，单位为毫秒（默认30分钟）
      */
@@ -68,12 +73,6 @@ public class ShiroConfig {
      */
     @Value("${shiro.session.kickoutAfter}")
     private boolean kickoutAfter;
-
-    /**
-     * 验证码类型
-     */
-    @Value("${shiro.user.captchaType}")
-    private String captchaType;
 
     /**
      * 设置Cookie的域名
@@ -132,11 +131,10 @@ public class ShiroConfig {
         EhCacheManager em = new EhCacheManager();
         if (StringUtils.isNull(cacheManager)) {
             em.setCacheManager(new net.sf.ehcache.CacheManager(getCacheManagerConfigFileInputStream()));
-            return em;
         } else {
             em.setCacheManager(cacheManager);
-            return em;
         }
+        return em;
     }
 
     /**
@@ -148,8 +146,7 @@ public class ShiroConfig {
         try {
             inputStream = ResourceUtils.getInputStreamForPath(configFile);
             byte[] b = IOUtils.toByteArray(inputStream);
-            InputStream in = new ByteArrayInputStream(b);
-            return in;
+            return new ByteArrayInputStream(b);
         } catch (IOException e) {
             throw new ConfigurationException(
                     "Unable to obtain input stream for cacheManagerConfigFile [" + configFile + "]", e);
@@ -174,8 +171,7 @@ public class ShiroConfig {
      */
     @Bean
     public OnlineSessionDAO sessionDAO() {
-        OnlineSessionDAO sessionDAO = new OnlineSessionDAO();
-        return sessionDAO;
+        return new OnlineSessionDAO();
     }
 
     /**
@@ -183,8 +179,7 @@ public class ShiroConfig {
      */
     @Bean
     public OnlineSessionFactory sessionFactory() {
-        OnlineSessionFactory sessionFactory = new OnlineSessionFactory();
-        return sessionFactory;
+        return new OnlineSessionFactory();
     }
 
     /**
@@ -198,7 +193,7 @@ public class ShiroConfig {
         // 删除过期的session
         manager.setDeleteInvalidSessions(true);
         // 设置全局session超时时间
-        manager.setGlobalSessionTimeout(expireTime * 60 * 1000);
+        manager.setGlobalSessionTimeout((long) expireTime * 60 * 1000);
         // 去掉 JSESSIONID
         manager.setSessionIdUrlRewritingEnabled(false);
         // 定义要使用的无效的Session定时调度器
@@ -266,13 +261,11 @@ public class ShiroConfig {
         // 退出 logout地址，shiro去清除session
         filterChainDefinitionMap.put("/logout", "logout");
         // 不需要拦截的访问
-        filterChainDefinitionMap.put("/login", "anon");
-        // 注册相关
-        filterChainDefinitionMap.put("/register", "anon");
+        filterChainDefinitionMap.putAll(shiroAnonConfig.getFilterChainDefinitionMap());
         // 系统权限列表
         // filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
 
-        Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
+        Map<String, Filter> filters = new LinkedHashMap<>();
         filters.put("onlineSession", onlineSessionFilter());
         filters.put("syncOnlineSession", syncOnlineSessionFilter());
         filters.put("kickout", kickoutSessionFilter());

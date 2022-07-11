@@ -13,13 +13,12 @@ import java.lang.reflect.Method;
 public class EnumValidator implements ConstraintValidator<EnumValid, Object> {
 
     String validField;
-    String methodName = "code";
     Class<?>[] cls; //枚举类
 
     @Override
     public void initialize(EnumValid constraintAnnotation) {
         cls = constraintAnnotation.target();
-        validField = constraintAnnotation.validField();
+        validField = constraintAnnotation.method();
     }
 
     @Override
@@ -30,7 +29,7 @@ public class EnumValidator implements ConstraintValidator<EnumValid, Object> {
                     if (cl.isEnum()) {
                         //枚举类验证
                         Object[] objs = cl.getEnumConstants();
-                        Method method = cl.getMethod(methodName);
+                        Method method = cl.getMethod("name");
                         for (Object obj : objs) {
                             Object code = method.invoke(obj);
                             if (value.equals(code.toString())) {

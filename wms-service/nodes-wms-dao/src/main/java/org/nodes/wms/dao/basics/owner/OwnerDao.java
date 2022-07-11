@@ -23,7 +23,7 @@ public interface OwnerDao {
 	 * @param woId: 货主id
 	 * @return Owner
 	 */
-    Owner getById(Long woId);
+	Owner getById(Long woId);
 
 	/**
 	 * 根据编码查找货主信息
@@ -31,11 +31,21 @@ public interface OwnerDao {
 	 * @param ownerCode: 货主编码
 	 * @return Owner
 	 */
-    Owner getByCode(String ownerCode);
+	Owner getByCode(String ownerCode);
 
 	/**
 	 * 获取第一条货主信息
+	 *
 	 * @return
 	 */
-    Owner selectFirstOwner();
+	Owner selectFirstOwner();
+
+
+	/**
+	 * 根据货主名称查找货主信息
+	 *
+	 * @param ownerName: 货主名称
+	 * @return Owner
+	 */
+	Owner getByName(String ownerName);
 }

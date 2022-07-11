@@ -9,10 +9,10 @@ import com.nodes.common.utils.security.ShiroUtils;
 import com.nodes.common.utils.text.Convert;
 import com.nodes.project.system.config.domain.Config;
 import com.nodes.project.system.config.mapper.ConfigMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Service
 public class ConfigServiceImpl implements IConfigService {
-    @Autowired
+    @Resource
     private ConfigMapper configMapper;
 
     /**

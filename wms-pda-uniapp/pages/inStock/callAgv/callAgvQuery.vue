@@ -120,7 +120,9 @@
 		},
 		methods: {
 			esc() {
-				uni.$u.func.routeNavigateTo('/pages/home/childrenHome?title=上架');
+				uni.$u.func.routeNavigateTo('/pages/home/childrenHome', {
+					name: '上架'
+				});
 			},
 			press(num){
 				if(num==10){
@@ -133,7 +135,12 @@
 				this.param.whId = uni.getStorageSync('warehouse').whId
 				receive.findStockByBoxCode(this.param).then(res => {
 					this.stockList = res.data
+				    
 					if(tool.isNotEmpty(this.stockList)){
+					  if(this.stockList.length==1){
+						  uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgv', this.stockList[0]);
+						  return
+					  }
 						this.clickItem()
 					}
 				})
@@ -141,8 +148,7 @@
 			
 			
 			clickItem() {
-				alert("sdssssd")
-				uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgvQueryList', this.param);
+				uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgvQueryList', this.stockList);
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)

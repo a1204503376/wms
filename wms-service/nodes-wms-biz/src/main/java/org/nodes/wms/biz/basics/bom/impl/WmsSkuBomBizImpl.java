@@ -12,8 +12,10 @@ import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomExcelResponse;
 import org.nodes.wms.dao.basics.bom.dto.output.WmsSkuBomResponse;
 import org.nodes.wms.dao.basics.bom.entites.SkuBom;
 import org.springblade.core.excel.util.ExcelUtil;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -66,5 +68,14 @@ public class WmsSkuBomBizImpl implements WmsSkuBomBiz {
 	@Override
 	public Boolean deleteSkuBomByIds(DeleteSkuBomByIdsRequest request) {
 		return skuBomDao.delete(request.getIds());
+	}
+
+	@Override
+	public boolean importExcel(List<WmsSkuBomExcelResponse> importDataList) {
+		if (Func.isEmpty(importDataList)) {
+			throw new ServiceException("导入失败，没有可导入的数据");
+		}
+		List<SkuBom> skuBomList = skuBomFactory.createSkuBom(importDataList);
+		return skuBomDao.saveSkuBomList(skuBomList);
 	}
 }
