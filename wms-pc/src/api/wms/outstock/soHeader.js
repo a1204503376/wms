@@ -2,11 +2,37 @@ import request from '@/router/axios'
 
 export const getPage = (params, data) => {
     return request({
-        url: '/api/wms/outstock/header/page',
+        url: '/api/wms/outstock/soBill/page',
         method: 'post',
         params: {
             params
         },
+        data: data
+    })
+}
+
+export const add = (data) => {
+    return request({
+        url: '/api/wms/outstock/soBill/add',
+        method: 'post',
+        data: data
+    })
+}
+
+export const detailByEdit = (soBillId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/detailByEdit',
+        method: 'post',
+        data: {
+            soBillId: soBillId
+        }
+    })
+}
+
+export const edit = (data) => {
+    return request({
+        url: '/api/wms/outstock/soBill/edit',
+        method: 'post',
         data: data
     })
 }

@@ -194,5 +194,28 @@ export default [
                 props: true,
                 component: () => import('@/views/wms/system/updateVer/updateVerEdit')
             }]
-    }
+    },
+    {
+        path: '/soBill',
+        component: Layout,
+        children: [
+            {
+                path: 'add/:soBillId',
+                name: '新增出库单',
+                props: true,
+                component: () => import('@/views/wms/outstock/soHeader/soBillAdd')
+            },
+            {
+                path: 'edit/:soBillId',
+                name: '编辑出库单',
+                props: true,
+                component: () => import('@/views/wms/outstock/soHeader/soBillEdit')
+            },
+            {
+                path: 'detail/:soBillId',
+                name: '出库单详情',
+                props: true,
+                component: () => import('@/views/wms/outstock/soHeader/soBillDetail')
+            }]
+    },
 ]

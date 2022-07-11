@@ -17,7 +17,7 @@ import org.nodes.wms.core.outstock.so.entity.SoDetail;
 import org.nodes.wms.core.outstock.so.entity.SoHeader;
 import org.nodes.wms.core.outstock.so.entity.Wellen;
 import org.nodes.wms.core.outstock.so.entity.WellenDetail;
-import org.nodes.wms.core.outstock.so.enums.SoDetailStateEnum;
+import org.nodes.wms.dao.outstock.so.enums.SoDetailStateEnum;
 import org.nodes.wms.core.outstock.so.enums.WellenStateEnum;
 import org.nodes.wms.core.outstock.so.mapper.WellenMapper;
 import org.nodes.wms.core.outstock.so.service.ISoDetailService;
