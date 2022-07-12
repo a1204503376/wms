@@ -7,9 +7,11 @@ import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.putway.dto.output.CallAgvResponse;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
+import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
 import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
+import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
@@ -181,5 +183,14 @@ public interface StockBiz {
 	 * @return Pda根据编码查询库存-响应对象
 	 */
 	IPage<FindAllStockByNoResponse> selectStockList(FindAllStockByNoRequest request, Query query);
+
+	/**
+	 * 获取库存分页
+	 *
+	 * @param query          分页参数
+	 * @param stockPageQuery 查询参数
+	 * @return 分页对象
+	 */
+	Page<StockPageResponse> getStockPage(Query query, StockPageQuery stockPageQuery);
 
 }

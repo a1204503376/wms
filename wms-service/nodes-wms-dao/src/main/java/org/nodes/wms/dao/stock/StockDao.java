@@ -1,8 +1,11 @@
 package org.nodes.wms.dao.stock;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
+import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
+import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
@@ -109,4 +112,14 @@ public interface StockDao {
 	 * @return Pda根据编码查询库存-响应对象
 	 */
 	IPage<FindAllStockByNoResponse> getStockList(FindAllStockByNoRequest request, IPage<Stock> page);
+
+	/**
+	 * 获取库存分页 --pc端
+	 *
+	 * @param page           分页参数
+	 * @param stockPageQuery 查询参数
+	 * @return 分页对象
+	 */
+	Page<StockPageResponse> page(IPage<StockPageResponse> page, StockPageQuery stockPageQuery);
+
 }

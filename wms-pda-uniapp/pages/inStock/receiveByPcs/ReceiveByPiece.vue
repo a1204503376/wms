@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
+		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
 			:bgColor="navigationBarBackgroundColor" title="按件收货" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
@@ -147,14 +147,11 @@
 					receive.submitReceiptByPcs(_this.params).then(data => {
 						if (data.data.allReceivieIsAccomplish && data.data.currentReceivieIsAccomplish) {
 							//当前收货单收货收货完毕
-							_this.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/receiptHeaderEnquiry');
+							_this.$u.func.navigateBackTo(2);
 							return;
 						} else if (data.data.currentReceivieIsAccomplish) {
 							//当前收货单详情收货收货完毕
-							_this.$u.func.routeNavigateTo(
-								'/pages/inStock/receiveByPcs/receiptDetailEnquiry', {
-									receiveId: _this.receiveId
-								});
+							_this.$u.func.navigateBackTo(1);
 							return;
 						} else {
 							//当前收货单详情收货部分收货,刷新当前页面
@@ -180,9 +177,7 @@
 				})
 			},
 			esc() {
-				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/receiptDetailEnquiry', {
-					receiveId: this.receiveId
-				});
+				uni.$u.func.navigateBackTo(1);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

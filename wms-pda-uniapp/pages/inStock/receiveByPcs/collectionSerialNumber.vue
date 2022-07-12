@@ -101,11 +101,7 @@
 				this.serialNumberList.splice(index, 1)
 			},
 			esc() {
-				this.$destroy('keyboardListener')
-				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/ReceiveByPiece', {
-					receiveId: this.receiveId,
-					receiveDetailId: this.receiveDetailId
-				});
+				uni.$u.func.navigateBackTo(1);
 			},
 			submit() {
 				var _this = this;
@@ -130,17 +126,11 @@
 								if (data.data.allReceivieIsAccomplish && data.data
 									.currentReceivieIsAccomplish) {
 									//当前收货单收货收货完毕
-									_this.$destroy('keyboardListener')
-									_this.$u.func.routeNavigateTo(
-										'/pages/inStock/receiveByPcs/receiptHeaderEnquiry');
+									_this.$u.func.navigateBackTo(3);
 									return;
 								} else if (data.data.currentReceivieIsAccomplish) {
 									//当前收货单详情收货收货完毕
-									_this.$destroy('keyboardListener')
-									_this.$u.func.routeNavigateTo(
-										'/pages/inStock/receiveByPcs/receiptDetailEnquiry', {
-											receiveId: _this.receiveId
-										});
+									_this.$u.func.navigateBackTo(2);
 									return;
 								} else {
 									//当前收货单详情收货部分收货,返回收货单收货页面

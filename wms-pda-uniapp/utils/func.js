@@ -55,7 +55,7 @@ const install = (Vue, vm) => {
 	// 退出登录
 	const logout = () => {
 		vm.$u.vuex('accessToken', '')
-		uni.redirectTo({
+		uni.reLaunch({
 			url: '/pages/login/login'
 		})
 	}
@@ -118,6 +118,17 @@ const install = (Vue, vm) => {
 	const navigateBack = () => {
 		uni.navigateBack({
 			delta:1,//返回层数，2则上上页
+		})
+	}
+	
+	const navigateBackTo = (delta) => {
+		if(!tool.isNumber(delta)||delta<1)
+		{
+			delta=1;
+		}
+		// TODO 校验必须是大于等于1的整数，如果不是用默认值1
+		uni.navigateBack({
+			delta:delta,
 		})
 	}
 
@@ -216,6 +227,7 @@ const install = (Vue, vm) => {
 		routeNavigateTo,
 		routeReLaunch,
 		navigateBack,
+		navigateBackTo,
 		checkLogin,
 		paramsToObj,
 		refreshPage,

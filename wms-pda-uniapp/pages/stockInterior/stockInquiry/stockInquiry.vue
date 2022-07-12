@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
-			:bgColor="navigationBarBackgroundColor" title="按件收货" titleStyle="color:#ffffff;font-size:21px"
+			:bgColor="navigationBarBackgroundColor" title="库存查询" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<template>
@@ -42,7 +42,7 @@
 
 <script>
 	import setting from '@/common/setting'
-	import receive from '@/api/inStock/receiveByPcs.js'
+	import stockInquiry from '@/api/stockInterior/stockInquiry.js'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
 	export default {
@@ -95,9 +95,11 @@
 				}
 			},
 			esc() {
-				uni.$u.func.navigateBackTo(1);
+				uni.$u.func.routeNavigateTo('/pages/home/childrenHome', {
+					name: '库内'
+				});
 			},
-			getReceiveList() {
+			findAllStockByNo() {
 				this.noData = false;
 				this.receiveList = [];
 				this.loadmore = true;
@@ -105,7 +107,7 @@
 				this.page.current = 1;
 				this.analysisCode(this.params.no);
 				this.params.whId = uni.getStorageSync('warehouse').whId;
-				receive.getReceiveList(this.params, this.page).then(data => {
+				stockInquiry.findAllStockByNo(this.params, this.page).then(data => {
 					if (data.data.records.length > 0) {
 						this.status = 'loading';
 						this.loadmore = true;
@@ -121,7 +123,7 @@
 				})
 			},
 			search() {
-				uni.$u.throttle(this.getReceiveList(), 1000)
+				uni.$u.throttle(this.findAllStockByNo(), 1000)
 			},
 			clickItem(item) {
 				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/receiptDetailEnquiry', item);
@@ -135,7 +137,7 @@
 				this.divider = false;
 				this.page.current++;
 				this.params.whId = uni.getStorageSync('warehouse').whId;
-				receive.getReceiveList(this.params, this.page).then(data => {
+				stockInterior.findAllStockByNo(this.params, this.page).then(data => {
 					if (data.data.records.length > 0) {
 						this.status = 'loading';
 						data.data.records.forEach((item, index) => { //js遍历数组

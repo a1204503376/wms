@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
+import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
+import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.nodes.wms.dao.stock.mapper.StockMapper;
@@ -230,5 +233,10 @@ public class StockDaoImpl
 		LambdaQueryWrapper<Stock> queryWrapper = Wrappers.lambdaQuery();
 		queryWrapper.apply("stay_stock_qty + stock_qty > pick_qty");
 		return queryWrapper;
+	}
+
+	@Override
+	public Page<StockPageResponse> page(IPage<StockPageResponse> page, StockPageQuery stockPageQuery) {
+		return super.baseMapper.getPage(page, stockPageQuery);
 	}
 }

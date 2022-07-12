@@ -54,7 +54,6 @@
 						});
 					}
 					this.putawayData = data.data;
-					this.$destroy('keyboardListener')
 					uni.$u.func.routeNavigateTo('/pages/inStock/putawayByBox/putawayByBoxSubmit', this
 					.putawayData);
 				})
@@ -77,10 +76,7 @@
 				}
 			},
 			esc() {
-				this.$destroy('keyboardListener')
-				uni.$u.func.routeNavigateTo('/pages/home/childrenHome', {
-					name: '上架'
-				});
+				uni.$u.func.navigateBackTo(1);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

@@ -78,7 +78,6 @@
 				var _this = this;
 				uni.$u.throttle(function() {
 					console.log(_this.params)
-					// this.$destroy('keyboardListener')
 					_this.submitPutawayByBox();
 				}, 1000)
 
@@ -91,8 +90,7 @@
 				})
 			},
 			esc() {
-				this.$destroy('keyboardListener')
-				uni.$u.func.routeNavigateTo('/pages/inStock/putawayByBox/lpnQueryByBox');
+				uni.$u.func.navigateBackTo(1);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);
