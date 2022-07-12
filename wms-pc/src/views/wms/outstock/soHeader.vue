@@ -336,7 +336,7 @@ export default {
             })
         },
         onEdit(row) {
-            if (row.soBillState.trim() !== '单据创建') {
+            if (row.soBillState.trim() !== '未出库') {
                 this.$message.warning("操作失败，该出库单正在处理中");
                 return;
             }

@@ -35,5 +35,24 @@
             <result column="sku_spec" property="skuSpec"/>
         </association>
     </resultMap>
+
+    <select id="pageForSoDetailBySoBillId"
+            resultType="org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse">
+        SELECT
+        so_line_no,
+        sku_code,
+        sku_name,
+        um_code,
+        um_name,
+        plan_qty,
+        sku_lot1,
+        sku_lot4,
+        remark
+        FROM so_detail
+        WHERE so_bill_id = #{soBillId} AND is_deleted = 0
+        <if test="page.orders == null or page.orders.size == 0">
+            ORDER BY create_time DESC
+        </if>
+    </select>
 </mapper>
 

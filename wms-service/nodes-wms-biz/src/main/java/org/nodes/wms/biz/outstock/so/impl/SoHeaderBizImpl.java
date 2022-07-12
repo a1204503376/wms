@@ -9,6 +9,7 @@ import org.nodes.wms.dao.outstock.so.SoHeaderDao;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.SoBillEditResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderForDetailResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
@@ -91,5 +92,10 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		soBillEditResponse.setSoHeader(soHeaderDao.getSoHeaderEditBySoBillId(soBillId));
 		soBillEditResponse.setSoDetailList(soDetailDao.getSoDetailEditBySoBillId(soBillId));
 		return soBillEditResponse;
+	}
+
+	@Override
+	public SoHeaderForDetailResponse findSoHeaderForDetailBySoBillId(Long soBillId) {
+		return soHeaderDao.getSoHeaderForDetailById(soBillId);
 	}
 }

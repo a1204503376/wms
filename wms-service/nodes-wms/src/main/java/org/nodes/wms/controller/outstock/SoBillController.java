@@ -7,15 +7,20 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.core.tool.validation.Update;
+import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
+import org.nodes.wms.biz.outstock.so.SoDetailBiz;
 import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
 import org.nodes.wms.core.outstock.so.cache.SoCache;
 import org.nodes.wms.core.outstock.so.service.ISoHeaderService;
 import org.nodes.wms.core.outstock.so.vo.SoHeaderVO;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickForSoDetailResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillRemoveRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.SoBillEditResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderForDetailResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.springblade.core.log.annotation.ApiLog;
@@ -34,11 +39,15 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_ROOT_URL + "outstock/soBill")
 @Api(value = "出库管理主接口", tags = "出库管理主接口")
-public class SoHeaderController {
+public class SoBillController {
 
 	private final ISoHeaderService soHeaderService;
 
 	private final SoHeaderBiz soHeaderBiz;
+
+	private final SoDetailBiz soDetailBiz;
+
+	private final LogSoPickBiz logSoPickBiz;
 
 	/**
 	 * 详情
@@ -174,5 +183,24 @@ public class SoHeaderController {
 	public R<String> edit(@Validated(Update.class) @RequestBody SoBillAddOrEditRequest soBillAddOrEditRequest) {
 		SoHeader soHeader = soHeaderBiz.edit(soBillAddOrEditRequest);
 		return R.success(String.format("编辑出库单成功，出库单编码：%s", soHeader.getSoBillNo()));
+	}
+
+	@PostMapping("/detail_header")
+	public R<SoHeaderForDetailResponse> headerForDetail(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
+		return R.data(soHeaderBiz.findSoHeaderForDetailBySoBillId(soBillIdRequest.getSoBillId()));
+	}
+
+	@PostMapping("/detail_detail")
+	public R<Page<SoDetailForDetailResponse>> detailForDetail(Query query,
+															  @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
+		Page<SoDetailForDetailResponse> pageSoDetail = soDetailBiz.pageSoDetailForDetailBySoBillId(query, soBillIdRequest);
+		return R.data(pageSoDetail);
+	}
+
+	@PostMapping("/detail_logSoPick")
+	public R<Page<LogSoPickForSoDetailResponse>> logSoPickForSoDetail(Query query,
+																	  @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
+		Page<LogSoPickForSoDetailResponse> pageLogSoPick = logSoPickBiz.pageLogSoPickForSoDetailBySoBillId(query, soBillIdRequest);
+		return R.data(pageLogSoPick);
 	}
 }

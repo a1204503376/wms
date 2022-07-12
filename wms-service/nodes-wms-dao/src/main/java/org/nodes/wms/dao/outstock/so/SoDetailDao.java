@@ -1,6 +1,9 @@
 package org.nodes.wms.dao.outstock.so;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailEditResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 
 import java.util.List;
@@ -33,4 +36,13 @@ public interface SoDetailDao {
 	 * @return true: 删除成功，false: 删除失败
 	 */
 	boolean removeByIdList(List<Long> detailIdList);
+
+	/**
+	 * 查看明细：根据出库单id分页查询出库单明细信息
+	 *
+	 * @param page: 分页参数
+	 * @param soBillId: 出库单id
+	 * @return Page<SoDetailForDetailResponse> 出库单明细分页信息
+	 */
+	Page<SoDetailForDetailResponse> pageForSoDetailBySoBillId(IPage<?> page, Long soBillId);
 }
