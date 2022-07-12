@@ -84,7 +84,7 @@
 		},
 		methods: {
 			esc() {
-				uni.$u.func.routeNavigateTo('/pages/userSetting/userSetting');
+				uni.$u.func.navigateBackTo(1);
 			},
 			oldPwd() {
 				uni.hideKeyboard(); //隐藏软键盘				

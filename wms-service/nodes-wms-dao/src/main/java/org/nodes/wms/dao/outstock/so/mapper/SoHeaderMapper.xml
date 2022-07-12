@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.outstock.so.mapper.SoHeaderMapper">
 
-    <select id="page" resultType="org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse">
+    <sql id="pageOrList">
         SELECT
         sh.so_bill_id,
         sh.so_bill_no,
@@ -61,11 +61,14 @@
             <if test="params.createUser != null and params.createUser != ''">
                 AND u1.real_name LIKE CONCAT('%', #{params.createUser}, '%')
             </if>
-            <if test=" page.orders == null or page.orders.size == 0 ">
-                ORDER BY sh.create_time DESC
-            </if>
         </where>
+    </sql>
 
+    <select id="page" resultType="org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse">
+        <include refid="pageOrList"/>
+        <if test=" page.orders == null or page.orders.size == 0">
+            ORDER BY sh.create_time DESC
+        </if>
     </select>
 
     <select id="selectSoHeaderEditBySoBillId"
@@ -102,5 +105,31 @@
             <result column="name" property="name"/>
         </association>
     </resultMap>
+
+    <select id="selectSoHeaderForDetailById"
+            resultType="org.nodes.wms.dao.outstock.so.dto.output.SoHeaderForDetailResponse">
+        SELECT header.so_bill_no,
+               billType.bill_type_name as bill_type,
+               customer.name           as customer_name,
+               `owner`.owner_name,
+               warehouse.wh_name,
+               dict1.dict_value        as outstock_type,
+               dict2.dict_value        as transport_type,
+               header.so_bill_remark
+        FROM so_header header
+                 LEFT JOIN basics_customers customer ON header.customer_code = customer.code
+                 LEFT JOIN wms_warehouse warehouse ON header.wh_id = warehouse.wh_id
+                 LEFT JOIN wms_owner `owner` ON header.wo_id = `owner`.wo_id
+                 LEFT JOIN blade_dict dict1 ON header.outstock_type = dict1.dict_key AND dict1.code = 'outstore_type'
+                 LEFT JOIN blade_dict dict2
+                           ON header.transport_code = dict2.dict_key AND dict2.code = 'so_transport_code'
+                 LEFT JOIN wms_bill_type billType ON header.bill_type_cd = billType.bill_type_cd
+        WHERE header.is_deleted = 0
+          AND header.so_bill_id = #{id}
+    </select>
+
+    <select id="listByQuery" resultType="org.nodes.wms.dao.outstock.so.dto.output.SoHeaderExcelResponse">
+        <include refid="pageOrList"/>
+    </select>
 </mapper>
 

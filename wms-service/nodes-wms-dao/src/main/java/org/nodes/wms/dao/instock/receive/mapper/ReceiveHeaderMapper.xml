@@ -105,7 +105,7 @@
         LEFT JOIN wms_bill_type b ON h.bill_type_cd = b.bill_type_cd
         <where>
             h.receive_no LIKE concat('%',#{query.no},'%') AND h.is_deleted=0 AND h.wh_id=#{query.whId}
-            OR  h.external_order_no LIKE concat('%',#{query.no},'%') AND h.wh_id=#{query.whId} AND h.is_deleted=0
+            OR h.external_order_no LIKE concat('%',#{query.no},'%') AND h.wh_id=#{query.whId} AND h.is_deleted=0
         </where>
         group by h.receive_id,b.bill_type_name
         order by h.create_time
@@ -167,7 +167,7 @@
     <select id="pageNotReceiveDetail"
             resultType="org.nodes.wms.dao.instock.receive.dto.output.NotReceiveDetailResponse">
         <include refid="notReceiveDetail"/>
-        <if test="page.orders != null or page.orders.size > 0">
+        <if test="page.orders == null or page.orders.size() == 0">
             ORDER BY header.create_time , receive_no
         </if>
     </select>

@@ -10,58 +10,58 @@
 				<u--input v-model="param.boxCode" @confirm="getReceiveDetailList"  readonly></u--input>
 			</u-form-item>
 		</u--form>
-		<view style="margin-top: 35%;margin-left: 5%;margin-right: 5%;">
+		<view style="margin-top: 30%;margin-left: 2%;margin-right: 2%;">
 		<u-row >
 			<u-col span="3">
-				<view class="demo-layout bg-purple"><u-button  @click="press('A')" style="height: 70px;width: 90%;font-size: 25px;">A</u-button></view>
+				<view class="demo-layout bg-purple"><u-button  @click="press('A')" style="height: 70px;width: 95%;font-size: 25px;">A</u-button></view>
 			</u-col>
 			<u-col span="3">
-				<view class="demo-layout bg-purple"><u-button @click="press(1)" style="height: 70px;width: 90%;font-size: 25px;">1</u-button></view>
+				<view class="demo-layout bg-purple"><u-button @click="press(1)" style="height: 70px;width: 95%;font-size: 25px;">1</u-button></view>
 			</u-col>
 			<u-col span="3">
-				<view class="demo-layout bg-purple"><u-button @click="press(2)" style="height: 70px;width: 90%;font-size: 25px;">2</u-button></view>
+				<view class="demo-layout bg-purple"><u-button @click="press(2)" style="height: 70px;width: 95%;font-size: 25px;">2</u-button></view>
 			</u-col>
 			<u-col span="3">
-				<view class="demo-layout bg-purple"><u-button  @click="press(3)" style="height: 70px;width: 90%;font-size: 25px;">3</u-button></view>
-			</u-col>
-		</u-row>
-		<u-row customStyle="margin-top: 5%">
-			<u-col span="3">
-				<view class="demo-layout bg-purple"><u-button  @click="press('B')" style="height: 70px;width: 90%;font-size: 25px;">B</u-button></view>
-			</u-col>
-			<u-col span="3">
-				<view class="demo-layout bg-purple"><u-button  @click="press(4)" style="height: 70px;width: 90%;font-size: 20px;font-size: 25px;" >4</u-button></view>
-			</u-col>
-			<u-col span="3">
-				<view class="demo-layout bg-purple"><u-button   @click="press(5)" style="height: 70px;width: 90%;font-size: 25px;">5</u-button></view>
-			</u-col>
-			<u-col span="3">
-				<view class="demo-layout bg-purple"><u-button   @click="press(6)" style="height: 70px;width: 90%;font-size: 25px;">6</u-button></view>
+				<view class="demo-layout bg-purple"><u-button  @click="press(3)" style="height: 70px;width: 95%;font-size: 25px;">3</u-button></view>
 			</u-col>
 		</u-row>
 		<u-row customStyle="margin-top: 5%">
 			<u-col span="3">
-				<view class="demo-layout bg-purple"><u-button @click="press('C')" style="height: 70px;width: 90%;font-size: 25px;">C</u-button></view>
+				<view class="demo-layout bg-purple"><u-button  @click="press('B')" style="height: 70px;width: 95%;font-size: 25px;">B</u-button></view>
 			</u-col>
 			<u-col span="3">
-				<view class="demo-layout bg-purple"><u-button  @click="press(7)" style="height: 70px;width: 90%;font-size: 25px;">7</u-button></view>
+				<view class="demo-layout bg-purple"><u-button  @click="press(4)" style="height: 70px;width: 95%;font-size: 20px;font-size: 25px;" >4</u-button></view>
 			</u-col>
 			<u-col span="3">
-				<view class="demo-layout bg-purple"><u-button   @click="press(8)" style="height: 70px;width: 90%;font-size: 25px;">8</u-button></view>
+				<view class="demo-layout bg-purple"><u-button   @click="press(5)" style="height: 70px;width: 95%;font-size: 25px;">5</u-button></view>
 			</u-col>
 			<u-col span="3">
-				<view class="demo-layout bg-purple"><u-button   @click="press(9)" style="height: 70px;width: 90%;font-size: 25px;">9</u-button></view>
+				<view class="demo-layout bg-purple"><u-button   @click="press(6)" style="height: 70px;width: 95%;font-size: 25px;">6</u-button></view>
+			</u-col>
+		</u-row>
+		<u-row customStyle="margin-top: 5%">
+			<u-col span="3">
+				<view class="demo-layout bg-purple"><u-button @click="press('C')" style="height: 70px;width: 95%;font-size: 25px;">C</u-button></view>
+			</u-col>
+			<u-col span="3">
+				<view class="demo-layout bg-purple"><u-button  @click="press(7)" style="height: 70px;width: 95%;font-size: 25px;">7</u-button></view>
+			</u-col>
+			<u-col span="3">
+				<view class="demo-layout bg-purple"><u-button   @click="press(8)" style="height: 70px;width: 95%;font-size: 25px;">8</u-button></view>
+			</u-col>
+			<u-col span="3">
+				<view class="demo-layout bg-purple"><u-button   @click="press(9)" style="height: 70px;width: 95%;font-size: 25px;">9</u-button></view>
 			</u-col>
 		</u-row>
 		<u-row customStyle="margin-top: 5%">
 		<u-col span="3">
-			<view class="demo-layout bg-purple"><u-button  @click="press('D')" style="height: 70px;width: 90%;font-size: 25px;">D</u-button></view>
+			<view class="demo-layout bg-purple"><u-button  @click="press('D')" style="height: 70px;width: 95%;font-size: 25px;">D</u-button></view>
 		</u-col>
 		<u-col span="3">
-			<view class="demo-layout bg-purple"><u-button  @click="press(10)" style="height: 70px;width: 90%;font-size: 25PX;">删除</u-button></view>
+			<view class="demo-layout bg-purple"><u-button  @click="press(10)" style="height: 70px;width: 95%;font-size: 25PX;">删除</u-button></view>
 		</u-col>
 		<u-col span="3">
-			<view class="demo-layout bg-purple"><u-button   @click="press(0)" style="height: 70px;width: 90%;font-size: 25px;">0</u-button></view>
+			<view class="demo-layout bg-purple"><u-button   @click="press(0)" style="height: 70px;width: 95%;font-size: 25px;">0</u-button></view>
 		</u-col>
 	
 			

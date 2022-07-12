@@ -55,7 +55,7 @@ const install = (Vue, vm) => {
 	// 退出登录
 	const logout = () => {
 		vm.$u.vuex('accessToken', '')
-		uni.redirectTo({
+		uni.reLaunch({
 			url: '/pages/login/login'
 		})
 	}
@@ -122,6 +122,10 @@ const install = (Vue, vm) => {
 	}
 	
 	const navigateBackTo = (delta) => {
+		if(!tool.isNumber(delta)||delta<1)
+		{
+			delta=1;
+		}
 		// TODO 校验必须是大于等于1的整数，如果不是用默认值1
 		uni.navigateBack({
 			delta:delta,

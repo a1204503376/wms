@@ -11,4 +11,5 @@ import java.io.Serializable;
 public class FindAllStockByNoRequest implements Serializable {
 	private static final long serialVersionUID = -5586308651480809877L;
 	private String no;
+	private Long whId;
 }

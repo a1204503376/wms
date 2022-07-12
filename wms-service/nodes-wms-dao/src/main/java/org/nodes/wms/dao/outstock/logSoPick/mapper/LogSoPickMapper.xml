@@ -9,8 +9,29 @@
                sum(pick_real_qty) as pick_real_qty
         FROM log_so_pick
         WHERE DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= create_time
-        GROUP BY sku_id,sku_code
+        GROUP BY sku_id, sku_code
         ORDER BY pick_real_qty DESC
         limit 10
+    </select>
+
+    <select id="pageForSoDetailBySoBillId"
+            resultType="org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickForSoDetailResponse">
+        SELECT
+        proc_time,
+        loc_code,
+        sku_code,
+        sku_name,
+        lot_number,
+        wellen_no,
+        pick_real_qty,
+        wsp_name,
+        wsu_name,
+        sku_lot1,
+        sku_lot4
+        FROM log_so_pick
+        WHERE so_bill_id = #{soBillId} AND is_deleted = 0
+        <if test="page.orders == null or page.orders.size == 0 ">
+            ORDER BY create_time DESC
+        </if>
     </select>
 </mapper>

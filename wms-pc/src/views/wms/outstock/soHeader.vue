@@ -124,6 +124,7 @@
                     <el-table-column align="center" fixed="right" label="操作" width="100">
                         <template v-slot="scope">
                             <el-button size="small" type="text" @click="onEdit(scope.row)">编辑</el-button>
+                            <el-button size="small" type="text" @click="onClose(scope.row)">关闭</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -154,9 +155,10 @@ import {listMixin} from "@/mixins/list";
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js'
 import NodesSoBillState from "@/components/wms/select/NodesSoBillState";
-import {getPage, remove} from "@/api/wms/outstock/soHeader"
+import {getPage, remove, exportData, closeSoBill} from "@/api/wms/outstock/soHeader"
 import NodesCustomer from "@/components/wms/select/NodesCustomer";
 import NodesBillType from "@/components/wms/select/NodesBillType";
+import {nowDateFormat} from "@/util/date";
 
 
 export default {
@@ -302,8 +304,9 @@ export default {
             this.loading = true;
             exportData(this.form.params)
                 .then((res) => {
+                    console.log(res);
                     this.$message.success("操作成功，正在下载中...");
-                    fileDownload(res.data, "出库单.xlsx");
+                    fileDownload(res.data, `出库单${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
                 })
                 .catch(() => {
                     this.$message.error("系统模板目录配置有误或文件不存在");
@@ -336,7 +339,7 @@ export default {
             })
         },
         onEdit(row) {
-            if (row.soBillState.trim() !== '单据创建') {
+            if (row.soBillState.trim() !== '未出库') {
                 this.$message.warning("操作失败，该出库单正在处理中");
                 return;
             }
@@ -345,6 +348,12 @@ export default {
                 params: {
                     soBillId: row.soBillId
                 }
+            })
+        },
+        onClose(row){
+            closeSoBill(row.soBillId).then((res)=>{
+                this.$message.success(res.data.msg);
+                this.refreshTable();
             })
         },
         onView(row) {

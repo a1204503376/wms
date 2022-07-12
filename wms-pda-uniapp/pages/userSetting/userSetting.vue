@@ -76,7 +76,7 @@
 		},
 		methods: {
 			esc() {
-				uni.$u.func.routeNavigateTo('/pages/home/home');
+				uni.$u.func.navigateBackTo(1);
 			},
 			logout() {
 				this.$u.func.logout();

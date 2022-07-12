@@ -90,7 +90,7 @@
 
     <select id="page" resultType="org.nodes.wms.dao.stock.dto.output.StockLogPageResponse">
         <include refid="stockLog"/>
-        <if test="page.orders != null or page.orders.size > 0">
+        <if test="page.orders == null or page.orders.size == 0">
             ORDER BY sl.create_time
         </if>
     </select>
