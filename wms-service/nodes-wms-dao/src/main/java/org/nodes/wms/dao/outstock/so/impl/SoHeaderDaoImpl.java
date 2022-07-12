@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.so.SoHeaderDao;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderEditResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderForDetailResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.so.mapper.SoHeaderMapper;
@@ -32,6 +33,11 @@ public class SoHeaderDaoImpl extends BaseServiceImpl<SoHeaderMapper, SoHeader> i
 	@Override
 	public SoHeader getById(Long id) {
 		return super.getById(id);
+	}
+
+	@Override
+	public SoHeaderForDetailResponse getSoHeaderForDetailById(Long id) {
+		return super.baseMapper.selectSoHeaderForDetailById(id);
 	}
 
 	@Override
