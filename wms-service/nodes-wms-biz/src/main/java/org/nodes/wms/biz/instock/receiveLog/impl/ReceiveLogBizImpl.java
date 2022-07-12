@@ -2,7 +2,6 @@ package org.nodes.wms.biz.instock.receiveLog.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.config.DateTimeFinals;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
@@ -34,8 +33,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -86,8 +83,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		ReceiveLog log = createReceiveLog(receiveLog, receiveHeader, detail);
 		log.setSkuLot1(request.getSkuLot1());
 		log.setSkuLot2(request.getSkuLot2());
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DateTimeFinals.DATE_FORMAT);
-		log.setSkuLot3(LocalDateTime.now().format(formatter));
+		log.setSkuLot3(Func.formatDate(new Date()));
 		receiveLogDao.save(log);
 		return log;
 	}

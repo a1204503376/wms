@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.stock.dto.output;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
@@ -42,6 +44,11 @@ public class FindAllStockByNoResponse extends BaseSkuLot implements Serializable
 	 */
 	private String ownerName;
 	/**
+	 * 货主ID
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long woId;
+	/**
 	 * 计量单位编码
 	 */
 	private String wsuCode;
@@ -55,6 +62,10 @@ public class FindAllStockByNoResponse extends BaseSkuLot implements Serializable
 	private BigDecimal pickQty;
 
 	public String getQty() {
-		return this.getStockQty().subtract(this.getPickQty()) + wsuCode;
+		return this.getStockQty().subtract(this.getPickQty()).stripTrailingZeros().toPlainString() + wsuCode;
+	}
+
+	public String getSurplusQty() {
+		return this.getStockQty().subtract(this.getPickQty()).stripTrailingZeros().toPlainString();
 	}
 }
