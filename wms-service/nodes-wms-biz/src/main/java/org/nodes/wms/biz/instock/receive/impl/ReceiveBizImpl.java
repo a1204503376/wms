@@ -238,7 +238,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		//创建收货单明细保存集合
 		List<EditReceiveDetailRequest> editReceiveDetailRequestList = editReceiveRequest.getEditReceiveDetailRequestList();
 		for (EditReceiveDetailRequest editReceiveDetailRequest : editReceiveDetailRequestList) {
-			ReceiveDetail receiveDetail = receiveFactory.createEditReceiveDetail(editReceiveDetailRequest, receiveHeader);
+			ReceiveDetail receiveDetail = receiveFactory.createEditReceiveDetail(editReceiveDetailRequest, receiveHeader, receiveNo);
 			receiveDetailDao.saveOrUpdateReceiveDetail(receiveDetail);
 		}
 		receiveHeaderDao.updateReceive(receiveHeader);
