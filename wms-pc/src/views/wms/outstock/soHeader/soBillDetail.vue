@@ -67,6 +67,7 @@
                                 <el-tab-pane v-for="(item, index) in tabList" :key="index" :label="item.lable"
                                              :name="item.name">
                                     <el-table
+                                        v-loading="tableLoading"
                                         :data="publicTable.data"
                                         border
                                         highlight-current-row
@@ -169,6 +170,7 @@ export default {
             publicTable: {
                 data: [],
             },
+            tableLoading: false,
             //明细的行对象
             soDetailColumnList: [
                 {
@@ -292,6 +294,7 @@ export default {
                 })
         },
         getDetail() {
+            this.tableLoading = true;
             this.publicTable.columnList = this.soDetailColumnList;
             if (func.isEmpty(this.soBillId)) {
                 return;
@@ -300,9 +303,11 @@ export default {
                 .then((res) => {
                     this.publicTable.data = res.data.data.records;
                     this.page.total = res.data.data.total;
+                    this.tableLoading = false;
                 })
         },
         getSoRecord() {
+            this.tableLoading = true;
             this.publicTable.columnList = this.soRecordColumnList;
             if (func.isEmpty(this.soBillId)) {
                 return;
@@ -311,6 +316,7 @@ export default {
                 .then((res) => {
                     this.publicTable.data = res.data.data.records;
                     this.page.total = res.data.data.total;
+                    this.tableLoading = false;
                 })
         },
         //点击Tab的时候进行判断，然后获取对应数据及行对象
@@ -320,7 +326,7 @@ export default {
             this.getTableData();
         },
         // 重置分页对象
-        resetPage(){
+        resetPage() {
             this.page = {
                 total: 0,
                 size: 20,

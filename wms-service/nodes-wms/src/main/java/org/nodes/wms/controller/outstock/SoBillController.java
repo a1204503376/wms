@@ -30,6 +30,7 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 /**
@@ -202,5 +203,16 @@ public class SoBillController {
 																	  @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		Page<LogSoPickForSoDetailResponse> pageLogSoPick = logSoPickBiz.pageLogSoPickForSoDetailBySoBillId(query, soBillIdRequest);
 		return R.data(pageLogSoPick);
+	}
+
+	@PostMapping("/export")
+	public void export(@RequestBody SoHeaderPageQuery soHeaderPageQuery, HttpServletResponse response) {
+		soHeaderBiz.export(soHeaderPageQuery, response);
+	}
+
+	@PostMapping("/close")
+	public R<String> close(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
+		soHeaderBiz.closeById(soBillIdRequest.getSoBillId());
+		return R.success("关闭成功");
 	}
 }

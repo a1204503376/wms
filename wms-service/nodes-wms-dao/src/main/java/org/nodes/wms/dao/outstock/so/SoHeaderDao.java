@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderEditResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderExcelResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderForDetailResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
@@ -63,4 +64,20 @@ public interface SoHeaderDao {
 	 * @return SoHeaderForDetailResponse 查看明细头表信息响应对象
 	 */
 	SoHeaderForDetailResponse getSoHeaderForDetailById(Long id);
+
+	/**
+	 * 根据id修改出库单头表信息
+	 *
+	 * @param soHeader: 出库单头表对象
+	 * @return true: 修改成功，false: 修改失败
+	 */
+    boolean updateSoHeaderById(SoHeader soHeader);
+
+	/**
+	 * 导出Excel
+	 *
+	 * @param soHeaderPageQuery: 导出时条件参数
+	 * @return List<SoHeaderExcelResponse> 出库单数据
+	 */
+	List<SoHeaderExcelResponse> listByQuery(SoHeaderPageQuery soHeaderPageQuery);
 }

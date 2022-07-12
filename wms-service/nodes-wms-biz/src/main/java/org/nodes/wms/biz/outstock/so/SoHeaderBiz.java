@@ -9,6 +9,7 @@ import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.springblade.core.mp.support.Query;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -64,4 +65,19 @@ public interface SoHeaderBiz {
 	 * @return SoHeaderForDetailResponse 查看明细头表信息响应对象
 	 */
 	SoHeaderForDetailResponse findSoHeaderForDetailBySoBillId(Long soBillId);
+
+	/**
+	 * 关闭出库单
+	 *
+	 * @param soBillId: 出库单id
+	 */
+    void closeById(Long soBillId);
+
+	/**
+	 * 导出
+	 *
+	 * @param soHeaderPageQuery: 导出时条件参数
+	 * @param response: 响应对象
+	 */
+	void export(SoHeaderPageQuery soHeaderPageQuery, HttpServletResponse response);
 }

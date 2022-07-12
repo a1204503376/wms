@@ -9,11 +9,13 @@ import org.nodes.wms.dao.outstock.so.SoHeaderDao;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.SoBillEditResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderExcelResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderForDetailResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
+import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -21,7 +23,10 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 发货单业务接口实现类
@@ -97,5 +102,22 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	@Override
 	public SoHeaderForDetailResponse findSoHeaderForDetailBySoBillId(Long soBillId) {
 		return soHeaderDao.getSoHeaderForDetailById(soBillId);
+	}
+
+	@Override
+	public void closeById(Long soBillId) {
+		Map<String, Object> soHeaderMap = new HashMap();
+		soHeaderMap.put("soBillId", soBillId);
+		soHeaderMap.put("soBillState", SoBillStateEnum.CLOSED.getIndex());
+		SoHeader soHeader = soBillFactory.createSoHeaderByCustom(soHeaderMap);
+		if (!soHeaderDao.updateSoHeaderById(soHeader)) {
+			throw new ServiceException("关闭出库单失败，请稍后再试");
+		}
+	}
+
+	@Override
+	public void export(SoHeaderPageQuery soHeaderPageQuery, HttpServletResponse response) {
+		List<SoHeaderExcelResponse> soHeaderExcelList = soHeaderDao.listByQuery(soHeaderPageQuery);
+		ExcelUtil.export(response, "", "", soHeaderExcelList, SoHeaderExcelResponse.class);
 	}
 }
