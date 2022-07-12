@@ -60,11 +60,7 @@
 		},
 		methods: {
 			esc() {
-				if (tool.isEmpty(uni.getStorageSync('warehouse'))) {
-					uni.$u.func.routeNavigateTo('/pages/login/login');
-					return;
-				}
-				uni.$u.func.routeNavigateTo('/pages/userSetting/userSetting');
+				uni.$u.func.navigateBackTo(1);
 			},
 			submit() {
 				uni.setStorageSync('warehouse', this.warehouse);

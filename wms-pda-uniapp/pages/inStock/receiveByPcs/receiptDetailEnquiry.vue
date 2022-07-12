@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
+		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
 			:bgColor="navigationBarBackgroundColor" title="按件收货" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
@@ -95,8 +95,7 @@
 				}
 			},
 			esc() {
-				this.$destroy('keyboardListener')
-				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/receiptHeaderEnquiry');
+				uni.$u.func.navigateBackTo(1);
 			},
 			getReceiveDetailList() {
 				if (tool.isNotEmpty(this.params.skuCode)) {
@@ -114,7 +113,6 @@
 			},
 			clickItem(row) {
 				row.receiveId = this.params.receiveId;
-				this.$destroy('keyboardListener')
 				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/ReceiveByPiece', row);
 			},
 			scannerCallback(no) {
