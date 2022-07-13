@@ -240,7 +240,7 @@ public class StockBizImpl implements StockBiz {
 		List<Serial> resultStockSerial = new ArrayList<>();
 		List<SerialLog> serialLogList = new ArrayList<>();
 		// 找出已经存在但出库的序列号，该类序列号入库次数加1
-		List<String> outBoundSerialNoList = null;
+		List<String> outBoundSerialNoList = new ArrayList<>();
 		List<Serial> outBoundSerialList = serialDao.getOutBoundSerialBySerialNo(serialNoList);
 		if (Func.isNotEmpty(outBoundSerialList)) {
 			for (Serial serial : outBoundSerialList) {
@@ -252,11 +252,10 @@ public class StockBizImpl implements StockBiz {
 		}
 
 		// 针对不存在的序列号则新增序列号
-		List<String> newSerialNoList = serialNoList;
 		if (Func.isNotEmpty(outBoundSerialNoList)) {
-			newSerialNoList.removeAll(outBoundSerialNoList);
+			serialNoList.removeAll(outBoundSerialNoList);
 		}
-		for (String serialNo : newSerialNoList) {
+		for (String serialNo : serialNoList) {
 			Serial stockSerial = new Serial();
 			stockSerial.setSerialNumber(serialNo);
 			updateSerialAndSaveLog(stockSerial, stock, 1);

@@ -142,7 +142,7 @@ public interface StockBiz {
 	/**
 	 * 根据库存查询所有的序列号
 	 *
-	 * @param stockId
+	 * @param stockId 库存主键
 	 * @return 序列号
 	 */
 	List<Serial> findSerialByStock(Long stockId);
@@ -150,8 +150,8 @@ public interface StockBiz {
 	/**
 	 * 根据箱码查询库存
 	 *
-	 * @param boxCode
-	 * @return
+	 * @param boxCode 箱码，必填
+	 * @return 库存对象
 	 */
 	List<Stock> findStockByBoxCode(String boxCode);
 
