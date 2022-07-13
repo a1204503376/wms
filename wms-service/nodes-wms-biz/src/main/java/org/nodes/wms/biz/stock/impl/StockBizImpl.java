@@ -9,12 +9,13 @@ import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
+import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.factory.StockFactory;
 import org.nodes.wms.biz.stock.merge.StockMergeStrategy;
-import org.nodes.wms.biz.stock.modular.StockFactory;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
+import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.instock.receiveLog.ReceiveLogDao;
@@ -71,6 +72,7 @@ public class StockBizImpl implements StockBiz {
 	private final SerialDao serialDao;
 	private final StockFactory stockFactory;
 	private final ReceiveLogDao receiveLogDao;
+	private final LogBiz logBiz;
 
 
 	@Override
@@ -635,6 +637,8 @@ public class StockBizImpl implements StockBiz {
 			//保存清点记录
 			receiveLogDao.save(receiveLog);
 		}
+		//记录业务日志
+		logBiz.auditLog(AuditLogType.INSTOCK, "导入库存" + receiveLogList.size() + "条");
 		return true;
 	}
 
