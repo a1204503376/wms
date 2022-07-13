@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
-			:bgColor="navigationBarBackgroundColor" title="库存查询" titleStyle="color:#ffffff;font-size:21px"
+			:bgColor="navigationBarBackgroundColor" title="库存详情" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u--form>
@@ -38,7 +38,6 @@
 
 <script>
 	import setting from '@/common/setting'
-	import receive from '@/api/inStock/receiveByPcs.js'
 	import uniSelect from '@/components/uni-select.vue'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
@@ -52,34 +51,12 @@
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
-					skuCode: undefined,
-					skuName: undefined,
-					skuLot2: undefined,
-					surplusQty: undefined,
-					wsuCode: undefined,
-					skuLot1: undefined,
-					boxCode: undefined,
-					locCode: 'STAGE',
-					isSn: ''
 				},
-				receiveDetailId: '',
-				receiveId: '',
-				receiveDetailList: [],
-				locCode: '',
-				boxCode: ''
 			}
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
-			console.log(parse)
 			this.params= parse;
-			// this.getDetailByDetailId();
-		},
-		onUnload() {
-			uni.$u.func.unRegisterScanner();
-		},
-		onShow() {
-			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		onBackPress(event) {
 			// #ifdef APP-PLUS

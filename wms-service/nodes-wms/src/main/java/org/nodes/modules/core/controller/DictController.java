@@ -50,14 +50,13 @@ import static org.springblade.core.cache.constant.CacheConstant.SYS_CACHE;
 
 /**
  * 字典 控制器
- *
  */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(AppConstant.APPLICATION_SYSTEM_NAME + "/dict")
 public class DictController extends BladeController {
 
-	private IDictService dictService;
+	private final IDictService dictService;
 
 	/**
 	 * 详情
@@ -190,10 +189,10 @@ public class DictController extends BladeController {
 				&& !u.getParentId().equals(CommonConstant.TOP_PARENT_ID);
 		}).sorted(Comparator.comparing(Dict::getDictKey)).collect(Collectors.toList());*/
 		List<Dict> dictList = dictService.list(Condition.getQueryWrapper(new Dict())
-		.lambda()
-		.eq(Dict::getCode,code)
-		.eq(Dict::getIsSealed,new Integer(0))
-		.ne(Dict::getParentId,CommonConstant.TOP_PARENT_ID)
+			.lambda()
+			.eq(Dict::getCode, code)
+			.eq(Dict::getIsSealed, new Integer(0))
+			.ne(Dict::getParentId, CommonConstant.TOP_PARENT_ID)
 		);
 		return R.data(dictList);
 	}

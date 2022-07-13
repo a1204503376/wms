@@ -7,6 +7,7 @@ import lombok.Data;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
 
 import java.math.BigDecimal;
+
 /**
  * 收货单 清点表
  **/
@@ -24,7 +25,7 @@ public class ReceiveLog extends BaseSkuLotEntity {
 	 */
 	private Long receiveId;
 	/**
-	 *  收货单据编码
+	 * 收货单据编码
 	 */
 	private String receiveNo;
 	/**
@@ -111,5 +112,9 @@ public class ReceiveLog extends BaseSkuLotEntity {
 	 * 计量单位编码
 	 */
 	private String wsuCode;
+	/**
+	 * 库存状态
+	 */
+	private Integer stockStatus;
 }
 
