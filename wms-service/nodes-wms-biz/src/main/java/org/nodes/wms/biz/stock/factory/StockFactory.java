@@ -25,7 +25,7 @@ public class StockFactory {
 	private final SkuBiz skuBiz;
 	private final ZoneBiz zoneBiz;
 
-	public Stock create(ReceiveLog receiveLog, Location location){
+	public Stock create(ReceiveLog receiveLog, Location location) {
 		AssertUtil.notNull(receiveLog, "创建库存失败，清点记录为空");
 		AssertUtil.notNull(location, "创建库存失败，目标为空");
 
@@ -33,7 +33,12 @@ public class StockFactory {
 		SkuLotUtil.setAllSkuLot(receiveLog, stock);
 		stock.setLastInTime(LocalDateTime.now());
 		// TODO 如果没有库存状态则默认
-		stock.setStockStatus(StockStatusEnum.NORMAL);
+		if (Func.isNull(receiveLog.getStockStatus())) {
+			stock.setStockStatus(StockStatusEnum.NORMAL);
+		} else {
+			stock.setStockStatus(receiveLog.getStockStatus());
+		}
+
 		stock.setSkuLevel(receiveLog.getSkuLevel());
 		stock.setWsuCode(receiveLog.getWsuCode());
 		Sku sku = skuBiz.findById(receiveLog.getSkuId());
@@ -65,7 +70,7 @@ public class StockFactory {
 	}
 
 	public Stock create(Stock sourceStock, Location targetLocation,
-						String targetLpnCode, String targetBoxCode, BigDecimal qty){
+						String targetLpnCode, String targetBoxCode, BigDecimal qty) {
 		AssertUtil.notNull(sourceStock, "创建库存失败，原库存为空");
 		AssertUtil.notNull(targetLocation, "创建库存失败，目标库位为空");
 		AssertUtil.notNull(qty, "创建库存失败，数量为空");

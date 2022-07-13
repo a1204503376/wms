@@ -14,8 +14,6 @@ import org.nodes.wms.biz.stock.factory.StockFactory;
 import org.nodes.wms.biz.stock.merge.StockMergeStrategy;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
-import org.nodes.wms.dao.basics.sku.entities.Sku;
-import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
@@ -36,7 +34,6 @@ import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.entities.StockLog;
 import org.nodes.wms.dao.stock.enums.SerialStateEnum;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
-import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -128,18 +125,12 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	// 将sourceStock合并到targetStock
-	private void mergeStock(Stock sourceStock, Stock targetStock,
-							LocalDateTime lastIn, LocalDateTime lastOut) {
+	private void mergeStock(Stock sourceStock, Stock targetStock) {
 		targetStock.setStockQty(targetStock.getStockQty().add(sourceStock.getStockQty()));
 		targetStock.setStayStockQty(targetStock.getStayStockQty().add(sourceStock.getStayStockQty()));
 		targetStock.setPickQty(targetStock.getPickQty().add(sourceStock.getPickQty()));
 		targetStock.setOccupyQty(targetStock.getOccupyQty().add(sourceStock.getOccupyQty()));
-		if (!Func.isNull(lastIn)) {
-			targetStock.setLastInTime(lastIn);
-		}
-		if (!Func.isNull(lastOut)) {
-			targetStock.setLastOutTime(lastOut);
-		}
+		targetStock.setLastInTime(LocalDateTime.now());
 	}
 
 	@Override
@@ -152,15 +143,15 @@ public class StockBizImpl implements StockBiz {
 		Stock stock = stockFactory.create(receiveLog, location);
 		Stock existStock = stockMergeStrategy.matchCanMergeStock(stock);
 		// 本次入库保存的库存对象，如果需要合并则是数据库中保存的stock对象，否则为新的库存对象
-		Stock finalStock = null;
-		StockLog stockLog = null;
+		Stock finalStock;
+		StockLog stockLog;
 		if (Func.isNull(existStock)) {
 			// 新建库存
 			finalStock = stockDao.saveNewStock(stock);
 			stockLog = createAndSaveStockLog(type, finalStock, receiveLog, "新建库存");
 		} else {
 			// 合并库存
-			mergeStock(stock, existStock, LocalDateTime.now(), null);
+			mergeStock(stock, existStock);
 			finalStock = stockDao.updateStock(existStock);
 			stockLog = createAndSaveStockLog(type, finalStock, receiveLog, "合并库存");
 		}
