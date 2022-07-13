@@ -1,10 +1,9 @@
-
 <template>
     <el-select
         v-model="val"
         :multiple="multiple"
-        size="mini"
-        style="width:100%;"
+        :size="size"
+        :disabled="disabled"
         value-key="value"
         @change="onChange">
         <el-option
@@ -33,6 +32,10 @@ export default {
         defaultValue:{type:Boolean,required: false,default: () => false},
         // 单选多选切换，默认为false
         multiple: {type: Boolean, required: false, default: false},
+        // 组件大小，默认为mini, 支持 medium/small/mini
+        size: {type: String, required: false, default: () => "mini"},
+        // 是否禁用 默认为 false不禁用
+        disabled: {type: Boolean, required: false, default: () => false}
     },
     data() {
         return {

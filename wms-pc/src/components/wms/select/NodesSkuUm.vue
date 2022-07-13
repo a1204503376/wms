@@ -3,10 +3,11 @@
         v-model="val"
         collapse-tags
         placeholder="请选择"
-        size="mini"
         style="width:100%;"
         @change="onChange"
         @visible-change="onFocus"
+        :size="size"
+        :disabled="disabled"
            >
         <el-option
             v-for="item in dataSource"
@@ -35,8 +36,12 @@ export default {
     },
     props: {
         selectVal: [String],
-      //物料编码,新增和编辑时将其设置为当前行的sku对象
-        sku:{type: Object, required: false}
+        //物料编码,新增和编辑时将其设置为当前行的sku对象
+        sku:{type: Object, required: false},
+        // 组件大小，默认为mini, 支持 medium/small/mini
+        size: {type: String, required: false, default: () => "mini"},
+        // 是否禁用 默认为 false不禁用
+        disabled: {type: Boolean, required: false, default: () => false}
     },
     data() {
         return {
