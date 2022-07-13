@@ -25,6 +25,17 @@ public class SystemParamBizImpl implements SystemParamBiz {
 	}
 
 	@Override
+	public int findSkuLotNumberOfOpen() {
+		Param param = systemParamDao.selectByKey(SystemParamConstant.SKU_LOT_NUMBER_OPEN);
+		if (Func.isNull(param)){
+			return 30;
+		}
+
+		return Integer.parseInt(param.getParamValue());
+	}
+
+
+	@Override
 	public Boolean saveOrUpdate(Param param) {
 		return systemParamDao.saveOrUpdate(param);
 	}

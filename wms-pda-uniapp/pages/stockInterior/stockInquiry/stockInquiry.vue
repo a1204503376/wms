@@ -70,7 +70,7 @@
 				stockInquiryList: [],
 				page: {
 					total: 0,
-					size: 5,
+					size: 4,
 					current: 1,
 					ascs: "", //正序字段集合
 					descs: "", //倒序字段集合
@@ -110,9 +110,7 @@
 				}
 			},
 			esc() {
-				uni.$u.func.routeNavigateTo('/pages/home/childrenHome', {
-					name: '库内'
-				});
+				uni.$u.func.navigateBackTo(1);
 			},
 			findAllStockByNo() {
 				this.noData = false;
@@ -128,6 +126,7 @@
 						this.loadmore = true;
 						this.noData = false;
 					} else {
+						this.status = 'nomore';
 						this.loadmore = false;
 						this.noData = true;
 					}
