@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.dao.outstock.so.mapper.SoDetailMapper">
+
+    <select id="selectSoDetailEditBySoBillId"
+            resultMap="soDetailMap">
+        SELECT so_detail_id,
+               so_line_no,
+               sku_id,
+               sku_code,
+               sku_name,
+               sku_spec,
+               um_code,
+               plan_qty,
+               sku_lot1,
+               sku_lot4,
+               remark
+        FROM so_detail
+        WHERE so_bill_id = #{soBillId}
+          AND is_deleted = 0
+    </select>
+
+    <resultMap id="soDetailMap" type="org.nodes.wms.dao.outstock.so.dto.output.SoDetailEditResponse">
+        <id column="so_detail_id" property="soDetailId"/>
+        <result column="so_line_no" property="soLineNo"/>
+        <result column="um_code" property="umCode"/>
+        <result column="plan_qty" property="planQty"/>
+        <result column="sku_lot1" property="skuLot1"/>
+        <result column="sku_lot4" property="skuLot4"/>
+        <result column="remark" property="remark"/>
+        <association property="sku" javaType="org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse">
+            <id column="sku_id" property="skuId"/>
+            <result column="sku_code" property="skuCode"/>
+            <result column="sku_name" property="skuName"/>
+            <result column="sku_spec" property="skuSpec"/>
+        </association>
+    </resultMap>
+
+    <select id="pageForSoDetailBySoBillId"
+            resultType="org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse">
+        SELECT
+        so_line_no,
+        sku_code,
+        sku_name,
+        um_code,
+        um_name,
+        plan_qty,
+        sku_lot1,
+        sku_lot4,
+        remark
+        FROM so_detail
+        WHERE so_bill_id = #{soBillId} AND is_deleted = 0
+        <if test="page.orders == null or page.orders.size == 0">
+            ORDER BY create_time DESC
+        </if>
+    </select>
+</mapper>
+

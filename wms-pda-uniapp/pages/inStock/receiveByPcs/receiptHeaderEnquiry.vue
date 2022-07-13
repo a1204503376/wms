@@ -95,9 +95,7 @@
 				}
 			},
 			esc() {
-				uni.$u.func.routeNavigateTo('/pages/home/childrenHome', {
-					name: '收货'
-				});
+				uni.$u.func.navigateBackTo(1);
 			},
 			getReceiveList() {
 				this.noData = false;

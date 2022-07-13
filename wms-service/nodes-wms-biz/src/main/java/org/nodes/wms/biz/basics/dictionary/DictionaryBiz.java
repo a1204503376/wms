@@ -22,4 +22,10 @@ public interface DictionaryBiz {
 	 * @return
 	 */
 	Dict findZoneTypeOfAutoStore();
+
+	/**
+	 * 获取虚拟库区的字典
+	 * @return
+	 */
+	Dict findZoneTypeOfVirtual();
 }

@@ -1,131 +1,99 @@
 import request from '@/router/axios'
+import {blob} from "pikaz-excel-js/lib/PikazJsExcel.common";
 
-export const getPage = (params, data) => {
+export const getPage = (page, data) => {
     return request({
-        url: '/api/wms/outstock/header/page',
+        url: '/api/wms/outstock/soBill/page',
         method: 'post',
-        params: {
-            params
-        },
+        params: page,
         data: data
     })
 }
 
-// export const getList = (current, size, params) => {
-//     return request({
-//         url: '/api/wms/outstock/header/page',
-//         method: 'get',
-//         params: {
-//             ...params,
-//             current,
-//             size,
-//         }
-//     })
-// }
-// export const add = (row) => {
-//     return request({
-//         url: '/api/wms/outstock/header/submit',
-//         method: 'post',
-//         data: row
-//     })
-// }
-// export const update = (row) => {
-//     return request({
-//         url: '/api/wms/outstock/header/submit',
-//         method: 'post',
-//         data: row
-//     })
-// }
-// export const getSoBillNo = (row) => {
-//     return request({
-//         url: '/api/wms/outstock/header/getSoBillNo',
-//         method: 'get',
-//     })
-// }
-// export const remove = (ids) => {
-//     return request({
-//         url: '/api/wms/outstock/header/remove',
-//         method: 'post',
-//         params: {
-//             ids,
-//         }
-//     })
-// }
-// export const getDetail = (row) => {
-//     return request({
-//         url: '/api/wms/outstock/header/detail',
-//         method: 'get',
-//         params: {
-//             soBillId: row
-//         }
-//     })
-// }
-//
-// export const canEdit = (id) => {
-//     return request({
-//         url: '/api/wms/outstock/header/canEdit',
-//         method: 'get',
-//         params: {
-//             soHeaderId: id
-//         }
-//     })
-// }
-//
-// export const cancel = (ids) => {
-//     return request({
-//         url: '/api/wms/outstock/header/cancel',
-//         method: 'post',
-//         params: {
-//             ids
-//         }
-//     })
-// }
-//
-// export const exportFile = (data) => {
-//     return request({
-//         url: '/api/wms/outstock/header/export',
-//         method: 'get',
-//         params: {
-//             ...data
-//         },
-//         responseType: 'blob'
-//     })
-// }
-// export const callback = (data) => {
-//     return request({
-//         url: '/api/wms/outstock/header/callback',
-//         method: 'post',
-//         data: data
-//     })
-// }
-//
-// export const completed = (ids) => {
-//     return request({
-//         url: '/api/wms/outstock/header/completed',
-//         method: 'post',
-//         params: {
-//             ids,
-//         }
-//     })
-// }
-//
-// export const completedOutstock = (ids) => {
-//     return request({
-//         url: '/api/wms/outstock/header/complated/outstock',
-//         method: 'post',
-//         params: {
-//             ids
-//         }
-//     })
-// }
-//
-// export const cancelPick = (ids) => {
-//     return request({
-//         url: '/api/wms/outstock/pickplan/cancelPick',
-//         method: 'get',
-//         params: {
-//             ids
-//         }
-//     })
-// }
+export const add = (data) => {
+    return request({
+        url: '/api/wms/outstock/soBill/add',
+        method: 'post',
+        data: data
+    })
+}
+
+export const remove = (soBillIdList) => {
+    return request({
+        url: '/api/wms/outstock/soBill/remove',
+        method: 'post',
+        data: {
+            idList: soBillIdList
+        }
+    })
+}
+
+export const detailByEdit = (soBillId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/detailByEdit',
+        method: 'post',
+        data: {
+            soBillId: soBillId
+        }
+    })
+}
+
+export const edit = (data) => {
+    return request({
+        url: '/api/wms/outstock/soBill/edit',
+        method: 'post',
+        data: data
+    })
+}
+
+export const getHeaderForDetail = (soBillId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/detail_header',
+        method: 'post',
+        data: {
+            soBillId: soBillId
+        }
+    })
+}
+
+export const getDetailForDetail = (page, soBillId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/detail_detail',
+        method: 'post',
+        params: page,
+        data: {
+            soBillId: soBillId
+        }
+    })
+}
+
+export const getLogSoPickForDetail = (page, soBillId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/detail_logSoPick',
+        method: 'post',
+        params: page,
+        data: {
+            soBillId: soBillId
+        }
+    })
+}
+
+export const exportData = (data) => {
+    return request({
+        url: '/api/wms/outstock/soBill/export',
+        method: 'post',
+        data: data,
+        responseType: 'blob'
+    })
+}
+
+export const closeSoBill = (soBillId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/close',
+        method: 'post',
+        data: {
+            soBillId: soBillId
+        }
+    })
+}
 

@@ -238,7 +238,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		//创建收货单明细保存集合
 		List<EditReceiveDetailRequest> editReceiveDetailRequestList = editReceiveRequest.getEditReceiveDetailRequestList();
 		for (EditReceiveDetailRequest editReceiveDetailRequest : editReceiveDetailRequestList) {
-			ReceiveDetail receiveDetail = receiveFactory.createEditReceiveDetail(editReceiveDetailRequest, receiveHeader);
+			ReceiveDetail receiveDetail = receiveFactory.createEditReceiveDetail(editReceiveDetailRequest, receiveHeader, receiveNo);
 			receiveDetailDao.saveOrUpdateReceiveDetail(receiveDetail);
 		}
 		receiveHeaderDao.updateReceive(receiveHeader);
@@ -403,7 +403,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		logBiz.auditLog(AuditLogType.INSTOCK,
 			receiveHeader.getReceiveId(),
 			receiveHeader.getReceiveNo(),
-			String.format("[%s]:[%s]行[%s]收[%s],批次[%s]",
+			String.format("%s:[%s]行[%s]收[%s],批次[%s]",
 				logType, detail.getLineNo(), detail.getSkuCode()
 				, receivelog.getQty(), receivelog.getSkuLot1()));
 	}

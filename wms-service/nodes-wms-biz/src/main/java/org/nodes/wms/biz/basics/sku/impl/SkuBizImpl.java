@@ -3,16 +3,17 @@ package org.nodes.wms.biz.basics.sku.impl;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.sku.modular.SkuFactory;
-import org.nodes.wms.dao.basics.sku.*;
+import org.nodes.wms.dao.basics.sku.SkuDao;
+import org.nodes.wms.dao.basics.sku.SkuIncDao;
+import org.nodes.wms.dao.basics.sku.SkuReplaceDao;
+import org.nodes.wms.dao.basics.sku.SkuUmDao;
 import org.nodes.wms.dao.basics.sku.dto.input.SkuAddOrEditRequest;
 import org.nodes.wms.dao.basics.sku.dto.input.SkuSelectQuery;
-import org.nodes.wms.dao.basics.sku.dto.output.PdaSkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.*;
 import org.nodes.wms.dao.basics.skuType.SkuTypeDao;
 import org.nodes.wms.dao.basics.skuType.entities.SkuType;
-import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,19 +43,19 @@ public class SkuBizImpl implements SkuBiz {
 		return skuDao.listTop10BySkuCodeSkuName(skuSelectQuery.getKey(), skuSelectQuery.getKey());
 	}
 
-    @Override
-    public Sku findById(Long skuId) {
-        return skuDao.getById(skuId);
-    }
+	@Override
+	public Sku findById(Long skuId) {
+		return skuDao.getById(skuId);
+	}
 
-    @Override
-    public Sku findByCode(String skuCode) {
+	@Override
+	public Sku findByCode(String skuCode) {
 		return skuDao.getSkuByCode(skuCode);
-    }
+	}
 
 	@Override
 	public SkuType findSkuTypeById(Long skuTypeId) {
-		return  skuTypeDao.getSkuTypeById(skuTypeId);
+		return skuTypeDao.getSkuTypeById(skuTypeId);
 	}
 
 	@Override
@@ -63,14 +64,14 @@ public class SkuBizImpl implements SkuBiz {
 	}
 
 	@Override
-    public List<SkuUmSelectResponse> findSkuUmSelectResponseListBySkuId(Long skuId) {
-        return skuDao.listSkuUmBySkuId(skuId);
-    }
+	public List<SkuUmSelectResponse> findSkuUmSelectResponseListBySkuId(Long skuId) {
+		return skuDao.listSkuUmBySkuId(skuId);
+	}
 
-    @Override
-    public SkuPackageAggregate findSkuPackageAggregateBySkuId(Long skuId) {
-        return skuDao.getSkuPackageAggregateBySkuId(skuId);
-    }
+	@Override
+	public SkuPackageAggregate findSkuPackageAggregateBySkuId(Long skuId) {
+		return skuDao.getSkuPackageAggregateBySkuId(skuId);
+	}
 
 	@Override
 	public SkuUm findSkuUmByUmCode(String skuUmCode) {
@@ -83,9 +84,9 @@ public class SkuBizImpl implements SkuBiz {
 	}
 
 	@Override
-    public SkuPackageDetail findBaseSkuPackageDetail(Long skuId) {
-        return skuDao.getBaseSkuPackageDetail(skuId);
-    }
+	public SkuPackageDetail findBaseSkuPackageDetail(Long skuId) {
+		return skuDao.getBaseSkuPackageDetail(skuId);
+	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -95,18 +96,18 @@ public class SkuBizImpl implements SkuBiz {
 		skuDao.saveSku(sku);
 		//新增或修改 替代物品
 		List<SkuReplace> skuReplaceList = skuAddOrEditRequest.getSkuReplaceList();
-		skuReplaceList.forEach(item->item.setSkuId(sku.getSkuId()));
+		skuReplaceList.forEach(item -> item.setSkuId(sku.getSkuId()));
 		skuReplaceDao.saveBatchSkuReplace(skuReplaceList);
 		// 删除替代物品
-		if(Func.isNotEmpty(skuAddOrEditRequest.getSkuReplaceIdList())){
-		skuReplaceDao.deleteByIdList(skuAddOrEditRequest.getSkuReplaceIdList());
+		if (Func.isNotEmpty(skuAddOrEditRequest.getSkuReplaceIdList())) {
+			skuReplaceDao.deleteByIdList(skuAddOrEditRequest.getSkuReplaceIdList());
 		}
 		//新增或修改 物品与供应商关联结合
 		List<SkuInc> skuIncList = skuAddOrEditRequest.getSkuIncList();
-		skuIncList.forEach(item->item.setSkuId(sku.getSkuId()));
+		skuIncList.forEach(item -> item.setSkuId(sku.getSkuId()));
 		skuIncDao.saveBatchSkuInc(skuIncList);
 		// 删除物品与供应商关联
-		if(Func.isNotEmpty(skuAddOrEditRequest.getSkuIncIdList())){
+		if (Func.isNotEmpty(skuAddOrEditRequest.getSkuIncIdList())) {
 			skuIncDao.deleteByIdList(skuAddOrEditRequest.getSkuIncIdList());
 		}
 		return sku;
@@ -127,5 +128,20 @@ public class SkuBizImpl implements SkuBiz {
 			.distinct()
 			.collect(Collectors.toList());
 		return skuSpecList;
+	}
+
+	@Override
+	public int getSkuCountByCode(String skuCode) {
+		return skuDao.countByCode(skuCode);
+	}
+
+	@Override
+	public int getSkuUmCountByUmCode(String umCode) {
+		return skuUmDao.countByCode(umCode);
+	}
+
+	@Override
+	public SkuPackageDetail getSkuPackageDetailBySkuId(Long skuId, String wsuCode) {
+		return skuDao.getSkuPackageDetailBySkuId(skuId, wsuCode);
 	}
 }

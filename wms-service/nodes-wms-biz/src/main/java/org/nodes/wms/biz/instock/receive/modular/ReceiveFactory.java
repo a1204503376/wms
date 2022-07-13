@@ -149,7 +149,7 @@ public class ReceiveFactory {
 		//设置货主id
 		receiveDetail.setWoId(receiveHeader.getWoId());
 		//设置接收状态
-		 receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.NOT_RECEIPT);
+		receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.NOT_RECEIPT);
 		//设置生产批次
 		receiveDetail.setSkuLot1(newReceiveDetailRequest.getSkuLot1());
 		//设置客户
@@ -261,17 +261,19 @@ public class ReceiveFactory {
 
 	}
 
-	public ReceiveDetail createEditReceiveDetail(EditReceiveDetailRequest editReceiveDetailRequest,ReceiveHeader receiveHeader) {
+	public ReceiveDetail createEditReceiveDetail(EditReceiveDetailRequest editReceiveDetailRequest, ReceiveHeader receiveHeader, String receiveNo) {
 		//收货单明细实体
 		ReceiveDetail receiveDetail = new ReceiveDetail();
 		//设置收货单明细id
-		if(Func.isNotEmpty(editReceiveDetailRequest.getReceiveDetailId())){
+		if (Func.isNotEmpty(editReceiveDetailRequest.getReceiveDetailId())) {
 			receiveDetail.setReceiveDetailId(editReceiveDetailRequest.getReceiveDetailId());
-		}else{
+		} else {
 			//设置收货单编码
-			receiveDetail.setReceiveNo(receiveHeader.getReceiveNo());
-			//设置收货单id
+			receiveDetail.setReceiveNo(receiveNo);
+			//设置明细表收货单id
 			receiveDetail.setReceiveId(receiveHeader.getReceiveId());
+			//  设置订单行号
+			receiveDetail.setLineNo(editReceiveDetailRequest.getLineNumber());
 		}
 		//根据物料id获取物料实体
 		Sku sku = skuBiz.findById(editReceiveDetailRequest.getSku().getSkuId());
@@ -281,10 +283,6 @@ public class ReceiveFactory {
 		SkuPackageDetail skuPackageDetail = skuPackageAggregate.findSkuPackageDetail(editReceiveDetailRequest.getUmCode());
 		//获取基础包装明细
 		SkuPackageDetail baseSkuPackageDetail = skuPackageAggregate.findBaseSkuPackageDetail();
-		//设置明细表收货单id
-		receiveDetail.setReceiveId(receiveHeader.getReceiveId());
-		//  设置订单行号
-		receiveDetail.setLineNo(editReceiveDetailRequest.getLineNumber());
 		//设置物料id
 		receiveDetail.setSkuId(sku.getSkuId());
 		//设置物料编码
@@ -299,8 +297,6 @@ public class ReceiveFactory {
 		receiveDetail.setSurplusQty(editReceiveDetailRequest.getPlanQty());
 		//设置备注
 		receiveDetail.setRemark(editReceiveDetailRequest.getRemark());
-		//设置收货单编码
-		receiveDetail.setReceiveNo(receiveHeader.getReceiveNo());
 		//设置包装id
 		receiveDetail.setWspId(sku.getWspId());
 		//设置计量单位编码
@@ -334,10 +330,11 @@ public class ReceiveFactory {
 
 	/**
 	 * 按箱收货根据前端传入参数创建收货单头表实体
-	 * @param receiveDetailLpnPdaRequest  前端传入参数
+	 *
+	 * @param receiveDetailLpnPdaRequest 前端传入参数
 	 * @return
 	 */
-	public ReceiveHeader createReceiveHeader(ReceiveDetailLpnPdaRequest receiveDetailLpnPdaRequest){
+	public ReceiveHeader createReceiveHeader(ReceiveDetailLpnPdaRequest receiveDetailLpnPdaRequest) {
 		ReceiveHeader receiveHeader = new ReceiveHeader();
 		//设置收货单编码
 		receiveHeader.setReceiveNo(noGeneratorUtil.createReceiveBillNo());
@@ -364,15 +361,16 @@ public class ReceiveFactory {
 
 	/**
 	 * 按箱收货创建收货单明细
-	 * @param request 前端传入参数
-	 * @param item 物料信息
-	 * @param lpn   lpn实体
+	 *
+	 * @param request       前端传入参数
+	 * @param item          物料信息
+	 * @param lpn           lpn实体
 	 * @param receiveHeader 收货单头表实体
-	 * @return  收货单明细实体
+	 * @return 收货单明细实体
 	 */
 
-	public ReceiveDetail createReceiveDetail(ReceiveDetailLpnPdaRequest request, ReceiveDetailLpnItemDto item, ReceiveDetailLpn lpn,ReceiveHeader receiveHeader,int linNo) {
-		ReceiveDetail  receiveDetail  = new ReceiveDetail();
+	public ReceiveDetail createReceiveDetail(ReceiveDetailLpnPdaRequest request, ReceiveDetailLpnItemDto item, ReceiveDetailLpn lpn, ReceiveHeader receiveHeader, int linNo) {
+		ReceiveDetail receiveDetail = new ReceiveDetail();
 		//根据仓库id获取仓库实体
 		Warehouse warehouse = warehouseBiz.findById(request.getWhId());
 		//根据物料id获取物料实体
@@ -421,8 +419,8 @@ public class ReceiveFactory {
 		receiveDetail.setOwnerCode(lpn.getOwnerCode());
 		//设置接收状态
 		receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.COMPLETED);
-        //设置批属性信息
-		SkuLotUtil.setAllSkuLot(lpn,receiveDetail);
+		//设置批属性信息
+		SkuLotUtil.setAllSkuLot(lpn, receiveDetail);
 		receiveDetail.setSkuLot1(request.getSkuLot1());
 		receiveDetail.setSkuLot2(request.getSkuLot2());
 		return receiveDetail;

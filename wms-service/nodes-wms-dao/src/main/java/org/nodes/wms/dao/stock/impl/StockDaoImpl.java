@@ -2,9 +2,15 @@ package org.nodes.wms.dao.stock.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.wms.dao.stock.StockDao;
+import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
+import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
+import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
+import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.nodes.wms.dao.stock.mapper.StockMapper;
@@ -184,6 +190,7 @@ public class StockDaoImpl
 		UpdateWrapper<Stock> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
 			.eq(Stock::getStockId, stockId);
+		// 更新对象
 		Stock stock = new Stock();
 		stock.setStockQty(stockQty);
 		stock.setStayStockQty(stayStockQty);
@@ -202,11 +209,11 @@ public class StockDaoImpl
 
 	@Override
 	public List<Stock> getStockByLocIdList(List<Long> locIdList) {
-		if(Func.isEmpty(locIdList)){
+		if (Func.isEmpty(locIdList)) {
 			throw new NullArgumentException("StockDaoImpl.getStockByLocIdList方法的参数为空");
 		}
 		LambdaQueryWrapper<Stock> lambdaQueryWrapper = getStockQuery();
-		lambdaQueryWrapper.in(Stock::getLocId,locIdList);
+		lambdaQueryWrapper.in(Stock::getLocId, locIdList);
 		return super.list(lambdaQueryWrapper);
 	}
 
@@ -215,9 +222,27 @@ public class StockDaoImpl
 		return super.getById(stockId);
 	}
 
+	@Override
+	public IPage<FindAllStockByNoResponse> getStockList(FindAllStockByNoRequest request, IPage<Stock> page) {
+		if (Func.isEmpty(request.getNo())) {
+			throw new NullArgumentException("编码不能为空");
+		}
+		return baseMapper.getList(request, page);
+	}
+
 	private LambdaQueryWrapper<Stock> getStockQuery() {
 		LambdaQueryWrapper<Stock> queryWrapper = Wrappers.lambdaQuery();
 		queryWrapper.apply("stay_stock_qty + stock_qty > pick_qty");
 		return queryWrapper;
 	}
+
+	@Override
+	public Page<StockPageResponse> page(IPage<StockPageResponse> page, StockPageQuery stockPageQuery) {
+		return super.baseMapper.getPage(page, stockPageQuery);
+	}
+
+    @Override
+    public List<StockPageResponse> getStockResponseByQuery(StockPageQuery stockPageQuery) {
+        return super.baseMapper.getStockResponseByQuery(stockPageQuery);
+    }
 }

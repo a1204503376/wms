@@ -58,12 +58,10 @@
 		methods: {
 			navTo(menu) {
 				//跳转页面
-				this.$destroy('keyboardListener')
 				uni.$u.func.routeNavigateTo(menu.path);
 			},
 			closePage() {
-				this.$destroy('keyboardListener')
-				uni.$u.func.routeNavigateTo('/pages/home/home');
+				uni.$u.func.navigateBackTo(1);
 			},
 			scannerCallback(data) {
 				this.username = data

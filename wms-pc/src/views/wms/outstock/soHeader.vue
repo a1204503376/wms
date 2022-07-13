@@ -4,10 +4,10 @@
             <template v-slot:searchFrom>
                 <el-row type="flex">
                     <el-col :span="8">
-                        <el-form-item label="发货单编码" label-width="90px">
+                        <el-form-item label="出库单编码" label-width="90px">
                             <el-input v-model.trim="form.params.soBillNo"
                                       :clearable="true"
-                                      placeholder="请输入发货单编码">
+                                      placeholder="请输入出库单编码">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -41,6 +41,7 @@
                         <el-form-item label="客户" label-width="90px">
                             <nodes-customer
                                 v-model.trim="form.params.customerIdList"
+                                :multiple="true"
                                 placeholder="请输入客户编码或名称"></nodes-customer>
                         </el-form-item>
                     </el-col>
@@ -123,6 +124,7 @@
                     <el-table-column align="center" fixed="right" label="操作" width="100">
                         <template v-slot="scope">
                             <el-button size="small" type="text" @click="onEdit(scope.row)">编辑</el-button>
+                            <el-button size="small" type="text" @click="onClose(scope.row)">关闭</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -153,9 +155,10 @@ import {listMixin} from "@/mixins/list";
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js'
 import NodesSoBillState from "@/components/wms/select/NodesSoBillState";
-import {getPage} from "@/api/wms/outstock/soHeader"
+import {getPage, remove, exportData, closeSoBill} from "@/api/wms/outstock/soHeader"
 import NodesCustomer from "@/components/wms/select/NodesCustomer";
 import NodesBillType from "@/components/wms/select/NodesBillType";
+import {nowDateFormat} from "@/util/date";
 
 
 export default {
@@ -189,7 +192,7 @@ export default {
                 columnList: [
                     {
                         prop: 'soBillNo',
-                        label: '发货单编码',
+                        label: '出库单编码',
                         sortable: 'custom',
                     },
                     {
@@ -285,30 +288,25 @@ export default {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning",
+            }).then(() => {
+                let soBillIdList = rows.map(item => item.soBillId);
+                remove(soBillIdList)
+                    .then((res) => {
+                        this.$message({
+                            type: "success",
+                            message: res.data.msg,
+                        });
+                        this.getTableData();
+                    })
             })
-                .then(() => {
-                    let removeObj = {
-                        soBillIds: []
-                    };
-                    rows.forEach((item) => {
-                        removeObj.soBillIds.push(item.soBillId);
-                    });
-                    remove(removeObj)
-                        .then((res) => {
-                            this.$message({
-                                type: "success",
-                                message: res.data.msg,
-                            });
-                            this.getTableData();
-                        })
-                })
         },
         onExportData() {
             this.loading = true;
             exportData(this.form.params)
                 .then((res) => {
+                    console.log(res);
                     this.$message.success("操作成功，正在下载中...");
-                    fileDownload(res.data, "发货单.xlsx");
+                    fileDownload(res.data, `出库单${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
                 })
                 .catch(() => {
                     this.$message.error("系统模板目录配置有误或文件不存在");
@@ -318,7 +316,7 @@ export default {
                 });
         },
         onReset() {
-            this.form.params={
+            this.form.params = {
                 soBillNo: '',
                 orderNo: '',
                 billTypeCdList: [],
@@ -330,31 +328,37 @@ export default {
             }
         },
         onExportLocalData() {
-            this.exportCurrentDataToExcel("发货单", "发货单");
+            this.exportCurrentDataToExcel("出库单", "出库单");
         },
         onAdd() {
             this.$router.push({
-                name: '新增发货单',
+                name: '新增出库单',
                 params: {
                     soBillId: '0'
                 }
             })
         },
         onEdit(row) {
-            if (row.asnBillStateValue !== '未收货') {
-                this.$message.warning("操作失败，改发货单已收货");
+            if (row.soBillState.trim() !== '未出库') {
+                this.$message.warning("操作失败，该出库单正在处理中");
                 return;
             }
             this.$router.push({
-                name: '编辑发货单',
+                name: '编辑出库单',
                 params: {
                     soBillId: row.soBillId
                 }
             })
         },
+        onClose(row){
+            closeSoBill(row.soBillId).then((res)=>{
+                this.$message.success(res.data.msg);
+                this.refreshTable();
+            })
+        },
         onView(row) {
             this.$router.push({
-                name: '发货单详情',
+                name: '出库单详情',
                 params: {
                     soBillId: row.soBillId
                 }

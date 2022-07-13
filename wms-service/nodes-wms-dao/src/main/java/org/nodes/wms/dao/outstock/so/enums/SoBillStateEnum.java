@@ -17,8 +17,14 @@ public enum SoBillStateEnum {
 	EXECUTING("处理中", 20),
 	PART("部分出库", 30),
 	COMPLETED("已完成", 40),
+
+	NOT("未出库",50),
+	PART_STOCK_OUT("部分出库",60),
+	COMPLETED_STOCK_OUT("全部出库",70),
+	ALLOCATED("已分配",80),
 	REPEAL("已撤销", 90),
-	CANCEL("已取消",91);
+	CANCEL("已取消",91),
+	CLOSED("已关闭",92);
 
 	@EnumValue
 	final Integer index;

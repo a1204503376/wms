@@ -2,135 +2,126 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.basics.sku.mapper.SkuMapper">
 
-	<select id="listTop10BySkuCodeSkuName" resultType="org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse">
-		SELECT sku_id,
-		       sku_code,
-		       sku_name,
-		       sku_spec
-		FROM wms_sku
-		WHERE sku_code LIKE CONCAT('%', #{skuCode}, '%')
-		   OR sku_name LIKE CONCAT('%', #{skuName}, '%')
-		ORDER BY update_time DESC
-		LIMIT 10
-	</select>
+    <select id="listTop10BySkuCodeSkuName" resultType="org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse">
+        SELECT sku_id,
+               sku_code,
+               sku_name,
+               sku_spec
+        FROM wms_sku
+        WHERE sku_code LIKE CONCAT('%', #{skuCode}, '%')
+           OR sku_name LIKE CONCAT('%', #{skuName}, '%')
+        ORDER BY update_time DESC
+        LIMIT 10
+    </select>
 
     <select id="listSkuUmBySkuId" resultType="org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse">
-        SELECT
-            temp2.sku_level,
-            s.sku_type_id,
-            temp2.wsu_id,
-            temp2.wsu_code,
-            temp2.wsu_name
-        FROM
-            wms_sku s
-                INNER JOIN (
-                SELECT
-                    temp1.sku_level,
-                    temp1.wsp_id,
-                    temp1.wsu_id,
-                    temp1.wsu_code,
-                    temp1.wsu_name
-                FROM
-                    wms_sku_package p
-                        LEFT JOIN (
-                        SELECT
-                            pd.sku_level,
-                            pd.wsp_id,
-                            um.wsu_id,
-                            um.wsu_code,
-                            um.wsu_name
-                        FROM
-                            wms_sku_package_detail pd
-                                LEFT JOIN wms_sku_um um ON pd.wsu_id = um.wsu_id
-                    ) AS temp1 ON p.wsp_id = temp1.wsp_id
-            ) AS temp2 ON s.wsp_id = temp2.wsp_id WHERE sku_id = #{skuId} ORDER BY sku_level
+        SELECT temp2.sku_level,
+               s.sku_type_id,
+               temp2.wsu_id,
+               temp2.wsu_code,
+               temp2.wsu_name
+        FROM wms_sku s
+                 INNER JOIN (SELECT temp1.sku_level,
+                                    temp1.wsp_id,
+                                    temp1.wsu_id,
+                                    temp1.wsu_code,
+                                    temp1.wsu_name
+                             FROM wms_sku_package p
+                                      LEFT JOIN (SELECT pd.sku_level,
+                                                        pd.wsp_id,
+                                                        um.wsu_id,
+                                                        um.wsu_code,
+                                                        um.wsu_name
+                                                 FROM wms_sku_package_detail pd
+                                                          LEFT JOIN wms_sku_um um ON pd.wsu_id = um.wsu_id) AS temp1
+                                                ON p.wsp_id = temp1.wsp_id) AS temp2 ON s.wsp_id = temp2.wsp_id
+        WHERE sku_id = #{skuId}
+        ORDER BY sku_level
     </select>
     <select id="getSkuPackageAggregateBySkuId"
             resultMap="skuPackageAndDetailMapping">
-        SELECT
-            p.wsp_id,
-            p.wh_id,
-            p.wsp_name,
-            p.spec,
-            p.online_package,
-            p.package_type,
-            p.pallet_box_level,
-            p.pallet_level,
-            p.lpn_weight,
-            p.lpn_height,
-            p.lpn_length,
-            p.lpn_width,
-            p.is_default,
-            p.status,
-            p.tenant_id,
-            p.create_dept,
-            p.create_user,
-            p.create_time,
-            p.update_user,
-            p.update_time,
-            p.is_deleted,
-            pd.wspd_id,
-            pd.wsp_id as pdWspId,
-            pd.sku_level,
-            pd.wsu_id,
-            pd.wsu_code,
-            pd.wsu_name,
-            pd.convert_qty,
-            pd.lpn_weight pdLpnWeight,
-            pd.lpn_length pdLpnLength,
-            pd.lpn_width pdLpnWidth,
-            pd.lpn_height pdLpnHeight,
-            pd.filter_value,
-            pd.indicator_digit,
-            pd.sku_spec,
-            pd.status as pdStatus,
-            pd.tenant_id as pdTenantId,
-            pd.create_dept as pdCreateDept,
-            pd.create_user as pdCreateUser,
-            pd.create_time as pdCreateTime,
-            pd.update_user as pdUpdateUser,
-            pd.update_time as pdUpdateTime,
-            pd.is_deleted as pdIsDeleted
+        SELECT p.wsp_id,
+               p.wh_id,
+               p.wsp_name,
+               p.spec,
+               p.online_package,
+               p.package_type,
+               p.pallet_box_level,
+               p.pallet_level,
+               p.lpn_weight,
+               p.lpn_height,
+               p.lpn_length,
+               p.lpn_width,
+               p.is_default,
+               p.status,
+               p.tenant_id,
+               p.create_dept,
+               p.create_user,
+               p.create_time,
+               p.update_user,
+               p.update_time,
+               p.is_deleted,
+               pd.wspd_id,
+               pd.wsp_id      as pdWspId,
+               pd.sku_level,
+               pd.wsu_id,
+               pd.wsu_code,
+               pd.wsu_name,
+               pd.convert_qty,
+               pd.lpn_weight     pdLpnWeight,
+               pd.lpn_length     pdLpnLength,
+               pd.lpn_width      pdLpnWidth,
+               pd.lpn_height     pdLpnHeight,
+               pd.filter_value,
+               pd.indicator_digit,
+               pd.sku_spec,
+               pd.status      as pdStatus,
+               pd.tenant_id   as pdTenantId,
+               pd.create_dept as pdCreateDept,
+               pd.create_user as pdCreateUser,
+               pd.create_time as pdCreateTime,
+               pd.update_user as pdUpdateUser,
+               pd.update_time as pdUpdateTime,
+               pd.is_deleted  as pdIsDeleted
         FROM wms_sku_package p
-        LEFT JOIN wms_sku_package_detail pd ON pd.wsp_id = p.wsp_id
-        INNER JOIN wms_sku s ON s.wsp_id = p.wsp_id
+                 LEFT JOIN wms_sku_package_detail pd ON pd.wsp_id = p.wsp_id
+                 INNER JOIN wms_sku s ON s.wsp_id = p.wsp_id
         WHERE s.sku_id = #{skuId}
     </select>
     <select id="getSkuUmByUmCode" resultType="org.nodes.wms.dao.basics.sku.entities.SkuUm">
-        select
-        wsu_id,
-        wsu_code,
-        wsu_name
-       from wms_sku_um
-       where wsu_code = #{skuUmCode}
+        select wsu_id,
+               wsu_code,
+               wsu_name
+        from wms_sku_um
+        where wsu_code = #{skuUmCode}
     </select>
     <select id="getBaseSkuPackageDetail" resultType="org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail">
-        select
-            wspd.wsp_id,
-            wspd.sku_level,
-            wspd.wsu_id,
-            wspd.wsu_code,
-            wspd.wsu_name,
-            wspd.convert_qty,
-            wspd.lpn_weight,
-            wspd.lpn_length,
-            wspd.lpn_width,
-            wspd.lpn_height,
-            wspd.filter_value,
-            wspd.indicator_digit,
-            wspd.sku_spec,
-            wspd.status as wspdStatus,
-            wspd.tenant_id,
-            wspd.create_dept,
-            wspd.create_user,
-            wspd.create_time,
-            wspd.update_user,
-            wspd.update_time,
-            wspd.is_deleted
-          from wms_sku ws,wms_sku_package_detail wspd
-         where ws.wsp_id = wspd.wsp_id
-         and ws.sku_id = #{skuId}
-        and wspd.sku_level = 1
+        select wspd.wsp_id,
+               wspd.sku_level,
+               wspd.wsu_id,
+               wspd.wsu_code,
+               wspd.wsu_name,
+               wspd.convert_qty,
+               wspd.lpn_weight,
+               wspd.lpn_length,
+               wspd.lpn_width,
+               wspd.lpn_height,
+               wspd.filter_value,
+               wspd.indicator_digit,
+               wspd.sku_spec,
+               wspd.status as wspdStatus,
+               wspd.tenant_id,
+               wspd.create_dept,
+               wspd.create_user,
+               wspd.create_time,
+               wspd.update_user,
+               wspd.update_time,
+               wspd.is_deleted
+        from wms_sku ws,
+             wms_sku_package_detail wspd
+        where ws.wsp_id = wspd.wsp_id
+          and ws.sku_id = #{skuId}
+          and wspd.sku_level = 1
 
     </select>
 
@@ -185,8 +176,16 @@
 
     <select id="selectSkuPackageByWspId" resultType="org.nodes.wms.dao.basics.sku.entities.SkuPackage">
         SELECT *
-            FROM wms_sku_package
+        FROM wms_sku_package
         WHERE wsp_id = #{wspId}
+    </select>
+    <select id="getSkuPackageDetailBySkuId"
+            resultType="org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail">
+        select wspd.*
+        from wms_sku_package_detail wspd
+                 left join wms_sku ws on wspd.wsp_id = ws.wsp_id
+        where ws.sku_id = #{skuId}
+        and wspd.wsu_code = #{wsuCode}
     </select>
 
 </mapper>

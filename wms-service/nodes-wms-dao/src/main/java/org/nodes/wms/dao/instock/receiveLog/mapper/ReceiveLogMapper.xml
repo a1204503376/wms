@@ -144,7 +144,7 @@
 
     <select id="page" resultType="org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse">
         <include refid="receiveLogList"/>
-        <if test="page.orders != null or page.orders.size != ''">
+        <if test="page.orders == null or page.orders.size == 0">
             ORDER BY rl.create_time DESC
         </if>
     </select>

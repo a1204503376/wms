@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.springblade.core.tenant.mp.TenantEntity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -16,7 +15,7 @@ public class PutawayLog extends TenantEntity {
 	 * 主键id
 	 */
 	@TableId(type = IdType.ASSIGN_ID)
-	private Long apiId;
+	private Long aplId;
 	/**
 	 * 容器编码
 	 */
@@ -60,7 +59,7 @@ public class PutawayLog extends TenantEntity {
 	/**
 	 * 执行时间
 	 */
-	private LocalDateTime apiTime;
+	private LocalDateTime aplTime;
 	/**
 	 * 执行内容
 	 */

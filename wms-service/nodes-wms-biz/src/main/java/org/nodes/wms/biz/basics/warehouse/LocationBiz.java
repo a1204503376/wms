@@ -269,4 +269,12 @@ public interface LocationBiz {
 	 * @param request@return 库位信息
 	 */
 	List<Location> findLocationByLpnType(LpnTypeRequest request);
+
+	/**
+	 * 判断是否存在虚拟库位
+	 *
+	 * @param locationList
+	 * @return true:表示存在虚拟库位
+	 */
+    boolean isVirtualLocation(List<Location> locationList);
 }

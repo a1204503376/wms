@@ -60,4 +60,12 @@ public interface LocationMapper extends BaseMapper<Location> {
 	 */
 	List<Location> getLocationByLpnTypeIdAndZoneType(Long lpnTypeId, String zoneType);
 
+	/**
+	 * 根据库区类型查找相对应的库位
+	 *
+	 * @param locIdList
+	 * @param zoneType
+	 * @return
+	 */
+	List<Location> getLocationByZoneType(List<Long> locIdList, Integer zoneType);
 }
