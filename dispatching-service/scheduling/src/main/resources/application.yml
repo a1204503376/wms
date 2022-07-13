@@ -13,6 +13,9 @@ scheduling:
   # 获取ip地址开关
   addressEnabled: false
   wmsUrl: http://10.168.3.136:5101
+  agvUrl: http://localhost:55200
+  #JOB超时（单位：分钟）
+  jobTimeout: 20
 
 # 开发环境配置
 server:

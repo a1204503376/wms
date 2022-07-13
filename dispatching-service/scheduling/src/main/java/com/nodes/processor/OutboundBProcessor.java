@@ -1,5 +1,6 @@
 package com.nodes.processor;
 
+import com.nodes.project.api.enums.ProcessorEnum;
 import com.nodes.project.api.service.ProcessorService;
 import org.springframework.stereotype.Component;
 import tech.powerjob.worker.core.processor.ProcessResult;
@@ -9,16 +10,17 @@ import tech.powerjob.worker.core.processor.sdk.BasicProcessor;
 import javax.annotation.Resource;
 
 /**
- * 呼叫AGV 处理器
+ * B箱出库
  */
 @Component
-public class CallAgvProcessor implements BasicProcessor {
+public class OutboundBProcessor implements BasicProcessor {
 
     @Resource
     private ProcessorService processorService;
 
+
     @Override
     public ProcessResult process(TaskContext context) throws Exception {
-        return processorService.callAgv(context);
+        return processorService.selectJobQueue(context, ProcessorEnum.OUTBOUND_B);
     }
 }
