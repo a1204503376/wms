@@ -32,7 +32,7 @@ public class StockFactory {
 		Stock stock = new Stock();
 		SkuLotUtil.setAllSkuLot(receiveLog, stock);
 		stock.setLastInTime(LocalDateTime.now());
-		// TODO 如果没有库存状态则默认
+
 		if (Func.isNull(receiveLog.getStockStatus())) {
 			stock.setStockStatus(StockStatusEnum.NORMAL);
 		} else {
