@@ -190,6 +190,7 @@ public class StockDaoImpl
 		UpdateWrapper<Stock> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
 			.eq(Stock::getStockId, stockId);
+		// 更新对象
 		Stock stock = new Stock();
 		stock.setStockQty(stockQty);
 		stock.setStayStockQty(stayStockQty);
