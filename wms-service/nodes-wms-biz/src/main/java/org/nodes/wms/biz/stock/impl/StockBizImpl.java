@@ -10,6 +10,7 @@ import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.factory.StockFactory;
 import org.nodes.wms.biz.stock.merge.StockMergeStrategy;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
@@ -66,6 +67,7 @@ public class StockBizImpl implements StockBiz {
 	private final StockLogDao stockLogDao;
 	private final SerialLogDao serialLogDao;
 	private final SerialDao serialDao;
+	private final StockFactory stockFactory;
 
 	@Override
 	public void freezeByLoc(StockLogTypeEnum type, Long locId, String occupyFlag) {
@@ -147,7 +149,7 @@ public class StockBizImpl implements StockBiz {
 		// 验证批属性
 		SkuLotUtil.check(receiveLog, receiveLog.getWoId(), receiveLog.getWhId());
 		// 形成库存，需要考虑库存合并
-		Stock stock = createStock(receiveLog, location);
+		Stock stock = stockFactory.create(receiveLog, location);
 		Stock existStock = stockMergeStrategy.matchCanMergeStock(stock);
 		// 本次入库保存的库存对象，如果需要合并则是数据库中保存的stock对象，否则为新的库存对象
 		Stock finalStock = null;
@@ -173,17 +175,14 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
-	public Stock outStockByCancleReceive(StockLogTypeEnum type, ReceiveLog receiveLog, Stock stock) {
+	public Stock outStockByCancelReceive(StockLogTypeEnum type, ReceiveLog receiveLog, Stock stock) {
 		if (BigDecimalUtil.ge(receiveLog.getQty(), BigDecimal.ZERO)) {
 			throw new ServiceException("撤销收货下架库存失败,清点记录的数量必须是负数");
 		}
 		// 下架库存
 		BigDecimal cancelQty = receiveLog.getQty().abs();
-		if (BigDecimalUtil.gt(cancelQty, StockUtil.getStockEnable(stock))) {
-			throw new ServiceException("撤销收货下架库存失败,撤销数量大于可用数量");
-		}
+		StockUtil.pickQty(stock, cancelQty, "撤销收货下架库存");
 
-		stock.setPickQty(stock.getPickQty().add(cancelQty));
 		stockDao.updateStock(stock.getStockId(), stock.getStockQty(),
 			stock.getStayStockQty(), stock.getPickQty(), null, null);
 		// 生成库存日志
@@ -302,72 +301,41 @@ public class StockBizImpl implements StockBiz {
 		serial.setStatus(1);
 	}
 
-	private Stock createStock(ReceiveLog receiveLog, Location location) {
-		Stock stock = new Stock();
-		SkuLotUtil.setAllSkuLot(receiveLog, stock);
-		stock.setLastInTime(LocalDateTime.now());
-		stock.setStockStatus(StockStatusEnum.NORMAL);
-		stock.setSkuLevel(receiveLog.getSkuLevel());
-		stock.setWsuCode(receiveLog.getWsuCode());
-		Sku sku = skuBiz.findById(receiveLog.getSkuId());
-		if (Func.isNotEmpty(sku)) {
-			stock.setWspName(sku.getWspName());
-		}
-		stock.setWspId(receiveLog.getWspId());
-		stock.setSkuId(receiveLog.getSkuId());
-		stock.setSkuCode(receiveLog.getSkuCode());
-		stock.setSkuName(receiveLog.getSkuName());
-		stock.setStayStockQty(BigDecimal.ZERO);
-		stock.setStockQty(receiveLog.getQty());
-		stock.setPickQty(BigDecimal.ZERO);
-		stock.setOccupyQty(BigDecimal.ZERO);
-		stock.setBoxCode(receiveLog.getBoxCode());
-		stock.setLpnCode(receiveLog.getLpnCode());
-		stock.setLocCode(receiveLog.getLocCode());
-		stock.setLocId(receiveLog.getLocId());
-		stock.setZoneId(location.getZoneId());
-		Zone zone = zoneBiz.findById(location.getZoneId());
-		if (Func.isNotEmpty(zone)) {
-			stock.setZoneCode(zone.getZoneCode());
-		}
-		stock.setWhId(receiveLog.getWhId());
-		stock.setWhCode(receiveLog.getWhCode());
-		stock.setWoId(receiveLog.getWoId());
-
-		return stock;
-	}
-
 	@Override
 	public Stock moveStock(Stock sourceStock, List<String> serialNoList,
 						   BigDecimal qty, Location targetLocation, StockLogTypeEnum type,
 						   Long billId, String billNo, String lineNo) {
-		// 获取目标库位是否有可以合并的库存，如果没有则新增库存
+		return moveStock(sourceStock, serialNoList, qty, sourceStock.getBoxCode(),
+			sourceStock.getLpnCode(), targetLocation, type, billId, billNo, lineNo);
+	}
+
+	@Override
+	public Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
+						   String targetBoxCode, String targetLpnCode, Location targetLocation,
+						   StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+		StockUtil.assertPick(sourceStock, qty, "库存移动失败");
+
 		Stock tempStock = new Stock();
 		BeanUtil.copy(sourceStock, tempStock);
+		// 匹配是否存在能合并的库存，此处必须更新locId, lpnCode, boxCode
 		tempStock.setLocId(targetLocation.getLocId());
+		tempStock.setLpnCode(targetLpnCode);
+		tempStock.setBoxCode(targetBoxCode);
 		Stock targetStock = stockMergeStrategy.matchCanMergeStock(tempStock);
-		StockLog targetStockLog = null;
+		StockLog targetStockLog;
 		if (Func.isNull(targetStock)) {
-			targetStock = new Stock();
-			BeanUtil.copy(sourceStock, targetStock);
-			StockUtil.resetStockInfo(targetStock);
-			targetStock.setStockQty(qty);
-			targetStock.setLocId(targetLocation.getLocId());
-			targetStock.setLocCode(targetLocation.getLocCode());
-			targetStock.setZoneId(targetLocation.getZoneId());
-			Zone zone = zoneBiz.findById(targetLocation.getZoneId());
-			targetStock.setZoneCode(zone.getZoneCode());
+			targetStock = stockFactory.create(sourceStock, targetLocation, targetLpnCode, targetBoxCode, qty);
 			stockDao.saveNewStock(targetStock);
 			targetStockLog = createAndSaveStockLog(true, targetStock, qty,
 				type, billId, billNo, lineNo, "库存移动-新库存");
 		} else {
-			targetStock.setStockQty(targetStock.getStockQty().add(qty));
+			StockUtil.addQty(targetStock, qty);
 			stockDao.updateStock(targetStock);
 			targetStockLog = createAndSaveStockLog(true, targetStock, qty,
 				type, billId, billNo, lineNo, "库存移动-合并");
 		}
-		sourceStock.setPickQty(sourceStock.getPickQty().add(qty));
-		sourceStock.setLastOutTime(LocalDateTime.now());
+
+		StockUtil.pickQty(sourceStock, qty, "库存移动");
 		stockDao.updateStock(sourceStock);
 		// 生成库存日志
 		createAndSaveStockLog(false, sourceStock, qty, type, billId, billNo,
@@ -380,6 +348,21 @@ public class StockBizImpl implements StockBiz {
 		}
 
 		return targetStock;
+	}
+
+	@Override
+	public List<Stock> moveStockByBoxCode(String boxCode, String targetBoxCode, String targetLpnCode,
+										  Location targetLocation, StockLogTypeEnum type, Long billId,
+										  String billNo, String lineNo) {
+		// TODO
+		return null;
+	}
+
+	@Override
+	public List<Stock> moveStockByLpnCode(String lpnCode, String targetLpnCode, Location targetLocation,
+										  StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+		// TODO
+		return null;
 	}
 
 	private StockLog createAndSaveStockLog(boolean isInStock, Stock stock, BigDecimal qty,
