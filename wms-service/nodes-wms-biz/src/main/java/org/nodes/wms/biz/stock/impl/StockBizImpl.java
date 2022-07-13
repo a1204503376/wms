@@ -634,9 +634,9 @@ public class StockBizImpl implements StockBiz {
 		for (ReceiveLog receiveLog : receiveLogList) {
 			//调用入库方法
 			inStock(StockLogTypeEnum.INSTOCK_BY_Import, receiveLog);
-			//保存清点记录
-			receiveLogDao.save(receiveLog);
 		}
+		//保存清点记录
+		receiveLogDao.saveBatch(receiveLogList);
 		//记录业务日志
 		logBiz.auditLog(AuditLogType.INSTOCK, "导入库存" + receiveLogList.size() + "条");
 		return true;

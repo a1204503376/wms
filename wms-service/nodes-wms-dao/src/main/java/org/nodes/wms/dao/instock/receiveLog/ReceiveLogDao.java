@@ -8,13 +8,16 @@ import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.instock.receiveLog.mapper.ReceiveLogMapper;
+import org.springblade.core.mp.base.BaseService;
+import org.springblade.core.mp.base.BaseServiceImpl;
 
 import java.util.List;
 
 /**
  * 清点记录Dao接口
  */
-public interface ReceiveLogDao {
+public interface ReceiveLogDao extends BaseService<ReceiveLog> {
 	/**
 	 * 根据收货单id获取清点记录
 	 * @param receiveId 收货单id
