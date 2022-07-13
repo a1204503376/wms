@@ -1,114 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.stock.mapper.StockMapper">
-     <sql id="stock">
-         select s.stock_id,
-         s.sku_code,
-         s.stock_status,
-         s.sku_lot1,
-         s.pick_qty,
-         s.stock_qty,
-         s.occupy_qty,
-         s.wsu_code,
-         s.loc_code,
-         s.zone_code,
-         s.box_code,
-         s.lpn_code,
-         s.sku_lot2,
-         s.sku_lot3,
-         s.sku_lot4,
-         s.sku_lot5,
-         s.sku_lot6,
-         s.sku_lot7,
-         s.sku_lot8,
-         s.wh_code,
-         wo.owner_code,
-         wo.owner_name,
-         s.task_id,
-         s.last_in_time,
-         s.last_out_time
-         from wms_stock s
-         left join wms_owner wo on s.wo_id = wo.wo_id
-         <where>
-             AND s.is_deleted ='0'
-             <if test="query.skuIds != null and query.skuIds.size()>0">
-                 AND s.sku_id in
-                 <foreach collection="query.skuIds" item="item" open="(" close=")" separator=",">
-                     #{item}
-                 </foreach>
-             </if>
-             <if test="query.whIdList != null and query.whIdList.size()>0">
-                 AND s.wh_id in
-                 <foreach collection="query.whIdList" item="item" open="(" close=")" separator=",">
-                     #{item}
-                 </foreach>
-             </if>
+    <sql id="stock">
+        select s.stock_id,
+        s.sku_code,
+        s.stock_status,
+        s.sku_lot1,
+        s.pick_qty,
+        s.stock_qty,
+        s.occupy_qty,
+        s.wsu_code,
+        s.loc_code,
+        s.zone_code,
+        s.box_code,
+        s.lpn_code,
+        s.sku_lot2,
+        s.sku_lot3,
+        s.sku_lot4,
+        s.sku_lot5,
+        s.sku_lot6,
+        s.sku_lot7,
+        s.sku_lot8,
+        s.wh_code,
+        wo.owner_code,
+        wo.owner_name,
+        s.task_id,
+        s.last_in_time,
+        s.last_out_time
+        from wms_stock s
+        left join wms_owner wo on s.wo_id = wo.wo_id
+        <where>
+            AND s.is_deleted ='0'
+            <if test="query.skuIds != null and query.skuIds.size()>0">
+                AND s.sku_id in
+                <foreach collection="query.skuIds" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="query.whIdList != null and query.whIdList.size()>0">
+                AND s.wh_id in
+                <foreach collection="query.whIdList" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
 
-             <if test="query.skuLot1!=null and query.skuLot1 != ''">
-                 AND s.sku_lot1 LIKE concat('%',#{query.skuLot1},'%')
-             </if>
-             <if test="query.locCode!=null and query.locCode != ''">
-                 AND s.loc_code LIKE concat('%',#{query.locCode},'%')
-             </if>
-             <if test="query.stockStatusList != null and query.stockStatusList.size() > 0">
-                 AND s.stock_status in
-                 <foreach collection="query.stockStatusList" item="item" open="(" close=")" separator=",">
-                     #{item}
-                 </foreach>
-             </if>
-             <if test="query.zoneCode!=null and query.zoneCode != ''">
-                 AND s.zone_code LIKE concat('%',#{query.zoneCode},'%')
-             </if>
-             <if test="query.boxCode!=null and query.boxCode != ''">
-                 AND s.box_code LIKE concat('%',#{query.boxCode},'%')
-             </if>
-             <if test="query.lpnCode!=null and query.lpnCode != ''">
-                 AND s.lpn_code LIKE concat('%',#{query.lpnCode},'%')
-             </if>
-             <if test="query.skuLot2!=null and query.skuLot2 != ''">
-                 AND s.sku_lot2 LIKE concat('%',#{query.skuLot2},'%')
-             </if>
-             <if test="query.skuLot4!=null and query.skuLot4 != ''">
-                 AND s.sku_lot4 LIKE concat('%',#{query.skuLot4},'%')
-             </if>
-             <if test="query.skuLot5!=null and query.skuLot5 != ''">
-                 AND s.sku_lot5 LIKE concat('%',#{query.skuLot5},'%')
-             </if>
-             <if test="query.skuLot6!=null and query.skuLot6 != ''">
-                 AND s.sku_lot6 LIKE concat('%',#{query.skuLot6},'%')
-             </if>
-             <if test="query.skuLot7!=null and query.skuLot7 != ''">
-                 AND s.sku_lot7 LIKE concat('%',#{query.skuLot7},'%')
-             </if>
-             <if test="query.skuLot8!=null and query.skuLot8 != ''">
-                 AND s.sku_lot8 LIKE concat('%',#{query.skuLot8},'%')
-             </if>
-             <if test="query.woId!=null and query.woId != ''">
-                 AND s.wo_id = #{query.ownerCode}
-             </if>
-             <if test="query.receiveTimeBegin!=null">
-                 AND s.sku_Lot3 &gt;= #{query.lastInTimeBegin}
-             </if>
-             <if test="query.receiveTimeEnd!=null">
-                 AND s.sku_Lot3 &lt;= #{query.lastInTimeBegin}
-             </if>
-             <if test="query.lastInTimeBegin!=null">
-                 AND s.last_In_Time &gt;= #{query.lastInTimeBegin}
-             </if>
-             <if test="query.lastInTimeEnd!=null">
-                 AND s.last_In_Time &lt;= #{query.lastInTimeBegin}
-             </if>
-             <if test="query.lastOutTimeBegin!=null">
-                 AND s.last_Out_Time &gt;= #{query.lastOutTimeEnd}
-             </if>
-             <if test="query.lastOutTimeEnd!=null">
-                 AND s.last_Out_Time &lt;= #{query.lastOutTimeEnd}
-             </if>
-             <if test="query.taskId!=null and query.taskId != ''">
-                 AND s.task_Id LIKE concat('%',#{query.taskId},'%')
-             </if>
-         </where>
-     </sql>
+            <if test="query.skuLot1!=null and query.skuLot1 != ''">
+                AND s.sku_lot1 LIKE concat('%',#{query.skuLot1},'%')
+            </if>
+            <if test="query.locCode!=null and query.locCode != ''">
+                AND s.loc_code LIKE concat('%',#{query.locCode},'%')
+            </if>
+            <if test="query.stockStatusList != null and query.stockStatusList.size() > 0">
+                AND s.stock_status in
+                <foreach collection="query.stockStatusList" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="query.zoneCode!=null and query.zoneCode != ''">
+                AND s.zone_code LIKE concat('%',#{query.zoneCode},'%')
+            </if>
+            <if test="query.boxCode!=null and query.boxCode != ''">
+                AND s.box_code LIKE concat('%',#{query.boxCode},'%')
+            </if>
+            <if test="query.lpnCode!=null and query.lpnCode != ''">
+                AND s.lpn_code LIKE concat('%',#{query.lpnCode},'%')
+            </if>
+            <if test="query.skuLot2!=null and query.skuLot2 != ''">
+                AND s.sku_lot2 LIKE concat('%',#{query.skuLot2},'%')
+            </if>
+            <if test="query.skuLot4!=null and query.skuLot4 != ''">
+                AND s.sku_lot4 LIKE concat('%',#{query.skuLot4},'%')
+            </if>
+            <if test="query.skuLot5!=null and query.skuLot5 != ''">
+                AND s.sku_lot5 LIKE concat('%',#{query.skuLot5},'%')
+            </if>
+            <if test="query.skuLot6!=null and query.skuLot6 != ''">
+                AND s.sku_lot6 LIKE concat('%',#{query.skuLot6},'%')
+            </if>
+            <if test="query.skuLot7!=null and query.skuLot7 != ''">
+                AND s.sku_lot7 LIKE concat('%',#{query.skuLot7},'%')
+            </if>
+            <if test="query.skuLot8!=null and query.skuLot8 != ''">
+                AND s.sku_lot8 LIKE concat('%',#{query.skuLot8},'%')
+            </if>
+            <if test="query.woId!=null and query.woId != ''">
+                AND s.wo_id = #{query.woId}
+            </if>
+            <if test="query.receiveTimeBegin!=null">
+                AND s.sku_Lot3 &gt;= #{query.lastInTimeBegin}
+            </if>
+            <if test="query.receiveTimeEnd!=null">
+                AND s.sku_Lot3 &lt;= #{query.lastInTimeBegin}
+            </if>
+            <if test="query.lastInTimeBegin!=null">
+                AND s.last_In_Time &gt;= #{query.lastInTimeBegin}
+            </if>
+            <if test="query.lastInTimeEnd!=null">
+                AND s.last_In_Time &lt;= #{query.lastInTimeBegin}
+            </if>
+            <if test="query.lastOutTimeBegin!=null">
+                AND s.last_Out_Time &gt;= #{query.lastOutTimeEnd}
+            </if>
+            <if test="query.lastOutTimeEnd!=null">
+                AND s.last_Out_Time &lt;= #{query.lastOutTimeEnd}
+            </if>
+            <if test="query.taskId!=null and query.taskId != ''">
+                AND s.task_Id LIKE concat('%',#{query.taskId},'%')
+            </if>
+        </where>
+    </sql>
     <select id="selectStockQtyByLocIdList" resultType="java.util.HashMap">
         SELECT SUM(stock_qty-pick_qty) AS skuQty, MAX( TIMESTAMPDIFF(DAY, last_in_time, now()) ) AS skuStoreDay
         FROM wms_stock
