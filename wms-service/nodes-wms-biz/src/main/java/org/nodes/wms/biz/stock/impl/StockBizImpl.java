@@ -353,15 +353,31 @@ public class StockBizImpl implements StockBiz {
 	public List<Stock> moveStockByBoxCode(String boxCode, String targetBoxCode, String targetLpnCode,
 										  Location targetLocation, StockLogTypeEnum type, Long billId,
 										  String billNo, String lineNo) {
-		// TODO
-		return null;
+		List<Stock> sourceStockList = stockDao.getStockByBoxCode(boxCode, null);
+		List<Stock> targetStockList = new ArrayList<>();
+		for (Stock sourceStock : sourceStockList){
+			List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
+			Stock targetStock = moveStock(sourceStock, serialNoList, StockUtil.getStockBalance(sourceStock),
+				targetBoxCode, targetLpnCode, targetLocation, type, billId, billNo, lineNo);
+			targetStockList.add(targetStock);
+		}
+
+		return targetStockList;
 	}
 
 	@Override
 	public List<Stock> moveStockByLpnCode(String lpnCode, String targetLpnCode, Location targetLocation,
 										  StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
-		// TODO
-		return null;
+		List<Stock> sourceStockList = stockDao.getStockByLpnCode(lpnCode, null);
+		List<Stock> targetStockList = new ArrayList<>();
+		for (Stock sourceStock : sourceStockList){
+			List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
+			Stock targetStock = moveStock(sourceStock, serialNoList, StockUtil.getStockBalance(sourceStock),
+				sourceStock.getBoxCode(), targetLpnCode, targetLocation, type, billId, billNo, lineNo);
+			targetStockList.add(targetStock);
+		}
+
+		return targetStockList;
 	}
 
 	private StockLog createAndSaveStockLog(boolean isInStock, Stock stock, BigDecimal qty,
