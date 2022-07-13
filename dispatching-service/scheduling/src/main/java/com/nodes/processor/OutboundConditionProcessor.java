@@ -9,16 +9,16 @@ import tech.powerjob.worker.core.processor.sdk.BasicProcessor;
 import javax.annotation.Resource;
 
 /**
- * 呼叫AGV 处理器
+ * 出库条件 处理器
  */
 @Component
-public class CallAgvProcessor implements BasicProcessor {
+public class OutboundConditionProcessor implements BasicProcessor {
 
     @Resource
     private ProcessorService processorService;
 
     @Override
     public ProcessResult process(TaskContext context) throws Exception {
-        return processorService.callAgv(context);
+        return processorService.outboundAllowed(context);
     }
 }

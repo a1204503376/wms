@@ -34,42 +34,38 @@ public class WmsController {
     /**
      * 下发JOB
      */
-    @Log(title = Constants.API_WMS)
+    @Log(title = Constants.API_WMS_NAME)
     @PostMapping("publishJob")
     public AjaxResult publishJob(@Valid
                                  @RequestBody
                                  List<PublishJobRequest> publishJobRequestList) {
-        log.info("下发JOB 请求参数：{}", publishJobRequestList);
         return jobQueueService.publishJob(publishJobRequestList);
     }
 
     /**
      * 继续执行JOB
      */
-    @Log(title = Constants.API_AGV_NAME)
+    @Log(title = Constants.API_WMS_NAME)
     @PostMapping("continueJob")
     public AjaxResult continueJob(JobActionRequest jobActionRequest) {
-        log.info("继续执行JOB 请求参数：{}", jobActionRequest);
         return jobQueueService.continueJob(jobActionRequest);
     }
 
     /**
      * 取消JOB
      */
-    @Log(title = Constants.API_AGV_NAME)
+    @Log(title = Constants.API_WMS_NAME)
     @PostMapping("cancelJob")
     public AjaxResult cancelJob(JobActionRequest jobActionRequest) {
-        log.info("取消JOB 请求参数：{}", jobActionRequest);
         return jobQueueService.cancelJob(jobActionRequest);
     }
 
     /**
      * 终止JOB
      */
-    @Log(title = Constants.API_AGV_NAME)
+    @Log(title = Constants.API_WMS_NAME)
     @PostMapping("terminationJob")
     public AjaxResult terminationJob(JobActionRequest jobActionRequest) {
-        log.info("取消JOB 请求参数：{}", jobActionRequest);
         return jobQueueService.terminationJob(jobActionRequest);
     }
 

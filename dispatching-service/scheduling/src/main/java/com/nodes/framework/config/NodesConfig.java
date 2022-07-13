@@ -17,9 +17,19 @@ public class NodesConfig {
     public static final String PREFIX = "scheduling";
 
     /**
+     * JOB超时（单位：分钟）
+     */
+    private int jobTimeout;
+
+    /**
      * WMS API
      */
     private String wmsUrl;
+
+    /**
+     * AGV API
+     */
+    private String agvUrl;
 
     /**
      * 项目名称

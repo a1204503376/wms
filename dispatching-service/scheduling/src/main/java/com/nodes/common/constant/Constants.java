@@ -97,16 +97,6 @@ public class Constants {
     public static final String SCHEDULING_JOB_PRIORITY = "scheduling_job_priority";
 
     /**
-     * 调度JOB默认优先级
-     */
-    public static final int DEFAULT_PRIORITY = 100;
-
-    /**
-     * 调度JOB最高优先级
-     */
-    public static final int HIGHEST_PRIORITY = 0;
-
-    /**
      * 系统通用API路径前缀
      */
     public static final String API_PATH_PREFIX = "/api/";

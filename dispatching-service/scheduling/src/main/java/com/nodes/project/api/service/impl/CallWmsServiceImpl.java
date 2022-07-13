@@ -2,27 +2,26 @@ package com.nodes.project.api.service.impl;
 
 import com.nodes.framework.config.NodesConfig;
 import com.nodes.project.api.domain.JobQueue;
+import com.nodes.project.api.dto.wms.WmsGlobalResponse;
 import com.nodes.project.api.dto.wms.WmsOutboundResourcesRequest;
-import com.nodes.project.api.dto.wms.WmsResultResponse;
 import com.nodes.project.api.dto.wms.WmsSyncTaskStateRequest;
+import com.nodes.project.api.service.CallApiService;
 import com.nodes.project.api.service.CallWmsService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 
-@Service
 @Slf4j
+@Service
 public class CallWmsServiceImpl implements CallWmsService {
 
     private static final String url_queryAndFrozenEnableOutbound = "/wms/scheduling/queryAndFrozenEnableOutbound";
     private static final String url_syncTaskSate = "/wms/scheduling/syncTaskState";
 
     @Resource
-    private RestTemplate restTemplate;
+    private CallApiService callApiService;
     @Resource
     private NodesConfig nodesConfig;
 
@@ -36,16 +35,16 @@ public class CallWmsServiceImpl implements CallWmsService {
         wmsSyncTaskStateRequest.setTaskHeaderId(jobQueue.getWmsTaskId());
         wmsSyncTaskStateRequest.setTaskDetailId(jobQueue.getWmsTaskDetailId());
         wmsSyncTaskStateRequest.setState(jobQueue.getStatus());
-
-        WmsResultResponse wmsResultResponse = restTemplate.postForObject(nodesConfig.getWmsUrl() + url_syncTaskSate, wmsSyncTaskStateRequest, WmsResultResponse.class);
-        assert wmsResultResponse != null;
-        if (BooleanUtils.isFalse(wmsResultResponse.getSuccess())) {
-            log.error("WMS[{}]接口回失败，参数：{}", url_syncTaskSate, wmsSyncTaskStateRequest);
-        }
+        String url = nodesConfig.getWmsUrl() + url_syncTaskSate;
+        callApiService.postWms(url, wmsSyncTaskStateRequest);
     }
 
     @Override
-    public WmsResultResponse queryAndFrozenEnableOutbound(WmsOutboundResourcesRequest wmsOutboundResourcesRequest) {
-        return null;
+    public WmsGlobalResponse queryAndFrozenEnableOutbound(JobQueue jobQueue) {
+        WmsOutboundResourcesRequest wmsOutboundResourcesRequest = new WmsOutboundResourcesRequest();
+        wmsOutboundResourcesRequest.setTaskDetailId(jobQueue.getWmsTaskDetailId());
+        wmsOutboundResourcesRequest.setLpnTypeCode(jobQueue.getWmsBoxType().getCode());
+        String url = nodesConfig.getWmsUrl() + url_queryAndFrozenEnableOutbound;
+        return callApiService.postWms(url, wmsOutboundResourcesRequest);
     }
 }
