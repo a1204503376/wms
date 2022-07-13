@@ -12,7 +12,9 @@ import org.nodes.wms.dao.instock.asn.enums.AsnBillStateEnum;
 import org.nodes.wms.dao.instock.asn.enums.InStorageTypeEnum;
 import org.nodes.wms.dao.outstock.so.dto.output.SoBillStateResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogTypeResponse;
+import org.nodes.wms.dao.stock.dto.output.StockStatusResponse;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,5 +69,9 @@ public class StateController {
 	@GetMapping("/getSoBillState")
 	public R<List<SoBillStateResponse>> getSoBillState(){
 		return R.data(SoBillStateEnum.getList());
+	}
+	@GetMapping("/getStockStatus")
+	public R<List<StockStatusResponse>> getStockStatus(){
+		return R.data(StockStatusEnum.getList());
 	}
 }
