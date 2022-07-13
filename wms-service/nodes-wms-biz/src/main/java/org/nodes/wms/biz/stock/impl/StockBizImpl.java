@@ -11,12 +11,14 @@ import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.merge.StockMergeStrategy;
+import org.nodes.wms.biz.stock.modular.StockFactory;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.common.stock.StockUtil;
+import org.nodes.wms.dao.instock.receiveLog.ReceiveLogDao;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.putway.dto.output.BoxDto;
 import org.nodes.wms.dao.putway.dto.output.CallAgvResponse;
@@ -26,6 +28,7 @@ import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.StockLogDao;
 import org.nodes.wms.dao.stock.constant.SerialLogConstant;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
+import org.nodes.wms.dao.stock.dto.input.StockImportRequest;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.dto.output.*;
@@ -45,6 +48,8 @@ import org.springblade.core.tool.utils.ConvertUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.StringUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
@@ -66,6 +71,8 @@ public class StockBizImpl implements StockBiz {
 	private final StockLogDao stockLogDao;
 	private final SerialLogDao serialLogDao;
 	private final SerialDao serialDao;
+	private final StockFactory stockFactory;
+	private final ReceiveLogDao receiveLogDao;
 
 	@Override
 	public void freezeByLoc(StockLogTypeEnum type, Long locId, String occupyFlag) {
@@ -616,7 +623,46 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public Page<StockPageResponse> getStockPage(Query query, StockPageQuery stockPageQuery) {
-		return stockDao.page(Condition.getPage(query), stockPageQuery);
+		Page<StockPageResponse> page = stockDao.page(Condition.getPage(query), stockPageQuery);
+		List<StockPageResponse> list = page.getRecords();
+		for (StockPageResponse stockPageResponse : list) {
+			//设置库存可用量
+			stockPageResponse.setStockEnable(stockPageResponse.getStockQty().add(stockPageResponse.getPickQty().subtract(stockPageResponse.getOccupyQty())));
+			//设置库存余额
+			stockPageResponse.setStockBalance(stockPageResponse.getStockQty().subtract(stockPageResponse.getPickQty()));
+		}
+		return page;
+	}
+
+	@Override
+	public void exportExcel(StockPageQuery stockPageQuery, HttpServletResponse response) {
+		List<StockPageResponse> stockPageResponseList = stockDao.getStockResponseByQuery(stockPageQuery);
+		for (StockPageResponse stockPageResponse : stockPageResponseList) {
+			String stockStatus = stockPageResponse.getStockStatus().getDesc();
+			stockPageResponse.setStockStatusDesc(stockStatus);
+			//设置库存可用量
+			stockPageResponse.setStockEnable(stockPageResponse.getStockQty().add(stockPageResponse.getPickQty().subtract(stockPageResponse.getOccupyQty())));
+			//设置库存余额
+			stockPageResponse.setStockBalance(stockPageResponse.getStockQty().subtract(stockPageResponse.getPickQty()));
+		}
+		ExcelUtil.export(response, "库存余额", "库存余额数据表", stockPageResponseList, StockPageResponse.class);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public boolean importExcel(List<StockImportRequest> importDataList) {
+
+		if (Func.isEmpty(importDataList)) {
+			throw new ServiceException("导入失败，没有可导入的数据");
+		}
+		List<ReceiveLog> receiveLogList = stockFactory.createStockListForImport(importDataList);
+		for (ReceiveLog receiveLog : receiveLogList) {
+			//调用入库方法
+			inStock(StockLogTypeEnum.INSTOCK_BY_Import, receiveLog);
+			//保存清点记录
+			receiveLogDao.save(receiveLog);
+		}
+		return true;
 	}
 
 }

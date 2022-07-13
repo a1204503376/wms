@@ -239,4 +239,9 @@ public class StockDaoImpl
 	public Page<StockPageResponse> page(IPage<StockPageResponse> page, StockPageQuery stockPageQuery) {
 		return super.baseMapper.getPage(page, stockPageQuery);
 	}
+
+    @Override
+    public List<StockPageResponse> getStockResponseByQuery(StockPageQuery stockPageQuery) {
+        return super.baseMapper.getStockResponseByQuery(stockPageQuery);
+    }
 }

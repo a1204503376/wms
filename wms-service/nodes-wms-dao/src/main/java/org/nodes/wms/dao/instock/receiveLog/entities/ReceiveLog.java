@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 import java.math.BigDecimal;
 
@@ -40,6 +41,10 @@ public class ReceiveLog extends BaseSkuLotEntity {
 	 * 收货单明细ID
 	 */
 	private Long receiveDetailId;
+	/**
+	 * 供应商id
+	 */
+	private Long supplierId;
 	/**
 	 * 订单行号
 	 */
@@ -115,6 +120,6 @@ public class ReceiveLog extends BaseSkuLotEntity {
 	/**
 	 * 库存状态
 	 */
-	private Integer stockStatus;
+	private StockStatusEnum stockStatus;
 }
 

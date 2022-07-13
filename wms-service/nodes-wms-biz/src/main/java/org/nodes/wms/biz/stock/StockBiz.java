@@ -6,6 +6,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.putway.dto.output.CallAgvResponse;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
+import org.nodes.wms.dao.stock.dto.input.StockImportRequest;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
@@ -193,4 +194,17 @@ public interface StockBiz {
 	 */
 	Page<StockPageResponse> getStockPage(Query query, StockPageQuery stockPageQuery);
 
+	/**
+	 * 库存列表导出
+	 *
+	 * @param stockPageQuery 查询参数
+	 * @param response       返回对象
+	 */
+	void exportExcel(StockPageQuery stockPageQuery, HttpServletResponse response);
+
+	/**
+	 * 导入
+	 * @param importDataList 导入的数据集合
+	 */
+	boolean importExcel(List<StockImportRequest> importDataList);
 }
