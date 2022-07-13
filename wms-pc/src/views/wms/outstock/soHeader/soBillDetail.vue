@@ -1,87 +1,78 @@
 <template>
     <basic-container>
         <el-container id="container" v-loading="loading">
-            <el-main style="overflow: hidden;overflow-y: scroll;height: 100%">
+            <el-main style="overflow: hidden;overflow-y: scroll;">
                 <el-form ref="form"
                          :model="form.params"
+                         :rules="form.rules"
                          label-position="right"
-                         label-width="120px"
-                         size="mini"
+                         label-width="150px"
+                         size="medium"
                          style="margin-left:10px;margin-right:10px;"
                 >
                     <el-row>
-                        <h3>ASN单</h3>
+                        <h3>出库订单</h3>
                     </el-row>
-                    <el-row>
+                    <el-row type="flex">
                         <el-col :span="8">
-                            <el-form-item label="ASN单编码：">
-                                {{form.params.asnBillNo}}
+                            <el-form-item label="出库单编码：">
+                                {{ form.params.soBillNo }}
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="单据类型：">
-                                {{form.params.billTypeName}}
+                                {{ form.params.billType }}
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="供应商：">
-                                {{form.params.supplierName}}
+                            <el-form-item label="所属库房：">
+                                {{ form.params.whName }}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row type="flex">
+                        <el-col :span="8">
+                            <el-form-item label="所属货主：">
+                                {{ form.params.ownerName }}
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="仓库：">
-                                {{form.params.whName}}
+                            <el-form-item label="客户：">
+                                {{ form.params.customerName }}
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="货主：">
-                                {{form.params.ownerName}}
+                            <el-form-item label="出库方式：">
+                                {{ form.params.outstockType }}
                             </el-form-item>
                         </el-col>
+                    </el-row>
+                    <el-row type="flex">
+                        <el-col :span="8">
+                            <el-form-item label="发货方式：">
+                                {{ form.params.transportType }}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row type="flex">
                         <el-col :span="8">
                             <el-form-item label="备注：">
-                                {{form.params.asnBillRemark}}
+                                {{ form.params.soBillRemark }}
                             </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <h3>ASN单明细</h3>
-                    </el-row>
-                    <el-row style="overflow-y: auto">
-                        <el-col>
-                            <el-table
-                                ref="table"
-                                :data="table.data"
-                                border
-                                highlight-current-row
-                                size="mini">
-                                <el-table-column
-                                    fixed
-                                    type="index">
-                                    <template slot="header">
-                                        #
-                                    </template>
-                                </el-table-column>
-                                <template v-for="(column,index) in table.columnList">
-                                    <el-table-column
-                                        v-if="!column.hide"
-                                        :key="index"
-                                        show-overflow-tooltip
-                                        v-bind="column">
-                                    </el-table-column>
-                                </template>
-                            </el-table>
                         </el-col>
                     </el-row>
                     <el-row>
                         <template>
-                            <el-tabs v-model="activeName" @tab-click="handleClick" type="border-card">
-                                <el-tab-pane :label="item.lable" :name="item.name" v-for="(item, index) in tabList" :key="index">
+                            <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
+                                <el-tab-pane v-for="(item, index) in tabList" :key="index" :label="item.lable"
+                                             :name="item.name">
                                     <el-table
+                                        v-loading="tableLoading"
                                         :data="publicTable.data"
                                         border
                                         highlight-current-row
-                                        size="mini">
+                                        size="mini"
+                                        @sort-change="onSortChange">
                                         <el-table-column
                                             fixed
                                             type="index">
@@ -98,6 +89,16 @@
                                             </el-table-column>
                                         </template>
                                     </el-table>
+                                    <el-pagination
+                                        :background="true"
+                                        :hide-on-single-page="false"
+                                        :page-sizes="[20, 50, 100]"
+                                        layout="total, sizes, prev, pager, next, jumper"
+                                        style="margin-top: 10px;text-align:right;"
+                                        v-bind="page"
+                                        @size-change="handleSizeChange"
+                                        @current-change="handleCurrentChange">
+                                    </el-pagination>
                                 </el-tab-pane>
                             </el-tabs>
                         </template>
@@ -108,8 +109,7 @@
                 <el-row style="margin-top: 10px;line-height:60px;text-align:right;">
                     <el-button
                         :loading="loading"
-                        @click="onClose"
-                    >关 闭
+                        @click="onClose">关 闭
                     </el-button>
                 </el-row>
             </el-footer>
@@ -118,225 +118,235 @@
 </template>
 
 <script>
+import NodesSku from "@/components/wms/select/NodesSku";
+import NodesLineNumber from "@/components/wms/table/NodesLineNumber";
 import {editDetailMixin} from "@/mixins/editDetail";
-import {detail, getLog} from "@/api/wms/instock/asnHeader"
+import {listMixin} from "@/mixins/list";
+import {getDetailForDetail, getHeaderForDetail, getLogSoPickForDetail} from "@/api/wms/outstock/soHeader"
+import NodesBillType from "@/components/wms/select/NodesBillType";
+import NodesCustomer from "@/components/wms/select/NodesCustomer";
+import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
+import NodesOwner from "@/components/wms/select/NodesOwner";
+import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
+import NodesDictionary from "@/components/wms/select/NodesDictionary";
+import func from "@/util/func";
 
 export default {
-    name: "selectDetails",
-    components: {},
-    mixins: [editDetailMixin],
+    name: "detail",
+    components: {
+        NodesSkuUm, NodesOwner, NodesWarehouse,
+        NodesCustomer, NodesDictionary,
+        NodesBillType, NodesLineNumber, NodesSku,
+    },
+    mixins: [editDetailMixin, listMixin],
     props: {
-        asnBillId: {type: String, required: true},
+        soBillId: {type: String, required: true},
     },
     data() {
         return {
-            that:this,
-            page: {
-                total: 0,
-                size: 20,
-                current: 1,
-                ascs: "", //正序字段集合
-                descs: "", //倒序字段集合
-            },
-            form:{
-                params:{
-                    asnBillId: '',
-                    asnBillNo: '',
-                    billTypeName: '',
-                    supplierCode: '',
-                    supplierName: '',
-                    createTime: '',
-                    createUser: '',
-                    whCode: '',
+            form: {
+                params: {
+                    soBillNo: '',
+                    billType: '',
                     whName: '',
                     ownerName: '',
-                    asnBillRemark: '',
+                    customerName: '',
+                    outstockType: '',
+                    transportType: '',
+                    soBillRemark: ''
                 }
             },
             table: {
-                columnList: [
-                    {
-                        prop: 'skuCode',
-                        label: '物品编码',
-                        width: 140,
-                    },
-                    {
-                        prop: 'skuName',
-                        width: 230,
-                        label: '物品名称'
-                    },
-                    {
-                        prop: 'skuSpec',
-                        width: 100,
-                        label: '规格',
-                        align: 'center'
-                    },
-                    {
-                        prop: 'umName',
-                        width: 100,
-                        label: '计量单位',
-                        align: 'center'
-                    },
-                    {
-                        prop: 'planQty',
-                        width: 100,
-                        label: '计划数量',
-                        align: 'center'
-                    },
-                    {
-                        prop: 'scanQty',
-                        width: 100,
-                        label: '实收数量',
-                        align: 'center'
-                    },
-                    {
-                        prop: 'remark',
-                        label: '备注'
-                    },
-                ]
+                columnList: []
             },
             //标签页list集合，根据这个集合循环出来Tab标签
-            tabList:[
-                {lable:'日志',name:'log'},
-                {lable:'收货记录',name:'receivingRecord'}
+            tabList: [
+                {lable: '出库单明细', name: 'soDetail'},
+                {lable: '拣货记录', name: 'soRecord'},
             ],
             //tab标签默认打开第一个
-            activeName:'log',
+            activeName: 'soDetail',
             //Tab标签所有的数据来源
             publicTable: {
-                page: {
-                    total: 0,
-                    size: 20,
-                    current: 1,
-                    ascs: "", //正序字段集合
-                    descs: "", //倒序字段集合
-                },
+                data: [],
             },
-            //log日志的行对象
-            logColumnList: [
+            tableLoading: false,
+            //明细的行对象
+            soDetailColumnList: [
                 {
-                    prop: 'userAccount',
-                    label: '操作人账号',
-                    width: 300,
+                    prop: 'soLineNo',
+                    sortable: 'custom',
+                    label: '行号',
                 },
                 {
-                    prop: 'userRealName',
-                    label: '操作人名称'
+                    prop: 'skuCode',
+                    sortable: 'custom',
+                    label: '物品编码'
                 },
                 {
-                    prop: 'type',
-                    label: '操作类型',
-                    align: 'right'
+                    prop: 'skuName',
+                    sortable: 'custom',
+                    label: '物品名称'
                 },
                 {
-                    prop: 'billId',
-                    label: '目标单据id'
+                    prop: 'umCode',
+                    sortable: 'custom',
+                    label: '计量单位编码'
                 },
                 {
-                    prop: 'billNo',
-                    label: '目标单据编码'
+                    prop: 'umName',
+                    sortable: 'custom',
+                    label: '计量单位名称'
                 },
                 {
-                    prop: 'log',
-                    label: '操作内容'
+                    prop: 'planQty',
+                    sortable: 'custom',
+                    label: '计划数量'
                 },
                 {
-                    prop: 'updateTime',
-                    label: '变更时间'
+                    prop: 'skuLot1',
+                    sortable: 'custom',
+                    label: '生产批次'
                 },
+                {
+                    prop: 'skuLot4',
+                    sortable: 'custom',
+                    label: '专用客户'
+                },
+                {
+                    prop: 'remark',
+                    sortable: 'custom',
+                    label: '备注'
+                }
             ],
-            //收货记录的行对象
-            receivingRecordColumnList: [
+            //出库记录的行对象
+            soRecordColumnList: [
                 {
-                    prop: 'name',
-                    label: '姓名',
-                    width: 300,
+                    prop: 'procTime',
+                    sortable: 'custom',
+                    label: '业务发生时间',
                 },
                 {
-                    prop: 'date',
-                    label: '日期'
+                    prop: 'locCode',
+                    sortable: 'custom',
+                    label: '库位编码'
                 },
                 {
-                    prop: 'wages',
-                    label: '工资',
-                    // left/center/right
-                    align: 'right'
+                    prop: 'skuCode',
+                    sortable: 'custom',
+                    label: '物品编码'
                 },
                 {
-                    prop: 'date',
-                    label: '日期'
+                    prop: 'skuName',
+                    sortable: 'custom',
+                    label: '物品名称'
                 },
                 {
-                    prop: 'address',
-                    label: '地址'
+                    prop: 'lotNumber',
+                    sortable: 'custom',
+                    label: '批次号'
                 },
                 {
-                    prop: 'address',
-                    label: '接收记录'
+                    prop: 'pickRealQty',
+                    sortable: 'custom',
+                    label: '拣货量'
                 },
-            ]
+                {
+                    prop: 'wspName',
+                    sortable: 'custom',
+                    label: '包装名称'
+                },
+                {
+                    prop: 'wsuName',
+                    sortable: 'custom',
+                    label: '计量单位名称'
+                },
+                {
+                    prop: 'skuLot1',
+                    sortable: 'custom',
+                    label: '生产批次'
+                },
+                {
+                    prop: 'skuLot4',
+                    sortable: 'custom',
+                    label: '专用客户'
+                }
+            ],
         }
     },
-    mounted() {
-
-    },
     created() {
-        this.getTableData();
-        //初始化选择Tab行对象是Log日志行对象
-        this.publicTable.columnList=this.logColumnList;
-        //获取日志的数据
-        this.getLog();
+        this.getInitializeData()
     },
     watch: {
-        asnBillId() {
-            this.refreshTable();
+        soBillId() {
+            this.getInitializeData();
         }
     },
     methods: {
-        refreshTable() {
+        getInitializeData() {
+            this.getHeader();
             this.getTableData();
         },
-        getTableData() {
-            // API调用:post(this.searchFrom)
-            let asnBillIdObj = {
-                asnBillId: this.asnBillId,
-            }
-            detail(asnBillIdObj)
-                .then((res)=>{
-                    let asnHeader = res.data.data.asnHeaderViewResponse;
-                    let asnDetailList = res.data.data.asnDetailViewResponse;
-                    // let asnReceiveList = res.data.data.asnReceiveViewResponse;
-                    this.form.params = asnHeader;
-                    this.table.data = asnDetailList
+        getHeader() {
+            getHeaderForDetail(this.soBillId)
+                .then((res) => {
+                    this.form.params = res.data.data;
                 })
         },
-        //获取日志数据---跟后台交互
-        getLog() {
-            let asnBillIdObj = {
-                asnBillId: this.asnBillId
+        getDetail() {
+            this.tableLoading = true;
+            this.publicTable.columnList = this.soDetailColumnList;
+            if (func.isEmpty(this.soBillId)) {
+                return;
             }
-            getLog(asnBillIdObj)
-                .then((res)=>{
-                    this.publicTable.data = res.data.data;
+            getDetailForDetail(this.page, this.soBillId)
+                .then((res) => {
+                    this.publicTable.data = res.data.data.records;
+                    this.page.total = res.data.data.total;
+                    this.tableLoading = false;
                 })
         },
-        //获取收货记录数据---跟后台交互
-        getReceivingRecord() {
-            // API调用:post(this.searchFrom)
-
+        getSoRecord() {
+            this.tableLoading = true;
+            this.publicTable.columnList = this.soRecordColumnList;
+            if (func.isEmpty(this.soBillId)) {
+                return;
+            }
+            getLogSoPickForDetail(this.page, this.soBillId)
+                .then((res) => {
+                    this.publicTable.data = res.data.data.records;
+                    this.page.total = res.data.data.total;
+                    this.tableLoading = false;
+                })
         },
         //点击Tab的时候进行判断，然后获取对应数据及行对象
         handleClick(tab) {
-            if(tab.name===this.tabList[0].name)
-            {
-                this.publicTable.columnList=this.logColumnList;
-                this.getLog();
-
-            }else {
-                this.publicTable.columnList=this.receivingRecordColumnList;
-                this.getReceivingRecord();
+            this.form.activeName = tab.name;
+            this.resetPage();
+            this.getTableData();
+        },
+        // 重置分页对象
+        resetPage() {
+            this.page = {
+                total: 0,
+                size: 20,
+                current: 1,
+                ascs: "",
+                descs: "",
             }
         },
+        createRowObj() {
+        },
+        getCrudColumnList() {
+            // 覆盖混入的list中的方法
+        },
+        getTableData() {
+            if (this.form.activeName === 'soRecord') {
+                this.getSoRecord();
+            } else {
+                this.getDetail();
+            }
+        }
     }
 }
 </script>

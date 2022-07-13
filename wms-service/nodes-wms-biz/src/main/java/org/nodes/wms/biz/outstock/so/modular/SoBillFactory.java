@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 发货单头表工厂类
@@ -119,5 +120,11 @@ public class SoBillFactory {
 			// 批属性 生产批次、专用客户
 		});
 		return soDetailListResult;
+	}
+
+    public SoHeader createSoHeaderByCustom(Map<String, Object> soHeaderMap) {
+		SoHeader soHeader = new SoHeader();
+		BeanUtil.copy(soHeaderMap,soHeader);
+		return soHeader;
 	}
 }

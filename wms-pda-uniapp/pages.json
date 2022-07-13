@@ -194,6 +194,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/stockInterior/stockInquiry/stockDetailInquiry",
+            "style" :                                                                                    
+            {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#33cbcc"

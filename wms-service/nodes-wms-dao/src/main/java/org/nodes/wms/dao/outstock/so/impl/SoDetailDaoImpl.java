@@ -1,7 +1,10 @@
 package org.nodes.wms.dao.outstock.so.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.so.SoDetailDao;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailEditResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.mapper.SoDetailMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -28,4 +31,10 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 	public boolean removeByIdList(List<Long> detailIdList) {
 		return super.removeByIds(detailIdList);
 	}
+
+	@Override
+	public Page<SoDetailForDetailResponse> pageForSoDetailBySoBillId(IPage<?> page, Long soBillId) {
+		return super.baseMapper.pageForSoDetailBySoBillId(page, soBillId);
+	}
+
 }
