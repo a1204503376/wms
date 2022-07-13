@@ -36,6 +36,14 @@ public interface SerialDao extends BaseService<Serial> {
 	List<Serial> getSerialByStockId(Long stockId);
 
 	/**
+	 * 根据stockid获取在库的序列号列表
+	 *
+	 * @param stockId
+	 * @return 序列号集合
+	 */
+	List<String> getSerialNoByStockId(Long stockId);
+
+	/**
 	 * 更新序列号状态
 	 *
 	 * @param serialNoList
