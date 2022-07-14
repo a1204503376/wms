@@ -49,7 +49,7 @@ public class PutwayBizImpl implements PutwayBiz {
 				.map(Serial::getSerialNumber)
 				.collect(Collectors.toList());
 		}
-		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), sourceStock.getLocCode());
+		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
 		stockBiz.moveStock(sourceStock, serialNoList, request.getQty(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY, null, null, null);
 		// 生成上架记录
 		PutawayLog putawayLog = new PutawayLog();

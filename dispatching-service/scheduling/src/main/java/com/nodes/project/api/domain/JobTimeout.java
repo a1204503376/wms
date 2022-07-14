@@ -3,11 +3,12 @@ package com.nodes.project.api.domain;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.nodes.framework.web.domain.SimpleEntity;
+import com.nodes.project.api.enums.JobFlagSyncWmsEnum;
 import com.nodes.project.api.enums.WmsBoxTypeEnum;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Date;
  */
 @TableName(value = "job_timeout")
 @Data
-public class JobTimeout {
+public class JobTimeout extends SimpleEntity {
     /**
      * 主键
      */
@@ -118,7 +119,13 @@ public class JobTimeout {
     private String locationNameTo;
 
     /**
-     * 创建时间
+     * 同步给WMS标志
      */
-    private LocalDateTime createTime;
+    private JobFlagSyncWmsEnum flagSyncWms;
+
+    /**
+     * 同步消息
+     */
+    private String syncMsg;
+
 }

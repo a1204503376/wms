@@ -7,17 +7,17 @@ import com.nodes.common.utils.StringUtils;
 import com.nodes.framework.config.NodesConfig;
 import com.nodes.processor.ProcessResultUtils;
 import com.nodes.project.api.domain.JobQueue;
+import com.nodes.project.api.domain.JobTimeout;
 import com.nodes.project.api.dto.agv.AgvGlobalResponse;
 import com.nodes.project.api.dto.agv.AgvResponse;
 import com.nodes.project.api.dto.wms.WmsGlobalResponse;
 import com.nodes.project.api.dto.wms.WmsResponse;
+import com.nodes.project.api.enums.JobFlagSyncWmsEnum;
 import com.nodes.project.api.enums.JobStatusEnum;
 import com.nodes.project.api.enums.ProcessorEnum;
-import com.nodes.project.api.service.CallAgvService;
-import com.nodes.project.api.service.CallWmsService;
-import com.nodes.project.api.service.JobQueueService;
-import com.nodes.project.api.service.ProcessorService;
+import com.nodes.project.api.service.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import tech.powerjob.common.serialize.JsonUtils;
 import tech.powerjob.worker.core.processor.ProcessResult;
 import tech.powerjob.worker.core.processor.TaskContext;
@@ -26,6 +26,7 @@ import tech.powerjob.worker.log.OmsLogger;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -43,6 +44,8 @@ public class ProcessorServiceImpl implements ProcessorService {
     private CallAgvService callAgvService;
     @Resource
     private NodesConfig nodesConfig;
+    @Resource
+    private JobTimeoutService jobTimeoutService;
 
     @Override
     public ProcessResult selectJobQueue(TaskContext context, ProcessorEnum processorEnum) {
@@ -108,7 +111,7 @@ public class ProcessorServiceImpl implements ProcessorService {
         Map<String, String> fetchWorkflowContext = workflowContext.fetchWorkflowContext();
         if (!fetchWorkflowContext.containsKey(JobConstants.WORKFLOW_JOB_QUEUE_KEY)) {
             omsLogger.debug("Workflow_data中({})不存在key：{}", fetchWorkflowContext, JobConstants.WORKFLOW_JOB_QUEUE_KEY);
-            return ProcessResultUtils.failed("Workflow不存在JOB，退出本次处理");
+            return ProcessResultUtils.failed("Workflow不存在JOB，退出执行");
         }
         return ProcessResultUtils.success();
     }
@@ -130,7 +133,7 @@ public class ProcessorServiceImpl implements ProcessorService {
         JobQueue jobQueue = optionalJobQueue.get();
         // 调用WMS API 判定库位是否可用
         WmsGlobalResponse wmsGlobalResponse = callWmsService.queryAndFrozenEnableOutbound(jobQueue);
-        if (WmsGlobalResponse.isException(wmsGlobalResponse)) {
+        if (WmsGlobalResponse.hasException(wmsGlobalResponse)) {
             omsLogger.debug("呼叫WMS异常：{}", wmsGlobalResponse.getMsg());
             return ProcessResultUtils.failed();
         }
@@ -182,6 +185,49 @@ public class ProcessorServiceImpl implements ProcessorService {
         setStatusAgvResultSuccessful(jobQueue, omsLogger);
 
         return ProcessResultUtils.success("呼叫AGV成功");
+    }
+
+    @Override
+    public ProcessResult syncJobTimeout(TaskContext context) {
+        OmsLogger omsLogger = context.getOmsLogger();
+
+        omsLogger.debug("查询JOB超时表");
+        List<JobTimeout> jobTimeoutList = jobTimeoutService.listBySyncWms();
+        if (CollectionUtils.isEmpty(jobTimeoutList)) {
+            omsLogger.debug("未找到需要同步的超时JOB信息，退出执行");
+            return ProcessResultUtils.success();
+        }
+
+        omsLogger.debug("呼叫WMS接口");
+        WmsGlobalResponse wmsGlobalResponse = callWmsService.syncTimoutMsg(jobTimeoutList);
+
+        omsLogger.debug("保存同步消息");
+        String syncMsg = "同步成功";
+        JobFlagSyncWmsEnum jobFlagSyncWmsEnum = JobFlagSyncWmsEnum.SYNCHRONIZATION_SUCCESSFUL;
+        if (WmsGlobalResponse.hasException(wmsGlobalResponse)) {
+            syncMsg = wmsGlobalResponse.getMsg();
+            jobFlagSyncWmsEnum = JobFlagSyncWmsEnum.SYNCHRONIZATION_FAILED;
+        } else {
+            WmsResponse wmsResponse = wmsGlobalResponse.getWmsResponse();
+            if (WmsResponse.isFailed(wmsResponse)) {
+                syncMsg = wmsResponse.getMsg();
+                jobFlagSyncWmsEnum = JobFlagSyncWmsEnum.SYNCHRONIZATION_FAILED;
+            }
+        }
+        for (JobTimeout jobTimeout : jobTimeoutList) {
+            jobTimeout.setSyncMsg(syncMsg);
+            jobTimeout.setFlagSyncWms(jobFlagSyncWmsEnum);
+        }
+        try {
+            jobTimeoutService.updateBatchById(jobTimeoutList);
+        } catch (Exception e) {
+            omsLogger.debug("保存同步消息异常：{}", e);
+            return ProcessResultUtils.failed("保存同步消息异常");
+        }
+
+        return jobFlagSyncWmsEnum != JobFlagSyncWmsEnum.SYNCHRONIZATION_SUCCESSFUL
+                ? ProcessResultUtils.failed(syncMsg)
+                : ProcessResultUtils.success(syncMsg);
     }
 
     private Optional<JobQueue> findByWorkflowMap(TaskContext context) {

@@ -2,7 +2,6 @@ package com.nodes.project.api.service.impl;
 
 import com.nodes.common.constant.JobConstants;
 import com.nodes.common.utils.StringUtils;
-import com.nodes.framework.config.NodesConfig;
 import com.nodes.project.api.domain.JobQueue;
 import com.nodes.project.api.dto.agv.*;
 import com.nodes.project.api.service.CallAgvService;
@@ -23,13 +22,11 @@ public class CallAgvServiceImpl implements CallAgvService {
 
     @Resource
     private CallApiService callApiService;
-    @Resource
-    private NodesConfig nodesConfig;
 
     @Override
     public AgvGlobalResponse transportOrders(JobQueue jobQueue) {
         AgvTransportOrderRequest agvTransportOrderRequest = getAgvTransportOrderRequest(jobQueue);
-        return callApiService.postAgv(nodesConfig.getAgvUrl() + url_transportOrders, agvTransportOrderRequest);
+        return callApiService.postAgv(url_transportOrders, agvTransportOrderRequest);
     }
 
     @NotNull
@@ -59,7 +56,7 @@ public class CallAgvServiceImpl implements CallAgvService {
     public AgvGlobalResponse withdrawal(JobQueue jobQueue) {
         AgvWithdrawalRequest agvWithdrawalRequest = new AgvWithdrawalRequest();
         agvWithdrawalRequest.setName(jobQueue.getId());
-        String url = StringUtils.format(nodesConfig.getAgvUrl() + url_withdrawal, jobQueue);
+        String url = StringUtils.format(url_withdrawal, jobQueue);
         return callApiService.postAgv(url, agvWithdrawalRequest);
     }
 }
