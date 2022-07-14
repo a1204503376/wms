@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,11 +47,10 @@ public class SchedulingController {
 
 	/**
 	 * 调度系统广播通知
-	 * @param request
-	 * @return
+	 * @param request 通知对象集合
 	 */
 	@PostMapping("broadcastNotification")
-	public R broadcastNotification(@Valid @RequestBody SchedulingBroadcastNotificationRequest request){
+	public R broadcastNotification(@Valid @RequestBody List<SchedulingBroadcastNotificationRequest> request){
 
 		return R.success(ResultCode.SUCCESS);
 	}
