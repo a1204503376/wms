@@ -77,7 +77,7 @@
 		},
 		methods: {
 			esc() {
-				uni.$u.func.routeNavigateTo('/pages/home/childrenHome?title=收货');
+				uni.$u.func.navigateBackTo(1);
 			},
 			getReceiveDetailList() {
 				receive.getReceiveDetailLpn(this.param.boxCode).then(res => {
