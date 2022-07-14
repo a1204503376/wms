@@ -16,4 +16,6 @@ public interface ProcessorService {
     ProcessResult outboundAllowed(TaskContext context);
 
     ProcessResult callAgv(TaskContext context);
+
+    ProcessResult syncJobTimeout(TaskContext context);
 }

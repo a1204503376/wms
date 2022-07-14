@@ -30,7 +30,7 @@ public class WmsGlobalResponse {
         return agvGlobalResponse;
     }
 
-    public static boolean isException(WmsGlobalResponse wmsGlobalResponse) {
+    public static boolean hasException(WmsGlobalResponse wmsGlobalResponse) {
         Assert.notNull(wmsGlobalResponse, "呼叫WMS异常对象为空");
         return BooleanUtils.isTrue(wmsGlobalResponse.getFlagException());
     }

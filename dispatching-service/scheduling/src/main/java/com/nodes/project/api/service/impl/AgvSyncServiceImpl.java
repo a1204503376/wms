@@ -12,6 +12,7 @@ import com.nodes.project.api.enums.JobStatusEnum;
 import com.nodes.project.api.mapper.AgvSyncMapper;
 import com.nodes.project.api.mapper.JobQueueMapper;
 import com.nodes.project.api.service.AgvSyncService;
+import com.nodes.project.api.service.CallWmsService;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class AgvSyncServiceImpl extends ServiceImpl<AgvSyncMapper, AgvSync>
         implements AgvSyncService {
 
     @Resource
-    private CallWmsServiceImpl callWmsService;
+    private CallWmsService callWmsService;
     @Resource
     private JobQueueMapper jobQueueMapper;
 

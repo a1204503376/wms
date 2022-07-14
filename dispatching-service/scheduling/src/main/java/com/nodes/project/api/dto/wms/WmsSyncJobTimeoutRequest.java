@@ -18,5 +18,8 @@ public class WmsSyncJobTimeoutRequest {
      */
     private Long taskHeaderId;
 
-
+    /**
+     * 通知
+     */
+    private String msg;
 }
