@@ -91,3 +91,13 @@ export const getLogList = (receiveId) => {
         }
     })
 }
+
+export const getReceiveBillDataBylsopIds = (lsopIds) => {
+    return request({
+        url: '/api/wms/receive/findReceiveLogBylsopIds',
+        method: 'post',
+        data: {
+            lsopIdList: lsopIds
+        }
+    })
+}

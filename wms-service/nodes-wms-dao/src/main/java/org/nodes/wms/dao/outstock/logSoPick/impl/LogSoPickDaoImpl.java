@@ -40,4 +40,9 @@ public class LogSoPickDaoImpl extends BaseServiceImpl<LogSoPickMapper, LogSoPick
 	public List<LogSoPicExcelResponse> listByQuery(LogSoPickPageQuery logSoPickPageQuery) {
 		return super.baseMapper.listByQuery(logSoPickPageQuery);
 	}
+
+	@Override
+	public List<LogSoPick> getByIds(List<Long> lsopIdList) {
+		return super.listByIds(lsopIdList);
+	}
 }

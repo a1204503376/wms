@@ -3,6 +3,7 @@ package org.nodes.wms.biz.instock.receiveLog;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
+import org.nodes.wms.dao.instock.receive.dto.output.EditReceiveDetailResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnItemDto;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
@@ -87,4 +88,12 @@ public interface ReceiveLogBiz {
 	List<ReceiveLog> newReceiveLog(List<ReceiveLog> receiveLogList);
 
 	List<ReceiveLog> findReceiveLog(List<Long> receiveIdList);
+
+	/**
+	 * 根据拣货日志记录id查找收货日志信息响应给前端
+	 *
+	 * @param lsopIdList: 拣货日志记录id
+	 * @return List<EditReceiveDetailResponse> 收货单信息响应对象
+	 */
+	List<EditReceiveDetailResponse> findReceiveLogBylsopIds(List<Long> lsopIdList);
 }

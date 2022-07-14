@@ -36,6 +36,7 @@
 
     <sql id="pageOrList">
         SELECT
+        lsp.lsop_id,
         lsp.so_bill_no,
         header.bill_type_name,
         detail.so_line_no,
