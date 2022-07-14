@@ -12,12 +12,14 @@
                d.sku_lot18,d.sku_lot19,d.sku_lot20,d.sku_lot21,d.sku_lot22,d.sku_lot23,d.sku_lot24,d.sku_lot25,
                d.sku_lot26,d.sku_lot27,d.sku_lot28,d.sku_lot29,d.sku_lot30,d.lpn_code,d.box_code,d.sn_code,
                d.wh_id,d.wo_id,d.source,d.executor_user_id,d.executor_user_code,d.begin_time,d.remark,d.version,
-               d.STATUS,d.tenant_id,d.create_dept,d.create_user,d.create_time,d.update_user,d.update_time,
-               d.is_deleted,h.type_cd,h.proc_type,h.task_state,o.owner_name,w.wh_name
+               d.STATUS,d.tenant_id,d.create_dept,d.create_time,d.update_time,
+               d.is_deleted,h.type_cd,h.proc_type,h.task_state,o.owner_name,w.wh_name,user1.real_name as create_user,user2.real_name as update_user
         from task_detail d
         LEFT JOIN task_header h on d.task_header_id = h.id
         LEFT JOIN wms_owner o on d.wo_id=o.wo_id
         LEFT JOIN wms_warehouse w on d.wh_id= w.wh_id
+        LEFT JOIN blade_user user1 ON user1.id = d.create_user
+        LEFT JOIN blade_user user2 ON user2.id = d.update_user
         <where>
             <if test="query.billNo!=null and query.billNo!=''">
                 AND  d.bill_no like concat('%',#{query.billNo},'%')
@@ -31,13 +33,13 @@
             <if test="query.boxCode!=null and query.boxCode!=''">
                 AND d.box_code like  concat('%',#{query.boxCode},'%')
             </if>
-            <if test="query.boxCode!=null and query.boxCode!=''">
-                AND d.box_code like  concat('%',#{query.boxCode},'%')
+            <if test="query.lpnCode!=null and query.lpnCode!=''">
+                AND d.lpn_code like  concat('%',#{query.lpnCode},'%')
             </if>
             <if test="query.executorUserCode!=null and query.executorUserCode!=''">
-                AND   d.executor_user_code concat('%',#{query.executorUserCode},'%')
+                AND   d.executor_user_code like concat('%',#{query.executorUserCode},'%')
             </if>
-            <if test="query.updateTimeBegin!=null and query.updateTimeBegin!='' and query.updateTimeEnd!=null and query.updateTimeEnd!=''">
+            <if test="query.updateTimeBegin!=null and query.updateTimeEnd!=null">
                 AND  d.update_time between #{query.updateTimeBegin} and  #{query.updateTimeEnd}
             </if>
         </where>
@@ -71,13 +73,13 @@
             <if test="query.boxCode!=null and query.boxCode!=''">
                 AND d.box_code like  concat('%',#{query.boxCode},'%')
             </if>
-            <if test="query.boxCode!=null and query.boxCode!=''">
-                AND d.box_code like  concat('%',#{query.boxCode},'%')
+            <if test="query.lpnCode!=null and query.lpnCode!=''">
+                AND d.lpn_code like  concat('%',#{query.lpnCode},'%')
             </if>
             <if test="query.executorUserCode!=null and query.executorUserCode!=''">
-                AND   d.executor_user_code concat('%',#{query.executorUserCode},'%')
+                AND   d.executor_user_code like concat('%',#{query.executorUserCode},'%')
             </if>
-            <if test="query.updateTimeBegin!=null and query.updateTimeBegin!='' and query.updateTimeEnd!=null and query.updateTimeEnd!=''">
+            <if test="query.updateTimeBegin!=null and query.updateTimeEnd!=null">
                 AND  d.update_time between #{query.updateTimeBegin} and  #{query.updateTimeEnd}
             </if>
         </where>

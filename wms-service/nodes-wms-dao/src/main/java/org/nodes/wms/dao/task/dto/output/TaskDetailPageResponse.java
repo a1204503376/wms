@@ -1,6 +1,5 @@
 package org.nodes.wms.dao.task.dto.output;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
@@ -8,7 +7,6 @@ import org.nodes.wms.dao.task.enums.ProcTypeEnum;
 import org.nodes.wms.dao.task.enums.TaskDetailStatusEnum;
 import org.nodes.wms.dao.task.enums.TaskStateEnum;
 import org.nodes.wms.dao.task.enums.TypeCdEnum;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -153,16 +151,27 @@ public class TaskDetailPageResponse extends BaseSkuLot implements Serializable {
 	/**
 	 * 任务执行开始时间
 	 */
-	@JsonFormat(
-		pattern = "yyyy-MM-dd HH:mm:ss"
-	)
-	@DateTimeFormat(
-		pattern = "yyyy-MM-dd HH:mm:ss"
-	)
 	private Date beginTime;
 	/**
 	 * 备注
 	 */
 	private String remark;
+	/**
+	 * 创建人
+	 */
+	private String createUser;
+	/**
+	 * 创建时间
+	 */
+	private Date createTime;
+	/**
+	 * 修改人
+	 */
+	private String updateUser;
+	/**
+	 * 修改时间
+	 */
+	private Date updateTime;
+
 
 }
