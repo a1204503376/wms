@@ -2,7 +2,7 @@
     <el-select
         v-model="val"
         :default-first-option="true"
-        :multiple="true"
+        :multiple="multiple"
         :loading="loading"
         :remote-method="remoteMethod"
         filterable
@@ -32,7 +32,9 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Array, String]
+        selectVal: [Array, String],
+        // 单选多选切换，默认为false
+        multiple: {type: Boolean, required: false, default: false},
     },
     data() {
         return {

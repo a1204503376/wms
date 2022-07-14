@@ -4,15 +4,20 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
+import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
+import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
+import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
+import org.nodes.wms.dao.instock.receive.dto.output.EditReceiveDetailResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnItemDto;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
@@ -24,6 +29,7 @@ import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -50,6 +56,10 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	private final ReceiveBiz receiveBiz;
 	private final OwnerBiz ownerBiz;
 	private final StockBiz stockBiz;
+
+	private final LogSoPickBiz logSoPickBiz;
+
+	private final SkuBiz skuBiz;
 
 
 	@Override
@@ -208,5 +218,28 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	@Override
 	public List<ReceiveLog> findReceiveLog(List<Long> receiveIdList) {
 		return null;
+	}
+
+	@Override
+	public List<EditReceiveDetailResponse> findReceiveLogBylsopIds(List<Long> lsopIdList) {
+		List<LogSoPick> logSoPickList = logSoPickBiz.findByIds(lsopIdList);
+		List<EditReceiveDetailResponse> receiveDetailList = new ArrayList<>();
+		logSoPickList.forEach(item->{
+			EditReceiveDetailResponse detail = new EditReceiveDetailResponse();
+			// 赋值sku对象属性
+			Sku sku = skuBiz.findById(item.getSkuId());
+			SkuSelectResponse skuSelectResponse = new SkuSelectResponse();
+			skuSelectResponse.setSkuId(sku.getSkuId());
+			skuSelectResponse.setSkuCode(sku.getSkuCode());
+			skuSelectResponse.setSkuName(sku.getSkuName());
+			skuSelectResponse.setSkuSpec(sku.getSkuSpec());
+			detail.setSku(skuSelectResponse);
+			// 计量单位编码
+			detail.setUmCode(item.getWsuCode());
+			// 批属性
+			SkuLotUtil.setAllSkuLot(item,detail);
+			receiveDetailList.add(detail);
+		});
+		return receiveDetailList;
 	}
 }

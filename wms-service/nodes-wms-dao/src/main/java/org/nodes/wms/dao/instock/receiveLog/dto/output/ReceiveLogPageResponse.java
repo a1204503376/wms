@@ -1,11 +1,9 @@
 package org.nodes.wms.dao.instock.receiveLog.dto.output;
 
-import com.alibaba.excel.annotation.ExcelProperty;
-import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
-import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
+import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 
 import java.io.Serializable;
@@ -16,7 +14,7 @@ import java.util.Date;
  * 收货单清点记录分页返回dto类
  **/
 @Data
-public class ReceiveLogPageResponse extends BaseSkuLotEntity implements Serializable {
+public class ReceiveLogPageResponse extends BaseSkuLot implements Serializable {
 
 	private static final long serialVersionUID = -4270898178645936584L;
 

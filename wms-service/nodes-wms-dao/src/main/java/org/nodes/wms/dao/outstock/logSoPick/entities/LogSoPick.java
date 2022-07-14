@@ -95,6 +95,11 @@ public class LogSoPick extends SkuLotBaseEntity {
 	private Integer skuLevel;
 
 	/**
+	 * 计量单位编码
+	 */
+	private String wsuCode;
+
+	/**
 	 * 计量单位名称
 	 */
 	private String wsuName;

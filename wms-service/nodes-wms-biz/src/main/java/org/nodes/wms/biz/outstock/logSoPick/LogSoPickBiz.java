@@ -5,6 +5,7 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.input.LogSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickForSoDetailResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickIndexResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickPageResponse;
+import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
 import org.springblade.core.mp.support.Query;
 
@@ -48,4 +49,12 @@ public interface LogSoPickBiz {
 	 * @param response 响应对象
 	 */
 	void export(LogSoPickPageQuery logSoPickPageQuery, HttpServletResponse response);
+
+	/**
+	 * 根据拣货记录id获取拣货记录日志信息
+	 *
+	 * @param lsopIdList: 拣货记录id
+	 * @return List<LogSoPick> 拣货记录信息
+	 */
+	List<LogSoPick> findByIds(List<Long> lsopIdList);
 }

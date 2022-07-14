@@ -420,14 +420,14 @@ export default {
         },
         createReceiveBill() {
             let rows = this.$refs.table.selection;
-            let lsopIds = rows.map(item => item.lsopId);
             if (func.isEmpty(rows)) {
                 this.$message.warning("至少选择一条记录创建");
                 return;
             }
+            let lsopIds = rows.map(item => item.lsopId);
             this.$router.push({
-                name: '拣货记录-创建发货单',
-                params: {
+                name: '创建收货单',
+                query: {
                     lsopIds: lsopIds
                 }
             })

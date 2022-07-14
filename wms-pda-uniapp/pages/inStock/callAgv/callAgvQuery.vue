@@ -136,6 +136,12 @@
 				    
 					if(tool.isNotEmpty(this.stockList)){
 					  if(this.stockList.length==1){
+						  if(this.stockList[0].lpnType==='0'){
+						  	this.$u.func.showToast({
+						  		title: '箱码类型错误，请重新输入'
+						  	})
+						  	return
+						  }
 						  uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgv', this.stockList[0]);
 						  return
 					  }

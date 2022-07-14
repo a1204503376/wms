@@ -9,16 +9,14 @@ import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.dao.application.dto.output.ReceiveBillStateResponse;
 import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.input.*;
-import org.nodes.wms.dao.instock.receive.dto.output.EditReceiveResponse;
-import org.nodes.wms.dao.instock.receive.dto.output.NotReceiveDetailResponse;
-import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
-import org.nodes.wms.dao.instock.receive.dto.output.ReceiveResponse;
+import org.nodes.wms.dao.instock.receive.dto.output.*;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveCancelRequest;
 import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageQuery;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.LogSoPickIdListRequest;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
@@ -165,5 +163,11 @@ public class ReceiveController {
 		@RequestBody NotReceiveDetailPageQuery notReceiveDetailPageQuery,
 		HttpServletResponse response) {
 		receiveBiz.exportNotReceiveDetail(notReceiveDetailPageQuery, response);
+	}
+
+	@PostMapping("/findReceiveLogBylsopIds")
+	public R<List<EditReceiveDetailResponse>> findReceiveBillDataBylsopIds(
+		@Valid @RequestBody LogSoPickIdListRequest logSoPickIdListRequest){
+		return R.data(receiveLogBiz.findReceiveLogBylsopIds(logSoPickIdListRequest.getLsopIdList()));
 	}
 }

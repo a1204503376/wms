@@ -9,6 +9,7 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPicExcelResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickForSoDetailResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickIndexResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickPageResponse;
+import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
@@ -46,5 +47,10 @@ public class LogSoPickBizImpl implements LogSoPickBiz {
 	public void export(LogSoPickPageQuery logSoPickPageQuery, HttpServletResponse response) {
 		List<LogSoPicExcelResponse> logSoPicExcelList = logSoPickDao.listByQuery(logSoPickPageQuery);
 		ExcelUtil.export(response, "", "", logSoPicExcelList, LogSoPicExcelResponse.class);
+	}
+
+	@Override
+	public List<LogSoPick> findByIds(List<Long> lsopIdList) {
+		return logSoPickDao.getByIds(lsopIdList);
 	}
 }
