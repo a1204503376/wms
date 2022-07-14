@@ -395,6 +395,8 @@ public class StockBizImpl implements StockBiz {
 		} else {
 			stockLog.setCurrentPickQty(qty);
 		}
+
+		stockLogDao.save(stockLog);
 		return stockLog;
 	}
 
