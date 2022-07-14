@@ -10,6 +10,7 @@
         placeholder="请输入物品编码或名称"
         popper-class="popper-auto"
         size="mini"
+        :disabled="disabled"
         @change="onChange"
         @select="handleSelect">
         <template v-slot="{ item }">
@@ -33,6 +34,8 @@ export default {
         selectVal: [Array, String, Object],
         // 单选多选切换，默认为false
         multiple: {type: Boolean, required: false, default: false},
+        // 是否禁用 默认为 false不禁用
+        disabled: {type: Boolean, required: false, default: () => false}
     },
     data() {
         return {

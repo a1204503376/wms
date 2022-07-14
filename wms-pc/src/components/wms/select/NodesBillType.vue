@@ -7,6 +7,7 @@
         filterable
         placeholder="请选择"
         :size="size"
+        :disabled="disabled"
         value-key="billTypeId"
         @change="onChange">
         <el-option
@@ -36,7 +37,9 @@ export default {
         // 查询的单据类型，"":查询所有, "I":查询入库单据类型, "O":查询出库单据类型
         ioType: {type: String, required: false, default: () => ''},
         // 组件大小，默认为mini, 支持 medium/small/mini
-        size: {type: String, required: false, default: () => "mini"}
+        size: {type: String, required: false, default: () => "mini"},
+        // 是否禁用 默认为 false不禁用
+        disabled: {type: Boolean, required: false, default: () => false}
     },
     data() {
         return {
