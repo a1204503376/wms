@@ -7,6 +7,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.poi.ss.formula.functions.T;
 import org.nodes.core.base.entity.Dict;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
@@ -238,7 +239,11 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public Location findLocationByLocCode(Long whId, String locCode) {
-		return locationDao.getLocationByLocCode(whId, locCode);
+		AssertUtil.notNull(whId,"库房ID不能为空");
+		AssertUtil.notNull(locCode,"库房编码不能为空");
+		Location location = locationDao.getLocationByLocCode(whId, locCode);
+		AssertUtil.notNull(location,"获取库位失败,请更换库位编码后重试");
+		return location;
 	}
 
 	@Override
