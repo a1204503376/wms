@@ -6,7 +6,6 @@ import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
 
-import javax.validation.constraints.Null;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -35,8 +34,7 @@ public class StockUtil {
 	 */
 	public static BigDecimal getStockBalance(List<Stock> stockList) {
 		BigDecimal qtySubtractMax = BigDecimal.ZERO;
-		for (Stock stock : stockList
-		) {
+		for (Stock stock : stockList) {
 			if (!Func.equals(stockList.get(0).getSkuLevel(), stock.getSkuLevel())) {
 				throw new ServiceException("箱码包装层级不一致");
 			}
@@ -88,8 +86,8 @@ public class StockUtil {
 		return qtySubtractMax;
 	}
 
-    public static void resetStockInfo(Stock stock) {
-		if (Func.isNull(stock)){
+	public static void resetStockInfo(Stock stock) {
+		if (Func.isNull(stock)) {
 			throw new NullArgumentException("重置库存信息失败，object is null");
 		}
 
@@ -103,5 +101,5 @@ public class StockUtil {
 		stock.setZoneId(null);
 		stock.setZoneCode(null);
 		stock.setVersion(null);
-    }
+	}
 }
