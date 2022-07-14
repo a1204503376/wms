@@ -103,9 +103,7 @@
 		},
 		methods: {
 			esc() {
-				uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgvQueryList', {
-					name: '收货'
-				});
+				uni.$u.func.navigateBackTo(1);
 			},
 			change(item){
 			  this.locCode = item.locCode

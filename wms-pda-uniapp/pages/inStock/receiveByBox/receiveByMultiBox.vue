@@ -116,7 +116,7 @@
 				}
 			},
 			esc() {
-				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByBox/receiveDetailLpnListQuery');
+				uni.$u.func.navigateBackTo(1);
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)

@@ -120,9 +120,7 @@
 		},
 		methods: {
 			esc() {
-				uni.$u.func.routeNavigateTo('/pages/home/childrenHome', {
-					name: '上架'
-				});
+				uni.$u.func.navigateBackTo(1);
 			},
 			press(num){
 				if(num==10){
