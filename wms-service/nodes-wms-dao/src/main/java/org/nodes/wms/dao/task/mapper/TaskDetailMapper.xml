@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nodes.wms.dao.task.mapper.TaskDetailMapper">
+
+
+    <select id="getPage" resultType="org.nodes.wms.dao.task.dto.output.TaskDetailPageResponse">
+        select d.id,d.task_detail_status,d.task_header_id,d.bill_id,d.bill_no,d.bill_detail_id,
+               d.bill_line_no,d.sku_id,d.sku_code,d.wsp_id,d.sku_level,d.um_code,d.um_name,d.plan_qty,
+               d.scan_qty,d.stock_id,d.stock_status,d.loc_id,d.target_loc_id,d.target_loc_code,d.sku_lot1,
+               d.sku_lot2,d.sku_lot3,d.sku_lot4,d.sku_lot5,d.sku_lot6,d.sku_lot7,d.sku_lot8,d.sku_lot9
+               ,d.sku_lot10,d.sku_lot11,d.sku_lot12,d.sku_lot13,d.sku_lot14,d.sku_lot15,d.sku_lot16,d.sku_lot17,
+               d.sku_lot18,d.sku_lot19,d.sku_lot20,d.sku_lot21,d.sku_lot22,d.sku_lot23,d.sku_lot24,d.sku_lot25,
+               d.sku_lot26,d.sku_lot27,d.sku_lot28,d.sku_lot29,d.sku_lot30,d.lpn_code,d.box_code,d.sn_code,
+               d.wh_id,d.wo_id,d.source,d.executor_user_id,d.executor_user_code,d.begin_time,d.remark,d.version,
+               d.STATUS,d.tenant_id,d.create_dept,d.create_user,d.create_time,d.update_user,d.update_time,
+               d.is_deleted,h.type_cd,h.proc_type,h.task_state,o.owner_name,w.wh_name
+        from task_detail d
+        LEFT JOIN task_header h on d.task_header_id = h.id
+        LEFT JOIN wms_owner o on d.wo_id=o.wo_id
+        LEFT JOIN wms_warehouse w on d.wh_id= w.wh_id
+        <where>
+            <if test="query.billNo!=null and query.billNo!=''">
+                AND  d.bill_no like concat('%',#{query.billNo},'%')
+            </if>
+            <if test="query.skuCode!=null and query.skuCode!=''">
+                AND  d.sku_code like  concat('%',#{query.skuCode},'%')
+            </if>
+            <if test="query.stockStatus!=null and query.stockStatus!=''">
+                AND  d.stock_status = #{query.stockStatus}
+            </if>
+            <if test="query.boxCode!=null and query.boxCode!=''">
+                AND d.box_code like  concat('%',#{query.boxCode},'%')
+            </if>
+            <if test="query.boxCode!=null and query.boxCode!=''">
+                AND d.box_code like  concat('%',#{query.boxCode},'%')
+            </if>
+            <if test="query.executorUserCode!=null and query.executorUserCode!=''">
+                AND   d.executor_user_code concat('%',#{query.executorUserCode},'%')
+            </if>
+            <if test="query.updateTimeBegin!=null and query.updateTimeBegin!='' and query.updateTimeEnd!=null and query.updateTimeEnd!=''">
+                AND  d.update_time between #{query.updateTimeBegin} and  #{query.updateTimeEnd}
+            </if>
+        </where>
+        order by d.create_time desc
+    </select>
+    <select id="getTaskList" resultType="org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse">
+        select d.id,d.task_detail_status,d.task_header_id,d.bill_id,d.bill_no,d.bill_detail_id,
+        d.bill_line_no,d.sku_id,d.sku_code,d.wsp_id,d.sku_level,d.um_code,d.um_name,d.plan_qty,
+        d.scan_qty,d.stock_id,d.stock_status,d.loc_id,d.target_loc_id,d.target_loc_code,d.sku_lot1,
+        d.sku_lot2,d.sku_lot3,d.sku_lot4,d.sku_lot5,d.sku_lot6,d.sku_lot7,d.sku_lot8,d.sku_lot9
+        ,d.sku_lot10,d.sku_lot11,d.sku_lot12,d.sku_lot13,d.sku_lot14,d.sku_lot15,d.sku_lot16,d.sku_lot17,
+        d.sku_lot18,d.sku_lot19,d.sku_lot20,d.sku_lot21,d.sku_lot22,d.sku_lot23,d.sku_lot24,d.sku_lot25,
+        d.sku_lot26,d.sku_lot27,d.sku_lot28,d.sku_lot29,d.sku_lot30,d.lpn_code,d.box_code,d.sn_code,
+        d.wh_id,d.wo_id,d.source,d.executor_user_id,d.executor_user_code,d.begin_time,d.remark,d.version,
+        d.STATUS,d.tenant_id,d.create_dept,d.create_user,d.create_time,d.update_user,d.update_time,
+        d.is_deleted,h.type_cd,h.proc_type,h.task_state,o.owner_name,w.wh_name
+        from task_detail d
+        LEFT JOIN task_header h on d.task_header_id = h.id
+        LEFT JOIN wms_owner o on d.wo_id=o.wo_id
+        LEFT JOIN wms_warehouse w on d.wh_id= w.wh_id
+        <where>
+            <if test="query.billNo!=null and query.billNo!=''">
+                AND  d.bill_no like concat('%',#{query.billNo},'%')
+            </if>
+            <if test="query.skuCode!=null and query.skuCode!=''">
+                AND  d.sku_code like  concat('%',#{query.skuCode},'%')
+            </if>
+            <if test="query.stockStatus!=null and query.stockStatus!=''">
+                AND  d.stock_status = #{query.stockStatus}
+            </if>
+            <if test="query.boxCode!=null and query.boxCode!=''">
+                AND d.box_code like  concat('%',#{query.boxCode},'%')
+            </if>
+            <if test="query.boxCode!=null and query.boxCode!=''">
+                AND d.box_code like  concat('%',#{query.boxCode},'%')
+            </if>
+            <if test="query.executorUserCode!=null and query.executorUserCode!=''">
+                AND   d.executor_user_code concat('%',#{query.executorUserCode},'%')
+            </if>
+            <if test="query.updateTimeBegin!=null and query.updateTimeBegin!='' and query.updateTimeEnd!=null and query.updateTimeEnd!=''">
+                AND  d.update_time between #{query.updateTimeBegin} and  #{query.updateTimeEnd}
+            </if>
+        </where>
+        order by d.create_time desc
+    </select>
+</mapper>
