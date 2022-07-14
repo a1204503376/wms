@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
  * 拣货记录日志
  **/
@@ -19,17 +22,17 @@ public class LogSoPick extends SkuLotBaseEntity {
 	 * 拣货记录id
 	 */
 	@TableId(value = "lsop_id", type = IdType.ASSIGN_ID)
-	private String lsopId;
+	private Long lsopId;
 
 	/**
 	 * 业务发生时间
 	 */
-	private String procTime;
+	private Date procTime;
 
 	/**
 	 * 库位id
 	 */
-	private String locId;
+	private Long locId;
 
 	/**
 	 * 库位编码
@@ -39,12 +42,12 @@ public class LogSoPick extends SkuLotBaseEntity {
 	/**
 	 * 任务id
 	 */
-	private String taskId;
+	private Long taskId;
 
 	/**
 	 * 物品id
 	 */
-	private String skuId;
+	private Long skuId;
 
 	/**
 	 * 物品编码
@@ -64,22 +67,22 @@ public class LogSoPick extends SkuLotBaseEntity {
 	/**
 	 * 波次id
 	 */
-	private String wellenId;
+	private Long wellenId;
 
 	/**
 	 * 波次编号
 	 */
-	private String wellenNo;
+	private Long wellenNo;
 
 	/**
 	 * 拣货量
 	 */
-	private String pickRealQty;
+	private BigDecimal pickRealQty;
 
 	/**
 	 * 包装id
 	 */
-	private String wspId;
+	private Long wspId;
 
 	/**
 	 * 包装名称
@@ -89,7 +92,12 @@ public class LogSoPick extends SkuLotBaseEntity {
 	/**
 	 * 层级
 	 */
-	private String skuLevel;
+	private Integer skuLevel;
+
+	/**
+	 * 计量单位编码
+	 */
+	private String wsuCode;
 
 	/**
 	 * 计量单位名称
@@ -99,7 +107,7 @@ public class LogSoPick extends SkuLotBaseEntity {
 	/**
 	 * 换算倍率
 	 */
-	private String convertQty;
+	private Integer convertQty;
 
 	/**
 	 * 容器编码
@@ -114,7 +122,7 @@ public class LogSoPick extends SkuLotBaseEntity {
 	/**
 	 * 单据id
 	 */
-	private String soBillId;
+	private Long soBillId;
 
 	/**
 	 * 单据编码
@@ -124,17 +132,17 @@ public class LogSoPick extends SkuLotBaseEntity {
 	/**
 	 * 发货清单id
 	 */
-	private String inventoryId;
+	private Long inventoryId;
 
 	/**
 	 * 明细id
 	 */
-	private String soDetailId;
+	private Long soDetailId;
 
 	/**
 	 * 拣货计划id
 	 */
-	private String pickPlanId;
+	private Long pickPlanId;
 
 	/**
 	 * 序列号
@@ -144,5 +152,5 @@ public class LogSoPick extends SkuLotBaseEntity {
 	/**
 	 * 库房id
 	 */
-	private String whId;
+	private Long whId;
 }

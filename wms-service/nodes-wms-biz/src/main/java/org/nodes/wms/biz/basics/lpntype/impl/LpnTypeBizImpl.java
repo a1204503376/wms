@@ -3,7 +3,6 @@ package org.nodes.wms.biz.basics.lpntype.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
-import org.nodes.wms.dao.putway.dto.modular.LpnTypeFactory;
 import org.nodes.wms.dao.basics.lpntype.LpnTypeDao;
 import org.nodes.wms.dao.basics.lpntype.dto.input.*;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeByIdResponse;
@@ -12,6 +11,7 @@ import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypePageResponse;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeSelectResponse;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
+import org.nodes.wms.dao.putway.dto.modular.LpnTypeFactory;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -40,7 +40,7 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 	@Override
 	public IPage<LpnTypePageResponse> getPage(Query query, LpnTypePageQuery lpnTypePageQuery) {
 		IPage<LpnTypePageResponse> page = Condition.getPage(query);
-		return lpnTypeDao.selectPage(page,lpnTypePageQuery);
+		return lpnTypeDao.selectPage(page, lpnTypePageQuery);
 	}
 
 	/**
@@ -50,8 +50,7 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 	@Override
 	public boolean newLpnType(NewLpnTypeRequest lpnTypeRequest) {
 		boolean existCarrierCode = lpnTypeDao.isExistCarrierCode(lpnTypeRequest.getCode());
-		if(existCarrierCode)
-		{
+		if (existCarrierCode) {
 			throw new ServiceException("新增容器失败，容器类型编码重复");
 		}
 		return lpnTypeDao.insert(lpnTypeFactory.createLpnType(lpnTypeRequest));
@@ -78,6 +77,7 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 
 	/**
 	 * 容器ById查询
+	 *
 	 * @param lpnTypeByIdRequest 容器ById请求对象
 	 * @return 容器ById查询返回对象
 	 */
@@ -88,6 +88,7 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 
 	/**
 	 * 根据id修改容器
+	 *
 	 * @param lpnTypeRequest 修改请求对象
 	 * @return 是否成功
 	 */
@@ -96,34 +97,43 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 		return lpnTypeDao.updateById(lpnTypeFactory.createLpnType(lpnTypeRequest));
 	}
 
-    @Override
-    public LpnType findLpnTypeById(Long id) {
+	@Override
+	public LpnType findLpnTypeById(Long id) {
 		return lpnTypeDao.getLpnTypeById(id);
-    }
+	}
 
 	@Override
 	public LpnType findLpnTypeByCode(String code) {
 		return lpnTypeDao.getLpnTypeByCode(code);
 	}
 
-    @Override
-    public List<LpnTypeSelectResponse> findLpnTypeSelectList() {
-        return lpnTypeDao.getLpnTypeSelectList();
-    }
+	@Override
+	public List<LpnTypeSelectResponse> findLpnTypeSelectList() {
+		return lpnTypeDao.getLpnTypeSelectList();
+	}
 
-    @Override
-    public LpnTypeCodeEnum parseBoxCode(String boxCode) {
-        LpnTypeCodeEnum[] lpnTypeCodeEnum = LpnTypeCodeEnum.values();
-		for (LpnTypeCodeEnum item:lpnTypeCodeEnum){
-			if(item.getCode().equals(boxCode.substring(0,1))){
+	@Override
+	public LpnTypeCodeEnum parseBoxCode(String boxCode) {
+		LpnTypeCodeEnum[] lpnTypeCodeEnum = LpnTypeCodeEnum.values();
+		for (LpnTypeCodeEnum item : lpnTypeCodeEnum) {
+			if (item.getCode().equals(boxCode.substring(0, 1))) {
 				return item;
 			}
 		}
-	   throw new ServiceException("查询失败,箱码输入错误");
-    }
+		throw new ServiceException("查询失败,箱码输入错误");
+	}
 
-    @Override
-    public LpnType findLpnTypeByBoxCode(String boxCode) {
-        return lpnTypeDao.getLpnTypeByCode(boxCode);
-    }
+	@Override
+	public LpnTypeCodeEnum tryParseBoxCode(String boxCode) {
+		try {
+			return parseBoxCode(boxCode);
+		} catch (Throwable throwable) {
+			return LpnTypeCodeEnum.UNKNOWN;
+		}
+	}
+
+	@Override
+	public LpnType findLpnTypeByBoxCode(String boxCode) {
+		return lpnTypeDao.getLpnTypeByCode(boxCode);
+	}
 }

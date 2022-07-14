@@ -1,9 +1,12 @@
 package com.nodes.project.api.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.google.common.collect.Lists;
 import com.nodes.common.enums.IPairs;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 /**
  * JOB 状态
@@ -95,12 +98,12 @@ public enum JobStatusEnum implements IPairs<Integer, String, JobStatusEnum> {
         return desc;
     }
 
-    public static JobStatusEnum getByKey(Integer key) {
-        for (JobStatusEnum value : values()) {
-            if (value.key().equals(key)) {
-                return value;
-            }
-        }
-        throw new IllegalArgumentException("枚举KEY非法");
+    public static List<JobStatusEnum> listByAllow() {
+        return Lists.newArrayList(
+                JobStatusEnum.NOT_STARTED,
+                JobStatusEnum.AGV_RETURN_FAILED,
+                JobStatusEnum.CALL_AGV_EXCEPTION,
+                JobStatusEnum.CONTINUE_EXECUTE
+        );
     }
 }

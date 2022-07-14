@@ -34,7 +34,7 @@ public interface SkuMapper extends BaseMapper<Sku> {
 	 * @param skuId: 物品id
 	 * @return List<SkuUmSelectResponse>
 	 */
-    List<SkuUmSelectResponse> listSkuUmBySkuId(@Param("skuId") Long skuId);
+	List<SkuUmSelectResponse> listSkuUmBySkuId(@Param("skuId") Long skuId);
 
 	/**
 	 * 根据物品id查询包装和包装明细
@@ -46,7 +46,7 @@ public interface SkuMapper extends BaseMapper<Sku> {
 
 	SkuUm getSkuUmByUmCode(@Param("skuUmCode") String skuUmCode);
 
-    SkuPackageDetail getBaseSkuPackageDetail(@Param("skuId")Long skuId);
+	SkuPackageDetail getBaseSkuPackageDetail(@Param("skuId") Long skuId);
 
 	/**
 	 * 根据包装id查询包装信息
@@ -55,4 +55,13 @@ public interface SkuMapper extends BaseMapper<Sku> {
 	 * @return SkuPackage
 	 */
 	SkuPackage selectSkuPackageByWspId(@Param("wspId") Long wspId);
+
+	/**
+	 * 根据物料id和计量单位编码获取包装明细
+	 *
+	 * @param skuId   物料id
+	 * @param wsuCode 计量单位编码
+	 * @return 包装明细
+	 */
+	SkuPackageDetail getSkuPackageDetailBySkuId(@Param("skuId")Long skuId,@Param("wsuCode") String wsuCode);
 }

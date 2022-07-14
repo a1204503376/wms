@@ -1,10 +1,10 @@
 package org.nodes.wms.dao.stock.dto.input;
 
 import lombok.Data;
-import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 库存分页查询参数dto
@@ -15,11 +15,11 @@ public class StockPageQuery implements Serializable {
 	/**
 	 * 物品编码
 	 */
-	private String skuCode;
+	private List<Long> skuIds;
 	/**
 	 * 生产批次
 	 */
-	private String SkuLot1;
+	private String skuLot1;
 	/**
 	 * 库位编码
 	 */
@@ -27,8 +27,9 @@ public class StockPageQuery implements Serializable {
 	/**
 	 * 库存状态
 	 */
-	private StockStatusEnum stockStatus;
+	private List<Integer> stockStatusList;
 	/**
+	 * /**
 	 * 库区编码
 	 */
 	private String zoneCode;
@@ -43,39 +44,43 @@ public class StockPageQuery implements Serializable {
 	/**
 	 * 规格型号
 	 */
-	private String SkuLot2;
+	private String skuLot2;
 	/**
-	 * 收货日期
+	 * 收货日期开始
 	 */
-	private String SkuLot3;
+	private String receiveTimeBegin;
+	/**
+	 * 收货日期结束
+	 */
+	private String receiveTimeEnd;
 	/**
 	 * 专用客户
 	 */
-	private String SkuLot4;
+	private String skuLot4;
 	/**
 	 * 钢背批次
 	 */
-	private String SkuLot5;
+	private String skuLot5;
 	/**
 	 * 摩擦块批次
 	 */
-	private String SkuLot6;
+	private String skuLot6;
 	/**
 	 * 产品标识代码
 	 */
-	private String SkuLot7;
+	private String skuLot7;
 	/**
 	 * CRCC
 	 */
-	private String SkuLot8;
+	private String skuLot8;
 	/**
 	 * 库房编码
 	 */
-	private String whCode;
+	private List<Long> whIdList;
 	/**
-	 * 货主编码
+	 * 货主
 	 */
-	private Long ownerCode;
+	private Long woId;
 	/**
 	 * 最近入库时间开始
 	 */

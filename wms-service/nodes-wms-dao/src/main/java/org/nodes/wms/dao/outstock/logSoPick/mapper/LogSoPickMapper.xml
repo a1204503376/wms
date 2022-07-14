@@ -22,7 +22,6 @@
         sku_code,
         sku_name,
         lot_number,
-        wellen_no,
         pick_real_qty,
         wsp_name,
         wsu_name,
@@ -33,5 +32,111 @@
         <if test="page.orders == null or page.orders.size == 0 ">
             ORDER BY create_time DESC
         </if>
+    </select>
+
+    <sql id="pageOrList">
+        SELECT
+        lsp.lsop_id,
+        lsp.so_bill_no,
+        header.bill_type_name,
+        detail.so_line_no,
+        lsp.sku_name,
+        lsp.sku_code,
+        lsp.box_code,
+        lsp.sn_code,
+        lsp.lpn_code,
+        lsp.pick_real_qty,
+        lsp.wsu_name,
+        lsp.sn_code,
+        lsp.create_time,
+        `user`.real_name as createUserName,
+        lsp.sku_lot1,
+        lsp.sku_lot2,
+        lsp.sku_lot3,
+        lsp.sku_lot4,
+        lsp.sku_lot5,
+        lsp.sku_lot6,
+        lsp.sku_lot7,
+        lsp.sku_lot8,
+        lsp.sku_lot9,
+        lsp.sku_lot10,
+        lsp.sku_lot11,
+        lsp.sku_lot12,
+        lsp.sku_lot13,
+        lsp.sku_lot14,
+        lsp.sku_lot15,
+        lsp.sku_lot17,
+        lsp.sku_lot18,
+        lsp.sku_lot19,
+        lsp.sku_lot20,
+        lsp.sku_lot21,
+        lsp.sku_lot22,
+        lsp.sku_lot23,
+        lsp.sku_lot24,
+        lsp.sku_lot25,
+        lsp.sku_lot26,
+        lsp.sku_lot27,
+        lsp.sku_lot28,
+        lsp.sku_lot29,
+        lsp.sku_lot30
+        FROM log_so_pick lsp
+        LEFT JOIN (
+            SELECT
+            so_header.so_bill_id,
+            so_header.so_bill_state,
+            wms_bill_type.bill_type_cd,
+            wms_bill_type.bill_type_name
+            FROM so_header
+            LEFT JOIN wms_bill_type ON wms_bill_type.bill_type_cd = so_header.bill_type_cd
+        )as header ON header.so_bill_id = lsp.so_bill_id
+        LEFT JOIN so_detail detail ON detail.so_detail_id = lsp.so_detail_id
+        LEFT JOIN blade_user `user` ON `user`.id = lsp.create_user
+        <where>
+            lsp.is_deleted = 0
+            <if test="param.soBillNo != null and param.soBillNo != ''">
+                AND lsp.so_bill_no LIKE CONCAT('%', #{param.soBillNo} ,'%')
+            </if>
+            <if test="param.billTypeCdList != null and param.billTypeCdList.size != 0">
+                AND header.bill_type_cd IN
+                <foreach collection="param.billTypeCdList" close=")" open="(" separator="," item="item">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="param.skuIdList != null and param.skuIdList.size != 0">
+                AND lsp.sku_id IN
+                <foreach collection="param.skuIdList" close=")" open="(" separator="," item="item">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="param.boxCode != null and param.boxCode != ''">
+                AND lsp.box_code LIKE CONCAT('%', #{param.boxCode} ,'%')
+            </if>
+            <if test="param.lpnCode != null and param.lpnCode != ''">
+                AND lsp.lpn_code LIKE CONCAT('%', #{param.lpnCode} ,'%')
+            </if>
+            <if test="param.snCode != null and param.snCode != ''">
+                AND lsp.sn_code LIKE CONCAT('%', #{param.snCode} ,'%')
+            </if>
+            <if test="param.createTimeBegin != null">
+                AND lsp.create_time &gt;= #{param.createTimeBegin}
+            </if>
+            <if test="param.createTimeEnd != null">
+                AND lsp.create_time &lt;= #{param.createTimeEnd}
+            </if>
+            <if test="param.createUser != null and param.createUser !=''">
+                AND `user`.real_name LIKE CONCAT('%', #{param.createUser} ,'%')
+            </if>
+        </where>
+    </sql>
+    <select id="page" resultType="org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickPageResponse">
+        <include refid="pageOrList"/>
+        <if test="page.orders == null or page.orders.size == 0">
+            ORDER BY lsp.create_time DESC
+        </if>
+    </select>
+
+    <select id="listByQuery"
+            resultType="org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPicExcelResponse">
+        <include refid="pageOrList"/>
     </select>
 </mapper>

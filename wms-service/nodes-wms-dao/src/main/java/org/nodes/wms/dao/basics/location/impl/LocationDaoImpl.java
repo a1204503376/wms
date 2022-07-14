@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.basics.location.LocationDao;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
 import org.nodes.wms.dao.basics.location.dto.output.LocationDetailResponse;
@@ -146,6 +147,8 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 
 	@Override
 	public List<Location> getLocationByZoneType(List<Long> locIdList, Integer zoneType) {
+		AssertUtil.notEmpty(locIdList, "判断是否有虚拟库位失败，库位集合为空");
+
 		return locationMapper.getLocationByZoneType(locIdList, zoneType);
 	}
 

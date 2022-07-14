@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.nodes.wms.dao.basics.sku.dto.input.SkuSelectRequest;
+import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
 
 import java.math.BigDecimal;
 
@@ -11,7 +12,7 @@ import java.math.BigDecimal;
  * 收货单编辑接收前端收货单明细类
  */
 @Data
-public class EditReceiveDetailRequest {
+public class EditReceiveDetailRequest extends BaseSkuLot {
 	/**
 	 * 收货单明细id
 	 */
@@ -29,7 +30,6 @@ public class EditReceiveDetailRequest {
 	 * 实收数量
 	 */
 	private BigDecimal scanQty;
-
 	/**
 	 * 计量单位编码
 	 */
@@ -49,21 +49,21 @@ public class EditReceiveDetailRequest {
 	/**
 	 * 生产批次
 	 */
-	private String skuLot1;
+//	private String skuLot1;
 	/**
 	 * 客户
 	 */
-	private String skuLot4;
+//	private String skuLot4;
 	/**
 	 * 钢背批次
 	 */
-	private String skuLot5;
+//	private String skuLot5;
 	/**
 	 * 摩擦块批次
 	 */
-	private String  skuLot6;
+//	private String  skuLot6;
 	/**
 	 * CRCC
 	 */
-	private String skuLot8;
+//	private String skuLot8;
 }

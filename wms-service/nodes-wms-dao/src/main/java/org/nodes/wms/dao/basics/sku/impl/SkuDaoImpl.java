@@ -25,15 +25,15 @@ public class SkuDaoImpl
 		return super.baseMapper.listTop10BySkuCodeSkuName(skuCode, skuName);
 	}
 
-    @Override
-    public Sku getById(Long skuId) {
-        return super.getById(skuId);
-    }
+	@Override
+	public Sku getById(Long skuId) {
+		return super.getById(skuId);
+	}
 
-    @Override
-    public List<SkuUmSelectResponse> listSkuUmBySkuId(Long skuId) {
-        return super.baseMapper.listSkuUmBySkuId(skuId);
-    }
+	@Override
+	public List<SkuUmSelectResponse> listSkuUmBySkuId(Long skuId) {
+		return super.baseMapper.listSkuUmBySkuId(skuId);
+	}
 
 	@Override
 	public SkuPackageAggregate getSkuPackageAggregateBySkuId(Long skuId) {
@@ -45,15 +45,15 @@ public class SkuDaoImpl
 		return super.baseMapper.getSkuUmByUmCode(skuUmCode);
 	}
 
-    @Override
-    public SkuPackageDetail getBaseSkuPackageDetail(Long skuId) {
+	@Override
+	public SkuPackageDetail getBaseSkuPackageDetail(Long skuId) {
 		return super.baseMapper.getBaseSkuPackageDetail(skuId);
-    }
+	}
 
-    @Override
-    public Sku getSkuByCode(String skuCode) {
-		return super.getOne(new LambdaQueryWrapper<Sku>().eq(Sku::getSkuCode,skuCode));
-    }
+	@Override
+	public Sku getSkuByCode(String skuCode) {
+		return super.getOne(new LambdaQueryWrapper<Sku>().eq(Sku::getSkuCode, skuCode));
+	}
 
 	@Override
 	public void saveSku(Sku sku) {
@@ -71,6 +71,17 @@ public class SkuDaoImpl
 		skuQueryWrapper.select("distinct sku_spec");
 		skuQueryWrapper.isNotNull("sku_spec");
 		return super.list(skuQueryWrapper);
+	}
+
+	@Override
+	public int countByCode(String skuCode) {
+
+		return super.count(new LambdaQueryWrapper<Sku>().eq(Sku::getSkuCode, skuCode));
+	}
+
+	@Override
+	public SkuPackageDetail getSkuPackageDetailBySkuId(Long skuId, String wsuCode) {
+		return super.baseMapper.getSkuPackageDetailBySkuId(skuId,wsuCode);
 	}
 
 }

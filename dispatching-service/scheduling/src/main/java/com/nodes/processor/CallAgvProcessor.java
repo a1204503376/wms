@@ -1,24 +1,24 @@
 package com.nodes.processor;
 
+import com.nodes.project.api.service.ProcessorService;
+import org.springframework.stereotype.Component;
 import tech.powerjob.worker.core.processor.ProcessResult;
 import tech.powerjob.worker.core.processor.TaskContext;
 import tech.powerjob.worker.core.processor.sdk.BasicProcessor;
 
+import javax.annotation.Resource;
+
 /**
- * 呼叫AGV
+ * 呼叫AGV 处理器
  */
+@Component
 public class CallAgvProcessor implements BasicProcessor {
+
+    @Resource
+    private ProcessorService processorService;
 
     @Override
     public ProcessResult process(TaskContext context) throws Exception {
-
-        // 1.查询上下文中的JOB实例
-        // 2.组装相关参数呼叫AGV API
-        // 2.1更新JOB的状态，默认成功状态
-        // 3.呼叫AGV失败：记录到失败日志表,记录失败状态到JOB
-        // 4.呼叫AGV成功：更新JOB相关状态
-
-
-        return null;
+        return processorService.callAgv(context);
     }
 }

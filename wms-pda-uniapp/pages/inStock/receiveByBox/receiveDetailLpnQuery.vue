@@ -65,10 +65,7 @@
 		},
 		methods: {
 			esc() {
-				this.$destroy('keyboardListener')
-				uni.$u.func.routeNavigateTo('/pages/home/childrenHome' ,{
-					name: '收货'
-				});
+				uni.$u.func.navigateBackTo(1);
 			},
 			getReceiveDetailList() {
 				receive.getReceiveDetailLpn(this.param.boxCode).then(res => {

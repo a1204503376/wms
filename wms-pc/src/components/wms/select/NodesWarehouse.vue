@@ -2,9 +2,10 @@
     <el-select
         v-model="val"
         :multiple="multiple"
-        :size="size"
         collapse-tags
         placeholder="请选择"
+        :size="size"
+        :disabled="disabled"
         @change="onChange">
         <el-option
             v-for="item in dataSource"
@@ -37,7 +38,9 @@ export default {
         //是否有默认值 true:有默认值  默认为false 编辑时将其设置为true
         defaultValue: {type: Boolean, required: false, default: () => false},
         // 组件大小，默认为mini, 支持 medium/small/mini
-        size: {type: String, required: false, default: () => "mini"}
+        size: {type: String, required: false, default: () => "mini"},
+        // 是否禁用 默认为 false不禁用
+        disabled: {type: Boolean, required: false, default: () => false}
     },
     data() {
         return {

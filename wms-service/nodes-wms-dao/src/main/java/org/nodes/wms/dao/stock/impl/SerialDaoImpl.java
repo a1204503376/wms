@@ -14,6 +14,7 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 库存序列号Dao接口实现类
@@ -59,7 +60,19 @@ public class SerialDaoImpl extends BaseServiceImpl<SerialMapper, Serial> impleme
         return super.list(queryWrapper);
     }
 
-    @Override
+	@Override
+	public List<String> getSerialNoByStockId(Long stockId) {
+		List<Serial> serialList = getSerialByStockId(stockId);
+		if (Func.isNotEmpty(serialList)){
+			return serialList.stream()
+				.map(Serial::getSerialNumber)
+				.collect(Collectors.toList());
+		}
+
+		return null;
+	}
+
+	@Override
 	public void updateSerialState(List<String> serialNoList, SerialStateEnum state, Long stockId) {
 		if (Func.isEmpty(serialNoList)){
 			throw new NullArgumentException("更新序列号状态");

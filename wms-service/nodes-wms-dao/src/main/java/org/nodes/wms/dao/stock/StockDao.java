@@ -122,4 +122,10 @@ public interface StockDao {
 	 */
 	Page<StockPageResponse> page(IPage<StockPageResponse> page, StockPageQuery stockPageQuery);
 
+	/**
+	 * 获取导出数据集合
+	 * @param stockPageQuery 查询参数
+	 * @return
+	 */
+    List<StockPageResponse> getStockResponseByQuery(StockPageQuery stockPageQuery);
 }

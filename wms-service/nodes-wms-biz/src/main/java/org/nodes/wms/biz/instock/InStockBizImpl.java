@@ -173,7 +173,7 @@ public class InStockBizImpl implements InStockBiz {
 //			List<ReceiveLog> receiveLogList = receiveLogBiz.findReceiveLog(receiveIdList);
 			// 下架库存
 			Stock stock = stockBiz.findStockOnStage(item);
-			stockBiz.outStockByCancleReceive(StockLogTypeEnum.OUTSTOCK_BY_CANCEL_RECEIVE, item, stock);
+			stockBiz.outStockByCancelReceive(StockLogTypeEnum.OUTSTOCK_BY_CANCEL_RECEIVE, item, stock);
 			// 更新收货单明细
 			ReceiveDetail receiveDetail = receiveBiz.getDetailByReceiveDetailId(item.getReceiveDetailId());
 			receiveBiz.updateReceiveDetail(receiveDetail, item.getQty());

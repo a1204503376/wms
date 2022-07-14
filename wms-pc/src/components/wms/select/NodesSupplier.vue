@@ -8,10 +8,10 @@
         placeholder="请输入供应商编码或名称"
         remote
         reserve-keyword
-        size="mini"
-        style="width: 450px"
         value-key="id"
         :multiple="multiple"
+        :size="size"
+        :disabled="disabled"
         @change="onChange">
         <el-option
             v-for="item in options"
@@ -38,7 +38,11 @@ export default {
     props: {
         selectVal: [Object,String,Array],
         // 是否多选 true:多选 默认为单选
-        multiple: {type: Boolean, required: false, default:()=>false}
+        multiple: {type: Boolean, required: false, default:()=>false},
+        // 组件大小，默认为mini, 支持 medium/small/mini
+        size: {type: String, required: false, default: () => "mini"},
+        // 是否禁用 默认为 false不禁用
+        disabled: {type: Boolean, required: false, default: () => false}
     },
     data() {
         return {
