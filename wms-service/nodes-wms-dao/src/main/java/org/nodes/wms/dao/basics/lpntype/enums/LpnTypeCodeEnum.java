@@ -11,13 +11,14 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum LpnTypeCodeEnum {
-	A("A","A箱"),
+	A("A", "A箱"),
 
-	B("B","B箱"),
+	B("B", "B箱"),
 
-	C("C","C箱"),
+	C("C", "C箱"),
 
-	D("D","D箱");
+	D("D", "D箱"),
+	UNKNOWN("0", "未知箱型");
 
 	@EnumValue
 	private final String code;

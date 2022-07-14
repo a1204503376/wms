@@ -356,7 +356,7 @@ public class StockBizImpl implements StockBiz {
 										  String billNo, String lineNo) {
 		List<Stock> sourceStockList = stockDao.getStockByBoxCode(boxCode, null);
 		List<Stock> targetStockList = new ArrayList<>();
-		for (Stock sourceStock : sourceStockList){
+		for (Stock sourceStock : sourceStockList) {
 			List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
 			Stock targetStock = moveStock(sourceStock, serialNoList, StockUtil.getStockBalance(sourceStock),
 				targetBoxCode, targetLpnCode, targetLocation, type, billId, billNo, lineNo);
@@ -371,7 +371,7 @@ public class StockBizImpl implements StockBiz {
 										  StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
 		List<Stock> sourceStockList = stockDao.getStockByLpnCode(lpnCode, null);
 		List<Stock> targetStockList = new ArrayList<>();
-		for (Stock sourceStock : sourceStockList){
+		for (Stock sourceStock : sourceStockList) {
 			List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
 			Stock targetStock = moveStock(sourceStock, serialNoList, StockUtil.getStockBalance(sourceStock),
 				sourceStock.getBoxCode(), targetLpnCode, targetLocation, type, billId, billNo, lineNo);
@@ -395,6 +395,8 @@ public class StockBizImpl implements StockBiz {
 		} else {
 			stockLog.setCurrentPickQty(qty);
 		}
+
+		stockLogDao.save(stockLog);
 		return stockLog;
 	}
 
@@ -438,7 +440,7 @@ public class StockBizImpl implements StockBiz {
 			//取出每个分组里的库存集合
 			List<Stock> stocks = entry.getValue();
 			//获取箱型
-			String lpnType = lpnTypeBiz.parseBoxCode(stocks.get(0).getBoxCode()).getCode();
+			String lpnType = lpnTypeBiz.tryParseBoxCode(stocks.get(0).getBoxCode()).getCode();
 			//如果是D箱型则根据lpn查询同一托盘的所有库存
 			if (lpnType.equals(LpnTypeCodeEnum.D.getCode())) {
 				// 根据lpnCoe获取同一托盘的所有库存

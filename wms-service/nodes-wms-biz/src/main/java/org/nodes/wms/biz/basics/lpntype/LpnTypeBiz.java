@@ -99,9 +99,18 @@ public interface LpnTypeBiz {
 	LpnTypeCodeEnum parseBoxCode(String boxCode);
 
 	/**
+	 * 解析箱型, 天宜定制功能
+	 *
+	 * @param boxCode 箱码
+	 * @return
+	 */
+	LpnTypeCodeEnum tryParseBoxCode(String boxCode);
+
+	/**
 	 * 天宜定制：根据箱型获取容器列别
+	 *
 	 * @param boxCode
 	 * @return
 	 */
-    LpnType findLpnTypeByBoxCode(String boxCode);
+	LpnType findLpnTypeByBoxCode(String boxCode);
 }
