@@ -224,4 +224,18 @@ export default [
                 component: () => import('@/views/wms/outstock/soHeader/soBillDetail')
             }]
     },
+    {
+        path: '/logSoPick',
+        component: Layout,
+        children: [
+            {
+                path: 'createReceiveBill',
+                name: '创建收货单',
+                props: ($route) => {
+                    return { lsopIds: $route.query.lsopIds };
+                },
+                component: () => import('@/views/wms/instock/receive/receiveNewForLogSoPick')
+            }
+        ]
+    }
 ]

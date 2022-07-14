@@ -7,6 +7,7 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPicExcelResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickForSoDetailResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickIndexResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickPageResponse;
+import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 
 import java.util.List;
 
@@ -47,4 +48,12 @@ public interface LogSoPickDao {
 	 * @return List<LogSoPicExcelResponse>
 	 */
 	List<LogSoPicExcelResponse> listByQuery(LogSoPickPageQuery logSoPickPageQuery);
+
+	/**
+	 * 根据拣货记录id获取拣货记录日志信息
+	 *
+	 * @param lsopIdList: 拣货记录id
+	 * @return List<LogSoPick> 拣货记录信息
+	 */
+	List<LogSoPick> getByIds(List<Long> lsopIdList);
 }
