@@ -4,12 +4,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
+import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
-public class EditReceiveDetailResponse implements Serializable {
+public class EditReceiveDetailResponse extends BaseSkuLot implements Serializable {
 	private static final long serialVersionUID = -1896492170322284739L;
 	/**
 	 * 收货单明细id
@@ -28,7 +29,6 @@ public class EditReceiveDetailResponse implements Serializable {
 	 * 实收数量
 	 */
 	private BigDecimal scanQty;
-
 	/**
 	 * 计量单位编码
 	 */
@@ -44,25 +44,25 @@ public class EditReceiveDetailResponse implements Serializable {
 	/**
 	 * 行号
 	 */
-   private  String lineNumber;
+	private String lineNumber;
 	/**
 	 * 生产批次
 	 */
-	private String skuLot1;
+//	private String skuLot1;
 	/**
 	 * 客户
 	 */
-	private String skuLot4;
+//	private String skuLot4;
 	/**
 	 * 钢背批次
 	 */
-	private String skuLot5;
+//	private String skuLot5;
 	/**
 	 * 摩擦块批次
 	 */
-	private String  skuLot6;
+//	private String  skuLot6;
 	/**
 	 * CRCC
 	 */
-	private String skuLot8;
+//	private String skuLot8;
 }

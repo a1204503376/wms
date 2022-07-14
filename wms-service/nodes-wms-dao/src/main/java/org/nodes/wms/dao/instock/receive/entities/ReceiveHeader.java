@@ -75,7 +75,7 @@ public class ReceiveHeader extends TenantEntity {
 	/**
 	 * 供应商id
 	 */
-	private long supplierId;
+	private Long supplierId;
 
 	/**
 	 * 供应商编码
