@@ -63,13 +63,17 @@
 		},
 		methods: {
 			esc() {
-				uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgvQuery', {
-					name: '收货'
-				});
+				uni.$u.func.navigateBackTo(1);
 			},
 
 
 			clickItem(index) {
+				if(this.stockList[index].lpnType==='0'){
+					this.$u.func.showToast({
+						title: '箱码类型错误，请重新选择'
+					})
+					return
+				}
 				uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgv',this.stockList[index]);
 			},
 

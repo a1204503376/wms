@@ -100,10 +100,16 @@ export default [
                 component: () => import('@/views/wms/instock/receive/receiveNew')
             },
             {
-                path: 'edit/:id/:receiveId',
+                path: 'edit/:receiveId',
                 name: '编辑收货单',
                 props: true,
                 component: () => import('@/views/wms/instock/receive/receiveEdit')
+            },
+            {
+                path: 'receiveByPc/:receiveId',
+                name: 'PC收货',
+                props: true,
+                component: () => import('@/views/wms/instock/receive/receiveByPc')
             },
             {
                 path: 'detail/:receiveId',
