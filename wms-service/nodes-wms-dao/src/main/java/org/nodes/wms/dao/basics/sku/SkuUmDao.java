@@ -31,4 +31,11 @@ public interface SkuUmDao {
 	 * @param skuUm 计量单位实体
 	 */
 	void insert(SkuUm skuUm);
+
+	/**
+	 * 根据编码获取数据条数
+	 * @param umCode 计量单位编码
+	 * @return 数据条数
+	 */
+	int countByCode(String umCode);
 }

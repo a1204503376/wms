@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 import java.math.BigDecimal;
+
 /**
  * 收货单 清点表
  **/
@@ -24,7 +26,7 @@ public class ReceiveLog extends BaseSkuLotEntity {
 	 */
 	private Long receiveId;
 	/**
-	 *  收货单据编码
+	 * 收货单据编码
 	 */
 	private String receiveNo;
 	/**
@@ -39,6 +41,10 @@ public class ReceiveLog extends BaseSkuLotEntity {
 	 * 收货单明细ID
 	 */
 	private Long receiveDetailId;
+	/**
+	 * 供应商id
+	 */
+	private Long supplierId;
 	/**
 	 * 订单行号
 	 */
@@ -111,5 +117,9 @@ public class ReceiveLog extends BaseSkuLotEntity {
 	 * 计量单位编码
 	 */
 	private String wsuCode;
+	/**
+	 * 库存状态
+	 */
+	private StockStatusEnum stockStatus;
 }
 

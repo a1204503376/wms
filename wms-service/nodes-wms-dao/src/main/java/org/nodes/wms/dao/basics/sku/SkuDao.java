@@ -26,7 +26,7 @@ public interface SkuDao {
 	 * @param skuId: 物品id
 	 * @return Sku
 	 */
-    Sku getById(Long skuId);
+	Sku getById(Long skuId);
 
 	/**
 	 * 根据物品id查询所有计量单位，基础计量单位放第一个
@@ -34,7 +34,7 @@ public interface SkuDao {
 	 * @param skuId: 物品id
 	 * @return List<SkuUmSelectResponse>
 	 */
-    List<SkuUmSelectResponse> listSkuUmBySkuId(Long skuId);
+	List<SkuUmSelectResponse> listSkuUmBySkuId(Long skuId);
 
 	/**
 	 * 根据物品id查询包装明细
@@ -46,18 +46,20 @@ public interface SkuDao {
 
 	/**
 	 * 根据计量单位编码查询计量单位实体
+	 *
 	 * @param skuUmCode:计量单位编码
 	 * @return SkuUm
 	 */
 	SkuUm getSkuUmByUmCode(String skuUmCode);
 
-    SkuPackageDetail getBaseSkuPackageDetail(Long skuId);
+	SkuPackageDetail getBaseSkuPackageDetail(Long skuId);
 
 	/**
 	 * 根据物品编码查询物品实体
+	 *
 	 * @param skuCode 物品编码
 	 */
-    Sku getSkuByCode(String skuCode);
+	Sku getSkuByCode(String skuCode);
 
 	/**
 	 * 新增或修改物品信息
@@ -77,7 +79,23 @@ public interface SkuDao {
 
 	/**
 	 * 获取sku的List集合
+	 *
 	 * @return sku的List集合
 	 */
 	List<Sku> getSkuList();
+
+	/**
+	 * 根据编码查询数据条数
+	 *
+	 * @param skuCode 物料编码
+	 */
+	int countByCode(String skuCode);
+
+	/**
+	 * 根据物料id和计量单位编码获取
+	 * @param skuId 物料id
+	 * @param wsuCode 计量单位编码
+	 * @return 包装明细
+	 */
+	SkuPackageDetail getSkuPackageDetailBySkuId(Long skuId, String wsuCode);
 }

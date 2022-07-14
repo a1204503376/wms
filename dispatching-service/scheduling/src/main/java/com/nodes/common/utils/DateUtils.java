@@ -121,6 +121,14 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
     /**
+     * 计算与当前时间相差的分钟数
+     */
+    public static long differenceMinutes(LocalDateTime begin, LocalDateTime end) {
+        Duration duration = Duration.between(begin, end);
+        return Math.abs(duration.toMinutes());
+    }
+
+    /**
      * 计算两个时间差
      */
     public static String getDatePoor(Date endDate, Date nowDate) {
@@ -140,6 +148,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         // long sec = diff % nd % nh % nm / ns;
         return day + "天" + hour + "小时" + min + "分钟";
     }
+
 
     /**
      * 增加 LocalDateTime ==> Date

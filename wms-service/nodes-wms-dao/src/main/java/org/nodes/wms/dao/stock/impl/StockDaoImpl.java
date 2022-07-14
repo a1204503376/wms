@@ -190,6 +190,7 @@ public class StockDaoImpl
 		UpdateWrapper<Stock> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
 			.eq(Stock::getStockId, stockId);
+		// 更新对象
 		Stock stock = new Stock();
 		stock.setStockQty(stockQty);
 		stock.setStayStockQty(stayStockQty);
@@ -239,4 +240,9 @@ public class StockDaoImpl
 	public Page<StockPageResponse> page(IPage<StockPageResponse> page, StockPageQuery stockPageQuery) {
 		return super.baseMapper.getPage(page, stockPageQuery);
 	}
+
+    @Override
+    public List<StockPageResponse> getStockResponseByQuery(StockPageQuery stockPageQuery) {
+        return super.baseMapper.getStockResponseByQuery(stockPageQuery);
+    }
 }

@@ -2,7 +2,6 @@ package org.nodes.wms.dao.basics.sku.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import org.nodes.wms.dao.basics.customer.entities.BasicsCustomer;
 import org.nodes.wms.dao.basics.sku.SkuUmDao;
 import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.dao.basics.sku.mapper.SkuUmMapper;
@@ -40,4 +39,9 @@ public class SkuUmDaoImpl extends BaseServiceImpl<SkuUmMapper, SkuUm>
 	public void insert(SkuUm skuUm) {
 		super.save(skuUm);
 	}
+
+    @Override
+    public int countByCode(String umCode) {
+		return super.count(new LambdaQueryWrapper<SkuUm>().eq(SkuUm::getWsuCode,umCode));
+    }
 }

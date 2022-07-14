@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nodes.project.api.mapper.JobTimeoutMapper">
+
+    <resultMap id="BaseResultMap" type="com.nodes.project.api.domain.JobTimeout">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="wmsTaskId" column="wms_task_id" jdbcType="BIGINT"/>
+            <result property="wmsTaskDetailId" column="wms_task_detail_id" jdbcType="BIGINT"/>
+            <result property="wmsBillNo" column="wms_bill_no" jdbcType="VARCHAR"/>
+            <result property="wmsBillType" column="wms_bill_type" jdbcType="VARCHAR"/>
+            <result property="wmsLineNo" column="wms_line_no" jdbcType="VARCHAR"/>
+            <result property="wmsSkuCode" column="wms_sku_code" jdbcType="VARCHAR"/>
+            <result property="wmsSkuName" column="wms_sku_name" jdbcType="VARCHAR"/>
+            <result property="wmsQty" column="wms_qty" jdbcType="DECIMAL"/>
+            <result property="wmsUmCode" column="wms_um_code" jdbcType="VARCHAR"/>
+            <result property="wmsUmName" column="wms_um_name" jdbcType="VARCHAR"/>
+            <result property="wmsBoxType" column="wms_box_type" jdbcType="CHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="priority" column="priority" jdbcType="INTEGER"/>
+            <result property="typeCode" column="type_code" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="beginTime" column="begin_time" jdbcType="TIMESTAMP"/>
+            <result property="endTime" column="end_time" jdbcType="DATE"/>
+            <result property="locationNameFrom" column="location_name_from" jdbcType="VARCHAR"/>
+            <result property="locationNameTo" column="location_name_to" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,wms_task_id,wms_task_detail_id,
+        wms_bill_no,wms_bill_type,wms_line_no,
+        wms_sku_code,wms_sku_name,wms_qty,
+        wms_um_code,wms_um_name,wms_box_type,
+        name,priority,type_code,
+        status,begin_time,end_time,
+        location_name_from,location_name_to,create_time,
+        update_time
+    </sql>
+</mapper>

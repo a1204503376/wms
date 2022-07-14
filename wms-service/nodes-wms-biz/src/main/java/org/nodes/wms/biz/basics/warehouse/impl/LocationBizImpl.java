@@ -309,12 +309,11 @@ public class LocationBizImpl implements LocationBiz {
 	@Override
 	public boolean isVirtualLocation(List<Location> locationList) {
 		Dict dict = dictionaryBiz.findZoneTypeOfVirtual();
-		// TODO
 		List<Long> locIdList = locationList.stream()
 			.map(Location::getLocId)
 			.distinct()
 			.collect(Collectors.toList());
 		List<Location> locations = locationDao.getLocationByZoneType(locIdList, dict.getDictKey());
-		return Func.isEmpty(locations);
+		return Func.isNotEmpty(locations);
 	}
 }
