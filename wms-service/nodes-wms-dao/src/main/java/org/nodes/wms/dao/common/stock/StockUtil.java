@@ -73,8 +73,7 @@ public class StockUtil {
 	 */
 	public static BigDecimal getStockEnable(List<Stock> stockList) {
 		BigDecimal qtySubtractMax = BigDecimal.ZERO;
-		for (Stock stock : stockList
-		) {
+		for (Stock stock : stockList) {
 			if (!Func.equals(stockList.get(0).getSkuLevel(), stock.getSkuLevel())) {
 				throw new ServiceException("箱码包装层级不一致");
 			}
@@ -118,7 +117,7 @@ public class StockUtil {
 	 */
 	public static void assertPick(Stock sourceStock, BigDecimal pickQty, String reason) {
 		BigDecimal enableQty = getStockEnable(sourceStock);
-		if (BigDecimalUtil.le(enableQty, pickQty)) {
+		if (BigDecimalUtil.lt(enableQty, pickQty)) {
 			if (Func.isEmpty(reason)) {
 				reason = "判断库存下架量要大于可用量";
 			}
@@ -133,7 +132,7 @@ public class StockUtil {
 	 *
 	 * @param stock   库存对象
 	 * @param pickQty 下架量
-	 * @param reason 操作的场景
+	 * @param reason  操作的场景
 	 */
 	public static void pickQty(Stock stock, BigDecimal pickQty, String reason) {
 		assertPick(stock, pickQty, reason);
