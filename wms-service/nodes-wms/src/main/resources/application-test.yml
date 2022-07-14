@@ -23,4 +23,4 @@ blade:
     remote-mode: true
     log-mode: true
 server:
-  port: 5101
+  port: 6001
