@@ -10,6 +10,7 @@ import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
+import org.nodes.wms.biz.instock.receiveLog.modular.ReceiveLogFactory;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.factory.StockFactory;
 import org.nodes.wms.biz.stock.merge.StockMergeStrategy;
@@ -73,7 +74,7 @@ public class StockBizImpl implements StockBiz {
 	private final StockFactory stockFactory;
 	private final ReceiveLogDao receiveLogDao;
 	private final LogBiz logBiz;
-
+	private final ReceiveLogFactory receiveLogFactory;
 
 	@Override
 	public void freezeByLoc(StockLogTypeEnum type, Long locId, String occupyFlag) {
@@ -646,7 +647,8 @@ public class StockBizImpl implements StockBiz {
 		if (Func.isEmpty(importDataList)) {
 			throw new ServiceException("导入失败，没有可导入的数据");
 		}
-		List<ReceiveLog> receiveLogList = stockFactory.createStockListForImport(importDataList);
+		// 校验参数并生成清点记录
+		List<ReceiveLog> receiveLogList = receiveLogFactory.createReceiveLogListForImport(importDataList);
 		for (ReceiveLog receiveLog : receiveLogList) {
 			//调用入库方法
 			inStock(StockLogTypeEnum.INSTOCK_BY_Import, receiveLog);
