@@ -128,4 +128,9 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 		return super.baseMapper.listNotReceiveDetailByQuery(notReceiveDetailPageQuery, billState);
 	}
 
+	@Override
+	public ReceiveByPcResponse getReceiveByPcResponse(Long receiveId) {
+		return super.baseMapper.selectReceiveByPcResponse(receiveId);
+	}
+
 }
