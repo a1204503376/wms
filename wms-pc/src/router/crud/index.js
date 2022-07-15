@@ -229,11 +229,9 @@ export default [
         component: Layout,
         children: [
             {
-                path: 'createReceiveBill',
+                path: 'createReceiveBill/:logSoPicks',
                 name: '创建收货单',
-                props: ($route) => {
-                    return { lsopIds: $route.query.lsopIds };
-                },
+                props: true,
                 component: () => import('@/views/wms/instock/receive/receiveNewForLogSoPick')
             }
         ]
@@ -243,11 +241,9 @@ export default [
         component: Layout,
         children: [
             {
-                path: 'createSoBill',
+                path: 'createSoBill/:receiveLogs',
                 name: '创建发货单',
-                props: ($route) => {
-                    return { receiveLogs: $route.query.receiveLogs };
-                },
+                props: true,
                 component: () => import('@/views/wms/outstock/soHeader/soBillAddForReceiveLog')
             }
         ]

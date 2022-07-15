@@ -1,5 +1,4 @@
 import request from '@/router/axios'
-import {blob} from "pikaz-excel-js/lib/PikazJsExcel.common";
 
 export const getPage = (page, data) => {
     return request({
@@ -93,16 +92,6 @@ export const closeSoBill = (soBillId) => {
         method: 'post',
         data: {
             soBillId: soBillId
-        }
-    })
-}
-
-export const getSoBillDataByReceiveIds = (ids) => {
-    return request({
-        url: '/api/wms/outstock/soBill/findLogSoPickByReceiveIds',
-        method: 'post',
-        data: {
-            idList: ids
         }
     })
 }

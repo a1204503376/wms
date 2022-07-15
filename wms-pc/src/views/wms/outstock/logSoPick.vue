@@ -424,11 +424,10 @@ export default {
                 this.$message.warning("至少选择一条记录创建");
                 return;
             }
-            let lsopIds = rows.map(item => item.lsopId);
             this.$router.push({
                 name: '创建收货单',
-                query: {
-                    lsopIds: lsopIds
+                params: {
+                    logSoPicks: JSON.stringify(rows)
                 }
             })
         },

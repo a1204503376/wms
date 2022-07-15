@@ -276,7 +276,7 @@ import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesBillType from "@/components/wms/select/NodesBillType";
 import NodesSupplier from "@/components/wms/select/NodesSupplier";
 import NodesOwner from "@/components/wms/select/NodesOwner";
-import {addReceive, getReceiveBillDataBylsopIds} from "@/api/wms/instock/receive";
+import {addReceive} from "@/api/wms/instock/receive";
 import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
 
 export default {
@@ -288,7 +288,7 @@ export default {
     },
     mixins: [editDetailMixin],
     props: {
-        lsopIds: {type: Array},
+        logSoPicks: {type: String},
     },
     data() {
         return {
@@ -320,6 +320,11 @@ export default {
     created() {
         this.initializeData();
     },
+    watch: {
+        logSoPicks(){
+            this.initializeData();
+        }
+    },
     methods: {
         // 过滤空白行
         filterBlankRow(row) {
@@ -349,14 +354,20 @@ export default {
             };
         },
         initializeData() {
-            getReceiveBillDataBylsopIds(this.lsopIds)
-                .then((res) => {
-                    this.table.data = res.data.data;
-                    // let tableData = this.table.data;
-                    // res.data.data.forEach(item => {
-                    //     tableData.push(item)
-                    // })
-                })
+            this.table.data = JSON.parse(this.logSoPicks);
+            let i = 1;
+            this.table.data.forEach(row => {
+                row.lineNumber = i * 10;
+                row.sku = {
+                    skuId: row.skuId,
+                    skuCode: row.skuCode,
+                    skuName: row.skuName,
+                    skuSpec: row.skuLot2,
+                };
+                row.planQty = row.pickRealQty;
+                row.umCode = row.wsuCode;
+                i++;
+            })
         },
         createRowObj() {
             return {
@@ -388,7 +399,7 @@ export default {
         },
         submitFormParams() {
             this.form.params.newReceiveDetailRequestList = this.table.postData
-            return addReceive(this.form.params)
+             return addReceive(this.form.params)
                 .then(res => {
                     return {
                         msg: res.data.msg,

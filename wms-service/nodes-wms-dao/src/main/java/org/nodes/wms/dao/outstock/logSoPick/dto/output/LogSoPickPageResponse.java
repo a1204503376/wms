@@ -3,7 +3,7 @@ package org.nodes.wms.dao.outstock.logSoPick.dto.output;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
-import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
+import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -13,7 +13,7 @@ import java.util.Date;
  * 拣货记录日志分页响应类
  **/
 @Data
-public class LogSoPickPageResponse extends SkuLotBaseEntity implements Serializable {
+public class LogSoPickPageResponse extends BaseSkuLot implements Serializable {
 
 	private static final long serialVersionUID = -3534787471846284616L;
 
@@ -39,6 +39,12 @@ public class LogSoPickPageResponse extends SkuLotBaseEntity implements Serializa
 	private String soLineNo;
 
 	/**
+	 * 物品id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long skuId;
+
+	/**
 	 * 物品编码
 	 */
 	private String skuCode;
@@ -58,6 +64,11 @@ public class LogSoPickPageResponse extends SkuLotBaseEntity implements Serializa
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private BigDecimal pickRealQty;
+
+	/**
+	 * 计量单位编码
+	 */
+	private String wsuCode;
 
 	/**
 	 * 计量单位
