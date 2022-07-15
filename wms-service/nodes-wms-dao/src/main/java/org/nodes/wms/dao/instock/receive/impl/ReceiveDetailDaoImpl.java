@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.wms.dao.instock.receive.ReceiveDetailDao;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceiveByPcQuery;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailPdaQuery;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailRequest;
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailPdaResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailResponse;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailByPcResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.mapper.ReceiveDetailMapper;
 import org.springblade.core.log.exception.ServiceException;
@@ -78,17 +80,22 @@ public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, R
 	@Override
 	public void updateReceiveDetail(ReceiveDetail detail) {
 		//TODO
-		if(Func.isEmpty(detail.getReceiveDetailId())){
-          throw new ServiceException("更新收货单明细时,收货单详情ID为空");
+		if (Func.isEmpty(detail.getReceiveDetailId())) {
+			throw new ServiceException("更新收货单明细时,收货单详情ID为空");
 		}
-		if(!super.updateById(detail)){
+		if (!super.updateById(detail)) {
 			throw new ServiceException("更新收货单明细失败,请重试");
 		}
 	}
 
-    @Override
-    public String selectReceiveDetailLinNo(Long receiveId) {
+	@Override
+	public String selectReceiveDetailLinNo(Long receiveId) {
 		return super.baseMapper.selectReceiveDetailLinNo(receiveId);
-    }
+	}
+
+	@Override
+	public ReceiveDetailByPcResponse getReceiveDetailByPcResponse(ReceiveByPcQuery receiveByPcQuery) {
+		return super.baseMapper.selectReceiveDetailByPcResponse(receiveByPcQuery);
+	}
 
 }

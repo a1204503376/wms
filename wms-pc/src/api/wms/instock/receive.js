@@ -92,6 +92,21 @@ export const getLogList = (receiveId) => {
     })
 }
 
+export const getReceiveByPc = (data) => {
+    return request({
+        url: '/api/wms/receive/getReceiveByPc',
+        method: 'post',
+        data: data,
+    })
+}
+export const getReceiveDetailByPc = (data) => {
+    return request({
+        url: '/api/wms/receive/getReceiveDetailByPc',
+        method: 'post',
+        data: data,
+    })
+}
+
 export const getReceiveBillDataBylsopIds = (lsopIds) => {
     return request({
         url: '/api/wms/receive/findReceiveLogBylsopIds',

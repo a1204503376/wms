@@ -11,6 +11,4 @@ public interface CallApiService {
     WmsGlobalResponse postWms(String url, Object request);
 
     AgvGlobalResponse postAgv(String url, Object request);
-
-    void saveCallApiLog(String url, Object request, Object response, Exception ex);
 }

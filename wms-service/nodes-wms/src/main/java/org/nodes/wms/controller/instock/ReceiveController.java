@@ -147,7 +147,7 @@ public class ReceiveController {
 	}
 
 	@PostMapping("/cancelReceive")
-	public R<String> revoke(@RequestBody ReceiveCancelRequest receiveCancelRequest){
+	public R<String> revoke(@RequestBody ReceiveCancelRequest receiveCancelRequest) {
 		inStockBiz.cancelReceive(receiveCancelRequest.getIdList());
 		return R.success("撤销成功");
 	}
@@ -170,4 +170,16 @@ public class ReceiveController {
 		@Valid @RequestBody LogSoPickIdListRequest logSoPickIdListRequest){
 		return R.data(receiveLogBiz.findReceiveLogBylsopIds(logSoPickIdListRequest.getLsopIdList()));
 	}
+
+	@PostMapping("/getReceiveByPc")
+	public R<ReceiveByPcResponse> getReceiveByPc(@Valid @RequestBody ReceiveIdRequest receiveIdRequest) {
+		return R.data(receiveBiz.getReceiveByPcResponse(receiveIdRequest.getReceiveId()));
+	}
+
+	@PostMapping("/getReceiveDetailByPc")
+	public R<ReceiveDetailByPcResponse> getReceiveDetailByPc(@Valid @RequestBody ReceiveByPcQuery receiveByPcQuery) {
+		return R.data(receiveBiz.getReceiveDetailByPcResponse(receiveByPcQuery));
+	}
+
+
 }

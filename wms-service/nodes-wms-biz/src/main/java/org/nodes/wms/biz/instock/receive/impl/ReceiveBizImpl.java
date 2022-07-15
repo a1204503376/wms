@@ -439,4 +439,14 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			"未收货明细",
 			notReceiveDetailList, NotReceiveDetailExcelResponse.class);
 	}
+
+	@Override
+	public ReceiveByPcResponse getReceiveByPcResponse(Long receiveId) {
+		return receiveHeaderDao.getReceiveByPcResponse(receiveId);
+	}
+
+	@Override
+	public ReceiveDetailByPcResponse getReceiveDetailByPcResponse(ReceiveByPcQuery receiveByPcQuery) {
+		return receiveDetailDao.getReceiveDetailByPcResponse(receiveByPcQuery);
+	}
 }

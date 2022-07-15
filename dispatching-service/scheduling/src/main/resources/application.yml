@@ -12,7 +12,7 @@ scheduling:
   profile: D:/ruoyi/uploadPath
   # 获取ip地址开关
   addressEnabled: false
-  wmsUrl: http://10.168.3.136:5101
+  wmsUrl: http://10.168.3.136:5101/wms/scheduling
   agvUrl: http://localhost:55200
   #JOB超时（单位：分钟）
   jobTimeout: 20
@@ -34,6 +34,7 @@ server:
       max: 800
       # Tomcat启动初始化的线程数，默认值10
       min-spare: 100
+    max-http-form-post-size: 32768
 
 # 日志配置
 logging:
