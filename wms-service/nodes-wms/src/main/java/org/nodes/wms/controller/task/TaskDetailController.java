@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.task.TaskDetailBiz;
+import org.nodes.wms.dao.task.dto.input.AgainIssuedlTask;
+import org.nodes.wms.dao.task.dto.input.CancelTaskRequest;
+import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
 import org.nodes.wms.dao.task.dto.input.TaskDetailPageRequest;
 import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
 import org.nodes.wms.dao.task.dto.output.TaskDetailPageResponse;
@@ -29,6 +32,7 @@ public class TaskDetailController {
 
 
 	@PostMapping("/page")
+	@ApiLog("任务详情-分页查询任务详情")
 	public R<IPage<TaskDetailPageResponse>> page(Query query, @RequestBody TaskDetailPageRequest request) {
 		return R.data(taskDetailBiz.selectPage(request, query));
 	}
@@ -46,4 +50,24 @@ public class TaskDetailController {
 		});
 		ExcelUtil.export(response, "任务详情", "任务详情数据表", responseList, TaskDetailExcelResponse.class);
 	}
+
+	@PostMapping("/stopTask")
+	@ApiLog("任务详情-停止任务")
+	public void stopTask(StopTaskRequest request) {
+		taskDetailBiz.stopActivity(request);
+	}
+
+	@PostMapping("/cancelTask")
+	@ApiLog("任务详情-取消任务")
+	public void cancelTask(CancelTaskRequest request) {
+		taskDetailBiz.cancelActivity(request);
+	}
+
+	@PostMapping("againIssuedlTask")
+	@ApiLog("任务详情-重新下发")
+	public void againIssuedlTask(AgainIssuedlTask request) {
+		taskDetailBiz.againIssuedlActivity(request);
+	}
+
+
 }
