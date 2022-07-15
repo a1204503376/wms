@@ -451,10 +451,9 @@ export default {
                 this.$message.warning("至少选择一条记录创建");
                 return;
             }
-            // let ids = rows.map(item => item.id);
             this.$router.push({
                 name: '创建发货单',
-                query: {
+                params: {
                     receiveLogs: JSON.stringify(rows)
                 }
             })

@@ -44,9 +44,9 @@
                     </el-row>
                     <el-row type="flex">
                         <el-col :span="8">
-                            <el-form-item label="客户" prop="customerId">
+                            <el-form-item label="客户" prop="customer">
                                 <nodes-customer
-                                    v-model="form.params.customerId"
+                                    v-model="form.params.customer"
                                     size="medium">
                                 </nodes-customer>
                             </el-form-item>
@@ -268,7 +268,7 @@ export default {
                     billTypeCd: '',
                     whId: '',
                     woId: '',
-                    customerId: '',
+                    customer: {},
                     transportCode: '',
                     outstockType: '',
                     soBillRemark: '',
@@ -339,7 +339,7 @@ export default {
                     type: 'object',
                     required: true,
                     fields: {
-                        skuId: {required: true, message: skuErrorMsg },
+                        skuId: {required: true, message: skuErrorMsg},
                         skuCode: {required: true, message: skuErrorMsg},
                         skuName: {required: true, message: skuErrorMsg},
                     }
@@ -393,9 +393,10 @@ export default {
             })
         },
         submitFormParams() {
-            this.form.params.soDetailList = this.table.postData
-
-            return add(this.form.params)
+            let parmas = this.form.params;
+            parmas.soDetailList = this.table.postData
+            parmas.customerId = parmas.customer.id;
+            return add(parmas)
                 .then(res => {
                     return {
                         msg: res.data.msg,
