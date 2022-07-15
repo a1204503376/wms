@@ -97,3 +97,13 @@ export const closeSoBill = (soBillId) => {
     })
 }
 
+export const getSoBillDataByReceiveIds = (ids) => {
+    return request({
+        url: '/api/wms/outstock/soBill/findLogSoPickByReceiveIds',
+        method: 'post',
+        data: {
+            idList: ids
+        }
+    })
+}
+

@@ -5,7 +5,8 @@
                 <el-row type="flex">
                     <el-col :span="8">
                         <el-form-item label="收货单编码" label-width="90px">
-                            <el-input placeholder="请输入收货单编码" v-model.trim="form.params.receiveNo" :clearable="true"></el-input>
+                            <el-input v-model.trim="form.params.receiveNo" :clearable="true"
+                                      placeholder="请输入收货单编码"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -28,22 +29,26 @@
                 <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="LPN" label-width="90px">
-                            <el-input placeholder="请输入LPN" v-model.trim="form.params.lpnCode" :clearable="true"></el-input>
+                            <el-input v-model.trim="form.params.lpnCode" :clearable="true"
+                                      placeholder="请输入LPN"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="箱号" label-width="90px">
-                            <el-input placeholder="请输入箱号" v-model.trim="form.params.boxCode" :clearable="true"></el-input>
+                            <el-input v-model.trim="form.params.boxCode" :clearable="true"
+                                      placeholder="请输入箱号"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="序列号" label-width="90px">
-                            <el-input placeholder="请输入序列号" v-model.trim="form.params.snCode" :clearable="true"></el-input>
+                            <el-input v-model.trim="form.params.snCode" :clearable="true"
+                                      placeholder="请输入序列号"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="收货人" label-width="90px">
-                            <el-input placeholder="请输入收货人" v-model.trim="form.params.createUser" :clearable="true"></el-input>
+                            <el-input v-model.trim="form.params.createUser" :clearable="true"
+                                      placeholder="请输入收货人"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -72,6 +77,10 @@
                 </el-row>
             </template>
             <template v-slot:batchBtn>
+                <el-button v-if="permissionObj.createSoBill"
+                           size="mini" type="primary"
+                           @click="createSoBill">创建发货单
+                </el-button>
                 <el-button v-if="permissionObj.cancelReceive"
                            size="mini" type="primary"
                            @click="cancelReceive">撤销收货
@@ -381,6 +390,7 @@ export default {
             return {
                 search: this.vaildData(this.permission.receiveLog_search, false),
                 cancelReceive: this.vaildData(this.permission.receiveLog_cancelReceive, false),
+                createSoBill: this.vaildData(this.permission.receiveLog_createSoBill, false),
             }
         }
     },
@@ -434,6 +444,20 @@ export default {
         },
         onExportLocalData() {
             this.exportCurrentDataToExcel("收货记录", "收货记录")
+        },
+        createSoBill() {
+            let rows = this.$refs.table.selection;
+            if (func.isEmpty(rows)) {
+                this.$message.warning("至少选择一条记录创建");
+                return;
+            }
+            // let ids = rows.map(item => item.id);
+            this.$router.push({
+                name: '创建发货单',
+                query: {
+                    receiveLogs: JSON.stringify(rows)
+                }
+            })
         },
         cancelReceive() {
             this.$confirm("确定撤销选中的记录?", {
