@@ -51,11 +51,11 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	public SoHeader add(SoBillAddOrEditRequest soBillAddOrEditRequest) {
 		SoHeader soHeader = soBillFactory.createSoHeader(soBillAddOrEditRequest);
 		if (!soHeaderDao.saveOrUpdateSoHeader(soHeader)) {
-			throw new ServiceException("新增出库单头表信息失败，请稍后再试");
+			throw new ServiceException("新增发货单头表信息失败，请稍后再试");
 		}
 		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader, soBillAddOrEditRequest.getSoDetailList());
 		if (!soDetailDao.saveOrUpdateBatch(soDetailList)) {
-			throw new ServiceException("新增出库单明细信息失败，请稍后再试");
+			throw new ServiceException("新增发货单明细信息失败，请稍后再试");
 		}
 
 		return soHeader;
@@ -66,7 +66,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		soBillIdList.forEach(item -> {
 			SoHeader soHeader = soHeaderDao.getById(item);
 			if (!soHeader.getSoBillState().equals(SoBillStateEnum.NOT.getIndex())) {
-				throw new ServiceException("删除失败,只能删除单据状态为未出库的出库单");
+				throw new ServiceException("删除失败,只能删除单据状态为未出库的发货单");
 			}
 		});
 		return soHeaderDao.removeByIdList(soBillIdList);
@@ -77,16 +77,16 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	public SoHeader edit(SoBillAddOrEditRequest soBillAddOrEditRequest) {
 		SoHeader soHeader = soBillFactory.createSoHeader(soBillAddOrEditRequest);
 		if (!soHeaderDao.saveOrUpdateSoHeader(soHeader)) {
-			throw new ServiceException("编辑出库单头表信息失败，请稍后再试");
+			throw new ServiceException("编辑发货单头表信息失败，请稍后再试");
 		}
 		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader, soBillAddOrEditRequest.getSoDetailList());
 		if (!soDetailDao.saveOrUpdateBatch(soDetailList)) {
-			throw new ServiceException("编辑出库单明细信息失败，请稍后再试");
+			throw new ServiceException("编辑发货单明细信息失败，请稍后再试");
 		}
 
 		if (Func.isNotEmpty(soBillAddOrEditRequest.getRemoveIdList())
 			&& !soDetailDao.removeByIdList(soBillAddOrEditRequest.getRemoveIdList())) {
-			throw new ServiceException("删除出库单明细信息失败，请稍后再试");
+			throw new ServiceException("删除发货单明细信息失败，请稍后再试");
 		}
 		return soHeader;
 	}
@@ -111,7 +111,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		soHeaderMap.put("soBillState", SoBillStateEnum.CLOSED.getIndex());
 		SoHeader soHeader = soBillFactory.createSoHeaderByCustom(soHeaderMap);
 		if (!soHeaderDao.updateSoHeaderById(soHeader)) {
-			throw new ServiceException("关闭出库单失败，请稍后再试");
+			throw new ServiceException("关闭发货单失败，请稍后再试");
 		}
 	}
 

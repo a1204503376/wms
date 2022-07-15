@@ -8,7 +8,7 @@ import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
 import java.math.BigDecimal;
 
 /**
- * 出库单明细实体类
+ * 发货单明细实体类
  **/
 @Data
 @TableName("so_detail")
@@ -18,13 +18,13 @@ public class SoDetail extends BaseSkuLotEntity {
 
 
 	/**
-	 * 出库单明细id
+	 * 发货单明细id
 	 */
 	@TableId("so_detail_id")
 	private Long soDetailId;
 
 	/**
-	 * 出库单id
+	 * 发货单id
 	 */
 	private Long soBillId;
 

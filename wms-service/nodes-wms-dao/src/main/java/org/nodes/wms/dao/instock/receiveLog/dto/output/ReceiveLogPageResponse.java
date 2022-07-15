@@ -46,6 +46,12 @@ public class ReceiveLogPageResponse extends BaseSkuLot implements Serializable {
 	private String lineNo;
 
 	/**
+	 * 物品id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long skuId;
+
+	/**
 	 * 物品编码
 	 */
 	private String skuCode;
@@ -54,6 +60,11 @@ public class ReceiveLogPageResponse extends BaseSkuLot implements Serializable {
 	 * 物品名称
 	 */
 	private String skuName;
+
+	/**
+	 * 计量单位编码
+	 */
+	private String wsuCode;
 
 	/**
 	 * 收货数量

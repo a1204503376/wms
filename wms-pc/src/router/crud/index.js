@@ -109,7 +109,7 @@ export default [
                 path: 'receiveByPc/:receiveId',
                 name: 'PC收货',
                 props: true,
-                component: () => import('@/views/wms/instock/receive/receiveByPc')
+                // component: () => import('@/views/wms/instock/receive/receiveByPc')
             },
             {
                 path: 'detail/:receiveId',
@@ -235,6 +235,20 @@ export default [
                     return { lsopIds: $route.query.lsopIds };
                 },
                 component: () => import('@/views/wms/instock/receive/receiveNewForLogSoPick')
+            }
+        ]
+    },
+    {
+        path: '/receiveLog',
+        component: Layout,
+        children: [
+            {
+                path: 'createSoBill',
+                name: '创建发货单',
+                props: ($route) => {
+                    return { receiveLogs: $route.query.receiveLogs };
+                },
+                component: () => import('@/views/wms/outstock/soHeader/soBillAddForReceiveLog')
             }
         ]
     }
