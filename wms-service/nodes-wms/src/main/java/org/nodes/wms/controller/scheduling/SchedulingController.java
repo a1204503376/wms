@@ -53,8 +53,8 @@ public class SchedulingController {
 	 * @param request 通知对象集合
 	 */
 	@PostMapping("broadcastNotification")
-	public R broadcastNotification(@Valid @RequestBody List<SchedulingBroadcastNotificationRequest> request) {
-
+	public R<String> broadcastNotification(@Valid @RequestBody List<SchedulingBroadcastNotificationRequest> request) {
+		schedulingBiz.broadcastNotificationActivity(request);
 		return R.success(ResultCode.SUCCESS);
 	}
 
