@@ -25,11 +25,11 @@ public interface LogSoPickBiz {
 	List<LogSoPickIndexResponse> findPickSkuQtyTop10();
 
 	/**
-	 * 出库单查看明细：根据出库单id分页查询获取拣货记录日志信息
+	 * 发货单查看明细：根据发货单id分页查询获取拣货记录日志信息
 	 *
-	 * @param soBillIdRequest: 出库单id请求对象
+	 * @param soBillIdRequest: 发货单id请求对象
 	 * @param query            分页参数
-	 * @return Page<LogSoPickForSoDetailResponse> 出库单查看明细 拣货记录日志信息分页响应对象
+	 * @return Page<LogSoPickForSoDetailResponse> 发货单查看明细 拣货记录日志信息分页响应对象
 	 */
 	Page<LogSoPickForSoDetailResponse> pageLogSoPickForSoDetailBySoBillId(Query query, SoBillIdRequest soBillIdRequest);
 

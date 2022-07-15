@@ -28,9 +28,6 @@ public class LogSoPickBizImpl implements LogSoPickBiz {
 
 	private final LogSoPickDao logSoPickDao;
 
-//	private final ReceiveLogBiz receiveLogBiz;
-//	private final SkuBiz skuBiz;
-
 	@Override
 	public List<LogSoPickIndexResponse> findPickSkuQtyTop10() {
 		return logSoPickDao.getPickSkuQtyTop10();
@@ -56,28 +53,4 @@ public class LogSoPickBizImpl implements LogSoPickBiz {
 	public List<LogSoPick> findByIds(List<Long> lsopIdList) {
 		return logSoPickDao.getByIds(lsopIdList);
 	}
-
-//	@Override
-//	public List<SoDetailEditResponse> findLogSoPickByReceiveIds(List<Long> receiveIdList) {
-//		List<ReceiveLog> receiveLogList = receiveLogBiz.findReceiveLog(receiveIdList);
-//		List<SoDetailEditResponse> soDetailList = new ArrayList<>();
-//		receiveLogList.forEach(item ->{
-//			SoDetailEditResponse soDetail = new SoDetailEditResponse();
-//			// 赋值 物品
-//			skuBiz.findById(item.getSkuId());
-//			SkuSelectResponse sku = new SkuSelectResponse();
-//			sku.setSkuId(sku.getSkuId());
-//			sku.setSkuCode(sku.getSkuCode());
-//			sku.setSkuName(sku.getSkuName());
-//			sku.setSkuSpec(sku.getSkuSpec());
-//			soDetail.setSku(sku);
-//			// 计量单位编码
-//			soDetail.setUmCode(item.getWsuCode());
-//			//批属性
-//			SkuLotUtil.setAllSkuLot(item,soDetail);
-//
-//			soDetailList.add(soDetail);
-//		});
-//		return soDetailList;
-//	}
 }

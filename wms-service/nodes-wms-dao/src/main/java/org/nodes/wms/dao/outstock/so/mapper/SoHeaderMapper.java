@@ -30,17 +30,17 @@ public interface SoHeaderMapper extends BaseMapper<SoHeader> {
 	Page<SoHeaderPageResponse> page(IPage<?> page, @Param("params")SoHeaderPageQuery soHeaderPageQuery);
 
 	/**
-	 * 获取编辑时出库单头表信息
+	 * 获取编辑时发货单头表信息
 	 *
-	 * @param soBillId: 出库单id
-	 * @return SoHeaderEditResponse 出库单编辑响应对象
+	 * @param soBillId: 发货单id
+	 * @return SoHeaderEditResponse 发货单编辑响应对象
 	 */
 	SoHeaderEditResponse selectSoHeaderEditBySoBillId(@Param("soBillId") Long soBillId);
 
 	/**
-	 * 查看明细：根据出库单id获取头表信息
+	 * 查看明细：根据发货单id获取头表信息
 	 *
-	 * @param id: 出库单id
+	 * @param id: 发货单id
 	 * @return SoHeaderForDetailResponse 查看明细头表信息响应对象
 	 */
     SoHeaderForDetailResponse selectSoHeaderForDetailById(@Param("id") Long id);
@@ -49,7 +49,7 @@ public interface SoHeaderMapper extends BaseMapper<SoHeader> {
 	 * 导出Excel
 	 *
 	 * @param soHeaderPageQuery: 导出时条件参数
-	 * @return List<SoHeaderExcelResponse> 出库单数据
+	 * @return List<SoHeaderExcelResponse> 发货单数据
 	 */
     List<SoHeaderExcelResponse> listByQuery(@Param("params") SoHeaderPageQuery soHeaderPageQuery);
 }

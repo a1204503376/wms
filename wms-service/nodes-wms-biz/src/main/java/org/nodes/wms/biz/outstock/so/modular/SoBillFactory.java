@@ -90,7 +90,7 @@ public class SoBillFactory {
 				// 实收数量
 				detail.setScanQty(BigDecimal.ZERO);
 			}
-			// 出库单id，编码，单据类型
+			// 发货单id，编码，单据类型
 			detail.setSoBillId(soHeader.getSoBillId());
 			detail.setSoBillNo(soHeader.getSoBillNo());
 			detail.setBillTypeCd(soHeader.getBillTypeCd());

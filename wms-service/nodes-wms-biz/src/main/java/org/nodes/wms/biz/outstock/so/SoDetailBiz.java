@@ -6,16 +6,16 @@ import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
 import org.springblade.core.mp.support.Query;
 
 /**
- * 出库单明细业务接口
+ * 发货单明细业务接口
  **/
 public interface SoDetailBiz {
 
 	/**
-	 * 查看明细：根据出库单id分页查询出库单明细信息
+	 * 查看明细：根据发货单id分页查询发货单明细信息
 	 *
-	 * @param soBillIdRequest: 出库单id请求对象
+	 * @param soBillIdRequest: 发货单id请求对象
 	 * @param query: 分页参数
-	 * @return Page<SoDetailForDetailResponse> 出库单明细分页信息
+	 * @return Page<SoDetailForDetailResponse> 发货单明细分页信息
 	 */
 	Page<SoDetailForDetailResponse> pageSoDetailForDetailBySoBillId(Query query, SoBillIdRequest soBillIdRequest);
 }
