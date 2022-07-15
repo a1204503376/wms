@@ -4,10 +4,10 @@
             <template v-slot:searchFrom>
                 <el-row type="flex">
                     <el-col :span="8">
-                        <el-form-item label="出库单编码" label-width="90px">
+                        <el-form-item label="发货单编码" label-width="90px">
                             <el-input v-model.trim="form.params.soBillNo"
                                       :clearable="true"
-                                      placeholder="请输入出库单编码">
+                                      placeholder="请输入发货单编码">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -192,7 +192,7 @@ export default {
                 columnList: [
                     {
                         prop: 'soBillNo',
-                        label: '出库单编码',
+                        label: '发货单编码',
                         sortable: 'custom',
                     },
                     {
@@ -306,7 +306,7 @@ export default {
                 .then((res) => {
                     console.log(res);
                     this.$message.success("操作成功，正在下载中...");
-                    fileDownload(res.data, `出库单${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
+                    fileDownload(res.data, `发货单${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
                 })
                 .catch(() => {
                     this.$message.error("系统模板目录配置有误或文件不存在");
@@ -328,11 +328,11 @@ export default {
             }
         },
         onExportLocalData() {
-            this.exportCurrentDataToExcel("出库单", "出库单");
+            this.exportCurrentDataToExcel("发货单", "发货单");
         },
         onAdd() {
             this.$router.push({
-                name: '新增出库单',
+                name: '新增发货单',
                 params: {
                     soBillId: '0'
                 }
@@ -340,11 +340,11 @@ export default {
         },
         onEdit(row) {
             if (row.soBillState.trim() !== '未出库') {
-                this.$message.warning("操作失败，该出库单正在处理中");
+                this.$message.warning("操作失败，该发货单正在处理中");
                 return;
             }
             this.$router.push({
-                name: '编辑出库单',
+                name: '编辑发货单',
                 params: {
                     soBillId: row.soBillId
                 }
@@ -358,7 +358,7 @@ export default {
         },
         onView(row) {
             this.$router.push({
-                name: '出库单详情',
+                name: '发货单详情',
                 params: {
                     soBillId: row.soBillId
                 }

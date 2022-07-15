@@ -6,7 +6,7 @@ import org.nodes.wms.dao.common.log.dto.input.*;
 import org.nodes.wms.dao.common.log.dto.output.*;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
-import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.LogForSoDetailResponse;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -141,4 +141,13 @@ public interface LogBiz {
 	void exportLogApiExcel(LogApiPageQuery logApiPageQuery, HttpServletResponse response);
 
 	List<LogReceiveResponse> getLogByReceiveId(Long receiveId);
+
+	/**
+	 * 根据发货单id分页查询发货单日志
+	 *
+	 * @param soBillId: 发货单id
+	 * @param page: 分页参数
+	 * @return PageLogForSoDetailResponse> 发货单日志分页响应对象
+	 */
+	Page<LogForSoDetailResponse> pageLogBySoBillId(IPage<?> page, Long soBillId);
 }

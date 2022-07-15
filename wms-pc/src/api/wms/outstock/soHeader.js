@@ -77,6 +77,17 @@ export const getLogSoPickForDetail = (page, soBillId) => {
     })
 }
 
+export const getSoLogForDetail = (page, soBillId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/detail_log',
+        method: 'post',
+        params: page,
+        data: {
+            soBillId: soBillId
+        }
+    })
+}
+
 export const exportData = (data) => {
     return request({
         url: '/api/wms/outstock/soBill/export',

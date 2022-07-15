@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-
 import org.nodes.wms.dao.common.log.LogActionDao;
 import org.nodes.wms.dao.common.log.dto.input.LogActionPageQuery;
 import org.nodes.wms.dao.common.log.dto.input.LogPageQuery;
@@ -14,6 +13,7 @@ import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
 import org.nodes.wms.dao.common.log.dto.output.LogTaskResponse;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.mapper.LogActionMapper;
+import org.nodes.wms.dao.outstock.so.dto.output.LogForSoDetailResponse;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -23,14 +23,16 @@ import java.util.List;
 
 /**
  * 审计日志Service
+ *
  * @author 王智勇
  */
 @Repository
 @Service
 @RequiredArgsConstructor
-public class LogActionDaoImpl  extends BaseServiceImpl<LogActionMapper, LogAction> implements LogActionDao {
+public class LogActionDaoImpl extends BaseServiceImpl<LogActionMapper, LogAction> implements LogActionDao {
 	/**
 	 * 添加审计日志添加对象
+	 *
 	 * @param logAction 日志审批对象
 	 * @return 是否成功
 	 */
@@ -39,15 +41,15 @@ public class LogActionDaoImpl  extends BaseServiceImpl<LogActionMapper, LogActio
 		return super.save(logAction);
 	}
 
-    @Override
-    public List<LogAction> findLogByBillId(Long billId) {
-        return super.list(new LambdaQueryWrapper<LogAction>()
-			.eq(LogAction::getBillId,billId).eq(LogAction::getType,billId));
-    }
+	@Override
+	public List<LogAction> findLogByBillId(Long billId) {
+		return super.list(new LambdaQueryWrapper<LogAction>()
+			.eq(LogAction::getBillId, billId).eq(LogAction::getType, billId));
+	}
 
 	@Override
 	public Page<LogTaskResponse> getPage(LogPageQuery logPageQuery, IPage<LogAction> page) {
-		return super.baseMapper.getPage(logPageQuery,page);
+		return super.baseMapper.getPage(logPageQuery, page);
 	}
 
 	/**
@@ -57,7 +59,7 @@ public class LogActionDaoImpl  extends BaseServiceImpl<LogActionMapper, LogActio
 	 */
 	@Override
 	public Page<LogActionPageResponse> getLists(LogActionPageQuery logActionPageQuery, IPage<LogAction> page) {
-		return super.baseMapper.getLists(logActionPageQuery,page);
+		return super.baseMapper.getLists(logActionPageQuery, page);
 	}
 
 	@Override
@@ -68,5 +70,10 @@ public class LogActionDaoImpl  extends BaseServiceImpl<LogActionMapper, LogActio
 	@Override
 	public List<LogReceiveResponse> findLogByReceiveId(Long receiveId) {
 		return super.baseMapper.findLogByReceiveId(receiveId);
+	}
+
+	@Override
+	public Page<LogForSoDetailResponse> pageLotBySoBillId(IPage<?> page, Long soBillId) {
+		return super.baseMapper.pageLotBySoBillId(page, soBillId);
 	}
 }

@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * 出库单查看明细明细信息响应类
+ * 发货单查看明细明细信息响应类
  **/
 @Data
 public class SoDetailForDetailResponse implements Serializable {

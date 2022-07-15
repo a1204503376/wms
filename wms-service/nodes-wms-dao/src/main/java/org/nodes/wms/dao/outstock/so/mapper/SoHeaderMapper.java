@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderEditResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderExcelResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderForDetailResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.springframework.stereotype.Repository;
 
@@ -52,4 +49,13 @@ public interface SoHeaderMapper extends BaseMapper<SoHeader> {
 	 * @return List<SoHeaderExcelResponse> 发货单数据
 	 */
     List<SoHeaderExcelResponse> listByQuery(@Param("params") SoHeaderPageQuery soHeaderPageQuery);
+
+	/**
+	 * 根据id分页查询发货单日志
+	 *
+	 * @param id: 发货单id
+	 * @param page: 分页参数
+	 * @return PageLogForSoDetailResponse> 发货单日志分页响应对象
+	 */
+    Page<LogForSoDetailResponse> pageLotById(IPage<?> page, Long id);
 }

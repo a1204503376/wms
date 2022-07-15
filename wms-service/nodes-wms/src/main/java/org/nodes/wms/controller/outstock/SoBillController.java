@@ -13,7 +13,6 @@ import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
 import org.nodes.wms.core.outstock.so.cache.SoCache;
 import org.nodes.wms.core.outstock.so.service.ISoHeaderService;
 import org.nodes.wms.core.outstock.so.vo.SoHeaderVO;
-import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogIdListRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickForSoDetailResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
@@ -30,7 +29,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * 出库单API
@@ -204,6 +202,13 @@ public class SoBillController {
 		return R.data(pageLogSoPick);
 	}
 
+	@PostMapping("/detail_log")
+	public R<Page<LogForSoDetailResponse>> logForSoDetail(Query query,
+														  @Valid @RequestBody SoBillIdRequest soBillIdRequest){
+		Page<LogForSoDetailResponse> pageLog = soHeaderBiz.pageLogById(query, soBillIdRequest.getSoBillId());
+		return R.data(pageLog);
+	}
+
 	@PostMapping("/export")
 	public void export(@RequestBody SoHeaderPageQuery soHeaderPageQuery, HttpServletResponse response) {
 		soHeaderBiz.export(soHeaderPageQuery, response);
@@ -215,9 +220,4 @@ public class SoBillController {
 		return R.success("关闭成功");
 	}
 
-//	@PostMapping("/findLogSoPickByReceiveIds")
-//	public R<List<SoDetailEditResponse>> findLogSoPickByReceiveIds(
-//		@Valid @RequestBody ReceiveLogIdListRequest receiveLogIdListRequest){
-//		return R.data(logSoPickBiz.findLogSoPickByReceiveIds(receiveLogIdListRequest.getIdList()));
-//	}
 }

@@ -9,6 +9,7 @@ import org.nodes.wms.dao.common.log.dto.output.LogActionPageResponse;
 import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
 import org.nodes.wms.dao.common.log.dto.output.LogTaskResponse;
 import org.nodes.wms.dao.common.log.entities.LogAction;
+import org.nodes.wms.dao.outstock.so.dto.output.LogForSoDetailResponse;
 
 import java.util.List;
 
@@ -60,4 +61,13 @@ public interface LogActionDao {
 	 * @param receiveId 收货单id
 	 */
 	List<LogReceiveResponse> findLogByReceiveId(Long receiveId);
+
+	/**
+	 * 根据发货单id分页查询发货单日志
+	 *
+	 * @param soBillId: 发货单id
+	 * @param page: 分页参数
+	 * @return PageLogForSoDetailResponse> 发货单日志分页响应对象
+	 */
+	Page<LogForSoDetailResponse> pageLotBySoBillId(IPage<?> page, Long soBillId);
 }

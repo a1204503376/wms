@@ -3,6 +3,7 @@ package org.nodes.wms.biz.outstock.so;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
+import org.nodes.wms.dao.outstock.so.dto.output.LogForSoDetailResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoBillEditResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderForDetailResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
@@ -80,4 +81,13 @@ public interface SoHeaderBiz {
 	 * @param response: 响应对象
 	 */
 	void export(SoHeaderPageQuery soHeaderPageQuery, HttpServletResponse response);
+
+	/**
+	 * 根据发货单id分页查询发货单日志
+	 *
+	 * @param soBillId: 发货单id
+	 * @param query: 分页参数
+	 * @return PageLogForSoDetailResponse> 发货单日志分页响应对象
+	 */
+	Page<LogForSoDetailResponse> pageLogById(Query query, Long soBillId);
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 出库单查看明细头表信息响应类
+ * 发货单查看明细头表信息响应类
  **/
 @Data
 public class SoHeaderForDetailResponse implements Serializable {
@@ -13,7 +13,7 @@ public class SoHeaderForDetailResponse implements Serializable {
 	private static final long serialVersionUID = -6117291554836588836L;
 
 	/**
-	 * 出库单编码
+	 * 发货单编码
 	 */
 	private String soBillNo;
 
