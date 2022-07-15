@@ -1,13 +1,17 @@
 package org.nodes.wms.biz.task.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
+import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.task.SchedulingBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.zone.constant.ZoneConstant;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
+import org.nodes.wms.dao.common.log.dto.input.NoticeMessageRequest;
 import org.nodes.wms.dao.task.dto.QueryAndFrozenEnableOutboundRequest;
+import org.nodes.wms.dao.task.dto.SchedulingBroadcastNotificationRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +21,7 @@ import java.util.List;
 public class SchedulingBizImpl implements SchedulingBiz {
 	private final LocationBiz locationBiz;
 	private final ZoneBiz zoneBiz;
+	private final LogBiz logBiz;
 
 	@Override
 	public String selectAndFrozenEnableOutbound(QueryAndFrozenEnableOutboundRequest request) {
@@ -26,8 +31,21 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		List<Location> locationList = locationBiz.findLocationByZoneId(zone.getZoneId());
 		//将入库接驳区库位进行判断 寻找符合条件的库位 没冻结，无库存占用
 		Location location = locationList.stream().filter(item -> !locationBiz.isFrozen(item)).findFirst().orElse(null);
-		//冻结库位
-		locationBiz.freezeByOccupyFlag(location.getLocId(), request.getTaskDetailId().toString());
-		return location.getLocCode();
+		AssertUtil.notNull(location, "暂无合适的库位");
+		if (location != null) {
+			//冻结库位
+			locationBiz.freezeByOccupyFlag(location.getLocId(), request.getTaskDetailId().toString());
+			return location.getLocCode();
+		}
+		return null;
+	}
+
+	@Override
+	public void broadcastNotificationActivity(List<SchedulingBroadcastNotificationRequest> request) {
+		for (SchedulingBroadcastNotificationRequest notificationRequest : request) {
+			NoticeMessageRequest message = new NoticeMessageRequest();
+			message.setLog(String.format("任务[%s]：[%s]", notificationRequest.getTaskDetailId(), notificationRequest.getMsg()));
+			logBiz.noticeMesssage(message);
+		}
 	}
 }
