@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.task.TaskDetailBiz;
 import org.nodes.wms.dao.task.TaskDetailDao;
+import org.nodes.wms.dao.task.dto.input.AgainIssuedlTask;
+import org.nodes.wms.dao.task.dto.input.CancelTaskRequest;
+import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
 import org.nodes.wms.dao.task.dto.input.TaskDetailPageRequest;
 import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
 import org.nodes.wms.dao.task.dto.output.TaskDetailPageResponse;
@@ -28,5 +31,20 @@ public class TaskDetailBizImpl implements TaskDetailBiz {
 	@Override
 	public List<TaskDetailExcelResponse> selectTaskList(HashMap<String, Object> params) {
 		return taskDetailDao.getTaskList(params);
+	}
+
+	@Override
+	public void stopActivity(StopTaskRequest request) {
+
+	}
+
+	@Override
+	public void cancelActivity(CancelTaskRequest request) {
+
+	}
+
+	@Override
+	public void againIssuedlActivity(AgainIssuedlTask request) {
+
 	}
 }

@@ -252,4 +252,18 @@ public interface ReceiveBiz {
 	 */
 	void exportNotReceiveDetail(
 		NotReceiveDetailPageQuery notReceiveDetailPageQuery, HttpServletResponse response);
+
+	/**
+	 * pc收货获取头表返回对象
+	 *
+	 * @param receiveId 收货单id
+	 */
+	ReceiveByPcResponse getReceiveByPcResponse(Long receiveId);
+
+	/**
+	 * pc收货返回前端明细对象
+	 *
+	 * @param receiveByPcQuery 查询参数
+	 */
+	ReceiveDetailByPcResponse getReceiveDetailByPcResponse(ReceiveByPcQuery receiveByPcQuery);
 }

@@ -249,7 +249,7 @@ public interface LocationBiz {
 	/**
 	 * 天宜定制：根据容器列别获取agv可用的库位，按照上架顺序返回
 	 *
-	 * @param lpnType   容器类别
+	 * @param lpnType  容器类别
 	 * @param zoneType 库区类型
 	 * @return
 	 */
@@ -276,5 +276,13 @@ public interface LocationBiz {
 	 * @param locationList
 	 * @return true:表示存在虚拟库位
 	 */
-    boolean isVirtualLocation(List<Location> locationList);
+	boolean isVirtualLocation(List<Location> locationList);
+
+	/**
+	 * 根据库区ID获取该区域的库位
+	 *
+	 * @param zoneId 库区ID
+	 * @return 库位信息
+	 */
+	List<Location> findLocationByZoneId(Long zoneId);
 }

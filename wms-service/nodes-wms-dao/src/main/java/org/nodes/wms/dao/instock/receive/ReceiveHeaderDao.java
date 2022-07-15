@@ -3,10 +3,10 @@ package org.nodes.wms.dao.instock.receive;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.instock.receive.dto.input.NotReceiveDetailPageQuery;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceivePdaQuery;
 import org.nodes.wms.dao.instock.receive.dto.output.*;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
-import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
 
 import java.util.List;
 
@@ -90,4 +90,11 @@ public interface ReceiveHeaderDao {
 	 */
 	List<NotReceiveDetailExcelResponse> getNotReceiveDetailListByQuery(
 		NotReceiveDetailPageQuery notReceiveDetailPageQuery, Integer detailStatus);
+
+	/**
+	 * pc收货获取头表返回对象
+	 *
+	 * @param receiveId 收货单id
+	 */
+	ReceiveByPcResponse getReceiveByPcResponse(Long receiveId);
 }

@@ -97,7 +97,7 @@
                     <el-table-column
                         fixed
                         type="selection"
-                        width="50">
+                        >
                     </el-table-column>
 
                     <template v-for="(column,index) in table.columnList">
@@ -112,6 +112,7 @@
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column"
+                            width="130"
                         >
                         </el-table-column>
                     </template>
@@ -119,10 +120,11 @@
                     <el-table-column
                         fixed="right"
                         label="操作"
-                        width="100">
+                        width="180">
                         <template slot-scope="scope">
                             <el-button @click="handleClick(scope.row)" type="text" size="small" >编辑</el-button>
                             <el-button @click="onClose(scope.row)" type="text" size="small" >关闭</el-button>
+                            <el-button @click="onReceive(scope.row)" type="text" size="small" >PC收货</el-button>
                         </template>
                     </el-table-column>
 
@@ -220,45 +222,38 @@ export default {
                     {
                         prop: 'receiveNo',
                         label: '收货单编码',
-                        width: 120,
                         sortable: 'custom'
                     },
                     {
                         prop: 'billStateDesc',
                         label: '单据状态',
                         sortable: 'custom',
-                        width: 120,
                     },
                     {
                         prop: 'asnBillNo',
-                        width: 100,
                         label: 'ASN单编码',
                         sortable: 'custom'
                     },
                     {
                         prop: 'externalOrderNo',
                         label: '上游编码',
-                        width: 100,
                         sortable: 'custom',
                         align: 'right'
                     },
                     {
                         prop: 'supplierCode',
                         label: '供应商编码',
-                        width: 250,
                         sortable: 'custom',
                         align: 'right'
                     },
                     {
                         prop: 'supplierName',
-                        width: 100,
                         sortable: 'custom',
                         label: '供应商名称'
                     },
                     {
                         prop: 'whCode',
                         sortable: 'custom',
-                        width: 120,
                         label: '仓库编码'
                     },
                     {
@@ -274,19 +269,16 @@ export default {
                     {
                         prop: 'externalPreCreateDate',
                         sortable: 'custom',
-                        width: 120,
                         label: '上游创建时间'
                     },
                     {
                         prop: 'externalCreateUser',
-                        width: 150,
                         sortable: 'custom',
                         label: '上游创建人'
                     },
                     {
                         prop: 'updateUser',
                         sortable: 'custom',
-                        width: 150,
                         label: '更新人'
                     },
                     {
@@ -326,6 +318,14 @@ export default {
                 }
             });
         },
+        onReceive(row){
+            this.$router.push({
+                name: 'PC收货',
+                params: {
+                    receiveId:row.receiveId
+                }
+            });
+        },
         getTableData() {
 
             page(this.page, this.form.params)
@@ -349,7 +349,6 @@ export default {
             this.$router.push({
                 name: '编辑收货单',
                 params: {
-                    id: '0',
                     receiveId:row.receiveId
                 }
             });

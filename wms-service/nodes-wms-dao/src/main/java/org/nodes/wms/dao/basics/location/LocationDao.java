@@ -153,4 +153,12 @@ public interface LocationDao {
 	 * @return
 	 */
 	List<Location> getLocationByZoneType(List<Long> locIdList, Integer zoneType);
+
+	/**
+	 * 根据库区ID获取该区域的库位
+	 *
+	 * @param zoneId 库区ID
+	 * @return 库位信息
+	 */
+	List<Location> getLocationByZoneId(Long zoneId);
 }

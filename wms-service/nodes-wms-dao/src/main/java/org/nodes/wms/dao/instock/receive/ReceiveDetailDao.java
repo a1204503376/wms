@@ -1,10 +1,12 @@
 package org.nodes.wms.dao.instock.receive;
 
 import org.apache.ibatis.annotations.Param;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceiveByPcQuery;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailPdaQuery;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailRequest;
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailPdaResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailResponse;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailByPcResponse;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 
 import java.util.List;
@@ -37,12 +39,13 @@ public interface ReceiveDetailDao {
 
 	/**
 	 * @param receiveDetailId 收货明细单主键id
-	 * @return  pda收货页面获取收货的详细信息
+	 * @return pda收货页面获取收货的详细信息
 	 */
 	ReceiveDetail getDetailByReceiveDetailId(Long receiveDetailId);
 
 	/**
 	 * 根据id修改收货单详情
+	 *
 	 * @param detail 收货单详情
 	 * @return 是否成功
 	 */
@@ -55,4 +58,11 @@ public interface ReceiveDetailDao {
 	 * @return 最新一条明细的订单行号
 	 */
 	String selectReceiveDetailLinNo(Long receiveId);
+
+	/**
+	 * pc收货获取返回前端明细对象
+	 *
+	 * @param receiveByPcQuery 查询参数
+	 */
+	ReceiveDetailByPcResponse getReceiveDetailByPcResponse(ReceiveByPcQuery receiveByPcQuery);
 }

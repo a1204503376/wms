@@ -175,5 +175,14 @@
             resultType="org.nodes.wms.dao.instock.receive.dto.output.NotReceiveDetailExcelResponse">
         <include refid="notReceiveDetail"/>
     </select>
+    <select id="selectReceiveByPcResponse"
+            resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveByPcResponse">
+        select receive_id,
+               receive_no,
+               external_order_no,
+               wh_code
+        from receive_header
+        where receive_id = #{receiveId}
+    </select>
 
 </mapper>
