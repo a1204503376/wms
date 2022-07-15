@@ -153,6 +153,14 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	}
 
 	@Override
+	public List<Location> getLocationByZoneId(Long zoneId) {
+		AssertUtil.notNull(zoneId, "获取库位失败，库区ID为空");
+		LambdaQueryWrapper<Location> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+		lambdaQueryWrapper.eq(Location::getZoneId, zoneId);
+		return super.list(lambdaQueryWrapper);
+	}
+
+	@Override
 	public List<Location> getLocationByLpnType(LpnTypeRequest request) {
 
 		return super.baseMapper.selectLoctionByLpnType(request);

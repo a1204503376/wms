@@ -321,4 +321,9 @@ public class LocationBizImpl implements LocationBiz {
 		List<Location> locations = locationDao.getLocationByZoneType(locIdList, dict.getDictKey());
 		return Func.isNotEmpty(locations);
 	}
+
+	@Override
+	public List<Location> findLocationByZoneId(Long zoneId) {
+		return locationDao.getLocationByZoneId(zoneId);
+	}
 }
