@@ -266,4 +266,12 @@ public interface ReceiveBiz {
 	 * @param receiveByPcQuery 查询参数
 	 */
 	ReceiveDetailByPcResponse getReceiveDetailByPcResponse(ReceiveByPcQuery receiveByPcQuery);
+
+	/**
+	 * PC收货
+	 *
+	 * @param receiveByPcRequest 前端传入参数
+	 * @return 单号
+	 */
+	String receiveByPc(ReceiveByPcRequest receiveByPcRequest);
 }

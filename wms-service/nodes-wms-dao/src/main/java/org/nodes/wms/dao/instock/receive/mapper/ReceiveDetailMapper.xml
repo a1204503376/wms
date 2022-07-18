@@ -69,7 +69,8 @@
     </select>
     <select id="selectReceiveDetailByPcResponse"
             resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailByPcResponse">
-        select line_no,
+        select receive_detail_id,
+               line_no,
                sku_code,
                surplus_qty,
                um_code,
@@ -81,6 +82,7 @@
         from receive_detail
         where line_no = #{query.lineNumber}
           and receive_id = #{query.receiveId}
+          and detail_status = '10'
     </select>
 
 </mapper>

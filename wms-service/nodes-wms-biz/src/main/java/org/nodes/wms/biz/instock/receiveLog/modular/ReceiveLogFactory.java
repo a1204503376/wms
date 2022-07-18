@@ -14,6 +14,9 @@ import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceiveByPcDetailRequest;
+import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
+import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.stock.dto.input.StockImportRequest;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
@@ -34,6 +37,13 @@ public class ReceiveLogFactory {
 	private final OwnerBiz ownerBiz;
 	private final SupplierBiz supplierBiz;
 
+
+	/**
+	 * 根据前端导入表格生成清点记录集合
+	 *
+	 * @param importDataList 导入数据集合
+	 * @return 清点记录集合
+	 */
 	public List<ReceiveLog> createReceiveLogListForImport(List<StockImportRequest> importDataList) {
 		List<ReceiveLog> receiveLogList = new ArrayList<>();
 		for (StockImportRequest stockImportRequest : importDataList) {
@@ -106,5 +116,42 @@ public class ReceiveLogFactory {
 			receiveLogList.add(receiveLog);
 		}
 		return receiveLogList;
+	}
+
+	/**
+	 * pc收货根据前端传入数据生成清点记录
+	 *
+	 * @param request       前端传入收货明细集合
+	 * @param receiveHeader 收货单头表
+	 * @param receiveDetail 收货单明细
+	 * @return 清点记录实体
+	 */
+	public ReceiveLog createReceiveLog(ReceiveByPcDetailRequest request, ReceiveHeader receiveHeader, ReceiveDetail receiveDetail) {
+		ReceiveLog receiveLog = new ReceiveLog();
+		Location location = locationBiz.findByLocId(request.getLocId());
+		receiveLog.setReceiveId(receiveHeader.getReceiveId());
+		receiveLog.setReceiveNo(receiveHeader.getReceiveNo());
+		receiveLog.setAsnBillId(receiveHeader.getAsnBillId());
+		receiveLog.setAsnBillNo(receiveHeader.getAsnBillNo());
+		receiveLog.setReceiveDetailId(receiveDetail.getReceiveDetailId());
+		receiveLog.setSupplierId(receiveHeader.getSupplierId());
+		receiveLog.setLineNo(request.getLineNo());
+		receiveLog.setQty(request.getScanQty());
+		receiveLog.setLpnCode(request.getLpnCode());
+		receiveLog.setLocId(location.getLocId());
+		receiveLog.setLocCode(location.getLocCode());
+		receiveLog.setSkuId(receiveDetail.getSkuId());
+		receiveLog.setWsuCode(request.getUmCode());
+		receiveLog.setSkuCode(receiveDetail.getSkuCode());
+		receiveLog.setSkuName(receiveDetail.getSkuName());
+		receiveLog.setWspId(receiveDetail.getWspId());
+		receiveLog.setSkuLevel(receiveDetail.getSkuLevel());
+		receiveLog.setSkuSpec(receiveDetail.getSkuSpec());
+		receiveLog.setWhId(receiveDetail.getWhId());
+		receiveLog.setWhCode(receiveDetail.getWhCode());
+		receiveLog.setWoId(receiveDetail.getWoId());
+		receiveLog.setOwnerCode(receiveDetail.getOwnerCode());
+		SkuLotUtil.setAllSkuLot(request, receiveLog);
+		return receiveLog;
 	}
 }

@@ -87,4 +87,19 @@ public interface ReceiveLogBiz {
 	List<ReceiveLog> newReceiveLog(List<ReceiveLog> receiveLogList);
 
 	List<ReceiveLog> findReceiveLog(List<Long> receiveIdList);
+
+	/**
+	 * 根据拣货日志记录id查找收货日志信息响应给前端
+	 *
+	 * @param lsopIdList: 拣货日志记录id
+	 * @return List<EditReceiveDetailResponse> 收货单信息响应对象
+	 */
+	List<EditReceiveDetailResponse> findReceiveLogBylsopIds(List<Long> lsopIdList);
+
+	/**
+	 * 保存清点记录
+	 *
+	 * @param receiveLog 清点记录实体
+	 */
+	void saveReceiveLog(ReceiveLog receiveLog);
 }
