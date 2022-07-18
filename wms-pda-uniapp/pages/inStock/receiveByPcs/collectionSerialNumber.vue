@@ -87,6 +87,12 @@
 		},
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
+			var that = this;
+			that.emitKeyDown = function(e) {
+				if (e.key == 'Enter') {
+					that.analysisCode(that.params.serialNumber);
+				}
+			};
 		},
 		onBackPress(event) {
 			// #ifdef APP-PLUS
@@ -94,13 +100,14 @@
 				this.esc();
 				return true;
 			}
-		   // #endif
+			// #endif
 		},
 		methods: {
 			remove(index) {
 				this.serialNumberList.splice(index, 1)
 			},
 			esc() {
+				this.clearEmitKeyDown();
 				uni.$u.func.navigateBackTo(1);
 			},
 			submit() {
@@ -126,14 +133,17 @@
 								if (data.data.allReceivieIsAccomplish && data.data
 									.currentReceivieIsAccomplish) {
 									//当前收货单收货收货完毕
+									_this.clearEmitKeyDown();
 									_this.$u.func.navigateBackTo(3);
 									return;
 								} else if (data.data.currentReceivieIsAccomplish) {
 									//当前收货单详情收货收货完毕
+									_this.clearEmitKeyDown();
 									_this.$u.func.navigateBackTo(2);
 									return;
 								} else {
 									//当前收货单详情收货部分收货,返回收货单收货页面
+									_this.clearEmitKeyDown();
 									_this.esc();
 								}
 
@@ -191,6 +201,9 @@
 					serialNumber: barcode.content,
 					backgroundColor: "background-color: #fff;"
 				});
+			},
+			clearEmitKeyDown() {
+				this.emitKeyDown = null;
 			},
 			emitKeyDown(e) {
 				if (e.key == 'Enter') {

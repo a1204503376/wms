@@ -46,6 +46,12 @@
 		},
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
+			var that = this;
+			that.emitKeyDown = function(e) {
+				if (e.key >= 1 && e.key <= 9) {
+					that.navTo(that.childrenMenu[e.key - 1])
+				}
+			};
 		},
 		onBackPress(event) {
 			// #ifdef APP-PLUS
@@ -56,11 +62,16 @@
 			// #endif
 		},
 		methods: {
+			clearEmitKeyDown() {
+				this.emitKeyDown = null;
+			},
 			navTo(menu) {
+				this.clearEmitKeyDown();
 				//跳转页面
 				uni.$u.func.routeNavigateTo(menu.path);
 			},
 			closePage() {
+				this.clearEmitKeyDown();
 				uni.$u.func.navigateBackTo(1);
 			},
 			scannerCallback(data) {

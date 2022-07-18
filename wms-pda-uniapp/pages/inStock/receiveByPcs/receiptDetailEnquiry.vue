@@ -67,6 +67,12 @@
 		},
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
+			var that = this;
+			that.emitKeyDown = function(e) {
+				if (e.key == 'Enter') {
+					that.getReceiveDetailList();
+				}
+			};
 		},
 		onBackPress(event) {
 			// #ifdef APP-PLUS
@@ -95,6 +101,7 @@
 				}
 			},
 			esc() {
+				this.clearEmitKeyDown();
 				uni.$u.func.navigateBackTo(1);
 			},
 			getReceiveDetailList() {
@@ -113,11 +120,15 @@
 			},
 			clickItem(row) {
 				row.receiveId = this.params.receiveId;
+				this.clearEmitKeyDown();
 				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/ReceiveByPiece', row);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);
 				this.getReceiveDetailList();
+			},
+			clearEmitKeyDown() {
+				this.emitKeyDown = null;
 			},
 			emitKeyDown(e) {
 				if (e.key == 'Enter') {
