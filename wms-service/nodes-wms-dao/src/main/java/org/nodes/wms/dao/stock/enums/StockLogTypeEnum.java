@@ -22,6 +22,7 @@ public enum StockLogTypeEnum {
 	INSTOCK_BY_CANCEL_PICK(104, "撤销拣货"),
 	INSTOCK_BY_PUTAWAY(105, "按箱上架"),
 	INSTOCK_BY_Import(106, "导入库存"),
+	INSTOCK_BY_PC(107, "PC库存"),
 	STOCK_FREEZE(201, "库存冻结"),
 	STOCK_UNFREEZE(202, "库存解冻"),
 	STOCK_MOVE_BY_START_INSTOCK_TASK(203, "入库任务开始执行"),

@@ -6,10 +6,8 @@ import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
-import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
-import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
@@ -53,10 +51,7 @@ import java.util.stream.Collectors;
 public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	private final ReceiveLogDao receiveLogDao;
 	private final LocationBiz locationBiz;
-	private final ReceiveBiz receiveBiz;
 	private final OwnerBiz ownerBiz;
-	private final StockBiz stockBiz;
-
 	private final LogSoPickBiz logSoPickBiz;
 
 	private final SkuBiz skuBiz;
@@ -131,8 +126,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 
 	@Override
 	public void exportExcel(ReceiveLogPageQuery receiveLogPageQuery, HttpServletResponse response) {
-		List<ReceiveLogExcelResponse> receiveLogList
-			= receiveLogDao.getReceiveLogListByQuery(receiveLogPageQuery);
+		List<ReceiveLogExcelResponse> receiveLogList = receiveLogDao.getReceiveLogListByQuery(receiveLogPageQuery);
 		ExcelUtil.export(response, "收货记录", "收货记录", receiveLogList, ReceiveLogExcelResponse.class);
 	}
 
@@ -159,7 +153,6 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		return receiveLog;
 	}
 
-
 	@Override
 	public List<ReceiveLog> canCancelReceive(List<Long> receiveIdList) {
 		List<ReceiveLog> receiveLogList = receiveLogDao.getReceiveLogListByIdList(receiveIdList);
@@ -170,13 +163,9 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 			}
 		});
 		//货主、物品、库位、状态、箱码、LPNCode、30个批属性相同的才合并
-		Map<String, List<ReceiveLog>> collect = receiveLogList.stream().collect(Collectors.groupingBy(
-			item -> item.getWhId() + "_" + item.getSkuId() + "_" + item.getLocId() + "_" + item.getBoxCode()
-				+ "_" + item.getLpnCode())
-		);
+		Map<String, List<ReceiveLog>> collect = receiveLogList.stream().collect(Collectors.groupingBy(item -> item.getWhId() + "_" + item.getSkuId() + "_" + item.getLocId() + "_" + item.getBoxCode() + "_" + item.getLpnCode()));
 		List<ReceiveLog> finalReceiveLogList = new ArrayList<>();
-		for (Map.Entry<String, List<ReceiveLog>> entry : collect.entrySet()
-		) {
+		for (Map.Entry<String, List<ReceiveLog>> entry : collect.entrySet()) {
 			List<ReceiveLog> value = entry.getValue();
 			if (value.size() == 1) {
 				finalReceiveLogList.add(value.get(0));
@@ -224,7 +213,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	public List<EditReceiveDetailResponse> findReceiveLogBylsopIds(List<Long> lsopIdList) {
 		List<LogSoPick> logSoPickList = logSoPickBiz.findByIds(lsopIdList);
 		List<EditReceiveDetailResponse> receiveDetailList = new ArrayList<>();
-		logSoPickList.forEach(item->{
+		logSoPickList.forEach(item -> {
 			EditReceiveDetailResponse detail = new EditReceiveDetailResponse();
 			// 赋值sku对象属性
 			Sku sku = skuBiz.findById(item.getSkuId());
@@ -237,9 +226,14 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 			// 计量单位编码
 			detail.setUmCode(item.getWsuCode());
 			// 批属性
-			SkuLotUtil.setAllSkuLot(item,detail);
+			SkuLotUtil.setAllSkuLot(item, detail);
 			receiveDetailList.add(detail);
 		});
 		return receiveDetailList;
+	}
+
+	@Override
+	public void saveReceiveLog(ReceiveLog receiveLog) {
+		receiveLogDao.save(receiveLog);
 	}
 }

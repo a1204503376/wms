@@ -3,8 +3,7 @@
         <el-container id="container" v-loading="loading">
             <el-main style="overflow: hidden;overflow-y: scroll;">
                 <el-form ref="form"
-                         :model="form.params.newReceiveHeaderRequest"
-                         :rules="form.rules"
+                         :model="form.params"
                          label-position="right"
                          label-width="120px"
                          size="mini"
@@ -12,13 +11,14 @@
                 >
                     <el-row>
                         <el-col :span="8">
-                            收货单编码: {{form.params.receiveNo}}
+
+                            收货单编码: {{ form.params.receiveNo }}
                         </el-col>
                         <el-col :span="8">
-                            上游单据编码： {{form.params.externalOrderNo}}
+                            上游单据编码： {{ form.params.externalOrderNo }}
                         </el-col>
                         <el-col :span="8">
-                            仓库编码:{{form.params.whCode}}
+                            仓库编码:{{ form.params.whCode }}
                         </el-col>
                     </el-row>
 
@@ -51,8 +51,10 @@
                                     <template v-slot="{row}">
                                         <el-input
                                             size=mini
-                                            v-model="row.skuLot5"
-                                            @keyup.enter.native="aa"
+                                            v-model="row.lineNumber"
+                                            @blur="getDetailData(row)"
+                                            @focus="getFocus(row)"
+                                            @keyup.enter.native="getDetailData(row)"
                                         >
                                         </el-input>
                                     </template>
@@ -69,7 +71,7 @@
                                     <template v-slot="{row}">
                                         <el-input
                                             size=mini
-                                            v-model="row.sku.skuSpec"
+                                            v-model="row.skuCode"
                                             :disabled="true">
                                         </el-input>
 
@@ -84,11 +86,16 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input-number
-                                            v-model="row.planQty"
+                                            v-model="row.scanQty"
+                                            :disabled="exist(row)"
                                             style="width: 80px"
                                             :min="0"
+                                            :max="row.surplusQty+row.scanQty"
                                             controls-position="right"
-                                            size="mini"></el-input-number>
+                                            size="mini"
+                                            @change="(val,oldValue)=>onChange(val,oldValue,row)">
+                                            >
+                                        </el-input-number>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -103,7 +110,7 @@
                                     <template v-slot="{row}">
                                         <el-input
                                             size=mini
-                                            v-model="row.sku.skuSpec"
+                                            v-model="row.surplusQty"
                                             :disabled="true">
                                         </el-input>
 
@@ -121,7 +128,7 @@
                                     <template v-slot="{row}">
                                         <el-input
                                             size=mini
-                                            v-model="row.sku.skuSpec"
+                                            v-model="row.umCode"
                                             :disabled="true">
                                         </el-input>
                                     </template>
@@ -136,7 +143,7 @@
                                         <span class="d-table-header-required">库位编码</span>
                                     </template>
                                     <template v-slot="{row}">
-                                        <nodes-location v-model="row.skuLot1"></nodes-location>
+                                        <nodes-location v-model="row.locId"></nodes-location>
                                     </template>
                                 </el-table-column>
                                 <el-table-column width="130">
@@ -146,7 +153,7 @@
                                     <template v-slot="{row}">
                                         <el-input
                                             size=mini
-                                            v-model="row.skuLot1"
+                                            v-model="row.boxCode"
                                         >
                                         </el-input>
                                     </template>
@@ -158,7 +165,7 @@
                                     <template v-slot="{row}">
                                         <el-input
                                             size=mini
-                                            v-model="row.skuLot1"
+                                            v-model="row.lpnCode"
                                         >
                                         </el-input>
                                     </template>
@@ -170,7 +177,7 @@
                                     <template v-slot="{row}">
                                         <el-input
                                             size=mini
-                                            v-model="row.skuLot1"
+                                            v-model="row.snCode"
                                         >
                                         </el-input>
                                     </template>
@@ -236,16 +243,6 @@
                                     </template>
                                 </el-table-column>
 
-                                <el-table-column width="130">
-                                    <template slot="header">
-                                        <span class="d-table-header-required">备注</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <el-input v-model="row.remark" size="mini"></el-input>
-                                    </template>
-                                </el-table-column>
-
-
 
                             </el-table>
                         </el-col>
@@ -276,7 +273,7 @@
 <script>
 import {editDetailMixin} from "@/mixins/editDetail";
 import func from "@/util/func";
-import {addReceive, getEditReceiveById, getReceiveByPc} from "@/api/wms/instock/receive";
+import {getReceiveByPc, getReceiveDetailByPc, ReceiveByPc} from "@/api/wms/instock/receive";
 import NodesLocation from "@/components/wms/select/NodesLocation";
 
 export default {
@@ -290,80 +287,150 @@ export default {
     mixins: [editDetailMixin],
     data() {
         return {
+            rowObject: {
+                lineNumber: '',
+                scanQty: 0,
+            },
+            rowData: [],
             refresh: true,
             form: {
                 params: {
-                   receiveNo:'',
-                    externalOrderNo:'',
-                    whCode:''
+                    receiveId: "",
+                    receiveNo: '',
+                    externalOrderNo: '',
+                    whCode: ''
                 },
 
             }
         }
     },
     created() {
-         this.getTableData()
+        this.getTableData()
     },
     methods: {
-        aa() {
-            alert("回车事件")
+        getFocus(row) {
+            this.rowObject.lineNumber = row.lineNumber
+            this.rowObject.scanQty = row.scanQty
+        },
+        exist(row) {
+            if (func.isEmpty(row.lineNumber)) {
+                return true
+            }
+            return false
+        },
+        onChange(val, oldVal, row) {
+            let data = this.table.data
+            let a = val - oldVal
+            row.surplusQty = row.surplusQty - a
+            data.find(u => {
+                if (u.lineNumber === row.lineNumber) {
+                    u.surplusQty = row.surplusQty
+                }
+
+            });
         },
 
         // 过滤空白行
         filterBlankRow(row) {
             return !(
-                (func.isEmpty(row.sku.skuId)
-                    && func.isEmpty(row.sku.skuCode)
-                    && func.isEmpty(row.sku.skuName))
-                && row.planQty === 0
+                func.isEmpty(row.lineNumber)
             );
         },
-        getTableData() {
-            if (func.isEmpty(this.receiveId)){
-                return;
+        getDetailData(row) {
+            if (func.isEmpty(row.lineNumber)) {
+                return
+            }
+            let a = this.rowData
+            let column = a.find(u => {
+                if (u.lineNumber === row.lineNumber) {
+                    return u
+                }
+            });
+
+            if (func.isNotEmpty(this.rowObject) && row.lineNumber != this.rowObject.lineNumber) {
+                let data = this.table.data
+                data.find(u => {
+                    if (u.lineNumber === this.rowObject.lineNumber) {
+                        u.surplusQty = u.surplusQty + this.rowObject.scanQty
+                    }
+                });
+
             }
 
+            if (func.isNotEmpty(column)) {
+                if (column.surplusQty === 0) {
+                    this.$message.error('该行号剩余数量为0');
+                    row.lineNumber = ''
+                    return
+                }
+                row.skuCode = column.skuCode
+                row.surplusQty = column.surplusQty
+                row.umCode = column.umCode
+                row.skuLot1 = column.skuLot1
+                row.skuLot4 = column.skulot4
+                row.skuLot5 = column.skuLot5
+                row.skuLot6 = column.skuLot6
+                row.skuLot8 = column.skuLot8
+                return
+            }
+
+            let skuUmSelectQuery = {
+                lineNumber: row.lineNumber,
+                receiveId: this.receiveId
+            };
+
+            getReceiveDetailByPc(skuUmSelectQuery)
+                .then((res) => {
+                    let item = res.data.data
+                    if (func.isEmpty(item.lineNo)) {
+                        this.$message.error('没有搜索到该行号');
+                        Object.keys(row).forEach(key => {
+                            row[key] = ''
+                        })
+                        return
+                    }
+                    row.skuCode = item.skuCode
+                    row.surplusQty = item.surplusQty
+                    row.umCode = item.umCode
+                    row.skuLot1 = item.skuLot1
+                    row.skuLot4 = item.skulot4
+                    row.skuLot5 = item.skuLot5
+                    row.skuLot6 = item.skuLot6
+                    row.skuLot8 = item.skuLot8
+                    this.rowData.push(item)
+
+
+                })
+        },
+        getTableData() {
             let skuUmSelectQuery = {
                 receiveId: this.receiveId
             };
             getReceiveByPc(skuUmSelectQuery)
                 .then((res) => {
                     let pageObj = res.data.data;
-                    this.form.params = pageObj.receiveHeaderResponse;
+                    this.form.params = pageObj
                 })
 
         },
         getDescriptor() {
-            const skuErrorMsg = '请选择物品编码';
             return {
-                sku: {
-                    type: 'object',
-                    required: true,
-                    fields: {
-                        skuId: {required: true, message: skuErrorMsg},
-                        skuCode: {required: true, message: skuErrorMsg},
-                        skuName: {required: true, message: skuErrorMsg},
-
-                    }
-                },
-                planQty: {type: 'Number', validator: (rule, value) => value > 0, message: '计划数量不能为0'}
-
+                scanQty: {type: 'Number', validator: (rule, value) => value > 0, message: '计划数量不能为0'},
+                locId: {required: true, message: '库位不能为空'}
             };
         },
         createRowObj() {
             return {
-                skuCode:'',
+                receiveDetailId: '',
+                skuCode: '',
                 lineNumber: '',
-                sku: {
-                    skuId: '',
-                    skuCode: '',
-                    skuName: '',
-                    skuSpec: ''
-                },
+                scanQty: 0,
+                surplusQty: 0,
                 umCode: '',
-                planQty: 0,
-                remark: '',
-                skuSpec: '',
+                locId: '',
+                boxCode: '',
+                lpnCode: '',
+                snCode: '',
                 skuLot1: '',
                 skuLot4: '',
                 skuLot5: '',
@@ -377,8 +444,9 @@ export default {
 
         },
         submitFormParams() {
-            this.form.params.newReceiveDetailRequestList = this.table.postData
-            return addReceive(this.form.params)
+            let detailRequestList = this.table.postData
+            let receiveByPcRequest = {receiveId: this.receiveId, detailRequestList}
+            return ReceiveByPc(receiveByPcRequest)
                 .then(res => {
                     return {
                         msg: res.data.msg,

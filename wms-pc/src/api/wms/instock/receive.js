@@ -116,3 +116,11 @@ export const getReceiveBillDataBylsopIds = (lsopIds) => {
         }
     })
 }
+
+export const ReceiveByPc = (data) => {
+    return request({
+        url: '/api/wms/receive/ReceiveByPc',
+        method: 'post',
+        data: data,
+    })
+}

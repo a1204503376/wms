@@ -319,6 +319,20 @@ export default {
             });
         },
         onReceive(row){
+            let state = row.billState;
+            if(state==="关闭"){
+                this.$message.error('该收货单已关闭，不能进行收货');
+                return
+            }
+            if(state==="全部收货"){
+                this.$message.error('该收货单已全部收货，不能进行收货');
+                return
+            }
+            if(state==="已取消"){
+                this.$message.error('该收货单已取消，不能进行收货');
+                return
+            }
+
             this.$router.push({
                 name: 'PC收货',
                 params: {
@@ -377,12 +391,12 @@ export default {
                 type: "warning",
             }).then(() => {
                let state = row.billState;
-                if(state===40){
+                if(state==="关闭"){
                     this.$message.error('该收货单已关闭，请勿重复点击');
                     throw new Error('该收货单已关闭，请勿重复点击');
                 }
 
-               if(state!==30){
+               if(state!=="全部收货"){
                    this.$message.error('关闭失败,请先完成收货');
                    throw new Error('关闭失败,请先完成收货');
                }

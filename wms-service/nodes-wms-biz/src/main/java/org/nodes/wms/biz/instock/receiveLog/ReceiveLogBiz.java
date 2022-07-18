@@ -96,4 +96,11 @@ public interface ReceiveLogBiz {
 	 * @return List<EditReceiveDetailResponse> 收货单信息响应对象
 	 */
 	List<EditReceiveDetailResponse> findReceiveLogBylsopIds(List<Long> lsopIdList);
+
+	/**
+	 * 保存清点记录
+	 *
+	 * @param receiveLog 清点记录实体
+	 */
+	void saveReceiveLog(ReceiveLog receiveLog);
 }

@@ -167,7 +167,7 @@ public class ReceiveController {
 
 	@PostMapping("/findReceiveLogBylsopIds")
 	public R<List<EditReceiveDetailResponse>> findReceiveBillDataBylsopIds(
-		@Valid @RequestBody LogSoPickIdListRequest logSoPickIdListRequest){
+		@Valid @RequestBody LogSoPickIdListRequest logSoPickIdListRequest) {
 		return R.data(receiveLogBiz.findReceiveLogBylsopIds(logSoPickIdListRequest.getLsopIdList()));
 	}
 
@@ -179,6 +179,17 @@ public class ReceiveController {
 	@PostMapping("/getReceiveDetailByPc")
 	public R<ReceiveDetailByPcResponse> getReceiveDetailByPc(@Valid @RequestBody ReceiveByPcQuery receiveByPcQuery) {
 		return R.data(receiveBiz.getReceiveDetailByPcResponse(receiveByPcQuery));
+	}
+
+	/**
+	 * pc售后
+	 *
+	 * @param request 前端传入参数
+	 */
+	@PostMapping("/receiveByPc")
+	public R<String> receiveByPc(@Valid @RequestBody ReceiveByPcRequest request) {
+		String receiveNo = receiveBiz.receiveByPc(request);
+		return R.success("单号:" + receiveNo + "修改成功");
 	}
 
 

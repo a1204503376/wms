@@ -1,20 +1,19 @@
-package org.nodes.wms.dao.instock.receive.dto.output;
+package org.nodes.wms.dao.instock.receive.dto.input;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /**
- * pc收货明细返回前端dto
+ * pc收货接收前端明细dto
  */
 @Data
-public class ReceiveDetailByPcResponse {
-	/**
-	 * 收货单明细id
-	 */
+public class ReceiveByPcDetailRequest {
 	@JsonSerialize(using = ToStringSerializer.class)
+	@NotNull
 	private Long receiveDetailId;
 	/**
 	 * 订单行号
@@ -25,13 +24,33 @@ public class ReceiveDetailByPcResponse {
 	 */
 	private String skuCode;
 	/**
-	 * 剩余数量
+	 * 实收数量
 	 */
-	private BigDecimal surplusQty;
+	@NotNull
+	private BigDecimal scanQty;
 	/**
 	 * 计量单位编码
 	 */
 	private String umCode;
+	/**
+	 * 库位编码
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	@NotNull
+	private Long locId;
+	/**
+	 * 箱码
+	 */
+	private String boxCode;
+	/**
+	 * lpn
+	 */
+	private String lpnCode;
+	/**
+	 * 序列号
+	 */
+	private String snCode;
+
 	/**
 	 * 生产批次
 	 */
