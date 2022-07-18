@@ -44,6 +44,14 @@
 		},
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
+			var that = this;
+			that.emitKeyDown = function(e) {
+				if (e.key == 'Enter') {
+					that.analysisCode(that.params.boxCode);
+					//查询方法
+					that.getPutawayData();
+				}
+			};
 		},
 		methods: {
 			getPutawayData() {
@@ -54,8 +62,9 @@
 						});
 					}
 					this.putawayData = data.data;
+					this.clearEmitKeyDown();
 					uni.$u.func.routeNavigateTo('/pages/inStock/putawayByBox/putawayByBoxSubmit', this
-					.putawayData);
+						.putawayData);
 				})
 			},
 			analysisCode(code) {
@@ -76,12 +85,16 @@
 				}
 			},
 			esc() {
+				this.clearEmitKeyDown();
 				uni.$u.func.navigateBackTo(1);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);
 				//查询方法
 				this.getPutawayData();
+			},
+			clearEmitKeyDown() {
+				this.emitKeyDown = null;
 			},
 			emitKeyDown(e) {
 				if (e.key == 'Enter') {
