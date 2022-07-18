@@ -164,11 +164,6 @@ public class ReceiveController {
 		receiveBiz.exportNotReceiveDetail(notReceiveDetailPageQuery, response);
 	}
 
-	@PostMapping("/findReceiveLogBylsopIds")
-	public R<List<EditReceiveDetailResponse>> findReceiveBillDataBylsopIds(
-		@Valid @RequestBody LogSoPickIdListRequest logSoPickIdListRequest) {
-		return R.data(receiveLogBiz.findReceiveLogBylsopIds(logSoPickIdListRequest.getLsopIdList()));
-	}
 
 	@PostMapping("/getReceiveByPc")
 	public R<ReceiveByPcResponse> getReceiveByPc(@Valid @RequestBody ReceiveIdRequest receiveIdRequest) {

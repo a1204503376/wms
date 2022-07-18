@@ -398,8 +398,6 @@ export default {
                     row.skuLot6 = item.skuLot6
                     row.skuLot8 = item.skuLot8
                     this.rowData.push(item)
-
-
                 })
         },
         getTableData() {

@@ -4,10 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
-import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
-import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
@@ -48,9 +46,6 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	private final ReceiveLogDao receiveLogDao;
 	private final LocationBiz locationBiz;
 	private final OwnerBiz ownerBiz;
-	private final LogSoPickBiz logSoPickBiz;
-
-	private final SkuBiz skuBiz;
 
 
 	@Override
@@ -205,28 +200,6 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		return null;
 	}
 
-	@Override
-	public List<EditReceiveDetailResponse> findReceiveLogBylsopIds(List<Long> lsopIdList) {
-		List<LogSoPick> logSoPickList = logSoPickBiz.findByIds(lsopIdList);
-		List<EditReceiveDetailResponse> receiveDetailList = new ArrayList<>();
-		logSoPickList.forEach(item -> {
-			EditReceiveDetailResponse detail = new EditReceiveDetailResponse();
-			// 赋值sku对象属性
-			Sku sku = skuBiz.findById(item.getSkuId());
-			SkuSelectResponse skuSelectResponse = new SkuSelectResponse();
-			skuSelectResponse.setSkuId(sku.getSkuId());
-			skuSelectResponse.setSkuCode(sku.getSkuCode());
-			skuSelectResponse.setSkuName(sku.getSkuName());
-			skuSelectResponse.setSkuSpec(sku.getSkuSpec());
-			detail.setSku(skuSelectResponse);
-			// 计量单位编码
-			detail.setUmCode(item.getWsuCode());
-			// 批属性
-			SkuLotUtil.setAllSkuLot(item, detail);
-			receiveDetailList.add(detail);
-		});
-		return receiveDetailList;
-	}
 
 	@Override
 	public void saveReceiveLog(ReceiveLog receiveLog) {
