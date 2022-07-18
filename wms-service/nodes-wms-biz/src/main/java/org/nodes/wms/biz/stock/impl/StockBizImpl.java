@@ -431,6 +431,9 @@ public class StockBizImpl implements StockBiz {
 		List<CallAgvResponse> callAgvResponseList = new ArrayList<>();
 		//根据仓库id获取入库暂存区库位
 		Location stage = locationBiz.getStageLocation(whId);
+		if (Func.isEmpty(stage)) {
+			throw new ServiceException("查询失败,该库房下入库暂存区库位为空");
+		}
 		//根据箱码和库房id获取入库暂存区库存
 		List<Stock> stockList = findLpnStockOnStageLeft(whId, boxCode, stage);
 		//按lpn编码对查询出的集合进行分组

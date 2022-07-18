@@ -135,7 +135,7 @@ public class ReceiveLogFactory {
 		receiveLog.setAsnBillNo(receiveHeader.getAsnBillNo());
 		receiveLog.setReceiveDetailId(receiveDetail.getReceiveDetailId());
 		receiveLog.setSupplierId(receiveHeader.getSupplierId());
-		receiveLog.setLineNo(request.getLineNo());
+		receiveLog.setLineNo(request.getLineNumber());
 		receiveLog.setQty(request.getScanQty());
 		receiveLog.setLpnCode(request.getLpnCode());
 		receiveLog.setLocId(location.getLocId());
@@ -149,8 +149,8 @@ public class ReceiveLogFactory {
 		receiveLog.setSkuSpec(receiveDetail.getSkuSpec());
 		receiveLog.setWhId(receiveDetail.getWhId());
 		receiveLog.setWhCode(receiveDetail.getWhCode());
-		receiveLog.setWoId(receiveDetail.getWoId());
-		receiveLog.setOwnerCode(receiveDetail.getOwnerCode());
+		receiveLog.setWoId(receiveHeader.getWoId());
+		receiveLog.setOwnerCode(receiveHeader.getOwnerCode());
 		SkuLotUtil.setAllSkuLot(request, receiveLog);
 		return receiveLog;
 	}

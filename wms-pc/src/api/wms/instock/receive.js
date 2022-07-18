@@ -76,7 +76,7 @@ export const getReceiveLogList = (receiveId) => {
     return request({
         url: '/api/wms/receive/getReceiveLogList',
         method: 'get',
-        params:{
+        params: {
             receiveId,
         }
     })
@@ -86,7 +86,7 @@ export const getLogList = (receiveId) => {
     return request({
         url: '/api/wms/receive/getLogList',
         method: 'get',
-        params:{
+        params: {
             receiveId,
         }
     })
@@ -119,7 +119,7 @@ export const getReceiveBillDataBylsopIds = (lsopIds) => {
 
 export const ReceiveByPc = (data) => {
     return request({
-        url: '/api/wms/receive/ReceiveByPc',
+        url: '/api/wms/receive/receiveByPc',
         method: 'post',
         data: data,
     })

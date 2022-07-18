@@ -457,8 +457,8 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public String receiveByPc(ReceiveByPcRequest receiveByPcRequest) {
-		//receiveBiz.canReceive(header, detail, item.getPlanQty());
 		//根据id获取头表信息
 		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(receiveByPcRequest.getReceiveId());
 		List<ReceiveByPcDetailRequest> detailList = receiveByPcRequest.getDetailRequestList();

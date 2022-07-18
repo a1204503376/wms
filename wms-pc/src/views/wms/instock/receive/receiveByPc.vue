@@ -54,7 +54,7 @@
                                             v-model="row.lineNumber"
                                             @blur="getDetailData(row)"
                                             @focus="getFocus(row)"
-                                            @keyup.enter.native="getDetailData(row)"
+                                            @keyup.enter.native="getDetailData(row,$event)"
                                         >
                                         </el-input>
                                     </template>
@@ -328,6 +328,12 @@ export default {
                 }
 
             });
+            this.rowData.find(u => {
+                if (u.lineNo === row.lineNumber) {
+                    u.surplusQty = row.surplusQty
+                }
+
+            });
         },
 
         // 过滤空白行
@@ -336,13 +342,13 @@ export default {
                 func.isEmpty(row.lineNumber)
             );
         },
-        getDetailData(row) {
+        getDetailData(row, $event) {
             if (func.isEmpty(row.lineNumber)) {
                 return
             }
             let a = this.rowData
             let column = a.find(u => {
-                if (u.lineNumber === row.lineNumber) {
+                if (u.lineNo === row.lineNumber) {
                     return u
                 }
             });
@@ -354,6 +360,8 @@ export default {
                         u.surplusQty = u.surplusQty + this.rowObject.scanQty
                     }
                 });
+                this.rowObject.lineNumber = row.lineNumber
+                this.rowObject.scanQty = 0
 
             }
 
@@ -363,6 +371,7 @@ export default {
                     row.lineNumber = ''
                     return
                 }
+                row.receiveDetailId = column.receiveDetailId
                 row.skuCode = column.skuCode
                 row.surplusQty = column.surplusQty
                 row.umCode = column.umCode
@@ -389,9 +398,11 @@ export default {
                         })
                         return
                     }
+                    row.receiveDetailId = item.receiveDetailId
                     row.skuCode = item.skuCode
                     row.surplusQty = item.surplusQty
                     row.umCode = item.umCode
+                    row.scanQty = 0
                     row.skuLot1 = item.skuLot1
                     row.skuLot4 = item.skulot4
                     row.skuLot5 = item.skuLot5
@@ -399,6 +410,7 @@ export default {
                     row.skuLot8 = item.skuLot8
                     this.rowData.push(item)
                 })
+
         },
         getTableData() {
             let skuUmSelectQuery = {
@@ -438,9 +450,6 @@ export default {
         },
 
 
-        onChangeSku(row) {
-
-        },
         submitFormParams() {
             let detailRequestList = this.table.postData
             let receiveByPcRequest = {receiveId: this.receiveId, detailRequestList}
