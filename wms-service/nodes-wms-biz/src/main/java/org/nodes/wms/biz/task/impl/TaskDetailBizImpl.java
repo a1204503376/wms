@@ -10,6 +10,7 @@ import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
 import org.nodes.wms.dao.task.dto.input.TaskDetailPageRequest;
 import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
 import org.nodes.wms.dao.task.dto.output.TaskDetailPageResponse;
+import org.nodes.wms.dao.task.entities.TaskDetail;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springframework.stereotype.Service;
@@ -46,5 +47,10 @@ public class TaskDetailBizImpl implements TaskDetailBiz {
 	@Override
 	public void againIssuedlActivity(AgainIssuedlTask request) {
 
+	}
+
+	@Override
+	public Boolean updateTaskState(TaskDetail taskDetail) {
+		return taskDetailDao.update(taskDetail);
 	}
 }

@@ -2,6 +2,7 @@ package org.nodes.wms.biz.task;
 
 import org.nodes.wms.dao.task.dto.QueryAndFrozenEnableOutboundRequest;
 import org.nodes.wms.dao.task.dto.SchedulingBroadcastNotificationRequest;
+import org.nodes.wms.dao.task.dto.SyncTaskStateRequest;
 
 import java.util.List;
 
@@ -20,4 +21,11 @@ public interface SchedulingBiz {
 	 * @param request 里面包含日志消息和任务ID
 	 */
 	void broadcastNotificationActivity(List<SchedulingBroadcastNotificationRequest> request);
+
+	/**
+	 * 同步状态
+	 *
+	 * @param request 请求参数
+	 */
+	Boolean synchronizeTaskStatus(SyncTaskStateRequest request);
 }

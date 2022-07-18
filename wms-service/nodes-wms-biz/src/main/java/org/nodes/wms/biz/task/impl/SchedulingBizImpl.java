@@ -6,12 +6,16 @@ import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.task.SchedulingBiz;
+import org.nodes.wms.biz.task.TaskDetailBiz;
+import org.nodes.wms.biz.task.modular.TaskDetailFactory;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.zone.constant.ZoneConstant;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.log.dto.input.NoticeMessageRequest;
 import org.nodes.wms.dao.task.dto.QueryAndFrozenEnableOutboundRequest;
 import org.nodes.wms.dao.task.dto.SchedulingBroadcastNotificationRequest;
+import org.nodes.wms.dao.task.dto.SyncTaskStateRequest;
+import org.nodes.wms.dao.task.entities.TaskDetail;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +26,8 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	private final LocationBiz locationBiz;
 	private final ZoneBiz zoneBiz;
 	private final LogBiz logBiz;
+	private final TaskDetailFactory taskDetailFactory;
+	private final TaskDetailBiz taskDetailBiz;
 
 	@Override
 	public String selectAndFrozenEnableOutbound(QueryAndFrozenEnableOutboundRequest request) {
@@ -47,5 +53,11 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			message.setLog(String.format("任务[%s]：[%s]", notificationRequest.getTaskDetailId(), notificationRequest.getMsg()));
 			logBiz.noticeMesssage(message);
 		}
+	}
+
+	@Override
+	public Boolean synchronizeTaskStatus(SyncTaskStateRequest request) {
+		TaskDetail detail = taskDetailFactory.create(request);
+		return taskDetailBiz.updateTaskState(detail);
 	}
 }

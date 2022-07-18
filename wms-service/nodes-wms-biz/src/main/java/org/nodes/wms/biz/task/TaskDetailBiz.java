@@ -7,6 +7,7 @@ import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
 import org.nodes.wms.dao.task.dto.input.TaskDetailPageRequest;
 import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
 import org.nodes.wms.dao.task.dto.output.TaskDetailPageResponse;
+import org.nodes.wms.dao.task.entities.TaskDetail;
 import org.springblade.core.mp.support.Query;
 
 import java.util.HashMap;
@@ -53,4 +54,11 @@ public interface TaskDetailBiz {
 	 * @param request 重新下发任务的参数
 	 */
 	void againIssuedlActivity(AgainIssuedlTask request);
+
+	/**
+	 * 修改任务状态
+	 *
+	 * @param taskDetail 包含任务明细ID，任务状态
+	 */
+	Boolean updateTaskState(TaskDetail taskDetail);
 }

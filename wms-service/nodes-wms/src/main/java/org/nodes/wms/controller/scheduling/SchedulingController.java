@@ -32,7 +32,7 @@ public class SchedulingController {
 	@ApiLog("调度系统同步任务执行状态")
 	@PostMapping("syncTaskState")
 	public R<String> syncTaskState(@Valid @RequestBody SyncTaskStateRequest request) {
-		return R.data("TODO");
+		return R.data(schedulingBiz.synchronizeTaskStatus(request) ? "同步任务执行状态成功" : "同步任务执行状态失败");
 	}
 
 	/**
