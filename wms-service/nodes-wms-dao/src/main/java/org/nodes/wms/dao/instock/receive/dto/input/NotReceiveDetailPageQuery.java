@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 未收货明细分页请求dto类
@@ -21,7 +22,7 @@ public class NotReceiveDetailPageQuery implements Serializable {
 	/**
 	 * 单据类型
 	 */
-	private String billType;
+	private List<String> billTypeCdList;
 
 	/**
 	 * 上游编码
