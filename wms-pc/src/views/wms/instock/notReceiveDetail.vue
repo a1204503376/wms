@@ -144,8 +144,8 @@ export default {
             form: {
                 params: {
                     receiveNo: "",
-                    skuCode: "",
-                    billTypeCdList: "",
+                    skuIdList: [],
+                    billTypeCdList: [],
                     externalOrderNo: "",
                     createUser: "",
                     createTimeDateRange: ["", ""],
@@ -290,7 +290,7 @@ export default {
         onReset() {
             this.form.params = {
                 receiveNo: "",
-                skuCode: "",
+                skuIdList: [],
                 billTypeCdList: [],
                 externalOrderNo: "",
                 createUser: "",

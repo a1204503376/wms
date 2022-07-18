@@ -32,7 +32,7 @@ public class NotReceiveDetailPageQuery implements Serializable {
 	/**
 	 * 物品编码
 	 */
-	private String skuCode;
+	private List<Long> skuIdList;
 
 	/**
 	 * 创建人
