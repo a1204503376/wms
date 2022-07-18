@@ -54,5 +54,97 @@
             ORDER BY create_time DESC
         </if>
     </select>
+
+    <select id="pageNotSoPick"
+            resultType="org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse">
+        <if test="page.orders == null and page.orders.size > 0">
+            ORDER BY detail.create_time DESC
+        </if>
+    </select>
+
+    <select id="notSoPickListByQuery"
+            resultType="org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickExcelResponse">
+        <include refid="notSoPickPageOrList"/>
+    </select>
+
+    <sql id="notSoPickPageOrList">
+        SELECT header.so_bill_id,
+        header.so_bill_no,
+        billType.bill_type_name,
+        header.order_no,
+        so_line_no,
+        sku_code,
+        sku_name,
+        plan_qty,
+        scan_qty,
+        surplus_qty,
+        um_name,
+        sku_lot1,
+        sku_lot2,
+        sku_lot3,
+        sku_lot4,
+        sku_lot5,
+        sku_lot6,
+        sku_lot7,
+        sku_lot8,
+        sku_lot9,
+        sku_lot10,
+        sku_lot11,
+        sku_lot12,
+        sku_lot13,
+        sku_lot14,
+        sku_lot15,
+        sku_lot16,
+        sku_lot17,
+        sku_lot18,
+        sku_lot19,
+        sku_lot20,
+        sku_lot21,
+        sku_lot22,
+        sku_lot23,
+        sku_lot24,
+        sku_lot25,
+        sku_lot26,
+        sku_lot27,
+        sku_lot28,
+        sku_lot29,
+        sku_lot30,
+        `user`.real_name as create_user,
+        header.create_time
+        FROM so_detail detail
+        LEFT JOIN so_header header ON header.so_bill_id = detail.so_bill_id
+        LEFT JOIN blade_user `user` ON `user`.id = header.create_user
+        LEFT JOIN wms_bill_type billType ON billType.bill_type_cd = header.bill_type_cd
+        <where>
+            detail.plan_qty > detail.scan_qty
+            <if test="param.soBillNo != null and param.soBillNo != ''">
+                AND header.so_bill_no LIKE CONCAT('%', #{param.soBillNo} ,'%')
+            </if>
+            <if test="param.billTypeCdList != null and param.billTypeCdList.size > 0">
+                AND header.bill_type_cd IN
+                <foreach collection="param.billTypeCdList" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="param.orderNo != null and param.orderNo != ''">
+                AND header.order_no LIKE CONCAT('%', #{param.orderNo} ,'%')
+            </if>
+            <if test="param.skuIdList != null and param.skuIdList.size > 0">
+                AND detail.sku_id IN
+                <foreach collection="param.skuIdList" close=")" item="item" open="(" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="param.createUser != null and param.createUser != ''">
+                AND `user`.real_name LIKE CONCAT('%', #{param.createUser}, '%')
+            </if>
+            <if test="param.createTimeBegin != null">
+                AND detail.create_time &gt;= #{param.createTimeBegin}
+            </if>
+            <if test="param.createTimeEnd != null">
+                AND detail.create_time &lt;= #{param.createTimeEnd}
+            </if>
+        </where>
+    </sql>
 </mapper>
 

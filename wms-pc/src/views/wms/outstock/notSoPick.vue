@@ -1,11 +1,11 @@
 <template>
-    <div id="notReceiveDetail">
+    <div id="notSoPick">
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
                     <el-col :span="8">
-                        <el-form-item label="收货单编码" label-width="90px">
-                            <el-input placeholder="请输入收货单编码" v-model.trim="form.params.receiveNo" :clearable="true"></el-input>
+                        <el-form-item label="发货单编码" label-width="90px">
+                            <el-input placeholder="请输入发货单编码" v-model.trim="form.params.soBillNo" :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -17,8 +17,8 @@
                         <el-form-item label="单据类型" label-width="90px">
                             <nodes-bill-type
                                 v-model="form.params.billTypeCdList"
-                                io-type="I"
                                 :multiple="true"
+                                io-type="O"
                                 :clearable="true"></nodes-bill-type>
                         </el-form-item>
                     </el-col>
@@ -28,7 +28,7 @@
                 <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="上游编码" label-width="90px">
-                            <el-input placeholder="请输入上游编码" v-model.trim="form.params.externalOrderNo" :clearable="true"></el-input>
+                            <el-input placeholder="请输入上游编码" v-model.trim="form.params.orderNo" :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -115,20 +115,18 @@ import {listMixin} from "@/mixins/list";
 import NodesLocation from "@/components/wms/select/NodesLocation";
 import NodesOwner from "@/components/wms/select/NodesOwner";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
-import {exportExcel, getPage} from "@/api/wms/instock/notReceiveDetail"
+import {exportExcel, getPage} from "@/api/wms/outstock/notSoPick"
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js'
 import {nowDateFormat} from "@/util/date";
-import NodesReceiveBillState from "@/components/wms/select/NodesReceiveBillState";
 import NodesBillType from "@/components/wms/select/NodesBillType";
 import NodesSku from "@/components/wms/select/NodesSkuByQuery";
 
 export default {
-    name: "notReceiveDetail",
+    name: "notSoPick",
     components: {
         NodesSku,
         NodesBillType,
-        NodesReceiveBillState,
         NodesWarehouse,
         NodesOwner,
         NodesLocation,
@@ -143,19 +141,19 @@ export default {
         return {
             form: {
                 params: {
-                    receiveNo: "",
+                    soBillNo: '',
                     skuIdList: [],
                     billTypeCdList: [],
-                    externalOrderNo: "",
-                    createUser: "",
-                    createTimeDateRange: ["", ""],
+                    orderNo: '',
+                    createUser: '',
+                    createTimeDateRange: ['', ''],
                 },
             },
             table: {
                 columnList: [
                     {
-                        prop: "receiveNo",
-                        label: "收货单编码",
+                        prop: "soBillNo",
+                        label: "发货单编码",
                         sortable: "custom",
                     },
                     {
@@ -164,12 +162,12 @@ export default {
                         sortable: "custom"
                     },
                     {
-                        prop: "externalOrderNo",
+                        prop: "orderNo",
                         label: "上游编码",
                         sortable: "custom"
                     },
                     {
-                        prop: "lineNo",
+                        prop: "soLineNo",
                         label: "行号",
                         sortable: "custom"
                     },
@@ -215,7 +213,7 @@ export default {
                     },
                     {
                         prop: "skuLot3",
-                        label: "收货日期",
+                        label: "发货日期",
                         sortable: "custom"
                     },
                     {
@@ -267,8 +265,8 @@ export default {
     computed: {
         permissionObj() {
             return {
-                search: this.vaildData(this.permission.notReceiveDetail_search, false),
-                repeal: this.vaildData(this.permission.notReceiveDetail_repeal, false),
+                search: this.vaildData(this.permission.notSoPick_search, false),
+                repeal: this.vaildData(this.permission.notSoPick_repeal, false),
             }
         }
     },
@@ -289,12 +287,12 @@ export default {
         },
         onReset() {
             this.form.params = {
-                receiveNo: "",
+                soBillNo: '',
                 skuIdList: [],
                 billTypeCdList: [],
-                externalOrderNo: "",
-                createUser: "",
-                createTimeDateRange: ["", ""],
+                orderNo: '',
+                createUser: '',
+                createTimeDateRange: ['', ''],
             }
         },
         exportData() {
@@ -302,7 +300,7 @@ export default {
             exportExcel(this.form.params)
                 .then((res) => {
                     this.$message.success("操作成功，正在下载中...");
-                    fileDownload(res.data, `未收货明细${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
+                    fileDownload(res.data, `未发货明细${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
                 })
                 .catch(() => {
                     this.$message.error("系统模板目录配置有误或文件不存在");
@@ -312,7 +310,7 @@ export default {
                 });
         },
         onExportLocalData() {
-            this.exportCurrentDataToExcel("未收货明细", "未收货明细")
+            this.exportCurrentDataToExcel("未发货明细", "未发货明细")
         },
         onRepeal() {
             let rows = this.$refs.table;

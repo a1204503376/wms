@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.instock.receive.dto.input;
+package org.nodes.wms.dao.outstock.logSoPick.dto.input;
 
 import lombok.Data;
 
@@ -7,17 +7,17 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 未收货明细分页请求dto类
+ * 未发货分页请求dto类
  **/
 @Data
-public class NotReceiveDetailPageQuery implements Serializable {
+public class NotSoPickPageQuery implements Serializable {
 
-	private static final long serialVersionUID = 2441383923151178232L;
+	private static final long serialVersionUID = -9216042978283508798L;
 
 	/**
-	 * 收货单编码
+	 * 发货单编码
 	 */
-	private String receiveNo;
+	private String soBillNo;
 
 	/**
 	 * 单据类型
@@ -27,7 +27,7 @@ public class NotReceiveDetailPageQuery implements Serializable {
 	/**
 	 * 上游编码
 	 */
-	private String externalOrderNo;
+	private String orderNo;
 
 	/**
 	 * 物品编码

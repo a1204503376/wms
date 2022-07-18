@@ -1,5 +1,6 @@
 package org.nodes.wms.controller.outstock;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,7 +14,9 @@ import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
 import org.nodes.wms.core.outstock.so.cache.SoCache;
 import org.nodes.wms.core.outstock.so.service.ISoHeaderService;
 import org.nodes.wms.core.outstock.so.vo.SoHeaderVO;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickForSoDetailResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillRemoveRequest;
@@ -220,4 +223,15 @@ public class SoBillController {
 		return R.success("关闭成功");
 	}
 
+	@PostMapping("/pageNotSoPick")
+	public R<IPage<NotSoPickPageResponse>> pageNotLogSoPick(
+		Query query, @RequestBody NotSoPickPageQuery notSoPickPageQuery) {
+		return R.data(soDetailBiz.pageNotSoPick(query, notSoPickPageQuery));
+	}
+
+	@PostMapping("/exportNotSoPick")
+	public void exportNotSoPick(
+		@RequestBody NotSoPickPageQuery notSoPickPageQuery, HttpServletResponse response){
+		soDetailBiz.exportNotSoPick(notSoPickPageQuery, response);
+	}
 }

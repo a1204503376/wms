@@ -145,7 +145,7 @@
             <if test="param.receiveNo != null and param.receiveNo != ''">
                 AND header.receive_no LIKE CONCAT('%', #{param.receiveNo} ,'%')
             </if>
-            <if test="param.billTypeCdList != null and param.billTypeCdList.size >0">
+            <if test="param.billTypeCdList != null and param.billTypeCdList.size > 0">
                 AND header.bill_type_cd IN
                 <foreach collection="param.billTypeCdList" item="item" separator="," open="(" close=")">
                     #{item}
@@ -154,8 +154,11 @@
             <if test="param.externalOrderNo != null and param.externalOrderNo != ''">
                 AND header.external_order_no LIKE CONCAT('%', #{param.externalOrderNo} ,'%')
             </if>
-            <if test="param.skuCode != null and param.skuCode != ''">
-                AND detail.sku_code LIKE CONCAT('%', #{param.skuCode}, '%')
+            <if test="param.skuIdList != null and param.skuIdList.size > 0">
+                AND detail.sku_id IN
+                <foreach collection="param.skuIdList" close=")" open="(" separator="," item="item">
+                    #{item}
+                </foreach>
             </if>
             <if test="param.createUser != null and param.createUser != ''">
                 AND `user`.real_name LIKE CONCAT('%', #{param.createUser}, '%')
@@ -176,10 +179,12 @@
             ORDER BY header.create_time , receive_no
         </if>
     </select>
+
     <select id="listNotReceiveDetailByQuery"
             resultType="org.nodes.wms.dao.instock.receive.dto.output.NotReceiveDetailExcelResponse">
         <include refid="notReceiveDetail"/>
     </select>
+
     <select id="selectReceiveByPcResponse"
             resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveByPcResponse">
         select receive_id,

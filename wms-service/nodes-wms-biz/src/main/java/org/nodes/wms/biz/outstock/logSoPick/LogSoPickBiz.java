@@ -58,11 +58,4 @@ public interface LogSoPickBiz {
 	 */
 	List<LogSoPick> findByIds(List<Long> lsopIdList);
 
-	/**
-	 * 根据收货记录id查找收货记录信息转化为收货单信息响应给前端
-	 *
-	 * @param receiveIdList:
-	 * @return List<SoDetailEditResponse>
-	 */
-//	List<SoDetailEditResponse> findLogSoPickByReceiveIds(List<Long> receiveIdList);
 }
