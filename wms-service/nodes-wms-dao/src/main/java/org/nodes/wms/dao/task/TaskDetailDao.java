@@ -29,4 +29,12 @@ public interface TaskDetailDao extends BaseService<TaskDetail> {
 	 * @return TaskDetailExcelResponse集合
 	 */
 	List<TaskDetailExcelResponse> getTaskList(HashMap<String, Object> params);
+
+	/**
+	 * 根据任务明细ID更新任务状态
+	 *
+	 * @param detail 包含任务状态以及明细ID和头表ID
+	 * @return 是否成功
+	 */
+	Boolean update(TaskDetail detail);
 }
