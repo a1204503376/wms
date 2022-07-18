@@ -145,7 +145,7 @@ export default {
                 params: {
                     receiveNo: "",
                     skuCode: "",
-                    billTypeCdList: [],
+                    billTypeCdList: "",
                     externalOrderNo: "",
                     createUser: "",
                     createTimeDateRange: ["", ""],
