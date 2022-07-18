@@ -16,7 +16,9 @@
                     <el-col :span="8">
                         <el-form-item label="单据类型" label-width="90px">
                             <nodes-bill-type
-                                v-model="form.params.billType"
+                                v-model="form.params.billTypeCdList"
+                                io-type="I"
+                                :multiple="true"
                                 :clearable="true"></nodes-bill-type>
                         </el-form-item>
                     </el-col>
@@ -143,7 +145,7 @@ export default {
                 params: {
                     receiveNo: "",
                     skuCode: "",
-                    billType: "",
+                    billTypeCdList: [],
                     externalOrderNo: "",
                     createUser: "",
                     createTimeDateRange: ["", ""],
@@ -289,7 +291,7 @@ export default {
             this.form.params = {
                 receiveNo: "",
                 skuCode: "",
-                billType: "",
+                billTypeCdList: [],
                 externalOrderNo: "",
                 createUser: "",
                 createTimeDateRange: ["", ""],

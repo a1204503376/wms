@@ -140,11 +140,16 @@
         LEFT JOIN blade_user `user` ON header.create_user = `user`.id
         <where>
             detail.detail_status = #{detailStatus}
+            AND detail.plan_qty = surplus_qty
+            AND detail.scan_qty = 0
             <if test="param.receiveNo != null and param.receiveNo != ''">
                 AND header.receive_no LIKE CONCAT('%', #{param.receiveNo} ,'%')
             </if>
-            <if test="param.billType != null and param.billType != ''">
-                AND header.bill_type_cd = #{param.billType}
+            <if test="param.billTypeCdList != null and param.billTypeCdList.size >0">
+                AND header.bill_type_cd IN
+                <foreach collection="param.billTypeCdList" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
             </if>
             <if test="param.externalOrderNo != null and param.externalOrderNo != ''">
                 AND header.external_order_no LIKE CONCAT('%', #{param.externalOrderNo} ,'%')
