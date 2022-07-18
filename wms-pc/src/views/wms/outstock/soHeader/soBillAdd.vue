@@ -43,9 +43,9 @@
                     </el-row>
                     <el-row type="flex">
                         <el-col :span="8">
-                            <el-form-item label="客户" prop="customerId">
+                            <el-form-item label="客户" prop="customer">
                                 <nodes-customer
-                                    v-model="form.params.customerId"
+                                    v-model="form.params.customer"
                                     size="medium">
                                 </nodes-customer>
                             </el-form-item>
@@ -263,7 +263,7 @@ export default {
                     billTypeCd: '',
                     whId: '',
                     woId: '',
-                    customerId: '',
+                    customer: {},
                     transportCode: '',
                     outstockType: '',
                     soBillRemark: '',
@@ -383,7 +383,7 @@ export default {
                 billTypeCd: params.billTypeCd,
                 whId: params.whId,
                 woId: params.woId,
-                customerId: params.customerId,
+                customerId: params.customer.id,
                 transportCode: params.transportCode,
                 outstockType: params.outstockType,
                 soBillRemark: params.soBillRemark,

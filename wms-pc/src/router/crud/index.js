@@ -109,7 +109,7 @@ export default [
                 path: 'receiveByPc/:receiveId',
                 name: 'PC收货',
                 props: true,
-                component: () => import('@/views/wms/instock/receive/receiveByPc')
+                // component: () => import('@/views/wms/instock/receive/receiveByPc')
             },
             {
                 path: 'detail/:receiveId',
@@ -207,19 +207,19 @@ export default [
         children: [
             {
                 path: 'add/:soBillId',
-                name: '新增出库单',
+                name: '新增发货单',
                 props: true,
                 component: () => import('@/views/wms/outstock/soHeader/soBillAdd')
             },
             {
                 path: 'edit/:soBillId',
-                name: '编辑出库单',
+                name: '编辑发货单',
                 props: true,
                 component: () => import('@/views/wms/outstock/soHeader/soBillEdit')
             },
             {
                 path: 'detail/:soBillId',
-                name: '出库单详情',
+                name: '发货单详情',
                 props: true,
                 component: () => import('@/views/wms/outstock/soHeader/soBillDetail')
             }]
@@ -229,12 +229,22 @@ export default [
         component: Layout,
         children: [
             {
-                path: 'createReceiveBill',
+                path: 'createReceiveBill/:logSoPicks',
                 name: '创建收货单',
-                props: ($route) => {
-                    return { lsopIds: $route.query.lsopIds };
-                },
+                props: true,
                 component: () => import('@/views/wms/instock/receive/receiveNewForLogSoPick')
+            }
+        ]
+    },
+    {
+        path: '/receiveLog',
+        component: Layout,
+        children: [
+            {
+                path: 'createSoBill/:receiveLogs',
+                name: '创建发货单',
+                props: true,
+                component: () => import('@/views/wms/outstock/soHeader/soBillAddForReceiveLog')
             }
         ]
     }

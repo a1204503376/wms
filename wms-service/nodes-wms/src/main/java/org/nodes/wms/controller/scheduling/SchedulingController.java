@@ -2,6 +2,7 @@ package org.nodes.wms.controller.scheduling;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.wms.biz.task.SchedulingBiz;
 import org.nodes.wms.dao.task.dto.QueryAndFrozenEnableOutboundRequest;
 import org.nodes.wms.dao.task.dto.SchedulingBroadcastNotificationRequest;
 import org.nodes.wms.dao.task.dto.SyncTaskStateRequest;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.SCHEDULING_SYSTEM_API)
 public class SchedulingController {
+	private final SchedulingBiz schedulingBiz;
 
 	/**
 	 * 调度系统同步任务执行状态
@@ -30,7 +32,7 @@ public class SchedulingController {
 	@ApiLog("调度系统同步任务执行状态")
 	@PostMapping("syncTaskState")
 	public R<String> syncTaskState(@Valid @RequestBody SyncTaskStateRequest request) {
-		return R.data("TODO");
+		return R.data(schedulingBiz.synchronizeTaskStatus(request) ? "同步任务执行状态成功" : "同步任务执行状态失败");
 	}
 
 	/**
@@ -42,16 +44,17 @@ public class SchedulingController {
 	@ApiLog("调度系统查询可用接驳区并冻结")
 	@PostMapping("queryAndFrozenEnableOutbound")
 	public R<String> queryAndFrozenEnableOutbound(@Valid @RequestBody QueryAndFrozenEnableOutboundRequest request) {
-		return R.data("TODO");
+		return R.data(schedulingBiz.selectAndFrozenEnableOutbound(request));
 	}
 
 	/**
 	 * 调度系统广播通知
+	 *
 	 * @param request 通知对象集合
 	 */
 	@PostMapping("broadcastNotification")
-	public R broadcastNotification(@Valid @RequestBody List<SchedulingBroadcastNotificationRequest> request){
-
+	public R<String> broadcastNotification(@Valid @RequestBody List<SchedulingBroadcastNotificationRequest> request) {
+		schedulingBiz.broadcastNotificationActivity(request);
 		return R.success(ResultCode.SUCCESS);
 	}
 

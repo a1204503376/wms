@@ -48,7 +48,12 @@ public class SoBillFactory {
 		SoHeader soHeader = new SoHeader();
 		BeanUtil.copy(soBillAddOrEditRequest, soHeader);
 
-		BasicsCustomer customer = customerBiz.findCustomerById(soBillAddOrEditRequest.getCustomerId());
+		if (Func.isNotEmpty(soBillAddOrEditRequest.getCustomerId())) {
+			BasicsCustomer customer = customerBiz.findCustomerById(soBillAddOrEditRequest.getCustomerId());
+			// 客户编码和名称
+			soHeader.setCustomerCode(customer.getCode());
+			soHeader.setCustomerName(customer.getName());
+		}
 		Warehouse warehouse = warehouseBiz.findById(soHeader.getWhId());
 		Owner owner = ownerBiz.findById(soHeader.getWoId());
 
@@ -65,9 +70,7 @@ public class SoBillFactory {
 		soHeader.setWhCode(warehouse.getWhCode());
 		// 货主编码
 		soHeader.setOwnerCode(owner.getOwnerCode());
-		// 客户编码和名称
-		soHeader.setCustomerCode(customer.getCode());
-		soHeader.setCustomerName(customer.getName());
+
 		return soHeader;
 	}
 
@@ -87,7 +90,7 @@ public class SoBillFactory {
 				// 实收数量
 				detail.setScanQty(BigDecimal.ZERO);
 			}
-			// 出库单id，编码，单据类型
+			// 发货单id，编码，单据类型
 			detail.setSoBillId(soHeader.getSoBillId());
 			detail.setSoBillNo(soHeader.getSoBillNo());
 			detail.setBillTypeCd(soHeader.getBillTypeCd());
@@ -122,9 +125,9 @@ public class SoBillFactory {
 		return soDetailListResult;
 	}
 
-    public SoHeader createSoHeaderByCustom(Map<String, Object> soHeaderMap) {
+	public SoHeader createSoHeaderByCustom(Map<String, Object> soHeaderMap) {
 		SoHeader soHeader = new SoHeader();
-		BeanUtil.copy(soHeaderMap,soHeader);
+		BeanUtil.copy(soHeaderMap, soHeader);
 		return soHeader;
 	}
 }

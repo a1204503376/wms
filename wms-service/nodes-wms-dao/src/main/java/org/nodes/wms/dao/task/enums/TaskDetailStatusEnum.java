@@ -20,4 +20,19 @@ public enum TaskDetailStatusEnum {
 	private final Integer code;
 	@JsonValue
 	private final String desc;
+
+	public static TaskDetailStatusEnum valuesOf(int state) {
+		switch (state) {
+			case 0:
+				return NORMAL;
+			case 1:
+				return CLOSE;
+			case 2:
+				return CANCELED;
+			case 3:
+				return TASK_EXCEPTION;
+			default:
+				return NORMAL;
+		}
+	}
 }

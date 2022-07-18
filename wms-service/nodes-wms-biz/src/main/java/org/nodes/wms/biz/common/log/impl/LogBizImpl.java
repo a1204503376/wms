@@ -14,6 +14,7 @@ import org.nodes.wms.dao.common.log.dto.output.*;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.entities.LogMessage;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
+import org.nodes.wms.dao.outstock.so.dto.output.LogForSoDetailResponse;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -166,7 +167,12 @@ public class LogBizImpl implements LogBiz {
 		return actionDao.findLogByReceiveId(receiveId);
 	}
 
-    @Override
+	@Override
+	public Page<LogForSoDetailResponse> pageLogBySoBillId(IPage<?> page, Long soBillId) {
+		return actionDao.pageLotBySoBillId(page, soBillId);
+	}
+
+	@Override
     public IPage<LogApiPageResponse> getLogApiPage(LogApiPageQuery logApiPageQuery, Query query) {
 		IPage<LogApiPageResponse> page = Condition.getPage(query);
 		return logApiDao.selectPage(logApiPageQuery,page);

@@ -36,11 +36,13 @@ public class SoBillAddOrEditRequest implements Serializable {
 	/**
 	 * 库房id
 	 */
+	@NotNull(message = "参数 whid 为空")
 	private Long whId;
 
 	/**
 	 * 货主id
 	 */
+	@NotNull(message = "参数 woid 为空")
 	private Long woId;
 
 	/**
@@ -51,11 +53,13 @@ public class SoBillAddOrEditRequest implements Serializable {
 	/**
 	 * 发货方式
 	 */
+	@NotNull(message = "参数 transportCode 为空")
 	private Integer transportCode;
 
 	/**
 	 * 出库方式
 	 */
+	@NotNull(message = "参数 outstockType 为空")
 	private Integer outstockType;
 
 	/**

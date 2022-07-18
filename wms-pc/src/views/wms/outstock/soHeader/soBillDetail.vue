@@ -10,57 +10,84 @@
                          size="medium"
                          style="margin-left:10px;margin-right:10px;"
                 >
-                    <el-row>
-                        <h3>出库订单</h3>
-                    </el-row>
-                    <el-row type="flex">
-                        <el-col :span="8">
-                            <el-form-item label="出库单编码：">
-                                {{ form.params.soBillNo }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="单据类型：">
-                                {{ form.params.billType }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="所属库房：">
-                                {{ form.params.whName }}
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row type="flex">
-                        <el-col :span="8">
-                            <el-form-item label="所属货主：">
-                                {{ form.params.ownerName }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="客户：">
-                                {{ form.params.customerName }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="出库方式：">
+                    <el-descriptions
+                        :column="4"
+                        border
+                        class="margin-top"
+                        style="margin-bottom: 20px">
+                        <el-descriptions-item
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content">
+                            <template slot="label">
+                                <i class="el-icon-user"></i>
+                                出库单编码
+                            </template>
+                            {{ form.params.soBillNo }}
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content">
+                            <template slot="label">
+                                <i class="el-icon-mobile-phone"></i>
+                                单据类型
+                            </template>
+                            {{ form.params.billType }}
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content">
+                            <template slot="label">
+                                <i class="el-icon-location-outline"></i>
+                                所属库房
+                            </template>
+                            {{ form.params.whName }}
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content">
+                            <template slot="label">
+                                <i class="el-icon-tickets"></i>
+                                所属货主
+                            </template>
+                            <el-tag size="small">{{ form.params.ownerName }}</el-tag>
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content">
+                            <template slot="label">
+                                <i class="el-icon-office-building"></i>
+                                客户
+                            </template>
+                            {{ form.params.customerName }}
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content">
+                            <template slot="label">
+                                <i class="el-icon-tickets"></i>
                                 {{ form.params.outstockType }}
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row type="flex">
-                        <el-col :span="8">
-                            <el-form-item label="发货方式：">
-                                {{ form.params.transportType }}
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row type="flex">
-                        <el-col :span="8">
-                            <el-form-item label="备注：">
-                                {{ form.params.soBillRemark }}
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
+                            </template>
+                            <el-tag size="small">{{ form.params.ownerName }}</el-tag>
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content">
+                            <template slot="label">
+                                <i class="el-icon-tickets"></i>
+                                发货方式
+                            </template>
+                            <el-tag size="small">{{ form.params.transportType }}</el-tag>
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content">
+                            <template slot="label">
+                                <i class="el-icon-tickets"></i>
+                                备注
+                            </template>
+                            <i>{{ form.params.soBillRemark }}</i>
+                        </el-descriptions-item>
+                    </el-descriptions>
                     <el-row>
                         <template>
                             <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
@@ -122,7 +149,7 @@ import NodesSku from "@/components/wms/select/NodesSku";
 import NodesLineNumber from "@/components/wms/table/NodesLineNumber";
 import {editDetailMixin} from "@/mixins/editDetail";
 import {listMixin} from "@/mixins/list";
-import {getDetailForDetail, getHeaderForDetail, getLogSoPickForDetail} from "@/api/wms/outstock/soHeader"
+import {getDetailForDetail, getHeaderForDetail, getLogSoPickForDetail, getSoLogForDetail} from "@/api/wms/outstock/soHeader"
 import NodesBillType from "@/components/wms/select/NodesBillType";
 import NodesCustomer from "@/components/wms/select/NodesCustomer";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
@@ -163,6 +190,7 @@ export default {
             tabList: [
                 {lable: '出库单明细', name: 'soDetail'},
                 {lable: '拣货记录', name: 'soRecord'},
+                {lable: '日志', name: 'soLog'},
             ],
             //tab标签默认打开第一个
             activeName: 'soDetail',
@@ -272,6 +300,29 @@ export default {
                     label: '专用客户'
                 }
             ],
+            //出库记录的行对象
+            soLogColumnList: [
+                {
+                    prop: 'userAccount',
+                    label: '操作人员账号',
+                    align: 'center'
+                },
+                {
+                    prop: 'userRealName',
+                    label: '操作人员姓名',
+                    align: 'center'
+                },
+                {
+                    prop: 'log',
+                    label: '操作内容',
+                    align: 'center'
+                },
+                {
+                    prop: 'createTime',
+                    label: '操作时间',
+                    align: 'center'
+                },
+            ],
         }
     },
     created() {
@@ -319,6 +370,19 @@ export default {
                     this.tableLoading = false;
                 })
         },
+        getSoLog() {
+            this.tableLoading = true;
+            this.publicTable.columnList = this.soLogColumnList;
+            if (func.isEmpty(this.soBillId)) {
+                return;
+            }
+            getSoLogForDetail(this.page, this.soBillId)
+                .then((res) => {
+                    this.publicTable.data = res.data.data.records;
+                    this.page.total = res.data.data.total;
+                    this.tableLoading = false;
+                })
+        },
         //点击Tab的时候进行判断，然后获取对应数据及行对象
         handleClick(tab) {
             this.form.activeName = tab.name;
@@ -343,7 +407,9 @@ export default {
         getTableData() {
             if (this.form.activeName === 'soRecord') {
                 this.getSoRecord();
-            } else {
+            }else if(this.form.activeName === 'soLog'){
+                this.getSoLog();
+            }else {
                 this.getDetail();
             }
         }
@@ -356,5 +422,14 @@ export default {
     content: "*";
     color: #F56C6C;
     margin-right: 4px;
+}
+
+/deep/ .descriptions-label {
+    width: 150px;
+    color: #00a680;
+}
+
+/deep/ .descriptions-content {
+    width: 250px;
 }
 </style>

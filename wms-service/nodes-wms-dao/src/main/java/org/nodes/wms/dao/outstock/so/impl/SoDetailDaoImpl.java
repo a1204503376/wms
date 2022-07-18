@@ -2,6 +2,9 @@ package org.nodes.wms.dao.outstock.so.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickExcelResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
 import org.nodes.wms.dao.outstock.so.SoDetailDao;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailEditResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
@@ -13,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 出库单Dao接口实现类
+ * 发货单Dao接口实现类
  **/
 @Repository
 public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> implements SoDetailDao {
@@ -37,4 +40,13 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 		return super.baseMapper.pageForSoDetailBySoBillId(page, soBillId);
 	}
 
+    @Override
+    public Page<NotSoPickPageResponse> pageNotSoPick(IPage<Object> page, NotSoPickPageQuery notSoPickPageQuery) {
+        return super.baseMapper.pageNotSoPick(page, notSoPickPageQuery);
+    }
+
+	@Override
+	public List<NotSoPickExcelResponse> notSoPickListByQuery(NotSoPickPageQuery notSoPickPageQuery) {
+		return super.baseMapper.notSoPickListByQuery(notSoPickPageQuery);
+	}
 }

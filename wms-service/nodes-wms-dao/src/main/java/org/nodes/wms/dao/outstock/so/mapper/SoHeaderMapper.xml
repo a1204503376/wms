@@ -131,5 +131,9 @@
     <select id="listByQuery" resultType="org.nodes.wms.dao.outstock.so.dto.output.SoHeaderExcelResponse">
         <include refid="pageOrList"/>
     </select>
+
+    <select id="pageLotById" resultType="org.nodes.wms.dao.outstock.so.dto.output.LogForSoDetailResponse">
+
+    </select>
 </mapper>
 

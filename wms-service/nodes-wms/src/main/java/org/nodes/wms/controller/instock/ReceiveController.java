@@ -16,7 +16,6 @@ import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveCancelRequest;
 import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageQuery;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.LogSoPickIdListRequest;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;

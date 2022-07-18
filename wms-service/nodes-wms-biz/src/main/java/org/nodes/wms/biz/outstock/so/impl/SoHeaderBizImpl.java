@@ -2,16 +2,15 @@ package org.nodes.wms.biz.outstock.so.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
 import org.nodes.wms.biz.outstock.so.modular.SoBillFactory;
+import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.outstock.so.SoDetailDao;
 import org.nodes.wms.dao.outstock.so.SoHeaderDao;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
-import org.nodes.wms.dao.outstock.so.dto.output.SoBillEditResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderExcelResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderForDetailResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
@@ -41,6 +40,8 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 
 	private final SoBillFactory soBillFactory;
 
+	private final LogBiz logBiz;
+
 	@Override
 	public Page<SoHeaderPageResponse> getPage(Query query, SoHeaderPageQuery soHeaderPageQuery) {
 		return soHeaderDao.page(Condition.getPage(query), soHeaderPageQuery);
@@ -51,13 +52,13 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	public SoHeader add(SoBillAddOrEditRequest soBillAddOrEditRequest) {
 		SoHeader soHeader = soBillFactory.createSoHeader(soBillAddOrEditRequest);
 		if (!soHeaderDao.saveOrUpdateSoHeader(soHeader)) {
-			throw new ServiceException("新增出库单头表信息失败，请稍后再试");
+			throw new ServiceException("新增发货单头表信息失败，请稍后再试");
 		}
 		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader, soBillAddOrEditRequest.getSoDetailList());
 		if (!soDetailDao.saveOrUpdateBatch(soDetailList)) {
-			throw new ServiceException("新增出库单明细信息失败，请稍后再试");
+			throw new ServiceException("新增发货单明细信息失败，请稍后再试");
 		}
-
+		logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), soHeader.getSoBillNo(), "新建发货单");
 		return soHeader;
 	}
 
@@ -66,8 +67,9 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		soBillIdList.forEach(item -> {
 			SoHeader soHeader = soHeaderDao.getById(item);
 			if (!soHeader.getSoBillState().equals(SoBillStateEnum.NOT.getIndex())) {
-				throw new ServiceException("删除失败,只能删除单据状态为未出库的出库单");
+				throw new ServiceException("删除失败,只能删除单据状态为未出库的发货单");
 			}
+			logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), "删除发货单");
 		});
 		return soHeaderDao.removeByIdList(soBillIdList);
 	}
@@ -77,17 +79,17 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	public SoHeader edit(SoBillAddOrEditRequest soBillAddOrEditRequest) {
 		SoHeader soHeader = soBillFactory.createSoHeader(soBillAddOrEditRequest);
 		if (!soHeaderDao.saveOrUpdateSoHeader(soHeader)) {
-			throw new ServiceException("编辑出库单头表信息失败，请稍后再试");
+			throw new ServiceException("编辑发货单头表信息失败，请稍后再试");
 		}
 		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader, soBillAddOrEditRequest.getSoDetailList());
 		if (!soDetailDao.saveOrUpdateBatch(soDetailList)) {
-			throw new ServiceException("编辑出库单明细信息失败，请稍后再试");
+			throw new ServiceException("编辑发货单明细信息失败，请稍后再试");
 		}
-
 		if (Func.isNotEmpty(soBillAddOrEditRequest.getRemoveIdList())
 			&& !soDetailDao.removeByIdList(soBillAddOrEditRequest.getRemoveIdList())) {
-			throw new ServiceException("删除出库单明细信息失败，请稍后再试");
+			throw new ServiceException("编辑发货单明细信息失败，请稍后再试");
 		}
+		logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), soHeader.getSoBillNo(), "编辑发货单");
 		return soHeader;
 	}
 
@@ -106,18 +108,24 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 
 	@Override
 	public void closeById(Long soBillId) {
-		Map<String, Object> soHeaderMap = new HashMap();
+		Map<String, Object> soHeaderMap = new HashMap<String, Object>();
 		soHeaderMap.put("soBillId", soBillId);
 		soHeaderMap.put("soBillState", SoBillStateEnum.CLOSED.getIndex());
 		SoHeader soHeader = soBillFactory.createSoHeaderByCustom(soHeaderMap);
 		if (!soHeaderDao.updateSoHeaderById(soHeader)) {
-			throw new ServiceException("关闭出库单失败，请稍后再试");
+			throw new ServiceException("关闭发货单失败，请稍后再试");
 		}
+		logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), "关闭发货单");
 	}
 
 	@Override
 	public void export(SoHeaderPageQuery soHeaderPageQuery, HttpServletResponse response) {
 		List<SoHeaderExcelResponse> soHeaderExcelList = soHeaderDao.listByQuery(soHeaderPageQuery);
 		ExcelUtil.export(response, "", "", soHeaderExcelList, SoHeaderExcelResponse.class);
+	}
+
+	@Override
+	public Page<LogForSoDetailResponse> pageLogById(Query query, Long soBillId) {
+		return logBiz.pageLogBySoBillId(Condition.getPage(query), soBillId);
 	}
 }

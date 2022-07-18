@@ -1,9 +1,13 @@
 package org.nodes.wms.biz.task;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.task.dto.input.AgainIssuedlTask;
+import org.nodes.wms.dao.task.dto.input.CancelTaskRequest;
+import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
 import org.nodes.wms.dao.task.dto.input.TaskDetailPageRequest;
 import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
 import org.nodes.wms.dao.task.dto.output.TaskDetailPageResponse;
+import org.nodes.wms.dao.task.entities.TaskDetail;
 import org.springblade.core.mp.support.Query;
 
 import java.util.HashMap;
@@ -29,4 +33,32 @@ public interface TaskDetailBiz {
 	 * @return 按照条件查询出来的任务详情
 	 */
 	List<TaskDetailExcelResponse> selectTaskList(HashMap<String, Object> params);
+
+	/**
+	 * 停止任务的动作
+	 *
+	 * @param request 停止任务的参数
+	 */
+	void stopActivity(StopTaskRequest request);
+
+	/**
+	 * 取消任务的动作
+	 *
+	 * @param request 取消任务的参数
+	 */
+	void cancelActivity(CancelTaskRequest request);
+
+	/**
+	 * 重新下发任务的动作
+	 *
+	 * @param request 重新下发任务的参数
+	 */
+	void againIssuedlActivity(AgainIssuedlTask request);
+
+	/**
+	 * 修改任务状态
+	 *
+	 * @param taskDetail 包含任务明细ID，任务状态
+	 */
+	Boolean updateTaskState(TaskDetail taskDetail);
 }

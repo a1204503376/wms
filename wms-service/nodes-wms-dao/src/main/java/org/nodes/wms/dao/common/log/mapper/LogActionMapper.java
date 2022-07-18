@@ -3,7 +3,6 @@ package org.nodes.wms.dao.common.log.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.common.log.dto.input.LogActionPageQuery;
 import org.nodes.wms.dao.common.log.dto.input.LogPageQuery;
@@ -12,7 +11,7 @@ import org.nodes.wms.dao.common.log.dto.output.LogActionPageResponse;
 import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
 import org.nodes.wms.dao.common.log.dto.output.LogTaskResponse;
 import org.nodes.wms.dao.common.log.entities.LogAction;
-import org.springframework.stereotype.Repository;
+import org.nodes.wms.dao.outstock.so.dto.output.LogForSoDetailResponse;
 
 import java.util.List;
 
@@ -49,4 +48,13 @@ public interface LogActionMapper extends BaseMapper<LogAction> {
 	 * @param receiveId 收货单id
 	 */
 	List<LogReceiveResponse> findLogByReceiveId(Long receiveId);
+
+	/**
+	 * 根据id分页查询发货单日志
+	 *
+	 * @param soBillId: 发货单id
+	 * @param page: 分页参数
+	 * @return PageLogForSoDetailResponse> 发货单日志分页响应对象
+	 */
+    Page<LogForSoDetailResponse> pageLotBySoBillId(IPage<?> page, @Param("soBillId") Long soBillId);
 }

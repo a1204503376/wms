@@ -42,7 +42,13 @@
 			this.menuLists = uni.getStorageSync('menuList');
 		},
 		onShow() {
-			this.title = uni.getStorageSync('warehouse').whName;
+			var that = this;
+			that.title = uni.getStorageSync('warehouse').whName;
+			that.emitKeyDown = function(e) {
+				if (e.key >= 1 && e.key <= 9) {
+					that.navTo(that.menuLists[e.key - 1])
+				}
+			};
 		},
 		methods: {
 			emitKeyDown(e) {
@@ -50,26 +56,31 @@
 					this.navTo(this.menuLists[e.key - 1])
 				}
 			},
+			clearEmitKeyDown(){
+				this.emitKeyDown = null;
+			},
 			navTo(menu) {
 				if (tool.isNotEmpty(menu.children) && menu.children.length > 0) {
 					uni.setStorageSync('childrenMenu', menu.children)
+					this.clearEmitKeyDown();
 					//有子集的自动跳转统一模板
 					uni.$u.func.routeNavigateTo('/pages/home/childrenHome', menu);
 					return;
-				}
-				else if(tool.isNotEmpty(menu.path)){
+				} else if (tool.isNotEmpty(menu.path)) {
+					this.clearEmitKeyDown();
 					//没有子集的跳转到自己的页面
 					uni.$u.func.routeNavigateTo(menu.path, {
 						path: '/pages/home/home'
 					});
-				}else{
+				} else {
 					this.$u.func.showToast({
 						title: '请联系管理员为您配置相关权限'
 					});
 				}
-			
+
 			},
 			userSetting() {
+				this.clearEmitKeyDown();
 				uni.$u.func.routeNavigateTo('/pages/userSetting/userSetting');
 			},
 			goOut() {

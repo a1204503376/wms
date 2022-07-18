@@ -122,4 +122,20 @@
     from log_action
    where bill_id = #{receiveId}
     </select>
+
+
+    <select id="pageLotBySoBillId"
+            resultType="org.nodes.wms.dao.outstock.so.dto.output.LogForSoDetailResponse">
+        select
+            user_account,
+            user_real_name,
+            type,
+            log,
+            create_time
+        from log_action
+        where bill_id = #{soBillId}
+        <if test="page.orders == null or page.orders.size == 0">
+            ORDER BY create_time DESC
+        </if>
+    </select>
 </mapper>

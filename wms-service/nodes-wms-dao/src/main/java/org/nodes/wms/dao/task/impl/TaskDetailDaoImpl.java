@@ -1,8 +1,10 @@
 package org.nodes.wms.dao.task.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.task.TaskDetailDao;
 import org.nodes.wms.dao.task.dto.input.TaskDetailPageRequest;
 import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
@@ -32,5 +34,15 @@ public class TaskDetailDaoImpl extends BaseServiceImpl<TaskDetailMapper, TaskDet
 	@Override
 	public List<TaskDetailExcelResponse> getTaskList(HashMap<String, Object> params) {
 		return taskDetailMapper.getTaskList(params);
+	}
+
+	@Override
+	public Boolean update(TaskDetail detail) {
+		AssertUtil.notNull(detail.getId(), "任务明细ID为空");
+		AssertUtil.notNull(detail.getTaskDetailStatus(), "任务明细状态为空");
+		UpdateWrapper updateWrapper = new UpdateWrapper();
+		updateWrapper.eq("id", detail.getId());
+		updateWrapper.set("task_detail_status", detail.getTaskDetailStatus());
+		return super.update(updateWrapper);
 	}
 }
