@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.putway.dto.input;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -14,6 +16,7 @@ public class AddByBoxShelfRequest implements Serializable {
 	/**
 	 * 库存ID
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long stockId;
 	/**
 	 * 箱码
@@ -26,6 +29,7 @@ public class AddByBoxShelfRequest implements Serializable {
 	/**
 	 * 库房id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long whId;
 	/**
 	 * 总数

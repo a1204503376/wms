@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.stock.dto.output;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -17,6 +19,7 @@ public class StockPdaByPcsResponse implements Serializable {
 	/**
 	 * 库位ID
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long locId;
 	/**
 	 * 库位编码

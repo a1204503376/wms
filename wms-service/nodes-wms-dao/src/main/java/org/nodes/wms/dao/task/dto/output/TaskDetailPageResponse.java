@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.task.dto.output;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
@@ -39,10 +41,12 @@ public class TaskDetailPageResponse extends BaseSkuLot implements Serializable {
 	/**
 	 * 任务头表id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long taskHeaderId;
 	/**
 	 * 单据id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long billId;
 	/**
 	 * 单据编码
@@ -51,6 +55,7 @@ public class TaskDetailPageResponse extends BaseSkuLot implements Serializable {
 	/**
 	 * 单据明细id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long billDetailId;
 	/**
 	 * 单据行号
@@ -59,6 +64,7 @@ public class TaskDetailPageResponse extends BaseSkuLot implements Serializable {
 	/**
 	 * 物品ID
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long skuId;
 	/**
 	 * 物品编码
@@ -67,6 +73,7 @@ public class TaskDetailPageResponse extends BaseSkuLot implements Serializable {
 	/**
 	 * 包装ID
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long wspId;
 	/**
 	 * 层级
@@ -91,6 +98,7 @@ public class TaskDetailPageResponse extends BaseSkuLot implements Serializable {
 	/**
 	 * 原库存id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long stockId;
 	/**
 	 * 库存状态(0正常,1冻结)
@@ -99,10 +107,12 @@ public class TaskDetailPageResponse extends BaseSkuLot implements Serializable {
 	/**
 	 * 原库位id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long locId;
 	/**
 	 * 目标库位id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long targetLocId;
 	/**
 	 * 目标库位编码
@@ -123,10 +133,12 @@ public class TaskDetailPageResponse extends BaseSkuLot implements Serializable {
 	/**
 	 * 库房ID
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long whId;
 	/**
 	 * 货主ID
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long woId;
 	/**
 	 * 任务来源
