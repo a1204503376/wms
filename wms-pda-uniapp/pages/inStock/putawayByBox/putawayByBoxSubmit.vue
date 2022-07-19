@@ -8,13 +8,13 @@
 			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.boxCode" border="0" disabled></u--input>
 			</u-form-item>
-			<u-form-item label="LOC" class="left-text-one-line" labelWidth="100">
+			<u-form-item label="LOC" :required="true"  class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.locCode"></u--input>
-			</u-form-item>
-			<u-form-item label="容器编码" class="left-text-one-line" labelWidth="100">
+			</u-form-item> 
+			<u-form-item label="容器编码" :required="true"  class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.lpnCode"></u--input>
 			</u-form-item>
-			<u-form-item label="总数" class="left-text-one-line" labelWidth="100">
+			<u-form-item label="总数" :required="true"  class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.qty" border="0" disabled></u--input>
 			</u-form-item>
 		</u--form>
@@ -84,8 +84,14 @@
 			submit() {
 				var _this = this;
 				uni.$u.throttle(function() {
-					console.log(_this.params)
-					_this.submitPutawayByBox();
+					if(tool.isNotEmpty(_this.params.locCode)&&tool.isNotEmpty(_this.params.lpnCode)){
+						_this.submitPutawayByBox();
+					}
+					else{
+						this.$u.func.showToast({
+							title: '请正确输入数据'
+						});
+					}
 				}, 1000)
 
 			},
@@ -93,7 +99,7 @@
 				this.params.qty = 1;
 				this.params.whId = uni.getStorageSync('warehouse').whId
 				putawayByBoxs.submitPutawayByBox(this.params).then(data => {
-
+                   this.esc();
 				})
 			},
 			esc() {
