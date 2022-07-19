@@ -88,7 +88,7 @@
 						_this.submitPutawayByBox();
 					}
 					else{
-						this.$u.func.showToast({
+						_this.$u.func.showToast({
 							title: '请正确输入数据'
 						});
 					}
@@ -96,7 +96,6 @@
 
 			},
 			submitPutawayByBox() {
-				this.params.qty = 1;
 				this.params.whId = uni.getStorageSync('warehouse').whId
 				putawayByBoxs.submitPutawayByBox(this.params).then(data => {
                    this.esc();
