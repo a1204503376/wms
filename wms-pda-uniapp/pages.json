@@ -230,6 +230,13 @@
 				"navigationStyle": "custom"
 			}
 
+		}, {
+			"path": "pages/picking/connectionAreaPicking/connectionAreaMove",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
 		}
 	],
 	"globalStyle": {
