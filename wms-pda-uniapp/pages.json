@@ -1,6 +1,5 @@
 {
-	"pages": [
-		{
+	"pages": [{
 			"path": "pages/login/login",
 			"style": {
 				"enablePullDownRefresh": false,
@@ -205,6 +204,34 @@
 
 		}, {
 			"path": "pages/picking/connectionAreaPicking/connectionAreaPicking",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/picking/picking/pickingByBox",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/picking/picking/pickingByPcs",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/picking/picking/pickingSerialNumber",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/picking/connectionAreaPicking/connectionAreaMove",
 			"style": {
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"

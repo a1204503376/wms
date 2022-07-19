@@ -1,35 +1,23 @@
 <template>
 	<view>
 		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
-			:bgColor="navigationBarBackgroundColor" title="按件收货" titleStyle="color:#ffffff;font-size:21px"
+			:bgColor="navigationBarBackgroundColor" title="按件拣货" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u--form>
 			<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.skuCode" border="0" disabled></u--input>
 			</u-form-item>
-			<u-form-item label="名称" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuName" border="0" disabled></u--input>
-			</u-form-item>
-			<u-form-item label="型号" :required="true" class="left-text-one-line" labelWidth="100">
-				<uni-select v-model="params.skuLot2"></uni-select>
-			</u-form-item>
-			<u-form-item label="数量" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.surplusQty"></u--input>
-				<!-- <u-number-box v-model="params.skuCode" @change="valChange"></u-number-box> -->
-			</u-form-item>
-			<u-form-item label="UOM" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.wsuCode" border="0" disabled></u--input>
-			</u-form-item>
-			<u-form-item label="生产批次" :required="true" class="left-text-one-line" labelWidth="100">
+			<u-form-item label="批次" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.skuLot1"></u--input>
-			</u-form-item>
-			<u-form-item label="箱码" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.boxCode"></u--input>
 			</u-form-item>
 			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.locCode"></u--input>
 			</u-form-item>
+			<u-form-item label="数量" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.qty"></u--input>
+			</u-form-item>
+
 		</u--form>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
@@ -127,48 +115,18 @@
 			},
 			submit() {
 				var _this = this;
+				_this.params.isSn = true;
 				uni.$u.throttle(function() {
-					_this.params.locCode = uni.$u.func.parseLocCode(_this.params.locCode);
-					_this.params.receiveDetailId = _this.receiveDetailId;
-					_this.params.receiveId = _this.receiveId;
-					if (tool.isNotEmpty(_this.locCode) && _this.params.locCode != _this.locCode) {
-						_this.$u.func.showToast({
-							title: '该箱已在' + _this.locCode + ',收货时不能移动',
-						});
-						return;
-					}
 					if (_this.params.isSn) {
-						uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/collectionSerialNumber', _this
-							.params);
+						_this.$u.func.showToast({
+							title: '有序列号'
+						});
+						uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingSerialNumber');
 						return;
 					}
-					//提交表单数据 收货
-					_this.params.whCode = uni.getStorageSync('warehouse').whCode;
-					_this.params.whId = uni.getStorageSync('warehouse').whId;
-
-					if (tool.isNotEmpty(_this.params.skuLot2)&&tool.isNotEmpty(_this.params.locCode)&&tool.isNotEmpty(_this.params.boxCode)&&tool.isNotEmpty(_this.params.skuLot1)&&params.surplusQty>0) {
-						receive.submitReceiptByPcs(_this.params).then(data => {
-							if (data.data.allReceivieIsAccomplish && data.data
-								.currentReceivieIsAccomplish) {
-								//当前收货单收货收货完毕
-								_this.$u.func.navigateBackTo(2);
-								return;
-							} else if (data.data.currentReceivieIsAccomplish) {
-								//当前收货单详情收货收货完毕
-								_this.$u.func.navigateBackTo(1);
-								return;
-							} else {
-								//当前收货单详情收货部分收货,刷新当前页面
-								_this.$u.func.refreshPage()
-								return;
-							}
-						});
-					}else{
-						_this.$u.func.showToast({
-							title: '请输入必填字段',
-						});
-					}
-
+					_this.$u.func.showToast({
+						title: '拣货完成'
+					});
 				}, 1000)
 
 			},
