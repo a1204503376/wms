@@ -60,7 +60,6 @@
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
 			this.params.receiveId = parse.receiveId
-			this.getReceiveDetailList();
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -73,6 +72,7 @@
 					that.getReceiveDetailList();
 				}
 			};
+			that.getReceiveDetailList();
 		},
 		onBackPress(event) {
 			// #ifdef APP-PLUS
