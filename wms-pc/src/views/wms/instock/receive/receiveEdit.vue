@@ -22,7 +22,8 @@
                         <el-col :span="8">
                             <el-form-item label="单据类型">
                                 <nodes-bill-type
-                                    v-model="form.params.editReceiveHeaderRequest.billTypeCd"></nodes-bill-type>
+                                    v-model="form.params.editReceiveHeaderRequest.billTypeCd"
+                                    io-type="i"></nodes-bill-type>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -51,7 +52,8 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="备注">
-                                <el-input type="textarea" v-model="form.params.editReceiveHeaderRequest.remark" style="width: 1055px"></el-input>
+                                <el-input type="textarea" v-model="form.params.editReceiveHeaderRequest.remark"
+                                          style="width: 1055px"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -185,7 +187,7 @@
                                     width="130"
                                 >
                                     <template slot="header">
-                                        <span >生产批次</span>
+                                        <span>生产批次</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input v-model="row.skuLot1" size="mini"></el-input>
@@ -195,7 +197,7 @@
                                     width="130"
                                 >
                                     <template slot="header">
-                                        <span >客户</span>
+                                        <span>客户</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input v-model="row.skuLot4" size="mini"></el-input>
@@ -205,7 +207,7 @@
                                     width="130"
                                 >
                                     <template slot="header">
-                                        <span >钢背批次</span>
+                                        <span>钢背批次</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input v-model="row.skuLot5" size="mini"></el-input>
@@ -215,7 +217,7 @@
                                     width="130"
                                 >
                                     <template slot="header">
-                                        <span >摩擦块批次</span>
+                                        <span>摩擦块批次</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input v-model="row.skuLot6" size="mini"></el-input>
@@ -225,7 +227,7 @@
                                     width="130"
                                 >
                                     <template slot="header">
-                                        <span >CRCC</span>
+                                        <span>CRCC</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input v-model="row.skuLot8" size="mini"></el-input>
@@ -235,16 +237,16 @@
                                     width="130"
                                 >
                                     <template slot="header">
-                                        <span >备注</span>
+                                        <span>备注</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input v-model.trim="row.remark" size="mini"></el-input>
                                     </template>
                                 </el-table-column>
 
-                                <el-table-column  width="100">
+                                <el-table-column width="100">
                                     <template slot="header">
-                                        <span >操作</span>
+                                        <span>操作</span>
                                     </template>
                                     <template slot-scope="scope">
                                         <el-button
@@ -293,7 +295,7 @@ import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesBillType from "@/components/wms/select/NodesBillType";
 import NodesSupplier from "@/components/wms/select/NodesSupplier";
 import NodesOwner from "@/components/wms/select/NodesOwner";
-import {addReceive, editReceive, getEditReceiveById} from "@/api/wms/instock/receive";
+import {editReceive, getEditReceiveById} from "@/api/wms/instock/receive";
 import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
 
 export default {
@@ -317,14 +319,14 @@ export default {
                         inStoreType: '',
                         billTypeCd: '',
                         whId: '',
-                        supplier:{
-                            id:'',
-                            code:'',
-                            name:''
+                        supplier: {
+                            id: '',
+                            code: '',
+                            name: ''
                         },
                         woId: '',
                         remark: '',
-                        receiveDetailIdList:[]
+                        receiveDetailIdList: []
 
                     },
                     editReceiveDetailRequestList: []
@@ -342,8 +344,8 @@ export default {
             }
         }
     },
-    watch:{
-        receiveId(){
+    watch: {
+        receiveId() {
             this.getTableData()
         }
     },
@@ -362,7 +364,7 @@ export default {
         },
 
         getTableData() {
-            if (func.isEmpty(this.receiveId)){
+            if (func.isEmpty(this.receiveId)) {
                 return;
             }
 
@@ -393,18 +395,18 @@ export default {
                     skuId: '',
                     skuCode: '',
                     skuName: '',
-                    skuSpec:''
+                    skuSpec: ''
                 },
                 umCode: '',
-                receiveDetailId:'',
+                receiveDetailId: '',
                 planQty: 0,
-                scanQty:'',
+                scanQty: '',
                 remark: '',
-                skuLot1:'',
-                skuLot4:'',
-                skuLot5:'',
-                skuLot6:'',
-                skuLot8:'',
+                skuLot1: '',
+                skuLot4: '',
+                skuLot5: '',
+                skuLot6: '',
+                skuLot8: '',
             }
         },
         onChangeSku(row) {
@@ -416,9 +418,9 @@ export default {
                 cancelButtonText: "取消",
                 type: "warning",
             }).then(() => {
-               if(func.isNotEmpty(rows[index].receiveDetailId)) {
-                 this.form.params.editReceiveHeaderRequest.receiveDetailIdList.push(rows[index].receiveDetailId)
-               }
+                if (func.isNotEmpty(rows[index].receiveDetailId)) {
+                    this.form.params.editReceiveHeaderRequest.receiveDetailIdList.push(rows[index].receiveDetailId)
+                }
 
 
                 rows.splice(index, 1);
