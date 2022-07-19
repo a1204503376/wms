@@ -103,9 +103,10 @@
         b.bill_type_name
         from receive_header h
         LEFT JOIN wms_bill_type b ON h.bill_type_cd = b.bill_type_cd
+        LEFT JOIN receive_detail d on h.receive_id= d.receive_id
         <where>
-            h.receive_no LIKE concat('%',#{query.no},'%') AND h.is_deleted=0 AND h.wh_id=#{query.whId}
-            OR h.external_order_no LIKE concat('%',#{query.no},'%') AND h.wh_id=#{query.whId} AND h.is_deleted=0
+            h.receive_no LIKE concat('%',#{query.no},'%') AND h.is_deleted=0 AND h.wh_id=#{query.whId} and  d.surplus_qty&gt;0
+            OR h.external_order_no LIKE concat('%',#{query.no},'%') AND h.wh_id=#{query.whId} AND h.is_deleted=0 and  d.surplus_qty&gt;0
         </where>
         group by h.receive_id,b.bill_type_name
         order by h.create_time
