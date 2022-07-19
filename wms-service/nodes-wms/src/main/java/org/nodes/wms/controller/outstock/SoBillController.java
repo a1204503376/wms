@@ -234,4 +234,9 @@ public class SoBillController {
 		@RequestBody NotSoPickPageQuery notSoPickPageQuery, HttpServletResponse response){
 		soDetailBiz.exportNotSoPick(notSoPickPageQuery, response);
 	}
+
+	@PostMapping("/getSoBillDataByDistribution")
+	public R<SoBillDistributedResponse> getSoBillDataByDistribution(@Valid @RequestBody SoBillIdRequest soBillIdRequest){
+		return R.data(soHeaderBiz.findSoBillForDistBySoBillId(soBillIdRequest.getSoBillId()));
+	}
 }

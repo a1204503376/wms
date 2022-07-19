@@ -121,10 +121,11 @@
                             width="150">
                         </el-table-column>
                     </template>
-                    <el-table-column align="center" fixed="right" label="操作" width="100">
+                    <el-table-column align="center" fixed="right" label="操作" width="150">
                         <template v-slot="scope">
                             <el-button size="small" type="text" @click="onEdit(scope.row)">编辑</el-button>
                             <el-button size="small" type="text" @click="onClose(scope.row)">关闭</el-button>
+                            <el-button size="small" type="text" @click="onDistribute(scope.row)">分配</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -259,7 +260,8 @@ export default {
             return {
                 search: this.vaildData(this.permission.so_header_search, false),
                 add: this.vaildData(this.permission.so_header_add, false),
-                delete: this.vaildData(this.permission.so_header_delete, false)
+                delete: this.vaildData(this.permission.so_header_delete, false),
+                pickPlan: this.vaildData(this.permission.so_header_pickPlan, false)
             }
         }
     },
@@ -354,6 +356,14 @@ export default {
             closeSoBill(row.soBillId).then((res)=>{
                 this.$message.success(res.data.msg);
                 this.refreshTable();
+            })
+        },
+        onDistribute(row){
+            this.$router.push({
+                name: '分配',
+                params: {
+                    soBillId: row.soBillId
+                }
             })
         },
         onView(row) {

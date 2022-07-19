@@ -1,6 +1,8 @@
 package org.nodes.wms.dao.outstock.so.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickExcelResponse;
@@ -49,4 +51,11 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 	public List<NotSoPickExcelResponse> notSoPickListByQuery(NotSoPickPageQuery notSoPickPageQuery) {
 		return super.baseMapper.notSoPickListByQuery(notSoPickPageQuery);
 	}
+
+    @Override
+    public List<SoDetail> getBySoBillId(Long soBillId) {
+		LambdaQueryWrapper<SoDetail> queryWrapper = Wrappers.lambdaQuery();
+		queryWrapper.eq(SoDetail::getSoBillId,soBillId);
+        return list(queryWrapper);
+    }
 }

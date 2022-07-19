@@ -128,4 +128,17 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	public Page<LogForSoDetailResponse> pageLogById(Query query, Long soBillId) {
 		return logBiz.pageLogBySoBillId(Condition.getPage(query), soBillId);
 	}
+
+    @Override
+    public SoBillDistributedResponse findSoBillForDistBySoBillId(Long soBillId) {
+		SoHeader soHeader = soHeaderDao.getById(soBillId);
+		List<SoDetail> soDetailList = soDetailDao.getBySoBillId(soBillId);
+		SoBillDistributedResponse soBill = new SoBillDistributedResponse();
+		soBill.setSoBillId(soHeader.getSoBillId());
+		soBill.setSoBillNo(soHeader.getSoBillNo());
+		soBill.setOrderNo(soHeader.getOrderNo());
+		List<SoDetailForDistResponse> details = Func.copy(soDetailList, SoDetailForDistResponse.class);
+		soBill.setSoDetailList(details);
+		return soBill;
+    }
 }

@@ -65,4 +65,12 @@ public interface SoDetailDao {
 	 * @return List<NotSoPickExcelResponse> 未发货记录
 	 */
 	List<NotSoPickExcelResponse> notSoPickListByQuery(NotSoPickPageQuery notSoPickPageQuery);
+
+	/**
+	 * 根据发货单id获取发货单明细
+	 *
+	 * @param soBillId: 发货单id
+	 * @return List<SoDetail> 发货单明细
+	 */
+	List<SoDetail> getBySoBillId(Long soBillId);
 }

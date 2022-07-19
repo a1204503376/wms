@@ -107,3 +107,14 @@ export const closeSoBill = (soBillId) => {
     })
 }
 
+export const getSoBillDataByDistribution = (soBillId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/getSoBillDataByDistribution',
+        method: 'post',
+        data: {
+            soBillId: soBillId
+        }
+    })
+}
+
+
