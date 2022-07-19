@@ -43,6 +43,9 @@
                                                    @click="onAddBatchRow">
                                         </el-button>
                                     </template>
+                                    <template v-slot="{row}">
+                                        <el-button @click="onReset(row)" type="text" size="small">清空</el-button>
+                                    </template>
                                 </el-table-column>
                                 <el-table-column width="100">
                                     <template slot="header">
@@ -54,7 +57,7 @@
                                             v-model="row.lineNumber"
                                             @blur="getDetailData(row)"
                                             @focus="getFocus(row)"
-                                            @keyup.enter.native="getDetailData(row,$event)"
+                                            @keyup.enter.native="getDetailData(row)"
                                         >
                                         </el-input>
                                     </template>
@@ -342,7 +345,11 @@ export default {
                 func.isEmpty(row.lineNumber)
             );
         },
-        getDetailData(row, $event) {
+        getDetailData(row) {
+            if (func.isEmpty(row.lineNumber) && func.isNotEmpty(row.skuCode)) {
+                row.lineNumber = this.rowObject.lineNumber
+                return
+            }
             if (func.isEmpty(row.lineNumber)) {
                 return
             }
@@ -422,6 +429,25 @@ export default {
                     this.form.params = pageObj
                 })
 
+        },
+        onReset(row) {
+            this.rowData.find(u => {
+                if (u.lineNo === row.lineNumber) {
+                    u.surplusQty = u.surplusQty + row.scanQty
+                }
+
+            });
+            let data = this.table.data
+            data.find(u => {
+                if (u.lineNumber === row.lineNumber) {
+                    u.surplusQty = u.surplusQty + row.scanQty
+                }
+            });
+            Object.keys(row).forEach(key => {
+                row[key] = ''
+                row.scanQty = 0
+                row.surplusQty = 0
+            })
         },
         getDescriptor() {
             return {
