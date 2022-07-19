@@ -127,27 +127,31 @@
 			},
 			submit() {
 				var _this = this;
+				var paramsData = {};
 				uni.$u.throttle(function() {
-					_this.params.locCode = uni.$u.func.parseLocCode(_this.params.locCode);
-					_this.params.receiveDetailId = _this.receiveDetailId;
-					_this.params.receiveId = _this.receiveId;
-					if (tool.isNotEmpty(_this.locCode) && _this.params.locCode != _this.locCode) {
+					paramsData = _this.params;
+					paramsData.locCode = uni.$u.func.parseLocCode(paramsData.locCode);
+					paramsData.receiveDetailId = _this.receiveDetailId;
+					paramsData.receiveId = _this.receiveId;
+					if (tool.isNotEmpty(_this.locCode) && paramsData.locCode != _this.locCode) {
 						_this.$u.func.showToast({
 							title: '该箱已在' + _this.locCode + ',收货时不能移动',
 						});
 						return;
 					}
+					//提交表单数据 收货
+					paramsData.whCode = uni.getStorageSync('warehouse').whCode;
+					paramsData.whId = uni.getStorageSync('warehouse').whId;
 					if (_this.params.isSn) {
 						uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/collectionSerialNumber', _this
 							.params);
 						return;
 					}
-					//提交表单数据 收货
-					_this.params.whCode = uni.getStorageSync('warehouse').whCode;
-					_this.params.whId = uni.getStorageSync('warehouse').whId;
 
-					if (tool.isNotEmpty(_this.params.skuLot2)&&tool.isNotEmpty(_this.params.locCode)&&tool.isNotEmpty(_this.params.boxCode)&&tool.isNotEmpty(_this.params.skuLot1)&&params.surplusQty>0) {
-						receive.submitReceiptByPcs(_this.params).then(data => {
+					if (tool.isNotEmpty(paramsData.skuLot2) && tool.isNotEmpty(paramsData.locCode) && tool
+						.isNotEmpty(paramsData.boxCode) && tool.isNotEmpty(paramsData.skuLot1) && paramsData
+						.surplusQty > 0) {
+						receive.submitReceiptByPcs(paramsData).then(data => {
 							if (data.data.allReceivieIsAccomplish && data.data
 								.currentReceivieIsAccomplish) {
 								//当前收货单收货收货完毕
@@ -163,12 +167,12 @@
 								return;
 							}
 						});
-					}else{
+					} else {
 						_this.$u.func.showToast({
 							title: '请输入必填字段',
 						});
+						_this.params.locCode = 'STAGE'
 					}
-
 				}, 1000)
 
 			},
