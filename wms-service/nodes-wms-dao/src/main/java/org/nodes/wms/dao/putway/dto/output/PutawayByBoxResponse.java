@@ -1,7 +1,8 @@
 package org.nodes.wms.dao.putway.dto.output;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
-import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -15,6 +16,7 @@ public class PutawayByBoxResponse implements Serializable {
 	/**
 	 * 库存ID
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long stockId;
 	/**
 	 * 箱码
