@@ -122,7 +122,6 @@
                         </el-table-column>
                     </template>
                     <el-table-column align="center" fixed="right" label="操作" width="180">
-                    <el-table-column align="center" fixed="right" label="操作" width="150">
                         <template v-slot="scope">
                             <el-button size="small" type="text" @click="onEdit(scope.row)">编辑</el-button>
                             <el-button size="small" type="text" @click="onClose(scope.row)">关闭</el-button>
@@ -360,7 +359,7 @@ export default {
                 this.refreshTable();
             })
         },
-        onDistribute(row){
+        onDistribute(row) {
             this.$router.push({
                 name: '分配',
                 params: {
