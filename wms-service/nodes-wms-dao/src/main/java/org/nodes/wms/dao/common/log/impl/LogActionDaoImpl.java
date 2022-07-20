@@ -1,7 +1,9 @@
 package org.nodes.wms.dao.common.log.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.common.log.LogActionDao;
@@ -13,8 +15,8 @@ import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
 import org.nodes.wms.dao.common.log.dto.output.LogTaskResponse;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.mapper.LogActionMapper;
-import org.nodes.wms.dao.outstock.so.dto.output.LogForSoDetailResponse;
 import org.springblade.core.mp.base.BaseServiceImpl;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -73,7 +75,11 @@ public class LogActionDaoImpl extends BaseServiceImpl<LogActionMapper, LogAction
 	}
 
 	@Override
-	public Page<LogForSoDetailResponse> pageLotBySoBillId(IPage<?> page, Long soBillId) {
-		return super.baseMapper.pageLotBySoBillId(page, soBillId);
+	public IPage<LogAction> pageLogByBillId(IPage<LogAction> page, Long billId) {
+		QueryWrapper<LogAction> lambdaQueryWrapper = Wrappers.query();
+		lambdaQueryWrapper
+			.eq("bill_id", billId)
+			.orderByDesc(Func.isEmpty(page.orders()), "create_time");
+		return super.baseMapper.selectPage(page, lambdaQueryWrapper);
 	}
 }

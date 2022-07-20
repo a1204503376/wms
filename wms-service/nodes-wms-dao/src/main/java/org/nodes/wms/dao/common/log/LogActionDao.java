@@ -9,17 +9,18 @@ import org.nodes.wms.dao.common.log.dto.output.LogActionPageResponse;
 import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
 import org.nodes.wms.dao.common.log.dto.output.LogTaskResponse;
 import org.nodes.wms.dao.common.log.entities.LogAction;
-import org.nodes.wms.dao.outstock.so.dto.output.LogForSoDetailResponse;
 
 import java.util.List;
 
 /**
  * 审计日志Dao
+ *
  * @author 王智勇
  */
 public interface LogActionDao {
 	/**
 	 * 添加审计日志添加对象
+	 *
 	 * @param logAction 日志审批对象
 	 * @return 是否成功
 	 */
@@ -27,6 +28,7 @@ public interface LogActionDao {
 
 	/**
 	 * 根据billId获取日志集合
+	 *
 	 * @param billId
 	 * @return
 	 */
@@ -43,14 +45,16 @@ public interface LogActionDao {
 
 	/**
 	 * 业务日志分页查询
+	 *
 	 * @param logActionPageQuery 业务日志查询条件
-	 * @param page 分页参数
+	 * @param page               分页参数
 	 * @return 业务日志响应对象
 	 */
 	Page<LogActionPageResponse> getLists(LogActionPageQuery logActionPageQuery, IPage<LogAction> page);
 
 	/**
 	 * 获取业务日志集合
+	 *
 	 * @param logActionPageQuery 导出条件
 	 * @return 业务日志集合
 	 */
@@ -58,16 +62,17 @@ public interface LogActionDao {
 
 	/**
 	 * 根据收货单id获取日志列表
+	 *
 	 * @param receiveId 收货单id
 	 */
 	List<LogReceiveResponse> findLogByReceiveId(Long receiveId);
 
 	/**
-	 * 根据发货单id分页查询发货单日志
+	 * 根据单据id分页查询单据日志
 	 *
-	 * @param soBillId: 发货单id
-	 * @param page: 分页参数
-	 * @return PageLogForSoDetailResponse> 发货单日志分页响应对象
+	 * @param billId: 单据id
+	 * @param page:   分页参数
+	 * @return Page<LogAction> 单据日志分页信息
 	 */
-	Page<LogForSoDetailResponse> pageLotBySoBillId(IPage<?> page, Long soBillId);
+	IPage<LogAction> pageLogByBillId(IPage<LogAction> page, Long billId);
 }
