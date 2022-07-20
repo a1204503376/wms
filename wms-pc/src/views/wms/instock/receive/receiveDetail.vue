@@ -16,60 +16,60 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="单据编码:">
-                                {{form.params.receiveNo}}
+                                {{ form.params.receiveNo }}
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="单据状态:">
-                                {{form.params.billStateDesc}}
+                                {{ form.params.billStateDesc }}
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="库房:">
-                                {{form.params.whCode}}
+                                {{ form.params.whCode }}
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="货主:">
-                                {{form.params.ownerCode}}
+                                {{ form.params.ownerCode }}
                             </el-form-item>
                         </el-col>
 
 
                         <el-col :span="8">
                             <el-form-item label="单据类型:">
-                                {{form.params.billTypeName}}
+                                {{ form.params.billTypeName }}
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="入库方式:">
-                                {{form.params.inStoreTypeDesc}}
+                                {{ form.params.inStoreTypeDesc }}
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="ASN编码:">
-                                {{form.params.asnBillNo}}
+                                {{ form.params.asnBillNo }}
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="供应商编码:">
-                                {{form.params.supplierCode}}
+                                {{ form.params.supplierCode }}
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="供应商名称:">
-                                {{form.params.supplierName}}
+                                {{ form.params.supplierName }}
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="备注:">
-                                {{form.params.remark}}
+                                {{ form.params.remark }}
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -125,10 +125,10 @@ export default {
     },
     name: "receiveDetails",
     components: {NodesLineNumber, NodesSku, NodesInStoreMode},
-    mixins: [editDetailMixin,listMixin],
+    mixins: [editDetailMixin, listMixin],
     data() {
         return {
-            that:this,
+            that: this,
             page: {
                 total: 0,
                 size: 20,
@@ -136,32 +136,32 @@ export default {
                 ascs: "", //正序字段集合
                 descs: "", //倒序字段集合
             },
-            form:{
-                params:{
-                    receiveNo:'',
-                    asnBillNo:'',
-                    whCode:'',
-                    billStateDesc:'',
-                    ownerCode:'',
-                    inStoreTypeDesc:'',
-                    remark:'',
-                    supplierCode:'',
-                    supplierName:'',
-                    billTypeCd:'',
-                    billTypeName:'',
+            form: {
+                params: {
+                    receiveNo: '',
+                    asnBillNo: '',
+                    whCode: '',
+                    billStateDesc: '',
+                    ownerCode: '',
+                    inStoreTypeDesc: '',
+                    remark: '',
+                    supplierCode: '',
+                    supplierName: '',
+                    billTypeCd: '',
+                    billTypeName: '',
                 }
             },
-            tabList:[
-                {lable:'收货单明细',name:'receiveDetail'},
-                {lable:'清点记录',name:'receiveLog'},
-                {lable:'操作日志',name:'Log'}
+            tabList: [
+                {lable: '收货单明细', name: 'receiveDetail'},
+                {lable: '清点记录', name: 'receiveLog'},
+                {lable: '操作日志', name: 'Log'}
             ],
             //tab标签默认打开第一个
-            activeName:'receiveDetail',
-            receiveLogData:[],
-            receiveDetailData:[],
-            LogData:[],
-            receiveLogList:[
+            activeName: 'receiveDetail',
+            receiveLogData: [],
+            receiveDetailData: [],
+            LogData: [],
+            receiveLogList: [
                 {
                     prop: 'lineNo',
                     label: '行号',
@@ -219,7 +219,7 @@ export default {
                     label: '创建时间',
                 },
             ],
-            logList:[
+            logList: [
                 {
                     prop: 'userAccount',
                     label: '操作人员账号',
@@ -260,15 +260,18 @@ export default {
                 },
                 {
                     prop: 'planQty',
-                    label: '计划数量'
+                    label: '计划数量',
+                    width: 130
                 },
                 {
                     prop: 'scanQty',
-                    label: '已收数量'
+                    label: '已收数量',
+                    width: 130
                 },
                 {
                     prop: 'surplusQty',
-                    label: '剩余数量'
+                    label: '剩余数量',
+                    width: 130
                 },
                 {
                     prop: 'umName',
@@ -315,31 +318,31 @@ export default {
 
         }
     },
-    watch:{
-       receiveId(){
-           this.getTableData();
-       }
+    watch: {
+        receiveId() {
+            this.getTableData();
+        }
     },
     created() {
         this.getTableData();
     },
     methods: {
         handleClick(tab) {
-            if(tab.name === 'receiveDetail'){
+            if (tab.name === 'receiveDetail') {
                 this.table.columnList = this.receiveDetailList
                 this.table.data = this.receiveDetailData
-            }else if(tab.name === 'receiveLog'){
+            } else if (tab.name === 'receiveLog') {
                 this.getReceiveLogList()
-            }else{
+            } else {
                 this.getLogList();
             }
         },
         getTableData() {
             this.table.columnList = this.receiveDetailList;
-            if(func.isEmpty(this.receiveId)){
+            if (func.isEmpty(this.receiveId)) {
                 return;
             }
-           let ReceiveIdRequest  = {
+            let ReceiveIdRequest = {
                 receiveId: this.receiveId
             }
             getReceiveDetailById(ReceiveIdRequest)
@@ -350,30 +353,30 @@ export default {
                     this.table.data = obj.detailList;
                 })
         },
-        getReceiveLogList(){
+        getReceiveLogList() {
             this.table.columnList = this.receiveLogList
-            if(func.isEmpty(this.receiveLogData)){
+            if (func.isEmpty(this.receiveLogData)) {
                 getReceiveLogList(this.receiveId)
-                    .then((res) =>{
+                    .then((res) => {
                             this.receiveLogData = res.data.data
                             this.table.data = res.data.data
                         }
                     )
-            }else{
+            } else {
                 this.table.data = this.receiveLogData
             }
 
         },
-        getLogList(){
+        getLogList() {
             this.table.columnList = this.logList
-            if(func.isEmpty(this.LogData)){
+            if (func.isEmpty(this.LogData)) {
                 getLogList(this.receiveId)
-                    .then((res) =>{
+                    .then((res) => {
                             this.LogData = res.data.data
                             this.table.data = res.data.data
                         }
                     )
-            }else{
+            } else {
                 this.table.data = this.LogData
             }
 

@@ -106,4 +106,21 @@ export const closeSoBill = (soBillId) => {
         }
     })
 }
+export const getSoHeaderByPickPc = (data) => {
+    return request({
+        url: '/api/wms/outstock/soBill/getSoHeaderByPickPc',
+        method: 'post',
+        data: data
+    })
+}
 
+
+export const getLineNoAndSkuSelectList = (soBillId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/getLineNoAndSkuSelectList',
+        method: 'get',
+        params: {
+            soBillId
+        }
+    })
+}

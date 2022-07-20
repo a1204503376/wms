@@ -9,6 +9,7 @@ import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.outstock.so.SoDetailDao;
 import org.nodes.wms.dao.outstock.so.SoHeaderDao;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
+import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
@@ -127,5 +128,10 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	@Override
 	public Page<LogForSoDetailResponse> pageLogById(Query query, Long soBillId) {
 		return logBiz.pageLogBySoBillId(Condition.getPage(query), soBillId);
+	}
+
+	@Override
+	public PickByPcSoHeaderResponse getSoHeaderByPickPc(SoBillIdRequest soBillIdRequest) {
+		return soHeaderDao.getSoHeaderResponseById(soBillIdRequest.getSoBillId());
 	}
 }

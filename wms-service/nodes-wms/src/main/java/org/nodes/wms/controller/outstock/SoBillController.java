@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 出库单API
@@ -207,7 +208,7 @@ public class SoBillController {
 
 	@PostMapping("/detail_log")
 	public R<Page<LogForSoDetailResponse>> logForSoDetail(Query query,
-														  @Valid @RequestBody SoBillIdRequest soBillIdRequest){
+														  @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		Page<LogForSoDetailResponse> pageLog = soHeaderBiz.pageLogById(query, soBillIdRequest.getSoBillId());
 		return R.data(pageLog);
 	}
@@ -231,7 +232,21 @@ public class SoBillController {
 
 	@PostMapping("/exportNotSoPick")
 	public void exportNotSoPick(
-		@RequestBody NotSoPickPageQuery notSoPickPageQuery, HttpServletResponse response){
+		@RequestBody NotSoPickPageQuery notSoPickPageQuery, HttpServletResponse response) {
 		soDetailBiz.exportNotSoPick(notSoPickPageQuery, response);
+	}
+
+
+	@PostMapping("/getSoHeaderByPickPc")
+	public R<PickByPcSoHeaderResponse> getSoHeaderByPickPc(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
+		return R.data(soHeaderBiz.getSoHeaderByPickPc(soBillIdRequest));
+	}
+
+	/**
+	 * 获取出库明细下拉框集合
+	 */
+	@GetMapping("/getLineNoAndSkuSelectList")
+	public R<List<LineNoAndSkuSelectResponse>> getLineNoAndSkuSelectList(Long soBillId) {
+		return R.data(soDetailBiz.getLineNoAndSkuSelectList(soBillId));
 	}
 }
