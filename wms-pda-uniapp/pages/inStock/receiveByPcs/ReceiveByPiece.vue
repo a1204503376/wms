@@ -182,6 +182,7 @@
 				};
 				receive.getDetailByDetailId(params).then(data => {
 					this.params.skuCode = data.data.skuCode;
+					this.params.skuLot2 = data.data.skuCode;
 					this.params.skuName = data.data.skuName;
 					this.params.surplusQty = data.data.surplusQty;
 					this.params.wsuCode = data.data.wsuCode;
