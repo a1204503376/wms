@@ -18,7 +18,7 @@ public interface PickingByPcsBiz {
 	IPage<FindAllPickingResponse> selectAllPickingByNo(FindAllPickingRequest request, Query query);
 
 	/**
-	 * 按件收货动作
+	 * 按件拣货动作
 	 *
 	 * @param request 请求对象
 	 * @return 是否拣货成功
