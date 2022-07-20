@@ -109,7 +109,7 @@ public class SoBillFactory {
 			detail.setBaseUmCode(baseSkuPackageDetail.getWsuCode());
 			detail.setBaseUmName(baseSkuPackageDetail.getWsuName());
 			//剩余数量
-			detail.setSurplusQty(detail.getPlanQty().subtract(detail.getPlanQty()));
+			detail.setSurplusQty(detail.getPlanQty().subtract(detail.getScanQty()));
 			// 发货库房
 			detail.setPickWhCode(soHeader.getWhCode());
 			// 单价
