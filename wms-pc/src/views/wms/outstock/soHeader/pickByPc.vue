@@ -25,6 +25,7 @@
                     <el-row>选择出库明细
                         <nodes-out-stock v-model="lineNo" :so-bill-id="this.soBillId"></nodes-out-stock>
                     </el-row>
+                    <br>
                     <el-row>
                         <h3>出库明细</h3>
                     </el-row>
@@ -50,6 +51,7 @@
                             </el-table>
                         </template>
                     </el-row>
+
                     <el-row>
                         <h3>明细</h3>
                     </el-row>
@@ -318,6 +320,7 @@ export default {
     mixins: [editDetailMixin],
     data() {
         return {
+            detailData: [],
             lineNo: '',
 
             rowObject: {
@@ -338,13 +341,14 @@ export default {
     },
     watch: {
         lineNo(newVal) {
-            alert("ddgdgdgd")
+
         }
     },
     created() {
         this.getTableData()
     },
     methods: {
+      
         getFocus(row) {
             this.rowObject.lineNumber = row.lineNumber
             this.rowObject.scanQty = row.scanQty
