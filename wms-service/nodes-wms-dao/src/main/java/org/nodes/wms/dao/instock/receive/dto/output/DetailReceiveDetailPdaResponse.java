@@ -27,4 +27,8 @@ public class DetailReceiveDetailPdaResponse implements Serializable {
 	 * 剩余数量
 	 */
 	private BigDecimal surplusQty;
+	/**
+	 * 行号
+	 */
+	private String lineNo;
 }
