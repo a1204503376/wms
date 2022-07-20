@@ -2,6 +2,7 @@ package org.nodes.wms.dao.basics.sku.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.basics.sku.SkuDao;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse;
@@ -81,7 +82,17 @@ public class SkuDaoImpl
 
 	@Override
 	public SkuPackageDetail getSkuPackageDetailBySkuId(Long skuId, String wsuCode) {
-		return super.baseMapper.getSkuPackageDetailBySkuId(skuId,wsuCode);
+		return super.baseMapper.getSkuPackageDetailBySkuId(skuId, wsuCode);
+	}
+
+	@Override
+	public List<Sku> getSkuListByNo(String no) {
+		AssertUtil.notNull(no, "获取SKU集合失败,原因物料编码/物料型号为空");
+		LambdaQueryWrapper<Sku> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+		lambdaQueryWrapper.eq(Sku::getSkuSpec, no)
+			.or()
+			.eq(Sku::getSkuCode, no);
+		return super.list(lambdaQueryWrapper);
 	}
 
 }

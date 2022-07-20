@@ -93,9 +93,18 @@ public interface SkuDao {
 
 	/**
 	 * 根据物料id和计量单位编码获取
-	 * @param skuId 物料id
+	 *
+	 * @param skuId   物料id
 	 * @param wsuCode 计量单位编码
 	 * @return 包装明细
 	 */
 	SkuPackageDetail getSkuPackageDetailBySkuId(Long skuId, String wsuCode);
+
+	/**
+	 * 根据编码或者型号获取Sku集合
+	 *
+	 * @param no
+	 * @return
+	 */
+	List<Sku> getSkuListByNo(String no);
 }
