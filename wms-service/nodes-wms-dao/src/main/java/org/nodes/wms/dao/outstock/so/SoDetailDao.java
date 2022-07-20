@@ -74,4 +74,12 @@ public interface SoDetailDao {
 	 * @return 行号和物料编码集合
 	 */
 	List<LineNoAndSkuSelectResponse> getLineNoAndSkuCodeById(Long soBillId);
+
+	/**
+	 * 根据发货单id获取发货单明细
+	 *
+	 * @param soBillId: 发货单id
+	 * @return List<SoDetail> 发货单明细
+	 */
+	List<SoDetail> getBySoBillId(Long soBillId);
 }

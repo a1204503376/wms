@@ -96,4 +96,12 @@ public interface SoHeaderBiz {
 	 * @return 头表信息
 	 */
 	PickByPcSoHeaderResponse getSoHeaderByPickPc(SoBillIdRequest soBillIdRequest);
+
+	/**
+	 * 根据发货单id查找分页时的发货单信息
+	 *
+	 * @param soBillId : 发货单id
+	 * @return SoBillDistributedResponse 发货单信息
+	 */
+	SoBillDistributedResponse findSoBillForDistBySoBillId(Long soBillId);
 }

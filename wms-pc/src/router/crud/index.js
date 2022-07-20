@@ -228,6 +228,12 @@ export default [
                 name: '发货单详情',
                 props: true,
                 component: () => import('@/views/wms/outstock/soHeader/soBillDetail')
+            },
+            {
+                path: 'distribute/:soBillId',
+                name: '分配',
+                props: true,
+                component: () => import('@/views/wms/outstock/soHeader/distribution')
             }]
     },
     {

@@ -249,4 +249,9 @@ public class SoBillController {
 	public R<List<LineNoAndSkuSelectResponse>> getLineNoAndSkuSelectList(Long soBillId) {
 		return R.data(soDetailBiz.getLineNoAndSkuSelectList(soBillId));
 	}
+
+	@PostMapping("/getSoBillDataByDistribution")
+	public R<SoBillDistributedResponse> getSoBillDataByDistribution(@Valid @RequestBody SoBillIdRequest soBillIdRequest){
+		return R.data(soHeaderBiz.findSoBillForDistBySoBillId(soBillIdRequest.getSoBillId()));
+	}
 }

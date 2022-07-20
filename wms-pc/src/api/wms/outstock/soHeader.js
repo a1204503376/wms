@@ -114,6 +114,17 @@ export const getSoHeaderByPickPc = (data) => {
     })
 }
 
+export const getSoBillDataByDistribution = (soBillId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/getSoBillDataByDistribution',
+        method: 'post',
+        data: {
+            soBillId: soBillId
+        }
+    })
+}
+
+
 
 export const getLineNoAndSkuSelectList = (soBillId) => {
     return request({
