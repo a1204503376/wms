@@ -325,6 +325,18 @@ export default {
     created() {
         this.getTableData()
     },
+    watch: {
+        receiveId() {
+            this.table.data.find(u => {
+                Object.keys(u).forEach(key => {
+                    u[key] = ''
+                })
+            });
+            this.rowData = []
+            this.rowObject = {lineNumber: '', scanQty: 0}
+            this.getTableData()
+        }
+    },
     methods: {
         getFocus(row) {
             this.rowObject.lineNumber = row.lineNumber
@@ -453,7 +465,6 @@ export default {
                     let pageObj = res.data.data;
                     this.form.params = pageObj
                 })
-
         },
         onReset(row) {
             this.rowData.find(u => {
