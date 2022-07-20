@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(WmsApiPath.WMS_PDA_API + "/picking")
+@RequestMapping(WmsApiPath.WMS_PDA_API + "/connectionAreaPicking")
 public class ConnectionAreaPickingController {
 	private final ConnectionAreaPickingBiz connectionAreaPickingBiz;
 
