@@ -25,6 +25,7 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -152,6 +153,7 @@ public class ReceiveLogFactory {
 		receiveLog.setWoId(receiveHeader.getWoId());
 		receiveLog.setOwnerCode(receiveHeader.getOwnerCode());
 		SkuLotUtil.setAllSkuLot(request, receiveLog);
+		receiveLog.setSkuLot3(Func.formatDate(new Date()));
 		return receiveLog;
 	}
 }

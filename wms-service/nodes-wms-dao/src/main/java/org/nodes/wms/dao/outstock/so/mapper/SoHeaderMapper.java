@@ -20,11 +20,11 @@ public interface SoHeaderMapper extends BaseMapper<SoHeader> {
 	/**
 	 * 获取ASN单的分页结果，支持明细相关字段查询
 	 *
-	 * @param page    分页参数
+	 * @param page              分页参数
 	 * @param soHeaderPageQuery 条件参数
 	 * @return Page<SoHeaderPageResponse>
 	 */
-	Page<SoHeaderPageResponse> page(IPage<?> page, @Param("params")SoHeaderPageQuery soHeaderPageQuery);
+	Page<SoHeaderPageResponse> page(IPage<?> page, @Param("params") SoHeaderPageQuery soHeaderPageQuery);
 
 	/**
 	 * 获取编辑时发货单头表信息
@@ -40,7 +40,7 @@ public interface SoHeaderMapper extends BaseMapper<SoHeader> {
 	 * @param id: 发货单id
 	 * @return SoHeaderForDetailResponse 查看明细头表信息响应对象
 	 */
-    SoHeaderForDetailResponse selectSoHeaderForDetailById(@Param("id") Long id);
+	SoHeaderForDetailResponse selectSoHeaderForDetailById(@Param("id") Long id);
 
 	/**
 	 * 导出Excel
@@ -48,14 +48,22 @@ public interface SoHeaderMapper extends BaseMapper<SoHeader> {
 	 * @param soHeaderPageQuery: 导出时条件参数
 	 * @return List<SoHeaderExcelResponse> 发货单数据
 	 */
-    List<SoHeaderExcelResponse> listByQuery(@Param("params") SoHeaderPageQuery soHeaderPageQuery);
+	List<SoHeaderExcelResponse> listByQuery(@Param("params") SoHeaderPageQuery soHeaderPageQuery);
 
 	/**
 	 * 根据id分页查询发货单日志
 	 *
-	 * @param id: 发货单id
+	 * @param id:   发货单id
 	 * @param page: 分页参数
 	 * @return PageLogForSoDetailResponse> 发货单日志分页响应对象
 	 */
-    Page<LogForSoDetailResponse> pageLotById(IPage<?> page, Long id);
+	Page<LogForSoDetailResponse> pageLotById(IPage<?> page, Long id);
+
+	/**
+	 * pc拣货获取头表信息
+	 *
+	 * @param soBillId 头表id
+	 * @return 头表信息
+	 */
+	PickByPcSoHeaderResponse selectSoHeaderResponseById(Long soBillId);
 }

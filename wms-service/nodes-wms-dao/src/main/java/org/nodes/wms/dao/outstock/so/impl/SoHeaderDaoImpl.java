@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.so.SoHeaderDao;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderEditResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderExcelResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderForDetailResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.so.mapper.SoHeaderMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -49,6 +46,11 @@ public class SoHeaderDaoImpl extends BaseServiceImpl<SoHeaderMapper, SoHeader> i
 	@Override
 	public List<SoHeaderExcelResponse> listByQuery(SoHeaderPageQuery soHeaderPageQuery) {
 		return super.baseMapper.listByQuery(soHeaderPageQuery);
+	}
+
+	@Override
+	public PickByPcSoHeaderResponse getSoHeaderResponseById(Long soBillId) {
+		return super.baseMapper.selectSoHeaderResponseById(soBillId);
 	}
 
 	@Override

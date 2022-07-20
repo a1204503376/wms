@@ -37,6 +37,10 @@ public class ReceiveDetailByPcResponse {
 	 */
 	private String skuLot1;
 	/**
+	 * 规格型号
+	 */
+	private String skuLot2;
+	/**
 	 * 客户
 	 */
 	private String skuLot4;

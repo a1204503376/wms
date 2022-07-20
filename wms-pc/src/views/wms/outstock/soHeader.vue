@@ -121,10 +121,12 @@
                             width="150">
                         </el-table-column>
                     </template>
-                    <el-table-column align="center" fixed="right" label="操作" width="100">
+                    <el-table-column align="center" fixed="right" label="操作" width="180">
                         <template v-slot="scope">
                             <el-button size="small" type="text" @click="onEdit(scope.row)">编辑</el-button>
                             <el-button size="small" type="text" @click="onClose(scope.row)">关闭</el-button>
+                            <el-button size="small" type="text" @click="onPick(scope.row)">PC拣货</el-button>
+                            <el-button size="small" type="text" @click="onDistribute(scope.row)">分配</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -155,7 +157,7 @@ import {listMixin} from "@/mixins/list";
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js'
 import NodesSoBillState from "@/components/wms/select/NodesSoBillState";
-import {getPage, remove, exportData, closeSoBill} from "@/api/wms/outstock/soHeader"
+import {closeSoBill, exportData, getPage, remove} from "@/api/wms/outstock/soHeader"
 import NodesCustomer from "@/components/wms/select/NodesCustomer";
 import NodesBillType from "@/components/wms/select/NodesBillType";
 import {nowDateFormat} from "@/util/date";
@@ -259,7 +261,8 @@ export default {
             return {
                 search: this.vaildData(this.permission.so_header_search, false),
                 add: this.vaildData(this.permission.so_header_add, false),
-                delete: this.vaildData(this.permission.so_header_delete, false)
+                delete: this.vaildData(this.permission.so_header_delete, false),
+                pickPlan: this.vaildData(this.permission.so_header_pickPlan, false)
             }
         }
     },
@@ -350,10 +353,18 @@ export default {
                 }
             })
         },
-        onClose(row){
-            closeSoBill(row.soBillId).then((res)=>{
+        onClose(row) {
+            closeSoBill(row.soBillId).then((res) => {
                 this.$message.success(res.data.msg);
                 this.refreshTable();
+            })
+        },
+        onDistribute(row) {
+            this.$router.push({
+                name: '分配',
+                params: {
+                    soBillId: row.soBillId
+                }
             })
         },
         onView(row) {
@@ -363,6 +374,15 @@ export default {
                     soBillId: row.soBillId
                 }
             })
+        },
+        onPick(row) {
+            this.$router.push({
+                name: 'PC拣货',
+                params: {
+                    soBillId: row.soBillId
+                }
+            })
+
         },
     }
 }
