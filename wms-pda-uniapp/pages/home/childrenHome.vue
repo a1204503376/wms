@@ -63,7 +63,7 @@
 		},
 		methods: {
 			clearEmitKeyDown() {
-				this.emitKeyDown = null;
+				this.emitKeyDown = function(){};
 			},
 			navTo(menu) {
 				this.clearEmitKeyDown();

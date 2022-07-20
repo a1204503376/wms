@@ -57,7 +57,7 @@
 				}
 			},
 			clearEmitKeyDown(){
-				this.emitKeyDown = null;
+				this.emitKeyDown = function(){};
 			},
 			navTo(menu) {
 				if (tool.isNotEmpty(menu.children) && menu.children.length > 0) {
