@@ -23,7 +23,8 @@ public enum AuditLogType implements IPairs<Integer,String, AuditLogType> {
 	OUTSTOCK_BILL(104, "出库单单据操作"),
 	OUTSTOCK(105, "出库操作"),
 	CRON_TASK(106,"定时任务操作"),
-	RECEIVE_BILL(107,"收货单单据操作");
+	RECEIVE_BILL(107,"收货单单据操作"),
+	ASN_BILL(108,"ASN单单据操作");
 
 	@EnumValue
 	Integer index;
