@@ -17,6 +17,8 @@ import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
+import org.nodes.wms.dao.picking.dto.input.FindAllPickingRequest;
+import org.nodes.wms.dao.picking.dto.output.FindAllPickingResponse;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -150,4 +152,9 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		soBill.setSoDetailList(details);
 		return soBill;
     }
+
+	@Override
+	public IPage<FindAllPickingResponse> getAllPickingByNo(IPage<?> page, FindAllPickingRequest request) {
+		return soHeaderDao.getAllPickingPage(page,request);
+	}
 }

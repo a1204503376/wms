@@ -10,5 +10,7 @@ import java.io.Serializable;
 @Data
 public class FindAllPickingRequest implements Serializable {
 	private static final long serialVersionUID = -2328658218530094518L;
-
+    private String no;
+	private String whId;
+	private Integer billDetailState;
 }

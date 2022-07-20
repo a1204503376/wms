@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.picking.dto.input.FindAllPickingRequest;
+import org.nodes.wms.dao.picking.dto.output.FindAllPickingResponse;
 
 import java.util.List;
 
@@ -85,4 +87,13 @@ public interface SoHeaderDao {
 	 * @return 发货单信息
 	 */
 	PickByPcSoHeaderResponse getSoHeaderResponseById(Long soBillId);
+
+	/**
+	 * 根据发货单编码/上游编码/任务号
+	 *
+	 * @param page    分页对象
+	 * @param request 请求条件 包含no
+	 * @return 拣货分页
+	 */
+	IPage<FindAllPickingResponse> getAllPickingPage(IPage<?> page, FindAllPickingRequest request);
 }
