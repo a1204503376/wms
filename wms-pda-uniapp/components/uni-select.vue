@@ -10,7 +10,8 @@
 			<picker style="width: 100%;height: 100%;" v-model="dataSource" v-if="isSkuByCode" :range="columns"
 				value="index" @change="bindPickerChange" :disabled="isSkuByCode">
 				<view class="uni-input-input" style="width: 100%;">
-					<u--input style="margin-top: 0rpx; z-index: 99999;" v-model="dataSource" :disabled="isSkuByCode"></u--input>
+					<u--input style="margin-top: 0rpx; z-index: 99999;" v-model="dataSource" :disabled="isSkuByCode">
+					</u--input>
 				</view>
 			</picker>
 		</view>
@@ -32,15 +33,17 @@
 		watch: {
 			selectVal: {
 				handler(selectVal) {
-					this.dataSource = this.selectVal;
-					if(tool.isNotEmpty(this.selectVal)){
-						this.params.no = this.selectVal;
-						this.getDataSoueceDefault();
+					this.isTwoInto++;
+					if (this.isTwoInto<=2) {
+						this.dataSource = this.selectVal;
+						if (tool.isNotEmpty(this.selectVal)) {
+							this.params.no = this.selectVal;
+							this.getDataSoueceDefault();
+						} else {
+							this.getDataSource();
+						}
 					}
-					else{
-						this.getDataSource();
-					}
-					
+
 				},
 				immediate: true,
 				deep: true
@@ -48,6 +51,7 @@
 		},
 		data() {
 			return {
+				isTwoInto: 0,
 				params: {
 					no: ''
 				},
