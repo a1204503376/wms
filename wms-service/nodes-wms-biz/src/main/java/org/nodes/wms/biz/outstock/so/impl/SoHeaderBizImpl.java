@@ -1,10 +1,12 @@
 package org.nodes.wms.biz.outstock.so.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
 import org.nodes.wms.biz.outstock.so.modular.SoBillFactory;
+import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.outstock.so.SoDetailDao;
 import org.nodes.wms.dao.outstock.so.SoHeaderDao;
@@ -126,8 +128,10 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	}
 
 	@Override
-	public Page<LogForSoDetailResponse> pageLogById(Query query, Long soBillId) {
-		return logBiz.pageLogBySoBillId(Condition.getPage(query), soBillId);
+	public Page<LogForSoDetailResponse> pageLogById(IPage<?> page, Long soBillId) {
+		Page<LogDetailPageResponse> logDetailPageResponsePage = logBiz.pageLogByBillId(page, soBillId);
+
+		return null;
 	}
 	@Override
 	public PickByPcSoHeaderResponse getSoHeaderByPickPc(SoBillIdRequest soBillIdRequest) {

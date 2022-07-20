@@ -5,15 +5,14 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.core.tool.validation.Update;
 import org.nodes.wms.biz.instock.asn.AsnBiz;
+import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnBillIdRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.DeleteRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnBillByEditResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnBillViewResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnLogActionViewResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.*;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * ASN单管理API
@@ -44,15 +42,33 @@ public class AsnController {
 		return R.data(asnPage);
 	}
 
-	@PostMapping("/detail")
-	public R<AsnBillViewResponse> asnBillViewDetail(@Valid @RequestBody AsnBillIdRequest asnBillIdRequest) {
-		AsnBillViewResponse asnBillViewResponse = asnBiz.findAsnBillViewDetailByAsnBillId(asnBillIdRequest.getAsnBillId());
-		return R.data(asnBillViewResponse);
+	@PostMapping("/detail_header")
+	public R<AsnHeaderForDetailResponse> getAsnHeaderForDetail(@Valid @RequestBody AsnBillIdRequest asnBillIdRequest) {
+		AsnHeaderForDetailResponse asnHeader = asnBiz.findAsnHeaderForDetailByAsnBillId(asnBillIdRequest.getAsnBillId());
+		return R.data(asnHeader);
 	}
 
-	@PostMapping("/log")
-	public R<List<AsnLogActionViewResponse>> log(@Valid @RequestBody AsnBillIdRequest asnBillIdRequest){
-		List<AsnLogActionViewResponse> logActionList = asnBiz.findAsnLogActionById(asnBillIdRequest.getAsnBillId());
+	@PostMapping("/detail_detail")
+	public R<Page<AsnDetailForDetailResponse>> pageAsnDetailForDetail(
+		Query query, @Valid @RequestBody AsnBillIdRequest asnBillIdRequest) {
+		Page<AsnDetailForDetailResponse> pageAsnDetail =
+			asnBiz.findAsnDetailForDetailByAsnBillId(Condition.getPage(query), asnBillIdRequest.getAsnBillId());
+		return R.data(pageAsnDetail);
+	}
+
+	@PostMapping("/detail_receive")
+	public R<Page<ReceiveHeaderResponse>> pageReceiveForDetail(
+		Query query, @Valid @RequestBody AsnBillIdRequest asnBillIdRequest) {
+		Page<ReceiveHeaderResponse> pageReceiveHeader =
+			asnBiz.findReceiveHeaderForDetailByAsnBillId(Condition.getPage(query), asnBillIdRequest.getAsnBillId());
+		return R.data(pageReceiveHeader);
+	}
+
+	@PostMapping("/detail_log")
+	public R<Page<LogDetailPageResponse>> log(
+		Query query, @Valid @RequestBody AsnBillIdRequest asnBillIdRequest){
+		Page<LogDetailPageResponse> logActionList =
+			asnBiz.findAsnLogForDetailByAsnBillId(Condition.getPage(query), asnBillIdRequest.getAsnBillId());
 		return R.data(logActionList);
 	}
 

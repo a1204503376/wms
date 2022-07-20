@@ -50,32 +50,16 @@ public interface AsnHeaderDao {
 	/**
 	 * 根据ASN单id查询ASN单头表信息
 	 *
-	 * @param asnBillId: ASN单id
+	 * @param id: ASN单id
 	 * @return AsnHeader
 	 */
-	AsnHeader getAsnHeaderByAsnBillId(Long asnBillId);
+	AsnHeader getById(Long id);
 
 	/**
 	 * 查看明细-根据ASN单id获取ASN单头表信息
 	 *
 	 * @param id: Asn单id
-	 * @return AsnHeaderViewResponse
+	 * @return AsnHeaderForDetailResponse ASN单头表信息
 	 */
-	AsnHeaderViewResponse getAsnHeaderViewById(Long id);
-
-	/**
-	 * 查看明细-根据ASN单id获取ASN单详细信息
-	 *
-	 * @param asnBillId: Asn单id
-	 * @return List<AsnDetailViewResponse>
-	 */
-	List<AsnDetailViewResponse> getAsnDetailViewByAsnBillId(Long asnBillId);
-
-	/**
-	 * 根据ASN单id获取审计日志
-	 *
-	 * @param id: ASN单id
-	 * @return List<AsnLogActionViewResponse>
-	 */
-    List<AsnLogActionViewResponse> getLogActionById(Long id);
+	AsnHeaderForDetailResponse getAsnHeaderForDetailById(Long id);
 }

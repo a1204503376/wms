@@ -43,21 +43,12 @@ public class AsnHeaderDaoImpl
 	}
 
 	@Override
-	public AsnHeader getAsnHeaderByAsnBillId(Long asnBillId) {
-		return super.baseMapper.selectAsnHeaderByAsnBillId(asnBillId);
+	public AsnHeader getById(Long id) {
+		return super.baseMapper.getById(id);
 	}
 
 	@Override
-	public AsnHeaderViewResponse getAsnHeaderViewById(Long asnBillId) {
-		return super.baseMapper.selectAsnHeaderViewById(asnBillId);
-	}
-
-	public List<AsnDetailViewResponse> getAsnDetailViewByAsnBillId(Long asnBillId) {
-		return super.baseMapper.selectAsnDetailViewByAsnBillId(asnBillId);
-	}
-
-	@Override
-	public List<AsnLogActionViewResponse> getLogActionById(Long id) {
-		return super.baseMapper.selectLogActionById(id);
+	public AsnHeaderForDetailResponse getAsnHeaderForDetailById(Long asnBillId) {
+		return super.baseMapper.selectAsnHeaderForDetailById(asnBillId);
 	}
 }

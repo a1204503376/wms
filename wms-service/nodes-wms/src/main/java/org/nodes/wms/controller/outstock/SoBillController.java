@@ -24,6 +24,7 @@ import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.springblade.core.log.annotation.ApiLog;
+import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
@@ -209,7 +210,7 @@ public class SoBillController {
 	@PostMapping("/detail_log")
 	public R<Page<LogForSoDetailResponse>> logForSoDetail(Query query,
 														  @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		Page<LogForSoDetailResponse> pageLog = soHeaderBiz.pageLogById(query, soBillIdRequest.getSoBillId());
+		Page<LogForSoDetailResponse> pageLog = soHeaderBiz.pageLogById(Condition.getPage(query), soBillIdRequest.getSoBillId());
 		return R.data(pageLog);
 	}
 

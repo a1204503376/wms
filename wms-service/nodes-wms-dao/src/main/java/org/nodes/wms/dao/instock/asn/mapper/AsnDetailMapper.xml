@@ -22,4 +22,24 @@
         FROM asn_detail
         WHERE asn_bill_id = #{asnBillId} AND is_deleted = 0
     </select>
+
+    <select id="selectAsnDetailForDetailByAsnBillId"
+            resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnDetailForDetailResponse">
+        SELECT asn_detail_id,
+               asn_line_no,
+               sku_code,
+               sku_name,
+               sku_spec,
+               um_name,
+               plan_qty,
+               scan_qty,
+               surplus_qty,
+               remark,
+               detail_status
+        FROM asn_detail
+        WHERE asn_bill_id = #{asnBillId}
+        <if test="page.orders == null or page.orders.size == 0">
+            ORDER BY create_time
+        </if>
+    </select>
 </mapper>

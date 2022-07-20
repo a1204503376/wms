@@ -5,15 +5,14 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
- * 查看明细-ASN单头表返回对象
+ * ASN单查看详情返回对象
  **/
 @Data
-public class AsnHeaderViewResponse implements Serializable {
+public class AsnHeaderForDetailResponse implements Serializable {
 
-	private static final long serialVersionUID = 9035568602666392913L;
+	private static final long serialVersionUID = -3473344917539589477L;
 
 	/**
 	 * ASN单头表id
@@ -32,29 +31,9 @@ public class AsnHeaderViewResponse implements Serializable {
 	private String billTypeName;
 
 	/**
-	 * 供应商编码
-	 */
-	private String supplierCode;
-
-	/**
 	 * 供应商名称
 	 */
 	private String supplierName;
-
-	/**
-	 * 创建时间
-	 */
-	private Date createTime;
-
-	/**
-	 * 创建人
-	 */
-	private String createUser;
-
-	/**
-	 * 仓库编码
-	 */
-	private String whCode;
 
 	/**
 	 * 仓库名称
@@ -70,5 +49,10 @@ public class AsnHeaderViewResponse implements Serializable {
 	 * 备注
 	 */
 	private String asnBillRemark;
-}
 
+	/**
+	 * ASN单头表信息dto
+	 */
+//	private AsnHeaderViewResponse asnHeaderViewResponse;
+
+}

@@ -132,7 +132,7 @@
         </where>
     </select>
 
-    <select id="selectAsnHeaderByAsnBillId" resultType="org.nodes.wms.dao.instock.asn.entities.AsnHeader">
+    <select id="getById" resultType="org.nodes.wms.dao.instock.asn.entities.AsnHeader">
         SELECT asn_bill_id,
                asn_bill_no,
                wh_id,
@@ -143,20 +143,16 @@
                supplier_name,
                asn_bill_remark
         FROM asn_header
-        WHERE asn_bill_id = #{asnBillId}
+        WHERE asn_bill_id = #{id}
           AND is_deleted = 0
     </select>
 
-    <select id="selectAsnHeaderViewById" resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnHeaderViewResponse">
+    <select id="selectAsnHeaderForDetailById" resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnHeaderForDetailResponse">
         SELECT h.asn_bill_id,
                h.asn_bill_no,
                b.bill_type_name,
-               h.supplier_code,
                h.supplier_name,
                h.asn_bill_remark,
-               h.create_time,
-               `user`.real_name as headerCreateUser,
-               w.wh_code,
                w.wh_name,
                o.owner_name
         FROM asn_header h
@@ -166,37 +162,6 @@
                  LEFT JOIN blade_user `user` ON h.create_user = `user`.id
         WHERE h.asn_bill_id = #{id}
           and h.is_deleted = 0
-    </select>
-
-    <select id="selectAsnDetailViewByAsnBillId"
-            resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnDetailViewResponse">
-        SELECT asn_detail_id,
-               asn_line_no,
-               sku_code,
-               sku_name,
-               sku_spec,
-               um_name,
-               plan_qty,
-               scan_qty,
-               surplus_qty,
-               remark,
-               detail_status
-        FROM asn_detail
-        WHERE asn_bill_id = #{asnBillId}
-    </select>
-
-    <select id="selectLogActionById"
-            resultType="org.nodes.wms.dao.instock.asn.dto.output.AsnLogActionViewResponse">
-        SELECT id,
-               user_account,
-               user_real_name,
-               type,
-               bill_id,
-               bill_no,
-               log,
-               update_time
-        FROM log_action
-        WHERE bill_id = #{id}
     </select>
 </mapper>
 

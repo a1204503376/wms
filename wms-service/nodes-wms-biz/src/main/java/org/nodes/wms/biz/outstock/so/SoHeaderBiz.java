@@ -1,5 +1,6 @@
 package org.nodes.wms.biz.outstock.so;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
@@ -84,10 +85,10 @@ public interface SoHeaderBiz {
 	 * 根据发货单id分页查询发货单日志
 	 *
 	 * @param soBillId: 发货单id
-	 * @param query:    分页参数
+	 * @param page:    分页参数
 	 * @return PageLogForSoDetailResponse> 发货单日志分页响应对象
 	 */
-	Page<LogForSoDetailResponse> pageLogById(Query query, Long soBillId);
+	Page<LogForSoDetailResponse> pageLogById(IPage<?> page, Long soBillId);
 
 	/**
 	 * pc发货返回前端头表信息
