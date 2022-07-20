@@ -144,4 +144,9 @@ public class SkuBizImpl implements SkuBiz {
 	public SkuPackageDetail getSkuPackageDetailBySkuId(Long skuId, String wsuCode) {
 		return skuDao.getSkuPackageDetailBySkuId(skuId, wsuCode);
 	}
+
+	@Override
+	public List<Sku> selectSkuListByNo(String no) {
+		return skuDao.getSkuListByNo(no);
+	}
 }

@@ -8,10 +8,6 @@
 			<u-form-item label="箱码" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.skuCode" border="0" disabled></u--input>
 			</u-form-item>
-			<u-form-item label="LPN" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuLot1"></u--input>
-			</u-form-item>
-
 		</u--form>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">

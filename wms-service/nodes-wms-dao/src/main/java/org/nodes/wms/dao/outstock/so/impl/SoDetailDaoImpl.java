@@ -8,6 +8,7 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickExcelResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
 import org.nodes.wms.dao.outstock.so.SoDetailDao;
+import org.nodes.wms.dao.outstock.so.dto.output.LineNoAndSkuSelectResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailEditResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
@@ -42,14 +43,19 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 		return super.baseMapper.pageForSoDetailBySoBillId(page, soBillId);
 	}
 
-    @Override
-    public Page<NotSoPickPageResponse> pageNotSoPick(IPage<Object> page, NotSoPickPageQuery notSoPickPageQuery) {
-        return super.baseMapper.pageNotSoPick(page, notSoPickPageQuery);
-    }
+	@Override
+	public Page<NotSoPickPageResponse> pageNotSoPick(IPage<Object> page, NotSoPickPageQuery notSoPickPageQuery) {
+		return super.baseMapper.pageNotSoPick(page, notSoPickPageQuery);
+	}
 
 	@Override
 	public List<NotSoPickExcelResponse> notSoPickListByQuery(NotSoPickPageQuery notSoPickPageQuery) {
 		return super.baseMapper.notSoPickListByQuery(notSoPickPageQuery);
+	}
+
+	@Override
+	public List<LineNoAndSkuSelectResponse> getLineNoAndSkuCodeById(Long soBillId) {
+		return super.baseMapper.selectLineNoAndSkuCodeById(soBillId);
 	}
 
     @Override

@@ -218,6 +218,12 @@ export default [
                 component: () => import('@/views/wms/outstock/soHeader/soBillEdit')
             },
             {
+                path: 'pick/:soBillId',
+                name: 'PC拣货',
+                props: true,
+                component: () => import('@/views/wms/outstock/soHeader/pickByPc')
+            },
+            {
                 path: 'detail/:soBillId',
                 name: '发货单详情',
                 props: true,

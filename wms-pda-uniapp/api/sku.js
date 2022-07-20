@@ -8,7 +8,16 @@ const getSkuDropDownBox =()=>{
 	})
 }
 
+const getSkuByCode=(params)=>{
+	return http.request({
+		url:'/api/ApiPDA/sku/findSkuByCode',
+		method: 'POST',
+		data:params
+	})
+}
+
 
 export default {
-	getSkuDropDownBox
+	getSkuDropDownBox,
+	getSkuByCode
 }

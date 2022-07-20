@@ -136,9 +136,18 @@ public interface SkuBiz {
 
 	/**
 	 * 根据物料id和计量单位编码获取包装明细
-	 * @param skuId 物料id
+	 *
+	 * @param skuId   物料id
 	 * @param wsuCode 计量单位 编码
-	 * @return  包装明细实体
+	 * @return 包装明细实体
 	 */
 	SkuPackageDetail getSkuPackageDetailBySkuId(Long skuId, String wsuCode);
+
+	/**
+	 * 根据物品编码或者物品型号 查询出对应的SKU集合
+	 *
+	 * @param no 物品编码/物品型号
+	 * @return SKU集合
+	 */
+	List<Sku> selectSkuListByNo(String no);
 }

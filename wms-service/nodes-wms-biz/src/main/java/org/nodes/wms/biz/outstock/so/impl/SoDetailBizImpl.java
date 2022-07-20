@@ -8,6 +8,7 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickExcelResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
 import org.nodes.wms.dao.outstock.so.SoDetailDao;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
+import org.nodes.wms.dao.outstock.so.dto.output.LineNoAndSkuSelectResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
@@ -31,14 +32,19 @@ public class SoDetailBizImpl implements SoDetailBiz {
 		return soDetailDao.pageForSoDetailBySoBillId(Condition.getPage(query), soBillIdRequest.getSoBillId());
 	}
 
-    @Override
-    public Page<NotSoPickPageResponse> pageNotSoPick(Query query, NotSoPickPageQuery notSoPickPageQuery) {
-        return soDetailDao.pageNotSoPick(Condition.getPage(query), notSoPickPageQuery);
-    }
+	@Override
+	public Page<NotSoPickPageResponse> pageNotSoPick(Query query, NotSoPickPageQuery notSoPickPageQuery) {
+		return soDetailDao.pageNotSoPick(Condition.getPage(query), notSoPickPageQuery);
+	}
 
 	@Override
 	public void exportNotSoPick(NotSoPickPageQuery notSoPickPageQuery, HttpServletResponse response) {
 		List<NotSoPickExcelResponse> notSoPickList = soDetailDao.notSoPickListByQuery(notSoPickPageQuery);
 		ExcelUtil.export(response, notSoPickList, NotSoPickExcelResponse.class);
+	}
+
+	@Override
+	public List<LineNoAndSkuSelectResponse> getLineNoAndSkuSelectList(Long soBillId) {
+		return soDetailDao.getLineNoAndSkuCodeById(soBillId);
 	}
 }

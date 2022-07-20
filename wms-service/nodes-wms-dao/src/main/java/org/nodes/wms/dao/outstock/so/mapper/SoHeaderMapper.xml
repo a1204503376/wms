@@ -135,5 +135,13 @@
     <select id="pageLotById" resultType="org.nodes.wms.dao.outstock.so.dto.output.LogForSoDetailResponse">
 
     </select>
+    <select id="selectSoHeaderResponseById"
+            resultType="org.nodes.wms.dao.outstock.so.dto.output.PickByPcSoHeaderResponse">
+        select so_bill_no,
+               order_no,
+               wh_code
+        from so_header
+        where so_bill_id = #{soBillId}
+    </select>
 </mapper>
 

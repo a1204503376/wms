@@ -164,27 +164,38 @@ public class ReceiveController {
 		receiveBiz.exportNotReceiveDetail(notReceiveDetailPageQuery, response);
 	}
 
+	/**
+	 * pc收货获取头表显示信息
+	 *
+	 * @param receiveIdRequest 收货单id
+	 * @return 头表信息
+	 */
 
 	@PostMapping("/getReceiveByPc")
 	public R<ReceiveByPcResponse> getReceiveByPc(@Valid @RequestBody ReceiveIdRequest receiveIdRequest) {
 		return R.data(receiveBiz.getReceiveByPcResponse(receiveIdRequest.getReceiveId()));
 	}
 
+	/**
+	 * pc收货获取明细显示信息
+	 *
+	 * @param receiveByPcQuery 包含收货单头表id和订单行号
+	 * @return 明细返回信息
+	 */
 	@PostMapping("/getReceiveDetailByPc")
 	public R<ReceiveDetailByPcResponse> getReceiveDetailByPc(@Valid @RequestBody ReceiveByPcQuery receiveByPcQuery) {
 		return R.data(receiveBiz.getReceiveDetailByPcResponse(receiveByPcQuery));
 	}
 
 	/**
-	 * pc售后
+	 * pc收货
 	 *
 	 * @param request 前端传入参数
 	 */
 	@PostMapping("/receiveByPc")
 	public R<String> receiveByPc(@Valid @RequestBody ReceiveByPcRequest request) {
 		String receiveNo = receiveBiz.receiveByPc(request);
-		return R.success("单号:" + receiveNo + "修改成功");
+		return R.success("单号:" + receiveNo + "收货成功");
 	}
-
 
 }

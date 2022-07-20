@@ -12,16 +12,44 @@
                     <el-row>
                         <el-col :span="8">
 
-                            收货单编码: {{ form.params.receiveNo }}
+                            发货单编码: {{ form.params.soBillNo }}
                         </el-col>
                         <el-col :span="8">
-                            上游单据编码： {{ form.params.externalOrderNo }}
+                            上游单据编码： {{ form.params.orderNo }}
                         </el-col>
                         <el-col :span="8">
                             仓库编码:{{ form.params.whCode }}
                         </el-col>
                     </el-row>
-
+                    <br>
+                    <el-row>选择出库明细
+                        <nodes-out-stock v-model="lineNo" :so-bill-id="this.soBillId"></nodes-out-stock>
+                    </el-row>
+                    <el-row>
+                        <h3>出库明细</h3>
+                    </el-row>
+                    <el-row>
+                        <template>
+                            <el-table
+                                :data="tableData"
+                                style="width: 100%">
+                                <el-table-column
+                                    prop="date"
+                                    label="日期"
+                                    width="180">
+                                </el-table-column>
+                                <el-table-column
+                                    prop="name"
+                                    label="姓名"
+                                    width="180">
+                                </el-table-column>
+                                <el-table-column
+                                    prop="address"
+                                    label="地址">
+                                </el-table-column>
+                            </el-table>
+                        </template>
+                    </el-row>
                     <el-row>
                         <h3>明细</h3>
                     </el-row>
@@ -43,9 +71,6 @@
                                                    @click="onAddBatchRow">
                                         </el-button>
                                     </template>
-                                    <template v-slot="{row}">
-                                        <el-button @click="onReset(row)" type="text" size="small">清空</el-button>
-                                    </template>
                                 </el-table-column>
                                 <el-table-column width="100">
                                     <template slot="header">
@@ -57,7 +82,7 @@
                                             v-model="row.lineNumber"
                                             @blur="getDetailData(row)"
                                             @focus="getFocus(row)"
-                                            @keyup.enter.native="getDetailData(row)"
+                                            @keyup.enter.native="getDetailData(row,$event)"
                                         >
                                         </el-input>
                                     </template>
@@ -80,24 +105,9 @@
 
                                     </template>
                                 </el-table-column>
-                                <el-table-column width="130">
-                                    <template slot="header">
-                                        <span class="d-table-header-required">规格</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <el-input
-                                            size=mini
-                                            v-model="row.skuLot2"
-                                            :disabled="row.skuLot2Exist"
-                                        >
-                                        </el-input>
-                                    </template>
-                                </el-table-column>
-
-
                                 <el-table-column
                                     prop="planQty"
-                                    width="160"
+                                    width="120"
                                 >
                                     <template slot="header">
                                         <span class="d-table-header-required">本次收货量</span>
@@ -106,7 +116,7 @@
                                         <el-input-number
                                             v-model="row.scanQty"
                                             :disabled="exist(row)"
-                                            style="width:130px"
+                                            style="width: 80px"
                                             :min="0"
                                             :max="row.surplusQty+row.scanQty"
                                             controls-position="right"
@@ -119,7 +129,7 @@
                                 <el-table-column
                                     :align="'left'"
                                     prop="skuCode"
-                                    width="150"
+                                    width="100"
                                 >
 
                                     <template slot="header">
@@ -291,20 +301,25 @@
 <script>
 import {editDetailMixin} from "@/mixins/editDetail";
 import func from "@/util/func";
-import {getReceiveByPc, getReceiveDetailByPc, ReceiveByPc} from "@/api/wms/instock/receive";
+import {getReceiveDetailByPc, ReceiveByPc} from "@/api/wms/instock/receive";
 import NodesLocation from "@/components/wms/select/NodesLocation";
+import {getSoHeaderByPickPc} from "@/api/wms/outstock/soHeader";
+import NodesOutStock from "@/components/wms/select/NodesOutStock";
 
 export default {
     props: {
-        receiveId: {type: String},
+        soBillId: {type: String},
     },
     name: "edit",
     components: {
+        NodesOutStock,
         NodesLocation,
     },
     mixins: [editDetailMixin],
     data() {
         return {
+            lineNo: '',
+
             rowObject: {
                 lineNumber: '',
                 scanQty: 0,
@@ -313,13 +328,17 @@ export default {
             refresh: true,
             form: {
                 params: {
-                    receiveId: "",
-                    receiveNo: '',
-                    externalOrderNo: '',
+                    soBillNo: '',
+                    orderNo: '',
                     whCode: ''
                 },
 
             }
+        }
+    },
+    watch: {
+        lineNo(newVal) {
+            alert("ddgdgdgd")
         }
     },
     created() {
@@ -360,11 +379,7 @@ export default {
                 func.isEmpty(row.lineNumber)
             );
         },
-        getDetailData(row) {
-            if (func.isEmpty(row.lineNumber) && func.isNotEmpty(row.skuCode)) {
-                row.lineNumber = this.rowObject.lineNumber
-                return
-            }
+        getDetailData(row, $event) {
             if (func.isEmpty(row.lineNumber)) {
                 return
             }
@@ -398,12 +413,10 @@ export default {
                 row.surplusQty = column.surplusQty
                 row.umCode = column.umCode
                 row.skuLot1 = column.skuLot1
-                row.skuLot2 = column.skuLot2
                 row.skuLot4 = column.skulot4
                 row.skuLot5 = column.skuLot5
                 row.skuLot6 = column.skuLot6
                 row.skuLot8 = column.skuLot8
-                row.skuLot2Exist = column.skuLot2Exist
                 return
             }
 
@@ -428,57 +441,29 @@ export default {
                     row.umCode = item.umCode
                     row.scanQty = 0
                     row.skuLot1 = item.skuLot1
-                    row.skuLot2 = item.skuLot2
                     row.skuLot4 = item.skulot4
                     row.skuLot5 = item.skuLot5
                     row.skuLot6 = item.skuLot6
                     row.skuLot8 = item.skuLot8
-                    if (func.isNotEmpty(item.skuLot2)) {
-                        row.skuLot2Exist = true
-                        item['skuLot2Exist'] = true
-                    } else {
-                        item['skuLot2Exist'] = false
-                    }
-
                     this.rowData.push(item)
                 })
 
         },
         getTableData() {
             let skuUmSelectQuery = {
-                receiveId: this.receiveId
+                soBillId: this.soBillId
             };
-            getReceiveByPc(skuUmSelectQuery)
+            getSoHeaderByPickPc(skuUmSelectQuery)
                 .then((res) => {
                     let pageObj = res.data.data;
                     this.form.params = pageObj
                 })
 
         },
-        onReset(row) {
-            this.rowData.find(u => {
-                if (u.lineNo === row.lineNumber) {
-                    u.surplusQty = u.surplusQty + row.scanQty
-                }
-
-            });
-            let data = this.table.data
-            data.find(u => {
-                if (u.lineNumber === row.lineNumber) {
-                    u.surplusQty = u.surplusQty + row.scanQty
-                }
-            });
-            Object.keys(row).forEach(key => {
-                row[key] = ''
-                row.scanQty = 0
-                row.surplusQty = 0
-            })
-        },
         getDescriptor() {
             return {
                 scanQty: {type: 'Number', validator: (rule, value) => value > 0, message: '计划数量不能为0'},
-                locId: {required: true, message: '库位不能为空'},
-                skuLot2: {required: true, message: '规格不能为空'}
+                locId: {required: true, message: '库位不能为空'}
             };
         },
         createRowObj() {
@@ -494,14 +479,13 @@ export default {
                 lpnCode: '',
                 snCode: '',
                 skuLot1: '',
-                skuLot2: '',
                 skuLot4: '',
                 skuLot5: '',
                 skuLot6: '',
                 skuLot8: '',
-                skuLot2Exist: false
             }
         },
+
 
         submitFormParams() {
             let detailRequestList = this.table.postData

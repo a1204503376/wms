@@ -66,6 +66,14 @@
             resultType="org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickExcelResponse">
         <include refid="notSoPickPageOrList"/>
     </select>
+    <select id="selectLineNoAndSkuCodeById"
+            resultType="org.nodes.wms.dao.outstock.so.dto.output.LineNoAndSkuSelectResponse">
+        select so_line_no lineNo,
+               sku_code
+        from so_detail
+        where so_bill_id = #{soBillId}
+          and surplus_qty > 0
+    </select>
 
     <sql id="notSoPickPageOrList">
         SELECT header.so_bill_id,

@@ -482,10 +482,11 @@ public class ReceiveBizImpl implements ReceiveBiz {
 				//调用库存函数
 				stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PC, receiveLog);
 				//总数累加
-				sum.add(detailRequest.getScanQty());
+				sum = sum.add(detailRequest.getScanQty());
 			}
 			//修改收货单明细状态和剩余数量
 			receiveDetail.setSurplusQty(receiveDetail.getSurplusQty().subtract(sum));
+			receiveDetail.setScanQty(receiveDetail.getScanQty().add(sum));
 			if (receiveDetail.getSurplusQty().compareTo(BigDecimal.ZERO) == 1) {
 				receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.PART);
 				isCompleted = false;
