@@ -23,8 +23,8 @@ public enum DetailStatusEnum implements IPairs<Integer,String,DetailStatusEnum> 
 		return this;
 	}
 	@EnumValue
-	@JsonValue
 	private final Integer code;
+	@JsonValue
 	private final String desc;
 	@Override
 	public Integer key() {
