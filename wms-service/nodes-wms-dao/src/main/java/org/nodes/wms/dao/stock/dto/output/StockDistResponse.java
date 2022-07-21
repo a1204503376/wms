@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * 发货单分配页面拣货记录响应类
+ * 发货单分配页面可分配库存响应类
  **/
 @Data
 public class StockDistResponse extends BaseSkuLot implements Serializable {
