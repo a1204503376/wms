@@ -167,6 +167,7 @@
 								return;
 							}
 						});
+						_this.$u.func.refreshPage()
 					} else {
 						_this.$u.func.showToast({
 							title: '请输入必填字段',

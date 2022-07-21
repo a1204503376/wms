@@ -71,10 +71,10 @@
 			}
 		},
 		onLoad: function(option) {
-			var parse = JSON.parse(option.param)
-			this.receiveDetailId = parse.receiveDetailId;
-			this.receiveId = parse.receiveId;
-			this.params = parse;
+			// var parse = JSON.parse(option.param)
+			// this.receiveDetailId = parse.receiveDetailId;
+			// this.receiveId = parse.receiveId;
+			// this.params = parse;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();

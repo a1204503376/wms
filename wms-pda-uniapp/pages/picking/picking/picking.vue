@@ -59,8 +59,8 @@
 			}
 		},
 		onLoad: function(option) {
-			var parse = JSON.parse(option.param)
-			this.params.receiveId = parse.receiveId
+			// var parse = JSON.parse(option.param)
+			// this.params.receiveId = parse.receiveId
 			this.getReceiveDetailList();
 		},
 		onUnload() {

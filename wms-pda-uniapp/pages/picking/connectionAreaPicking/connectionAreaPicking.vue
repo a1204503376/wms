@@ -58,14 +58,14 @@
 		},
 		onLoad: function(option) {
 
-			var parse = JSON.parse(option.param)
-			this.lpnItem = parse
-			this.param.lpnType = this.lpnItem.lpnType
-			this.param.whId = uni.getStorageSync('warehouse').whId
-			putWay.findLocByLpnType(this.param).then(res => {
-				this.locList = res.data
-			})
-			this.lpnItem['locId'] = 0
+			// var parse = JSON.parse(option.param)
+			// this.lpnItem = parse
+			// this.param.lpnType = this.lpnItem.lpnType
+			// this.param.whId = uni.getStorageSync('warehouse').whId
+			// putWay.findLocByLpnType(this.param).then(res => {
+			// 	this.locList = res.data
+			// })
+			// this.lpnItem['locId'] = 0
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();

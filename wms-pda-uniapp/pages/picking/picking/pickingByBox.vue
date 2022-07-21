@@ -6,7 +6,7 @@
 		</u-navbar>
 		<u--form>
 			<u-form-item label="箱码" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuCode" border="0" disabled></u--input>
+				<u--input v-model="params.skuCode" ></u--input>
 			</u-form-item>
 		</u--form>
 		<view class="footer">
@@ -52,10 +52,10 @@
 			}
 		},
 		onLoad: function(option) {
-			var parse = JSON.parse(option.param)
-			this.receiveDetailId = parse.receiveDetailId;
-			this.receiveId = parse.receiveId;
-			this.getDetailByDetailId();
+			// var parse = JSON.parse(option.param)
+			// this.receiveDetailId = parse.receiveDetailId;
+			// this.receiveId = parse.receiveId;
+			// this.getDetailByDetailId();
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
