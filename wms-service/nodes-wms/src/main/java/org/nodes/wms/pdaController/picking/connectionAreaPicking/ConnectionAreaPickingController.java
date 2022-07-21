@@ -25,7 +25,7 @@ public class ConnectionAreaPickingController {
 	private final ConnectionAreaPickingBiz connectionAreaPickingBiz;
 
 	/**
-	 * 出库接驳区拣货库位查询
+	 * PDA接驳区拣货:出库接驳区拣货库位查询
 	 *
 	 * @param request Pda根据编码查询库存-请求对象
 	 * @return 出库接驳区拣货库位查询
@@ -38,7 +38,7 @@ public class ConnectionAreaPickingController {
 
 
 	/**
-	 * 接驳区拣货
+	 * PDA接驳区拣货:接驳区拣货
 	 *
 	 * @param request 接驳区拣货-请求对象
 	 */
@@ -50,7 +50,7 @@ public class ConnectionAreaPickingController {
 
 
 	/**
-	 * 接驳区移动
+	 * PDA接驳区拣货:接驳区移动
 	 *
 	 * @param request 接驳区移动-请求对象
 	 */

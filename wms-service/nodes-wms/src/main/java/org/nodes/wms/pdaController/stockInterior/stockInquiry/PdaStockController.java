@@ -25,7 +25,7 @@ public class PdaStockController {
 	private final StockBiz stockBiz;
 
 	/**
-	 * 库存分页查询
+	 * PDA库存查询:库存分页查询
 	 *
 	 * @param request Pda根据编码查询库存-请求对象
 	 * @param query   分页条件

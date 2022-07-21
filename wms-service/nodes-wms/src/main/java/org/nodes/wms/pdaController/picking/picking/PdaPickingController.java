@@ -29,7 +29,7 @@ public class PdaPickingController {
 	private final PickingByPcsBiz pickingByPcsBiz;
 
 	/**
-	 * 拣货分页查询
+	 * PDA拣货：拣货分页查询
 	 *
 	 * @param request Pda根据编码查询库存-请求对象
 	 * @param query   分页条件
@@ -42,7 +42,7 @@ public class PdaPickingController {
 	}
 
 	/**
-	 * 按箱拣货
+	 * PDA按箱拣货：按箱拣货
 	 *
 	 * @param request 按箱拣货请求对象
 	 * @return 按箱拣货响应对象
@@ -54,7 +54,7 @@ public class PdaPickingController {
 	}
 
 	/**
-	 * 按件拣货
+	 * PDA按件拣货：按件拣货
 	 *
 	 * @param request 按件拣货请求对象
 	 * @return 按件拣货响应对象
