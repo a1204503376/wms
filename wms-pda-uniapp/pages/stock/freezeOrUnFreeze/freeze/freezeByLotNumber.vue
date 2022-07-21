@@ -60,7 +60,11 @@
 				var _this = this;
 				_this.params.isSn = true;
 				uni.$u.throttle(function() {
-					console.log('按批次号冻结成功')
+					if (tool.isNotEmpty(_this.params.lotNumber)) {
+						console.log('按批次号冻结成功')
+						return;
+					}
+					console.log('按批次号冻结失败')
 				}, 1000)
 
 			},
