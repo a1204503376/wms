@@ -56,7 +56,7 @@
 
 <script>
 	import setting from '@/common/setting'
-	import stockInquiry from '@/api/stockInterior/stockInquiry.js'
+	import stockInquiry from '@/api/stock/stockInquiry.js'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
 	export default {
