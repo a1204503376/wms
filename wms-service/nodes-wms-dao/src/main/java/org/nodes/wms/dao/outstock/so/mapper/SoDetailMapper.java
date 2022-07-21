@@ -7,7 +7,9 @@ import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickExcelResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
+import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.output.LineNoAndSkuSelectResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoDetailAndStockResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailEditResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
@@ -62,4 +64,12 @@ public interface SoDetailMapper extends BaseMapper<SoDetail> {
 	 * @return 行号和物料编码集合
 	 */
 	List<LineNoAndSkuSelectResponse> selectLineNoAndSkuCodeById(@Param("soBillId") Long soBillId);
+
+	/**
+	 * 根据发货单id和行号获取明细数据
+	 *
+	 * @param soDetailAndStockRequest 包含发货单id和行号
+	 * @return 明细数据
+	 */
+	SoDetailAndStockResponse getPickByPcDetail(@Param("param") SoDetailAndStockRequest soDetailAndStockRequest);
 }

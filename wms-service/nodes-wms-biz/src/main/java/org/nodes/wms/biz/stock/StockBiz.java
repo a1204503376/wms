@@ -256,7 +256,16 @@ public interface StockBiz {
 
 	/**
 	 * 导入
+	 *
 	 * @param importDataList 导入的数据集合
 	 */
 	boolean importExcel(List<StockImportRequest> importDataList);
+
+	/**
+	 * pc拣货根据物料编码获取出库库存集合
+	 *
+	 * @param skuCode
+	 * @return
+	 */
+	List<Stock> getStockListBySkuCode(String skuCode);
 }

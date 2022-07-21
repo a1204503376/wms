@@ -125,7 +125,6 @@ export const getSoBillDataByDistribution = (soBillId) => {
 }
 
 
-
 export const getLineNoAndSkuSelectList = (soBillId) => {
     return request({
         url: '/api/wms/outstock/soBill/getLineNoAndSkuSelectList',
@@ -133,5 +132,12 @@ export const getLineNoAndSkuSelectList = (soBillId) => {
         params: {
             soBillId
         }
+    })
+}
+export const getSoDetailAndStock = (data) => {
+    return request({
+        url: '/api/wms/outstock/soBill/getSoDetailAndStock',
+        method: 'post',
+        data: data
     })
 }

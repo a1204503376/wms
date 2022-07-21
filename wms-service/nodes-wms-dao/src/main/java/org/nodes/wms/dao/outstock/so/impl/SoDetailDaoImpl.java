@@ -8,7 +8,9 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickExcelResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
 import org.nodes.wms.dao.outstock.so.SoDetailDao;
+import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.output.LineNoAndSkuSelectResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoDetailAndStockResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailEditResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
@@ -58,10 +60,15 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 		return super.baseMapper.selectLineNoAndSkuCodeById(soBillId);
 	}
 
-    @Override
-    public List<SoDetail> getBySoBillId(Long soBillId) {
+	@Override
+	public List<SoDetail> getBySoBillId(Long soBillId) {
 		LambdaQueryWrapper<SoDetail> queryWrapper = Wrappers.lambdaQuery();
-		queryWrapper.eq(SoDetail::getSoBillId,soBillId);
-        return list(queryWrapper);
-    }
+		queryWrapper.eq(SoDetail::getSoBillId, soBillId);
+		return list(queryWrapper);
+	}
+
+	@Override
+	public SoDetailAndStockResponse getPickByPcDetail(SoDetailAndStockRequest soDetailAndStockRequest) {
+		return super.baseMapper.getPickByPcDetail(soDetailAndStockRequest);
+	}
 }

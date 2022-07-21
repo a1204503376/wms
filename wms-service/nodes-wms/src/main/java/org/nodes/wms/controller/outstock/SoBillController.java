@@ -17,10 +17,7 @@ import org.nodes.wms.core.outstock.so.vo.SoHeaderVO;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickForSoDetailResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
-import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
-import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
-import org.nodes.wms.dao.outstock.so.dto.input.SoBillRemoveRequest;
-import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
+import org.nodes.wms.dao.outstock.so.dto.input.*;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.springblade.core.log.annotation.ApiLog;
@@ -251,7 +248,12 @@ public class SoBillController {
 	}
 
 	@PostMapping("/getSoBillDataByDistribution")
-	public R<SoBillDistributedResponse> getSoBillDataByDistribution(@Valid @RequestBody SoBillIdRequest soBillIdRequest){
+	public R<SoBillDistributedResponse> getSoBillDataByDistribution(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		return R.data(soHeaderBiz.findSoBillForDistBySoBillId(soBillIdRequest.getSoBillId()));
+	}
+
+	@PostMapping("/getSoDetailAndStock")
+	public R<SoDetailAndStockResponse> getSoDetailAndStock(@Valid @RequestBody SoDetailAndStockRequest soDetailAndStockRequest) {
+		return R.data(soHeaderBiz.getSoDetailAndStock(soDetailAndStockRequest));
 	}
 }

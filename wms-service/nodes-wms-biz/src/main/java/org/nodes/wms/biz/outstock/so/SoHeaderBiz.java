@@ -3,6 +3,7 @@ package org.nodes.wms.biz.outstock.so;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
+import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
@@ -104,4 +105,12 @@ public interface SoHeaderBiz {
 	 * @return SoBillDistributedResponse 发货单信息
 	 */
 	SoBillDistributedResponse findSoBillForDistBySoBillId(Long soBillId);
+
+	/**
+	 * pc拣货获取前端出库明细和库存信息
+	 *
+	 * @param soDetailAndStockRequest 包含行号和发货单id
+	 * @return 出库明细和库存信息
+	 */
+	SoDetailAndStockResponse getSoDetailAndStock(SoDetailAndStockRequest soDetailAndStockRequest);
 }

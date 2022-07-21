@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickExcelResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
+import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.output.LineNoAndSkuSelectResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoDetailAndStockResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailEditResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
@@ -82,4 +84,12 @@ public interface SoDetailDao {
 	 * @return List<SoDetail> 发货单明细
 	 */
 	List<SoDetail> getBySoBillId(Long soBillId);
+
+	/**
+	 * pc拣货获取发货单明细
+	 *
+	 * @param soDetailAndStockRequest 包含行号和发货单id
+	 * @return 发货单明细数据
+	 */
+	SoDetailAndStockResponse getPickByPcDetail(SoDetailAndStockRequest soDetailAndStockRequest);
 }
