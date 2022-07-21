@@ -28,16 +28,25 @@ public class IndexController {
 
 	private final LogSoPickBiz logSoPickBiz;
 
+	/**
+	 * 首页：获取首页库存信息
+	 */
 	@GetMapping("/stockData")
 	public R<StockIndexResponse> stockData(){
 		return R.data(stockQueryBiz.staticsStockDataOnIndexPage());
 	}
 
+	/**
+	 * 首页：获取一周内收货量前10的物品
+	 */
 	@GetMapping("/inStockRate")
 	public  R<List<ReceiveLogIndexResponse>> inStockRate(){
 		return R.data(receiveLogBiz.findReceiveSkuQtyTop10());
 	}
 
+	/**
+	 * 首页：获取一周内发货量前10的物品
+	 */
 	@GetMapping("/outStockRate")
 	public  R<List<LogSoPickIndexResponse>> outStockRate(){
 		return R.data(logSoPickBiz.findPickSkuQtyTop10());
