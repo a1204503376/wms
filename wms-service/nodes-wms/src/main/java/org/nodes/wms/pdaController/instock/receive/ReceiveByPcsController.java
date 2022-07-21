@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * 收货管理API
+ * 按件收货API
  */
 @RestController
 @RequiredArgsConstructor
@@ -42,7 +42,7 @@ public class ReceiveByPcsController {
 	private final StockBiz stockBiz;
 
 	/**
-	 * PDA收货管理查询
+	 * PDA按件收货:收货管理查询
 	 */
 	@ApiLog("PDA收货管理查询")
 	@PostMapping("/list")
@@ -52,10 +52,12 @@ public class ReceiveByPcsController {
 	}
 
 	/**
+	 * PDA按件收货:收货详情查询
+	 *
 	 * @param receiveDetailPdaQuery 按单收货详情页面查询条件
 	 * @return 按单收货详情集合
 	 */
-	@ApiLog("PDA按单收货详情页面查询")
+	@ApiLog("PDA按单收货详情查询")
 	@PostMapping("/findDetailListByReceiveId")
 	public R<List<DetailReceiveDetailPdaResponse>> findDetailListByReceiveId(@RequestBody ReceiveDetailPdaQuery receiveDetailPdaQuery) {
 		List<DetailReceiveDetailPdaResponse> listByReceiveId = receiveBiz.getDetailListByReceiveId(receiveDetailPdaQuery);
@@ -63,7 +65,8 @@ public class ReceiveByPcsController {
 	}
 
 	/**
-	 * PDA按单收货详情明细查询
+	 * PDA按件收货:收货单详情明细查询
+	 *
 	 * @param receiveDetailByReceiveIdPdaQuery 请求参数
 	 * @return 当前收货单详情，以及他是否是序列号管理 isSn
 	 */
@@ -75,7 +78,8 @@ public class ReceiveByPcsController {
 	}
 
 	/**
-	 * PDA按件收货
+	 * PDA按件收货:按件收货
+	 *
 	 * @param pdaByPieceReceiveQuery PDA按件收货请求参数
 	 * @return 是否成功
 	 */
@@ -86,6 +90,8 @@ public class ReceiveByPcsController {
 	}
 
 	/**
+	 * PDA按件收货:库位查询
+	 *
 	 * @param request 请求对象包含参数-库房id-库位编码
 	 * @return 库位
 	 */
@@ -98,6 +104,8 @@ public class ReceiveByPcsController {
 	}
 
 	/**
+	 * PDA按件收货:查询库存
+	 *
 	 * @param request 根据箱码查询库存
 	 * @return 库位信息
 	 */
@@ -110,6 +118,8 @@ public class ReceiveByPcsController {
 	}
 
 	/**
+	 * PDA按件收货:查询已经存在的序列号集合
+	 *
 	 * @param request 收货单序列号集合
 	 * @return 已经存在的序列号集合
 	 */
