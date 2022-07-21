@@ -32,250 +32,111 @@
                     <el-row>
                         <template>
                             <el-table
-                                :data="tableData"
+                                :data="detailData"
                                 style="width: 100%">
                                 <el-table-column
-                                    prop="date"
-                                    label="日期"
+                                    prop="soLineNo"
+                                    label="行号"
                                     width="180">
+                                    <el-input
+                                        size=mini
+                                        :disabled="true">
+                                    </el-input>
                                 </el-table-column>
                                 <el-table-column
-                                    prop="name"
-                                    label="姓名"
+                                    prop="skuCode"
+                                    label="物品编码"
                                     width="180">
+                                    <el-input
+                                        size=mini
+                                        :disabled="true">
+                                    </el-input>
+                                </el-table-column>
+                                <el-table-column
+                                    prop="planQty"
+                                    label="计划量">
+                                    <el-input
+                                        size=mini
+                                        :disabled="true">
+                                    </el-input>
                                 </el-table-column>
                                 <el-table-column
                                     prop="address"
-                                    label="地址">
+                                    label="已出量">
+                                    <el-input
+                                        size=mini
+                                        :disabled="true">
+                                    </el-input>
+                                </el-table-column>
+                                <el-table-column
+                                    prop="address"
+                                    label="剩余量">
+                                    <el-input
+                                        size=mini
+                                        :disabled="true">
+                                    </el-input>
+                                </el-table-column>
+                                <el-table-column
+                                    prop="address"
+                                    label="计量单位">
+                                    <el-input
+                                        size=mini
+                                        :disabled="true">
+                                    </el-input>
+                                </el-table-column>
+                                <el-table-column
+                                    prop="address"
+                                    label="批次号">
+                                    <el-input
+                                        size=mini
+                                        :disabled="true">
+                                    </el-input>
                                 </el-table-column>
                             </el-table>
                         </template>
                     </el-row>
 
-                    <el-row>
-                        <h3>明细</h3>
-                    </el-row>
                     <el-row style="overflow-y: auto">
-                        <el-col>
-                            <el-table
-                                ref="table"
-                                :data="table.data"
-                                border
-                                size="mini">
-                                <el-table-column
-                                    width="53"
-                                >
-                                    <template slot="header">
-                                        <el-button circle
-                                                   icon="el-icon-plus"
-                                                   size="mini"
-                                                   type="primary"
-                                                   @click="onAddBatchRow">
-                                        </el-button>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column width="100">
-                                    <template slot="header">
-                                        <span>行号</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <el-input
-                                            size=mini
-                                            v-model="row.lineNumber"
-                                            @blur="getDetailData(row)"
-                                            @focus="getFocus(row)"
-                                            @keyup.enter.native="getDetailData(row,$event)"
-                                        >
-                                        </el-input>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    :align="'left'"
-                                    prop="skuCode"
-                                    width="195"
-                                >
+                        <el-tabs v-model="activeName" @tab-click="handleClick" type="border-card">
+                            <el-tab-pane :label="item.lable" :name="item.name" v-for="(item, index) in tabList"
+                                         :key="index">
+                                <el-table
+                                    :data="table.data"
+                                    border
+                                    highlight-current-row
+                                    size="mini">
+                                    <el-table-column
+                                        :align="'left'"
+                                        prop="skuCode"
+                                        width="150"
+                                    >
 
-                                    <template slot="header">
-                                        <span class="d-table-header-required">物品编码</span>
+                                        <template slot="header">
+                                            <span>本次出库</span>
+                                        </template>
+                                        <template v-slot="{row}">
+                                            <el-input-number
+                                                v-model="row.outStockQty"
+                                                style="width:130px"
+                                                :min="0"
+                                                controls-position="right"
+                                                size="mini"
+                                                @change="(val,oldValue)=>onChange(val,oldValue,row)">
+                                                >
+                                            </el-input-number>
+                                        </template>
+                                    </el-table-column>
+                                    <template v-for="(column,index) in table.columnList">
+                                        <el-table-column
+                                            v-if="!column.hide"
+                                            :key="index"
+                                            show-overflow-tooltip
+                                            v-bind="column">
+                                        </el-table-column>
                                     </template>
-                                    <template v-slot="{row}">
-                                        <el-input
-                                            size=mini
-                                            v-model="row.skuCode"
-                                            :disabled="true">
-                                        </el-input>
-
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    prop="planQty"
-                                    width="120"
-                                >
-                                    <template slot="header">
-                                        <span class="d-table-header-required">本次收货量</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <el-input-number
-                                            v-model="row.scanQty"
-                                            :disabled="exist(row)"
-                                            style="width: 80px"
-                                            :min="0"
-                                            :max="row.surplusQty+row.scanQty"
-                                            controls-position="right"
-                                            size="mini"
-                                            @change="(val,oldValue)=>onChange(val,oldValue,row)">
-                                            >
-                                        </el-input-number>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    :align="'left'"
-                                    prop="skuCode"
-                                    width="100"
-                                >
-
-                                    <template slot="header">
-                                        <span class="d-table-header-required">剩余数量</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <el-input
-                                            size=mini
-                                            v-model="row.surplusQty"
-                                            :disabled="true">
-                                        </el-input>
-
-                                    </template>
-                                </el-table-column>
-
-                                <el-table-column
-                                    :align="'left'"
-                                    prop="skuCode"
-                                    width="110"
-                                >
-                                    <template slot="header">
-                                        <span class="d-table-header-required">计量单位</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <el-input
-                                            size=mini
-                                            v-model="row.umCode"
-                                            :disabled="true">
-                                        </el-input>
-                                    </template>
-                                </el-table-column>
-
-                                <el-table-column
-                                    :align="'left'"
-                                    prop="skuCode"
-                                    width="180"
-                                >
-                                    <template slot="header">
-                                        <span class="d-table-header-required">库位编码</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <nodes-location v-model="row.locId"></nodes-location>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column width="130">
-                                    <template slot="header">
-                                        <span>箱码</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <el-input
-                                            size=mini
-                                            v-model="row.boxCode"
-                                        >
-                                        </el-input>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column width="130">
-                                    <template slot="header">
-                                        <span>LPN</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <el-input
-                                            size=mini
-                                            v-model="row.lpnCode"
-                                        >
-                                        </el-input>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column width="130">
-                                    <template slot="header">
-                                        <span>序列号</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <el-input
-                                            size=mini
-                                            v-model="row.snCode"
-                                        >
-                                        </el-input>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column width="130">
-                                    <template slot="header">
-                                        <span>生产批次</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <el-input
-                                            size=mini
-                                            v-model="row.skuLot1"
-                                        >
-                                        </el-input>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column width="130">
-                                    <template slot="header">
-                                        <span>客户</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <el-input
-                                            size=mini
-                                            v-model="row.skuLot4"
-                                        >
-                                        </el-input>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column width="130">
-                                    <template slot="header">
-                                        <span>钢背批次</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <el-input
-                                            size=mini
-                                            v-model="row.skuLot5"
-                                        >
-                                        </el-input>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column width="130">
-                                    <template slot="header">
-                                        <span>摩擦块批次</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <el-input
-                                            size=mini
-                                            v-model="row.skuLot6"
-                                        >
-                                        </el-input>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column width="130">
-                                    <template slot="header">
-                                        <span>CRCC</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <el-input
-                                            size=mini
-                                            v-model="row.skuLot8"
-                                        >
-                                        </el-input>
-                                    </template>
-                                </el-table-column>
-
-
-                            </el-table>
-                        </el-col>
+                                </el-table>
+                            </el-tab-pane>
+                        </el-tabs>
                     </el-row>
                 </el-form>
             </el-main>
@@ -303,9 +164,9 @@
 <script>
 import {editDetailMixin} from "@/mixins/editDetail";
 import func from "@/util/func";
-import {getReceiveDetailByPc, ReceiveByPc} from "@/api/wms/instock/receive";
+import {ReceiveByPc} from "@/api/wms/instock/receive";
 import NodesLocation from "@/components/wms/select/NodesLocation";
-import {getSoHeaderByPickPc} from "@/api/wms/outstock/soHeader";
+import {getSoDetailAndStock, getSoHeaderByPickPc} from "@/api/wms/outstock/soHeader";
 import NodesOutStock from "@/components/wms/select/NodesOutStock";
 
 export default {
@@ -320,7 +181,57 @@ export default {
     mixins: [editDetailMixin],
     data() {
         return {
+            tabList: [
+                {lable: '按件拣货', name: 'pickByPiece'},
+                {lable: '按箱拣货', name: 'pickByBox'},
+            ],
+            activeName: 'pickByPiece',
+            table: {
+                columnList: [
+                    {
+                        prop: 'stockEnableQty',
+                        label: '可用库存',
+                    },
+                    {
+                        prop: 'stockBalanceQty',
+                        label: '余额',
+                    },
+                    {
+                        prop: 'skuCode',
+                        label: '物品编码',
+                    },
+                    {
+                        prop: 'lotNumber',
+                        label: '批次号',
+                    },
+                    {
+                        prop: 'lotNumber',
+                        label: '库位',
+                    },
+                    {
+                        prop: 'zoneCode',
+                        label: '库区',
+                    },
+                    {
+                        prop: 'whCode',
+                        label: '库房',
+                    },
+                    {
+                        prop: 'boxCode',
+                        label: '箱码',
+                    },
+                    {
+                        prop: 'lpnCode',
+                        label: 'lpn',
+                    },
+
+
+                ]
+            },
+
+
             detailData: [],
+            stockData: [],
             lineNo: '',
 
             rowObject: {
@@ -341,14 +252,16 @@ export default {
     },
     watch: {
         lineNo(newVal) {
-
+            this.getDetailData(newVal)
         }
     },
     created() {
-        this.getTableData()
+        this.getHeaderData()
     },
     methods: {
-      
+        handleClick() {
+
+        },
         getFocus(row) {
             this.rowObject.lineNumber = row.lineNumber
             this.rowObject.scanQty = row.scanQty
@@ -383,77 +296,20 @@ export default {
                 func.isEmpty(row.lineNumber)
             );
         },
-        getDetailData(row, $event) {
-            if (func.isEmpty(row.lineNumber)) {
-                return
-            }
-            let a = this.rowData
-            let column = a.find(u => {
-                if (u.lineNo === row.lineNumber) {
-                    return u
-                }
-            });
-
-            if (func.isNotEmpty(this.rowObject) && row.lineNumber != this.rowObject.lineNumber) {
-                let data = this.table.data
-                data.find(u => {
-                    if (u.lineNumber === this.rowObject.lineNumber) {
-                        u.surplusQty = u.surplusQty + this.rowObject.scanQty
-                    }
-                });
-                this.rowObject.lineNumber = row.lineNumber
-                this.rowObject.scanQty = 0
-
-            }
-
-            if (func.isNotEmpty(column)) {
-                if (column.surplusQty === 0) {
-                    this.$message.error('该行号剩余数量为0');
-                    row.lineNumber = ''
-                    return
-                }
-                row.receiveDetailId = column.receiveDetailId
-                row.skuCode = column.skuCode
-                row.surplusQty = column.surplusQty
-                row.umCode = column.umCode
-                row.skuLot1 = column.skuLot1
-                row.skuLot4 = column.skulot4
-                row.skuLot5 = column.skuLot5
-                row.skuLot6 = column.skuLot6
-                row.skuLot8 = column.skuLot8
-                return
-            }
-
-            let skuUmSelectQuery = {
-                lineNumber: row.lineNumber,
-                receiveId: this.receiveId
+        getDetailData(lineNo) {
+            let soDetailAndStockRequest = {
+                soBillId: this.soBillId,
+                soLineNo: lineNo
             };
-
-            getReceiveDetailByPc(skuUmSelectQuery)
+            getSoDetailAndStock(soDetailAndStockRequest)
                 .then((res) => {
-                    let item = res.data.data
-                    if (func.isEmpty(item.lineNo)) {
-                        this.$message.error('没有搜索到该行号');
-                        Object.keys(row).forEach(key => {
-                            row[key] = ''
-                        })
-                        return
-                    }
-                    row.receiveDetailId = item.receiveDetailId
-                    row.skuCode = item.skuCode
-                    row.surplusQty = item.surplusQty
-                    row.umCode = item.umCode
-                    row.scanQty = 0
-                    row.skuLot1 = item.skuLot1
-                    row.skuLot4 = item.skulot4
-                    row.skuLot5 = item.skuLot5
-                    row.skuLot6 = item.skuLot6
-                    row.skuLot8 = item.skuLot8
-                    this.rowData.push(item)
+                    let detailObj = res.data.data
+                    this.detailData.length = 0
+                    this.detailData.push(detailObj.pickByPcSoDetailResponse)
+                    this.table.data = detailObj.stockResponseList;
                 })
-
         },
-        getTableData() {
+        getHeaderData() {
             let skuUmSelectQuery = {
                 soBillId: this.soBillId
             };
@@ -469,25 +325,6 @@ export default {
                 scanQty: {type: 'Number', validator: (rule, value) => value > 0, message: '计划数量不能为0'},
                 locId: {required: true, message: '库位不能为空'}
             };
-        },
-        createRowObj() {
-            return {
-                receiveDetailId: '',
-                skuCode: '',
-                lineNumber: '',
-                scanQty: 0,
-                surplusQty: 0,
-                umCode: '',
-                locId: '',
-                boxCode: '',
-                lpnCode: '',
-                snCode: '',
-                skuLot1: '',
-                skuLot4: '',
-                skuLot5: '',
-                skuLot6: '',
-                skuLot8: '',
-            }
         },
 
 

@@ -6,7 +6,6 @@ import org.nodes.wms.biz.putway.PutwayBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
-import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.putway.PutawayLogDao;
 import org.nodes.wms.dao.putway.dto.input.AddByBoxShelfRequest;
 import org.nodes.wms.dao.putway.dto.input.CallAgvRequest;
@@ -76,7 +75,7 @@ public class PutwayBizImpl implements PutwayBiz {
 				// 根据id获取库存实体
 				Stock stock = stockQueryBiz.findStockById(stockId);
 				//获取数量
-				BigDecimal qty = StockUtil.getStockBalance(stock);
+				BigDecimal qty = stock.getStockBalance();
 				//获取序列号
 				List<Serial> serialList = stockQueryBiz.findSerialByStock(stockId);
 				List<String> serialNoList = new ArrayList<>();
