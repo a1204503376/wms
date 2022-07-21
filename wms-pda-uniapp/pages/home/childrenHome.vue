@@ -67,6 +67,12 @@
 			},
 			navTo(menu) {
 				this.clearEmitKeyDown();
+				if(tool.isNotEmpty(menu.children)){
+					uni.setStorageSync('childrenMenu', menu.children)
+					//有子集的自动跳转统一模板
+					uni.$u.func.routeNavigateTo('/pages/home/childrenHome', menu);
+					return;
+				}
 				//跳转页面
 				uni.$u.func.routeNavigateTo(menu.path);
 			},
