@@ -68,4 +68,15 @@
 	font-size: $theme-font-size!important;
 }
 
+.swipe-action {
+    &__content {
+        padding: 25rpx 0;
+        &__text {
+        font-size: 15px;
+        color: $u-main-color;
+        padding-left: 30rpx;
+        }
+    }
+}
+
 

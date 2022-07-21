@@ -218,5 +218,4 @@
 </script>
 
 <style lang="scss">
-	@import 'collectionSerialNumber.scss';
 </style>
