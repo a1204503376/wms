@@ -17,7 +17,7 @@
                         <el-col :span="8">
                             <el-form-item label="ASN单编码" prop="asnBillNo">
                                 <el-input v-model="form.params.asnBillNo"
-                                          disabled="true"
+                                          :disabled="true"
                                           size="medium"
                                           style="width: 210px"
                                 >

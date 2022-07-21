@@ -11,7 +11,7 @@ import org.nodes.wms.biz.instock.asn.impl.AsnBizImpl;
 import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnDetailRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnBillViewResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnHeaderForDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -63,21 +63,21 @@ public class AsnTest {
 	}
 
 	@Test
-	public void findAsnBillViewDetailByIdTest(){
-		AsnBillViewResponse asnBillViewResponse = asnBiz.findAsnBillViewDetailByAsnBillId(1527561445477265410L);
+	public void findAsnBillViewDetailByIdTest() {
+		AsnHeaderForDetailResponse asnHeaderForDetailResponse = asnBiz.findAsnHeaderForDetailByAsnBillId(1527561445477265410L);
 //		System.out.println(asnDetailResponse);
 //		Assertions.assertEquals(1,asnDetailResponse);
 	}
 
 	@Test
-	public void deleteTest(){
+	public void deleteTest() {
 		List<Long> idList = new ArrayList<>();
 		idList.add(1234568L);
 		asnBiz.remove(idList);
 	}
 
 	@Test
-	public void insertTest(){
+	public void insertTest() {
 		AddOrEditAsnBillRequest addOrEditAsnBillRequest = new AddOrEditAsnBillRequest();
 		for (int i = 0; i < 99; i++) {
 			addOrEditAsnBillRequest.setBillTypeCd("10");
@@ -101,7 +101,7 @@ public class AsnTest {
 	}
 
 	@Test
-	public void DateUtilTest(){
+	public void DateUtilTest() {
 		System.out.println(DateUtil.formatDateTimeMini(new Date()));
 	}
 }

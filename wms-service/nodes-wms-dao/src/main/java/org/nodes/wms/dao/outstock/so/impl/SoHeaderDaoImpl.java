@@ -2,11 +2,14 @@ package org.nodes.wms.dao.outstock.so.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.outstock.so.SoHeaderDao;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.so.mapper.SoHeaderMapper;
+import org.nodes.wms.dao.picking.dto.input.FindAllPickingRequest;
+import org.nodes.wms.dao.picking.dto.output.FindAllPickingResponse;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
 
@@ -51,6 +54,15 @@ public class SoHeaderDaoImpl extends BaseServiceImpl<SoHeaderMapper, SoHeader> i
 	@Override
 	public PickByPcSoHeaderResponse getSoHeaderResponseById(Long soBillId) {
 		return super.baseMapper.selectSoHeaderResponseById(soBillId);
+	}
+
+	@Override
+	public IPage<FindAllPickingResponse> getAllPickingPage(IPage<?> page, FindAllPickingRequest request) {
+		AssertUtil.notNull(request.getNo(),"发货单编码/上游编码/任务号不能为空");
+		AssertUtil.notNull(request.getWhId(),"库房编码不能为空");
+		AssertUtil.notNull(request.getBillDetailState(),"单据状态不能为空");
+		//TODO
+		return super.baseMapper.getAllPickPage(page,request);
 	}
 
 	@Override

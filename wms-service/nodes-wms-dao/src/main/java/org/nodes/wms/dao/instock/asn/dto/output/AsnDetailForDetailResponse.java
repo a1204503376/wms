@@ -3,6 +3,7 @@ package org.nodes.wms.dao.instock.asn.dto.output;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
+import org.nodes.wms.dao.instock.receive.enums.DetailStatusEnum;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -11,7 +12,7 @@ import java.math.BigDecimal;
  * 查看明细-ASN单明细表返回对象
  **/
 @Data
-public class AsnDetailViewResponse implements Serializable {
+public class AsnDetailForDetailResponse implements Serializable {
 
 	private static final long serialVersionUID = 1959979521968969432L;
 
@@ -37,11 +38,6 @@ public class AsnDetailViewResponse implements Serializable {
 	private String skuName;
 
 	/**
-	 * 物品规格
-	 */
-	private String skuSpec;
-
-	/**
 	 * 计量单位名称
 	 */
 	private String umName;
@@ -49,17 +45,14 @@ public class AsnDetailViewResponse implements Serializable {
 	/**
 	 * 计划数量
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private BigDecimal planQty;
 
 	/**
 	 * 实际数量
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private BigDecimal scanQty;
-
-	/**
-	 * 剩余数量
-	 */
-	private BigDecimal surplusQty;
 
 	/**
 	 * 备注
@@ -69,6 +62,6 @@ public class AsnDetailViewResponse implements Serializable {
 	/**
 	 * 接收状态
 	 */
-	private Integer detailStatus;
+	private DetailStatusEnum detailStatus;
 }
 

@@ -1,8 +1,11 @@
 package org.nodes.wms.dao.instock.asn.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.instock.asn.AsnDetailDao;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailForDetailResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.nodes.wms.dao.instock.asn.mapper.AsnDetailMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -36,7 +39,12 @@ public class AsnDetailDaoImpl
 		return super.baseMapper.selectAsnDetailByAsnBillId(asnBillId);
 	}
 
-    @Override
+	@Override
+	public Page<AsnDetailForDetailResponse> getAsnDetailForDetailByAsnBillId(IPage<?> page, Long asnBillId) {
+		return super.baseMapper.selectAsnDetailForDetailByAsnBillId(page, asnBillId);
+	}
+
+	@Override
     public void deleteByIds(List<Long> removeIdList) {
         super.removeByIds(removeIdList);
     }

@@ -85,9 +85,10 @@
                                                     v-bind="column">
                                                 </el-table-column>
                                             </template>
-                                            <el-table-column align="center" fixed="right" label="操作" width="150">
+                                            <el-table-column align="center" fixed="right" label="操作" width="100">
                                                 <template v-slot="scope">
-                                                    <el-button size="small" type="text" @click="onEdit(scope.row)">编辑
+                                                    <el-button size="small" type="text" @click="onEdit(scope.row)">
+                                                        编辑
                                                     </el-button>
                                                     <el-button size="small" type="text" @click="onCancel(scope.row)">
                                                         取消

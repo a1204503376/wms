@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.outstock.logSoPick.dto.output;
+package org.nodes.wms.dao.stock.dto.output;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  * 发货单分配页面拣货记录响应类
  **/
 @Data
-public class LogSoPickDistResponse extends BaseSkuLot implements Serializable {
+public class StockDistResponse extends BaseSkuLot implements Serializable {
 
 	private static final long serialVersionUID = -829789935189414879L;
 

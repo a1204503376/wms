@@ -49,7 +49,7 @@ public class PdaPickingController {
 	 */
 	@ApiLog("PDA按箱拣货")
 	@PostMapping("/pickingByBox")
-	public R<PickingByBoxResponse> pickingByBox(PickingByBoxRequest request) {
+	public R<PickingByBoxResponse> pickingByBox(@RequestBody PickingByBoxRequest request) {
 		return R.data(pickingByBoxBiz.pickingByBoxAction(request));
 	}
 
@@ -61,7 +61,7 @@ public class PdaPickingController {
 	 */
 	@ApiLog("PDA按件拣货")
 	@PostMapping("/pickingByPcs")
-	public R<PickingByBoxResponse> pickingByPcs(PickingByBoxRequest request) {
+	public R<PickingByBoxResponse> pickingByPcs(@RequestBody PickingByBoxRequest request) {
 		return R.data(pickingByPcsBiz.pickingByPcsAction(request));
 	}
 }

@@ -1,5 +1,6 @@
 package org.nodes.wms.biz.outstock.so;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
@@ -7,6 +8,8 @@ import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.picking.dto.input.FindAllPickingRequest;
+import org.nodes.wms.dao.picking.dto.output.FindAllPickingResponse;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -85,10 +88,10 @@ public interface SoHeaderBiz {
 	 * 根据发货单id分页查询发货单日志
 	 *
 	 * @param soBillId: 发货单id
-	 * @param query:    分页参数
+	 * @param page:    分页参数
 	 * @return PageLogForSoDetailResponse> 发货单日志分页响应对象
 	 */
-	Page<LogForSoDetailResponse> pageLogById(Query query, Long soBillId);
+	Page<LogForSoDetailResponse> pageLogById(IPage<?> page, Long soBillId);
 
 	/**
 	 * pc发货返回前端头表信息
@@ -105,6 +108,15 @@ public interface SoHeaderBiz {
 	 * @return SoBillDistributedResponse 发货单信息
 	 */
 	SoBillDistributedResponse findSoBillForDistBySoBillId(Long soBillId);
+
+	/**
+	 * 根据发货单编码/上游编码/任务号
+	 *
+	 * @param page    分页对象
+	 * @param request 请求条件 包含no
+	 * @return 拣货分页查询响应对象
+	 */
+	IPage<FindAllPickingResponse> getAllPickingByNo(IPage<?> page, FindAllPickingRequest request);
 
 	/**
 	 * pc拣货获取前端出库明细和库存信息

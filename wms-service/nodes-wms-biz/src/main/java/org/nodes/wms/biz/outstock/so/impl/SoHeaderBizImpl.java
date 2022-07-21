@@ -1,10 +1,12 @@
 package org.nodes.wms.biz.outstock.so.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
 import org.nodes.wms.biz.outstock.so.modular.SoBillFactory;
+import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.common.stock.StockUtil;
@@ -18,6 +20,8 @@ import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
+import org.nodes.wms.dao.picking.dto.input.FindAllPickingRequest;
+import org.nodes.wms.dao.picking.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.stock.dto.output.PickByPcStockResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.excel.util.ExcelUtil;
@@ -134,8 +138,10 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	}
 
 	@Override
-	public Page<LogForSoDetailResponse> pageLogById(Query query, Long soBillId) {
-		return logBiz.pageLogBySoBillId(Condition.getPage(query), soBillId);
+	public Page<LogForSoDetailResponse> pageLogById(IPage<?> page, Long soBillId) {
+		Page<LogDetailPageResponse> logDetailPageResponsePage = logBiz.pageLogByBillId(page, soBillId);
+
+		return null;
 	}
 
 	@Override
@@ -154,6 +160,12 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		List<SoDetailForDistResponse> details = Func.copy(soDetailList, SoDetailForDistResponse.class);
 		soBill.setSoDetailList(details);
 		return soBill;
+    }
+
+	@Override
+	public IPage<FindAllPickingResponse> getAllPickingByNo(IPage<?> page, FindAllPickingRequest request) {
+		return soHeaderDao.getAllPickingPage(page,request);
+	}
 	}
 
 	@Override

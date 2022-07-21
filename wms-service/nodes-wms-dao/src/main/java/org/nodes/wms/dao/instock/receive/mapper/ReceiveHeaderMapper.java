@@ -53,4 +53,13 @@ public interface ReceiveHeaderMapper extends BaseMapper<ReceiveHeader> {
 	 * @param receiveId 收货单id
 	 */
 	ReceiveByPcResponse selectReceiveByPcResponse(Long receiveId);
+
+	/**
+	 * 根据ASN单id分页查询收货单头表信息
+	 *
+	 * @param asnBillId: ASN单id
+	 * @param page: 分页参数
+	 * @return Page<ReceiveHeaderResponse> 收货单头表分页信息
+	 */
+    Page<ReceiveHeaderResponse> selectReceiveHeaderForDetailByAsnBillId(IPage<?> page, @Param("asnBillId") Long asnBillId);
 }

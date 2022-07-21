@@ -2,13 +2,12 @@ package org.nodes.wms.biz.instock.asn;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnBillByEditResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnBillViewResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnLogActionViewResponse;
-import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
+import org.nodes.wms.dao.instock.asn.dto.output.*;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -25,16 +24,7 @@ public interface AsnBiz {
 	 * @param pageParamsQuery 分页请求参数
 	 * @return IPage<PageResponse>
 	 */
-	Page<PageResponse> getPageAsnBill(IPage<?> page,
-									  PageParamsQuery pageParamsQuery);
-
-	/**
-	 * 根据ASN单id获取ASN单头表信息、ASN单明细信息、收货单头表信息
-	 *
-	 * @param asnBillId: ASN单id
-	 * @return AsnBillViewResponse
-	 */
-	AsnBillViewResponse findAsnBillViewDetailByAsnBillId(Long asnBillId);
+	Page<PageResponse> getPageAsnBill(IPage<?> page, PageParamsQuery pageParamsQuery);
 
 	/**
 	 * 根据Asn单id删除Asn单头表信息
@@ -58,7 +48,7 @@ public interface AsnBiz {
 	 * @param addOrEditAsnBillRequest: Asn单创建对象
 	 * @return AsnHeader
 	 */
-    AsnHeader add(AddOrEditAsnBillRequest addOrEditAsnBillRequest);
+	AsnHeader add(AddOrEditAsnBillRequest addOrEditAsnBillRequest);
 
 	/**
 	 * 编辑-根据ASN单id获取Asn单头表和Asn明细信息
@@ -85,17 +75,46 @@ public interface AsnBiz {
 	void exportAsnBill(PageParamsQuery pageParamsQuery, HttpServletResponse response);
 
 	/**
-	 * 根据ASN单id查询审计日志
+	 * 查看明细-根据ASN单id查询ASN单头表信息
 	 *
 	 * @param asnBillId: ASN单id
-	 * @return List<AsnLogActionViewResponse>
+	 * @return AsnHeaderForDetailResponse ASN单头表信息
 	 */
-	List<AsnLogActionViewResponse> findAsnLogActionById(Long asnBillId);
+	AsnHeaderForDetailResponse findAsnHeaderForDetailByAsnBillId(Long asnBillId);
+
+	/**
+	 * 查看明细-根据ASN单id分页查询ASN单明细信息
+	 *
+	 * @param asnBillId: ASN单id
+	 * @param page:      分页参数
+	 * @return AsnHeaderForDetailResponse ASN单头表信息
+	 */
+	Page<AsnDetailForDetailResponse> findAsnDetailForDetailByAsnBillId(IPage<?> page, Long asnBillId);
+
+	/**
+	 * 查看明细-根据ASN单id分页查询发货单头表信息
+	 *
+	 * @param asnBillId: ASN单id
+	 * @param page:      分页参数
+	 * @return Page<ReceiveHeaderResponse> 发货单头表信息
+	 */
+	Page<ReceiveHeaderResponse> findReceiveHeaderForDetailByAsnBillId(IPage<?> page, Long asnBillId);
+
+	/**
+	 * 查看明细-根据ASN单id分页查询ASN单审计日志信息
+	 *
+	 * @param page:      分页参数
+	 * @param asnBillId: ASN单id
+	 * @return Page<AsnLogForDetailResponse> 审计日志信息
+	 */
+	Page<LogDetailPageResponse> findAsnLogForDetailByAsnBillId(IPage<?> page, Long asnBillId);
 
 	/**
 	 * 根据asn id删除asn单
+	 *
 	 * @param asnBillIdList
 	 * @return
 	 */
 	boolean remove(List<Long> asnBillIdList);
+
 }
