@@ -139,7 +139,7 @@ public class SoDetail extends BaseSkuLotEntity {
 	private BigDecimal detailAmount;
 
 	/**
-	 * 单据状态
+	 * 单据状态 TODO 定义为枚举
 	 */
 	private Integer billDetailState;
 

@@ -153,6 +153,7 @@ public class SkuLotUtil {
 
 	private static <T> boolean isEmpty(Property skuLotProperty, T skuLotObject) {
 		try {
+			assert skuLotProperty.getReadMethod() != null;
 			String t1SkuLot = (String) (skuLotProperty.getReadMethod().invoke(skuLotObject));
 			if (Func.isNull(t1SkuLot)) {
 				return true;

@@ -241,7 +241,9 @@ public class SoBillController {
 	}
 
 	/**
-	 * 获取出库明细下拉框集合
+	 * PC拣货：获取出库但可用拣货的明细简要信息
+	 * @param soBillId
+	 * @return
 	 */
 	@GetMapping("/getLineNoAndSkuSelectList")
 	public R<List<LineNoAndSkuSelectResponse>> getLineNoAndSkuSelectList(Long soBillId) {
@@ -253,8 +255,14 @@ public class SoBillController {
 		return R.data(soHeaderBiz.findSoBillForDistBySoBillId(soBillIdRequest.getSoBillId()));
 	}
 
+	/**
+	 * PC拣货：根据明细行号获取明细和对应的可用库存
+	 * @param soDetailAndStockRequest
+	 * @return
+	 */
 	@PostMapping("/getSoDetailAndStock")
-	public R<SoDetailAndStockResponse> getSoDetailAndStock(@Valid @RequestBody SoDetailAndStockRequest soDetailAndStockRequest) {
+	public R<SoDetailAndStockResponse> getSoDetailAndStock(@Valid @RequestBody
+																   SoDetailAndStockRequest soDetailAndStockRequest) {
 		return R.data(soHeaderBiz.getSoDetailAndStock(soDetailAndStockRequest));
 	}
 }
