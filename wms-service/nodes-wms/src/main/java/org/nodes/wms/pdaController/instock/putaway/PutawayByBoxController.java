@@ -34,7 +34,7 @@ public class PutawayByBoxController {
 	private final PutwayBiz putwayBiz;
 
 	/**
-	 * PDA根据箱码查询库存
+	 * PDA按箱上架：根据箱码查询库存
 	 *
 	 * @param request 包含箱码和库房ID
 	 * @return 上架信息
@@ -62,6 +62,8 @@ public class PutawayByBoxController {
 	}
 
 	/**
+	 * PDA按箱上架：按箱上架
+	 *
 	 * @param request 新建按箱上架的请求参数
 	 */
 	@ApiLog("PDA按箱上架")
