@@ -25,12 +25,18 @@ public class LogSoPickController {
 
 	private final LogSoPickBiz logSoPickBiz;
 
+	/**
+	 * 拣货记录：分页
+	 */
 	@PostMapping("/page")
 	public R<Page<LogSoPickPageResponse>> page(Query query, @RequestBody LogSoPickPageQuery logSoPickPageQuery) {
 		Page<LogSoPickPageResponse> pageLogSoPick = logSoPickBiz.page(query, logSoPickPageQuery);
 		return R.data(pageLogSoPick);
 	}
 
+	/**
+	 * 拣货记录：服务端导出
+	 */
 	@PostMapping("/export")
 	public void export(@RequestBody LogSoPickPageQuery logSoPickPageQuery, HttpServletResponse response) {
 		logSoPickBiz.export(logSoPickPageQuery, response);
