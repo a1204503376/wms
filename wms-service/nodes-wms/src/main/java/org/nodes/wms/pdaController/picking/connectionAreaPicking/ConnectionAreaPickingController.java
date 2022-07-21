@@ -30,7 +30,6 @@ public class ConnectionAreaPickingController {
 	 * @param request Pda根据编码查询库存-请求对象
 	 * @return 出库接驳区拣货库位查询
 	 */
-	@ApiLog("PDA出库接驳区拣货库位查询")
 	@PostMapping("/OutboundAccessAreaLocationQuery")
 	public R<IPage<OutboundAccessAreaLocationQueryResponse>> outboundAccessAreaLocationQuery(@RequestBody OutboundAccessAreaLocationQueryRequest request, Query query) {
 		return R.data(connectionAreaPickingBiz.selectLocationByConnectionArea(request, query));

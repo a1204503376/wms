@@ -5,7 +5,6 @@ import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.dao.basics.sku.dto.input.FindSkuByCodeRequest;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
-import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +27,6 @@ public class PdaSkuController {
 	 *
 	 * @return 型号集合
 	 */
-	@ApiLog("PDA查询型号下拉框组件")
 	@GetMapping("/findSkuDropDownBox")
 	public R<List<String>> findSkuDropDownBox() {
 		List<String> dropDownBox = skuBiz.getSkuDropDownBox();
@@ -41,7 +39,6 @@ public class PdaSkuController {
 	 * @param request 包含物料编码
 	 * @return 物品型号集合
 	 */
-	@ApiLog("PDA根据物料编码查询型号下拉框组件")
 	@PostMapping("/findSkuByCode")
 	public R<List<String>> findSkuByCode(@RequestBody FindSkuByCodeRequest request) {
 		List<Sku> skus = skuBiz.selectSkuListByNo(request.getNo());

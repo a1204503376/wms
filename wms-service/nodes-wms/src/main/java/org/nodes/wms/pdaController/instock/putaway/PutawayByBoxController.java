@@ -39,7 +39,6 @@ public class PutawayByBoxController {
 	 * @param request 包含箱码和库房ID
 	 * @return 上架信息
 	 */
-	@ApiLog("PDA根据箱码查询库存")
 	@PostMapping("/findPutawayDataByBoxCode")
 	public R<PutawayByBoxResponse> findPutawayDataByBoxCode(@RequestBody PutawayByBoxRequest request) {
 		List<Stock> stockList = stockBiz.findStockOnStageByBoxCode(request.getWhId(), request.getBoxCode());

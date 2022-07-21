@@ -35,7 +35,6 @@ public class PdaPickingController {
 	 * @param query   分页条件
 	 * @return 库存响应对象
 	 */
-	@ApiLog("PDA拣货分页查询")
 	@PostMapping("/findAllPickingByNo")
 	public R<IPage<FindAllPickingResponse>> findAllPickingByNo(@RequestBody FindAllPickingRequest request, Query query) {
 		return R.data(pickingByPcsBiz.selectAllPickingByNo(request, query));

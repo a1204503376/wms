@@ -6,7 +6,6 @@ import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
 import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
-import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +30,6 @@ public class PdaStockController {
 	 * @param query   分页条件
 	 * @return 库存响应对象
 	 */
-	@ApiLog("PDA库存查询")
 	@PostMapping("/findAllStockByNo")
 	public R<IPage<FindAllStockByNoResponse>> findAllStockByNo(@RequestBody FindAllStockByNoRequest request, Query query) {
 		return R.data(stockBiz.selectStockList(request, query));
