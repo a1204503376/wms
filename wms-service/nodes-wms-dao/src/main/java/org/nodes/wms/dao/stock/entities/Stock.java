@@ -139,7 +139,7 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	private Integer version;
 
 	/**
-	 * 库存余额
+	 * 库存余额,序列化成json为stockBalance
 	 *
 	 * @return 库存余额
 	 */
@@ -149,7 +149,7 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	}
 
 	/**
-	 * 库存可用量
+	 * 库存可用量,序列化成json为stockEnable
 	 *
 	 * @return 库存可用量
 	 */
