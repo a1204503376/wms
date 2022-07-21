@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
-import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
+import org.nodes.wms.dao.instock.asn.dto.input.AsnBillPageQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.*;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
@@ -21,10 +21,10 @@ public interface AsnBiz {
 	 * 分页查询
 	 *
 	 * @param page            分页对象
-	 * @param pageParamsQuery 分页请求参数
+	 * @param asnBillPageQuery 分页请求参数
 	 * @return IPage<PageResponse>
 	 */
-	Page<PageResponse> getPageAsnBill(IPage<?> page, PageParamsQuery pageParamsQuery);
+	Page<PageResponse> getPageAsnBill(IPage<?> page, AsnBillPageQuery asnBillPageQuery);
 
 	/**
 	 * 根据Asn单id删除Asn单头表信息
@@ -69,10 +69,10 @@ public interface AsnBiz {
 	/**
 	 * Excel 导出(导出当前查询条件)
 	 *
-	 * @param pageParamsQuery: 条件参数
+	 * @param asnBillPageQuery: 条件参数
 	 * @param response:
 	 */
-	void exportAsnBill(PageParamsQuery pageParamsQuery, HttpServletResponse response);
+	void exportAsnBill(AsnBillPageQuery asnBillPageQuery, HttpServletResponse response);
 
 	/**
 	 * 查看明细-根据ASN单id查询ASN单头表信息
@@ -110,10 +110,10 @@ public interface AsnBiz {
 	Page<LogDetailPageResponse> findAsnLogForDetailByAsnBillId(IPage<?> page, Long asnBillId);
 
 	/**
-	 * 根据asn id删除asn单
+	 * 根据ASN单id删除ASN单
 	 *
-	 * @param asnBillIdList
-	 * @return
+	 * @param asnBillIdList ASN单id
+	 * @return true：删除成功，false：删除失败
 	 */
 	boolean remove(List<Long> asnBillIdList);
 

@@ -12,7 +12,7 @@ import org.nodes.wms.dao.instock.asn.AsnDetailDao;
 import org.nodes.wms.dao.instock.asn.AsnHeaderDao;
 import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnDetailRequest;
-import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
+import org.nodes.wms.dao.instock.asn.dto.input.AsnBillPageQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.*;
 import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
@@ -45,8 +45,8 @@ public class AsnBizImpl implements AsnBiz {
 
 	@Override
 	public Page<PageResponse> getPageAsnBill(IPage<?> page,
-											 PageParamsQuery pageParamsQuery) {
-		Page<PageResponse> pageResponsePage = asnHeaderDao.selectPageAsnBill(page, pageParamsQuery);
+											 AsnBillPageQuery asnBillPageQuery) {
+		Page<PageResponse> pageResponsePage = asnHeaderDao.selectPageAsnBill(page, asnBillPageQuery);
 		pageResponsePage.getRecords().forEach(item -> {
 			item.setAsnBillStateValue(item.getAsnBillState().getDesc());
 		});
@@ -159,8 +159,8 @@ public class AsnBizImpl implements AsnBiz {
 	}
 
 	@Override
-	public void exportAsnBill(PageParamsQuery pageParamsQuery, HttpServletResponse response) {
-		List<AsnBillExportResponse> asnBillList = asnHeaderDao.listByParamsQuery(pageParamsQuery);
+	public void exportAsnBill(AsnBillPageQuery asnBillPageQuery, HttpServletResponse response) {
+		List<AsnBillExportResponse> asnBillList = asnHeaderDao.listByParamsQuery(asnBillPageQuery);
 		asnBillList.forEach(item -> {
 			item.setAsnBillStateValue(item.getAsnBillState().getDesc());
 		});

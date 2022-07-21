@@ -10,7 +10,7 @@ import java.util.List;
  * ASN单据 分页参数
  */
 @Data
-public class PageParamsQuery implements Serializable {
+public class AsnBillPageQuery implements Serializable {
 
 	private static final long serialVersionUID = 1599695543698915713L;
 
