@@ -115,4 +115,12 @@ public interface StockQueryBiz {
 	 * @return 分页对象
 	 */
 	Page<StockPageResponse> getStockPage(Query query, StockPageQuery stockPageQuery);
+
+	/**
+	 * pc上架根据物料编码获取库存集合
+	 *
+	 * @param skuCode 物料编码
+	 * @return 库存集合
+	 */
+	List<Stock> getStockListBySkuCode(String skuCode);
 }

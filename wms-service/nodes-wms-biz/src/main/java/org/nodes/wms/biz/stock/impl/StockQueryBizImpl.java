@@ -211,6 +211,11 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		return page;
 	}
 
+	@Override
+	public List<Stock> getStockListBySkuCode(String skuCode) {
+		return stockDao.getStockListBySkuCode(skuCode);
+	}
+
 	private List<Stock> findLpnStockOnStageLeft(Long whId, String boxCode, Location stage) {
 		//根据箱码和库位查询入库暂存区的库存
 		List<Stock> stockList = stockDao.getStockLeftLikeByBoxCode(boxCode,

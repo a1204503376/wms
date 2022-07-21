@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
 import org.nodes.wms.biz.outstock.so.modular.SoBillFactory;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.common.stock.StockUtil;
@@ -50,6 +51,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	private final SoDetailDao soDetailDao;
 
 	private final SoBillFactory soBillFactory;
+	private StockQueryBiz stockQueryBiz;
 
 	private final LogBiz logBiz;
 
@@ -66,7 +68,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 			throw new ServiceException("新增发货单头表信息失败，请稍后再试");
 		}
 		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader,
-				soBillAddOrEditRequest.getSoDetailList());
+			soBillAddOrEditRequest.getSoDetailList());
 		if (!soDetailDao.saveOrUpdateBatch(soDetailList)) {
 			throw new ServiceException("新增发货单明细信息失败，请稍后再试");
 		}
@@ -94,12 +96,12 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 			throw new ServiceException("编辑发货单头表信息失败，请稍后再试");
 		}
 		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader,
-				soBillAddOrEditRequest.getSoDetailList());
+			soBillAddOrEditRequest.getSoDetailList());
 		if (!soDetailDao.saveOrUpdateBatch(soDetailList)) {
 			throw new ServiceException("编辑发货单明细信息失败，请稍后再试");
 		}
 		if (Func.isNotEmpty(soBillAddOrEditRequest.getRemoveIdList())
-				&& !soDetailDao.removeByIdList(soBillAddOrEditRequest.getRemoveIdList())) {
+			&& !soDetailDao.removeByIdList(soBillAddOrEditRequest.getRemoveIdList())) {
 			throw new ServiceException("编辑发货单明细信息失败，请稍后再试");
 		}
 		logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), soHeader.getSoBillNo(), "编辑发货单");
@@ -169,9 +171,11 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 
 	@Override
 	public SoDetailAndStockResponse getSoDetailAndStock(SoDetailAndStockRequest soDetailAndStockRequest) {
-		SoDetailAndStockResponse soDetailAndStockResponse = soDetailDao.getPickByPcDetail(soDetailAndStockRequest);
+		SoDetailAndStockResponse soDetailAndStockResponse = new SoDetailAndStockResponse();
+		PickByPcSoDetailResponse pickByPcSoDetailResponse = soDetailDao.getPickByPcDetail(soDetailAndStockRequest);
+		soDetailAndStockResponse.setPickByPcSoDetailResponse(pickByPcSoDetailResponse);
 		List<PickByPcStockResponse> stockResponseList = new ArrayList<>();
-		List<Stock> stockList = new ArrayList<>();// stockBiz.getStockListBySkuCode(soDetailAndStockResponse.getSkuCode());
+		List<Stock> stockList = stockQueryBiz.getStockListBySkuCode(pickByPcSoDetailResponse.getSkuCode());
 		for (Stock stock : stockList) {
 			BigDecimal stockEnableQty = StockUtil.getStockEnable(stock);
 			if (stockEnableQty.compareTo(BigDecimal.ZERO) == -1) {
@@ -182,7 +186,8 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 			Func.copy(stock, pickByPcStockResponse);
 			pickByPcStockResponse.setStockEnableQty(stockEnableQty);
 			pickByPcStockResponse.setStockBalanceQty(stockBalanceQty);
-			pickByPcStockResponse.setSoDetailId(soDetailAndStockResponse.getSoDetailId());
+			pickByPcStockResponse.setSoDetailId(pickByPcSoDetailResponse.getSoDetailId());
+			pickByPcStockResponse.setSoDetailId(pickByPcSoDetailResponse.getSoDetailId());
 			stockResponseList.add(pickByPcStockResponse);
 		}
 		soDetailAndStockResponse.setStockResponseList(stockResponseList);

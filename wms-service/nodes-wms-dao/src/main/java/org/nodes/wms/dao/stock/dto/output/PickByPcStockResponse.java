@@ -29,9 +29,9 @@ public class PickByPcStockResponse {
 	 */
 	private String skuCode;
 	/**
-	 * 批次号
+	 * 批次
 	 */
-	private String lotNumber;
+	private String skuLot1;
 	/**
 	 * 库位编码
 	 */
@@ -41,6 +41,10 @@ public class PickByPcStockResponse {
 	 */
 	private String zoneCode;
 	/**
+	 * 库房编码
+	 */
+	private String whCode;
+	/**
 	 * 箱号
 	 */
 	private String boxCode;
@@ -48,4 +52,8 @@ public class PickByPcStockResponse {
 	 * 托盘号
 	 */
 	private String lpnCode;
+	/**
+	 * 出库数量
+	 */
+	private BigDecimal outStockQty;
 }
