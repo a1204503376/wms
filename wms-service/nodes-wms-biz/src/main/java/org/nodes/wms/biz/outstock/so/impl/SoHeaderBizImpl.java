@@ -128,7 +128,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		if (!soHeaderDao.updateSoHeaderById(soHeader)) {
 			throw new ServiceException("关闭发货单失败，请稍后再试");
 		}
-		logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), "关闭发货单");
+		logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), soHeader.getSoBillNo(), "关闭发货单");
 	}
 
 	@Override
