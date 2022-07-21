@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
+import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
@@ -116,4 +117,12 @@ public interface SoHeaderBiz {
 	 * @return 拣货分页查询响应对象
 	 */
 	IPage<FindAllPickingResponse> getAllPickingByNo(IPage<?> page, FindAllPickingRequest request);
+
+	/**
+	 * pc拣货获取前端出库明细和库存信息
+	 *
+	 * @param soDetailAndStockRequest 包含行号和发货单id
+	 * @return 出库明细和库存信息
+	 */
+	SoDetailAndStockResponse getSoDetailAndStock(SoDetailAndStockRequest soDetailAndStockRequest);
 }

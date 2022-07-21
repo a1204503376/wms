@@ -60,5 +60,7 @@ public interface StockMapper extends BaseMapper<Stock> {
 	 * @return
 	 */
 	List<StockPageResponse> getStockResponseByQuery(StockPageQuery stockPageQuery);
+
+
 }
 

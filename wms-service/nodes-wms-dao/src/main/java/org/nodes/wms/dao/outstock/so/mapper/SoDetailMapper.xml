@@ -76,6 +76,19 @@
         where so_bill_id = #{soBillId}
           and surplus_qty > 0
     </select>
+    <select id="getPickByPcDetail"
+            resultType="org.nodes.wms.dao.outstock.so.dto.output.SoDetailAndStockResponse">
+        select so_detail_id,
+               so_line_no,
+               sku_code,
+               plan_qty,
+               scan_qty,
+               surplus_qty,
+               lot_number
+        from so_detail
+        where so_bill_id = #{param.soBillId}
+          and so_line_no = #{param.soLineNo}
+    </select>
 
     <sql id="notSoPickPageOrList">
         SELECT header.so_bill_id,

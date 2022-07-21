@@ -665,4 +665,9 @@ public class StockBizImpl implements StockBiz {
 		return true;
 	}
 
+	@Override
+	public List<Stock> getStockListBySkuCode(String skuCode) {
+		return stockDao.getStockListBySkuCode(skuCode);
+	}
+
 }

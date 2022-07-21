@@ -43,7 +43,7 @@ public class StockUtil {
 			}
 
 			BigDecimal balance = stock.getStockQty().subtract(stock.getPickQty());
-			if (BigDecimalUtil.lt(balance, BigDecimal.ZERO)){
+			if (BigDecimalUtil.lt(balance, BigDecimal.ZERO)) {
 				throw ExceptionUtil.mpe("计算库存余额异常，[%d]余额为负数", stock.getStockId());
 			}
 
