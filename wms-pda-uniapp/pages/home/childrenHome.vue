@@ -6,7 +6,7 @@
 		</u-navbar>
 
 		<u-grid class="menu" col="3">
-			<u-grid-item class="menu-item" v-for="(menu, index2) in childrenMenu" :key="menu.code" @click="navTo(menu)">
+			<u-grid-item class="menu-item" v-for="(menu, index2) in childrenMenu" :key="menu.id" @click="navTo(menu)">
 				<text class="menu-number">{{index2+1}}</text>
 				<text :class="menu.source" class="menu-icon"></text>
 				<view class="menu-text">
