@@ -1,4 +1,4 @@
-package org.nodes.wms.pdaController.stockControl;
+package org.nodes.wms.pdaController.stock.freezeOrUnFreeze;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(WmsApiPath.WMS_PDA_API + "/stockControl")
-public class PdaStockControlController {
+@RequestMapping(WmsApiPath.WMS_PDA_API + "/stock/freezeOrUnFreeze")
+public class PdaFreezeOrUnFreezeController {
 	private final StockControlBiz stockControlBiz;
 
 	/**
