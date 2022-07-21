@@ -7,6 +7,7 @@ import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.instock.InStockBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPdaByPcsRequest;
 import org.nodes.wms.dao.basics.location.dto.output.LocationPdaByPcsResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
@@ -40,6 +41,7 @@ public class ReceiveByPcsController {
 	private final InStockBiz inStockBiz;
 	private final LocationBiz locationBiz;
 	private final StockBiz stockBiz;
+	private final StockQueryBiz stockQueryBiz;
 
 	/**
 	 * PDA按件收货:收货管理查询
@@ -107,7 +109,7 @@ public class ReceiveByPcsController {
 	 */
 	@PostMapping("findThisStockByBoxCode")
 	public R<List<StockPdaByPcsResponse>> findThisStockByBoxCode(@RequestBody StockPdaByPcsRequest request) {
-		List<Stock> stockList = stockBiz.findStockByBoxCode(request.getBoxCode());
+		List<Stock> stockList = stockQueryBiz.findStockByBoxCode(request.getBoxCode());
 		List<StockPdaByPcsResponse> responseList = BeanUtil.copy(stockList, StockPdaByPcsResponse.class);
 		return R.data(responseList);
 	}
@@ -120,7 +122,7 @@ public class ReceiveByPcsController {
 	 */
 	@PostMapping("getSerialNumberList")
 	public R<List<String>> getSerialNumberList(@RequestBody ReceiveSerialNoListRequest request) {
-		List<Serial> serialList = stockBiz.findSerialBySerialNo(request.getSerialNumberList());
+		List<Serial> serialList = stockQueryBiz.findSerialBySerialNo(request.getSerialNumberList());
 		List<String> serialNumberList = serialList.stream()
 			.map(Serial::getSerialNumber)
 			.distinct()

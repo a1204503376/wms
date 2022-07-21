@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
@@ -137,4 +138,23 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	@Version
 	private Integer version;
 
+	/**
+	 * 库存余额
+	 *
+	 * @return 库存余额
+	 */
+	@JsonSerialize
+	public BigDecimal getStockBalance() {
+		return getStockQty().subtract(getPickQty());
+	}
+
+	/**
+	 * 库存可用量
+	 *
+	 * @return 库存可用量
+	 */
+	@JsonSerialize
+	public BigDecimal getStockEnable() {
+		return getStockQty().subtract(getPickQty()).subtract(getOccupyQty());
+	}
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
 import org.springblade.core.mp.support.Query;
@@ -24,14 +25,15 @@ import javax.servlet.http.HttpServletResponse;
 public class StockLogController {
 
 	private final StockBiz stockBiz;
+	private final StockQueryBiz stockQueryBiz;
 
 	@PostMapping("/page")
 	public R<IPage<StockLogPageResponse>> page(Query query, @RequestBody StockLogPageQuery stockLogPageQuery) {
-		return R.data(stockBiz.pageStockLog(query, stockLogPageQuery));
+		return R.data(stockQueryBiz.pageStockLog(query, stockLogPageQuery));
 	}
 
 	@PostMapping("/export")
 	public void export(@RequestBody StockLogPageQuery stockLogPageQuery, HttpServletResponse response) {
-		stockBiz.export(stockLogPageQuery, response);
+		stockBiz.exportStockLogToExcel(stockLogPageQuery, response);
 	}
 }

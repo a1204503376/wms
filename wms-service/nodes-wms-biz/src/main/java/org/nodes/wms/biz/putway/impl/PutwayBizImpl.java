@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.putway.PutwayBiz;
 import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.putway.PutawayLogDao;
@@ -35,14 +36,15 @@ public class PutwayBizImpl implements PutwayBiz {
 	private final LocationBiz locationBiz;
 	private final StockBiz stockBiz;
 	private final PutawayLogDao putawayLogDao;
+	private final StockQueryBiz stockQueryBiz;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void addByBoxShelf(AddByBoxShelfRequest request) {
 		// 调用库存移动，如果关联了序列号需要获取序列号
-		Stock sourceStock = stockBiz.findStockById(request.getStockId());
+		Stock sourceStock = stockQueryBiz.findStockById(request.getStockId());
 		//获取序列号
-		List<Serial> serialList = stockBiz.findSerialByStock(request.getStockId());
+		List<Serial> serialList = stockQueryBiz.findSerialByStock(request.getStockId());
 		List<String> serialNoList = new ArrayList<>();
 		if (Func.isNotEmpty(serialList)) {
 			serialNoList = serialList.stream()
@@ -72,11 +74,11 @@ public class PutwayBizImpl implements PutwayBiz {
 			List<Long> stockIdList = boxDto.getStockIdList();
 			for (Long stockId : stockIdList) {
 				// 根据id获取库存实体
-				Stock stock = stockBiz.findStockById(stockId);
+				Stock stock = stockQueryBiz.findStockById(stockId);
 				//获取数量
 				BigDecimal qty = StockUtil.getStockBalance(stock);
 				//获取序列号
-				List<Serial> serialList = stockBiz.findSerialByStock(stockId);
+				List<Serial> serialList = stockQueryBiz.findSerialByStock(stockId);
 				List<String> serialNoList = new ArrayList<>();
 				if (Func.isNotEmpty(serialList)) {
 					serialNoList = serialList.stream()

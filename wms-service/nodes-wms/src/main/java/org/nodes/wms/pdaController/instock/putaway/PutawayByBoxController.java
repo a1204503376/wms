@@ -3,7 +3,7 @@ package org.nodes.wms.pdaController.instock.putaway;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.putway.PutwayBiz;
-import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.putway.constant.PutwayConstant;
 import org.nodes.wms.dao.putway.dto.input.AddByBoxShelfRequest;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.util.List;
 
-
 /**
  * 按箱上架API
  */
@@ -30,7 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_PDA_API + "/putaway")
 public class PutawayByBoxController {
-	private final StockBiz stockBiz;
+	private final StockQueryBiz stockQueryBiz;
 	private final PutwayBiz putwayBiz;
 
 	/**
@@ -41,17 +40,22 @@ public class PutawayByBoxController {
 	 */
 	@PostMapping("/findPutawayDataByBoxCode")
 	public R<PutawayByBoxResponse> findPutawayDataByBoxCode(@RequestBody PutawayByBoxRequest request) {
-		List<Stock> stockList = stockBiz.findStockOnStageByBoxCode(request.getWhId(), request.getBoxCode());
+		List<Stock> stockList = stockQueryBiz.findStockOnStageByBoxCode(request.getWhId(), request.getBoxCode());
 		if (Func.isEmpty(stockList)) {
 			throw new ServiceException("暂无入库暂存区的库存");
 		}
 		BigDecimal qty = StockUtil.getStockBalance(stockList);
 		PutawayByBoxResponse response = new PutawayByBoxResponse();
-		if (stockList.get(BigDecimal.ZERO.intValue()).getBoxCode().indexOf(PutwayConstant.BOX_CODE_A) == BigDecimal.ZERO.intValue() ||
-			stockList.get(BigDecimal.ZERO.intValue()).getBoxCode().indexOf(PutwayConstant.BOX_CODE_B) == BigDecimal.ZERO.intValue() ||
-			stockList.get(BigDecimal.ZERO.intValue()).getBoxCode().indexOf(PutwayConstant.BOX_CODE_C) == BigDecimal.ZERO.intValue() ||
-			stockList.get(BigDecimal.ZERO.intValue()).getBoxCode().indexOf(PutwayConstant.BOX_CODE_D) == BigDecimal.ZERO.intValue()
-		) {
+		if (stockList.get(BigDecimal.ZERO.intValue()).getBoxCode().indexOf(PutwayConstant.BOX_CODE_A) == BigDecimal.ZERO
+				.intValue() ||
+				stockList.get(BigDecimal.ZERO.intValue()).getBoxCode()
+						.indexOf(PutwayConstant.BOX_CODE_B) == BigDecimal.ZERO.intValue()
+				||
+				stockList.get(BigDecimal.ZERO.intValue()).getBoxCode()
+						.indexOf(PutwayConstant.BOX_CODE_C) == BigDecimal.ZERO.intValue()
+				||
+				stockList.get(BigDecimal.ZERO.intValue()).getBoxCode()
+						.indexOf(PutwayConstant.BOX_CODE_D) == BigDecimal.ZERO.intValue()) {
 			response.setLpnCode(stockList.get(BigDecimal.ZERO.intValue()).getLpnCode());
 		}
 		response.setStockId(stockList.get(BigDecimal.ZERO.intValue()).getStockId());
@@ -70,6 +74,5 @@ public class PutawayByBoxController {
 	public void submitPutawayByBox(@RequestBody AddByBoxShelfRequest request) {
 		putwayBiz.addByBoxShelf(request);
 	}
-
 
 }

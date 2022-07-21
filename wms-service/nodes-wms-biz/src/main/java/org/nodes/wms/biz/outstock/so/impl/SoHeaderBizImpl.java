@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
 import org.nodes.wms.biz.outstock.so.modular.SoBillFactory;
-import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.common.stock.StockUtil;
@@ -53,7 +52,6 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	private final SoBillFactory soBillFactory;
 
 	private final LogBiz logBiz;
-	private final StockBiz stockBiz;
 
 	@Override
 	public Page<SoHeaderPageResponse> getPage(Query query, SoHeaderPageQuery soHeaderPageQuery) {
@@ -67,7 +65,8 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		if (!soHeaderDao.saveOrUpdateSoHeader(soHeader)) {
 			throw new ServiceException("新增发货单头表信息失败，请稍后再试");
 		}
-		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader, soBillAddOrEditRequest.getSoDetailList());
+		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader,
+				soBillAddOrEditRequest.getSoDetailList());
 		if (!soDetailDao.saveOrUpdateBatch(soDetailList)) {
 			throw new ServiceException("新增发货单明细信息失败，请稍后再试");
 		}
@@ -94,12 +93,13 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		if (!soHeaderDao.saveOrUpdateSoHeader(soHeader)) {
 			throw new ServiceException("编辑发货单头表信息失败，请稍后再试");
 		}
-		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader, soBillAddOrEditRequest.getSoDetailList());
+		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader,
+				soBillAddOrEditRequest.getSoDetailList());
 		if (!soDetailDao.saveOrUpdateBatch(soDetailList)) {
 			throw new ServiceException("编辑发货单明细信息失败，请稍后再试");
 		}
 		if (Func.isNotEmpty(soBillAddOrEditRequest.getRemoveIdList())
-			&& !soDetailDao.removeByIdList(soBillAddOrEditRequest.getRemoveIdList())) {
+				&& !soDetailDao.removeByIdList(soBillAddOrEditRequest.getRemoveIdList())) {
 			throw new ServiceException("编辑发货单明细信息失败，请稍后再试");
 		}
 		logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), soHeader.getSoBillNo(), "编辑发货单");
@@ -171,7 +171,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	public SoDetailAndStockResponse getSoDetailAndStock(SoDetailAndStockRequest soDetailAndStockRequest) {
 		SoDetailAndStockResponse soDetailAndStockResponse = soDetailDao.getPickByPcDetail(soDetailAndStockRequest);
 		List<PickByPcStockResponse> stockResponseList = new ArrayList<>();
-		List<Stock> stockList = stockBiz.getStockListBySkuCode(soDetailAndStockResponse.getSkuCode());
+		List<Stock> stockList = new ArrayList<>();// stockBiz.getStockListBySkuCode(soDetailAndStockResponse.getSkuCode());
 		for (Stock stock : stockList) {
 			BigDecimal stockEnableQty = StockUtil.getStockEnable(stock);
 			if (stockEnableQty.compareTo(BigDecimal.ZERO) == -1) {

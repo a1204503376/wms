@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
-import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickIndexResponse;
 import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
@@ -23,15 +23,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class IndexController {
 
-	private final StockBiz stockBiz;
-
+	private final StockQueryBiz stockQueryBiz;
 	private final ReceiveLogBiz receiveLogBiz;
 
 	private final LogSoPickBiz logSoPickBiz;
 
 	@GetMapping("/stockData")
 	public R<StockIndexResponse> stockData(){
-		return R.data(stockBiz.staticsStockDataOnIndexPage());
+		return R.data(stockQueryBiz.staticsStockDataOnIndexPage());
 	}
 
 	@GetMapping("/inStockRate")

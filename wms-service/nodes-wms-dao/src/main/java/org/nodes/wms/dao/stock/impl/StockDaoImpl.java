@@ -246,8 +246,4 @@ public class StockDaoImpl
 		return super.baseMapper.getStockResponseByQuery(stockPageQuery);
 	}
 
-	@Override
-	public List<Stock> getStockListBySkuCode(String skuCode) {
-		return super.list(new LambdaQueryWrapper<Stock>().eq(Stock::getSkuCode, skuCode));
-	}
 }
