@@ -10,7 +10,7 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
 import org.nodes.wms.dao.outstock.so.SoDetailDao;
 import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.output.LineNoAndSkuSelectResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoDetailAndStockResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.PickByPcSoDetailResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailEditResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
@@ -68,7 +68,7 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 	}
 
 	@Override
-	public SoDetailAndStockResponse getPickByPcDetail(SoDetailAndStockRequest soDetailAndStockRequest) {
+	public PickByPcSoDetailResponse getPickByPcDetail(SoDetailAndStockRequest soDetailAndStockRequest) {
 		return super.baseMapper.getPickByPcDetail(soDetailAndStockRequest);
 	}
 }

@@ -130,4 +130,11 @@ public interface StockDao {
 	 */
 	List<StockPageResponse> getStockResponseByQuery(StockPageQuery stockPageQuery);
 
+	/**
+	 * pc拣货获取可出库库存集合
+	 *
+	 * @param skuCode 物料编码
+	 * @return 可用库存集合
+	 */
+	List<Stock> getStockListBySkuCode(String skuCode);
 }
