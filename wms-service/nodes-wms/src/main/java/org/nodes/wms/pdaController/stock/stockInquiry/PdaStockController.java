@@ -1,4 +1,4 @@
-package org.nodes.wms.pdaController.stockInterior.stockInquiry;
+package org.nodes.wms.pdaController.stock.stockInquiry;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(WmsApiPath.WMS_PDA_API + "/stockInterior")
+@RequestMapping(WmsApiPath.WMS_PDA_API + "/stock/stockInterior")
 public class PdaStockController {
 	private final StockBiz stockBiz;
 
