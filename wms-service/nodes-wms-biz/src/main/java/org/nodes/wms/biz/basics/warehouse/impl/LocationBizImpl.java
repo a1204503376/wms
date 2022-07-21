@@ -31,6 +31,7 @@ import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.StringUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -53,7 +54,8 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
-	public boolean importData(List<LocationExcelRequest> locationDataList) {
+	public boolean importData(MultipartFile file) {
+		List<LocationExcelRequest> locationDataList = ExcelUtil.read(file, LocationExcelRequest.class);
 		if (Func.isEmpty(locationDataList)) {
 			throw new ServiceException("导入失败，没有可导入的数据");
 		}
