@@ -272,6 +272,41 @@
 				"navigationStyle": "custom"
 			}
 
+		}, {
+			"path": "pages/stockControl/unFreeze/unFreeze",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/stockControl/unFreeze/unFreezeByLocCode",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/stockControl/unFreeze/unFreezeByLotNumber",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/stockControl/unFreeze/unFreezeBySerialNumber",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/stockControl/unFreeze/portionUnFreeze",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
 		}
 	],
 	"globalStyle": {
