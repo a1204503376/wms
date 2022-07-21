@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
 import org.nodes.wms.biz.outstock.so.modular.SoBillFactory;
-import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.outstock.so.SoDetailDao;
@@ -160,12 +160,11 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		List<SoDetailForDistResponse> details = Func.copy(soDetailList, SoDetailForDistResponse.class);
 		soBill.setSoDetailList(details);
 		return soBill;
-    }
+	}
 
 	@Override
 	public IPage<FindAllPickingResponse> getAllPickingByNo(IPage<?> page, FindAllPickingRequest request) {
-		return soHeaderDao.getAllPickingPage(page,request);
-	}
+		return soHeaderDao.getAllPickingPage(page, request);
 	}
 
 	@Override
