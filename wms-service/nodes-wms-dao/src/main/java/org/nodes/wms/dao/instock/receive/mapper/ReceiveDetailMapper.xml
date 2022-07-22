@@ -48,7 +48,7 @@
 
     <select id="selectDetailListByReceiveId"
             resultType="org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailPdaResponse">
-        select receive_detail_id,sku_code,surplus_qty from receive_detail
+        select receive_detail_id,sku_code,surplus_qty,line_no from receive_detail
         <where>
             surplus_qty>0 and is_deleted=0 AND wh_id=#{query.whId}
             <if test="query.skuCode!=null and query.skuCode != ''">
@@ -69,20 +69,23 @@
     </select>
     <select id="selectReceiveDetailByPcResponse"
             resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailByPcResponse">
-        select receive_detail_id,
-               line_no,
-               sku_code,
-               surplus_qty,
-               um_code,
-               sku_lot1,
-               sku_lot4,
-               sku_lot5,
-               sku_lot6,
-               sku_lot8
-        from receive_detail
-        where line_no = #{query.lineNumber}
+        SELECT rd.receive_detail_id,
+               rd.line_no,
+               rd.sku_code,
+               rd.surplus_qty,
+               rd.um_code,
+               rd.sku_lot1,
+               ws.sku_spec skulot2,
+               rd.sku_lot4,
+               rd.sku_lot5,
+               rd.sku_lot6,
+               rd.sku_lot8
+        FROM receive_detail rd,
+             wms_sku ws
+        WHERE rd.sku_code = ws.sku_code
+          and line_no = #{query.lineNumber}
           and receive_id = #{query.receiveId}
-          and detail_status = '10'
+          and detail_status in ('10', '20')
     </select>
 
 </mapper>

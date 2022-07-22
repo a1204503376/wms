@@ -55,6 +55,11 @@
 		},
 		methods: {
 			getPutawayData() {
+				if(tool.isEmpty(this.params.boxCode)){
+					uni.$u.func.showToast({
+						title: '查询失败，请输入箱码后重试'
+					});
+				}
 				putawayByBox.getPutawayData(this.params).then(data => {
 					if (tool.isEmpty(data.data)) {
 						uni.$u.func.showToast({
@@ -94,7 +99,7 @@
 				this.getPutawayData();
 			},
 			clearEmitKeyDown() {
-				this.emitKeyDown = null;
+				this.emitKeyDown = function(){};
 			},
 			emitKeyDown(e) {
 				if (e.key == 'Enter') {

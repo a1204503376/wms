@@ -19,7 +19,7 @@
                                 <nodes-bill-type
                                     v-model="form.params.billTypeCd"
                                     :default-value="true"
-                                    io-type="I"
+                                    io-type="O"
                                     size="medium"
                                 ></nodes-bill-type>
                             </el-form-item>

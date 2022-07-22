@@ -7,6 +7,7 @@ import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.instock.InStockBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPdaByPcsRequest;
 import org.nodes.wms.dao.basics.location.dto.output.LocationPdaByPcsResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
@@ -30,7 +31,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * 收货管理API
+ * 按件收货API
  */
 @RestController
 @RequiredArgsConstructor
@@ -40,11 +41,11 @@ public class ReceiveByPcsController {
 	private final InStockBiz inStockBiz;
 	private final LocationBiz locationBiz;
 	private final StockBiz stockBiz;
+	private final StockQueryBiz stockQueryBiz;
 
 	/**
-	 * PDA收货管理查询
+	 * PDA按件收货:收货管理查询
 	 */
-	@ApiLog("PDA收货管理查询")
 	@PostMapping("/list")
 	public R<Page<ReceiveHeaderPdaResponse>> list(@RequestBody ReceivePdaQuery receivePdaQuery, Query query) {
 		Page<ReceiveHeaderPdaResponse> pages = receiveBiz.getReceiveListByReceiveNo(receivePdaQuery, query);
@@ -52,10 +53,11 @@ public class ReceiveByPcsController {
 	}
 
 	/**
+	 * PDA按件收货:收货详情查询
+	 *
 	 * @param receiveDetailPdaQuery 按单收货详情页面查询条件
 	 * @return 按单收货详情集合
 	 */
-	@ApiLog("PDA按单收货详情页面查询")
 	@PostMapping("/findDetailListByReceiveId")
 	public R<List<DetailReceiveDetailPdaResponse>> findDetailListByReceiveId(@RequestBody ReceiveDetailPdaQuery receiveDetailPdaQuery) {
 		List<DetailReceiveDetailPdaResponse> listByReceiveId = receiveBiz.getDetailListByReceiveId(receiveDetailPdaQuery);
@@ -63,11 +65,11 @@ public class ReceiveByPcsController {
 	}
 
 	/**
-	 * PDA按单收货详情明细查询
+	 * PDA按件收货:收货单详情明细查询
+	 *
 	 * @param receiveDetailByReceiveIdPdaQuery 请求参数
 	 * @return 当前收货单详情，以及他是否是序列号管理 isSn
 	 */
-	@ApiLog("PDA按单收货详情明细查询")
 	@PostMapping("findDetailByReceiveDetailId")
 	public R<ReceiveDetailByReceiveIdPdaResponse> findDetailByReceiveDetailId(@RequestBody ReceiveDetailByReceiveIdPdaQuery receiveDetailByReceiveIdPdaQuery) {
 		ReceiveDetailByReceiveIdPdaResponse detail = receiveBiz.selectDetailByReceiveDetailId(receiveDetailByReceiveIdPdaQuery);
@@ -75,7 +77,8 @@ public class ReceiveByPcsController {
 	}
 
 	/**
-	 * PDA按件收货
+	 * PDA按件收货:按件收货
+	 *
 	 * @param pdaByPieceReceiveQuery PDA按件收货请求参数
 	 * @return 是否成功
 	 */
@@ -86,10 +89,11 @@ public class ReceiveByPcsController {
 	}
 
 	/**
+	 * PDA按件收货:库位查询
+	 *
 	 * @param request 请求对象包含参数-库房id-库位编码
 	 * @return 库位
 	 */
-	@ApiLog("PDA按件收货-库位查询")
 	@PostMapping("findThisLocationByLocCode")
 	public R<LocationPdaByPcsResponse> findThisLocationByLocCode(@RequestBody LocationPdaByPcsRequest request) {
 		Location location = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
@@ -98,25 +102,27 @@ public class ReceiveByPcsController {
 	}
 
 	/**
+	 * PDA按件收货:查询库存
+	 *
 	 * @param request 根据箱码查询库存
 	 * @return 库位信息
 	 */
-	@ApiLog("PDA按件收货-查询库存")
 	@PostMapping("findThisStockByBoxCode")
 	public R<List<StockPdaByPcsResponse>> findThisStockByBoxCode(@RequestBody StockPdaByPcsRequest request) {
-		List<Stock> stockList = stockBiz.findStockByBoxCode(request.getBoxCode());
+		List<Stock> stockList = stockQueryBiz.findStockByBoxCode(request.getBoxCode());
 		List<StockPdaByPcsResponse> responseList = BeanUtil.copy(stockList, StockPdaByPcsResponse.class);
 		return R.data(responseList);
 	}
 
 	/**
+	 * PDA按件收货:查询已经存在的序列号集合
+	 *
 	 * @param request 收货单序列号集合
 	 * @return 已经存在的序列号集合
 	 */
-	@ApiLog("PDA按件收货-查询已经存在的序列号集合")
 	@PostMapping("getSerialNumberList")
 	public R<List<String>> getSerialNumberList(@RequestBody ReceiveSerialNoListRequest request) {
-		List<Serial> serialList = stockBiz.findSerialBySerialNo(request.getSerialNumberList());
+		List<Serial> serialList = stockQueryBiz.findSerialBySerialNo(request.getSerialNumberList());
 		List<String> serialNumberList = serialList.stream()
 			.map(Serial::getSerialNumber)
 			.distinct()

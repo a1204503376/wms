@@ -10,8 +10,8 @@ import org.junit.runners.MethodSorters;
 import org.nodes.wms.biz.instock.asn.impl.AsnBizImpl;
 import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnDetailRequest;
-import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
-import org.nodes.wms.dao.instock.asn.dto.output.AsnBillViewResponse;
+import org.nodes.wms.dao.instock.asn.dto.input.AsnBillPageQuery;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnHeaderForDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -42,7 +42,7 @@ public class AsnTest {
 	public void selectTest() throws ParseException {
 		IPage<?> page = new Page<>(1, 10);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		PageParamsQuery pageParamsQuery = new PageParamsQuery();
+		AsnBillPageQuery asnBillPageQuery = new AsnBillPageQuery();
 //		pageParamsQuery.setAsnBillNo("A001");
 //		pageParamsQuery.setAsnBillState(new String[]{"10","20","3"});
 //		pageParamsQuery.setSkuCode("wp001");
@@ -51,11 +51,11 @@ public class AsnTest {
 //		pageParamsQuery.setExternalOrderNo("2222223");
 //		pageParamsQuery.setExternalCreateUser("管理员4");
 //		pageParamsQuery.setWhIdList("库房编码002");
-		pageParamsQuery.setSupplier("供应商");
+		asnBillPageQuery.setSupplier("供应商");
 
 		Query query = new Query();
 		query.setDescs("asn_bill_id");
-		IPage<PageResponse> asnPage = asnBiz.getPageAsnBill(Condition.getPage(query), pageParamsQuery);
+		IPage<PageResponse> asnPage = asnBiz.getPageAsnBill(Condition.getPage(query), asnBillPageQuery);
 
 		System.out.println(asnPage.getRecords());
 		Assertions.assertEquals(5, asnPage.getTotal());
@@ -63,21 +63,21 @@ public class AsnTest {
 	}
 
 	@Test
-	public void findAsnBillViewDetailByIdTest(){
-		AsnBillViewResponse asnBillViewResponse = asnBiz.findAsnBillViewDetailByAsnBillId(1527561445477265410L);
+	public void findAsnBillViewDetailByIdTest() {
+		AsnHeaderForDetailResponse asnHeaderForDetailResponse = asnBiz.findAsnHeaderForDetailByAsnBillId(1527561445477265410L);
 //		System.out.println(asnDetailResponse);
 //		Assertions.assertEquals(1,asnDetailResponse);
 	}
 
 	@Test
-	public void deleteTest(){
+	public void deleteTest() {
 		List<Long> idList = new ArrayList<>();
 		idList.add(1234568L);
 		asnBiz.remove(idList);
 	}
 
 	@Test
-	public void insertTest(){
+	public void insertTest() {
 		AddOrEditAsnBillRequest addOrEditAsnBillRequest = new AddOrEditAsnBillRequest();
 		for (int i = 0; i < 99; i++) {
 			addOrEditAsnBillRequest.setBillTypeCd("10");
@@ -101,7 +101,7 @@ public class AsnTest {
 	}
 
 	@Test
-	public void DateUtilTest(){
+	public void DateUtilTest() {
 		System.out.println(DateUtil.formatDateTimeMini(new Date()));
 	}
 }

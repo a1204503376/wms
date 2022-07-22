@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.stock.dto.input.StockImportRequest;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
@@ -26,10 +27,11 @@ import java.util.List;
 @RequestMapping(WmsApiPath.WMS_ROOT_URL + "stock")
 public class StockManagerController {
 	private final StockBiz stockBiz;
+	private final StockQueryBiz stockQueryBiz;
 
 	@PostMapping("/page")
 	public R<IPage<StockPageResponse>> page(Query query, @RequestBody StockPageQuery stockPageQuery) {
-		return R.data(stockBiz.getStockPage(query, stockPageQuery));
+		return R.data(stockQueryBiz.getStockPage(query, stockPageQuery));
 	}
 
 	/**
@@ -37,7 +39,7 @@ public class StockManagerController {
 	 */
 	@PostMapping("export")
 	public void export(@RequestBody StockPageQuery stockPageQuery, HttpServletResponse response) {
-		stockBiz.exportExcel(stockPageQuery, response);
+		stockBiz.exportStockToExcel(stockPageQuery, response);
 	}
 
 	/**
@@ -53,7 +55,7 @@ public class StockManagerController {
 	@PostMapping("/import-data")
 	public R<String> importData(MultipartFile file) {
 		List<StockImportRequest> importDataList = ExcelUtil.read(file, StockImportRequest.class);
-		boolean importFlag = stockBiz.importExcel(importDataList);
+		boolean importFlag = stockBiz.importStockByExcel(importDataList);
 		return importFlag ? R.success("导入成功") : R.fail("导入失败");
 	}
 

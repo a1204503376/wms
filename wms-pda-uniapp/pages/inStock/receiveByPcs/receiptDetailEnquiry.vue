@@ -18,7 +18,8 @@
 				<view @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
 						<u-col span="10" class="left-text-one-line">
-							<view class="demo-layout bg-purple-light font-in-page">{{index+1}}-{{item.skuCode}}</view>
+							<view class="demo-layout bg-purple-light font-in-page">{{item.lineNo}}-{{item.skuCode}}
+							</view>
 						</u-col>
 						<u-col span="2">
 							<view class="demo-layout bg-purple font-in-page">{{item.surplusQty}}</view>
@@ -60,13 +61,13 @@
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
 			this.params.receiveId = parse.receiveId
-			this.getReceiveDetailList();
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
 		},
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
+			this.getReceiveDetailList();
 			var that = this;
 			that.emitKeyDown = function(e) {
 				if (e.key == 'Enter') {
@@ -128,7 +129,7 @@
 				this.getReceiveDetailList();
 			},
 			clearEmitKeyDown() {
-				this.emitKeyDown = null;
+				this.emitKeyDown = function() {};
 			},
 			emitKeyDown(e) {
 				if (e.key == 'Enter') {

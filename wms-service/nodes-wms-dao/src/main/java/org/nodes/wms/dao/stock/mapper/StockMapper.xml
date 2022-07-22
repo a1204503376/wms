@@ -163,4 +163,5 @@
     <select id="getStockResponseByQuery" resultType="org.nodes.wms.dao.stock.dto.output.StockPageResponse">
         <include refid="stock"/>
     </select>
+
 </mapper>

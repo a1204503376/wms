@@ -57,7 +57,8 @@
 
     <select id="pageNotSoPick"
             resultType="org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse">
-        <if test="page.orders == null and page.orders.size > 0">
+        <include refid="notSoPickPageOrList"/>
+        <if test="page.orders == null or page.orders.size == 0">
             ORDER BY detail.create_time DESC
         </if>
     </select>
@@ -65,6 +66,28 @@
     <select id="notSoPickListByQuery"
             resultType="org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickExcelResponse">
         <include refid="notSoPickPageOrList"/>
+    </select>
+
+    <select id="selectLineNoAndSkuCodeById"
+            resultType="org.nodes.wms.dao.outstock.so.dto.output.LineNoAndSkuSelectResponse">
+        select so_line_no lineNo,
+               sku_code
+        from so_detail
+        where so_bill_id = #{soBillId}
+          and surplus_qty > 0
+    </select>
+    <select id="getPickByPcDetail"
+            resultType="org.nodes.wms.dao.outstock.so.dto.output.PickByPcSoDetailResponse">
+        select so_detail_id,
+               so_line_no,
+               sku_code,
+               plan_qty,
+               scan_qty,
+               surplus_qty,
+               lot_number
+        from so_detail
+        where so_bill_id = #{param.soBillId}
+          and so_line_no = #{param.soLineNo}
     </select>
 
     <sql id="notSoPickPageOrList">

@@ -5,6 +5,7 @@ import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaMultiRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
@@ -32,7 +33,7 @@ public class InStockBizImpl implements InStockBiz {
 	private final ReceiveFactory receiveFactory;
 	private final StockBiz stockBiz;
 	private final ReceiveLogBiz receiveLogBiz;
-
+	private final StockQueryBiz stockQueryBiz;
 
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	@Override
@@ -172,7 +173,7 @@ public class InStockBizImpl implements InStockBiz {
 		newReceiveLogList.forEach(item -> {
 //			List<ReceiveLog> receiveLogList = receiveLogBiz.findReceiveLog(receiveIdList);
 			// 下架库存
-			Stock stock = stockBiz.findStockOnStage(item);
+			Stock stock = stockQueryBiz.findStockOnStage(item);
 			stockBiz.outStockByCancelReceive(StockLogTypeEnum.OUTSTOCK_BY_CANCEL_RECEIVE, item, stock);
 			// 更新收货单明细
 			ReceiveDetail receiveDetail = receiveBiz.getDetailByReceiveDetailId(item.getReceiveDetailId());

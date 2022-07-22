@@ -103,9 +103,10 @@
         b.bill_type_name
         from receive_header h
         LEFT JOIN wms_bill_type b ON h.bill_type_cd = b.bill_type_cd
+        LEFT JOIN receive_detail d on h.receive_id= d.receive_id
         <where>
-            h.receive_no LIKE concat('%',#{query.no},'%') AND h.is_deleted=0 AND h.wh_id=#{query.whId}
-            OR h.external_order_no LIKE concat('%',#{query.no},'%') AND h.wh_id=#{query.whId} AND h.is_deleted=0
+            h.receive_no LIKE concat('%',#{query.no},'%') AND h.is_deleted=0 AND h.wh_id=#{query.whId} and  d.surplus_qty&gt;0
+            OR h.external_order_no LIKE concat('%',#{query.no},'%') AND h.wh_id=#{query.whId} AND h.is_deleted=0 and  d.surplus_qty&gt;0
         </where>
         group by h.receive_id,b.bill_type_name
         order by h.create_time
@@ -193,6 +194,25 @@
                wh_code
         from receive_header
         where receive_id = #{receiveId}
+    </select>
+
+    <select id="selectReceiveHeaderForDetailByAsnBillId"
+            resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse">
+        SELECT
+            h.receive_no,
+            h.bill_state,
+            h.remark,
+            `user1`.real_name as create_user,
+            h.create_time,
+            `user2`.real_name as update_user,
+            h.update_time
+        FROM receive_header h
+        LEFT JOIN blade_user `user1` ON h.create_user = `user1`.id
+        LEFT JOIN blade_user `user2` ON h.update_user = `user2`.id
+        WHERE asn_bill_id = #{asnBillId}
+        <if test="page.orders == null or page.orders.size == 0">
+            ORDER BY h.create_time DESC
+        </if>
     </select>
 
 </mapper>

@@ -6,7 +6,7 @@
 		</u-navbar>
 
 		<u-grid class="menu" col="3">
-			<u-grid-item class="menu-item" v-for="(menu, index2) in childrenMenu" :key="menu.code" @click="navTo(menu)">
+			<u-grid-item class="menu-item" v-for="(menu, index2) in childrenMenu" :key="menu.id" @click="navTo(menu)">
 				<text class="menu-number">{{index2+1}}</text>
 				<text :class="menu.source" class="menu-icon"></text>
 				<view class="menu-text">
@@ -63,10 +63,16 @@
 		},
 		methods: {
 			clearEmitKeyDown() {
-				this.emitKeyDown = null;
+				this.emitKeyDown = function(){};
 			},
 			navTo(menu) {
 				this.clearEmitKeyDown();
+				if(tool.isNotEmpty(menu.children)){
+					uni.setStorageSync('childrenMenu', menu.children)
+					//有子集的自动跳转统一模板
+					uni.$u.func.routeNavigateTo('/pages/home/childrenHome', menu);
+					return;
+				}
 				//跳转页面
 				uni.$u.func.routeNavigateTo(menu.path);
 			},

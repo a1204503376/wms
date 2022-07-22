@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.stock.dto.input;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -80,6 +82,7 @@ public class StockPageQuery implements Serializable {
 	/**
 	 * 货主
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long woId;
 	/**
 	 * 最近入库时间开始

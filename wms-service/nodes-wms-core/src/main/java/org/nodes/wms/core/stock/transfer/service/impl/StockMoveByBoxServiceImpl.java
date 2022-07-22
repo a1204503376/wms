@@ -197,7 +197,7 @@ public class StockMoveByBoxServiceImpl implements IStockMoveByBoxService {
 						}).findFirst().orElse(null);
 						if (Func.isNotEmpty(soHeader)) {
 							stockAndPackageVO.setSoBillNo(soHeader.getSoBillNo());
-							stockAndPackageVO.setEnterpriseName(soHeader.getCName());
+							stockAndPackageVO.setEnterpriseName(soHeader.getCustomerName());
 							stockAndPackageVO.setOrderNo(soHeader.getOrderNo());
 						}
 					}

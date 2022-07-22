@@ -14,10 +14,10 @@ import org.nodes.wms.dao.common.log.dto.output.*;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.entities.LogMessage;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
-import org.nodes.wms.dao.outstock.so.dto.output.LogForSoDetailResponse;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.StringUtil;
@@ -30,6 +30,7 @@ import java.util.List;
 
 /**
  * 日志实现类，实现通知日志和审计日志的存储
+ *
  * @author 王智勇
  */
 @Service
@@ -37,7 +38,7 @@ import java.util.List;
 public class LogBizImpl implements LogBiz {
 	private final LogFactory logFactory;
 	private final LogMessageDao logMessageDao;
-    private final LogActionDao actionDao;
+	private final LogActionDao actionDao;
 	private final LogErrorDao logErrorDao;
 
 	private final LogApiDao logApiDao;
@@ -106,54 +107,55 @@ public class LogBizImpl implements LogBiz {
 
 	@Override
 	public void auditLog(String userName, AuditLogType cronTask, Long id, String log) {
-		LogAction logAction = logFactory.createLogAction(userName,cronTask,id,log);
+		LogAction logAction = logFactory.createLogAction(userName, cronTask, id, log);
 		actionDao.insertLogAction(logAction);
 	}
 
 	@Override
 	public Page<LogTaskResponse> getPage(LogPageQuery logPageQuery, Query query) {
 		IPage<LogAction> page = Condition.getPage(query);
-		return actionDao.getPage(logPageQuery,page);
+		return actionDao.getPage(logPageQuery, page);
 	}
 
-    @Override
-    public Integer getLogMsgCount() {
-        return logMessageDao.getLogMsgCount();
-    }
+	@Override
+	public Integer getLogMsgCount() {
+		return logMessageDao.getLogMsgCount();
+	}
 
 	@Override
 	public List<LogMessageResponse> getLogMsgList(Long num) {
-			return logMessageDao.getLogMsgList(num, DateUtil.formatDate(new Date()));
+		return logMessageDao.getLogMsgList(num, DateUtil.formatDate(new Date()));
 	}
 
 
 	@Override
 	public void editLogMsgReaded(Long num, Long id) {
-		logMessageDao.updateLogMsgReaded(num,id);
+		logMessageDao.updateLogMsgReaded(num, id);
 	}
 
 	/**
 	 * 业务日志分页查询
+	 *
 	 * @param logActionPageQuery 业务日志查询条件
-	 * @param query 分页参数
+	 * @param query              分页参数
 	 * @return 业务日志响应对象
 	 */
 	@Override
 	public Page<LogActionPageResponse> getLists(LogActionPageQuery logActionPageQuery, Query query) {
 		IPage<LogAction> page = Condition.getPage(query);
-		return actionDao.getLists(logActionPageQuery,page);
+		return actionDao.getLists(logActionPageQuery, page);
 	}
 
 	@Override
 	public void exportActionLists(LogActionPageQuery logActionPageQuery, HttpServletResponse response) {
 		List<LogActionExcelResponse> actionLists = actionDao.getActionLists(logActionPageQuery);
-		ExcelUtil.export(response, "业务日志", "业务日志数据表",actionLists, LogActionExcelResponse.class);
+		ExcelUtil.export(response, "业务日志", "业务日志数据表", actionLists, LogActionExcelResponse.class);
 	}
 
 	@Override
 	public IPage<LogErrorPageResponse> getLogErrorPage(LogErrorPageQuery logErrorPageQuery, Query query) {
 		IPage<LogErrorPageResponse> page = Condition.getPage(query);
-          return  logErrorDao.selectPage(logErrorPageQuery,page);
+		return logErrorDao.selectPage(logErrorPageQuery, page);
 	}
 
 	@Override
@@ -168,22 +170,25 @@ public class LogBizImpl implements LogBiz {
 	}
 
 	@Override
-	public Page<LogForSoDetailResponse> pageLogBySoBillId(IPage<?> page, Long soBillId) {
-		return actionDao.pageLotBySoBillId(page, soBillId);
+	public Page<LogDetailPageResponse> pageLogByBillId(IPage<?> page, Long billId) {
+		IPage<LogAction> logActionPage = actionDao.pageLogByBillId((IPage<LogAction>) page, billId);
+		Page<LogDetailPageResponse> pageDetail = new Page<>();
+		BeanUtil.copy(logActionPage, pageDetail);
+		return pageDetail;
 	}
 
 	@Override
-    public IPage<LogApiPageResponse> getLogApiPage(LogApiPageQuery logApiPageQuery, Query query) {
+	public IPage<LogApiPageResponse> getLogApiPage(LogApiPageQuery logApiPageQuery, Query query) {
 		IPage<LogApiPageResponse> page = Condition.getPage(query);
-		return logApiDao.selectPage(logApiPageQuery,page);
-    }
+		return logApiDao.selectPage(logApiPageQuery, page);
+	}
 
 	@Override
 	public void exportLogApiExcel(LogApiPageQuery logApiPageQuery, HttpServletResponse response) {
 		List<LogApiPageResponse> logApiResponseList = logApiDao.getLogApiResponseByQuery(logApiPageQuery);
-		logApiResponseList.forEach(item->{
-			item.setParams(StringUtil.sub(item.getParams(),0,32767));
-			item.setData(StringUtil.sub(item.getParams(),0,32767));
+		logApiResponseList.forEach(item -> {
+			item.setParams(StringUtil.sub(item.getParams(), 0, 32767));
+			item.setData(StringUtil.sub(item.getParams(), 0, 32767));
 		});
 		ExcelUtil.export(response, "请求日志", "请求日志数据表", logApiResponseList, LogApiPageResponse.class);
 	}

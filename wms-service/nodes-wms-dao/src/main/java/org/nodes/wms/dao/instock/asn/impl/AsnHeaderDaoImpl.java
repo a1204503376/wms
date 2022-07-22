@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.instock.asn.AsnHeaderDao;
-import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
+import org.nodes.wms.dao.instock.asn.dto.input.AsnBillPageQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.*;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.nodes.wms.dao.instock.asn.mapper.AsnHeaderMapper;
@@ -23,8 +23,8 @@ public class AsnHeaderDaoImpl
 	implements AsnHeaderDao {
 
 	@Override
-	public Page<PageResponse> selectPageAsnBill(IPage<?> page, PageParamsQuery pageParamsQuery) {
-		return super.baseMapper.selectPageAsnBill(page, pageParamsQuery);
+	public Page<PageResponse> selectPageAsnBill(IPage<?> page, AsnBillPageQuery asnBillPageQuery) {
+		return super.baseMapper.selectPageAsnBill(page, asnBillPageQuery);
 	}
 
 	@Override
@@ -38,26 +38,17 @@ public class AsnHeaderDaoImpl
 	}
 
 	@Override
-	public List<AsnBillExportResponse> listByParamsQuery(PageParamsQuery pageParamsQuery) {
-		return super.baseMapper.selectAsnBillList(pageParamsQuery);
+	public List<AsnBillExportResponse> listByParamsQuery(AsnBillPageQuery asnBillPageQuery) {
+		return super.baseMapper.selectAsnBillList(asnBillPageQuery);
 	}
 
 	@Override
-	public AsnHeader getAsnHeaderByAsnBillId(Long asnBillId) {
-		return super.baseMapper.selectAsnHeaderByAsnBillId(asnBillId);
+	public AsnHeader getById(Long id) {
+		return super.baseMapper.getById(id);
 	}
 
 	@Override
-	public AsnHeaderViewResponse getAsnHeaderViewById(Long asnBillId) {
-		return super.baseMapper.selectAsnHeaderViewById(asnBillId);
-	}
-
-	public List<AsnDetailViewResponse> getAsnDetailViewByAsnBillId(Long asnBillId) {
-		return super.baseMapper.selectAsnDetailViewByAsnBillId(asnBillId);
-	}
-
-	@Override
-	public List<AsnLogActionViewResponse> getLogActionById(Long id) {
-		return super.baseMapper.selectLogActionById(id);
+	public AsnHeaderForDetailResponse getAsnHeaderForDetailById(Long asnBillId) {
+		return super.baseMapper.selectAsnHeaderForDetailById(asnBillId);
 	}
 }

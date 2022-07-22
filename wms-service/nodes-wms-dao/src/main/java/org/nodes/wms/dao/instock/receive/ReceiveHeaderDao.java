@@ -97,4 +97,13 @@ public interface ReceiveHeaderDao {
 	 * @param receiveId 收货单id
 	 */
 	ReceiveByPcResponse getReceiveByPcResponse(Long receiveId);
+
+	/**
+	 * ASN单明细查看-根据ASN单id分页查询收货单头表信息
+	 *
+	 * @param page: 分页参数
+	 * @param asnBillId: ASN单id
+	 * @return Page<ReceiveHeaderResponse> 收货单头表分页信息
+	 */
+    Page<ReceiveHeaderResponse> getReceiveHeaderForDetailByAsnBillId(IPage<?> page, Long asnBillId);
 }

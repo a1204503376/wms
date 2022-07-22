@@ -17,12 +17,11 @@ import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
-import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -81,7 +80,8 @@ public class SupplierBizImpl implements SupplierBiz {
 	}
 
 	@Override
-	public boolean importExcel(List<SupplierImportRequest> importDataList) {
+	public boolean importExcel(MultipartFile file) {
+		List<SupplierImportRequest> importDataList = ExcelUtil.read(file, SupplierImportRequest.class);
 		if (Func.isEmpty(importDataList)) {
 			throw new ServiceException("导入失败，没有可导入的数据");
 		}

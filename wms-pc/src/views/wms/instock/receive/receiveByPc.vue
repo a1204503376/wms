@@ -43,6 +43,9 @@
                                                    @click="onAddBatchRow">
                                         </el-button>
                                     </template>
+                                    <template v-slot="{row}">
+                                        <el-button @click="onReset(row)" type="text" size="small">清空</el-button>
+                                    </template>
                                 </el-table-column>
                                 <el-table-column width="100">
                                     <template slot="header">
@@ -54,7 +57,7 @@
                                             v-model="row.lineNumber"
                                             @blur="getDetailData(row)"
                                             @focus="getFocus(row)"
-                                            @keyup.enter.native="getDetailData(row,$event)"
+                                            @keyup.enter.native="getDetailData(row)"
                                         >
                                         </el-input>
                                     </template>
@@ -77,9 +80,24 @@
 
                                     </template>
                                 </el-table-column>
+                                <el-table-column width="130">
+                                    <template slot="header">
+                                        <span class="d-table-header-required">规格</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input
+                                            size=mini
+                                            v-model="row.skuLot2"
+                                            :disabled="row.skuLot2Exist"
+                                        >
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+
+
                                 <el-table-column
                                     prop="planQty"
-                                    width="120"
+                                    width="160"
                                 >
                                     <template slot="header">
                                         <span class="d-table-header-required">本次收货量</span>
@@ -88,7 +106,7 @@
                                         <el-input-number
                                             v-model="row.scanQty"
                                             :disabled="exist(row)"
-                                            style="width: 80px"
+                                            style="width:130px"
                                             :min="0"
                                             :max="row.surplusQty+row.scanQty"
                                             controls-position="right"
@@ -101,7 +119,7 @@
                                 <el-table-column
                                     :align="'left'"
                                     prop="skuCode"
-                                    width="100"
+                                    width="150"
                                 >
 
                                     <template slot="header">
@@ -307,6 +325,18 @@ export default {
     created() {
         this.getTableData()
     },
+    watch: {
+        receiveId() {
+            this.table.data.find(u => {
+                Object.keys(u).forEach(key => {
+                    u[key] = ''
+                })
+            });
+            this.rowData = []
+            this.rowObject = {lineNumber: '', scanQty: 0}
+            this.getTableData()
+        }
+    },
     methods: {
         getFocus(row) {
             this.rowObject.lineNumber = row.lineNumber
@@ -342,7 +372,11 @@ export default {
                 func.isEmpty(row.lineNumber)
             );
         },
-        getDetailData(row, $event) {
+        getDetailData(row) {
+            if (func.isEmpty(row.lineNumber) && func.isNotEmpty(row.skuCode)) {
+                row.lineNumber = this.rowObject.lineNumber
+                return
+            }
             if (func.isEmpty(row.lineNumber)) {
                 return
             }
@@ -376,10 +410,12 @@ export default {
                 row.surplusQty = column.surplusQty
                 row.umCode = column.umCode
                 row.skuLot1 = column.skuLot1
+                row.skuLot2 = column.skuLot2
                 row.skuLot4 = column.skulot4
                 row.skuLot5 = column.skuLot5
                 row.skuLot6 = column.skuLot6
                 row.skuLot8 = column.skuLot8
+                row.skuLot2Exist = column.skuLot2Exist
                 return
             }
 
@@ -404,10 +440,18 @@ export default {
                     row.umCode = item.umCode
                     row.scanQty = 0
                     row.skuLot1 = item.skuLot1
+                    row.skuLot2 = item.skuLot2
                     row.skuLot4 = item.skulot4
                     row.skuLot5 = item.skuLot5
                     row.skuLot6 = item.skuLot6
                     row.skuLot8 = item.skuLot8
+                    if (func.isNotEmpty(item.skuLot2)) {
+                        row.skuLot2Exist = true
+                        item['skuLot2Exist'] = true
+                    } else {
+                        item['skuLot2Exist'] = false
+                    }
+
                     this.rowData.push(item)
                 })
 
@@ -421,12 +465,31 @@ export default {
                     let pageObj = res.data.data;
                     this.form.params = pageObj
                 })
+        },
+        onReset(row) {
+            this.rowData.find(u => {
+                if (u.lineNo === row.lineNumber) {
+                    u.surplusQty = u.surplusQty + row.scanQty
+                }
 
+            });
+            let data = this.table.data
+            data.find(u => {
+                if (u.lineNumber === row.lineNumber) {
+                    u.surplusQty = u.surplusQty + row.scanQty
+                }
+            });
+            Object.keys(row).forEach(key => {
+                row[key] = ''
+                row.scanQty = 0
+                row.surplusQty = 0
+            })
         },
         getDescriptor() {
             return {
                 scanQty: {type: 'Number', validator: (rule, value) => value > 0, message: '计划数量不能为0'},
-                locId: {required: true, message: '库位不能为空'}
+                locId: {required: true, message: '库位不能为空'},
+                skuLot2: {required: true, message: '规格不能为空'}
             };
         },
         createRowObj() {
@@ -442,13 +505,14 @@ export default {
                 lpnCode: '',
                 snCode: '',
                 skuLot1: '',
+                skuLot2: '',
                 skuLot4: '',
                 skuLot5: '',
                 skuLot6: '',
                 skuLot8: '',
+                skuLot2Exist: false
             }
         },
-
 
         submitFormParams() {
             let detailRequestList = this.table.postData

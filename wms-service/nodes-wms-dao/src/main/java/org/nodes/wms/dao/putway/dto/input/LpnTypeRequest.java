@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.putway.dto.input;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -17,5 +19,6 @@ public class LpnTypeRequest implements Serializable {
 	/**
 	 * 库房id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long whId;
 }

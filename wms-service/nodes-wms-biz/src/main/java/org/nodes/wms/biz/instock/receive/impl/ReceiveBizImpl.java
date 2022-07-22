@@ -10,6 +10,7 @@ import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.biz.instock.receiveLog.modular.ReceiveLogFactory;
 import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.sku.SkuDao;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse;
@@ -54,7 +55,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	private final ReceiveDetailDao receiveDetailDao;
 	private final SkuDao skuDao;
 	private final ReceiveFactory receiveFactory;
-
+	private final StockQueryBiz stockQueryBiz;
 	private final LogBiz logBiz;
 	private final ReceiveDetailLpnDao receiveDetailLpnDao;
 	private final StockBiz stockBiz;
@@ -288,7 +289,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 
 	@Override
 	public ReceiveDetailLpnPdaResponse getReceiveDetailLpnByBoxCode(String boxCode) {
-		List<Stock> stockList = stockBiz.findStockByBoxCode(boxCode);
+		List<Stock> stockList = stockQueryBiz.findStockByBoxCode(boxCode);
 		if (Func.isNotEmpty(stockList)) {
 			throw new ServiceException("收货失败,该箱码已在库存中存在");
 		}
@@ -482,10 +483,11 @@ public class ReceiveBizImpl implements ReceiveBiz {
 				//调用库存函数
 				stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PC, receiveLog);
 				//总数累加
-				sum.add(detailRequest.getScanQty());
+				sum = sum.add(detailRequest.getScanQty());
 			}
 			//修改收货单明细状态和剩余数量
 			receiveDetail.setSurplusQty(receiveDetail.getSurplusQty().subtract(sum));
+			receiveDetail.setScanQty(receiveDetail.getScanQty().add(sum));
 			if (receiveDetail.getSurplusQty().compareTo(BigDecimal.ZERO) == 1) {
 				receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.PART);
 				isCompleted = false;

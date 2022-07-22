@@ -6,17 +6,23 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.asn.AsnBiz;
 import org.nodes.wms.biz.instock.asn.modular.AsnFactory;
+import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
+import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.instock.asn.AsnDetailDao;
 import org.nodes.wms.dao.instock.asn.AsnHeaderDao;
 import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnDetailRequest;
-import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
+import org.nodes.wms.dao.instock.asn.dto.input.AsnBillPageQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.*;
 import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
+import org.nodes.wms.dao.instock.asn.enums.AsnBillStateEnum;
+import org.nodes.wms.dao.instock.receive.ReceiveHeaderDao;
+import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -33,13 +39,14 @@ public class AsnBizImpl implements AsnBiz {
 	private final AsnHeaderDao asnHeaderDao;
 	private final AsnDetailDao asnDetailDao;
 	private final AsnFactory asnFactory;
+	private final ReceiveHeaderDao receiveHeaderDao;
 
 	private final LogBiz logBiz;
 
 	@Override
 	public Page<PageResponse> getPageAsnBill(IPage<?> page,
-											 PageParamsQuery pageParamsQuery) {
-		Page<PageResponse> pageResponsePage = asnHeaderDao.selectPageAsnBill(page, pageParamsQuery);
+											 AsnBillPageQuery asnBillPageQuery) {
+		Page<PageResponse> pageResponsePage = asnHeaderDao.selectPageAsnBill(page, asnBillPageQuery);
 		pageResponsePage.getRecords().forEach(item -> {
 			item.setAsnBillStateValue(item.getAsnBillState().getDesc());
 		});
@@ -47,17 +54,32 @@ public class AsnBizImpl implements AsnBiz {
 	}
 
 	@Override
-	public AsnBillViewResponse findAsnBillViewDetailByAsnBillId(Long asnBillId) {
-		AsnHeaderViewResponse asnHeaderViewResponse = asnHeaderDao.getAsnHeaderViewById(asnBillId);
-		List<AsnDetailViewResponse> asnDetailViewResponseList = asnHeaderDao.getAsnDetailViewByAsnBillId(asnBillId);
-		AsnBillViewResponse asnBillViewResponse = new AsnBillViewResponse();
-		asnBillViewResponse.setAsnHeaderViewResponse(asnHeaderViewResponse);
-		asnBillViewResponse.setAsnDetailViewResponse(asnDetailViewResponseList);
-		return asnBillViewResponse;
+	public AsnHeaderForDetailResponse findAsnHeaderForDetailByAsnBillId(Long asnBillId) {
+		return asnHeaderDao.getAsnHeaderForDetailById(asnBillId);
+	}
+
+	@Override
+	public Page<AsnDetailForDetailResponse> findAsnDetailForDetailByAsnBillId(IPage<?> page, Long asnBillId) {
+		return asnDetailDao.getAsnDetailForDetailByAsnBillId(page, asnBillId);
+	}
+
+	@Override
+	public Page<ReceiveHeaderResponse> findReceiveHeaderForDetailByAsnBillId(IPage<?> page, Long asnBillId) {
+		return receiveHeaderDao.getReceiveHeaderForDetailByAsnBillId(page, asnBillId);
+	}
+
+	@Override
+	public Page<LogDetailPageResponse> findAsnLogForDetailByAsnBillId(IPage<?> page, Long asnBillId) {
+
+		return logBiz.pageLogByBillId(page, asnBillId);
 	}
 
 	@Override
 	public boolean removeAsnBillById(List<Long> asnBillIdList) {
+		asnBillIdList.forEach(item -> {
+			AsnHeader asnHeader = asnHeaderDao.getById(item);
+			logBiz.auditLog(AuditLogType.ASN_BILL, asnHeader.getAsnBillId(), "删除ASN单");
+		});
 		return asnHeaderDao.deleteAsnHeaderById(asnBillIdList);
 	}
 
@@ -82,13 +104,15 @@ public class AsnBizImpl implements AsnBiz {
 		}
 		// 新增ASN单明细数据
 		asnDetailDao.saveOrUpdateAsnDetail(details);
+
+		logBiz.auditLog(AuditLogType.ASN_BILL, asnHeader.getAsnBillId(), asnHeader.getAsnBillNo(),"新建ASN单");
 		return asnHeader;
 	}
 
 	@Override
 	public AsnBillByEditResponse findAsnHeaderAndAsnDetail(Long asnBillId) {
 		// 获取ASN头表信息
-		AsnHeader asnHeader = asnHeaderDao.getAsnHeaderByAsnBillId(asnBillId);
+		AsnHeader asnHeader = asnHeaderDao.getById(asnBillId);
 		// 获取ASN明细信息
 		List<AsnDetail> asnDetailList = asnDetailDao.getAsnDetailByAsnBillId(asnBillId);
 		// 获取头表dto
@@ -106,9 +130,9 @@ public class AsnBizImpl implements AsnBiz {
 	@Transactional(rollbackFor = Exception.class)
 	public AsnHeader edit(AddOrEditAsnBillRequest addOrEditAsnBillRequest) {
 		// 根据ASN单id 获取ASN单实体对象，验证该ASN单状态是否 是已收货
-		AsnHeader header = asnHeaderDao.getAsnHeaderByAsnBillId(addOrEditAsnBillRequest.getAsnBillId());
-		if (header.getAsnBillState().getCode() != 10) {
-			throw new ServiceException("编辑ASN单失败，该ASN单已收货，单据编码:"+header.getAsnBillNo());
+		AsnHeader header = asnHeaderDao.getById(addOrEditAsnBillRequest.getAsnBillId());
+		if (!header.getAsnBillState().getCode().equals(AsnBillStateEnum.NOT_RECEIPT.getCode())) {
+			throw new ServiceException("编辑ASN单失败，该ASN单已收货，单据编码:" + header.getAsnBillNo());
 		}
 
 		// 创建ASN单头表实体，修改ASN单头表数据
@@ -130,25 +154,22 @@ public class AsnBizImpl implements AsnBiz {
 
 		//设置ASN单编码用于前端编码提示
 		asnHeader.setAsnBillNo(header.getAsnBillNo());
+		logBiz.auditLog(AuditLogType.ASN_BILL, asnHeader.getAsnBillId(), asnHeader.getAsnBillNo(), "编辑ASN单");
 		return asnHeader;
 	}
 
 	@Override
-	public void exportAsnBill(PageParamsQuery pageParamsQuery, HttpServletResponse response) {
-		List<AsnBillExportResponse> asnBillList = asnHeaderDao.listByParamsQuery(pageParamsQuery);
+	public void exportAsnBill(AsnBillPageQuery asnBillPageQuery, HttpServletResponse response) {
+		List<AsnBillExportResponse> asnBillList = asnHeaderDao.listByParamsQuery(asnBillPageQuery);
 		asnBillList.forEach(item -> {
 			item.setAsnBillStateValue(item.getAsnBillState().getDesc());
 		});
 		ExcelUtil.export(response, "ASD单", "ASN单数据报表", asnBillList, AsnBillExportResponse.class);
 	}
 
-    @Override
-    public List<AsnLogActionViewResponse> findAsnLogActionById(Long asnBillId) {
-        return asnHeaderDao.getLogActionById(asnBillId);
-    }
-
-    @Override
-    public boolean remove(List<Long> asnBillIdList) {
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public boolean remove(List<Long> asnBillIdList) {
 		// 1.删除ASN头表
 		boolean delAsnBillFlag = removeAsnBillById(asnBillIdList);
 		// 2.删除ASN明细表
@@ -158,5 +179,5 @@ public class AsnBizImpl implements AsnBiz {
 		// 3.删除收货单头表 (传asnBillIdList)
 
 		return true;
-    }
+	}
 }

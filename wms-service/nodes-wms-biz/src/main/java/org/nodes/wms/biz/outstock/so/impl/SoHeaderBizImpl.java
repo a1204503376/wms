@@ -1,19 +1,29 @@
 package org.nodes.wms.biz.outstock.so.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
 import org.nodes.wms.biz.outstock.so.modular.SoBillFactory;
+import org.nodes.wms.biz.stock.StockQueryBiz;
+import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
+import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.outstock.so.SoDetailDao;
 import org.nodes.wms.dao.outstock.so.SoHeaderDao;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
+import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
+import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
+import org.nodes.wms.dao.picking.dto.input.FindAllPickingRequest;
+import org.nodes.wms.dao.picking.dto.output.FindAllPickingResponse;
+import org.nodes.wms.dao.stock.dto.output.PickByPcStockResponse;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -23,6 +33,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +51,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	private final SoDetailDao soDetailDao;
 
 	private final SoBillFactory soBillFactory;
+	private StockQueryBiz stockQueryBiz;
 
 	private final LogBiz logBiz;
 
@@ -54,7 +67,8 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		if (!soHeaderDao.saveOrUpdateSoHeader(soHeader)) {
 			throw new ServiceException("新增发货单头表信息失败，请稍后再试");
 		}
-		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader, soBillAddOrEditRequest.getSoDetailList());
+		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader,
+			soBillAddOrEditRequest.getSoDetailList());
 		if (!soDetailDao.saveOrUpdateBatch(soDetailList)) {
 			throw new ServiceException("新增发货单明细信息失败，请稍后再试");
 		}
@@ -81,7 +95,8 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		if (!soHeaderDao.saveOrUpdateSoHeader(soHeader)) {
 			throw new ServiceException("编辑发货单头表信息失败，请稍后再试");
 		}
-		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader, soBillAddOrEditRequest.getSoDetailList());
+		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader,
+			soBillAddOrEditRequest.getSoDetailList());
 		if (!soDetailDao.saveOrUpdateBatch(soDetailList)) {
 			throw new ServiceException("编辑发货单明细信息失败，请稍后再试");
 		}
@@ -115,7 +130,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		if (!soHeaderDao.updateSoHeaderById(soHeader)) {
 			throw new ServiceException("关闭发货单失败，请稍后再试");
 		}
-		logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), "关闭发货单");
+		logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), soHeader.getSoBillNo(), "关闭发货单");
 	}
 
 	@Override
@@ -125,7 +140,57 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	}
 
 	@Override
-	public Page<LogForSoDetailResponse> pageLogById(Query query, Long soBillId) {
-		return logBiz.pageLogBySoBillId(Condition.getPage(query), soBillId);
+	public Page<LogForSoDetailResponse> pageLogById(IPage<?> page, Long soBillId) {
+		Page<LogDetailPageResponse> logDetailPageResponsePage = logBiz.pageLogByBillId(page, soBillId);
+
+		return null;
+	}
+
+	@Override
+	public PickByPcSoHeaderResponse getSoHeaderByPickPc(SoBillIdRequest soBillIdRequest) {
+		return soHeaderDao.getSoHeaderResponseById(soBillIdRequest.getSoBillId());
+	}
+
+	@Override
+	public SoBillDistributedResponse findSoBillForDistBySoBillId(Long soBillId) {
+		SoHeader soHeader = soHeaderDao.getById(soBillId);
+		List<SoDetail> soDetailList = soDetailDao.getBySoBillId(soBillId);
+		SoBillDistributedResponse soBill = new SoBillDistributedResponse();
+		soBill.setSoBillId(soHeader.getSoBillId());
+		soBill.setSoBillNo(soHeader.getSoBillNo());
+		soBill.setOrderNo(soHeader.getOrderNo());
+		List<SoDetailForDistResponse> details = Func.copy(soDetailList, SoDetailForDistResponse.class);
+		soBill.setSoDetailList(details);
+		return soBill;
+	}
+
+	@Override
+	public IPage<FindAllPickingResponse> getAllPickingByNo(IPage<?> page, FindAllPickingRequest request) {
+		return soHeaderDao.getAllPickingPage(page, request);
+	}
+
+	@Override
+	public SoDetailAndStockResponse getSoDetailAndStock(SoDetailAndStockRequest soDetailAndStockRequest) {
+		SoDetailAndStockResponse soDetailAndStockResponse = new SoDetailAndStockResponse();
+		PickByPcSoDetailResponse pickByPcSoDetailResponse = soDetailDao.getPickByPcDetail(soDetailAndStockRequest);
+		soDetailAndStockResponse.setPickByPcSoDetailResponse(pickByPcSoDetailResponse);
+		List<PickByPcStockResponse> stockResponseList = new ArrayList<>();
+		List<Stock> stockList = stockQueryBiz.getStockListBySkuCode(pickByPcSoDetailResponse.getSkuCode());
+		for (Stock stock : stockList) {
+			BigDecimal stockEnableQty = StockUtil.getStockEnable(stock);
+			if (stockEnableQty.compareTo(BigDecimal.ZERO) == -1) {
+				continue;
+			}
+			BigDecimal stockBalanceQty = StockUtil.getStockBalance(stock);
+			PickByPcStockResponse pickByPcStockResponse = new PickByPcStockResponse();
+			Func.copy(stock, pickByPcStockResponse);
+			pickByPcStockResponse.setStockEnableQty(stockEnableQty);
+			pickByPcStockResponse.setStockBalanceQty(stockBalanceQty);
+			pickByPcStockResponse.setSoDetailId(pickByPcSoDetailResponse.getSoDetailId());
+			pickByPcStockResponse.setSoDetailId(pickByPcSoDetailResponse.getSoDetailId());
+			stockResponseList.add(pickByPcStockResponse);
+		}
+		soDetailAndStockResponse.setStockResponseList(stockResponseList);
+		return soDetailAndStockResponse;
 	}
 }

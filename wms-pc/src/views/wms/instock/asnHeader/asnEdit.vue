@@ -7,7 +7,7 @@
                          :rules="form.rules"
                          label-position="right"
                          label-width="120px"
-                         size="mini"
+                         size="medium"
                          style="margin-left:10px;margin-right:10px;"
                 >
                     <el-row>
@@ -17,15 +17,18 @@
                         <el-col :span="8">
                             <el-form-item label="ASN单编码" prop="asnBillNo">
                                 <el-input v-model="form.params.asnBillNo"
-                                          :readonly="true"
-                                          style="width: 250px;"
+                                          :disabled="true"
+                                          size="medium"
+                                          style="width: 210px"
                                 >
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="单据类型" prop="billTypeCd">
-                                <nodes-bill-type v-model="form.params.billTypeCd" style="width: 250px">
+                                <nodes-bill-type
+                                    v-model="form.params.billTypeCd"
+                                    size="medium">
                                 </nodes-bill-type>
                             </el-form-item>
                         </el-col>
@@ -33,8 +36,7 @@
                             <el-form-item label="供应商" prop="supplier">
                                 <nodes-supplier
                                     v-model="form.params.supplier"
-                                    :multiple="false"
-                                    style="width: 250px">
+                                    size="medium">
                                 </nodes-supplier>
                             </el-form-item>
                         </el-col>
@@ -44,8 +46,7 @@
                             <el-form-item label="仓库" prop="whId">
                                 <nodes-warehouse
                                     v-model="form.params.whId"
-                                    :multiple="false"
-                                    style="width: 250px;"
+                                    size="medium"
                                 ></nodes-warehouse>
                             </el-form-item>
                         </el-col>
@@ -55,8 +56,7 @@
                                 <nodes-owner
                                     v-model="form.params.woId"
                                     :default-value="true"
-                                    :multiple="false"
-                                    style="width: 250px;"
+                                    size="medium"
                                 ></nodes-owner>
                             </el-form-item>
                         </el-col>
@@ -66,9 +66,11 @@
                             <el-form-item label="备注" prop="asnBillRemark">
                                 <el-input
                                     v-model="form.params.asnBillRemark"
+                                    maxLength="66"
                                     :rows=2
                                     placeholder="请输入内容"
-                                    style="width: 1070px"
+                                    size="medium"
+                                    style="width: 1171px"
                                     type="textarea">
                                 </el-input>
                             </el-form-item>
@@ -144,7 +146,7 @@
                                 </el-table-column>
                                 <el-table-column :align="'left'" prop="skuSpec">
                                     <template slot="header">
-                                        <span class="d-table-header-required">规格</span>
+                                        <span>规格</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
@@ -192,16 +194,16 @@
                                         <span>备注</span>
                                     </template>
                                     <template v-slot="{row}">
-                                        <el-input v-model="row.remark" size="mini"></el-input>
+                                        <el-input v-model="row.remark" maxLength="66" size="mini"></el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column align="center" width="100px">
                                     <template slot="header">
                                         <span>操作</span>
                                     </template>
-                                    <template v-slot="{row}">
+                                    <template v-slot="scope">
                                         <el-link type="primary"
-                                                 @click.native.prevent="deleteRow(row.$index, table.data, row)">删除
+                                                 @click.native.prevent="deleteRow(scope.$index, table.data, scope)">删除
                                         </el-link>
                                     </template>
                                 </el-table-column>

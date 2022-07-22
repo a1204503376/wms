@@ -1,5 +1,8 @@
 package org.nodes.wms.dao.instock.asn;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.instock.asn.dto.output.AsnDetailForDetailResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 
 import java.util.List;
@@ -39,4 +42,13 @@ public interface AsnDetailDao {
 	 * @param removeIdList: ASN单明细id
 	 */
 	void deleteByIds(List<Long> removeIdList);
+
+	/**
+	 * 查看明细-根据ASN单id分页查询ASN单明细
+	 *
+	 * @param asnBillId: ASN单id
+	 * @param page: 分页参数
+	 * @return Page<AsnDetailForDetailResponse> ASN单明细分页对象
+	 */
+	Page<AsnDetailForDetailResponse> getAsnDetailForDetailByAsnBillId(IPage<?> page, Long asnBillId);
 }

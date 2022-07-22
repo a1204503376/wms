@@ -3,13 +3,13 @@
 <mapper namespace="org.nodes.wms.dao.common.log.mapper.LogActionMapper">
 
     <select id="getPage" resultType="org.nodes.wms.dao.common.log.dto.output.LogTaskResponse">
-         select
-            la.user_account,
-            la.user_real_name,
-            la.log,
-            la.create_time,
-            ct.crontab_task_name
-         from log_action la,crontab_task ct
+        select
+        la.user_account,
+        la.user_real_name,
+        la.log,
+        la.create_time,
+        ct.crontab_task_name
+        from log_action la,crontab_task ct
         <where>
             <if test="query.billId!=null and query.billDate != ''">
                 AND la.bill_id LIKE concat('%',#{query.billId},'%')
@@ -18,13 +18,13 @@
                 AND la.user_account LIKE concat('%',#{query.userAccount},'%')
             </if>
             <if test="query.createTimeBegin!=null">
-                AND la.create_time  &gt;= #{query.createTimeBegin}
+                AND la.create_time &gt;= #{query.createTimeBegin}
             </if>
             <if test="query.createTimeEnd!=null">
-                AND la.create_time  &lt;= #{query.createTimeEnd}
+                AND la.create_time &lt;= #{query.createTimeEnd}
             </if>
             <if test="query.crontabTaskName!=null">
-                AND ct.crontab_task_name  LIKE concat('%',#{query.crontabTaskName},'%')
+                AND ct.crontab_task_name LIKE concat('%',#{query.crontabTaskName},'%')
             </if>
             And la.bill_id = ct.id
             AND type = 106
@@ -33,12 +33,13 @@
     </select>
 
     <select id="getLists" resultType="org.nodes.wms.dao.common.log.dto.output.LogActionPageResponse">
-        select log.id,log.user_account,log.user_real_name,log.type,log.bill_id,log.bill_no,log.log,log.status,log.tenant_id,log.create_dept,log.create_time,log.update_time,
-               user1.real_name createUser,
-               user2.real_name updateUser
+        select
+        log.id,log.user_account,log.user_real_name,log.type,log.bill_id,log.bill_no,log.log,log.status,log.tenant_id,log.create_dept,log.create_time,log.update_time,
+        user1.real_name createUser,
+        user2.real_name updateUser
         from log_action log
-                 LEFT JOIN blade_user user1 ON user1.id = log.create_user
-                 LEFT JOIN blade_user user2 ON user2.id = log.update_user
+        LEFT JOIN blade_user user1 ON user1.id = log.create_user
+        LEFT JOIN blade_user user2 ON user2.id = log.update_user
         <where>
             <if test="query.userAccount!=null and query.userAccount != ''">
                 AND log.user_account LIKE concat('%',#{query.userAccount},'%')
@@ -74,7 +75,8 @@
     </select>
 
     <select id="getActionLists" resultType="org.nodes.wms.dao.common.log.dto.output.LogActionExcelResponse">
-        select log.id,log.user_account,log.user_real_name,log.type,log.bill_id,log.bill_no,log.log,log.status,log.tenant_id,log.create_dept,log.create_time,log.update_time,
+        select
+        log.id,log.user_account,log.user_real_name,log.type,log.bill_id,log.bill_no,log.log,log.status,log.tenant_id,log.create_dept,log.create_time,log.update_time,
         user1.real_name createUser,
         user2.real_name updateUser
         from log_action log
@@ -109,33 +111,16 @@
                 AND log.update_time between #{query.updateTimeBegin} and #{query.updateTimeEnd}
             </if>
         </where>
-            order by log.create_time desc
+        order by log.create_time desc
     </select>
 
     <select id="findLogByReceiveId" resultType="org.nodes.wms.dao.common.log.dto.output.LogReceiveResponse">
-    select
-     user_account,
-    user_real_name,
-    type,
-    log,
-    create_time
-    from log_action
-   where bill_id = #{receiveId}
-    </select>
-
-
-    <select id="pageLotBySoBillId"
-            resultType="org.nodes.wms.dao.outstock.so.dto.output.LogForSoDetailResponse">
-        select
-            user_account,
-            user_real_name,
-            type,
-            log,
-            create_time
+        select user_account,
+               user_real_name,
+               type,
+               log,
+               create_time
         from log_action
-        where bill_id = #{soBillId}
-        <if test="page.orders == null or page.orders.size == 0">
-            ORDER BY create_time DESC
-        </if>
+        where bill_id = #{receiveId}
     </select>
 </mapper>

@@ -70,6 +70,9 @@
 		},
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
+			if(tool.isNotEmpty(this.params.no)){
+				this.getReceiveList();
+			}
 		},
 		onBackPress(event) {
 			// #ifdef APP-PLUS

@@ -7,6 +7,7 @@ import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.systemParam.SystemParamBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.stock.entities.Stock;
@@ -32,6 +33,7 @@ public class TianYiPutwayStrategy {
 	private final StockBiz stockBiz;
 	private final SystemParamBiz systemParamBiz;
 	private final DictionaryBiz dictionaryBiz;
+	private final StockQueryBiz stockQueryBiz;
 
 	public Location run(BigDecimal putwayQty, Stock sourceStock) {
 		// 获取要上架库存的箱型
@@ -67,7 +69,7 @@ public class TianYiPutwayStrategy {
 			throw new ServiceException("虚拟库位不存在载重计算");
 		}
 		// 获取该列的所有库存
-		List<Stock> stockList = stockBiz.findStockByLocation(locationList);
+		List<Stock> stockList = stockQueryBiz.findStockByLocation(locationList);
 		// 根据箱型计算总重, 需要注意同一个库位上可能存在多个stock，算重量时只需根据库位计算
 		List<Stock> stocks = stockList
 			.stream()

@@ -4,7 +4,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.springblade.core.test.BladeBootTest;
 import org.springblade.core.test.BladeSpringRunner;
@@ -22,7 +22,7 @@ import java.util.List;
 public class StockTest {
 
 	@Autowired
-	private StockBiz stockBiz;
+	private StockQueryBiz stockQueryBiz;
 
 	@Test
 	public void findSerialBySerialNoTest(){
@@ -30,6 +30,6 @@ public class StockTest {
 		serialList.add("100");
 		serialList.add("200");
 		serialList.add("4000");
-		List<Serial> serialListResult = stockBiz.findSerialBySerialNo(serialList);
+		List<Serial> serialListResult = stockQueryBiz.findSerialBySerialNo(serialList);
 	}
 }

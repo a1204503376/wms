@@ -133,4 +133,9 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 		return super.baseMapper.selectReceiveByPcResponse(receiveId);
 	}
 
+    @Override
+    public Page<ReceiveHeaderResponse> getReceiveHeaderForDetailByAsnBillId(IPage<?> page, Long asnBillId) {
+        return super.baseMapper.selectReceiveHeaderForDetailByAsnBillId(page, asnBillId);
+    }
+
 }

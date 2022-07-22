@@ -106,4 +106,38 @@ export const closeSoBill = (soBillId) => {
         }
     })
 }
+export const getSoHeaderByPickPc = (data) => {
+    return request({
+        url: '/api/wms/outstock/soBill/getSoHeaderByPickPc',
+        method: 'post',
+        data: data
+    })
+}
 
+export const getSoBillDataByDistribution = (soBillId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/getSoBillDataByDistribution',
+        method: 'post',
+        data: {
+            soBillId: soBillId
+        }
+    })
+}
+
+
+export const getLineNoAndSkuSelectList = (soBillId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/getLineNoAndSkuSelectList',
+        method: 'get',
+        params: {
+            soBillId
+        }
+    })
+}
+export const getSoDetailAndStock = (data) => {
+    return request({
+        url: '/api/wms/outstock/soBill/getSoDetailAndStock',
+        method: 'post',
+        data: data
+    })
+}

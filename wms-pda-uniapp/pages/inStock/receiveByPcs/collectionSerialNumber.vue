@@ -203,7 +203,7 @@
 				});
 			},
 			clearEmitKeyDown() {
-				this.emitKeyDown = null;
+				this.emitKeyDown = function(){};
 			},
 			emitKeyDown(e) {
 				if (e.key == 'Enter') {
@@ -218,5 +218,4 @@
 </script>
 
 <style lang="scss">
-	@import 'collectionSerialNumber.scss';
 </style>

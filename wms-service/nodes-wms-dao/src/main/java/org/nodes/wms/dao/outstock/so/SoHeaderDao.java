@@ -3,11 +3,10 @@ package org.nodes.wms.dao.outstock.so;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderEditResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderExcelResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderForDetailResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.picking.dto.input.FindAllPickingRequest;
+import org.nodes.wms.dao.picking.dto.output.FindAllPickingResponse;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public interface SoHeaderDao {
 	/**
 	 * 分页
 	 *
-	 * @param page: 分页参数
+	 * @param page:              分页参数
 	 * @param soHeaderPageQuery: 分页查询请求对象
 	 * @return Page<SoHeaderPageResponse>
 	 */
@@ -31,7 +30,7 @@ public interface SoHeaderDao {
 	 * @param soHeader: 发货单头表对象
 	 * @return true: 新增或修改失败 false: 新增或修改失败
 	 */
-    boolean saveOrUpdateSoHeader(SoHeader soHeader);
+	boolean saveOrUpdateSoHeader(SoHeader soHeader);
 
 	/**
 	 * 获取编辑时发货单头表信息
@@ -71,7 +70,7 @@ public interface SoHeaderDao {
 	 * @param soHeader: 发货单头表对象
 	 * @return true: 修改成功，false: 修改失败
 	 */
-    boolean updateSoHeaderById(SoHeader soHeader);
+	boolean updateSoHeaderById(SoHeader soHeader);
 
 	/**
 	 * 导出Excel
@@ -80,4 +79,21 @@ public interface SoHeaderDao {
 	 * @return List<SoHeaderExcelResponse> 发货单数据
 	 */
 	List<SoHeaderExcelResponse> listByQuery(SoHeaderPageQuery soHeaderPageQuery);
+
+	/**
+	 * pc拣货获取发货单头表信息
+	 *
+	 * @param soBillId 发货单id
+	 * @return 发货单信息
+	 */
+	PickByPcSoHeaderResponse getSoHeaderResponseById(Long soBillId);
+
+	/**
+	 * 根据发货单编码/上游编码/任务号
+	 *
+	 * @param page    分页对象
+	 * @param request 请求条件 包含no
+	 * @return 拣货分页
+	 */
+	IPage<FindAllPickingResponse> getAllPickingPage(IPage<?> page, FindAllPickingRequest request);
 }

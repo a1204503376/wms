@@ -31,6 +31,9 @@
 			<view class="btn-cancle" @click="esc()">
 				返回
 			</view>
+			<view class="btn-submit" @click="submit()">
+				确定
+			</view>
 		</view>
 	</view>
 </template>
@@ -56,8 +59,8 @@
 			}
 		},
 		onLoad: function(option) {
-			var parse = JSON.parse(option.param)
-			this.params.receiveId = parse.receiveId
+			// var parse = JSON.parse(option.param)
+			// this.params.receiveId = parse.receiveId
 			this.getReceiveDetailList();
 		},
 		onUnload() {
@@ -81,6 +84,11 @@
 			// #endif
 		},
 		methods: {
+			submit() {
+				//TODO 等页面测试通过之后删除
+				this.clearEmitKeyDown();
+				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingByPcs');
+			},
 			analysisCode(code) {
 				var barcode = barcodeFunc.parseBarcode(code);
 				var barcodeType = barcodeFunc.BarcodeType;
@@ -119,14 +127,14 @@
 			clickItem(row) {
 				row.receiveId = this.params.receiveId;
 				this.clearEmitKeyDown();
-				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/ReceiveByPiece', row);
+				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingByPcs', row);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);
 				this.getReceiveDetailList();
 			},
 			clearEmitKeyDown() {
-				this.emitKeyDown = null;
+				this.emitKeyDown = function(){};
 			},
 			emitKeyDown(e) {
 				if (e.key == 'Enter') {

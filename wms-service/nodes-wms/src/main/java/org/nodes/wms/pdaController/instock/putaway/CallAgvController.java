@@ -3,7 +3,7 @@ package org.nodes.wms.pdaController.instock.putaway;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.putway.PutwayBiz;
-import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.putway.dto.input.CallAgvRequest;
 import org.nodes.wms.dao.putway.dto.input.LpnTypeRequest;
 import org.nodes.wms.dao.putway.dto.input.PutawayByBoxRequest;
@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping(WmsApiPath.WMS_PDA_API + "/putaway")
 public class CallAgvController {
 	private final PutwayBiz putwayBiz;
-	private final StockBiz stockBiz;
+	private final StockQueryBiz stockQueryBiz;
 
 
 	/**
@@ -36,7 +36,7 @@ public class CallAgvController {
 	 */
 	@PostMapping("/findStockByBoxCode")
 	public R<List<CallAgvResponse>> findStockByBoxCode(@RequestBody PutawayByBoxRequest request) {
-		return R.data(stockBiz.findLpnStockOnStageLeftByCallAgv(request.getWhId(), request.getBoxCode()));
+		return R.data(stockQueryBiz.findLpnStockOnStageLeftByCallAgv(request.getWhId(), request.getBoxCode()));
 	}
 
 	/**
