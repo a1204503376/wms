@@ -29,13 +29,13 @@ public interface ReceiveHeaderMapper extends BaseMapper<ReceiveHeader> {
 	 *
 	 * @param page:                      分页参数
 	 * @param notReceiveDetailPageQuery: 未收货明细查询条件
-	 * @param detailStatus:              接收状态：10未收货
+	 * @param billStateList:             接收状态
 	 * @return 未收货明细数据
 	 */
 	IPage<NotReceiveDetailResponse> pageNotReceiveDetail(
 		IPage<?> page,
 		@Param("param") NotReceiveDetailPageQuery notReceiveDetailPageQuery,
-		@Param("detailStatus") Integer detailStatus);
+		@Param("detailStateList") List<Integer> billStateList);
 
 	/**
 	 * 根据条件获取未收货明细数据

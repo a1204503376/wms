@@ -118,8 +118,8 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 
 	@Override
 	public IPage<NotReceiveDetailResponse> pageNotReceiveDetail(
-		IPage<?> page, NotReceiveDetailPageQuery notReceiveDetailPageQuery, Integer billState) {
-		return super.baseMapper.pageNotReceiveDetail(page, notReceiveDetailPageQuery, billState);
+		IPage<?> page, NotReceiveDetailPageQuery notReceiveDetailPageQuery, List<Integer> billStateList) {
+		return super.baseMapper.pageNotReceiveDetail(page, notReceiveDetailPageQuery, billStateList);
 	}
 
 	@Override
