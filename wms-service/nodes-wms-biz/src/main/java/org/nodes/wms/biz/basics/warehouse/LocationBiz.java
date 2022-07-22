@@ -2,7 +2,6 @@ package org.nodes.wms.biz.basics.warehouse;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.location.dto.input.LocationAddOrEditRequest;
-import org.nodes.wms.dao.basics.location.dto.input.LocationExcelRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
 import org.nodes.wms.dao.basics.location.dto.input.LocationSelectQuery;
 import org.nodes.wms.dao.basics.location.dto.output.LocationDetailResponse;
@@ -13,6 +12,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.putway.dto.input.LpnTypeRequest;
 import org.springblade.core.mp.support.Query;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -29,10 +29,10 @@ public interface LocationBiz {
 	/**
 	 * 导入
 	 *
-	 * @param locationDataList: 导入数据集合
+	 * @param file: excel二进制文件
 	 * @return true: 导入成功，false：导入失败
 	 */
-	boolean importData(List<LocationExcelRequest> locationDataList);
+	boolean importData(MultipartFile file);
 
 	/**
 	 * 分页

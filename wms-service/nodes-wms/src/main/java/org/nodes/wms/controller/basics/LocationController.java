@@ -14,7 +14,6 @@ import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
-import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springframework.validation.annotation.Validated;
@@ -36,6 +35,9 @@ public class LocationController {
 
 	private final LocationBiz locationBiz;
 
+	/**
+	 * 库位：分页
+	 */
 	@PostMapping("/page")
 	public R<Page<LocationPageResponse>> page(Query query, @RequestBody LocationPageQuery locationPageQuery){
 		Page<LocationPageResponse> pageResponse = locationBiz.page(query, locationPageQuery);
@@ -43,7 +45,7 @@ public class LocationController {
 	}
 
 	/**
-	 * 详情
+	 * 库位：详情
 	 */
 	@GetMapping("/detail")
 	public R<LocationDetailResponse> detail(@RequestParam Long locId){
@@ -52,18 +54,7 @@ public class LocationController {
 	}
 
 	/**
-	 * 列表
-	 */
-//	@ApiLog("库位-列表")
-//	@GetMapping("/list")
-//	@ApiOperation(value = "列表", notes = "传入location")
-//	public R<List<LocationVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
-//		List<Location> list = locationService.list(Condition.getQueryWrapper(params, Location.class));
-//		return R.data(LocationWrapper.build().listVO(list));
-//	}
-
-	/**
-	 * 新增
+	 * 库位：新增
 	 */
 	@ApiLog("库位-新增")
 	@PostMapping("/add")
@@ -73,7 +64,7 @@ public class LocationController {
 	}
 
 	/**
-	 * 删除
+	 * 库位：删除
 	 */
 	@ApiLog("库位-删除")
 	@PostMapping("/remove")
@@ -82,11 +73,17 @@ public class LocationController {
 		return remove ? R.success("删除成功") : R.fail("删除失败");
 	}
 
+	/**
+	 * 库位编辑：根据库位id获取库位信息
+	 */
 	@GetMapping("/detailByEdit")
 	public R<LocationEditResponse> detailByEdit(@RequestParam Long locId){
 		return R.data(locationBiz.findLocationById(locId));
 	}
 
+	/**
+	 * 库位：编辑
+	 */
 	@ApiLog("库位-编辑")
 	@PostMapping("/edit")
 	public R<String> edit(@Validated({ Update.class }) @RequestBody LocationAddOrEditRequest locationAddOrEditRequest){
@@ -95,46 +92,7 @@ public class LocationController {
 	}
 
 	/**
-	 * 锁定库位
-	 *
-	 * @param
-	 * @return
-	 */
-//	@ApiLog("库位-锁定")
-//	@PostMapping("/lock")
-//	@ApiOperation(value = "锁定库位", notes = "传入库位ids")
-//	public R lock(String locIds) {
-//		CacheUtil.clear(LOCATION_CACHE);
-//		return R.status(locationService.lockById(locIds, StringPool.N.toUpperCase()));
-//	}
-
-	/**
-	 * 解锁库位
-	 *
-	 * @param
-	 * @return
-	 */
-//	@ApiLog("库位-解锁")
-//	@PostMapping("/unlock")
-//	@ApiOperation(value = "解锁库位", notes = "传入库位ids")
-//	public R unlock(String locIds) {
-//		CacheUtil.clear(LOCATION_CACHE);
-//		return R.status(locationService.lockById(locIds, null));
-//	}
-
-	/**
-	 * 打印
-	 * @return
-	 */
-//	@ApiLog("库位-打印")
-//	@PostMapping("/print")
-//	@ApiOperation(value = "打印库位标签", notes = "传入库位ids")
-//	public R print(@ApiParam(value = "主键集合", required = true) @RequestParam String ids){
-//		return R.data(locationService.print(Func.toLongList(ids)));
-//	}
-
-	/**
-	 * 导出
+	 * 库位：服务端导出
 	 */
 	@PostMapping("/export")
 	public void export(@RequestBody LocationPageQuery locationPageQuery,HttpServletResponse response) {
@@ -142,7 +100,7 @@ public class LocationController {
 	}
 
 	/**
-	 * 导出模板
+	 * 库位：模板导出
 	 */
 	@GetMapping("export-template")
 	public void exportTemplate(HttpServletResponse response) {
@@ -151,21 +109,18 @@ public class LocationController {
 	}
 
 	/**
-	 * 导入数据
+	 * 库位：导入
 	 */
 	@PostMapping("import-data")
 	public R<String> importData(MultipartFile file) {
-		List<LocationExcelRequest> locationDataList = ExcelUtil.read(file, LocationExcelRequest.class);
-		boolean tag = locationBiz.importData(locationDataList);
-		return tag ? R.success("导入成功") : R.fail("导入失败");
+		return locationBiz.importData(file) ? R.success("导入成功") : R.fail("导入失败");
 	}
 
 	/**
-	 * 获取客户下拉列表最近10条数据
+	 * 库位组件：根据库位编码或名称获取最近更新的10个库位信息
 	 */
 	@PostMapping("getLocationSelectResponseTop10List")
 	public R<List<LocationSelectResponse>> getLocationSelectResponseTop10List(@RequestBody LocationSelectQuery locationSelectQuery) {
 		return R.data(locationBiz.getLocationSelectResponseTop10List(locationSelectQuery));
 	}
-
 }

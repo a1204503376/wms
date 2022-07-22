@@ -10,7 +10,7 @@ import org.junit.runners.MethodSorters;
 import org.nodes.wms.biz.instock.asn.impl.AsnBizImpl;
 import org.nodes.wms.dao.instock.asn.dto.input.AddOrEditAsnBillRequest;
 import org.nodes.wms.dao.instock.asn.dto.input.AsnDetailRequest;
-import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
+import org.nodes.wms.dao.instock.asn.dto.input.AsnBillPageQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.AsnHeaderForDetailResponse;
 import org.nodes.wms.dao.instock.asn.dto.output.PageResponse;
 import org.springblade.core.mp.support.Condition;
@@ -42,7 +42,7 @@ public class AsnTest {
 	public void selectTest() throws ParseException {
 		IPage<?> page = new Page<>(1, 10);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		PageParamsQuery pageParamsQuery = new PageParamsQuery();
+		AsnBillPageQuery asnBillPageQuery = new AsnBillPageQuery();
 //		pageParamsQuery.setAsnBillNo("A001");
 //		pageParamsQuery.setAsnBillState(new String[]{"10","20","3"});
 //		pageParamsQuery.setSkuCode("wp001");
@@ -51,11 +51,11 @@ public class AsnTest {
 //		pageParamsQuery.setExternalOrderNo("2222223");
 //		pageParamsQuery.setExternalCreateUser("管理员4");
 //		pageParamsQuery.setWhIdList("库房编码002");
-		pageParamsQuery.setSupplier("供应商");
+		asnBillPageQuery.setSupplier("供应商");
 
 		Query query = new Query();
 		query.setDescs("asn_bill_id");
-		IPage<PageResponse> asnPage = asnBiz.getPageAsnBill(Condition.getPage(query), pageParamsQuery);
+		IPage<PageResponse> asnPage = asnBiz.getPageAsnBill(Condition.getPage(query), asnBillPageQuery);
 
 		System.out.println(asnPage.getRecords());
 		Assertions.assertEquals(5, asnPage.getTotal());

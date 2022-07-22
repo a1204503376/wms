@@ -75,11 +75,11 @@ public interface ReceiveHeaderDao {
 	 *
 	 * @param page:                      分页参数
 	 * @param notReceiveDetailPageQuery: 分页查询条件
-	 * @param detailStatus:              接收状态：10未收货
+	 * @param billStateList:             接收状态
 	 * @return 未收货明细数据
 	 */
 	IPage<NotReceiveDetailResponse> pageNotReceiveDetail(
-		IPage<?> page, NotReceiveDetailPageQuery notReceiveDetailPageQuery, Integer detailStatus);
+		IPage<?> page, NotReceiveDetailPageQuery notReceiveDetailPageQuery, List<Integer> billStateList);
 
 	/**
 	 * 根据查询条件获取未收货明细数据
@@ -101,9 +101,9 @@ public interface ReceiveHeaderDao {
 	/**
 	 * ASN单明细查看-根据ASN单id分页查询收货单头表信息
 	 *
-	 * @param page: 分页参数
+	 * @param page:      分页参数
 	 * @param asnBillId: ASN单id
 	 * @return Page<ReceiveHeaderResponse> 收货单头表分页信息
 	 */
-    Page<ReceiveHeaderResponse> getReceiveHeaderForDetailByAsnBillId(IPage<?> page, Long asnBillId);
+	Page<ReceiveHeaderResponse> getReceiveHeaderForDetailByAsnBillId(IPage<?> page, Long asnBillId);
 }

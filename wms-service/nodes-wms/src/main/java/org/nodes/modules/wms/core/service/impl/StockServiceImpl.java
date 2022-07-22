@@ -207,8 +207,8 @@ public class StockServiceImpl implements StockService {
 				soHeader.setFinishDate(now);
 				soHeader.setTransportCode(SoBillTransportCodeEnum.SelfTaking.getIndex());//发货方式
 				soHeader.setOutstockType(OutstockTypeEnum.Normal.getIndex());
-				soHeader.setCCode(warehouse.getWhCode());
-				soHeader.setCName(warehouse.getWhName());
+//				soHeader.setCCode(warehouse.getWhCode());
+//				soHeader.setCName(warehouse.getWhName());
 				soHeader.setTransportDate(now);
 				soHeader.setCreateType(CreateTypeEnum.INNER.getIndex());
 				soHeader.setBillCreator(AuthUtil.getNickName());

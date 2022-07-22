@@ -73,7 +73,6 @@ public class MenuController extends BladeController {
 	/**
 	 * 详情
 	 */
-	@ApiLog("菜单-获取详情")
 	@GetMapping("/detail")
 	@ApiOperation(value = "详情", notes = "传入menu")
 	public R<MenuVO> detail(Menu menu) {
@@ -83,7 +82,6 @@ public class MenuController extends BladeController {
 	/**
 	 * 列表
 	 */
-	@ApiLog("菜单-获取列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "列表", notes = "传入menu")
 	public R<List<MenuVO>> list(@ApiIgnore @RequestParam Map<String, Object> params) {
@@ -119,7 +117,6 @@ public class MenuController extends BladeController {
 		return R.data(menuVOList);
 	}
 
-	@ApiLog("菜单-分页")
 	@GetMapping("/page")
 	public R<IPage<MenuVO>> page(@ApiIgnore @RequestParam Map<String, Object> params, Query query) {
 		LambdaQueryWrapper<Menu> queryWrapper = Condition.getQueryWrapper(params, Menu.class)
@@ -153,7 +150,6 @@ public class MenuController extends BladeController {
 	/**
 	 * 列表
 	 */
-	@ApiLog("菜单-获取列表")
 	@GetMapping("/menu-list")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "code", value = "菜单编号", paramType = "query", dataType = "string"),
@@ -207,7 +203,6 @@ public class MenuController extends BladeController {
 	/**
 	 * 前端菜单数据
 	 */
-	@ApiLog("菜单-前端菜单数据")
 	@GetMapping("/routes")
 	@ApiOperation(value = "前端菜单数据", notes = "前端菜单数据")
 	public R<List<MenuVO>> routes(BladeUser user, Long topMenuId, Integer systemType) {
@@ -218,7 +213,6 @@ public class MenuController extends BladeController {
 	/**
 	 * 前端菜单数据
 	 */
-	@ApiLog("菜单-前端菜单数据")
 	@GetMapping("/routes-ext")
 	@ApiOperation(value = "前端菜单数据", notes = "前端菜单数据")
 	public R<List<MenuVO>> routesExt(BladeUser user, Long topMenuId, Integer systemType) {
@@ -229,7 +223,6 @@ public class MenuController extends BladeController {
 	/**
 	 * 前端按钮数据
 	 */
-	@ApiLog("菜单-前端按钮数据")
 	@GetMapping("/buttons")
 	@ApiOperation(value = "前端按钮数据", notes = "前端按钮数据")
 	public R<List<MenuVO>> buttons(@NotNull BladeUser user) {
@@ -240,7 +233,6 @@ public class MenuController extends BladeController {
 	/**
 	 * 获取菜单树形结构
 	 */
-	@ApiLog("菜单-获取菜单树形结构")
 	@GetMapping("/tree")
 	@ApiOperation(value = "树形结构", notes = "树形结构")
 	public R<List<MenuVO>> tree() {
@@ -251,7 +243,6 @@ public class MenuController extends BladeController {
 	/**
 	 * 获取权限分配树形结构
 	 */
-	@ApiLog("菜单-权限分配树形结构")
 	@GetMapping("/grant-tree")
 	@ApiOperation(value = "权限分配树形结构", notes = "权限分配树形结构")
 	public R<GrantTreeVO> grantTree(BladeUser user) {
@@ -265,7 +256,6 @@ public class MenuController extends BladeController {
 	/**
 	 * 获取权限分配树形结构
 	 */
-	@ApiLog("菜单-角色所分配的树")
 	@GetMapping("/role-tree-keys")
 	@ApiOperation(value = "角色所分配的树", notes = "角色所分配的树")
 	public R<CheckedTreeVO> roleTreeKeys(String roleIds) {
@@ -279,7 +269,6 @@ public class MenuController extends BladeController {
 	/**
 	 * 获取顶部菜单树形结构
 	 */
-	@ApiLog("菜单-顶部菜单树形结构")
 	@GetMapping("/grant-top-tree")
 	@ApiOperation(value = "顶部菜单树形结构", notes = "顶部菜单树形结构")
 	public R<GrantTreeVO> grantTopTree(BladeUser user) {
@@ -291,7 +280,6 @@ public class MenuController extends BladeController {
 	/**
 	 * 获取顶部菜单树形结构
 	 */
-	@ApiLog("菜单-顶部菜单所分配的树")
 	@GetMapping("/top-tree-keys")
 	@ApiOperation(value = "顶部菜单所分配的树", notes = "顶部菜单所分配的树")
 	public R<CheckedTreeVO> topTreeKeys(String topMenuIds) {
@@ -303,7 +291,6 @@ public class MenuController extends BladeController {
 	/**
 	 * 顶部菜单数据
 	 */
-	@ApiLog("菜单-顶部菜单数据")
 	@GetMapping("/top-menu")
 	@ApiOperation(value = "顶部菜单数据", notes = "顶部菜单数据")
 	public R<List<TopMenu>> topMenu(BladeUser user) {
@@ -322,7 +309,6 @@ public class MenuController extends BladeController {
 	/**
 	 * 获取配置的角色权限
 	 */
-	@ApiLog("菜单-菜单的角色权限")
 	@GetMapping("auth-routes")
 	@ApiOperation(value = "菜单的角色权限")
 	public R<List<Kv>> authRoutes(BladeUser user) {

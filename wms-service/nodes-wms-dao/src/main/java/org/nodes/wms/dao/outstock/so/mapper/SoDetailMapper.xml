@@ -77,7 +77,7 @@
           and surplus_qty > 0
     </select>
     <select id="getPickByPcDetail"
-            resultType="org.nodes.wms.dao.outstock.so.dto.output.SoDetailAndStockResponse">
+            resultType="org.nodes.wms.dao.outstock.so.dto.output.PickByPcSoDetailResponse">
         select so_detail_id,
                so_line_no,
                sku_code,

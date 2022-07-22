@@ -7,7 +7,7 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickExcelResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.output.LineNoAndSkuSelectResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoDetailAndStockResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.PickByPcSoDetailResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailEditResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
@@ -91,5 +91,5 @@ public interface SoDetailDao {
 	 * @param soDetailAndStockRequest 包含行号和发货单id
 	 * @return 发货单明细数据
 	 */
-	SoDetailAndStockResponse getPickByPcDetail(SoDetailAndStockRequest soDetailAndStockRequest);
+	PickByPcSoDetailResponse getPickByPcDetail(SoDetailAndStockRequest soDetailAndStockRequest);
 }

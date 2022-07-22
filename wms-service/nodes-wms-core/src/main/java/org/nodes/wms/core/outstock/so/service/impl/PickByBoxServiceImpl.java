@@ -151,7 +151,7 @@ public class PickByBoxServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 			if (Func.isNotEmpty(wellenSoHeaderVos)) {
 				pickTaskVO.setOrderNo(wellenSoHeaderVos.get(0).getSoHeader().getOrderNo());
 				pickTaskVO.setSobillNo(wellenSoHeaderVos.get(0).getSoHeader().getSoBillNo());
-				pickTaskVO.setCName(wellenSoHeaderVos.get(0).getSoHeader().getCName());
+				pickTaskVO.setCName(wellenSoHeaderVos.get(0).getSoHeader().getCustomerName());
 				pickTaskVO.setTransportDate(wellenSoHeaderVos.get(0).getSoHeader().getTransportDate());
 			}
 		}
@@ -358,7 +358,7 @@ public class PickByBoxServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 		if (Func.isNotEmpty(wellenSoHeaderVos)) {
 			pickTaskVO.setOrderNo(wellenSoHeaderVos.get(0).getSoHeader().getOrderNo());
 			pickTaskVO.setSobillNo(wellenSoHeaderVos.get(0).getSoHeader().getSoBillNo());
-			pickTaskVO.setCName(wellenSoHeaderVos.get(0).getSoHeader().getCName());
+			pickTaskVO.setCName(wellenSoHeaderVos.get(0).getSoHeader().getCustomerName());
 			pickTaskVO.setTransportDate(wellenSoHeaderVos.get(0).getSoHeader().getTransportDate());
 		}
 		// 获取当前波次下所有拣货计划
