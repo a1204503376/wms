@@ -1,11 +1,11 @@
 <template>
 	<view>
 		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
-			:bgColor="navigationBarBackgroundColor" title="按件拣货" titleStyle="color:#ffffff;font-size:21px"
+			:bgColor="navigationBarBackgroundColor" title="标准移动" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u--form>
-			<u-form-item label="序列号" :required="true" class="left-text-one-line" labelWidth="100">
+			<u-form-item label="序列号" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.serialNumber"></u--input>
 			</u-form-item>
 		</u--form>
@@ -71,10 +71,10 @@
 			}
 		},
 		onLoad: function(option) {
-			// var parse = JSON.parse(option.param)
-			// this.receiveDetailId = parse.receiveDetailId;
-			// this.receiveId = parse.receiveId;
-			// this.params = parse;
+			var parse = JSON.parse(option.param)
+			this.receiveDetailId = parse.receiveDetailId;
+			this.receiveId = parse.receiveId;
+			this.params = parse;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -123,25 +123,26 @@
 							_this.params.serialNumberList = serialList;
 							_this.params.whCode = uni.getStorageSync('warehouse').whCode;
 							_this.params.whId = uni.getStorageSync('warehouse').whId;
-							receive.submitReceiptByPcs(_this.params).then(data => {
-								if (data.data.allReceivieIsAccomplish && data.data
-									.currentReceivieIsAccomplish) {
-									//当前收货单收货收货完毕
-									_this.clearEmitKeyDown();
-									_this.$u.func.navigateBackTo(3);
-									return;
-								} else if (data.data.currentReceivieIsAccomplish) {
-									//当前收货单详情收货收货完毕
-									_this.clearEmitKeyDown();
-									_this.$u.func.navigateBackTo(2);
-									return;
-								} else {
-									//当前收货单详情收货部分收货,返回收货单收货页面
-									_this.clearEmitKeyDown();
-									_this.esc();
-								}
+							console.log('标准移动序列号采集成功')
+							// receive.submitReceiptByPcs(_this.params).then(data => {
+							// 	if (data.data.allReceivieIsAccomplish && data.data
+							// 		.currentReceivieIsAccomplish) {
+							// 		//当前收货单收货收货完毕
+							// 		_this.clearEmitKeyDown();
+							// 		_this.$u.func.navigateBackTo(3);
+							// 		return;
+							// 	} else if (data.data.currentReceivieIsAccomplish) {
+							// 		//当前收货单详情收货收货完毕
+							// 		_this.clearEmitKeyDown();
+							// 		_this.$u.func.navigateBackTo(2);
+							// 		return;
+							// 	} else {
+							// 		//当前收货单详情收货部分收货,返回收货单收货页面
+							// 		_this.clearEmitKeyDown();
+							// 		_this.esc();
+							// 	}
 
-							});
+							// });
 						} else {
 							_this.$u.func.showToast({
 								title: '序列号已存在'

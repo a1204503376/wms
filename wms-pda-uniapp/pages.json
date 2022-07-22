@@ -307,6 +307,34 @@
 				"navigationStyle": "custom"
 			}
 
+		}, {
+			"path": "pages/stock/stockManage/standardMove/standardMove",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/stock/stockManage/standardMove/moveByBoxCode",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/stock/stockManage/standardMove/standardMoveSubmit",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/stock/stockManage/standardMove/standardMoveSerialNumber",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
 		}
 	],
 	"globalStyle": {
