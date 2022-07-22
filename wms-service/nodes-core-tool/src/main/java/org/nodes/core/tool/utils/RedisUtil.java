@@ -21,8 +21,8 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 public final class RedisUtil {
 
-	private RedisTemplate<String, Object> redisTemplate;
-	private StringRedisTemplate stringRedisTemplate;
+	private final RedisTemplate<String, Object> redisTemplate;
+	private final StringRedisTemplate stringRedisTemplate;
 
 	/**
 	 * 指定缓存失效时间

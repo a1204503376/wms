@@ -4,7 +4,7 @@ package org.nodes.wms.biz.common.utils;
 import lombok.AllArgsConstructor;
 import org.nodes.core.base.entity.Param;
 import org.nodes.core.tool.config.NoBillFinals;
-import org.nodes.core.tool.utils.NoGeneraRulesUtil;
+import org.nodes.core.tool.utils.CodeGenerator;
 import org.nodes.wms.biz.basics.systemParam.SystemParamBiz;
 import org.nodes.wms.biz.common.config.WMSAppConfig;
 import org.springblade.core.tool.utils.Func;
@@ -20,9 +20,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @AllArgsConstructor
-public class NoGeneratorUtil {
+public class OrderNoGeneratorUtil {
 
-	private final NoGeneraRulesUtil noGeneraRulesUtil;
+	private final CodeGenerator codeGenerator;
 	private final WMSAppConfig wmsAppConfig;
 	private final SystemParamBiz systemParamBiz;
 
@@ -96,8 +96,8 @@ public class NoGeneratorUtil {
 	 */
 	private String createNo(String prefix, String paramKeyOfRule) {
 		Param param = systemParamBiz.selectByKey(paramKeyOfRule);
-		String role = Func.isNull(param) ? null : param.getParamValue();
-		return noGeneraRulesUtil.generateCode(wmsAppConfig.getProjectName(), prefix, role);
+		String rule = Func.isNull(param) ? null : param.getParamValue();
+		return codeGenerator.generateCode(wmsAppConfig.getProjectName(), "ORDER", prefix, rule);
 	}
 
 

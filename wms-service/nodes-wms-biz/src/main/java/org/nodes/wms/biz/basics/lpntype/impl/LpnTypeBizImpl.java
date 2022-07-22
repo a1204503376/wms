@@ -2,7 +2,10 @@ package org.nodes.wms.biz.basics.lpntype.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.core.tool.utils.CodeGenerator;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
+import org.nodes.wms.biz.common.config.WMSAppConfig;
 import org.nodes.wms.dao.basics.lpntype.LpnTypeDao;
 import org.nodes.wms.dao.basics.lpntype.dto.input.*;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeByIdResponse;
@@ -31,6 +34,8 @@ import java.util.List;
 public class LpnTypeBizImpl implements LpnTypeBiz {
 	private final LpnTypeDao lpnTypeDao;
 	private final LpnTypeFactory lpnTypeFactory;
+	private final CodeGenerator codeGenerator;
+	private final WMSAppConfig wmsAppConfig;
 
 	/**
 	 * @param query            分页参数
@@ -136,4 +141,12 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 	public LpnType findLpnTypeByBoxCode(String boxCode) {
 		return lpnTypeDao.getLpnTypeByCode(boxCode);
 	}
+
+    @Override
+    public String generateLpnCode(String lpnTypeCode) {
+		LpnType lpnType = lpnTypeDao.getLpnTypeByCode(lpnTypeCode);
+		AssertUtil.notEmpty(lpnType.getLpnNoRule(), "容器编码生成失败，没有配置编码生成规则");
+		return codeGenerator.generateCode(wmsAppConfig.getProjectName(),
+			"LPN", lpnTypeCode, lpnType.getLpnNoRule());
+    }
 }

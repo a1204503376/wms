@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang.NullArgumentException;
+import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
@@ -23,6 +25,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * 库存Dao接口实现类
@@ -249,6 +252,20 @@ public class StockDaoImpl
 	@Override
 	public List<Stock> getStockListBySkuCode(String skuCode) {
 		return super.list(new LambdaQueryWrapper<Stock>().eq(Stock::getSkuCode, skuCode));
+	}
+
+	@Override
+	public <R> List<Stock> findEnableStock(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
+									   List<String> zoneTypeList, SkuLotBaseEntity skuLot, Function<?, R>[] sorts) {
+		AssertUtil.notNull(whId, "查询可用库存时库房id不能位空");
+		AssertUtil.notNull(skuId, "查询可用库存时物品id不能位空");
+
+		LambdaQueryWrapper<Stock> stockQuery = getStockQuery();
+		stockQuery.eq(Stock::getWhId, whId)
+			.eq(Stock::getSkuId, skuId);
+
+		// TODO
+		return null;
 	}
 
 }

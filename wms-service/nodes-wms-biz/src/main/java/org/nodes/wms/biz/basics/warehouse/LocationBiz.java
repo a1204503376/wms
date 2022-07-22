@@ -94,42 +94,42 @@ public interface LocationBiz {
 	boolean remove(List<Long> idList);
 
 	/**
-	 * 返回所有的库房的入库集货区
+	 * 返回所有的库房的入库集货区库位
 	 *
 	 * @return List<Location>
 	 */
 	List<Location> getAllStageLocation();
 
 	/**
-	 * 返回所有的库房的入库检验区
+	 * 返回所有的库房的入库检验区库位
 	 *
 	 * @return List<Location>
 	 */
 	List<Location> getAllQcLocation();
 
 	/**
-	 * 返回所有的库房的出库暂存区
+	 * 返回所有的库房的出库暂存区库位
 	 *
 	 * @return List<Location>
 	 */
 	List<Location> getAllPickToLocation();
 
 	/**
-	 * 返回所有的库房的打包暂存区
+	 * 返回所有的库房的打包暂存区库位
 	 *
 	 * @return List<Location>
 	 */
 	List<Location> getAllPackLocation();
 
 	/**
-	 * 返回所有的库房的未知暂存区
+	 * 返回所有的库房的未知库位
 	 *
 	 * @return List<Location>
 	 */
 	List<Location> getAllUnknownLocation();
 
 	/**
-	 * 返回所有的库房的在途暂存区
+	 * 返回所有的库房的在途暂存库位
 	 *
 	 * @return List<Location>
 	 */

@@ -11,6 +11,7 @@ import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.stock.merge.StockMergeStrategy;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.putway.dto.output.BoxDto;
@@ -28,6 +29,7 @@ import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
 import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -41,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -185,6 +188,16 @@ public class StockQueryBizImpl implements StockQueryBiz {
 			.distinct()
 			.collect(Collectors.toList());
 		return stockDao.getStockByLocIdList(locIdList);
+	}
+
+	@Override
+	public <R> List<Stock> findEnableStock(Long whId, Long skuId,
+										   StockStatusEnum stockStatusEnum,
+										   List<String> zoneTypeList,
+										   SkuLotBaseEntity skuLot,
+										   Function<?, R>[] sorts) {
+
+		return stockDao.findEnableStock(whId, skuId, stockStatusEnum, zoneTypeList, skuLot, sorts);
 	}
 
 	@Override

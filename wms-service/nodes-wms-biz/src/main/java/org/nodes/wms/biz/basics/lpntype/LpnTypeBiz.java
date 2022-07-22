@@ -113,4 +113,11 @@ public interface LpnTypeBiz {
 	 * @return
 	 */
 	LpnType findLpnTypeByBoxCode(String boxCode);
+
+	/**
+	 * 根据容器类别生成编码
+	 * @param lpnTypeCode
+	 * @return
+	 */
+	String generateLpnCode(String lpnTypeCode);
 }

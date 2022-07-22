@@ -5,7 +5,7 @@ import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.suppliers.SupplierBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
-import org.nodes.wms.biz.common.utils.NoGeneratorUtil;
+import org.nodes.wms.biz.common.utils.OrderNoGeneratorUtil;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
@@ -37,7 +37,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AsnFactory {
 
-	private final NoGeneratorUtil noGeneratorUtil;
+	private final OrderNoGeneratorUtil orderNoGeneratorUtil;
 
 	private final SupplierBiz supplierBiz;
 
@@ -65,7 +65,7 @@ public class AsnFactory {
 			asnHeader.setAsnBillNo(addOrEditAsnBillRequest.getAsnBillNo());
 		} else {
 			// ASN单编码
-			asnHeader.setAsnBillNo(noGeneratorUtil.createAsnBillNo());
+			asnHeader.setAsnBillNo(orderNoGeneratorUtil.createAsnBillNo());
 			// 单据状态
 			asnHeader.setAsnBillState(AsnBillStateEnum.NOT_RECEIPT);
 		}
