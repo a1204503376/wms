@@ -335,6 +335,20 @@
 				"navigationStyle": "custom"
 			}
 
+		}, {
+			"path": "pages/stock/stockManage/moveByBoxCode/moveByBoxCode",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/stock/stockManage/moveByBoxCode/moveByBoxCodeSubmit",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
 		}
 	],
 	"globalStyle": {
