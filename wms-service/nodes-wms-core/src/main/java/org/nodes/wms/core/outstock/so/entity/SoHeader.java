@@ -164,15 +164,15 @@ public class SoHeader extends AttributeBase implements Serializable {
 	/**
 	 * 客户编号
 	 */
-	@JsonProperty("cCode")
+	@JsonProperty("customerCode")
 	@ApiModelProperty(value = "客户编号")
-	private String cCode;
+	private String customerCode;
 	/**
 	 * 客户名称
 	 */
 	@ApiModelProperty(value = "客户名称")
-	@JsonProperty("cName")
-	private String cName;
+	@JsonProperty("customerName")
+	private String customerName;
 	/**
 	 * 收货人地址
 	 */
