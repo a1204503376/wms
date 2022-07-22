@@ -129,7 +129,7 @@
                                 </el-table-column>
                                 <el-table-column
                                     prop="planQty"
-                                    width="120"
+                                    width="170"
                                 >
                                     <template slot="header">
                                         <span class="d-table-header-required">计划数量</span>
@@ -137,7 +137,7 @@
                                     <template v-slot="{row}">
                                         <el-input-number
                                             v-model="row.planQty"
-                                            style="width: 80px"
+                                            style="width: 130px"
                                             :min="0"
                                             controls-position="right"
                                             size="mini"></el-input-number>
