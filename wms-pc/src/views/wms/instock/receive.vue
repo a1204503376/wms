@@ -3,7 +3,7 @@
         <nodes-master-page :configure="masterConfig" :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-form-item label="收货单编码">
-                    <el-input v-model="form.params.receiveNo" class="d-input"  :clearable="true"></el-input>
+                    <el-input v-model="form.params.receiveNo" class="d-input" :clearable="true"></el-input>
                 </el-form-item>
                 <el-form-item label="单据状态">
                     <nodes-receive-bill-state v-model="form.params.billStateList"></nodes-receive-bill-state>
@@ -24,10 +24,11 @@
                             <el-input v-model="form.params.asnBillNo" class="d-input" :clearable="true"></el-input>
                         </el-form-item>
                         <el-form-item label="仓库编码">
-                              <nodes-warehouse v-model="form.params.whIds" :multiple="true"></nodes-warehouse>
+                            <nodes-warehouse v-model="form.params.whIds" :multiple="true"></nodes-warehouse>
                         </el-form-item>
                         <el-form-item label="上游创建人">
-                            <el-input v-model="form.params.externalCreateUser" class="d-input" :clearable="true"></el-input>
+                            <el-input v-model="form.params.externalCreateUser" class="d-input"
+                                      :clearable="true"></el-input>
                         </el-form-item>
                         <el-form-item label="供应商编码">
                             <el-input v-model="form.params.supplierCode" class="d-input" :clearable="true"></el-input>
@@ -38,7 +39,7 @@
                     <el-col :span="24">
 
                         <el-form-item label="创建日期">
-                            <nodes-date-range v-model="form.params.createTimeDateRange" ></nodes-date-range>
+                            <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
                         </el-form-item>
 
                     </el-col>
@@ -46,8 +47,8 @@
 
             </template>
             <template v-slot:batchBtn>
-                <el-button  icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增</el-button>
-                <el-button  size="mini" type="danger" @click="onRemove" icon="el-icon-delete"
+                <el-button icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增</el-button>
+                <el-button size="mini" type="danger" @click="onRemove" icon="el-icon-delete"
                            :plain="false">删除
                 </el-button>
             </template>
@@ -80,8 +81,9 @@
                     <el-button circle icon="el-icon-download" @click="exportData" size="mini"></el-button>
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
-                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet" style="display: inline-block;margin-left: 10px">
-                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData" />
+                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
+                                  style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData"/>
                     </excel-export>
                 </el-tooltip>
             </template>
@@ -97,13 +99,16 @@
                     <el-table-column
                         fixed
                         type="selection"
-                        >
+                    >
                     </el-table-column>
 
                     <template v-for="(column,index) in table.columnList">
-                        <el-table-column sortable="custom" prop="receiveNo" label="收货单编码" width="150"  v-if="!column.hide && index===0"  show-overflow-tooltip >
+                        <el-table-column sortable="custom" prop="receiveNo" label="收货单编码" width="150"
+                                         v-if="!column.hide && index===0" show-overflow-tooltip>
                             <template slot-scope="scope">
-                                <el-link  @click="onViewDetails(scope.row.receiveId)" target="_blank" type="primary">{{scope.row.receiveNo}}</el-link>
+                                <el-link @click="onViewDetails(scope.row.receiveId)" target="_blank" type="primary">
+                                    {{ scope.row.receiveNo }}
+                                </el-link>
                             </template>
                         </el-table-column>
 
@@ -122,9 +127,9 @@
                         label="操作"
                         width="180">
                         <template slot-scope="scope">
-                            <el-button @click="handleClick(scope.row)" type="text" size="small" >编辑</el-button>
-                            <el-button @click="onClose(scope.row)" type="text" size="small" >关闭</el-button>
-                            <el-button @click="onReceive(scope.row)" type="text" size="small" >PC收货</el-button>
+                            <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
+                            <el-button @click="onClose(scope.row)" type="text" size="small">关闭</el-button>
+                            <el-button @click="onReceive(scope.row)" type="text" size="small">PC收货</el-button>
                         </template>
                     </el-table-column>
 
@@ -163,7 +168,7 @@ import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
-import {page,remove,close,exportFile} from "@/api/wms/instock/receive";
+import {close, exportFile, page, remove} from "@/api/wms/instock/receive";
 import {listMixin} from "@/mixins/list";
 import fileDownload from "js-file-download";
 import NodesReceiveBillState from "../../../components/wms/select/NodesReceiveBillState";
@@ -172,7 +177,6 @@ import NodesLocation from "@/components/wms/select/NodesLocation";
 import NodesSku from "@/components/wms/select/NodesSku";
 import NodesSkuByQuery from "@/components/wms/select/NodesSkuByQuery";
 import {ExcelExport} from 'pikaz-excel-js';
-
 
 
 export default {
@@ -200,7 +204,7 @@ export default {
             },
             form: {
                 params: {
-                    code:[],
+                    code: [],
                     receiveNo: '',
                     billStateList: [],
                     skuIds: [],
@@ -212,9 +216,9 @@ export default {
                     createTimeDateRange: '',
                 }
             },
-            billState:"",
-            nums:{
-                receiveIdList:[],
+            billState: "",
+            nums: {
+                receiveIdList: [],
             },
 
             table: {
@@ -298,7 +302,7 @@ export default {
     },
     watch: {
         $route(to) {
-            if(to.query && to.query.isRefresh === 'true'){
+            if (to.query && to.query.isRefresh === 'true') {
                 this.getTableData();
             }
         }
@@ -308,9 +312,9 @@ export default {
     },
     methods: {
         onExportLocalData() {
-            this.exportCurrentDataToExcel("收货单","收货单");
+            this.exportCurrentDataToExcel("收货单", "收货单");
         },
-        onViewDetails(id){
+        onViewDetails(id) {
             this.$router.push({
                 name: '收货单详情',
                 params: {
@@ -318,17 +322,17 @@ export default {
                 }
             });
         },
-        onReceive(row){
+        onReceive(row) {
             let state = row.billState;
-            if(state==="关闭"){
+            if (state === "关闭") {
                 this.$message.error('该收货单已关闭，不能进行收货');
                 return
             }
-            if(state==="全部收货"){
+            if (state === "全部收货") {
                 this.$message.error('该收货单已全部收货，不能进行收货');
                 return
             }
-            if(state==="已取消"){
+            if (state === "已取消") {
                 this.$message.error('该收货单已取消，不能进行收货');
                 return
             }
@@ -336,7 +340,7 @@ export default {
             this.$router.push({
                 name: 'PC收货',
                 params: {
-                    receiveId:row.receiveId
+                    receiveId: row.receiveId
                 }
             });
         },
@@ -359,11 +363,16 @@ export default {
                 }
             });
         },
-        handleClick(row){
+        handleClick(row) {
+            let state = row.billState;
+            if (state !== "未收货") {
+                this.$message.error('当前收货单不允许编辑');
+                return
+            }
             this.$router.push({
                 name: '编辑收货单',
                 params: {
-                    receiveId:row.receiveId
+                    receiveId: row.receiveId
                 }
             });
         },
@@ -390,16 +399,16 @@ export default {
                 cancelButtonText: "取消",
                 type: "warning",
             }).then(() => {
-               let state = row.billState;
-                if(state==="关闭"){
+                let state = row.billState;
+                if (state === "关闭") {
                     this.$message.error('该收货单已关闭，请勿重复点击');
                     throw new Error('该收货单已关闭，请勿重复点击');
                 }
 
-               if(state!=="全部收货"){
-                   this.$message.error('关闭失败,请先完成收货');
-                   throw new Error('关闭失败,请先完成收货');
-               }
+                if (state !== "全部收货") {
+                    this.$message.error('关闭失败,请先完成收货');
+                    throw new Error('关闭失败,请先完成收货');
+                }
 
                 this.nums.receiveId = row.receiveId;
                 close(this.nums)
