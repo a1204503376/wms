@@ -115,17 +115,17 @@ public class WarehouseServiceImpl<M extends WarehouseMapper, T extends Warehouse
 		//PICKTO（出库集货区）、PACK（打包区）、UNKNOWN（未知库位）、
 		//INTRANSIT（库内虚拟区）；默认的库位编码为库房编码加上述库位编码，中间用-隔开
 		//1.生成入库暂存区
-		// Long stageZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.Stage);
+		Long stageZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.STAGE);
 		//2.生成出库暂存区
-		//Long pickZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.Pick);
+		Long pickZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.PICKTO);
 		//3.生成包装暂存区
 		//Long packZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.Pack);
 		//4.生成移动暂存区
 		//Long moveZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.Move);
 
 		//5.更新库房初时暂存区
-//		whDTO.setStage(stageZoneId);
-//		whDTO.setPick(pickZoneId);
+		whDTO.setStage(stageZoneId);
+		whDTO.setPick(pickZoneId);
 //		whDTO.setPack(packZoneId);
 //		whDTO.setMove(moveZoneId);
 		warehouseBiz.afterNewWarehouse(whDTO);
@@ -375,7 +375,7 @@ public class WarehouseServiceImpl<M extends WarehouseMapper, T extends Warehouse
 		long zoneId = 0l;
 		Zone zone = new Zone();
 		zone.setWhId(warehouse.getWhId());
-		zone.setZoneCode(zoneType.toString());
+		zone.setZoneCode(String.format("%s-%s", warehouse.getWhCode(), zoneType.toString()));
 		zone.setZoneName(zoneType.getName());
 		zone.setZoneType(zoneType.getIndex());
 		zone.setCreateDept(warehouse.getDeptId());
@@ -388,7 +388,7 @@ public class WarehouseServiceImpl<M extends WarehouseMapper, T extends Warehouse
 		Location loc = new Location();
 		loc.setWhId(warehouse.getWhId());
 		loc.setZoneId(zoneId);
-		loc.setLocCode(zoneType.toString() + warehouse.getWhCode());
+		loc.setLocCode(String.format("%s-%s", warehouse.getWhCode(), zoneType.toString()));
 		loc.setLocType(LocTypeEnum.Virtual.getIndex());
 		loc.setCreateDept(warehouse.getDeptId());
 		boolean saveLocIsSucceed = locationService.save(loc);
