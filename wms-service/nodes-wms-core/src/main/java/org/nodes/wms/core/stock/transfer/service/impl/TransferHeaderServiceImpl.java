@@ -498,7 +498,7 @@ public class TransferHeaderServiceImpl<M extends TransferHeaderMapper, T extends
 					detail.setWhId(soHeader.getWhId());
 					detail.setSoBillId(soHeader.getSoBillId());
 					detail.setSoBillNo(soHeader.getSoBillNo());
-					detail.setCName(soHeader.getCName());
+					detail.setCName(soHeader.getCustomerName());
 					detail.setSkuId(sku.getSkuId());
 					detail.setSkuCode(sku.getSkuCode());
 					detail.setSkuName(sku.getSkuName());

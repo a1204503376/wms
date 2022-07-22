@@ -12,6 +12,7 @@
 
     <artifactId>powerjob-server-starter</artifactId>
     <version>${project.parent.version}</version>
+    <packaging>war</packaging>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

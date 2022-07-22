@@ -140,9 +140,12 @@
         LEFT JOIN wms_bill_type billType ON header.bill_type_cd = billType.bill_type_cd
         LEFT JOIN blade_user `user` ON header.create_user = `user`.id
         <where>
-            detail.detail_status = #{detailStatus}
-            AND detail.plan_qty = surplus_qty
-            AND detail.scan_qty = 0
+             detail.is_deleted = 0 AND
+            detail.plan_qty > detail.scan_qty
+            AND detail.detail_status IN
+            <foreach collection="detailStateList" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
             <if test="param.receiveNo != null and param.receiveNo != ''">
                 AND header.receive_no LIKE CONCAT('%', #{param.receiveNo} ,'%')
             </if>

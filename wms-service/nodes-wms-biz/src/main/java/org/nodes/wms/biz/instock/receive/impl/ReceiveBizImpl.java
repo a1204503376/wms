@@ -428,11 +428,11 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	@Override
 	public IPage<NotReceiveDetailResponse> pageNotReceiveDetail(
 		Query query, NotReceiveDetailPageQuery notReceiveDetailPageQuery) {
+		List<Integer> billStateList = new ArrayList<>();
+		billStateList.add(ReceiveDetailStatusEnum.NOT_RECEIPT.getCode());
+		billStateList.add(ReceiveDetailStatusEnum.PART.getCode());
 		return receiveHeaderDao.pageNotReceiveDetail(
-			Condition.getPage(query),
-			notReceiveDetailPageQuery,
-			ReceiveDetailStatusEnum.NOT_RECEIPT.getCode()
-		);
+			Condition.getPage(query), notReceiveDetailPageQuery, billStateList);
 	}
 
 	@Override
