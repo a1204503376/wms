@@ -131,7 +131,7 @@ public interface StockBiz {
 	boolean judgeEnableOnLocation(Location location);
 
 	/**
-	 * 导入
+	 * 导入库存
 	 *
 	 * @param importDataList 导入的数据集合
 	 */

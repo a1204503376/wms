@@ -2,6 +2,7 @@ package org.nodes.wms.dao.stock;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * 库存Dao接口
@@ -137,4 +139,17 @@ public interface StockDao {
 	 * @return 可用库存集合
 	 */
 	List<Stock> getStockListBySkuCode(String skuCode);
+
+	/**
+	 * 查询可用库存
+	 * @param whId
+	 * @param skuId
+	 * @param stockStatusEnum
+	 * @param zoneTypeList
+	 * @param skuLot
+	 * @param sorts
+	 * @return
+	 */
+	<R> List<Stock> findEnableStock(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
+								List<String> zoneTypeList, SkuLotBaseEntity skuLot, Function<?, R>[] sorts);
 }

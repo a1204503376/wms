@@ -2,16 +2,14 @@ package org.nodes.stock;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.nodes.wms.biz.stock.StockQueryBiz;
-import org.nodes.wms.dao.stock.entities.Serial;
+import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
+import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
+import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.springblade.core.test.BladeBootTest;
 import org.springblade.core.test.BladeSpringRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 库存测试类
@@ -21,15 +19,17 @@ import java.util.List;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class StockTest {
 
-	@Autowired
-	private StockQueryBiz stockQueryBiz;
 
 	@Test
-	public void findSerialBySerialNoTest(){
-		List<String> serialList = new ArrayList<>();
-		serialList.add("100");
-		serialList.add("200");
-		serialList.add("4000");
-		List<Serial> serialListResult = stockQueryBiz.findSerialBySerialNo(serialList);
+	public void testStockQuery(){
+		BaseSkuLot skuLot1 = new BaseSkuLot();
+		skuLot1.setSkuLot1("test1");
+		skuLot1.setSkuLot2("test2");
+
+		BaseSkuLotEntity skuLot2 = new BaseSkuLotEntity();
+		SkuLotUtil.setAllSkuLot(skuLot1, skuLot2);
+
+		Assertions.assertEquals(skuLot2.getSkuLot1(), skuLot1.getSkuLot1());
+		Assertions.assertEquals(skuLot2.getSkuLot2(), skuLot1.getSkuLot2());
 	}
 }

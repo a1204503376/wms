@@ -153,7 +153,7 @@ public class SkuController {
 		return R.data(umList);
 	}
 
-	@ApiLog("供应商管理-新增或修改")
+	@ApiLog("物品管理-新增或修改")
 	@PostMapping("/save")
 	public R<String> save(@Valid @RequestBody SkuAddOrEditRequest skuAddOrEditRequest) {
 		Sku sku = skuBiz.save(skuAddOrEditRequest);
