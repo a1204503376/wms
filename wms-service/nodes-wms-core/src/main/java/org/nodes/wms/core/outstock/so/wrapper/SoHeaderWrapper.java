@@ -88,12 +88,12 @@ public class SoHeaderWrapper extends BaseEntityWrapper<SoHeader, SoHeaderVO> {
 		}
 
 		//客户ID
-		if (Func.isNotEmpty(soHeaderVO.getCCode())) {
+		if (Func.isNotEmpty(soHeaderVO.getCustomerName())) {
 			IEnterpriseService iEnterpriseService = SpringUtil.getBean(IEnterpriseService.class);
 			//Enterprise enterprise = EnterpriseCache.getByCode(soHeaderVO.getCCode());
 			Enterprise enterprise = iEnterpriseService.list(Condition.getQueryWrapper(new Enterprise())
 				.lambda()
-				.eq(Enterprise::getEnterpriseCode, soHeaderVO.getCCode()))
+				.eq(Enterprise::getEnterpriseCode, soHeaderVO.getCustomerCode()))
 				.stream().findFirst().orElse(null);
 			if (Func.isNotEmpty(enterprise)) {
 				soHeaderVO.setCId(enterprise.getPeId());

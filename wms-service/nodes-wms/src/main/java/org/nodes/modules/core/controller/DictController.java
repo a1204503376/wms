@@ -61,7 +61,6 @@ public class DictController extends BladeController {
 	/**
 	 * 详情
 	 */
-	@ApiLog("字典-获取字典详情")
 	@GetMapping("/detail")
 	@ApiOperation(value = "详情", notes = "传入dict")
 	public R<DictVO> detail(Dict dict) {
@@ -71,7 +70,6 @@ public class DictController extends BladeController {
 	/**
 	 * 列表
 	 */
-	@ApiLog("字典-获取字典列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "列表", notes = "传入dict")
 	public R<List<DictVO>> list(@ApiIgnore @RequestParam Map<String, Object> params) {
@@ -99,7 +97,6 @@ public class DictController extends BladeController {
 	/**
 	 * 分页
 	 */
-	@ApiLog("字典-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "列表", notes = "传入dict")
 	public R<IPage<DictVO>> page(@ApiIgnore @RequestParam Map<String, Object> params, Query query) {
@@ -125,7 +122,6 @@ public class DictController extends BladeController {
 	/**
 	 * 子列表
 	 */
-	@ApiLog("字典-获取字典子级列表")
 	@GetMapping("/child-list")
 	@ApiOperation(value = "列表", notes = "传入dict")
 	public R<IPage<DictVO>> childList(@ApiIgnore @RequestParam Dict dict, Query query) {
@@ -140,7 +136,6 @@ public class DictController extends BladeController {
 	 *
 	 * @return
 	 */
-	@ApiLog("字典-获取字典树形结构")
 	@GetMapping("/tree")
 	@ApiOperation(value = "树形结构", notes = "树形结构")
 	public R<List<DictVO>> tree() {
@@ -178,7 +173,6 @@ public class DictController extends BladeController {
 	 *
 	 * @return
 	 */
-	@ApiLog("字典-获取字典")
 	@GetMapping("/dictionary")
 	@ApiOperation(value = "获取字典", notes = "获取字典")
 	public R<List<Dict>> dictionary(String code) {

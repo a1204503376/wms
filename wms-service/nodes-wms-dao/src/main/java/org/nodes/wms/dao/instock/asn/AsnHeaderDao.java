@@ -2,7 +2,7 @@ package org.nodes.wms.dao.instock.asn;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.nodes.wms.dao.instock.asn.dto.input.PageParamsQuery;
+import org.nodes.wms.dao.instock.asn.dto.input.AsnBillPageQuery;
 import org.nodes.wms.dao.instock.asn.dto.output.*;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 
@@ -18,10 +18,10 @@ public interface AsnHeaderDao {
 	 * 分页查询
 	 *
 	 * @param page            分页对象
-	 * @param pageParamsQuery 分页请求参数
+	 * @param asnBillPageQuery 分页请求参数
 	 * @return Page<PageResponse>
 	 */
-	Page<PageResponse> selectPageAsnBill(IPage<?> page, PageParamsQuery pageParamsQuery);
+	Page<PageResponse> selectPageAsnBill(IPage<?> page, AsnBillPageQuery asnBillPageQuery);
 
 	/**
 	 * 新增/修改 ASN单头表信息和明细
@@ -42,10 +42,10 @@ public interface AsnHeaderDao {
 	/**
 	 * Excel 导出(导出当前查询条件)
 	 *
-	 * @param pageParamsQuery: 查询条件
+	 * @param asnBillPageQuery: 查询条件
 	 * @return List<AsnBillExportResponse>
 	 */
-    List<AsnBillExportResponse> listByParamsQuery(PageParamsQuery pageParamsQuery);
+    List<AsnBillExportResponse> listByParamsQuery(AsnBillPageQuery asnBillPageQuery);
 
 	/**
 	 * 根据ASN单id查询ASN单头表信息

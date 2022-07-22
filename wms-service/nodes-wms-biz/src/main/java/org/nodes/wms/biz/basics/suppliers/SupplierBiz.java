@@ -3,12 +3,12 @@ package org.nodes.wms.biz.basics.suppliers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.suppliers.dto.input.AddOrEditSupplierRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierImportRequest;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierPageQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierSelectQuery;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierPageResponse;
 import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
 import org.nodes.wms.dao.basics.suppliers.entities.Supplier;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -78,10 +78,10 @@ public interface SupplierBiz {
 	/**
 	 * Excel 导入
 	 *
-	 * @param importDataList: 导入excel数据集合
+	 * @param file: excel二进制文件
 	 * @return true: 导入成功， false: 导入失败
 	 */
-	boolean importExcel(List<SupplierImportRequest> importDataList);
+	boolean importExcel(MultipartFile file);
 
 	/**
 	 * 新增或修改供应商

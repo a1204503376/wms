@@ -482,8 +482,8 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 				if (Func.isNotEmpty(soHeaderQuery.getCName())) {
 					sql.and(c_keyword -> {
 						c_keyword
-							.or().like(SoHeader::getCCode, soHeaderQuery.getCName())
-							.or().like(SoHeader::getCName, soHeaderQuery.getCName());
+							.or().like(SoHeader::getCustomerCode, soHeaderQuery.getCName())
+							.or().like(SoHeader::getCustomerName, soHeaderQuery.getCName());
 					});
 				}
 				if (Func.isNotEmpty(soHeaderQuery.getBillTypeCd())) {

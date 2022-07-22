@@ -12,14 +12,11 @@ import org.nodes.wms.dao.common.log.dto.output.LogActionPageResponse;
 import org.nodes.wms.dao.common.log.dto.output.LogApiPageResponse;
 import org.nodes.wms.dao.common.log.dto.output.LogErrorPageResponse;
 import org.nodes.wms.dao.common.log.dto.output.LogMessageResponse;
-import org.nodes.wms.dao.instock.receive.dto.input.ReceivePageQuery;
-import org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -99,7 +96,7 @@ public class LogController {
 	}
 
 	/**
-	 * 请求日志分页查询
+	 * 请求日志：分页查询
 	 */
 	@PostMapping("/logApiPage")
 	public R<IPage<LogApiPageResponse>> logApiPage(@RequestBody LogApiPageQuery logApiPageQuery, Query query) {
@@ -107,6 +104,9 @@ public class LogController {
 		return R.data(pages);
 	}
 
+	/**
+	 * 请求日志：服务端导出
+	 */
 	@PostMapping("logApiExport")
 	public void logApiExport(@RequestBody LogApiPageQuery logApiPageQuery, HttpServletResponse response) {
 		logBiz.exportLogApiExcel(logApiPageQuery, response);

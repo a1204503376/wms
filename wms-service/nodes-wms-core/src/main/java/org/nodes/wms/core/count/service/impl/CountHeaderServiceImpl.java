@@ -804,8 +804,8 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper, T extends Count
 //					soHeader.setZoneType(ZoneTypeEnum.VIRTUAL.getIndex());
 					soHeader.setOutstockType(OutstockTypeEnum.Normal.getIndex());
 					soHeader.setCreateType(CreateTypeEnum.INNER.getIndex());
-					soHeader.setCCode(warehouse.getWhCode());
-					soHeader.setCName(warehouse.getWhName());
+//					soHeader.setCCode(warehouse.getWhCode());
+//					soHeader.setCName(warehouse.getWhName());
 					soHeader.setDetailList(new ArrayList<>());
 //					soHeader.setArriveDate(now);
 					soHeader.setFinishDate(now);

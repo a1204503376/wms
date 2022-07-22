@@ -27,11 +27,17 @@ public class StockLogController {
 	private final StockBiz stockBiz;
 	private final StockQueryBiz stockQueryBiz;
 
+	/**
+	 * 库存日志：分页
+	 */
 	@PostMapping("/page")
 	public R<IPage<StockLogPageResponse>> page(Query query, @RequestBody StockLogPageQuery stockLogPageQuery) {
 		return R.data(stockQueryBiz.pageStockLog(query, stockLogPageQuery));
 	}
 
+	/**
+	 * 库存日志：服务端导出
+	 */
 	@PostMapping("/export")
 	public void export(@RequestBody StockLogPageQuery stockLogPageQuery, HttpServletResponse response) {
 		stockBiz.exportStockLogToExcel(stockLogPageQuery, response);

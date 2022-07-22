@@ -64,7 +64,6 @@ public class ParamController extends BladeController {
 	/**
 	 * 详情
 	 */
-	@ApiLog("参数管理-详情")
 	@GetMapping("/detail")
 	@ApiOperation(value = "详情", notes = "传入param")
 	public R<Param> detail(Param param) {
@@ -74,7 +73,6 @@ public class ParamController extends BladeController {
 	/**
 	 * 列表
 	 */
-	@ApiLog("参数管理-列表")
 	@GetMapping("/list")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "paramName", value = "参数名称", paramType = "query", dataType = "string"),
@@ -96,7 +94,6 @@ public class ParamController extends BladeController {
 	/**
 	 * 分页
 	 */
-	@ApiLog("参数管理-分页")
 	@GetMapping("/page")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "paramName", value = "参数名称", paramType = "query", dataType = "string"),
