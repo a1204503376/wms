@@ -17,6 +17,7 @@
 package org.nodes.core.config;
 
 
+import org.nodes.core.tool.constant.WmsApiPath;
 import org.springblade.core.secure.registry.SecureRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,6 +52,7 @@ public class BladeConfiguration implements WebMvcConfigurer {
 		secureRegistry.excludePathPatterns("/swagger-resources/**");
 		secureRegistry.excludePathPatterns("/druid/**");
 		secureRegistry.excludePathPatterns("/api/ApiPDA/token");
+		secureRegistry.excludePathPatterns(WmsApiPath.SCHEDULING_SYSTEM_API+ "/generateBoxCode");
 		return secureRegistry;
 	}
 

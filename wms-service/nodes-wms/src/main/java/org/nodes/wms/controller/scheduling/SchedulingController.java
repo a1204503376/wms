@@ -63,7 +63,7 @@ public class SchedulingController {
 	 * @param lpnTypeCode
 	 * @return
 	 */
-	@PostMapping("generateBoxCode")
+	@GetMapping("generateBoxCode")
 	public R<String> generateBoxCode(@RequestParam("lpnTypeCode") String lpnTypeCode) {
 		String boxCode = lpnTypeBiz.generateLpnCode(lpnTypeCode);
 		return R.data(boxCode);
