@@ -2,6 +2,7 @@ package com.nodes.project.api.service.impl;
 
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.toolkit.SimpleQuery;
 import com.nodes.common.constant.JobConstants;
 import com.nodes.common.exception.ServiceException;
 import com.nodes.common.utils.StringUtils;
@@ -240,6 +241,7 @@ public class JobQueueServiceImpl extends ServiceImpl<JobQueueMapper, JobQueue>
 
     @Override
     public boolean updateStatusAndBeginTime(JobQueue jobQueue) {
+        SimpleQuery
         return super.lambdaUpdate()
                 .set(JobQueue::getStatus, jobQueue.getStatus())
                 .set(JobQueue::getBeginTime, jobQueue.getBeginTime())
