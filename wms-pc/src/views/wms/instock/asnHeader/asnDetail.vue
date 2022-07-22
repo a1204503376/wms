@@ -16,57 +16,57 @@
                         style="margin-bottom: 20px">
                         <el-descriptions-item
                             label-class-name="descriptions-label"
-                            content-class-name="descriptions-content">
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
                             <template slot="label">
-                                <i class="el-icon-user"></i>
                                 ASN单编码
                             </template>
                             {{ form.params.asnBillNo }}
                         </el-descriptions-item>
                         <el-descriptions-item
                             label-class-name="descriptions-label"
-                            content-class-name="descriptions-content">
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
                             <template slot="label">
-                                <i class="el-icon-mobile-phone"></i>
                                 单据类型
                             </template>
                             {{ form.params.billTypeName }}
                         </el-descriptions-item>
                         <el-descriptions-item
                             label-class-name="descriptions-label"
-                            content-class-name="descriptions-content">
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
                             <template slot="label">
-                                <i class="el-icon-location-outline"></i>
                                 供应商
                             </template>
                             {{ form.params.supplierName }}
                         </el-descriptions-item>
                         <el-descriptions-item
                             label-class-name="descriptions-label"
-                            content-class-name="descriptions-content">
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
                             <template slot="label">
-                                <i class="el-icon-tickets"></i>
                                 仓库
                             </template>
-                            <el-tag size="small">{{ form.params.whName }}</el-tag>
+                            {{ form.params.whName }}
                         </el-descriptions-item>
                         <el-descriptions-item
                             label-class-name="descriptions-label"
-                            content-class-name="descriptions-content">
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
                             <template slot="label">
-                                <i class="el-icon-office-building"></i>
                                 货主
                             </template>
                             {{ form.params.ownerName }}
                         </el-descriptions-item>
                         <el-descriptions-item
                             label-class-name="descriptions-label"
-                            content-class-name="descriptions-content">
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
                             <template slot="label">
-                                <i class="el-icon-tickets"></i>
                                 备注
                             </template>
-                            <i>{{ form.params.asnBillRemark }}</i>
+                            {{ form.params.asnBillRemark }}
                         </el-descriptions-item>
                     </el-descriptions>
                     <el-row>
@@ -355,7 +355,6 @@ export default {
 
 /deep/ .descriptions-label {
     width: 150px;
-    color: #00a680;
 }
 
 /deep/ .descriptions-content {
