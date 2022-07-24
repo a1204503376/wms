@@ -289,7 +289,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 
 	@Override
 	public ReceiveDetailLpnPdaResponse getReceiveDetailLpnByBoxCode(String boxCode) {
-		List<Stock> stockList = stockQueryBiz.findStockByBoxCode(boxCode);
+		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(boxCode);
 		if (Func.isNotEmpty(stockList)) {
 			throw new ServiceException("收货失败,该箱码已在库存中存在");
 		}
