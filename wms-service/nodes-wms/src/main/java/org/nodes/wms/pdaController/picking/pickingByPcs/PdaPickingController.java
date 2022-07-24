@@ -56,7 +56,7 @@ public class PdaPickingController {
 	 * @param request Pda根据发货单ID查询出库单明细-请求对象
 	 * @return 拣货详情响应对象
 	 */
-	@PostMapping("/findAllPickingByNo")
+	@PostMapping("/findPickingBySoBillId")
 	public R<IPage<FindAllPickingResponse>> findPickingBySoBillId(@RequestBody FindAllPickingRequest request) {
 		return null;
 	}
