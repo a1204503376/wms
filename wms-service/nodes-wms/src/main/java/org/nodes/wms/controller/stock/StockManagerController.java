@@ -1,6 +1,7 @@
 package org.nodes.wms.controller.stock;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.stock.StockBiz;
@@ -51,8 +52,14 @@ public class StockManagerController {
 		ExcelUtil.export(response, "库存余额", "库存余额数据表", importExcelList, StockImportRequest.class);
 	}
 
+	/**
+	 * 库存余额：库存导入
+	 * @param file
+	 * @return
+	 */
 	@ApiLog("库存管理-导入")
 	@PostMapping("/import-data")
+	@ApiOperation("库存管理-导入")
 	public R<String> importData(MultipartFile file) {
 		List<StockImportRequest> importDataList = ExcelUtil.read(file, StockImportRequest.class);
 		boolean importFlag = stockBiz.importStockByExcel(importDataList);

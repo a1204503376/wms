@@ -16,7 +16,9 @@ public enum ZoneVirtualTypeEnum {
 	Move(70, "移动暂存区"),
 	Pack(72, "包装暂存区"),
 	Stage(73, "入库暂存区"),
-	Pick(74, "出库暂存区");
+	Pick(74, "出库暂存区"),
+	PICKTO(110, "出库集货区"),
+	STAGE(120, "入库暂存区");
 
 	private Integer index;
 	private String name;
@@ -58,7 +60,7 @@ public enum ZoneVirtualTypeEnum {
 			add(ZoneVirtualTypeEnum.Stage.toString().toLowerCase());
 			add(ZoneVirtualTypeEnum.Pick.toString().toLowerCase());
 		}};
-		return virtualList.stream().filter(u->locCode.toLowerCase().startsWith(u)).count() > 0;
+		return virtualList.stream().filter(u -> locCode.toLowerCase().startsWith(u)).count() > 0;
 	}
 
 	public static List<Integer> list() {

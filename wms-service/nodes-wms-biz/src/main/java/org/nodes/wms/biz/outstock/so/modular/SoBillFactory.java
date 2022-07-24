@@ -5,7 +5,7 @@ import org.nodes.wms.biz.basics.customer.CustomerBiz;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
-import org.nodes.wms.biz.common.utils.NoGeneratorUtil;
+import org.nodes.wms.biz.common.utils.OrderNoGeneratorUtil;
 import org.nodes.wms.dao.basics.customer.entities.BasicsCustomer;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
@@ -34,7 +34,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SoBillFactory {
 
-	private final NoGeneratorUtil noGeneratorUtil;
+	private final OrderNoGeneratorUtil orderNoGeneratorUtil;
 
 	private final CustomerBiz customerBiz;
 
@@ -60,7 +60,7 @@ public class SoBillFactory {
 		// id为空即新增时
 		if (Func.isEmpty(soHeader.getSoBillId())) {
 			// 单据编码
-			soHeader.setSoBillNo(noGeneratorUtil.createSoBillNo());
+			soHeader.setSoBillNo(orderNoGeneratorUtil.createSoBillNo());
 			// 单据状态：10 单据创建
 			soHeader.setSoBillState(SoBillStateEnum.NOT.getIndex());
 			// 订单状态

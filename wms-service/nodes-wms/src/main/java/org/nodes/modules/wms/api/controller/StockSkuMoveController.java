@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * 库存移动
+ *
  *
  * @Author zx
  * @Date 2020/3/10

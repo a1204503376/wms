@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
-import org.nodes.wms.biz.common.utils.NoGeneratorUtil;
+import org.nodes.wms.biz.common.utils.OrderNoGeneratorUtil;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
@@ -37,7 +37,7 @@ import java.math.BigDecimal;
 public class ReceiveFactory {
 	private final WarehouseBiz warehouseBiz;
 	private final OwnerBiz ownerBiz;
-	private final NoGeneratorUtil noGeneratorUtil;
+	private final OrderNoGeneratorUtil orderNoGeneratorUtil;
 
 	private final SkuBiz skuBiz;
 
@@ -81,7 +81,7 @@ public class ReceiveFactory {
 		//设置备注
 		receiveHeader.setRemark(newReceiveHeaderRequest.getRemark());
 		//设置收货单编码
-		receiveHeader.setReceiveNo(noGeneratorUtil.createReceiveBillNo());
+		receiveHeader.setReceiveNo(orderNoGeneratorUtil.createReceiveBillNo());
 		//设置收货单状态
 		receiveHeader.setBillState(ReceiveHeaderStateEnum.NOT_RECEIPT);
 
@@ -337,7 +337,7 @@ public class ReceiveFactory {
 	public ReceiveHeader createReceiveHeader(ReceiveDetailLpnPdaRequest receiveDetailLpnPdaRequest) {
 		ReceiveHeader receiveHeader = new ReceiveHeader();
 		//设置收货单编码
-		receiveHeader.setReceiveNo(noGeneratorUtil.createReceiveBillNo());
+		receiveHeader.setReceiveNo(orderNoGeneratorUtil.createReceiveBillNo());
 		//根据仓库id获取仓库实体
 		Warehouse warehouse = warehouseBiz.findById(receiveDetailLpnPdaRequest.getWhId());
 		//设置仓库id
