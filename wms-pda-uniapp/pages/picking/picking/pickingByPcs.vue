@@ -1,8 +1,8 @@
 <template>
 	<view>
-		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
-			:bgColor="navigationBarBackgroundColor" title="按件拣货" titleStyle="color:#ffffff;font-size:21px"
-			style="color:#ffffff;font-size:21px">
+		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false" rightIcon="order"
+			@rightClick="gotoDetails" :bgColor="navigationBarBackgroundColor" title="按件拣货"
+			titleStyle="color:#ffffff;font-size:21px" style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u--form>
 			<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
@@ -146,6 +146,9 @@
 			},
 			esc() {
 				uni.$u.func.navigateBackTo(1);
+			},
+			gotoDetails() {
+				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingDetails');
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);
