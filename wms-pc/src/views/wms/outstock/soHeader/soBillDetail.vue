@@ -16,76 +16,77 @@
                         class="margin-top"
                         style="margin-bottom: 20px">
                         <el-descriptions-item
+                            content-class-name="descriptions-content"
                             label-class-name="descriptions-label"
-                            content-class-name="descriptions-content">
+                            :label-style="{'text-align': 'right'}">
                             <template slot="label">
-                                <i class="el-icon-user"></i>
                                 出库单编码
                             </template>
                             {{ form.params.soBillNo }}
                         </el-descriptions-item>
                         <el-descriptions-item
+                            content-class-name="descriptions-content"
                             label-class-name="descriptions-label"
-                            content-class-name="descriptions-content">
+                            :label-style="{'text-align': 'right'}">
                             <template slot="label">
-                                <i class="el-icon-mobile-phone"></i>
                                 单据类型
                             </template>
                             {{ form.params.billType }}
                         </el-descriptions-item>
                         <el-descriptions-item
+                            content-class-name="descriptions-content"
                             label-class-name="descriptions-label"
-                            content-class-name="descriptions-content">
+                            :label-style="{'text-align': 'right'}">
                             <template slot="label">
-                                <i class="el-icon-location-outline"></i>
                                 所属库房
                             </template>
                             {{ form.params.whName }}
                         </el-descriptions-item>
                         <el-descriptions-item
+                            content-class-name="descriptions-content"
                             label-class-name="descriptions-label"
-                            content-class-name="descriptions-content">
+                            :label-style="{'text-align': 'right'}">
                             <template slot="label">
-                                <i class="el-icon-tickets"></i>
                                 所属货主
                             </template>
-                            <el-tag size="small">{{ form.params.ownerName }}</el-tag>
+                            {{ form.params.ownerName }}
                         </el-descriptions-item>
                         <el-descriptions-item
+                            content-class-name="descriptions-content"
                             label-class-name="descriptions-label"
-                            content-class-name="descriptions-content">
+                            :label-style="{'text-align': 'right'}">
                             <template slot="label">
-                                <i class="el-icon-office-building"></i>
                                 客户
                             </template>
                             {{ form.params.customerName }}
                         </el-descriptions-item>
                         <el-descriptions-item
+                            content-class-name="descriptions-content"
                             label-class-name="descriptions-label"
-                            content-class-name="descriptions-content">
+                            :label-style="{'text-align': 'right'}">
                             <template slot="label">
-                                <i class="el-icon-tickets"></i>
-                                {{ form.params.outstockType }}
+                                出库方式
                             </template>
-                            <el-tag size="small">{{ form.params.ownerName }}</el-tag>
+                            {{ form.params.outstockType }}
                         </el-descriptions-item>
                         <el-descriptions-item
+                            content-class-name="descriptions-content"
                             label-class-name="descriptions-label"
-                            content-class-name="descriptions-content">
+                            :label-style="{'text-align': 'right'}">
                             <template slot="label">
-                                <i class="el-icon-tickets"></i>
                                 发货方式
                             </template>
-                            <el-tag size="small">{{ form.params.transportType }}</el-tag>
+                            {{ form.params.transportType }}
                         </el-descriptions-item>
                         <el-descriptions-item
+                            content-class-name="descriptions-content"
                             label-class-name="descriptions-label"
-                            content-class-name="descriptions-content">
+                            :label-style="{'text-align': 'right'}">
                             <template slot="label">
                                 <i class="el-icon-tickets"></i>
                                 备注
                             </template>
-                            <i>{{ form.params.soBillRemark }}</i>
+                            {{ form.params.soBillRemark }}
                         </el-descriptions-item>
                     </el-descriptions>
                     <el-row>
@@ -149,7 +150,12 @@ import NodesSku from "@/components/wms/select/NodesSku";
 import NodesLineNumber from "@/components/wms/table/NodesLineNumber";
 import {editDetailMixin} from "@/mixins/editDetail";
 import {listMixin} from "@/mixins/list";
-import {getDetailForDetail, getHeaderForDetail, getLogSoPickForDetail, getSoLogForDetail} from "@/api/wms/outstock/soHeader"
+import {
+    getDetailForDetail,
+    getHeaderForDetail,
+    getLogSoPickForDetail,
+    getSoLogForDetail
+} from "@/api/wms/outstock/soHeader"
 import NodesBillType from "@/components/wms/select/NodesBillType";
 import NodesCustomer from "@/components/wms/select/NodesCustomer";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
@@ -186,20 +192,16 @@ export default {
             table: {
                 columnList: []
             },
-            //标签页list集合，根据这个集合循环出来Tab标签
             tabList: [
                 {lable: '出库单明细', name: 'soDetail'},
                 {lable: '拣货记录', name: 'soRecord'},
                 {lable: '日志', name: 'soLog'},
             ],
-            //tab标签默认打开第一个
             activeName: 'soDetail',
-            //Tab标签所有的数据来源
             publicTable: {
                 data: [],
             },
             tableLoading: false,
-            //明细的行对象
             soDetailColumnList: [
                 {
                     prop: 'soLineNo',
@@ -247,7 +249,6 @@ export default {
                     label: '备注'
                 }
             ],
-            //出库记录的行对象
             soRecordColumnList: [
                 {
                     prop: 'procTime',
@@ -300,27 +301,30 @@ export default {
                     label: '专用客户'
                 }
             ],
-            //出库记录的行对象
             soLogColumnList: [
                 {
                     prop: 'userAccount',
                     label: '操作人员账号',
-                    align: 'center'
+                    align: 'center',
+                    sortable: 'custom',
                 },
                 {
                     prop: 'userRealName',
                     label: '操作人员姓名',
-                    align: 'center'
+                    align: 'center',
+                    sortable: 'custom',
                 },
                 {
                     prop: 'log',
                     label: '操作内容',
-                    align: 'center'
+                    align: 'center',
+                    sortable: 'custom',
                 },
                 {
                     prop: 'createTime',
                     label: '操作时间',
-                    align: 'center'
+                    align: 'center',
+                    sortable: 'custom',
                 },
             ],
         }
@@ -407,9 +411,9 @@ export default {
         getTableData() {
             if (this.form.activeName === 'soRecord') {
                 this.getSoRecord();
-            }else if(this.form.activeName === 'soLog'){
+            } else if (this.form.activeName === 'soLog') {
                 this.getSoLog();
-            }else {
+            } else {
                 this.getDetail();
             }
         }
@@ -426,7 +430,11 @@ export default {
 
 /deep/ .descriptions-label {
     width: 150px;
-    color: #00a680;
+    text-align: center;
+}
+
+/deep/ .el-descriptions-item__label{
+    text-align: center;
 }
 
 /deep/ .descriptions-content {

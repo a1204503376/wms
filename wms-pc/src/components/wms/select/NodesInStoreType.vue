@@ -2,6 +2,7 @@
     <nodes-select
         v-model="val"
         :data-source="dataSource"
+        :clearable="true"
         v-bind="$attrs"
     >
     </nodes-select>

@@ -4,6 +4,7 @@
         collapse-tags
         placeholder="请选择"
         style="width:100%;"
+        :clearable="true"
         @change="onChange"
         @visible-change="onFocus"
         :size="size"

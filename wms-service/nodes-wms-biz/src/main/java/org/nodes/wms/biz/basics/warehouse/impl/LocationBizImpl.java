@@ -1,11 +1,9 @@
 package org.nodes.wms.biz.basics.warehouse.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.NullArgumentException;
-import org.apache.poi.ss.formula.functions.T;
 import org.nodes.core.base.entity.Dict;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
@@ -65,8 +63,7 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public Page<LocationPageResponse> page(Query query, LocationPageQuery locationPageQuery) {
-		IPage<T> page = Condition.getPage(query);
-		return locationDao.selectPage(page, locationPageQuery);
+		return locationDao.selectPage(Condition.getPage(query), locationPageQuery);
 	}
 
 	@Override
@@ -110,11 +107,11 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean remove(List<Long> idList) {
-		for (Long id : idList
-		) {
+		for (Long id : idList) {
 			Location location = locationDao.getLocationById(id);
 			String locCode = location.getLocCode();
-			if (location.getLocType().equals(LocTypeEnum.Virtual.key())
+			if (Func.isNotEmpty(location.getLocType())
+				&& location.getLocType().equals(LocTypeEnum.Virtual.key())
 				&& StringUtil.contains(locCode, '-')
 				&& ArrayUtils.contains(LocationConstant.getLocTypes(), StringUtil.subAfter(locCode, "-", true))
 			) {

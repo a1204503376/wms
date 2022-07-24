@@ -4,6 +4,7 @@
         :collapse-tags="true"
         :io-type="ioType"
         :multiple="multiple"
+        :clearable="true"
         filterable
         placeholder="请选择"
         :size="size"

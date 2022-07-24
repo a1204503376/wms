@@ -1,6 +1,7 @@
 <template>
     <el-select
         v-model="val"
+        :clearable="true"
         :collapse-tags="true"
         :default-first-option="true"
         :loading="loading"
