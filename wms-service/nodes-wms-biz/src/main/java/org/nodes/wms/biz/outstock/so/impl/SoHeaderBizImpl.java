@@ -3,13 +3,14 @@ package org.nodes.wms.biz.outstock.so.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
 import org.nodes.wms.biz.outstock.so.modular.SoBillFactory;
 import org.nodes.wms.biz.stock.StockQueryBiz;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
-import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.outstock.so.SoDetailDao;
 import org.nodes.wms.dao.outstock.so.SoHeaderDao;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
@@ -22,8 +23,9 @@ import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
 import org.nodes.wms.dao.picking.dto.input.FindAllPickingRequest;
 import org.nodes.wms.dao.picking.dto.output.FindAllPickingResponse;
-import org.nodes.wms.dao.stock.dto.output.PickByPcStockResponse;
+import org.nodes.wms.dao.stock.dto.output.PickByPcStockDto;
 import org.nodes.wms.dao.stock.entities.Stock;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -34,10 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 发货单业务接口实现类
@@ -51,7 +50,8 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	private final SoDetailDao soDetailDao;
 
 	private final SoBillFactory soBillFactory;
-	private StockQueryBiz stockQueryBiz;
+	private final StockQueryBiz stockQueryBiz;
+	private final ZoneBiz zoneBiz;
 
 	private final LogBiz logBiz;
 
@@ -171,24 +171,35 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 
 	@Override
 	public SoDetailAndStockResponse getSoDetailAndStock(SoDetailAndStockRequest soDetailAndStockRequest) {
+		//new一个返回对象
 		SoDetailAndStockResponse soDetailAndStockResponse = new SoDetailAndStockResponse();
+		//获取明细行的返回对象
 		PickByPcSoDetailResponse pickByPcSoDetailResponse = soDetailDao.getPickByPcDetail(soDetailAndStockRequest);
 		soDetailAndStockResponse.setPickByPcSoDetailResponse(pickByPcSoDetailResponse);
-		List<PickByPcStockResponse> stockResponseList = new ArrayList<>();
-		List<Stock> stockList = stockQueryBiz.getStockListBySkuCode(pickByPcSoDetailResponse.getSkuCode());
+		//创建库存返回对象集合
+		List<PickByPcStockDto> stockResponseList = new ArrayList<>();
+		//构造查询库存集合条件
+		List<String> zoneNameList = new ArrayList<>();
+		Collections.addAll(zoneNameList, "虚拟库区", "D箱人工拣货区", "零散存储区", "入库质检区", "入库暂存区");
+		List<Long> zoneIdList = zoneBiz.getZoneIdListByName(zoneNameList);
+		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
+		skuLot.setSkuLot1(pickByPcSoDetailResponse.getSkuLot1());
+		//根据查询条件获取库存集合
+		List<Stock> stockList = stockQueryBiz.findEnableStockByZone(soDetailAndStockRequest.getWhId(), pickByPcSoDetailResponse.getSkuId(),
+			StockStatusEnum.NORMAL, zoneIdList, skuLot);
 		for (Stock stock : stockList) {
-			BigDecimal stockEnableQty = StockUtil.getStockEnable(stock);
+			BigDecimal stockEnableQty = stock.getStockEnable();
 			if (stockEnableQty.compareTo(BigDecimal.ZERO) == -1) {
 				continue;
 			}
-			BigDecimal stockBalanceQty = StockUtil.getStockBalance(stock);
-			PickByPcStockResponse pickByPcStockResponse = new PickByPcStockResponse();
-			Func.copy(stock, pickByPcStockResponse);
-			pickByPcStockResponse.setStockEnableQty(stockEnableQty);
-			pickByPcStockResponse.setStockBalanceQty(stockBalanceQty);
-			pickByPcStockResponse.setSoDetailId(pickByPcSoDetailResponse.getSoDetailId());
-			pickByPcStockResponse.setSoDetailId(pickByPcSoDetailResponse.getSoDetailId());
-			stockResponseList.add(pickByPcStockResponse);
+			BigDecimal stockBalanceQty = stock.getStockBalance();
+			PickByPcStockDto pickByPcStockDto = new PickByPcStockDto();
+			Func.copy(stock, pickByPcStockDto);
+			pickByPcStockDto.setStockEnable(stockEnableQty);
+			pickByPcStockDto.setStockBalance(stockBalanceQty);
+			pickByPcStockDto.setSoDetailId(pickByPcSoDetailResponse.getSoDetailId());
+			pickByPcStockDto.setHasSerail(stockQueryBiz.getSerialCountByStockId(stock.getStockId()) > 0);
+			stockResponseList.add(pickByPcStockDto);
 		}
 		soDetailAndStockResponse.setStockResponseList(stockResponseList);
 		return soDetailAndStockResponse;

@@ -38,7 +38,7 @@ export const editMixin = {
             this.submitFormParams().then(res => {
                 this.$message.success(res.msg);
                 this.onClose();
-                if (func.isNotEmpty(res.router)){
+                if (func.isNotEmpty(res.router)) {
                     this.$router.push(res.router);
                 }
             });

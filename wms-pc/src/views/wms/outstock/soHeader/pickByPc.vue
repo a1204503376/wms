@@ -33,69 +33,50 @@
                         <template>
                             <el-table
                                 :data="detailData"
+                                border
+                                highlight-current-row
                                 style="width: 100%">
                                 <el-table-column
                                     prop="soLineNo"
                                     label="行号"
                                     width="180">
-                                    <el-input
-                                        size=mini
-                                        :disabled="true">
-                                    </el-input>
                                 </el-table-column>
                                 <el-table-column
                                     prop="skuCode"
                                     label="物品编码"
                                     width="180">
-                                    <el-input
-                                        size=mini
-                                        :disabled="true">
-                                    </el-input>
                                 </el-table-column>
                                 <el-table-column
                                     prop="planQty"
                                     label="计划量">
-                                    <el-input
-                                        size=mini
-                                        :disabled="true">
-                                    </el-input>
                                 </el-table-column>
                                 <el-table-column
-                                    prop="address"
+                                    prop="scanQty"
                                     label="已出量">
-                                    <el-input
-                                        size=mini
-                                        :disabled="true">
-                                    </el-input>
                                 </el-table-column>
                                 <el-table-column
-                                    prop="address"
+                                    prop="surplusQty"
                                     label="剩余量">
-                                    <el-input
-                                        size=mini
-                                        :disabled="true">
-                                    </el-input>
                                 </el-table-column>
                                 <el-table-column
-                                    prop="address"
+                                    prop="wsuCode"
                                     label="计量单位">
-                                    <el-input
-                                        size=mini
-                                        :disabled="true">
-                                    </el-input>
+
                                 </el-table-column>
                                 <el-table-column
-                                    prop="address"
+                                    prop="skuLot1"
                                     label="批次号">
-                                    <el-input
-                                        size=mini
-                                        :disabled="true">
-                                    </el-input>
+
+                                </el-table-column>
+                                <el-table-column
+                                    prop="skuLot2"
+                                    label="专用客户">
+
                                 </el-table-column>
                             </el-table>
                         </template>
                     </el-row>
-
+                    <br>
                     <el-row style="overflow-y: auto">
                         <el-tabs v-model="activeName" @tab-click="handleClick" type="border-card">
                             <el-tab-pane :label="item.lable" :name="item.name" v-for="(item, index) in tabList"
@@ -107,8 +88,7 @@
                                     size="mini">
                                     <el-table-column
                                         :align="'left'"
-                                        prop="skuCode"
-                                        width="150"
+                                        width="160"
                                     >
 
                                         <template slot="header">
@@ -118,6 +98,7 @@
                                             <el-input-number
                                                 v-model="row.outStockQty"
                                                 style="width:130px"
+                                                :max="getMax(row)"
                                                 :min="0"
                                                 controls-position="right"
                                                 size="mini"
@@ -134,6 +115,18 @@
                                             v-bind="column">
                                         </el-table-column>
                                     </template>
+                                    <el-table-column
+                                        :align="'left'"
+                                        width="200"
+                                    >
+                                        <template slot="header">
+                                            <span class="d-table-header-required">序列号</span>
+                                        </template>
+                                        <template v-slot="{row}">
+                                            <nodes-serial v-model="row.serailList" :stockId="row.stockId">
+                                            </nodes-serial>
+                                        </template>
+                                    </el-table-column>
                                 </el-table>
                             </el-tab-pane>
                         </el-tabs>
@@ -163,11 +156,10 @@
 
 <script>
 import {editDetailMixin} from "@/mixins/editDetail";
-import func from "@/util/func";
-import {ReceiveByPc} from "@/api/wms/instock/receive";
 import NodesLocation from "@/components/wms/select/NodesLocation";
-import {getSoDetailAndStock, getSoHeaderByPickPc} from "@/api/wms/outstock/soHeader";
+import {getSoDetailAndStock, getSoHeaderByPickPc, pickByPc} from "@/api/wms/outstock/soHeader";
 import NodesOutStock from "@/components/wms/select/NodesOutStock";
+import NodesSerial from "@/components/wms/select/NodesSerial";
 
 export default {
     props: {
@@ -175,6 +167,7 @@ export default {
     },
     name: "edit",
     components: {
+        NodesSerial,
         NodesOutStock,
         NodesLocation,
     },
@@ -189,11 +182,11 @@ export default {
             table: {
                 columnList: [
                     {
-                        prop: 'stockEnableQty',
+                        prop: 'stockEnable',
                         label: '可用库存',
                     },
                     {
-                        prop: 'stockBalanceQty',
+                        prop: 'stockBalance',
                         label: '余额',
                     },
                     {
@@ -201,8 +194,8 @@ export default {
                         label: '物品编码',
                     },
                     {
-                        prop: 'lotNumber',
-                        label: '批次号',
+                        prop: 'skuLot1',
+                        label: '批次',
                     },
                     {
                         prop: 'lotNumber',
@@ -259,47 +252,58 @@ export default {
         this.getHeaderData()
     },
     methods: {
+        getDescriptor() {
+            return {};
+        },
         handleClick() {
 
         },
-        getFocus(row) {
-            this.rowObject.lineNumber = row.lineNumber
-            this.rowObject.scanQty = row.scanQty
-        },
-        exist(row) {
-            if (func.isEmpty(row.lineNumber)) {
-                return true
+        getMax(row) {
+            if (this.detailData[0].surplusQty + row.outStockQty < row.stockBalance + row.outStockQty) {
+                return this.detailData[0].surplusQty + row.outStockQty
             }
-            return false
+            return row.stockEnable + row.outStockQty
         },
+
         onChange(val, oldVal, row) {
-            let data = this.table.data
             let a = val - oldVal
-            row.surplusQty = row.surplusQty - a
-            data.find(u => {
-                if (u.lineNumber === row.lineNumber) {
-                    u.surplusQty = row.surplusQty
-                }
-
-            });
-            this.rowData.find(u => {
-                if (u.lineNo === row.lineNumber) {
-                    u.surplusQty = row.surplusQty
-                }
-
-            });
+            row.stockEnable = row.stockEnable - a
+            this.detailData[0].scanQty = this.detailData[0].scanQty + a
+            this.detailData[0].surplusQty = this.detailData[0].surplusQty - a
         },
+
 
         // 过滤空白行
         filterBlankRow(row) {
             return !(
-                func.isEmpty(row.lineNumber)
+                row.outStockQty === 0
             );
         },
+        checkDetails() {
+            let tableData = this.table.data.filter(d => this.filterBlankRow(d));
+            if (tableData.length === 0) {
+                this.$message.warning("没有可以提交的数据");
+                return;
+            }
+            for (const row of tableData) {
+                if (!row.hasSerail) {
+                    continue;
+                }
+                if (row.outStockQty !== row.serailList.length) {
+                    this.$message.warning("出库数量与序列号选择数量不一致");
+                    return false;
+                }
+            }
+            this.table.postData = tableData;
+            return true;
+        },
+
+
         getDetailData(lineNo) {
             let soDetailAndStockRequest = {
                 soBillId: this.soBillId,
-                soLineNo: lineNo
+                soLineNo: lineNo,
+                whId: this.form.params.whId
             };
             getSoDetailAndStock(soDetailAndStockRequest)
                 .then((res) => {
@@ -320,23 +324,17 @@ export default {
                 })
 
         },
-        getDescriptor() {
-            return {
-                scanQty: {type: 'Number', validator: (rule, value) => value > 0, message: '计划数量不能为0'},
-                locId: {required: true, message: '库位不能为空'}
-            };
-        },
 
 
         submitFormParams() {
-            let detailRequestList = this.table.postData
-            let receiveByPcRequest = {receiveId: this.receiveId, detailRequestList}
-            return ReceiveByPc(receiveByPcRequest)
+            let pickByPcStockDtoList = this.table.postData
+            let pickByPcRequest = {soBillId: this.soBillId, pickByPcStockDtoList}
+            return pickByPc(pickByPcRequest)
                 .then(res => {
                     return {
-                        msg: res.data.msg,
+                        msg: res.data.data,
                         router: {
-                            path: '/wms/instock/receive',
+                            path: '/wms/outstock/soHeader',
                             query: {
                                 isRefresh: 'true'
                             }

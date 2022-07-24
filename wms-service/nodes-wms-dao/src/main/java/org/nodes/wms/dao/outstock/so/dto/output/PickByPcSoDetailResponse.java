@@ -25,6 +25,10 @@ public class PickByPcSoDetailResponse {
 	 */
 	private String skuCode;
 	/**
+	 * 物品id
+	 */
+	private Long skuId;
+	/**
 	 * 计划数量
 	 */
 	private BigDecimal planQty;
@@ -36,6 +40,10 @@ public class PickByPcSoDetailResponse {
 	 * 剩余数量
 	 */
 	private BigDecimal surplusQty;
+	/**
+	 * 计量单位
+	 */
+	private String umCode;
 	/**
 	 * 批次
 	 */

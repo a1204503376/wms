@@ -141,3 +141,19 @@ export const getSoDetailAndStock = (data) => {
         data: data
     })
 }
+export const getSerialSelectResponseList = (stockId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/getSerialSelectResponseList',
+        method: 'get',
+        params: {
+            stockId
+        }
+    })
+}
+export const pickByPc = (data) => {
+    return request({
+        url: '/api/wms/outstock/soBill/pickByPc',
+        method: 'post',
+        data: data
+    })
+}

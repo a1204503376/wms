@@ -17,6 +17,7 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.*;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.stock.dto.output.SerialSelectResponse;
 import org.nodes.wms.dao.stock.dto.output.StockDistResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
@@ -299,7 +300,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/getSoDetailAndStock")
 	public R<SoDetailAndStockResponse> getSoDetailAndStock(@Valid @RequestBody
-																   SoDetailAndStockRequest soDetailAndStockRequest) {
+														   SoDetailAndStockRequest soDetailAndStockRequest) {
 		return R.data(soHeaderBiz.getSoDetailAndStock(soDetailAndStockRequest));
 	}
 
@@ -307,7 +308,7 @@ public class SoBillController {
 	 * 分配：自动分配
 	 */
 	@PostMapping("/automaticAssign")
-	public R<String> automaticAssign(@Valid @RequestBody SoDetailIdsRequest soDetailIdsRequest){
+	public R<String> automaticAssign(@Valid @RequestBody SoDetailIdsRequest soDetailIdsRequest) {
 		return null;
 	}
 
@@ -315,7 +316,7 @@ public class SoBillController {
 	 * 分配：取消分配
 	 */
 	@PostMapping("/cancelAll")
-	public R<String> cancelAll(@Valid @RequestBody SoDetailIdsRequest soDetailIdsRequest){
+	public R<String> cancelAll(@Valid @RequestBody SoDetailIdsRequest soDetailIdsRequest) {
 		return null;
 	}
 
@@ -323,7 +324,7 @@ public class SoBillController {
 	 * 分配：确认下发
 	 */
 	@PostMapping("/issued")
-	public R<String> issued(@Valid @RequestBody SoBillIdRequest soBillIdRequest){
+	public R<String> issued(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		return null;
 	}
 
@@ -331,7 +332,7 @@ public class SoBillController {
 	 * 分配调整：根据物品id查找物品可分配库存信息
 	 */
 	@PostMapping("/getEnableStockBySkuId")
-	public R<StockDistResponse> getEnableStockBySkuId(@Valid @RequestBody SkuIdRequest skuIdRequest){
+	public R<StockDistResponse> getEnableStockBySkuId(@Valid @RequestBody SkuIdRequest skuIdRequest) {
 		return null;
 	}
 
@@ -339,7 +340,25 @@ public class SoBillController {
 	 * 分配调整：保存分配信息、更新库存占用数量
 	 */
 	@PostMapping("/saveAssign")
-	public R<String> saveAssign(@Valid @RequestBody SoBillDistRequest soBillDistRequest){
+	public R<String> saveAssign(@Valid @RequestBody SoBillDistRequest soBillDistRequest) {
 		return null;
+	}
+
+	/**
+	 * pc拣货: 获取序列号下拉列表
+	 */
+	@GetMapping("getSerialSelectResponseList")
+	public R<List<SerialSelectResponse>> getSerialSelectResponseList(Long stockId) {
+		List<SerialSelectResponse> serialSelectResponseList = soDetailBiz.getSerialSelectResponseList(stockId);
+		return R.data(serialSelectResponseList);
+	}
+
+	/**
+	 * pc拣货
+	 */
+	@ApiLog("pc拣货")
+	@PostMapping("pickByPc")
+	public R<String> pickByPc(@RequestBody PickByPcRequest pickByPcRequest) {
+		return R.data("操作成功");
 	}
 }
