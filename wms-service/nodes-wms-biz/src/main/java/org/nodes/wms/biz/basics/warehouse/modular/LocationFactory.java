@@ -1,7 +1,6 @@
 package org.nodes.wms.biz.basics.warehouse.modular;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.enums.StatusEnum;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
@@ -100,23 +99,22 @@ public class LocationFactory {
 //			&& !locationAddRequest.getStatus().equals(StatusEnum.OFF.getIndex())) {
 //			throw new ServiceException("新增失败，启用状态只能为1(启用)或者-1(禁用)");
 //		}
+		List<Location> locations = locationDao.getLocationByWhId(location.getWhId());
+		Warehouse warehouse = warehouseBiz.findById(location.getWhId());
 		Func.copy(locationAddOrEditRequest, location);
 		// 根据id是否为空判断是(新增/编辑)操作
 		if (Func.isNotEmpty(locationAddOrEditRequest.getLocId())) {
 			location.setLocId(locationAddOrEditRequest.getLocId());
+		} else {
+			List<String> locCodeList = locations.stream().map(Location::getLocCode).collect(Collectors.toList());
+			if (Func.isNotEmpty(locCodeList) && locCodeList.contains(location.getLocCode())) {
+				throw new ServiceException(
+					String.format(
+						"新增失败，库房[编码：%s]中的库位[编码：%s]已存在",
+						warehouse.getWhCode(),
+						locationAddOrEditRequest.getLocCode()));
+			}
 		}
-		List<Location> locations = locationDao.getLocationByWhId(location.getWhId());
-		Warehouse warehouse = warehouseBiz.findById(location.getWhId());
-		List<String> locCodeList = locations.stream().map(Location::getLocCode).collect(Collectors.toList());
-		if (Func.isNotEmpty(locCodeList) && locCodeList.contains(location.getLocCode())) {
-			throw new ServiceException(
-				String.format(
-					"%s失败，库房[编码：%s]中的库位[编码：%s]已存在",
-					Func.isEmpty(location.getLocId()) ? "新增" : "编辑",
-					warehouse.getWhCode(),
-					locationAddOrEditRequest.getLocCode()));
-		}
-
 		return location;
 	}
 
