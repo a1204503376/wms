@@ -58,7 +58,7 @@ public class SchedulingController {
 	}
 
 	/**
-	 * 调度系统: 生成箱码
+	 * 成品打包程序: 生成箱码
 	 *
 	 * @param lpnTypeCode
 	 * @return

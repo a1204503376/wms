@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 
-
 /**
  * 容器管理业务类
  */
@@ -142,11 +141,11 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 		return lpnTypeDao.getLpnTypeByCode(boxCode);
 	}
 
-    @Override
-    public String generateLpnCode(String lpnTypeCode) {
+	@Override
+	public String generateLpnCode(String lpnTypeCode) {
 		LpnType lpnType = lpnTypeDao.getLpnTypeByCode(lpnTypeCode);
 		AssertUtil.notEmpty(lpnType.getLpnNoRule(), "容器编码生成失败，没有配置编码生成规则");
 		return codeGenerator.generateCode(wmsAppConfig.getProjectName(),
-			"LPN", lpnTypeCode, lpnType.getLpnNoRule());
-    }
+				"LPN", lpnTypeCode, lpnType.getLpnNoRule());
+	}
 }
