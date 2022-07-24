@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.base.entity.Dept;
 import org.nodes.core.base.service.IDeptService;
-import org.nodes.core.base.vo.DeptVO;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.dao.basics.location.LocationDao;
 import org.nodes.wms.dao.basics.location.constant.LocationConstant;
@@ -62,12 +61,12 @@ public class WarehouseBizImpl implements WarehouseBiz {
 		return warehouseDao.findById(warehouseId);
 	}
 
-    @Override
-    public List<Warehouse> findAll() {
+	@Override
+	public List<Warehouse> findAll() {
 		return warehouseDao.findAll();
-    }
+	}
 
-    @Override
+	@Override
 	public Warehouse findByCode(String whCode) {
 		return warehouseDao.findByCode(whCode);
 	}
@@ -77,7 +76,7 @@ public class WarehouseBizImpl implements WarehouseBiz {
 	public List<Warehouse> getWarehouseByUser(BladeUser user) {
 		List<Dept> childDeptList = deptService.getAllChildDept(user.getDeptId());
 		List<Long> deptIdList = null;
-		if (Func.isEmpty(childDeptList)){
+		if (Func.isEmpty(childDeptList)) {
 			deptIdList = new ArrayList<>();
 		} else {
 			deptIdList = childDeptList.stream()
@@ -94,7 +93,7 @@ public class WarehouseBizImpl implements WarehouseBiz {
 	@Override
 	public List<WarehousePdaResponse> getWarehouseResponseByUser(BladeUser user) {
 		List<Warehouse> warehouseList = getWarehouseByUser(user);
-		if (Func.isEmpty(warehouseList)){
+		if (Func.isEmpty(warehouseList)) {
 			return null;
 		}
 
@@ -118,6 +117,12 @@ public class WarehouseBizImpl implements WarehouseBiz {
 			locationParam.setWhId(warehouse.getWhId());
 			locationParam.setZoneId(zone.getZoneId());
 			locationParam.setLocType(LocTypeEnum.Virtual.getCode());
+			if (Func.equals(item, LocationConstant.LOC_STAGE) && Func.isNotEmpty(warehouse.getStage())) {
+				return;
+			}
+			if (Func.equals(item, LocationConstant.LOC_PICKTO) && Func.isNotEmpty(warehouse.getPick())) {
+				return;
+			}
 			locationParam.setLocCode(warehouse.getWhCode() + "-" + item);
 			locationParam.setCreateDept(warehouse.getDeptId());
 			locationDao.saveOrUpdateLocation(locationParam);
