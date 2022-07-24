@@ -123,6 +123,9 @@ public class WarehouseBizImpl implements WarehouseBiz {
 			if (Func.equals(item, LocationConstant.LOC_PICKTO) && Func.isNotEmpty(warehouse.getPick())) {
 				return;
 			}
+			if (Func.equals(item, LocationConstant.LOC_QC) && Func.isNotEmpty(warehouse.getQc())) {
+				return;
+			}
 			locationParam.setLocCode(warehouse.getWhCode() + "-" + item);
 			locationParam.setCreateDept(warehouse.getDeptId());
 			locationDao.saveOrUpdateLocation(locationParam);
