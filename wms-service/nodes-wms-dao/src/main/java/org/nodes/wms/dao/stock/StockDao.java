@@ -139,10 +139,6 @@ public interface StockDao {
 	 */
 	List<Stock> getStockListBySkuCode(String skuCode);
 
-	List<Stock> findEnableStockByZoneType(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-										  List<String> zoneTypeList, SkuLotBaseEntity skuLot,
-										  List<Long> excludeZoneIdList);
-
 	List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
 									  List<Long> zoneIdList, SkuLotBaseEntity skuLot,
 									  List<Long> excludeZoneIdList);

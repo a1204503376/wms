@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
+import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.stock.merge.StockMergeStrategy;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.putway.dto.output.BoxDto;
@@ -46,6 +48,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StockQueryBizImpl implements StockQueryBiz {
 
+	private final ZoneBiz zoneBiz;
 	private final StockDao stockDao;
 	private final LocationBiz locationBiz;
 	private final LpnTypeBiz lpnTypeBiz;
@@ -186,11 +189,9 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public List<Stock> findEnableStockByZoneType(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
 												 List<String> zoneTypeList, SkuLotBaseEntity skuLot) {
-		Long pickToZoneId = locationBiz.getPickToLocation(whId).getZoneId();
-		List<Long> exculdeZoneIdList = new ArrayList<>();
-		exculdeZoneIdList.add(pickToZoneId);
-		return stockDao.findEnableStockByZoneType(whId, skuId, stockStatusEnum,
-			zoneTypeList, skuLot, exculdeZoneIdList);
+		List<Zone> zoneList = zoneBiz.findByZoneType(zoneTypeList);
+		List<Long> zoneIdList = zoneList.stream().map(Zone::getZoneId).collect(Collectors.toList());
+		return findEnableStockByZone(whId, skuId, stockStatusEnum, zoneIdList, skuLot);
 	}
 
 	@Override

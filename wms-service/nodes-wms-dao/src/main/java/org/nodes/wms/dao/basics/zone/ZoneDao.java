@@ -51,4 +51,6 @@ public interface ZoneDao {
 	 * @return Zone
 	 */
 	Zone saveOrUpdateZone(Zone zone);
+
+	List<Zone> getByZoneType(List<String> zoneTypeList);
 }
