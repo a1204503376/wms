@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
@@ -45,9 +46,28 @@ namespace Packaging.Common
             throw new ApplicationException("登录WMS失败");
         }
 
+        public static string GetBoxNumber(string lpnCode)
+        {
+            var result = $"{WmsUrl}/wms/scheduling/generateBoxCode"
+                .SetQueryParam("lpnTypeCode", lpnCode)
+                .GetAsync()
+                .ReceiveJson()
+                .Result;
+            if (result.success)
+            {
+                return result.data;
+            }
+
+            var msg = $"获取箱号时，WMS返回失败：{result.msg}";
+            Serilog.Log.Warning(msg);
+            throw new Exception(msg);
+
+        }
+
         private static string WmsUrl => ConfigurationManager.AppSettings["WmsUrl"];
     }
 
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class WmsLogin
     {
         public string user_name { get; set; }
@@ -58,5 +78,6 @@ namespace Packaging.Common
         public int? error_code { get; set; }
         public string error_description { get; set; }
         public long user_id { get; set; }
+        public long dept_id { get; set; }
     }
 }
