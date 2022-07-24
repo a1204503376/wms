@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.outstock.so.dto.output;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -22,4 +24,9 @@ public class PickByPcSoHeaderResponse implements Serializable {
 	 * 库房编码
 	 */
 	private String whCode;
+	/**
+	 * 库房id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long whId;
 }

@@ -16,25 +16,30 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ZoneBizImpl implements ZoneBiz {
 
-    private final ZoneDao zoneRepository;
+	private final ZoneDao zoneRepository;
 
 	@Override
 	public List<ZoneSelectResponse> getZoneSelectData(List<Long> whIdList) {
 		return zoneRepository.listSelectByWhIdList(whIdList);
 	}
 
-    @Override
-    public Zone findByCode(String zoneCode) {
-        return zoneRepository.getZoneByCode(zoneCode);
-    }
+	@Override
+	public Zone findByCode(String zoneCode) {
+		return zoneRepository.getZoneByCode(zoneCode);
+	}
 
-    @Override
-    public Zone findByCodeWhCode(String zoneCode, String whCode) {
-        return zoneRepository.getZoneByCodeWhCode(zoneCode,whCode);
-    }
+	@Override
+	public Zone findByCodeWhCode(String zoneCode, String whCode) {
+		return zoneRepository.getZoneByCodeWhCode(zoneCode, whCode);
+	}
 
-    @Override
-    public Zone findById(Long zoneId) {
-        return zoneRepository.getZoneById(zoneId);
-    }
+	@Override
+	public Zone findById(Long zoneId) {
+		return zoneRepository.getZoneById(zoneId);
+	}
+
+	@Override
+	public List<Long> getZoneIdListByName(List<String> zoneNameList) {
+		return zoneRepository.getZoneIdListByName(zoneNameList);
+	}
 }

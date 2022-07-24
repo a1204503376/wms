@@ -26,9 +26,17 @@ public interface ZoneMapper extends BaseMapper<Zone> {
 	/**
 	 * 根据库区编码和库房编码查询库区信息
 	 *
-	 * @param code: 库区编码
+	 * @param code:   库区编码
 	 * @param whCode: 库房编码
 	 * @return Zone
 	 */
-    Zone selectZoneByCodeWhCode(@Param("code") String code, @Param("whCode") String whCode);
+	Zone selectZoneByCodeWhCode(@Param("code") String code, @Param("whCode") String whCode);
+
+	/**
+	 * 根据库区名称集合获取库区id集合
+	 *
+	 * @param zoneNameList 库区名称集合
+	 * @return 库区id集合
+	 */
+	List<Long> selectZoneIdListByName(@Param("zoneNameList") List<String> zoneNameList);
 }

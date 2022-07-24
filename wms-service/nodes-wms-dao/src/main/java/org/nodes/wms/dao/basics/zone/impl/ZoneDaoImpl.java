@@ -42,4 +42,9 @@ public class ZoneDaoImpl
 		super.saveOrUpdate(zone);
 		return zone;
 	}
+
+	@Override
+	public List<Long> getZoneIdListByName(List<String> zoneNameList) {
+		return super.baseMapper.selectZoneIdListByName(zoneNameList);
+	}
 }

@@ -12,7 +12,7 @@
             :key="item.lineNo"
             :label="item.skuCode"
             :value="item.lineNo">
-            <span style="float: left">{{ item.lineNo }}</span>
+            <span style="float: left">{{ item.lineNo }}行</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.skuCode }}</span>
         </el-option>
     </el-select>
