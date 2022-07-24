@@ -4,7 +4,6 @@
 			:bgColor="navigationBarBackgroundColor" title="冻结" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
-		<h4 align="left" style='height: 70rpx;margin-top: 35rpx;' class="font-in-page left-text-one-line">冻结方式:</h4>
 		<view>
 			<u-cell-group>
 				<u-cell title="1.按库位冻结" isLink url="/pages/stock/freezeOrUnFreeze/freeze/freezeByLocCode"></u-cell>

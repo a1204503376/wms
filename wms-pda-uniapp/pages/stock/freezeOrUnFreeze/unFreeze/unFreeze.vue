@@ -4,7 +4,6 @@
 			:bgColor="navigationBarBackgroundColor" title="解冻" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
-		<h4 align="left" style='height: 70rpx;margin-top: 35rpx;' class="font-in-page left-text-one-line">解冻方式:</h4>
 		<view>
 			<u-cell-group>
 				<u-cell title="1.按库位解冻" isLink url="/pages/stock/freezeOrUnFreeze/unFreeze/unFreezeByLocCode"></u-cell>
