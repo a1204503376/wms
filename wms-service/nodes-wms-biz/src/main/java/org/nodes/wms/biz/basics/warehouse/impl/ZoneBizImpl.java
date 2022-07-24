@@ -37,4 +37,9 @@ public class ZoneBizImpl implements ZoneBiz {
     public Zone findById(Long zoneId) {
         return zoneRepository.getZoneById(zoneId);
     }
+
+    @Override
+    public List<Zone> findByZoneType(List<String> zoneTypeList) {
+		return zoneRepository.getByZoneType(zoneTypeList);
+    }
 }

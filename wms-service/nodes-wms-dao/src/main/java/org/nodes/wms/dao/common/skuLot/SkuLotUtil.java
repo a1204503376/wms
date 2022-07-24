@@ -3,7 +3,6 @@ package org.nodes.wms.dao.common.skuLot;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.nodes.wms.dao.basics.skulot.SkuLotValDao;
 import org.nodes.wms.dao.basics.skulot.constant.SkuLotConstant;
-import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotVal;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
@@ -173,9 +172,10 @@ public class SkuLotUtil {
 	 *
 	 * @param queryWrapper
 	 * @param skuLot
+	 * @param <T>
 	 * @param <R>
 	 */
-	public static <R> void applySql(LambdaQueryWrapper<R> queryWrapper, SkuLotBaseEntity skuLot) {
+	public static <T, R> void applySql(LambdaQueryWrapper<R> queryWrapper, T skuLot) {
 		String propertyName;
 		for (int i = 0; i < SKULOT_NUMBER; ++i) {
 			propertyName = String.format("%s%d", SKULOT, i + 1);

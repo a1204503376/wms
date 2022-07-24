@@ -41,4 +41,11 @@ public interface ZoneBiz {
 	 * @return Zone
 	 */
     Zone findById(Long zoneId);
+
+	/**
+	 * 根据库区类型查询库区
+	 * @param zoneTypeList
+	 * @return
+	 */
+	List<Zone> findByZoneType(List<String> zoneTypeList);
 }
