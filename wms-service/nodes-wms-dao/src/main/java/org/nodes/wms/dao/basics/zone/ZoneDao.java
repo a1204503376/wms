@@ -59,4 +59,6 @@ public interface ZoneDao {
 	 * @return 库区id集合
 	 */
 	List<Long> getZoneIdListByName(List<String> zoneNameList);
+
+	List<Zone> getByZoneType(List<String> zoneTypeList);
 }

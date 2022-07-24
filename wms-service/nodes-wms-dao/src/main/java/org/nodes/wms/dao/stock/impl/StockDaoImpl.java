@@ -261,19 +261,6 @@ public class StockDaoImpl
 	}
 
 	@Override
-	public List<Stock> findEnableStockByZoneType(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-												 List<String> zoneTypeList, SkuLotBaseEntity skuLot, List<Long> excludeZoneIdList) {
-		checkByFindEnableStock(whId, skuId, excludeZoneIdList);
-
-		LambdaQueryWrapper<Stock> stockQuery = getStockQuery();
-		stockQuery.eq(Stock::getWhId, whId)
-			.eq(Stock::getSkuId, skuId);
-
-		// TODO
-		return null;
-	}
-
-	@Override
 	public List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
 											 List<Long> zoneIdList, SkuLotBaseEntity skuLot,
 											 List<Long> excludeZoneIdList) {

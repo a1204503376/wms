@@ -18,6 +18,7 @@ public class ZoneDaoImpl
 	extends BaseServiceImpl<ZoneMapper, Zone>
 	implements ZoneDao {
 
+	@Override
 	public List<ZoneSelectResponse> listSelectByWhIdList(List<Long> whIdList) {
 		return super.baseMapper.listSelectByWhIdList(whIdList);
 	}
@@ -42,6 +43,15 @@ public class ZoneDaoImpl
 		super.saveOrUpdate(zone);
 		return zone;
 	}
+
+    @Override
+    public List<Zone> getByZoneType(List<String> zoneTypeList) {
+		AssertUtil.notEmpty(zoneTypeList, "根据库区类型查找库区失败，因为库区类型集合为空");
+
+        LambdaQueryWrapper<Zone> queryWrapper = Wrappers.lambdaQuery(Zone.class);
+        queryWrapper.in(Zone::getZoneType, zoneTypeList);
+        return super.list(queryWrapper);
+    }
 
 	@Override
 	public List<Long> getZoneIdListByName(List<String> zoneNameList) {

@@ -119,6 +119,14 @@ public interface StockQueryBiz {
 	List<Serial> findSerialByStock(Long stockId);
 
 	/**
+	 * 根据库存id获取序列号数量
+	 *
+	 * @param stockId 库存id
+	 * @return 序列号数量
+	 */
+	int getSerialCountByStockId(Long stockId);
+
+	/**
 	 * 首页的库存数据统计
 	 *
 	 * @return 统计数据
@@ -162,18 +170,10 @@ public interface StockQueryBiz {
 	List<CallAgvResponse> findLpnStockOnStageLeftByCallAgv(Long whId, String boxCode);
 
 	/**
-	 * pc上架根据物料编码获取库存集合
+	 * pc上架根据物料编码获取库存集合 TODO 可以删除了
 	 *
 	 * @param skuCode 物料编码
 	 * @return 库存集合
 	 */
 	List<Stock> getStockListBySkuCode(String skuCode);
-
-	/**
-	 * 根据库存id获取序列号数量
-	 *
-	 * @param stockId 库存id
-	 * @return 序列号数量
-	 */
-	int getSerialCountByStockId(Long stockId);
 }

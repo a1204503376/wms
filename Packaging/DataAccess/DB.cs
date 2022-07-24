@@ -66,6 +66,15 @@ namespace DataAccess
                         throw new ArgumentOutOfRangeException();
                 }
             };
+
+            // mysql枚举映射为int
+            freeSql.Aop.ConfigEntityProperty += (s, e) =>
+            {
+                if (e.Property.PropertyType.IsEnum)
+                {
+                    e.ModifyResult.MapType = typeof(int);
+                }
+            };
             return freeSql;
         });
 

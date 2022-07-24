@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.basics.warehouse.entities;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -25,9 +26,8 @@ import java.io.Serializable;
 @ApiModel(value = "Warehouse对象", description = "仓库")
 public class Warehouse extends TenantEntity implements Serializable {
 
-	private static final long serialVersionUID = 1L;
 	public static final int DATA_TYPE = 2;
-
+	private static final long serialVersionUID = 1L;
 	/**
 	 * 仓库ID
 	 */
@@ -91,6 +91,13 @@ public class Warehouse extends TenantEntity implements Serializable {
 	@ApiModelProperty(value = "出库暂存区")
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long pick;
+	/**
+	 * 入库质检区
+	 */
+	@ApiModelProperty(value = "入库质检区")
+	@JsonSerialize(using = ToStringSerializer.class)
+	@TableField(exist = false)
+	private Long qc;
 	/**
 	 * 包装暂存区
 	 */

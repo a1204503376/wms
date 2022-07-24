@@ -23,13 +23,13 @@ public interface ZoneBiz {
 	 * @param zoneCode: 库区编码
 	 * @return Zone
 	 */
-	Zone findByCode(String zoneCode);
+    Zone findByCode(String zoneCode);
 
 	/**
 	 * 根据库区编码和库房编码查询库区信息
 	 *
 	 * @param zoneCode: 库区编码
-	 * @param whCode:   库房编码
+	 * @param whCode: 库房编码
 	 * @return Zone
 	 */
 	Zone findByCodeWhCode(String zoneCode, String whCode);
@@ -40,7 +40,14 @@ public interface ZoneBiz {
 	 * @param zoneId: 库区id
 	 * @return Zone
 	 */
-	Zone findById(Long zoneId);
+    Zone findById(Long zoneId);
+
+	/**
+	 * 根据库区类型查询库区
+	 * @param zoneTypeList
+	 * @return
+	 */
+	List<Zone> findByZoneType(List<String> zoneTypeList);
 
 	/**
 	 * 根据库区名称集合获取库区id集合
