@@ -93,7 +93,10 @@ public class SerialDaoImpl extends BaseServiceImpl<SerialMapper, Serial> impleme
 
 	@Override
 	public int getSerialCountByStockId(Long stockId) {
-		return super.count(new LambdaQueryWrapper<Serial>().eq(Serial::getStockId, stockId));
+		LambdaQueryWrapper<Serial> queryWrapper = getLambdaQuery();
+		queryWrapper.eq(Serial::getStockId, stockId)
+			.eq(Serial::getSerialState, SerialStateEnum.IN_STOCK.getCode());
+		return super.count(queryWrapper);
 	}
 
 	private LambdaQueryWrapper<Serial> getLambdaQuery() {

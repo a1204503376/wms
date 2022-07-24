@@ -185,7 +185,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public List<Stock> findEnableStockByZoneType(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-													 List<String> zoneTypeList, SkuLotBaseEntity skuLot) {
+												 List<String> zoneTypeList, SkuLotBaseEntity skuLot) {
 		Long pickToZoneId = locationBiz.getPickToLocation(whId).getZoneId();
 		List<Long> exculdeZoneIdList = new ArrayList<>();
 		exculdeZoneIdList.add(pickToZoneId);
@@ -195,7 +195,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-												 List<Long> zoneIdList, SkuLotBaseEntity skuLot) {
+											 List<Long> zoneIdList, SkuLotBaseEntity skuLot) {
 		Long pickToZoneId = locationBiz.getPickToLocation(whId).getZoneId();
 		List<Long> exculdeZoneIdList = new ArrayList<>();
 		exculdeZoneIdList.add(pickToZoneId);
@@ -205,7 +205,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-													 List<Long> locationIdList, SkuLotBaseEntity skuLot) {
+												 List<Long> locationIdList, SkuLotBaseEntity skuLot) {
 		Long pickToZoneId = locationBiz.getPickToLocation(whId).getZoneId();
 		List<Long> exculdeZoneIdList = new ArrayList<>();
 		exculdeZoneIdList.add(pickToZoneId);
