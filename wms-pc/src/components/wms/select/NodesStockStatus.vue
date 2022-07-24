@@ -3,6 +3,7 @@
     <el-select
         v-model="val"
         :multiple="multiple"
+        :clearable="true"
         size="mini"
         style="width:100%;"
         value-key="value"

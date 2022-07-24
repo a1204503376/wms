@@ -2,6 +2,7 @@
     <el-select
         v-model="val"
         :multiple="multiple"
+        :clearable="true"
         size="size"
         value-key="id"
         @change="onChange">

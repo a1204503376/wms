@@ -2,6 +2,7 @@
     <el-select
         v-model="val"
         :multiple="multiple"
+        :clearable="true"
         collapse-tags
         placeholder="请选择"
         :size="size"

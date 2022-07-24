@@ -5,6 +5,7 @@
         collapse-tags
         placeholder="请选择"
         :multiple="multiple"
+        :clearable="true"
         size="mini"
         style="width:100%;"
         :default-first-option="true"

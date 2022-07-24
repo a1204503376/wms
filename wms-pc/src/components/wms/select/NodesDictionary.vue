@@ -2,6 +2,7 @@
     <el-select
         v-model="val"
         :code="code"
+        :clearable="true"
         :multiple="multiple"
         collapse-tags
         :size="size"

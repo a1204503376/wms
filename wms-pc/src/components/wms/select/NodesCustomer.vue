@@ -5,6 +5,7 @@
         :default-first-option="true"
         :loading="loading"
         :multiple="multiple"
+        :clearable="true"
         :remote-method="remoteMethod"
         :size="size"
         filterable

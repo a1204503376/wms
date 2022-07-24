@@ -5,6 +5,7 @@
         :multiple="multiple"
         collapse-tags
         :size="size"
+        :clearable="true"
         value-key="zoneId"
         :wh-id-list="whIdList"
         @change="onChange">
