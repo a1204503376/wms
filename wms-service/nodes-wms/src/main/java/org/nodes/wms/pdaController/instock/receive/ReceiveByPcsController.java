@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 /**
  * 按件收货API
  */
@@ -59,8 +58,10 @@ public class ReceiveByPcsController {
 	 * @return 按单收货详情集合
 	 */
 	@PostMapping("/findDetailListByReceiveId")
-	public R<List<DetailReceiveDetailPdaResponse>> findDetailListByReceiveId(@RequestBody ReceiveDetailPdaQuery receiveDetailPdaQuery) {
-		List<DetailReceiveDetailPdaResponse> listByReceiveId = receiveBiz.getDetailListByReceiveId(receiveDetailPdaQuery);
+	public R<List<DetailReceiveDetailPdaResponse>> findDetailListByReceiveId(
+			@RequestBody ReceiveDetailPdaQuery receiveDetailPdaQuery) {
+		List<DetailReceiveDetailPdaResponse> listByReceiveId = receiveBiz
+				.getDetailListByReceiveId(receiveDetailPdaQuery);
 		return R.data(listByReceiveId);
 	}
 
@@ -71,8 +72,10 @@ public class ReceiveByPcsController {
 	 * @return 当前收货单详情，以及他是否是序列号管理 isSn
 	 */
 	@PostMapping("findDetailByReceiveDetailId")
-	public R<ReceiveDetailByReceiveIdPdaResponse> findDetailByReceiveDetailId(@RequestBody ReceiveDetailByReceiveIdPdaQuery receiveDetailByReceiveIdPdaQuery) {
-		ReceiveDetailByReceiveIdPdaResponse detail = receiveBiz.selectDetailByReceiveDetailId(receiveDetailByReceiveIdPdaQuery);
+	public R<ReceiveDetailByReceiveIdPdaResponse> findDetailByReceiveDetailId(
+			@RequestBody ReceiveDetailByReceiveIdPdaQuery receiveDetailByReceiveIdPdaQuery) {
+		ReceiveDetailByReceiveIdPdaResponse detail = receiveBiz
+				.selectDetailByReceiveDetailId(receiveDetailByReceiveIdPdaQuery);
 		return R.data(detail);
 	}
 
@@ -109,7 +112,7 @@ public class ReceiveByPcsController {
 	 */
 	@PostMapping("findThisStockByBoxCode")
 	public R<List<StockPdaByPcsResponse>> findThisStockByBoxCode(@RequestBody StockPdaByPcsRequest request) {
-		List<Stock> stockList = stockQueryBiz.findStockByBoxCode(request.getBoxCode());
+		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
 		List<StockPdaByPcsResponse> responseList = BeanUtil.copy(stockList, StockPdaByPcsResponse.class);
 		return R.data(responseList);
 	}
@@ -124,11 +127,10 @@ public class ReceiveByPcsController {
 	public R<List<String>> getSerialNumberList(@RequestBody ReceiveSerialNoListRequest request) {
 		List<Serial> serialList = stockQueryBiz.findSerialBySerialNo(request.getSerialNumberList());
 		List<String> serialNumberList = serialList.stream()
-			.map(Serial::getSerialNumber)
-			.distinct()
-			.collect(Collectors.toList());
+				.map(Serial::getSerialNumber)
+				.distinct()
+				.collect(Collectors.toList());
 		return R.data(serialNumberList);
 	}
-
 
 }

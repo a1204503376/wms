@@ -5,11 +5,17 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.nodes.wms.biz.stock.StockQueryBiz;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.test.BladeBootTest;
 import org.springblade.core.test.BladeSpringRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 库存测试类
@@ -19,17 +25,16 @@ import org.springblade.core.test.BladeSpringRunner;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class StockTest {
 
+	@Autowired
+	private StockQueryBiz stockQueryBiz;
 
 	@Test
 	public void testStockQuery(){
-		BaseSkuLot skuLot1 = new BaseSkuLot();
-		skuLot1.setSkuLot1("test1");
-		skuLot1.setSkuLot2("test2");
-
-		BaseSkuLotEntity skuLot2 = new BaseSkuLotEntity();
-		SkuLotUtil.setAllSkuLot(skuLot1, skuLot2);
-
-		Assertions.assertEquals(skuLot2.getSkuLot1(), skuLot1.getSkuLot1());
-		Assertions.assertEquals(skuLot2.getSkuLot2(), skuLot1.getSkuLot2());
+		Long whId = 1540154178775576578L;
+		Long skuId = 1544937646084644866L;
+		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
+		skuLot.setSkuLot1("190904");
+		List<Stock> stock = stockQueryBiz.findEnableStockByLocation(whId, skuId, null, null, skuLot);
+		Assertions.assertNotNull(stock);
 	}
 }

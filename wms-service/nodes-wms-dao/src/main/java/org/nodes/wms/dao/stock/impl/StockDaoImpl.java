@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
+import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
@@ -25,7 +26,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * 库存Dao接口实现类
@@ -254,11 +254,16 @@ public class StockDaoImpl
 		return super.list(new LambdaQueryWrapper<Stock>().eq(Stock::getSkuCode, skuCode));
 	}
 
-	@Override
-	public <R> List<Stock> findEnableStock(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-									   List<String> zoneTypeList, SkuLotBaseEntity skuLot, Function<?, R>[] sorts) {
+	private void checkByFindEnableStock(Long whId, Long skuId, List<Long> excludeZoneIdList) {
 		AssertUtil.notNull(whId, "查询可用库存时库房id不能位空");
 		AssertUtil.notNull(skuId, "查询可用库存时物品id不能位空");
+		AssertUtil.notNull(excludeZoneIdList, "查询可用库存时出库暂存区id不能位空");
+	}
+
+	@Override
+	public List<Stock> findEnableStockByZoneType(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
+												 List<String> zoneTypeList, SkuLotBaseEntity skuLot, List<Long> excludeZoneIdList) {
+		checkByFindEnableStock(whId, skuId, excludeZoneIdList);
 
 		LambdaQueryWrapper<Stock> stockQuery = getStockQuery();
 		stockQuery.eq(Stock::getWhId, whId)
@@ -266,6 +271,43 @@ public class StockDaoImpl
 
 		// TODO
 		return null;
+	}
+
+	@Override
+	public List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
+											 List<Long> zoneIdList, SkuLotBaseEntity skuLot,
+											 List<Long> excludeZoneIdList) {
+		checkByFindEnableStock(whId, skuId, excludeZoneIdList);
+
+		LambdaQueryWrapper<Stock> stockQuery = getStockQuery();
+		stockQuery.eq(Stock::getWhId, whId)
+			.eq(Stock::getSkuId, skuId)
+			.in(Func.isNotEmpty(zoneIdList), Stock::getZoneId, zoneIdList)
+			.notIn(Stock::getZoneId, excludeZoneIdList);
+		if (!Func.isNull(stockStatusEnum)) {
+			stockQuery.eq(Stock::getStockStatus, stockStatusEnum.getCode());
+		}
+		SkuLotUtil.applySql(stockQuery, skuLot);
+
+		return super.list(stockQuery);
+	}
+
+	@Override
+	public List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
+												 List<Long> locationIdList, SkuLotBaseEntity skuLot, List<Long> excludeZoneIdList) {
+		checkByFindEnableStock(whId, skuId, excludeZoneIdList);
+
+		LambdaQueryWrapper<Stock> stockQuery = getStockQuery();
+		stockQuery.eq(Stock::getWhId, whId)
+			.eq(Stock::getSkuId, skuId)
+			.in(Func.isNotEmpty(locationIdList), Stock::getLocId, locationIdList)
+			.notIn(Stock::getZoneId, excludeZoneIdList);
+		if (!Func.isNull(stockStatusEnum)) {
+			stockQuery.eq(Stock::getStockStatus, stockStatusEnum.getCode());
+		}
+		SkuLotUtil.applySql(stockQuery, skuLot);
+
+		return super.list(stockQuery);
 	}
 
 }

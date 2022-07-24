@@ -1,7 +1,8 @@
 package org.nodes.wms.biz.stock;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import java.util.List;
+import java.util.function.Supplier;
+
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
@@ -18,12 +19,16 @@ import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.mp.support.Query;
 
-import java.util.List;
-import java.util.function.Function;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 public interface StockQueryBiz {
+
 	/**
 	 * 根据Id获取库存实体,包含了出库暂存区
+	 *
+	 * @param stockId
+	 * @return
 	 */
 	Stock findStockById(Long stockId);
 
@@ -38,16 +43,41 @@ public interface StockQueryBiz {
 	/**
 	 * 查找可用库存,排除出库暂存区
 	 *
-	 * @param whId   必填，库房id
-	 * @param skuId  必填，物品id
+	 * @param whId            必填，库房id
+	 * @param skuId           必填，物品id
 	 * @param stockStatusEnum 非必填，如果为空则表示查询所有状态
-	 * @param zoneTypeList 非必填，如果为空则表示不限制库区类型
-	 * @param skuLot 非必填，如果批属性不为空，则需要匹配
-	 * @param sorts 非必填，排序字段，只支持stock属性的排序，默认按物品和库位编码升序
+	 * @param zoneTypeList    非必填，如果为空则表示不限制库区类型
+	 * @param skuLot          非必填，如果批属性不为空，则需要匹配
 	 * @return
 	 */
-	<R> List<Stock> findEnableStock(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-									List<String> zoneTypeList, SkuLotBaseEntity skuLot, Function<?, R>[] sorts);
+	List<Stock> findEnableStockByZoneType(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
+			List<String> zoneTypeList, SkuLotBaseEntity skuLot);
+
+	/**
+	 * 根据库区id查询可用库存,排除出库暂存区
+	 *
+	 * @param whId            必填，库房id
+	 * @param skuId           必填，物品id
+	 * @param stockStatusEnum 非必填，如果为空则表示查询所有状态
+	 * @param zoneIdList      非必填，如果为空则表示不限制库区
+	 * @param skuLot          非必填，如果批属性不为空，则需要匹配
+	 * @return
+	 */
+	List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
+			List<Long> zoneIdList, SkuLotBaseEntity skuLot);
+
+	/**
+	 * 根据库位id查询可用库存,排除出库暂存区
+	 *
+	 * @param whId            必填，库房id
+	 * @param skuId           必填，物品id
+	 * @param stockStatusEnum 非必填，如果为空则表示查询所有状态
+	 * @param locationIdList  非必填，如果为空则表示不限制库位
+	 * @param skuLot          非必填，如果批属性不为空，则需要匹配
+	 * @return
+	 */
+	List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
+			List<Long> locationIdList, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 根据箱码查询库存,排除出库暂存区
@@ -55,7 +85,7 @@ public interface StockQueryBiz {
 	 * @param boxCode 箱码，必填
 	 * @return 库存对象
 	 */
-	List<Stock> findStockByBoxCode(String boxCode);
+	List<Stock> findEnableStockByBoxCode(String boxCode);
 
 	/**
 	 * 根据箱码获取入库暂存区的库存

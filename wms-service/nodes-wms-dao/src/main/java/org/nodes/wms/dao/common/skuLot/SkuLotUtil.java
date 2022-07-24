@@ -1,7 +1,9 @@
 package org.nodes.wms.dao.common.skuLot;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.nodes.wms.dao.basics.skulot.SkuLotValDao;
 import org.nodes.wms.dao.basics.skulot.constant.SkuLotConstant;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotVal;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
@@ -166,4 +168,28 @@ public class SkuLotUtil {
 		return true;
 	}
 
+	/**
+	 * 如果skulot不为null时，将会把该批属性追加到sql中
+	 *
+	 * @param queryWrapper
+	 * @param skuLot
+	 * @param <R>
+	 */
+	public static <R> void applySql(LambdaQueryWrapper<R> queryWrapper, SkuLotBaseEntity skuLot) {
+		String propertyName;
+		for (int i = 0; i < SKULOT_NUMBER; ++i) {
+			propertyName = String.format("%s%d", SKULOT, i + 1);
+			Property skuLotProperty = ReflectUtil.getProperty(skuLot.getClass(), propertyName);
+			try {
+				Object skuLotValue = skuLotProperty.getReadMethod().invoke(skuLot);
+				if (!Func.isNull(skuLotValue)) {
+					queryWrapper.apply(String.format("sku_lot%d = '%s'", i + 1, skuLotValue));
+				}
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

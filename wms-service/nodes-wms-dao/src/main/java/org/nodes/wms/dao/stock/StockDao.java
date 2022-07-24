@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * 库存Dao接口
@@ -140,16 +139,15 @@ public interface StockDao {
 	 */
 	List<Stock> getStockListBySkuCode(String skuCode);
 
-	/**
-	 * 查询可用库存
-	 * @param whId
-	 * @param skuId
-	 * @param stockStatusEnum
-	 * @param zoneTypeList
-	 * @param skuLot
-	 * @param sorts
-	 * @return
-	 */
-	<R> List<Stock> findEnableStock(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-								List<String> zoneTypeList, SkuLotBaseEntity skuLot, Function<?, R>[] sorts);
+	List<Stock> findEnableStockByZoneType(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
+										  List<String> zoneTypeList, SkuLotBaseEntity skuLot,
+										  List<Long> excludeZoneIdList);
+
+	List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
+									  List<Long> zoneIdList, SkuLotBaseEntity skuLot,
+									  List<Long> excludeZoneIdList);
+
+	List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
+										  List<Long> locationIdList, SkuLotBaseEntity skuLot,
+										  List<Long> excludeZoneIdList);
 }
