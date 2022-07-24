@@ -1,6 +1,7 @@
 <template>
     <el-select
         v-model="val"
+        :clearable="true"
         collapse-tags
         placeholder="请选择"
         :multiple="multiple"

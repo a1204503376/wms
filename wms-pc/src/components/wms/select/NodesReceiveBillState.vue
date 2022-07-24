@@ -1,6 +1,7 @@
 <template>
     <nodes-select
         v-model="val"
+        :clearable="true"
         :data-source="dataSource"
     >
     </nodes-select>

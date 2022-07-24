@@ -2,6 +2,7 @@
     <el-select
         v-model="val"
         :default-first-option="true"
+        :clearable="true"
         :multiple="multiple"
         :loading="loading"
         :remote-method="remoteMethod"

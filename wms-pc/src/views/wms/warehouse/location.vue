@@ -8,25 +8,24 @@
                             <el-input
                                 v-model.trim="form.params.locCode"
                                 :clearable="true"
-                                placeholder="请输入库位编码"
-                            ></el-input>
+                                placeholder="请输入库位编码">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="所属库房" label-width="90px">
                             <nodes-warehouse
                                 v-model="form.params.whIdList"
-                                :multiple="true"
-                            ></nodes-warehouse>
+                                :multiple="true">
+                            </nodes-warehouse>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="所属库区" label-width="90px">
                             <nodes-zone
                                 v-model="form.params.zoneIdList"
-                                :multiple="true"
-                                skuIdList
-                            ></nodes-zone>
+                                :multiple="true">
+                            </nodes-zone>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -38,9 +37,8 @@
                             <nodes-dictionary
                                 v-model="form.params.locTypeList"
                                 :multiple="true"
-                                code="loc_type"
-                                skuIdList
-                            ></nodes-dictionary>
+                                code="loc_type">
+                            </nodes-dictionary>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -48,9 +46,8 @@
                             <nodes-dictionary
                                 v-model="form.params.locCategoryList"
                                 :multiple="true"
-                                code="loc_category"
-                                skuIdList
-                            ></nodes-dictionary>
+                                code="loc_category">
+                            </nodes-dictionary>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -58,23 +55,19 @@
                             <nodes-dictionary
                                 v-model="form.params.locHandlingList"
                                 :multiple="true"
-                                code="loc_handling"
-                                skuIdList
-                            ></nodes-dictionary>
+                                code="loc_handling">
+                            </nodes-dictionary>
                         </el-form-item>
                     </el-col>
-                    <el-row>
-                        <el-col :span="6">
-                            <el-form-item label="使用状态" label-width="90px">
-                                <nodes-dictionary
-                                    v-model="form.params.locFlagList"
-                                    :multiple="true"
-                                    code="loc_flag"
-                                    skuIdList
-                                ></nodes-dictionary>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
+                    <el-col :span="6">
+                        <el-form-item label="使用状态" label-width="90px">
+                            <nodes-dictionary
+                                v-model="form.params.locFlagList"
+                                :multiple="true"
+                                code="loc_flag">
+                            </nodes-dictionary>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
             </template>
             <template v-slot:batchBtn>

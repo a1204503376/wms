@@ -7,7 +7,7 @@
                          :rules="form.rules"
                          label-position="right"
                          label-width="120px"
-                         size="mini"
+                         size="medium"
                          style="margin-left:10px;margin-right:10px;"
                 >
                     <el-row>
@@ -17,8 +17,10 @@
                         <el-col :span="8">
                             <el-form-item label="库位编码" prop="locCode">
                                 <el-input
+                                    size="medium"
                                     :clearable="true"
                                     v-model="form.params.locCode"
+                                    :disabled="true"
                                     placeholder="请输入编码"
                                     type="text"
                                 ></el-input>
@@ -27,6 +29,7 @@
                         <el-col :span="8">
                             <el-form-item label="库房" prop="whId">
                                 <nodes-warehouse
+                                    size="medium"
                                     v-model="form.params.whId"
                                 ></nodes-warehouse>
                             </el-form-item>
@@ -34,6 +37,7 @@
                         <el-col :span="8">
                             <el-form-item label="库区" prop="zoneId">
                                 <nodes-zone
+                                    size="medium"
                                     v-model="form.params.zoneId"
                                 ></nodes-zone>
                             </el-form-item>
@@ -43,6 +47,7 @@
                         <el-col :span="8">
                             <el-form-item label="库位类型" prop="locType">
                                 <nodes-dictionary
+                                    size="medium"
                                     v-model="form.params.locType"
                                     code="loc_type"
                                 ></nodes-dictionary>
@@ -51,6 +56,7 @@
                         <el-col :span="8">
                             <el-form-item label="库位种类" prop="locCategory">
                                 <nodes-dictionary
+                                    size="medium"
                                     v-model="form.params.locCategory"
                                     code="loc_category"
                                 ></nodes-dictionary>
@@ -59,6 +65,7 @@
                         <el-col :span="8">
                             <el-form-item label="库位处理" prop="locHandling">
                                 <nodes-dictionary
+                                    size="medium"
                                     v-model="form.params.locHandling"
                                     code="loc_handling"
                                 ></nodes-dictionary>
@@ -69,6 +76,7 @@
                         <el-col :span="8">
                             <el-form-item label="校验数位" prop="checkDigit">
                                 <el-input
+                                    size="medium"
                                     :clearable="true"
                                     v-model="form.params.checkDigit"
                                     maxlength="50"
@@ -85,12 +93,13 @@
                                     v-model="form.params.logicAllocation"
                                     :min="0"
                                     controls-position="right"
-                                    style="width: 288px"></el-input-number>
+                                    size="medium"></el-input-number>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="使用状态" prop="locFlag">
                                 <nodes-dictionary
+                                    size="medium"
                                     v-model="form.params.locFlag"
                                     code="loc_flag">
                                 </nodes-dictionary>
@@ -101,6 +110,7 @@
                         <el-col :span="8">
                             <el-form-item label="ABC分类" prop="abc">
                                 <nodes-dictionary
+                                    size="medium"
                                     v-model="form.params.abc"
                                     code="abc"
                                 ></nodes-dictionary>
@@ -109,17 +119,17 @@
                         <el-col :span="8">
                             <el-form-item label="上架顺序" prop="putOrder">
                                 <el-input-number
+                                    size="medium"
                                     v-model="form.params.putOrder"
                                     :min="0"
-                                    controls-position="right"
-                                    style="width: 288px"></el-input-number>
+                                    controls-position="right"></el-input-number>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="容器类别" prop="lpnTypeId">
                                 <nodes-lpn-type
-                                    v-model="form.params.lpnTypeId"
-                                >
+                                    size="medium"
+                                    v-model="form.params.lpnTypeId">
                                 </nodes-lpn-type>
                             </el-form-item>
                         </el-col>
@@ -131,6 +141,7 @@
                         <el-col :span="8">
                             <el-form-item label="长度" prop="locLength">
                                 <el-input
+                                    size="medium"
                                     v-model="form.params.locLength"
                                     placeholder="请输入长度"
                                     :clearable="true"
@@ -141,6 +152,7 @@
                         <el-col :span="8">
                             <el-form-item label="高度" prop="locHigh">
                                 <el-input
+                                    size="medium"
                                     v-model="form.params.locHigh"
                                     placeholder="请输入高度"
                                     :clearable="true"
@@ -151,6 +163,7 @@
                         <el-col :span="8">
                             <el-form-item label="宽度" prop="locWide">
                                 <el-input
+                                    size="medium"
                                     :clearable="true"
                                     v-model="form.params.locWide"
                                     placeholder="请输入宽度"
@@ -163,6 +176,7 @@
                         <el-col :span="8">
                             <el-form-item label="货架层" prop="locLevel">
                                 <el-input
+                                    size="medium"
                                     :clearable="true"
                                     v-model="form.params.locLevel"
                                     maxlength="50"
@@ -176,6 +190,7 @@
                         <el-col :span="8">
                             <el-form-item label="货架列" prop="locColumn">
                                 <el-input
+                                    size="medium"
                                     :clearable="true"
                                     v-model="form.params.locColumn"
                                     maxlength="50"
@@ -188,6 +203,7 @@
                         <el-col :span="8">
                             <el-form-item label="货架排" prop="locBank">
                                 <el-input
+                                    size="medium"
                                     :clearable="true"
                                     v-model="form.params.locBank"
                                     maxlength="50"
@@ -202,6 +218,7 @@
                         <el-col :span="8">
                             <el-form-item label="容量" prop="capacity">
                                 <el-input
+                                    size="medium"
                                     v-model="form.params.capacity"
                                     placeholder="请输入容量"
                                     :clearable="true"
@@ -212,6 +229,7 @@
                         <el-col :span="8">
                             <el-form-item label="载重量" prop="loadWeight">
                                 <el-input
+                                    size="medium"
                                     v-model="form.params.loadWeight"
                                     placeholder="请输入载重量"
                                     :clearable="true"
@@ -224,19 +242,19 @@
                         <el-col :span="8">
                             <el-form-item label="最大件数" prop="itemNum">
                                 <el-input-number
+                                    size="medium"
                                     v-model="form.params.itemNum"
                                     :min="0"
-                                    controls-position="right"
-                                    style="width: 288px"></el-input-number>
+                                    controls-position="right"></el-input-number>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="最大托数" prop="trayNum">
                                 <el-input-number
+                                    size="medium"
                                     v-model="form.params.trayNum"
                                     :min="0"
-                                    controls-position="right"
-                                    style="width: 288px"></el-input-number>
+                                    controls-position="right"></el-input-number>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -246,8 +264,7 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="混放物品" prop="locSkuMix">
-                                <el-select v-model="form.params.locSkuMix" clearable placeholder="请选择"
-                                           style="width: 288px;">
+                                <el-select v-model="form.params.locSkuMix" clearable placeholder="请选择">
                                     <el-option
                                         v-for="item in form.mixOptions"
                                         :key="item.value"
@@ -260,8 +277,7 @@
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="混放批号" prop="locLotNoMix">
-                                <el-select v-model="form.params.locLotNoMix" clearable placeholder="请选择"
-                                           style="width: 288px;">
+                                <el-select v-model="form.params.locLotNoMix" clearable placeholder="请选择">
                                     <el-option
                                         v-for="item in form.mixOptions"
                                         :key="item.value"
@@ -420,5 +436,9 @@ export default {
     content: "*";
     color: #F56C6C;
     margin-right: 4px;
+}
+
+.el-input {
+    width: 210px
 }
 </style>

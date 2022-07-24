@@ -349,6 +349,13 @@
 				"navigationStyle": "custom"
 			}
 
+		}, {
+			"path": "pages/picking/picking/pickingDetails",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
 		}
 	],
 	"globalStyle": {

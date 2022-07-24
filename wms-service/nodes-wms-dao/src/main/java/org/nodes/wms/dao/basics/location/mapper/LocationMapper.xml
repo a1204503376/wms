@@ -8,7 +8,8 @@
                loc_code
         FROM wms_location
         WHERE loc_code LIKE CONCAT('%', #{locCode}, '%')
-        ORDER BY update_time DESC LIMIT 10
+        ORDER BY update_time DESC
+        LIMIT 10
     </select>
 
     <sql id="tableList">
@@ -68,7 +69,7 @@
                 </foreach>
             </if>
             <if test=" param.locHandlingList != null and param.locHandlingList.size > 0 ">
-                AND l.loc_type IN
+                AND l.loc_handling IN
                 <foreach collection="param.locHandlingList" open="(" close=")" item="item" separator=",">
                     #{item}
                 </foreach>
@@ -85,7 +86,7 @@
     <select id="listByPage" resultType="org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse">
         <include refid="tableList"/>
         <if test=" page.orders == null or page.orders.size == 0 ">
-            ORDER BY l.create_time DESC
+            ORDER BY l.create_time DESC,l.loc_id
         </if>
     </select>
 

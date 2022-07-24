@@ -4,6 +4,7 @@
         :multiple="multiple"
         collapse-tags
         placeholder="请选择"
+        :clearable="true"
         size="mini"
         style="width:100%;"
         @change="onChange">

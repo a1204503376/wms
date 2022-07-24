@@ -1,6 +1,7 @@
 <template>
     <el-select
         v-model="val"
+        :clearable="true"
         :collapse-tags="true"
         :data-source="dataSource"
         :multiple="true"

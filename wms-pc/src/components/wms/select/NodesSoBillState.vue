@@ -3,6 +3,7 @@
         v-model="val"
         :data-source="dataSource"
         :multiple="true"
+        :clearable="true"
         @change="onChange">
         <el-option
             v-for="item in dataSource"

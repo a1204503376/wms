@@ -4,8 +4,8 @@
         v-model="val"
         :multiple="multiple"
         collapse-tags
-        size="mini"
-        style="width:100%;"
+        :size="size"
+        :clearable="true"
         value-key="zoneId"
         :wh-id-list="whIdList"
         @change="onChange">
@@ -36,7 +36,9 @@ export default {
         // 单选多选切换，默认为false
         multiple: {type: Boolean, required: false, default: () => false},
         // 库房id集合 ,可根据库房id查询该库房下的所有库区  默认为null查询所有库区
-        whIdList: {type: [Number, Array, String], required: false, default: ()=> null}
+        whIdList: {type: [Number, Array, String], required: false, default: ()=> null},
+        // 组件大小，默认为mini, 支持 medium/small/mini
+        size: {type: String, required: false, default: () => "mini"},
     },
     data() {
         return {
