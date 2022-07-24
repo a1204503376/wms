@@ -243,6 +243,11 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		return stockDao.getStockListBySkuCode(skuCode);
 	}
 
+	@Override
+	public int getSerialCountByStockId(Long stockId) {
+		return serialDao.getSerialCountByStockId(stockId);
+	}
+
 	private List<Stock> findLpnStockOnStageLeft(Long whId, String boxCode, Location stage) {
 		// 根据箱码和库位查询入库暂存区的库存
 		List<Stock> stockList = stockDao.getStockLeftLikeByBoxCode(boxCode,
