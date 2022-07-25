@@ -2,14 +2,13 @@ package org.nodes.wms.pdaController.stock.freezeOrUnFreeze;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
-import org.nodes.wms.biz.stockControl.StockControlBiz;
+import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.dao.stock.dto.input.*;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 
 /**
  * 库存控制API
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_PDA_API + "/stock/freezeOrUnFreeze")
 public class PdaFreezeOrUnFreezeController {
-	private final StockControlBiz stockControlBiz;
+	private final StockManageBiz stockControlBiz;
 
 	/**
 	 * 按库位冻结
@@ -107,6 +106,5 @@ public class PdaFreezeOrUnFreezeController {
 	public void portionUnFreeze(@RequestBody PortionUnFreezeRequest request) {
 		stockControlBiz.portionUnFreezeAction(request);
 	}
-
 
 }

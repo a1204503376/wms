@@ -131,6 +131,8 @@ import fileDownload from "js-file-download";
                 </el-row>
             </template>
             <template v-slot:batchBtn>
+                <el-button icon="el-icon-plus" size="mini" type="primary" @click="showByBox">按箱显示
+                </el-button>
                 <el-button icon="el-icon-upload2" plain size="mini"
                            @click="onUpload">导入
                 </el-button>
@@ -217,7 +219,7 @@ import fileDownload from "js-file-download";
             </template>
             <template v-slot:page>
                 <el-pagination
-                    :page-sizes="[20, 50, 100]"
+                    :page-sizes="pageSize"
                     background
                     layout="total, sizes, prev, pager, next, jumper"
                     v-bind="page"
@@ -241,7 +243,7 @@ import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import {listMixin} from "@/mixins/list";
-import {page, exportFile, importFile} from "@/api/wms/stock/stock";
+import {exportFile, importFile, page} from "@/api/wms/stock/stock";
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js';
 import fileUpload from "@/components/nodes/fileUpload";
@@ -297,6 +299,7 @@ export default {
             deleteCustomerRequest: {
                 ids: [],
             },
+            pageSize: [20, 50, 100],
             table: {
                 columnList: [
                     {
@@ -324,6 +327,12 @@ export default {
                         label: "库存可用",
                         sortable: "custom"
                     },
+                    {
+                        prop: "occupyQty",
+                        label: "库存占用",
+                        sortable: "custom"
+                    },
+
                     {
                         prop: "wsuCode",
                         label: "计量单位",
@@ -438,6 +447,12 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
+
+                    let currentSku = this.pageSize.indexOf(pageObj.total)
+                    if (currentSku === -1) {
+                        this.pageSize.push(pageObj.total)
+                    }
+
                 });
         },
         refreshTable() {
@@ -479,32 +494,13 @@ export default {
             }
             this.$emit('dateRangeChange', val);
         },
-        onAdd() {
+        showByBox() {
             this.$router.push({
                 name: '新增客户',
                 params: {
                     id: '0'
                 }
             });
-        },
-        onRemove() {
-            this.$confirm("确定删除当前数据？", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning",
-            }).then(() => {
-
-                this.$refs.table.selection.forEach(e => {
-                    this.deleteCustomerRequest.ids.push(e.id)
-                })
-                remove(this.deleteCustomerRequest)
-                    .then(() => {
-                        this.$message.success('删除成功');
-                        this.getTableData();
-                    })
-                    .catch(() => {
-                    });
-            })
         },
         callbackFileUpload(res) {
             this.fileUpload.visible = false;
