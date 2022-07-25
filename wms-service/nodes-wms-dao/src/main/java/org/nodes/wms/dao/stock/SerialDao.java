@@ -52,4 +52,11 @@ public interface SerialDao extends BaseService<Serial> {
 	 */
 	void updateSerialState(List<String> serialNoList, SerialStateEnum state, Long stockId);
 
+	/**
+	 * 根据库存id获取序列号数量
+	 *
+	 * @param stockId 库存id
+	 * @return 系列号数量
+	 */
+	int getSerialCountByStockId(Long stockId);
 }

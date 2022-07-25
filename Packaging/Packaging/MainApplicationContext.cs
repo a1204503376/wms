@@ -151,6 +151,9 @@ namespace Packaging
                     }
 
                     GlobalSettings.UserName = validateUser.user_name;
+                    GlobalSettings.UserId = validateUser.user_id;
+                    GlobalSettings.NickName = validateUser.nick_name;
+                    GlobalSettings.UserDeptId = validateUser.dept_id;
                     success = true;
 
                 }

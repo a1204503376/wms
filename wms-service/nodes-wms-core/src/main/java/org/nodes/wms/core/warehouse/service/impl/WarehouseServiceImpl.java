@@ -118,6 +118,8 @@ public class WarehouseServiceImpl<M extends WarehouseMapper, T extends Warehouse
 		Long stageZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.STAGE);
 		//2.生成出库暂存区
 		Long pickZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.PICKTO);
+		//生成入库质检区
+		Long qcZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.QC);
 		//3.生成包装暂存区
 		//Long packZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.Pack);
 		//4.生成移动暂存区
@@ -126,6 +128,7 @@ public class WarehouseServiceImpl<M extends WarehouseMapper, T extends Warehouse
 		//5.更新库房初时暂存区
 		whDTO.setStage(stageZoneId);
 		whDTO.setPick(pickZoneId);
+		whDTO.setQc(qcZoneId);
 //		whDTO.setPack(packZoneId);
 //		whDTO.setMove(moveZoneId);
 		warehouseBiz.afterNewWarehouse(whDTO);

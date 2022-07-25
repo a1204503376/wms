@@ -72,7 +72,7 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	 */
 	private BigDecimal pickQty;
 	/**
-	 * 占用数量，不再使用
+	 * 占用数量
 	 */
 	private BigDecimal occupyQty;
 	/**

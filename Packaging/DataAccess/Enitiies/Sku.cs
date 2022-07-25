@@ -12,5 +12,10 @@ namespace DataAccess.Enitiies
         /// 型号
         /// </summary>
         public string SkuSpec { get; set; }
+        public long WspId{ get; set; }
+        /// <summary>
+        /// 包装名称
+        /// </summary>
+        public string WspName { get; set; }
     }
 }

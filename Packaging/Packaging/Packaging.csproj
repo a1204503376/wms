@@ -34,21 +34,30 @@
   <ItemGroup>
     <Reference Include="Accessibility" />
     <Reference Include="DevExpress.BonusSkins.v21.2" />
+    <Reference Include="DevExpress.Charts.v21.2.Core, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.CodeParser.v21.2, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Data.Desktop.v21.2" />
     <Reference Include="DevExpress.Data.v21.2" />
     <Reference Include="DevExpress.DataAccess.v21.2, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Office.v21.2.Core, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Pdf.v21.2.Core, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.PivotGrid.v21.2.Core, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Printing.v21.2.Core" />
     <Reference Include="DevExpress.RichEdit.v21.2.Core, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.RichEdit.v21.2.Export, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Utils.v21.2" />
+    <Reference Include="DevExpress.Utils.v21.2.UI, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Xpo.v21.2, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraBars.v21.2" />
     <Reference Include="DevExpress.Sparkline.v21.2.Core" />
+    <Reference Include="DevExpress.XtraCharts.v21.2, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraEditors.v21.2" />
+    <Reference Include="DevExpress.XtraGauges.v21.2.Core, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraGrid.v21.2, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraLayout.v21.2, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraPrinting.v21.2, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraReports.v21.2, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraReports.v21.2.Extensions, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="Flurl, Version=3.0.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Flurl.3.0.6\lib\net472\Flurl.dll</HintPath>
     </Reference>
@@ -85,12 +94,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\CustomValidation.cs" />
     <Compile Include="Common\CustomValidationCheckedComboBoxEdit.cs" />
     <Compile Include="Common\ExcelDataSourceExtension.cs" />
     <Compile Include="Common\ExceptionExtensions.cs" />
     <Compile Include="Common\Md5Helper.cs" />
     <Compile Include="Common\ModelConvertHelper.cs" />
+    <Compile Include="Common\SnowflakeIds.cs" />
     <Compile Include="Common\UiTags.cs" />
     <Compile Include="Common\WmsApiHelper.cs" />
     <Compile Include="Encasement\ImportForm.cs">
@@ -98,6 +109,12 @@
     </Compile>
     <Compile Include="Encasement\ImportForm.Designer.cs">
       <DependentUpon>ImportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Encasement\SerialNumberReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Encasement\SerialNumberReport.Designer.cs">
+      <DependentUpon>SerialNumberReport.cs</DependentUpon>
     </Compile>
     <Compile Include="Encasement\SpeedClassForm.cs">
       <SubType>Form</SubType>
@@ -167,6 +184,9 @@
     <EmbeddedResource Include="Encasement\SerialNumberPackingForm.resx">
       <DependentUpon>SerialNumberPackingForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Encasement\SerialNumberReport.resx">
+      <DependentUpon>SerialNumberReport.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Encasement\SpeedClassForm.resx">
       <DependentUpon>SpeedClassForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -179,6 +199,7 @@
     <None Include="..\.editorconfig">
       <Link>.editorconfig</Link>
     </None>
+    <None Include="Properties\DataSources\DataAccess.Dto.SerialNumberPrintDto.datasource" />
     <None Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

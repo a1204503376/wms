@@ -18,4 +18,9 @@ public class SoDetailAndStockRequest {
 	 * 行号
 	 */
 	private String soLineNo;
+	/**
+	 * 库房id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long whId;
 }

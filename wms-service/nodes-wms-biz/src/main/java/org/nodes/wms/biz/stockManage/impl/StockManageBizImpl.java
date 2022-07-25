@@ -1,13 +1,14 @@
-package org.nodes.wms.biz.stockControl.impl;
+package org.nodes.wms.biz.stockManage.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.wms.biz.stockControl.StockControlBiz;
+
+import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.dao.stock.dto.input.*;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class StockControlBizImpl implements StockControlBiz {
+public class StockManageBizImpl implements StockManageBiz {
 	@Override
 	public void freezeByLocCodeAction(FreezeByLocCodeRequest request) {
 

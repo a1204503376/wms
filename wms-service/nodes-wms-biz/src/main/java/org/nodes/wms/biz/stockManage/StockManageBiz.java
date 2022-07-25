@@ -1,11 +1,11 @@
-package org.nodes.wms.biz.stockControl;
+package org.nodes.wms.biz.stockManage;
 
 import org.nodes.wms.dao.stock.dto.input.*;
 
 /**
  * 库存控制BIZ
  */
-public interface StockControlBiz {
+public interface StockManageBiz {
 	/**
 	 * 按库位冻结
 	 *

@@ -81,10 +81,13 @@
         select so_detail_id,
                so_line_no,
                sku_code,
+               sku_id,
                plan_qty,
                scan_qty,
+               um_code,
                surplus_qty,
-               lot_number
+               sku_lot1,
+               sku_lot4
         from so_detail
         where so_bill_id = #{param.soBillId}
           and so_line_no = #{param.soLineNo}

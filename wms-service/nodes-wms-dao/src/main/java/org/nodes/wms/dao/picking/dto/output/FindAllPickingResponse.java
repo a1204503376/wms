@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.picking.dto.output;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -10,6 +12,11 @@ import java.io.Serializable;
 @Data
 public class FindAllPickingResponse implements Serializable {
 	private static final long serialVersionUID = 1486941751771336282L;
+	/**
+	 *发货单ID
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long soBillId;
 	/**
 	 * 发货单编码
 	 */

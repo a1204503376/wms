@@ -18,6 +18,7 @@ import org.nodes.wms.dao.outstock.so.dto.input.*;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
+import org.nodes.wms.dao.stock.dto.output.SerialSelectResponse;
 import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
@@ -386,9 +387,9 @@ public class SoBillController {
 			StockSoPickPlanResponse stock = new StockSoPickPlanResponse();
 			stock.setStockId(ConvertUtil.convert(i, Long.class));
 			stock.setBoxCode("boxTest");
-			stock.setLocId(ConvertUtil.convert(123456,Long.class));
+			stock.setLocId(ConvertUtil.convert(123456, Long.class));
 			stock.setLocName("库位test");
-			stock.setZoneId(ConvertUtil.convert(654321,Long.class));
+			stock.setZoneId(ConvertUtil.convert(654321, Long.class));
 			stock.setZoneName("库区test");
 			stock.setSkuCode("HZ916");
 			stock.setLotNumber("lotNumber" + i);
@@ -418,5 +419,23 @@ public class SoBillController {
 		System.out.println(soBillDistributedRequest.getSoDetailId());
 		System.out.println(soBillDistributedRequest.getStockIdAndSoPickPlanQtyList());
 		return null;
+	}
+
+	/**
+	 * pc拣货: 获取序列号下拉列表
+	 */
+	@GetMapping("getSerialSelectResponseList")
+	public R<List<SerialSelectResponse>> getSerialSelectResponseList(Long stockId) {
+		List<SerialSelectResponse> serialSelectResponseList = soDetailBiz.getSerialSelectResponseList(stockId);
+		return R.data(serialSelectResponseList);
+	}
+
+	/**
+	 * pc拣货
+	 */
+	@ApiLog("pc拣货")
+	@PostMapping("pickByPc")
+	public R<String> pickByPc(@RequestBody PickByPcRequest pickByPcRequest) {
+		return R.data("操作成功");
 	}
 }

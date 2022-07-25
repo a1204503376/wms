@@ -24,7 +24,7 @@ public class SerialDaoImpl extends BaseServiceImpl<SerialMapper, Serial> impleme
 
 	@Override
 	public List<Serial> getSerialBySerialNo(List<String> serialNoList) {
-		if (Func.isEmpty(serialNoList)){
+		if (Func.isEmpty(serialNoList)) {
 			throw new ServiceException("序列号查询参考为空");
 		}
 
@@ -37,7 +37,7 @@ public class SerialDaoImpl extends BaseServiceImpl<SerialMapper, Serial> impleme
 
 	@Override
 	public List<Serial> getOutBoundSerialBySerialNo(List<String> serialNoList) {
-		if (Func.isEmpty(serialNoList)){
+		if (Func.isEmpty(serialNoList)) {
 			throw new ServiceException("序列号查询参考为空");
 		}
 
@@ -48,22 +48,22 @@ public class SerialDaoImpl extends BaseServiceImpl<SerialMapper, Serial> impleme
 		return super.list(queryWrapper);
 	}
 
-    @Override
-    public List<Serial> getSerialByStockId(Long stockId) {
-		if (Func.isNull(stockId)){
+	@Override
+	public List<Serial> getSerialByStockId(Long stockId) {
+		if (Func.isNull(stockId)) {
 			throw new NullArgumentException("getSerialByStockId");
 		}
 
 		LambdaQueryWrapper<Serial> queryWrapper = getLambdaQuery();
 		queryWrapper.eq(Serial::getStockId, stockId)
 			.eq(Serial::getSerialState, SerialStateEnum.IN_STOCK.getCode());
-        return super.list(queryWrapper);
-    }
+		return super.list(queryWrapper);
+	}
 
 	@Override
 	public List<String> getSerialNoByStockId(Long stockId) {
 		List<Serial> serialList = getSerialByStockId(stockId);
-		if (Func.isNotEmpty(serialList)){
+		if (Func.isNotEmpty(serialList)) {
 			return serialList.stream()
 				.map(Serial::getSerialNumber)
 				.collect(Collectors.toList());
@@ -74,7 +74,7 @@ public class SerialDaoImpl extends BaseServiceImpl<SerialMapper, Serial> impleme
 
 	@Override
 	public void updateSerialState(List<String> serialNoList, SerialStateEnum state, Long stockId) {
-		if (Func.isEmpty(serialNoList)){
+		if (Func.isEmpty(serialNoList)) {
 			throw new NullArgumentException("更新序列号状态");
 		}
 
@@ -83,15 +83,23 @@ public class SerialDaoImpl extends BaseServiceImpl<SerialMapper, Serial> impleme
 			.in(Serial::getSerialNumber, serialNoList);
 		Serial serial = new Serial();
 		serial.setSerialState(state);
-		if (!Func.isNull(stockId)){
+		if (!Func.isNull(stockId)) {
 			serial.setStockId(stockId);
 		}
-		if (!super.update(serial, updateWrapper)){
+		if (!super.update(serial, updateWrapper)) {
 			throw new ServiceException("更新序列号状态失败");
 		}
 	}
 
-	private LambdaQueryWrapper<Serial> getLambdaQuery(){
+	@Override
+	public int getSerialCountByStockId(Long stockId) {
+		LambdaQueryWrapper<Serial> queryWrapper = getLambdaQuery();
+		queryWrapper.eq(Serial::getStockId, stockId)
+			.eq(Serial::getSerialState, SerialStateEnum.IN_STOCK.getCode());
+		return super.count(queryWrapper);
+	}
+
+	private LambdaQueryWrapper<Serial> getLambdaQuery() {
 		return Wrappers.lambdaQuery(Serial.class);
 	}
 }

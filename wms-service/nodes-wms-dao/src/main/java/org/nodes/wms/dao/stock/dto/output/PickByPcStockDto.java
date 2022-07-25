@@ -5,25 +5,32 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * pc拣货返货前端可出库库存dto
  */
 @Data
-public class PickByPcStockResponse {
+public class PickByPcStockDto {
 	/**
 	 * 发货单明细id
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long soDetailId;
 	/**
+	 * 库存id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long stockId;
+
+	/**
 	 * 可用库存
 	 */
-	private BigDecimal stockEnableQty;
+	private BigDecimal stockBalance;
 	/**
 	 * 库存余额
 	 */
-	private BigDecimal stockBalanceQty;
+	private BigDecimal stockEnable;
 	/**
 	 * 物品编码
 	 */
@@ -56,4 +63,12 @@ public class PickByPcStockResponse {
 	 * 出库数量
 	 */
 	private BigDecimal outStockQty;
+	/**
+	 * 序列号集合
+	 */
+	private List<String> serailList;
+	/**
+	 * 是否有序列号
+	 */
+	private Boolean hasSerail;
 }

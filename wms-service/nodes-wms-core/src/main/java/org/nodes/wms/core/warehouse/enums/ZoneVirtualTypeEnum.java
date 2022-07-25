@@ -18,26 +18,11 @@ public enum ZoneVirtualTypeEnum {
 	Stage(73, "入库暂存区"),
 	Pick(74, "出库暂存区"),
 	PICKTO(110, "出库集货区"),
-	STAGE(120, "入库暂存区");
+	STAGE(120, "入库暂存区"),
+	QC(130, "入库质检区");
 
 	private Integer index;
 	private String name;
-
-	public Integer getIndex() {
-		return index;
-	}
-
-	public void setIndex(Integer index) {
-		this.index = index;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	ZoneVirtualTypeEnum(Integer index, String name) {
 		this.index = index;
@@ -71,5 +56,21 @@ public enum ZoneVirtualTypeEnum {
 			add(ZoneVirtualTypeEnum.Pick.getIndex());
 		}};
 		return list;
+	}
+
+	public Integer getIndex() {
+		return index;
+	}
+
+	public void setIndex(Integer index) {
+		this.index = index;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

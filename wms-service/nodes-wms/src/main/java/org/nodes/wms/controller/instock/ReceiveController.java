@@ -38,7 +38,7 @@ public class ReceiveController {
 	private final InStockBiz inStockBiz;
 
 	/**
-	 * 收货管理分页查询
+	 * 收货管理:分页查询
 	 */
 	@PostMapping("/page")
 	public R<IPage<ReceiveHeaderResponse>> page(@Valid @RequestBody ReceivePageQuery receivePageQuery, Query query) {
@@ -47,7 +47,7 @@ public class ReceiveController {
 	}
 
 	/**
-	 * 收货管理新建
+	 * 收货管理:新建
 	 */
 	@ApiLog("收货管理-新增")
 	@PostMapping("/newReceive")
@@ -57,7 +57,7 @@ public class ReceiveController {
 	}
 
 	/**
-	 * 收货单管理修改
+	 * 收货单管理:修改
 	 */
 	@ApiLog("收货管理-修改")
 	@PostMapping("/editReceive")
@@ -67,7 +67,7 @@ public class ReceiveController {
 	}
 
 	/**
-	 * 收货管理删除
+	 * 收货管理:删除
 	 */
 	@ApiLog("收货管理-逻辑删除")
 	@PostMapping("/delete")
@@ -79,7 +79,7 @@ public class ReceiveController {
 	}
 
 	/**
-	 * 查看收货单明细
+	 * 收货管理:查看收货单明细
 	 */
 	@PostMapping("/getReceiveDetailById")
 	public R<ReceiveResponse> getReceiveDetailById(@Valid @RequestBody ReceiveIdRequest receiveIdRequest) {
@@ -87,7 +87,7 @@ public class ReceiveController {
 	}
 
 	/**
-	 * 编辑页面数据回显
+	 * 收货管理:编辑页面数据回显
 	 */
 	@PostMapping("/getEditReceiveById")
 	public R<EditReceiveResponse> getEditReceiveById(@Valid @RequestBody ReceiveIdRequest receiveIdRequest) {
@@ -95,7 +95,7 @@ public class ReceiveController {
 	}
 
 	/**
-	 * 关闭收货单
+	 * 收货管理:关闭收货单
 	 */
 	@ApiLog("收货管理-修改状态")
 	@PostMapping("/editBillState")
@@ -104,7 +104,7 @@ public class ReceiveController {
 	}
 
 	/**
-	 * 导出
+	 * 收货管理:导出
 	 */
 	@PostMapping("export")
 	public void export(@RequestBody ReceivePageQuery receivePageQuery, HttpServletResponse response) {
@@ -112,7 +112,7 @@ public class ReceiveController {
 	}
 
 	/**
-	 * 获取收货单状态集合
+	 * 收货管理:获取收货单状态集合
 	 */
 	@GetMapping("getReceiveStateList")
 	public R<List<ReceiveBillStateResponse>> getReceiveStateList() {
@@ -120,15 +120,16 @@ public class ReceiveController {
 	}
 
 	/**
-	 * 根据收货单id获取清点记录集合
-	 *
-	 * @param receiveId 收货单id
+	 * 收货管理:根据收货单id获取清点记录集合
 	 */
 	@GetMapping("/getReceiveLogList")
 	public R<List<ReceiveLogResponse>> getReceiveLogList(Long receiveId) {
 		return R.data(receiveLogBiz.getReceiveLogList(receiveId));
 	}
 
+	/**
+	 * 收货管理:获取操作日志
+	 */
 	@GetMapping("/getLogList")
 	public R<List<LogReceiveResponse>> getLogList(Long receiveId) {
 		return R.data(receiveBiz.getLogList(receiveId));
@@ -165,10 +166,7 @@ public class ReceiveController {
 	}
 
 	/**
-	 * pc收货获取头表显示信息
-	 *
-	 * @param receiveIdRequest 收货单id
-	 * @return 头表信息
+	 * pc收货:获取头表显示信息
 	 */
 
 	@PostMapping("/getReceiveByPc")
@@ -177,10 +175,7 @@ public class ReceiveController {
 	}
 
 	/**
-	 * pc收货获取明细显示信息
-	 *
-	 * @param receiveByPcQuery 包含收货单头表id和订单行号
-	 * @return 明细返回信息
+	 * pc:收货获取明细显示信息
 	 */
 	@PostMapping("/getReceiveDetailByPc")
 	public R<ReceiveDetailByPcResponse> getReceiveDetailByPc(@Valid @RequestBody ReceiveByPcQuery receiveByPcQuery) {
@@ -189,8 +184,6 @@ public class ReceiveController {
 
 	/**
 	 * pc收货
-	 *
-	 * @param request 前端传入参数
 	 */
 	@PostMapping("/receiveByPc")
 	public R<String> receiveByPc(@Valid @RequestBody ReceiveByPcRequest request) {

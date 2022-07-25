@@ -1,7 +1,7 @@
 package org.nodes.wms.dao.outstock.so.dto.output;
 
 import lombok.Data;
-import org.nodes.wms.dao.stock.dto.output.PickByPcStockResponse;
+import org.nodes.wms.dao.stock.dto.output.PickByPcStockDto;
 
 import java.util.List;
 
@@ -17,6 +17,6 @@ public class SoDetailAndStockResponse {
 	/**
 	 * 可出库库存集合
 	 */
-	List<PickByPcStockResponse> stockResponseList;
+	List<PickByPcStockDto> stockResponseList;
 
 }

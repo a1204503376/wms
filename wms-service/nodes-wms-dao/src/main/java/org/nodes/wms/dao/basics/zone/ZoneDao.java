@@ -51,4 +51,14 @@ public interface ZoneDao {
 	 * @return Zone
 	 */
 	Zone saveOrUpdateZone(Zone zone);
+
+	/**
+	 * 根据库区名称集合获取获取id集合
+	 *
+	 * @param zoneNameList 库区名称集合
+	 * @return 库区id集合
+	 */
+	List<Long> getZoneIdListByName(List<String> zoneNameList);
+
+	List<Zone> getByZoneType(List<String> zoneTypeList);
 }
