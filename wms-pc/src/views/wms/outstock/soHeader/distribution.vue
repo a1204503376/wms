@@ -3,7 +3,6 @@
         <el-container id="container" v-loading="loading">
             <el-main style="overflow: hidden;overflow-y: scroll;height: 100%">
                 <el-form ref="form"
-                         :model="form.params"
                          label-position="right"
                          label-width="120px"
                          size="mini"
@@ -12,26 +11,29 @@
                         <el-row :gutter="10" type="flex">
                             <el-col :span="4">
                                 <el-form-item label="发货单编码：" label-width="100px">
-                                    <label>{{ form.params.soBillNo }}</label>
+                                    <label>{{ soHeader.soBillNo }}</label>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="4">
                                 <el-form-item label="上游编码：" label-width="120px">
-                                    {{ form.params.orderNo }}
+                                    {{ soHeader.orderNo }}
                                 </el-form-item>
                             </el-col>
                             <el-col :offset="8" :span="2">
-                                <el-button class="top_button" size="medium" type="primary">
+                                <el-button class="top_button" size="medium"
+                                           type="primary" @click="onAssign()">
                                     自动分配
                                 </el-button>
                             </el-col>
                             <el-col :span="2">
-                                <el-button class="top_button" size="medium" type="primary">
+                                <el-button class="top_button" size="medium"
+                                           type="primary" @close="onCancelAll">
                                     全部取消
                                 </el-button>
                             </el-col>
                             <el-col :span="2">
-                                <el-button class="top_button" size="medium" type="primary">
+                                <el-button class="top_button" size="medium"
+                                           type="primary" @click="onIssued">
                                     确认下发
                                 </el-button>
                             </el-col>
@@ -43,7 +45,7 @@
                         </el-row>
                     </el-row>
                     <el-row :gutter="10" style="margin-bottom: 20px; margin-top: 20px">
-                        <el-col :span="8">
+                        <el-col>
                             <el-row>
                                 <el-col>
                                     <div style="line-height: 53px ;height:53px ; width: auto">收货单明细</div>
@@ -51,12 +53,12 @@
                             </el-row>
                             <el-table
                                 ref="table"
-                                :data="table.data"
+                                :data="table.soDetailData"
                                 border
                                 highlight-current-row
-                                size="mini"
-                                title="发货单明细">
-                                <template v-for="(column,index) in table.columnList">
+                                max-height="250"
+                                size="mini">
+                                <template v-for="(column,index) in table.soDetailColumnList">
                                     <el-table-column
                                         v-if="!column.hide"
                                         :key="index"
@@ -64,54 +66,110 @@
                                         v-bind="column">
                                     </el-table-column>
                                 </template>
+                                <el-table-column align="center" fixed="right" label="操作" width="100">
+                                    <template v-slot="scope">
+                                        <el-button size="small" type="text" @click="onAdjust(scope.row)">
+                                            调整
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
                             </el-table>
                         </el-col>
-                        <el-col :span="16">
+                    </el-row>
+                    <el-row>
+                        <el-col>
+                            <div style="line-height: 53px ;height:53px ; width: auto">分配明细</div>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col>
                             <template>
-                                <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
-                                    <el-tab-pane v-for="(item, index) in tabList" :key="index" :label="item.lable"
-                                                 :name="item.name">
-                                        <el-table
-                                            :data="publicTable.data"
-                                            :span-method="objectSpanMethod"
-                                            border
-                                            highlight-current-row
-                                            size="mini">
-                                            <template v-for="(column,index) in publicTable.columnList">
-                                                <el-table-column
-                                                    v-if="!column.hide"
-                                                    :key="index"
-                                                    show-overflow-tooltip
-                                                    v-bind="column">
-                                                </el-table-column>
-                                            </template>
-                                            <el-table-column align="center" fixed="right" label="操作" width="100">
-                                                <template v-slot="scope">
-                                                    <el-button size="small" type="text" @click="onEdit(scope.row)">
-                                                        编辑
-                                                    </el-button>
-                                                    <el-button size="small" type="text" @click="onCancel(scope.row)">
-                                                        取消
-                                                    </el-button>
-                                                </template>
-                                            </el-table-column>
-                                        </el-table>
-                                    </el-tab-pane>
-                                </el-tabs>
+                                <el-table
+                                    :data="table.soPickPlanData"
+                                    :span-method="objectSpanMethod"
+                                    border
+                                    highlight-current-row
+                                    max-height="250"
+                                    size="mini">
+                                    <template v-for="(column,index) in table.soPickPlanColumnList">
+                                        <el-table-column
+                                            :key="index"
+                                            show-overflow-tooltip
+                                            v-bind="column">
+                                        </el-table-column>
+                                    </template>
+                                </el-table>
                             </template>
                         </el-col>
                     </el-row>
                 </el-form>
             </el-main>
         </el-container>
+        <template>
+            <el-dialog
+                :append-to-body="true"
+                :title="dialog.dialogTitle"
+                :visible.sync="dialog.dialogTableVisible"
+                width="80%"
+                @close="refreshData">
+                <el-table
+                    ref="dialogTable"
+                    :data="dialog.dialogData"
+                    :span-method="objectSpanMethod"
+                    :summary-method="getSummaries"
+                    border
+                    highlight-current-row
+                    show-summary>
+                    <el-table-column label="可用量" prop="stockEnableQty"></el-table-column>
+                    <el-table-column label="余额" prop="stockBalanceQty"></el-table-column>
+                    <el-table-column label="本次分配量" prop="soPickPlanQty" width="150">
+                        <template v-slot="{row}">
+                            <el-input
+                                v-model="row.soPickPlanQty"
+                                maxlength="9"
+                                oninput="value=value.replace(/[^\d]/g,'')"
+                                placeholder="请输入分配数量"
+                                size="medium"
+                                style="width: 100%"
+                            ></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="箱码" prop="boxCode"></el-table-column>
+                    <el-table-column label="库位" prop="locName"></el-table-column>
+                    <el-table-column label="库区" prop="zoneName"></el-table-column>
+                    <el-table-column label="LPN" prop="lpnCode"></el-table-column>
+                    <el-table-column label="物品编码" prop="skuCode"></el-table-column>
+                    <el-table-column label="批次" prop="lotNumber"></el-table-column>
+                    <el-table-column label="状态" prop="stockState"></el-table-column>
+                    <el-table-column label="生产批次" prop="skuLot1"></el-table-column>
+                    <el-table-column label="规格型号" prop="skuLot2"></el-table-column>
+                    <el-table-column label="收货日期" prop="skuLot3"></el-table-column>
+                    <el-table-column label="专用客户" prop="skuLot4"></el-table-column>
+                    <el-table-column label="钢背批次" prop="skuLot5"></el-table-column>
+                    <el-table-column label="摩擦快批次" prop="skuLot6" width="150"></el-table-column>
+                    <el-table-column label="产品标识代码" prop="skuLot7" width="150"></el-table-column>
+                    <el-table-column label="是否CRCC验证" prop="skuLot8" width="150"></el-table-column>
+                </el-table>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="onAdjustSubmit()">确 定</el-button>
+                    <el-button @click="dialog.dialogTableVisible = false">取 消</el-button>
+                </div>
+            </el-dialog>
+        </template>
     </basic-container>
 </template>
 
-
 <script>
 import {editMixin} from "@/mixins/edit";
-import {getSoBillDataByDistribution} from "@/api/wms/outstock/soHeader"
-import {} from "@/api/wms/stock/stock"
+import {
+    automaticAssign,
+    cancelAll,
+    getEnableStockBySkuId,
+    getSoBillDataByDistribution,
+    getSoPickPlanData, issued,
+    saveAssign
+} from "@/api/wms/outstock/soHeader"
+import func from "@/util/func";
 
 export default {
     name: "distribution",
@@ -124,22 +182,13 @@ export default {
         return {
             that: this,
             loading: false,
-            page: {
-                total: 0,
-                size: 20,
-                current: 1,
-                ascs: "", //正序字段集合
-                descs: "", //倒序字段集合
-            },
-            form: {
-                params: {
-                    soBillId: '',
-                    soBillNo: '',
-                    orderNo: ''
-                }
+            soHeader: {
+                soBillId: '',
+                soBillNo: '',
+                orderNo: ''
             },
             table: {
-                columnList: [
+                soDetailColumnList: [
                     {
                         prop: 'soLineNo',
                         width: 50,
@@ -169,186 +218,111 @@ export default {
                         width: 100,
                         align: 'center'
                     },
-                ]
+                ],
+                soDetailData: [],
+                soPickPlanColumnList: [
+                    {
+                        prop: 'boxCode',
+                        label: '箱码',
+                    },
+                    {
+                        prop: 'zoneName',
+                        label: '库区',
+                    },
+                    {
+                        prop: 'locName',
+                        label: '库位'
+                    },
+                    {
+                        prop: 'lpnCode',
+                        label: 'LPN'
+                    },
+                    {
+                        prop: 'pickPlanQty',
+                        label: '分配量'
+                    },
+                    {
+                        prop: 'skuCode',
+                        label: '物品编码'
+                    },
+                    {
+                        prop: 'lotNumber',
+                        label: '批次'
+                    },
+                    {
+                        prop: 'enableQty',
+                        label: '可用量'
+                    },
+                    {
+                        prop: 'surplusQty',
+                        label: '余额'
+                    },
+                    {
+                        prop: 'state',
+                        label: '状态'
+                    },
+                    {
+                        prop: 'skuLot1',
+                        label: '生产批次'
+                    },
+                    {
+                        prop: 'skuLot2',
+                        label: '规格型号'
+                    },
+                    {
+                        prop: 'skuLot3',
+                        label: '收货日期'
+                    },
+                    {
+                        prop: 'skuLot4',
+                        label: '专用客户'
+                    },
+                    {
+                        prop: 'skuLot5',
+                        label: '钢背批次'
+                    },
+                    {
+                        prop: 'skuLot6',
+                        width: 100,
+                        label: '摩擦快批次'
+                    },
+                    {
+                        prop: 'skuLot7',
+                        width: 100,
+                        label: '产品标识代码'
+                    },
+                    {
+                        prop: 'skuLot8',
+                        width: 100,
+                        label: '是否CRCC校验'
+                    },
+                ],
+                soPickPlanData: [],
             },
-            //标签页list集合，根据这个集合循环出来Tab标签
-            tabList: [
-                {lable: '按件', name: 'piece'},
-                {lable: '按箱', name: 'box'}
-            ],
-            activeName: 'piece',
-            publicTable: {
-                page: {
-                    total: 0,
-                    size: 20,
-                    current: 1,
-                    ascs: '',
-                    descs: '',
-                },
+            mergedCell: {
+                mergedArray: [],
+                mergedIndex: 0,
             },
-            pieceColumnList: [
-                {
-                    prop: 'skuCode',
-                    label: '物品编码'
-                },
-                {
-                    prop: 'lotNumber',
-                    label: '批次'
-                },
-                {
-                    prop: 'distributeQty',
-                    label: '分配'
-                },
-                {
-                    prop: 'billId',
-                    label: '可用'
-                },
-                {
-                    prop: 'billNo',
-                    width: 100,
-                    label: '目标单据编码'
-                },
-                {
-                    prop: 'log',
-                    label: '余额'
-                },
-                {
-                    prop: 'updateTime',
-                    label: '库位'
-                },
-                {
-                    prop: 'updateTime',
-                    label: '库区'
-                },
-                {
-                    prop: 'updateTime',
-                    label: '箱码'
-                },
-                {
-                    prop: 'updateTime',
-                    label: 'LPN'
-                },
-                {
-                    prop: 'updateTime',
-                    label: '状态'
-                },
-                {
-                    prop: 'skuLot1',
-                    label: '生产批次'
-                },
-                {
-                    prop: 'skuLot2',
-                    label: '规格型号'
-                },
-                {
-                    prop: 'skuLot3',
-                    label: '收货日期'
-                },
-                {
-                    prop: 'skuLot4',
-                    label: '专用客户'
-                },
-                {
-                    prop: 'skuLot5',
-                    label: '钢背批次'
-                },
-                {
-                    prop: 'skuLot6',
-                    width: 100,
-                    label: '摩擦快批次'
-                },
-                {
-                    prop: 'skuLot7',
-                    width: 100,
-                    label: '产品标识代码'
-                },
-                {
-                    prop: 'skuLot8',
-                    width: 100,
-                    label: '是否CRCC校验'
-                },
-            ],
-            boxColumnList: [
-                {
-                    prop: 'name',
-                    label: '箱码',
-                },
-                {
-                    prop: 'date',
-                    label: '分配'
-                },
-                {
-                    prop: 'wages',
-                    label: '库区',
-                },
-                {
-                    prop: 'date',
-                    label: '库位'
-                },
-                {
-                    prop: 'address',
-                    label: 'LPN'
-                },
-                {
-                    prop: 'address',
-                    label: '物品编码'
-                },
-                {
-                    prop: 'date',
-                    label: '批次'
-                },
-                {
-                    prop: 'address',
-                    label: '可用'
-                },
-                {
-                    prop: 'address',
-                    label: '约'
-                },
-                {
-                    prop: 'date',
-                    label: '状态'
-                },
-                {
-                    prop: 'skuLot1',
-                    label: '生产批次'
-                },
-                {
-                    prop: 'skuLot2',
-                    label: '规格型号'
-                },
-                {
-                    prop: 'skuLot3',
-                    label: '收货日期'
-                },
-                {
-                    prop: 'skuLot4',
-                    label: '专用客户'
-                },
-                {
-                    prop: 'skuLot5',
-                    label: '钢背批次'
-                },
-                {
-                    prop: 'skuLot6',
-                    width: 100,
-                    label: '摩擦快批次'
-                },
-                {
-                    prop: 'skuLot7',
-                    width: 100,
-                    label: '产品标识代码'
-                },
-                {
-                    prop: 'skuLot8',
-                    width: 100,
-                    label: '是否CRCC校验'
-                },
-            ]
-        }
-    },
-    mounted() {
+            dialog: {
+                dialogTableVisible: false,
+                dialogTitle: "",
+                dialogData: [
+                    {
+                        boxCode: '',
+                        soPickPlanQty: 0,
+                        location: '',
+                        lpn: '',
+                        skuCode: '',
+                        enableQty: 0,
+                        surplusQty: 0,
+                        stockState: '',
+                        skuLot1: '',
+                    }
+                ],
+                soDetailId: '',
+            },
 
+        }
     },
     created() {
         this.getTableData();
@@ -359,8 +333,54 @@ export default {
         }
     },
     methods: {
-        objectSpanMethod({ row, column, rowIndex, columnIndex }){
-
+        resetMerge(data) {
+            this.mergedCell = {
+                mergedArray: [],
+                mergedIndex: 0,
+            };
+            this.merge(data);
+        },
+        refreshData() {
+            this.resetMerge(this.table.soPickPlanData);
+        },
+        objectSpanMethod({row, column, rowIndex, columnIndex}) {
+            if (this.mergedCell.mergedArray.length > 0) {
+                if (
+                    column.label === '箱码' || column.label === '库位' ||
+                    column.label === '库区' || column.label === 'LPN'
+                ) {
+                    const _row = this.mergedCell.mergedArray[rowIndex];
+                    const _col = _row > 0 ? 1 : 0;
+                    return {
+                        rowspan: _row,
+                        colspan: _col,
+                    };
+                }
+            }
+        },
+        merge(data) {
+            if (data.length > 0) {
+                for (let i = 0; i < data.length; i++) {
+                    if (i === 0) {
+                        this.mergedCell.mergedArray.push(1);
+                        this.mergedCell.mergedIndex = 0;
+                    } else {
+                        // 判断当前元素与上一元素是否相同
+                        if (
+                            data[i].boxCode === data[i - 1].boxCode
+                            && data[i].locId === data[i - 1].locId
+                            && data[i].zoneId === data[i - 1].zoneId
+                            && data[i].lpnCode === data[i - 1].lpnCode
+                        ) {
+                            this.mergedCell.mergedArray[this.mergedCell.mergedIndex] += 1;
+                            this.mergedCell.mergedArray.push(0);
+                        } else {
+                            this.mergedCell.mergedArray.push(1);
+                            this.mergedCell.mergedIndex = i;
+                        }
+                    }
+                }
+            }
         },
         refreshTable() {
             this.getTableData();
@@ -368,39 +388,85 @@ export default {
         getTableData() {
             getSoBillDataByDistribution(this.soBillId).then((res) => {
                 let data = res.data.data;
-                let params = this.form.params;
-                params.soBillId = data.soBillId;
-                params.soBillNo = data.soBillId;
-                params.orderNo = data.orderNo;
+                this.soHeader.soBillId = data.soBillId;
+                this.soHeader.soBillNo = data.soBillNo;
+                this.soHeader.orderNo = data.orderNo;
                 data.soDetailList.forEach(item => {
                     item.distributeQty = 0;
                 })
-                this.table.data = data.soDetailList;
+                this.table.soDetailData = data.soDetailList;
             })
-            this.publicTable.columnList = this.pieceColumnList;
-            this.getTablePaneDataByPiece();
+            this.getSoPickPlanData();
         },
-        getTablePaneDataByPiece() {
-
+        async getSoPickPlanData() {
+            await getSoPickPlanData(this.soBillId).then((res) => {
+                this.table.soPickPlanData = res.data.data;
+            })
+            this.merge(this.table.soPickPlanData);
         },
-        getTablePaneDataByBox() {
+        onAssign() {
+            automaticAssign(this.soHeader.soBillId).then((res) => {
 
+            })
         },
-        handleClick(tab) {
-            if (tab.name === this.tabList[0].name) {
-                this.publicTable.columnList = this.pieceColumnList;
-                this.getTablePaneDataByPiece();
+        onIssued() {
+            issued(this.soHeader.soBillId).then((res) => {
 
-            } else {
-                this.publicTable.columnList = this.boxColumnList;
-                this.getTablePaneDataByBox();
+            })
+        },
+        onCancelAll() {
+            cancelAll(this.soHeader.soBillId).then((res) => {
+
+            })
+        },
+        async onAdjust(row) {
+            this.dialog.soDetailId = row.soDetailId;
+            this.dialog.dialogTitle = `分配调整  ${this.soHeader.soBillNo}  计划数量：${row.planQty}`
+            await getEnableStockBySkuId(row.skuId).then((res) => {
+                this.dialog.dialogData = res.data.data;
+            })
+            // 重置拣货计划的合并数据,并重新赋值
+            this.resetMerge(this.dialog.dialogData);
+            this.dialog.dialogTableVisible = true;
+        },
+        onAdjustSubmit() {
+            let data = this.dialog.dialogData.filter(item => this.filterRowBySoPickPlan(item));
+            for (const i in data) {
+                if (data[i].soPickPlanQty > data[i].stockEnableQty) {
+                    this.$message.warning(`物品 ${data[i].skuCode}，批次${data[i].skuLot1} 的分配量不能大于可用量`)
+                    return;
+                }
             }
-        },
-        onEdit() {
+            let stockIdAndSoPickPlanQtyList = data.map(item => {
+                return Object.assign({}, {'stockId': item.stockId, 'soPickPlanQty': item.soPickPlanQty})
+            })
+            saveAssign(this.soHeader.soBillId, this.dialog.soDetailId, stockIdAndSoPickPlanQtyList).then((res) => {
+                console.log(res);
+                this.resetMerge(this.getSoPickPlanData());
+            })
 
         },
-        onCancel() {
-
+        // 过滤未填写本次分配量的行
+        filterRowBySoPickPlan(row) {
+            return !(row.soPickPlanQty === 0 || func.isEmpty(row.soPickPlanQty));
+        },
+        getSummaries(param) {
+            const {columns, data} = param;
+            const sums = [];
+            columns.forEach((column, index) => {
+                const values = data.map(item => Number(item[column.property]));
+                if (!values.every(value => isNaN(value))) {
+                    sums[index] = values.reduce((prev, curr) => {
+                        const value = Number(curr);
+                        if (!isNaN(value)) {
+                            return prev + curr;
+                        } else {
+                            return prev;
+                        }
+                    }, 0);
+                }
+            });
+            return sums;
         },
         createRowObj() {
             // 覆盖混入的方法
