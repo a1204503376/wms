@@ -146,7 +146,7 @@
     </select>
 
     <select id="getAllPickPage" resultType="org.nodes.wms.dao.picking.dto.output.FindAllPickingResponse">
-        select h.so_bill_no,h.bill_type_cd from so_header h
+        select h.so_bill_id,h.so_bill_no,h.bill_type_cd from so_header h
         left join so_detail d
         on h.so_bill_id=d.so_bill_id
         <where>
@@ -159,6 +159,7 @@
                 1
             </if>
         </where>
+        group by h.so_bill_no
     </select>
 </mapper>
 
