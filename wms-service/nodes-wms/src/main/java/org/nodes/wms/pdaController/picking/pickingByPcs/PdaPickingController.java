@@ -58,11 +58,12 @@ public class PdaPickingController {
 	 * PDA拣货：拣货详情查询
 	 *
 	 * @param request Pda根据发货单ID查询出库单明细-请求对象
+	 * @param query   分页参数
 	 * @return 拣货详情响应对象
 	 */
 	@PostMapping("/findPickingBySoBillId")
-	public R<IPage<FindPickingBySoBillIdResponse>> findPickingBySoBillId(@RequestBody FindPickingBySoBillIdRequest request) {
-		return null;
+	public R<IPage<FindPickingBySoBillIdResponse>> findPickingBySoBillId(@RequestBody FindPickingBySoBillIdRequest request, Query query) {
+		return R.data(pickingByPcsBiz.selectPickingBySoBillId(request, query));
 	}
 
 	/**

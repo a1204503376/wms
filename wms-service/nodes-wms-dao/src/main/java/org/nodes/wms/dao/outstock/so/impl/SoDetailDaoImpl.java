@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickExcelResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
@@ -70,5 +71,13 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 	@Override
 	public PickByPcSoDetailResponse getPickByPcDetail(SoDetailAndStockRequest soDetailAndStockRequest) {
 		return super.baseMapper.getPickByPcDetail(soDetailAndStockRequest);
+	}
+
+	@Override
+	public IPage<SoDetail> getSoDetailPage(Long soBillId, IPage<SoDetail> page) {
+		AssertUtil.notEmpty(String.valueOf(soBillId), "发货单ID不能为空");
+		LambdaQueryWrapper<SoDetail> queryWrapper = Wrappers.lambdaQuery();
+		queryWrapper.eq(SoDetail::getSoBillId, soBillId);
+		return super.baseMapper.selectPage(page, queryWrapper);
 	}
 }

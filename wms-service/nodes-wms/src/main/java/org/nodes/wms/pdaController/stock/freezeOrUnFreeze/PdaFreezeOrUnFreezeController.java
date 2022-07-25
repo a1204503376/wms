@@ -27,7 +27,7 @@ public class PdaFreezeOrUnFreezeController {
 	@ApiLog("PDA按库位冻结")
 	@PostMapping("freezeByLocCode")
 	public void freezeByLocCode(@RequestBody FreezeByLocCodeRequest request) {
-		stockControlBiz.freezeByLocCodeAction(request);
+		stockControlBiz.freezeByLocCodeAction(request.getLocCode());
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class PdaFreezeOrUnFreezeController {
 	@ApiLog("PDA按批次号冻结")
 	@PostMapping("freezeByLotNumber")
 	public void freezeByLotNumber(@RequestBody FreezeByLotNumberRequest request) {
-		stockControlBiz.freezeByLotNumberAction(request);
+		stockControlBiz.freezeByLotNumberAction(request.getLotNumber());
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class PdaFreezeOrUnFreezeController {
 	@ApiLog("PDA按批次号冻结")
 	@PostMapping("freezeBySerialNumber")
 	public void freezeBySerialNumber(@RequestBody FreezeBySerialNumberRequest request) {
-		stockControlBiz.freezeBySerialNumberAction(request);
+		stockControlBiz.freezeBySerialNumberAction(request.getSerialNumber());
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class PdaFreezeOrUnFreezeController {
 	@ApiLog("PDA按库位解冻")
 	@PostMapping("unFreezeByLocCode")
 	public void unFreezeByLocCode(@RequestBody UnFreezeByLocCodeRequest request) {
-		stockControlBiz.unFreezeByLocCodeAction(request);
+		stockControlBiz.unFreezeByLocCodeAction(request.getLocCode());
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class PdaFreezeOrUnFreezeController {
 	@ApiLog("PDA按批次号解冻")
 	@PostMapping("unFreezeByLotNumber")
 	public void unFreezeByLotNumber(@RequestBody UnFreezeByLotNumberRequest request) {
-		stockControlBiz.unFreezeByLotNumberAction(request);
+		stockControlBiz.unFreezeByLotNumberAction(request.getLotNumber());
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class PdaFreezeOrUnFreezeController {
 	@ApiLog("PDA按批次号解冻")
 	@PostMapping("unFreezeBySerialNumber")
 	public void unFreezeBySerialNumber(@RequestBody UnFreezeBySerialNumberRequest request) {
-		stockControlBiz.unFreezeBySerialNumberAction(request);
+		stockControlBiz.unFreezeBySerialNumberAction(request.getSerialNumber());
 	}
 
 	/**

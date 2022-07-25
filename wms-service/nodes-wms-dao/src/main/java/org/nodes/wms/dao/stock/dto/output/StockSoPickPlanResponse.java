@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  * 发货单分配页面可分配库存响应类
  **/
 @Data
-public class StockDistResponse extends BaseSkuLot implements Serializable {
+public class StockSoPickPlanResponse extends BaseSkuLot implements Serializable {
 
 	private static final long serialVersionUID = -829789935189414879L;
 
@@ -21,6 +21,38 @@ public class StockDistResponse extends BaseSkuLot implements Serializable {
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long stockId;
+
+	/**
+	 * 箱码
+	 */
+	private String boxCode;
+
+	/**
+	 * 库位id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long locId;
+
+	/**
+	 * 库位
+	 */
+	private String locName;
+
+	/**
+	 * 库区id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long zoneId;
+
+	/**
+	 * 库区
+	 */
+	private String zoneName;
+
+	/**
+	 * lpn
+	 */
+	private String lpnCode;
 
 	/**
 	 * 物品编码
@@ -35,37 +67,15 @@ public class StockDistResponse extends BaseSkuLot implements Serializable {
 	/**
 	 * 可用量
 	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private BigDecimal stockEnable;
+	private BigDecimal stockEnableQty;
 
 	/**
 	 * 余额
 	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private BigDecimal stockBalance;
-
-	/**
-	 * 库位
-	 */
-	private String locName;
-
-	/**
-	 * 库区
-	 */
-	private String zoneName;
-
-	/**
-	 * 箱码
-	 */
-	private String boxCode;
-
-	/**
-	 * lpn
-	 */
-	private String lpnCode;
+	private BigDecimal stockBalanceQty;
 
 	/**
 	 * 库存状态
 	 */
-	private String stockStatus;
+	private String stockState;
 }

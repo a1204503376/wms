@@ -203,9 +203,9 @@
                                     <template slot="header">
                                         <span>操作</span>
                                     </template>
-                                    <template v-slot="{row}">
+                                    <template v-slot="scope">
                                         <el-link type="primary"
-                                                 @click.native.prevent="deleteRow(row.$index, table.data)">删除
+                                                 @click.native.prevent="deleteRow(scope.$index, table.data)">删除
                                         </el-link>
                                     </template>
                                 </el-table-column>

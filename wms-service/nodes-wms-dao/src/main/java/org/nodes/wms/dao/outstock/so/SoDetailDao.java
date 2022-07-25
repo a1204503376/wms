@@ -92,4 +92,13 @@ public interface SoDetailDao {
 	 * @return 发货单明细数据
 	 */
 	PickByPcSoDetailResponse getPickByPcDetail(SoDetailAndStockRequest soDetailAndStockRequest);
+
+	/**
+	 * 根据发货单ID查询出库单明细分页
+	 *
+	 * @param soBillId 发货单ID
+	 * @param page     分页参数
+	 * @return 分页
+	 */
+	IPage<SoDetail> getSoDetailPage(Long soBillId, IPage<SoDetail> page);
 }

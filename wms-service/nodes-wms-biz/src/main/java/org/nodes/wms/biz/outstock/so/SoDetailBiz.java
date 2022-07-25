@@ -1,11 +1,13 @@
 package org.nodes.wms.biz.outstock.so;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
 import org.nodes.wms.dao.outstock.so.dto.output.LineNoAndSkuSelectResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
+import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.stock.dto.output.SerialSelectResponse;
 import org.springblade.core.mp.support.Query;
 
@@ -58,4 +60,13 @@ public interface SoDetailBiz {
 	 * @return 序列号集合
 	 */
 	List<SerialSelectResponse> getSerialSelectResponseList(Long stockId);
+
+	/**
+	 * 根据发货单ID查询出库单明细
+	 *
+	 * @param soBillId 发货单ID
+	 * @param query    分页参数
+	 * @return 分页
+	 */
+	IPage<SoDetail> getPickingBySoBillId(Long soBillId, Query query);
 }
