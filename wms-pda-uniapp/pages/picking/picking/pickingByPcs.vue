@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false" rightIcon="order"
-			@rightClick="gotoDetails" :bgColor="navigationBarBackgroundColor" title="按件拣货"
+			rightIconColor="#fff" @rightClick="gotoDetails" :bgColor="navigationBarBackgroundColor" title="按件拣货"
 			titleStyle="color:#ffffff;font-size:21px" style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u--form>
@@ -48,26 +48,22 @@
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
 					skuCode: undefined,
-					skuName: undefined,
-					skuLot2: undefined,
-					surplusQty: undefined,
-					wsuCode: undefined,
 					skuLot1: undefined,
 					boxCode: undefined,
 					locCode: undefined,
-					isSn: undefined
+					isSn: undefined,
+					qty: undefined,
+					billTypeCd: undefined,
+					soBillId: undefined,
+					soBillNo: undefined
 				},
-				receiveDetailId: '',
-				receiveId: '',
-				receiveDetailList: [],
-				locCode: '',
-				boxCode: '',
 				soBillId: ''
 			}
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
-			this.soBillId=parse.soBillId;
+			console.log(parse)
+			this.soBillId = parse.soBillId;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
