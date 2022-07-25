@@ -141,7 +141,6 @@
 				})
 			},
 			clickItem(row) {
-				row.receiveId = this.params.receiveId;
 				this.clearEmitKeyDown();
 				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingByPcs', row);
 			},
