@@ -1,4 +1,3 @@
-
 package org.nodes.wms.dao.stock.entities;
 
 import com.baomidou.mybatisplus.annotation.IdType;

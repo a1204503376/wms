@@ -193,6 +193,8 @@ import fileDownload from "js-file-download";
                 <el-table
                     ref="table"
                     :data="table.data"
+                    show-summary
+                    :summary-method="getSummaries"
                     border
                     highlight-current-row
                     row-key="id"
@@ -501,6 +503,34 @@ export default {
                     id: '0'
                 }
             });
+        },
+        getSummaries(param) {
+            const {columns, data} = param;
+            const sums = [];
+            columns.forEach((column, index) => {
+                if (index === 0) {
+                    sums[index] = '合计';
+                    return;
+                }
+                if (index === 5 || index === 6 || index === 7) {
+                    const values = data.map(item => Number(item[column.property]));
+                    if (!values.every(value => isNaN(value))) {
+                        sums[index] = values.reduce((prev, curr) => {
+                            const value = Number(curr);
+                            if (!isNaN(value)) {
+                                return prev + curr;
+                            } else {
+                                return prev;
+                            }
+                        }, 0);
+
+                    } else {
+                        sums[index] = '';
+                    }
+                }
+            });
+
+            return sums;
         },
         callbackFileUpload(res) {
             this.fileUpload.visible = false;
