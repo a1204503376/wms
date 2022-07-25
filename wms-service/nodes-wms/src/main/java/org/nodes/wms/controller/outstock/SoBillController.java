@@ -17,16 +17,21 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.*;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
-import org.nodes.wms.dao.stock.dto.output.StockDistResponse;
+import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
+import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
+import org.springblade.core.tool.utils.ConvertUtil;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -299,15 +304,59 @@ public class SoBillController {
 	 */
 	@PostMapping("/getSoDetailAndStock")
 	public R<SoDetailAndStockResponse> getSoDetailAndStock(@Valid @RequestBody
-																   SoDetailAndStockRequest soDetailAndStockRequest) {
+														   SoDetailAndStockRequest soDetailAndStockRequest) {
 		return R.data(soHeaderBiz.getSoDetailAndStock(soDetailAndStockRequest));
+	}
+
+	/**
+	 * 分配：根据发货单id获取拣货计划信息
+	 */
+	@PostMapping("/getSoPickPlan")
+	public R<List<SoPickPlanForDistResponse>> getSoPickPlan(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
+		List<SoPickPlanForDistResponse> soPickPlanList = new LinkedList<>();
+		for (int i = 0; i < 10; i++) {
+			SoPickPlanForDistResponse soPickPlan = new SoPickPlanForDistResponse();
+			soPickPlan.setPickPlanId(ConvertUtil.convert(1000 + i, Long.class));
+			soPickPlan.setPickPlanQty(ConvertUtil.convert(1000 + i, BigDecimal.class));
+			if (i % 2 == 0 || i % 3 == 0) {
+				soPickPlan.setBoxCode("box1");
+				soPickPlan.setZoneId(10L);
+				soPickPlan.setZoneName("zone1");
+				soPickPlan.setLocId(100L);
+				soPickPlan.setLocName("loc1");
+				soPickPlan.setLpnCode("lpn1");
+			} else {
+				soPickPlan.setBoxCode("box2");
+				soPickPlan.setZoneId(20L);
+				soPickPlan.setZoneName("zone2");
+				soPickPlan.setLocId(200L);
+				soPickPlan.setLocName("loc2");
+				soPickPlan.setLpnCode("lpn2");
+			}
+			soPickPlan.setSkuCode("sku" + i);
+			soPickPlan.setLotNumber("lotNumber" + 1);
+			soPickPlan.setEnableQty(ConvertUtil.convert(8000 + i, BigDecimal.class));
+			soPickPlan.setSurplusQty(ConvertUtil.convert(10000 + i, BigDecimal.class));
+			soPickPlan.setState(SoBillStateEnum.ALLOCATED);
+
+			soPickPlan.setSkuLot1("skuLot1");
+			soPickPlan.setSkuLot2("skuLot2");
+			soPickPlan.setSkuLot3("skuLot3");
+			soPickPlan.setSkuLot4("skuLot4");
+			soPickPlan.setSkuLot5("skuLot5");
+			soPickPlan.setSkuLot6("skuLot6");
+			soPickPlan.setSkuLot7("skuLot7");
+			soPickPlan.setSkuLot8("skuLot8");
+			soPickPlanList.add(soPickPlan);
+		}
+		return R.data(soPickPlanList);
 	}
 
 	/**
 	 * 分配：自动分配
 	 */
 	@PostMapping("/automaticAssign")
-	public R<String> automaticAssign(@Valid @RequestBody SoDetailIdsRequest soDetailIdsRequest){
+	public R<String> automaticAssign(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		return null;
 	}
 
@@ -315,7 +364,7 @@ public class SoBillController {
 	 * 分配：取消分配
 	 */
 	@PostMapping("/cancelAll")
-	public R<String> cancelAll(@Valid @RequestBody SoDetailIdsRequest soDetailIdsRequest){
+	public R<String> cancelAll(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		return null;
 	}
 
@@ -323,7 +372,7 @@ public class SoBillController {
 	 * 分配：确认下发
 	 */
 	@PostMapping("/issued")
-	public R<String> issued(@Valid @RequestBody SoBillIdRequest soBillIdRequest){
+	public R<String> issued(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		return null;
 	}
 
@@ -331,15 +380,43 @@ public class SoBillController {
 	 * 分配调整：根据物品id查找物品可分配库存信息
 	 */
 	@PostMapping("/getEnableStockBySkuId")
-	public R<StockDistResponse> getEnableStockBySkuId(@Valid @RequestBody SkuIdRequest skuIdRequest){
-		return null;
+	public R<List<StockSoPickPlanResponse>> getEnableStockBySkuId(@Valid @RequestBody SkuIdRequest skuIdRequest) {
+		List<StockSoPickPlanResponse> stockDistributedList = new ArrayList<>();
+		for (int i = 0; i < 10; i++) {
+			StockSoPickPlanResponse stock = new StockSoPickPlanResponse();
+			stock.setStockId(ConvertUtil.convert(i, Long.class));
+			stock.setBoxCode("boxTest");
+			stock.setLocId(ConvertUtil.convert(123456,Long.class));
+			stock.setLocName("库位test");
+			stock.setZoneId(ConvertUtil.convert(654321,Long.class));
+			stock.setZoneName("库区test");
+			stock.setSkuCode("HZ916");
+			stock.setLotNumber("lotNumber" + i);
+			stock.setStockEnableQty(ConvertUtil.convert(50 + i, BigDecimal.class));
+			stock.setStockBalanceQty(ConvertUtil.convert(50 - i, BigDecimal.class));
+			stock.setLpnCode("lpnTest");
+			stock.setStockState("状态test");
+			stock.setSkuLot1("skuLot1");
+			stock.setSkuLot2("skuLot2");
+			stock.setSkuLot3("skuLot3");
+			stock.setSkuLot4("skuLot4");
+			stock.setSkuLot5("skuLot5");
+			stock.setSkuLot6("skuLot6");
+			stock.setSkuLot7("skuLot7");
+			stock.setSkuLot8("skuLot8");
+			stockDistributedList.add(stock);
+		}
+		return R.data(stockDistributedList);
 	}
 
 	/**
 	 * 分配调整：保存分配信息、更新库存占用数量
 	 */
 	@PostMapping("/saveAssign")
-	public R<String> saveAssign(@Valid @RequestBody SoBillDistRequest soBillDistRequest){
+	public R<String> saveAssign(@Valid @RequestBody SoBillDistributedRequest soBillDistributedRequest) {
+		System.out.println(soBillDistributedRequest.getSoBillId());
+		System.out.println(soBillDistributedRequest.getSoDetailId());
+		System.out.println(soBillDistributedRequest.getStockIdAndSoPickPlanQtyList());
 		return null;
 	}
 }
