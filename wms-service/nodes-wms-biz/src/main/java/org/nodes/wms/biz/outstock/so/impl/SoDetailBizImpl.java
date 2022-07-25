@@ -1,5 +1,6 @@
 package org.nodes.wms.biz.outstock.so.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.outstock.so.SoDetailBiz;
@@ -11,6 +12,7 @@ import org.nodes.wms.dao.outstock.so.SoDetailDao;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
 import org.nodes.wms.dao.outstock.so.dto.output.LineNoAndSkuSelectResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
+import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.stock.dto.output.SerialSelectResponse;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.springblade.core.excel.util.ExcelUtil;
@@ -64,5 +66,11 @@ public class SoDetailBizImpl implements SoDetailBiz {
 			serialSelectResponseList.add(serialSelectResponse);
 		}
 		return serialSelectResponseList;
+	}
+
+	@Override
+	public IPage<SoDetail> getPickingBySoBillId(Long soBillId, Query query) {
+		IPage<SoDetail> page = Condition.getPage(query);
+		return soDetailDao.getSoDetailPage(soBillId, page);
 	}
 }
