@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.picking.pickingByPcs.PickingByPcsBiz;
+import org.nodes.wms.dao.picking.dto.input.EsitSerialNumberRequest;
 import org.nodes.wms.dao.picking.dto.input.FindAllPickingRequest;
 import org.nodes.wms.dao.picking.dto.input.PickingByBoxRequest;
+import org.nodes.wms.dao.picking.dto.output.EsitSerialNumberResponse;
 import org.nodes.wms.dao.picking.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.picking.dto.output.PickingByBoxResponse;
 import org.springblade.core.log.annotation.ApiLog;
@@ -60,5 +62,17 @@ public class PdaPickingController {
 	public R<IPage<FindAllPickingResponse>> findPickingBySoBillId(@RequestBody FindAllPickingRequest request) {
 		return null;
 	}
+
+	/**
+	 * 判断当前物品是否是序列号管理
+	 *
+	 * @param request 判断当前物品是否是序列号管理请求对象
+	 * @return 是否是序列号管理
+	 */
+	@PostMapping("/findEsitSerialNumberBySkuCode")
+	public R<EsitSerialNumberResponse> findEsitSerialNumberBySkuCode(@RequestBody EsitSerialNumberRequest request) {
+		return null;
+	}
+
 
 }
