@@ -6,20 +6,21 @@
 		</u-navbar>
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
 		<u--form labelPosition="left" :model="params">
-			<u-form-item label="" borderBottom class="left-text-one-line font-in-page" labelWidth="100">
-				<u--input v-model="params.skuCode" placeholder="请输入发货单编码/上游编码/任务号"></u--input>
-			</u-form-item>
+			<u-search placeholder="请输入发货单编码/上游编码/任务号" v-model="params.no" :show-action="false"
+				@custom="getReceiveDetailList" @search="getReceiveDetailList" class="font-in-page"
+				style="margin: 12rpx">
+			</u-search>
 		</u--form>
 		<!-- ${index + 1} -->
-		<u-list style="height: 960rpx;">
+		<u-list style="height: 960rpx;" @scrolltolower="scrolltolower">
 			<u-list-item v-for="(item, index) in receiveDetailList" :key="index">
 				<view @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
 						<u-col span="10" class="left-text-one-line">
-							<view class="demo-layout bg-purple-light font-in-page">{{index+1}}-{{item.skuCode}}</view>
+							<view class="demo-layout bg-purple-light font-in-page">{{item.soBillNo}}</view>
 						</u-col>
 						<u-col span="2">
-							<view class="demo-layout bg-purple font-in-page">{{item.surplusQty}}</view>
+							<view class="demo-layout bg-purple font-in-page">{{item.billTypeCd}}</view>
 						</u-col>
 					</u-row>
 					<u-divider text=""></u-divider>
@@ -40,7 +41,7 @@
 
 <script>
 	import setting from '@/common/setting'
-	import receive from '@/api/inStock/receiveByPcs.js'
+	import picking from '@/api/picking/picking.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
@@ -53,15 +54,25 @@
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
 					receiveId: '',
-					skuCode: '',
+					no: '',
 				},
-				receiveDetailList: []
+				page: {
+					total: 0,
+					size: 9,
+					current: 1,
+					ascs: "", //正序字段集合
+					descs: "", //倒序字段集合
+				},
+				receiveDetailList: [],
+				status: 'loadmore',
+				loadmore: false,
+				noData: false,
 			}
 		},
 		onLoad: function(option) {
 			// var parse = JSON.parse(option.param)
 			// this.params.receiveId = parse.receiveId
-			this.getReceiveDetailList();
+			// this.getReceiveDetailList();
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -71,7 +82,7 @@
 			var that = this;
 			that.emitKeyDown = function(e) {
 				if (e.key == 'Enter') {
-					this.getReceiveDetailList();
+					that.getReceiveDetailList();
 				}
 			};
 		},
@@ -94,10 +105,7 @@
 				var barcodeType = barcodeFunc.BarcodeType;
 				switch (barcode.type) {
 					case barcodeType.UnKnow:
-						this.params.skuCode = barcode.content;
-						break;
-					case barcodeType.Sku:
-						this.params.skuCode = barcode.content;
+						this.params.no = barcode.content;
 						break;
 					default:
 						this.$u.func.showToast({
@@ -111,17 +119,25 @@
 				uni.$u.func.navigateBackTo(1);
 			},
 			getReceiveDetailList() {
-				if (tool.isNotEmpty(this.params.skuCode)) {
-					this.analysisCode(this.params.skuCode);
+				if (tool.isNotEmpty(this.params.no)) {
+					this.analysisCode(this.params.no);
 				}
+				this.page.current = 1;
 				this.params.whId = uni.getStorageSync('warehouse').whId;
-				receive.getReceiveDetailList(this.params).then(data => {
-					this.receiveDetailList = data.data;
-					//TODO
-					// if (data.data.length == 1) {
-					// 	data.data[0].receiveId = this.params.receiveId;
-					// 	uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/ReceiveByPiece', data.data[0]);
-					// }
+				picking.findAllPickingByNo(this.params, this.page).then(data => {
+					if (data.data.records.length > 0) {
+						this.status = 'loading';
+						this.loadmore = true;
+						this.noData = false;
+					} else {
+						this.status = 'nomore';
+						this.loadmore = false;
+						this.noData = true;
+					}
+					this.receiveDetailList = data.data.records;
+					if (this.receiveDetailList.length < this.page.size) {
+						this.loadmore = false;
+					}
 				})
 			},
 			clickItem(row) {
@@ -134,12 +150,29 @@
 				this.getReceiveDetailList();
 			},
 			clearEmitKeyDown() {
-				this.emitKeyDown = function(){};
+				this.emitKeyDown = function() {};
 			},
 			emitKeyDown(e) {
 				if (e.key == 'Enter') {
 					this.getReceiveDetailList();
 				}
+			},
+			scrolltolower() {
+				this.loading = false;
+				this.divider = false;
+				this.page.current++;
+				this.params.whId = uni.getStorageSync('warehouse').whId;
+				picking.findAllPickingByNo(this.params, this.page).then(data => {
+					if (data.data.records.length > 0) {
+						this.status = 'loading';
+						data.data.records.forEach((item, index) => { //js遍历数组
+							this.receiveDetailList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
+						});
+					} else {
+						this.status = 'nomore';
+					}
+
+				})
 			}
 		}
 	}
