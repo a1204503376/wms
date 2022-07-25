@@ -83,6 +83,8 @@
                                          :key="index">
                                 <el-table
                                     :data="table.data"
+                                    show-summary
+                                    :summary-method="getSummaries"
                                     border
                                     highlight-current-row
                                     size="mini">
@@ -198,7 +200,7 @@ export default {
                         label: '批次',
                     },
                     {
-                        prop: 'lotNumber',
+                        prop: 'locCode',
                         label: '库位',
                     },
                     {
@@ -297,7 +299,34 @@ export default {
             this.table.postData = tableData;
             return true;
         },
+        getSummaries(param) {
+            const {columns, data} = param;
+            const sums = [];
+            columns.forEach((column, index) => {
+                if (index === 0) {
+                    sums[index] = '合计';
+                    return;
+                }
+                if (index === 1 || index === 2) {
+                    const values = data.map(item => Number(item[column.property]));
+                    if (!values.every(value => isNaN(value))) {
+                        sums[index] = values.reduce((prev, curr) => {
+                            const value = Number(curr);
+                            if (!isNaN(value)) {
+                                return prev + curr;
+                            } else {
+                                return prev;
+                            }
+                        }, 0);
 
+                    } else {
+                        sums[index] = '';
+                    }
+                }
+            });
+
+            return sums;
+        },
 
         getDetailData(lineNo) {
             let soDetailAndStockRequest = {
