@@ -1,9 +1,9 @@
-package org.nodes.wms.biz.picking.connectionAreaPicking;
+package org.nodes.wms.biz.outstock.pickingbyconnection;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.nodes.wms.dao.picking.dto.input.ConnectionAreaPickingRequest;
-import org.nodes.wms.dao.picking.dto.input.OutboundAccessAreaLocationQueryRequest;
-import org.nodes.wms.dao.picking.dto.output.OutboundAccessAreaLocationQueryResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.ConnectionAreaPickingRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.OutboundAccessAreaLocationQueryRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.OutboundAccessAreaLocationQueryResponse;
 import org.springblade.core.mp.support.Query;
 
 public interface ConnectionAreaPickingBiz {

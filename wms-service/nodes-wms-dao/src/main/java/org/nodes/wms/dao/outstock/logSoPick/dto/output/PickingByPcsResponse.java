@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.picking.dto.output;
+package org.nodes.wms.dao.outstock.logSoPick.dto.output;
 
 import lombok.Data;
 

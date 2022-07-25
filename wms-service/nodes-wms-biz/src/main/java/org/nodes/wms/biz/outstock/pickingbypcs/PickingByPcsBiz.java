@@ -1,12 +1,12 @@
-package org.nodes.wms.biz.picking.pickingByPcs;
+package org.nodes.wms.biz.outstock.pickingbypcs;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.nodes.wms.dao.picking.dto.input.FindAllPickingRequest;
-import org.nodes.wms.dao.picking.dto.input.FindPickingBySoBillIdRequest;
-import org.nodes.wms.dao.picking.dto.input.PickingByBoxRequest;
-import org.nodes.wms.dao.picking.dto.output.FindAllPickingResponse;
-import org.nodes.wms.dao.picking.dto.output.FindPickingBySoBillIdResponse;
-import org.nodes.wms.dao.picking.dto.output.PickingByBoxResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindAllPickingRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindPickingBySoBillIdRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.PickingByBoxRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindPickingBySoBillIdResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.PickingByBoxResponse;
 import org.springblade.core.mp.support.Query;
 
 public interface PickingByPcsBiz {

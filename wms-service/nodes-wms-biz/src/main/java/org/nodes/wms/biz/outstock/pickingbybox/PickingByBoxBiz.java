@@ -1,7 +1,7 @@
-package org.nodes.wms.biz.picking.pickingByBox;
+package org.nodes.wms.biz.outstock.pickingbybox;
 
-import org.nodes.wms.dao.picking.dto.input.PickingByBoxRequest;
-import org.nodes.wms.dao.picking.dto.output.PickingByBoxResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.PickingByBoxRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.PickingByBoxResponse;
 
 public interface PickingByBoxBiz {
 	/**

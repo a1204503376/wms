@@ -2,9 +2,9 @@ package org.nodes.wms.pdaController.picking.pickingByBox;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
-import org.nodes.wms.biz.picking.pickingByBox.PickingByBoxBiz;
-import org.nodes.wms.dao.picking.dto.input.PickingByBoxRequest;
-import org.nodes.wms.dao.picking.dto.output.PickingByBoxResponse;
+import org.nodes.wms.biz.outstock.pickingbybox.PickingByBoxBiz;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.PickingByBoxRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.PickingByBoxResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.PostMapping;

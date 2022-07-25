@@ -1,11 +1,11 @@
-package org.nodes.wms.biz.picking.connectionAreaPicking.impl;
+package org.nodes.wms.biz.outstock.pickingbyconnection.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
-import org.nodes.wms.biz.picking.connectionAreaPicking.ConnectionAreaPickingBiz;
-import org.nodes.wms.dao.picking.dto.input.ConnectionAreaPickingRequest;
-import org.nodes.wms.dao.picking.dto.input.OutboundAccessAreaLocationQueryRequest;
-import org.nodes.wms.dao.picking.dto.output.OutboundAccessAreaLocationQueryResponse;
+import org.nodes.wms.biz.outstock.pickingbyconnection.ConnectionAreaPickingBiz;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.ConnectionAreaPickingRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.OutboundAccessAreaLocationQueryRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.OutboundAccessAreaLocationQueryResponse;
 import org.springblade.core.mp.support.Query;
 import org.springframework.stereotype.Service;
 
