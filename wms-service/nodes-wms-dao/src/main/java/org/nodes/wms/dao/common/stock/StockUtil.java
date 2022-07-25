@@ -39,7 +39,7 @@ public class StockUtil {
 		for (Stock stock : stockList) {
 			if (!Func.equals(stockList.get(0).getSkuLevel(), stock.getSkuLevel())) {
 				throw ExceptionUtil.mpe("计算库存余额异常，[%d][%d]包装层级不一致",
-					stockList.get(0).getStockId(), stock.getStockId());
+						stockList.get(0).getStockId(), stock.getStockId());
 			}
 
 			BigDecimal balance = stock.getStockQty().subtract(stock.getPickQty());
@@ -54,13 +54,13 @@ public class StockUtil {
 	}
 
 	/**
-	 * 计算库存的可用量 = stockQty + pickQty - occupyQty, 为负数抛异常
+	 * 计算库存的可用量 = stockQty - pickQty - occupyQty, 为负数抛异常
 	 *
 	 * @param stock 库存对象
 	 * @return 可用量
 	 */
 	public static BigDecimal getStockEnable(Stock stock) {
-		BigDecimal qty = stock.getStockQty().add(stock.getPickQty()).subtract(stock.getOccupyQty());
+		BigDecimal qty = stock.getStockQty().subtract(stock.getPickQty()).subtract(stock.getOccupyQty());
 		if (BigDecimalUtil.lt(qty, BigDecimal.ZERO)) {
 			throw ExceptionUtil.mpe("计算库存可用量异常，[%d]可用为负数", stock.getStockId());
 		}
@@ -69,7 +69,7 @@ public class StockUtil {
 	}
 
 	/**
-	 * 计算库存的可用量 = stockQty + pickQty - occupyQty。计算库存量的时候需要考虑计量单位
+	 * 计算库存的可用量 = stockQty - pickQty - occupyQty。计算库存量的时候需要考虑计量单位
 	 * 如果计算的包装层级不一致则抛异常
 	 *
 	 * @param stockList 库存对象集合
@@ -80,10 +80,10 @@ public class StockUtil {
 		for (Stock stock : stockList) {
 			if (!Func.equals(stockList.get(0).getSkuLevel(), stock.getSkuLevel())) {
 				throw ExceptionUtil.mpe("计算库存可用量异常，[%d][%d]包装层级不一致",
-					stockList.get(0).getStockId(), stock.getStockId());
+						stockList.get(0).getStockId(), stock.getStockId());
 			}
 
-			BigDecimal enable = stock.getStockQty().add(stock.getPickQty()).subtract(stock.getOccupyQty());
+			BigDecimal enable = stock.getStockQty().subtract(stock.getPickQty()).subtract(stock.getOccupyQty());
 			if (BigDecimalUtil.lt(enable, BigDecimal.ZERO)) {
 				throw ExceptionUtil.mpe("计算库存可用量异常，[%d]可用为负数", stock.getStockId());
 			}
@@ -128,7 +128,7 @@ public class StockUtil {
 			}
 
 			throw new ServiceException(String.format("%s失败,stockId:%d,enable:%f,pickQty:%f",
-				reason, sourceStock.getStockId(), enableQty, pickQty));
+					reason, sourceStock.getStockId(), enableQty, pickQty));
 		}
 	}
 
