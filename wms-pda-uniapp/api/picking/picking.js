@@ -2,7 +2,7 @@ import http from '@/http/api.js'
 
 const findAllPickingByNo = (data, params) => {
 	return http.request({
-		url: '/api/ApiPDA/picking/findAllPickingByNo',
+		url: '/api/ApiPDA/pickingByPcs/findAllPickingByNo',
 		method: 'POST',
 		data: data,
 		params: params
@@ -11,7 +11,7 @@ const findAllPickingByNo = (data, params) => {
 
 const pickingByPcs = (data) => {
 	return http.request({
-		url: '/api/ApiPDA/picking/pickingByPcs',
+		url: '/api/ApiPDA/pickingByPcs/pickingByPcs',
 		method: 'POST',
 		data: data
 	})
@@ -19,7 +19,7 @@ const pickingByPcs = (data) => {
 
 const pickingByBox = (data) => {
 	return http.request({
-		url: '/api/ApiPDA/picking/pickingByBox',
+		url: '/api/ApiPDA/pickingByBox/pickingByBox',
 		method: 'POST',
 		data: data
 	})
