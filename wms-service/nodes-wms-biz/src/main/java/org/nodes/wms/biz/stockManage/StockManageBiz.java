@@ -9,23 +9,23 @@ public interface StockManageBiz {
 	/**
 	 * 按库位冻结
 	 *
-	 * @param request 请求对象-内部包含库位
+	 * @param  locCode 库位编码
 	 */
-	void freezeByLocCodeAction(FreezeByLocCodeRequest request);
+	void freezeByLocCodeAction(String locCode);
 
 	/**
 	 * 按批次号冻结
 	 *
-	 * @param request 请求对象-内部包含批次号
+	 * @param lotNumber 批次号
 	 */
-	void freezeByLotNumberAction(FreezeByLotNumberRequest request);
+	void freezeByLotNumberAction(String lotNumber);
 
 	/**
 	 * 按序列号冻结
 	 *
-	 * @param request 请求对象-内部包含序列号
+	 * @param serialNumber 序列号
 	 */
-	void freezeBySerialNumberAction(FreezeBySerialNumberRequest request);
+	void freezeBySerialNumberAction(String serialNumber);
 
 	/**
 	 * 部分冻结
@@ -37,23 +37,23 @@ public interface StockManageBiz {
 	/**
 	 * 按库位解冻
 	 *
-	 * @param request 请求对象-内部包含库位
+	 * @param locCode 库位
 	 */
-	void unFreezeByLocCodeAction(UnFreezeByLocCodeRequest request);
+	void unFreezeByLocCodeAction(String locCode);
 
 	/**
 	 * 按批次号解冻
 	 *
-	 * @param request 请求对象-内部包含批次号
+	 * @param lotNumber 批次号
 	 */
-	void unFreezeByLotNumberAction(UnFreezeByLotNumberRequest request);
+	void unFreezeByLotNumberAction(String lotNumber);
 
 	/**
 	 * 按序列号解冻
 	 *
-	 * @param request 请求对象-内部包含序列号
+	 * @param serialNumber 序列号
 	 */
-	void unFreezeBySerialNumberAction(UnFreezeBySerialNumberRequest request);
+	void unFreezeBySerialNumberAction(String serialNumber);
 
 	/**
 	 * 部分解冻
@@ -61,4 +61,26 @@ public interface StockManageBiz {
 	 * @param request 请求对象-内部包含 物品编码-库位编码-批次号-序列号
 	 */
 	void portionUnFreezeAction(PortionUnFreezeRequest request);
+
+	/**
+	 * PDA库存管理:标准移动
+	 *
+	 * @param request Pda库存移动-请求对象
+	 */
+	void stockMove(StockMoveRequest request);
+
+
+	/**
+	 * PDA库存管理:LPN移动
+	 *
+	 * @param request Pda库存移动-请求对象
+	 */
+	void stockMoveByLpn(StockMoveByLpnRequest request);
+
+	/**
+	 * PDA库存管理:按箱移动
+	 *
+	 * @param request Pda库存按箱移动-请求对象
+	 */
+	void stockMoveByBox(StockMoveByBoxCodeRequest request);
 }

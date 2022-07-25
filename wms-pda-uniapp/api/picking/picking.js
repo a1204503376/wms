@@ -25,8 +25,17 @@ const pickingByBox = (data) => {
 	})
 }
 
+const getPickingBySoBillId = (data) => {
+	return http.request({
+		url: '/api/ApiPDA/pickingByPcs/findPickingBySoBillId',
+		method: 'POST',
+		data: data
+	})
+}
+
 export default {
 	findAllPickingByNo,
 	pickingByPcs,
-	pickingByBox
+	pickingByBox,
+	getPickingBySoBillId
 }

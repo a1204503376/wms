@@ -62,8 +62,8 @@
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
-			console.log(parse)
 			this.soBillId = parse.soBillId;
+			this.params=parse;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -146,7 +146,7 @@
 				uni.$u.func.navigateBackTo(1);
 			},
 			gotoDetails() {
-				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingDetails');
+				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingDetails',this.params);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

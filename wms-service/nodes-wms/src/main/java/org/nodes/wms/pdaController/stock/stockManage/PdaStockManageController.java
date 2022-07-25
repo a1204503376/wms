@@ -2,9 +2,11 @@ package org.nodes.wms.pdaController.stock.stockManage;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
-import org.nodes.wms.biz.stock.StockManageBiz;
+import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.dao.stock.dto.input.*;
-import org.nodes.wms.dao.stock.dto.output.*;
+import org.nodes.wms.dao.stock.dto.output.EstimateStockMoveByBoxCodeResponse;
+import org.nodes.wms.dao.stock.dto.output.EstimateStockMoveByLpnCodeResponse;
+import org.nodes.wms.dao.stock.dto.output.EstimateStockMoveResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +31,7 @@ public class PdaStockManageController {
 	 */
 	@PostMapping("/estimateStockMove")
 	public R<EstimateStockMoveResponse> estimateStockMove(@RequestBody EstimateStockMoveRequest request) {
-		return R.data(stockManageBiz.estimateStockMoveAction(request));
+		return null;
 	}
 
 	/**
@@ -40,7 +42,7 @@ public class PdaStockManageController {
 	@ApiLog("PDA库存管理:标准移动")
 	@PostMapping("/stockMove")
 	public void stockMove(@RequestBody StockMoveRequest request) {
-		stockManageBiz.stockMoveAction(request);
+		stockManageBiz.stockMove(request);
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class PdaStockManageController {
 	 */
 	@PostMapping("/estimateStockMoveByLpn")
 	public R<EstimateStockMoveByLpnCodeResponse> estimateStockMoveByLpn(@RequestBody EstimateStockMoveByLpnCodeRequest request) {
-		return R.data(stockManageBiz.estimateStockMoveByLpnAction(request));
+		return null;
 	}
 
 	/**
@@ -62,7 +64,7 @@ public class PdaStockManageController {
 	@ApiLog("PDA库存管理:LPN移动")
 	@PostMapping("/stockMoveByLpn")
 	public void stockMoveByLpn(@RequestBody StockMoveByLpnRequest request) {
-		stockManageBiz.stockMoveByLpnAction(request);
+		stockManageBiz.stockMoveByLpn(request);
 	}
 
 	/**
@@ -73,7 +75,7 @@ public class PdaStockManageController {
 	 */
 	@PostMapping("/estimateStockMoveByBoxCode")
 	public R<EstimateStockMoveByBoxCodeResponse> estimateStockMoveByBoxCode(@RequestBody EstimateStockMoveByBoxCodeRequest request) {
-		return R.data(stockManageBiz.estimateStockMoveByBoxCodeAction(request));
+		return null;
 	}
 
 	/**
@@ -84,6 +86,6 @@ public class PdaStockManageController {
 	@ApiLog("PDA库存管理:按箱移动")
 	@PostMapping("/stockMoveByBoxCode")
 	public void stockMoveByBoxCode(@RequestBody StockMoveByBoxCodeRequest request) {
-		stockManageBiz.stockMoveByBoxCodeAction(request);
+		stockManageBiz.stockMoveByBox(request);
 	}
 }
