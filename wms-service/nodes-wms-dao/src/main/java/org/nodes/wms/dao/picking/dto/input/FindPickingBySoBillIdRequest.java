@@ -17,4 +17,8 @@ public class FindPickingBySoBillIdRequest implements Serializable {
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long soBillId;
+	/**
+	 * 库房id
+	 */
+	private Long whId;
 }
