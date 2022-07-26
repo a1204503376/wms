@@ -15,15 +15,20 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * 天宜定制：提供给调度系统的接口
+ * @author nodesc
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.SCHEDULING_SYSTEM_API)
 public class SchedulingController {
+
 	private final SchedulingBiz schedulingBiz;
 	private final LpnTypeBiz lpnTypeBiz;
 
 	/**
-	 * 调度系统:同步任务执行状态
+	 * 调度系统:反馈任务执行状态
 	 *
 	 * @param request 请求参数
 	 * @return 消息
