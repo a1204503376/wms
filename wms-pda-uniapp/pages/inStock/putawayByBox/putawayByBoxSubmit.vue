@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
-			:bgColor="navigationBarBackgroundColor" title="按件收货" titleStyle="color:#ffffff;font-size:21px"
+			:bgColor="navigationBarBackgroundColor" title="按箱上架" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u--form>
@@ -11,11 +11,13 @@
 			<u-form-item label="LOC" :required="true"  class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.locCode"></u--input>
 			</u-form-item> 
-			<u-form-item label="容器编码" :required="true"  class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.lpnCode"></u--input>
-			</u-form-item>
 			<u-form-item label="总数" :required="true"  class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.qty" border="0" disabled></u--input>
+			</u-form-item>
+			<u-form-item label="整箱上架" :required="true"  class="left-text-one-line" labelWidth="100">
+				<is-all-lpn-putaway>
+					
+				</is-all-lpn-putaway>
 			</u-form-item>
 		</u--form>
 		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
@@ -36,9 +38,11 @@
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
+	import isAllLpnPutaway from '@/components/isAllLpnPutaway.vue'
 	export default {
 		components: {
-			keyboardListener
+			keyboardListener,
+			isAllLpnPutaway
 		},
 		data() {
 			return {
@@ -84,7 +88,7 @@
 			submit() {
 				var _this = this;
 				uni.$u.throttle(function() {
-					if(tool.isNotEmpty(_this.params.locCode)&&tool.isNotEmpty(_this.params.lpnCode)){
+					if(tool.isNotEmpty(_this.params.locCode)){
 						_this.submitPutawayByBox();
 					}
 					else{
