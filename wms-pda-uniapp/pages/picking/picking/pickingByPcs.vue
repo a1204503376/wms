@@ -68,7 +68,8 @@
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
 		},
-		onShow() {
+		onShow: function(option) {
+			console.log(option)
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		onBackPress(event) {

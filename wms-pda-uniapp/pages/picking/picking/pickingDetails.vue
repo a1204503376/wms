@@ -109,7 +109,7 @@
 			},
 			esc() {
 				this.clearEmitKeyDown();
-				uni.$u.func.navigateBackTo(1);
+				uni.$u.func.routeRedirectTo('/pages/picking/picking/pickingByPcs',this.params);
 			},
 			getReceiveDetailList() {
 				this.params.whId = uni.getStorageSync('warehouse').whId;
@@ -123,9 +123,12 @@
 				})
 			},
 			clickItem(row) {
-				row.receiveId = this.params.receiveId;
+				this.params.skuName = row.skuName;
+				this.params.baseUmName = row.baseUmName;
+				this.params.planQty = row.planQty;
+				this.params.scanQty = row.scanQty;
 				this.clearEmitKeyDown();
-				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingByPcs', row);
+				uni.$u.func.routeRedirectTo('/pages/picking/picking/pickingByPcs',this.params);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

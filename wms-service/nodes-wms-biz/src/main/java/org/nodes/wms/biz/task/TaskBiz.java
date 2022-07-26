@@ -16,7 +16,7 @@ import java.util.List;
 /**
  *
  */
-public interface TaskDetailBiz {
+public interface TaskBiz {
 	/**
 	 * 任务详情分页
 	 *
@@ -32,28 +32,28 @@ public interface TaskDetailBiz {
 	 * @param params 任务详情请求参数
 	 * @return 按照条件查询出来的任务详情
 	 */
-	List<TaskDetailExcelResponse> selectTaskList(HashMap<String, Object> params);
+	List<TaskDetailExcelResponse> selectTaskDetailList(HashMap<String, Object> params);
 
 	/**
 	 * 停止任务的动作
 	 *
 	 * @param request 停止任务的参数
 	 */
-	void stopActivity(StopTaskRequest request);
+	void stop(StopTaskRequest request);
 
 	/**
 	 * 取消任务的动作
 	 *
 	 * @param request 取消任务的参数
 	 */
-	void cancelActivity(CancelTaskRequest request);
+	void cancel(CancelTaskRequest request);
 
 	/**
 	 * 重新下发任务的动作
 	 *
 	 * @param request 重新下发任务的参数
 	 */
-	void againIssuedlActivity(AgainIssuedlTask request);
+	void restart(AgainIssuedlTask request);
 
 	/**
 	 * 修改任务状态

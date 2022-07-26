@@ -6,7 +6,7 @@ import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.task.SchedulingBiz;
-import org.nodes.wms.biz.task.TaskDetailBiz;
+import org.nodes.wms.biz.task.TaskBiz;
 import org.nodes.wms.biz.task.modular.TaskDetailFactory;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.zone.constant.ZoneConstant;
@@ -27,7 +27,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	private final ZoneBiz zoneBiz;
 	private final LogBiz logBiz;
 	private final TaskDetailFactory taskDetailFactory;
-	private final TaskDetailBiz taskDetailBiz;
+	private final TaskBiz taskBiz;
 
 	@Override
 	public String selectAndFrozenEnableOutbound(QueryAndFrozenEnableOutboundRequest request) {
@@ -58,6 +58,6 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	@Override
 	public Boolean synchronizeTaskStatus(SyncTaskStateRequest request) {
 		TaskDetail detail = taskDetailFactory.create(request);
-		return taskDetailBiz.updateTaskState(detail);
+		return taskBiz.updateTaskState(detail); // TODO 改为抛业务异常的方式
 	}
 }

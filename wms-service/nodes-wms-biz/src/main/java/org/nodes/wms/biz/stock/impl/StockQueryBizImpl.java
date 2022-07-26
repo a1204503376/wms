@@ -115,7 +115,12 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		return stockMergeStrategy.matchSameStock(receiveLog);
 	}
 
-	@Override
+    @Override
+    public List<Stock> findStockByLpnCode(String lpnCode) {
+		return stockDao.getStockByLpnCode(lpnCode, null);
+    }
+
+    @Override
 	public StockIndexResponse staticsStockDataOnIndexPage() {
 		// 获取所有入库暂存区库位
 		List<Location> allStageList = locationBiz.getAllStageLocation();

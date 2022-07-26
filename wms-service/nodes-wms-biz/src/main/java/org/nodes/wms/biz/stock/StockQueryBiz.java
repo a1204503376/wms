@@ -100,6 +100,13 @@ public interface StockQueryBiz {
 	Stock findStockOnStage(ReceiveLog receiveLog);
 
 	/**
+	 * 根据lpncode查询库存，含出库暂存区的
+	 * @param lpnCode 必填
+	 * @return
+	 */
+	List<Stock> findStockByLpnCode(String lpnCode);
+
+	/**
 	 * 根据序列号编码获取在库的序列号信息
 	 *
 	 * @param serialNoList 序列号编码
