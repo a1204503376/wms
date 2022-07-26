@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.stock.merge;
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.stock.StockDao;
@@ -32,6 +33,7 @@ public class DefaultStockMergeStrategy implements StockMergeStrategy {
 
 	@Override
 	public Stock matchSameStock(ReceiveLog receiveLog) {
+		AssertUtil.notNull(receiveLog, "根据清点记录查询库存失败,清点记录为空");
 		return match(StockStatusEnum.NORMAL, receiveLog.getWoId(),
 			receiveLog.getLocId(), receiveLog.getSkuId(), receiveLog.getBoxCode(),
 			receiveLog.getLpnCode(), receiveLog);
