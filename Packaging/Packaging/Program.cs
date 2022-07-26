@@ -17,7 +17,7 @@ namespace Packaging
         public static extern bool SetForegroundWindow(IntPtr hWnd);
 
         [STAThread]
-        private static void Main()
+        private static void Main() 
         {
             Log.Logger = new LoggerConfiguration()
                     //设置最小日志级别

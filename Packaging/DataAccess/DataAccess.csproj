@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DB.cs" />
+    <Compile Include="Dto\BatchPrintDto.cs" />
     <Compile Include="Dto\SerialNumberPrintDto.cs" />
     <Compile Include="Encasement\AutoIdentificationDal.cs" />
     <Compile Include="Wms\ReceiveDetailLpnDal.cs" />

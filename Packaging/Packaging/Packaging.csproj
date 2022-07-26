@@ -74,6 +74,7 @@
       <HintPath>..\packages\Serilog.Sinks.File.5.0.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
@@ -104,11 +105,18 @@
     <Compile Include="Common\SnowflakeIds.cs" />
     <Compile Include="Common\UiTags.cs" />
     <Compile Include="Common\WmsApiHelper.cs" />
+    <Compile Include="Encasement\DataBindHelper.cs" />
     <Compile Include="Encasement\ImportForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Encasement\ImportForm.Designer.cs">
       <DependentUpon>ImportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Encasement\BatchPackingReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Encasement\BatchPackingReport.Designer.cs">
+      <DependentUpon>BatchPackingReport.cs</DependentUpon>
     </Compile>
     <Compile Include="Encasement\SerialNumberReport.cs">
       <SubType>Component</SubType>
@@ -178,11 +186,18 @@
     <Compile Include="WaitForm.designer.cs">
       <DependentUpon>WaitForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Encasement\BatchPackingForm.resx">
+      <DependentUpon>BatchPackingForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Encasement\ImportForm.resx">
       <DependentUpon>ImportForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Encasement\SerialNumberPackingForm.resx">
       <DependentUpon>SerialNumberPackingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Encasement\BatchPackingReport.resx">
+      <DependentUpon>BatchPackingReport.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Encasement\SerialNumberReport.resx">
       <DependentUpon>SerialNumberReport.cs</DependentUpon>
@@ -199,6 +214,7 @@
     <None Include="..\.editorconfig">
       <Link>.editorconfig</Link>
     </None>
+    <None Include="Properties\DataSources\DataAccess.Dto.BatchPrintDto.datasource" />
     <None Include="Properties\DataSources\DataAccess.Dto.SerialNumberPrintDto.datasource" />
     <None Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">

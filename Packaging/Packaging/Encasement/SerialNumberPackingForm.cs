@@ -30,25 +30,9 @@ namespace Packaging.Encasement
 
         private void SerialNumberPackingForm_Load(object sender, EventArgs e)
         {
-            SetSpeedClassDataSource();
-            SetSkuDataSource();
+            DataBindHelper.SetSpeedClassDataSource(sluSpeedClass.Properties);
+            DataBindHelper.SetSkuDataSource(sluSku.Properties);
             gridControl1.DataSource = _packingAutoIdentifications;
-        }
-
-        private void SetSpeedClassDataSource()
-        {
-            var packingSpeedClasses = SpeedClassDal.GetAll();
-            sluSpeedClass.Properties.DisplayMember = "SpeedClass";
-            sluSpeedClass.Properties.KeyMember = "Id";
-            sluSpeedClass.Properties.DataSource = packingSpeedClasses;
-        }
-
-        private void SetSkuDataSource()
-        {
-            var skus = SkuDal.GetAll();
-            sluSku.Properties.DisplayMember = "SkuName";
-            sluSku.Properties.KeyMember = "SkuId";
-            sluSku.Properties.DataSource = skus;
         }
 
         private void sluSku_Properties_Closed(object sender, DevExpress.XtraEditors.Controls.ClosedEventArgs e)
