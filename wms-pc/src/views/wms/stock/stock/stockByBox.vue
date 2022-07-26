@@ -130,19 +130,7 @@ import fileDownload from "js-file-download";
 
                 </el-row>
             </template>
-            <template v-slot:batchBtn>
-                <el-button icon="el-icon-plus" size="mini" type="primary" @click="showByBox">按箱显示
-                </el-button>
-                <el-button icon="el-icon-upload2" plain size="mini"
-                           @click="onUpload">导入
-                </el-button>
-                <file-upload
-                    :visible="fileUpload.visible"
-                    file-name="库存"
-                    template-url="/api/wms/stock/export-template"
-                    @callback="callbackFileUpload"
-                ></file-upload>
-            </template>
+
             <template v-slot:tableTool>
                 <el-tooltip
                     :enterable="false"
@@ -193,8 +181,8 @@ import fileDownload from "js-file-download";
                 <el-table
                     ref="table"
                     :data="table.data"
-                    show-summary
-                    :summary-method="getSummaries"
+                    :row-class-name="tableRowClassName"
+                    :span-method="arraySpanMethod"
                     border
                     highlight-current-row
                     row-key="id"
@@ -202,9 +190,8 @@ import fileDownload from "js-file-download";
                     style="width: 100%"
                     @sort-change="onSortChange"
                 >
-                    <el-table-column fixed type="selection" width="50"></el-table-column>
                     <el-table-column fixed type="index">
-                        <template slot="header"> #</template>
+                        <template slot="header">序号</template>
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column
@@ -235,6 +222,11 @@ import fileDownload from "js-file-download";
         </dialog-column>
     </div>
 </template>
+<style>
+.el-table .success-row {
+    background: #eaeaea;
+}
+</style>
 
 <script>
 
@@ -245,7 +237,7 @@ import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import {listMixin} from "@/mixins/list";
-import {exportFile, importFile, page} from "@/api/wms/stock/stock";
+import {exportFile, page} from "@/api/wms/stock/stock";
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js';
 import fileUpload from "@/components/nodes/fileUpload";
@@ -295,7 +287,8 @@ export default {
                     receiveTimeDateRange: "",
                     lastInTimeDateRange: "",
                     lastOutTimeDateRange: "",
-                    taskId: ""
+                    taskId: "",
+                    isShowByBox: true
                 }
             },
             deleteCustomerRequest: {
@@ -304,6 +297,11 @@ export default {
             pageSize: [20, 50, 100],
             table: {
                 columnList: [
+                    {
+                        prop: "boxCode",
+                        label: "箱码",
+                        sortable: "custom"
+                    },
                     {
                         prop: "skuCode",
                         label: "物品编码",
@@ -343,11 +341,6 @@ export default {
                     {
                         prop: "locCode",
                         label: "库位编码",
-                        sortable: "custom"
-                    },
-                    {
-                        prop: "boxCode",
-                        label: "箱码",
                         sortable: "custom"
                     },
                     {
@@ -447,14 +440,43 @@ export default {
             page(this.page, this.form.params)
                 .then((res) => {
                     let pageObj = res.data.data;
-                    this.table.data = pageObj.records;
+                    this.table.data.length = 0
                     this.page.total = pageObj.total;
-
-                    let currentSku = this.pageSize.indexOf(pageObj.total)
-                    if (currentSku === -1) {
-                        this.pageSize.push(pageObj.total)
-                    }
-
+                    let arr = pageObj.records
+                    let balanceSum = 0
+                    let enableSum = 0
+                    let occupySum = 0
+                    arr.forEach((item, index) => {
+                        this.table.data.push(item)
+                        balanceSum += item.stockBalance
+                        enableSum += item.stockEnable
+                        occupySum += item.occupyQty
+                        if (index != arr.length - 1) {
+                            if (item.boxCode != arr[index + 1].boxCode) {
+                                let a = {
+                                    boxCode: '合计',
+                                    stockBalance: balanceSum,
+                                    stockEnable: enableSum,
+                                    occupyQty: occupySum
+                                }
+                                balanceSum = 0,
+                                    enableSum = 0,
+                                    occupySum = 0
+                                this.table.data.push(a)
+                            }
+                        } else {
+                            let a = {
+                                boxCode: '合计',
+                                stockBalance: balanceSum,
+                                stockEnable: enableSum,
+                                occupyQty: occupySum
+                            }
+                            balanceSum = 0,
+                                enableSum = 0,
+                                occupySum = 0
+                            this.table.data.push(a)
+                        }
+                    })
                 });
         },
         refreshTable() {
@@ -496,11 +518,6 @@ export default {
             }
             this.$emit('dateRangeChange', val);
         },
-        showByBox() {
-            this.$router.push({
-                name: '按箱显示',
-            });
-        },
         getSummaries(param) {
             const {columns, data} = param;
             const sums = [];
@@ -529,17 +546,42 @@ export default {
 
             return sums;
         },
-        callbackFileUpload(res) {
-            this.fileUpload.visible = false;
-            if (!res.result) {
-                return;
+        arraySpanMethod({row, column, rowIndex, columnIndex}) {
+            if (columnIndex === 1) {
+                const _row = this.getSpanArr(this.table.data).one[rowIndex]
+                const _col = _row > 0 ? 1 : 0
+                return {
+                    rowspan: _row,
+                    colspan: _col,
+                }
             }
-            let param = this.getFormData(res);
-            importFile(param).then((res) => {
-                this.$message.success(res.data.msg);
-                this.refreshTable();
-            })
         },
+        tableRowClassName({row}) {
+            if (row.boxCode === '合计') {
+                return 'success-row';
+            }
+        },
+        getSpanArr(arr) {
+            if (arr) {
+                const spanOneArr = []
+                let concatOne = 0
+                arr.forEach((item, index) => {
+                    if (index === 0) {
+                        spanOneArr.push(1)
+                    } else {
+                        if (item.boxCode === arr[index - 1].boxCode && item.boxCode != '合计') {
+                            spanOneArr[concatOne] += 1
+                            spanOneArr.push(0)
+                        } else {
+                            spanOneArr.push(1)
+                            concatOne = index
+                        }
+                    }
+                })
+                return {one: spanOneArr}
+            }
+        },
+
     },
 };
 </script>

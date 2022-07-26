@@ -70,6 +70,11 @@ public class LogSoPick extends SkuLotBaseEntity {
 	private Long wellenId;
 
 	/**
+	 * 序列号
+	 */
+	private String snCode;
+
+	/**
 	 * 波次编号
 	 */
 	private Long wellenNo;

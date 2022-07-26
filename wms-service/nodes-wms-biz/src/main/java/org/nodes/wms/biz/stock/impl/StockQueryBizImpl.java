@@ -227,16 +227,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public Page<StockPageResponse> getStockPage(Query query, StockPageQuery stockPageQuery) {
-		Page<StockPageResponse> page = stockDao.page(Condition.getPage(query), stockPageQuery);
-		List<StockPageResponse> list = page.getRecords();
-		for (StockPageResponse stockPageResponse : list) {
-			// 设置库存可用量
-			stockPageResponse.setStockEnable(stockPageResponse.getStockQty()
-				.add(stockPageResponse.getPickQty().subtract(stockPageResponse.getOccupyQty())));
-			// 设置库存余额
-			stockPageResponse.setStockBalance(stockPageResponse.getStockQty().subtract(stockPageResponse.getPickQty()));
-		}
-		return page;
+		return stockDao.page(Condition.getPage(query), stockPageQuery);
 	}
 
 	@Override
