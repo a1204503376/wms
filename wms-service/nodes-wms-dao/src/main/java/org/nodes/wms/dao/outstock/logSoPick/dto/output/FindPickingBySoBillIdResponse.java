@@ -39,8 +39,8 @@ public class FindPickingBySoBillIdResponse implements Serializable {
 	private String baseUmName;
 
 	/**
-	 * 物品名称
+	 * 物品编码
 	 */
-	private String skuName;
+	private String skuCode;
 
 }
