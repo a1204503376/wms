@@ -23,10 +23,7 @@ import org.nodes.wms.dao.stock.StockLogDao;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
-import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
-import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
-import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
-import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
+import org.nodes.wms.dao.stock.dto.output.*;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
@@ -242,6 +239,21 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public List<Stock> getStockListBySkuCode(String skuCode) {
 		return stockDao.getStockListBySkuCode(skuCode);
+	}
+
+	@Override
+	public List<StockMoveResponse> findStockMoveByBoxCode(List<String> boxCodeList) {
+		List<StockMoveResponse> stockMoveList = new ArrayList<>();
+		boxCodeList.forEach(item ->{
+			List<Stock> stockList =  stockDao.getStockByBoxCode(item, null);
+			stockMoveList.addAll(Func.copy(stockList, StockMoveResponse.class));
+		});
+		return stockMoveList;
+	}
+
+	@Override
+	public StockMoveResponse findStockMoveBySkuId(Long stockId) {
+		return Func.copy(stockDao.getStockById(stockId), StockMoveResponse.class);
 	}
 
 	@Override

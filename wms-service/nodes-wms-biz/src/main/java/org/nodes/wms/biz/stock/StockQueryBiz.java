@@ -9,10 +9,7 @@ import org.nodes.wms.dao.putway.dto.output.CallAgvResponse;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
-import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
-import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
-import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
-import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
+import org.nodes.wms.dao.stock.dto.output.*;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
@@ -197,4 +194,20 @@ public interface StockQueryBiz {
 	 * @return 库存集合
 	 */
 	List<Stock> getStockListBySkuCode(String skuCode);
+
+	/**
+	 * 根据箱码获取库存信息
+	 *
+	 * @param boxCodeList 箱码
+	 * @return List<StockMoveResponse> 库存移动查询响应对象
+	 */
+	List<StockMoveResponse> findStockMoveByBoxCode(List<String> boxCodeList);
+
+	/**
+	 * 根据库存id获取库存信息
+	 *
+	 * @param stockId 库存id
+	 * @return StockMoveResponse 库存移动查询响应对象
+	 */
+	StockMoveResponse findStockMoveBySkuId(Long stockId);
 }
