@@ -3,7 +3,7 @@ package org.nodes.wms.controller.task;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
-import org.nodes.wms.biz.task.TaskDetailBiz;
+import org.nodes.wms.biz.task.TaskBiz;
 import org.nodes.wms.dao.task.dto.input.AgainIssuedlTask;
 import org.nodes.wms.dao.task.dto.input.CancelTaskRequest;
 import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
@@ -28,19 +28,19 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_ROOT_URL + "taskDetail")
 public class TaskDetailController {
-	private final TaskDetailBiz taskDetailBiz;
+	private final TaskBiz taskBiz;
 
 
 	@PostMapping("/page")
 	@ApiLog("任务详情-分页查询任务详情")
 	public R<IPage<TaskDetailPageResponse>> page(Query query, @RequestBody TaskDetailPageRequest request) {
-		return R.data(taskDetailBiz.selectPage(request, query));
+		return R.data(taskBiz.selectPage(request, query));
 	}
 
 	@PostMapping("/export")
 	@ApiLog("任务详情-导出任务详情")
 	public void export(@ApiIgnore @RequestBody HashMap<String, Object> params, HttpServletResponse response) {
-		List<TaskDetailExcelResponse> responseList = taskDetailBiz.selectTaskList(params);
+		List<TaskDetailExcelResponse> responseList = taskBiz.selectTaskDetailList(params);
 		responseList.forEach(item -> {
 			item.setTypeCdValue(item.getTypeCd().getDesc());
 			item.setProcTypeValue(item.getProcType().getDesc());
@@ -54,19 +54,19 @@ public class TaskDetailController {
 	@PostMapping("/stopTask")
 	@ApiLog("任务详情-停止任务")
 	public void stopTask(StopTaskRequest request) {
-		taskDetailBiz.stopActivity(request);
+		taskBiz.stop(request);
 	}
 
 	@PostMapping("/cancelTask")
 	@ApiLog("任务详情-取消任务")
 	public void cancelTask(CancelTaskRequest request) {
-		taskDetailBiz.cancelActivity(request);
+		taskBiz.cancel(request);
 	}
 
 	@PostMapping("againIssuedlTask")
 	@ApiLog("任务详情-重新下发")
 	public void againIssuedlTask(AgainIssuedlTask request) {
-		taskDetailBiz.againIssuedlActivity(request);
+		taskBiz.restart(request);
 	}
 
 
