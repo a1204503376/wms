@@ -6,7 +6,7 @@
 		</u-navbar>
 		<u--form>
 			<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuName"  disabled></u--input>
+				<u--input v-model="params.skuCode"  disabled></u--input>
 			</u-form-item>
 			<u-form-item label="余额" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.surplusQty" disabled></u--input>

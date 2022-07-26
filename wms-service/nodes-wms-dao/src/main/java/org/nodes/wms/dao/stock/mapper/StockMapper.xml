@@ -6,9 +6,9 @@
         s.sku_code,
         s.stock_status,
         s.sku_lot1,
-        s.pick_qty,
-        s.stock_qty,
         s.occupy_qty,
+        s.stock_qty-s.pick_qty-s.occupy_qty stockEnable,
+        s.stock_qty-s.pick_qty stockBalance,
         s.wsu_code,
         s.loc_code,
         s.zone_code,
@@ -107,6 +107,9 @@
             <if test="query.taskId!=null and query.taskId != ''">
                 AND s.task_Id LIKE concat('%',#{query.taskId},'%')
             </if>
+            <if test="query.isShowByBox !=null and 'true'.toString() == query.isShowByBox.toString()">
+                AND s.box_code != ''
+            </if>
         </where>
     </sql>
     <select id="selectStockQtyByLocIdList" resultType="java.util.HashMap">
@@ -143,16 +146,14 @@
         <where>
             <if test="query.no != null and query.no != ''">
                 s.loc_code LIKE CONCAT('%', #{query.no} ,'%') and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty >
-                s.pick_qty
-                and s.stock_status = 0 or
+                s.pick_qty or
                 s.sku_code LIKE CONCAT('%', #{query.no} ,'%') and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty >
-                s.pick_qty
-                and stock_status = 0 or
+                s.pick_qty or
                 s.box_code LIKE CONCAT('%', #{query.no} ,'%') and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty >
                 s.pick_qty
-                and s.stock_status = 0
             </if>
         </where>
+        GROUP BY  s.stock_id
     </select>
     <select id="getPage" resultType="org.nodes.wms.dao.stock.dto.output.StockPageResponse">
         <include refid="stock"/>

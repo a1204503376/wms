@@ -25,7 +25,7 @@ export const listMixin = {
                 total: 0,
                 size: 20,
                 current: 1,
-                ascs: "", //正序字段集合
+                ascs: "boxCode", //正序字段集合
                 descs: "", //倒序字段集合
             },
             columnShowHide: {
@@ -33,11 +33,11 @@ export const listMixin = {
                 dataSource: []
             },
             exportExcelName: '',
-            exportExcelSheet:[
+            exportExcelSheet: [
                 {
-                    tHeader:[],
-                    table:[],
-                    keys:[],
+                    tHeader: [],
+                    table: [],
+                    keys: [],
                     sheetName: "",
                     cellStyle: [],
                 }
@@ -172,7 +172,7 @@ export const listMixin = {
             this.exportExcelSheet[0].keys = this.table.columnList.map((item) => {
                 return item.prop;
             }).join(",").split(",");
-            this.exportExcelSheet[0].sheetName =  sheetName || "sheet1"
+            this.exportExcelSheet[0].sheetName = sheetName || "sheet1"
             let localStr = nowDateFormat("yyyyMMddhhmm")
             this.exportExcelName = filename + localStr || localStr;
             this.exportExcelSheet[0].tHeader.forEach((value, index) => {
@@ -194,7 +194,7 @@ export const listMixin = {
         onUpload() {
             this.fileUpload.visible = true;
         },
-        getFormData(res){
+        getFormData(res) {
             let file = res.data.localFile.file;
             let param = new FormData();
             param.append("file", file);

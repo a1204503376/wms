@@ -104,4 +104,8 @@ public class StockPageQuery implements Serializable {
 	 * 任务号
 	 */
 	private String taskId;
+	/**
+	 * 是否按箱显示
+	 */
+	private Boolean isShowByBox;
 }

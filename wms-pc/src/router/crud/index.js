@@ -259,5 +259,17 @@ export default [
                 component: () => import('@/views/wms/outstock/soHeader/soBillAddForReceiveLog')
             }
         ]
+    },
+    {
+        path: '/stock',
+        component: Layout,
+        children: [
+            {
+                path: 'stockByBox',
+                name: '按箱显示',
+                props: true,
+                component: () => import('@/views/wms/stock/stock/stockByBox')
+            }
+        ]
     }
 ]

@@ -5,40 +5,54 @@
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<template>
-			<u-search placeholder="请输入库位编码/物品编码/lpn编码" v-model="params.no" :show-action="false" @custom="search"
+			<u-search placeholder="请输入收货单编码/上游编码" v-model="params.no" :show-action="false" @custom="search"
 				@search="search" class="font-in-page" style="margin: 12rpx">
 			</u-search>
 		</template>
 		<u-divider text="" style="margin-top:0rpx;"></u-divider>
 		<u-divider text="暂无数据" v-if="noData"></u-divider>
-		<u-list style="height: 950rpx;"  @scrolltolower="scrolltolower">
-			<u-list-item v-for="(item, index) in stockInquiryList" :key="item.receiveNo">
+		<u-list style="height: 950rpx;" @scrolltolower="scrolltolower">
+			<u-list-item v-for="(item, index) in receiveList" :key="index">
 				<view @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="6" class="left-text-one-line font-in-page">
-							<u--text class="demo-layout bg-purple-light" v-text="item.skuName"></u--text>
+						<u-col span="3" class="left-text-one-line font-in-page">
+							<u--text class="demo-layout bg-purple-light" v-text="item.balance"></u--text>
 						</u-col>
-						<u-col span="6">
+						<u-col span="7">
 							<u--text class="demo-layout bg-purple  font-in-page" v-text="item.qty"></u--text>
 						</u-col>
-					</u-row>
-					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="6"  class="left-text-one-line">
-							<u--text class=" demo-layout bg-purple  font-in-page" v-text="item.skuLot1"></u--text>
-						</u-col>
-						<u-col span="6" class="left-text-one-line">
-							<u--text class="demo-layout bg-purple font-in-page" v-text="item.boxCode"></u--text>
-						</u-col>
-						<u-col span="6" class="left-text-one-line">
-							<u--text class="demo-layout bg-purple font-in-page" v-text="item.locCode"></u--text>
-						</u-col>
-						<u-col span="6" class="left-text-one-line">
-							<u--text class="demo-layout bg-purple font-in-page" v-text="item.stockStatus"></u--text>
+						<u-col span="2">
+							<view>
+								<uni-tag text="正常"  inverted="true" type="success" v-if="item.stockStatus=='正常'" :circle="true">
+								</uni-tag>
+							</view>
+							<view>
+								<uni-tag text="冻结"  inverted="true" type="error" v-if="item.stockStatus=='冻结'" :circle="true"></uni-tag>
+							</view>
 						</u-col>
 					</u-row>
 					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="12" class="left-text-one-line">
-							<u--text class="demo-layout bg-purple font-in-page" v-text="item.ownerName"></u--text>
+						<u-col span="3" class="left-text-one-line font-in-page">
+							<u--text class="demo-layout bg-purple-light" v-text="item.storageLocation"></u--text>
+						</u-col>
+						<u-col span="9">
+							<u--text class="demo-layout bg-purple  font-in-page" v-text="item.locCode"></u--text>
+						</u-col>
+					</u-row>
+					<u-row customStyle="margin-bottom: 10px">
+						<u-col span="3" class="left-text-one-line font-in-page">
+							<u--text class="demo-layout bg-purple-light" v-text="item.lot"></u--text>
+						</u-col>
+						<u-col span="9">
+							<u--text class="demo-layout bg-purple  font-in-page" v-text="item.skuLot1"></u--text>
+						</u-col>
+					</u-row>
+					<u-row customStyle="margin-bottom: 10px">
+						<u-col span="3" class="left-text-one-line font-in-page">
+							<u--text class="demo-layout bg-purple-light" v-text="item.goods"></u--text>
+						</u-col>
+						<u-col span="9">
+							<u--text class="demo-layout bg-purple  font-in-page" v-text="item.skuCode"></u--text>
 						</u-col>
 					</u-row>
 					<u-divider text=""></u-divider>
@@ -60,17 +74,16 @@
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
 	export default {
-		name : 'stockInquiry',
 		data() {
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
 					no: '',
 				},
-				stockInquiryList: [],
+				receiveList: [],
 				page: {
 					total: 0,
-					size: 4,
+					size: 7,
 					current: 1,
 					ascs: "", //正序字段集合
 					descs: "", //倒序字段集合
@@ -112,9 +125,9 @@
 			esc() {
 				uni.$u.func.navigateBackTo(1);
 			},
-			findAllStockByNo() {
+			getReceiveList() {
 				this.noData = false;
-				this.stockInquiryList = [];
+				this.receiveList = [];
 				this.loadmore = true;
 				this.status = 'loading';
 				this.page.current = 1;
@@ -126,21 +139,20 @@
 						this.loadmore = true;
 						this.noData = false;
 					} else {
-						this.status = 'nomore';
 						this.loadmore = false;
 						this.noData = true;
 					}
-					this.stockInquiryList = data.data.records;
-					if (this.stockInquiryList.length < this.page.size) {
+					this.receiveList = data.data.records;
+					if (this.receiveList.length < 7) {
 						this.loadmore = false;
 					}
 				})
 			},
 			search() {
-				uni.$u.throttle(this.findAllStockByNo(), 1000)
+				uni.$u.throttle(this.getReceiveList(), 1000)
 			},
 			clickItem(item) {
-				uni.$u.func.routeNavigateTo('/pages/stockInterior/stockInquiry/stockDetailInquiry', item);
+				uni.$u.func.routeNavigateTo('/pages/stock/stockInquiry/stockDetailInquiry', item);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);
@@ -152,14 +164,13 @@
 				this.page.current++;
 				this.params.whId = uni.getStorageSync('warehouse').whId;
 				stockInquiry.findAllStockByNo(this.params, this.page).then(data => {
-					if (data.data.records.length > 0 && tool.isNotEmpty(data.data.records)) {
+					if (data.data.records.length > 0) {
 						this.status = 'loading';
 						data.data.records.forEach((item, index) => { //js遍历数组
-							this.stockInquiryList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
+							this.receiveList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
 						});
 					} else {
 						this.status = 'nomore';
-						return;
 					}
 
 				})
