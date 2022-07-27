@@ -267,11 +267,17 @@ public interface LocationBiz {
 	List<Location> findLocationByZoneId(Long zoneId);
 
 	/**
-	 * 冻结或解冻库位状态（locFlag：冻结40，解冻1）
-	 * 
-	 * @param isFreeze true:表示业务系统自动冻结，false：解冻
+	 * 根据任务冻结库位（locFlag：冻结40）
+	 *
 	 * @param location 冻结库位
-	 * @param taskId   冻结时赋值，解冻时该值必须为null
+	 * @param taskId   必填
 	 */
-	void freezeOrUnfreezeLoc(boolean isFreeze, Location location, String taskId);
+	void freezeLocByTask(Location location, String taskId);
+
+	/**
+	 * 根据任务解冻库位（locFlag：解冻1）
+	 * @param location 库位
+	 * @param taskId 必填
+	 */
+	void unfreezeLocByTask(Location location, String taskId);
 }

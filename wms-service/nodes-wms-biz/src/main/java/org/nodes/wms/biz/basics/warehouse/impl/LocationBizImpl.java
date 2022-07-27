@@ -300,7 +300,12 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
-	public void freezeOrUnfreezeLoc(boolean isFreeze, Location location, String taskId) {
+	public void unfreezeLocByTask(Location location, String taskId) {
+		// TODO 王 Auto-generated method stub
+	}
+
+	@Override
+	public void freezeLocByTask(Location location, String taskId) {
 		// TODO 王 Auto-generated method stub
 
 	}
