@@ -152,7 +152,7 @@ public interface LocationBiz {
 	Location getQcLocation(Long whId);
 
 	/**
-	 * 获取指定库房的出库暂库位
+	 * 获取指定库房的出库集货位
 	 *
 	 * @param whId
 	 * @return
