@@ -60,15 +60,16 @@ public class FindAllStockByNoResponse extends BaseSkuLot implements Serializable
 	 * 下架数量
 	 */
 	private BigDecimal pickQty;
-	private String balance = "余额";
+	private String balance = "可/余";
 	private String storageLocation = "库位";
 	private String lot = "批次";
 	private String goods = "物品";
-	public String getQty() {
-		return this.getStockQty().subtract(this.getPickQty()).stripTrailingZeros().toPlainString() + wsuCode;
-	}
-
-	public String getSurplusQty() {
-		return this.getStockQty().subtract(this.getPickQty()).stripTrailingZeros().toPlainString();
-	}
+	/**
+	 * 可用
+	 */
+	private BigDecimal stockEnable;
+	/**
+	 * 余额
+	 */
+	private BigDecimal stockBalance;
 }

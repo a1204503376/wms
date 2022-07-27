@@ -18,7 +18,7 @@
 						<u--text class="demo-layout bg-purple-light" v-text="item.balance"></u--text>
 					</u-col>
 					<u-col span="7">
-						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.qty"></u--text>
+						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.stockEnable+'/'+item.stockBalance+' '+item.wsuCode"></u--text>
 					</u-col>
 					<u-col span="2">
 						<view>
