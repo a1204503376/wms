@@ -37,7 +37,7 @@ public class AddByBoxShelfRequest implements Serializable {
 	private BigDecimal qty;
 
 	/**
-	 * 托盘号
+	 * 是否整箱收货
 	 */
-	private String lpnCode;
+	private Boolean isAllLpnPutaway;
 }
