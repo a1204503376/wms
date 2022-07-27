@@ -223,7 +223,7 @@ public class StockDaoImpl
 	@Override
 	public Stock getStockById(Long stockId) {
 		AssertUtil.notNull(stockId, "库存查询失败，stockId不能为空");
-		
+
 		return super.getById(stockId);
 	}
 

@@ -31,4 +31,40 @@ export const importFile = (data) => {
     })
 }
 
+export const getStockDataByBoxCode = (data) => {
+    return request({
+        url: '/api/wms/stock/getStockDataByBoxCode',
+        method: 'post',
+        data: {
+            boxCodeList: data
+        }
+    })
+}
+
+export const getStockDataByStockId = (data) => {
+    return request({
+        url: '/api/wms/stock/getStockDataByStockId',
+        method: 'post',
+        data: {
+            stockId: data
+        }
+    })
+}
+
+export const move = (data) => {
+    return request({
+        url: '/api/wms/stock/import-data',
+        method: 'post',
+        data: data
+    })
+}
+
+export const moveByBox = (data) => {
+    return request({
+        url: '/api/wms/stock/import-data',
+        method: 'post',
+        data: data
+    })
+}
+
 

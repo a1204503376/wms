@@ -5,59 +5,59 @@
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<template>
-			<u-search placeholder="请输入收货单编码/上游编码" v-model="params.no" :show-action="false" @custom="search"
+			<u-search placeholder="请输入物品编码/批次号/loc/箱码/lpn" v-model="params.no" :show-action="false" @custom="search"
 				@search="search" class="font-in-page" style="margin: 12rpx">
 			</u-search>
 		</template>
 		<u-divider text="" style="margin-top:0rpx;"></u-divider>
 		<u-divider text="暂无数据" v-if="noData"></u-divider>
 		<u-list style="height: 950rpx;" @scrolltolower="scrolltolower">
-			<u-list-item v-for="(item, index) in receiveList" :key="index">
-				<view @click="clickItem(item)">
-					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="3" class="left-text-one-line font-in-page">
-							<u--text class="demo-layout bg-purple-light" v-text="item.balance"></u--text>
-						</u-col>
-						<u-col span="7">
-							<u--text class="demo-layout bg-purple  font-in-page" v-text="item.qty"></u--text>
-						</u-col>
-						<u-col span="2">
-							<view>
-								<uni-tag text="正常"  inverted="true" type="success" v-if="item.stockStatus=='正常'" :circle="true">
-								</uni-tag>
-							</view>
-							<view>
-								<uni-tag text="冻结"  inverted="true" type="error" v-if="item.stockStatus=='冻结'" :circle="true"></uni-tag>
-							</view>
-						</u-col>
-					</u-row>
-					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="3" class="left-text-one-line font-in-page">
-							<u--text class="demo-layout bg-purple-light" v-text="item.storageLocation"></u--text>
-						</u-col>
-						<u-col span="9">
-							<u--text class="demo-layout bg-purple  font-in-page" v-text="item.locCode"></u--text>
-						</u-col>
-					</u-row>
-					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="3" class="left-text-one-line font-in-page">
-							<u--text class="demo-layout bg-purple-light" v-text="item.lot"></u--text>
-						</u-col>
-						<u-col span="9">
-							<u--text class="demo-layout bg-purple  font-in-page" v-text="item.skuLot1"></u--text>
-						</u-col>
-					</u-row>
-					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="3" class="left-text-one-line font-in-page">
-							<u--text class="demo-layout bg-purple-light" v-text="item.goods"></u--text>
-						</u-col>
-						<u-col span="9">
-							<u--text class="demo-layout bg-purple  font-in-page" v-text="item.skuCode"></u--text>
-						</u-col>
-					</u-row>
-					<u-divider text=""></u-divider>
-				</view>
-			</u-list-item>
+			<view v-for="(item, index) in receiveList" :key="index" @click="clickItem(item)">
+				<u-row customStyle="margin-bottom: 10px">
+					<u-col span="3" class="left-text-one-line font-in-page">
+						<u--text class="demo-layout bg-purple-light" v-text="item.balance"></u--text>
+					</u-col>
+					<u-col span="7">
+						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.qty"></u--text>
+					</u-col>
+					<u-col span="2">
+						<view>
+							<uni-tag text="正常" inverted="true" type="success" v-if="item.stockStatus=='正常'"
+								:circle="true">
+							</uni-tag>
+						</view>
+						<view>
+							<uni-tag text="冻结" inverted="true" type="error" v-if="item.stockStatus=='冻结'"
+								:circle="true"></uni-tag>
+						</view>
+					</u-col>
+				</u-row>
+				<u-row customStyle="margin-bottom: 10px">
+					<u-col span="3" class="left-text-one-line font-in-page">
+						<u--text class="demo-layout bg-purple-light" v-text="item.storageLocation"></u--text>
+					</u-col>
+					<u-col span="9">
+						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.locCode"></u--text>
+					</u-col>
+				</u-row>
+				<u-row customStyle="margin-bottom: 10px">
+					<u-col span="3" class="left-text-one-line font-in-page">
+						<u--text class="demo-layout bg-purple-light" v-text="item.lot"></u--text>
+					</u-col>
+					<u-col span="9">
+						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.skuLot1"></u--text>
+					</u-col>
+				</u-row>
+				<u-row customStyle="margin-bottom: 10px">
+					<u-col span="3" class="left-text-one-line font-in-page">
+						<u--text class="demo-layout bg-purple-light" v-text="item.goods"></u--text>
+					</u-col>
+					<u-col span="9">
+						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.skuCode"></u--text>
+					</u-col>
+				</u-row>
+				<u-divider text=""></u-divider>
+			</view>
 			<u-loadmore :status="status" v-if="loadmore" />
 		</u-list>
 		<view class="footer">
