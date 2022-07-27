@@ -12,9 +12,8 @@
 			</u-search>
 		</u--form>
 		<!-- ${index + 1} -->
-		<u-list style="height: 960rpx;" @scrolltolower="scrolltolower">
-			<u-list-item v-for="(item, index) in receiveDetailList" :key="index">
-				<view @click="clickItem(item)">
+		<u-list style="height: 900rpx;" @scrolltolower="scrolltolower">
+			<view v-for="(item, index) in receiveDetailList" :key="index" @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
 						<u-col span="10" class="left-text-one-line">
 							<view class="demo-layout bg-purple-light font-in-page">{{item.soBillNo}}</view>
@@ -24,8 +23,7 @@
 						</u-col>
 					</u-row>
 					<u-divider text=""></u-divider>
-				</view>
-			</u-list-item>
+			</view>
 		</u-list>
 		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
 		<view class="footer">

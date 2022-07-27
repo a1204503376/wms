@@ -12,8 +12,7 @@
 		<u-divider text="" style="margin-top:0rpx;"></u-divider>
 		<u-divider text="暂无数据" v-if="noData"></u-divider>
 		<u-list style="height: 950rpx;"  @scrolltolower="scrolltolower">
-			<u-list-item v-for="(item, index) in receiveList" :key="item.receiveNo">
-				<view @click="clickItem(item)">
+			<view v-for="(item, index) in receiveList" :key="item.receiveNo"  @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
 						<u-col span="6" class="left-text-one-line font-in-page">
 							<u--text class="demo-layout bg-purple-light" v-text="item.receiveNo"></u--text>
@@ -28,8 +27,7 @@
 						</u-col>
 					</u-row>
 					<u-divider text=""></u-divider>
-				</view>
-			</u-list-item>
+			</view>
 			<u-loadmore :status="status" v-if="loadmore" />
 		</u-list>
 		<view class="footer">
