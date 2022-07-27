@@ -25,7 +25,7 @@ export const listMixin = {
                 total: 0,
                 size: 20,
                 current: 1,
-                ascs: "boxCode", //正序字段集合
+                ascs: "", //正序字段集合
                 descs: "", //倒序字段集合
             },
             columnShowHide: {

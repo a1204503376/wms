@@ -14,7 +14,9 @@ import java.util.List;
 
 /**
  * 库存业务接口
- **/
+ *
+ * @author nodesc
+ */
 public interface StockBiz {
 
 	/**
@@ -125,7 +127,7 @@ public interface StockBiz {
 	/**
 	 * 判断该库位是否有库存或被冻结
 	 *
-	 * @param location
+	 * @param location 库位
 	 * @return true：可用
 	 */
 	boolean judgeEnableOnLocation(Location location);
@@ -134,6 +136,7 @@ public interface StockBiz {
 	 * 导入库存
 	 *
 	 * @param importDataList 导入的数据集合
+	 * @return true:正常执行
 	 */
 	boolean importStockByExcel(List<StockImportRequest> importDataList);
 

@@ -3,6 +3,7 @@ package org.nodes.wms.biz.stock.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
@@ -22,10 +23,7 @@ import org.nodes.wms.dao.stock.StockLogDao;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
-import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
-import org.nodes.wms.dao.stock.dto.output.StockIndexResponse;
-import org.nodes.wms.dao.stock.dto.output.StockLogPageResponse;
-import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
+import org.nodes.wms.dao.stock.dto.output.*;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
@@ -38,10 +36,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,6 +73,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public List<Stock> findStockOnStageByBoxCode(Long whId, String boxCode) {
 		Location stage = locationBiz.getStageLocation(whId);
+		AssertUtil.notNull(stage, "根据箱码查询入库暂存区库存失败，没有查到对应的入库暂存区");
 		return stockDao.getStockByBoxCode(boxCode, Collections.singletonList(stage.getLocId()));
 	}
 
@@ -118,12 +114,12 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		return stockMergeStrategy.matchSameStock(receiveLog);
 	}
 
-    @Override
-    public List<Stock> findStockByLpnCode(String lpnCode) {
+	@Override
+	public List<Stock> findStockByLpnCode(String lpnCode) {
 		return stockDao.getStockByLpnCode(lpnCode, null);
-    }
+	}
 
-    @Override
+	@Override
 	public StockIndexResponse staticsStockDataOnIndexPage() {
 		// 获取所有入库暂存区库位
 		List<Location> allStageList = locationBiz.getAllStageLocation();
@@ -145,20 +141,18 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		StockIndexResponse response = new StockIndexResponse();
 
 		if (Func.isNotEmpty(stageStock)) {
-			response.setStageSkuQty(
-				ConvertUtil.convert(stageStock.get("skuQty"), BigDecimal.class)
-					.setScale(3, RoundingMode.DOWN));
-			response.setStageSkuStoreDay(
-				ConvertUtil.convert(stageStock.get("skuStoreDay"), Integer.class));
+			Optional<BigDecimal> stageQty = Optional.ofNullable(ConvertUtil.convert(stageStock.get("skuQty"), BigDecimal.class));
+			response.setStageSkuQty(stageQty.orElse(BigDecimal.ZERO).setScale(3, RoundingMode.DOWN));
+			response.setStageSkuStoreDay(ConvertUtil.convert(stageStock.get("skuStoreDay"), Integer.class));
 		} else {
 			response.setStageSkuQty(BigDecimal.ZERO);
 			response.setStageSkuStoreDay(0);
 		}
 
 		if (Func.isNotEmpty(qcStock)) {
-			response.setQcSkuQty(
-				ConvertUtil.convert(qcStock.get("skuQty"), BigDecimal.class)
-					.setScale(3, RoundingMode.DOWN)); // 保留三位小数
+			Optional<BigDecimal> qcQty = Optional.ofNullable(ConvertUtil.convert(qcStock.get("skuQty"), BigDecimal.class));
+			// 保留三位小数
+			response.setQcSkuQty(qcQty.orElse(BigDecimal.ZERO).setScale(3, RoundingMode.DOWN));
 			response.setQcSkuStoreDay(
 				ConvertUtil.convert(qcStock.get("skuStoreDay"), Integer.class));
 		} else {
@@ -189,6 +183,13 @@ public class StockQueryBizImpl implements StockQueryBiz {
 			.distinct()
 			.collect(Collectors.toList());
 		return stockDao.getStockByLocIdList(locIdList);
+	}
+
+	@Override
+	public List<Stock> findStockByLocation(Long locationId) {
+		AssertUtil.notNull(locationId, "库存查询失败，库位不能为空");
+
+		return stockDao.getStockByLocIdList(Collections.singletonList(locationId));
 	}
 
 	@Override
@@ -238,6 +239,21 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public List<Stock> getStockListBySkuCode(String skuCode) {
 		return stockDao.getStockListBySkuCode(skuCode);
+	}
+
+	@Override
+	public List<StockMoveResponse> findStockMoveByBoxCode(List<String> boxCodeList) {
+		List<StockMoveResponse> stockMoveList = new ArrayList<>();
+		boxCodeList.forEach(item ->{
+			List<Stock> stockList =  stockDao.getStockByBoxCode(item, null);
+			stockMoveList.addAll(Func.copy(stockList, StockMoveResponse.class));
+		});
+		return stockMoveList;
+	}
+
+	@Override
+	public StockMoveResponse findStockMoveBySkuId(Long stockId) {
+		return Func.copy(stockDao.getStockById(stockId), StockMoveResponse.class);
 	}
 
 	@Override

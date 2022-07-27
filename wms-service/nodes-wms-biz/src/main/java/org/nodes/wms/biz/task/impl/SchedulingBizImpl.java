@@ -50,7 +50,8 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	public void broadcastNotificationActivity(List<SchedulingBroadcastNotificationRequest> request) {
 		for (SchedulingBroadcastNotificationRequest notificationRequest : request) {
 			NoticeMessageRequest message = new NoticeMessageRequest();
-			message.setLog(String.format("任务[%s]：[%s]", notificationRequest.getTaskDetailId(), notificationRequest.getMsg()));
+			message.setLog(String.format("任务[%s]：[%s]",
+				notificationRequest.getTaskDetailId(), notificationRequest.getMsg()));
 			logBiz.noticeMesssage(message);
 		}
 	}

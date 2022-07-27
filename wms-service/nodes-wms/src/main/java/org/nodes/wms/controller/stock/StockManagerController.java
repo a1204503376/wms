@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
-import org.nodes.wms.dao.stock.dto.input.StockImportRequest;
-import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
+import org.nodes.wms.dao.stock.dto.input.*;
+import org.nodes.wms.dao.stock.dto.output.StockMoveResponse;
 import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,5 +67,21 @@ public class StockManagerController {
 		return importFlag ? R.success("导入成功") : R.fail("导入失败");
 	}
 
+	/**
+	 * 库存余额：按件移动-根据库存id获取库存信息
+	 */
+	@PostMapping("/getStockDataByStockId")
+	public R<StockMoveResponse> getStockDataByStockId(
+		@Valid @RequestBody StockIdRequest stockIdRequest){
+		return R.data(stockQueryBiz.findStockMoveBySkuId(stockIdRequest.getStockId()));
+	}
 
+	/**
+	 * 库存余额：按箱移动-根据箱码获取库存信息
+	 */
+	@PostMapping("/getStockDataByBoxCode")
+	public R<List<StockMoveResponse>> getStockDataToMove(
+						@Valid @RequestBody StockMoveByBoxCodeRequest stockMoveByBoxCodeRequest){
+		return R.data(stockQueryBiz.findStockMoveByBoxCode(stockMoveByBoxCodeRequest.getBoxCodeList()));
+	}
 }
