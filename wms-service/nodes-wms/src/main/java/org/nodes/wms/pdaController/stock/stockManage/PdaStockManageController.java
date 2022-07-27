@@ -31,7 +31,7 @@ public class PdaStockManageController {
 	 */
 	@PostMapping("/estimateStockMove")
 	public R<EstimateStockMoveResponse> estimateStockMove(@RequestBody EstimateStockMoveRequest request) {
-		return null;
+		return R.data(stockManageBiz.skuIsSn(request));
 	}
 
 	/**

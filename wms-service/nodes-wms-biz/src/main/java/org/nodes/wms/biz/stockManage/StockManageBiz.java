@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.stockManage;
 
 import org.nodes.wms.dao.stock.dto.input.*;
+import org.nodes.wms.dao.stock.dto.output.EstimateStockMoveResponse;
 
 /**
  * 库存控制BIZ
@@ -83,4 +84,11 @@ public interface StockManageBiz {
 	 * @param request Pda库存按箱移动-请求对象
 	 */
 	void stockMoveByBox(StockMoveByBoxCodeRequest request);
+
+	/**
+	 * Pda判断库存是否可移动
+	 * @param request 请求对象
+	 * @return 是否序列号管理
+	 */
+	EstimateStockMoveResponse skuIsSn(EstimateStockMoveRequest request);
 }
