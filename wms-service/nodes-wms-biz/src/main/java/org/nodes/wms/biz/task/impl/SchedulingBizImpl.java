@@ -1,21 +1,18 @@
 package org.nodes.wms.biz.task.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.task.SchedulingBiz;
 import org.nodes.wms.biz.task.TaskBiz;
 import org.nodes.wms.biz.task.modular.TaskDetailFactory;
-import org.nodes.wms.dao.basics.location.entities.Location;
-import org.nodes.wms.dao.basics.zone.constant.ZoneConstant;
-import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.log.dto.input.NoticeMessageRequest;
 import org.nodes.wms.dao.task.dto.QueryAndFrozenEnableOutboundRequest;
 import org.nodes.wms.dao.task.dto.SchedulingBroadcastNotificationRequest;
 import org.nodes.wms.dao.task.dto.SyncTaskStateRequest;
 import org.nodes.wms.dao.task.entities.TaskDetail;
+import org.springblade.core.log.exception.ServiceException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,8 +48,10 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	}
 
 	@Override
-	public Boolean synchronizeTaskStatus(SyncTaskStateRequest request) {
+	public void synchronizeTaskStatus(SyncTaskStateRequest request) {
 		TaskDetail detail = taskDetailFactory.create(request);
-		return taskBiz.updateTaskState(detail); // TODO 王 改为抛业务异常的方式
+		if(!taskBiz.updateTaskState(detail)){
+			throw new ServiceException("同步任务执行状态失败");
+		}
 	}
 }
