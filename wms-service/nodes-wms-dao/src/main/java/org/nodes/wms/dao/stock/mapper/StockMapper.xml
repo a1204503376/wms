@@ -134,7 +134,10 @@
     </select>
 
     <select id="getList" resultType="org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse">
-        select s.stock_id, s.stock_status, s.sku_level, s.wsp_name, s.wsp_id , s.sku_id, s.sku_code, s.sku_name,
+        select
+        s.stock_qty-s.pick_qty-s.occupy_qty stockEnable,
+        s.stock_qty-s.pick_qty stockBalance,
+        s.stock_id, s.stock_status, s.sku_level, s.wsp_name, s.wsp_id , s.sku_id, s.sku_code, s.sku_name,
         s.stay_stock_qty, s.stock_qty , s.pick_qty, s.occupy_qty, s.box_code, s.lpn_code, s.loc_id , s.loc_code,
         s.zone_id, s.zone_code, s.wh_id, s.wh_code , s.wo_id, s.last_in_time, s.last_out_time, s.lot_number,
         s.wsu_code , s.version, s.sku_lot1, s.sku_lot2, s.sku_lot3, s.sku_lot4 , s.sku_lot5, s.sku_lot6, s.sku_lot7,
@@ -144,12 +147,16 @@
         ownerName
         from wms_stock s left join wms_owner o on s.wo_id = o.wo_id
         <where>
-            <if test="query.no != null and query.no != ''">
-                s.loc_code LIKE CONCAT('%', #{query.no} ,'%') and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty >
+            <if test="query.no != null and query.no != '' and query.type == null or query.type == ''">
+                s.loc_code LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty >
                 s.pick_qty or
-                s.sku_code LIKE CONCAT('%', #{query.no} ,'%') and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty >
+                s.sku_code LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty >
                 s.pick_qty or
-                s.box_code LIKE CONCAT('%', #{query.no} ,'%') and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty >
+                s.box_code LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty >
+                s.pick_qty
+            </if>
+            <if test="query.no != null and query.no != '' and query.type != null and query.type != ''">
+                s.${query.type} LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty >
                 s.pick_qty
             </if>
         </where>

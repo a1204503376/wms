@@ -151,11 +151,11 @@
         on h.so_bill_id=d.so_bill_id
         <where>
             <if test="params.no!=null and params.no != '' and params.whId!=null and params.whId != ''">
-                AND h.so_bill_no like concat('%',#{params.no},'%') AND d.bill_detail_state LIKE
-                concat('%',#{params.billDetailState},'%') AND h.wh_id = #{params.whId} AND h.is_deleted=0 and h.status =
+                AND h.so_bill_no like concat('%',#{params.no},'%') AND d.bill_detail_state=#{params.billDetailState} AND
+                h.wh_id = #{params.whId} AND h.is_deleted=0 and h.status =
                 1
-                OR h.order_no like concat('%',#{params.no},'%') AND d.bill_detail_state LIKE
-                concat('%',#{params.billDetailState},'%') AND h.wh_id = #{params.whId} AND h.is_deleted=0 and h.status =
+                OR h.order_no like concat('%',#{params.no},'%') AND d.bill_detail_state =#{params.billDetailState} AND
+                h.wh_id = #{params.whId} AND h.is_deleted=0 and h.status =
                 1
             </if>
         </where>
