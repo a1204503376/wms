@@ -36,6 +36,10 @@ public class FindAllStockByNoResponse extends BaseSkuLot implements Serializable
 	 */
 	private String locCode;
 	/**
+	 * LPN
+	 */
+	private String lpnCode;
+	/**
 	 * 状态
 	 */
 	private StockStatusEnum stockStatus;

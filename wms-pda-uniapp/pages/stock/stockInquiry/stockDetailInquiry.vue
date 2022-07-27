@@ -16,11 +16,14 @@
 				<u--input v-model="params.stockBalance" disabled></u--input>
 				<u--text slot="right" class="font-in-page" v-text="params.wsuCode"></u--text>
 			</u-form-item>
+			<u-form-item label="LOC" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.locCode" disabled></u--input>
+			</u-form-item>
 			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.boxCode" disabled></u--input>
 			</u-form-item>
-			<u-form-item label="LOC" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.locCode" disabled></u--input>
+			<u-form-item label="LPN" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.lpnCode" disabled></u--input>
 			</u-form-item>
 			<u-form-item label="状态" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.stockStatus" disabled></u--input>
