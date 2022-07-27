@@ -1,11 +1,7 @@
 package org.nodes.wms.dao.basics.location.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.basics.location.LocationDao;
@@ -17,15 +13,21 @@ import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.mapper.LocationMapper;
 import org.nodes.wms.dao.putway.dto.input.LpnTypeRequest;
-import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * 库位管理Dao实现类
+ * 
+ * @author nodesc
  */
 @Repository
 @RequiredArgsConstructor
@@ -92,8 +94,8 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 
 		LambdaQueryWrapper<Location> lambdaQueryWrapper = new LambdaQueryWrapper<>();
 		lambdaQueryWrapper
-			.eq(Location::getLocCode, locCode)
-			.eq(Location::getWhId, whId);
+				.eq(Location::getLocCode, locCode)
+				.eq(Location::getWhId, whId);
 		return super.getOne(lambdaQueryWrapper);
 	}
 
@@ -116,22 +118,11 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	}
 
 	@Override
-	public void updateOccupyFlag(Long locId, String occupyFlag) {
-		UpdateWrapper<Location> updateWrapper = Wrappers.update();
-		updateWrapper.lambda()
-			.eq(Location::getLocId, locId)
-			.set(Location::getOccupyFlag, occupyFlag);
-		if (super.update(updateWrapper)) {
-			throw new ServiceException("库位冻结/解冻更新失败");
-		}
-	}
-
-	@Override
 	public List<Location> getLocationByLpnTypeId(Long lpnTypeId, String zoneType) {
 		if (Func.isEmpty(lpnTypeId)) {
 			throw new NullArgumentException("LocationDaoImpl.getLocationByLpnTypeId方法的参数为空");
 		}
-		//根据库区类型查询查询库位，如果zongType可以为空
+		// 根据库区类型查询查询库位，如果zongType可以为空
 		return locationMapper.getLocationByLpnTypeIdAndZoneType(lpnTypeId, zoneType);
 	}
 
@@ -165,6 +156,5 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 
 		return super.baseMapper.selectLoctionByLpnType(request);
 	}
-
 
 }

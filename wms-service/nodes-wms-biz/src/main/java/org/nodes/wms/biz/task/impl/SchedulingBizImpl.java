@@ -31,18 +31,12 @@ public class SchedulingBizImpl implements SchedulingBiz {
 
 	@Override
 	public String selectAndFrozenEnableOutbound(QueryAndFrozenEnableOutboundRequest request) {
-		//获取入库接驳区信息
-		Zone zone = zoneBiz.findByCode(ZoneConstant.AGV_SHIPMENTS_CONNECTION_AREA);
-		//获取所有入库接驳区的库位
-		List<Location> locationList = locationBiz.findLocationByZoneId(zone.getZoneId());
-		//将入库接驳区库位进行判断 寻找符合条件的库位 没冻结，无库存占用
-		Location location = locationList.stream().filter(item -> !locationBiz.isFrozen(item)).findFirst().orElse(null);
-		AssertUtil.notNull(location, "暂无合适的库位");
-		if (location != null) {
-			//冻结库位
-			locationBiz.freezeByOccupyFlag(location.getLocId(), request.getTaskDetailId().toString());
-			return location.getLocCode();
-		}
+
+		// TODO 王
+		// 根据箱型（ABC）获取出库接驳区的库位/D箱人工拣货区库位
+		// 判断库位是否有库存
+		// 如果没有库存则冻结
+
 		return null;
 	}
 
@@ -51,7 +45,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		for (SchedulingBroadcastNotificationRequest notificationRequest : request) {
 			NoticeMessageRequest message = new NoticeMessageRequest();
 			message.setLog(String.format("任务[%s]：[%s]",
-				notificationRequest.getTaskDetailId(), notificationRequest.getMsg()));
+					notificationRequest.getTaskDetailId(), notificationRequest.getMsg()));
 			logBiz.noticeMesssage(message);
 		}
 	}
@@ -59,6 +53,6 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	@Override
 	public Boolean synchronizeTaskStatus(SyncTaskStateRequest request) {
 		TaskDetail detail = taskDetailFactory.create(request);
-		return taskBiz.updateTaskState(detail); // TODO 改为抛业务异常的方式
+		return taskBiz.updateTaskState(detail); // TODO 王 改为抛业务异常的方式
 	}
 }

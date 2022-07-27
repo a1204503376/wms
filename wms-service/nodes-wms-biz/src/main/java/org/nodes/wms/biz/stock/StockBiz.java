@@ -69,8 +69,8 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
-					Location targetLocation, StockLogTypeEnum type,
-					Long billId, String billNo, String lineNo);
+			Location targetLocation, StockLogTypeEnum type,
+			Long billId, String billNo, String lineNo);
 
 	/**
 	 * 库存移动
@@ -88,9 +88,9 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
-					String targetBoxCode, String targetLpnCode,
-					Location targetLocation, StockLogTypeEnum type,
-					Long billId, String billNo, String lineNo);
+			String targetBoxCode, String targetLpnCode,
+			Location targetLocation, StockLogTypeEnum type,
+			Long billId, String billNo, String lineNo);
 
 	/**
 	 * 整箱移动
@@ -106,8 +106,8 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	List<Stock> moveStockByBoxCode(String boxCode, String targetBoxCode, String targetLpnCode,
-								   Location targetLocation, StockLogTypeEnum type,
-								   Long billId, String billNo, String lineNo);
+			Location targetLocation, StockLogTypeEnum type,
+			Long billId, String billNo, String lineNo);
 
 	/**
 	 * 整托移动
@@ -122,10 +122,10 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	List<Stock> moveStockByLpnCode(String lpnCode, String targetLpnCode, Location targetLocation, StockLogTypeEnum type,
-								   Long billId, String billNo, String lineNo);
+			Long billId, String billNo, String lineNo);
 
 	/**
-	 * 判断该库位是否有库存或被冻结
+	 * 天宜定制：判断该库位是否有库存或被冻结
 	 *
 	 * @param location 库位
 	 * @return true：可用

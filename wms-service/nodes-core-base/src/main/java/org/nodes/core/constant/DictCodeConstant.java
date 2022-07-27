@@ -61,7 +61,7 @@ public interface DictCodeConstant {
 	 */
 	String LOC_HANDLING = "loc_handling";
 	/**
-	 * 库位标志
+	 * 使用状态
 	 */
 	String LOC_FLAG = "loc_flag";
 	/**
@@ -199,7 +199,6 @@ public interface DictCodeConstant {
 	 * 月台分类
 	 */
 	String PLATFORM_TYPE = "platform_type";
-
 
 	String TASK_PROC_TYPE = "task_proc_type";
 

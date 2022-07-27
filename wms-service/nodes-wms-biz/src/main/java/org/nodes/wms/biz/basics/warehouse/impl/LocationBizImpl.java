@@ -244,19 +244,6 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
-	public boolean isFrozen(Location location) {
-		if (Func.isNull(location.getLocFlag())) {
-			return false;
-		}
-
-		if (location.getLocFlag() == 10 || location.getLocFlag() == 20) {
-			return true;
-		}
-
-		return Func.isNotEmpty(location.getOccupyFlag()) && !"0".equals(location.getOccupyFlag());
-	}
-
-	@Override
 	public boolean isMixSku(Location location) {
 		if (Func.isEmpty(location.getLocSkuMix())) {
 			return true;
@@ -275,19 +262,6 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
-	public void freezeByOccupyFlag(Long locId, String occupyFlag) {
-		if (Func.isEmpty(occupyFlag)) {
-			throw new NullArgumentException("库内库位冻结时冻结标识为空");
-		}
-		locationDao.updateOccupyFlag(locId, occupyFlag);
-	}
-
-	@Override
-	public void unfreezeByOccupyFlag(Long locId) {
-		locationDao.updateOccupyFlag(locId, null);
-	}
-
-	@Override
 	public boolean isPickToLocation(Location location) {
 		Location pickToLocation = getPickToLocation(location.getWhId());
 		return location.getLocId().equals(pickToLocation.getLocId());
@@ -295,7 +269,7 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public List<Location> findEnableAgvLocation(LpnType lpnType, String zoneType) {
-		// TODO 需要按照上架顺序排序，并且库位的使用状态为正常的
+		// TODO 王 需要按照上架顺序排序，并且库位的使用状态为正常的
 		return locationDao.getLocationByLpnTypeId(lpnType.getId(), zoneType);
 	}
 
@@ -323,5 +297,11 @@ public class LocationBizImpl implements LocationBiz {
 	@Override
 	public List<Location> findLocationByZoneId(Long zoneId) {
 		return locationDao.getLocationByZoneId(zoneId);
+	}
+
+	@Override
+	public void freezeOrUnfreezeLoc(boolean isFreeze, Location location, String taskId) {
+		// TODO 王 Auto-generated method stub
+
 	}
 }
