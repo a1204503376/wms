@@ -61,7 +61,6 @@ public class SoHeaderDaoImpl extends BaseServiceImpl<SoHeaderMapper, SoHeader> i
 		AssertUtil.notEmpty(request.getNo(), "发货单编码/上游编码/任务号不能为空");
 		AssertUtil.notEmpty(request.getWhId(), "库房编码不能为空");
 		AssertUtil.notNull(request.getBillDetailState(), "单据状态不能为空");
-		//TODO
 		return super.baseMapper.getAllPickPage(page, request);
 	}
 
