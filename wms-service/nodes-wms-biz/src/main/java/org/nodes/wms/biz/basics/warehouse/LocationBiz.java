@@ -267,7 +267,7 @@ public interface LocationBiz {
 	List<Location> findLocationByZoneId(Long zoneId);
 
 	/**
-	 * 根据任务冻结库位（locFlag：冻结40）
+	 * 根据任务冻结库位，并赋值locFlagDesc（locFlag：冻结40）
 	 *
 	 * @param location 冻结库位
 	 * @param taskId   必填
@@ -275,7 +275,7 @@ public interface LocationBiz {
 	void freezeLocByTask(Location location, String taskId);
 
 	/**
-	 * 根据任务解冻库位（locFlag：解冻1）
+	 * 根据任务解冻库位，并置空locFlagDesc（locFlag：解冻1）
 	 * @param location 库位
 	 * @param taskId 必填
 	 */
