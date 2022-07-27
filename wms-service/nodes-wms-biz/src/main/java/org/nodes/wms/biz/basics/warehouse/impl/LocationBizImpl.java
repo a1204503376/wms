@@ -3,7 +3,6 @@ package org.nodes.wms.biz.basics.warehouse.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.base.entity.Dict;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
@@ -269,7 +268,6 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public List<Location> findEnableAgvLocation(LpnType lpnType, String zoneType) {
-		// TODO 王 需要按照上架顺序排序，并且库位的使用状态为正常的
 		return locationDao.getLocationByLpnTypeId(lpnType.getId(), zoneType);
 	}
 

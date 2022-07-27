@@ -93,7 +93,6 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 
 	@Override
 	public void updateReceiveHeader(ReceiveHeader header) {
-		//TODO
 		if (Func.isEmpty(header.getReceiveId())) {
 			throw new ServiceException("更细收货单头表时ReceiveId为空");
 		}

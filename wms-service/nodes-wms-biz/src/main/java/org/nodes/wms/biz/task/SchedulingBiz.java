@@ -31,5 +31,5 @@ public interface SchedulingBiz {
 	 *
 	 * @param request 请求参数
 	 */
-	Boolean synchronizeTaskStatus(SyncTaskStateRequest request);
+	void synchronizeTaskStatus(SyncTaskStateRequest request);
 }
