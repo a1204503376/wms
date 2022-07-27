@@ -190,9 +190,6 @@ import fileDownload from "js-file-download";
                     style="width: 100%"
                     @sort-change="onSortChange"
                 >
-                    <el-table-column fixed type="index">
-                        <template slot="header">序号</template>
-                    </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column
                             v-if="!column.hide"
@@ -547,7 +544,7 @@ export default {
             return sums;
         },
         arraySpanMethod({row, column, rowIndex, columnIndex}) {
-            if (columnIndex === 1) {
+            if (columnIndex === 0) {
                 const _row = this.getSpanArr(this.table.data).one[rowIndex]
                 const _col = _row > 0 ? 1 : 0
                 return {

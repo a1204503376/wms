@@ -4,7 +4,7 @@
         :multiple="true"
         collapse-tags
         filterable
-        :placeholder="msg"
+        :placeholder="this.msg"
         :size="size"
         @change="onChange">
         <el-option
@@ -34,13 +34,13 @@ export default {
         selectVal: [Array],
         // 组件大小，默认为mini, 支持 medium/small/mini
         size: {type: String, required: false, default: () => "mini"},
-        stockId: {String},
-        msg: {String, default: () => "请选择"}
+        stockId: {String}
     },
     data() {
         return {
             val: this.selectVal,
-            dataSource: []
+            dataSource: [],
+            msg: "请选择"
         }
     },
     async created() {
