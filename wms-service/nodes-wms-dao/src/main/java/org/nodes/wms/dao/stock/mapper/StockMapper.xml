@@ -147,12 +147,16 @@
         ownerName
         from wms_stock s left join wms_owner o on s.wo_id = o.wo_id
         <where>
-            <if test="query.no != null and query.no != ''">
+            <if test="query.no != null and query.no != '' and query.type == null or query.type == ''">
                 s.loc_code LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty >
                 s.pick_qty or
                 s.sku_code LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty >
                 s.pick_qty or
                 s.box_code LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty >
+                s.pick_qty
+            </if>
+            <if test="query.no != null and query.no != '' and query.type != null and query.type != ''">
+                s.${query.type} LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty >
                 s.pick_qty
             </if>
         </where>

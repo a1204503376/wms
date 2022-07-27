@@ -15,4 +15,8 @@ public class FindAllStockByNoRequest implements Serializable {
 	private String no;
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long whId;
+	/**
+	 * PDA扫码之后，符合相对应的条码的数据，然后只根据这一个字段去查询
+	 */
+	private String type;
 }

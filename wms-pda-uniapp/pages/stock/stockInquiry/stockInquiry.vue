@@ -18,7 +18,8 @@
 						<u--text class="demo-layout bg-purple-light" v-text="item.balance"></u--text>
 					</u-col>
 					<u-col span="7">
-						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.stockEnable+'/'+item.stockBalance+' '+item.wsuCode"></u--text>
+						<u--text class="demo-layout bg-purple  font-in-page"
+							v-text="item.stockEnable+'/'+item.stockBalance+' '+item.wsuCode"></u--text>
 					</u-col>
 					<u-col span="2">
 						<view>
@@ -79,6 +80,7 @@
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
 					no: '',
+					type: ''
 				},
 				receiveList: [],
 				page: {
@@ -109,11 +111,32 @@
 		},
 		methods: {
 			analysisCode(code) {
+				this.params.type = '';
 				var barcode = barcodeFunc.parseBarcode(code);
 				var barcodeType = barcodeFunc.BarcodeType;
 				switch (barcode.type) {
 					case barcodeType.UnKnow:
 						this.params.no = barcode.content;
+						break;
+					case barcodeType.Loc:
+						this.params.no = barcode.content;
+						this.params.type = "loc_code";
+						break;
+					case barcodeType.Lpn:
+						this.params.no = barcode.content;
+						this.params.type = "lpn_code";
+						break;
+					case barcodeType.Sku:
+						this.params.no = barcode.content;
+						this.params.type = "sku_code";
+						break;
+					case barcodeType.LotNumber:
+						this.params.no = barcode.content;
+						this.params.type = "sku_lot1";
+						break;
+					case barcodeType.Box:
+						this.params.no = barcode.content;
+						this.params.type = "box_code";
 						break;
 					default:
 						this.$u.func.showToast({
