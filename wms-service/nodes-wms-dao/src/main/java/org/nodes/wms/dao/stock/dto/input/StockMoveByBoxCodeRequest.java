@@ -14,7 +14,7 @@ public class StockMoveByBoxCodeRequest implements Serializable {
 	/**
 	 * 目标库位编码
 	 */
-	private String targetLocCode;
+	private String locCode;
 	/**
 	 * lpn编码-托盘号
 	 */
