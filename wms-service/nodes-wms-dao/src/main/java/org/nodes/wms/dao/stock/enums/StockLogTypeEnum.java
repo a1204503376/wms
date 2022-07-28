@@ -32,7 +32,7 @@ public enum StockLogTypeEnum {
 	STOCK_TO_INSTOCK_RECE(207, "到入库接驳区"),
 	STOCK_MOVE_BY_PCS(208, "PC按件移位"),
 	STOCK_MOVE_BY_BOX(209, "PC按箱移位"),
-
+	STOCK_MOVE_BY_BOX_PDA(210, "按箱移位-手持"),
 	OUTSTOCK_BY_PICK(301, "拣货出库"),
 	OUTSTOCK_BY_CANCEL_RECEIVE(302, "撤销收货");
 

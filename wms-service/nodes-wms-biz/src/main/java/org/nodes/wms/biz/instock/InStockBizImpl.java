@@ -148,7 +148,7 @@ public class InStockBizImpl implements InStockBiz {
 	public void receiveByMultiBoxCode(ReceiveDetailLpnPdaMultiRequest receiveDetailLpnPdaMultiRequest) {
 		// 判断lpnCode是否为空，如果为空则随机生成一个lpnCode
 		if (Func.isEmpty(receiveDetailLpnPdaMultiRequest.getLpnCode())) {
-			receiveDetailLpnPdaMultiRequest.setLpnCode(Func.randomUUID());
+			receiveDetailLpnPdaMultiRequest.setLpnCode(receiveDetailLpnPdaMultiRequest.getLocCode());
 		}
 		// 循环调用按箱收货业务方法
 		for (ReceiveDetailLpnPdaRequest item : receiveDetailLpnPdaMultiRequest.getReceiveDetailLpnPdaRequestList()) {
