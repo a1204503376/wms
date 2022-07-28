@@ -2,7 +2,6 @@
     <el-select
         v-model="val"
         :collapse-tags="true"
-        :io-type="ioType"
         :multiple="multiple"
         :clearable="true"
         filterable
