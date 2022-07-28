@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 import java.math.BigDecimal;
 
@@ -66,7 +67,7 @@ public class StockLog extends BaseSkuLotEntity {
 	/**
 	 * 库存状态（0正常，1冻结）
 	 */
-	private Integer stockStatus;
+	private StockStatusEnum stockStatus;
 
 	/**
 	 * 层级
