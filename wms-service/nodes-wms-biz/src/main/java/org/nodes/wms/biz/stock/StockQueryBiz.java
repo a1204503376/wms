@@ -201,7 +201,7 @@ public interface StockQueryBiz {
 	 * @param boxCodeList 箱码
 	 * @return List<StockMoveResponse> 库存移动查询响应对象
 	 */
-	List<StockMoveResponse> findStockMoveByBoxCode(List<String> boxCodeList);
+	List<Stock> findStockMoveByBoxCode(List<String> boxCodeList);
 
 	/**
 	 * 根据库存id获取库存信息
