@@ -110,9 +110,9 @@ public class LocationBizImpl implements LocationBiz {
 			Location location = locationDao.getLocationById(id);
 			String locCode = location.getLocCode();
 			if (Func.isNotEmpty(location.getLocType())
-					&& location.getLocType().equals(LocTypeEnum.Virtual.key())
-					&& StringUtil.contains(locCode, '-')
-					&& ArrayUtils.contains(LocationConstant.getLocTypes(), StringUtil.subAfter(locCode, "-", true))) {
+				&& location.getLocType().equals(LocTypeEnum.Virtual.key())
+				&& StringUtil.contains(locCode, '-')
+				&& ArrayUtils.contains(LocationConstant.getLocTypes(), StringUtil.subAfter(locCode, "-", true))) {
 				throw new ServiceException(String.format("库位[编码：%s]是系统生成虚拟库位不可删除", location.getLocCode()));
 			}
 		}
@@ -122,8 +122,8 @@ public class LocationBizImpl implements LocationBiz {
 	private List<String> getLocCodeOfSystemCreated(String systemCreateCode) {
 		List<Warehouse> warehouseList = warehouseBiz.findAll();
 		return warehouseList.stream()
-				.map(item -> String.format("%s-%s", item.getWhCode(), systemCreateCode))
-				.collect(Collectors.toList());
+			.map(item -> String.format("%s-%s", item.getWhCode(), systemCreateCode))
+			.collect(Collectors.toList());
 	}
 
 	@Override
@@ -169,7 +169,7 @@ public class LocationBizImpl implements LocationBiz {
 		}
 		List<Location> allStageLocation = getAllStageLocation();
 		List<Location> locationList = allStageLocation.stream()
-				.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
@@ -180,7 +180,7 @@ public class LocationBizImpl implements LocationBiz {
 		}
 		List<Location> allQcLocation = getAllQcLocation();
 		List<Location> locationList = allQcLocation.stream()
-				.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
@@ -191,7 +191,7 @@ public class LocationBizImpl implements LocationBiz {
 		}
 		List<Location> allPickToLocation = getAllPickToLocation();
 		List<Location> locationList = allPickToLocation.stream()
-				.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
@@ -202,7 +202,7 @@ public class LocationBizImpl implements LocationBiz {
 		}
 		List<Location> allPackLocation = getAllPackLocation();
 		List<Location> locationList = allPackLocation.stream()
-				.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
@@ -213,7 +213,7 @@ public class LocationBizImpl implements LocationBiz {
 		}
 		List<Location> allUnknownLocation = getAllUnknownLocation();
 		List<Location> locationList = allUnknownLocation.stream()
-				.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
@@ -224,7 +224,7 @@ public class LocationBizImpl implements LocationBiz {
 		}
 		List<Location> allInTransitLocation = getAllInTransitLocation();
 		List<Location> locationList = allInTransitLocation.stream()
-				.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
@@ -285,9 +285,9 @@ public class LocationBizImpl implements LocationBiz {
 	public boolean isVirtualLocation(List<Location> locationList) {
 		Dict dict = dictionaryBiz.findZoneTypeOfVirtual();
 		List<Long> locIdList = locationList.stream()
-				.map(Location::getLocId)
-				.distinct()
-				.collect(Collectors.toList());
+			.map(Location::getLocId)
+			.distinct()
+			.collect(Collectors.toList());
 		List<Location> locations = locationDao.getLocationByZoneType(locIdList, dict.getDictKey());
 		return Func.isNotEmpty(locations);
 	}
@@ -299,12 +299,13 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public void unfreezeLocByTask(Location location, String taskId) {
-		// TODO 王 Auto-generated method stub
+		location.setLocFlag(LocationConstant.LOC_FLAG_NORMAL);
+		locationDao.freezeOrUnfreezeLocByTask(location, taskId);
 	}
 
 	@Override
 	public void freezeLocByTask(Location location, String taskId) {
-		// TODO 王 Auto-generated method stub
-
+		location.setLocFlag(LocationConstant.LOC_FLAG_SYSTEM_FORZEN);
+		locationDao.freezeOrUnfreezeLocByTask(location, taskId);
 	}
 }

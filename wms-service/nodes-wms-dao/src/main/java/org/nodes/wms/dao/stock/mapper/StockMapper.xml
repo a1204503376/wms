@@ -157,8 +157,8 @@
                 s.pick_qty
             </if>
             <if test="query.no != null and query.no != '' and query.type != null and query.type != ''">
-                s.${query.type} LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and
-                s.stay_stock_qty + s.stock_qty >
+                s.${query.type} = #{query.no} and s.wh_id=#{query.whId} and s.is_deleted = 0 and s.stay_stock_qty +
+                s.stock_qty >
                 s.pick_qty
             </if>
         </where>

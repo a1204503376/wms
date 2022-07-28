@@ -17,8 +17,12 @@ import java.util.Map;
 
 /**
  * 库存Dao接口
- **/
+ *
+ * @author caiyun
+ */
 public interface StockDao {
+
+	List<Stock> getStockById(List<Long> stockIds);
 
 	/**
 	 * 根据库位id查询库存数量
@@ -54,6 +58,8 @@ public interface StockDao {
 	 */
 	List<Stock> getStockByBoxCode(String boxCode, List<Long> locIdList);
 
+	List<Stock> getStockByBoxCode(List<String> boxCodes, List<Long> locIdList);
+
 	/**
 	 * 根据箱号左模糊查找
 	 *
@@ -81,6 +87,8 @@ public interface StockDao {
 	 */
 	List<Stock> getStockByLpnCode(String lpnCode, List<Long> locIdList);
 
+	List<Stock> getStockByLpnCode(List<String> lpnCodes, List<Long> locIdList);
+
 	/**
 	 * 根据箱码查询该LPN上所有的库存，含自身
 	 *
@@ -100,6 +108,8 @@ public interface StockDao {
 
 	void updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
 					 BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
+
+	void updateStock(List<Long> stockIds, StockStatusEnum status);
 
 	List<Stock> getStockByLocIdList(List<Long> locIdList);
 
@@ -146,4 +156,5 @@ public interface StockDao {
 	List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
 										  List<Long> locationIdList, SkuLotBaseEntity skuLot,
 										  List<Long> excludeZoneIdList);
+
 }

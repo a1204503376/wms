@@ -7,12 +7,17 @@ import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.task.SchedulingBiz;
 import org.nodes.wms.biz.task.TaskBiz;
 import org.nodes.wms.biz.task.modular.TaskDetailFactory;
+import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
+import org.nodes.wms.dao.basics.zone.constant.ZoneConstant;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.log.dto.input.NoticeMessageRequest;
 import org.nodes.wms.dao.task.dto.QueryAndFrozenEnableOutboundRequest;
 import org.nodes.wms.dao.task.dto.SchedulingBroadcastNotificationRequest;
 import org.nodes.wms.dao.task.dto.SyncTaskStateRequest;
 import org.nodes.wms.dao.task.entities.TaskDetail;
 import org.springblade.core.log.exception.ServiceException;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,13 +33,24 @@ public class SchedulingBizImpl implements SchedulingBiz {
 
 	@Override
 	public String selectAndFrozenEnableOutbound(QueryAndFrozenEnableOutboundRequest request) {
-
-		// TODO 王
 		// 根据箱型（ABC）获取出库接驳区的库位/D箱人工拣货区库位
-		// 判断库位是否有库存
-		// 如果没有库存则冻结
-
-		return null;
+		String area = ZoneConstant.ZONE_CODE_AGV_SHIPMENT_CONNECTION_AREA;
+		if (Func.equals(request.getLpnTypeCode(), LpnTypeCodeEnum.D)) {
+			area = ZoneConstant.ZONE_CODE_D_PICK_AREA;
+		}
+		Zone zone = zoneBiz.findByCode(area);
+		List<Location> locationList = locationBiz.findLocationByZoneId(zone.getZoneId());
+		String locCode = "";
+		for (Location location : locationList) {
+			// 判断库位是否有库存
+			if (location.enableStock()) {
+				// 如果没有库存则冻结
+				locationBiz.freezeLocByTask(location, request.getTaskDetailId().toString());
+				locCode = location.getLocCode();
+				break;
+			}
+		}
+		return locCode;
 	}
 
 	@Override
@@ -42,7 +58,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		for (SchedulingBroadcastNotificationRequest notificationRequest : request) {
 			NoticeMessageRequest message = new NoticeMessageRequest();
 			message.setLog(String.format("任务[%s]：[%s]",
-					notificationRequest.getTaskDetailId(), notificationRequest.getMsg()));
+				notificationRequest.getTaskDetailId(), notificationRequest.getMsg()));
 			logBiz.noticeMesssage(message);
 		}
 	}
@@ -50,7 +66,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	@Override
 	public void synchronizeTaskStatus(SyncTaskStateRequest request) {
 		TaskDetail detail = taskDetailFactory.create(request);
-		if(!taskBiz.updateTaskState(detail)){
+		if (!taskBiz.updateTaskState(detail)) {
 			throw new ServiceException("同步任务执行状态失败");
 		}
 	}

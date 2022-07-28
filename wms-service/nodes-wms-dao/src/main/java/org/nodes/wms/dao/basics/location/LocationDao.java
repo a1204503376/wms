@@ -140,7 +140,7 @@ public interface LocationDao {
 
 	/**
 	 * 查找库位列表中指定类型的库位
-	 * 
+	 *
 	 * @param locIdList
 	 * @param zoneType
 	 * @return
@@ -154,4 +154,12 @@ public interface LocationDao {
 	 * @return 库位信息
 	 */
 	List<Location> getLocationByZoneId(Long zoneId);
+
+	/**
+	 * 冻结或解冻 库位信息
+	 *
+	 * @param location 库位信息
+	 * @param taskId   任务id
+	 */
+	void freezeOrUnfreezeLocByTask(Location location, String taskId);
 }
