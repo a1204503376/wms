@@ -113,56 +113,62 @@
 			submit() {
 				var _this = this;
 				uni.$u.throttle(function() {
-					var serialList = [];
-					_this.serialNumberList.forEach((serialNumbers, index) => {
-						serialList.push(serialNumbers.serialNumber)
-					})
-					let params = {
-						serialNumberList: serialList
-					}
-					receive.getSerialNumberList(params).then(data => {
-						if (tool.isEmpty(data.data)) {
-							var serialList = [];
-							_this.serialNumberList.forEach((serialNumbers, index) => {
-								serialList.push(serialNumbers.serialNumber)
-							})
-							_this.params.serialNumberList = serialList;
-							_this.params.whCode = uni.getStorageSync('warehouse').whCode;
-							_this.params.whId = uni.getStorageSync('warehouse').whId;
-							receive.submitReceiptByPcs(_this.params).then(data => {
-								if (data.data.allReceivieIsAccomplish && data.data
-									.currentReceivieIsAccomplish) {
-									//当前收货单收货收货完毕
-									_this.clearEmitKeyDown();
-									_this.$u.func.navigateBackTo(3);
-									return;
-								} else if (data.data.currentReceivieIsAccomplish) {
-									//当前收货单详情收货收货完毕
-									_this.clearEmitKeyDown();
-									_this.$u.func.navigateBackTo(2);
-									return;
-								} else {
-									//当前收货单详情收货部分收货,返回收货单收货页面
-									_this.clearEmitKeyDown();
-									_this.esc();
-								}
-
-							});
-						} else {
-							_this.$u.func.showToast({
-								title: '序列号已存在'
-							});
-							_this.serialNumberList.forEach((serialNumber, index) => {
-								data.data.forEach((serialNumbers, index) => {
-									if (serialNumber.serialNumber ==
-										serialNumbers) {
-										serialNumber.backgroundColor =
-											"background-color: #DD524D;"
-									}
-								});
-							});
+					if (_this.serialNumberList.length == _this.params.surplusQty) {
+						var serialList = [];
+						_this.serialNumberList.forEach((serialNumbers, index) => {
+							serialList.push(serialNumbers.serialNumber)
+						})
+						let params = {
+							serialNumberList: serialList
 						}
-					});
+						receive.getSerialNumberList(params).then(data => {
+							if (tool.isEmpty(data.data)) {
+								var serialList = [];
+								_this.serialNumberList.forEach((serialNumbers, index) => {
+									serialList.push(serialNumbers.serialNumber)
+								})
+								_this.params.serialNumberList = serialList;
+								_this.params.whCode = uni.getStorageSync('warehouse').whCode;
+								_this.params.whId = uni.getStorageSync('warehouse').whId;
+								receive.submitReceiptByPcs(_this.params).then(data => {
+									if (data.data.allReceivieIsAccomplish && data.data
+										.currentReceivieIsAccomplish) {
+										//当前收货单收货收货完毕
+										_this.clearEmitKeyDown();
+										_this.$u.func.navigateBackTo(3);
+										return;
+									} else if (data.data.currentReceivieIsAccomplish) {
+										//当前收货单详情收货收货完毕
+										_this.clearEmitKeyDown();
+										_this.$u.func.navigateBackTo(2);
+										return;
+									} else {
+										//当前收货单详情收货部分收货,返回收货单收货页面
+										_this.clearEmitKeyDown();
+										_this.esc();
+									}
+
+								});
+							} else {
+								_this.$u.func.showToast({
+									title: '序列号已存在'
+								});
+								_this.serialNumberList.forEach((serialNumber, index) => {
+									data.data.forEach((serialNumbers, index) => {
+										if (serialNumber.serialNumber ==
+											serialNumbers) {
+											serialNumber.backgroundColor =
+												"background-color: #DD524D;"
+										}
+									});
+								});
+							}
+						});
+					}else{
+						_this.$u.func.showToast({
+							title: '序列号应与收货数量相同,请采集序列号'
+						});
+					}
 				}, 1000)
 			},
 			analysisCode(code) {
@@ -203,7 +209,7 @@
 				});
 			},
 			clearEmitKeyDown() {
-				this.emitKeyDown = function(){};
+				this.emitKeyDown = function() {};
 			},
 			emitKeyDown(e) {
 				if (e.key == 'Enter') {

@@ -29,6 +29,7 @@
 	import uniSelect from '@/components/uni-select.vue'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
+	import stockManage from '@/api/stock/stockManage.js'
 	export default {
 		components: {
 			uniSelect
@@ -42,8 +43,9 @@
 				}
 			}
 		},
-		onLoad() {
-
+		onLoad: function(option) {
+			var parse = JSON.parse(option.param)
+			this.params= parse;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -64,8 +66,12 @@
 				var _this = this;
 				_this.params.isSn = true;
 				uni.$u.throttle(function() {
-					if (tool.isNotEmpty(_this.params.locCode) && tool.isNotEmpty(_this.params.lpnCode)) {
+					if (tool.isNotEmpty(_this.params.locCode)) {
 						console.log('按箱移动成功')
+						_this.params.whId = uni.getStorageSync('warehouse').whId;
+						stockManage.stockMoveByBoxCode(_this.params).then(data => {
+							console.log(data)
+						})
 						return;
 					}
 					console.log('标准移动失败')
