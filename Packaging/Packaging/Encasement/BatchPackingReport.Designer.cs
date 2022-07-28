@@ -54,8 +54,8 @@
             this.xrLabel4 = new DevExpress.XtraReports.UI.XRLabel();
             this.lbBoxNumber = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLabel5 = new DevExpress.XtraReports.UI.XRLabel();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
+            this.objectDataSource1 = new DevExpress.DataAccess.ObjectBinding.ObjectDataSource(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.objectDataSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
             // TopMargin
@@ -98,6 +98,8 @@
             // 
             // lbQty4
             // 
+            this.lbQty4.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
+            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[Qty4]")});
             this.lbQty4.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbQty4.LocationFloat = new DevExpress.Utils.PointFloat(112.3456F, 343.7314F);
             this.lbQty4.Multiline = true;
@@ -108,6 +110,8 @@
             // 
             // lbQty3
             // 
+            this.lbQty3.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
+            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[Qty3]")});
             this.lbQty3.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbQty3.LocationFloat = new DevExpress.Utils.PointFloat(112.6082F, 298.6389F);
             this.lbQty3.Multiline = true;
@@ -118,6 +122,8 @@
             // 
             // lbQty2
             // 
+            this.lbQty2.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
+            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[Qty2]")});
             this.lbQty2.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbQty2.LocationFloat = new DevExpress.Utils.PointFloat(112.6082F, 255.7778F);
             this.lbQty2.Multiline = true;
@@ -277,6 +283,8 @@
             // 
             // lbQty1
             // 
+            this.lbQty1.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
+            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[Qty1]")});
             this.lbQty1.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbQty1.LocationFloat = new DevExpress.Utils.PointFloat(112.6082F, 210.3056F);
             this.lbQty1.Multiline = true;
@@ -319,9 +327,10 @@
             this.xrLabel5.StylePriority.UseFont = false;
             this.xrLabel5.Text = "箱号：";
             // 
-            // bindingSource1
+            // objectDataSource1
             // 
-            this.bindingSource1.DataSource = typeof(DataAccess.Dto.BatchPrintDto);
+            this.objectDataSource1.DataSource = typeof(System.Collections.Generic.List<DataAccess.Dto.BatchPrintDto>);
+            this.objectDataSource1.Name = "objectDataSource1";
             // 
             // BatchPackingReport
             // 
@@ -330,8 +339,8 @@
             this.BottomMargin,
             this.Detail});
             this.ComponentStorage.AddRange(new System.ComponentModel.IComponent[] {
-            this.bindingSource1});
-            this.DataSource = this.bindingSource1;
+            this.objectDataSource1});
+            this.DataSource = this.objectDataSource1;
             this.Font = new System.Drawing.Font("微软雅黑", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Landscape = true;
             this.Margins = new System.Drawing.Printing.Margins(1, 17, 1, 11);
@@ -341,7 +350,7 @@
             this.ShowPrintMarginsWarning = false;
             this.Version = "21.2";
             this.BeforePrint += new System.Drawing.Printing.PrintEventHandler(this.SerialNumberReport_BeforePrint);
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.objectDataSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 
         }
@@ -351,6 +360,12 @@
         private DevExpress.XtraReports.UI.TopMarginBand TopMargin;
         private DevExpress.XtraReports.UI.BottomMarginBand BottomMargin;
         private DevExpress.XtraReports.UI.DetailBand Detail;
+        private DevExpress.XtraReports.UI.XRLabel lbQty4;
+        private DevExpress.XtraReports.UI.XRLabel lbQty3;
+        private DevExpress.XtraReports.UI.XRLabel lbQty2;
+        private DevExpress.XtraReports.UI.XRLabel xrLabel11;
+        private DevExpress.XtraReports.UI.XRLabel xrLabel10;
+        private DevExpress.XtraReports.UI.XRPictureBox xrPictureBox1;
         private DevExpress.XtraReports.UI.XRBarCode bcBoxNumber;
         private DevExpress.XtraReports.UI.XRPictureBox xrPictureBox2;
         private DevExpress.XtraReports.UI.XRPictureBox xrPictureBox3;
@@ -365,12 +380,6 @@
         private DevExpress.XtraReports.UI.XRLabel xrLabel4;
         private DevExpress.XtraReports.UI.XRLabel lbBoxNumber;
         private DevExpress.XtraReports.UI.XRLabel xrLabel5;
-        private System.Windows.Forms.BindingSource bindingSource1;
-        private DevExpress.XtraReports.UI.XRPictureBox xrPictureBox1;
-        private DevExpress.XtraReports.UI.XRLabel xrLabel10;
-        private DevExpress.XtraReports.UI.XRLabel xrLabel11;
-        private DevExpress.XtraReports.UI.XRLabel lbQty4;
-        private DevExpress.XtraReports.UI.XRLabel lbQty3;
-        private DevExpress.XtraReports.UI.XRLabel lbQty2;
+        private DevExpress.DataAccess.ObjectBinding.ObjectDataSource objectDataSource1;
     }
 }

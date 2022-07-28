@@ -7,10 +7,6 @@ using DataAccess.Dto;
 using DataAccess.Enitiies;
 using DataAccess.Enums;
 using DataAccess.Wms;
-using DevExpress.Utils.Extensions;
-using DevExpress.XtraEditors.DXErrorProvider;
-using DevExpress.XtraGrid.Columns;
-using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraReports.UI;
 using Packaging.Common;
 using Packaging.Settings;
@@ -75,9 +71,7 @@ namespace Packaging.Encasement
                 return;
             }
 
-            BatchPrintDto batchPrintDto = GetBatchPrintDto();
-
-            var batchPackingReport = new BatchPackingReport(batchPrintDto);
+            var batchPackingReport = GetBatchPackingReport();
             batchPackingReport.Print();
         }
 
@@ -89,7 +83,6 @@ namespace Packaging.Encasement
                 SpecialCustomer = txtSpecialCustomer.Text,
                 BoxNumber = Constants.DefaulutBoxNumber,
                 Copies = Convert.ToInt16(txtPrintNumber.Text),
-                PrintDate = DateTime.Now.ToString("yyMMdd"),
                 UserName = GlobalSettings.UserName,
                 SkuDetails = _skuDetails.ToList()
             };
@@ -128,7 +121,10 @@ namespace Packaging.Encasement
                 }).ToList();
 
             batchPrintDto.ReceiveDetailLpns = receiveDetailLpns;
-            return batchPrintDto;
+
+            BatchPrintDto.SetQty(batchPrintDto);
+
+            return  batchPrintDto;
         }
 
         private void gridView1_KeyDown(object sender, KeyEventArgs e)
@@ -212,10 +208,16 @@ namespace Packaging.Encasement
 
         private void btnPreviewPrint_Click(object sender, EventArgs e)
         {
-            BatchPrintDto batchPrintDto = GetBatchPrintDto();
+            var batchPackingReport = GetBatchPackingReport();
+            batchPackingReport.ShowPreview();
+        }
+
+        private BatchPackingReport GetBatchPackingReport()
+        {
+            var batchPrintDto = GetBatchPrintDto();
 
             var batchPackingReport = new BatchPackingReport(batchPrintDto);
-            batchPackingReport.ShowPreview();
+            return batchPackingReport;
         }
     }
 }

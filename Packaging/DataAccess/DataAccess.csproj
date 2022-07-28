@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,11 +30,13 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>..\packages\BouncyCastle.1.8.5\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.DataAccess.v21.2, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="FreeSql, Version=3.2.665.0, Culture=neutral, PublicKeyToken=a33928e5d4a4b39c, processorArchitecture=MSIL">
       <HintPath>..\packages\FreeSql.3.2.665\lib\net451\FreeSql.dll</HintPath>
     </Reference>
@@ -90,10 +93,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\PrintHelper.cs" />
     <Compile Include="DB.cs" />
     <Compile Include="Dto\BatchPrintDto.cs" />
     <Compile Include="Dto\SerialNumberPrintDto.cs" />
     <Compile Include="Encasement\AutoIdentificationDal.cs" />
+    <Compile Include="Encasement\PackingReportItemDal.cs" />
+    <Compile Include="Enitiies\PackingReportItem.cs" />
+    <Compile Include="Enitiies\WmsSerial.cs" />
+    <Compile Include="Enitiies\WmsStock.cs" />
     <Compile Include="Wms\ReceiveDetailLpnDal.cs" />
     <Compile Include="Wms\SkuDal.cs" />
     <Compile Include="Encasement\SpeedClassDal.cs" />
@@ -111,8 +119,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SystemManager\UserDal.cs" />
+    <Compile Include="Wms\WmsSerialDal.cs" />
     <Compile Include="Wms\WmsSkuPackageDetailDal.cs" />
+    <Compile Include="Wms\WmsStockDal.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

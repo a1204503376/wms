@@ -1,6 +1,5 @@
 ﻿using DataAccess.Encasement;
 using DataAccess.Wms;
-using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Repository;
 
 namespace Packaging.Encasement

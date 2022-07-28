@@ -301,36 +301,41 @@ namespace Packaging.Encasement
 
         private void btnSavePrint_Click(object sender, EventArgs e)
         {
+            var serialNumberReport = GetSerialNumberReport();
+            serialNumberReport.Print();
+        }
+
+        private SerialNumberReport GetSerialNumberReport()
+        {
             var serialNumberPrintDto = GetSerialNumberPrintDto();
 
             var serialNumberReport = new SerialNumberReport(serialNumberPrintDto);
-            serialNumberReport.Print();
+            return serialNumberReport;
         }
 
         private SerialNumberPrintDto GetSerialNumberPrintDto()
         {
-            var serialNumberPrintDto = new SerialNumberPrintDto();
-
             if (!(sluSku.EditValue is Sku sku))
             {
                 throw new Exception("请选择物品");
             }
 
-            var autoIdentification = _packingAutoIdentifications.First();
-            serialNumberPrintDto.SkuName = sku.SkuName;
-            serialNumberPrintDto.BoxType = cbxBox.Text;
-            serialNumberPrintDto.Model = luModel.Text;
-            serialNumberPrintDto.PrintDate = DateTime.Now.ToString("yyMMdd");
-            serialNumberPrintDto.UserName = GlobalSettings.UserName;
-            serialNumberPrintDto.Qty = $"{_packingAutoIdentifications.Count} {sku.WspName}/箱";
-            serialNumberPrintDto.SpeedClass = sluSpeedClass.Text;
-            serialNumberPrintDto.ProductIdentificationCode = autoIdentification.ProductIdentificationCode;
-            serialNumberPrintDto.SpecialCustomer = txtSpecialCustomer.Text;
-            serialNumberPrintDto.Copies = Convert.ToInt16(txtPrintNumber.EditValue);
-            serialNumberPrintDto.BoxNumber = Constants.DefaulutBoxNumber;
+            var serialNumberPrintDto = new SerialNumberPrintDto
+            {
+                SkuName = sku.SkuName,
+                BoxType = cbxBox.Text,
+                Model = luModel.Text,
+                UserName = GlobalSettings.UserName,
+                Qty = $"{_packingAutoIdentifications.Count} {sku.WspName}/箱",
+                SpeedClass = sluSpeedClass.Text,
+                ProductIdentificationCode = _packingAutoIdentifications.First().ProductIdentificationCode,
+                SpecialCustomer = txtSpecialCustomer.Text,
+                Copies = Convert.ToInt16(txtPrintNumber.EditValue),
+                BoxNumber = Constants.DefaulutBoxNumber
+            };
             SerialNumberDictionary(serialNumberPrintDto);
 
-            // 入库成功后打印
+            // 组装入库数据
             var groupBy =
                 _packingAutoIdentifications.GroupBy(d =>
                     d.AssembleDate + Constants.Underline
@@ -381,54 +386,35 @@ namespace Packaging.Encasement
                     CreateDept = GlobalSettings.UserDeptId,
                 }).ToList();
             serialNumberPrintDto.ReceiveDetailLpns = receiveDetailLpns;
+
             return serialNumberPrintDto;
         }
 
         private void SerialNumberDictionary(SerialNumberPrintDto serialNumberPrintDto)
         {
-            Dictionary<string, List<string>> serialNumberDictionary = new Dictionary<string, List<string>>();
-            foreach (var identification in _packingAutoIdentifications)
-            {
-                if (identification.ProductSupportCode.Length < 7)
-                {
-                    continue;
-                }
-                var key = identification.ProductSupportCode.Substring(0, 6);
-                var value = identification.ProductSupportCode.Replace(key, string.Empty);
-                if (serialNumberDictionary.ContainsKey(key))
-                {
-                    serialNumberDictionary[key].Add(value);
-                }
-                else
-                {
-                    serialNumberDictionary.Add(key, new List<string>
-                    {
-                        value
-                    });
-                }
-            }
-
-            var serialNumberRanges = new List<SerialNumberRange>();
-            foreach (var pair in serialNumberDictionary)
-            {
-                pair.Value.Sort();
-                var serialNumberRange = new SerialNumberRange
-                {
-                    Key = pair.Key,
-                    Begin = pair.Value.First(),
-                    End = pair.Value.Last()
-                };
-                serialNumberRanges.Add(serialNumberRange);
-            }
-            serialNumberPrintDto.SerialNumberRanges = serialNumberRanges;
+            SerialNumberPrintDto.SetSerialNumberRanges(serialNumberPrintDto, _packingAutoIdentifications
+                .Select(d=>d.ProductSupportCode).ToList());
         }
 
         private void btnPreviewPrint_Click(object sender, EventArgs e)
         {
-            var serialNumberPrintDto = GetSerialNumberPrintDto();
-
-            var serialNumberReport = new SerialNumberReport(serialNumberPrintDto);
+            var serialNumberReport = GetSerialNumberReport();
             serialNumberReport.ShowPreview();
+        }
+
+        private void gvSerialNumber_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Delete || e.Modifiers != Keys.Control)
+            {
+                return;
+            }
+
+            var dialogResult = CustomMessageBox.Confirm("确认删除当前行？");
+            if (dialogResult != DialogResult.Yes)
+            {
+                return;
+            }
+            gvSerialNumber.DeleteRow(gvSerialNumber.FocusedRowHandle);
         }
     }
 }
