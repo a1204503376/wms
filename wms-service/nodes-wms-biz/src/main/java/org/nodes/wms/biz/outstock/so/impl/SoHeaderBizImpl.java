@@ -136,6 +136,9 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	@Override
 	public void export(SoHeaderPageQuery soHeaderPageQuery, HttpServletResponse response) {
 		List<SoHeaderExcelResponse> soHeaderExcelList = soHeaderDao.listByQuery(soHeaderPageQuery);
+		soHeaderExcelList.forEach(soHeader ->{
+			soHeader.setSoBillStateValue(soHeader.getSoBillState().getName());
+		});
 		ExcelUtil.export(response, "", "", soHeaderExcelList, SoHeaderExcelResponse.class);
 	}
 
