@@ -1,7 +1,11 @@
 package org.nodes.wms.dao.basics.location.impl;
 
-import java.util.List;
-
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.basics.location.LocationDao;
@@ -13,20 +17,16 @@ import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.mapper.LocationMapper;
 import org.nodes.wms.dao.putway.dto.input.LpnTypeRequest;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 /**
  * 库位管理Dao实现类
- * 
+ *
  * @author nodesc
  */
 @Repository
@@ -94,8 +94,8 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 
 		LambdaQueryWrapper<Location> lambdaQueryWrapper = new LambdaQueryWrapper<>();
 		lambdaQueryWrapper
-				.eq(Location::getLocCode, locCode)
-				.eq(Location::getWhId, whId);
+			.eq(Location::getLocCode, locCode)
+			.eq(Location::getWhId, whId);
 		return super.getOne(lambdaQueryWrapper);
 	}
 
@@ -149,6 +149,19 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 		LambdaQueryWrapper<Location> lambdaQueryWrapper = new LambdaQueryWrapper<>();
 		lambdaQueryWrapper.eq(Location::getZoneId, zoneId);
 		return super.list(lambdaQueryWrapper);
+	}
+
+	@Override
+	public void freezeOrUnfreezeLocByTask(Location location, String taskId) {
+		AssertUtil.notNull(location, "冻结解冻库位时库位不能为空");
+		AssertUtil.notEmpty(taskId, "冻结解冻库位时任务编号不能为空");
+		UpdateWrapper<Location> updateWrapper = new UpdateWrapper<>();
+		updateWrapper.eq("loc_id", location.getLocId())
+			.set("loc_flag", location.getLocFlag())
+			.set("loc_flag_desc", taskId);
+		if (!super.update(updateWrapper)) {
+			throw new ServiceException("冻结库存失败");
+		}
 	}
 
 	@Override
