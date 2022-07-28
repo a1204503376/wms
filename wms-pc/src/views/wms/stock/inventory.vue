@@ -112,7 +112,7 @@ import fileDownload from "js-file-download";
             <template v-slot:batchBtn>
                 <el-button icon="el-icon-plus" size="mini" type="primary" @click="showByBox">按箱显示
                 </el-button>
-                <el-button icon="el-icon-plus" size="mini" type="primary" @click="showByBox">按LPN显示
+                <el-button icon="el-icon-plus" size="mini" type="primary" @click="showByLpn">按LPN显示
                 </el-button>
                 <el-button size="mini" type="primary" @click="moveByPiece">
                     按件移动
@@ -373,7 +373,15 @@ import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import {listMixin} from "@/mixins/list";
-import {exportFile, getStockDataByBoxCode, getStockDataByStockId, move, moveByBox, importFile, page} from "@/api/wms/stock/stock";
+import {
+    exportFile,
+    getStockDataByBoxCode,
+    getStockDataByStockId,
+    importFile,
+    move,
+    moveByBox,
+    page
+} from "@/api/wms/stock/stock";
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js';
 import fileUpload from "@/components/nodes/fileUpload";
@@ -643,6 +651,11 @@ export default {
                 name: '按箱显示',
             });
         },
+        showByLpn() {
+            this.$router.push({
+                name: '按LPN显示',
+            });
+        },
         getSummaries(param) {
             const {columns, data} = param;
             const sums = [];
@@ -765,8 +778,8 @@ export default {
             }
         },
         rowAdd() {
-            if (this.dialog.isMoveByBox ) {
-                if(this.dialog.childrenData.length !== 0){
+            if (this.dialog.isMoveByBox) {
+                if (this.dialog.childrenData.length !== 0) {
                     return;
                 }
                 this.dialog.childrenData.push({id: 1, targetBoxCode: '', targetLocId: [], targetLpnCode: ''});
@@ -845,33 +858,33 @@ export default {
         },
         onSubmit() {
             let childrenData = this.dialog.childrenData;
-            if(func.isEmpty(childrenData)){
+            if (func.isEmpty(childrenData)) {
                 this.$message.warning("请填写移动信息");
                 return;
             }
-            if (this.dialog.isMoveByBox){
-                if (func.isEmpty(childrenData[0].targetBoxCode)){
+            if (this.dialog.isMoveByBox) {
+                if (func.isEmpty(childrenData[0].targetBoxCode)) {
                     this.$message.warning("请填写目标箱码");
                     return;
                 }
-                if (func.isEmpty(childrenData[0].targetLocId)){
+                if (func.isEmpty(childrenData[0].targetLocId)) {
                     this.$message.warning("请选择目标库位编码");
                     return;
                 }
-                if (func.isEmpty(childrenData[0].targetBoxCode)){
+                if (func.isEmpty(childrenData[0].targetBoxCode)) {
                     this.$message.warning("请填写目标LPN");
                     return;
                 }
                 let moveByBoxObj = {
                     boxCodeList: [...new Set(this.dialog.gridData.map(item => item.boxCode))],
-                    targetBoxCode : this.dialog.childrenData[0].targetBoxCode,
-                    targetLocId : this.dialog.childrenData[0].targetLocId,
-                    targetLpnCode : this.dialog.childrenData[0].targetLpnCode,
+                    targetBoxCode: this.dialog.childrenData[0].targetBoxCode,
+                    targetLocId: this.dialog.childrenData[0].targetLocId,
+                    targetLpnCode: this.dialog.childrenData[0].targetLpnCode,
                 }
-                moveByBox(moveByBoxObj).then((res)=>{
+                moveByBox(moveByBoxObj).then((res) => {
 
                 });
-            }else {
+            } else {
                 for (const i in childrenData) {
                     if (childrenData[i].serials.length !== childrenData[i].qty) {
                         this.$message.warning(`第${childrenData[i].id}行，转移数量不等于选中的序列号数量`);
@@ -897,7 +910,7 @@ export default {
                     stockId: this.dialog.gridData[0].stockId,
                     stockMoveDataList: this.dialog.childrenData
                 }
-                move(moveObj).then((res)=>{
+                move(moveObj).then((res) => {
 
                 })
             }
