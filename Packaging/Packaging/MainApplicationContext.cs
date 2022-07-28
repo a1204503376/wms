@@ -1,13 +1,7 @@
 using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Security.Cryptography;
-using System.Text;
 using System.Windows.Forms;
-using DataAccess.SystemManager;
-using DevExpress.XtraEditors;
-using Flurl.Http;
 using Packaging.Common;
 using Packaging.Settings;
 using Packaging.SystemManager;

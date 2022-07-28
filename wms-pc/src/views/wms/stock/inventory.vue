@@ -120,8 +120,6 @@ import fileDownload from "js-file-download";
                 <el-button size="mini" type="primary" @click="moveByBox">
                     按箱移动
                 </el-button>
-                <el-button icon="el-icon-plus" size="mini" type="primary" @click="showByBox">按LPN显示
-                </el-button>
                 <el-button icon="el-icon-upload2" plain size="mini"
                            @click="onUpload">导入
                 </el-button>
@@ -265,26 +263,32 @@ import fileDownload from "js-file-download";
                     </el-table>
                     <el-table
                         :data="dialog.childrenData"
+                        :height="
+                            dialog.isMoveByBox ?  dialog.isFullScreen ? 435 : 100
+                                                : dialog.isFullScreen ? 435 : 350"
                         border
-                        height="350"
-                        style="width: 100%">
-                        <el-table-column prop="id" width="80">
+                        size="medium">
+                        <el-table-column prop="id" width="50">
                             <template slot="header">
                                 <el-button
                                     circle
                                     icon="el-icon-plus"
-                                    size="mini"
                                     style="padding: 4px"
                                     type="primary"
                                     @click="rowAdd">
                                 </el-button>
                             </template>
                         </el-table-column>
-                        <el-table-column label="转移数量">
+                        <el-table-column
+                            v-if="!dialog.isMoveByBox"
+                            label="转移数量"
+                            width="160px">
                             <template v-slot="scope">
-                                <el-input-number v-model="scope.row['qty']" :max="dialog.children.max"
-                                                 :min="dialog.children.min"
-                                                 size="small" @change="qtyChange(scope.row)">
+                                <el-input-number
+                                    v-model="scope.row['qty']"
+                                    :max="dialog.children.max" :min="dialog.children.min"
+                                    size="medium"
+                                    style="width: 100%" @change="qtyChange(scope.row)">
                                 </el-input-number>
                             </template>
                         </el-table-column>
@@ -293,16 +297,54 @@ import fileDownload from "js-file-download";
                             label="序列号">
                             <template v-slot="scope">
                                 <nodes-serial
-                                    v-model="scope.row['serial']"
-                                    :stock-id="dialog.gridData[0].stockId">
+                                    v-model="scope.row['serials']"
+                                    :collapse="false"
+                                    size="medium"
+                                    :stock-id="dialog.gridData[0].stockId"
+                                    style="width: 100%">
                                 </nodes-serial>
                             </template>
                         </el-table-column>
                         <el-table-column
-                            label="库位">
+                            v-if="!dialog.isMoveByBox"
+                            label="库位"
+                            width="180">
                             <template v-slot="scope">
-                                <nodes-location v-model="scope.row['locId']">
+                                <nodes-location
+                                    size="medium"
+                                    v-model="scope.row['locId']">
                                 </nodes-location>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            v-if="dialog.isMoveByBox"
+                            label="目标箱码">
+                            <template v-slot="scope">
+                                <el-input
+                                    v-model="scope.row['targetBoxCode']"
+                                    size="medium">
+                                </el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            v-if="dialog.isMoveByBox"
+                            label="目标库位">
+                            <template v-slot="scope">
+                                <nodes-location
+                                    v-model="scope.row['targetLocId']"
+                                    size="medium"
+                                    style="width: 100%;">
+                                </nodes-location>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            v-if="dialog.isMoveByBox"
+                            label="目标LPN">
+                            <template v-slot="scope">
+                                <el-input
+                                    v-model="scope.row['targetLpnCode']"
+                                    size="medium">
+                                </el-input>
                             </template>
                         </el-table-column>
                         <el-table-column label="操作" width="80">
@@ -317,7 +359,7 @@ import fileDownload from "js-file-download";
                     </el-table>
                 </div>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="onSubmit">确定</el-button>
+                    <el-button type="primary" @click="onSubmit">确定</el-button>
                     <el-button style="margin-left: 15px;" @click="dialog.showDialog = false">关 闭</el-button>
                 </div>
             </el-dialog>
@@ -331,7 +373,7 @@ import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import {listMixin} from "@/mixins/list";
-import {exportFile, getStockDataByBoxCode, getStockDataByStockId, importFile, page} from "@/api/wms/stock/stock";
+import {exportFile, getStockDataByBoxCode, getStockDataByStockId, move, moveByBox, importFile, page} from "@/api/wms/stock/stock";
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js';
 import fileUpload from "@/components/nodes/fileUpload";
@@ -370,8 +412,9 @@ export default {
             form: {
                 params: {
                     skuIds: [],
-                    skuLot1: "",
                     locIdList: [],
+                    skuLot1: "190904",
+                    locCode: "",
                     stockStatusList: [],
                     zoneIdList: [],
                     boxCode: "",
@@ -520,8 +563,10 @@ export default {
                 loading: false,
                 gridData: [],
                 children: {
+                    actualQty: 0,
+                    actualQtyBak: 0,
                     min: 1,
-                    max: 10,
+                    max: 0,
                 },
                 isMoveByBox: false, //是否按箱移动，默认为false
                 childrenData: [],
@@ -646,7 +691,6 @@ export default {
             this.getStockDataByMove(this.dialog.isMoveByBox)
         },
         getStockDataByMove(isMoveByBox) {
-            console.log(isMoveByBox);
             let rows = this.$refs.table.selection;
             if (rows.length === 0) {
                 this.$message.warning("请选择一条记录进行移动")
@@ -681,6 +725,7 @@ export default {
                 await getStockDataByStockId(rows[0].stockId).then((res) => {
                     this.dialog.gridData.push(res.data.data);
                 })
+                this.dialog.children.actualQty = this.dialog.gridData[0].stockEnable;
             }
         },
         // ==========================已下是 dialog 中的方法=================================
@@ -720,52 +765,142 @@ export default {
             }
         },
         rowAdd() {
-            let dialog = this.dialog;
-            let id = dialog.childrenData.length + 1;
-            if (dialog.serials.length === 0) {
-                dialog.children.min = 0;
-                dialog.children.max = dialog.gridData[0].stockEnable;
+            if (this.dialog.isMoveByBox ) {
+                if(this.dialog.childrenData.length !== 0){
+                    return;
+                }
+                this.dialog.childrenData.push({id: 1, targetBoxCode: '', targetLocId: [], targetLpnCode: ''});
             } else {
-                this.min = 1;
-                // this.max = 1;
-            }
-            if (dialog.serials.length > 0 && id > dialog.serials.length) {
-                this.$message.warning(`转移数量不能超过序列号的数量！`);
-                return;
-            }
-            if (dialog.serials.length > 0 && id > dialog.gridData[0].stockEnable) {
-                this.$message.warning(`转移数量不能超过可用数量！`);
-                return;
-            }
-            let temp = dialog.childrenData.filter(x => x.qty === 0);
-            if (temp.length > 0) {
-                this.$message.warning(`请先编辑第${temp[0].id}行的数据！`);
-                return;
-            }
-            this.qtyChange();
-            if (dialog.isMoveByBox) {
-                dialog.childrenData.push({id: id, qty: 0, locId: ''});
-            } else {
-                dialog.childrenData.push({id: id, qty: 80, serial: [], locId: ''});
+                let id = this.dialog.childrenData.length + 1;
+                if (this.dialog.serials.length === 0) {
+                    this.dialog.children.min = 0;
+                    this.dialog.children.max = this.dialog.gridData[0].stockEnable;
+                } else {
+                    this.dialog.children.min = 1;
+                    this.dialog.children.max = 1;
+                }
+                if (this.dialog.serials.length > 0 && id > this.dialog.serials.length) {
+                    this.$message.warning(`转移数量不能超过序列号的数量！`);
+                    return;
+                }
+                if (this.dialog.serials.length > 0 && id > this.dialog.gridData[0].stockEnable) {
+                    this.$message.warning(`转移数量不能超过可用数量！`);
+                    return;
+                }
+                let temp = this.dialog.childrenData.filter(x => x.qty === 0);
+                if (temp.length > 0) {
+                    this.$message.warning(`请先编辑第${temp[0].id}行的数据！`);
+                    return;
+                }
+                this.qtyChange();
+                this.dialog.childrenData.push({id: id, qty: this.dialog.children.actualQty, serials: [], locId: ''});
             }
         },
         dialogHandleRemove(index) {
             this.dialog.childrenData.splice(index, 1);
-            this.dialog.childrenDataforEach((x, index) => {
+            this.dialog.childrenData.forEach((x, index) => {
                 x.id = index + 1;
             });
+            this.qtyChange();
         },
         onClose() {
-            console.log("dialog关闭");
             this.dialog.showDialog = false;
             this.dialog.gridData = [];
+            this.dialog.children = {
+                actualQty: 0,
+                actualQtyBak: 0,
+                min: 1,
+                max: 0,
+            };
             this.dialog.childrenData = [];
         },
-        qtyChange() {
-
+        qtyChange(row) {
+            let temp = this.dialog.childrenData.map(function (x) {
+                return parseFloat(x.qty);
+            });
+            if (this.dialog.children.actualQtyBak === 0) {
+                this.dialog.children.actualQtyBak = this.dialog.children.actualQty;
+            }
+            let sum = temp.reduce((n, m) => n + m, 0);
+            if (sum > this.dialog.children.actualQtyBak) {
+                this.$message.warning("转移数量超出可用数量！");
+                setTimeout(() => {
+                    let temp = this.dialog.childrenData.filter(x => x.id !== row.id).map(function (x) {
+                        return parseFloat(x.qty);
+                    });
+                    let sum = temp.reduce((n, m) => n + m, 0);
+                    row['qty'] = this.dialog.children.actualQtyBak - sum;
+                    this.actualQty = 0;
+                }, 1);
+            } else {
+                if (this.dialog.children.actualQtyBak !== 0) {
+                    this.dialog.children.actualQty = this.dialog.children.actualQtyBak;
+                }
+                if (sum === 0) {
+                    this.dialog.children.actualQty = this.dialog.children.actualQtyBak;
+                } else {
+                    this.dialog.children.actualQty -= sum;
+                }
+            }
         },
         onSubmit() {
+            let childrenData = this.dialog.childrenData;
+            if(func.isEmpty(childrenData)){
+                this.$message.warning("请填写移动信息");
+                return;
+            }
+            if (this.dialog.isMoveByBox){
+                if (func.isEmpty(childrenData[0].targetBoxCode)){
+                    this.$message.warning("请填写目标箱码");
+                    return;
+                }
+                if (func.isEmpty(childrenData[0].targetLocId)){
+                    this.$message.warning("请选择目标库位编码");
+                    return;
+                }
+                if (func.isEmpty(childrenData[0].targetBoxCode)){
+                    this.$message.warning("请填写目标LPN");
+                    return;
+                }
+                let moveByBoxObj = {
+                    boxCodeList: [...new Set(this.dialog.gridData.map(item => item.boxCode))],
+                    targetBoxCode : this.dialog.childrenData[0].targetBoxCode,
+                    targetLocId : this.dialog.childrenData[0].targetLocId,
+                    targetLpnCode : this.dialog.childrenData[0].targetLpnCode,
+                }
+                moveByBox(moveByBoxObj).then((res)=>{
 
+                });
+            }else {
+                for (const i in childrenData) {
+                    if (childrenData[i].serials.length !== childrenData[i].qty) {
+                        this.$message.warning(`第${childrenData[i].id}行，转移数量不等于选中的序列号数量`);
+                        return;
+                    }
+                }
+                let serials = childrenData.map(item => item.serials);
+                if (serials.length > 1) {
+                    for (let i = 0; i < serials.length - 1; i++) {
+                        for (let j = i + 1; j < serials.length; j++) {
+                            let temp = serials[j];
+                            for (let k = 0; k < temp.length; k++) {
+                                if (serials[i].find(x => x === temp[k])) {
+                                    this.$message.error(`第${i + 1}行和第${j + 1}存在重复的序列号`);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                let moveObj = {
+                    stockId: this.dialog.gridData[0].stockId,
+                    stockMoveDataList: this.dialog.childrenData
+                }
+                move(moveObj).then((res)=>{
+
+                })
+            }
         },
     },
 };
@@ -782,10 +917,14 @@ export default {
 }
 
 /deep/ .maxDialog {
-    margin-right: 23px;
-    width: 87%;
-    margin-top: 14vh;
+    margin-right: 19px;
+    width: 87.5%;
+    margin-top: 14vh !important;
     height: 79%;
 }
 
+//:class="dialog.isFullScreen ? 'children_maxTable': 'children_minTable'"
+/deep/ .maxDialog .el-dialog__body {
+    max-height: 82% !important;
+}
 </style>

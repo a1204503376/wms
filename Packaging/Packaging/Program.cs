@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using Packaging.Settings;
 using Serilog;
 
 namespace Packaging
@@ -17,7 +16,7 @@ namespace Packaging
         public static extern bool SetForegroundWindow(IntPtr hWnd);
 
         [STAThread]
-        private static void Main()
+        private static void Main() 
         {
             Log.Logger = new LoggerConfiguration()
                     //设置最小日志级别
@@ -101,7 +100,7 @@ namespace Packaging
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            MessageBox.Show(e.ToString());
+            MessageBox.Show(e.ExceptionObject.ToString());
         }
 
 

@@ -276,7 +276,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		response.setWsuCode(detail.getUmCode());
 		Sku sku = skuDao.getById(detail.getSkuId());
 		if (response != null) {
-			response.setIsSn(false);
+			response.setIsSn(true);
 			if (Func.isNotEmpty(sku)) {
 				if (sku.getIsSn() == BigDecimal.ZERO.intValue()) {
 					response.setIsSn(false);

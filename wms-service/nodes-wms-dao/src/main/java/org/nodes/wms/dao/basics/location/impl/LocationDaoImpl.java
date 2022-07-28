@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.basics.location.LocationDao;
+import org.nodes.wms.dao.basics.location.constant.LocationConstant;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
 import org.nodes.wms.dao.basics.location.dto.output.LocationDetailResponse;
 import org.nodes.wms.dao.basics.location.dto.output.LocationExcelResponse;
@@ -152,15 +153,21 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	}
 
 	@Override
-	public void freezeOrUnfreezeLocByTask(Location location, String taskId) {
-		AssertUtil.notNull(location, "冻结解冻库位时库位不能为空");
+	public void freezeOrUnfreezeLocByTask(String taskId, Long locId, Integer locFlag) {
 		AssertUtil.notEmpty(taskId, "冻结解冻库位时任务编号不能为空");
 		UpdateWrapper<Location> updateWrapper = new UpdateWrapper<>();
-		updateWrapper.eq("loc_id", location.getLocId())
-			.set("loc_flag", location.getLocFlag())
-			.set("loc_flag_desc", taskId);
+		if (Func.isNotEmpty(locId) && Func.isNotEmpty(locFlag)) {
+			updateWrapper.eq("loc_id", locId)
+				.set("loc_flag", locFlag)
+				.set("loc_flag_desc", taskId);
+		} else {
+			updateWrapper.eq("loc_flag_desc", taskId)
+				.set("loc_flag", LocationConstant.LOC_FLAG_NORMAL)
+				.set("loc_flag_desc", null);
+		}
+
 		if (!super.update(updateWrapper)) {
-			throw new ServiceException("冻结库存失败");
+			throw new ServiceException("冻结或解冻库位失败");
 		}
 	}
 

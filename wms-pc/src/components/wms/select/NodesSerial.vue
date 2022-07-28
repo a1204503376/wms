@@ -2,7 +2,7 @@
     <el-select
         v-model="val"
         :multiple="true"
-        collapse-tags
+        :collapse-tags="collapse"
         filterable
         :placeholder="this.msg"
         :size="size"
@@ -34,7 +34,9 @@ export default {
         selectVal: [Array],
         // 组件大小，默认为mini, 支持 medium/small/mini
         size: {type: String, required: false, default: () => "mini"},
-        stockId: {String}
+        stockId: {String},
+        // 多选时是否将选中值按文字的形式展示
+        collapse: {type:Boolean, require: false, default: () => false}
     },
     data() {
         return {

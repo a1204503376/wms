@@ -10,7 +10,7 @@
         placeholder="请输入关键词"
         remote
         reserve-keyword
-        size="mini"
+        :size="size"
         value-key="code"
         @change="onChange">
         <el-option
@@ -36,6 +36,8 @@ export default {
         selectVal: [Array, String],
         // 单选多选切换，默认为false
         multiple: {type: Boolean, required: false, default: false},
+        // 组件大小，默认为mini, 支持 medium/small/mini
+        size: {type: String, required: false, default: () => "mini"},
     },
     data() {
         return {

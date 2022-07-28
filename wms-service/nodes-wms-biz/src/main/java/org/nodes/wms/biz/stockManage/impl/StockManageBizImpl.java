@@ -117,22 +117,19 @@ public class StockManageBizImpl implements StockManageBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void stockMoveByBox(StockMoveByBoxCodeRequest request) {
 		//根据前端传过来的LocCode
-		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getTargetLocCode());
+		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
 		if (Func.isEmpty(request.getLpnCode())) {
 			request.setLpnCode(targetLocation.getLocCode());
 		}
 		//根据传过来的多个箱码集合查询出多个库存
 		List<String> boxCodeList = request.getBoxCodeList().stream().filter(Func::isNotEmpty).collect(Collectors.toList());
 		List<Stock> stockList = stockQueryBiz.findStockMoveByBoxCode(boxCodeList);
-		stockList.forEach(stock -> {
-			Location location = locationBiz.findByLocId(stock.getLocId());
-			//判断查询出来的库存库位是否可以移动
-			if (stockBiz.judgeEnableOnLocation(location)) {
-				//多个箱码，移动到同一库位复制，判断库存库位最大载重，是否可以承受着多个箱子的重量
-				//移动
-				stockBiz.moveStock(stock, null, stock.getStockBalance(), stock.getBoxCode(), request.getLpnCode(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_BOX_PDA, null, null, null);
-			}
-		});
+		for (Stock stock : stockList) {
+			System.out.println("stock.getBoxCode()"+stock.getBoxCode());
+			//移动
+			stockBiz.moveStock(stock, null, stock.getStockBalance(), stock.getBoxCode(), request.getLpnCode(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_BOX_PDA, null, null, null);
+		}
+		;
 	}
 
 	@Override

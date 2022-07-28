@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
+import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.dao.stock.dto.input.*;
 import org.nodes.wms.dao.stock.dto.output.StockMoveResponse;
 import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
@@ -32,6 +33,8 @@ import java.util.List;
 public class StockManagerController {
 	private final StockBiz stockBiz;
 	private final StockQueryBiz stockQueryBiz;
+
+	private final StockManageBiz stockManageBiz;
 
 	@PostMapping("/page")
 	public R<IPage<StockPageResponse>> page(Query query, @RequestBody StockPageQuery stockPageQuery) {
@@ -88,5 +91,23 @@ public class StockManagerController {
 		List<Stock> stockList = stockQueryBiz.findStockMoveByBoxCode(stockMoveByBoxCodeRequest.getBoxCodeList());
 		List<StockMoveResponse> responseList = BeanUtil.copy(stockList, StockMoveResponse.class);
 		return R.data(responseList);
+	}
+
+	/**
+	 * 库存余额：按件移动
+	 */
+	@PostMapping("move")
+	public R<String> move(@Valid @RequestBody StockMoveRequest stockMoveRequest){
+//		return stockManageBiz.stockMove(stockMoveRequest);
+		return null;
+	}
+
+	/**
+	 * 库存余额：按箱移动
+	 */
+	@PostMapping("/moveByBoxCode")
+	public R<String> moveByBoxCode(@Valid @RequestBody StockMoveByBoxCodeRequest stockMoveByBoxCodeRequest){
+//		return stockManageBiz.stockMoveByBox(stockMoveByBoxCodeRequest);
+		return null;
 	}
 }

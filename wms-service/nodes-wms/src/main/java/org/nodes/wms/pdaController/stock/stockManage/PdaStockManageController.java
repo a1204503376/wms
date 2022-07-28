@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_PDA_API + "/stock/stockManage")
 public class PdaStockManageController {
-	private StockManageBiz stockManageBiz;
+	private final StockManageBiz stockManageBiz;
 
 	/**
 	 * PDA库存管理:标准移动-查询根据条件查询库存，判断库存是否唯一，并且是否序列号管理

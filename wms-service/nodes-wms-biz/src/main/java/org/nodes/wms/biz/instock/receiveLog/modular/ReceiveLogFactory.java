@@ -130,6 +130,9 @@ public class ReceiveLogFactory {
 	public ReceiveLog createReceiveLog(ReceiveByPcDetailRequest request, ReceiveHeader receiveHeader, ReceiveDetail receiveDetail) {
 		ReceiveLog receiveLog = new ReceiveLog();
 		Location location = locationBiz.findByLocId(request.getLocId());
+		if (Func.isEmpty(location)) {
+			throw new ServiceException("收货失败,没有查询到库位信息");
+		}
 		receiveLog.setReceiveId(receiveHeader.getReceiveId());
 		receiveLog.setReceiveNo(receiveHeader.getReceiveNo());
 		receiveLog.setAsnBillId(receiveHeader.getAsnBillId());
