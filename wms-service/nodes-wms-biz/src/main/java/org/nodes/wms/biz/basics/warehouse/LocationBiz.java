@@ -269,15 +269,14 @@ public interface LocationBiz {
 	/**
 	 * 根据任务冻结库位，并赋值locFlagDesc（locFlag：冻结40）
 	 *
-	 * @param location 冻结库位
+	 * @param locationId 冻结库位
 	 * @param taskId   必填
 	 */
-	void freezeLocByTask(Location location, String taskId);
+	void freezeLocByTask(Long locationId, String taskId);
 
 	/**
 	 * 根据任务解冻库位，并置空locFlagDesc（locFlag：解冻1）
-	 * @param location 库位
 	 * @param taskId 必填
 	 */
-	void unfreezeLocByTask(Location location, String taskId);
+	void unfreezeLocByTask(String taskId);
 }

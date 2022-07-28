@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 
 /**
  * 库存，库存中数量保存的是基础计量单位
+ *
+ * @author nodesc
  */
 @Data
 @TableName("wms_stock")

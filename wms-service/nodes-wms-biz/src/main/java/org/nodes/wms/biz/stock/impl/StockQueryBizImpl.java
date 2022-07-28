@@ -204,6 +204,12 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	}
 
 	@Override
+	public boolean isEmptyLocation(Long locationId) {
+		List<Stock> stocks = findStockByLocation(locationId);
+		return Func.isEmpty(stocks);
+	}
+
+	@Override
 	public List<Stock> findEnableStockByZoneType(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
 												 List<String> zoneTypeList, SkuLotBaseEntity skuLot) {
 		List<Zone> zoneList = zoneBiz.findByZoneType(zoneTypeList);
