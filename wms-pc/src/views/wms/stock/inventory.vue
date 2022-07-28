@@ -19,8 +19,7 @@ import fileDownload from "js-file-download";
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="库位" label-width="90px">
-                            <el-input v-model.trim="form.params.locCode" :clearable="true"
-                                      placeholder="请输入库位"></el-input>
+                            <nodes-location v-model="form.params.locIdList" :multiple="true"></nodes-location>
                         </el-form-item>
                     </el-col>
 
@@ -35,8 +34,7 @@ import fileDownload from "js-file-download";
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库区" label-width="90px">
-                            <el-input v-model.trim="form.params.zoneCode" :clearable="true"
-                                      placeholder="请输入库区"></el-input>
+                            <nodes-zone v-model="form.params.zoneIdList" :multiple="true"></nodes-zone>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -86,33 +84,13 @@ import fileDownload from "js-file-download";
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="产品标识" label-width="90px">
-                            <el-input v-model.trim="form.params.skuLot7" :clearable="true"
-                                      placeholder="请输入产品标识"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item label="CRCC" label-width="90px">
-                            <el-input v-model.trim="form.params.skuLot8" :clearable="true"
-                                      placeholder="请输入CRCC"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
                         <el-form-item label="库房" label-width="90px">
                             <nodes-warehouse v-model="form.params.whIdList" :multiple="true"></nodes-warehouse>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row>
                     <el-col :span="6">
                         <el-form-item label="货主" label-width="90px">
                             <nodes-owner v-model="form.params.woId"></nodes-owner>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item label="任务号" label-width="90px">
-                            <el-input v-model.trim="form.params.taskId" :clearable="true"
-                                      placeholder="请输入任务号"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -121,23 +99,28 @@ import fileDownload from "js-file-download";
                             </nodes-date-range>
                         </el-form-item>
                     </el-col>
+                </el-row>
+                <el-row>
                     <el-col :span="6">
                         <el-form-item label="出库时间" label-width="90px">
                             <nodes-date-range v-model="form.params.lastOutTimeDateRange" style="width: 200px">
                             </nodes-date-range>
                         </el-form-item>
                     </el-col>
-
                 </el-row>
             </template>
             <template v-slot:batchBtn>
                 <el-button icon="el-icon-plus" size="mini" type="primary" @click="showByBox">按箱显示
+                </el-button>
+                <el-button icon="el-icon-plus" size="mini" type="primary" @click="showByBox">按LPN显示
                 </el-button>
                 <el-button size="mini" type="primary" @click="moveByPiece">
                     按件移动
                 </el-button>
                 <el-button size="mini" type="primary" @click="moveByBox">
                     按箱移动
+                </el-button>
+                <el-button icon="el-icon-plus" size="mini" type="primary" @click="showByBox">按LPN显示
                 </el-button>
                 <el-button icon="el-icon-upload2" plain size="mini"
                            @click="onUpload">导入
@@ -360,11 +343,13 @@ import func from "@/util/func";
 import NodesLocation from "@/components/wms/select/NodesLocation";
 import "../../../../public/cdn/iconfont/avue/iconfont.css"
 import NodesSerial from "@/components/wms/select/NodesSerial";
+import NodesZone from "@/components/wms/select/NodesZone";
 
 
 export default {
     name: "customer",
     components: {
+        NodesZone,
         NodesSerial,
         NodesLocation,
         DialogColumn,
@@ -386,23 +371,20 @@ export default {
                 params: {
                     skuIds: [],
                     skuLot1: "",
-                    locCode: "",
+                    locIdList: [],
                     stockStatusList: [],
-                    zoneCode: "",
+                    zoneIdList: [],
                     boxCode: "",
                     lpnCode: "",
                     skuLot2: "",
                     skuLot4: "",
                     skuLot5: "",
                     skuLot6: "",
-                    skuLot7: "",
-                    skuLot8: "",
                     whIdList: [],
                     woId: "",
                     receiveTimeDateRange: "",
                     lastInTimeDateRange: "",
                     lastOutTimeDateRange: "",
-                    taskId: ""
                 }
             },
             deleteCustomerRequest: {
@@ -515,11 +497,6 @@ export default {
                     {
                         prop: "createUserName",
                         label: "收货人",
-                        sortable: "custom"
-                    },
-                    {
-                        prop: "taskId",
-                        label: "任务号",
                         sortable: "custom"
                     },
                     {
@@ -769,7 +746,7 @@ export default {
             if (dialog.isMoveByBox) {
                 dialog.childrenData.push({id: id, qty: 0, locId: ''});
             } else {
-                dialog.childrenData.push({id: id, qty: 0, serial: [], locId: ''});
+                dialog.childrenData.push({id: id, qty: 80, serial: [], locId: ''});
             }
         },
         dialogHandleRemove(index) {

@@ -53,8 +53,8 @@ public class StockDaoImpl
 	}
 
 	@Override
-	public List<Stock> getStockByBoxCodeExcludeLoc(String boxCode, List<Long> excludeLocIdList) {
-		if (Func.isEmpty(boxCode)) {
+	public List<Stock> getStockByBoxCodeExcludeLoc(List<String> boxCodes, List<Long> excludeLocIdList) {
+		if (Func.isEmpty(boxCodes)) {
 			throw new NullArgumentException("库存查询失败，按箱码查询库存时箱码为空");
 		}
 
@@ -62,7 +62,7 @@ public class StockDaoImpl
 		if (Func.isNotEmpty(excludeLocIdList)) {
 			queryWrapper.notIn(Stock::getLocId, excludeLocIdList);
 		}
-		queryWrapper.eq(Stock::getBoxCode, boxCode);
+		queryWrapper.in(Stock::getBoxCode, boxCodes);
 		return super.list(queryWrapper);
 	}
 

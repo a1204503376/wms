@@ -96,6 +96,14 @@ public interface StockQueryBiz {
 	List<Stock> findEnableStockByBoxCode(String boxCode);
 
 	/**
+	 * 根据箱码集合查询库存,排除出库暂存区
+	 *
+	 * @param boxCodes 箱码集合，必填
+	 * @return Stock集合
+	 */
+	List<Stock> findEnableStockByBoxCode(List<String> boxCodes);
+
+	/**
 	 * 根据箱码获取入库暂存区的库存
 	 *
 	 * @param whId    必填，库房id
