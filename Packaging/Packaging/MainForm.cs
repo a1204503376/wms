@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using DataAccess.SystemManager;
 using DevExpress.XtraBars;
 using DevExpress.XtraBars.Docking2010.Views.Tabbed;
 using DevExpress.XtraEditors;
 using Packaging.Settings;
-using Packaging.Utility;
 
 namespace Packaging
 {

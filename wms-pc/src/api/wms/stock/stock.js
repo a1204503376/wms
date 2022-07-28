@@ -53,7 +53,7 @@ export const getStockDataByStockId = (data) => {
 
 export const move = (data) => {
     return request({
-        url: '/api/wms/stock/import-data',
+        url: '/api/wms/stock/move',
         method: 'post',
         data: data
     })
@@ -61,7 +61,7 @@ export const move = (data) => {
 
 export const moveByBox = (data) => {
     return request({
-        url: '/api/wms/stock/import-data',
+        url: '/api/wms/stock/moveByBox',
         method: 'post',
         data: data
     })

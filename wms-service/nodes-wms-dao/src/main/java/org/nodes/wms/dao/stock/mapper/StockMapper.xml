@@ -3,35 +3,35 @@
 <mapper namespace="org.nodes.wms.dao.stock.mapper.StockMapper">
     <sql id="stock">
         select s.stock_id,
-        s.sku_code,
-        s.stock_status,
-        s.sku_lot1,
-        s.occupy_qty,
-        s.stock_qty-s.pick_qty-s.occupy_qty stock_enable,
-        s.stock_qty-s.pick_qty stock_balance,
-        s.wsu_code,
-        s.loc_code,
-        s.zone_code,
-        s.box_code,
-        s.lpn_code,
-        s.sku_lot2,
-        s.sku_lot3,
-        s.sku_lot4,
-        s.sku_lot5,
-        s.sku_lot6,
-        s.sku_lot7,
-        s.sku_lot8,
-        s.wh_code,
-        wo.owner_code,
-        wo.owner_name,
-        s.last_in_time,
-        s.last_out_time
+               s.sku_code,
+               s.stock_status,
+               s.sku_lot1,
+               s.occupy_qty,
+               s.stock_qty - s.pick_qty - s.occupy_qty stock_enable,
+               s.stock_qty - s.pick_qty                stock_balance,
+               s.wsu_code,
+               s.loc_code,
+               s.zone_code,
+               s.box_code,
+               s.lpn_code,
+               s.sku_lot2,
+               s.sku_lot3,
+               s.sku_lot4,
+               s.sku_lot5,
+               s.sku_lot6,
+               s.sku_lot7,
+               s.sku_lot8,
+               s.wh_code,
+               wo.owner_code,
+               wo.owner_name,
+               s.last_in_time,
+               s.last_out_time
         from wms_stock s
-        left join wms_owner wo on s.wo_id = wo.wo_id
-        left join wms_zone wz on s.zone_id = wz.zone_id
+                 left join wms_owner wo on s.wo_id = wo.wo_id
+                 left join wms_zone wz on s.zone_id = wz.zone_id
+    </sql>
+    <sql id="stock1">
         <where>
-            AND s.is_deleted ='0'
-
             <if test="query.skuIds != null and query.skuIds.size()>0">
                 AND s.sku_id in
                 <foreach collection="query.skuIds" item="item" open="(" close=")" separator=",">
@@ -105,9 +105,7 @@
             <if test="query.lastOutTimeEnd!=null">
                 AND s.last_Out_Time &lt;= #{query.lastOutTimeEnd}
             </if>
-            <if test="query.isShowByBox !=null and 'true'.toString() == query.isShowByBox.toString()">
-                AND s.box_code != ''
-            </if>
+
         </where>
     </sql>
     <select id="selectStockQtyByLocIdList" resultType="java.util.HashMap">
@@ -166,6 +164,8 @@
     </select>
     <select id="getPage" resultType="org.nodes.wms.dao.stock.dto.output.StockPageResponse">
         <include refid="stock"/>
+        <include refid="stock1"/>
+        AND s.is_deleted ='0'
         <if test="page.orders == null or page.orders.size() == 0">
             ORDER BY s.create_time
         </if>
@@ -173,5 +173,11 @@
     <select id="getStockResponseByQuery" resultType="org.nodes.wms.dao.stock.dto.output.StockPageResponse">
         <include refid="stock"/>
     </select>
-
+    <select id="getStockResponseByBox" resultType="org.nodes.wms.dao.stock.dto.output.StockPageResponse">
+        <include refid="stock"/>
+        where s.box_code in
+        (SELECT distinct box_code from wms_stock s<include refid="stock1"/>)
+        AND s.is_deleted ='0'
+        order by s.box_code
+    </select>
 </mapper>

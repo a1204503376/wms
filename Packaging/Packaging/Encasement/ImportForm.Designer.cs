@@ -173,7 +173,7 @@
             this.ClientSize = new System.Drawing.Size(951, 456);
             this.Controls.Add(this.layoutControl1);
             this.Name = "ImportForm";
-            this.Text = "ImportForm";
+            this.Text = "导入自动标识系统信息";
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
