@@ -19,8 +19,7 @@ import fileDownload from "js-file-download";
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="库位" label-width="90px">
-                            <el-input placeholder="请输入库位" v-model.trim="form.params.locCode"
-                                      :clearable="true"></el-input>
+                            <nodes-location v-model="form.params.locIdList" :multiple="true"></nodes-location>
                         </el-form-item>
                     </el-col>
 
@@ -35,7 +34,7 @@ import fileDownload from "js-file-download";
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库区" label-width="90px">
-                            <el-input placeholder="请输入库区" v-model.trim="form.params.zoneCode"
+                            <el-input placeholder="请输入库区" v-model.trim="form.params.zoneIdList"
                                       :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
@@ -86,33 +85,13 @@ import fileDownload from "js-file-download";
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="产品标识" label-width="90px">
-                            <el-input placeholder="请输入产品标识" v-model.trim="form.params.skuLot7"
-                                      :clearable="true"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item label="CRCC" label-width="90px">
-                            <el-input placeholder="请输入CRCC" v-model.trim="form.params.skuLot8"
-                                      :clearable="true"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
                         <el-form-item label="库房" label-width="90px">
                             <nodes-warehouse v-model="form.params.whIdList" :multiple="true"></nodes-warehouse>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row>
                     <el-col :span="6">
                         <el-form-item label="货主" label-width="90px">
                             <nodes-owner v-model="form.params.woId"></nodes-owner>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item label="任务号" label-width="90px">
-                            <el-input placeholder="请输入任务号" v-model.trim="form.params.taskId"
-                                      :clearable="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -121,6 +100,8 @@ import fileDownload from "js-file-download";
                             </nodes-date-range>
                         </el-form-item>
                     </el-col>
+                </el-row>
+                <el-row>
                     <el-col :span="6">
                         <el-form-item label="出库时间" label-width="90px">
                             <nodes-date-range v-model="form.params.lastOutTimeDateRange" style="width: 200px">
@@ -268,23 +249,20 @@ export default {
                 params: {
                     skuIds: [],
                     skuLot1: "",
-                    locCode: "",
+                    locIdLiSt: [],
                     stockStatusList: [],
-                    zoneCode: "",
+                    zoneIdList: [],
                     boxCode: "",
                     lpnCode: "",
                     skuLot2: "",
                     skuLot4: "",
                     skuLot5: "",
                     skuLot6: "",
-                    skuLot7: "",
-                    skuLot8: "",
                     whIdList: [],
                     woId: "",
                     receiveTimeDateRange: "",
                     lastInTimeDateRange: "",
                     lastOutTimeDateRange: "",
-                    taskId: "",
                     isShowByBox: true
                 }
             },

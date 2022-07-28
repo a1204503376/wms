@@ -39,11 +39,11 @@ public interface StockDao {
 	/**
 	 * 获取所有库存数据，含冻结的库存。如果出库暂存区为空则表示查询的库存数据包含出库暂存区的
 	 *
-	 * @param boxCode
+	 * @param boxCodes
 	 * @param excludeLocIdList
 	 * @return
 	 */
-	List<Stock> getStockByBoxCodeExcludeLoc(String boxCode, List<Long> excludeLocIdList);
+	List<Stock> getStockByBoxCodeExcludeLoc(List<String> boxCodes, List<Long> excludeLocIdList);
 
 	/**
 	 * 根据boxCode获取指定库存

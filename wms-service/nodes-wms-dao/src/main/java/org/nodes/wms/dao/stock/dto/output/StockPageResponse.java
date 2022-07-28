@@ -177,12 +177,6 @@ public class StockPageResponse implements Serializable {
 	@ExcelProperty({"库存信息", "货主名称"})
 	private String ownerName;
 	/**
-	 * 任务号
-	 */
-	@ColumnWidth(15)
-	@ExcelProperty({"库存信息", "任务号"})
-	private String taskId;
-	/**
 	 * 最近入库时间(库存数量增加时更新)
 	 */
 	@ColumnWidth(15)

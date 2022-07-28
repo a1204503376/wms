@@ -23,18 +23,17 @@ public class StockPageQuery implements Serializable {
 	 */
 	private String skuLot1;
 	/**
-	 * 库位编码
+	 * 库位id集合
 	 */
-	private String locCode;
+	private List<Long> locIdList;
 	/**
 	 * 库存状态
 	 */
 	private List<Integer> stockStatusList;
 	/**
-	 * /**
-	 * 库区编码
+	 * 库区id
 	 */
-	private String zoneCode;
+	private List<Long> zoneIdList;
 	/**
 	 * 箱号
 	 */
@@ -68,15 +67,7 @@ public class StockPageQuery implements Serializable {
 	 */
 	private String skuLot6;
 	/**
-	 * 产品标识代码
-	 */
-	private String skuLot7;
-	/**
-	 * CRCC
-	 */
-	private String skuLot8;
-	/**
-	 * 库房编码
+	 * 库房id
 	 */
 	private List<Long> whIdList;
 	/**
@@ -100,10 +91,6 @@ public class StockPageQuery implements Serializable {
 	 * 最近出库时间结束
 	 */
 	private LocalDateTime lastOutTimeEnd;
-	/**
-	 * 任务号
-	 */
-	private String taskId;
 	/**
 	 * 是否按箱显示
 	 */
