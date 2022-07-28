@@ -290,7 +290,13 @@ public class StockBizImpl implements StockBiz {
 		StockUtil.assertPick(sourceStock, qty, "库存移动失败");
 		if (!targetLocation.enableStock()) {
 			throw new ServiceException(
-				String.format("库存移动失败，目标库位[%s]不能上架库存", targetLocation.getLocCode()));
+				String.format("库存移动失败，目标库位[%s]不能上架库存", targetLocation.getLocCode())
+			);
+		}
+		if (StockStatusEnum.SYSTEM_FREEZE.equals(sourceStock.getStockStatus())) {
+			throw new ServiceException(
+				String.format("库存移动失败,原库存[%d]被系统冻结,不能移动", sourceStock.getStockId())
+			);
 		}
 
 		Stock tempStock = new Stock();
@@ -375,7 +381,7 @@ public class StockBizImpl implements StockBiz {
 		stockDao.updateStock(stockIds, StockStatusEnum.FREEZE);
 		List<Stock> stocks = stockDao.getStockById(stockIds);
 		for (Stock stock : stocks) {
-			createAndSaveStockLog(StockLogTypeEnum.STOCK_FREEZE, stock, "按stockid冻结");
+			createAndSaveStockLog(StockLogTypeEnum.STOCK_FREEZE, stock, "按stock id冻结");
 		}
 	}
 
@@ -388,7 +394,7 @@ public class StockBizImpl implements StockBiz {
 		stockDao.updateStock(stockIds, StockStatusEnum.NORMAL);
 
 		for (Stock stock : stocks) {
-			createAndSaveStockLog(StockLogTypeEnum.STOCK_UNFREEZE, stock, "按stockid解冻");
+			createAndSaveStockLog(StockLogTypeEnum.STOCK_UNFREEZE, stock, "按stock id解冻");
 		}
 	}
 

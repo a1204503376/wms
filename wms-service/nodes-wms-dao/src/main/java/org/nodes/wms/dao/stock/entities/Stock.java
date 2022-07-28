@@ -33,7 +33,7 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	private Long stockId;
 
 	/**
-	 * 库存状态
+	 * 库存状态, 系统冻结的库存不能移动
 	 */
 	private StockStatusEnum stockStatus;
 	/**

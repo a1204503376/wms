@@ -61,4 +61,6 @@ public interface TaskBiz {
 	 * @param taskDetail 包含任务明细ID，任务状态
 	 */
 	Boolean updateTaskState(TaskDetail taskDetail);
+
+
 }

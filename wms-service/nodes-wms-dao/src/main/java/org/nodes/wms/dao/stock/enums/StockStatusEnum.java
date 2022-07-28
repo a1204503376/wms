@@ -16,9 +16,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public enum StockStatusEnum {
 	NORMAL(0, "正常"),
-	FREEZE(1, "冻结");
+	FREEZE(1, "冻结"),
+	SYSTEM_FREEZE(-1, "系统冻结");
 
-	@EnumValue
+    @EnumValue
 	private final Integer code;
 	@JsonValue
 	private final String desc;
