@@ -158,8 +158,9 @@ public interface LocationDao {
 	/**
 	 * 冻结或解冻 库位信息
 	 *
-	 * @param location 库位信息
-	 * @param taskId   任务id
+	 * @param taskId  任务id
+	 * @param locId   库位id 可为空 为空则为解冻
+	 * @param locFlag 库位状态 可为空 为空则为解冻
 	 */
-	void freezeOrUnfreezeLocByTask(Location location, String taskId);
+	void freezeOrUnfreezeLocByTask(String taskId, Long locId, Integer locFlag);
 }

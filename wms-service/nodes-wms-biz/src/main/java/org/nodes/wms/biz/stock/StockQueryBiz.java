@@ -49,6 +49,14 @@ public interface StockQueryBiz {
 	List<Stock> findStockByLocation(Long locationId);
 
 	/**
+	 * 判断库位是否有库存
+	 *
+	 * @param locationId 库位id
+	 * @return true表示空库位（无库存）
+	 */
+	boolean isEmptyLocation(Long locationId);
+
+	/**
 	 * 查找可用库存,排除出库暂存区
 	 *
 	 * @param whId            必填，库房id
