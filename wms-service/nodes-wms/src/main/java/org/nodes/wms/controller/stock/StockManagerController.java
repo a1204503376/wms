@@ -9,10 +9,12 @@ import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.stock.dto.input.*;
 import org.nodes.wms.dao.stock.dto.output.StockMoveResponse;
 import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
+import org.springblade.core.tool.utils.BeanUtil;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,6 +57,7 @@ public class StockManagerController {
 
 	/**
 	 * 库存余额：库存导入
+	 *
 	 * @param file
 	 * @return
 	 */
@@ -72,7 +75,7 @@ public class StockManagerController {
 	 */
 	@PostMapping("/getStockDataByStockId")
 	public R<StockMoveResponse> getStockDataByStockId(
-		@Valid @RequestBody StockIdRequest stockIdRequest){
+		@Valid @RequestBody StockIdRequest stockIdRequest) {
 		return R.data(stockQueryBiz.findStockMoveBySkuId(stockIdRequest.getStockId()));
 	}
 
@@ -81,7 +84,9 @@ public class StockManagerController {
 	 */
 	@PostMapping("/getStockDataByBoxCode")
 	public R<List<StockMoveResponse>> getStockDataToMove(
-						@Valid @RequestBody StockMoveByBoxCodeRequest stockMoveByBoxCodeRequest){
-		return R.data(stockQueryBiz.findStockMoveByBoxCode(stockMoveByBoxCodeRequest.getBoxCodeList()));
+		@Valid @RequestBody StockMoveByBoxCodeRequest stockMoveByBoxCodeRequest) {
+		List<Stock> stockList = stockQueryBiz.findStockMoveByBoxCode(stockMoveByBoxCodeRequest.getBoxCodeList());
+		List<StockMoveResponse> responseList = BeanUtil.copy(stockList, StockMoveResponse.class);
+		return R.data(responseList);
 	}
 }
