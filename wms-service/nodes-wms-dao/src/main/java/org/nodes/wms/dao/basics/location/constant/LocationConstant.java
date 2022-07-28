@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.basics.location.constant;
 
+import org.bouncycastle.jcajce.provider.asymmetric.dsa.DSASigner.stdDSA;
+
 /**
  * 库位常量类
  **/
@@ -34,15 +36,31 @@ public class LocationConstant {
 	 * 库内的在途库存的库位
 	 */
 	public static final String LOC_INTRANSIT = "INTRANSIT";
+	/**
+	 * 正常
+	 */
+	public static final Integer LOC_FLAG_NORMAL = 1;
+	/**
+	 * 破损 不能上架库存到该库位
+	 */
+	public static final Integer LOC_FLAG_DAMAGED = 10;
+	/**
+	 * 冻结 可以上架库存，但库存状态为冻结
+	 */
+	public static final Integer LOC_FLAG_FORZEN = 20;
+	/**
+	 * 业务系统冻结, 不能上架库存到该库位
+	 */
+	public static final Integer LOC_FLAG_SYSTEM_FORZEN = 40;
 
-	public static String[] getLocTypes(){
-		return new String[]{
-			LOC_STAGE,
-			LOC_QC,
-			LOC_PICKTO,
-			LOC_PACK,
-			LOC_UNKNOWN,
-			LOC_INTRANSIT
+	public static String[] getLocTypes() {
+		return new String[] {
+				LOC_STAGE,
+				LOC_QC,
+				LOC_PICKTO,
+				LOC_PACK,
+				LOC_UNKNOWN,
+				LOC_INTRANSIT
 		};
 	}
 }

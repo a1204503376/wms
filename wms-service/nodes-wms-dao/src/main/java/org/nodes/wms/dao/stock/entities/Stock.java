@@ -1,4 +1,3 @@
-
 package org.nodes.wms.dao.stock.entities;
 
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -17,6 +16,8 @@ import java.time.LocalDateTime;
 
 /**
  * 库存，库存中数量保存的是基础计量单位
+ *
+ * @author nodesc
  */
 @Data
 @TableName("wms_stock")
@@ -72,7 +73,7 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	 */
 	private BigDecimal pickQty;
 	/**
-	 * 占用数量，不再使用
+	 * 占用数量
 	 */
 	private BigDecimal occupyQty;
 	/**

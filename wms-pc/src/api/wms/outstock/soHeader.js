@@ -125,6 +125,24 @@ export const getSoBillDataByDistribution = (soBillId) => {
 }
 
 
+export const getSoPickPlanData = (soBillId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/getSoPickPlan',
+        method: 'post',
+        data: {
+            soBillId: soBillId
+        }
+    })
+}
+
+export const getSoDetailAndStock = (data) => {
+    return request({
+        url: '/api/wms/outstock/soBill/getSoDetailAndStock',
+        method: 'post',
+        data: data
+    })
+}
+
 export const getLineNoAndSkuSelectList = (soBillId) => {
     return request({
         url: '/api/wms/outstock/soBill/getLineNoAndSkuSelectList',
@@ -134,10 +152,78 @@ export const getLineNoAndSkuSelectList = (soBillId) => {
         }
     })
 }
-export const getSoDetailAndStock = (data) => {
+
+export const automaticAssign = (soBillId) => {
     return request({
-        url: '/api/wms/outstock/soBill/getSoDetailAndStock',
+        url: '/api/wms/outstock/soBill/automaticAssign',
+        method: 'post',
+        data: {
+            soBillId: soBillId
+        }
+    })
+}
+
+export const cancelAll = (soBillId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/cancelAll',
+        method: 'post',
+        data: {
+            soBillId: soBillId
+        }
+    })
+}
+
+export const issued = (soBillId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/issued',
+        method: 'post',
+        data: {
+            soBillId: soBillId
+        }
+    })
+}
+
+export const getEnableStockBySkuId = (skuId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/getEnableStockBySkuId',
+        method: 'post',
+        data: {
+            skuId: skuId
+        }
+    })
+}
+export const getSerialSelectResponseList = (stockId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/getSerialSelectResponseList',
+        method: 'get',
+        params: {
+            stockId
+        }
+    })
+}
+
+export const pickByPc = (data) => {
+    return request({
+        url: '/api/wms/outstock/soBill/pickByPc',
         method: 'post',
         data: data
     })
 }
+
+export const saveAssign = (soBillId, soDetailId, stockIdAndSoPickPlanQtyList) => {
+    let soBillDistributedRequest = {
+        soBillId: soBillId,
+        soDetailId: soDetailId,
+        stockIdAndSoPickPlanQtyList: stockIdAndSoPickPlanQtyList
+    }
+    return request({
+        url: '/api/wms/outstock/soBill/saveAssign',
+        method: 'post',
+        data: soBillDistributedRequest
+    })
+}
+
+
+
+
+

@@ -14,25 +14,10 @@ import java.util.List;
 
 /**
  * 库存业务接口
- **/
+ *
+ * @author nodesc
+ */
 public interface StockBiz {
-
-	/**
-	 * 根据库位冻结
-	 *
-	 * @param type       库存移动类型
-	 * @param locId      库位id
-	 * @param occupyFlag 库位占用标记
-	 */
-	void freezeByLoc(StockLogTypeEnum type, Long locId, String occupyFlag);
-
-	/**
-	 * 根据库位解冻
-	 *
-	 * @param type  库存移动类型
-	 * @param locId 库位id
-	 */
-	void unfreezeByLoc(StockLogTypeEnum type, Long locId);
 
 	/**
 	 * 收货入库
@@ -54,7 +39,7 @@ public interface StockBiz {
 	Stock outStockByCancelReceive(StockLogTypeEnum type, ReceiveLog receiveLog, Stock stock);
 
 	/**
-	 * 库存移动
+	 * 库存移动,可能会发生库存合并
 	 *
 	 * @param sourceStock    原库存,必填
 	 * @param serialNoList   移动的序列号，可能为空
@@ -71,7 +56,7 @@ public interface StockBiz {
 					Long billId, String billNo, String lineNo);
 
 	/**
-	 * 库存移动
+	 * 库存移动,可能会发生库存合并
 	 *
 	 * @param sourceStock    原库存,必填
 	 * @param serialNoList   移动的序列号，可能为空
@@ -91,7 +76,7 @@ public interface StockBiz {
 					Long billId, String billNo, String lineNo);
 
 	/**
-	 * 整箱移动
+	 * 整箱移动,可能会发生库存合并
 	 *
 	 * @param boxCode        需要移动的箱码，必填
 	 * @param targetBoxCode  目标箱码，必填
@@ -108,7 +93,7 @@ public interface StockBiz {
 								   Long billId, String billNo, String lineNo);
 
 	/**
-	 * 整托移动
+	 * 整托移动,可能会发生库存合并
 	 *
 	 * @param lpnCode        需要移动的托盘号，必填
 	 * @param targetLpnCode  目标托盘号，必填
@@ -123,9 +108,65 @@ public interface StockBiz {
 								   Long billId, String billNo, String lineNo);
 
 	/**
-	 * 判断该库位是否有库存或被冻结
+	 * 冻结
 	 *
-	 * @param location
+	 * @param stockIds 必填
+	 */
+	void freezeStock(List<Long> stockIds);
+
+	/**
+	 * 解冻
+	 *
+	 * @param stockIds 必填
+	 */
+	void unfreezeStock(List<Long> stockIds);
+
+	/**
+	 * 按库位冻结
+	 *
+	 * @param locIds 必填
+	 */
+	void freezeStockByLoc(List<Long> locIds);
+
+	/**
+	 * 按库位解冻
+	 *
+	 * @param locIds 必填
+	 */
+	void unfreezeStockByLoc(List<Long> locIds);
+
+	/**
+	 * 按箱冻结
+	 *
+	 * @param boxCodes 必填
+	 */
+	void freezeStockByBoxCode(List<String> boxCodes);
+
+	/**
+	 * 按箱解冻
+	 *
+	 * @param boxCodes 必填
+	 */
+	void unFreezeStockByBoxCode(List<String> boxCodes);
+
+	/**
+	 * 按lpn冻结
+	 *
+	 * @param lpnCodes 必填
+	 */
+	void freezeStockByLpnCode(List<String> lpnCodes);
+
+	/**
+	 * 按lpn解冻
+	 *
+	 * @param lpnCodes 必填
+	 */
+	void unfreezeStockByLpnCode(List<String> lpnCodes);
+
+	/**
+	 * 天宜定制：判断该库位是否有库存或被冻结
+	 *
+	 * @param location 库位
 	 * @return true：可用
 	 */
 	boolean judgeEnableOnLocation(Location location);
@@ -134,6 +175,7 @@ public interface StockBiz {
 	 * 导入库存
 	 *
 	 * @param importDataList 导入的数据集合
+	 * @return true:正常执行
 	 */
 	boolean importStockByExcel(List<StockImportRequest> importDataList);
 

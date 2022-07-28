@@ -23,4 +23,8 @@ public class StockMoveByBoxCodeRequest implements Serializable {
 	 * 箱码
 	 */
 	private List<String> boxCodeList;
+	/**
+	 * 库房ID
+	 */
+	private Long whId;
 }

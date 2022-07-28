@@ -6,16 +6,24 @@
 		</u-navbar>
 		<u--form>
 			<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuName"  disabled></u--input>
+				<u--input v-model="params.skuCode"  disabled></u--input>
 			</u-form-item>
-			<u-form-item label="余额" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.surplusQty" disabled></u--input>
+			<u-form-item label="可用" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.stockEnable" disabled></u--input>
+				<u--text slot="right" class="font-in-page" v-text="params.wsuCode"></u--text>
+			</u-form-item>
+			<u-form-item label="余额" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.stockBalance" disabled></u--input>
+				<u--text slot="right" class="font-in-page" v-text="params.wsuCode"></u--text>
+			</u-form-item>
+			<u-form-item label="LOC" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.locCode" disabled></u--input>
 			</u-form-item>
 			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.boxCode" disabled></u--input>
 			</u-form-item>
-			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.locCode" disabled></u--input>
+			<u-form-item label="LPN" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.lpnCode" disabled></u--input>
 			</u-form-item>
 			<u-form-item label="状态" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.stockStatus" disabled></u--input>

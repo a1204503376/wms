@@ -1,5 +1,6 @@
 package org.nodes.wms.dao.basics.zone.impl;
 
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.nodes.core.tool.utils.AssertUtil;
@@ -46,12 +47,16 @@ public class ZoneDaoImpl
 		return zone;
 	}
 
-    @Override
-    public List<Zone> getByZoneType(List<String> zoneTypeList) {
+	@Override
+	public List<Zone> getByZoneType(List<String> zoneTypeList) {
 		AssertUtil.notEmpty(zoneTypeList, "根据库区类型查找库区失败，因为库区类型集合为空");
+		LambdaQueryWrapper<Zone> queryWrapper = Wrappers.lambdaQuery(Zone.class);
+		queryWrapper.in(Zone::getZoneType, zoneTypeList);
+		return super.list(queryWrapper);
+	}
 
-        LambdaQueryWrapper<Zone> queryWrapper = Wrappers.lambdaQuery(Zone.class);
-        queryWrapper.in(Zone::getZoneType, zoneTypeList);
-        return super.list(queryWrapper);
-    }
+	@Override
+	public List<Long> getZoneIdListByName(List<String> zoneNameList) {
+		return super.baseMapper.selectZoneIdListByName(zoneNameList);
+	}
 }

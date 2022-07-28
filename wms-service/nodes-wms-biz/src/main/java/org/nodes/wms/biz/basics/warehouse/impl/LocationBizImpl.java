@@ -3,7 +3,6 @@ package org.nodes.wms.biz.basics.warehouse.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.base.entity.Dict;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
@@ -113,8 +112,7 @@ public class LocationBizImpl implements LocationBiz {
 			if (Func.isNotEmpty(location.getLocType())
 				&& location.getLocType().equals(LocTypeEnum.Virtual.key())
 				&& StringUtil.contains(locCode, '-')
-				&& ArrayUtils.contains(LocationConstant.getLocTypes(), StringUtil.subAfter(locCode, "-", true))
-			) {
+				&& ArrayUtils.contains(LocationConstant.getLocTypes(), StringUtil.subAfter(locCode, "-", true))) {
 				throw new ServiceException(String.format("库位[编码：%s]是系统生成虚拟库位不可删除", location.getLocCode()));
 			}
 		}
@@ -145,7 +143,6 @@ public class LocationBizImpl implements LocationBiz {
 		List<String> pickToLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_PICKTO);
 		return locationDao.findLocation(pickToLocCodeList);
 	}
-
 
 	@Override
 	public List<Location> getAllPackLocation() {
@@ -238,24 +235,11 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public Location findLocationByLocCode(Long whId, String locCode) {
-		AssertUtil.notNull(whId,"库房ID不能为空");
-		AssertUtil.notNull(locCode,"库房编码不能为空");
+		AssertUtil.notNull(whId, "库房ID不能为空");
+		AssertUtil.notNull(locCode, "库房编码不能为空");
 		Location location = locationDao.getLocationByLocCode(whId, locCode);
-		AssertUtil.notNull(location,"获取库位失败,请更换库位编码后重试");
+		AssertUtil.notNull(location, "获取库位失败,请更换库位编码后重试");
 		return location;
-	}
-
-	@Override
-	public boolean isFrozen(Location location) {
-		if (Func.isNull(location.getLocFlag())) {
-			return false;
-		}
-
-		if (location.getLocFlag() == 10 || location.getLocFlag() == 20) {
-			return true;
-		}
-
-		return Func.isNotEmpty(location.getOccupyFlag()) && !"0".equals(location.getOccupyFlag());
 	}
 
 	@Override
@@ -274,19 +258,6 @@ public class LocationBizImpl implements LocationBiz {
 		}
 
 		return "1".equals(location.getLocLotNoMix());
-	}
-
-	@Override
-	public void freezeByOccupyFlag(Long locId, String occupyFlag) {
-		if (Func.isEmpty(occupyFlag)) {
-			throw new NullArgumentException("库内库位冻结时冻结标识为空");
-		}
-		locationDao.updateOccupyFlag(locId, occupyFlag);
-	}
-
-	@Override
-	public void unfreezeByOccupyFlag(Long locId) {
-		locationDao.updateOccupyFlag(locId, null);
 	}
 
 	@Override
@@ -324,5 +295,15 @@ public class LocationBizImpl implements LocationBiz {
 	@Override
 	public List<Location> findLocationByZoneId(Long zoneId) {
 		return locationDao.getLocationByZoneId(zoneId);
+	}
+
+	@Override
+	public void unfreezeLocByTask(String taskId) {
+		locationDao.freezeOrUnfreezeLocByTask(taskId, null, null);
+	}
+
+	@Override
+	public void freezeLocByTask(Long locationId, String taskId) {
+		locationDao.freezeOrUnfreezeLocByTask(taskId, locationId, LocationConstant.LOC_FLAG_SYSTEM_FORZEN);
 	}
 }

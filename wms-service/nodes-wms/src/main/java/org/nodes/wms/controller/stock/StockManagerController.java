@@ -6,17 +6,21 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
-import org.nodes.wms.dao.stock.dto.input.StockImportRequest;
-import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
+import org.nodes.wms.biz.stockManage.StockManageBiz;
+import org.nodes.wms.dao.stock.dto.input.*;
+import org.nodes.wms.dao.stock.dto.output.StockMoveResponse;
 import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
+import org.springblade.core.tool.utils.BeanUtil;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +33,8 @@ import java.util.List;
 public class StockManagerController {
 	private final StockBiz stockBiz;
 	private final StockQueryBiz stockQueryBiz;
+
+	private final StockManageBiz stockManageBiz;
 
 	@PostMapping("/page")
 	public R<IPage<StockPageResponse>> page(Query query, @RequestBody StockPageQuery stockPageQuery) {
@@ -54,6 +60,7 @@ public class StockManagerController {
 
 	/**
 	 * 库存余额：库存导入
+	 *
 	 * @param file
 	 * @return
 	 */
@@ -66,5 +73,41 @@ public class StockManagerController {
 		return importFlag ? R.success("导入成功") : R.fail("导入失败");
 	}
 
+	/**
+	 * 库存余额：按件移动-根据库存id获取库存信息
+	 */
+	@PostMapping("/getStockDataByStockId")
+	public R<StockMoveResponse> getStockDataByStockId(
+		@Valid @RequestBody StockIdRequest stockIdRequest) {
+		return R.data(stockQueryBiz.findStockMoveBySkuId(stockIdRequest.getStockId()));
+	}
 
+	/**
+	 * 库存余额：按箱移动-根据箱码获取库存信息
+	 */
+	@PostMapping("/getStockDataByBoxCode")
+	public R<List<StockMoveResponse>> getStockDataToMove(
+		@Valid @RequestBody StockMoveByBoxCodeRequest stockMoveByBoxCodeRequest) {
+		List<Stock> stockList = stockQueryBiz.findStockMoveByBoxCode(stockMoveByBoxCodeRequest.getBoxCodeList());
+		List<StockMoveResponse> responseList = BeanUtil.copy(stockList, StockMoveResponse.class);
+		return R.data(responseList);
+	}
+
+	/**
+	 * 库存余额：按件移动
+	 */
+	@PostMapping("move")
+	public R<String> move(@Valid @RequestBody StockMoveRequest stockMoveRequest){
+//		return stockManageBiz.stockMove(stockMoveRequest);
+		return null;
+	}
+
+	/**
+	 * 库存余额：按箱移动
+	 */
+	@PostMapping("/moveByBoxCode")
+	public R<String> moveByBoxCode(@Valid @RequestBody StockMoveByBoxCodeRequest stockMoveByBoxCodeRequest){
+//		return stockManageBiz.stockMoveByBox(stockMoveByBoxCodeRequest);
+		return null;
+	}
 }

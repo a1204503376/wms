@@ -6,6 +6,10 @@ import org.nodes.wms.dao.task.dto.SyncTaskStateRequest;
 
 import java.util.List;
 
+/**
+ * 天宜定制，调度系统业务层
+ * @author T
+ */
 public interface SchedulingBiz {
 	/**
 	 * 查询可用的出库接驳区库位，并冻结
@@ -27,5 +31,5 @@ public interface SchedulingBiz {
 	 *
 	 * @param request 请求参数
 	 */
-	Boolean synchronizeTaskStatus(SyncTaskStateRequest request);
+	void synchronizeTaskStatus(SyncTaskStateRequest request);
 }

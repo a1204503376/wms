@@ -3,11 +3,15 @@ package org.nodes.wms.pdaController.picking.pickingByPcs;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
-import org.nodes.wms.biz.picking.pickingByPcs.PickingByPcsBiz;
-import org.nodes.wms.dao.picking.dto.input.FindAllPickingRequest;
-import org.nodes.wms.dao.picking.dto.input.PickingByBoxRequest;
-import org.nodes.wms.dao.picking.dto.output.FindAllPickingResponse;
-import org.nodes.wms.dao.picking.dto.output.PickingByBoxResponse;
+import org.nodes.wms.biz.outstock.pickingbypcs.PickingByPcsBiz;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.EsitSerialNumberRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindAllPickingRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindPickingBySoBillIdRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.PickingByBoxRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.EsitSerialNumberResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindPickingBySoBillIdResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.PickingByBoxResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
@@ -54,11 +58,24 @@ public class PdaPickingController {
 	 * PDA拣货：拣货详情查询
 	 *
 	 * @param request Pda根据发货单ID查询出库单明细-请求对象
+	 * @param query   分页参数
 	 * @return 拣货详情响应对象
 	 */
 	@PostMapping("/findPickingBySoBillId")
-	public R<IPage<FindAllPickingResponse>> findPickingBySoBillId(@RequestBody FindAllPickingRequest request) {
+	public R<IPage<FindPickingBySoBillIdResponse>> findPickingBySoBillId(@RequestBody FindPickingBySoBillIdRequest request, Query query) {
+		return R.data(pickingByPcsBiz.selectPickingBySoBillId(request, query));
+	}
+
+	/**
+	 * 判断当前物品是否是序列号管理
+	 *
+	 * @param request 判断当前物品是否是序列号管理请求对象
+	 * @return 是否是序列号管理
+	 */
+	@PostMapping("/findEsitSerialNumberBySkuCode")
+	public R<EsitSerialNumberResponse> findEsitSerialNumberBySkuCode(@RequestBody EsitSerialNumberRequest request) {
 		return null;
 	}
+
 
 }

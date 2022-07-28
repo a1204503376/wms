@@ -1,20 +1,23 @@
 <template>
 	<view>
 		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false" rightIcon="order"
-			@rightClick="gotoDetails" :bgColor="navigationBarBackgroundColor" title="按件拣货"
+			rightIconColor="#fff" @rightClick="gotoDetails" :bgColor="navigationBarBackgroundColor" title="按件拣货"
 			titleStyle="color:#ffffff;font-size:21px" style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u--form>
-			<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuCode" border="0" disabled></u--input>
+			<u-form-item label="物品" :required="true" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.skuCode"></u--input>
 			</u-form-item>
 			<u-form-item label="批次" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.skuLot1"></u--input>
 			</u-form-item>
+			<u-form-item label="箱码" :required="true" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.boxCode"></u--input>
+			</u-form-item>
 			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.locCode"></u--input>
 			</u-form-item>
-			<u-form-item label="数量" class="left-text-one-line" labelWidth="100">
+			<u-form-item label="数量" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.qty"></u--input>
 			</u-form-item>
 
@@ -45,32 +48,28 @@
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
 					skuCode: undefined,
-					skuName: undefined,
-					skuLot2: undefined,
-					surplusQty: undefined,
-					wsuCode: undefined,
 					skuLot1: undefined,
 					boxCode: undefined,
-					locCode: 'STAGE',
-					isSn: ''
+					locCode: undefined,
+					isSn: undefined,
+					qty: undefined,
+					billTypeCd: undefined,
+					soBillId: undefined,
+					soBillNo: undefined
 				},
-				receiveDetailId: '',
-				receiveId: '',
-				receiveDetailList: [],
-				locCode: '',
-				boxCode: ''
+				soBillId: ''
 			}
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
-			this.receiveDetailId = parse.receiveDetailId;
-			this.receiveId = parse.receiveId;
-			this.getDetailByDetailId();
+			this.soBillId = parse.soBillId;
+			this.params=parse;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
 		},
-		onShow() {
+		onShow: function(option) {
+			console.log(option)
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		onBackPress(event) {
@@ -148,7 +147,7 @@
 				uni.$u.func.navigateBackTo(1);
 			},
 			gotoDetails() {
-				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingDetails');
+				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingDetails',this.params);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

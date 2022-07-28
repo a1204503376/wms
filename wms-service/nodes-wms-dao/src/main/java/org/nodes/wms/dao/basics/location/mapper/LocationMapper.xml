@@ -167,7 +167,9 @@
             <if test="zoneType !=null and zoneType != ''">
                 and z.zone_type=#{zoneType}
             </if>
+            AND l.loc_status = 1
         </where>
+     ORDER BY l.put_order
     </select>
 
     <select id="getLocationByZoneType" resultType="org.nodes.wms.dao.basics.location.entities.Location">

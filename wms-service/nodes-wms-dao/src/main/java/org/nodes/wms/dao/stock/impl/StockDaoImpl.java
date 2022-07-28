@@ -35,6 +35,14 @@ public class StockDaoImpl
 	extends BaseServiceImpl<StockMapper, Stock> implements StockDao {
 
 	@Override
+	public List<Stock> getStockById(List<Long> stockIds) {
+		AssertUtil.notEmpty(stockIds, "库存查询失败，stockids is null");
+		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
+		queryWrapper.in(Stock::getStockId, stockIds);
+		return super.list(queryWrapper);
+	}
+
+	@Override
 	public Map<String, Object> getStockQtyByLocIdList(List<Long> locIdList) {
 		return super.baseMapper.selectStockQtyByLocIdList(locIdList);
 	}
@@ -45,8 +53,8 @@ public class StockDaoImpl
 	}
 
 	@Override
-	public List<Stock> getStockByBoxCodeExcludeLoc(String boxCode, List<Long> excludeLocIdList) {
-		if (Func.isEmpty(boxCode)) {
+	public List<Stock> getStockByBoxCodeExcludeLoc(List<String> boxCodes, List<Long> excludeLocIdList) {
+		if (Func.isEmpty(boxCodes)) {
 			throw new NullArgumentException("库存查询失败，按箱码查询库存时箱码为空");
 		}
 
@@ -54,7 +62,7 @@ public class StockDaoImpl
 		if (Func.isNotEmpty(excludeLocIdList)) {
 			queryWrapper.notIn(Stock::getLocId, excludeLocIdList);
 		}
-		queryWrapper.eq(Stock::getBoxCode, boxCode);
+		queryWrapper.in(Stock::getBoxCode, boxCodes);
 		return super.list(queryWrapper);
 	}
 
@@ -69,6 +77,20 @@ public class StockDaoImpl
 			queryWrapper.in(Stock::getLocId, locIdList);
 		}
 		queryWrapper.eq(Stock::getBoxCode, boxCode);
+		return super.list(queryWrapper);
+	}
+
+	@Override
+	public List<Stock> getStockByBoxCode(List<String> boxCodes, List<Long> locIdList) {
+		if (Func.isEmpty(boxCodes)) {
+			throw new NullArgumentException("库存查询失败，按箱码查询库存时箱码为空");
+		}
+
+		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
+		if (Func.isNotEmpty(locIdList)) {
+			queryWrapper.in(Stock::getLocId, locIdList);
+		}
+		queryWrapper.in(Stock::getBoxCode, boxCodes);
 		return super.list(queryWrapper);
 	}
 
@@ -97,6 +119,20 @@ public class StockDaoImpl
 			queryWrapper.in(Stock::getLocId, locIdList);
 		}
 		queryWrapper.eq(Stock::getLpnCode, lpnCode);
+		return super.list(queryWrapper);
+	}
+
+	@Override
+	public List<Stock> getStockByLpnCode(List<String> lpnCodes, List<Long> locIdList) {
+		if (Func.isEmpty(lpnCodes)) {
+			throw new NullArgumentException("库存查询失败，按LPN查询库存时LPN为空");
+		}
+
+		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
+		if (Func.isNotEmpty(locIdList)) {
+			queryWrapper.in(Stock::getLocId, locIdList);
+		}
+		queryWrapper.in(Stock::getLpnCode, lpnCodes);
 		return super.list(queryWrapper);
 	}
 
@@ -211,6 +247,20 @@ public class StockDaoImpl
 	}
 
 	@Override
+	public void updateStock(List<Long> stockIds, StockStatusEnum status) {
+		AssertUtil.notEmpty(stockIds, "update stock status error");
+
+		Stock stock = new Stock();
+		stock.setStockStatus(status);
+
+		UpdateWrapper<Stock> updateWrapper = Wrappers.update();
+		updateWrapper.lambda().in(Stock::getStockId, stockIds);
+		if (!super.update(stock, updateWrapper)) {
+			throw new ServiceException("库存保存失败,请再次重试");
+		}
+	}
+
+	@Override
 	public List<Stock> getStockByLocIdList(List<Long> locIdList) {
 		if (Func.isEmpty(locIdList)) {
 			throw new NullArgumentException("StockDaoImpl.getStockByLocIdList方法的参数为空");
@@ -222,6 +272,8 @@ public class StockDaoImpl
 
 	@Override
 	public Stock getStockById(Long stockId) {
+		AssertUtil.notNull(stockId, "库存查询失败，stockId不能为空");
+
 		return super.getById(stockId);
 	}
 

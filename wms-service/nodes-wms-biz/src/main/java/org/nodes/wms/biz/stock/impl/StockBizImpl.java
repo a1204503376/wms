@@ -1,12 +1,10 @@
 package org.nodes.wms.biz.stock.impl;
 
+import com.alibaba.csp.sentinel.util.AssertUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.tool.utils.BigDecimalUtil;
-import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
-import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
-import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receiveLog.modular.ReceiveLogFactory;
 import org.nodes.wms.biz.stock.StockBiz;
@@ -34,6 +32,7 @@ import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.entities.StockLog;
 import org.nodes.wms.dao.stock.enums.SerialStateEnum;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.BeanUtil;
@@ -51,15 +50,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author nodesc
+ */
 @Service
 @RequiredArgsConstructor
 public class StockBizImpl implements StockBiz {
 
 	private final StockDao stockDao;
-	private final ZoneBiz zoneBiz;
 	private final LocationBiz locationBiz;
-	private final SkuBiz skuBiz;
-	private final LpnTypeBiz lpnTypeBiz;
 	private final StockMergeStrategy stockMergeStrategy;
 	private final StockLogDao stockLogDao;
 	private final SerialLogDao serialLogDao;
@@ -69,37 +68,15 @@ public class StockBizImpl implements StockBiz {
 	private final LogBiz logBiz;
 	private final ReceiveLogFactory receiveLogFactory;
 
-	@Override
-	public void freezeByLoc(StockLogTypeEnum type, Long locId, String occupyFlag) {
-		if (Func.isEmpty(occupyFlag)) {
-			throw new NullArgumentException("冻结库位函数中的occupyFlag为空");
-		}
-
-		locationBiz.freezeByOccupyFlag(locId, occupyFlag);
-		createAndSaveStockLog(type, String.format("库内库位冻结,冻结标识:%s", occupyFlag));
-	}
-
-	@Override
-	public void unfreezeByLoc(StockLogTypeEnum type, Long locId) {
-		locationBiz.unfreezeByOccupyFlag(locId);
-		createAndSaveStockLog(type, "库内库位解冻");
-	}
-
-	private StockLog createAndSaveStockLog(StockLogTypeEnum type, String msg) {
-		StockLog stockLog = new StockLog();
-		stockLog.setLogType(type.getDesc());
-		stockLog.setMsg(msg);
-		stockLogDao.save(stockLog);
-		return stockLog;
-	}
-
-	// 库位是否被冻结，库位是否允许混放
+	/**
+	 * 库位是否被冻结，库位是否允许混放
+	 */
 	private <T> void canInStockByLocation(Location location, Long skuId, T skuLotObject) {
 		if (Func.isEmpty(location)) {
 			throw new ServiceException("新增库存失败,库位不存在");
 		}
 		// 库位是否冻结
-		if (locationBiz.isFrozen(location)) {
+		if (!location.enableStock()) {
 			throw new ServiceException("新增库存失败,库位被冻结");
 		}
 		// 库位是否允许混放物品
@@ -127,7 +104,9 @@ public class StockBizImpl implements StockBiz {
 		}
 	}
 
-	// 将sourceStock合并到targetStock
+	/**
+	 * 将sourceStock合并到targetStock
+	 */
 	private void mergeStock(Stock sourceStock, Stock targetStock) {
 		targetStock.setStockQty(targetStock.getStockQty().add(sourceStock.getStockQty()));
 		targetStock.setStayStockQty(targetStock.getStayStockQty().add(sourceStock.getStayStockQty()));
@@ -211,6 +190,7 @@ public class StockBizImpl implements StockBiz {
 		stockLog.setSourceBillNo(receiveLog.getReceiveNo());
 		stockLog.setLineNo(receiveLog.getLineNo());
 		stockLog.setCurrentStayStockQty(BigDecimal.ZERO);
+		stockLog.setMsg(msg);
 		if (BigDecimalUtil.gt(receiveLog.getQty(), BigDecimal.ZERO)) {
 			// 收货日志
 			stockLog.setCurrentStockQty(receiveLog.getQty());
@@ -306,7 +286,12 @@ public class StockBizImpl implements StockBiz {
 	public Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
 						   String targetBoxCode, String targetLpnCode, Location targetLocation,
 						   StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+		AssertUtil.notNull(targetLocation, "库存移动失败，目标库位为空");
 		StockUtil.assertPick(sourceStock, qty, "库存移动失败");
+		if (!targetLocation.enableStock()) {
+			throw new ServiceException(
+				String.format("库存移动失败，目标库位[%s]不能上架库存", targetLocation.getLocCode()));
+		}
 
 		Stock tempStock = new Stock();
 		BeanUtil.copy(sourceStock, tempStock);
@@ -335,8 +320,8 @@ public class StockBizImpl implements StockBiz {
 			lineNo, "库存移动下架");
 		// 更新序列号和库存的关联关系
 		if (Func.isNotEmpty(serialNoList)) {
-			SerialStateEnum serialStateEnum = locationBiz.isPickToLocation(targetLocation) ?
-				SerialStateEnum.OUT_STOCK : SerialStateEnum.IN_STOCK;
+			SerialStateEnum serialStateEnum = locationBiz.isPickToLocation(targetLocation) ? SerialStateEnum.OUT_STOCK
+				: SerialStateEnum.IN_STOCK;
 			updateSerialAndSaveLog(serialNoList, serialStateEnum, targetStock.getStockId(), targetStockLog);
 		}
 
@@ -374,6 +359,111 @@ public class StockBizImpl implements StockBiz {
 		return targetStockList;
 	}
 
+	private StockLog createAndSaveStockLog(StockLogTypeEnum type, Stock stock, String msg) {
+		StockLog stockLog = new StockLog();
+		Func.copy(stock, stockLog);
+		stockLog.setLogType(type.getDesc());
+		stockLog.setMsg(msg);
+		stockLogDao.save(stockLog);
+		return stockLog;
+	}
+
+	@Override
+	public void freezeStock(List<Long> stockIds) {
+		AssertUtil.assertNotEmpty(stockIds, "冻结库存失败，参数为空");
+
+		stockDao.updateStock(stockIds, StockStatusEnum.FREEZE);
+		List<Stock> stocks = stockDao.getStockById(stockIds);
+		for (Stock stock : stocks) {
+			createAndSaveStockLog(StockLogTypeEnum.STOCK_FREEZE, stock, "按stockid冻结");
+		}
+	}
+
+	@Override
+	public void unfreezeStock(List<Long> stockIds) {
+		AssertUtil.assertNotEmpty(stockIds, "解冻库存失败，参数为空");
+
+		List<Stock> stocks = stockDao.getStockById(stockIds);
+		AssertUtil.assertNotEmpty(stocks, "解冻库存失败,没有查询到可用库存");
+		stockDao.updateStock(stockIds, StockStatusEnum.NORMAL);
+
+		for (Stock stock : stocks) {
+			createAndSaveStockLog(StockLogTypeEnum.STOCK_UNFREEZE, stock, "按stockid解冻");
+		}
+	}
+
+	@Override
+	public void freezeStockByLoc(List<Long> locIds) {
+		AssertUtil.assertNotEmpty(locIds, "冻结库存失败，参数为空");
+		List<Stock> stocks = stockDao.getStockByLocIdList(locIds);
+		AssertUtil.assertNotEmpty(stocks, "冻结库存失败,没有查询到可用库存");
+		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
+		stockDao.updateStock(stockIds, StockStatusEnum.FREEZE);
+		for (Stock stock : stocks) {
+			createAndSaveStockLog(StockLogTypeEnum.STOCK_FREEZE, stock, "按库位冻结");
+		}
+	}
+
+	@Override
+	public void unfreezeStockByLoc(List<Long> locIds) {
+		AssertUtil.assertNotEmpty(locIds, "解冻库存失败，参数为空");
+		List<Stock> stocks = stockDao.getStockByLocIdList(locIds);
+		AssertUtil.assertNotEmpty(stocks, "解冻库存失败,没有查询到可用库存");
+		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
+		stockDao.updateStock(stockIds, StockStatusEnum.NORMAL);
+		for (Stock stock : stocks) {
+			createAndSaveStockLog(StockLogTypeEnum.STOCK_UNFREEZE, stock, "按库位解冻");
+		}
+	}
+
+	@Override
+	public void freezeStockByBoxCode(List<String> boxCodes) {
+		AssertUtil.assertNotEmpty(boxCodes, "冻结库存失败，参数为空");
+		List<Stock> stocks = stockDao.getStockByBoxCode(boxCodes, null);
+		AssertUtil.assertNotEmpty(stocks, "冻结库存失败,没有查询到可用库存");
+		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
+		stockDao.updateStock(stockIds, StockStatusEnum.FREEZE);
+		for (Stock stock : stocks) {
+			createAndSaveStockLog(StockLogTypeEnum.STOCK_FREEZE, stock, "按boxCode冻结");
+		}
+	}
+
+	@Override
+	public void unFreezeStockByBoxCode(List<String> boxCodes) {
+		AssertUtil.assertNotEmpty(boxCodes, "解冻库存失败，参数为空");
+		List<Stock> stocks = stockDao.getStockByBoxCode(boxCodes, null);
+		AssertUtil.assertNotEmpty(stocks, "解冻库存失败,没有查询到可用库存");
+		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
+		stockDao.updateStock(stockIds, StockStatusEnum.NORMAL);
+		for (Stock stock : stocks) {
+			createAndSaveStockLog(StockLogTypeEnum.STOCK_UNFREEZE, stock, "按boxCode解冻");
+		}
+	}
+
+	@Override
+	public void freezeStockByLpnCode(List<String> lpnCodes) {
+		AssertUtil.assertNotEmpty(lpnCodes, "冻结库存失败，参数为空");
+		List<Stock> stocks = stockDao.getStockByLpnCode(lpnCodes, null);
+		AssertUtil.assertNotEmpty(stocks, "冻结库存失败,没有查询到可用库存");
+		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
+		stockDao.updateStock(stockIds, StockStatusEnum.FREEZE);
+		for (Stock stock : stocks) {
+			createAndSaveStockLog(StockLogTypeEnum.STOCK_FREEZE, stock, "按lpnCode冻结");
+		}
+	}
+
+	@Override
+	public void unfreezeStockByLpnCode(List<String> lpnCodes) {
+		AssertUtil.assertNotEmpty(lpnCodes, "解冻库存失败，参数为空");
+		List<Stock> stocks = stockDao.getStockByLpnCode(lpnCodes, null);
+		AssertUtil.assertNotEmpty(stocks, "解冻库存失败,没有查询到可用库存");
+		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
+		stockDao.updateStock(stockIds, StockStatusEnum.NORMAL);
+		for (Stock stock : stocks) {
+			createAndSaveStockLog(StockLogTypeEnum.STOCK_UNFREEZE, stock, "按lpnCode解冻");
+		}
+	}
+
 	private StockLog createAndSaveStockLog(boolean isInStock, Stock stock, BigDecimal qty,
 										   StockLogTypeEnum type, Long billId, String billNo,
 										   String lineNo, String msg) {
@@ -383,6 +473,7 @@ public class StockBizImpl implements StockBiz {
 		stockLog.setSourceBillNo(billNo);
 		stockLog.setLogType(type.getDesc());
 		stockLog.setLineNo(lineNo);
+		stockLog.setMsg(msg);
 		if (isInStock) {
 			stockLog.setCurrentStockQty(qty);
 		} else {
@@ -407,7 +498,7 @@ public class StockBizImpl implements StockBiz {
 			&& BigDecimalUtil.gt(StockUtil.getStockBalance(stock), BigDecimal.ZERO)) {
 			return false;
 		}
-		return !locationBiz.isFrozen(location);
+		return location.enableStock();
 	}
 
 	@Override
@@ -416,9 +507,10 @@ public class StockBizImpl implements StockBiz {
 		for (StockPageResponse stockPageResponse : stockPageResponseList) {
 			String stockStatus = stockPageResponse.getStockStatus().getDesc();
 			stockPageResponse.setStockStatusDesc(stockStatus);
-			//设置库存可用量
-			stockPageResponse.setStockEnable(stockPageResponse.getStockQty().add(stockPageResponse.getPickQty().subtract(stockPageResponse.getOccupyQty())));
-			//设置库存余额
+			// 设置库存可用量
+			stockPageResponse.setStockEnable(stockPageResponse.getStockQty()
+				.add(stockPageResponse.getPickQty().subtract(stockPageResponse.getOccupyQty())));
+			// 设置库存余额
 			stockPageResponse.setStockBalance(stockPageResponse.getStockQty().subtract(stockPageResponse.getPickQty()));
 		}
 		ExcelUtil.export(response, "库存余额", "库存余额数据表", stockPageResponseList, StockPageResponse.class);
@@ -434,12 +526,12 @@ public class StockBizImpl implements StockBiz {
 		// 校验参数并生成清点记录
 		List<ReceiveLog> receiveLogList = receiveLogFactory.createReceiveLogListForImport(importDataList);
 		for (ReceiveLog receiveLog : receiveLogList) {
-			//调用入库方法
+			// 调用入库方法
 			inStock(StockLogTypeEnum.INSTOCK_BY_Import, receiveLog);
 		}
-		//保存清点记录
+		// 保存清点记录
 		receiveLogDao.saveBatch(receiveLogList);
-		//记录业务日志
+		// 记录业务日志
 		logBiz.auditLog(AuditLogType.INSTOCK, "导入库存" + receiveLogList.size() + "条");
 		return true;
 	}

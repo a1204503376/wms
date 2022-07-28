@@ -48,4 +48,12 @@ public interface ZoneBiz {
 	 * @return
 	 */
 	List<Zone> findByZoneType(List<String> zoneTypeList);
+
+	/**
+	 * 根据库区名称集合获取库区id集合
+	 *
+	 * @param zoneNameList 库区名称集合
+	 * @return 库区id集合
+	 */
+	List<Long> getZoneIdListByName(List<String> zoneNameList);
 }

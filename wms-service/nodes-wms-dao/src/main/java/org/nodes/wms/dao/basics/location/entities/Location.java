@@ -3,14 +3,21 @@ package org.nodes.wms.dao.basics.location.entities;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import lombok.Data;
+
+import org.nodes.wms.dao.basics.location.constant.LocationConstant;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.tenant.mp.TenantEntity;
+import org.springblade.core.tool.utils.Func;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
  * 库位管理 实体类
+ * 
+ * @author nodesc
  */
 @Data
 @TableName("wms_location")
@@ -60,7 +67,7 @@ public class Location extends TenantEntity {
 	private String allocationZone;
 
 	/**
-	 * 库位标志
+	 * 使用状态
 	 */
 	private Integer locFlag;
 
@@ -326,9 +333,32 @@ public class Location extends TenantEntity {
 	private LocalDateTime lastLocCountDate;
 
 	/**
-	 * 库位占用标记，如果为空或0标识未被占用
+	 * 系统自动冻结时关联的信息
 	 */
-	private String occupyFlag;
+	private String locFlagDesc;
+
+	/**
+	 * 判断库位是否可以上架库存
+	 * 
+	 * @return true表示可以上架库存
+	 */
+	public boolean enableStock() {
+		return Func.isNull(locFlag)
+				|| LocationConstant.LOC_FLAG_NORMAL.equals(locFlag)
+				|| LocationConstant.LOC_FLAG_FORZEN.equals(locFlag);
+	}
+
+	/**
+	 * 获取该库位库存默认状态
+	 * 
+	 * @return 库存状态
+	 */
+	public StockStatusEnum defaultStockStatus() {
+		if (LocationConstant.LOC_FLAG_FORZEN.equals(locFlag)) {
+			return StockStatusEnum.FREEZE;
+		}
+
+		return StockStatusEnum.NORMAL;
+	}
 
 }
-

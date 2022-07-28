@@ -2,14 +2,13 @@ package org.nodes.wms.pdaController.stock.freezeOrUnFreeze;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
-import org.nodes.wms.biz.stockControl.StockControlBiz;
+import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.dao.stock.dto.input.*;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 
 /**
  * 库存控制API
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_PDA_API + "/stock/freezeOrUnFreeze")
 public class PdaFreezeOrUnFreezeController {
-	private final StockControlBiz stockControlBiz;
+	private final StockManageBiz stockControlBiz;
 
 	/**
 	 * 按库位冻结
@@ -28,7 +27,7 @@ public class PdaFreezeOrUnFreezeController {
 	@ApiLog("PDA按库位冻结")
 	@PostMapping("freezeByLocCode")
 	public void freezeByLocCode(@RequestBody FreezeByLocCodeRequest request) {
-		stockControlBiz.freezeByLocCodeAction(request);
+		stockControlBiz.freezeByLocCodeAction(request.getLocCode());
 	}
 
 	/**
@@ -39,7 +38,7 @@ public class PdaFreezeOrUnFreezeController {
 	@ApiLog("PDA按批次号冻结")
 	@PostMapping("freezeByLotNumber")
 	public void freezeByLotNumber(@RequestBody FreezeByLotNumberRequest request) {
-		stockControlBiz.freezeByLotNumberAction(request);
+		stockControlBiz.freezeByLotNumberAction(request.getLotNumber());
 	}
 
 	/**
@@ -50,7 +49,7 @@ public class PdaFreezeOrUnFreezeController {
 	@ApiLog("PDA按批次号冻结")
 	@PostMapping("freezeBySerialNumber")
 	public void freezeBySerialNumber(@RequestBody FreezeBySerialNumberRequest request) {
-		stockControlBiz.freezeBySerialNumberAction(request);
+		stockControlBiz.freezeBySerialNumberAction(request.getSerialNumber());
 	}
 
 	/**
@@ -72,7 +71,7 @@ public class PdaFreezeOrUnFreezeController {
 	@ApiLog("PDA按库位解冻")
 	@PostMapping("unFreezeByLocCode")
 	public void unFreezeByLocCode(@RequestBody UnFreezeByLocCodeRequest request) {
-		stockControlBiz.unFreezeByLocCodeAction(request);
+		stockControlBiz.unFreezeByLocCodeAction(request.getLocCode());
 	}
 
 	/**
@@ -83,7 +82,7 @@ public class PdaFreezeOrUnFreezeController {
 	@ApiLog("PDA按批次号解冻")
 	@PostMapping("unFreezeByLotNumber")
 	public void unFreezeByLotNumber(@RequestBody UnFreezeByLotNumberRequest request) {
-		stockControlBiz.unFreezeByLotNumberAction(request);
+		stockControlBiz.unFreezeByLotNumberAction(request.getLotNumber());
 	}
 
 	/**
@@ -94,7 +93,7 @@ public class PdaFreezeOrUnFreezeController {
 	@ApiLog("PDA按批次号解冻")
 	@PostMapping("unFreezeBySerialNumber")
 	public void unFreezeBySerialNumber(@RequestBody UnFreezeBySerialNumberRequest request) {
-		stockControlBiz.unFreezeBySerialNumberAction(request);
+		stockControlBiz.unFreezeBySerialNumberAction(request.getSerialNumber());
 	}
 
 	/**
@@ -107,6 +106,5 @@ public class PdaFreezeOrUnFreezeController {
 	public void portionUnFreeze(@RequestBody PortionUnFreezeRequest request) {
 		stockControlBiz.portionUnFreezeAction(request);
 	}
-
 
 }

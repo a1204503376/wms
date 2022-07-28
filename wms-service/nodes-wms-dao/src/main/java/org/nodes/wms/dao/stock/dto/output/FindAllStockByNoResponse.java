@@ -16,9 +16,9 @@ import java.math.BigDecimal;
 public class FindAllStockByNoResponse extends BaseSkuLot implements Serializable {
 	private static final long serialVersionUID = 5677449884106430903L;
 	/**
-	 * 物品名称
+	 * 物品编码
 	 */
-	private String skuName;
+	private String skuCode;
 	/**
 	 * 可用余额(单位)
 	 */
@@ -35,6 +35,10 @@ public class FindAllStockByNoResponse extends BaseSkuLot implements Serializable
 	 * 库位
 	 */
 	private String locCode;
+	/**
+	 * LPN
+	 */
+	private String lpnCode;
 	/**
 	 * 状态
 	 */
@@ -60,12 +64,16 @@ public class FindAllStockByNoResponse extends BaseSkuLot implements Serializable
 	 * 下架数量
 	 */
 	private BigDecimal pickQty;
-
-	public String getQty() {
-		return this.getStockQty().subtract(this.getPickQty()).stripTrailingZeros().toPlainString() + wsuCode;
-	}
-
-	public String getSurplusQty() {
-		return this.getStockQty().subtract(this.getPickQty()).stripTrailingZeros().toPlainString();
-	}
+	private String balance = "可/余";
+	private String storageLocation = "库位";
+	private String lot = "批次";
+	private String goods = "物品";
+	/**
+	 * 可用
+	 */
+	private BigDecimal stockEnable;
+	/**
+	 * 余额
+	 */
+	private BigDecimal stockBalance;
 }

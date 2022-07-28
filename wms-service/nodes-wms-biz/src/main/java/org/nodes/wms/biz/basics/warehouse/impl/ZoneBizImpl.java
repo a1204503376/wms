@@ -33,10 +33,15 @@ public class ZoneBizImpl implements ZoneBiz {
         return zoneRepository.getZoneByCodeWhCode(zoneCode,whCode);
     }
 
-    @Override
-    public Zone findById(Long zoneId) {
-        return zoneRepository.getZoneById(zoneId);
-    }
+	@Override
+	public Zone findById(Long zoneId) {
+		return zoneRepository.getZoneById(zoneId);
+	}
+
+	@Override
+	public List<Long> getZoneIdListByName(List<String> zoneNameList) {
+		return zoneRepository.getZoneIdListByName(zoneNameList);
+	}
 
     @Override
     public List<Zone> findByZoneType(List<String> zoneTypeList) {

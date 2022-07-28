@@ -140,6 +140,7 @@ public class ReceiveLogFactory {
 		receiveLog.setQty(request.getScanQty());
 		receiveLog.setLpnCode(request.getLpnCode());
 		receiveLog.setLocId(location.getLocId());
+		receiveLog.setSnCode(request.getSnCode());
 		receiveLog.setLocCode(location.getLocCode());
 		receiveLog.setSkuId(receiveDetail.getSkuId());
 		receiveLog.setWsuCode(request.getUmCode());

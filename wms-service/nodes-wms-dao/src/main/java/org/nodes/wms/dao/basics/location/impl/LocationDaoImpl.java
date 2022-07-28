@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.basics.location.LocationDao;
+import org.nodes.wms.dao.basics.location.constant.LocationConstant;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
 import org.nodes.wms.dao.basics.location.dto.output.LocationDetailResponse;
 import org.nodes.wms.dao.basics.location.dto.output.LocationExcelResponse;
@@ -26,6 +27,8 @@ import java.util.List;
 
 /**
  * 库位管理Dao实现类
+ *
+ * @author nodesc
  */
 @Repository
 @RequiredArgsConstructor
@@ -116,22 +119,11 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	}
 
 	@Override
-	public void updateOccupyFlag(Long locId, String occupyFlag) {
-		UpdateWrapper<Location> updateWrapper = Wrappers.update();
-		updateWrapper.lambda()
-			.eq(Location::getLocId, locId)
-			.set(Location::getOccupyFlag, occupyFlag);
-		if (super.update(updateWrapper)) {
-			throw new ServiceException("库位冻结/解冻更新失败");
-		}
-	}
-
-	@Override
 	public List<Location> getLocationByLpnTypeId(Long lpnTypeId, String zoneType) {
 		if (Func.isEmpty(lpnTypeId)) {
 			throw new NullArgumentException("LocationDaoImpl.getLocationByLpnTypeId方法的参数为空");
 		}
-		//根据库区类型查询查询库位，如果zongType可以为空
+		// 根据库区类型查询查询库位，如果zongType可以为空
 		return locationMapper.getLocationByLpnTypeIdAndZoneType(lpnTypeId, zoneType);
 	}
 
@@ -161,10 +153,28 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	}
 
 	@Override
+	public void freezeOrUnfreezeLocByTask(String taskId, Long locId, Integer locFlag) {
+		AssertUtil.notEmpty(taskId, "冻结解冻库位时任务编号不能为空");
+		UpdateWrapper<Location> updateWrapper = new UpdateWrapper<>();
+		if (Func.isNotEmpty(locId) && Func.isNotEmpty(locFlag)) {
+			updateWrapper.eq("loc_id", locId)
+				.set("loc_flag", locFlag)
+				.set("loc_flag_desc", taskId);
+		} else {
+			updateWrapper.eq("loc_flag_desc", taskId)
+				.set("loc_flag", LocationConstant.LOC_FLAG_NORMAL)
+				.set("loc_flag_desc", null);
+		}
+
+		if (!super.update(updateWrapper)) {
+			throw new ServiceException("冻结或解冻库位失败");
+		}
+	}
+
+	@Override
 	public List<Location> getLocationByLpnType(LpnTypeRequest request) {
 
 		return super.baseMapper.selectLoctionByLpnType(request);
 	}
-
 
 }

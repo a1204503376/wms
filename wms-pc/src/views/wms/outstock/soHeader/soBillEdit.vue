@@ -215,9 +215,9 @@
                                     <template slot="header">
                                         <span>操作</span>
                                     </template>
-                                    <template v-slot="{row}">
+                                    <template v-slot="scope">
                                         <el-link type="primary"
-                                                 @click.native.prevent="deleteRow(row.$index, table.data, row)">删除
+                                                 @click.native.prevent="deleteRow(scope.$index, table.data)">删除
                                         </el-link>
                                     </template>
                                 </el-table-column>
@@ -362,24 +362,13 @@ export default {
                 },
             };
         },
-        deleteRow(index, rows, row) {
+        deleteRow(index, rows) {
             this.$confirm('确定删除该条记录吗?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                if (func.isEmpty(row.soDetailId)) {
-                    rows.splice(index, 1);
-                } else {
-                    this.table.data = rows.filter(function (value) {
-                        return value !== row;
-                    })
-                    this.removeIdList.push(row.soDetailId)
-                }
-                this.$message({
-                    type: 'success',
-                    message: '删除成功!'
-                });
+                rows.splice(index, 1)
             })
         },
         getDataSource() {

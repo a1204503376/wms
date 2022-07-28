@@ -17,6 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+/**
+ * @author nodesc
+ */
 public interface LocationBiz {
 	/**
 	 * 获取库位下拉列表最近十条数据
@@ -152,7 +155,7 @@ public interface LocationBiz {
 	Location getQcLocation(Long whId);
 
 	/**
-	 * 获取指定库房的出库暂库位
+	 * 获取指定库房的出库集货位
 	 *
 	 * @param whId
 	 * @return
@@ -200,14 +203,6 @@ public interface LocationBiz {
 	Location findLocationByLocCode(Long whId, String locCode);
 
 	/**
-	 * 判断库位是否冻结
-	 *
-	 * @param location
-	 * @return true：冻结
-	 */
-	boolean isFrozen(Location location);
-
-	/**
 	 * 判断是否允许混放物品
 	 *
 	 * @param location
@@ -222,21 +217,6 @@ public interface LocationBiz {
 	 * @return true：允许
 	 */
 	boolean isMixSkuLot(Location location);
-
-	/**
-	 * 冻结库位
-	 *
-	 * @param locId
-	 * @param occupyFlag 自动任务的时候为任务id
-	 */
-	void freezeByOccupyFlag(Long locId, String occupyFlag);
-
-	/**
-	 * 解冻由freezeByOccupyFlag冻结的库位
-	 *
-	 * @param locId
-	 */
-	void unfreezeByOccupyFlag(Long locId);
 
 	/**
 	 * 判断库位是否为出库暂存区
@@ -285,4 +265,18 @@ public interface LocationBiz {
 	 * @return 库位信息
 	 */
 	List<Location> findLocationByZoneId(Long zoneId);
+
+	/**
+	 * 根据任务冻结库位，并赋值locFlagDesc（locFlag：冻结40）
+	 *
+	 * @param locationId 冻结库位
+	 * @param taskId   必填
+	 */
+	void freezeLocByTask(Long locationId, String taskId);
+
+	/**
+	 * 根据任务解冻库位，并置空locFlagDesc（locFlag：解冻1）
+	 * @param taskId 必填
+	 */
+	void unfreezeLocByTask(String taskId);
 }

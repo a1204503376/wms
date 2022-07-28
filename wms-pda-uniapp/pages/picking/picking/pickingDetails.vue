@@ -9,11 +9,17 @@
 			<u-list-item v-for="(item, index) in receiveDetailList" :key="index">
 				<view @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="10" class="left-text-one-line">
-							<view class="demo-layout bg-purple-light font-in-page">{{index+1}}-{{item.skuCode}}</view>
+						<u-col span="8" class="left-text-one-line">
+							<view class="demo-layout bg-purple-light font-in-page">{{item.soLineNo}}</view>
 						</u-col>
-						<u-col span="2">
-							<view class="demo-layout bg-purple font-in-page">{{item.surplusQty}}</view>
+						<u-col span="4">
+							<view class="demo-layout bg-purple font-in-page">{{item.scanQty}}/{{item.planQty}}
+								{{item.baseUmName}}</view>
+						</u-col>
+					</u-row>
+					<u-row  customStyle="margin-bottom: 10px">
+						<u-col span="12" class="left-text-one-line">
+							<view class="demo-layout bg-purple font-in-page">{{item.skuName}}</view>
 						</u-col>
 					</u-row>
 					<u-divider text=""></u-divider>
@@ -34,7 +40,7 @@
 
 <script>
 	import setting from '@/common/setting'
-	import receive from '@/api/inStock/receiveByPcs.js'
+	import picking from '@/api/picking/picking.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
@@ -53,8 +59,9 @@
 			}
 		},
 		onLoad: function(option) {
-			// var parse = JSON.parse(option.param)
-			// this.params.receiveId = parse.receiveId
+			var parse = JSON.parse(option.param)
+			console.log(parse)
+			this.params = parse;
 			this.getReceiveDetailList();
 		},
 		onUnload() {
@@ -102,15 +109,12 @@
 			},
 			esc() {
 				this.clearEmitKeyDown();
-				uni.$u.func.navigateBackTo(1);
+				uni.$u.func.routeRedirectTo('/pages/picking/picking/pickingByPcs',this.params);
 			},
 			getReceiveDetailList() {
-				if (tool.isNotEmpty(this.params.skuCode)) {
-					this.analysisCode(this.params.skuCode);
-				}
 				this.params.whId = uni.getStorageSync('warehouse').whId;
-				receive.getReceiveDetailList(this.params).then(data => {
-					this.receiveDetailList = data.data;
+				picking.getPickingBySoBillId(this.params).then(data => {
+					this.receiveDetailList = data.data.records;
 					//TODO
 					// if (data.data.length == 1) {
 					// 	data.data[0].receiveId = this.params.receiveId;
@@ -119,16 +123,19 @@
 				})
 			},
 			clickItem(row) {
-				row.receiveId = this.params.receiveId;
+				this.params.skuName = row.skuName;
+				this.params.baseUmName = row.baseUmName;
+				this.params.planQty = row.planQty;
+				this.params.scanQty = row.scanQty;
 				this.clearEmitKeyDown();
-				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingByPcs', row);
+				uni.$u.func.routeRedirectTo('/pages/picking/picking/pickingByPcs',this.params);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);
 				this.getReceiveDetailList();
 			},
 			clearEmitKeyDown() {
-				this.emitKeyDown = function(){};
+				this.emitKeyDown = function() {};
 			},
 			emitKeyDown(e) {
 				if (e.key == 'Enter') {

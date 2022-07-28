@@ -1,8 +1,10 @@
 package org.nodes.wms.biz.putway.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.putway.PutwayBiz;
+import org.nodes.wms.biz.putway.modular.PutwayFactory;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
@@ -25,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,13 +37,27 @@ public class PutwayBizImpl implements PutwayBiz {
 	private final StockBiz stockBiz;
 	private final PutawayLogDao putawayLogDao;
 	private final StockQueryBiz stockQueryBiz;
+	private final PutwayFactory putwayFactory;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void addByBoxShelf(AddByBoxShelfRequest request) {
-		// 调用库存移动，如果关联了序列号需要获取序列号
+		// 调用库存移动
 		Stock sourceStock = stockQueryBiz.findStockById(request.getStockId());
-		//获取序列号
+		AssertUtil.notNull(sourceStock, "没有该库存信息");
+		if (request.getIsAllLpnPutaway() && Func.isNotEmpty(sourceStock.getLpnCode())) {
+			List<Stock> stockList = stockQueryBiz.findStockByLpnCode(sourceStock.getLpnCode());
+			AssertUtil.notNull(stockList, "暂无与此托盘号相关库存的信息");
+			Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
+			stockBiz.moveStockByLpnCode(sourceStock.getLpnCode(), sourceStock.getLpnCode(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY, null, null, null);
+			// 生成上架记录
+			stockList.forEach(stock -> {
+				PutawayLog putawayLog = putwayFactory.create(request, stock, targetLocation);
+				putawayLogDao.save(putawayLog);
+			});
+			return;
+		}
+		//获取序列号 如果库存关联了序列号需要获取序列号
 		List<Serial> serialList = stockQueryBiz.findSerialByStock(request.getStockId());
 		List<String> serialNoList = new ArrayList<>();
 		if (Func.isNotEmpty(serialList)) {
@@ -53,15 +68,10 @@ public class PutwayBizImpl implements PutwayBiz {
 		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
 		stockBiz.moveStock(sourceStock, serialNoList, request.getQty(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY, null, null, null);
 		// 生成上架记录
-		PutawayLog putawayLog = new PutawayLog();
-		putawayLog.setLpnCode(request.getLpnCode());
-		putawayLog.setTargetLocCode(targetLocation.getLocCode());
-		putawayLog.setWhId(request.getWhId());
-		putawayLog.setUserName(AuthUtil.getUserName());
-		putawayLog.setUserCode(AuthUtil.getUserAccount());
-		putawayLog.setAplTime(Func.parseDateTime(Func.formatDate(new Date())));
+		PutawayLog putawayLog = putwayFactory.create(request, sourceStock, targetLocation);
 		putawayLogDao.save(putawayLog);
 	}
+
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)

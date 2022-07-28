@@ -6,9 +6,9 @@
         s.sku_code,
         s.stock_status,
         s.sku_lot1,
-        s.pick_qty,
-        s.stock_qty,
         s.occupy_qty,
+        s.stock_qty-s.pick_qty-s.occupy_qty stock_enable,
+        s.stock_qty-s.pick_qty stock_balance,
         s.wsu_code,
         s.loc_code,
         s.zone_code,
@@ -24,13 +24,14 @@
         s.wh_code,
         wo.owner_code,
         wo.owner_name,
-        s.task_id,
         s.last_in_time,
         s.last_out_time
         from wms_stock s
         left join wms_owner wo on s.wo_id = wo.wo_id
+        left join wms_zone wz on s.zone_id = wz.zone_id
         <where>
             AND s.is_deleted ='0'
+
             <if test="query.skuIds != null and query.skuIds.size()>0">
                 AND s.sku_id in
                 <foreach collection="query.skuIds" item="item" open="(" close=")" separator=",">
@@ -43,21 +44,27 @@
                     #{item}
                 </foreach>
             </if>
-
+            <if test="query.zoneIdList != null and query.zoneIdList.size() > 0">
+                AND s.zone_id in
+                <foreach collection="query.zoneIdList" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="query.locIdList != null and query.locIdList.size() > 0">
+                AND s.loc_id in
+                <foreach collection="query.locIdList" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
             <if test="query.skuLot1!=null and query.skuLot1 != ''">
                 AND s.sku_lot1 LIKE concat('%',#{query.skuLot1},'%')
             </if>
-            <if test="query.locCode!=null and query.locCode != ''">
-                AND s.loc_code LIKE concat('%',#{query.locCode},'%')
-            </if>
+
             <if test="query.stockStatusList != null and query.stockStatusList.size() > 0">
                 AND s.stock_status in
                 <foreach collection="query.stockStatusList" item="item" open="(" close=")" separator=",">
                     #{item}
                 </foreach>
-            </if>
-            <if test="query.zoneCode!=null and query.zoneCode != ''">
-                AND s.zone_code LIKE concat('%',#{query.zoneCode},'%')
             </if>
             <if test="query.boxCode!=null and query.boxCode != ''">
                 AND s.box_code LIKE concat('%',#{query.boxCode},'%')
@@ -76,12 +83,6 @@
             </if>
             <if test="query.skuLot6!=null and query.skuLot6 != ''">
                 AND s.sku_lot6 LIKE concat('%',#{query.skuLot6},'%')
-            </if>
-            <if test="query.skuLot7!=null and query.skuLot7 != ''">
-                AND s.sku_lot7 LIKE concat('%',#{query.skuLot7},'%')
-            </if>
-            <if test="query.skuLot8!=null and query.skuLot8 != ''">
-                AND s.sku_lot8 LIKE concat('%',#{query.skuLot8},'%')
             </if>
             <if test="query.woId!=null and query.woId != ''">
                 AND s.wo_id = #{query.woId}
@@ -104,8 +105,8 @@
             <if test="query.lastOutTimeEnd!=null">
                 AND s.last_Out_Time &lt;= #{query.lastOutTimeEnd}
             </if>
-            <if test="query.taskId!=null and query.taskId != ''">
-                AND s.task_Id LIKE concat('%',#{query.taskId},'%')
+            <if test="query.isShowByBox !=null and 'true'.toString() == query.isShowByBox.toString()">
+                AND s.box_code != ''
             </if>
         </where>
     </sql>
@@ -131,7 +132,10 @@
     </select>
 
     <select id="getList" resultType="org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse">
-        select s.stock_id, s.stock_status, s.sku_level, s.wsp_name, s.wsp_id , s.sku_id, s.sku_code, s.sku_name,
+        select
+        s.stock_qty-s.pick_qty-s.occupy_qty stockEnable,
+        s.stock_qty-s.pick_qty stockBalance,
+        s.stock_id, s.stock_status, s.sku_level, s.wsp_name, s.wsp_id , s.sku_id, s.sku_code, s.sku_name,
         s.stay_stock_qty, s.stock_qty , s.pick_qty, s.occupy_qty, s.box_code, s.lpn_code, s.loc_id , s.loc_code,
         s.zone_id, s.zone_code, s.wh_id, s.wh_code , s.wo_id, s.last_in_time, s.last_out_time, s.lot_number,
         s.wsu_code , s.version, s.sku_lot1, s.sku_lot2, s.sku_lot3, s.sku_lot4 , s.sku_lot5, s.sku_lot6, s.sku_lot7,
@@ -141,18 +145,24 @@
         ownerName
         from wms_stock s left join wms_owner o on s.wo_id = o.wo_id
         <where>
-            <if test="query.no != null and query.no != ''">
-                s.loc_code LIKE CONCAT('%', #{query.no} ,'%') and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty >
+            <if test="query.no != null and query.no != '' and query.type == null or query.type == ''">
+                s.loc_code LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and
+                s.stay_stock_qty + s.stock_qty >
+                s.pick_qty or
+                s.sku_code LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and
+                s.stay_stock_qty + s.stock_qty >
+                s.pick_qty or
+                s.box_code LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and
+                s.stay_stock_qty + s.stock_qty >
                 s.pick_qty
-                and s.stock_status = 0 or
-                s.sku_code LIKE CONCAT('%', #{query.no} ,'%') and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty >
+            </if>
+            <if test="query.no != null and query.no != '' and query.type != null and query.type != ''">
+                s.${query.type} = #{query.no} and s.wh_id=#{query.whId} and s.is_deleted = 0 and s.stay_stock_qty +
+                s.stock_qty >
                 s.pick_qty
-                and stock_status = 0 or
-                s.box_code LIKE CONCAT('%', #{query.no} ,'%') and s.is_deleted = 0 and s.stay_stock_qty + s.stock_qty >
-                s.pick_qty
-                and s.stock_status = 0
             </if>
         </where>
+        GROUP BY s.stock_id
     </select>
     <select id="getPage" resultType="org.nodes.wms.dao.stock.dto.output.StockPageResponse">
         <include refid="stock"/>

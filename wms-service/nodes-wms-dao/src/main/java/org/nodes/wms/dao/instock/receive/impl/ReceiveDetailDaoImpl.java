@@ -79,7 +79,6 @@ public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, R
 
 	@Override
 	public void updateReceiveDetail(ReceiveDetail detail) {
-		//TODO
 		if (Func.isEmpty(detail.getReceiveDetailId())) {
 			throw new ServiceException("更新收货单明细时,收货单详情ID为空");
 		}

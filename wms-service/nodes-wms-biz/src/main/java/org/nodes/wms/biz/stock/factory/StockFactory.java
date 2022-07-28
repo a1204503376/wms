@@ -34,7 +34,7 @@ public class StockFactory {
 		stock.setLastInTime(LocalDateTime.now());
 
 		if (Func.isNull(receiveLog.getStockStatus())) {
-			stock.setStockStatus(StockStatusEnum.NORMAL);
+			stock.setStockStatus(location.defaultStockStatus());
 		} else {
 			stock.setStockStatus(receiveLog.getStockStatus());
 		}
@@ -70,7 +70,7 @@ public class StockFactory {
 	}
 
 	public Stock create(Stock sourceStock, Location targetLocation,
-						String targetLpnCode, String targetBoxCode, BigDecimal qty) {
+			String targetLpnCode, String targetBoxCode, BigDecimal qty) {
 		AssertUtil.notNull(sourceStock, "创建库存失败，原库存为空");
 		AssertUtil.notNull(targetLocation, "创建库存失败，目标库位为空");
 		AssertUtil.notNull(qty, "创建库存失败，数量为空");
@@ -88,9 +88,9 @@ public class StockFactory {
 		Zone zone = zoneBiz.findById(targetLocation.getZoneId());
 		targetStock.setZoneCode(zone.getZoneCode());
 		targetStock.setLastInTime(LocalDateTime.now());
+		targetStock.setStockStatus(targetLocation.defaultStockStatus());
 
 		return targetStock;
 	}
-
 
 }

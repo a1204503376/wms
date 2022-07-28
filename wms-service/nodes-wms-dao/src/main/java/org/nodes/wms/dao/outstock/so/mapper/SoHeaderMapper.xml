@@ -139,21 +139,27 @@
             resultType="org.nodes.wms.dao.outstock.so.dto.output.PickByPcSoHeaderResponse">
         select so_bill_no,
                order_no,
-               wh_code
+               wh_code,
+               wh_id
         from so_header
         where so_bill_id = #{soBillId}
     </select>
 
-    <select id="getAllPickPage" resultType="org.nodes.wms.dao.picking.dto.output.FindAllPickingResponse">
-        select h.so_bill_no,h.bill_type_cd from so_header h
-        left join  so_detail d
+    <select id="getAllPickPage" resultType="org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse">
+        select h.so_bill_id,h.so_bill_no,h.bill_type_cd from so_header h
+        left join so_detail d
         on h.so_bill_id=d.so_bill_id
         <where>
             <if test="params.no!=null and params.no != '' and params.whId!=null and params.whId != ''">
-                AND h.so_bill_no like concat('%',#{params.no},'%')  AND d.bill_detail_state LIKE concat('%',#{params.billDetailState},'%')   AND h.wh_id = #{params.whId} AND h.is_deleted=0 and h.status = 1
-                OR h.order_no like concat('%',#{params.no},'%')   AND d.bill_detail_state LIKE concat('%',#{params.billDetailState},'%')   AND h.wh_id = #{params.whId} AND h.is_deleted=0 and h.status = 1
+                AND h.so_bill_no like concat('%',#{params.no},'%') AND d.bill_detail_state=#{params.billDetailState} AND
+                h.wh_id = #{params.whId} AND h.is_deleted=0 and h.status =
+                1
+                OR h.order_no like concat('%',#{params.no},'%') AND d.bill_detail_state =#{params.billDetailState} AND
+                h.wh_id = #{params.whId} AND h.is_deleted=0 and h.status =
+                1
             </if>
         </where>
+        group by h.so_bill_no
     </select>
 </mapper>
 
