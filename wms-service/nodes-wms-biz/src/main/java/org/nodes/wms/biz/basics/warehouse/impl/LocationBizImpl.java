@@ -298,14 +298,12 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
-	public void unfreezeLocByTask(Location location, String taskId) {
-		location.setLocFlag(LocationConstant.LOC_FLAG_NORMAL);
-		locationDao.freezeOrUnfreezeLocByTask(location, taskId);
+	public void unfreezeLocByTask(String taskId) {
+		locationDao.freezeOrUnfreezeLocByTask(taskId, null, null);
 	}
 
 	@Override
-	public void freezeLocByTask(Location location, String taskId) {
-		location.setLocFlag(LocationConstant.LOC_FLAG_SYSTEM_FORZEN);
-		locationDao.freezeOrUnfreezeLocByTask(location, taskId);
+	public void freezeLocByTask(Long locationId, String taskId) {
+		locationDao.freezeOrUnfreezeLocByTask(taskId, locationId, LocationConstant.LOC_FLAG_SYSTEM_FORZEN);
 	}
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.SchedulingBiz;
 import org.nodes.wms.biz.task.TaskBiz;
 import org.nodes.wms.biz.task.modular.TaskDetailFactory;
@@ -30,6 +31,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	private final LogBiz logBiz;
 	private final TaskDetailFactory taskDetailFactory;
 	private final TaskBiz taskBiz;
+	private final StockQueryBiz stockQueryBiz;
 
 	@Override
 	public String selectAndFrozenEnableOutbound(QueryAndFrozenEnableOutboundRequest request) {
@@ -43,9 +45,9 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		String locCode = "";
 		for (Location location : locationList) {
 			// 判断库位是否有库存
-			if (location.enableStock()) {
+			if (location.enableStock() && stockQueryBiz.isEmptyLocation(location.getLocId())) {
 				// 如果没有库存则冻结
-				locationBiz.freezeLocByTask(location, request.getTaskDetailId().toString());
+				locationBiz.freezeLocByTask(location.getLocId(), request.getTaskDetailId().toString());
 				locCode = location.getLocCode();
 				break;
 			}

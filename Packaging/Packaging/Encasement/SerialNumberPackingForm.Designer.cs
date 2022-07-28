@@ -675,6 +675,7 @@
             this.gvSerialNumber.OptionsBehavior.Editable = false;
             this.gvSerialNumber.OptionsView.ShowFooter = true;
             this.gvSerialNumber.CustomDrawRowIndicator += new DevExpress.XtraGrid.Views.Grid.RowIndicatorCustomDrawEventHandler(this.gvSerialNumber_CustomDrawRowIndicator);
+            this.gvSerialNumber.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gvSerialNumber_KeyDown);
             this.gvSerialNumber.RowCountChanged += new System.EventHandler(this.gvSerialNumber_RowCountChanged);
             // 
             // gridColumn6
