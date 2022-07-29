@@ -120,6 +120,12 @@ import fileDownload from "js-file-download";
                 <el-button size="mini" type="primary" @click="moveByBox">
                     按箱移动
                 </el-button>
+                <el-button size="mini" type="primary" @click="moveByBox">
+                    库存冻结
+                </el-button>
+                <el-button size="mini" type="primary" @click="dialogFormVisible = true">
+                    库存解冻
+                </el-button>
                 <el-button icon="el-icon-upload2" plain size="mini"
                            @click="onUpload">导入
                 </el-button>
@@ -364,6 +370,22 @@ import fileDownload from "js-file-download";
                 </div>
             </el-dialog>
         </template>
+        <template>
+            <el-dialog title="收货地址" :visible.sync="dialogFormVisible" append-to-body>
+                <el-form :model="form">
+                    <el-form-item label="解冻类型" :label-width="formLabelWidth">
+                        <el-select v-model="form.region" placeholder="请选择解冻类型">
+                            <el-option label="区域一" value="shanghai"></el-option>
+                            <el-option label="区域二" value="beijing"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                </div>
+            </el-dialog>
+        </template>
     </div>
 </template>
 <script>
@@ -416,13 +438,22 @@ export default {
     mixins: [listMixin],
     data() {
         return {
+            dialogFormVisible: false,
+            formLabelWidth: '120px',
             woId: "",
             form: {
                 params: {
+                    name: '',
+                    region: '',
+                    date1: '',
+                    date2: '',
+                    delivery: false,
+                    type: [],
+                    resource: '',
+                    desc: '',
                     skuIds: [],
                     locIdList: [],
-                    skuLot1: "190904",
-                    locCode: "",
+                    skuLot1: "",
                     stockStatusList: [],
                     zoneIdList: [],
                     boxCode: "",

@@ -20,6 +20,7 @@
                sku_lot8
         from receive_detail
         where receive_id = #{id}
+          and is_deleted = 0
     </select>
     <select id="selectDetailByHeaderId" resultType="org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailRequest">
         select receive_detail_id,
