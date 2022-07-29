@@ -22,6 +22,7 @@ import org.nodes.wms.dao.instock.asn.dto.output.AsnHeaderEditResponse;
 import org.nodes.wms.dao.instock.asn.entities.AsnDetail;
 import org.nodes.wms.dao.instock.asn.entities.AsnHeader;
 import org.nodes.wms.dao.instock.asn.enums.AsnBillStateEnum;
+import org.nodes.wms.dao.instock.asn.enums.InStorageTypeEnum;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +48,9 @@ public class AsnFactory {
 
 	private final OwnerBiz ownerBiz;
 
-	// 新增时，创建头表对象
+	/**
+	 * 创建ASN单头表对象
+	 */
 	public AsnHeader createAsnHeader(AddOrEditAsnBillRequest addOrEditAsnBillRequest) {
 		// 根据供应商id获取供应商信息
 		Supplier supplier = supplierBiz.findById(addOrEditAsnBillRequest.getSupplierId());
@@ -94,7 +97,7 @@ public class AsnFactory {
 			asnHeader.setOwnerCode(owner.getOwnerCode());
 		}
 		// 入库方式，默认为常规入库
-		asnHeader.setInstoreType(10);
+		asnHeader.setInstoreType(InStorageTypeEnum.Normal);
 		return asnHeader;
 	}
 
@@ -136,20 +139,22 @@ public class AsnFactory {
 		return detailResponseList;
 	}
 
-	//创建明细对象
-	public AsnDetail createAsnDetail(AsnHeader asnHeaderObj, AsnDetailRequest asnDetailObj) {
+	/**
+	 * 创建ASN单明细对象
+	 */
+	public AsnDetail createAsnDetail(AsnHeader asnHeaderObj, AsnDetailRequest asnDetailRequest) {
 		AsnDetail asnDetail = new AsnDetail();
 		// 明细id
-		if (Func.isNotEmpty(asnDetailObj.getAsnDetailId())) {
-			asnDetail.setAsnDetailId(asnDetailObj.getAsnDetailId());
+		if (Func.isNotEmpty(asnDetailRequest.getAsnDetailId())) {
+			asnDetail.setAsnDetailId(asnDetailRequest.getAsnDetailId());
 		} else {
 			// 实收数量
-			asnDetail.setScanQty(new BigDecimal(0));
+			asnDetail.setScanQty(BigDecimal.ZERO);
 			// 剩余数量
-			asnDetail.setSurplusQty(asnDetailObj.getPlanQty());
+			asnDetail.setSurplusQty(asnDetailRequest.getPlanQty());
 		}
 		// 行号
-		asnDetail.setAsnLineNo(asnDetailObj.getAsnLineNo());
+		asnDetail.setAsnLineNo(asnDetailRequest.getAsnLineNo());
 		// ASN单id
 		asnDetail.setAsnBillId(asnHeaderObj.getAsnBillId());
 		// ASN单编码
@@ -157,7 +162,7 @@ public class AsnFactory {
 		// 供应商id
 		asnDetail.setSupplierId(asnHeaderObj.getSupplierId());
 		// 根据物品id查找物品信息
-		Sku sku = skuBiz.findById(asnDetailObj.getSkuId());
+		Sku sku = skuBiz.findById(asnDetailRequest.getSkuId());
 		// 物品id
 		asnDetail.setSkuId(sku.getSkuId());
 		// 物品编码
@@ -168,14 +173,14 @@ public class AsnFactory {
 		asnDetail.setSkuSpec(sku.getSkuSpec());
 
 		// 根据计量单位编码 获取计量单位信息
-		SkuUm skuUm = skuBiz.findSkuUmByUmCode(asnDetailObj.getUmCode());
+		SkuUm skuUm = skuBiz.findSkuUmByUmCode(asnDetailRequest.getUmCode());
 		asnDetail.setUmCode(skuUm.getWsuCode());
 		asnDetail.setUmName(skuUm.getWsuName());
 
 		// 根据物品编码 获取包装和包装明细信息
-		SkuPackageAggregate skuPackageAggregate = skuBiz.findSkuPackageAggregateBySkuId(asnDetailObj.getSkuId());
+		SkuPackageAggregate skuPackageAggregate = skuBiz.findSkuPackageAggregateBySkuId(asnDetailRequest.getSkuId());
 		// 根据计量单位编码从聚合类对象中获取 包装明细信息
-		SkuPackageDetail skuPackageDetail = skuPackageAggregate.findSkuPackageDetail(asnDetailObj.getUmCode());
+		SkuPackageDetail skuPackageDetail = skuPackageAggregate.findSkuPackageDetail(asnDetailRequest.getUmCode());
 		// 从聚合类对象中获取 基础包装明细信息
 		SkuPackageDetail baseSkuPackageDetail = skuPackageAggregate.findBaseSkuPackageDetail();
 
@@ -194,11 +199,11 @@ public class AsnFactory {
 		// 基础计量单位名称
 		asnDetail.setBaseUmName(baseSkuPackageDetail.getWsuName());
 		// 计划数量
-		asnDetail.setPlanQty(asnDetailObj.getPlanQty());
+		asnDetail.setPlanQty(asnDetailRequest.getPlanQty());
 		// 库房id
 		asnDetail.setWhId(asnHeaderObj.getWhId());
 		// 备注
-		asnDetail.setRemark(asnDetailObj.getRemark());
+		asnDetail.setRemark(asnDetailRequest.getRemark());
 		return asnDetail;
 	}
 }
