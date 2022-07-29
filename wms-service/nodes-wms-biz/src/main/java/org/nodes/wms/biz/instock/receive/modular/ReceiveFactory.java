@@ -274,6 +274,8 @@ public class ReceiveFactory {
 			receiveDetail.setReceiveId(receiveHeader.getReceiveId());
 			//  设置订单行号
 			receiveDetail.setLineNo(editReceiveDetailRequest.getLineNumber());
+			//设置接收状态
+			receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.NOT_RECEIPT);
 		}
 		//根据物料id获取物料实体
 		Sku sku = skuBiz.findById(editReceiveDetailRequest.getSku().getSkuId());

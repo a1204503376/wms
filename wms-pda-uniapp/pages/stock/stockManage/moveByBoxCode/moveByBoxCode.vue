@@ -80,11 +80,20 @@
 							.boxCodeList[1].boxCode) || tool.isNotEmpty(_this.params.boxCodeList[2].boxCode) ||
 						tool.isNotEmpty(_this.params.boxCodeList[3].boxCode)) {
 						console.log('按箱移动')
+						var params = {};
+						var boxCodeList = [];
+						boxCodeList.push(_this.params.boxCodeList[0].boxCode);
+						boxCodeList.push(_this.params.boxCodeList[1].boxCode);
+						boxCodeList.push(_this.params.boxCodeList[2].boxCode);
+						boxCodeList.push(_this.params.boxCodeList[3].boxCode);
+						params.boxCodeList = boxCodeList;
 						uni.$u.func.routeNavigateTo('/pages/stock/stockManage/moveByBoxCode/moveByBoxCodeSubmit',
-							_this.params);
+							params);
 						return;
 					}
-					console.log('至少输入一个箱码')
+					uni.$u.func.showToast({
+						title: '至少输入一个箱码',
+					})
 					return;
 				}, 1000)
 

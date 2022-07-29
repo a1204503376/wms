@@ -64,9 +64,9 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public List<Stock> findEnableStockByBoxCode(String boxCode) {
 		List<Long> pickToLocList = locationBiz.getAllPickToLocation()
-		    	.stream()
-				.map(Location::getLocId)
-				.collect(Collectors.toList());
+			.stream()
+			.map(Location::getLocId)
+			.collect(Collectors.toList());
 		return stockDao.getStockByBoxCodeExcludeLoc(Collections.singletonList(boxCode), pickToLocList);
 	}
 
@@ -250,24 +250,14 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public Page<StockPageResponse> getStockPage(Query query, StockPageQuery stockPageQuery) {
-		Page<StockPageResponse> page = stockDao.page(Condition.getPage(query), stockPageQuery);
-		//如果不是按箱显示直接返回
-		if (Func.isEmpty(stockPageQuery.getIsShowByBox())) {
+		if (Func.isNotEmpty(stockPageQuery.getIsShowByBox()) || Func.isNotEmpty(stockPageQuery.getIsShowByLpn())) {
+			List<StockPageResponse> stockPageResponseList = stockDao.getStockResponseByBoxOrByLpn(stockPageQuery);
+			Page<StockPageResponse> page = new Page<>();
+			page.setRecords(stockPageResponseList);
+			page.setTotal(stockPageResponseList.size());
 			return page;
 		}
-		//获取当前page中返回的数组
-		List<StockPageResponse> stockPageResponseList = page.getRecords();
-		//获取箱码集合
-		List<String> boxCodes = stockPageResponseList.stream().map(u -> u.getBoxCode()).collect(Collectors.toList());
-		//按箱码查询出所有库存
-		List<Stock> stockList = findEnableStockByBoxCode(boxCodes);
-		stockPageResponseList.clear();
-		for (Stock stock : stockList) {
-			StockPageResponse stockPageResponse = new StockPageResponse();
-			Func.copy(stock, stockPageResponse);
-			stockPageResponseList.add(stockPageResponse);
-		}
-		page.setRecords(stockPageResponseList);
+		Page<StockPageResponse> page = stockDao.page(Condition.getPage(query), stockPageQuery);
 		return page;
 	}
 

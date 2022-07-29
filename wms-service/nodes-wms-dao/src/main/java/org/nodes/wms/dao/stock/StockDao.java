@@ -157,4 +157,11 @@ public interface StockDao {
 										  List<Long> locationIdList, SkuLotBaseEntity skuLot,
 										  List<Long> excludeZoneIdList);
 
+	/**
+	 * 库存余额按箱显示
+	 *
+	 * @param stockPageQuery 查询参数
+	 * @return 库存信息
+	 */
+	List<StockPageResponse> getStockResponseByBoxOrByLpn(StockPageQuery stockPageQuery);
 }

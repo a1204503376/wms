@@ -1,6 +1,6 @@
 import fileDownload from "js-file-download";
 <template>
-    <div id='stockByBox'>
+    <div id='stockByLpn'>
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
@@ -218,7 +218,7 @@ import func from "@/util/func";
 
 
 export default {
-    name: "stockByBox",
+    name: "stockByLpn",
     components: {
         NodesZone,
         NodesLocation,
@@ -257,7 +257,7 @@ export default {
                     receiveTimeDateRange: "",
                     lastInTimeDateRange: "",
                     lastOutTimeDateRange: "",
-                    isShowByBox: true
+                    isShowByLpn: true
                 }
             },
             deleteCustomerRequest: {
@@ -266,6 +266,10 @@ export default {
             pageSize: [20, 50, 100],
             table: {
                 columnList: [
+                    {
+                        prop: "lpnCode",
+                        label: "LPN"
+                    },
                     {
                         prop: "boxCode",
                         label: "箱码"
@@ -302,10 +306,6 @@ export default {
                     {
                         prop: "locCode",
                         label: "库位编码"
-                    },
-                    {
-                        prop: "lpnCode",
-                        label: "LPN"
                     },
                     {
                         prop: "skuLot2",
@@ -384,7 +384,7 @@ export default {
         getTableData() {
             let hasNoQuery = true
             for (let item in this.form.params) {
-                if (item !== 'isShowByBox' && func.isNotEmpty(this.form.params[item])) {
+                if (item !== 'isShowByLpn' && func.isNotEmpty(this.form.params[item])) {
                     hasNoQuery = false
                 }
             }
@@ -411,9 +411,9 @@ export default {
                         enableSum += item.stockEnable
                         occupySum += item.occupyQty
                         if (index != arr.length - 1) {
-                            if (item.boxCode != arr[index + 1].boxCode) {
+                            if (item.lpnCode != arr[index + 1].lpnCode) {
                                 let a = {
-                                    boxCode: '合计',
+                                    lpnCode: '合计',
                                     stockBalance: balanceSum,
                                     stockEnable: enableSum,
                                     occupyQty: occupySum
@@ -425,7 +425,7 @@ export default {
                             }
                         } else {
                             let a = {
-                                boxCode: '合计',
+                                lpnCode: '合计',
                                 stockBalance: balanceSum,
                                 stockEnable: enableSum,
                                 occupyQty: occupySum
@@ -478,8 +478,8 @@ export default {
             this.$emit('dateRangeChange', val);
         },
         arraySpanMethod({row, column, rowIndex, columnIndex}) {
-            if (columnIndex === 0) {
-                const _row = this.getSpanArr(this.table.data).one[rowIndex]
+            if (columnIndex === 0 || columnIndex === 1) {
+                const _row = this.getSpanArr(this.table.data, columnIndex).one[rowIndex]
                 const _col = _row > 0 ? 1 : 0
                 return {
                     rowspan: _row,
@@ -488,11 +488,11 @@ export default {
             }
         },
         tableRowClassName({row}) {
-            if (row.boxCode === '合计') {
+            if (row.lpnCode === '合计') {
                 return 'success-row';
             }
         },
-        getSpanArr(arr) {
+        getSpanArr(arr, type) {
             if (arr) {
                 const spanOneArr = []
                 let concatOne = 0
@@ -500,13 +500,25 @@ export default {
                     if (index === 0) {
                         spanOneArr.push(1)
                     } else {
-                        if (item.boxCode === arr[index - 1].boxCode && item.boxCode != '合计') {
-                            spanOneArr[concatOne] += 1
-                            spanOneArr.push(0)
-                        } else {
-                            spanOneArr.push(1)
-                            concatOne = index
+                        if (type === 0) {
+                            if (item.lpnCode === arr[index - 1].lpnCode) {
+                                spanOneArr[concatOne] += 1
+                                spanOneArr.push(0)
+                            } else {
+                                spanOneArr.push(1)
+                                concatOne = index
+                            }
                         }
+                        if (type === 1) {
+                            if (item.boxCode === arr[index - 1].boxCode) {
+                                spanOneArr[concatOne] += 1
+                                spanOneArr.push(0)
+                            } else {
+                                spanOneArr.push(1)
+                                concatOne = index
+                            }
+                        }
+
                     }
                 })
                 return {one: spanOneArr}

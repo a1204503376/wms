@@ -1,22 +1,16 @@
 <template>
 	<view>
 		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
-			:bgColor="navigationBarBackgroundColor" title="按件收货" titleStyle="color:#ffffff;font-size:21px"
+			:bgColor="navigationBarBackgroundColor" title="按序列号拆箱" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u--form>
-			<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuCode" border="0" disabled></u--input>
-			</u-form-item>
-			<u-form-item label="名称" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuName" border="0" disabled></u--input>
-			</u-form-item>
 			<u-form-item label="序列号" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.serialNumber"></u--input>
 			</u-form-item>
 		</u--form>
 		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">
-			序列号列表({{serialNumberList.length}}/{{params.surplusQty}})</h4>
+			序列号列表({{serialNumberList.length}})</h4>
 		<!-- ${index + 1} -->
 		<u-list style="height: 650rpx;">
 			<u-list-item v-for="(item, index) in serialNumberList" :key="index" :style="item.backgroundColor">
@@ -113,62 +107,58 @@
 			submit() {
 				var _this = this;
 				uni.$u.throttle(function() {
-					if (_this.serialNumberList.length == _this.params.surplusQty) {
-						var serialList = [];
-						_this.serialNumberList.forEach((serialNumbers, index) => {
-							serialList.push(serialNumbers.serialNumber)
-						})
-						let params = {
-							serialNumberList: serialList
-						}
-						receive.getSerialNumberList(params).then(data => {
-							if (tool.isEmpty(data.data)) {
-								var serialList = [];
-								_this.serialNumberList.forEach((serialNumbers, index) => {
-									serialList.push(serialNumbers.serialNumber)
-								})
-								_this.params.serialNumberList = serialList;
-								_this.params.whCode = uni.getStorageSync('warehouse').whCode;
-								_this.params.whId = uni.getStorageSync('warehouse').whId;
-								receive.submitReceiptByPcs(_this.params).then(data => {
-									if (data.data.allReceivieIsAccomplish && data.data
-										.currentReceivieIsAccomplish) {
-										//当前收货单收货收货完毕
-										_this.clearEmitKeyDown();
-										_this.$u.func.navigateBackTo(3);
-										return;
-									} else if (data.data.currentReceivieIsAccomplish) {
-										//当前收货单详情收货收货完毕
-										_this.clearEmitKeyDown();
-										_this.$u.func.navigateBackTo(2);
-										return;
-									} else {
-										//当前收货单详情收货部分收货,返回收货单收货页面
-										_this.clearEmitKeyDown();
-										_this.esc();
-									}
-
-								});
-							} else {
-								_this.$u.func.showToast({
-									title: '序列号已存在'
-								});
-								_this.serialNumberList.forEach((serialNumber, index) => {
-									data.data.forEach((serialNumbers, index) => {
-										if (serialNumber.serialNumber ==
-											serialNumbers) {
-											serialNumber.backgroundColor =
-												"background-color: #DD524D;"
-										}
-									});
-								});
-							}
-						});
-					}else{
-						_this.$u.func.showToast({
-							title: '序列号应与收货数量相同,请采集序列号'
-						});
+					var serialList = [];
+					_this.serialNumberList.forEach((serialNumbers, index) => {
+						serialList.push(serialNumbers.serialNumber)
+					})
+					let params = {
+						serialNumberList: serialList
 					}
+					receive.getSerialNumberList(params).then(data => {
+						if (tool.isEmpty(data.data)) {
+							var serialList = [];
+							_this.serialNumberList.forEach((serialNumbers, index) => {
+								serialList.push(serialNumbers.serialNumber)
+							})
+							_this.params.serialNumberList = serialList;
+							_this.params.whCode = uni.getStorageSync('warehouse').whCode;
+							_this.params.whId = uni.getStorageSync('warehouse').whId;
+							console.log("序列号采集成功")
+							uni.$u.func.routeNavigateTo('/pages/stock/devanning/devanningSubmit', _this.params);
+							// receive.submitReceiptByPcs(_this.params).then(data => {
+							// 	if (data.data.allReceivieIsAccomplish && data.data
+							// 		.currentReceivieIsAccomplish) {
+							// 		//当前收货单收货收货完毕
+							// 		_this.clearEmitKeyDown();
+							// 		_this.$u.func.navigateBackTo(3);
+							// 		return;
+							// 	} else if (data.data.currentReceivieIsAccomplish) {
+							// 		//当前收货单详情收货收货完毕
+							// 		_this.clearEmitKeyDown();
+							// 		_this.$u.func.navigateBackTo(2);
+							// 		return;
+							// 	} else {
+							// 		//当前收货单详情收货部分收货,返回收货单收货页面
+							// 		_this.clearEmitKeyDown();
+							// 		_this.esc();
+							// 	}
+
+							// });
+						} else {
+							_this.$u.func.showToast({
+								title: '序列号已存在'
+							});
+							_this.serialNumberList.forEach((serialNumber, index) => {
+								data.data.forEach((serialNumbers, index) => {
+									if (serialNumber.serialNumber ==
+										serialNumbers) {
+										serialNumber.backgroundColor =
+											"background-color: #DD524D;"
+									}
+								});
+							});
+						}
+					});
 				}, 1000)
 			},
 			analysisCode(code) {
