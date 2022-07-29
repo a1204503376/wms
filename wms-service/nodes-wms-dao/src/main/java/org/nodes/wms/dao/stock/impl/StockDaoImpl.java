@@ -350,7 +350,7 @@ public class StockDaoImpl
 	}
 
 	@Override
-	public List<StockPageResponse> getStockResponseByBox(StockPageQuery stockPageQuery) {
-		return super.baseMapper.getStockResponseByBox(stockPageQuery);
+	public List<StockPageResponse> getStockResponseByBoxOrByLpn(StockPageQuery stockPageQuery) {
+		return super.baseMapper.getStockResponseByBoxOrByLpn(stockPageQuery);
 	}
 }

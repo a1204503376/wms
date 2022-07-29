@@ -37,7 +37,7 @@ public class LocationConstant {
 	 */
 	public static final String LOC_INTRANSIT = "INTRANSIT";
 	/**
-	 * 正常
+	 * 正常 可以上架库存
 	 */
 	public static final Integer LOC_FLAG_NORMAL = 1;
 	/**
@@ -49,7 +49,7 @@ public class LocationConstant {
 	 */
 	public static final Integer LOC_FLAG_FORZEN = 20;
 	/**
-	 * 业务系统冻结, 不能上架库存到该库位
+	 * 系统业务冻结, 不能上架库存到该库位
 	 */
 	public static final Integer LOC_FLAG_SYSTEM_FORZEN = 40;
 
