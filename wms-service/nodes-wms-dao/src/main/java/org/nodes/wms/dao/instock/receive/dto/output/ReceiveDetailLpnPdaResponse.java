@@ -31,7 +31,7 @@ public class ReceiveDetailLpnPdaResponse {
 	/**
 	 * 生产批次
 	 */
-	private String SkuLot1;
+	private String skuLot1;
 	/**
 	 * 总数
 	 */

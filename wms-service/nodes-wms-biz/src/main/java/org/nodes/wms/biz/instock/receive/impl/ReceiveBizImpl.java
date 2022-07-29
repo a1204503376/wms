@@ -3,6 +3,8 @@ package org.nodes.wms.biz.instock.receive.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.constant.AppConstant;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
@@ -43,6 +45,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -85,8 +88,8 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	public boolean remove(List<Long> receiveIdList) {
 		for (Long receiveId : receiveIdList) {
 			ReceiveHeader receiveHeader = receiveHeaderDao.selectBillStateById(receiveId);
-			if (receiveHeader.getBillState().getCode() != 10) {
-				throw new ServiceException("删除失败,单号：" + receiveHeader.getReceiveNo() + "已进行收货");
+			if (receiveHeader.getBillState() != ReceiveHeaderStateEnum.NOT_RECEIPT) {
+				throw new ServiceException(Func.format("当前状态不等于：{},不允许删除；单号：{}" ,ReceiveHeaderStateEnum.NOT_RECEIPT.getDesc(), receiveHeader.getReceiveNo()));
 			}
 			//获取关联明细集合
 			List<Long> receiveDetailIdList = receiveDetailDao.selectDetailIdByReceiveId(receiveId);
@@ -273,17 +276,19 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	public ReceiveDetailByReceiveIdPdaResponse selectDetailByReceiveDetailId(ReceiveDetailByReceiveIdPdaQuery receiveIdPdaQuery) {
 		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveIdPdaQuery.getReceiveDetailId());
 		ReceiveDetailByReceiveIdPdaResponse response = BeanUtil.copy(detail, ReceiveDetailByReceiveIdPdaResponse.class);
+		AssertUtil.isNull(response, "收货单明细返回对象为空");
+
+		assert response != null;
+
 		response.setWsuCode(detail.getUmCode());
+		response.setIsSn(true);
+
 		Sku sku = skuDao.getById(detail.getSkuId());
-		if (response != null) {
-			response.setIsSn(true);
-			if (Func.isNotEmpty(sku)) {
-				if (sku.getIsSn() == BigDecimal.ZERO.intValue()) {
-					response.setIsSn(false);
-				}
+		if (Func.isNotEmpty(sku)) {
+			if (Objects.equals(sku.getIsSn(), AppConstant.FALSE_DEFAULT)) {
+				response.setIsSn(false);
 			}
 		}
-
 		return response;
 	}
 
@@ -299,8 +304,11 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			throw new ServiceException("没有搜索到该箱码");
 		}
 		ReceiveDetailLpnPdaResponse receiveDetailLpnPdaResponse = new ReceiveDetailLpnPdaResponse();
-		BigDecimal i = new BigDecimal(0);
-		int a = 1;
+		BigDecimal totalPlanQty = BigDecimal.ZERO;
+
+		// 是否对批属性2进行过赋值操作
+		boolean skuSpecFlag = true;
+
 		List<ReceiveDetailLpnItemDto> receiveDetailLpnItemDtoList = new ArrayList<>();
 		ReceiveDetailLpn receiveDetailLpn = receiveDetailLpnList.get(0);
 		receiveDetailLpnPdaResponse.setLpnCode(receiveDetailLpn.getLpnCode());
@@ -310,9 +318,9 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			//添加sku的dto到集合中
 			ReceiveDetailLpnItemDto receiveDetailLpnItemDto = new ReceiveDetailLpnItemDto();
 			//设置型号
-			if (Func.isNotEmpty(item.getSkuSpec()) && a == 1) {
+			if (skuSpecFlag && Func.isNotEmpty(item.getSkuSpec())) {
 				receiveDetailLpnPdaResponse.setSkuLot2(item.getSkuSpec());
-				a = 0;
+				skuSpecFlag = false;
 			}
 			receiveDetailLpnItemDto.setSkuCode(item.getSkuCode());
 			receiveDetailLpnItemDto.setSkuName(item.getSkuName());
@@ -322,38 +330,36 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			receiveDetailLpnItemDto.setReceiveDetailLpnId(item.getId());
 			receiveDetailLpnItemDtoList.add(receiveDetailLpnItemDto);
 			//设置总数
-			i = i.add(item.getPlanQty());
+			totalPlanQty = totalPlanQty.add(item.getPlanQty());
 		}
 		//设置sku的dto集合
 		receiveDetailLpnPdaResponse.setReceiveDetailLpnItemDtoList(receiveDetailLpnItemDtoList);
 		//设置总数
-		receiveDetailLpnPdaResponse.setNum(i);
+		receiveDetailLpnPdaResponse.setNum(totalPlanQty);
 		return receiveDetailLpnPdaResponse;
 	}
 
 	@Override
-	public void canReceive(ReceiveHeader receiveHeader, ReceiveDetail detail, BigDecimal receiveQty) {
-		if (Func.isEmpty(receiveQty)) {
+	public void canReceive(ReceiveHeader receiveHeader,
+						   ReceiveDetail detail,
+						   BigDecimal receiveQty) {
+		if (Func.isEmpty(receiveQty) || receiveQty.equals(BigDecimal.ZERO)) {
 			throw new ServiceException("请输入数量");
 		}
-		if (detail.getDetailStatus() == ReceiveDetailStatusEnum.NOT_RECEIPT || detail.getDetailStatus() == ReceiveDetailStatusEnum.PART) {
-			if (receiveHeader.getBillState() == ReceiveHeaderStateEnum.NOT_RECEIPT || receiveHeader.getBillState() == ReceiveHeaderStateEnum.PART) {
-				int isExit = detail.getPlanQty().compareTo(detail.getScanQty());
-				if (isExit == BigDecimal.ZERO.intValue()) {
-					throw new ServiceException("该单不可以收货，原因无可收的货物");
-				} else {
-					BigDecimal sumScanQty = detail.getScanQty().add(receiveQty);
-					int compareTo = detail.getPlanQty().compareTo(sumScanQty);
-					//如果数量不超过计划数量就复制给实收数量
-					if (compareTo < BigDecimal.ZERO.intValue()) {
-						throw new ServiceException("不能超收");
-					}
-				}
-			} else {
-				throw new ServiceException("该单不可以收货，原因收货单已经收货完成");
-			}
-		} else {
+		if (receiveHeader.getBillState() != ReceiveHeaderStateEnum.NOT_RECEIPT
+			&& receiveHeader.getBillState() != ReceiveHeaderStateEnum.PART) {
+			throw new ServiceException("该单不可以收货，原因收货单已经收货完成");
+		}
+		if (detail.getDetailStatus() != ReceiveDetailStatusEnum.NOT_RECEIPT
+			&& detail.getDetailStatus() != ReceiveDetailStatusEnum.PART) {
 			throw new ServiceException("该单不可以收货，原因收货单明细已经收货完成");
+		}
+		if (BigDecimalUtil.eq(detail.getPlanQty() ,detail.getScanQty())) {
+			throw new ServiceException("该单不可以收货，原因无可收的货物");
+		}
+		// 当前实际量+本次收货量 > 计划量
+		if (BigDecimalUtil.lt(detail.getPlanQty(),detail.getScanQty().add(receiveQty))) {
+			throw new ServiceException("不能超收");
 		}
 	}
 
@@ -366,27 +372,54 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		BigDecimal surplusQty = detail.getPlanQty().subtract(scanQty);
 		detail.setSurplusQty(surplusQty);
 
-		//判断当前单据的实收数量是否等于计划量
-		boolean scanQtyEqPlanQty = BigDecimalUtil.eq(detail.getScanQty(), detail.getPlanQty());
-		//判断当前单据的剩余数量是否等于计划量
-		boolean surplusQtyEqPlanQty = BigDecimalUtil.eq(detail.getSurplusQty(), detail.getPlanQty());
-		//判断当前单据的数量是否小于计划量
-		boolean scanQtyLePlanQty = BigDecimalUtil.le(detail.getScanQty(), detail.getPlanQty());
-
-		if (scanQtyEqPlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.PART || scanQtyEqPlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.NOT_RECEIPT) {
-			//如果当前单据的实收数量等于计划量，并且状态等于部分收货或者未收货时
-			detail.setDetailStatus(ReceiveDetailStatusEnum.COMPLETED);
-		} else if (surplusQtyEqPlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.COMPLETED || surplusQtyEqPlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.PART) {
-			//如果当前单据的实收数量等于计划量，并且状态等于部分收货或者收货完成时
-			detail.setDetailStatus(ReceiveDetailStatusEnum.NOT_RECEIPT);
-		} else if (scanQtyLePlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.NOT_RECEIPT || scanQtyLePlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.PART || scanQtyLePlanQty && detail.getDetailStatus() == ReceiveDetailStatusEnum.COMPLETED) {
-			//如果当前单据的实收数量是否小于计划量，并且状态等于未收货或者部分收货时
-			detail.setDetailStatus(ReceiveDetailStatusEnum.PART);
-		} else {
+		ReceiveDetailStatusEnum find = null;
+		if (validPartNotReceipt(detail)) {
+			find = ReceiveDetailStatusEnum.COMPLETED;
+		} else if (validPartCompleted(detail)) {
+			find = ReceiveDetailStatusEnum.NOT_RECEIPT;
+		} else if (validPartNotReceiptCompleted(detail)) {
+			find = ReceiveDetailStatusEnum.PART;
+		}
+		if (find == null) {
 			throw new ServiceException("更新收货单明细表时出现异常");
 		}
 
+		detail.setDetailStatus(find);
 		receiveDetailDao.updateReceiveDetail(detail);
+	}
+
+	/**
+	 * 实收量 == 计划量
+	 * 并且，当前状态是部分收货或者未收货时
+	 * 将状态变更为：已完成
+	 */
+	private static boolean validPartNotReceipt(ReceiveDetail detail) {
+		return BigDecimalUtil.eq(detail.getScanQty(), detail.getPlanQty())
+			&& (ReceiveDetailStatusEnum.PART == detail.getDetailStatus()
+			|| ReceiveDetailStatusEnum.NOT_RECEIPT == detail.getDetailStatus());
+	}
+
+	/**
+	 * 实际量 < 计划量
+	 * 并且，当前状态是部分收货或者已完成时
+	 * 将状态变更为：未收货
+	 */
+	private static boolean validPartCompleted(ReceiveDetail detail) {
+		return BigDecimalUtil.le(detail.getScanQty(), detail.getPlanQty())
+			&& (ReceiveDetailStatusEnum.PART == detail.getDetailStatus()
+			|| ReceiveDetailStatusEnum.COMPLETED == detail.getDetailStatus());
+	}
+
+	/**
+	 * 剩余量 == 计划量
+	 * 并且，当前状态是部分收货、未收货、已完成时
+	 * 将状态变更为：部分收货
+	 */
+	private static boolean validPartNotReceiptCompleted(ReceiveDetail detail) {
+		return BigDecimalUtil.eq(detail.getSurplusQty(), detail.getPlanQty())
+			&& (ReceiveDetailStatusEnum.PART == detail.getDetailStatus()
+			|| ReceiveDetailStatusEnum.NOT_RECEIPT == detail.getDetailStatus()
+			|| ReceiveDetailStatusEnum.COMPLETED == detail.getDetailStatus());
 	}
 
 	@Override
@@ -466,7 +499,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		//前端传入明细集合按明细id分组
 		Map<Long, List<ReceiveByPcDetailRequest>> detailMap = detailList.stream().collect(Collectors.groupingBy(ReceiveByPcDetailRequest::getReceiveDetailId));
 		//所有明细全部完成收货标志
-		Boolean isCompleted = true;
+		boolean isCompleted = true;
 		for (Map.Entry<Long, List<ReceiveByPcDetailRequest>> entry : detailMap.entrySet()) {
 			//获取每个分组的明细对象
 			ReceiveDetail receiveDetail = receiveDetailDao.getDetailByReceiveDetailId(entry.getKey());
@@ -488,7 +521,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			//修改收货单明细状态和剩余数量
 			receiveDetail.setSurplusQty(receiveDetail.getSurplusQty().subtract(sum));
 			receiveDetail.setScanQty(receiveDetail.getScanQty().add(sum));
-			if (receiveDetail.getSurplusQty().compareTo(BigDecimal.ZERO) == 1) {
+			if (BigDecimalUtil.gt(receiveDetail.getSurplusQty(),BigDecimal.ZERO)) {
 				receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.PART);
 				isCompleted = false;
 			} else {
@@ -498,12 +531,12 @@ public class ReceiveBizImpl implements ReceiveBiz {
 
 		}
 		//更新头表状态
-		if (isCompleted) {
-			receiveHeader.setBillState(ReceiveHeaderStateEnum.COMPLETED);
-		} else {
-			receiveHeader.setBillState(ReceiveHeaderStateEnum.PART);
-		}
+		receiveHeader.setBillState(isCompleted
+			? ReceiveHeaderStateEnum.COMPLETED
+			: ReceiveHeaderStateEnum.PART);
+
 		receiveHeaderDao.updateReceive(receiveHeader);
+
 		//记录日志
 		logBiz.auditLog(AuditLogType.INSTOCK, receiveHeader.getReceiveId(), receiveHeader.getReceiveNo(), "PC收货");
 		return receiveHeader.getReceiveNo();
