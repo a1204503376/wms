@@ -347,4 +347,10 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		return callAgvResponse;
 	}
 
+	@Override
+	public List<Stock> findEnableStockBySkuLot(SkuLotBaseEntity skuLot) {
+
+		return null;
+	}
+
 }

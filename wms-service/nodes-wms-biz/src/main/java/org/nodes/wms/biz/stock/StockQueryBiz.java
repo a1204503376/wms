@@ -75,7 +75,7 @@ public interface StockQueryBiz {
 	 * @param skuLot 必填，如果批属性不为空，则需要匹配
 	 * @return Stock集合
 	 */
-	List<Stock> findEnableStockByZoneType(SkuLotBaseEntity skuLot);
+	List<Stock> findEnableStockBySkuLot(SkuLotBaseEntity skuLot);
 
 	/**
 	 * 根据库区id查询可用库存,排除出库暂存区
