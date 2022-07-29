@@ -39,7 +39,8 @@ public interface StockBiz {
 	Stock outStockByCancelReceive(StockLogTypeEnum type, ReceiveLog receiveLog, Stock stock);
 
 	/**
-	 * 库存移动,可能会发生库存合并
+	 * 库存移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
+	 * 原库存状态为系统冻结在移动时抛异常；目标库位状态(locFlag)如果不是正常或冻结时抛异常
 	 *
 	 * @param sourceStock    原库存,必填
 	 * @param serialNoList   移动的序列号，可能为空
@@ -56,7 +57,8 @@ public interface StockBiz {
 					Long billId, String billNo, String lineNo);
 
 	/**
-	 * 库存移动,可能会发生库存合并
+	 * 库存移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
+	 * 原库存状态为系统冻结在移动时抛异常；目标库位状态(locFlag)如果不是正常或冻结时抛异常
 	 *
 	 * @param sourceStock    原库存,必填
 	 * @param serialNoList   移动的序列号，可能为空
@@ -76,7 +78,8 @@ public interface StockBiz {
 					Long billId, String billNo, String lineNo);
 
 	/**
-	 * 整箱移动,可能会发生库存合并
+	 * 整箱移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
+	 * 原库存状态为系统冻结在移动时抛异常；目标库位状态(locFlag)如果不是正常或冻结时抛异常
 	 *
 	 * @param boxCode        需要移动的箱码，必填
 	 * @param targetBoxCode  目标箱码，必填
@@ -93,7 +96,8 @@ public interface StockBiz {
 								   Long billId, String billNo, String lineNo);
 
 	/**
-	 * 整托移动,可能会发生库存合并
+	 * 整托移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
+	 * 原库存状态为系统冻结在移动时抛异常；目标库位状态(locFlag)如果不是正常或冻结时抛异常
 	 *
 	 * @param lpnCode        需要移动的托盘号，必填
 	 * @param targetLpnCode  目标托盘号，必填

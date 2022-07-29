@@ -157,7 +157,7 @@ public class StockBizImpl implements StockBiz {
 		StockUtil.pickQty(stock, cancelQty, "撤销收货下架库存");
 
 		stockDao.updateStock(stock.getStockId(), stock.getStockQty(),
-			stock.getStayStockQty(), stock.getPickQty(), null, null);
+				stock.getStayStockQty(), stock.getPickQty(), null, null);
 		// 生成库存日志
 		StockLog stockLog = createAndSaveStockLog(type, stock, receiveLog, "撤销收货");
 		// 修改序列号状态和生成序列号日志
@@ -170,7 +170,7 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	private void updateSerialAndSaveLog(List<String> serialNoList, SerialStateEnum state, Long stockId,
-										StockLog stockLog) {
+			StockLog stockLog) {
 		serialDao.updateSerialState(serialNoList, state, stockId);
 		List<Serial> serialList = serialDao.getSerialBySerialNo(serialNoList);
 		List<SerialLog> serialLogList = new ArrayList<>();
@@ -182,7 +182,7 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	private StockLog createAndSaveStockLog(StockLogTypeEnum type, Stock finalStock,
-										   ReceiveLog receiveLog, String msg) {
+			ReceiveLog receiveLog, String msg) {
 		StockLog stockLog = new StockLog();
 		BeanUtil.copy(finalStock, stockLog);
 		stockLog.setLogType(type.getDesc());
@@ -214,10 +214,10 @@ public class StockBizImpl implements StockBiz {
 		List<Serial> existSerialList = serialDao.getSerialBySerialNo(serialNoList);
 		if (Func.isNotEmpty(existSerialList)) {
 			List<String> existSerialNo = existSerialList.stream()
-				.map(Serial::getSerialNumber)
-				.collect(Collectors.toList());
+					.map(Serial::getSerialNumber)
+					.collect(Collectors.toList());
 			throw new ServiceException(String.format("保存序列号失败,%s序列号已在库",
-				StringUtil.join(existSerialNo, ",")));
+					StringUtil.join(existSerialNo, ",")));
 		}
 
 		List<Serial> resultStockSerial = new ArrayList<>();
@@ -276,27 +276,25 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public Stock moveStock(Stock sourceStock, List<String> serialNoList,
-						   BigDecimal qty, Location targetLocation, StockLogTypeEnum type,
-						   Long billId, String billNo, String lineNo) {
+			BigDecimal qty, Location targetLocation, StockLogTypeEnum type,
+			Long billId, String billNo, String lineNo) {
 		return moveStock(sourceStock, serialNoList, qty, sourceStock.getBoxCode(),
-			sourceStock.getLpnCode(), targetLocation, type, billId, billNo, lineNo);
+				sourceStock.getLpnCode(), targetLocation, type, billId, billNo, lineNo);
 	}
 
 	@Override
 	public Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
-						   String targetBoxCode, String targetLpnCode, Location targetLocation,
-						   StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+			String targetBoxCode, String targetLpnCode, Location targetLocation,
+			StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
 		AssertUtil.notNull(targetLocation, "库存移动失败，目标库位为空");
 		StockUtil.assertPick(sourceStock, qty, "库存移动失败");
 		if (!targetLocation.enableStock()) {
 			throw new ServiceException(
-				String.format("库存移动失败，目标库位[%s]不能上架库存", targetLocation.getLocCode())
-			);
+					String.format("库存移动失败，目标库位[%s]不能上架库存", targetLocation.getLocCode()));
 		}
 		if (StockStatusEnum.SYSTEM_FREEZE.equals(sourceStock.getStockStatus())) {
 			throw new ServiceException(
-				String.format("库存移动失败,原库存[%d]被系统冻结,不能移动", sourceStock.getStockId())
-			);
+					String.format("库存移动失败,原库存[%d]被系统冻结,不能移动", sourceStock.getStockId()));
 		}
 
 		Stock tempStock = new Stock();
@@ -311,23 +309,23 @@ public class StockBizImpl implements StockBiz {
 			targetStock = stockFactory.create(sourceStock, targetLocation, targetLpnCode, targetBoxCode, qty);
 			stockDao.saveNewStock(targetStock);
 			targetStockLog = createAndSaveStockLog(true, targetStock, qty,
-				type, billId, billNo, lineNo, "库存移动-新库存");
+					type, billId, billNo, lineNo, "库存移动-新库存");
 		} else {
 			StockUtil.addQty(targetStock, qty);
 			stockDao.updateStock(targetStock);
 			targetStockLog = createAndSaveStockLog(true, targetStock, qty,
-				type, billId, billNo, lineNo, "库存移动-合并");
+					type, billId, billNo, lineNo, "库存移动-合并");
 		}
 
 		StockUtil.pickQty(sourceStock, qty, "库存移动");
 		stockDao.updateStock(sourceStock);
 		// 生成库存日志
 		createAndSaveStockLog(false, sourceStock, qty, type, billId, billNo,
-			lineNo, "库存移动下架");
+				lineNo, "库存移动下架");
 		// 更新序列号和库存的关联关系
 		if (Func.isNotEmpty(serialNoList)) {
 			SerialStateEnum serialStateEnum = locationBiz.isPickToLocation(targetLocation) ? SerialStateEnum.OUT_STOCK
-				: SerialStateEnum.IN_STOCK;
+					: SerialStateEnum.IN_STOCK;
 			updateSerialAndSaveLog(serialNoList, serialStateEnum, targetStock.getStockId(), targetStockLog);
 		}
 
@@ -336,14 +334,14 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public List<Stock> moveStockByBoxCode(String boxCode, String targetBoxCode, String targetLpnCode,
-										  Location targetLocation, StockLogTypeEnum type, Long billId,
-										  String billNo, String lineNo) {
+			Location targetLocation, StockLogTypeEnum type, Long billId,
+			String billNo, String lineNo) {
 		List<Stock> sourceStockList = stockDao.getStockByBoxCode(boxCode, null);
 		List<Stock> targetStockList = new ArrayList<>();
 		for (Stock sourceStock : sourceStockList) {
 			List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
 			Stock targetStock = moveStock(sourceStock, serialNoList, StockUtil.getStockBalance(sourceStock),
-				targetBoxCode, targetLpnCode, targetLocation, type, billId, billNo, lineNo);
+					targetBoxCode, targetLpnCode, targetLocation, type, billId, billNo, lineNo);
 			targetStockList.add(targetStock);
 		}
 
@@ -352,13 +350,13 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public List<Stock> moveStockByLpnCode(String lpnCode, String targetLpnCode, Location targetLocation,
-										  StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+			StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
 		List<Stock> sourceStockList = stockDao.getStockByLpnCode(lpnCode, null);
 		List<Stock> targetStockList = new ArrayList<>();
 		for (Stock sourceStock : sourceStockList) {
 			List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
 			Stock targetStock = moveStock(sourceStock, serialNoList, StockUtil.getStockBalance(sourceStock),
-				sourceStock.getBoxCode(), targetLpnCode, targetLocation, type, billId, billNo, lineNo);
+					sourceStock.getBoxCode(), targetLpnCode, targetLocation, type, billId, billNo, lineNo);
 			targetStockList.add(targetStock);
 		}
 
@@ -471,8 +469,8 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	private StockLog createAndSaveStockLog(boolean isInStock, Stock stock, BigDecimal qty,
-										   StockLogTypeEnum type, Long billId, String billNo,
-										   String lineNo, String msg) {
+			StockLogTypeEnum type, Long billId, String billNo,
+			String lineNo, String msg) {
 		StockLog stockLog = new StockLog();
 		BeanUtil.copy(stock, stockLog);
 		stockLog.setSourceBillId(billId);
@@ -492,7 +490,7 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public void exportStockLogToExcel(StockLogPageQuery stockLogPageQuery,
-									  HttpServletResponse response) {
+			HttpServletResponse response) {
 		List<StockLogExcelResponse> stockLogList = stockLogDao.listByQuery(stockLogPageQuery);
 		ExcelUtil.export(response, "", "", stockLogList, StockLogExcelResponse.class);
 	}
@@ -501,7 +499,7 @@ public class StockBizImpl implements StockBiz {
 	public boolean judgeEnableOnLocation(Location location) {
 		List<Stock> stock = stockDao.getStockByLocId(location.getLocId());
 		if (Func.isNotEmpty(stock)
-			&& BigDecimalUtil.gt(StockUtil.getStockBalance(stock), BigDecimal.ZERO)) {
+				&& BigDecimalUtil.gt(StockUtil.getStockBalance(stock), BigDecimal.ZERO)) {
 			return false;
 		}
 		return location.enableStock();
@@ -515,7 +513,7 @@ public class StockBizImpl implements StockBiz {
 			stockPageResponse.setStockStatusDesc(stockStatus);
 			// 设置库存可用量
 			stockPageResponse.setStockEnable(stockPageResponse.getStockQty()
-				.add(stockPageResponse.getPickQty().subtract(stockPageResponse.getOccupyQty())));
+					.add(stockPageResponse.getPickQty().subtract(stockPageResponse.getOccupyQty())));
 			// 设置库存余额
 			stockPageResponse.setStockBalance(stockPageResponse.getStockQty().subtract(stockPageResponse.getPickQty()));
 		}
