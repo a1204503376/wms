@@ -234,4 +234,12 @@ public interface StockQueryBiz {
 	 * @return StockMoveResponse 库存移动查询响应对象
 	 */
 	StockMoveResponse findStockMoveBySkuId(Long stockId);
+
+	/**
+	 * 根据 传过来的stockIds集合获取库存集合
+	 *
+	 * @param stockIds 库存id集合
+	 * @return 库存集合
+	 */
+	List<Stock> findStockByIds(List<Long> stockIds);
 }

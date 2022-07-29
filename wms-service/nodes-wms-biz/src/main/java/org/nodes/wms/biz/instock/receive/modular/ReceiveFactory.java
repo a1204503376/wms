@@ -42,11 +42,6 @@ public class ReceiveFactory {
 	private final SkuBiz skuBiz;
 
 
-	public static void main(String[] args) {
-
-	}
-
-
 	/**
 	 * 新增收货单创建收货单头表实体
 	 *
@@ -119,7 +114,7 @@ public class ReceiveFactory {
 		//设置计划数量
 		receiveDetail.setPlanQty(newReceiveDetailRequest.getPlanQty());
 		//设置实收数量
-		receiveDetail.setScanQty(BigDecimal.valueOf(0));
+		receiveDetail.setScanQty(BigDecimal.ZERO);
 		//设置剩余数量
 		receiveDetail.setSurplusQty(newReceiveDetailRequest.getPlanQty());
 		//设置备注
@@ -392,7 +387,7 @@ public class ReceiveFactory {
 		//设置实收数量
 		receiveDetail.setScanQty(item.getPlanQty());
 		//设置剩余数量
-		receiveDetail.setSurplusQty(BigDecimal.valueOf(0));
+		receiveDetail.setSurplusQty(BigDecimal.ZERO);
 		//设置收货单编码
 		receiveDetail.setReceiveNo(receiveHeader.getReceiveNo());
 		//设置包装id
