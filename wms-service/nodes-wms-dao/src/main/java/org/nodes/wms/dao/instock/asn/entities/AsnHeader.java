@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.nodes.wms.dao.instock.asn.enums.AsnBillStateEnum;
+import org.nodes.wms.dao.instock.asn.enums.InStorageTypeEnum;
 import org.springblade.core.tenant.mp.TenantEntity;
 
 import java.util.Date;
@@ -112,7 +113,7 @@ public class AsnHeader extends TenantEntity {
 	/**
 	 * 入库方式
 	 */
-	private Integer instoreType;
+	private InStorageTypeEnum instoreType;
 
 	/**
 	 * 供应商id

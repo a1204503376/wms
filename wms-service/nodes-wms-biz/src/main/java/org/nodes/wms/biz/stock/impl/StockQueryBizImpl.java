@@ -277,6 +277,11 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	}
 
 	@Override
+	public List<Stock> findStockByIds(List<Long> stockIds) {
+		return stockDao.getStockById(stockIds);
+	}
+
+	@Override
 	public int getSerialCountByStockId(Long stockId) {
 		return serialDao.getSerialCountByStockId(stockId);
 	}

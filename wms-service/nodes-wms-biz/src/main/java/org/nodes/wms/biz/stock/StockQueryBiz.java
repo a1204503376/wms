@@ -70,6 +70,14 @@ public interface StockQueryBiz {
 			List<String> zoneTypeList, SkuLotBaseEntity skuLot);
 
 	/**
+	 * 查找可用库存,排除出库暂存区
+	 *
+	 * @param skuLot 必填，如果批属性不为空，则需要匹配
+	 * @return Stock集合
+	 */
+	List<Stock> findEnableStockByZoneType(SkuLotBaseEntity skuLot);
+
+	/**
 	 * 根据库区id查询可用库存,排除出库暂存区
 	 *
 	 * @param whId            必填，库房id
@@ -218,4 +226,12 @@ public interface StockQueryBiz {
 	 * @return StockMoveResponse 库存移动查询响应对象
 	 */
 	StockMoveResponse findStockMoveBySkuId(Long stockId);
+
+	/**
+	 * 根据 传过来的stockIds集合获取库存集合
+	 *
+	 * @param stockIds 库存id集合
+	 * @return 库存集合
+	 */
+	List<Stock> findStockByIds(List<Long> stockIds);
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.apache.commons.lang.NullArgumentException;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.stock.SerialDao;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.enums.SerialStateEnum;
@@ -62,6 +63,7 @@ public class SerialDaoImpl extends BaseServiceImpl<SerialMapper, Serial> impleme
 
 	@Override
 	public List<String> getSerialNoByStockId(Long stockId) {
+		AssertUtil.notNull(stockId,"根据库存ID获取序列号集合库存ID为NULL");
 		List<Serial> serialList = getSerialByStockId(stockId);
 		if (Func.isNotEmpty(serialList)) {
 			return serialList.stream()
