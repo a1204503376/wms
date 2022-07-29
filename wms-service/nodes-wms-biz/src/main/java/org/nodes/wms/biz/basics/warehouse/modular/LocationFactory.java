@@ -61,10 +61,10 @@ public class LocationFactory {
 			List<String> locCodeList = locations.stream().map(Location::getLocCode).collect(Collectors.toList());
 			if (Func.isNotEmpty(locCodeList) && locCodeList.contains(data.getLocCode())) {
 				throw new ServiceException(
-					String.format(
-						"导入失败，库房[编码：%s]中的库位[编码：%s]已存在",
-						data.getWhCode(), data.getLocCode()
-					));
+						String.format(
+								"导入失败，库房[编码：%s]中的库位[编码：%s]已存在",
+								data.getWhCode(), data.getLocCode()
+						));
 			}
 			// 根据库区编码查询库区信息
 			if (Func.isNotEmpty(data.getZoneCode())) {
@@ -99,9 +99,10 @@ public class LocationFactory {
 //			&& !locationAddRequest.getStatus().equals(StatusEnum.OFF.getIndex())) {
 //			throw new ServiceException("新增失败，启用状态只能为1(启用)或者-1(禁用)");
 //		}
+		Func.copy(locationAddOrEditRequest, location);
 		List<Location> locations = locationDao.getLocationByWhId(location.getWhId());
 		Warehouse warehouse = warehouseBiz.findById(location.getWhId());
-		Func.copy(locationAddOrEditRequest, location);
+
 		// 根据id是否为空判断是(新增/编辑)操作
 		if (Func.isNotEmpty(locationAddOrEditRequest.getLocId())) {
 			location.setLocId(locationAddOrEditRequest.getLocId());
@@ -109,10 +110,10 @@ public class LocationFactory {
 			List<String> locCodeList = locations.stream().map(Location::getLocCode).collect(Collectors.toList());
 			if (Func.isNotEmpty(locCodeList) && locCodeList.contains(location.getLocCode())) {
 				throw new ServiceException(
-					String.format(
-						"新增失败，库房[编码：%s]中的库位[编码：%s]已存在",
-						warehouse.getWhCode(),
-						locationAddOrEditRequest.getLocCode()));
+						String.format(
+								"新增失败，库房[编码：%s]中的库位[编码：%s]已存在",
+								warehouse.getWhCode(),
+								locationAddOrEditRequest.getLocCode()));
 			}
 		}
 		return location;
