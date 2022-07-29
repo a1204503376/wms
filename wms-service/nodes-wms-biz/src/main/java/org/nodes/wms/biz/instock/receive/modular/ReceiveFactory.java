@@ -42,11 +42,6 @@ public class ReceiveFactory {
 	private final SkuBiz skuBiz;
 
 
-	public static void main(String[] args) {
-
-	}
-
-
 	/**
 	 * 新增收货单创建收货单头表实体
 	 *
