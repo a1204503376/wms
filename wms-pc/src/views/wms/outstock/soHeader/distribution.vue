@@ -19,7 +19,13 @@
                                     {{ soHeader.orderNo }}
                                 </el-form-item>
                             </el-col>
-                            <el-col :offset="8" :span="2">
+                            <el-col :offset="10" :span="2">
+                                <el-button class="top_button" size="medium"
+                                           type="primary" @click="onRefresh">
+                                    刷新
+                                </el-button>
+                            </el-col>
+                            <el-col :span="2">
                                 <el-button class="top_button" size="medium"
                                            type="primary" @click="onAssign()">
                                     自动分配
@@ -44,61 +50,60 @@
                             </el-col>
                         </el-row>
                     </el-row>
-                    <el-row :gutter="10" style="margin-bottom: 20px; margin-top: 20px">
+                    <el-row style="margin-bottom: 20px">
                         <el-col>
-                            <el-row>
-                                <el-col>
-                                    <div style="line-height: 53px ;height:53px ; width: auto">收货单明细</div>
-                                </el-col>
-                            </el-row>
-                            <el-table
-                                ref="table"
-                                :data="table.soDetailData"
-                                border
-                                highlight-current-row
-                                max-height="250"
-                                size="mini">
-                                <template v-for="(column,index) in table.soDetailColumnList">
-                                    <el-table-column
-                                        v-if="!column.hide"
-                                        :key="index"
-                                        show-overflow-tooltip
-                                        v-bind="column">
-                                    </el-table-column>
-                                </template>
-                                <el-table-column align="center" fixed="right" label="操作" width="100">
-                                    <template v-slot="scope">
-                                        <el-button size="small" type="text" @click="onAdjust(scope.row)">
-                                            调整
-                                        </el-button>
-                                    </template>
-                                </el-table-column>
-                            </el-table>
+                            <el-tabs>
+                                <el-tab-pane label="发货明细">
+                                    <el-table
+                                        ref="table"
+                                        :data="table.soDetailData"
+                                        border
+                                        highlight-current-row
+                                        max-height="148"
+                                        size="mini"
+                                        @row-click="onRowClick">
+                                        <template v-for="(column,index) in table.soDetailColumnList">
+                                            <el-table-column
+                                                v-if="!column.hide"
+                                                :key="index"
+                                                show-overflow-tooltip
+                                                v-bind="column">
+                                            </el-table-column>
+                                        </template>
+                                        <el-table-column align="center" fixed="right" label="操作" width="100">
+                                            <template v-slot="scope">
+                                                <el-button size="small" type="text" @click="onAdjust(scope.row)">
+                                                    调整
+                                                </el-button>
+                                            </template>
+                                        </el-table-column>
+                                    </el-table>
+                                </el-tab-pane>
+                            </el-tabs>
                         </el-col>
                     </el-row>
-                    <el-row>
-                        <el-col>
-                            <div style="line-height: 53px ;height:53px ; width: auto">分配明细</div>
-                        </el-col>
-                    </el-row>
-                    <el-row>
+                    <el-row :gutter="10">
                         <el-col>
                             <template>
-                                <el-table
-                                    :data="table.soPickPlanData"
-                                    :span-method="objectSpanMethod"
-                                    border
-                                    highlight-current-row
-                                    max-height="250"
-                                    size="mini">
-                                    <template v-for="(column,index) in table.soPickPlanColumnList">
-                                        <el-table-column
-                                            :key="index"
-                                            show-overflow-tooltip
-                                            v-bind="column">
-                                        </el-table-column>
-                                    </template>
-                                </el-table>
+                                <el-tabs type="border-card">
+                                    <el-tab-pane label="按箱分配">
+                                        <el-table
+                                            :data="table.soPickPlanData"
+                                            :span-method="objectSpanMethod"
+                                            border
+                                            highlight-current-row
+                                            max-height="310"
+                                            size="mini">
+                                            <template v-for="(column,index) in table.soPickPlanColumnList">
+                                                <el-table-column
+                                                    :key="index"
+                                                    show-overflow-tooltip
+                                                    v-bind="column">
+                                                </el-table-column>
+                                            </template>
+                                        </el-table>
+                                    </el-tab-pane>
+                                </el-tabs>
                             </template>
                         </el-col>
                     </el-row>
@@ -120,8 +125,8 @@
                     border
                     highlight-current-row
                     show-summary>
-                    <el-table-column label="可用量" prop="stockEnableQty"></el-table-column>
-                    <el-table-column label="余额" prop="stockBalanceQty"></el-table-column>
+                    <el-table-column label="可用量" prop="stockEnable"></el-table-column>
+                    <el-table-column label="余额" prop="stockBalance"></el-table-column>
                     <el-table-column label="本次分配量" prop="soPickPlanQty" width="150">
                         <template v-slot="{row}">
                             <el-input
@@ -166,7 +171,8 @@ import {
     cancelAll,
     getEnableStockBySkuId,
     getSoBillDataByDistribution,
-    getSoPickPlanData, issued,
+    getSoPickPlanData,
+    issued,
     saveAssign
 } from "@/api/wms/outstock/soHeader"
 import func from "@/util/func";
@@ -199,7 +205,7 @@ export default {
                         label: '物品编码'
                     },
                     {
-                        prop: 'surplusQty',
+                        prop: 'stockBalance',
                         label: '剩余量',
                         align: 'center'
                     },
@@ -226,11 +232,11 @@ export default {
                         label: '箱码',
                     },
                     {
-                        prop: 'zoneName',
+                        prop: 'zoneCode',
                         label: '库区',
                     },
                     {
-                        prop: 'locName',
+                        prop: 'locCode',
                         label: '库位'
                     },
                     {
@@ -250,15 +256,15 @@ export default {
                         label: '批次'
                     },
                     {
-                        prop: 'enableQty',
+                        prop: 'stockEnable',
                         label: '可用量'
                     },
                     {
-                        prop: 'surplusQty',
+                        prop: 'stockBalance',
                         label: '余额'
                     },
                     {
-                        prop: 'state',
+                        prop: 'stockStatusValue',
                         label: '状态'
                     },
                     {
@@ -313,8 +319,8 @@ export default {
                         location: '',
                         lpn: '',
                         skuCode: '',
-                        enableQty: 0,
-                        surplusQty: 0,
+                        stockEnable: 0,
+                        stockBalance: 0,
                         stockState: '',
                         skuLot1: '',
                     }
@@ -396,13 +402,20 @@ export default {
                 })
                 this.table.soDetailData = data.soDetailList;
             })
-            this.getSoPickPlanData();
+            this.getSoPickPlanData(this.soBillId);
         },
-        async getSoPickPlanData() {
-            await getSoPickPlanData(this.soBillId).then((res) => {
+        async getSoPickPlanData(soBillId, soDetailId) {
+            await getSoPickPlanData(soBillId, soDetailId).then((res) => {
                 this.table.soPickPlanData = res.data.data;
             })
+            console.log(this.table.soPickPlanData);
             this.merge(this.table.soPickPlanData);
+        },
+        onRowClick(row) {
+            this.getSoPickPlanData(this.soHeader.soBillId, row.soDetailId)
+        },
+        onRefresh() {
+            this.getSoPickPlanData(this.soHeader.soBillId);
         },
         onAssign() {
             automaticAssign(this.soHeader.soBillId).then((res) => {
@@ -432,7 +445,7 @@ export default {
         onAdjustSubmit() {
             let data = this.dialog.dialogData.filter(item => this.filterRowBySoPickPlan(item));
             for (const i in data) {
-                if (data[i].soPickPlanQty > data[i].stockEnableQty) {
+                if (data[i].soPickPlanQty > data[i].stockEnable) {
                     this.$message.warning(`物品 ${data[i].skuCode}，批次${data[i].skuLot1} 的分配量不能大于可用量`)
                     return;
                 }
@@ -441,7 +454,6 @@ export default {
                 return Object.assign({}, {'stockId': item.stockId, 'soPickPlanQty': item.soPickPlanQty})
             })
             saveAssign(this.soHeader.soBillId, this.dialog.soDetailId, stockIdAndSoPickPlanQtyList).then((res) => {
-                console.log(res);
                 this.resetMerge(this.getSoPickPlanData());
             })
 
