@@ -276,7 +276,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	public ReceiveDetailByReceiveIdPdaResponse selectDetailByReceiveDetailId(ReceiveDetailByReceiveIdPdaQuery receiveIdPdaQuery) {
 		ReceiveDetail detail = receiveDetailDao.getDetailByReceiveDetailId(receiveIdPdaQuery.getReceiveDetailId());
 		ReceiveDetailByReceiveIdPdaResponse response = BeanUtil.copy(detail, ReceiveDetailByReceiveIdPdaResponse.class);
-		AssertUtil.isNull(response, "收货单明细返回对象为空");
+		AssertUtil.notNull(response, "收货单明细返回对象为空");
 
 		assert response != null;
 
