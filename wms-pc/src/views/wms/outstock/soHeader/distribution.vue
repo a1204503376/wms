@@ -113,47 +113,61 @@
         <template>
             <el-dialog
                 :append-to-body="true"
-                :title="dialog.dialogTitle"
+                :close-on-click-modal="false"
+                :custom-class="dialog.isFullScreen ? 'maxDialog' : '' "
+                :show-close="true"
                 :visible.sync="dialog.dialogTableVisible"
-                width="80%"
                 @close="refreshData">
+                <span slot="title" class="dialog-footer">
+                        <div class="icon">
+                            <span>{{ dialog.title }}</span>
+                            <el-button class="button_telescopic" type="text">
+                                <i :class="dialog.isFullScreen ? 'icon-tuichuquanping' : 'icon-quanping'"
+                                   @click="telescopic">
+                                </i>
+                            </el-button>
+                        </div>
+                    </span>
                 <el-table
                     ref="dialogTable"
                     :data="dialog.dialogData"
                     :span-method="objectSpanMethod"
                     :summary-method="getSummaries"
+                    :height="dialog.isFullScreen ? 530 : 450"
                     border
                     highlight-current-row
                     show-summary>
-                    <el-table-column label="可用量" prop="stockEnable"></el-table-column>
-                    <el-table-column label="余额" prop="stockBalance"></el-table-column>
-                    <el-table-column label="本次分配量" prop="soPickPlanQty" width="150">
-                        <template v-slot="{row}">
-                            <el-input
-                                v-model="row.soPickPlanQty"
-                                maxlength="9"
-                                oninput="value=value.replace(/[^\d]/g,'')"
-                                placeholder="请输入分配数量"
-                                size="medium"
-                                style="width: 100%"
-                            ></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="箱码" prop="boxCode"></el-table-column>
-                    <el-table-column label="库位" prop="locName"></el-table-column>
-                    <el-table-column label="库区" prop="zoneName"></el-table-column>
-                    <el-table-column label="LPN" prop="lpnCode"></el-table-column>
-                    <el-table-column label="物品编码" prop="skuCode"></el-table-column>
-                    <el-table-column label="批次" prop="lotNumber"></el-table-column>
-                    <el-table-column label="状态" prop="stockState"></el-table-column>
-                    <el-table-column label="生产批次" prop="skuLot1"></el-table-column>
-                    <el-table-column label="规格型号" prop="skuLot2"></el-table-column>
-                    <el-table-column label="收货日期" prop="skuLot3"></el-table-column>
-                    <el-table-column label="专用客户" prop="skuLot4"></el-table-column>
-                    <el-table-column label="钢背批次" prop="skuLot5"></el-table-column>
-                    <el-table-column label="摩擦快批次" prop="skuLot6" width="150"></el-table-column>
-                    <el-table-column label="产品标识代码" prop="skuLot7" width="150"></el-table-column>
-                    <el-table-column label="是否CRCC验证" prop="skuLot8" width="150"></el-table-column>
+                    <div style="margin-top: 10px">
+                        <el-table-column label="可用量" prop="stockEnable"></el-table-column>
+                        <el-table-column label="余额" prop="stockBalance"></el-table-column>
+                        <el-table-column label="本次分配量" prop="soPickPlanQty" width="150">
+                            <template v-slot="{row}">
+                                <el-input
+                                    v-model="row.soPickPlanQty"
+                                    maxlength="9"
+                                    oninput="value=value.replace(/[^\d]/g,'')"
+                                    placeholder="请输入分配数量"
+                                    size="medium"
+                                    style="width: 100%"
+                                ></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="箱码" prop="boxCode"></el-table-column>
+                        <el-table-column label="库位" prop="locName"></el-table-column>
+                        <el-table-column label="库区" prop="zoneName"></el-table-column>
+                        <el-table-column label="LPN" prop="lpnCode"></el-table-column>
+                        <el-table-column label="物品编码" prop="skuCode"></el-table-column>
+                        <el-table-column label="批次" prop="lotNumber"></el-table-column>
+                        <el-table-column label="状态" prop="stockState"></el-table-column>
+                        <el-table-column label="生产批次" prop="skuLot1"></el-table-column>
+                        <el-table-column label="规格型号" prop="skuLot2"></el-table-column>
+                        <el-table-column label="收货日期" prop="skuLot3"></el-table-column>
+                        <el-table-column label="专用客户" prop="skuLot4"></el-table-column>
+                        <el-table-column label="钢背批次" prop="skuLot5"></el-table-column>
+                        <el-table-column label="摩擦快批次" prop="skuLot6" width="150"></el-table-column>
+                        <el-table-column label="产品标识代码" prop="skuLot7" width="150"></el-table-column>
+                        <el-table-column label="是否CRCC验证" prop="skuLot8" width="150"></el-table-column>
+                    </div>
                 </el-table>
                 <div slot="footer" class="dialog-footer">
                     <el-button type="primary" @click="onAdjustSubmit()">确 定</el-button>
@@ -176,10 +190,10 @@ import {
     saveAssign
 } from "@/api/wms/outstock/soHeader"
 import func from "@/util/func";
+import "../../../../../public/cdn/iconfont/avue/iconfont.css"
 
 export default {
     name: "distribution",
-    components: {},
     mixins: [editMixin],
     props: {
         soBillId: {type: String, required: true},
@@ -311,7 +325,8 @@ export default {
             },
             dialog: {
                 dialogTableVisible: false,
-                dialogTitle: "",
+                isFullScreen: false,
+                title: "",
                 dialogData: [
                     {
                         boxCode: '',
@@ -432,9 +447,12 @@ export default {
 
             })
         },
+        telescopic() {
+            this.dialog.isFullScreen = !this.dialog.isFullScreen;
+        },
         async onAdjust(row) {
             this.dialog.soDetailId = row.soDetailId;
-            this.dialog.dialogTitle = `分配调整  ${this.soHeader.soBillNo}  计划数量：${row.planQty}`
+            this.dialog.title = `分配调整  ${this.soHeader.soBillNo}  计划数量：${row.planQty}`
             await getEnableStockBySkuId(row.skuId).then((res) => {
                 this.dialog.dialogData = res.data.data;
             })
@@ -496,5 +514,24 @@ export default {
 
 .top_button {
     float: right;
+}
+
+.button_telescopic {
+    color: #909399;
+    float: right;
+    line-height: 22px;
+    margin-right: 22px;
+    font-size: 16px;
+}
+
+/deep/ .maxDialog {
+    margin-right: 13px;
+    width: 88%;
+    margin-top: 14vh !important;
+    height: 79%;
+}
+
+/deep/ .maxDialog .el-dialog__body {
+    max-height: 82% !important;
 }
 </style>
