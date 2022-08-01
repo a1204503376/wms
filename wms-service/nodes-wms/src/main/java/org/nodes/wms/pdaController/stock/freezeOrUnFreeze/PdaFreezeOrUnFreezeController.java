@@ -101,7 +101,7 @@ public class PdaFreezeOrUnFreezeController {
 	 *
 	 * @param request 请求对象-内部包含序列号
 	 */
-	@ApiLog("PDA按批次号解冻")
+	@ApiLog("PDA按序列号解冻")
 	@PostMapping("unFreezeBySerialNumber")
 	public void unFreezeBySerialNumber(@RequestBody UnFreezeBySerialNumberRequest request) {
 		stockControlBiz.unFreezeBySerialNumberAction(request.getSerialNumber());

@@ -391,6 +391,13 @@
 				"navigationStyle": "custom"
 			}
 
+		}, {
+			"path": "pages/stock/freezeOrUnFreeze/unFreeze/unFreezeByBoxCode",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
 		}
 	],
 	"globalStyle": {
