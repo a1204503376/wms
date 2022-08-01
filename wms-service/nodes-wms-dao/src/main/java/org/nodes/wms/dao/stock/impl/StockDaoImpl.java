@@ -348,4 +348,15 @@ public class StockDaoImpl
 	public List<StockPageResponse> getStockResponseByBoxOrByLpn(StockPageQuery stockPageQuery) {
 		return super.baseMapper.getStockResponseByBoxOrByLpn(stockPageQuery);
 	}
+
+	@Override
+	public List<Stock> getEnableStockBySkuLotAndExculdeLoc(List<Long> exculdeLocId, SkuLotBaseEntity skuLot) {
+		LambdaQueryWrapper<Stock> stockQuery = getStockQuery();
+		if (Func.isNotEmpty(exculdeLocId)){
+			stockQuery.notIn(Stock::getLocId, exculdeLocId);
+		}
+
+		SkuLotUtil.applySql(stockQuery, skuLot);
+		return super.list(stockQuery);
+	}
 }
