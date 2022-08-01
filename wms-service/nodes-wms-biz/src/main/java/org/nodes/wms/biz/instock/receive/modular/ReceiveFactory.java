@@ -74,6 +74,8 @@ public class ReceiveFactory {
 		receiveHeader.setSupplierCode(newReceiveHeaderRequest.getSupplier().getCode());
 		//设置供应商名称
 		receiveHeader.setSupplierName(newReceiveHeaderRequest.getSupplier().getName());
+		//设置归还人
+		receiveHeader.setSupplierContact(newReceiveHeaderRequest.getSupplierContact());
 		//设置单据类型
 		receiveHeader.setBillTypeCd(newReceiveHeaderRequest.getBillTypeCd());
 		//设置入库方式
@@ -182,6 +184,8 @@ public class ReceiveFactory {
 		receiveHeaderEditResponse.getSupplier().setId(receiveHeader.getSupplierId());
 		receiveHeaderEditResponse.getSupplier().setCode(receiveHeader.getSupplierCode());
 		receiveHeaderEditResponse.getSupplier().setName(receiveHeader.getSupplierName());
+		//设置归还人
+		receiveHeaderEditResponse.setSupplierContact(receiveHeader.getSupplierContact());
 		//设置入库方式
 		receiveHeaderEditResponse.setInStoreType(receiveHeader.getInStoreType());
 		//设置货主id
@@ -251,6 +255,8 @@ public class ReceiveFactory {
 		receiveHeader.setSupplierCode(editReceiveHeaderRequest.getSupplier().getCode());
 		//设置供应商名称
 		receiveHeader.setSupplierName(editReceiveHeaderRequest.getSupplier().getName());
+		//设置归还人
+		receiveHeader.setSupplierContact(editReceiveHeaderRequest.getSupplierContact());
 		//设置单据类型
 		receiveHeader.setBillTypeCd(editReceiveHeaderRequest.getBillTypeCd());
 		//设置入库方式

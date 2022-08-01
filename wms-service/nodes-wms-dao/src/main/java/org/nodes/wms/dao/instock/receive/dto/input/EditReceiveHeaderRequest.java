@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.nodes.wms.dao.basics.suppliers.dto.input.SupplierSelectRequest;
-import org.nodes.wms.dao.basics.suppliers.dto.output.SupplierSelectResponse;
 
 import java.io.Serializable;
 import java.util.List;
@@ -36,6 +35,11 @@ public class EditReceiveHeaderRequest implements Serializable {
 	 * 供应商下拉返回对象
 	 */
 	private SupplierSelectRequest supplier;
+
+	/**
+	 * 供应商联系人(归还人)
+	 */
+	private String supplierContact;
 
 	/**
 	 * 入库方式
