@@ -11,6 +11,7 @@
                s.stock_qty - s.pick_qty                stock_balance,
                s.wsu_code,
                s.loc_code,
+               s.loc_id,
                s.zone_code,
                s.box_code,
                s.lpn_code,
@@ -105,7 +106,7 @@
             <if test="query.lastOutTimeEnd!=null">
                 AND s.last_Out_Time &lt;= #{query.lastOutTimeEnd}
             </if>
-
+            and s.stay_stock_qty + s.stock_qty > s.pick_qty
         </where>
     </sql>
     <select id="selectStockQtyByLocIdList" resultType="java.util.HashMap">

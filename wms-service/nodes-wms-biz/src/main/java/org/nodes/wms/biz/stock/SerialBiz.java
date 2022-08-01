@@ -7,7 +7,7 @@ import java.util.List;
  */
 public interface SerialBiz {
 	/**
-	 * 根据stockid获取在库的序列号列表
+	 * 根据stockId获取在库的序列号列表
 	 *
 	 * @param stockId 库存id
 	 * @return 序列号集合

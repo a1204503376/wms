@@ -250,6 +250,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public Page<StockPageResponse> getStockPage(Query query, StockPageQuery stockPageQuery) {
+		//按箱显示货按lpn显示
 		if (Func.isNotEmpty(stockPageQuery.getIsShowByBox()) || Func.isNotEmpty(stockPageQuery.getIsShowByLpn())) {
 			List<StockPageResponse> stockPageResponseList = stockDao.getStockResponseByBoxOrByLpn(stockPageQuery);
 			Page<StockPageResponse> page = new Page<>();
