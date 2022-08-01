@@ -19,8 +19,8 @@
                                     v-model="form.params.billTypeCd"
                                     :default-value="true"
                                     io-type="O"
-                                    size="medium"
-                                ></nodes-bill-type>
+                                    size="medium">
+                                </nodes-bill-type>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -43,19 +43,30 @@
                     </el-row>
                     <el-row type="flex">
                         <el-col :span="8">
-                            <el-form-item label="客户" prop="customer">
+                            <el-form-item
+                                :label="form.params.billTypeCd !== this.$commonConst.BILL_TYPE_LEND ? '客户' : '借用人'"
+                                :prop="form.params.billTypeCd !== this.$commonConst.BILL_TYPE_LEND ? 'customer' : 'contact'">
                                 <nodes-customer
+                                    v-if="form.params.billTypeCd !== this.$commonConst.BILL_TYPE_LEND"
                                     v-model="form.params.customer"
                                     size="medium">
                                 </nodes-customer>
+                                <el-input
+                                    v-if="form.params.billTypeCd === this.$commonConst.BILL_TYPE_LEND"
+                                    v-model="form.params.contact"
+                                    :clearable="true"
+                                    placeholder="请输入借用人"
+                                    size="medium"
+                                    style="width: 210px">
+                                </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="出库方式" prop="outstockType">
                                 <nodes-dictionary
                                     v-model="form.params.outstockType"
-                                    size="medium"
-                                    code="outstore_type">
+                                    code="outstore_type"
+                                    size="medium">
                                 </nodes-dictionary>
                             </el-form-item>
                         </el-col>
@@ -63,8 +74,8 @@
                             <el-form-item label="发货方式" prop="transportCode">
                                 <nodes-dictionary
                                     v-model="form.params.transportCode"
-                                    size="medium"
-                                    code="so_transport_code">
+                                    code="so_transport_code"
+                                    size="medium">
                                 </nodes-dictionary>
                             </el-form-item>
                         </el-col>
@@ -74,9 +85,9 @@
                             <el-form-item label="备注" prop="soBillRemark">
                                 <el-input
                                     v-model="form.params.soBillRemark"
-                                    size="medium"
                                     :rows=2
                                     placeholder="请输入内容"
+                                    size="medium"
                                     style="width: 1171px"
                                     type="textarea">
                                 </el-input>
@@ -264,6 +275,7 @@ export default {
                     whId: '',
                     woId: '',
                     customer: {},
+                    contact: '',
                     transportCode: '',
                     outstockType: '',
                     soBillRemark: '',
@@ -288,6 +300,13 @@ export default {
                             required: true,
                             message: '请选择货主',
                             trigger: 'change'
+                        }
+                    ],
+                    contact: [
+                        {
+                            required: true,
+                            message: '请输入借用人',
+                            trigger: 'blur'
                         }
                     ],
                     transportCode: [
@@ -384,6 +403,7 @@ export default {
                 whId: params.whId,
                 woId: params.woId,
                 customerId: params.customer.id,
+                contact: params.contact,
                 transportCode: params.transportCode,
                 outstockType: params.outstockType,
                 soBillRemark: params.soBillRemark,
