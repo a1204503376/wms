@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
+import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receiveLog.modular.ReceiveLogFactory;
@@ -251,7 +252,6 @@ public class StockBizImpl implements StockBiz {
 		return resultStockSerial;
 	}
 
-	// 生成序列号日志
 	private SerialLog createSerialLog(int proType, Serial serial, StockLog stockLog) {
 		SerialLog serialLog = new SerialLog();
 		BeanUtil.copy(serial, serialLog);
@@ -334,6 +334,24 @@ public class StockBizImpl implements StockBiz {
 					String.format("序列号校验失败,库存[%d]没有关联序列号", stock.getStockId()));
 			}
 		}
+	}
+
+	@Override
+	public boolean equalStockStatus(List<Stock> stockList, StockStatusEnum status, boolean isThrow) {
+		AssertUtil.notNull(status, "库存校验失败，库存状态不能为空");
+
+		for (Stock stock : stockList){
+			if (!status.equals(stock.getStockStatus())){
+				if (isThrow){
+					throw ExceptionUtil.mpe("库存状态校验失败,库存[%d]现状态为[%s]不等于[%s]",
+						stock.getStockId(), stock.getStockStatus().getDesc(), status.getDesc());
+				} else {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	@Override
@@ -422,8 +440,11 @@ public class StockBizImpl implements StockBiz {
 	public void freezeStock(List<Long> stockIds) {
 		AssertUtil.notEmpty(stockIds, "冻结库存失败，参数为空");
 
-		stockDao.updateStock(stockIds, StockStatusEnum.FREEZE);
 		List<Stock> stocks = stockDao.getStockById(stockIds);
+		AssertUtil.notEmpty(stocks, "冻结库存失败,没有查询到可用库存");
+		equalStockStatus(stocks, StockStatusEnum.NORMAL, true);
+
+		stockDao.updateStock(stockIds, StockStatusEnum.FREEZE);
 		for (Stock stock : stocks) {
 			createAndSaveStockLog(StockLogTypeEnum.STOCK_FREEZE, stock, "按stock id冻结");
 		}
@@ -435,8 +456,9 @@ public class StockBizImpl implements StockBiz {
 
 		List<Stock> stocks = stockDao.getStockById(stockIds);
 		AssertUtil.notEmpty(stocks, "解冻库存失败,没有查询到可用库存");
-		stockDao.updateStock(stockIds, StockStatusEnum.NORMAL);
+		equalStockStatus(stocks, StockStatusEnum.FREEZE, true);
 
+		stockDao.updateStock(stockIds, StockStatusEnum.NORMAL);
 		for (Stock stock : stocks) {
 			createAndSaveStockLog(StockLogTypeEnum.STOCK_UNFREEZE, stock, "按stock id解冻");
 		}
@@ -447,6 +469,8 @@ public class StockBizImpl implements StockBiz {
 		AssertUtil.notEmpty(locIds, "冻结库存失败，参数为空");
 		List<Stock> stocks = stockDao.getStockByLocIdList(locIds);
 		AssertUtil.notEmpty(stocks, "冻结库存失败,没有查询到可用库存");
+		equalStockStatus(stocks, StockStatusEnum.NORMAL, true);
+
 		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
 		stockDao.updateStock(stockIds, StockStatusEnum.FREEZE);
 		for (Stock stock : stocks) {
@@ -459,6 +483,8 @@ public class StockBizImpl implements StockBiz {
 		AssertUtil.notEmpty(locIds, "解冻库存失败，参数为空");
 		List<Stock> stocks = stockDao.getStockByLocIdList(locIds);
 		AssertUtil.notEmpty(stocks, "解冻库存失败,没有查询到可用库存");
+		equalStockStatus(stocks, StockStatusEnum.FREEZE, true);
+
 		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
 		stockDao.updateStock(stockIds, StockStatusEnum.NORMAL);
 		for (Stock stock : stocks) {
@@ -471,6 +497,8 @@ public class StockBizImpl implements StockBiz {
 		AssertUtil.notEmpty(boxCodes, "冻结库存失败，参数为空");
 		List<Stock> stocks = stockDao.getStockByBoxCode(boxCodes, null);
 		AssertUtil.notEmpty(stocks, "冻结库存失败,没有查询到可用库存");
+		equalStockStatus(stocks, StockStatusEnum.NORMAL, true);
+
 		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
 		stockDao.updateStock(stockIds, StockStatusEnum.FREEZE);
 		for (Stock stock : stocks) {
@@ -483,6 +511,8 @@ public class StockBizImpl implements StockBiz {
 		AssertUtil.notEmpty(boxCodes, "解冻库存失败，参数为空");
 		List<Stock> stocks = stockDao.getStockByBoxCode(boxCodes, null);
 		AssertUtil.notEmpty(stocks, "解冻库存失败,没有查询到可用库存");
+		equalStockStatus(stocks, StockStatusEnum.FREEZE, true);
+
 		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
 		stockDao.updateStock(stockIds, StockStatusEnum.NORMAL);
 		for (Stock stock : stocks) {
@@ -495,6 +525,8 @@ public class StockBizImpl implements StockBiz {
 		AssertUtil.notEmpty(lpnCodes, "冻结库存失败，参数为空");
 		List<Stock> stocks = stockDao.getStockByLpnCode(lpnCodes, null);
 		AssertUtil.notEmpty(stocks, "冻结库存失败,没有查询到可用库存");
+		equalStockStatus(stocks, StockStatusEnum.NORMAL, true);
+
 		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
 		stockDao.updateStock(stockIds, StockStatusEnum.FREEZE);
 		for (Stock stock : stocks) {
@@ -507,6 +539,8 @@ public class StockBizImpl implements StockBiz {
 		AssertUtil.notEmpty(lpnCodes, "解冻库存失败，参数为空");
 		List<Stock> stocks = stockDao.getStockByLpnCode(lpnCodes, null);
 		AssertUtil.notEmpty(stocks, "解冻库存失败,没有查询到可用库存");
+		equalStockStatus(stocks, StockStatusEnum.FREEZE, true);
+
 		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
 		stockDao.updateStock(stockIds, StockStatusEnum.NORMAL);
 		for (Stock stock : stocks) {

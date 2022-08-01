@@ -7,6 +7,7 @@ import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
@@ -176,6 +177,16 @@ public interface StockBiz {
 	 * @param serialNoList 序列号编码
 	 */
 	void checkSerial(Stock stock, List<String> serialNoList);
+
+	/**
+	 * 检查库存的状态是否全部相等，并且等于指定的状态
+	 *
+	 * @param stockList 库存对象
+	 * @param status    状态
+	 * @param isThrow   true表示如果不相同则抛异常，false表示不会抛异常
+	 * @return true：表示库存的批属性都等于status
+	 */
+	boolean equalStockStatus(List<Stock> stockList, StockStatusEnum status, boolean isThrow);
 
 	/**
 	 * 天宜定制：判断该库位是否有库存或被冻结
