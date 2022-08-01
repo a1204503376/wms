@@ -11,6 +11,11 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * 库存工具类
+ *
+ * @author nodesc
+ */
 public class StockUtil {
 
 	/**
@@ -39,7 +44,7 @@ public class StockUtil {
 		for (Stock stock : stockList) {
 			if (!Func.equals(stockList.get(0).getSkuLevel(), stock.getSkuLevel())) {
 				throw ExceptionUtil.mpe("计算库存余额异常，[%d][%d]包装层级不一致",
-						stockList.get(0).getStockId(), stock.getStockId());
+					stockList.get(0).getStockId(), stock.getStockId());
 			}
 
 			BigDecimal balance = stock.getStockQty().subtract(stock.getPickQty());
@@ -80,7 +85,7 @@ public class StockUtil {
 		for (Stock stock : stockList) {
 			if (!Func.equals(stockList.get(0).getSkuLevel(), stock.getSkuLevel())) {
 				throw ExceptionUtil.mpe("计算库存可用量异常，[%d][%d]包装层级不一致",
-						stockList.get(0).getStockId(), stock.getStockId());
+					stockList.get(0).getStockId(), stock.getStockId());
 			}
 
 			BigDecimal enable = stock.getStockQty().subtract(stock.getPickQty()).subtract(stock.getOccupyQty());
@@ -128,7 +133,7 @@ public class StockUtil {
 			}
 
 			throw new ServiceException(String.format("%s失败,stockId:%d,enable:%f,pickQty:%f",
-					reason, sourceStock.getStockId(), enableQty, pickQty));
+				reason, sourceStock.getStockId(), enableQty, pickQty));
 		}
 	}
 

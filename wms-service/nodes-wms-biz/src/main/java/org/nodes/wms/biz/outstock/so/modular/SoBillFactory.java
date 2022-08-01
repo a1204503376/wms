@@ -85,11 +85,6 @@ public class SoBillFactory {
 			// 从聚合类对象中获取基础包装明细信息
 			SkuPackageDetail baseSkuPackageDetail = skuPackageAggregate.findBaseSkuPackageDetail();
 
-			// id为空即新增时
-			if (Func.isEmpty(detail.getSoDetailId())) {
-				// 实收数量
-				detail.setScanQty(BigDecimal.ZERO);
-			}
 			// 发货单id，编码，单据类型
 			detail.setSoBillId(soHeader.getSoBillId());
 			detail.setSoBillNo(soHeader.getSoBillNo());
@@ -108,6 +103,8 @@ public class SoBillFactory {
 			// 基础计量单位编码和名称
 			detail.setBaseUmCode(baseSkuPackageDetail.getWsuCode());
 			detail.setBaseUmName(baseSkuPackageDetail.getWsuName());
+			// 实收数量
+			detail.setScanQty(BigDecimal.ZERO);
 			//剩余数量
 			detail.setSurplusQty(detail.getPlanQty().subtract(detail.getScanQty()));
 			// 发货库房

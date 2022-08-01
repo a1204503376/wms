@@ -97,7 +97,7 @@ public class StockManagerController {
 	 * 库存余额：按件移动
 	 */
 	@PostMapping("move")
-	public R<String> move(@Valid @RequestBody StockMoveRequest stockMoveRequest){
+	public R<String> move(@Valid @RequestBody StockMoveRequest stockMoveRequest) {
 //		return stockManageBiz.stockMove(stockMoveRequest);
 		return null;
 	}
@@ -106,8 +106,34 @@ public class StockManagerController {
 	 * 库存余额：按箱移动
 	 */
 	@PostMapping("/moveByBoxCode")
-	public R<String> moveByBoxCode(@Valid @RequestBody StockMoveByBoxCodeRequest stockMoveByBoxCodeRequest){
+	public R<String> moveByBoxCode(@Valid @RequestBody StockMoveByBoxCodeRequest stockMoveByBoxCodeRequest) {
 //		return stockManageBiz.stockMoveByBox(stockMoveByBoxCodeRequest);
 		return null;
 	}
+
+	/**
+	 * 库存余额:库存冻结
+	 *
+	 * @param stockThawAndFrozenDto 前端传入参数
+	 * @return 操作成功提示
+	 */
+	@PostMapping("/stockFrozen")
+	public R<String> stockFrozen(@RequestBody StockThawAndFrozenDto stockThawAndFrozenDto) {
+		stockManageBiz.stockFrozen(stockThawAndFrozenDto);
+		return R.success("操作成功");
+	}
+
+	/**
+	 * 库存余额:库存解冻
+	 *
+	 * @param stockThawAndFrozenDto 前端传入参数
+	 * @return 操作成功提示
+	 */
+	@PostMapping("/stockUnFrozen")
+	public R<String> stockUnFrozen(@RequestBody StockThawAndFrozenDto stockThawAndFrozenDto) {
+		stockManageBiz.stockUnFrozen(stockThawAndFrozenDto);
+		return R.success("操作成功");
+	}
+
+
 }

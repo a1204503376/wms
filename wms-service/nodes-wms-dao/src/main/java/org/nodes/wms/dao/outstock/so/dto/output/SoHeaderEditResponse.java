@@ -49,6 +49,11 @@ public class SoHeaderEditResponse implements Serializable {
 	private CustomerSelectResponse customer;
 
 	/**
+	 * 借用人
+	 */
+	private String contact;
+
+	/**
 	 * 出库方式
 	 */
 	private Integer outstockType;

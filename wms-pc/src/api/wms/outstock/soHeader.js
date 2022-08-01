@@ -125,12 +125,13 @@ export const getSoBillDataByDistribution = (soBillId) => {
 }
 
 
-export const getSoPickPlanData = (soBillId) => {
+export const getSoPickPlanData = (soBillId, soDetailId) => {
     return request({
         url: '/api/wms/outstock/soBill/getSoPickPlan',
         method: 'post',
         data: {
-            soBillId: soBillId
+            soBillId: soBillId,
+            soDetailId: soDetailId
         }
     })
 }

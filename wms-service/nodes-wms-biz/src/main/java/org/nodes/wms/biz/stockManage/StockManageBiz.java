@@ -106,4 +106,18 @@ public interface StockManageBiz {
 	 * @return 是否序列号管理
 	 */
 	EstimateStockMoveResponse skuIsSn(EstimateStockMoveRequest request);
+
+	/**
+	 * 批量冻结库存
+	 *
+	 * @param stockThawAndFrozenDto 包含箱码、生产批次、库位集合
+	 */
+	void stockFrozen(StockThawAndFrozenDto stockThawAndFrozenDto);
+
+	/**
+	 * 批量解冻库存
+	 *
+	 * @param stockThawAndFrozenDto 包含箱码、生产批次、库位集合
+	 */
+	void stockUnFrozen(StockThawAndFrozenDto stockThawAndFrozenDto);
 }
