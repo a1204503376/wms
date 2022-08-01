@@ -371,13 +371,12 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		//给剩余数量赋值
 		BigDecimal surplusQty = detail.getPlanQty().subtract(scanQty);
 		detail.setSurplusQty(surplusQty);
-
 		ReceiveDetailStatusEnum find = null;
 		if (validPartNotReceipt(detail)) {
 			find = ReceiveDetailStatusEnum.COMPLETED;
 		} else if (validPartCompleted(detail)) {
 			find = ReceiveDetailStatusEnum.NOT_RECEIPT;
-		} else if (validPartNotReceiptCompleted(detail)) {
+		}else if (validPartNotReceiptCompleted(detail)) {
 			find = ReceiveDetailStatusEnum.PART;
 		}
 		if (find == null) {
@@ -394,6 +393,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	 * 将状态变更为：已完成
 	 */
 	private static boolean validPartNotReceipt(ReceiveDetail detail) {
+		System.out.println(BigDecimalUtil.eq(detail.getScanQty(), detail.getPlanQty()));
 		return BigDecimalUtil.eq(detail.getScanQty(), detail.getPlanQty())
 			&& (ReceiveDetailStatusEnum.PART == detail.getDetailStatus()
 			|| ReceiveDetailStatusEnum.NOT_RECEIPT == detail.getDetailStatus());
@@ -401,24 +401,26 @@ public class ReceiveBizImpl implements ReceiveBiz {
 
 	/**
 	 * 实际量 < 计划量
-	 * 并且，当前状态是部分收货或者已完成时
-	 * 将状态变更为：未收货
+	 * 并且，当前状态是未收货、部分收货或者已完成时
+	 * 将状态变更为：部分收货
 	 */
-	private static boolean validPartCompleted(ReceiveDetail detail) {
+	private static boolean validPartNotReceiptCompleted(ReceiveDetail detail) {
+		System.out.println(BigDecimalUtil.le(detail.getScanQty(), detail.getPlanQty()));
 		return BigDecimalUtil.le(detail.getScanQty(), detail.getPlanQty())
 			&& (ReceiveDetailStatusEnum.PART == detail.getDetailStatus()
+			|| ReceiveDetailStatusEnum.NOT_RECEIPT == detail.getDetailStatus()
 			|| ReceiveDetailStatusEnum.COMPLETED == detail.getDetailStatus());
 	}
 
 	/**
 	 * 剩余量 == 计划量
-	 * 并且，当前状态是部分收货、未收货、已完成时
-	 * 将状态变更为：部分收货
+	 * 并且，当前状态是部分收货、已完成时
+	 * 将状态变更为：未收货
 	 */
-	private static boolean validPartNotReceiptCompleted(ReceiveDetail detail) {
+	private static boolean validPartCompleted(ReceiveDetail detail) {
+		System.out.println(BigDecimalUtil.eq(detail.getSurplusQty(), detail.getPlanQty()));
 		return BigDecimalUtil.eq(detail.getSurplusQty(), detail.getPlanQty())
 			&& (ReceiveDetailStatusEnum.PART == detail.getDetailStatus()
-			|| ReceiveDetailStatusEnum.NOT_RECEIPT == detail.getDetailStatus()
 			|| ReceiveDetailStatusEnum.COMPLETED == detail.getDetailStatus());
 	}
 

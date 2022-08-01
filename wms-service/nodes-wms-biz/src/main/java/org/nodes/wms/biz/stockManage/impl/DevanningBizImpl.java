@@ -50,7 +50,9 @@ public class DevanningBizImpl implements DevanningBiz {
 		List<String> serialNumberList = new ArrayList<>();
 		for (Stock stock : stockList) {
 			List<String> serialBizSerialNoByStockId = serialBiz.findSerialNoByStockId(stock.getStockId());
-			serialNumberList.addAll(serialBizSerialNoByStockId);
+			if (Func.isNotEmpty(serialBizSerialNoByStockId)) {
+				serialNumberList.addAll(serialBizSerialNoByStockId);
+			}
 		}
 
 		if (Func.isNotEmpty(serialNumberList)) {
@@ -85,20 +87,32 @@ public class DevanningBizImpl implements DevanningBiz {
 			AssertUtil.notNull(serialNumberList, "根据序列号拆箱时,未采集序列号");
 			//根据页面传过来的String序列号转化成 在库的序列号实体 集合
 			List<Serial> serialList = stockQueryBiz.findSerialBySerialNo(serialNumberList);
+			AssertUtil.notNull(serialList, "根据序列号拆箱时,查找不到对应在库的序列号");
 			//用在库的序列号实体包含的库存ID获取多个库存对象
 			List<Long> stockIds = serialList.stream().map(Serial::getStockId).collect(Collectors.toList());
 			List<Stock> stockList = stockQueryBiz.findStockByIds(stockIds);
 			AssertUtil.notNull(serialNumberList, "采集的序列号找不到对应库存");
-			stockList.forEach(stock -> {
-				stock.setBoxCode(request.getBoxCode());
-				stockBiz.moveStock(stock, null, stock.getStockBalance(), location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
-			});
+			//获取序列号对应的一个库存
+			Stock stock = stockQueryBiz.findStockById(serialList.get(0).getStockId());
+			AssertUtil.notNull(stock, "根据序列号拆箱时,根据序列号集合找不到对应库存");
+			//给库位设置当前箱码/新箱码
+			stock.setBoxCode(request.getBoxCode());
+			//lpn等同于库位
+			stock.setLpnCode(location.getLocCode());
+			//库位移动
+			stockBiz.moveStock(stock, serialNumberList, stock.getStockBalance(), location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
 		} else {
 			AssertUtil.notNull(request.getStockList(), "根据物品拆箱时,未选择物品");
 			//如果序列号不为空执行 按库存拆箱
 			request.getStockList().forEach(stockDeva -> {
+				//根据每一个库位id获取库位
 				Stock stock = stockQueryBiz.findStockById(stockDeva.getStockId());
+				AssertUtil.notNull(stock, "根据序列号拆箱时,根据物品找不到对应库存");
+				//给库位设置当前箱码/新箱码
 				stock.setBoxCode(request.getBoxCode());
+				//lpn等同于库位
+				stock.setLpnCode(location.getLocCode());
+				//如果用户输入的数量大于0则进行拆箱
 				if (BigDecimalUtil.gt(stockDeva.getSplitQty(), BigDecimal.ZERO)) {
 					stockBiz.moveStock(stock, null, stockDeva.getSplitQty(), location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
 				}
