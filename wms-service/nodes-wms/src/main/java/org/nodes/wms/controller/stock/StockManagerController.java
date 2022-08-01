@@ -129,7 +129,7 @@ public class StockManagerController {
 	 * @param stockThawAndFrozenDto 前端传入参数
 	 * @return 操作成功提示
 	 */
-	@PostMapping("/stockFrozen")
+	@PostMapping("/stockUnFrozen")
 	public R<String> stockUnFrozen(@RequestBody StockThawAndFrozenDto stockThawAndFrozenDto) {
 		stockManageBiz.stockUnFrozen(stockThawAndFrozenDto);
 		return R.success("操作成功");

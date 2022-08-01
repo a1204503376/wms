@@ -682,8 +682,12 @@ export default {
             console.log('重置表单');
         },
         submit() {
-            if (this.form1.freezeType === '') {
+            if (this.form1.freezeShow && this.form1.freezeType === '') {
                 this.$message.warning("请选择冻结类型")
+                return;
+            }
+            if (this.form1.thawShow && this.form1.thawType === '') {
+                this.$message.warning("请选择解冻类型")
                 return;
             }
             let StockThawAndFrozenDto = {};
