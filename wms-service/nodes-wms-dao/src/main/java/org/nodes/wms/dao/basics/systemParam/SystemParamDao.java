@@ -11,7 +11,7 @@ public interface SystemParamDao {
 	 * @param param Param对象
 	 * @return 是否成功
 	 */
-	public Boolean saveOrUpdate(Param param);
+	Boolean saveOrUpdate(Param param);
 
 	/**
 	 * 根据参数的key获取参数
@@ -19,7 +19,7 @@ public interface SystemParamDao {
 	 * @param key 键
 	 * @return Param
 	 */
-	public Param selectByKey(String key);
+	Param selectByKey(String key);
 
 	/**
 	 * 移除参数
@@ -27,6 +27,6 @@ public interface SystemParamDao {
 	 * @param ids 参数id集合
 	 * @return 是否成功
 	 */
-	public Boolean delete(String ids);
+	Boolean delete(String ids);
 
 }

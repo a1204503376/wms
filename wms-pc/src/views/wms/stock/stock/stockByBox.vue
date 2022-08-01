@@ -1,6 +1,6 @@
 import fileDownload from "js-file-download";
 <template>
-    <div id='inventory'>
+    <div id='stockByBox'>
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
@@ -34,8 +34,7 @@ import fileDownload from "js-file-download";
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库区" label-width="90px">
-                            <el-input placeholder="请输入库区" v-model.trim="form.params.zoneIdList"
-                                      :clearable="true"></el-input>
+                            <nodes-zone v-model="form.params.zoneIdList" :multiple="true"></nodes-zone>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -184,17 +183,7 @@ import fileDownload from "js-file-download";
 
                 </el-table>
             </template>
-            <template v-slot:page>
-                <el-pagination
-                    :page-sizes="pageSize"
-                    background
-                    layout="total, sizes, prev, pager, next, jumper"
-                    v-bind="page"
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                >
-                </el-pagination>
-            </template>
+
         </nodes-master-page>
         <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
         </dialog-column>
@@ -223,11 +212,16 @@ import NodesSku from "@/components/wms/select/NodesSkuByQuery";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesOwner from "@/components/wms/select/NodesOwner";
 import NodesStockStatus from "@/components/wms/select/NodesStockStatus";
+import NodesLocation from "@/components/wms/select/NodesLocation";
+import NodesZone from "@/components/wms/select/NodesZone";
+import func from "@/util/func";
 
 
 export default {
-    name: "customer",
+    name: "stockByBox",
     components: {
+        NodesZone,
+        NodesLocation,
         DialogColumn,
         NodesOwner,
         NodesSearchInput,
@@ -249,7 +243,7 @@ export default {
                 params: {
                     skuIds: [],
                     skuLot1: "",
-                    locIdLiSt: [],
+                    locIdList: [],
                     stockStatusList: [],
                     zoneIdList: [],
                     boxCode: "",
@@ -274,74 +268,60 @@ export default {
                 columnList: [
                     {
                         prop: "boxCode",
-                        label: "箱码",
-                        sortable: "custom"
+                        label: "箱码"
                     },
                     {
                         prop: "skuCode",
-                        label: "物品编码",
-                        sortable: "custom",
+                        label: "物品编码"
                     },
                     {
                         prop: "stockStatus",
-                        label: "库存状态",
-                        sortable: "custom"
+                        label: "库存状态"
                     },
                     {
                         prop: "skuLot1",
-                        label: "生产批次",
-                        sortable: "custom"
+                        label: "生产批次"
                     },
                     {
                         prop: "stockBalance",
-                        label: "库存余额",
-                        sortable: "custom"
+                        label: "库存余额"
                     },
                     {
                         prop: "stockEnable",
-                        label: "库存可用",
-                        sortable: "custom"
+                        label: "库存可用"
                     },
                     {
                         prop: "occupyQty",
-                        label: "库存占用",
-                        sortable: "custom"
+                        label: "库存占用"
                     },
 
                     {
                         prop: "wsuCode",
-                        label: "计量单位",
-                        sortable: "custom"
+                        label: "计量单位"
                     },
                     {
                         prop: "locCode",
-                        label: "库位编码",
-                        sortable: "custom"
+                        label: "库位编码"
                     },
                     {
                         prop: "lpnCode",
-                        label: "LPN",
-                        sortable: "custom"
+                        label: "LPN"
                     },
                     {
                         prop: "skuLot2",
-                        label: "规格型号",
-                        sortable: "custom"
+                        label: "规格型号"
                     },
                     {
                         prop: "skuLot3",
-                        label: "收货日期",
-                        sortable: "custom"
+                        label: "收货日期"
                     },
                     {
                         prop: "skuLot4",
-                        label: "专用客户",
-                        sortable: "custom"
+                        label: "专用客户"
                     },
                     {
                         prop: "skuLot5",
-                        label: "钢背批次",
-                        sortable: "custom"
+                        label: "钢背批次"
                     },
                     {
                         prop: "skuLot6",
@@ -350,48 +330,39 @@ export default {
                     },
                     {
                         prop: "skuLot7",
-                        label: "产品标识代码",
-                        sortable: "custom"
+                        label: "产品标识代码"
                     },
                     {
                         prop: "skuLot8",
-                        label: "是否CRCC验证",
-                        sortable: "custom"
+                        label: "是否CRCC验证"
                     },
                     {
                         prop: "whCode",
-                        label: "库房",
-                        sortable: "custom"
+                        label: "库房"
                     },
                     {
                         prop: "ownerCode",
-                        label: "货主编码",
-                        sortable: "custom"
+                        label: "货主编码"
                     },
                     {
                         prop: "ownerName",
-                        label: "货主名称",
-                        sortable: "custom"
+                        label: "货主名称"
                     },
                     {
                         prop: "createUserName",
-                        label: "收货人",
-                        sortable: "custom"
+                        label: "收货人"
                     },
                     {
                         prop: "taskId",
-                        label: "任务号",
-                        sortable: "custom"
+                        label: "任务号"
                     },
                     {
                         prop: "lastInTime",
-                        label: "入库时间",
-                        sortable: "custom"
+                        label: "入库时间"
                     },
                     {
                         prop: "lastOutTime",
-                        label: "出库时间",
-                        sortable: "custom"
+                        label: "出库时间"
                     },
                 ],
             },
@@ -401,7 +372,6 @@ export default {
         };
     },
     created() {
-        this.getTableData();
     },
     watch: {
         $route(to) {
@@ -412,9 +382,23 @@ export default {
     },
     methods: {
         getTableData() {
+            let hasNoQuery = true
+            for (let item in this.form.params) {
+                if (item !== 'isShowByBox' && func.isNotEmpty(this.form.params[item])) {
+                    hasNoQuery = false
+                }
+            }
+            if (hasNoQuery) {
+                this.$message.warning("至少输入一个查询条件")
+                return
+            }
             page(this.page, this.form.params)
                 .then((res) => {
                     let pageObj = res.data.data;
+                    if (pageObj.records.length === 0) {
+                        this.$message.warning("没有搜索到符合查询条件的内容")
+                        return
+                    }
                     this.table.data.length = 0
                     this.page.total = pageObj.total;
                     let arr = pageObj.records
@@ -492,34 +476,6 @@ export default {
 
             }
             this.$emit('dateRangeChange', val);
-        },
-        getSummaries(param) {
-            const {columns, data} = param;
-            const sums = [];
-            columns.forEach((column, index) => {
-                if (index === 0) {
-                    sums[index] = '合计';
-                    return;
-                }
-                if (index === 5 || index === 6 || index === 7) {
-                    const values = data.map(item => Number(item[column.property]));
-                    if (!values.every(value => isNaN(value))) {
-                        sums[index] = values.reduce((prev, curr) => {
-                            const value = Number(curr);
-                            if (!isNaN(value)) {
-                                return prev + curr;
-                            } else {
-                                return prev;
-                            }
-                        }, 0);
-
-                    } else {
-                        sums[index] = '';
-                    }
-                }
-            });
-
-            return sums;
         },
         arraySpanMethod({row, column, rowIndex, columnIndex}) {
             if (columnIndex === 0) {

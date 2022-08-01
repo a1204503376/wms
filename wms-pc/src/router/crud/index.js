@@ -269,6 +269,12 @@ export default [
                 name: '按箱显示',
                 props: true,
                 component: () => import('@/views/wms/stock/stock/stockByBox')
+            },
+            {
+                path: 'stockByLpn',
+                name: '按LPN显示',
+                props: true,
+                component: () => import('@/views/wms/stock/stock/stockByLpn')
             }
         ]
     }

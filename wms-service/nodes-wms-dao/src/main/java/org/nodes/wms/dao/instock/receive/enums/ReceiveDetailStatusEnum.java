@@ -12,14 +12,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ReceiveDetailStatusEnum {
 	/**
-	 *未收货
+	 * 未收货
 	 */
 	NOT_RECEIPT(10, "未收货"),
 
 	/**
 	 * 部分收货
 	 */
-	PART(20,"部分收货"),
+	PART(20, "部分收货"),
 
 	/**
 	 * 全部收货
@@ -36,4 +36,5 @@ public enum ReceiveDetailStatusEnum {
 	private final Integer code;
 	@JsonValue
 	private final String desc;
+
 }

@@ -8,7 +8,7 @@ namespace DataAccess.Enitiies
         [Column(IsPrimary = true)]
         public T Id { get; set; }
         [Column(Position = -2)]
-        public DateTime? CreateTime { get; set; }
+        public DateTime? CreateTime { get; set; } = DateTime.Now;
         [Column(Position = -2)]
         public DateTime? UpdateTime { get; set; }
     }

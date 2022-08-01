@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackagingWeb", "PackagingWeb\PackagingWeb.csproj", "{6C66CA1D-69FF-4140-BFC5-E77CFCC206A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{5B358FB0-C0FB-4558-BDE7-4E45AC411A98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B358FB0-C0FB-4558-BDE7-4E45AC411A98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B358FB0-C0FB-4558-BDE7-4E45AC411A98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C66CA1D-69FF-4140-BFC5-E77CFCC206A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C66CA1D-69FF-4140-BFC5-E77CFCC206A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C66CA1D-69FF-4140-BFC5-E77CFCC206A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C66CA1D-69FF-4140-BFC5-E77CFCC206A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

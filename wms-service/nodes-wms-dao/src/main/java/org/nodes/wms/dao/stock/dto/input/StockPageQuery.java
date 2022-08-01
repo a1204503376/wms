@@ -95,4 +95,8 @@ public class StockPageQuery implements Serializable {
 	 * 是否按箱显示
 	 */
 	private Boolean isShowByBox;
+	/**
+	 * 是否按lpn显示
+	 */
+	private Boolean isShowByLpn;
 }

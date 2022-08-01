@@ -5,6 +5,11 @@ import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributio
 
 import java.util.List;
 
+/**
+ * 出库业务
+ *
+ * @author nodesc
+ */
 public interface OutStockBiz {
 
     /**
@@ -12,7 +17,7 @@ public interface OutStockBiz {
      *
      * @param request
      */
-    void pcPickByPcs(PickByPcRequest request);
+	void pickByPc(PickByPcRequest request);
 
 	/**
 	 * 根据发货单id和发货单明细id查询拣货计划

@@ -1,8 +1,8 @@
 package org.nodes.wms.biz.stock.impl;
 
-import com.alibaba.csp.sentinel.util.AssertUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
@@ -71,7 +71,7 @@ public class StockBizImpl implements StockBiz {
 	/**
 	 * 库位是否被冻结，库位是否允许混放
 	 */
-	private <T> void canInStockByLocation(Location location, Long skuId, T skuLotObject) {
+	private <T> void canInStock(Location location, Long skuId, T skuLotObject) {
 		if (Func.isEmpty(location)) {
 			throw new ServiceException("新增库存失败,库位不存在");
 		}
@@ -118,7 +118,7 @@ public class StockBizImpl implements StockBiz {
 	@Override
 	public Stock inStock(StockLogTypeEnum type, ReceiveLog receiveLog) {
 		Location location = locationBiz.findByLocId(receiveLog.getLocId());
-		canInStockByLocation(location, receiveLog.getSkuId(), receiveLog);
+		canInStock(location, receiveLog.getSkuId(), receiveLog);
 		// 验证批属性
 		SkuLotUtil.check(receiveLog, receiveLog.getWoId(), receiveLog.getWhId());
 		// 形成库存，需要考虑库存合并
@@ -282,16 +282,66 @@ public class StockBizImpl implements StockBiz {
 			sourceStock.getLpnCode(), targetLocation, type, billId, billNo, lineNo);
 	}
 
-	@Override
-	public Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
-						   String targetBoxCode, String targetLpnCode, Location targetLocation,
-						   StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+	private void canMoveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
+							  Location targetLocation) {
 		AssertUtil.notNull(targetLocation, "库存移动失败，目标库位为空");
 		StockUtil.assertPick(sourceStock, qty, "库存移动失败");
+
+		if (Func.isNotEmpty(serialNoList)) {
+			List<String> serialNos = serialNoList.stream()
+				.distinct()
+				.collect(Collectors.toList());
+			if (serialNoList.size() != serialNos.size()) {
+				throw new ServiceException(String.format("库存移动失败,存在重复的的序列号,%s",
+					String.join(",", serialNoList)));
+			}
+
+			if (serialNos.size() != qty.intValue()) {
+				throw new ServiceException("库存移动失败,移动的个数与序列号个数不一致");
+			}
+		}
+
 		if (!targetLocation.enableStock()) {
 			throw new ServiceException(
 				String.format("库存移动失败，目标库位[%s]不能上架库存", targetLocation.getLocCode()));
 		}
+
+		if (StockStatusEnum.SYSTEM_FREEZE.equals(sourceStock.getStockStatus())) {
+			throw new ServiceException(
+				String.format("库存移动失败,原库存[%d]被系统冻结,不能移动", sourceStock.getStockId()));
+		}
+	}
+
+	@Override
+	public void checkSerial(Stock stock, List<String> serialNoList) {
+		List<String> serialNosOfStock = serialDao.getSerialNoByStockId(stock.getStockId());
+
+		if (Func.isNotEmpty(serialNosOfStock)) {
+			if (Func.isEmpty(serialNoList)) {
+				throw new ServiceException(
+					String.format("序列号校验失败,库存[%d]有关联序列号,请选择序列号", stock.getStockId()));
+			}
+
+			for (String item : serialNoList) {
+				if (!serialNosOfStock.contains(item)) {
+					throw new ServiceException(
+						String.format("序列号校验失败,序列号[%s]不在库存[%d]中", item, stock.getStockId()));
+				}
+			}
+		} else {
+			if (Func.isNotEmpty(serialNoList)) {
+				throw new ServiceException(
+					String.format("序列号校验失败,库存[%d]没有关联序列号", stock.getStockId()));
+			}
+		}
+	}
+
+	@Override
+	public Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
+						   String targetBoxCode, String targetLpnCode, Location targetLocation,
+						   StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+		canMoveStock(sourceStock, serialNoList, qty, targetLocation);
+		checkSerial(sourceStock, serialNoList);
 
 		Stock tempStock = new Stock();
 		BeanUtil.copy(sourceStock, tempStock);
@@ -370,33 +420,33 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public void freezeStock(List<Long> stockIds) {
-		AssertUtil.assertNotEmpty(stockIds, "冻结库存失败，参数为空");
+		AssertUtil.notEmpty(stockIds, "冻结库存失败，参数为空");
 
 		stockDao.updateStock(stockIds, StockStatusEnum.FREEZE);
 		List<Stock> stocks = stockDao.getStockById(stockIds);
 		for (Stock stock : stocks) {
-			createAndSaveStockLog(StockLogTypeEnum.STOCK_FREEZE, stock, "按stockid冻结");
+			createAndSaveStockLog(StockLogTypeEnum.STOCK_FREEZE, stock, "按stock id冻结");
 		}
 	}
 
 	@Override
 	public void unfreezeStock(List<Long> stockIds) {
-		AssertUtil.assertNotEmpty(stockIds, "解冻库存失败，参数为空");
+		AssertUtil.notEmpty(stockIds, "解冻库存失败，参数为空");
 
 		List<Stock> stocks = stockDao.getStockById(stockIds);
-		AssertUtil.assertNotEmpty(stocks, "解冻库存失败,没有查询到可用库存");
+		AssertUtil.notEmpty(stocks, "解冻库存失败,没有查询到可用库存");
 		stockDao.updateStock(stockIds, StockStatusEnum.NORMAL);
 
 		for (Stock stock : stocks) {
-			createAndSaveStockLog(StockLogTypeEnum.STOCK_UNFREEZE, stock, "按stockid解冻");
+			createAndSaveStockLog(StockLogTypeEnum.STOCK_UNFREEZE, stock, "按stock id解冻");
 		}
 	}
 
 	@Override
 	public void freezeStockByLoc(List<Long> locIds) {
-		AssertUtil.assertNotEmpty(locIds, "冻结库存失败，参数为空");
+		AssertUtil.notEmpty(locIds, "冻结库存失败，参数为空");
 		List<Stock> stocks = stockDao.getStockByLocIdList(locIds);
-		AssertUtil.assertNotEmpty(stocks, "冻结库存失败,没有查询到可用库存");
+		AssertUtil.notEmpty(stocks, "冻结库存失败,没有查询到可用库存");
 		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
 		stockDao.updateStock(stockIds, StockStatusEnum.FREEZE);
 		for (Stock stock : stocks) {
@@ -406,9 +456,9 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public void unfreezeStockByLoc(List<Long> locIds) {
-		AssertUtil.assertNotEmpty(locIds, "解冻库存失败，参数为空");
+		AssertUtil.notEmpty(locIds, "解冻库存失败，参数为空");
 		List<Stock> stocks = stockDao.getStockByLocIdList(locIds);
-		AssertUtil.assertNotEmpty(stocks, "解冻库存失败,没有查询到可用库存");
+		AssertUtil.notEmpty(stocks, "解冻库存失败,没有查询到可用库存");
 		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
 		stockDao.updateStock(stockIds, StockStatusEnum.NORMAL);
 		for (Stock stock : stocks) {
@@ -418,9 +468,9 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public void freezeStockByBoxCode(List<String> boxCodes) {
-		AssertUtil.assertNotEmpty(boxCodes, "冻结库存失败，参数为空");
+		AssertUtil.notEmpty(boxCodes, "冻结库存失败，参数为空");
 		List<Stock> stocks = stockDao.getStockByBoxCode(boxCodes, null);
-		AssertUtil.assertNotEmpty(stocks, "冻结库存失败,没有查询到可用库存");
+		AssertUtil.notEmpty(stocks, "冻结库存失败,没有查询到可用库存");
 		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
 		stockDao.updateStock(stockIds, StockStatusEnum.FREEZE);
 		for (Stock stock : stocks) {
@@ -430,9 +480,9 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public void unFreezeStockByBoxCode(List<String> boxCodes) {
-		AssertUtil.assertNotEmpty(boxCodes, "解冻库存失败，参数为空");
+		AssertUtil.notEmpty(boxCodes, "解冻库存失败，参数为空");
 		List<Stock> stocks = stockDao.getStockByBoxCode(boxCodes, null);
-		AssertUtil.assertNotEmpty(stocks, "解冻库存失败,没有查询到可用库存");
+		AssertUtil.notEmpty(stocks, "解冻库存失败,没有查询到可用库存");
 		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
 		stockDao.updateStock(stockIds, StockStatusEnum.NORMAL);
 		for (Stock stock : stocks) {
@@ -442,9 +492,9 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public void freezeStockByLpnCode(List<String> lpnCodes) {
-		AssertUtil.assertNotEmpty(lpnCodes, "冻结库存失败，参数为空");
+		AssertUtil.notEmpty(lpnCodes, "冻结库存失败，参数为空");
 		List<Stock> stocks = stockDao.getStockByLpnCode(lpnCodes, null);
-		AssertUtil.assertNotEmpty(stocks, "冻结库存失败,没有查询到可用库存");
+		AssertUtil.notEmpty(stocks, "冻结库存失败,没有查询到可用库存");
 		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
 		stockDao.updateStock(stockIds, StockStatusEnum.FREEZE);
 		for (Stock stock : stocks) {
@@ -454,9 +504,9 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public void unfreezeStockByLpnCode(List<String> lpnCodes) {
-		AssertUtil.assertNotEmpty(lpnCodes, "解冻库存失败，参数为空");
+		AssertUtil.notEmpty(lpnCodes, "解冻库存失败，参数为空");
 		List<Stock> stocks = stockDao.getStockByLpnCode(lpnCodes, null);
-		AssertUtil.assertNotEmpty(stocks, "解冻库存失败,没有查询到可用库存");
+		AssertUtil.notEmpty(stocks, "解冻库存失败,没有查询到可用库存");
 		List<Long> stockIds = stocks.stream().map(Stock::getStockId).collect(Collectors.toList());
 		stockDao.updateStock(stockIds, StockStatusEnum.NORMAL);
 		for (Stock stock : stocks) {

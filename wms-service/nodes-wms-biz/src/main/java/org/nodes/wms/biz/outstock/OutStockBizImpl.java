@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * 出库业务实现类
+ * 
+ * @author nodesc
+ */
 @Service
 @RequiredArgsConstructor
 public class OutStockBizImpl implements OutStockBiz {
@@ -16,9 +21,11 @@ public class OutStockBizImpl implements OutStockBiz {
 	private final SoPickPlanDao soPickPlanDao;
 
     @Override
-    public void pcPickByPcs(PickByPcRequest request) {
+    public void pickByPc(PickByPcRequest request) {
         // TODO Auto-generated method stub
-
+        // 单据状态为终结状态，则不能进行拣货
+        // 已经分配过的不能进行PC拣货
+        //
     }
 
     @Override

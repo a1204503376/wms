@@ -4,6 +4,11 @@ import org.nodes.core.base.entity.Param;
 
 import java.math.BigDecimal;
 
+/**
+ * 系统参数业务操作类
+ *
+ * @author nodesc
+ */
 public interface SystemParamBiz {
 	/**
 	 * 获取列的最大载重
@@ -11,6 +16,13 @@ public interface SystemParamBiz {
 	 * @return 列的最大载重
 	 */
 	BigDecimal findMaxLoadWeightOfColumn();
+
+	/**
+	 * 天宜定制：获取调度系统的url
+	 *
+	 * @return 调度系统url
+	 */
+	String findScheduleUrl();
 
 	/**
 	 * 获取开放的批属性个数,如果没有配置则返回30

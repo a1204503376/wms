@@ -61,6 +61,12 @@ public interface StockMapper extends BaseMapper<Stock> {
 	 */
 	List<StockPageResponse> getStockResponseByQuery(StockPageQuery stockPageQuery);
 
-
+	/**
+	 * 获取库存余额按箱显示信息
+	 *
+	 * @param stockPageQuery 查询参数
+	 * @return 库存信息
+	 */
+	List<StockPageResponse> getStockResponseByBoxOrByLpn(@Param("query") StockPageQuery stockPageQuery);
 }
 

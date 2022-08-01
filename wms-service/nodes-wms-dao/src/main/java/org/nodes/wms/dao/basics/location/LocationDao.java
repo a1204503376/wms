@@ -156,11 +156,19 @@ public interface LocationDao {
 	List<Location> getLocationByZoneId(Long zoneId);
 
 	/**
-	 * 冻结或解冻 库位信息
-	 *
-	 * @param taskId  任务id
-	 * @param locId   库位id 可为空 为空则为解冻
-	 * @param locFlag 库位状态 可为空 为空则为解冻
+	 * 根据库位id更新库位状态
+	 * 
+	 * @param locId   库位id，必填
+	 * @param locFlag 库位使用标记，必填
+	 * @param taskId  占用的任务id
 	 */
-	void freezeOrUnfreezeLocByTask(String taskId, Long locId, Integer locFlag);
+	void updateLocFlag(Long locId, Integer locFlag, String taskId);
+
+	/**
+	 * 根据taskid更新库位状态
+	 * 
+	 * @param taskId  占用的任务id，必填
+	 * @param locFlag 库位使用标记，必填
+	 */
+	void updateLocFlag(String taskId, Integer locFlag);
 }
