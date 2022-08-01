@@ -13,6 +13,7 @@
         :size="size"
         :disabled="disabled"
         :clearable="true"
+        @clear="clear"
         @change="onChange">
         <el-option
             v-for="item in options"
@@ -58,7 +59,7 @@ export default {
     },
     watch: {
         selectVal(){
-            this.setDefaultByProps();
+            // this.setDefaultByProps();
         }
     },
     methods: {
@@ -88,6 +89,10 @@ export default {
         }, 500),
         onChange(val) {
             this.$emit('selectValChange', val);
+        },
+        clear(){
+            console.log("clear");
+            // TODO 默认清空方法将 selectVal 变成了 "", 调教表单报错
         }
     }
 }

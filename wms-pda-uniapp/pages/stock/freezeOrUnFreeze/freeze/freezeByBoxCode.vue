@@ -1,12 +1,12 @@
 <template>
 	<view>
 		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
-			:bgColor="navigationBarBackgroundColor" title="按库位冻结" titleStyle="color:#ffffff;font-size:21px"
+			:bgColor="navigationBarBackgroundColor" title="按箱码冻结" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u--form>
-			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.locCode"></u--input>
+			<u-form-item label="箱码" :required="true" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.boxCode"></u--input>
 			</u-form-item>
 		</u--form>
 		<view class="footer">
@@ -35,7 +35,7 @@
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
-					locCode: '',
+					boxCode: '',
 					whId:uni.getStorageSync('warehouse').whId
 				}
 			}
@@ -61,8 +61,8 @@
 			submit() {
 				var _this = this;
 				uni.$u.throttle(function() {
-					if (tool.isNotEmpty(_this.params.locCode)) {
-						freezeOrUnFreeze.freezeByLocCode(_this.params).then(data => {
+					if (tool.isNotEmpty(_this.params.boxCode)) {
+						freezeOrUnFreeze.freezeByBoxCode(_this.params).then(data => {
 							console.log(data)
 						})
 						return;

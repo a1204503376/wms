@@ -374,14 +374,14 @@ import fileDownload from "js-file-download";
             <el-dialog title="选择类型" :visible.sync="form1.popShow" append-to-body width="800px">
                 <el-form :model="form1">
                     <el-form-item label="解冻类型" label-width="120px" v-if="form1.thawShow">
-                        <el-select v-model="form1.thawType" placeholder="请选择解冻类型">
+                        <el-select v-model="form1.stockType" placeholder="请选择解冻类型">
                             <el-option label="整批次解冻" value="byBatch"></el-option>
                             <el-option label="库位解冻" value="byLoc"></el-option>
                             <el-option label="按箱解冻" value="byBox"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="冻结类型" label-width="120px" v-if="form1.freezeShow">
-                        <el-select v-model="form1.freezeType" placeholder="请选择冻结类型">
+                        <el-select v-model="form1.stockType" placeholder="请选择冻结类型">
                             <el-option label="整批次冻结" value="byBatch"></el-option>
                             <el-option label="库位冻结" value="byLoc"></el-option>
                             <el-option label="按箱冻结" value="byBox"></el-option>
@@ -414,7 +414,8 @@ import {
     move,
     moveByBox,
     page,
-    stockFrozen
+    stockFrozen,
+    stockUnFrozen
 } from "@/api/wms/stock/stock";
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js';
@@ -475,9 +476,8 @@ export default {
             form1: {
                 popShow: false,
                 thawShow: false,
-                thawType: "",
                 freezeShow: false,
-                freezeType: "",
+                stockType: "",
                 remark: ""
             },
             deleteCustomerRequest: {
@@ -682,17 +682,13 @@ export default {
             console.log('重置表单');
         },
         submit() {
-            if (this.form1.freezeShow && this.form1.freezeType === '') {
-                this.$message.warning("请选择冻结类型")
-                return;
-            }
-            if (this.form1.thawShow && this.form1.thawType === '') {
-                this.$message.warning("请选择解冻类型")
+            if (this.form1.stockType === '') {
+                this.$message.warning("请选择类型")
                 return;
             }
             let StockThawAndFrozenDto = {};
             let remark = this.form1.remark
-            if (this.form1.freezeType === 'byBatch') {
+            if (this.form1.stockType === 'byBatch') {
                 let skuLot1List = this.$refs.table.selection.map((row) => {
                     return row.skuLot1;
                 });
@@ -702,12 +698,12 @@ export default {
                     return;
                 }
                 StockThawAndFrozenDto = {skuLot1List, remark}
-            } else if (this.form1.freezeType === 'byLoc') {
+            } else if (this.form1.stockType === 'byLoc') {
                 let locIdList = this.$refs.table.selection.map((row) => {
                     return row.locId;
                 });
                 StockThawAndFrozenDto = {locIdList, remark}
-            } else if (this.form1.freezeType === 'byBox') {
+            } else if (this.form1.stockType === 'byBox') {
                 let boxCodeList = this.$refs.table.selection.map((row) => {
                     return row.boxCode;
                 });
@@ -727,7 +723,7 @@ export default {
             }
             if (this.form1.thawShow) {
                 this.cancel()
-                stockFrozen(StockThawAndFrozenDto).then((res) => {
+                stockUnFrozen(StockThawAndFrozenDto).then((res) => {
                     this.getTableData()
                     this.$message.success(res.data.msg);
                 })

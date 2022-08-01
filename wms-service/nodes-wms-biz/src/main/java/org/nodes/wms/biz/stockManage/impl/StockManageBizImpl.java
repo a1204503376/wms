@@ -17,7 +17,6 @@ import org.nodes.wms.dao.stock.dto.output.EstimateStockMoveResponse;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
-import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -27,6 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author admin
+ */
 @Service
 @RequiredArgsConstructor
 public class StockManageBizImpl implements StockManageBiz {
@@ -38,17 +40,32 @@ public class StockManageBizImpl implements StockManageBiz {
 
 
 	@Override
-	public void freezeByLocCodeAction(String locCode) {
-
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public void freezeByLocCodeAction(String locCode, Long whId) {
+		Location location = locationBiz.findLocationByLocCode(whId, locCode);
+		AssertUtil.notNull(location, "根据库位编码冻结时，根据库房编码查询出的库位为空");
+		List<Long> locIds = new ArrayList<>();
+		locIds.add(location.getLocId());
+		stockBiz.freezeStockByLoc(locIds);
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void freezeByLotNumberAction(String lotNumber) {
-
+		AssertUtil.notEmpty(lotNumber, "按批次号冻结时批次号为空");
+		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
+		skuLot.setSkuLot1(lotNumber);
+		List<Stock> stockList = stockQueryBiz.findEnableStockBySkuLot(skuLot);
+		AssertUtil.notNull(stockList, "按批次号冻结时,根据批次号查询不到对应库存");
+		List<Long> stockIds = stockList.stream()
+			.map(Stock::getStockId)
+			.distinct()
+			.collect(Collectors.toList());
+		stockBiz.freezeStock(stockIds);
 	}
 
 	@Override
-	public void freezeBySerialNumberAction(String serialNumber) {
+	public void freezeBySerialNumberAction(List<String> serialNumber) {
 
 	}
 
@@ -58,13 +75,37 @@ public class StockManageBizImpl implements StockManageBiz {
 	}
 
 	@Override
-	public void unFreezeByLocCodeAction(String locCode) {
-
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public void freezeStockByBoxCodeAction(String boxCode) {
+		AssertUtil.notNull(boxCode, "按箱冻结时箱码未输入");
+		List<String> boxCodes = new ArrayList<>();
+		boxCodes.add(boxCode);
+		stockBiz.freezeStockByBoxCode(boxCodes);
 	}
 
 	@Override
-	public void unFreezeByLotNumberAction(String lotNumber) {
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public void unFreezeByLocCodeAction(String locCode, Long whId) {
+		Location location = locationBiz.findLocationByLocCode(whId, locCode);
+		AssertUtil.notNull(location, "根据库位编码解冻时，根据库房编码查询出的库位为空");
+		List<Long> locIds = new ArrayList<>();
+		locIds.add(location.getLocId());
+		stockBiz.unfreezeStockByLoc(locIds);
+	}
 
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public void unFreezeByLotNumberAction(String lotNumber) {
+		AssertUtil.notEmpty(lotNumber, "按批次号解冻时批次号为空");
+		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
+		skuLot.setSkuLot1(lotNumber);
+		List<Stock> stockList = stockQueryBiz.findEnableStockBySkuLot(skuLot);
+		AssertUtil.notNull(stockList, "按批次号解冻时,根据批次号查询不到对应库存");
+		List<Long> stockIds = stockList.stream()
+			.map(Stock::getStockId)
+			.distinct()
+			.collect(Collectors.toList());
+		stockBiz.unfreezeStock(stockIds);
 	}
 
 	@Override
@@ -75,6 +116,15 @@ public class StockManageBizImpl implements StockManageBiz {
 	@Override
 	public void portionUnFreezeAction(PortionUnFreezeRequest request) {
 
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public void unFreezeStockByBoxCodeAction(String boxCode) {
+		AssertUtil.notNull(boxCode, "按箱解冻时箱码未输入");
+		List<String> boxCodes = new ArrayList<>();
+		boxCodes.add(boxCode);
+		stockBiz.unFreezeStockByBoxCode(boxCodes);
 	}
 
 	@Override
@@ -133,7 +183,6 @@ public class StockManageBizImpl implements StockManageBiz {
 			//移动
 			stockBiz.moveStock(stock, null, stock.getStockBalance(), stock.getBoxCode(), request.getLpnCode(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_BOX_PDA, null, null, null);
 		}
-		;
 	}
 
 	@Override
@@ -160,13 +209,14 @@ public class StockManageBizImpl implements StockManageBiz {
 				Func.isNotEmpty(stockThawAndFrozenDto.getRemark()) ? "备注:" + stockThawAndFrozenDto.getRemark() : "");
 		}
 		if (Func.isNotEmpty(stockThawAndFrozenDto.getLocIdList())) {
-			List<String> locIdList = stockThawAndFrozenDto.getLocIdList()
+			List<Long> locIdList = stockThawAndFrozenDto.getLocIdList()
 				.stream()
 				.distinct()
+				.map(Long::parseLong)
 				.collect(Collectors.toList());
-			stockBiz.freezeStockByLoc(BeanUtil.copy(locIdList, Long.class));
+			stockBiz.freezeStockByLoc(locIdList);
 			msg = String.format("按库位冻结,库存ID:[%s]%s",
-				String.join(",", locIdList),
+				Func.join(locIdList),
 				Func.isNotEmpty(stockThawAndFrozenDto.getRemark()) ? "备注:" + stockThawAndFrozenDto.getRemark() : "");
 		}
 		if (Func.isNotEmpty(stockThawAndFrozenDto.getSkuLot1List())) {
@@ -205,13 +255,14 @@ public class StockManageBizImpl implements StockManageBiz {
 				Func.isNotEmpty(stockThawAndFrozenDto.getRemark()) ? "备注:" + stockThawAndFrozenDto.getRemark() : "");
 		}
 		if (Func.isNotEmpty(stockThawAndFrozenDto.getLocIdList())) {
-			List<String> locIdList = stockThawAndFrozenDto.getLocIdList()
+			List<Long> locIdList = stockThawAndFrozenDto.getLocIdList()
 				.stream()
 				.distinct()
+				.map(Long::parseLong)
 				.collect(Collectors.toList());
-			stockBiz.unfreezeStockByLoc(BeanUtil.copy(locIdList, Long.class));
-			msg = String.format("按库位解冻,库存ID:[%s]%s",
-				String.join(",", locIdList),
+			stockBiz.unfreezeStockByLoc(locIdList);
+			msg = String.format("按库位解冻,库位ID:[%s]%s",
+				Func.join(locIdList),
 				Func.isNotEmpty(stockThawAndFrozenDto.getRemark()) ? "备注:" + stockThawAndFrozenDto.getRemark() : "");
 		}
 		if (Func.isNotEmpty(stockThawAndFrozenDto.getSkuLot1List())) {

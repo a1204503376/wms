@@ -7,7 +7,7 @@
                          :rules="form.rules"
                          label-position="right"
                          label-width="120px"
-                         size="mini"
+                         size="medium"
                          style="margin-left:10px;margin-right:10px;"
                 >
                     <el-row>
@@ -16,20 +16,39 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="库房">
-                                <nodes-warehouse v-model="form.params.newReceiveHeaderRequest.whId"
-                                                 :default-value="true"></nodes-warehouse>
+                                <nodes-warehouse
+                                    v-model="form.params.newReceiveHeaderRequest.whId"
+                                    :default-value="true"
+                                    size="medium">
+                                </nodes-warehouse>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="单据类型" prop="billTypeCd">
-                                <nodes-bill-type v-model="form.params.newReceiveHeaderRequest.billTypeCd"
-                                                 io-type="i"></nodes-bill-type>
+                                <nodes-bill-type
+                                    v-model="form.params.newReceiveHeaderRequest.billTypeCd"
+                                    io-type="i"
+                                    size="medium">
+                                </nodes-bill-type>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="供应商">
-                                <nodes-supplier v-model="form.params.newReceiveHeaderRequest.supplier"
-                                                style="width: 200px"></nodes-supplier>
+                        <el-col :span="8" >
+                            <el-form-item
+                                :label="form.params.newReceiveHeaderRequest.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN ? '供应商' : '归还人'"
+                                :prop="form.params.newReceiveHeaderRequest.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN ? 'supplier' : 'supplierContact'">
+                                <nodes-supplier
+                                    v-model="form.params.newReceiveHeaderRequest.supplier"
+                                    v-if="form.params.newReceiveHeaderRequest.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN"
+                                    size="medium">
+                                </nodes-supplier>
+                                <el-input
+                                    style="width: 210px"
+                                    placeholder="请输入归还人"
+                                    :clearable="true"
+                                    v-model="form.params.newReceiveHeaderRequest.supplierContact"
+                                    v-if="form.params.newReceiveHeaderRequest.billTypeCd === this.$commonConst.BILL_TYPE_RETURN"
+                                    size="medium">
+                                </el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -38,25 +57,29 @@
                             <el-form-item label="入库方式">
                                 <nodes-in-store-mode
                                     v-model="form.params.newReceiveHeaderRequest.inStoreType"
-                                    :multiple="false" :default-value="true">
+                                    :default-value="true"
+                                    :multiple="false" size="medium">
                                 </nodes-in-store-mode>
                             </el-form-item>
                         </el-col>
-
                         <el-col :span="8">
                             <el-form-item label="货主">
-                                <nodes-owner v-model="form.params.newReceiveHeaderRequest.woId"
-                                             :default-value="true"></nodes-owner>
+                                <nodes-owner
+                                    v-model="form.params.newReceiveHeaderRequest.woId"
+                                    :default-value="true"
+                                    size="medium">
+                                </nodes-owner>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="备注">
-                                <el-input type="textarea" v-model="form.params.newReceiveHeaderRequest.remark"
-                                          style="width: 1055px"></el-input>
+                                <el-input v-model="form.params.newReceiveHeaderRequest.remark"
+                                          style="width: 1172px"
+                                          type="textarea">
+                                </el-input>
                             </el-form-item>
-
                         </el-col>
                     </el-row>
                     <el-row>
@@ -70,8 +93,7 @@
                                 border
                                 size="mini">
                                 <el-table-column
-                                    width="53"
-                                >
+                                    width="53">
                                     <template slot="header">
                                         <el-button circle
                                                    icon="el-icon-plus"
@@ -85,21 +107,18 @@
                                     label="行号"
                                     show-overflow-tooltip
                                     type="index"
-                                    width="60"
-                                >
+                                    width="60">
                                     <template v-slot="scope">
                                         <nodes-line-number
                                             :index="scope.$index"
-                                            @change="(val)=>{ scope.row.lineNumber = val; }"
-                                        >
+                                            @change="(val)=>{ scope.row.lineNumber = val; }">
                                         </nodes-line-number>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
                                     :align="'left'"
                                     prop="skuCode"
-                                    width="195"
-                                >
+                                    width="195">
                                     <template slot="header">
                                         <span class="d-table-header-required">物品编码</span>
                                     </template>
@@ -107,12 +126,8 @@
                                         <nodes-sku
                                             v-model="row.sku"
                                             style="width: 170px;"
-                                            @selectValChange="onChangeSku(row)"
-
-                                        >
-
+                                            @selectValChange="onChangeSku(row)">
                                         </nodes-sku>
-
                                     </template>
                                 </el-table-column>
                                 <el-table-column width="125">
@@ -121,34 +136,31 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.sku.skuName"
-                                            :disabled="true">
+                                            :disabled="true"
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
                                     prop="planQty"
-                                    width="170"
-                                >
+                                    width="170">
                                     <template slot="header">
                                         <span class="d-table-header-required">计划数量</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input-number
                                             v-model="row.planQty"
-                                            style="width: 130px"
                                             :min="0"
                                             controls-position="right"
-                                            size="mini"></el-input-number>
+                                            size="mini"
+                                            style="width: 130px"></el-input-number>
                                     </template>
                                 </el-table-column>
-
                                 <el-table-column
                                     :align="'left'"
                                     prop="skuCode"
-                                    width="110"
-                                >
+                                    width="110">
                                     <template slot="header">
                                         <span class="d-table-header-required">计量单位</span>
                                     </template>
@@ -156,19 +168,17 @@
                                         <nodes-sku-um v-model="row.umCode" :sku="row.sku"></nodes-sku-um>
                                     </template>
                                 </el-table-column>
-
                                 <el-table-column
                                     :align="'left'"
-                                    prop="skuCode"
-                                >
+                                    prop="skuCode">
                                     <template slot="header">
                                         <span class="d-table-header-required">规格</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.sku.skuSpec"
-                                            :disabled="true">
+                                            :disabled="true"
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -178,9 +188,8 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.skuLot1"
-                                        >
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -190,9 +199,8 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.skuLot4"
-                                        >
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -202,9 +210,8 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.skuLot5"
-                                        >
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -214,9 +221,8 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.skuLot6"
-                                        >
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -226,13 +232,11 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.skuLot8"
-                                        >
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
-
                                 <el-table-column width="130">
                                     <template slot="header">
                                         <span class="d-table-header-required">备注</span>
@@ -245,17 +249,15 @@
                                     <template slot="header">
                                         <span class="d-table-header-required">操作</span>
                                     </template>
-                                    <template slot-scope="scope">
+                                    <template v-slot="scope">
                                         <el-button
-                                            @click.native.prevent="deleteRow(scope.$index, table.data)"
+                                            size="small"
                                             type="text"
-                                            size="small">
+                                            @click.native.prevent="deleteRow(scope.$index, table.data)">
                                             删除
                                         </el-button>
                                     </template>
                                 </el-table-column>
-
-
                             </el-table>
                         </el-col>
                     </el-row>
@@ -266,14 +268,12 @@
                     <el-button
                         :loading="loading"
                         type="primary"
-                        @click="onSubmit"
-                    >
+                        @click="onSubmit">
                         保 存
                     </el-button>
                     <el-button
                         :loading="loading"
-                        @click="onClose"
-                    >
+                        @click="onClose">
                         关 闭
                     </el-button>
                 </el-row>
@@ -319,11 +319,11 @@ export default {
                             code: '',
                             name: ''
                         },
+                        supplierContact: null,
                         woId: '',
                         remark: '',
                     },
                     newReceiveDetailRequestList: []
-
                 },
                 rules: {
                     billTypeCd: [
@@ -333,15 +333,21 @@ export default {
                             trigger: 'change'
                         }
                     ],
+                    supplierContact: [
+                        {
+                            required: true,
+                            message: '请输入归还人',
+                            trigger: 'blur'
+                        }
+                    ]
                 }
             }
         }
     },
-    created() {
-
-    },
     methods: {
-
+        billTypeChange(row){
+            console.log(row)
+        },
         // 过滤空白行
         filterBlankRow(row) {
             return !(

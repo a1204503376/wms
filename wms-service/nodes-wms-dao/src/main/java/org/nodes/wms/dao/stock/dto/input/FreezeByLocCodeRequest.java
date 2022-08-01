@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.stock.dto.input;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -14,4 +16,9 @@ public class FreezeByLocCodeRequest implements Serializable {
 	 * 库位编码
 	 */
 	private String locCode;
+	/**
+	 *  库房id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long whId;
 }

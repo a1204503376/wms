@@ -65,6 +65,25 @@ const portionUnFreeze = (data) => {
 	})
 }
 
+const freezeByBoxCode = (data) => {
+	return http.request({
+		url: '/api/ApiPDA/stock/freezeOrUnFreeze/freezeByBoxCode',
+		method: 'POST',
+		data: data
+	})
+}
+
+const unfreezeByBoxCode = (data) => {
+	return http.request({
+		url: '/api/ApiPDA/stock/freezeOrUnFreeze/unfreezeByBoxCode',
+		method: 'POST',
+		data: data
+	})
+}
+
+
+
+
 export default {
 	freezeByLocCode,
 	freezeByLotNumber,
@@ -73,5 +92,7 @@ export default {
 	unFreezeByLocCode,
 	unFreezeByLotNumber,
 	unFreezeBySerialNumber,
-	portionUnFreeze
+	portionUnFreeze,
+	freezeByBoxCode,
+	unfreezeByBoxCode
 }

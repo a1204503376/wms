@@ -1,9 +1,10 @@
 package org.nodes.wms.dao.outstock.so.dto.output;
 
-import com.alibaba.excel.annotation.ExcelIgnore;
+import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import lombok.Data;
+import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,6 +14,7 @@ import java.util.Date;
  **/
 @Data
 @ColumnWidth(15)
+@ExcelIgnoreUnannotated
 public class SoHeaderExcelResponse implements Serializable {
 
 	private static final long serialVersionUID = 7539146158533443755L;
@@ -39,8 +41,9 @@ public class SoHeaderExcelResponse implements Serializable {
 	 * 单据状态
 	 */
 	@ExcelProperty("单据状态")
-	@ExcelIgnore
-	private String soBillState;
+	private String soBillStateValue;
+
+	private SoBillStateEnum soBillState;
 
 	/**
 	 * 客户编码
