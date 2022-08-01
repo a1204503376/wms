@@ -17,7 +17,6 @@ import org.nodes.wms.dao.stock.dto.output.EstimateStockMoveResponse;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
-import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -210,13 +209,14 @@ public class StockManageBizImpl implements StockManageBiz {
 				Func.isNotEmpty(stockThawAndFrozenDto.getRemark()) ? "备注:" + stockThawAndFrozenDto.getRemark() : "");
 		}
 		if (Func.isNotEmpty(stockThawAndFrozenDto.getLocIdList())) {
-			List<String> locIdList = stockThawAndFrozenDto.getLocIdList()
+			List<Long> locIdList = stockThawAndFrozenDto.getLocIdList()
 				.stream()
 				.distinct()
+				.map(Long::parseLong)
 				.collect(Collectors.toList());
-			stockBiz.freezeStockByLoc(BeanUtil.copy(locIdList, Long.class));
+			stockBiz.freezeStockByLoc(locIdList);
 			msg = String.format("按库位冻结,库存ID:[%s]%s",
-				String.join(",", locIdList),
+				Func.join(locIdList),
 				Func.isNotEmpty(stockThawAndFrozenDto.getRemark()) ? "备注:" + stockThawAndFrozenDto.getRemark() : "");
 		}
 		if (Func.isNotEmpty(stockThawAndFrozenDto.getSkuLot1List())) {
@@ -255,13 +255,14 @@ public class StockManageBizImpl implements StockManageBiz {
 				Func.isNotEmpty(stockThawAndFrozenDto.getRemark()) ? "备注:" + stockThawAndFrozenDto.getRemark() : "");
 		}
 		if (Func.isNotEmpty(stockThawAndFrozenDto.getLocIdList())) {
-			List<String> locIdList = stockThawAndFrozenDto.getLocIdList()
+			List<Long> locIdList = stockThawAndFrozenDto.getLocIdList()
 				.stream()
 				.distinct()
+				.map(Long::parseLong)
 				.collect(Collectors.toList());
-			stockBiz.unfreezeStockByLoc(BeanUtil.copy(locIdList, Long.class));
-			msg = String.format("按库位解冻,库存ID:[%s]%s",
-				String.join(",", locIdList),
+			stockBiz.unfreezeStockByLoc(locIdList);
+			msg = String.format("按库位解冻,库位ID:[%s]%s",
+				Func.join(locIdList),
 				Func.isNotEmpty(stockThawAndFrozenDto.getRemark()) ? "备注:" + stockThawAndFrozenDto.getRemark() : "");
 		}
 		if (Func.isNotEmpty(stockThawAndFrozenDto.getSkuLot1List())) {
