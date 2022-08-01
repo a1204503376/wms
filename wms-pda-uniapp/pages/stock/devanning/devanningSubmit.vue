@@ -8,7 +8,7 @@
 			<u-form-item label="目标LOC" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.locCode"></u--input>
 			</u-form-item>
-			<u-form-item label="整箱上架" :required="true" class="left-text-one-line" labelWidth="100">
+			<u-form-item label="新箱码" :required="true" class="left-text-one-line" labelWidth="100">
 				<picker style="width: 100%;height: 100%;" v-model="dataSource" :range="isAllLpnPutawayList"
 					range-key="name" value="index" @change="bindPickerChange">
 					<view class="uni-input-input" style="width: 100%;">
@@ -34,6 +34,7 @@
 	import uniSelect from '@/components/uni-select.vue'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
+	import devanning from '@/api/stock/devanning.js'
 	export default {
 		components: {
 			uniSelect
@@ -42,7 +43,8 @@
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
-					locCode: ''
+					locCode: '',
+					newBoxCode: ''
 				},
 				dataSource: "",
 				isAllLpnPutawayList: [{
@@ -58,10 +60,11 @@
 				]
 			}
 		},
-		onLoad() {
-		this.dataSource = this.isAllLpnPutawayList[0].name;
-		this.params.isAllLpnPutaway = this.isAllLpnPutawayList[0].isAllLpnPutaway;
-		console.log(this.params.isAllLpnPutaway)
+		onLoad: function(option) {
+			var parse = JSON.parse(option.param)
+			this.params = parse;
+			this.dataSource = this.isAllLpnPutawayList[0].name;
+			this.params.newBoxCode = this.isAllLpnPutawayList[0].isAllLpnPutaway;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -81,25 +84,34 @@
 			bindPickerChange: function(e) {
 				this.index = e.detail.value
 				this.dataSource = this.isAllLpnPutawayList[e.detail.value].name;
-				this.params.isAllLpnPutaway = this.isAllLpnPutawayList[e.detail.value].isAllLpnPutaway;
-			    console.log(this.params.isAllLpnPutaway)
+				this.params.newBoxCode = this.isAllLpnPutawayList[e.detail.value].isAllLpnPutaway;
+				console.log(this.params.newBoxCode)
 			},
 			submit() {
 				var _this = this;
-				_this.params.isSn = true;
 				uni.$u.throttle(function() {
 					if (tool.isNotEmpty(_this.params.locCode)) {
-						console.log('拆箱成功')
-						uni.$u.func.routeNavigateTo('/pages/stock/stockManage/standardMove/standardMoveSerialNumber', _this.params);
-						
+						devanning.devanningSubmit(_this.params).then(data => {
+							uni.$u.func.showToast({
+								title: '拆箱成功'
+							});
+							_this.esc();
+						})
 						return;
+					} else {
+						uni.$u.func.showToast({
+							title: '拆箱失败'
+						});
 					}
-					console.log('拆箱失败')
 				}, 1000)
 
 			},
 			esc() {
-				uni.$u.func.navigateBackTo(1);
+				if (tool.isNotEmpty(this.params.page)) {
+					uni.$u.func.navigateBackTo((this.params.page + 1));
+				} else {
+					uni.$u.func.navigateBackTo(2);
+				}
 			}
 		}
 	}

@@ -88,6 +88,11 @@ public class StockPageResponse implements Serializable {
 	@ExcelProperty({"库存信息", "库位编码"})
 	private String locCode;
 	/**
+	 * 库位id
+	 */
+	@ExcelIgnore
+	private Long locId;
+	/**
 	 * 库区编码
 	 */
 	@ColumnWidth(15)
