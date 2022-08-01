@@ -168,6 +168,16 @@ public interface StockBiz {
 	void unfreezeStockByLpnCode(List<String> lpnCodes);
 
 	/**
+	 * 校验库存的序列号
+	 * 如果库存有关联序列号，但serialNoList为空，则抛异常
+	 * 如果库存有关联序列号，则要求serialNoList的序列号必须是该库存的，否则抛异常
+	 *
+	 * @param stock        库存
+	 * @param serialNoList 序列号编码
+	 */
+	void checkSerial(Stock stock, List<String> serialNoList);
+
+	/**
 	 * 天宜定制：判断该库位是否有库存或被冻结
 	 *
 	 * @param location 库位
