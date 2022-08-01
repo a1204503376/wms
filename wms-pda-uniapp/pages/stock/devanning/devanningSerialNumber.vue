@@ -65,15 +65,13 @@
 				}],
 				params: {},
 				serialNumberList: [],
-				serialNumberLists: ['1', '11', '111', '1111', '001', '11111', '111111'],
+				serialNumberLists: [],
 				receiveDetailId: '',
 				receiveId: ''
 			}
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
-			this.receiveDetailId = parse.receiveDetailId;
-			this.receiveId = parse.receiveId;
 			this.params = parse;
 		},
 		onUnload() {
@@ -107,58 +105,21 @@
 			submit() {
 				var _this = this;
 				uni.$u.throttle(function() {
-					var serialList = [];
-					_this.serialNumberList.forEach((serialNumbers, index) => {
-						serialList.push(serialNumbers.serialNumber)
-					})
-					let params = {
-						serialNumberList: serialList
+					if (_this.serialNumberList.length > 0) {
+						let serialNumberList = []
+						_this.serialNumberList.forEach(item => {
+							serialNumberList.push(item.serialNumber)
+						})
+						var params = {};
+						params = _this.params;
+						params.serialNumberList = serialNumberList;
+						uni.$u.func.routeNavigateTo('/pages/stock/devanning/devanningSubmit', params);
+					} else {
+						_this.$u.func.showToast({
+							title: '请至少采集一个序列号'
+						});
 					}
-					receive.getSerialNumberList(params).then(data => {
-						if (tool.isEmpty(data.data)) {
-							var serialList = [];
-							_this.serialNumberList.forEach((serialNumbers, index) => {
-								serialList.push(serialNumbers.serialNumber)
-							})
-							_this.params.serialNumberList = serialList;
-							_this.params.whCode = uni.getStorageSync('warehouse').whCode;
-							_this.params.whId = uni.getStorageSync('warehouse').whId;
-							console.log("序列号采集成功")
-							uni.$u.func.routeNavigateTo('/pages/stock/devanning/devanningSubmit', _this.params);
-							// receive.submitReceiptByPcs(_this.params).then(data => {
-							// 	if (data.data.allReceivieIsAccomplish && data.data
-							// 		.currentReceivieIsAccomplish) {
-							// 		//当前收货单收货收货完毕
-							// 		_this.clearEmitKeyDown();
-							// 		_this.$u.func.navigateBackTo(3);
-							// 		return;
-							// 	} else if (data.data.currentReceivieIsAccomplish) {
-							// 		//当前收货单详情收货收货完毕
-							// 		_this.clearEmitKeyDown();
-							// 		_this.$u.func.navigateBackTo(2);
-							// 		return;
-							// 	} else {
-							// 		//当前收货单详情收货部分收货,返回收货单收货页面
-							// 		_this.clearEmitKeyDown();
-							// 		_this.esc();
-							// 	}
 
-							// });
-						} else {
-							_this.$u.func.showToast({
-								title: '序列号已存在'
-							});
-							_this.serialNumberList.forEach((serialNumber, index) => {
-								data.data.forEach((serialNumbers, index) => {
-									if (serialNumber.serialNumber ==
-										serialNumbers) {
-										serialNumber.backgroundColor =
-											"background-color: #DD524D;"
-									}
-								});
-							});
-						}
-					});
 				}, 1000)
 			},
 			analysisCode(code) {
@@ -192,11 +153,20 @@
 					});
 					return;
 				}
-				this.params.serialNumber = barcode.content;
-				this.serialNumberList.push({
-					serialNumber: barcode.content,
-					backgroundColor: "background-color: #fff;"
-				});
+				let isExists = this.params.serialNumberList.findIndex(item => item == barcode.content);
+				if (isExists >= 0) {
+					this.params.serialNumber = barcode.content;
+					this.serialNumberList.push({
+						serialNumber: barcode.content,
+						backgroundColor: "background-color: #fff;"
+					});
+					return;
+				} else {
+					this.$u.func.showToast({
+						title: '此托盘上不存在该序列号'
+					});
+				}
+
 			},
 			clearEmitKeyDown() {
 				this.emitKeyDown = function() {};

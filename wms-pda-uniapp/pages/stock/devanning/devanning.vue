@@ -24,7 +24,7 @@
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
-	import putawayByBox from '@/api/inStock/putawayByBox.js'
+	import devanning from '@/api/stock/devanning.js'
 	export default {
 		components: {
 			keyboardListener
@@ -62,8 +62,18 @@
 				}
 
 				this.clearEmitKeyDown();
-				uni.$u.func.routeNavigateTo('/pages/stock/devanning/goodsDevanning', this
-					.putawayData);
+				devanning.getAllSerialNumberManage(this.params).then(data => {
+					var params = {};
+					params = data.data;
+					params.boxCode = this.params.boxCode;
+					params.whId = this.params.whId;
+					if (data.data.isSn) {
+						uni.$u.func.routeNavigateTo('/pages/stock/devanning/devanningSerialNumber', params);
+					} else {
+						uni.$u.func.routeNavigateTo('/pages/stock/devanning/goodsDevanning', params);
+					}
+				})
+
 			},
 			analysisCode(code) {
 				var barcode = barcodeFunc.parseBarcode(code);
