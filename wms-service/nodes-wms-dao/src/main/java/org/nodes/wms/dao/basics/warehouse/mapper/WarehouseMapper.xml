@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.basics.warehouse.mapper.WarehouseMapper">
 
-
     <select id="getWarehouseSelectResponseList" resultType="org.nodes.wms.dao.basics.warehouse.dto.output.WarehouseResponse">
         SELECT
             wh_id,
@@ -10,5 +9,6 @@
             wh_name
         FROM
             wms_warehouse
+        where is_deleted = 0
     </select>
 </mapper>
