@@ -98,7 +98,7 @@ public interface StockDao {
 	List<Stock> getStockOnLpnByBoxCode(String boxCode);
 
 	List<Stock> getStock(StockStatusEnum status, Long woId, Long locId,
-						 Long skuId, String boxCode, String lpnCode);
+			Long skuId, String boxCode, String lpnCode);
 
 	List<Stock> getStockByLocId(Long locId);
 
@@ -107,7 +107,7 @@ public interface StockDao {
 	Stock updateStock(Stock stock);
 
 	void updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
-					 BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
+			BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
 
 	void updateStock(List<Long> stockIds, StockStatusEnum status);
 
@@ -141,21 +141,13 @@ public interface StockDao {
 	 */
 	List<StockPageResponse> getStockResponseByQuery(StockPageQuery stockPageQuery);
 
-	/**
-	 * pc拣货获取可出库库存集合
-	 *
-	 * @param skuCode 物料编码
-	 * @return 可用库存集合
-	 */
-	List<Stock> getStockListBySkuCode(String skuCode);
-
 	List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-									  List<Long> zoneIdList, SkuLotBaseEntity skuLot,
-									  List<Long> excludeZoneIdList);
+			List<Long> zoneIdList, SkuLotBaseEntity skuLot,
+			List<Long> excludeZoneIdList);
 
 	List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-										  List<Long> locationIdList, SkuLotBaseEntity skuLot,
-										  List<Long> excludeZoneIdList);
+			List<Long> locationIdList, SkuLotBaseEntity skuLot,
+			List<Long> excludeZoneIdList);
 
 	/**
 	 * 库存余额按箱显示

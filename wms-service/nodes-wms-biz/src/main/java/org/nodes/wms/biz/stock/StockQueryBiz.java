@@ -67,7 +67,15 @@ public interface StockQueryBiz {
 	 * @return Stock集合
 	 */
 	List<Stock> findEnableStockByZoneType(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-										  List<String> zoneTypeList, SkuLotBaseEntity skuLot);
+			List<String> zoneTypeList, SkuLotBaseEntity skuLot);
+
+	/**
+	 * 查找可用库存,排除出库暂存区
+	 *
+	 * @param skuLot 必填，如果批属性不为空，则需要匹配
+	 * @return Stock集合
+	 */
+	List<Stock> findEnableStockBySkuLot(SkuLotBaseEntity skuLot);
 
 	/**
 	 * 根据库区id查询可用库存,排除出库暂存区
@@ -80,7 +88,7 @@ public interface StockQueryBiz {
 	 * @return Stock集合
 	 */
 	List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-									  List<Long> zoneIdList, SkuLotBaseEntity skuLot);
+			List<Long> zoneIdList, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 根据库位id查询可用库存,排除出库暂存区
@@ -93,7 +101,7 @@ public interface StockQueryBiz {
 	 * @return Stock集合
 	 */
 	List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-										  List<Long> locationIdList, SkuLotBaseEntity skuLot);
+			List<Long> locationIdList, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 根据箱码查询库存,排除出库暂存区
@@ -202,14 +210,6 @@ public interface StockQueryBiz {
 	 * @return key:lpn编码
 	 */
 	List<CallAgvResponse> findLpnStockOnStageLeftByCallAgv(Long whId, String boxCode);
-
-	/**
-	 * pc上架根据物料编码获取库存集合 TODO 可以删除了
-	 *
-	 * @param skuCode 物料编码
-	 * @return 库存集合
-	 */
-	List<Stock> getStockListBySkuCode(String skuCode);
 
 	/**
 	 * 根据箱码获取库存信息

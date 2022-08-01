@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.basics.location.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -95,8 +96,8 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 
 		LambdaQueryWrapper<Location> lambdaQueryWrapper = new LambdaQueryWrapper<>();
 		lambdaQueryWrapper
-			.eq(Location::getLocCode, locCode)
-			.eq(Location::getWhId, whId);
+				.eq(Location::getLocCode, locCode)
+				.eq(Location::getWhId, whId);
 		return super.getOne(lambdaQueryWrapper);
 	}
 
@@ -153,28 +154,38 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	}
 
 	@Override
-	public void freezeOrUnfreezeLocByTask(String taskId, Long locId, Integer locFlag) {
-		AssertUtil.notEmpty(taskId, "冻结解冻库位时任务编号不能为空");
-		UpdateWrapper<Location> updateWrapper = new UpdateWrapper<>();
-		if (Func.isNotEmpty(locId) && Func.isNotEmpty(locFlag)) {
-			updateWrapper.eq("loc_id", locId)
-				.set("loc_flag", locFlag)
-				.set("loc_flag_desc", taskId);
-		} else {
-			updateWrapper.eq("loc_flag_desc", taskId)
-				.set("loc_flag", LocationConstant.LOC_FLAG_NORMAL)
-				.set("loc_flag_desc", null);
-		}
+	public List<Location> getLocationByLpnType(LpnTypeRequest request) {
+		return super.baseMapper.selectLoctionByLpnType(request);
+	}
 
+	@Override
+	public void updateLocFlag(Long locId, Integer locFlag, String taskId) {
+		AssertUtil.notNull(locId, "冻结解冻库位时locId不能为空");
+		AssertUtil.notNull(locFlag, "冻结解冻库位时locFlag不能为空");
+
+		if (Func.isNull(taskId)) {
+			taskId = "";
+		}
+		LambdaUpdateWrapper<Location> updateWrapper = Wrappers.lambdaUpdate();
+		updateWrapper.eq(Location::getLocId, locId)
+				.set(Location::getLocFlag, locFlag)
+				.set(Location::getLocFlagDesc, taskId);
 		if (!super.update(updateWrapper)) {
-			throw new ServiceException("冻结或解冻库位失败");
+			throw new ServiceException(String.format("根据locId:[%d]更新库位使用状态失败", locId));
 		}
 	}
 
 	@Override
-	public List<Location> getLocationByLpnType(LpnTypeRequest request) {
+	public void updateLocFlag(String taskId, Integer locFlag) {
+		AssertUtil.notNull(taskId, "冻结解冻库位时任务编号不能为空");
+		AssertUtil.notNull(locFlag, "冻结解冻库位时状态不能为空");
 
-		return super.baseMapper.selectLoctionByLpnType(request);
+		LambdaUpdateWrapper<Location> updateWrapper = Wrappers.lambdaUpdate();
+		updateWrapper.eq(Location::getLocFlagDesc, taskId)
+				.set(Location::getLocFlag, locFlag);
+		if (!super.update(updateWrapper)) {
+			throw new ServiceException(String.format("根据taskId:[%d]更新库位使用状态失败", taskId));
+		}
 	}
 
 }

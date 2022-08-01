@@ -2,6 +2,11 @@ package org.nodes.wms.biz.outstock;
 
 import org.nodes.wms.dao.outstock.so.dto.input.PickByPcRequest;
 
+/**
+ * 出库业务
+ * 
+ * @author nodesc
+ */
 public interface OutStockBiz {
 
     /**
@@ -9,5 +14,5 @@ public interface OutStockBiz {
      * 
      * @param request
      */
-    void pcPickByPcs(PickByPcRequest request);
+    void pickByPc(PickByPcRequest request);
 }
