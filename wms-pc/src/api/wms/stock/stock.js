@@ -67,4 +67,21 @@ export const moveByBox = (data) => {
     })
 }
 
+export const stockFrozen = (data) => {
+    return request({
+        url: '/api/wms/stock/stockFrozen',
+        method: 'post',
+        data: data
+    })
+}
+
+export const stockUnFrozen = (data) => {
+    return request({
+        url: '/api/wms/stock/stockUnFrozen',
+        method: 'post',
+        data: data
+    })
+}
+
+
 
