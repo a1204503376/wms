@@ -384,6 +384,13 @@
 				"navigationStyle": "custom"
 			}
 
+		}, {
+			"path": "pages/stock/freezeOrUnFreeze/freeze/freezeByBoxCode",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
 		}
 	],
 	"globalStyle": {
