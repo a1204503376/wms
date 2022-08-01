@@ -7,72 +7,118 @@
                          label-position="right"
                          label-width="120px"
                          size="mini"
-                         style="margin-left:10px;margin-right:10px;"
-                >
-
+                         style="margin-left:10px;margin-right:10px;" >
                     <el-row>
                         <h3>收货订单</h3>
                     </el-row>
-                    <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="单据编码:">
-                                {{ form.params.receiveNo }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="单据状态:">
-                                {{ form.params.billStateDesc }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="库房:">
-                                {{ form.params.whCode }}
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="货主:">
-                                {{ form.params.ownerCode }}
-                            </el-form-item>
-                        </el-col>
-
-
-                        <el-col :span="8">
-                            <el-form-item label="单据类型:">
-                                {{ form.params.billTypeName }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="入库方式:">
-                                {{ form.params.inStoreTypeDesc }}
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="ASN编码:">
-                                {{ form.params.asnBillNo }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="供应商编码:">
-                                {{ form.params.supplierCode }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="供应商名称:">
-                                {{ form.params.supplierName }}
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="备注:">
-                                {{ form.params.remark }}
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
+                    <el-descriptions
+                        :column="4"
+                        border
+                        class="margin-top"
+                        style="margin-bottom: 20px">
+                        <el-descriptions-item
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
+                            <template slot="label">
+                                单据编码
+                            </template>
+                            {{ form.params.receiveNo }}
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
+                            <template slot="label">
+                                单据状态
+                            </template>
+                            {{ form.params.billStateDesc }}
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
+                            <template slot="label">
+                                库房
+                            </template>
+                            {{ form.params.whCode }}
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
+                            <template slot="label">
+                                货主
+                            </template>
+                            {{ form.params.ownerName }}
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
+                            <template slot="label">
+                                单据类型
+                            </template>
+                            {{ form.params.billTypeName }}
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
+                            <template slot="label">
+                                入库方式
+                            </template>
+                            {{ form.params.inStoreTypeDesc }}
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
+                            <template slot="label">
+                                ASN编码
+                            </template>
+                            {{ form.params.asnBillNo }}
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            v-if="form.params.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN"
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
+                            <template slot="label">
+                                供应商编码
+                            </template>
+                            {{ form.params.supplierCode }}
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            v-if="form.params.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN"
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
+                            <template slot="label">
+                                供应商名称
+                            </template>
+                            {{ form.params.supplierName }}
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            v-if="form.params.billTypeCd === this.$commonConst.BILL_TYPE_RETURN"
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
+                            <template slot="label">
+                                归还人
+                            </template>
+                            {{ form.params.supplierContact }}
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
+                            <template slot="label">
+                                备注
+                            </template>
+                            {{ form.params.remark }}
+                        </el-descriptions-item>
+                    </el-descriptions>
                 </el-form>
                 <el-tabs v-model="activeName" @tab-click="handleClick" type="border-card">
                     <el-tab-pane :label="item.lable" :name="item.name" v-for="(item, index) in tabList" :key="index">
@@ -81,7 +127,6 @@
                             border
                             highlight-current-row
                             size="mini">
-
                             <template v-for="(column,index) in table.columnList">
                                 <el-table-column
                                     v-if="!column.hide"
@@ -91,7 +136,6 @@
                                 </el-table-column>
                             </template>
                         </el-table>
-
                     </el-tab-pane>
                 </el-tabs>
             </el-main>
@@ -99,8 +143,7 @@
                 <el-row style="margin-top: 10px;line-height:60px;text-align:right;">
                     <el-button
                         :loading="loading"
-                        @click="onClose"
-                    >
+                        @click="onClose">
                         关 闭
                     </el-button>
                 </el-row>
@@ -113,8 +156,7 @@
 import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
 import NodesSku from "@/components/wms/select/NodesSku";
 import NodesLineNumber from "@/components/wms/table/NodesLineNumber";
-import {editDetailMixin} from "@/mixins/editDetail";
-// eslint-disable-next-line no-unused-vars
+import {editMixin} from "@/mixins/edit";
 import {listMixin} from "@/mixins/list";
 import {getLogList, getReceiveDetailById, getReceiveLogList} from "@/api/wms/instock/receive";
 import func from "@/util/func";
@@ -125,7 +167,7 @@ export default {
     },
     name: "receiveDetails",
     components: {NodesLineNumber, NodesSku, NodesInStoreMode},
-    mixins: [editDetailMixin, listMixin],
+    mixins: [editMixin, listMixin],
     data() {
         return {
             that: this,
@@ -149,6 +191,7 @@ export default {
                     supplierName: '',
                     billTypeCd: '',
                     billTypeName: '',
+                    supplierContact: '',
                 }
             },
             tabList: [
@@ -254,24 +297,19 @@ export default {
                 {
                     prop: 'skuName',
                     label: '物品名称',
-                    // left/center/right
                     width: 130,
-
                 },
                 {
                     prop: 'planQty',
                     label: '计划数量',
-                    width: 130
                 },
                 {
                     prop: 'scanQty',
                     label: '已收数量',
-                    width: 130
                 },
                 {
                     prop: 'surplusQty',
                     label: '剩余数量',
-                    width: 130
                 },
                 {
                     prop: 'umName',
@@ -315,7 +353,6 @@ export default {
             table: {
                 columnList: []
             },
-
         }
     },
     watch: {
@@ -365,7 +402,6 @@ export default {
             } else {
                 this.table.data = this.receiveLogData
             }
-
         },
         getLogList() {
             this.table.columnList = this.logList
@@ -380,8 +416,10 @@ export default {
                 this.table.data = this.LogData
             }
 
-        }
+        },
+        getCrudColumnList(){
 
+        },
     }
 }
 </script>
@@ -391,5 +429,13 @@ export default {
     content: "*";
     color: #F56C6C;
     margin-right: 4px;
+}
+
+/deep/ .descriptions-label {
+    width: 150px;
+}
+
+/deep/ .descriptions-content {
+    width: 250px;
 }
 </style>

@@ -81,6 +81,7 @@
                customer.id,
                customer.code,
                customer.name,
+               contact,
                transport_code,
                outstock_type,
                so_bill_remark
@@ -99,6 +100,7 @@
         <result property="transportCode" column="transport_code"/>
         <result property="outstockType" column="outstock_type"/>
         <result property="soBillRemark" column="so_bill_remark"/>
+        <result property="contact" column="contact"/>
         <association property="customer" javaType="org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse">
             <id column="id" property="id"/>
             <result column="code" property="code"/>
@@ -109,8 +111,10 @@
     <select id="selectSoHeaderForDetailById"
             resultType="org.nodes.wms.dao.outstock.so.dto.output.SoHeaderForDetailResponse">
         SELECT header.so_bill_no,
-               billType.bill_type_name as bill_type,
+               header.bill_type_cd,
+               billType.bill_type_name as bill_type_name,
                customer.name           as customer_name,
+               header.contact,
                `owner`.owner_name,
                warehouse.wh_name,
                dict1.dict_value        as outstock_type,

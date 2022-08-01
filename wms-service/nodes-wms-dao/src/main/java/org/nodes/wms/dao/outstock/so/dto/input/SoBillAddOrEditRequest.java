@@ -51,6 +51,11 @@ public class SoBillAddOrEditRequest implements Serializable {
 	private Long customerId;
 
 	/**
+	 * 借用人
+	 */
+	private String contact;
+
+	/**
 	 * 发货方式
 	 */
 	@NotNull(message = "参数 transportCode 为空")

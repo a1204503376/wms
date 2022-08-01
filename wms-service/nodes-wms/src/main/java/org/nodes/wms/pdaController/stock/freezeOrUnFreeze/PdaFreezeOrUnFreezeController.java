@@ -27,7 +27,7 @@ public class PdaFreezeOrUnFreezeController {
 	@ApiLog("PDA按库位冻结")
 	@PostMapping("freezeByLocCode")
 	public void freezeByLocCode(@RequestBody FreezeByLocCodeRequest request) {
-		stockControlBiz.freezeByLocCodeAction(request.getLocCode());
+		stockControlBiz.freezeByLocCodeAction(request.getLocCode(), request.getWhId());
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class PdaFreezeOrUnFreezeController {
 	@ApiLog("PDA按库位解冻")
 	@PostMapping("unFreezeByLocCode")
 	public void unFreezeByLocCode(@RequestBody UnFreezeByLocCodeRequest request) {
-		stockControlBiz.unFreezeByLocCodeAction(request.getLocCode());
+		stockControlBiz.unFreezeByLocCodeAction(request.getLocCode(),request.getWhId());
 	}
 
 	/**

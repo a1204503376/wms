@@ -84,6 +84,7 @@
                rh.asn_bill_no,
                rh.supplier_code,
                rh.supplier_name,
+               rh.supplier_contact,
                rh.remark
         from receive_header rh,
              wms_bill_type wbt

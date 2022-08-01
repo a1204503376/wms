@@ -28,11 +28,10 @@ public class DetailReceiveHeaderResponse implements Serializable {
 	 * 单据状态枚举
 	 */
 	private ReceiveHeaderStateEnum billState;
-	/**e
+	/**
 	 * 单据状态描述
 	 */
 	private String billStateDesc;
-
 	/**
 	 * 货主编码
 	 */
@@ -49,7 +48,6 @@ public class DetailReceiveHeaderResponse implements Serializable {
 	 * WMS备注
 	 */
 	private String remark;
-
 	/**
 	 * 供应商编码
 	 */
@@ -58,6 +56,10 @@ public class DetailReceiveHeaderResponse implements Serializable {
 	 * 供应商名称
 	 */
 	private String supplierName;
+	/**
+	 * 归还人
+	 */
+	private String supplierContact;
 	/**
 	 * 单据类型
 	 */

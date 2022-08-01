@@ -93,6 +93,16 @@ public class ReceiveHeader extends TenantEntity {
 	private String supplierAddress;
 
 	/**
+	 * 供应商联系人(归还人)
+	 */
+	private String  supplierContact;
+
+	/**
+	 * 供应商联系电话
+	 */
+	private String supplierPhone;
+
+	/**
 	 * 部门id
 	 */
 	private Long deptId;

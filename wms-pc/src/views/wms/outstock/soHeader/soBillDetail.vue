@@ -31,7 +31,7 @@
                             <template slot="label">
                                 单据类型
                             </template>
-                            {{ form.params.billType }}
+                            {{ form.params.billTypeName }}
                         </el-descriptions-item>
                         <el-descriptions-item
                             content-class-name="descriptions-content"
@@ -52,6 +52,7 @@
                             {{ form.params.ownerName }}
                         </el-descriptions-item>
                         <el-descriptions-item
+                            v-if="form.params.billTypeCd !== this.$commonConst.BILL_TYPE_LEND"
                             content-class-name="descriptions-content"
                             label-class-name="descriptions-label"
                             :label-style="{'text-align': 'right'}">
@@ -59,6 +60,16 @@
                                 客户
                             </template>
                             {{ form.params.customerName }}
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                            v-if="form.params.billTypeCd === this.$commonConst.BILL_TYPE_LEND"
+                            content-class-name="descriptions-content"
+                            label-class-name="descriptions-label"
+                            :label-style="{'text-align': 'right'}">
+                            <template slot="label">
+                                借用人
+                            </template>
+                            {{ form.params.contact }}
                         </el-descriptions-item>
                         <el-descriptions-item
                             content-class-name="descriptions-content"
@@ -70,6 +81,7 @@
                             {{ form.params.outstockType }}
                         </el-descriptions-item>
                         <el-descriptions-item
+                            :span="2"
                             content-class-name="descriptions-content"
                             label-class-name="descriptions-label"
                             :label-style="{'text-align': 'right'}">
@@ -83,7 +95,6 @@
                             label-class-name="descriptions-label"
                             :label-style="{'text-align': 'right'}">
                             <template slot="label">
-                                <i class="el-icon-tickets"></i>
                                 备注
                             </template>
                             {{ form.params.soBillRemark }}
@@ -146,8 +157,6 @@
 </template>
 
 <script>
-import NodesSku from "@/components/wms/select/NodesSku";
-import NodesLineNumber from "@/components/wms/table/NodesLineNumber";
 import {editDetailMixin} from "@/mixins/editDetail";
 import {listMixin} from "@/mixins/list";
 import {
@@ -156,21 +165,10 @@ import {
     getLogSoPickForDetail,
     getSoLogForDetail
 } from "@/api/wms/outstock/soHeader"
-import NodesBillType from "@/components/wms/select/NodesBillType";
-import NodesCustomer from "@/components/wms/select/NodesCustomer";
-import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
-import NodesOwner from "@/components/wms/select/NodesOwner";
-import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
-import NodesDictionary from "@/components/wms/select/NodesDictionary";
 import func from "@/util/func";
 
 export default {
     name: "detail",
-    components: {
-        NodesSkuUm, NodesOwner, NodesWarehouse,
-        NodesCustomer, NodesDictionary,
-        NodesBillType, NodesLineNumber, NodesSku,
-    },
     mixins: [editDetailMixin, listMixin],
     props: {
         soBillId: {type: String, required: true},
@@ -180,7 +178,7 @@ export default {
             form: {
                 params: {
                     soBillNo: '',
-                    billType: '',
+                    billTypeName: '',
                     whName: '',
                     ownerName: '',
                     customerName: '',
