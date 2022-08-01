@@ -136,9 +136,6 @@
         <include refid="pageOrList"/>
     </select>
 
-    <select id="pageLotById" resultType="org.nodes.wms.dao.outstock.so.dto.output.LogForSoDetailResponse">
-
-    </select>
     <select id="selectSoHeaderResponseById"
             resultType="org.nodes.wms.dao.outstock.so.dto.output.PickByPcSoHeaderResponse">
         select so_bill_no,
