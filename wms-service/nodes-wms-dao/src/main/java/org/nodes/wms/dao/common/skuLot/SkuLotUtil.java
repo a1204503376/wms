@@ -1,6 +1,8 @@
 package org.nodes.wms.dao.common.skuLot;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import lombok.extern.slf4j.Slf4j;
+import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.dao.basics.skulot.SkuLotValDao;
 import org.nodes.wms.dao.basics.skulot.constant.SkuLotConstant;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotVal;
@@ -15,6 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * skuLot工具类。该工具类的前提条件：要求两个对象必须有skuLot[n]的属性
  */
+@Slf4j
 public class SkuLotUtil {
 	private static final String SKULOT = "skuLot";
 	private static final int SKULOT_NUMBER = 30;
@@ -177,19 +180,21 @@ public class SkuLotUtil {
 	 */
 	public static <T, R> void applySql(LambdaQueryWrapper<R> queryWrapper, T skuLot) {
 		String propertyName;
-		for (int i = 0; i < SKULOT_NUMBER; ++i) {
-			propertyName = String.format("%s%d", SKULOT, i + 1);
-			Property skuLotProperty = ReflectUtil.getProperty(skuLot.getClass(), propertyName);
-			try {
+		boolean hasSkuLot = hasSkuLot(skuLot);
+		if (Boolean.FALSE == hasSkuLot) {
+			throw ExceptionUtil.mpe("参数：{}，批属性个数小于30个", skuLot);
+		}
+		try {
+			for (int i = 0; i < SKULOT_NUMBER; ++i) {
+				propertyName = String.format("%s%d", SKULOT, i + 1);
+				Property skuLotProperty = ReflectUtil.getProperty(skuLot.getClass(), propertyName);
 				Object skuLotValue = skuLotProperty.getReadMethod().invoke(skuLot);
-				if (!Func.isNull(skuLotValue)) {
+				if (Func.notNull(skuLotValue)) {
 					queryWrapper.apply(String.format("sku_lot%d = '%s'", i + 1, skuLotValue));
 				}
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
 			}
+		} catch (Exception e) {
+			log.warn("applySql 异常", e);
 		}
 	}
 }
