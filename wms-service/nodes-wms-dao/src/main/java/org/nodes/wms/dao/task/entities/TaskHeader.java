@@ -17,6 +17,7 @@ import java.util.Date;
  * 任务头表
  */
 @Data
+@Deprecated
 public class TaskHeader extends TenantEntity implements Serializable {
 	private static final long serialVersionUID = -7346133644795089970L;
 	/**

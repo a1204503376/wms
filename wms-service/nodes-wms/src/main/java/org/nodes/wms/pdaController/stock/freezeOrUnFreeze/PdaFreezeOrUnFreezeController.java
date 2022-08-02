@@ -64,6 +64,17 @@ public class PdaFreezeOrUnFreezeController {
 	}
 
 	/**
+	 * 按箱码冻结
+	 *
+	 * @param request 请求对象-内部包含箱码
+	 */
+	@ApiLog("PDA按箱码冻结")
+	@PostMapping("freezeByBoxCode")
+	public void freezeByBoxCode(@RequestBody FreezeByBoxCodeRequest request) {
+		stockControlBiz.freezeStockByBoxCodeAction(request.getBoxCode());
+	}
+
+	/**
 	 * 按库位解冻
 	 *
 	 * @param request 请求对象-内部包含库位
@@ -90,7 +101,7 @@ public class PdaFreezeOrUnFreezeController {
 	 *
 	 * @param request 请求对象-内部包含序列号
 	 */
-	@ApiLog("PDA按批次号解冻")
+	@ApiLog("PDA按序列号解冻")
 	@PostMapping("unFreezeBySerialNumber")
 	public void unFreezeBySerialNumber(@RequestBody UnFreezeBySerialNumberRequest request) {
 		stockControlBiz.unFreezeBySerialNumberAction(request.getSerialNumber());
@@ -105,6 +116,17 @@ public class PdaFreezeOrUnFreezeController {
 	@PostMapping("portionUnFreeze")
 	public void portionUnFreeze(@RequestBody PortionUnFreezeRequest request) {
 		stockControlBiz.portionUnFreezeAction(request);
+	}
+
+	/**
+	 * 按箱码解冻
+	 *
+	 * @param request 请求对象-内部包含箱码
+	 */
+	@ApiLog("PDA按箱码解冻")
+	@PostMapping("unfreezeByBoxCode")
+	public void unfreezeByBoxCode(@RequestBody FreezeByBoxCodeRequest request) {
+		stockControlBiz.unFreezeStockByBoxCodeAction(request.getBoxCode());
 	}
 
 }

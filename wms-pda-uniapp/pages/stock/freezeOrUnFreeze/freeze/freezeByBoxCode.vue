@@ -1,12 +1,12 @@
 <template>
 	<view>
 		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
-			:bgColor="navigationBarBackgroundColor" title="按批次号冻结" titleStyle="color:#ffffff;font-size:21px"
+			:bgColor="navigationBarBackgroundColor" title="按箱码冻结" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u--form>
-			<u-form-item label="批次号" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.lotNumber"></u--input>
+			<u-form-item label="箱码" :required="true" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.boxCode"></u--input>
 			</u-form-item>
 		</u--form>
 		<view class="footer">
@@ -35,12 +35,13 @@
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
-					lotNumber: ''
+					boxCode: '',
+					whId:uni.getStorageSync('warehouse').whId
 				}
 			}
 		},
 		onLoad() {
-
+		
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -60,14 +61,14 @@
 			submit() {
 				var _this = this;
 				uni.$u.throttle(function() {
-					if (tool.isNotEmpty(_this.params.lotNumber)) {
-						freezeOrUnFreeze.freezeByLotNumber(_this.params).then(data => {
+					if (tool.isNotEmpty(_this.params.boxCode)) {
+						freezeOrUnFreeze.freezeByBoxCode(_this.params).then(data => {
 							console.log(data)
 						})
 						return;
 					}
 					_this.$u.func.showToast({
-						title: '请输入批次号'
+						title: '请输入LOC'
 					});
 				}, 1000)
 

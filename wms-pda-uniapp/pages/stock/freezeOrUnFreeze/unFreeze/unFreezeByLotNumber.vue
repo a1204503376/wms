@@ -26,6 +26,7 @@
 	import uniSelect from '@/components/uni-select.vue'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
+	import freezeOrUnFreeze from '@/api/stock/freezeOrUnFreeze.js'
 	export default {
 		components: {
 			uniSelect
@@ -39,7 +40,7 @@
 			}
 		},
 		onLoad() {
-		
+
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -61,10 +62,14 @@
 				_this.params.isSn = true;
 				uni.$u.throttle(function() {
 					if (tool.isNotEmpty(_this.params.lotNumber)) {
-						console.log('按批次号解冻成功')
+						freezeOrUnFreeze.unFreezeByLotNumber(_this.params).then(data => {
+							console.log(data)
+						})
 						return;
 					}
-					console.log('按批次号解冻失败')
+					_this.$u.func.showToast({
+						title: '请输入批次号'
+					});
 				}, 1000)
 
 			},
