@@ -195,7 +195,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/getSoBillDataByDistribution")
 	public R<SoBillDistributedResponse> getSoBillDataByDistribution(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		return R.data(soHeaderBiz.findSoBillForDistBySoBillId(soBillIdRequest.getSoBillId()));
+		return R.data(soHeaderBiz.findSoBillForDistributeBySoBillId(soBillIdRequest.getSoBillId()));
 	}
 
 	/**

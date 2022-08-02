@@ -10,10 +10,7 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickExcelResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
 import org.nodes.wms.dao.outstock.so.SoDetailDao;
 import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
-import org.nodes.wms.dao.outstock.so.dto.output.LineNoAndSkuSelectResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.PickByPcSoDetailResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoDetailEditResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.mapper.SoDetailMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -80,4 +77,9 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 		queryWrapper.eq(SoDetail::getSoBillId, soBillId);
 		return super.baseMapper.selectPage(page, queryWrapper);
 	}
+
+    @Override
+    public List<SoDetailForDistResponse> getSoDetailForDistribute(Long soBillId) {
+        return super.baseMapper.getSoDetailForDistribute(soBillId);
+    }
 }

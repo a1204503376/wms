@@ -39,6 +39,7 @@ public interface StockManageBiz {
 
 	/**
 	 * 按箱冻结
+	 *
 	 * @param boxCode 箱码 必填
 	 */
 	void freezeStockByBoxCodeAction(String boxCode);
@@ -73,6 +74,7 @@ public interface StockManageBiz {
 
 	/**
 	 * 按箱解冻
+	 *
 	 * @param boxCode 箱码 必填
 	 */
 	void unFreezeStockByBoxCodeAction(String boxCode);
@@ -120,4 +122,11 @@ public interface StockManageBiz {
 	 * @param stockThawAndFrozenDto 包含箱码、生产批次、库位集合
 	 */
 	void stockUnFrozen(StockThawAndFrozenDto stockThawAndFrozenDto);
+
+	/**
+	 * PDA库存管理:LPN移动-查询根据条件查询库存，判断库存是否唯一，并且是否可移动
+	 *
+	 * @param lpnCode 托盘号
+	 */
+	void decideStockLpn(String lpnCode);
 }

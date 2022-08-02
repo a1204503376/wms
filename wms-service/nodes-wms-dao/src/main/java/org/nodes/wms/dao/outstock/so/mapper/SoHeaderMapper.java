@@ -53,15 +53,6 @@ public interface SoHeaderMapper extends BaseMapper<SoHeader> {
 	List<SoHeaderExcelResponse> listByQuery(@Param("params") SoHeaderPageQuery soHeaderPageQuery);
 
 	/**
-	 * 根据id分页查询发货单日志
-	 *
-	 * @param id:   发货单id
-	 * @param page: 分页参数
-	 * @return PageLogForSoDetailResponse> 发货单日志分页响应对象
-	 */
-	Page<LogForSoDetailResponse> pageLotById(IPage<?> page, Long id);
-
-	/**
 	 * pc拣货获取头表信息
 	 *
 	 * @param soBillId 头表id

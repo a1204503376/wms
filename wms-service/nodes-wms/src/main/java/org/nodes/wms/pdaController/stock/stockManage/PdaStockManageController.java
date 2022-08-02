@@ -5,7 +5,6 @@ import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.dao.stock.dto.input.*;
 import org.nodes.wms.dao.stock.dto.output.EstimateStockMoveByBoxCodeResponse;
-import org.nodes.wms.dao.stock.dto.output.EstimateStockMoveByLpnCodeResponse;
 import org.nodes.wms.dao.stock.dto.output.EstimateStockMoveResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.tool.api.R;
@@ -52,8 +51,9 @@ public class PdaStockManageController {
 	 * @return 库存是否可移动响应对象
 	 */
 	@PostMapping("/estimateStockMoveByLpn")
-	public R<EstimateStockMoveByLpnCodeResponse> estimateStockMoveByLpn(@RequestBody EstimateStockMoveByLpnCodeRequest request) {
-		return null;
+	public R<String> estimateStockMoveByLpn(@RequestBody EstimateStockMoveByLpnCodeRequest request) {
+		stockManageBiz.decideStockLpn(request.getLpnCode());
+		return R.success("success");
 	}
 
 	/**

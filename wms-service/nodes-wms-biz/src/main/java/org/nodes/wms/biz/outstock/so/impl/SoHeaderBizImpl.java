@@ -160,15 +160,13 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		return soHeaderDao.getSoHeaderResponseById(soBillIdRequest.getSoBillId());
 	}
 
-	@Override
-	public SoBillDistributedResponse findSoBillForDistBySoBillId(Long soBillId) {
-		SoHeader soHeader = soHeaderDao.getById(soBillId);
-		List<SoDetail> soDetailList = soDetailDao.getBySoBillId(soBillId);
+	public SoBillDistributedResponse findSoBillForDistributeBySoBillId(Long soBillId) {
 		SoBillDistributedResponse soBill = new SoBillDistributedResponse();
+		SoHeader soHeader = soHeaderDao.getById(soBillId);
 		soBill.setSoBillId(soHeader.getSoBillId());
 		soBill.setSoBillNo(soHeader.getSoBillNo());
 		soBill.setOrderNo(soHeader.getOrderNo());
-		List<SoDetailForDistResponse> details = Func.copy(soDetailList, SoDetailForDistResponse.class);
+		List<SoDetailForDistResponse> details =  soDetailDao.getSoDetailForDistribute(soBillId);
 		soBill.setSoDetailList(details);
 		return soBill;
 	}

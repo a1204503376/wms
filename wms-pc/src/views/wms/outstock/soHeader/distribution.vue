@@ -8,47 +8,55 @@
                          size="mini"
                          style="margin-left:10px;margin-right:10px;">
                     <el-row>
-                        <el-row :gutter="10" type="flex">
-                            <el-col :span="4">
-                                <el-form-item label="发货单编码：" label-width="100px">
-                                    <label>{{ soHeader.soBillNo }}</label>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="4">
-                                <el-form-item label="上游编码：" label-width="120px">
-                                    {{ soHeader.orderNo }}
-                                </el-form-item>
-                            </el-col>
-                            <el-col :offset="10" :span="2">
-                                <el-button class="top_button" size="medium"
-                                           type="primary" @click="onRefresh">
-                                    刷新
-                                </el-button>
-                            </el-col>
-                            <el-col :span="2">
-                                <el-button class="top_button" size="medium"
-                                           type="primary" @click="onAssign()">
-                                    自动分配
-                                </el-button>
-                            </el-col>
-                            <el-col :span="2">
-                                <el-button class="top_button" size="medium"
-                                           type="primary" @close="onCancelAll">
-                                    全部取消
-                                </el-button>
-                            </el-col>
-                            <el-col :span="2">
-                                <el-button class="top_button" size="medium"
-                                           type="primary" @click="onIssued">
-                                    确认下发
-                                </el-button>
-                            </el-col>
-                            <el-col :span="2">
-                                <el-button :loading="loading" class="top_button"
-                                           plain size="medium" @click="onClose">关 闭
-                                </el-button>
-                            </el-col>
-                        </el-row>
+                        <el-col :span="6">
+                            <el-row :gutter="10" type="flex" justify="end">
+                                <el-col :span="10">
+                                    <el-form-item label="发货单编码：" label-width="100px">
+                                        <span>{{ soHeader.soBillNo }}</span>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :offset="4" :span="10">
+                                    <el-form-item label="上游编码：" label-width="120px">
+                                        <span>{{ soHeader.orderNo }}</span>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-col>
+                        <el-col :span="6">
+                        </el-col>
+                        <el-col :span="12">
+                            <el-row :gutter="10" type="flex" justify="end">
+                                <el-col :span="4.8">
+                                    <el-button class="top_button" size="medium"
+                                               type="primary" @click="onRefresh">
+                                        刷新
+                                    </el-button>
+                                </el-col>
+                                <el-col :span="4.8">
+                                    <el-button class="top_button" size="medium"
+                                               type="primary" @click="onAssign()">
+                                        自动分配
+                                    </el-button>
+                                </el-col>
+                                <el-col :span="4.8">
+                                    <el-button class="top_button" size="medium"
+                                               type="primary" @close="onCancelAll">
+                                        全部取消
+                                    </el-button>
+                                </el-col>
+                                <el-col :span="4.8">
+                                    <el-button class="top_button" size="medium"
+                                               type="primary" @click="onIssued">
+                                        确认下发
+                                    </el-button>
+                                </el-col>
+                                <el-col :span="4.8">
+                                    <el-button :loading="loading" class="top_button"
+                                               plain size="medium" @click="onClose">关 闭
+                                    </el-button>
+                                </el-col>
+                            </el-row>
+                        </el-col>
                     </el-row>
                     <el-row style="margin-bottom: 20px">
                         <el-col>
@@ -58,8 +66,10 @@
                                         ref="table"
                                         :data="table.soDetailData"
                                         border
+                                        :show-summary="true"
+                                        :summary-method="summarySoDetail"
                                         highlight-current-row
-                                        max-height="148"
+                                        max-height="172"
                                         size="mini"
                                         @row-click="onRowClick">
                                         <template v-for="(column,index) in table.soDetailColumnList">
@@ -91,6 +101,8 @@
                                             :data="table.soPickPlanData"
                                             :span-method="objectSpanMethod"
                                             border
+                                            :summary-method="summarySoPickPlan"
+                                            :show-summary="true"
                                             highlight-current-row
                                             max-height="310"
                                             size="mini">
@@ -114,26 +126,17 @@
             <el-dialog
                 :append-to-body="true"
                 :close-on-click-modal="false"
-                :custom-class="dialog.isFullScreen ? 'maxDialog' : '' "
+                :custom-class="'maxDialog'"
+                :title="dialog.title"
                 :show-close="true"
                 :visible.sync="dialog.dialogTableVisible"
                 @close="refreshData">
-                <span slot="title" class="dialog-footer">
-                        <div class="icon">
-                            <span>{{ dialog.title }}</span>
-                            <el-button class="button_telescopic" type="text">
-                                <i :class="dialog.isFullScreen ? 'icon-tuichuquanping' : 'icon-quanping'"
-                                   @click="telescopic">
-                                </i>
-                            </el-button>
-                        </div>
-                    </span>
                 <el-table
                     ref="dialogTable"
                     :data="dialog.dialogData"
                     :span-method="objectSpanMethod"
                     :summary-method="getSummaries"
-                    :height="dialog.isFullScreen ? 530 : 450"
+                    :height="530"
                     border
                     highlight-current-row
                     show-summary>
@@ -148,8 +151,8 @@
                                     oninput="value=value.replace(/[^\d]/g,'')"
                                     placeholder="请输入分配数量"
                                     size="medium"
-                                    style="width: 100%"
-                                ></el-input>
+                                    style="width: 100%">
+                                </el-input>
                             </template>
                         </el-table-column>
                         <el-table-column label="箱码" prop="boxCode"></el-table-column>
@@ -219,24 +222,32 @@ export default {
                         label: '物品编码'
                     },
                     {
-                        prop: 'stockBalance',
-                        label: '剩余量',
-                        align: 'center'
+                        prop: 'skuName',
+                        label: '物品名称'
                     },
                     {
-                        prop: 'distributeQty',
-                        label: '分配量'
-                    },
-                    {
-                        prop: 'planQty',
-                        label: '计划量',
-                        align: 'center'
+                        prop: 'skuSpec',
+                        label: '物品规格'
                     },
                     {
                         prop: 'umCode',
                         label: '计量单位编码',
                         width: 100,
-                        align: 'center'
+                    },
+                    {
+                        prop: 'pickPlanQty',
+                        label: '分配量',
+                        align: 'right'
+                    },
+                    {
+                        prop: 'planQty',
+                        label: '计划量',
+                        align: 'right'
+                    },
+                    {
+                        prop: 'surplusQty',
+                        label: '剩余量',
+                        align: 'right'
                     },
                 ],
                 soDetailData: [],
@@ -325,7 +336,6 @@ export default {
             },
             dialog: {
                 dialogTableVisible: false,
-                isFullScreen: false,
                 title: "",
                 dialogData: [
                     {
@@ -342,7 +352,6 @@ export default {
                 ],
                 soDetailId: '',
             },
-
         }
     },
     created() {
@@ -412,9 +421,6 @@ export default {
                 this.soHeader.soBillId = data.soBillId;
                 this.soHeader.soBillNo = data.soBillNo;
                 this.soHeader.orderNo = data.orderNo;
-                data.soDetailList.forEach(item => {
-                    item.distributeQty = 0;
-                })
                 this.table.soDetailData = data.soDetailList;
             })
             this.getSoPickPlanData(this.soBillId);
@@ -423,8 +429,51 @@ export default {
             await getSoPickPlanData(soBillId, soDetailId).then((res) => {
                 this.table.soPickPlanData = res.data.data;
             })
-            console.log(this.table.soPickPlanData);
             this.merge(this.table.soPickPlanData);
+        },
+        summarySoPickPlan(param) {
+            const { columns, data } = param;
+            const sums = [];
+            columns.forEach((column, index) => {
+                if (index === 0) {
+                    sums[index] = '合计';
+                    return;
+                }
+                const values = data.map(item => Number(item[column.property]));
+                if (column.property === 'pickPlanQty' || column.property === 'stockBalance' || column.property === 'stockEnable') {
+                    sums[index] = values.reduce((prev, curr) => {
+                        const value = Number(curr);
+                        if (!isNaN(value)) {
+                            return prev + curr;
+                        } else {
+                            return prev;
+                        }
+                    }, 0);
+                }
+            });
+            return sums;
+        },
+        summarySoDetail(param){
+            const { columns, data } = param;
+            const sums = [];
+            columns.forEach((column, index) => {
+                if (index === 0) {
+                    sums[index] = '合计';
+                    return;
+                }
+                const values = data.map(item => Number(item[column.property]));
+                if (column.property === 'pickPlanQty' || column.property === 'planQty' || column.property === 'surplusQty') {
+                    sums[index] = values.reduce((prev, curr) => {
+                        const value = Number(curr);
+                        if (!isNaN(value)) {
+                            return prev + curr;
+                        } else {
+                            return prev;
+                        }
+                    }, 0);
+                }
+            });
+            return sums;
         },
         onRowClick(row) {
             this.getSoPickPlanData(this.soHeader.soBillId, row.soDetailId)
@@ -446,9 +495,6 @@ export default {
             cancelAll(this.soHeader.soBillId).then((res) => {
 
             })
-        },
-        telescopic() {
-            this.dialog.isFullScreen = !this.dialog.isFullScreen;
         },
         async onAdjust(row) {
             this.dialog.soDetailId = row.soDetailId;

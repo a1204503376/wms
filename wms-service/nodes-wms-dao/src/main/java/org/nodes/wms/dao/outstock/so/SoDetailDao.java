@@ -6,10 +6,7 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickExcelResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
-import org.nodes.wms.dao.outstock.so.dto.output.LineNoAndSkuSelectResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.PickByPcSoDetailResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoDetailEditResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 
 import java.util.List;
@@ -101,4 +98,12 @@ public interface SoDetailDao {
 	 * @return 分页
 	 */
 	IPage<SoDetail> getSoDetailPage(Long soBillId, IPage<SoDetail> page);
+
+	/**
+	 * 根据发货单id查找分配页面的发货明细信息
+	 *
+	 * @param soBillId 发货单id
+	 * @return 发货单明细信息
+	 */
+	List<SoDetailForDistResponse> getSoDetailForDistribute(Long soBillId);
 }

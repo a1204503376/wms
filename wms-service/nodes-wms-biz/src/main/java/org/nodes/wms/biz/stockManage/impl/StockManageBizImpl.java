@@ -135,23 +135,25 @@ public class StockManageBizImpl implements StockManageBiz {
 		Sku sku = skuBiz.findByCode(request.getSkuCode());
 		//根据locCode获取Location对象
 		Location location = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
+		//根据目标locCode获取Location对象
+		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getTargetLocCode());
 		List<Long> locationIdList = new ArrayList<>();
 		locationIdList.add(location.getLocId());
 		//批属性赋值
 		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
 		skuLot.setSkuLot1(request.getLotNumber());
 		List<Stock> stockList = stockQueryBiz.findEnableStockByLocation(request.getWhId(), sku.getSkuId(), null, locationIdList, skuLot);
-		AssertUtil.notNull(stockList, "根据您输入的数据查询不到对应的库存，请输入后重试");
+		AssertUtil.notNull(stockList, "根据您输入的数据查询不到对应的库存，请重新输入后重试");
 		stockList.forEach(stock -> {
 			//获取序列号 如果库存关联了序列号需要获取序列号
 			List<Serial> serialList = stockQueryBiz.findSerialByStock(stock.getStockId());
-			List<String> serialNoList = new ArrayList<>();
+			List<String> serialNoList = null;
 			if (Func.isNotEmpty(serialList)) {
 				serialNoList = serialList.stream()
 					.map(Serial::getSerialNumber)
 					.collect(Collectors.toList());
 			}
-//		   stockBiz.moveStock(stock,S);
+			stockBiz.moveStock(stock, serialNoList, stock.getStockBalance(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_PCS_PDA, null, null, null);
 		});
 
 		//根据请求对象获取对应库存移动需要的值
@@ -162,8 +164,11 @@ public class StockManageBizImpl implements StockManageBiz {
 
 
 	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void stockMoveByLpn(StockMoveByLpnRequest request) {
-
+		//根据前端传过来的LocCode
+		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getTargetLocCode());
+		stockBiz.moveStockByLpnCode(request.getLpnCode(), request.getTargetLpnCode(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_LPN_PDA, null, null, null);
 	}
 
 
@@ -284,5 +289,11 @@ public class StockManageBizImpl implements StockManageBiz {
 				Func.isNotEmpty(stockThawAndFrozenDto.getRemark()) ? "备注:" + stockThawAndFrozenDto.getRemark() : "");
 		}
 		logBiz.auditLog(AuditLogType.STOCK_TYPE, msg);
+	}
+
+	@Override
+	public void decideStockLpn(String lpnCode) {
+		List<Stock> stockList = stockQueryBiz.findStockByLpnCode(lpnCode);
+		AssertUtil.notNull(stockList, "该Lpn查询不到对应库存,请更换LPN后重试");
 	}
 }
