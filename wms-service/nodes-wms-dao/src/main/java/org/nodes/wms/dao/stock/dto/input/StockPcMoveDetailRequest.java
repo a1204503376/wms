@@ -25,10 +25,10 @@ public class StockPcMoveDetailRequest implements Serializable {
 	 * 目标库位id
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
-	private Long targetLocId;
+	private Long locId;
 
 	/**
 	 * 序列号
 	 */
-	private List<String> serialNumberList;
+	private List<String> serials;
 }

@@ -405,6 +405,13 @@
 				"navigationStyle": "custom"
 			}
 
+		}, {
+			"path": "pages/stock/stockManage/moveByLpnCode/moveByLpnCodeSbumit",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
 		}
 	],
 	"globalStyle": {

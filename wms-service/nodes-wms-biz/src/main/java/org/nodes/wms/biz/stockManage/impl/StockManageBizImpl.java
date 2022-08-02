@@ -38,7 +38,6 @@ public class StockManageBizImpl implements StockManageBiz {
 	private final SkuBiz skuBiz;
 	private final LogBiz logBiz;
 
-
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void freezeByLocCodeAction(String locCode, Long whId) {
@@ -162,7 +161,6 @@ public class StockManageBizImpl implements StockManageBiz {
 		//获取目标库位信息
 	}
 
-
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void stockMoveByLpn(StockMoveByLpnRequest request) {
@@ -171,23 +169,27 @@ public class StockManageBizImpl implements StockManageBiz {
 		stockBiz.moveStockByLpnCode(request.getLpnCode(), request.getTargetLpnCode(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_LPN_PDA, null, null, null);
 	}
 
-
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void stockMoveByBox(StockMoveByBoxCodeRequest request) {
 		//根据前端传过来的LocCode
-		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
+		Location targetLocation;
+		if (Func.isNotEmpty(request.getLocCode())) {
+			//根据前端传过来的LocCode
+			targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
+		} else {
+			//根据前端传过来的LocCode
+			targetLocation = locationBiz.findByLocId(request.getTargetLocId());
+			AssertUtil.notNull(targetLocation, "获取库位失败,请更换库位ID后重试");
+		}
 		if (Func.isEmpty(request.getLpnCode())) {
 			request.setLpnCode(targetLocation.getLocCode());
 		}
 		//根据传过来的多个箱码集合查询出多个库存
 		List<String> boxCodeList = request.getBoxCodeList().stream().filter(Func::isNotEmpty).collect(Collectors.toList());
-		List<Stock> stockList = stockQueryBiz.findStockMoveByBoxCode(boxCodeList);
-		for (Stock stock : stockList) {
-			System.out.println("stock.getBoxCode()" + stock.getBoxCode());
-			//移动
-			stockBiz.moveStock(stock, null, stock.getStockBalance(), stock.getBoxCode(), request.getLpnCode(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_BOX_PDA, null, null, null);
-		}
+		boxCodeList.forEach(boxcode ->
+			stockBiz.moveStockByBoxCode(boxcode, boxcode, request.getLpnCode(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_BOX_PDA, null, null, null)
+		);
 	}
 
 	@Override
@@ -295,5 +297,17 @@ public class StockManageBizImpl implements StockManageBiz {
 	public void decideStockLpn(String lpnCode) {
 		List<Stock> stockList = stockQueryBiz.findStockByLpnCode(lpnCode);
 		AssertUtil.notNull(stockList, "该Lpn查询不到对应库存,请更换LPN后重试");
+	}
+
+	@Override
+	public void stockMoveByPc(StockPcMoveRequest stockPcMoveRequest) {
+		Long stockId = stockPcMoveRequest.getStockId();
+		Stock stock = stockQueryBiz.findStockById(stockId);
+		List<StockPcMoveDetailRequest> stockMoveDataList = stockPcMoveRequest.getStockMoveDataList();
+		stockMoveDataList.forEach(move -> {
+			Location location = locationBiz.findByLocId(move.getLocId());
+			stockBiz.moveStock(stock, move.getSerials(), move.getQty(), location,
+				StockLogTypeEnum.STOCK_MOVE_BY_PCS, null, null, null);
+		});
 	}
 }
