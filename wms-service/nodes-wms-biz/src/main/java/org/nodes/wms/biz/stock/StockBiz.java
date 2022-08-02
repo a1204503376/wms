@@ -2,6 +2,7 @@ package org.nodes.wms.biz.stock;
 
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.stock.dto.input.StockImportRequest;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
@@ -38,6 +39,14 @@ public interface StockBiz {
 	 * @return 下架后库存
 	 */
 	Stock outStockByCancelReceive(StockLogTypeEnum type, ReceiveLog receiveLog, Stock stock);
+
+	/**
+	 * 撤销拣货时库存操作，如果已经发运（出库集货区没有对应的库存）则会抛异常
+	 *
+	 * @param type 移动类型 必填
+	 * @param pickLog 撤销记录，qty必须是负数
+	 */
+	void outStockByCancelPick(StockLogTypeEnum type, LogSoPick pickLog);
 
 	/**
 	 * 库存移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
