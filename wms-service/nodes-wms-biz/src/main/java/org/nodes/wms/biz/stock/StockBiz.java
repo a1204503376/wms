@@ -176,7 +176,7 @@ public interface StockBiz {
 	 * @param stock        库存
 	 * @param serialNoList 序列号编码
 	 */
-	void checkSerial(Stock stock, List<String> serialNoList);
+	void checkSerialOnStock(Stock stock, List<String> serialNoList);
 
 	/**
 	 * 检查库存的状态是否全部相等，并且等于指定的状态。可用根据isThrow参数指定方法是否抛异常
