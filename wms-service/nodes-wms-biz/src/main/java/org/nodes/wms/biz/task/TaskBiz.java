@@ -62,5 +62,4 @@ public interface TaskBiz {
 	 */
 	Boolean updateTaskState(TaskDetail taskDetail);
 
-
 }

@@ -34,6 +34,14 @@ public interface StockQueryBiz {
 	Stock findStockById(Long stockId);
 
 	/**
+	 * 根据任务id获取库存
+	 * 
+	 * @param taskId 任务id
+	 * @return 库存集合
+	 */
+	List<Stock> findStockByTaskId(Long taskId);
+
+	/**
 	 * 根据库位获取库位的所有库存
 	 *
 	 * @param locationList 必填，库位集合
@@ -68,7 +76,7 @@ public interface StockQueryBiz {
 	 * @return Stock集合
 	 */
 	List<Stock> findEnableStockByZoneType(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-										  List<String> zoneTypeList, SkuLotBaseEntity skuLot);
+			List<String> zoneTypeList, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 查找可用库存,排除出库暂存区
@@ -89,7 +97,7 @@ public interface StockQueryBiz {
 	 * @return Stock集合
 	 */
 	List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-									  List<Long> zoneIdList, SkuLotBaseEntity skuLot);
+			List<Long> zoneIdList, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 根据库位id查询可用库存,排除出库暂存区
@@ -102,7 +110,7 @@ public interface StockQueryBiz {
 	 * @return Stock集合
 	 */
 	List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-										  List<Long> locationIdList, SkuLotBaseEntity skuLot);
+			List<Long> locationIdList, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 根据箱码查询库存,排除出库暂存区

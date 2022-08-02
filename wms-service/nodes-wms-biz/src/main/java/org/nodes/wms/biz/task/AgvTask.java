@@ -42,22 +42,22 @@ public class AgvTask {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void putwayToSchedule(List<Stock> stocks) {
 		// 判断是否是库位是否是自动化临时区，如果是则生成上架任务
-		if (!locationBiz.isAgvTempOfZoneType(stocks.get(0).getLocId())){
+		if (!locationBiz.isAgvTempOfZoneType(stocks.get(0).getLocId())) {
 			return;
 		}
 
-		WmsTask putwayTask =wmsTaskFactory.create(stocks.get(0));
+		WmsTask putwayTask = wmsTaskFactory.create(stocks.get(0));
 		wmsTaskDao.save(putwayTask);
 		// 调用上架策略生成目标库位，并把目标库位保存到任务表中
 		Location targetLoc = putwayStrategyActuator.run(BigDecimal.ZERO, stocks);
-		if (!targetLoc.getLocId().equals(locationBiz.getUnknowLocation(stocks.get(0).getWhId()).getLocId())){
+		if (!targetLoc.getLocId().equals(locationBiz.getUnknowLocation(stocks.get(0).getWhId()).getLocId())) {
 			// 如果计算得到了目标库位，则发送到调度系统
 			if (sendToSchedule(putwayTask)) {
 				putwayTask.setTaskState(WmsTaskStateEnum.ISSUED);
 			}
 			// 调度系统接收成功之后冻结目标库位和冻结原库位的库存
 			locationBiz.freezeLocByTask(targetLoc.getLocId(), putwayTask.getTaskId().toString());
-			stockBiz.freezeStockByTask(stocks, putwayTask.getTaskId());
+			stockBiz.freezeStockByTask(stocks, false, putwayTask.getTaskId());
 		}
 
 		// 更新任务

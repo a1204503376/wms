@@ -100,7 +100,7 @@ public interface StockDao {
 	List<Stock> getStockOnLpnByBoxCode(String boxCode);
 
 	List<Stock> getStock(StockStatusEnum status, Long woId, Long locId,
-						 Long skuId, String boxCode, String lpnCode);
+			Long skuId, String boxCode, String lpnCode);
 
 	List<Stock> getStockByLocId(Long locId);
 
@@ -109,7 +109,7 @@ public interface StockDao {
 	Stock updateStock(Stock stock);
 
 	void updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
-					 BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
+			BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
 
 	void updateStock(List<Long> stockIds, StockStatusEnum status);
 
@@ -144,12 +144,12 @@ public interface StockDao {
 	List<StockPageResponse> getStockResponseByQuery(StockPageQuery stockPageQuery);
 
 	List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-									  List<Long> zoneIdList, SkuLotBaseEntity skuLot,
-									  List<Long> excludeZoneIdList);
+			List<Long> zoneIdList, SkuLotBaseEntity skuLot,
+			List<Long> excludeZoneIdList);
 
 	List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-										  List<Long> locationIdList, SkuLotBaseEntity skuLot,
-										  List<Long> excludeZoneIdList);
+			List<Long> locationIdList, SkuLotBaseEntity skuLot,
+			List<Long> excludeZoneIdList);
 
 	/**
 	 * 库存余额按箱显示
@@ -180,9 +180,18 @@ public interface StockDao {
 	/**
 	 * 根据系统任务，更新库存状态
 	 *
-	 * @param stockIds
-	 * @param systemFreeze
-	 * @param taskId
+	 * @param stockIds    库存数据
+	 * @param status      库存状态
+	 * @param isUpadteLpn true:表示用taskId更新lpn的值
+	 * @param taskId      用来替换lpn的值
 	 */
-	void updateStock(List<Long> stockIds, StockStatusEnum systemFreeze, Long taskId);
+	void updateStock(List<Long> stockIds, StockStatusEnum status, boolean isUpadteLpn, Long taskId);
+
+	/**
+	 * 根据任务id获取库存
+	 * 
+	 * @param taskId
+	 * @return
+	 */
+	List<Stock> getStockByTaskId(Long taskId);
 }

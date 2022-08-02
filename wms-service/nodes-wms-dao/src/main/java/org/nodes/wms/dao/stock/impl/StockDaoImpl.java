@@ -354,7 +354,7 @@ public class StockDaoImpl
 	@Override
 	public List<Stock> getEnableStockBySkuLotAndExculdeLoc(List<Long> exculdeLocId, SkuLotBaseEntity skuLot) {
 		LambdaQueryWrapper<Stock> stockQuery = getStockQuery();
-		if (Func.isNotEmpty(exculdeLocId)){
+		if (Func.isNotEmpty(exculdeLocId)) {
 			stockQuery.notIn(Stock::getLocId, exculdeLocId);
 		}
 
@@ -368,7 +368,30 @@ public class StockDaoImpl
 	}
 
 	@Override
-	public void updateStock(List<Long> stockIds, StockStatusEnum systemFreeze, Long taskId) {
-		// TODO
+	public void updateStock(List<Long> stockIds, StockStatusEnum status, boolean isUpadteLpn, Long taskId) {
+		AssertUtil.notEmpty(stockIds, "update stock status error, stock list is empty");
+		AssertUtil.notNull(taskId, "update stock status error, task id is null");
+
+		Stock stock = new Stock();
+		stock.setStockStatus(status);
+		stock.setTaskId(taskId.toString());
+		if (isUpadteLpn) {
+			stock.setLpnCode(taskId.toString());
+		}
+
+		UpdateWrapper<Stock> updateWrapper = Wrappers.update();
+		updateWrapper.lambda().in(Stock::getStockId, stockIds);
+		if (!super.update(stock, updateWrapper)) {
+			throw new ServiceException("库存状态更新失败,请再次重试");
+		}
+	}
+
+	@Override
+	public List<Stock> getStockByTaskId(Long taskId) {
+		AssertUtil.notNull(taskId, "根据任务id查询库存失败,taskId不能为空");
+
+		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
+		queryWrapper.eq(Stock::getTaskId, taskId);
+		return super.list(queryWrapper);
 	}
 }

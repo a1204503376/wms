@@ -23,7 +23,7 @@ public class WmsTask extends TenantEntity {
 	/**
 	 * 任务ID
 	 */
-	@TableId(value = "task_d", type = IdType.ASSIGN_ID)
+	@TableId(value = "task_id", type = IdType.ASSIGN_ID)
 	private Long taskId;
 
 	/**
