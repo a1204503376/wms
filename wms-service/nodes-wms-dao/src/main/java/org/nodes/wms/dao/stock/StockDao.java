@@ -141,14 +141,6 @@ public interface StockDao {
 	 */
 	List<StockPageResponse> getStockResponseByQuery(StockPageQuery stockPageQuery);
 
-	/**
-	 * pc拣货获取可出库库存集合
-	 *
-	 * @param skuCode 物料编码
-	 * @return 可用库存集合
-	 */
-	List<Stock> getStockListBySkuCode(String skuCode);
-
 	List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
 									  List<Long> zoneIdList, SkuLotBaseEntity skuLot,
 									  List<Long> excludeZoneIdList);
@@ -164,4 +156,13 @@ public interface StockDao {
 	 * @return 库存信息
 	 */
 	List<StockPageResponse> getStockResponseByBoxOrByLpn(StockPageQuery stockPageQuery);
+
+	/**
+	 * 按照批属性查找排除库位中的库存
+	 *
+	 * @param exculdeLocId 排除的库位id,非必填
+	 * @param skuLot       批属性
+	 * @return 库存数据
+	 */
+	List<Stock> getEnableStockBySkuLotAndExculdeLoc(List<Long> exculdeLocId, SkuLotBaseEntity skuLot);
 }

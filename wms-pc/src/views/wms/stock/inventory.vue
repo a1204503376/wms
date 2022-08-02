@@ -120,10 +120,10 @@ import fileDownload from "js-file-download";
                 <el-button size="mini" type="primary" @click="moveByBox">
                     按箱移动
                 </el-button>
-                <el-button size="mini" type="primary" @click="moveByBox">
+                <el-button size="mini" type="primary" @click="freeze">
                     库存冻结
                 </el-button>
-                <el-button size="mini" type="primary" @click="dialogFormVisible = true">
+                <el-button size="mini" type="primary" @click="thaw">
                     库存解冻
                 </el-button>
                 <el-button icon="el-icon-upload2" plain size="mini"
@@ -371,18 +371,29 @@ import fileDownload from "js-file-download";
             </el-dialog>
         </template>
         <template>
-            <el-dialog title="收货地址" :visible.sync="dialogFormVisible" append-to-body>
-                <el-form :model="form">
-                    <el-form-item label="解冻类型" :label-width="formLabelWidth">
-                        <el-select v-model="form.region" placeholder="请选择解冻类型">
-                            <el-option label="区域一" value="shanghai"></el-option>
-                            <el-option label="区域二" value="beijing"></el-option>
+            <el-dialog title="选择类型" :visible.sync="form1.popShow" append-to-body width="800px">
+                <el-form :model="form1">
+                    <el-form-item label="解冻类型" label-width="120px" v-if="form1.thawShow">
+                        <el-select v-model="form1.stockType" placeholder="请选择解冻类型">
+                            <el-option label="整批次解冻" value="byBatch"></el-option>
+                            <el-option label="库位解冻" value="byLoc"></el-option>
+                            <el-option label="按箱解冻" value="byBox"></el-option>
                         </el-select>
+                    </el-form-item>
+                    <el-form-item label="冻结类型" label-width="120px" v-if="form1.freezeShow">
+                        <el-select v-model="form1.stockType" placeholder="请选择冻结类型">
+                            <el-option label="整批次冻结" value="byBatch"></el-option>
+                            <el-option label="库位冻结" value="byLoc"></el-option>
+                            <el-option label="按箱冻结" value="byBox"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="备注" label-width="120px">
+                        <el-input type="textarea" style="width: 600px" v-model="form1.remark"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                    <el-button @click="cancel">取 消</el-button>
+                    <el-button type="primary" @click="submit">确 定</el-button>
                 </div>
             </el-dialog>
         </template>
@@ -402,7 +413,9 @@ import {
     importFile,
     move,
     moveByBox,
-    page
+    page,
+    stockFrozen,
+    stockUnFrozen
 } from "@/api/wms/stock/stock";
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js';
@@ -439,18 +452,9 @@ export default {
     data() {
         return {
             dialogFormVisible: false,
-            formLabelWidth: '120px',
             woId: "",
             form: {
                 params: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: '',
                     skuIds: [],
                     locIdList: [],
                     skuLot1: "",
@@ -468,6 +472,13 @@ export default {
                     lastInTimeDateRange: "",
                     lastOutTimeDateRange: "",
                 }
+            },
+            form1: {
+                popShow: false,
+                thawShow: false,
+                freezeShow: false,
+                stockType: "",
+                remark: ""
             },
             deleteCustomerRequest: {
                 ids: [],
@@ -670,6 +681,99 @@ export default {
             this.onChange(null);
             console.log('重置表单');
         },
+        submit() {
+            if (this.form1.stockType === '') {
+                this.$message.warning("请选择类型")
+                return;
+            }
+            let StockThawAndFrozenDto = {};
+            let remark = this.form1.remark
+            if (this.form1.stockType === 'byBatch') {
+                let skuLot1List = this.$refs.table.selection.map((row) => {
+                    return row.skuLot1;
+                });
+                let newArr = skuLot1List.filter(i => i && i.trim())
+                if (newArr.length === 0) {
+                    this.$message.warning("所选记录批次为空,请选择其他类型")
+                    return;
+                }
+                StockThawAndFrozenDto = {skuLot1List, remark}
+            } else if (this.form1.stockType === 'byLoc') {
+                let locIdList = this.$refs.table.selection.map((row) => {
+                    return row.locId;
+                });
+                StockThawAndFrozenDto = {locIdList, remark}
+            } else if (this.form1.stockType === 'byBox') {
+                let boxCodeList = this.$refs.table.selection.map((row) => {
+                    return row.boxCode;
+                });
+                let newArr = boxCodeList.filter(i => i && i.trim())
+                if (newArr.length === 0) {
+                    this.$message.warning("所选记录箱码为空,请选择其他类型")
+                    return;
+                }
+                StockThawAndFrozenDto = {boxCodeList, remark}
+            }
+            if (this.form1.freezeShow) {
+                this.cancel()
+                stockFrozen(StockThawAndFrozenDto).then((res) => {
+                    this.getTableData()
+                    this.$message.success(res.data.msg);
+                })
+            }
+            if (this.form1.thawShow) {
+                this.cancel()
+                stockUnFrozen(StockThawAndFrozenDto).then((res) => {
+                    this.getTableData()
+                    this.$message.success(res.data.msg);
+                })
+            }
+
+        },
+        thaw() {
+            let rows = this.$refs.table.selection;
+            if (rows.length === 0) {
+                this.$message.warning("请选择一条记录进行解冻")
+                return;
+            }
+            for (let item of rows) {
+                if (item.stockStatus === '正常') {
+                    this.$message.warning("物品:" + item.skuCode + " 不需要解冻,请重新选择")
+                    return
+                }
+            }
+            this.form1.popShow = true,
+                this.form1.freezeShow = false
+            this.form1.thawShow = true
+        },
+        freeze() {
+            let rows = this.$refs.table.selection;
+            if (rows.length === 0) {
+                this.$message.warning("请选择一条记录进行冻结")
+                return;
+            }
+            for (let item of rows) {
+                if (item.stockStatus === '冻结') {
+                    this.$message.warning("物品:" + item.skuCode + " 不需要冻结,请重新选择")
+                    return
+                }
+            }
+            this.form1.popShow = true,
+                this.form1.thawShow = false
+            this.form1.freezeShow = true
+        },
+        cancel() {
+            this.form1 = {
+                popShow: false,
+                thawShow: false,
+                thawType: "",
+                freezeShow: false,
+                freezeType: "",
+                remark: ""
+            }
+        },
+
+
         onChange(val) {
             if (val == null) {
                 this.dateRange = [];

@@ -64,18 +64,18 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public List<Stock> findEnableStockByBoxCode(String boxCode) {
 		List<Long> pickToLocList = locationBiz.getAllPickToLocation()
-			.stream()
-			.map(Location::getLocId)
-			.collect(Collectors.toList());
+				.stream()
+				.map(Location::getLocId)
+				.collect(Collectors.toList());
 		return stockDao.getStockByBoxCodeExcludeLoc(Collections.singletonList(boxCode), pickToLocList);
 	}
 
 	@Override
 	public List<Stock> findEnableStockByBoxCode(List<String> boxCodes) {
 		List<Long> pickToLocList = locationBiz.getAllPickToLocation()
-			.stream()
-			.map(Location::getLocId)
-			.collect(Collectors.toList());
+				.stream()
+				.map(Location::getLocId)
+				.collect(Collectors.toList());
 		return stockDao.getStockByBoxCodeExcludeLoc(boxCodes, pickToLocList);
 	}
 
@@ -109,7 +109,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 			if (lpnType.equals(LpnTypeCodeEnum.D.getCode())) {
 				// 根据lpnCoe获取同一托盘的所有库存
 				stocks = stockDao.getStockByLpnCode(stocks.get(0).getLpnCode(),
-					Collections.singletonList(stage.getLocId()));
+						Collections.singletonList(stage.getLocId()));
 			}
 			// 创建返回对象并添加到集合中
 			CallAgvResponse callAgvResponse = createCallAgvResponse(stocks, lpnType);
@@ -138,20 +138,20 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		List<Location> allPickToList = locationBiz.getAllPickToLocation();
 		// 根据入库暂存区id获取入库暂存区的物品数量和存放天数
 		Map<String, Object> stageStock = stockDao.getStockQtyByLocIdList(
-			allStageList.stream().map(Location::getLocId).collect(Collectors.toList()));
+				allStageList.stream().map(Location::getLocId).collect(Collectors.toList()));
 		// 根据入库检验区id获取入库检验区的物品数量和存放天数
 		Map<String, Object> qcStock = stockDao.getStockQtyByLocIdList(
-			allQcList.stream().map(Location::getLocId).collect(Collectors.toList()));
+				allQcList.stream().map(Location::getLocId).collect(Collectors.toList()));
 		// 根据出库暂存区id获取库存中不是入库暂存区的物品总数
 		int stockSkuCount = stockDao.getStockSkuCountByLocIdList(
-			allPickToList.stream().map(Location::getLocId).collect(Collectors.toList()));
+				allPickToList.stream().map(Location::getLocId).collect(Collectors.toList()));
 		// 查询库位总数
 		int locCount = locationBiz.countAll();
 		StockIndexResponse response = new StockIndexResponse();
 
 		if (Func.isNotEmpty(stageStock)) {
 			Optional<BigDecimal> stageQty = Optional
-				.ofNullable(ConvertUtil.convert(stageStock.get("skuQty"), BigDecimal.class));
+					.ofNullable(ConvertUtil.convert(stageStock.get("skuQty"), BigDecimal.class));
 			response.setStageSkuQty(stageQty.orElse(BigDecimal.ZERO).setScale(3, RoundingMode.DOWN));
 			response.setStageSkuStoreDay(ConvertUtil.convert(stageStock.get("skuStoreDay"), Integer.class));
 		} else {
@@ -161,11 +161,11 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 		if (Func.isNotEmpty(qcStock)) {
 			Optional<BigDecimal> qcQty = Optional
-				.ofNullable(ConvertUtil.convert(qcStock.get("skuQty"), BigDecimal.class));
+					.ofNullable(ConvertUtil.convert(qcStock.get("skuQty"), BigDecimal.class));
 			// 保留三位小数
 			response.setQcSkuQty(qcQty.orElse(BigDecimal.ZERO).setScale(3, RoundingMode.DOWN));
 			response.setQcSkuStoreDay(
-				ConvertUtil.convert(qcStock.get("skuStoreDay"), Integer.class));
+					ConvertUtil.convert(qcStock.get("skuStoreDay"), Integer.class));
 		} else {
 			response.setQcSkuQty(BigDecimal.ZERO);
 			response.setQcSkuStoreDay(0);
@@ -183,16 +183,16 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public Page<StockLogPageResponse> pageStockLog(Query query,
-												   StockLogPageQuery stockLogPageQuery) {
+			StockLogPageQuery stockLogPageQuery) {
 		return stockLogDao.page(Condition.getPage(query), stockLogPageQuery);
 	}
 
 	@Override
 	public List<Stock> findStockByLocation(List<Location> locationList) {
 		List<Long> locIdList = locationList.stream()
-			.map(Location::getLocId)
-			.distinct()
-			.collect(Collectors.toList());
+				.map(Location::getLocId)
+				.distinct()
+				.collect(Collectors.toList());
 		return stockDao.getStockByLocIdList(locIdList);
 	}
 
@@ -211,30 +211,32 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public List<Stock> findEnableStockByZoneType(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-												 List<String> zoneTypeList, SkuLotBaseEntity skuLot) {
-		List<Zone> zoneList = zoneBiz.findByZoneType(zoneTypeList);
-		List<Long> zoneIdList = zoneList.stream().map(Zone::getZoneId).collect(Collectors.toList());
+			List<String> zoneTypeList, SkuLotBaseEntity skuLot) {
+		List<Long> zoneIdList = null;
+		if (Func.isNotEmpty(zoneTypeList)){
+			List<Zone> zoneList = zoneBiz.findByZoneType(zoneTypeList);
+			zoneIdList = zoneList.stream()
+				.map(Zone::getZoneId)
+				.collect(Collectors.toList());
+		}
+
 		return findEnableStockByZone(whId, skuId, stockStatusEnum, zoneIdList, skuLot);
 	}
 
 	@Override
 	public List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-											 List<Long> zoneIdList, SkuLotBaseEntity skuLot) {
+			List<Long> zoneIdList, SkuLotBaseEntity skuLot) {
 		Long pickToZoneId = locationBiz.getPickToLocation(whId).getZoneId();
-		List<Long> exculdeZoneIdList = new ArrayList<>();
-		exculdeZoneIdList.add(pickToZoneId);
 		return stockDao.findEnableStockByZone(whId, skuId, stockStatusEnum,
-			zoneIdList, skuLot, exculdeZoneIdList);
+				zoneIdList, skuLot, Collections.singletonList(pickToZoneId));
 	}
 
 	@Override
 	public List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-												 List<Long> locationIdList, SkuLotBaseEntity skuLot) {
+			List<Long> locationIdList, SkuLotBaseEntity skuLot) {
 		Long pickToZoneId = locationBiz.getPickToLocation(whId).getZoneId();
-		List<Long> exculdeZoneIdList = new ArrayList<>();
-		exculdeZoneIdList.add(pickToZoneId);
 		return stockDao.findEnableStockByLocation(whId, skuId, stockStatusEnum,
-			locationIdList, skuLot, exculdeZoneIdList);
+				locationIdList, skuLot, Collections.singletonList(pickToZoneId));
 	}
 
 	@Override
@@ -250,6 +252,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public Page<StockPageResponse> getStockPage(Query query, StockPageQuery stockPageQuery) {
+		//按箱显示货按lpn显示
 		if (Func.isNotEmpty(stockPageQuery.getIsShowByBox()) || Func.isNotEmpty(stockPageQuery.getIsShowByLpn())) {
 			List<StockPageResponse> stockPageResponseList = stockDao.getStockResponseByBoxOrByLpn(stockPageQuery);
 			Page<StockPageResponse> page = new Page<>();
@@ -259,11 +262,6 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		}
 		Page<StockPageResponse> page = stockDao.page(Condition.getPage(query), stockPageQuery);
 		return page;
-	}
-
-	@Override
-	public List<Stock> getStockListBySkuCode(String skuCode) {
-		return stockDao.getStockListBySkuCode(skuCode);
 	}
 
 	@Override
@@ -282,6 +280,11 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	}
 
 	@Override
+	public List<Stock> findStockByIds(List<Long> stockIds) {
+		return stockDao.getStockById(stockIds);
+	}
+
+	@Override
 	public int getSerialCountByStockId(Long stockId) {
 		return serialDao.getSerialCountByStockId(stockId);
 	}
@@ -289,7 +292,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	private List<Stock> findLpnStockOnStageLeft(Long whId, String boxCode, Location stage) {
 		// 根据箱码和库位查询入库暂存区的库存
 		List<Stock> stockList = stockDao.getStockLeftLikeByBoxCode(boxCode,
-			Collections.singletonList(stage.getLocId()));
+				Collections.singletonList(stage.getLocId()));
 		if (Func.isEmpty(stockList)) {
 			throw new ServiceException("没有查询到相关库存信息");
 		}
@@ -345,6 +348,15 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		// 设置箱码对象集合
 		callAgvResponse.setBoxList(boxDtoList);
 		return callAgvResponse;
+	}
+
+	@Override
+	public List<Stock> findEnableStockBySkuLot(SkuLotBaseEntity skuLot) {
+		List<Location> allPickToLocation = locationBiz.getAllPickToLocation();
+		List<Long> pickToLocIdList = allPickToLocation.stream()
+			.map(Location::getLocId)
+			.collect(Collectors.toList());
+		return stockDao.getEnableStockBySkuLotAndExculdeLoc(pickToLocIdList, skuLot);
 	}
 
 }

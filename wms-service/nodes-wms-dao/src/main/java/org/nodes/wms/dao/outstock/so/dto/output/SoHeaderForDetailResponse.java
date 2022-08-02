@@ -18,9 +18,14 @@ public class SoHeaderForDetailResponse implements Serializable {
 	private String soBillNo;
 
 	/**
+	 * 单据类型编码
+	 */
+	private String billTypeCd;
+
+	/**
 	 * 单据类型
 	 */
-	private String billType;
+	private String billTypeName;
 
 	/**
 	 * 所属库房
@@ -36,6 +41,11 @@ public class SoHeaderForDetailResponse implements Serializable {
 	 * 客户
 	 */
 	private String customerName;
+
+	/**
+	 * 借用人
+	 */
+	private String contact;
 
 	/**
 	 * 出库方式

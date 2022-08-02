@@ -3,6 +3,7 @@ package org.nodes.wms.dao.stock.dto.input;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 库存冻结请求对象
@@ -13,5 +14,5 @@ public class FreezeBySerialNumberRequest implements Serializable {
 	/**
      * 序列号
 	 */
-	private String serialNumber;
+	private List<String> serialNumber;
 }

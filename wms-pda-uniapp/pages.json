@@ -384,6 +384,27 @@
 				"navigationStyle": "custom"
 			}
 
+		}, {
+			"path": "pages/stock/freezeOrUnFreeze/freeze/freezeByBoxCode",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/stock/freezeOrUnFreeze/unFreeze/unFreezeByBoxCode",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/stock/stockManage/moveByLpnCode/moveByLpnCode",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
 		}
 	],
 	"globalStyle": {

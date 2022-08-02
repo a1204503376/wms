@@ -63,6 +63,12 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public SoHeader add(SoBillAddOrEditRequest soBillAddOrEditRequest) {
+		if (Func.isNotEmpty(soBillAddOrEditRequest.getSoBillId())){
+			SoHeader soHeader = soHeaderDao.getById(soBillAddOrEditRequest.getSoBillId());
+			if (!SoBillStateEnum.CREATE.getIndex().equals(soHeader.getSoBillState())){
+				throw new ServiceException("编辑失败，该发货单目前不可编辑");
+			}
+		}
 		SoHeader soHeader = soBillFactory.createSoHeader(soBillAddOrEditRequest);
 		if (!soHeaderDao.saveOrUpdateSoHeader(soHeader)) {
 			throw new ServiceException("新增发货单头表信息失败，请稍后再试");
@@ -136,6 +142,9 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	@Override
 	public void export(SoHeaderPageQuery soHeaderPageQuery, HttpServletResponse response) {
 		List<SoHeaderExcelResponse> soHeaderExcelList = soHeaderDao.listByQuery(soHeaderPageQuery);
+		soHeaderExcelList.forEach(soHeader ->{
+			soHeader.setSoBillStateValue(soHeader.getSoBillState().getName());
+		});
 		ExcelUtil.export(response, "", "", soHeaderExcelList, SoHeaderExcelResponse.class);
 	}
 

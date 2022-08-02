@@ -33,6 +33,9 @@ public enum StockLogTypeEnum {
 	STOCK_MOVE_BY_PCS(208, "PC按件移位"),
 	STOCK_MOVE_BY_BOX(209, "PC按箱移位"),
 	STOCK_MOVE_BY_BOX_PDA(210, "按箱移位-手持"),
+	STOCK_MOVE_BY_PCS_PDA(211, "标准移动-手持"),
+	STOCK_MOVE_BY_LPN_PDA(212, "LPN移动-手持"),
+	STOCK_DEVANNING_BY_PDA(240, "拆箱-手持"),
 	OUTSTOCK_BY_PICK(301, "拣货出库"),
 	OUTSTOCK_BY_CANCEL_RECEIVE(302, "撤销收货");
 

@@ -18,4 +18,12 @@ public class StockMoveByLpnRequest implements Serializable {
 	 * lpn编码-托盘号
 	 */
 	private String lpnCode;
+	/**
+	 * 库房ID
+	 */
+	private Long whId;
+	/**
+	 * lpn编码-目标托盘号
+	 */
+	private String targetLpnCode;
 }

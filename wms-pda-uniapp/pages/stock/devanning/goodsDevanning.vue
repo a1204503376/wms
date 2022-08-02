@@ -5,15 +5,27 @@
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
-		<u--form labelPosition="left" :model="params">
-			<u-form-item label="箱码" borderBottom class="left-text-one-line font-in-page" labelWidth="100">
-				<u--input v-model="params.boxCode"></u--input>
+		<u--form labelPosition="left" :model="paramsView">
+			<u-form-item label="物品" borderBottom class="left-text-one-line font-in-page" labelWidth="100">
+				<u--input v-model="paramsView.skuCode"></u--input>
+			</u-form-item>
+			<u-form-item label="批次" borderBottom class="left-text-one-line font-in-page" labelWidth="100">
+				<u--input v-model="paramsView.skuLot1"></u--input>
+			</u-form-item>
+			<u-form-item label="余额" borderBottom class="left-text-one-line font-in-page" labelWidth="100">
+				<u--input v-model="paramsView.stockBalance"></u--input>
+			</u-form-item>
+			<u-form-item label="拆数量" borderBottom class="left-text-one-line font-in-page" labelWidth="100">
+				<u--input v-model="paramsView.splitQty"></u--input>
 			</u-form-item>
 		</u--form>
 		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
 				返回
+			</view>
+			<view class="btn-cancle" @click="next()">
+				下一项
 			</view>
 		</view>
 	</view>
@@ -36,13 +48,26 @@
 					boxCode: '',
 					whId: uni.getStorageSync('warehouse').whId
 				},
+				paramsView: {},
 				putawayData: {}
 			}
+		},
+		onLoad: function(option) {
+			var parse = JSON.parse(option.param)
+			this.params = parse;
+			if (tool.isNotEmpty(this.params.page)) {
+				this.paramsView = this.params.stockList[this.params.page]
+			} else {
+				this.params.page = 0;
+				this.paramsView = this.params.stockList[this.params.page]
+			}
+			console.log(this.paramsView)
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
 		},
 		onShow() {
+			this.paramsView.splitQty=0;
 			uni.$u.func.registerScanner(this.scannerCallback);
 			var that = this;
 			that.emitKeyDown = function(e) {
@@ -54,16 +79,24 @@
 			};
 		},
 		methods: {
+			next() {
+				this.params.page++;
+				if (this.params.stockList.length > this.params.page) {
+					this.params.stockList[this.params.page].splitQty=this.paramsView.splitQty;
+					uni.$u.func.routeNavigateTo('/pages/stock/devanning/goodsDevanning', this.params);
+				} else {
+					debugger
+					uni.$u.func.routeNavigateTo('/pages/stock/devanning/devanningSubmit', this
+						.params);
+				}
+			},
 			getPutawayData() {
 				if (tool.isEmpty(this.params.boxCode)) {
 					uni.$u.func.showToast({
 						title: '查询失败，请输入箱码后重试'
 					});
 				}
-
 				this.clearEmitKeyDown();
-				uni.$u.func.routeNavigateTo('/pages/stock/devanning/devanningSubmit', this
-					.putawayData);
 			},
 			analysisCode(code) {
 				var barcode = barcodeFunc.parseBarcode(code);

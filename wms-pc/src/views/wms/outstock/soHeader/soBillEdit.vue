@@ -52,11 +52,22 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="客户" prop="customer">
+                            <el-form-item
+                                :label="form.params.billTypeCd !== this.$commonConst.BILL_TYPE_LEND ? '客户' : '借用人'"
+                                :prop="form.params.billTypeCd !== this.$commonConst.BILL_TYPE_LEND ? 'customer' : 'contact'">
                                 <nodes-customer
+                                    v-if="form.params.billTypeCd !== this.$commonConst.BILL_TYPE_LEND"
                                     v-model="form.params.customer"
                                     size="medium">
                                 </nodes-customer>
+                                <el-input
+                                    v-if="form.params.billTypeCd === this.$commonConst.BILL_TYPE_LEND"
+                                    v-model="form.params.contact"
+                                    :clearable="true"
+                                    placeholder="请输入借用人"
+                                    size="medium"
+                                    style="width: 210px">
+                                </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -280,6 +291,7 @@ export default {
                     whId: '',
                     woId: '',
                     customer: {},
+                    contact: '',
                     outstockType: '',
                     transportCode: '',
                     soBillRemark: ''
@@ -304,6 +316,13 @@ export default {
                             required: true,
                             message: '请选择货主',
                             trigger: 'change'
+                        }
+                    ],
+                    contact: [
+                        {
+                            required: true,
+                            message: '请输入借用人',
+                            trigger: 'blur'
                         }
                     ],
                     transportCode: [
@@ -433,6 +452,7 @@ export default {
                 whId: params.whId,
                 woId: params.woId,
                 customerId: params.customer.id,
+                contact: params.contact,
                 transportCode: params.transportCode,
                 soBillRemark: params.soBillRemark,
                 outstockType: params.outstockType,

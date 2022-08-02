@@ -3,6 +3,8 @@ package org.nodes.wms.biz.stockManage;
 import org.nodes.wms.dao.stock.dto.input.*;
 import org.nodes.wms.dao.stock.dto.output.EstimateStockMoveResponse;
 
+import java.util.List;
+
 /**
  * 库存控制BIZ
  */
@@ -10,9 +12,9 @@ public interface StockManageBiz {
 	/**
 	 * 按库位冻结
 	 *
-	 * @param  locCode 库位编码
+	 * @param locCode 库位编码
 	 */
-	void freezeByLocCodeAction(String locCode);
+	void freezeByLocCodeAction(String locCode, Long whId);
 
 	/**
 	 * 按批次号冻结
@@ -26,7 +28,7 @@ public interface StockManageBiz {
 	 *
 	 * @param serialNumber 序列号
 	 */
-	void freezeBySerialNumberAction(String serialNumber);
+	void freezeBySerialNumberAction(List<String> serialNumber);
 
 	/**
 	 * 部分冻结
@@ -36,11 +38,18 @@ public interface StockManageBiz {
 	void portionFreezeAction(PortionFreezeRequest request);
 
 	/**
+	 * 按箱冻结
+	 *
+	 * @param boxCode 箱码 必填
+	 */
+	void freezeStockByBoxCodeAction(String boxCode);
+
+	/**
 	 * 按库位解冻
 	 *
 	 * @param locCode 库位
 	 */
-	void unFreezeByLocCodeAction(String locCode);
+	void unFreezeByLocCodeAction(String locCode, Long whId);
 
 	/**
 	 * 按批次号解冻
@@ -62,6 +71,13 @@ public interface StockManageBiz {
 	 * @param request 请求对象-内部包含 物品编码-库位编码-批次号-序列号
 	 */
 	void portionUnFreezeAction(PortionUnFreezeRequest request);
+
+	/**
+	 * 按箱解冻
+	 *
+	 * @param boxCode 箱码 必填
+	 */
+	void unFreezeStockByBoxCodeAction(String boxCode);
 
 	/**
 	 * PDA库存管理:标准移动
@@ -87,8 +103,30 @@ public interface StockManageBiz {
 
 	/**
 	 * Pda判断库存是否可移动
+	 *
 	 * @param request 请求对象
 	 * @return 是否序列号管理
 	 */
 	EstimateStockMoveResponse skuIsSn(EstimateStockMoveRequest request);
+
+	/**
+	 * 批量冻结库存
+	 *
+	 * @param stockThawAndFrozenDto 包含箱码、生产批次、库位集合
+	 */
+	void stockFrozen(StockThawAndFrozenDto stockThawAndFrozenDto);
+
+	/**
+	 * 批量解冻库存
+	 *
+	 * @param stockThawAndFrozenDto 包含箱码、生产批次、库位集合
+	 */
+	void stockUnFrozen(StockThawAndFrozenDto stockThawAndFrozenDto);
+
+	/**
+	 * PDA库存管理:LPN移动-查询根据条件查询库存，判断库存是否唯一，并且是否可移动
+	 *
+	 * @param lpnCode 托盘号
+	 */
+	void decideStockLpn(String lpnCode);
 }

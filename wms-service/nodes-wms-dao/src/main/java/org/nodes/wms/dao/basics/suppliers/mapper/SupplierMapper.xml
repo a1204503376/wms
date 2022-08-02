@@ -75,8 +75,8 @@
                `code`,
                `name`
         FROM basics_suppliers
-        WHERE `code` LIKE CONCAT('%', #{code}, '%')
-           OR `name` LIKE CONCAT('%', #{name}, '%')
+        WHERE (`code` LIKE CONCAT('%', #{code}, '%')
+           OR `name` LIKE CONCAT('%', #{name}, '%')) AND is_deleted = 0
         ORDER BY update_time DESC
         LIMIT 10
     </select>

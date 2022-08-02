@@ -13,6 +13,7 @@
         :size="size"
         :disabled="disabled"
         :clearable="true"
+        @clear="clear"
         @change="onChange">
         <el-option
             v-for="item in options"
@@ -37,9 +38,9 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Object,String,Array],
+        selectVal: [Object, Array],
         // 是否多选 true:多选 默认为单选
-        multiple: {type: Boolean, required: false, default:()=>false},
+        multiple: {type: Boolean, required: false, default: () => false},
         // 组件大小，默认为mini, 支持 medium/small/mini
         size: {type: String, required: false, default: () => "mini"},
         // 是否禁用 默认为 false不禁用
@@ -57,18 +58,18 @@ export default {
         this.setDefaultByProps();
     },
     watch: {
-        selectVal(){
+        selectVal() {
             this.setDefaultByProps();
         }
     },
     methods: {
-        setDefaultByProps(){
+        setDefaultByProps() {
             this.val = this.selectVal;
-            if (!this.isEdit){
+            if (!this.isEdit) {
                 return;
             }
             let currentSupplier = this.options.find(item => item.id === this.selectVal.id);
-            if (func.isEmpty(currentSupplier)){
+            if (func.isEmpty(currentSupplier)) {
                 this.options.push(this.selectVal);
             }
         },
@@ -87,7 +88,18 @@ export default {
             }
         }, 500),
         onChange(val) {
+            if (val === "") {
+                val = {
+                    id: '',
+                    code: '',
+                    name: ''
+                }
+            }
             this.$emit('selectValChange', val);
+        },
+        clear() {
+            console.log("clear");
+            // TODO 默认清空方法将 selectVal 变成了 "", 调教表单报错
         }
     }
 }

@@ -10,7 +10,7 @@
 				<u-cell title="2.按批次号冻结" isLink url="/pages/stock/freezeOrUnFreeze/freeze/freezeByLotNumber"></u-cell>
 				<u-cell title="3.按序列号冻结" isLink url="/pages/stock/freezeOrUnFreeze/freeze/freezeBySerialNumber">
 				</u-cell>
-				<u-cell title="4.按物品、批次、库位部分冻结" isLink url="/pages/stock/freezeOrUnFreeze/freeze/portionFreeze">
+				<u-cell title="4.按箱码冻结" isLink url="/pages/stock/freezeOrUnFreeze/freeze/freezeByBoxCode">
 				</u-cell>
 			</u-cell-group>
 		</view>

@@ -30,6 +30,11 @@ public class NewReceiveHeaderRequest implements Serializable {
 	private SupplierSelectRequest supplier;
 
 	/**
+	 * 归还人
+	 */
+	private String supplierContact;
+
+	/**
 	 * 入库方式
 	 */
 	private Integer inStoreType;
