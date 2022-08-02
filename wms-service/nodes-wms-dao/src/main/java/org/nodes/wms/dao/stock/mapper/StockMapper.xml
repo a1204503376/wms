@@ -173,6 +173,9 @@
     </select>
     <select id="getStockResponseByQuery" resultType="org.nodes.wms.dao.stock.dto.output.StockPageResponse">
         <include refid="stock"/>
+        <include refid="stock1"/>
+        AND s.is_deleted ='0'
+        ORDER BY s.create_time
     </select>
 
     <select id="getStockResponseByBoxOrByLpn" resultType="org.nodes.wms.dao.stock.dto.output.StockPageResponse">
@@ -193,5 +196,63 @@
             AND s.is_deleted ='0'
             order by s.lpn_code,s.box_code
         </if>
+    </select>
+    <select id="getSerialPage" resultType="org.nodes.wms.dao.stock.dto.output.StockBySerialPageResponse">
+        select ws.serial_number,
+        s.sku_code,
+        s.stock_status,
+        s.sku_lot1,
+        s.wsu_code,
+        s.loc_code,
+        s.zone_code,
+        s.box_code,
+        s.lpn_code,
+        s.sku_lot2,
+        s.sku_lot3,
+        s.sku_lot4,
+        s.sku_lot5,
+        s.sku_lot6,
+        s.sku_lot7,
+        s.sku_lot8,
+        s.wh_code,
+        wo.owner_code,
+        wo.owner_name,
+        s.last_in_time,
+        s.last_out_time
+        from wms_serial ws
+        left join wms_stock s on ws.stock_id = s.stock_id
+        left join wms_owner wo on s.wo_id = wo.wo_id
+        left join wms_zone wz on s.zone_id = wz.zone_id
+        <where>
+            <if test="query.serial != null and query.serial != ''">
+                AND ws.serial_number LIKE concat('%',#{query.serial},'%')
+            </if>
+            <if test="query.skuIds != null and query.skuIds.size()>0">
+                AND s.sku_id in
+                <foreach collection="query.skuIds" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="query.locIdList != null and query.locIdList.size() > 0">
+                AND s.loc_id in
+                <foreach collection="query.locIdList" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="query.skuLot1!=null and query.skuLot1 != ''">
+                AND s.sku_lot1 LIKE concat('%',#{query.skuLot1},'%')
+            </if>
+            <if test="query.boxCode!=null and query.boxCode != ''">
+                AND s.box_code LIKE concat('%',#{query.boxCode},'%')
+            </if>
+            <if test="query.serialBegin!=null and query.serialBegin != ''">
+                AND ws.serial_number &gt;= #{query.serialBegin}
+            </if>
+            <if test="query.serialEnd!=null and query.serialEnd != ''">
+                AND ws.serial_number &lt;= #{query.serialEnd}
+            </if>
+            and s.stay_stock_qty + s.stock_qty > s.pick_qty
+            and ws.is_deleted = '0'
+        </where>
     </select>
 </mapper>

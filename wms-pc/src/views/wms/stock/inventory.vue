@@ -110,10 +110,6 @@ import fileDownload from "js-file-download";
                 </el-row>
             </template>
             <template v-slot:batchBtn>
-                <el-button icon="el-icon-plus" size="mini" type="primary" @click="showByBox">按箱显示
-                </el-button>
-                <el-button icon="el-icon-plus" size="mini" type="primary" @click="showByLpn">按LPN显示
-                </el-button>
                 <el-button size="mini" type="primary" @click="moveByPiece">
                     按件移动
                 </el-button>
@@ -125,6 +121,12 @@ import fileDownload from "js-file-download";
                 </el-button>
                 <el-button size="mini" type="primary" @click="thaw">
                     库存解冻
+                </el-button>
+                <el-button icon="el-icon-plus" size="mini" type="primary" @click="showByBox">按箱显示
+                </el-button>
+                <el-button icon="el-icon-plus" size="mini" type="primary" @click="showByLpn">按LPN显示
+                </el-button>
+                <el-button icon="el-icon-plus" size="mini" type="primary" @click="showBySerial">按序列号显示
                 </el-button>
                 <el-button icon="el-icon-upload2" plain size="mini"
                            @click="onUpload">导入
@@ -774,6 +776,11 @@ export default {
         showByLpn() {
             this.$router.push({
                 name: '按LPN显示',
+            });
+        },
+        showBySerial() {
+            this.$router.push({
+                name: '按序列号显示',
             });
         },
         getSummaries(param) {

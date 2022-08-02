@@ -7,6 +7,7 @@ import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.putway.dto.output.CallAgvResponse;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
+import org.nodes.wms.dao.stock.dto.input.StockBySerialPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.dto.output.*;
@@ -67,7 +68,7 @@ public interface StockQueryBiz {
 	 * @return Stock集合
 	 */
 	List<Stock> findEnableStockByZoneType(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-			List<String> zoneTypeList, SkuLotBaseEntity skuLot);
+										  List<String> zoneTypeList, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 查找可用库存,排除出库暂存区
@@ -88,7 +89,7 @@ public interface StockQueryBiz {
 	 * @return Stock集合
 	 */
 	List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-			List<Long> zoneIdList, SkuLotBaseEntity skuLot);
+									  List<Long> zoneIdList, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 根据库位id查询可用库存,排除出库暂存区
@@ -101,7 +102,7 @@ public interface StockQueryBiz {
 	 * @return Stock集合
 	 */
 	List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-			List<Long> locationIdList, SkuLotBaseEntity skuLot);
+										  List<Long> locationIdList, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 根据箱码查询库存,排除出库暂存区
@@ -234,4 +235,13 @@ public interface StockQueryBiz {
 	 * @return 库存集合
 	 */
 	List<Stock> findStockByIds(List<Long> stockIds);
+
+	/**
+	 * 库存余额按序列号显示分页信息
+	 *
+	 * @param query                  分页参数
+	 * @param stockBySerialPageQuery 查询条件
+	 * @return 分页对象
+	 */
+	IPage<StockBySerialPageResponse> getStockBySerialPage(Query query, StockBySerialPageQuery stockBySerialPageQuery);
 }

@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
+import org.nodes.wms.dao.stock.dto.input.StockBySerialPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
+import org.nodes.wms.dao.stock.dto.output.StockBySerialPageResponse;
 import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
@@ -165,4 +167,13 @@ public interface StockDao {
 	 * @return 库存数据
 	 */
 	List<Stock> getEnableStockBySkuLotAndExculdeLoc(List<Long> exculdeLocId, SkuLotBaseEntity skuLot);
+
+	/**
+	 * 库存余额按序列号显示获取分页信息
+	 *
+	 * @param page                   分页条件
+	 * @param stockBySerialPageQuery 查询参数
+	 * @return 分页对象
+	 */
+	Page<StockBySerialPageResponse> page(IPage<?> page, StockBySerialPageQuery stockBySerialPageQuery);
 }

@@ -275,6 +275,12 @@ export default [
                 name: '按LPN显示',
                 props: true,
                 component: () => import('@/views/wms/stock/stock/stockByLpn')
+            },
+            {
+                path: 'stockBySerial',
+                name: '按序列号显示',
+                props: true,
+                component: () => import('@/views/wms/stock/stock/stockBySerial')
             }
         ]
     }

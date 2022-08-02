@@ -1,5 +1,7 @@
 package org.nodes.wms.biz.stock.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.tool.utils.AssertUtil;
@@ -21,9 +23,11 @@ import org.nodes.wms.dao.stock.SerialLogDao;
 import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.StockLogDao;
 import org.nodes.wms.dao.stock.constant.SerialLogConstant;
+import org.nodes.wms.dao.stock.dto.input.StockBySerialPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockImportRequest;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
+import org.nodes.wms.dao.stock.dto.output.StockBySerialPageResponse;
 import org.nodes.wms.dao.stock.dto.output.StockLogExcelResponse;
 import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
 import org.nodes.wms.dao.stock.entities.Serial;
@@ -115,10 +119,10 @@ public class StockBizImpl implements StockBiz {
 		targetStock.setLastInTime(LocalDateTime.now());
 	}
 
-	private List<String> checkSerialOnInStock(ReceiveLog receiveLog){
-		if (Func.isNotEmpty(receiveLog.getSnCode())){
+	private List<String> checkSerialOnInStock(ReceiveLog receiveLog) {
+		if (Func.isNotEmpty(receiveLog.getSnCode())) {
 			List<String> serialNoList = Arrays.asList(Func.split(receiveLog.getSnCode(), ","));
-			if (serialNoList.size() != receiveLog.getQty().intValue()){
+			if (serialNoList.size() != receiveLog.getQty().intValue()) {
 				throw new ServiceException(
 					String.format("入库失败,采集的序列号个数[%d]与收货数量[%d]不一致",
 						serialNoList.size(), receiveLog.getQty().intValue()));
@@ -353,9 +357,9 @@ public class StockBizImpl implements StockBiz {
 	public boolean equalStockStatus(List<Stock> stockList, StockStatusEnum status, boolean isThrow) {
 		AssertUtil.notNull(status, "库存校验失败，库存状态不能为空");
 
-		for (Stock stock : stockList){
-			if (!status.equals(stock.getStockStatus())){
-				if (isThrow){
+		for (Stock stock : stockList) {
+			if (!status.equals(stock.getStockStatus())) {
+				if (isThrow) {
 					throw new ServiceException(String.format("库存状态校验失败,库存[%d]现状态为[%s]不等于[%s]",
 						stock.getStockId(), stock.getStockStatus().getDesc(), status.getDesc()));
 				} else {
@@ -596,6 +600,15 @@ public class StockBizImpl implements StockBiz {
 									  HttpServletResponse response) {
 		List<StockLogExcelResponse> stockLogList = stockLogDao.listByQuery(stockLogPageQuery);
 		ExcelUtil.export(response, "", "", stockLogList, StockLogExcelResponse.class);
+	}
+
+	@Override
+	public void exportBySerial(StockBySerialPageQuery stockBySerialPageQuery, HttpServletResponse response) {
+		IPage<?> page = new Page();
+		page.setCurrent(1);
+		page.setSize(100000);
+		List<StockBySerialPageResponse> stockBySerialPageResponseList = stockDao.page(page, stockBySerialPageQuery).getRecords();
+		ExcelUtil.export(response, "库存余额", "库存余额数据表", stockBySerialPageResponseList, StockBySerialPageResponse.class);
 	}
 
 	@Override

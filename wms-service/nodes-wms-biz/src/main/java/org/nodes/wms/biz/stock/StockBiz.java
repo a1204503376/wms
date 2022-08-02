@@ -2,6 +2,7 @@ package org.nodes.wms.biz.stock;
 
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.stock.dto.input.StockBySerialPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockImportRequest;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
@@ -220,4 +221,11 @@ public interface StockBiz {
 	 */
 	void exportStockLogToExcel(StockLogPageQuery stockLogPageQuery, HttpServletResponse response);
 
+	/**
+	 * 按序列号显示库存导出
+	 *
+	 * @param stockBySerialPageQuery 查询对象
+	 * @param response               响应对象
+	 */
+	void exportBySerial(StockBySerialPageQuery stockBySerialPageQuery, HttpServletResponse response);
 }

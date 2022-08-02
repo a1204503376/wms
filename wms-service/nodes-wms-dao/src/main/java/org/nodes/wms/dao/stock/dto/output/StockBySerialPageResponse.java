@@ -1,80 +1,48 @@
 package org.nodes.wms.dao.stock.dto.output;
 
-import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.nodes.wms.dao.common.esayExcel.StockStatusConverter;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 库存分页返回前端response
+ * 库存按序列号显示返回前端分页dto
  */
 @Data
-public class StockPageResponse implements Serializable {
-	private static final long serialVersionUID = -4376432991216164312L;
+public class StockBySerialPageResponse implements Serializable {
+	private static final long serialVersionUID = 6196607591505436862L;
 	/**
-	 * 库存主键id
+	 * 序列号
 	 */
-	@ExcelIgnore
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long stockId;
+	@ColumnWidth(15)
+	@ExcelProperty({"库存信息", "序列号"})
+	private String serialNumber;
 	/**
 	 * 物品编码
 	 */
 	@ColumnWidth(15)
-	@ExcelProperty({"库存信息", "物料编码"})
+	@ExcelProperty({"库存信息", "物品编码"})
 	private String skuCode;
 	/**
 	 * 库存状态
 	 */
-	@ExcelIgnore
-	private StockStatusEnum stockStatus;
-	/**
-	 * 库存状态导出字段
-	 */
 	@ColumnWidth(15)
-	@ExcelProperty({"库存信息", "库存状态"})
-	private String stockStatusDesc;
+	@ExcelProperty(value = {"库存信息", "库存状态"}, converter = StockStatusConverter.class)
+	@JsonSerialize
+	private StockStatusEnum stockStatus;
+
+
 	/**
 	 * 生产批次
 	 */
 	@ColumnWidth(15)
 	@ExcelProperty({"库存信息", "生产批次"})
 	private String skuLot1;
-	/**
-	 * 上架数量
-	 */
-	@ExcelIgnore
-	private BigDecimal stockQty;
-	/**
-	 * 下架数量
-	 */
-	@ExcelIgnore
-	private BigDecimal pickQty;
-	/**
-	 * 占用数量
-	 */
-	@ExcelProperty
-	private BigDecimal occupyQty;
-
-	/**
-	 * 库存余额
-	 */
-	@ColumnWidth(15)
-	@ExcelProperty({"库存信息", "库存余额"})
-	private BigDecimal stockBalance;
-	/**
-	 * 库存可用
-	 */
-	@ColumnWidth(15)
-	@ExcelProperty({"库存信息", "库存可用"})
-	private BigDecimal stockEnable;
 	/**
 	 * 计量单位编码
 	 */
@@ -87,12 +55,6 @@ public class StockPageResponse implements Serializable {
 	@ColumnWidth(15)
 	@ExcelProperty({"库存信息", "库位编码"})
 	private String locCode;
-	/**
-	 * 库位id
-	 */
-	@ExcelIgnore
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long locId;
 	/**
 	 * 库区编码
 	 */
@@ -155,21 +117,11 @@ public class StockPageResponse implements Serializable {
 	@ExcelProperty({"库存信息", "CRCC"})
 	private String skuLot8;
 	/**
-	 * 库房ID
-	 */
-	@ExcelIgnore
-	private Long whId;
-	/**
 	 * 库房编码
 	 */
 	@ColumnWidth(15)
 	@ExcelProperty({"库存信息", "库房编码"})
 	private String whCode;
-	/**
-	 * 货主ID
-	 */
-	@ExcelIgnore
-	private Long woId;
 	/**
 	 * 货主编码
 	 */
