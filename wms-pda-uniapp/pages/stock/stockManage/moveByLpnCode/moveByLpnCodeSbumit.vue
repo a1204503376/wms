@@ -5,8 +5,11 @@
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u--form>
+			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.targetLocCode"></u--input>
+			</u-form-item>
 			<u-form-item label="LPN" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.lpnCode"></u--input>
+				<u--input v-model="params.targetLpnCode"></u--input>
 			</u-form-item>
 		</u--form>
 		<view class="footer">
@@ -35,11 +38,17 @@
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
-					lpnCode: ''
+					targetLocCode: '',
+					lpnCode: '',
+					targetLpnCode: ''
 				}
 			}
 		},
-		onLoad() {},
+		onLoad: function(option) {
+			var parse = JSON.parse(option.param)
+			this.params = parse;
+			this.params.targetLpnCode=parse.lpnCode;
+		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
 		},
@@ -59,16 +68,16 @@
 				var _this = this;
 				_this.params.isSn = true;
 				uni.$u.throttle(function() {
-					if (tool.isNotEmpty(_this.params.lpnCode)) {
+					if (tool.isNotEmpty(_this.params.targetLocCode) && tool.isNotEmpty(_this.params.targetLpnCode)) {
 						_this.params.whId = uni.getStorageSync('warehouse').whId;
-						stockManage.estimateStockMoveByLpn(_this.params).then(data => {
-							uni.$u.func.routeNavigateTo('/pages/stock/stockManage/moveByLpnCode/moveByLpnCodeSbumit', _this.params);
+						stockManage.stockMoveByLpn(_this.params).then(data => {
+							console.log(data)
 						})
 						return;
 					}
-					_this.$u.func.showToast({
-						title: '请输入LPN'
-					});
+					uni.$u.func.showToast({
+						title: '请输入必填字段',
+					})
 				}, 1000)
 
 			},
