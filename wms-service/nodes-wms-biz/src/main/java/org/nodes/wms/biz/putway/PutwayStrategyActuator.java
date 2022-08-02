@@ -9,6 +9,7 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 上架策略执行器
@@ -19,13 +20,13 @@ public class PutwayStrategyActuator {
 	private final LocationBiz locationBiz;
 	private final TianYiPutwayStrategy tianYiPutwayStrategy;
 
-	public Location run(BigDecimal putwayQty, Stock sourceStock) {
-		Location location = tianYiPutwayStrategy.run(putwayQty, sourceStock);
+	public Location run(BigDecimal putwayQty, List<Stock> stocks) {
+		Location location = tianYiPutwayStrategy.run(putwayQty, stocks);
 		if (!Func.isNull(location)) {
 			return location;
 		}
 
 		// 计算不到合适的库位，则返回unknow库位
-		return locationBiz.getUnknowLocation(sourceStock.getWhId());
+		return locationBiz.getUnknowLocation(stocks.get(0).getWhId());
 	}
 }

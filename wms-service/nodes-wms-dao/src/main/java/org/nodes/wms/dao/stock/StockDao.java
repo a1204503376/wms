@@ -165,4 +165,13 @@ public interface StockDao {
 	 * @return 库存数据
 	 */
 	List<Stock> getEnableStockBySkuLotAndExculdeLoc(List<Long> exculdeLocId, SkuLotBaseEntity skuLot);
+
+	/**
+	 * 根据系统任务，更新库存状态
+	 *
+	 * @param stockIds
+	 * @param systemFreeze
+	 * @param taskId
+	 */
+	void updateStock(List<Long> stockIds, StockStatusEnum systemFreeze, Long taskId);
 }

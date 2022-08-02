@@ -11,6 +11,7 @@ import org.springblade.core.mp.base.BaseService;
 import java.util.HashMap;
 import java.util.List;
 
+@Deprecated
 public interface TaskDetailDao extends BaseService<TaskDetail> {
 
 	/**

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
+@Deprecated
 public enum TaskDetailStatusEnum {
 	NORMAL(0, "正常"),
 	CLOSE(1, "关闭"),

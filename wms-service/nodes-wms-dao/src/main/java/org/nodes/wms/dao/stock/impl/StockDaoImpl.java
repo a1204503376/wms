@@ -359,4 +359,9 @@ public class StockDaoImpl
 		SkuLotUtil.applySql(stockQuery, skuLot);
 		return super.list(stockQuery);
 	}
+
+	@Override
+	public void updateStock(List<Long> stockIds, StockStatusEnum systemFreeze, Long taskId) {
+		// TODO
+	}
 }

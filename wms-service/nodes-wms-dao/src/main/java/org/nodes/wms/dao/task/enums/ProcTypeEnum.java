@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
+@Deprecated
 public enum ProcTypeEnum {
 	RUNNING(1, "执行中"),
 	PICKING(0, "不发布任务");

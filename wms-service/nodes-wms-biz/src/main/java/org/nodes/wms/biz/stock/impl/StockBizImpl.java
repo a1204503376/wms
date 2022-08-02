@@ -599,6 +599,23 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
+	public void freezeStockByTask(List<Stock> stocks, Long taskId) {
+		AssertUtil.notEmpty(stocks, "库存系统冻结失败,库存不能为空");
+		AssertUtil.notNull(taskId, "库存系统冻结失败,taskId is not null");
+
+		List<Long> stockIds = stocks.stream()
+			.map(Stock::getStockId)
+			.collect(Collectors.toList());
+		stockDao.updateStock(stockIds, StockStatusEnum.SYSTEM_FREEZE, taskId);
+
+		for (Stock stock : stocks){
+			stock.setStockStatus(StockStatusEnum.SYSTEM_FREEZE);
+
+			createAndSaveStockLog(StockLogTypeEnum.STOCK_FREEZE, stock, "系统冻结");
+		}
+	}
+
+	@Override
 	public boolean judgeEnableOnLocation(Location location) {
 		List<Stock> stock = stockDao.getStockByLocId(location.getLocId());
 		if (Func.isNotEmpty(stock)

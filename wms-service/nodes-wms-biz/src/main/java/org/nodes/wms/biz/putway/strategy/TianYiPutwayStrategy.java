@@ -35,18 +35,20 @@ public class TianYiPutwayStrategy {
 	private final DictionaryBiz dictionaryBiz;
 	private final StockQueryBiz stockQueryBiz;
 
-	public Location run(BigDecimal putwayQty, Stock sourceStock) {
+	public Location run(BigDecimal putwayQty, List<Stock> stocks) {
 		// 获取要上架库存的箱型
-		LpnType lpnType = lpnTypeBiz.findLpnTypeByBoxCode(sourceStock.getBoxCode());
+		LpnType lpnType = lpnTypeBiz.findLpnTypeByBoxCode(stocks.get(0).getBoxCode());
 		// 根据箱型查询所有可以上架的空库位(自动存储区的)，要按照上架顺序排序,
 		List<Location> locationList = locationBiz.findEnableAgvLocation(lpnType,
 			dictionaryBiz.findZoneTypeOfAutoStore().getDictKey().toString());
 		// 获取列的最大载重
 		BigDecimal maxLoadWeight = systemParamBiz.findMaxLoadWeightOfColumn();
+		BigDecimal currentWeight = lpnType.getWeight().multiply(BigDecimal.valueOf(stocks.size()));
 		// 根据顺序刷选并返回合格的库位，刷选条件：判断该列的重量是否超过了最大限重
 		for (Location location : locationList) {
+			// 计算当前货架上的载重
 			BigDecimal loadWeight = staticsLoadWeightByColumn(location);
-			if (BigDecimalUtil.le(loadWeight.add(lpnType.getWeight()), maxLoadWeight)) {
+			if (BigDecimalUtil.le(loadWeight.add(currentWeight), maxLoadWeight)) {
 				if (stockBiz.judgeEnableOnLocation(location)) {
 					return location;
 				}

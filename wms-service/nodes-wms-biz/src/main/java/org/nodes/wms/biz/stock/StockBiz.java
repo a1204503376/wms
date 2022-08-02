@@ -220,4 +220,11 @@ public interface StockBiz {
 	 */
 	void exportStockLogToExcel(StockLogPageQuery stockLogPageQuery, HttpServletResponse response);
 
+	/**
+	 * 系统任务冻结库存，该类冻结的库存不能执行移动等库内操作
+	 *
+	 * @param stocks 目标库存
+	 * @param taskId 任务id
+	 */
+	void freezeStockByTask(List<Stock> stocks, Long taskId);
 }
