@@ -26,6 +26,7 @@
 	import uniSelect from '@/components/uni-select.vue'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
+	import freezeOrUnFreeze from '@/api/stock/freezeOrUnFreeze.js'
 	export default {
 		components: {
 			uniSelect
@@ -34,7 +35,8 @@
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
-					locCode: ''
+					locCode: '',
+					whId:uni.getStorageSync('warehouse').whId
 				}
 			}
 		},
@@ -58,13 +60,16 @@
 		methods: {
 			submit() {
 				var _this = this;
-				_this.params.isSn = true;
 				uni.$u.throttle(function() {
 					if (tool.isNotEmpty(_this.params.locCode)) {
-						console.log('按库位冻结成功')
+						freezeOrUnFreeze.freezeByLocCode(_this.params).then(data => {
+							console.log(data)
+						})
 						return;
 					}
-					console.log('按库位冻结失败')
+					_this.$u.func.showToast({
+						title: '请输入LOC'
+					});
 				}, 1000)
 
 			},

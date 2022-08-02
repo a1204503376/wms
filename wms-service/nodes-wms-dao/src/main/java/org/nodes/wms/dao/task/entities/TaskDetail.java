@@ -17,6 +17,7 @@ import java.util.Date;
  * 任务详情
  */
 @Data
+@Deprecated
 public class TaskDetail extends BaseSkuLotEntity {
 	/**
 	 * 任务明细id

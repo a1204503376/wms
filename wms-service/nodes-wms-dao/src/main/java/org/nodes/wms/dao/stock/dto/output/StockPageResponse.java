@@ -91,6 +91,7 @@ public class StockPageResponse implements Serializable {
 	 * 库位id
 	 */
 	@ExcelIgnore
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long locId;
 	/**
 	 * 库区编码

@@ -212,8 +212,14 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public List<Stock> findEnableStockByZoneType(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
 			List<String> zoneTypeList, SkuLotBaseEntity skuLot) {
-		List<Zone> zoneList = zoneBiz.findByZoneType(zoneTypeList);
-		List<Long> zoneIdList = zoneList.stream().map(Zone::getZoneId).collect(Collectors.toList());
+		List<Long> zoneIdList = null;
+		if (Func.isNotEmpty(zoneTypeList)){
+			List<Zone> zoneList = zoneBiz.findByZoneType(zoneTypeList);
+			zoneIdList = zoneList.stream()
+				.map(Zone::getZoneId)
+				.collect(Collectors.toList());
+		}
+
 		return findEnableStockByZone(whId, skuId, stockStatusEnum, zoneIdList, skuLot);
 	}
 
@@ -221,20 +227,16 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	public List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
 			List<Long> zoneIdList, SkuLotBaseEntity skuLot) {
 		Long pickToZoneId = locationBiz.getPickToLocation(whId).getZoneId();
-		List<Long> exculdeZoneIdList = new ArrayList<>();
-		exculdeZoneIdList.add(pickToZoneId);
 		return stockDao.findEnableStockByZone(whId, skuId, stockStatusEnum,
-				zoneIdList, skuLot, exculdeZoneIdList);
+				zoneIdList, skuLot, Collections.singletonList(pickToZoneId));
 	}
 
 	@Override
 	public List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
 			List<Long> locationIdList, SkuLotBaseEntity skuLot) {
 		Long pickToZoneId = locationBiz.getPickToLocation(whId).getZoneId();
-		List<Long> exculdeZoneIdList = new ArrayList<>();
-		exculdeZoneIdList.add(pickToZoneId);
 		return stockDao.findEnableStockByLocation(whId, skuId, stockStatusEnum,
-				locationIdList, skuLot, exculdeZoneIdList);
+				locationIdList, skuLot, Collections.singletonList(pickToZoneId));
 	}
 
 	@Override
@@ -350,8 +352,11 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public List<Stock> findEnableStockBySkuLot(SkuLotBaseEntity skuLot) {
-
-		return null;
+		List<Location> allPickToLocation = locationBiz.getAllPickToLocation();
+		List<Long> pickToLocIdList = allPickToLocation.stream()
+			.map(Location::getLocId)
+			.collect(Collectors.toList());
+		return stockDao.getEnableStockBySkuLotAndExculdeLoc(pickToLocIdList, skuLot);
 	}
 
 }

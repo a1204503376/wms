@@ -343,8 +343,8 @@ public class StockBizImpl implements StockBiz {
 		for (Stock stock : stockList){
 			if (!status.equals(stock.getStockStatus())){
 				if (isThrow){
-					throw ExceptionUtil.mpe("库存状态校验失败,库存[%d]现状态为[%s]不等于[%s]",
-						stock.getStockId(), stock.getStockStatus().getDesc(), status.getDesc());
+					throw new ServiceException(String.format("库存状态校验失败,库存[%d]现状态为[%s]不等于[%s]",
+						stock.getStockId(), stock.getStockStatus().getDesc(), status.getDesc()));
 				} else {
 					return false;
 				}
