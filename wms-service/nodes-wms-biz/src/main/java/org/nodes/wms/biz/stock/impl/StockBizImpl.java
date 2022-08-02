@@ -18,6 +18,7 @@ import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.instock.receiveLog.ReceiveLogDao;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.stock.SerialDao;
 import org.nodes.wms.dao.stock.SerialLogDao;
 import org.nodes.wms.dao.stock.StockDao;
@@ -119,10 +120,10 @@ public class StockBizImpl implements StockBiz {
 		targetStock.setLastInTime(LocalDateTime.now());
 	}
 
-	private List<String> checkSerialOnInStock(ReceiveLog receiveLog) {
-		if (Func.isNotEmpty(receiveLog.getSnCode())) {
+	private List<String> checkSerialOnInStock(ReceiveLog receiveLog){
+		if (Func.isNotEmpty(receiveLog.getSnCode())){
 			List<String> serialNoList = Arrays.asList(Func.split(receiveLog.getSnCode(), ","));
-			if (serialNoList.size() != receiveLog.getQty().intValue()) {
+			if (serialNoList.size() != receiveLog.getQty().intValue()){
 				throw new ServiceException(
 					String.format("入库失败,采集的序列号个数[%d]与收货数量[%d]不一致",
 						serialNoList.size(), receiveLog.getQty().intValue()));
@@ -186,6 +187,11 @@ public class StockBizImpl implements StockBiz {
 		}
 
 		return stock;
+	}
+
+	@Override
+	public void outStockByCancelPick(StockLogTypeEnum type, LogSoPick pickLog) {
+
 	}
 
 	private void updateSerialAndSaveLog(List<String> serialNoList, SerialStateEnum state, Long stockId,
@@ -357,9 +363,9 @@ public class StockBizImpl implements StockBiz {
 	public boolean equalStockStatus(List<Stock> stockList, StockStatusEnum status, boolean isThrow) {
 		AssertUtil.notNull(status, "库存校验失败，库存状态不能为空");
 
-		for (Stock stock : stockList) {
-			if (!status.equals(stock.getStockStatus())) {
-				if (isThrow) {
+		for (Stock stock : stockList){
+			if (!status.equals(stock.getStockStatus())){
+				if (isThrow){
 					throw new ServiceException(String.format("库存状态校验失败,库存[%d]现状态为[%s]不等于[%s]",
 						stock.getStockId(), stock.getStockStatus().getDesc(), status.getDesc()));
 				} else {
@@ -609,6 +615,23 @@ public class StockBizImpl implements StockBiz {
 		page.setSize(100000);
 		List<StockBySerialPageResponse> stockBySerialPageResponseList = stockDao.page(page, stockBySerialPageQuery).getRecords();
 		ExcelUtil.export(response, "库存余额", "库存余额数据表", stockBySerialPageResponseList, StockBySerialPageResponse.class);
+	}
+
+	@Override
+	public void freezeStockByTask(List<Stock> stocks, Long taskId) {
+		AssertUtil.notEmpty(stocks, "库存系统冻结失败,库存不能为空");
+		AssertUtil.notNull(taskId, "库存系统冻结失败,taskId is not null");
+
+		List<Long> stockIds = stocks.stream()
+			.map(Stock::getStockId)
+			.collect(Collectors.toList());
+		stockDao.updateStock(stockIds, StockStatusEnum.SYSTEM_FREEZE, taskId);
+
+		for (Stock stock : stocks){
+			stock.setStockStatus(StockStatusEnum.SYSTEM_FREEZE);
+
+			createAndSaveStockLog(StockLogTypeEnum.STOCK_FREEZE, stock, "系统冻结");
+		}
 	}
 
 	@Override

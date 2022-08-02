@@ -176,4 +176,13 @@ public interface StockDao {
 	 * @return 分页对象
 	 */
 	Page<StockBySerialPageResponse> page(IPage<?> page, StockBySerialPageQuery stockBySerialPageQuery);
+
+	/**
+	 * 根据系统任务，更新库存状态
+	 *
+	 * @param stockIds
+	 * @param systemFreeze
+	 * @param taskId
+	 */
+	void updateStock(List<Long> stockIds, StockStatusEnum systemFreeze, Long taskId);
 }

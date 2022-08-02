@@ -2,6 +2,7 @@ package org.nodes.wms.biz.putway.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.putway.PutwayBiz;
 import org.nodes.wms.biz.putway.modular.PutwayFactory;
@@ -57,16 +58,26 @@ public class PutwayBizImpl implements PutwayBiz {
 			});
 			return;
 		}
-		//获取序列号 如果库存关联了序列号需要获取序列号
-		List<Serial> serialList = stockQueryBiz.findSerialByStock(request.getStockId());
-		List<String> serialNoList = new ArrayList<>();
-		if (Func.isNotEmpty(serialList)) {
-			serialNoList = serialList.stream()
-				.map(Serial::getSerialNumber)
-				.collect(Collectors.toList());
-		}
+
 		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
-		stockBiz.moveStock(sourceStock, serialNoList, request.getQty(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY, null, null, null);
+		List<Stock> stockList = stockQueryBiz.findStockOnStageByBoxCode(request.getWhId(), request.getBoxCode());
+		stockList.forEach(stock -> {
+			//获取序列号 如果库存关联了序列号需要获取序列号
+			List<Serial> serialList = stockQueryBiz.findSerialByStock(stock.getStockId());
+			List<String> serialNoList = new ArrayList<>();
+			if (Func.isNotEmpty(serialList)) {
+				serialNoList = serialList.stream()
+					.map(Serial::getSerialNumber)
+					.collect(Collectors.toList());
+			}
+			if (BigDecimalUtil.gt((request.getQty().subtract(stock.getStockEnable())), BigDecimal.ZERO)) {
+				request.setQty(request.getQty().subtract(stock.getStockEnable()));
+				stockBiz.moveStock(stock, serialNoList, stock.getStockEnable(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY, null, null, null);
+			} else {
+				stockBiz.moveStock(stock, serialNoList, request.getQty(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY, null, null, null);
+			}
+
+		});
 		// 生成上架记录
 		PutawayLog putawayLog = putwayFactory.create(request, sourceStock, targetLocation);
 		putawayLogDao.save(putawayLog);

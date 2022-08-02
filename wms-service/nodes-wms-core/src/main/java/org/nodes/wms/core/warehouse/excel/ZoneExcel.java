@@ -31,10 +31,10 @@ public class ZoneExcel {
 	@ExcelProperty({"库房名称"})
 	private String whName;
 	/**
-	 * 库区类型
+	 * 库区类型编码
 	 */
 	@ColumnWidth(15)
-	@ExcelProperty({"库区类型"})
+	@ExcelProperty({"库区类型编码"})
 	private String zoneType;
 	/**
 	 * 是否启用

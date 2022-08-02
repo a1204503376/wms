@@ -279,4 +279,11 @@ public interface LocationBiz {
 	 * @param taskId 必填
 	 */
 	void unfreezeLocByTask(String taskId);
+
+	/**
+	 * 判断库位是否是属于agv临时区的库位
+	 * @param locId 库位id
+	 * @return true：标识该库位属于agv临时区库位
+	 */
+    boolean isAgvTempOfZoneType(Long locId);
 }

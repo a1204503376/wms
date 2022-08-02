@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 /**
  * 库位管理 业务类
- * 
+ *
  * @author nodesc
  */
 @Service
@@ -304,7 +304,13 @@ public class LocationBizImpl implements LocationBiz {
 		locationDao.updateLocFlag(taskId, LocationConstant.LOC_FLAG_NORMAL);
 	}
 
-	@Override
+    @Override
+    public boolean isAgvTempOfZoneType(Long locId) {
+		// TODO 彭永程
+        return false;
+    }
+
+    @Override
 	public void freezeLocByTask(Long locationId, String taskId) {
 		AssertUtil.notEmpty(taskId, "系统冻结库位失败,根据任务系统冻结库位时必须要指定系统任务标识");
 		locationDao.updateLocFlag(locationId, LocationConstant.LOC_FLAG_SYSTEM_FORZEN, taskId);

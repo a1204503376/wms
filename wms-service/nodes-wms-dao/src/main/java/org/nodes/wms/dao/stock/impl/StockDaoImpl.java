@@ -34,7 +34,7 @@ import java.util.Map;
  **/
 @Repository
 public class StockDaoImpl
-	extends BaseServiceImpl<StockMapper, Stock> implements StockDao {
+		extends BaseServiceImpl<StockMapper, Stock> implements StockDao {
 
 	@Override
 	public List<Stock> getStockById(List<Long> stockIds) {
@@ -170,17 +170,17 @@ public class StockDaoImpl
 
 	@Override
 	public List<Stock> getStock(StockStatusEnum status, Long woId,
-								Long locId, Long skuId, String boxCode, String lpnCode) {
+			Long locId, Long skuId, String boxCode, String lpnCode) {
 		if (Func.isNull(woId) || Func.isNull(skuId) || Func.isNull(locId)) {
 			throw new ServiceException("库存查询失败,缺失必要参数");
 		}
 
 		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
 		queryWrapper
-			.eq(Stock::getStockStatus, status.getCode())
-			.eq(Stock::getWoId, woId)
-			.eq(Stock::getLocId, locId)
-			.eq(Stock::getSkuId, skuId);
+				.eq(Stock::getStockStatus, status.getCode())
+				.eq(Stock::getWoId, woId)
+				.eq(Stock::getLocId, locId)
+				.eq(Stock::getSkuId, skuId);
 
 		if (Func.isEmpty(boxCode)) {
 			queryWrapper.apply("(box_code is null)");
@@ -227,10 +227,10 @@ public class StockDaoImpl
 
 	@Override
 	public void updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
-							BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime) {
+			BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime) {
 		UpdateWrapper<Stock> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
-			.eq(Stock::getStockId, stockId);
+				.eq(Stock::getStockId, stockId);
 		// 更新对象
 		Stock stock = new Stock();
 		stock.setStockQty(stockQty);
@@ -311,15 +311,15 @@ public class StockDaoImpl
 
 	@Override
 	public List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-											 List<Long> zoneIdList, SkuLotBaseEntity skuLot,
-											 List<Long> excludeZoneIdList) {
+			List<Long> zoneIdList, SkuLotBaseEntity skuLot,
+			List<Long> excludeZoneIdList) {
 		checkByFindEnableStock(whId, skuId, excludeZoneIdList);
 
 		LambdaQueryWrapper<Stock> stockQuery = getStockQuery();
 		stockQuery.eq(Stock::getWhId, whId)
-			.eq(Stock::getSkuId, skuId)
-			.in(Func.isNotEmpty(zoneIdList), Stock::getZoneId, zoneIdList)
-			.notIn(Stock::getZoneId, excludeZoneIdList);
+				.eq(Stock::getSkuId, skuId)
+				.in(Func.isNotEmpty(zoneIdList), Stock::getZoneId, zoneIdList)
+				.notIn(Stock::getZoneId, excludeZoneIdList);
 		if (!Func.isNull(stockStatusEnum)) {
 			stockQuery.eq(Stock::getStockStatus, stockStatusEnum.getCode());
 		}
@@ -330,14 +330,14 @@ public class StockDaoImpl
 
 	@Override
 	public List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-												 List<Long> locationIdList, SkuLotBaseEntity skuLot, List<Long> excludeZoneIdList) {
+			List<Long> locationIdList, SkuLotBaseEntity skuLot, List<Long> excludeZoneIdList) {
 		checkByFindEnableStock(whId, skuId, excludeZoneIdList);
 
 		LambdaQueryWrapper<Stock> stockQuery = getStockQuery();
 		stockQuery.eq(Stock::getWhId, whId)
-			.eq(Stock::getSkuId, skuId)
-			.in(Func.isNotEmpty(locationIdList), Stock::getLocId, locationIdList)
-			.notIn(Stock::getZoneId, excludeZoneIdList);
+				.eq(Stock::getSkuId, skuId)
+				.in(Func.isNotEmpty(locationIdList), Stock::getLocId, locationIdList)
+				.notIn(Stock::getZoneId, excludeZoneIdList);
 		if (!Func.isNull(stockStatusEnum)) {
 			stockQuery.eq(Stock::getStockStatus, stockStatusEnum.getCode());
 		}
@@ -354,7 +354,7 @@ public class StockDaoImpl
 	@Override
 	public List<Stock> getEnableStockBySkuLotAndExculdeLoc(List<Long> exculdeLocId, SkuLotBaseEntity skuLot) {
 		LambdaQueryWrapper<Stock> stockQuery = getStockQuery();
-		if (Func.isNotEmpty(exculdeLocId)) {
+		if (Func.isNotEmpty(exculdeLocId)){
 			stockQuery.notIn(Stock::getLocId, exculdeLocId);
 		}
 
@@ -365,5 +365,10 @@ public class StockDaoImpl
 	@Override
 	public Page<StockBySerialPageResponse> page(IPage<?> page, StockBySerialPageQuery stockBySerialPageQuery) {
 		return super.baseMapper.getSerialPage(page, stockBySerialPageQuery);
+	}
+
+	@Override
+	public void updateStock(List<Long> stockIds, StockStatusEnum systemFreeze, Long taskId) {
+		// TODO
 	}
 }
