@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
-import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receiveLog.modular.ReceiveLogFactory;
@@ -116,8 +115,24 @@ public class StockBizImpl implements StockBiz {
 		targetStock.setLastInTime(LocalDateTime.now());
 	}
 
+	private List<String> checkSerialOnInStock(ReceiveLog receiveLog){
+		if (Func.isNotEmpty(receiveLog.getSnCode())){
+			List<String> serialNoList = Arrays.asList(Func.split(receiveLog.getSnCode(), ","));
+			if (serialNoList.size() != receiveLog.getQty().intValue()){
+				throw new ServiceException(
+					String.format("入库失败,采集的序列号个数[%d]与收货数量[%d]不一致",
+						serialNoList.size(), receiveLog.getQty().intValue()));
+			}
+
+			return serialNoList;
+		}
+
+		return null;
+	}
+
 	@Override
 	public Stock inStock(StockLogTypeEnum type, ReceiveLog receiveLog) {
+		List<String> serialNoList = checkSerialOnInStock(receiveLog);
 		Location location = locationBiz.findByLocId(receiveLog.getLocId());
 		canInStock(location, receiveLog.getSkuId(), receiveLog);
 		// 验证批属性
@@ -140,8 +155,7 @@ public class StockBizImpl implements StockBiz {
 		}
 
 		// 形成序列号信息
-		if (Func.isNotEmpty(receiveLog.getSnCode())) {
-			List<String> serialNoList = Arrays.asList(Func.split(receiveLog.getSnCode(), ","));
+		if (Func.isNotEmpty(serialNoList)) {
 			createAndSaveSerial(serialNoList, finalStock, stockLog);
 		}
 
@@ -205,7 +219,6 @@ public class StockBizImpl implements StockBiz {
 		return stockLog;
 	}
 
-	// 生成并保存序列号
 	private List<Serial> createAndSaveSerial(List<String> serialNoList, Stock stock, StockLog stockLog) {
 		if (Func.isEmpty(serialNoList) || Func.isNull(stock)) {
 			throw new NullArgumentException("保存序列号时参数为空");
@@ -313,7 +326,7 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
-	public void checkSerial(Stock stock, List<String> serialNoList) {
+	public void checkSerialOnStock(Stock stock, List<String> serialNoList) {
 		List<String> serialNosOfStock = serialDao.getSerialNoByStockId(stock.getStockId());
 
 		if (Func.isNotEmpty(serialNosOfStock)) {
@@ -359,7 +372,7 @@ public class StockBizImpl implements StockBiz {
 						   String targetBoxCode, String targetLpnCode, Location targetLocation,
 						   StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
 		canMoveStock(sourceStock, serialNoList, qty, targetLocation);
-		checkSerial(sourceStock, serialNoList);
+		checkSerialOnStock(sourceStock, serialNoList);
 
 		Stock tempStock = new Stock();
 		BeanUtil.copy(sourceStock, tempStock);
