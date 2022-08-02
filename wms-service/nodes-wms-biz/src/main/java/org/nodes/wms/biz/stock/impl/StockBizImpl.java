@@ -413,6 +413,11 @@ public class StockBizImpl implements StockBiz {
 	public List<Stock> moveStockByBoxCode(String boxCode, String targetBoxCode, String targetLpnCode,
 										  Location targetLocation, StockLogTypeEnum type, Long billId,
 										  String billNo, String lineNo) {
+		AssertUtil.notEmpty(boxCode, "库存按BOX移动失败,原BOX不能为空");
+		AssertUtil.notEmpty(targetBoxCode, "库存按BOX移动失败,目标BOX不能为空");
+		AssertUtil.notNull(targetLocation, "库存按BOX移动失败,目标LOC不能为空");
+		AssertUtil.notNull(type, "库存按BOX移动失败,库存移动类型不能为空");
+
 		List<Stock> sourceStockList = stockDao.getStockByBoxCode(boxCode, null);
 		List<Stock> targetStockList = new ArrayList<>();
 		for (Stock sourceStock : sourceStockList) {
@@ -428,6 +433,11 @@ public class StockBizImpl implements StockBiz {
 	@Override
 	public List<Stock> moveStockByLpnCode(String lpnCode, String targetLpnCode, Location targetLocation,
 										  StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+		AssertUtil.notEmpty(lpnCode, "库存按LPN移动失败,原LPN不能为空");
+		AssertUtil.notEmpty(targetLpnCode, "库存按LPN移动失败,目标LPN不能为空");
+		AssertUtil.notNull(targetLocation, "库存按LPN移动失败,目标LOC不能为空");
+		AssertUtil.notNull(type, "库存按LPN移动失败,库存移动类型不能为空");
+
 		List<Stock> sourceStockList = stockDao.getStockByLpnCode(lpnCode, null);
 		List<Stock> targetStockList = new ArrayList<>();
 		for (Stock sourceStock : sourceStockList) {
