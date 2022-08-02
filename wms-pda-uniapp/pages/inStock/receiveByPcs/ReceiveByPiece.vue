@@ -155,14 +155,23 @@
 							if (data.data.allReceivieIsAccomplish && data.data
 								.currentReceivieIsAccomplish) {
 								//当前收货单收货收货完毕
+								_this.$u.func.showToast({
+									title: '当前收货单收货收货完毕',
+								});
 								_this.$u.func.navigateBackTo(2);
 								return;
 							} else if (data.data.currentReceivieIsAccomplish) {
 								//当前收货单详情收货收货完毕
+								_this.$u.func.showToast({
+									title: '当前收货单详情收货收货完毕',
+								});
 								_this.$u.func.navigateBackTo(1);
 								return;
 							} else {
 								//当前收货单详情收货部分收货,刷新当前页面
+								_this.$u.func.showToast({
+									title: '当前收货单详情部分收货',
+								});
 								_this.$u.func.refreshPage()
 								return;
 							}

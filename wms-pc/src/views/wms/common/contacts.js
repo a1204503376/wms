@@ -28,6 +28,7 @@ export const group = {
                     prop: "contactsNumber",
                     label: "电话",
                     maxlength: 200,
+                    width: 200,
                     rules: [
                         {
                             required: true,
@@ -40,7 +41,6 @@ export const group = {
                 {
                     prop: "contactsFax",
                     label: "传真",
-                    width: 120,
                     maxlength: 200,
                     rules: [
                         {

@@ -14,7 +14,7 @@
 			<u-form-item label="总数" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.qty" border="0" disabled></u--input>
 			</u-form-item>
-			<u-form-item label="整箱上架" :required="true" class="left-text-one-line" labelWidth="100">
+			<u-form-item label="整托上架" :required="true" class="left-text-one-line" labelWidth="100">
 				<picker style="width: 100%;height: 100%;" v-model="dataSource" :range="isAllLpnPutawayList"
 					range-key="name" value="index" @change="bindPickerChange">
 					<view class="uni-input-input" style="width: 100%;">
@@ -66,8 +66,8 @@
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
 			this.params = parse;
-			this.dataSource = this.isAllLpnPutawayList[0].name;
-			this.params.isAllLpnPutaway = this.isAllLpnPutawayList[0].isAllLpnPutaway;
+			this.dataSource = this.isAllLpnPutawayList[1].name;
+			this.params.isAllLpnPutaway = this.isAllLpnPutawayList[1].isAllLpnPutaway;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();

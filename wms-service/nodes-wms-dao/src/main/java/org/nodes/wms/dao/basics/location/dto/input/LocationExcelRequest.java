@@ -54,7 +54,7 @@ public class LocationExcelRequest implements Serializable {
 	/**
 	 * 应用类型
 	 */
-	@ExcelProperty("应用类型")
+	@ExcelProperty("库位类型")
 	private Integer locType;
 
 	/**
