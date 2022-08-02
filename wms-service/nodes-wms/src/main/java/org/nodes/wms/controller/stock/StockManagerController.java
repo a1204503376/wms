@@ -97,18 +97,18 @@ public class StockManagerController {
 	 * 库存余额：按件移动
 	 */
 	@PostMapping("move")
-	public R<String> move(@Valid @RequestBody StockMoveRequest stockMoveRequest) {
-//		return stockManageBiz.stockMove(stockMoveRequest);
-		return null;
+	public R<String> move(@Valid @RequestBody StockPcMoveRequest stockPcMoveRequest) {
+		stockManageBiz.stockMoveByPc(stockPcMoveRequest);
+		return R.success("操作成功");
 	}
 
 	/**
 	 * 库存余额：按箱移动
 	 */
-	@PostMapping("/moveByBoxCode")
+	@PostMapping("/moveByBox")
 	public R<String> moveByBoxCode(@Valid @RequestBody StockMoveByBoxCodeRequest stockMoveByBoxCodeRequest) {
-//		return stockManageBiz.stockMoveByBox(stockMoveByBoxCodeRequest);
-		return null;
+		stockManageBiz.stockMoveByBox(stockMoveByBoxCodeRequest);
+		return R.success("操作成功");
 	}
 
 	/**
