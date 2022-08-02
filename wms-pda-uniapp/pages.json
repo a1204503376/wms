@@ -398,6 +398,13 @@
 				"navigationStyle": "custom"
 			}
 
+		}, {
+			"path": "pages/stock/stockManage/moveByLpnCode/moveByLpnCode",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
 		}
 	],
 	"globalStyle": {

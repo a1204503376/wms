@@ -107,7 +107,7 @@ public interface SoHeaderBiz {
 	 * @param soBillId : 发货单id
 	 * @return SoBillDistributedResponse 发货单信息
 	 */
-	SoBillDistributedResponse findSoBillForDistBySoBillId(Long soBillId);
+	SoBillDistributedResponse findSoBillForDistributeBySoBillId(Long soBillId);
 
 	/**
 	 * 根据发货单编码/上游编码/任务号

@@ -2,6 +2,7 @@
     <el-select
         v-model="val"
         :default-first-option="true"
+        :collapse-tags="true"
         :clearable="true"
         :multiple="multiple"
         :loading="loading"
