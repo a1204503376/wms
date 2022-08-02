@@ -11,6 +11,11 @@ import java.util.List;
 @Data
 public class StockMoveByBoxCodeRequest implements Serializable {
 	private static final long serialVersionUID = 6251527073571241801L;
+
+	/**
+	 * 目标库位id
+	 */
+	private Long targetLocId;
 	/**
 	 * 目标库位编码
 	 */
