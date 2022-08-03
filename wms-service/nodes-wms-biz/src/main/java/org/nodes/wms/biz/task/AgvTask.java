@@ -1,10 +1,15 @@
 package org.nodes.wms.biz.task;
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.wms.biz.basics.systemParam.SystemParamBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.putway.PutwayStrategyActuator;
 import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.task.factory.PublishJobFactory;
 import org.nodes.wms.biz.task.factory.WmsTaskFactory;
+import org.nodes.wms.biz.task.util.SendToScheduleUtil;
+import org.nodes.wms.dao.application.dto.scheduling.SchedulingGlobalResponse;
+import org.nodes.wms.dao.application.dto.scheduling.SchedulingResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.task.WmsTaskDao;
@@ -15,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,6 +39,9 @@ public class AgvTask {
 	private final PutwayStrategyActuator putwayStrategyActuator;
 	private final WmsTaskDao wmsTaskDao;
 	private final StockBiz stockBiz;
+	private final PublishJobFactory publishJobFactory;
+	private final SystemParamBiz systemParamBiz;
+	private final SendToScheduleUtil sendToScheduleUtil;
 
 	/**
 	 * 生成AGV上架任务
@@ -52,7 +61,7 @@ public class AgvTask {
 		Location targetLoc = putwayStrategyActuator.run(BigDecimal.ZERO, stocks);
 		if (!targetLoc.getLocId().equals(locationBiz.getUnknowLocation(stocks.get(0).getWhId()).getLocId())) {
 			// 如果计算得到了目标库位，则发送到调度系统
-			if (sendToSchedule(putwayTask)) {
+			if (sendToSchedule(Collections.singletonList(putwayTask))) {
 				putwayTask.setTaskState(WmsTaskStateEnum.ISSUED);
 			}
 			// 调度系统接收成功之后冻结目标库位和冻结原库位的库存
@@ -70,9 +79,12 @@ public class AgvTask {
 	 * @param putwayTask
 	 * @return true:发送成功
 	 */
-	private boolean sendToSchedule(WmsTask putwayTask) {
-		// TODO 彭永程
-		return true;
+	public boolean sendToSchedule(List<WmsTask> putwayTask) {
+		String url = systemParamBiz.findScheduleUrl().concat(POST_JOB_API);
+
+		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(url, publishJobFactory.createPublishJobRequestList(putwayTask));
+		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
+		return schedulingResponse.hasFailed();
 	}
 
 	public void moveStockToSchedule() {
