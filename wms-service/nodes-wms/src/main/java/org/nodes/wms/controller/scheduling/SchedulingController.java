@@ -33,7 +33,7 @@ public class SchedulingController {
 	 * @param request 请求参数
 	 * @return 消息
 	 */
-	@ApiLog("调度系统同步任务执行状态")
+	@ApiLog("调度系统-同步任务执行状态")
 	@PostMapping("syncTaskState")
 	public R<String> syncTaskState(@Valid @RequestBody SyncTaskStateRequest request) {
 		schedulingBiz.synchronizeTaskStatus(request);

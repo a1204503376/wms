@@ -36,10 +36,11 @@ public enum StockLogTypeEnum {
 	STOCK_MOVE_BY_PCS_PDA(211, "标准移动-手持"),
 	STOCK_MOVE_BY_LPN_PDA(212, "LPN移动-手持"),
 	STOCK_DEVANNING_BY_PDA(240, "拆箱-手持"),
+	STOCK_AGV_MOVE(250, "自动化任务移动"),
 	OUTSTOCK_BY_PICK(301, "拣货出库"),
 	OUTSTOCK_BY_CANCEL_RECEIVE(302, "撤销收货");
 
-	private final Integer code;
+    private final Integer code;
 	@EnumValue
 	@JsonValue
 	private final String desc;
