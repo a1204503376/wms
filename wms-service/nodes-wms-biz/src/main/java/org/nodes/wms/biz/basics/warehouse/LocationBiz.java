@@ -23,6 +23,7 @@ import java.util.List;
  * @author nodesc
  */
 public interface LocationBiz {
+
 	/**
 	 * 获取库位下拉列表最近十条数据
 	 *
@@ -65,30 +66,12 @@ public interface LocationBiz {
 	Location add(LocationAddOrEditRequest locationAddOrEditRequest);
 
 	/**
-	 * 根据库位id查找库位信息
-	 *
-	 * @param locId: 库位id
-	 * @return LocationPageResponse
-	 */
-	LocationEditResponse findLocationById(Long locId);
-
-	Location findByLocId(long locId);
-
-	/**
 	 * 编辑
 	 *
 	 * @param locationAddOrEditRequest: 编辑请求对象
 	 * @return Location
 	 */
 	Location edit(LocationAddOrEditRequest locationAddOrEditRequest);
-
-	/**
-	 * 查看详情
-	 *
-	 * @param locId: 库位id
-	 * @return LocationDetailResponse
-	 */
-	LocationDetailResponse getLocationDetailById(Long locId);
 
 	/**
 	 * 批量删除
@@ -99,32 +82,28 @@ public interface LocationBiz {
 	boolean remove(List<Long> idList);
 
 	/**
-	 * 返回所有的库房的入库集货区库位
+	 * 查看详情
 	 *
-	 * @return List<Location>
+	 * @param locId: 库位id
+	 * @return LocationDetailResponse
 	 */
-	List<Location> getAllStageLocation();
+	LocationDetailResponse getLocationDetailById(Long locId);
 
 	/**
-	 * 返回所有的库房的入库检验区库位
+	 * 根据库位id查找库位信息
 	 *
-	 * @return List<Location>
+	 * @param locId: 库位id
+	 * @return LocationPageResponse
 	 */
-	List<Location> getAllQcLocation();
+	LocationEditResponse findLocationById(Long locId);
 
 	/**
-	 * 返回所有的库房的出库暂存区库位
+	 * 根据库位id查找库位
 	 *
-	 * @return List<Location>
+	 * @param locId 库位id，必填
+	 * @return location
 	 */
-	List<Location> getAllPickToLocation();
-
-	/**
-	 * 返回所有的库房的打包暂存区库位
-	 *
-	 * @return List<Location>
-	 */
-	List<Location> getAllPackLocation();
+	Location findByLocId(long locId);
 
 	/**
 	 * 返回所有的库房的未知库位
@@ -134,43 +113,11 @@ public interface LocationBiz {
 	List<Location> getAllUnknownLocation();
 
 	/**
-	 * 返回所有的库房的在途暂存库位
+	 * 返回所有的库房的中间库位
 	 *
 	 * @return List<Location>
 	 */
 	List<Location> getAllInTransitLocation();
-
-	/**
-	 * 获取指定库房的入库暂库位
-	 *
-	 * @param whId
-	 * @return
-	 */
-	Location getStageLocation(Long whId);
-
-	/**
-	 * 获取指定库房的质检库位
-	 *
-	 * @param whId
-	 * @return
-	 */
-	Location getQcLocation(Long whId);
-
-	/**
-	 * 获取指定库房的出库集货位
-	 *
-	 * @param whId
-	 * @return
-	 */
-	Location getPickToLocation(Long whId);
-
-	/**
-	 * 获取指定库房的打包库位
-	 *
-	 * @param whId
-	 * @return
-	 */
-	Location getPackLocation(Long whId);
 
 	/**
 	 * 获取指定库房的未知库位
@@ -187,6 +134,126 @@ public interface LocationBiz {
 	 * @return
 	 */
 	Location getInTransitLocation(Long whId);
+
+	/**
+	 * 根据类型获取对应库区数据
+	 *
+	 * @param zoneType 库区类型 必填
+	 * @return 库位集合
+	 */
+	List<Location> getLocationByZoneType(Integer zoneType);
+
+	/**
+	 * 根据类型和库房 获取对应库房下的库区数据
+	 *
+	 * @param whId     库房ID 必填
+	 * @param zoneType 库区类型 必填
+	 * @return 库位集合
+	 */
+	List<Location> getLocationByZoneType(Long whId, Integer zoneType);
+
+	/**
+	 * 判断库位是否为出库暂存区
+	 *
+	 * @param location
+	 * @return true：是出库暂存区
+	 */
+	boolean isPickToLocation(Location location);
+
+	/**
+	 * 判断是否存在虚拟库位
+	 *
+	 * @param locationList
+	 * @return true:表示存在虚拟库位
+	 */
+	boolean isVirtualLocation(List<Location> locationList);
+
+	/**
+	 * 根据库区ID获取该区域的库位
+	 *
+	 * @param zoneId 库区ID
+	 * @return 库位信息
+	 */
+	List<Location> findLocationByZoneId(Long zoneId);
+
+	/**
+	 * 判断库位是否是属于agv临时区的库位
+	 *
+	 * @param locId 库位id
+	 * @return true：标识该库位属于agv临时区库位
+	 */
+	boolean isAgvTempOfZoneType(Long locId);
+
+
+	/**
+	 * 返回所有的库房的入库集货区库位
+	 *
+	 * @return List<Location>
+	 */
+	@Deprecated
+	List<Location> getAllStageLocation();
+
+	/**
+	 * 返回所有的库房的入库检验区库位
+	 *
+	 * @return List<Location>
+	 */
+	@Deprecated
+	List<Location> getAllQcLocation();
+
+	/**
+	 * 返回所有的库房的出库暂存区库位
+	 *
+	 * @return List<Location>
+	 */
+	@Deprecated
+	List<Location> getAllPickToLocation();
+
+	/**
+	 * 返回所有的库房的打包暂存区库位
+	 *
+	 * @return List<Location>
+	 */
+	@Deprecated
+	List<Location> getAllPackLocation();
+
+
+	/**
+	 * 获取指定库房的入库暂库位
+	 *
+	 * @param whId
+	 * @return
+	 */
+	@Deprecated
+	Location getStageLocation(Long whId);
+
+	/**
+	 * 获取指定库房的质检库位
+	 *
+	 * @param whId
+	 * @return
+	 */
+	@Deprecated
+	Location getQcLocation(Long whId);
+
+	/**
+	 * 获取指定库房的出库集货位
+	 *
+	 * @param whId
+	 * @return
+	 */
+	@Deprecated
+	Location getPickToLocation(Long whId);
+
+	/**
+	 * 获取指定库房的打包库位
+	 *
+	 * @param whId
+	 * @return
+	 */
+	@Deprecated
+	Location getPackLocation(Long whId);
+
 
 	/**
 	 * 获取库位总数量
@@ -221,14 +288,6 @@ public interface LocationBiz {
 	boolean isMixSkuLot(Location location);
 
 	/**
-	 * 判断库位是否为出库暂存区
-	 *
-	 * @param location
-	 * @return true：是出库暂存区
-	 */
-	boolean isPickToLocation(Location location);
-
-	/**
 	 * 天宜定制：根据容器列别获取agv可用的库位，按照上架顺序返回
 	 *
 	 * @param lpnType  容器类别
@@ -248,44 +307,25 @@ public interface LocationBiz {
 	/**
 	 * 根据箱型和库房id获取库位集合
 	 *
-	 * @param request@return 库位信息
+	 * @param request
+	 * @return 库位信息
 	 */
 	List<Location> findLocationByLpnType(LpnTypeRequest request);
 
-	/**
-	 * 判断是否存在虚拟库位
-	 *
-	 * @param locationList
-	 * @return true:表示存在虚拟库位
-	 */
-	boolean isVirtualLocation(List<Location> locationList);
-
-	/**
-	 * 根据库区ID获取该区域的库位
-	 *
-	 * @param zoneId 库区ID
-	 * @return 库位信息
-	 */
-	List<Location> findLocationByZoneId(Long zoneId);
 
 	/**
 	 * 根据任务冻结库位，并赋值locFlagDesc（locFlag：冻结40）
 	 *
 	 * @param locationId 冻结库位
-	 * @param taskId   必填
+	 * @param taskId     必填
 	 */
 	void freezeLocByTask(Long locationId, String taskId);
 
 	/**
 	 * 根据任务解冻库位，并置空locFlagDesc（locFlag：解冻1）
+	 *
 	 * @param taskId 必填
 	 */
 	void unfreezeLocByTask(String taskId);
 
-	/**
-	 * 判断库位是否是属于agv临时区的库位
-	 * @param locId 库位id
-	 * @return true：标识该库位属于agv临时区库位
-	 */
-    boolean isAgvTempOfZoneType(Long locId);
 }
