@@ -3,6 +3,7 @@ package org.nodes.wms.biz.stock.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
@@ -144,7 +145,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public StockIndexResponse staticsStockDataOnIndexPage() {
 		// 获取所有入库暂存区库位
-		List<Location> allStageList = locationBiz.getAllStageLocation();
+		List<Location> allStageList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_IN_STOCK_TS_AREA);
 		// 获取所有入库检验区库位
 		List<Location> allQcList = locationBiz.getAllQcLocation();
 		// 获取所有出库暂存区库位

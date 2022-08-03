@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.ArrayUtils;
 import org.nodes.core.base.entity.Dict;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
@@ -129,12 +130,6 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
-	public List<Location> getAllStageLocation() {
-		List<String> stageLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_STAGE);
-		return locationDao.findLocation(stageLocCodeList);
-	}
-
-	@Override
 	public List<Location> getAllQcLocation() {
 		List<String> qcLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_QC);
 		return locationDao.findLocation(qcLocCodeList);
@@ -169,7 +164,7 @@ public class LocationBizImpl implements LocationBiz {
 		if (Func.isEmpty(whId)) {
 			return null;
 		}
-		List<Location> allStageLocation = getAllStageLocation();
+		List<Location> allStageLocation = getLocationByZoneType(DictCodeConstant.ZONE_TYPE_IN_STOCK_TS_AREA);
 		List<Location> locationList = allStageLocation.stream()
 			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
