@@ -7,27 +7,29 @@
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
 		<u--form labelPosition="left">
 			<u-form-item label="接驳库位" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="locCode"  readonly></u--input>
+				<u--input v-model="locCode" readonly></u--input>
 			</u-form-item>
 		</u--form>
 		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">库位信息</h4>
-		
-		<view style="margin-top: 5%;" >
-			<u-row >
+
+		<view style="margin-top: 5%;">
+			<u-row>
 				<template v-for="(item, index) in locList">
-				<u-col span="3" v-if="item.isEmpty" >
-					<u-button style="height: 60px;width: 95%;font-size: 40rpx;" @click="change(item)">{{item.locCodeView}}</u-button>
-				</u-col>
-				<u-col span="3"  v-if="!item.isEmpty">
-					<u-button style="height: 60px;width: 95%;font-size: 40rpx;" disabled>{{item.locCodeView}}</u-button>
-				</u-col>
+					<u-col span="3" v-if="item.isEmpty">
+						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" @click="change(item)">
+							{{item.locCodeView}}</u-button>
+					</u-col>
+					<u-col span="3" v-if="!item.isEmpty">
+						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" disabled>{{item.locCodeView}}
+						</u-button>
+					</u-col>
 				</template>
 			</u-row>
 			<u-divider></u-divider>
-		
+
 		</view>
-		
-		
+
+
 		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">箱码信息</h4>
 
 		<view style="margin-top: 5%;" v-for="(item, index) in lpnItem.boxList">
@@ -40,7 +42,7 @@
 				</u-col>
 			</u-row>
 			<u-divider></u-divider>
-		
+
 		</view>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
@@ -71,8 +73,8 @@
 					whId: 0,
 				},
 				lpnItem: '',
-				locCode:'',
-               locList:[]
+				locCode: '',
+				locList: []
 			}
 		},
 		onLoad: function(option) {
@@ -82,7 +84,7 @@
 			this.param.lpnType = this.lpnItem.lpnType
 			this.param.whId = uni.getStorageSync('warehouse').whId
 			putWay.findLocByLpnType(this.param).then(res => {
-                 this.locList = res.data
+				this.locList = res.data
 			})
 			this.lpnItem['locId'] = 0
 		},
@@ -97,7 +99,7 @@
 			}
 			// #endif
 		},
-		
+
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
@@ -105,27 +107,34 @@
 			esc() {
 				uni.$u.func.navigateBackTo(1);
 			},
-			change(item){
-			  this.locCode = item.locCode
-			  this.lpnItem.locId = item.locId
+			change(item) {
+				this.locCode = item.locCode
+				this.lpnItem.locId = item.locId
 			},
-           
+
 			clickItem() {
+				var that = this
 				putWay.callAgv(this.lpnItem).then(res => {
-					uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgv');
-				})
+					that.$u.func.showToast({
+						title: '操作成功'
+					})
+					 uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgvQuery');
 				
+				
+
+				})
+
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)
 				if (item.type == barCodeService.BarcodeType.Loc) {
 					let param = this.locList.find(u => u.locCode === item.content);
-					if(tool.isEmpty(param)){
+					if (tool.isEmpty(param)) {
 						this.$u.func.showToast({
 							title: '扫描错误,库位信息不符'
 						})
 					}
-					if(tool.isNotEmpty(param)){
+					if (tool.isNotEmpty(param)) {
 						this.locCode = item.content;
 					}
 				} else {

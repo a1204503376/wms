@@ -90,6 +90,63 @@ public interface DictCodeConstant {
 	 */
 	String ZONE_TYPE = "zone_type";
 	/**
+	 * 库区类型:不合格品区
+	 */
+	Integer ZONE_TYPE_UNACCEPTED_PRODUCT_AREA = 50;
+	/**
+	 * 库区类型:虚拟库区
+	 */
+	Integer ZONE_TYPE_VIRTUAL_AREA = 70;
+
+	/**
+	 * 库区类型:备货区
+	 */
+	Integer ZONE_TYPE_CHOICE_AREA = 71;
+	/**
+	 * 库区类型:翻包区
+	 */
+	Integer ZONE_TYPE_FLAP_BAG_AREA = 72;
+	/**
+	 * 库区类型:拣货区
+	 */
+	Integer ZONE_TYPE_PICKING_AREA = 75;
+	/**
+	 * 库区类型:质检区
+	 */
+	Integer ZONE_TYPE_QC_AREA = 76;
+	/**
+	 * 库区类型:储存区
+	 */
+	Integer ZONE_TYPE_STORAGE_AREA = 77;
+	/**
+	 * 库区类型:自动化存储区
+	 */
+	Integer ZONE_TYPE_AUTOMATION_STORAGE_AREA = 78;
+	/**
+	 * 库区类型:自动化拣货区
+	 */
+	Integer ZONE_TYPE_AUTOMATION_PICKING_AREA = 79;
+	/**
+	 * 库区类型:自动化备货区
+	 */
+	Integer ZONE_TYPE_AUTOMATION_CHOICE_AREA = 80;
+	/**
+	 * 库区类型:自动化临时区
+	 */
+	Integer ZONE_TYPE_AUTOMATION_TEMPORARY_AREA = 81;
+	/**
+	 * 库区类型:出库集货区
+	 */
+	Integer ZONE_TYPE_OUT_STOCK_SHIPPING_AREA = 110;
+	/**
+	 * 库区类型:入库暂存区
+	 */
+	Integer ZONE_TYPE_IN_STOCK_TS_AREA = 120;
+	/**
+	 * 库区类型:入库质检区
+	 */
+	Integer ZONE_TYPE_IN_STOCK_QC_AREA = 130;
+	/**
 	 * 入库方式
 	 */
 	String INSTORE_TYPE = "instore_type";
