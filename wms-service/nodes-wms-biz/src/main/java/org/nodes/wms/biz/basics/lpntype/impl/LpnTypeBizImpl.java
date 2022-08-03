@@ -138,7 +138,8 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 
 	@Override
 	public LpnType findLpnTypeByBoxCode(String boxCode) {
-		return lpnTypeDao.getLpnTypeByCode(boxCode);
+		LpnTypeCodeEnum lpnTypeCodeEnum = tryParseBoxCode(boxCode);
+		return lpnTypeDao.getLpnTypeByCode(lpnTypeCodeEnum.getCode());
 	}
 
 	@Override
