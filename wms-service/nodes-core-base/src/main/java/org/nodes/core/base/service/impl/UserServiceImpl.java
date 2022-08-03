@@ -27,7 +27,7 @@ import org.nodes.core.base.entity.*;
 import org.nodes.core.base.enums.ParamEnum;
 import org.nodes.core.base.mapper.UserMapper;
 import org.nodes.core.base.service.*;
-import org.nodes.core.constant.AppConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.constant.TenantConstant;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -232,7 +232,7 @@ public class UserServiceImpl<M extends UserMapper, T extends User> extends BaseS
 	@Override
 	public boolean resetPassword(String userIds) {
 		User user = new User();
-		user.setPassword(DigestUtil.encrypt(AppConstant.DEFAULT_PASSWORD));
+		user.setPassword(DigestUtil.encrypt(WmsAppConstant.DEFAULT_PASSWORD));
 		user.setUpdateTime(DateUtil.now());
 		return this.update(user, Wrappers.<User>update().lambda().in(User::getId, Func.toLongList(userIds)));
 	}

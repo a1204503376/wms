@@ -1,10 +1,9 @@
 package org.nodes.core.constant;
 
 /**
- * 字典常量.
+ * 字典常量
  *
  * @author zhuangqian
- * @since
  */
 public interface DictCodeConstant {
 

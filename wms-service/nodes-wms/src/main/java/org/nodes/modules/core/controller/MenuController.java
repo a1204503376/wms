@@ -29,6 +29,7 @@ import org.nodes.core.base.vo.CheckedTreeVO;
 import org.nodes.core.base.vo.GrantTreeVO;
 import org.nodes.core.base.vo.MenuVO;
 import org.nodes.core.base.wrapper.MenuWrapper;
+import org.nodes.core.constant.WmsAppConstant;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.launch.constant.AppConstant;
@@ -118,7 +119,7 @@ public class MenuController extends BladeController {
 	public R<IPage<MenuVO>> page(@ApiIgnore @RequestParam Map<String, Object> params, Query query) {
 		LambdaQueryWrapper<Menu> queryWrapper = Condition.getQueryWrapper(params, Menu.class)
 			.lambda()
-			.eq(Menu::getParentId, org.nodes.core.constant.AppConstant.TOP_PARENT_ID)
+			.eq(Menu::getParentId, WmsAppConstant.TOP_PARENT_ID)
 			.func(sql -> {
 				if (!SecureUtil.isDeveloper()) {
 					sql.eq(Menu::getIsVisible, 0);

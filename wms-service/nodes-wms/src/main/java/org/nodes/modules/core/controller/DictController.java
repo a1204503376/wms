@@ -24,6 +24,7 @@ import org.nodes.core.base.entity.Dict;
 import org.nodes.core.base.service.IDictService;
 import org.nodes.core.base.vo.DictVO;
 import org.nodes.core.base.wrapper.DictWrapper;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.cache.utils.CacheUtil;
@@ -101,7 +102,7 @@ public class DictController extends BladeController {
 	public R<IPage<DictVO>> page(@ApiIgnore @RequestParam Map<String, Object> params, Query query) {
 		IPage<Dict> page = dictService.page(Condition.getPage(query), Condition.getQueryWrapper(params, Dict.class)
 			.lambda()
-			.eq(Dict::getParentId, org.nodes.core.constant.AppConstant.TOP_PARENT_ID)
+			.eq(Dict::getParentId, WmsAppConstant.TOP_PARENT_ID)
 			.orderByAsc(Dict::getSort));
 		IPage<DictVO> dictPage = DictWrapper.build().pageVO(page);
 		if (Func.isNotEmpty(dictPage) && Func.isNotEmpty(dictPage.getRecords())) {
@@ -112,7 +113,7 @@ public class DictController extends BladeController {
 				long hasChildren = childrenList.stream().filter(u -> {
 					return u.getParentId().equals(item.getId());
 				}).count();
-				item.setHasChildren(hasChildren > org.nodes.core.constant.AppConstant.TOP_PARENT_ID);
+				item.setHasChildren(hasChildren > WmsAppConstant.TOP_PARENT_ID);
 			});
 		}
 		return R.data(dictPage);
@@ -185,7 +186,7 @@ public class DictController extends BladeController {
 			.lambda()
 			.eq(Dict::getCode, code)
 			.eq(Dict::getIsSealed, new Integer(0))
-			.ne(Dict::getParentId, org.nodes.core.constant.AppConstant.TOP_PARENT_ID)
+			.ne(Dict::getParentId, WmsAppConstant.TOP_PARENT_ID)
 		);
 		return R.data(dictList);
 	}

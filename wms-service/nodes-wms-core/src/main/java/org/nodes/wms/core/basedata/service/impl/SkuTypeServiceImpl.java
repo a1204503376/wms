@@ -2,7 +2,7 @@ package org.nodes.wms.core.basedata.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import org.nodes.core.constant.AppConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.core.tool.utils.ValidationUtil;
@@ -138,11 +138,11 @@ public class SkuTypeServiceImpl<M extends SkuTypeMapper, T extends SkuType>
 		}
 		//skuType.setTypePreId(skuTypeVO.gParentId());
 		if (Func.isEmpty(skuType.getTypePreId())) {
-			skuType.setTypePreId(AppConstant.TOP_PARENT_ID);
+			skuType.setTypePreId(WmsAppConstant.TOP_PARENT_ID);
 		}
 		if (skuType.getTypePreId().equals(skuType.getSkuTypeId())) {
 			throw new ServiceException("上位分类 不能与 当前分类一致！");
-		} else if (!skuType.getTypePreId().equals(AppConstant.TOP_PARENT_ID)){
+		} else if (!skuType.getTypePreId().equals(WmsAppConstant.TOP_PARENT_ID)){
 			SkuType parentSkuType = super.getById(skuType.getTypePreId());
 			if (Func.isNotEmpty(parentSkuType)
 				&& parentSkuType.getTypePath().indexOf(skuType.getSkuTypeId().toString()) > -1) {
@@ -291,11 +291,11 @@ public class SkuTypeServiceImpl<M extends SkuTypeMapper, T extends SkuType>
 			throw new ServiceException("分类编码和货主不能同时重复");
 		}
 		if (Func.isEmpty(entity.getTypePreId())) {
-			entity.setTypePreId(AppConstant.TOP_PARENT_ID);
+			entity.setTypePreId(WmsAppConstant.TOP_PARENT_ID);
 		}
 		if (entity.getTypePreId().equals(entity.getSkuTypeId())) {
 			throw new ServiceException("上位分类 不能与 当前分类一致！");
-		} else if (!entity.getTypePreId().equals(AppConstant.TOP_PARENT_ID)){
+		} else if (!entity.getTypePreId().equals(WmsAppConstant.TOP_PARENT_ID)){
 			SkuType parentSkuType = super.getById(entity.getTypePreId());
 			if (Func.isNotEmpty(parentSkuType)
 				&& parentSkuType.getTypePath().indexOf(entity.getSkuTypeId().toString()) > -1) {

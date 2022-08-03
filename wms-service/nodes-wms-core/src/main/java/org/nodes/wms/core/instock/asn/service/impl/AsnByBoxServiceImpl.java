@@ -7,7 +7,7 @@ import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.ParamCache;
 import org.nodes.core.base.entity.Param;
 import org.nodes.core.base.enums.ParamEnum;
-import org.nodes.core.constant.AppConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.cache.SerialNoCache;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.NodesUtil;
@@ -207,10 +207,10 @@ public class AsnByBoxServiceImpl extends AbsBaseAsnHeaderService<AsnHeaderMapper
 			asnDetail = collect.get(0);
 		}
 		//验证物品明细包装是否相同
-		Long wspId = AppConstant.TOP_PARENT_ID;
+		Long wspId = WmsAppConstant.TOP_PARENT_ID;
 		BigDecimal sum = BigDecimal.ZERO;
 		for (AsnDetail asnDetail1 : asnDetailList) {
-			if (wspId == AppConstant.TOP_PARENT_ID) {
+			if (wspId == WmsAppConstant.TOP_PARENT_ID) {
 				wspId = asnDetail1.getWspId();
 			} else if (!wspId.equals(asnDetail1.getWspId())) {
 				throw new ServiceException(String.format(
