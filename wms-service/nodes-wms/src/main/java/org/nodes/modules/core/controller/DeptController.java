@@ -10,7 +10,6 @@ import org.nodes.core.base.entity.Dept;
 import org.nodes.core.base.service.IDeptService;
 import org.nodes.core.base.vo.DeptVO;
 import org.nodes.core.base.wrapper.DeptWrapper;
-import org.nodes.core.constant.CommonConstant;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.cache.utils.CacheUtil;

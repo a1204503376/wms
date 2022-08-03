@@ -24,7 +24,6 @@ import org.nodes.core.base.entity.Dict;
 import org.nodes.core.base.service.IDictService;
 import org.nodes.core.base.vo.DictVO;
 import org.nodes.core.base.wrapper.DictWrapper;
-import org.nodes.core.constant.CommonConstant;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.cache.utils.CacheUtil;
