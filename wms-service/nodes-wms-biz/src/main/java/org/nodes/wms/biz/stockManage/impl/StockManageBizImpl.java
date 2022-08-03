@@ -160,12 +160,15 @@ public class StockManageBizImpl implements StockManageBiz {
 	public void stockMoveByBox(StockMoveByBoxCodeRequest request) {
 		//根据前端传过来的LocCode
 		Location targetLocation;
+		StockLogTypeEnum stockLogTypeEnum;
 		if (Func.isNotEmpty(request.getLocCode())) {
 			//根据前端传过来的LocCode
 			targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
+			stockLogTypeEnum = StockLogTypeEnum.STOCK_MOVE_BY_BOX_PDA;
 		} else {
 			//根据前端传过来的LocCode
 			targetLocation = locationBiz.findByLocId(request.getTargetLocId());
+			stockLogTypeEnum = StockLogTypeEnum.STOCK_MOVE_BY_BOX;
 			AssertUtil.notNull(targetLocation, "获取库位失败,请更换库位ID后重试");
 		}
 		if (Func.isEmpty(request.getLpnCode())) {
@@ -174,7 +177,7 @@ public class StockManageBizImpl implements StockManageBiz {
 		//根据传过来的多个箱码集合查询出多个库存
 		List<String> boxCodeList = request.getBoxCodeList().stream().filter(Func::isNotEmpty).collect(Collectors.toList());
 		boxCodeList.forEach(boxcode ->
-			stockBiz.moveStockByBoxCode(boxcode, boxcode, request.getLpnCode(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_BOX_PDA, null, null, null)
+			stockBiz.moveStockByBoxCode(boxcode, boxcode, request.getLpnCode(), targetLocation, stockLogTypeEnum, null, null, null)
 		);
 	}
 
