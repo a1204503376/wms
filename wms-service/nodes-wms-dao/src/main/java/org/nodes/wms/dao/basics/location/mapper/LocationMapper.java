@@ -67,5 +67,5 @@ public interface LocationMapper extends BaseMapper<Location> {
 	 * @param zoneType
 	 * @return
 	 */
-	List<Location> getLocationByZoneType(List<Long> locIdList, Integer zoneType);
+	List<Location> getLocationByZoneType(List<Long> locIdList,Long whId, Integer zoneType);
 }

@@ -141,11 +141,12 @@ public interface LocationDao {
 	/**
 	 * 查找库位列表中指定类型的库位
 	 *
-	 * @param locIdList
-	 * @param zoneType
+	 * @param locIdList 可为空
+	 * @param whId      可为空
+	 * @param zoneType  必填
 	 * @return
 	 */
-	List<Location> getLocationByZoneType(List<Long> locIdList, Integer zoneType);
+	List<Location> getLocationByZoneType(List<Long> locIdList, Long whId, Integer zoneType);
 
 	/**
 	 * 根据库区ID获取该区域的库位
