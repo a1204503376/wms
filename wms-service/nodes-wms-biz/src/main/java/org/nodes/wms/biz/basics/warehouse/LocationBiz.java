@@ -148,9 +148,9 @@ public interface LocationBiz {
 	 *
 	 * @param whId     库房ID 必填
 	 * @param zoneType 库区类型 必填
-	 * @return 库位集合
+	 * @return 库位
 	 */
-	List<Location> getLocationByZoneType(Long whId, Integer zoneType);
+	Location getLocationByZoneType(Long whId, Integer zoneType);
 
 	/**
 	 * 判断库位是否为出库暂存区
@@ -183,15 +183,6 @@ public interface LocationBiz {
 	 * @return true：标识该库位属于agv临时区库位
 	 */
 	boolean isAgvTempOfZoneType(Long locId);
-
-	/**
-	 * 获取指定库房的入库暂库位
-	 *
-	 * @param whId
-	 * @return
-	 */
-	@Deprecated
-	Location getStageLocation(Long whId);
 
 	/**
 	 * 获取指定库房的质检库位
