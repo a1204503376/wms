@@ -14,7 +14,6 @@ import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.stock.dto.input.*;
 import org.nodes.wms.dao.stock.dto.output.EstimateStockMoveResponse;
-import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.tool.utils.Func;
@@ -129,36 +128,23 @@ public class StockManageBizImpl implements StockManageBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void stockMove(StockMoveRequest request) {
-		// TODO库存标准移动没写全
 		//根据skuCode获取SKU对象
 		Sku sku = skuBiz.findByCode(request.getSkuCode());
 		//根据locCode获取Location对象
 		Location location = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
-		//根据目标locCode获取Location对象
-		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getTargetLocCode());
 		List<Long> locationIdList = new ArrayList<>();
 		locationIdList.add(location.getLocId());
+		//根据目标locCode获取Location对象
+		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getTargetLocCode());
 		//批属性赋值
 		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
 		skuLot.setSkuLot1(request.getLotNumber());
+		//根据库房ID SKUID 库位 和批属性1查询对应库存
 		List<Stock> stockList = stockQueryBiz.findEnableStockByLocation(request.getWhId(), sku.getSkuId(), null, locationIdList, skuLot);
+		//断言stockList
 		AssertUtil.notNull(stockList, "根据您输入的数据查询不到对应的库存，请重新输入后重试");
-		stockList.forEach(stock -> {
-			//获取序列号 如果库存关联了序列号需要获取序列号
-			List<Serial> serialList = stockQueryBiz.findSerialByStock(stock.getStockId());
-			List<String> serialNoList = null;
-			if (Func.isNotEmpty(serialList)) {
-				serialNoList = serialList.stream()
-					.map(Serial::getSerialNumber)
-					.collect(Collectors.toList());
-			}
-			stockBiz.moveStock(stock, serialNoList, stock.getStockBalance(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_PCS_PDA, null, null, null);
-		});
-
-		//根据请求对象获取对应库存移动需要的值
-		//根据库存ID获取原库存
-		//获取序列号集合 移动数量,库存移动类型
-		//获取目标库位信息
+		//库存移动
+		stockBiz.moveStock(stockList.get(0), request.getSerialNumberList(), stockList.get(0).getStockBalance(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_PCS_PDA, null, null, null);
 	}
 
 	@Override

@@ -6,7 +6,7 @@
 		</u-navbar>
 		<u--form>
 			<u-form-item label="目标LOC" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.locCode"></u--input>
+				<u--input v-model="params.targetLocCode"></u--input>
 			</u-form-item>
 		</u--form>
 		<view class="footer">
@@ -34,12 +34,13 @@
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
-					locCode: ''
+					targetLocCode: ''
 				}
 			}
 		},
-		onLoad() {
-		
+		onLoad: function(option) {
+			var parse = JSON.parse(option.param)
+			this.params = parse;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -60,7 +61,7 @@
 				var _this = this;
 				_this.params.isSn = true;
 				uni.$u.throttle(function() {
-					if (tool.isNotEmpty(_this.params.locCode)) {
+					if (tool.isNotEmpty(_this.params.targetLocCode)) {
 						console.log('标准移动成功')
 						uni.$u.func.routeNavigateTo('/pages/stock/stockManage/standardMove/standardMoveSerialNumber', _this.params);
 						
