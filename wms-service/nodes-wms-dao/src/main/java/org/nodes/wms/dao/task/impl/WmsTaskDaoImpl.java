@@ -1,5 +1,6 @@
 package org.nodes.wms.dao.task.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
@@ -9,10 +10,13 @@ import org.springblade.core.mp.base.BaseServiceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author nodesc
  */
+@Repository
+@RequiredArgsConstructor
 public class WmsTaskDaoImpl
 		extends BaseServiceImpl<WmsTaskMapper, WmsTask>
 		implements WmsTaskDao {
