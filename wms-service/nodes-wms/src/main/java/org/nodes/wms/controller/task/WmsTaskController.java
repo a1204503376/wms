@@ -7,9 +7,9 @@ import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.dao.task.dto.input.AgainIssuedlTask;
 import org.nodes.wms.dao.task.dto.input.CancelTaskRequest;
 import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
-import org.nodes.wms.dao.task.dto.input.TaskDetailPageRequest;
+import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
 import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
-import org.nodes.wms.dao.task.dto.output.TaskDetailPageResponse;
+import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
@@ -30,11 +30,16 @@ import java.util.List;
 public class WmsTaskController {
 	private final WmsTaskBiz wmsTaskBiz;
 
-
+	/**
+	 * 库内管理:获取工作任务分页
+	 *
+	 * @param query         分页参数
+	 * @param taskPageQuery 查询参数
+	 * @return 分页对象
+	 */
 	@PostMapping("/page")
-	@ApiLog("任务详情-分页查询任务详情")
-	public R<IPage<TaskDetailPageResponse>> page(Query query, @RequestBody TaskDetailPageRequest request) {
-		return R.data(wmsTaskBiz.selectPage(request, query));
+	public R<IPage<TaskPageResponse>> page(Query query, @RequestBody TaskPageQuery taskPageQuery) {
+		return R.data(wmsTaskBiz.page(taskPageQuery, query));
 	}
 
 	@PostMapping("/export")

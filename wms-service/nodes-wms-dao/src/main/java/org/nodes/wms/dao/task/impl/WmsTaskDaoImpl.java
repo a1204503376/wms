@@ -1,9 +1,13 @@
 package org.nodes.wms.dao.task.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.task.WmsTaskDao;
+import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
+import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
 import org.nodes.wms.dao.task.mapper.WmsTaskMapper;
@@ -37,6 +41,11 @@ public class WmsTaskDaoImpl
 		if (!super.update(updateWrapper)) {
 			throw new ServiceException("更新任务状态失败");
 		}
+	}
+
+	@Override
+	public Page<TaskPageResponse> getPage(IPage<Object> page, TaskPageQuery taskPageQuery) {
+		return super.baseMapper.getPage(page, taskPageQuery);
 	}
 
 }
