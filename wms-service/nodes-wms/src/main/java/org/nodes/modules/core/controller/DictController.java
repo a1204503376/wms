@@ -102,7 +102,7 @@ public class DictController extends BladeController {
 	public R<IPage<DictVO>> page(@ApiIgnore @RequestParam Map<String, Object> params, Query query) {
 		IPage<Dict> page = dictService.page(Condition.getPage(query), Condition.getQueryWrapper(params, Dict.class)
 			.lambda()
-			.eq(Dict::getParentId, CommonConstant.TOP_PARENT_ID)
+			.eq(Dict::getParentId, org.nodes.core.constant.AppConstant.TOP_PARENT_ID)
 			.orderByAsc(Dict::getSort));
 		IPage<DictVO> dictPage = DictWrapper.build().pageVO(page);
 		if (Func.isNotEmpty(dictPage) && Func.isNotEmpty(dictPage.getRecords())) {
@@ -113,7 +113,7 @@ public class DictController extends BladeController {
 				long hasChildren = childrenList.stream().filter(u -> {
 					return u.getParentId().equals(item.getId());
 				}).count();
-				item.setHasChildren(hasChildren > CommonConstant.TOP_PARENT_ID);
+				item.setHasChildren(hasChildren > org.nodes.core.constant.AppConstant.TOP_PARENT_ID);
 			});
 		}
 		return R.data(dictPage);
@@ -186,7 +186,7 @@ public class DictController extends BladeController {
 			.lambda()
 			.eq(Dict::getCode, code)
 			.eq(Dict::getIsSealed, new Integer(0))
-			.ne(Dict::getParentId, CommonConstant.TOP_PARENT_ID)
+			.ne(Dict::getParentId, org.nodes.core.constant.AppConstant.TOP_PARENT_ID)
 		);
 		return R.data(dictList);
 	}

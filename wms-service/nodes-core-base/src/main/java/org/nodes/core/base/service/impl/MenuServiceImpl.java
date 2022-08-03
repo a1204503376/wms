@@ -20,10 +20,17 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nodes.core.base.cache.*;
+import org.nodes.core.base.cache.MenuCache;
+import org.nodes.core.base.dto.MenuDTO;
+import org.nodes.core.base.entity.*;
+import org.nodes.core.base.enums.MenuCategoryEnum;
+import org.nodes.core.base.mapper.MenuMapper;
+import org.nodes.core.base.service.*;
+import org.nodes.core.base.vo.MenuVO;
 import org.nodes.core.base.vo.PdaMenuVO;
+import org.nodes.core.base.wrapper.MenuWrapper;
 import org.nodes.core.base.wrapper.PdaMenuWrapper;
-import org.nodes.core.constant.CommonConstant;
+import org.nodes.core.constant.AppConstant;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -36,13 +43,6 @@ import org.springblade.core.tool.node.ForestNodeMerger;
 import org.springblade.core.tool.support.Kv;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.StringUtil;
-import org.nodes.core.base.dto.MenuDTO;
-import org.nodes.core.base.entity.*;
-import org.nodes.core.base.enums.MenuCategoryEnum;
-import org.nodes.core.base.mapper.MenuMapper;
-import org.nodes.core.base.service.*;
-import org.nodes.core.base.vo.MenuVO;
-import org.nodes.core.base.wrapper.MenuWrapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -375,7 +375,7 @@ public class MenuServiceImpl <M extends MenuMapper, T extends Menu> extends Serv
 		menu.setIsDeleted(BladeConstant.DB_NOT_DELETED);
 		menu.setIsVisible(0);
 		if (Func.isEmpty(menu.getParentId())) {
-			menu.setParentId(CommonConstant.TOP_PARENT_ID);
+			menu.setParentId(AppConstant.TOP_PARENT_ID);
 		}
 		boolean result = saveOrUpdate(menu);
 		if (result) {

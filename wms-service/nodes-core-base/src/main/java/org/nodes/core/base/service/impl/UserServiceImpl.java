@@ -17,21 +17,20 @@
 package org.nodes.core.base.service.impl;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import lombok.AllArgsConstructor;
 import org.nodes.core.auth.enums.UserEnum;
-import org.nodes.core.base.service.*;
-import org.nodes.core.constant.TenantConstant;
+import org.nodes.core.base.cache.ParamCache;
+import org.nodes.core.base.cache.SysCache;
 import org.nodes.core.base.entity.*;
-import org.nodes.core.base.cache.*;
-import org.nodes.core.constant.CommonConstant;
+import org.nodes.core.base.enums.ParamEnum;
+import org.nodes.core.base.mapper.UserMapper;
+import org.nodes.core.base.service.*;
+import org.nodes.core.constant.AppConstant;
+import org.nodes.core.constant.TenantConstant;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
-import org.springblade.core.mp.support.Condition;
 import org.springblade.core.secure.BladeUser;
 import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.core.secure.utils.SecureUtil;
@@ -40,8 +39,6 @@ import org.springblade.core.tool.constant.BladeConstant;
 import org.springblade.core.tool.jackson.JsonUtil;
 import org.springblade.core.tool.support.Kv;
 import org.springblade.core.tool.utils.*;
-import org.nodes.core.base.enums.ParamEnum;
-import org.nodes.core.base.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -235,7 +232,7 @@ public class UserServiceImpl<M extends UserMapper, T extends User> extends BaseS
 	@Override
 	public boolean resetPassword(String userIds) {
 		User user = new User();
-		user.setPassword(DigestUtil.encrypt(CommonConstant.DEFAULT_PASSWORD));
+		user.setPassword(DigestUtil.encrypt(AppConstant.DEFAULT_PASSWORD));
 		user.setUpdateTime(DateUtil.now());
 		return this.update(user, Wrappers.<User>update().lambda().in(User::getId, Func.toLongList(userIds)));
 	}

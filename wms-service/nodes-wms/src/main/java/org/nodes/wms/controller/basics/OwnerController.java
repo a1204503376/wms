@@ -6,7 +6,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.core.basedata.dto.OwnerDTO;

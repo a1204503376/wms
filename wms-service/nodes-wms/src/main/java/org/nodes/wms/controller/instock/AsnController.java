@@ -2,7 +2,7 @@ package org.nodes.wms.controller.instock;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.core.tool.validation.Update;
 import org.nodes.wms.biz.instock.asn.AsnBiz;
 import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
