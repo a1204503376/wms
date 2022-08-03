@@ -6,17 +6,17 @@ package org.nodes.core.constant;
 public class LocationConstant {
 
 	/**
-	 * 入库暂存区
+	 * 入库暂存区，属于入库暂存区
 	 */
 	public static final String LOC_STAGE = "STAGE";
 
 	/**
-	 * 入库质检区
+	 * 入库质检区,属于入库质检区
 	 */
 	public static final String LOC_QC = "QC";
 
 	/**
-	 * 出库集货区
+	 * 出库集货区，属于出库集货区
 	 */
 	public static final String LOC_PICKTO = "PICKTO";
 
@@ -26,12 +26,12 @@ public class LocationConstant {
 	public static final String LOC_PACK = "PACK";
 
 	/**
-	 * 未知库位
+	 * 未知库位，属于虚拟库区类型
 	 */
 	public static final String LOC_UNKNOWN = "UNKNOWN";
 
 	/**
-	 * 库内的在途库存的库位
+	 * 库内中间库位，属于虚拟库区类型
 	 */
 	public static final String LOC_INTRANSIT = "INTRANSIT";
 	/**

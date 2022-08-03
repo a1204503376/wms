@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
+ * 库位相关业务
+ *
  * @author nodesc
  */
 public interface LocationBiz {
