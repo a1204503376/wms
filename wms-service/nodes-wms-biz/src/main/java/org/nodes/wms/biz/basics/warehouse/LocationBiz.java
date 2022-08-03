@@ -185,15 +185,6 @@ public interface LocationBiz {
 	boolean isAgvTempOfZoneType(Long locId);
 
 	/**
-	 * 返回所有的库房的打包暂存区库位
-	 *
-	 * @return List<Location>
-	 */
-	@Deprecated
-	List<Location> getAllPackLocation();
-
-
-	/**
 	 * 获取指定库房的入库暂库位
 	 *
 	 * @param whId
@@ -219,16 +210,6 @@ public interface LocationBiz {
 	 */
 	@Deprecated
 	Location getPickToLocation(Long whId);
-
-	/**
-	 * 获取指定库房的打包库位
-	 *
-	 * @param whId
-	 * @return
-	 */
-	@Deprecated
-	Location getPackLocation(Long whId);
-
 
 	/**
 	 * 获取库位总数量

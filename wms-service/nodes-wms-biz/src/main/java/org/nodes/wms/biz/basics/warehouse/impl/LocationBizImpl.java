@@ -130,12 +130,6 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
-	public List<Location> getAllPackLocation() {
-		List<String> packLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_PACK);
-		return locationDao.findLocation(packLocCodeList);
-	}
-
-	@Override
 	public List<Location> getAllUnknownLocation() {
 		List<String> unknownLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_UNKNOWN);
 		return locationDao.findLocation(unknownLocCodeList);
@@ -176,17 +170,6 @@ public class LocationBizImpl implements LocationBiz {
 		}
 		List<Location> allPickToLocation = getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA);
 		List<Location> locationList = allPickToLocation.stream()
-			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
-		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
-	}
-
-	@Override
-	public Location getPackLocation(Long whId) {
-		if (Func.isEmpty(whId)) {
-			return null;
-		}
-		List<Location> allPackLocation = getAllPackLocation();
-		List<Location> locationList = allPackLocation.stream()
 			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
