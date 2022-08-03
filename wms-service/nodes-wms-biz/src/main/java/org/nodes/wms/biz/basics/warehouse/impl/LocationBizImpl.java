@@ -129,13 +129,6 @@ public class LocationBizImpl implements LocationBiz {
 			.collect(Collectors.toList());
 	}
 
-
-	@Override
-	public List<Location> getAllPickToLocation() {
-		List<String> pickToLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_PICKTO);
-		return locationDao.findLocation(pickToLocCodeList);
-	}
-
 	@Override
 	public List<Location> getAllPackLocation() {
 		List<String> packLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_PACK);
@@ -181,7 +174,7 @@ public class LocationBizImpl implements LocationBiz {
 		if (Func.isEmpty(whId)) {
 			return null;
 		}
-		List<Location> allPickToLocation = getAllPickToLocation();
+		List<Location> allPickToLocation = getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA);
 		List<Location> locationList = allPickToLocation.stream()
 			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;

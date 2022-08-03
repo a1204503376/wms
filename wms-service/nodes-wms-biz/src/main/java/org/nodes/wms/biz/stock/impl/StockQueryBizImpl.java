@@ -71,7 +71,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public List<Stock> findEnableStockByBoxCode(String boxCode) {
-		List<Long> pickToLocList = locationBiz.getAllPickToLocation()
+		List<Long> pickToLocList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA)
 				.stream()
 				.map(Location::getLocId)
 				.collect(Collectors.toList());
@@ -80,7 +80,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public List<Stock> findEnableStockByBoxCode(List<String> boxCodes) {
-		List<Long> pickToLocList = locationBiz.getAllPickToLocation()
+		List<Long> pickToLocList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA)
 				.stream()
 				.map(Location::getLocId)
 				.collect(Collectors.toList());
@@ -149,7 +149,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		// 获取所有入库检验区库位
 		List<Location> allQcList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_IN_STOCK_QC_AREA);
 		// 获取所有出库暂存区库位
-		List<Location> allPickToList = locationBiz.getAllPickToLocation();
+		List<Location> allPickToList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA);
 		// 根据入库暂存区id获取入库暂存区的物品数量和存放天数
 		Map<String, Object> stageStock = stockDao.getStockQtyByLocIdList(
 				allStageList.stream().map(Location::getLocId).collect(Collectors.toList()));
@@ -371,7 +371,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public List<Stock> findEnableStockBySkuLot(SkuLotBaseEntity skuLot) {
-		List<Location> allPickToLocation = locationBiz.getAllPickToLocation();
+		List<Location> allPickToLocation = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA);
 		List<Long> pickToLocIdList = allPickToLocation.stream()
 				.map(Location::getLocId)
 				.collect(Collectors.toList());
