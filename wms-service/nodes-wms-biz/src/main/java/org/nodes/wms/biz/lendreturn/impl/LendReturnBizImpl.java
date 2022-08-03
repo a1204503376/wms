@@ -23,6 +23,7 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +39,8 @@ public class LendReturnBizImpl implements LendReturnBiz {
 	private final LogLendReturnFactory logLendReturnFactory;
 	private final LogLendReturnDao logLendReturnDao;
 	private final LogNoReturnDao logNoReturnDao;
-	private final LendReturnBiz lendReturnBiz;
+	@Resource
+	private LendReturnBiz lendReturnBiz;
 
 	/**
 	 * 保存借出归还记录
