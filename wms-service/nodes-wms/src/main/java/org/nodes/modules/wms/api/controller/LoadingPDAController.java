@@ -7,7 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
-import org.nodes.core.constant.AppConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.cache.SerialNoCache;
 import org.nodes.wms.core.outstock.loading.entity.SoTruckDetail;
 import org.nodes.wms.core.outstock.loading.entity.SoTruckHeader;
@@ -132,7 +132,7 @@ public class LoadingPDAController extends BladeController {
 			return  soTruckHeaderModel;
 		}else{
 			soTruckHeader.setTruckCode(SerialNoCache.getTcNo());
-			soTruckHeader.setTruckState(AppConstant.Loading);
+			soTruckHeader.setTruckState(WmsAppConstant.Loading);
 			soTruckHeader.setTruckDate(LocalDateTime.now());
 			soTruckHeaderService.saveOrUpdate(soTruckHeader);
 			return soTruckHeaderService.getById(soTruckHeader.getTruckId());

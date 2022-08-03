@@ -2,7 +2,7 @@ package org.nodes.wms.biz.lendreturn.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.constant.AppConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.core.tool.utils.StringPool;
@@ -53,9 +53,9 @@ public class LendReturnBizImpl implements LendReturnBiz {
 		if (Boolean.FALSE == allMatchType){
 			throw  ExceptionUtil.mpe("借出归还集合内的类型必须一致");
 		}
-		if (Func.equals(AppConstant.BILL_TYPE_LEND,lendReturnRequest.getBillTypeCd())){
+		if (Func.equals(WmsAppConstant.BILL_TYPE_LEND,lendReturnRequest.getBillTypeCd())){
 			 logLendReturnList = logLendReturnFactory.createLendList(logLendReturnRequestList);
-		}else if (Func.equals(AppConstant.BILL_TYPE_RETURN,lendReturnRequest.getBillTypeCd())){
+		}else if (Func.equals(WmsAppConstant.BILL_TYPE_RETURN,lendReturnRequest.getBillTypeCd())){
 			logLendReturnList = logLendReturnFactory.createReturnList(logLendReturnRequestList);
 		}else {
 			throw ExceptionUtil.mpe(ResultCode.PARAM_VALID_ERROR);

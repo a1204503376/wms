@@ -10,7 +10,7 @@ import org.nodes.core.base.entity.User;
 import org.nodes.core.base.enums.LoginStatusEnum;
 import org.nodes.core.base.enums.ParamEnum;
 import org.nodes.core.base.service.IUserService;
-import org.nodes.core.constant.AppConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.count.entity.CountHeader;
 import org.nodes.wms.core.count.service.ICountHeaderService;
@@ -177,7 +177,7 @@ public class TaskServiceImpl<M extends TaskMapper, T extends Task>
 			task.setTtpId(taskDTO.getTaskPackage().getTtpId());
 			task.setTaskProcType(taskDTO.getTaskPackage().getTaskProcType());
 		} else {
-			task.setTtpId(AppConstant.TOP_PARENT_ID);
+			task.setTtpId(WmsAppConstant.TOP_PARENT_ID);
 			task.setTaskProcType(TaskProcTypeEnum.Cooperation.getIndex());
 		}
 		task.setTaskTypeCd(taskDTO.getTaskType());

@@ -30,7 +30,7 @@ import org.nodes.core.base.vo.MenuVO;
 import org.nodes.core.base.vo.PdaMenuVO;
 import org.nodes.core.base.wrapper.MenuWrapper;
 import org.nodes.core.base.wrapper.PdaMenuWrapper;
-import org.nodes.core.constant.AppConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -375,7 +375,7 @@ public class MenuServiceImpl <M extends MenuMapper, T extends Menu> extends Serv
 		menu.setIsDeleted(BladeConstant.DB_NOT_DELETED);
 		menu.setIsVisible(0);
 		if (Func.isEmpty(menu.getParentId())) {
-			menu.setParentId(AppConstant.TOP_PARENT_ID);
+			menu.setParentId(WmsAppConstant.TOP_PARENT_ID);
 		}
 		boolean result = saveOrUpdate(menu);
 		if (result) {

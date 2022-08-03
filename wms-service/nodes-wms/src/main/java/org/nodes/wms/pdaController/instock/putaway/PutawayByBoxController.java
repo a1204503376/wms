@@ -2,10 +2,10 @@ package org.nodes.wms.pdaController.instock.putaway;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.wms.biz.putway.PutwayBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.common.stock.StockUtil;
-import org.nodes.core.constant.PutwayConstant;
 import org.nodes.wms.dao.putway.dto.input.AddByBoxShelfRequest;
 import org.nodes.wms.dao.putway.dto.input.PutawayByBoxRequest;
 import org.nodes.wms.dao.putway.dto.output.PutawayByBoxResponse;
@@ -46,16 +46,16 @@ public class PutawayByBoxController {
 		}
 		BigDecimal qty = StockUtil.getStockBalance(stockList);
 		PutawayByBoxResponse response = new PutawayByBoxResponse();
-		if (stockList.get(BigDecimal.ZERO.intValue()).getBoxCode().indexOf(PutwayConstant.BOX_CODE_A) == BigDecimal.ZERO
+		if (stockList.get(BigDecimal.ZERO.intValue()).getBoxCode().indexOf(WmsAppConstant.BOX_CODE_A) == BigDecimal.ZERO
 				.intValue() ||
 				stockList.get(BigDecimal.ZERO.intValue()).getBoxCode()
-						.indexOf(PutwayConstant.BOX_CODE_B) == BigDecimal.ZERO.intValue()
+						.indexOf(WmsAppConstant.BOX_CODE_B) == BigDecimal.ZERO.intValue()
 				||
 				stockList.get(BigDecimal.ZERO.intValue()).getBoxCode()
-						.indexOf(PutwayConstant.BOX_CODE_C) == BigDecimal.ZERO.intValue()
+						.indexOf(WmsAppConstant.BOX_CODE_C) == BigDecimal.ZERO.intValue()
 				||
 				stockList.get(BigDecimal.ZERO.intValue()).getBoxCode()
-						.indexOf(PutwayConstant.BOX_CODE_D) == BigDecimal.ZERO.intValue()) {
+						.indexOf(WmsAppConstant.BOX_CODE_D) == BigDecimal.ZERO.intValue()) {
 			response.setLpnCode(stockList.get(BigDecimal.ZERO.intValue()).getLpnCode());
 		}
 		response.setStockId(stockList.get(BigDecimal.ZERO.intValue()).getStockId());

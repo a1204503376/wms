@@ -1,6 +1,28 @@
 package org.nodes.core.constant;
 
-public interface AppConstant {
+/**
+ * 应用程序常量
+ *
+ * @author nodesc
+ */
+public interface WmsAppConstant {
+
+	/**
+	 * 天宜定制：箱型：A箱
+	 */
+	String BOX_CODE_A = "A";
+	/**
+	 * 天宜定制：箱型：B箱
+	 */
+	String BOX_CODE_B = "B";
+	/**
+	 * 天宜定制：箱型：C箱
+	 */
+	String BOX_CODE_C = "C";
+	/**
+	 * 天宜定制：箱型：D箱
+	 */
+	String BOX_CODE_D = "D";
 
 	String BASE_PACKAGES = "org.springblade";
 
@@ -69,5 +91,23 @@ public interface AppConstant {
 	 */
 	Integer API_SCOPE_CATEGORY = 2;
 
-	Integer Loading = 10;//正在装车
+	/**
+	 * 正在装车
+	 */
+	Integer Loading = 10;
+
+	/**
+	 * 批属性：批属性必填
+	 */
+	Integer SKU_LOT_MUST = 1;
+
+	/**
+	 * 批属性：批属性的字段名称前缀
+	 */
+	String SKU_LOT_FIELD_PREFIX = "skuLot";
+
+	/**
+	 * 批属性：批属性的总个数
+	 */
+	int SKU_LOT_TOTAL_NUM = 30;
 }

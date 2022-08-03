@@ -2,9 +2,9 @@ package org.nodes.wms.dao.common.skuLot;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.dao.basics.skulot.SkuLotValDao;
-import org.nodes.core.constant.SkuLotConstant;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotVal;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
@@ -16,11 +16,11 @@ import java.lang.reflect.InvocationTargetException;
 
 /**
  * skuLot工具类。该工具类的前提条件：要求两个对象必须有skuLot[n]的属性
+ *
+ * @author nodesc
  */
 @Slf4j
 public class SkuLotUtil {
-	private static final String SKULOT = "skuLot";
-	private static final int SKULOT_NUMBER = 30;
 
 	/**
 	 * 将原对象中的skuLot1-skuLot30赋值给目标对象
@@ -32,8 +32,8 @@ public class SkuLotUtil {
 	 */
 	public static <T1, T2> void setAllSkuLot(T1 source, T2 target) {
 		String propertyName;
-		for (int i = 0; i < SKULOT_NUMBER; ++i) {
-			propertyName = String.format("%s%d", SKULOT, i + 1);
+		for (int i = 0; i < WmsAppConstant.SKU_LOT_TOTAL_NUM; ++i) {
+			propertyName = String.format("%s%d", WmsAppConstant.SKU_LOT_FIELD_PREFIX, i + 1);
 			Property sourceProperty = ReflectUtil.getProperty(source.getClass(), propertyName);
 			Property targetProperty = ReflectUtil.getProperty(target.getClass(), propertyName);
 			try {
@@ -61,8 +61,8 @@ public class SkuLotUtil {
 		}
 
 		String propertyName;
-		for (int i = 0; i < SKULOT_NUMBER; ++i) {
-			propertyName = String.format("%s%d", SKULOT, i + 1);
+		for (int i = 0; i < WmsAppConstant.SKU_LOT_TOTAL_NUM; ++i) {
+			propertyName = String.format("%s%d", WmsAppConstant.SKU_LOT_FIELD_PREFIX, i + 1);
 			Property t1Property = ReflectUtil.getProperty(t1.getClass(), propertyName);
 			Property t2Property = ReflectUtil.getProperty(t2.getClass(), propertyName);
 			if (Func.isEmpty(t1Property) || Func.isEmpty(t2Property)) {
@@ -111,8 +111,8 @@ public class SkuLotUtil {
 		}
 
 		String propertyName;
-		for (int i = 0; i < SKULOT_NUMBER; ++i) {
-			propertyName = String.format("%s%d", SKULOT, i + 1);
+		for (int i = 0; i < WmsAppConstant.SKU_LOT_TOTAL_NUM; ++i) {
+			propertyName = String.format("%s%d", WmsAppConstant.SKU_LOT_FIELD_PREFIX, i + 1);
 			Property skuLotProperty = ReflectUtil.getProperty(object.getClass(), propertyName);
 			if (Func.isNull(skuLotProperty)) {
 				return false;
@@ -123,16 +123,16 @@ public class SkuLotUtil {
 	}
 
 	/**
-	 * 校验SKULOT是否符合设置，目前只校验是否必填
+	 * 校验SKU LOT是否符合设置，目前只校验是否必填
 	 *
 	 * @param skuLotObject 含skuLot的对象
 	 * @param woId         货主id，不能为空
 	 * @param whId         库房id，不能为空
-	 * @param <T>          有skulot属性的类
+	 * @param <T>          有sku lot属性的类
 	 */
 	public static <T> void check(T skuLotObject, Long woId, Long whId) {
 		if (Func.isNull(woId) || Func.isNull(whId) || !hasSkuLot(skuLotObject)) {
-			throw new ServiceException("批属性校验失败，货主和库房编码不能为空,或对象中没有SKULOT属性");
+			throw new ServiceException("批属性校验失败，货主和库房编码不能为空,或对象中没有SKU LOT属性");
 		}
 
 		SkuLotValDao skuLotValDao = SpringUtil.getBean(SkuLotValDao.class);
@@ -142,10 +142,10 @@ public class SkuLotUtil {
 		}
 
 		String propertyName;
-		for (int i = 0; i < SKULOT_NUMBER; ++i) {
+		for (int i = 0; i < WmsAppConstant.SKU_LOT_TOTAL_NUM; ++i) {
 			Integer skuLotMust = skuLotVal.skuLotMustGet(i + 1);
-			if (SkuLotConstant.SKULOT_MUST.equals(skuLotMust)) {
-				propertyName = String.format("%s%d", SKULOT, i + 1);
+			if (WmsAppConstant.SKU_LOT_MUST.equals(skuLotMust)) {
+				propertyName = String.format("%s%d", WmsAppConstant.SKU_LOT_FIELD_PREFIX, i + 1);
 				Property skuLotProperty = ReflectUtil.getProperty(skuLotObject.getClass(), propertyName);
 				if (isEmpty(skuLotProperty, skuLotObject)) {
 					throw new ServiceException(
@@ -171,7 +171,7 @@ public class SkuLotUtil {
 	}
 
 	/**
-	 * 如果skulot不为null时，将会把该批属性追加到sql中
+	 * 如果sku lot不为null时，将会把该批属性追加到sql中
 	 *
 	 * @param queryWrapper
 	 * @param skuLot
@@ -185,8 +185,8 @@ public class SkuLotUtil {
 			throw ExceptionUtil.mpe("参数：{}，批属性个数小于30个", skuLot);
 		}
 		try {
-			for (int i = 0; i < SKULOT_NUMBER; ++i) {
-				propertyName = String.format("%s%d", SKULOT, i + 1);
+			for (int i = 0; i < WmsAppConstant.SKU_LOT_TOTAL_NUM; ++i) {
+				propertyName = String.format("%s%d", WmsAppConstant.SKU_LOT_FIELD_PREFIX, i + 1);
 				Property skuLotProperty = ReflectUtil.getProperty(skuLot.getClass(), propertyName);
 				Object skuLotValue = skuLotProperty.getReadMethod().invoke(skuLot);
 				if (Func.notNull(skuLotValue)) {

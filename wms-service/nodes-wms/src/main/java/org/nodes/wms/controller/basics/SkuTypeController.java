@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.constant.AppConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.biz.basics.skuType.SkuTypeBiz;
@@ -79,7 +79,7 @@ public class SkuTypeController extends BladeController {
 			skuTypeList.forEach(item->{
 				boolean hasChildren = childrenList.stream().filter(u->{
 					return u.getTypePreId().equals(item.getSkuTypeId());
-				}).count() > AppConstant.TOP_PARENT_ID;
+				}).count() > WmsAppConstant.TOP_PARENT_ID;
 				item.setHasChildren(hasChildren);
 			});
 		}
@@ -97,7 +97,7 @@ public class SkuTypeController extends BladeController {
 	public R<IPage<SkuTypeVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
 		IPage<SkuType> page = skuTypeService.page(Condition.getPage(query), Condition.getQueryWrapper(params, SkuType.class)
 			.lambda()
-			.eq(SkuType::getTypePreId, AppConstant.TOP_PARENT_ID));
+			.eq(SkuType::getTypePreId, WmsAppConstant.TOP_PARENT_ID));
 		IPage<SkuTypeVO> skuTypePage = SkuTypeWrapper.build().pageVO(page);
 		if (Func.isNotEmpty(skuTypePage) && Func.isNotEmpty(skuTypePage.getRecords())) {
 			List<SkuType> childrenList = skuTypeService.list(Condition.getQueryWrapper(new SkuType())
@@ -106,7 +106,7 @@ public class SkuTypeController extends BladeController {
 			skuTypePage.getRecords().forEach(item->{
 				boolean hasChildren = childrenList.stream().filter(u->{
 					return u.getTypePreId().equals(item.getSkuTypeId());
-				}).count() > AppConstant.TOP_PARENT_ID;
+				}).count() > WmsAppConstant.TOP_PARENT_ID;
 				item.setHasChildren(hasChildren);
 			});
 		}

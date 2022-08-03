@@ -27,7 +27,7 @@ import org.nodes.core.base.service.IRoleScopeService;
 import org.nodes.core.base.service.IRoleService;
 import org.nodes.core.base.service.IUserService;
 import org.nodes.core.base.vo.RoleVO;
-import org.nodes.core.constant.AppConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
@@ -122,13 +122,13 @@ public class RoleServiceImpl<M extends RoleMapper, T extends Role> extends BaseS
 	private boolean grantDataScope(List<Long> roleIds, List<Long> dataScopeIds) {
 		// 删除角色配置的数据权限集合
 		roleScopeService.remove(Wrappers.<RoleScope>update().lambda()
-			.eq(RoleScope::getScopeCategory, AppConstant.DATA_SCOPE_CATEGORY)
+			.eq(RoleScope::getScopeCategory, WmsAppConstant.DATA_SCOPE_CATEGORY)
 			.in(RoleScope::getRoleId, roleIds));
 		// 组装配置
 		List<RoleScope> roleDataScopes = new ArrayList<>();
 		roleIds.forEach(roleId -> dataScopeIds.forEach(scopeId -> {
 			RoleScope roleScope = new RoleScope();
-			roleScope.setScopeCategory(AppConstant.DATA_SCOPE_CATEGORY);
+			roleScope.setScopeCategory(WmsAppConstant.DATA_SCOPE_CATEGORY);
 			roleScope.setRoleId(roleId);
 			roleScope.setScopeId(scopeId);
 			roleDataScopes.add(roleScope);
@@ -141,13 +141,13 @@ public class RoleServiceImpl<M extends RoleMapper, T extends Role> extends BaseS
 	private boolean grantApiScope(List<Long> roleIds, List<Long> apiScopeIds) {
 		// 删除角色配置的接口权限集合
 		roleScopeService.remove(Wrappers.<RoleScope>update().lambda()
-			.eq(RoleScope::getScopeCategory, AppConstant.API_SCOPE_CATEGORY)
+			.eq(RoleScope::getScopeCategory, WmsAppConstant.API_SCOPE_CATEGORY)
 			.in(RoleScope::getRoleId, roleIds));
 		// 组装配置
 		List<RoleScope> roleApiScopes = new ArrayList<>();
 		roleIds.forEach(roleId -> apiScopeIds.forEach(scopeId -> {
 			RoleScope roleScope = new RoleScope();
-			roleScope.setScopeCategory(AppConstant.API_SCOPE_CATEGORY);
+			roleScope.setScopeCategory(WmsAppConstant.API_SCOPE_CATEGORY);
 			roleScope.setScopeId(scopeId);
 			roleScope.setRoleId(roleId);
 			roleApiScopes.add(roleScope);
