@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.ArrayUtils;
 import org.nodes.core.base.entity.Dict;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
@@ -112,9 +113,9 @@ public class LocationBizImpl implements LocationBiz {
 			Location location = locationDao.getLocationById(id);
 			String locCode = location.getLocCode();
 			if (Func.isNotEmpty(location.getLocType())
-					&& location.getLocType().equals(LocTypeEnum.Virtual.key())
-					&& StringUtil.contains(locCode, '-')
-					&& ArrayUtils.contains(LocationConstant.getLocTypes(), StringUtil.subAfter(locCode, "-", true))) {
+				&& location.getLocType().equals(LocTypeEnum.Virtual.key())
+				&& StringUtil.contains(locCode, '-')
+				&& ArrayUtils.contains(LocationConstant.getLocTypes(), StringUtil.subAfter(locCode, "-", true))) {
 				throw new ServiceException(String.format("库位[编码：%s]是系统生成虚拟库位不可删除", location.getLocCode()));
 			}
 		}
@@ -124,14 +125,8 @@ public class LocationBizImpl implements LocationBiz {
 	private List<String> getLocCodeOfSystemCreated(String systemCreateCode) {
 		List<Warehouse> warehouseList = warehouseBiz.findAll();
 		return warehouseList.stream()
-				.map(item -> String.format("%s-%s", item.getWhCode(), systemCreateCode))
-				.collect(Collectors.toList());
-	}
-
-	@Override
-	public List<Location> getAllStageLocation() {
-		List<String> stageLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_STAGE);
-		return locationDao.findLocation(stageLocCodeList);
+			.map(item -> String.format("%s-%s", item.getWhCode(), systemCreateCode))
+			.collect(Collectors.toList());
 	}
 
 	@Override
@@ -169,9 +164,9 @@ public class LocationBizImpl implements LocationBiz {
 		if (Func.isEmpty(whId)) {
 			return null;
 		}
-		List<Location> allStageLocation = getAllStageLocation();
+		List<Location> allStageLocation = getLocationByZoneType(DictCodeConstant.ZONE_TYPE_IN_STOCK_TS_AREA);
 		List<Location> locationList = allStageLocation.stream()
-				.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
@@ -182,7 +177,7 @@ public class LocationBizImpl implements LocationBiz {
 		}
 		List<Location> allQcLocation = getAllQcLocation();
 		List<Location> locationList = allQcLocation.stream()
-				.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
@@ -193,7 +188,7 @@ public class LocationBizImpl implements LocationBiz {
 		}
 		List<Location> allPickToLocation = getAllPickToLocation();
 		List<Location> locationList = allPickToLocation.stream()
-				.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
@@ -204,7 +199,7 @@ public class LocationBizImpl implements LocationBiz {
 		}
 		List<Location> allPackLocation = getAllPackLocation();
 		List<Location> locationList = allPackLocation.stream()
-				.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
@@ -215,7 +210,7 @@ public class LocationBizImpl implements LocationBiz {
 		}
 		List<Location> allUnknownLocation = getAllUnknownLocation();
 		List<Location> locationList = allUnknownLocation.stream()
-				.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
@@ -226,8 +221,18 @@ public class LocationBizImpl implements LocationBiz {
 		}
 		List<Location> allInTransitLocation = getAllInTransitLocation();
 		List<Location> locationList = allInTransitLocation.stream()
-				.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
+	}
+
+	@Override
+	public List<Location> getLocationByZoneType(Integer zoneType) {
+		return locationDao.getLocationByZoneType(null, null, zoneType);
+	}
+
+	@Override
+	public List<Location> getLocationByZoneType(Long whId, Integer zoneType) {
+		return locationDao.getLocationByZoneType(null, whId, zoneType);
 	}
 
 	@Override
@@ -287,10 +292,11 @@ public class LocationBizImpl implements LocationBiz {
 	public boolean isVirtualLocation(List<Location> locationList) {
 		Dict dict = dictionaryBiz.findZoneTypeOfVirtual();
 		List<Long> locIdList = locationList.stream()
-				.map(Location::getLocId)
-				.distinct()
-				.collect(Collectors.toList());
-		List<Location> locations = locationDao.getLocationByZoneType(locIdList, dict.getDictKey());
+			.map(Location::getLocId)
+			.distinct()
+			.collect(Collectors.toList());
+		List<Location> locations = locationDao.getLocationByZoneType(locIdList, null, dict.getDictKey());
+		AssertUtil.notNull(locations, "判断是否有虚拟库位失败，库位集合为空");
 		return Func.isNotEmpty(locations);
 	}
 
@@ -304,13 +310,13 @@ public class LocationBizImpl implements LocationBiz {
 		locationDao.updateLocFlag(taskId, LocationConstant.LOC_FLAG_NORMAL, true);
 	}
 
-    @Override
-    public boolean isAgvTempOfZoneType(Long locId) {
+	@Override
+	public boolean isAgvTempOfZoneType(Long locId) {
 		// TODO 彭永程
-        return false;
-    }
+		return false;
+	}
 
-    @Override
+	@Override
 	public void freezeLocByTask(Long locationId, String taskId) {
 		AssertUtil.notEmpty(taskId, "系统冻结库位失败,根据任务系统冻结库位时必须要指定系统任务标识");
 		locationDao.updateLocFlag(locationId, LocationConstant.LOC_FLAG_SYSTEM_FORZEN, taskId);

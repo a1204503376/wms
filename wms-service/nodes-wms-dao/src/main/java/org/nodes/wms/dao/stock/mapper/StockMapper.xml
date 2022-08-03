@@ -106,7 +106,7 @@
             <if test="query.lastOutTimeEnd!=null">
                 AND s.last_Out_Time &lt;= #{query.lastOutTimeEnd}
             </if>
-            and s.stay_stock_qty + s.stock_qty > s.pick_qty
+
         </where>
     </sql>
     <select id="selectStockQtyByLocIdList" resultType="java.util.HashMap">
@@ -166,6 +166,7 @@
     <select id="getPage" resultType="org.nodes.wms.dao.stock.dto.output.StockPageResponse">
         <include refid="stock"/>
         <include refid="stock1"/>
+        and s.stay_stock_qty + s.stock_qty > s.pick_qty
         AND s.is_deleted ='0'
         <if test="page.orders == null or page.orders.size() == 0">
             ORDER BY s.create_time
@@ -185,6 +186,7 @@
             (SELECT distinct box_code from wms_stock s
             <include refid="stock1"/>
             and s.box_code !='')
+            and s.stay_stock_qty + s.stock_qty > s.pick_qty
             AND s.is_deleted ='0'
             order by s.box_code
         </if>
@@ -193,6 +195,7 @@
             (SELECT distinct lpn_code from wms_stock s
             <include refid="stock1"/>
             and s.lpn_code !='' and s.box_code !='')
+            and s.stay_stock_qty + s.stock_qty > s.pick_qty
             AND s.is_deleted ='0'
             order by s.lpn_code,s.box_code
         </if>

@@ -137,10 +137,8 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	}
 
 	@Override
-	public List<Location> getLocationByZoneType(List<Long> locIdList, Integer zoneType) {
-		AssertUtil.notEmpty(locIdList, "判断是否有虚拟库位失败，库位集合为空");
-
-		return locationMapper.getLocationByZoneType(locIdList, zoneType);
+	public List<Location> getLocationByZoneType(List<Long> locIdList, Long whId, Integer zoneType) {
+		return locationMapper.getLocationByZoneType(locIdList, whId, zoneType);
 	}
 
 	@Override

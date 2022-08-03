@@ -6,6 +6,7 @@ import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
+import org.nodes.wms.biz.task.AgvTask;
 import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaMultiRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,6 +36,7 @@ public class InStockBizImpl implements InStockBiz {
 	private final StockBiz stockBiz;
 	private final ReceiveLogBiz receiveLogBiz;
 	private final StockQueryBiz stockQueryBiz;
+	private final AgvTask agvTask;
 
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	@Override
@@ -86,6 +89,7 @@ public class InStockBizImpl implements InStockBiz {
 			}
 
 		}
+		List<Stock> stockList = new ArrayList<>();
 		for (ReceiveDetailLpnItemDto item : request.getReceiveDetailLpnItemDtoList()) {
 			ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(item.getReceiveDetailId());
 			ReceiveHeader header = receiveBiz.selectReceiveHeaderById(detail.getReceiveId());
@@ -102,7 +106,7 @@ public class InStockBizImpl implements InStockBiz {
 			// 生成清点记录
 			ReceiveLog receiveLog = receiveLogBiz.newReceiveLog(request, item, lpn, header, detail);
 			// 调用库存函数（for begin：一条执行一次）
-			stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_BOX, receiveLog);
+			stockList.add(stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_BOX, receiveLog));
 			//有单收货更新头表和明细信息
 			if (hasReceiveHeaderId) {
 				// 更新收货单明细状态（for end：一条执行一次）
@@ -118,7 +122,7 @@ public class InStockBizImpl implements InStockBiz {
 			receiveBiz.log(logType, header, detail, receiveLog);
 
 		}
-
+		agvTask.putwayToSchedule(stockList);
 
 	}
 

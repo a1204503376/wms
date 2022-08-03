@@ -8,6 +8,7 @@ import org.nodes.wms.biz.putway.PutwayBiz;
 import org.nodes.wms.biz.putway.modular.PutwayFactory;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
+import org.nodes.wms.biz.task.AgvTask;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.putway.PutawayLogDao;
 import org.nodes.wms.dao.putway.dto.input.AddByBoxShelfRequest;
@@ -39,6 +40,7 @@ public class PutwayBizImpl implements PutwayBiz {
 	private final PutawayLogDao putawayLogDao;
 	private final StockQueryBiz stockQueryBiz;
 	private final PutwayFactory putwayFactory;
+	private final AgvTask agvTask;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -90,6 +92,7 @@ public class PutwayBizImpl implements PutwayBiz {
 		//获取目标库位信息
 		Location targetLocation = locationBiz.findByLocId(request.getLocId());
 		List<BoxDto> boxDtoList = request.getBoxList();
+		List<Stock> targetStockList = new ArrayList<>();
 		for (BoxDto boxDto : boxDtoList) {
 			List<Long> stockIdList = boxDto.getStockIdList();
 			for (Long stockId : stockIdList) {
@@ -106,7 +109,8 @@ public class PutwayBizImpl implements PutwayBiz {
 						.collect(Collectors.toList());
 				}
 				// 调用库存移动
-				stockBiz.moveStock(stock, serialNoList, qty, targetLocation, StockLogTypeEnum.STOCK_TO_INSTOCK_RECE, null, null, null);
+				Stock targetStock = stockBiz.moveStock(stock, serialNoList, qty, targetLocation, StockLogTypeEnum.STOCK_TO_INSTOCK_RECE, null, null, null);
+				targetStockList.add(targetStock);
 				// 生成上架记录
 				PutawayLog putawayLog = new PutawayLog();
 				putawayLog.setLpnCode(stock.getLpnCode());
@@ -118,6 +122,7 @@ public class PutwayBizImpl implements PutwayBiz {
 				putawayLogDao.save(putawayLog);
 			}
 		}
+		agvTask.putwayToSchedule(targetStockList);
 
 
 	}

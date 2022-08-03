@@ -151,7 +151,7 @@ public class StockManagerController {
 	/**
 	 * 库存余额: 按序列号显示导出
 	 *
-	 * @param stockBySerialPageQuery
+	 * @param stockBySerialPageQuery 查询参数
 	 * @param response               响应对象
 	 */
 	@PostMapping("exportBySerial")
