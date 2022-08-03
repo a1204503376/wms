@@ -10,20 +10,9 @@
 			</u-form-item>
 		</u--form>
 		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">
-			序列号列表({{serialNumberList.length}}/{{params.surplusQty}})</h4>
-		<!-- ${index + 1} -->
+			序列号列表({{serialNumberList.length}}/{{params.qty}})</h4>
 		<u-list style="height: 650rpx;">
 			<u-list-item v-for="(item, index) in serialNumberList" :key="index" :style="item.backgroundColor">
-				<!-- 	<u-cell :title="item.serialNumber">
-					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="10" class="left-text-one-line">
-							<view class="demo-layout bg-purple-light font-in-page">{{item.serialNumber}}</view>
-						</u-col>
-						<u-col span="2">
-							<view class="demo-layout bg-purple font-in-page" @click="remove(index)">删除</view>
-						</u-col>
-					</u-row>
-				</u-cell> -->
 				<u-swipe-action>
 					<u-swipe-action-item :options="buttenName" @click="remove(index)">
 						<view class="swipe-action u-border-top u-border-bottom" :style="item.backgroundColor">
@@ -52,6 +41,7 @@
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import receive from '@/api/inStock/receiveByPcs.js'
+	import stockManage from '@/api/stock/stockManage.js'
 	import tool from '@/utils/tool.js'
 	export default {
 		components: {
@@ -65,15 +55,13 @@
 				}],
 				params: {},
 				serialNumberList: [],
-				serialNumberLists: ['1', '11', '111', '1111', '001', '11111', '111111'],
+				serialNumberLists: [],
 				receiveDetailId: '',
 				receiveId: ''
 			}
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
-			this.receiveDetailId = parse.receiveDetailId;
-			this.receiveId = parse.receiveId;
 			this.params = parse;
 		},
 		onUnload() {
@@ -124,25 +112,9 @@
 							_this.params.whCode = uni.getStorageSync('warehouse').whCode;
 							_this.params.whId = uni.getStorageSync('warehouse').whId;
 							console.log('标准移动序列号采集成功')
-							// receive.submitReceiptByPcs(_this.params).then(data => {
-							// 	if (data.data.allReceivieIsAccomplish && data.data
-							// 		.currentReceivieIsAccomplish) {
-							// 		//当前收货单收货收货完毕
-							// 		_this.clearEmitKeyDown();
-							// 		_this.$u.func.navigateBackTo(3);
-							// 		return;
-							// 	} else if (data.data.currentReceivieIsAccomplish) {
-							// 		//当前收货单详情收货收货完毕
-							// 		_this.clearEmitKeyDown();
-							// 		_this.$u.func.navigateBackTo(2);
-							// 		return;
-							// 	} else {
-							// 		//当前收货单详情收货部分收货,返回收货单收货页面
-							// 		_this.clearEmitKeyDown();
-							// 		_this.esc();
-							// 	}
-
-							// });
+							stockManage.stockMove(_this.params).then(data => {
+								console.log(data)
+							})
 						} else {
 							_this.$u.func.showToast({
 								title: '序列号已存在'
@@ -198,7 +170,7 @@
 				});
 			},
 			clearEmitKeyDown() {
-				this.emitKeyDown = function(){};
+				this.emitKeyDown = function() {};
 			},
 			emitKeyDown(e) {
 				if (e.key == 'Enter') {
