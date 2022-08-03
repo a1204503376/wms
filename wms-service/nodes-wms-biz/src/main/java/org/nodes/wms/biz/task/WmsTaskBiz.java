@@ -14,9 +14,11 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
+ * wms工作任务BIZ
  *
+ * @author nodesc
  */
-public interface TaskBiz {
+public interface WmsTaskBiz {
 	/**
 	 * 任务详情分页
 	 *
