@@ -64,7 +64,7 @@
 			},
 			submit() {
 				uni.setStorageSync('warehouse', this.warehouse);
-				uni.$u.func.routeNavigateTo('/pages/home/home');
+				uni.$u.func.routeReLaunch('/pages/home/home');
 			},
 			radioChange(row) {
 				this.warehouse = row.detail.value;

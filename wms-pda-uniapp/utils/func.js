@@ -93,7 +93,7 @@ const install = (Vue, vm) => {
 		})
 	}
 	
-	// 跳转路由前检查登录状态 有历史路由的跳转
+	// 跳转路由前检查登录状态 跳转页面 但是当前页面不计入路由进行管理
 	const routeRedirectTo = (url,param) => {
 		if(tool.isNotEmpty(param)){
 			url+='?param='+JSON.stringify(param);
