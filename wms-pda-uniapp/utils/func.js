@@ -202,7 +202,7 @@ const install = (Vue, vm) => {
 				image: data.image || '',
 				mask: data.mask || false,
 				position: data.position || 'center',
-				duration: data.duration || 1500,
+				duration: data.duration || 35000,
 				success: () => {
 					setTimeout(() => {
 						if (data.back) return uni.navigateBack()
