@@ -2,7 +2,7 @@ package org.nodes.wms.biz.task.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.wms.biz.task.TaskBiz;
+import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.dao.task.TaskDetailDao;
 import org.nodes.wms.dao.task.dto.input.AgainIssuedlTask;
 import org.nodes.wms.dao.task.dto.input.CancelTaskRequest;
@@ -21,7 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class TaskBizImpl implements TaskBiz {
+public class WmsTaskBizImpl implements WmsTaskBiz {
 	private final TaskDetailDao taskDetailDao;
 
 	@Override
