@@ -1,7 +1,7 @@
 package org.nodes.wms.pdaController.basics;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.dao.basics.sku.dto.input.FindSkuByCodeRequest;
 import org.nodes.wms.dao.basics.sku.entities.Sku;

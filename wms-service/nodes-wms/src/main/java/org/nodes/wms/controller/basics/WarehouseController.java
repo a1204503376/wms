@@ -3,7 +3,7 @@ package org.nodes.wms.controller.basics;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;

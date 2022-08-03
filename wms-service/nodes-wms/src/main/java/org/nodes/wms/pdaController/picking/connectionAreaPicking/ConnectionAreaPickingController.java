@@ -2,8 +2,8 @@ package org.nodes.wms.pdaController.picking.connectionAreaPicking;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
-import org.nodes.wms.biz.outstock.pickingbyconnection.ConnectionAreaPickingBiz;
+import org.nodes.core.constant.WmsApiPath;
+import org.nodes.wms.biz.outstock.OutStockBiz;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.ConnectionAreaPickingRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.OutboundAccessAreaLocationQueryRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.OutboundAccessAreaLocationQueryResponse;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_PDA_API + "/connectionAreaPicking")
 public class ConnectionAreaPickingController {
-	private final ConnectionAreaPickingBiz connectionAreaPickingBiz;
+	private final OutStockBiz outStockBiz;
 
 	/**
 	 * PDA接驳区拣货:出库接驳区拣货库位查询
@@ -32,7 +32,7 @@ public class ConnectionAreaPickingController {
 	 */
 	@PostMapping("/OutboundAccessAreaLocationQuery")
 	public R<IPage<OutboundAccessAreaLocationQueryResponse>> outboundAccessAreaLocationQuery(@RequestBody OutboundAccessAreaLocationQueryRequest request, Query query) {
-		return R.data(connectionAreaPickingBiz.selectLocationByConnectionArea(request, query));
+		return R.data(outStockBiz.selectLocationByConnectionArea(request, query));
 	}
 
 
@@ -44,7 +44,7 @@ public class ConnectionAreaPickingController {
 	@ApiLog("接驳区拣货")
 	@PostMapping("/ConnectionAreaPicking")
 	public void connectionAreaPicking(@RequestBody ConnectionAreaPickingRequest request) {
-		connectionAreaPickingBiz.connectionAreaPickAction(request);
+		outStockBiz.connectionAreaPick(request);
 	}
 
 
@@ -56,7 +56,7 @@ public class ConnectionAreaPickingController {
 	@ApiLog("PDA接驳区移动")
 	@PostMapping("/ConnectionAreaMove")
 	public void connectionAreaMove(@RequestBody ConnectionAreaPickingRequest request) {
-		connectionAreaPickingBiz.connectionAreaMoveAction(request);
+		outStockBiz.connectionAreaMove(request);
 	}
 
 }

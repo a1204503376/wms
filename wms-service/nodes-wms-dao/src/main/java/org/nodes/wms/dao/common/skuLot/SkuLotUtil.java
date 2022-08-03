@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.dao.basics.skulot.SkuLotValDao;
-import org.nodes.wms.dao.basics.skulot.constant.SkuLotConstant;
+import org.nodes.core.constant.SkuLotConstant;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotVal;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
