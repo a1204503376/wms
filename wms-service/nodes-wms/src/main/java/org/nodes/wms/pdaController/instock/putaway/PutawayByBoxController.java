@@ -5,7 +5,7 @@ import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.putway.PutwayBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.common.stock.StockUtil;
-import org.nodes.wms.dao.putway.constant.PutwayConstant;
+import org.nodes.core.constant.PutwayConstant;
 import org.nodes.wms.dao.putway.dto.input.AddByBoxShelfRequest;
 import org.nodes.wms.dao.putway.dto.input.PutawayByBoxRequest;
 import org.nodes.wms.dao.putway.dto.output.PutawayByBoxResponse;

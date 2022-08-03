@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.putway.constant;
+package org.nodes.core.constant;
 
 
 /**

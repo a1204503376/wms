@@ -1,6 +1,4 @@
-package org.nodes.wms.dao.basics.location.constant;
-
-import org.bouncycastle.jcajce.provider.asymmetric.dsa.DSASigner.stdDSA;
+package org.nodes.core.constant;
 
 /**
  * 库位常量类
