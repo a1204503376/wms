@@ -87,9 +87,19 @@ public class WmsTask extends TenantEntity {
 	private Long fromLocId;
 
 	/**
+	 * 来源库位编码
+	 */
+	private String fromLocCode;
+
+	/**
 	 * 目标库位id
 	 */
 	private Long toLocId;
+
+	/**
+	 * 目标库位code
+	 */
+	private String toLocCode;
 
 	/**
 	 * 箱码

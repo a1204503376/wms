@@ -14,6 +14,7 @@ import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.log.dto.input.NoticeMessageRequest;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.dto.QueryAndFrozenEnableOutboundRequest;
 import org.nodes.wms.dao.task.dto.SchedulingBroadcastNotificationRequest;
@@ -117,15 +118,24 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		Location tempLoc = locationBiz.getInTransitLocation(wmsTask.getWhId());
 		for (Stock stock : stockList) {
 			stockBiz.moveAllStock(stock, stock.getBoxCode(), wmsTask.getTaskId().toString(), tempLoc,
-				StockLogTypeEnum.STOCK_AGV_MOVE, null, null, null);
+				StockLogTypeEnum.STOCK_AGV_MOVE, wmsTask.getTaskId(), null, null);
 		}
 	}
 
 	private void onSuccess(WmsTask wmsTask) {
 		// 修改任务状态
-
+		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.COMPLETED);
 		// 将中间库位的库存移动到目标库位
+		Location targetLoc = locationBiz.findByLocId(wmsTask.getToLocId());
+		List<Stock> stockList = stockQueryBiz.findStockByTaskId(wmsTask.getTaskId());
+		for (Stock stock : stockList){
+			stock.setTaskId("");
+			stock.setStockStatus(StockStatusEnum.NORMAL);
+			stockBiz.moveAllStock(stock, stock.getBoxCode(), stock.getLpnCode(), targetLoc,
+				StockLogTypeEnum.STOCK_AGV_MOVE, wmsTask.getTaskId(), null, null);
+		}
 		// 解冻目标库位
+		locationBiz.unfreezeLocByTask(wmsTask.getTaskId().toString());
 	}
 
 	private void onException(WmsTask wmsTask) {
