@@ -55,11 +55,13 @@ public class AgvTask {
 			return;
 		}
 
-		WmsTask putwayTask = wmsTaskFactory.create(stocks.get(0));
+		WmsTask putwayTask = wmsTaskFactory.create(stocks);
 		wmsTaskDao.save(putwayTask);
 		// 调用上架策略生成目标库位，并把目标库位保存到任务表中
 		Location targetLoc = putwayStrategyActuator.run(BigDecimal.ZERO, stocks);
 		if (!targetLoc.getLocId().equals(locationBiz.getUnknowLocation(stocks.get(0).getWhId()).getLocId())) {
+			putwayTask.setToLocId(targetLoc.getLocId());
+			putwayTask.setToLocCode(targetLoc.getLocCode());
 			// 如果计算得到了目标库位，则发送到调度系统
 			if (sendToSchedule(Collections.singletonList(putwayTask))) {
 				putwayTask.setTaskState(WmsTaskStateEnum.ISSUED);
