@@ -10,7 +10,6 @@ import org.nodes.core.base.entity.Dept;
 import org.nodes.core.base.service.IDeptService;
 import org.nodes.core.base.vo.DeptVO;
 import org.nodes.core.base.wrapper.DeptWrapper;
-import org.nodes.core.constant.CommonConstant;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.cache.utils.CacheUtil;
@@ -94,7 +93,7 @@ public class DeptController extends BladeController {
 	public R<IPage<DeptVO>> page(@ApiIgnore @RequestParam Map<String, Object> params, Query query) {
 		IPage<Dept> basePage = deptService.page(Condition.getPage(query), Condition.getQueryWrapper(params, Dept.class)
 			.lambda()
-			.eq(Dept::getParentId, CommonConstant.TOP_PARENT_ID));
+			.eq(Dept::getParentId, org.nodes.core.constant.AppConstant.TOP_PARENT_ID));
 		IPage<DeptVO> page = DeptWrapper.build().pageVO(basePage);
 		if (Func.isNotEmpty(page) && Func.isNotEmpty(page.getRecords())) {
 			List<Dept> deptList = deptService.list(Condition.getQueryWrapper(new Dept())
@@ -104,7 +103,7 @@ public class DeptController extends BladeController {
 				long childrenSize = deptList.stream().filter(u->{
 					return u.getParentId().equals(item.getId());
 				}).count();
-				item.setHasChildren(childrenSize > CommonConstant.TOP_PARENT_ID);
+				item.setHasChildren(childrenSize > org.nodes.core.constant.AppConstant.TOP_PARENT_ID);
 			});
 		}
 		return R.data(page);

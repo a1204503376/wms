@@ -1,8 +1,8 @@
 package org.nodes.wms.pdaController.picking.pickingByBox;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
-import org.nodes.wms.biz.outstock.pickingbybox.PickingByBoxBiz;
+import org.nodes.core.constant.WmsApiPath;
+import org.nodes.wms.biz.outstock.OutStockBiz;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.PickingByBoxRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.PickingByBoxResponse;
 import org.springblade.core.log.annotation.ApiLog;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_PDA_API + "/pickingByBox")
 public class PdaPickingByBoxController {
-	private final PickingByBoxBiz pickingByBoxBiz;
+	private final OutStockBiz outStockBiz;
 
 	/**
 	 * PDA按箱拣货：按箱拣货
@@ -31,6 +31,6 @@ public class PdaPickingByBoxController {
 	@ApiLog("PDA按箱拣货")
 	@PostMapping("/pickingByBox")
 	public R<PickingByBoxResponse> pickingByBox(@RequestBody PickingByBoxRequest request) {
-		return R.data(pickingByBoxBiz.pickingByBoxAction(request));
+		return R.data(outStockBiz.pickingByBox(request));
 	}
 }

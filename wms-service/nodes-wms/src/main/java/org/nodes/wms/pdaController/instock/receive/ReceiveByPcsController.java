@@ -2,7 +2,7 @@ package org.nodes.wms.pdaController.instock.receive;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.instock.InStockBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;

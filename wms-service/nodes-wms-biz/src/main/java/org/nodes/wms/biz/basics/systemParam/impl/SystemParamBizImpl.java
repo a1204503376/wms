@@ -5,7 +5,7 @@ import org.nodes.core.base.entity.Param;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.systemParam.SystemParamBiz;
 import org.nodes.wms.dao.basics.systemParam.SystemParamDao;
-import org.nodes.wms.dao.basics.systemParam.constant.SystemParamConstant;
+import org.nodes.core.constant.SystemParamConstant;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 

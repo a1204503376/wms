@@ -2,8 +2,10 @@ package org.nodes.wms.biz.stock.merge;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
@@ -37,6 +39,15 @@ public class DefaultStockMergeStrategy implements StockMergeStrategy {
 		return match(StockStatusEnum.NORMAL, receiveLog.getWoId(),
 			receiveLog.getLocId(), receiveLog.getSkuId(), receiveLog.getBoxCode(),
 			receiveLog.getLpnCode(), receiveLog);
+	}
+
+	@Override
+	public Stock matchSameStock(LogSoPick pickLog, Location pickToLoc){
+		AssertUtil.notNull(pickLog, "根据清点记录查询库存失败,拣货记录为空");
+		AssertUtil.notNull(pickToLoc, "根据清点记录查询库存失败,出库集货区为空");
+
+		return match(pickLog.getStockStatus(), pickLog.getWoId(), pickToLoc.getLocId(),
+			pickLog.getSkuId(), pickLog.getBoxCode(), pickLog.getLpnCode(), pickLog);
 	}
 
 	private <T> Stock match(StockStatusEnum stockStatus, Long woId, Long locId,

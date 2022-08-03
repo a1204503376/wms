@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.basics.systemParam.constant;
+package org.nodes.core.constant;
 
 /**
  * 系统参数key的常量

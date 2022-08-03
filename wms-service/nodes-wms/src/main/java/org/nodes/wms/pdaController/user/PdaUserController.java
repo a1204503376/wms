@@ -1,7 +1,7 @@
 package org.nodes.wms.pdaController.user;
 
 import lombok.AllArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.biz.user.UserBiz;
 import org.nodes.wms.dao.User.dto.input.EditUserLoginStatusRequest;

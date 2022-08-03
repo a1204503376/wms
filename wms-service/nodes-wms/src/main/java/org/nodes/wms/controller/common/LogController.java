@@ -3,7 +3,7 @@ package org.nodes.wms.controller.common;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.dao.common.log.dto.input.LogActionPageQuery;
 import org.nodes.wms.dao.common.log.dto.input.LogApiPageQuery;

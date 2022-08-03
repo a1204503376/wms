@@ -140,6 +140,7 @@
 			},
 			clickItem(row) {
 				this.clearEmitKeyDown();
+				uni.setStorageSync('soDetail', '');
 				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingByPcs', row);
 			},
 			scannerCallback(no) {

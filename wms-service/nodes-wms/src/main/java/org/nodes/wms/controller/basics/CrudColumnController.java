@@ -1,7 +1,7 @@
 package org.nodes.wms.controller.basics;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.crudcolumn.CrudColumnBiz;
 import org.nodes.wms.dao.basics.crudcolumn.dto.CrudColumnRequest;
 import org.nodes.wms.dao.basics.crudcolumn.dto.CrudColumnResponse;

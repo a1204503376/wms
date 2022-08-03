@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.basics.zone.constant;
+package org.nodes.core.constant;
 
 /**
  * 库区常量

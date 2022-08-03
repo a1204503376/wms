@@ -1,7 +1,7 @@
 package org.nodes.wms.pdaController.user;
 
 import lombok.AllArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.BarcodeRule.SysBarcodeRuleBiz;
 import org.nodes.wms.dao.basics.BarcodeRule.dto.output.SysBarcodeRuleResponse;
 import org.springblade.core.tool.api.R;

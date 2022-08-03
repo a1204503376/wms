@@ -3,7 +3,7 @@ package org.nodes.wms.controller.basics;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.core.tool.validation.Update;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.dao.basics.location.dto.input.*;

@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.basics.skulot.constant;
+package org.nodes.core.constant;
 
 public class SkuLotConstant {
 	/**

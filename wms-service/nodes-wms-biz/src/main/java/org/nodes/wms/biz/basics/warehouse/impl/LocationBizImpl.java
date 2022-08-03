@@ -10,7 +10,7 @@ import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.biz.basics.warehouse.modular.LocationFactory;
 import org.nodes.wms.dao.basics.location.LocationDao;
-import org.nodes.wms.dao.basics.location.constant.LocationConstant;
+import org.nodes.core.constant.LocationConstant;
 import org.nodes.wms.dao.basics.location.dto.input.LocationAddOrEditRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationExcelRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
@@ -301,7 +301,7 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public void unfreezeLocByTask(String taskId) {
-		locationDao.updateLocFlag(taskId, LocationConstant.LOC_FLAG_NORMAL);
+		locationDao.updateLocFlag(taskId, LocationConstant.LOC_FLAG_NORMAL, true);
 	}
 
     @Override

@@ -1,7 +1,7 @@
 package org.nodes.wms.pdaController.stock.freezeOrUnFreeze;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.dao.stock.dto.input.*;
 import org.springblade.core.log.annotation.ApiLog;

@@ -21,7 +21,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.*;
 import jodd.util.StringPool;
 import lombok.AllArgsConstructor;
-import org.nodes.core.base.cache.MenuCache;
 import org.nodes.core.base.entity.Menu;
 import org.nodes.core.base.entity.TopMenu;
 import org.nodes.core.base.service.IMenuService;
@@ -30,8 +29,6 @@ import org.nodes.core.base.vo.CheckedTreeVO;
 import org.nodes.core.base.vo.GrantTreeVO;
 import org.nodes.core.base.vo.MenuVO;
 import org.nodes.core.base.wrapper.MenuWrapper;
-import org.nodes.core.constant.CommonConstant;
-import org.nodes.core.tool.utils.NodesUtil;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.launch.constant.AppConstant;
@@ -121,7 +118,7 @@ public class MenuController extends BladeController {
 	public R<IPage<MenuVO>> page(@ApiIgnore @RequestParam Map<String, Object> params, Query query) {
 		LambdaQueryWrapper<Menu> queryWrapper = Condition.getQueryWrapper(params, Menu.class)
 			.lambda()
-			.eq(Menu::getParentId, CommonConstant.TOP_PARENT_ID)
+			.eq(Menu::getParentId, org.nodes.core.constant.AppConstant.TOP_PARENT_ID)
 			.func(sql -> {
 				if (!SecureUtil.isDeveloper()) {
 					sql.eq(Menu::getIsVisible, 0);
