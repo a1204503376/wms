@@ -14,10 +14,12 @@ import org.nodes.wms.dao.lendreturn.mapper.LogNoReturnMapper;
 import org.springblade.core.mp.base.BaseEntity;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.tool.utils.Func;
+import org.springframework.stereotype.Repository;
 
 /**
  * 未归还记录 Dao接口 实现类
  */
+@Repository
 public class LogNoReturnDaoImpl
 	extends BaseServiceImpl<LogNoReturnMapper, LogNoReturn>
 	implements LogNoReturnDao {
