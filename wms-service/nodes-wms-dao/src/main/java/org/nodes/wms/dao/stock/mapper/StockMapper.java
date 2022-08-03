@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
+import org.nodes.wms.dao.stock.dto.input.StockBySerialPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
+import org.nodes.wms.dao.stock.dto.output.StockBySerialPageResponse;
 import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springframework.stereotype.Repository;
@@ -68,5 +70,14 @@ public interface StockMapper extends BaseMapper<Stock> {
 	 * @return 库存信息
 	 */
 	List<StockPageResponse> getStockResponseByBoxOrByLpn(@Param("query") StockPageQuery stockPageQuery);
+
+	/**
+	 * 库存余额按序列号显示获取分页
+	 *
+	 * @param page                   分页对象
+	 * @param stockBySerialPageQuery 查询参数
+	 * @return 分页
+	 */
+	Page<StockBySerialPageResponse> getSerialPage(IPage<?> page, @Param("query") StockBySerialPageQuery stockBySerialPageQuery);
 }
 

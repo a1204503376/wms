@@ -32,6 +32,26 @@ public class SoDetailForDistResponse implements Serializable {
 	private String skuCode;
 
 	/**
+	 * 物品名称
+	 */
+	private String skuName;
+
+	/**
+	 * 物品规格
+	 */
+	private String skuSpec;
+
+	/**
+	 * 计量单位编码
+	 */
+	private String umCode;
+
+	/**
+	 * 分配量
+	 */
+	private BigDecimal pickPlanQty;
+
+	/**
 	 * 剩余量
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
@@ -42,8 +62,4 @@ public class SoDetailForDistResponse implements Serializable {
 	 */
 	private BigDecimal planQty;
 
-	/**
-	 * 计量单位编码
-	 */
-	private String umCode;
 }

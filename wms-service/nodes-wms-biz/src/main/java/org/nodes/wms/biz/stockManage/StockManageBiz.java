@@ -129,4 +129,11 @@ public interface StockManageBiz {
 	 * @param lpnCode 托盘号
 	 */
 	void decideStockLpn(String lpnCode);
+
+	/**
+	 * 库存余额：PC按件移动
+	 *
+	 * @param stockPcMoveRequest PC按件移动参数
+	 */
+    void stockMoveByPc(StockPcMoveRequest stockPcMoveRequest);
 }

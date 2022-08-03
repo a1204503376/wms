@@ -7,8 +7,8 @@ import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.nodes.wms.dao.task.enums.ProcTypeEnum;
 import org.nodes.wms.dao.task.enums.TaskDetailStatusEnum;
-import org.nodes.wms.dao.task.enums.TaskStateEnum;
-import org.nodes.wms.dao.task.enums.TypeCdEnum;
+import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
+import org.nodes.wms.dao.task.enums.WmsTaskTypeEnum;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -24,7 +24,7 @@ public class TaskDetailPageResponse extends BaseSkuLot implements Serializable {
 	/**
 	 * 任务类别(1上架2拣货3盘点)
 	 */
-	private TypeCdEnum typeCd;
+	private WmsTaskTypeEnum typeCd;
 	/**
 	 * 任务执行方式
 	 */
@@ -32,7 +32,7 @@ public class TaskDetailPageResponse extends BaseSkuLot implements Serializable {
 	/**
 	 * 任务状态(0=正常1=关闭2=已取消3=任务异常)
 	 */
-	private TaskStateEnum taskState;
+	private WmsTaskStateEnum taskState;
 
 	/**
 	 * 任务明细状态

@@ -142,10 +142,11 @@
                             <el-form-item label="长度" prop="locLength">
                                 <el-input
                                     size="medium"
+                                    oninput="value=value.replace(/[^\d]/g,'')"
                                     v-model="form.params.locLength"
                                     placeholder="请输入长度"
-                                    :clearable="true"
-                                ><template slot="append">mm</template>
+                                    :clearable="true">
+                                    <template slot="append">mm</template>
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -154,9 +155,10 @@
                                 <el-input
                                     size="medium"
                                     v-model="form.params.locHigh"
+                                    oninput="value=value.replace(/[^\d]/g,'')"
                                     placeholder="请输入高度"
-                                    :clearable="true"
-                                ><template slot="append">mm</template>
+                                    :clearable="true">
+                                    <template slot="append">mm</template>
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -164,10 +166,11 @@
                             <el-form-item label="宽度" prop="locWide">
                                 <el-input
                                     size="medium"
+                                    oninput="value=value.replace(/[^\d]/g,'')"
                                     :clearable="true"
                                     v-model="form.params.locWide"
-                                    placeholder="请输入宽度"
-                                ><template slot="append">mm</template>
+                                    placeholder="请输入宽度">
+                                    <template slot="append">mm</template>
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -178,12 +181,12 @@
                                 <el-input
                                     size="medium"
                                     :clearable="true"
+                                    oninput="value=value.replace(/[^\d]/g,'')"
                                     v-model="form.params.locLevel"
                                     maxlength="50"
                                     placeholder="请输入货架层"
                                     show-word-limit
-                                    type="text"
-                                >
+                                    type="text">
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -193,11 +196,12 @@
                                     size="medium"
                                     :clearable="true"
                                     v-model="form.params.locColumn"
+                                    oninput="value=value.replace(/[^\d]/g,'')"
                                     maxlength="50"
                                     placeholder="请输入货架列"
                                     show-word-limit
-                                    type="text"
-                                ></el-input>
+                                    type="text">
+                                </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -206,11 +210,12 @@
                                     size="medium"
                                     :clearable="true"
                                     v-model="form.params.locBank"
+                                    oninput="value=value.replace(/[^\d]/g,'')"
                                     maxlength="50"
                                     placeholder="请输入货架排"
                                     show-word-limit
-                                    type="text"
-                                ></el-input>
+                                    type="text">
+                                </el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -220,9 +225,10 @@
                                 <el-input
                                     size="medium"
                                     v-model="form.params.capacity"
+                                    oninput="value=value.replace(/[^\d]/g,'')"
                                     placeholder="请输入容量"
-                                    :clearable="true"
-                                ><template slot="append">mm³</template>
+                                    :clearable="true">
+                                    <template slot="append">mm³</template>
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -231,9 +237,10 @@
                                 <el-input
                                     size="medium"
                                     v-model="form.params.loadWeight"
+                                    oninput="value=value.replace(/[^\d]/g,'')"
                                     placeholder="请输入载重量"
-                                    :clearable="true"
-                                ><template slot="append">kg</template>
+                                    :clearable="true">
+                                    <template slot="append">kg</template>
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -296,13 +303,11 @@
                     <el-button
                         :loading="loading"
                         type="primary"
-                        @click="onSubmit"
-                    >保 存
+                        @click="onSubmit">保 存
                     </el-button>
                     <el-button
                         :loading="loading"
-                        @click="onClose"
-                    >关 闭
+                        @click="onClose">关 闭
                     </el-button>
                 </el-row>
             </el-footer>

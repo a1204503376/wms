@@ -21,6 +21,7 @@ import org.nodes.wms.dao.stock.SerialDao;
 import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.StockLogDao;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
+import org.nodes.wms.dao.stock.dto.input.StockBySerialPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.dto.output.*;
@@ -213,11 +214,11 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	public List<Stock> findEnableStockByZoneType(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
 			List<String> zoneTypeList, SkuLotBaseEntity skuLot) {
 		List<Long> zoneIdList = null;
-		if (Func.isNotEmpty(zoneTypeList)){
+		if (Func.isNotEmpty(zoneTypeList)) {
 			List<Zone> zoneList = zoneBiz.findByZoneType(zoneTypeList);
 			zoneIdList = zoneList.stream()
-				.map(Zone::getZoneId)
-				.collect(Collectors.toList());
+					.map(Zone::getZoneId)
+					.collect(Collectors.toList());
 		}
 
 		return findEnableStockByZone(whId, skuId, stockStatusEnum, zoneIdList, skuLot);
@@ -252,7 +253,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public Page<StockPageResponse> getStockPage(Query query, StockPageQuery stockPageQuery) {
-		//按箱显示货按lpn显示
+		// 按箱显示或按lpn显示
 		if (Func.isNotEmpty(stockPageQuery.getIsShowByBox()) || Func.isNotEmpty(stockPageQuery.getIsShowByLpn())) {
 			List<StockPageResponse> stockPageResponseList = stockDao.getStockResponseByBoxOrByLpn(stockPageQuery);
 			Page<StockPageResponse> page = new Page<>();
@@ -260,8 +261,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 			page.setTotal(stockPageResponseList.size());
 			return page;
 		}
-		Page<StockPageResponse> page = stockDao.page(Condition.getPage(query), stockPageQuery);
-		return page;
+		return stockDao.page(Condition.getPage(query), stockPageQuery);
 	}
 
 	@Override
@@ -282,6 +282,12 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public List<Stock> findStockByIds(List<Long> stockIds) {
 		return stockDao.getStockById(stockIds);
+	}
+
+	@Override
+	public IPage<StockBySerialPageResponse> getStockBySerialPage(Query query,
+			StockBySerialPageQuery stockBySerialPageQuery) {
+		return stockDao.page(Condition.getPage(query), stockBySerialPageQuery);
 	}
 
 	@Override
@@ -354,9 +360,14 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	public List<Stock> findEnableStockBySkuLot(SkuLotBaseEntity skuLot) {
 		List<Location> allPickToLocation = locationBiz.getAllPickToLocation();
 		List<Long> pickToLocIdList = allPickToLocation.stream()
-			.map(Location::getLocId)
-			.collect(Collectors.toList());
-		return stockDao.getEnableStockBySkuLotAndExculdeLoc(pickToLocIdList, skuLot);
+				.map(Location::getLocId)
+				.collect(Collectors.toList());
+		return stockDao.getEnableStockBySkuLotAndExcludeLoc(pickToLocIdList, skuLot);
+	}
+
+	@Override
+	public List<Stock> findStockByTaskId(Long taskId) {
+		return stockDao.getStockByTaskId(taskId);
 	}
 
 }

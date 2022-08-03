@@ -97,10 +97,6 @@ export default {
             }
             this.$emit('selectValChange', val);
         },
-        clear() {
-            console.log("clear");
-            // TODO 默认清空方法将 selectVal 变成了 "", 调教表单报错
-        }
     }
 }
 </script>

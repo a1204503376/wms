@@ -83,5 +83,22 @@ export const stockUnFrozen = (data) => {
     })
 }
 
+export const pageBySerial = (page, params) => {
+    return request({
+        url: '/api/wms/stock/pageBySerial',
+        method: 'post',
+        params: page,
+        data: params
+    })
+}
+
+export const exportBySerial = (data) => {
+    return request({
+        url: '/api/wms/stock/exportBySerial',
+        method: 'post',
+        data: data,
+        responseType: 'blob'
+    })
+}
 
 

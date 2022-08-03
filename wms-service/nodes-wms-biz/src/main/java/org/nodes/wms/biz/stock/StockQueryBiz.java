@@ -7,6 +7,7 @@ import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.putway.dto.output.CallAgvResponse;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
+import org.nodes.wms.dao.stock.dto.input.StockBySerialPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.dto.output.*;
@@ -31,6 +32,14 @@ public interface StockQueryBiz {
 	 * @return Stock
 	 */
 	Stock findStockById(Long stockId);
+
+	/**
+	 * 根据任务id获取库存
+	 * 
+	 * @param taskId 任务id
+	 * @return 库存集合
+	 */
+	List<Stock> findStockByTaskId(Long taskId);
 
 	/**
 	 * 根据库位获取库位的所有库存
@@ -234,4 +243,13 @@ public interface StockQueryBiz {
 	 * @return 库存集合
 	 */
 	List<Stock> findStockByIds(List<Long> stockIds);
+
+	/**
+	 * 库存余额按序列号显示分页信息
+	 *
+	 * @param query                  分页参数
+	 * @param stockBySerialPageQuery 查询条件
+	 * @return 分页对象
+	 */
+	IPage<StockBySerialPageResponse> getStockBySerialPage(Query query, StockBySerialPageQuery stockBySerialPageQuery);
 }

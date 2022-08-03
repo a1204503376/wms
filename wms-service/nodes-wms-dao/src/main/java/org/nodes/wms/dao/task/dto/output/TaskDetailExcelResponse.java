@@ -7,8 +7,8 @@ import lombok.Data;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.nodes.wms.dao.task.enums.ProcTypeEnum;
 import org.nodes.wms.dao.task.enums.TaskDetailStatusEnum;
-import org.nodes.wms.dao.task.enums.TaskStateEnum;
-import org.nodes.wms.dao.task.enums.TypeCdEnum;
+import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
+import org.nodes.wms.dao.task.enums.WmsTaskTypeEnum;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -28,7 +28,7 @@ public class TaskDetailExcelResponse implements Serializable {
 	@ColumnWidth(15)
 	@ExcelProperty({"任务类别"})
 	private String typeCdValue;
-	private TypeCdEnum typeCd;
+	private WmsTaskTypeEnum typeCd;
 	/**
 	 * 任务执行方式
 	 */
@@ -42,7 +42,7 @@ public class TaskDetailExcelResponse implements Serializable {
 	@ColumnWidth(15)
 	@ExcelProperty({"任务状态"})
 	private String taskStateValue;
-	private TaskStateEnum taskState;
+	private WmsTaskStateEnum taskState;
 	/**
 	 * 任务明细状态
 	 */

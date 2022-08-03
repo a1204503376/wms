@@ -8,6 +8,7 @@ import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.dao.stock.dto.input.*;
+import org.nodes.wms.dao.stock.dto.output.StockBySerialPageResponse;
 import org.nodes.wms.dao.stock.dto.output.StockMoveResponse;
 import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
@@ -97,18 +98,18 @@ public class StockManagerController {
 	 * 库存余额：按件移动
 	 */
 	@PostMapping("move")
-	public R<String> move(@Valid @RequestBody StockMoveRequest stockMoveRequest) {
-//		return stockManageBiz.stockMove(stockMoveRequest);
-		return null;
+	public R<String> move(@Valid @RequestBody StockPcMoveRequest stockPcMoveRequest) {
+		stockManageBiz.stockMoveByPc(stockPcMoveRequest);
+		return R.success("操作成功");
 	}
 
 	/**
 	 * 库存余额：按箱移动
 	 */
-	@PostMapping("/moveByBoxCode")
+	@PostMapping("/moveByBox")
 	public R<String> moveByBoxCode(@Valid @RequestBody StockMoveByBoxCodeRequest stockMoveByBoxCodeRequest) {
-//		return stockManageBiz.stockMoveByBox(stockMoveByBoxCodeRequest);
-		return null;
+		stockManageBiz.stockMoveByBox(stockMoveByBoxCodeRequest);
+		return R.success("操作成功");
 	}
 
 	/**
@@ -133,6 +134,29 @@ public class StockManagerController {
 	public R<String> stockUnFrozen(@RequestBody StockThawAndFrozenDto stockThawAndFrozenDto) {
 		stockManageBiz.stockUnFrozen(stockThawAndFrozenDto);
 		return R.success("操作成功");
+	}
+
+	/**
+	 * 库存余额: 按序列号显示
+	 *
+	 * @param query                  分页参数
+	 * @param stockBySerialPageQuery 查询条件
+	 * @return 分页返回对象
+	 */
+	@PostMapping("/pageBySerial")
+	public R<IPage<StockBySerialPageResponse>> pageBySerial(Query query, @RequestBody StockBySerialPageQuery stockBySerialPageQuery) {
+		return R.data(stockQueryBiz.getStockBySerialPage(query, stockBySerialPageQuery));
+	}
+
+	/**
+	 * 库存余额: 按序列号显示导出
+	 *
+	 * @param stockBySerialPageQuery
+	 * @param response               响应对象
+	 */
+	@PostMapping("exportBySerial")
+	public void exportBySerial(@RequestBody StockBySerialPageQuery stockBySerialPageQuery, HttpServletResponse response) {
+		stockBiz.exportBySerial(stockBySerialPageQuery, response);
 	}
 
 

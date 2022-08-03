@@ -110,10 +110,6 @@ import fileDownload from "js-file-download";
                 </el-row>
             </template>
             <template v-slot:batchBtn>
-                <el-button icon="el-icon-plus" size="mini" type="primary" @click="showByBox">按箱显示
-                </el-button>
-                <el-button icon="el-icon-plus" size="mini" type="primary" @click="showByLpn">按LPN显示
-                </el-button>
                 <el-button size="mini" type="primary" @click="moveByPiece">
                     按件移动
                 </el-button>
@@ -125,6 +121,12 @@ import fileDownload from "js-file-download";
                 </el-button>
                 <el-button size="mini" type="primary" @click="thaw">
                     库存解冻
+                </el-button>
+                <el-button icon="el-icon-plus" size="mini" type="primary" @click="showByBox">按箱显示
+                </el-button>
+                <el-button icon="el-icon-plus" size="mini" type="primary" @click="showByLpn">按LPN显示
+                </el-button>
+                <el-button icon="el-icon-plus" size="mini" type="primary" @click="showBySerial">按序列号显示
                 </el-button>
                 <el-button icon="el-icon-upload2" plain size="mini"
                            @click="onUpload">导入
@@ -227,29 +229,21 @@ import fileDownload from "js-file-download";
         <dialog-column v-bind="columnShowHide" @close="onColumnShowHide"></dialog-column>
         <template>
             <el-dialog
-                v-dialogDrag="true"
+                :append-to-body="true"
                 :close-on-click-modal="false"
-                :custom-class="dialog.isFullScreen ? 'maxDialog' : '' "
+                :custom-class="'maxDialog'"
                 :show-close="true"
+                :title="dialog.title"
                 :visible.sync="dialog.showDialog"
-                append-to-body
                 @close="onClose">
-                <span slot="title" class="dialog-footer">
-                    <div class="icon">
-                        <span>{{ dialog.title }}</span>
-                        <el-button class="button_enlarge" type="text">
-                            <i :class="dialog.isFullScreen ? 'icon-tuichuquanping' : 'icon-quanping'"
-                               @click="enlarge">
-                            </i>
-                        </el-button>
-                    </div>
-                </span>
                 <div style="margin-top: 10px;">
                     <el-table
                         ref="multipleTable"
                         v-loading="dialog.loading"
                         :data="dialog.gridData"
                         :header-cell-style="{'background-color': '#fafafa'}"
+                        :height="dialog.isMoveByBox ? 390 : ''"
+                        :max-height="dialog.isMoveByBox ? 400 : ''"
                         :span-method="dialogGridDataSpanMethod"
                         border
                         element-loading-spinner="el-icon-loading"
@@ -269,12 +263,13 @@ import fileDownload from "js-file-download";
                     </el-table>
                     <el-table
                         :data="dialog.childrenData"
-                        :height="
-                            dialog.isMoveByBox ?  dialog.isFullScreen ? 435 : 100
-                                                : dialog.isFullScreen ? 435 : 350"
+                        :height="dialog.isMoveByBox ? 120 : 435"
+                        :max-height="dialog.isMoveByBox ? 120 : 420"
                         border
                         size="medium">
-                        <el-table-column prop="id" width="50">
+                        <el-table-column
+                            v-if="!dialog.isMoveByBox" prop="id"
+                            width="50">
                             <template slot="header">
                                 <el-button
                                     circle
@@ -305,9 +300,10 @@ import fileDownload from "js-file-download";
                                 <nodes-serial
                                     v-model="scope.row['serials']"
                                     :collapse="false"
-                                    size="medium"
                                     :stock-id="dialog.gridData[0].stockId"
-                                    style="width: 100%">
+                                    size="medium"
+                                    style="width: 100%"
+                                    v-on:getSerialDataSource="getSerialDataSource">
                                 </nodes-serial>
                             </template>
                         </el-table-column>
@@ -317,19 +313,9 @@ import fileDownload from "js-file-download";
                             width="180">
                             <template v-slot="scope">
                                 <nodes-location
-                                    size="medium"
-                                    v-model="scope.row['locId']">
-                                </nodes-location>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            v-if="dialog.isMoveByBox"
-                            label="目标箱码">
-                            <template v-slot="scope">
-                                <el-input
-                                    v-model="scope.row['targetBoxCode']"
+                                    v-model="scope.row['locId']"
                                     size="medium">
-                                </el-input>
+                                </nodes-location>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -349,11 +335,15 @@ import fileDownload from "js-file-download";
                             <template v-slot="scope">
                                 <el-input
                                     v-model="scope.row['targetLpnCode']"
+                                    placeholder="请输入目标LPN"
                                     size="medium">
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column label="操作" width="80">
+                        <el-table-column
+                            label="操作"
+                            width="80"
+                            v-if="!dialog.isMoveByBox">
                             <template v-slot="scope">
                                 <el-button
                                     size="mini"
@@ -371,16 +361,16 @@ import fileDownload from "js-file-download";
             </el-dialog>
         </template>
         <template>
-            <el-dialog title="选择类型" :visible.sync="form1.popShow" append-to-body width="800px">
+            <el-dialog :visible.sync="form1.popShow" append-to-body title="选择类型" width="800px">
                 <el-form :model="form1">
-                    <el-form-item label="解冻类型" label-width="120px" v-if="form1.thawShow">
+                    <el-form-item v-if="form1.thawShow" label="解冻类型" label-width="120px">
                         <el-select v-model="form1.stockType" placeholder="请选择解冻类型">
                             <el-option label="整批次解冻" value="byBatch"></el-option>
                             <el-option label="库位解冻" value="byLoc"></el-option>
                             <el-option label="按箱解冻" value="byBox"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="冻结类型" label-width="120px" v-if="form1.freezeShow">
+                    <el-form-item v-if="form1.freezeShow" label="冻结类型" label-width="120px">
                         <el-select v-model="form1.stockType" placeholder="请选择冻结类型">
                             <el-option label="整批次冻结" value="byBatch"></el-option>
                             <el-option label="库位冻结" value="byLoc"></el-option>
@@ -388,7 +378,7 @@ import fileDownload from "js-file-download";
                         </el-select>
                     </el-form-item>
                     <el-form-item label="备注" label-width="120px">
-                        <el-input type="textarea" style="width: 600px" v-model="form1.remark"></el-input>
+                        <el-input v-model="form1.remark" style="width: 600px" type="textarea"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -429,7 +419,6 @@ import NodesLocation from "@/components/wms/select/NodesLocation";
 import "../../../../public/cdn/iconfont/avue/iconfont.css"
 import NodesSerial from "@/components/wms/select/NodesSerial";
 import NodesZone from "@/components/wms/select/NodesZone";
-
 
 export default {
     name: "customer",
@@ -608,9 +597,9 @@ export default {
                 visible: false,
             },
             dialog: {
-                isFullScreen: false,
                 showDialog: false,
                 loading: false,
+                title: '',
                 gridData: [],
                 children: {
                     actualQty: 0,
@@ -620,7 +609,7 @@ export default {
                 },
                 isMoveByBox: false, //是否按箱移动，默认为false
                 childrenData: [],
-                serials: [], //序列号
+                serials: [], //序列号组件中所有的序列号
                 //合并对象
                 merge: {
                     mergedArray: [],
@@ -772,8 +761,6 @@ export default {
                 remark: ""
             }
         },
-
-
         onChange(val) {
             if (val == null) {
                 this.dateRange = [];
@@ -789,6 +776,11 @@ export default {
         showByLpn() {
             this.$router.push({
                 name: '按LPN显示',
+            });
+        },
+        showBySerial() {
+            this.$router.push({
+                name: '按序列号显示',
             });
         },
         getSummaries(param) {
@@ -868,6 +860,7 @@ export default {
                     this.dialog.gridData = res.data.data;
                 })
                 this.merge(this.dialog.gridData);
+                this.dialog.childrenData.push({id: 1, targetLocId: [], targetLpnCode: ''});
             } else {
                 this.dialog.title = '按件移动';
                 await getStockDataByStockId(rows[0].stockId).then((res) => {
@@ -877,9 +870,6 @@ export default {
             }
         },
         // ==========================已下是 dialog 中的方法=================================
-        enlarge() {
-            this.dialog.isFullScreen = !this.dialog.isFullScreen;
-        },
         dialogGridDataSpanMethod({row, column, rowIndex, columnIndex}) {
             if (this.dialog.merge.mergedArray.length > 0) {
                 if (column.label === '箱码') {
@@ -894,55 +884,47 @@ export default {
         },
         merge(data) {
             if (data.length > 0) {
-                let mergedArray = this.dialog.merge.mergedArray;
-                let mergedIndex = this.dialog.merge.mergedIndex;
                 for (let i = 0; i < data.length; i++) {
                     if (i === 0) {
-                        mergedArray.push(1);
-                        mergedIndex = 0;
+                        this.dialog.merge.mergedArray.push(1);
+                        this.dialog.merge.mergedIndex = 0;
                     } else {
                         if (data[i].boxCode === data[i - 1].boxCode) {
-                            mergedArray[mergedIndex] += 1;
-                            mergedArray.push(0);
+                            this.dialog.merge.mergedArray[this.dialog.merge.mergedIndex] += 1;
+                            this.dialog.merge.mergedArray.push(0);
                         } else {
-                            mergedArray.push(1);
-                            mergedIndex = i;
+                            this.dialog.merge.mergedArray.push(1);
+                            this.dialog.merge.mergedIndex = i;
                         }
                     }
                 }
             }
         },
         rowAdd() {
-            if (this.dialog.isMoveByBox) {
-                if (this.dialog.childrenData.length !== 0) {
-                    return;
-                }
-                this.dialog.childrenData.push({id: 1, targetBoxCode: '', targetLocId: [], targetLpnCode: ''});
-            } else {
-                let id = this.dialog.childrenData.length + 1;
-                if (this.dialog.serials.length === 0) {
-                    this.dialog.children.min = 0;
-                    this.dialog.children.max = this.dialog.gridData[0].stockEnable;
-                } else {
-                    this.dialog.children.min = 1;
-                    this.dialog.children.max = 1;
-                }
-                if (this.dialog.serials.length > 0 && id > this.dialog.serials.length) {
-                    this.$message.warning(`转移数量不能超过序列号的数量！`);
-                    return;
-                }
-                if (this.dialog.serials.length > 0 && id > this.dialog.gridData[0].stockEnable) {
-                    this.$message.warning(`转移数量不能超过可用数量！`);
-                    return;
-                }
-                let temp = this.dialog.childrenData.filter(x => x.qty === 0);
-                if (temp.length > 0) {
-                    this.$message.warning(`请先编辑第${temp[0].id}行的数据！`);
-                    return;
-                }
-                this.qtyChange();
-                this.dialog.childrenData.push({id: id, qty: this.dialog.children.actualQty, serials: [], locId: ''});
+            let id = this.dialog.childrenData.length + 1;
+            if (this.dialog.serials.length === 0) {
+                this.dialog.children.min = 0;
+                this.dialog.children.max = this.dialog.gridData[0].stockEnable;
             }
+            if (this.dialog.serials.length > 0 && id > this.dialog.serials.length) {
+                this.$message.warning(`转移数量不能超过序列号的数量！`);
+                return;
+            }
+            if (this.dialog.serials.length > 0 && id > this.dialog.gridData[0].stockEnable) {
+                this.$message.warning(`转移数量不能超过可用数量！`);
+                return;
+            }
+            let temp = this.dialog.childrenData.filter(x => x.qty === 0);
+            if (temp.length > 0) {
+                this.$message.warning(`请先编辑第${temp[0].id}行的数据！`);
+                return;
+            }
+            this.qtyChange();
+            this.dialog.childrenData.push({id: id, qty: this.dialog.children.actualQty, serials: [], locId: ''});
+
+        },
+        getSerialDataSource(data) {
+            this.dialog.serials = data;
         },
         dialogHandleRemove(index) {
             this.dialog.childrenData.splice(index, 1);
@@ -961,6 +943,13 @@ export default {
                 max: 0,
             };
             this.dialog.childrenData = [];
+            this.resetMerge()
+        },
+        resetMerge() {
+            this.dialog.merge = {
+                mergedArray: [],
+                mergedIndex: 0,
+            };
         },
         qtyChange(row) {
             let temp = this.dialog.childrenData.map(function (x) {
@@ -978,7 +967,7 @@ export default {
                     });
                     let sum = temp.reduce((n, m) => n + m, 0);
                     row['qty'] = this.dialog.children.actualQtyBak - sum;
-                    this.actualQty = 0;
+                    this.dialog.children.actualQty = 0;
                 }, 1);
             } else {
                 if (this.dialog.children.actualQtyBak !== 0) {
@@ -998,30 +987,27 @@ export default {
                 return;
             }
             if (this.dialog.isMoveByBox) {
-                if (func.isEmpty(childrenData[0].targetBoxCode)) {
-                    this.$message.warning("请填写目标箱码");
-                    return;
-                }
                 if (func.isEmpty(childrenData[0].targetLocId)) {
                     this.$message.warning("请选择目标库位编码");
                     return;
                 }
-                if (func.isEmpty(childrenData[0].targetBoxCode)) {
-                    this.$message.warning("请填写目标LPN");
-                    return;
-                }
                 let moveByBoxObj = {
                     boxCodeList: [...new Set(this.dialog.gridData.map(item => item.boxCode))],
-                    targetBoxCode: this.dialog.childrenData[0].targetBoxCode,
                     targetLocId: this.dialog.childrenData[0].targetLocId,
                     targetLpnCode: this.dialog.childrenData[0].targetLpnCode,
                 }
                 moveByBox(moveByBoxObj).then((res) => {
-
+                    this.onClose();
+                    this.refreshTable();
+                    this.$message.success(res.data.msg);
                 });
             } else {
                 for (const i in childrenData) {
-                    if (childrenData[i].serials.length !== childrenData[i].qty) {
+                    if (this.dialog.serials.length !== 0 && childrenData[i].serials.length === 0) {
+                        this.$message.warning(`第${childrenData[i].id}行，请选择序列号`);
+                        return;
+                    }
+                    if (this.dialog.serials.length !== 0 && childrenData[i].serials.length !== childrenData[i].qty) {
                         this.$message.warning(`第${childrenData[i].id}行，转移数量不等于选中的序列号数量`);
                         return;
                     }
@@ -1041,12 +1027,21 @@ export default {
                     }
                 }
 
+                let locIdList = childrenData.map(item => item.locId);
+                for (const i in locIdList) {
+                    if (func.isEmpty(locIdList[i])) {
+                        this.$message.error(`第${childrenData[i].id}行，请选择库位`)
+                        return;
+                    }
+                }
                 let moveObj = {
                     stockId: this.dialog.gridData[0].stockId,
                     stockMoveDataList: this.dialog.childrenData
                 }
                 move(moveObj).then((res) => {
-
+                    this.onClose();
+                    this.refreshTable();
+                    this.$message.success(res.data.msg);
                 })
             }
         },
@@ -1056,14 +1051,6 @@ export default {
 
 <style lang="scss" scoped>
 
-.button_enlarge {
-    color: #909399;
-    float: right;
-    line-height: 22px;
-    margin-right: 22px;
-    font-size: 16px;
-}
-
 /deep/ .maxDialog {
     margin-right: 19px;
     width: 87.5%;
@@ -1071,7 +1058,6 @@ export default {
     height: 79%;
 }
 
-//:class="dialog.isFullScreen ? 'children_maxTable': 'children_minTable'"
 /deep/ .maxDialog .el-dialog__body {
     max-height: 82% !important;
 }

@@ -11,8 +11,10 @@ import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
+import org.nodes.wms.dao.stock.dto.input.StockBySerialPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
+import org.nodes.wms.dao.stock.dto.output.StockBySerialPageResponse;
 import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
@@ -36,7 +38,7 @@ public class StockDaoImpl
 
 	@Override
 	public List<Stock> getStockById(List<Long> stockIds) {
-		AssertUtil.notEmpty(stockIds, "库存查询失败，stockids is null");
+		AssertUtil.notEmpty(stockIds, "库存查询失败，stockIds is null");
 		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
 		queryWrapper.in(Stock::getStockId, stockIds);
 		return super.list(queryWrapper);
@@ -181,13 +183,13 @@ public class StockDaoImpl
 				.eq(Stock::getSkuId, skuId);
 
 		if (Func.isEmpty(boxCode)) {
-			queryWrapper.apply("(box_code is null)");
+			queryWrapper.apply("(box_code is null or box_code = '')");
 		} else {
 			queryWrapper.eq(Stock::getBoxCode, boxCode);
 		}
 
 		if (Func.isEmpty(lpnCode)) {
-			queryWrapper.apply("(lpn_code is null)");
+			queryWrapper.apply("(lpn_code is null or lpn_code = '')");
 		} else {
 			queryWrapper.eq(Stock::getLpnCode, lpnCode);
 		}
@@ -350,13 +352,46 @@ public class StockDaoImpl
 	}
 
 	@Override
-	public List<Stock> getEnableStockBySkuLotAndExculdeLoc(List<Long> exculdeLocId, SkuLotBaseEntity skuLot) {
+	public List<Stock> getEnableStockBySkuLotAndExcludeLoc(List<Long> excludeLocId, SkuLotBaseEntity skuLot) {
 		LambdaQueryWrapper<Stock> stockQuery = getStockQuery();
-		if (Func.isNotEmpty(exculdeLocId)){
-			stockQuery.notIn(Stock::getLocId, exculdeLocId);
+		if (Func.isNotEmpty(excludeLocId)) {
+			stockQuery.notIn(Stock::getLocId, excludeLocId);
 		}
 
 		SkuLotUtil.applySql(stockQuery, skuLot);
 		return super.list(stockQuery);
+	}
+
+	@Override
+	public Page<StockBySerialPageResponse> page(IPage<?> page, StockBySerialPageQuery stockBySerialPageQuery) {
+		return super.baseMapper.getSerialPage(page, stockBySerialPageQuery);
+	}
+
+	@Override
+	public void updateStock(List<Long> stockIds, StockStatusEnum status, boolean isUpdateLpn, Long taskId) {
+		AssertUtil.notEmpty(stockIds, "update stock status error, stock list is empty");
+		AssertUtil.notNull(taskId, "update stock status error, task id is null");
+
+		Stock stock = new Stock();
+		stock.setStockStatus(status);
+		stock.setTaskId(taskId.toString());
+		if (isUpdateLpn) {
+			stock.setLpnCode(taskId.toString());
+		}
+
+		UpdateWrapper<Stock> updateWrapper = Wrappers.update();
+		updateWrapper.lambda().in(Stock::getStockId, stockIds);
+		if (!super.update(stock, updateWrapper)) {
+			throw new ServiceException("库存状态更新失败,请再次重试");
+		}
+	}
+
+	@Override
+	public List<Stock> getStockByTaskId(Long taskId) {
+		AssertUtil.notNull(taskId, "根据任务id查询库存失败,taskId不能为空");
+
+		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
+		queryWrapper.eq(Stock::getTaskId, taskId);
+		return super.list(queryWrapper);
 	}
 }

@@ -137,6 +137,8 @@
                         <el-col :span="8">
                             <el-form-item label="长度" prop="locLength">
                                 <el-input v-model="form.params.locLength"
+                                          oninput="value=value.replace(/[^\d]/g,'')"
+                                          maxLength="10"
                                           size="medium" placeholder="请输入内容">
                                     <template slot="append">mm</template>
                                 </el-input>
@@ -145,6 +147,8 @@
                         <el-col :span="8">
                             <el-form-item label="高度" prop="locHigh">
                                 <el-input v-model="form.params.locHigh"
+                                          oninput="value=value.replace(/[^\d]/g,'')"
+                                          maxLength="10"
                                           size="medium" placeholder="请输入内容">
                                     <template slot="append">mm</template>
                                 </el-input>
@@ -153,6 +157,8 @@
                         <el-col :span="8">
                             <el-form-item label="宽度" prop="locWide">
                                 <el-input v-model="form.params.locWide"
+                                          oninput="value=value.replace(/[^\d]/g,'')"
+                                          maxLength="10"
                                           size="medium" placeholder="请输入内容">
                                     <template slot="append">mm</template>
                                 </el-input>
@@ -164,6 +170,7 @@
                             <el-form-item label="货架层" prop="locLevel">
                                 <el-input
                                     v-model="form.params.locLevel"
+                                    oninput="value=value.replace(/[^\d]/g,'')"
                                     maxlength="50"
                                     placeholder="请输入内容"
                                     show-word-limit
@@ -176,6 +183,7 @@
                             <el-form-item label="货架列" prop="locColumn">
                                 <el-input
                                     v-model="form.params.locColumn"
+                                    oninput="value=value.replace(/[^\d]/g,'')"
                                     maxlength="50"
                                     placeholder="请输入内容"
                                     show-word-limit
@@ -188,6 +196,7 @@
                             <el-form-item label="货架排" prop="locBank">
                                 <el-input
                                     v-model="form.params.locBank"
+                                    oninput="value=value.replace(/[^\d]/g,'')"
                                     maxlength="50"
                                     placeholder="请输入内容"
                                     show-word-limit
@@ -201,6 +210,8 @@
                         <el-col :span="8">
                             <el-form-item label="容量" prop="capacity">
                                 <el-input v-model="form.params.capacity"
+                                          oninput="value=value.replace(/[^\d]/g,'')"
+                                          maxLength="10"
                                           size="medium" placeholder="请输入内容">
                                     <template slot="append">mm³</template>
                                 </el-input>
@@ -209,6 +220,8 @@
                         <el-col :span="8">
                             <el-form-item label="载重量" prop="loadWeight">
                                 <el-input v-model="form.params.loadWeight"
+                                          oninput="value=value.replace(/[^\d]/g,'')"
+                                          maxLength="10"
                                           size="medium" placeholder="请输入内容">
                                     <template slot="append">kg</template>
                                 </el-input>
