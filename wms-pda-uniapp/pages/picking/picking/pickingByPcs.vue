@@ -68,8 +68,13 @@
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
 		},
-		onShow: function(option) {
-			console.log(option)
+		onShow() {
+			var soDetail = uni.getStorageSync('soDetail');
+			if(tool.isNotEmpty(soDetail)){
+				this.params.skuCode = soDetail.skuCode;
+				this.params.qty = soDetail.planQty;
+				this.params.skuLot1=soDetail.skuLot1;
+			}
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		onBackPress(event) {

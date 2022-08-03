@@ -3,7 +3,7 @@ package org.nodes.wms.pdaController.picking.pickingByPcs;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.constant.WmsApiPath;
-import org.nodes.wms.biz.outstock.pickingbypcs.PickingByPcsBiz;
+import org.nodes.wms.biz.outstock.OutStockBiz;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.EsitSerialNumberRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindAllPickingRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindPickingBySoBillIdRequest;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_PDA_API + "/pickingByPcs")
 public class PdaPickingController {
-	private final PickingByPcsBiz pickingByPcsBiz;
+	private final OutStockBiz outStockBiz;
 
 	/**
 	 * PDA拣货：拣货分页查询
@@ -39,7 +39,7 @@ public class PdaPickingController {
 	 */
 	@PostMapping("/findAllPickingByNo")
 	public R<IPage<FindAllPickingResponse>> findAllPickingByNo(@RequestBody FindAllPickingRequest request, Query query) {
-		return R.data(pickingByPcsBiz.selectAllPickingByNo(request, query));
+		return R.data(outStockBiz.selectAllPickingByNo(request, query));
 	}
 
 	/**
@@ -51,7 +51,7 @@ public class PdaPickingController {
 	@ApiLog("PDA按件拣货")
 	@PostMapping("/pickingByPcs")
 	public R<PickingByBoxResponse> pickingByPcs(@RequestBody PickingByBoxRequest request) {
-		return R.data(pickingByPcsBiz.pickingByPcsAction(request));
+		return R.data(outStockBiz.pickingByPcs(request));
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class PdaPickingController {
 	 */
 	@PostMapping("/findPickingBySoBillId")
 	public R<IPage<FindPickingBySoBillIdResponse>> findPickingBySoBillId(@RequestBody FindPickingBySoBillIdRequest request, Query query) {
-		return R.data(pickingByPcsBiz.selectPickingBySoBillId(request, query));
+		return R.data(outStockBiz.selectPickingBySoBillId(request, query));
 	}
 
 	/**
