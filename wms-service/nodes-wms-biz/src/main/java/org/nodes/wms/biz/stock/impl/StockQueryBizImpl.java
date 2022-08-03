@@ -261,8 +261,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 			page.setTotal(stockPageResponseList.size());
 			return page;
 		}
-		Page<StockPageResponse> page = stockDao.page(Condition.getPage(query), stockPageQuery);
-		return page;
+		return stockDao.page(Condition.getPage(query), stockPageQuery);
 	}
 
 	@Override
@@ -363,7 +362,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		List<Long> pickToLocIdList = allPickToLocation.stream()
 				.map(Location::getLocId)
 				.collect(Collectors.toList());
-		return stockDao.getEnableStockBySkuLotAndExculdeLoc(pickToLocIdList, skuLot);
+		return stockDao.getEnableStockBySkuLotAndExcludeLoc(pickToLocIdList, skuLot);
 	}
 
 	@Override

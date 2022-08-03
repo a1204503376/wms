@@ -38,7 +38,7 @@ public class StockDaoImpl
 
 	@Override
 	public List<Stock> getStockById(List<Long> stockIds) {
-		AssertUtil.notEmpty(stockIds, "库存查询失败，stockids is null");
+		AssertUtil.notEmpty(stockIds, "库存查询失败，stockIds is null");
 		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
 		queryWrapper.in(Stock::getStockId, stockIds);
 		return super.list(queryWrapper);
@@ -183,13 +183,13 @@ public class StockDaoImpl
 				.eq(Stock::getSkuId, skuId);
 
 		if (Func.isEmpty(boxCode)) {
-			queryWrapper.apply("(box_code is null)");
+			queryWrapper.apply("(box_code is null or box_code = '')");
 		} else {
 			queryWrapper.eq(Stock::getBoxCode, boxCode);
 		}
 
 		if (Func.isEmpty(lpnCode)) {
-			queryWrapper.apply("(lpn_code is null)");
+			queryWrapper.apply("(lpn_code is null or lpn_code = '')");
 		} else {
 			queryWrapper.eq(Stock::getLpnCode, lpnCode);
 		}
@@ -352,10 +352,10 @@ public class StockDaoImpl
 	}
 
 	@Override
-	public List<Stock> getEnableStockBySkuLotAndExculdeLoc(List<Long> exculdeLocId, SkuLotBaseEntity skuLot) {
+	public List<Stock> getEnableStockBySkuLotAndExcludeLoc(List<Long> excludeLocId, SkuLotBaseEntity skuLot) {
 		LambdaQueryWrapper<Stock> stockQuery = getStockQuery();
-		if (Func.isNotEmpty(exculdeLocId)) {
-			stockQuery.notIn(Stock::getLocId, exculdeLocId);
+		if (Func.isNotEmpty(excludeLocId)) {
+			stockQuery.notIn(Stock::getLocId, excludeLocId);
 		}
 
 		SkuLotUtil.applySql(stockQuery, skuLot);
@@ -368,14 +368,14 @@ public class StockDaoImpl
 	}
 
 	@Override
-	public void updateStock(List<Long> stockIds, StockStatusEnum status, boolean isUpadteLpn, Long taskId) {
+	public void updateStock(List<Long> stockIds, StockStatusEnum status, boolean isUpdateLpn, Long taskId) {
 		AssertUtil.notEmpty(stockIds, "update stock status error, stock list is empty");
 		AssertUtil.notNull(taskId, "update stock status error, task id is null");
 
 		Stock stock = new Stock();
 		stock.setStockStatus(status);
 		stock.setTaskId(taskId.toString());
-		if (isUpadteLpn) {
+		if (isUpdateLpn) {
 			stock.setLpnCode(taskId.toString());
 		}
 

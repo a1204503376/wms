@@ -20,10 +20,16 @@ import java.util.Map;
 /**
  * 库存Dao接口
  *
- * @author caiyun
+ * @author nodesc
  */
 public interface StockDao {
 
+	/**
+	 * 根据stockId获取库存
+	 *
+	 * @param stockIds stock id list
+	 * @return stock集合
+	 */
 	List<Stock> getStockById(List<Long> stockIds);
 
 	/**
@@ -45,9 +51,9 @@ public interface StockDao {
 	/**
 	 * 获取所有库存数据，含冻结的库存。如果出库暂存区为空则表示查询的库存数据包含出库暂存区的
 	 *
-	 * @param boxCodes
-	 * @param excludeLocIdList
-	 * @return
+	 * @param boxCodes         箱码集合
+	 * @param excludeLocIdList 排除的库位id
+	 * @return stock集合
 	 */
 	List<Stock> getStockByBoxCodeExcludeLoc(List<String> boxCodes, List<Long> excludeLocIdList);
 
@@ -56,10 +62,17 @@ public interface StockDao {
 	 *
 	 * @param boxCode   必填，不能为空
 	 * @param locIdList 可为空
-	 * @return
+	 * @return stock集合
 	 */
 	List<Stock> getStockByBoxCode(String boxCode, List<Long> locIdList);
 
+	/**
+	 * 根据箱码查询指定库位的库存
+	 *
+	 * @param boxCodes  箱码，必填
+	 * @param locIdList 库位id集合，如果为空则查询所有的库位
+	 * @return stock集合
+	 */
 	List<Stock> getStockByBoxCode(List<String> boxCodes, List<Long> locIdList);
 
 	/**
@@ -67,16 +80,16 @@ public interface StockDao {
 	 *
 	 * @param boxCode   箱号的后几位
 	 * @param locIdList 库位id
-	 * @return 库存
+	 * @return stock集合
 	 */
 	List<Stock> getStockLeftLikeByBoxCode(String boxCode, List<Long> locIdList);
 
 	/**
 	 * 获取所有库存数据，含冻结的库存。如果出库暂存区为空则表示查询的库存数据包含出库暂存区的
 	 *
-	 * @param lpnCode
-	 * @param excludeLocIdList
-	 * @return
+	 * @param lpnCode          lpn编码
+	 * @param excludeLocIdList 排除的库位id
+	 * @return stock集合
 	 */
 	List<Stock> getStockByLpnCodeExcludeLoc(String lpnCode, List<Long> excludeLocIdList);
 
@@ -85,36 +98,100 @@ public interface StockDao {
 	 *
 	 * @param lpnCode   必填，不能为空
 	 * @param locIdList 可为空
-	 * @return
+	 * @return stock集合
 	 */
 	List<Stock> getStockByLpnCode(String lpnCode, List<Long> locIdList);
 
+	/**
+	 * 根据lpn编码查询指定库位的库存
+	 *
+	 * @param lpnCodes  lpn编码，必填
+	 * @param locIdList 库位id，如果为空则查询所有库位的库存
+	 * @return stock集合
+	 */
 	List<Stock> getStockByLpnCode(List<String> lpnCodes, List<Long> locIdList);
 
 	/**
 	 * 根据箱码查询该LPN上所有的库存，含自身
 	 *
 	 * @param boxCode 必填，不能为空
-	 * @return
+	 * @return stock集合
 	 */
 	List<Stock> getStockOnLpnByBoxCode(String boxCode);
 
+	/**
+	 * 查询库存
+	 *
+	 * @param status  库存状态，必填
+	 * @param woId    货主id，必填
+	 * @param locId   库位id， 必填
+	 * @param skuId   物品id，必填
+	 * @param boxCode 箱码，为空时则查询空箱码的库存，必填
+	 * @param lpnCode lpn编码，为空时则查询空lpn的库存，必填
+	 * @return stock集合
+	 */
 	List<Stock> getStock(StockStatusEnum status, Long woId, Long locId,
-			Long skuId, String boxCode, String lpnCode);
+						 Long skuId, String boxCode, String lpnCode);
 
+	/**
+	 * 根据库位id查找库存
+	 *
+	 * @param locId 库位id，必填
+	 * @return stock集合
+	 */
 	List<Stock> getStockByLocId(Long locId);
 
+	/**
+	 * 保存新的库存
+	 *
+	 * @param stock 库存
+	 * @return stock
+	 */
 	Stock saveNewStock(Stock stock);
 
+	/**
+	 * 根据stockId更新库存信息，stock中如果stockId为空则会抛异常
+	 *
+	 * @param stock 需要更新的库存信息
+	 * @return stock
+	 */
 	Stock updateStock(Stock stock);
 
+	/**
+	 * 更新库存数量
+	 *
+	 * @param stockId      stock id，必填
+	 * @param stockQty     新的上架数量，必填
+	 * @param stayStockQty 新的待上架数量，必填
+	 * @param pickQty      新的下架数量，必填
+	 * @param lastInTime   最近入库时间，非必填
+	 * @param lastOutTime  最近出库时间，分必填
+	 */
 	void updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
-			BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
+					 BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
 
+	/**
+	 * 批量更新库存状态
+	 *
+	 * @param stockIds stock id，必填
+	 * @param status   库存状态，必填
+	 */
 	void updateStock(List<Long> stockIds, StockStatusEnum status);
 
+	/**
+	 * 根据库位查找库存
+	 *
+	 * @param locIdList 库位id，必填
+	 * @return stock集合
+	 */
 	List<Stock> getStockByLocIdList(List<Long> locIdList);
 
+	/**
+	 * 根据stock id获取库存
+	 *
+	 * @param stockId stock id，必填
+	 * @return stock
+	 */
 	Stock getStockById(Long stockId);
 
 	/**
@@ -139,17 +216,39 @@ public interface StockDao {
 	 * 获取导出数据集合
 	 *
 	 * @param stockPageQuery 查询参数
-	 * @return
+	 * @return stock集合
 	 */
 	List<StockPageResponse> getStockResponseByQuery(StockPageQuery stockPageQuery);
 
+	/**
+	 * 查找物品可用库存
+	 *
+	 * @param whId              库房id，必填
+	 * @param skuId             物品id，必填
+	 * @param stockStatusEnum   库存状态，为空标识查询所有状态的库存
+	 * @param zoneIdList        库区id，为空则查询所有库区的库存
+	 * @param skuLot            批属性信息，可为空
+	 * @param excludeZoneIdList 排除的库区id
+	 * @return stock集合
+	 */
 	List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-			List<Long> zoneIdList, SkuLotBaseEntity skuLot,
-			List<Long> excludeZoneIdList);
+									  List<Long> zoneIdList, SkuLotBaseEntity skuLot,
+									  List<Long> excludeZoneIdList);
 
+	/**
+	 * 查询物品可用库存
+	 *
+	 * @param whId              库房id，必填
+	 * @param skuId             物品id，必填
+	 * @param stockStatusEnum   库存状态，为空标识查询所有状态的库存
+	 * @param locationIdList    库位id，为空标识查所有库位的库存
+	 * @param skuLot            批属性信息，非必填
+	 * @param excludeZoneIdList 排除的库区id
+	 * @return stock集合
+	 */
 	List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-			List<Long> locationIdList, SkuLotBaseEntity skuLot,
-			List<Long> excludeZoneIdList);
+										  List<Long> locationIdList, SkuLotBaseEntity skuLot,
+										  List<Long> excludeZoneIdList);
 
 	/**
 	 * 库存余额按箱显示
@@ -162,11 +261,11 @@ public interface StockDao {
 	/**
 	 * 按照批属性查找排除库位中的库存
 	 *
-	 * @param exculdeLocId 排除的库位id,非必填
+	 * @param excludeLocId 排除的库位id,非必填
 	 * @param skuLot       批属性
-	 * @return 库存数据
+	 * @return stock集合
 	 */
-	List<Stock> getEnableStockBySkuLotAndExculdeLoc(List<Long> exculdeLocId, SkuLotBaseEntity skuLot);
+	List<Stock> getEnableStockBySkuLotAndExcludeLoc(List<Long> excludeLocId, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 库存余额按序列号显示获取分页信息
@@ -182,16 +281,16 @@ public interface StockDao {
 	 *
 	 * @param stockIds    库存数据
 	 * @param status      库存状态
-	 * @param isUpadteLpn true:表示用taskId更新lpn的值
+	 * @param isUpdateLpn true:表示用taskId更新lpn的值
 	 * @param taskId      用来替换lpn的值
 	 */
-	void updateStock(List<Long> stockIds, StockStatusEnum status, boolean isUpadteLpn, Long taskId);
+	void updateStock(List<Long> stockIds, StockStatusEnum status, boolean isUpdateLpn, Long taskId);
 
 	/**
 	 * 根据任务id获取库存
-	 * 
-	 * @param taskId
-	 * @return
+	 *
+	 * @param taskId task id
+	 * @return stock集合
 	 */
 	List<Stock> getStockByTaskId(Long taskId);
 }
