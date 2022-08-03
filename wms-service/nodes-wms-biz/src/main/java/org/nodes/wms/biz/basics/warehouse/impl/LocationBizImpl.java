@@ -142,17 +142,6 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
-	public Location getQcLocation(Long whId) {
-		if (Func.isEmpty(whId)) {
-			return null;
-		}
-		List<Location> allQcLocation = getLocationByZoneType(DictCodeConstant.ZONE_TYPE_IN_STOCK_QC_AREA);
-		List<Location> locationList = allQcLocation.stream()
-			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
-		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
-	}
-
-	@Override
 	public Location getPickToLocation(Long whId) {
 		if (Func.isEmpty(whId)) {
 			return null;
