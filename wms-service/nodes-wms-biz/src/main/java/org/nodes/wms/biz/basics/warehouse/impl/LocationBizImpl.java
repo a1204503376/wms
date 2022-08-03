@@ -129,11 +129,6 @@ public class LocationBizImpl implements LocationBiz {
 			.collect(Collectors.toList());
 	}
 
-	@Override
-	public List<Location> getAllQcLocation() {
-		List<String> qcLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_QC);
-		return locationDao.findLocation(qcLocCodeList);
-	}
 
 	@Override
 	public List<Location> getAllPickToLocation() {
@@ -175,7 +170,7 @@ public class LocationBizImpl implements LocationBiz {
 		if (Func.isEmpty(whId)) {
 			return null;
 		}
-		List<Location> allQcLocation = getAllQcLocation();
+		List<Location> allQcLocation = getLocationByZoneType(DictCodeConstant.ZONE_TYPE_IN_STOCK_QC_AREA);
 		List<Location> locationList = allQcLocation.stream()
 			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;

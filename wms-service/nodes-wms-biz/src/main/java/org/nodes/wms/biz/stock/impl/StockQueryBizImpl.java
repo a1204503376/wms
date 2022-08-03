@@ -147,7 +147,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		// 获取所有入库暂存区库位
 		List<Location> allStageList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_IN_STOCK_TS_AREA);
 		// 获取所有入库检验区库位
-		List<Location> allQcList = locationBiz.getAllQcLocation();
+		List<Location> allQcList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_IN_STOCK_QC_AREA);
 		// 获取所有出库暂存区库位
 		List<Location> allPickToList = locationBiz.getAllPickToLocation();
 		// 根据入库暂存区id获取入库暂存区的物品数量和存放天数
