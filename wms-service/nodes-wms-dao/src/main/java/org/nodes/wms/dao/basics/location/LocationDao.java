@@ -141,11 +141,12 @@ public interface LocationDao {
 	/**
 	 * 查找库位列表中指定类型的库位
 	 *
-	 * @param locIdList
-	 * @param zoneType
+	 * @param locIdList 可为空
+	 * @param whId      可为空
+	 * @param zoneType  必填
 	 * @return
 	 */
-	List<Location> getLocationByZoneType(List<Long> locIdList, Integer zoneType);
+	List<Location> getLocationByZoneType(List<Long> locIdList, Long whId, Integer zoneType);
 
 	/**
 	 * 根据库区ID获取该区域的库位
@@ -157,7 +158,7 @@ public interface LocationDao {
 
 	/**
 	 * 根据库位id更新库位状态
-	 * 
+	 *
 	 * @param locId   库位id，必填
 	 * @param locFlag 库位使用标记，必填
 	 * @param taskId  占用的任务id
@@ -166,9 +167,10 @@ public interface LocationDao {
 
 	/**
 	 * 根据taskid更新库位状态
-	 * 
-	 * @param taskId  占用的任务id，必填
-	 * @param locFlag 库位使用标记，必填
+	 *
+	 * @param taskId             占用的任务id，必填
+	 * @param locFlag            库位使用标记，必填
+	 * @param isResetLocFlagDesc true:重置库位标记为空
 	 */
-	void updateLocFlag(String taskId, Integer locFlag);
+	void updateLocFlag(String taskId, Integer locFlag, boolean isResetLocFlagDesc);
 }

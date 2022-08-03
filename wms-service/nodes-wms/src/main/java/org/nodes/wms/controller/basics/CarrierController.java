@@ -2,7 +2,7 @@ package org.nodes.wms.controller.basics;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.carriers.CarrierBiz;
 import org.nodes.wms.dao.basics.carrier.dto.input.*;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierDropDownResponse;

@@ -1,7 +1,7 @@
 package org.nodes.wms.controller.index;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;

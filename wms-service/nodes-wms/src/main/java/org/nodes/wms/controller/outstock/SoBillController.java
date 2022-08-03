@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.core.tool.validation.Update;
 import org.nodes.wms.biz.outstock.OutStockBiz;
 import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;

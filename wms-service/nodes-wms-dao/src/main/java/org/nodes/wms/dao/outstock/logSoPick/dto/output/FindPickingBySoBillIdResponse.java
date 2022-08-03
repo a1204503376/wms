@@ -3,6 +3,7 @@ package org.nodes.wms.dao.outstock.logSoPick.dto.output;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
+import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -11,7 +12,7 @@ import java.math.BigDecimal;
  * Pda根据发货单ID查询出库单明细-响应对象
  **/
 @Data
-public class FindPickingBySoBillIdResponse implements Serializable {
+public class FindPickingBySoBillIdResponse extends BaseSkuLotEntity implements Serializable {
 	private static final long serialVersionUID = 1486941751771336282L;
 	/**
 	 * 发货单ID

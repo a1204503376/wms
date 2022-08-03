@@ -1,7 +1,7 @@
 package org.nodes.wms.pdaController.stock.devanning;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.stockManage.DevanningBiz;
 import org.nodes.wms.dao.stock.dto.input.DevanningSubmitRequest;
 import org.nodes.wms.dao.stock.dto.input.FindAllSerialNumberManageRequest;

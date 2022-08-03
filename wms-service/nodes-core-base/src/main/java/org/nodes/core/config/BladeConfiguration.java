@@ -17,7 +17,7 @@
 package org.nodes.core.config;
 
 
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.springblade.core.secure.registry.SecureRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

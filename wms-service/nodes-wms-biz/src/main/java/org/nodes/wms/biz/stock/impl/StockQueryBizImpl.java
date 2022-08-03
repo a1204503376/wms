@@ -15,6 +15,7 @@ import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.putway.dto.output.BoxDto;
 import org.nodes.wms.dao.putway.dto.output.CallAgvResponse;
 import org.nodes.wms.dao.stock.SerialDao;
@@ -40,6 +41,11 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * 库存查询相关业务
+ *
+ * @author nodesc
+ */
 @Service
 @RequiredArgsConstructor
 public class StockQueryBizImpl implements StockQueryBiz {
@@ -122,6 +128,12 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public Stock findStockOnStage(ReceiveLog receiveLog) {
 		return stockMergeStrategy.matchSameStock(receiveLog);
+	}
+
+	@Override
+	public Stock findStockOnPickTo(LogSoPick pickLog) {
+		Location pickToLoc = locationBiz.getPickToLocation(pickLog.getWhId());
+		return stockMergeStrategy.matchSameStock(pickLog, pickToLoc);
 	}
 
 	@Override

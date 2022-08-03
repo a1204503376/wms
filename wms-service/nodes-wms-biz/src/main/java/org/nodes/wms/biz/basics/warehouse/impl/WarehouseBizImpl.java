@@ -7,7 +7,7 @@ import org.nodes.core.base.entity.Dept;
 import org.nodes.core.base.service.IDeptService;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.dao.basics.location.LocationDao;
-import org.nodes.wms.dao.basics.location.constant.LocationConstant;
+import org.nodes.core.constant.LocationConstant;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.enums.LocTypeEnum;
 import org.nodes.wms.dao.basics.warehouse.SysAuthDao;

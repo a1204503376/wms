@@ -1,4 +1,4 @@
-package org.nodes.core.tool.constant;
+package org.nodes.core.constant;
 
 /**
  * WMS系统API路径常量类

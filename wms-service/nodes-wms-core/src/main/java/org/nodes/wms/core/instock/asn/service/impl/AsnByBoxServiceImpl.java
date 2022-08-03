@@ -7,7 +7,7 @@ import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.base.cache.ParamCache;
 import org.nodes.core.base.entity.Param;
 import org.nodes.core.base.enums.ParamEnum;
-import org.nodes.core.constant.CommonConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.cache.SerialNoCache;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.NodesUtil;
@@ -15,10 +15,6 @@ import org.nodes.wms.core.allot.service.IAllotHeaderService;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
-import org.nodes.wms.dao.basics.sku.entities.Sku;
-import org.nodes.wms.dao.basics.skulot.entities.SkuLotVal;
-import org.nodes.wms.dao.basics.sku.entities.SkuPackage;
-import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.core.basedata.service.ISkuLogService;
 import org.nodes.wms.core.basedata.service.ISkuLotService;
 import org.nodes.wms.core.basedata.service.ISkuLotValService;
@@ -51,7 +47,6 @@ import org.nodes.wms.core.log.system.enums.DataTypeEnum;
 import org.nodes.wms.core.log.system.enums.SystemProcTypeEnum;
 import org.nodes.wms.core.log.system.service.ISystemProcService;
 import org.nodes.wms.core.stock.core.dto.StockAddDTO;
-import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.entity.StockDetail;
 import org.nodes.wms.core.stock.core.enums.EventTypeEnum;
 import org.nodes.wms.core.stock.core.service.IStockDetailService;
@@ -63,9 +58,14 @@ import org.nodes.wms.core.system.service.ITaskService;
 import org.nodes.wms.core.warehouse.cache.LocationCache;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
 import org.nodes.wms.core.warehouse.entity.Location;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackage;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.dao.basics.sku.enums.SkuLevelEnum;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotVal;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.nodes.wms.dao.instock.asn.enums.AsnBillStateEnum;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.secure.BladeUser;
@@ -207,10 +207,10 @@ public class AsnByBoxServiceImpl extends AbsBaseAsnHeaderService<AsnHeaderMapper
 			asnDetail = collect.get(0);
 		}
 		//验证物品明细包装是否相同
-		Long wspId = CommonConstant.TOP_PARENT_ID;
+		Long wspId = WmsAppConstant.TOP_PARENT_ID;
 		BigDecimal sum = BigDecimal.ZERO;
 		for (AsnDetail asnDetail1 : asnDetailList) {
-			if (wspId == CommonConstant.TOP_PARENT_ID) {
+			if (wspId == WmsAppConstant.TOP_PARENT_ID) {
 				wspId = asnDetail1.getWspId();
 			} else if (!wspId.equals(asnDetail1.getWspId())) {
 				throw new ServiceException(String.format(

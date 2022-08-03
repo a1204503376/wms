@@ -1,7 +1,7 @@
 package org.nodes.wms.controller.basics;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
 import org.nodes.wms.dao.application.dto.output.DictionaryResponse;
 import org.springblade.core.tool.api.R;

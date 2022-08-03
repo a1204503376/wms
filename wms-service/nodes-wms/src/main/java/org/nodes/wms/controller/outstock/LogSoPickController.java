@@ -2,7 +2,7 @@ package org.nodes.wms.controller.outstock;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.LogSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickPageResponse;

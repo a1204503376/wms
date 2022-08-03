@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -158,4 +159,19 @@ public class LogSoPick extends SkuLotBaseEntity {
 	 * 库房id
 	 */
 	private Long whId;
+
+	/**
+	 * 库存状态
+	 */
+	private StockStatusEnum stockStatus;
+
+	/**
+	 * 货主id
+	 */
+	private Long woId;
+
+	/**
+	 * 箱码
+	 */
+	private String boxCode;
 }

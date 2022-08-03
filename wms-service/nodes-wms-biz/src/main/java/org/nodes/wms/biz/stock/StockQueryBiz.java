@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.putway.dto.output.CallAgvResponse;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
 import org.nodes.wms.dao.stock.dto.input.StockBySerialPageQuery;
@@ -35,7 +36,7 @@ public interface StockQueryBiz {
 
 	/**
 	 * 根据任务id获取库存
-	 * 
+	 *
 	 * @param taskId 任务id
 	 * @return 库存集合
 	 */
@@ -144,6 +145,14 @@ public interface StockQueryBiz {
 	 * @return Stock
 	 */
 	Stock findStockOnStage(ReceiveLog receiveLog);
+
+	/**
+	 * 根据拣货记录在出库集货区查找库存
+	 *
+	 * @param pickLog 拣货记录
+	 * @return stock
+	 */
+	Stock findStockOnPickTo(LogSoPick pickLog);
 
 	/**
 	 * 根据lpn code查询库存，含出库暂存区的
