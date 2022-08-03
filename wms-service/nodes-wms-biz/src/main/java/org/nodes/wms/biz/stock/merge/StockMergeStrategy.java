@@ -1,6 +1,8 @@
 package org.nodes.wms.biz.stock.merge;
 
+import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.stock.entities.Stock;
 
 /**
@@ -23,4 +25,13 @@ public interface StockMergeStrategy {
 	 * @return 和清点记录相同的库存
 	 */
 	Stock matchSameStock(ReceiveLog receiveLog);
+
+	/**
+	 * 匹配相同的库存
+	 *
+	 * @param pickLog   拣货记录
+	 * @param pickToLoc 出库集货区
+	 * @return 和清点记录相同的库存
+	 */
+	Stock matchSameStock(LogSoPick pickLog, Location pickToLoc);
 }
