@@ -10,7 +10,7 @@
 			</u-search>
 		</template>
 		<u-divider text="" style="margin-top:0rpx;"></u-divider>
-		<u-divider text="暂无数据" v-if="noData"></u-divider>
+		<u-divider text="该单不存在或已经全部收货" v-if="noData"></u-divider>
 		<u-list style="height: 950rpx;"  @scrolltolower="scrolltolower">
 			<view v-for="(item, index) in receiveList" :key="item.receiveNo"  @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
