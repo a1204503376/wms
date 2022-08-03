@@ -26,7 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AgvTask {
 
-	private static final String POST_JOB_API = "/wms/publishJob";
+	private static final String POST_JOB_API = "/api/wms/publishJob";
 
 	private final LocationBiz locationBiz;
 	private final WmsTaskFactory wmsTaskFactory;
