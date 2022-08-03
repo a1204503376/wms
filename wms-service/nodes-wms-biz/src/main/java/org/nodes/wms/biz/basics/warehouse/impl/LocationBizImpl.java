@@ -301,7 +301,7 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public void unfreezeLocByTask(String taskId) {
-		locationDao.updateLocFlag(taskId, LocationConstant.LOC_FLAG_NORMAL);
+		locationDao.updateLocFlag(taskId, LocationConstant.LOC_FLAG_NORMAL, true);
 	}
 
     @Override

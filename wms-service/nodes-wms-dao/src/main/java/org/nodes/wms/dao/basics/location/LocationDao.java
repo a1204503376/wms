@@ -157,7 +157,7 @@ public interface LocationDao {
 
 	/**
 	 * 根据库位id更新库位状态
-	 * 
+	 *
 	 * @param locId   库位id，必填
 	 * @param locFlag 库位使用标记，必填
 	 * @param taskId  占用的任务id
@@ -166,9 +166,10 @@ public interface LocationDao {
 
 	/**
 	 * 根据taskid更新库位状态
-	 * 
-	 * @param taskId  占用的任务id，必填
-	 * @param locFlag 库位使用标记，必填
+	 *
+	 * @param taskId             占用的任务id，必填
+	 * @param locFlag            库位使用标记，必填
+	 * @param isResetLocFlagDesc true:重置库位标记为空
 	 */
-	void updateLocFlag(String taskId, Integer locFlag);
+	void updateLocFlag(String taskId, Integer locFlag, boolean isResetLocFlagDesc);
 }
