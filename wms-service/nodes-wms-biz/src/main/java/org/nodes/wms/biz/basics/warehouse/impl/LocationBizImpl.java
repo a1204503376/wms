@@ -142,17 +142,6 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
-	public Location getPickToLocation(Long whId) {
-		if (Func.isEmpty(whId)) {
-			return null;
-		}
-		List<Location> allPickToLocation = getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA);
-		List<Location> locationList = allPickToLocation.stream()
-			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
-		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
-	}
-
-	@Override
 	public Location getUnknowLocation(Long whId) {
 		if (Func.isEmpty(whId)) {
 			return null;
@@ -218,7 +207,7 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isPickToLocation(Location location) {
-		Location pickToLocation = getPickToLocation(location.getWhId());
+		Location pickToLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA);
 		return location.getLocId().equals(pickToLocation.getLocId());
 	}
 

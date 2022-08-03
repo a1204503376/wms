@@ -133,7 +133,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public Stock findStockOnPickTo(LogSoPick pickLog) {
-		Location pickToLoc = locationBiz.getPickToLocation(pickLog.getWhId());
+		Location pickToLoc = locationBiz.getLocationByZoneType(pickLog.getWhId(), DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA);
 		return stockMergeStrategy.matchSameStock(pickLog, pickToLoc);
 	}
 
@@ -240,7 +240,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
 											 List<Long> zoneIdList, SkuLotBaseEntity skuLot) {
-		Long pickToZoneId = locationBiz.getPickToLocation(whId).getZoneId();
+		Long pickToZoneId = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA).getZoneId();
 		return stockDao.findEnableStockByZone(whId, skuId, stockStatusEnum,
 			zoneIdList, skuLot, Collections.singletonList(pickToZoneId));
 	}
@@ -248,7 +248,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
 												 List<Long> locationIdList, SkuLotBaseEntity skuLot) {
-		Long pickToZoneId = locationBiz.getPickToLocation(whId).getZoneId();
+		Long pickToZoneId = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA).getZoneId();
 		return stockDao.findEnableStockByLocation(whId, skuId, stockStatusEnum,
 			locationIdList, skuLot, Collections.singletonList(pickToZoneId));
 	}

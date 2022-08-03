@@ -184,16 +184,6 @@ public interface LocationBiz {
 	 */
 	boolean isAgvTempOfZoneType(Long locId);
 
-
-	/**
-	 * 获取指定库房的出库集货位
-	 *
-	 * @param whId
-	 * @return
-	 */
-	@Deprecated
-	Location getPickToLocation(Long whId);
-
 	/**
 	 * 获取库位总数量
 	 *
