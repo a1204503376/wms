@@ -39,7 +39,7 @@ public interface OutStockBiz {
 	List<SoPickPlanForDistributionResponse> getSoPickPlanBySoBillIdAndSoDetailId(Long soBillId, Long soDetailId);
 
 	/**
-	 * 撤销发货
+	 * 撤销拣货
 	 *
 	 * @param logSoPickIdList 拣货记录id
 	 */

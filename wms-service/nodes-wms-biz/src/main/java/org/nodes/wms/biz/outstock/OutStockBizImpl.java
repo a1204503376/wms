@@ -6,11 +6,13 @@ import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.outstock.so.SoDetailBiz;
 import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
 import org.nodes.wms.dao.outstock.SoPickPlanDao;
+import org.nodes.wms.dao.outstock.logSoPick.LogSoPickDao;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.*;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindPickingBySoBillIdResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.OutboundAccessAreaLocationQueryResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.PickingByBoxResponse;
+import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.outstock.so.dto.input.PickByPcRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillDistributedRequest;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
@@ -36,6 +38,7 @@ import java.util.List;
 public class OutStockBizImpl implements OutStockBiz {
 
 	private final SoPickPlanDao soPickPlanDao;
+	private final LogSoPickDao logSoPickDao;
 	private final SoHeaderBiz soHeaderBiz;
 	private final SoDetailBiz soDetailBiz;
 
@@ -128,7 +131,11 @@ public class OutStockBizImpl implements OutStockBiz {
 	public void cancelOutstock(List<Long> logSoPickIdList) {
 
 		// 根据拣货记录id查找所有的拣货记录
+		List<LogSoPick> logSoPickList = logSoPickDao.getByIds(logSoPickIdList);
 		// 生成一笔反向的拣货记录
+		logSoPickList.forEach(logSoPick -> {
+//			logSoPickDao.
+		});
 		// 根据反向拣货记录下架库存
 		// 更新发货单明细状态与实收数量
 		// 更新发货单头表状态
