@@ -148,9 +148,9 @@ public interface LocationBiz {
 	 *
 	 * @param whId     库房ID 必填
 	 * @param zoneType 库区类型 必填
-	 * @return 库位集合
+	 * @return 库位
 	 */
-	List<Location> getLocationByZoneType(Long whId, Integer zoneType);
+	Location getLocationByZoneType(Long whId, Integer zoneType);
 
 	/**
 	 * 判断库位是否为出库暂存区
@@ -183,77 +183,6 @@ public interface LocationBiz {
 	 * @return true：标识该库位属于agv临时区库位
 	 */
 	boolean isAgvTempOfZoneType(Long locId);
-
-
-	/**
-	 * 返回所有的库房的入库集货区库位
-	 *
-	 * @return List<Location>
-	 */
-	@Deprecated
-	List<Location> getAllStageLocation();
-
-	/**
-	 * 返回所有的库房的入库检验区库位
-	 *
-	 * @return List<Location>
-	 */
-	@Deprecated
-	List<Location> getAllQcLocation();
-
-	/**
-	 * 返回所有的库房的出库暂存区库位
-	 *
-	 * @return List<Location>
-	 */
-	@Deprecated
-	List<Location> getAllPickToLocation();
-
-	/**
-	 * 返回所有的库房的打包暂存区库位
-	 *
-	 * @return List<Location>
-	 */
-	@Deprecated
-	List<Location> getAllPackLocation();
-
-
-	/**
-	 * 获取指定库房的入库暂库位
-	 *
-	 * @param whId
-	 * @return
-	 */
-	@Deprecated
-	Location getStageLocation(Long whId);
-
-	/**
-	 * 获取指定库房的质检库位
-	 *
-	 * @param whId
-	 * @return
-	 */
-	@Deprecated
-	Location getQcLocation(Long whId);
-
-	/**
-	 * 获取指定库房的出库集货位
-	 *
-	 * @param whId
-	 * @return
-	 */
-	@Deprecated
-	Location getPickToLocation(Long whId);
-
-	/**
-	 * 获取指定库房的打包库位
-	 *
-	 * @param whId
-	 * @return
-	 */
-	@Deprecated
-	Location getPackLocation(Long whId);
-
 
 	/**
 	 * 获取库位总数量

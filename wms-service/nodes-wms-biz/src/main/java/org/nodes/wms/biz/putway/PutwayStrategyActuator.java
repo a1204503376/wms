@@ -21,7 +21,7 @@ public class PutwayStrategyActuator {
 	private final TianYiPutwayStrategy tianYiPutwayStrategy;
 
 	public Location run(BigDecimal putwayQty, List<Stock> stocks) {
-		Location location = tianYiPutwayStrategy.run(putwayQty, stocks);
+		Location location = tianYiPutwayStrategy.run(stocks);
 		if (!Func.isNull(location)) {
 			return location;
 		}

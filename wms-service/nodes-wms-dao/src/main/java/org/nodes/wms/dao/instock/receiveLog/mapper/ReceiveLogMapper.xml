@@ -4,21 +4,22 @@
 
     <select id="selectReceiveLogList"
             resultType="org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse">
-        select line_No,
-               qty,
-               lpn_code,
-               box_code,
-               sn_code,
-               loc_code,
-               sku_code,
-               sku_code,
-               sku_level,
-               sku_spec,
-               wh_code,
-               owner_code,
-               create_user,
-               create_time
-        from receive_log
+        select rl.line_No,
+               rl.qty,
+               rl.lpn_code,
+               rl.box_code,
+               rl.sn_code,
+               rl.loc_code,
+               rl.sku_code,
+               rl.sku_name,
+               rl.sku_level,
+               rl.sku_spec,
+               rl.wh_code,
+               rl.owner_code,
+               user.real_name createUser,
+               rl.create_time
+        from receive_log rl
+                 LEFT JOIN blade_user user ON user.id = rl.create_user
         where receive_id = #{receiveId}
     </select>
 

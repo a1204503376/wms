@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.ArrayUtils;
 import org.nodes.core.base.entity.Dict;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
@@ -129,30 +130,6 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
-	public List<Location> getAllStageLocation() {
-		List<String> stageLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_STAGE);
-		return locationDao.findLocation(stageLocCodeList);
-	}
-
-	@Override
-	public List<Location> getAllQcLocation() {
-		List<String> qcLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_QC);
-		return locationDao.findLocation(qcLocCodeList);
-	}
-
-	@Override
-	public List<Location> getAllPickToLocation() {
-		List<String> pickToLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_PICKTO);
-		return locationDao.findLocation(pickToLocCodeList);
-	}
-
-	@Override
-	public List<Location> getAllPackLocation() {
-		List<String> packLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_PACK);
-		return locationDao.findLocation(packLocCodeList);
-	}
-
-	@Override
 	public List<Location> getAllUnknownLocation() {
 		List<String> unknownLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_UNKNOWN);
 		return locationDao.findLocation(unknownLocCodeList);
@@ -162,50 +139,6 @@ public class LocationBizImpl implements LocationBiz {
 	public List<Location> getAllInTransitLocation() {
 		List<String> inTransitLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_INTRANSIT);
 		return locationDao.findLocation(inTransitLocCodeList);
-	}
-
-	@Override
-	public Location getStageLocation(Long whId) {
-		if (Func.isEmpty(whId)) {
-			return null;
-		}
-		List<Location> allStageLocation = getAllStageLocation();
-		List<Location> locationList = allStageLocation.stream()
-			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
-		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
-	}
-
-	@Override
-	public Location getQcLocation(Long whId) {
-		if (Func.isEmpty(whId)) {
-			return null;
-		}
-		List<Location> allQcLocation = getAllQcLocation();
-		List<Location> locationList = allQcLocation.stream()
-			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
-		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
-	}
-
-	@Override
-	public Location getPickToLocation(Long whId) {
-		if (Func.isEmpty(whId)) {
-			return null;
-		}
-		List<Location> allPickToLocation = getAllPickToLocation();
-		List<Location> locationList = allPickToLocation.stream()
-			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
-		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
-	}
-
-	@Override
-	public Location getPackLocation(Long whId) {
-		if (Func.isEmpty(whId)) {
-			return null;
-		}
-		List<Location> allPackLocation = getAllPackLocation();
-		List<Location> locationList = allPackLocation.stream()
-			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
-		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
 	@Override
@@ -236,8 +169,8 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
-	public List<Location> getLocationByZoneType(Long whId, Integer zoneType) {
-		return locationDao.getLocationByZoneType(null, whId, zoneType);
+	public Location getLocationByZoneType(Long whId, Integer zoneType) {
+		return locationDao.getLocationByZoneTypeAndWhId(null, whId, zoneType);
 	}
 
 	@Override
@@ -274,7 +207,7 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isPickToLocation(Location location) {
-		Location pickToLocation = getPickToLocation(location.getWhId());
+		Location pickToLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA);
 		return location.getLocId().equals(pickToLocation.getLocId());
 	}
 

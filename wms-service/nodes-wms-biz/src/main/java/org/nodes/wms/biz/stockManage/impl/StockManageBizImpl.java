@@ -299,4 +299,25 @@ public class StockManageBizImpl implements StockManageBiz {
 				StockLogTypeEnum.STOCK_MOVE_BY_PCS, null, null, null);
 		});
 	}
+
+	/**
+	 * 校验 库存移动：不能移动到出库集货区、虚拟区的库位
+	 *
+	 * @param soureLocation  当前库存
+	 * @param targetLocation 目标库存
+	 */
+	private void canMove(Location soureLocation, Location targetLocation) {
+
+	}
+
+	/**
+	 * 校验 库内移动校验：1. 校验同库区内移动  2。 校验目标库位箱型  3. 校验载重
+	 *
+	 * @param soureLocation  当前库存
+	 * @param targetLocation 目标库存
+	 * @param stock          库存
+	 */
+	private void canMoveVerify(Location soureLocation, Location targetLocation, Stock stock) {
+
+	}
 }

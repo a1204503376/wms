@@ -149,4 +149,9 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 		return codeGenerator.generateCode(wmsAppConfig.getProjectName(),
 				"LPN", lpnTypeCode, lpnType.getLpnNoRule());
 	}
+
+    @Override
+    public LpnType findLpnType(LpnTypeCodeEnum type) {
+		return lpnTypeDao.getLpnTypeByCode(type.getCode());
+    }
 }
