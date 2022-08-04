@@ -11,7 +11,7 @@
                rl.sn_code,
                rl.loc_code,
                rl.sku_code,
-               rl.sku_code,
+               rl.sku_name,
                rl.sku_level,
                rl.sku_spec,
                rl.wh_code,

@@ -212,8 +212,8 @@ public class SoBillController {
 	 */
 	@PostMapping("/getSoPickPlan")
 	public R<List<SoPickPlanForDistributionResponse>> getSoPickPlan(
-							@Valid @RequestBody SoBillIdAndSoDetailIdRequest request) {
-		return R.data(outStockBiz.getSoPickPlanBySoBillIdAndSoDetailId(request.getSoBillId(),request.getSoDetailId()));
+		@Valid @RequestBody SoBillIdAndSoDetailIdRequest request) {
+		return R.data(outStockBiz.getSoPickPlanBySoBillIdAndSoDetailId(request.getSoBillId(), request.getSoDetailId()));
 	}
 
 	/**
@@ -299,6 +299,7 @@ public class SoBillController {
 	@ApiLog("pc拣货")
 	@PostMapping("pickByPc")
 	public R<String> pickByPc(@RequestBody PickByPcRequest pickByPcRequest) {
+		outStockBiz.pickByPc(pickByPcRequest);
 		return R.data("操作成功");
 	}
 }
