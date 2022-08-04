@@ -89,19 +89,19 @@
                 AND s.wo_id = #{query.woId}
             </if>
             <if test="query.receiveTimeBegin!=null">
-                AND s.sku_Lot3 &gt;= #{query.lastInTimeBegin}
+                AND s.sku_Lot3 &gt;= #{query.receiveTimeBegin}
             </if>
             <if test="query.receiveTimeEnd!=null">
-                AND s.sku_Lot3 &lt;= #{query.lastInTimeBegin}
+                AND s.sku_Lot3 &lt;= #{query.receiveTimeEnd}
             </if>
             <if test="query.lastInTimeBegin!=null">
                 AND s.last_In_Time &gt;= #{query.lastInTimeBegin}
             </if>
             <if test="query.lastInTimeEnd!=null">
-                AND s.last_In_Time &lt;= #{query.lastInTimeBegin}
+                AND s.last_In_Time &lt;= #{query.lastInTimeEnd}
             </if>
             <if test="query.lastOutTimeBegin!=null">
-                AND s.last_Out_Time &gt;= #{query.lastOutTimeEnd}
+                AND s.last_Out_Time &gt;= #{query.lastOutTimeBegin}
             </if>
             <if test="query.lastOutTimeEnd!=null">
                 AND s.last_Out_Time &lt;= #{query.lastOutTimeEnd}
