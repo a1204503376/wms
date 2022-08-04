@@ -3,13 +3,16 @@ package org.nodes.wms.biz.stockManage.impl;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
+import org.nodes.wms.biz.putway.strategy.TianYiPutwayStrategy;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
@@ -38,6 +41,8 @@ public class StockManageBizImpl implements StockManageBiz {
 	private final LocationBiz locationBiz;
 	private final SkuBiz skuBiz;
 	private final LogBiz logBiz;
+	private final LpnTypeBiz lpnTypeBiz;
+	private final TianYiPutwayStrategy tianYiPutwayStrategy;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -308,13 +313,14 @@ public class StockManageBizImpl implements StockManageBiz {
 	 * @param targetLocation 目标库存
 	 */
 	private void canMove(Location targetLocation) {
+		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
 		List<Location> outStockShippingLocationList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA);
 		Location outStockShippingLocation = outStockShippingLocationList
 			.stream()
 			.filter(location -> Func.equals(location.getLocId(), targetLocation.getLocId()))
 			.findFirst()
 			.orElse(null);
-		if(Func.isNotEmpty(outStockShippingLocation)){
+		if (Func.isNotEmpty(outStockShippingLocation)) {
 			throw new ServiceException("库存移动时不能移动到出库集货区");
 		}
 
@@ -323,7 +329,7 @@ public class StockManageBizImpl implements StockManageBiz {
 			.filter(location -> Func.equals(location.getLocId(), targetLocation.getLocId()))
 			.findFirst()
 			.orElse(null);
-		if(Func.isNotEmpty(virtualLocation)){
+		if (Func.isNotEmpty(virtualLocation)) {
 			throw new ServiceException("库存移动时不能移动到虚拟区");
 		}
 	}
@@ -331,11 +337,31 @@ public class StockManageBizImpl implements StockManageBiz {
 	/**
 	 * 校验 库内移动校验：1. 校验同库区内移动  2。 校验目标库位箱型  3. 校验载重
 	 *
-	 * @param sourceLocation  当前库存
+	 * @param sourceLocation 当前库存
 	 * @param targetLocation 目标库存
-	 * @param stock          库存
+	 * @param stockList      库存集合
 	 */
-	private void canMoveVerify(Location sourceLocation, Location targetLocation, Stock stock) {
+	public void canMoveVerify(Location sourceLocation, Location targetLocation, List<Stock> stockList) {
+		System.out.println(sourceLocation);
+		System.out.println(targetLocation);
+		AssertUtil.notNull(sourceLocation, "校验库存移动失败当前库位为空");
+		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
+		AssertUtil.notNull(stockList, "校验库存移动失败库存为空");
 
+		if (!Func.equals(sourceLocation.getZoneId(), targetLocation.getZoneId())) {
+			throw new ServiceException("库存移动时不能跨区移动");
+		}
+
+		LpnType sourceLpnType = lpnTypeBiz.findLpnTypeById(sourceLocation.getLpnTypeId());
+		AssertUtil.notNull(sourceLpnType, "根据箱码获取当前库存箱型失败");
+		LpnType targetLpnType = lpnTypeBiz.findLpnTypeById(targetLocation.getLpnTypeId());
+		AssertUtil.notNull(targetLpnType, "获取目标库位箱型失败");
+		if (Func.isNotEmpty(targetLpnType.getCode()) && !Func.equals(sourceLpnType.getCode(), targetLpnType.getCode())) {
+			throw new ServiceException("库存移动时当前库存和目标库位所存储的箱型不一致");
+		}
+
+		if (!tianYiPutwayStrategy.isNotOverweight(stockList, targetLocation)) {
+			throw new ServiceException("要移动的库存超过了最大载重");
+		}
 	}
 }
