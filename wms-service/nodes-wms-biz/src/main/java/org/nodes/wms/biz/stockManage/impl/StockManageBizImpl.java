@@ -297,6 +297,7 @@ public class StockManageBizImpl implements StockManageBiz {
 		List<StockPcMoveDetailRequest> stockMoveDataList = stockPcMoveRequest.getStockMoveDataList();
 		stockMoveDataList.forEach(move -> {
 			Location location = locationBiz.findByLocId(move.getLocId());
+			canMove(location);
 			stockBiz.moveStock(stock, move.getSerials(), move.getQty(), location,
 				StockLogTypeEnum.STOCK_MOVE_BY_PCS, null, null, null);
 		});
