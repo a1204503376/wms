@@ -12,13 +12,17 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindPickingBySoBillIdResp
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.OutboundAccessAreaLocationQueryResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.PickingByBoxResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.PickByPcRequest;
+import org.nodes.wms.dao.outstock.so.dto.input.SoBillDistributedRequest;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.enums.SoDetailStateEnum;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
+import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -92,5 +96,42 @@ public class OutStockBizImpl implements OutStockBiz {
 	@Override
 	public void connectionAreaMove(ConnectionAreaPickingRequest request) {
 
+	}
+
+	@Override
+	public boolean automaticAssign(Long soBillId) {
+		return false;
+	}
+
+	@Override
+	public boolean cancelAssign(Long soBillId) {
+		return false;
+	}
+
+	@Override
+	public boolean issued(Long soBillId) {
+		return false;
+	}
+
+	@Override
+	public List<StockSoPickPlanResponse> getEnableStockBySkuId(Long skuId) {
+		return null;
+	}
+
+	@Override
+	public boolean saveAssign(SoBillDistributedRequest soBillDistributedRequest) {
+		return false;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public void cancelOutstock(List<Long> logSoPickIdList) {
+
+		// 根据拣货记录id查找所有的拣货记录
+		// 生成一笔反向的拣货记录
+		// 根据反向拣货记录下架库存
+		// 更新发货单明细状态与实收数量
+		// 更新发货单头表状态
+		// 记录业务日志
 	}
 }

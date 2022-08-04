@@ -1,13 +1,16 @@
 package org.nodes.wms.biz.outstock;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.*;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindPickingBySoBillIdResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.OutboundAccessAreaLocationQueryResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.PickingByBoxResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.PickByPcRequest;
+import org.nodes.wms.dao.outstock.so.dto.input.SoBillDistributedRequest;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
+import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
 import org.springblade.core.mp.support.Query;
 
 import java.util.List;
@@ -35,6 +38,12 @@ public interface OutStockBiz {
 	 */
 	List<SoPickPlanForDistributionResponse> getSoPickPlanBySoBillIdAndSoDetailId(Long soBillId, Long soDetailId);
 
+	/**
+	 * 撤销发货
+	 *
+	 * @param logSoPickIdList 拣货记录id
+	 */
+    void cancelOutstock(List<Long> logSoPickIdList);
 
 	/**
 	 * 拣货分页查询
@@ -62,7 +71,6 @@ public interface OutStockBiz {
 	 */
 	IPage<FindPickingBySoBillIdResponse> selectPickingBySoBillId(FindPickingBySoBillIdRequest request, Query query);
 
-
 	/**
 	 * 按箱拣货动作
 	 *
@@ -70,7 +78,6 @@ public interface OutStockBiz {
 	 * @return 是否拣货成功
 	 */
 	PickingByBoxResponse pickingByBox(PickingByBoxRequest request);
-
 
 	/**
 	 * 查询出库接驳区的库未
@@ -94,4 +101,44 @@ public interface OutStockBiz {
 	 * @param request 请求参数
 	 */
 	void connectionAreaMove(ConnectionAreaPickingRequest request);
+
+	/**
+	 * 分配：自动分配
+	 *
+	 * @param soBillId 发货单id
+	 * @return true：自动分配成功 false：自动分配失败
+	 */
+	boolean automaticAssign(Long soBillId);
+
+	/**
+	 * 分配：取消分配
+	 *
+	 * @param soBillId 发货单id
+	 * @return true：取消分配成功 false：取消分配失败
+	 */
+	boolean cancelAssign(Long soBillId);
+
+	/**
+	 * 分配：确认下发
+	 *
+	 * @param soBillId 发货单id
+	 * @return true：确认下发成功 false：确认下发失败
+	 */
+	boolean issued(Long soBillId);
+
+	/**
+	 * 分配：分配调整-根据物品id获取可分配的物品库存信息
+	 *
+	 * @param skuId 物品id
+	 * @return 可分配物品库存信息
+	 */
+	List<StockSoPickPlanResponse> getEnableStockBySkuId(@Param("skuId") Long skuId);
+
+	/**
+	 * 分配：分配调整-保存调整后的信息
+	 *
+	 * @param soBillDistributedRequest:
+	 * @return true：保存成功 false：保存失败
+	 */
+	boolean saveAssign(SoBillDistributedRequest soBillDistributedRequest);
 }
