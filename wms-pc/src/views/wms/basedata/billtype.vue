@@ -24,7 +24,7 @@ import fileDownload from "js-file-download";
 </template>
 
 <script>
-import {getPage, add, remove, getDetail} from "@/api/wms/basedata/billtype.js";
+import {add, getDetail, getPage, remove} from "@/api/wms/basedata/billtype.js";
 import {group as group_1} from "./billType/group_1";
 import dataVerify from "@/components/nodes/dataVerify";
 import LabelData from "./enterprise/labelData";
@@ -52,9 +52,7 @@ export default {
                 delBtn: true,
                 menu: true,
                 custom: false,
-                menuItem: [
-
-                ],
+                menuItem: [],
                 column: [
                     {
                         label: "单据类型编码",
@@ -78,7 +76,7 @@ export default {
                     // },
                     {
                         label: "单据类型种类",
-                        prop: "ioTypeDesc",
+                        prop: "ioType",
                         //hide: true,
                         search: true,
                         // type: "select",
@@ -135,10 +133,10 @@ export default {
         ...mapGetters(["permission"]),
         permissionList() {
             return {
-                add:this.vaildData(this.permission.billtype_add,false),
-                edit:this.vaildData(this.permission.billtype_edit,false),
-                delete:this.vaildData(this.permission.billtype_delete,false),
-                view:this.vaildData(this.permission.billtype_view,false),
+                add: this.vaildData(this.permission.billtype_add, false),
+                edit: this.vaildData(this.permission.billtype_edit, false),
+                delete: this.vaildData(this.permission.billtype_delete, false),
+                view: this.vaildData(this.permission.billtype_view, false),
             }
         },
     },
@@ -161,11 +159,12 @@ export default {
             });
         },
         rowSave(row, loading, done, type) {
-            if(row.ioType==0){
-                row.ioType='I';
-            }else if (row.ioType==1){
-                row.ioType='O';
-            };
+            if (row.ioType == 0) {
+                row.ioType = 'I';
+            } else if (row.ioType == 1) {
+                row.ioType = 'O';
+            }
+            ;
             add(row).then(
                 () => {
                     loading();
@@ -219,14 +218,14 @@ export default {
                     .then(res => {
                         //从blade_dict中取出来的内容是数字类型，从wms_bill_type取出来的数据是字符串类型
                         //所以后台只能传过来字符串数据，现在手动转成数字类型以便绑定
-                        if(res.data.data.ioType=="I"){
-                            res.data.data.ioType=0;
-                        }else if(res.data.data.ioType=="O"){
-                            res.data.data.ioType=1;
-                        }else if(res.data.data.ioType=="IC"){
-                            res.data.data.ioType=2;
-                        }else if(res.data.data.ioType=="OC"){
-                            res.data.data.ioType=3;
+                        if (res.data.data.ioType == "I") {
+                            res.data.data.ioType = 0;
+                        } else if (res.data.data.ioType == "O") {
+                            res.data.data.ioType = 1;
+                        } else if (res.data.data.ioType == "IC") {
+                            res.data.data.ioType = 2;
+                        } else if (res.data.data.ioType == "OC") {
+                            res.data.data.ioType = 3;
                         }
                         this.form = res.data.data;
                     })

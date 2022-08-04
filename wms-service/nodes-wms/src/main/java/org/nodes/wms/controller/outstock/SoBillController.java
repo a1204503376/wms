@@ -12,6 +12,7 @@ import org.nodes.wms.biz.outstock.so.SoDetailBiz;
 import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
 import org.nodes.wms.core.outstock.so.service.ISoHeaderService;
 import org.nodes.wms.dao.basics.sku.dto.input.SkuIdRequest;
+import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickForSoDetailResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
@@ -133,9 +134,9 @@ public class SoBillController {
 	 * 发货单明细：根据发货单id查找发货单审计日志信息
 	 */
 	@PostMapping("/detail_log")
-	public R<Page<LogForSoDetailResponse>> logForSoDetail(Query query,
+	public R<Page<LogDetailPageResponse>> logForSoDetail(Query query,
 														  @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		Page<LogForSoDetailResponse> pageLog = soHeaderBiz.pageLogById(Condition.getPage(query), soBillIdRequest.getSoBillId());
+		Page<LogDetailPageResponse> pageLog = soHeaderBiz.pageLogById(Condition.getPage(query), soBillIdRequest.getSoBillId());
 		return R.data(pageLog);
 	}
 
@@ -212,8 +213,8 @@ public class SoBillController {
 	 */
 	@PostMapping("/getSoPickPlan")
 	public R<List<SoPickPlanForDistributionResponse>> getSoPickPlan(
-							@Valid @RequestBody SoBillIdAndSoDetailIdRequest request) {
-		return R.data(outStockBiz.getSoPickPlanBySoBillIdAndSoDetailId(request.getSoBillId(),request.getSoDetailId()));
+		@Valid @RequestBody SoBillIdAndSoDetailIdRequest request) {
+		return R.data(outStockBiz.getSoPickPlanBySoBillIdAndSoDetailId(request.getSoBillId(), request.getSoDetailId()));
 	}
 
 	/**
@@ -299,6 +300,7 @@ public class SoBillController {
 	@ApiLog("pc拣货")
 	@PostMapping("pickByPc")
 	public R<String> pickByPc(@RequestBody PickByPcRequest pickByPcRequest) {
+		outStockBiz.pickByPc(pickByPcRequest);
 		return R.data("操作成功");
 	}
 }

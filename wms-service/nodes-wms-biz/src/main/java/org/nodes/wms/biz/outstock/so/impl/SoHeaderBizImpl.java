@@ -149,10 +149,8 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	}
 
 	@Override
-	public Page<LogForSoDetailResponse> pageLogById(IPage<?> page, Long soBillId) {
-		Page<LogDetailPageResponse> logDetailPageResponsePage = logBiz.pageLogByBillId(page, soBillId);
-
-		return null;
+	public Page<LogDetailPageResponse> pageLogById(IPage<?> page, Long soBillId) {
+		 return logBiz.pageLogByBillId(page, soBillId);
 	}
 
 	@Override
