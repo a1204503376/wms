@@ -138,7 +138,7 @@ public interface LocationBiz {
 	/**
 	 * 根据类型获取对应库区数据
 	 *
-	 * @param zoneType 库区类型 必填
+	 * @param zoneType 库区类型 必填，具体参考DictCodeConstant中的常量
 	 * @return 库位集合
 	 */
 	List<Location> getLocationByZoneType(Integer zoneType);
@@ -147,7 +147,7 @@ public interface LocationBiz {
 	 * 根据类型和库房 获取对应库房下的库区数据
 	 *
 	 * @param whId     库房ID 必填
-	 * @param zoneType 库区类型 必填
+	 * @param zoneType 库区类型 必填，具体参考DictCodeConstant中的常量
 	 * @return 库位
 	 */
 	Location getLocationByZoneType(Long whId, Integer zoneType);

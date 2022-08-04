@@ -199,7 +199,7 @@ public class StockServiceImpl implements StockService {
 						break;
 					}
 				}
-				soHeader.setSoBillState(SoBillStateEnum.COMPLETED.getIndex());
+				soHeader.setSoBillState(SoBillStateEnum.COMPLETED.getCode());
 				soHeader.setBillTypeCd(ParamCache.getValue(ParamEnum.COUNT_LOSS_TYPECD.getKey()));//单据种类编码
 				soHeader.setBillKey(soHeader.getSoBillNo());
 				soHeader.setLastUpdateDate(now);

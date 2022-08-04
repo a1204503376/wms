@@ -62,7 +62,7 @@ public class SoBillFactory {
 			// 单据编码
 			soHeader.setSoBillNo(orderNoGeneratorUtil.createSoBillNo());
 			// 单据状态：10 单据创建
-			soHeader.setSoBillState(SoBillStateEnum.NOT.getIndex());
+			soHeader.setSoBillState(SoBillStateEnum.CREATE);
 			// 订单状态
 			soHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());
 		}

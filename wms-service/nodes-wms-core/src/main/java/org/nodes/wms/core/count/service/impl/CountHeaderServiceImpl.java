@@ -797,7 +797,7 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper, T extends Count
 					}
 
 					soHeader.setBillKey(countHeader.getCountBillNo());
-					soHeader.setSoBillState(SoBillStateEnum.COMPLETED.getIndex());
+					soHeader.setSoBillState(SoBillStateEnum.COMPLETED.getCode());
 					soHeader.setBillTypeCd(ParamCache.getValue(ParamEnum.COUNT_LOSS_TYPECD.getKey()));
 					soHeader.setBillKey(soHeader.getSoBillNo());
 					soHeader.setTransportCode(SoBillTransportCodeEnum.SelfTaking.getIndex());

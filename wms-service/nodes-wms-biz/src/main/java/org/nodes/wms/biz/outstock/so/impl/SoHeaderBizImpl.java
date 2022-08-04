@@ -65,7 +65,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	public SoHeader add(SoBillAddOrEditRequest soBillAddOrEditRequest) {
 		if (Func.isNotEmpty(soBillAddOrEditRequest.getSoBillId())){
 			SoHeader soHeader = soHeaderDao.getById(soBillAddOrEditRequest.getSoBillId());
-			if (!SoBillStateEnum.CREATE.getIndex().equals(soHeader.getSoBillState())){
+			if (!SoBillStateEnum.CREATE.getCode().equals(soHeader.getSoBillState())){
 				throw new ServiceException("编辑失败，该发货单目前不可编辑");
 			}
 		}
@@ -86,7 +86,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	public boolean remove(List<Long> soBillIdList) {
 		soBillIdList.forEach(item -> {
 			SoHeader soHeader = soHeaderDao.getById(item);
-			if (!soHeader.getSoBillState().equals(SoBillStateEnum.NOT.getIndex())) {
+			if (!soHeader.getSoBillState().equals(SoBillStateEnum.CREATE.getCode())) {
 				throw new ServiceException("删除失败,只能删除单据状态为未出库的发货单");
 			}
 			logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), "删除发货单");
@@ -131,7 +131,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	public void closeById(Long soBillId) {
 		Map<String, Object> soHeaderMap = new HashMap<String, Object>();
 		soHeaderMap.put("soBillId", soBillId);
-		soHeaderMap.put("soBillState", SoBillStateEnum.CLOSED.getIndex());
+		soHeaderMap.put("soBillState", SoBillStateEnum.COMPLETED.getCode());
 		SoHeader soHeader = soBillFactory.createSoHeaderByCustom(soHeaderMap);
 		if (!soHeaderDao.updateSoHeaderById(soHeader)) {
 			throw new ServiceException("关闭发货单失败，请稍后再试");
@@ -143,7 +143,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	public void export(SoHeaderPageQuery soHeaderPageQuery, HttpServletResponse response) {
 		List<SoHeaderExcelResponse> soHeaderExcelList = soHeaderDao.listByQuery(soHeaderPageQuery);
 		soHeaderExcelList.forEach(soHeader ->{
-			soHeader.setSoBillStateValue(soHeader.getSoBillState().getName());
+			soHeader.setSoBillStateValue(soHeader.getSoBillState().getDesc());
 		});
 		ExcelUtil.export(response, "", "", soHeaderExcelList, SoHeaderExcelResponse.class);
 	}
