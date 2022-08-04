@@ -2,6 +2,7 @@ package org.nodes.wms.dao.lendreturn.dto.input;
 
 import lombok.Data;
 import org.nodes.wms.dao.lendreturn.enums.LendReturnTypeEnum;
+import org.nodes.wms.dao.stock.dto.SkuLotDto;
 
 import java.util.Date;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * 借出归还记录查询请求对象
  */
 @Data
-public class LendReturnQuery {
+public class LendReturnQuery extends SkuLotDto {
 	/**
 	 * 借出归还类别
 	 */
