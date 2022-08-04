@@ -15,6 +15,8 @@ import java.util.List;
 
 /**
  * 容器对象Biz
+ *
+ * @author nodesc
  */
 public interface LpnTypeBiz {
 
@@ -94,7 +96,7 @@ public interface LpnTypeBiz {
 	 * 解析箱型, 天宜定制功能
 	 *
 	 * @param boxCode 箱码
-	 * @return
+	 * @return LpnTypeCodeEnum
 	 */
 	LpnTypeCodeEnum parseBoxCode(String boxCode);
 
@@ -102,22 +104,31 @@ public interface LpnTypeBiz {
 	 * 解析箱型, 天宜定制功能
 	 *
 	 * @param boxCode 箱码
-	 * @return
+	 * @return LpnTypeCodeEnum
 	 */
 	LpnTypeCodeEnum tryParseBoxCode(String boxCode);
 
 	/**
 	 * 天宜定制：根据箱型获取容器列别
 	 *
-	 * @param boxCode
-	 * @return
+	 * @param boxCode 箱码
+	 * @return LpnType
 	 */
 	LpnType findLpnTypeByBoxCode(String boxCode);
 
 	/**
 	 * 根据容器类别生成编码
-	 * @param lpnTypeCode
-	 * @return
+	 *
+	 * @param lpnTypeCode 容器类别编码
+	 * @return 容器编码
 	 */
 	String generateLpnCode(String lpnTypeCode);
+
+	/**
+	 * 根据容器类别获取容器信息
+	 *
+	 * @param type 容器类别
+	 * @return LpnType
+	 */
+	LpnType findLpnType(LpnTypeCodeEnum type);
 }
