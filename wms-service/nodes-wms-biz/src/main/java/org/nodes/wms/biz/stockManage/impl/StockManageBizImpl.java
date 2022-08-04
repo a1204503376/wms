@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.stockManage.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
@@ -16,6 +17,7 @@ import org.nodes.wms.dao.stock.dto.input.*;
 import org.nodes.wms.dao.stock.dto.output.EstimateStockMoveResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -139,7 +141,7 @@ public class StockManageBizImpl implements StockManageBiz {
 		//批属性赋值
 		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
 		skuLot.setSkuLot1(request.getLotNumber());
-		//根据库房ID SKUID 库位 和批属性1查询对应库存
+		//根据库房ID SKU_ID 库位 和批属性1查询对应库存
 		List<Stock> stockList = stockQueryBiz.findEnableStockByLocation(request.getWhId(), sku.getSkuId(), null, locationIdList, skuLot);
 		//断言stockList
 		AssertUtil.notNull(stockList, "根据您输入的数据查询不到对应的库存，请重新输入后重试");
@@ -176,8 +178,8 @@ public class StockManageBizImpl implements StockManageBiz {
 		}
 		//根据传过来的多个箱码集合查询出多个库存
 		List<String> boxCodeList = request.getBoxCodeList().stream().filter(Func::isNotEmpty).collect(Collectors.toList());
-		boxCodeList.forEach(boxcode ->
-			stockBiz.moveStockByBoxCode(boxcode, boxcode, request.getLpnCode(), targetLocation, stockLogTypeEnum, null, null, null)
+		boxCodeList.forEach(boxCode ->
+			stockBiz.moveStockByBoxCode(boxCode, boxCode, request.getLpnCode(), targetLocation, stockLogTypeEnum, null, null, null)
 		);
 	}
 
@@ -303,21 +305,37 @@ public class StockManageBizImpl implements StockManageBiz {
 	/**
 	 * 校验 库存移动：不能移动到出库集货区、虚拟区的库位
 	 *
-	 * @param soureLocation  当前库存
 	 * @param targetLocation 目标库存
 	 */
-	private void canMove(Location soureLocation, Location targetLocation) {
+	private void canMove(Location targetLocation) {
+		List<Location> outStockShippingLocationList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA);
+		Location outStockShippingLocation = outStockShippingLocationList
+			.stream()
+			.filter(location -> Func.equals(location.getLocId(), targetLocation.getLocId()))
+			.findFirst()
+			.orElse(null);
+		if(Func.isNotEmpty(outStockShippingLocation)){
+			throw new ServiceException("库存移动时不能移动到出库集货区");
+		}
 
+		List<Location> virtualLocationList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_VIRTUAL_AREA);
+		Location virtualLocation = virtualLocationList.stream()
+			.filter(location -> Func.equals(location.getLocId(), targetLocation.getLocId()))
+			.findFirst()
+			.orElse(null);
+		if(Func.isNotEmpty(virtualLocation)){
+			throw new ServiceException("库存移动时不能移动到虚拟区");
+		}
 	}
 
 	/**
 	 * 校验 库内移动校验：1. 校验同库区内移动  2。 校验目标库位箱型  3. 校验载重
 	 *
-	 * @param soureLocation  当前库存
+	 * @param sourceLocation  当前库存
 	 * @param targetLocation 目标库存
 	 * @param stock          库存
 	 */
-	private void canMoveVerify(Location soureLocation, Location targetLocation, Stock stock) {
+	private void canMoveVerify(Location sourceLocation, Location targetLocation, Stock stock) {
 
 	}
 }
