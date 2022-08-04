@@ -8,6 +8,7 @@ import org.nodes.wms.dao.lendreturn.dto.output.NoReturnResponse;
 import org.nodes.wms.dao.lendreturn.entities.LogLendReturn;
 import org.nodes.wms.dao.lendreturn.entities.LogNoReturn;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -34,4 +35,12 @@ public interface LendReturnBiz {
 	 * 分页查询未归还记录
 	 */
 	Page<NoReturnResponse> pageNoReturn(Page<LogNoReturn> page, LendReturnQuery lendReturnQuery);
+
+	/**
+	 * 未归还记录： 服务端导出
+	 *
+	 * @param lendReturnQuery 导出时条件
+	 * @param response 响应对象
+	 */
+	void exportNoReturn(LendReturnQuery lendReturnQuery, HttpServletResponse response);
 }

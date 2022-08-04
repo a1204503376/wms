@@ -7,6 +7,8 @@ import org.nodes.wms.dao.lendreturn.dto.output.NoReturnResponse;
 import org.nodes.wms.dao.lendreturn.entities.LogNoReturn;
 import org.springblade.core.mp.base.BaseService;
 
+import java.util.List;
+
 /**
  * 未归还日志 Dao接口
  */
@@ -21,4 +23,12 @@ public interface LogNoReturnDao extends BaseService<LogNoReturn> {
 	 * 分页查询未归还记录
 	 */
     Page<NoReturnResponse> selectPage(Page<LogNoReturn> page, LendReturnQuery lendReturnQuery);
+
+	/**
+	 * 根据Query中的条件查询未归还记录
+	 *
+	 * @param lendReturnQuery 查询条件
+	 * @return 未归还记录
+	 */
+	List<LogNoReturn> listByQuery(LendReturnQuery lendReturnQuery);
 }
