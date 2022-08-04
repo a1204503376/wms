@@ -343,8 +343,6 @@ public class StockManageBizImpl implements StockManageBiz {
 	 * @param stockList      库存集合
 	 */
 	public void canMoveVerify(Location sourceLocation, Location targetLocation, List<Stock> stockList) {
-		System.out.println(sourceLocation);
-		System.out.println(targetLocation);
 		AssertUtil.notNull(sourceLocation, "校验库存移动失败当前库位为空");
 		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
 		AssertUtil.notNull(stockList, "校验库存移动失败库存为空");
