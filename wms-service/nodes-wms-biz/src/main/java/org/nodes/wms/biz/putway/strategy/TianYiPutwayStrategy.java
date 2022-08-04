@@ -11,15 +11,15 @@ import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
+import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.log.exception.ServiceException;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.TreeSet;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -63,13 +63,13 @@ public class TianYiPutwayStrategy {
 	}
 
 	/**
-	 * 判断库存上架到目标库位之后是否超过最大载重
+	 * 判断库存上架到目标库位之后是否超过最大载重，要求上架的库存必须是同一种容器类别
 	 *
 	 * @param stockList 待上库存
 	 * @param targetLoc 目标库位
 	 * @return true：未超重
 	 */
-	public boolean isNotOverweight(List<Stock> stockList, Location targetLoc){
+	public boolean isNotOverweight(List<Stock> stockList, Location targetLoc) {
 		AssertUtil.notEmpty(stockList, "载重校验失败，待上库存为空");
 		AssertUtil.notNull(targetLoc, "载重校验失败，待上库位为空");
 
@@ -84,11 +84,15 @@ public class TianYiPutwayStrategy {
 	 * 根据库存计算重量
 	 * 注意：是根据箱的个数计算重量，不是库存的数量
 	 *
-	 * @param stockList 库存
+	 * @param stockList 库存，要求库存必须是同一个容器类别
 	 * @param lpnType   容器类型
 	 * @return 当前库存的载重
 	 */
 	private BigDecimal staticsLoadWeightByStock(List<Stock> stockList, LpnType lpnType) {
+		if (Func.isEmpty(stockList)) {
+			return BigDecimal.ZERO;
+		}
+
 		List<String> boxCodes = stockList.stream()
 			.map(Stock::getBoxCode)
 			.distinct()
@@ -99,7 +103,8 @@ public class TianYiPutwayStrategy {
 	/**
 	 * 计算库位一列的载重, 虚拟库位不参与计算
 	 *
-	 * @return
+	 * @param location 库位
+	 * @return 货架列当前库存的载重
 	 */
 	private BigDecimal staticsLoadWeightByColumn(Location location) {
 		// 获取同列的所有库位
@@ -110,18 +115,35 @@ public class TianYiPutwayStrategy {
 		}
 		// 获取该列的所有库存
 		List<Stock> stockList = stockQueryBiz.findStockByLocation(locationList);
-		// 根据箱型计算总重, 需要注意同一个库位上可能存在多个stock，算重量时只需根据库位计算
-		List<Stock> stocks = stockList
-			.stream()
-			.collect(Collectors.collectingAndThen(Collectors.toCollection(()
-					-> new TreeSet<>(Comparator.comparing(o -> o.getLocId())))
-				, ArrayList::new));
-		// 库位1：stock1 stock2 库位2：stock3  重量：stock1.箱型重量 + stock3.箱型重量
-		BigDecimal sumWeight = BigDecimal.ZERO;
-		for (Stock stock : stocks) {
-			LpnType lpnType = lpnTypeBiz.findLpnTypeByBoxCode(stock.getLpnCode());
-			sumWeight = sumWeight.add(lpnType.getWeight());
+		return staticsLoadWeightByStock(stockList);
+	}
+
+	/**
+	 * 计算库存的载重
+	 *
+	 * @param stockList 必填，库存可以是任意容器类别
+	 * @return 当前库存的载重
+	 */
+	private BigDecimal staticsLoadWeightByStock(List<Stock> stockList) {
+		if (Func.isEmpty(stockList)) {
+			return BigDecimal.ZERO;
 		}
-		return sumWeight;
+
+		// 获取所有的箱号
+		List<String> boxCodes = stockList.stream()
+			.map(Stock::getBoxCode)
+			.distinct()
+			.collect(Collectors.toList());
+		// 根据箱号计算重量
+		BigDecimal result = BigDecimal.ZERO;
+		Map<LpnTypeCodeEnum, List<String>> lpnType2BoxCodes = boxCodes.stream()
+			.collect(Collectors.groupingBy(lpnTypeBiz::tryParseBoxCode));
+		for (Map.Entry<LpnTypeCodeEnum, List<String>> entry : lpnType2BoxCodes.entrySet()) {
+			LpnType lpnType = lpnTypeBiz.findLpnType(entry.getKey());
+			AssertUtil.notNull(lpnType, String.format("计算重量失败,容器类别[%s]没有配置重量", entry.getKey().getCode()));
+			result = result.add(lpnType.getWeight().multiply(BigDecimal.valueOf(entry.getValue().size())));
+		}
+
+		return result;
 	}
 }
