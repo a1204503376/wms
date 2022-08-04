@@ -2,4 +2,41 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.task.mapper.WmsTaskMapper">
 
+    <select id="getPage" resultType="org.nodes.wms.dao.task.dto.output.TaskPageResponse">
+        select task_id,
+        bill_no,
+        task_type_cd,
+        task_state,
+        sku_code,
+        task_qty,
+        scan_qty,
+        um_code,
+        lot,
+        from_loc_code,
+        to_loc_code,
+        lpn_code,
+        allot_time
+        from tsk_task
+        <where>
+            <if test="query.taskId != null and query.taskId != ''">
+                AND task_id LIKE concat('%',#{query.taskId},'%')
+            </if>
+            <if test="query.billNo != null and query.billNo != ''">
+                AND bill_no LIKE concat('%',#{query.billNo},'%')
+            </if>
+            <if test="query.taskTypeCdList != null and query.taskTypeCdList.size()>0">
+                AND task_type_cd in
+                <foreach collection="query.taskTypeCdList" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="query.taskStateList != null and query.taskStateList.size()>0">
+                AND task_state in
+                <foreach collection="query.taskStateList" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+
+        </where>
+    </select>
 </mapper>

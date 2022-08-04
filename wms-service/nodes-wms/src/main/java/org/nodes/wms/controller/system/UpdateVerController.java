@@ -2,7 +2,7 @@ package org.nodes.wms.controller.system;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.system.UpdateVerBiz;
 import org.nodes.wms.dao.system.updateVer.dto.input.UpdateVerEditRequest;
 import org.nodes.wms.dao.system.updateVer.dto.input.UpdateVerPageQuery;

@@ -4,17 +4,17 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.constant.CommonConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.biz.basics.skuType.SkuTypeBiz;
 import org.nodes.wms.core.basedata.dto.SkuTypeDTO;
-import org.nodes.wms.dao.basics.skuType.dto.input.SkuTypeAddOrEditRequest;
-import org.nodes.wms.dao.basics.skuType.entities.SkuType;
 import org.nodes.wms.core.basedata.excel.SkuTypeExcel;
 import org.nodes.wms.core.basedata.service.ISkuTypeService;
 import org.nodes.wms.core.basedata.vo.SkuTypeVO;
 import org.nodes.wms.core.basedata.wrapper.SkuTypeWrapper;
+import org.nodes.wms.dao.basics.skuType.dto.input.SkuTypeAddOrEditRequest;
+import org.nodes.wms.dao.basics.skuType.entities.SkuType;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
@@ -79,7 +79,7 @@ public class SkuTypeController extends BladeController {
 			skuTypeList.forEach(item->{
 				boolean hasChildren = childrenList.stream().filter(u->{
 					return u.getTypePreId().equals(item.getSkuTypeId());
-				}).count() > CommonConstant.TOP_PARENT_ID;
+				}).count() > WmsAppConstant.TOP_PARENT_ID;
 				item.setHasChildren(hasChildren);
 			});
 		}
@@ -97,7 +97,7 @@ public class SkuTypeController extends BladeController {
 	public R<IPage<SkuTypeVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
 		IPage<SkuType> page = skuTypeService.page(Condition.getPage(query), Condition.getQueryWrapper(params, SkuType.class)
 			.lambda()
-			.eq(SkuType::getTypePreId, CommonConstant.TOP_PARENT_ID));
+			.eq(SkuType::getTypePreId, WmsAppConstant.TOP_PARENT_ID));
 		IPage<SkuTypeVO> skuTypePage = SkuTypeWrapper.build().pageVO(page);
 		if (Func.isNotEmpty(skuTypePage) && Func.isNotEmpty(skuTypePage.getRecords())) {
 			List<SkuType> childrenList = skuTypeService.list(Condition.getQueryWrapper(new SkuType())
@@ -106,7 +106,7 @@ public class SkuTypeController extends BladeController {
 			skuTypePage.getRecords().forEach(item->{
 				boolean hasChildren = childrenList.stream().filter(u->{
 					return u.getTypePreId().equals(item.getSkuTypeId());
-				}).count() > CommonConstant.TOP_PARENT_ID;
+				}).count() > WmsAppConstant.TOP_PARENT_ID;
 				item.setHasChildren(hasChildren);
 			});
 		}

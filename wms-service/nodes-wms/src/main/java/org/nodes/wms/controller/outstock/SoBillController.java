@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.core.tool.validation.Update;
 import org.nodes.wms.biz.outstock.OutStockBiz;
 import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
@@ -12,6 +12,7 @@ import org.nodes.wms.biz.outstock.so.SoDetailBiz;
 import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
 import org.nodes.wms.core.outstock.so.service.ISoHeaderService;
 import org.nodes.wms.dao.basics.sku.dto.input.SkuIdRequest;
+import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickForSoDetailResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
@@ -25,14 +26,11 @@ import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
-import org.springblade.core.tool.utils.ConvertUtil;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -133,9 +131,9 @@ public class SoBillController {
 	 * 发货单明细：根据发货单id查找发货单审计日志信息
 	 */
 	@PostMapping("/detail_log")
-	public R<Page<LogForSoDetailResponse>> logForSoDetail(Query query,
+	public R<Page<LogDetailPageResponse>> logForSoDetail(Query query,
 														  @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		Page<LogForSoDetailResponse> pageLog = soHeaderBiz.pageLogById(Condition.getPage(query), soBillIdRequest.getSoBillId());
+		Page<LogDetailPageResponse> pageLog = soHeaderBiz.pageLogById(Condition.getPage(query), soBillIdRequest.getSoBillId());
 		return R.data(pageLog);
 	}
 
@@ -212,8 +210,8 @@ public class SoBillController {
 	 */
 	@PostMapping("/getSoPickPlan")
 	public R<List<SoPickPlanForDistributionResponse>> getSoPickPlan(
-							@Valid @RequestBody SoBillIdAndSoDetailIdRequest request) {
-		return R.data(outStockBiz.getSoPickPlanBySoBillIdAndSoDetailId(request.getSoBillId(),request.getSoDetailId()));
+		@Valid @RequestBody SoBillIdAndSoDetailIdRequest request) {
+		return R.data(outStockBiz.getSoPickPlanBySoBillIdAndSoDetailId(request.getSoBillId(), request.getSoDetailId()));
 	}
 
 	/**
@@ -221,7 +219,8 @@ public class SoBillController {
 	 */
 	@PostMapping("/automaticAssign")
 	public R<String> automaticAssign(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		return null;
+		outStockBiz.automaticAssign(soBillIdRequest.getSoBillId());
+		return R.data("分配成功");
 	}
 
 	/**
@@ -229,7 +228,8 @@ public class SoBillController {
 	 */
 	@PostMapping("/cancelAll")
 	public R<String> cancelAll(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		return null;
+		outStockBiz.cancelAssign(soBillIdRequest.getSoBillId());
+		return R.data("取消分配成功");
 	}
 
 	/**
@@ -237,7 +237,8 @@ public class SoBillController {
 	 */
 	@PostMapping("/issued")
 	public R<String> issued(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		return null;
+		outStockBiz.issued(soBillIdRequest.getSoBillId());
+		return R.data("确认下发成功");
 	}
 
 	/**
@@ -245,32 +246,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/getEnableStockBySkuId")
 	public R<List<StockSoPickPlanResponse>> getEnableStockBySkuId(@Valid @RequestBody SkuIdRequest skuIdRequest) {
-		List<StockSoPickPlanResponse> stockDistributedList = new ArrayList<>();
-		for (int i = 0; i < 10; i++) {
-			StockSoPickPlanResponse stock = new StockSoPickPlanResponse();
-			stock.setStockId(ConvertUtil.convert(i, Long.class));
-			stock.setBoxCode("boxTest");
-			stock.setLocId(ConvertUtil.convert(123456, Long.class));
-			stock.setLocName("库位test");
-			stock.setZoneId(ConvertUtil.convert(654321, Long.class));
-			stock.setZoneName("库区test");
-			stock.setSkuCode("HZ916");
-			stock.setLotNumber("lotNumber" + i);
-			stock.setStockEnableQty(ConvertUtil.convert(50 + i, BigDecimal.class));
-			stock.setStockBalanceQty(ConvertUtil.convert(50 - i, BigDecimal.class));
-			stock.setLpnCode("lpnTest");
-			stock.setStockState("状态test");
-			stock.setSkuLot1("skuLot1");
-			stock.setSkuLot2("skuLot2");
-			stock.setSkuLot3("skuLot3");
-			stock.setSkuLot4("skuLot4");
-			stock.setSkuLot5("skuLot5");
-			stock.setSkuLot6("skuLot6");
-			stock.setSkuLot7("skuLot7");
-			stock.setSkuLot8("skuLot8");
-			stockDistributedList.add(stock);
-		}
-		return R.data(stockDistributedList);
+		return R.data(outStockBiz.getEnableStockBySkuId(skuIdRequest.getSkuId()));
 	}
 
 	/**
@@ -278,10 +254,8 @@ public class SoBillController {
 	 */
 	@PostMapping("/saveAssign")
 	public R<String> saveAssign(@Valid @RequestBody SoBillDistributedRequest soBillDistributedRequest) {
-		System.out.println(soBillDistributedRequest.getSoBillId());
-		System.out.println(soBillDistributedRequest.getSoDetailId());
-		System.out.println(soBillDistributedRequest.getStockIdAndSoPickPlanQtyList());
-		return null;
+		outStockBiz.saveAssign(soBillDistributedRequest);
+		return R.data("调整成功");
 	}
 
 	/**
@@ -299,6 +273,7 @@ public class SoBillController {
 	@ApiLog("pc拣货")
 	@PostMapping("pickByPc")
 	public R<String> pickByPc(@RequestBody PickByPcRequest pickByPcRequest) {
+		outStockBiz.pickByPc(pickByPcRequest);
 		return R.data("操作成功");
 	}
 }

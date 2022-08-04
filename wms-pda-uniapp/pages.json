@@ -412,7 +412,36 @@
 				"navigationStyle": "custom"
 			}
 
+		}, {
+			"path": "pages/checkStock/staticCheckStock/staticCheckStock",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/checkStock/staticCheckStock/startCheckStock",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/checkStock/staticCheckStock/autoLocation",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/checkStock/staticCheckStock/artificialLocation",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
 		}
+
 	],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#33cbcc"

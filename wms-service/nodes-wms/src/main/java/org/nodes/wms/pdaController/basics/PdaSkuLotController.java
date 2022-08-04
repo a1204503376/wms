@@ -1,7 +1,7 @@
 package org.nodes.wms.pdaController.basics;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.skulot.SkuLotBiz;
 import org.nodes.wms.biz.basics.systemParam.SystemParamBiz;
 import org.nodes.wms.dao.basics.skulot.dto.input.FindAllSkuLotRequest;

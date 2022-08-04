@@ -16,23 +16,19 @@
  */
 package org.nodes.core.base.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import org.nodes.core.base.cache.UserCache;
-import org.nodes.core.base.entity.User;
-import org.nodes.core.base.service.IUserService;
-import org.springblade.core.log.exception.ServiceException;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.nodes.core.base.entity.Role;
 import org.nodes.core.base.entity.RoleMenu;
 import org.nodes.core.base.entity.RoleScope;
+import org.nodes.core.base.entity.User;
 import org.nodes.core.base.mapper.RoleMapper;
 import org.nodes.core.base.service.IRoleMenuService;
 import org.nodes.core.base.service.IRoleScopeService;
 import org.nodes.core.base.service.IRoleService;
+import org.nodes.core.base.service.IUserService;
 import org.nodes.core.base.vo.RoleVO;
-import org.nodes.core.constant.CommonConstant;
+import org.nodes.core.constant.WmsAppConstant;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.secure.utils.AuthUtil;
@@ -126,13 +122,13 @@ public class RoleServiceImpl<M extends RoleMapper, T extends Role> extends BaseS
 	private boolean grantDataScope(List<Long> roleIds, List<Long> dataScopeIds) {
 		// 删除角色配置的数据权限集合
 		roleScopeService.remove(Wrappers.<RoleScope>update().lambda()
-			.eq(RoleScope::getScopeCategory, CommonConstant.DATA_SCOPE_CATEGORY)
+			.eq(RoleScope::getScopeCategory, WmsAppConstant.DATA_SCOPE_CATEGORY)
 			.in(RoleScope::getRoleId, roleIds));
 		// 组装配置
 		List<RoleScope> roleDataScopes = new ArrayList<>();
 		roleIds.forEach(roleId -> dataScopeIds.forEach(scopeId -> {
 			RoleScope roleScope = new RoleScope();
-			roleScope.setScopeCategory(CommonConstant.DATA_SCOPE_CATEGORY);
+			roleScope.setScopeCategory(WmsAppConstant.DATA_SCOPE_CATEGORY);
 			roleScope.setRoleId(roleId);
 			roleScope.setScopeId(scopeId);
 			roleDataScopes.add(roleScope);
@@ -145,13 +141,13 @@ public class RoleServiceImpl<M extends RoleMapper, T extends Role> extends BaseS
 	private boolean grantApiScope(List<Long> roleIds, List<Long> apiScopeIds) {
 		// 删除角色配置的接口权限集合
 		roleScopeService.remove(Wrappers.<RoleScope>update().lambda()
-			.eq(RoleScope::getScopeCategory, CommonConstant.API_SCOPE_CATEGORY)
+			.eq(RoleScope::getScopeCategory, WmsAppConstant.API_SCOPE_CATEGORY)
 			.in(RoleScope::getRoleId, roleIds));
 		// 组装配置
 		List<RoleScope> roleApiScopes = new ArrayList<>();
 		roleIds.forEach(roleId -> apiScopeIds.forEach(scopeId -> {
 			RoleScope roleScope = new RoleScope();
-			roleScope.setScopeCategory(CommonConstant.API_SCOPE_CATEGORY);
+			roleScope.setScopeCategory(WmsAppConstant.API_SCOPE_CATEGORY);
 			roleScope.setScopeId(scopeId);
 			roleScope.setRoleId(roleId);
 			roleApiScopes.add(roleScope);

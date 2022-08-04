@@ -3,7 +3,7 @@ package org.nodes.wms.core.timed;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.crontab.entity.CrontabTask;
@@ -20,7 +20,6 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;

@@ -18,7 +18,9 @@ package org.nodes.modules.core.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.nodes.core.base.entity.Role;
 import org.nodes.core.base.entity.User;
@@ -26,8 +28,6 @@ import org.nodes.core.base.service.IUserService;
 import org.nodes.core.base.vo.GrantVO;
 import org.nodes.core.base.vo.RoleVO;
 import org.nodes.core.base.wrapper.RoleWrapper;
-import org.nodes.core.constant.CommonConstant;
-import org.nodes.modules.core.service.IRoleService;
 import org.nodes.modules.core.service.impl.RoleService;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.cache.utils.CacheUtil;
@@ -35,9 +35,7 @@ import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.secure.BladeUser;
-import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.core.tool.api.R;
-import org.springblade.core.tool.constant.BladeConstant;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +44,6 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.springblade.core.cache.constant.CacheConstant.SYS_CACHE;
 

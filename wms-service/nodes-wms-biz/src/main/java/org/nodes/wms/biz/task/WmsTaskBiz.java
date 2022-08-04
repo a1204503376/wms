@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.task.dto.input.AgainIssuedlTask;
 import org.nodes.wms.dao.task.dto.input.CancelTaskRequest;
 import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
-import org.nodes.wms.dao.task.dto.input.TaskDetailPageRequest;
+import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
 import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
-import org.nodes.wms.dao.task.dto.output.TaskDetailPageResponse;
+import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.nodes.wms.dao.task.entities.TaskDetail;
 import org.springblade.core.mp.support.Query;
 
@@ -14,17 +14,19 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
+ * wms工作任务BIZ
  *
+ * @author nodesc
  */
-public interface TaskBiz {
+public interface WmsTaskBiz {
 	/**
-	 * 任务详情分页
+	 * 工作任务分页
 	 *
-	 * @param request 任务详情分页参数
-	 * @param query   分页条件
-	 * @return 按照条件查询出来的任务详情
+	 * @param taskPageQuery 查询参数
+	 * @param query         分页参数
+	 * @return 分页对象
 	 */
-	Page<TaskDetailPageResponse> selectPage(TaskDetailPageRequest request, Query query);
+	Page<TaskPageResponse> page(TaskPageQuery taskPageQuery, Query query);
 
 	/**
 	 * 任务详情

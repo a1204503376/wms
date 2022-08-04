@@ -2,14 +2,15 @@ package org.nodes.wms.biz.task.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.wms.biz.task.TaskBiz;
+import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.dao.task.TaskDetailDao;
+import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.dto.input.AgainIssuedlTask;
 import org.nodes.wms.dao.task.dto.input.CancelTaskRequest;
 import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
-import org.nodes.wms.dao.task.dto.input.TaskDetailPageRequest;
+import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
 import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
-import org.nodes.wms.dao.task.dto.output.TaskDetailPageResponse;
+import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.nodes.wms.dao.task.entities.TaskDetail;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -21,12 +22,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class TaskBizImpl implements TaskBiz {
+public class WmsTaskBizImpl implements WmsTaskBiz {
 	private final TaskDetailDao taskDetailDao;
+	private final WmsTaskDao wmsTaskDao;
 
 	@Override
-	public Page<TaskDetailPageResponse> selectPage(TaskDetailPageRequest request, Query query) {
-		return taskDetailDao.getPage(Condition.getPage(query), request);
+	public Page<TaskPageResponse> page(TaskPageQuery taskPageQuery, Query query) {
+		return wmsTaskDao.getPage(Condition.getPage(query), taskPageQuery);
 	}
 
 	@Override

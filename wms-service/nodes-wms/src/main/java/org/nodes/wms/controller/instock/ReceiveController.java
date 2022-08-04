@@ -2,7 +2,7 @@ package org.nodes.wms.controller.instock;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.instock.InStockBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;

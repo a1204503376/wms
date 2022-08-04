@@ -2,7 +2,6 @@ package org.nodes.wms.dao.basics.location.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -10,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.basics.location.LocationDao;
-import org.nodes.wms.dao.basics.location.constant.LocationConstant;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
 import org.nodes.wms.dao.basics.location.dto.output.LocationDetailResponse;
 import org.nodes.wms.dao.basics.location.dto.output.LocationExcelResponse;
@@ -96,8 +94,8 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 
 		LambdaQueryWrapper<Location> lambdaQueryWrapper = new LambdaQueryWrapper<>();
 		lambdaQueryWrapper
-				.eq(Location::getLocCode, locCode)
-				.eq(Location::getWhId, whId);
+			.eq(Location::getLocCode, locCode)
+			.eq(Location::getWhId, whId);
 		return super.getOne(lambdaQueryWrapper);
 	}
 
@@ -139,10 +137,13 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	}
 
 	@Override
-	public List<Location> getLocationByZoneType(List<Long> locIdList, Integer zoneType) {
-		AssertUtil.notEmpty(locIdList, "判断是否有虚拟库位失败，库位集合为空");
+	public List<Location> getLocationByZoneType(List<Long> locIdList, Long whId, Integer zoneType) {
+		return locationMapper.getLocationByZoneType(locIdList, whId, zoneType);
+	}
 
-		return locationMapper.getLocationByZoneType(locIdList, zoneType);
+	@Override
+	public Location getLocationByZoneTypeAndWhId(List<Long> locIdList, Long whId, Integer zoneType) {
+		return locationMapper.getLocationByZoneTypeAndWhId(locIdList, whId, zoneType);
 	}
 
 	@Override
@@ -168,21 +169,23 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 		}
 		LambdaUpdateWrapper<Location> updateWrapper = Wrappers.lambdaUpdate();
 		updateWrapper.eq(Location::getLocId, locId)
-				.set(Location::getLocFlag, locFlag)
-				.set(Location::getLocFlagDesc, taskId);
+			.set(Location::getLocFlag, locFlag)
+			.set(Location::getLocFlagDesc, taskId);
 		if (!super.update(updateWrapper)) {
 			throw new ServiceException(String.format("根据locId:[%d]更新库位使用状态失败", locId));
 		}
 	}
 
 	@Override
-	public void updateLocFlag(String taskId, Integer locFlag) {
+	public void updateLocFlag(String taskId, Integer locFlag, boolean isResetLocFlagDesc) {
 		AssertUtil.notNull(taskId, "冻结解冻库位时任务编号不能为空");
 		AssertUtil.notNull(locFlag, "冻结解冻库位时状态不能为空");
 
 		LambdaUpdateWrapper<Location> updateWrapper = Wrappers.lambdaUpdate();
 		updateWrapper.eq(Location::getLocFlagDesc, taskId)
-				.set(Location::getLocFlag, locFlag);
+			.set(Location::getLocFlag, locFlag)
+			.set(isResetLocFlagDesc, Location::getLocFlagDesc, "");
+
 		if (!super.update(updateWrapper)) {
 			throw new ServiceException(String.format("根据taskId:[%d]更新库位使用状态失败", taskId));
 		}

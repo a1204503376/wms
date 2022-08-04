@@ -1,4 +1,4 @@
-package org.nodes.wms.dao.basics.systemParam.constant;
+package org.nodes.core.constant;
 
 /**
  * 系统参数key的常量
@@ -19,5 +19,5 @@ public class SystemParamConstant {
 	/**
 	 * 天宜定制：调度系统接口地址
 	 */
-	public static final String SCHEDULE_URL = "";
+	public static final String SCHEDULE_URL = "tianyi:schedule_url";
 }

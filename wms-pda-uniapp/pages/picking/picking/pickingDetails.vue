@@ -128,7 +128,8 @@
 				this.params.planQty = row.planQty;
 				this.params.scanQty = row.scanQty;
 				this.clearEmitKeyDown();
-				uni.$u.func.routeRedirectTo('/pages/picking/picking/pickingByPcs',this.params);
+				uni.setStorageSync('soDetail', row);
+				uni.$u.func.routeRedirectTo('/pages/picking/picking/pickingByPcs');
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

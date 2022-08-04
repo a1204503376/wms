@@ -3,7 +3,7 @@ package org.nodes.wms.biz.instock.receive.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.AppConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.common.log.LogBiz;
@@ -285,7 +285,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 
 		Sku sku = skuDao.getById(detail.getSkuId());
 		if (Func.isNotEmpty(sku)) {
-			if (Objects.equals(sku.getIsSn(), AppConstant.FALSE_DEFAULT)) {
+			if (Objects.equals(sku.getIsSn(), WmsAppConstant.FALSE_DEFAULT)) {
 				response.setIsSn(false);
 			}
 		}

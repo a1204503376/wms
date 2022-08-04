@@ -1,7 +1,7 @@
 package org.nodes.wms.controller.state;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.constant.WmsApiPath;
+import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
 import org.nodes.wms.dao.application.dto.output.AuditLogTypeResponse;
 import org.nodes.wms.dao.application.dto.output.LpnTypeResponse;

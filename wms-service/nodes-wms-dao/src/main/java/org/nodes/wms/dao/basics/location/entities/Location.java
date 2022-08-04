@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.Data;
 
-import org.nodes.wms.dao.basics.location.constant.LocationConstant;
+import org.nodes.core.constant.LocationConstant;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.tenant.mp.TenantEntity;
 import org.springblade.core.tool.utils.Func;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 /**
  * 库位管理 实体类
- * 
+ *
  * @author nodesc
  */
 @Data
@@ -339,7 +339,7 @@ public class Location extends TenantEntity {
 
 	/**
 	 * 判断库位是否可以上架库存
-	 * 
+	 *
 	 * @return true表示可以上架库存
 	 */
 	public boolean enableStock() {
@@ -350,7 +350,7 @@ public class Location extends TenantEntity {
 
 	/**
 	 * 获取该库位库存默认状态
-	 * 
+	 *
 	 * @return 库存状态
 	 */
 	public StockStatusEnum defaultStockStatus() {

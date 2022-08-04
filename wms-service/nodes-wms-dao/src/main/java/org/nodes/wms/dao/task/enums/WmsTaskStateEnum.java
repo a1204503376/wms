@@ -16,7 +16,7 @@ public enum WmsTaskStateEnum {
 	NOT_ISSUED(1, "未下发"),
 	ISSUED(2, "已下发"),
 	START_EXECUTION(3, "开始执行"),
-	ABNORMAL(4, "异常中断"),
+	ABNORMAL(4, "异常中断中"),
 	COMPLETED(5, "已完成"),
 	CANCELED(6, "已取消");
 

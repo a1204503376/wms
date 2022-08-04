@@ -93,7 +93,7 @@ const install = (Vue, vm) => {
 		})
 	}
 	
-	// 跳转路由前检查登录状态 有历史路由的跳转
+	// 跳转路由前检查登录状态 跳转页面 但是当前页面不计入路由进行管理
 	const routeRedirectTo = (url,param) => {
 		if(tool.isNotEmpty(param)){
 			url+='?param='+JSON.stringify(param);
@@ -202,7 +202,7 @@ const install = (Vue, vm) => {
 				image: data.image || '',
 				mask: data.mask || false,
 				position: data.position || 'center',
-				duration: data.duration || 1500,
+				duration: data.duration || 35000,
 				success: () => {
 					setTimeout(() => {
 						if (data.back) return uni.navigateBack()

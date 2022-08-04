@@ -126,7 +126,7 @@ public class StockUtil {
 	 * @param reason      失败场景
 	 */
 	public static void assertPick(Stock sourceStock, BigDecimal pickQty, String reason) {
-		BigDecimal enableQty = getStockEnable(sourceStock);
+		BigDecimal enableQty = sourceStock.getStockEnable();
 		if (BigDecimalUtil.lt(enableQty, pickQty)) {
 			if (Func.isEmpty(reason)) {
 				reason = "判断库存可用量是否够";
