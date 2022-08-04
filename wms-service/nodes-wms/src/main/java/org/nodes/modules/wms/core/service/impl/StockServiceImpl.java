@@ -251,7 +251,7 @@ public class StockServiceImpl implements StockService {
 				soDetail.setPlanQty(originalStock.getStockQty());
 				soDetail.setScanQty(soDetail.getPlanQty());
 				soDetail.setSurplusQty(soDetail.getPlanQty().subtract(soDetail.getScanQty()));
-				soDetail.setBillDetailState(SoDetailStateEnum.Allocated.getIndex());//单据状态
+				soDetail.setBillDetailState(SoDetailStateEnum.Allocated.getCode());//单据状态
 				// 处理明细批属性
 				for (int i = 1; i <= ParamCache.LOT_COUNT; i++) {
 					if (originalStock.skuLotChk(i)) {

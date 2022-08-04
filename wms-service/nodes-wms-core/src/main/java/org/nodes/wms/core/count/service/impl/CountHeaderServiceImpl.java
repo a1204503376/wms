@@ -861,7 +861,7 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper, T extends Count
 						soDetail.setPlanQty(countReport.getWmsQty().subtract(countReport.getCountQty()));
 						soDetail.setScanQty(soDetail.getPlanQty());
 						soDetail.setSurplusQty(soDetail.getPlanQty().subtract(soDetail.getScanQty()));
-						soDetail.setBillDetailState(SoDetailStateEnum.Allocated.getIndex());
+						soDetail.setBillDetailState(SoDetailStateEnum.Allocated.getCode());
 						// 处理明细批属性
 						for (int i = 1; i <= ParamCache.LOT_COUNT; i++) {
 							if (countReport.skuLotChk(i)) {

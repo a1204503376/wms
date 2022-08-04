@@ -70,7 +70,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	@Override
 	public IPage<FindAllPickingResponse> selectAllPickingByNo(FindAllPickingRequest request, Query query) {
 		// request.setBillDetailState(SoDetailStateEnum.Allocated.getIndex());
-		request.setBillDetailState(SoDetailStateEnum.UnAlloc.getIndex());
+		request.setBillDetailState(SoDetailStateEnum.UnAlloc.getCode());
 		return soHeaderBiz.getAllPickingByNo(Condition.getPage(query), request);
 	}
 

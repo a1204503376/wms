@@ -882,7 +882,7 @@ public class PickPlanServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 				soDetail1.setSurplusQty(soDetail1.getSurplusQty().add(stockDetail.getStockQty()));
 				if (BigDecimalUtil.eq(soDetail1.getScanQty(), BigDecimal.ZERO)
 					&& Func.isNotEmpty(deleteList)) {
-					soDetail1.setBillDetailState(SoDetailStateEnum.UnAlloc.getIndex());
+					soDetail1.setBillDetailState(SoDetailStateEnum.UnAlloc.getCode());
 				}
 				updateSoDetailList.add(soDetail1);
 			});
@@ -1746,7 +1746,7 @@ public class PickPlanServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 		// 获取所有还可以分配的明细
 		List<SoDetail> soDetailListAll = soDetailService.list(Condition.getQueryWrapper(new SoDetail()).lambda()
 			.in(SoDetail::getSoBillId, billIdList)
-			.eq(SoDetail::getBillDetailState, SoDetailStateEnum.UnAlloc.getIndex())
+			.eq(SoDetail::getBillDetailState, SoDetailStateEnum.UnAlloc.getCode())
 			.ne(SoDetail::getSurplusQty, BigDecimal.ZERO));
 		List<CreateDetailPickPlanVO> resultList = new ArrayList<>();
 
