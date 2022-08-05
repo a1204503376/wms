@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.enums.BaseEnum;
 import org.nodes.wms.dao.stock.dto.output.StockStatusResponse;
 
 import java.util.ArrayList;
@@ -14,12 +15,12 @@ import java.util.List;
  */
 @Getter
 @RequiredArgsConstructor
-public enum StockStatusEnum {
+public enum StockStatusEnum implements BaseEnum {
 	NORMAL(0, "正常"),
 	FREEZE(1, "冻结"),
 	SYSTEM_FREEZE(-1, "系统冻结");
 
-    @EnumValue
+	@EnumValue
 	private final Integer code;
 	@JsonValue
 	private final String desc;
@@ -35,4 +36,6 @@ public enum StockStatusEnum {
 		}
 		return stockStatusList;
 	}
+
+
 }
