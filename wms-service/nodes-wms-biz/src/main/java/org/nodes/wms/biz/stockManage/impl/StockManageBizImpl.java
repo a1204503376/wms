@@ -315,7 +315,7 @@ public class StockManageBizImpl implements StockManageBiz {
 	 */
 	private void canMove(Location targetLocation) {
 		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
-		List<Location> outStockShippingLocationList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA);
+		List<Location> outStockShippingLocationList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OF_PICK_TO);
 		Location outStockShippingLocation = outStockShippingLocationList
 			.stream()
 			.filter(location -> Func.equals(location.getLocId(), targetLocation.getLocId()))

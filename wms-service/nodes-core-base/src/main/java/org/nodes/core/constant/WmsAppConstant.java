@@ -7,23 +7,6 @@ package org.nodes.core.constant;
  */
 public interface WmsAppConstant {
 
-	/**
-	 * 天宜定制：箱型：A箱
-	 */
-	String BOX_CODE_A = "A";
-	/**
-	 * 天宜定制：箱型：B箱
-	 */
-	String BOX_CODE_B = "B";
-	/**
-	 * 天宜定制：箱型：C箱
-	 */
-	String BOX_CODE_C = "C";
-	/**
-	 * 天宜定制：箱型：D箱
-	 */
-	String BOX_CODE_D = "D";
-
 	String BASE_PACKAGES = "org.springblade";
 
 	/**

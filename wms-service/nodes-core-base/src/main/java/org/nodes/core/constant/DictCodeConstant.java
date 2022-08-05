@@ -137,15 +137,15 @@ public interface DictCodeConstant {
 	/**
 	 * 库区类型:出库集货区
 	 */
-	Integer ZONE_TYPE_OUT_STOCK_SHIPPING_AREA = 110;
+	Integer ZONE_TYPE_OF_PICK_TO = 110;
 	/**
 	 * 库区类型:入库暂存区
 	 */
-	Integer ZONE_TYPE_IN_STOCK_TS_AREA = 120;
+	Integer ZONE_TYPE_OF_STAGE = 120;
 	/**
 	 * 库区类型:入库质检区
 	 */
-	Integer ZONE_TYPE_IN_STOCK_QC_AREA = 130;
+	Integer ZONE_TYPE_OF_INSTOCK_QC = 130;
 	/**
 	 * 入库方式
 	 */
