@@ -10,6 +10,7 @@ import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.nodes.wms.dao.task.entities.TaskDetail;
 import org.springblade.core.mp.support.Query;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 
@@ -64,4 +65,11 @@ public interface WmsTaskBiz {
 	 */
 	Boolean updateTaskState(TaskDetail taskDetail);
 
+	/**
+	 * 导出工作任务列表
+	 *
+	 * @param taskPageQuery 查询参数
+	 * @param response      响应对象
+	 */
+	void export(TaskPageQuery taskPageQuery, HttpServletResponse response);
 }

@@ -14,16 +14,19 @@ import org.nodes.wms.dao.lendreturn.dto.input.LendReturnQuery;
 import org.nodes.wms.dao.lendreturn.dto.input.LendReturnRequest;
 import org.nodes.wms.dao.lendreturn.dto.input.LogLendReturnRequest;
 import org.nodes.wms.dao.lendreturn.dto.output.LendReturnResponse;
+import org.nodes.wms.dao.lendreturn.dto.output.NoReturnExcelResponse;
 import org.nodes.wms.dao.lendreturn.dto.output.NoReturnResponse;
 import org.nodes.wms.dao.lendreturn.entities.LogLendReturn;
 import org.nodes.wms.dao.lendreturn.entities.LogNoReturn;
 import org.nodes.wms.dao.lendreturn.enums.LendReturnTypeEnum;
+import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.tool.api.ResultCode;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,13 +42,12 @@ public class LendReturnBizImpl implements LendReturnBiz {
 	private final LogLendReturnFactory logLendReturnFactory;
 	private final LogLendReturnDao logLendReturnDao;
 	private final LogNoReturnDao logNoReturnDao;
-	@Resource
-	private LendReturnBiz lendReturnBiz;
 
 	/**
 	 * 保存借出归还记录
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void saveLog(LendReturnRequest lendReturnRequest) {
 		List<LogLendReturn> logLendReturnList;
 		List<LogLendReturnRequest> logLendReturnRequestList = lendReturnRequest.getLogLendReturnRequestList();
@@ -87,12 +89,10 @@ public class LendReturnBizImpl implements LendReturnBiz {
 				}
 			}
 		}
-		lendReturnBiz.saveLogData(logNoReturnList,logLendReturnList);
+		saveLogData(logNoReturnList,logLendReturnList);
 	}
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void saveLogData(List<LogNoReturn> logNoReturnList, List<LogLendReturn> logLendReturnList) {
+	private void saveLogData(List<LogNoReturn> logNoReturnList, List<LogLendReturn> logLendReturnList) {
 		// 如果借出量 == 归还量，物理删除记录
 		List<LogNoReturn> deleteList = logNoReturnList.stream()
 			.filter(d -> Func.notNull(d.getId())
@@ -125,6 +125,12 @@ public class LendReturnBizImpl implements LendReturnBiz {
 	@Override
 	public Page<NoReturnResponse> pageNoReturn(Page<LogNoReturn> page, LendReturnQuery lendReturnQuery) {
 		return logNoReturnDao.selectPage(page,lendReturnQuery);
+	}
+
+	@Override
+	public void exportNoReturn(LendReturnQuery lendReturnQuery, HttpServletResponse response) {
+		List<LogNoReturn> logNoReturnList = logNoReturnDao.listByQuery(lendReturnQuery);
+		ExcelUtil.export(response,"","",Func.copy(logNoReturnList, NoReturnExcelResponse.class),NoReturnExcelResponse.class);
 	}
 
 	private static void setQtyAndSnCode(boolean lendFlag, LogLendReturnRequest logLendReturnRequest, LogNoReturn logNoReturn) {

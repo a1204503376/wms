@@ -16,7 +16,7 @@ import java.util.List;
  * @since 2020-02-20
  */
 @Primary
-public interface CountRecordMapper extends BaseMapper<CountRecord> {
+public interface CountRecordMapper1 extends BaseMapper<CountRecord> {
 
 	/**
 	 * 自定义分页

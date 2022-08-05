@@ -1,6 +1,5 @@
 package org.nodes.wms.biz.lendreturn.modular;
 
-import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.lendreturn.dto.input.LogLendReturnRequest;
 import org.nodes.wms.dao.lendreturn.entities.LogLendReturn;
@@ -15,7 +14,6 @@ import java.util.List;
  * 主要用于创建借出归还实体
  */
 @Service
-@RequiredArgsConstructor
 public class LogLendReturnFactory {
 
 	public List<LogLendReturn> createLendList(List<LogLendReturnRequest> logLendReturnRequestList){

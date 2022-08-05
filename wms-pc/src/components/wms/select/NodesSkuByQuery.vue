@@ -30,7 +30,7 @@ import {getSkuSelectResponseTop10List} from "@/api/wms/basics/sku";
 import debounce from "lodash/debounce";
 
 export default {
-    name: "NodesSku",
+    name: "NodesSkuByQuery",
     model: {
         prop: 'selectVal',
         event: 'selectValChange'

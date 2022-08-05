@@ -4,6 +4,11 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.enums.BaseEnum;
+import org.nodes.wms.dao.task.dto.output.TaskTypeSelectResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 任务类别
@@ -12,8 +17,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public enum WmsTaskTypeEnum {
-
+public enum WmsTaskTypeEnum implements BaseEnum {
 	PUTAWAY(1, "上架"),
 	PICKING(2, "拣货"),
 	STOCK_COUNT(3, "盘点"),
@@ -26,4 +30,15 @@ public enum WmsTaskTypeEnum {
 
 	@JsonValue
 	private final String desc;
+
+	public static List<TaskTypeSelectResponse> getList() {
+		List<TaskTypeSelectResponse> list = new ArrayList<>();
+		for (WmsTaskTypeEnum item : values()) {
+			TaskTypeSelectResponse taskTypeSelectResponse = new TaskTypeSelectResponse();
+			taskTypeSelectResponse.setLabel(item.desc);
+			taskTypeSelectResponse.setValue(item.code);
+			list.add(taskTypeSelectResponse);
+		}
+		return list;
+	}
 }

@@ -112,7 +112,7 @@ public class WarehouseServiceImpl<M extends WarehouseMapper, T extends Warehouse
 			//WarehouseCache.saveOrUpdate(whDTO);
 		}
 		//STAGE（入库集货区）、QC（入库检验区）、
-		//PICKTO（出库集货区）、PACK（打包区）、UNKNOWN（未知库位）、
+		//PICKTO（出库集货区）、UNKNOWN（未知库位）、
 		//INTRANSIT（库内虚拟区）；默认的库位编码为库房编码加上述库位编码，中间用-隔开
 		//1.生成入库暂存区
 		Long stageZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.STAGE);

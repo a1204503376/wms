@@ -1,78 +1,58 @@
 <template>
-    <div id="soHeader">
+    <div id="unReturned">
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
                     <el-col :span="8">
-                        <el-form-item label="发货单编码" label-width="90px">
-                            <el-input v-model.trim="form.params.soBillNo"
-                                      :clearable="true"
-                                      placeholder="请输入发货单编码">
+                        <el-form-item label="借出人姓名" label-width="90px">
+                            <el-input
+                                v-model.trim="form.params.lendReturnName"
+                                :clearable="true"
+                                placeholder="请输入借出人姓名">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="上游编码" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.orderNo"
-                                :clearable="true"
-                                placeholder="请输入上有编码"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="单据类型" label-width="90px">
-                            <nodes-bill-type
-                                v-model="form.params.billTypeCdList"
+                        <el-form-item label="物品" label-width="90px">
+                            <nodes-sku
+                                v-model="form.params.skuIdList"
                                 :multiple="true"
-                                io-type="O"
-                                placeholder="请选择"></nodes-bill-type>
+                                placeholder="请选择">
+                            </nodes-sku>
                         </el-form-item>
                     </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="创建日期" label-width="90px">
+                                <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
+                            </el-form-item>
+                        </el-col>
                 </el-row>
             </template>
             <template v-slot:expandSearch>
                 <el-row type="flex">
                     <el-col :span="6">
-                        <el-form-item label="单据状态" label-width="90px">
-                            <nodes-so-bill-state v-model="form.params.soBillStateList"></nodes-so-bill-state>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item label="客户" label-width="90px">
-                            <nodes-customer
-                                v-model.trim="form.params.customerIdList"
-                                :multiple="true"
-                                placeholder="请输入客户编码或名称"></nodes-customer>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item label="仓库" label-width="90px">
-                            <nodes-warehouse
-                                v-model="form.params.whIdList"
-                                :multiple="true"
-                            ></nodes-warehouse>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item label="创建日期" label-width="90px">
-                            <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row type="flex">
-                    <el-col :span="6">
-                        <el-form-item label="创建人" label-width="90px">
+                        <el-form-item label="生产批次" label-width="90px">
                             <el-input
-                                v-model.trim="form.params.createUser"
+                                v-model.trim="form.params.skuLot1"
                                 :clearable="true"
-                                placeholder="请输入创建人"></el-input>
+                                placeholder="请输入生产批次">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="规格型号" label-width="90px">
+                            <el-input
+                                v-model.trim="form.params.skuLot2"
+                                :clearable="true"
+                                placeholder="请输入规格型号">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </template>
             <template v-slot:batchBtn>
                 <el-button
-                    v-if="permissionObj.add"
+                    v-if="permissionObj.createReturnBill"
                     icon="el-icon-plus"
                     size="mini" type="primary"
                     @click="createReturnBill">创建归还单
@@ -98,36 +78,27 @@
             <template v-slot:table>
                 <el-table ref="table" :data="table.data" border highlight-current-row
                           size="mini" @sort-change="onSortChange">
-                    <el-table-column fixed type="selection" width="50">
+                    <el-table-column
+                        fixed
+                        type="selection"
+                        width="50">
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
-                        <el-table-column v-if="!column.hide && column.prop === 'soBillNo'" :key="index"
-                                         show-overflow-tooltip
-                                         v-bind="column" width="150">
-                            <template v-slot="scope">
-                                <el-link
-                                    :underline="false"
-                                    target="_blank"
-                                    type="primary"
-                                    @click="onView(scope.row)">{{ scope.row.soBillNo }}
-                                </el-link>
-                            </template>
-                        </el-table-column>
                         <el-table-column
-                            v-if="!column.hide && column.prop !== 'soBillNo'"
+                            v-if="!column.hide"
                             :key="index"
                             show-overflow-tooltip
-                            v-bind="column"
-                            width="150">
+                            v-bind="column" width="150">
                         </el-table-column>
                     </template>
                 </el-table>
             </template>
             <template v-slot:page>
-                <el-pagination :current-page="page.current" :page-size="page.size" :page-sizes="[20, 50, 100]"
-                               :total="page.total" background layout="total, sizes, prev, pager, next, jumper"
-                               v-bind="page"
-                               @size-change="handleSizeChange" @current-change="handleCurrentChange">
+                <el-pagination
+                    :current-page="page.current" :page-size="page.size" :page-sizes="[20, 50, 100]"
+                    :total="page.total" background layout="total, sizes, prev, pager, next, jumper"
+                    v-bind="page"
+                    @size-change="handleSizeChange" @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>
@@ -144,24 +115,19 @@
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
-import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import {listMixin} from "@/mixins/list";
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js'
-import NodesSoBillState from "@/components/wms/select/NodesSoBillState";
-import {closeSoBill, exportData, getPage, remove} from "@/api/wms/outstock/soHeader"
-import NodesCustomer from "@/components/wms/select/NodesCustomer";
-import NodesBillType from "@/components/wms/select/NodesBillType";
+import {exportData, page} from "@/api/wms/stock/unReturned"
 import {nowDateFormat} from "@/util/date";
+import NodesSku from "@/components/wms/select/NodesSkuByQuery";
+import func from "@/util/func";
 
 
 export default {
-    name: "soHeader",
+    name: "unReturned",
     components: {
-        NodesBillType,
-        NodesCustomer,
-        NodesSoBillState,
-        NodesWarehouse,
+        NodesSku,
         DialogColumn,
         NodesMasterPage,
         NodesDateRange,
@@ -172,67 +138,66 @@ export default {
         return {
             form: {
                 params: {
-
+                    lendReturnName: '',
+                    skuIdList: [],
+                    createTimeDateRange: [],
+                    skuLot1: null,
+                    skuLot2: null,
                 }
             },
             table: {
                 columnList: [
                     {
-                        prop: 'soBillNo',
-                        label: '发货单编码',
+                        prop: 'lendReturnName',
+                        label: '借出人姓名',
                         sortable: 'custom',
                     },
                     {
-                        prop: 'orderNo',
-                        label: '上游编码',
+                        prop: 'skuCode',
+                        label: '物品编码',
                         sortable: 'custom',
                     },
                     {
-                        prop: 'billTypeName',
-                        label: '单据类型',
+                        prop: 'skuName',
+                        label: '物品名称',
                         sortable: 'custom',
                     },
                     {
-                        prop: 'soBillState',
-                        label: '单据状态',
+                        prop: 'lendQty',
+                        label: '借出数量',
                         sortable: 'custom',
                     },
                     {
-                        prop: 'customerCode',
-                        label: '客户编码',
+                        prop: 'returnQty',
+                        label: '归还数量',
                         sortable: 'custom',
                     },
                     {
-                        prop: 'customerName',
-                        label: '客户名称',
+                        prop: 'noReturnQty',
+                        label: '未归还数量',
                         sortable: 'custom',
                     },
                     {
-                        prop: 'whName',
-                        label: '仓库编码',
+                        prop: 'wsuCode',
+                        label: '计量单位编码',
                         sortable: 'custom',
                     },
                     {
-                        prop: 'createTime',
-                        label: '创建时间',
+                        prop: 'wsuName',
+                        label: '计量单位名称',
                         sortable: 'custom',
                     },
                     {
-                        prop: 'createUser',
-                        label: '创建人',
-                        sortable: 'custom',
-                    },
-                    {
-                        prop: 'soBillRemark',
-                        label: '备注',
+                        prop: 'snCode',
+                        label: '序列号',
                         sortable: 'custom',
                     },
                 ]
             },
         }
     },
-    async created() {
-        await this.getTableData();
+    created() {
+        this.getTableData();
     },
     watch: {
         $route(to) {
@@ -250,8 +215,8 @@ export default {
         }
     },
     methods: {
-        async getTableData() {
-            await getPage(this.page, this.form.params)
+        getTableData() {
+            page(this.page, this.form.params)
                 .then((res) => {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
@@ -265,9 +230,8 @@ export default {
             this.loading = true;
             exportData(this.form.params)
                 .then((res) => {
-                    console.log(res);
                     this.$message.success("操作成功，正在下载中...");
-                    fileDownload(res.data, `发货单${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
+                    fileDownload(res.data, `未归还列表${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
                 })
                 .catch(() => {
                     this.$message.error("系统模板目录配置有误或文件不存在");
@@ -278,13 +242,28 @@ export default {
         },
         onReset() {
             this.form.params = {
+                lendReturnName: '',
+                skuIdList: [],
+                createTimeDateRange: [],
+                skuLot1: null,
+                skuLot2: null,
             }
         },
         onExportLocalData() {
-            this.exportCurrentDataToExcel("发货单", "发货单");
+            this.exportCurrentDataToExcel("未归还列表", "未归还列表");
         },
         createReturnBill() {
-
+            let rows = this.$refs.table.selection;
+            if (func.isEmpty(rows)) {
+                this.$message.warning("至少选择一条记录创建");
+                return;
+            }
+            this.$router.push({
+                name: '创建归还单',
+                params: {
+                    unReturnedData: JSON.stringify(rows)
+                }
+            })
         }
     }
 }

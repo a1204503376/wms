@@ -30,4 +30,9 @@ public class NoBillFinals {
 	 * 参数key：发运单编码生成规则
 	 */
 	public final static String RULE_SHIP = "NoRuleOfShip";
+
+	/**
+	 * 参数key：盘点单编码生成规则
+	 */
+	public final static String RULE_COUNT = "NoRuleOfCount";
 }
