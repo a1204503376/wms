@@ -16,7 +16,7 @@ import java.util.List;
  * @since 2020-02-20
  */
 @Primary
-public interface CountReportMapper extends BaseMapper<CountReport> {
+public interface CountReportMapper1 extends BaseMapper<CountReport> {
 
 	/**
 	 * 自定义分页

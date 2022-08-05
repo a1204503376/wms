@@ -25,7 +25,7 @@ import org.nodes.wms.core.count.entity.CountHeader;
 import org.nodes.wms.core.count.entity.CountRecord;
 import org.nodes.wms.core.count.entity.CountReport;
 import org.nodes.wms.core.count.enums.*;
-import org.nodes.wms.core.count.mapper.CountHeaderMapper;
+import org.nodes.wms.core.count.mapper.CountHeaderMapper1;
 import org.nodes.wms.core.count.service.*;
 import org.nodes.wms.core.count.vo.CountDetailVO;
 import org.nodes.wms.core.count.vo.CountHeaderVO;
@@ -121,8 +121,8 @@ import java.util.stream.Collectors;
 @Service
 @Primary
 @Transactional(propagation = Propagation.NESTED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
-public class CountHeaderServiceImpl<M extends CountHeaderMapper, T extends CountHeader>
-	extends BaseServiceImpl<CountHeaderMapper, CountHeader>
+public class CountHeaderServiceImpl<M extends CountHeaderMapper1, T extends CountHeader>
+	extends BaseServiceImpl<CountHeaderMapper1, CountHeader>
 	implements ICountHeaderService {
 
 	@Autowired

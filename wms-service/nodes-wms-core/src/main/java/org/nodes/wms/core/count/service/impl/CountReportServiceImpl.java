@@ -3,7 +3,7 @@ package org.nodes.wms.core.count.service.impl;
 
 import org.nodes.wms.core.count.entity.CountReport;
 import org.nodes.wms.core.count.excel.CountReportExcel;
-import org.nodes.wms.core.count.mapper.CountReportMapper;
+import org.nodes.wms.core.count.mapper.CountReportMapper1;
 import org.nodes.wms.core.count.service.ICountReportService;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -29,8 +29,8 @@ import java.util.List;
 @Service
 @Primary
 @Transactional(propagation = Propagation.NESTED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
-public class CountReportServiceImpl<M extends CountReportMapper, T extends CountReport>
-	extends BaseServiceImpl<CountReportMapper, CountReport>
+public class CountReportServiceImpl<M extends CountReportMapper1, T extends CountReport>
+	extends BaseServiceImpl<CountReportMapper1, CountReport>
 	implements ICountReportService {
 
 	/**
