@@ -58,9 +58,9 @@ public class SkuService extends org.nodes.wms.core.basedata.service.impl.SkuServ
 		// 判断物品是否有未处理完的出库明细
 		List<SoHeader> soHeaderList = soHeaderService.list(Condition.getQueryWrapper(new SoHeader()).lambda()
 			.notIn(SoHeader::getSoBillState,
-				SoBillStateEnum.COMPLETED.getIndex(),
-				SoBillStateEnum.REPEAL.getIndex(),
-				SoBillStateEnum.CANCEL.getIndex()));
+				SoBillStateEnum.COMPLETED.getCode(),
+				SoBillStateEnum.ALL_OUT_STOCK.getCode(),
+				SoBillStateEnum.CANCELED.getCode()));
 		QueryWrapper<SoDetail> soDetailQueryWrapper = Condition.getQueryWrapper(new SoDetail());
 		soDetailQueryWrapper.lambda()
 			.gt(SoDetail::getSurplusQty, BigDecimal.ZERO)
@@ -126,7 +126,7 @@ public class SkuService extends org.nodes.wms.core.basedata.service.impl.SkuServ
 			// 验证出库
 			List<SoHeader> soHeaderList = soHeaderService.list(Condition.getQueryWrapper(new SoHeader())
 				.lambda()
-				.eq(SoHeader::getSoBillState, SoBillStateEnum.EXECUTING.getIndex()));
+				.eq(SoHeader::getSoBillState, SoBillStateEnum.EXECUTING.getCode()));
 			if (Func.isNotEmpty(soHeaderList)) {
 				List<SoDetail> soDetailList = soDetailService.list(Condition.getQueryWrapper(new SoDetail())
 					.lambda()
@@ -157,7 +157,7 @@ public class SkuService extends org.nodes.wms.core.basedata.service.impl.SkuServ
 			// 处理创建状态的出库单明细
 			soHeaderList = soHeaderService.list(Condition.getQueryWrapper(new SoHeader())
 				.lambda()
-				.eq(SoHeader::getSoBillState, SoBillStateEnum.CREATE.getIndex()));
+				.eq(SoHeader::getSoBillState, SoBillStateEnum.CREATE.getCode()));
 			if (Func.isNotEmpty(soHeaderList)) {
 				List<SoDetail> soDetailList = soDetailService.list(Condition.getQueryWrapper(new SoDetail())
 					.lambda()
@@ -196,7 +196,7 @@ public class SkuService extends org.nodes.wms.core.basedata.service.impl.SkuServ
 		// 验证出库
 		List<SoHeader> soHeaderList = soHeaderService.list(Condition.getQueryWrapper(new SoHeader())
 			.lambda()
-			.eq(SoHeader::getSoBillState, SoBillStateEnum.EXECUTING.getIndex()));
+			.eq(SoHeader::getSoBillState, SoBillStateEnum.EXECUTING.getCode()));
 		if (Func.isNotEmpty(soHeaderList)) {
 			List<SoDetail> soDetailList = soDetailService.list(Condition.getQueryWrapper(new SoDetail())
 				.lambda()

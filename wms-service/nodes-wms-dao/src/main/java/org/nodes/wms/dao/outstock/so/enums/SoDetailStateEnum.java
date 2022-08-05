@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.outstock.so.enums;
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -23,8 +25,15 @@ public enum SoDetailStateEnum {
 	/**
 	 * 已分配
 	 */
-	Allocated("已分配", 30);
+	Allocated("已分配", 30),
+	NORMAL("正常", 0),
+	PART("部分出库", 50),
+	ALL_OUT_STOCK("全部出库", 60),
+	DELETED("已删除", 40);
 
-	private String name;
-	private int index;
+	@JsonValue
+	private String desc;
+
+	@EnumValue
+	private int code;
 }

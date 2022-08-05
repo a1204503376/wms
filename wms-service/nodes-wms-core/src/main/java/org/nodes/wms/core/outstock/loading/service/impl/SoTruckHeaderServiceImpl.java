@@ -376,7 +376,7 @@ public class SoTruckHeaderServiceImpl<M extends SoTruckHeaderMapper, T extends S
 			// 查询该订单是否存在已装车的容器
 			Integer truckDetailSize = soTruckDetailService.list(Condition.getQueryWrapper(new SoTruckDetail()).lambda()
 				.eq(SoTruckDetail::getSoBillId, soHeader.getSoBillId())).size();
-			if (soHeader.getSoBillState().equals(SoBillStateEnum.CANCEL) && truckDetailSize.equals(0)) {
+			if (soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED) && truckDetailSize.equals(0)) {
 				throw new ServiceException(
 					"当前容器：" + soTruckDetail.getLpnCode() + " 关联的出库单(" + soHeader.getSoBillNo() + ")已取消！");
 			}

@@ -49,8 +49,8 @@ public class SkuLotUtil {
 	/**
 	 * 比较两个对象中的所有skuLot是否相同
 	 *
-	 * @param t1
-	 * @param t2
+	 * @param t1 比较对象
+	 * @param t2 比较对象
 	 * @param <T1> 存在skuLot[n]属性的对象
 	 * @param <T2> 存在skuLot[n]属性的对象
 	 * @return 相同返回ture，否则返回false,如果没有skuLot属性也返回false
@@ -86,8 +86,8 @@ public class SkuLotUtil {
 	/**
 	 * 判断两个是否相同，如果两个都为空（null和空白字符）或者两个值相等
 	 *
-	 * @param t1SkuLot
-	 * @param t2SkuLot
+	 * @param t1SkuLot 比较对象
+	 * @param t2SkuLot 比较对象
 	 * @return true：相同
 	 */
 	private static boolean isSame(Object t1SkuLot, Object t2SkuLot) {
@@ -101,8 +101,8 @@ public class SkuLotUtil {
 	/**
 	 * 判断对象是否有30个skuLot属性
 	 *
-	 * @param object
-	 * @param <T>
+	 * @param object 需要判断的对象
+	 * @param <T> 需要判断的类
 	 * @return true:存在30个批属性
 	 */
 	public static <T> boolean hasSkuLot(T object) {
@@ -173,12 +173,28 @@ public class SkuLotUtil {
 	/**
 	 * 如果sku lot不为null时，将会把该批属性追加到sql中
 	 *
-	 * @param queryWrapper
-	 * @param skuLot
-	 * @param <T>
-	 * @param <R>
+	 * @param queryWrapper queryWrapper
+	 * @param skuLot       含有skuLot属性的对象
+	 * @param <T>          含有skuLot属性的类
+	 * @param <R>          返回类定义
 	 */
 	public static <T, R> void applySql(LambdaQueryWrapper<R> queryWrapper, T skuLot) {
+		applySql(queryWrapper, skuLot, false);
+	}
+
+	/**
+	 * 如果sku lot不为空白字符时，将会把该批属性追加到sql中
+	 *
+	 * @param queryWrapper queryWrapper
+	 * @param skuLot       含有skuLot属性的对象
+	 * @param <T>          含有skuLot属性的类
+	 * @param <R>          返回类定义
+	 */
+	public static <T, R> void applySqlOfNotEmpty(LambdaQueryWrapper<R> queryWrapper, T skuLot) {
+		applySql(queryWrapper, skuLot, true);
+	}
+
+	private static <T, R> void applySql(LambdaQueryWrapper<R> queryWrapper, T skuLot, boolean isNotEmpty) {
 		String propertyName;
 		boolean hasSkuLot = hasSkuLot(skuLot);
 		if (Boolean.FALSE == hasSkuLot) {
@@ -189,12 +205,18 @@ public class SkuLotUtil {
 				propertyName = String.format("%s%d", WmsAppConstant.SKU_LOT_FIELD_PREFIX, i + 1);
 				Property skuLotProperty = ReflectUtil.getProperty(skuLot.getClass(), propertyName);
 				Object skuLotValue = skuLotProperty.getReadMethod().invoke(skuLot);
-				if (Func.notNull(skuLotValue)) {
-					queryWrapper.apply(String.format("sku_lot%d = '%s'", i + 1, skuLotValue));
+				if (isNotEmpty) {
+					if (Func.isNotEmpty(skuLotValue)) {
+						queryWrapper.apply(String.format("sku_lot%d = '%s'", i + 1, skuLotValue));
+					}
+				} else {
+					if (Func.notNull(skuLotValue)) {
+						queryWrapper.apply(String.format("sku_lot%d = '%s'", i + 1, skuLotValue));
+					}
 				}
 			}
 		} catch (Exception e) {
-			log.warn("applySql 异常", e);
+			log.warn("SkuLotUtil.applySql 异常", e);
 		}
 	}
 }

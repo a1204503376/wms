@@ -431,8 +431,8 @@ public class PickPlanServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 				}
 
 				// 判断当前订单状态
-				if (!SoBillStateEnum.CREATE.getIndex().equals(soHeader.getSoBillState()) &&
-					!SoBillStateEnum.EXECUTING.getIndex().equals(soHeader.getSoBillState())) {
+				if (!SoBillStateEnum.CREATE.getCode().equals(soHeader.getSoBillState()) &&
+					!SoBillStateEnum.EXECUTING.getCode().equals(soHeader.getSoBillState())) {
 					throw new ServiceException("订单编码: " + soHeader.getSoBillNo() + " 当前状态不允许生成拣货计划！");
 				}
 
@@ -882,7 +882,7 @@ public class PickPlanServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 				soDetail1.setSurplusQty(soDetail1.getSurplusQty().add(stockDetail.getStockQty()));
 				if (BigDecimalUtil.eq(soDetail1.getScanQty(), BigDecimal.ZERO)
 					&& Func.isNotEmpty(deleteList)) {
-					soDetail1.setBillDetailState(SoDetailStateEnum.UnAlloc.getIndex());
+					soDetail1.setBillDetailState(SoDetailStateEnum.UnAlloc.getCode());
 				}
 				updateSoDetailList.add(soDetail1);
 			});
@@ -1404,7 +1404,7 @@ public class PickPlanServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 			if (Func.isEmpty(soHeader)) {
 				throw new ServiceException("数据异常：指定出库单不存在！");
 			}
-			if (soHeader.getSoBillState().equals(SoBillStateEnum.CANCEL.getIndex())) {
+			if (soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED.getCode())) {
 				throw new ServiceException("取消订单不允许再执行拣货操作；请将已拣物品放到暂存区后返回任务列表刷新任务！");
 			}
 		}
@@ -1746,14 +1746,14 @@ public class PickPlanServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 		// 获取所有还可以分配的明细
 		List<SoDetail> soDetailListAll = soDetailService.list(Condition.getQueryWrapper(new SoDetail()).lambda()
 			.in(SoDetail::getSoBillId, billIdList)
-			.eq(SoDetail::getBillDetailState, SoDetailStateEnum.UnAlloc.getIndex())
+			.eq(SoDetail::getBillDetailState, SoDetailStateEnum.UnAlloc.getCode())
 			.ne(SoDetail::getSurplusQty, BigDecimal.ZERO));
 		List<CreateDetailPickPlanVO> resultList = new ArrayList<>();
 
 		for (SoHeader soHeader : soHeaderListAll) {
 			// 判断当前订单状态
-			if (!SoBillStateEnum.CREATE.getIndex().equals(soHeader.getSoBillState()) &&
-				!SoBillStateEnum.EXECUTING.getIndex().equals(soHeader.getSoBillState())) {
+			if (!SoBillStateEnum.CREATE.getCode().equals(soHeader.getSoBillState()) &&
+				!SoBillStateEnum.EXECUTING.getCode().equals(soHeader.getSoBillState())) {
 				throw new ServiceException("订单编码: " + soHeader.getSoBillNo() + " 当前状态不允许生成拣货计划！");
 			}
 			// 记录系统日志
@@ -1825,11 +1825,11 @@ public class PickPlanServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 			systemProcService.create(systemProcParam);
 
 			// 订单状态=创建，不允许执行取消分配操作
-			if (!soHeader.getSoBillState().equals(SoBillStateEnum.EXECUTING.getIndex())) {
+			if (!soHeader.getSoBillState().equals(SoBillStateEnum.EXECUTING.getCode())) {
 				throw new ServiceException(
 					String.format(
 						"不允许执行取消分配操作（订单编码：%s 当前状态：%s）",
-						soHeader.getSoBillNo(), SoBillStateEnum.CREATE.getName()));
+						soHeader.getSoBillNo(), SoBillStateEnum.CREATE.getDesc()));
 			}
 			// 查询订单是否存在拣货记录
 			int soPickCount = soPickService.count(Condition.getQueryWrapper(new SoPick()).lambda()

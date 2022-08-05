@@ -270,7 +270,7 @@ public class TransferHeaderServiceImpl<M extends TransferHeaderMapper, T extends
 		List<NeedSkuVO> needSkuList = new ArrayList<>();
 		// 获取当前所有未分配订单
 		List<SoHeader> soHeaderList = soHeaderService.list(Condition.getQueryWrapper(new SoHeader()).lambda()
-			.eq(SoHeader::getSoBillState, SoBillStateEnum.CREATE.getIndex())
+			.eq(SoHeader::getSoBillState, SoBillStateEnum.CREATE.getCode())
 		);
 		// 获取已经生成了补货任务的订单明细
 		List<TransferHeader> transferHeaderList = super.list(
@@ -443,7 +443,7 @@ public class TransferHeaderServiceImpl<M extends TransferHeaderMapper, T extends
 		List<NeedSkuDetailVO> detailList = new ArrayList<>();
 		// 获取当前所有未分配订单
 		List<SoHeader> soHeaderList = soHeaderService.list(Condition.getQueryWrapper(new SoHeader()).lambda()
-			.eq(SoHeader::getSoBillState, SoBillStateEnum.CREATE.getIndex())
+			.eq(SoHeader::getSoBillState, SoBillStateEnum.CREATE.getCode())
 		);
 		// 获取订单明细
 		if (Func.isNotEmpty(soHeaderList)) {

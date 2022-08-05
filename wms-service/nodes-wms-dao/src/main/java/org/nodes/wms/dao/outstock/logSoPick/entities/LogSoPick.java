@@ -146,6 +146,11 @@ public class LogSoPick extends SkuLotBaseEntity {
 	private Long soDetailId;
 
 	/**
+	 * 出库单行号
+	 */
+	private String soLineNo;
+
+	/**
 	 * 拣货计划id
 	 */
 	private Long pickPlanId;

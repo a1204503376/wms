@@ -64,8 +64,8 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
-					Location targetLocation, StockLogTypeEnum type,
-					Long billId, String billNo, String lineNo);
+			Location targetLocation, StockLogTypeEnum type,
+			Long billId, String billNo, String lineNo);
 
 	/**
 	 * 整库存移动,自动计算关联序列号
@@ -81,7 +81,7 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	Stock moveAllStock(Stock sourceStock, String targetBoxCode, String targetLpnCode,
-					   Location targetLocation, StockLogTypeEnum type, Long billId, String billNo, String lineNo);
+			Location targetLocation, StockLogTypeEnum type, Long billId, String billNo, String lineNo);
 
 	/**
 	 * 库存移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -100,9 +100,9 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
-					String targetBoxCode, String targetLpnCode,
-					Location targetLocation, StockLogTypeEnum type,
-					Long billId, String billNo, String lineNo);
+			String targetBoxCode, String targetLpnCode,
+			Location targetLocation, StockLogTypeEnum type,
+			Long billId, String billNo, String lineNo);
 
 	/**
 	 * 整箱移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -119,8 +119,8 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	List<Stock> moveStockByBoxCode(String boxCode, String targetBoxCode, String targetLpnCode,
-								   Location targetLocation, StockLogTypeEnum type,
-								   Long billId, String billNo, String lineNo);
+			Location targetLocation, StockLogTypeEnum type,
+			Long billId, String billNo, String lineNo);
 
 	/**
 	 * 整托移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -136,7 +136,7 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	List<Stock> moveStockByLpnCode(String lpnCode, String targetLpnCode, Location targetLocation, StockLogTypeEnum type,
-								   Long billId, String billNo, String lineNo);
+			Long billId, String billNo, String lineNo);
 
 	/**
 	 * 冻结
