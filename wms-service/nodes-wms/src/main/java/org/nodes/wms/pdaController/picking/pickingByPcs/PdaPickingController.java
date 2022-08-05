@@ -7,7 +7,7 @@ import org.nodes.wms.biz.outstock.OutStockBiz;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.EsitSerialNumberRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindAllPickingRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindPickingBySoBillIdRequest;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.PickingByBoxRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.PickByPcsRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.EsitSerialNumberResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindPickingBySoBillIdResponse;
@@ -50,8 +50,8 @@ public class PdaPickingController {
 	 */
 	@ApiLog("PDA按件拣货")
 	@PostMapping("/pickingByPcs")
-	public R<PickingByBoxResponse> pickingByPcs(@RequestBody PickingByBoxRequest request) {
-		return R.data(outStockBiz.pickingByPcs(request));
+	public R<PickingByBoxResponse> pickingByPcs(@RequestBody PickByPcsRequest request) {
+		return R.data(outStockBiz.pickByPcs(request));
 	}
 
 	/**

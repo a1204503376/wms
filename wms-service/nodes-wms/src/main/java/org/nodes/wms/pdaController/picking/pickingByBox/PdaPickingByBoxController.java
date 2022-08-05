@@ -3,7 +3,7 @@ package org.nodes.wms.pdaController.picking.pickingByBox;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.outstock.OutStockBiz;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.PickingByBoxRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.PickByPcsRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.PickingByBoxResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.tool.api.R;
@@ -30,7 +30,7 @@ public class PdaPickingByBoxController {
 	 */
 	@ApiLog("PDA按箱拣货")
 	@PostMapping("/pickingByBox")
-	public R<PickingByBoxResponse> pickingByBox(@RequestBody PickingByBoxRequest request) {
-		return R.data(outStockBiz.pickingByBox(request));
+	public R<PickingByBoxResponse> pickingByBox(@RequestBody PickByPcsRequest request) {
+		return R.data(outStockBiz.pickByBox(request));
 	}
 }
