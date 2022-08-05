@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * 库存业务接口
+ * 待办(TODO)：对外提供的函数最好是stockId，这样防止外部修改原stock而导致出现的业务异常
  *
  * @author nodesc
  */
@@ -51,6 +52,7 @@ public interface StockBiz {
 
 	/**
 	 * 库存移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
+	 * 不会变更库存的箱码和lpn编码
 	 * 原库存状态为系统冻结在移动时抛异常；目标库位状态(locFlag)如果不是正常或冻结时抛异常
 	 *
 	 * @param sourceStock    原库存,必填
@@ -85,6 +87,7 @@ public interface StockBiz {
 
 	/**
 	 * 库存移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
+	 * 目标箱码和lpn编码会发生改变时调用
 	 * 原库存状态为系统冻结在移动时抛异常；目标库位状态(locFlag)如果不是正常或冻结时抛异常
 	 *
 	 * @param sourceStock    原库存,必填
