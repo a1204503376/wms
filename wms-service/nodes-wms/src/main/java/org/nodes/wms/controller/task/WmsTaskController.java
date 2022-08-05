@@ -8,9 +8,11 @@ import org.nodes.wms.dao.task.dto.input.AgainIssuedlTask;
 import org.nodes.wms.dao.task.dto.input.CancelTaskRequest;
 import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
 import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
-import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
 import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
-import org.springblade.core.excel.util.ExcelUtil;
+import org.nodes.wms.dao.task.dto.output.TaskStateSelectResponse;
+import org.nodes.wms.dao.task.dto.output.TaskTypeSelectResponse;
+import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
+import org.nodes.wms.dao.task.enums.WmsTaskTypeEnum;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
@@ -18,10 +20,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -42,18 +42,28 @@ public class WmsTaskController {
 		return R.data(wmsTaskBiz.page(taskPageQuery, query));
 	}
 
+	/**
+	 * 库内管理-工作任务:获取任务类型下拉框返回集合
+	 */
+	@PostMapping("getTaskTypeSelectResponse")
+	public R<List<TaskTypeSelectResponse>> getTaskTypeSelectResponse() {
+		return R.data(WmsTaskTypeEnum.getList());
+	}
+
+	/**
+	 * 库内管理-工作任务:获取任务状态下拉框返回集合
+	 */
+	@PostMapping("getTaskStateSelectResponse")
+	public R<List<TaskStateSelectResponse>> getTaskStateSelectResponse() {
+		return R.data(WmsTaskStateEnum.getList());
+	}
+
+	/**
+	 * 库内管理-工作任务:导出
+	 */
 	@PostMapping("/export")
-	@ApiLog("任务详情-导出任务详情")
-	public void export(@ApiIgnore @RequestBody HashMap<String, Object> params, HttpServletResponse response) {
-		List<TaskDetailExcelResponse> responseList = wmsTaskBiz.selectTaskDetailList(params);
-		responseList.forEach(item -> {
-			item.setTypeCdValue(item.getTypeCd().getDesc());
-			item.setProcTypeValue(item.getProcType().getDesc());
-			item.setTaskStateValue(item.getTaskState().getDesc());
-			item.setTaskDetailStatusValue(item.getTaskDetailStatus().getDesc());
-			item.setStockStatusValue(item.getStockStatus().getDesc());
-		});
-		ExcelUtil.export(response, "任务详情", "任务详情数据表", responseList, TaskDetailExcelResponse.class);
+	public void export(@RequestBody TaskPageQuery taskPageQuery, HttpServletResponse response) {
+		wmsTaskBiz.export(taskPageQuery, response);
 	}
 
 	@PostMapping("/stopTask")
