@@ -22,6 +22,7 @@ public enum StockLogTypeEnum {
 	INSTOCK_BY_CANCEL_PICK(104, "撤销拣货"),
 	INSTOCK_BY_PUTAWAY(105, "按箱上架"),
 	INSTOCK_BY_Import(106, "导入库存"),
+	INSTOCK_BY_PUTAWAY_PDA(115, "按箱上架-手持"),
 	INSTOCK_BY_PC(107, "PC收货"),
 	STOCK_FREEZE(201, "库存冻结"),
 	STOCK_UNFREEZE(202, "库存解冻"),
@@ -40,7 +41,7 @@ public enum StockLogTypeEnum {
 	OUTSTOCK_BY_PICK(301, "拣货出库"),
 	OUTSTOCK_BY_CANCEL_RECEIVE(302, "撤销收货");
 
-    private final Integer code;
+	private final Integer code;
 	@EnumValue
 	@JsonValue
 	private final String desc;
