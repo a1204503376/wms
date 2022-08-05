@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PutwayBiz {
 	/**
-	 * 提交按箱收货
+	 * 提交按箱上架
 	 *
 	 * @param request 请求对象
 	 */
