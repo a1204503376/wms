@@ -42,13 +42,12 @@ public class LendReturnBizImpl implements LendReturnBiz {
 	private final LogLendReturnFactory logLendReturnFactory;
 	private final LogLendReturnDao logLendReturnDao;
 	private final LogNoReturnDao logNoReturnDao;
-	@Resource
-	private LendReturnBiz lendReturnBiz;
 
 	/**
 	 * 保存借出归还记录
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void saveLog(LendReturnRequest lendReturnRequest) {
 		List<LogLendReturn> logLendReturnList;
 		List<LogLendReturnRequest> logLendReturnRequestList = lendReturnRequest.getLogLendReturnRequestList();
@@ -90,12 +89,10 @@ public class LendReturnBizImpl implements LendReturnBiz {
 				}
 			}
 		}
-		lendReturnBiz.saveLogData(logNoReturnList,logLendReturnList);
+		saveLogData(logNoReturnList,logLendReturnList);
 	}
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void saveLogData(List<LogNoReturn> logNoReturnList, List<LogLendReturn> logLendReturnList) {
+	private void saveLogData(List<LogNoReturn> logNoReturnList, List<LogLendReturn> logLendReturnList) {
 		// 如果借出量 == 归还量，物理删除记录
 		List<LogNoReturn> deleteList = logNoReturnList.stream()
 			.filter(d -> Func.notNull(d.getId())

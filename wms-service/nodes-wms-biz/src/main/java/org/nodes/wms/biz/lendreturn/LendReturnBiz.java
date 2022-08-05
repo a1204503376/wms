@@ -22,11 +22,6 @@ public interface LendReturnBiz {
 	void saveLog(LendReturnRequest lendReturnRequest);
 
 	/**
-	 * 保持借出归还操作记录和未归还记录
-	 */
-    void saveLogData(List<LogNoReturn> logNoReturnList, List<LogLendReturn> logLendReturnList);
-
-	/**
 	 * 分页查询借出归还记录
 	 */
 	Page<LendReturnResponse> pageLendReturn(Page<LogLendReturn> page, LendReturnQuery lendReturnQuery);

@@ -51,6 +51,11 @@ public class OrderNoGeneratorUtil {
 	 */
 	private final static String PREFIX_SHIP = "SH";
 
+	/**
+	 * 盘点单编码
+	 */
+	private final static String PREFIX_COUNT = "C";
+
 
 	/**
 	 * ASN单据编码生成
@@ -85,6 +90,13 @@ public class OrderNoGeneratorUtil {
 	 */
 	public String createShipBillNo() {
 		return createNo(PREFIX_SHIP, NoBillFinals.RULE_SHIP);
+	}
+
+	/**
+	 * 发运单编码生成
+	 */
+	public String createCountBillNo() {
+		return createNo(PREFIX_COUNT, NoBillFinals.RULE_COUNT);
 	}
 
 	/**

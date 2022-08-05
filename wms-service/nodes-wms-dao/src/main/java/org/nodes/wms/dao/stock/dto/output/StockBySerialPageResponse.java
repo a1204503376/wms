@@ -3,8 +3,7 @@ package org.nodes.wms.dao.stock.dto.output;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import lombok.Data;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.nodes.wms.dao.common.esayExcel.StockStatusConverter;
+import org.nodes.wms.dao.common.esayExcel.EnumConverter;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 import java.io.Serializable;
@@ -32,8 +31,7 @@ public class StockBySerialPageResponse implements Serializable {
 	 * 库存状态
 	 */
 	@ColumnWidth(15)
-	@ExcelProperty(value = {"库存信息", "库存状态"}, converter = StockStatusConverter.class)
-	@JsonSerialize
+	@ExcelProperty(value = {"库存信息", "库存状态"}, converter = EnumConverter.class)
 	private StockStatusEnum stockStatus;
 
 

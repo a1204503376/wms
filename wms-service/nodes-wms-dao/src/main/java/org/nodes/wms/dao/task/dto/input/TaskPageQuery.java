@@ -21,11 +21,11 @@ public class TaskPageQuery {
 	/**
 	 * 任务类型
 	 */
-	private List<String> taskTypeCdList;
+	private List<Integer> taskTypeCdList;
 	/**
 	 * 任务状态
 	 */
-	private List<String> taskStateList;
+	private List<Integer> taskStateList;
 	/**
 	 * 物品编码
 	 */

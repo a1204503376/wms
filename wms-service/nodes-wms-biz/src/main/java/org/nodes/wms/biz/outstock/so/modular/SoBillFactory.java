@@ -62,7 +62,7 @@ public class SoBillFactory {
 			// 单据编码
 			soHeader.setSoBillNo(orderNoGeneratorUtil.createSoBillNo());
 			// 单据状态：10 单据创建
-			soHeader.setSoBillState(SoBillStateEnum.NOT.getIndex());
+			soHeader.setSoBillState(SoBillStateEnum.CREATE);
 			// 订单状态
 			soHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());
 		}
@@ -116,7 +116,7 @@ public class SoBillFactory {
 				Func.isEmpty(detail.getDetailPrice()) ?
 					null : detail.getDetailPrice().multiply(detail.getPlanQty()));
 			//单据状态
-			detail.setBillDetailState(SoDetailStateEnum.UnAlloc.getIndex());
+			detail.setBillDetailState(SoDetailStateEnum.UnAlloc.getCode());
 			// 批属性 生产批次、专用客户
 		});
 		return soDetailListResult;

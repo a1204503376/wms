@@ -5,51 +5,39 @@
              ref="searchForm"
              size="mini"
              v-model="form">
-        <nodes-master-page :configure="masterConfig" :permission="permissionObj" v-on="form.events">
+        <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
+                    <el-col :span="8">
+                        <el-form-item label="任务id" label-width="90px">
+                            <el-input v-model="form.params.taskId"></el-input>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="8">
                         <el-form-item label="单据编码" label-width="90px">
                             <el-input v-model="form.params.billNo"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="物品编码" label-width="90px">
-                            <nodes-sku style="width: 200px" v-model="form.params.skuCode"></nodes-sku>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="库存状态" label-width="90px">
-                            <el-input v-model="form.params.stockStatus"></el-input>
+                        <el-form-item label="任务类型" label-width="90px">
+                            <nodes-task-type v-model="form.params.taskTypeCdList" multiple="true"></nodes-task-type>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </template>
             <template v-slot:expandSearch>
                 <el-row type="flex">
-                    <el-col :span="7">
-                        <el-form-item label="托盘号" label-width="90px">
-                            <el-input v-model="form.params.lpnCode"></el-input>
+                    <el-col :span="6">
+                        <el-form-item label="任务状态" label-width="90px">
+                            <nodes-task-state v-model="form.params.taskStateList" multiple="true"></nodes-task-state>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="7">
-                        <el-form-item label="箱号" label-width="90px">
-                            <el-input v-model="form.params.boxCode"></el-input>
+                    <el-col :span="6">
+                        <el-form-item label="物品编码" label-width="90px">
+                            <nodes-sku-by-query v-model="form.params.skuIdList"></nodes-sku-by-query>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="7">
-                        <el-form-item label="任务执行者" label-width="90px">
-                            <el-input v-model="form.params.executorUserCode"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row type="flex">
-                    <el-col :span="8">
-                        <el-form-item label="更新时间" label-width="90px">
-                            <nodes-date-range style="width: 200px"
-                                              v-model="form.params.updateTimeDateRange"></nodes-date-range>
-                        </el-form-item>
-                    </el-col>
+
                 </el-row>
 
             </template>
@@ -79,7 +67,7 @@
                     effect="dark"
                     placement="top"
                 >
-                    <el-button @click="excel" circle icon="el-icon-download" size="mini"></el-button>
+                    <el-button @click="exportData" circle icon="el-icon-download" size="mini"></el-button>
                 </el-tooltip>
                 <el-tooltip
                     :enterable="false"
@@ -123,6 +111,7 @@
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column"
+                            width="130"
                             v-if="!column.hide">
                         </el-table-column>
                     </template>
@@ -141,6 +130,7 @@
                 </el-pagination>
             </template>
         </nodes-master-page>
+        <dialog-column v-bind="columnShowHide" @close="onColumnShowHide"></dialog-column>
     </el-form>
 </template>
 
@@ -154,17 +144,22 @@ import NodesSku from "@/components/wms/select/NodesSku";
 import fileDownload from "js-file-download";
 import {listMixin} from "@/mixins/list";
 // eslint-disable-next-line no-unused-vars
-import {
-    getPage,
-    exportTaskDetail
-} from "@/api/wms/task/taskDetail.js";
-import func from "@/util/func";
+import {exportFile, getPage} from "@/api/wms/task/taskDetail.js";
 import fileUpload from "@/components/nodes/fileUpload";
 import {ExcelExport} from 'pikaz-excel-js';
+import NodesSkuByQuery from "@/components/wms/select/NodesSkuByQuery";
+import NodesTaskType from "@/components/wms/select/NodesTaskType";
+import NodesTaskState from "@/components/wms/select/NodesTaskState";
+import DialogColumn from "@/components/element-ui/crud/dialog-column";
+
 
 export default {
     name: "carrier",
     components: {
+        DialogColumn,
+        NodesTaskState,
+        NodesTaskType,
+        NodesSkuByQuery,
         NodesSearchInput,
         NodesMasterPage,
         NodesDateRange,
@@ -176,211 +171,99 @@ export default {
     mixins: [listMixin],
     data() {
         return {
-            fileUpload: {
-                visible: false,
-            },
-            selectionList: [],
-
-            deleteParams: {
-                list: []
-            },
-            masterConfig: {
-                showExpandBtn: true
-            },
-            params: {},
-            excelParams: {
-                code: '',
-                name: '',
-                simpleName: '',
-            },
             form: {
                 params: {
+                    taskId: '',
                     billNo: '',
-                    skuCode: '',
-                    stockStatus: '',
-                    lpnCode: '',
-                    boxCode: '',
-                    updateTimeDateRange: ['', ''],//更新时间开始 更新时间结束
+                    taskTypeCdList: [],
+                    taskStateList: [],
+                    skuIdList: [],
                 }
             },
             table: {
                 columnList: [
                     {
-                        prop: 'typeCd',
-                        label: '任务类别'
-                    },
-                    {
-                        prop: 'procType',
-                        label: '任务执行方式'
-                    },
-                    {
-                        prop: 'taskState',
-                        label: '任务状态'
-                    },
-                    {
-                        prop: 'taskDetailStatus',
-                        label: '任务明细状态'
+                        prop: 'taskId',
+                        label: '任务Id',
+                        sortable: "custom",
                     },
                     {
                         prop: 'billNo',
-                        label: '单据编码'
+                        label: '单据编码',
+                        sortable: "custom",
                     },
                     {
-                        prop: 'billLineNo',
-                        label: '单据行号'
+                        prop: 'taskTypeCd',
+                        label: '任务类型',
+                        sortable: "custom",
+                    },
+                    {
+                        prop: 'taskState',
+                        label: '任务状态',
+                        sortable: "custom",
                     },
                     {
                         prop: 'skuCode',
-                        label: '物品编码'
+                        label: '物品编码',
+                        sortable: "custom",
                     },
                     {
-                        prop: 'skuLevel',
-                        label: '层级'
-                    },
-                    {
-                        prop: 'umCode',
-                        label: '计量单位编码'
-                    },
-                    {
-                        prop: 'umName',
-                        label: '计量单位名称'
-                    },
-                    {
-                        prop: 'planQty',
-                        label: '计划数量'
+                        prop: 'taskQty',
+                        label: '数量',
+                        sortable: "custom",
                     },
                     {
                         prop: 'scanQty',
-                        label: '实际任务执行数量'
+                        label: '实际数量',
+                        sortable: "custom",
                     },
                     {
-                        prop: 'stockStatus',
-                        label: '库存状态'
+                        prop: 'umCode',
+                        label: '计量单位',
+                        sortable: "custom",
                     },
                     {
-                        prop: 'targetLocCode',
-                        label: '目标库位编码'
+                        prop: 'lot',
+                        label: '批次号',
+                        sortable: "custom",
                     },
                     {
-                        prop: 'lpnCode',
-                        label: '托盘号'
+                        prop: 'fromLocCode',
+                        label: '来源库位',
+                        sortable: "custom",
+                    },
+                    {
+                        prop: 'toLocCode',
+                        label: '目标库位',
+                        sortable: "custom",
                     },
                     {
                         prop: 'boxCode',
-                        label: '箱号'
+                        label: '箱号',
+                        sortable: "custom",
                     },
                     {
-                        prop: 'snCode',
-                        label: '序列号'
+                        prop: 'lpnCode',
+                        label: '托盘号',
+                        sortable: "custom",
                     },
                     {
-                        prop: 'source',
-                        label: '任务来源'
-                    },
-                    {
-                        prop: 'executorUserCode',
-                        label: '任务执行者'
-                    },
-                    {
-                        prop: 'ownerName',
-                        label: '货主名称'
-                    },
-                    {
-                        prop: 'whName',
-                        label: '库房名称'
-                    },
-                    {
-                        prop: 'beginTime',
-                        label: '任务执行开始时间'
-                    },
-                    {
-                        prop: 'remark',
-                        label: '备注'
-                    },
-                    {
-                        prop: 'skuLot1',
-                        label: '生产批次'
-                    },
-                    {
-                        prop: 'skuLot2',
-                        label: '规格型号'
-                    },
-                    {
-                        prop: 'skuLot3',
-                        label: '收货日期'
-                    },
-                    {
-                        prop: 'skuLot4',
-                        label: '专用客户'
-                    },
-                    {
-                        prop: 'skuLot5',
-                        label: '钢背批次'
-                    },
-                    {
-                        prop: 'skuLot6',
-                        label: '摩擦块批次'
-                    },
-                    {
-                        prop: 'skuLot7',
-                        label: '产品标识代码'
-                    },
-                    {
-                        prop: 'skuLot8',
-                        label: 'CRCC'
-                    },
-                    {
-                        prop: 'createUser',
-                        label: '创建人'
-                    },
-                    {
-                        prop: 'createTime',
-                        label: '创建时间'
-                    },
-                    {
-                        prop: 'updateUser',
-                        label: '修改人'
-                    },
-                    {
-                        prop: 'updateTime',
-                        label: '修改时间'
+                        prop: 'allotTime',
+                        label: '任务下发时间',
+                        sortable: "custom",
                     }
                 ]
             },
         }
     },
 
-    activated() {
+    created() {
         this.getTableData();
     },
-    computed: {
-        ids() {
-            let ids = [];
-            this.selectionList.forEach(ele => {
-                ids.push(ele.id);
-            });
-            return ids.join(",");
-        },
-        codes() {
-            let codes = [];
-            this.selectionList.forEach(ele => {
-                codes.push(ele.joinSkuCode);
-            });
-            return codes.join(",");
-        },
-        permissionObj() {
-            return {
-                search: this.vaildData(this.permission.wmsSkuBom_search, false),
-                add: this.vaildData(this.permission.wmsSkuBom_add, false),
-                delete: this.vaildData(this.permission.wmsSkuBom_delete, false),
-                import: this.vaildData(this.permission.wmsSkuBom_import, false)
-            }
-        }
 
-    },
     methods: {
         onExportLocalData() {
-            this.exportCurrentDataToExcel("物料清单", "物料清单");
+            this.exportCurrentDataToExcel("工作任务", "工作任务");
         },
         callbackFileUpload(res) {
             this.fileUpload.visible = false;
@@ -393,49 +276,7 @@ export default {
                 this.getTableData();
             })
         },
-        onRemove() {
-            this.$confirm("确定删除容器编码为" + this.codes + "的数据吗?", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning"
-            }).then(() => {
-                this.deleteParams.list = this.ids.split(',');
-                deleteWmsSkuBom(this.deleteParams.list).then((res) => {
-                    if (res.data.code == 200) {
-                        this.getTableData();
-                        this.$message({
-                            type: "success",
-                            message: "操作成功!"
-                        });
-                    } else {
-                        this.$message({
-                            type: "error",
-                            message: "操作失败!"
-                        });
-                    }
 
-
-                });
-            });
-        },
-        onAdd() {
-            this.$router.push({
-                name: '新增物料',
-                params: {
-                    id: '0'
-                }
-            });
-        },
-        onEdit(row) {
-            this.$router.push({
-                name: '编辑物料',
-                params: {
-                    id: row.id
-                }
-            });
-        },
-        hideOnSinglePage() {
-        },
         selectionChange(row) {
             this.selectionList = row;
         },
@@ -443,29 +284,25 @@ export default {
             this.selectionList = [];
             this.$refs.table.toggleSelection();
         },
-        excel() {
-            var that = this;
-            if (func.isNotEmpty(this.form.params.skuCode)) {
-                this.form.params.skuCode = this.form.params.skuCode.skuCode;
-            }
-            that.excelParams = this.form.params;
-            exportTaskDetail(that.excelParams).then((res) => {
-                console.log(res)
-                fileDownload(res.data, "任务详情.xlsx");
-            });
+        exportData() {
+            this.loading = true;
+            exportFile(this.form.params)
+                .then((res) => {
+                    this.$message.success("操作成功，正在下载中...");
+                    fileDownload(res.data, "库存列表.xlsx");
+                })
+                .catch(() => {
+                    this.$message.error("系统模板目录配置有误或文件不存在");
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
         getTableData() {
-            var that = this;
-            if (func.isNotEmpty(this.form.params.skuCode)) {
-                this.form.params.skuCode = this.form.params.skuCode.skuCode;
-            }
-            that.params = this.form.params
-            getPage(that.params, this.page).then((res) => {
-                this.page.total = res.data.data.total;
-                this.page.currentPage = res.data.data.pages;
-                this.page.current = res.data.data.current;
-                this.page.size = res.data.data.size;
-                this.table.data = res.data.data.records;
+            getPage(this.page, this.form.params).then((res) => {
+                let pageObj = res.data.data;
+                this.table.data = pageObj.records;
+                this.page.total = pageObj.total;
             });
         },
 

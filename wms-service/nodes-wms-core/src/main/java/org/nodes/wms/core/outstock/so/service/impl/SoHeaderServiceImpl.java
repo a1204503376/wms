@@ -149,7 +149,7 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 		if (Func.isEmpty(soHeader.getSoBillNo())) {
 			soHeader.setSoBillNo(SoCache.getSoBillNo());
 		}
-		soHeader.setSoBillState(SoBillStateEnum.CREATE.getIndex());
+		soHeader.setSoBillState(SoBillStateEnum.CREATE.getCode());
 		soHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());
 		soHeader.setShipState(ShipStateEnum.DEFAULT.getIndex());
 		this.fillSaveData(soHeader);
@@ -181,7 +181,7 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 		if (Func.isEmpty(soHeader.getSoBillNo())) {
 			soHeader.setSoBillNo(SoCache.getSoBillNo());
 		}
-		soHeader.setSoBillState(SoBillStateEnum.CREATE.getIndex());
+		soHeader.setSoBillState(SoBillStateEnum.CREATE.getCode());
 		soHeader.setSyncState(SyncStateEnum.DEFAULT.getIndex());
 		soHeader.setShipState(ShipStateEnum.DEFAULT.getIndex());
 		this.fillSaveData(soHeader);
@@ -290,7 +290,7 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 			if (Func.isEmpty(soHeader)) {
 				throw new ServiceException("单据不存在！");
 			}
-			if (!SoBillStateEnum.CREATE.getIndex().equals(soHeader.getSoBillState())) {
+			if (!SoBillStateEnum.CREATE.getCode().equals(soHeader.getSoBillState())) {
 				throw new ServiceException(String.format("单据[%s]为%s状态不可删除",
 					soHeader.getSoBillNo(), DictCache.getValue(DictCodeConstant.SO_BILL_STATE,soHeader.getSoBillState())));
 			}
@@ -325,10 +325,10 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 			return soHeader;
 		}
 		// 当订单状态已经 = 已取消  则不允许再进行任何修改订单状态操作
-		if (soHeader.getSoBillState().equals(SoBillStateEnum.CANCEL.getIndex())) {
+		if (soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED.getCode())) {
 			throw new ServiceException("订单：" + soHeader.getSoBillNo() + " 已取消，拒绝当前操作！");
 		}
-		if (SoBillStateEnum.COMPLETED.getIndex().equals(soBillState.getIndex())) {
+		if (SoBillStateEnum.COMPLETED.getCode().equals(soBillState.getCode())) {
 			if (!isCompel) {
 				// 如果还有未分配的库存信息，不更新订单状态
 				List<SoDetail> soDetailList = soDetailService.list(Condition.getQueryWrapper(new SoDetail()).lambda()
@@ -368,7 +368,7 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 			}
 			soHeader.setFinishDate(LocalDateTime.now());
 		}
-		soHeader.setSoBillState(soBillState.getIndex());
+		soHeader.setSoBillState(soBillState.getCode());
 		// 修改订单主表订单状态
 		super.updateById(soHeader);
 		IAllotHeaderService allotHeaderService = SpringUtil.getBean(IAllotHeaderService.class);
@@ -395,7 +395,7 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 		if (soHeader.getBillTypeCd().equals("209")) {
 			throw new ServiceException("调拨发货单不允许编辑! ");
 		}
-		return SoBillStateEnum.CREATE.getIndex().equals(soHeader.getSoBillState());
+		return SoBillStateEnum.CREATE.getCode().equals(soHeader.getSoBillState());
 //			|| SoBillStateEnum.EXECUTING.getIndex().equals(soHeader.getSoBillState())
 //			|| SoBillStateEnum.PART.getIndex().equals(soHeader.getSoBillState());
 	}
@@ -408,9 +408,9 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 			if (Func.isEmpty(soHeader)) {
 				throw new ServiceException("指定出库单不存在(ID: " + soBillId + ")！");
 			}
-			if (soHeader.getSoBillState().equals(SoBillStateEnum.CREATE.getIndex())) {
+			if (soHeader.getSoBillState().equals(SoBillStateEnum.CREATE.getCode())) {
 				// 暂时无其他业务处理
-			} else if (soHeader.getSoBillState().equals(SoBillStateEnum.EXECUTING.getIndex())) {
+			} else if (soHeader.getSoBillState().equals(SoBillStateEnum.EXECUTING.getCode())) {
 				// 1. 关闭 拣货任务
 				// 1.1. 先获取该订单的波次信息
 				Map<Long, List<WellenDetail>> wellenDetailMap = wellenDetailService.listByBillId(soBillId).stream()
@@ -436,7 +436,7 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 					stockOccupyService.subtract(stockOccupyReduceDTO);
 				}
 				// 1.1.2. 如果为多单分配的任务：不做处理(手持端在二次分拣的时候再处理)
-			} else if (soHeader.getSoBillState().equals(SoBillStateEnum.COMPLETED.getIndex())) {
+			} else if (soHeader.getSoBillState().equals(SoBillStateEnum.COMPLETED.getCode())) {
 				// 查询该订单的库存是否还在库内
 				List<StockDetail> stockDetailList = stockDetailService.list(Condition.getQueryWrapper(new StockDetail())
 					.lambda()
@@ -463,7 +463,7 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 			}
 			// 关闭其他关联的任务
 			taskService.closeTask(soBillId, TaskTypeEnum.ALL);
-			this.updateBillState(soBillId, SoBillStateEnum.CANCEL, true);
+			this.updateBillState(soBillId, SoBillStateEnum.CANCELED, true);
 		}
 
 		return true;
@@ -533,12 +533,11 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 		if (Func.isNotEmpty(soHeaderList)) {
 			for (SoHeader soHeader : soHeaderList) {
 				// 忽略已完成的订单
-				if (SoBillStateEnum.COMPLETED.getIndex().equals(soHeader.getSoBillState())) {
+				if (SoBillStateEnum.COMPLETED.getCode().equals(soHeader.getSoBillState())) {
 					continue;
 				}
 				// 对已取消、已撤销的订单，异常提示
-				if (SoBillStateEnum.CANCEL.getIndex().equals(soHeader.getSoBillState()) ||
-					SoBillStateEnum.REPEAL.getIndex().equals(soHeader.getSoBillState())) {
+				if (SoBillStateEnum.CANCELED.getCode().equals(soHeader.getSoBillState())) {
 					throw new ServiceException(String.format("出库单[%s] %s，不允许再执行此操作",
 						soHeader.getSoBillNo(), SoBillStateEnum.valueOf(soHeader.getSoBillState())));
 				}
@@ -579,8 +578,7 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 //					String.format("出库单[%s] 还未拣货完成，请拣完货后再执行此操作！", soHeader.getSoBillNo()));
 //			}
 			// 对已取消、已撤销的订单，异常提示
-			if (SoBillStateEnum.CANCEL.getIndex().equals(soHeader.getSoBillState()) ||
-				SoBillStateEnum.REPEAL.getIndex().equals(soHeader.getSoBillState())) {
+			if (SoBillStateEnum.CANCELED.getCode().equals(soHeader.getSoBillState())) {
 				throw new ServiceException(String.format("出库单[%s] %s，不允许再执行此操作！",
 					soHeader.getSoBillNo(), SoBillStateEnum.valueOf(soHeader.getSoBillState())));
 			}

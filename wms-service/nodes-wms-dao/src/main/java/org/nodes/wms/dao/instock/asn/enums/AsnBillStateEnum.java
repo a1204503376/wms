@@ -42,6 +42,7 @@ public enum AsnBillStateEnum
 	@EnumValue
 	@JsonValue
 	private final Integer code;
+
 	private final String desc;
 
 	@Override
