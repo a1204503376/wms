@@ -16,6 +16,8 @@ import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 未归还记录 Dao接口 实现类
  */
@@ -60,4 +62,16 @@ public class LogNoReturnDaoImpl
 		return new Page<NoReturnResponse>(logNoReturnPage.getCurrent(), logNoReturnPage.getSize(), logNoReturnPage.getTotal())
 			.setRecords(Func.copy(logNoReturnPage.getRecords(), NoReturnResponse.class));
     }
+
+	@Override
+	public List<LogNoReturn> listByQuery(LendReturnQuery lendReturnQuery) {
+		LambdaQueryWrapper<LogNoReturn> queryWrapper = getLambdaQuery()
+			.in(Func.isNotEmpty(lendReturnQuery.getSkuIdList()),LogNoReturn::getSkuId,lendReturnQuery.getSkuIdList())
+			.like(Func.isNotBlank(lendReturnQuery.getLendReturnName()),LogNoReturn::getLendReturnName,lendReturnQuery.getLendReturnName())
+			.ge(Func.notNull(lendReturnQuery.getCreateTimeBegin()), BaseEntity::getCreateTime,lendReturnQuery.getCreateTimeBegin())
+			.le(Func.notNull(lendReturnQuery.getCreateTimeEnd()),BaseEntity::getCreateTime,lendReturnQuery.getCreateTimeEnd());
+
+		SkuLotUtil.applySql(queryWrapper,lendReturnQuery);
+		return super.list(queryWrapper);
+	}
 }

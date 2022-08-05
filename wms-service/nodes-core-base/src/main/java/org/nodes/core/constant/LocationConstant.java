@@ -56,7 +56,6 @@ public class LocationConstant {
 				LOC_STAGE,
 				LOC_QC,
 				LOC_PICKTO,
-				LOC_PACK,
 				LOC_UNKNOWN,
 				LOC_INTRANSIT
 		};

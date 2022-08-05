@@ -48,8 +48,8 @@ import org.nodes.wms.core.count.entity.CountReport;
 import org.nodes.wms.core.count.enums.CountByEnum;
 import org.nodes.wms.core.count.enums.CountRecordStateEnum;
 import org.nodes.wms.core.count.enums.StockCountStateEnum;
-import org.nodes.wms.core.count.mapper.CountHeaderMapper;
-import org.nodes.wms.core.count.mapper.CountRecordMapper;
+import org.nodes.wms.core.count.mapper.CountHeaderMapper1;
+import org.nodes.wms.core.count.mapper.CountRecordMapper1;
 import org.nodes.wms.core.count.service.ICountDetailService;
 import org.nodes.wms.core.count.service.ICountRecordService;
 import org.nodes.wms.core.count.service.ICountReportService;
@@ -94,8 +94,8 @@ import static org.nodes.wms.core.warehouse.cache.LocationCache.LOCATION_CACHE;
 @Service
 @Primary
 @Transactional(propagation = Propagation.NESTED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
-public class CountRecordServiceImpl<M extends CountRecordMapper, T extends CountRecord>
-	extends BaseServiceImpl<CountRecordMapper, CountRecord>
+public class CountRecordServiceImpl<M extends CountRecordMapper1, T extends CountRecord>
+	extends BaseServiceImpl<CountRecordMapper1, CountRecord>
 	implements ICountRecordService {
 
 	@Autowired
@@ -109,7 +109,7 @@ public class CountRecordServiceImpl<M extends CountRecordMapper, T extends Count
 	@Autowired
 	ITaskService taskService;
 	@Autowired
-	CountHeaderMapper countHeaderMapper;
+	CountHeaderMapper1 countHeaderMapper1;
 	@Autowired
 	ICountDetailService countDetailService;
 	@Autowired
@@ -161,7 +161,7 @@ public class CountRecordServiceImpl<M extends CountRecordMapper, T extends Count
 				throw new ServiceException("指定任务不存在(任务ID：" + randomCountDTO.getTaskId() + ")！");
 			}
 			// 获取盘点单
-			countHeader = countHeaderMapper.selectById(task.getBillId());
+			countHeader = countHeaderMapper1.selectById(task.getBillId());
 			if (Func.isEmpty(countHeader)) {
 				throw new ServiceException("指定盘点单不存在(" + task.getBillId() + ")！");
 			}
@@ -304,7 +304,7 @@ public class CountRecordServiceImpl<M extends CountRecordMapper, T extends Count
 				throw new ServiceException("指定任务不存在(任务ID：" + randomCheckSubmitDTO.getTaskId() + ")！");
 			}
 			// 获取盘点单
-			countHeader = countHeaderMapper.selectById(task.getBillId());
+			countHeader = countHeaderMapper1.selectById(task.getBillId());
 			// 获取任务明细
 			countDetailList = countDetailService.list(new QueryWrapper<CountDetail>()
 				.lambda()
@@ -312,7 +312,7 @@ public class CountRecordServiceImpl<M extends CountRecordMapper, T extends Count
 				.eq(CountDetail::getLocId, location.getLocId())
 			);
 		} else if (Func.isNotEmpty(randomCheckSubmitDTO.getCountNo())) {
-			countHeader = countHeaderMapper.selectOne(Condition.getQueryWrapper(new CountHeader())
+			countHeader = countHeaderMapper1.selectOne(Condition.getQueryWrapper(new CountHeader())
 				.lambda()
 				.eq(CountHeader::getCountBillNo, randomCheckSubmitDTO.getCountNo()));
 			// 获取任务明细
@@ -563,7 +563,7 @@ public class CountRecordServiceImpl<M extends CountRecordMapper, T extends Count
 				throw new ServiceException("指定任务不存在(任务ID：" + randomCountDTO.getTaskId() + ")！");
 			}
 			// 获取盘点单
-			countHeader = countHeaderMapper.selectById(task.getBillId());
+			countHeader = countHeaderMapper1.selectById(task.getBillId());
 			// 获取任务明细
 			countDetailList = countDetailService.list(new QueryWrapper<CountDetail>()
 				.lambda()
@@ -574,7 +574,7 @@ public class CountRecordServiceImpl<M extends CountRecordMapper, T extends Count
 				})
 			);
 		} else if (Func.isNotEmpty(randomCountDTO.getCountBillNo())) {
-			countHeader = countHeaderMapper.selectOne(Condition.getQueryWrapper(new CountHeader())
+			countHeader = countHeaderMapper1.selectOne(Condition.getQueryWrapper(new CountHeader())
 				.lambda()
 				.eq(CountHeader::getCountBillNo, randomCountDTO.getCountBillNo()));
 			// 获取任务明细

@@ -18,7 +18,7 @@ import java.util.List;
  * @since 2020-01-02
  */
 @Primary
-public interface CountHeaderMapper extends BaseMapper<CountHeader> {
+public interface CountHeaderMapper1 extends BaseMapper<CountHeader> {
 
 	/**
 	 * 自定义分页

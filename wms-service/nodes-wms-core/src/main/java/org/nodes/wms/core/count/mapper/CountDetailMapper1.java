@@ -18,7 +18,7 @@ import java.util.Map;
  * @since 2020-01-02
  */
 @Primary
-public interface CountDetailMapper extends BaseMapper<CountDetail> {
+public interface CountDetailMapper1 extends BaseMapper<CountDetail> {
 
 	/**
 	 * 自定义分页

@@ -4,7 +4,7 @@ package org.nodes.wms.core.count.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nodes.wms.core.stock.core.vo.CountSkuQtyVO;
 import org.nodes.wms.core.count.entity.CountDetail;
-import org.nodes.wms.core.count.mapper.CountDetailMapper;
+import org.nodes.wms.core.count.mapper.CountDetailMapper1;
 import org.nodes.wms.core.count.service.ICountDetailService;
 import org.nodes.wms.core.count.vo.CountDetailVO;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -28,8 +28,8 @@ import java.util.Map;
 @Service
 @Primary
 @Transactional(propagation = Propagation.NESTED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
-public class CountDetailServiceImpl<M extends CountDetailMapper, T extends CountDetail>
-	extends BaseServiceImpl<CountDetailMapper, CountDetail>
+public class CountDetailServiceImpl<M extends CountDetailMapper1, T extends CountDetail>
+	extends BaseServiceImpl<CountDetailMapper1, CountDetail>
 	implements ICountDetailService {
 
 	@Override
