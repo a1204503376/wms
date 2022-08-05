@@ -440,8 +440,14 @@
 				"navigationStyle": "custom"
 			}
 
-		}
+		}, {
+			"path": "pages/checkStock/staticCheckStock/updateLocQty",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
 
+		}
 	],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#33cbcc"

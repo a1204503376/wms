@@ -262,13 +262,13 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isVirtualLocation(Location location) {
-		// TODO Auto-generated method stub
-		return false;
+		Location virtualLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_VIRTUAL_AREA);
+		return location.getLocId().equals(virtualLocation.getLocId());
 	}
 
 	@Override
 	public boolean isStageLocation(Location location) {
-		// TODO Auto-generated method stub
-		return false;
+		Location stageLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_OF_STAGE);
+		return location.getLocId().equals(stageLocation.getLocId());
 	}
 }

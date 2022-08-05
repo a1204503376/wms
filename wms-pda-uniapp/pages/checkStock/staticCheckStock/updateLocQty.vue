@@ -1,47 +1,49 @@
 <template>
 	<view>
 		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
-			:bgColor="navigationBarBackgroundColor" title="差异处理(零散库区)" titleStyle="color:#ffffff;font-size:21px"
+			:bgColor="navigationBarBackgroundColor" title="修改差异数量" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u-divider text="" style="margin-top:0rpx;"></u-divider>
 		<u-divider text="暂无数据" v-if="noData"></u-divider>
 		<u-list style="height: 950rpx;" @scrolltolower="scrolltolower">
-			
-				<u-row customStyle="margin-bottom: 10px">
-					<u-col span="2" class="left-text-one-line font-in-page">
-						<u--text class="demo-layout bg-purple-light" v-text="'箱号'"></u--text>
-					</u-col>
-					<u-col span="4">
-						<u-input></u-input>
-					</u-col>
-					<u-col span="2">
-						<view>
-							<u--text class="demo-layout bg-purple-light" v-text="'库位'"></u--text>
-						</view>
-					</u-col>
-					<u-col span="4">
-						<u-input></u-input>
-					</u-col>
-				</u-row>
-				<view v-for="(item, index) in receiveList" :key="index">
-				<u-row customStyle="margin-bottom: 10px">
-					<u-col span="1" class="left-text-one-line font-in-page">
-						<u-icon name="checkbox-mark" color="green"></u-icon>
-					</u-col>
-					<u-col span="7">
-						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.locCode+'('+item.stockBalance+')'"></u--text>
-					</u-col>
-					<u-col span="2">
-						<u-button type="error" :plain="true" text="修改" @click="updateLocQty(item)"></u-button>
-					</u-col>
-					<u-col span="2">
-						<u-button type="success" :plain="true" text="无误"></u-button>
-					</u-col>
-				</u-row>
-				<u-divider text=""></u-divider>
-			</view>
-		<!-- 	<u-loadmore :status="status" v-if="loadmore" /> -->
+			<u-row customStyle="margin-bottom: 10px">
+				<u-col span="4" class="left-text-one-line font-in-page">
+					<u--text class="demo-layout bg-purple-light" v-text="'箱号'"></u--text>
+				</u-col>
+				<u-col span="8" class="font-in-page">
+					<u-input></u-input>
+				</u-col>
+			</u-row>
+			<u-row customStyle="margin-bottom: 10px">
+				<u-col span="4" class="left-text-one-line  font-in-page">
+					<view>
+						<u--text class="demo-layout bg-purple-light" v-text="'库位'"></u--text>
+					</view>
+				</u-col>
+				<u-col span="8" class="font-in-page">
+					<u-input></u-input>
+				</u-col>
+			</u-row>
+			<u-row  customStyle="margin-bottom: 10px">
+				<u-col span="4" class="left-text-one-line font-in-page">
+					<u--text class="demo-layout bg-purple-light" v-text="'物品编码'"></u--text>
+				</u-col>
+				<u-col span="8" class="font-in-page">
+					<u-input></u-input>
+				</u-col>
+			</u-row>
+			<u-row customStyle="margin-bottom: 10px">
+				<u-col span="4" class="left-text-one-line font-in-page">
+					<view>
+						<u--text class="demo-layout bg-purple-light" v-text="'库存余额'"></u--text>
+					</view>
+				</u-col>
+				<u-col span="8" class="font-in-page">
+					<u-input></u-input>
+				</u-col>
+			</u-row>
+			<u-divider text=""></u-divider>
 		</u-list>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
@@ -78,12 +80,12 @@
 				status: 'loadmore',
 				loadmore: false,
 				noData: false,
-				title:'开始盘点',
+				title: '开始盘点',
 			}
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param);
-			this.title = parse.skuCode+'开始盘点';
+			this.title = parse.skuCode + '开始盘点';
 			this.params = parse;
 			this.params.no = '0';
 			this.getReceiveList();
@@ -103,7 +105,7 @@
 			// #endif
 		},
 		methods: {
-			updateLocQty(row){
+			updateLocQty(row) {
 				uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/updateLocQty', row);
 			},
 			analysisCode(code) {
@@ -171,12 +173,12 @@
 				uni.$u.throttle(this.getReceiveList(), 1000)
 			},
 			clickItem(item) {
-				if(true){
+				if (true) {
 					uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/autoLocation', item);
-				}else{
+				} else {
 					uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/artificialLocation', item);
 				}
-				
+
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

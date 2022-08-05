@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 按箱上架API
+ * @author nodes
  */
 @RestController
 @RequiredArgsConstructor
@@ -47,8 +49,13 @@ public class PutawayByBoxController {
 		BigDecimal qty = StockUtil.getStockBalance(stockList);
 		PutawayByBoxResponse response = new PutawayByBoxResponse();
 		response.setLpnCode(stockList.get(0).getLpnCode());
-		// TODO 应为stockId集合
-		response.setStockId(stockList.get(0).getStockId());
+		List<Long> stockIds = stockList
+			.stream()
+			.map(Stock::getStockId)
+			.filter(Func::isNotEmpty)
+			.distinct()
+			.collect(Collectors.toList());
+		response.setStockId(stockIds);
 		response.setBoxCode(stockList.get(0).getBoxCode());
 		response.setQty(qty);
 		return R.data(response);

@@ -84,6 +84,7 @@
 		},
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
+			this.params.locCode = 'STAGE';
 		},
 		onBackPress(event) {
 			// #ifdef APP-PLUS
@@ -149,7 +150,7 @@
 					}
 
 					if (tool.isNotEmpty(paramsData.skuLot2) && tool.isNotEmpty(paramsData.locCode) && tool
-						.isNotEmpty(paramsData.boxCode) && tool.isNotEmpty(paramsData.skuLot1) && paramsData
+						.isNotEmpty(paramsData.boxCode) && tool.isNotEmpty(_this.params.boxCode) && tool.isNotEmpty(paramsData.skuLot1) && paramsData
 						.surplusQty > 0) {
 						receive.submitReceiptByPcs(paramsData).then(data => {
 							if (data.data.allReceivieIsAccomplish && data.data

@@ -7,19 +7,26 @@ import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.biz.count.StockCountBiz;
 import org.nodes.wms.biz.count.modular.StockCountFactory;
 import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
+import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.count.CountDetailDao;
 import org.nodes.wms.dao.count.CountHeaderDao;
 import org.nodes.wms.dao.count.dto.input.StockCountDetailRequest;
 import org.nodes.wms.dao.count.dto.input.StockCountRequest;
+import org.nodes.wms.dao.count.dto.output.PdaBoxQtyResponse;
 import org.nodes.wms.dao.count.dto.output.PdaBoxSkuQtyResponse;
 import org.nodes.wms.dao.count.dto.output.PdaStockCountDetailResponse;
 import org.nodes.wms.dao.count.dto.output.PdaStockCountResponse;
 import org.nodes.wms.dao.count.entity.CountDetail;
 import org.nodes.wms.dao.count.entity.CountHeader;
+import org.nodes.wms.dao.stock.entities.Stock;
+import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +40,7 @@ public class StockCountBizImpl implements StockCountBiz {
 	private final CountHeaderDao countHeaderDao;
 	private final CountDetailDao countDetailDao;
 	private final StockBiz stockBiz;
+	private final StockQueryBiz stockQueryBiz;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -76,8 +84,18 @@ public class StockCountBizImpl implements StockCountBiz {
 	public List<PdaStockCountDetailResponse> getPdaStockCountDetailResponseList(Long countBillId) {
 		List<CountDetail> countDetailList = countDetailDao.selectByCountBillId(countBillId);
 		// 统计箱内物品数量
-
-		return null;
+		List<PdaStockCountDetailResponse> responseList = BeanUtil.copy(countDetailList, PdaStockCountDetailResponse.class);
+        responseList.forEach(response ->{
+			List<PdaBoxQtyResponse> pdaBoxQtyResponseList= new ArrayList<>();
+			PdaBoxQtyResponse pdaBoxQtyResponse = new PdaBoxQtyResponse();
+			List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(response.getBoxCode());
+			BigDecimal stockBalance = StockUtil.getStockBalance(stockList);
+            pdaBoxQtyResponse.setBoxCode(response.getBoxCode());
+			pdaBoxQtyResponse.setTotalQty(stockBalance);
+			pdaBoxQtyResponseList.add(pdaBoxQtyResponse);
+			response.setPdaBoxQtyResponseList(pdaBoxQtyResponseList);
+		});
+		return responseList;
 	}
 
 	@Override
