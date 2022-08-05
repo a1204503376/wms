@@ -121,6 +121,7 @@ import {ExcelExport} from 'pikaz-excel-js'
 import {exportData, page} from "@/api/wms/stock/unReturned"
 import {nowDateFormat} from "@/util/date";
 import NodesSku from "@/components/wms/select/NodesSkuByQuery";
+import func from "@/util/func";
 
 
 export default {
@@ -252,7 +253,17 @@ export default {
             this.exportCurrentDataToExcel("未归还列表", "未归还列表");
         },
         createReturnBill() {
-
+            let rows = this.$refs.table.selection;
+            if (func.isEmpty(rows)) {
+                this.$message.warning("至少选择一条记录创建");
+                return;
+            }
+            this.$router.push({
+                name: '创建归还单',
+                params: {
+                    unReturnedData: JSON.stringify(rows)
+                }
+            })
         }
     }
 }
