@@ -11,7 +11,7 @@ import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.AgvTask;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.putway.PutawayLogDao;
-import org.nodes.wms.dao.putway.dto.input.AddByBoxShelfRequest;
+import org.nodes.wms.dao.putway.dto.input.PutwayByBoxRequest;
 import org.nodes.wms.dao.putway.dto.input.CallAgvRequest;
 import org.nodes.wms.dao.putway.dto.input.LpnTypeRequest;
 import org.nodes.wms.dao.putway.dto.output.BoxDto;
@@ -44,7 +44,16 @@ public class PutwayBizImpl implements PutwayBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public void addByBoxShelf(AddByBoxShelfRequest request) {
+	public void putwayByBox(PutwayByBoxRequest request) {
+		// TODO bug
+		// request中的stockId应改为list
+		// 判断库存是否在入库暂存区，如果不是入库暂存区应报异常
+		// 如果是整托：原库中的lpn为空白字符，需要抛异常
+		// 如果是整托：按托移动
+		// 如果不是整托：按箱移动
+		// 生成上架记录
+
+
 		// 调用库存移动
 		Stock sourceStock = stockQueryBiz.findStockById(request.getStockId());
 		AssertUtil.notNull(sourceStock, "没有该库存信息");

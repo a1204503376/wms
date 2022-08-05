@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * 按箱上架策略请求对象
  **/
 @Data
-public class AddByBoxShelfRequest implements Serializable {
+public class PutwayByBoxRequest implements Serializable {
 	private static final long serialVersionUID = 6938605109923273805L;
 	/**
 	 * 库存ID

@@ -2,7 +2,7 @@ package org.nodes.wms.biz.putway.modular;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.basics.location.entities.Location;
-import org.nodes.wms.dao.putway.dto.input.AddByBoxShelfRequest;
+import org.nodes.wms.dao.putway.dto.input.PutwayByBoxRequest;
 import org.nodes.wms.dao.putway.entities.PutawayLog;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.secure.utils.AuthUtil;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Component
 @RequiredArgsConstructor
 public class PutwayFactory {
-	public PutawayLog create(AddByBoxShelfRequest request, Stock sourceStock, Location targetLocation) {
+	public PutawayLog create(PutwayByBoxRequest request, Stock sourceStock, Location targetLocation) {
 		PutawayLog putawayLog = new PutawayLog();
 		putawayLog.setLpnCode(sourceStock.getLpnCode());
 		putawayLog.setTargetLocCode(targetLocation.getLocCode());

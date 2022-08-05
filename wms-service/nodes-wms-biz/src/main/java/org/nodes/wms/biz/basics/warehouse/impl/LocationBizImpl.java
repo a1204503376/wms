@@ -207,7 +207,7 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isPickToLocation(Location location) {
-		Location pickToLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA);
+		Location pickToLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO);
 		return location.getLocId().equals(pickToLocation.getLocId());
 	}
 
