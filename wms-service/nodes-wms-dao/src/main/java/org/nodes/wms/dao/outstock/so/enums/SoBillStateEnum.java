@@ -10,46 +10,47 @@ import org.nodes.wms.dao.outstock.so.dto.output.SoBillStateResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 出库单状态
+ *
+ * @author nodesc
+ */
 @Getter
 @AllArgsConstructor
 public enum SoBillStateEnum {
 	CREATE("单据创建", 10),
-	EXECUTING("处理中", 20),
+	EXECUTING("已分配", 20),
 	PART("部分出库", 30),
-	COMPLETED("已完成", 40),
+	ALL_OUT_STOCK("全部出库", 35),
+	COMPLETED("已关闭", 40),
+	CANCELED("已取消", 90);
 
-	NOT("未出库",50),
-	PART_STOCK_OUT("部分出库",60),
-	COMPLETED_STOCK_OUT("全部出库",70),
-	ALLOCATED("已分配",80),
-	REPEAL("已撤销", 90),
-	CANCEL("已取消",91),
-	CLOSED("已关闭",92);
 
 	@EnumValue
-	final Integer index;
-	@JsonValue
-	final String name;
+	final Integer code;
 
-	SoBillStateEnum(String name, Integer index) {
-		this.name = name;
-		this.index = index;
+	@JsonValue
+	final String desc;
+
+	SoBillStateEnum(String desc, Integer code) {
+		this.desc = desc;
+		this.code = code;
 	}
 
 	public static String valueOf(Integer index) {
-		switch(index) {
+		switch (index) {
 			case 10:
-				return CREATE.getName();
+				return CREATE.getDesc();
 			case 20:
-				return EXECUTING.getName();
+				return EXECUTING.getDesc();
 			case 30:
-				return PART.getName();
+				return PART.getDesc();
+			case 35:
+				return ALL_OUT_STOCK.getDesc();
 			case 40:
-				return COMPLETED.getName();
+				return COMPLETED.getDesc();
 			case 90:
-				return REPEAL.getName();
-			case 91:
-				return CANCEL.getName();
+				return CANCELED.getDesc();
 			default:
 				return StringPool.EMPTY;
 		}
@@ -57,11 +58,10 @@ public enum SoBillStateEnum {
 
 	public static List<SoBillStateResponse> getList() {
 		List<SoBillStateResponse> soBillStateList = new ArrayList<>();
-		for (SoBillStateEnum item : values()
-			 ) {
+		for (SoBillStateEnum item : values()) {
 			SoBillStateResponse soBillStateResponse = new SoBillStateResponse();
-			soBillStateResponse.setValue(item.getIndex());
-			soBillStateResponse.setLabel(item.getName());
+			soBillStateResponse.setValue(item.getCode());
+			soBillStateResponse.setLabel(item.getDesc());
 			soBillStateList.add(soBillStateResponse);
 		}
 		return soBillStateList;

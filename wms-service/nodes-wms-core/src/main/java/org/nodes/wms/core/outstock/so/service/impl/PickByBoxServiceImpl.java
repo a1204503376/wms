@@ -497,7 +497,7 @@ public class PickByBoxServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 			 * author		pengwei
 			 * date			2020-07-02
 			 */
-			if (soHeader.getSoBillState().equals(SoBillStateEnum.CANCEL.getIndex())) {
+			if (soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED.getCode())) {
 				throw new ServiceException("取消订单不允许再执行拣货操作；请将已拣物品放到暂存区后返回任务列表刷新任务！");
 			}
 			//更新任务开始时间

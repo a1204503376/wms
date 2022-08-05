@@ -57,7 +57,7 @@ public class SoDetailServiceImpl<M extends SoDetailMapper, T extends SoDetail>
 		}
 		entity.setScanQty(BigDecimal.ZERO);
 		entity.setSurplusQty(entity.getPlanQty());
-		entity.setBillDetailState(SoDetailStateEnum.UnAlloc.getIndex());
+		entity.setBillDetailState(SoDetailStateEnum.UnAlloc.getCode());
 
 		return super.save(entity);
 	}
@@ -68,7 +68,7 @@ public class SoDetailServiceImpl<M extends SoDetailMapper, T extends SoDetail>
 		if (Func.isEmpty(soDetail)) {
 			throw new ServiceException("订单明细不存在（ID：" + soDetailId + "）！");
 		}
-		soDetail.setBillDetailState(soDetailState.getIndex());
+		soDetail.setBillDetailState(soDetailState.getCode());
 		return super.updateById(soDetail);
 	}
 	/**

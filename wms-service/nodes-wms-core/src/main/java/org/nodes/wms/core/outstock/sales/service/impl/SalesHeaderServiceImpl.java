@@ -114,7 +114,7 @@ public class SalesHeaderServiceImpl<M extends SalesHeaderMapper, T extends Sales
 			salesHeader.setSoBillNo(SoCache.getSalesBillNo());
 		}
 		if (Func.isEmpty(salesHeader.getSoBillState())) {
-			salesHeader.setSoBillState(SoBillStateEnum.CREATE.getIndex());
+			salesHeader.setSoBillState(SoBillStateEnum.CREATE.getCode());
 		}
 		if (Func.isEmpty(salesHeader.getTransportCode())) {
 			salesHeader.setTransportCode(701);

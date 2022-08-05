@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+
+import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
 import org.springblade.core.mp.base.BaseEntity;
 
 import java.io.Serializable;
@@ -53,7 +55,7 @@ public class SoHeader extends BaseEntity implements Serializable {
 	/**
 	 * 单据状态
 	 */
-	private Integer soBillState;
+	private SoBillStateEnum soBillState;
 
 	/**
 	 * 组合单据ID
