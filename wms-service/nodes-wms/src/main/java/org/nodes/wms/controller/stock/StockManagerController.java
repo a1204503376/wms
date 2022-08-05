@@ -1,12 +1,16 @@
 package org.nodes.wms.controller.stock;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
+import org.nodes.wms.biz.lendreturn.LendReturnBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.stockManage.StockManageBiz;
+import org.nodes.wms.dao.lendreturn.dto.input.LendReturnQuery;
+import org.nodes.wms.dao.lendreturn.dto.output.NoReturnResponse;
 import org.nodes.wms.dao.stock.dto.input.*;
 import org.nodes.wms.dao.stock.dto.output.StockBySerialPageResponse;
 import org.nodes.wms.dao.stock.dto.output.StockMoveResponse;
@@ -14,6 +18,7 @@ import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
+import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.BeanUtil;
@@ -36,6 +41,8 @@ public class StockManagerController {
 	private final StockQueryBiz stockQueryBiz;
 
 	private final StockManageBiz stockManageBiz;
+
+	private final LendReturnBiz lendReturnBiz;
 
 	@PostMapping("/page")
 	public R<IPage<StockPageResponse>> page(Query query, @RequestBody StockPageQuery stockPageQuery) {
@@ -159,5 +166,20 @@ public class StockManagerController {
 		stockBiz.exportBySerial(stockBySerialPageQuery, response);
 	}
 
+	/**
+	 * 未归还列表：分页查询
+	 */
+	@PostMapping("/pageUnReturned")
+	public R<Page<NoReturnResponse>> pageUnReturned(Query query, @RequestBody LendReturnQuery lendReturnQuery){
+		Page<NoReturnResponse> noReturnResponsePage = lendReturnBiz.pageNoReturn((Page)Condition.getPage(query), lendReturnQuery);
+		return R.data(noReturnResponsePage);
+	}
 
+	/**
+	 * 未归还列表：服务端导出
+	 */
+	@PostMapping("/exportUnReturned")
+	public void pageUnReturned(@RequestBody LendReturnQuery lendReturnQuery,HttpServletResponse response){
+		lendReturnBiz.exportNoReturn(lendReturnQuery, response);
+	}
 }

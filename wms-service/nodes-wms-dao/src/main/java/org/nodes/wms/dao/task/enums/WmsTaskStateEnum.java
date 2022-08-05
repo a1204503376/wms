@@ -4,6 +4,11 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.enums.BaseEnum;
+import org.nodes.wms.dao.task.dto.output.TaskStateSelectResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 任务状态
@@ -12,7 +17,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public enum WmsTaskStateEnum {
+public enum WmsTaskStateEnum implements BaseEnum {
 	NOT_ISSUED(1, "未下发"),
 	ISSUED(2, "已下发"),
 	START_EXECUTION(3, "开始执行"),
@@ -25,4 +30,15 @@ public enum WmsTaskStateEnum {
 
 	@JsonValue
 	private final String desc;
+
+	public static List<TaskStateSelectResponse> getList() {
+		List<TaskStateSelectResponse> list = new ArrayList<>();
+		for (WmsTaskStateEnum item : values()) {
+			TaskStateSelectResponse taskStateSelectResponse = new TaskStateSelectResponse();
+			taskStateSelectResponse.setLabel(item.desc);
+			taskStateSelectResponse.setValue(item.code);
+			list.add(taskStateSelectResponse);
+		}
+		return list;
+	}
 }
