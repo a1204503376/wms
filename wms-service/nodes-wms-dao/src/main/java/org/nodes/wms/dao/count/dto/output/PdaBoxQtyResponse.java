@@ -19,4 +19,8 @@ public class PdaBoxQtyResponse {
 	 * 箱内物品总数量
 	 */
 	private BigDecimal totalQty;
+	/**
+	 * 传输给前端做是否无误的判断
+	 */
+	private Boolean isValid = false;
 }

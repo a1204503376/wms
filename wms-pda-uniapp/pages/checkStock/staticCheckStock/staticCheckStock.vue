@@ -5,7 +5,7 @@
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<template>
-			<u-search placeholder="盘点单号" v-model="params.no" :show-action="false" @custom="search"
+			<u-search placeholder="盘点单号" v-model="params.countBillNo" :show-action="false" @custom="search"
 				@search="search" class="font-in-page" style="margin: 12rpx">
 			</u-search>
 		</template>
@@ -15,18 +15,26 @@
 			<view v-for="(item, index) in receiveList" :key="index" @click="clickItem(item)">
 				<u-row customStyle="margin-bottom: 10px">
 					<u-col span="3" class="left-text-one-line font-in-page">
-						<u--text class="demo-layout bg-purple-light" v-text="'盘点单号'"></u--text>
+						<u--text class="demo-layout bg-purple-light" v-text="'盘点单号:'"></u--text>
 					</u-col>
 					<u-col span="9">
-						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.skuLot1"></u--text>
+						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.countBillNo"></u--text>
 					</u-col>
 				</u-row>
 				<u-row customStyle="margin-bottom: 10px">
 					<u-col span="3" class="left-text-one-line font-in-page">
-						<u--text class="demo-layout bg-purple-light" v-text="'创建时间'"></u--text>
+						<u--text class="demo-layout bg-purple-light" v-text="'建单人:'"></u--text>
 					</u-col>
 					<u-col span="9">
-						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.skuCode"></u--text>
+						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.creator"></u--text>
+					</u-col>
+				</u-row>
+				<u-row customStyle="margin-bottom: 10px">
+					<u-col span="3" class="left-text-one-line font-in-page">
+						<u--text class="demo-layout bg-purple-light" v-text="'创建时间:'"></u--text>
+					</u-col>
+					<u-col span="9">
+						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.createTime"></u--text>
 					</u-col>
 				</u-row>
 				<u-divider text=""></u-divider>
@@ -43,7 +51,7 @@
 
 <script>
 	import setting from '@/common/setting'
-	import stockInquiry from '@/api/stock/stockInquiry.js'
+	import staticCheckStock from '@/api/checkStock/staticCheckStock.js'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
 	export default {
@@ -51,7 +59,7 @@
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
-					no: '',
+					countBillNo: '',
 					type: ''
 				},
 				receiveList: [],
@@ -88,26 +96,26 @@
 				var barcodeType = barcodeFunc.BarcodeType;
 				switch (barcode.type) {
 					case barcodeType.UnKnow:
-						this.params.no = barcode.content;
+						this.params.countBillNo = barcode.content;
 						break;
 					case barcodeType.Loc:
-						this.params.no = barcode.content;
+						this.params.countBillNo = barcode.content;
 						this.params.type = "loc_code";
 						break;
 					case barcodeType.Lpn:
-						this.params.no = barcode.content;
+						this.params.countBillNo = barcode.content;
 						this.params.type = "lpn_code";
 						break;
 					case barcodeType.Sku:
-						this.params.no = barcode.content;
+						this.params.countBillNo = barcode.content;
 						this.params.type = "sku_code";
 						break;
 					case barcodeType.LotNumber:
-						this.params.no = barcode.content;
+						this.params.countBillNo = barcode.content;
 						this.params.type = "sku_lot1";
 						break;
 					case barcodeType.Box:
-						this.params.no = barcode.content;
+						this.params.countBillNo = barcode.content;
 						this.params.type = "box_code";
 						break;
 					default:
@@ -126,10 +134,10 @@
 				this.loadmore = true;
 				this.status = 'loading';
 				this.page.current = 1;
-				this.analysisCode(this.params.no);
+				this.analysisCode(this.params.countBillNo);
 				this.params.whId = uni.getStorageSync('warehouse').whId;
-				stockInquiry.findAllStockByNo(this.params, this.page).then(data => {
-					if (data.data.records.length > 0) {
+				staticCheckStock.getPdaStockCountResponseList(this.params, this.page).then(data => {
+					if (data.data.length > 0) {
 						this.status = 'loading';
 						this.loadmore = true;
 						this.noData = false;
@@ -137,7 +145,7 @@
 						this.loadmore = false;
 						this.noData = true;
 					}
-					this.receiveList = data.data.records;
+					this.receiveList = data.data;
 					if (this.receiveList.length < 7) {
 						this.loadmore = false;
 					}
@@ -149,8 +157,8 @@
 			clickItem(item) {
 				uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/startCheckStock', item);
 			},
-			scannerCallback(no) {
-				this.analysisCode(no);
+			scannerCallback(countBillNo) {
+				this.analysisCode(countBillNo);
 				this.search();
 			},
 			scrolltolower() {
@@ -161,7 +169,7 @@
 				stockInquiry.findAllStockByNo(this.params, this.page).then(data => {
 					if (data.data.records.length > 0) {
 						this.status = 'loading';
-						data.data.records.forEach((item, index) => { //js遍历数组
+						data.data.forEach((item, index) => { //js遍历数组
 							this.receiveList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
 						});
 					} else {
