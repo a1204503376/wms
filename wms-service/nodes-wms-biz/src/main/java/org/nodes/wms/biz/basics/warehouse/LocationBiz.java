@@ -162,15 +162,22 @@ public interface LocationBiz {
 
 	/**
 	 * 判断库位是否为虚拟库位
-	 * 
+	 *
 	 * @param location location
 	 * @return true：是虚拟库位
 	 */
 	boolean isVirtualLocation(Location location);
 
 	/**
+	 * 判断库位是否为人工拣货区/拣货区
+	 *
+	 * @param location location
+	 * @return true：是人工拣货区/拣货区
+	 */
+	boolean isPickLocation(Location location);
+	/**
 	 * 判断是否是入库暂存区库位
-	 * 
+	 *
 	 * @param location location
 	 * @return true：是入库暂存区库位
 	 */

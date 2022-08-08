@@ -267,6 +267,12 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
+	public boolean isPickLocation(Location location) {
+		Location pickLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_PICK);
+		return location.getLocId().equals(pickLocation.getLocId());
+	}
+
+	@Override
 	public boolean isStageLocation(Location location) {
 		Location stageLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_OF_STAGE);
 		return location.getLocId().equals(stageLocation.getLocId());
