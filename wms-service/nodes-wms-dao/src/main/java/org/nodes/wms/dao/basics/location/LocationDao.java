@@ -183,4 +183,12 @@ public interface LocationDao {
 	 * @param isResetLocFlagDesc true:重置库位标记为空
 	 */
 	void updateLocFlag(String taskId, Integer locFlag, boolean isResetLocFlagDesc);
+
+	/**
+	 * 根据库位id获取所属库区的库区类型
+	 *
+	 * @param locId 库位id
+	 * @return String
+	 */
+	Integer getZoneTypeByLocId(Long locId);
 }

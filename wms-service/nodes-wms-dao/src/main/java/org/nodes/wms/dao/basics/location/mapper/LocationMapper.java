@@ -78,4 +78,11 @@ public interface LocationMapper extends BaseMapper<Location> {
 	 */
 	Location getLocationByZoneTypeAndWhId(List<Long> locIdList,Long whId, Integer zoneType);
 
+	/**
+	 * 根据库位id获取所属库区的库区类型
+	 *
+	 * @param locId 库位id
+	 * @return 库区类型
+	 */
+    Integer selectZoneTypeByLocId(Long locId);
 }

@@ -5,13 +5,15 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.ArrayUtils;
 import org.nodes.core.base.entity.Dict;
 import org.nodes.core.constant.DictCodeConstant;
+import org.nodes.core.constant.LocationConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
+import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.basics.warehouse.modular.LocationFactory;
 import org.nodes.wms.dao.basics.location.LocationDao;
-import org.nodes.core.constant.LocationConstant;
 import org.nodes.wms.dao.basics.location.dto.input.LocationAddOrEditRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationExcelRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
@@ -44,6 +46,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LocationBizImpl implements LocationBiz {
 	private final WarehouseBiz warehouseBiz;
+	private final ZoneBiz zoneBiz;
 	private final LocationDao locationDao;
 	private final LocationFactory locationFactory;
 	private final DictionaryBiz dictionaryBiz;
@@ -193,7 +196,7 @@ public class LocationBizImpl implements LocationBiz {
 			return true;
 		}
 
-		return "1".equals(location.getLocSkuMix());
+		return WmsAppConstant.TRUE_DEFAULT_STRING.equals(location.getLocSkuMix());
 	}
 
 	@Override
@@ -202,7 +205,7 @@ public class LocationBizImpl implements LocationBiz {
 			return true;
 		}
 
-		return "1".equals(location.getLocLotNoMix());
+		return WmsAppConstant.TRUE_DEFAULT_STRING.equals(location.getLocLotNoMix());
 	}
 
 	@Override
@@ -250,8 +253,17 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isAgvTempOfZoneType(Long locId) {
-		// TODO 彭永程
-		return false;
+		Integer zoneType = locationDao.getZoneTypeByLocId(locId);
+		return DictCodeConstant.ZONE_TYPE_AUTOMATION_TEMPORARY_AREA.equals(zoneType);
+	}
+
+	@Override
+	public boolean isAgvZone(Long locId) {
+		Integer zoneType = locationDao.getZoneTypeByLocId(locId);
+		return DictCodeConstant.ZONE_TYPE_AUTOMATION_STORAGE_AREA.equals(zoneType)
+			|| DictCodeConstant.ZONE_TYPE_AUTOMATION_PICKING_AREA.equals(zoneType)
+			|| DictCodeConstant.ZONE_TYPE_AUTOMATION_CHOICE_AREA.equals(zoneType)
+			|| DictCodeConstant.ZONE_TYPE_AUTOMATION_TEMPORARY_AREA.equals(zoneType);
 	}
 
 	@Override

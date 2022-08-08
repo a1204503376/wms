@@ -208,6 +208,14 @@ public interface LocationBiz {
 	boolean isAgvTempOfZoneType(Long locId);
 
 	/**
+	 * 判断库位是否属于agv区域
+	 *
+	 * @param locId 库位id
+	 * @return true：该库位属于自动化存储区 或 自动化拣货区 或 自动化备货区 或 自动化临时区
+	 */
+	boolean isAgvZone(Long locId);
+
+	/**
 	 * 获取库位总数量
 	 *
 	 * @return int
