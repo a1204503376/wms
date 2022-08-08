@@ -162,7 +162,7 @@ public interface LocationBiz {
 
 	/**
 	 * 判断库位是否为虚拟库位
-	 * 
+	 *
 	 * @param location location
 	 * @return true：是虚拟库位
 	 */
@@ -170,7 +170,7 @@ public interface LocationBiz {
 
 	/**
 	 * 判断是否是入库暂存区库位
-	 * 
+	 *
 	 * @param location location
 	 * @return true：是入库暂存区库位
 	 */
@@ -199,6 +199,14 @@ public interface LocationBiz {
 	 * @return true：标识该库位属于agv临时区库位
 	 */
 	boolean isAgvTempOfZoneType(Long locId);
+
+	/**
+	 * 判断库位是否属于agv区域
+	 *
+	 * @param locId 库位id
+	 * @return true：该库位属于自动化存储区 或 自动化拣货区 或 自动化备货区 或 自动化临时区
+	 */
+	boolean isAgvZone(Long locId);
 
 	/**
 	 * 获取库位总数量

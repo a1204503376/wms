@@ -20,6 +20,16 @@ public interface WmsAppConstant {
 	Integer TRUE_DEFAULT = 1;
 
 	/**
+	 * 系统全局默认true的字符值
+	 */
+	String TRUE_DEFAULT_STRING = "1";
+
+	/**
+	 * 系统全局默认false的字符值
+	 */
+	String FALSE_DEFAULT_STRING = "0";
+
+	/**
 	 * 单据类型：归还入库
 	 */
 	String BILL_TYPE_RETURN = "RR";

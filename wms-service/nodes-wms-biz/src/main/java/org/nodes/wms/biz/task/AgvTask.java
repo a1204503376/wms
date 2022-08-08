@@ -84,12 +84,19 @@ public class AgvTask {
 	public boolean sendToSchedule(List<WmsTask> putwayTask) {
 		String url = systemParamBiz.findScheduleUrl().concat(POST_JOB_API);
 
-		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(url, publishJobFactory.createPublishJobRequestList(putwayTask));
+		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
+			url, publishJobFactory.createPublishJobRequestList(putwayTask));
 		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
 		return schedulingResponse.hasFailed();
 	}
 
-	public void moveStockToSchedule() {
+	/**
+	 * AGV库内移动,只有原和目标库位都是agv存储区的才有效
+	 *
+	 * @param sourceStock 移动的原库存
+	 * @param targetLocId 目标库位
+	 */
+	public void moveStockToSchedule(List<Stock> sourceStock, Long targetLocId) {
 
 	}
 

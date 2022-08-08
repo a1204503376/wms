@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.ArrayUtils;
 import org.nodes.core.base.entity.Dict;
 import org.nodes.core.constant.DictCodeConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
@@ -193,7 +194,7 @@ public class LocationBizImpl implements LocationBiz {
 			return true;
 		}
 
-		return "1".equals(location.getLocSkuMix());
+		return WmsAppConstant.TRUE_DEFAULT_STRING.equals(location.getLocSkuMix());
 	}
 
 	@Override
@@ -202,7 +203,7 @@ public class LocationBizImpl implements LocationBiz {
 			return true;
 		}
 
-		return "1".equals(location.getLocLotNoMix());
+		return WmsAppConstant.TRUE_DEFAULT_STRING.equals(location.getLocLotNoMix());
 	}
 
 	@Override
@@ -250,6 +251,12 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isAgvTempOfZoneType(Long locId) {
+		// TODO 彭永程
+		return false;
+	}
+
+	@Override
+	public boolean isAgvZone(Long locId) {
 		// TODO 彭永程
 		return false;
 	}
