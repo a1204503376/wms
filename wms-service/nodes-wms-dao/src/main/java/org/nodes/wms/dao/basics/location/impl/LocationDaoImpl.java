@@ -191,4 +191,9 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 		}
 	}
 
+    @Override
+    public Integer getZoneTypeByLocId(Long locId) {
+        return super.baseMapper.selectZoneTypeByLocId(locId);
+    }
+
 }

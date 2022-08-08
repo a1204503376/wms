@@ -194,6 +194,14 @@
                 </foreach>
             </if>
         </where>
-     limit 1
+        limit 1
+    </select>
+
+    <select id="selectZoneTypeByLocId" resultType="java.lang.Integer">
+        SELECT
+            zone.zone_type
+        FROM wms_location loc
+                 LEFT JOIN wms_zone zone ON zone.zone_id = loc.zone_id
+        WHERE loc.loc_id = #{locId}
     </select>
 </mapper>
