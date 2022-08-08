@@ -1,20 +1,26 @@
 package org.nodes.wms.biz.task;
 
 import lombok.RequiredArgsConstructor;
+
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.systemParam.SystemParamBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.putway.PutwayStrategyActuator;
 import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.factory.PublishJobFactory;
 import org.nodes.wms.biz.task.factory.WmsTaskFactory;
 import org.nodes.wms.biz.task.util.SendToScheduleUtil;
 import org.nodes.wms.dao.application.dto.scheduling.SchedulingGlobalResponse;
 import org.nodes.wms.dao.application.dto.scheduling.SchedulingResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.outstock.so.entities.SoDetail;
+import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
+import org.springblade.core.log.exception.ServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 天宜定制：agv调度任务
@@ -42,6 +49,7 @@ public class AgvTask {
 	private final PublishJobFactory publishJobFactory;
 	private final SystemParamBiz systemParamBiz;
 	private final SendToScheduleUtil sendToScheduleUtil;
+	private final StockQueryBiz stockQueryBiz;
 
 	/**
 	 * 生成AGV上架任务
@@ -85,7 +93,7 @@ public class AgvTask {
 		String url = systemParamBiz.findScheduleUrl().concat(POST_JOB_API);
 
 		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
-			url, publishJobFactory.createPublishJobRequestList(putwayTask));
+				url, publishJobFactory.createPublishJobRequestList(putwayTask));
 		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
 		return schedulingResponse.hasFailed();
 	}
@@ -97,10 +105,52 @@ public class AgvTask {
 	 * @param targetLocId 目标库位
 	 */
 	public void moveStockToSchedule(List<Stock> sourceStock, Long targetLocId) {
+		// 只有agv存储区的才需要执行，且原库存必须是同一个库位的库存
+		AssertUtil.notEmpty(sourceStock, "AGV库内移动任务下发失败,原库存为空无法移动");
+		AssertUtil.notNull(targetLocId, "AGV库内移动任务下发失败,目标库位为空");
 
+		List<Long> sourceIds = sourceStock.stream()
+				.map(Stock::getLocId)
+				.distinct()
+				.collect(Collectors.toList());
+		if (sourceIds.size() > 1) {
+			throw new ServiceException("AGV库内移动任务下发失败，不支持同时移动多个库位的库存");
+		}
+
+		if (!locationBiz.isAgvZone(sourceIds.get(0))
+				|| !locationBiz.isAgvZone(targetLocId)) {
+			throw new ServiceException("AGV库内移动任务下发失败，AGV只能移动自动区的库存");
+		}
+
+		// TODO 此处需要将目标库位传入
+		WmsTask moveTask = wmsTaskFactory.create(sourceStock);
+		if (sendToSchedule(Collections.singletonList(moveTask))) {
+			moveTask.setTaskState(WmsTaskStateEnum.ISSUED);
+		}
+		locationBiz.freezeLocByTask(targetLocId, moveTask.getTaskId().toString());
+		stockBiz.freezeStockByTask(sourceStock, false, moveTask.getTaskId());
+		wmsTaskDao.save(moveTask);
 	}
 
-	public void pickToSchedule() {
+	/**
+	 * 拣货任务到agv，按库位下发
+	 * 
+	 * @param locId    库位id
+	 * @param so       出库单信息
+	 * @param soDetail 出库单明细信息
+	 */
+	public void pickToSchedule(Long locId, SoHeader so, SoDetail soDetail) {
+		AssertUtil.notNull(locId, "AGV拣货任务下发失败,locId为空");
+		AssertUtil.notNull(so, "AGV拣货任务下发失败,so为空");
+		AssertUtil.notNull(soDetail, "AGV拣货任务下发失败,soDetail为空");
 
+		// TODO 此处需要将目标库位传入
+		List<Stock> sourceStock = stockQueryBiz.findStockByLocation(locId);
+		WmsTask pickTask = wmsTaskFactory.create(sourceStock);
+		if (sendToSchedule(Collections.singletonList(pickTask))) {
+			pickTask.setTaskState(WmsTaskStateEnum.ISSUED);
+		}
+		stockBiz.freezeStockByTask(sourceStock, false, pickTask.getTaskId());
+		wmsTaskDao.save(pickTask);
 	}
 }
