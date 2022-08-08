@@ -1,131 +1,247 @@
 <template>
-    <basic-container>
-        <nodes-crud
-            ref="table"
-            :option="option"
-            :data="data"
-            :table-loading="loading"
-            @on-load="onLoad"
-            @selection-change="selectionChange"
-        ></nodes-crud>
-    </basic-container>
+    <div id="serialLog">
+        <nodes-master-page :permission="permissionObj" v-on="form.events">
+            <template v-slot:searchFrom>
+                <el-row type="flex">
+                    <el-col :span="8">
+                        <el-form-item label="序列号">
+                            <el-input v-model.trim="form.params.serialNumberBegin" :clearable="true"
+                                      style="width: 91px;"></el-input>
+                            <span style="margin: 0 2px 0 2px">—</span>
+                            <el-input v-model.trim="form.params.serialNumberEnd" :clearable="true"
+                                      style="width: 91px;"></el-input>
+                        </el-form-item>
+                        <el-tooltip placement="top">
+                            <div slot="content">
+                                <span>1、只输入前者或后者，则模糊匹配输入值</span><br>
+                                <span>2、前者输入查找值，后者输入0，则查找大于输入值的序列号"</span><br>
+                                <span>3、后者输入查找值，前者输入0，则查找小于输入值的序列号"</span><br>
+                                <span>4、前者后者均输入查找值，则查找该范围内的序列号"</span>
+                            </div>
+                            <i class="el-icon-question" style="height: 28px;line-height: 28px"></i>
+                        </el-tooltip>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="批次">
+                            <el-input v-model.trim="form.params.lotNumber" :clearable="true"
+                                      placeholder="请输入批次"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="序列号状态">
+                            <nodes-serial-state v-model="form.params.serialStateList"></nodes-serial-state>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </template>
+            <template v-slot:expandSearch>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="入库日期">
+                            <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </template>
+            <template v-slot:tableTool>
+                <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
+                    <el-button circle icon="el-icon-refresh" size="mini" @click="onRefresh"></el-button>
+                </el-tooltip>
+                <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">
+                    <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
+                </el-tooltip>
+                <el-tooltip :enterable="false" class="item" content="服务端导出" effect="dark" placement="top">
+                    <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
+                </el-tooltip>
+                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
+                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
+                                  style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData"/>
+                    </excel-export>
+                </el-tooltip>
+            </template>
+            <template v-slot:table>
+                <el-table ref="table"
+                          :data="table.data"
+                          border
+                          highlight-current-row
+                          size="mini"
+                          style="width: 100%"
+                          @sort-change="onSortChange">
+                    <el-table-column
+                        fixed
+                        type="selection"
+                        width="50">
+                    </el-table-column>
+                    <el-table-column
+                        fixed
+                        sortable
+                        type="index">
+                        <template slot="header">
+                            #
+                        </template>
+                    </el-table-column>
+                    <template v-for="(column, index) in table.columnList">
+                        <el-table-column
+                            :key="index"
+                            show-overflow-tooltip
+                            v-bind="column">
+                        </el-table-column>
+                    </template>
+                </el-table>
+            </template>
+            <template v-slot:page>
+                <el-pagination :current-page="page.current" :page-size="page.size" :page-sizes="[20, 50, 100]"
+                               :total="page.total" background layout="total, sizes, prev, pager, next, jumper"
+                               v-bind="page"
+                               @size-change="handleSizeChange" @current-change="handleCurrentChange">
+                </el-pagination>
+            </template>
+        </nodes-master-page>
+        <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
+        </dialog-column>
+    </div>
 </template>
+
 <script>
-import {getPage} from "@/api/wms/log/serialLog";
+
+import {exportExcel, getPage} from "@/api/wms/log/serialLog";
+import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
+import NodesDateRange from "@/components/wms/general/NodesDateRange";
+import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
+import DialogColumn from "@/components/element-ui/crud/dialog-column";
+import {listMixin} from "@/mixins/list";
+import fileDownload from "js-file-download";
+import {ExcelExport} from 'pikaz-excel-js'
+import fileUpload from "@/components/nodes/fileUpload";
+import {nowDateFormat} from "@/util/date";
+import NodesSerialState from "@/components/wms/select/NodesSerialState";
 
 export default {
-    name: "seriallog",
-    components: {},
+    name: "serialLog",
+    mixins: [listMixin],
+    components: {
+        NodesSerialState,
+        DialogColumn,
+        NodesSearchInput,
+        NodesMasterPage,
+        NodesDateRange,
+        ExcelExport,
+        fileUpload,
+    },
     data() {
         return {
-            titleText: "",
-            dialogVisible: false,
-            loading: false,
-            dialogs: false, //搜索界面的显隐
-            isView: false,
-            isShow: false,
-            selectionList: [], //选中的数据
-            data: [], //列表数据
-            option: {
-                newBtn: false,
-                multiDelBtn: false,
-                viewBtn: false,
-                editBtn: false,
-                delBtn: false,
-                column: [
-                    {
-                        label: "操作时间",
-                        prop: "updateTime",
-                        width: 160,
-                        sortable: true,
-                        type: 'date-picker'
-                    },
+            form: {
+                params: {
+                    serialNumberBegin: '',
+                    serialNumberEnd: '',
+                    lotNumber: '',
+                    createTimeDateRange: ['', ''],
+                    serialStateList: []
+                },
+            },
+            fileUpload: {
+                visible: false,
+            },
+            table: {
+                columnList: [
                     {
                         label: "序列号",
                         prop: "serialNumber",
-                        width: 160,
-                        search: true,
-                        sortable: true,
+                        sortable: "custom",
                     },
                     {
                         label: "物品编码",
                         prop: "skuCode",
-                        width: 160,
-                        sortable: true,
+                        sortable: "custom",
                     },
                     {
                         label: "物品名称",
                         prop: "skuName",
-                        width: 160,
-                        sortable: true,
+                        sortable: "custom",
+                    },
+                    {
+                        label: "库位",
+                        prop: "locCode",
+                        sortable: "custom",
+                    },
+                    {
+                        label: "箱码",
+                        prop: "boxCode",
+                        sortable: "custom",
+                    },
+                    {
+                        label: "LPN",
+                        prop: "lpnCode",
+                        sortable: "custom",
                     },
                     {
                         label: "批次号",
                         prop: "lotNumber",
-                        width: 160,
-                        sortable: true,
+                        sortable: "custom",
                     },
                     {
-                        label: "处理类型",
-                        prop: "proType",
-                        width: 160,
-                        sortable: true,
-                        type: "select",
-                        dicUrl:
-                            "/api/blade-system/dict/dictionary?code=" + this.$dict.proType,
-                        props: {
-                            label: "dictValue",
-                            value: "dictKey",
-                        },
+                        label: "序列号状态",
+                        prop: "serialState",
+                        sortable: "custom",
                     },
                     {
-                        label: "操作人",
-                        prop: "updateUser",
-                        width: 160,
-                        sortable: true,
-                        type: 'select-table-user',
-                        dicUrl: '/api/blade-user/list',
-                        props: {
-                            value: 'id',
-                            label: 'realName'
-                        }
+                        label: "入库日期",
+                        prop: "createTime",
+                        sortable: "custom",
                     },
                 ],
             },
         };
     },
+    created() {
+        this.getTableData();
+    },
     computed: {
-        ids() {
-            let ids = [];
-            this.selectionList.forEach((ele) => {
-                ids.push(ele.id);
-            });
-            return ids.join(",");
-        },
+        permissionObj() {
+            return {
+                search: this.vaildData(this.permission.serialLog_search, false)
+            }
+        }
     },
     methods: {
-        //默认渲染数据
-        onLoad(page, params = {}) {
+        getTableData() {
+
+            getPage(this.page, this.form.params)
+                .then((res) => {
+                    let pageObj = res.data.data;
+                    this.table.data = pageObj.records;
+                    this.page.total = pageObj.total;
+                })
+        },
+        refreshTable() {
+            this.getTableData();
+        },
+        onReset() {
+            this.form.params = {
+                serialNumberBegin: '',
+                serialNumberEnd: '',
+                lotNumber: '',
+                createTimeDateRange: ['', ''],
+                serialStateList: []
+            }
+        },
+        exportData() {
             this.loading = true;
-            getPage(
-                page.currentPage,
-                page.pageSize,
-                Object.assign(params, this.query)
-            ).then((res) => {
-                const data = res.data.data;
-                page.total = data.total;
-                this.data = data.records;
-                this.loading = false;
-                this.selectionClear();
-            });
+            exportExcel(this.form.params)
+                .then((res) => {
+                    this.$message.success("操作成功，正在下载中...");
+                    fileDownload(res.data, `序列号日志${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
+                })
+                .catch(() => {
+                    this.$message.error("系统模板目录配置有误或文件不存在");
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
-        //选中的数据
-        selectionChange(list) {
-            this.selectionList = list;
-        },
-        selectionClear() {
-            this.selectionList = [];
-            this.$refs.table.toggleSelection();
+        onExportLocalData() {
+            this.exportCurrentDataToExcel("序列号日志", "序列号日志")
         },
     },
 };

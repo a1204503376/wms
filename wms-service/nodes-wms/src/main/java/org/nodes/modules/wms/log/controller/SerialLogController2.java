@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.nodes.wms.core.stock.core.dto.SerialLogDTO;
 import org.nodes.wms.core.stock.core.entity.SerialLog;
 import org.nodes.wms.core.stock.core.service.ISerialLogService;
 import org.nodes.wms.core.stock.core.vo.SerialLogVO;
@@ -14,16 +13,16 @@ import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
-import org.springblade.core.tool.utils.ObjectUtil;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 /**
- * 序列号日志 控制器
+ * 序列号日志 控制器  由SerialLogController更名为SerialLogController2
  *
  * @author zx
  * @since 2020-02-24
@@ -32,7 +31,7 @@ import java.util.HashMap;
 @AllArgsConstructor
 @RequestMapping("/wms/log/serialLog")
 @Api(value = "序列号日志", tags = "序列号日志接口")
-public class SerialLogController extends BladeController {
+public class SerialLogController2 extends BladeController {
 
 	private ISerialLogService serialLogService;
 
