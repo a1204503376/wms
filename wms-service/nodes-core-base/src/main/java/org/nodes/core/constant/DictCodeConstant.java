@@ -109,7 +109,7 @@ public interface DictCodeConstant {
 	/**
 	 * 库区类型:拣货区
 	 */
-	Integer ZONE_TYPE_PICKING_AREA = 75;
+	Integer ZONE_TYPE_PICK = 75;
 	/**
 	 * 库区类型:质检区
 	 */

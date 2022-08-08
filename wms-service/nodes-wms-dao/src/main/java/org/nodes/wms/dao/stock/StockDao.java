@@ -3,6 +3,7 @@ package org.nodes.wms.dao.stock;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
+import org.nodes.wms.dao.count.dto.output.PdaBoxQtyResponse;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
 import org.nodes.wms.dao.stock.dto.input.StockBySerialPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
@@ -293,4 +294,12 @@ public interface StockDao {
 	 * @return stock集合
 	 */
 	List<Stock> getStockByTaskId(Long taskId);
+
+	/**
+	 * 库存统计
+	 *
+	 * @param locCode 库位
+	 * @return PdaBoxQtyResponse
+	 */
+	List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode);
 }

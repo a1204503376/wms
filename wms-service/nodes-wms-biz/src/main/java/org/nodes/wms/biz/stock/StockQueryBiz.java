@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
+import org.nodes.wms.dao.count.dto.output.PdaBoxQtyResponse;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.putway.dto.output.CallAgvResponse;
@@ -261,4 +262,12 @@ public interface StockQueryBiz {
 	 * @return 分页对象
 	 */
 	IPage<StockBySerialPageResponse> getStockBySerialPage(Query query, StockBySerialPageQuery stockBySerialPageQuery);
+
+	/**
+	 * 获取库存统计
+	 *
+	 * @param locCode 库位
+	 * @return PdaBoxQtyResponse
+	 */
+	List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode);
 }

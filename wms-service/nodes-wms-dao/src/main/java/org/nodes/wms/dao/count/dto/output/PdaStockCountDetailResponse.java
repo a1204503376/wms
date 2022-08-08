@@ -27,6 +27,10 @@ public class PdaStockCountDetailResponse {
 	 */
 	private String locCode;
 	/**
+	 * 箱号
+	 */
+	private String boxCode;
+	/**
 	 * 箱号和箱内物品总数量对象集合
 	 */
 	private List<PdaBoxQtyResponse> pdaBoxQtyResponseList;
@@ -34,4 +38,8 @@ public class PdaStockCountDetailResponse {
 	 * 盘点人
 	 */
 	private String userName;
+	/**
+	 * 是否是人工拣货区/拣货区
+	 */
+	private Boolean isPickLocation;
 }
