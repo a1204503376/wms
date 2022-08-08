@@ -1,10 +1,10 @@
 <template>
 	<view>
 		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
-			:bgColor="navigationBarBackgroundColor" :title="title" titleStyle="color:#ffffff;font-size:21px"
+			:bgColor="navigationBarBackgroundColor" title="开始盘点" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
-		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">开始盘点</h4>
+		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">{{title}}</h4>
 		<u-divider text="" style="margin-top:0rpx;"></u-divider>
 		<u-divider text="暂无数据" v-if="noData"></u-divider>
 		<u-list style="height: 950rpx;" @scrolltolower="scrolltolower">
@@ -13,7 +13,7 @@
 					<u-col span="3" class="left-text-one-line font-in-page">
 						<u--text class="demo-layout bg-purple-light" v-text="'库位'"></u--text>
 					</u-col>
-					<u-col span="5">
+					<u-col span="6">
 						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.locCode"></u--text>
 					</u-col>
 					<u-col span="2">
@@ -164,7 +164,8 @@
 				uni.$u.throttle(this.getReceiveList(), 1000)
 			},
 			clickItem(item) {
-				if (item.isPickLocation) {
+				// if (item.isPickLocation) {
+				if (true) {
 					uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/artificialLocation', item);
 				} else {
 					uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/autoLocation', item);
