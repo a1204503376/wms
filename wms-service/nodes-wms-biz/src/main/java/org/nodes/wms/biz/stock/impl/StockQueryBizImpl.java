@@ -15,6 +15,7 @@ import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.stock.StockUtil;
+import org.nodes.wms.dao.count.dto.output.PdaBoxQtyResponse;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.putway.dto.output.BoxDto;
@@ -71,7 +72,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public List<Stock> findEnableStockByBoxCode(String boxCode) {
-		List<Long> pickToLocList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA)
+		List<Long> pickToLocList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OF_PICK_TO)
 			.stream()
 			.map(Location::getLocId)
 			.collect(Collectors.toList());
@@ -80,7 +81,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public List<Stock> findEnableStockByBoxCode(List<String> boxCodes) {
-		List<Long> pickToLocList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA)
+		List<Long> pickToLocList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OF_PICK_TO)
 			.stream()
 			.map(Location::getLocId)
 			.collect(Collectors.toList());
@@ -89,7 +90,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public List<Stock> findStockOnStageByBoxCode(Long whId, String boxCode) {
-		Location stage = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA);
+		Location stage = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_OF_STAGE);
 		AssertUtil.notNull(stage, "根据箱码查询入库暂存区库存失败，没有查到对应的入库暂存区");
 		return stockDao.getStockByBoxCode(boxCode, Collections.singletonList(stage.getLocId()));
 	}
@@ -99,7 +100,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		// 创建返回集合
 		List<CallAgvResponse> callAgvResponseList = new ArrayList<>();
 		// 根据仓库id获取入库暂存区库位
-		Location stage = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_IN_STOCK_TS_AREA);
+		Location stage = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_OF_STAGE);
 		if (Func.isEmpty(stage)) {
 			throw new ServiceException("查询失败,该库房下入库暂存区库位为空");
 		}
@@ -133,7 +134,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public Stock findStockOnPickTo(LogSoPick pickLog) {
-		Location pickToLoc = locationBiz.getLocationByZoneType(pickLog.getWhId(), DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA);
+		Location pickToLoc = locationBiz.getLocationByZoneType(pickLog.getWhId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO);
 		return stockMergeStrategy.matchSameStock(pickLog, pickToLoc);
 	}
 
@@ -145,11 +146,11 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public StockIndexResponse staticsStockDataOnIndexPage() {
 		// 获取所有入库暂存区库位
-		List<Location> allStageList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_IN_STOCK_TS_AREA);
+		List<Location> allStageList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OF_STAGE);
 		// 获取所有入库检验区库位
-		List<Location> allQcList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_IN_STOCK_QC_AREA);
+		List<Location> allQcList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OF_INSTOCK_QC);
 		// 获取所有出库暂存区库位
-		List<Location> allPickToList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA);
+		List<Location> allPickToList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OF_PICK_TO);
 		// 根据入库暂存区id获取入库暂存区的物品数量和存放天数
 		Map<String, Object> stageStock = stockDao.getStockQtyByLocIdList(
 			allStageList.stream().map(Location::getLocId).collect(Collectors.toList()));
@@ -240,7 +241,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
 											 List<Long> zoneIdList, SkuLotBaseEntity skuLot) {
-		Long pickToZoneId = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA).getZoneId();
+		Long pickToZoneId = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_OF_PICK_TO).getZoneId();
 		return stockDao.findEnableStockByZone(whId, skuId, stockStatusEnum,
 			zoneIdList, skuLot, Collections.singletonList(pickToZoneId));
 	}
@@ -248,7 +249,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
 												 List<Long> locationIdList, SkuLotBaseEntity skuLot) {
-		Long pickToZoneId = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA).getZoneId();
+		Long pickToZoneId = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_OF_PICK_TO).getZoneId();
 		return stockDao.findEnableStockByLocation(whId, skuId, stockStatusEnum,
 			locationIdList, skuLot, Collections.singletonList(pickToZoneId));
 	}
@@ -301,6 +302,11 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	public IPage<StockBySerialPageResponse> getStockBySerialPage(Query query,
 																 StockBySerialPageQuery stockBySerialPageQuery) {
 		return stockDao.page(Condition.getPage(query), stockBySerialPageQuery);
+	}
+
+	@Override
+	public List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode) {
+		return stockDao.getStockCountByLocCode(locCode);
 	}
 
 	@Override
@@ -371,7 +377,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public List<Stock> findEnableStockBySkuLot(SkuLotBaseEntity skuLot) {
-		List<Location> allPickToLocation = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OUT_STOCK_SHIPPING_AREA);
+		List<Location> allPickToLocation = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OF_PICK_TO);
 		List<Long> pickToLocIdList = allPickToLocation.stream()
 			.map(Location::getLocId)
 			.collect(Collectors.toList());

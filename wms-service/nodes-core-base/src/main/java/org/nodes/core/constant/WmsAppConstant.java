@@ -7,23 +7,6 @@ package org.nodes.core.constant;
  */
 public interface WmsAppConstant {
 
-	/**
-	 * 天宜定制：箱型：A箱
-	 */
-	String BOX_CODE_A = "A";
-	/**
-	 * 天宜定制：箱型：B箱
-	 */
-	String BOX_CODE_B = "B";
-	/**
-	 * 天宜定制：箱型：C箱
-	 */
-	String BOX_CODE_C = "C";
-	/**
-	 * 天宜定制：箱型：D箱
-	 */
-	String BOX_CODE_D = "D";
-
 	String BASE_PACKAGES = "org.springblade";
 
 	/**
@@ -35,6 +18,16 @@ public interface WmsAppConstant {
 	 * 系统全局默认 true 值
 	 */
 	Integer TRUE_DEFAULT = 1;
+
+	/**
+	 * 系统全局默认true的字符值
+	 */
+	String TRUE_DEFAULT_STRING = "1";
+
+	/**
+	 * 系统全局默认false的字符值
+	 */
+	String FALSE_DEFAULT_STRING = "0";
 
 	/**
 	 * 单据类型：归还入库

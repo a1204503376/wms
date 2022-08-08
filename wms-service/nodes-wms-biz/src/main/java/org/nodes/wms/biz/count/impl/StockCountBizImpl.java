@@ -4,18 +4,23 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.core.tool.utils.NodesUtil;
+import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.count.StockCountBiz;
 import org.nodes.wms.biz.count.modular.StockCountFactory;
 import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
+import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.count.CountDetailDao;
 import org.nodes.wms.dao.count.CountHeaderDao;
 import org.nodes.wms.dao.count.dto.input.StockCountDetailRequest;
 import org.nodes.wms.dao.count.dto.input.StockCountRequest;
+import org.nodes.wms.dao.count.dto.output.PdaBoxQtyResponse;
 import org.nodes.wms.dao.count.dto.output.PdaBoxSkuQtyResponse;
 import org.nodes.wms.dao.count.dto.output.PdaStockCountDetailResponse;
 import org.nodes.wms.dao.count.dto.output.PdaStockCountResponse;
 import org.nodes.wms.dao.count.entity.CountDetail;
 import org.nodes.wms.dao.count.entity.CountHeader;
+import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +38,8 @@ public class StockCountBizImpl implements StockCountBiz {
 	private final CountHeaderDao countHeaderDao;
 	private final CountDetailDao countDetailDao;
 	private final StockBiz stockBiz;
+	private final StockQueryBiz stockQueryBiz;
+	private final LocationBiz locationBiz;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -76,8 +83,14 @@ public class StockCountBizImpl implements StockCountBiz {
 	public List<PdaStockCountDetailResponse> getPdaStockCountDetailResponseList(Long countBillId) {
 		List<CountDetail> countDetailList = countDetailDao.selectByCountBillId(countBillId);
 		// 统计箱内物品数量
-
-		return null;
+		List<PdaStockCountDetailResponse> responseList = BeanUtil.copy(countDetailList, PdaStockCountDetailResponse.class);
+        responseList.forEach(response ->{
+			List<PdaBoxQtyResponse> pdaBoxQtyResponseList = stockQueryBiz.getStockCountByLocCode(response.getLocCode());
+			response.setPdaBoxQtyResponseList(pdaBoxQtyResponseList);
+			Location location = locationBiz.findByLocId(response.getLocId());
+			response.setIsPickLocation(locationBiz.isPickLocation(location));
+		});
+		return responseList;
 	}
 
 	@Override

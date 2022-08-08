@@ -2,7 +2,6 @@ package org.nodes.wms.biz.putway.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
-import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.putway.PutwayBiz;
 import org.nodes.wms.biz.putway.modular.PutwayFactory;
@@ -11,15 +10,16 @@ import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.AgvTask;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.putway.PutawayLogDao;
-import org.nodes.wms.dao.putway.dto.input.AddByBoxShelfRequest;
 import org.nodes.wms.dao.putway.dto.input.CallAgvRequest;
 import org.nodes.wms.dao.putway.dto.input.LpnTypeRequest;
+import org.nodes.wms.dao.putway.dto.input.PutwayByBoxRequest;
 import org.nodes.wms.dao.putway.dto.output.BoxDto;
 import org.nodes.wms.dao.putway.dto.output.LocResponse;
 import org.nodes.wms.dao.putway.entities.PutawayLog;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
@@ -44,42 +44,34 @@ public class PutwayBizImpl implements PutwayBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public void addByBoxShelf(AddByBoxShelfRequest request) {
-		// 调用库存移动
-		Stock sourceStock = stockQueryBiz.findStockById(request.getStockId());
-		AssertUtil.notNull(sourceStock, "没有该库存信息");
-		if (request.getIsAllLpnPutaway() && Func.isNotEmpty(sourceStock.getLpnCode())) {
+	public void putwayByBox(PutwayByBoxRequest request) {
+		// 判断库存是否在入库暂存区，如果不是入库暂存区应报异常
+		Stock sourceStock = stockQueryBiz.findStockById(request.getStockId().get(0));
+		AssertUtil.notNull(sourceStock, "按箱上架失败,没有原库存信息");
+		Location location = locationBiz.findLocationByLocCode(request.getWhId(), sourceStock.getLocCode());
+		boolean stageLocation = locationBiz.isStageLocation(location);
+		if (!stageLocation) {
+			throw new ServiceException("按箱上架失败,原库存不是入库暂存区的库存");
+		}
+
+		// 如果是整托：按托移动
+		if (request.getIsAllLpnPutaway()) {
+			// 如果是整托：原库中的lpn为空白字符，需要抛异常
+			AssertUtil.notEmpty(sourceStock.getLpnCode(), "按箱上架失败,原库中的lpn为空白字符");
 			List<Stock> stockList = stockQueryBiz.findStockByLpnCode(sourceStock.getLpnCode());
-			AssertUtil.notNull(stockList, "暂无与此托盘号相关库存的信息");
+			AssertUtil.notNull(stockList, "按箱上架失败,暂无与此托盘号相关库存的信息");
 			Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
-			stockBiz.moveStockByLpnCode(sourceStock.getLpnCode(), sourceStock.getLpnCode(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY, null, null, null);
+			stockBiz.moveStockByLpnCode(sourceStock.getLpnCode(), sourceStock.getLpnCode(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY_PDA, null, null, null);
 			// 生成上架记录
-			stockList.forEach(stock -> {
-				PutawayLog putawayLog = putwayFactory.create(request, stock, targetLocation);
-				putawayLogDao.save(putawayLog);
-			});
+			PutawayLog putawayLog = putwayFactory.create(request, sourceStock, targetLocation);
+			putawayLogDao.save(putawayLog);
 			return;
 		}
 
+		// 如果不是整托：按箱移动
 		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
-		List<Stock> stockList = stockQueryBiz.findStockOnStageByBoxCode(request.getWhId(), request.getBoxCode());
-		stockList.forEach(stock -> {
-			//获取序列号 如果库存关联了序列号需要获取序列号
-			List<Serial> serialList = stockQueryBiz.findSerialByStock(stock.getStockId());
-			List<String> serialNoList = new ArrayList<>();
-			if (Func.isNotEmpty(serialList)) {
-				serialNoList = serialList.stream()
-					.map(Serial::getSerialNumber)
-					.collect(Collectors.toList());
-			}
-			if (BigDecimalUtil.gt((request.getQty().subtract(stock.getStockEnable())), BigDecimal.ZERO)) {
-				request.setQty(request.getQty().subtract(stock.getStockEnable()));
-				stockBiz.moveStock(stock, serialNoList, stock.getStockEnable(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY, null, null, null);
-			} else {
-				stockBiz.moveStock(stock, serialNoList, request.getQty(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY, null, null, null);
-			}
+		stockBiz.moveStockByBoxCode(request.getBoxCode(), request.getBoxCode(), sourceStock.getLpnCode(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY_PDA, null, null, null);
 
-		});
 		// 生成上架记录
 		PutawayLog putawayLog = putwayFactory.create(request, sourceStock, targetLocation);
 		putawayLogDao.save(putawayLog);

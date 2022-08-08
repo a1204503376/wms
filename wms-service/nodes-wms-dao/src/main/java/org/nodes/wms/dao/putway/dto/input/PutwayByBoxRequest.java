@@ -6,18 +6,19 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 按箱上架策略请求对象
  **/
 @Data
-public class AddByBoxShelfRequest implements Serializable {
+public class PutwayByBoxRequest implements Serializable {
 	private static final long serialVersionUID = 6938605109923273805L;
 	/**
 	 * 库存ID
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
-	private Long stockId;
+	private List<Long> stockId;
 	/**
 	 * 箱码
 	 */

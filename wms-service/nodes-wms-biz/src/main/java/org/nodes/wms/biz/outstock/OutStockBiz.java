@@ -60,7 +60,7 @@ public interface OutStockBiz {
 	 * @param request 请求对象
 	 * @return 是否拣货成功
 	 */
-	PickingByBoxResponse pickingByPcs(PickingByBoxRequest request);
+	PickingByBoxResponse pickByPcs(PickByPcsRequest request);
 
 	/**
 	 * Pda根据发货单ID查询出库单明细
@@ -77,7 +77,7 @@ public interface OutStockBiz {
 	 * @param request 请求参数
 	 * @return 是否拣货成功
 	 */
-	PickingByBoxResponse pickingByBox(PickingByBoxRequest request);
+	PickingByBoxResponse pickByBox(PickByPcsRequest request);
 
 	/**
 	 * 查询出库接驳区的库未

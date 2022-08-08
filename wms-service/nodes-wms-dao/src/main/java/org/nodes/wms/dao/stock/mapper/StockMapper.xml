@@ -258,4 +258,16 @@
             and ws.is_deleted = '0'
         </where>
     </select>
+
+    <select id="getStockCountByLocCode" parameterType="org.nodes.wms.dao.count.dto.output.PdaBoxQtyResponse">
+        select box_code,sum(stock_qty-pick_qty) total_qty from wms_stock
+        <where>
+            <if test="locCode!=null and locCode != ''">
+                loc_code = #{locCode}
+            </if>
+            AND is_deleted = 0
+            AND status = 1
+        </where>
+        GROUP BY box_code;
+    </select>
 </mapper>

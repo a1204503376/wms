@@ -155,10 +155,33 @@ public interface LocationBiz {
 	/**
 	 * 判断库位是否为出库暂存区
 	 *
-	 * @param location
+	 * @param location location
 	 * @return true：是出库暂存区
 	 */
 	boolean isPickToLocation(Location location);
+
+	/**
+	 * 判断库位是否为虚拟库位
+	 *
+	 * @param location location
+	 * @return true：是虚拟库位
+	 */
+	boolean isVirtualLocation(Location location);
+
+	/**
+	 * 判断库位是否为人工拣货区/拣货区
+	 *
+	 * @param location location
+	 * @return true：是人工拣货区/拣货区
+	 */
+	boolean isPickLocation(Location location);
+	/**
+	 * 判断是否是入库暂存区库位
+	 *
+	 * @param location location
+	 * @return true：是入库暂存区库位
+	 */
+	boolean isStageLocation(Location location);
 
 	/**
 	 * 判断是否存在虚拟库位
@@ -183,6 +206,14 @@ public interface LocationBiz {
 	 * @return true：标识该库位属于agv临时区库位
 	 */
 	boolean isAgvTempOfZoneType(Long locId);
+
+	/**
+	 * 判断库位是否属于agv区域
+	 *
+	 * @param locId 库位id
+	 * @return true：该库位属于自动化存储区 或 自动化拣货区 或 自动化备货区 或 自动化临时区
+	 */
+	boolean isAgvZone(Long locId);
 
 	/**
 	 * 获取库位总数量
@@ -240,7 +271,6 @@ public interface LocationBiz {
 	 * @return 库位信息
 	 */
 	List<Location> findLocationByLpnType(LpnTypeRequest request);
-
 
 	/**
 	 * 根据任务冻结库位，并赋值locFlagDesc（locFlag：冻结40）

@@ -57,10 +57,10 @@ public class OutStockBizImpl implements OutStockBiz {
 
 	@Override
 	public List<SoPickPlanForDistributionResponse> getSoPickPlanBySoBillIdAndSoDetailId(Long soBillId,
-			Long soDetailId) {
+																						Long soDetailId) {
 		AssertUtil.notNull(soBillId.toString(), "查询拣货计划失败，发货单id为空");
 		List<SoPickPlanForDistributionResponse> soPickPlanList = soPickPlanDao.getBySoBillIdAndSoDetailId(soBillId,
-				soDetailId);
+			soDetailId);
 		soPickPlanList.forEach(item -> {
 			item.setStockStatusValue(item.getStockStatus().getDesc());
 		});
@@ -75,13 +75,22 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public PickingByBoxResponse pickingByPcs(PickingByBoxRequest request) {
+	public PickingByBoxResponse pickByPcs(PickByPcsRequest request) {
+		// 1 业务判断：
+		// 1.1 单据和单据明细行的状态如果为终结状态，则不能进行拣货
+		// 1.1 拣货数量是否超过剩余数量
+		// 2 生成拣货记录，需要注意序列号（log_so_pick)
+		// 3 调用拣货计划中相应的函数
+		// 3 移动库存到出库集货区
+		// 4 更新出库单明细中的状态和数量
+		// 5 更新发货单状态
+		// 6 记录业务日志
 		return null;
 	}
 
 	@Override
 	public IPage<FindPickingBySoBillIdResponse> selectPickingBySoBillId(FindPickingBySoBillIdRequest request,
-			Query query) {
+																		Query query) {
 		IPage<SoDetail> page = soDetailBiz.getPickingBySoBillId(request.getSoBillId(), query);
 		AssertUtil.notNull(page, "查询结果为空");
 		return page.convert(result -> {
@@ -90,13 +99,23 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public PickingByBoxResponse pickingByBox(PickingByBoxRequest request) {
+	public PickingByBoxResponse pickByBox(PickByPcsRequest request) {
+
+		// 1 业务判断：
+		// 1.1 单据和单据明细行的状态如果为终结状态，则不能进行拣货
+		// 1.1 拣货数量是否超过剩余数量
+		// 2 生成拣货记录，需要注意序列号（log_so_pick)
+		// 3 调用拣货计划中相应的函数
+		// 3 移动库存到出库集货区
+		// 4 更新出库单明细中的状态和数量
+		// 5 更新发货单状态
+		// 6 记录业务日志
 		return null;
 	}
 
 	@Override
 	public IPage<OutboundAccessAreaLocationQueryResponse> selectLocationByConnectionArea(
-			OutboundAccessAreaLocationQueryRequest request, Query query) {
+		OutboundAccessAreaLocationQueryRequest request, Query query) {
 		return null;
 	}
 
