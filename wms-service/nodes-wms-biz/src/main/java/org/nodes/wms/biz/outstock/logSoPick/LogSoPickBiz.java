@@ -53,7 +53,7 @@ public interface LogSoPickBiz {
 	/**
 	 * 根据拣货记录id获取拣货记录日志信息
 	 *
-	 * @param lsopIdList: 拣货记录id
+	 * @param lsopIdList 拣货记录id
 	 * @return List<LogSoPick> 拣货记录信息
 	 */
 	List<LogSoPick> findByIds(List<Long> lsopIdList);
