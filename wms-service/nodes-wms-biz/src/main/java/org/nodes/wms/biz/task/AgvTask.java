@@ -81,7 +81,7 @@ public class AgvTask {
 	 * @param putwayTask
 	 * @return true:发送成功
 	 */
-	public boolean sendToSchedule(List<WmsTask> putwayTask) {
+	private boolean sendToSchedule(List<WmsTask> putwayTask) {
 		String url = systemParamBiz.findScheduleUrl().concat(POST_JOB_API);
 
 		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(

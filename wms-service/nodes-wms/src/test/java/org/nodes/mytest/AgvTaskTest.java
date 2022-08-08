@@ -33,6 +33,6 @@ public class AgvTaskTest {
 		wmsTask.setBillDetailId(20220803102801L);
 		wmsTask.setTaskState(WmsTaskStateEnum.ABNORMAL);
 		putwayTask.add(wmsTask);
-		agvTask.sendToSchedule(putwayTask);
+//		agvTask.sendToSchedule(putwayTask);
 	}
 }
