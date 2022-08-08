@@ -1,5 +1,5 @@
 <template>
-    <div id="supplier">
+    <div id="logApi">
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
@@ -95,7 +95,7 @@ import {nowDateFormat} from "@/util/date";
 
 
 export default {
-    name: "supplier",
+    name: "logApi",
     components: {
         DialogColumn,
         NodesSearchInput,
@@ -179,18 +179,10 @@ export default {
             }
         };
     },
-    watch: {
-        $route(to) {
-            if (to.query && to.query.isRefresh === 'true') {
-                this.refreshTable();
-            }
-        }
-    },
     computed: {
         permissionObj() {
             return {
-                search: this.vaildData(this.permission.supplier_search, false),
-                import: this.vaildData(this.permission.supplier_import, false)
+                search: this.vaildData(this.permission.logApi_search, false)
             }
         }
     },

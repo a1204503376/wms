@@ -86,7 +86,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	public boolean remove(List<Long> soBillIdList) {
 		soBillIdList.forEach(item -> {
 			SoHeader soHeader = soHeaderDao.getById(item);
-			if (!soHeader.getSoBillState().equals(SoBillStateEnum.CREATE.getCode())) {
+			if (!SoBillStateEnum.CREATE.getCode().equals(soHeader.getSoBillState().getCode())) {
 				throw new ServiceException("删除失败,只能删除单据状态为未出库的发货单");
 			}
 			logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), "删除发货单");
