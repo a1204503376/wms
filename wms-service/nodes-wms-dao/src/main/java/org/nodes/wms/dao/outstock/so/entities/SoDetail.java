@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
+import org.nodes.wms.dao.outstock.so.enums.SoDetailStateEnum;
 
 import java.math.BigDecimal;
 
@@ -139,9 +140,9 @@ public class SoDetail extends BaseSkuLotEntity {
 	private BigDecimal detailAmount;
 
 	/**
-	 * 单据状态 TODO 定义为枚举
+	 * 单据状态
 	 */
-	private Integer billDetailState;
+	private SoDetailStateEnum billDetailState;
 
 	/**
 	 * 波次id

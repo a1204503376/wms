@@ -1,13 +1,19 @@
 import request from '@/router/axios'
 
-export const getPage = (current, size, params) => {
+export const getPage = (page, params) => {
     return request({
-        url: '/api/wms/log/serialLog/page',
-        method: 'get',
-        params: {
-            ...params,
-            current,
-            size,
-        }
+        url: '/api/wms/serialLog/page',
+        method: 'post',
+        params: page,
+        data: params
+    })
+}
+
+export const exportExcel = (data) => {
+    return request({
+        url: '/api/wms/serialLog/export',
+        method: 'post',
+        data: data,
+        responseType: 'blob'
     })
 }
