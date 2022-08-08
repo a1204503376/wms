@@ -9,6 +9,7 @@ import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
+import org.nodes.wms.dao.count.dto.output.PdaBoxQtyResponse;
 import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
 import org.nodes.wms.dao.stock.dto.input.StockBySerialPageQuery;
@@ -393,5 +394,11 @@ public class StockDaoImpl
 		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
 		queryWrapper.eq(Stock::getTaskId, taskId);
 		return super.list(queryWrapper);
+	}
+
+	@Override
+	public List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode) {
+		AssertUtil.notEmpty(locCode,"根据库位查询库存数据失败，locCode不能为空");
+		return super.baseMapper.getStockCountByLocCode(locCode);
 	}
 }

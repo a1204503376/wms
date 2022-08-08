@@ -15,6 +15,7 @@ import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.stock.StockUtil;
+import org.nodes.wms.dao.count.dto.output.PdaBoxQtyResponse;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.putway.dto.output.BoxDto;
@@ -301,6 +302,11 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	public IPage<StockBySerialPageResponse> getStockBySerialPage(Query query,
 																 StockBySerialPageQuery stockBySerialPageQuery) {
 		return stockDao.page(Condition.getPage(query), stockBySerialPageQuery);
+	}
+
+	@Override
+	public List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode) {
+		return stockDao.getStockCountByLocCode(locCode);
 	}
 
 	@Override

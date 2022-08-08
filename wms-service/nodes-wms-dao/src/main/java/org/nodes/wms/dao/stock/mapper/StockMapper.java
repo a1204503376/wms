@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
+import org.nodes.wms.dao.count.dto.output.PdaBoxQtyResponse;
 import org.nodes.wms.dao.stock.dto.input.FindAllStockByNoRequest;
 import org.nodes.wms.dao.stock.dto.input.StockBySerialPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
@@ -79,5 +80,13 @@ public interface StockMapper extends BaseMapper<Stock> {
 	 * @return 分页
 	 */
 	Page<StockBySerialPageResponse> getSerialPage(IPage<?> page, @Param("query") StockBySerialPageQuery stockBySerialPageQuery);
+
+	/**
+	 * 库存统计
+	 *
+	 * @param locCode 库位
+	 * @return PdaBoxQtyResponse
+	 */
+	List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode);
 }
 
