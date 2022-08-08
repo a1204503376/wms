@@ -11,7 +11,6 @@ import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
-import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.basics.warehouse.modular.LocationFactory;
 import org.nodes.wms.dao.basics.location.LocationDao;
 import org.nodes.wms.dao.basics.location.dto.input.LocationAddOrEditRequest;
@@ -46,7 +45,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LocationBizImpl implements LocationBiz {
 	private final WarehouseBiz warehouseBiz;
-	private final ZoneBiz zoneBiz;
 	private final LocationDao locationDao;
 	private final LocationFactory locationFactory;
 	private final DictionaryBiz dictionaryBiz;
