@@ -5,6 +5,7 @@ import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.putway.PutwayBiz;
 import org.nodes.wms.biz.putway.modular.PutwayFactory;
+import org.nodes.wms.biz.putway.strategy.TianYiPutwayStrategy;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.AgvTask;
@@ -41,6 +42,7 @@ public class PutwayBizImpl implements PutwayBiz {
 	private final StockQueryBiz stockQueryBiz;
 	private final PutwayFactory putwayFactory;
 	private final AgvTask agvTask;
+	private final TianYiPutwayStrategy tianYiPutwayStrategy;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -61,6 +63,14 @@ public class PutwayBizImpl implements PutwayBiz {
 			List<Stock> stockList = stockQueryBiz.findStockByLpnCode(sourceStock.getLpnCode());
 			AssertUtil.notNull(stockList, "按箱上架失败,暂无与此托盘号相关库存的信息");
 			Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
+			boolean pickLocation = locationBiz.isPickLocation(targetLocation);
+			if(!pickLocation){
+				throw new ServiceException("按箱上架失败，目标库位不是拣货区/人工区的库位");
+			}
+			boolean notOverweight = tianYiPutwayStrategy.isNotOverweight(stockList, targetLocation);
+			if(!notOverweight){
+				throw new ServiceException("按箱上架失败，超出最大载重");
+			}
 			stockBiz.moveStockByLpnCode(sourceStock.getLpnCode(), sourceStock.getLpnCode(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY_PDA, null, null, null);
 			// 生成上架记录
 			PutawayLog putawayLog = putwayFactory.create(request, sourceStock, targetLocation);
@@ -70,6 +80,16 @@ public class PutwayBizImpl implements PutwayBiz {
 
 		// 如果不是整托：按箱移动
 		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
+		boolean pickLocation = locationBiz.isPickLocation(targetLocation);
+		if(!pickLocation){
+			throw new ServiceException("按箱上架失败，目标库位不是拣货区/人工区的库位");
+		}
+		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
+	    AssertUtil.notNull(stockList,"按箱上架失败，根据箱码查询不到对应库存");
+		boolean notOverweight = tianYiPutwayStrategy.isNotOverweight(stockList, targetLocation);
+		if(!notOverweight){
+			throw new ServiceException("按箱上架失败，超出最大载重");
+		}
 		stockBiz.moveStockByBoxCode(request.getBoxCode(), request.getBoxCode(), sourceStock.getLpnCode(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY_PDA, null, null, null);
 
 		// 生成上架记录
