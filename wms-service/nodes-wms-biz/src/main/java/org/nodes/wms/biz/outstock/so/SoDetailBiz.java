@@ -12,6 +12,7 @@ import org.nodes.wms.dao.stock.dto.output.SerialSelectResponse;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -84,4 +85,12 @@ public interface SoDetailBiz {
 	 * @param soDetail 发货单实体
 	 */
 	void update(SoDetail soDetail);
+
+	/**
+	 * 修改发货单明细状态和剩余数量
+	 *
+	 * @param soDetail 收货单明细实体
+	 * @param pickQty  拣货传入实收数量  撤销拣货传入撤销数量
+	 */
+	void updateSoDetailStatus(SoDetail soDetail, BigDecimal pickQty);
 }
