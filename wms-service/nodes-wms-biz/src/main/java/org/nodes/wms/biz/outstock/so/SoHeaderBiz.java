@@ -3,7 +3,7 @@ package org.nodes.wms.biz.outstock.so;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindAllPickingRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
@@ -11,8 +11,6 @@ import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
-import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;

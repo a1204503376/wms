@@ -27,7 +27,7 @@ public interface LogSoPickDao {
 	 * 发货单查看明细：根据发货单id分页查询获取拣货记录日志信息
 	 *
 	 * @param soBillId: 发货单id
-	 * @param page:      分页参数
+	 * @param page:     分页参数
 	 * @return Page<LogSoPickForSoDetailResponse> 发货单查看明细 拣货记录日志信息分页响应对象
 	 */
 	Page<LogSoPickForSoDetailResponse> pageForSoDetailBySoBillId(IPage<?> page, Long soBillId);
@@ -56,4 +56,11 @@ public interface LogSoPickDao {
 	 * @return List<LogSoPick> 拣货记录信息
 	 */
 	List<LogSoPick> getByIds(List<Long> lsopIdList);
+
+	/**
+	 * 保存拣货记录
+	 *
+	 * @param logSoPick 拣货记录实体
+	 */
+	void saveLogSoPick(LogSoPick logSoPick);
 }

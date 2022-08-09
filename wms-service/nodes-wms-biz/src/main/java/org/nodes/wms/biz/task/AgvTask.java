@@ -1,7 +1,6 @@
 package org.nodes.wms.biz.task;
 
 import lombok.RequiredArgsConstructor;
-
 import lombok.extern.slf4j.Slf4j;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.systemParam.SystemParamBiz;
@@ -42,6 +41,8 @@ import java.util.stream.Collectors;
 public class AgvTask {
 
 	private static final String POST_JOB_API = "/api/wms/publishJob";
+	private static final String POST_CONTINUE_JOB_API = "/api/wms/continueJob";
+	private static final String POST_CANCEL_JOB_API = "/api/wms/cancelJob";
 
 	private final LocationBiz locationBiz;
 	private final WmsTaskFactory wmsTaskFactory;
@@ -91,7 +92,7 @@ public class AgvTask {
 	 * @param putwayTask agv任务
 	 * @return true:发送成功
 	 */
-	public boolean sendToSchedule(List<WmsTask> putwayTask) {
+	private boolean sendToSchedule(List<WmsTask> putwayTask) {
 		String url = systemParamBiz.findScheduleUrl().concat(POST_JOB_API);
 
 		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
@@ -154,5 +155,31 @@ public class AgvTask {
 		}
 		stockBiz.freezeStockByTask(sourceStock, false, pickTask.getTaskId());
 		wmsTaskDao.save(pickTask);
+	}
+
+	/**
+	 * 继续执行任务
+	 */
+	public void continueTask(List<WmsTask> tasks) {
+		String url = systemParamBiz.findScheduleUrl().concat(POST_CONTINUE_JOB_API);
+		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
+			url, publishJobFactory.createContinueJobRequest(tasks));
+		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
+		if(schedulingResponse.hasFailed()){
+			throw new ServiceException("继续任务失败，" + schedulingResponse.getMsg());
+		}
+	}
+
+	/**
+	 * 取消任务
+	 */
+	public void cancel() {
+		String url = systemParamBiz.findScheduleUrl().concat(POST_CANCEL_JOB_API);
+		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
+			url, publishJobFactory.createCancelJobRequest());
+		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
+		if(schedulingResponse.hasFailed()){
+			throw new ServiceException("取消任务失败，" + schedulingResponse.getMsg());
+		}
 	}
 }

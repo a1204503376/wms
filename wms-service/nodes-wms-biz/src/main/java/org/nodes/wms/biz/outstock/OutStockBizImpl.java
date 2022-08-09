@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.logSoPick.modular.LogSoPickFactory;
@@ -91,13 +92,14 @@ public class OutStockBizImpl implements OutStockBiz {
 		for (PickByPcStockDto pickByPcStockDto : pickByPcStockDtoList) {
 			sum.add(pickByPcStockDto.getOutStockQty());
 		}
-		if (sum.compareTo(soDetail.getSurplusQty()) == 1) {
+		if (BigDecimalUtil.gt(sum, soDetail.getSurplusQty())) {
 			throw new ServiceException("拣货失败,收货数量大于剩余数量");
 		}
 		// 2 生成拣货记录，需要注意序列号（log_so_pick)
 		for (PickByPcStockDto pickByPcStockDto : pickByPcStockDtoList) {
 			Stock stock = stockQueryBiz.findStockById(pickByPcStockDto.getStockId());
 			LogSoPick logSoPick = logSoPickFactory.createLogSoPick(pickByPcStockDto, soHeader, soDetail, stock);
+			logSoPickDao.saveLogSoPick(logSoPick);
 			Location location = locationBiz
 					.getLocationByZoneType(stock.getWhId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO).get(0);
 			// 3 移动库存到出库集货区
@@ -219,7 +221,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public List<StockSoPickPlanResponse> getEnableStockBySkuId(Long skuId) {
+	public List<StockSoPickPlanResponse> getEnableStockBySkuCode(String skuCode) {
 		return null;
 	}
 

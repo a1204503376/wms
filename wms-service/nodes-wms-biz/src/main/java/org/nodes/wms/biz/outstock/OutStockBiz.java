@@ -1,7 +1,6 @@
 package org.nodes.wms.biz.outstock;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.*;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindPickingBySoBillIdResponse;
@@ -129,10 +128,10 @@ public interface OutStockBiz {
 	/**
 	 * 分配：分配调整-根据物品id获取可分配的物品库存信息
 	 *
-	 * @param skuId 物品id
+	 * @param skuCode 物品编码
 	 * @return 可分配物品库存信息
 	 */
-	List<StockSoPickPlanResponse> getEnableStockBySkuId(@Param("skuId") Long skuId);
+	List<StockSoPickPlanResponse> getEnableStockBySkuCode(String skuCode);
 
 	/**
 	 * 分配：分配手动调整-保存调整后的信息
