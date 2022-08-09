@@ -171,7 +171,9 @@ public class StockManageBizImpl implements StockManageBiz {
 		//根据前端传过来的LocCode
 		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getTargetLocCode());
 		List<Stock> stockList = stockQueryBiz.findStockByLpnCode(request.getLpnCode());
-
+		AssertUtil.notNull(stockList, "LPN移动失败，根据LPN获取库存集合为空");
+		Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
+		canMove(sourceLocation, targetLocation, stockList);
 		if (locationBiz.isAgvLocation(targetLocation)) {
 			//AGV移动任务生成
 			agvTask.moveStockToSchedule(stockList, targetLocation.getLocId());
@@ -351,7 +353,8 @@ public class StockManageBizImpl implements StockManageBiz {
 	 * @param targetLocation targetLocation
 	 * @param stockList      stockList
 	 */
-	private void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList) {
+	@Override
+	public void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList) {
 		AssertUtil.notNull(sourceLocation, "校验库存移动失败当前库位为空");
 		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
 		AssertUtil.notNull(stockList, "校验库存移动失败库存为空");
@@ -405,7 +408,7 @@ public class StockManageBizImpl implements StockManageBiz {
 	 * @param sourceLocation sourceLocation
 	 * @param targetLocation targetLocation
 	 */
- 	private void canMoveToLocAuto(Location sourceLocation, Location targetLocation) {
+	private void canMoveToLocAuto(Location sourceLocation, Location targetLocation) {
 		if (locationBiz.isAgvLocation(sourceLocation) && locationBiz.isAgvLocation(targetLocation)) {
 			if (!stockQueryBiz.isEmptyLocation(targetLocation.getLocId())) {
 				throw new ServiceException("库存移动失败，自动区目标库位存在库存");
