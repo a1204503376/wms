@@ -3,13 +3,15 @@ package org.nodes.wms.dao.count.dto.output;
 import lombok.Data;
 import org.nodes.wms.dao.count.enums.CountDetailStateEnum;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * PDA显示盘点单明细对象
  */
 @Data
-public class PdaStockCountDetailResponse {
+public class PdaStockCountDetailResponse implements Serializable {
+	private static final long serialVersionUID = 6140321376233603756L;
 	/**
 	 * 盘点单明细ID
 	 */

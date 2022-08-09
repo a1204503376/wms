@@ -5,6 +5,7 @@ import org.nodes.wms.dao.count.enums.CountByEnum;
 import org.nodes.wms.dao.count.enums.StockCountStateEnum;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,8 +13,9 @@ import java.util.List;
  * 盘点单编辑请求对象
  */
 @Data
-public class StockCountRequest {
+public class StockCountRequest implements Serializable {
 
+	private static final long serialVersionUID = -7847971547429117878L;
 	/**
 	 * 盘点单头表主键ID
 	 */
