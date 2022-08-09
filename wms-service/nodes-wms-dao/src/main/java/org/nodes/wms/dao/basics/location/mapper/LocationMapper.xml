@@ -194,7 +194,6 @@
                 </foreach>
             </if>
         </where>
-        limit 1
     </select>
 
     <select id="selectZoneTypeByLocId" resultType="java.lang.Integer">
