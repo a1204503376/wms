@@ -96,14 +96,7 @@ public class OutStockBizImpl implements OutStockBiz {
 				soDetail.getSoLineNo());
 		}
 		// 4 更新出库单明细中的状态和数量
-		soDetail.setScanQty(soDetail.getScanQty().add(pickQty));
-		soDetail.setSurplusQty(soDetail.getSurplusQty().subtract(pickQty));
-		if (soDetail.getSurplusQty() == BigDecimal.ZERO) {
-			soDetail.setBillDetailState(SoDetailStateEnum.ALL_OUT_STOCK);
-		} else {
-			soDetail.setBillDetailState(SoDetailStateEnum.PART);
-		}
-		soDetailBiz.update(soDetail);
+		soDetailBiz.updateSoDetailStatus(soDetail, pickQty);
 		// 5 更新发货单状态
 		soHeaderBiz.updateSoBillState(soHeader);
 		// 6 记录业务日志
