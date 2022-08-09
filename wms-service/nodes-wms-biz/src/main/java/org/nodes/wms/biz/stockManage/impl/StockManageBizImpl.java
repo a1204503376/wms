@@ -153,7 +153,7 @@ public class StockManageBizImpl implements StockManageBiz {
 		//断言stockList
 		AssertUtil.notNull(stockList, "根据您输入的数据查询不到对应的库存，请重新输入后重试");
 		//判断库存是否可以移动
-		canMove(location, targetLocation, stockList);
+		canMove(location, targetLocation, stockList, stockList.get(0).getBoxCode());
 
 		if (locationBiz.isAgvLocation(targetLocation)) {
 			//AGV移动任务生成
@@ -173,7 +173,7 @@ public class StockManageBizImpl implements StockManageBiz {
 		List<Stock> stockList = stockQueryBiz.findStockByLpnCode(request.getLpnCode());
 		AssertUtil.notNull(stockList, "LPN移动失败，根据LPN获取库存集合为空");
 		Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
-		canMove(sourceLocation, targetLocation, stockList);
+		canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode());
 		if (locationBiz.isAgvLocation(targetLocation)) {
 			//AGV移动任务生成
 			agvTask.moveStockToSchedule(stockList, targetLocation.getLocId());
@@ -209,7 +209,7 @@ public class StockManageBizImpl implements StockManageBiz {
 				AssertUtil.notNull(stockList, "PDA库存管理:按箱移动失败，根据箱码查询不到对应库存");
 				Location location = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
 				//判断库存是否可以移动
-				canMove(location, targetLocation, stockList);
+				canMove(location, targetLocation, stockList, boxCode);
 				if (locationBiz.isAgvLocation(targetLocation)) {
 					//AGV移动任务生成
 					agvTask.moveStockToSchedule(stockList, targetLocation.getLocId());
@@ -352,9 +352,10 @@ public class StockManageBizImpl implements StockManageBiz {
 	 * @param sourceLocation sourceLocation
 	 * @param targetLocation targetLocation
 	 * @param stockList      stockList
+	 * @param boxCode        boxCode
 	 */
 	@Override
-	public void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList) {
+	public void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList, String boxCode) {
 		AssertUtil.notNull(sourceLocation, "校验库存移动失败当前库位为空");
 		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
 		AssertUtil.notNull(stockList, "校验库存移动失败库存为空");
@@ -369,7 +370,7 @@ public class StockManageBizImpl implements StockManageBiz {
 		canMoveToLocType(sourceLocation, targetLocation);
 
 		//4. 校验目标库位的箱型
-		canMoveToBoxType(sourceLocation, targetLocation);
+		canMoveToBoxType(targetLocation, boxCode);
 
 		// 5. 校验载重
 		canMoveByIsNotOverweight(targetLocation, stockList);
@@ -431,13 +432,13 @@ public class StockManageBizImpl implements StockManageBiz {
 	/**
 	 * 校验目标库位的箱型
 	 *
-	 * @param sourceLocation sourceLocation
 	 * @param targetLocation targetLocation
+	 * @param boxCode        boxCode
 	 */
-	private void canMoveToBoxType(Location sourceLocation, Location targetLocation) {
-		if (Func.isNotEmpty(sourceLocation.getLpnTypeId()) && Func.isNotEmpty(targetLocation.getLpnTypeId())) {
-			LpnType sourceLpnType = lpnTypeBiz.findLpnTypeById(sourceLocation.getLpnTypeId());
-			AssertUtil.notNull(sourceLpnType, "根据箱码获取当前库存箱型失败");
+	private void canMoveToBoxType(Location targetLocation, String boxCode) {
+		if (Func.isNotEmpty(targetLocation.getLpnTypeId())) {
+			LpnType sourceLpnType = lpnTypeBiz.findLpnTypeByBoxCode(boxCode);
+			AssertUtil.notNull(sourceLpnType, "获取当前箱子箱型失败");
 			LpnType targetLpnType = lpnTypeBiz.findLpnTypeById(targetLocation.getLpnTypeId());
 			AssertUtil.notNull(targetLpnType, "获取目标库位箱型失败");
 			if (Func.isNotEmpty(targetLpnType.getCode()) && !Func.equals(sourceLpnType.getCode(), targetLpnType.getCode())) {
