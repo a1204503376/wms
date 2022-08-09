@@ -184,6 +184,13 @@ public interface LocationBiz {
 	boolean isStageLocation(Location location);
 
 	/**
+	 * 判断是否是AGV库位
+	 *
+	 * @param location location
+	 * @return true：是AGV库位
+	 */
+	boolean isAgvLocation(Location location);
+	/**
 	 * 判断是否存在虚拟库位
 	 *
 	 * @param locationList

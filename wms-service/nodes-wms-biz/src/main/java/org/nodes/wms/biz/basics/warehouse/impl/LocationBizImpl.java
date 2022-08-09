@@ -287,4 +287,16 @@ public class LocationBizImpl implements LocationBiz {
 		Location stageLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_OF_STAGE);
 		return location.getLocId().equals(stageLocation.getLocId());
 	}
+
+	@Override
+	public boolean isAgvLocation(Location location) {
+		Location autoStageLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_STORAGE_AREA);
+		Location autoPickLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_PICKING_AREA);
+		Location autoStockUpLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_CHOICE_AREA);
+		Location autoTemporaryLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_TEMPORARY_AREA);
+		return location.getLocId().equals(autoStageLocation.getLocId())
+			||location.getLocId().equals(autoPickLocation.getLocId())
+			||location.getLocId().equals(autoStockUpLocation.getLocId())
+			||location.getLocId().equals(autoTemporaryLocation.getLocId());
+	}
 }
