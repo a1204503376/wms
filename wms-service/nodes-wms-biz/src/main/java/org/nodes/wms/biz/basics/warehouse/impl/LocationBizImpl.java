@@ -175,6 +175,11 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
+	public Boolean getLocationByZoneType(Long whId, Long locId, Integer zoneType) {
+		return locationDao.getLocationByZoneTypeAndLocId(whId, locId, zoneType);
+	}
+
+	@Override
 	public int countAll() {
 		return locationDao.countAll();
 	}
