@@ -17,10 +17,9 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="收货单状态" label-width="90px">
-                            <nodes-receive-bill-state
-                                v-model="form.params.billStateList">
-                            </nodes-receive-bill-state>
+                        <el-form-item label="箱号" label-width="90px">
+                            <el-input v-model.trim="form.params.boxCode" :clearable="true"
+                                      placeholder="请输入箱号"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -31,12 +30,6 @@
                         <el-form-item label="LPN" label-width="90px">
                             <el-input v-model.trim="form.params.lpnCode" :clearable="true"
                                       placeholder="请输入LPN"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item label="箱号" label-width="90px">
-                            <el-input v-model.trim="form.params.boxCode" :clearable="true"
-                                      placeholder="请输入箱号"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -51,14 +44,14 @@
                                       placeholder="请输入收货人"></el-input>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row>
                     <el-col :span="6">
                         <el-form-item label="收货时间" label-width="90px">
                             <nodes-date-range v-model="form.params.createTimeDateRange" style="width: 200px">
                             </nodes-date-range>
                         </el-form-item>
                     </el-col>
+                </el-row>
+                <el-row>
                     <el-col :span="6">
                         <el-form-item label="库位" label-width="90px">
                             <nodes-location v-model="form.params.locIdList"></nodes-location>
@@ -220,14 +213,12 @@ import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js'
 import {nowDateFormat} from "@/util/date";
 import func from "@/util/func";
-import NodesReceiveBillState from "@/components/wms/select/NodesReceiveBillState";
 import NodesSku from "@/components/wms/select/NodesSkuByQuery";
 
 export default {
     name: "receiveLog",
     components: {
         NodesSku,
-        NodesReceiveBillState,
         NodesWarehouse,
         NodesOwner,
         NodesLocation,
@@ -246,7 +237,6 @@ export default {
                 params: {
                     receiveNo: "",
                     skuIdList: [],
-                    billStateList: [],
                     boxCode: "",
                     lpnCode: "",
                     snCode: "",
@@ -263,11 +253,6 @@ export default {
                         prop: "receiveNo",
                         label: "收货单编码",
                         sortable: "custom",
-                    },
-                    {
-                        prop: "billState",
-                        label: "收货单状态",
-                        sortable: "custom"
                     },
                     {
                         prop: "lineNo",
@@ -417,7 +402,6 @@ export default {
             this.form.params = {
                 receiveNo: "",
                 skuIdList: [],
-                billStateList: [],
                 boxCode: "",
                 lpnCode: "",
                 snCode: "",
@@ -473,13 +457,6 @@ export default {
                 for (const i in qtyList) {
                     if (qtyList[i] < 0) {
                         this.$message.error("撤销失败，选择的记录中不允许有已撤销的记录")
-                        return;
-                    }
-                }
-                let billStateList = rows.map(item => item.billState);
-                for (const i in billStateList) {
-                    if (billStateList[i] === '未收货') {
-                        this.$message.error("撤销失败，选择的记录中收货单状态只能是部分收获或全部收货")
                         return;
                     }
                 }

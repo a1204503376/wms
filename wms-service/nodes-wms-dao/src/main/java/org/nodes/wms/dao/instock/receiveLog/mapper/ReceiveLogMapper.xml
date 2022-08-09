@@ -40,7 +40,6 @@
         rl.id,
         rl.receive_id,
         rl.receive_no,
-        header.bill_state,
         rl.line_no,
         rl.sku_id,
         rl.sku_code,
@@ -87,7 +86,6 @@
         rl.sku_lot29,
         rl.sku_lot30
         FROM receive_log rl
-        LEFT JOIN receive_header header ON header.receive_id = rl.receive_id
         LEFT JOIN wms_sku_package_detail wspd ON wspd.wsp_id = rl.wsp_id
         LEFT JOIN wms_warehouse wh ON wh.wh_id = rl.wh_id
         LEFT JOIN wms_owner o ON o.wo_id = rl.wo_id
@@ -96,12 +94,6 @@
             rl.is_deleted = 0
             <if test="param.receiveNo != null and param.receiveNo != ''">
                 AND rl.receive_no LIKE CONCAT('%', #{param.receiveNo} ,'%')
-            </if>
-            <if test="param.billStateList != null and param.billStateList.size > 0">
-                AND header.bill_state IN
-                <foreach collection="param.billStateList" item="item" separator="," open="(" close=")">
-                    #{item}
-                </foreach>
             </if>
             <if test="param.skuIdList != null and param.skuIdList.size > 0">
                 AND rl.sku_id IN
