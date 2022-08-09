@@ -211,7 +211,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public List<StockSoPickPlanResponse> getEnableStockBySkuId(Long skuId) {
+	public List<StockSoPickPlanResponse> getEnableStockBySkuCode(String skuCode) {
 		return null;
 	}
 
