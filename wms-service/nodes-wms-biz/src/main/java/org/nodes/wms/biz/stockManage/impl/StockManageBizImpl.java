@@ -423,7 +423,7 @@ public class StockManageBizImpl implements StockManageBiz {
 	 * @param targetLocation targetLocation
 	 */
 	private void canMoveToLocType(Location sourceLocation, Location targetLocation) {
-		if (!Func.equals(sourceLocation.getZoneId(), targetLocation.getZoneId())) {
+		if (!Func.equals(sourceLocation.getZoneId(), targetLocation.getZoneId()) && !locationBiz.isStageLocation(sourceLocation)) {
 			throw new ServiceException("库存移动时不能跨区移动");
 		}
 	}
@@ -435,14 +435,15 @@ public class StockManageBizImpl implements StockManageBiz {
 	 * @param targetLocation targetLocation
 	 */
 	private void canMoveToBoxType(Location sourceLocation, Location targetLocation) {
-		LpnType sourceLpnType = lpnTypeBiz.findLpnTypeById(sourceLocation.getLpnTypeId());
-		AssertUtil.notNull(sourceLpnType, "根据箱码获取当前库存箱型失败");
-		LpnType targetLpnType = lpnTypeBiz.findLpnTypeById(targetLocation.getLpnTypeId());
-		AssertUtil.notNull(targetLpnType, "获取目标库位箱型失败");
-		if (Func.isNotEmpty(targetLpnType.getCode()) && !Func.equals(sourceLpnType.getCode(), targetLpnType.getCode())) {
-			throw new ServiceException("库存移动时当前库存和目标库位所存储的箱型不一致");
+		if (Func.isNotEmpty(sourceLocation.getLpnTypeId()) && Func.isNotEmpty(targetLocation.getLpnTypeId())) {
+			LpnType sourceLpnType = lpnTypeBiz.findLpnTypeById(sourceLocation.getLpnTypeId());
+			AssertUtil.notNull(sourceLpnType, "根据箱码获取当前库存箱型失败");
+			LpnType targetLpnType = lpnTypeBiz.findLpnTypeById(targetLocation.getLpnTypeId());
+			AssertUtil.notNull(targetLpnType, "获取目标库位箱型失败");
+			if (Func.isNotEmpty(targetLpnType.getCode()) && !Func.equals(sourceLpnType.getCode(), targetLpnType.getCode())) {
+				throw new ServiceException("库存移动时当前库存和目标库位所存储的箱型不一致");
+			}
 		}
-
 	}
 
 	/**
