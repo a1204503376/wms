@@ -86,6 +86,8 @@
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param);
 			this.receiveList = parse;
+			this.params.locCode = parse.locCode;
+			this.params.boxCode = parse.boxCode;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -108,7 +110,6 @@
 				}else{
 					item.isValid=false;
 				}
-				console.log(item)
 			},
 			analysisCode(code) {
 				this.params.type = '';

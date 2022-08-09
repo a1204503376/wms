@@ -35,6 +35,7 @@ public class CountDetailDaoImpl
 				CountDetail::getLocCode,
 				CountDetail::getBoxCode,
 				CountDetail::getUserName)
+			.groupBy(CountDetail::getLocCode)
 			.list();
 	}
 }

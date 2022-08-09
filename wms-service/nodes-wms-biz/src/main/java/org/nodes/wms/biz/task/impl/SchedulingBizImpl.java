@@ -67,17 +67,21 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		}
 		Zone zone = zoneBiz.findByCode(area);
 		List<Location> locationList = locationBiz.findLocationByZoneId(zone.getZoneId());
-		String locCode = "";
+
 		for (Location location : locationList) {
 			// 判断库位是否有库存
 			if (location.enableStock() && stockQueryBiz.isEmptyLocation(location.getLocId())) {
-				// 如果没有库存则冻结
+				// 如果没有库存则冻结库位
 				locationBiz.freezeLocByTask(location.getLocId(), request.getTaskDetailId().toString());
-				locCode = location.getLocCode();
-				break;
+				// 更新任务信息
+				WmsTask wmsTask = wmsTaskDao.getById(request.getTaskDetailId());
+				wmsTask.setToLocId(location.getLocId());
+				wmsTask.setToLocCode(location.getLocCode());
+				wmsTaskDao.updateById(wmsTask);
+				return location.getLocCode();
 			}
 		}
-		return locCode;
+		return "";
 	}
 
 	@Override
@@ -85,7 +89,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		for (SchedulingBroadcastNotificationRequest notificationRequest : request) {
 			NoticeMessageRequest message = new NoticeMessageRequest();
 			message.setLog(String.format("任务[%s]：[%s]",
-				notificationRequest.getTaskDetailId(), notificationRequest.getMsg()));
+					notificationRequest.getTaskDetailId(), notificationRequest.getMsg()));
 			logBiz.noticeMesssage(message);
 		}
 	}
@@ -118,7 +122,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		Location tempLoc = locationBiz.getInTransitLocation(wmsTask.getWhId());
 		for (Stock stock : stockList) {
 			stockBiz.moveAllStock(stock, stock.getBoxCode(), wmsTask.getTaskId().toString(), tempLoc,
-				StockLogTypeEnum.STOCK_AGV_MOVE, wmsTask.getTaskId(), null, null);
+					StockLogTypeEnum.STOCK_AGV_MOVE, wmsTask.getTaskId(), null, null);
 		}
 	}
 
@@ -128,11 +132,11 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		// 将中间库位的库存移动到目标库位
 		Location targetLoc = locationBiz.findByLocId(wmsTask.getToLocId());
 		List<Stock> stockList = stockQueryBiz.findStockByTaskId(wmsTask.getTaskId());
-		for (Stock stock : stockList){
+		for (Stock stock : stockList) {
 			stock.setTaskId("");
 			stock.setStockStatus(StockStatusEnum.NORMAL);
 			stockBiz.moveAllStock(stock, stock.getBoxCode(), stock.getLpnCode(), targetLoc,
-				StockLogTypeEnum.STOCK_AGV_MOVE, wmsTask.getTaskId(), null, null);
+					StockLogTypeEnum.STOCK_AGV_MOVE, wmsTask.getTaskId(), null, null);
 		}
 		// 解冻目标库位
 		locationBiz.unfreezeLocByTask(wmsTask.getTaskId().toString());
