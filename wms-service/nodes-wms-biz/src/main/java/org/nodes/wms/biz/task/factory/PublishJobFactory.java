@@ -2,8 +2,9 @@ package org.nodes.wms.biz.task.factory;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
-import org.nodes.wms.biz.task.modular.PublishJobRequest;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
+import org.nodes.wms.dao.task.dto.input.AgvJobRequest;
+import org.nodes.wms.dao.task.dto.input.PublishJobRequest;
 import org.nodes.wms.dao.task.entities.WmsTask;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,12 @@ public class PublishJobFactory {
 
 	private final SkuBiz skuBiz;
 
+	/**
+	 * 创建发送任务请求对象
+	 *
+	 * @param putwayTask AGV任务
+	 * @return 发送任务请求对象
+	 */
 	public List<PublishJobRequest> createPublishJobRequestList(List<WmsTask> putwayTask){
 		List<PublishJobRequest> publishJobRequestList = new ArrayList<>();
 		putwayTask.forEach(task -> {
@@ -42,4 +49,29 @@ public class PublishJobFactory {
 		});
 		return publishJobRequestList;
 	}
+
+	/**
+	 * 创建AGV任务请求对象
+	 *
+	 * @param tasks AGV任务
+	 * @return AGV继续执行任务请求对象
+	 */
+	public AgvJobRequest createContinueJobRequest(List<WmsTask> tasks) {
+		AgvJobRequest agvJobRequest = new AgvJobRequest();
+		agvJobRequest.setWmsTaskId(tasks.get(0).getTaskId());
+		agvJobRequest.setWmsTaskDetailId(tasks.get(0).getTaskId());
+		return agvJobRequest;
+	}
+
+	/**
+	 * 创建AGV取消任务请求对象
+	 *
+	 * @return AGV取消任务请求对象
+	 */
+    public AgvJobRequest createCancelJobRequest() {
+		AgvJobRequest agvJobRequest = new AgvJobRequest();
+		agvJobRequest.setWmsTaskId(0L);
+		agvJobRequest.setWmsTaskDetailId(0L);
+		return agvJobRequest;
+    }
 }

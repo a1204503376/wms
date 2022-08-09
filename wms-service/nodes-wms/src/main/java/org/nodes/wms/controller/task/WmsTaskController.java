@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.task.WmsTaskBiz;
-import org.nodes.wms.dao.task.dto.input.AgainIssuedlTask;
+import org.nodes.wms.dao.task.dto.input.ContinueTaskRequest;
 import org.nodes.wms.dao.task.dto.input.CancelTaskRequest;
 import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
 import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -74,15 +75,13 @@ public class WmsTaskController {
 
 	@PostMapping("/cancelTask")
 	@ApiLog("任务详情-取消任务")
-	public void cancelTask(CancelTaskRequest request) {
-		wmsTaskBiz.cancel(request);
+	public void cancelTask(@RequestBody @Valid CancelTaskRequest request) {
+		wmsTaskBiz.cancel(request.getTaskIdList());
 	}
 
-	@PostMapping("againIssuedlTask")
-	@ApiLog("任务详情-重新下发")
-	public void againIssuedlTask(AgainIssuedlTask request) {
-		wmsTaskBiz.restart(request);
+	@PostMapping("/continueTask")
+	@ApiLog("任务详情-继续执行")
+	public void continueTask(@RequestBody @Valid ContinueTaskRequest request) {
+		wmsTaskBiz.continueTask(request.getTaskIdList());
 	}
-
-
 }

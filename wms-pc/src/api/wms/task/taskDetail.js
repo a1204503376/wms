@@ -17,6 +17,7 @@ export const exportFile = (params) => {
         responseType: 'blob'
     })
 }
+
 export const getTaskTypeSelectResponse = (data) => {
     return request({
         url: '/api/wms/taskDetail/getTaskTypeSelectResponse',
@@ -24,10 +25,31 @@ export const getTaskTypeSelectResponse = (data) => {
         data: data
     })
 }
+
 export const getTaskStateSelectResponse = (data) => {
     return request({
         url: '/api/wms/taskDetail/getTaskStateSelectResponse',
         method: 'post',
         data: data
+    })
+}
+
+export const cancelTask = (data) => {
+    return request({
+        url: '/api/wms/taskDetail/cancelTask',
+        method: 'post',
+        data: {
+            taskIdList: data
+        }
+    })
+}
+
+export const continueTask = (data) => {
+    return request({
+        url: '/api/wms/taskDetail/continueTask',
+        method: 'post',
+        data: {
+            taskIdList: data
+        }
     })
 }
