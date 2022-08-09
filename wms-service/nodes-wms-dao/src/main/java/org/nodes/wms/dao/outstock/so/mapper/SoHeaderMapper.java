@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindAllPickingRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.springframework.stereotype.Repository;
 
@@ -67,5 +67,5 @@ public interface SoHeaderMapper extends BaseMapper<SoHeader> {
 	 * @param request 请求参数包含-单据状态为已经分配 并且已经生成了对应的拣货任务的
 	 * @return 符合条件的单据
 	 */
-	IPage<FindAllPickingResponse> getAllPickPage(IPage<?> page, @Param("params") FindAllPickingRequest request);
+	IPage<FindAllPickingResponse> getAllPickPage(IPage<?> page, @Param("params") findSoHeaderByNoRequest request);
 }

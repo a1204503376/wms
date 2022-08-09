@@ -43,7 +43,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	private final SoDetailBiz soDetailBiz;
 
 	@Override
-	public void pickByPc(PickByPcRequest request) {
+	public void pickByPcsOnPc(PickByPcRequest request) {
 		// 1 业务判断：
 		// 1.1 如果单据有拣货计划则不能使用PC拣货
 		// 1.2 单据和单据明细行的状态如果为终结状态，则不能进行拣货
@@ -68,7 +68,8 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public IPage<FindAllPickingResponse> selectAllPickingByNo(FindAllPickingRequest request, Query query) {
+	public IPage<FindAllPickingResponse> findSoHeaderByNo(findSoHeaderByNoRequest request, Query query) {
+		// TODO bug只需要查询SoHeader
 		// request.setBillDetailState(SoDetailStateEnum.Allocated.getIndex());
 		request.setBillDetailState(SoDetailStateEnum.UnAlloc.getCode());
 		return soHeaderBiz.getAllPickingByNo(Condition.getPage(query), request);
@@ -89,8 +90,9 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public IPage<FindPickingBySoBillIdResponse> selectPickingBySoBillId(FindPickingBySoBillIdRequest request,
-																		Query query) {
+	public IPage<FindPickingBySoBillIdResponse> findOpenSoDetail(FindOpenSoDetailRequest request,
+																 Query query) {
+		// TODO bug 需要加上单据明细状态
 		IPage<SoDetail> page = soDetailBiz.getPickingBySoBillId(request.getSoBillId(), query);
 		AssertUtil.notNull(page, "查询结果为空");
 		return page.convert(result -> {
@@ -114,28 +116,28 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public IPage<OutboundAccessAreaLocationQueryResponse> selectLocationByConnectionArea(
-		OutboundAccessAreaLocationQueryRequest request, Query query) {
+	public IPage<OutboundAccessAreaLocationQueryResponse> findLocOfAgvPickTo(
+		FindLocOfAgvPickToRequest request, Query query) {
 		return null;
 	}
 
 	@Override
-	public void connectionAreaPick(ConnectionAreaPickingRequest request) {
+	public void pickOnAgvPickTo(MoveOnAgvPickToRequest request) {
 
 	}
 
 	@Override
-	public void connectionAreaMove(ConnectionAreaPickingRequest request) {
+	public void moveOnAgvPickTo(MoveOnAgvPickToRequest request) {
 
 	}
 
 	@Override
-	public boolean automaticAssign(Long soBillId) {
+	public boolean autoDistribute(Long soBillId) {
 		return false;
 	}
 
 	@Override
-	public boolean cancelAssign(Long soBillId) {
+	public boolean cancleDistribute(Long soBillId) {
 		return false;
 	}
 
@@ -150,7 +152,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public boolean saveAssign(SoBillDistributedRequest soBillDistributedRequest) {
+	public boolean manualDistribute(SoBillDistributedRequest soBillDistributedRequest) {
 		return false;
 	}
 

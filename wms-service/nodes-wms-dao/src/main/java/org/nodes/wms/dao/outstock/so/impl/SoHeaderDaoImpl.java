@@ -8,7 +8,7 @@ import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.so.mapper.SoHeaderMapper;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindAllPickingRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
@@ -57,7 +57,7 @@ public class SoHeaderDaoImpl extends BaseServiceImpl<SoHeaderMapper, SoHeader> i
 	}
 
 	@Override
-	public IPage<FindAllPickingResponse> getAllPickingPage(IPage<?> page, FindAllPickingRequest request) {
+	public IPage<FindAllPickingResponse> getAllPickingPage(IPage<?> page, findSoHeaderByNoRequest request) {
 		AssertUtil.notEmpty(request.getNo(), "发货单编码/上游编码/任务号不能为空");
 		AssertUtil.notEmpty(request.getWhId(), "库房编码不能为空");
 		AssertUtil.notNull(request.getBillDetailState(), "单据状态不能为空");

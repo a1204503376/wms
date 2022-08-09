@@ -21,7 +21,7 @@ import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindAllPickingRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.stock.dto.output.PickByPcStockDto;
 import org.nodes.wms.dao.stock.entities.Stock;
@@ -170,7 +170,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	}
 
 	@Override
-	public IPage<FindAllPickingResponse> getAllPickingByNo(IPage<?> page, FindAllPickingRequest request) {
+	public IPage<FindAllPickingResponse> getAllPickingByNo(IPage<?> page, findSoHeaderByNoRequest request) {
 		return soHeaderDao.getAllPickingPage(page, request);
 	}
 

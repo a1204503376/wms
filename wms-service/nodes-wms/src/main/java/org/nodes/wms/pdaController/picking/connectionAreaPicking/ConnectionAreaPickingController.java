@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.outstock.OutStockBiz;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.ConnectionAreaPickingRequest;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.OutboundAccessAreaLocationQueryRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.MoveOnAgvPickToRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindLocOfAgvPickToRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.OutboundAccessAreaLocationQueryResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
@@ -31,8 +31,8 @@ public class ConnectionAreaPickingController {
 	 * @return 出库接驳区拣货库位查询
 	 */
 	@PostMapping("/OutboundAccessAreaLocationQuery")
-	public R<IPage<OutboundAccessAreaLocationQueryResponse>> outboundAccessAreaLocationQuery(@RequestBody OutboundAccessAreaLocationQueryRequest request, Query query) {
-		return R.data(outStockBiz.selectLocationByConnectionArea(request, query));
+	public R<IPage<OutboundAccessAreaLocationQueryResponse>> outboundAccessAreaLocationQuery(@RequestBody FindLocOfAgvPickToRequest request, Query query) {
+		return R.data(outStockBiz.findLocOfAgvPickTo(request, query));
 	}
 
 
@@ -43,8 +43,8 @@ public class ConnectionAreaPickingController {
 	 */
 	@ApiLog("接驳区拣货")
 	@PostMapping("/ConnectionAreaPicking")
-	public void connectionAreaPicking(@RequestBody ConnectionAreaPickingRequest request) {
-		outStockBiz.connectionAreaPick(request);
+	public void connectionAreaPicking(@RequestBody MoveOnAgvPickToRequest request) {
+		outStockBiz.pickOnAgvPickTo(request);
 	}
 
 
@@ -55,8 +55,8 @@ public class ConnectionAreaPickingController {
 	 */
 	@ApiLog("PDA接驳区移动")
 	@PostMapping("/ConnectionAreaMove")
-	public void connectionAreaMove(@RequestBody ConnectionAreaPickingRequest request) {
-		outStockBiz.connectionAreaMove(request);
+	public void connectionAreaMove(@RequestBody MoveOnAgvPickToRequest request) {
+		outStockBiz.moveOnAgvPickTo(request);
 	}
 
 }

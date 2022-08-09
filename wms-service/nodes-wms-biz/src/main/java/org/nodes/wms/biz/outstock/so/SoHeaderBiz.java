@@ -9,7 +9,7 @@ import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindAllPickingRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.springblade.core.mp.support.Query;
 
@@ -117,7 +117,7 @@ public interface SoHeaderBiz {
 	 * @param request 请求条件 包含no
 	 * @return 拣货分页查询响应对象
 	 */
-	IPage<FindAllPickingResponse> getAllPickingByNo(IPage<?> page, FindAllPickingRequest request);
+	IPage<FindAllPickingResponse> getAllPickingByNo(IPage<?> page, findSoHeaderByNoRequest request);
 
 	/**
 	 * pc拣货获取前端出库明细和库存信息
