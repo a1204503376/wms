@@ -149,7 +149,6 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	@Override
 	public Boolean getLocationByZoneTypeAndLocId(Long whId, Long locId, Integer zoneType) {
 		Location location = locationMapper.getLocationByZoneTypeAndLocId(whId, locId, zoneType);
-		AssertUtil.notNull(location, "根据库位ID，类型获取库位失败");
 		return Func.isNotEmpty(location);
 	}
 
