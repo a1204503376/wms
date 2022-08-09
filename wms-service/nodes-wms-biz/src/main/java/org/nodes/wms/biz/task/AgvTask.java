@@ -2,6 +2,7 @@ package org.nodes.wms.biz.task;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.systemParam.SystemParamBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AgvTask {
 
 	private static final String POST_JOB_API = "/api/wms/publishJob";
@@ -86,7 +88,7 @@ public class AgvTask {
 	/**
 	 * 发送任务到调度系统
 	 *
-	 * @param putwayTask
+	 * @param putwayTask agv任务
 	 * @return true:发送成功
 	 */
 	public boolean sendToSchedule(List<WmsTask> putwayTask) {
@@ -100,12 +102,13 @@ public class AgvTask {
 
 	/**
 	 * AGV库内移动,只有原和目标库位都是agv存储区的才有效
+	 * 一次只能移动一个库位的库存，否则抛异常
 	 *
 	 * @param sourceStock 移动的原库存
 	 * @param targetLocId 目标库位
+	 * @return true:表示触发了agv的移动任务，false：表示不符合创建agv移动任务
 	 */
-	public void moveStockToSchedule(List<Stock> sourceStock, Long targetLocId) {
-		// 只有agv存储区的才需要执行，且原库存必须是同一个库位的库存
+	public boolean moveStockToSchedule(List<Stock> sourceStock, Long targetLocId) {
 		AssertUtil.notEmpty(sourceStock, "AGV库内移动任务下发失败,原库存为空无法移动");
 		AssertUtil.notNull(targetLocId, "AGV库内移动任务下发失败,目标库位为空");
 
@@ -119,7 +122,8 @@ public class AgvTask {
 
 		if (!locationBiz.isAgvZone(sourceIds.get(0))
 				|| !locationBiz.isAgvZone(targetLocId)) {
-			throw new ServiceException("AGV库内移动任务下发失败，AGV只能移动自动区的库存");
+			log.warn("AGV库内移动任务下发失败，AGV只能移动自动区的库存");
+			return false;
 		}
 
 		// TODO 此处需要将目标库位传入
@@ -130,11 +134,12 @@ public class AgvTask {
 		locationBiz.freezeLocByTask(targetLocId, moveTask.getTaskId().toString());
 		stockBiz.freezeStockByTask(sourceStock, false, moveTask.getTaskId());
 		wmsTaskDao.save(moveTask);
+		return true;
 	}
 
 	/**
 	 * 拣货任务到agv，按库位下发
-	 * 
+	 *
 	 * @param locId    库位id
 	 * @param so       出库单信息
 	 * @param soDetail 出库单明细信息
