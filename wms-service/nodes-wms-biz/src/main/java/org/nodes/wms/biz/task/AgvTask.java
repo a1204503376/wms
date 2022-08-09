@@ -65,7 +65,7 @@ public class AgvTask {
 			return;
 		}
 
-		WmsTask putwayTask = wmsTaskFactory.create(stocks);
+		WmsTask putwayTask = wmsTaskFactory.createPutwayTask(stocks);
 		wmsTaskDao.save(putwayTask);
 		// 调用上架策略生成目标库位，并把目标库位保存到任务表中
 		Location targetLoc = putwayStrategyActuator.run(BigDecimal.ZERO, stocks);
@@ -125,9 +125,8 @@ public class AgvTask {
 			log.warn("AGV库内移动任务下发失败，AGV只能移动自动区的库存");
 			return false;
 		}
-
-		// TODO 此处需要将目标库位传入
-		WmsTask moveTask = wmsTaskFactory.create(sourceStock);
+		
+		WmsTask moveTask = wmsTaskFactory.createMoveTask(sourceStock, targetLocId);
 		if (sendToSchedule(Collections.singletonList(moveTask))) {
 			moveTask.setTaskState(WmsTaskStateEnum.ISSUED);
 		}
@@ -149,9 +148,8 @@ public class AgvTask {
 		AssertUtil.notNull(so, "AGV拣货任务下发失败,so为空");
 		AssertUtil.notNull(soDetail, "AGV拣货任务下发失败,soDetail为空");
 
-		// TODO 此处需要将目标库位传入
 		List<Stock> sourceStock = stockQueryBiz.findStockByLocation(locId);
-		WmsTask pickTask = wmsTaskFactory.create(sourceStock);
+		WmsTask pickTask = wmsTaskFactory.createPickTask(sourceStock, so, soDetail);
 		if (sendToSchedule(Collections.singletonList(pickTask))) {
 			pickTask.setTaskState(WmsTaskStateEnum.ISSUED);
 		}

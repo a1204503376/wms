@@ -1,6 +1,8 @@
 package org.nodes.wms.biz.task.factory;
 
 import org.nodes.wms.dao.common.stock.StockUtil;
+import org.nodes.wms.dao.outstock.so.entities.SoDetail;
+import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
@@ -10,9 +12,12 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * @author nodesc
+ */
 @Service
 public class WmsTaskFactory {
-	public WmsTask create(List<Stock> stockList) {
+	public WmsTask createPutwayTask(List<Stock> stockList) {
 		WmsTask wmsTask = new WmsTask();
 		// 任务id
 		wmsTask.setTaskId(stockList.get(0).getStockId());
@@ -55,5 +60,21 @@ public class WmsTaskFactory {
 		// 任务开始执行事件为空
 		// 任务关闭时间为空
 		return wmsTask;
+	}
+
+	public WmsTask createMoveTask(List<Stock> sourceStock, Long targetLocId) {
+		return null;
+	}
+
+	/**
+	 * 创建拣货任务，目标库位为空。只有调度系统通过接口查询可用库位时才清楚目标库位
+	 *
+	 * @param sourceStock 拣货的库存
+	 * @param so          出库单
+	 * @param soDetail    出库单明细
+	 * @return 拣货任务
+	 */
+	public WmsTask createPickTask(List<Stock> sourceStock, SoHeader so, SoDetail soDetail) {
+		return null;
 	}
 }

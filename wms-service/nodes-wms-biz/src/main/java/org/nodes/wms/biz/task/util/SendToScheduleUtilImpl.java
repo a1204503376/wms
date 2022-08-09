@@ -19,6 +19,7 @@ public class SendToScheduleUtilImpl implements SendToScheduleUtil{
 	@Resource
 	private RestTemplate restTemplate;
 
+	@Override
 	public SchedulingGlobalResponse sendPost(String url, Object request){
 		try {
 			return SchedulingGlobalResponse.success(restTemplate.postForObject(url, request , SchedulingResponse.class));
