@@ -76,40 +76,28 @@ public class OutStockBizImpl implements OutStockBiz {
 			throw new ServiceException("拣货失败,收货单已存在拣货计划");
 		}
 		// 1.2 单据和单据明细行的状态如果为终结状态，则不能进行拣货
-		if (soHeader.getSoBillState().equals(SoBillStateEnum.COMPLETED)
-				|| soHeader.getSoBillState().equals(SoBillStateEnum.ALL_OUT_STOCK)
-				|| soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED)) {
-			throw new ServiceException("拣货失败,收货单状态为" + soHeader.getSoBillState() + "不能进行拣货");
-		}
-		if (soDetail.getBillDetailState().equals(SoDetailStateEnum.DELETED)
-				|| soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
-			throw new ServiceException("拣货失败,收货单明细状态为" + soDetail.getBillDetailState() + "不能进行拣货");
-		}
-
 		// 1.3 拣货数量是否超过剩余数量
+		BigDecimal pickQty = request.getPickByPcStockDtoList().stream()
+			.map(PickByPcStockDto::getOutStockQty)
+			.reduce(BigDecimal.ZERO, BigDecimal::add);
+		canPick(soHeader, soDetail, pickQty);
+
 		List<PickByPcStockDto> pickByPcStockDtoList = request.getPickByPcStockDtoList();
-		BigDecimal sum = BigDecimal.ZERO;
-		for (PickByPcStockDto pickByPcStockDto : pickByPcStockDtoList) {
-			sum.add(pickByPcStockDto.getOutStockQty());
-		}
-		if (BigDecimalUtil.gt(sum, soDetail.getSurplusQty())) {
-			throw new ServiceException("拣货失败,收货数量大于剩余数量");
-		}
 		// 2 生成拣货记录，需要注意序列号（log_so_pick)
 		for (PickByPcStockDto pickByPcStockDto : pickByPcStockDtoList) {
 			Stock stock = stockQueryBiz.findStockById(pickByPcStockDto.getStockId());
 			LogSoPick logSoPick = logSoPickFactory.createLogSoPick(pickByPcStockDto, soHeader, soDetail, stock);
 			logSoPickDao.saveLogSoPick(logSoPick);
 			Location location = locationBiz
-					.getLocationByZoneType(stock.getWhId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO).get(0);
+				.getLocationByZoneType(stock.getWhId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO).get(0);
 			// 3 移动库存到出库集货区
 			stockBiz.moveStock(stock, pickByPcStockDto.getSerailList(), pickByPcStockDto.getOutStockQty(),
-					location, StockLogTypeEnum.OUTSTOCK_BY_PC, soHeader.getSoBillId(), soHeader.getSoBillNo(),
-					soDetail.getSoLineNo());
+				location, StockLogTypeEnum.OUTSTOCK_BY_PC, soHeader.getSoBillId(), soHeader.getSoBillNo(),
+				soDetail.getSoLineNo());
 		}
 		// 4 更新出库单明细中的状态和数量
-		soDetail.setScanQty(soDetail.getScanQty().add(sum));
-		soDetail.setSurplusQty(soDetail.getSurplusQty().subtract(sum));
+		soDetail.setScanQty(soDetail.getScanQty().add(pickQty));
+		soDetail.setSurplusQty(soDetail.getSurplusQty().subtract(pickQty));
 		if (soDetail.getSurplusQty() == BigDecimal.ZERO) {
 			soDetail.setBillDetailState(SoDetailStateEnum.ALL_OUT_STOCK);
 		} else {
@@ -122,12 +110,28 @@ public class OutStockBizImpl implements OutStockBiz {
 		logBiz.auditLog(AuditLogType.OUTSTOCK, "PC拣货");
 	}
 
+	private void canPick(SoHeader soHeader, SoDetail soDetail, BigDecimal pickQty) {
+		if (soHeader.getSoBillState().equals(SoBillStateEnum.COMPLETED)
+			|| soHeader.getSoBillState().equals(SoBillStateEnum.ALL_OUT_STOCK)
+			|| soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED)) {
+			throw new ServiceException("拣货失败,收货单状态为" + soHeader.getSoBillState() + "不能进行拣货");
+		}
+		if (soDetail.getBillDetailState().equals(SoDetailStateEnum.DELETED)
+			|| soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
+			throw new ServiceException("拣货失败,收货单明细状态为" + soDetail.getBillDetailState() + "不能进行拣货");
+		}
+		if (BigDecimalUtil.gt(pickQty, soDetail.getSurplusQty())) {
+			throw new ServiceException("拣货失败,收货数量大于剩余数量");
+		}
+	}
+
+
 	@Override
 	public List<SoPickPlanForDistributionResponse> getSoPickPlanBySoBillIdAndSoDetailId(Long soBillId,
-			Long soDetailId) {
+																						Long soDetailId) {
 		AssertUtil.notNull(soBillId.toString(), "查询拣货计划失败，发货单id为空");
 		List<SoPickPlanForDistributionResponse> soPickPlanList = soPickPlanDao.getBySoBillIdAndSoDetailId(soBillId,
-				soDetailId);
+			soDetailId);
 		soPickPlanList.forEach(item -> {
 			item.setStockStatusValue(item.getStockStatus().getDesc());
 		});
@@ -158,7 +162,7 @@ public class OutStockBizImpl implements OutStockBiz {
 
 	@Override
 	public IPage<FindPickingBySoBillIdResponse> findOpenSoDetail(FindOpenSoDetailRequest request,
-			Query query) {
+																 Query query) {
 		// TODO bug 需要加上单据明细状态
 		IPage<SoDetail> page = soDetailBiz.getPickingBySoBillId(request.getSoBillId(), query);
 		AssertUtil.notNull(page, "查询结果为空");
@@ -184,7 +188,7 @@ public class OutStockBizImpl implements OutStockBiz {
 
 	@Override
 	public IPage<OutboundAccessAreaLocationQueryResponse> findLocOfAgvPickTo(
-			FindLocOfAgvPickToRequest request, Query query) {
+		FindLocOfAgvPickToRequest request, Query query) {
 		return null;
 	}
 
