@@ -142,7 +142,7 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	}
 
 	@Override
-	public Location getLocationByZoneTypeAndWhId(List<Long> locIdList, Long whId, Integer zoneType) {
+	public List<Location> getLocationByZoneTypeAndWhId(List<Long> locIdList, Long whId, Integer zoneType) {
 		return locationMapper.getLocationByZoneTypeAndWhId(locIdList, whId, zoneType);
 	}
 

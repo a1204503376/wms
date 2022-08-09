@@ -67,7 +67,7 @@ public interface LocationMapper extends BaseMapper<Location> {
 	 * @param zoneType
 	 * @return
 	 */
-	List<Location> getLocationByZoneType(List<Long> locIdList,Long whId, Integer zoneType);
+	List<Location> getLocationByZoneType(List<Long> locIdList, Long whId, Integer zoneType);
 
 	/**
 	 * 根据库区类型查找相对应的库位
@@ -76,7 +76,7 @@ public interface LocationMapper extends BaseMapper<Location> {
 	 * @param zoneType
 	 * @return
 	 */
-	Location getLocationByZoneTypeAndWhId(List<Long> locIdList,Long whId, Integer zoneType);
+	List<Location> getLocationByZoneTypeAndWhId(List<Long> locIdList, Long whId, Integer zoneType);
 
 	/**
 	 * 根据库位id获取所属库区的库区类型
