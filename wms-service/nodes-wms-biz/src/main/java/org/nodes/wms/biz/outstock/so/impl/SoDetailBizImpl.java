@@ -3,6 +3,7 @@ package org.nodes.wms.biz.outstock.so.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.outstock.so.SoDetailBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
@@ -13,6 +14,7 @@ import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
 import org.nodes.wms.dao.outstock.so.dto.output.LineNoAndSkuSelectResponse;
 import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
+import org.nodes.wms.dao.outstock.so.enums.SoDetailStateEnum;
 import org.nodes.wms.dao.stock.dto.output.SerialSelectResponse;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.springblade.core.excel.util.ExcelUtil;
@@ -22,6 +24,7 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,6 +84,20 @@ public class SoDetailBizImpl implements SoDetailBiz {
 
 	@Override
 	public void update(SoDetail soDetail) {
+		soDetailDao.update(soDetail);
+	}
+
+	@Override
+	public void updateSoDetailStatus(SoDetail soDetail, BigDecimal pickQty) {
+		soDetail.setScanQty(soDetail.getScanQty().add(pickQty));
+		soDetail.setSurplusQty(soDetail.getSurplusQty().subtract(pickQty));
+		if (BigDecimalUtil.eq(soDetail.getSurplusQty(), BigDecimal.ZERO)) {
+			soDetail.setBillDetailState(SoDetailStateEnum.ALL_OUT_STOCK);
+		} else if (BigDecimalUtil.eq(soDetail.getScanQty(), BigDecimal.ZERO)) {
+			soDetail.setBillDetailState(SoDetailStateEnum.NORMAL);
+		} else if (BigDecimalUtil.gt(soDetail.getScanQty(), BigDecimal.ZERO)) {
+			soDetail.setBillDetailState(SoDetailStateEnum.PART);
+		}
 		soDetailDao.update(soDetail);
 	}
 }
