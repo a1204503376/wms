@@ -3,7 +3,7 @@ package org.nodes.wms.biz.outstock.so;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindAllPickingRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
@@ -117,7 +117,7 @@ public interface SoHeaderBiz {
 	 * @param request 请求条件 包含no
 	 * @return 拣货分页查询响应对象
 	 */
-	IPage<FindAllPickingResponse> getAllPickingByNo(IPage<?> page, FindAllPickingRequest request);
+	IPage<FindAllPickingResponse> getAllPickingByNo(IPage<?> page, findSoHeaderByNoRequest request);
 
 	/**
 	 * pc拣货获取前端出库明细和库存信息

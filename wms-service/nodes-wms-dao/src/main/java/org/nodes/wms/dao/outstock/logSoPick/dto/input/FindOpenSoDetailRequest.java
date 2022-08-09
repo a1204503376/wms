@@ -10,7 +10,7 @@ import java.io.Serializable;
  * Pda根据发货单ID查询出库单明细-请求对象
  **/
 @Data
-public class FindPickingBySoBillIdRequest implements Serializable {
+public class FindOpenSoDetailRequest implements Serializable {
 	private static final long serialVersionUID = -2328658218530094518L;
 	/**
 	 * 发货单id

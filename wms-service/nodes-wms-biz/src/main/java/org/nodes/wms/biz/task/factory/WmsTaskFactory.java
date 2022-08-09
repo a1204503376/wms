@@ -17,7 +17,59 @@ import java.util.List;
  */
 @Service
 public class WmsTaskFactory {
+
+	/**
+	 * 创建AGV上架任务
+	 *
+	 * @param stockList 库存
+	 * @return 上架任务
+	 */
 	public WmsTask createPutwayTask(List<Stock> stockList) {
+		WmsTask wmsTask = getWmsTask(stockList);
+		// 任务类型： AGV上架
+		wmsTask.setTaskTypeCd(WmsTaskTypeEnum.AGV_PUTAWAY);
+		return wmsTask;
+	}
+
+	/**
+	 * 创建AGV库内移位任务
+	 *
+	 * @param sourceStock 库存
+	 * @param targetLocId 目标库位id
+	 * @return 库内移位任务
+	 */
+	public WmsTask createMoveTask(List<Stock> sourceStock, Long targetLocId) {
+		WmsTask wmsTask = getWmsTask(sourceStock);
+		// 任务类型： AGV库内移位
+		wmsTask.setTaskTypeCd(WmsTaskTypeEnum.AGV_STOCK_MOVE);
+		// 目标库位
+		wmsTask.setToLocId(targetLocId);
+		return wmsTask;
+	}
+
+	/**
+	 * 创建拣货任务，目标库位为空。只有调度系统通过接口查询可用库位时才清楚目标库位
+	 *
+	 * @param sourceStock 拣货的库存
+	 * @param so          出库单
+	 * @param soDetail    出库单明细
+	 * @return 拣货任务
+	 */
+	public WmsTask createPickTask(List<Stock> sourceStock, SoHeader so, SoDetail soDetail) {
+		WmsTask wmsTask = getWmsTask(sourceStock);
+		// 单据id、编码，明细id
+		wmsTask.setBillId(so.getSoBillId());
+		wmsTask.setBillNo(so.getSoBillNo());
+		wmsTask.setBillDetailId(soDetail.getSoDetailId());
+		// 任务类型： AGV拣货
+		wmsTask.setTaskTypeCd(WmsTaskTypeEnum.AGV_PICKING);
+		return wmsTask;
+	}
+
+	/**
+	 * 赋值
+	 */
+	private WmsTask getWmsTask(List<Stock> stockList) {
 		WmsTask wmsTask = new WmsTask();
 		// 任务id
 		wmsTask.setTaskId(stockList.get(0).getStockId());
@@ -25,9 +77,6 @@ public class WmsTaskFactory {
 		wmsTask.setBillId(stockList.get(0).getStockId());
 		// 关联明细id
 		wmsTask.setBillDetailId(stockList.get(0).getStockId());
-		// 单据编码为空
-		// 任务类型： AGV上架
-		wmsTask.setTaskTypeCd(WmsTaskTypeEnum.AGV_PUTAWAY);
 		// 任务执行方式
 		wmsTask.setTaskProcType(0);
 		// 任务状态： 未下发
@@ -41,8 +90,6 @@ public class WmsTaskFactory {
 		// 计量单位编码
 		wmsTask.setUmCode(stockList.get(0).getWsuCode());
 		// 批次号为空
-		// 来源库位id为空
-		// 来源库位编码为空
 		// 箱码
 		wmsTask.setBoxCode(stockList.get(0).getBoxCode());
 		// 工作任务包ID为空
@@ -60,21 +107,5 @@ public class WmsTaskFactory {
 		// 任务开始执行事件为空
 		// 任务关闭时间为空
 		return wmsTask;
-	}
-
-	public WmsTask createMoveTask(List<Stock> sourceStock, Long targetLocId) {
-		return null;
-	}
-
-	/**
-	 * 创建拣货任务，目标库位为空。只有调度系统通过接口查询可用库位时才清楚目标库位
-	 *
-	 * @param sourceStock 拣货的库存
-	 * @param so          出库单
-	 * @param soDetail    出库单明细
-	 * @return 拣货任务
-	 */
-	public WmsTask createPickTask(List<Stock> sourceStock, SoHeader so, SoDetail soDetail) {
-		return null;
 	}
 }

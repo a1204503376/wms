@@ -1,8 +1,6 @@
 package org.nodes.wms.biz.task;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.nodes.wms.dao.task.dto.input.AgainIssuedlTask;
-import org.nodes.wms.dao.task.dto.input.CancelTaskRequest;
 import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
 import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
 import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
@@ -47,16 +45,16 @@ public interface WmsTaskBiz {
 	/**
 	 * 取消任务的动作
 	 *
-	 * @param request 取消任务的参数
+	 * @param taskIdList 任务id
 	 */
-	void cancel(CancelTaskRequest request);
+	void cancel(List<Long> taskIdList);
 
 	/**
-	 * 重新下发任务的动作
+	 * 继续执行任务的动作
 	 *
-	 * @param request 重新下发任务的参数
+	 * @param taskIdList 任务id
 	 */
-	void restart(AgainIssuedlTask request);
+	void continueTask(List<Long> taskIdList);
 
 	/**
 	 * 修改任务状态

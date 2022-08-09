@@ -20,7 +20,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="任务类型" label-width="90px">
-                            <nodes-task-type v-model="form.params.taskTypeCdList" multiple="true"></nodes-task-type>
+                            <nodes-task-type v-model="form.params.taskTypeCdList" :multiple="true"></nodes-task-type>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -37,9 +37,7 @@
                             <nodes-sku-by-query v-model="form.params.skuIdList"></nodes-sku-by-query>
                         </el-form-item>
                     </el-col>
-
                 </el-row>
-
             </template>
             <template v-slot:tableTool>
                 <el-tooltip
@@ -47,8 +45,7 @@
                     class="item"
                     content="刷新"
                     effect="dark"
-                    placement="top"
-                >
+                    placement="top">
                     <el-button @click="onRefresh" circle icon="el-icon-refresh" size="mini"></el-button>
                 </el-tooltip>
                 <el-tooltip
@@ -56,8 +53,7 @@
                     class="item"
                     content="显隐"
                     effect="dark"
-                    placement="top"
-                >
+                    placement="top">
                     <el-button @click="onColumnShowHide" circle icon="el-icon-s-operation" size="mini"></el-button>
                 </el-tooltip>
                 <el-tooltip
@@ -65,8 +61,7 @@
                     class="item"
                     content="服务端导出"
                     effect="dark"
-                    placement="top"
-                >
+                    placement="top">
                     <el-button @click="exportData" circle icon="el-icon-download" size="mini"></el-button>
                 </el-tooltip>
                 <el-tooltip
@@ -74,8 +69,7 @@
                     class="item"
                     content="本地导出"
                     effect="dark"
-                    placement="top"
-                >
+                    placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
                                   style="display: inline-block;margin-left: 10px">
                         <el-button @click="onExportLocalData" circle icon="el-icon-bottom" size="mini">
@@ -83,10 +77,19 @@
                     </excel-export>
                 </el-tooltip>
             </template>
+            <template v-slot:batchBtn>
+                <el-button
+                    v-if="permissionObj.continue" size="mini" type="primary"
+                    @click="continueTask">继续执行
+                </el-button>
+                <el-button
+                    v-if="permissionObj.cancel" size="mini"
+                    type="primary" @click="cancelTask">取消任务
+                </el-button>
+            </template>
             <template v-slot:table>
                 <el-table
                     :data="table.data"
-                    @selection-change="selectionChange"
                     @sort-change="onSortChange"
                     border
                     highlight-current-row
@@ -143,8 +146,7 @@ import NodesSku from "@/components/wms/select/NodesSku";
 
 import fileDownload from "js-file-download";
 import {listMixin} from "@/mixins/list";
-// eslint-disable-next-line no-unused-vars
-import {exportFile, getPage} from "@/api/wms/task/taskDetail.js";
+import {exportFile, getPage, cancelTask, continueTask} from "@/api/wms/task/taskDetail";
 import fileUpload from "@/components/nodes/fileUpload";
 import {ExcelExport} from 'pikaz-excel-js';
 import NodesSkuByQuery from "@/components/wms/select/NodesSkuByQuery";
@@ -256,33 +258,21 @@ export default {
             },
         }
     },
-
     created() {
         this.getTableData();
     },
-
+    computed: {
+        permissionObj() {
+            return {
+                search: this.vaildData(this.permission.taskDetail_search, false),
+                cancel: this.vaildData(this.permission.taskDetail_cancel, false),
+                continue: this.vaildData(this.permission.taskDetail_continue, false)
+            }
+        }
+    },
     methods: {
         onExportLocalData() {
             this.exportCurrentDataToExcel("工作任务", "工作任务");
-        },
-        callbackFileUpload(res) {
-            this.fileUpload.visible = false;
-            if (!res.result) {
-                return;
-            }
-            let param = this.getFormData(res);
-            importData(param).then((res) => {
-                this.$message.success(res.data.msg);
-                this.getTableData();
-            })
-        },
-
-        selectionChange(row) {
-            this.selectionList = row;
-        },
-        selectionClear() {
-            this.selectionList = [];
-            this.$refs.table.toggleSelection();
         },
         exportData() {
             this.loading = true;
@@ -305,7 +295,30 @@ export default {
                 this.page.total = pageObj.total;
             });
         },
+        cancelTask(){
+            let rows = this.$refs.table.selection;
+            for (let i in rows) {
+                if(rows[i].taskState.trim() !== '异常中断中'){
+                    this.$message.warning("只能选择异常中断中的任务进行操作");
+                    return
+                }
+            }
+            cancelTask(rows.map(x => x.taskId)).then(()=>{
 
+            })
+        },
+        continueTask(){
+            let rows = this.$refs.table.selection;
+            for (let i in rows) {
+                if(rows[i].taskState.trim() !== '异常中断中'){
+                    this.$message.warning("只能选择异常中断中的任务进行操作");
+                    return
+                }
+            }
+            continueTask(rows.map(x => x.taskId)).then(()=>{
+
+            })
+        },
     }
 }
 </script>

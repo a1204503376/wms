@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.logSoPick.modular.LogSoPickFactory;
@@ -66,7 +67,7 @@ public class OutStockBizImpl implements OutStockBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public void pickByPc(PickByPcRequest request) {
+	public void pickByPcsOnPc(PickByPcRequest request) {
 		SoHeader soHeader = soHeaderBiz.getSoHeaderById(request.getSoBillId());
 		SoDetail soDetail = soDetailBiz.getSoDetailById(request.getPickByPcStockDtoList().get(0).getSoDetailId());
 		// 1 业务判断：
@@ -75,37 +76,28 @@ public class OutStockBizImpl implements OutStockBiz {
 			throw new ServiceException("拣货失败,收货单已存在拣货计划");
 		}
 		// 1.2 单据和单据明细行的状态如果为终结状态，则不能进行拣货
-		if (soHeader.getSoBillState().equals(SoBillStateEnum.COMPLETED)
-			|| soHeader.getSoBillState().equals(SoBillStateEnum.ALL_OUT_STOCK)
-			|| soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED)) {
-			throw new ServiceException("拣货失败,收货单状态为" + soHeader.getSoBillState() + "不能进行拣货");
-		}
-		if (soDetail.getBillDetailState().equals(SoDetailStateEnum.DELETED)
-			|| soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
-			throw new ServiceException("拣货失败,收货单明细状态为" + soDetail.getBillDetailState() + "不能进行拣货");
-		}
-
 		// 1.3 拣货数量是否超过剩余数量
+		BigDecimal pickQty = request.getPickByPcStockDtoList().stream()
+			.map(PickByPcStockDto::getOutStockQty)
+			.reduce(BigDecimal.ZERO, BigDecimal::add);
+		canPick(soHeader, soDetail, pickQty);
+
 		List<PickByPcStockDto> pickByPcStockDtoList = request.getPickByPcStockDtoList();
-		BigDecimal sum = BigDecimal.ZERO;
-		for (PickByPcStockDto pickByPcStockDto : pickByPcStockDtoList) {
-			sum.add(pickByPcStockDto.getOutStockQty());
-		}
-		if (sum.compareTo(soDetail.getSurplusQty()) == 1) {
-			throw new ServiceException("拣货失败,收货数量大于剩余数量");
-		}
 		// 2 生成拣货记录，需要注意序列号（log_so_pick)
 		for (PickByPcStockDto pickByPcStockDto : pickByPcStockDtoList) {
 			Stock stock = stockQueryBiz.findStockById(pickByPcStockDto.getStockId());
 			LogSoPick logSoPick = logSoPickFactory.createLogSoPick(pickByPcStockDto, soHeader, soDetail, stock);
-			Location location = locationBiz.getLocationByZoneType(stock.getWhId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO).get(0);
+			logSoPickDao.saveLogSoPick(logSoPick);
+			Location location = locationBiz
+				.getLocationByZoneType(stock.getWhId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO).get(0);
 			// 3 移动库存到出库集货区
 			stockBiz.moveStock(stock, pickByPcStockDto.getSerailList(), pickByPcStockDto.getOutStockQty(),
-				location, StockLogTypeEnum.OUTSTOCK_BY_PC, soHeader.getSoBillId(), soHeader.getSoBillNo(), soDetail.getSoLineNo());
+				location, StockLogTypeEnum.OUTSTOCK_BY_PC, soHeader.getSoBillId(), soHeader.getSoBillNo(),
+				soDetail.getSoLineNo());
 		}
 		// 4 更新出库单明细中的状态和数量
-		soDetail.setScanQty(soDetail.getScanQty().add(sum));
-		soDetail.setSurplusQty(soDetail.getSurplusQty().subtract(sum));
+		soDetail.setScanQty(soDetail.getScanQty().add(pickQty));
+		soDetail.setSurplusQty(soDetail.getSurplusQty().subtract(pickQty));
 		if (soDetail.getSurplusQty() == BigDecimal.ZERO) {
 			soDetail.setBillDetailState(SoDetailStateEnum.ALL_OUT_STOCK);
 		} else {
@@ -116,6 +108,21 @@ public class OutStockBizImpl implements OutStockBiz {
 		soHeaderBiz.updateSoBillState(soHeader);
 		// 6 记录业务日志
 		logBiz.auditLog(AuditLogType.OUTSTOCK, "PC拣货");
+	}
+
+	private void canPick(SoHeader soHeader, SoDetail soDetail, BigDecimal pickQty) {
+		if (soHeader.getSoBillState().equals(SoBillStateEnum.COMPLETED)
+			|| soHeader.getSoBillState().equals(SoBillStateEnum.ALL_OUT_STOCK)
+			|| soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED)) {
+			throw new ServiceException("拣货失败,收货单状态为" + soHeader.getSoBillState() + "不能进行拣货");
+		}
+		if (soDetail.getBillDetailState().equals(SoDetailStateEnum.DELETED)
+			|| soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
+			throw new ServiceException("拣货失败,收货单明细状态为" + soDetail.getBillDetailState() + "不能进行拣货");
+		}
+		if (BigDecimalUtil.gt(pickQty, soDetail.getSurplusQty())) {
+			throw new ServiceException("拣货失败,收货数量大于剩余数量");
+		}
 	}
 
 
@@ -132,7 +139,8 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public IPage<FindAllPickingResponse> selectAllPickingByNo(FindAllPickingRequest request, Query query) {
+	public IPage<FindAllPickingResponse> findSoHeaderByNo(findSoHeaderByNoRequest request, Query query) {
+		// TODO bug只需要查询SoHeader
 		// request.setBillDetailState(SoDetailStateEnum.Allocated.getIndex());
 		request.setBillDetailState(SoDetailStateEnum.UnAlloc.getCode());
 		return soHeaderBiz.getAllPickingByNo(Condition.getPage(query), request);
@@ -153,8 +161,9 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public IPage<FindPickingBySoBillIdResponse> selectPickingBySoBillId(FindPickingBySoBillIdRequest request,
-																		Query query) {
+	public IPage<FindPickingBySoBillIdResponse> findOpenSoDetail(FindOpenSoDetailRequest request,
+																 Query query) {
+		// TODO bug 需要加上单据明细状态
 		IPage<SoDetail> page = soDetailBiz.getPickingBySoBillId(request.getSoBillId(), query);
 		AssertUtil.notNull(page, "查询结果为空");
 		return page.convert(result -> {
@@ -178,28 +187,35 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public IPage<OutboundAccessAreaLocationQueryResponse> selectLocationByConnectionArea(
-		OutboundAccessAreaLocationQueryRequest request, Query query) {
+	public IPage<OutboundAccessAreaLocationQueryResponse> findLocOfAgvPickTo(
+		FindLocOfAgvPickToRequest request, Query query) {
 		return null;
 	}
 
 	@Override
-	public void connectionAreaPick(ConnectionAreaPickingRequest request) {
-
+	public void pickOnAgvPickTo(MoveOnAgvPickToRequest request) {
+		// 判断出库接驳区是否有库存，如果没有库存则抛异常
+		// 根据库存查找对应的出库单明细
+		// 判断如果当前拣货量是否会超过剩余量，超过剩余量则返回信息给pda，要求pda跳转到移动的界面
+		// 如果没有超过剩余量，则执行过程同按箱拣货
 	}
 
 	@Override
-	public void connectionAreaMove(ConnectionAreaPickingRequest request) {
-
+	public void moveOnAgvPickTo(MoveOnAgvPickToRequest request) {
+		// 执行按箱移动
+		// 记录日志
 	}
 
 	@Override
-	public boolean automaticAssign(Long soBillId) {
+	public boolean autoDistribute(Long soBillId) {
+
+		// 执行策略分配
+		// 记录业务日志
 		return false;
 	}
 
 	@Override
-	public boolean cancelAssign(Long soBillId) {
+	public boolean cancleDistribute(Long soBillId) {
 		return false;
 	}
 
@@ -209,12 +225,12 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public List<StockSoPickPlanResponse> getEnableStockBySkuId(Long skuId) {
+	public List<StockSoPickPlanResponse> getEnableStockBySkuCode(String skuCode) {
 		return null;
 	}
 
 	@Override
-	public boolean saveAssign(SoBillDistributedRequest soBillDistributedRequest) {
+	public boolean manualDistribute(SoBillDistributedRequest soBillDistributedRequest) {
 		return false;
 	}
 
@@ -226,7 +242,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		List<LogSoPick> logSoPickList = logSoPickDao.getByIds(logSoPickIdList);
 		// 生成一笔反向的拣货记录
 		logSoPickList.forEach(logSoPick -> {
-//			logSoPickDao.
+			// logSoPickDao.
 		});
 		// 根据拣货记录下架库存
 		// 更新发货单明细状态与实收数量
