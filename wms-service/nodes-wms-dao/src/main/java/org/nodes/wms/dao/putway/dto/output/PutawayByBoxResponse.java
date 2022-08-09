@@ -6,7 +6,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * 按箱上架请求对象
@@ -18,7 +17,7 @@ public class PutawayByBoxResponse implements Serializable {
 	 * 库存ID
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
-	private List<Long> stockId;
+	private Long stockId;
 	/**
 	 * 箱码
 	 */

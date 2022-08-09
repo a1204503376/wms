@@ -55,7 +55,7 @@ public class PutawayByBoxController {
 			.filter(Func::isNotEmpty)
 			.distinct()
 			.collect(Collectors.toList());
-		response.setStockId(stockIds);
+		response.setStockId(stockIds.get(0));
 		response.setBoxCode(stockList.get(0).getBoxCode());
 		response.setQty(qty);
 		return R.data(response);

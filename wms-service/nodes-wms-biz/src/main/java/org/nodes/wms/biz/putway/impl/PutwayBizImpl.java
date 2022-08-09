@@ -50,7 +50,7 @@ public class PutwayBizImpl implements PutwayBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void putwayByBox(PutwayByBoxRequest request) {
 		// 判断库存是否在入库暂存区，如果不是入库暂存区应报异常
-		Stock sourceStock = stockQueryBiz.findStockById(request.getStockId().get(0));
+		Stock sourceStock = stockQueryBiz.findStockById(request.getStockId());
 		AssertUtil.notNull(sourceStock, "按箱上架失败,没有原库存信息");
 		Location location = locationBiz.findLocationByLocCode(request.getWhId(), sourceStock.getLocCode());
 		boolean stageLocation = locationBiz.isStageLocation(location);
