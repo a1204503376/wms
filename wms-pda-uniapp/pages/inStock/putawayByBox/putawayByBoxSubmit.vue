@@ -120,7 +120,6 @@
 			},
 			submitPutawayByBox() {
 				this.params.whId = uni.getStorageSync('warehouse').whId
-				this.params.stockId = JSON.parse(this.params.stockId)
 				putawayByBoxs.submitPutawayByBox(this.params).then(data => {
 					this.esc();
 				})
