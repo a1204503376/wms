@@ -156,7 +156,7 @@ public interface LocationDao {
 	 * @param zoneType  必填
 	 * @return
 	 */
-	Location getLocationByZoneTypeAndWhId(List<Long> locIdList, Long whId, Integer zoneType);
+	List<Location> getLocationByZoneTypeAndWhId(List<Long> locIdList, Long whId, Integer zoneType);
 
 	/**
 	 * 根据库区ID获取该区域的库位

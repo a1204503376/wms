@@ -114,9 +114,9 @@ public class LocationBizImpl implements LocationBiz {
 			Location location = locationDao.getLocationById(id);
 			String locCode = location.getLocCode();
 			if (Func.isNotEmpty(location.getLocType())
-					&& location.getLocType().equals(LocTypeEnum.Virtual.key())
-					&& StringUtil.contains(locCode, '-')
-					&& ArrayUtils.contains(LocationConstant.getLocTypes(), StringUtil.subAfter(locCode, "-", true))) {
+				&& location.getLocType().equals(LocTypeEnum.Virtual.key())
+				&& StringUtil.contains(locCode, '-')
+				&& ArrayUtils.contains(LocationConstant.getLocTypes(), StringUtil.subAfter(locCode, "-", true))) {
 				throw new ServiceException(String.format("库位[编码：%s]是系统生成虚拟库位不可删除", location.getLocCode()));
 			}
 		}
@@ -126,8 +126,8 @@ public class LocationBizImpl implements LocationBiz {
 	private List<String> getLocCodeOfSystemCreated(String systemCreateCode) {
 		List<Warehouse> warehouseList = warehouseBiz.findAll();
 		return warehouseList.stream()
-				.map(item -> String.format("%s-%s", item.getWhCode(), systemCreateCode))
-				.collect(Collectors.toList());
+			.map(item -> String.format("%s-%s", item.getWhCode(), systemCreateCode))
+			.collect(Collectors.toList());
 	}
 
 	@Override
@@ -149,7 +149,7 @@ public class LocationBizImpl implements LocationBiz {
 		}
 		List<Location> allUnknownLocation = getAllUnknownLocation();
 		List<Location> locationList = allUnknownLocation.stream()
-				.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
@@ -160,7 +160,7 @@ public class LocationBizImpl implements LocationBiz {
 		}
 		List<Location> allInTransitLocation = getAllInTransitLocation();
 		List<Location> locationList = allInTransitLocation.stream()
-				.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
+			.filter(item -> whId.equals(item.getWhId())).collect(Collectors.toList());
 		return Func.isNotEmpty(locationList) ? locationList.get(0) : null;
 	}
 
@@ -170,7 +170,7 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
-	public Location getLocationByZoneType(Long whId, Integer zoneType) {
+	public List<Location> getLocationByZoneType(Long whId, Integer zoneType) {
 		return locationDao.getLocationByZoneTypeAndWhId(null, whId, zoneType);
 	}
 
@@ -208,7 +208,7 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isPickToLocation(Location location) {
-		Location pickToLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO);
+		Location pickToLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO).get(0);
 		return location.getLocId().equals(pickToLocation.getLocId());
 	}
 
@@ -231,9 +231,9 @@ public class LocationBizImpl implements LocationBiz {
 	public boolean isVirtualLocation(List<Location> locationList) {
 		Dict dict = dictionaryBiz.findZoneTypeOfVirtual();
 		List<Long> locIdList = locationList.stream()
-				.map(Location::getLocId)
-				.distinct()
-				.collect(Collectors.toList());
+			.map(Location::getLocId)
+			.distinct()
+			.collect(Collectors.toList());
 		List<Location> locations = locationDao.getLocationByZoneType(locIdList, null, dict.getDictKey());
 		AssertUtil.notNull(locations, "判断是否有虚拟库位失败，库位集合为空");
 		return Func.isNotEmpty(locations);
@@ -272,31 +272,31 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isVirtualLocation(Location location) {
-		Location virtualLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_VIRTUAL_AREA);
+		Location virtualLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_VIRTUAL_AREA).get(0);
 		return location.getLocId().equals(virtualLocation.getLocId());
 	}
 
 	@Override
 	public boolean isPickLocation(Location location) {
-		Location pickLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_PICK);
+		Location pickLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_PICK).get(0);
 		return location.getLocId().equals(pickLocation.getLocId());
 	}
 
 	@Override
 	public boolean isStageLocation(Location location) {
-		Location stageLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_OF_STAGE);
+		Location stageLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_OF_STAGE).get(0);
 		return location.getLocId().equals(stageLocation.getLocId());
 	}
 
 	@Override
 	public boolean isAgvLocation(Location location) {
-		Location autoStageLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_STORAGE_AREA);
-		Location autoPickLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_PICKING_AREA);
-		Location autoStockUpLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_CHOICE_AREA);
-		Location autoTemporaryLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_TEMPORARY_AREA);
+		Location autoStageLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_STORAGE_AREA).get(0);
+		Location autoPickLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_PICKING_AREA).get(0);
+		Location autoStockUpLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_CHOICE_AREA).get(0);
+		Location autoTemporaryLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_TEMPORARY_AREA).get(0);
 		return location.getLocId().equals(autoStageLocation.getLocId())
-			||location.getLocId().equals(autoPickLocation.getLocId())
-			||location.getLocId().equals(autoStockUpLocation.getLocId())
-			||location.getLocId().equals(autoTemporaryLocation.getLocId());
+			|| location.getLocId().equals(autoPickLocation.getLocId())
+			|| location.getLocId().equals(autoStockUpLocation.getLocId())
+			|| location.getLocId().equals(autoTemporaryLocation.getLocId());
 	}
 }

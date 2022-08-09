@@ -150,7 +150,7 @@ public interface LocationBiz {
 	 * @param zoneType 库区类型 必填，具体参考DictCodeConstant中的常量
 	 * @return 库位
 	 */
-	Location getLocationByZoneType(Long whId, Integer zoneType);
+	List<Location> getLocationByZoneType(Long whId, Integer zoneType);
 
 	/**
 	 * 判断库位是否为出库暂存区
