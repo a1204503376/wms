@@ -64,6 +64,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	private final LocationBiz locationBiz;
 	private final LogBiz logBiz;
 
+
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void pickByPcsOnPc(PickByPcRequest request) {
@@ -98,6 +99,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		for (PickByPcStockDto pickByPcStockDto : pickByPcStockDtoList) {
 			Stock stock = stockQueryBiz.findStockById(pickByPcStockDto.getStockId());
 			LogSoPick logSoPick = logSoPickFactory.createLogSoPick(pickByPcStockDto, soHeader, soDetail, stock);
+			logSoPickDao.saveLogSoPick(logSoPick);
 			Location location = locationBiz.getLocationByZoneType(stock.getWhId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO).get(0);
 			// 3 移动库存到出库集货区
 			stockBiz.moveStock(stock, pickByPcStockDto.getSerailList(), pickByPcStockDto.getOutStockQty(),

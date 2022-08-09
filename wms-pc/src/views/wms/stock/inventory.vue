@@ -128,6 +128,9 @@ import fileDownload from "js-file-download";
                 </el-button>
                 <el-button icon="el-icon-plus" size="mini" type="primary" @click="showBySerial">按序列号显示
                 </el-button>
+                <el-button size="mini" type="primary" @click="printBoxSticker">
+                    箱贴打印
+                </el-button>
                 <el-button icon="el-icon-upload2" plain size="mini"
                            @click="onUpload">导入
                 </el-button>
@@ -751,6 +754,10 @@ export default {
             this.form1.popShow = true,
                 this.form1.thawShow = false
             this.form1.freezeShow = true
+        },
+        printBoxSticker() {
+            let rows = this.$refs.table.selection;
+            alert("箱贴打印" + row)
         },
         cancel() {
             this.form1 = {

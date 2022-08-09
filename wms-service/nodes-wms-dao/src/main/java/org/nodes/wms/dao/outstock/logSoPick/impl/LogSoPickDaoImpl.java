@@ -10,6 +10,7 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickIndexResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickPageResponse;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.outstock.logSoPick.mapper.LogSoPickMapper;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
 
@@ -44,5 +45,12 @@ public class LogSoPickDaoImpl extends BaseServiceImpl<LogSoPickMapper, LogSoPick
 	@Override
 	public List<LogSoPick> getByIds(List<Long> lsopIdList) {
 		return super.listByIds(lsopIdList);
+	}
+
+	@Override
+	public void saveLogSoPick(LogSoPick logSoPick) {
+		if (!super.save(logSoPick)) {
+			throw new ServiceException("保存拣货记录失败");
+		}
 	}
 }

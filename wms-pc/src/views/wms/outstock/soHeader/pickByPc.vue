@@ -179,7 +179,6 @@ export default {
         return {
             tabList: [
                 {lable: '按件拣货', name: 'pickByPiece'},
-                {lable: '按箱拣货', name: 'pickByBox'},
             ],
             activeName: 'pickByPiece',
             table: {
