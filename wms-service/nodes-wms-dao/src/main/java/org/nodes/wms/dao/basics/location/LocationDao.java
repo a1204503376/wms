@@ -142,9 +142,9 @@ public interface LocationDao {
 	 * 查找库位列表中指定类型的库位
 	 *
 	 * @param locIdList 可为空
-	 * @param whId      可为空
+	 * @param whId      必填
 	 * @param zoneType  必填
-	 * @return
+	 * @return 符合条件的库位
 	 */
 	List<Location> getLocationByZoneType(List<Long> locIdList, Long whId, Integer zoneType);
 
@@ -152,11 +152,21 @@ public interface LocationDao {
 	 * 查找库位列表中指定类型的库位
 	 *
 	 * @param locIdList 可为空
-	 * @param whId      可为空
+	 * @param whId      必填
 	 * @param zoneType  必填
-	 * @return
+	 * @return 符合条件的库位
 	 */
 	List<Location> getLocationByZoneTypeAndWhId(List<Long> locIdList, Long whId, Integer zoneType);
+
+	/**
+	 * 查找库位列表中指定类型的库位是否存在
+	 *
+	 * @param locId    可为空
+	 * @param whId     必填
+	 * @param zoneType 必填
+	 * @return 如果为true表示符合条件的库位存在 反之为false
+	 */
+	Boolean getLocationByZoneTypeAndLocId(Long whId, Long locId, Integer zoneType);
 
 	/**
 	 * 根据库区ID获取该区域的库位
