@@ -219,7 +219,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/automaticAssign")
 	public R<String> automaticAssign(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		outStockBiz.automaticAssign(soBillIdRequest.getSoBillId());
+		outStockBiz.autoDistribute(soBillIdRequest.getSoBillId());
 		return R.data("分配成功");
 	}
 
@@ -228,7 +228,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/cancelAll")
 	public R<String> cancelAll(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		outStockBiz.cancelAssign(soBillIdRequest.getSoBillId());
+		outStockBiz.cancleDistribute(soBillIdRequest.getSoBillId());
 		return R.data("取消分配成功");
 	}
 
@@ -254,7 +254,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/saveAssign")
 	public R<String> saveAssign(@Valid @RequestBody SoBillDistributedRequest soBillDistributedRequest) {
-		outStockBiz.saveAssign(soBillDistributedRequest);
+		outStockBiz.manualDistribute(soBillDistributedRequest);
 		return R.data("调整成功");
 	}
 
@@ -273,7 +273,7 @@ public class SoBillController {
 	@ApiLog("pc拣货")
 	@PostMapping("pickByPc")
 	public R<String> pickByPc(@RequestBody PickByPcRequest pickByPcRequest) {
-		outStockBiz.pickByPc(pickByPcRequest);
+		outStockBiz.pickByPcsOnPc(pickByPcRequest);
 		return R.data("操作成功");
 	}
 }

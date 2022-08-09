@@ -49,8 +49,8 @@ public class SkuLotUtil {
 	/**
 	 * 比较两个对象中的所有skuLot是否相同
 	 *
-	 * @param t1 比较对象
-	 * @param t2 比较对象
+	 * @param t1   比较对象
+	 * @param t2   比较对象
 	 * @param <T1> 存在skuLot[n]属性的对象
 	 * @param <T2> 存在skuLot[n]属性的对象
 	 * @return 相同返回ture，否则返回false,如果没有skuLot属性也返回false
@@ -102,7 +102,7 @@ public class SkuLotUtil {
 	 * 判断对象是否有30个skuLot属性
 	 *
 	 * @param object 需要判断的对象
-	 * @param <T> 需要判断的类
+	 * @param <T>    需要判断的类
 	 * @return true:存在30个批属性
 	 */
 	public static <T> boolean hasSkuLot(T object) {
@@ -179,7 +179,7 @@ public class SkuLotUtil {
 	 * @param <R>          返回类定义
 	 */
 	public static <T, R> void applySql(LambdaQueryWrapper<R> queryWrapper, T skuLot) {
-		applySql(queryWrapper, skuLot, false);
+		applySql(queryWrapper, skuLot, true);
 	}
 
 	/**

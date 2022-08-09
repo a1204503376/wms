@@ -131,8 +131,8 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setQty(item.getPlanQty());
 		receiveLog.setLpnCode(request.getLpnCode());
 		receiveLog.setLocCode(request.getLocCode());
-		receiveLog.setSkuCode(item.getSkuCode());
-		receiveLog.setSkuName(item.getSkuName());
+		receiveLog.setSkuCode(detail.getSkuCode());
+		receiveLog.setSkuName(detail.getSkuName());
 		receiveLog.setSkuSpec(detail.getSkuSpec());
 		receiveLog.setWhId(request.getWhId());
 		receiveLog = createReceiveLog(receiveLog, receiveHeader, detail);

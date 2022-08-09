@@ -90,9 +90,9 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public List<Stock> findStockOnStageByBoxCode(Long whId, String boxCode) {
-		Location stage = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_OF_STAGE);
+		List<Location> stage = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_OF_STAGE);
 		AssertUtil.notNull(stage, "根据箱码查询入库暂存区库存失败，没有查到对应的入库暂存区");
-		return stockDao.getStockByBoxCode(boxCode, Collections.singletonList(stage.getLocId()));
+		return stockDao.getStockByBoxCode(boxCode, Collections.singletonList(stage.get(0).getLocId()));
 	}
 
 	@Override
@@ -100,12 +100,12 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		// 创建返回集合
 		List<CallAgvResponse> callAgvResponseList = new ArrayList<>();
 		// 根据仓库id获取入库暂存区库位
-		Location stage = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_OF_STAGE);
+		List<Location>  stage = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_OF_STAGE);
 		if (Func.isEmpty(stage)) {
 			throw new ServiceException("查询失败,该库房下入库暂存区库位为空");
 		}
 		// 根据箱码和库房id获取入库暂存区库存
-		List<Stock> stockList = findLpnStockOnStageLeft(whId, boxCode, stage);
+		List<Stock> stockList = findLpnStockOnStageLeft(whId, boxCode, stage.get(0));
 		// 按lpn编码对查询出的集合进行分组
 		Map<String, List<Stock>> stockMap = stockList.stream().collect(Collectors.groupingBy(Stock::getLpnCode));
 		// 遍历分组后的map
@@ -118,7 +118,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 			if (lpnType.equals(LpnTypeCodeEnum.D.getCode())) {
 				// 根据lpnCoe获取同一托盘的所有库存
 				stocks = stockDao.getStockByLpnCode(stocks.get(0).getLpnCode(),
-					Collections.singletonList(stage.getLocId()));
+					Collections.singletonList(stage.get(0).getLocId()));
 			}
 			// 创建返回对象并添加到集合中
 			CallAgvResponse callAgvResponse = createCallAgvResponse(stocks, lpnType);
@@ -134,8 +134,8 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public Stock findStockOnPickTo(LogSoPick pickLog) {
-		Location pickToLoc = locationBiz.getLocationByZoneType(pickLog.getWhId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO);
-		return stockMergeStrategy.matchSameStock(pickLog, pickToLoc);
+		List<Location>  pickToLoc = locationBiz.getLocationByZoneType(pickLog.getWhId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO);
+		return stockMergeStrategy.matchSameStock(pickLog, pickToLoc.get(0));
 	}
 
 	@Override
@@ -241,7 +241,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
 											 List<Long> zoneIdList, SkuLotBaseEntity skuLot) {
-		Long pickToZoneId = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_OF_PICK_TO).getZoneId();
+		Long pickToZoneId = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_OF_PICK_TO).get(0).getZoneId();
 		return stockDao.findEnableStockByZone(whId, skuId, stockStatusEnum,
 			zoneIdList, skuLot, Collections.singletonList(pickToZoneId));
 	}
@@ -249,7 +249,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
 												 List<Long> locationIdList, SkuLotBaseEntity skuLot) {
-		Long pickToZoneId = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_OF_PICK_TO).getZoneId();
+		Long pickToZoneId = locationBiz.getLocationByZoneType(whId, DictCodeConstant.ZONE_TYPE_OF_PICK_TO).get(0).getZoneId();
 		return stockDao.findEnableStockByLocation(whId, skuId, stockStatusEnum,
 			locationIdList, skuLot, Collections.singletonList(pickToZoneId));
 	}

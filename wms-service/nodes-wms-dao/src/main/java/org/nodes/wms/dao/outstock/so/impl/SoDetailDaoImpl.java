@@ -13,6 +13,7 @@ import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.mapper.SoDetailMapper;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
 
@@ -78,8 +79,20 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 		return super.baseMapper.selectPage(page, queryWrapper);
 	}
 
-    @Override
-    public List<SoDetailForDistResponse> getSoDetailForDistribute(Long soBillId) {
-        return super.baseMapper.getSoDetailForDistribute(soBillId);
-    }
+	@Override
+	public List<SoDetailForDistResponse> getSoDetailForDistribute(Long soBillId) {
+		return super.baseMapper.getSoDetailForDistribute(soBillId);
+	}
+
+	@Override
+	public SoDetail getSoDetailById(Long soDetailId) {
+		return super.getById(soDetailId);
+	}
+
+	@Override
+	public void update(SoDetail soDetail) {
+		if (!super.saveOrUpdate(soDetail)) {
+			throw new ServiceException("修改发货单明细失败");
+		}
+	}
 }
