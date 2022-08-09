@@ -76,12 +76,12 @@ public class OutStockBizImpl implements OutStockBiz {
 		}
 		// 1.2 单据和单据明细行的状态如果为终结状态，则不能进行拣货
 		if (soHeader.getSoBillState().equals(SoBillStateEnum.COMPLETED)
-			|| soHeader.getSoBillState().equals(SoBillStateEnum.ALL_OUT_STOCK)
-			|| soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED)) {
+				|| soHeader.getSoBillState().equals(SoBillStateEnum.ALL_OUT_STOCK)
+				|| soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED)) {
 			throw new ServiceException("拣货失败,收货单状态为" + soHeader.getSoBillState() + "不能进行拣货");
 		}
 		if (soDetail.getBillDetailState().equals(SoDetailStateEnum.DELETED)
-			|| soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
+				|| soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
 			throw new ServiceException("拣货失败,收货单明细状态为" + soDetail.getBillDetailState() + "不能进行拣货");
 		}
 
@@ -98,10 +98,12 @@ public class OutStockBizImpl implements OutStockBiz {
 		for (PickByPcStockDto pickByPcStockDto : pickByPcStockDtoList) {
 			Stock stock = stockQueryBiz.findStockById(pickByPcStockDto.getStockId());
 			LogSoPick logSoPick = logSoPickFactory.createLogSoPick(pickByPcStockDto, soHeader, soDetail, stock);
-			Location location = locationBiz.getLocationByZoneType(stock.getWhId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO).get(0);
+			Location location = locationBiz
+					.getLocationByZoneType(stock.getWhId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO).get(0);
 			// 3 移动库存到出库集货区
 			stockBiz.moveStock(stock, pickByPcStockDto.getSerailList(), pickByPcStockDto.getOutStockQty(),
-				location, StockLogTypeEnum.OUTSTOCK_BY_PC, soHeader.getSoBillId(), soHeader.getSoBillNo(), soDetail.getSoLineNo());
+					location, StockLogTypeEnum.OUTSTOCK_BY_PC, soHeader.getSoBillId(), soHeader.getSoBillNo(),
+					soDetail.getSoLineNo());
 		}
 		// 4 更新出库单明细中的状态和数量
 		soDetail.setScanQty(soDetail.getScanQty().add(sum));
@@ -118,13 +120,12 @@ public class OutStockBizImpl implements OutStockBiz {
 		logBiz.auditLog(AuditLogType.OUTSTOCK, "PC拣货");
 	}
 
-
 	@Override
 	public List<SoPickPlanForDistributionResponse> getSoPickPlanBySoBillIdAndSoDetailId(Long soBillId,
-																						Long soDetailId) {
+			Long soDetailId) {
 		AssertUtil.notNull(soBillId.toString(), "查询拣货计划失败，发货单id为空");
 		List<SoPickPlanForDistributionResponse> soPickPlanList = soPickPlanDao.getBySoBillIdAndSoDetailId(soBillId,
-			soDetailId);
+				soDetailId);
 		soPickPlanList.forEach(item -> {
 			item.setStockStatusValue(item.getStockStatus().getDesc());
 		});
@@ -155,7 +156,7 @@ public class OutStockBizImpl implements OutStockBiz {
 
 	@Override
 	public IPage<FindPickingBySoBillIdResponse> findOpenSoDetail(FindOpenSoDetailRequest request,
-																 Query query) {
+			Query query) {
 		// TODO bug 需要加上单据明细状态
 		IPage<SoDetail> page = soDetailBiz.getPickingBySoBillId(request.getSoBillId(), query);
 		AssertUtil.notNull(page, "查询结果为空");
@@ -181,22 +182,29 @@ public class OutStockBizImpl implements OutStockBiz {
 
 	@Override
 	public IPage<OutboundAccessAreaLocationQueryResponse> findLocOfAgvPickTo(
-		FindLocOfAgvPickToRequest request, Query query) {
+			FindLocOfAgvPickToRequest request, Query query) {
 		return null;
 	}
 
 	@Override
 	public void pickOnAgvPickTo(MoveOnAgvPickToRequest request) {
-
+		// 判断出库接驳区是否有库存，如果没有库存则抛异常
+		// 根据库存查找对应的出库单明细
+		// 判断如果当前拣货量是否会超过剩余量，超过剩余量则返回信息给pda，要求pda跳转到移动的界面
+		// 如果没有超过剩余量，则执行过程同按箱拣货
 	}
 
 	@Override
 	public void moveOnAgvPickTo(MoveOnAgvPickToRequest request) {
-
+		// 执行按箱移动
+		// 记录日志
 	}
 
 	@Override
 	public boolean autoDistribute(Long soBillId) {
+
+		// 执行策略分配
+		// 记录业务日志
 		return false;
 	}
 
@@ -228,7 +236,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		List<LogSoPick> logSoPickList = logSoPickDao.getByIds(logSoPickIdList);
 		// 生成一笔反向的拣货记录
 		logSoPickList.forEach(logSoPick -> {
-//			logSoPickDao.
+			// logSoPickDao.
 		});
 		// 根据拣货记录下架库存
 		// 更新发货单明细状态与实收数量
