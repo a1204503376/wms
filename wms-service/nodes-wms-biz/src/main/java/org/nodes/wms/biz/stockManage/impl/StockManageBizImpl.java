@@ -347,17 +347,29 @@ public class StockManageBizImpl implements StockManageBiz {
 	 * 4. 校验目标库位的箱型
 	 * 5. 校验载重
 	 *
-	 * @param sourceLocation
-	 * @param targetLocation
-	 * @param stockList
+	 * @param sourceLocation sourceLocation
+	 * @param targetLocation targetLocation
+	 * @param stockList      stockList
 	 */
 	private void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList) {
 		AssertUtil.notNull(sourceLocation, "校验库存移动失败当前库位为空");
 		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
 		AssertUtil.notNull(stockList, "校验库存移动失败库存为空");
 
+		//1. 不能移动到出库集货区和虚拟库区
 		canMoveToLoc(targetLocation);
-		canMoveVerify(sourceLocation, targetLocation, stockList);
+
+		//2. 如果是自动区则要求目标库位必须是空库位（库位上没有库存）
+		canMoveToLocAuto(sourceLocation, targetLocation);
+
+		//3. 只能是同类型（自动与人工区）的库区之间移动
+		canMoveToLocType(sourceLocation, targetLocation);
+
+		//4. 校验目标库位的箱型
+		canMoveToBoxType(sourceLocation, targetLocation);
+
+		// 5. 校验载重
+		canMoveByIsNotOverweight(targetLocation, stockList);
 	}
 
 	/**
@@ -388,19 +400,38 @@ public class StockManageBizImpl implements StockManageBiz {
 	}
 
 	/**
-	 * 校验 库内移动校验：1. 校验同库区内移动  2。 校验目标库位箱型  3. 校验载重 4. 如果目标库位是自动区且目标库位有库存则不能再移动至此
+	 * 如果是自动区则要求目标库位必须是空库位（库位上没有库存）
 	 *
-	 * @param sourceLocation 当前库存
-	 * @param targetLocation 目标库存
-	 * @param stockList      库存集合
+	 * @param sourceLocation sourceLocation
+	 * @param targetLocation targetLocation
 	 */
-	private void canMoveVerify(Location sourceLocation, Location targetLocation, List<Stock> stockList) {
+ 	private void canMoveToLocAuto(Location sourceLocation, Location targetLocation) {
+		if (locationBiz.isAgvLocation(sourceLocation) && locationBiz.isAgvLocation(targetLocation)) {
+			if (!stockQueryBiz.isEmptyLocation(targetLocation.getLocId())) {
+				throw new ServiceException("库存移动失败，自动区目标库位存在库存");
+			}
+		}
+	}
 
-
+	/**
+	 * 只能是同类型（自动与人工区）的库区之间移动
+	 *
+	 * @param sourceLocation sourceLocation
+	 * @param targetLocation targetLocation
+	 */
+	private void canMoveToLocType(Location sourceLocation, Location targetLocation) {
 		if (!Func.equals(sourceLocation.getZoneId(), targetLocation.getZoneId())) {
 			throw new ServiceException("库存移动时不能跨区移动");
 		}
+	}
 
+	/**
+	 * 校验目标库位的箱型
+	 *
+	 * @param sourceLocation sourceLocation
+	 * @param targetLocation targetLocation
+	 */
+	private void canMoveToBoxType(Location sourceLocation, Location targetLocation) {
 		LpnType sourceLpnType = lpnTypeBiz.findLpnTypeById(sourceLocation.getLpnTypeId());
 		AssertUtil.notNull(sourceLpnType, "根据箱码获取当前库存箱型失败");
 		LpnType targetLpnType = lpnTypeBiz.findLpnTypeById(targetLocation.getLpnTypeId());
@@ -409,6 +440,15 @@ public class StockManageBizImpl implements StockManageBiz {
 			throw new ServiceException("库存移动时当前库存和目标库位所存储的箱型不一致");
 		}
 
+	}
+
+	/**
+	 * 校验载重
+	 *
+	 * @param targetLocation 目标库存
+	 * @param stockList      库存集合
+	 */
+	private void canMoveByIsNotOverweight(Location targetLocation, List<Stock> stockList) {
 		if (!tianYiPutwayStrategy.isNotOverweight(stockList, targetLocation)) {
 			throw new ServiceException("要移动的库存超过了最大载重");
 		}
