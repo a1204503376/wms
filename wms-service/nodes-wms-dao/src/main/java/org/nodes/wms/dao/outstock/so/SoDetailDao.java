@@ -106,4 +106,19 @@ public interface SoDetailDao {
 	 * @return 发货单明细信息
 	 */
 	List<SoDetailForDistResponse> getSoDetailForDistribute(Long soBillId);
+
+	/**
+	 * 根据id获取发货单实体
+	 *
+	 * @param soDetailId 发货单id
+	 * @return 发货单实体
+	 */
+	SoDetail getSoDetailById(Long soDetailId);
+
+	/**
+	 * 修改发货单明细
+	 *
+	 * @param soDetail 发货单明细实体
+	 */
+	void update(SoDetail soDetail);
 }

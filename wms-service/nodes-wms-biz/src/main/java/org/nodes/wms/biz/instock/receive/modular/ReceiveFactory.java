@@ -23,6 +23,7 @@ import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
@@ -378,6 +379,9 @@ public class ReceiveFactory {
 		Warehouse warehouse = warehouseBiz.findById(request.getWhId());
 		//根据物料id获取物料实体
 		Sku sku = skuBiz.findById(item.getSkuId());
+		if (Func.isEmpty(sku)) {
+			throw new ServiceException("收货失败,创建收货单明细时无法获取到物料信息");
+		}
 		//设置明细表收货单id
 		receiveDetail.setReceiveId(receiveHeader.getReceiveId());
 		//  设置订单行号
