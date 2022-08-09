@@ -73,4 +73,14 @@ public class SoDetailBizImpl implements SoDetailBiz {
 		IPage<SoDetail> page = Condition.getPage(query);
 		return soDetailDao.getSoDetailPage(soBillId, page);
 	}
+
+	@Override
+	public SoDetail getSoDetailById(Long soDetailId) {
+		return soDetailDao.getSoDetailById(soDetailId);
+	}
+
+	@Override
+	public void update(SoDetail soDetail) {
+		soDetailDao.update(soDetail);
+	}
 }

@@ -69,4 +69,19 @@ public interface SoDetailBiz {
 	 * @return 分页
 	 */
 	IPage<SoDetail> getPickingBySoBillId(Long soBillId, Query query);
+
+	/**
+	 * 根据Id获取发货单明细实体
+	 *
+	 * @param soDetailId 发货单明细id
+	 * @return 发货单实体
+	 */
+	SoDetail getSoDetailById(Long soDetailId);
+
+	/**
+	 * 修改发货单明细
+	 *
+	 * @param soDetail 发货单实体
+	 */
+	void update(SoDetail soDetail);
 }

@@ -3,14 +3,14 @@ package org.nodes.wms.biz.outstock.so;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindAllPickingRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindAllPickingRequest;
-import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -126,4 +126,21 @@ public interface SoHeaderBiz {
 	 * @return 出库明细和库存信息
 	 */
 	SoDetailAndStockResponse getSoDetailAndStock(SoDetailAndStockRequest soDetailAndStockRequest);
+
+	/**
+	 * 根据id获取发货单实体
+	 *
+	 * @param soBillId 发货单id
+	 * @return 发货单实体
+	 */
+	SoHeader getSoHeaderById(Long soBillId);
+
+	/**
+	 * 修改发货单状态
+	 *
+	 * @param soHeader 发货单头表
+	 */
+	void updateSoBillState(SoHeader soHeader);
+
+
 }
