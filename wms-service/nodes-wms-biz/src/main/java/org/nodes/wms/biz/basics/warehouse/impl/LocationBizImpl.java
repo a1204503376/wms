@@ -175,6 +175,11 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
+	public Boolean getLocationByZoneType(Long whId, Long locId, Integer zoneType) {
+		return locationDao.getLocationByZoneTypeAndLocId(whId, locId, zoneType);
+	}
+
+	@Override
 	public int countAll() {
 		return locationDao.countAll();
 	}
@@ -208,8 +213,7 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isPickToLocation(Location location) {
-		Location pickToLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO).get(0);
-		return location.getLocId().equals(pickToLocation.getLocId());
+		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO);
 	}
 
 	@Override
@@ -272,31 +276,27 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isVirtualLocation(Location location) {
-		Location virtualLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_VIRTUAL_AREA).get(0);
-		return location.getLocId().equals(virtualLocation.getLocId());
+		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictCodeConstant.ZONE_TYPE_VIRTUAL_AREA);
 	}
 
 	@Override
 	public boolean isPickLocation(Location location) {
-		Location pickLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_PICK).get(0);
-		return location.getLocId().equals(pickLocation.getLocId());
+		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictCodeConstant.ZONE_TYPE_PICK);
 	}
 
 	@Override
 	public boolean isStageLocation(Location location) {
-		Location stageLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_OF_STAGE).get(0);
-		return location.getLocId().equals(stageLocation.getLocId());
+		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictCodeConstant.ZONE_TYPE_OF_STAGE);
 	}
 
 	@Override
 	public boolean isAgvLocation(Location location) {
-		Location autoStageLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_STORAGE_AREA).get(0);
-		Location autoPickLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_PICKING_AREA).get(0);
-		Location autoStockUpLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_CHOICE_AREA).get(0);
-		Location autoTemporaryLocation = getLocationByZoneType(location.getWhId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_TEMPORARY_AREA).get(0);
-		return location.getLocId().equals(autoStageLocation.getLocId())
-			|| location.getLocId().equals(autoPickLocation.getLocId())
-			|| location.getLocId().equals(autoStockUpLocation.getLocId())
-			|| location.getLocId().equals(autoTemporaryLocation.getLocId());
+		if (getLocationByZoneType(location.getWhId(), location.getLocId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_STORAGE_AREA)
+			|| getLocationByZoneType(location.getWhId(), location.getLocId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_PICKING_AREA)
+			|| getLocationByZoneType(location.getWhId(), location.getLocId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_CHOICE_AREA)
+			|| getLocationByZoneType(location.getWhId(), location.getLocId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_TEMPORARY_AREA)) {
+			return true;
+		}
+		return false;
 	}
 }

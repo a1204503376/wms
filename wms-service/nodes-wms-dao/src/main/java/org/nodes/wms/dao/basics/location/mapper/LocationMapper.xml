@@ -8,8 +8,7 @@
                loc_code
         FROM wms_location
         WHERE loc_code LIKE CONCAT('%', #{locCode}, '%')
-        ORDER BY update_time DESC
-        LIMIT 10
+        ORDER BY update_time DESC LIMIT 10
     </select>
 
     <sql id="tableList">
@@ -196,11 +195,28 @@
         </where>
     </select>
 
+    <select id="getLocationByZoneTypeAndLocId" resultType="org.nodes.wms.dao.basics.location.entities.Location">
+        select l.*
+        from wms_location l LEFT
+        JOIN wms_zone z on l.zone_id=z.zone_id
+        <where>
+            <if test="zoneType !=null and zoneType != ''">
+                and z.zone_type = #{zoneType}
+            </if>
+            <if test="whId !=null and whId != ''">
+                and l.wh_id = #{whId}
+            </if>
+            <if test="locId !=null and locId != ''">
+                and l.loc_id = #{locId}
+            </if>
+        </where>
+    </select>
+
     <select id="selectZoneTypeByLocId" resultType="java.lang.Integer">
-        SELECT
-            zone.zone_type
+        SELECT zone.zone_type
         FROM wms_location loc
-                 LEFT JOIN wms_zone zone ON zone.zone_id = loc.zone_id
+                 LEFT JOIN wms_zone zone
+        ON zone.zone_id = loc.zone_id
         WHERE loc.loc_id = #{locId}
     </select>
 </mapper>

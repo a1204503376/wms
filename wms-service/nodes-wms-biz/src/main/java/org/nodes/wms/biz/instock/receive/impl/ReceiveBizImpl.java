@@ -89,7 +89,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		for (Long receiveId : receiveIdList) {
 			ReceiveHeader receiveHeader = receiveHeaderDao.selectBillStateById(receiveId);
 			if (receiveHeader.getBillState() != ReceiveHeaderStateEnum.NOT_RECEIPT) {
-				throw new ServiceException(Func.format("当前状态不等于：{},不允许删除；单号：{}" ,ReceiveHeaderStateEnum.NOT_RECEIPT.getDesc(), receiveHeader.getReceiveNo()));
+				throw new ServiceException(Func.format("当前状态不等于：{},不允许删除；单号：{}", ReceiveHeaderStateEnum.NOT_RECEIPT.getDesc(), receiveHeader.getReceiveNo()));
 			}
 			//获取关联明细集合
 			List<Long> receiveDetailIdList = receiveDetailDao.selectDetailIdByReceiveId(receiveId);
@@ -354,11 +354,11 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			&& detail.getDetailStatus() != ReceiveDetailStatusEnum.PART) {
 			throw new ServiceException("该单不可以收货，原因收货单明细已经收货完成");
 		}
-		if (BigDecimalUtil.eq(detail.getPlanQty() ,detail.getScanQty())) {
+		if (BigDecimalUtil.eq(detail.getPlanQty(), detail.getScanQty())) {
 			throw new ServiceException("该单不可以收货，原因无可收的货物");
 		}
 		// 当前实际量+本次收货量 > 计划量
-		if (BigDecimalUtil.lt(detail.getPlanQty(),detail.getScanQty().add(receiveQty))) {
+		if (BigDecimalUtil.lt(detail.getPlanQty(), detail.getScanQty().add(receiveQty))) {
 			throw new ServiceException("不能超收");
 		}
 	}
@@ -376,7 +376,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			find = ReceiveDetailStatusEnum.COMPLETED;
 		} else if (validPartCompleted(detail)) {
 			find = ReceiveDetailStatusEnum.NOT_RECEIPT;
-		}else if (validPartNotReceiptCompleted(detail)) {
+		} else if (validPartNotReceiptCompleted(detail)) {
 			find = ReceiveDetailStatusEnum.PART;
 		}
 		if (find == null) {
@@ -427,8 +427,13 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	@Override
 	public void updateReciveHeader(ReceiveHeader receiveHeader, ReceiveDetail detail) {
 		List<ReceiveDetail> details = receiveDetailDao.selectReceiveDetailById(detail.getReceiveId());
-		List<ReceiveDetail> completed = details.stream().filter(item -> item.getDetailStatus().getCode().equals(ReceiveHeaderStateEnum.COMPLETED.getCode())).collect(Collectors.toList());
-		List<ReceiveDetail> notReceipt = details.stream().filter(item -> item.getDetailStatus().getCode().equals(ReceiveHeaderStateEnum.NOT_RECEIPT.getCode())).collect(Collectors.toList());
+		List<ReceiveDetail> completed = details.stream()
+			.filter(item -> item.getDetailStatus().getCode().equals(ReceiveHeaderStateEnum.COMPLETED.getCode()))
+			.collect(Collectors.toList());
+		List<ReceiveDetail> notReceipt = details.stream()
+			.filter(item -> item.getDetailStatus().getCode().equals(ReceiveHeaderStateEnum.NOT_RECEIPT.getCode()))
+			.collect(Collectors.toList());
+
 		if (details.size() == completed.size()) {
 			receiveHeader.setBillState(ReceiveHeaderStateEnum.COMPLETED);
 		} else if (details.size() == notReceipt.size()) {
@@ -523,7 +528,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			//修改收货单明细状态和剩余数量
 			receiveDetail.setSurplusQty(receiveDetail.getSurplusQty().subtract(sum));
 			receiveDetail.setScanQty(receiveDetail.getScanQty().add(sum));
-			if (BigDecimalUtil.gt(receiveDetail.getSurplusQty(),BigDecimal.ZERO)) {
+			if (BigDecimalUtil.gt(receiveDetail.getSurplusQty(), BigDecimal.ZERO)) {
 				receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.PART);
 				isCompleted = false;
 			} else {
