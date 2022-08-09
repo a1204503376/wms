@@ -67,7 +67,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	public SoHeader add(SoBillAddOrEditRequest soBillAddOrEditRequest) {
 		if (Func.isNotEmpty(soBillAddOrEditRequest.getSoBillId())) {
 			SoHeader soHeader = soHeaderDao.getById(soBillAddOrEditRequest.getSoBillId());
-			if (!SoBillStateEnum.CREATE.getCode().equals(soHeader.getSoBillState())) {
+			if (!SoBillStateEnum.CREATE.equals(soHeader.getSoBillState())) {
 				throw new ServiceException("编辑失败，该发货单目前不可编辑");
 			}
 		}
@@ -221,16 +221,32 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	@Override
 	public void updateSoBillState(SoHeader soHeader) {
 		List<SoDetail> soDetailList = soDetailDao.getBySoBillId(soHeader.getSoBillId());
+		SoBillStateEnum soBillStateEnum = soHeader.getSoBillState();
+		int sizeOfNormal = 0;
+		int sizeOfPart = 0;
+		int allOutStock = 0;
+		int deleted = 0;
 		for (SoDetail soDetail : soDetailList) {
-			if (!soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
-				if (!soHeader.getSoBillState().equals(SoBillStateEnum.PART)) {
-					soHeader.setSoBillState(SoBillStateEnum.PART);
-					soHeaderDao.saveOrUpdateSoHeader(soHeader);
-				}
-				return;
+			if (soDetail.getBillDetailState().equals(SoDetailStateEnum.NORMAL)) {
+				sizeOfNormal++;
+			} else if (soDetail.getBillDetailState().equals(SoDetailStateEnum.PART)) {
+				sizeOfPart++;
+			} else if (soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
+				allOutStock++;
+			} else if (soDetail.getBillDetailState().equals(SoDetailStateEnum.DELETED)) {
+				deleted++;
 			}
 		}
-		soHeader.setSoBillState(SoBillStateEnum.ALL_OUT_STOCK);
-		soHeaderDao.saveOrUpdateSoHeader(soHeader);
+		if (sizeOfPart > 0) {
+			soHeader.setSoBillState(SoBillStateEnum.PART);
+		} else if (sizeOfNormal + deleted == soDetailList.size()) {
+			soHeader.setSoBillState(SoBillStateEnum.CREATE);
+		} else if (allOutStock + deleted == soDetailList.size()) {
+			soHeader.setSoBillState(SoBillStateEnum.ALL_OUT_STOCK);
+		}
+		if (!soHeader.getSoBillState().equals(soBillStateEnum)) {
+			soHeaderDao.saveOrUpdateSoHeader(soHeader);
+		}
+
 	}
 }
