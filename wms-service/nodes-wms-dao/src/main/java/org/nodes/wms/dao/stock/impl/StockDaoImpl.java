@@ -277,7 +277,9 @@ public class StockDaoImpl
 	public Stock getStockById(Long stockId) {
 		AssertUtil.notNull(stockId, "库存查询失败，stockId不能为空");
 
-		return super.getById(stockId);
+		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
+		queryWrapper.eq(Stock::getStockId, stockId);
+		return super.getOne(queryWrapper);
 	}
 
 	@Override
@@ -398,7 +400,7 @@ public class StockDaoImpl
 
 	@Override
 	public List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode) {
-		AssertUtil.notEmpty(locCode,"根据库位查询库存数据失败，locCode不能为空");
+		AssertUtil.notEmpty(locCode, "根据库位查询库存数据失败，locCode不能为空");
 		return super.baseMapper.getStockCountByLocCode(locCode);
 	}
 }
