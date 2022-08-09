@@ -47,6 +47,15 @@ public class LogSoPickFactory {
 		logSoPick.setSoDetailId(soDetail.getSoDetailId());
 		logSoPick.setSoLineNo(soDetail.getSoLineNo());
 		logSoPick.setWhId(stock.getWhId());
+		StringBuilder serailNumber = new StringBuilder();
+		if (pickByPcStockDto.getSerailList().size() > 0) {
+			for (String serailNum : pickByPcStockDto.getSerailList()) {
+				serailNumber.append(serailNum);
+				serailNumber.append(",");
+			}
+			serailNumber.deleteCharAt(serailNumber.length() - 1);
+		}
+		logSoPick.setSnCode(serailNumber.toString());
 		logSoPick.setStockStatus(stock.getStockStatus());
 		SkuLotUtil.setAllSkuLot(stock, logSoPick);
 		return logSoPick;
