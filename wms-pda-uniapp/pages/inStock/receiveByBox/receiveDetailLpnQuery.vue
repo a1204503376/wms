@@ -65,7 +65,7 @@
 		},
 		methods: {
 			esc() {
-				uni.$u.func.navigateBackTo(1);
+				uni.$u.func.routeNavigateTo('/pages/home/home')
 			},
 			getReceiveDetailList() {
 				receive.getReceiveDetailLpn(this.param.boxCode).then(res => {
