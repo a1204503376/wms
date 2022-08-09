@@ -302,10 +302,31 @@ public class StockManageBizImpl implements StockManageBiz {
 		List<StockPcMoveDetailRequest> stockMoveDataList = stockPcMoveRequest.getStockMoveDataList();
 		stockMoveDataList.forEach(move -> {
 			Location location = locationBiz.findByLocId(move.getLocId());
-			canMove(location);
+			canMoveToLoc(location);
 			stockBiz.moveStock(stock, move.getSerials(), move.getQty(), location,
 				StockLogTypeEnum.STOCK_MOVE_BY_PCS, null, null, null);
 		});
+	}
+
+	/**
+	 * 判断库存是否可以移动（天宜定制）
+	 * 1. 不能移动到出库集货区和虚拟库区
+	 * 2. 如果是自动区则要求目标库位必须是空库位（库位上没有库存）
+	 * 3. 只能是同类型（自动与人工区）的库区之间移动
+	 * 4. 校验目标库位的箱型
+	 * 5. 校验载重
+	 *
+	 * @param sourceLocation
+	 * @param targetLocation
+	 * @param stockList
+	 */
+	private void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList){
+		AssertUtil.notNull(sourceLocation, "校验库存移动失败当前库位为空");
+		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
+		AssertUtil.notNull(stockList, "校验库存移动失败库存为空");
+
+		canMoveToLoc(targetLocation);
+		canMoveVerify(sourceLocation, targetLocation, stockList);
 	}
 
 	/**
@@ -313,7 +334,7 @@ public class StockManageBizImpl implements StockManageBiz {
 	 *
 	 * @param targetLocation 目标库存
 	 */
-	private void canMove(Location targetLocation) {
+	private void canMoveToLoc(Location targetLocation) {
 		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
 		List<Location> outStockShippingLocationList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OF_PICK_TO);
 		Location outStockShippingLocation = outStockShippingLocationList
@@ -336,16 +357,14 @@ public class StockManageBizImpl implements StockManageBiz {
 	}
 
 	/**
-	 * 校验 库内移动校验：1. 校验同库区内移动  2。 校验目标库位箱型  3. 校验载重
+	 * 校验 库内移动校验：1. 校验同库区内移动  2。 校验目标库位箱型  3. 校验载重 4. 如果目标库位是自动区且目标库位有库存则不能再移动至此
 	 *
 	 * @param sourceLocation 当前库存
 	 * @param targetLocation 目标库存
 	 * @param stockList      库存集合
 	 */
-	public void canMoveVerify(Location sourceLocation, Location targetLocation, List<Stock> stockList) {
-		AssertUtil.notNull(sourceLocation, "校验库存移动失败当前库位为空");
-		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
-		AssertUtil.notNull(stockList, "校验库存移动失败库存为空");
+	private void canMoveVerify(Location sourceLocation, Location targetLocation, List<Stock> stockList) {
+
 
 		if (!Func.equals(sourceLocation.getZoneId(), targetLocation.getZoneId())) {
 			throw new ServiceException("库存移动时不能跨区移动");

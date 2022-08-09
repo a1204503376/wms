@@ -106,34 +106,33 @@ public class AgvTask {
 	 *
 	 * @param sourceStock 移动的原库存
 	 * @param targetLocId 目标库位
-	 * @return true:表示触发了agv的移动任务，false：表示不符合创建agv移动任务
 	 */
-	public boolean moveStockToSchedule(List<Stock> sourceStock, Long targetLocId) {
+	public void moveStockToSchedule(List<Stock> sourceStock, Long targetLocId) {
 		AssertUtil.notEmpty(sourceStock, "AGV库内移动任务下发失败,原库存为空无法移动");
 		AssertUtil.notNull(targetLocId, "AGV库内移动任务下发失败,目标库位为空");
 
-		List<Long> sourceIds = sourceStock.stream()
+		List<Long> sourceLocIds = sourceStock.stream()
 				.map(Stock::getLocId)
 				.distinct()
 				.collect(Collectors.toList());
-		if (sourceIds.size() > 1) {
-			throw new ServiceException("AGV库内移动任务下发失败，不支持同时移动多个库位的库存");
-		}
 
-		if (!locationBiz.isAgvZone(sourceIds.get(0))
-				|| !locationBiz.isAgvZone(targetLocId)) {
-			log.warn("AGV库内移动任务下发失败，AGV只能移动自动区的库存");
-			return false;
+		for (Long locId : sourceLocIds){
+			if (!locationBiz.isAgvZone(locId) || !locationBiz.isAgvZone(locId)) {
+				log.info("AGV库内移动任务下发失败，AGV只能移动自动区的库存");
+				continue;
+			}
+
+			List<Stock> stockOfLoc = sourceStock.stream()
+				.filter(item -> locId.equals(item.getLocId()))
+				.collect(Collectors.toList());
+			WmsTask moveTask = wmsTaskFactory.createMoveTask(stockOfLoc, targetLocId);
+			if (sendToSchedule(Collections.singletonList(moveTask))) {
+				moveTask.setTaskState(WmsTaskStateEnum.ISSUED);
+			}
+			locationBiz.freezeLocByTask(targetLocId, moveTask.getTaskId().toString());
+			stockBiz.freezeStockByTask(stockOfLoc, false, moveTask.getTaskId());
+			wmsTaskDao.save(moveTask);
 		}
-		
-		WmsTask moveTask = wmsTaskFactory.createMoveTask(sourceStock, targetLocId);
-		if (sendToSchedule(Collections.singletonList(moveTask))) {
-			moveTask.setTaskState(WmsTaskStateEnum.ISSUED);
-		}
-		locationBiz.freezeLocByTask(targetLocId, moveTask.getTaskId().toString());
-		stockBiz.freezeStockByTask(sourceStock, false, moveTask.getTaskId());
-		wmsTaskDao.save(moveTask);
-		return true;
 	}
 
 	/**
