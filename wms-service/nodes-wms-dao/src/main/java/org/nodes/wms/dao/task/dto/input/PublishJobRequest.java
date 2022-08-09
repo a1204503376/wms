@@ -1,4 +1,4 @@
-package org.nodes.wms.biz.task.modular;
+package org.nodes.wms.dao.task.dto.input;
 
 import lombok.Data;
 

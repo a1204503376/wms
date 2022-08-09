@@ -245,8 +245,8 @@ import fileDownload from "js-file-download";
                         v-loading="dialog.loading"
                         :data="dialog.gridData"
                         :header-cell-style="{'background-color': '#fafafa'}"
-                        :height="dialog.isMoveByBox ? 390 : ''"
-                        :max-height="dialog.isMoveByBox ? 400 : ''"
+                        :height="dialog.isMoveByBox ? 390 : 'auto'"
+                        :max-height="dialog.isMoveByBox ? 400 : 'auto'"
                         :span-method="dialogGridDataSpanMethod"
                         border
                         element-loading-spinner="el-icon-loading"
@@ -317,6 +317,7 @@ import fileDownload from "js-file-download";
                             <template v-slot="scope">
                                 <nodes-location
                                     v-model="scope.row['locId']"
+                                    :source-loc-code="dialog.gridData[0].locCode"
                                     size="medium">
                                 </nodes-location>
                             </template>

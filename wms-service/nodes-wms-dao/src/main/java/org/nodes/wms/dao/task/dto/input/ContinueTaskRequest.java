@@ -7,9 +7,9 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class CancelTaskRequest implements Serializable {
+public class ContinueTaskRequest implements Serializable {
 
-	private static final long serialVersionUID = 2617863679859114028L;
+	private static final long serialVersionUID = 3024478198258511862L;
 
 	/**
 	 * 任务id

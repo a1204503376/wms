@@ -1,17 +1,17 @@
 <template>
     <el-select
         v-model="val"
-        :default-first-option="true"
-        :collapse-tags="true"
         :clearable="true"
-        :multiple="multiple"
+        :collapse-tags="true"
+        :default-first-option="true"
         :loading="loading"
+        :multiple="multiple"
         :remote-method="remoteMethod"
+        :size="size"
         filterable
         placeholder="请输入关键词"
         remote
         reserve-keyword
-        :size="size"
         value-key="code"
         @change="onChange">
         <el-option
@@ -26,6 +26,7 @@
 <script>
 import debounce from "lodash/debounce";
 import {getLocationSelectResponseTop10List} from "@/api/wms/basics/location";
+import Func from "@/util/func";
 
 export default {
     name: "NodesLocation",
@@ -39,6 +40,8 @@ export default {
         multiple: {type: Boolean, required: false, default: false},
         // 组件大小，默认为mini, 支持 medium/small/mini
         size: {type: String, required: false, default: () => "mini"},
+        // 库存移动时，原库位编码。
+        sourceLocCode: {type: String, required: false, default: () => null}
     },
     data() {
         return {
@@ -62,6 +65,10 @@ export default {
                 };
                 let {data: {data}} = await getLocationSelectResponseTop10List(locationSelectQuery);
                 this.options = data;
+                // 库存移动时：过滤与原库位相等的目标库位
+                if (Func.isNotEmpty(this.sourceLocCode)) {
+                    this.options = data.filter(item => item.locCode !== this.sourceLocCode);
+                }
                 this.loading = false;
             } else {
                 this.options = [];
