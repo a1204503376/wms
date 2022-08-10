@@ -1,5 +1,6 @@
 package org.nodes.wms.dao.count.dto.output;
 
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -16,6 +17,7 @@ public class PdaSkuQtyResponse implements Serializable {
 	/**
 	 * 物品ID
 	 */
+	@com.fasterxml.jackson.databind.annotation.JsonSerialize(using = ToStringSerializer.class)
 	private Long skuId;
 	/**
 	 * 物品编码
@@ -32,4 +34,13 @@ public class PdaSkuQtyResponse implements Serializable {
 	 */
 	@JsonSerialize
 	private BigDecimal stockBalance;
+
+	/**
+	 * 箱号
+	 */
+	private String boxCode;
+	/**
+	 * 库位编码
+	 */
+	private String locCode;
 }

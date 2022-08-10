@@ -104,6 +104,23 @@
 			// #endif
 		},
 		methods: {
+			submit() {
+				if (this.isValid()) {
+                 //采集当前差异的数据然后生成差异报告
+				} else {
+					this.$u.func.showToast({
+						title: '请确认当前库存的差异状况，无误请点击无误，有差异请修改差异',
+					});
+				}
+			},
+			isValid() {
+				for (let i = 0; i < this.receiveList.pdaBoxQtyResponseList.length; i++) {
+					if (this.receiveList.pdaBoxQtyResponseList[i].isValid == false) {
+						return false;
+					}
+				}
+				return true;
+			},
 			updateStatesIsDiff(item,bool){
 				if(bool == 'success'){
 					item.isValid=true;
