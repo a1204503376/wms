@@ -23,25 +23,25 @@ public class PublishJobFactory {
 	/**
 	 * 创建发送任务请求对象
 	 *
-	 * @param putwayTask AGV任务
+	 * @param wmsTasks AGV任务
 	 * @return 发送任务请求对象
 	 */
-	public List<PublishJobRequest> createPublishJobRequestList(List<WmsTask> putwayTask){
+	public List<PublishJobRequest> createPublishJobRequestList(List<WmsTask> wmsTasks) {
 		List<PublishJobRequest> publishJobRequestList = new ArrayList<>();
-		putwayTask.forEach(task -> {
-			Sku sku  = skuBiz.findByCode(task.getSkuCode());
+		wmsTasks.forEach(task -> {
+			Sku sku = skuBiz.findByCode(task.getSkuCode());
 			PublishJobRequest publishJob = new PublishJobRequest();
-			publishJob.setWmsBillId(task.getBillId());
+			publishJob.setWmsTaskId(task.getTaskId());
 			publishJob.setWmsBillNo(task.getBillNo());
-			publishJob.setWmsBillType("上架");
-			publishJob.setWmsDetailId(task.getBillDetailId());
+			publishJob.setWmsBillType(task.getTaskTypeCd().getCode().toString());
+			publishJob.setWmsDetailId(task.getTaskId());
 			publishJob.setWmsLineNo("0");
 			publishJob.setWmsSkuCode(task.getSkuCode());
 			publishJob.setWmsSkuName(sku.getSkuName());
 			publishJob.setWmsQty(task.getTaskQty());
 			publishJob.setWmsUmCode(task.getUmCode());
 			publishJob.setWmsUmName(task.getUmCode());
-			publishJob.setJobType(task.getTaskTypeCd().getCode());
+			publishJob.setJobTypeCode(task.getTaskTypeCd().getCode());
 			publishJob.setLocationNameFrom(task.getFromLocCode());
 			publishJob.setLocationNameTo(task.getToLocCode());
 
@@ -68,10 +68,10 @@ public class PublishJobFactory {
 	 *
 	 * @return AGV取消任务请求对象
 	 */
-    public AgvJobRequest createCancelJobRequest() {
+	public AgvJobRequest createCancelJobRequest() {
 		AgvJobRequest agvJobRequest = new AgvJobRequest();
 		agvJobRequest.setWmsTaskId(0L);
 		agvJobRequest.setWmsTaskDetailId(0L);
 		return agvJobRequest;
-    }
+	}
 }
