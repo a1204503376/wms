@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <!--SRM天翼云地址-->
+  <baseUrl>http://116.8.106.85:5302/Software</baseUrl>
+  <name>Nodes.SRM.PrintLabel</name>
+  <version>1.0</version>
+</root>
