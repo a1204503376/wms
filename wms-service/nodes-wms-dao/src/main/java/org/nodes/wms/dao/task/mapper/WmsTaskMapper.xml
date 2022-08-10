@@ -39,4 +39,15 @@
 
         </where>
     </select>
+
+    <select id="getTaskByState" resultType="org.nodes.wms.dao.task.entities.WmsTask">
+        select *
+        from tsk_task
+        <where>
+            <if test="taskState != null and taskState != ''">
+                AND task_state=#{taskState}
+            </if>
+
+        </where>
+    </select>
 </mapper>
