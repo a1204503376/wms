@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using DataAccess.Enitiies;
 
@@ -15,6 +16,13 @@ namespace DataAccess.Dto
         public string SpeedClass { get; set; } = "";
         public string Qty { get; set; }
         public string BoxNumber { get; set; }
+        public string BoxNumberLabel
+        {
+            get
+            {
+                return $"{ConfigurationManager.AppSettings["BoxCodePrefix"]}{BoxNumber}";
+            }
+        }
 
         public string BoxNumberSuffix
         {

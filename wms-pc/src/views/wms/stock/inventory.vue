@@ -29,7 +29,7 @@ import fileDownload from "js-file-download";
                 <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="库存状态" label-width="90px">
-                            <NodesStockStatus v-model="form.params.stockStatusList" multiple="true"></NodesStockStatus>
+                            <NodesStockStatus v-model="form.params.stockStatusList" :multiple="true"></NodesStockStatus>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -94,13 +94,18 @@ import fileDownload from "js-file-download";
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
+                        <el-form-item label="货架列" label-width="90px">
+                            <el-input placeholder="请输入货架列" v-model="form.params.locColumn"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="6">
                         <el-form-item label="入库时间" label-width="90px">
                             <nodes-date-range v-model="form.params.lastInTimeDateRange" style="width: 200px">
                             </nodes-date-range>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row>
                     <el-col :span="6">
                         <el-form-item label="出库时间" label-width="90px">
                             <nodes-date-range v-model="form.params.lastOutTimeDateRange" style="width: 200px">
@@ -461,6 +466,7 @@ export default {
                     skuLot6: "",
                     whIdList: [],
                     woId: "",
+                    locColumn: '',
                     receiveTimeDateRange: "",
                     lastInTimeDateRange: "",
                     lastOutTimeDateRange: "",

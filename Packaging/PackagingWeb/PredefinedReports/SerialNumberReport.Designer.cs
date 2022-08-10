@@ -611,7 +611,7 @@ namespace PackagingWeb.PredefinedReports
             this.bcBoxNumber.AutoModule = true;
             this.bcBoxNumber.BarCodeOrientation = DevExpress.XtraPrinting.BarCode.BarCodeOrientation.RotateRight;
             this.bcBoxNumber.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
-            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[BoxNumber]")});
+            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[BoxNumberLabel]")});
             this.bcBoxNumber.LocationFloat = new DevExpress.Utils.PointFloat(948.3475F, 10F);
             this.bcBoxNumber.Module = 4.81F;
             this.bcBoxNumber.Name = "bcBoxNumber";
@@ -769,7 +769,7 @@ namespace PackagingWeb.PredefinedReports
             // 
             // objectDataSource1
             // 
-            this.objectDataSource1.DataSource = typeof(List<DataAccess.Dto.SerialNumberPrintDto>);
+            this.objectDataSource1.DataSource = typeof(System.Collections.Generic.List<DataAccess.Dto.SerialNumberPrintDto>);
             this.objectDataSource1.Name = "objectDataSource1";
             // 
             // SerialNumberReport
@@ -779,7 +779,7 @@ namespace PackagingWeb.PredefinedReports
             this.BottomMargin,
             this.Detail});
             this.ComponentStorage.AddRange(new System.ComponentModel.IComponent[] {
-                this.objectDataSource1});
+            this.objectDataSource1});
             this.DataSource = this.objectDataSource1;
             this.Font = new System.Drawing.Font("微软雅黑", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Landscape = true;

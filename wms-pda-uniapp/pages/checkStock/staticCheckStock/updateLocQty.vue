@@ -6,50 +6,54 @@
 		</u-navbar>
 		<u-divider text="" style="margin-top:0rpx;"></u-divider>
 		<u-divider text="暂无数据" v-if="noData"></u-divider>
+		<u-modal :show="show" :title="title" :content='content' cancelText='取消' :closeOnClickOverlay="true"
+			:showCancelButton="true" @confirm="confirm()" @cancel="close()" @close="close()"></u-modal>
 		<u-list style="height: 950rpx;" @scrolltolower="scrolltolower">
-			<u-row customStyle="margin-bottom: 10px">
-				<u-col span="4" class="left-text-one-line font-in-page">
-					<u--text class="demo-layout bg-purple-light" v-text="'箱号'"></u--text>
-				</u-col>
-				<u-col span="8" class="font-in-page">
-					<u-input></u-input>
-				</u-col>
-			</u-row>
-			<u-row customStyle="margin-bottom: 10px">
-				<u-col span="4" class="left-text-one-line  font-in-page">
-					<view>
-						<u--text class="demo-layout bg-purple-light" v-text="'库位'"></u--text>
-					</view>
-				</u-col>
-				<u-col span="8" class="font-in-page">
-					<u-input></u-input>
-				</u-col>
-			</u-row>
-			<u-row  customStyle="margin-bottom: 10px">
-				<u-col span="4" class="left-text-one-line font-in-page">
-					<u--text class="demo-layout bg-purple-light" v-text="'物品编码'"></u--text>
-				</u-col>
-				<u-col span="8" class="font-in-page">
-					<u-input></u-input>
-				</u-col>
-			</u-row>
-			<u-row customStyle="margin-bottom: 10px">
-				<u-col span="4" class="left-text-one-line font-in-page">
-					<view>
-						<u--text class="demo-layout bg-purple-light" v-text="'库存余额'"></u--text>
-					</view>
-				</u-col>
-				<u-col span="8" class="font-in-page">
-					<u-input></u-input>
-				</u-col>
-			</u-row>
-			<u-divider text=""></u-divider>
+			<view v-for="(item, index) in receiveList" :key="index">
+				<u-row customStyle="margin-bottom: 10px">
+					<u-col span="4" class="left-text-one-line font-in-page">
+						<u--text class="demo-layout bg-purple-light" v-text="'箱号'"></u--text>
+					</u-col>
+					<u-col span="8" class="font-in-page">
+						<u-input v-model="item.boxCode"></u-input>
+					</u-col>
+				</u-row>
+				<u-row customStyle="margin-bottom: 10px">
+					<u-col span="4" class="left-text-one-line  font-in-page">
+						<view>
+							<u--text class="demo-layout bg-purple-light" v-text="'库位'"></u--text>
+						</view>
+					</u-col>
+					<u-col span="8" class="font-in-page">
+						<u-input v-model="item.locCode"></u-input>
+					</u-col>
+				</u-row>
+				<u-row customStyle="margin-bottom: 10px">
+					<u-col span="4" class="left-text-one-line font-in-page">
+						<u--text class="demo-layout bg-purple-light" v-text="'物品编码'"></u--text>
+					</u-col>
+					<u-col span="8" class="font-in-page">
+						<u-input v-model="item.skuCode"></u-input>
+					</u-col>
+				</u-row>
+				<u-row customStyle="margin-bottom: 10px">
+					<u-col span="4" class="left-text-one-line font-in-page">
+						<view>
+							<u--text class="demo-layout bg-purple-light" v-text="'库存余额'"></u--text>
+						</view>
+					</u-col>
+					<u-col span="8" class="font-in-page">
+						<u-input v-model="item.stockBalance"></u-input>
+					</u-col>
+				</u-row>
+				<u-divider text=""></u-divider>
+			</view>
 		</u-list>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
 				返回
 			</view>
-			<view class="btn-cancle" @click="esc()">
+			<view class="btn-cancle" @click="submit()">
 				提交
 			</view>
 		</view>
@@ -58,8 +62,8 @@
 
 <script>
 	import setting from '@/common/setting'
-	import stockInquiry from '@/api/stock/stockInquiry.js'
 	import barcodeFunc from '@/common/barcodeFunc.js'
+	import staticCheckStock from '@/api/checkStock/staticCheckStock.js'
 	import tool from '@/utils/tool.js'
 	export default {
 		data() {
@@ -67,9 +71,11 @@
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
 					no: '',
-					type: ''
+					type: '',
+					stockBalance: 0
 				},
 				receiveList: [],
+				defaultList: [],
 				page: {
 					total: 0,
 					size: 7,
@@ -80,14 +86,17 @@
 				status: 'loadmore',
 				loadmore: false,
 				noData: false,
-				title: '开始盘点',
+				title: '确认提交',
+				show: false,
+				content: '确认当前总数量为'
 			}
 		},
 		onLoad: function(option) {
+			uni.setStorageSync('isaListAsDefaultList', '')
 			var parse = JSON.parse(option.param);
-			this.title = parse.skuCode + '开始盘点';
-			this.params = parse;
-			this.params.no = '0';
+			this.params.boxCode = parse.boxCode;
+			this.params.locCode = parse.locCode;
+			this.params.totalQty = parse.totalQty;
 			this.getReceiveList();
 		},
 		onUnload() {
@@ -105,6 +114,38 @@
 			// #endif
 		},
 		methods: {
+			confirm() {
+				console.log(this.isListAsDefaultList())
+				if (this.isListAsDefaultList()) {
+					this.esc();
+				} else {
+					uni.setStorageSync('isListAsDefaultList', this.receiveList)
+					this.esc();
+				}
+			},
+			close() {
+				this.show = false;
+			},
+			submit() {
+				this.params.stockBalance = 0;
+				this.receiveList.forEach((item, index) => { //js遍历数组
+					this.params.stockBalance = Number(item.stockBalance) + Number(this.params.stockBalance);
+				});
+				this.content = '确认当前总数量为' + this.params.stockBalance;
+				this.show = true;
+			},
+			isListAsDefaultList() {
+				console.log(this.receiveList)
+				console.log(this.defaultList)
+				for (let i = 0; i < this.receiveList.length; i++) {
+					if (Number(this.receiveList[i].stockBalance) !== Number(this.defaultList[i].stockBalance)) {
+						return false;
+					} else {
+						continue;
+					}
+				}
+				return true;
+			},
 			updateLocQty(row) {
 				uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/updateLocQty', row);
 			},
@@ -152,10 +193,9 @@
 				this.loadmore = true;
 				this.status = 'loading';
 				this.page.current = 1;
-				this.analysisCode(this.params.no);
 				this.params.whId = uni.getStorageSync('warehouse').whId;
-				stockInquiry.findAllStockByNo(this.params, this.page).then(data => {
-					if (data.data.records.length > 0) {
+				staticCheckStock.findPdaSkuQtyResponseList(this.params, this.page).then(data => {
+					if (data.data.length > 0) {
 						this.status = 'loading';
 						this.loadmore = true;
 						this.noData = false;
@@ -163,7 +203,12 @@
 						this.loadmore = false;
 						this.noData = true;
 					}
-					this.receiveList = data.data.records;
+					data.data.forEach((item, index) => { //js遍历数组
+						item.boxCode = this.params.boxCode;
+						item.locCode = this.params.locCode;
+						this.receiveList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
+						this.defaultList.push(item)
+					});
 					if (this.receiveList.length < 7) {
 						this.loadmore = false;
 					}
@@ -189,11 +234,14 @@
 				this.divider = false;
 				this.page.current++;
 				this.params.whId = uni.getStorageSync('warehouse').whId;
-				stockInquiry.findAllStockByNo(this.params, this.page).then(data => {
-					if (data.data.records.length > 0) {
+				staticCheckStock.findPdaSkuQtyResponseList(this.params, this.page).then(data => {
+					if (data.data.length > 0) {
 						this.status = 'loading';
-						data.data.records.forEach((item, index) => { //js遍历数组
+						data.data.forEach((item, index) => { //js遍历数组
+							item.boxCode = this.params.boxCode;
+							item.locCode = this.params.locCode;
 							this.receiveList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
+							this.defaultList.push(item)
 						});
 					} else {
 						this.status = 'nomore';

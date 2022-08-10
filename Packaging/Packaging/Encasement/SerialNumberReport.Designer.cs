@@ -609,7 +609,7 @@
             this.bcBoxNumber.AutoModule = true;
             this.bcBoxNumber.BarCodeOrientation = DevExpress.XtraPrinting.BarCode.BarCodeOrientation.RotateRight;
             this.bcBoxNumber.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
-            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[BoxNumber]")});
+            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[BoxNumberLabel]")});
             this.bcBoxNumber.LocationFloat = new DevExpress.Utils.PointFloat(948.3475F, 10F);
             this.bcBoxNumber.Module = 4.81F;
             this.bcBoxNumber.Name = "bcBoxNumber";

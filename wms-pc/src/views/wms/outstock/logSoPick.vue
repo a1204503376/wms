@@ -194,12 +194,13 @@
 </template>
 
 <script>
+
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import {listMixin} from "@/mixins/list";
-import {exportExcel, getPage} from "@/api/wms/outstock/logSoPick"
+import {cancelOutstock, exportExcel, getPage} from "@/api/wms/outstock/logSoPick"
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js'
 import {nowDateFormat} from "@/util/date";
@@ -406,16 +407,27 @@ export default {
             this.exportCurrentDataToExcel("发货记录", "发货记录")
         },
         cancelOutstock() {
+            let rows = this.$refs.table.selection;
+            if (func.isEmpty(rows)) {
+                this.$message.warning("至少选择一条记录撤销");
+                return;
+            }
+            let lsopIdList = rows.map(row => row.lsopId);
+            for (const i in lsopIdList) {
+                if(lsopIdList[i] < 0){
+                    this.$message.error("撤销失败，选择的记录中不允许有已撤销的记录")
+                    return;
+                }
+            }
             this.$confirm("确定撤销选中的记录?", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning",
             }).then(() => {
-                let rows = this.$refs.table.selection;
-                if (func.isEmpty(rows)) {
-                    this.$message.warning("至少选择一条记录撤销");
-                    return;
-                }
+                cancelOutstock(lsopIdList).then((res)=>{
+                    this.$message.success(res.data.msg);
+                    this.getTableData();
+                })
             });
         },
         createReceiveBill() {
@@ -432,7 +444,7 @@ export default {
             })
         },
         cellStyle({row, column}) {
-            if (row.qty < 0 && column.property === 'qty') {
+            if (row.pickRealQty < 0 && column.property === 'pickRealQty') {
                 return "background-color: #FF6666"
             }
         },
