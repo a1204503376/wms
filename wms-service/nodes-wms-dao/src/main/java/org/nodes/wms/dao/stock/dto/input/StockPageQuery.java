@@ -76,6 +76,10 @@ public class StockPageQuery implements Serializable {
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long woId;
 	/**
+	 * 货架列
+	 */
+	private String locColumn;
+	/**
 	 * 最近入库时间开始
 	 */
 	private LocalDateTime lastInTimeBegin;
