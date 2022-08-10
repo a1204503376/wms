@@ -230,16 +230,27 @@ public class OutStockBizImpl implements OutStockBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void cancelOutstock(List<Long> logSoPickIdList) {
-
 		// 根据拣货记录id查找所有的拣货记录
 		List<LogSoPick> logSoPickList = logSoPickDao.getByIds(logSoPickIdList);
-		// 生成一笔反向的拣货记录
 		logSoPickList.forEach(logSoPick -> {
-			// logSoPickDao.
+			// 判断收货记录中是否存在撤销数为负数的，有就抛异常
+			if (BigDecimalUtil.lt(logSoPick.getPickRealQty(), BigDecimal.ZERO)) {
+				throw new ServiceException("撤销失败，选择的记录中不允许有已撤销的记录");
+			}
+			// 根据拣货记录下架库存
+			stockBiz.outStockByCancelPick(StockLogTypeEnum.INSTOCK_BY_CANCEL_PICK, logSoPick);
+			// 生成一笔反向的拣货记录
+			logSoPick.setLsopId(null);
+			logSoPick.setPickRealQty(logSoPick.getPickRealQty().negate());
+			logSoPickDao.saveLogSoPick(logSoPick);
+			// 更新发货单明细状态与实收数量
+			SoDetail soDetail = soDetailBiz.getSoDetailById(logSoPick.getSoDetailId());
+			soDetailBiz.updateSoDetailStatus(soDetail, logSoPick.getPickRealQty());
+			// 更新发货单头表状态
+			SoHeader soHeader = soHeaderBiz.getSoHeaderById(logSoPick.getSoBillId());
+			soHeaderBiz.updateSoBillState(soHeader);
+			// 记录业务日志
+			logBiz.auditLog(AuditLogType.OUTSTOCK, soHeader.getSoBillId(), soHeader.getSoBillNo(), "撤销收货");
 		});
-		// 根据拣货记录下架库存
-		// 更新发货单明细状态与实收数量
-		// 更新发货单头表状态
-		// 记录业务日志
 	}
 }
