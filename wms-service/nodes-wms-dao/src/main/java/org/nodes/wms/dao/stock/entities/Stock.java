@@ -139,7 +139,15 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	@Version
 	private Integer version;
 
+	/**
+	 * 关联任务id
+	 */
 	private String taskId;
+
+	/**
+	 * 是否有序列号,1有序列号
+	 */
+	private Integer hasSerial;
 
 	/**
 	 * 库存余额,序列化成json为stockBalance

@@ -2,7 +2,6 @@ package org.nodes.wms.dao.application.dto.scheduling;
 
 import lombok.Data;
 import org.apache.commons.lang3.BooleanUtils;
-import org.springframework.util.Assert;
 
 /**
  * 调度系统全局返回结果对象
@@ -30,8 +29,7 @@ public class SchedulingGlobalResponse {
 		return schedulingGlobal;
 	}
 
-	public static boolean hasException(SchedulingGlobalResponse schedulingGlobal) {
-		Assert.notNull(schedulingGlobal, "请求调度系统异常对象为空");
-		return BooleanUtils.isTrue(schedulingGlobal.getFlagException());
+	public boolean hasException() {
+		return BooleanUtils.isTrue(flagException);
 	}
 }

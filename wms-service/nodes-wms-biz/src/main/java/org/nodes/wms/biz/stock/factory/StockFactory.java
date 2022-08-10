@@ -1,6 +1,8 @@
 package org.nodes.wms.biz.stock.factory;
 
 import lombok.RequiredArgsConstructor;
+
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -66,11 +69,17 @@ public class StockFactory {
 		stock.setWhCode(receiveLog.getWhCode());
 		stock.setWoId(receiveLog.getWoId());
 
+		if (Func.isNotEmpty(receiveLog.getSnCode())) {
+			stock.setHasSerial(WmsAppConstant.TRUE_DEFAULT);
+		} else {
+			stock.setHasSerial(WmsAppConstant.FALSE_DEFAULT);
+		}
+
 		return stock;
 	}
 
 	public Stock create(Stock sourceStock, Location targetLocation,
-			String targetLpnCode, String targetBoxCode, BigDecimal qty) {
+			String targetLpnCode, String targetBoxCode, BigDecimal qty, List<String> serialNoList) {
 		AssertUtil.notNull(sourceStock, "创建库存失败，原库存为空");
 		AssertUtil.notNull(targetLocation, "创建库存失败，目标库位为空");
 		AssertUtil.notNull(qty, "创建库存失败，数量为空");
@@ -89,6 +98,12 @@ public class StockFactory {
 		targetStock.setZoneCode(zone.getZoneCode());
 		targetStock.setLastInTime(LocalDateTime.now());
 		targetStock.setStockStatus(targetLocation.defaultStockStatus());
+
+		if (Func.isNotEmpty(serialNoList)) {
+			targetStock.setHasSerial(WmsAppConstant.TRUE_DEFAULT);
+		} else {
+			targetStock.setHasSerial(WmsAppConstant.FALSE_DEFAULT);
+		}
 
 		return targetStock;
 	}

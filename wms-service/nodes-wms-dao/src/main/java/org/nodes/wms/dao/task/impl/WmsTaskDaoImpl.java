@@ -53,4 +53,9 @@ public class WmsTaskDaoImpl
 	public List<WmsTask> getTaskByIds(List<Long> taskIdList) {
 		return super.listByIds(taskIdList);
 	}
+
+	@Override
+	public List<WmsTask> getTaskByState(int taskState) {
+		return super.baseMapper.getTaskByState(taskState);
+	}
 }

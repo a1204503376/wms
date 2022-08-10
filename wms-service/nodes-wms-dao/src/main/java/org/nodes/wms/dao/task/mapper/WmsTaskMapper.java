@@ -8,6 +8,8 @@ import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
 import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.nodes.wms.dao.task.entities.WmsTask;
 
+import java.util.List;
+
 /**
  * @author nodesc
  */
@@ -20,4 +22,12 @@ public interface WmsTaskMapper extends BaseMapper<WmsTask> {
 	 * @return 分页对象
 	 */
 	Page<TaskPageResponse> getPage(IPage<Object> page, @Param("query") TaskPageQuery taskPageQuery);
+
+	/**
+	 * 根据状态获取任务
+	 *
+	 * @param taskState 查询参数
+	 * @return 分页对象
+	 */
+	List<WmsTask> getTaskByState(int taskState);
 }

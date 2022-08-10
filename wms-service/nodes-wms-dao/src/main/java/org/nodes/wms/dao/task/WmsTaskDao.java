@@ -39,4 +39,12 @@ public interface WmsTaskDao extends BaseService<WmsTask> {
 	 * @return 任务
 	 */
 	List<WmsTask> getTaskByIds(List<Long> taskIdList);
+
+	/**
+	 * 根据状态获取任务
+	 *
+	 * @param taskState 查询参数
+	 * @return 分页对象
+	 */
+	List<WmsTask> getTaskByState(int taskState);
 }
