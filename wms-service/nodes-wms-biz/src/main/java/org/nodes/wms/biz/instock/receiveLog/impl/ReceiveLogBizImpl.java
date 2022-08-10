@@ -129,7 +129,11 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setBoxCode(request.getBoxCode());
 		receiveLog.setSnCode(lpn.getSnCode());
 		receiveLog.setQty(item.getPlanQty());
-		receiveLog.setLpnCode(request.getLpnCode());
+		if (Func.isEmpty(request.getLpnCode())) {
+			receiveLog.setLpnCode(request.getBoxCode());
+		} else {
+			receiveLog.setLpnCode(request.getLpnCode());
+		}
 		receiveLog.setLocCode(request.getLocCode());
 		receiveLog.setSkuCode(detail.getSkuCode());
 		receiveLog.setSkuName(detail.getSkuName());

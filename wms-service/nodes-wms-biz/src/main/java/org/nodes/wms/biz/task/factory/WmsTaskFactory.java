@@ -89,13 +89,21 @@ public class WmsTaskFactory {
 		wmsTask.setScanQty(StockUtil.getStockBalance(stockList));
 		// 计量单位编码
 		wmsTask.setUmCode(stockList.get(0).getWsuCode());
+		//来源库位ID
+		wmsTask.setFromLocId(stockList.get(0).getLocId());
+		//来源库位编码
+		wmsTask.setFromLocCode(stockList.get(0).getLocCode());
 		// 批次号为空
 		// 箱码
 		wmsTask.setBoxCode(stockList.get(0).getBoxCode());
-		// 工作任务包ID为空
+		// 工作任务包ID
+		wmsTask.setTtpId(stockList.get(0).getStockId());
 		// 库房id
 		wmsTask.setWhId(stockList.get(0).getWhId());
+		// lpn
+		wmsTask.setLpnCode(stockList.get(0).getLpnCode());
 		// 工作区ID为空
+		wmsTask.setWwaId(stockList.get(0).getStockId());
 		// 用户ID为空
 		// 用户编码为空
 		// 用户名称为空
