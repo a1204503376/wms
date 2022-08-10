@@ -57,6 +57,7 @@ public class LogSoPickFactory {
 		}
 		logSoPick.setSnCode(serailNumber.toString());
 		logSoPick.setStockStatus(stock.getStockStatus());
+		logSoPick.setWoId(stock.getWoId());
 		SkuLotUtil.setAllSkuLot(stock, logSoPick);
 		return logSoPick;
 	}
