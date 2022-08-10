@@ -11,13 +11,25 @@ namespace Packaging
     internal static class Program
     {
         [DllImport("User32.dll")]
-        public static extern bool ShowWindowAsync(IntPtr hWnd, int cmdShow);
+        private static extern bool ShowWindowAsync(IntPtr hWnd, int cmdShow);
         [DllImport("User32.dll")]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
 
         [STAThread]
         private static void Main() 
         {
+            if (CheckUpdate())
+            {
+                var pro = new Process
+                {
+                    StartInfo = new ProcessStartInfo(
+                        Application.StartupPath + System.IO.Path.DirectorySeparatorChar + "TUpdater.exe",
+                        Application.ExecutablePath)
+                };
+                pro.Start();
+                return;
+            }
+
             Log.Logger = new LoggerConfiguration()
                     //设置最小日志级别
                     .MinimumLevel.Debug()
@@ -51,6 +63,18 @@ namespace Packaging
             {
                 HandleRunningInstance(instance);
             }
+        }
+
+        /// <summary>
+        /// 检查是否需要更新
+        /// </summary>
+        /// <returns>结果 true-更新 false-不更新</returns>
+        private static bool CheckUpdate()
+        {
+            var mainAppExecutablePath = Application.ExecutablePath;
+            var appVersionManager = new TUpdater.Updater.AppVersionManager();
+            var updateService = new TUpdater.Updater.UpdateService(appVersionManager);
+            return updateService.NeedUpdate(mainAppExecutablePath);
         }
 
         private static Process RunningInstance()

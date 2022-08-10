@@ -25,49 +25,6 @@ namespace Packaging
         public bool ShouldRun { get; } = true;
 
         /// <summary>
-        /// 检查是否需要更新
-        /// </summary>
-        /// <returns>结果 true-更新 false-不更新</returns>
-        private bool CheckUpdate()
-        {
-            return false;
-            // var strManifestFile = Application.StartupPath + "\\manifest.xml";
-            // var strServerFile = string.Empty;
-            //
-            // try
-            // {
-            //     //从本地读取更新配置文件信息
-            //     _xmlUpdater = new XmlFiles(strManifestFile);
-            //
-            //     //获取服务器地址
-            //     _updateUrl = _xmlUpdater.GetNodeValue("//Url");
-            //
-            //     var appUpdater = new AppUpdater
-            //     {
-            //         UpdaterUrl = _updateUrl + "/manifest.xml"
-            //     };
-            //
-            //     _tempUpdatePath = Environment.GetEnvironmentVariable("Temp") + "\\" + "_" + _xmlUpdater.FindNode("//Application").Attributes["applicationId"].Value + "\\";
-            //     appUpdater.DownAutoUpdateFile(_tempUpdatePath);
-            //
-            //     //获取更新文件列表
-            //     var htUpdateFile = new Hashtable();
-            //     strServerFile = _tempUpdatePath + "\\manifest.xml";
-            //
-            //     _availableUpdate = appUpdater.CheckForUpdate(strServerFile, strManifestFile, out htUpdateFile);
-            //     if (_availableUpdate > 0)
-            //     {
-            //         return true;
-            //     }
-            // }
-            // catch (Exception ex)
-            // {
-            //     XtraMessageBox.Show(ex.Message);
-            // }
-            // return false;
-        }
-
-        /// <summary>
         /// Initializes a new instance of the MainApplicationContext class.
         /// </summary>
         public MainApplicationContext()
@@ -84,20 +41,6 @@ namespace Packaging
                 this._logonDialog.OkClicked += new EventHandler(this.logonDialog_OkClicked);
                 if (this._logonDialog.ShowDialog() == DialogResult.OK)
                 {
-                    if (CheckUpdate())
-                    {
-                        var pro = new Process();
-
-                        var appPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-                        pro.StartInfo.FileName = Application.StartupPath + System.IO.Path.DirectorySeparatorChar + "Updater.exe";
-                        pro.StartInfo.CreateNoWindow = true;
-                        pro.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
-                        pro.Start();
-
-                        this.ShouldRun = false;
-                        this.ExitThread();
-                    }
-
                     var formMain = new MainForm();
                     formMain.FormClosed += new FormClosedEventHandler(formMain_FormClosed);
 

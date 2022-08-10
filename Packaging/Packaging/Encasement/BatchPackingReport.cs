@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using DataAccess.Dto;
@@ -51,14 +52,19 @@ namespace Packaging.Encasement
         {
             try
             {
-                ReceiveDetailLpnDal.Save(_batchPrintDtoList.First().ReceiveDetailLpns);
+                SaveData();
             }
             catch (Exception ex)
             {
                 e.Cancel = true;
-                Serilog.Log.Fatal("序列号打印前入库保存异常：{}",ex);
-                CustomMessageBox.Exception($"序列号打印前入库保存异常:{ex.GetOriginalException().Message}");
+                Serilog.Log.Fatal("打印前入库保存异常：{}",ex);
+                CustomMessageBox.Exception($"打印前入库保存异常:{ex.GetOriginalException().Message}");
             }
+        }
+
+        private void SaveData()
+        {
+            ReceiveDetailLpnDal.Save(_batchPrintDtoList.First().ReceiveDetailLpns);
         }
 
         private void SerialNumberReport_BeforePrint(object sender, System.Drawing.Printing.PrintEventArgs e)
@@ -82,6 +88,27 @@ namespace Packaging.Encasement
             }
 
             printDto.ReceiveDetailLpns.ForEach(d => { d.BoxCode = boxNumber; });
+
+            SavePrintPreView();
+        }
+
+        private void SavePrintPreView()
+        {
+            bool savePrintPreviewFlag = Convert.ToBoolean(ConfigurationManager.AppSettings["SavePrintPreviewFlag"]);
+            if (!savePrintPreviewFlag)
+            {
+                return;
+            }
+
+            try
+            {
+                SaveData();
+            }
+            catch (Exception ex)
+            {
+                Serilog.Log.Fatal("预览时入库保存异常:{}", ex);
+                CustomMessageBox.Exception($"预览时入库保存异常:{ex.GetOriginalException().Message}");
+            }
         }
     }
 }
