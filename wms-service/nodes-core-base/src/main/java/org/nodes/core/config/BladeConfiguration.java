@@ -52,7 +52,7 @@ public class BladeConfiguration implements WebMvcConfigurer {
 		secureRegistry.excludePathPatterns("/swagger-resources/**");
 		secureRegistry.excludePathPatterns("/druid/**");
 		secureRegistry.excludePathPatterns("/api/ApiPDA/token");
-		secureRegistry.excludePathPatterns(WmsApiPath.SCHEDULING_SYSTEM_API+ "/generateBoxCode");
+		secureRegistry.excludePathPatterns(WmsApiPath.SCHEDULING_SYSTEM_API+ "/**");
 		return secureRegistry;
 	}
 

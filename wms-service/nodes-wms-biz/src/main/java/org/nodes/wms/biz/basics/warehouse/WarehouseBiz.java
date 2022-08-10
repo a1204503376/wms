@@ -52,14 +52,11 @@ public interface WarehouseBiz {
 	List<WarehousePdaResponse> getWarehouseResponseByUser(BladeUser user);
 
 	/**
-	 * 新增库房之后初始化库区、库位
-	 * 默认创建如下虚拟库位：STAGE（入库集货区）、QC（入库检验区）、
-	 * PICKTO（出库集货区）、PACK（打包区）、UNKNOWN（未知库位）、
-	 * INTRANSIT（库内虚拟区）；默认的库位编码为库房编码加上述库位编码，中间用-隔开
+	 * 新增库房之后初始化库区、库位,编码格式已库房编码-开头
 	 *
 	 * @param warehouse: 库房对象
 	 */
-	void afterNewWarehouse(Warehouse warehouse);
+	void initZoneAndLocAfterNewWarehouse(Warehouse warehouse);
 
 	/**
 	 * 授权

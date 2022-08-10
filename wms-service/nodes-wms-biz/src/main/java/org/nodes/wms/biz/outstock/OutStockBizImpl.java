@@ -3,6 +3,7 @@ package org.nodes.wms.biz.outstock;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.DictCodeConstant;
+import org.nodes.core.constant.DictKVConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
@@ -89,7 +90,7 @@ public class OutStockBizImpl implements OutStockBiz {
 			LogSoPick logSoPick = logSoPickFactory.createLogSoPick(pickByPcStockDto, soHeader, soDetail, stock);
 			logSoPickDao.saveLogSoPick(logSoPick);
 			Location location = locationBiz
-					.getLocationByZoneType(stock.getWhId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO).get(0);
+					.getLocationByZoneType(stock.getWhId(), DictKVConstant.ZONE_TYPE_OF_PICK_TO).get(0);
 			// 3 移动库存到出库集货区
 			stockBiz.moveStock(stock, pickByPcStockDto.getSerailList(), pickByPcStockDto.getOutStockQty(),
 					location, StockLogTypeEnum.OUTSTOCK_BY_PC, soHeader.getSoBillId(), soHeader.getSoBillNo(),

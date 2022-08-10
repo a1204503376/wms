@@ -14,6 +14,7 @@ import org.nodes.wms.core.warehouse.cache.ZoneCache;
 import org.nodes.wms.core.warehouse.dto.ZoneDTO;
 import org.nodes.wms.core.warehouse.entity.Location;
 import org.nodes.wms.core.warehouse.enums.LocTypeEnum;
+import org.nodes.wms.core.warehouse.enums.ZoneTypeEnum;
 import org.nodes.wms.core.warehouse.excel.ZoneExcel;
 import org.nodes.wms.core.warehouse.mapper.ZoneMapper;
 import org.nodes.wms.core.warehouse.service.ILocationService;
@@ -24,7 +25,6 @@ import org.nodes.wms.core.warehouse.wrapper.ZoneWrapper;
 import org.nodes.wms.dao.application.dto.output.DictionaryResponse;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
-import org.nodes.wms.dao.basics.zone.enums.ZoneTypeEnum;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -63,7 +63,7 @@ public class ZoneServiceImpl<M extends ZoneMapper, T extends Zone>
 		for (Serializable id : idList) {
 			Zone zone = super.getById(id);
 			String zoneCode = zone.getZoneCode();
-			if (ZoneTypeEnum.VIRTUAL.getCode().equals((zone.getZoneType()))
+			if (ZoneTypeEnum.VIRTUAL.getIndex().equals((zone.getZoneType()))
 				&& StringUtil.contains(zoneCode, '-')
 				&& ZoneTypeEnum.VIRTUAL.toString().equals(StringUtil.subAfter(zoneCode, "-", true))) {
 				throw new ServiceException(String.format("删除失败，库区[编码：%s, 名称：%s] 是系统虚拟库区无法删除！", zoneCode, zone.getZoneName()));

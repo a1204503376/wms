@@ -103,4 +103,60 @@ public interface WmsAppConstant {
 	 * 批属性：批属性的总个数
 	 */
 	int SKU_LOT_TOTAL_NUM = 30;
+
+	/**
+	 * 入库暂存区，属于入库暂存区
+	 */
+	String LOC_STAGE = "STAGE";
+
+	/**
+	 * 入库质检区,属于入库质检区
+	 */
+	String LOC_QC = "QC";
+
+	/**
+	 * 出库集货区，属于出库集货区
+	 */
+	String LOC_PICKTO = "PICKTO";
+
+	/**
+	 * 打包区
+	 */
+	String LOC_PACK = "PACK";
+
+	/**
+	 * 未知库位，属于虚拟库区类型
+	 */
+	String LOC_UNKNOWN = "UNKNOWN";
+
+	/**
+	 * 库内中间库位，属于虚拟库区类型
+	 */
+	String LOC_INTRANSIT = "INTRANSIT";
+
+	/**
+	 * 系统创建的默认库位
+	 */
+	String[] LOC_BY_SYSTEM_CREATED =
+		new String[]{LOC_STAGE, LOC_QC, LOC_PICKTO, LOC_UNKNOWN, LOC_INTRANSIT};
+
+	/**
+	 * 虚拟库区
+	 */
+	String ZONE_VIRTUAL = "VIRTUAL";
+
+	/**
+	 * 系统自动创建的默认库区
+	 */
+	String[] ZONE_BY_SYSTEM_CREATED =
+		new String[]{LOC_STAGE, LOC_QC, LOC_PICKTO, ZONE_VIRTUAL};
+
+	/**
+	 * D箱人工拣货区(天宜定制)
+	 */
+	String ZONE_CODE_D_PICK_AREA = "WH1-D";
+	/**
+	 * agv发货接驳区(天宜定制)
+	 */
+	String ZONE_CODE_AGV_SHIPMENT_CONNECTION_AREA = "WH1-AGV-PICKTO";
 }

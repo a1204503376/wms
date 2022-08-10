@@ -2,6 +2,7 @@ package org.nodes.wms.biz.stockManage.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.DictCodeConstant;
+import org.nodes.core.constant.DictKVConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
@@ -383,7 +384,7 @@ public class StockManageBizImpl implements StockManageBiz {
 	 */
 	private void canMoveToLoc(Location targetLocation) {
 		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
-		List<Location> outStockShippingLocationList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OF_PICK_TO);
+		List<Location> outStockShippingLocationList = locationBiz.getLocationByZoneType(DictKVConstant.ZONE_TYPE_OF_PICK_TO);
 		Location outStockShippingLocation = outStockShippingLocationList
 			.stream()
 			.filter(location -> Func.equals(location.getLocId(), targetLocation.getLocId()))
@@ -393,7 +394,7 @@ public class StockManageBizImpl implements StockManageBiz {
 			throw new ServiceException("库存移动时不能移动到出库集货区");
 		}
 
-		List<Location> virtualLocationList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_VIRTUAL_AREA);
+		List<Location> virtualLocationList = locationBiz.getLocationByZoneType(DictKVConstant.ZONE_TYPE_VIRTUAL_AREA);
 		Location virtualLocation = virtualLocationList.stream()
 			.filter(location -> Func.equals(location.getLocId(), targetLocation.getLocId()))
 			.findFirst()

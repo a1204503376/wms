@@ -96,7 +96,6 @@ public class Warehouse extends TenantEntity implements Serializable {
 	 */
 	@ApiModelProperty(value = "入库质检区")
 	@JsonSerialize(using = ToStringSerializer.class)
-	@TableField(exist = false)
 	private Long qc;
 	/**
 	 * 包装暂存区
@@ -104,6 +103,11 @@ public class Warehouse extends TenantEntity implements Serializable {
 	@ApiModelProperty(value = "包装暂存区")
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long pack;
+
+	/**
+	 * 虚拟库区
+	 */
+	private Long virtualZone;
 	/**
 	 * 移动暂存区
 	 */

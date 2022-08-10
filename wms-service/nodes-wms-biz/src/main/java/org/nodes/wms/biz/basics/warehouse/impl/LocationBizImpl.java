@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.ArrayUtils;
 import org.nodes.core.base.entity.Dict;
 import org.nodes.core.constant.DictCodeConstant;
-import org.nodes.core.constant.LocationConstant;
+import org.nodes.core.constant.DictKVConstant;
 import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
@@ -116,7 +116,7 @@ public class LocationBizImpl implements LocationBiz {
 			if (Func.isNotEmpty(location.getLocType())
 				&& location.getLocType().equals(LocTypeEnum.Virtual.key())
 				&& StringUtil.contains(locCode, '-')
-				&& ArrayUtils.contains(LocationConstant.getLocTypes(), StringUtil.subAfter(locCode, "-", true))) {
+				&& ArrayUtils.contains(WmsAppConstant.LOC_BY_SYSTEM_CREATED, StringUtil.subAfter(locCode, "-", true))) {
 				throw new ServiceException(String.format("库位[编码：%s]是系统生成虚拟库位不可删除", location.getLocCode()));
 			}
 		}
@@ -132,13 +132,13 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public List<Location> getAllUnknownLocation() {
-		List<String> unknownLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_UNKNOWN);
+		List<String> unknownLocCodeList = getLocCodeOfSystemCreated(WmsAppConstant.LOC_UNKNOWN);
 		return locationDao.findLocation(unknownLocCodeList);
 	}
 
 	@Override
 	public List<Location> getAllInTransitLocation() {
-		List<String> inTransitLocCodeList = getLocCodeOfSystemCreated(LocationConstant.LOC_INTRANSIT);
+		List<String> inTransitLocCodeList = getLocCodeOfSystemCreated(WmsAppConstant.LOC_INTRANSIT);
 		return locationDao.findLocation(inTransitLocCodeList);
 	}
 
@@ -213,7 +213,7 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isPickToLocation(Location location) {
-		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictCodeConstant.ZONE_TYPE_OF_PICK_TO);
+		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_OF_PICK_TO);
 	}
 
 	@Override
@@ -250,51 +250,51 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public void unfreezeLocByTask(String taskId) {
-		locationDao.updateLocFlag(taskId, LocationConstant.LOC_FLAG_NORMAL, true);
+		locationDao.updateLocFlag(taskId, DictKVConstant.LOC_FLAG_NORMAL, true);
 	}
 
 	@Override
 	public boolean isAgvTempOfZoneType(Long locId) {
 		Integer zoneType = locationDao.getZoneTypeByLocId(locId);
-		return DictCodeConstant.ZONE_TYPE_AUTOMATION_TEMPORARY_AREA.equals(zoneType);
+		return DictKVConstant.ZONE_TYPE_AUTOMATION_TEMPORARY_AREA.equals(zoneType);
 	}
 
 	@Override
 	public boolean isAgvZone(Long locId) {
 		Integer zoneType = locationDao.getZoneTypeByLocId(locId);
-		return DictCodeConstant.ZONE_TYPE_AUTOMATION_STORAGE_AREA.equals(zoneType)
-			|| DictCodeConstant.ZONE_TYPE_AUTOMATION_PICKING_AREA.equals(zoneType)
-			|| DictCodeConstant.ZONE_TYPE_AUTOMATION_CHOICE_AREA.equals(zoneType)
-			|| DictCodeConstant.ZONE_TYPE_AUTOMATION_TEMPORARY_AREA.equals(zoneType);
+		return DictKVConstant.ZONE_TYPE_AUTOMATION_STORAGE_AREA.equals(zoneType)
+			|| DictKVConstant.ZONE_TYPE_AUTOMATION_PICKING_AREA.equals(zoneType)
+			|| DictKVConstant.ZONE_TYPE_AUTOMATION_CHOICE_AREA.equals(zoneType)
+			|| DictKVConstant.ZONE_TYPE_AUTOMATION_TEMPORARY_AREA.equals(zoneType);
 	}
 
 	@Override
 	public void freezeLocByTask(Long locationId, String taskId) {
 		AssertUtil.notEmpty(taskId, "系统冻结库位失败,根据任务系统冻结库位时必须要指定系统任务标识");
-		locationDao.updateLocFlag(locationId, LocationConstant.LOC_FLAG_SYSTEM_FORZEN, taskId);
+		locationDao.updateLocFlag(locationId, DictKVConstant.LOC_FLAG_SYSTEM_FORZEN, taskId);
 	}
 
 	@Override
 	public boolean isVirtualLocation(Location location) {
-		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictCodeConstant.ZONE_TYPE_VIRTUAL_AREA);
+		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_VIRTUAL_AREA);
 	}
 
 	@Override
 	public boolean isPickLocation(Location location) {
-		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictCodeConstant.ZONE_TYPE_PICK);
+		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_PICK);
 	}
 
 	@Override
 	public boolean isStageLocation(Location location) {
-		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictCodeConstant.ZONE_TYPE_OF_STAGE);
+		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_OF_STAGE);
 	}
 
 	@Override
 	public boolean isAgvLocation(Location location) {
-		if (getLocationByZoneType(location.getWhId(), location.getLocId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_STORAGE_AREA)
-			|| getLocationByZoneType(location.getWhId(), location.getLocId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_PICKING_AREA)
-			|| getLocationByZoneType(location.getWhId(), location.getLocId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_CHOICE_AREA)
-			|| getLocationByZoneType(location.getWhId(), location.getLocId(), DictCodeConstant.ZONE_TYPE_AUTOMATION_TEMPORARY_AREA)) {
+		if (getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_AUTOMATION_STORAGE_AREA)
+			|| getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_AUTOMATION_PICKING_AREA)
+			|| getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_AUTOMATION_CHOICE_AREA)
+			|| getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_AUTOMATION_TEMPORARY_AREA)) {
 			return true;
 		}
 		return false;
