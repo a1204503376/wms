@@ -6,7 +6,7 @@ import com.nodes.framework.web.domain.SimpleEntity;
 import lombok.Data;
 
 /**
- * @TableName agv_exception
+ * AGV方异常记录表
  */
 @TableName(value = "agv_exception")
 @Data

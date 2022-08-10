@@ -47,13 +47,13 @@ public class PublishJobRequest {
     private String wmsLineNo;
 
     /**
-     * WMS物料编码
+     * WMS物品编码
      */
     @NotBlank(message = "WMS物料编码不能为空")
     private String wmsSkuCode;
 
     /**
-     * WMS物料名称
+     * WMS物品名称
      */
     @NotBlank(message = "WMS物料名称不能为空")
     private String wmsSkuName;
