@@ -93,15 +93,22 @@
                                     size="medium"></el-input-number>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="使用状态" prop="locFlag">
-                                <nodes-dictionary
-                                    v-model="form.params.locFlag"
-                                    code="loc_flag"
-                                    size="medium">
-                                </nodes-dictionary>
-                            </el-form-item>
-                        </el-col>
+                        <el-tooltip placement="top">
+                            <div slot="content">破损:不能上架库存<br/>冻结:可以上架库存，但库存状态为冻结<br/>业务系统冻结:不能上架库存到该库位</div>
+                            <el-col :span="8">
+
+
+                                <el-form-item label="使用状态" prop="locFlag">
+
+                                    <nodes-dictionary
+                                        v-model="form.params.locFlag"
+                                        code="loc_flag"
+                                        size="medium">
+                                    </nodes-dictionary>
+                                </el-form-item>
+
+                            </el-col>
+                        </el-tooltip>
                     </el-row>
                     <el-row>
                         <el-col :span="8">

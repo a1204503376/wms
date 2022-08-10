@@ -33,7 +33,7 @@
 						<u--text class="demo-layout bg-purple-light" v-text="'物品编码'"></u--text>
 					</u-col>
 					<u-col span="8" class="font-in-page">
-						<u-input v-model="item.skuCode"></u-input>
+						<u-input v-model="item.skuCode" border="0" disabled></u-input>
 					</u-col>
 				</u-row>
 				<u-row customStyle="margin-bottom: 10px">
@@ -72,10 +72,11 @@
 				params: {
 					no: '',
 					type: '',
-					stockBalance: 0
+					stockBalance: 0,
+					defaultList: [],
 				},
+				differDefaultList: [],
 				receiveList: [],
-				defaultList: [],
 				page: {
 					total: 0,
 					size: 7,
@@ -92,7 +93,7 @@
 			}
 		},
 		onLoad: function(option) {
-			uni.setStorageSync('isaListAsDefaultList', '')
+			uni.setStorageSync('isListAsDefault', '')
 			var parse = JSON.parse(option.param);
 			this.params.boxCode = parse.boxCode;
 			this.params.locCode = parse.locCode;
@@ -115,11 +116,15 @@
 		},
 		methods: {
 			confirm() {
-				console.log(this.isListAsDefaultList())
-				if (this.isListAsDefaultList()) {
+				let isListAsDefault = this.isListAsDefaultList();
+				if (tool.isEmpty(this.differDefaultList)) {
 					this.esc();
 				} else {
-					uni.setStorageSync('isListAsDefaultList', this.receiveList)
+					let isListAsDefault = {};
+					isListAsDefault.differDefaultList = this.differDefaultList;
+					isListAsDefault.boxCode = this.params.boxCode;
+					isListAsDefault.locCode = this.params.locCode;
+					uni.setStorageSync('isListAsDefault', isListAsDefault)
 					this.esc();
 				}
 			},
@@ -135,16 +140,13 @@
 				this.show = true;
 			},
 			isListAsDefaultList() {
-				console.log(this.receiveList)
-				console.log(this.defaultList)
 				for (let i = 0; i < this.receiveList.length; i++) {
-					if (Number(this.receiveList[i].stockBalance) !== Number(this.defaultList[i].stockBalance)) {
-						return false;
-					} else {
-						continue;
+					if (Number(this.receiveList[i].stockBalance) !== Number(this.params.defaultList[i].stockBalance) ||
+						this.receiveList[i].boxCode !== this.params.defaultList[i].boxCode || this.receiveList[i]
+						.locCode !== this.params.defaultList[i].locCode) {
+						this.differDefaultList.push(this.receiveList[i]);
 					}
 				}
-				return true;
 			},
 			updateLocQty(row) {
 				uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/updateLocQty', row);
@@ -203,16 +205,28 @@
 						this.loadmore = false;
 						this.noData = true;
 					}
-					data.data.forEach((item, index) => { //js遍历数组
-						item.boxCode = this.params.boxCode;
-						item.locCode = this.params.locCode;
-						this.receiveList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
-						this.defaultList.push(item)
-					});
+					this.receiveList = data.data;
+
 					if (this.receiveList.length < 7) {
 						this.loadmore = false;
 					}
 				})
+				staticCheckStock.findPdaSkuQtyResponseList(this.params, this.page).then(data => {
+					if (data.data.length > 0) {
+						this.status = 'loading';
+						this.loadmore = true;
+						this.noData = false;
+					} else {
+						this.loadmore = false;
+						this.noData = true;
+					}
+					this.params.defaultList = data.data;
+
+					if (this.receiveList.length < 7) {
+						this.loadmore = false;
+					}
+				})
+
 			},
 			search() {
 				uni.$u.throttle(this.getReceiveList(), 1000)
@@ -238,16 +252,23 @@
 					if (data.data.length > 0) {
 						this.status = 'loading';
 						data.data.forEach((item, index) => { //js遍历数组
-							item.boxCode = this.params.boxCode;
-							item.locCode = this.params.locCode;
 							this.receiveList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
-							this.defaultList.push(item)
+
 						});
 					} else {
 						this.status = 'nomore';
 					}
 
 				})
+				staticCheckStock.findPdaSkuQtyResponseList(this.params, this.page).then(data => {
+					if (data.data.length > 0) {
+						data.data.forEach((item, index) => { //js遍历数组
+							this.params.defaultList.push(item)
+						});
+					}
+
+				})
+
 			}
 		}
 	}

@@ -89,16 +89,20 @@ public class AgvTask {
 	/**
 	 * 发送任务到调度系统
 	 *
-	 * @param putwayTask agv任务
+	 * @param wmsTasks agv任务
 	 * @return true:发送成功
 	 */
-	private boolean sendToSchedule(List<WmsTask> putwayTask) {
+	private boolean sendToSchedule(List<WmsTask> wmsTasks) {
 		String url = systemParamBiz.findScheduleUrl().concat(POST_JOB_API);
 
 		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
-				url, publishJobFactory.createPublishJobRequestList(putwayTask));
+			url, publishJobFactory.createPublishJobRequestList(wmsTasks));
+		if (schedulingGlobalResponse.hasException()) {
+			log.error("调用API（{}）异常：{}", url, schedulingGlobalResponse.getMsg());
+			return false;
+		}
 		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
-		return schedulingResponse.hasFailed();
+		return !schedulingResponse.hasFailed();
 	}
 
 	/**
@@ -113,11 +117,11 @@ public class AgvTask {
 		AssertUtil.notNull(targetLocId, "AGV库内移动任务下发失败,目标库位为空");
 
 		List<Long> sourceLocIds = sourceStock.stream()
-				.map(Stock::getLocId)
-				.distinct()
-				.collect(Collectors.toList());
+			.map(Stock::getLocId)
+			.distinct()
+			.collect(Collectors.toList());
 
-		for (Long locId : sourceLocIds){
+		for (Long locId : sourceLocIds) {
 			if (!locationBiz.isAgvZone(locId) || !locationBiz.isAgvZone(locId)) {
 				log.info("AGV库内移动任务下发失败，AGV只能移动自动区的库存");
 				continue;
@@ -165,7 +169,7 @@ public class AgvTask {
 		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
 			url, publishJobFactory.createContinueJobRequest(tasks));
 		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
-		if(schedulingResponse.hasFailed()){
+		if (schedulingResponse.hasFailed()) {
 			throw new ServiceException("继续任务失败，" + schedulingResponse.getMsg());
 		}
 	}
@@ -178,7 +182,7 @@ public class AgvTask {
 		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
 			url, publishJobFactory.createCancelJobRequest());
 		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
-		if(schedulingResponse.hasFailed()){
+		if (schedulingResponse.hasFailed()) {
 			throw new ServiceException("取消任务失败，" + schedulingResponse.getMsg());
 		}
 	}

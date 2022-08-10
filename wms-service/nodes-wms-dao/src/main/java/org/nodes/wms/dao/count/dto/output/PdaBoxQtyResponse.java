@@ -28,4 +28,9 @@ public class PdaBoxQtyResponse implements Serializable {
 	 * 传输给前端做是否无误的判断
 	 */
 	private Boolean isValid = false;
+
+	/**
+	 * 传输给前端按钮默认显示
+	 */
+	private Boolean isButton = true;
 }

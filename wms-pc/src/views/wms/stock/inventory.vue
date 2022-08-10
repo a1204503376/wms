@@ -211,12 +211,37 @@ import fileDownload from "js-file-download";
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column
-                            v-if="!column.hide"
+                            v-if="!column.hide && index !==1"
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column"
                             width="130"
                         >
+                        </el-table-column>
+                        <el-table-column
+                            v-if="!column.hide && index===1"
+                            :key="index"
+                            show-overflow-tooltip
+                            v-bind="column"
+                            width="130"
+                        >
+                            <template slot-scope="scope">
+                                <el-tag
+                                    v-if="scope.row.stockStatus === '系统冻结' || scope.row.stockStatus === '冻结'"
+                                    type="danger"
+                                >
+                                    {{ scope.row.stockStatus }}
+                                </el-tag>
+                                <el-tag
+                                    v-else
+                                    type="success"
+                                >
+                                    {{ scope.row.stockStatus }}
+                                </el-tag>
+
+                            </template>
+
+
                         </el-table-column>
                     </template>
 

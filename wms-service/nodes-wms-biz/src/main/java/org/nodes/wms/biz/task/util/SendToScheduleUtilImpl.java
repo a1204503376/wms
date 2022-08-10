@@ -14,16 +14,17 @@ import javax.annotation.Resource;
  **/
 @Slf4j
 @Service
-public class SendToScheduleUtilImpl implements SendToScheduleUtil{
+public class SendToScheduleUtilImpl implements SendToScheduleUtil {
 
 	@Resource
 	private RestTemplate restTemplate;
 
 	@Override
-	public SchedulingGlobalResponse sendPost(String url, Object request){
+	public SchedulingGlobalResponse sendPost(String url, Object request) {
 		try {
-			return SchedulingGlobalResponse.success(restTemplate.postForObject(url, request , SchedulingResponse.class));
-		}catch (Exception e){
+			SchedulingResponse schedulingResponse = restTemplate.postForObject(url, request, SchedulingResponse.class);
+			return SchedulingGlobalResponse.success(schedulingResponse);
+		} catch (Exception e) {
 			log.error(StringUtil.format("请求调度系统异常，URL：{}", url));
 			return SchedulingGlobalResponse.error(e);
 		}
