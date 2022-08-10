@@ -16,7 +16,10 @@ public class PdaBoxQtyResponse implements Serializable {
 	 * 箱号
 	 */
 	private String boxCode;
-
+	/**
+	 * 库位编码
+	 */
+	private String locCode;
 	/**
 	 * 箱内物品总数量
 	 */

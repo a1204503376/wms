@@ -16,7 +16,16 @@ const getPdaStockCountDetailResponseList =(data)=>{
 	})
 }
 
+const findPdaSkuQtyResponseList =(data)=>{
+	return http.request({
+		url: '/api/ApiPDA/count/StockStaticCheck/findPdaSkuQtyResponseList',
+		method: 'POST',
+		data:data,
+	})
+}
+
 export default {
 	getPdaStockCountResponseList,
-	getPdaStockCountDetailResponseList
+	getPdaStockCountDetailResponseList,
+	findPdaSkuQtyResponseList
 }

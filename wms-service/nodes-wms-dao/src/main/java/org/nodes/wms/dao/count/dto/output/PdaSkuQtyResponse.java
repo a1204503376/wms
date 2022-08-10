@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.count.dto.output;
 
 import lombok.Data;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -29,5 +30,6 @@ public class PdaSkuQtyResponse implements Serializable {
 	 * 库存余额(上架量 - 下架量)
 	 * 包括：冻结量和占用量
 	 */
-	private BigDecimal stockQty;
+	@JsonSerialize
+	private BigDecimal stockBalance;
 }

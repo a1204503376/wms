@@ -260,7 +260,7 @@
     </select>
 
     <select id="getStockCountByLocCode" resultType="org.nodes.wms.dao.count.dto.output.PdaBoxQtyResponse">
-        select box_code,sum(stock_qty-pick_qty) total_qty from wms_stock
+        select loc_code,box_code,sum(stock_qty-pick_qty) total_qty from wms_stock
         <where>
             <if test="locCode!=null and locCode != ''">
                 loc_code = #{locCode}
