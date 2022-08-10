@@ -12,7 +12,7 @@ public class PublishJobRequest {
 	private Long wmsTaskId;
 	private String wmsBillNo;
 	private String wmsBillType;
-	private Long wmsDetailId;
+	private Long wmsTaskDetailId;
 	private String wmsLineNo;
 	private String wmsSkuCode;
 	private String wmsSkuName;

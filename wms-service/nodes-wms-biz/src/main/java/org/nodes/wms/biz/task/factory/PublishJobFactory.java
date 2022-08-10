@@ -34,7 +34,7 @@ public class PublishJobFactory {
 			publishJob.setWmsTaskId(task.getTaskId());
 			publishJob.setWmsBillNo(task.getBillNo());
 			publishJob.setWmsBillType(task.getTaskTypeCd().getCode().toString());
-			publishJob.setWmsDetailId(task.getTaskId());
+			publishJob.setWmsTaskDetailId(task.getTaskId());
 			publishJob.setWmsLineNo("0");
 			publishJob.setWmsSkuCode(task.getSkuCode());
 			publishJob.setWmsSkuName(sku.getSkuName());

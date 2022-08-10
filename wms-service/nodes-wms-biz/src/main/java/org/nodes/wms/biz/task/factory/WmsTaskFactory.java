@@ -18,6 +18,7 @@ import java.util.List;
 @Service
 public class WmsTaskFactory {
 
+
 	/**
 	 * 创建AGV上架任务
 	 *
