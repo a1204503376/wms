@@ -28,6 +28,7 @@ public class LogSoPickFactory {
 	 */
 	public LogSoPick createLogSoPick(PickByPcStockDto pickByPcStockDto, SoHeader soHeader, SoDetail soDetail, Stock stock) {
 		LogSoPick logSoPick = new LogSoPick();
+		logSoPick.setLocId(pickByPcStockDto.getLocId());
 		logSoPick.setLocCode(pickByPcStockDto.getLocCode());
 		logSoPick.setSkuId(stock.getSkuId());
 		logSoPick.setSkuCode(stock.getSkuCode());
