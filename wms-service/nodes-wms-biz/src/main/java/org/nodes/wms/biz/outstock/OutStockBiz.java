@@ -1,7 +1,6 @@
 package org.nodes.wms.biz.outstock;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.*;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindPickingBySoBillIdResponse;
@@ -27,7 +26,7 @@ public interface OutStockBiz {
 	 *
 	 * @param request
 	 */
-	void pickByPc(PickByPcRequest request);
+	void pickByPcsOnPc(PickByPcRequest request);
 
 	/**
 	 * 根据发货单id和发货单明细id查询拣货计划
@@ -46,13 +45,13 @@ public interface OutStockBiz {
     void cancelOutstock(List<Long> logSoPickIdList);
 
 	/**
-	 * 拣货分页查询
+	 * PDA按件拣货：根据单号查询出库单
 	 *
 	 * @param request 查询条件
 	 * @param query   分页参数
 	 * @return 返回多个能按件拣货的对象
 	 */
-	IPage<FindAllPickingResponse> selectAllPickingByNo(FindAllPickingRequest request, Query query);
+	IPage<FindAllPickingResponse> findSoHeaderByNo(findSoHeaderByNoRequest request, Query query);
 
 	/**
 	 * 按件拣货动作
@@ -63,13 +62,13 @@ public interface OutStockBiz {
 	PickingByBoxResponse pickByPcs(PickByPcsRequest request);
 
 	/**
-	 * Pda根据发货单ID查询出库单明细
+	 * Pda根据发货单ID查询可以拣货的出库单明细
 	 *
 	 * @param request 请求对象-发货单ID
 	 * @param query   分页参数
 	 * @return 实现的分页
 	 */
-	IPage<FindPickingBySoBillIdResponse> selectPickingBySoBillId(FindPickingBySoBillIdRequest request, Query query);
+	IPage<FindPickingBySoBillIdResponse> findOpenSoDetail(FindOpenSoDetailRequest request, Query query);
 
 	/**
 	 * 按箱拣货动作
@@ -80,27 +79,27 @@ public interface OutStockBiz {
 	PickingByBoxResponse pickByBox(PickByPcsRequest request);
 
 	/**
-	 * 查询出库接驳区的库未
+	 * 查询出库接驳区的库位
 	 *
 	 * @param request 查询条件
 	 * @param query   分页参数
 	 * @return 多个库位信息
 	 */
-	IPage<OutboundAccessAreaLocationQueryResponse> selectLocationByConnectionArea(OutboundAccessAreaLocationQueryRequest request, Query query);
+	IPage<OutboundAccessAreaLocationQueryResponse> findLocOfAgvPickTo(FindLocOfAgvPickToRequest request, Query query);
 
 	/**
 	 * 接驳区拣货动作
 	 *
 	 * @param request 请求参数
 	 */
-	void connectionAreaPick(ConnectionAreaPickingRequest request);
+	void pickOnAgvPickTo(MoveOnAgvPickToRequest request);
 
 	/**
 	 * 接驳区移动
 	 *
 	 * @param request 请求参数
 	 */
-	void connectionAreaMove(ConnectionAreaPickingRequest request);
+	void moveOnAgvPickTo(MoveOnAgvPickToRequest request);
 
 	/**
 	 * 分配：自动分配
@@ -108,7 +107,7 @@ public interface OutStockBiz {
 	 * @param soBillId 发货单id
 	 * @return true：自动分配成功 false：自动分配失败
 	 */
-	boolean automaticAssign(Long soBillId);
+	boolean autoDistribute(Long soBillId);
 
 	/**
 	 * 分配：取消分配
@@ -116,7 +115,7 @@ public interface OutStockBiz {
 	 * @param soBillId 发货单id
 	 * @return true：取消分配成功 false：取消分配失败
 	 */
-	boolean cancelAssign(Long soBillId);
+	boolean cancleDistribute(Long soBillId);
 
 	/**
 	 * 分配：确认下发
@@ -129,16 +128,16 @@ public interface OutStockBiz {
 	/**
 	 * 分配：分配调整-根据物品id获取可分配的物品库存信息
 	 *
-	 * @param skuId 物品id
+	 * @param skuCode 物品编码
 	 * @return 可分配物品库存信息
 	 */
-	List<StockSoPickPlanResponse> getEnableStockBySkuId(@Param("skuId") Long skuId);
+	List<StockSoPickPlanResponse> getEnableStockBySkuCode(String skuCode);
 
 	/**
-	 * 分配：分配调整-保存调整后的信息
+	 * 分配：分配手动调整-保存调整后的信息
 	 *
 	 * @param soBillDistributedRequest:
 	 * @return true：保存成功 false：保存失败
 	 */
-	boolean saveAssign(SoBillDistributedRequest soBillDistributedRequest);
+	boolean manualDistribute(SoBillDistributedRequest soBillDistributedRequest);
 }

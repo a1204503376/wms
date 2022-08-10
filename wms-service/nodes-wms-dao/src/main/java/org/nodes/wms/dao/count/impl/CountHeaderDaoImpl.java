@@ -18,15 +18,16 @@ public class CountHeaderDaoImpl
 	extends BaseServiceImpl<CountHeaderMapper, CountHeader>
 	implements CountHeaderDao {
 
-    @Override
-    public List<CountHeader> selectByCountBillNo(String countBillNo) {
-        return super.lambdaQuery()
+	@Override
+	public List<CountHeader> selectByCountBillNo(String countBillNo) {
+		return super.lambdaQuery()
 			.like(CountHeader::getCountBillNo, countBillNo)
-			.in(CountHeader::getCountBillState, StockCountStateEnum.CREATE,StockCountStateEnum.COUNTING)
+			.in(CountHeader::getCountBillState, StockCountStateEnum.CREATE, StockCountStateEnum.COUNTING)
 			.select(
+				CountHeader::getCountBillId,
 				CountHeader::getCountBillNo,
 				CountHeader::getCreator,
 				BaseEntity::getCreateTime)
 			.list();
-    }
+	}
 }

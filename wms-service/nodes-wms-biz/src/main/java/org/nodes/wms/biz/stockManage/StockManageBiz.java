@@ -1,7 +1,9 @@
 package org.nodes.wms.biz.stockManage;
 
+import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.stock.dto.input.*;
 import org.nodes.wms.dao.stock.dto.output.EstimateStockMoveResponse;
+import org.nodes.wms.dao.stock.entities.Stock;
 
 import java.util.List;
 
@@ -135,5 +137,20 @@ public interface StockManageBiz {
 	 *
 	 * @param stockPcMoveRequest PC按件移动参数
 	 */
-    void stockMoveByPc(StockPcMoveRequest stockPcMoveRequest);
+	void stockMoveByPc(StockPcMoveRequest stockPcMoveRequest);
+
+	/**
+	 * 判断库存是否可以移动（天宜定制）
+	 * 1. 不能移动到出库集货区和虚拟库区
+	 * 2. 如果是自动区则要求目标库位必须是空库位（库位上没有库存）
+	 * 3. 只能是同类型（自动与人工区）的库区之间移动
+	 * 4. 校验目标库位的箱型
+	 * 5. 校验载重
+	 *
+	 * @param sourceLocation sourceLocation
+	 * @param targetLocation targetLocation
+	 * @param stockList      stockList
+	 * @param boxCode        boxCode
+	 */
+	void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList, String boxCode);
 }

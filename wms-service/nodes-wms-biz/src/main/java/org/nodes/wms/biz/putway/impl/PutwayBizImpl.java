@@ -5,8 +5,10 @@ import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.putway.PutwayBiz;
 import org.nodes.wms.biz.putway.modular.PutwayFactory;
+import org.nodes.wms.biz.putway.strategy.TianYiPutwayStrategy;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
+import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.biz.task.AgvTask;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.putway.PutawayLogDao;
@@ -41,12 +43,14 @@ public class PutwayBizImpl implements PutwayBiz {
 	private final StockQueryBiz stockQueryBiz;
 	private final PutwayFactory putwayFactory;
 	private final AgvTask agvTask;
+	private final TianYiPutwayStrategy tianYiPutwayStrategy;
+	private final StockManageBiz stockManageBiz;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void putwayByBox(PutwayByBoxRequest request) {
 		// 判断库存是否在入库暂存区，如果不是入库暂存区应报异常
-		Stock sourceStock = stockQueryBiz.findStockById(request.getStockId().get(0));
+		Stock sourceStock = stockQueryBiz.findStockById(request.getStockId());
 		AssertUtil.notNull(sourceStock, "按箱上架失败,没有原库存信息");
 		Location location = locationBiz.findLocationByLocCode(request.getWhId(), sourceStock.getLocCode());
 		boolean stageLocation = locationBiz.isStageLocation(location);
@@ -61,6 +65,18 @@ public class PutwayBizImpl implements PutwayBiz {
 			List<Stock> stockList = stockQueryBiz.findStockByLpnCode(sourceStock.getLpnCode());
 			AssertUtil.notNull(stockList, "按箱上架失败,暂无与此托盘号相关库存的信息");
 			Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
+			boolean pickLocation = locationBiz.isPickLocation(targetLocation);
+			if (!pickLocation) {
+				throw new ServiceException("按箱上架失败，目标库位不是拣货区/人工区的库位");
+			}
+			AssertUtil.notNull(stockList, "LPN移动失败，根据LPN获取库存集合为空");
+			Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
+			stockManageBiz.canMove(sourceLocation, targetLocation, stockList, request.getBoxCode());
+			if (locationBiz.isAgvLocation(targetLocation)) {
+				//AGV移动任务生成
+				agvTask.moveStockToSchedule(stockList, targetLocation.getLocId());
+				return;
+			}
 			stockBiz.moveStockByLpnCode(sourceStock.getLpnCode(), sourceStock.getLpnCode(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY_PDA, null, null, null);
 			// 生成上架记录
 			PutawayLog putawayLog = putwayFactory.create(request, sourceStock, targetLocation);
@@ -70,8 +86,20 @@ public class PutwayBizImpl implements PutwayBiz {
 
 		// 如果不是整托：按箱移动
 		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
+		boolean pickLocation = locationBiz.isPickLocation(targetLocation);
+		if (!pickLocation) {
+			throw new ServiceException("按箱上架失败，目标库位不是拣货区/人工区的库位");
+		}
+		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
+		AssertUtil.notNull(stockList, "按箱上架失败，根据箱码查询不到对应库存");
+		Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
+		stockManageBiz.canMove(sourceLocation, targetLocation, stockList, request.getBoxCode());
+		if (locationBiz.isAgvLocation(targetLocation)) {
+			//AGV移动任务生成
+			agvTask.moveStockToSchedule(stockList, targetLocation.getLocId());
+			return;
+		}
 		stockBiz.moveStockByBoxCode(request.getBoxCode(), request.getBoxCode(), sourceStock.getLpnCode(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY_PDA, null, null, null);
-
 		// 生成上架记录
 		PutawayLog putawayLog = putwayFactory.create(request, sourceStock, targetLocation);
 		putawayLogDao.save(putawayLog);

@@ -162,6 +162,7 @@ import NodesLocation from "@/components/wms/select/NodesLocation";
 import {getSoDetailAndStock, getSoHeaderByPickPc, pickByPc} from "@/api/wms/outstock/soHeader";
 import NodesOutStock from "@/components/wms/select/NodesOutStock";
 import NodesSerial from "@/components/wms/select/NodesSerial";
+import func from "@/util/func";
 
 export default {
     props: {
@@ -178,7 +179,6 @@ export default {
         return {
             tabList: [
                 {lable: '按件拣货', name: 'pickByPiece'},
-                {lable: '按箱拣货', name: 'pickByBox'},
             ],
             activeName: 'pickByPiece',
             table: {
@@ -247,7 +247,10 @@ export default {
     },
     watch: {
         lineNo(newVal) {
-            this.getDetailData(newVal)
+            if (func.isNotEmpty(newVal)) {
+                this.getDetailData(newVal)
+            }
+
         }
     },
     created() {

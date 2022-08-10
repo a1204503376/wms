@@ -1,56 +1,46 @@
 <template>
 	<view>
 		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
-			:bgColor="navigationBarBackgroundColor" :title="title" titleStyle="color:#ffffff;font-size:21px"
+			:bgColor="navigationBarBackgroundColor" title="开始盘点" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
+		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">{{title}}</h4>
 		<u-divider text="" style="margin-top:0rpx;"></u-divider>
 		<u-divider text="暂无数据" v-if="noData"></u-divider>
 		<u-list style="height: 950rpx;" @scrolltolower="scrolltolower">
-			<view v-for="(item, index) in receiveList" :key="index" @click="clickItem(item)">
+			<view v-for="(item, index) in receiveList" :key="index">
 				<u-row customStyle="margin-bottom: 10px">
 					<u-col span="3" class="left-text-one-line font-in-page">
 						<u--text class="demo-layout bg-purple-light" v-text="'库位'"></u--text>
 					</u-col>
-					<u-col span="5">
-						<u--text class="demo-layout bg-purple  font-in-page"
-							v-text="'库位'+'/'+item.stockBalance+' '+item.wsuCode"></u--text>
+					<u-col span="6">
+						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.locCode"></u--text>
 					</u-col>
 					<u-col span="2">
 						<view>
-							<u-button type="success" :plain="true" text="盘点"></u-button>
+							<u-button type="success" :plain="true" text="盘点" @click="clickItem(item)"></u-button>
 						</view>
 					</u-col>
 				</u-row>
 				<u-row customStyle="margin-bottom: 10px">
-					<u-col span="12" class="left-text-one-line font-in-page">
-						<u--text class="demo-layout bg-purple-light" v-text="'箱号'"></u--text>
-					</u-col>
-				</u-row>
-				<u-row customStyle="margin-bottom: 10px">
 					<u-col span="3" class="left-text-one-line font-in-page">
-						<u--text class="demo-layout bg-purple-light" v-text="''"></u--text>
+						<u--text class="demo-layout bg-purple-light" v-text="'仓管'"></u--text>
 					</u-col>
-					<u-col span="9">
-						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.locCode+'('+item.stockBalance+')'"></u--text>
-					</u-col>
-				</u-row>
-				<u-row customStyle="margin-bottom: 10px">
-					<u-col span="3" class="left-text-one-line font-in-page">
-						<u--text class="demo-layout bg-purple-light" v-text="''"></u--text>
-					</u-col>
-					<u-col span="9">
-						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.locCode+'('+item.stockBalance+')'"></u--text>
+					<u-col span="7">
+						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.userName"></u--text>
 					</u-col>
 				</u-row>
-				<u-row customStyle="margin-bottom: 10px">
-					<u-col span="3" class="left-text-one-line font-in-page">
-						<u--text class="demo-layout bg-purple-light" v-text="''"></u--text>
-					</u-col>
-					<u-col span="9">
-						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.locCode+'('+item.stockBalance+')'"></u--text>
-					</u-col>
-				</u-row>
+				<view v-for="(res, indes) in item.pdaBoxQtyResponseList" :key="indes">
+					<u-row customStyle="margin-bottom: 10px">
+						<u-col span="3" class="left-text-one-line font-in-page">
+							<u--text class="demo-layout bg-purple-light" v-text="'箱号'" v-if="indes==0"></u--text>
+						</u-col>
+						<u-col span="9">
+							<u--text class="demo-layout bg-purple  font-in-page"
+								v-text="res.boxCode+' ('+res.totalQty+')'"></u--text>
+						</u-col>
+					</u-row>
+				</view>
 				<u-divider text=""></u-divider>
 			</view>
 			<u-loadmore :status="status" v-if="loadmore" />
@@ -65,7 +55,7 @@
 
 <script>
 	import setting from '@/common/setting'
-	import stockInquiry from '@/api/stock/stockInquiry.js'
+	import staticCheckStock from '@/api/checkStock/staticCheckStock.js'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
 	export default {
@@ -73,8 +63,7 @@
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
-					no: '',
-					type: ''
+					countBillId: ''
 				},
 				receiveList: [],
 				page: {
@@ -87,14 +76,13 @@
 				status: 'loadmore',
 				loadmore: false,
 				noData: false,
-				title:'开始盘点',
+				title: '',
 			}
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param);
-			this.title = parse.skuCode+'开始盘点';
-			this.params = parse;
-			this.params.no = '0';
+			this.title = parse.countBillNo;
+			this.params.countBillId = parse.countBillId;
 			this.getReceiveList();
 		},
 		onUnload() {
@@ -156,10 +144,9 @@
 				this.loadmore = true;
 				this.status = 'loading';
 				this.page.current = 1;
-				this.analysisCode(this.params.no);
 				this.params.whId = uni.getStorageSync('warehouse').whId;
-				stockInquiry.findAllStockByNo(this.params, this.page).then(data => {
-					if (data.data.records.length > 0) {
+				staticCheckStock.getPdaStockCountDetailResponseList(this.params, this.page).then(data => {
+					if (data.data.length > 0) {
 						this.status = 'loading';
 						this.loadmore = true;
 						this.noData = false;
@@ -167,7 +154,7 @@
 						this.loadmore = false;
 						this.noData = true;
 					}
-					this.receiveList = data.data.records;
+					this.receiveList = data.data;
 					if (this.receiveList.length < 7) {
 						this.loadmore = false;
 					}
@@ -177,12 +164,13 @@
 				uni.$u.throttle(this.getReceiveList(), 1000)
 			},
 			clickItem(item) {
-				if(true){
-					uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/autoLocation', item);
-				}else{
+				// if (item.isPickLocation) {
+				if (true) {
 					uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/artificialLocation', item);
+				} else {
+					uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/autoLocation', item);
 				}
-				
+
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);
@@ -193,10 +181,10 @@
 				this.divider = false;
 				this.page.current++;
 				this.params.whId = uni.getStorageSync('warehouse').whId;
-				stockInquiry.findAllStockByNo(this.params, this.page).then(data => {
-					if (data.data.records.length > 0) {
+				staticCheckStock.getPdaStockCountDetailResponseList(this.params, this.page).then(data => {
+					if (data.data.length > 0) {
 						this.status = 'loading';
-						data.data.records.forEach((item, index) => { //js遍历数组
+						data.data.forEach((item, index) => { //js遍历数组
 							this.receiveList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
 						});
 					} else {

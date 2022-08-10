@@ -150,7 +150,17 @@ public interface LocationBiz {
 	 * @param zoneType 库区类型 必填，具体参考DictCodeConstant中的常量
 	 * @return 库位
 	 */
-	Location getLocationByZoneType(Long whId, Integer zoneType);
+	List<Location> getLocationByZoneType(Long whId, Integer zoneType);
+
+	/**
+	 * 查找库位列表中指定类型的库位是否存在
+	 *
+	 * @param whId     库房ID 必填
+	 * @param locId    库位ID 必填
+	 * @param zoneType 库区类型 必填，具体参考DictCodeConstant中的常量
+	 * @return 如果为true表示符合条件的库位存在 反之为false
+	 */
+	Boolean getLocationByZoneType(Long whId, Long locId, Integer zoneType);
 
 	/**
 	 * 判断库位是否为出库暂存区
@@ -175,6 +185,7 @@ public interface LocationBiz {
 	 * @return true：是人工拣货区/拣货区
 	 */
 	boolean isPickLocation(Location location);
+
 	/**
 	 * 判断是否是入库暂存区库位
 	 *
@@ -182,6 +193,14 @@ public interface LocationBiz {
 	 * @return true：是入库暂存区库位
 	 */
 	boolean isStageLocation(Location location);
+
+	/**
+	 * 判断是否是AGV库位
+	 *
+	 * @param location location
+	 * @return true：是AGV库位
+	 */
+	boolean isAgvLocation(Location location);
 
 	/**
 	 * 判断是否存在虚拟库位

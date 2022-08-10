@@ -142,8 +142,14 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	}
 
 	@Override
-	public Location getLocationByZoneTypeAndWhId(List<Long> locIdList, Long whId, Integer zoneType) {
+	public List<Location> getLocationByZoneTypeAndWhId(List<Long> locIdList, Long whId, Integer zoneType) {
 		return locationMapper.getLocationByZoneTypeAndWhId(locIdList, whId, zoneType);
+	}
+
+	@Override
+	public Boolean getLocationByZoneTypeAndLocId(Long whId, Long locId, Integer zoneType) {
+		Location location = locationMapper.getLocationByZoneTypeAndLocId(whId, locId, zoneType);
+		return Func.isNotEmpty(location);
 	}
 
 	@Override
@@ -191,9 +197,9 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 		}
 	}
 
-    @Override
-    public Integer getZoneTypeByLocId(Long locId) {
-        return super.baseMapper.selectZoneTypeByLocId(locId);
-    }
+	@Override
+	public Integer getZoneTypeByLocId(Long locId) {
+		return super.baseMapper.selectZoneTypeByLocId(locId);
+	}
 
 }

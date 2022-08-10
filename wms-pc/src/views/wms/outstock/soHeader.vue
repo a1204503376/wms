@@ -342,7 +342,7 @@ export default {
             })
         },
         onEdit(row) {
-            if (row.soBillState.trim() !== '未出库') {
+            if (row.soBillState.trim() !== '单据创建') {
                 this.$message.warning("操作失败，该发货单正在处理中");
                 return;
             }

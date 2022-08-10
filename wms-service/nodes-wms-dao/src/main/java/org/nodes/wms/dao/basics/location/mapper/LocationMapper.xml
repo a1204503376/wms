@@ -8,8 +8,7 @@
                loc_code
         FROM wms_location
         WHERE loc_code LIKE CONCAT('%', #{locCode}, '%')
-        ORDER BY update_time DESC
-        LIMIT 10
+        ORDER BY update_time DESC LIMIT 10
     </select>
 
     <sql id="tableList">
@@ -139,7 +138,7 @@
                  left join wms_zone wz on wl.zone_id = wz.zone_id
                  left join wms_lpn_type wt on wl.lpn_type_id = wt.id
         where wl.wh_id = #{param.whId}
-          and wz.zone_name = '入库接驳区'
+          and wz.zone_name = 'AGV收货接驳区'
           and wt.code = #{param.lpnType}
     </select>
 
@@ -194,14 +193,30 @@
                 </foreach>
             </if>
         </where>
-        limit 1
+    </select>
+
+    <select id="getLocationByZoneTypeAndLocId" resultType="org.nodes.wms.dao.basics.location.entities.Location">
+        select l.*
+        from wms_location l LEFT
+        JOIN wms_zone z on l.zone_id=z.zone_id
+        <where>
+            <if test="zoneType !=null and zoneType != ''">
+                and z.zone_type = #{zoneType}
+            </if>
+            <if test="whId !=null and whId != ''">
+                and l.wh_id = #{whId}
+            </if>
+            <if test="locId !=null and locId != ''">
+                and l.loc_id = #{locId}
+            </if>
+        </where>
     </select>
 
     <select id="selectZoneTypeByLocId" resultType="java.lang.Integer">
-        SELECT
-            zone.zone_type
+        SELECT zone.zone_type
         FROM wms_location loc
-                 LEFT JOIN wms_zone zone ON zone.zone_id = loc.zone_id
+                 LEFT JOIN wms_zone zone
+        ON zone.zone_id = loc.zone_id
         WHERE loc.loc_id = #{locId}
     </select>
 </mapper>

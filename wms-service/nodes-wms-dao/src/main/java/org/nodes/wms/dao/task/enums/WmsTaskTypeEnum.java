@@ -21,9 +21,9 @@ public enum WmsTaskTypeEnum implements BaseEnum {
 	PUTAWAY(1, "上架"),
 	PICKING(2, "拣货"),
 	STOCK_COUNT(3, "盘点"),
-	AGV_PUTAWAY(10, "AGV上架"),
-	AGV_PICKING(20, "AGV拣货"),
-	AGV_STOCK_MOVE(30, "AGV库内移位");
+	AGV_PUTAWAY(101, "AGV上架"),
+	AGV_PICKING(102, "AGV拣货"),
+	AGV_STOCK_MOVE(103, "AGV库内移位");
 
 	@EnumValue
 	private final Integer code;

@@ -1,20 +1,26 @@
 package org.nodes.wms.biz.task;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.systemParam.SystemParamBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.putway.PutwayStrategyActuator;
 import org.nodes.wms.biz.stock.StockBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.factory.PublishJobFactory;
 import org.nodes.wms.biz.task.factory.WmsTaskFactory;
 import org.nodes.wms.biz.task.util.SendToScheduleUtil;
 import org.nodes.wms.dao.application.dto.scheduling.SchedulingGlobalResponse;
 import org.nodes.wms.dao.application.dto.scheduling.SchedulingResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.outstock.so.entities.SoDetail;
+import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
+import org.springblade.core.log.exception.ServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 天宜定制：agv调度任务
@@ -30,9 +37,12 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AgvTask {
 
 	private static final String POST_JOB_API = "/api/wms/publishJob";
+	private static final String POST_CONTINUE_JOB_API = "/api/wms/continueJob";
+	private static final String POST_CANCEL_JOB_API = "/api/wms/cancelJob";
 
 	private final LocationBiz locationBiz;
 	private final WmsTaskFactory wmsTaskFactory;
@@ -42,6 +52,7 @@ public class AgvTask {
 	private final PublishJobFactory publishJobFactory;
 	private final SystemParamBiz systemParamBiz;
 	private final SendToScheduleUtil sendToScheduleUtil;
+	private final StockQueryBiz stockQueryBiz;
 
 	/**
 	 * 生成AGV上架任务
@@ -55,7 +66,7 @@ public class AgvTask {
 			return;
 		}
 
-		WmsTask putwayTask = wmsTaskFactory.create(stocks);
+		WmsTask putwayTask = wmsTaskFactory.createPutwayTask(stocks);
 		wmsTaskDao.save(putwayTask);
 		// 调用上架策略生成目标库位，并把目标库位保存到任务表中
 		Location targetLoc = putwayStrategyActuator.run(BigDecimal.ZERO, stocks);
@@ -78,29 +89,97 @@ public class AgvTask {
 	/**
 	 * 发送任务到调度系统
 	 *
-	 * @param putwayTask
+	 * @param putwayTask agv任务
 	 * @return true:发送成功
 	 */
-	public boolean sendToSchedule(List<WmsTask> putwayTask) {
+	private boolean sendToSchedule(List<WmsTask> putwayTask) {
 		String url = systemParamBiz.findScheduleUrl().concat(POST_JOB_API);
 
 		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
-			url, publishJobFactory.createPublishJobRequestList(putwayTask));
+				url, publishJobFactory.createPublishJobRequestList(putwayTask));
 		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
 		return schedulingResponse.hasFailed();
 	}
 
 	/**
 	 * AGV库内移动,只有原和目标库位都是agv存储区的才有效
+	 * 一次只能移动一个库位的库存，否则抛异常
 	 *
 	 * @param sourceStock 移动的原库存
 	 * @param targetLocId 目标库位
 	 */
 	public void moveStockToSchedule(List<Stock> sourceStock, Long targetLocId) {
+		AssertUtil.notEmpty(sourceStock, "AGV库内移动任务下发失败,原库存为空无法移动");
+		AssertUtil.notNull(targetLocId, "AGV库内移动任务下发失败,目标库位为空");
 
+		List<Long> sourceLocIds = sourceStock.stream()
+				.map(Stock::getLocId)
+				.distinct()
+				.collect(Collectors.toList());
+
+		for (Long locId : sourceLocIds){
+			if (!locationBiz.isAgvZone(locId) || !locationBiz.isAgvZone(locId)) {
+				log.info("AGV库内移动任务下发失败，AGV只能移动自动区的库存");
+				continue;
+			}
+
+			List<Stock> stockOfLoc = sourceStock.stream()
+				.filter(item -> locId.equals(item.getLocId()))
+				.collect(Collectors.toList());
+			WmsTask moveTask = wmsTaskFactory.createMoveTask(stockOfLoc, targetLocId);
+			if (sendToSchedule(Collections.singletonList(moveTask))) {
+				moveTask.setTaskState(WmsTaskStateEnum.ISSUED);
+			}
+			locationBiz.freezeLocByTask(targetLocId, moveTask.getTaskId().toString());
+			stockBiz.freezeStockByTask(stockOfLoc, false, moveTask.getTaskId());
+			wmsTaskDao.save(moveTask);
+		}
 	}
 
-	public void pickToSchedule() {
+	/**
+	 * 拣货任务到agv，按库位下发
+	 *
+	 * @param locId    库位id
+	 * @param so       出库单信息
+	 * @param soDetail 出库单明细信息
+	 */
+	public void pickToSchedule(Long locId, SoHeader so, SoDetail soDetail) {
+		AssertUtil.notNull(locId, "AGV拣货任务下发失败,locId为空");
+		AssertUtil.notNull(so, "AGV拣货任务下发失败,so为空");
+		AssertUtil.notNull(soDetail, "AGV拣货任务下发失败,soDetail为空");
 
+		List<Stock> sourceStock = stockQueryBiz.findStockByLocation(locId);
+		WmsTask pickTask = wmsTaskFactory.createPickTask(sourceStock, so, soDetail);
+		if (sendToSchedule(Collections.singletonList(pickTask))) {
+			pickTask.setTaskState(WmsTaskStateEnum.ISSUED);
+		}
+		stockBiz.freezeStockByTask(sourceStock, false, pickTask.getTaskId());
+		wmsTaskDao.save(pickTask);
+	}
+
+	/**
+	 * 继续执行任务
+	 */
+	public void continueTask(List<WmsTask> tasks) {
+		String url = systemParamBiz.findScheduleUrl().concat(POST_CONTINUE_JOB_API);
+		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
+			url, publishJobFactory.createContinueJobRequest(tasks));
+		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
+		if(schedulingResponse.hasFailed()){
+			throw new ServiceException("继续任务失败，" + schedulingResponse.getMsg());
+		}
+	}
+
+	/**
+	 * 取消任务
+	 */
+	public void cancel() {
+		String url = systemParamBiz.findScheduleUrl().concat(POST_CANCEL_JOB_API);
+		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
+			url, publishJobFactory.createCancelJobRequest());
+		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
+		if(schedulingResponse.hasFailed()){
+			throw new ServiceException("取消任务失败，" + schedulingResponse.getMsg());
+		}
 	}
 }

@@ -116,7 +116,7 @@ public class SoBillFactory {
 				Func.isEmpty(detail.getDetailPrice()) ?
 					null : detail.getDetailPrice().multiply(detail.getPlanQty()));
 			//单据状态
-			detail.setBillDetailState(SoDetailStateEnum.UnAlloc.getCode());
+			detail.setBillDetailState(SoDetailStateEnum.NORMAL);
 			// 批属性 生产批次、专用客户
 		});
 		return soDetailListResult;

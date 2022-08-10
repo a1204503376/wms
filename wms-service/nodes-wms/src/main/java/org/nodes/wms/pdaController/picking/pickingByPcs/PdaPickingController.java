@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.outstock.OutStockBiz;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.EsitSerialNumberRequest;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindAllPickingRequest;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindPickingBySoBillIdRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindOpenSoDetailRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.PickByPcsRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.EsitSerialNumberResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
@@ -38,8 +38,8 @@ public class PdaPickingController {
 	 * @return 库存响应对象
 	 */
 	@PostMapping("/findAllPickingByNo")
-	public R<IPage<FindAllPickingResponse>> findAllPickingByNo(@RequestBody FindAllPickingRequest request, Query query) {
-		return R.data(outStockBiz.selectAllPickingByNo(request, query));
+	public R<IPage<FindAllPickingResponse>> findAllPickingByNo(@RequestBody findSoHeaderByNoRequest request, Query query) {
+		return R.data(outStockBiz.findSoHeaderByNo(request, query));
 	}
 
 	/**
@@ -62,8 +62,8 @@ public class PdaPickingController {
 	 * @return 拣货详情响应对象
 	 */
 	@PostMapping("/findPickingBySoBillId")
-	public R<IPage<FindPickingBySoBillIdResponse>> findPickingBySoBillId(@RequestBody FindPickingBySoBillIdRequest request, Query query) {
-		return R.data(outStockBiz.selectPickingBySoBillId(request, query));
+	public R<IPage<FindPickingBySoBillIdResponse>> findPickingBySoBillId(@RequestBody FindOpenSoDetailRequest request, Query query) {
+		return R.data(outStockBiz.findOpenSoDetail(request, query));
 	}
 
 	/**

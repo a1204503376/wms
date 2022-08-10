@@ -1,4 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="org.nodes.wms.dao.stock.mapper.SerialLogMapper">
+
+    <sql id="pageOrList">
+        SELECT
+        wlsnl_id,
+        stock.sku_code,
+        stock.sku_name,
+        stock.loc_code,
+        stock.box_code,
+        stock.lpn_code,
+        log.lot_number,
+        serial_number,
+        log.create_time,
+        serial_state
+        FROM wms_serial_log log
+        LEFT JOIN wms_stock stock ON stock.stock_id = log.stock_id
+        <where>
+            log.is_deleted = 0
+            <if test="param.serialNumberBegin != null and param.serialNumberBegin !=''
+                    and param.serialNumberEnd != null and param.serialNumberEnd !='' ">
+                <if test="param.serialNumberBegin != &quot;0&quot;">
+                    AND serial_number &gt;= #{param.serialNumberBegin}
+                </if>
+                <if test="param.serialNumberEnd != &quot;0&quot;">
+                    AND serial_number &lt;= #{param.serialNumberEnd}
+                </if>
+            </if>
+            <if test="(param.serialNumberBegin == null or param.serialNumberBegin == '')
+                    and (param.serialNumberEnd != null and param.serialNumberEnd != '')">
+                    AND serial_number LIKE CONCAT('%', #{param.serialNumberEnd}, '%')
+            </if>
+            <if test="(param.serialNumberEnd == null or param.serialNumberEnd == '')
+                    and (param.serialNumberBegin != null and param.serialNumberBegin != '')">
+                    AND serial_number LIKE CONCAT('%', #{param.serialNumberBegin}, '%')
+            </if>
+            <if test="param.lotNumber != null and param.lotNumber != ''">
+                AND log.lot_number = #{param.lotNumber}
+            </if>
+            <if test="param.createTimeBegin != null">
+                AND log.create_time &gt;= #{param.createTimeBegin}
+            </if>
+            <if test="param.createTimeEnd != null">
+                AND log.create_time &lt;= #{param.createTimeEnd}
+            </if>
+            <if test="param.serialStateList != null and param.serialStateList.size > 0">
+                AND serial_state IN
+                <foreach collection="param.serialStateList" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <select id="page" resultType="org.nodes.wms.dao.stock.dto.output.SerialLogPageResponse">
+        <include refid="pageOrList"/>
+        <if test="page.orders != null and page.orders.size > 0">
+            ORDER BY log.create_time DESC
+        </if>
+    </select>
+
+    <select id="listByQuery" resultType="org.nodes.wms.dao.stock.dto.output.SerialLogExcelResponse">
+        <include refid="pageOrList"/>
+    </select>
 </mapper>

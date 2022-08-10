@@ -16,6 +16,7 @@ import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author nodesc
@@ -48,4 +49,8 @@ public class WmsTaskDaoImpl
 		return super.baseMapper.getPage(page, taskPageQuery);
 	}
 
+	@Override
+	public List<WmsTask> getTaskByIds(List<Long> taskIdList) {
+		return super.listByIds(taskIdList);
+	}
 }

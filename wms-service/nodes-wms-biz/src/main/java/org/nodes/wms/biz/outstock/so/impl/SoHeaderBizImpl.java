@@ -11,6 +11,9 @@ import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
+import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.outstock.so.SoDetailDao;
 import org.nodes.wms.dao.outstock.so.SoHeaderDao;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
@@ -21,8 +24,7 @@ import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindAllPickingRequest;
-import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
+import org.nodes.wms.dao.outstock.so.enums.SoDetailStateEnum;
 import org.nodes.wms.dao.stock.dto.output.PickByPcStockDto;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
@@ -63,9 +65,9 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public SoHeader add(SoBillAddOrEditRequest soBillAddOrEditRequest) {
-		if (Func.isNotEmpty(soBillAddOrEditRequest.getSoBillId())){
+		if (Func.isNotEmpty(soBillAddOrEditRequest.getSoBillId())) {
 			SoHeader soHeader = soHeaderDao.getById(soBillAddOrEditRequest.getSoBillId());
-			if (!SoBillStateEnum.CREATE.getCode().equals(soHeader.getSoBillState())){
+			if (!SoBillStateEnum.CREATE.equals(soHeader.getSoBillState())) {
 				throw new ServiceException("编辑失败，该发货单目前不可编辑");
 			}
 		}
@@ -86,7 +88,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	public boolean remove(List<Long> soBillIdList) {
 		soBillIdList.forEach(item -> {
 			SoHeader soHeader = soHeaderDao.getById(item);
-			if (!soHeader.getSoBillState().equals(SoBillStateEnum.CREATE.getCode())) {
+			if (!SoBillStateEnum.CREATE.getCode().equals(soHeader.getSoBillState().getCode())) {
 				throw new ServiceException("删除失败,只能删除单据状态为未出库的发货单");
 			}
 			logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), "删除发货单");
@@ -142,7 +144,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 	@Override
 	public void export(SoHeaderPageQuery soHeaderPageQuery, HttpServletResponse response) {
 		List<SoHeaderExcelResponse> soHeaderExcelList = soHeaderDao.listByQuery(soHeaderPageQuery);
-		soHeaderExcelList.forEach(soHeader ->{
+		soHeaderExcelList.forEach(soHeader -> {
 			soHeader.setSoBillStateValue(soHeader.getSoBillState().getDesc());
 		});
 		ExcelUtil.export(response, "", "", soHeaderExcelList, SoHeaderExcelResponse.class);
@@ -150,7 +152,7 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 
 	@Override
 	public Page<LogDetailPageResponse> pageLogById(IPage<?> page, Long soBillId) {
-		 return logBiz.pageLogByBillId(page, soBillId);
+		return logBiz.pageLogByBillId(page, soBillId);
 	}
 
 	@Override
@@ -164,13 +166,13 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		soBill.setSoBillId(soHeader.getSoBillId());
 		soBill.setSoBillNo(soHeader.getSoBillNo());
 		soBill.setOrderNo(soHeader.getOrderNo());
-		List<SoDetailForDistResponse> details =  soDetailDao.getSoDetailForDistribute(soBillId);
+		List<SoDetailForDistResponse> details = soDetailDao.getSoDetailForDistribute(soBillId);
 		soBill.setSoDetailList(details);
 		return soBill;
 	}
 
 	@Override
-	public IPage<FindAllPickingResponse> getAllPickingByNo(IPage<?> page, FindAllPickingRequest request) {
+	public IPage<FindAllPickingResponse> getAllPickingByNo(IPage<?> page, findSoHeaderByNoRequest request) {
 		return soHeaderDao.getAllPickingPage(page, request);
 	}
 
@@ -185,9 +187,10 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		List<PickByPcStockDto> stockResponseList = new ArrayList<>();
 		//构造查询库存集合条件
 		List<String> zoneNameList = new ArrayList<>();
-		Collections.addAll(zoneNameList, "虚拟库区", "D箱人工拣货区", "零散存储区", "入库质检区", "入库暂存区");
+		Collections.addAll(zoneNameList, "虚拟库区", "D箱人工拣货区", "人工货架区", "入库质检区", "入库暂存区");
 		List<Long> zoneIdList = zoneBiz.getZoneIdListByName(zoneNameList);
 		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
+		SkuLotUtil.setAllSkuLot(pickByPcSoDetailResponse, skuLot);
 		skuLot.setSkuLot1(pickByPcSoDetailResponse.getSkuLot1());
 		//根据查询条件获取库存集合
 		List<Stock> stockList = stockQueryBiz.findEnableStockByZone(soDetailAndStockRequest.getWhId(), pickByPcSoDetailResponse.getSkuId(),
@@ -208,5 +211,42 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		}
 		soDetailAndStockResponse.setStockResponseList(stockResponseList);
 		return soDetailAndStockResponse;
+	}
+
+	@Override
+	public SoHeader getSoHeaderById(Long soBillId) {
+		return soHeaderDao.getById(soBillId);
+	}
+
+	@Override
+	public void updateSoBillState(SoHeader soHeader) {
+		List<SoDetail> soDetailList = soDetailDao.getBySoBillId(soHeader.getSoBillId());
+		SoBillStateEnum soBillStateEnum = soHeader.getSoBillState();
+		int sizeOfNormal = 0;
+		int sizeOfPart = 0;
+		int allOutStock = 0;
+		int deleted = 0;
+		for (SoDetail soDetail : soDetailList) {
+			if (soDetail.getBillDetailState().equals(SoDetailStateEnum.NORMAL)) {
+				sizeOfNormal++;
+			} else if (soDetail.getBillDetailState().equals(SoDetailStateEnum.PART)) {
+				sizeOfPart++;
+			} else if (soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
+				allOutStock++;
+			} else if (soDetail.getBillDetailState().equals(SoDetailStateEnum.DELETED)) {
+				deleted++;
+			}
+		}
+		if (sizeOfPart > 0) {
+			soHeader.setSoBillState(SoBillStateEnum.PART);
+		} else if (sizeOfNormal + deleted == soDetailList.size()) {
+			soHeader.setSoBillState(SoBillStateEnum.CREATE);
+		} else if (allOutStock + deleted == soDetailList.size()) {
+			soHeader.setSoBillState(SoBillStateEnum.ALL_OUT_STOCK);
+		}
+		if (!soHeader.getSoBillState().equals(soBillStateEnum)) {
+			soHeaderDao.saveOrUpdateSoHeader(soHeader);
+		}
+
 	}
 }

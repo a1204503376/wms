@@ -135,29 +135,44 @@ public class ReceiveController {
 		return R.data(receiveBiz.getLogList(receiveId));
 	}
 
+	/**
+	 * 收货记录：分页查询
+	 */
 	@PostMapping("/pageReceiveLog")
 	public R<IPage<ReceiveLogPageResponse>> pageReceiveLog(
 		Query query, @RequestBody ReceiveLogPageQuery receiveLogPageQuery) {
 		return R.data(receiveLogBiz.page(query, receiveLogPageQuery));
 	}
 
+	/**
+	 * 收货记录：导出
+	 */
 	@PostMapping("/exportReceiveLog")
 	public void exportReceiveLog(@RequestBody ReceiveLogPageQuery receiveLogPageQuery, HttpServletResponse response) {
 		receiveLogBiz.exportExcel(receiveLogPageQuery, response);
 	}
 
+	/**
+	 * 收货记录：撤销收货
+	 */
 	@PostMapping("/cancelReceive")
 	public R<String> revoke(@RequestBody ReceiveCancelRequest receiveCancelRequest) {
 		inStockBiz.cancelReceive(receiveCancelRequest.getIdList());
 		return R.success("撤销成功");
 	}
 
+	/**
+	 * 未收货明细：分页查询
+	 */
 	@PostMapping("/pageNotReceiveDetail")
 	public R<IPage<NotReceiveDetailResponse>> pageNotReceiveDetail(
 		Query query, @RequestBody NotReceiveDetailPageQuery notReceiveDetailPageQuery) {
 		return R.data(receiveBiz.pageNotReceiveDetail(query, notReceiveDetailPageQuery));
 	}
 
+	/**
+	 * 未收货明细：导出
+	 */
 	@PostMapping("/exportNotReceiveDetail")
 	public void exportNotReceiveDetail(
 		@RequestBody NotReceiveDetailPageQuery notReceiveDetailPageQuery,
@@ -168,7 +183,6 @@ public class ReceiveController {
 	/**
 	 * pc收货:获取头表显示信息
 	 */
-
 	@PostMapping("/getReceiveByPc")
 	public R<ReceiveByPcResponse> getReceiveByPc(@Valid @RequestBody ReceiveIdRequest receiveIdRequest) {
 		return R.data(receiveBiz.getReceiveByPcResponse(receiveIdRequest.getReceiveId()));
@@ -190,5 +204,4 @@ public class ReceiveController {
 		String receiveNo = receiveBiz.receiveByPc(request);
 		return R.success("单号:" + receiveNo + "收货成功");
 	}
-
 }

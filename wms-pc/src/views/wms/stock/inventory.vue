@@ -128,6 +128,9 @@ import fileDownload from "js-file-download";
                 </el-button>
                 <el-button icon="el-icon-plus" size="mini" type="primary" @click="showBySerial">按序列号显示
                 </el-button>
+                <el-button size="mini" type="primary" @click="printBoxSticker">
+                    箱贴打印
+                </el-button>
                 <el-button icon="el-icon-upload2" plain size="mini"
                            @click="onUpload">导入
                 </el-button>
@@ -242,8 +245,8 @@ import fileDownload from "js-file-download";
                         v-loading="dialog.loading"
                         :data="dialog.gridData"
                         :header-cell-style="{'background-color': '#fafafa'}"
-                        :height="dialog.isMoveByBox ? 390 : ''"
-                        :max-height="dialog.isMoveByBox ? 400 : ''"
+                        :height="dialog.isMoveByBox ? 390 : 'auto'"
+                        :max-height="dialog.isMoveByBox ? 400 : 'auto'"
                         :span-method="dialogGridDataSpanMethod"
                         border
                         element-loading-spinner="el-icon-loading"
@@ -314,6 +317,7 @@ import fileDownload from "js-file-download";
                             <template v-slot="scope">
                                 <nodes-location
                                     v-model="scope.row['locId']"
+                                    :source-loc-code="dialog.gridData[0].locCode"
                                     size="medium">
                                 </nodes-location>
                             </template>
@@ -750,6 +754,10 @@ export default {
             this.form1.popShow = true,
                 this.form1.thawShow = false
             this.form1.freezeShow = true
+        },
+        printBoxSticker() {
+            let rows = this.$refs.table.selection;
+            alert("箱贴打印" + row)
         },
         cancel() {
             this.form1 = {

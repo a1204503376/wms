@@ -10,26 +10,28 @@
 				<u-col span="2" class="left-text-one-line font-in-page">
 					<u--text class="demo-layout bg-purple-light" v-text="'箱号'"></u--text>
 				</u-col>
-				<u-col span="4">
-					<u-input></u-input>
+				<u-col span="10">
+					<u-input v-model="params.boxCode"></u-input>
 				</u-col>
-				<u-col span="2">
+			</u-row>
+			<u-row>
+				<u-col span="2" class="left-text-one-line font-in-page">
 					<view>
 						<u--text class="demo-layout bg-purple-light" v-text="'库位'"></u--text>
 					</view>
 				</u-col>
-				<u-col span="4">
-					<u-input></u-input>
+				<u-col span="10">
+					<u-input v-model="params.locCode"></u-input>
 				</u-col>
 			</u-row>
-			<view v-for="(item, index) in receiveList" :key="index" :style="item.backgroundColor">
+			<view v-for="(item, index) in receiveList.pdaBoxQtyResponseList" :key="index" :style="item.backgroundColor">
 				<u-row customStyle="margin-bottom: 10px">
 					<u-col span="1" class="left-text-one-line font-in-page">
-						<u-icon name="checkbox-mark" color="green" v-if="item.balance"></u-icon>
+						<u-icon name="checkbox-mark" color="green" v-if="item.isValid"></u-icon>
 					</u-col>
-					<u-col span="8">
+					<u-col span="7">
 						<u--text class="left-text-one-line  demo-layout bg-purple  font-in-page"
-							v-text="item.locCode+'('+item.stockBalance+')'"></u--text>
+							v-text="item.boxCode+' ('+item.totalQty+')'"></u--text>
 					</u-col>
 					<u-col span="2">
 						<u-button type="error" :plain="true" text="差异" @click="updateStatesIsDiff(item,'error')">
@@ -64,8 +66,8 @@
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
-					no: '',
-					type: ''
+					boxCode: '',
+					locCode: ''
 				},
 				receiveList: [],
 				page: {
@@ -83,10 +85,9 @@
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param);
-			this.title = parse.skuCode + '开始盘点';
-			this.params = parse;
-			this.params.no = '0';
-			this.getReceiveList();
+			this.receiveList = parse;
+			this.params.locCode = parse.locCode;
+			this.params.boxCode = parse.boxCode;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -105,11 +106,10 @@
 		methods: {
 			updateStatesIsDiff(item,bool){
 				if(bool == 'success'){
-					item.balance=true;
+					item.isValid=true;
 				}else{
-					item.balance=false;
+					item.isValid=false;
 				}
-				console.log(item)
 			},
 			analysisCode(code) {
 				this.params.type = '';

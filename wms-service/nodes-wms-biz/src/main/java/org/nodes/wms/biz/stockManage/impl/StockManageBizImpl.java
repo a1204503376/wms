@@ -11,6 +11,7 @@ import org.nodes.wms.biz.putway.strategy.TianYiPutwayStrategy;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.stockManage.StockManageBiz;
+import org.nodes.wms.biz.task.AgvTask;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
@@ -43,6 +44,7 @@ public class StockManageBizImpl implements StockManageBiz {
 	private final LogBiz logBiz;
 	private final LpnTypeBiz lpnTypeBiz;
 	private final TianYiPutwayStrategy tianYiPutwayStrategy;
+	private final AgvTask agvTask;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -150,6 +152,15 @@ public class StockManageBizImpl implements StockManageBiz {
 		List<Stock> stockList = stockQueryBiz.findEnableStockByLocation(request.getWhId(), sku.getSkuId(), null, locationIdList, skuLot);
 		//断言stockList
 		AssertUtil.notNull(stockList, "根据您输入的数据查询不到对应的库存，请重新输入后重试");
+		//判断库存是否可以移动
+		canMove(location, targetLocation, stockList, stockList.get(0).getBoxCode());
+
+		if (locationBiz.isAgvLocation(targetLocation)) {
+			//AGV移动任务生成
+			agvTask.moveStockToSchedule(stockList, targetLocation.getLocId());
+			return;
+		}
+
 		//库存移动
 		stockBiz.moveStock(stockList.get(0), request.getSerialNumberList(), stockList.get(0).getStockBalance(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_PCS_PDA, null, null, null);
 	}
@@ -159,6 +170,16 @@ public class StockManageBizImpl implements StockManageBiz {
 	public void stockMoveByLpn(StockMoveByLpnRequest request) {
 		//根据前端传过来的LocCode
 		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getTargetLocCode());
+		List<Stock> stockList = stockQueryBiz.findStockByLpnCode(request.getLpnCode());
+		AssertUtil.notNull(stockList, "LPN移动失败，根据LPN获取库存集合为空");
+		Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
+		canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode());
+		if (locationBiz.isAgvLocation(targetLocation)) {
+			//AGV移动任务生成
+			agvTask.moveStockToSchedule(stockList, targetLocation.getLocId());
+			return;
+		}
+
 		stockBiz.moveStockByLpnCode(request.getLpnCode(), request.getTargetLpnCode(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_LPN_PDA, null, null, null);
 	}
 
@@ -183,8 +204,20 @@ public class StockManageBizImpl implements StockManageBiz {
 		}
 		//根据传过来的多个箱码集合查询出多个库存
 		List<String> boxCodeList = request.getBoxCodeList().stream().filter(Func::isNotEmpty).collect(Collectors.toList());
-		boxCodeList.forEach(boxCode ->
-			stockBiz.moveStockByBoxCode(boxCode, boxCode, request.getLpnCode(), targetLocation, stockLogTypeEnum, null, null, null)
+		boxCodeList.forEach(boxCode -> {
+				List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(boxCode);
+				AssertUtil.notNull(stockList, "PDA库存管理:按箱移动失败，根据箱码查询不到对应库存");
+				Location location = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
+				//判断库存是否可以移动
+				canMove(location, targetLocation, stockList, boxCode);
+				if (locationBiz.isAgvLocation(targetLocation)) {
+					//AGV移动任务生成
+					agvTask.moveStockToSchedule(stockList, targetLocation.getLocId());
+					return;
+				}
+				stockBiz.moveStockByBoxCode(boxCode, boxCode, request.getLpnCode(),
+					targetLocation, stockLogTypeEnum, null, null, null);
+			}
 		);
 	}
 
@@ -302,10 +335,45 @@ public class StockManageBizImpl implements StockManageBiz {
 		List<StockPcMoveDetailRequest> stockMoveDataList = stockPcMoveRequest.getStockMoveDataList();
 		stockMoveDataList.forEach(move -> {
 			Location location = locationBiz.findByLocId(move.getLocId());
-			canMove(location);
+			canMoveToLoc(location);
 			stockBiz.moveStock(stock, move.getSerials(), move.getQty(), location,
 				StockLogTypeEnum.STOCK_MOVE_BY_PCS, null, null, null);
 		});
+	}
+
+	/**
+	 * 判断库存是否可以移动（天宜定制）
+	 * 1. 不能移动到出库集货区和虚拟库区
+	 * 2. 如果是自动区则要求目标库位必须是空库位（库位上没有库存）
+	 * 3. 只能是同类型（自动与人工区）的库区之间移动
+	 * 4. 校验目标库位的箱型
+	 * 5. 校验载重
+	 *
+	 * @param sourceLocation sourceLocation
+	 * @param targetLocation targetLocation
+	 * @param stockList      stockList
+	 * @param boxCode        boxCode
+	 */
+	@Override
+	public void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList, String boxCode) {
+		AssertUtil.notNull(sourceLocation, "校验库存移动失败当前库位为空");
+		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
+		AssertUtil.notNull(stockList, "校验库存移动失败库存为空");
+
+		//1. 不能移动到出库集货区和虚拟库区
+		canMoveToLoc(targetLocation);
+
+		//2. 如果是自动区则要求目标库位必须是空库位（库位上没有库存）
+		canMoveToLocAuto(sourceLocation, targetLocation);
+
+		//3. 只能是同类型（自动与人工区）的库区之间移动
+		canMoveToLocType(sourceLocation, targetLocation);
+
+		//4. 校验目标库位的箱型
+		canMoveToBoxType(targetLocation, boxCode);
+
+		// 5. 校验载重
+		canMoveByIsNotOverweight(targetLocation, stockList);
 	}
 
 	/**
@@ -313,7 +381,7 @@ public class StockManageBizImpl implements StockManageBiz {
 	 *
 	 * @param targetLocation 目标库存
 	 */
-	private void canMove(Location targetLocation) {
+	private void canMoveToLoc(Location targetLocation) {
 		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
 		List<Location> outStockShippingLocationList = locationBiz.getLocationByZoneType(DictCodeConstant.ZONE_TYPE_OF_PICK_TO);
 		Location outStockShippingLocation = outStockShippingLocationList
@@ -336,29 +404,56 @@ public class StockManageBizImpl implements StockManageBiz {
 	}
 
 	/**
-	 * 校验 库内移动校验：1. 校验同库区内移动  2。 校验目标库位箱型  3. 校验载重
+	 * 如果是自动区则要求目标库位必须是空库位（库位上没有库存）
 	 *
-	 * @param sourceLocation 当前库存
+	 * @param sourceLocation sourceLocation
+	 * @param targetLocation targetLocation
+	 */
+	private void canMoveToLocAuto(Location sourceLocation, Location targetLocation) {
+		if (locationBiz.isAgvLocation(sourceLocation) && locationBiz.isAgvLocation(targetLocation)) {
+			if (!stockQueryBiz.isEmptyLocation(targetLocation.getLocId())) {
+				throw new ServiceException("库存移动失败，自动区目标库位存在库存");
+			}
+		}
+	}
+
+	/**
+	 * 只能是同类型（自动与人工区）的库区之间移动
+	 *
+	 * @param sourceLocation sourceLocation
+	 * @param targetLocation targetLocation
+	 */
+	private void canMoveToLocType(Location sourceLocation, Location targetLocation) {
+		if (!Func.equals(sourceLocation.getZoneId(), targetLocation.getZoneId()) && !locationBiz.isStageLocation(sourceLocation)) {
+			throw new ServiceException("库存移动时不能跨区移动");
+		}
+	}
+
+	/**
+	 * 校验目标库位的箱型
+	 *
+	 * @param targetLocation targetLocation
+	 * @param boxCode        boxCode
+	 */
+	private void canMoveToBoxType(Location targetLocation, String boxCode) {
+		if (Func.isNotEmpty(targetLocation.getLpnTypeId())) {
+			LpnType sourceLpnType = lpnTypeBiz.findLpnTypeByBoxCode(boxCode);
+			AssertUtil.notNull(sourceLpnType, "获取当前箱子箱型失败");
+			LpnType targetLpnType = lpnTypeBiz.findLpnTypeById(targetLocation.getLpnTypeId());
+			AssertUtil.notNull(targetLpnType, "获取目标库位箱型失败");
+			if (Func.isNotEmpty(targetLpnType.getCode()) && !Func.equals(sourceLpnType.getCode(), targetLpnType.getCode())) {
+				throw new ServiceException("库存移动时当前库存和目标库位所存储的箱型不一致");
+			}
+		}
+	}
+
+	/**
+	 * 校验载重
+	 *
 	 * @param targetLocation 目标库存
 	 * @param stockList      库存集合
 	 */
-	public void canMoveVerify(Location sourceLocation, Location targetLocation, List<Stock> stockList) {
-		AssertUtil.notNull(sourceLocation, "校验库存移动失败当前库位为空");
-		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
-		AssertUtil.notNull(stockList, "校验库存移动失败库存为空");
-
-		if (!Func.equals(sourceLocation.getZoneId(), targetLocation.getZoneId())) {
-			throw new ServiceException("库存移动时不能跨区移动");
-		}
-
-		LpnType sourceLpnType = lpnTypeBiz.findLpnTypeById(sourceLocation.getLpnTypeId());
-		AssertUtil.notNull(sourceLpnType, "根据箱码获取当前库存箱型失败");
-		LpnType targetLpnType = lpnTypeBiz.findLpnTypeById(targetLocation.getLpnTypeId());
-		AssertUtil.notNull(targetLpnType, "获取目标库位箱型失败");
-		if (Func.isNotEmpty(targetLpnType.getCode()) && !Func.equals(sourceLpnType.getCode(), targetLpnType.getCode())) {
-			throw new ServiceException("库存移动时当前库存和目标库位所存储的箱型不一致");
-		}
-
+	private void canMoveByIsNotOverweight(Location targetLocation, List<Stock> stockList) {
 		if (!tianYiPutwayStrategy.isNotOverweight(stockList, targetLocation)) {
 			throw new ServiceException("要移动的库存超过了最大载重");
 		}

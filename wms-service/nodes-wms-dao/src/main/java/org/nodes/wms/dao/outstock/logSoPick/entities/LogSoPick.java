@@ -71,11 +71,6 @@ public class LogSoPick extends SkuLotBaseEntity {
 	private Long wellenId;
 
 	/**
-	 * 序列号
-	 */
-	private String snCode;
-
-	/**
 	 * 波次编号
 	 */
 	private Long wellenNo;
@@ -121,6 +116,16 @@ public class LogSoPick extends SkuLotBaseEntity {
 	private String lpnCode;
 
 	/**
+	 * 箱码
+	 */
+	private String boxCode;
+
+	/**
+	 * 序列号
+	 */
+	private String snCode;
+
+	/**
 	 * 目标容器
 	 */
 	private String targetLpnCode;
@@ -156,11 +161,6 @@ public class LogSoPick extends SkuLotBaseEntity {
 	private Long pickPlanId;
 
 	/**
-	 * 序列号
-	 */
-	private String soDetailCode;
-
-	/**
 	 * 库房id
 	 */
 	private Long whId;
@@ -174,9 +174,4 @@ public class LogSoPick extends SkuLotBaseEntity {
 	 * 货主id
 	 */
 	private Long woId;
-
-	/**
-	 * 箱码
-	 */
-	private String boxCode;
 }

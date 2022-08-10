@@ -73,6 +73,10 @@ public class TianYiPutwayStrategy {
 		AssertUtil.notEmpty(stockList, "载重校验失败，待上库存为空");
 		AssertUtil.notNull(targetLoc, "载重校验失败，待上库位为空");
 
+		if (locationBiz.isVirtualLocation(targetLoc)){
+			return true;
+		}
+
 		LpnType lpnType = lpnTypeBiz.findLpnTypeByBoxCode(stockList.get(0).getBoxCode());
 		BigDecimal currentStockWeight = staticsLoadWeightByStock(stockList, lpnType);
 		BigDecimal weightOfColumn = staticsLoadWeightByColumn(targetLoc);
