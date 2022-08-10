@@ -2,6 +2,7 @@ package org.nodes.wms.biz.count;
 
 import org.nodes.wms.dao.count.dto.input.StockCountRequest;
 import org.nodes.wms.dao.count.dto.output.PdaBoxSkuQtyResponse;
+import org.nodes.wms.dao.count.dto.output.PdaSkuQtyResponse;
 import org.nodes.wms.dao.count.dto.output.PdaStockCountDetailResponse;
 import org.nodes.wms.dao.count.dto.output.PdaStockCountResponse;
 
@@ -28,8 +29,12 @@ public interface StockCountBiz {
 	List<PdaStockCountDetailResponse> getPdaStockCountDetailResponseList(Long countBillId);
 
 	/**
-	 *根据箱号和库位ID查询返回给PDA使用的箱内物品数量对象集合
+	 * 根据箱号和库位ID查询返回给PDA使用的箱内物品数量对象集合
 	 */
-	List<PdaBoxSkuQtyResponse> getPdaBoxSkuQtyResponseList(String boxCode,String locId);
+	List<PdaBoxSkuQtyResponse> getPdaBoxSkuQtyResponseList(String boxCode, String locId);
 
+	/**
+	 * 根据箱号询返回给PDA使用的箱内物品数量对象集合
+	 */
+	List<PdaSkuQtyResponse> getPdaSkuQtyResponseList(String boxCode);
 }

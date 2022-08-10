@@ -9,12 +9,12 @@ import java.io.Serializable;
  * 盘点单编辑请求对象
  */
 @Data
-public class FindPdaStockCountResponseListRequest implements Serializable {
-	private static final long serialVersionUID = 489756629570332225L;
+public class FindPdaSkuQtyResponseList implements Serializable {
+	private static final long serialVersionUID = 7282904270153514291L;
 	/**
-	 * 盘点单编码
+	 * 箱码
 	 */
-	private String countBillNo;
+	private String boxCode;
 	/**
 	 * 库房ID
 	 */

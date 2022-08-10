@@ -2,14 +2,16 @@ package org.nodes.wms.dao.count.dto.output;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * PDA显示箱号和箱子内物品总数量的返回对象
  */
 @Data
-public class PdaBoxQtyResponse {
+public class PdaBoxQtyResponse implements Serializable {
 
+	private static final long serialVersionUID = 2040077459648458152L;
 	/**
 	 * 箱号
 	 */

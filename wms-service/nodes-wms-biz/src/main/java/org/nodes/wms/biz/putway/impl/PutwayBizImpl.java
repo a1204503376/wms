@@ -71,7 +71,7 @@ public class PutwayBizImpl implements PutwayBiz {
 			}
 			AssertUtil.notNull(stockList, "LPN移动失败，根据LPN获取库存集合为空");
 			Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
-			stockManageBiz.canMove(sourceLocation, targetLocation, stockList);
+			stockManageBiz.canMove(sourceLocation, targetLocation, stockList, request.getBoxCode());
 			if (locationBiz.isAgvLocation(targetLocation)) {
 				//AGV移动任务生成
 				agvTask.moveStockToSchedule(stockList, targetLocation.getLocId());
@@ -93,7 +93,7 @@ public class PutwayBizImpl implements PutwayBiz {
 		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
 		AssertUtil.notNull(stockList, "按箱上架失败，根据箱码查询不到对应库存");
 		Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
-		stockManageBiz.canMove(sourceLocation, targetLocation, stockList);
+		stockManageBiz.canMove(sourceLocation, targetLocation, stockList, request.getBoxCode());
 		if (locationBiz.isAgvLocation(targetLocation)) {
 			//AGV移动任务生成
 			agvTask.moveStockToSchedule(stockList, targetLocation.getLocId());

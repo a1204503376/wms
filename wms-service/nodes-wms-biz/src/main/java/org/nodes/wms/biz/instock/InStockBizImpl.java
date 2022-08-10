@@ -175,7 +175,6 @@ public class InStockBizImpl implements InStockBiz {
 		// 生成撤销的清点记录
 		List<ReceiveLog> newReceiveLogList = receiveLogBiz.newReceiveLog(receiveLogList);
 		newReceiveLogList.forEach(item -> {
-//			List<ReceiveLog> receiveLogList = receiveLogBiz.findReceiveLog(receiveIdList);
 			// 下架库存
 			Stock stock = stockQueryBiz.findStockOnStage(item);
 			stockBiz.outStockByCancelReceive(StockLogTypeEnum.OUTSTOCK_BY_CANCEL_RECEIVE, item, stock);

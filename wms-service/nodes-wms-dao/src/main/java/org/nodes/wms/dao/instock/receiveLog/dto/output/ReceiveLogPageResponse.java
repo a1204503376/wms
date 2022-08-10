@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
-import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -34,11 +33,6 @@ public class ReceiveLogPageResponse extends BaseSkuLot implements Serializable {
 	 * 收货单编码
 	 */
 	private String receiveNo;
-
-	/**
-	 * 收货单状态
-	 */
-	private ReceiveHeaderStateEnum billState;
 
 	/**
 	 * 行号

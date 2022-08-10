@@ -137,7 +137,7 @@ public interface StockManageBiz {
 	 *
 	 * @param stockPcMoveRequest PC按件移动参数
 	 */
-    void stockMoveByPc(StockPcMoveRequest stockPcMoveRequest);
+	void stockMoveByPc(StockPcMoveRequest stockPcMoveRequest);
 
 	/**
 	 * 判断库存是否可以移动（天宜定制）
@@ -150,6 +150,7 @@ public interface StockManageBiz {
 	 * @param sourceLocation sourceLocation
 	 * @param targetLocation targetLocation
 	 * @param stockList      stockList
+	 * @param boxCode        boxCode
 	 */
-	void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList);
+	void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList, String boxCode);
 }

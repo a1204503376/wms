@@ -5,6 +5,8 @@ import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.count.StockCountBiz;
 import org.nodes.wms.dao.count.dto.input.FindPdaStockCountDetailResponseListRequest;
 import org.nodes.wms.dao.count.dto.input.FindPdaStockCountResponseListRequest;
+import org.nodes.wms.dao.count.dto.input.FindPdaSkuQtyResponseList;
+import org.nodes.wms.dao.count.dto.output.PdaSkuQtyResponse;
 import org.nodes.wms.dao.count.dto.output.PdaStockCountDetailResponse;
 import org.nodes.wms.dao.count.dto.output.PdaStockCountResponse;
 import org.springblade.core.tool.api.R;
@@ -48,4 +50,16 @@ public class StockStaticCheckController {
 	public R<List<PdaStockCountDetailResponse>> findPdaStockCountDetailResponseList(@RequestBody FindPdaStockCountDetailResponseListRequest request) {
 		return R.data(stockCountBiz.getPdaStockCountDetailResponseList(request.getCountBillId()));
 	}
+
+	/**
+	 * 静态盘点：根据箱码查询库存详情
+	 *
+	 * @param request 箱码
+	 * @return 响应对象
+	 */
+	@PostMapping("/findPdaSkuQtyResponseList")
+	public R<List<PdaSkuQtyResponse>> findPdaSkuQtyResponseList(@RequestBody FindPdaSkuQtyResponseList request) {
+		return R.data(stockCountBiz.getPdaSkuQtyResponseList(request.getBoxCode()));
+	}
+
 }
