@@ -22,7 +22,6 @@ public class PickByPcStockDto {
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long stockId;
-
 	/**
 	 * 可用库存
 	 */
@@ -39,6 +38,11 @@ public class PickByPcStockDto {
 	 * 批次
 	 */
 	private String skuLot1;
+	/**
+	 * 库位编码
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long locId;
 	/**
 	 * 库位编码
 	 */
