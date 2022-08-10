@@ -166,7 +166,7 @@
             this.barSubItem3,
             this.barButtonItem1});
             this.barManager1.MainMenu = this.mainBar;
-            this.barManager1.MaxItemId = 5;
+            this.barManager1.MaxItemId = 6;
             this.barManager1.StatusBar = this.bar8;
             this.barManager1.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barManager_ItemClick);
             // 

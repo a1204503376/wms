@@ -30,6 +30,7 @@
         from wms_stock s
                  left join wms_owner wo on s.wo_id = wo.wo_id
                  left join wms_zone wz on s.zone_id = wz.zone_id
+                 left join wms_location loc on loc.loc_id = s.loc_id
     </sql>
     <sql id="stock1">
         <where>
@@ -87,6 +88,9 @@
             </if>
             <if test="query.woId!=null and query.woId != ''">
                 AND s.wo_id = #{query.woId}
+            </if>
+            <if test="query.locColumn != null and query.locColumn != ''">
+                AND loc.loc_column = #{query.locColumn}
             </if>
             <if test="query.receiveTimeBegin!=null">
                 AND s.sku_Lot3 &gt;= #{query.receiveTimeBegin}

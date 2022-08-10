@@ -18,12 +18,12 @@ export const exportExcel = (data) => {
     })
 }
 
-export const cancelOutstock = (ids) => {
+export const cancelOutstock = (lsopIdList) => {
     return request({
         url: '/api/wms/outstock/logSoPick/cancelOutstock',
         method: 'post',
         data: {
-            idList: ids
+            lsopIdList: lsopIdList
         }
     })
 }

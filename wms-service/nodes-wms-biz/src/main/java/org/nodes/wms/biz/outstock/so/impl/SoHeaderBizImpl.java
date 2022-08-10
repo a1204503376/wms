@@ -186,15 +186,12 @@ public class SoHeaderBizImpl implements SoHeaderBiz {
 		//创建库存返回对象集合
 		List<PickByPcStockDto> stockResponseList = new ArrayList<>();
 		//构造查询库存集合条件
-		List<String> zoneNameList = new ArrayList<>();
-		Collections.addAll(zoneNameList, "虚拟库区", "D箱人工拣货区", "人工货架区", "入库质检区", "入库暂存区");
-		List<Long> zoneIdList = zoneBiz.getZoneIdListByName(zoneNameList);
 		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
 		SkuLotUtil.setAllSkuLot(pickByPcSoDetailResponse, skuLot);
 		skuLot.setSkuLot1(pickByPcSoDetailResponse.getSkuLot1());
 		//根据查询条件获取库存集合
 		List<Stock> stockList = stockQueryBiz.findEnableStockByZone(soDetailAndStockRequest.getWhId(), pickByPcSoDetailResponse.getSkuId(),
-			StockStatusEnum.NORMAL, zoneIdList, skuLot);
+			StockStatusEnum.NORMAL, null, skuLot);
 		for (Stock stock : stockList) {
 			BigDecimal stockEnableQty = stock.getStockEnable();
 			if (stockEnableQty.compareTo(BigDecimal.ZERO) == -1) {

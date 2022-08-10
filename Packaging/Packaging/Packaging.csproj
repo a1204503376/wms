@@ -241,10 +241,17 @@
       <Project>{5b358fb0-c0fb-4558-bde7-4e45ac411a98}</Project>
       <Name>DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TUpdater\TUpdater.csproj">
+      <Project>{47c182c3-0614-488c-9cce-c5a6e81ad593}</Project>
+      <Name>TUpdater</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="manifest.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tclient.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

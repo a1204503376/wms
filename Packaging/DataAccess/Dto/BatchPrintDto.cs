@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using DataAccess.Enitiies;
@@ -20,6 +21,15 @@ namespace DataAccess.Dto
         public string PrintDate { get; set; } = DateTime.Now.ToString("yyMMdd");
         public string UserName { get; set; }
         public string BoxNumber { get; set; }
+
+        public string BoxNumberLabel
+        {
+            get
+            {
+                return $"{ConfigurationManager.AppSettings["BoxCodePrefix"]}{BoxNumber}";
+            }
+        }
+
         public string BoxNumberSuffix
         {
             get => BoxNumber.Substring(BoxNumber.Length - 4, 4);
