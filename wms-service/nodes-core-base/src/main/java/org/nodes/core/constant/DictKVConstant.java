@@ -11,27 +11,27 @@ public interface DictKVConstant {
 	/**
 	 * 库区类型(zone_type):不合格品区
 	 */
-	Integer ZONE_TYPE_UNACCEPTED_PRODUCT_AREA = 50;
+	Integer ZONE_TYPE_NONCONFORMING = 50;
 	/**
 	 * 库区类型(zone_type):虚拟库区
 	 */
-	Integer ZONE_TYPE_VIRTUAL_AREA = 70;
+	Integer ZONE_TYPE_VIRTUAL = 70;
 	/**
 	 * 库区类型(zone_type):备货区
 	 */
-	Integer ZONE_TYPE_CHOICE_AREA = 71;
+	Integer ZONE_TYPE_CHOICE = 71;
 	/**
 	 * 库区类型(zone_type):翻包区
 	 */
-	Integer ZONE_TYPE_FLAP_BAG_AREA = 72;
+	Integer ZONE_TYPE_PACK = 72;
 	/**
 	 * 库区类型(zone_type):入库暂存区
 	 */
-	Integer ZONE_TYPE_OF_STAGE = 73;
+	Integer ZONE_TYPE_STAGE = 73;
 	/**
 	 * 库区类型(zone_type):出库集货区
 	 */
-	Integer ZONE_TYPE_OF_PICK_TO = 74;
+	Integer ZONE_TYPE_PICK_TO = 74;
 	/**
 	 * 库区类型(zone_type):拣货区
 	 */
@@ -39,27 +39,27 @@ public interface DictKVConstant {
 	/**
 	 * 库区类型(zone_type):入库质检区
 	 */
-	Integer ZONE_TYPE_OF_INSTOCK_QC = 76;
+	Integer ZONE_TYPE_INSTOCK_QC = 76;
 	/**
 	 * 库区类型(zone_type):存储区
 	 */
-	Integer ZONE_TYPE_STORAGE_AREA = 77;
+	Integer ZONE_TYPE_STORAGE = 77;
 	/**
 	 * 库区类型(zone_type):自动化存储区
 	 */
-	Integer ZONE_TYPE_AUTOMATION_STORAGE_AREA = 80;
+	Integer ZONE_TYPE_AGV_STORAGE = 80;
 	/**
 	 * 库区类型(zone_type):自动化拣货区
 	 */
-	Integer ZONE_TYPE_AUTOMATION_PICKING_AREA = 81;
+	Integer ZONE_TYPE_AGV_PICK = 81;
 	/**
 	 * 库区类型(zone_type):自动化备货区
 	 */
-	Integer ZONE_TYPE_AUTOMATION_CHOICE_AREA = 82;
+	Integer ZONE_TYPE_AGV_CHOICE = 82;
 	/**
 	 * 库区类型(zone_type):自动化临时区
 	 */
-	Integer ZONE_TYPE_AUTOMATION_TEMPORARY_AREA = 83;
+	Integer ZONE_TYPE_AGV_TEMPORARY = 83;
 
 	/**
 	 * 库位使用状态(loc_flag)：正常 可以上架库存

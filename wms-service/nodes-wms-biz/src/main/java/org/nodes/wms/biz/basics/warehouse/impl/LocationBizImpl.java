@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.ArrayUtils;
 import org.nodes.core.base.entity.Dict;
-import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.constant.DictKVConstant;
 import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
@@ -95,6 +94,11 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public Location edit(LocationAddOrEditRequest locationAddOrEditRequest) {
+		if (Func.notNull(locationDao.getLocationByLocCode(locationAddOrEditRequest.getWhId(),
+			locationAddOrEditRequest.getLocCode()))){
+			throw new ServiceException("新增库位失败，该库位在当前库房已经存在");
+		}
+
 		Location location = locationFactory.createLocation(locationAddOrEditRequest);
 		locationDao.saveOrUpdateLocation(location);
 		return location;
@@ -213,7 +217,7 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isPickToLocation(Location location) {
-		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_OF_PICK_TO);
+		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_PICK_TO);
 	}
 
 	@Override
@@ -256,16 +260,16 @@ public class LocationBizImpl implements LocationBiz {
 	@Override
 	public boolean isAgvTempOfZoneType(Long locId) {
 		Integer zoneType = locationDao.getZoneTypeByLocId(locId);
-		return DictKVConstant.ZONE_TYPE_AUTOMATION_TEMPORARY_AREA.equals(zoneType);
+		return DictKVConstant.ZONE_TYPE_AGV_TEMPORARY.equals(zoneType);
 	}
 
 	@Override
 	public boolean isAgvZone(Long locId) {
 		Integer zoneType = locationDao.getZoneTypeByLocId(locId);
-		return DictKVConstant.ZONE_TYPE_AUTOMATION_STORAGE_AREA.equals(zoneType)
-			|| DictKVConstant.ZONE_TYPE_AUTOMATION_PICKING_AREA.equals(zoneType)
-			|| DictKVConstant.ZONE_TYPE_AUTOMATION_CHOICE_AREA.equals(zoneType)
-			|| DictKVConstant.ZONE_TYPE_AUTOMATION_TEMPORARY_AREA.equals(zoneType);
+		return DictKVConstant.ZONE_TYPE_AGV_STORAGE.equals(zoneType)
+			|| DictKVConstant.ZONE_TYPE_AGV_PICK.equals(zoneType)
+			|| DictKVConstant.ZONE_TYPE_AGV_CHOICE.equals(zoneType)
+			|| DictKVConstant.ZONE_TYPE_AGV_TEMPORARY.equals(zoneType);
 	}
 
 	@Override
@@ -276,7 +280,7 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isVirtualLocation(Location location) {
-		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_VIRTUAL_AREA);
+		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_VIRTUAL);
 	}
 
 	@Override
@@ -286,15 +290,15 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public boolean isStageLocation(Location location) {
-		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_OF_STAGE);
+		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_STAGE);
 	}
 
 	@Override
 	public boolean isAgvLocation(Location location) {
-		if (getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_AUTOMATION_STORAGE_AREA)
-			|| getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_AUTOMATION_PICKING_AREA)
-			|| getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_AUTOMATION_CHOICE_AREA)
-			|| getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_AUTOMATION_TEMPORARY_AREA)) {
+		if (getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_AGV_STORAGE)
+			|| getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_AGV_PICK)
+			|| getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_AGV_CHOICE)
+			|| getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_AGV_TEMPORARY)) {
 			return true;
 		}
 		return false;

@@ -91,31 +91,7 @@ public class LocationFactory {
 
 	public Location createLocation(LocationAddOrEditRequest locationAddOrEditRequest) {
 		Location location = new Location();
-//		if (Func.isEmpty(locationAddRequest.getStatus())) {
-//			throw new ServiceException("新增失败，启用状态不能为空");
-//		}
-		// 判断启用状态
-//		if (!locationAddRequest.getStatus().equals(StatusEnum.ON.getIndex())
-//			&& !locationAddRequest.getStatus().equals(StatusEnum.OFF.getIndex())) {
-//			throw new ServiceException("新增失败，启用状态只能为1(启用)或者-1(禁用)");
-//		}
 		Func.copy(locationAddOrEditRequest, location);
-		List<Location> locations = locationDao.getLocationByWhId(location.getWhId());
-		Warehouse warehouse = warehouseBiz.findById(location.getWhId());
-
-		// 根据id是否为空判断是(新增/编辑)操作
-		if (Func.isNotEmpty(locationAddOrEditRequest.getLocId())) {
-			location.setLocId(locationAddOrEditRequest.getLocId());
-		} else {
-			List<String> locCodeList = locations.stream().map(Location::getLocCode).collect(Collectors.toList());
-			if (Func.isNotEmpty(locCodeList) && locCodeList.contains(location.getLocCode())) {
-				throw new ServiceException(
-						String.format(
-								"新增失败，库房[编码：%s]中的库位[编码：%s]已存在",
-								warehouse.getWhCode(),
-								locationAddOrEditRequest.getLocCode()));
-			}
-		}
 		return location;
 	}
 

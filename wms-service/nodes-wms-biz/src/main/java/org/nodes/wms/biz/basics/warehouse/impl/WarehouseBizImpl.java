@@ -27,7 +27,6 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -129,16 +128,16 @@ public class WarehouseBizImpl implements WarehouseBiz {
 	@Override
 	public void initZoneAndLocAfterNewWarehouse(Warehouse warehouse) {
 		// 创建默认的库区（入库暂存区、入库质检区、出库集货区、虚拟库区）
-		Zone stageZone = newZoneBySystem(warehouse, DictKVConstant.ZONE_TYPE_OF_STAGE,
+		Zone stageZone = newZoneBySystem(warehouse, DictKVConstant.ZONE_TYPE_STAGE,
 			WmsAppConstant.LOC_STAGE, "入库暂存区");
 		warehouse.setStage(stageZone.getZoneId());
-		Zone pickToZone = newZoneBySystem(warehouse, DictKVConstant.ZONE_TYPE_OF_PICK_TO,
+		Zone pickToZone = newZoneBySystem(warehouse, DictKVConstant.ZONE_TYPE_PICK_TO,
 			WmsAppConstant.LOC_PICKTO, "出库集货区");
 		warehouse.setPick(pickToZone.getZoneId());
-		Zone qcZone = newZoneBySystem(warehouse, DictKVConstant.ZONE_TYPE_OF_INSTOCK_QC,
+		Zone qcZone = newZoneBySystem(warehouse, DictKVConstant.ZONE_TYPE_INSTOCK_QC,
 			WmsAppConstant.LOC_QC, "入库质检区");
 		warehouse.setQc(qcZone.getZoneId());
-		Zone virtualZone = newZoneBySystem(warehouse, DictKVConstant.ZONE_TYPE_VIRTUAL_AREA,
+		Zone virtualZone = newZoneBySystem(warehouse, DictKVConstant.ZONE_TYPE_VIRTUAL,
 			WmsAppConstant.ZONE_VIRTUAL, "虚拟库区");
 		warehouse.setVirtualZone(virtualZone.getZoneId());
 
