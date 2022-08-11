@@ -132,7 +132,21 @@ public interface StockDao {
 	 * @return stock集合
 	 */
 	List<Stock> getStock(StockStatusEnum status, Long woId, Long locId,
-						 Long skuId, String boxCode, String lpnCode);
+			Long skuId, String boxCode, String lpnCode);
+
+	/**
+	 * 匹配库存，即使库存余额为0也会被匹配到
+	 *
+	 * @param status  库存状态，必填
+	 * @param woId    货主id，必填
+	 * @param locId   库位id， 必填
+	 * @param skuId   物品id，必填
+	 * @param boxCode 箱码，为空时则查询空箱码的库存，必填
+	 * @param lpnCode lpn编码，为空时则查询空lpn的库存，必填
+	 * @return stock集合
+	 */
+	List<Stock> matchStock(StockStatusEnum status, Long woId, Long locId,
+			Long skuId, String boxCode, String lpnCode);
 
 	/**
 	 * 根据库位id查找库存
@@ -169,7 +183,7 @@ public interface StockDao {
 	 * @param lastOutTime  最近出库时间，分必填
 	 */
 	void updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
-					 BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
+			BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
 
 	/**
 	 * 批量更新库存状态
@@ -233,8 +247,8 @@ public interface StockDao {
 	 * @return stock集合
 	 */
 	List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-									  List<Long> zoneIdList, SkuLotBaseEntity skuLot,
-									  List<Long> excludeZoneIdList);
+			List<Long> zoneIdList, SkuLotBaseEntity skuLot,
+			List<Long> excludeZoneIdList);
 
 	/**
 	 * 查询物品可用库存
@@ -248,8 +262,8 @@ public interface StockDao {
 	 * @return stock集合
 	 */
 	List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-										  List<Long> locationIdList, SkuLotBaseEntity skuLot,
-										  List<Long> excludeZoneIdList);
+			List<Long> locationIdList, SkuLotBaseEntity skuLot,
+			List<Long> excludeZoneIdList);
 
 	/**
 	 * 库存余额按箱显示
