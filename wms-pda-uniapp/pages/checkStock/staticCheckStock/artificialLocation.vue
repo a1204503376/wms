@@ -7,7 +7,6 @@
 		<u-divider text="" style="margin-top:0rpx;"></u-divider>
 		<u-divider text="暂无数据" v-if="noData"></u-divider>
 		<u-list style="height: 950rpx;" @scrolltolower="scrolltolower">
-
 			<u-row customStyle="margin-bottom: 10px">
 				<u-col span="2" class="left-text-one-line font-in-page">
 					<u--text class="demo-layout bg-purple-light" v-text="'箱号'"></u--text>
@@ -61,7 +60,7 @@
 
 <script>
 	import setting from '@/common/setting'
-	import stockInquiry from '@/api/stock/stockInquiry.js'
+	import staticCheckStock from '@/api/checkStock/staticCheckStock.js'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
 	export default {
@@ -135,8 +134,12 @@
 						this.esc();
 						return;
 					} else {
-                       //调用生成从差异报告
-					   
+						//调用生成从差异报告
+						let params = {}
+						params.countReportList = this.defaultList
+						staticCheckStock.generateCountReport(params).then(data => {
+							console.log(data.data)
+						})
 					}
 				} else {
 					this.$u.func.showToast({

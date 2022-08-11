@@ -24,8 +24,17 @@ const findPdaSkuQtyResponseList =(data)=>{
 	})
 }
 
+const generateCountReport =(data)=>{
+	return http.request({
+		url: '/api/ApiPDA/count/StockStaticCheck/generateCountReport',
+		method: 'POST',
+		data:data,
+	})
+}
+
 export default {
 	getPdaStockCountResponseList,
 	getPdaStockCountDetailResponseList,
-	findPdaSkuQtyResponseList
+	findPdaSkuQtyResponseList,
+	generateCountReport
 }

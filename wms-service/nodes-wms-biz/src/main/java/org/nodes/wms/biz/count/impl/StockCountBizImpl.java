@@ -4,14 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.core.tool.utils.NodesUtil;
+import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.count.CountReportBiz;
 import org.nodes.wms.biz.count.StockCountBiz;
 import org.nodes.wms.biz.count.modular.CountReportFactory;
 import org.nodes.wms.biz.count.modular.StockCountFactory;
-import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.dao.count.CountDetailDao;
 import org.nodes.wms.dao.count.CountHeaderDao;
 import org.nodes.wms.dao.count.dto.input.GenerateCountReport;
@@ -39,12 +40,11 @@ public class StockCountBizImpl implements StockCountBiz {
 	private final StockCountFactory stockCountFactory;
 	private final CountHeaderDao countHeaderDao;
 	private final CountDetailDao countDetailDao;
-	private final StockBiz stockBiz;
 	private final StockQueryBiz stockQueryBiz;
 	private final LocationBiz locationBiz;
 	private final CountReportFactory countReportFactory;
 	private final CountReportBiz countReportBiz;
-
+    private final SkuBiz skuBiz;
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void save(StockCountRequest stockCountRequest) {
@@ -117,6 +117,8 @@ public class StockCountBizImpl implements StockCountBiz {
 			Stock stock = stockQueryBiz.findStockById(generateCountReport.getStockId());
 			CountDetail countDetail = countDetailDao.selectCountDetailByCode(stock.getLocCode(), stock.getBoxCode());
 			CountReport countReport = countReportFactory.createCountReport(generateCountReport, stock, countDetail);
+			SkuUm um = skuBiz.findSkuUmByUmCode(stock.getWsuCode());
+			countReport.setWsuName(um.getWsuName());
 			countReportBiz.insertCountReport(countReport);
 		});
 	}
