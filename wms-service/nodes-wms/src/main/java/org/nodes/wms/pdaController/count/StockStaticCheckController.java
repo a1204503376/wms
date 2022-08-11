@@ -3,9 +3,10 @@ package org.nodes.wms.pdaController.count;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.count.StockCountBiz;
+import org.nodes.wms.dao.count.dto.input.FindPdaSkuQtyResponseList;
 import org.nodes.wms.dao.count.dto.input.FindPdaStockCountDetailResponseListRequest;
 import org.nodes.wms.dao.count.dto.input.FindPdaStockCountResponseListRequest;
-import org.nodes.wms.dao.count.dto.input.FindPdaSkuQtyResponseList;
+import org.nodes.wms.dao.count.dto.input.GenerateCountReportRequest;
 import org.nodes.wms.dao.count.dto.output.PdaSkuQtyResponse;
 import org.nodes.wms.dao.count.dto.output.PdaStockCountDetailResponse;
 import org.nodes.wms.dao.count.dto.output.PdaStockCountResponse;
@@ -62,4 +63,15 @@ public class StockStaticCheckController {
 		return R.data(stockCountBiz.getPdaSkuQtyResponseList(request.getBoxCode()));
 	}
 
+	/**
+	 * 生成差异报告
+	 *
+	 * @param request 生成差异报告请求对象
+	 * @return 成功消息
+	 */
+	@PostMapping("/generateCountReport")
+	public R<String> generateCountReport(@RequestBody GenerateCountReportRequest request) {
+		stockCountBiz.generateCountReport(request.getCountReportList());
+		return R.success("生成差异报告成功");
+	}
 }

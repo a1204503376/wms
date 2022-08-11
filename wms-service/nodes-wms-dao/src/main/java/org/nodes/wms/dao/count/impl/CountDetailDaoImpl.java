@@ -17,17 +17,17 @@ public class CountDetailDaoImpl
 	extends BaseServiceImpl<CountDetailMapper, CountDetail>
 	implements CountDetailDao {
 
-    @Override
-    public boolean deleteByIds(List<Long> ids) {
-		AssertUtil.notEmpty(ids,"参数为空");
-		return baseMapper.deleteByCountDetailId(ids)>0;
-    }
+	@Override
+	public boolean deleteByIds(List<Long> ids) {
+		AssertUtil.notEmpty(ids, "参数为空");
+		return baseMapper.deleteByCountDetailId(ids) > 0;
+	}
 
 	@Override
 	public List<CountDetail> selectByCountBillId(Long countBillId) {
-		AssertUtil.notNull(countBillId,"盘点单ID为空");
+		AssertUtil.notNull(countBillId, "盘点单ID为空");
 		return super.lambdaQuery()
-			.eq(CountDetail::getCountBillId,countBillId)
+			.eq(CountDetail::getCountBillId, countBillId)
 			.select(
 				CountDetail::getCountDetailId,
 				CountDetail::getCountDetailState,
@@ -37,5 +37,15 @@ public class CountDetailDaoImpl
 				CountDetail::getUserName)
 			.groupBy(CountDetail::getLocCode)
 			.list();
+	}
+
+	@Override
+	public CountDetail selectCountDetailByCode(String locCode, String boxCode) {
+		AssertUtil.notNull(locCode, "根据库位编码和箱码获取盘点单明细时，库位编码为空");
+		AssertUtil.notNull(boxCode, "根据库位编码和箱码获取盘点单明细时，箱码为空");
+		return super.lambdaQuery()
+			.eq(CountDetail::getLocCode, locCode)
+			.eq(CountDetail::getBoxCode, boxCode)
+			.one();
 	}
 }
