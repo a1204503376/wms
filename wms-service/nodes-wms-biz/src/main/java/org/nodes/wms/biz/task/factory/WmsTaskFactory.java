@@ -74,6 +74,10 @@ public class WmsTaskFactory {
 		WmsTask wmsTask = new WmsTask();
 		// 任务id
 		wmsTask.setTaskId(stockList.get(0).getStockId());
+		//箱码
+		wmsTask.setBoxCode(stockList.get(0).getBoxCode());
+		//批次号
+		wmsTask.setLot(stockList.get(0).getSkuLot1());
 		// 关联单据id
 		wmsTask.setBillId(stockList.get(0).getStockId());
 		// 关联明细id
