@@ -1,14 +1,8 @@
 package org.nodes.wms.biz.stock.impl;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
@@ -54,10 +48,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-
-import lombok.RequiredArgsConstructor;
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author nodesc
@@ -210,6 +207,9 @@ public class StockBizImpl implements StockBiz {
 
 		// 根据撤销记录查找库存，判断库存是否够
 		Stock stock = stockQueryBiz.findStockOnPickTo(pickLog);
+		if (Func.isNull(stock)){
+			throw new ServiceException("撤销拣货失败，出库集货区无此库存");
+		}
 		// 将库存移动到原库位上
 		List<String> serialNoList = null;
 		if (Func.isNotEmpty(pickLog.getSnCode())) {
