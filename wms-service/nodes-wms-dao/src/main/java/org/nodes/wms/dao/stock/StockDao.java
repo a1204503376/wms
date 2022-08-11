@@ -143,10 +143,11 @@ public interface StockDao {
 	 * @param skuId   物品id，必填
 	 * @param boxCode 箱码，为空时则查询空箱码的库存，必填
 	 * @param lpnCode lpn编码，为空时则查询空lpn的库存，必填
+	 * @param dropId  落放id，为空时采用空白字符替代
 	 * @return stock集合
 	 */
 	List<Stock> matchStock(StockStatusEnum status, Long woId, Long locId,
-			Long skuId, String boxCode, String lpnCode);
+			Long skuId, String boxCode, String lpnCode, String dropId);
 
 	/**
 	 * 根据库位id查找库存
@@ -309,6 +310,7 @@ public interface StockDao {
 
 	/**
 	 * 根据stock更新库存状态和落放id
+	 * 
 	 * @param stocks stocks只需要其中的stockId作为更新的条件
 	 * @param status 库存状态
 	 * @param dropId 落放id

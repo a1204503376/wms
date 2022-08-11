@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -119,7 +120,8 @@ public class SchedulingBizImpl implements SchedulingBiz {
 
 	/**
 	 * AGV开始执行任务，WMS系统的操作：
-	 * 1. 将原库位库存转移到中间库位，中间库位的库存仍是冻结状态
+	 * 修改任务状态
+	 * 将原库位库存转移到中间库位，中间库位的库存仍是冻结状态
 	 *
 	 * @param wmsTask 任务
 	 */
@@ -127,15 +129,21 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		// 修改任务状态
 		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.START_EXECUTION);
 		// 将原库位库存移动到中间库位
-		List<Stock> stockList = stockQueryBiz.findStockByTaskId(wmsTask.getTaskId());
-		Location tempLoc = locationBiz.getInTransitLocation(wmsTask.getWhId());
+		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
 		for (Stock stock : stockList) {
-			stockBiz.moveAllStock(stock, stock.getBoxCode(), wmsTask.getTaskId().toString(), tempLoc,
-					StockLogTypeEnum.STOCK_AGV_MOVE, wmsTask.getTaskId(), null, null);
+			stockBiz.moveAllStockToDropId(stock, wmsTask.getTaskId().toString(), StockLogTypeEnum.STOCK_AGV_MOVE);
 		}
-
 	}
 
+	/**
+	 * AGV执行完毕，WMS的操作有：
+	 * 修改任务状态
+	 * 移动库存到目标库位
+	 * 解冻目标库存
+	 * 解冻目标库位
+	 * 
+	 * @param wmsTask 任务
+	 */
 	private void onSuccess(WmsTask wmsTask) {
 		if (WmsTaskStateEnum.ISSUED.equals(wmsTask.getTaskState())) {
 			throw new ServiceException(String.format(
@@ -146,15 +154,16 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.COMPLETED);
 		// 将中间库位的库存移动到目标库位
 		Location targetLoc = locationBiz.findByLocId(wmsTask.getToLocId());
-		List<Stock> stockList = stockQueryBiz.findStockByTaskId(wmsTask.getTaskId());
+		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
+		List<Stock> targetStockList = new ArrayList<Stock>();
 		for (Stock stock : stockList) {
-			stock.setDropId("");
-			stock.setStockStatus(StockStatusEnum.NORMAL);
-			stockBiz.moveAllStock(stock, stock.getBoxCode(), stock.getLpnCode(), targetLoc,
-					StockLogTypeEnum.STOCK_AGV_MOVE, wmsTask.getTaskId(), null, null);
+			Stock targetStock = stockBiz.moveAllStockFromDropId(stock, targetLoc, wmsTask.getTaskId().toString(),
+					StockLogTypeEnum.STOCK_AGV_MOVE);
+			targetStockList.add(targetStock);
 		}
-		// 解冻目标库位
+
 		locationBiz.unfreezeLocByTask(wmsTask.getTaskId().toString());
+		stockBiz.unfreezeStockByDropId(targetStockList, wmsTask.getTaskId());
 	}
 
 	private void onException(WmsTask wmsTask) {

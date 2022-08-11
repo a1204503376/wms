@@ -208,9 +208,9 @@ public class StockBizImpl implements StockBiz {
 
 		// 根据撤销记录查找库存，判断库存是否够
 		Stock stock = stockQueryBiz.findStockOnPickTo(pickLog);
-		if (Func.isNull(stock)){
+		if (Func.isNull(stock)) {
 			throw ExceptionUtil.mpe(
-				"撤销拣货失败，出库集货区无此库存[物品编码:{},生产批次:{}]",pickLog.getSkuCode(),pickLog.getSkuLot1());
+					"撤销拣货失败，出库集货区无此库存[物品编码:{},生产批次:{}]", pickLog.getSkuCode(), pickLog.getSkuLot1());
 		}
 		// 将库存移动到原库位上
 		List<String> serialNoList = null;
@@ -349,6 +349,20 @@ public class StockBizImpl implements StockBiz {
 		AssertUtil.notNull(targetLocation, "库存移动失败，目标库位为空");
 		StockUtil.assertPick(sourceStock, qty, "库存移动失败");
 
+		if (!targetLocation.enableStock()) {
+			throw new ServiceException(
+					String.format("库存移动失败，目标库位[%s]不能上架库存", targetLocation.getLocCode()));
+		}
+	}
+
+	private void checkStockStatus(Stock sourceStock) {
+		if (StockStatusEnum.SYSTEM_FREEZE.equals(sourceStock.getStockStatus())) {
+			throw new ServiceException(
+					String.format("库存移动失败,原库存[%d]被系统冻结,不能移动", sourceStock.getStockId()));
+		}
+	}
+
+	private void checkQtyOfSerial(Stock stock, List<String> serialNoList, BigDecimal moveQty) {
 		if (Func.isNotEmpty(serialNoList)) {
 			List<String> serialNos = serialNoList.stream()
 					.distinct()
@@ -358,26 +372,16 @@ public class StockBizImpl implements StockBiz {
 						String.join(",", serialNoList)));
 			}
 
-			if (serialNos.size() != qty.intValue()) {
+			if (serialNos.size() != moveQty.intValue()) {
 				throw new ServiceException("库存移动失败,移动的个数与序列号个数不一致");
 			}
-		}
-
-		if (!targetLocation.enableStock()) {
-			throw new ServiceException(
-					String.format("库存移动失败，目标库位[%s]不能上架库存", targetLocation.getLocCode()));
-		}
-
-		if (StockStatusEnum.SYSTEM_FREEZE.equals(sourceStock.getStockStatus())) {
-			throw new ServiceException(
-					String.format("库存移动失败,原库存[%d]被系统冻结,不能移动", sourceStock.getStockId()));
 		}
 	}
 
 	@Override
 	public void checkSerialOnStock(Stock stock, List<String> serialNoList) {
-		List<String> serialNosOfStock = serialDao.getSerialNoByStockId(stock.getStockId());
 
+		List<String> serialNosOfStock = serialDao.getSerialNoByStockId(stock.getStockId());
 		if (Func.isNotEmpty(serialNosOfStock)) {
 			if (Func.isEmpty(serialNoList)) {
 				throw new ServiceException(
@@ -393,7 +397,7 @@ public class StockBizImpl implements StockBiz {
 		} else {
 			if (Func.isNotEmpty(serialNoList)) {
 				throw new ServiceException(
-						String.format("序列号校验失败,库存[%d]没有关联序列号", stock.getStockId()));
+						String.format("序列号校验失败,库存[%d]没有关联任何序列号", stock.getStockId()));
 			}
 		}
 	}
@@ -421,46 +425,24 @@ public class StockBizImpl implements StockBiz {
 	public Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
 			String targetBoxCode, String targetLpnCode, Location targetLocation,
 			StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+		return moveStock(sourceStock, serialNoList, qty, targetBoxCode,
+				targetLpnCode, targetLocation, type, null, billId, billNo, lineNo);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
+			String targetBoxCode, String targetLpnCode,
+			Location targetLocation, StockLogTypeEnum type, String dropId,
+			Long billId, String billNo, String lineNo) {
 
 		canMoveStock(sourceStock, serialNoList, qty, targetLocation);
+		checkStockStatus(sourceStock);
+		checkQtyOfSerial(sourceStock, serialNoList, qty);
 		checkSerialOnStock(sourceStock, serialNoList);
 
-		Stock tempStock = new Stock();
-		BeanUtil.copy(sourceStock, tempStock);
-		// 匹配是否存在能合并的库存，此处必须更新locId, lpnCode, boxCode
-		tempStock.setLocId(targetLocation.getLocId());
-		tempStock.setLpnCode(targetLpnCode);
-		tempStock.setBoxCode(targetBoxCode);
-		Stock targetStock = stockMergeStrategy.matchCanMergeStock(tempStock);
-		StockLog targetStockLog;
-		if (Func.isNull(targetStock)) {
-			targetStock = stockFactory.create(sourceStock, targetLocation, targetLpnCode, targetBoxCode, qty,
-					serialNoList);
-			stockDao.saveNewStock(targetStock);
-			targetStockLog = createAndSaveStockLog(true, targetStock, qty,
-					type, billId, billNo, lineNo, "库存移动-新库存");
-		} else {
-			StockUtil.addQty(targetStock, qty);
-			stockDao.updateStock(targetStock);
-			targetStockLog = createAndSaveStockLog(true, targetStock, qty,
-					type, billId, billNo, lineNo, "库存移动-合并");
-		}
-
-		// 下架原库存
-		StockUtil.pickQty(sourceStock, qty, "库存移动");
-		stockDao.updateStock(sourceStock.getStockId(), sourceStock.getStockQty(), sourceStock.getStayStockQty(),
-			sourceStock.getPickQty(), null, LocalDateTime.now());
-		// 生成库存日志
-		createAndSaveStockLog(false, sourceStock, qty, type, billId, billNo,
-				lineNo, "库存移动下架");
-		// 更新序列号和库存的关联关系
-		if (Func.isNotEmpty(serialNoList)) {
-			SerialStateEnum serialStateEnum = locationBiz.isPickToLocation(targetLocation) ? SerialStateEnum.OUT_STOCK
-					: SerialStateEnum.IN_STOCK;
-			updateSerialAndSaveLog(serialNoList, serialStateEnum, targetStock.getStockId(), targetStockLog);
-		}
-
-		return targetStock;
+		return runMoveStock(sourceStock, serialNoList, qty, targetBoxCode, targetLpnCode,
+				targetLocation, type, dropId, billId, billNo, lineNo);
 	}
 
 	@Override
@@ -513,6 +495,78 @@ public class StockBizImpl implements StockBiz {
 		stockLog.setMsg(msg);
 		stockLogDao.save(stockLog);
 		return stockLog;
+	}
+
+	private Stock runMoveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
+			String targetBoxCode, String targetLpnCode, Location targetLocation, StockLogTypeEnum type, String dropId,
+			Long billId, String billNo, String lineNo) {
+
+		if (Func.isNull(dropId)) {
+			dropId = "";
+		}
+
+		Stock tempTargetStock = new Stock();
+		BeanUtil.copy(sourceStock, tempTargetStock);
+		// 匹配是否存在能合并的库存，此处必须更新locId, lpnCode, boxCode,dropId
+		tempTargetStock.setLocId(targetLocation.getLocId());
+		tempTargetStock.setLpnCode(targetLpnCode);
+		tempTargetStock.setBoxCode(targetBoxCode);
+		tempTargetStock.setDropId(dropId);
+		Stock targetStock = stockMergeStrategy.matchCanMergeStock(tempTargetStock);
+		StockLog targetStockLog;
+		if (Func.isNull(targetStock)) {
+			targetStock = stockFactory.create(sourceStock, targetLocation, targetLpnCode, targetBoxCode, qty,
+					serialNoList);
+			stockDao.saveNewStock(targetStock);
+			targetStockLog = createAndSaveStockLog(true, targetStock, qty,
+					type, billId, billNo, lineNo, "库存移动-新库存");
+		} else {
+			StockUtil.addQty(targetStock, qty);
+			stockDao.updateStock(targetStock);
+			targetStockLog = createAndSaveStockLog(true, targetStock, qty,
+					type, billId, billNo, lineNo, "库存移动-合并");
+		}
+
+		// 下架原库存
+		StockUtil.pickQty(sourceStock, qty, "库存移动");
+		stockDao.updateStock(sourceStock.getStockId(), sourceStock.getStockQty(), sourceStock.getStayStockQty(),
+				sourceStock.getPickQty(), null, LocalDateTime.now());
+		// 生成库存日志
+		createAndSaveStockLog(false, sourceStock, qty, type, billId, billNo,
+				lineNo, "库存移动下架");
+		// 更新序列号和库存的关联关系
+		if (Func.isNotEmpty(serialNoList)) {
+			SerialStateEnum serialStateEnum = locationBiz.isPickToLocation(targetLocation) ? SerialStateEnum.OUT_STOCK
+					: SerialStateEnum.IN_STOCK;
+			updateSerialAndSaveLog(serialNoList, serialStateEnum, targetStock.getStockId(), targetStockLog);
+		}
+
+		return targetStock;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public Stock moveAllStockToDropId(Stock sourceStock, String dropId, StockLogTypeEnum type) {
+
+		List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
+		Location dropIdLoc = locationBiz.getInTransitLocation(sourceStock.getWhId());
+		canMoveStock(sourceStock, serialNoList, sourceStock.getStockEnable(), dropIdLoc);
+		checkQtyOfSerial(sourceStock, serialNoList, sourceStock.getStockEnable());
+
+		return runMoveStock(sourceStock, serialNoList, sourceStock.getStockEnable(), sourceStock.getBoxCode(),
+				sourceStock.getLpnCode(), dropIdLoc, type, dropId, null, dropId, null);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public Stock moveAllStockFromDropId(Stock sourceStock, Location targetLocation, String dropId,
+			StockLogTypeEnum type) {
+
+		List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
+		canMoveStock(sourceStock, serialNoList, sourceStock.getStockEnable(), targetLocation);
+		checkQtyOfSerial(sourceStock, serialNoList, sourceStock.getStockEnable());
+		return runMoveStock(sourceStock, serialNoList, sourceStock.getStockEnable(), sourceStock.getBoxCode(),
+				sourceStock.getLpnCode(), targetLocation, type, "", null, dropId, null);
 	}
 
 	@Override
@@ -676,7 +730,7 @@ public class StockBizImpl implements StockBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void freezeStockByDropId(List<Stock> stocks, Long dropId) {
 		AssertUtil.notEmpty(stocks, "库存系统冻结失败,库存不能为空");
-		AssertUtil.notNull(dropId, "库存系统冻结失败,taskId is not null");
+		AssertUtil.notNull(dropId, "库存系统冻结失败,dropId is not null");
 
 		stockDao.updateStockByDropId(stocks, StockStatusEnum.SYSTEM_FREEZE, dropId.toString());
 
@@ -684,18 +738,19 @@ public class StockBizImpl implements StockBiz {
 			stock.setStockStatus(StockStatusEnum.SYSTEM_FREEZE);
 			stock.setDropId(dropId.toString());
 
-			createAndSaveStockLog(StockLogTypeEnum.STOCK_FREEZE, stock, String.format("系统冻结 by %d", dropId));
+			createAndSaveStockLog(StockLogTypeEnum.STOCK_FREEZE, stock,
+					String.format("系统冻结 by %d", dropId));
 		}
 	}
 
 	@Override
-	public List<Stock> unfreezeStockByDropId(Long dropId) {
-		List<Stock> stocks = stockDao.getStockByDropId(dropId);
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public List<Stock> unfreezeStockByDropId(List<Stock> stocks, Long dropId) {
 		AssertUtil.notEmpty(stocks, "根据任务解冻库存失败,没有任务[%d]关联的库存", dropId);
 
 		stockDao.updateStockByDropId(stocks, StockStatusEnum.NORMAL, "");
 
-		for (Stock item : stocks){
+		for (Stock item : stocks) {
 			item.setStockStatus(StockStatusEnum.NORMAL);
 			item.setDropId("");
 
