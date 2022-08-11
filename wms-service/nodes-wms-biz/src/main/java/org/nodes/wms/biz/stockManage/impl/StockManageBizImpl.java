@@ -162,7 +162,7 @@ public class StockManageBizImpl implements StockManageBiz {
 		}
 
 		//库存移动
-		stockBiz.moveStock(stockList.get(0), request.getSerialNumberList(), stockList.get(0).getStockBalance(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_PCS_PDA, null, null, null);
+		stockBiz.moveStock(stockList.get(0), request.getSerialNumberList(), request.getQty(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_PCS_PDA, null, null, null);
 	}
 
 	@Override
