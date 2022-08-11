@@ -129,6 +129,7 @@
 		},
 		methods: {
 			submit() {
+				console.log(this.defaultList)
 				if (this.isValid()) {
 					if (tool.isEmpty(this.defaultList)) {
 						this.esc();

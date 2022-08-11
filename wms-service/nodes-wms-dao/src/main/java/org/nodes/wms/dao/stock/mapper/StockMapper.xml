@@ -10,6 +10,7 @@
                s.stock_qty - s.pick_qty - s.occupy_qty stock_enable,
                s.stock_qty - s.pick_qty                stock_balance,
                s.wsu_code,
+               s.has_serial,
                s.loc_code,
                s.loc_id,
                s.zone_code,
@@ -58,6 +59,9 @@
                     #{item}
                 </foreach>
             </if>
+            <if test="query.hasSerial != null">
+                AND s.has_serial = #{query.hasSerial}
+            </if>
             <if test="query.skuLot1!=null and query.skuLot1 != ''">
                 AND s.sku_lot1 LIKE concat('%',#{query.skuLot1},'%')
             </if>
@@ -91,6 +95,12 @@
             </if>
             <if test="query.locColumn != null and query.locColumn != ''">
                 AND loc.loc_column = #{query.locColumn}
+            </if>
+            <if test="query.zoneTypeList != null and query.zoneTypeList.size >0 ">
+                AND wz.zone_type IN
+                <foreach collection="query.zoneTypeList" separator="," close=")" open="(" item="item">
+                    #{item}
+                </foreach>
             </if>
             <if test="query.receiveTimeBegin!=null">
                 AND s.sku_Lot3 &gt;= #{query.receiveTimeBegin}

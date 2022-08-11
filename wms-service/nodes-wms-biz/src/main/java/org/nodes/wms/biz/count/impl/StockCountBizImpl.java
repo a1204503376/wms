@@ -5,18 +5,22 @@ import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
+import org.nodes.wms.biz.count.CountReportBiz;
 import org.nodes.wms.biz.count.StockCountBiz;
+import org.nodes.wms.biz.count.modular.CountReportFactory;
 import org.nodes.wms.biz.count.modular.StockCountFactory;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.count.CountDetailDao;
 import org.nodes.wms.dao.count.CountHeaderDao;
+import org.nodes.wms.dao.count.dto.input.GenerateCountReport;
 import org.nodes.wms.dao.count.dto.input.StockCountDetailRequest;
 import org.nodes.wms.dao.count.dto.input.StockCountRequest;
 import org.nodes.wms.dao.count.dto.output.*;
 import org.nodes.wms.dao.count.entity.CountDetail;
 import org.nodes.wms.dao.count.entity.CountHeader;
+import org.nodes.wms.dao.count.entity.CountReport;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
@@ -38,6 +42,8 @@ public class StockCountBizImpl implements StockCountBiz {
 	private final StockBiz stockBiz;
 	private final StockQueryBiz stockQueryBiz;
 	private final LocationBiz locationBiz;
+	private final CountReportFactory countReportFactory;
+	private final CountReportBiz countReportBiz;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -102,6 +108,17 @@ public class StockCountBizImpl implements StockCountBiz {
 		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(boxCode);
 		AssertUtil.notNull(stockList, "修改差异数量根据箱码，查询数据失败,根据箱码查询出的库存集合为空");
 		return BeanUtil.copy(stockList, PdaSkuQtyResponse.class);
+	}
+
+	@Override
+	public void generateCountReport(List<GenerateCountReport> countReportList) {
+		AssertUtil.notNull(countReportList, "生成盘点差异报告失败，用户提交的数据为空");
+		countReportList.forEach(generateCountReport -> {
+			Stock stock = stockQueryBiz.findStockById(generateCountReport.getStockId());
+			CountDetail countDetail = countDetailDao.selectCountDetailByCode(stock.getLocCode(), stock.getBoxCode());
+			CountReport countReport = countReportFactory.createCountReport(generateCountReport, stock, countDetail);
+			countReportBiz.insertCountReport(countReport);
+		});
 	}
 
 

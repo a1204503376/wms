@@ -2,10 +2,15 @@ package org.nodes.wms.dao.stock.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.stock.SerialDao;
+import org.nodes.wms.dao.stock.dto.input.SerialPageQuery;
+import org.nodes.wms.dao.stock.dto.output.SerialExcelResponse;
+import org.nodes.wms.dao.stock.dto.output.SerialPageResponse;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.enums.SerialStateEnum;
 import org.nodes.wms.dao.stock.mapper.SerialMapper;
@@ -63,7 +68,7 @@ public class SerialDaoImpl extends BaseServiceImpl<SerialMapper, Serial> impleme
 
 	@Override
 	public List<String> getSerialNoByStockId(Long stockId) {
-		AssertUtil.notNull(stockId,"根据库存ID获取序列号集合库存ID为NULL");
+		AssertUtil.notNull(stockId, "根据库存ID获取序列号集合库存ID为NULL");
 		List<Serial> serialList = getSerialByStockId(stockId);
 		if (Func.isNotEmpty(serialList)) {
 			return serialList.stream()
@@ -99,6 +104,16 @@ public class SerialDaoImpl extends BaseServiceImpl<SerialMapper, Serial> impleme
 		queryWrapper.eq(Serial::getStockId, stockId)
 			.eq(Serial::getSerialState, SerialStateEnum.IN_STOCK.getCode());
 		return super.count(queryWrapper);
+	}
+
+	@Override
+	public Page<SerialPageResponse> getPage(SerialPageQuery serialPageQuery, IPage<?> page) {
+		return super.baseMapper.getPage(serialPageQuery, page);
+	}
+
+	@Override
+	public List<SerialExcelResponse> listByQuery(SerialPageQuery serialPageQuery) {
+		return super.baseMapper.listByQuery(serialPageQuery);
 	}
 
 	private LambdaQueryWrapper<Serial> getLambdaQuery() {

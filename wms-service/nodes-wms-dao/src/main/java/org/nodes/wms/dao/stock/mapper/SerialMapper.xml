@@ -1,4 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.stock.mapper.SerialMapper">
+
+    <sql id="listOrPage">
+        SELECT serial.serial_id,
+               serial.serial_number,
+               serial.serial_state,
+               serial.instock_number,
+               serial.sku_code,
+               serial.sku_name,
+               stock.box_code,
+               stock.lpn_code
+        FROM wms_serial serial
+                 LEFT JOIN wms_stock stock ON stock.stock_id = serial.stock_id
+        WHERE serial.is_deleted = 0
+          AND stock.stock_id = #{param.stockId}
+    </sql>
+
+    <select id="getPage" resultType="org.nodes.wms.dao.stock.dto.output.SerialPageResponse">
+        <include refid="listOrPage"/>
+        <if test="page.orders == null or page.orders.size == 0">
+            ORDER BY serial.create_time desc
+        </if>
+    </select>
+
+    <select id="listByQuery" resultType="org.nodes.wms.dao.stock.dto.output.SerialExcelResponse">
+        <include refid="listOrPage"/>
+    </select>
 </mapper>

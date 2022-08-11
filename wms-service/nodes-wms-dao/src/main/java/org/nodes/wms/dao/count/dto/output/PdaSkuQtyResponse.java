@@ -9,16 +9,24 @@ import java.math.BigDecimal;
 
 /**
  * PDA显示物品及其数量返回对象
+ * @author nodes
  */
 @Data
 public class PdaSkuQtyResponse implements Serializable {
 
 	private static final long serialVersionUID = -1058124541100303293L;
 	/**
+	 * 库存ID
+	 */
+	@com.fasterxml.jackson.databind.annotation.JsonSerialize(using = ToStringSerializer.class)
+	private Long stockId;
+
+	/**
 	 * 物品ID
 	 */
 	@com.fasterxml.jackson.databind.annotation.JsonSerialize(using = ToStringSerializer.class)
 	private Long skuId;
+
 	/**
 	 * 物品编码
 	 */
