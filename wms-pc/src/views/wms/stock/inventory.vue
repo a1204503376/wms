@@ -110,7 +110,7 @@ import fileDownload from "js-file-download";
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="是否序列号管理" label-width="90px">
+                        <el-form-item label="是否序列号" label-width="90px">
                             <el-select v-model="form.params.hasSerial" :clearable="true">
                                 <el-option
                                     v-for="item in [{label: '是',value: 1},{label: '否',value: 0}]"

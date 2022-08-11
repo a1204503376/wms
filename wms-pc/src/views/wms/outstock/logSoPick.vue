@@ -114,39 +114,26 @@
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column
-                            v-if="!column.hide && column.prop !== 'soBillNo' && column.prop !== 'snCode' "
+                            v-if="!column.hide "
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column"
                             width="130">
-                        </el-table-column>
-                        <el-table-column
-                            v-if="!column.hide && column.prop === 'soBillNo' "
-                            :key="index"
-                            show-overflow-tooltip
-                            v-bind="column"
-                            width="130">
-                            <template v-slot="scope">
+                            <template v-slot="scope"
+                                      v-if = "column.prop === 'snCode' || column.prop === 'soBillNo'">
                                 <el-link
+                                    v-if="column.prop === 'snCode'"
+                                    :underline="false"
+                                    type="primary"
+                                    @click="openDialog(scope.row.snCode)">
+                                    {{ scope.row.snCode }}
+                                </el-link>
+                                <el-link
+                                    v-if="column.prop === 'soBillNo'"
                                     :underline="false"
                                     target="_blank"
                                     type="primary"
-                                    @click="onView(scope.row)">{{ scope.row.soBillNo }}
-                                </el-link>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            v-if="!column.hide && column.prop === 'snCode' "
-                            :key="index"
-                            show-overflow-tooltip
-                            v-bind="column"
-                            width="130">
-                            <template v-slot="scope">
-                                <el-link
-                                    :underline="false"
-                                    type="primary"
-                                    @click="openDialog(scope.row.snCode)"
-                                >{{ scope.row.snCode }}
+                                    @click="onDetail(scope.row.soBillId)">{{ scope.row.soBillNo }}
                                 </el-link>
                             </template>
                         </el-table-column>
@@ -448,11 +435,12 @@ export default {
                 return "background-color: #FF6666"
             }
         },
-        onView(row) {
+        onDetail(soBillId) {
+            console.log(soBillId);
             this.$router.push({
                 name: '发货单详情',
                 params: {
-                    soBillId: row.soBillId
+                    soBillId: soBillId
                 }
             })
         },

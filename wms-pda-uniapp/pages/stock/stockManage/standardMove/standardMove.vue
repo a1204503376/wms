@@ -72,11 +72,12 @@
 				uni.$u.throttle(function() {
 					if (_this.params.qty > 0 && tool.isNotEmpty(_this.params.locCode) && tool.isNotEmpty(_this
 							.params.lotNumber) && tool.isNotEmpty(_this.params.skuCode)) {
-						console.log('标准移动查询成功')
 						uni.$u.func.routeNavigateTo('/pages/stock/stockManage/standardMove/standardMoveSubmit', _this.params);
 						return;
 					}
-					console.log('标准移动查询失败')
+          _this.$u.func.showToast({
+            title: '标准移动失败，请输入必填字段'
+          });
 					return;
 				}, 1000)
 

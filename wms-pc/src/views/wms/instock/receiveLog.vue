@@ -120,39 +120,26 @@
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column
-                            v-if="!column.hide && column.prop !== 'receiveNo' && column.prop !== 'snCode' "
+                            v-if="!column.hide"
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column"
                             width="130">
-                        </el-table-column>
-                        <el-table-column
-                            v-if="!column.hide && column.prop === 'receiveNo' "
-                            :key="index"
-                            show-overflow-tooltip
-                            v-bind="column"
-                            width="130">
-                            <template v-slot="scope">
+                            <template v-slot="scope" v-if="column.prop === 'receiveNo' || column.prop === 'snCode'">
                                 <el-link
+                                    v-if="column.prop === 'receiveNo'"
                                     :underline="false"
                                     target="_blank"
                                     type="primary"
-                                    @click="onView(scope.row)">{{ scope.row.receiveNo }}
+                                    @click="onView(scope.row)">
+                                    {{ scope.row.receiveNo }}
                                 </el-link>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            v-if="!column.hide && column.prop === 'snCode' "
-                            :key="index"
-                            show-overflow-tooltip
-                            v-bind="column"
-                            width="130">
-                            <template v-slot="scope">
                                 <el-link
+                                    v-if="column.prop === 'snCode'"
                                     :underline="false"
                                     type="primary"
-                                    @click="openDialog(scope.row.snCode)"
-                                >{{ scope.row.snCode }}
+                                    @click="openDialog(scope.row.snCode)">
+                                    {{ scope.row.snCode }}
                                 </el-link>
                             </template>
                         </el-table-column>
