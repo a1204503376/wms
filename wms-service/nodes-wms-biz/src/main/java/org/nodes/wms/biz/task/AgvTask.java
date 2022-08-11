@@ -79,7 +79,7 @@ public class AgvTask {
 			}
 			// 调度系统接收成功之后冻结目标库位和冻结原库位的库存
 			locationBiz.freezeLocByTask(targetLoc.getLocId(), putwayTask.getTaskId().toString());
-			stockBiz.freezeStockByTask(stocks, false, putwayTask.getTaskId());
+			stockBiz.freezeStockByDropId(stocks, putwayTask.getTaskId());
 		}
 
 		// 更新任务
@@ -135,7 +135,7 @@ public class AgvTask {
 				moveTask.setTaskState(WmsTaskStateEnum.ISSUED);
 			}
 			locationBiz.freezeLocByTask(targetLocId, moveTask.getTaskId().toString());
-			stockBiz.freezeStockByTask(stockOfLoc, false, moveTask.getTaskId());
+			stockBiz.freezeStockByDropId(stockOfLoc, moveTask.getTaskId());
 			wmsTaskDao.save(moveTask);
 		}
 	}
@@ -157,7 +157,7 @@ public class AgvTask {
 		if (sendToSchedule(Collections.singletonList(pickTask))) {
 			pickTask.setTaskState(WmsTaskStateEnum.ISSUED);
 		}
-		stockBiz.freezeStockByTask(sourceStock, false, pickTask.getTaskId());
+		stockBiz.freezeStockByDropId(sourceStock, pickTask.getTaskId());
 		wmsTaskDao.save(pickTask);
 	}
 

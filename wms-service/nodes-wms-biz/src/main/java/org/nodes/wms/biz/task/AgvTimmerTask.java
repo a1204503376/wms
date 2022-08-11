@@ -109,7 +109,7 @@ public class AgvTimmerTask {
 					}
 					// 调度系统接收成功之后冻结目标库位和冻结原库位的库存
 					locationBiz.freezeLocByTask(targetLoc.getLocId(), wmsTask.getTaskId().toString());
-					stockBiz.freezeStockByTask(stocks, false, wmsTask.getTaskId());
+					stockBiz.freezeStockByDropId(stocks, wmsTask.getTaskId());
 				}
 				// 更新任务
 				wmsTaskDao.updateById(wmsTask);

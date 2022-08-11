@@ -250,13 +250,20 @@ public interface StockBiz {
 	void exportStockLogToExcel(StockLogPageQuery stockLogPageQuery, HttpServletResponse response);
 
 	/**
-	 * 系统任务冻结库存，该类冻结的库存不能执行移动等库内操作
+	 * 系统落放id冻结库存，该类冻结的库存不能执行移动等库内操作,同时会更新库存中的taskId
 	 *
 	 * @param stocks      目标库存
-	 * @param isUpdateLpn true:表示更新用taskId更新lpn，如果是虚拟库位时需要这样处理
-	 * @param taskId      任务id
+	 * @param dropId      落放id
 	 */
-	void freezeStockByTask(List<Stock> stocks, boolean isUpdateLpn, Long taskId);
+	void freezeStockByDropId(List<Stock> stocks, Long dropId);
+
+	/**
+	 * 根据落放id解冻库存，同时会将库存的taskId清空
+	 *
+	 * @param dropId 落放id
+	 * @return 解冻之后的库存
+	 */
+	List<Stock> unfreezeStockByDropId(Long dropId);
 
 	/**
 	 * 按序列号显示库存导出

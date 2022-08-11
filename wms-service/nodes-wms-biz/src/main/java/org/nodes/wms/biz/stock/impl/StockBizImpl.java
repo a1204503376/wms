@@ -419,6 +419,7 @@ public class StockBizImpl implements StockBiz {
 	public Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
 			String targetBoxCode, String targetLpnCode, Location targetLocation,
 			StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+
 		canMoveStock(sourceStock, serialNoList, qty, targetLocation);
 		checkSerialOnStock(sourceStock, serialNoList);
 
@@ -443,8 +444,10 @@ public class StockBizImpl implements StockBiz {
 					type, billId, billNo, lineNo, "库存移动-合并");
 		}
 
+		// 下架原库存
 		StockUtil.pickQty(sourceStock, qty, "库存移动");
-		stockDao.updateStock(sourceStock);
+		stockDao.updateStock(sourceStock.getStockId(), sourceStock.getStockQty(), sourceStock.getStayStockQty(),
+			sourceStock.getPickQty(), null, LocalDateTime.now());
 		// 生成库存日志
 		createAndSaveStockLog(false, sourceStock, qty, type, billId, billNo,
 				lineNo, "库存移动下架");
@@ -669,20 +672,35 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public void freezeStockByTask(List<Stock> stocks, boolean isUpdateLpn, Long taskId) {
+	public void freezeStockByDropId(List<Stock> stocks, Long dropId) {
 		AssertUtil.notEmpty(stocks, "库存系统冻结失败,库存不能为空");
-		AssertUtil.notNull(taskId, "库存系统冻结失败,taskId is not null");
+		AssertUtil.notNull(dropId, "库存系统冻结失败,taskId is not null");
 
-		List<Long> stockIds = stocks.stream()
-				.map(Stock::getStockId)
-				.collect(Collectors.toList());
-		stockDao.updateStock(stockIds, StockStatusEnum.SYSTEM_FREEZE, isUpdateLpn, taskId);
+		stockDao.updateStockByDropId(stocks, StockStatusEnum.SYSTEM_FREEZE, dropId.toString());
 
 		for (Stock stock : stocks) {
 			stock.setStockStatus(StockStatusEnum.SYSTEM_FREEZE);
+			stock.setDropId(dropId.toString());
 
-			createAndSaveStockLog(StockLogTypeEnum.STOCK_FREEZE, stock, "系统冻结");
+			createAndSaveStockLog(StockLogTypeEnum.STOCK_FREEZE, stock, String.format("系统冻结 by %d", dropId));
 		}
+	}
+
+	@Override
+	public List<Stock> unfreezeStockByDropId(Long dropId) {
+		List<Stock> stocks = stockDao.getStockByDropId(dropId);
+		AssertUtil.notEmpty(stocks, "根据任务解冻库存失败,没有任务[%d]关联的库存", dropId);
+
+		stockDao.updateStockByDropId(stocks, StockStatusEnum.NORMAL, "");
+
+		for (Stock item : stocks){
+			item.setStockStatus(StockStatusEnum.NORMAL);
+			item.setDropId("");
+
+			createAndSaveStockLog(StockLogTypeEnum.STOCK_UNFREEZE, item, String.format("系统解结 by %d", dropId));
+		}
+
+		return stocks;
 	}
 
 	@Override

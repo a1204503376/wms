@@ -386,7 +386,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public List<Stock> findStockByTaskId(Long taskId) {
-		return stockDao.getStockByTaskId(taskId);
+		return stockDao.getStockByDropId(taskId);
 	}
 
 }

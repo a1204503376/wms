@@ -1,7 +1,10 @@
 package org.nodes.wms.biz.task.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.nodes.core.constant.WmsAppConstant;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
@@ -21,6 +24,7 @@ import org.nodes.wms.dao.task.dto.SchedulingBroadcastNotificationRequest;
 import org.nodes.wms.dao.task.dto.SyncTaskStateRequest;
 import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -35,6 +39,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SchedulingBizImpl implements SchedulingBiz {
 
 	/**
@@ -98,6 +103,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void synchronizeTaskStatus(SyncTaskStateRequest request) {
 		WmsTask wmsTask = wmsTaskDao.getById(request.getTaskDetailId());
+		AssertUtil.notNull(wmsTask, "任务状态变更通知失败,查不到对应的任务");
 
 		if (AGV_TASK_STATE_BEGIN.equals(request.getState())) {
 			onStart(wmsTask);
@@ -106,6 +112,9 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		} else if (AGV_TASK_STATE_EXCEPTION.equals(request.getState())) {
 			onException(wmsTask);
 		}
+
+		log.info("接收调度系统任务状态变更通知,状态:%d,任务:%d",
+				request.getState(), request.getTaskDetailId());
 	}
 
 	/**
@@ -124,16 +133,22 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			stockBiz.moveAllStock(stock, stock.getBoxCode(), wmsTask.getTaskId().toString(), tempLoc,
 					StockLogTypeEnum.STOCK_AGV_MOVE, wmsTask.getTaskId(), null, null);
 		}
+
 	}
 
 	private void onSuccess(WmsTask wmsTask) {
+		if (WmsTaskStateEnum.ISSUED.equals(wmsTask.getTaskState())) {
+			throw new ServiceException(String.format(
+					"任务执行完毕状态更新失败,任务[%d]当前状态[%s]不是开始执行状态",
+					wmsTask.getTaskId(), wmsTask.getTaskState().getDesc()));
+		}
 		// 修改任务状态
 		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.COMPLETED);
 		// 将中间库位的库存移动到目标库位
 		Location targetLoc = locationBiz.findByLocId(wmsTask.getToLocId());
 		List<Stock> stockList = stockQueryBiz.findStockByTaskId(wmsTask.getTaskId());
 		for (Stock stock : stockList) {
-			stock.setTaskId("");
+			stock.setDropId("");
 			stock.setStockStatus(StockStatusEnum.NORMAL);
 			stockBiz.moveAllStock(stock, stock.getBoxCode(), stock.getLpnCode(), targetLoc,
 					StockLogTypeEnum.STOCK_AGV_MOVE, wmsTask.getTaskId(), null, null);

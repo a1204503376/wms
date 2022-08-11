@@ -292,22 +292,12 @@ public interface StockDao {
 	Page<StockBySerialPageResponse> page(IPage<?> page, StockBySerialPageQuery stockBySerialPageQuery);
 
 	/**
-	 * 根据系统任务，更新库存状态
-	 *
-	 * @param stockIds    库存数据
-	 * @param status      库存状态
-	 * @param isUpdateLpn true:表示用taskId更新lpn的值
-	 * @param taskId      用来替换lpn的值
-	 */
-	void updateStock(List<Long> stockIds, StockStatusEnum status, boolean isUpdateLpn, Long taskId);
-
-	/**
 	 * 根据任务id获取库存
 	 *
-	 * @param taskId task id
+	 * @param dropId 落放id
 	 * @return stock集合
 	 */
-	List<Stock> getStockByTaskId(Long taskId);
+	List<Stock> getStockByDropId(Long dropId);
 
 	/**
 	 * 库存统计
@@ -316,4 +306,12 @@ public interface StockDao {
 	 * @return PdaBoxQtyResponse
 	 */
 	List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode);
+
+	/**
+	 * 根据stock更新库存状态和落放id
+	 * @param stocks stocks只需要其中的stockId作为更新的条件
+	 * @param status 库存状态
+	 * @param dropId 落放id
+	 */
+	void updateStockByDropId(List<Stock> stocks, StockStatusEnum status, String dropId);
 }
