@@ -86,7 +86,9 @@
 			},
 			esc() {
 				this.clearEmitKeyDown();
-				uni.$u.func.navigateBackTo(1);
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			submit() {
 				var _this = this;
