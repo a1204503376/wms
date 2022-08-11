@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
+import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receiveLog.modular.ReceiveLogFactory;
@@ -208,7 +209,8 @@ public class StockBizImpl implements StockBiz {
 		// 根据撤销记录查找库存，判断库存是否够
 		Stock stock = stockQueryBiz.findStockOnPickTo(pickLog);
 		if (Func.isNull(stock)){
-			throw new ServiceException("撤销拣货失败，出库集货区无此库存");
+			throw ExceptionUtil.mpe(
+				"撤销拣货失败，出库集货区无此库存[物品编码:{},生产批次:{}]",pickLog.getSkuCode(),pickLog.getSkuLot1());
 		}
 		// 将库存移动到原库位上
 		List<String> serialNoList = null;
