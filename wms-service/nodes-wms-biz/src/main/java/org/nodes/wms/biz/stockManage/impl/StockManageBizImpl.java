@@ -1,7 +1,6 @@
 package org.nodes.wms.biz.stockManage.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.constant.DictKVConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
@@ -163,7 +162,7 @@ public class StockManageBizImpl implements StockManageBiz {
 		}
 
 		//库存移动
-		stockBiz.moveStock(stockList.get(0), request.getSerialNumberList(), stockList.get(0).getStockBalance(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_PCS_PDA, null, null, null);
+		stockBiz.moveStock(stockList.get(0), request.getSerialNumberList(), request.getQty(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_PCS_PDA, null, null, null);
 	}
 
 	@Override
