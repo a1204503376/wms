@@ -95,11 +95,32 @@ import fileDownload from "js-file-download";
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="货架列" label-width="90px">
-                            <el-input placeholder="请输入货架列" v-model="form.params.locColumn"></el-input>
+                            <el-input v-model="form.params.locColumn" placeholder="请输入货架列"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="库区类型" label-width="90px">
+                            <nodes-dictionary
+                                v-model="form.params.zoneTypeList"
+                                :clearable="true"
+                                :multiple="true" code="zone_type">
+                            </nodes-dictionary>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="是否序列号管理" label-width="90px">
+                            <el-select v-model="form.params.hasSerial" :clearable="true">
+                                <el-option
+                                    v-for="item in [{label: '是',value: 1},{label: '否',value: 0}]"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="6">
                         <el-form-item label="入库时间" label-width="90px">
                             <nodes-date-range v-model="form.params.lastInTimeDateRange" style="width: 200px">
@@ -215,8 +236,17 @@ import fileDownload from "js-file-download";
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column"
-                            width="130"
-                        >
+                            width="130">
+                            <template v-if="column.prop === 'hasSerial'" v-slot="scope">
+                                <el-link
+                                    v-if="scope.row.hasSerial === 1"
+                                    :underline="false"
+                                    target="_blank"
+                                    type="primary"
+                                    @click="showHasSerialView(scope.row.stockId)">是
+                                </el-link>
+                                {{ scope.row.hasSerial !== 1 ? '否' : '' }}
+                            </template>
                         </el-table-column>
                         <el-table-column
                             v-if="!column.hide && index===1"
@@ -244,7 +274,6 @@ import fileDownload from "js-file-download";
 
                         </el-table-column>
                     </template>
-
                 </el-table>
             </template>
             <template v-slot:page>
@@ -375,9 +404,9 @@ import fileDownload from "js-file-download";
                             </template>
                         </el-table-column>
                         <el-table-column
+                            v-if="!dialog.isMoveByBox"
                             label="操作"
-                            width="80"
-                            v-if="!dialog.isMoveByBox">
+                            width="80">
                             <template v-slot="scope">
                                 <el-button
                                     size="mini"
@@ -453,10 +482,12 @@ import NodesLocation from "@/components/wms/select/NodesLocation";
 import "../../../../public/cdn/iconfont/avue/iconfont.css"
 import NodesSerial from "@/components/wms/select/NodesSerial";
 import NodesZone from "@/components/wms/select/NodesZone";
+import NodesDictionary from "@/components/wms/select/NodesDictionary";
 
 export default {
     name: "customer",
     components: {
+        NodesDictionary,
         NodesZone,
         NodesSerial,
         NodesLocation,
@@ -492,6 +523,8 @@ export default {
                     whIdList: [],
                     woId: "",
                     locColumn: '',
+                    hasSerial: '',
+                    zoneTypeList: [],
                     receiveTimeDateRange: "",
                     lastInTimeDateRange: "",
                     lastOutTimeDateRange: "",
@@ -540,10 +573,14 @@ export default {
                         label: "库存占用",
                         sortable: "custom"
                     },
-
                     {
                         prop: "wsuCode",
                         label: "计量单位",
+                        sortable: "custom"
+                    },
+                    {
+                        prop: "hasSerial",
+                        label: "是否序列号管理",
                         sortable: "custom"
                     },
                     {
@@ -1085,6 +1122,14 @@ export default {
                 })
             }
         },
+        showHasSerialView(stockId) {
+            this.$router.push({
+                name: '序列号',
+                params: {
+                    stockId: stockId
+                }
+            });
+        }
     },
 };
 </script>

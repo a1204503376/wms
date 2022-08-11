@@ -281,7 +281,13 @@ export default [
                 name: '按序列号显示',
                 props: true,
                 component: () => import('@/views/wms/stock/stock/stockBySerial')
+            },
+            {
+                path: 'serial/:stockId',
+                name: '序列号',
+                props: true,
+                component: () => import('@/views/wms/stock/stock/serial')
             }
         ]
-    }
+    },
 ]

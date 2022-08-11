@@ -101,4 +101,22 @@ export const exportBySerial = (data) => {
     })
 }
 
+export const pageSerial = (data, page) => {
+    return request({
+        url: '/api/wms/stock/pageSerial',
+        method: 'post',
+        data: data,
+        params: page
+    })
+}
+
+export const exportSerial = (data) => {
+    return request({
+        url: '/api/wms/stock/exportSerial',
+        method: 'post',
+        data: data,
+        responseType: 'blob'
+    })
+}
+
 
