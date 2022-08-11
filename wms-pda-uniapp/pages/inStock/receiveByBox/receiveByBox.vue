@@ -16,7 +16,7 @@
 				<u--input v-model="param.skuLot1" @focus="focus(2)" @confirm="change" @blur="blur(2)"
 					:focus="this.focusNum == 2"></u--input>
 			</u-form-item>
-			<u-form-item label="LPN" :required="true" class="left-text-one-line" labelWidth="100">
+			<u-form-item label="LPN" :required="false" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="param.lpnCode" @focus="focus(3)" @blur="blur(3)" @confirm="change"
 					:focus="this.focusNum == 3"></u--input>
 			</u-form-item>
