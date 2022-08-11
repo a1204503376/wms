@@ -3,7 +3,6 @@ package org.nodes.wms.biz.stock.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.constant.DictKVConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
@@ -101,9 +100,9 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		// 创建返回集合
 		List<CallAgvResponse> callAgvResponseList = new ArrayList<>();
 		// 根据仓库id获取入库暂存区库位
-		List<Location>  stage = locationBiz.getLocationByZoneType(whId, DictKVConstant.ZONE_TYPE_OF_STAGE);
+		List<Location> stage = locationBiz.getLocationByZoneType(whId, DictKVConstant.ZONE_TYPE_OF_STAGE);
 		if (Func.isEmpty(stage)) {
-			throw new ServiceException("查询失败,该库房下入库暂存区库位为空");
+			throw new ServiceException("查询失败,该库房没有配置入库暂存区");
 		}
 		// 根据箱码和库房id获取入库暂存区库存
 		List<Stock> stockList = findLpnStockOnStageLeft(whId, boxCode, stage.get(0));
@@ -135,7 +134,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public Stock findStockOnPickTo(LogSoPick pickLog) {
-		List<Location>  pickToLoc = locationBiz.getLocationByZoneType(pickLog.getWhId(), DictKVConstant.ZONE_TYPE_OF_PICK_TO);
+		List<Location> pickToLoc = locationBiz.getLocationByZoneType(pickLog.getWhId(), DictKVConstant.ZONE_TYPE_OF_PICK_TO);
 		return stockMergeStrategy.matchSameStock(pickLog, pickToLoc.get(0));
 	}
 
