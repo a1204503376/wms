@@ -24,6 +24,12 @@ public class LogSoPickPageResponse extends BaseSkuLot implements Serializable {
 	private Long lsopId;
 
 	/**
+	 * 发货单id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long soBillId;
+
+	/**
 	 * 发货单编码
 	 */
 	private String soBillNo;
