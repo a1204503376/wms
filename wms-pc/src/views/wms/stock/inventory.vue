@@ -824,9 +824,33 @@ export default {
             this.form1.freezeShow = true
         },
         print() {
-            alert("箱贴打印")
-            this.navParams.get('userInfo');
-            window.open(" http://10.168.3.106:6480/box.aspx")
+            let rows = this.$refs.table.selection;
+            let boxCodeList = '';
+            for (let item of rows) {
+                if (item.hasSerial !== rows[0].hasSerial) {
+                    this.$message.error('请选择全部有序列号或全部无序列号的行');
+                    return;
+                }
+                if (boxCodeList.indexOf(item.boxCode) == -1) {
+                    boxCodeList += item.boxCode;
+                    boxCodeList += ',';
+                }
+            }
+            if (func.isEmpty(boxCodeList)) {
+                this.$message.error('没有可打印的箱号');
+                return
+            }
+            boxCodeList = boxCodeList.slice(0, -1)
+            let userName = localStorage.getItem('userName');
+            let type = '';
+            if (rows[0].hasSerial === 1) {
+                type = 'sn'
+            } else {
+                type = 'batch'
+            }
+            let url = "http://10.168.3.136:6480/box.aspx";
+            url = url + '?' + 'BoxCodes=' + boxCodeList + '&' + 'BoxType=' + type + '&' + 'UserName=' + userName;
+            window.open(url);
         },
         cancel() {
             this.form1 = {
