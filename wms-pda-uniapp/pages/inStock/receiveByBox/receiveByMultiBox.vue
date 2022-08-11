@@ -97,6 +97,9 @@
 			submit() {
 				this.param.locCode = this.$u.func.parseLocCode(this.param.locCode)
 				receive.receiveByMultiBox(this.param).then(res => {
+					that.$u.func.showToast({
+						title: '操作成功'
+					})
 					uni.$u.func.routeNavigateTo('/pages/inStock/receiveByBox/receiveDetailLpnListQuery');
 				})
 			},

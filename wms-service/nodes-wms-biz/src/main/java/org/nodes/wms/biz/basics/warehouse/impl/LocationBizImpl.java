@@ -76,6 +76,11 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public Location add(LocationAddOrEditRequest locationAddOrEditRequest) {
+		if (Func.notNull(locationDao.getLocationByLocCode(locationAddOrEditRequest.getWhId(),
+			locationAddOrEditRequest.getLocCode()))){
+			throw new ServiceException("新增库位失败，该库位在当前库房已经存在");
+		}
+
 		Location location = locationFactory.createLocation(locationAddOrEditRequest);
 		locationDao.saveOrUpdateLocation(location);
 		return location;
@@ -94,12 +99,10 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public Location edit(LocationAddOrEditRequest locationAddOrEditRequest) {
-		if (Func.notNull(locationDao.getLocationByLocCode(locationAddOrEditRequest.getWhId(),
-			locationAddOrEditRequest.getLocCode()))){
-			throw new ServiceException("新增库位失败，该库位在当前库房已经存在");
-		}
+		AssertUtil.notNull(locationAddOrEditRequest.getLocId(), "编辑库位失败,库位主键为空");
 
-		Location location = locationFactory.createLocation(locationAddOrEditRequest);
+		Location location = locationDao.getLocationById(locationAddOrEditRequest.getLocId());
+		Func.copy(locationAddOrEditRequest, location);
 		locationDao.saveOrUpdateLocation(location);
 		return location;
 	}

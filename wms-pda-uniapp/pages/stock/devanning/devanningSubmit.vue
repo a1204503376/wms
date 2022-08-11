@@ -108,9 +108,13 @@
 			},
 			esc() {
 				if (tool.isNotEmpty(this.params.page)) {
-					uni.$u.func.navigateBackTo((this.params.page + 1));
+					uni.navigateBack({
+						delta: Number(this.params.page + 1)
+					});
 				} else {
-					uni.$u.func.navigateBackTo(2);
+					uni.navigateBack({
+						delta: 2
+					});
 				}
 			}
 		}

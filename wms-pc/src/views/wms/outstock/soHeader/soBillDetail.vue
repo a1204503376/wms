@@ -232,6 +232,16 @@ export default {
                     label: '计划数量'
                 },
                 {
+                    prop: 'scanQty',
+                    sortable: 'custom',
+                    label: '实发数量'
+                },
+                {
+                    prop: 'surplusQty',
+                    sortable: 'custom',
+                    label: '剩余数量'
+                },
+                {
                     prop: 'skuLot1',
                     sortable: 'custom',
                     label: '生产批次'

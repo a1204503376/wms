@@ -45,6 +45,8 @@
         um_code,
         um_name,
         plan_qty,
+        scan_qty,
+        surplus_qty,
         sku_lot1,
         sku_lot4,
         remark

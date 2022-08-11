@@ -1,8 +1,8 @@
 <template>
 	<view>
-		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
+		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
 			:bgColor="navigationBarBackgroundColor" title="按件收货" titleStyle="color:#ffffff;font-size:21px"
-			style="color:#ffffff;font-size:21px">
+			style="color:#ffffff;font-size:21px;z-index: 999;">
 		</u-navbar>
 		<template>
 			<u-search placeholder="请输入收货单编码/上游编码" v-model="params.no" :show-action="false" @custom="search"
@@ -96,7 +96,9 @@
 				}
 			},
 			esc() {
-				uni.$u.func.navigateBackTo(1);
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			getReceiveList() {
 				this.noData = false;
