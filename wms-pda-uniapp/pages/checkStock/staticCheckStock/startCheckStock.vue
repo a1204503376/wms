@@ -165,7 +165,7 @@
 			},
 			clickItem(item) {
 				// if (item.isPickLocation) {
-				if (true) {
+				if (false) {
 					uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/artificialLocation', item);
 				} else {
 					uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/autoLocation', item);
