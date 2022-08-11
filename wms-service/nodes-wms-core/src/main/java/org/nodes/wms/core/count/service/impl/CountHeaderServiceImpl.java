@@ -317,8 +317,7 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper1, T extends Coun
 			countHeaderVO.setUserName(countHeaderVO.getCountDetailList().get(0).getUserName());
 		}
 		List<CountReport> reportList = countReportService.list(Wrappers.lambdaQuery(CountReport.class)
-			.eq(CountReport::getCountBillId, countHeaderGet.getCountBillId())
-			.apply("wms_qty <> count_qty"));
+			.eq(CountReport::getCountBillId, countHeaderGet.getCountBillId()));
 		if (reportList.size() > 0) {
 			List<CountReportVO> countReportVOList = new ArrayList<>();
 			for (CountReport countReportAdd : reportList) {

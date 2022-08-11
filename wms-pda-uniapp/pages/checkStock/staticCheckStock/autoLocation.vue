@@ -6,50 +6,50 @@
 		</u-navbar>
 		<u-divider text="" style="margin-top:0rpx;"></u-divider>
 		<u-divider text="暂无数据" v-if="noData"></u-divider>
+		<u-row customStyle="margin-bottom: 10px">
+			<u-col span="2" class="left-text-one-line font-in-page">
+				<u--text class="demo-layout bg-purple-light" v-text="'箱号'"></u--text>
+			</u-col>
+			<u-col span="10">
+				<u-input v-model="params.boxCode"></u-input>
+			</u-col>
+		</u-row>
+		<u-row>
+			<u-col span="2" class="left-text-one-line font-in-page">
+				<view>
+					<u--text class="demo-layout bg-purple-light" v-text="'库位'"></u--text>
+				</view>
+			</u-col>
+			<u-col span="10">
+				<u-input v-model="params.locCode"></u-input>
+			</u-col>
+		</u-row>
+		<view v-for="(item, index) in receiveList.pdaBoxQtyResponseList" :key="index" :style="item.backgroundColor">
 			<u-row customStyle="margin-bottom: 10px">
-				<u-col span="2" class="left-text-one-line font-in-page">
-					<u--text class="demo-layout bg-purple-light" v-text="'箱号'"></u--text>
+				<u-col span="1" class="left-text-one-line font-in-page">
+					<u-icon name="checkbox-mark" color="green" v-if="item.isValid"></u-icon>
 				</u-col>
-				<u-col span="10">
-					<u-input v-model="params.boxCode"></u-input>
+				<u-col span="7">
+					<u--text class="left-text-one-line  demo-layout bg-purple  font-in-page"
+						v-text="item.boxCode+' ('+item.totalQty+')'"></u--text>
+				</u-col>
+				<u-col span="2">
+					<u-button type="error" :plain="true" text="差异" @click="updateStatesIsDiff(item,'error')">
+					</u-button>
+				</u-col>
+				<u-col span="2">
+					<u-button type="success" :plain="true" text="无误" @click="updateStatesIsDiff(item,'success')">
+					</u-button>
 				</u-col>
 			</u-row>
-			<u-row>
-				<u-col span="2" class="left-text-one-line font-in-page">
-					<view>
-						<u--text class="demo-layout bg-purple-light" v-text="'库位'"></u--text>
-					</view>
-				</u-col>
-				<u-col span="10">
-					<u-input v-model="params.locCode"></u-input>
-				</u-col>
-			</u-row>
-			<view v-for="(item, index) in receiveList.pdaBoxQtyResponseList" :key="index" :style="item.backgroundColor">
-				<u-row customStyle="margin-bottom: 10px">
-					<u-col span="1" class="left-text-one-line font-in-page">
-						<u-icon name="checkbox-mark" color="green" v-if="item.isValid"></u-icon>
-					</u-col>
-					<u-col span="7">
-						<u--text class="left-text-one-line  demo-layout bg-purple  font-in-page"
-							v-text="item.boxCode+' ('+item.totalQty+')'"></u--text>
-					</u-col>
-					<u-col span="2">
-						<u-button type="error" :plain="true" text="差异" @click="updateStatesIsDiff(item,'error')">
-						</u-button>
-					</u-col>
-					<u-col span="2">
-						<u-button type="success" :plain="true" text="无误" @click="updateStatesIsDiff(item,'success')">
-						</u-button>
-					</u-col>
-				</u-row>
-				<u-divider text=""></u-divider>
-			</view>
-			<!-- 	<u-loadmore :status="status" v-if="loadmore" /> -->
+			<u-divider text=""></u-divider>
+		</view>
+		<!-- 	<u-loadmore :status="status" v-if="loadmore" /> -->
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
 				返回
 			</view>
-			<view class="btn-cancle" @click="esc()">
+			<view class="btn-cancle" @click="submit()">
 				提交
 			</view>
 		</view>
@@ -59,6 +59,7 @@
 <script>
 	import setting from '@/common/setting'
 	import stockInquiry from '@/api/stock/stockInquiry.js'
+	import staticCheckStock from '@/api/checkStock/staticCheckStock.js'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
 	export default {
@@ -70,6 +71,7 @@
 					locCode: ''
 				},
 				receiveList: [],
+				defaultList: [], //默认的数据 
 				page: {
 					total: 0,
 					size: 7,
@@ -86,8 +88,8 @@
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param);
 			this.receiveList = parse;
-			this.params.locCode = parse.locCode;
-			this.params.boxCode = parse.boxCode;
+			var param = JSON.parse(option.param);
+			this.defaultList = param;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -105,27 +107,29 @@
 		},
 		methods: {
 			submit() {
-				if (this.isValid()) {
-                 //采集当前差异的数据然后生成差异报告
-				} else {
-					this.$u.func.showToast({
-						title: '请确认当前库存的差异状况，无误请点击无误，有差异请修改差异',
-					});
-				}
+				//采集当前差异的数据然后生成差异报告
+				let params = {};
+				params.beChangedList = this.receiveList.pdaBoxQtyResponseList;
+				params.defaultList = this.defaultList.pdaBoxQtyResponseList;
+				staticCheckStock.generateCountReportByAutoLocation(params).then(data => {
+					console.log(data.data)
+				})
+
 			},
-			isValid() {
-				for (let i = 0; i < this.receiveList.pdaBoxQtyResponseList.length; i++) {
-					if (this.receiveList.pdaBoxQtyResponseList[i].isValid == false) {
-						return false;
+			updateStatesIsDiff(item, bool) {
+				if (bool == 'success') {
+					if (tool.isNotEmpty(this.params.locCode) && tool.isNotEmpty(this.params.boxCode)) {
+						item.locCode = this.params.locCode;
+						item.boxCode = this.params.boxCode;
+						item.isValid = true;
+					} else {
+						this.$u.func.showToast({
+							title: '请扫描或输入箱码以及库位编码'
+						});
 					}
-				}
-				return true;
-			},
-			updateStatesIsDiff(item,bool){
-				if(bool == 'success'){
-					item.isValid=true;
-				}else{
-					item.isValid=false;
+
+				} else {
+					item.isValid = false;
 				}
 			},
 			analysisCode(code) {

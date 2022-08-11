@@ -164,8 +164,7 @@
 				uni.$u.throttle(this.getReceiveList(), 1000)
 			},
 			clickItem(item) {
-				// if (item.isPickLocation) {
-				if (true) {
+				if (item.isPickLocation) {
 					uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/artificialLocation', item);
 				} else {
 					uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/autoLocation', item);

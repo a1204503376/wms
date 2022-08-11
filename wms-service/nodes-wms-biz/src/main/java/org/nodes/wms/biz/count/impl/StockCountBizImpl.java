@@ -2,6 +2,7 @@ package org.nodes.wms.biz.count.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
@@ -15,6 +16,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.dao.count.CountDetailDao;
 import org.nodes.wms.dao.count.CountHeaderDao;
+import org.nodes.wms.dao.count.dto.input.AutoLocationBoxQty;
 import org.nodes.wms.dao.count.dto.input.GenerateCountReport;
 import org.nodes.wms.dao.count.dto.input.StockCountDetailRequest;
 import org.nodes.wms.dao.count.dto.input.StockCountRequest;
@@ -28,6 +30,7 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -44,7 +47,8 @@ public class StockCountBizImpl implements StockCountBiz {
 	private final LocationBiz locationBiz;
 	private final CountReportFactory countReportFactory;
 	private final CountReportBiz countReportBiz;
-    private final SkuBiz skuBiz;
+	private final SkuBiz skuBiz;
+
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void save(StockCountRequest stockCountRequest) {
@@ -121,6 +125,37 @@ public class StockCountBizImpl implements StockCountBiz {
 			countReport.setWsuName(um.getWsuName());
 			countReportBiz.insertCountReport(countReport);
 		});
+	}
+
+	@Override
+	public void generateCountReportByAutoLocation(List<AutoLocationBoxQty> beChangedList, List<AutoLocationBoxQty> defaultList) {
+		for (int i = 0; i < beChangedList.size(); i++) {
+			List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(defaultList.get(i).getBoxCode());
+			AssertUtil.notNull(stockList, "自动区生成库存差异报告失败,根据箱码获取库存失败");
+
+			CountDetail countDetail = countDetailDao.selectCountDetailByCode(defaultList.get(i).getLocCode(), defaultList.get(i).getBoxCode());
+			CountReport countReport = countReportFactory.createCountReport(stockList, countDetail);
+
+			countReport.setLpnCode(beChangedList.get(i).getBoxCode());
+			countReport.setLocCode(beChangedList.get(i).getLocCode());
+			Location location = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), beChangedList.get(i).getLocCode());
+			countReport.setLocId(location.getLocId());
+			SkuUm um = skuBiz.findSkuUmByUmCode(stockList.get(0).getWsuCode());
+			countReport.setWsuName(um.getWsuName());
+
+			if (beChangedList.get(i).getIsValid()) {
+				if(BigDecimalUtil.eq(beChangedList.get(i).getTotalQty(),defaultList.get(i).getTotalQty())
+					&&Func.equals(beChangedList.get(i).getLocCode(),defaultList.get(i).getLocCode())
+					&&Func.equals(beChangedList.get(i).getBoxCode(),defaultList.get(i).getBoxCode())
+				){
+                  continue;
+				}
+				countReport.setCountQty(beChangedList.get(i).getTotalQty());
+			} else {
+				countReport.setCountQty(BigDecimal.ZERO);
+			}
+			countReportBiz.insertCountReport(countReport);
+		}
 	}
 
 
