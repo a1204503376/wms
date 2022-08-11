@@ -43,7 +43,7 @@ public class TianYiPutwayStrategy {
 		LpnType lpnType = lpnTypeBiz.findLpnTypeByBoxCode(stocks.get(0).getBoxCode());
 		// 根据箱型查询所有可以上架的空库位(自动存储区的)，要按照上架顺序排序,
 		List<Location> locationList = locationBiz.findEnableAgvLocation(lpnType,
-			dictionaryBiz.findZoneTypeOfAutoStore().getDictKey().toString());
+				dictionaryBiz.findZoneTypeOfAutoStore().getDictKey().toString());
 		// 获取列的最大载重
 		BigDecimal maxLoadWeight = systemParamBiz.findMaxLoadWeightOfColumn();
 		// 计算当前库存的载重
@@ -73,7 +73,7 @@ public class TianYiPutwayStrategy {
 		AssertUtil.notEmpty(stockList, "载重校验失败，待上库存为空");
 		AssertUtil.notNull(targetLoc, "载重校验失败，待上库位为空");
 
-		if (locationBiz.isVirtualLocation(targetLoc)){
+		if (locationBiz.isVirtualLocation(targetLoc)) {
 			return true;
 		}
 
@@ -98,9 +98,9 @@ public class TianYiPutwayStrategy {
 		}
 
 		List<String> boxCodes = stockList.stream()
-			.map(Stock::getBoxCode)
-			.distinct()
-			.collect(Collectors.toList());
+				.map(Stock::getBoxCode)
+				.distinct()
+				.collect(Collectors.toList());
 		return lpnType.getWeight().multiply(BigDecimal.valueOf(boxCodes.size()));
 	}
 
@@ -135,13 +135,14 @@ public class TianYiPutwayStrategy {
 
 		// 获取所有的箱号
 		List<String> boxCodes = stockList.stream()
-			.map(Stock::getBoxCode)
-			.distinct()
-			.collect(Collectors.toList());
+				.filter(stock -> Func.isNotEmpty(stock.getBoxCode()))
+				.map(Stock::getBoxCode)
+				.distinct()
+				.collect(Collectors.toList());
 		// 根据箱号计算重量
 		BigDecimal result = BigDecimal.ZERO;
 		Map<LpnTypeCodeEnum, List<String>> lpnType2BoxCodes = boxCodes.stream()
-			.collect(Collectors.groupingBy(lpnTypeBiz::tryParseBoxCode));
+				.collect(Collectors.groupingBy(lpnTypeBiz::tryParseBoxCode));
 		for (Map.Entry<LpnTypeCodeEnum, List<String>> entry : lpnType2BoxCodes.entrySet()) {
 			LpnType lpnType = lpnTypeBiz.findLpnType(entry.getKey());
 			AssertUtil.notNull(lpnType, String.format("计算重量失败,容器类别[%s]没有配置重量", entry.getKey().getCode()));

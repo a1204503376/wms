@@ -7,7 +7,6 @@
 		<u-divider text="" style="margin-top:0rpx;"></u-divider>
 		<u-divider text="暂无数据" v-if="noData"></u-divider>
 		<u-list style="height: 950rpx;" @scrolltolower="scrolltolower">
-			
 			<u-row customStyle="margin-bottom: 10px">
 				<u-col span="2" class="left-text-one-line font-in-page">
 					<u--text class="demo-layout bg-purple-light" v-text="'箱号'"></u--text>
@@ -26,30 +25,33 @@
 					<u-input v-model="params.locCode"></u-input>
 				</u-col>
 			</u-row>
-				<view v-for="(item, index) in receiveList.pdaBoxQtyResponseList" :key="index">
+			<view v-for="(item, index) in receiveList.pdaBoxQtyResponseList" :key="index">
 				<u-row customStyle="margin-bottom: 10px">
 					<u-col span="1" class="left-text-one-line font-in-page">
-						<u-icon name="checkbox-mark" color="green"  v-if="item.isValid"></u-icon>
+						<u-icon name="checkbox-mark" color="green" v-if="item.isValid"></u-icon>
 					</u-col>
 					<u-col span="7">
-						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.boxCode+' ('+item.totalQty+')'"></u--text>
+						<u--text class="demo-layout bg-purple  font-in-page"
+							v-text="item.boxCode+' ('+item.totalQty+')'"></u--text>
 					</u-col>
 					<u-col span="2">
-						<u-button type="error" :plain="true" text="修改" @click="updateLocQty(item)"></u-button>
+						<u-button type="error" :plain="true" text="修改" @click="updateLocQty(item)" v-if="item.isButton">
+						</u-button>
 					</u-col>
 					<u-col span="2">
-						<u-button type="success" :plain="true" text="无误"  @click="updateStatesIsDiff(item,'success')"></u-button>
+						<u-button type="success" :plain="true" text="无误" @click="updateStatesIsDiff(item,'success')">
+						</u-button>
 					</u-col>
 				</u-row>
 				<u-divider text=""></u-divider>
 			</view>
-		<!-- 	<u-loadmore :status="status" v-if="loadmore" /> -->
+			<!-- 	<u-loadmore :status="status" v-if="loadmore" /> -->
 		</u-list>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
 				返回
 			</view>
-			<view class="btn-cancle" @click="esc()">
+			<view class="btn-cancle" @click="submit()">
 				提交
 			</view>
 		</view>
@@ -58,7 +60,7 @@
 
 <script>
 	import setting from '@/common/setting'
-	import stockInquiry from '@/api/stock/stockInquiry.js'
+	import staticCheckStock from '@/api/checkStock/staticCheckStock.js'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
 	export default {
@@ -80,10 +82,13 @@
 				status: 'loadmore',
 				loadmore: false,
 				noData: false,
-				title:'开始盘点',
+				title: '开始盘点',
+				defaultList: [], //差异的数据 
 			}
 		},
 		onLoad: function(option) {
+			uni.setStorageSync('isListAsDefault', '')
+			uni.setStorageSync('defaultRow', '')
 			var parse = JSON.parse(option.param);
 			this.receiveList = parse;
 			this.params.locCode = parse.locCode;
@@ -94,6 +99,24 @@
 		},
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
+			let isListAsDefault = uni.getStorageSync('isListAsDefault')
+			let defaultRow = uni.getStorageSync('defaultRow');
+			if (tool.isNotEmpty(isListAsDefault)) {
+				if (tool.isNotEmpty(isListAsDefault.differDefaultList)) {
+					let stockBalance = 0;
+					isListAsDefault.differDefaultList.forEach((item, index) => { //js遍历数组
+						stockBalance = Number(stockBalance) + Number(item.stockBalance)
+						this.defaultList.push(item);
+					});
+					this.receiveList.pdaBoxQtyResponseList.forEach((item, index) => { //js遍历数组
+						if (item.boxCode == defaultRow.boxCode) {
+							item.totalQty = stockBalance;
+							item.isValid = true;
+							item.isButton = false;
+						}
+					});
+				}
+			}
 		},
 		onBackPress(event) {
 			// #ifdef APP-PLUS
@@ -104,108 +127,53 @@
 			// #endif
 		},
 		methods: {
-			updateStatesIsDiff(item,bool){
-				if(bool == 'success'){
-					item.isValid=true;
-				}else{
-					item.isValid=false;
+			submit() {
+				console.log(this.defaultList)
+				if (this.isValid()) {
+					if (tool.isEmpty(this.defaultList)) {
+						this.esc();
+						return;
+					} else {
+						//调用生成从差异报告
+						let params = {}
+						params.countReportList = this.defaultList
+						staticCheckStock.generateCountReport(params).then(data => {
+							console.log(data.data)
+						})
+					}
+				} else {
+					this.$u.func.showToast({
+						title: '请确认当前库存的差异状况，无误请点击无误，有差异请修改差异',
+					});
 				}
 			},
-			updateLocQty(row){
+			isValid() {
+				for (let i = 0; i < this.receiveList.pdaBoxQtyResponseList.length; i++) {
+					if (this.receiveList.pdaBoxQtyResponseList[i].isValid == false) {
+						return false;
+					}
+				}
+				return true;
+			},
+			updateStatesIsDiff(item, bool) {
+				if (bool == 'success') {
+					item.isValid = true;
+				} else {
+					item.isValid = false;
+				}
+			},
+			updateLocQty(row) {
+				uni.setStorageSync('defaultRow', row)
 				uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/updateLocQty', row);
-			},
-			analysisCode(code) {
-				this.params.type = '';
-				var barcode = barcodeFunc.parseBarcode(code);
-				var barcodeType = barcodeFunc.BarcodeType;
-				switch (barcode.type) {
-					case barcodeType.UnKnow:
-						this.params.no = barcode.content;
-						break;
-					case barcodeType.Loc:
-						this.params.no = barcode.content;
-						this.params.type = "loc_code";
-						break;
-					case barcodeType.Lpn:
-						this.params.no = barcode.content;
-						this.params.type = "lpn_code";
-						break;
-					case barcodeType.Sku:
-						this.params.no = barcode.content;
-						this.params.type = "sku_code";
-						break;
-					case barcodeType.LotNumber:
-						this.params.no = barcode.content;
-						this.params.type = "sku_lot1";
-						break;
-					case barcodeType.Box:
-						this.params.no = barcode.content;
-						this.params.type = "box_code";
-						break;
-					default:
-						this.$u.func.showToast({
-							title: '条码识别失败,不支持的条码类型'
-						});
-						break;
-				}
 			},
 			esc() {
 				uni.$u.func.navigateBackTo(1);
 			},
-			getReceiveList() {
-				this.noData = false;
-				this.receiveList = [];
-				this.loadmore = true;
-				this.status = 'loading';
-				this.page.current = 1;
-				this.analysisCode(this.params.no);
-				this.params.whId = uni.getStorageSync('warehouse').whId;
-				stockInquiry.findAllStockByNo(this.params, this.page).then(data => {
-					if (data.data.records.length > 0) {
-						this.status = 'loading';
-						this.loadmore = true;
-						this.noData = false;
-					} else {
-						this.loadmore = false;
-						this.noData = true;
-					}
-					this.receiveList = data.data.records;
-					if (this.receiveList.length < 7) {
-						this.loadmore = false;
-					}
-				})
-			},
 			search() {
 				uni.$u.throttle(this.getReceiveList(), 1000)
 			},
-			clickItem(item) {
-				if(true){
-					uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/autoLocation', item);
-				}else{
-					uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/artificialLocation', item);
-				}
-				
-			},
 			scannerCallback(no) {
-				this.analysisCode(no);
 				this.search();
-			},
-			scrolltolower() {
-				this.loading = false;
-				this.divider = false;
-				this.page.current++;
-				this.params.whId = uni.getStorageSync('warehouse').whId;
-				stockInquiry.findAllStockByNo(this.params, this.page).then(data => {
-					if (data.data.records.length > 0) {
-						this.status = 'loading';
-						data.data.records.forEach((item, index) => { //js遍历数组
-							this.receiveList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
-						});
-					} else {
-						this.status = 'nomore';
-					}
-
-				})
 			}
 		}
 	}

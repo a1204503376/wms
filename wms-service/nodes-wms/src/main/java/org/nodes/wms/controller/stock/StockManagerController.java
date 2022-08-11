@@ -6,12 +6,14 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.lendreturn.LendReturnBiz;
+import org.nodes.wms.biz.stock.SerialBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.dao.lendreturn.dto.input.LendReturnQuery;
 import org.nodes.wms.dao.lendreturn.dto.output.NoReturnResponse;
 import org.nodes.wms.dao.stock.dto.input.*;
+import org.nodes.wms.dao.stock.dto.output.SerialPageResponse;
 import org.nodes.wms.dao.stock.dto.output.StockBySerialPageResponse;
 import org.nodes.wms.dao.stock.dto.output.StockMoveResponse;
 import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
@@ -43,6 +45,8 @@ public class StockManagerController {
 	private final StockManageBiz stockManageBiz;
 
 	private final LendReturnBiz lendReturnBiz;
+
+	private final SerialBiz serialBiz;
 
 	@PostMapping("/page")
 	public R<IPage<StockPageResponse>> page(Query query, @RequestBody StockPageQuery stockPageQuery) {
@@ -181,5 +185,15 @@ public class StockManagerController {
 	@PostMapping("/exportUnReturned")
 	public void pageUnReturned(@RequestBody LendReturnQuery lendReturnQuery,HttpServletResponse response){
 		lendReturnBiz.exportNoReturn(lendReturnQuery, response);
+	}
+
+	@PostMapping("/pageSerial")
+	public R<Page<SerialPageResponse>> pageSerial(@RequestBody @Valid SerialPageQuery serialPageQuery, Query query){
+		return R.data(serialBiz.page(serialPageQuery, query));
+	}
+
+	@PostMapping("/exportSerial")
+	public void exportSerial(@RequestBody @Valid SerialPageQuery serialPageQuery, HttpServletResponse response){
+		serialBiz.export(serialPageQuery, response);
 	}
 }

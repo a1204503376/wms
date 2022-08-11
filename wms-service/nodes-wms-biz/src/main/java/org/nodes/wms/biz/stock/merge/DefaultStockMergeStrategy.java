@@ -19,6 +19,8 @@ import java.util.List;
  * 默认库存合并策略
  * 合并的原则：
  * 货主、物品、库位、状态、箱码、LpnCode、30个批属性相同的才合并
+ * 
+ * @author nodesc
  */
 @Service
 @RequiredArgsConstructor
@@ -29,34 +31,34 @@ public class DefaultStockMergeStrategy implements StockMergeStrategy {
 	@Override
 	public Stock matchCanMergeStock(Stock newStock) {
 		return match(newStock.getStockStatus(),
-			newStock.getWoId(), newStock.getLocId(), newStock.getSkuId(),
-			newStock.getBoxCode(), newStock.getLpnCode(), newStock);
+				newStock.getWoId(), newStock.getLocId(), newStock.getSkuId(),
+				newStock.getBoxCode(), newStock.getLpnCode(), newStock);
 	}
 
 	@Override
 	public Stock matchSameStock(ReceiveLog receiveLog) {
 		AssertUtil.notNull(receiveLog, "根据清点记录查询库存失败,清点记录为空");
 		return match(StockStatusEnum.NORMAL, receiveLog.getWoId(),
-			receiveLog.getLocId(), receiveLog.getSkuId(), receiveLog.getBoxCode(),
-			receiveLog.getLpnCode(), receiveLog);
+				receiveLog.getLocId(), receiveLog.getSkuId(), receiveLog.getBoxCode(),
+				receiveLog.getLpnCode(), receiveLog);
 	}
 
 	@Override
-	public Stock matchSameStock(LogSoPick pickLog, Location pickToLoc){
+	public Stock matchSameStock(LogSoPick pickLog, Location pickToLoc) {
 		AssertUtil.notNull(pickLog, "根据清点记录查询库存失败,拣货记录为空");
 		AssertUtil.notNull(pickToLoc, "根据清点记录查询库存失败,出库集货区为空");
 
 		return match(pickLog.getStockStatus(), pickLog.getWoId(), pickToLoc.getLocId(),
-			pickLog.getSkuId(), pickLog.getBoxCode(), pickLog.getLpnCode(), pickLog);
+				pickLog.getSkuId(), pickLog.getBoxCode(), pickLog.getLpnCode(), pickLog);
 	}
 
 	private <T> Stock match(StockStatusEnum stockStatus, Long woId, Long locId,
-						Long skuId,String boxCode, String lpnCode, T source){
-		if (!SkuLotUtil.hasSkuLot(source)){
+			Long skuId, String boxCode, String lpnCode, T source) {
+		if (!SkuLotUtil.hasSkuLot(source)) {
 			throw new ServiceException("库存匹配失败,匹配原对象没有批属性信息");
 		}
 
-		List<Stock> existStockList = stockDao.getStock(stockStatus, woId, locId, skuId, boxCode, lpnCode);
+		List<Stock> existStockList = stockDao.matchStock(stockStatus, woId, locId, skuId, boxCode, lpnCode);
 		if (Func.isEmpty(existStockList)) {
 			return null;
 		}
@@ -72,7 +74,7 @@ public class DefaultStockMergeStrategy implements StockMergeStrategy {
 
 		if (existStockNum > 1) {
 			throw new ServiceException(String.format("库存匹配失败,到多条相同的库存,skuId[%d]-locId[%d]",
-				skuId, locId));
+					skuId, locId));
 		}
 
 		return existStock;

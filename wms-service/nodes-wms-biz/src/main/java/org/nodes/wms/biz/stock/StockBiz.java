@@ -48,7 +48,7 @@ public interface StockBiz {
 	 * @param type          移动类型 必填
 	 * @param cancelPickLog 撤销的拣货记录，qty必须是负数
 	 */
-	void outStockByCancelPick(StockLogTypeEnum type, LogSoPick cancelPickLog);
+	void moveStockByCancelPick(StockLogTypeEnum type, LogSoPick cancelPickLog);
 
 	/**
 	 * 库存移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态

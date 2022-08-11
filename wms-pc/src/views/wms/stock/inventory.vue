@@ -95,11 +95,32 @@ import fileDownload from "js-file-download";
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="货架列" label-width="90px">
-                            <el-input placeholder="请输入货架列" v-model="form.params.locColumn"></el-input>
+                            <el-input v-model="form.params.locColumn" placeholder="请输入货架列"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="库区类型" label-width="90px">
+                            <nodes-dictionary
+                                v-model="form.params.zoneTypeList"
+                                :clearable="true"
+                                :multiple="true" code="zone_type">
+                            </nodes-dictionary>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="是否序列号" label-width="90px">
+                            <el-select v-model="form.params.hasSerial" :clearable="true">
+                                <el-option
+                                    v-for="item in [{label: '是',value: 1},{label: '否',value: 0}]"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="6">
                         <el-form-item label="入库时间" label-width="90px">
                             <nodes-date-range v-model="form.params.lastInTimeDateRange" style="width: 200px">
@@ -133,7 +154,7 @@ import fileDownload from "js-file-download";
                 </el-button>
                 <el-button icon="el-icon-plus" size="mini" type="primary" @click="showBySerial">按序列号显示
                 </el-button>
-                <el-button size="mini" type="primary" @click="printBoxSticker">
+                <el-button size="mini" type="primary" @click="print">
                     箱贴打印
                 </el-button>
                 <el-button icon="el-icon-upload2" plain size="mini"
@@ -211,15 +232,48 @@ import fileDownload from "js-file-download";
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column
-                            v-if="!column.hide"
+                            v-if="!column.hide && index !==1"
+                            :key="index"
+                            show-overflow-tooltip
+                            v-bind="column"
+                            width="130">
+                            <template v-if="column.prop === 'hasSerial'" v-slot="scope">
+                                <el-link
+                                    v-if="scope.row.hasSerial === 1"
+                                    :underline="false"
+                                    target="_blank"
+                                    type="primary"
+                                    @click="showHasSerialView(scope.row.stockId)">是
+                                </el-link>
+                                {{ scope.row.hasSerial !== 1 ? '否' : '' }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            v-if="!column.hide && index===1"
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column"
                             width="130"
                         >
+                            <template slot-scope="scope">
+                                <el-tag
+                                    v-if="scope.row.stockStatus === '系统冻结' || scope.row.stockStatus === '冻结'"
+                                    type="danger"
+                                >
+                                    {{ scope.row.stockStatus }}
+                                </el-tag>
+                                <el-tag
+                                    v-else
+                                    type="success"
+                                >
+                                    {{ scope.row.stockStatus }}
+                                </el-tag>
+
+                            </template>
+
+
                         </el-table-column>
                     </template>
-
                 </el-table>
             </template>
             <template v-slot:page>
@@ -350,9 +404,9 @@ import fileDownload from "js-file-download";
                             </template>
                         </el-table-column>
                         <el-table-column
+                            v-if="!dialog.isMoveByBox"
                             label="操作"
-                            width="80"
-                            v-if="!dialog.isMoveByBox">
+                            width="80">
                             <template v-slot="scope">
                                 <el-button
                                     size="mini"
@@ -428,10 +482,12 @@ import NodesLocation from "@/components/wms/select/NodesLocation";
 import "../../../../public/cdn/iconfont/avue/iconfont.css"
 import NodesSerial from "@/components/wms/select/NodesSerial";
 import NodesZone from "@/components/wms/select/NodesZone";
+import NodesDictionary from "@/components/wms/select/NodesDictionary";
 
 export default {
     name: "customer",
     components: {
+        NodesDictionary,
         NodesZone,
         NodesSerial,
         NodesLocation,
@@ -467,6 +523,8 @@ export default {
                     whIdList: [],
                     woId: "",
                     locColumn: '',
+                    hasSerial: '',
+                    zoneTypeList: [],
                     receiveTimeDateRange: "",
                     lastInTimeDateRange: "",
                     lastOutTimeDateRange: "",
@@ -515,10 +573,14 @@ export default {
                         label: "库存占用",
                         sortable: "custom"
                     },
-
                     {
                         prop: "wsuCode",
                         label: "计量单位",
+                        sortable: "custom"
+                    },
+                    {
+                        prop: "hasSerial",
+                        label: "是否序列号管理",
                         sortable: "custom"
                     },
                     {
@@ -761,9 +823,34 @@ export default {
                 this.form1.thawShow = false
             this.form1.freezeShow = true
         },
-        printBoxSticker() {
+        print() {
             let rows = this.$refs.table.selection;
-            alert("箱贴打印" + row)
+            let boxCodeList = '';
+            for (let item of rows) {
+                if (item.hasSerial !== rows[0].hasSerial) {
+                    this.$message.error('请选择全部有序列号或全部无序列号的行');
+                    return;
+                }
+                if (boxCodeList.indexOf(item.boxCode) == -1) {
+                    boxCodeList += item.boxCode;
+                    boxCodeList += ',';
+                }
+            }
+            if (func.isEmpty(boxCodeList)) {
+                this.$message.error('没有可打印的箱号');
+                return
+            }
+            boxCodeList = boxCodeList.slice(0, -1)
+            let userName = localStorage.getItem('userName');
+            let type = '';
+            if (rows[0].hasSerial === 1) {
+                type = 'sn'
+            } else {
+                type = 'batch'
+            }
+            let url = "http://10.168.3.136:6480/box.aspx";
+            url = url + '?' + 'BoxCodes=' + boxCodeList + '&' + 'BoxType=' + type + '&' + 'UserName=' + userName;
+            window.open(url);
         },
         cancel() {
             this.form1 = {
@@ -1059,6 +1146,14 @@ export default {
                 })
             }
         },
+        showHasSerialView(stockId) {
+            this.$router.push({
+                name: '序列号',
+                params: {
+                    stockId: stockId
+                }
+            });
+        }
     },
 };
 </script>

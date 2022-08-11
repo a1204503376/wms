@@ -47,6 +47,14 @@ public class StockPageQuery implements Serializable {
 	 */
 	private String skuLot2;
 	/**
+	 * 是否序列号管理 (1:是   0:否)
+	 */
+	private Integer hasSerial;
+	/**
+	 * 库区类型
+	 */
+	private List<Integer> zoneTypeList;
+	/**
 	 * 收货日期开始
 	 */
 	private String receiveTimeBegin;

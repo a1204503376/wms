@@ -1,5 +1,10 @@
 package org.nodes.wms.dao.stock;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.stock.dto.input.SerialPageQuery;
+import org.nodes.wms.dao.stock.dto.output.SerialExcelResponse;
+import org.nodes.wms.dao.stock.dto.output.SerialPageResponse;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.enums.SerialStateEnum;
 import org.springblade.core.mp.base.BaseService;
@@ -59,4 +64,21 @@ public interface SerialDao extends BaseService<Serial> {
 	 * @return 系列号数量
 	 */
 	int getSerialCountByStockId(Long stockId);
+
+	/**
+	 * 分页查询序列号
+	 *
+	 * @param serialPageQuery 条件参数
+	 * @param page           分页参数
+	 * @return 序列号分页对象
+	 */
+	Page<SerialPageResponse> getPage(SerialPageQuery serialPageQuery, IPage<?> page);
+
+	/**
+	 * 根据Query中的条件查询序列号
+	 *
+	 * @param serialPageQuery: 条件参数
+	 * @return 序列号
+	 */
+	List<SerialExcelResponse> listByQuery(SerialPageQuery serialPageQuery);
 }

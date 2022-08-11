@@ -17,9 +17,7 @@ public enum ZoneVirtualTypeEnum {
 	Pack(72, "包装暂存区"),
 	Stage(73, "入库暂存区"),
 	Pick(74, "出库暂存区"),
-	PICKTO(110, "出库集货区"),
-	STAGE(120, "入库暂存区"),
-	QC(130, "入库质检区");
+	QC(76, "入库质检区");
 
 	private Integer index;
 	private String name;

@@ -62,7 +62,6 @@ public class StockPageResponse implements Serializable {
 	 */
 	@ExcelProperty
 	private BigDecimal occupyQty;
-
 	/**
 	 * 库存余额
 	 */
@@ -82,6 +81,10 @@ public class StockPageResponse implements Serializable {
 	@ExcelProperty({"库存信息", "计量单位编码"})
 	private String wsuCode;
 	/**
+	 * 是否有序列号(1:有序列号)
+	 */
+	private Integer hasSerial;
+	/**
 	 * 库位编码
 	 */
 	@ColumnWidth(15)
@@ -99,7 +102,6 @@ public class StockPageResponse implements Serializable {
 	@ColumnWidth(15)
 	@ExcelProperty({"库存信息", "库区编码"})
 	private String zoneCode;
-
 	/**
 	 * 箱号
 	 */
@@ -194,5 +196,4 @@ public class StockPageResponse implements Serializable {
 	@ColumnWidth(15)
 	@ExcelProperty({"库存信息", "出库时间"})
 	private Date lastOutTime;
-
 }

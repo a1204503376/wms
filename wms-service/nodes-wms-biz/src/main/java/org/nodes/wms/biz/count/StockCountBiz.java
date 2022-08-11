@@ -1,5 +1,6 @@
 package org.nodes.wms.biz.count;
 
+import org.nodes.wms.dao.count.dto.input.GenerateCountReport;
 import org.nodes.wms.dao.count.dto.input.StockCountRequest;
 import org.nodes.wms.dao.count.dto.output.PdaBoxSkuQtyResponse;
 import org.nodes.wms.dao.count.dto.output.PdaSkuQtyResponse;
@@ -37,4 +38,11 @@ public interface StockCountBiz {
 	 * 根据箱号询返回给PDA使用的箱内物品数量对象集合
 	 */
 	List<PdaSkuQtyResponse> getPdaSkuQtyResponseList(String boxCode);
+
+	/**
+	 * 根据用户手动所提交的数据 生成差异报告
+	 *
+	 * @param countReportList
+	 */
+	void generateCountReport(List<GenerateCountReport> countReportList);
 }

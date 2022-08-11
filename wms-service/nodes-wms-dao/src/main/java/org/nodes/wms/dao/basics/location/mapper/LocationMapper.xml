@@ -103,7 +103,6 @@
                d3.dict_value                         as locHandling,
                d4.dict_value                         as abc,
                d5.dict_value                         as locFlag,
-               l.loc_flag,
                l.check_digit,
                l.logic_allocation,
                l.loc_bank,

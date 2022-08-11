@@ -27,7 +27,7 @@
 			<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">物品列表</h4>
 				<u-list>
 						<u-list-item
-							v-for="(item, index) in param.receiveDetailLpnItemDtoList"
+							v-for="(item, index) in skuList"
 							:key="index"
 						>
 						<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
@@ -65,6 +65,7 @@
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				focusNum: 0,
+				skuList:[],
 				param: {
 					id: '',
 					receiveDetailId: '',
@@ -75,7 +76,6 @@
 					skuLot2: '',
 					num: '',
 					receiveDetailLpnItemDtoList: [],
-
 				},
 			}
 		},
@@ -84,6 +84,14 @@
 			this.param = parse
 			this.param['locCode'] = 'STAGE'
 			this.param['whId'] = uni.getStorageSync('warehouse').whId
+			this.skuList = this.param.receiveDetailLpnItemDtoList.reduce((total, cur, index) => {
+							let hasValue = total.findIndex(current => {
+								return current.skuCode === cur.skuCode;
+							});
+							hasValue === -1 && total.push(cur);
+							hasValue !== -1 && (total[hasValue].planQty = total[hasValue].planQty + cur.planQty);
+							return total;
+						}, []);
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();

@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
-import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.springblade.core.test.BladeBootTest;
 import org.springblade.core.test.BladeSpringRunner;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +19,12 @@ import java.util.List;
 @BladeBootTest(appName = "wms3.3-test", profile = "test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ReceiveTest {
+
 	@Autowired
 	private ReceiveLogBiz receiveLogBiz;
 
 	@Test
-	public void revokeTest(){
+	public void revokeTest() {
 		List<Long> list = new ArrayList<>();
 		list.add(1542461428042588161L);
 		list.add(1542460942849695746L);

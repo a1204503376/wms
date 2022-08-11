@@ -5,9 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.base.entity.Dept;
 import org.nodes.core.base.service.IDeptService;
+import org.nodes.core.constant.DictKVConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.dao.basics.location.LocationDao;
-import org.nodes.core.constant.LocationConstant;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.enums.LocTypeEnum;
 import org.nodes.wms.dao.basics.warehouse.SysAuthDao;
@@ -18,7 +19,6 @@ import org.nodes.wms.dao.basics.warehouse.entities.SysAuth;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.nodes.wms.dao.basics.zone.ZoneDao;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
-import org.nodes.wms.dao.basics.zone.enums.ZoneTypeEnum;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.secure.BladeUser;
 import org.springblade.core.tool.utils.AesUtil;
@@ -27,7 +27,6 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -102,34 +101,52 @@ public class WarehouseBizImpl implements WarehouseBiz {
 		return result;
 	}
 
-	@Override
-	public void afterNewWarehouse(Warehouse warehouse) {
-		Zone zoneParam = new Zone();
-		zoneParam.setWhId(warehouse.getWhId());
-		zoneParam.setZoneCode(warehouse.getWhCode() + "-" + ZoneTypeEnum.VIRTUAL);
-		zoneParam.setZoneName(ZoneTypeEnum.VIRTUAL.getName());
-		zoneParam.setZoneType(ZoneTypeEnum.VIRTUAL.getCode());
-		zoneParam.setCreateDept(warehouse.getDeptId());
-		Zone zone = zoneDao.saveOrUpdateZone(zoneParam);
+	private Zone newZoneBySystem(Warehouse warehouse, Integer zoneType, String zoneCodeSuffix, String zoneName){
+		Zone zone = new Zone();
+		zone.setWhId(warehouse.getWhId());
+		zone.setZoneCode(warehouse.getWhCode() + "-" + zoneCodeSuffix);
+		zone.setZoneName(zoneName);
+		zone.setZoneType(zoneType);
+		zone.setCreateDept(warehouse.getDeptId());
+		zoneDao.saveOrUpdateZone(zone);
 
-		Arrays.stream(LocationConstant.getLocTypes()).forEach(item -> {
-			Location locationParam = new Location();
-			locationParam.setWhId(warehouse.getWhId());
-			locationParam.setZoneId(zone.getZoneId());
-			locationParam.setLocType(LocTypeEnum.Virtual.getCode());
-			if (Func.equals(item, LocationConstant.LOC_STAGE) && Func.isNotEmpty(warehouse.getStage())) {
-				return;
-			}
-			if (Func.equals(item, LocationConstant.LOC_PICKTO) && Func.isNotEmpty(warehouse.getPick())) {
-				return;
-			}
-			if (Func.equals(item, LocationConstant.LOC_QC) && Func.isNotEmpty(warehouse.getQc())) {
-				return;
-			}
-			locationParam.setLocCode(warehouse.getWhCode() + "-" + item);
-			locationParam.setCreateDept(warehouse.getDeptId());
-			locationDao.saveOrUpdateLocation(locationParam);
-		});
+		return zone;
+	}
+
+	private Location newLocationBySystem(Warehouse warehouse, Zone zone, String locCodeSuffix){
+		Location location = new Location();
+		location.setWhId(warehouse.getWhId());
+		location.setZoneId(zone.getZoneId());
+		location.setLocType(LocTypeEnum.Virtual.getCode());
+		location.setLocFlag(DictKVConstant.LOC_FLAG_NORMAL);
+		location.setLocCode(warehouse.getWhCode() + "-" + locCodeSuffix);
+		location.setCreateDept(warehouse.getDeptId());
+		locationDao.saveOrUpdateLocation(location);
+		return location;
+	}
+
+	@Override
+	public void initZoneAndLocAfterNewWarehouse(Warehouse warehouse) {
+		// 创建默认的库区（入库暂存区、入库质检区、出库集货区、虚拟库区）
+		Zone stageZone = newZoneBySystem(warehouse, DictKVConstant.ZONE_TYPE_STAGE,
+			WmsAppConstant.LOC_STAGE, "入库暂存区");
+		warehouse.setStage(stageZone.getZoneId());
+		Zone pickToZone = newZoneBySystem(warehouse, DictKVConstant.ZONE_TYPE_PICK_TO,
+			WmsAppConstant.LOC_PICKTO, "出库集货区");
+		warehouse.setPick(pickToZone.getZoneId());
+		Zone qcZone = newZoneBySystem(warehouse, DictKVConstant.ZONE_TYPE_INSTOCK_QC,
+			WmsAppConstant.LOC_QC, "入库质检区");
+		warehouse.setQc(qcZone.getZoneId());
+		Zone virtualZone = newZoneBySystem(warehouse, DictKVConstant.ZONE_TYPE_VIRTUAL,
+			WmsAppConstant.ZONE_VIRTUAL, "虚拟库区");
+		warehouse.setVirtualZone(virtualZone.getZoneId());
+
+		// 创建默认的库位（入库暂存区、入库质检区、出库集货区、在途库位、未知库位）
+		newLocationBySystem(warehouse, stageZone, WmsAppConstant.LOC_STAGE);
+		newLocationBySystem(warehouse, pickToZone, WmsAppConstant.LOC_PICKTO);
+		newLocationBySystem(warehouse, qcZone, WmsAppConstant.LOC_QC);
+		newLocationBySystem(warehouse, virtualZone, WmsAppConstant.LOC_UNKNOWN);
+		newLocationBySystem(warehouse, virtualZone, WmsAppConstant.LOC_INTRANSIT);
 	}
 
 	@Override

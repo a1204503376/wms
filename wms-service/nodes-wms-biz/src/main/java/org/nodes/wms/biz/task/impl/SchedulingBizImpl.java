@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.task.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
@@ -9,7 +10,6 @@ import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.SchedulingBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
-import org.nodes.core.constant.ZoneConstant;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.log.dto.input.NoticeMessageRequest;
 import org.nodes.wms.dao.stock.entities.Stock;
@@ -61,9 +61,9 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public String selectAndFrozenEnableOutbound(QueryAndFrozenEnableOutboundRequest request) {
 		// 根据箱型（ABC）获取出库接驳区的库位/D箱人工拣货区库位
-		String area = ZoneConstant.ZONE_CODE_AGV_SHIPMENT_CONNECTION_AREA;
+		String area = WmsAppConstant.ZONE_CODE_AGV_SHIPMENT_CONNECTION_AREA;
 		if (Func.equals(request.getLpnTypeCode(), LpnTypeCodeEnum.D)) {
-			area = ZoneConstant.ZONE_CODE_D_PICK_AREA;
+			area = WmsAppConstant.ZONE_CODE_D_PICK_AREA;
 		}
 		Zone zone = zoneBiz.findByCode(area);
 		List<Location> locationList = locationBiz.findLocationByZoneId(zone.getZoneId());

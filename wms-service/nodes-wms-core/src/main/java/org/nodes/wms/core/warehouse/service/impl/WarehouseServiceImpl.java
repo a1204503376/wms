@@ -83,10 +83,8 @@ public class WarehouseServiceImpl<M extends WarehouseMapper, T extends Warehouse
 	@Autowired
 	WarehouseBiz warehouseBiz;
 
-
 	@Override
 	public boolean save(WarehouseDTO whDTO) {
-
 		// 校验授权个数
 		warehouseBiz.valiAuthorization();
 
@@ -111,27 +109,8 @@ public class WarehouseServiceImpl<M extends WarehouseMapper, T extends Warehouse
 		if (this.save((Warehouse) whDTO)) {
 			//WarehouseCache.saveOrUpdate(whDTO);
 		}
-		//STAGE（入库集货区）、QC（入库检验区）、
-		//PICKTO（出库集货区）、UNKNOWN（未知库位）、
-		//INTRANSIT（库内虚拟区）；默认的库位编码为库房编码加上述库位编码，中间用-隔开
-		//1.生成入库暂存区
-		Long stageZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.STAGE);
-		//2.生成出库暂存区
-		Long pickZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.PICKTO);
-		//生成入库质检区
-		Long qcZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.QC);
-		//3.生成包装暂存区
-		//Long packZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.Pack);
-		//4.生成移动暂存区
-		//Long moveZoneId = this.generateZoneAndLocation(whDTO, ZoneVirtualTypeEnum.Move);
 
-		//5.更新库房初时暂存区
-		whDTO.setStage(stageZoneId);
-		whDTO.setPick(pickZoneId);
-		whDTO.setQc(qcZoneId);
-//		whDTO.setPack(packZoneId);
-//		whDTO.setMove(moveZoneId);
-		warehouseBiz.afterNewWarehouse(whDTO);
+		warehouseBiz.initZoneAndLocAfterNewWarehouse(whDTO);
 		boolean saveInitZoneIsSucceed = super.updateById(whDTO);
 		if (!saveInitZoneIsSucceed) {
 			throw new ServiceException("库房初始暂存区关联失败！");

@@ -6,6 +6,7 @@ import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
 import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
 import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.nodes.wms.dao.task.entities.TaskDetail;
+import org.nodes.wms.dao.task.entities.WmsTask;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -70,4 +71,10 @@ public interface WmsTaskBiz {
 	 * @param response      响应对象
 	 */
 	void export(TaskPageQuery taskPageQuery, HttpServletResponse response);
+
+	/**
+	 * 业务日志
+	 * @param wmsTask
+	 */
+	void log(WmsTask wmsTask);
 }

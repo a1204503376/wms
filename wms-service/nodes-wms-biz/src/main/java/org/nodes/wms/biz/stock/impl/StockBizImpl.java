@@ -201,7 +201,7 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public void outStockByCancelPick(StockLogTypeEnum type, LogSoPick pickLog) {
+	public void moveStockByCancelPick(StockLogTypeEnum type, LogSoPick pickLog) {
 		AssertUtil.notNull(pickLog, "撤销拣货失败，原拣货记录为空");
 
 		if (BigDecimalUtil.le(pickLog.getPickRealQty(), BigDecimal.ZERO)) {
@@ -212,12 +212,12 @@ public class StockBizImpl implements StockBiz {
 		Stock stock = stockQueryBiz.findStockOnPickTo(pickLog);
 		// 将库存移动到原库位上
 		List<String> serialNoList = null;
-		if (Func.isNotEmpty(pickLog.getSnCode())){
+		if (Func.isNotEmpty(pickLog.getSnCode())) {
 			serialNoList = Arrays.asList(Func.split(pickLog.getSnCode(), ","));
 		}
 		Location loc = locationBiz.findByLocId(pickLog.getLocId());
 		moveStock(stock, serialNoList, pickLog.getPickRealQty(), loc, StockLogTypeEnum.INSTOCK_BY_CANCEL_PICK,
-			pickLog.getSoBillId(), pickLog.getSoBillNo(), pickLog.getSoDetailId().toString());
+				pickLog.getSoBillId(), pickLog.getSoBillNo(), pickLog.getSoDetailId().toString());
 	}
 
 	private void updateSerialAndSaveLog(List<String> serialNoList, SerialStateEnum state, Long stockId,
@@ -431,7 +431,8 @@ public class StockBizImpl implements StockBiz {
 		Stock targetStock = stockMergeStrategy.matchCanMergeStock(tempStock);
 		StockLog targetStockLog;
 		if (Func.isNull(targetStock)) {
-			targetStock = stockFactory.create(sourceStock, targetLocation, targetLpnCode, targetBoxCode, qty);
+			targetStock = stockFactory.create(sourceStock, targetLocation, targetLpnCode, targetBoxCode, qty,
+					serialNoList);
 			stockDao.saveNewStock(targetStock);
 			targetStockLog = createAndSaveStockLog(true, targetStock, qty,
 					type, billId, billNo, lineNo, "库存移动-新库存");

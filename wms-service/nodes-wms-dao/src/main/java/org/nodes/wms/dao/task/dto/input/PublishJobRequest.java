@@ -9,17 +9,17 @@ import java.math.BigDecimal;
  **/
 @Data
 public class PublishJobRequest {
-	private Long wmsBillId;
+	private Long wmsTaskId;
 	private String wmsBillNo;
 	private String wmsBillType;
-	private Long wmsDetailId;
+	private Long wmsTaskDetailId;
 	private String wmsLineNo;
 	private String wmsSkuCode;
 	private String wmsSkuName;
 	private BigDecimal wmsQty;
 	private String wmsUmCode;
 	private String wmsUmName;
-	private Integer jobType;
+	private Integer jobTypeCode;
 	private String locationNameFrom;
 	private String locationNameTo;
 }

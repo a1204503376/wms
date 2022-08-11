@@ -2,7 +2,9 @@ package org.nodes.wms.biz.stock;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.stock.dto.input.SerialLogPageQuery;
+import org.nodes.wms.dao.stock.dto.input.SerialPageQuery;
 import org.nodes.wms.dao.stock.dto.output.SerialLogPageResponse;
+import org.nodes.wms.dao.stock.dto.output.SerialPageResponse;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +26,7 @@ public interface SerialBiz {
 	/**
 	 * 序列号日志：分页查询
 	 *
-	 * @param query 分页参数
+	 * @param query              分页参数
 	 * @param serialLogPageQuery 条件参数
 	 * @return 序列号日志分页信息
 	 */
@@ -34,7 +36,24 @@ public interface SerialBiz {
 	 * 序列号日志：导出
 	 *
 	 * @param serialLogPageQuery 导出时条件
-	 * @param response 响应对象
+	 * @param response           响应对象
 	 */
 	void exportLog(SerialLogPageQuery serialLogPageQuery, HttpServletResponse response);
+
+	/**
+	 * 序列号：分页查询
+	 *
+	 * @param serialPageQuery 条件参数
+	 * @param query           分页参数
+	 * @return 序列号分页对象
+	 */
+	Page<SerialPageResponse> page(SerialPageQuery serialPageQuery, Query query);
+
+	/**
+	 * 序列号：导出
+	 *
+	 * @param serialPageQuery 条件参数
+	 * @param response 响应对象
+	 */
+	void export(SerialPageQuery serialPageQuery, HttpServletResponse response);
 }
