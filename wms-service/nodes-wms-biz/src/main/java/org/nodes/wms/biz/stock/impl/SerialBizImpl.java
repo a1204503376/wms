@@ -6,8 +6,11 @@ import org.nodes.wms.biz.stock.SerialBiz;
 import org.nodes.wms.dao.stock.SerialDao;
 import org.nodes.wms.dao.stock.SerialLogDao;
 import org.nodes.wms.dao.stock.dto.input.SerialLogPageQuery;
+import org.nodes.wms.dao.stock.dto.input.SerialPageQuery;
+import org.nodes.wms.dao.stock.dto.output.SerialExcelResponse;
 import org.nodes.wms.dao.stock.dto.output.SerialLogExcelResponse;
 import org.nodes.wms.dao.stock.dto.output.SerialLogPageResponse;
+import org.nodes.wms.dao.stock.dto.output.SerialPageResponse;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -37,5 +40,16 @@ public class SerialBizImpl implements SerialBiz {
 	public void exportLog(SerialLogPageQuery serialLogPageQuery, HttpServletResponse response) {
 		List<SerialLogExcelResponse> serialLogList = serialLogDao.listByQuery(serialLogPageQuery);
 		ExcelUtil.export(response, "", "", serialLogList, SerialLogExcelResponse.class);
+	}
+
+	@Override
+	public Page<SerialPageResponse> page(SerialPageQuery serialPageQuery, Query query) {
+		return serialDao.getPage(serialPageQuery, Condition.getPage(query));
+	}
+
+	@Override
+	public void export(SerialPageQuery serialPageQuery, HttpServletResponse response) {
+		List<SerialExcelResponse> serialList = serialDao.listByQuery(serialPageQuery);
+		ExcelUtil.export(response, "", "", serialList, SerialExcelResponse.class);
 	}
 }
