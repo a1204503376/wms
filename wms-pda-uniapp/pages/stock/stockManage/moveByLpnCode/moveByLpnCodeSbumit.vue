@@ -47,7 +47,7 @@
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
 			this.params = parse;
-			this.params.targetLpnCode=parse.lpnCode;
+			this.params.targetLpnCode = parse.lpnCode;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -68,10 +68,13 @@
 				var _this = this;
 				_this.params.isSn = true;
 				uni.$u.throttle(function() {
-					if (tool.isNotEmpty(_this.params.targetLocCode) && tool.isNotEmpty(_this.params.targetLpnCode)) {
+					if (tool.isNotEmpty(_this.params.targetLocCode) && tool.isNotEmpty(_this.params
+						.targetLpnCode)) {
 						_this.params.whId = uni.getStorageSync('warehouse').whId;
 						stockManage.stockMoveByLpn(_this.params).then(data => {
-							console.log(data)
+							uni.$u.func.routeRedirectTo(
+								'/pages/stock/stockManage/moveByLpnCode/moveByLpnCode',
+								_this.params);
 						})
 						return;
 					}
