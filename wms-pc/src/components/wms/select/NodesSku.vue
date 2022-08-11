@@ -54,18 +54,19 @@ export default {
     },
     methods: {
         setDefaultByProps() {
-            this.val = this.selectVal.skuCode;
-            if (!this.isEdit) {
+            if (this.isEdit) {
                 return;
             }
             let currentSku = this.data.find(item => item.skuId === this.selectVal.skuId);
             if (func.isEmpty(currentSku)) {
                 this.data.push(this.selectVal);
             }
+            this.val = this.selectVal.skuCode;
         },
         // 输入值后失去焦点
         onChange(val) {
             if (!this.data.map((item) => item.skuCode).includes(this.val)) {
+                this.val = '';
                 this.$emit('selectValChange', {});
             }
 
@@ -90,6 +91,7 @@ export default {
             this.data = data;
         },
         handleSelect(item) {
+            this.val = item.skuCode;
             this.$emit('selectValChange', item);
         },
     },

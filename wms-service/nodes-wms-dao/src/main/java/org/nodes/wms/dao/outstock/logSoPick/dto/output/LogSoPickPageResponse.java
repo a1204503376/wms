@@ -68,7 +68,6 @@ public class LogSoPickPageResponse extends BaseSkuLot implements Serializable {
 	/**
 	 * 拣货量
 	 */
-	@JsonSerialize(using = ToStringSerializer.class)
 	private BigDecimal pickRealQty;
 
 	/**

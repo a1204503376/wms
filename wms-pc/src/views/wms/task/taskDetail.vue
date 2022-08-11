@@ -1,10 +1,10 @@
 <template>
-    <el-form :inline="true"
+    <el-form ref="searchForm"
+             v-model="form"
+             :inline="true"
              label-position="right"
              label-width="60"
-             ref="searchForm"
-             size="mini"
-             v-model="form">
+             size="mini">
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
@@ -29,7 +29,11 @@
                 <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="任务状态" label-width="90px">
-                            <nodes-task-state v-model="form.params.taskStateList" multiple="true"></nodes-task-state>
+                            <nodes-task-state
+                                :default-value="true"
+                                v-model="form.params.taskStateList"
+                                :multiple="true">
+                            </nodes-task-state>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -46,7 +50,7 @@
                     content="刷新"
                     effect="dark"
                     placement="top">
-                    <el-button @click="onRefresh" circle icon="el-icon-refresh" size="mini"></el-button>
+                    <el-button circle icon="el-icon-refresh" size="mini" @click="onRefresh"></el-button>
                 </el-tooltip>
                 <el-tooltip
                     :enterable="false"
@@ -54,7 +58,7 @@
                     content="显隐"
                     effect="dark"
                     placement="top">
-                    <el-button @click="onColumnShowHide" circle icon="el-icon-s-operation" size="mini"></el-button>
+                    <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
                 </el-tooltip>
                 <el-tooltip
                     :enterable="false"
@@ -62,7 +66,7 @@
                     content="服务端导出"
                     effect="dark"
                     placement="top">
-                    <el-button @click="exportData" circle icon="el-icon-download" size="mini"></el-button>
+                    <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
                 </el-tooltip>
                 <el-tooltip
                     :enterable="false"
@@ -72,7 +76,7 @@
                     placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
                                   style="display: inline-block;margin-left: 10px">
-                        <el-button @click="onExportLocalData" circle icon="el-icon-bottom" size="mini">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
                         </el-button>
                     </excel-export>
                 </el-tooltip>
@@ -89,13 +93,13 @@
             </template>
             <template v-slot:table>
                 <el-table
+                    ref="table"
                     :data="table.data"
-                    @sort-change="onSortChange"
                     border
                     highlight-current-row
-                    ref="table"
                     size="mini"
-                    style="width: 100%">
+                    style="width: 100%"
+                    @sort-change="onSortChange">
                     <el-table-column
                         fixed
                         type="selection"
@@ -111,11 +115,11 @@
                     </el-table-column>
                     <template v-for="(column,index) in table.columnList">
                         <el-table-column
+                            v-if="!column.hide"
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column"
-                            width="130"
-                            v-if="!column.hide">
+                            width="130">
                         </el-table-column>
                     </template>
                 </el-table>
@@ -125,10 +129,10 @@
                     :page-size="page.size"
                     :page-sizes="[20, 50, 100]"
                     :total="page.total"
-                    @current-change="handleCurrentChange"
-                    @size-change="handleSizeChange"
                     background
                     layout="total, sizes, prev, pager, next, jumper"
+                    @current-change="handleCurrentChange"
+                    @size-change="handleSizeChange"
                 >
                 </el-pagination>
             </template>
@@ -146,7 +150,7 @@ import NodesSku from "@/components/wms/select/NodesSku";
 
 import fileDownload from "js-file-download";
 import {listMixin} from "@/mixins/list";
-import {exportFile, getPage, cancelTask, continueTask} from "@/api/wms/task/taskDetail";
+import {cancelTask, continueTask, exportFile, getPage} from "@/api/wms/task/taskDetail";
 import fileUpload from "@/components/nodes/fileUpload";
 import {ExcelExport} from 'pikaz-excel-js';
 import NodesSkuByQuery from "@/components/wms/select/NodesSkuByQuery";
@@ -178,7 +182,7 @@ export default {
                     taskId: '',
                     billNo: '',
                     taskTypeCdList: [],
-                    taskStateList: [],
+                    taskStateList: [1, 2, 3, 4], // 默认未下发、已下发、开始执行、异常中断中
                     skuIdList: [],
                 }
             },
@@ -295,27 +299,27 @@ export default {
                 this.page.total = pageObj.total;
             });
         },
-        cancelTask(){
+        cancelTask() {
             let rows = this.$refs.table.selection;
             for (let i in rows) {
-                if(rows[i].taskState.trim() !== '异常中断中'){
+                if (rows[i].taskState.trim() !== '异常中断中') {
                     this.$message.warning("只能选择异常中断中的任务进行操作");
                     return
                 }
             }
-            cancelTask(rows.map(x => x.taskId)).then(()=>{
+            cancelTask(rows.map(x => x.taskId)).then(() => {
 
             })
         },
-        continueTask(){
+        continueTask() {
             let rows = this.$refs.table.selection;
             for (let i in rows) {
-                if(rows[i].taskState.trim() !== '异常中断中'){
+                if (rows[i].taskState.trim() !== '异常中断中') {
                     this.$message.warning("只能选择异常中断中的任务进行操作");
                     return
                 }
             }
-            continueTask(rows.map(x => x.taskId)).then(()=>{
+            continueTask(rows.map(x => x.taskId)).then(() => {
 
             })
         },

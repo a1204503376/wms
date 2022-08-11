@@ -177,7 +177,6 @@
                             <el-form-item label="货架层" prop="locLevel">
                                 <el-input
                                     v-model="form.params.locLevel"
-                                    oninput="value=value.replace(/[^\d]/g,'')"
                                     maxlength="50"
                                     placeholder="请输入内容"
                                     show-word-limit
@@ -190,7 +189,6 @@
                             <el-form-item label="货架列" prop="locColumn">
                                 <el-input
                                     v-model="form.params.locColumn"
-                                    oninput="value=value.replace(/[^\d]/g,'')"
                                     maxlength="50"
                                     placeholder="请输入内容"
                                     show-word-limit
@@ -203,7 +201,6 @@
                             <el-form-item label="货架排" prop="locBank">
                                 <el-input
                                     v-model="form.params.locBank"
-                                    oninput="value=value.replace(/[^\d]/g,'')"
                                     maxlength="50"
                                     placeholder="请输入内容"
                                     show-word-limit

@@ -181,7 +181,6 @@
                                 <el-input
                                     size="medium"
                                     :clearable="true"
-                                    oninput="value=value.replace(/[^\d]/g,'')"
                                     v-model="form.params.locLevel"
                                     maxlength="50"
                                     placeholder="请输入货架层"
@@ -196,7 +195,6 @@
                                     size="medium"
                                     :clearable="true"
                                     v-model="form.params.locColumn"
-                                    oninput="value=value.replace(/[^\d]/g,'')"
                                     maxlength="50"
                                     placeholder="请输入货架列"
                                     show-word-limit
@@ -210,7 +208,6 @@
                                     size="medium"
                                     :clearable="true"
                                     v-model="form.params.locBank"
-                                    oninput="value=value.replace(/[^\d]/g,'')"
                                     maxlength="50"
                                     placeholder="请输入货架排"
                                     show-word-limit
