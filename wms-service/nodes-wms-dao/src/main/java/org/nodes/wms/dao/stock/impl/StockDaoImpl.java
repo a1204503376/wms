@@ -172,11 +172,23 @@ public class StockDaoImpl
 	@Override
 	public List<Stock> getStock(StockStatusEnum status, Long woId,
 			Long locId, Long skuId, String boxCode, String lpnCode) {
+		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
+		return getStock(status, woId, locId, skuId, boxCode, lpnCode, queryWrapper);
+	}
+
+	@Override
+	public List<Stock> matchStock(StockStatusEnum status, Long woId, Long locId,
+			Long skuId, String boxCode, String lpnCode) {
+		LambdaQueryWrapper<Stock> queryWrapper = Wrappers.lambdaQuery(Stock.class);
+		return getStock(status, woId, locId, skuId, boxCode, lpnCode, queryWrapper);
+	}
+
+	private List<Stock> getStock(StockStatusEnum status, Long woId,
+			Long locId, Long skuId, String boxCode, String lpnCode, LambdaQueryWrapper<Stock> queryWrapper) {
 		if (Func.isNull(woId) || Func.isNull(skuId) || Func.isNull(locId)) {
 			throw new ServiceException("库存查询失败,缺失必要参数");
 		}
 
-		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
 		queryWrapper
 				.eq(Stock::getStockStatus, status.getCode())
 				.eq(Stock::getWoId, woId)
@@ -291,7 +303,7 @@ public class StockDaoImpl
 	}
 
 	private LambdaQueryWrapper<Stock> getStockQuery() {
-		LambdaQueryWrapper<Stock> queryWrapper = Wrappers.lambdaQuery();
+		LambdaQueryWrapper<Stock> queryWrapper = Wrappers.lambdaQuery(Stock.class);
 		queryWrapper.apply("stay_stock_qty + stock_qty > pick_qty");
 		return queryWrapper;
 	}
@@ -403,4 +415,5 @@ public class StockDaoImpl
 		AssertUtil.notEmpty(locCode, "根据库位查询库存数据失败，locCode不能为空");
 		return super.baseMapper.getStockCountByLocCode(locCode);
 	}
+
 }

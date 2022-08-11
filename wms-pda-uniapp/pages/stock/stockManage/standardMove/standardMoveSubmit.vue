@@ -26,6 +26,7 @@
 	import uniSelect from '@/components/uni-select.vue'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
+	import stockManage from '@/api/stock/stockManage.js'
 	export default {
 		components: {
 			uniSelect
@@ -62,12 +63,29 @@
 				_this.params.isSn = true;
 				uni.$u.throttle(function() {
 					if (tool.isNotEmpty(_this.params.targetLocCode)) {
-						console.log('标准移动成功')
-						uni.$u.func.routeNavigateTo('/pages/stock/stockManage/standardMove/standardMoveSerialNumber', _this.params);
-						
+						stockManage.estimateStockMove(_this.params).then(data => {
+							if (data.data.isSn) {
+								uni.$u.func.routeNavigateTo(
+									'/pages/stock/stockManage/standardMove/standardMoveSerialNumber',
+									_this.params);
+							} else {
+								_this.params.whId = uni.getStorageSync('warehouse').whId;
+								stockManage.stockMove(_this.params).then(data => {
+									_this.$u.func.showToast({
+										title: '标准移动成功'
+									});
+									uni.$u.func.routeRedirectTo(
+										'/pages/stock/stockManage/standardMove/standardMove');
+								});
+							}
+
+						})
 						return;
+					} else {
+						_this.$u.func.showToast({
+							title: '标准移动失败'
+						});
 					}
-					console.log('标准移动失败')
 				}, 1000)
 
 			},

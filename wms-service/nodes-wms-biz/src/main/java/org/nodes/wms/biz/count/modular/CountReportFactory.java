@@ -24,6 +24,8 @@ public class CountReportFactory {
 	 */
 	public CountReport createCountReport(GenerateCountReport generateCountReport, Stock stock, CountDetail countDetail) {
 		CountReport countReport = BeanUtil.copy(stock, CountReport.class);
+		countReport.setSystemLot(stock.getSkuLot1());
+		countReport.setCountLot(stock.getSkuLot1());
 		countReport.setCountBillId(countDetail.getCountBillId());
 		countReport.setCountBillNo(countDetail.getCountBillNo());
 		countReport.setWmsQty(stock.getStockBalance());
