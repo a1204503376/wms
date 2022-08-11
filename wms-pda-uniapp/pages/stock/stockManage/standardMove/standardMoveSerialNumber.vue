@@ -111,7 +111,6 @@
 							_this.params.serialNumberList = serialList;
 							_this.params.whCode = uni.getStorageSync('warehouse').whCode;
 							_this.params.whId = uni.getStorageSync('warehouse').whId;
-							console.log('标准移动序列号采集成功')
 							stockManage.stockMove(_this.params).then(data => {
 								console.log(data)
 							})
