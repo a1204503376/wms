@@ -38,6 +38,7 @@ import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.BeanUtil;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -153,14 +154,22 @@ public class OutStockBizImpl implements OutStockBiz {
 
 		// 2 生成拣货记录，需要注意序列号（log_so_pick)
 		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
-		LogSoPick logSoPick = logSoPickFactory.createLogSoPick(request, soHeader, soDetail, stockList.get(0), sourceLocation);
+		AssertUtil.notNull(stockList, "PDA拣货失败，根据箱码获取库存失败");
+		Stock stock = stockList.stream()
+			.filter(stockParam ->
+				Func.equals(stockParam.getSkuCode(), request.getSkuCode())
+					&& Func.equals(stockParam.getSkuLot1(), request.getSkuLot1())
+					&& Func.equals(stockParam.getLocCode(), request.getLocCode()))
+			.findFirst().orElse(null);
+		AssertUtil.notNull(stockList, "PDA拣货失败，根据您输入的条件找不到对应的库存");
+		LogSoPick logSoPick = logSoPickFactory.createLogSoPick(request, soHeader, soDetail, stock, sourceLocation);
 		logSoPickDao.saveLogSoPick(logSoPick);
 
 		// 3 调用拣货计划中相应的函数
 		// 3 移动库存到出库集货区
 		Location location = locationBiz
 			.getLocationByZoneType(request.getWhId(), DictKVConstant.ZONE_TYPE_PICK_TO).get(0);
-		stockBiz.moveStock(stockList.get(0), request.getSerailList(), request.getQty(),
+		stockBiz.moveStock(stock, request.getSerailList(), request.getQty(),
 			location, StockLogTypeEnum.OUTSTOCK_BY_PC, soHeader.getSoBillId(), soHeader.getSoBillNo(),
 			soDetail.getSoLineNo());
 		// 4 更新出库单明细中的状态和数量
