@@ -11,7 +11,7 @@ module.exports = {
 	// 租户
 	tenantId: '000000',
 	// api请求地址url
-	apiUrl: 'http://localhost:8088',
+	apiUrl: 'http://10.168.3.136:6001',
 	// 后端数据的接收方式application/json;charset=UTF-8或者application/x-www-form-urlencoded;charset=UTF-8
 	contentType: 'application/json;charset=UTF-8',
 	// 操作正常code
