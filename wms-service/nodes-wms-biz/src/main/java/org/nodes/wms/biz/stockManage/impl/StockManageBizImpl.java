@@ -157,7 +157,7 @@ public class StockManageBizImpl implements StockManageBiz {
 
 		if (locationBiz.isAgvLocation(targetLocation)) {
 			//AGV移动任务生成
-			agvTask.moveStockToSchedule(stockList, targetLocation.getLocId());
+			agvTask.moveStockToSchedule(stockList, targetLocation);
 			return;
 		}
 
@@ -176,7 +176,7 @@ public class StockManageBizImpl implements StockManageBiz {
 		canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode());
 		if (locationBiz.isAgvLocation(targetLocation)) {
 			//AGV移动任务生成
-			agvTask.moveStockToSchedule(stockList, targetLocation.getLocId());
+			agvTask.moveStockToSchedule(stockList, targetLocation);
 			return;
 		}
 
@@ -204,7 +204,7 @@ public class StockManageBizImpl implements StockManageBiz {
 		}
 		//根据传过来的多个箱码集合查询出多个库存
 		List<String> boxCodeList = request.getBoxCodeList().stream().filter(Func::isNotEmpty).collect(Collectors.toList());
-		boxCodeList.forEach(boxCode -> {
+		for(String boxCode:boxCodeList){
 				List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(boxCode);
 				AssertUtil.notNull(stockList, "PDA库存管理:按箱移动失败，根据箱码查询不到对应库存");
 				Location location = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
@@ -212,13 +212,12 @@ public class StockManageBizImpl implements StockManageBiz {
 				canMove(location, targetLocation, stockList, boxCode);
 				if (locationBiz.isAgvLocation(targetLocation)) {
 					//AGV移动任务生成
-					agvTask.moveStockToSchedule(stockList, targetLocation.getLocId());
-					return;
+					agvTask.moveStockToSchedule(stockList, targetLocation);
+					break;
 				}
 				stockBiz.moveStockByBoxCode(boxCode, boxCode, request.getLpnCode(),
 					targetLocation, stockLogTypeEnum, null, null, null);
 			}
-		);
 	}
 
 	@Override
