@@ -9,7 +9,7 @@
 			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="param.locCode" @focus="focus(1)" @blur="blur(1)" @confirm="change"></u--input>
 			</u-form-item>
-			<u-form-item label="LPN" :required="true" class="left-text-one-line" labelWidth="100">
+			<u-form-item label="LPN"  class="left-text-one-line" labelWidth="100">
 				<u--input v-model="param.lpnCode" @focus="focus(2)" @blur="blur(2)" @confirm="change"
 					:focus="this.focusNum == 2"></u--input>
 			</u-form-item>
@@ -97,7 +97,7 @@
 			submit() {
 				this.param.locCode = this.$u.func.parseLocCode(this.param.locCode)
 				receive.receiveByMultiBox(this.param).then(res => {
-					that.$u.func.showToast({
+					this.$u.func.showToast({
 						title: '操作成功'
 					})
 					this.esc()

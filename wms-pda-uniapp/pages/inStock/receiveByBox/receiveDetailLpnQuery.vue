@@ -54,6 +54,10 @@
 		},
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
+			this.param = {
+				boxCode: '',
+				num: 0,
+			}
 		},
 		onBackPress(event) {
 			// #ifdef APP-PLUS
