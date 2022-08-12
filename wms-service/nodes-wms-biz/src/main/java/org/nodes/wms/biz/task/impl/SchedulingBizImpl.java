@@ -141,7 +141,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	 * 移动库存到目标库位
 	 * 解冻目标库存
 	 * 解冻目标库位
-	 * 
+	 *
 	 * @param wmsTask 任务
 	 */
 	private void onSuccess(WmsTask wmsTask) {
@@ -152,6 +152,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		}
 		// 修改任务状态
 		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.COMPLETED);
+		locationBiz.unfreezeLocByTask(wmsTask.getTaskId().toString());
 		// 将中间库位的库存移动到目标库位
 		Location targetLoc = locationBiz.findByLocId(wmsTask.getToLocId());
 		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
@@ -162,7 +163,6 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			targetStockList.add(targetStock);
 		}
 
-		locationBiz.unfreezeLocByTask(wmsTask.getTaskId().toString());
 		stockBiz.unfreezeStockByDropId(targetStockList, wmsTask.getTaskId());
 	}
 

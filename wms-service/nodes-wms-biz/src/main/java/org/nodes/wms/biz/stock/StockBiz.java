@@ -111,7 +111,7 @@ public interface StockBiz {
 	 * 库存移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
 	 * 目标箱码和lpn编码会发生改变时调用
 	 * 原库存状态为系统冻结在移动时抛异常；目标库位状态(locFlag)如果不是正常或冻结时抛异常
-	 * 
+	 *
 	 * @param sourceStock    原库存,必填
 	 * @param serialNoList   移动的序列号，可能为空
 	 * @param qty            移动数量,必填
@@ -166,7 +166,7 @@ public interface StockBiz {
 
 	/**
 	 * 移动库存到落放id，不检验库存状态
-	 * 
+	 *
 	 * @param sourceStock 源库存
 	 * @param dropId      落放id
 	 * @param type        库存操作类型
@@ -176,7 +176,7 @@ public interface StockBiz {
 
 	/**
 	 * 从落放id全部移动到目标库位，不检验库存状态
-	 * 
+	 *
 	 * @param sourceStock    源库存
 	 * @param targetLocation 目标库位
 	 * @param dropId         落放id
@@ -294,7 +294,7 @@ public interface StockBiz {
 	void exportStockLogToExcel(StockLogPageQuery stockLogPageQuery, HttpServletResponse response);
 
 	/**
-	 * 系统落放id冻结库存，该类冻结的库存不能执行移动等库内操作,同时会更新库存中的taskId
+	 * 系统落放id冻结库存，该类冻结的库存不能执行移动等库内操作,同时会更新库存中的DropId
 	 *
 	 * @param stocks 目标库存
 	 * @param dropId 落放id
@@ -302,7 +302,7 @@ public interface StockBiz {
 	void freezeStockByDropId(List<Stock> stocks, Long dropId);
 
 	/**
-	 * 根据落放id解冻库存，同时会将库存的taskId清空
+	 * 根据落放id解冻库存，同时会将库存的DropId清空
 	 *
 	 * @param stocks sotck
 	 * @param dropId 落放id
