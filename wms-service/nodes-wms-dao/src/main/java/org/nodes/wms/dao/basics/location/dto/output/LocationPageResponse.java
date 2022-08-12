@@ -62,9 +62,9 @@ public class LocationPageResponse implements Serializable {
 	private String locHandling;
 
 	/**
-	 * 使用状态
+	 * 库位状态
 	 */
-	@ExcelProperty("使用状态")
+	@ExcelProperty("库位状态")
 	private String locFlag;
 
 	/**
