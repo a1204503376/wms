@@ -3,7 +3,7 @@
         v-model="val"
         :multiple="multiple"
         :clearable="true"
-        size="size"
+        :size="size"
         value-key="id"
         @change="onChange">
         <el-option

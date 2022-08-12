@@ -16,6 +16,8 @@
         from_loc_code,
         to_loc_code,
         lpn_code,
+        begin_time,
+        close_time,
         allot_time
         from tsk_task
         <where>
