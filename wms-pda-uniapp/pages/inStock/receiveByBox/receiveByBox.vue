@@ -114,7 +114,7 @@
 					that.$u.func.showToast({
 						title: '操作成功'
 					})
-					uni.$u.func.routeNavigateTo('/pages/inStock/receiveByBox/receiveDetailLpnQuery');
+					this.esc()
 				})
 			},
 			focus(num) {
@@ -133,7 +133,9 @@
 				}
 			},
 			esc() {
-			uni.$u.func.navigateBackTo(1);
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)

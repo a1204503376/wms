@@ -120,7 +120,9 @@
 		},
 		methods: {
 			esc() {
-				uni.$u.func.routeNavigateTo('/pages/home/home')
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			press(num){
 				if(num==10){
