@@ -144,11 +144,10 @@ public class StockCountBizImpl implements StockCountBiz {
 			countReport.setWsuName(um.getWsuName());
 
 			if (beChangedList.get(i).getIsValid()) {
-				if(BigDecimalUtil.eq(beChangedList.get(i).getTotalQty(),defaultList.get(i).getTotalQty())
-					&&Func.equals(beChangedList.get(i).getLocCode(),defaultList.get(i).getLocCode())
-					&&Func.equals(beChangedList.get(i).getBoxCode(),defaultList.get(i).getBoxCode())
-				){
-                  continue;
+				if (BigDecimalUtil.eq(beChangedList.get(i).getTotalQty(), defaultList.get(i).getTotalQty())
+					&& Func.equals(beChangedList.get(i).getLocCode(), defaultList.get(i).getLocCode())
+					&& Func.equals(beChangedList.get(i).getBoxCode(), defaultList.get(i).getBoxCode())) {
+					continue;
 				}
 				countReport.setCountQty(beChangedList.get(i).getTotalQty());
 			} else {
