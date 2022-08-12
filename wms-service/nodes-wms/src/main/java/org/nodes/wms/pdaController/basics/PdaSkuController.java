@@ -2,14 +2,17 @@ package org.nodes.wms.pdaController.basics;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.dao.basics.sku.dto.input.FindSkuByCodeRequest;
+import org.nodes.wms.dao.basics.sku.dto.input.FindSkuIsSnBySkuCodeRequest;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -50,5 +53,20 @@ public class PdaSkuController {
 		return R.data(skuList);
 	}
 
+	/**
+	 * PDA查询当前物品是否序列号管理
+	 *
+	 * @return 当前物品是否序列号
+	 */
+	@GetMapping("/findSkuIsSnBySkuCode")
+	public R<Boolean> findSkuIsSnBySkuCode(FindSkuIsSnBySkuCodeRequest request) {
+		Sku sku = skuBiz.findByCode(request.getSkuCode());
+		if (Func.isNotEmpty(sku)) {
+			if (Objects.equals(sku.getIsSn(), WmsAppConstant.FALSE_DEFAULT)) {
+				return R.data(false);
+			}
+		}
+		return R.data(true);
+	}
 
 }

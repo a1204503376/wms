@@ -47,8 +47,8 @@ public class PdaPickingController {
 	 * @param request 按件拣货请求对象
 	 */
 	@ApiLog("PDA按件拣货")
-	@PostMapping("/pickingByPcs")
-	public R<String> pickingByPcs(@RequestBody PickByPcsRequest request) {
+	@PostMapping("/pickByPcs")
+	public R<String> pickByPcs(@RequestBody PickByPcsRequest request) {
 		outStockBiz.pickByPcs(request);
 		return R.success("PDA按件拣货,拣货成功");
 	}
