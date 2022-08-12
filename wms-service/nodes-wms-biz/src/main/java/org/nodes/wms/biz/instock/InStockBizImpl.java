@@ -43,7 +43,7 @@ public class InStockBizImpl implements InStockBiz {
 	@Override
 	public void receiveByBoxCode(ReceiveDetailLpnPdaRequest request, String logType) {
 		boolean hasReceiveHeaderId = Func.isNotEmpty(request.getReceiveHeaderId());
-		if(Func.isNotEmpty(request.getLpnCode())) {
+		if (Func.isNotEmpty(request.getLpnCode())) {
 			List<Stock> stocks = stockQueryBiz.findStockByLpnCode(request.getLpnCode());
 			if (Func.notNull(stocks) && stocks.size() > 0) {
 				throw new ServiceException("LPN[" + request.getLpnCode() + "]已存在库存数据！");
@@ -136,7 +136,7 @@ public class InStockBizImpl implements InStockBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public PdaByPcsReceiveResponse receiptByPcs(PdaByPieceReceiveRequest request) {
-		if(Func.isNotEmpty(request.getBoxCode())) {
+		if (Func.isNotEmpty(request.getBoxCode())) {
 			List<Stock> stocks = stockQueryBiz.findStockByLpnCode(request.getBoxCode());
 			if (Func.notNull(stocks) && stocks.size() > 0) {
 				throw new ServiceException("箱码[" + request.getBoxCode() + "]已存在库存数据！");
@@ -163,7 +163,7 @@ public class InStockBizImpl implements InStockBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void receiveByMultiBoxCode(ReceiveDetailLpnPdaMultiRequest receiveDetailLpnPdaMultiRequest) {
-		if(Func.isNotEmpty(receiveDetailLpnPdaMultiRequest.getLpnCode())) {
+		if (Func.isNotEmpty(receiveDetailLpnPdaMultiRequest.getLpnCode())) {
 			List<Stock> stocks = stockQueryBiz.findStockByLpnCode(receiveDetailLpnPdaMultiRequest.getLpnCode());
 			if (Func.notNull(stocks) && stocks.size() > 0) {
 				throw new ServiceException("LPN[" + receiveDetailLpnPdaMultiRequest.getLpnCode() + "]已存在库存数据！");
@@ -171,7 +171,7 @@ public class InStockBizImpl implements InStockBiz {
 		}
 		// 判断lpnCode是否为空，如果为空则随机生成一个lpnCode
 		if (Func.isEmpty(receiveDetailLpnPdaMultiRequest.getLpnCode())) {
-			receiveDetailLpnPdaMultiRequest.setLpnCode(receiveDetailLpnPdaMultiRequest.getLocCode());
+			receiveDetailLpnPdaMultiRequest.setLpnCode(receiveDetailLpnPdaMultiRequest.getReceiveDetailLpnPdaRequestList().get(0).getBoxCode());
 		}
 		// 循环调用按箱收货业务方法
 		for (ReceiveDetailLpnPdaRequest item : receiveDetailLpnPdaMultiRequest.getReceiveDetailLpnPdaRequestList()) {
