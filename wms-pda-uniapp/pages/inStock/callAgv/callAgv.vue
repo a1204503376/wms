@@ -31,7 +31,7 @@
 						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" @click="change(item)">
 							{{item.locCodeView}}</u-button>
 					</u-col>
-					<u-col span="3" v-if="!item.isEmpty && index >3">
+					<u-col span="3" v-if="!item.isEmpty && index">
 						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" disabled>{{item.locCodeView}}
 						</u-button>
 					</u-col>
@@ -117,7 +117,9 @@
 		},
 		methods: {
 			esc() {
-				uni.$u.func.navigateBackTo(1);
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			change(item) {
 				this.locCode = item.locCode
@@ -130,9 +132,7 @@
 					that.$u.func.showToast({
 						title: '操作成功'
 					})
-					 uni.$u.func.routeNavigateTo('/pages/inStock/callAgv/callAgvQuery');
-				
-				
+					this.esc()
 
 				})
 

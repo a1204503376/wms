@@ -43,10 +43,11 @@ public class InStockBizImpl implements InStockBiz {
 	@Override
 	public void receiveByBoxCode(ReceiveDetailLpnPdaRequest request, String logType) {
 		boolean hasReceiveHeaderId = Func.isNotEmpty(request.getReceiveHeaderId());
-		List<Stock> stocks=stockQueryBiz.findStockByLpnCode(request.getLpnCode());
-		if(Func.notNull(stocks) && stocks.size()>0)
-		{
-			throw new ServiceException("LPN["+request.getLpnCode()+"]已存在库存数据！");
+		if(Func.isNotEmpty(request.getLpnCode())) {
+			List<Stock> stocks = stockQueryBiz.findStockByLpnCode(request.getLpnCode());
+			if (Func.notNull(stocks) && stocks.size() > 0) {
+				throw new ServiceException("LPN[" + request.getLpnCode() + "]已存在库存数据！");
+			}
 		}
 		ReceiveHeader receiveHeader = new ReceiveHeader();
 		// 判断业务参数（无单收货除外），是否可以正常收货、超收
@@ -135,10 +136,11 @@ public class InStockBizImpl implements InStockBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public PdaByPcsReceiveResponse receiptByPcs(PdaByPieceReceiveRequest request) {
-		List<Stock> stocks=stockQueryBiz.findStockByLpnCode(request.getBoxCode());
-		if(Func.notNull(stocks) && stocks.size()>0)
-		{
-			throw new ServiceException("箱码["+request.getBoxCode()+"]已存在库存数据！");
+		if(Func.isNotEmpty(request.getBoxCode())) {
+			List<Stock> stocks = stockQueryBiz.findStockByLpnCode(request.getBoxCode());
+			if (Func.notNull(stocks) && stocks.size() > 0) {
+				throw new ServiceException("箱码[" + request.getBoxCode() + "]已存在库存数据！");
+			}
 		}
 		ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(request.getReceiveDetailId());
 		ReceiveHeader receiveHeader = receiveBiz.selectReceiveHeaderById(request.getReceiveId());
@@ -161,10 +163,11 @@ public class InStockBizImpl implements InStockBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void receiveByMultiBoxCode(ReceiveDetailLpnPdaMultiRequest receiveDetailLpnPdaMultiRequest) {
-		List<Stock> stocks=stockQueryBiz.findStockByLpnCode(receiveDetailLpnPdaMultiRequest.getLpnCode());
-		if(Func.notNull(stocks) && stocks.size()>0)
-		{
-			throw new ServiceException("LPN["+receiveDetailLpnPdaMultiRequest.getLpnCode()+"]已存在库存数据！");
+		if(Func.isNotEmpty(receiveDetailLpnPdaMultiRequest.getLpnCode())) {
+			List<Stock> stocks = stockQueryBiz.findStockByLpnCode(receiveDetailLpnPdaMultiRequest.getLpnCode());
+			if (Func.notNull(stocks) && stocks.size() > 0) {
+				throw new ServiceException("LPN[" + receiveDetailLpnPdaMultiRequest.getLpnCode() + "]已存在库存数据！");
+			}
 		}
 		// 判断lpnCode是否为空，如果为空则随机生成一个lpnCode
 		if (Func.isEmpty(receiveDetailLpnPdaMultiRequest.getLpnCode())) {
