@@ -5,6 +5,7 @@ import org.nodes.core.constant.WmsApiPath;
 import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.dao.basics.sku.dto.input.FindSkuByCodeRequest;
+import org.nodes.wms.dao.basics.sku.dto.input.FindSkuIsSnBySkuCodeRequest;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
@@ -58,8 +59,8 @@ public class PdaSkuController {
 	 * @return 当前物品是否序列号
 	 */
 	@GetMapping("/findSkuIsSnBySkuCode")
-	public R<Boolean> findSkuIsSnBySkuCode(String skuCode) {
-		Sku sku = skuBiz.findByCode(skuCode);
+	public R<Boolean> findSkuIsSnBySkuCode(FindSkuIsSnBySkuCodeRequest request) {
+		Sku sku = skuBiz.findByCode(request.getSkuCode());
 		if (Func.isNotEmpty(sku)) {
 			if (Objects.equals(sku.getIsSn(), WmsAppConstant.FALSE_DEFAULT)) {
 				return R.data(false);
