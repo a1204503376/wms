@@ -98,7 +98,7 @@
                             <el-col :span="8">
 
 
-                                <el-form-item label="使用状态" prop="locFlag">
+                                <el-form-item label="库位状态" prop="locFlag">
 
                                     <nodes-dictionary
                                         v-model="form.params.locFlag"
