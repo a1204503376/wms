@@ -39,6 +39,8 @@
 	import uniSelect from '@/components/uni-select.vue'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
+	import picking from '@/api/picking/picking.js'
+	import sku from '@/api/sku.js';
 	export default {
 		components: {
 			uniSelect
@@ -56,7 +58,7 @@
 					billTypeCd: undefined,
 					soBillId: undefined,
 					soBillNo: undefined,
-					soDetailId:undefined
+					soDetailId: undefined
 				},
 				soBillId: ''
 			}
@@ -76,7 +78,7 @@
 			var soDetail = uni.getStorageSync('soDetail');
 			if (tool.isNotEmpty(soDetail)) {
 				this.params.skuCode = soDetail.skuCode;
-				this.params.qty =soDetail.surplusQty;
+				this.params.qty = soDetail.surplusQty;
 				this.params.skuLot1 = soDetail.skuLot1;
 				this.params.soDetailId = soDetail.soDetailId;
 			}
@@ -125,16 +127,21 @@
 				var _this = this;
 				_this.params.isSn = true;
 				uni.$u.throttle(function() {
-					if (_this.params.isSn) {
-						_this.$u.func.showToast({
-							title: '有序列号'
-						});
-						uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingSerialNumber');
-						return;
-					}
-					_this.$u.func.showToast({
-						title: '拣货完成'
-					});
+					let params = {}
+					params.skuCode = _this.params.skuCode;
+					sku.findSkuIsSnBySkuCode(params).then(data => {
+						console.log(data)
+					})
+					// if (_this.params.isSn) {
+					// 	_this.$u.func.showToast({
+					// 		title: '有序列号'
+					// 	});
+					// 	uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingSerialNumber');
+					// 	return;
+					// }
+					// _this.$u.func.showToast({
+					// 	title: '拣货完成'
+					// });
 				}, 1000)
 
 			},

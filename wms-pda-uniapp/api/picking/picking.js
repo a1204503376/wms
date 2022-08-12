@@ -9,9 +9,9 @@ const findAllPickingByNo = (data, params) => {
 	})
 }
 
-const pickingByPcs = (data) => {
+const pickByPcs = (data) => {
 	return http.request({
-		url: '/api/ApiPDA/pickingByPcs/pickingByPcs',
+		url: '/api/ApiPDA/pickingByPcs/pickByPcs',
 		method: 'POST',
 		data: data
 	})
@@ -35,7 +35,7 @@ const getPickingBySoBillId = (data) => {
 
 export default {
 	findAllPickingByNo,
-	pickingByPcs,
+	pickByPcs,
 	pickingByBox,
 	getPickingBySoBillId
 }
