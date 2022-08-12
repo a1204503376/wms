@@ -63,19 +63,21 @@
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
 			this.soBillId = parse.soBillId;
-			this.params=parse;
+			this.params.soBillNo = parse.soBillNo;
+			this.params.soBillId = parse.soBillId;
+			this.params.billTypeName = parse.billTypeName;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
 		},
 		onShow() {
+			uni.$u.func.registerScanner(this.scannerCallback);
 			var soDetail = uni.getStorageSync('soDetail');
-			if(tool.isNotEmpty(soDetail)){
+			if (tool.isNotEmpty(soDetail)) {
 				this.params.skuCode = soDetail.skuCode;
 				this.params.qty = soDetail.planQty;
-				this.params.skuLot1=soDetail.skuLot1;
+				this.params.skuLot1 = soDetail.skuLot1;
 			}
-			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		onBackPress(event) {
 			// #ifdef APP-PLUS
@@ -154,7 +156,7 @@
 				});
 			},
 			gotoDetails() {
-				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingDetails',this.params);
+				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingDetails', this.params);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

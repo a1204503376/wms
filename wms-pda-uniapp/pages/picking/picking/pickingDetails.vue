@@ -14,10 +14,11 @@
 						</u-col>
 						<u-col span="4">
 							<view class="demo-layout bg-purple font-in-page">{{item.scanQty}}/{{item.planQty}}
-								{{item.baseUmName}}</view>
+								{{item.baseUmName}}
+							</view>
 						</u-col>
 					</u-row>
-					<u-row  customStyle="margin-bottom: 10px">
+					<u-row customStyle="margin-bottom: 10px">
 						<u-col span="12" class="left-text-one-line">
 							<view class="demo-layout bg-purple font-in-page">{{item.skuName}}</view>
 						</u-col>
@@ -60,7 +61,6 @@
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
-			console.log(parse)
 			this.params = parse;
 			this.getReceiveDetailList();
 		},
@@ -109,7 +109,9 @@
 			},
 			esc() {
 				this.clearEmitKeyDown();
-				uni.$u.func.routeRedirectTo('/pages/picking/picking/pickingByPcs',this.params);
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			getReceiveDetailList() {
 				this.params.whId = uni.getStorageSync('warehouse').whId;
@@ -129,7 +131,7 @@
 				this.params.scanQty = row.scanQty;
 				this.clearEmitKeyDown();
 				uni.setStorageSync('soDetail', row);
-				uni.$u.func.routeRedirectTo('/pages/picking/picking/pickingByPcs');
+				this.esc();
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);
