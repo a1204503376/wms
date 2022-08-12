@@ -10,17 +10,40 @@
 				<view @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
 						<u-col span="8" class="left-text-one-line">
-							<view class="demo-layout bg-purple-light font-in-page">{{item.soLineNo}}</view>
+							<view class="demo-layout bg-purple-light font-in-page">{{'行号'}}</view>
 						</u-col>
 						<u-col span="4">
-							<view class="demo-layout bg-purple font-in-page">{{item.scanQty}}/{{item.planQty}}
-								{{item.baseUmName}}
+							<view class="demo-layout bg-purple font-in-page">
+							{{item.soLineNo}}
 							</view>
 						</u-col>
 					</u-row>
 					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="12" class="left-text-one-line">
-							<view class="demo-layout bg-purple font-in-page">{{item.skuName}}</view>
+						<u-col span="8" class="left-text-one-line">
+							<view class="demo-layout bg-purple-light font-in-page">{{'物品编码'}}</view>
+						</u-col>
+						<u-col span="4">
+							<view class="demo-layout bg-purple font-in-page">
+							{{item.skuCode}}
+							</view>
+						</u-col>
+					</u-row>
+					<u-row customStyle="margin-bottom: 10px">
+						<u-col span="8" class="left-text-one-line">
+							<view class="demo-layout bg-purple-light font-in-page">{{'实际数量'}}</view>
+						</u-col>
+						<u-col span="4">
+							<view class="demo-layout bg-purple font-in-page">{{item.scanQty}}/{{item.baseUmName}}
+							</view>
+						</u-col>
+					</u-row>
+					<u-row customStyle="margin-bottom: 10px">
+						<u-col span="8" class="left-text-one-line">
+							<view class="demo-layout bg-purple-light font-in-page">{{'计划数量'}}</view>
+						</u-col>
+						<u-col span="4">
+							<view class="demo-layout bg-purple font-in-page">{{item.planQty}}/{{item.baseUmName}}
+							</view>
 						</u-col>
 					</u-row>
 					<u-divider text=""></u-divider>
@@ -117,6 +140,7 @@
 				this.params.whId = uni.getStorageSync('warehouse').whId;
 				picking.getPickingBySoBillId(this.params).then(data => {
 					this.receiveDetailList = data.data.records;
+					console.log(data.data.records)
 					//TODO
 					// if (data.data.length == 1) {
 					// 	data.data[0].receiveId = this.params.receiveId;

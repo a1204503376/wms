@@ -12,6 +12,7 @@ import org.nodes.wms.dao.outstock.so.SoDetailDao;
 import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
+import org.nodes.wms.dao.outstock.so.enums.SoDetailStateEnum;
 import org.nodes.wms.dao.outstock.so.mapper.SoDetailMapper;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -21,7 +22,9 @@ import java.util.List;
 
 /**
  * 发货单Dao接口实现类
- **/
+ *
+ * @author nodesc
+ */
 @Repository
 public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> implements SoDetailDao {
 	@Override
@@ -75,7 +78,8 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 	public IPage<SoDetail> getSoDetailPage(Long soBillId, IPage<SoDetail> page) {
 		AssertUtil.notEmpty(String.valueOf(soBillId), "发货单ID不能为空");
 		LambdaQueryWrapper<SoDetail> queryWrapper = Wrappers.lambdaQuery();
-		queryWrapper.eq(SoDetail::getSoBillId, soBillId);
+		queryWrapper.eq(SoDetail::getSoBillId, soBillId)
+			.in(SoDetail::getBillDetailState, SoDetailStateEnum.Allocated, SoDetailStateEnum.PART);
 		return super.baseMapper.selectPage(page, queryWrapper);
 	}
 
@@ -86,6 +90,7 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 
 	@Override
 	public SoDetail getSoDetailById(Long soDetailId) {
+		AssertUtil.notNull(soDetailId,"根据出库单明细ID获取出库单明细失败，出库单明细ID为空");
 		return super.getById(soDetailId);
 	}
 

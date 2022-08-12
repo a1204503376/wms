@@ -133,7 +133,6 @@ public class OutStockBizImpl implements OutStockBiz {
 
 	@Override
 	public IPage<FindAllPickingResponse> findSoHeaderByNo(findSoHeaderByNoRequest request, Query query) {
-		// TODO bug只需要查询SoHeader
 		List<SoBillStateEnum> soBillStateEnums = new ArrayList<>();
 		soBillStateEnums.add(SoBillStateEnum.EXECUTING);
 		soBillStateEnums.add(SoBillStateEnum.PART);
@@ -142,23 +141,39 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public PickingByBoxResponse pickByPcs(PickByPcsRequest request) {
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public void pickByPcs(PickByPcsRequest request) {
+		SoHeader soHeader = soHeaderBiz.getSoHeaderById(request.getSoBillId());
+		SoDetail soDetail = soDetailBiz.getSoDetailById(request.getSoDetailId());
+		Location sourceLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
 		// 1 业务判断：
 		// 1.1 单据和单据明细行的状态如果为终结状态，则不能进行拣货
 		// 1.1 拣货数量是否超过剩余数量
+		canPick(soHeader, soDetail, request.getQty());
+
 		// 2 生成拣货记录，需要注意序列号（log_so_pick)
+		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
+		LogSoPick logSoPick = logSoPickFactory.createLogSoPick(request, soHeader, soDetail, stockList.get(0), sourceLocation);
+		logSoPickDao.saveLogSoPick(logSoPick);
+
 		// 3 调用拣货计划中相应的函数
 		// 3 移动库存到出库集货区
+		Location location = locationBiz
+			.getLocationByZoneType(request.getWhId(), DictKVConstant.ZONE_TYPE_PICK_TO).get(0);
+		stockBiz.moveStock(stockList.get(0), request.getSerailList(), request.getQty(),
+			location, StockLogTypeEnum.OUTSTOCK_BY_PC, soHeader.getSoBillId(), soHeader.getSoBillNo(),
+			soDetail.getSoLineNo());
 		// 4 更新出库单明细中的状态和数量
+		soDetailBiz.updateSoDetailStatus(soDetail, request.getQty());
 		// 5 更新发货单状态
+		soHeaderBiz.updateSoBillState(soHeader);
 		// 6 记录业务日志
-		return null;
+		logBiz.auditLog(AuditLogType.OUTSTOCK, "PDA按件拣货");
 	}
 
 	@Override
 	public IPage<FindPickingBySoBillIdResponse> findOpenSoDetail(FindOpenSoDetailRequest request,
 																 Query query) {
-		// TODO bug 需要加上单据明细状态
 		IPage<SoDetail> page = soDetailBiz.getPickingBySoBillId(request.getSoBillId(), query);
 		AssertUtil.notNull(page, "查询结果为空");
 		return page.convert(result -> {
@@ -167,6 +182,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public PickingByBoxResponse pickByBox(PickByPcsRequest request) {
 
 		// 1 业务判断：
@@ -188,6 +204,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void pickOnAgvPickTo(MoveOnAgvPickToRequest request) {
 		// 判断出库接驳区是否有库存，如果没有库存则抛异常
 		// 根据库存查找对应的出库单明细

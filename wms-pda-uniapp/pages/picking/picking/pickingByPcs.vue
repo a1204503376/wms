@@ -55,7 +55,8 @@
 					qty: undefined,
 					billTypeCd: undefined,
 					soBillId: undefined,
-					soBillNo: undefined
+					soBillNo: undefined,
+					soDetailId:undefined
 				},
 				soBillId: ''
 			}
@@ -75,8 +76,9 @@
 			var soDetail = uni.getStorageSync('soDetail');
 			if (tool.isNotEmpty(soDetail)) {
 				this.params.skuCode = soDetail.skuCode;
-				this.params.qty = soDetail.planQty;
+				this.params.qty =soDetail.surplusQty;
 				this.params.skuLot1 = soDetail.skuLot1;
+				this.params.soDetailId = soDetail.soDetailId;
 			}
 		},
 		onBackPress(event) {
