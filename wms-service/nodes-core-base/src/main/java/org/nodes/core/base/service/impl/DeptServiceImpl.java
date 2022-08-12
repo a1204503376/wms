@@ -18,28 +18,22 @@ package org.nodes.core.base.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
 import org.nodes.core.base.dto.DeptDTO;
 import org.nodes.core.base.entity.Dept;
 import org.nodes.core.base.entity.User;
 import org.nodes.core.base.mapper.DeptMapper;
-import org.nodes.core.base.mapper.UserMapper;
 import org.nodes.core.base.service.IDeptService;
 import org.nodes.core.base.service.IUserService;
 import org.nodes.core.base.vo.DeptVO;
-import org.nodes.core.base.cache.CacheNames;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.constant.BladeConstant;
 import org.springblade.core.tool.node.ForestNodeMerger;
 import org.springblade.core.tool.utils.Func;
-import org.springblade.core.tool.utils.SpringUtil;
 import org.springblade.core.tool.utils.StringPool;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -59,7 +53,7 @@ import java.util.List;
 @AllArgsConstructor
 @Primary
 @Transactional(propagation = Propagation.NESTED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
-public class DeptServiceImpl <M extends DeptMapper, T extends Dept> extends BaseServiceImpl<DeptMapper, Dept> implements IDeptService {
+public class DeptServiceImpl<M extends DeptMapper, T extends Dept> extends BaseServiceImpl<DeptMapper, Dept> implements IDeptService {
 
 	IUserService userService;
 
@@ -69,7 +63,6 @@ public class DeptServiceImpl <M extends DeptMapper, T extends Dept> extends Base
 	}
 
 	@Override
-	@Cacheable(value = CacheNames.NODE_DEPT,key = "'list'")
 	public List<Dept> list() {
 		return super.list();
 	}
@@ -85,7 +78,6 @@ public class DeptServiceImpl <M extends DeptMapper, T extends Dept> extends Base
 	}
 
 	@Override
-	@CacheEvict(value = CacheNames.NODE_DEPT,key = "'list'")
 	public boolean submit(Dept dept) {
 		if (Func.isEmpty(dept.getParentId())) {
 			dept.setParentId(BladeConstant.TOP_PARENT_ID);
@@ -112,7 +104,6 @@ public class DeptServiceImpl <M extends DeptMapper, T extends Dept> extends Base
 	}
 
 	@Override
-	@CacheEvict(value = CacheNames.NODE_DEPT,key = "'list'")
 	public boolean removeByIds(Collection<? extends Serializable> idList) {
 		Integer cnt = baseMapper.selectCount(Wrappers.<Dept>query().lambda().in(Dept::getParentId, idList));
 		if (cnt > 0) {

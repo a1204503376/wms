@@ -81,11 +81,12 @@ namespace Packaging.Encasement
         private void SetModelDataSource(IEnumerable<string> skuSpecList)
         {
             var list = skuSpecList
-                .Where(d=>!string.IsNullOrWhiteSpace(d))
-                .Select(skuSpec => new Sku
-            {
-                SkuSpec = skuSpec
-            }).ToList();
+                .Where(d => !string.IsNullOrWhiteSpace(d))
+                .Select(skuSpec =>
+                    new Sku
+                    {
+                        SkuSpec = skuSpec
+                    }).ToList();
 
             if (list.Count > 1)
             {

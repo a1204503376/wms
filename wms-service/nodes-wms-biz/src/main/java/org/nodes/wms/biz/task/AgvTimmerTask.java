@@ -64,7 +64,7 @@ public class AgvTimmerTask {
 			{
 				pickingTask(wmsTask);
 			}
-			else if(wmsTask.getTaskTypeCd().equals(WmsTaskTypeEnum.AGV_STOCK_MOVE) && Func.isNull(wmsTask.getToLocId()))//AGV库内移位，目标库位为空
+			else if(wmsTask.getTaskTypeCd().equals(WmsTaskTypeEnum.AGV_STOCK_MOVE) && Func.isNotEmpty(wmsTask.getToLocId()))//AGV库内移位，目标库位为空
 			{
 				transferLibraryTask(wmsTask);
 			}
