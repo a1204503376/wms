@@ -29,10 +29,28 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+
             </template>
             <template v-slot:expandSearch>
                 <el-row>
-                    <el-col :span="6">
+                    <el-col :span="8">
+                        <el-form-item label="容器类别" label-width="90px">
+                            <nodes-lpn-type
+                                v-model="form.params.lpnTypeIdList"
+                                :multiple="true">
+                            </nodes-lpn-type>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="库位状态" label-width="90px">
+                            <nodes-dictionary
+                                v-model="form.params.locFlagList"
+                                :multiple="true"
+                                code="loc_flag">
+                            </nodes-dictionary>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
                         <el-form-item label="库位类型" label-width="90px">
                             <nodes-dictionary
                                 v-model="form.params.locTypeList"
@@ -41,7 +59,38 @@
                             </nodes-dictionary>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="货架层" label-width="90px">
+                            <el-input
+                                v-model.trim="form.params.locLevel"
+                                clearable="true"
+                                placeholder="请输入货架层">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="货架排" label-width="90px">
+                            <el-input
+                                v-model.trim="form.params.locBank"
+                                clearable="true"
+                                placeholder="请输入货架排">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="货架列" label-width="90px">
+                            <el-input
+                                v-model.trim="form.params.locColumn"
+                                clearable="true"
+                                placeholder="请输入货架列">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
                         <el-form-item label="库位种类" label-width="90px">
                             <nodes-dictionary
                                 v-model="form.params.locCategoryList"
@@ -50,21 +99,12 @@
                             </nodes-dictionary>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="8">
                         <el-form-item label="库位处理" label-width="90px">
                             <nodes-dictionary
                                 v-model="form.params.locHandlingList"
                                 :multiple="true"
                                 code="loc_handling">
-                            </nodes-dictionary>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item label="使用状态" label-width="90px">
-                            <nodes-dictionary
-                                v-model="form.params.locFlagList"
-                                :multiple="true"
-                                code="loc_flag">
                             </nodes-dictionary>
                         </el-form-item>
                     </el-col>
@@ -183,10 +223,12 @@ import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesZone from "@/components/wms/select/NodesZone";
 import NodesDictionary from "@/components/wms/select/NodesDictionary";
 import {nowDateFormat} from "@/util/date";
+import NodesLpnType from "@/components/wms/select/NodesLpnType";
 
 export default {
     name: "location",
     components: {
+        NodesLpnType,
         NodesDictionary,
         NodesZone,
         NodesWarehouse,
@@ -205,10 +247,14 @@ export default {
                     locCode: '',
                     whIdList: [],
                     zoneIdList: [],
+                    lpnTypeIdList: [],
+                    locFlagList: [],
+                    locLevel: '',
+                    locBank: '',
+                    locColumn: '',
                     locTypeList: [],
                     locCategoryList: [],
                     locHandlingList: [],
-                    locFlagList: []
                 },
             },
             table: {
@@ -226,6 +272,31 @@ export default {
                     {
                         prop: "zoneName",
                         label: "所属库区",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "lpnTypeCode",
+                        label: "容器类别",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "locFlag",
+                        label: "库位状态",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "locLevel",
+                        label: "货架层",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "locBank",
+                        label: "货架排",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "locColumn",
+                        label: "货架列",
                         sortable: "custom",
                     },
                     {
@@ -249,23 +320,8 @@ export default {
                         sortable: "custom",
                     },
                     {
-                        prop: "locFlag",
-                        label: "使用状态",
-                        sortable: "custom",
-                    },
-                    {
                         prop: "abc",
                         label: "ABC分类",
-                        sortable: "custom",
-                    },
-                    {
-                        prop: "locColumn",
-                        label: "货架列",
-                        sortable: "custom",
-                    },
-                    {
-                        prop: "locBank",
-                        label: "货架排",
                         sortable: "custom",
                     },
                     {
@@ -329,10 +385,14 @@ export default {
                 locCode: '',
                 whIdList: [],
                 zoneIdList: [],
+                lpnTypeIdList: [],
+                locFlagList: [],
+                locLevel: '',
+                locBank: '',
+                locColumn: '',
                 locTypeList: [],
                 locCategoryList: [],
                 locHandlingList: [],
-                locFlagList: []
             }
         },
         onRemove() {
