@@ -57,9 +57,8 @@ public interface OutStockBiz {
 	 * 按件拣货动作
 	 *
 	 * @param request 请求对象
-	 * @return 是否拣货成功
 	 */
-	PickingByBoxResponse pickByPcs(PickByPcsRequest request);
+	void pickByPcs(PickByPcsRequest request);
 
 	/**
 	 * Pda根据发货单ID查询可以拣货的出库单明细

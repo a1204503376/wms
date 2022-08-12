@@ -180,9 +180,98 @@ public class InStockBizImpl implements InStockBiz {
 			item.setSkuLot1(receiveDetailLpnPdaMultiRequest.getSkuLot1());
 			item.setSkuLot2(receiveDetailLpnPdaMultiRequest.getSkuLot2());
 			item.setWhId(receiveDetailLpnPdaMultiRequest.getWhId());
-			receiveByBoxCode(item, StockLogTypeEnum.INSTOCK_BY_MULTI_BOX.getDesc());
+//			receiveByBoxCode(item, StockLogTypeEnum.INSTOCK_BY_MULTI_BOX.getDesc());
+			receiveByDuoBoxCode(item, StockLogTypeEnum.INSTOCK_BY_MULTI_BOX.getDesc());
 		}
 
+
+	}
+
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	@Override
+	public void receiveByDuoBoxCode(ReceiveDetailLpnPdaRequest request, String logType) {
+		boolean hasReceiveHeaderId = Func.isNotEmpty(request.getReceiveHeaderId());
+		ReceiveHeader receiveHeader = new ReceiveHeader();
+		// 判断业务参数（无单收货除外），是否可以正常收货、超收
+		if (hasReceiveHeaderId) {
+			for (ReceiveDetailLpnItemDto item : request.getReceiveDetailLpnItemDtoList()) {
+				ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(item.getReceiveDetailId());
+				ReceiveHeader header = receiveBiz.selectReceiveHeaderById(detail.getReceiveId());
+				receiveBiz.canReceive(header, detail, item.getPlanQty());
+			}
+		} else {
+			// 是否无单收货：判断当前用户是否有无单收货且未关闭的单据，如果有则用这个收货单（如果多个取最后一个）并新建收货单明细
+			List<ReceiveHeader> receiveHeaderList = receiveBiz.getReceiveListByNonOrder(AuthUtil.getUserId());
+			// 订单行号
+			String lineNo = "0";
+			int lineNum = 0;
+			if (Func.isNotEmpty(receiveHeaderList)) {
+				//取无单收货最后一条收货单
+				receiveHeader = receiveHeaderList.get(receiveHeaderList.size() - 1);
+				//获取当前收货单关联的最新一条明细的行号
+				lineNo = receiveBiz.getReceiveDetailLinNo(receiveHeader.getReceiveId());
+			} else {
+				//否则新建一个收货单
+				receiveHeader = receiveFactory.createReceiveHeader(request);
+				receiveBiz.newReceiveHeader(receiveHeader);
+			}
+			// 设置request的头表id
+			request.setReceiveHeaderId(receiveHeader.getReceiveId());
+			if (Func.isNotEmpty(lineNo)) {
+				lineNum = Integer.parseInt(lineNo);
+			}
+			//循环生成明细
+			for (ReceiveDetailLpnItemDto item : request.getReceiveDetailLpnItemDtoList()) {
+				lineNum += 10;
+				//根据id获取lpn实体
+				ReceiveDetailLpn lpn = receiveBiz.getReceiveDetailLpnById(item.getReceiveDetailLpnId());
+				//创建收货单明细
+				ReceiveDetail receiveDetail = receiveFactory.createReceiveDetail(request, item, lpn, receiveHeader, lineNum);
+				receiveBiz.newReceiveDetail(receiveDetail);
+				//更新lpn表的明细id
+				lpn.setReceiveDetailId(receiveDetail.getReceiveDetailId());
+				//更新lpn表头表id
+				lpn.setReceiveHeaderId(receiveHeader.getReceiveId());
+				receiveBiz.updateReceiveDetailLpn(lpn);
+				//设置request的明细id
+				item.setReceiveDetailId(receiveDetail.getReceiveDetailId());
+			}
+
+		}
+		List<Stock> stockList = new ArrayList<>();
+		for (ReceiveDetailLpnItemDto item : request.getReceiveDetailLpnItemDtoList()) {
+			ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(item.getReceiveDetailId());
+			ReceiveHeader header = receiveBiz.selectReceiveHeaderById(detail.getReceiveId());
+			//根据id获取lpn实体
+			ReceiveDetailLpn lpn = receiveBiz.getReceiveDetailLpnById(item.getReceiveDetailLpnId());
+			//更新lpn表批属性信息
+			lpn.setSkuLot1(request.getSkuLot1());
+			lpn.setSkuLot2(request.getSkuLot2());
+			//更新lpn实收数量
+			lpn.setScanQty(lpn.getScanQty().add(item.getPlanQty()));
+			//更新lpn状态
+			lpn.setDetailStatus(ReceiveDetailStatusEnum.COMPLETED);
+			receiveBiz.updateReceiveDetailLpn(lpn);
+			// 生成清点记录
+			ReceiveLog receiveLog = receiveLogBiz.newReceiveLog(request, item, lpn, header, detail);
+			// 调用库存函数（for begin：一条执行一次）
+			stockList.add(stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_BOX, receiveLog));
+			//有单收货更新头表和明细信息
+			if (hasReceiveHeaderId) {
+				// 更新收货单明细状态（for end：一条执行一次）
+				receiveBiz.updateReceiveDetail(detail, item.getPlanQty());
+				// 更新收货单状态
+				receiveBiz.updateReciveHeader(header, detail);
+			}
+			// 记录业务日志
+			if (Func.isEmpty(logType)) {
+				//传入参数为空设置为按箱收货类型
+				logType = StockLogTypeEnum.INSTOCK_BY_BOX.getDesc();
+			}
+			receiveBiz.log(logType, header, detail, receiveLog);
+
+		}
+		agvTask.putwayToSchedule(stockList);
 
 	}
 

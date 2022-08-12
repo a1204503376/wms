@@ -36,7 +36,6 @@ public class TaskPageResponse {
 	@ColumnWidth(15)
 	@ExcelProperty(value = "任务类型", converter = EnumConverter.class)
 	private WmsTaskTypeEnum taskTypeCd;
-
 	/**
 	 * 任务状态
 	 */
@@ -49,14 +48,12 @@ public class TaskPageResponse {
 	@ColumnWidth(15)
 	@ExcelProperty("单据编码")
 	private String skuCode;
-
 	/**
 	 * 数量
 	 */
 	@ColumnWidth(15)
 	@ExcelProperty("数量")
 	private BigDecimal taskQty;
-
 	/**
 	 * 实际数量
 	 */
@@ -69,7 +66,6 @@ public class TaskPageResponse {
 	@ColumnWidth(15)
 	@ExcelProperty("计量单位")
 	private String umCode;
-
 	/**
 	 * 批次号
 	 */
@@ -82,27 +78,36 @@ public class TaskPageResponse {
 	@ColumnWidth(15)
 	@ExcelProperty("来源库位")
 	private String fromLocCode;
-
 	/**
 	 * 目标库位code
 	 */
 	@ColumnWidth(15)
 	@ExcelProperty("目标库位")
 	private String toLocCode;
-
 	/**
 	 * 箱码
 	 */
 	@ColumnWidth(15)
 	@ExcelProperty("箱码")
 	private String boxCode;
-
 	/**
 	 * LPN编码
 	 */
 	@ColumnWidth(15)
 	@ExcelProperty("LPN")
 	private String lpnCode;
+	/**
+	 * 任务开始执行的时间
+	 */
+	@ColumnWidth(15)
+	@ExcelProperty("任务开始执行的时间")
+	private LocalDateTime beginTime;
+	/**
+	 * 任务结束执行时间
+	 */
+	@ColumnWidth(15)
+	@ExcelProperty("任务结束执行时间")
+	private LocalDateTime closeTime;
 	/**
 	 * 任务分派时间
 	 */

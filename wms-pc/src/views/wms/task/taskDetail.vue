@@ -120,6 +120,12 @@
                             show-overflow-tooltip
                             v-bind="column"
                             width="130">
+                            <template v-if="column.prop === 'taskState'" v-slot="scope">
+                                <el-tag v-if="scope.row.taskState === '已下发' || scope.row.taskState === '开始执行'" type="success">{{scope.row.taskState}}</el-tag>
+                                <el-tag v-if="scope.row.taskState === '已完成' || scope.row.taskState === '已取消'" type="info">{{scope.row.taskState}}</el-tag>
+                                <el-tag v-if="scope.row.taskState === '未下发'" type="warning">{{scope.row.taskState}}</el-tag>
+                                <el-tag v-if="scope.row.taskState === '异常中断中'" type="danger">{{scope.row.taskState}}</el-tag>
+                            </template>
                         </el-table-column>
                     </template>
                 </el-table>
@@ -251,6 +257,16 @@ export default {
                     {
                         prop: 'lpnCode',
                         label: '托盘号',
+                        sortable: "custom",
+                    },
+                    {
+                        prop: 'beginTime',
+                        label: '开始执行时间',
+                        sortable: "custom",
+                    },
+                    {
+                        prop: 'closeTime',
+                        label: '结束执行时间',
                         sortable: "custom",
                     },
                     {

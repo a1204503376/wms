@@ -34,9 +34,17 @@ public interface InStockBiz {
 	void receiveByMultiBoxCode(ReceiveDetailLpnPdaMultiRequest receiveDetailLpnPdaMultiRequest);
 
 	/**
+	 * 按箱收货,支持无单收货(多箱收货调用)
+	 *
+	 * @param request
+	 */
+	void receiveByDuoBoxCode(ReceiveDetailLpnPdaRequest request,String logType);
+
+	/**
 	 * 撤销收货
 	 *
 	 * @param receiveIdList 清点记录id
 	 */
 	void cancelReceive(List<Long> receiveIdList);
+
 }

@@ -78,7 +78,6 @@
 				})
 			},
 			clickItem() {
-				this.$destroy('keyboardListener')
 				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByBox/receiveByBox', this.param);
 			},
 			scannerCallback(no) {

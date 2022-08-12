@@ -20,24 +20,21 @@
 				<u--input v-model="param.lpnCode" @focus="focus(3)" @blur="blur(3)" @confirm="change"
 					:focus="this.focusNum == 3"></u--input>
 			</u-form-item>
-			
+
 			<u-form-item label="型号" class="left-text-one-line" labelWidth="100">
 				<uni-select v-model="param.skuLot2"></uni-select>
 			</u-form-item>
 			<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">物品列表</h4>
-				<u-list>
-						<u-list-item
-							v-for="(item, index) in skuList"
-							:key="index"
-						>
-						<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
-							<u--input v-model="item.skuCode" border="0" disabled></u--input>
-						</u-form-item>
-						<u-form-item label="数量" class="left-text-one-line" labelWidth="100">
-							<u--input v-model="item.planQty" border="0" disabled></u--input>
-						</u-form-item>
-						</u-list-item>
-					</u-list>
+			<u-list>
+				<u-list-item v-for="(item, index) in skuList" :key="index">
+					<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
+						<u--input v-model="item.skuCode" border="0" disabled></u--input>
+					</u-form-item>
+					<u-form-item label="数量" class="left-text-one-line" labelWidth="100">
+						<u--input v-model="item.planQty" border="0" disabled></u--input>
+					</u-form-item>
+				</u-list-item>
+			</u-list>
 		</u--form>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
@@ -65,7 +62,7 @@
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				focusNum: 0,
-				skuList:[],
+				skuList: [],
 				param: {
 					id: '',
 					receiveDetailId: '',
@@ -85,13 +82,13 @@
 			this.param['locCode'] = 'STAGE'
 			this.param['whId'] = uni.getStorageSync('warehouse').whId
 			this.skuList = this.param.receiveDetailLpnItemDtoList.reduce((total, cur, index) => {
-							let hasValue = total.findIndex(current => {
-								return current.skuCode === cur.skuCode;
-							});
-							hasValue === -1 && total.push(cur);
-							hasValue !== -1 && (total[hasValue].planQty = total[hasValue].planQty + cur.planQty);
-							return total;
-						}, []);
+				let hasValue = total.findIndex(current => {
+					return current.skuCode === cur.skuCode;
+				});
+				hasValue === -1 && total.push(cur);
+				hasValue !== -1 && (total[hasValue].planQty = total[hasValue].planQty + cur.planQty);
+				return total;
+			}, []);
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -125,7 +122,7 @@
 					this.focusNum = 0;
 				}
 			},
-		 change() {
+			change() {
 				if (this.focusNum != 3) {
 					this.focusNum = this.focusNum + 1;
 				} else {
@@ -149,8 +146,8 @@
 					this.$u.func.showToast({
 						title: '无法识别,不支持的条码类型'
 					})
-			}
-	
+				}
+
 			},
 
 		}

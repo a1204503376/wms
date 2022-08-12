@@ -33,6 +33,7 @@ public class SoHeaderDaoImpl extends BaseServiceImpl<SoHeaderMapper, SoHeader> i
 
 	@Override
 	public SoHeader getById(Long id) {
+		AssertUtil.notNull(id,"根据发货单ID获取发货单失败，发货单ID为空");
 		return super.getById(id);
 	}
 

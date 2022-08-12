@@ -85,14 +85,14 @@
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
-      onBackPress(event) {
-      	// #ifdef APP-PLUS
-      	if (event.from === 'backbutton') {
-      		this.esc();
-      		return true;
-      	}
-      	// #endif
-      },
+		onBackPress(event) {
+			// #ifdef APP-PLUS
+			if (event.from === 'backbutton') {
+				this.esc();
+				return true;
+			}
+			// #endif
+		},
 		methods: {
 			submit() {
 				this.param.locCode = this.$u.func.parseLocCode(this.param.locCode)

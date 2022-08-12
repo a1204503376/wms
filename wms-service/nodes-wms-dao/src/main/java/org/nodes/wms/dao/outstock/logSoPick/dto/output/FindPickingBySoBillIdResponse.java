@@ -19,6 +19,13 @@ public class FindPickingBySoBillIdResponse extends BaseSkuLotEntity implements S
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long soBillId;
+
+	/**
+	 * 发货单明细id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long soDetailId;
+
 	/**
 	 * 行号
 	 */
@@ -33,6 +40,11 @@ public class FindPickingBySoBillIdResponse extends BaseSkuLotEntity implements S
 	 * 计划数量
 	 */
 	private BigDecimal planQty;
+
+	/**
+	 * 剩余数量
+	 */
+	private BigDecimal surplusQty;
 
 	/**
 	 * 基础计量单位名称
