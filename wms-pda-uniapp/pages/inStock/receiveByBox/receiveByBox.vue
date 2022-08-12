@@ -52,11 +52,9 @@
 	import barCodeService from '@/common/barcodeFunc.js'
 	import uniSelect from '@/components/uni-select.vue'
 	import setting from '@/common/setting'
-	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {
 		components: {
 			uniSelect,
-			keyboardListener
 		},
 		data() {
 			return {
@@ -108,7 +106,7 @@
 			submit() {
 				this.param.locCode = this.$u.func.parseLocCode(this.param.locCode)
 				receive.receiveByCode(this.param).then(res => {
-					that.$u.func.showToast({
+					this.$u.func.showToast({
 						title: '操作成功'
 					})
 					this.esc()
