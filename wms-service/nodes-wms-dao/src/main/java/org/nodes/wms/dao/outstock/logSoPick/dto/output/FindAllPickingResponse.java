@@ -23,8 +23,8 @@ public class FindAllPickingResponse implements Serializable {
 	private String soBillNo;
 
 	/**
-	 * 单据种类编码
+	 * 单据种类编码名称
 	 */
-	private String billTypeCd;
+	private String billTypeName;
 
 }
