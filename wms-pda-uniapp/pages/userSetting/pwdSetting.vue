@@ -84,7 +84,9 @@
 		},
 		methods: {
 			esc() {
-				uni.$u.func.navigateBackTo(1);
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			oldPwd() {
 				uni.hideKeyboard(); //隐藏软键盘				

@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * 默认库存合并策略
  * 合并的原则：
- * 货主、物品、库位、状态、箱码、LpnCode、30个批属性相同的才合并
+ * 货主、物品、库位、状态、箱码、LpnCode、dropId、30个批属性相同的才合并
  * 
  * @author nodesc
  */
@@ -32,7 +32,7 @@ public class DefaultStockMergeStrategy implements StockMergeStrategy {
 	public Stock matchCanMergeStock(Stock newStock) {
 		return match(newStock.getStockStatus(),
 				newStock.getWoId(), newStock.getLocId(), newStock.getSkuId(),
-				newStock.getBoxCode(), newStock.getLpnCode(), newStock);
+				newStock.getBoxCode(), newStock.getLpnCode(), newStock.getDropId(), newStock);
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class DefaultStockMergeStrategy implements StockMergeStrategy {
 		AssertUtil.notNull(receiveLog, "根据清点记录查询库存失败,清点记录为空");
 		return match(StockStatusEnum.NORMAL, receiveLog.getWoId(),
 				receiveLog.getLocId(), receiveLog.getSkuId(), receiveLog.getBoxCode(),
-				receiveLog.getLpnCode(), receiveLog);
+				receiveLog.getLpnCode(), null, receiveLog);
 	}
 
 	@Override
@@ -49,16 +49,17 @@ public class DefaultStockMergeStrategy implements StockMergeStrategy {
 		AssertUtil.notNull(pickToLoc, "根据清点记录查询库存失败,出库集货区为空");
 
 		return match(pickLog.getStockStatus(), pickLog.getWoId(), pickToLoc.getLocId(),
-				pickLog.getSkuId(), pickLog.getBoxCode(), pickLog.getLpnCode(), pickLog);
+				pickLog.getSkuId(), pickLog.getBoxCode(), pickLog.getLpnCode(), null, pickLog);
 	}
 
 	private <T> Stock match(StockStatusEnum stockStatus, Long woId, Long locId,
-			Long skuId, String boxCode, String lpnCode, T source) {
+			Long skuId, String boxCode, String lpnCode, String dorpId, T source) {
 		if (!SkuLotUtil.hasSkuLot(source)) {
 			throw new ServiceException("库存匹配失败,匹配原对象没有批属性信息");
 		}
 
-		List<Stock> existStockList = stockDao.matchStock(stockStatus, woId, locId, skuId, boxCode, lpnCode);
+		List<Stock> existStockList = stockDao.matchStock(stockStatus, woId, locId,
+				skuId, boxCode, lpnCode, dorpId);
 		if (Func.isEmpty(existStockList)) {
 			return null;
 		}

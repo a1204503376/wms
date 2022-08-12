@@ -109,12 +109,13 @@ public class AgvTimmerTask {
 					}
 					// 调度系统接收成功之后冻结目标库位和冻结原库位的库存
 					locationBiz.freezeLocByTask(targetLoc.getLocId(), wmsTask.getTaskId().toString());
-					stockBiz.freezeStockByTask(stocks, false, wmsTask.getTaskId());
+					stockBiz.freezeStockByDropId(stocks, wmsTask.getTaskId());
+
+					// 更新任务
+					wmsTaskDao.updateById(wmsTask);
+					//业务日志
+					wmsTaskBiz.log(wmsTask);
 				}
-				// 更新任务
-				wmsTaskDao.updateById(wmsTask);
-				//业务日志
-				wmsTaskBiz.log(wmsTask);
 				logger.info("定时任务启动,预计启动AGV上架任务结束2=任务ID:"+wmsTask.getTaskId()+";"+ WmsTaskStateEnum.ISSUED.getDesc()+"; time="+sdf.format(new Date()));
 			}
 		}

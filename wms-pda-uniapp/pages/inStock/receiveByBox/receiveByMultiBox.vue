@@ -85,19 +85,22 @@
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
-      onBackPress(event) {
-      	// #ifdef APP-PLUS
-      	if (event.from === 'backbutton') {
-      		this.esc();
-      		return true;
-      	}
-      	// #endif
-      },
+		onBackPress(event) {
+			// #ifdef APP-PLUS
+			if (event.from === 'backbutton') {
+				this.esc();
+				return true;
+			}
+			// #endif
+		},
 		methods: {
 			submit() {
 				this.param.locCode = this.$u.func.parseLocCode(this.param.locCode)
 				receive.receiveByMultiBox(this.param).then(res => {
-					uni.$u.func.routeNavigateTo('/pages/inStock/receiveByBox/receiveDetailLpnListQuery');
+					that.$u.func.showToast({
+						title: '操作成功'
+					})
+					this.esc()
 				})
 			},
 			focus(num) {
@@ -116,7 +119,9 @@
 				}
 			},
 			esc() {
-				uni.$u.func.navigateBackTo(1);
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)

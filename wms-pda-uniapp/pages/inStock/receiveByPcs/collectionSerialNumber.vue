@@ -108,7 +108,9 @@
 			},
 			esc() {
 				this.clearEmitKeyDown();
-				uni.$u.func.navigateBackTo(1);
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			submit() {
 				var _this = this;
@@ -138,7 +140,9 @@
 										_this.$u.func.showToast({
 											title: '当前收货单收货收货完毕'
 										});
-										_this.$u.func.navigateBackTo(3);
+										uni.navigateBack({
+											delta: 3
+										});
 										return;
 									} else if (data.data.currentReceivieIsAccomplish) {
 										//当前收货单详情收货收货完毕
@@ -146,7 +150,9 @@
 										_this.$u.func.showToast({
 											title: '当前收货单详情收货收货完毕'
 										});
-										_this.$u.func.navigateBackTo(2);
+										uni.navigateBack({
+											delta: 2
+										});
 										return;
 									} else {
 										//当前收货单详情收货部分收货,返回收货单收货页面

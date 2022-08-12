@@ -108,6 +108,29 @@ public interface StockBiz {
 			Long billId, String billNo, String lineNo);
 
 	/**
+	 * 库存移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
+	 * 目标箱码和lpn编码会发生改变时调用
+	 * 原库存状态为系统冻结在移动时抛异常；目标库位状态(locFlag)如果不是正常或冻结时抛异常
+	 *
+	 * @param sourceStock    原库存,必填
+	 * @param serialNoList   移动的序列号，可能为空
+	 * @param qty            移动数量,必填
+	 * @param targetBoxCode  目标箱码
+	 * @param targetLpnCode  目标托盘号
+	 * @param targetLocation 目标库位 必填
+	 * @param type           库存移动类型,必填
+	 * @param dropId         落放id，如果为空时会采用空白字符串
+	 * @param billId         操作单id，可为空
+	 * @param billNo         操作单编码，可为空
+	 * @param lineNo         操作单行号，可为空
+	 * @return 目标库存
+	 */
+	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
+			String targetBoxCode, String targetLpnCode,
+			Location targetLocation, StockLogTypeEnum type, String dropId,
+			Long billId, String billNo, String lineNo);
+
+	/**
 	 * 整箱移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
 	 * 原库存状态为系统冻结在移动时抛异常；目标库位状态(locFlag)如果不是正常或冻结时抛异常
 	 *
@@ -140,6 +163,27 @@ public interface StockBiz {
 	 */
 	List<Stock> moveStockByLpnCode(String lpnCode, String targetLpnCode, Location targetLocation, StockLogTypeEnum type,
 			Long billId, String billNo, String lineNo);
+
+	/**
+	 * 移动库存到落放id，不检验库存状态
+	 *
+	 * @param sourceStock 源库存
+	 * @param dropId      落放id
+	 * @param type        库存操作类型
+	 * @return 目标库存
+	 */
+	Stock moveAllStockToDropId(Stock sourceStock, String dropId, StockLogTypeEnum type);
+
+	/**
+	 * 从落放id全部移动到目标库位，不检验库存状态
+	 *
+	 * @param sourceStock    源库存
+	 * @param targetLocation 目标库位
+	 * @param dropId         落放id
+	 * @param type           库存操作类型
+	 * @return 目标库存
+	 */
+	Stock moveAllStockFromDropId(Stock sourceStock, Location targetLocation, String dropId, StockLogTypeEnum type);
 
 	/**
 	 * 冻结
@@ -250,13 +294,21 @@ public interface StockBiz {
 	void exportStockLogToExcel(StockLogPageQuery stockLogPageQuery, HttpServletResponse response);
 
 	/**
-	 * 系统任务冻结库存，该类冻结的库存不能执行移动等库内操作
+	 * 系统落放id冻结库存，该类冻结的库存不能执行移动等库内操作,同时会更新库存中的DropId
 	 *
-	 * @param stocks      目标库存
-	 * @param isUpdateLpn true:表示更新用taskId更新lpn，如果是虚拟库位时需要这样处理
-	 * @param taskId      任务id
+	 * @param stocks 目标库存
+	 * @param dropId 落放id
 	 */
-	void freezeStockByTask(List<Stock> stocks, boolean isUpdateLpn, Long taskId);
+	void freezeStockByDropId(List<Stock> stocks, Long dropId);
+
+	/**
+	 * 根据落放id解冻库存，同时会将库存的DropId清空
+	 *
+	 * @param stocks sotck
+	 * @param dropId 落放id
+	 * @return 解冻之后的库存
+	 */
+	List<Stock> unfreezeStockByDropId(List<Stock> stocks, Long dropId);
 
 	/**
 	 * 按序列号显示库存导出

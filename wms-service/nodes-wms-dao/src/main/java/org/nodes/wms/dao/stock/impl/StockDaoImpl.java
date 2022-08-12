@@ -29,9 +29,12 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 库存Dao接口实现类
+ *
+ * @author nodesc
  **/
 @Repository
 public class StockDaoImpl
@@ -173,27 +176,32 @@ public class StockDaoImpl
 	public List<Stock> getStock(StockStatusEnum status, Long woId,
 			Long locId, Long skuId, String boxCode, String lpnCode) {
 		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
-		return getStock(status, woId, locId, skuId, boxCode, lpnCode, queryWrapper);
+		return getStock(status, woId, locId, skuId, boxCode, lpnCode, null, queryWrapper);
 	}
 
 	@Override
 	public List<Stock> matchStock(StockStatusEnum status, Long woId, Long locId,
-			Long skuId, String boxCode, String lpnCode) {
+			Long skuId, String boxCode, String lpnCode, String dropId) {
 		LambdaQueryWrapper<Stock> queryWrapper = Wrappers.lambdaQuery(Stock.class);
-		return getStock(status, woId, locId, skuId, boxCode, lpnCode, queryWrapper);
+		return getStock(status, woId, locId, skuId, boxCode, lpnCode, dropId, queryWrapper);
 	}
 
 	private List<Stock> getStock(StockStatusEnum status, Long woId,
-			Long locId, Long skuId, String boxCode, String lpnCode, LambdaQueryWrapper<Stock> queryWrapper) {
+			Long locId, Long skuId, String boxCode, String lpnCode,
+			String dropId, LambdaQueryWrapper<Stock> queryWrapper) {
 		if (Func.isNull(woId) || Func.isNull(skuId) || Func.isNull(locId)) {
 			throw new ServiceException("库存查询失败,缺失必要参数");
+		}
+		if (Func.isNull(dropId)) {
+			dropId = "";
 		}
 
 		queryWrapper
 				.eq(Stock::getStockStatus, status.getCode())
 				.eq(Stock::getWoId, woId)
 				.eq(Stock::getLocId, locId)
-				.eq(Stock::getSkuId, skuId);
+				.eq(Stock::getSkuId, skuId)
+				.eq(Stock::getDropId, dropId);
 
 		if (Func.isEmpty(boxCode)) {
 			queryWrapper.apply("(box_code is null or box_code = '')");
@@ -249,10 +257,10 @@ public class StockDaoImpl
 		stock.setStockQty(stockQty);
 		stock.setStayStockQty(stayStockQty);
 		stock.setPickQty(pickQty);
-		if (Func.isNotEmpty(lastInTime)) {
+		if (Func.notNull(lastInTime)) {
 			stock.setLastInTime(lastInTime);
 		}
-		if (Func.isNotEmpty(lastOutTime)) {
+		if (Func.notNull(lastOutTime)) {
 			stock.setLastOutTime(lastOutTime);
 		}
 
@@ -383,17 +391,18 @@ public class StockDaoImpl
 	}
 
 	@Override
-	public void updateStock(List<Long> stockIds, StockStatusEnum status, boolean isUpdateLpn, Long taskId) {
-		AssertUtil.notEmpty(stockIds, "update stock status error, stock list is empty");
-		AssertUtil.notNull(taskId, "update stock status error, task id is null");
+	public void updateStockByDropId(List<Stock> stocks, StockStatusEnum status, String dropId) {
+		AssertUtil.notEmpty(stocks, "update stock status error, stock list is empty");
 
 		Stock stock = new Stock();
 		stock.setStockStatus(status);
-		stock.setTaskId(taskId.toString());
-		if (isUpdateLpn) {
-			stock.setLpnCode(taskId.toString());
+		if (StockStatusEnum.SYSTEM_FREEZE.equals(status)) {
+			stock.setDropId(dropId);
 		}
 
+		List<Long> stockIds = stocks.stream()
+				.map(Stock::getStockId)
+				.collect(Collectors.toList());
 		UpdateWrapper<Stock> updateWrapper = Wrappers.update();
 		updateWrapper.lambda().in(Stock::getStockId, stockIds);
 		if (!super.update(stock, updateWrapper)) {
@@ -402,11 +411,11 @@ public class StockDaoImpl
 	}
 
 	@Override
-	public List<Stock> getStockByTaskId(Long taskId) {
-		AssertUtil.notNull(taskId, "根据任务id查询库存失败,taskId不能为空");
+	public List<Stock> getStockByDropId(Long dropId) {
+		AssertUtil.notNull(dropId, "根据任务id查询库存失败,taskId不能为空");
 
 		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
-		queryWrapper.eq(Stock::getTaskId, taskId);
+		queryWrapper.eq(Stock::getDropId, dropId);
 		return super.list(queryWrapper);
 	}
 

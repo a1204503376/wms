@@ -1,5 +1,6 @@
 package org.nodes.wms.biz.count;
 
+import org.nodes.wms.dao.count.dto.input.AutoLocationBoxQty;
 import org.nodes.wms.dao.count.dto.input.GenerateCountReport;
 import org.nodes.wms.dao.count.dto.input.StockCountRequest;
 import org.nodes.wms.dao.count.dto.output.PdaBoxSkuQtyResponse;
@@ -40,9 +41,17 @@ public interface StockCountBiz {
 	List<PdaSkuQtyResponse> getPdaSkuQtyResponseList(String boxCode);
 
 	/**
-	 * 根据用户手动所提交的数据 生成差异报告
+	 * 根据用户手动所提交的数据 生成差异报告 /人工区
 	 *
-	 * @param countReportList
+	 * @param countReportList 用户手动所提交的数据集合
 	 */
 	void generateCountReport(List<GenerateCountReport> countReportList);
+
+	/**
+	 * 据用户手动所提交的数据 生成差异报告 /自动区
+	 *
+	 * @param beChangedList 用户改变后所提交的数据集合
+	 * @param defaultList   用户未改变的数据集合
+	 */
+	void generateCountReportByAutoLocation(List<AutoLocationBoxQty> beChangedList, List<AutoLocationBoxQty> defaultList);
 }
