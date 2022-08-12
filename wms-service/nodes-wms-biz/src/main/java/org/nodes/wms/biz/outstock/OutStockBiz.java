@@ -57,7 +57,6 @@ public interface OutStockBiz {
 	 * 按件拣货动作
 	 *
 	 * @param request 请求对象
-	 * @return 是否拣货成功
 	 */
 	void pickByPcs(PickByPcsRequest request);
 
