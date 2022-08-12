@@ -110,11 +110,11 @@ public class AgvTask {
 	 * 一次只能移动一个库位的库存，否则抛异常
 	 *
 	 * @param sourceStock 移动的原库存
-	 * @param targetLocId 目标库位
+	 * @param targetLocation 目标库位
 	 */
-	public void moveStockToSchedule(List<Stock> sourceStock, Long targetLocId) {
+	public void moveStockToSchedule(List<Stock> sourceStock, Location targetLocation) {
 		AssertUtil.notEmpty(sourceStock, "AGV库内移动任务下发失败,原库存为空无法移动");
-		AssertUtil.notNull(targetLocId, "AGV库内移动任务下发失败,目标库位为空");
+		AssertUtil.notNull(targetLocation, "AGV库内移动任务下发失败,目标库位为空");
 
 		List<Long> sourceLocIds = sourceStock.stream()
 			.map(Stock::getLocId)
@@ -130,11 +130,11 @@ public class AgvTask {
 			List<Stock> stockOfLoc = sourceStock.stream()
 				.filter(item -> locId.equals(item.getLocId()))
 				.collect(Collectors.toList());
-			WmsTask moveTask = wmsTaskFactory.createMoveTask(stockOfLoc, targetLocId);
+			WmsTask moveTask = wmsTaskFactory.createMoveTask(stockOfLoc, targetLocation);
 			if (sendToSchedule(Collections.singletonList(moveTask))) {
 				moveTask.setTaskState(WmsTaskStateEnum.ISSUED);
 			}
-			locationBiz.freezeLocByTask(targetLocId, moveTask.getTaskId().toString());
+			locationBiz.freezeLocByTask(targetLocation.getLocId(), moveTask.getTaskId().toString());
 			stockBiz.freezeStockByDropId(stockOfLoc, moveTask.getTaskId());
 			wmsTaskDao.save(moveTask);
 		}

@@ -1,5 +1,7 @@
 package org.nodes.wms.biz.task.factory;
 
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
@@ -37,15 +39,16 @@ public class WmsTaskFactory {
 	 * 创建AGV库内移位任务
 	 *
 	 * @param sourceStock 库存
-	 * @param targetLocId 目标库位id
+	 * @param targetLocation 目标库位
 	 * @return 库内移位任务
 	 */
-	public WmsTask createMoveTask(List<Stock> sourceStock, Long targetLocId) {
+	public WmsTask createMoveTask(List<Stock> sourceStock, Location targetLocation) {
 		WmsTask wmsTask = getWmsTask(sourceStock);
 		// 任务类型： AGV库内移位
 		wmsTask.setTaskTypeCd(WmsTaskTypeEnum.AGV_STOCK_MOVE);
 		// 目标库位
-		wmsTask.setToLocId(targetLocId);
+		wmsTask.setToLocId(targetLocation.getLocId());
+		wmsTask.setToLocCode(targetLocation.getLocCode());
 		return wmsTask;
 	}
 
@@ -74,7 +77,7 @@ public class WmsTaskFactory {
 	private WmsTask getWmsTask(List<Stock> stockList) {
 		WmsTask wmsTask = new WmsTask();
 		// 任务id
-		wmsTask.setTaskId(stockList.get(0).getStockId());
+		wmsTask.setTaskId(IdWorker.getId());
 		//批次号
 		wmsTask.setLot(stockList.get(0).getSkuLot1());
 		// 关联单据id
