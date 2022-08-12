@@ -7,6 +7,9 @@ using DataAccess.Dto;
 using DataAccess.Enitiies;
 using DataAccess.Enums;
 using DataAccess.Wms;
+using DevExpress.XtraEditors;
+using DevExpress.XtraEditors.Controls;
+using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraReports.UI;
 using Packaging.Common;
 using Packaging.Settings;
@@ -28,11 +31,41 @@ namespace Packaging.Encasement
 
         private void BatchPackingForm_Load(object sender, System.EventArgs e)
         {
+            SetSluSkuDataSource();
+            SetLuModelDataSource();
+            InitializeSkuDetails();
+        }
+
+        private void SetSluSkuDataSource()
+        {
             _sluSkuDataSource = SkuDal.GetAll();
             sluSku.DisplayMember = "SkuName";
             sluSku.KeyMember = "SkuId";
             sluSku.DataSource = _sluSkuDataSource;
-            InitializeSkuDetails();
+        }
+
+        private void SetLuModelDataSource()
+        {
+            var skuSpecList = _sluSkuDataSource.Select(d => d.SkuSpec)
+                .Distinct()
+                .Where(d => !string.IsNullOrWhiteSpace(d))
+                .Select(skuSpec =>
+                    new Sku
+                    {
+                        SkuSpec = skuSpec
+                    }).ToList();
+
+            if (skuSpecList.Count > 1)
+            {
+                skuSpecList.Insert(0, new Sku
+                {
+                    SkuSpec = string.Empty
+                });
+            }
+
+            luModel.DisplayMember = "SkuSpec";
+            luModel.ValueMember = "SkuSpec";
+            luModel.DataSource = skuSpecList;
         }
 
         private void InitializeSkuDetails()
@@ -155,6 +188,15 @@ namespace Packaging.Encasement
             {
                 e.Valid = false;
                 e.ErrorText = "请选择物品";
+                return;
+            }
+
+            var colSkuSpec = gridView1.Columns["SkuSpec"];
+            var skuSpec = gridView1.GetRowCellValue(e.RowHandle, colSkuSpec);
+            if (skuSpec==null || string.IsNullOrWhiteSpace(skuSpec.ToString()))
+            {
+                e.Valid = false;
+                e.ErrorText = "请选择型号";
                 return;
             }
 
