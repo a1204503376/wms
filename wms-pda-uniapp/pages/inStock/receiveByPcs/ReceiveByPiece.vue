@@ -159,14 +159,16 @@
 								_this.$u.func.showToast({
 									title: '当前收货单收货收货完毕',
 								});
-								_this.$u.func.navigateBackTo(2);
+								uni.navigateBack({
+									delta: 2
+								});
 								return;
 							} else if (data.data.currentReceivieIsAccomplish) {
 								//当前收货单详情收货收货完毕
 								_this.$u.func.showToast({
 									title: '当前收货单详情收货收货完毕',
 								});
-								_this.$u.func.navigateBackTo(1);
+								_this.esc();
 								return;
 							} else {
 								//当前收货单详情收货部分收货,刷新当前页面
@@ -179,7 +181,7 @@
 						});
 						_this.$u.func.refreshPage()
 					} else {
-						_this.$u.func.showToast({
+						_this.$u.func.showToast({ 
 							title: '请输入必填字段',
 						});
 						_this.params.locCode = 'STAGE'

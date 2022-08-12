@@ -127,6 +127,9 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	 * @param wmsTask 任务
 	 */
 	private void onStart(WmsTask wmsTask) {
+		if (!WmsTaskStateEnum.ISSUED.equals(wmsTask.getTaskState())){
+			throw new ServiceException("状态更新失败,只有已下发的任务才可以执行");
+		}
 		// 修改任务状态
 		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.START_EXECUTION);
 		// 将原库位库存移动到中间库位

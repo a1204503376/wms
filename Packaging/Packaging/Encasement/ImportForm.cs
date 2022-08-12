@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Data;
 using DataAccess.Encasement;
 using DataAccess.Enitiies;
 using DevExpress.DataAccess.Excel;
+using DevExpress.XtraGrid;
 using Packaging.Common;
 using Packaging.Settings;
 using Packaging.Utility;
@@ -37,10 +39,7 @@ namespace Packaging.Encasement
                 FileName = filePath
             };
 
-            var worksheetSettings = new ExcelWorksheetSettings
-            {
-                WorksheetIndex = 0
-            };
+            var worksheetSettings = new ExcelWorksheetSettings("Sheet1", "A2:L2000");
             var sourceOptions = new ExcelSourceOptions
             {
                 ImportSettings = worksheetSettings,
@@ -56,7 +55,31 @@ namespace Packaging.Encasement
 
         private void simpleButton2_Click(object sender, EventArgs e)
         {
+            if (_excelDataSource == null)
+            {
+                CustomMessageBox.Warning("请导入数据");
+                return;
+            }
+
             var dataTable = _excelDataSource.ToDataTable();
+            foreach (var dataTableColumn in dataTable.Columns)
+            {
+                if (!(dataTableColumn is DataColumn tableColumn))
+                {
+                    continue;
+                }
+
+                if (!tableColumn.ColumnName.Contains("Column"))
+                {
+                    continue;
+                }
+
+                gridControl1.DataSource = null;
+                gridView1.Columns.Clear();
+                CustomMessageBox.Warning("导入的数据格式与模板不一致");
+                return;
+            }
+        
             var packingAutoIdentifications = ModelConvertHelper<PackingAutoIdentification>.ConvertToModel(dataTable);
 
             var flag = AutoIdentificationDal.SaveImportExcel(packingAutoIdentifications);
