@@ -134,6 +134,8 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		for (Stock stock : stockList) {
 			stockBiz.moveAllStockToDropId(stock, wmsTask.getTaskId().toString(), StockLogTypeEnum.STOCK_AGV_MOVE);
 		}
+
+		log.info("agv任务开始[%d]-[%s]", wmsTask.getTaskId(), wmsTask);
 	}
 
 	/**
@@ -165,6 +167,8 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		}
 
 		stockBiz.unfreezeStockByDropId(targetStockList, wmsTask.getTaskId());
+
+		log.info("agv任务结束[%d]-[%s]", wmsTask.getTaskId(), wmsTask);
 	}
 
 	private void onException(WmsTask wmsTask) {
@@ -173,5 +177,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		}
 		// 修改任务状态
 		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.ABNORMAL);
+
+		log.info("agv任务异常[%d]-[%s]", wmsTask.getTaskId(), wmsTask);
 	}
 }
