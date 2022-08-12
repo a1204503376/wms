@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 /**
  * 库存Dao接口实现类
- * 
+ *
  * @author nodesc
  **/
 @Repository
