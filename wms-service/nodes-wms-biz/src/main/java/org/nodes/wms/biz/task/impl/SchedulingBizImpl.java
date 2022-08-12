@@ -91,6 +91,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void broadcastNotificationActivity(List<SchedulingBroadcastNotificationRequest> request) {
 		for (SchedulingBroadcastNotificationRequest notificationRequest : request) {
 			NoticeMessageRequest message = new NoticeMessageRequest();
@@ -133,6 +134,8 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		for (Stock stock : stockList) {
 			stockBiz.moveAllStockToDropId(stock, wmsTask.getTaskId().toString(), StockLogTypeEnum.STOCK_AGV_MOVE);
 		}
+
+		log.info("agv任务开始[%d]-[%s]", wmsTask.getTaskId(), wmsTask);
 	}
 
 	/**
@@ -164,10 +167,17 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		}
 
 		stockBiz.unfreezeStockByDropId(targetStockList, wmsTask.getTaskId());
+
+		log.info("agv任务结束[%d]-[%s]", wmsTask.getTaskId(), wmsTask);
 	}
 
 	private void onException(WmsTask wmsTask) {
+		if (WmsTaskStateEnum.COMPLETED.equals(wmsTask.getTaskState())){
+			throw new ServiceException("状态更新失败,任务已经完成");
+		}
 		// 修改任务状态
 		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.ABNORMAL);
+
+		log.info("agv任务异常[%d]-[%s]", wmsTask.getTaskId(), wmsTask);
 	}
 }

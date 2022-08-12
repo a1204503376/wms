@@ -37,6 +37,10 @@ public class WmsTaskDaoImpl
 		if (WmsTaskStateEnum.COMPLETED.equals(state)
 			|| WmsTaskStateEnum.CANCELED.equals(state)) {
 			updateWrapper.lambda().set(WmsTask::getCloseTime, LocalDateTime.now());
+		} else if (WmsTaskStateEnum.ISSUED.equals(state)){
+			updateWrapper.lambda().set(WmsTask::getAllotTime, LocalDateTime.now());
+		} else if (WmsTaskStateEnum.START_EXECUTION.equals(state)) {
+			updateWrapper.lambda().set(WmsTask::getBeginTime, LocalDateTime.now());
 		}
 
 		if (!super.update(updateWrapper)) {

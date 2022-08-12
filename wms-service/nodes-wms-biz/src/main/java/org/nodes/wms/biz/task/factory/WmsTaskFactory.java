@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author nodesc
@@ -99,7 +100,9 @@ public class WmsTaskFactory {
 		//批次号
 		wmsTask.setLot(stockList.get(0).getSkuLot1());
 		// 箱码
-		wmsTask.setBoxCode(stockList.get(0).getBoxCode());
+		List<String> boxCodes = stockList.stream()
+			.map(Stock::getBoxCode).distinct().collect(Collectors.toList());
+		wmsTask.setBoxCode(String.join(",", boxCodes));
 		// 工作任务包ID
 		wmsTask.setTtpId(stockList.get(0).getStockId());
 		// 库房id

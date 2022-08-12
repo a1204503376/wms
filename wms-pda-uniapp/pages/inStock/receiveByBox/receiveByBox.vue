@@ -111,7 +111,7 @@
 					that.$u.func.showToast({
 						title: '操作成功'
 					})
-					uni.$u.func.routeNavigateTo('/pages/inStock/receiveByBox/receiveDetailLpnQuery');
+					this.esc()
 				})
 			},
 			focus(num) {
