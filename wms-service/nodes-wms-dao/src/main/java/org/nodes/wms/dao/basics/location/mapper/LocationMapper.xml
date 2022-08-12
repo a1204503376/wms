@@ -73,6 +73,12 @@
                     #{item}
                 </foreach>
             </if>
+            <if test=" param.lpnTypeIdList != null and param.lpnTypeIdList.size > 0 ">
+                AND l.lpn_type_id IN
+                <foreach collection="param.lpnTypeIdList" open="(" close=")" item="item" separator=",">
+                    #{item}
+                </foreach>
+            </if>
             <if test=" param.locFlagList != null and param.locFlagList.size > 0 ">
                 AND l.loc_flag IN
                 <foreach collection="param.locFlagList" open="(" close=")" item="item" separator=",">
