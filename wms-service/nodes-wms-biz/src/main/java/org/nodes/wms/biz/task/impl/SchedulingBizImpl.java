@@ -91,6 +91,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void broadcastNotificationActivity(List<SchedulingBroadcastNotificationRequest> request) {
 		for (SchedulingBroadcastNotificationRequest notificationRequest : request) {
 			NoticeMessageRequest message = new NoticeMessageRequest();
@@ -167,6 +168,9 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	}
 
 	private void onException(WmsTask wmsTask) {
+		if (WmsTaskStateEnum.COMPLETED.equals(wmsTask.getTaskState())){
+			throw new ServiceException("状态更新失败,任务已经完成");
+		}
 		// 修改任务状态
 		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.ABNORMAL);
 	}
