@@ -203,7 +203,9 @@
 				})
 			},
 			esc() {
-				uni.$u.func.navigateBackTo(1);
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

@@ -37,6 +37,8 @@ export default {
         multiple: {type: Boolean, required: false, default: false},
         // 组件大小，默认为mini, 支持 medium/small/mini
         size: {type: String, required: false, default: () => "mini"},
+        //是否有默认值 true:有默认值  默认为false 编辑时将其设置为true
+        defaultValue: {type: Boolean, required: false, default: () => false},
     },
     data() {
         return {
@@ -46,6 +48,9 @@ export default {
     },
     async created() {
         await this.getDataSource()
+        if(this.defaultValue){
+            this.onChange(this.selectVal);
+        }
     },
     watch: {
         selectVal(newVal) {

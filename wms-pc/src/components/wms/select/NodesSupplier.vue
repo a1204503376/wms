@@ -13,7 +13,6 @@
         :size="size"
         :disabled="disabled"
         :clearable="true"
-        @clear="clear"
         @change="onChange">
         <el-option
             v-for="item in options"

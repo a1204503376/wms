@@ -149,7 +149,9 @@
 				})
 			},
 			esc() {
-				uni.$u.func.navigateBackTo(1);
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			gotoDetails() {
 				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingDetails',this.params);

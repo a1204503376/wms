@@ -167,7 +167,9 @@
 				uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/updateLocQty', row);
 			},
 			esc() {
-				uni.$u.func.navigateBackTo(1);
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			search() {
 				uni.$u.throttle(this.getReceiveList(), 1000)

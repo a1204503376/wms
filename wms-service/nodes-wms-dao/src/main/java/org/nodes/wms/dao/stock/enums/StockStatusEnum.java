@@ -12,12 +12,23 @@ import java.util.List;
 
 /**
  * 库存状态
+ * 
+ * @author nodesc
  */
 @Getter
 @RequiredArgsConstructor
 public enum StockStatusEnum implements BaseEnum {
+	/**
+	 * 正常
+	 */
 	NORMAL(0, "正常"),
+	/**
+	 * 冻结
+	 */
 	FREEZE(1, "冻结"),
+	/**
+	 * 系统冻结,不能进行移动
+	 */
 	SYSTEM_FREEZE(-1, "系统冻结");
 
 	@EnumValue
@@ -27,8 +38,7 @@ public enum StockStatusEnum implements BaseEnum {
 
 	public static List<StockStatusResponse> getList() {
 		List<StockStatusResponse> stockStatusList = new ArrayList<>();
-		for (StockStatusEnum item : values()
-		) {
+		for (StockStatusEnum item : values()) {
 			StockStatusResponse stockStatusResponse = new StockStatusResponse();
 			stockStatusResponse.setValue(item.getCode());
 			stockStatusResponse.setLabel(item.getDesc());
@@ -36,6 +46,5 @@ public enum StockStatusEnum implements BaseEnum {
 		}
 		return stockStatusList;
 	}
-
 
 }

@@ -16,7 +16,7 @@
 				<u--input v-model="param.skuLot1" @focus="focus(2)" @confirm="change" @blur="blur(2)"
 					:focus="this.focusNum == 2"></u--input>
 			</u-form-item>
-			<u-form-item label="LPN" :required="true" class="left-text-one-line" labelWidth="100">
+			<u-form-item label="LPN" :required="false" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="param.lpnCode" @focus="focus(3)" @blur="blur(3)" @confirm="change"
 					:focus="this.focusNum == 3"></u--input>
 			</u-form-item>
@@ -111,7 +111,10 @@
 			submit() {
 				this.param.locCode = this.$u.func.parseLocCode(this.param.locCode)
 				receive.receiveByCode(this.param).then(res => {
-					uni.$u.func.routeNavigateTo('/pages/inStock/receiveByBox/receiveDetailLpnQuery');
+					that.$u.func.showToast({
+						title: '操作成功'
+					})
+					this.esc()
 				})
 			},
 			focus(num) {
@@ -130,7 +133,9 @@
 				}
 			},
 			esc() {
-			uni.$u.func.navigateBackTo(1);
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)

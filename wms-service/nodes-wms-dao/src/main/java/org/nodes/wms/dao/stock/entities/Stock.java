@@ -140,9 +140,9 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	private Integer version;
 
 	/**
-	 * 关联任务id
+	 * 落放id
 	 */
-	private String taskId;
+	private String dropId;
 
 	/**
 	 * 是否有序列号,1有序列号

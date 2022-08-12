@@ -147,17 +147,23 @@
     </select>
 
     <select id="getAllPickPage" resultType="org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse">
-        select h.so_bill_id,h.so_bill_no,h.bill_type_cd from so_header h
-        left join so_detail d
-        on h.so_bill_id=d.so_bill_id
+        select h.so_bill_id,h.so_bill_no,b.bill_type_name from so_header h
+        left join wms_bill_type b
+        on h.bill_type_cd=b.bill_type_cd
         <where>
             <if test="params.no!=null and params.no != '' and params.whId!=null and params.whId != ''">
-                AND h.so_bill_no like concat('%',#{params.no},'%') AND d.bill_detail_state=#{params.billDetailState} AND
+                AND h.so_bill_no like concat('%',#{params.no},'%') AND
                 h.wh_id = #{params.whId} AND h.is_deleted=0 and h.status =
-                1
-                OR h.order_no like concat('%',#{params.no},'%') AND d.bill_detail_state =#{params.billDetailState} AND
+                1 AND h.so_bill_state IN
+                <foreach collection="params.soBillState" open="(" close=")" separator="," item="item">
+                    #{item}
+                </foreach>
+                OR h.order_no like concat('%',#{params.no},'%') AND
                 h.wh_id = #{params.whId} AND h.is_deleted=0 and h.status =
-                1
+                1 AND h.so_bill_state IN
+                <foreach collection="params.soBillState" open="(" close=")" separator="," item="item">
+                    #{item}
+                </foreach>
             </if>
         </where>
         group by h.so_bill_no

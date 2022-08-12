@@ -1,7 +1,5 @@
 package org.nodes.wms.dao.outstock.so.dto.output;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -43,8 +41,17 @@ public class SoDetailForDetailResponse implements Serializable {
 	/**
 	 * 计划数量
 	 */
-	@JsonSerialize(using = ToStringSerializer.class)
 	private BigDecimal planQty;
+
+	/**
+	 * 实发数量
+	 */
+	private BigDecimal scanQty;
+
+	/**
+	 * 剩余数量
+	 */
+	private BigDecimal surplusQty;
 
 	/**
 	 * 生产批次

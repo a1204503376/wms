@@ -36,12 +36,12 @@ public interface StockQueryBiz {
 	Stock findStockById(Long stockId);
 
 	/**
-	 * 根据任务id获取库存
+	 * 根据落放id获取库存
 	 *
-	 * @param taskId 任务id
+	 * @param dropId 落放id
 	 * @return 库存集合
 	 */
-	List<Stock> findStockByTaskId(Long taskId);
+	List<Stock> findStockByDropId(Long dropId);
 
 	/**
 	 * 根据库位获取库位的所有库存

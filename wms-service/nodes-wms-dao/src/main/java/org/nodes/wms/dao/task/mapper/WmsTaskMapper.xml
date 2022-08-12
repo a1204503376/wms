@@ -8,6 +8,7 @@
         task_type_cd,
         task_state,
         sku_code,
+        box_code,
         task_qty,
         scan_qty,
         um_code,

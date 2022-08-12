@@ -15,11 +15,11 @@
 		<u-list style="height: 900rpx;" @scrolltolower="scrolltolower">
 			<view v-for="(item, index) in receiveDetailList" :key="index" @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="10" class="left-text-one-line">
+						<u-col span="8" class="left-text-one-line">
 							<view class="demo-layout bg-purple-light font-in-page">{{item.soBillNo}}</view>
 						</u-col>
-						<u-col span="2">
-							<view class="demo-layout bg-purple font-in-page">{{item.billTypeCd}}</view>
+						<u-col span="4">
+							<view class="demo-layout bg-purple font-in-page">{{item.billTypeName}}</view>
 						</u-col>
 					</u-row>
 					<u-divider text=""></u-divider>
@@ -114,7 +114,9 @@
 			},
 			esc() {
 				this.clearEmitKeyDown();
-				uni.$u.func.navigateBackTo(1);
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			getReceiveDetailList() {
 				if (tool.isNotEmpty(this.params.no)) {

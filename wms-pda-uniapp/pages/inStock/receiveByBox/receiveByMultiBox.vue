@@ -97,7 +97,10 @@
 			submit() {
 				this.param.locCode = this.$u.func.parseLocCode(this.param.locCode)
 				receive.receiveByMultiBox(this.param).then(res => {
-					uni.$u.func.routeNavigateTo('/pages/inStock/receiveByBox/receiveDetailLpnListQuery');
+					that.$u.func.showToast({
+						title: '操作成功'
+					})
+					this.esc()
 				})
 			},
 			focus(num) {
@@ -116,7 +119,9 @@
 				}
 			},
 			esc() {
-				uni.$u.func.navigateBackTo(1);
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)

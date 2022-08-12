@@ -60,7 +60,9 @@
 		},
 		methods: {
 			esc() {
-				uni.$u.func.navigateBackTo(1);
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			submit() {
 				uni.setStorageSync('warehouse', this.warehouse);
