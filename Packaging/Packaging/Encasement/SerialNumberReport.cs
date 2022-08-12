@@ -6,7 +6,9 @@ using System.IO;
 using System.Linq;
 using DataAccess.Dto;
 using DataAccess.Encasement;
+using DataAccess.Enitiies;
 using DataAccess.Wms;
+using Newtonsoft.Json;
 using Packaging.Common;
 using Packaging.Utility;
 
@@ -15,6 +17,7 @@ namespace Packaging.Encasement
     public partial class SerialNumberReport : DevExpress.XtraReports.UI.XtraReport
     {
         private readonly List<SerialNumberPrintDto> _serialNumberPrintDtoList;
+        private bool _isSave = false;
 
         private SerialNumberReport()
         {
@@ -64,7 +67,18 @@ namespace Packaging.Encasement
 
         private void SaveData()
         {
-            ReceiveDetailLpnDal.Save(_serialNumberPrintDtoList.First().ReceiveDetailLpns);
+            if (_isSave)
+            {
+                return;
+            }
+            // 多个序列号合并成一条记录
+            var receiveDetailLpns = _serialNumberPrintDtoList.First().ReceiveDetailLpns;
+            var receiveDetailLpn = JsonConvert.DeserializeObject<ReceiveDetailLpn>(
+                JsonConvert.SerializeObject(receiveDetailLpns.First()));
+            receiveDetailLpn.SnCode = string.Join(",", receiveDetailLpns.Select(d => d.SnCode).ToList());
+            receiveDetailLpn.PlanQty = receiveDetailLpns.Count;
+
+            ReceiveDetailLpnDal.Save(receiveDetailLpn);
         }
 
         private void SerialNumberReport_BeforePrint(object sender, System.Drawing.Printing.PrintEventArgs e)
@@ -103,6 +117,7 @@ namespace Packaging.Encasement
             try
             {
                 SaveData();
+                _isSave = true;
             }
             catch (Exception ex)
             {
