@@ -41,7 +41,7 @@ public enum StockLogTypeEnum {
 	OUTSTOCK_BY_PICK(301, "拣货出库"),
 	OUTSTOCK_BY_CANCEL_RECEIVE(302, "撤销收货"),
 	OUTSTOCK_BY_PC(303, "PC拣货"),
-	OUTSTOCK_BY_PC_PDA(304, "PDA按件拣货");
+	OUTSTOCK_BY_PC_PDA(304, "按件拣货-手持");
 
 
 	private final Integer code;
