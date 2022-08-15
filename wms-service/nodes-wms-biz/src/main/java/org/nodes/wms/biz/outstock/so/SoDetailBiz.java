@@ -1,7 +1,10 @@
 package org.nodes.wms.biz.outstock.so;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import java.math.BigDecimal;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
@@ -11,12 +14,13 @@ import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.stock.dto.output.SerialSelectResponse;
 import org.springblade.core.mp.support.Query;
 
-import javax.servlet.http.HttpServletResponse;
-import java.math.BigDecimal;
-import java.util.List;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
  * 发货单明细业务接口
+ * 
+ * @author nodesc
  **/
 public interface SoDetailBiz {
 
@@ -90,7 +94,15 @@ public interface SoDetailBiz {
 	 * 修改发货单明细状态和剩余数量
 	 *
 	 * @param soDetail 收货单明细实体
-	 * @param pickQty  拣货传入实收数量  撤销拣货传入撤销数量
+	 * @param pickQty  拣货传入实收数量 撤销拣货传入撤销数量
 	 */
 	void updateSoDetailStatus(SoDetail soDetail, BigDecimal pickQty);
+
+	/**
+	 * 根据出库单id获取可以出库的明细
+	 * 
+	 * @param soBillId 出库单头表id
+	 * @return 可以出库的订单明细
+	 */
+	List<SoDetail> getEnableSoDetailBySoHeaderId(Long soBillId);
 }

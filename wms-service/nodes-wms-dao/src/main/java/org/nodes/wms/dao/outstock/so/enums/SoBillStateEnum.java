@@ -20,6 +20,7 @@ import java.util.List;
 public enum SoBillStateEnum {
 	CREATE("单据创建", 10),
 	EXECUTING("已分配", 20),
+	ISSUED("已下发", 25),
 	PART("部分出库", 30),
 	ALL_OUT_STOCK("全部出库", 35),
 	COMPLETED("已关闭", 40),
@@ -43,6 +44,8 @@ public enum SoBillStateEnum {
 				return CREATE.getDesc();
 			case 20:
 				return EXECUTING.getDesc();
+			case 25:
+				return ISSUED.getDesc();
 			case 30:
 				return PART.getDesc();
 			case 35:
