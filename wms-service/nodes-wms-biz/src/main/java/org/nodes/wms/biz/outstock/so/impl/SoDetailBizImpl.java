@@ -1,8 +1,11 @@
 package org.nodes.wms.biz.outstock.so.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import lombok.RequiredArgsConstructor;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.outstock.so.SoDetailBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
@@ -23,10 +26,10 @@ import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  *
@@ -39,7 +42,8 @@ public class SoDetailBizImpl implements SoDetailBiz {
 	private final StockQueryBiz stockQueryBiz;
 
 	@Override
-	public Page<SoDetailForDetailResponse> pageSoDetailForDetailBySoBillId(Query query, SoBillIdRequest soBillIdRequest) {
+	public Page<SoDetailForDetailResponse> pageSoDetailForDetailBySoBillId(Query query,
+			SoBillIdRequest soBillIdRequest) {
 		return soDetailDao.pageForSoDetailBySoBillId(Condition.getPage(query), soBillIdRequest.getSoBillId());
 	}
 
@@ -99,5 +103,11 @@ public class SoDetailBizImpl implements SoDetailBiz {
 			soDetail.setBillDetailState(SoDetailStateEnum.PART);
 		}
 		soDetailDao.update(soDetail);
+	}
+
+	@Override
+	public List<SoDetail> getEnableSoDetailBySoHeaderId(Long soBillId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
