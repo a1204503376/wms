@@ -20,7 +20,6 @@ export const getLocIdApi = (zoneId) => {
 }
 
 
-
 //盘点单编码
 export const getCNO = () => {
     return request({
@@ -87,13 +86,23 @@ export const update = (row) => {
     })
 }
 //查询库房
+// export const searchSku = (row) => {
+//     return request({
+//         url: '/api/wms/count/countheader/querylocation',
+//         method: 'post',
+//         data: row
+//     })
+// }
+
+//查询库房
 export const searchSku = (row) => {
     return request({
-        url: '/api/wms/count/countheader/querylocation',
+        url: '/api/wms/count/countheader/findStockCountDetailBySkuSpec',
         method: 'post',
         data: row
     })
 }
+
 
 export const countTask = (row) => {
     return request({

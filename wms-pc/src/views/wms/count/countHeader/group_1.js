@@ -1,6 +1,6 @@
-import { getCNO,getDefaltMode } from "@/api/wms/count/countheader";
-import { getSelectList } from "@/api/wms/warehouse/zone.js";
-import { dict } from '@/api/core/dict';
+import {getCNO, getDefaltMode} from "@/api/wms/count/countheader";
+import {getSelectList} from "@/api/wms/warehouse/zone.js";
+import {dict} from '@/api/core/dict';
 
 export const group = {
     label: '基本信息',
@@ -28,7 +28,7 @@ export const group = {
                 value: 'dictKey'
             },
             rules: [
-                { required: true, message: "请选择盘点类型！", trigger: "blur" }
+                {required: true, message: "请选择盘点类型！", trigger: "blur"}
             ]
         },
         {
@@ -42,11 +42,11 @@ export const group = {
                 value: 'whId'
             },
             rules: [
-                { required: true, message: "请选择库房！", trigger: "blur" }
+                {required: true, message: "请选择库房！", trigger: "blur"}
             ],
             cascaderItem: ['zoneId'],
             change: function (val, obj, col, data) {
-                data.countDetailList=undefined;
+                data.countDetailList = undefined;
                 if (col.cascader) {
                     col.cascader.forEach(item => {
                         if (item.prop === 'zoneId') {
@@ -70,26 +70,8 @@ export const group = {
                 value: 'dictKey'
             },
             rules: [
-                { required: true, message: "请选择盘点方式！", trigger: "blur" }
+                {required: true, message: "请选择盘点方式！", trigger: "blur"}
             ]
-        },
-        {
-            label: '',
-            prop: 'mode',
-            type: 'switch',
-            activeColor:'#13ce66',
-            inactiveColor:'#ff4949',
-            activeText:'明盘',
-            inactiveText:'盲盘',
-            activeValue:'1',
-            inactiveValue:'0',
-            default: function (data, type) {
-                if (type === 'new') {
-                    getDefaltMode().then(res => {
-                        data.mode = res.data.data;
-                    });
-                }
-            }
         },
         // {
         //     label: '执行人',

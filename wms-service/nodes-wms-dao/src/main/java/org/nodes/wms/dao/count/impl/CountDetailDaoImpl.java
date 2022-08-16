@@ -2,6 +2,8 @@ package org.nodes.wms.dao.count.impl;
 
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.count.CountDetailDao;
+import org.nodes.wms.dao.count.dto.input.PdaStockCountDetailBySkuSpecRequest;
+import org.nodes.wms.dao.count.dto.output.PdaStockCountDetailBySkuSpecResponse;
 import org.nodes.wms.dao.count.entity.CountDetail;
 import org.nodes.wms.dao.count.mapper.CountDetailMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -47,5 +49,11 @@ public class CountDetailDaoImpl
 			.eq(CountDetail::getLocCode, locCode)
 			.eq(CountDetail::getBoxCode, boxCode)
 			.one();
+	}
+
+	@Override
+	public List<PdaStockCountDetailBySkuSpecResponse> getStockCountDetailBySkuSpec(PdaStockCountDetailBySkuSpecRequest request) {
+		AssertUtil.notNull(request.getSkuLot2(), "查询能创建盘点单的明细失败，规格型号不能为空");
+		return super.baseMapper.getStockCountDetailBySkuSpec(request);
 	}
 }
