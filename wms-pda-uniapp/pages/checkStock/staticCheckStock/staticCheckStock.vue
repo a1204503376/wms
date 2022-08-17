@@ -11,7 +11,7 @@
 		</template>
 		<u-divider text="" style="margin-top:0rpx;"></u-divider>
 		<u-divider text="暂无数据" v-if="noData"></u-divider>
-		<u-list style="height: 950rpx;" @scrolltolower="scrolltolower">
+		<u-list style="height: 950rpx;">
 			<view v-for="(item, index) in receiveList" :key="index" @click="clickItem(item)">
 				<u-row customStyle="margin-bottom: 10px">
 					<u-col span="3" class="left-text-one-line font-in-page">
@@ -163,23 +163,23 @@
 				this.analysisCode(countBillNo);
 				this.search();
 			},
-			scrolltolower() {
-				this.loading = false;
-				this.divider = false;
-				this.page.current++;
-				this.params.whId = uni.getStorageSync('warehouse').whId;
-				stockInquiry.findAllStockByNo(this.params, this.page).then(data => {
-					if (data.data.records.length > 0) {
-						this.status = 'loading';
-						data.data.forEach((item, index) => { //js遍历数组
-							this.receiveList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
-						});
-					} else {
-						this.status = 'nomore';
-					}
+			// scrolltolower() {
+			// 	this.loading = false;
+			// 	this.divider = false;
+			// 	this.page.current++;
+			// 	this.params.whId = uni.getStorageSync('warehouse').whId;
+			// 	staticCheckStock.getPdaStockCountResponseList(this.params, this.page).then(data => {
+			// 		if (data.data.length > 0) {
+			// 			this.status = 'loading';
+			// 			data.data.forEach((item, index) => { //js遍历数组
+			// 				this.receiveList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
+			// 			});
+			// 		} else {
+			// 			this.status = 'nomore';
+			// 		}
 
-				})
-			}
+			// 	})
+			// }
 		}
 	}
 </script>
