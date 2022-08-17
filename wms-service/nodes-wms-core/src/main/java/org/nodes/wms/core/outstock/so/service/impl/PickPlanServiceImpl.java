@@ -239,12 +239,12 @@ public class PickPlanServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 				.lambda()
 				.eq(StockOccupy::getOccupyType, StockOccupyTypeEnum.PickPlan.getIndex())
 				.eq(StockOccupy::getWhId, soHeader.getWhId())
-				.eq(StockOccupy::getSkuId, sku.getSkuId())
-				.eq(StockOccupy::getSoBillId, soHeader.getSoBillId())
-				.eq(StockOccupy::getSoDetailId, soDetail.getSoDetailId()));
+				.eq(StockOccupy::getSkuId, sku.getSkuId()));
+//				.eq(StockOccupy::getSoBillId, soHeader.getSoBillId())
+//				.eq(StockOccupy::getSoDetailId, soDetail.getSoDetailId()));
 		if (Func.isNotEmpty(stockOccupyList)) {
-			occupyQty = stockOccupyList.stream().map(StockOccupy::getOccupyQty)
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
+//			occupyQty = stockOccupyList.stream().map(StockOccupy::getOccupyQty)
+//				.reduce(BigDecimal.ZERO, BigDecimal::add);
 		}
 		// 已分配数量
 		List<BigDecimal> pickPlanQtyList = new ArrayList<>();
@@ -495,8 +495,8 @@ public class PickPlanServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 		// 忽略已经保存的明细行
 		List<Long> soDetailIdList = NodesUtil.toList(savePickPlanDTO.getDetailList(), SavePickPlanDetailDTO::getSoDetailId);
 		List<StockOccupy> stockOccupyList = stockOccupyService.list(Condition.getQueryWrapper(new StockOccupy())
-			.lambda()
-			.in(StockOccupy::getSoDetailId, soDetailIdList));
+			.lambda());
+//			.in(StockOccupy::getSoDetailId, soDetailIdList));
 		if (Func.isNotEmpty(stockOccupyList)) {
 			List<SoDetail> soDetailList = soDetailService.listByIds(soDetailIdList);
 			// 删除已经保存的拣货计划明细（避免同时点保存）
@@ -510,9 +510,10 @@ public class PickPlanServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 						return false;
 					}
 					BigDecimal pickPlanQty = savePickPlanDetailDTO.getPickPlanQty();
-					BigDecimal occupyQty = stockOccupyList.stream().filter(u -> {
-						return u.getSoDetailId().equals(savePickPlanDetailDTO.getSoDetailId());
-					}).map(StockOccupy::getOccupyQty).reduce(BigDecimal.ZERO, BigDecimal::add);
+					BigDecimal occupyQty = BigDecimal.ZERO;
+//						stockOccupyList.stream().filter(u -> {
+//						return u.getSoDetailId().equals(savePickPlanDetailDTO.getSoDetailId());
+//					}).map(StockOccupy::getOccupyQty).reduce(BigDecimal.ZERO, BigDecimal::add);
 					return BigDecimalUtil.gt(
 						pickPlanQty.add(occupyQty), soDetail.getPlanQty().subtract(soDetail.getScanQty()));
 				}
@@ -667,20 +668,20 @@ public class PickPlanServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 								savePickPlanDTO.getDetailList().remove(detail);
 								// 创建库存占用
 								StockOccupyDTO stockOccupyDTO = new StockOccupyDTO();
-								stockOccupyDTO.setTransId(wellenDetailVO.getWellenId());
+//								stockOccupyDTO.setTransId(wellenDetailVO.getWellenId());
 								stockOccupyDTO.setOccupyType(StockOccupyTypeEnum.PickPlan.getIndex());
 								stockOccupyDTO.setWhId(wellen.getWhId());
 								stockOccupyDTO.setStockId(stock.getStockId());
 								stockOccupyDTO.setSkuId(detail.getSkuId());
 								stockOccupyDTO.setSkuCode(detail.getSkuCode());
 								stockOccupyDTO.setSkuName(detail.getSkuName());
-								stockOccupyDTO.setSystemProcId(systemProc.getSystemProcId());
-								stockOccupyDTO.setOccupyTime(LocalDateTime.now());
-								stockOccupyDTO.setOccupyQty(detail.getPickPlanQty());
-								stockOccupyDTO.setSoBillId(wellenDetailVO.getSoBillId());
-								stockOccupyDTO.setSoBillNo(wellenDetailVO.getSoBillNo());
-								stockOccupyDTO.setSoDetailId(wellenDetailVO.getSoDetail().getSoDetailId());
-								stockOccupyDTO.setPickPlanId(detail.getPickPlanId());
+//								stockOccupyDTO.setSystemProcId(systemProc.getSystemProcId());
+//								stockOccupyDTO.setOccupyTime(LocalDateTime.now());
+//								stockOccupyDTO.setOccupyQty(detail.getPickPlanQty());
+//								stockOccupyDTO.setSoBillId(wellenDetailVO.getSoBillId());
+//								stockOccupyDTO.setSoBillNo(wellenDetailVO.getSoBillNo());
+//								stockOccupyDTO.setSoDetailId(wellenDetailVO.getSoDetail().getSoDetailId());
+//								stockOccupyDTO.setPickPlanId(detail.getPickPlanId());
 								stockOccupyService.add(stockOccupyDTO);
 							}
 						}
@@ -1846,7 +1847,7 @@ public class PickPlanServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 			// 删除拣货计划
 			if (ObjectUtil.isNotEmpty(stockOccupyList)) {
 				for (StockOccupy stockOccupy : stockOccupyList) {
-					super.removeById(stockOccupy.getPickPlanId());
+//					super.removeById(stockOccupy.getPickPlanId());
 				}
 			}
 		}

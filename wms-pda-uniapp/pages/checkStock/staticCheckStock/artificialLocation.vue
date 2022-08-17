@@ -128,19 +128,13 @@
 		},
 		methods: {
 			submit() {
-				console.log(this.defaultList)
 				if (this.isValid()) {
-					if (tool.isEmpty(this.defaultList)) {
-						this.esc();
-						return;
-					} else {
 						//调用生成从差异报告
 						let params = {}
 						params.countReportList = this.defaultList
 						staticCheckStock.generateCountReport(params).then(data => {
 							console.log(data.data)
 						})
-					}
 				} else {
 					this.$u.func.showToast({
 						title: '请确认当前库存的差异状况，无误请点击无误，有差异请修改差异',
@@ -158,6 +152,7 @@
 			updateStatesIsDiff(item, bool) {
 				if (bool == 'success') {
 					item.isValid = true;
+					this.defaultList.push(item)
 				} else {
 					item.isValid = false;
 				}

@@ -14,11 +14,11 @@ import org.springblade.core.tool.utils.StringPool;
 @AllArgsConstructor
 public enum StockCountStateEnum {
 
-	CREATE("等待分配任务", 10),
-	COUNTING("正在盘点", 20),
-	COUNT_COMPLATED("盘点完成", 30),
-	CREATE_COUNT_DIFF("生成差异", 31),
-	INVALID("作废", 40),
+	CREATE("创建", 1),
+	COUNTING("正在盘点", 2),
+	COUNT_COMPLATED("盘点完成", 3),
+	CREATE_COUNT_DIFF("生成差异报告", 31),
+	INVALID("作废", 4),
 	UPLOADED("已上传", 50),
 	AUDIT_PASS("审核通过", 60),
 	AUDIT_UN_PASS("审核未通过", 70),

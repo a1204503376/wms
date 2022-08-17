@@ -269,5 +269,5 @@ public interface StockQueryBiz {
 	 * @param locCode 库位
 	 * @return PdaBoxQtyResponse
 	 */
-	List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode);
+	List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode, String boxCode);
 }

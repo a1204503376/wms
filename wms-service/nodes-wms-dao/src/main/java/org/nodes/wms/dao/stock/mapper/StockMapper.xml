@@ -355,7 +355,10 @@
         select loc_code,box_code,sum(stock_qty-pick_qty) total_qty from wms_stock
         <where>
             <if test="locCode!=null and locCode != ''">
-                loc_code = #{locCode}
+                AND loc_code = #{locCode}
+            </if>
+            <if test="boxCode!=null and boxCode != ''">
+                AND box_code = #{boxCode}
             </if>
             AND is_deleted = 0
             AND status = 1

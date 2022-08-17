@@ -306,11 +306,11 @@ public interface StockDao {
 	 * @param locCode 库位
 	 * @return PdaBoxQtyResponse
 	 */
-	List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode);
+	List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode, String boxCode);
 
 	/**
 	 * 根据stock更新库存状态和落放id
-	 * 
+	 *
 	 * @param stocks stocks只需要其中的stockId作为更新的条件
 	 * @param status 库存状态
 	 * @param dropId 落放id

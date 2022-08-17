@@ -2,13 +2,13 @@ package org.nodes.wms.biz.count.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
-import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.count.CountReportBiz;
 import org.nodes.wms.biz.count.StockCountBiz;
+import org.nodes.wms.biz.count.modular.CountRecordFactory;
 import org.nodes.wms.biz.count.modular.CountReportFactory;
 import org.nodes.wms.biz.count.modular.StockCountFactory;
 import org.nodes.wms.biz.stock.StockQueryBiz;
@@ -16,15 +16,19 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.dao.count.CountDetailDao;
 import org.nodes.wms.dao.count.CountHeaderDao;
+import org.nodes.wms.dao.count.CountRecordDao;
 import org.nodes.wms.dao.count.dto.input.*;
 import org.nodes.wms.dao.count.dto.output.*;
 import org.nodes.wms.dao.count.entity.CountDetail;
 import org.nodes.wms.dao.count.entity.CountHeader;
-import org.nodes.wms.dao.count.entity.CountReport;
+import org.nodes.wms.dao.count.entity.CountRecord;
+import org.nodes.wms.dao.count.enums.CountDetailStateEnum;
+import org.nodes.wms.dao.count.enums.StockCountStateEnum;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -43,8 +47,10 @@ public class StockCountBizImpl implements StockCountBiz {
 	private final StockQueryBiz stockQueryBiz;
 	private final LocationBiz locationBiz;
 	private final CountReportFactory countReportFactory;
+	private final CountRecordFactory countRecordFactory;
 	private final CountReportBiz countReportBiz;
 	private final SkuBiz skuBiz;
+	private final CountRecordDao countRecordDao;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -90,7 +96,7 @@ public class StockCountBizImpl implements StockCountBiz {
 		// 统计箱内物品数量
 		List<PdaStockCountDetailResponse> responseList = BeanUtil.copy(countDetailList, PdaStockCountDetailResponse.class);
 		responseList.forEach(response -> {
-			List<PdaBoxQtyResponse> pdaBoxQtyResponseList = stockQueryBiz.getStockCountByLocCode(response.getLocCode());
+			List<PdaBoxQtyResponse> pdaBoxQtyResponseList = stockQueryBiz.getStockCountByLocCode(response.getLocCode(), response.getBoxCode());
 			response.setPdaBoxQtyResponseList(pdaBoxQtyResponseList);
 			Location location = locationBiz.findByLocId(response.getLocId());
 			response.setIsPickLocation(locationBiz.isPickLocation(location));
@@ -112,45 +118,65 @@ public class StockCountBizImpl implements StockCountBiz {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void generateCountReport(List<GenerateCountReport> countReportList) {
-		AssertUtil.notNull(countReportList, "生成盘点差异报告失败，用户提交的数据为空");
+		AssertUtil.notNull(countReportList, "生成盘点单记录失败，用户提交的数据为空");
 		countReportList.forEach(generateCountReport -> {
-			Stock stock = stockQueryBiz.findStockById(generateCountReport.getStockId());
-			CountDetail countDetail = countDetailDao.selectCountDetailByCode(stock.getLocCode(), stock.getBoxCode());
-			CountReport countReport = countReportFactory.createCountReport(generateCountReport, stock, countDetail);
-			SkuUm um = skuBiz.findSkuUmByUmCode(stock.getWsuCode());
-			countReport.setWsuName(um.getWsuName());
-			countReportBiz.insertCountReport(countReport);
+
+			if (Func.isNotEmpty(generateCountReport.getStockId())) {
+				Stock stock = stockQueryBiz.findStockById(generateCountReport.getStockId());
+				CountDetail countDetail = countDetailDao.selectCountDetailByCode(generateCountReport.getLocCode(), generateCountReport.getBoxCode());
+				CountRecord countRecord = countRecordFactory.createCountRecord(generateCountReport, stock, countDetail);
+				SkuUm um = skuBiz.findSkuUmByUmCode(stock.getWsuCode());
+				countRecord.setWsuName(um.getWsuName());
+				countRecordDao.insert(countRecord);
+				countDetailDao.updateCountDetailStateByCountDetailId(countRecord.getCountBillId(), CountDetailStateEnum.COUNTED);
+				if (!countDetailDao.getCountDetailStateByCountBillId(countDetail.getCountBillId())) {
+					countHeaderDao.updateCountHeaderStateByCountBillId(countDetail.getCountBillId(), StockCountStateEnum.COUNT_COMPLETED);
+				}
+			} else {
+				List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(generateCountReport.getBoxCode());
+				for (Stock stocks : stockList) {
+					CountDetail countDetail = countDetailDao.selectCountDetailByCode(generateCountReport.getLocCode(), generateCountReport.getBoxCode());
+					CountRecord countRecord = countRecordFactory.createCountRecord(generateCountReport, stocks, countDetail);
+					SkuUm um = skuBiz.findSkuUmByUmCode(stocks.getWsuCode());
+					countRecord.setWsuName(um.getWsuName());
+					countRecordDao.insert(countRecord);
+					countDetailDao.updateCountDetailStateByCountDetailId(countDetail.getCountDetailId(), CountDetailStateEnum.COUNTED);
+					if (!countDetailDao.getCountDetailStateByCountBillId(countDetail.getCountBillId())) {
+						countHeaderDao.updateCountHeaderStateByCountBillId(countDetail.getCountBillId(), StockCountStateEnum.COUNT_COMPLETED);
+					}
+				}
+			}
+
+
 		});
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void generateCountReportByAutoLocation(List<AutoLocationBoxQty> beChangedList, List<AutoLocationBoxQty> defaultList) {
 		for (int i = 0; i < beChangedList.size(); i++) {
 			List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(defaultList.get(i).getBoxCode());
-			AssertUtil.notNull(stockList, "自动区生成库存差异报告失败,根据箱码获取库存失败");
+			AssertUtil.notNull(stockList, "生成盘点单记录失败,根据箱码获取库存失败");
 
 			CountDetail countDetail = countDetailDao.selectCountDetailByCode(defaultList.get(i).getLocCode(), defaultList.get(i).getBoxCode());
-			CountReport countReport = countReportFactory.createCountReport(stockList, countDetail);
+			List<CountRecord> countRecordList = countRecordFactory.createCountReport(stockList, countDetail);
+			for (CountRecord countRecord : countRecordList) {
+				countRecord.setLpnCode(beChangedList.get(i).getBoxCode());
+				countRecord.setLocCode(beChangedList.get(i).getLocCode());
+				Location location = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), beChangedList.get(i).getLocCode());
+				countRecord.setLocId(location.getLocId());
+				SkuUm um = skuBiz.findSkuUmByUmCode(countRecord.getWsuName());
+				countRecord.setWsuName(um.getWsuName());
 
-			countReport.setLpnCode(beChangedList.get(i).getBoxCode());
-			countReport.setLocCode(beChangedList.get(i).getLocCode());
-			Location location = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), beChangedList.get(i).getLocCode());
-			countReport.setLocId(location.getLocId());
-			SkuUm um = skuBiz.findSkuUmByUmCode(stockList.get(0).getWsuCode());
-			countReport.setWsuName(um.getWsuName());
-
-			if (beChangedList.get(i).getIsValid()) {
-				if (BigDecimalUtil.eq(beChangedList.get(i).getTotalQty(), defaultList.get(i).getTotalQty())
-					&& Func.equals(beChangedList.get(i).getLocCode(), defaultList.get(i).getLocCode())
-					&& Func.equals(beChangedList.get(i).getBoxCode(), defaultList.get(i).getBoxCode())) {
-					continue;
+				if (beChangedList.get(i).getIsValid()) {
+					countRecord.setCountQty(beChangedList.get(i).getTotalQty());
+				} else {
+					countRecord.setCountQty(BigDecimal.ZERO);
 				}
-				countReport.setCountQty(beChangedList.get(i).getTotalQty());
-			} else {
-				countReport.setCountQty(BigDecimal.ZERO);
+				countRecordDao.insert(countRecord);
 			}
-			countReportBiz.insertCountReport(countReport);
 		}
 	}
 

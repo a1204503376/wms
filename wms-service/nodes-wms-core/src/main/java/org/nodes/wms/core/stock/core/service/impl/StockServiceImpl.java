@@ -680,8 +680,8 @@ public class StockServiceImpl<M extends StockMapper, T extends Stock>
 			stockSubtract.getEventType().equals(EventTypeEnum.Move)) {
 
 			stockOccupyListAll = stockOccupyService.list(Condition.getQueryWrapper(new StockOccupy())
-				.lambda()
-				.eq(StockOccupy::getPickPlanId, stockSubtract.getDataId()));
+				.lambda());
+//				.eq(StockOccupy::getPickPlanId, stockSubtract.getDataId()));
 		} else if (stockSubtract.getEventType().equals(EventTypeEnum.Count)) {
 			stockOccupyListAll = stockOccupyService.list(Condition.getQueryWrapper(new StockOccupy())
 				.lambda()
@@ -728,7 +728,7 @@ public class StockServiceImpl<M extends StockMapper, T extends Stock>
 					continue;
 				}
 				for (StockOccupy stockOccupy : stockOccupyList) {
-					qty = stockOccupy.getOccupyQty();
+//					qty = stockOccupy.getOccupyQty();
 					if (BigDecimalUtil.ge(pickQty, qty)) {    // 下架数量 大于等于 占用数量
 						if (stockSubtract.getEventType().equals(EventTypeEnum.OutStock) ||
 							stockSubtract.getEventType().equals(EventTypeEnum.Move)) {
@@ -741,13 +741,13 @@ public class StockServiceImpl<M extends StockMapper, T extends Stock>
 						}
 						pickQty = pickQty.subtract(qty);
 						if (ObjectUtil.isNotEmpty(stockOccupy)) {
-							stockOccupy.setOccupyQty(stockOccupy.getOccupyQty().subtract(qty));
-							if (stockOccupy.getOccupyQty().compareTo(BigDecimal.ZERO) <= 0) {
-								// 删除库存占用明细
-								stockOccupyService.removeById(stockOccupy.getWsoId());
-							} else {
-								stockOccupyService.updateOccupyQty(stockOccupy);
-							}
+//							stockOccupy.setOccupyQty(stockOccupy.getOccupyQty().subtract(qty));
+//							if (stockOccupy.getOccupyQty().compareTo(BigDecimal.ZERO) <= 0) {
+//								// 删除库存占用明细
+//								stockOccupyService.removeById(stockOccupy.getWsoId());
+//							} else {
+//								stockOccupyService.updateOccupyQty(stockOccupy);
+//							}
 						}
 					} else {                // 下架数量 小于 占用数量
 						if (stockSubtract.getEventType().equals(EventTypeEnum.OutStock) ||
@@ -761,14 +761,14 @@ public class StockServiceImpl<M extends StockMapper, T extends Stock>
 						}
 						if (ObjectUtil.isNotEmpty(stockOccupy)) {
 							// 更新库存占用明细
-							stockOccupy.setOccupyQty(stockOccupy.getOccupyQty().subtract(pickQty));
+//							stockOccupy.setOccupyQty(stockOccupy.getOccupyQty().subtract(pickQty));
 							stockOccupyService.updateOccupyQty(stockOccupy);
 						}
 						pickQty = pickQty.subtract(pickQty);
 					}
 					StockSubtractVO stockReduceRltDTO = new StockSubtractVO();
-					stockReduceRltDTO.setSoBillId(stockOccupy.getSoBillId());
-					stockReduceRltDTO.setSoDetailId(stockOccupy.getSoDetailId());
+//					stockReduceRltDTO.setSoBillId(stockOccupy.getSoBillId());
+//					stockReduceRltDTO.setSoDetailId(stockOccupy.getSoDetailId());
 					stockReduceRltDTO.setStock(stock);
 					rltList.add(stockReduceRltDTO);
 					if (BigDecimalUtil.le(pickQty, BigDecimal.ZERO)) {

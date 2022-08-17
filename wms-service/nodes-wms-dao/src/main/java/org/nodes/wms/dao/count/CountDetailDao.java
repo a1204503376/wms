@@ -3,6 +3,7 @@ package org.nodes.wms.dao.count;
 import org.nodes.wms.dao.count.dto.input.PdaStockCountDetailBySkuSpecRequest;
 import org.nodes.wms.dao.count.dto.output.PdaStockCountDetailBySkuSpecResponse;
 import org.nodes.wms.dao.count.entity.CountDetail;
+import org.nodes.wms.dao.count.enums.CountDetailStateEnum;
 import org.springblade.core.mp.base.BaseService;
 
 import java.util.List;
@@ -23,6 +24,15 @@ public interface CountDetailDao extends BaseService<CountDetail> {
 	 */
 	List<CountDetail> selectByCountBillId(Long countBillId);
 
+	/**
+	 * 根据盘点单明细ID修改盘点单状态
+	 *
+	 * @param countDetailId        盘点单明细ID
+	 * @param countDetailStateEnum 盘点单状态
+	 */
+	void updateCountDetailStateByCountDetailId(Long countDetailId, CountDetailStateEnum countDetailStateEnum);
+
+	Boolean getCountDetailStateByCountBillId(Long countBillId);
 	/**
 	 * 根据库位编码和箱码查询明细集合
 	 *
