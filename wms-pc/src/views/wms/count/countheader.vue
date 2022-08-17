@@ -89,8 +89,7 @@ export default {
                 "复盘",
                 "盘点作废",
                 "生成差异报告",
-                "创建差异单据",
-                "随机盘点",
+                "创建差异单据"
             ],
             loading: false,
             selectionList: [], //选中的数据

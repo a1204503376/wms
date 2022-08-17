@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.count;
 
+import org.nodes.wms.dao.count.dto.input.PdaStockCountDetailBySkuSpecRequest;
+import org.nodes.wms.dao.count.dto.output.PdaStockCountDetailBySkuSpecResponse;
 import org.nodes.wms.dao.count.entity.CountDetail;
 import org.springblade.core.mp.base.BaseService;
 
@@ -29,4 +31,12 @@ public interface CountDetailDao extends BaseService<CountDetail> {
 	 * @return 盘点单明细
 	 */
 	CountDetail selectCountDetailByCode(String locCode, String boxCode);
+
+	/**
+	 * 根据规格型号查询能创建盘点单的明细
+	 *
+	 * @param request 包含规格型号
+	 * @return 能创建盘点单的明细
+	 */
+	List<PdaStockCountDetailBySkuSpecResponse> getStockCountDetailBySkuSpec(PdaStockCountDetailBySkuSpecRequest request);
 }

@@ -1,4 +1,3 @@
-
 package org.nodes.modules.wms.count.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -8,20 +7,20 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.nodes.core.base.cache.ParamCache;
-import org.nodes.core.base.entity.Param;
 import org.nodes.core.base.enums.ParamEnum;
-import org.nodes.core.base.service.IParamService;
+import org.nodes.wms.biz.count.StockCountBiz;
 import org.nodes.wms.core.count.entity.CountHeader;
 import org.nodes.wms.core.count.service.ICountHeaderService;
 import org.nodes.wms.core.count.vo.CountHeaderVO;
 import org.nodes.wms.core.count.wrapper.CountHeaderWrapper;
+import org.nodes.wms.dao.count.dto.input.PdaStockCountDetailBySkuSpecRequest;
+import org.nodes.wms.dao.count.dto.output.PdaStockCountDetailBySkuSpecResponse;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
-import org.springblade.core.tool.utils.SpringUtil;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -42,6 +41,7 @@ import java.util.List;
 public class CountHeaderController extends BladeController {
 
 	private ICountHeaderService countHeaderService;
+	private StockCountBiz stockCountBiz;
 
 	/**
 	 * 获取盘点单详情
@@ -109,7 +109,7 @@ public class CountHeaderController extends BladeController {
 	@PostMapping("/submit")
 	@ApiOperationSupport(order = 6)
 	@ApiOperation(value = "新增或修改 盘点单头表", notes = "传入countHeader")
-	public R submit( @RequestBody CountHeaderVO countHeaderVO) {
+	public R submit(@RequestBody CountHeaderVO countHeaderVO) {
 		if (Func.isEmpty(countHeaderVO.getCountBillId())) {
 			return R.status(countHeaderService.add(countHeaderVO));
 		} else {
@@ -143,6 +143,14 @@ public class CountHeaderController extends BladeController {
 	}
 
 	/**
+	 * 筛选盘点货位信息
+	 */
+	@PostMapping("/findStockCountDetailBySkuSpec")
+	public R<List<PdaStockCountDetailBySkuSpecResponse>> findStockCountDetailBySkuSpec(@RequestBody PdaStockCountDetailBySkuSpecRequest request) {
+		return R.data(stockCountBiz.findStockCountDetailBySkuSpec(request));
+	}
+
+	/**
 	 * 获取盘点单编号
 	 */
 	@ApiLog("盘点单头表接口-获取盘点单编号")
@@ -152,6 +160,7 @@ public class CountHeaderController extends BladeController {
 
 		return R.data(countHeaderService.getCNo());
 	}
+
 	/**
 	 * 获取盘点默认模式
 	 */
@@ -160,6 +169,7 @@ public class CountHeaderController extends BladeController {
 	public R getDefaltMode() {
 		return R.data(ParamCache.getValue(ParamEnum.COUNT_MODE.getKey()));
 	}
+
 	/**
 	 * 分配任务
 	 */

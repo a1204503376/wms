@@ -1,15 +1,20 @@
 package org.nodes.wms.dao.outstock.soPickPlan.entities;
 
+import java.math.BigDecimal;
+
+import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
+import com.baomidou.mybatisplus.annotation.Version;
 
-import java.math.BigDecimal;
+import lombok.Data;
 
 /**
  * 拣货计划实体类
+ * 
+ * @author nodesc
  **/
 @Data
 @TableName("so_pick_plan")
@@ -71,7 +76,7 @@ public class SoPickPlan extends BaseSkuLotEntity {
 	/**
 	 * 库区编码
 	 */
-	private String	zoneCode;
+	private String zoneCode;
 
 	/**
 	 * 箱码
@@ -157,4 +162,10 @@ public class SoPickPlan extends BaseSkuLotEntity {
 	 * 货主ID
 	 */
 	private Long woId;
+
+	/**
+	 * 乐观锁
+	 */
+	@Version
+	private Integer version;
 }
