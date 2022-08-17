@@ -61,6 +61,7 @@ public interface WmsTaskBiz {
 	 * 修改任务状态
 	 *
 	 * @param taskDetail 包含任务明细ID，任务状态
+	 * @return true:表示成功
 	 */
 	Boolean updateTaskState(TaskDetail taskDetail);
 
