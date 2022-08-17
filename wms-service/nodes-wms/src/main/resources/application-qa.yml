@@ -1,0 +1,12 @@
+#天宜测试环境配置
+spring:
+  redis:
+    host: 192.168.41.171
+    port: 6379
+    password:
+    database: 1
+    ssl: false
+  datasource:
+    url: jdbc:mysql://192.168.41.171:3306/qa_wms_dev?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
