@@ -12,7 +12,6 @@ import org.nodes.core.base.enums.ParamEnum;
 import org.nodes.core.base.service.IUserService;
 import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.NodesUtil;
-import org.nodes.wms.core.count.entity.CountHeader;
 import org.nodes.wms.core.count.service.ICountHeaderService;
 import org.nodes.wms.core.log.system.dto.SystemProcDTO;
 import org.nodes.wms.core.log.system.entity.SystemProc;
@@ -20,9 +19,7 @@ import org.nodes.wms.core.log.system.enums.ActionEnum;
 import org.nodes.wms.core.log.system.enums.DataTypeEnum;
 import org.nodes.wms.core.log.system.enums.SystemProcTypeEnum;
 import org.nodes.wms.core.log.system.service.ISystemProcService;
-import org.nodes.wms.core.outstock.so.entity.SoHeader;
 import org.nodes.wms.core.outstock.so.service.IWellenDetailService;
-import org.nodes.wms.core.outstock.so.vo.WellenSoHeaderVo;
 import org.nodes.wms.core.system.dto.TaskDTO;
 import org.nodes.wms.core.system.entity.RoleTask;
 import org.nodes.wms.core.system.entity.Task;
@@ -100,25 +97,25 @@ public class TaskServiceImpl<M extends TaskMapper, T extends Task>
 			if (Func.isEmpty(task)) {
 				throw new ServiceException(String.format("指定任务不存在（任务ID：%s）！", id));
 			}
-			if(Func.isNotEmpty(task)&&"901".equals(task.getBillTypeCd())){
-				List<WellenSoHeaderVo> soHeaderByWellenId = wellenDetailService.getSoHeaderByWellenId(Func.toLongList(task.getBillId().toString()));
-				if(Func.isEmpty(soHeaderByWellenId)){
-					throw new ServiceException(String.format("该任务拣货单不存在！"));
-				}
-				SoHeader soHeader = soHeaderByWellenId.get(0).getSoHeader();
-				if(!soHeader.getDeptId().equals(Func.toLong(user.getDeptId()))){
-					throw new ServiceException("用户不属于该任务的部门！");
-				}
-			}
-			if(Func.isNotEmpty(task)&&"909".equals(task.getBillTypeCd())){
-				CountHeader countHeader = countHeaderService.getById(task.getBillId());
-				if(Func.isEmpty(countHeader)){
-					throw new ServiceException(String.format("该任务盘点单不存在！"));
-				}
-				if(!countHeader.getCreateDept().equals(Func.toLong(user.getDeptId()))){
-					throw new ServiceException("用户不属于该任务的部门！");
-				}
-			}
+//			if(Func.isNotEmpty(task)&&"901".equals(task.getBillTypeCd())){
+//				List<WellenSoHeaderVo> soHeaderByWellenId = wellenDetailService.getSoHeaderByWellenId(Func.toLongList(task.getBillId().toString()));
+//				if(Func.isEmpty(soHeaderByWellenId)){
+//					throw new ServiceException(String.format("该任务拣货单不存在！"));
+//				}
+//				SoHeader soHeader = soHeaderByWellenId.get(0).getSoHeader();
+//				if(!soHeader.getDeptId().equals(Func.toLong(user.getDeptId()))){
+//					throw new ServiceException("用户不属于该任务的部门！");
+//				}
+//			}
+//			if(Func.isNotEmpty(task)&&"909".equals(task.getBillTypeCd())){
+//				CountHeader countHeader = countHeaderService.getById(task.getBillId());
+//				if(Func.isEmpty(countHeader)){
+//					throw new ServiceException(String.format("该任务盘点单不存在！"));
+//				}
+//				if(!countHeader.getCreateDept().equals(Func.toLong(user.getDeptId()))){
+//					throw new ServiceException("用户不属于该任务的部门！");
+//				}
+//			}
 			task.setAllotTime(LocalDateTime.now());
 			task.setUserId(user.getId());
 			task.setUserCode(user.getAccount());
@@ -182,7 +179,7 @@ public class TaskServiceImpl<M extends TaskMapper, T extends Task>
 		}
 		task.setTaskTypeCd(taskDTO.getTaskType());
 		task.setWhId(taskDTO.getWhId());
-		task.setBillTypeCd(taskDTO.getBillTypeCd());
+//		task.setBillTypeCd(taskDTO.getBillTypeCd());
 		task.setBillId(taskDTO.getBillId());
 		task.setBillNo(taskDTO.getBillNo());
 		task.setTaskQty(taskDTO.getTaskQty());

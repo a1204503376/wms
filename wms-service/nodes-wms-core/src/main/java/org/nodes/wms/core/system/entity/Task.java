@@ -63,11 +63,11 @@ public class Task extends TenantEntity implements Serializable {
 	 */
 	@ApiModelProperty(value = "任务执行方式")
 	private Integer taskProcType;
-	/**
-	 * 单据种类编码
-	 */
-	@ApiModelProperty(value = "单据种类编码")
-	private String billTypeCd;
+//	/**
+//	 * 单据种类编码
+//	 */
+//	@ApiModelProperty(value = "单据种类编码")
+//	private String billTypeCd;
 	/**
 	 * 单据ID
 	 */
