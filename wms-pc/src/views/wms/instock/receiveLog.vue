@@ -3,68 +3,87 @@
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="收货单编码" label-width="90px">
-                            <el-input v-model.trim="form.params.receiveNo" :clearable="true"
-                                      placeholder="请输入收货单编码"></el-input>
+                            <el-input
+                                v-model.trim="form.params.receiveNo"
+                                :clearable="true"
+                                placeholder="请输入收货单编码">
+
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
                             <nodes-sku
                                 v-model="form.params.skuIdList">
                             </nodes-sku>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="箱号" label-width="90px">
-                            <el-input v-model.trim="form.params.boxCode" :clearable="true"
-                                      placeholder="请输入箱号"></el-input>
+                            <el-input
+                                v-model.trim="form.params.boxCode"
+                                :clearable="true"
+                                placeholder="请输入箱号"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="LPN" label-width="90px">
+                            <el-input
+                                v-model.trim="form.params.lpnCode"
+                                :clearable="true"
+                                placeholder="请输入LPN"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
-            </template>
-            <template v-slot:expandSearch>
                 <el-row type="flex">
                     <el-col :span="6">
-                        <el-form-item label="LPN" label-width="90px">
-                            <el-input v-model.trim="form.params.lpnCode" :clearable="true"
-                                      placeholder="请输入LPN"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
                         <el-form-item label="序列号" label-width="90px">
-                            <el-input v-model.trim="form.params.snCode" :clearable="true"
-                                      placeholder="请输入序列号"></el-input>
+                            <el-input
+                                v-model.trim="form.params.snCode"
+                                :clearable="true"
+                                placeholder="请输入序列号">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="收货人" label-width="90px">
-                            <el-input v-model.trim="form.params.createUser" :clearable="true"
-                                      placeholder="请输入收货人"></el-input>
+                            <el-input
+                                v-model.trim="form.params.createUser"
+                                :clearable="true"
+                                placeholder="请输入收货人"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="收货时间" label-width="90px">
-                            <nodes-date-range v-model="form.params.createTimeDateRange" style="width: 200px">
+                            <nodes-date-range
+                                v-model="form.params.createTimeDateRange">
                             </nodes-date-range>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="库位" label-width="90px">
+                            <nodes-location
+                                v-model="form.params.locIdList">
+                            </nodes-location>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item label="库位" label-width="90px">
-                            <nodes-location v-model="form.params.locIdList"></nodes-location>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
                         <el-form-item label="库房" label-width="90px">
-                            <nodes-warehouse v-model="form.params.whIdList" :multiple="true"></nodes-warehouse>
+                            <nodes-warehouse
+                                v-model="form.params.whIdList"
+                                :multiple="true">
+                            </nodes-warehouse>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="货主" label-width="90px">
-                            <nodes-owner v-model="form.params.woId"></nodes-owner>
+                            <nodes-owner
+                                v-model="form.params.woId">
+                            </nodes-owner>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -100,6 +119,7 @@
                 <el-table ref="table"
                           :cell-style="cellStyle"
                           :data="table.data"
+                          :height="table.height"
                           border
                           highlight-current-row
                           size="mini"
@@ -125,7 +145,7 @@
                             show-overflow-tooltip
                             v-bind="column"
                             width="130">
-                            <template v-slot="scope" v-if="column.prop === 'receiveNo' || column.prop === 'snCode'">
+                            <template v-if="column.prop === 'receiveNo' || column.prop === 'snCode'" v-slot="scope">
                                 <el-link
                                     v-if="column.prop === 'receiveNo'"
                                     :underline="false"
@@ -317,7 +337,7 @@ export default {
                         sortable: "custom"
                     },
                     {
-                        prop: "skuLot8",
+                        prop: "skuLot6",
                         label: "是否CRCC验证",
                         sortable: "custom"
                     },
@@ -380,6 +400,9 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
+                    this.$nextTick(() => {
+                        this.$refs.table.doLayout();
+                    });
                 })
         },
         refreshTable() {
