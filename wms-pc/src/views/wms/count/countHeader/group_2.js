@@ -15,21 +15,30 @@ export const group = {
     label: '明细',
     column: [
         {
-            label: '搜索方式',
-            prop: 'searchType',
-            type: 'radio',
+            label: '规格型号',
+            prop: 'skuLot2',
+            type: 'input',
             view: false,
-            dicData: [
-                {value: 0, label: 'ABC盘点'},
-                {value: 1, label: '动碰盘点'},
-                {value: 2, label: '指定盘点'}
-            ],
-            span: 24,
-            default: 0,
-            hide: function (form, type) {
-                return type !== 'view';
-            }
+            rules: [
+                {required: true, message: "请输入规格型号！", trigger: "blur"}
+            ]
         },
+        // {
+        //     label: '搜索方式',
+        //     prop: 'searchType',
+        //     type: 'radio',
+        //     view: false,
+        //     dicData: [
+        //         {value: 0, label: 'ABC盘点'},
+        //         {value: 1, label: '动碰盘点'},
+        //         {value: 2, label: '指定盘点'}
+        //     ],
+        //     span: 24,
+        //     default: 0,
+        //     hide: function (form, type) {
+        //         return type !== 'view';
+        //     }
+        // },
         {
             label: '库区',
             prop: 'zoneId',
@@ -125,24 +134,24 @@ export const group = {
                 }
             },
         },
-        {
-            prop: 'abc',
-            label: 'ABC分类',
-            type: 'select',
-            dicUrl: '/api/blade-system/dict/dictionary?code=abc',
-            props: {
-                label: 'dictValue',
-                value: 'dictKey'
-            },
-            view: false,
-            hide: function (form, type) {
-                if (type !== 'view') {
-                    return form.searchType === 0;
-                } else {
-                    return false;
-                }
-            }
-        },
+        // {
+        //     prop: 'abc',
+        //     label: 'ABC分类',
+        //     type: 'select',
+        //     dicUrl: '/api/blade-system/dict/dictionary?code=abc',
+        //     props: {
+        //         label: 'dictValue',
+        //         value: 'dictKey'
+        //     },
+        //     view: false,
+        //     hide: function (form, type) {
+        //         if (type !== 'view') {
+        //             return form.searchType === 0;
+        //         } else {
+        //             return false;
+        //         }
+        //     }
+        // },
         {
             label: '类型',
             prop: 'changeType',
@@ -239,7 +248,7 @@ export const group = {
                     self.form.checked = false;
                     self.form.searchType = 0;
                     self.form.changeType = undefined;
-                    self.form.countDetailList =undefined;
+                    self.form.countDetailList = undefined;
                 }
             },
         },
@@ -266,16 +275,16 @@ export const group = {
                 {
                     label: '库位',
                     prop: 'locCode',
-                    width: 120,
+                    width: 160,
                 },
-                {
-                    label: 'ABC分类',
-                    prop: 'abcDesc',
-                    width: 100,
-                    hide: function (form) {
-                        return form && form.searchType === 0;
-                    }
-                },
+                // {
+                //     label: 'ABC分类',
+                //     prop: 'abcDesc',
+                //     width: 100,
+                //     hide: function (form) {
+                //         return form && form.searchType === 0;
+                //     }
+                // },
                 {
                     label: '物品编码',
                     prop: 'skuCode',
@@ -300,7 +309,7 @@ export const group = {
                 {
                     label: '库位盘点状态',
                     prop: 'locStatusDesc',
-                    width: 120
+                    width: 160
                 },
                 {
                     label: '上次盘点时间',

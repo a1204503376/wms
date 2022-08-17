@@ -16,10 +16,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.sku.entities.SkuUm;
 import org.nodes.wms.dao.count.CountDetailDao;
 import org.nodes.wms.dao.count.CountHeaderDao;
-import org.nodes.wms.dao.count.dto.input.AutoLocationBoxQty;
-import org.nodes.wms.dao.count.dto.input.GenerateCountReport;
-import org.nodes.wms.dao.count.dto.input.StockCountDetailRequest;
-import org.nodes.wms.dao.count.dto.input.StockCountRequest;
+import org.nodes.wms.dao.count.dto.input.*;
 import org.nodes.wms.dao.count.dto.output.*;
 import org.nodes.wms.dao.count.entity.CountDetail;
 import org.nodes.wms.dao.count.entity.CountHeader;
@@ -157,5 +154,8 @@ public class StockCountBizImpl implements StockCountBiz {
 		}
 	}
 
-
+	@Override
+	public List<PdaStockCountDetailBySkuSpecResponse> findStockCountDetailBySkuSpec(PdaStockCountDetailBySkuSpecRequest request) {
+		return countDetailDao.getStockCountDetailBySkuSpec(request);
+	}
 }

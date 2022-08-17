@@ -43,6 +43,15 @@
             <if test=" param.locCode != null and param.locCode !='' ">
                 AND l.loc_code LIKE CONCAT('%', #{param.locCode}, '%')
             </if>
+            <if test=" param.locLevel != null and param.locLevel !='' ">
+                AND l.loc_level LIKE CONCAT('%', #{param.locLevel}, '%')
+            </if>
+            <if test=" param.locBank != null and param.locBank !='' ">
+                AND l.loc_bank LIKE CONCAT('%', #{param.locBank}, '%')
+            </if>
+            <if test=" param.locColumn != null and param.locColumn !='' ">
+                AND l.loc_column LIKE CONCAT('%', #{param.locColumn}, '%')
+            </if>
             <if test=" param.whIdList != null and param.whIdList.size > 0 ">
                 AND l.wh_id IN
                 <foreach collection="param.whIdList" open="(" close=")" item="item" separator=",">

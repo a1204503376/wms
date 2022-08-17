@@ -2,11 +2,9 @@ package org.nodes.wms.biz.count;
 
 import org.nodes.wms.dao.count.dto.input.AutoLocationBoxQty;
 import org.nodes.wms.dao.count.dto.input.GenerateCountReport;
+import org.nodes.wms.dao.count.dto.input.PdaStockCountDetailBySkuSpecRequest;
 import org.nodes.wms.dao.count.dto.input.StockCountRequest;
-import org.nodes.wms.dao.count.dto.output.PdaBoxSkuQtyResponse;
-import org.nodes.wms.dao.count.dto.output.PdaSkuQtyResponse;
-import org.nodes.wms.dao.count.dto.output.PdaStockCountDetailResponse;
-import org.nodes.wms.dao.count.dto.output.PdaStockCountResponse;
+import org.nodes.wms.dao.count.dto.output.*;
 
 import java.util.List;
 
@@ -54,4 +52,13 @@ public interface StockCountBiz {
 	 * @param defaultList   用户未改变的数据集合
 	 */
 	void generateCountReportByAutoLocation(List<AutoLocationBoxQty> beChangedList, List<AutoLocationBoxQty> defaultList);
+
+	/**
+	 * 根据规格型号查询能创建盘点单的明细
+	 *
+	 * @param request 包含规格型号
+	 * @return 能创建盘点单的明细
+	 */
+	List<PdaStockCountDetailBySkuSpecResponse> findStockCountDetailBySkuSpec(PdaStockCountDetailBySkuSpecRequest request);
+
 }

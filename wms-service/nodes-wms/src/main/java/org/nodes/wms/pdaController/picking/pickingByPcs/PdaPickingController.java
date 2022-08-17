@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(WmsApiPath.WMS_PDA_API + "/pickingByPcs")
+@RequestMapping(WmsApiPath.WMS_PDA_API + "/pickByPcs")
 public class PdaPickingController {
 	private final OutStockBiz outStockBiz;
 

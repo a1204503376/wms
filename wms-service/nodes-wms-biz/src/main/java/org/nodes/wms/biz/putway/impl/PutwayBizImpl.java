@@ -64,23 +64,28 @@ public class PutwayBizImpl implements PutwayBiz {
 			AssertUtil.notEmpty(sourceStock.getLpnCode(), "按箱上架失败,原库中的lpn为空白字符");
 			List<Stock> stockList = stockQueryBiz.findStockByLpnCode(sourceStock.getLpnCode());
 			AssertUtil.notNull(stockList, "按箱上架失败,暂无与此托盘号相关库存的信息");
+			List<Stock> sourceStockList= stockList.stream()
+				.filter(stockPrams -> Func.equals(stockPrams.getBoxCode(), request.getBoxCode()))
+				.collect(Collectors.toList());
+			AssertUtil.notNull(sourceStockList, "按箱上架失败,暂无与此托盘号上的箱码的相关库存的信息");
 			Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
 			boolean pickLocation = locationBiz.isPickLocation(targetLocation);
 			if (!pickLocation) {
 				throw new ServiceException("按箱上架失败，目标库位不是拣货区/人工区的库位");
 			}
-			AssertUtil.notNull(stockList, "LPN移动失败，根据LPN获取库存集合为空");
-			Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
-			stockManageBiz.canMove(sourceLocation, targetLocation, stockList, request.getBoxCode());
+			Location sourceLocation = locationBiz.findLocationByLocCode(sourceStockList.get(0).getWhId(), sourceStockList.get(0).getLocCode());
+			stockManageBiz.canMove(sourceLocation, targetLocation, sourceStockList, request.getBoxCode());
 			if (locationBiz.isAgvLocation(targetLocation)) {
 				//AGV移动任务生成
-				agvTask.moveStockToSchedule(stockList, targetLocation.getLocId());
+				agvTask.moveStockToSchedule(sourceStockList, targetLocation);
 				return;
 			}
-			stockBiz.moveStockByLpnCode(sourceStock.getLpnCode(), sourceStock.getLpnCode(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY_PDA, null, null, null);
+			stockBiz.moveStockByLpnCode(sourceStockList.get(0).getLpnCode(), sourceStockList.get(0).getLpnCode(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY_PDA, null, null, null);
 			// 生成上架记录
-			PutawayLog putawayLog = putwayFactory.create(request, sourceStock, targetLocation);
-			putawayLogDao.save(putawayLog);
+			sourceStockList.forEach(stock -> {
+				PutawayLog putawayLog = putwayFactory.create(request, stock, targetLocation);
+				putawayLogDao.save(putawayLog);
+			});
 			return;
 		}
 
@@ -96,7 +101,7 @@ public class PutwayBizImpl implements PutwayBiz {
 		stockManageBiz.canMove(sourceLocation, targetLocation, stockList, request.getBoxCode());
 		if (locationBiz.isAgvLocation(targetLocation)) {
 			//AGV移动任务生成
-			agvTask.moveStockToSchedule(stockList, targetLocation.getLocId());
+			agvTask.moveStockToSchedule(stockList, targetLocation);
 			return;
 		}
 		stockBiz.moveStockByBoxCode(request.getBoxCode(), request.getBoxCode(), sourceStock.getLpnCode(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY_PDA, null, null, null);

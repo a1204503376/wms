@@ -49,7 +49,22 @@ public class LocationPageQuery implements Serializable {
 	private List<Long> lpnTypeIdList;
 
 	/**
-	 * 使用类型
+	 * 库位状态
 	 */
 	private List<Integer> locFlagList;
+
+	/**
+	 * 货架层
+	 */
+	private String locLevel;
+
+	/**
+	 * 货架排
+	 */
+	private String locBank;
+
+	/**
+	 * 货架列
+	 */
+	private String locColumn;
 }
