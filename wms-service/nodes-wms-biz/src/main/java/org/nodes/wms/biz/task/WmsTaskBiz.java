@@ -75,6 +75,7 @@ public interface WmsTaskBiz {
 
 	/**
 	 * 业务日志
+	 *
 	 * @param wmsTask
 	 */
 	void log(WmsTask wmsTask);
