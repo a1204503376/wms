@@ -16,24 +16,24 @@ public interface SoPickPlanBiz {
 	/**
 	 * 判断是否有分配中的计划
 	 *
-	 * @param soHeaderId 出库单id
+	 * @param soBillId 出库单id
 	 * @return true：表示出库单存在有效的分配计划
 	 */
-	boolean hasEnablePickPlan(Long soHeaderId);
+	boolean hasEnablePickPlan(Long soBillId);
 
 	/**
 	 * 根据出库id查找所有有效的拣货计划
 	 *
-	 * @param soHeaderId 出库单id
+	 * @param soBillId 出库单id
 	 * @return 拣货计划集合
 	 */
-	List<SoPickPlan> findBySoHeaderId(Long soHeaderId);
+	List<SoPickPlan> findBySoHeaderId(Long soBillId);
 
 	/**
 	 * 运行分配策略
 	 *
-	 * @param soHeader 发货单信息
-	 * @param soDetials 发货单未发明细
+	 * @param soHeader       发货单信息
+	 * @param soDetials      发货单未发明细
 	 * @param existPickPlans 已经存在的拣货计划
 	 * @return 运行的信息，如果全部分配成功则返回分配成功
 	 */

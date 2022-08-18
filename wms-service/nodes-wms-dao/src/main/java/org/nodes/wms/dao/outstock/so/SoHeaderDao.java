@@ -2,11 +2,12 @@ package org.nodes.wms.dao.outstock.so;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
-import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
+import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
 
 import java.util.List;
 
@@ -96,4 +97,14 @@ public interface SoHeaderDao {
 	 * @return 拣货分页
 	 */
 	IPage<FindAllPickingResponse> getAllPickingPage(IPage<?> page, findSoHeaderByNoRequest request);
+
+
+	/**
+	 * 修改发货单状态
+	 *
+	 * @param soBillId        发货单ID
+	 * @param soBillStateEnum 发货单状态
+	 */
+	void updateStateBySoBillId(Long soBillId, SoBillStateEnum soBillStateEnum);
+
 }

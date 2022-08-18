@@ -5,11 +5,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
 import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.nodes.wms.dao.task.entities.WmsTask;
+import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
+import org.nodes.wms.dao.task.enums.WmsTaskTypeEnum;
 import org.nodes.wms.dao.task.mapper.WmsTaskMapper;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -37,7 +40,7 @@ public class WmsTaskDaoImpl
 		if (WmsTaskStateEnum.COMPLETED.equals(state)
 			|| WmsTaskStateEnum.CANCELED.equals(state)) {
 			updateWrapper.lambda().set(WmsTask::getCloseTime, LocalDateTime.now());
-		} else if (WmsTaskStateEnum.ISSUED.equals(state)){
+		} else if (WmsTaskStateEnum.ISSUED.equals(state)) {
 			updateWrapper.lambda().set(WmsTask::getAllotTime, LocalDateTime.now());
 		} else if (WmsTaskStateEnum.START_EXECUTION.equals(state)) {
 			updateWrapper.lambda().set(WmsTask::getBeginTime, LocalDateTime.now());
@@ -61,5 +64,20 @@ public class WmsTaskDaoImpl
 	@Override
 	public List<WmsTask> getTaskByState(int taskState) {
 		return super.baseMapper.getTaskByState(taskState);
+	}
+
+	@Override
+	public WmsTask findTaskByBoxCode(String boxCode) {
+		AssertUtil.notNull(boxCode, "根据箱码获取任务失败，任务为空");
+		List<WmsTask> wmsTaskList = super.lambdaQuery()
+			.eq(WmsTask::getBoxCode, boxCode)
+			.eq(WmsTask::getTaskTypeCd, WmsTaskTypeEnum.PICKING)
+			.eq(WmsTask::getTaskProcType, WmsTaskProcTypeEnum.BY_BOX)
+			.in(WmsTask::getTaskState, WmsTaskStateEnum.NOT_ISSUED, WmsTaskStateEnum.ISSUED, WmsTaskStateEnum.START_EXECUTION, WmsTaskStateEnum.ABNORMAL)
+			.list();
+		if (wmsTaskList.size() > 1) {
+			throw new ServiceException("根据箱码获取任务失败，查询出多个任务，请检查任务后重试");
+		}
+		return wmsTaskList.get(0);
 	}
 }
