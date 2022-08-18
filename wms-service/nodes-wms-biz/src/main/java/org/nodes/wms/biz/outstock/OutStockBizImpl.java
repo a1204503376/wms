@@ -10,8 +10,7 @@ import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.logSoPick.modular.LogSoPickFactory;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
-import org.nodes.wms.biz.outstock.so.SoDetailBiz;
-import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
+import org.nodes.wms.biz.outstock.so.SoBillBiz;
 import org.nodes.wms.biz.outstock.strategy.TianyiPickStrategy;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
@@ -61,8 +60,7 @@ public class OutStockBizImpl implements OutStockBiz {
 
 	private final SoPickPlanDao soPickPlanDao;
 	private final LogSoPickDao logSoPickDao;
-	private final SoHeaderBiz soHeaderBiz;
-	private final SoDetailBiz soDetailBiz;
+	private final SoBillBiz soBillBiz;
 	private final SoPickPlanBiz soPickPlanBiz;
 	private final LogSoPickFactory logSoPickFactory;
 	private final StockBiz stockBiz;
@@ -74,8 +72,8 @@ public class OutStockBizImpl implements OutStockBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void pickByPcsOnPc(PickByPcRequest request) {
-		SoHeader soHeader = soHeaderBiz.getSoHeaderById(request.getSoBillId());
-		SoDetail soDetail = soDetailBiz.getSoDetailById(request.getPickByPcStockDtoList().get(0).getSoDetailId());
+		SoHeader soHeader = soBillBiz.getSoHeaderById(request.getSoBillId());
+		SoDetail soDetail = soBillBiz.getSoDetailById(request.getPickByPcStockDtoList().get(0).getSoDetailId());
 		// 1 业务判断：
 		// 1.1 如果单据有拣货计划则不能使用PC拣货
 		if (soPickPlanBiz.hasPickPlan(request.getSoBillId())) {
@@ -102,9 +100,9 @@ public class OutStockBizImpl implements OutStockBiz {
 					soDetail.getSoLineNo());
 		}
 		// 4 更新出库单明细中的状态和数量
-		soDetailBiz.updateSoDetailStatus(soDetail, pickQty);
+		soBillBiz.updateSoDetailStatus(soDetail, pickQty);
 		// 5 更新发货单状态
-		soHeaderBiz.updateSoBillState(soHeader);
+		soBillBiz.updateSoBillState(soHeader);
 		// 6 记录业务日志
 		logBiz.auditLog(AuditLogType.OUTSTOCK, "PC拣货");
 	}
@@ -142,14 +140,14 @@ public class OutStockBizImpl implements OutStockBiz {
 		soBillStateEnums.add(SoBillStateEnum.EXECUTING);
 		soBillStateEnums.add(SoBillStateEnum.PART);
 		request.setSoBillState(soBillStateEnums);
-		return soHeaderBiz.getAllPickingByNo(Condition.getPage(query), request);
+		return soBillBiz.getAllPickingByNo(Condition.getPage(query), request);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void pickByPcs(PickByPcsRequest request) {
-		SoHeader soHeader = soHeaderBiz.getSoHeaderById(request.getSoBillId());
-		SoDetail soDetail = soDetailBiz.getSoDetailById(request.getSoDetailId());
+		SoHeader soHeader = soBillBiz.getSoHeaderById(request.getSoBillId());
+		SoDetail soDetail = soBillBiz.getSoDetailById(request.getSoDetailId());
 		Location sourceLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
 		// 1 业务判断：
 		// 1.1 单据和单据明细行的状态如果为终结状态，则不能进行拣货
@@ -176,9 +174,9 @@ public class OutStockBizImpl implements OutStockBiz {
 				location, StockLogTypeEnum.OUTSTOCK_BY_PC, soHeader.getSoBillId(), soHeader.getSoBillNo(),
 				soDetail.getSoLineNo());
 		// 4 更新出库单明细中的状态和数量
-		soDetailBiz.updateSoDetailStatus(soDetail, request.getQty());
+		soBillBiz.updateSoDetailStatus(soDetail, request.getQty());
 		// 5 更新发货单状态
-		soHeaderBiz.updateSoBillState(soHeader);
+		soBillBiz.updateSoBillState(soHeader);
 		// 6 记录业务日志
 		logBiz.auditLog(AuditLogType.OUTSTOCK, "PDA按件拣货");
 	}
@@ -186,7 +184,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	@Override
 	public IPage<FindPickingBySoBillIdResponse> findOpenSoDetail(FindOpenSoDetailRequest request,
 			Query query) {
-		IPage<SoDetail> page = soDetailBiz.getPickingBySoBillId(request.getSoBillId(), query);
+		IPage<SoDetail> page = soBillBiz.getPickingBySoBillId(request.getSoBillId(), query);
 		AssertUtil.notNull(page, "查询结果为空");
 		return page.convert(result -> {
 			return BeanUtil.copy(result, FindPickingBySoBillIdResponse.class);
@@ -238,8 +236,8 @@ public class OutStockBizImpl implements OutStockBiz {
 		}
 
 		// 执行策略分配
-		SoHeader soHeader = soHeaderBiz.getSoHeaderById(soBillId);
-		List<SoDetail> soDetials = soDetailBiz.getEnableSoDetailBySoHeaderId(soBillId);
+		SoHeader soHeader = soBillBiz.getSoHeaderById(soBillId);
+		List<SoDetail> soDetials = soBillBiz.getEnableSoDetailBySoHeaderId(soBillId);
 		tianyiPickStrategy.run(soHeader, soDetials, pickPlans);
 		// 记录业务日志
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, soBillId, "执行自动分配");
@@ -283,11 +281,11 @@ public class OutStockBizImpl implements OutStockBiz {
 			logSoPick.setPickRealQty(logSoPick.getPickRealQty().negate());
 			logSoPickDao.saveLogSoPick(logSoPick);
 			// 更新发货单明细状态与实收数量
-			SoDetail soDetail = soDetailBiz.getSoDetailById(logSoPick.getSoDetailId());
-			soDetailBiz.updateSoDetailStatus(soDetail, logSoPick.getPickRealQty());
+			SoDetail soDetail = soBillBiz.getSoDetailById(logSoPick.getSoDetailId());
+			soBillBiz.updateSoDetailStatus(soDetail, logSoPick.getPickRealQty());
 			// 更新发货单头表状态
-			SoHeader soHeader = soHeaderBiz.getSoHeaderById(logSoPick.getSoBillId());
-			soHeaderBiz.updateSoBillState(soHeader);
+			SoHeader soHeader = soBillBiz.getSoHeaderById(logSoPick.getSoBillId());
+			soBillBiz.updateSoBillState(soHeader);
 			// 记录业务日志
 			logBiz.auditLog(AuditLogType.OUTSTOCK, soHeader.getSoBillId(), soHeader.getSoBillNo(), "撤销收货");
 		});
