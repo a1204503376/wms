@@ -11,6 +11,7 @@ import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.cache.SerialNoCache;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.NodesUtil;
+import org.nodes.wms.biz.count.StockCountBiz;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
@@ -153,6 +154,8 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper1, T extends Coun
 	private ISoHeaderService soHeaderService;
 	@Autowired
 	private ISoDetailService soDetailService;
+	@Autowired
+	private StockCountBiz stockCountBiz;
 
 
 	@Override
@@ -1111,7 +1114,7 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper1, T extends Coun
 						} else {
 //							stockOccupyDTO.setOccupyQty(report.getWmsQty().subtract(report.getCountQty()));
 						}
-						stockOccupyDTO.setWcrId(report.getWcrepId());
+//						stockOccupyDTO.setWcrId(report.getWcrepId());
 						stockOccupyDTO.setCreateUser(report.getCreateUser());
 						stockOccupyDTO.setUpdateUser(report.getCreateUser());
 //						stockOccupyDTO.setSoBillNo(report.getCountBillNo());
@@ -1123,6 +1126,12 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper1, T extends Coun
 			}
 //			CallbackManager.instance.countDiff(countHeader.getCountBillNo());
 		}
+		return true;
+	}
+
+	@Override
+	public boolean generateDifference(String ids) {
+		stockCountBiz.generateDifference(ids);
 		return true;
 	}
 
@@ -1350,7 +1359,7 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper1, T extends Coun
 				} else {
 //					stockOccupyDTO.setOccupyQty(report.getWmsQty().subtract(report.getCountQty()));
 				}
-				stockOccupyDTO.setWcrId(report.getWcrepId());
+//				stockOccupyDTO.setWcrId(report.getWcrepId());
 				stockOccupyDTO.setCreateUser(report.getCreateUser());
 				stockOccupyDTO.setUpdateUser(report.getCreateUser());
 //				stockOccupyDTO.setSoBillNo(report.getCountBillNo());

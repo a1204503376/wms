@@ -129,12 +129,14 @@
 		methods: {
 			submit() {
 				if (this.isValid()) {
-						//调用生成从差异报告
-						let params = {}
-						params.countReportList = this.defaultList
-						staticCheckStock.generateCountReport(params).then(data => {
-							console.log(data.data)
-						})
+					//调用生成从盘点记录
+					let params = {}
+					params.countReportList = this.defaultList
+					staticCheckStock.generateCountReport(params).then(data => {
+						uni.navigateBack({
+							delta: 2
+						});
+					})
 				} else {
 					this.$u.func.showToast({
 						title: '请确认当前库存的差异状况，无误请点击无误，有差异请修改差异',

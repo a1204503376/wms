@@ -110,6 +110,14 @@ public interface ICountHeaderService extends BaseService<CountHeader> {
 	boolean differenceReport(String ids);
 
 	/**
+	 * 生成差异报告
+	 *
+	 * @param ids
+	 * @return
+	 */
+	boolean generateDifference(String ids);
+
+	/**
 	 * 创建差异单据
 	 *
 	 * @param ids

@@ -35,6 +35,14 @@ public class CountHeaderDaoImpl
 	}
 
 	@Override
+	public List<CountHeader> selectByCountBillId(Long countBillId) {
+		return  super.lambdaQuery()
+			.like(CountHeader::getCountBillId, countBillId)
+			.in(CountHeader::getCountBillState, StockCountStateEnum.COUNT_COMPLETED)
+			.list();
+	}
+
+	@Override
 	public void updateCountHeaderStateByCountBillId(Long countBillId, StockCountStateEnum stockCountStateEnum) {
 		UpdateWrapper<CountHeader> updateWrapper = Wrappers.update();
 		updateWrapper

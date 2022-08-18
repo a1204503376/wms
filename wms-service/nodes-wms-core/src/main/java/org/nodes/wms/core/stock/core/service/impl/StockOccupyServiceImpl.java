@@ -62,7 +62,7 @@ public class StockOccupyServiceImpl<M extends StockOccupyMapper, T extends Stock
 //			stockOccupyQuery.setPickPlanId(pickPlanId);
 		}
 		if (ObjectUtil.isNotEmpty(wcrId)) {
-			stockOccupyQuery.setWcrId(wcrId);
+//			stockOccupyQuery.setWcrId(wcrId);
 		}
 		return super.list(Condition.getQueryWrapper(stockOccupyQuery));
 	}

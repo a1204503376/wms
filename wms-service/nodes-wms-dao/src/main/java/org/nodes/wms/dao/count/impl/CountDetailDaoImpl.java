@@ -32,11 +32,12 @@ public class CountDetailDaoImpl
 	}
 
 	@Override
-	public List<CountDetail> selectByCountBillId(Long countBillId) {
+	public List<CountDetail> selectByCountBillId(Long countBillId,CountDetailStateEnum countDetailStateEnum) {
 		AssertUtil.notNull(countBillId, "盘点单ID为空");
 		return super.lambdaQuery()
 			.eq(CountDetail::getCountBillId, countBillId)
-			.eq(CountDetail::getCountDetailState, CountDetailStateEnum.NOT_COUNTED)
+			.eq(CountDetail::getCountDetailState, countDetailStateEnum)
+			.groupBy(CountDetail::getLocCode)
 			.select(
 				CountDetail::getCountDetailId,
 				CountDetail::getCountDetailState,
@@ -64,17 +65,19 @@ public class CountDetailDaoImpl
 		return super.lambdaQuery()
 			.eq(CountDetail::getCountBillId, countBillId)
 			.eq(CountDetail::getCountDetailState, CountDetailStateEnum.NOT_COUNTED)
-			.count()>0;
+			.count() > 0;
 	}
 
 
 	@Override
-	public CountDetail selectCountDetailByCode(String locCode, String boxCode) {
+	public CountDetail selectCountDetailByCode(String locCode, String boxCode, String skuCode) {
 		AssertUtil.notNull(locCode, "根据库位编码和箱码获取盘点单明细时，库位编码为空");
 		AssertUtil.notNull(boxCode, "根据库位编码和箱码获取盘点单明细时，箱码为空");
 		return super.lambdaQuery()
 			.eq(CountDetail::getLocCode, locCode)
 			.eq(CountDetail::getBoxCode, boxCode)
+			.eq(CountDetail::getSkuCode, skuCode)
+			.last("limit 1")
 			.one();
 	}
 

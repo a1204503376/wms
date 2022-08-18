@@ -116,17 +116,17 @@ public class StockOccupy extends TenantEntity {
 //	@ApiModelProperty(value = "拣货计划ID(占用类型=10（拣货分配占用）or 30（出库预约占用）时必须)")
 //	@JsonSerialize(using = ToStringSerializer.class)
 //	private Long pickPlanId;
-	/**
-	 * 盘点单报告ID(占用类型=20（盘点占用）时必须)
-	 */
-	@ApiModelProperty(value = "盘点单报告ID(占用类型=20（盘点占用）时必须)")
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long wcrId;
-
-	/**
-	 * 序列号
-	 */
-	@ApiModelProperty("序列号")
-	private String serialNumber;
+//	/**
+//	 * 盘点单报告ID(占用类型=20（盘点占用）时必须)
+//	 */
+//	@ApiModelProperty(value = "盘点单报告ID(占用类型=20（盘点占用）时必须)")
+//	@JsonSerialize(using = ToStringSerializer.class)
+//	private Long wcrId;
+//
+//	/**
+//	 * 序列号
+//	 */
+//	@ApiModelProperty("序列号")
+//	private String serialNumber;
 
 }

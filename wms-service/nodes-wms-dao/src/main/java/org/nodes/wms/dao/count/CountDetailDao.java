@@ -22,7 +22,7 @@ public interface CountDetailDao extends BaseService<CountDetail> {
 	/**
 	 * 根据盘点单ID查询明细集合
 	 */
-	List<CountDetail> selectByCountBillId(Long countBillId);
+	List<CountDetail> selectByCountBillId(Long countBillId,CountDetailStateEnum countDetailStateEnum);
 
 	/**
 	 * 根据盘点单明细ID修改盘点单状态
@@ -38,9 +38,10 @@ public interface CountDetailDao extends BaseService<CountDetail> {
 	 *
 	 * @param locCode 库位编码
 	 * @param boxCode 箱码
+	 * @param skuCode 物品编码
 	 * @return 盘点单明细
 	 */
-	CountDetail selectCountDetailByCode(String locCode, String boxCode);
+	CountDetail selectCountDetailByCode(String locCode, String boxCode, String skuCode);
 
 	/**
 	 * 根据规格型号查询能创建盘点单的明细
