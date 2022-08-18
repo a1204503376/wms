@@ -74,6 +74,7 @@ public class WmsTaskDaoImpl
 			.eq(WmsTask::getTaskTypeCd, WmsTaskTypeEnum.PICKING)
 			.eq(WmsTask::getTaskProcType, WmsTaskProcTypeEnum.BY_BOX)
 			.in(WmsTask::getTaskState, WmsTaskStateEnum.NOT_ISSUED, WmsTaskStateEnum.ISSUED, WmsTaskStateEnum.START_EXECUTION, WmsTaskStateEnum.ABNORMAL)
+			.last("pick_plan_qty <> pick_real_qty")
 			.list();
 		if (wmsTaskList.size() > 1) {
 			throw new ServiceException("根据箱码获取任务失败，查询出多个任务，请检查任务后重试");
