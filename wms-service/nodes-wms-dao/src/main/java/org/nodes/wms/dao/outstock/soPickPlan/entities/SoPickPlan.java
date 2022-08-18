@@ -169,6 +169,10 @@ public class SoPickPlan extends BaseSkuLotEntity {
 	@Version
 	private Integer version;
 
+	/**
+	 * 获取剩余可拣量
+	 * @return
+	 */
 	public BigDecimal getSurplusQty(){
 		return pickPlanQty.subtract(pickRealQty);
 	}

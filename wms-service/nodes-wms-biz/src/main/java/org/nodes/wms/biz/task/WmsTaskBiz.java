@@ -78,4 +78,12 @@ public interface WmsTaskBiz {
 	 * @param wmsTask
 	 */
 	void log(WmsTask wmsTask);
+
+	/**
+	 * 根据箱码查询可用的任务
+	 *
+	 * @param boxCode 箱码
+	 * @return 任务
+	 */
+	WmsTask findEnableTaskByBoxCode(String boxCode);
 }
