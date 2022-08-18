@@ -22,7 +22,7 @@ public interface CountDetailDao extends BaseService<CountDetail> {
 	/**
 	 * 根据盘点单ID查询明细集合
 	 */
-	List<CountDetail> selectByCountBillId(Long countBillId);
+	List<CountDetail> selectByCountBillId(Long countBillId,CountDetailStateEnum countDetailStateEnum);
 
 	/**
 	 * 根据盘点单明细ID修改盘点单状态

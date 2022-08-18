@@ -61,4 +61,10 @@ public interface StockCountBiz {
 	 */
 	List<PdaStockCountDetailBySkuSpecResponse> findStockCountDetailBySkuSpec(PdaStockCountDetailBySkuSpecRequest request);
 
+	/**
+	 * 生成差异报告
+	 *
+	 * @param countBillNo countBillNo
+	 */
+	void generateDifference(String countBillNo);
 }

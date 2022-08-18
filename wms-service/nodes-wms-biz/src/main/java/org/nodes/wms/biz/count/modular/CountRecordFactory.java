@@ -60,7 +60,8 @@ public class CountRecordFactory {
 		CountRecord countRecord = BeanUtil.copy(stock, CountRecord.class);
 		countRecord.setCountBillId(countDetail.getCountBillId());
 		countRecord.setCountBillNo(countDetail.getCountBillNo());
-		countRecord.setBoxCode(stock.getBoxCode());
+		countRecord.setBoxCode(autoLocationBoxQty.getLocCode());
+		countRecord.setBoxCode(autoLocationBoxQty.getBoxCode());
 		countRecord.setSkuCode(stock.getSkuCode());
 		countRecord.setSkuName(stock.getSkuName());
 		countRecord.setWsuName(stock.getWsuCode());

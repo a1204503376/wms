@@ -7,6 +7,8 @@ import org.nodes.wms.dao.count.mapper.CountRecordMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 盘点单记录
  */
@@ -22,5 +24,13 @@ public class CountRecordDaoImpl
 		if (!super.save(countRecord)) {
 			AssertUtil.notNull(countRecord, "新增盘点单记录失败，保存数据时失败");
 		}
+	}
+
+	@Override
+	public List<CountRecord> getCountRecordListByCountBillId(Long countBillId, Long locId) {
+		return super.lambdaQuery()
+			.eq(CountRecord::getCountBillId, countBillId)
+			.eq(CountRecord::getLocId, locId)
+			.list();
 	}
 }

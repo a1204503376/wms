@@ -32,11 +32,11 @@ public class CountDetailDaoImpl
 	}
 
 	@Override
-	public List<CountDetail> selectByCountBillId(Long countBillId) {
+	public List<CountDetail> selectByCountBillId(Long countBillId,CountDetailStateEnum countDetailStateEnum) {
 		AssertUtil.notNull(countBillId, "盘点单ID为空");
 		return super.lambdaQuery()
 			.eq(CountDetail::getCountBillId, countBillId)
-			.eq(CountDetail::getCountDetailState, CountDetailStateEnum.NOT_COUNTED)
+			.eq(CountDetail::getCountDetailState, countDetailStateEnum)
 			.groupBy(CountDetail::getLocCode)
 			.select(
 				CountDetail::getCountDetailId,
