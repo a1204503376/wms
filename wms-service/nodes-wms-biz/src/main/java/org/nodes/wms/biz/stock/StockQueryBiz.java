@@ -78,7 +78,7 @@ public interface StockQueryBiz {
 	 * @return Stock集合
 	 */
 	List<Stock> findEnableStockByZoneType(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-			List<String> zoneTypeList, SkuLotBaseEntity skuLot);
+										  List<String> zoneTypeList, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 查找可用库存,排除出库暂存区
@@ -99,7 +99,7 @@ public interface StockQueryBiz {
 	 * @return Stock集合
 	 */
 	List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-			List<Long> zoneIdList, SkuLotBaseEntity skuLot);
+									  List<Long> zoneIdList, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 根据库位id查询可用库存,排除出库暂存区
@@ -112,7 +112,7 @@ public interface StockQueryBiz {
 	 * @return Stock集合
 	 */
 	List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-			List<Long> locationIdList, SkuLotBaseEntity skuLot);
+										  List<Long> locationIdList, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 根据箱码查询库存,排除出库暂存区
@@ -269,5 +269,5 @@ public interface StockQueryBiz {
 	 * @param locCode 库位
 	 * @return PdaBoxQtyResponse
 	 */
-	List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode, String boxCode);
+	List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode, String boxCode, String skuCode);
 }

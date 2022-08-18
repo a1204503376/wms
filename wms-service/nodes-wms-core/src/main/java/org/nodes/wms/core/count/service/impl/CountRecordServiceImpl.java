@@ -802,7 +802,8 @@ public class CountRecordServiceImpl<M extends CountRecordMapper1, T extends Coun
 			if (Func.isNotEmpty(stockOccupyList)) {
 				StockOccupy stockOccupy = stockOccupyList.get(0);
 				// 根据盘点报告ID获取盘点单
-				CountReport countReport = countReportService.getById(stockOccupy.getWcrId());
+				CountReport countReport = null;
+//					countReportService.getById(stockOccupy.getWcrId());
 				if (Func.isNotEmpty(countReport)) {
 					throw new ServiceException(
 						"当前盘点库存信息已被盘点单：" + countReport.getCountBillNo() + "占用，请先处理后再执行盘点！"

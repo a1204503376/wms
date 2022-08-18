@@ -685,7 +685,8 @@ public class StockServiceImpl<M extends StockMapper, T extends Stock>
 		} else if (stockSubtract.getEventType().equals(EventTypeEnum.Count)) {
 			stockOccupyListAll = stockOccupyService.list(Condition.getQueryWrapper(new StockOccupy())
 				.lambda()
-				.eq(StockOccupy::getWcrId, stockSubtract.getDataId()));
+//				.eq(StockOccupy::getWcrId, stockSubtract.getDataId())
+			);
 		}
 		List<StockDetail> stockDetailListAll = new ArrayList<>();
 		if (Func.isNotEmpty(stockList)) {

@@ -1111,7 +1111,7 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper1, T extends Coun
 						} else {
 //							stockOccupyDTO.setOccupyQty(report.getWmsQty().subtract(report.getCountQty()));
 						}
-						stockOccupyDTO.setWcrId(report.getWcrepId());
+//						stockOccupyDTO.setWcrId(report.getWcrepId());
 						stockOccupyDTO.setCreateUser(report.getCreateUser());
 						stockOccupyDTO.setUpdateUser(report.getCreateUser());
 //						stockOccupyDTO.setSoBillNo(report.getCountBillNo());
@@ -1350,7 +1350,7 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper1, T extends Coun
 				} else {
 //					stockOccupyDTO.setOccupyQty(report.getWmsQty().subtract(report.getCountQty()));
 				}
-				stockOccupyDTO.setWcrId(report.getWcrepId());
+//				stockOccupyDTO.setWcrId(report.getWcrepId());
 				stockOccupyDTO.setCreateUser(report.getCreateUser());
 				stockOccupyDTO.setUpdateUser(report.getCreateUser());
 //				stockOccupyDTO.setSoBillNo(report.getCountBillNo());

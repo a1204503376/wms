@@ -37,6 +37,7 @@ public class CountDetailDaoImpl
 		return super.lambdaQuery()
 			.eq(CountDetail::getCountBillId, countBillId)
 			.eq(CountDetail::getCountDetailState, CountDetailStateEnum.NOT_COUNTED)
+			.groupBy(CountDetail::getLocCode)
 			.select(
 				CountDetail::getCountDetailId,
 				CountDetail::getCountDetailState,
@@ -64,7 +65,7 @@ public class CountDetailDaoImpl
 		return super.lambdaQuery()
 			.eq(CountDetail::getCountBillId, countBillId)
 			.eq(CountDetail::getCountDetailState, CountDetailStateEnum.NOT_COUNTED)
-			.count()>0;
+			.count() > 0;
 	}
 
 
@@ -75,6 +76,7 @@ public class CountDetailDaoImpl
 		return super.lambdaQuery()
 			.eq(CountDetail::getLocCode, locCode)
 			.eq(CountDetail::getBoxCode, boxCode)
+			.last("limit 1")
 			.one();
 	}
 

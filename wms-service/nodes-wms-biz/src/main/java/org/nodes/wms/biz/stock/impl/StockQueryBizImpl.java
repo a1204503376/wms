@@ -308,8 +308,8 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	}
 
 	@Override
-	public List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode, String boxCode) {
-		return stockDao.getStockCountByLocCode(locCode, boxCode);
+	public List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode, String boxCode, String skuCode) {
+		return stockDao.getStockCountByLocCode(locCode, boxCode, skuCode);
 	}
 
 	@Override
