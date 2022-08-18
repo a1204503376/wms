@@ -31,7 +31,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -168,13 +167,11 @@ public class StockCountBizImpl implements StockCountBiz {
 			countRecord.setLocId(location.getLocId());
 			SkuUm um = skuBiz.findSkuUmByUmCode(countRecord.getWsuName());
 			countRecord.setWsuName(um.getWsuName());
-
-			if (beChangedList.get(i).getIsValid()) {
-				countRecord.setCountQty(beChangedList.get(i).getTotalQty());
-			} else {
-				countRecord.setCountQty(BigDecimal.ZERO);
-			}
 			countRecordDao.insert(countRecord);
+			countDetailDao.updateCountDetailStateByCountDetailId(countDetail.getCountDetailId(), CountDetailStateEnum.COUNTED);
+			if (!countDetailDao.getCountDetailStateByCountBillId(countDetail.getCountBillId())) {
+				countHeaderDao.updateCountHeaderStateByCountBillId(countDetail.getCountBillId(), StockCountStateEnum.COUNT_COMPLETED);
+			}
 
 		}
 	}
