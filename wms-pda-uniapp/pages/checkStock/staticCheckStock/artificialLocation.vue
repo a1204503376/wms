@@ -129,7 +129,7 @@
 		methods: {
 			submit() {
 				if (this.isValid()) {
-						//调用生成从差异报告
+						//调用生成从盘点记录
 						let params = {}
 						params.countReportList = this.defaultList
 						staticCheckStock.generateCountReport(params).then(data => {

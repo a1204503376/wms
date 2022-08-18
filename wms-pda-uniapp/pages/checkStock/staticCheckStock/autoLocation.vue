@@ -107,7 +107,7 @@
 		},
 		methods: {
 			submit() {
-				//采集当前差异的数据然后生成差异报告
+				//采集当前差异的数据然后生成盘点记录
 				let params = {};
 				params.beChangedList = this.receiveList.pdaBoxQtyResponseList;
 				params.defaultList = this.defaultList.pdaBoxQtyResponseList;

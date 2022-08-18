@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 生成盘点差异报告请求对象/人工区
+ * 生成盘点记录请求对象/人工区
  *
  * @author nodes
  */
