@@ -316,8 +316,7 @@ public class SoBillBizImpl implements SoBillBiz {
 
 	@Override
 	public List<SoDetail> getEnableSoDetailBySoHeaderId(Long soBillId) {
-		// TODO Auto-generated method stub
-		return null;
+		return soDetailDao.getSoDetailBySoHeaderId(soBillId);
 	}
 
 	@Override
@@ -329,6 +328,6 @@ public class SoBillBizImpl implements SoBillBiz {
 
 	@Override
 	public void updateState(Long soBillId, SoBillStateEnum soBillStateEnum) {
-		// TODO
+		soHeaderDao.updateStateBySoBillId(soBillId, soBillStateEnum);
 	}
 }

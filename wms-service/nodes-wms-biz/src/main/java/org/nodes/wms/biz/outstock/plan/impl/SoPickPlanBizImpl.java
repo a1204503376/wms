@@ -9,7 +9,6 @@ import org.nodes.wms.dao.outstock.SoPickPlanDao;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
-import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
@@ -31,16 +30,14 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	private final StockBiz stockBiz;
 
 	@Override
-	public boolean hasEnablePickPlan(Long soHeaderId) {
-		// TODO
-		return false;
+	public boolean hasEnablePickPlan(Long soBillId) {
+		return soPickPlanDao.hasEnablePickPlan(soBillId);
 	}
 
-    @Override
-    public List<SoPickPlan> findBySoHeaderId(Long soHeaderId) {
-		// TODO
-        return null;
-    }
+	@Override
+	public List<SoPickPlan> findBySoHeaderId(Long soBillId) {
+		return soPickPlanDao.findBySoHeaderId(soBillId);
+	}
 
 	@Override
 	public String runByPickStrategy(SoHeader soHeader, List<SoDetail> soDetials, List<SoPickPlan> existPickPlans) {
@@ -55,7 +52,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 			}
 			List<SoPickPlan> newPickPlan = tianyiPickStrategy.run(soHeader, detail, soDetials, pickPlanOfSoDetail);
 			result = createResultByRunPickStrategy(newPickPlan, detail, result);
-			if (Func.isNotEmpty(newPickPlan)){
+			if (Func.isNotEmpty(newPickPlan)) {
 				stockBiz.occupyStock(newPickPlan);
 				soPickPlanDao.saveBatch(newPickPlan);
 				existPickPlans.addAll(newPickPlan);
@@ -66,7 +63,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	}
 
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlan, SoDetail detail, String result) {
-		if (Func.isEmpty(newPickPlan)){
+		if (Func.isEmpty(newPickPlan)) {
 			return String.format("%s,%s行库存不足未分配", result, detail.getSoLineNo());
 		}
 
@@ -75,7 +72,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 			.map(SoPickPlan::getSurplusQty)
 			.reduce(BigDecimal::add)
 			.orElse(BigDecimal.ZERO);
-		if (BigDecimalUtil.ne(occupy, detail.getSurplusQty())){
+		if (BigDecimalUtil.ne(occupy, detail.getSurplusQty())) {
 			return String.format("%s,%s行库存不足,部分分配", result, detail.getSoLineNo());
 		}
 
