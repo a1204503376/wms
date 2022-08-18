@@ -74,7 +74,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		SoDetail soDetail = soBillBiz.getSoDetailById(request.getPickByPcStockDtoList().get(0).getSoDetailId());
 		// 1 业务判断：
 		// 1.1 如果单据有拣货计划则不能使用PC拣货
-		if (soPickPlanBiz.hasPickPlan(request.getSoBillId())) {
+		if (soPickPlanBiz.hasEnablePickPlan(request.getSoBillId())) {
 			throw new ServiceException("拣货失败,收货单已存在拣货计划");
 		}
 		// 1.2 单据和单据明细行的状态如果为终结状态，则不能进行拣货

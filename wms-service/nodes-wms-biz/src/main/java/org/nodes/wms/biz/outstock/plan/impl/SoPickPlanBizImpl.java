@@ -31,7 +31,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	private final StockBiz stockBiz;
 
 	@Override
-	public boolean hasPickPlan(Long soHeaderId) {
+	public boolean hasEnablePickPlan(Long soHeaderId) {
 		// TODO
 		return false;
 	}

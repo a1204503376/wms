@@ -328,7 +328,7 @@ public class SoBillBizImpl implements SoBillBiz {
 	}
 
 	@Override
-	public void updateState(Long soBillId, SoBillStateEnum executing) {
+	public void updateState(Long soBillId, SoBillStateEnum soBillStateEnum) {
 		// TODO
 	}
 }

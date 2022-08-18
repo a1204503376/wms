@@ -241,7 +241,7 @@ public interface SoBillBiz {
 	 * 更新发货单状态
 	 *
 	 * @param soBillId 发货单id
-	 * @param executing 状态
+	 * @param soBillStateEnum 状态
 	 */
-	void updateState(Long soBillId, SoBillStateEnum executing);
+	void updateState(Long soBillId, SoBillStateEnum soBillStateEnum);
 }

@@ -19,7 +19,7 @@ public interface SoPickPlanBiz {
 	 * @param soHeaderId 出库单id
 	 * @return true：表示出库单存在有效的分配计划
 	 */
-	boolean hasPickPlan(Long soHeaderId);
+	boolean hasEnablePickPlan(Long soHeaderId);
 
 	/**
 	 * 根据出库id查找所有有效的拣货计划
