@@ -107,4 +107,10 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 				wmsTask.getTaskId(),wmsTask.getBillNo(), wmsTask.getFromLocId()
 				, wmsTask.getToLocId(),wmsTask.getTaskTypeCd().getCode(), wmsTask.getTaskState().getCode()));
 	}
+
+	@Override
+	public WmsTask findEnableTaskByBoxCode(String boxCode) {
+		// TODO
+		return null;
+	}
 }

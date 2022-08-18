@@ -30,7 +30,7 @@ public class WmsTaskFactory {
 	 * @return 上架任务
 	 */
 	public WmsTask createPutwayTask(List<Stock> stockList) {
-		WmsTask wmsTask = createWmsTask(stockList, WmsTaskProcTypeEnum.BY_LPN);
+		WmsTask wmsTask = createWmsTask(stockList, WmsTaskProcTypeEnum.BY_LPN_AGV);
 		// 任务类型： AGV上架
 		wmsTask.setTaskTypeCd(WmsTaskTypeEnum.AGV_PUTAWAY);
 		return wmsTask;
@@ -44,7 +44,7 @@ public class WmsTaskFactory {
 	 * @return 库内移位任务
 	 */
 	public WmsTask createMoveTask(List<Stock> sourceStock, Location targetLocation) {
-		WmsTask wmsTask = createWmsTask(sourceStock, WmsTaskProcTypeEnum.BY_LOC);
+		WmsTask wmsTask = createWmsTask(sourceStock, WmsTaskProcTypeEnum.BY_LOC_AGV);
 		// 任务类型： AGV库内移位
 		wmsTask.setTaskTypeCd(WmsTaskTypeEnum.AGV_STOCK_MOVE);
 		// 目标库位
@@ -62,7 +62,7 @@ public class WmsTaskFactory {
 	 * @return 拣货任务
 	 */
 	public WmsTask createPickTask(List<Stock> sourceStock, SoHeader so, SoDetail soDetail) {
-		WmsTask wmsTask = createWmsTask(sourceStock, WmsTaskProcTypeEnum.BY_LOC);
+		WmsTask wmsTask = createWmsTask(sourceStock, WmsTaskProcTypeEnum.BY_LOC_AGV);
 		// 单据id、编码，明细id
 		wmsTask.setBillId(so.getSoBillId());
 		wmsTask.setBillNo(so.getSoBillNo());
