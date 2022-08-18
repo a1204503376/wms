@@ -377,4 +377,14 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		return stockDao.getStockByDropId(dropId);
 	}
 
+	@Override
+	public List<Stock> findEnableStockBySkuAndSkuLot(Long skuId, SkuLotBaseEntity skuLot) {
+		List<Location> pickToLocationList = locationBiz.getLocationByZoneType(DictKVConstant.ZONE_TYPE_PICK_TO);
+		List<Long> pickToLocIdList = pickToLocationList.stream()
+			.map(Location::getLocId)
+			.collect(Collectors.toList());
+		stockDao.getEnableStockBySkuLotAndExcludeLoc(skuId, pickToLocIdList, skuLot);
+		return null;
+	}
+
 }

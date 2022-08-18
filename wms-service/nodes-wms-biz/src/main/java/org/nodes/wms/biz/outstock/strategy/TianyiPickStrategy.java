@@ -3,9 +3,13 @@ package org.nodes.wms.biz.outstock.strategy;
 import java.util.List;
 
 import org.nodes.wms.biz.stock.StockQueryBiz;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
+import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
+import org.nodes.wms.dao.stock.entities.Stock;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -25,7 +29,14 @@ public class TianyiPickStrategy {
             List<SoDetail> soDetailList, List<SoPickPlan> existPickPlans) {
 
         // 根据发货单明细中的批属性查找所有可用的库存
-        //List<Stock> stockList = stockQueryBiz.findEnableStockBySkuLot(skuLot)
+        SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
+        SkuLotUtil.setAllSkuLot(soDetail, skuLot);
+        List<Stock> stockList = stockQueryBiz.findEnableStockBySkuAndSkuLot(soDetail.getSkuId(), skuLot);
+        if (Func.isEmpty(stockList)) {
+            return null;
+        }
+
+        
 
         return null;
     }

@@ -143,7 +143,7 @@ public interface StockQueryBiz {
 	 * @return Stock集合
 	 */
 	List<Stock> findEnableStockByZoneTypeAndSkuLot(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-												   List<String> zoneTypeList, SkuLotBaseEntity skuLot);
+			List<String> zoneTypeList, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 根据库区id查询可用库存,排除出库暂存区
@@ -156,7 +156,7 @@ public interface StockQueryBiz {
 	 * @return Stock集合
 	 */
 	List<Stock> findEnableStockByZoneAndSkuLot(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-											   List<Long> zoneIdList, SkuLotBaseEntity skuLot);
+			List<Long> zoneIdList, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 根据库位id查询可用库存,排除出库暂存区
@@ -169,8 +169,16 @@ public interface StockQueryBiz {
 	 * @return Stock集合
 	 */
 	List<Stock> findEnableStockByLocationAndSkuLot(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-												   List<Long> locationIdList, SkuLotBaseEntity skuLot);
+			List<Long> locationIdList, SkuLotBaseEntity skuLot);
 
+	/**
+	 * 根据物品和批次信息查找库存，排除出库暂存区
+	 * 
+	 * @param skuId  必填，物品id
+	 * @param skuLot 非必填，如果批属性不为空，则需要匹配
+	 * @return Stock集合
+	 */
+	List<Stock> findEnableStockBySkuAndSkuLot(Long skuId, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 根据序列号编码获取在库的序列号信息
@@ -195,7 +203,6 @@ public interface StockQueryBiz {
 	 * @return 序列号数量
 	 */
 	int getSerialCountByStockId(Long stockId);
-
 
 	/**
 	 * 首页的库存数据统计
