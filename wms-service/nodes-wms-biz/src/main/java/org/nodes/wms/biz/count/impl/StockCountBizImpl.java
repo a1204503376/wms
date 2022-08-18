@@ -96,7 +96,7 @@ public class StockCountBizImpl implements StockCountBiz {
 		// 统计箱内物品数量
 		List<PdaStockCountDetailResponse> responseList = BeanUtil.copy(countDetailList, PdaStockCountDetailResponse.class);
 		responseList.forEach(response -> {
-			List<PdaBoxQtyResponse> pdaBoxQtyResponseList = stockQueryBiz.getStockCountByLocCode(response.getLocCode(), response.getBoxCode());
+			List<PdaBoxQtyResponse> pdaBoxQtyResponseList = stockQueryBiz.getStockCountByLocCode(response.getLocCode(), response.getBoxCode(), null);
 			response.setPdaBoxQtyResponseList(pdaBoxQtyResponseList);
 			Location location = locationBiz.findByLocId(response.getLocId());
 			response.setIsPickLocation(locationBiz.isPickLocation(location));
@@ -157,26 +157,25 @@ public class StockCountBizImpl implements StockCountBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void generateCountReportByAutoLocation(List<AutoLocationBoxQty> beChangedList, List<AutoLocationBoxQty> defaultList) {
 		for (int i = 0; i < beChangedList.size(); i++) {
-			List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(defaultList.get(i).getBoxCode());
-			AssertUtil.notNull(stockList, "生成盘点单记录失败,根据箱码获取库存失败");
+			List<PdaBoxQtyResponse> stockCount = stockQueryBiz.getStockCountByLocCode(defaultList.get(i).getLocCode(), defaultList.get(i).getBoxCode(), defaultList.get(i).getSkuCode());
+			AssertUtil.notNull(stockCount, "生成盘点单记录失败,根据箱码获取库存失败");
 
 			CountDetail countDetail = countDetailDao.selectCountDetailByCode(defaultList.get(i).getLocCode(), defaultList.get(i).getBoxCode());
-			List<CountRecord> countRecordList = countRecordFactory.createCountReport(stockList, countDetail);
-			for (CountRecord countRecord : countRecordList) {
-				countRecord.setLpnCode(beChangedList.get(i).getBoxCode());
-				countRecord.setLocCode(beChangedList.get(i).getLocCode());
-				Location location = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), beChangedList.get(i).getLocCode());
-				countRecord.setLocId(location.getLocId());
-				SkuUm um = skuBiz.findSkuUmByUmCode(countRecord.getWsuName());
-				countRecord.setWsuName(um.getWsuName());
+			CountRecord countRecord = countRecordFactory.createCountReport(stockCount.get(0), countDetail, beChangedList.get(i));
+			countRecord.setLpnCode(beChangedList.get(i).getBoxCode());
+			countRecord.setLocCode(beChangedList.get(i).getLocCode());
+			Location location = locationBiz.findLocationByLocCode(stockCount.get(0).getWhId(), beChangedList.get(i).getLocCode());
+			countRecord.setLocId(location.getLocId());
+			SkuUm um = skuBiz.findSkuUmByUmCode(countRecord.getWsuName());
+			countRecord.setWsuName(um.getWsuName());
 
-				if (beChangedList.get(i).getIsValid()) {
-					countRecord.setCountQty(beChangedList.get(i).getTotalQty());
-				} else {
-					countRecord.setCountQty(BigDecimal.ZERO);
-				}
-				countRecordDao.insert(countRecord);
+			if (beChangedList.get(i).getIsValid()) {
+				countRecord.setCountQty(beChangedList.get(i).getTotalQty());
+			} else {
+				countRecord.setCountQty(BigDecimal.ZERO);
 			}
+			countRecordDao.insert(countRecord);
+
 		}
 	}
 

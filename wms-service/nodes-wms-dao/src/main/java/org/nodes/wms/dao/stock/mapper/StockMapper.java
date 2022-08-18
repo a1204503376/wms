@@ -85,8 +85,9 @@ public interface StockMapper extends BaseMapper<Stock> {
 	 * 库存统计
 	 *
 	 * @param locCode 库位
+	 * @param boxCode 箱码
 	 * @return PdaBoxQtyResponse
 	 */
-	List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode, String boxCode);
+	List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode, String boxCode, String skuCode);
 }
 

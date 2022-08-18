@@ -420,9 +420,9 @@ public class StockDaoImpl
 	}
 
 	@Override
-	public List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode, String boxCode) {
+	public List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode, String boxCode, String skuCode) {
 		AssertUtil.notEmpty(locCode, "根据库位查询库存数据失败，locCode不能为空");
-		return super.baseMapper.getStockCountByLocCode(locCode, boxCode);
+		return super.baseMapper.getStockCountByLocCode(locCode, boxCode, skuCode);
 	}
 
 }
