@@ -14,6 +14,7 @@ import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
 import org.nodes.wms.dao.stock.dto.output.SerialSelectResponse;
 import org.springblade.core.mp.support.Query;
 
@@ -216,7 +217,7 @@ public interface SoBillBiz {
 	/**
 	 * 修改发货单明细状态和剩余数量
 	 *
-	 * @param soDetail 收货单明细实体
+	 * @param soDetail 发货单明细实体
 	 * @param pickQty  拣货传入实收数量 撤销拣货传入撤销数量
 	 */
 	void updateSoDetailStatus(SoDetail soDetail, BigDecimal pickQty);
@@ -228,4 +229,19 @@ public interface SoBillBiz {
 	 * @return 可以出库的订单明细
 	 */
 	List<SoDetail> getEnableSoDetailBySoHeaderId(Long soBillId);
+
+	/**
+	 * 判断单据状态是否已经完成（含取消）
+	 * @param soHeader 发货单
+	 * @return true：表示发货单已经完成
+	 */
+	boolean isFinish(SoHeader soHeader);
+
+	/**
+	 * 更新发货单状态
+	 *
+	 * @param soBillId 发货单id
+	 * @param executing 状态
+	 */
+	void updateState(Long soBillId, SoBillStateEnum executing);
 }

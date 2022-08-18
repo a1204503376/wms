@@ -11,10 +11,15 @@ import java.util.List;
 
 /**
  * 拣货计划Dao接口实现类
+ *
+ * @author nodesc
  **/
 @Repository
-public class SoPickPlanDaoImpl extends BaseServiceImpl<SoPickPlanMapper, SoPickPlan> implements SoPickPlanDao {
+public class SoPickPlanDaoImpl
+	extends BaseServiceImpl<SoPickPlanMapper, SoPickPlan>
+	implements SoPickPlanDao {
 
+	@Override
 	public List<SoPickPlanForDistributionResponse> getBySoBillIdAndSoDetailId(Long soBillId, Long soDetailId) {
 		return super.baseMapper.selectSoPickPlanBySoBillIdAndSoDetailId(soBillId, soDetailId);
 	}

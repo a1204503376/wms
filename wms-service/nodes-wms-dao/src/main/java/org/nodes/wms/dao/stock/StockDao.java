@@ -316,4 +316,11 @@ public interface StockDao {
 	 * @param dropId 落放id
 	 */
 	void updateStockByDropId(List<Stock> stocks, StockStatusEnum status, String dropId);
+
+	/**
+	 * 更新库存占用量
+	 *
+	 * @param stock stockId不能为空，其中occupyQty需要是更新之后的量
+	 */
+    void upateOccupyQty(Stock stock);
 }

@@ -47,6 +47,8 @@ import java.util.*;
 
 /**
  * 发货单业务接口实现类
+ *
+ * @author nodesc
  **/
 @Service
 @RequiredArgsConstructor
@@ -246,7 +248,6 @@ public class SoBillBizImpl implements SoBillBiz {
 		if (!soHeader.getSoBillState().equals(soBillStateEnum)) {
 			soHeaderDao.saveOrUpdateSoHeader(soHeader);
 		}
-
 	}
 
 	@Override
@@ -317,5 +318,17 @@ public class SoBillBizImpl implements SoBillBiz {
 	public List<SoDetail> getEnableSoDetailBySoHeaderId(Long soBillId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean isFinish(SoHeader soHeader) {
+		return SoBillStateEnum.COMPLETED.equals(soHeader.getSoBillState())
+			|| SoBillStateEnum.ALL_OUT_STOCK.equals(soHeader.getSoBillState())
+			|| SoBillStateEnum.CANCELED.equals(soHeader.getSoBillState());
+	}
+
+	@Override
+	public void updateState(Long soBillId, SoBillStateEnum executing) {
+		// TODO
 	}
 }

@@ -410,7 +410,21 @@ public class StockDaoImpl
 		}
 	}
 
-	@Override
+    @Override
+    public void upateOccupyQty(Stock stock) {
+		AssertUtil.notNull(stock, "更新占用失败,stock参数为空");
+		Stock newStock = new Stock();
+		newStock.setStockId(stock.getStockId());
+		newStock.setOccupyQty(stock.getOccupyQty());
+
+		UpdateWrapper<Stock> updateWrapper = Wrappers.update();
+		updateWrapper.lambda().eq(Stock::getStockId, stock.getStockId());
+		if (!super.update(stock, updateWrapper)) {
+			throw new ServiceException("更新占用失败,请再次重试");
+		}
+    }
+
+    @Override
 	public List<Stock> getStockByDropId(Long dropId) {
 		AssertUtil.notNull(dropId, "根据任务id查询库存失败,taskId不能为空");
 

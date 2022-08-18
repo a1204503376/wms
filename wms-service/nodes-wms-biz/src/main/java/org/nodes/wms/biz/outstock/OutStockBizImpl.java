@@ -11,7 +11,6 @@ import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.logSoPick.modular.LogSoPickFactory;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.outstock.so.SoBillBiz;
-import org.nodes.wms.biz.outstock.strategy.TianyiPickStrategy;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
@@ -67,7 +66,6 @@ public class OutStockBizImpl implements OutStockBiz {
 	private final StockQueryBiz stockQueryBiz;
 	private final LocationBiz locationBiz;
 	private final LogBiz logBiz;
-	private final TianyiPickStrategy tianyiPickStrategy;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -163,6 +161,7 @@ public class OutStockBizImpl implements OutStockBiz {
 						&& Func.equals(stockParam.getLocCode(), request.getLocCode()))
 				.findFirst().orElse(null);
 		AssertUtil.notNull(stockList, "PDA拣货失败，根据您输入的条件找不到对应的库存");
+		AssertUtil.notNull(stock, "PDA拣货失败，根据您输入的条件找不到对应的库存");
 		LogSoPick logSoPick = logSoPickFactory.createLogSoPick(request, soHeader, soDetail, stock, sourceLocation);
 		logSoPickDao.saveLogSoPick(logSoPick);
 
@@ -229,23 +228,32 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public boolean autoDistribute(Long soBillId) {
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public String autoDistribute(Long soBillId) {
+		// 参数校验：已经完成的订单不能分配；有未完成的拣货计划的不能再次分配
+		SoHeader soHeader = soBillBiz.getSoHeaderById(soBillId);
+		if (soBillBiz.isFinish(soHeader)){
+			throw ExceptionUtil.mpe("已经完成的单据不能再次分配");
+		}
 		List<SoPickPlan> pickPlans = soPickPlanBiz.findBySoHeaderId(soBillId);
 		if (Func.isNotEmpty(pickPlans)) {
 			throw ExceptionUtil.mpe("整单分配失败,当前单据中存在未完成的拣货计划,请撤销或完成之后再分配");
 		}
-
-		// 执行策略分配
-		SoHeader soHeader = soBillBiz.getSoHeaderById(soBillId);
-		List<SoDetail> soDetials = soBillBiz.getEnableSoDetailBySoHeaderId(soBillId);
-		tianyiPickStrategy.run(soHeader, soDetials, pickPlans);
-		// 记录业务日志
+		// 自动生成拣货计划,即使有的明细因为库存不足导致无法全部分配，也可以部分分配成功
+		List<SoDetail> soDetails = soBillBiz.getEnableSoDetailBySoHeaderId(soBillId);
+		String result = soPickPlanBiz.runByPickStrategy(soHeader, soDetails, pickPlans);
+		// 更新发货单状态
+		if (SoBillStateEnum.CREATE.equals(soHeader.getSoBillState())){
+			soBillBiz.updateState(soBillId, SoBillStateEnum.EXECUTING);
+		}
+		// 记录日志
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, soBillId, "执行自动分配");
-		return false;
+
+		return result;
 	}
 
 	@Override
-	public boolean cancleDistribute(Long soBillId) {
+	public boolean cancelDistribute(Long soBillId) {
 		return false;
 	}
 
@@ -266,7 +274,7 @@ public class OutStockBizImpl implements OutStockBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public void cancelOutstock(List<Long> logSoPickIdList) {
+	public void cancelOutStock(List<Long> logSoPickIdList) {
 		// 根据拣货记录id查找所有的拣货记录
 		List<LogSoPick> logSoPickList = logSoPickDao.getByIds(logSoPickIdList);
 		logSoPickList.forEach(logSoPick -> {

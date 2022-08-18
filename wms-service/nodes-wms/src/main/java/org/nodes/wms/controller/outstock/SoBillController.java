@@ -223,7 +223,7 @@ public class SoBillController {
 	@ApiLog("发货单管理-取消分配")
 	@PostMapping("/cancelAll")
 	public R<String> cancelAll(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		outStockBiz.cancleDistribute(soBillIdRequest.getSoBillId());
+		outStockBiz.cancelDistribute(soBillIdRequest.getSoBillId());
 		return R.data("取消分配成功");
 	}
 

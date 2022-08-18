@@ -13,7 +13,7 @@ import lombok.Data;
 
 /**
  * 拣货计划实体类
- * 
+ *
  * @author nodesc
  **/
 @Data
@@ -41,7 +41,7 @@ public class SoPickPlan extends BaseSkuLotEntity {
 	/**
 	 * 出库单id
 	 */
-	private String soBillId;
+	private Long soBillId;
 
 	/**
 	 * 出库单编码(多个用逗号分隔)
@@ -168,4 +168,8 @@ public class SoPickPlan extends BaseSkuLotEntity {
 	 */
 	@Version
 	private Integer version;
+
+	public BigDecimal getSurplusQty(){
+		return pickPlanQty.subtract(pickRealQty);
+	}
 }
