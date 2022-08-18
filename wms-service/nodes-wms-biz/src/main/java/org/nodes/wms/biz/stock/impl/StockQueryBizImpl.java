@@ -80,12 +80,12 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	}
 
 	@Override
-	public List<Stock> findEnableStockByBoxCode(List<String> boxCodes) {
+	public List<Stock> findEnableStockByBoxCode(List<String> boxCodeList) {
 		List<Long> pickToLocList = locationBiz.getLocationByZoneType(DictKVConstant.ZONE_TYPE_PICK_TO)
 			.stream()
 			.map(Location::getLocId)
 			.collect(Collectors.toList());
-		return stockDao.getStockByBoxCodeExcludeLoc(boxCodes, pickToLocList);
+		return stockDao.getStockByBoxCodeExcludeLoc(boxCodeList, pickToLocList);
 	}
 
 	@Override
@@ -226,8 +226,8 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	}
 
 	@Override
-	public List<Stock> findEnableStockByZoneType(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-												 List<String> zoneTypeList, SkuLotBaseEntity skuLot) {
+	public List<Stock> findEnableStockByZoneTypeAndSkuLot(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
+														  List<String> zoneTypeList, SkuLotBaseEntity skuLot) {
 		List<Long> zoneIdList = null;
 		if (Func.isNotEmpty(zoneTypeList)) {
 			List<Zone> zoneList = zoneBiz.findByZoneType(zoneTypeList);
@@ -236,12 +236,12 @@ public class StockQueryBizImpl implements StockQueryBiz {
 				.collect(Collectors.toList());
 		}
 
-		return findEnableStockByZone(whId, skuId, stockStatusEnum, zoneIdList, skuLot);
+		return findEnableStockByZoneAndSkuLot(whId, skuId, stockStatusEnum, zoneIdList, skuLot);
 	}
 
 	@Override
-	public List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-											 List<Long> zoneIdList, SkuLotBaseEntity skuLot) {
+	public List<Stock> findEnableStockByZoneAndSkuLot(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
+													  List<Long> zoneIdList, SkuLotBaseEntity skuLot) {
 		Long pickToZoneId = locationBiz.getLocationByZoneType(whId, DictKVConstant.ZONE_TYPE_PICK_TO).get(0)
 			.getZoneId();
 		return stockDao.findEnableStockByZone(whId, skuId, stockStatusEnum,
@@ -249,8 +249,8 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	}
 
 	@Override
-	public List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-												 List<Long> locationIdList, SkuLotBaseEntity skuLot) {
+	public List<Stock> findEnableStockByLocationAndSkuLot(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
+														  List<Long> locationIdList, SkuLotBaseEntity skuLot) {
 		Long pickToZoneId = locationBiz.getLocationByZoneType(whId, DictKVConstant.ZONE_TYPE_PICK_TO).get(0)
 			.getZoneId();
 		return stockDao.findEnableStockByLocation(whId, skuId, stockStatusEnum,
@@ -282,23 +282,8 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	}
 
 	@Override
-	public List<Stock> findStockMoveByBoxCode(List<String> boxCodeList) {
-		List<Stock> stockList = new ArrayList<>();
-		boxCodeList.forEach(item -> {
-			List<Stock> stocks = stockDao.getStockByBoxCode(item, null);
-			stockList.addAll(stocks);
-		});
-		return stockList;
-	}
-
-	@Override
-	public StockMoveResponse findStockMoveBySkuId(Long stockId) {
-		return Func.copy(stockDao.getStockById(stockId), StockMoveResponse.class);
-	}
-
-	@Override
-	public List<Stock> findStockByIds(List<Long> stockIds) {
-		return stockDao.getStockById(stockIds);
+	public List<Stock> findStockById(List<Long> stockIdList) {
+		return stockDao.getStockById(stockIdList);
 	}
 
 	@Override
@@ -379,7 +364,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	}
 
 	@Override
-	public List<Stock> findEnableStockBySkuLot(SkuLotBaseEntity skuLot) {
+	public List<Stock> findEnableStockByZoneTypeAndSkuLot(SkuLotBaseEntity skuLot) {
 		List<Location> allPickToLocation = locationBiz.getLocationByZoneType(DictKVConstant.ZONE_TYPE_PICK_TO);
 		List<Long> pickToLocIdList = allPickToLocation.stream()
 			.map(Location::getLocId)

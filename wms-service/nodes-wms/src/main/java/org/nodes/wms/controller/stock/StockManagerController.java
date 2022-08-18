@@ -24,6 +24,7 @@ import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.BeanUtil;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -91,7 +92,9 @@ public class StockManagerController {
 	@PostMapping("/getStockDataByStockId")
 	public R<StockMoveResponse> getStockDataByStockId(
 		@Valid @RequestBody StockIdRequest stockIdRequest) {
-		return R.data(stockQueryBiz.findStockMoveBySkuId(stockIdRequest.getStockId()));
+		Stock stock = stockQueryBiz.findStockById(stockIdRequest.getStockId());
+		StockMoveResponse response = Func.copy(stock, StockMoveResponse.class);
+		return R.data(response);
 	}
 
 	/**
@@ -100,7 +103,7 @@ public class StockManagerController {
 	@PostMapping("/getStockDataByBoxCode")
 	public R<List<StockMoveResponse>> getStockDataToMove(
 		@Valid @RequestBody StockMoveByBoxCodeRequest stockMoveByBoxCodeRequest) {
-		List<Stock> stockList = stockQueryBiz.findStockMoveByBoxCode(stockMoveByBoxCodeRequest.getBoxCodeList());
+		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(stockMoveByBoxCodeRequest.getBoxCodeList());
 		List<StockMoveResponse> responseList = BeanUtil.copy(stockList, StockMoveResponse.class);
 		return R.data(responseList);
 	}

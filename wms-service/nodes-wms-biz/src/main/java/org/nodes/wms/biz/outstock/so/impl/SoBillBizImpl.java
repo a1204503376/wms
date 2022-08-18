@@ -194,7 +194,7 @@ public class SoBillBizImpl implements SoBillBiz {
 		SkuLotUtil.setAllSkuLot(pickByPcSoDetailResponse, skuLot);
 		skuLot.setSkuLot1(pickByPcSoDetailResponse.getSkuLot1());
 		//根据查询条件获取库存集合
-		List<Stock> stockList = stockQueryBiz.findEnableStockByZone(soDetailAndStockRequest.getWhId(), pickByPcSoDetailResponse.getSkuId(),
+		List<Stock> stockList = stockQueryBiz.findEnableStockByZoneAndSkuLot(soDetailAndStockRequest.getWhId(), pickByPcSoDetailResponse.getSkuId(),
 			StockStatusEnum.NORMAL, null, skuLot);
 		for (Stock stock : stockList) {
 			BigDecimal stockEnableQty = stock.getStockEnable();
