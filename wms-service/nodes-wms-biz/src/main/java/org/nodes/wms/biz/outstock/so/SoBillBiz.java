@@ -3,23 +3,28 @@ package org.nodes.wms.biz.outstock.so;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
+import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.stock.dto.output.SerialSelectResponse;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
  * 发货单业务接口
  **/
-public interface SoHeaderBiz {
+public interface SoBillBiz {
 
 	/**
 	 * 分页查询
@@ -142,5 +147,85 @@ public interface SoHeaderBiz {
 	 */
 	void updateSoBillState(SoHeader soHeader);
 
+	/**
+	 * 查看明细：根据发货单id分页查询发货单明细信息
+	 *
+	 * @param soBillIdRequest: 发货单id请求对象
+	 * @param query:           分页参数
+	 * @return Page<SoDetailForDetailResponse> 发货单明细分页信息
+	 */
+	Page<SoDetailForDetailResponse> pageSoDetailForDetailBySoBillId(Query query, SoBillIdRequest soBillIdRequest);
 
+	/**
+	 * 分页查询未发货记录
+	 *
+	 * @param query:              分页参数
+	 * @param notSoPickPageQuery: 分页查询条件
+	 * @return Page<NotSoPickPageResponse> 未发货记录分页对象
+	 */
+	Page<NotSoPickPageResponse> pageNotSoPick(Query query, NotSoPickPageQuery notSoPickPageQuery);
+
+	/**
+	 * 导出未发货记录
+	 *
+	 * @param notSoPickPageQuery: 导出时条件
+	 * @param response:           响应对象
+	 */
+	void exportNotSoPick(NotSoPickPageQuery notSoPickPageQuery, HttpServletResponse response);
+
+	/**
+	 * 获取出库明细行号和物料编码下拉列表集合
+	 *
+	 * @param soBillId 发货单id
+	 * @return 行号下拉列表数据
+	 */
+	List<LineNoAndSkuSelectResponse> getLineNoAndSkuSelectList(Long soBillId);
+
+	/**
+	 * 获取序列号下拉列表
+	 *
+	 * @param stockId 仓库id
+	 * @return 序列号集合
+	 */
+	List<SerialSelectResponse> getSerialSelectResponseList(Long stockId);
+
+	/**
+	 * 根据发货单ID查询出库单明细
+	 *
+	 * @param soBillId 发货单ID
+	 * @param query    分页参数
+	 * @return 分页
+	 */
+	IPage<SoDetail> getPickingBySoBillId(Long soBillId, Query query);
+
+	/**
+	 * 根据Id获取发货单明细实体
+	 *
+	 * @param soDetailId 发货单明细id
+	 * @return 发货单实体
+	 */
+	SoDetail getSoDetailById(Long soDetailId);
+
+	/**
+	 * 修改发货单明细
+	 *
+	 * @param soDetail 发货单实体
+	 */
+	void update(SoDetail soDetail);
+
+	/**
+	 * 修改发货单明细状态和剩余数量
+	 *
+	 * @param soDetail 收货单明细实体
+	 * @param pickQty  拣货传入实收数量 撤销拣货传入撤销数量
+	 */
+	void updateSoDetailStatus(SoDetail soDetail, BigDecimal pickQty);
+
+	/**
+	 * 根据出库单id获取可以出库的明细
+	 *
+	 * @param soBillId 出库单头表id
+	 * @return 可以出库的订单明细
+	 */
+	List<SoDetail> getEnableSoDetailBySoHeaderId(Long soBillId);
 }
