@@ -112,7 +112,7 @@
 				params.beChangedList = this.receiveList.pdaBoxQtyResponseList;
 				params.defaultList = this.defaultList.pdaBoxQtyResponseList;
 				staticCheckStock.generateCountReportByAutoLocation(params).then(data => {
-					console.log(data.data)
+					this.esc();
 				})
 
 			},
@@ -169,7 +169,7 @@
 			},
 			esc() {
 				uni.navigateBack({
-					delta: 1
+					delta: 2
 				});
 			},
 			getReceiveList() {

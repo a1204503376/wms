@@ -124,7 +124,7 @@ public class StockCountBizImpl implements StockCountBiz {
 
 			if (Func.isNotEmpty(generateCountReport.getStockId())) {
 				Stock stock = stockQueryBiz.findStockById(generateCountReport.getStockId());
-				CountDetail countDetail = countDetailDao.selectCountDetailByCode(generateCountReport.getLocCode(), generateCountReport.getBoxCode());
+				CountDetail countDetail = countDetailDao.selectCountDetailByCode(generateCountReport.getLocCode(), generateCountReport.getBoxCode(), generateCountReport.getSkuCode());
 				CountRecord countRecord = countRecordFactory.createCountRecord(generateCountReport, stock, countDetail);
 				SkuUm um = skuBiz.findSkuUmByUmCode(stock.getWsuCode());
 				countRecord.setWsuName(um.getWsuName());
@@ -136,7 +136,7 @@ public class StockCountBizImpl implements StockCountBiz {
 			} else {
 				List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(generateCountReport.getBoxCode());
 				for (Stock stocks : stockList) {
-					CountDetail countDetail = countDetailDao.selectCountDetailByCode(generateCountReport.getLocCode(), generateCountReport.getBoxCode());
+					CountDetail countDetail = countDetailDao.selectCountDetailByCode(generateCountReport.getLocCode(), generateCountReport.getBoxCode(), generateCountReport.getSkuCode());
 					CountRecord countRecord = countRecordFactory.createCountRecord(generateCountReport, stocks, countDetail);
 					SkuUm um = skuBiz.findSkuUmByUmCode(stocks.getWsuCode());
 					countRecord.setWsuName(um.getWsuName());
@@ -159,7 +159,7 @@ public class StockCountBizImpl implements StockCountBiz {
 			List<PdaBoxQtyResponse> stockCount = stockQueryBiz.getStockCountByLocCode(defaultList.get(i).getLocCode(), defaultList.get(i).getBoxCode(), defaultList.get(i).getSkuCode());
 			AssertUtil.notNull(stockCount, "生成盘点单记录失败,根据箱码获取库存失败");
 
-			CountDetail countDetail = countDetailDao.selectCountDetailByCode(defaultList.get(i).getLocCode(), defaultList.get(i).getBoxCode());
+			CountDetail countDetail = countDetailDao.selectCountDetailByCode(defaultList.get(i).getLocCode(), defaultList.get(i).getBoxCode(),  defaultList.get(i).getSkuCode());
 			CountRecord countRecord = countRecordFactory.createCountReport(stockCount.get(0), countDetail, beChangedList.get(i));
 			countRecord.setLpnCode(beChangedList.get(i).getBoxCode());
 			countRecord.setLocCode(beChangedList.get(i).getLocCode());

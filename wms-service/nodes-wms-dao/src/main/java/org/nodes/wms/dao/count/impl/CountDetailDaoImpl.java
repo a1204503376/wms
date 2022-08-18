@@ -70,12 +70,13 @@ public class CountDetailDaoImpl
 
 
 	@Override
-	public CountDetail selectCountDetailByCode(String locCode, String boxCode) {
+	public CountDetail selectCountDetailByCode(String locCode, String boxCode, String skuCode) {
 		AssertUtil.notNull(locCode, "根据库位编码和箱码获取盘点单明细时，库位编码为空");
 		AssertUtil.notNull(boxCode, "根据库位编码和箱码获取盘点单明细时，箱码为空");
 		return super.lambdaQuery()
 			.eq(CountDetail::getLocCode, locCode)
 			.eq(CountDetail::getBoxCode, boxCode)
+			.eq(CountDetail::getSkuCode, skuCode)
 			.last("limit 1")
 			.one();
 	}
