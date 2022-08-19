@@ -4,7 +4,7 @@
             <template v-slot:searchFrom>
                 <el-row type="flex">
                     <el-col :span="6">
-                        <el-form-item label="日志标题">
+                        <el-form-item label="日志标题" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.title"
                                 :clearable="true" class="search-input" placeholder="请输入日志标题">
@@ -12,7 +12,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="请求URI">
+                        <el-form-item label="请求URI" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.requestUri"
                                 :clearable="true" class="search-input" placeholder="请输入请求URI">
@@ -20,7 +20,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="创建日期">
+                        <el-form-item label="创建日期" label-width="90px">
                             <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
                         </el-form-item>
                     </el-col>

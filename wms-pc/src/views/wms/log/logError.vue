@@ -4,7 +4,7 @@
             <template v-slot:searchFrom>
                 <el-row type="flex">
                     <el-col :span="6">
-                        <el-form-item label="操作方式">
+                        <el-form-item label="操作方式" label-width="90px">
                             <el-input
                                 placeholder="请输入操作方式"
                                 v-model.trim="form.params.method" :clearable="true"
@@ -13,7 +13,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="请求url">
+                        <el-form-item label="请求url" label-width="90px">
                             <el-input
                                 placeholder="请输入url"
                                 v-model.trim="form.params.requestUri" :clearable="true"
@@ -22,7 +22,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="创建日期">
+                        <el-form-item label="创建日期" label-width="90px">
                             <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
                         </el-form-item>
                     </el-col>
@@ -126,7 +126,7 @@ import {ExcelExport} from 'pikaz-excel-js';
 import {nowDateFormat} from "@/util/date";
 
 export default {
-    name: "list",
+    name: "logError",
     components: {
         NodesMasterPage,
         DialogColumn,
