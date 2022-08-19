@@ -7,6 +7,7 @@ import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
 import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.nodes.wms.dao.task.entities.TaskDetail;
 import org.nodes.wms.dao.task.entities.WmsTask;
+import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
 import org.springblade.core.mp.support.Query;
 
@@ -88,7 +89,7 @@ public interface WmsTaskBiz {
 	 * @param boxCode 箱码
 	 * @return 任务
 	 */
-	WmsTask findEnableTaskByBoxCode(String boxCode);
+	WmsTask findEnableTaskByBoxCode(String boxCode, WmsTaskProcTypeEnum taskProcTypeEnum);
 
 	/**
 	 * 根据任务ID修改任务状态，以及实际量

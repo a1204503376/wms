@@ -68,12 +68,12 @@ public class WmsTaskDaoImpl
 	}
 
 	@Override
-	public WmsTask findTaskByBoxCode(String boxCode) {
+	public WmsTask findTaskByBoxCode(String boxCode, WmsTaskProcTypeEnum taskProcTypeEnum) {
 		AssertUtil.notNull(boxCode, "根据箱码获取任务失败，任务为空");
 		List<WmsTask> wmsTaskList = super.lambdaQuery()
 			.eq(WmsTask::getBoxCode, boxCode)
 			.eq(WmsTask::getTaskTypeCd, WmsTaskTypeEnum.PICKING)
-			.eq(WmsTask::getTaskProcType, WmsTaskProcTypeEnum.BY_BOX)
+			.eq(WmsTask::getTaskProcType, taskProcTypeEnum)
 			.in(WmsTask::getTaskState, WmsTaskStateEnum.NOT_ISSUED, WmsTaskStateEnum.ISSUED, WmsTaskStateEnum.START_EXECUTION, WmsTaskStateEnum.ABNORMAL)
 			.last("task_qty <> scan_qty")
 			.list();
@@ -102,7 +102,6 @@ public class WmsTaskDaoImpl
 			.eq(WmsTask::getBillId, soBillId)
 			.eq(WmsTask::getBillDetailId, soDetailId)
 			.eq(WmsTask::getTaskTypeCd, WmsTaskTypeEnum.PICKING)
-			.eq(WmsTask::getTaskProcType, WmsTaskProcTypeEnum.BY_PCS)
 			.in(WmsTask::getTaskState, WmsTaskStateEnum.NOT_ISSUED, WmsTaskStateEnum.ISSUED, WmsTaskStateEnum.START_EXECUTION, WmsTaskStateEnum.ABNORMAL)
 			.last("limit 1")
 			.one();
