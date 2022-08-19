@@ -111,4 +111,12 @@ public class StockPageQuery implements Serializable {
 	 * 是否按lpn显示
 	 */
 	private Boolean isShowByLpn;
+	/**
+	 * 批次号-开始
+	 */
+	private String lotNumberBegin;
+	/**
+	 * 批次号-结束
+	 */
+	private String lotNumberEnd;
 }
