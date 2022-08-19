@@ -89,7 +89,8 @@ public class RoleServiceImpl<M extends RoleMapper, T extends Role> extends BaseS
 
 	private boolean grantRoleMenu(List<Long> roleIds, List<Long> menuIds) {
 		// 删除角色配置的菜单集合
-		roleMenuService.remove(Wrappers.<RoleMenu>update().lambda().in(RoleMenu::getRoleId, roleIds));
+//		roleMenuService.remove(Wrappers.<RoleMenu>update().lambda().in(RoleMenu::getRoleId, roleIds));
+		roleMenuService.removeByRoleIds(roleIds);
 		// 组装配置
 		List<RoleMenu> roleMenus = new ArrayList<>();
 		roleIds.forEach(roleId -> menuIds.forEach(menuId -> {
