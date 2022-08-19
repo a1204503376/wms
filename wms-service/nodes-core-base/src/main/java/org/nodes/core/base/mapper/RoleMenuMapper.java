@@ -40,4 +40,10 @@ public interface RoleMenuMapper extends BaseMapper<RoleMenu> {
 	 */
 	List<RoleMenuVO> selectRoleMenuPage(IPage page, RoleMenuVO roleMenu);
 
+	/**
+	 * 根据角色id物理删除角色菜单信息
+	 *
+	 * @param roleIds: 角色id
+	 */
+    void deleteByIds(List<Long> roleIds);
 }

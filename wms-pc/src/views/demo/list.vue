@@ -1,6 +1,6 @@
 <template>
     <div id="list">
-        <nodes-master-page :permission="permissionObj" v-on="form.events">
+        <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
                     <el-col :span="6">
@@ -154,6 +154,7 @@
                             v-if="!column.hide"
                             :key="index"
                             show-overflow-tooltip
+                            width="150"
                             v-bind="column">
                         </el-table-column>
                     </template>
@@ -162,7 +163,7 @@
                         label="操作"
                         width="120">
                         <template v-slot="{row}">
-                            <el-button size="mini" type="text" @click="onEdit(row)">编辑</el-button>
+                            <el-button v-if="permissionObj.add" size="mini" type="text" @click="onEdit(row)">编辑</el-button>
                             <el-button size="mini" type="text" @click="onViewDetails(row)">查看详情</el-button>
                         </template>
                     </el-table-column>
@@ -189,7 +190,6 @@
 </template>
 
 <script>
-
 
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesAsnBillState from "@/components/wms/select/NodesAsnBillState";
@@ -321,6 +321,13 @@ export default {
     created() {
         this.getTableData();
     },
+    computed: {
+        permissionObj() {
+            return {
+                add: this.vaildData(this.permission.demo_add, false),
+            }
+        }
+    },
     methods: {
         getTableData() {
             // API调用:post(this.searchFrom)
@@ -349,7 +356,7 @@ export default {
             this.table.data = (number >= length)
                 ? fill.slice(offset, length)
                 : fill.slice(offset, number);
-            
+
             this.handleRefreshTable();
         },
         onSearch() {
@@ -405,7 +412,6 @@ export default {
                     sums[index] = '';
                 }
             });
-
             return sums;
         },
     }

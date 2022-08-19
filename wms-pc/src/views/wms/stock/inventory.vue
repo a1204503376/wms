@@ -1,4 +1,3 @@
-import fileDownload from "js-file-download";
 <template>
     <div id='inventory'>
         <nodes-master-page v-on="form.events">
@@ -73,7 +72,7 @@ import fileDownload from "js-file-download";
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="收货时间" label-width="90px">
                             <nodes-date-range v-model="form.params.receiveTimeDateRange">
@@ -106,7 +105,7 @@ import fileDownload from "js-file-download";
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="库房" label-width="90px">
                             <nodes-warehouse
@@ -142,7 +141,7 @@ import fileDownload from "js-file-download";
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="是否序列号" label-width="90px">
                             <el-select v-model="form.params.hasSerial" :clearable="true" class="search-input">
@@ -165,6 +164,28 @@ import fileDownload from "js-file-download";
                         <el-form-item label="出库时间" label-width="90px">
                             <nodes-date-range v-model="form.params.lastOutTimeDateRange">
                             </nodes-date-range>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="批次号" label-width="90px">
+                            <el-input
+                                v-model.trim="form.params.lotNumberBegin" :clearable="true"
+                                style="width: 78px;">
+                            </el-input>
+                            -
+                            <el-input
+                                v-model.trim="form.params.lotNumberEnd" :clearable="true"
+                                style="width: 78px;">
+                            </el-input>
+                            <el-tooltip placement="top">
+                                <div slot="content">
+                                    <span>1、只输入前者或后者，则模糊匹配输入值</span><br>
+                                    <span>2、前者输入查找值，后者输入0，则查找大于等于输入值的批次号"</span><br>
+                                    <span>3、后者输入查找值，前者输入0，则查找小于等于输入值的批次号"</span><br>
+                                    <span>4、前者后者均输入查找值，则查找该范围内的批次号"</span>
+                                </div>
+                                <i class="el-icon-question" style="margin-left: 5px;height: 28px;line-height: 28px"></i>
+                            </el-tooltip>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -561,6 +582,8 @@ export default {
                     receiveTimeDateRange: "",
                     lastInTimeDateRange: "",
                     lastOutTimeDateRange: "",
+                    lotNumberBegin: '',
+                    lotNumberEnd: '',
                 }
             },
             form1: {
@@ -788,7 +811,6 @@ export default {
                 createTimeDateRange: "",
             }
             this.onChange(null);
-            console.log('重置表单');
         },
         submit() {
             if (this.form1.stockType === '') {

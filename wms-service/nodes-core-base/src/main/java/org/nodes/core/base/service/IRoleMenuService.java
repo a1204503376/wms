@@ -16,9 +16,10 @@
  */
 package org.nodes.core.base.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import org.springblade.core.mp.base.BaseService;
 import org.nodes.core.base.entity.RoleMenu;
+import org.springblade.core.mp.base.BaseService;
+
+import java.util.List;
 
 /**
  * 服务类
@@ -27,4 +28,10 @@ import org.nodes.core.base.entity.RoleMenu;
  */
 public interface IRoleMenuService extends BaseService<RoleMenu> {
 
+	/**
+	 * 根据角色id物理删除角色信息
+	 *
+	 * @param roleIds 角色id
+	 */
+	void removeByRoleIds(List<Long> roleIds);
 }

@@ -16,18 +16,19 @@
  */
 package org.nodes.core.base.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.AllArgsConstructor;
-import org.nodes.core.base.mapper.UserMapper;
-import org.springblade.core.mp.base.BaseServiceImpl;
 import org.nodes.core.base.entity.RoleMenu;
 import org.nodes.core.base.mapper.RoleMenuMapper;
 import org.nodes.core.base.service.IRoleMenuService;
+import org.nodes.core.tool.utils.AssertUtil;
+import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 服务实现类
@@ -40,4 +41,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(propagation = Propagation.NESTED, isolation = Isolation.DEFAULT, rollbackFor = Exception.class)
 public class RoleMenuServiceImpl <M extends RoleMenuMapper, T extends RoleMenu> extends BaseServiceImpl<RoleMenuMapper, RoleMenu> implements IRoleMenuService {
 
+	@Override
+	public void removeByRoleIds(List<Long> roleIds) {
+		AssertUtil.notNull(roleIds,"删除角色权限失败，角色id为空");
+		super.baseMapper.deleteByIds(roleIds);
+	}
 }
