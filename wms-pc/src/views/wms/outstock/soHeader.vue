@@ -103,7 +103,7 @@
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table" :data="table.data" border highlight-current-row
+                <el-table ref="table" :height="table.height" :data="table.data" border highlight-current-row
                           size="mini" @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
@@ -150,7 +150,6 @@
 
 <script>
 
-
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
@@ -163,7 +162,6 @@ import {closeSoBill, exportData, getPage, remove} from "@/api/wms/outstock/soHea
 import NodesCustomer from "@/components/wms/select/NodesCustomer";
 import NodesBillType from "@/components/wms/select/NodesBillType";
 import {nowDateFormat} from "@/util/date";
-
 
 export default {
     name: "soHeader",
@@ -312,7 +310,6 @@ export default {
             this.loading = true;
             exportData(this.form.params)
                 .then((res) => {
-                    console.log(res);
                     this.$message.success("操作成功，正在下载中...");
                     fileDownload(res.data, `发货单${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
                 })
