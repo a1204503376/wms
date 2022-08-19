@@ -31,6 +31,10 @@ public class TianyiPickStrategy {
         // 根据发货单明细中的批属性查找所有可用的库存
         SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
         SkuLotUtil.setAllSkuLot(soDetail, skuLot);
+        // 分别查询人工区和自动区的库存，并分别进行按入库日期进行排序 findEnableStockByZoneTypeAndSkuLot
+        // 优先人工区，再自动化区，尽量不拆箱
+        // 如果是自动区的则需要根据箱码中生成其它物品的拣货计划
+
         List<Stock> stockList = stockQueryBiz.findEnableStockBySkuAndSkuLot(soDetail.getSkuId(), skuLot);
         if (Func.isEmpty(stockList)) {
             return null;
