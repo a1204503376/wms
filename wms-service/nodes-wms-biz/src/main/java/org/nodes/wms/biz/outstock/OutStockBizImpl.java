@@ -13,6 +13,7 @@ import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.outstock.so.SoBillBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
+import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
@@ -22,7 +23,6 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.input.*;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindPickingBySoBillIdResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.OutboundAccessAreaLocationQueryResponse;
-import org.nodes.wms.dao.outstock.logSoPick.dto.output.PickingByBoxResponse;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.outstock.so.dto.input.PickByPcRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillDistributedRequest;
@@ -50,6 +50,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 出库业务实现类
@@ -70,6 +71,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	private final LocationBiz locationBiz;
 	private final LogBiz logBiz;
 	private final WmsTaskBiz wmsTaskBiz;
+	private final StockManageBiz stockManageBiz;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -174,7 +176,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		Location location = locationBiz
 			.getLocationByZoneType(request.getWhId(), DictKVConstant.ZONE_TYPE_PICK_TO).get(0);
 		stockBiz.moveStock(stock, request.getSerailList(), request.getQty(),
-			location, StockLogTypeEnum.OUTSTOCK_BY_PC, soHeader.getSoBillId(), soHeader.getSoBillNo(),
+			location, StockLogTypeEnum.OUTSTOCK_BY_PC_PDA, soHeader.getSoBillId(), soHeader.getSoBillNo(),
 			soDetail.getSoLineNo());
 		// 4 更新出库单明细中的状态和数量
 		soBillBiz.updateSoDetailStatus(soDetail, request.getQty());
@@ -226,7 +228,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		Location location = locationBiz
 			.getLocationByZoneType(sourceLocation.getWhId(), DictKVConstant.ZONE_TYPE_PICK_TO).get(0);
 		stockBiz.moveStock(stock, null, task.getTaskQty().subtract(task.getScanQty()),
-			location, StockLogTypeEnum.OUTSTOCK_BY_PC, soHeader.getSoBillId(), soHeader.getSoBillNo(),
+			location, StockLogTypeEnum.OUTSTOCK_BY_BOX_PDA, soHeader.getSoBillId(), soHeader.getSoBillNo(),
 			soDetail.getSoLineNo());
 
 		//4、TODO 根据拣货计划下发库存和释放占用
@@ -254,18 +256,28 @@ public class OutStockBizImpl implements OutStockBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void pickOnAgvPickTo(MoveOnAgvPickToRequest request) {
-////		 判断出库接驳区是否有库存，如果没有库存则抛异常
-////		 根据库存查找对应的出库单明细
-////		 判断如果当前拣货量是否会超过剩余量，超过剩余量则返回信息给pda，要求pda跳转到移动的界面
-////		 如果没有超过剩余量，则执行过程同按箱拣货
-
-
 		//1、判断库位是否有库存
-		//2、根据库位查询库存
-		//3、判断是不是超拣
-		//4、如果没有超拣则执行按箱的流程
-		//5、如果超了则返回
+		boolean emptyLocation = stockQueryBiz.isEmptyLocation(request.getLocId());
+		if (!emptyLocation) {
+			throw new ServiceException("查询不到当前库位的库存");
+		}
 
+		//2、根据库位查询库存
+		List<Stock> stockList = stockQueryBiz.findStockByLocation(request.getLocId());
+		AssertUtil.notNull(stockList, "接驳区拣货失败，根据库位查询不到对应库存");
+		List<String> boxCodeList = stockList.stream()
+			.map(Stock::getBoxCode)
+			.distinct()
+			.collect(Collectors.toList());
+
+		//3、判断是不是超拣---直接走按箱的流程
+		//4、如果没有超拣则执行按箱的流---直接走按箱的流程
+		//5、如果超了则返回---直接走按箱的流程
+		for (String boxCode : boxCodeList) {
+			PickByBoxCodeRequest boxCodeRequest = new PickByBoxCodeRequest();
+			boxCodeRequest.setBoxCode(boxCode);
+			pickByBox(boxCodeRequest);
+		}
 	}
 
 	@Override
@@ -274,6 +286,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		//// 记录日志
 
 		//1、按库位移动
+
 		//2、更新拣货计划
 	}
 

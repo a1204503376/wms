@@ -9,6 +9,8 @@ import java.util.List;
 
 /**
  * 库存控制BIZ
+ *
+ * @author nodesc
  */
 public interface StockManageBiz {
 	/**
