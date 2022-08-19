@@ -7,9 +7,11 @@ import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
 import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.nodes.wms.dao.task.entities.TaskDetail;
 import org.nodes.wms.dao.task.entities.WmsTask;
+import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -87,4 +89,13 @@ public interface WmsTaskBiz {
 	 * @return 任务
 	 */
 	WmsTask findEnableTaskByBoxCode(String boxCode);
+
+	/**
+	 * 根据任务ID修改任务状态，以及实际量
+	 *
+	 * @param taskId        任务ID
+	 * @param taskStateEnum 任务状态
+	 * @param scanQty       实际数量
+	 */
+	void updateWmsTaskStateByTaskId(Long taskId, WmsTaskStateEnum taskStateEnum, BigDecimal scanQty);
 }
