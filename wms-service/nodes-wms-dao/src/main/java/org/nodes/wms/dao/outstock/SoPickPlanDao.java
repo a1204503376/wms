@@ -4,6 +4,7 @@ import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributio
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.springblade.core.mp.base.BaseService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -35,4 +36,12 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 	 * @return 拣货计划集合
 	 */
 	List<SoPickPlan> findBySoHeaderId(Long soBillId);
+
+	/**
+	 * 根据拣货计划ID修改拣货计划数量
+	 *
+	 * @param pickPlanId  拣货计划ID
+	 * @param pickRealQty 拣货实际数量
+	 */
+	void updatePickPlanPickRealQtyById(Long pickPlanId, BigDecimal pickRealQty);
 }
