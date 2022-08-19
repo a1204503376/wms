@@ -39,14 +39,14 @@ public interface StockCountBiz {
 	List<PdaSkuQtyResponse> getPdaSkuQtyResponseList(String boxCode);
 
 	/**
-	 * 根据用户手动所提交的数据 生成差异报告 /人工区
+	 * 根据用户手动所提交的数据 生成盘点记录 /人工区
 	 *
 	 * @param countReportList 用户手动所提交的数据集合
 	 */
 	void generateCountReport(List<GenerateCountReport> countReportList);
 
 	/**
-	 * 据用户手动所提交的数据 生成差异报告 /自动区
+	 * 据用户手动所提交的数据  生成盘点记录  /自动区
 	 *
 	 * @param beChangedList 用户改变后所提交的数据集合
 	 * @param defaultList   用户未改变的数据集合
@@ -61,4 +61,10 @@ public interface StockCountBiz {
 	 */
 	List<PdaStockCountDetailBySkuSpecResponse> findStockCountDetailBySkuSpec(PdaStockCountDetailBySkuSpecRequest request);
 
+	/**
+	 * 生成差异报告
+	 *
+	 * @param countBillNo countBillNo
+	 */
+	void generateDifference(String countBillNo);
 }

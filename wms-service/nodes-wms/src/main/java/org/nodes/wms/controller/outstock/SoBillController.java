@@ -7,8 +7,7 @@ import org.nodes.core.constant.WmsApiPath;
 import org.nodes.core.tool.validation.Update;
 import org.nodes.wms.biz.outstock.OutStockBiz;
 import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
-import org.nodes.wms.biz.outstock.so.SoDetailBiz;
-import org.nodes.wms.biz.outstock.so.SoHeaderBiz;
+import org.nodes.wms.biz.outstock.so.SoBillBiz;
 import org.nodes.wms.dao.basics.sku.dto.input.FindSkuByCodeRequest;
 import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
@@ -39,9 +38,7 @@ import java.util.List;
 @RequestMapping(WmsApiPath.WMS_ROOT_URL + "outstock/soBill")
 public class SoBillController {
 
-	private final SoHeaderBiz soHeaderBiz;
-
-	private final SoDetailBiz soDetailBiz;
+	private final SoBillBiz soBillBiz;
 
 	private final LogSoPickBiz logSoPickBiz;
 
@@ -52,7 +49,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/page")
 	public R<Page<SoHeaderPageResponse>> page(Query query, @RequestBody SoHeaderPageQuery soHeaderPageQuery) {
-		Page<SoHeaderPageResponse> soHeaderPageList = soHeaderBiz.getPage(query, soHeaderPageQuery);
+		Page<SoHeaderPageResponse> soHeaderPageList = soBillBiz.getPage(query, soHeaderPageQuery);
 		return R.data(soHeaderPageList);
 	}
 
@@ -62,7 +59,7 @@ public class SoBillController {
 	@ApiLog("发货单管理-新增")
 	@PostMapping("/add")
 	public R<String> add(@Valid @RequestBody SoBillAddOrEditRequest soBillAddOrEditRequest) {
-		SoHeader soHeader = soHeaderBiz.add(soBillAddOrEditRequest);
+		SoHeader soHeader = soBillBiz.add(soBillAddOrEditRequest);
 		return R.success(String.format("新增发货单成功，发货单编码：%s", soHeader.getSoBillNo()));
 	}
 
@@ -72,7 +69,7 @@ public class SoBillController {
 	@ApiLog("发货单管理-删除")
 	@PostMapping("/remove")
 	public R<String> remove(@Valid @RequestBody SoBillRemoveRequest soBillRemoveRequest) {
-		boolean isRemoveSuccess = soHeaderBiz.remove(soBillRemoveRequest.getIdList());
+		boolean isRemoveSuccess = soBillBiz.remove(soBillRemoveRequest.getIdList());
 		return R.success(isRemoveSuccess ? "删除成功" : "删除失败，请稍后再试");
 	}
 
@@ -81,7 +78,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/detailByEdit")
 	public R<SoBillEditResponse> detailByEdit(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		return R.data(soHeaderBiz.findSoBillByEdit(soBillIdRequest.getSoBillId()));
+		return R.data(soBillBiz.findSoBillByEdit(soBillIdRequest.getSoBillId()));
 	}
 
 	/**
@@ -90,7 +87,7 @@ public class SoBillController {
 	@ApiLog("发货单管理-编辑")
 	@PostMapping("/edit")
 	public R<String> edit(@Validated(Update.class) @RequestBody SoBillAddOrEditRequest soBillAddOrEditRequest) {
-		SoHeader soHeader = soHeaderBiz.edit(soBillAddOrEditRequest);
+		SoHeader soHeader = soBillBiz.edit(soBillAddOrEditRequest);
 		return R.success(String.format("编辑发货单成功，发货单编码：%s", soHeader.getSoBillNo()));
 	}
 
@@ -99,7 +96,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/detail_header")
 	public R<SoHeaderForDetailResponse> headerForDetail(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		return R.data(soHeaderBiz.findSoHeaderForDetailBySoBillId(soBillIdRequest.getSoBillId()));
+		return R.data(soBillBiz.findSoHeaderForDetailBySoBillId(soBillIdRequest.getSoBillId()));
 	}
 
 	/**
@@ -108,7 +105,7 @@ public class SoBillController {
 	@PostMapping("/detail_detail")
 	public R<Page<SoDetailForDetailResponse>> detailForDetail(Query query,
 															  @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		Page<SoDetailForDetailResponse> pageSoDetail = soDetailBiz.pageSoDetailForDetailBySoBillId(query, soBillIdRequest);
+		Page<SoDetailForDetailResponse> pageSoDetail = soBillBiz.pageSoDetailForDetailBySoBillId(query, soBillIdRequest);
 		return R.data(pageSoDetail);
 	}
 
@@ -128,7 +125,7 @@ public class SoBillController {
 	@PostMapping("/detail_log")
 	public R<Page<LogDetailPageResponse>> logForSoDetail(Query query,
 														  @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		Page<LogDetailPageResponse> pageLog = soHeaderBiz.pageLogById(Condition.getPage(query), soBillIdRequest.getSoBillId());
+		Page<LogDetailPageResponse> pageLog = soBillBiz.pageLogById(Condition.getPage(query), soBillIdRequest.getSoBillId());
 		return R.data(pageLog);
 	}
 
@@ -137,7 +134,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/export")
 	public void export(@RequestBody SoHeaderPageQuery soHeaderPageQuery, HttpServletResponse response) {
-		soHeaderBiz.export(soHeaderPageQuery, response);
+		soBillBiz.export(soHeaderPageQuery, response);
 	}
 
 	/**
@@ -146,7 +143,7 @@ public class SoBillController {
 	@PostMapping("/close")
 	@ApiLog("发货单-关闭")
 	public R<String> close(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		soHeaderBiz.closeById(soBillIdRequest.getSoBillId());
+		soBillBiz.closeById(soBillIdRequest.getSoBillId());
 		return R.success("关闭成功");
 	}
 
@@ -156,7 +153,7 @@ public class SoBillController {
 	@PostMapping("/pageNotSoPick")
 	public R<IPage<NotSoPickPageResponse>> pageNotLogSoPick(
 		Query query, @RequestBody NotSoPickPageQuery notSoPickPageQuery) {
-		return R.data(soDetailBiz.pageNotSoPick(query, notSoPickPageQuery));
+		return R.data(soBillBiz.pageNotSoPick(query, notSoPickPageQuery));
 	}
 
 	/**
@@ -165,7 +162,7 @@ public class SoBillController {
 	@PostMapping("/exportNotSoPick")
 	public void exportNotSoPick(
 		@RequestBody NotSoPickPageQuery notSoPickPageQuery, HttpServletResponse response) {
-		soDetailBiz.exportNotSoPick(notSoPickPageQuery, response);
+		soBillBiz.exportNotSoPick(notSoPickPageQuery, response);
 	}
 
 	/**
@@ -173,7 +170,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/getSoHeaderByPickPc")
 	public R<PickByPcSoHeaderResponse> getSoHeaderByPickPc(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		return R.data(soHeaderBiz.getSoHeaderByPickPc(soBillIdRequest));
+		return R.data(soBillBiz.getSoHeaderByPickPc(soBillIdRequest));
 	}
 
 	/**
@@ -181,7 +178,7 @@ public class SoBillController {
 	 */
 	@GetMapping("/getLineNoAndSkuSelectList")
 	public R<List<LineNoAndSkuSelectResponse>> getLineNoAndSkuSelectList(Long soBillId) {
-		return R.data(soDetailBiz.getLineNoAndSkuSelectList(soBillId));
+		return R.data(soBillBiz.getLineNoAndSkuSelectList(soBillId));
 	}
 
 	/**
@@ -189,7 +186,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/getSoBillDataByDistribution")
 	public R<SoBillDistributedResponse> getSoBillDataByDistribution(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		return R.data(soHeaderBiz.findSoBillForDistributeBySoBillId(soBillIdRequest.getSoBillId()));
+		return R.data(soBillBiz.findSoBillForDistributeBySoBillId(soBillIdRequest.getSoBillId()));
 	}
 
 	/**
@@ -198,7 +195,7 @@ public class SoBillController {
 	@PostMapping("/getSoDetailAndStock")
 	public R<SoDetailAndStockResponse> getSoDetailAndStock(@Valid @RequestBody
 														   SoDetailAndStockRequest soDetailAndStockRequest) {
-		return R.data(soHeaderBiz.getSoDetailAndStock(soDetailAndStockRequest));
+		return R.data(soBillBiz.getSoDetailAndStock(soDetailAndStockRequest));
 	}
 
 	/**
@@ -226,7 +223,7 @@ public class SoBillController {
 	@ApiLog("发货单管理-取消分配")
 	@PostMapping("/cancelAll")
 	public R<String> cancelAll(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		outStockBiz.cancleDistribute(soBillIdRequest.getSoBillId());
+		outStockBiz.cancelDistribute(soBillIdRequest.getSoBillId());
 		return R.data("取消分配成功");
 	}
 
@@ -263,7 +260,7 @@ public class SoBillController {
 	 */
 	@GetMapping("getSerialSelectResponseList")
 	public R<List<SerialSelectResponse>> getSerialSelectResponseList(Long stockId) {
-		List<SerialSelectResponse> serialSelectResponseList = soDetailBiz.getSerialSelectResponseList(stockId);
+		List<SerialSelectResponse> serialSelectResponseList = soBillBiz.getSerialSelectResponseList(stockId);
 		return R.data(serialSelectResponseList);
 	}
 

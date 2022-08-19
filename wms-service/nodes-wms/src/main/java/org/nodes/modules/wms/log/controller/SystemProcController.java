@@ -1,32 +1,30 @@
 package org.nodes.modules.wms.log.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import jodd.util.StringPool;
 import lombok.AllArgsConstructor;
 import org.nodes.modules.wms.log.vo.SystemProcVO;
 import org.nodes.modules.wms.log.wrapper.SystemProcWrapper;
+import org.nodes.wms.core.log.system.entity.SystemProc;
+import org.nodes.wms.core.log.system.service.ISystemProcService;
+import org.nodes.wms.core.outstock.loading.service.ITruckSerialService;
 import org.nodes.wms.core.stock.core.entity.*;
 import org.nodes.wms.core.stock.core.service.*;
 import org.nodes.wms.core.stock.core.wrapper.*;
-import org.nodes.wms.core.outstock.loading.service.ITruckSerialService;
-import org.nodes.wms.core.log.system.entity.SystemProc;
-import org.nodes.wms.core.log.system.service.ISystemProcService;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
-import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.ObjectUtil;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * 系统日志 控制器
@@ -81,7 +79,7 @@ public class SystemProcController extends BladeController {
 			));
 			detail.setStockOccupyList(StockOccupyWrapper.build().listVO(
 				stockOccupyService.list(Condition.getQueryWrapper(new StockOccupy()).lambda()
-					.eq(StockOccupy::getSystemProcId, detail.getSystemProcId())
+//					.eq(StockOccupy::getSystemProcId, detail.getSystemProcId())
 				)
 			));
 			detail.setStockLogList(StockLogWrapper.build().listVO(

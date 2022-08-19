@@ -1,63 +1,77 @@
 <template>
     <div id="logSoPick">
-        <nodes-master-page :permission="permissionObj" v-on="form.events">
+        <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="发货单编码" label-width="90px">
-                            <el-input v-model.trim="form.params.soBillNo" :clearable="true"
-                                      placeholder="请输入发货单编码"></el-input>
+                            <el-input
+                                v-model.trim="form.params.soBillNo" :clearable="true"
+                                class="search-input"
+                                placeholder="请输入发货单编码">
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="单据类型" label-width="90px">
                             <nodes-bill-type
                                 v-model="form.params.billTypeCdList"
                                 :multiple="true"
+                                class="search-input"
                                 io-type="O">
                             </nodes-bill-type>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
                             <nodes-sku
-                                v-model="form.params.skuIdList">
+                                v-model="form.params.skuIdList"
+                                class="search-input">
                             </nodes-sku>
                         </el-form-item>
                     </el-col>
-                </el-row>
-            </template>
-            <template v-slot:expandSearch>
-                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="箱号" label-width="90px">
-                            <el-input v-model.trim="form.params.boxCode" :clearable="true"
-                                      placeholder="请输入箱号"></el-input>
+                            <el-input
+                                v-model.trim="form.params.boxCode"
+                                :clearable="true"
+                                class="search-input"
+                                placeholder="请输入箱号">
+                            </el-input>
                         </el-form-item>
                     </el-col>
+                </el-row>
+                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="LPN" label-width="90px">
-                            <el-input v-model.trim="form.params.lpnCode" :clearable="true"
-                                      placeholder="请输入LPN"></el-input>
+                            <el-input
+                                v-model.trim="form.params.lpnCode"
+                                :clearable="true" class="search-input"
+                                placeholder="请输入LPN">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="序列号" label-width="90px">
-                            <el-input v-model.trim="form.params.snCode" :clearable="true"
-                                      placeholder="请输入序列号"></el-input>
+                            <el-input
+                                v-model.trim="form.params.snCode"
+                                :clearable="true" class="search-input"
+                                placeholder="请输入序列号">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="拣货人" label-width="90px">
-                            <el-input v-model.trim="form.params.createUser" :clearable="true"
-                                      placeholder="请输入拣货人"></el-input>
+                            <el-input
+                                v-model.trim="form.params.createUser"
+                                :clearable="true" class="search-input"
+                                placeholder="请输入拣货人">
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row>
                     <el-col :span="6">
                         <el-form-item label="拣货时间" label-width="90px">
-                            <nodes-date-range v-model="form.params.createTimeDateRange" style="width: 200px">
+                            <nodes-date-range v-model="form.params.createTimeDateRange">
                             </nodes-date-range>
                         </el-form-item>
                     </el-col>
@@ -94,6 +108,7 @@
                 <el-table ref="table"
                           :cell-style="cellStyle"
                           :data="table.data"
+                          :height="table.height"
                           border
                           highlight-current-row
                           size="mini"
@@ -106,7 +121,7 @@
                     </el-table-column>
                     <el-table-column
                         fixed
-                        sortable
+                        width="50"
                         type="index">
                         <template slot="header">
                             #
@@ -118,9 +133,9 @@
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column"
-                            width="130">
-                            <template v-slot="scope"
-                                      v-if = "column.prop === 'snCode' || column.prop === 'soBillNo'">
+                            min-width="150">
+                            <template v-if="column.prop === 'snCode' || column.prop === 'soBillNo'"
+                                      v-slot="scope">
                                 <el-link
                                     v-if="column.prop === 'snCode'"
                                     :underline="false"
@@ -157,8 +172,7 @@
                 <el-table
                     :border="true"
                     :data="snCodeList"
-                    max-height="500"
-                >
+                    max-height="500">
                     <el-table-column align="center" fixed type="index">
                         <template slot="header">
                             #
@@ -175,8 +189,12 @@
                 </div>
             </el-dialog>
         </template>
-        <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
-        </dialog-column>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
     </div>
 </template>
 
@@ -196,7 +214,7 @@ import NodesSku from "@/components/wms/select/NodesSkuByQuery";
 import NodesBillType from "@/components/wms/select/NodesBillType";
 
 export default {
-    name: "soBillLog",
+    name: "logSoPick",
     components: {
         NodesBillType,
         NodesSku,
@@ -339,7 +357,6 @@ export default {
     computed: {
         permissionObj() {
             return {
-                search: this.vaildData(this.permission.logSoPick_search, false),
                 cancelOutstock: this.vaildData(this.permission.logSoPick_cancelOutstock, false),
                 createReceiveBill: this.vaildData(this.permission.logSoPick_createReceiveBill, false),
             }
@@ -359,6 +376,7 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
+                    this.handleRefreshTable();
                 })
         },
         refreshTable() {
@@ -401,7 +419,7 @@ export default {
             }
             let lsopIdList = rows.map(row => row.lsopId);
             for (const i in lsopIdList) {
-                if(lsopIdList[i] < 0){
+                if (lsopIdList[i] < 0) {
                     this.$message.error("撤销失败，选择的记录中不允许有已撤销的记录")
                     return;
                 }
@@ -411,7 +429,7 @@ export default {
                 cancelButtonText: "取消",
                 type: "warning",
             }).then(() => {
-                cancelOutstock(lsopIdList).then((res)=>{
+                cancelOutstock(lsopIdList).then((res) => {
                     this.$message.success(res.data.msg);
                     this.getTableData();
                 })

@@ -21,6 +21,7 @@ import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.instock.receiveLog.ReceiveLogDao;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
+import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.SerialDao;
 import org.nodes.wms.dao.stock.SerialLogDao;
 import org.nodes.wms.dao.stock.StockDao;
@@ -55,6 +56,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -724,6 +727,79 @@ public class StockBizImpl implements StockBiz {
 		List<StockBySerialPageResponse> stockBySerialPageResponseList = stockDao.page(page, stockBySerialPageQuery)
 				.getRecords();
 		ExcelUtil.export(response, "库存余额", "库存余额数据表", stockBySerialPageResponseList, StockBySerialPageResponse.class);
+	}
+
+    @Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+    public void occupyStock(List<SoPickPlan> newPickPlan) {
+		AssertUtil.notEmpty(newPickPlan, "更新库存占用失败, 拣货计划为空无法更新");
+
+		Map<Long, List<SoPickPlan>> stockId2Qty = newPickPlan.stream()
+			.collect(Collectors.groupingBy(SoPickPlan::getStockId, Collectors.toList()));
+		stockId2Qty.forEach((stockId, soPickPlanList) -> {
+			BigDecimal currentOccupy = soPickPlanList.stream()
+				.map(SoPickPlan::getSurplusQty)
+				.reduce(BigDecimal::add)
+				.orElse(BigDecimal.ZERO);
+			SoPickPlan soPickPlan = soPickPlanList.get(0);
+			increaseOccupy(soPickPlan.getSoBillId(), soPickPlan.getSoBillNo(), soPickPlan.getSoDetailId(),
+				stockId, currentOccupy);
+		});
+    }
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public Stock increaseOccupy(Long soBillId, String soBillNo, Long soDetailId,
+							   Long stockId, BigDecimal currentOccupy) {
+		Stock stock = stockDao.getStockById(stockId);
+		if (BigDecimalUtil.gt(currentOccupy, stock.getStockEnable())){
+			throw new ServiceException(String.format("占用库存失败,[%d][%s]当前余额[%d]可用[%d],当前占用量[%d]超过可用量",
+				stockId, stock.getSkuCode(), stock.getStockBalance(), stock.getStockEnable(), currentOccupy));
+		}
+
+		stock.setOccupyQty(stock.getOccupyQty().add(currentOccupy));
+		stockDao.upateOccupyQty(stock);
+		createAndSaveOccupyStockLog(stock, soBillId, soBillNo, soDetailId, currentOccupy,
+			StockLogTypeEnum.STOCK_OCCUPY_BY_STRATEGY, "分配占用库存");
+
+		return stock;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public Stock reduceOccupy(Long soBillId, String soBillNo, Long soDetailId,
+							 Long stockId, BigDecimal currentUnOccupy) {
+		Stock stock = stockDao.getStockById(stockId);
+		if (BigDecimalUtil.gt(currentUnOccupy, stock.getOccupyQty())){
+			throw new ServiceException(String.format("释放占用库存失败,[%d][%s]当前余额[%d]占用[%d],当前释放量[%d]超过占用量",
+				stockId, stock.getSkuCode(), stock.getStockBalance(), stock.getOccupyQty(), currentUnOccupy));
+		}
+
+		stock.setOccupyQty(stock.getOccupyQty().subtract(currentUnOccupy));
+		stockDao.upateOccupyQty(stock);
+		createAndSaveOccupyStockLog(stock, soBillId, soBillNo, soDetailId, currentUnOccupy,
+			StockLogTypeEnum.STOCK_CANCEL_OCCUPY,"释放分配占用库存");
+
+		return stock;
+	}
+
+	private void createAndSaveOccupyStockLog(Stock stock, Long soBillId, String soBillNo, Long soDetailId,
+											 BigDecimal currentOccupy, StockLogTypeEnum type, String msg) {
+		StockLog stockLog = new StockLog();
+		Func.copy(stock, stockLog);
+		if (Func.notNull(soBillId)){
+			stockLog.setSourceBillId(soBillId);
+		}
+		if (Func.notNull(soBillNo)){
+			stockLog.setSourceBillNo(soBillNo);
+		}
+		if (Func.notNull(soDetailId)){
+			stockLog.setLineNo(soDetailId.toString());
+		}
+		stockLog.setCurrentOccupyQty(currentOccupy);
+		stockLog.setLogType(type.getDesc());
+		stockLog.setMsg(msg);
+		stockLogDao.save(stockLog);
 	}
 
 	@Override

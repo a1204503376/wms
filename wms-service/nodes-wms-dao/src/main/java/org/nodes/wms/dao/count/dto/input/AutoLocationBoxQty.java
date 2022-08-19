@@ -22,6 +22,10 @@ public class AutoLocationBoxQty implements Serializable {
 	 */
 	private String locCode;
 	/**
+	 * 物品编码
+	 */
+	private String skuCode;
+	/**
 	 * 箱内物品总数量
 	 */
 	private BigDecimal totalQty;

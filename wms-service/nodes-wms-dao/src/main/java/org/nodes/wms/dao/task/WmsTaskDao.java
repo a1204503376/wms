@@ -47,4 +47,12 @@ public interface WmsTaskDao extends BaseService<WmsTask> {
 	 * @return 分页对象
 	 */
 	List<WmsTask> getTaskByState(int taskState);
+
+	/**
+	 * 根据箱码获取任务
+	 *
+	 * @param boxCode 箱码
+	 * @return 任务
+	 */
+	WmsTask findTaskByBoxCode(String boxCode);
 }

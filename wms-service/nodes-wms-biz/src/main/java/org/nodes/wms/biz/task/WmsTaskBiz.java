@@ -61,6 +61,7 @@ public interface WmsTaskBiz {
 	 * 修改任务状态
 	 *
 	 * @param taskDetail 包含任务明细ID，任务状态
+	 * @return true:表示成功
 	 */
 	Boolean updateTaskState(TaskDetail taskDetail);
 
@@ -74,7 +75,16 @@ public interface WmsTaskBiz {
 
 	/**
 	 * 业务日志
+	 *
 	 * @param wmsTask
 	 */
 	void log(WmsTask wmsTask);
+
+	/**
+	 * 根据箱码查询可用的任务
+	 *
+	 * @param boxCode 箱码
+	 * @return 任务
+	 */
+	WmsTask findEnableTaskByBoxCode(String boxCode);
 }

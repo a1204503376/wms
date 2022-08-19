@@ -31,7 +31,7 @@ public class StockTest {
 		Long skuId = 1544937646084644866L;
 		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
 		skuLot.setSkuLot1("190904");
-		List<Stock> stock = stockQueryBiz.findEnableStockByLocation(whId, skuId, null, null, skuLot);
+		List<Stock> stock = stockQueryBiz.findEnableStockByLocationAndSkuLot(whId, skuId, null, null, skuLot);
 		Assertions.assertNotNull(stock);
 	}
 }

@@ -1,42 +1,66 @@
 <template>
     <div id="supplier">
-        <nodes-master-page :permission="permissionObj" v-on="form.events">
+        <nodes-master-page :show-expand-btn="false" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="供应商编码" label-width="90px">
-                            <el-input placeholder="请输入供应商编码" v-model.trim="form.params.code" :clearable="true" pla></el-input>
+                            <el-input
+                                v-model.trim="form.params.code"
+                                :clearable="true"
+                                class="search-input"
+                                placeholder="请输入供应商编码">
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="供应商名称" label-width="90px">
-                            <el-input placeholder="请输入供应商名称" v-model.trim="form.params.name" :clearable="true"></el-input>
+                            <el-input
+                                v-model.trim="form.params.name"
+                                :clearable="true"
+                                class="search-input"
+                                placeholder="请输入供应商名称">
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                </el-row>
-            </template>
-            <template v-slot:expandSearch>
-                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="创建日期" label-width="90px">
-                            <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
+                            <nodes-date-range
+                                v-model="form.params.createTimeDateRange">
+                            </nodes-date-range>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="更新日期" label-width="90px">
-                            <nodes-date-range v-model="form.params.updateTimeDateRange"></nodes-date-range>
+                            <nodes-date-range
+                                v-model="form.params.updateTimeDateRange">
+                            </nodes-date-range>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </template>
             <template v-slot:batchBtn>
-                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
+                <el-button
+                    v-if="permissionObj.add"
+                    icon="el-icon-plus"
+                    size="mini"
+                    type="primary"
+                    @click="onAdd">新增
                 </el-button>
-                <el-button v-if="permissionObj.delete" icon="el-icon-delete" plain size="mini" type="danger"
-                           @click="onRemove">删除
+                <el-button
+                    v-if="permissionObj.delete"
+                    :plain="true"
+                    icon="el-icon-delete"
+                    size="mini"
+                    type="danger"
+                    @click="onRemove">删除
                 </el-button>
-                <el-button v-if="permissionObj.import" icon="el-icon-upload2" plain size="mini"
-                           @click="onUpload">导入
+                <el-button
+                    v-if="permissionObj.import"
+                    :plain="true"
+                    icon="el-icon-upload2"
+                    size="mini"
+                    @click="onUpload">导入
                 </el-button>
                 <file-upload
                     :visible="fileUpload.visible"
@@ -63,13 +87,15 @@
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table"
-                          :data="table.data"
-                          border
-                          highlight-current-row
-                          size="mini"
-                          style="width: 100%"
-                          @sort-change="onSortChange">
+                <el-table
+                    ref="table"
+                    :data="table.data"
+                    :height="table.height"
+                    border
+                    highlight-current-row
+                    size="mini"
+                    style="width: 100%"
+                    @sort-change="onSortChange">
                     <el-table-column
                         fixed
                         type="selection"
@@ -77,28 +103,28 @@
                     </el-table-column>
                     <el-table-column
                         fixed
-                        sortable
-                        type="index">
+                        type="index"
+                    width="50">
                         <template slot="header">
                             #
                         </template>
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column
+                            v-if="!column.hide"
                             :key="index"
-                            show-overflow-tooltip
-                            v-bind="column">
+                            :show-overflow-tooltip="true"
+                            v-bind="column"
+                            width="150">
                         </el-table-column>
                     </template>
-                    <el-table-column label="启用"
-                                     prop="status"
-                                     width="100">
+                    <el-table-column
+                        label="启用"
+                        prop="status"
+                        width="80">
                         <template v-slot="{row}">
-                            <el-tag :type="row.status === 1 ? 'success' : 'danger'"
-                                    disable-transitions>{{
-                                    row.status ===
-                                    1 ? '是' : '否'
-                                }}
+                            <el-tag :type="row.status === 1 ? 'success' : 'danger'">
+                                {{ row.status === 1 ? '是' : '否' }}
                             </el-tag>
                         </template>
                     </el-table-column>
@@ -112,12 +138,17 @@
                 </el-pagination>
             </template>
         </nodes-master-page>
-        <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
-        </dialog-column>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
     </div>
 </template>
 
 <script>
+
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
@@ -128,7 +159,6 @@ import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js'
 import fileUpload from "@/components/nodes/fileUpload";
 import {nowDateFormat} from "@/util/date";
-
 
 export default {
     name: "supplier",
@@ -180,7 +210,6 @@ export default {
                     },
                     {
                         prop: "createTime",
-                        width: 130,
                         label: "创建时间",
                         sortable: "custom"
                     },
@@ -191,7 +220,6 @@ export default {
                     },
                     {
                         prop: "updateTime",
-                        width: 130,
                         label: "更新时间",
                         sortable: "custom"
                     },
@@ -212,7 +240,6 @@ export default {
     computed: {
         permissionObj() {
             return {
-                search: this.vaildData(this.permission.supplier_search, false),
                 add: this.vaildData(this.permission.supplier_add, false),
                 delete: this.vaildData(this.permission.supplier_delete, false),
                 import: this.vaildData(this.permission.supplier_import, false)
@@ -229,6 +256,7 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
+                    this.handleRefreshTable();
                 })
         },
         refreshTable() {
@@ -252,17 +280,12 @@ export default {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning",
-            })
-                .then(() => {
+            }).then(() => {
                     let removeObj = {
                         idList: rows.map(item => item.id)
                     };
-                    remove(removeObj)
-                        .then((res) => {
-                            this.$message({
-                                type: "success",
-                                message: res.data.msg,
-                            });
+                    remove(removeObj).then((res) => {
+                            this.$message.success(res.data.msg);
                             this.getTableData();
                         })
                 })

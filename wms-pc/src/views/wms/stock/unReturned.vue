@@ -1,49 +1,51 @@
 <template>
     <div id="unReturned">
-        <nodes-master-page :permission="permissionObj" v-on="form.events">
+        <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="借出人姓名" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.lendReturnName"
                                 :clearable="true"
+                                class="search-input"
                                 placeholder="请输入借出人姓名">
                             </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="物品" label-width="90px">
                             <nodes-sku
                                 v-model="form.params.skuIdList"
                                 :multiple="true"
+                                class="search-input"
                                 placeholder="请选择">
                             </nodes-sku>
                         </el-form-item>
                     </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="创建日期" label-width="90px">
-                                <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
-                            </el-form-item>
-                        </el-col>
-                </el-row>
-            </template>
-            <template v-slot:expandSearch>
-                <el-row type="flex">
+                    <el-col :span="6">
+                        <el-form-item label="创建日期" label-width="90px">
+                            <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="6">
                         <el-form-item label="生产批次" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.skuLot1"
                                 :clearable="true"
+                                class="search-input"
                                 placeholder="请输入生产批次">
                             </el-input>
                         </el-form-item>
                     </el-col>
+                </el-row>
+                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="规格型号" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.skuLot2"
                                 :clearable="true"
+                                class="search-input"
                                 placeholder="请输入规格型号">
                             </el-input>
                         </el-form-item>
@@ -76,8 +78,11 @@
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table" :data="table.data" border highlight-current-row
-                          size="mini" @sort-change="onSortChange">
+                <el-table
+                    ref="table"
+                    :data="table.data"
+                    :height="table.height" border highlight-current-row
+                    size="mini" @sort-change="onSortChange">
                     <el-table-column
                         fixed
                         type="selection"
@@ -111,7 +116,6 @@
 
 <script>
 
-
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
@@ -122,7 +126,6 @@ import {exportData, page} from "@/api/wms/stock/unReturned"
 import {nowDateFormat} from "@/util/date";
 import NodesSku from "@/components/wms/select/NodesSkuByQuery";
 import func from "@/util/func";
-
 
 export default {
     name: "unReturned",
@@ -209,7 +212,6 @@ export default {
     computed: {
         permissionObj() {
             return {
-                search: this.vaildData(this.permission.unReturned_search, false),
                 createReturnBill: this.vaildData(this.permission.unReturned_createReturnBill, false),
             }
         }
@@ -221,6 +223,7 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
+                    this.handleRefreshTable();
                 })
         },
         refreshTable() {

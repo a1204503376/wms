@@ -1,55 +1,98 @@
 <template>
     <div id="list">
-        <nodes-master-page :configure="masterConfig" :permission="permissionObj" v-on="form.events">
+        <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
-                <el-form-item label="收货单编码">
-                    <el-input v-model="form.params.receiveNo" class="d-input" :clearable="true"></el-input>
-                </el-form-item>
-                <el-form-item label="单据状态">
-                    <nodes-receive-bill-state v-model="form.params.billStateList"></nodes-receive-bill-state>
-                </el-form-item>
-                <el-form-item label="物品编码">
-                    <nodes-sku-by-query v-model="form.params.skuIds" style="width: 200px"></nodes-sku-by-query>
-
-                </el-form-item>
-
-                <el-form-item label="上游编码">
-                    <el-input v-model="form.params.externalOrderNo" class="d-input" :clearable="true"></el-input>
-                </el-form-item>
-            </template>
-            <template v-slot:expandSearch>
                 <el-row type="flex">
-                    <el-col :span="24">
-                        <el-form-item label="ASN单编码">
-                            <el-input v-model="form.params.asnBillNo" class="d-input" :clearable="true"></el-input>
+                    <el-col :span="6">
+                        <el-form-item label="收货单编码" label-width="90px">
+                            <el-input
+                                v-model="form.params.receiveNo"
+                                :clearable="true"
+                                class="search-input"
+                                placeholder="请输入收货单编码">
+                            </el-input>
                         </el-form-item>
-                        <el-form-item label="仓库编码">
-                            <nodes-warehouse v-model="form.params.whIds" :multiple="true"></nodes-warehouse>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="单据状态" label-width="90px">
+                            <nodes-receive-bill-state
+                                v-model="form.params.billStateList"
+                                class="search-input">
+                            </nodes-receive-bill-state>
                         </el-form-item>
-                        <el-form-item label="上游创建人">
-                            <el-input v-model="form.params.externalCreateUser" class="d-input"
-                                      :clearable="true"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="物品编码" label-width="90px">
+                            <nodes-sku-by-query
+                                v-model="form.params.skuIds"
+                                class="search-input">
+                            </nodes-sku-by-query>
                         </el-form-item>
-                        <el-form-item label="供应商编码">
-                            <el-input v-model="form.params.supplierCode" class="d-input" :clearable="true"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="上游编码" label-width="90px">
+                            <el-input
+                                v-model="form.params.externalOrderNo"
+                                :clearable="true"
+                                class="search-input"
+                                placeholder="请输入上游编码">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row type="flex">
-                    <el-col :span="24">
-
-                        <el-form-item label="创建日期">
-                            <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
+                    <el-col v-if="false" :span="6">
+                        <el-form-item label="ASN单编码" label-width="90px">
+                            <el-input
+                                v-model="form.params.asnBillNo"
+                                :clearable="true"
+                                class="search-input"
+                                placeholder="请输入ASN单编码">
+                            </el-input>
                         </el-form-item>
-
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="仓库编码" label-width="90px">
+                            <nodes-warehouse
+                                v-model="form.params.whIds"
+                                :multiple="true"
+                                class="search-input">
+                            </nodes-warehouse>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="上游创建人" label-width="90px">
+                            <el-input
+                                v-model="form.params.externalCreateUser"
+                                :clearable="true"
+                                class="search-input"
+                                placeholder="请输入上游创建人">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="供应商编码" label-width="90px">
+                            <el-input
+                                v-model="form.params.supplierCode"
+                                :clearable="true"
+                                class="search-input"
+                                placeholder="请输入供应商编码">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="创建日期" label-width="90px">
+                            <nodes-date-range
+                                v-model="form.params.createTimeDateRange">
+                            </nodes-date-range>
+                        </el-form-item>
                     </el-col>
                 </el-row>
-
             </template>
             <template v-slot:batchBtn>
-                <el-button icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增</el-button>
-                <el-button size="mini" type="danger" @click="onRemove" icon="el-icon-delete"
-                           :plain="false">删除
+                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增</el-button>
+                <el-button v-if="permissionObj.delete" :plain="true" icon="el-icon-delete" size="mini" type="danger"
+                           @click="onRemove">删除
                 </el-button>
             </template>
             <template v-slot:tableTool>
@@ -78,7 +121,7 @@
                     effect="dark"
                     placement="top"
                 >
-                    <el-button circle icon="el-icon-download" @click="exportData" size="mini"></el-button>
+                    <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
@@ -91,49 +134,45 @@
                 <el-table
                     ref="table"
                     :data="table.data"
+                    :height="table.height"
                     border
                     highlight-current-row
-                    size="mini"
                     row-key="receiveId"
+                    size="mini"
+                    style="width: 100%"
                     @sort-change="onSortChange">
                     <el-table-column
                         fixed
                         type="selection"
-                    >
+                        width="50">
                     </el-table-column>
-
                     <template v-for="(column,index) in table.columnList">
-                        <el-table-column sortable="custom" prop="receiveNo" label="收货单编码" width="150"
-                                         v-if="!column.hide && index===0" show-overflow-tooltip>
-                            <template slot-scope="scope">
-                                <el-link @click="onViewDetails(scope.row.receiveId)" target="_blank" type="primary">
+                        <el-table-column
+                            v-if="!column.hide"
+                            :key="index"
+                            min-width="150"
+                            show-overflow-tooltip
+                            v-bind="column">
+                            <template v-if="column.prop === 'receiveNo'" v-slot="scope">
+                                <el-link
+                                    target="_blank"
+                                    type="primary"
+                                    @click="onViewDetails(scope.row.receiveId)">
                                     {{ scope.row.receiveNo }}
                                 </el-link>
                             </template>
                         </el-table-column>
-
-                        <el-table-column
-                            v-if="!column.hide && index!=0"
-                            :key="index"
-                            show-overflow-tooltip
-                            v-bind="column"
-                            width="130"
-                        >
-                        </el-table-column>
                     </template>
-
                     <el-table-column
                         fixed="right"
                         label="操作"
-                        width="180">
-                        <template slot-scope="scope">
-                            <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
-                            <el-button @click="onClose(scope.row)" type="text" size="small">关闭</el-button>
-                            <el-button @click="onReceive(scope.row)" type="text" size="small">PC收货</el-button>
+                        width="150">
+                        <template v-slot="scope">
+                            <el-button v-if="permissionObj.edit" size="small" type="text" @click="handleClick(scope.row)">编辑</el-button>
+                            <el-button v-if="permissionObj.close" size="small" type="text" @click="onClose(scope.row)">关闭</el-button>
+                            <el-button v-if="permissionObj.receive" size="small" type="text" @click="onReceive(scope.row)">PC收货</el-button>
                         </template>
                     </el-table-column>
-
-
                 </el-table>
             </template>
             <template v-slot:page>
@@ -164,7 +203,6 @@
 
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesAsnBillState from "@/components/wms/select/NodesAsnBillState";
-import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
@@ -172,23 +210,17 @@ import {close, exportFile, page, remove} from "@/api/wms/instock/receive";
 import {listMixin} from "@/mixins/list";
 import fileDownload from "js-file-download";
 import NodesReceiveBillState from "../../../components/wms/select/NodesReceiveBillState";
-import NodesCustomer from "@/components/wms/select/NodesCustomer";
-import NodesLocation from "@/components/wms/select/NodesLocation";
-import NodesSku from "@/components/wms/select/NodesSku";
 import NodesSkuByQuery from "@/components/wms/select/NodesSkuByQuery";
 import {ExcelExport} from 'pikaz-excel-js';
+import {nowDateFormat} from "@/util/date";
 
 
 export default {
     name: "list",
     components: {
         NodesSkuByQuery,
-        NodesSku,
-        NodesLocation,
-        NodesCustomer,
         NodesReceiveBillState,
         DialogColumn,
-        NodesInStoreMode,
         NodesWarehouse,
         NodesAsnBillState,
         NodesMasterPage,
@@ -198,10 +230,6 @@ export default {
     mixins: [listMixin],
     data() {
         return {
-            masterConfig: {
-                showExpandBtn: true,
-                showPage: true
-            },
             form: {
                 params: {
                     code: [],
@@ -236,19 +264,18 @@ export default {
                     {
                         prop: 'asnBillNo',
                         label: 'ASN单编码',
-                        sortable: 'custom'
+                        sortable: 'custom',
+                        hide: true,
                     },
                     {
                         prop: 'externalOrderNo',
                         label: '上游编码',
                         sortable: 'custom',
-                        align: 'right'
                     },
                     {
                         prop: 'supplierCode',
                         label: '供应商编码',
                         sortable: 'custom',
-                        align: 'right'
                     },
                     {
                         prop: 'supplierName',
@@ -295,9 +322,19 @@ export default {
                         sortable: 'custom',
                         label: '消息'
                     },
-
                 ]
             },
+        }
+    },
+    computed: {
+        permissionObj() {
+            return {
+                add: this.vaildData(this.permission.receive_add, false),
+                delete: this.vaildData(this.permission.receive_delete, false),
+                edit: this.vaildData(this.permission.receive_edit, false),
+                close: this.vaildData(this.permission.receive_close, false),
+                receive: this.vaildData(this.permission.receive_receive, false),
+            }
         }
     },
     watch: {
@@ -345,15 +382,12 @@ export default {
             });
         },
         getTableData() {
-
-            page(this.page, this.form.params)
-                .then((res) => {
-                    let pageObj = res.data.data;
-                    this.table.data = pageObj.records;
-                    this.page.total = pageObj.total;
-                })
-                .catch(() => {
-                });
+            page(this.page, this.form.params).then((res) => {
+                let pageObj = res.data.data;
+                this.table.data = pageObj.records;
+                this.page.total = pageObj.total;
+                this.handleRefreshTable();
+            })
         },
         onAdd() {
             this.$router.push({
@@ -376,7 +410,6 @@ export default {
                 }
             });
         },
-
         onRemove() {
             this.$confirm("确定删除当前数据？", {
                 confirmButtonText: "确定",
@@ -386,8 +419,7 @@ export default {
                 this.$refs.table.selection.forEach(e => {
                     this.nums.receiveIdList.push(e.receiveId)
                 })
-                remove(this.nums)
-                    .then(() => {
+                remove(this.nums).then(() => {
                         this.$message.success('删除成功');
                         this.getTableData();
                     })
@@ -414,11 +446,8 @@ export default {
                 close(this.nums)
                     .then(() => {
                         this.$message.success('关闭成功');
-
                         this.getTableData();
                     })
-                    .catch(() => {
-                    });
             })
         },
 
@@ -427,7 +456,7 @@ export default {
             exportFile(this.form.params)
                 .then((res) => {
                     this.$message.success("操作成功，正在下载中...");
-                    fileDownload(res.data, "收货管理列表.xlsx");
+                    fileDownload(res.data, `收货管理列表${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
                 })
                 .catch(() => {
                     this.$message.error("系统模板目录配置有误或文件不存在");

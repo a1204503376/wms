@@ -90,7 +90,7 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 
 	@Override
 	public SoDetail getSoDetailById(Long soDetailId) {
-		AssertUtil.notNull(soDetailId,"根据出库单明细ID获取出库单明细失败，出库单明细ID为空");
+		AssertUtil.notNull(soDetailId, "根据出库单明细ID获取出库单明细失败，出库单明细ID为空");
 		return super.getById(soDetailId);
 	}
 
@@ -99,5 +99,14 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 		if (!super.saveOrUpdate(soDetail)) {
 			throw new ServiceException("修改发货单明细失败");
 		}
+	}
+
+	@Override
+	public List<SoDetail> getSoDetailBySoHeaderId(Long soBillId) {
+		AssertUtil.notNull(soBillId, "根据发货单ID查询发货单明细失败，发货单ID为空");
+		return super.lambdaQuery()
+			.eq(SoDetail::getSoBillId, soBillId)
+			.in(SoDetail::getBillDetailState, SoDetailStateEnum.AllocWellen, SoDetailStateEnum.Allocated, SoDetailStateEnum.NORMAL, SoDetailStateEnum.PART)
+			.list();
 	}
 }

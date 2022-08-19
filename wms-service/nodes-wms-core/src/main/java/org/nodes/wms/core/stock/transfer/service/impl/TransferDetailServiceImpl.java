@@ -2,20 +2,20 @@ package org.nodes.wms.core.stock.transfer.service.impl;
 
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
-import org.nodes.wms.dao.basics.sku.entities.Sku;
-import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
+import org.nodes.wms.core.outstock.so.entity.SoDetail;
 import org.nodes.wms.core.stock.core.dto.StockOccupyDTO;
-import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.enums.StockOccupyTypeEnum;
 import org.nodes.wms.core.stock.core.service.IStockOccupyService;
-import org.nodes.wms.core.outstock.so.entity.SoDetail;
+import org.nodes.wms.core.stock.transfer.entity.TransferDetail;
 import org.nodes.wms.core.stock.transfer.entity.TransferDetailItem;
 import org.nodes.wms.core.stock.transfer.entity.TransferHeader;
-import org.nodes.wms.core.stock.transfer.service.ITransferDetailItemService;
-import org.springblade.core.log.exception.ServiceException;
-import org.nodes.wms.core.stock.transfer.entity.TransferDetail;
 import org.nodes.wms.core.stock.transfer.mapper.TransferDetailMapper;
+import org.nodes.wms.core.stock.transfer.service.ITransferDetailItemService;
 import org.nodes.wms.core.stock.transfer.service.ITransferDetailService;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
+import org.nodes.wms.dao.stock.entities.Stock;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.utils.Func;
@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
  * 库内移动明细 服务实现类
@@ -99,19 +98,19 @@ public class TransferDetailServiceImpl<M extends TransferDetailMapper, T extends
 
 		// 创建库存占用
 		StockOccupyDTO stockOccupyDTO = new StockOccupyDTO();
-		stockOccupyDTO.setTransId(transferHeader.getTransferBillId());
+//		stockOccupyDTO.setTransId(transferHeader.getTransferBillId());
 		stockOccupyDTO.setOccupyType(StockOccupyTypeEnum.Replenish.getIndex());
 		stockOccupyDTO.setWhId(transferHeader.getWhId());
 		stockOccupyDTO.setStockId(stock.getStockId());
 		stockOccupyDTO.setSkuId(sku.getSkuId());
 		stockOccupyDTO.setSkuCode(sku.getSkuCode());
 		stockOccupyDTO.setSkuName(sku.getSkuName());
-		stockOccupyDTO.setSystemProcId(systemProcId);
-		stockOccupyDTO.setOccupyTime(LocalDateTime.now());
-		stockOccupyDTO.setOccupyQty(qty);
-		stockOccupyDTO.setSoBillId(transferHeader.getTransferBillId());
-		stockOccupyDTO.setSoBillNo(String.valueOf(transferHeader.getTransferBillId()));
-		stockOccupyDTO.setSoDetailId(transferDetail.getTransferDetailId());
+//		stockOccupyDTO.setSystemProcId(systemProcId);
+//		stockOccupyDTO.setOccupyTime(LocalDateTime.now());
+//		stockOccupyDTO.setOccupyQty(qty);
+//		stockOccupyDTO.setSoBillId(transferHeader.getTransferBillId());
+//		stockOccupyDTO.setSoBillNo(String.valueOf(transferHeader.getTransferBillId()));
+//		stockOccupyDTO.setSoDetailId(transferDetail.getTransferDetailId());
 		stockOccupyDTO.setCreateUser(transferHeader.getCreateUser());
 		stockOccupyDTO.setUpdateUser(transferHeader.getUpdateUser());
 		stockOccupyService.add(stockOccupyDTO);

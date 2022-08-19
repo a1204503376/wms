@@ -80,6 +80,9 @@
 		},
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
+			if (tool.isNotEmpty(this.params.countBillNo)) {
+				this.getReceiveList();
+			}
 		},
 		onBackPress(event) {
 			// #ifdef APP-PLUS

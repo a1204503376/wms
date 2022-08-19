@@ -7,6 +7,7 @@ import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.task.entities.WmsTask;
+import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
 import org.nodes.wms.dao.task.enums.WmsTaskTypeEnum;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class WmsTaskFactory {
 	 * @return 上架任务
 	 */
 	public WmsTask createPutwayTask(List<Stock> stockList) {
-		WmsTask wmsTask = getWmsTask(stockList);
+		WmsTask wmsTask = createWmsTask(stockList, WmsTaskProcTypeEnum.BY_LPN_AGV);
 		// 任务类型： AGV上架
 		wmsTask.setTaskTypeCd(WmsTaskTypeEnum.AGV_PUTAWAY);
 		return wmsTask;
@@ -43,7 +44,7 @@ public class WmsTaskFactory {
 	 * @return 库内移位任务
 	 */
 	public WmsTask createMoveTask(List<Stock> sourceStock, Location targetLocation) {
-		WmsTask wmsTask = getWmsTask(sourceStock);
+		WmsTask wmsTask = createWmsTask(sourceStock, WmsTaskProcTypeEnum.BY_LOC_AGV);
 		// 任务类型： AGV库内移位
 		wmsTask.setTaskTypeCd(WmsTaskTypeEnum.AGV_STOCK_MOVE);
 		// 目标库位
@@ -53,7 +54,7 @@ public class WmsTaskFactory {
 	}
 
 	/**
-	 * 创建拣货任务，目标库位为空。只有调度系统通过接口查询可用库位时才清楚目标库位
+	 * 创建agv拣货任务，目标库位为空。只有调度系统通过接口查询可用库位时才清楚目标库位
 	 *
 	 * @param sourceStock 拣货的库存
 	 * @param so          出库单
@@ -61,7 +62,7 @@ public class WmsTaskFactory {
 	 * @return 拣货任务
 	 */
 	public WmsTask createPickTask(List<Stock> sourceStock, SoHeader so, SoDetail soDetail) {
-		WmsTask wmsTask = getWmsTask(sourceStock);
+		WmsTask wmsTask = createWmsTask(sourceStock, WmsTaskProcTypeEnum.BY_LOC_AGV);
 		// 单据id、编码，明细id
 		wmsTask.setBillId(so.getSoBillId());
 		wmsTask.setBillNo(so.getSoBillNo());
@@ -74,7 +75,7 @@ public class WmsTaskFactory {
 	/**
 	 * 赋值
 	 */
-	private WmsTask getWmsTask(List<Stock> stockList) {
+	private WmsTask createWmsTask(List<Stock> stockList, WmsTaskProcTypeEnum proc) {
 		WmsTask wmsTask = new WmsTask();
 		// 任务id
 		wmsTask.setTaskId(IdWorker.getId());
@@ -85,7 +86,7 @@ public class WmsTaskFactory {
 		// 关联明细id
 		wmsTask.setBillDetailId(stockList.get(0).getStockId());
 		// 任务执行方式
-		wmsTask.setTaskProcType(0);
+		wmsTask.setTaskProcType(proc);
 		// 任务状态： 未下发
 		wmsTask.setTaskState(WmsTaskStateEnum.NOT_ISSUED);
 		// 物品编码

@@ -42,7 +42,7 @@ public interface OutStockBiz {
 	 *
 	 * @param logSoPickIdList 拣货记录id
 	 */
-    void cancelOutstock(List<Long> logSoPickIdList);
+    void cancelOutStock(List<Long> logSoPickIdList);
 
 	/**
 	 * PDA按件拣货：根据单号查询出库单
@@ -104,9 +104,9 @@ public interface OutStockBiz {
 	 * 分配：自动分配
 	 *
 	 * @param soBillId 发货单id
-	 * @return true：自动分配成功 false：自动分配失败
+	 * @return 分配成功则返回分配成功的信息，否则返回实际运行的信息
 	 */
-	boolean autoDistribute(Long soBillId);
+	String autoDistribute(Long soBillId);
 
 	/**
 	 * 分配：取消分配
@@ -114,7 +114,7 @@ public interface OutStockBiz {
 	 * @param soBillId 发货单id
 	 * @return true：取消分配成功 false：取消分配失败
 	 */
-	boolean cancleDistribute(Long soBillId);
+	boolean cancelDistribute(Long soBillId);
 
 	/**
 	 * 分配：确认下发

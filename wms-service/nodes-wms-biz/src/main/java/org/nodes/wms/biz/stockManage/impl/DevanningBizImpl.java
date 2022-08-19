@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * 拆箱相关业务
+ * 
  * @author admin
  */
 @Service
@@ -92,7 +94,7 @@ public class DevanningBizImpl implements DevanningBiz {
 				.map(Serial::getStockId)
 				.distinct()
 				.collect(Collectors.toList());
-			List<Stock> stockList = stockQueryBiz.findStockByIds(stockIds);
+			List<Stock> stockList = stockQueryBiz.findStockById(stockIds);
 			AssertUtil.notNull(stockList, "采集的序列号找不到对应库存");
 			stockList.forEach(stock -> {
 				AssertUtil.notNull(stock, "根据序列号拆箱时,根据序列号集合找不到对应库存");

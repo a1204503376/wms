@@ -1,72 +1,33 @@
 <template>
-    <div id="stockLog">
-        <nodes-master-page :permission="permissionObj" v-on="form.events">
+    <div id="stockMoveLog">
+        <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="物品" label-width="90px">
                             <nodes-sku-by-query
-                                style="width: 182px"
+                                class="search-input"
                                 v-model="form.params.skuIdList"
-                                :clearable="true"
-                            ></nodes-sku-by-query>
+                                :clearable="true">
+                            </nodes-sku-by-query>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="单据编码" label-width="90px">
-                            <el-input placeholder="请输入单据编码" v-model.trim="form.params.sourceBillNo" :clearable="true"></el-input>
+                            <el-input
+                                class="search-input"
+                                placeholder="请输入单据编码"
+                                v-model.trim="form.params.sourceBillNo" :clearable="true">
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="移动类型" label-width="90px">
                             <nodes-stock-log-type
                                 v-model="form.params.logTypeList"
-                                :multiple="true"
-                            ></nodes-stock-log-type>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row type="flex">
-                    <el-col :span="8">
-                        <el-form-item label="创建人" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.createUser"
-                                :clearable="true"
-                                placeholder="请输入创建人"
-                            ></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="创建日期" label-width="90px">
-                            <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </template>
-            <template v-slot:expandSearch>
-                <el-row type="flex">
-                    <el-col :span="6">
-                        <el-form-item label="库位" label-width="90px">
-                            <nodes-location
-                                style="width: 182px"
-                                v-model.trim="form.params.locIdList"
-                                :clearable="true"></nodes-location>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item label="库区" label-width="90px">
-                            <nodes-zone
-                                :multiple="true"
-                                v-model="form.params.zoneIdList"
-                            ></nodes-zone>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item label="库房" label-width="90px">
-                            <nodes-warehouse
-                                :multiple="true"
-                                v-model="form.params.whIdList"
-                            ></nodes-warehouse>
+                                class="search-input"
+                                :multiple="true">
+                            </nodes-stock-log-type>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -74,19 +35,67 @@
                             <el-input
                                 v-model.trim="form.params.boxCode"
                                 :clearable="true"
-                                placeholder="请输入箱码"
-                            ></el-input>
+                                class="search-input"
+                                placeholder="请输入箱码">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row type="flex">
                     <el-col :span="6">
+                        <el-form-item label="库位" label-width="90px">
+                            <nodes-location
+                                class="search-input"
+                                v-model.trim="form.params.locIdList"
+                                :clearable="true">
+                            </nodes-location>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="库区" label-width="90px">
+                            <nodes-zone
+                                :multiple="true"
+                                class="search-input"
+                                v-model="form.params.zoneIdList">
+                            </nodes-zone>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="库房" label-width="90px">
+                            <nodes-warehouse
+                                :multiple="true"
+                                class="search-input"
+                                v-model="form.params.whIdList">
+                            </nodes-warehouse>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
                         <el-form-item label="生产批次" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.skuLot1"
+                                class="search-input"
                                 :clearable="true"
-                                placeholder="请输入生产批次"
-                            ></el-input>
+                                placeholder="请输入生产批次">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row type="flex">
+                    <el-col :span="6">
+                        <el-form-item label="创建人" label-width="90px">
+                            <el-input
+                                class="search-input"
+                                v-model.trim="form.params.createUser"
+                                :clearable="true"
+                                placeholder="请输入创建人">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="创建日期" label-width="90px">
+                            <nodes-date-range
+                                v-model="form.params.createTimeDateRange">
+                            </nodes-date-range>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -111,6 +120,7 @@
             <template v-slot:table>
                 <el-table ref="table"
                           :data="table.data"
+                          :height="table.height"
                           border
                           highlight-current-row
                           size="mini"
@@ -118,12 +128,7 @@
                           @sort-change="onSortChange">
                     <el-table-column
                         fixed
-                        type="selection"
-                        width="50">
-                    </el-table-column>
-                    <el-table-column
-                        fixed
-                        sortable
+                        width="50"
                         type="index">
                         <template slot="header">
                             #
@@ -147,15 +152,18 @@
                 </el-pagination>
             </template>
         </nodes-master-page>
-        <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
-        </dialog-column>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
     </div>
 </template>
 
 <script>
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
-import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import {listMixin} from "@/mixins/list";
 import fileDownload from "js-file-download";
@@ -169,7 +177,6 @@ import NodesLocation from "@/components/wms/select/NodesLocation";
 import NodesZone from "@/components/wms/select/NodesZone";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 
-
 export default {
     name: "stockLog",
     components: {
@@ -178,7 +185,6 @@ export default {
         NodesLocation,
         NodesSkuByQuery,
         DialogColumn,
-        NodesSearchInput,
         NodesMasterPage,
         NodesDateRange,
         NodesStockLogType,
@@ -361,21 +367,6 @@ export default {
             }
         };
     },
-    watch: {
-        $route(to) {
-            if (to.query && to.query.isRefresh === 'true') {
-                this.refreshTable();
-            }
-        }
-    },
-    computed: {
-        permissionObj() {
-            return {
-                search: this.vaildData(this.permission.stockLog_search, false),
-                import: this.vaildData(this.permission.stockLog_import, false)
-            }
-        }
-    },
     created() {
         this.getTableData();
     },
@@ -386,6 +377,7 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
+                    this.handleRefreshTable();
                 })
         },
         refreshTable() {

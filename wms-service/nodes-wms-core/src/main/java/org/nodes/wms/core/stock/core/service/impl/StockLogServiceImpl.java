@@ -79,7 +79,7 @@ public class StockLogServiceImpl<M extends StockLogMapper, T extends StockLog>
 			stockLog.setWspName(skuPackage.getWspName());
 		}
 		stockLog.setProType(stockProcType.getIndex());
-		stockLog.setSystemProcId(systemProcId);
+//		stockLog.setSystemProcId(systemProcId);
 
 		super.save(stockLog);
 

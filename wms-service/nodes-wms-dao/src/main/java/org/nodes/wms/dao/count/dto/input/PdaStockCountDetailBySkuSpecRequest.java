@@ -33,7 +33,7 @@ public class PdaStockCountDetailBySkuSpecRequest extends SkuLot implements Seria
 	/**
 	 * 差异报告
 	 */
-	private List<Object> countReportVOList;
+	private List<CountRecordView> countReportVOList;
 
 	/**
 	 * 盘点标签

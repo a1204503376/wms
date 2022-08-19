@@ -3,44 +3,52 @@
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="发货单编码" label-width="90px">
-                            <el-input placeholder="请输入发货单编码" v-model.trim="form.params.soBillNo" :clearable="true"></el-input>
+                            <el-input v-model.trim="form.params.soBillNo" :clearable="true" class="search-input"
+                                      placeholder="请输入发货单编码">
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
-                            <nodes-sku v-model="form.params.skuIdList" :clearable="true"></nodes-sku>
+                            <nodes-sku v-model="form.params.skuIdList" :clearable="true"
+                                       class="search-input">
+                            </nodes-sku>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="单据类型" label-width="90px">
                             <nodes-bill-type
                                 v-model="form.params.billTypeCdList"
+                                :clearable="true"
                                 :multiple="true"
-                                io-type="O"
-                                :clearable="true"></nodes-bill-type>
+                                class="search-input"
+                                io-type="O">
+                            </nodes-bill-type>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="上游编码" label-width="90px">
+                            <el-input v-model.trim="form.params.orderNo" :clearable="true" class="search-input"
+                                      placeholder="请输入上游编码">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
-            </template>
-            <template v-slot:expandSearch>
                 <el-row type="flex">
                     <el-col :span="6">
-                        <el-form-item label="上游编码" label-width="90px">
-                            <el-input placeholder="请输入上游编码" v-model.trim="form.params.orderNo" :clearable="true"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
                         <el-form-item label="创建人" label-width="90px">
-                            <el-input placeholder="请输入创建人" v-model.trim="form.params.createUser" :clearable="true"></el-input>
+                            <el-input v-model.trim="form.params.createUser" :clearable="true"
+                                      placeholder="请输入创建人">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="创建时间" label-width="90px">
                             <nodes-date-range
-                                v-model="form.params.createTimeDateRange"
-                            ></nodes-date-range>
+                                v-model="form.params.createTimeDateRange">
+                            </nodes-date-range>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -65,6 +73,7 @@
             <template v-slot:table>
                 <el-table ref="table"
                           :data="table.data"
+                          :height="table.height"
                           border
                           highlight-current-row
                           size="mini"
@@ -77,7 +86,7 @@
                     </el-table-column>
                     <el-table-column
                         fixed
-                        sortable
+                        width="50"
                         type="index">
                         <template slot="header">
                             #
@@ -88,7 +97,7 @@
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column"
-                            width="130">
+                            min-width="150">
                         </el-table-column>
                     </template>
                 </el-table>
@@ -101,8 +110,12 @@
                 </el-pagination>
             </template>
         </nodes-master-page>
-        <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
-        </dialog-column>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
     </div>
 </template>
 
@@ -280,6 +293,7 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
+                    this.handleRefreshTable();
                 })
         },
         refreshTable() {
@@ -312,10 +326,6 @@ export default {
         onExportLocalData() {
             this.exportCurrentDataToExcel("未发货明细", "未发货明细")
         },
-        onRepeal() {
-            let rows = this.$refs.table;
-            console.log(rows);
-        }
     },
 };
 </script>

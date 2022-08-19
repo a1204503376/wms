@@ -102,4 +102,7 @@ public class CountDetail extends BaseEntity {
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	private LocalDateTime procTime;
 
+	private String boxCode;
+
+
 }

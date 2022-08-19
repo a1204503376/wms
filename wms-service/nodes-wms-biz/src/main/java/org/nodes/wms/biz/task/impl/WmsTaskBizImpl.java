@@ -104,7 +104,12 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 			wmsTask.getTaskId(),
 			wmsTask.getBillNo(),
 			String.format("任务ID[%s]:单据号[%s]来源库位[%s]目标库位[%s]任务编码[%s]任务状态[%s]",
-				wmsTask.getTaskId(),wmsTask.getBillNo(), wmsTask.getFromLocId()
-				, wmsTask.getToLocId(),wmsTask.getTaskTypeCd().getCode(), wmsTask.getTaskState().getCode()));
+				wmsTask.getTaskId(), wmsTask.getBillNo(), wmsTask.getFromLocId()
+				, wmsTask.getToLocId(), wmsTask.getTaskTypeCd().getCode(), wmsTask.getTaskState().getCode()));
+	}
+
+	@Override
+	public WmsTask findEnableTaskByBoxCode(String boxCode) {
+		return wmsTaskDao.findTaskByBoxCode(boxCode);
 	}
 }
