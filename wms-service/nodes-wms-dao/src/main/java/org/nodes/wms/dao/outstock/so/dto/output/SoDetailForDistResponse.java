@@ -62,4 +62,13 @@ public class SoDetailForDistResponse implements Serializable {
 	 */
 	private BigDecimal planQty;
 
+	/**
+	 * 生产批次
+	 */
+	private String skuLot1;
+
+	/**
+	 * 专用客户
+	 */
+	private String skuLot4;
 }

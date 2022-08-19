@@ -106,7 +106,9 @@
                detail.surplus_qty,
                detail.um_code,
                SUM(pick_plan_qty) AS pickPlanQty,
-               detail.plan_qty
+               detail.plan_qty,
+               detail.sku_lot1,
+               detail.sku_lot4
         FROM so_detail detail
                  LEFT JOIN so_pick_plan plan
                            ON plan.so_detail_id = detail.so_detail_id AND plan.is_deleted = 0
