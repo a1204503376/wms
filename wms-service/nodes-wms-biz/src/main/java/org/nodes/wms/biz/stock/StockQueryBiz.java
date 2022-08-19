@@ -36,6 +36,30 @@ public interface StockQueryBiz {
 	Stock findStockById(Long stockId);
 
 	/**
+	 * 根据 传过来的stockIds集合获取库存集合
+	 *
+	 * @param stockIdList 库存id集合
+	 * @return 库存集合
+	 */
+	List<Stock> findStockById(List<Long> stockIdList);
+
+	/**
+	 * 根据清点记录查询入库暂存区的库存,如果查询的库存超过两个会报异常
+	 *
+	 * @param receiveLog 清点记录，必填
+	 * @return Stock
+	 */
+	Stock findStockOnStage(ReceiveLog receiveLog);
+
+	/**
+	 * 根据拣货记录在出库集货区查找库存
+	 *
+	 * @param pickLog 拣货记录
+	 * @return stock
+	 */
+	Stock findStockOnPickTo(LogSoPick pickLog);
+
+	/**
 	 * 根据落放id获取库存
 	 *
 	 * @param dropId 落放id
@@ -68,51 +92,12 @@ public interface StockQueryBiz {
 	boolean isEmptyLocation(Long locationId);
 
 	/**
-	 * 查找可用库存,排除出库暂存区
+	 * 根据lpn code查询库存，含出库暂存区的
 	 *
-	 * @param whId            必填，库房id
-	 * @param skuId           必填，物品id
-	 * @param stockStatusEnum 非必填，如果为空则表示查询所有状态
-	 * @param zoneTypeList    非必填，如果为空则表示不限制库区类型
-	 * @param skuLot          非必填，如果批属性不为空，则需要匹配
+	 * @param lpnCode 必填
 	 * @return Stock集合
 	 */
-	List<Stock> findEnableStockByZoneType(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-										  List<String> zoneTypeList, SkuLotBaseEntity skuLot);
-
-	/**
-	 * 查找可用库存,排除出库暂存区
-	 *
-	 * @param skuLot 必填，如果批属性不为空，则需要匹配
-	 * @return Stock集合
-	 */
-	List<Stock> findEnableStockBySkuLot(SkuLotBaseEntity skuLot);
-
-	/**
-	 * 根据库区id查询可用库存,排除出库暂存区
-	 *
-	 * @param whId            必填，库房id
-	 * @param skuId           必填，物品id
-	 * @param stockStatusEnum 非必填，如果为空则表示查询所有状态
-	 * @param zoneIdList      非必填，如果为空则表示不限制库区
-	 * @param skuLot          非必填，如果批属性不为空，则需要匹配
-	 * @return Stock集合
-	 */
-	List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-									  List<Long> zoneIdList, SkuLotBaseEntity skuLot);
-
-	/**
-	 * 根据库位id查询可用库存,排除出库暂存区
-	 *
-	 * @param whId            必填，库房id
-	 * @param skuId           必填，物品id
-	 * @param stockStatusEnum 非必填，如果为空则表示查询所有状态
-	 * @param locationIdList  非必填，如果为空则表示不限制库位
-	 * @param skuLot          非必填，如果批属性不为空，则需要匹配
-	 * @return Stock集合
-	 */
-	List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-										  List<Long> locationIdList, SkuLotBaseEntity skuLot);
+	List<Stock> findStockByLpnCode(String lpnCode);
 
 	/**
 	 * 根据箱码查询库存,排除出库暂存区
@@ -125,10 +110,10 @@ public interface StockQueryBiz {
 	/**
 	 * 根据箱码集合查询库存,排除出库暂存区
 	 *
-	 * @param boxCodes 箱码集合，必填
+	 * @param boxCodeList 箱码集合，必填
 	 * @return Stock集合
 	 */
-	List<Stock> findEnableStockByBoxCode(List<String> boxCodes);
+	List<Stock> findEnableStockByBoxCode(List<String> boxCodeList);
 
 	/**
 	 * 根据箱码获取入库暂存区的库存
@@ -140,28 +125,60 @@ public interface StockQueryBiz {
 	List<Stock> findStockOnStageByBoxCode(Long whId, String boxCode);
 
 	/**
-	 * 根据清点记录查询入库暂存区的库存,如果查询的库存超过两个会报异常
+	 * 查找可用库存,排除出库暂存区
 	 *
-	 * @param receiveLog 清点记录，必填
-	 * @return Stock
-	 */
-	Stock findStockOnStage(ReceiveLog receiveLog);
-
-	/**
-	 * 根据拣货记录在出库集货区查找库存
-	 *
-	 * @param pickLog 拣货记录
-	 * @return stock
-	 */
-	Stock findStockOnPickTo(LogSoPick pickLog);
-
-	/**
-	 * 根据lpn code查询库存，含出库暂存区的
-	 *
-	 * @param lpnCode 必填
+	 * @param skuLot 必填，如果批属性不为空，则需要匹配
 	 * @return Stock集合
 	 */
-	List<Stock> findStockByLpnCode(String lpnCode);
+	List<Stock> findEnableStockByZoneTypeAndSkuLot(SkuLotBaseEntity skuLot);
+
+	/**
+	 * 查找可用库存,排除出库暂存区
+	 *
+	 * @param whId            必填，库房id
+	 * @param skuId           必填，物品id
+	 * @param stockStatusEnum 非必填，如果为空则表示查询所有状态
+	 * @param zoneTypeList    非必填，如果为空则表示不限制库区类型
+	 * @param skuLot          非必填，如果批属性不为空，则需要匹配
+	 * @return Stock集合
+	 */
+	List<Stock> findEnableStockByZoneTypeAndSkuLot(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
+			List<String> zoneTypeList, SkuLotBaseEntity skuLot);
+
+	/**
+	 * 根据库区id查询可用库存,排除出库暂存区
+	 *
+	 * @param whId            必填，库房id
+	 * @param skuId           必填，物品id
+	 * @param stockStatusEnum 非必填，如果为空则表示查询所有状态
+	 * @param zoneIdList      非必填，如果为空则表示不限制库区
+	 * @param skuLot          非必填，如果批属性不为空，则需要匹配
+	 * @return Stock集合
+	 */
+	List<Stock> findEnableStockByZoneAndSkuLot(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
+			List<Long> zoneIdList, SkuLotBaseEntity skuLot);
+
+	/**
+	 * 根据库位id查询可用库存,排除出库暂存区
+	 *
+	 * @param whId            必填，库房id
+	 * @param skuId           必填，物品id
+	 * @param stockStatusEnum 非必填，如果为空则表示查询所有状态
+	 * @param locationIdList  非必填，如果为空则表示不限制库位
+	 * @param skuLot          非必填，如果批属性不为空，则需要匹配
+	 * @return Stock集合
+	 */
+	List<Stock> findEnableStockByLocationAndSkuLot(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
+			List<Long> locationIdList, SkuLotBaseEntity skuLot);
+
+	/**
+	 * 根据物品和批次信息查找库存，排除出库暂存区
+	 * 
+	 * @param skuId  必填，物品id
+	 * @param skuLot 非必填，如果批属性不为空，则需要匹配
+	 * @return Stock集合
+	 */
+	List<Stock> findEnableStockBySkuAndSkuLot(Long skuId, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 根据序列号编码获取在库的序列号信息
@@ -231,30 +248,6 @@ public interface StockQueryBiz {
 	List<CallAgvResponse> findLpnStockOnStageLeftByCallAgv(Long whId, String boxCode);
 
 	/**
-	 * 根据箱码获取库存信息
-	 *
-	 * @param boxCodeList 箱码
-	 * @return List<StockMoveResponse> 库存移动查询响应对象
-	 */
-	List<Stock> findStockMoveByBoxCode(List<String> boxCodeList);
-
-	/**
-	 * 根据库存id获取库存信息
-	 *
-	 * @param stockId 库存id
-	 * @return StockMoveResponse 库存移动查询响应对象
-	 */
-	StockMoveResponse findStockMoveBySkuId(Long stockId);
-
-	/**
-	 * 根据 传过来的stockIds集合获取库存集合
-	 *
-	 * @param stockIds 库存id集合
-	 * @return 库存集合
-	 */
-	List<Stock> findStockByIds(List<Long> stockIds);
-
-	/**
 	 * 库存余额按序列号显示分页信息
 	 *
 	 * @param query                  分页参数
@@ -266,8 +259,10 @@ public interface StockQueryBiz {
 	/**
 	 * 获取库存统计
 	 *
-	 * @param locCode 库位
-	 * @return PdaBoxQtyResponse
+	 * @param locCode 库位编码
+	 * @param boxCode 箱码
+	 * @param skuCode 物品编码
+	 * @return 库存
 	 */
 	List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode, String boxCode, String skuCode);
 }

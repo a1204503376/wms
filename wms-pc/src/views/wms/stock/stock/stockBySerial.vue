@@ -1,56 +1,66 @@
-import fileDownload from "js-file-download";
 <template>
     <div id='inventory'>
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="序列号" label-width="90px">
-                            <el-input v-model.trim="form.params.serial" :clearable="true"
-                                      placeholder="请输入序列号"></el-input>
+                            <el-input
+                                v-model.trim="form.params.serial"
+                                :clearable="true" class="search-input"
+                                placeholder="请输入序列号">
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="序列号范围" label-width="90px">
-                            <el-input v-model.trim="form.params.serialBegin" :clearable="true"
-                                      style="width:100px"></el-input>
+                            <el-input
+                                v-model.trim="form.params.serialBegin" :clearable="true"
+                                style="width:84px">
+                            </el-input>
                             -
-                            <el-input v-model.trim="form.params.serialEnd" :clearable="true"
-                                      style="width:100px"></el-input>
+                            <el-input
+                                v-model.trim="form.params.serialEnd" :clearable="true"
+                                style="width:84px">
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
                             <nodes-sku
-                                v-model="form.params.skuIds">
+                                v-model="form.params.skuIds"
+                                class="search-input">
                             </nodes-sku>
                         </el-form-item>
                     </el-col>
-
-
-                </el-row>
-            </template>
-            <template v-slot:expandSearch>
-                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="箱号" label-width="90px">
-                            <el-input v-model.trim="form.params.boxCode" :clearable="true"
-                                      placeholder="请输入箱号"></el-input>
+                            <el-input
+                                v-model.trim="form.params.boxCode" :clearable="true" class="search-input"
+                                placeholder="请输入箱号">
+                            </el-input>
                         </el-form-item>
                     </el-col>
+                </el-row>
+                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="生产批次" label-width="90px">
-                            <el-input v-model.trim="form.params.skuLot1" :clearable="true"
-                                      placeholder="请输入生产批次"></el-input>
+                            <el-input
+                                v-model.trim="form.params.skuLot1"
+                                :clearable="true" class="search-input"
+                                placeholder="请输入生产批次">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库位" label-width="90px">
-                            <nodes-location v-model="form.params.locIdList" :multiple="true"></nodes-location>
+                            <nodes-location
+                                v-model="form.params.locIdList"
+                                :multiple="true" class="search-input">
+                            </nodes-location>
                         </el-form-item>
                     </el-col>
                 </el-row>
-
             </template>
             <template v-slot:tableTool>
                 <el-tooltip
@@ -102,6 +112,7 @@ import fileDownload from "js-file-download";
                 <el-table
                     ref="table"
                     :data="table.data"
+                    :height="table.height"
                     border
                     highlight-current-row
                     row-key="id"
@@ -138,6 +149,12 @@ import fileDownload from "js-file-download";
                 </el-pagination>
             </template>
         </nodes-master-page>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
     </div>
 </template>
 
@@ -331,6 +348,7 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
+                    this.handleRefreshTable();
 
                     let currentSku = this.pageSize.indexOf(pageObj.total)
                     if (currentSku === -1) {

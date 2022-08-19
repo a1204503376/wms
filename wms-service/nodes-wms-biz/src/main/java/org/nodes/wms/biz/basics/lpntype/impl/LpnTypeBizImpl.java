@@ -3,6 +3,7 @@ package org.nodes.wms.biz.basics.lpntype.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.CodeGenerator;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.common.config.WMSAppConfig;
@@ -22,6 +23,7 @@ import org.springblade.core.mp.support.Query;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -53,6 +55,13 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 	 */
 	@Override
 	public boolean newLpnType(NewLpnTypeRequest lpnTypeRequest) {
+		AssertUtil.notNull(lpnTypeRequest.getLpnType(), "新增容器类别失败，容器类型s为空");
+		AssertUtil.notEmpty(lpnTypeRequest.getCode(), "新增容器类别失败，容器类型编码为空");
+		AssertUtil.notEmpty(lpnTypeRequest.getLpnNoRule(), "新增容器类别失败，容器编码生成规则为空");
+		AssertUtil.notNull(lpnTypeRequest.getWeight(), "新增容器类别失败，容器重量为空");
+		if (BigDecimalUtil.gt(lpnTypeRequest.getWeight(), new BigDecimal("999999.999"))) {
+			throw new ServiceException("新增容器类别失败，重量超过数据最大限制，请重新输入重量");
+		}
 		boolean existCarrierCode = lpnTypeDao.isExistCarrierCode(lpnTypeRequest.getCode());
 		if (existCarrierCode) {
 			throw new ServiceException("新增容器失败，容器类型编码重复");
@@ -98,6 +107,14 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 	 */
 	@Override
 	public boolean updateLpnTypeById(UpdateLpnTypeRequest lpnTypeRequest) {
+		AssertUtil.notNull(lpnTypeRequest.getId(), "修改容器类别失败，容器ID为空");
+		AssertUtil.notNull(lpnTypeRequest.getLpnType(), "修改容器类别失败，容器类型s为空");
+		AssertUtil.notEmpty(lpnTypeRequest.getCode(), "修改容器类别失败，容器类型编码为空");
+		AssertUtil.notEmpty(lpnTypeRequest.getLpnNoRule(), "修改容器类别失败，容器编码生成规则为空");
+		AssertUtil.notNull(lpnTypeRequest.getWeight(), "修改容器类别失败，容器重量为空");
+		if (BigDecimalUtil.gt(lpnTypeRequest.getWeight(), new BigDecimal("999999.999"))) {
+			throw new ServiceException("重量超过数据最大限制，请重新输入重量");
+		}
 		return lpnTypeDao.updateById(lpnTypeFactory.createLpnType(lpnTypeRequest));
 	}
 
@@ -147,11 +164,11 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 		LpnType lpnType = lpnTypeDao.getLpnTypeByCode(lpnTypeCode);
 		AssertUtil.notEmpty(lpnType.getLpnNoRule(), "容器编码生成失败，没有配置编码生成规则");
 		return codeGenerator.generateCode(wmsAppConfig.getProjectName(),
-				"LPN", lpnTypeCode, lpnType.getLpnNoRule());
+			"LPN", lpnTypeCode, lpnType.getLpnNoRule());
 	}
 
-    @Override
-    public LpnType findLpnType(LpnTypeCodeEnum type) {
+	@Override
+	public LpnType findLpnType(LpnTypeCodeEnum type) {
 		return lpnTypeDao.getLpnTypeByCode(type.getCode());
-    }
+	}
 }

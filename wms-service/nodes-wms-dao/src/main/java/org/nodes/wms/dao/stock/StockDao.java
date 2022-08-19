@@ -132,7 +132,7 @@ public interface StockDao {
 	 * @return stock集合
 	 */
 	List<Stock> getStock(StockStatusEnum status, Long woId, Long locId,
-						 Long skuId, String boxCode, String lpnCode);
+			Long skuId, String boxCode, String lpnCode);
 
 	/**
 	 * 匹配库存，即使库存余额为0也会被匹配到
@@ -147,7 +147,7 @@ public interface StockDao {
 	 * @return stock集合
 	 */
 	List<Stock> matchStock(StockStatusEnum status, Long woId, Long locId,
-						   Long skuId, String boxCode, String lpnCode, String dropId);
+			Long skuId, String boxCode, String lpnCode, String dropId);
 
 	/**
 	 * 根据库位id查找库存
@@ -184,7 +184,7 @@ public interface StockDao {
 	 * @param lastOutTime  最近出库时间，分必填
 	 */
 	void updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
-					 BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
+			BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
 
 	/**
 	 * 批量更新库存状态
@@ -248,8 +248,8 @@ public interface StockDao {
 	 * @return stock集合
 	 */
 	List<Stock> findEnableStockByZone(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-									  List<Long> zoneIdList, SkuLotBaseEntity skuLot,
-									  List<Long> excludeZoneIdList);
+			List<Long> zoneIdList, SkuLotBaseEntity skuLot,
+			List<Long> excludeZoneIdList);
 
 	/**
 	 * 查询物品可用库存
@@ -263,8 +263,8 @@ public interface StockDao {
 	 * @return stock集合
 	 */
 	List<Stock> findEnableStockByLocation(Long whId, Long skuId, StockStatusEnum stockStatusEnum,
-										  List<Long> locationIdList, SkuLotBaseEntity skuLot,
-										  List<Long> excludeZoneIdList);
+			List<Long> locationIdList, SkuLotBaseEntity skuLot,
+			List<Long> excludeZoneIdList);
 
 	/**
 	 * 库存余额按箱显示
@@ -282,6 +282,16 @@ public interface StockDao {
 	 * @return stock集合
 	 */
 	List<Stock> getEnableStockBySkuLotAndExcludeLoc(List<Long> excludeLocId, SkuLotBaseEntity skuLot);
+
+	/**
+	 * 按照批属性查找排除库位中的库存
+	 * 
+	 * @param skuId        物品id
+	 * @param excludeLocId 排除的库位id,非必填
+	 * @param skuLot       批属性
+	 * @return stock集合
+	 */
+	List<Stock> getEnableStockBySkuLotAndExcludeLoc(Long skuId, List<Long> excludeLocId, SkuLotBaseEntity skuLot);
 
 	/**
 	 * 库存余额按序列号显示获取分页信息
@@ -324,5 +334,5 @@ public interface StockDao {
 	 *
 	 * @param stock stockId不能为空，其中occupyQty需要是更新之后的量
 	 */
-    void upateOccupyQty(Stock stock);
+	void upateOccupyQty(Stock stock);
 }
