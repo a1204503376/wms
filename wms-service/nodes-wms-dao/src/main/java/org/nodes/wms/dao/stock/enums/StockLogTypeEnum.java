@@ -38,6 +38,8 @@ public enum StockLogTypeEnum {
 	STOCK_MOVE_BY_LPN_PDA(212, "LPN移动-手持"),
 	STOCK_DEVANNING_BY_PDA(240, "拆箱-手持"),
 	STOCK_AGV_MOVE(250, "自动化任务移动"),
+	STOCK_OCCUPY_BY_STRATEGY(251, "分配占用"),
+	STOCK_CANCEL_OCCUPY(252, "释放分配占用"),
 	OUTSTOCK_BY_PICK(301, "拣货出库"),
 	OUTSTOCK_BY_CANCEL_RECEIVE(302, "撤销收货"),
 	OUTSTOCK_BY_PC(303, "PC拣货"),

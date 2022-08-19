@@ -2,11 +2,9 @@ package org.nodes.wms.biz.count;
 
 import org.nodes.wms.dao.count.dto.input.AutoLocationBoxQty;
 import org.nodes.wms.dao.count.dto.input.GenerateCountReport;
+import org.nodes.wms.dao.count.dto.input.PdaStockCountDetailBySkuSpecRequest;
 import org.nodes.wms.dao.count.dto.input.StockCountRequest;
-import org.nodes.wms.dao.count.dto.output.PdaBoxSkuQtyResponse;
-import org.nodes.wms.dao.count.dto.output.PdaSkuQtyResponse;
-import org.nodes.wms.dao.count.dto.output.PdaStockCountDetailResponse;
-import org.nodes.wms.dao.count.dto.output.PdaStockCountResponse;
+import org.nodes.wms.dao.count.dto.output.*;
 
 import java.util.List;
 
@@ -41,17 +39,32 @@ public interface StockCountBiz {
 	List<PdaSkuQtyResponse> getPdaSkuQtyResponseList(String boxCode);
 
 	/**
-	 * 根据用户手动所提交的数据 生成差异报告 /人工区
+	 * 根据用户手动所提交的数据 生成盘点记录 /人工区
 	 *
 	 * @param countReportList 用户手动所提交的数据集合
 	 */
 	void generateCountReport(List<GenerateCountReport> countReportList);
 
 	/**
-	 * 据用户手动所提交的数据 生成差异报告 /自动区
+	 * 据用户手动所提交的数据  生成盘点记录  /自动区
 	 *
 	 * @param beChangedList 用户改变后所提交的数据集合
 	 * @param defaultList   用户未改变的数据集合
 	 */
 	void generateCountReportByAutoLocation(List<AutoLocationBoxQty> beChangedList, List<AutoLocationBoxQty> defaultList);
+
+	/**
+	 * 根据规格型号查询能创建盘点单的明细
+	 *
+	 * @param request 包含规格型号
+	 * @return 能创建盘点单的明细
+	 */
+	List<PdaStockCountDetailBySkuSpecResponse> findStockCountDetailBySkuSpec(PdaStockCountDetailBySkuSpecRequest request);
+
+	/**
+	 * 生成差异报告
+	 *
+	 * @param countBillNo countBillNo
+	 */
+	void generateDifference(String countBillNo);
 }

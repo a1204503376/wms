@@ -54,7 +54,7 @@ public class LogSoPickController {
 	@ApiLog("发货记录-撤销拣货")
 	@PostMapping("/cancelOutstock")
 	public R<String> cancelOutstock(@RequestBody @Valid LogSoPickIdListRequest logSoPickIdListRequest) {
-		outStockBiz.cancelOutstock(logSoPickIdListRequest.getLsopIdList());
+		outStockBiz.cancelOutStock(logSoPickIdListRequest.getLsopIdList());
 		return R.data("撤销成功");
 	}
 }

@@ -156,7 +156,8 @@ public class SoTruckHeaderServiceImpl<M extends SoTruckHeaderMapper, T extends S
 			IStockOccupyService stockOccupyService = SpringUtil.getBean(IStockOccupyService.class);
 			stockOccupyList = stockOccupyService.list(Condition.getQueryWrapper(new StockOccupy())
 				.lambda()
-				.in(StockOccupy::getSoBillId, soBillIdList));
+//				.in(StockOccupy::getSoBillId, soBillIdList)
+			);
 			for (Long soBillId : soBillIdList) {
 				StockOccupySubtractDTO stockOccupyReduceDTO = new StockOccupySubtractDTO();
 				stockOccupyReduceDTO.setSoBillId(soBillId);

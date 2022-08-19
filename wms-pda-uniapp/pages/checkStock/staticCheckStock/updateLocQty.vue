@@ -121,7 +121,7 @@
 					this.esc();
 				} else {
 					let isListAsDefault = {};
-					isListAsDefault.differDefaultList = this.differDefaultList;
+					isListAsDefault.differDefaultList = this.receiveList;
 					isListAsDefault.boxCode = this.params.boxCode;
 					isListAsDefault.locCode = this.params.locCode;
 					uni.setStorageSync('isListAsDefault', isListAsDefault)

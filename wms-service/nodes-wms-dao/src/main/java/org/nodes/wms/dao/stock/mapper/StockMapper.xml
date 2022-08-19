@@ -352,14 +352,20 @@
     </select>
 
     <select id="getStockCountByLocCode" resultType="org.nodes.wms.dao.count.dto.output.PdaBoxQtyResponse">
-        select loc_code,box_code,sum(stock_qty-pick_qty) total_qty from wms_stock
+        select stock_id,stock_qty,wh_id,loc_code,box_code,sum(stock_qty-pick_qty) total_qty,sku_id,wsp_id,sku_level,sku_code,sku_name,wsu_code,sku_lot1,sku_lot2,sku_lot3 from wms_stock
         <where>
             <if test="locCode!=null and locCode != ''">
-                loc_code = #{locCode}
+                AND loc_code = #{locCode}
+            </if>
+            <if test="boxCode!=null and boxCode != ''">
+                AND box_code = #{boxCode}
+            </if>
+            <if test="skuCode!=null and skuCode != ''">
+                AND sku_code = #{skuCode}
             </if>
             AND is_deleted = 0
             AND status = 1
         </where>
-        GROUP BY box_code
+        GROUP BY loc_code,box_code,sku_code
     </select>
 </mapper>

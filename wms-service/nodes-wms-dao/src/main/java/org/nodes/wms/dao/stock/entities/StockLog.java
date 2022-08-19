@@ -60,6 +60,11 @@ public class StockLog extends BaseSkuLotEntity {
 	private BigDecimal currentPickQty;
 
 	/**
+	 * 当前操作的占用量
+	 */
+	private BigDecimal currentOccupyQty;
+
+	/**
 	 * 库存id
 	 */
 	private Long stockId;
@@ -100,19 +105,24 @@ public class StockLog extends BaseSkuLotEntity {
 	private String skuCode;
 
 	/**
-	 * 待上架数量(操作之前)
+	 * 待上架数量(操作之后)
 	 */
 	private BigDecimal stayStockQty;
 
 	/**
-	 * 上架数量(操作之前)
+	 * 上架数量(操作之后)
 	 */
 	private BigDecimal stockQty;
 
 	/**
-	 * 下架数量(操作之前)
+	 * 下架数量(操作之后)
 	 */
 	private BigDecimal pickQty;
+
+	/**
+	 * 占用量(操作之后)
+	 */
+	private BigDecimal occupyQty;
 
 	/**
 	 * 箱号

@@ -3,11 +3,9 @@ package org.nodes.wms.core.system.wrapper;
 import org.nodes.core.base.cache.DictCache;
 import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.utils.StringPool;
-import org.nodes.wms.core.basedata.cache.BillTypeCache;
 import org.nodes.wms.core.system.entity.Task;
 import org.nodes.wms.core.system.vo.TaskVO;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
-import org.nodes.wms.dao.basics.billType.entities.BillType;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.springblade.core.mp.support.BaseEntityWrapper;
 import org.springblade.core.tool.utils.BeanUtil;
@@ -35,10 +33,10 @@ public class TaskWrapper extends BaseEntityWrapper<Task, TaskVO> {
 			if (ObjectUtil.isNotEmpty(warehouse)) {
 				taskVO.setWhName(warehouse.getWhName());
 			}
-			BillType billType = BillTypeCache.getByCode(entity.getBillTypeCd());
-			if (ObjectUtil.isNotEmpty(billType)) {
-				taskVO.setBillTypeDesc(billType.getBillTypeName());
-			}
+//			BillType billType = BillTypeCache.getByCode(entity.getBillTypeCd());
+//			if (ObjectUtil.isNotEmpty(billType)) {
+//				taskVO.setBillTypeDesc(billType.getBillTypeName());
+//			}
 			taskVO.setTaskProcTypeDesc(DictCache.getValue(DictCodeConstant.TASK_PROC_TYPE, taskVO.getTaskProcType()));
 			taskVO.setTaskTypeDesc(DictCache.getValue(DictCodeConstant.TASK_TYPE, taskVO.getTaskTypeCd()));
 			taskVO.setIsAllot(

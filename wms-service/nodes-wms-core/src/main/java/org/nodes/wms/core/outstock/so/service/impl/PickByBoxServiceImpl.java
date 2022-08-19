@@ -423,26 +423,30 @@ public class PickByBoxServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 		List<StockOccupy> stockOccupyList = stockOccupyService.list(Condition.getQueryWrapper(new StockOccupy())
 			.lambda()
 			.eq(StockOccupy::getOccupyType, StockOccupyTypeEnum.PickPlan.getIndex())
-			.eq(StockOccupy::getPickPlanId, pickPlan.getPickPlanId()));
+//			.eq(StockOccupy::getPickPlanId, pickPlan.getPickPlanId())
+		);
 		if (Func.isEmpty(stockOccupyList)) {
 			throw new ServiceException(String.format("物品[%s]不在任务内，或已拣货完成！", pickTaskSubmitVO.getSkuCode()));
 		}
 		// 获取关联的所有表头
-		List<SoHeader> soHeaderList = soHeaderService.listByIds(
-			NodesUtil.toList(stockOccupyList, StockOccupy::getSoBillId)
+		List<SoHeader> soHeaderList =
+			soHeaderService.listByIds(
+			NodesUtil.toList(stockOccupyList, StockOccupy::getStockId)
 		);
 		// 获取关联的所有明细
 		List<SoDetail> soDetailList = soDetailMapper.selectList(Condition.getQueryWrapper(new SoDetail())
 			.lambda()
-			.in(SoDetail::getSoDetailId, NodesUtil.toList(stockOccupyList, StockOccupy::getSoDetailId)));
+//			.in(SoDetail::getSoDetailId, NodesUtil.toList(stockOccupyList, StockOccupy::getSoDetailId))
+		);
 		// 获取所有有关联的库存信息
 		List<Stock> stockList = stockService.listByIds(
 			NodesUtil.toList(stockOccupyList, StockOccupy::getStockId)
 		);
 		for (StockOccupy stockOccupy : stockOccupyList) {
-			pickPlanDTO.setSoDetailId(stockOccupy.getSoDetailId());
+//			pickPlanDTO.setSoDetailId(stockOccupy.getSoDetailId());
 			SoHeader soHeader = soHeaderList.stream().filter(u -> {
-				return u.getSoBillId().equals(stockOccupy.getSoBillId());
+//				return u.getSoBillId().equals(stockOccupy.getSoBillId());
+				return true;
 			}).findFirst().orElse(null);
 			if (Func.isNotEmpty(soHeader)) {
 				pickPlanDTO.setSoBillId(soHeader.getSoBillId());
@@ -450,10 +454,11 @@ public class PickByBoxServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 			}
 			// 获取明细
 			SoDetail soDetail = soDetailList.stream().filter(u -> {
-				return u.getSoDetailId().equals(stockOccupy.getSoDetailId());
+//				return u.getSoDetailId().equals(stockOccupy.getSoDetailId());
+				return true;
 			}).findFirst().orElse(null);
 			if (Func.isEmpty(soDetail)) {
-				throw new ServiceException("订单明细不存在(ID:" + stockOccupy.getSoDetailId() + ")");
+//				throw new ServiceException("订单明细不存在(ID:" + stockOccupy.getSoDetailId() + ")");
 			}
 			if (!sourceLoc.getLocId().equals(pickPlan.getLocId())) {
 				throw new ServiceException(String.format("请到库位[%s] 拣货！", pickPlan.getLocCode()));

@@ -11,4 +11,42 @@
         </foreach>
     </delete>
 
+    <select id="getStockCountDetailBySkuSpec"
+            resultType="org.nodes.wms.dao.count.dto.output.PdaStockCountDetailBySkuSpecResponse">
+        select s.wh_id,
+        w.wh_name,
+        s.loc_id,
+        s.loc_code,
+        s.box_code,
+        s.sku_id,
+        s.sku_code,
+        s.sku_name,
+        cd.count_bill_no,
+        l.last_loc_count_date,
+        ch.count_bill_state,
+        s.sku_lot2
+        from wms_stock s
+        LEFT JOIN wms_warehouse w
+        on s.wh_id = w.wh_id
+        LEFT JOIN wms_count_detail cd
+        on s.box_code = cd.box_code
+        LEFT JOIN wms_location l
+        on s.loc_id = l.loc_id
+        left join wms_count_header ch on cd.count_bill_no = ch.count_bill_no
+        <where>
+            s.stay_stock_qty + s.stock_qty > s.pick_qty
+            AND s.is_deleted = 0
+            <if test="param.skuLot2 != null and param.skuLot2 != ''">
+                AND s.sku_lot2 = #{param.skuLot2}
+            </if>
+            <if test="param.zoneId != null and param.zoneId.size > 0">
+                AND s.zone_id in
+                <foreach collection="param.zoneId" close=")" open="(" item="item" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY s.box_code desc
+    </select>
+
 </mapper>

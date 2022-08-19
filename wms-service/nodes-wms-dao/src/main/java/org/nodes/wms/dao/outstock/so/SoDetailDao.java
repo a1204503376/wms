@@ -121,4 +121,12 @@ public interface SoDetailDao {
 	 * @param soDetail 发货单明细实体
 	 */
 	void update(SoDetail soDetail);
+
+	/**
+	 * 根据发货单返回相对应的明细的ID
+	 *
+	 * @param soBillId 发货单ID
+	 * @return SoDetail集合
+	 */
+	List<SoDetail> getSoDetailBySoHeaderId(Long soBillId);
 }

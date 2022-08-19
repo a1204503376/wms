@@ -1,9 +1,12 @@
 package org.nodes.wms.dao.count.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.nodes.wms.dao.count.CountHeaderDao;
 import org.nodes.wms.dao.count.entity.CountHeader;
 import org.nodes.wms.dao.count.enums.StockCountStateEnum;
 import org.nodes.wms.dao.count.mapper.CountHeaderMapper;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseEntity;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
@@ -29,5 +32,25 @@ public class CountHeaderDaoImpl
 				CountHeader::getCreator,
 				BaseEntity::getCreateTime)
 			.list();
+	}
+
+	@Override
+	public List<CountHeader> selectByCountBillId(Long countBillId) {
+		return  super.lambdaQuery()
+			.like(CountHeader::getCountBillId, countBillId)
+			.in(CountHeader::getCountBillState, StockCountStateEnum.COUNT_COMPLETED)
+			.list();
+	}
+
+	@Override
+	public void updateCountHeaderStateByCountBillId(Long countBillId, StockCountStateEnum stockCountStateEnum) {
+		UpdateWrapper<CountHeader> updateWrapper = Wrappers.update();
+		updateWrapper
+			.lambda()
+			.set(CountHeader::getCountBillState, stockCountStateEnum.getCode())
+			.eq(CountHeader::getCountBillId, countBillId);
+		if (!super.update(updateWrapper)) {
+			throw new ServiceException("盘点单修改失败,请再次重试");
+		}
 	}
 }

@@ -528,8 +528,8 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 		// 获取与当前订单有关联的库存占用信息
 		IStockOccupyService stockOccupyService = SpringUtil.getBean(IStockOccupyService.class);
 		List<StockOccupy> stockOccupyList = stockOccupyService.list(Condition.getQueryWrapper(new StockOccupy())
-			.lambda()
-			.in(StockOccupy::getSoBillId, idList));
+			.lambda());
+//			.in(StockOccupy::getSoBillId, idList));
 		if (Func.isNotEmpty(soHeaderList)) {
 			for (SoHeader soHeader : soHeaderList) {
 				// 忽略已完成的订单
@@ -542,7 +542,8 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 						soHeader.getSoBillNo(), SoBillStateEnum.valueOf(soHeader.getSoBillState())));
 				}
 				List<StockOccupy> occupyList = stockOccupyList.stream().filter(u -> {
-					return soHeader.getSoBillId().equals(u.getSoBillId());
+//					return soHeader.getSoBillId().equals(u.getSoBillId());
+					return true;
 				}).collect(Collectors.toList());
 				if (Func.isNotEmpty(occupyList)) {
 					throw new ServiceException(String.format("出库单[%s] 还存在未拣货的物品，请完成拣货后再执行此操作! ",
@@ -562,7 +563,8 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 		IStockOccupyService stockOccupyService = SpringUtil.getBean(IStockOccupyService.class);
 		List<StockOccupy> stockOccupyList = stockOccupyService.list(Condition.getQueryWrapper(new StockOccupy())
 			.lambda()
-			.in(StockOccupy::getSoBillId, idList));
+//			.in(StockOccupy::getSoBillId, idList)
+		);
 		// 获取订单对应的库存
 		IStockDetailService stockDetailService = SpringUtil.getBean(IStockDetailService.class);
 		List<StockDetail> stockDetailList = stockDetailService.list(Condition.getQueryWrapper(new StockDetail())
@@ -586,7 +588,8 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 				throw new ServiceException(String.format("出库单[%s] 已经出库，不允许再执行此操作！", soHeader.getSoBillNo()));
 			}
 			List<StockOccupy> occupyList = stockOccupyList.stream().filter(u -> {
-				return soHeader.getSoBillId().equals(u.getSoBillId());
+//				return soHeader.getSoBillId().equals(u.getSoBillId());
+				return true;
 			}).collect(Collectors.toList());
 			if (Func.isNotEmpty(occupyList)) {
 				throw new ServiceException(String.format("出库单[%s] 还存在未拣货的物品，请完成拣货后再执行此操作! ",
