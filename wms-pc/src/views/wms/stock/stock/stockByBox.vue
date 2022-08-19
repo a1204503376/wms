@@ -1,62 +1,79 @@
-import fileDownload from "js-file-download";
 <template>
     <div id='stockByBox'>
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
                             <nodes-sku
-                                v-model="form.params.skuIds">
+                                v-model="form.params.skuIds"
+                                class="search-input">
                             </nodes-sku>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="生产批次" label-width="90px">
-                            <el-input placeholder="请输入生产批次" v-model.trim="form.params.skuLot1"
-                                      :clearable="true"></el-input>
+                            <el-input
+                                v-model.trim="form.params.skuLot1"
+                                :clearable="true" class="search-input"
+                                placeholder="请输入生产批次">
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="库位" label-width="90px">
-                            <nodes-location v-model="form.params.locIdList" :multiple="true"></nodes-location>
+                            <nodes-location
+                                v-model="form.params.locIdList"
+                                :multiple="true" class="search-input">
+                            </nodes-location>
                         </el-form-item>
                     </el-col>
-
-                </el-row>
-            </template>
-            <template v-slot:expandSearch>
-                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="库存状态" label-width="90px">
-                            <NodesStockStatus v-model="form.params.stockStatusList" multiple="true"></NodesStockStatus>
+                            <NodesStockStatus
+                                v-model="form.params.stockStatusList" class="search-input" :multiple="true">
+                            </NodesStockStatus>
                         </el-form-item>
                     </el-col>
+                </el-row>
+                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="库区" label-width="90px">
-                            <nodes-zone v-model="form.params.zoneIdList" :multiple="true"></nodes-zone>
+                            <nodes-zone
+                                v-model="form.params.zoneIdList"
+                                :multiple="true" class="search-input">
+                            </nodes-zone>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="箱号" label-width="90px">
-                            <el-input placeholder="请输入箱号" v-model.trim="form.params.boxCode"
-                                      :clearable="true"></el-input>
+                            <el-input
+                                v-model.trim="form.params.boxCode"
+                                :clearable="true" class="search-input"
+                                placeholder="请输入箱号">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="lpn" label-width="90px">
-                            <el-input placeholder="请输入lpn" v-model.trim="form.params.lpnCode"
-                                      :clearable="true"></el-input>
+                            <el-input
+                                v-model.trim="form.params.lpnCode"
+                                :clearable="true" class="search-input"
+                                placeholder="请输入lpn">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="规格型号" label-width="90px">
+                            <el-input
+                                v-model.trim="form.params.skuLot2"
+                                :clearable="true" class="search-input"
+                                placeholder="请输入规格型号">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="6">
-                        <el-form-item label="规格型号" label-width="90px">
-                            <el-input placeholder="请输入规格型号" v-model.trim="form.params.skuLot2"
-                                      :clearable="true"></el-input>
-                        </el-form-item>
-                    </el-col>
                     <el-col :span="6">
                         <el-form-item label="收货时间" label-width="90px">
                             <nodes-date-range v-model="form.params.receiveTimeDateRange" style="width: 200px">
@@ -65,32 +82,47 @@ import fileDownload from "js-file-download";
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="专用客户" label-width="90px">
-                            <el-input placeholder="请输入专用客户" v-model.trim="form.params.skuLot4"
-                                      :clearable="true"></el-input>
+                            <el-input
+                                v-model.trim="form.params.skuLot4"
+                                :clearable="true" class="search-input"
+                                placeholder="请输入专用客户">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="钢背批次" label-width="90px">
-                            <el-input placeholder="请输入钢背批次" v-model.trim="form.params.skuLot5"
-                                      :clearable="true"></el-input>
+                            <el-input
+                                v-model.trim="form.params.skuLot5"
+                                :clearable="true" class="search-input"
+                                placeholder="请输入钢背批次">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="摩擦块批次" label-width="90px">
+                            <el-input
+                                v-model.trim="form.params.skuLot6"
+                                :clearable="true" class="search-input"
+                                placeholder="请输入摩擦块批次">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item label="摩擦块批次" label-width="90px">
-                            <el-input placeholder="请输入摩擦块批次" v-model.trim="form.params.skuLot6"
-                                      :clearable="true"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
                         <el-form-item label="库房" label-width="90px">
-                            <nodes-warehouse v-model="form.params.whIdList" :multiple="true"></nodes-warehouse>
+                            <nodes-warehouse
+                                v-model="form.params.whIdList"
+                                :multiple="true" class="search-input">
+                            </nodes-warehouse>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="货主" label-width="90px">
-                            <nodes-owner v-model="form.params.woId"></nodes-owner>
+                            <nodes-owner
+                                v-model="form.params.woId"
+                                class="search-input">
+                            </nodes-owner>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -99,18 +131,14 @@ import fileDownload from "js-file-download";
                             </nodes-date-range>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row>
                     <el-col :span="6">
                         <el-form-item label="出库时间" label-width="90px">
                             <nodes-date-range v-model="form.params.lastOutTimeDateRange" style="width: 200px">
                             </nodes-date-range>
                         </el-form-item>
                     </el-col>
-
                 </el-row>
             </template>
-
             <template v-slot:tableTool>
                 <el-tooltip
                     :enterable="false"
@@ -161,6 +189,7 @@ import fileDownload from "js-file-download";
                 <el-table
                     ref="table"
                     :data="table.data"
+                    :height="table.height"
                     :row-class-name="tableRowClassName"
                     :span-method="arraySpanMethod"
                     border
@@ -180,13 +209,15 @@ import fileDownload from "js-file-download";
                         >
                         </el-table-column>
                     </template>
-
                 </el-table>
             </template>
-
         </nodes-master-page>
-        <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
-        </dialog-column>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
     </div>
 </template>
 <style>
@@ -198,8 +229,6 @@ import fileDownload from "js-file-download";
 <script>
 
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
-import NodesAsnBillState from "@/components/wms/select/NodesAsnBillState";
-import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
@@ -215,7 +244,7 @@ import NodesStockStatus from "@/components/wms/select/NodesStockStatus";
 import NodesLocation from "@/components/wms/select/NodesLocation";
 import NodesZone from "@/components/wms/select/NodesZone";
 import func from "@/util/func";
-
+import {nowDateFormat} from "@/util/date";
 
 export default {
     name: "stockByBox",
@@ -226,8 +255,6 @@ export default {
         NodesOwner,
         NodesSearchInput,
         NodesStockStatus,
-        NodesInStoreMode,
-        NodesAsnBillState,
         NodesMasterPage,
         NodesDateRange,
         NodesWarehouse,
@@ -371,8 +398,6 @@ export default {
             },
         };
     },
-    created() {
-    },
     watch: {
         $route(to) {
             if (to.query && to.query.isRefresh === 'true') {
@@ -401,6 +426,8 @@ export default {
                     }
                     this.table.data.length = 0
                     this.page.total = pageObj.total;
+                    this.handleRefreshTable();
+
                     let arr = pageObj.records
                     let balanceSum = 0
                     let enableSum = 0
@@ -446,7 +473,7 @@ export default {
             exportFile(this.form.params)
                 .then((res) => {
                     this.$message.success("操作成功，正在下载中...");
-                    fileDownload(res.data, "库存列表.xlsx");
+                    fileDownload(res.data, `库存列表${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
                 })
                 .catch(() => {
                     this.$message.error("系统模板目录配置有误或文件不存在");
@@ -455,10 +482,8 @@ export default {
                     this.loading = false;
                 });
         },
-
         onSubmit() {
             this.getTableData();
-
         },
         onExportLocalData() {
             this.exportCurrentDataToExcel("库存表", "库存表");
@@ -468,12 +493,10 @@ export default {
                 createTimeDateRange: "",
             }
             this.onChange(null);
-            console.log('重置表单');
         },
         onChange(val) {
             if (val == null) {
                 this.dateRange = [];
-
             }
             this.$emit('dateRangeChange', val);
         },
@@ -512,7 +535,6 @@ export default {
                 return {one: spanOneArr}
             }
         },
-
     },
 };
 </script>

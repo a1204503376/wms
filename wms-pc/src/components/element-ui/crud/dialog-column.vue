@@ -206,7 +206,7 @@ export default {
                         aliasName: func.strDefaultEmpty(item.aliasName),
                         hide: func.toBoolean(item.hide),
                         fixed: func.toBoolean(item.fixed),
-                        width: func.toInt(item.width, 200),
+                        width: func.toInt(item.width, 150),
                         align: func.strDefault(item.align, 'left'),
                         order: func.toInt(item.order, this.dataSource.indexOf(item))
                     }

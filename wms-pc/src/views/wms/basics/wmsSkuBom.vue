@@ -1,46 +1,36 @@
-import fileDownload from "js-file-download";
 <template>
-    <el-form ref="searchForm"
-             v-model="form"
-             :inline="true"
-             label-position="right"
-             label-width="60"
-             size="mini">
-        <nodes-master-page :configure="masterConfig" :permission="permissionObj" v-on="form.events">
+    <div id="wmsSkuBom">
+        <nodes-master-page :show-expand-btn="false" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="组合编码" label-width="90px">
-                            <nodes-sku v-model="form.params.joinSkuCode"></nodes-sku>
+                            <nodes-sku v-model="form.params.joinSkuCode" class="search-input"></nodes-sku>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
-                            <nodes-sku v-model="form.params.skuCode" style="width: 200px"></nodes-sku>
+                            <nodes-sku v-model="form.params.skuCode" class="search-input"></nodes-sku>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="货主" label-width="90px">
-                            <nodes-owner v-model="form.params.woId" style="width: 200px"></nodes-owner>
+                            <nodes-owner v-model="form.params.woId" class="search-input"></nodes-owner>
                         </el-form-item>
                     </el-col>
-                </el-row>
-            </template>
-            <template v-slot:expandSearch>
-                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="更新时间" label-width="90px">
-                            <nodes-date-range v-model="form.params.updateTimeDateRange"
-                                              style="width: 200px"></nodes-date-range>
+                            <nodes-date-range
+                                v-model="form.params.updateTimeDateRange">
+                            </nodes-date-range>
                         </el-form-item>
                     </el-col>
                 </el-row>
-
             </template>
             <template v-slot:batchBtn>
                 <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
                 </el-button>
-                <el-button v-if="permissionObj.delete" size="mini" type="primary" @click="onRemove">删除</el-button>
+                <el-button v-if="permissionObj.delete" :plain="true" size="mini" type="danger" @click="onRemove">删除</el-button>
                 <el-button v-if="permissionObj.import" icon="el-icon-upload2" plain size="mini"
                            @click="onUpload">导入
                 </el-button>
@@ -48,8 +38,8 @@ import fileDownload from "js-file-download";
                     :visible="fileUpload.visible"
                     file-name="物料清单"
                     template-url="/api/wms/WmsSkuBom/export-template"
-                    @callback="callbackFileUpload"
-                ></file-upload>
+                    @callback="callbackFileUpload">
+                </file-upload>
             </template>
             <template v-slot:tableTool>
                 <el-tooltip
@@ -86,7 +76,8 @@ import fileDownload from "js-file-download";
                     effect="dark"
                     placement="top"
                 >
-                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet" style="display: inline-block;margin-left: 10px">
+                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
+                                  style="display: inline-block;margin-left: 10px">
                         <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
                         </el-button>
                     </excel-export>
@@ -96,6 +87,7 @@ import fileDownload from "js-file-download";
                 <el-table
                     ref="table"
                     :data="table.data"
+                    :height="table.height"
                     border
                     highlight-current-row
                     size="mini"
@@ -109,8 +101,8 @@ import fileDownload from "js-file-download";
                     </el-table-column>
                     <el-table-column
                         fixed
-                        sortable
-                        type="index">
+                        type="index"
+                        width="50">
                         <template slot="header">
                             #
                         </template>
@@ -120,13 +112,14 @@ import fileDownload from "js-file-download";
                             v-if="!column.hide"
                             :key="index"
                             show-overflow-tooltip
-                            v-bind="column">
+                            v-bind="column"
+                            width="150">
                         </el-table-column>
                     </template>
                     <el-table-column
                         fixed="right"
                         label="操作"
-                        width="120">
+                        width="80">
                         <template v-slot="{row}">
                             <el-button size="mini" type="text" @click="onEdit(row)">编辑</el-button>
                         </template>
@@ -146,27 +139,25 @@ import fileDownload from "js-file-download";
                 </el-pagination>
             </template>
         </nodes-master-page>
-    </el-form>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
+    </div>
 </template>
 
 <script>
 
-
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
-import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import NodesOwner from "@/components/wms/select/NodesOwner";
 import NodesSku from "@/components/wms/select/NodesSku";
-
 import fileDownload from "js-file-download";
 import {listMixin} from "@/mixins/list";
-// eslint-disable-next-line no-unused-vars
-import {
-    getWmsSkuBomPage,
-    excel,
-    deleteWmsSkuBom,
-    importData
-} from "@/api/wms/basics/WmsSkuBom.js";
+import DialogColumn from "@/components/element-ui/crud/dialog-column";
+import {deleteWmsSkuBom, excel, getWmsSkuBomPage, importData} from "@/api/wms/basics/WmsSkuBom.js";
 import func from "@/util/func";
 import fileUpload from "@/components/nodes/fileUpload";
 import {ExcelExport} from 'pikaz-excel-js';
@@ -174,11 +165,11 @@ import {ExcelExport} from 'pikaz-excel-js';
 export default {
     name: "carrier",
     components: {
-        NodesSearchInput,
         NodesMasterPage,
         NodesDateRange,
         NodesOwner,
         NodesSku,
+        DialogColumn,
         fileUpload,
         ExcelExport
     },
@@ -189,26 +180,22 @@ export default {
                 visible: false,
             },
             selectionList: [],
-
             deleteParams: {
                 list: []
             },
-            masterConfig: {
-                showExpandBtn: true
-            },
             params: {},
             excelParams: {
-                code: '',
-                name: '',
-                simpleName: '',
+                joinSkuCode: '',
+                skuCode: '',
+                woId: '',
+                updateTimeDateRange: ['', ''],
             },
             form: {
                 params: {
                     joinSkuCode: '',
                     skuCode: '',
                     woId: '',
-                    createTimeDateRange: ['', ''],//创建时间开始 创建时间结束
-                    updateTimeDateRange: ['', ''],//更新时间开始 更新时间结束
+                    updateTimeDateRange: ['', ''],
                 }
             },
             table: {
@@ -257,7 +244,6 @@ export default {
             },
         }
     },
-
     activated() {
         this.getTableData();
     },
@@ -278,7 +264,6 @@ export default {
         },
         permissionObj() {
             return {
-                search: this.vaildData(this.permission.wmsSkuBom_search, false),
                 add: this.vaildData(this.permission.wmsSkuBom_add, false),
                 delete: this.vaildData(this.permission.wmsSkuBom_delete, false),
                 import: this.vaildData(this.permission.wmsSkuBom_import, false)
@@ -309,20 +294,12 @@ export default {
             }).then(() => {
                 this.deleteParams.list = this.ids.split(',');
                 deleteWmsSkuBom(this.deleteParams.list).then((res) => {
-                    if (res.data.code == 200) {
+                    if (res.data.code === 200) {
                         this.getTableData();
-                        this.$message({
-                            type: "success",
-                            message: "操作成功!"
-                        });
+                        this.$message.success("操作成功");
                     } else {
-                        this.$message({
-                            type: "error",
-                            message: "操作失败!"
-                        });
+                        this.$message.error("操作失败");
                     }
-
-
                 });
             });
         },
@@ -342,8 +319,6 @@ export default {
                 }
             });
         },
-        hideOnSinglePage() {
-        },
         selectionChange(row) {
             this.selectionList = row;
         },
@@ -355,7 +330,7 @@ export default {
             var that = this;
             that.excelParams = this.form.params;
             excel(that.excelParams).then((res) => {
-                fileDownload(res.data, "物料清单.xlsx");
+                fileDownload(res.data, `物料清单${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
             });
         },
         getTableData() {
@@ -364,7 +339,6 @@ export default {
             if (func.isNotEmpty(this.form.params.joinSkuCode.skuCode)) {
                 that.params.joinSkuCode = this.form.params.joinSkuCode.skuCode
             }
-            // eslint-disable-next-line no-empty
             if (func.isNotEmpty(this.form.params.skuCode.skuCode)) {
                 that.params.skuCode = this.form.params.skuCode.skuCode
             }
@@ -374,9 +348,9 @@ export default {
                 this.page.current = res.data.data.current;
                 this.page.size = res.data.data.size;
                 this.table.data = res.data.data.records;
+                this.handleRefreshTable();
             });
         },
-
     }
 }
 </script>

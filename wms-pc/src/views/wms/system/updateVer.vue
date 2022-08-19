@@ -1,6 +1,6 @@
 <template>
     <div id="updateVer">
-        <nodes-master-page :permission="permissionObj" v-on="form.events" :showSearchForm="false">
+        <nodes-master-page v-on="form.events" :showSearchForm="false">
             <template v-slot:tableTool>
                 <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
                     <el-button circle icon="el-icon-refresh" size="mini" @click="onRefresh"></el-button>
@@ -19,8 +19,10 @@
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table"
+                <el-table
+                    ref="table"
                           :data="table.data"
+                          :height="table.height"
                           border
                           highlight-current-row
                           size="mini"
@@ -48,8 +50,12 @@
                 </el-pagination>
             </template>
         </nodes-master-page>
-        <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
-        </dialog-column>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
     </div>
 </template>
 
@@ -112,13 +118,6 @@ export default {
             }
         }
     },
-    computed: {
-        permissionObj() {
-            return {
-                import: this.vaildData(this.permission.updateVer_import, false)
-            }
-        }
-    },
     created() {
         this.getTableData();
     },
@@ -129,6 +128,7 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
+                    this.handleRefreshTable();
                 })
         },
         refreshTable() {

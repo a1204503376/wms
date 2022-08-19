@@ -20,7 +20,7 @@
                         <div class="d-div-right">
                             <el-form-item>
                                 <slot name="searchBtn"></slot>
-                                <el-button v-if="permission.search" native-type="submit" type="primary"
+                                <el-button native-type="submit" type="primary"
                                            @click="onSearch">
                                     查找
                                 </el-button>
@@ -81,13 +81,11 @@ export default {
     props: {
         showExpandBtn: {type: Boolean, required: false, default: () => true},
         showPage: {type: Boolean, required: false, default: () => true},
-        permission: {type: Object, required: true},
         showSearchForm: {type: Boolean, required: false, default: () => true}
     },
     data() {
         return {
             expandMore: false,
-            tableHeight: 500
         }
     },
     created() {

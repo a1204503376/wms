@@ -1,6 +1,6 @@
 <template>
     <div id="serial">
-        <nodes-master-page :permission="permissionObj" :showSearchForm="false" v-on="form.events">
+        <nodes-master-page :showSearchForm="false" v-on="form.events">
             <template v-slot:tableTool>
                 <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
                     <el-button circle icon="el-icon-refresh" size="mini" @click="onRefresh"></el-button>
@@ -121,13 +121,6 @@ export default {
     watch: {
         stockId() {
             this.refreshTable();
-        }
-    },
-    computed: {
-        permissionObj() {
-            return {
-                // search: this.vaildData(this.permission.serialSerial_search, false)
-            }
         }
     },
     created() {

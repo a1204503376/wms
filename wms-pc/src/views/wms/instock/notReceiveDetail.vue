@@ -1,46 +1,54 @@
 <template>
     <div id="notReceiveDetail">
-        <nodes-master-page :permission="permissionObj" v-on="form.events">
+        <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="收货单编码" label-width="90px">
-                            <el-input placeholder="请输入收货单编码" v-model.trim="form.params.receiveNo" :clearable="true"></el-input>
+                            <el-input v-model.trim="form.params.receiveNo" :clearable="true" class="search-input"
+                                      placeholder="请输入收货单编码">
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
-                            <nodes-sku v-model="form.params.skuIdList" :clearable="true"></nodes-sku>
+                            <nodes-sku v-model="form.params.skuIdList" :clearable="true"
+                                       class="search-input">
+                            </nodes-sku>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="单据类型" label-width="90px">
                             <nodes-bill-type
                                 v-model="form.params.billTypeCdList"
-                                io-type="I"
+                                :clearable="true"
                                 :multiple="true"
-                                :clearable="true"></nodes-bill-type>
+                                class="search-input"
+                                io-type="I">
+                            </nodes-bill-type>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="上游编码" label-width="90px">
+                            <el-input v-model.trim="form.params.externalOrderNo" :clearable="true"
+                                      class="search-input" placeholder="请输入上游编码">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
-            </template>
-            <template v-slot:expandSearch>
                 <el-row type="flex">
                     <el-col :span="6">
-                        <el-form-item label="上游编码" label-width="90px">
-                            <el-input placeholder="请输入上游编码" v-model.trim="form.params.externalOrderNo" :clearable="true"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
                         <el-form-item label="创建人" label-width="90px">
-                            <el-input placeholder="请输入创建人" v-model.trim="form.params.createUser" :clearable="true"></el-input>
+                            <el-input v-model.trim="form.params.createUser" :clearable="true" class="search-input"
+                                      placeholder="请输入创建人">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="创建时间" label-width="90px">
                             <nodes-date-range
-                                v-model="form.params.createTimeDateRange"
-                            ></nodes-date-range>
+                                v-model="form.params.createTimeDateRange">
+                            </nodes-date-range>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -63,13 +71,15 @@
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table"
-                          :data="table.data"
-                          border
-                          highlight-current-row
-                          size="mini"
-                          style="width: 100%"
-                          @sort-change="onSortChange">
+                <el-table
+                    ref="table"
+                    :data="table.data"
+                    :height="table.height"
+                    border
+                    highlight-current-row
+                    size="mini"
+                    style="width: 100%"
+                    @sort-change="onSortChange">
                     <el-table-column
                         fixed
                         type="selection"
@@ -77,8 +87,8 @@
                     </el-table-column>
                     <el-table-column
                         fixed
-                        sortable
-                        type="index">
+                        type="index"
+                        width="50">
                         <template slot="header">
                             #
                         </template>
@@ -86,9 +96,9 @@
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column
                             :key="index"
+                            min-width="150"
                             show-overflow-tooltip
-                            v-bind="column"
-                            width="130">
+                            v-bind="column">
                         </el-table-column>
                     </template>
                 </el-table>
@@ -101,8 +111,12 @@
                 </el-pagination>
             </template>
         </nodes-master-page>
-        <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
-        </dialog-column>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
     </div>
 </template>
 
@@ -264,14 +278,6 @@ export default {
             }
         }
     },
-    computed: {
-        permissionObj() {
-            return {
-                search: this.vaildData(this.permission.notReceiveDetail_search, false),
-                repeal: this.vaildData(this.permission.notReceiveDetail_repeal, false),
-            }
-        }
-    },
     created() {
         this.getTableData();
     },
@@ -282,6 +288,7 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
+                    this.handleRefreshTable();
                 })
         },
         refreshTable() {
@@ -314,10 +321,6 @@ export default {
         onExportLocalData() {
             this.exportCurrentDataToExcel("未收货明细", "未收货明细")
         },
-        onRepeal() {
-            let rows = this.$refs.table;
-            console.log(rows);
-        }
     },
 };
 </script>

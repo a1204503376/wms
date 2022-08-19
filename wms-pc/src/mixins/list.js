@@ -54,11 +54,24 @@ export const listMixin = {
             }
         }
     },
+    watch: {
+        $route(){
+            this.handleRefreshTable();
+        }
+    },
     created() {
         this.getCrudColumnList();
         this.copyInitialValue();
     },
     methods: {
+        handleRefreshTable(){
+            // 解决固定列错位的问题
+            this.$nextTick(() => {
+                if (this.$refs.table && this.$refs.table.doLayout){
+                    this.$refs.table.doLayout();
+                }
+            });
+        },
         copyInitialValue() {
             this.form.deepCloneParams = deepClone(this.form.params);
         },
@@ -78,6 +91,7 @@ export const listMixin = {
         },
         handleTableHeightChange(data) {
           this.table.height = data;
+          this.handleRefreshTable();
         },
         onSortChange(column) {
             let prop = column.prop;
@@ -161,9 +175,6 @@ export const listMixin = {
                 return;
             }
             this.setColumnList(this.table.columnList, columnObj.columnList);
-            this.$nextTick(() => {
-                this.$refs.table.doLayout();
-            });
         },
         // 本地导出
         exportCurrentDataToExcel(sheetName, filename) {

@@ -1,9 +1,9 @@
 <template>
     <div id="supplier">
-        <nodes-master-page :permission="permissionObj" v-on="form.events">
+        <nodes-master-page :show-expand-btn="false" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="供应商编码" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.code"
@@ -13,7 +13,7 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="供应商名称" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.name"
@@ -103,7 +103,8 @@
                     </el-table-column>
                     <el-table-column
                         fixed
-                        type="index">
+                        type="index"
+                    width="50">
                         <template slot="header">
                             #
                         </template>
@@ -114,7 +115,7 @@
                             :key="index"
                             :show-overflow-tooltip="true"
                             v-bind="column"
-                            width="auto">
+                            width="150">
                         </el-table-column>
                     </template>
                     <el-table-column
@@ -137,12 +138,17 @@
                 </el-pagination>
             </template>
         </nodes-master-page>
-        <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
-        </dialog-column>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
     </div>
 </template>
 
 <script>
+
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
@@ -153,7 +159,6 @@ import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js'
 import fileUpload from "@/components/nodes/fileUpload";
 import {nowDateFormat} from "@/util/date";
-
 
 export default {
     name: "supplier",
@@ -235,7 +240,6 @@ export default {
     computed: {
         permissionObj() {
             return {
-                search: this.vaildData(this.permission.supplier_search, false),
                 add: this.vaildData(this.permission.supplier_add, false),
                 delete: this.vaildData(this.permission.supplier_delete, false),
                 import: this.vaildData(this.permission.supplier_import, false)
@@ -252,10 +256,7 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
-
-                    this.$nextTick(() => {
-                        this.$refs.table.doLayout();
-                    });
+                    this.handleRefreshTable();
                 })
         },
         refreshTable() {
@@ -279,17 +280,12 @@ export default {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning",
-            })
-                .then(() => {
+            }).then(() => {
                     let removeObj = {
                         idList: rows.map(item => item.id)
                     };
-                    remove(removeObj)
-                        .then((res) => {
-                            this.$message({
-                                type: "success",
-                                message: res.data.msg,
-                            });
+                    remove(removeObj).then((res) => {
+                            this.$message.success(res.data.msg);
                             this.getTableData();
                         })
                 })

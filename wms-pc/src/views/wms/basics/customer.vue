@@ -1,26 +1,42 @@
-import fileDownload from "js-file-download";
 <template>
     <div id='customer'>
-        <nodes-master-page :permission="permissionObj" v-on="form.events">
+        <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
-                <el-form-item label="客户编码">
-                    <el-input v-model="form.params.code" class="d-input"></el-input>
-                </el-form-item>
-                <el-form-item label="客户名称">
-                    <el-input v-model="form.params.name" class="d-input"></el-input>
-                </el-form-item>
-                <el-form-item label="客户简称">
-                    <el-input v-model="form.params.simpleName" class="d-input"></el-input>
-                </el-form-item>
-            </template>
-            <template v-slot:expandSearch>
                 <el-row type="flex">
-                    <el-col :span="24">
-                        <el-form-item label="创建日期">
+                    <el-col :span="6">
+                        <el-form-item label="客户编码" label-width="90px">
+                            <el-input
+                                placeholder="请输入客户编码"
+                                v-model.trim="form.params.code" class="search-input">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="客户名称" label-width="90px">
+                            <el-input
+                                placeholder="请输入客户名称"
+                                    v-model.trim="form.params.name" class="search-input">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="客户简称" label-width="90px">
+                            <el-input
+                                placeholder="请输入客户简称"
+                                v-model.trim="form.params.simpleName"
+                                class="search-input">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="创建日期" label-width="90px">
                             <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
                         </el-form-item>
-
-                        <el-form-item label="更新日期">
+                    </el-col>
+                </el-row>
+                <el-row type="flex">
+                    <el-col :span="6">
+                        <el-form-item label="更新日期" label-width="90px">
                             <nodes-date-range v-model="form.params.updateTimeDateRange"></nodes-date-range>
                         </el-form-item>
                     </el-col>
@@ -81,7 +97,8 @@ import fileDownload from "js-file-download";
                     <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
-                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet" style="display: inline-block;margin-left: 10px">
+                    <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
+                                  style="display: inline-block;margin-left: 10px">
                         <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
                         </el-button>
                     </excel-export>
@@ -91,6 +108,7 @@ import fileDownload from "js-file-download";
                 <el-table
                     ref="table"
                     :data="table.data"
+                    :height="table.height"
                     border
                     highlight-current-row
                     row-key="id"
@@ -99,7 +117,7 @@ import fileDownload from "js-file-download";
                     @sort-change="onSortChange"
                 >
                     <el-table-column fixed type="selection" width="50"></el-table-column>
-                    <el-table-column fixed type="index">
+                    <el-table-column fixed type="index" width="50">
                         <template slot="header"> #</template>
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
@@ -108,21 +126,14 @@ import fileDownload from "js-file-download";
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column"
-                        >
+                            width="150">
+                            <template v-slot="{row}" v-if="column.prop === 'status'">
+                                <el-tag :type="row.status === '启用' ? 'success' : 'danger'">
+                                    {{row.status === '启用' ? '是' : '否'}}
+                                </el-tag>
+                            </template>
                         </el-table-column>
                     </template>
-                    <el-table-column label="启用"
-                                     prop="status"
-                                     width="100">
-                        <template v-slot="{row}">
-                            <el-tag :type="row.status === '启用' ? 'success' : 'danger'"
-                                    disable-transitions>{{
-                                    row.status ===
-                                    '启用' ? '是' : '否'
-                                }}
-                            </el-tag>
-                        </template>
-                    </el-table-column>
                 </el-table>
             </template>
             <template v-slot:page>
@@ -137,8 +148,12 @@ import fileDownload from "js-file-download";
                 </el-pagination>
             </template>
         </nodes-master-page>
-        <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
-        </dialog-column>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
     </div>
 </template>
 
@@ -151,11 +166,10 @@ import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import {listMixin} from "@/mixins/list";
-import {exportFile, page, remove, importFile} from "@/api/wms/basics/customer";
+import {exportFile, importFile, page, remove} from "@/api/wms/basics/customer";
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js';
 import fileUpload from "@/components/nodes/fileUpload";
-
 
 
 export default {
@@ -267,10 +281,9 @@ export default {
     computed: {
         permissionObj() {
             return {
-                search: this.vaildData(this.permission.customer_view, false),
                 add: this.vaildData(this.permission.customer_add, false),
                 delete: this.vaildData(this.permission.customer_delete, false),
-                import: this.vaildData(this.permission.supplier_import, false)
+                import: this.vaildData(this.permission.custome_import, false)
             }
         }
     },
@@ -288,6 +301,7 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
+                    this.handleRefreshTable();
                 });
         },
         refreshTable() {
@@ -319,12 +333,10 @@ export default {
                 createTimeDateRange: "",
             }
             this.onChange(null);
-            console.log('重置表单');
         },
         onChange(val) {
             if (val == null) {
                 this.dateRange = [];
-
             }
             this.$emit('dateRangeChange', val);
         },
@@ -342,7 +354,6 @@ export default {
                 cancelButtonText: "取消",
                 type: "warning",
             }).then(() => {
-
                 this.$refs.table.selection.forEach(e => {
                     this.deleteCustomerRequest.ids.push(e.id)
                 })

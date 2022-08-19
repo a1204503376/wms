@@ -1,6 +1,6 @@
 <template>
     <div id="receiveLog">
-        <nodes-master-page :permission="permissionObj" v-on="form.events">
+        <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
                     <el-col :span="6">
@@ -8,15 +8,16 @@
                             <el-input
                                 v-model.trim="form.params.receiveNo"
                                 :clearable="true"
+                                class="search-input"
                                 placeholder="请输入收货单编码">
-
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
                             <nodes-sku
-                                v-model="form.params.skuIdList">
+                                v-model="form.params.skuIdList"
+                                class="search-input">
                             </nodes-sku>
                         </el-form-item>
                     </el-col>
@@ -25,7 +26,9 @@
                             <el-input
                                 v-model.trim="form.params.boxCode"
                                 :clearable="true"
-                                placeholder="请输入箱号"></el-input>
+                                class="search-input"
+                                placeholder="请输入箱号">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -33,7 +36,9 @@
                             <el-input
                                 v-model.trim="form.params.lpnCode"
                                 :clearable="true"
-                                placeholder="请输入LPN"></el-input>
+                                class="search-input"
+                                placeholder="请输入LPN">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -43,6 +48,7 @@
                             <el-input
                                 v-model.trim="form.params.snCode"
                                 :clearable="true"
+                                class="search-input"
                                 placeholder="请输入序列号">
                             </el-input>
                         </el-form-item>
@@ -52,7 +58,9 @@
                             <el-input
                                 v-model.trim="form.params.createUser"
                                 :clearable="true"
-                                placeholder="请输入收货人"></el-input>
+                                class="search-input"
+                                placeholder="请输入收货人">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -65,7 +73,8 @@
                     <el-col :span="6">
                         <el-form-item label="库位" label-width="90px">
                             <nodes-location
-                                v-model="form.params.locIdList">
+                                v-model="form.params.locIdList"
+                                class="search-input">
                             </nodes-location>
                         </el-form-item>
                     </el-col>
@@ -75,14 +84,16 @@
                         <el-form-item label="库房" label-width="90px">
                             <nodes-warehouse
                                 v-model="form.params.whIdList"
-                                :multiple="true">
+                                :multiple="true"
+                                class="search-input">
                             </nodes-warehouse>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="货主" label-width="90px">
                             <nodes-owner
-                                v-model="form.params.woId">
+                                v-model="form.params.woId"
+                                class="search-input">
                             </nodes-owner>
                         </el-form-item>
                     </el-col>
@@ -132,8 +143,8 @@
                     </el-table-column>
                     <el-table-column
                         fixed
-                        sortable
-                        type="index">
+                        type="index"
+                        width="50">
                         <template slot="header">
                             #
                         </template>
@@ -142,9 +153,9 @@
                         <el-table-column
                             v-if="!column.hide"
                             :key="index"
+                            min-width="150"
                             show-overflow-tooltip
-                            v-bind="column"
-                            width="130">
+                            v-bind="column">
                             <template v-if="column.prop === 'receiveNo' || column.prop === 'snCode'" v-slot="scope">
                                 <el-link
                                     v-if="column.prop === 'receiveNo'"
@@ -183,8 +194,7 @@
                 <el-table
                     :border="true"
                     :data="snCodeList"
-                    max-height="500"
-                >
+                    max-height="500">
                     <el-table-column align="center" fixed type="index">
                         <template slot="header">
                             #
@@ -201,8 +211,12 @@
                 </div>
             </el-dialog>
         </template>
-        <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
-        </dialog-column>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
     </div>
 </template>
 
@@ -380,7 +394,6 @@ export default {
     computed: {
         permissionObj() {
             return {
-                search: this.vaildData(this.permission.receiveLog_search, false),
                 cancelReceive: this.vaildData(this.permission.receiveLog_cancelReceive, false),
                 createSoBill: this.vaildData(this.permission.receiveLog_createSoBill, false),
             }
@@ -400,9 +413,7 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
-                    this.$nextTick(() => {
-                        this.$refs.table.doLayout();
-                    });
+                    this.handleRefreshTable();
                 })
         },
         refreshTable() {

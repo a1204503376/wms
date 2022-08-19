@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view />
+    <router-view ref="appView"/>
   </div>
 </template>
 
@@ -10,11 +10,10 @@ export default {
   data() {
     return {};
   },
-  watch: {},
-  created() {
-
+  watch: { },
+  created() { },
+  methods: {
   },
-  methods: {},
   computed: {}
 };
 </script>

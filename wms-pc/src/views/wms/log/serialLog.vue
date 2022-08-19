@@ -1,42 +1,48 @@
 <template>
     <div id="serialLog">
-        <nodes-master-page :permission="permissionObj" v-on="form.events">
+        <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="序列号">
-                            <el-input v-model.trim="form.params.serialNumberBegin" :clearable="true"
-                                      style="width: 91px;"></el-input>
-                            <span style="margin: 0 2px 0 2px">—</span>
-                            <el-input v-model.trim="form.params.serialNumberEnd" :clearable="true"
-                                      style="width: 91px;"></el-input>
+                            <el-input
+                                v-model.trim="form.params.serialNumberBegin" :clearable="true"
+                                style="width: 80px;">
+                            </el-input>
+                            -
+                            <el-input
+                                v-model.trim="form.params.serialNumberEnd" :clearable="true"
+                                style="width: 80px;">
+                            </el-input>
+                            <el-tooltip placement="top">
+                                <div slot="content">
+                                    <span>1、只输入前者或后者，则模糊匹配输入值</span><br>
+                                    <span>2、前者输入查找值，后者输入0，则查找大于输入值的序列号"</span><br>
+                                    <span>3、后者输入查找值，前者输入0，则查找小于输入值的序列号"</span><br>
+                                    <span>4、前者后者均输入查找值，则查找该范围内的序列号"</span>
+                                </div>
+                                <i class="el-icon-question" style="margin-left: 5px;height: 28px;line-height: 28px"></i>
+                            </el-tooltip>
                         </el-form-item>
-                        <el-tooltip placement="top">
-                            <div slot="content">
-                                <span>1、只输入前者或后者，则模糊匹配输入值</span><br>
-                                <span>2、前者输入查找值，后者输入0，则查找大于输入值的序列号"</span><br>
-                                <span>3、后者输入查找值，前者输入0，则查找小于输入值的序列号"</span><br>
-                                <span>4、前者后者均输入查找值，则查找该范围内的序列号"</span>
-                            </div>
-                            <i class="el-icon-question" style="height: 28px;line-height: 28px"></i>
-                        </el-tooltip>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="批次">
-                            <el-input v-model.trim="form.params.lotNumber" :clearable="true"
-                                      placeholder="请输入批次"></el-input>
+                            <el-input
+                                v-model.trim="form.params.lotNumber"
+                                :clearable="true" class="search-input"
+                                placeholder="请输入批次">
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="序列号状态">
-                            <nodes-serial-state v-model="form.params.serialStateList"></nodes-serial-state>
+                            <nodes-serial-state
+                                v-model="form.params.serialStateList"
+                                class="search-input">
+                            </nodes-serial-state>
                         </el-form-item>
                     </el-col>
-                </el-row>
-            </template>
-            <template v-slot:expandSearch>
-                <el-row>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="入库日期">
                             <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
                         </el-form-item>
@@ -63,6 +69,7 @@
             <template v-slot:table>
                 <el-table ref="table"
                           :data="table.data"
+                          :height="table.height"
                           border
                           highlight-current-row
                           size="mini"
@@ -75,8 +82,8 @@
                     </el-table-column>
                     <el-table-column
                         fixed
-                        sortable
-                        type="index">
+                        type="index"
+                        width="50">
                         <template slot="header">
                             #
                         </template>
@@ -98,8 +105,12 @@
                 </el-pagination>
             </template>
         </nodes-master-page>
-        <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
-        </dialog-column>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
     </div>
 </template>
 
@@ -197,13 +208,6 @@ export default {
     created() {
         this.getTableData();
     },
-    computed: {
-        permissionObj() {
-            return {
-                search: this.vaildData(this.permission.serialLog_search, false)
-            }
-        }
-    },
     methods: {
         getTableData() {
 
@@ -212,6 +216,7 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
+                    this.handleRefreshTable();
                 })
         },
         refreshTable() {

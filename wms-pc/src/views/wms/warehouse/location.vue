@@ -9,8 +9,7 @@
                                 v-model.trim="form.params.locCode"
                                 :clearable="true"
                                 class="search-input"
-                                placeholder="请输入库位编码"
-                                show-overflow-tooltip>
+                                placeholder="请输入库位编码">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -117,7 +116,6 @@
                     </el-col>
                 </el-row>
             </template>
-
             <template v-slot:batchBtn>
                 <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
                 </el-button>
@@ -191,7 +189,7 @@
                     </template>
                     <el-table-column align="center" fixed="right" label="操作" width="100">
                         <template v-slot="scope">
-                            <el-button size="small" type="text" @click="onEdit(scope.row)">编辑</el-button>
+                            <el-button  v-if="permissionObj.edit" size="small" type="text" @click="onEdit(scope.row)">编辑</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -210,10 +208,12 @@
                 </el-pagination>
             </template>
         </nodes-master-page>
-        <dialog-column
-            v-bind="columnShowHide"
-            @close="onColumnShowHide">
-        </dialog-column>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
     </div>
 </template>
 
@@ -360,9 +360,9 @@ export default {
     computed: {
         permissionObj() {
             return {
-                search: this.vaildData(this.permission.location_search, false),
                 add: this.vaildData(this.permission.location_add, false),
                 delete: this.vaildData(this.permission.location_delete, false),
+                edit: this.vaildData(this.permission.location_edit, false),
                 import: this.vaildData(this.permission.location_import, false)
             }
         }
@@ -377,10 +377,7 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
-
-                    this.$nextTick(() => {
-                        this.$refs.table.doLayout();
-                    });
+                    this.handleRefreshTable();
                 })
         },
         refreshTable() {

@@ -6,15 +6,12 @@
         placeholder="请选择"
         :clearable="true"
         size="mini"
-        style="width:100%;"
         @change="onChange">
         <el-option
             v-for="item in dataSource"
             :key="item.value"
             :label="item.label"
             :value="item.label">
-            <span style="float: left">{{ item.value }}</span>
-            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.label }}</span>
         </el-option>
     </el-select>
 
