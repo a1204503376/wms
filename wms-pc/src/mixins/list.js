@@ -14,12 +14,14 @@ export const listMixin = {
                 deepCloneParams: {},
                 events: {
                     search: this.onSearch,
-                    reset: this.onReset
+                    reset: this.onReset,
+                    changeTableHeight: this.handleTableHeightChange,
                 }
             },
             table: {
                 columnList: [],
-                data: []
+                data: [],
+                height: 300
             },
             page: {
                 total: 0,
@@ -73,6 +75,9 @@ export const listMixin = {
         },
         onRefresh() {
             this.getTableData();
+        },
+        handleTableHeightChange(data) {
+          this.table.height = data;
         },
         onSortChange(column) {
             let prop = column.prop;
