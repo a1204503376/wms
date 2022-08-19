@@ -95,4 +95,16 @@ public class WmsTaskDaoImpl
 			throw new ServiceException("任务更新失败,请再次重试");
 		}
 	}
+
+	@Override
+	public WmsTask getEnableTaskBySoBillId(Long soBillId, Long soDetailId) {
+		return super.lambdaQuery()
+			.eq(WmsTask::getBillId, soBillId)
+			.eq(WmsTask::getBillDetailId, soDetailId)
+			.eq(WmsTask::getTaskTypeCd, WmsTaskTypeEnum.PICKING)
+			.eq(WmsTask::getTaskProcType, WmsTaskProcTypeEnum.BY_PCS)
+			.in(WmsTask::getTaskState, WmsTaskStateEnum.NOT_ISSUED, WmsTaskStateEnum.ISSUED, WmsTaskStateEnum.START_EXECUTION, WmsTaskStateEnum.ABNORMAL)
+			.last("limit 1")
+			.one();
+	}
 }

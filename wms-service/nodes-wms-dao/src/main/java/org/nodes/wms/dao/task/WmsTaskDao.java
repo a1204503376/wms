@@ -65,4 +65,14 @@ public interface WmsTaskDao extends BaseService<WmsTask> {
 	 * @param scanQty       实际量
 	 */
 	void updateWmsTaskStateByTaskId(Long taskId, WmsTaskStateEnum taskStateEnum, BigDecimal scanQty);
+
+	/**
+	 * 根据发货单发货单详情查询可用的任务
+	 *
+	 * @param soBillId   发货单ID
+	 * @param soDetailId 发货单详情ID
+	 * @return 可用的任务
+	 */
+	WmsTask getEnableTaskBySoBillId(Long soBillId, Long soDetailId);
+
 }

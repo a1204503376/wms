@@ -123,4 +123,9 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 		wmsTaskDao.updateWmsTaskStateByTaskId(taskId, taskStateEnum, scanQty);
 	}
 
+	@Override
+	public WmsTask findEnableTaskBySoBillId(Long soBillId, Long soDetailId) {
+		return null;
+	}
+
 }
