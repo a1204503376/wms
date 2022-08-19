@@ -4,6 +4,7 @@ import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -38,4 +39,12 @@ public interface SoPickPlanBiz {
 	 * @return 运行的信息，如果全部分配成功则返回分配成功
 	 */
 	String runByPickStrategy(SoHeader soHeader, List<SoDetail> soDetials, List<SoPickPlan> existPickPlans);
+
+	/**
+	 * 根据拣货计划ID修改拣货计划数量
+	 *
+	 * @param pickPlanId  拣货计划ID
+	 * @param pickRealQty 拣货实际数量
+	 */
+	void updatePickPlanPickRealQtyById(Long pickPlanId, BigDecimal pickRealQty);
 }

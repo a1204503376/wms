@@ -5,7 +5,6 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.input.*;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindPickingBySoBillIdResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.OutboundAccessAreaLocationQueryResponse;
-import org.nodes.wms.dao.outstock.logSoPick.dto.output.PickingByBoxResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.PickByPcRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillDistributedRequest;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
@@ -75,7 +74,7 @@ public interface OutStockBiz {
 	 * @param request 请求参数
 	 * @return 是否拣货成功
 	 */
-	PickingByBoxResponse pickByBox(PickByPcsRequest request);
+	void pickByBox(PickByBoxCodeRequest request);
 
 	/**
 	 * 查询出库接驳区的库位

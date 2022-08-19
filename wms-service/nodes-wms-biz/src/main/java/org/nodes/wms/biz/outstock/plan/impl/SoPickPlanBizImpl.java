@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.outstock.plan.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.outstock.strategy.TianyiPickStrategy;
@@ -60,6 +61,13 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		}
 
 		return result;
+	}
+
+	@Override
+	public void updatePickPlanPickRealQtyById(Long pickPlanId, BigDecimal pickRealQty) {
+		AssertUtil.notNull(pickPlanId, "修改拣货计划失败,拣货计划ID为空");
+		AssertUtil.notNull(pickRealQty, "修改拣货计划失败,拣货量为空");
+		soPickPlanDao.updatePickPlanPickRealQtyById(pickPlanId, pickRealQty);
 	}
 
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlan, SoDetail detail, String result) {
