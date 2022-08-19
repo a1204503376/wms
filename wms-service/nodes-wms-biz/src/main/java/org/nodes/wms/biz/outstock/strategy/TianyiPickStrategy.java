@@ -1,7 +1,9 @@
 package org.nodes.wms.biz.outstock.strategy;
 
+import java.util.Arrays;
 import java.util.List;
 
+import org.nodes.core.constant.DictKVConstant;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
@@ -9,6 +11,7 @@ import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.entities.Stock;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,8 @@ import lombok.RequiredArgsConstructor;
 public class TianyiPickStrategy {
 
     private final StockQueryBiz stockQueryBiz;
+    private static final List<String> AGV_ZONE_TYPE_LIST = Arrays.asList(
+        DictKVConstant.ZONE_TYPE_AGV_CHOICE.toString(), DictKVConstant.ZONE_TYPE_AGV_PICK.toString());
 
     public List<SoPickPlan> run(SoHeader soHeader, SoDetail soDetail,
             List<SoDetail> soDetailList, List<SoPickPlan> existPickPlans) {
@@ -32,7 +37,10 @@ public class TianyiPickStrategy {
         SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
         SkuLotUtil.setAllSkuLot(soDetail, skuLot);
         // 分别查询人工区和自动区的库存，并分别进行按入库日期进行排序 findEnableStockByZoneTypeAndSkuLot
-        // 优先人工区，再自动化区，尽量不拆箱
+        List<Stock> agvStockList = stockQueryBiz.findEnableStockByZoneTypeAndSkuLot(soHeader.getWhId(), 
+            soDetail.getSkuId(), StockStatusEnum.NORMAL, AGV_ZONE_TYPE_LIST, skuLot);
+        // 优先人工区，再自动化区，尽量不拆箱。注意如果自动区的箱中存在不需要出的库存则不应该分配该箱
+
         // 如果是自动区的则需要根据箱码中生成其它物品的拣货计划
 
         List<Stock> stockList = stockQueryBiz.findEnableStockBySkuAndSkuLot(soDetail.getSkuId(), skuLot);
