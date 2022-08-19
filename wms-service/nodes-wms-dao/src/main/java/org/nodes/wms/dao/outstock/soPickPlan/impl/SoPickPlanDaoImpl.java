@@ -1,13 +1,17 @@
 package org.nodes.wms.dao.outstock.soPickPlan.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.outstock.SoPickPlanDao;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.outstock.soPickPlan.mapper.SoPickPlanMapper;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -39,5 +43,17 @@ public class SoPickPlanDaoImpl
 		return super.lambdaQuery()
 			.eq(SoPickPlan::getSoBillId, soBillId)
 			.list();
+	}
+
+	@Override
+	public void updatePickPlanPickRealQtyById(Long pickPlanId, BigDecimal pickRealQty) {
+		UpdateWrapper<SoPickPlan> updateWrapper = Wrappers.update();
+		updateWrapper.lambda()
+			.eq(SoPickPlan::getPickPlanId, pickPlanId);
+		SoPickPlan soPickPlan = new SoPickPlan();
+		soPickPlan.setPickRealQty(pickRealQty);
+		if (!super.update(soPickPlan, updateWrapper)) {
+			throw new ServiceException("修改拣货计划失败,请再次重试");
+		}
 	}
 }
