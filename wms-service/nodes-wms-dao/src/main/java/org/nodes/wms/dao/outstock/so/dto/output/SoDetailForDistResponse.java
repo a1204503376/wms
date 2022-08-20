@@ -27,6 +27,12 @@ public class SoDetailForDistResponse implements Serializable {
 	private String soLineNo;
 
 	/**
+	 * 物品id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long skuId;
+
+	/**
 	 * 物品编码
 	 */
 	private String skuCode;

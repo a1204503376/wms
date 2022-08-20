@@ -100,6 +100,7 @@
             resultType="org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDistResponse">
         SELECT detail.so_detail_id,
                detail.so_line_no,
+               detail.sku_id,
                detail.sku_code,
                detail.sku_name,
                detail.sku_spec,
