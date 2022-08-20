@@ -89,7 +89,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public LogSoPick pickByPlan(SoPickPlan pickPlan, BigDecimal pickQty, List<String> serialNoList) {
+	public LogSoPick pickByPlan(SoDetail soDetail, SoPickPlan pickPlan, BigDecimal pickQty, List<String> serialNoList) {
 		AssertUtil.notNull(pickPlan, "按计划拣货失败,拣货计划参数为空");
 		AssertUtil.notNull(pickQty, "按拣货计划拣货失败，拣货数量参数为空");
 
@@ -105,11 +105,11 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		Location pickToLocation = locationBiz.getLocationByZoneType(
 			pickPlan.getWhId(), DictKVConstant.ZONE_TYPE_PICK_TO).get(0);
 		stockBiz.moveStock(stock, serialNoList, pickQty, pickToLocation, StockLogTypeEnum.OUTSTOCK_BY_PICK_PLAN,
-			pickPlan.getSoBillId(),	pickPlan.getSoBillNo(), pickPlan.getSoDetailId().toString());
+			pickPlan.getSoBillId(),	pickPlan.getSoBillNo(), soDetail.getSoLineNo());
 		// 3.更新拣货计划
 		updatePickRealQty(pickPlan.getPickPlanId(), pickPlan.getPickRealQty().add(pickQty));
 		// 4.生产并保存拣货记录
-		LogSoPick logSoPick = logSoPickFactory.create(pickPlan, pickQty, serialNoList, stock);
+		LogSoPick logSoPick = logSoPickFactory.create(soDetail, pickPlan, pickQty, serialNoList, stock);
 		logSoPickDao.save(logSoPick);
 		return logSoPick;
 	}
