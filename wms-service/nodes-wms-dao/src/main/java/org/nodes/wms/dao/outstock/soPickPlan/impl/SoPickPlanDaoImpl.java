@@ -56,4 +56,12 @@ public class SoPickPlanDaoImpl
 			throw new ServiceException("修改拣货计划失败,请再次重试");
 		}
 	}
+
+	@Override
+	public SoPickPlan getPickByTaskId(Long taskId) {
+		AssertUtil.notNull(taskId, "根据任务查询关联的拣货计划失败，任务ID为空");
+		return super.lambdaQuery()
+			.eq(SoPickPlan::getTaskId, taskId)
+			.one();
+	}
 }

@@ -44,4 +44,12 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 	 * @param pickRealQty 拣货实际数量
 	 */
 	void updatePickPlanPickRealQtyById(Long pickPlanId, BigDecimal pickRealQty);
+
+	/**
+	 * 根据任务ID查询拣货计划
+	 *
+	 * @param taskId 任务ID
+	 * @return 拣货计划
+	 */
+	SoPickPlan getPickByTaskId(Long taskId);
 }
