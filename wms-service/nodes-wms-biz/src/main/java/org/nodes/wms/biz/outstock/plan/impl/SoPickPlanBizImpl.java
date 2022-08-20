@@ -109,7 +109,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		// 3.更新拣货计划
 		updatePickRealQty(pickPlan.getPickPlanId(), pickPlan.getPickRealQty().add(pickQty));
 		// 4.生产并保存拣货记录
-		LogSoPick logSoPick = logSoPickFactory.create(pickPlan, pickPlan, serialNoList, stock);
+		LogSoPick logSoPick = logSoPickFactory.create(pickPlan, pickQty, serialNoList, stock);
 		logSoPickDao.save(logSoPick);
 		return logSoPick;
 	}

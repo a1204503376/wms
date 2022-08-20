@@ -14,6 +14,7 @@ import org.nodes.wms.dao.stock.dto.output.PickByPcStockDto;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -163,7 +164,7 @@ public class LogSoPickFactory {
 		return logSoPickList;
 	}
 
-	public LogSoPick create(SoPickPlan pickPlan, SoPickPlan pickPlan1, List<String> serialNoList, Stock stock) {
+	public LogSoPick create(SoPickPlan pickPlan, BigDecimal pickQty, List<String> serialNoList, Stock stock) {
 		// TODO
 		return null;
 	}
