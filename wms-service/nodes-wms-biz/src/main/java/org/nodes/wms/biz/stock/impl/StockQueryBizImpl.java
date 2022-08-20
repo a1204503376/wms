@@ -383,8 +383,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		List<Long> pickToLocIdList = pickToLocationList.stream()
 			.map(Location::getLocId)
 			.collect(Collectors.toList());
-		stockDao.getEnableStockBySkuLotAndExcludeLoc(skuId, pickToLocIdList, skuLot);
-		return null;
+		return stockDao.getEnableStockBySkuLotAndExcludeLoc(skuId, pickToLocIdList, skuLot);
 	}
 
 }
