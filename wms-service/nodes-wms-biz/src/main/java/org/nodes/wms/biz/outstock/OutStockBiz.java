@@ -91,7 +91,7 @@ public interface OutStockBiz {
 	 *
 	 * @param request 请求参数
 	 */
-	Boolean pickOnAgvPickTo(MoveOnAgvPickToRequest request);
+	Boolean pickOnAgvPickTo(OnAgvPickToRequest request);
 
 	/**
 	 * 接驳区移动
