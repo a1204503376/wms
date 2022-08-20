@@ -1,5 +1,6 @@
 package org.nodes.wms.biz.outstock.plan;
 
+import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
@@ -47,4 +48,15 @@ public interface SoPickPlanBiz {
 	 * @param pickRealQty 拣货实际数量
 	 */
 	void updatePickPlanPickRealQtyById(Long pickPlanId, BigDecimal pickRealQty);
+
+	/**
+	 * 根据拣货计划拣货，
+	 * 该函数会执行如下操作：1. 释放库存占用 2.移动库存到出库暂存区 3.更新拣货计划 4.生产并保存拣货记录
+	 *
+	 * @param pickPlan     必填，拣货计划
+	 * @param pickQty      必填，本次拣货数量
+	 * @param serialNoList 非必填，序列号集合
+	 * @return 拣货记录
+	 */
+	LogSoPick pickByPlan(SoPickPlan pickPlan, BigDecimal pickQty, List<String> serialNoList);
 }

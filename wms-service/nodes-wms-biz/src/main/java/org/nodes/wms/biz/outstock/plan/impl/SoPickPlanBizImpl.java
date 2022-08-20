@@ -7,6 +7,7 @@ import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.outstock.strategy.TianyiPickStrategy;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.outstock.SoPickPlanDao;
+import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
@@ -68,6 +69,11 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		AssertUtil.notNull(pickPlanId, "修改拣货计划失败,拣货计划ID为空");
 		AssertUtil.notNull(pickRealQty, "修改拣货计划失败,拣货量为空");
 		soPickPlanDao.updatePickPlanPickRealQtyById(pickPlanId, pickRealQty);
+	}
+
+	@Override
+	public LogSoPick pickByPlan(SoPickPlan pickPlan, BigDecimal pickQty, List<String> serialNoList) {
+		return null;
 	}
 
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlan, SoDetail detail, String result) {
