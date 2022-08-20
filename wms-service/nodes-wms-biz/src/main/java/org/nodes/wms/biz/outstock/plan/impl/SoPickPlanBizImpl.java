@@ -160,6 +160,23 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		return null;
 	}
 
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public void cancelPickPlan(List<SoPickPlan> soPickPlanList, SoHeader soHeader) {
+		AssertUtil.notEmpty(soPickPlanList, "全部取消分配失败,待取消的拣货计划参数为空");
+
+		// 删除拣货计划
+		List<Long> soPickPlanIdList = soPickPlanList.stream()
+			.map(SoPickPlan::getPickPlanId)
+			.collect(Collectors.toList());
+		soPickPlanDao.removeByIds(soPickPlanIdList);
+		// 释放库存占用
+		for (SoPickPlan soPickPlan : soPickPlanList){
+			stockBiz.reduceOccupy(soHeader.getSoBillId(), soHeader.getSoBillNo(),
+				soPickPlan.getSoDetailId(), soPickPlan.getStockId(), soPickPlan.getSurplusQty());
+		}
+	}
+
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlan, SoDetail detail, String result) {
 		if (Func.isEmpty(newPickPlan)) {
 			return String.format("%s,%s行库存不足未分配", result, detail.getSoLineNo());

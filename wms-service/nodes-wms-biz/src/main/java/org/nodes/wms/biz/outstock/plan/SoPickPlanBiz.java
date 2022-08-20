@@ -67,4 +67,12 @@ public interface SoPickPlanBiz {
 	 * @return 拣货计划
 	 */
 	SoPickPlan findPickByTaskId(Long taskId);
+
+	/**
+	 * 取消分配
+	 *
+	 * @param soPickPlanList 需要取消分配的拣货计划
+	 * @param soHeader       发货单
+	 */
+	void cancelPickPlan(List<SoPickPlan> soPickPlanList, SoHeader soHeader);
 }

@@ -13,7 +13,6 @@ import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.outstock.so.SoBillBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
-import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
@@ -72,7 +71,6 @@ public class OutStockBizImpl implements OutStockBiz {
 	private final LocationBiz locationBiz;
 	private final LogBiz logBiz;
 	private final WmsTaskBiz wmsTaskBiz;
-	private final StockManageBiz stockManageBiz;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -329,13 +327,26 @@ public class OutStockBizImpl implements OutStockBiz {
 			soBillBiz.updateState(soBillId, SoBillStateEnum.EXECUTING);
 		}
 		// 记录日志
-		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, soBillId, soHeader.getSoBillNo(), "执行自动分配");
+		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, soBillId, soHeader.getSoBillNo(), "执行自动分配:" + result);
 
 		return result;
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public boolean cancelDistribute(Long soBillId) {
+		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findBySoHeaderId(soBillId);
+		if (Func.isEmpty(soPickPlanList)){
+			throw ExceptionUtil.mpe("取消分配失败,当前单据尚未执行分配");
+		}
+		if (Func.isNotEmpty(soPickPlanList.get(0).getTaskId())){
+			throw ExceptionUtil.mpe("取消分配失败,已经下发的不能取消分配");
+		}
+
+		SoHeader soHeader = soBillBiz.getSoHeaderById(soBillId);
+		soPickPlanBiz.cancelPickPlan(soPickPlanList, soHeader);
+
+		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, soBillId, soHeader.getSoBillNo(), "全部取消分配");
 		return false;
 	}
 
