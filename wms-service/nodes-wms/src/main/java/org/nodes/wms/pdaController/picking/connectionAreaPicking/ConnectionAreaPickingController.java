@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.outstock.OutStockBiz;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.MoveOnAgvPickToRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindLocOfAgvPickToRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.MoveOnAgvPickToRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.OnAgvPickToRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.OutboundAccessAreaLocationQueryResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
@@ -43,7 +44,7 @@ public class ConnectionAreaPickingController {
 	 */
 	@ApiLog("接驳区拣货")
 	@PostMapping("/ConnectionAreaPicking")
-	public void connectionAreaPicking(@RequestBody MoveOnAgvPickToRequest request) {
+	public void connectionAreaPicking(@RequestBody OnAgvPickToRequest request) {
 		outStockBiz.pickOnAgvPickTo(request);
 	}
 

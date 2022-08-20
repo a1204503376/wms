@@ -3,6 +3,7 @@ package org.nodes.wms.dao.task.impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
@@ -16,6 +17,7 @@ import org.nodes.wms.dao.task.enums.WmsTaskTypeEnum;
 import org.nodes.wms.dao.task.mapper.WmsTaskMapper;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -69,14 +71,20 @@ public class WmsTaskDaoImpl
 
 	@Override
 	public WmsTask findTaskByBoxCode(String boxCode, WmsTaskProcTypeEnum taskProcTypeEnum) {
-		AssertUtil.notNull(boxCode, "根据箱码获取任务失败，任务为空");
-		List<WmsTask> wmsTaskList = super.lambdaQuery()
+		LambdaQueryChainWrapper<WmsTask> lambdaQuery = super.lambdaQuery()
 			.eq(WmsTask::getBoxCode, boxCode)
 			.eq(WmsTask::getTaskTypeCd, WmsTaskTypeEnum.PICKING)
-			.eq(WmsTask::getTaskProcType, taskProcTypeEnum)
 			.in(WmsTask::getTaskState, WmsTaskStateEnum.NOT_ISSUED, WmsTaskStateEnum.ISSUED, WmsTaskStateEnum.START_EXECUTION, WmsTaskStateEnum.ABNORMAL)
-			.last("task_qty <> scan_qty")
-			.list();
+			.last("task_qty <> scan_qty");
+		if (Func.isEmpty(taskProcTypeEnum)) {
+			lambdaQuery.in(WmsTask::getTaskProcType, WmsTaskProcTypeEnum.BY_LOC,
+				WmsTaskProcTypeEnum.BY_BOX, WmsTaskProcTypeEnum.BY_PCS, WmsTaskProcTypeEnum.BY_LPN);
+		} else {
+			lambdaQuery.eq(WmsTask::getTaskProcType, taskProcTypeEnum);
+		}
+		AssertUtil.notNull(boxCode, "根据箱码获取任务失败，任务为空");
+
+		List<WmsTask> wmsTaskList = lambdaQuery.list();
 		if (wmsTaskList.size() > 1) {
 			throw new ServiceException("根据箱码获取任务失败，查询出多个任务，请检查任务后重试");
 		}
