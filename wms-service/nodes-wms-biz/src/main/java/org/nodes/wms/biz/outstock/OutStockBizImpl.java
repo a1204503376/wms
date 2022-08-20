@@ -334,19 +334,32 @@ public class OutStockBizImpl implements OutStockBiz {
 		}
 		// 自动生成拣货计划,即使有的明细因为库存不足导致无法全部分配，也可以部分分配成功
 		List<SoDetail> soDetails = soBillBiz.getEnableSoDetailBySoHeaderId(soBillId);
-		String result = soPickPlanBiz.runByPickStrategy(soHeader, soDetails, pickPlans);
+		String result = soPickPlanBiz.runPickStrategy(soHeader, soDetails, pickPlans);
 		// 更新发货单状态
 		if (SoBillStateEnum.CREATE.equals(soHeader.getSoBillState())) {
 			soBillBiz.updateState(soBillId, SoBillStateEnum.EXECUTING);
 		}
 		// 记录日志
-		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, soBillId, "执行自动分配");
+		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, soBillId, soHeader.getSoBillNo(), "执行自动分配:" + result);
 
 		return result;
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public boolean cancelDistribute(Long soBillId) {
+		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findBySoHeaderId(soBillId);
+		if (Func.isEmpty(soPickPlanList)){
+			throw ExceptionUtil.mpe("取消分配失败,当前单据尚未执行分配");
+		}
+		if (Func.isNotEmpty(soPickPlanList.get(0).getTaskId())){
+			throw ExceptionUtil.mpe("取消分配失败,已经下发的不能取消分配");
+		}
+
+		SoHeader soHeader = soBillBiz.getSoHeaderById(soBillId);
+		soPickPlanBiz.cancelPickPlan(soPickPlanList, soHeader);
+
+		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, soBillId, soHeader.getSoBillNo(), "全部取消分配");
 		return false;
 	}
 

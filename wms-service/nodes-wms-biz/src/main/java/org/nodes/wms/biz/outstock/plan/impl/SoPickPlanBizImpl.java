@@ -58,11 +58,11 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	}
 
 	@Override
-	public String runByPickStrategy(SoHeader soHeader, List<SoDetail> soDetials, List<SoPickPlan> existPickPlans) {
+	public String runPickStrategy(SoHeader soHeader, List<SoDetail> soDetials, List<SoPickPlan> existPickPlans) {
 		String result = "";
-
+		List<SoPickPlan> pickPlanOfSoDetail = null;
 		for (SoDetail detail : soDetials) {
-			List<SoPickPlan> pickPlanOfSoDetail = null;
+			pickPlanOfSoDetail = null;
 			if (Func.notNull(existPickPlans)) {
 				pickPlanOfSoDetail = existPickPlans.stream()
 					.filter(soPickPlan -> detail.getSoDetailId().equals(soPickPlan.getSoDetailId()))
@@ -158,6 +158,23 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	@Override
 	public List<SoPickPlan> findPickByTaskId(Long taskId) {
 		return soPickPlanDao.getPickByTaskId(taskId);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public void cancelPickPlan(List<SoPickPlan> soPickPlanList, SoHeader soHeader) {
+		AssertUtil.notEmpty(soPickPlanList, "全部取消分配失败,待取消的拣货计划参数为空");
+
+		// 删除拣货计划
+		List<Long> soPickPlanIdList = soPickPlanList.stream()
+			.map(SoPickPlan::getPickPlanId)
+			.collect(Collectors.toList());
+		soPickPlanDao.removeByIds(soPickPlanIdList);
+		// 释放库存占用
+		for (SoPickPlan soPickPlan : soPickPlanList){
+			stockBiz.reduceOccupy(soHeader.getSoBillId(), soHeader.getSoBillNo(),
+				soPickPlan.getSoDetailId(), soPickPlan.getStockId(), soPickPlan.getSurplusQty());
+		}
 	}
 
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlan, SoDetail detail, String result) {
