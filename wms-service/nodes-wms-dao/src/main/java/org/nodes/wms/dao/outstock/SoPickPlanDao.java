@@ -51,5 +51,5 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 	 * @param taskId 任务ID
 	 * @return 拣货计划
 	 */
-	SoPickPlan getPickByTaskId(Long taskId);
+	List<SoPickPlan> getPickByTaskId(Long taskId);
 }

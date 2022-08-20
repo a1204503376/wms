@@ -66,5 +66,5 @@ public interface SoPickPlanBiz {
 	 * @param taskId 任务ID
 	 * @return 拣货计划
 	 */
-	SoPickPlan findPickByTaskId(Long taskId);
+	List<SoPickPlan> findPickByTaskId(Long taskId);
 }

@@ -156,8 +156,8 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	}
 
 	@Override
-	public SoPickPlan findPickByTaskId(Long taskId) {
-		return null;
+	public List<SoPickPlan> findPickByTaskId(Long taskId) {
+		return soPickPlanDao.getPickByTaskId(taskId);
 	}
 
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlan, SoDetail detail, String result) {
