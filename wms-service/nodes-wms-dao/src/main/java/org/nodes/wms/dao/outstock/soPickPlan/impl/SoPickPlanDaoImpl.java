@@ -64,4 +64,17 @@ public class SoPickPlanDaoImpl
 			.eq(SoPickPlan::getTaskId, taskId)
 			.list();
 	}
+
+	@Override
+	public void updateTask(List<SoPickPlan> soPickPlanList, Long taskId) {
+		for (SoPickPlan soPickPlan : soPickPlanList){
+			UpdateWrapper<SoPickPlan> updateWrapper = Wrappers.update();
+			updateWrapper.lambda().eq(SoPickPlan::getPickPlanId, soPickPlan.getPickPlanId());
+			SoPickPlan saveDto = new SoPickPlan();
+			saveDto.setTaskId(taskId);
+			if (!super.update(saveDto, updateWrapper)) {
+				throw new ServiceException("更新拣货计划的任务id失败,请再次重试");
+			}
+		}
+	}
 }

@@ -3,10 +3,12 @@ package org.nodes.wms.biz.outstock;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.DictKVConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
+import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.logSoPick.modular.LogSoPickFactory;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
@@ -14,8 +16,10 @@ import org.nodes.wms.biz.outstock.so.SoBillBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.stockManage.StockManageBiz;
+import org.nodes.wms.biz.task.AgvTask;
 import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.outstock.SoPickPlanDao;
 import org.nodes.wms.dao.outstock.logSoPick.LogSoPickDao;
@@ -52,6 +56,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -74,6 +79,8 @@ public class OutStockBizImpl implements OutStockBiz {
 	private final LogBiz logBiz;
 	private final WmsTaskBiz wmsTaskBiz;
 	private final StockManageBiz stockManageBiz;
+	private final ZoneBiz zoneBiz;
+	private final AgvTask agvTask;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -408,8 +415,30 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public boolean issued(Long soBillId) {
-		return false;
+		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findBySoHeaderId(soBillId);
+		if (Func.isEmpty(soPickPlanList)){
+			throw ExceptionUtil.mpe("取消分配失败,当前单据尚未执行分配");
+		}
+
+		// 已经下发过的不用重复下发，自动区的按库位下发任务到agv，人工区的下发按件拣货任务
+		SoHeader soHeader = soBillBiz.getSoHeaderById(soBillId);
+		Map<Long, List<SoPickPlan>> locId2SoPickPlan = soPickPlanList.stream()
+			.collect(Collectors.groupingBy(SoPickPlan::getLocId, Collectors.toList()));
+		locId2SoPickPlan.forEach((locId, value)->{
+			Zone zone = zoneBiz.findById(value.get(0).getZoneId());
+			if (WmsAppConstant.ZONE_CODE_AGV.equals(zone.getZoneCode())){
+				if (Func.isEmpty(value.get(0).getTaskId())){
+					WmsTask task = agvTask.pickToSchedule(locId, soHeader, null);
+					soPickPlanDao.updateTask(value, task.getTaskId());
+				}
+			}else{
+				// TODO
+			}
+		});
+
+		return true;
 	}
 
 	@Override

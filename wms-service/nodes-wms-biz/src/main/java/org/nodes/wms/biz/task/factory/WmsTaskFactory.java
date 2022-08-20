@@ -10,6 +10,7 @@ import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
 import org.nodes.wms.dao.task.enums.WmsTaskTypeEnum;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -66,7 +67,10 @@ public class WmsTaskFactory {
 		// 单据id、编码，明细id
 		wmsTask.setBillId(so.getSoBillId());
 		wmsTask.setBillNo(so.getSoBillNo());
-		wmsTask.setBillDetailId(soDetail.getSoDetailId());
+		if (Func.notNull(soDetail)){
+			wmsTask.setBillDetailId(soDetail.getSoDetailId());
+		}
+
 		// 任务类型： AGV拣货
 		wmsTask.setTaskTypeCd(WmsTaskTypeEnum.AGV_PICKING);
 		return wmsTask;
