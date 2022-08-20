@@ -162,4 +162,9 @@ public class LogSoPickFactory {
 
 		return logSoPickList;
 	}
+
+	public LogSoPick create(SoPickPlan pickPlan, SoPickPlan pickPlan1, List<String> serialNoList, Stock stock) {
+		// TODO
+		return null;
+	}
 }

@@ -180,11 +180,12 @@ public interface StockDao {
 	 * @param stockQty     新的上架数量，必填
 	 * @param stayStockQty 新的待上架数量，必填
 	 * @param pickQty      新的下架数量，必填
+	 * @param occupyQty    新的占用数量，必填
 	 * @param lastInTime   最近入库时间，非必填
 	 * @param lastOutTime  最近出库时间，分必填
 	 */
 	void updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
-			BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
+			BigDecimal pickQty, BigDecimal occupyQty, LocalDateTime lastInTime, LocalDateTime lastOutTime);
 
 	/**
 	 * 批量更新库存状态
@@ -285,7 +286,7 @@ public interface StockDao {
 
 	/**
 	 * 按照批属性查找排除库位中的库存
-	 * 
+	 *
 	 * @param skuId        物品id
 	 * @param excludeLocId 排除的库位id,非必填
 	 * @param skuLot       批属性

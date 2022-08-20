@@ -8,13 +8,14 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickForSoDetailRespo
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickIndexResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickPageResponse;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
+import org.springblade.core.mp.base.BaseService;
 
 import java.util.List;
 
 /**
  * 拣货记录日志Dao接口
  **/
-public interface LogSoPickDao {
+public interface LogSoPickDao extends BaseService<LogSoPick> {
 
 	/**
 	 * 获取7天内出库量前10的物品

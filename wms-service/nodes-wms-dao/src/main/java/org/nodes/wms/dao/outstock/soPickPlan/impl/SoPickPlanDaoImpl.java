@@ -46,7 +46,7 @@ public class SoPickPlanDaoImpl
 	}
 
 	@Override
-	public void updatePickPlanPickRealQtyById(Long pickPlanId, BigDecimal pickRealQty) {
+	public void updatePickRealQty(Long pickPlanId, BigDecimal pickRealQty) {
 		UpdateWrapper<SoPickPlan> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
 			.eq(SoPickPlan::getPickPlanId, pickPlanId);
