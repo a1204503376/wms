@@ -59,4 +59,12 @@ public interface SoPickPlanBiz {
 	 * @return 拣货记录
 	 */
 	LogSoPick pickByPlan(SoPickPlan pickPlan, BigDecimal pickQty, List<String> serialNoList);
+
+	/**
+	 * 根据任务ID查询跟当前任务相关联的拣货计划
+	 *
+	 * @param taskId 任务ID
+	 * @return 拣货计划
+	 */
+	SoPickPlan findPickByTaskId(Long taskId);
 }

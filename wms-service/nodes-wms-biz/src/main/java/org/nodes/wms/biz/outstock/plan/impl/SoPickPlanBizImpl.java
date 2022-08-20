@@ -76,6 +76,11 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		return null;
 	}
 
+	@Override
+	public SoPickPlan findPickByTaskId(Long taskId) {
+		return null;
+	}
+
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlan, SoDetail detail, String result) {
 		if (Func.isEmpty(newPickPlan)) {
 			return String.format("%s,%s行库存不足未分配", result, detail.getSoLineNo());
