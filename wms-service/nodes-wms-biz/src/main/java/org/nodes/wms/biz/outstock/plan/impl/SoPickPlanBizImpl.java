@@ -58,11 +58,11 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	}
 
 	@Override
-	public String runByPickStrategy(SoHeader soHeader, List<SoDetail> soDetials, List<SoPickPlan> existPickPlans) {
+	public String runPickStrategy(SoHeader soHeader, List<SoDetail> soDetials, List<SoPickPlan> existPickPlans) {
 		String result = "";
-
+		List<SoPickPlan> pickPlanOfSoDetail = null;
 		for (SoDetail detail : soDetials) {
-			List<SoPickPlan> pickPlanOfSoDetail = null;
+			pickPlanOfSoDetail = null;
 			if (Func.notNull(existPickPlans)) {
 				pickPlanOfSoDetail = existPickPlans.stream()
 					.filter(soPickPlan -> detail.getSoDetailId().equals(soPickPlan.getSoDetailId()))

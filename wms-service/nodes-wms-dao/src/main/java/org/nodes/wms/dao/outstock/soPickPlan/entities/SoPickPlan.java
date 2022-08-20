@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 
 import lombok.Data;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 /**
  * 拣货计划实体类
@@ -89,9 +90,9 @@ public class SoPickPlan extends BaseSkuLotEntity {
 	private String lpnCode;
 
 	/**
-	 * 库存状态(0正常,1冻结)
+	 * 库存状态
 	 */
-	private String stockStatus;
+	private StockStatusEnum stockStatus;
 
 	/**
 	 * 物品ID

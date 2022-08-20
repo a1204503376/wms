@@ -39,7 +39,7 @@ public interface SoPickPlanBiz {
 	 * @param existPickPlans 已经存在的拣货计划
 	 * @return 运行的信息，如果全部分配成功则返回分配成功
 	 */
-	String runByPickStrategy(SoHeader soHeader, List<SoDetail> soDetials, List<SoPickPlan> existPickPlans);
+	String runPickStrategy(SoHeader soHeader, List<SoDetail> soDetials, List<SoPickPlan> existPickPlans);
 
 	/**
 	 * 根据拣货计划ID修改拣货计划数量
