@@ -37,6 +37,7 @@ import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.nodes.wms.dao.task.entities.WmsTask;
+import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -152,6 +153,19 @@ public class OutStockBizImpl implements OutStockBiz {
 	public void pickByPcs(PickByPcsRequest request) {
 		SoHeader soHeader = soBillBiz.getSoHeaderById(request.getSoBillId());
 		SoDetail soDetail = soBillBiz.getSoDetailById(request.getSoDetailId());
+		WmsTask task = wmsTaskBiz.findEnableTaskBySoBillId(request.getSoBillId(), request.getSoDetailId());
+		if (Func.isNotEmpty(task)) {
+			if (!Func.equals(task.getTaskProcType(), WmsTaskProcTypeEnum.BY_PCS)) {
+				throw new ServiceException("PDA按件拣货失败，存在任务，但不是按件拣货的任务");
+			}
+
+			//执行按照任务拣货
+			PickByBoxCodeRequest pickByBoxCodeRequest = new PickByBoxCodeRequest();
+			pickByBoxCodeRequest.setBoxCode(task.getBoxCode());
+			pickByBox(pickByBoxCodeRequest, WmsTaskProcTypeEnum.BY_PCS);
+			return;
+		}
+
 		Location sourceLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
 		// 1 业务判断：
 		// 1.1 单据和单据明细行的状态如果为终结状态，则不能进行拣货
@@ -196,10 +210,9 @@ public class OutStockBizImpl implements OutStockBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public void pickByBox(PickByBoxCodeRequest request) {
-
+	public void pickByBox(PickByBoxCodeRequest request, WmsTaskProcTypeEnum taskProcTypeEnum) {
 		//1、根据箱码查询任务
-		WmsTask task = wmsTaskBiz.findEnableTaskByBoxCode(request.getBoxCode());
+		WmsTask task = wmsTaskBiz.findEnableTaskByBoxCode(request.getBoxCode(), taskProcTypeEnum);
 		SoHeader soHeader = soBillBiz.getSoHeaderById(task.getBillId());
 		SoDetail soDetail = soBillBiz.getSoDetailById(task.getBillDetailId());
 		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(task.getBoxCode());
@@ -272,11 +285,19 @@ public class OutStockBizImpl implements OutStockBiz {
 
 		//3、判断是不是超拣---直接走按箱的流程
 		//4、如果没有超拣则执行按箱的流---直接走按箱的流程
-		//5、如果超了则返回---直接走按箱的流程
+		WmsTask task = wmsTaskBiz.findEnableTaskByBoxCode(stockList.get(0).getBoxCode(), WmsTaskProcTypeEnum.BY_LOC);
+		SoHeader soHeader = soBillBiz.getSoHeaderById(task.getBillId());
+		SoDetail soDetail = soBillBiz.getSoDetailById(task.getBillDetailId());
+		//2、参数校验
+		if (BigDecimalUtil.gt(task.getTaskQty().subtract(task.getScanQty()), soDetail.getSurplusQty())) {
+			throw new ServiceException("拣货失败,收货数量大于剩余数量");
+		}
+
+		//5、如果超了则返回
 		for (String boxCode : boxCodeList) {
 			PickByBoxCodeRequest boxCodeRequest = new PickByBoxCodeRequest();
 			boxCodeRequest.setBoxCode(boxCode);
-			pickByBox(boxCodeRequest);
+			pickByBox(boxCodeRequest, WmsTaskProcTypeEnum.BY_LOC);
 		}
 	}
 

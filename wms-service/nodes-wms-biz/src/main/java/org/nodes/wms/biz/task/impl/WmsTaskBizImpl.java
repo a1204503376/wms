@@ -16,6 +16,7 @@ import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
 import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.nodes.wms.dao.task.entities.TaskDetail;
 import org.nodes.wms.dao.task.entities.WmsTask;
+import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
@@ -111,8 +112,8 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 	}
 
 	@Override
-	public WmsTask findEnableTaskByBoxCode(String boxCode) {
-		return wmsTaskDao.findTaskByBoxCode(boxCode);
+	public WmsTask findEnableTaskByBoxCode(String boxCode, WmsTaskProcTypeEnum taskProcTypeEnum) {
+		return wmsTaskDao.findTaskByBoxCode(boxCode, taskProcTypeEnum);
 	}
 
 	@Override

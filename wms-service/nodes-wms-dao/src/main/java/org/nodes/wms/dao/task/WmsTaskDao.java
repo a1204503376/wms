@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
 import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.nodes.wms.dao.task.entities.WmsTask;
+import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
 import org.springblade.core.mp.base.BaseService;
 
@@ -52,10 +53,11 @@ public interface WmsTaskDao extends BaseService<WmsTask> {
 	/**
 	 * 根据箱码获取任务
 	 *
-	 * @param boxCode 箱码
+	 * @param boxCode          箱码
+	 * @param taskProcTypeEnum 任务执行方式
 	 * @return 任务
 	 */
-	WmsTask findTaskByBoxCode(String boxCode);
+	WmsTask findTaskByBoxCode(String boxCode, WmsTaskProcTypeEnum taskProcTypeEnum);
 
 	/**
 	 * 根据任务ID修改任务状态，以及实际量
