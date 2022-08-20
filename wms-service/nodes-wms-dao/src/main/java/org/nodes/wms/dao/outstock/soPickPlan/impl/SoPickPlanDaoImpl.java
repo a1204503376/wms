@@ -46,7 +46,7 @@ public class SoPickPlanDaoImpl
 	}
 
 	@Override
-	public void updatePickPlanPickRealQtyById(Long pickPlanId, BigDecimal pickRealQty) {
+	public void updatePickRealQty(Long pickPlanId, BigDecimal pickRealQty) {
 		UpdateWrapper<SoPickPlan> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
 			.eq(SoPickPlan::getPickPlanId, pickPlanId);
@@ -58,10 +58,10 @@ public class SoPickPlanDaoImpl
 	}
 
 	@Override
-	public SoPickPlan getPickByTaskId(Long taskId) {
+	public List<SoPickPlan> getPickByTaskId(Long taskId) {
 		AssertUtil.notNull(taskId, "根据任务查询关联的拣货计划失败，任务ID为空");
 		return super.lambdaQuery()
 			.eq(SoPickPlan::getTaskId, taskId)
-			.one();
+			.list();
 	}
 }

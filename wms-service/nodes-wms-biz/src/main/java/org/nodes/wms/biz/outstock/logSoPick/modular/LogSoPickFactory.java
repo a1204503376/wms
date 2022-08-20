@@ -14,7 +14,7 @@ import org.nodes.wms.dao.stock.dto.output.PickByPcStockDto;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -34,7 +34,7 @@ public class LogSoPickFactory {
 	 * @param pickByPcStockDto 前端传入参数
 	 * @param soHeader         收货单头表实体
 	 * @param soDetail         收货单明细实体
-	 * @param stock
+	 * @param stock            stock
 	 * @return 拣货记录实体
 	 */
 	public LogSoPick createLogSoPick(PickByPcStockDto pickByPcStockDto, SoHeader soHeader, SoDetail soDetail, Stock stock) {
@@ -121,45 +121,40 @@ public class LogSoPickFactory {
 		return logSoPick;
 	}
 
-	public List<LogSoPick> createLogSoPick(List<SoPickPlan> soPickPlanList, SoHeader soHeader, SoDetail soDetail, Stock stock, Location location) {
-		List<LogSoPick> logSoPickList = new ArrayList<>();
-		for (SoPickPlan soPickPlan : soPickPlanList) {
-			LogSoPick logSoPick = new LogSoPick();
-			logSoPick.setLocId(location.getLocId());
-			logSoPick.setLocCode(location.getLocCode());
-			logSoPick.setSkuId(stock.getSkuId());
-			logSoPick.setSkuCode(stock.getSkuCode());
-			logSoPick.setSkuName(stock.getSkuName());
-			logSoPick.setLotNumber(stock.getSkuLot1());
-			logSoPick.setPickRealQty(soPickPlan.getSurplusQty());
-			logSoPick.setWspId(stock.getWspId());
-			logSoPick.setWspName(stock.getWspName());
-			logSoPick.setSkuLevel(stock.getSkuLevel());
-			logSoPick.setWsuCode(stock.getWsuCode());
-			logSoPick.setConvertQty(1);
-			logSoPick.setSkuLevel(stock.getSkuLevel());
-			logSoPick.setLpnCode(stock.getLpnCode());
-			logSoPick.setBoxCode(stock.getBoxCode());
-			logSoPick.setSoBillId(soHeader.getSoBillId());
-			logSoPick.setSoBillNo(soHeader.getSoBillNo());
-			logSoPick.setSoDetailId(soDetail.getSoDetailId());
-			logSoPick.setSoLineNo(soDetail.getSoLineNo());
-			logSoPick.setWhId(stock.getWhId());
-			StringBuilder serailNumber = new StringBuilder();
-//			if (request.getSerailList().size() > 0) {
-//				for (String serailNum : request.getSerailList()) {
-//					serailNumber.append(serailNum);
-//					serailNumber.append(",");
-//				}
-//				serailNumber.deleteCharAt(serailNumber.length() - 1);
-//			}
-			logSoPick.setSnCode(serailNumber.toString());
-			logSoPick.setStockStatus(stock.getStockStatus());
-			logSoPick.setWoId(stock.getWoId());
-			SkuLotUtil.setAllSkuLot(stock, logSoPick);
-			logSoPickList.add(logSoPick);
+	public LogSoPick create(SoDetail soDetail, SoPickPlan pickPlan, BigDecimal pickQty, List<String> serialNoList, Stock stock) {
+		LogSoPick logSoPick = new LogSoPick();
+		logSoPick.setLocId(stock.getLocId());
+		logSoPick.setLocCode(stock.getLocCode());
+		logSoPick.setSkuId(stock.getSkuId());
+		logSoPick.setSkuCode(stock.getSkuCode());
+		logSoPick.setSkuName(stock.getSkuName());
+		logSoPick.setLotNumber(stock.getSkuLot1());
+		logSoPick.setPickRealQty(pickQty);
+		logSoPick.setWspId(stock.getWspId());
+		logSoPick.setWspName(stock.getWspName());
+		logSoPick.setSkuLevel(stock.getSkuLevel());
+		logSoPick.setWsuCode(stock.getWsuCode());
+		logSoPick.setConvertQty(1);
+		logSoPick.setSkuLevel(stock.getSkuLevel());
+		logSoPick.setLpnCode(stock.getLpnCode());
+		logSoPick.setBoxCode(stock.getBoxCode());
+		logSoPick.setSoBillId(pickPlan.getSoBillId());
+		logSoPick.setSoBillNo(pickPlan.getSoBillNo());
+		logSoPick.setSoDetailId(pickPlan.getSoDetailId());
+		logSoPick.setSoLineNo(soDetail.getSoLineNo());
+		logSoPick.setWhId(stock.getWhId());
+		StringBuilder serialNumber = new StringBuilder();
+		if (serialNoList.size() > 0) {
+			for (String serailNum : serialNoList) {
+				serialNumber.append(serailNum);
+				serialNumber.append(",");
+			}
+			serialNumber.deleteCharAt(serialNumber.length() - 1);
 		}
-
-		return logSoPickList;
+		logSoPick.setSnCode(serialNumber.toString());
+		logSoPick.setStockStatus(stock.getStockStatus());
+		logSoPick.setWoId(stock.getWoId());
+		SkuLotUtil.setAllSkuLot(stock, logSoPick);
+		return logSoPick;
 	}
 }

@@ -34,6 +34,7 @@ import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributio
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.dto.output.PickByPcStockDto;
 import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
+import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.nodes.wms.dao.task.entities.WmsTask;
@@ -118,6 +119,42 @@ public class OutStockBizImpl implements OutStockBiz {
 			|| soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED)) {
 			throw new ServiceException("拣货失败,收货单状态为" + soHeader.getSoBillState() + "不能进行拣货");
 		}
+		if (soDetail.getBillDetailState().equals(SoDetailStateEnum.DELETED)
+			|| soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
+			throw new ServiceException("拣货失败,收货单明细状态为" + soDetail.getBillDetailState() + "不能进行拣货");
+		}
+		if (BigDecimalUtil.gt(pickQty, soDetail.getSurplusQty())) {
+			throw new ServiceException("拣货失败,收货数量大于剩余数量");
+		}
+	}
+
+	private void canPick(List<SoDetail> soDetailList, List<Stock> stockList) {
+		BigDecimal surplusQty = BigDecimal.ZERO;
+		BigDecimal pickQty = BigDecimal.ZERO;
+		for (SoDetail soDetail : soDetailList) {
+			if (soDetail.getBillDetailState().equals(SoDetailStateEnum.DELETED)
+				|| soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
+				throw new ServiceException("拣货失败,收货单明细状态为" + soDetail.getBillDetailState() + "不能进行拣货");
+			}
+			surplusQty = surplusQty.add(soDetail.getSurplusQty());
+		}
+		for (Stock stock : stockList) {
+			pickQty = pickQty.add(stock.getStockBalance());
+		}
+		if (BigDecimalUtil.gt(pickQty, surplusQty)) {
+			throw new ServiceException("拣货失败,收货数量大于剩余数量");
+		}
+	}
+
+	private void canPick(SoHeader soHeader) {
+		if (soHeader.getSoBillState().equals(SoBillStateEnum.COMPLETED)
+			|| soHeader.getSoBillState().equals(SoBillStateEnum.ALL_OUT_STOCK)
+			|| soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED)) {
+			throw new ServiceException("拣货失败,收货单状态为" + soHeader.getSoBillState() + "不能进行拣货");
+		}
+	}
+
+	private void canPick(SoDetail soDetail, BigDecimal pickQty) {
 		if (soDetail.getBillDetailState().equals(SoDetailStateEnum.DELETED)
 			|| soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
 			throw new ServiceException("拣货失败,收货单明细状态为" + soDetail.getBillDetailState() + "不能进行拣货");
@@ -214,48 +251,40 @@ public class OutStockBizImpl implements OutStockBiz {
 		//1、根据箱码查询任务
 		WmsTask task = wmsTaskBiz.findEnableTaskByBoxCode(request.getBoxCode(), taskProcTypeEnum);
 		SoHeader soHeader = soBillBiz.getSoHeaderById(task.getBillId());
-		SoDetail soDetail = soBillBiz.getSoDetailById(task.getBillDetailId());
-		//2、参数校验
-		canPick(soHeader, soDetail, task.getTaskQty().subtract(task.getScanQty()));
+		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
+		//2、参数校验 头表
+		canPick(soHeader);
 		//3、根据拣货计划生成拣货记录,根据任务id从拣货计划中查找
-
-		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(task.getBoxCode());
-
-
-		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findBySoHeaderId(task.getBillId());
-		AssertUtil.notNull(soPickPlanList, "根据出库单ID查找有效的拣货计划");
-		Location sourceLocation = locationBiz.findByLocId(task.getFromLocId());
-		AssertUtil.notNull(stockList, "PDA按箱拣货失败，根据箱码获取库存失败");
-		Stock stock = stockList.stream()
-			.filter(stockParam -> Func.equals(stockParam.getSkuCode(), task.getSkuCode())
-				&& Func.equals(stockParam.getSkuLot1(), soDetail.getSkuLot1())
-				&& Func.equals(stockParam.getLocCode(), task.getFromLocCode()))
-			.findFirst()
-			.orElse(null);
-		AssertUtil.notNull(stock, "PDA按箱拣货失败，根据您输入的条件找不到对应的库存");
-		List<LogSoPick> logSoPickList = logSoPickFactory.createLogSoPick(soPickPlanList, soHeader, soDetail, stock, sourceLocation);
-		for (LogSoPick logSoPick : logSoPickList) {
-			logSoPickDao.saveLogSoPick(logSoPick);
+		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(task.getTaskId());
+		List<SoDetail> soDetailList = new ArrayList<>();
+		for (SoPickPlan soPickPlan : soPickPlanList) {
+			SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlan.getSoDetailId());
+			soDetailList.add(soDetail);
+		}
+		canPick(soDetailList, stockList);
+		//4、根据拣货计划下发库存和释放占用 会进行如下操作(1. 释放库存占用 2.移动库存到出库暂存区 3.更新拣货计划 4.生产并保存拣货记录)
+		for (SoPickPlan soPickPlan : soPickPlanList) {
+			List<Serial> serialList = stockQueryBiz.findSerialByStock(soPickPlan.getStockId());
+			List<String> serialNumberList = null;
+			if (Func.isNotEmpty(serialList)) {
+				serialNumberList = serialList
+					.stream()
+					.map(Serial::getSerialNumber)
+					.collect(Collectors.toList());
+			}
+			SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlan.getSoDetailId());
+			LogSoPick logSoPick = soPickPlanBiz.pickByPlan(soDetail, soPickPlan, soPickPlan.getPickPlanQty(), serialNumberList);
+			soBillBiz.updateSoDetailStatus(soDetail, soDetail.getPlanQty());
 		}
 
-		//移动库存到出库集货区
-		Location location = locationBiz
-			.getLocationByZoneType(sourceLocation.getWhId(), DictKVConstant.ZONE_TYPE_PICK_TO).get(0);
-		stockBiz.moveStock(stock, null, task.getTaskQty().subtract(task.getScanQty()),
-			location, StockLogTypeEnum.OUTSTOCK_BY_BOX_PDA, soHeader.getSoBillId(), soHeader.getSoBillNo(),
-			soDetail.getSoLineNo());
-
-		//4、TODO 根据拣货计划下发库存和释放占用
-
 		//5、更新出库单信息
-		soBillBiz.updateSoDetailStatus(soDetail, task.getTaskQty());
 		soBillBiz.updateSoBillState(soHeader);
 
-		//6、更新任务、拣货计划
+		//6、更新任务
 		wmsTaskBiz.updateWmsTaskStateByTaskId(task.getTaskId(), WmsTaskStateEnum.COMPLETED, task.getTaskQty());
 
 		//7、记录业务日志
-		logBiz.auditLog(AuditLogType.OUTSTOCK, "PDA按件拣货");
+		logBiz.auditLog(AuditLogType.OUTSTOCK, soHeader.getSoBillId(), soHeader.getSoBillNo(), spliceLog(taskProcTypeEnum, stockList));
 	}
 
 	@Override
@@ -266,7 +295,7 @@ public class OutStockBizImpl implements OutStockBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public void pickOnAgvPickTo(MoveOnAgvPickToRequest request) {
+	public Boolean pickOnAgvPickTo(MoveOnAgvPickToRequest request) {
 		//1、判断库位是否有库存
 		boolean emptyLocation = stockQueryBiz.isEmptyLocation(request.getLocId());
 		if (!emptyLocation) {
@@ -288,7 +317,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		SoDetail soDetail = soBillBiz.getSoDetailById(task.getBillDetailId());
 		//2、参数校验
 		if (BigDecimalUtil.gt(task.getTaskQty().subtract(task.getScanQty()), soDetail.getSurplusQty())) {
-			throw new ServiceException("拣货失败,收货数量大于剩余数量");
+			return false;
 		}
 
 		//5、如果超了则返回
@@ -297,6 +326,7 @@ public class OutStockBizImpl implements OutStockBiz {
 			boxCodeRequest.setBoxCode(boxCode);
 			pickByBox(boxCodeRequest, WmsTaskProcTypeEnum.BY_LOC);
 		}
+		return true;
 	}
 
 	@Override
@@ -304,6 +334,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		//// 执行按箱移动
 		//// 记录日志
 
+		//C1 判断目标库位是不是人工拣货区，如果不是则报异常 (PS:只能移动到人工拣货区)
 		//1、按库位移动
 
 		//2、更新拣货计划
@@ -379,5 +410,13 @@ public class OutStockBizImpl implements OutStockBiz {
 			// 记录业务日志
 			logBiz.auditLog(AuditLogType.OUTSTOCK, soHeader.getSoBillId(), soHeader.getSoBillNo(), "撤销收货");
 		});
+	}
+
+	private String spliceLog(WmsTaskProcTypeEnum taskProcTypeEnum, List<Stock> stockList) {
+		StringBuilder logString = new StringBuilder();
+		for (Stock stock : stockList) {
+			logString.append(String.format(" SKU[%s]批次[%s]数量[%s] ", stock.getSkuCode(), stock.getSkuLot1(), stock.getStockBalance().intValue()));
+		}
+		return String.format("PDA%s 箱码:[%s]%s", taskProcTypeEnum.getDesc(), stockList.get(0).getBoxCode(), logString);
 	}
 }
