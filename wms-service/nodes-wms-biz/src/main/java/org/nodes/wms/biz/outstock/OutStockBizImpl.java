@@ -3,10 +3,12 @@ package org.nodes.wms.biz.outstock;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.DictKVConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
+import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.logSoPick.modular.LogSoPickFactory;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
@@ -16,6 +18,7 @@ import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.outstock.SoPickPlanDao;
 import org.nodes.wms.dao.outstock.logSoPick.LogSoPickDao;
@@ -74,6 +77,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	private final LogBiz logBiz;
 	private final WmsTaskBiz wmsTaskBiz;
 	private final StockManageBiz stockManageBiz;
+	private final ZoneBiz zoneBiz;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -225,9 +229,11 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public IPage<OutboundAccessAreaLocationQueryResponse> findLocOfAgvPickTo(
-		FindLocOfAgvPickToRequest request, Query query) {
-		return null;
+	public List<OutboundAccessAreaLocationQueryResponse> findLocOfAgvPickTo(
+		FindLocOfAgvPickToRequest request) {
+		Zone zone = zoneBiz.findByCode(WmsAppConstant.ZONE_CODE_AGV_SHIPMENT_CONNECTION_AREA);
+		List<Location> locationList = locationBiz.getLocationByZoneType(zone.getZoneType());
+		return BeanUtil.copy(locationList, OutboundAccessAreaLocationQueryResponse.class);
 	}
 
 	@Override
@@ -349,10 +355,10 @@ public class OutStockBizImpl implements OutStockBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public boolean cancelDistribute(Long soBillId) {
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findBySoHeaderId(soBillId);
-		if (Func.isEmpty(soPickPlanList)){
+		if (Func.isEmpty(soPickPlanList)) {
 			throw ExceptionUtil.mpe("取消分配失败,当前单据尚未执行分配");
 		}
-		if (Func.isNotEmpty(soPickPlanList.get(0).getTaskId())){
+		if (Func.isNotEmpty(soPickPlanList.get(0).getTaskId())) {
 			throw ExceptionUtil.mpe("取消分配失败,已经下发的不能取消分配");
 		}
 
