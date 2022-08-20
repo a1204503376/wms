@@ -60,7 +60,6 @@ public class SoDetailForDistResponse implements Serializable {
 	/**
 	 * 剩余量
 	 */
-	@JsonSerialize(using = ToStringSerializer.class)
 	private BigDecimal surplusQty;
 
 	/**
