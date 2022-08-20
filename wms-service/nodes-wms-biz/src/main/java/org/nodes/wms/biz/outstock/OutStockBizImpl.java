@@ -415,8 +415,8 @@ public class OutStockBizImpl implements OutStockBiz {
 	private String spliceLog(WmsTaskProcTypeEnum taskProcTypeEnum, List<Stock> stockList) {
 		StringBuilder logString = new StringBuilder();
 		for (Stock stock : stockList) {
-			logString.append(String.format(" SKU[%s]批次[%s]数量[%s] ", stock.getSkuCode(), stock.getSkuLot1(), stock.getStockBalance()));
+			logString.append(String.format(" SKU[%s]批次[%s]数量[%s] ", stock.getSkuCode(), stock.getSkuLot1(), stock.getStockBalance().intValue()));
 		}
-		return String.format("PDA%s箱码:[%s]%s", taskProcTypeEnum.getDesc(), stockList.get(0).getBoxCode(), logString);
+		return String.format("PDA%s 箱码:[%s]%s", taskProcTypeEnum.getDesc(), stockList.get(0).getBoxCode(), logString);
 	}
 }
