@@ -81,10 +81,9 @@ public interface OutStockBiz {
 	 * 查询出库接驳区的库位
 	 *
 	 * @param request 查询条件
-	 * @param query   分页参数
 	 * @return 多个库位信息
 	 */
-	IPage<OutboundAccessAreaLocationQueryResponse> findLocOfAgvPickTo(FindLocOfAgvPickToRequest request, Query query);
+	List<OutboundAccessAreaLocationQueryResponse> findLocOfAgvPickTo(FindLocOfAgvPickToRequest request);
 
 	/**
 	 * 接驳区拣货动作
