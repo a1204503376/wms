@@ -13,6 +13,7 @@ import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.outstock.so.SoBillBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
+import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
@@ -72,6 +73,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	private final LocationBiz locationBiz;
 	private final LogBiz logBiz;
 	private final WmsTaskBiz wmsTaskBiz;
+	private final StockManageBiz stockManageBiz;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
