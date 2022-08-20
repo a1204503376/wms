@@ -29,9 +29,14 @@ public class SoPickPlanForDistributionResponse extends BaseSkuLot implements Ser
 	private String boxCode;
 
 	/**
-	 * 分配量
+	 * 计划量
 	 */
 	private BigDecimal pickPlanQty;
+
+	/**
+	 * 分配量
+	 */
+	private BigDecimal pickRealQty;
 
 	/**
 	 * 库区id
@@ -51,7 +56,7 @@ public class SoPickPlanForDistributionResponse extends BaseSkuLot implements Ser
 	private Long locId;
 
 	/**
-	 * 库位名称
+	 * 库位编码
 	 */
 	private String locCode;
 
@@ -61,32 +66,27 @@ public class SoPickPlanForDistributionResponse extends BaseSkuLot implements Ser
 	private String lpnCode;
 
 	/**
+	 * 物品id
+	 */
+	private String skuId;
+
+	/**
 	 * 物品编码
 	 */
 	private String skuCode;
 
 	/**
-	 * 批次
+	 * 物品名称
+	 */
+	private String skuName;
+
+	/**
+	 * 批次号
 	 */
 	private String lotNumber;
 
 	/**
-	 * 可用量
-	 */
-	private BigDecimal stockEnable;
-
-	/**
-	 * 余额
-	 */
-	private BigDecimal stockBalance;
-
-	/**
-	 * 库存状态枚举
-	 */
-	private StockStatusEnum stockStatus;
-
-	/**
 	 * 库存状态
 	 */
-	private String stockStatusValue;
+	private StockStatusEnum stockStatus;
 }

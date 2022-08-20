@@ -6,38 +6,39 @@
     <select id="selectSoPickPlanBySoBillIdAndSoDetailId"
             resultType="org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse">
         SELECT
-            plan.pick_plan_id,
-            plan.box_code,
-            plan.zone_id,
-            plan.zone_code,
-            plan.loc_id,
-            plan.loc_code,
-            plan.lpn_code,
-            plan.pick_plan_qty,
-            plan.sku_code,
-            plan.lot_number,
-            stock.stock_qty - stock.pick_qty - stock.occupy_qty as stockEnable,
-            stock.stock_qty - stock.pick_qty as stockBalance,
-            plan.stock_status,
-            plan.sku_lot1, plan.sku_lot2, plan.sku_lot3,
-            plan.sku_lot4, plan.sku_lot5, plan.sku_lot6,
-            plan.sku_lot7, plan.sku_lot8, plan.sku_lot9,
-            plan.sku_lot10, plan.sku_lot11, plan.sku_lot12,
-            plan.sku_lot13, plan.sku_lot14, plan.sku_lot15,
-            plan.sku_lot16, plan.sku_lot17, plan.sku_lot18,
-            plan.sku_lot19, plan.sku_lot20, plan.sku_lot21,
-            plan.sku_lot21, plan.sku_lot23, plan.sku_lot24,
-            plan.sku_lot25, plan.sku_lot26, plan.sku_lot27,
-            plan.sku_lot28, plan.sku_lot29, plan.sku_lot30
-            FROM so_pick_plan plan
-            LEFT JOIN wms_stock stock ON plan.stock_id = stock.stock_id
-            <where>
-                plan.is_deleted = 0
-                AND plan.so_bill_id = #{soBillId}
-                <if test="soDetailId != null and soDetailId != ''">
-                    AND plan.so_detail_id = #{soDetailId}
-                </if>
-            </where>
-            ORDER BY plan.box_code,plan.zone_code,plan.loc_code,plan.lpn_code
+        pick_plan_id,
+        box_code,
+        zone_id,
+        zone_code,
+        loc_id,
+        loc_code,
+        lpn_code,
+        pick_plan_qty,
+        pick_real_qty,
+        sku_code,
+        sku_id,
+        sku_name,
+        lot_number,
+        stock_status,
+        sku_lot1, sku_lot2, sku_lot3,
+        sku_lot4, sku_lot5, sku_lot6,
+        sku_lot7, sku_lot8, sku_lot9,
+        sku_lot10,sku_lot11, sku_lot12,
+        sku_lot13,sku_lot14, sku_lot15,
+        sku_lot16,sku_lot17, sku_lot18,
+        sku_lot19,sku_lot20, sku_lot21,
+        sku_lot21,sku_lot23, sku_lot24,
+        sku_lot25,sku_lot26, sku_lot27,
+        sku_lot28,sku_lot29, sku_lot30
+        FROM so_pick_plan
+        <where>
+            is_deleted = 0
+            AND pick_plan_qty > pick_real_qty
+            AND so_bill_id = #{soBillId}
+            <if test="soDetailId != null and soDetailId != ''">
+                AND so_detail_id = #{soDetailId}
+            </if>
+        </where>
+        ORDER BY box_code,zone_code,loc_code,lpn_code
     </select>
 </mapper>
