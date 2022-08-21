@@ -1,10 +1,14 @@
 package org.nodes.wms.dao.outstock.soPickPlan.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.outstock.SoPickPlanDao;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.intput.SoPickPlanPageQuery;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.outstock.soPickPlan.mapper.SoPickPlanMapper;
 import org.springblade.core.log.exception.ServiceException;
@@ -67,7 +71,7 @@ public class SoPickPlanDaoImpl
 
 	@Override
 	public void updateTask(List<SoPickPlan> soPickPlanList, Long taskId) {
-		for (SoPickPlan soPickPlan : soPickPlanList){
+		for (SoPickPlan soPickPlan : soPickPlanList) {
 			UpdateWrapper<SoPickPlan> updateWrapper = Wrappers.update();
 			updateWrapper.lambda().eq(SoPickPlan::getPickPlanId, soPickPlan.getPickPlanId());
 			SoPickPlan saveDto = new SoPickPlan();
@@ -76,5 +80,10 @@ public class SoPickPlanDaoImpl
 				throw new ServiceException("更新拣货计划的任务id失败,请再次重试");
 			}
 		}
+	}
+
+	@Override
+	public Page<SoPickPlanPageResponse> getPage(IPage<Object> page, SoPickPlanPageQuery soPickPlanPageQuery) {
+		return super.baseMapper.page(page, soPickPlanPageQuery);
 	}
 }

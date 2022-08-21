@@ -1,10 +1,15 @@
 package org.nodes.wms.biz.outstock.plan;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.intput.SoPickPlanPageQuery;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
+import org.springblade.core.mp.support.Query;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -77,4 +82,21 @@ public interface SoPickPlanBiz {
 	 * @param soHeader       发货单
 	 */
 	void cancelPickPlan(List<SoPickPlan> soPickPlanList, SoHeader soHeader);
+
+	/**
+	 * 获取分配记录分页
+	 *
+	 * @param query               分页条件
+	 * @param soPickPlanPageQuery 查询条件
+	 * @return 分页对象
+	 */
+	Page<SoPickPlanPageResponse> page(Query query, SoPickPlanPageQuery soPickPlanPageQuery);
+
+	/**
+	 * 导出分配记录
+	 *
+	 * @param soPickPlanPageQuery 查询条件
+	 * @param response            响应对象
+	 */
+	void export(SoPickPlanPageQuery soPickPlanPageQuery, HttpServletResponse response);
 }

@@ -1,5 +1,7 @@
 package org.nodes.wms.biz.outstock.plan.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.DictKVConstant;
 import org.nodes.core.tool.utils.AssertUtil;
@@ -17,15 +19,21 @@ import org.nodes.wms.dao.outstock.logSoPick.LogSoPickDao;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.intput.SoPickPlanPageQuery;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
+import org.springblade.core.excel.util.ExcelUtil;
+import org.springblade.core.mp.support.Condition;
+import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -93,7 +101,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		AssertUtil.notNull(pickPlan, "按计划拣货失败,拣货计划参数为空");
 		AssertUtil.notNull(pickQty, "按拣货计划拣货失败，拣货数量参数为空");
 
-		if (Func.isNull(pickPlan.getPickRealQty())){
+		if (Func.isNull(pickPlan.getPickRealQty())) {
 			pickPlan.setPickRealQty(BigDecimal.ZERO);
 		}
 
@@ -105,7 +113,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		Location pickToLocation = locationBiz.getLocationByZoneType(
 			pickPlan.getWhId(), DictKVConstant.ZONE_TYPE_PICK_TO).get(0);
 		stockBiz.moveStock(stock, serialNoList, pickQty, pickToLocation, StockLogTypeEnum.OUTSTOCK_BY_PICK_PLAN,
-			pickPlan.getSoBillId(),	pickPlan.getSoBillNo(), soDetail.getSoLineNo());
+			pickPlan.getSoBillId(), pickPlan.getSoBillNo(), soDetail.getSoLineNo());
 		// 3.更新拣货计划
 		updatePickRealQty(pickPlan.getPickPlanId(), pickPlan.getPickRealQty().add(pickQty));
 		// 4.生产并保存拣货记录
@@ -114,34 +122,34 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		return logSoPick;
 	}
 
-	private void checkPickByPlan(SoPickPlan pickPlan, BigDecimal pickQty, List<String> serialNoList, Stock stock){
-		if (BigDecimalUtil.ge(pickQty, BigDecimal.ZERO)){
+	private void checkPickByPlan(SoPickPlan pickPlan, BigDecimal pickQty, List<String> serialNoList, Stock stock) {
+		if (BigDecimalUtil.ge(pickQty, BigDecimal.ZERO)) {
 			throw ExceptionUtil.mpe("按拣货计划拣货失败,拣货数量必须大于0");
 		}
 
-		if (BigDecimalUtil.gt(pickQty, pickPlan.getSurplusQty())){
+		if (BigDecimalUtil.gt(pickQty, pickPlan.getSurplusQty())) {
 			throw ExceptionUtil.mpe("按拣货计划拣货失败,拣货数量超过计划量[%f]", pickPlan.getSurplusQty());
 		}
 
-		if (Func.isNotEmpty(serialNoList) && serialNoList.size() != pickQty.intValue()){
+		if (Func.isNotEmpty(serialNoList) && serialNoList.size() != pickQty.intValue()) {
 			throw ExceptionUtil.mpe("按拣货计划拣货失败,拣货数量[%f]与拣货序列号个数[%d]不符", pickQty, serialNoList.size());
 		}
 
-		if (BigDecimalUtil.gt(pickQty, stock.getStockBalance())){
+		if (BigDecimalUtil.gt(pickQty, stock.getStockBalance())) {
 			throw ExceptionUtil.mpe("按拣货计划拣货失败,拣货量超过库存[%d]的余额[%f]", stock.getStockId(), stock.getStockBalance());
 		}
 
-		if (BigDecimalUtil.gt(pickQty, stock.getOccupyQty())){
+		if (BigDecimalUtil.gt(pickQty, stock.getOccupyQty())) {
 			throw ExceptionUtil.mpe("按拣货计划拣货失败,拣货量[%f]超过库存[%d]的占用量[%f]",
 				pickQty, stock.getStockId(), stock.getOccupyQty());
 		}
 
 		List<Serial> serialOfStock = stockQueryBiz.findSerialByStock(stock.getStockId());
-		if (Func.isNotEmpty(serialOfStock) && Func.isEmpty(serialNoList)){
+		if (Func.isNotEmpty(serialOfStock) && Func.isEmpty(serialNoList)) {
 			throw ExceptionUtil.mpe("按拣货计划拣货失败,库存[%s]是按序列号管理的,请采集出库的序列号", stock.getStockId());
 		}
 
-		if (Func.isNotEmpty(serialOfStock) && Func.isNotEmpty(serialNoList)){
+		if (Func.isNotEmpty(serialOfStock) && Func.isNotEmpty(serialNoList)) {
 			List<String> serianNoOfStock = serialOfStock.stream()
 				.map(Serial::getSerialNumber)
 				.collect(Collectors.toList());
@@ -150,7 +158,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 			}
 		}
 
-		if (Func.isEmpty(serialOfStock) && Func.isNotEmpty(serialNoList)){
+		if (Func.isEmpty(serialOfStock) && Func.isNotEmpty(serialNoList)) {
 			throw ExceptionUtil.mpe("按拣货计划拣货失败,库存[%s]不是按序列号管理的,序列号无效", stock.getStockId());
 		}
 	}
@@ -171,10 +179,24 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 			.collect(Collectors.toList());
 		soPickPlanDao.removeByIds(soPickPlanIdList);
 		// 释放库存占用
-		for (SoPickPlan soPickPlan : soPickPlanList){
+		for (SoPickPlan soPickPlan : soPickPlanList) {
 			stockBiz.reduceOccupy(soHeader.getSoBillId(), soHeader.getSoBillNo(),
 				soPickPlan.getSoDetailId(), soPickPlan.getStockId(), soPickPlan.getSurplusQty());
 		}
+	}
+
+	@Override
+	public Page<SoPickPlanPageResponse> page(Query query, SoPickPlanPageQuery soPickPlanPageQuery) {
+		return soPickPlanDao.getPage(Condition.getPage(query), soPickPlanPageQuery);
+	}
+
+	@Override
+	public void export(SoPickPlanPageQuery soPickPlanPageQuery, HttpServletResponse response) {
+		IPage<Object> page = new Page();
+		page.setCurrent(1);
+		page.setSize(100000);
+		List<SoPickPlanPageResponse> soPickPlanPageResponseList = soPickPlanDao.getPage(page, soPickPlanPageQuery).getRecords();
+		ExcelUtil.export(response, "分配记录", "分配记录数据表", soPickPlanPageResponseList, SoPickPlanPageResponse.class);
 	}
 
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlan, SoDetail detail, String result) {
