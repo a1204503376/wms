@@ -1,9 +1,14 @@
 package org.nodes.wms.biz.outstock.plan;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.input.SoPickPlanPageQuery;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
+import org.springblade.core.mp.support.Query;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -38,4 +43,21 @@ public interface SoPickPlanBiz {
 	 * @return 运行的信息，如果全部分配成功则返回分配成功
 	 */
 	String runByPickStrategy(SoHeader soHeader, List<SoDetail> soDetials, List<SoPickPlan> existPickPlans);
+
+	/**
+	 * 获取分配记录分页
+	 *
+	 * @param query               分页条件
+	 * @param soPickPlanPageQuery 查询条件
+	 * @return 分页对象
+	 */
+	Page<SoPickPlanPageResponse> page(Query query, SoPickPlanPageQuery soPickPlanPageQuery);
+
+	/**
+	 * 导出分配记录
+	 *
+	 * @param soPickPlanPageQuery 查询条件
+	 * @param response            响应对象
+	 */
+	void export(SoPickPlanPageQuery soPickPlanPageQuery, HttpServletResponse response);
 }

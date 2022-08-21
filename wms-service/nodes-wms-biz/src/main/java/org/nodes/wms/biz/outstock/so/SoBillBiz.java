@@ -232,6 +232,7 @@ public interface SoBillBiz {
 
 	/**
 	 * 判断单据状态是否已经完成（含取消）
+	 *
 	 * @param soHeader 发货单
 	 * @return true：表示发货单已经完成
 	 */
@@ -240,8 +241,10 @@ public interface SoBillBiz {
 	/**
 	 * 更新发货单状态
 	 *
-	 * @param soBillId 发货单id
+	 * @param soBillId        发货单id
 	 * @param soBillStateEnum 状态
 	 */
 	void updateState(Long soBillId, SoBillStateEnum soBillStateEnum);
+
+
 }

@@ -1,6 +1,10 @@
 package org.nodes.wms.dao.outstock;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.input.SoPickPlanPageQuery;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.springblade.core.mp.base.BaseService;
 
@@ -35,4 +39,13 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 	 * @return 拣货计划集合
 	 */
 	List<SoPickPlan> findBySoHeaderId(Long soBillId);
+
+	/**
+	 * 获取分配记录分页
+	 *
+	 * @param page                分页条件
+	 * @param soPickPlanPageQuery 查询条件
+	 * @return 分页对象
+	 */
+	Page<SoPickPlanPageResponse> getPage(IPage<Object> page, SoPickPlanPageQuery soPickPlanPageQuery);
 }

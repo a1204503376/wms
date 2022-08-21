@@ -1,8 +1,12 @@
 package org.nodes.wms.dao.outstock.soPickPlan.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.outstock.SoPickPlanDao;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.input.SoPickPlanPageQuery;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.outstock.soPickPlan.mapper.SoPickPlanMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
@@ -39,5 +43,10 @@ public class SoPickPlanDaoImpl
 		return super.lambdaQuery()
 			.eq(SoPickPlan::getSoBillId, soBillId)
 			.list();
+	}
+
+	@Override
+	public Page<SoPickPlanPageResponse> getPage(IPage<Object> page, SoPickPlanPageQuery soPickPlanPageQuery) {
+		return super.baseMapper.page(page, soPickPlanPageQuery);
 	}
 }

@@ -12,6 +12,7 @@ import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
+import org.nodes.wms.dao.outstock.SoPickPlanDao;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
@@ -43,7 +44,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 发货单业务接口实现类
@@ -58,6 +62,7 @@ public class SoBillBizImpl implements SoBillBiz {
 	private final SoDetailDao soDetailDao;
 	private final StockQueryBiz stockQueryBiz;
 	private final SoBillFactory soBillFactory;
+	private final SoPickPlanDao soPickPlanDao;
 	private final LogBiz logBiz;
 
 	@Override
@@ -330,4 +335,5 @@ public class SoBillBizImpl implements SoBillBiz {
 	public void updateState(Long soBillId, SoBillStateEnum soBillStateEnum) {
 		soHeaderDao.updateStateBySoBillId(soBillId, soBillStateEnum);
 	}
+
 }

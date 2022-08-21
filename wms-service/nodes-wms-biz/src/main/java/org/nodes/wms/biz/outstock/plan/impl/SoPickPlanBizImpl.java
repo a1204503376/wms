@@ -1,5 +1,7 @@
 package org.nodes.wms.biz.outstock.plan.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
@@ -8,10 +10,16 @@ import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.outstock.SoPickPlanDao;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.input.SoPickPlanPageQuery;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
+import org.springblade.core.excel.util.ExcelUtil;
+import org.springblade.core.mp.support.Condition;
+import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,6 +68,20 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		}
 
 		return result;
+	}
+
+	@Override
+	public Page<SoPickPlanPageResponse> page(Query query, SoPickPlanPageQuery soPickPlanPageQuery) {
+		return soPickPlanDao.getPage(Condition.getPage(query), soPickPlanPageQuery);
+	}
+
+	@Override
+	public void export(SoPickPlanPageQuery soPickPlanPageQuery, HttpServletResponse response) {
+		IPage<Object> page = new Page();
+		page.setCurrent(1);
+		page.setSize(100000);
+		List<SoPickPlanPageResponse> soPickPlanPageResponseList = soPickPlanDao.getPage(page, soPickPlanPageQuery).getRecords();
+		ExcelUtil.export(response, "分配记录", "分配记录数据表", soPickPlanPageResponseList, SoPickPlanPageResponse.class);
 	}
 
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlan, SoDetail detail, String result) {
