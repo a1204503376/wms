@@ -248,7 +248,7 @@ public class StockDaoImpl
 
 	@Override
 	public void updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
-			BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime) {
+			BigDecimal pickQty, BigDecimal occupyQty, LocalDateTime lastInTime, LocalDateTime lastOutTime) {
 		UpdateWrapper<Stock> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
 				.eq(Stock::getStockId, stockId);
@@ -257,6 +257,7 @@ public class StockDaoImpl
 		stock.setStockQty(stockQty);
 		stock.setStayStockQty(stayStockQty);
 		stock.setPickQty(pickQty);
+		stock.setOccupyQty(occupyQty);
 		if (Func.notNull(lastInTime)) {
 			stock.setLastInTime(lastInTime);
 		}

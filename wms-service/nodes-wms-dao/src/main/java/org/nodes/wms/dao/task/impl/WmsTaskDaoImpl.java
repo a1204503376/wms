@@ -3,6 +3,7 @@ package org.nodes.wms.dao.task.impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
@@ -16,8 +17,10 @@ import org.nodes.wms.dao.task.enums.WmsTaskTypeEnum;
 import org.nodes.wms.dao.task.mapper.WmsTaskMapper;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -67,17 +70,48 @@ public class WmsTaskDaoImpl
 	}
 
 	@Override
-	public WmsTask findTaskByBoxCode(String boxCode) {
-		AssertUtil.notNull(boxCode, "根据箱码获取任务失败，任务为空");
-		List<WmsTask> wmsTaskList = super.lambdaQuery()
+	public WmsTask findTaskByBoxCode(String boxCode, WmsTaskProcTypeEnum taskProcTypeEnum) {
+		LambdaQueryChainWrapper<WmsTask> lambdaQuery = super.lambdaQuery()
 			.eq(WmsTask::getBoxCode, boxCode)
 			.eq(WmsTask::getTaskTypeCd, WmsTaskTypeEnum.PICKING)
-			.eq(WmsTask::getTaskProcType, WmsTaskProcTypeEnum.BY_BOX)
 			.in(WmsTask::getTaskState, WmsTaskStateEnum.NOT_ISSUED, WmsTaskStateEnum.ISSUED, WmsTaskStateEnum.START_EXECUTION, WmsTaskStateEnum.ABNORMAL)
-			.list();
+			.last("task_qty <> scan_qty");
+		if (Func.isEmpty(taskProcTypeEnum)) {
+			lambdaQuery.in(WmsTask::getTaskProcType, WmsTaskProcTypeEnum.BY_LOC,
+				WmsTaskProcTypeEnum.BY_BOX, WmsTaskProcTypeEnum.BY_PCS, WmsTaskProcTypeEnum.BY_LPN);
+		} else {
+			lambdaQuery.eq(WmsTask::getTaskProcType, taskProcTypeEnum);
+		}
+		AssertUtil.notNull(boxCode, "根据箱码获取任务失败，任务为空");
+
+		List<WmsTask> wmsTaskList = lambdaQuery.list();
 		if (wmsTaskList.size() > 1) {
 			throw new ServiceException("根据箱码获取任务失败，查询出多个任务，请检查任务后重试");
 		}
 		return wmsTaskList.get(0);
+	}
+
+	@Override
+	public void updateWmsTaskStateByTaskId(Long taskId, WmsTaskStateEnum taskStateEnum, BigDecimal scanQty) {
+		UpdateWrapper<WmsTask> updateWrapper = Wrappers.update();
+		updateWrapper.lambda()
+			.eq(WmsTask::getTaskId, taskId);
+		WmsTask wmsTask = new WmsTask();
+		wmsTask.setTaskState(taskStateEnum);
+		wmsTask.setScanQty(scanQty);
+		if (!super.update(wmsTask, updateWrapper)) {
+			throw new ServiceException("任务更新失败,请再次重试");
+		}
+	}
+
+	@Override
+	public WmsTask getEnableTaskBySoBillId(Long soBillId, Long soDetailId) {
+		return super.lambdaQuery()
+			.eq(WmsTask::getBillId, soBillId)
+			.eq(WmsTask::getBillDetailId, soDetailId)
+			.eq(WmsTask::getTaskTypeCd, WmsTaskTypeEnum.PICKING)
+			.in(WmsTask::getTaskState, WmsTaskStateEnum.NOT_ISSUED, WmsTaskStateEnum.ISSUED, WmsTaskStateEnum.START_EXECUTION, WmsTaskStateEnum.ABNORMAL)
+			.last("limit 1")
+			.one();
 	}
 }

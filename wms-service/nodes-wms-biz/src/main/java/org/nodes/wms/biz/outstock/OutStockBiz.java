@@ -5,11 +5,11 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.input.*;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindPickingBySoBillIdResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.OutboundAccessAreaLocationQueryResponse;
-import org.nodes.wms.dao.outstock.logSoPick.dto.output.PickingByBoxResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.PickByPcRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillDistributedRequest;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
 import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
+import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
 import org.springblade.core.mp.support.Query;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public interface OutStockBiz {
 	/**
 	 * PC按件拣货
 	 *
-	 * @param request
+	 * @param request request
 	 */
 	void pickByPcsOnPc(PickByPcRequest request);
 
@@ -42,7 +42,7 @@ public interface OutStockBiz {
 	 *
 	 * @param logSoPickIdList 拣货记录id
 	 */
-    void cancelOutStock(List<Long> logSoPickIdList);
+	void cancelOutStock(List<Long> logSoPickIdList);
 
 	/**
 	 * PDA按件拣货：根据单号查询出库单
@@ -72,26 +72,25 @@ public interface OutStockBiz {
 	/**
 	 * 按箱拣货动作
 	 *
-	 * @param request 请求参数
-	 * @return 是否拣货成功
+	 * @param request          请求参数
+	 * @param taskProcTypeEnum 任务执行方式
 	 */
-	PickingByBoxResponse pickByBox(PickByPcsRequest request);
+	void pickByBox(PickByBoxCodeRequest request, WmsTaskProcTypeEnum taskProcTypeEnum);
 
 	/**
 	 * 查询出库接驳区的库位
 	 *
 	 * @param request 查询条件
-	 * @param query   分页参数
 	 * @return 多个库位信息
 	 */
-	IPage<OutboundAccessAreaLocationQueryResponse> findLocOfAgvPickTo(FindLocOfAgvPickToRequest request, Query query);
+	List<OutboundAccessAreaLocationQueryResponse> findLocOfAgvPickTo(FindLocOfAgvPickToRequest request);
 
 	/**
 	 * 接驳区拣货动作
 	 *
 	 * @param request 请求参数
 	 */
-	void pickOnAgvPickTo(MoveOnAgvPickToRequest request);
+	Boolean pickOnAgvPickTo(OnAgvPickToRequest request);
 
 	/**
 	 * 接驳区移动

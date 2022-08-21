@@ -188,7 +188,7 @@ public class StockBizImpl implements StockBiz {
 		StockUtil.pickQty(stock, cancelQty, "撤销收货下架库存");
 
 		stockDao.updateStock(stock.getStockId(), stock.getStockQty(),
-				stock.getStayStockQty(), stock.getPickQty(), null, null);
+				stock.getStayStockQty(), stock.getPickQty(), stock.getOccupyQty(), null, null);
 		// 生成库存日志
 		StockLog stockLog = createAndSaveStockLog(type, stock, cancelReceiveLog, "撤销收货");
 		// 修改序列号状态和生成序列号日志
@@ -350,6 +350,7 @@ public class StockBizImpl implements StockBiz {
 	private void canMoveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
 			Location targetLocation) {
 		AssertUtil.notNull(targetLocation, "库存移动失败，目标库位为空");
+
 		StockUtil.assertPick(sourceStock, qty, "库存移动失败");
 
 		if (!targetLocation.enableStock()) {
@@ -533,7 +534,7 @@ public class StockBizImpl implements StockBiz {
 		// 下架原库存
 		StockUtil.pickQty(sourceStock, qty, "库存移动");
 		stockDao.updateStock(sourceStock.getStockId(), sourceStock.getStockQty(), sourceStock.getStayStockQty(),
-				sourceStock.getPickQty(), null, LocalDateTime.now());
+				sourceStock.getPickQty(), sourceStock.getOccupyQty(), null, LocalDateTime.now());
 		// 生成库存日志
 		createAndSaveStockLog(false, sourceStock, qty, type, billId, billNo,
 				lineNo, "库存移动下架");
@@ -739,8 +740,7 @@ public class StockBizImpl implements StockBiz {
 		stockId2Qty.forEach((stockId, soPickPlanList) -> {
 			BigDecimal currentOccupy = soPickPlanList.stream()
 				.map(SoPickPlan::getSurplusQty)
-				.reduce(BigDecimal::add)
-				.orElse(BigDecimal.ZERO);
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
 			SoPickPlan soPickPlan = soPickPlanList.get(0);
 			increaseOccupy(soPickPlan.getSoBillId(), soPickPlan.getSoBillNo(), soPickPlan.getSoDetailId(),
 				stockId, currentOccupy);

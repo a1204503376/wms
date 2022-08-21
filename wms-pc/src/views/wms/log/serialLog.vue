@@ -1,18 +1,18 @@
 <template>
     <div id="serialLog">
-        <nodes-master-page v-on="form.events">
+        <nodes-master-page :show-expand-btn="false" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
                     <el-col :span="6">
-                        <el-form-item label="序列号">
+                        <el-form-item label="序列号" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.serialNumberBegin" :clearable="true"
-                                style="width: 80px;">
+                                style="width: 78px;">
                             </el-input>
                             -
                             <el-input
                                 v-model.trim="form.params.serialNumberEnd" :clearable="true"
-                                style="width: 80px;">
+                                style="width: 78px;">
                             </el-input>
                             <el-tooltip placement="top">
                                 <div slot="content">
@@ -26,7 +26,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="批次">
+                        <el-form-item label="批次" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.lotNumber"
                                 :clearable="true" class="search-input"
@@ -35,7 +35,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="序列号状态">
+                        <el-form-item label="序列号状态" label-width="90px">
                             <nodes-serial-state
                                 v-model="form.params.serialStateList"
                                 class="search-input">
@@ -43,7 +43,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="入库日期">
+                        <el-form-item label="入库日期" label-width="90px">
                             <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
                         </el-form-item>
                     </el-col>
@@ -210,7 +210,6 @@ export default {
     },
     methods: {
         getTableData() {
-
             getPage(this.page, this.form.params)
                 .then((res) => {
                     let pageObj = res.data.data;

@@ -256,6 +256,23 @@
             <if test="query.lastOutTimeEnd!=null">
                 AND s.last_Out_Time &lt;= #{query.lastOutTimeEnd}
             </if>
+            <if test="query.lotNumberBegin != null and query.lotNumberBegin !=''
+                    and query.lotNumberEnd != null and query.lotNumberEnd !='' ">
+                <if test="query.lotNumberBegin != &quot;0&quot;">
+                    AND lot_number &gt;= #{query.lotNumberBegin}
+                </if>
+                <if test="query.lotNumberEnd != &quot;0&quot;">
+                    AND lot_number &lt;= #{query.lotNumberEnd}
+                </if>
+            </if>
+            <if test="(query.lotNumberBegin == null or query.lotNumberBegin == '')
+                    and (query.lotNumberEnd != null and query.lotNumberEnd != '')">
+                AND lot_number LIKE CONCAT('%', #{query.lotNumberEnd}, '%')
+            </if>
+            <if test="(query.lotNumberEnd == null or query.lotNumberEnd == '')
+                    and (query.lotNumberBegin != null and query.lotNumberBegin != '')">
+                AND lot_number LIKE CONCAT('%', #{query.lotNumberBegin}, '%')
+            </if>
             and s.stay_stock_qty + s.stock_qty > s.pick_qty
             AND s.is_deleted ='0'
         </where>

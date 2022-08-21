@@ -11,12 +11,24 @@
 
     <!-- 通用查询结果列 -->
     <sql id="baseColumnList">
-        select
-        id, menu_id, role_id, is_deleted
+        select id,
+               menu_id,
+               role_id,
+               is_deleted
     </sql>
 
     <select id="selectRoleMenuPage" resultMap="roleMenuResultMap">
-        select * from blade_role_menu where 1=1
+        select *
+        from blade_role_menu
+        where 1 = 1
     </select>
+
+    <delete id="deleteByIds">
+        DELETE FROM blade_role_menu
+        WHERE role_id IN
+        <foreach collection="roleIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
 
 </mapper>

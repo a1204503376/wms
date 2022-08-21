@@ -18,7 +18,6 @@ import java.util.List;
 
 /**
  * 库存业务接口
- * 待办(TODO)：对外提供的函数最好是stockId，这样防止外部修改原stock而导致出现的业务异常
  *
  * @author nodesc
  */

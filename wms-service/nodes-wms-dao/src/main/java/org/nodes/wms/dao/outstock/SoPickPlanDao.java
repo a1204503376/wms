@@ -1,10 +1,6 @@
 package org.nodes.wms.dao.outstock;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.nodes.wms.dao.outstock.soPickPlan.dto.input.SoPickPlanPageQuery;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
-import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.springblade.core.mp.base.BaseService;
 
@@ -39,6 +35,30 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 	 * @return 拣货计划集合
 	 */
 	List<SoPickPlan> findBySoHeaderId(Long soBillId);
+
+	/**
+	 * 根据拣货计划ID修改拣货计划数量
+	 *
+	 * @param pickPlanId  拣货计划ID
+	 * @param pickRealQty 拣货实际数量
+	 */
+	void updatePickRealQty(Long pickPlanId, BigDecimal pickRealQty);
+
+	/**
+	 * 根据任务ID查询拣货计划
+	 *
+	 * @param taskId 任务ID
+	 * @return 拣货计划
+	 */
+	List<SoPickPlan> getPickByTaskId(Long taskId);
+
+	/**
+	 * 更新拣货计划中的任务id
+	 *
+	 * @param soPickPlanList 拣货计划
+	 * @param taskId         任务id
+	 */
+	void updateTask(List<SoPickPlan> soPickPlanList, Long taskId);
 
 	/**
 	 * 获取分配记录分页
