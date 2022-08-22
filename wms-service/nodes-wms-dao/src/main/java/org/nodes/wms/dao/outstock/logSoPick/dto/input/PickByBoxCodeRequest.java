@@ -17,4 +17,10 @@ public class PickByBoxCodeRequest implements Serializable {
 	 * 箱码
 	 */
 	private String boxCode;
+
+	/**
+	 * 库房ID
+	 */
+	private Long whId;
+
 }

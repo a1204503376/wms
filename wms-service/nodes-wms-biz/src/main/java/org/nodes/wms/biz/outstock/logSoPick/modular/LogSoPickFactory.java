@@ -12,6 +12,7 @@ import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.dto.output.PickByPcStockDto;
 import org.nodes.wms.dao.stock.entities.Stock;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -144,7 +145,7 @@ public class LogSoPickFactory {
 		logSoPick.setSoLineNo(soDetail.getSoLineNo());
 		logSoPick.setWhId(stock.getWhId());
 		StringBuilder serialNumber = new StringBuilder();
-		if (serialNoList.size() > 0) {
+		if (Func.isNotEmpty(serialNoList)&&serialNoList.size() > 0) {
 			for (String serailNum : serialNoList) {
 				serialNumber.append(serailNum);
 				serialNumber.append(",");

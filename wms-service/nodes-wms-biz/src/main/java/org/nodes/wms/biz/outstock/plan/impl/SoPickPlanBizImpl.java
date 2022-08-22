@@ -123,7 +123,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	}
 
 	private void checkPickByPlan(SoPickPlan pickPlan, BigDecimal pickQty, List<String> serialNoList, Stock stock) {
-		if (BigDecimalUtil.ge(pickQty, BigDecimal.ZERO)) {
+		if (BigDecimalUtil.ge(BigDecimal.ZERO, pickQty)) {
 			throw ExceptionUtil.mpe("按拣货计划拣货失败,拣货数量必须大于0");
 		}
 
