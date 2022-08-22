@@ -9,7 +9,7 @@
                          style="margin-left:10px;margin-right:10px;">
                     <el-row>
                         <el-col :span="6">
-                            <el-row :gutter="10" type="flex" justify="end">
+                            <el-row :gutter="10" justify="end" type="flex">
                                 <el-col :span="10">
                                     <el-form-item label="发货单编码：" label-width="100px">
                                         <span>{{ soHeader.soBillNo }}</span>
@@ -25,34 +25,40 @@
                         <el-col :span="6">
                         </el-col>
                         <el-col :span="12">
-                            <el-row :gutter="10" type="flex" justify="end">
-                                <el-col :span="4.8">
+                            <el-row :gutter="10" justify="end" type="flex">
+                                <el-col :span="4">
                                     <el-button class="top_button" size="medium"
                                                type="primary" @click="onRefresh">
                                         刷新
                                     </el-button>
                                 </el-col>
-                                <el-col :span="4.8">
+                                <el-col :span="4">
                                     <el-button class="top_button" size="medium"
                                                type="primary" @click="onAssign()">
                                         自动分配
                                     </el-button>
                                 </el-col>
-                                <el-col :span="4.8">
+                                <el-col :span="4">
                                     <el-button class="top_button" size="medium"
                                                type="primary" @close="onCancelAll">
                                         全部取消
                                     </el-button>
                                 </el-col>
-                                <el-col :span="4.8">
+                                <el-col :span="4">
+                                    <el-button class="top_button" size="medium"
+                                               type="primary" @close="onCancel">
+                                        取消分配
+                                    </el-button>
+                                </el-col>
+                                <el-col :span="4">
                                     <el-button class="top_button" size="medium"
                                                type="primary" @click="onIssued">
                                         确认下发
                                     </el-button>
                                 </el-col>
-                                <el-col :span="4.8">
-                                    <el-button :loading="loading" class="top_button"
-                                               plain size="medium" @click="onClose">关 闭
+                                <el-col :span="4">
+                                    <el-button class="top_button"
+                                               size="medium" @click="onClose">关 闭
                                     </el-button>
                                 </el-col>
                             </el-row>
@@ -65,11 +71,11 @@
                                     <el-table
                                         ref="table"
                                         :data="table.soDetailData"
-                                        border
+                                        :height="table.soDetailHeight"
                                         :show-summary="true"
                                         :summary-method="summarySoDetail"
+                                        border
                                         highlight-current-row
-                                        max-height="172"
                                         size="mini"
                                         @row-click="onRowClick">
                                         <template v-for="(column,index) in table.soDetailColumnList">
@@ -81,8 +87,8 @@
                                             </el-table-column>
                                         </template>
                                         <el-table-column align="center" fixed="right" label="操作" width="100">
-                                            <template v-slot="scope">
-                                                <el-button size="small" type="text" @click="onAdjust(scope.row)">
+                                            <template v-slot="{row}">
+                                                <el-button size="small" type="text" @click="onAdjust(row)">
                                                     调整
                                                 </el-button>
                                             </template>
@@ -96,16 +102,19 @@
                         <el-col>
                             <template>
                                 <el-tabs type="border-card">
-                                    <el-tab-pane label="按箱分配">
+                                    <el-tab-pane label="分配记录">
                                         <el-table
+                                            ref="soPickPlanTable"
                                             :data="table.soPickPlanData"
-                                            :span-method="objectSpanMethod"
-                                            border
-                                            :summary-method="summarySoPickPlan"
+                                            :height="table.soPickPlanHeight"
                                             :show-summary="true"
+                                            :span-method="objectSpanMethod"
+                                            :summary-method="summarySoPickPlan"
+                                            border
                                             highlight-current-row
-                                            max-height="310"
                                             size="mini">
+                                            <el-table-column fixed type="selection" width="50">
+                                            </el-table-column>
                                             <template v-for="(column,index) in table.soPickPlanColumnList">
                                                 <el-table-column
                                                     :key="index"
@@ -122,62 +131,61 @@
                 </el-form>
             </el-main>
         </el-container>
-        <template>
-            <el-dialog
-                :append-to-body="true"
-                :close-on-click-modal="false"
-                :custom-class="'maxDialog'"
-                :title="dialog.title"
-                :show-close="true"
-                :visible.sync="dialog.dialogTableVisible"
-                @close="refreshData">
-                <el-table
-                    ref="dialogTable"
-                    :data="dialog.dialogData"
-                    :span-method="objectSpanMethod"
-                    :summary-method="getSummaries"
-                    :height="530"
-                    border
-                    highlight-current-row
-                    show-summary>
-                    <div style="margin-top: 10px">
-                        <el-table-column label="可用量" prop="stockEnable"></el-table-column>
-                        <el-table-column label="余额" prop="stockBalance"></el-table-column>
-                        <el-table-column label="本次分配量" prop="soPickPlanQty" width="150">
-                            <template v-slot="{row}">
-                                <el-input
-                                    v-model="row.soPickPlanQty"
-                                    maxlength="9"
-                                    oninput="value=value.replace(/[^\d]/g,'')"
-                                    placeholder="请输入分配数量"
-                                    size="medium"
-                                    style="width: 100%">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="箱码" prop="boxCode"></el-table-column>
-                        <el-table-column label="库位" prop="locName"></el-table-column>
-                        <el-table-column label="库区" prop="zoneName"></el-table-column>
-                        <el-table-column label="LPN" prop="lpnCode"></el-table-column>
-                        <el-table-column label="物品编码" prop="skuCode"></el-table-column>
-                        <el-table-column label="批次" prop="lotNumber"></el-table-column>
-                        <el-table-column label="状态" prop="stockState"></el-table-column>
-                        <el-table-column label="生产批次" prop="skuLot1"></el-table-column>
-                        <el-table-column label="规格型号" prop="skuLot2"></el-table-column>
-                        <el-table-column label="收货日期" prop="skuLot3"></el-table-column>
-                        <el-table-column label="专用客户" prop="skuLot4"></el-table-column>
-                        <el-table-column label="钢背批次" prop="skuLot5"></el-table-column>
-                        <el-table-column label="摩擦快批次" prop="skuLot6" width="150"></el-table-column>
-                        <el-table-column label="产品标识代码" prop="skuLot7" width="150"></el-table-column>
-                        <el-table-column label="是否CRCC验证" prop="skuLot8" width="150"></el-table-column>
-                    </div>
-                </el-table>
-                <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="onAdjustSubmit()">确 定</el-button>
-                    <el-button @click="dialog.dialogTableVisible = false">取 消</el-button>
+        <el-dialog
+            :append-to-body="true"
+            :close-on-click-modal="false"
+            :show-close="true"
+            :title="dialog.title"
+            :visible.sync="dialog.dialogTableVisible"
+            custom-class="dialogClass"
+            @close="refreshData">
+            <el-table
+                ref="dialogTable"
+                :data="dialog.dialogData"
+                :height="dialog.dialogTableHeight"
+                :span-method="objectSpanMethod"
+                :summary-method="getSummaries"
+                border
+                highlight-current-row
+                show-summary>
+                <div style="margin-top: 10px">
+                    <el-table-column label="库位" width="120" prop="locCode"></el-table-column>
+                    <el-table-column label="箱码" width="120" prop="boxCode"></el-table-column>
+                    <el-table-column label="库区" width="120" prop="zoneCode"></el-table-column>
+                    <el-table-column label="余额" prop="stockBalance"></el-table-column>
+                    <el-table-column label="可用量" prop="stockEnable"></el-table-column>
+                    <el-table-column label="本次分配量" prop="pickRealQty" width="150">
+                        <template v-slot="{row}">
+                            <el-input
+                                v-model="row.pickRealQty"
+                                maxlength="9"
+                                oninput="value=value.replace(/[^\d]/g,'')"
+                                placeholder="请输入分配数量"
+                                size="medium"
+                                style="width: 100%">
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="LPN" width="120" prop="lpnCode"></el-table-column>
+                    <el-table-column label="物品编码" prop="skuCode"></el-table-column>
+                    <el-table-column label="批次" prop="lotNumber"></el-table-column>
+                    <el-table-column label="状态" prop="stockStatus"></el-table-column>
+                    <el-table-column label="生产批次" width="120" prop="skuLot1"></el-table-column>
+                    <el-table-column label="规格型号" prop="skuLot2"></el-table-column>
+                    <el-table-column label="收货日期" width="120"  prop="skuLot3"></el-table-column>
+                    <el-table-column label="专用客户" prop="skuLot4"></el-table-column>
+                    <el-table-column label="钢背批次" prop="skuLot5"></el-table-column>
+                    <el-table-column label="摩擦快批次" prop="skuLot6" width="150"></el-table-column>
+                    <el-table-column label="产品标识代码" prop="skuLot7" width="150"></el-table-column>
+                    <el-table-column label="是否CRCC验证" prop="skuLot8" width="150"></el-table-column>
                 </div>
-            </el-dialog>
-        </template>
+            </el-table>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="onAdjustSubmit()">确 定</el-button>
+                <el-button @click="dialog.dialogTableVisible = false">取 消</el-button>
+            </div>
+        </el-dialog>
+
     </basic-container>
 </template>
 
@@ -186,14 +194,13 @@ import {editMixin} from "@/mixins/edit";
 import {
     automaticAssign,
     cancelAll,
-    getEnableStockBySkuId,
     getSoBillDataByDistribution,
     getSoPickPlanData,
+    getStockByDistributeAdjust,
     issued,
     saveAssign
 } from "@/api/wms/outstock/soHeader"
 import func from "@/util/func";
-import "../../../../../public/cdn/iconfont/avue/iconfont.css"
 
 export default {
     name: "distribution",
@@ -232,7 +239,6 @@ export default {
                     {
                         prop: 'umCode',
                         label: '计量单位编码',
-                        width: 100,
                     },
                     {
                         prop: 'pickPlanQty',
@@ -249,8 +255,17 @@ export default {
                         label: '剩余量',
                         align: 'right'
                     },
+                    {
+                        prop: 'skuLot1',
+                        label: '生产批次',
+                    },
+                    {
+                        prop: 'skuLot4',
+                        label: '专用客户',
+                    },
                 ],
                 soDetailData: [],
+                soDetailHeight: 0,
                 soPickPlanColumnList: [
                     {
                         prop: 'boxCode',
@@ -270,6 +285,10 @@ export default {
                     },
                     {
                         prop: 'pickPlanQty',
+                        label: '计划量'
+                    },
+                    {
+                        prop: 'pickRealQty',
                         label: '分配量'
                     },
                     {
@@ -277,20 +296,16 @@ export default {
                         label: '物品编码'
                     },
                     {
+                        prop: 'skuName',
+                        label: '物品名称'
+                    },
+                    {
                         prop: 'lotNumber',
-                        label: '批次'
-                    },
-                    {
-                        prop: 'stockEnable',
-                        label: '可用量'
-                    },
-                    {
-                        prop: 'stockBalance',
-                        label: '余额'
+                        label: '批次号'
                     },
                     {
                         prop: 'stockStatusValue',
-                        label: '状态'
+                        label: '库存状态'
                     },
                     {
                         prop: 'skuLot1',
@@ -329,6 +344,7 @@ export default {
                     },
                 ],
                 soPickPlanData: [],
+                soPickPlanHeight: 0,
             },
             mergedCell: {
                 mergedArray: [],
@@ -337,15 +353,17 @@ export default {
             dialog: {
                 dialogTableVisible: false,
                 title: "",
+                unDistributeQty: 0,
+                dialogTableHeight: 0,
                 dialogData: [
                     {
                         boxCode: '',
-                        soPickPlanQty: 0,
                         location: '',
+                        stockBalance: 0,
+                        stockEnable: 0,
+                        pickRealQty: 0,
                         lpn: '',
                         skuCode: '',
-                        stockEnable: 0,
-                        stockBalance: 0,
                         stockState: '',
                         skuLot1: '',
                     }
@@ -355,14 +373,29 @@ export default {
         }
     },
     created() {
+        window.addEventListener('resize', this.autoTableHeight);
         this.getTableData();
     },
     watch: {
         soBillId() {
             this.refreshTable();
+        },
+        $route() {
+            this.handleRefreshTable();
         }
     },
     methods: {
+        autoTableHeight() {
+            this.$nextTick(() => {
+                let height = window.innerHeight;
+                document.getElementById('container').style.height = `${height}px`;
+                let tableHeight = height - 350;
+                this.table.soDetailHeight = tableHeight * 0.4;
+                this.table.soPickPlanHeight = tableHeight * 0.6;
+                this.dialog.dialogTableHeight = height - 260;
+            })
+            this.handleRefreshTable();
+        },
         resetMerge(data) {
             this.mergedCell = {
                 mergedArray: [],
@@ -422,6 +455,7 @@ export default {
                 this.soHeader.soBillNo = data.soBillNo;
                 this.soHeader.orderNo = data.orderNo;
                 this.table.soDetailData = data.soDetailList;
+                this.handleRefreshTable();
             })
             this.getSoPickPlanData(this.soBillId);
         },
@@ -432,7 +466,7 @@ export default {
             this.merge(this.table.soPickPlanData);
         },
         summarySoPickPlan(param) {
-            const { columns, data } = param;
+            const {columns, data} = param;
             const sums = [];
             columns.forEach((column, index) => {
                 if (index === 0) {
@@ -440,7 +474,9 @@ export default {
                     return;
                 }
                 const values = data.map(item => Number(item[column.property]));
-                if (column.property === 'pickPlanQty' || column.property === 'stockBalance' || column.property === 'stockEnable') {
+                if (column.property === 'pickPlanQty'
+                    || column.property === 'stockBalance'
+                    || column.property === 'stockEnable') {
                     sums[index] = values.reduce((prev, curr) => {
                         const value = Number(curr);
                         if (!isNaN(value)) {
@@ -453,8 +489,8 @@ export default {
             });
             return sums;
         },
-        summarySoDetail(param){
-            const { columns, data } = param;
+        summarySoDetail(param) {
+            const {columns, data} = param;
             const sums = [];
             columns.forEach((column, index) => {
                 if (index === 0) {
@@ -483,7 +519,7 @@ export default {
         },
         onAssign() {
             automaticAssign(this.soHeader.soBillId).then((res) => {
-
+                this.$message.success(res);
             })
         },
         onIssued() {
@@ -496,12 +532,30 @@ export default {
 
             })
         },
+        onCancel() {
+            let rows = this.$refs.soPickPlanTable.selection;
+            if (func.isEmpty(rows)) {
+                this.$message.warning("请选择一条分配记录");
+                return
+            }
+        },
         async onAdjust(row) {
             this.dialog.soDetailId = row.soDetailId;
-            this.dialog.title = `分配调整  ${this.soHeader.soBillNo}  计划数量：${row.planQty}`
-            await getEnableStockBySkuId(row.skuId).then((res) => {
+            this.dialog.title = `当前物品：${row.skuCode}${row.skuName}     未分配：${this.dialog.unDistributeQty}`
+            await getStockByDistributeAdjust(row.skuId, row.skuLot1, row.skuLot4).then((res) => {
                 this.dialog.dialogData = res.data.data;
             })
+            debugger
+            if (func.isNotEmpty(this.dialog.dialogData)) {
+                let currentSkuPickPlanQty = this.dialog.dialogData.filter(x => {
+                    if (x.skuId === row.skuId) {
+                        return x.pickRealQty;
+                    }
+                }).reduce((previousValue, currentValue) => previousValue + currentValue, 0)
+                this.dialog.unDistributeQty = row.surplusQty - currentSkuPickPlanQty;
+            } else {
+                this.dialog.unDistributeQty = row.surplusQty
+            }
             // 重置拣货计划的合并数据,并重新赋值
             this.resetMerge(this.dialog.dialogData);
             this.dialog.dialogTableVisible = true;
@@ -532,6 +586,9 @@ export default {
             columns.forEach((column, index) => {
                 const values = data.map(item => Number(item[column.property]));
                 if (!values.every(value => isNaN(value))) {
+                    if(column.property === 'stockBalance'
+                        || column.property === 'stockEnable'
+                        || column.property === 'pickRealQty')
                     sums[index] = values.reduce((prev, curr) => {
                         const value = Number(curr);
                         if (!isNaN(value)) {
@@ -546,38 +603,28 @@ export default {
         },
         createRowObj() {
             // 覆盖混入的方法
-        }
+        },
+        handleRefreshTable() {
+            // 解决固定列错位的问题
+            this.$nextTick(() => {
+                if (this.$refs.table && this.$refs.table.doLayout) {
+                    this.$refs.table.doLayout();
+                }
+            });
+        },
     }
 }
 </script>
 
 <style scoped>
-.d-table-header-required:before {
-    content: "*";
-    color: #F56C6C;
-    margin-right: 4px;
-}
 
 .top_button {
     float: right;
 }
 
-.button_telescopic {
-    color: #909399;
-    float: right;
-    line-height: 22px;
-    margin-right: 22px;
-    font-size: 16px;
-}
-
-/deep/ .maxDialog {
+/deep/ .dialogClass {
     margin-right: 13px;
     width: 88%;
     margin-top: 14vh !important;
-    height: 79%;
-}
-
-/deep/ .maxDialog .el-dialog__body {
-    max-height: 82% !important;
 }
 </style>

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -34,9 +35,9 @@ public class StockSoPickPlanResponse extends BaseSkuLot implements Serializable 
 	private Long locId;
 
 	/**
-	 * 库位
+	 * 库位编码
 	 */
-	private String locName;
+	private String locCode;
 
 	/**
 	 * 库区id
@@ -47,7 +48,7 @@ public class StockSoPickPlanResponse extends BaseSkuLot implements Serializable 
 	/**
 	 * 库区
 	 */
-	private String zoneName;
+	private String zoneCode;
 
 	/**
 	 * lpn
@@ -55,9 +56,20 @@ public class StockSoPickPlanResponse extends BaseSkuLot implements Serializable 
 	private String lpnCode;
 
 	/**
+	 * 物品id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long skuId;
+
+	/**
 	 * 物品编码
 	 */
 	private String skuCode;
+
+	/**
+	 * 物品名称
+	 */
+	private String skuName;
 
 	/**
 	 * 批次号
@@ -67,15 +79,20 @@ public class StockSoPickPlanResponse extends BaseSkuLot implements Serializable 
 	/**
 	 * 可用量
 	 */
-	private BigDecimal stockEnableQty;
+	private BigDecimal stockEnable;
 
 	/**
 	 * 余额
 	 */
-	private BigDecimal stockBalanceQty;
+	private BigDecimal stockBalance;
+
+	/**
+	 * 分配量
+	 */
+	private BigDecimal pickRealQty;
 
 	/**
 	 * 库存状态
 	 */
-	private String stockState;
+	private StockStatusEnum stockStatus;
 }

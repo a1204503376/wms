@@ -16,6 +16,7 @@ import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.outstock.SoPickPlanDao;
 import org.nodes.wms.dao.outstock.logSoPick.LogSoPickDao;
@@ -52,6 +53,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -167,13 +169,8 @@ public class OutStockBizImpl implements OutStockBiz {
 	@Override
 	public List<SoPickPlanForDistributionResponse> getSoPickPlanBySoBillIdAndSoDetailId(Long soBillId,
 																						Long soDetailId) {
-		AssertUtil.notNull(soBillId.toString(), "查询拣货计划失败，发货单id为空");
-		List<SoPickPlanForDistributionResponse> soPickPlanList = soPickPlanDao.getBySoBillIdAndSoDetailId(soBillId,
-			soDetailId);
-		soPickPlanList.forEach(item ->
-			item.setStockStatusValue(item.getStockStatus().getDesc())
-		);
-		return soPickPlanList;
+		AssertUtil.notNull(soBillId, "查询拣货计划失败，发货单id为空");
+		return soPickPlanDao.getBySoBillIdAndSoDetailId(soBillId, soDetailId);
 	}
 
 	@Override
@@ -376,8 +373,64 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public List<StockSoPickPlanResponse> getEnableStockBySkuCode(String skuCode) {
-		return null;
+	public List<StockSoPickPlanResponse> getStockByDistributeAdjust(Long skuId, String skuLot1, String skuLot4) {
+		SkuLotBaseEntity sku = new SkuLotBaseEntity();
+		sku.setSkuLot1(skuLot1);
+		sku.setSkuLot4(skuLot4);
+		// 获取可分配的库存
+		List<Stock> stockList = stockQueryBiz.findEnableStockBySkuAndSkuLot(skuId, sku);
+		if (Func.isEmpty(stockList)) {
+			throw ExceptionUtil.mpe("该物品没有可分配的库存");
+		}
+		// 总库存（有箱码的库存加无箱码的库存）
+		List<Stock> allStock = new ArrayList<>();
+
+		// 查找出有箱码的库存，追加到总的库存中
+		List<String> boxCodeList = stockList.stream()
+			.map(Stock::getBoxCode)
+			.filter(Func::isNotEmpty)
+			.collect(Collectors.toList());
+		if (Func.isNotEmpty(boxCodeList)) {
+			List<Stock> stockOfBoxCodes = stockQueryBiz.findEnableStockByBoxCode(boxCodeList);
+			if (Func.isNotEmpty(stockOfBoxCodes)) {
+				allStock.addAll(stockOfBoxCodes);
+			}
+		}
+		// 查找出箱码为空的库存，追加到总的库存中
+		List<Stock> stockOfNonBoxCode = stockList.stream()
+			.filter(item -> Func.isEmpty(item.getBoxCode()))
+			.collect(Collectors.toList());
+		if (Func.isNotEmpty(stockOfNonBoxCode)) {
+			allStock.addAll(stockOfNonBoxCode);
+		}
+
+		List<Long> stockIdList = allStock.stream()
+			.map(Stock::getStockId)
+			.collect(Collectors.toList());
+
+		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findByStockIds(stockIdList);
+
+		List<StockSoPickPlanResponse> stockSoPickPlanList = Func.copy(allStock, StockSoPickPlanResponse.class);
+
+		if (Func.isNotEmpty(soPickPlanList)) {
+			// 拣货计划中根据stockId分组 统计每个stock对应的所有拣货计划拣货量总数
+			Map<Long, List<SoPickPlan>> planListMap = soPickPlanList.stream()
+				.collect(Collectors.groupingBy(SoPickPlan::getStockId));
+			planListMap.forEach((stockId, planList) -> {
+
+				BigDecimal pickRealQty = planList.stream()
+					.map(SoPickPlan::getPickRealQty)
+					.reduce(BigDecimal.ZERO, BigDecimal::add);
+
+				for (StockSoPickPlanResponse stockSoPickPlan : stockSoPickPlanList) {
+					if (stockSoPickPlan.getStockId().equals(stockId)) {
+						stockSoPickPlan.setPickRealQty(pickRealQty);
+						break;
+					}
+				}
+			});
+		}
+		return stockSoPickPlanList;
 	}
 
 	@Override

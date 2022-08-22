@@ -160,6 +160,11 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		return soPickPlanDao.getPickByTaskId(taskId);
 	}
 
+	@Override
+	public List<SoPickPlan> findByStockIds(List<Long> stockIdList) {
+		return soPickPlanDao.getByStockIds(stockIdList);
+	}
+
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlan, SoDetail detail, String result) {
 		if (Func.isEmpty(newPickPlan)) {
 			return String.format("%s,%s行库存不足未分配", result, detail.getSoLineNo());

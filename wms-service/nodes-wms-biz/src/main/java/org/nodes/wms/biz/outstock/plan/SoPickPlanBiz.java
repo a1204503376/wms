@@ -69,4 +69,12 @@ public interface SoPickPlanBiz {
 	 * @return 拣货计划
 	 */
 	List<SoPickPlan> findPickByTaskId(Long taskId);
+
+	/**
+	 * 根据库存id查询拣货计划
+	 *
+	 * @param stockIdList 库存id
+	 * @return 拣货计划
+	 */
+	List<SoPickPlan> findByStockIds(List<Long> stockIdList);
 }

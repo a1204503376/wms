@@ -184,12 +184,14 @@ export const issued = (soBillId) => {
     })
 }
 
-export const getEnableStockBySkuId = (skuId) => {
+export const getStockByDistributeAdjust = (skuId, skuLot1, skuLot4) => {
     return request({
-        url: '/api/wms/outstock/soBill/getEnableStockBySkuId',
+        url: '/api/wms/outstock/soBill/getStockByDistributeAdjust',
         method: 'post',
         data: {
-            skuId: skuId
+            skuId: skuId,
+            skuLot1: skuLot1,
+            skuLot4: skuLot4,
         }
     })
 }

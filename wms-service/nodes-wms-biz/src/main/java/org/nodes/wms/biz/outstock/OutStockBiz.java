@@ -125,12 +125,14 @@ public interface OutStockBiz {
 	boolean issued(Long soBillId);
 
 	/**
-	 * 分配：分配调整-根据物品id获取可分配的物品库存信息
+	 * 分配：分配调整-根据物品id、生产批次、专用客户获取可分配的物品库存信息
 	 *
-	 * @param skuCode 物品编码
-	 * @return 可分配物品库存信息
+	 * @param skuId   物品id
+	 * @param skuLot1 生产批次
+	 * @param skuLot4 专用客户
+	 * @return  可分配物品库存信息
 	 */
-	List<StockSoPickPlanResponse> getEnableStockBySkuCode(String skuCode);
+	List<StockSoPickPlanResponse> getStockByDistributeAdjust(Long skuId, String skuLot1, String skuLot4);
 
 	/**
 	 * 分配：分配手动调整-保存调整后的信息

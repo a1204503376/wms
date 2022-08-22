@@ -52,4 +52,12 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 	 * @return 拣货计划
 	 */
 	List<SoPickPlan> getPickByTaskId(Long taskId);
+
+	/**
+	 * 根据库存id查询拣货计划
+	 *
+	 * @param stockIdList 库存id
+	 * @return 拣货计划
+	 */
+    List<SoPickPlan> getByStockIds(List<Long> stockIdList);
 }
