@@ -108,7 +108,7 @@ public class TianyiPickStrategy {
 			}
 		}
 
-		if (needUnpackStock && BigDecimalUtil.gt(surplusQty, BigDecimal.ZERO)){
+		if (needUnpackStock || BigDecimalUtil.gt(surplusQty, BigDecimal.ZERO)){
 			for (Stock stock : manualStockList){
 				if (BigDecimalUtil.le(surplusQty, BigDecimal.ZERO)){
 					break;

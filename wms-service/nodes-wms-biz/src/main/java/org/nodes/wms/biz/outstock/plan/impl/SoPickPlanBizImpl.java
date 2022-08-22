@@ -201,7 +201,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlan, SoDetail detail, String result) {
 		if (Func.isEmpty(newPickPlan)) {
-			return String.format("%s,%s行库存不足未分配", result, detail.getSoLineNo());
+			return String.format("%s %s行库存不足未分配", result, detail.getSoLineNo());
 		}
 
 		BigDecimal occupy = newPickPlan.stream()
@@ -209,7 +209,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 			.map(SoPickPlan::getSurplusQty)
 			.reduce(BigDecimal.ZERO, BigDecimal::add);
 		if (BigDecimalUtil.ne(occupy, detail.getSurplusQty())) {
-			return String.format("%s,%s行库存不足,部分分配", result, detail.getSoLineNo());
+			return String.format("%s %s行库存不足,部分分配", result, detail.getSoLineNo());
 		}
 
 		return result;

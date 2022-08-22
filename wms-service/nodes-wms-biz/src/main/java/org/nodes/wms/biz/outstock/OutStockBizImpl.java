@@ -351,6 +351,9 @@ public class OutStockBizImpl implements OutStockBiz {
 		// 记录日志
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, soBillId, soHeader.getSoBillNo(), "执行自动分配:" + result);
 
+		if (Func.isEmpty(result)){
+			result = "分配成功";
+		}
 		return result;
 	}
 
