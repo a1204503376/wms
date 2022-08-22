@@ -6,31 +6,33 @@ import warehouse from '@/api/warehouse.js'
 const install = (Vue, vm) => {
 
 	// 登录成功之后的操作
-	const  login = (userInfo) => {
+	const login = (userInfo) => {
+		uni.setStorageSync('pickToLocList', undefined);
 		vm.$u.vuex('userName', userInfo.account)
-		uni.setStorageSync('warehouse',undefined)
-		vm.$u.vuex('loginTime', tool.format(new Date(),'YYYY-MM-DD HH:mm:ss'))
+		uni.setStorageSync('warehouse', undefined)
+		vm.$u.vuex('loginTime', tool.format(new Date(), 'YYYY-MM-DD HH:mm:ss'))
 		vm.$u.vuex('accessToken', userInfo.access_token)
 		vm.$u.vuex('refreshToken', userInfo.refresh_token)
 		vm.$u.vuex('expiresIn', userInfo.expires_in)
 		vm.$u.vuex('isLogin', true)
 		vm.$u.vuex('userId', userInfo.user_id)
 		userApi.getMenuList().then(data => {
-			if (tool.isNotEmpty(data.data)&&data.data[0].children.length>0) {
-				uni.setStorageSync('menuList',data.data[0].children)
+			if (tool.isNotEmpty(data.data) && data.data[0].children.length > 0) {
+				uni.setStorageSync('menuList', data.data[0].children)
 				userApi.getSignInStatus().then((res) => {
 					vm.$u.vuex('signStatus', res.data.loginStatus)
 					vm.$u.vuex('lastSignTime', res.data.lastLoginTime)
-				})  
-				barcodeRulesApi.barcodeRules().then((res)=>{
+				})
+				barcodeRulesApi.barcodeRules().then((res) => {
 					vm.$u.vuex('barcodeRules', res.data)
 				})
 				uni.hideLoading();
 				warehouse.getWarehouseList().then(data => {
 					if (data.data.length > 1 && tool.isEmpty(uni.getStorageSync('warehouse'))) {
 						uni.setStorageSync('warehouseList', data.data);
-						uni.$u.func.routeNavigateTo('/pages/userSetting/warehouseSetting',data.data);
-					} else if (tool.isEmpty(data.data[0])){
+						uni.$u.func.routeNavigateTo('/pages/userSetting/warehouseSetting', data
+							.data);
+					} else if (tool.isEmpty(data.data[0])) {
 						showToast('不能登录，当前用户没有配置有权限的仓库')
 					} else {
 						uni.setStorageSync('warehouse', data.data[0]);
@@ -38,20 +40,19 @@ const install = (Vue, vm) => {
 						uni.redirectTo({
 							url: '/pages/home/home'
 						})
-					} 
+					}
 				})
-			}
-			else{
+			} else {
 				uni.hideLoading();
 				showToast('不能登录，当前用户没有配置有权限的菜单')
 			}
-		
-		
+
+
 		})
-	
-	
+
+
 	}
-	
+
 	// 退出登录
 	const logout = () => {
 		vm.$u.vuex('accessToken', '')
@@ -72,9 +73,9 @@ const install = (Vue, vm) => {
 	}
 
 	// 跳转路由前检查登录状态 有历史路由的跳转
-	const routeNavigateTo = (url,param) => {
-		if(tool.isNotEmpty(param)){
-			url+='?param='+JSON.stringify(param);
+	const routeNavigateTo = (url, param) => {
+		if (tool.isNotEmpty(param)) {
+			url += '?param=' + JSON.stringify(param);
 		}
 		if (!vm.isLogin) {
 			uni.showToast({
@@ -92,11 +93,11 @@ const install = (Vue, vm) => {
 			url: url
 		})
 	}
-	
+
 	// 跳转路由前检查登录状态 跳转页面 但是当前页面不计入路由进行管理
-	const routeRedirectTo = (url,param) => {
-		if(tool.isNotEmpty(param)){
-			url+='?param='+JSON.stringify(param);
+	const routeRedirectTo = (url, param) => {
+		if (tool.isNotEmpty(param)) {
+			url += '?param=' + JSON.stringify(param);
 		}
 		if (!vm.isLogin) {
 			uni.showToast({
@@ -115,9 +116,9 @@ const install = (Vue, vm) => {
 		})
 	}
 	// 关闭所有页面打开某个页面
-	const routeReLaunch = (url,param) => {
-		if(tool.isNotEmpty(param)){
-			url+='?param='+JSON.stringify(param);
+	const routeReLaunch = (url, param) => {
+		if (tool.isNotEmpty(param)) {
+			url += '?param=' + JSON.stringify(param);
 		}
 		if (!vm.isLogin) {
 			uni.showToast({
@@ -135,21 +136,20 @@ const install = (Vue, vm) => {
 			url: url
 		})
 	}
-	
+
 	const navigateBack = () => {
 		uni.navigateBack({
-			delta:1,//返回层数，2则上上页
+			delta: 1, //返回层数，2则上上页
 		})
 	}
-	
+
 	const navigateBackTo = (delta) => {
-		if(!tool.isNumber(delta)||delta<1)
-		{
-			delta=1;
+		if (!tool.isNumber(delta) || delta < 1) {
+			delta = 1;
 		}
 		// TODO 校验必须是大于等于1的整数，如果不是用默认值1
 		uni.navigateBack({
-			delta:delta,
+			delta: delta,
 		})
 	}
 
@@ -212,11 +212,11 @@ const install = (Vue, vm) => {
 			})
 		}
 	}
-	
+
 	let hasRegisterScanner = false;
 	// 注册扫码组件
 	const registerScanner = (callback) => {
-		if (hasRegisterScanner){
+		if (hasRegisterScanner) {
 			uni.$off('on-scanner-data')
 		}
 		hasRegisterScanner = true;
@@ -230,14 +230,14 @@ const install = (Vue, vm) => {
 		hasRegisterScanner = false;
 		uni.$off('on-scanner-data')
 	}
-	
+
 	// 对stage、qc的库位进行处理
 	const parseLocCode = (locCode) => {
-		if (locCode === 'STAGE' || locCode === 'QC'){
+		if (locCode === 'STAGE' || locCode === 'QC') {
 			let whCode = uni.getStorageSync('warehouse').whCode;
 			return whCode + '-' + locCode;
 		}
-		
+
 		return locCode;
 	}
 

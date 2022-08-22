@@ -73,12 +73,18 @@
 			}
 		},
 		onLoad: function(option) {
-			let params = {
-				whId: uni.getStorageSync('warehouse').whId
-			};
-			pick.getConnectionAreaLocation(params).then(data => {
-				this.locList = data.data
-			})
+			let pickToLocList = uni.getStorageSync('pickToLocList');
+			if (tool.isEmpty(pickToLocList)) {
+				let params = {
+					whId: uni.getStorageSync('warehouse').whId
+				};
+				pick.getConnectionAreaLocation(params).then(data => {
+					this.locList = data.data;
+					uni.setStorageSync('pickToLocList', data.data);
+				})
+			} else {
+				this.locList = pickToLocList
+			}
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
