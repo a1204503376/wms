@@ -61,27 +61,27 @@ public class StockStaticCheckController {
 	}
 
 	/**
-	 * 生成差异报告/人工区
+	 * 生成盘点记录/人工区
 	 *
-	 * @param request 生成差异报告请求对象
+	 * @param request 生成盘点记录请求对象
 	 * @return 成功消息
 	 */
 	@PostMapping("/generateCountReport")
 	public R<String> generateCountReport(@RequestBody GenerateCountReportRequest request) {
 		stockCountBiz.generateCountReport(request.getCountReportList());
-		return R.success("生成差异报告成功");
+		return R.success("生成盘点记录成功");
 	}
 
 	/**
-	 * 生成差异报告/自动区
+	 * 生成盘点记录/自动区
 	 *
-	 * @param request 生成差异报告请求对象
+	 * @param request 生成盘点记录请求对象
 	 * @return 成功消息
 	 */
 	@PostMapping("/generateCountReportByAutoLocation")
 	public R<String> generateCountReportByAutoLocation(@RequestBody GenerateCountReportByAutoLocationRequest request) {
         stockCountBiz.generateCountReportByAutoLocation(request.getBeChangedList(),request.getDefaultList());
-		return R.success("生成差异报告成功");
+		return R.success("生成盘点记录成功");
 	}
 
 }

@@ -1,48 +1,55 @@
 <template>
     <div id="soHeader">
-        <nodes-master-page :permission="permissionObj" v-on="form.events">
+        <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="发货单编码" label-width="90px">
-                            <el-input v-model.trim="form.params.soBillNo"
-                                      :clearable="true"
-                                      placeholder="请输入发货单编码">
+                            <el-input
+                                v-model.trim="form.params.soBillNo"
+                                :clearable="true"
+                                class="search-input"
+                                placeholder="请输入发货单编码">
                             </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="上游编码" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.orderNo"
                                 :clearable="true"
-                                placeholder="请输入上有编码"></el-input>
+                                class="search-input"
+                                placeholder="请输入上有编码">
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="单据类型" label-width="90px">
                             <nodes-bill-type
                                 v-model="form.params.billTypeCdList"
                                 :multiple="true"
+                                class="search-input"
                                 io-type="O"
-                                placeholder="请选择"></nodes-bill-type>
+                                placeholder="请选择">
+                            </nodes-bill-type>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="单据状态" label-width="90px">
+                            <nodes-so-bill-state v-model="form.params.soBillStateList"
+                                                 class="search-input"></nodes-so-bill-state>
                         </el-form-item>
                     </el-col>
                 </el-row>
-            </template>
-            <template v-slot:expandSearch>
                 <el-row type="flex">
-                    <el-col :span="6">
-                        <el-form-item label="单据状态" label-width="90px">
-                            <nodes-so-bill-state v-model="form.params.soBillStateList"></nodes-so-bill-state>
-                        </el-form-item>
-                    </el-col>
                     <el-col :span="6">
                         <el-form-item label="客户" label-width="90px">
                             <nodes-customer
                                 v-model.trim="form.params.customerIdList"
                                 :multiple="true"
-                                placeholder="请输入客户编码或名称"></nodes-customer>
+                                class="search-input"
+                                placeholder="请输入客户编码或名称">
+                            </nodes-customer>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -50,7 +57,8 @@
                             <nodes-warehouse
                                 v-model="form.params.whIdList"
                                 :multiple="true"
-                            ></nodes-warehouse>
+                                class="search-input">
+                            </nodes-warehouse>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -58,14 +66,14 @@
                             <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="创建人" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.createUser"
                                 :clearable="true"
-                                placeholder="请输入创建人"></el-input>
+                                class="search-input"
+                                placeholder="请输入创建人">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -93,18 +101,19 @@
                         <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData"/>
                     </excel-export>
                 </el-tooltip>
-
             </template>
             <template v-slot:table>
-                <el-table ref="table" :data="table.data" border highlight-current-row
+                <el-table ref="table" :height="table.height" :data="table.data" border highlight-current-row
                           size="mini" @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
-                        <el-table-column v-if="!column.hide && column.prop === 'soBillNo'" :key="index"
-                                         show-overflow-tooltip
-                                         v-bind="column" width="150">
-                            <template v-slot="scope">
+                        <el-table-column
+                            v-if="!column.hide" :key="index"
+                            show-overflow-tooltip
+                            v-bind="column"
+                            min-width="150">
+                            <template v-slot="scope" v-if="column.prop === 'soBillNo'">
                                 <el-link
                                     :underline="false"
                                     target="_blank"
@@ -113,20 +122,13 @@
                                 </el-link>
                             </template>
                         </el-table-column>
-                        <el-table-column
-                            v-if="!column.hide && column.prop !== 'soBillNo'"
-                            :key="index"
-                            show-overflow-tooltip
-                            v-bind="column"
-                            width="150">
-                        </el-table-column>
                     </template>
                     <el-table-column align="center" fixed="right" label="操作" width="180">
                         <template v-slot="scope">
-                            <el-button size="small" type="text" @click="onEdit(scope.row)">编辑</el-button>
-                            <el-button size="small" type="text" @click="onClose(scope.row)">关闭</el-button>
-                            <el-button size="small" type="text" @click="onPick(scope.row)">PC拣货</el-button>
-                            <el-button size="small" type="text" @click="onDistribute(scope.row)">分配</el-button>
+                            <el-button v-if="permissionObj.edit" size="small" type="text" @click="onEdit(scope.row)">编辑</el-button>
+                            <el-button v-if="permissionObj.close" size="small" type="text" @click="onClose(scope.row)">关闭</el-button>
+                            <el-button v-if="permissionObj.pick" size="small" type="text" @click="onPick(scope.row)">PC拣货</el-button>
+                            <el-button v-if="permissionObj.distribute" size="small" type="text" @click="onDistribute(scope.row)">分配</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -148,7 +150,6 @@
 
 <script>
 
-
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
@@ -161,7 +162,6 @@ import {closeSoBill, exportData, getPage, remove} from "@/api/wms/outstock/soHea
 import NodesCustomer from "@/components/wms/select/NodesCustomer";
 import NodesBillType from "@/components/wms/select/NodesBillType";
 import {nowDateFormat} from "@/util/date";
-
 
 export default {
     name: "soHeader",
@@ -259,10 +259,12 @@ export default {
     computed: {
         permissionObj() {
             return {
-                search: this.vaildData(this.permission.so_header_search, false),
-                add: this.vaildData(this.permission.so_header_add, false),
-                delete: this.vaildData(this.permission.so_header_delete, false),
-                pickPlan: this.vaildData(this.permission.so_header_pickPlan, false)
+                add: this.vaildData(this.permission.soHeader_add, false),
+                delete: this.vaildData(this.permission.soHeader_delete, false),
+                edit: this.vaildData(this.permission.soHeader_edit, false),
+                close: this.vaildData(this.permission.soHeader_close, false),
+                pick: this.vaildData(this.permission.soHeader_pick, false),
+                distribute: this.vaildData(this.permission.soHeader_distribute, false)
             }
         }
     },
@@ -273,6 +275,7 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
+                    this.handleRefreshTable();
                 })
         },
         refreshTable() {
@@ -307,7 +310,6 @@ export default {
             this.loading = true;
             exportData(this.form.params)
                 .then((res) => {
-                    console.log(res);
                     this.$message.success("操作成功，正在下载中...");
                     fileDownload(res.data, `发货单${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
                 })

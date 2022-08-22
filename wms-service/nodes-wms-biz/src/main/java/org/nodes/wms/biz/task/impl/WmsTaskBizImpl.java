@@ -3,6 +3,7 @@ package org.nodes.wms.biz.task.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.task.AgvTask;
 import org.nodes.wms.biz.task.WmsTaskBiz;
@@ -15,6 +16,7 @@ import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
 import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.nodes.wms.dao.task.entities.TaskDetail;
 import org.nodes.wms.dao.task.entities.WmsTask;
+import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
@@ -23,6 +25,7 @@ import org.springblade.core.mp.support.Query;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -104,7 +107,26 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 			wmsTask.getTaskId(),
 			wmsTask.getBillNo(),
 			String.format("任务ID[%s]:单据号[%s]来源库位[%s]目标库位[%s]任务编码[%s]任务状态[%s]",
-				wmsTask.getTaskId(),wmsTask.getBillNo(), wmsTask.getFromLocId()
-				, wmsTask.getToLocId(),wmsTask.getTaskTypeCd().getCode(), wmsTask.getTaskState().getCode()));
+				wmsTask.getTaskId(), wmsTask.getBillNo(), wmsTask.getFromLocId()
+				, wmsTask.getToLocId(), wmsTask.getTaskTypeCd().getCode(), wmsTask.getTaskState().getCode()));
 	}
+
+	@Override
+	public WmsTask findEnableTaskByBoxCode(String boxCode, WmsTaskProcTypeEnum taskProcTypeEnum) {
+		return wmsTaskDao.findTaskByBoxCode(boxCode, taskProcTypeEnum);
+	}
+
+	@Override
+	public void updateWmsTaskStateByTaskId(Long taskId, WmsTaskStateEnum taskStateEnum, BigDecimal scanQty) {
+		AssertUtil.notNull(taskId, "修改任务状态失败,任务ID为空");
+		AssertUtil.notNull(taskStateEnum, "修改任务状态失败,任务状态为空");
+		AssertUtil.notNull(scanQty, "修改任务状态失败,实际拣货量为空");
+		wmsTaskDao.updateWmsTaskStateByTaskId(taskId, taskStateEnum, scanQty);
+	}
+
+	@Override
+	public WmsTask findEnableTaskBySoBillId(Long soBillId, Long soDetailId) {
+		return wmsTaskDao.getEnableTaskBySoBillId(soBillId, soDetailId);
+	}
+
 }

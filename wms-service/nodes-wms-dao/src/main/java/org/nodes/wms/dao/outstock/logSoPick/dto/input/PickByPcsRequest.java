@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * PDA按箱拣货请求参数
+ * PDA按件拣货请求参数
  **/
 @Data
 public class PickByPcsRequest extends BaseSkuLot implements Serializable {

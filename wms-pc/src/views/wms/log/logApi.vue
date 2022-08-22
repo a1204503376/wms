@@ -1,20 +1,26 @@
 <template>
     <div id="logApi">
-        <nodes-master-page :permission="permissionObj" v-on="form.events">
+        <nodes-master-page :show-expand-btn="false" v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
-                    <el-col :span="8">
-                        <el-form-item label="日志标题">
-                            <el-input placeholder="请输入日志标题" v-model.trim="form.params.title" :clearable="true"></el-input>
+                    <el-col :span="6">
+                        <el-form-item label="日志标题" label-width="90px">
+                            <el-input
+                                v-model.trim="form.params.title"
+                                :clearable="true" class="search-input" placeholder="请输入日志标题">
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="请求URI">
-                            <el-input placeholder="请输入请求URI" v-model.trim="form.params.requestUri" :clearable="true"></el-input>
+                    <el-col :span="6">
+                        <el-form-item label="请求URI" label-width="90px">
+                            <el-input
+                                v-model.trim="form.params.requestUri"
+                                :clearable="true" class="search-input" placeholder="请输入请求URI">
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="创建日期">
+                    <el-col :span="6">
+                        <el-form-item label="创建日期" label-width="90px">
                             <nodes-date-range v-model="form.params.createTimeDateRange"></nodes-date-range>
                         </el-form-item>
                     </el-col>
@@ -38,32 +44,29 @@
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table"
-                          :data="table.data"
-                          border
-                          highlight-current-row
-                          size="mini"
-                          style="width: 100%"
-                          @sort-change="onSortChange">
+                <el-table
+                    ref="table"
+                    :data="table.data"
+                    :height="table.height"
+                    border
+                    highlight-current-row
+                    size="mini"
+                    style="width: 100%"
+                    @sort-change="onSortChange">
                     <el-table-column
                         fixed
-                        type="selection"
+                        type="index"
                         width="50">
-                    </el-table-column>
-                    <el-table-column
-                        fixed
-                        sortable
-                        type="index">
                         <template slot="header">
                             #
                         </template>
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column
-                            width="140"
                             :key="index"
                             show-overflow-tooltip
-                            v-bind="column">
+                            v-bind="column"
+                            width="140">
                         </el-table-column>
                     </template>
                 </el-table>
@@ -76,8 +79,12 @@
                 </el-pagination>
             </template>
         </nodes-master-page>
-        <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
-        </dialog-column>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
     </div>
 </template>
 
@@ -179,13 +186,6 @@ export default {
             }
         };
     },
-    computed: {
-        permissionObj() {
-            return {
-                search: this.vaildData(this.permission.logApi_search, false)
-            }
-        }
-    },
     methods: {
         getTableData() {
             page(this.page, this.form.params)
@@ -193,6 +193,7 @@ export default {
                     let pageObj = res.data.data;
                     this.table.data = pageObj.records;
                     this.page.total = pageObj.total;
+                    this.handleRefreshTable();
                 })
         },
         refreshTable() {

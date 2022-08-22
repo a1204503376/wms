@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * 生成盘点差异报告请求对象
+ * 生成盘点单记录报告请求对象
  *
  * @author nodes
  */
@@ -51,4 +51,9 @@ public class GenerateCountReport implements Serializable {
 	 * 余额
 	 */
 	private BigDecimal stockBalance;
+
+	/**
+	 * 是否无误
+	 */
+	private Boolean isValid;
 }

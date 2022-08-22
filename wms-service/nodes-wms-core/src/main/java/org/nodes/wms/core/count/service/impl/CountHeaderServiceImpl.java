@@ -11,6 +11,7 @@ import org.nodes.core.constant.DictCodeConstant;
 import org.nodes.core.tool.cache.SerialNoCache;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.NodesUtil;
+import org.nodes.wms.biz.count.StockCountBiz;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
@@ -153,6 +154,8 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper1, T extends Coun
 	private ISoHeaderService soHeaderService;
 	@Autowired
 	private ISoDetailService soDetailService;
+	@Autowired
+	private StockCountBiz stockCountBiz;
 
 
 	@Override
@@ -1094,7 +1097,7 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper1, T extends Coun
 					// 生成差异报告(盘亏的情况下才生成)
 					if (report.getWmsQty().compareTo(report.getCountQty()) > 0) {
 						StockOccupyDTO stockOccupyDTO = new StockOccupyDTO();
-						stockOccupyDTO.setTransId(report.getCountBillId());
+//						stockOccupyDTO.setTransId(report.getCountBillId());
 						stockOccupyDTO.setOccupyType(StockOccupyTypeEnum.Count.getIndex());
 						stockOccupyDTO.setWhId(report.getWhId());
 						if (Func.isNotEmpty(stock)) {
@@ -1103,19 +1106,19 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper1, T extends Coun
 						stockOccupyDTO.setSkuId(report.getSkuId());
 						stockOccupyDTO.setSkuCode(report.getSkuCode());
 						stockOccupyDTO.setSkuName(report.getSkuName());
-						stockOccupyDTO.setSystemProcId(systemProc.getSystemProcId());
-						stockOccupyDTO.setOccupyTime(LocalDateTime.now());
+//						stockOccupyDTO.setSystemProcId(systemProc.getSystemProcId());
+//						stockOccupyDTO.setOccupyTime(LocalDateTime.now());
 						Sku sku = SkuCache.getById(report.getSkuId());
 						if (sku.getIsSn() == 1) {
-							stockOccupyDTO.setOccupyQty(BigDecimal.ONE);
+//							stockOccupyDTO.setOccupyQty(BigDecimal.ONE);
 						} else {
-							stockOccupyDTO.setOccupyQty(report.getWmsQty().subtract(report.getCountQty()));
+//							stockOccupyDTO.setOccupyQty(report.getWmsQty().subtract(report.getCountQty()));
 						}
-						stockOccupyDTO.setWcrId(report.getWcrepId());
+//						stockOccupyDTO.setWcrId(report.getWcrepId());
 						stockOccupyDTO.setCreateUser(report.getCreateUser());
 						stockOccupyDTO.setUpdateUser(report.getCreateUser());
-						stockOccupyDTO.setSoBillNo(report.getCountBillNo());
-						stockOccupyDTO.setSoBillId(report.getCountBillId());
+//						stockOccupyDTO.setSoBillNo(report.getCountBillNo());
+//						stockOccupyDTO.setSoBillId(report.getCountBillId());
 						stockOccupyService.add(stockOccupyDTO);
 					}
 
@@ -1123,6 +1126,12 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper1, T extends Coun
 			}
 //			CallbackManager.instance.countDiff(countHeader.getCountBillNo());
 		}
+		return true;
+	}
+
+	@Override
+	public boolean generateDifference(String ids) {
+		stockCountBiz.generateDifference(ids);
 		return true;
 	}
 
@@ -1333,7 +1342,7 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper1, T extends Coun
 			// 盘点占用(盘亏的情况下才生成)
 			if (report.getWmsQty().compareTo(report.getCountQty()) > 0) {
 				StockOccupyDTO stockOccupyDTO = new StockOccupyDTO();
-				stockOccupyDTO.setTransId(report.getCountBillId());
+//				stockOccupyDTO.setTransId(report.getCountBillId());
 				stockOccupyDTO.setOccupyType(StockOccupyTypeEnum.Count.getIndex());
 				stockOccupyDTO.setWhId(report.getWhId());
 				if (Func.isNotEmpty(stock)) {
@@ -1342,19 +1351,19 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper1, T extends Coun
 				stockOccupyDTO.setSkuId(report.getSkuId());
 				stockOccupyDTO.setSkuCode(report.getSkuCode());
 				stockOccupyDTO.setSkuName(report.getSkuName());
-				stockOccupyDTO.setSystemProcId(systemProc.getSystemProcId());
-				stockOccupyDTO.setOccupyTime(LocalDateTime.now());
+//				stockOccupyDTO.setSystemProcId(systemProc.getSystemProcId());
+//				stockOccupyDTO.setOccupyTime(LocalDateTime.now());
 				Sku sku = SkuCache.getById(report.getSkuId());
 				if (sku.getIsSn() == 1) {
-					stockOccupyDTO.setOccupyQty(BigDecimal.ONE);
+//					stockOccupyDTO.setOccupyQty(BigDecimal.ONE);
 				} else {
-					stockOccupyDTO.setOccupyQty(report.getWmsQty().subtract(report.getCountQty()));
+//					stockOccupyDTO.setOccupyQty(report.getWmsQty().subtract(report.getCountQty()));
 				}
-				stockOccupyDTO.setWcrId(report.getWcrepId());
+//				stockOccupyDTO.setWcrId(report.getWcrepId());
 				stockOccupyDTO.setCreateUser(report.getCreateUser());
 				stockOccupyDTO.setUpdateUser(report.getCreateUser());
-				stockOccupyDTO.setSoBillNo(report.getCountBillNo());
-				stockOccupyDTO.setSoBillId(report.getCountBillId());
+//				stockOccupyDTO.setSoBillNo(report.getCountBillNo());
+//				stockOccupyDTO.setSoBillId(report.getCountBillId());
 				stockOccupyService.add(stockOccupyDTO);
 			}
 		}
@@ -1433,7 +1442,7 @@ public class CountHeaderServiceImpl<M extends CountHeaderMapper1, T extends Coun
 				newHeader.setCountBillNo(SerialNoCache.getCNo());
 			}
 			newHeader.setWhId(countHeader.getWhId());
-			newHeader.setCountBillState(StockCountStateEnum.CREATE.getIndex());
+			newHeader.setCountBillState(org.nodes.wms.dao.count.enums.StockCountStateEnum.CREATE.getCode());
 			newHeader.setCountRemark(countHeader.getCountRemark());
 			newHeader.setCountTag(countHeader.getCountTag());
 			newHeader.setCreator(user.getNickName());

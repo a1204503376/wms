@@ -62,7 +62,7 @@ public class StockManageBizImpl implements StockManageBiz {
 		AssertUtil.notEmpty(lotNumber, "按批次号冻结时批次号为空");
 		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
 		skuLot.setSkuLot1(lotNumber);
-		List<Stock> stockList = stockQueryBiz.findEnableStockBySkuLot(skuLot);
+		List<Stock> stockList = stockQueryBiz.findEnableStockByZoneTypeAndSkuLot(skuLot);
 		AssertUtil.notNull(stockList, "按批次号冻结时,根据批次号查询不到对应库存");
 		List<Long> stockIds = stockList.stream()
 			.map(Stock::getStockId)
@@ -106,7 +106,7 @@ public class StockManageBizImpl implements StockManageBiz {
 		AssertUtil.notEmpty(lotNumber, "按批次号解冻时批次号为空");
 		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
 		skuLot.setSkuLot1(lotNumber);
-		List<Stock> stockList = stockQueryBiz.findEnableStockBySkuLot(skuLot);
+		List<Stock> stockList = stockQueryBiz.findEnableStockByZoneTypeAndSkuLot(skuLot);
 		AssertUtil.notNull(stockList, "按批次号解冻时,根据批次号查询不到对应库存");
 		List<Long> stockIds = stockList.stream()
 			.map(Stock::getStockId)
@@ -149,7 +149,7 @@ public class StockManageBizImpl implements StockManageBiz {
 		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
 		skuLot.setSkuLot1(request.getLotNumber());
 		//根据库房ID SKU_ID 库位 和批属性1查询对应库存
-		List<Stock> stockList = stockQueryBiz.findEnableStockByLocation(request.getWhId(), sku.getSkuId(), null, locationIdList, skuLot);
+		List<Stock> stockList = stockQueryBiz.findEnableStockByLocationAndSkuLot(request.getWhId(), sku.getSkuId(), null, locationIdList, skuLot);
 		//断言stockList
 		AssertUtil.notNull(stockList, "根据您输入的数据查询不到对应的库存，请重新输入后重试");
 		//判断库存是否可以移动
@@ -263,7 +263,7 @@ public class StockManageBizImpl implements StockManageBiz {
 			for (String skuLot1 : skuLot1List) {
 				SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
 				skuLot.setSkuLot1(skuLot1);
-				List<Stock> stockList = stockQueryBiz.findEnableStockBySkuLot(skuLot);
+				List<Stock> stockList = stockQueryBiz.findEnableStockByZoneTypeAndSkuLot(skuLot);
 				List<Long> stockIds = stockList.stream().map(Stock::getStockId).collect(Collectors.toList());
 				stockIdList.addAll(stockIds);
 			}
@@ -309,7 +309,7 @@ public class StockManageBizImpl implements StockManageBiz {
 			for (String skuLot1 : skuLot1List) {
 				SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
 				skuLot.setSkuLot1(skuLot1);
-				List<Stock> stockList = stockQueryBiz.findEnableStockBySkuLot(skuLot);
+				List<Stock> stockList = stockQueryBiz.findEnableStockByZoneTypeAndSkuLot(skuLot);
 				List<Long> stockIds = stockList.stream().map(Stock::getStockId).collect(Collectors.toList());
 				stockIdList.addAll(stockIds);
 			}
@@ -373,6 +373,19 @@ public class StockManageBizImpl implements StockManageBiz {
 
 		// 5. 校验载重
 		canMoveByIsNotOverweight(targetLocation, stockList);
+	}
+
+	@Override
+	public void canMoveToBoxType(Location targetLocation, Location sourceLocation) {
+		if (Func.isNotEmpty(targetLocation.getLpnTypeId())&&Func.isNotEmpty(sourceLocation.getLpnTypeId())) {
+			LpnType sourceLpnType = lpnTypeBiz.findLpnTypeById(sourceLocation.getLpnTypeId());
+			AssertUtil.notNull(sourceLpnType, "获取当前箱子箱型失败");
+			LpnType targetLpnType = lpnTypeBiz.findLpnTypeById(targetLocation.getLpnTypeId());
+			AssertUtil.notNull(targetLpnType, "获取目标库位箱型失败");
+			if (Func.isNotEmpty(targetLpnType.getCode()) && !Func.equals(sourceLpnType.getCode(), targetLpnType.getCode())) {
+				throw new ServiceException("库存移动时当前库存和目标库位所存储的箱型不一致");
+			}
+		}
 	}
 
 	/**

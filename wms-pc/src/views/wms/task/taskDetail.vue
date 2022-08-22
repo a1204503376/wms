@@ -1,113 +1,90 @@
 <template>
-    <el-form ref="searchForm"
-             v-model="form"
-             :inline="true"
-             label-position="right"
-             label-width="60"
-             size="mini">
-        <nodes-master-page :permission="permissionObj" v-on="form.events">
+    <div id="taskDetail">
+        <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
                 <el-row type="flex">
-                    <el-col :span="8">
-                        <el-form-item label="任务id" label-width="90px">
-                            <el-input v-model="form.params.taskId"></el-input>
+                    <el-col :span="6">
+                        <el-form-item
+                            label="任务id" label-width="90px">
+                            <el-input
+                                placeholder="请输入任务id"
+                                :clearable="true"
+                                class="search-input" v-model.trim="form.params.taskId">
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="单据编码" label-width="90px">
-                            <el-input v-model="form.params.billNo"></el-input>
+                            <el-input
+                                placeholder="请输入单据编码"
+                                :clearable="true"
+                                class="search-input" v-model.trim="form.params.billNo">
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item label="任务类型" label-width="90px">
-                            <nodes-task-type v-model="form.params.taskTypeCdList" :multiple="true"></nodes-task-type>
+                            <nodes-task-type class="search-input" v-model="form.params.taskTypeCdList" :multiple="true"></nodes-task-type>
                         </el-form-item>
                     </el-col>
-                </el-row>
-            </template>
-            <template v-slot:expandSearch>
-                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="任务状态" label-width="90px">
                             <nodes-task-state
+                                class="search-input"
                                 :default-value="true"
                                 v-model="form.params.taskStateList"
                                 :multiple="true">
                             </nodes-task-state>
                         </el-form-item>
                     </el-col>
+                </el-row>
+                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
-                            <nodes-sku-by-query v-model="form.params.skuIdList"></nodes-sku-by-query>
+                            <nodes-sku-by-query class="search-input" v-model="form.params.skuIdList"></nodes-sku-by-query>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </template>
             <template v-slot:tableTool>
-                <el-tooltip
-                    :enterable="false"
-                    class="item"
-                    content="刷新"
-                    effect="dark"
-                    placement="top">
+                <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
                     <el-button circle icon="el-icon-refresh" size="mini" @click="onRefresh"></el-button>
                 </el-tooltip>
-                <el-tooltip
-                    :enterable="false"
-                    class="item"
-                    content="显隐"
-                    effect="dark"
-                    placement="top">
+                <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">
                     <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
                 </el-tooltip>
-                <el-tooltip
-                    :enterable="false"
-                    class="item"
-                    content="服务端导出"
-                    effect="dark"
-                    placement="top">
+                <el-tooltip :enterable="false" class="item" content="服务端导出" effect="dark" placement="top">
                     <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
                 </el-tooltip>
-                <el-tooltip
-                    :enterable="false"
-                    class="item"
-                    content="本地导出"
-                    effect="dark"
-                    placement="top">
+                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                                  style="display: inline-block;margin-left: 10px">
+                        style="display: inline-block;margin-left: 10px">
                         <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
                         </el-button>
                     </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:batchBtn>
-                <el-button
-                    v-if="permissionObj.continue" size="mini" type="primary"
-                    @click="continueTask">继续执行
+                <el-button v-if="permissionObj.continue" size="mini" type="primary" @click="continueTask">继续执行
                 </el-button>
-                <el-button
-                    v-if="permissionObj.cancel" size="mini"
-                    type="primary" @click="cancelTask">取消任务
+                <el-button v-if="permissionObj.cancel" size="mini" type="primary" @click="cancelTask">取消任务
                 </el-button>
             </template>
             <template v-slot:table>
                 <el-table
                     ref="table"
                     :data="table.data"
+                    :height="table.height"
                     border
                     highlight-current-row
                     size="mini"
                     style="width: 100%"
                     @sort-change="onSortChange">
-                    <el-table-column
-                        fixed
-                        type="selection"
-                        width="50">
+                    <el-table-column fixed type="selection" width="50">
                     </el-table-column>
                     <el-table-column
                         fixed
-                        sortable
+                        width="50"
                         type="index">
                         <template slot="header">
                             #
@@ -119,32 +96,35 @@
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column"
-                            width="130">
+                            width="150">
                             <template v-if="column.prop === 'taskState'" v-slot="scope">
-                                <el-tag v-if="scope.row.taskState === '已下发' || scope.row.taskState === '开始执行'" type="success">{{scope.row.taskState}}</el-tag>
-                                <el-tag v-if="scope.row.taskState === '已完成' || scope.row.taskState === '已取消'" type="info">{{scope.row.taskState}}</el-tag>
-                                <el-tag v-if="scope.row.taskState === '未下发'" type="warning">{{scope.row.taskState}}</el-tag>
-                                <el-tag v-if="scope.row.taskState === '异常中断中'" type="danger">{{scope.row.taskState}}</el-tag>
+                                <el-tag v-if="scope.row.taskState === '已下发' || scope.row.taskState === '开始执行'"
+                                    type="success">{{ scope.row.taskState }}</el-tag>
+                                <el-tag v-if="scope.row.taskState === '已完成' || scope.row.taskState === '已取消'"
+                                    type="info">{{ scope.row.taskState }}</el-tag>
+                                <el-tag v-if="scope.row.taskState === '未下发'" type="warning">{{ scope.row.taskState }}
+                                </el-tag>
+                                <el-tag v-if="scope.row.taskState === '异常中断中'" type="danger">{{ scope.row.taskState }}
+                                </el-tag>
                             </template>
                         </el-table-column>
                     </template>
                 </el-table>
             </template>
             <template v-slot:page>
-                <el-pagination
-                    :page-size="page.size"
-                    :page-sizes="[20, 50, 100]"
-                    :total="page.total"
-                    background
-                    layout="total, sizes, prev, pager, next, jumper"
-                    @current-change="handleCurrentChange"
-                    @size-change="handleSizeChange"
-                >
+                <el-pagination :page-size="page.size" :page-sizes="[20, 50, 100]" :total="page.total" background
+                    layout="total, sizes, prev, pager, next, jumper" @current-change="handleCurrentChange"
+                    @size-change="handleSizeChange">
                 </el-pagination>
             </template>
         </nodes-master-page>
-        <dialog-column v-bind="columnShowHide" @close="onColumnShowHide"></dialog-column>
-    </el-form>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -155,15 +135,16 @@ import NodesOwner from "@/components/wms/select/NodesOwner";
 import NodesSku from "@/components/wms/select/NodesSku";
 
 import fileDownload from "js-file-download";
-import {listMixin} from "@/mixins/list";
-import {cancelTask, continueTask, exportFile, getPage} from "@/api/wms/task/taskDetail";
+import { listMixin } from "@/mixins/list";
+import { cancelTask, continueTask, exportFile, getPage } from "@/api/wms/task/taskDetail";
 import fileUpload from "@/components/nodes/fileUpload";
-import {ExcelExport} from 'pikaz-excel-js';
+import { ExcelExport } from 'pikaz-excel-js';
 import NodesSkuByQuery from "@/components/wms/select/NodesSkuByQuery";
 import NodesTaskType from "@/components/wms/select/NodesTaskType";
 import NodesTaskState from "@/components/wms/select/NodesTaskState";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
-
+import func from "@/util/func";
+import {nowDateFormat} from "@/util/date";
 
 export default {
     name: "carrier",
@@ -284,7 +265,6 @@ export default {
     computed: {
         permissionObj() {
             return {
-                search: this.vaildData(this.permission.taskDetail_search, false),
                 cancel: this.vaildData(this.permission.taskDetail_cancel, false),
                 continue: this.vaildData(this.permission.taskDetail_continue, false)
             }
@@ -299,7 +279,7 @@ export default {
             exportFile(this.form.params)
                 .then((res) => {
                     this.$message.success("操作成功，正在下载中...");
-                    fileDownload(res.data, "库存列表.xlsx");
+                    fileDownload(res.data, `工作任务${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
                 })
                 .catch(() => {
                     this.$message.error("系统模板目录配置有误或文件不存在");
@@ -313,10 +293,16 @@ export default {
                 let pageObj = res.data.data;
                 this.table.data = pageObj.records;
                 this.page.total = pageObj.total;
+                this.handleRefreshTable();
             });
         },
         cancelTask() {
             let rows = this.$refs.table.selection;
+            if (func.isEmpty(rows)) {
+                this.$message.error("请选择相应的任务");
+                return;
+            }
+
             for (let i in rows) {
                 if (rows[i].taskState.trim() !== '异常中断中') {
                     this.$message.warning("只能选择异常中断中的任务进行操作");
@@ -324,11 +310,16 @@ export default {
                 }
             }
             cancelTask(rows.map(x => x.taskId)).then(() => {
-
+                this.$message.success("操作成功")
             })
         },
         continueTask() {
             let rows = this.$refs.table.selection;
+            if (func.isEmpty(rows)) {
+                this.$message.error("请选择相应的任务");
+                return;
+            }
+
             for (let i in rows) {
                 if (rows[i].taskState.trim() !== '异常中断中') {
                     this.$message.warning("只能选择异常中断中的任务进行操作");
@@ -336,7 +327,7 @@ export default {
                 }
             }
             continueTask(rows.map(x => x.taskId)).then(() => {
-
+                this.$message.success("操作成功")
             })
         },
     }

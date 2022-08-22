@@ -59,26 +59,26 @@ public class StockOccupyServiceImpl<M extends StockOccupyMapper, T extends Stock
 			stockOccupyQuery.setStockId(stockId);
 		}
 		if (ObjectUtil.isNotEmpty(pickPlanId)) {
-			stockOccupyQuery.setPickPlanId(pickPlanId);
+//			stockOccupyQuery.setPickPlanId(pickPlanId);
 		}
 		if (ObjectUtil.isNotEmpty(wcrId)) {
-			stockOccupyQuery.setWcrId(wcrId);
+//			stockOccupyQuery.setWcrId(wcrId);
 		}
 		return super.list(Condition.getQueryWrapper(stockOccupyQuery));
 	}
 
 	@Override
 	public void updateOccupyQty(StockOccupy stockOccupy) {
-		if (BigDecimalUtil.le(stockOccupy.getOccupyQty(), BigDecimal.ZERO)) {
-			super.removeById(stockOccupy.getWsoId());
-		} else {
+//		if (BigDecimalUtil.le(stockOccupy.getOccupyQty(), BigDecimal.ZERO)) {
+//			super.removeById(stockOccupy.getWsoId());
+//		} else {
 			UpdateWrapper<StockOccupy> updateWrapper = new UpdateWrapper<>();
 			updateWrapper.lambda()
-				.set(StockOccupy::getOccupyQty, stockOccupy.getOccupyQty())
+//				.set(StockOccupy::getOccupyQty, stockOccupy.getOccupyQty())
 				.set(StockOccupy::getUpdateTime, LocalDateTime.now())
 				.eq(StockOccupy::getWsoId, stockOccupy.getWsoId());
 			super.update(updateWrapper);
-		}
+//		}
 	}
 
 	@Override
@@ -105,11 +105,11 @@ public class StockOccupyServiceImpl<M extends StockOccupyMapper, T extends Stock
 			stockOccupy.getOccupyType().equals(StockOccupyTypeEnum.Replenish.getIndex()) ||
 			stockOccupy.getOccupyType().equals(StockOccupyTypeEnum.Count.getIndex())
 		) {
-			stock.setOccupyQty(stock.getOccupyQty().add(stockOccupy.getOccupyQty()));
+//			stock.setOccupyQty(stock.getOccupyQty().add(stockOccupy.getOccupyQty()));
 		}
 		// 记录库存日志
 		IStockLogService stockLogService = SpringUtil.getBean(IStockLogService.class);
-		stockLogService.create(stock, null, StockProcTypeEnum.Update, stockOccupy.getSystemProcId());
+		stockLogService.create(stock, null, StockProcTypeEnum.Update, null);
 
 		stockService.updateById(stock);
 	}
@@ -136,14 +136,16 @@ public class StockOccupyServiceImpl<M extends StockOccupyMapper, T extends Stock
 					throw new ServiceException("指定库存不存在（库存ID：" + stockOccupy.getStockId() + "）！");
 				}
 				if (Func.isEmpty(stockOccupyReduce.getQty()) ||
-					stockOccupyReduce.getQty().compareTo(BigDecimal.ZERO) <= 0 ||
-					stockOccupy.getOccupyQty().compareTo(stockOccupyReduce.getQty()) < 0 ||
-					stockOccupyReduce.getQty().equals(stockOccupy.getOccupyQty())) {
+					stockOccupyReduce.getQty().compareTo(BigDecimal.ZERO) <= 0
+//					||
+//					stockOccupy.getOccupyQty().compareTo(stockOccupyReduce.getQty()) < 0 ||
+//					stockOccupyReduce.getQty().equals(stockOccupy.getOccupyQty())
+				) {
 					// 删除库存占用
 					super.removeById(stockOccupy);
 				} else {
 					// 更新库存占用数量
-					stockOccupy.setOccupyQty(stockOccupy.getOccupyQty().subtract(stockOccupyReduce.getQty()));
+//					stockOccupy.setOccupyQty(stockOccupy.getOccupyQty().subtract(stockOccupyReduce.getQty()));
 					super.updateById(stockOccupy);
 				}
 				// 修改库存表占用数量
@@ -152,14 +154,14 @@ public class StockOccupyServiceImpl<M extends StockOccupyMapper, T extends Stock
 					stockOccupyReduce.getOccupyType() == StockOccupyTypeEnum.Replenish.getIndex() ||
 					stockOccupyReduce.getOccupyType() == StockOccupyTypeEnum.Count.getIndex()) {
 					// 拣货占用
-					if (stock.getOccupyQty().subtract(stockOccupy.getOccupyQty()).compareTo(BigDecimal.ZERO) < 0) {
-						stock.setOccupyQty(BigDecimal.ZERO);
-					} else {
-						stock.setOccupyQty(stock.getOccupyQty().subtract(stockOccupy.getOccupyQty()));
-					}
+//					if (stock.getOccupyQty().subtract(stockOccupy.getOccupyQty()).compareTo(BigDecimal.ZERO) < 0) {
+//						stock.setOccupyQty(BigDecimal.ZERO);
+//					} else {
+//						stock.setOccupyQty(stock.getOccupyQty().subtract(stockOccupy.getOccupyQty()));
+//					}
 				}
 				// 记录库存日志
-				stockLogService.create(stock, null, StockProcTypeEnum.Update, stockOccupy.getSystemProcId());
+				stockLogService.create(stock, null, StockProcTypeEnum.Update, null);
 
 				stockService.updateById(stock);
 			}

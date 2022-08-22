@@ -1,76 +1,84 @@
 <template>
     <div id="list">
-        <nodes-master-page :permission="permissionObj" v-on="form.events">
+        <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
-                <el-form-item label="物品编码">
-                    <el-input v-model="form.params.skuCode" class="d-input"></el-input>
-                </el-form-item>
-                <el-form-item label="a.b">
-                    <el-input v-model="form.params.a.b" class="d-input"></el-input>
-                </el-form-item>
-                <el-form-item label="状态">
-                    <nodes-asn-bill-state v-model="form.params.asnState"></nodes-asn-bill-state>
-                </el-form-item>
-                <el-form-item label="入库方式">
-                    <nodes-in-store-mode v-model="form.params.inStorageType"
-                                         style="width: 180px"></nodes-in-store-mode>
-                </el-form-item>
-                <el-form-item label="状态">
-                    <nodes-lpn-type-state v-model="form.params.lpnTypeState"></nodes-lpn-type-state>
-                </el-form-item>
-            </template>
-            <template v-slot:expandSearch>
                 <el-row type="flex">
-                    <el-col :span="24">
-                        <el-form-item label="物品编码">
-                            <el-input v-model="form.params.skuCode" class="d-input"></el-input>
+                    <el-col :span="6">
+                        <el-form-item label="物品编码" label-width="90px">
+                            <el-input
+                                v-model.trim="form.params.skuCode"
+                                class="search-input">
+                            </el-input>
                         </el-form-item>
-                        <el-form-item label="物品编码">
-                            <el-input v-model="form.params.skuCode" class="d-input"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="a.b" label-width="90px">
+                            <el-input
+                                v-model="form.params.a.b" class="search-input">
+                            </el-input>
                         </el-form-item>
-                        <el-form-item label="物品编码">
-                            <el-input v-model="form.params.skuCode" class="d-input"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="ASN单状态" label-width="90px">
+                            <nodes-asn-bill-state
+                                v-model="form.params.asnState"
+                                class="search-input">
+                            </nodes-asn-bill-state>
                         </el-form-item>
-
-                        <el-form-item label="物品编码">
-                            <el-input v-model="form.params.skuCode" class="d-input"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="入库方式" label-width="90px">
+                            <nodes-in-store-mode
+                                v-model="form.params.inStorageType"
+                                class="search-input">
+                            </nodes-in-store-mode>
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row type="flex">
-                    <el-col :span="24">
-                        <el-form-item label="创建日期">
-                            <nodes-date-range v-model="form.params.createDateRange"></nodes-date-range>
+                <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="状态" label-width="90px">
+                            <nodes-lpn-type-state
+                                v-model="form.params.lpnTypeState"
+                                class="search-input">
+                            </nodes-lpn-type-state>
                         </el-form-item>
-
-                        <el-form-item label="物品编码">
-                            <el-input v-model="form.params.skuCode" class="d-input"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="物品编码" label-width="90px">
+                            <el-input v-model="form.params.skuCode" class="search-input"></el-input>
                         </el-form-item>
-
-                        <el-form-item label="创建日期">
-                            <nodes-date-range v-model="form.params.createDateRange"></nodes-date-range>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="物品编码" label-width="90px">
+                            <el-input v-model="form.params.skuCode" class="search-input"></el-input>
                         </el-form-item>
-                        <el-form-item label="物品编码">
-                            <el-input v-model="form.params.skuCode" class="d-input"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="物品编码" label-width="90px">
+                            <el-input v-model="form.params.skuCode" class="search-input"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row type="flex">
-                    <el-col :span="24">
-                        <el-form-item label="创建日期">
+                <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="创建日期" label-width="90px">
                             <nodes-date-range v-model="form.params.createDateRange"></nodes-date-range>
                         </el-form-item>
-
-                        <el-form-item label="物品编码">
-                            <el-input v-model="form.params.skuCode" class="d-input"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="物品编码" label-width="90px">
+                            <el-input v-model="form.params.skuCode" class="search-input"></el-input>
                         </el-form-item>
-
-                        <el-form-item label="创建日期">
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="创建日期" label-width="90px">
                             <nodes-date-range v-model="form.params.createDateRange"></nodes-date-range>
                         </el-form-item>
-
-                        <el-form-item label="物品编码">
-                            <el-input v-model="form.params.skuCode" class="d-input"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="物品编码" label-width="90px">
+                            <el-input v-model="form.params.skuCode" class="search-input"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -121,6 +129,7 @@
                 <el-table
                     ref="table"
                     :data="table.data"
+                    :height="table.height"
                     :summary-method="getSummaries"
                     border
                     highlight-current-row
@@ -134,8 +143,8 @@
                     </el-table-column>
                     <el-table-column
                         fixed
-                        sortable
-                        type="index">
+                        type="index"
+                        width="50">
                         <template slot="header">
                             #
                         </template>
@@ -145,6 +154,7 @@
                             v-if="!column.hide"
                             :key="index"
                             show-overflow-tooltip
+                            width="150"
                             v-bind="column">
                         </el-table-column>
                     </template>
@@ -153,7 +163,7 @@
                         label="操作"
                         width="120">
                         <template v-slot="{row}">
-                            <el-button size="mini" type="text" @click="onEdit(row)">编辑</el-button>
+                            <el-button v-if="permissionObj.add" size="mini" type="text" @click="onEdit(row)">编辑</el-button>
                             <el-button size="mini" type="text" @click="onViewDetails(row)">查看详情</el-button>
                         </template>
                     </el-table-column>
@@ -181,10 +191,8 @@
 
 <script>
 
-
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesAsnBillState from "@/components/wms/select/NodesAsnBillState";
-// eslint-disable-next-line no-unused-vars
 import NodesLpnTypeState from "@/components/wms/select/NodesLpnTypeState";
 import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
@@ -209,7 +217,7 @@ export default {
                     skuCode: '',
                     asnState: [10, 30, 20],
                     inStorageType: [20],
-                    lpnTypeState:[],
+                    lpnTypeState: [],
                     createDateRange: ['2022-01-01', '2022-03-01'],
                     a: {
                         b: 123
@@ -313,6 +321,13 @@ export default {
     created() {
         this.getTableData();
     },
+    computed: {
+        permissionObj() {
+            return {
+                add: this.vaildData(this.permission.demo_add, false),
+            }
+        }
+    },
     methods: {
         getTableData() {
             // API调用:post(this.searchFrom)
@@ -341,6 +356,8 @@ export default {
             this.table.data = (number >= length)
                 ? fill.slice(offset, length)
                 : fill.slice(offset, number);
+
+            this.handleRefreshTable();
         },
         onSearch() {
             console.log(this.form.params);
@@ -361,7 +378,7 @@ export default {
                 }
             });
         },
-        onViewDetails(row){
+        onViewDetails(row) {
             this.$router.push({
                 name: 'DEMO查看详情',
                 params: {
@@ -395,7 +412,6 @@ export default {
                     sums[index] = '';
                 }
             });
-
             return sums;
         },
     }

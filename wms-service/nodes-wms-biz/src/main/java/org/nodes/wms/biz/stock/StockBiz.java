@@ -3,6 +3,7 @@ package org.nodes.wms.biz.stock;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
+import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.dto.input.StockBySerialPageQuery;
 import org.nodes.wms.dao.stock.dto.input.StockImportRequest;
 import org.nodes.wms.dao.stock.dto.input.StockLogPageQuery;
@@ -17,7 +18,6 @@ import java.util.List;
 
 /**
  * 库存业务接口
- * 待办(TODO)：对外提供的函数最好是stockId，这样防止外部修改原stock而导致出现的业务异常
  *
  * @author nodesc
  */
@@ -66,8 +66,8 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
-			Location targetLocation, StockLogTypeEnum type,
-			Long billId, String billNo, String lineNo);
+					Location targetLocation, StockLogTypeEnum type,
+					Long billId, String billNo, String lineNo);
 
 	/**
 	 * 整库存移动,自动计算关联序列号
@@ -83,7 +83,7 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	Stock moveAllStock(Stock sourceStock, String targetBoxCode, String targetLpnCode,
-			Location targetLocation, StockLogTypeEnum type, Long billId, String billNo, String lineNo);
+					   Location targetLocation, StockLogTypeEnum type, Long billId, String billNo, String lineNo);
 
 	/**
 	 * 库存移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -103,9 +103,9 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
-			String targetBoxCode, String targetLpnCode,
-			Location targetLocation, StockLogTypeEnum type,
-			Long billId, String billNo, String lineNo);
+					String targetBoxCode, String targetLpnCode,
+					Location targetLocation, StockLogTypeEnum type,
+					Long billId, String billNo, String lineNo);
 
 	/**
 	 * 库存移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -126,9 +126,9 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
-			String targetBoxCode, String targetLpnCode,
-			Location targetLocation, StockLogTypeEnum type, String dropId,
-			Long billId, String billNo, String lineNo);
+					String targetBoxCode, String targetLpnCode,
+					Location targetLocation, StockLogTypeEnum type, String dropId,
+					Long billId, String billNo, String lineNo);
 
 	/**
 	 * 整箱移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -145,8 +145,8 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	List<Stock> moveStockByBoxCode(String boxCode, String targetBoxCode, String targetLpnCode,
-			Location targetLocation, StockLogTypeEnum type,
-			Long billId, String billNo, String lineNo);
+								   Location targetLocation, StockLogTypeEnum type,
+								   Long billId, String billNo, String lineNo);
 
 	/**
 	 * 整托移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -162,7 +162,7 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	List<Stock> moveStockByLpnCode(String lpnCode, String targetLpnCode, Location targetLocation, StockLogTypeEnum type,
-			Long billId, String billNo, String lineNo);
+								   Long billId, String billNo, String lineNo);
 
 	/**
 	 * 移动库存到落放id，不检验库存状态
@@ -317,4 +317,37 @@ public interface StockBiz {
 	 * @param response               响应对象
 	 */
 	void exportBySerial(StockBySerialPageQuery stockBySerialPageQuery, HttpServletResponse response);
+
+	/**
+	 * 根据拣货占用库存数量
+	 *
+	 * @param newPickPlan 拣货计划
+	 */
+	void occupyStock(List<SoPickPlan> newPickPlan);
+
+	/**
+	 * 新增占用量，更新之后的占用量等于原占用量加本次的currentOccupy
+	 *
+	 * @param soBillId      发货单id
+	 * @param soBillNo      发货单编码
+	 * @param soDetailId    发货单明细
+	 * @param stockId       库存id
+	 * @param currentOccupy 需要新增的占用数量
+	 * @return 更新之后的stock
+	 */
+	Stock increaseOccupy(Long soBillId, String soBillNo, Long soDetailId,
+						 Long stockId, BigDecimal currentOccupy);
+
+	/**
+	 * 减少占用量,更新之后的占用量等于原占用量减本次的currentOccupy。如果不用减则会抛异常
+	 *
+	 * @param soBillId        发货单id
+	 * @param soBillNo        发货单编码
+	 * @param soDetailId      发货单明细
+	 * @param stockId         库存id
+	 * @param currentUnOccupy 需要减少的占用数量
+	 * @return 更新之后的stock
+	 */
+	Stock reduceOccupy(Long soBillId, String soBillNo, Long soDetailId,
+					   Long stockId, BigDecimal currentUnOccupy);
 }

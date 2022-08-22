@@ -248,7 +248,7 @@ public class StockDaoImpl
 
 	@Override
 	public void updateStock(Long stockId, BigDecimal stockQty, BigDecimal stayStockQty,
-			BigDecimal pickQty, LocalDateTime lastInTime, LocalDateTime lastOutTime) {
+			BigDecimal pickQty, BigDecimal occupyQty, LocalDateTime lastInTime, LocalDateTime lastOutTime) {
 		UpdateWrapper<Stock> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
 				.eq(Stock::getStockId, stockId);
@@ -257,6 +257,7 @@ public class StockDaoImpl
 		stock.setStockQty(stockQty);
 		stock.setStayStockQty(stayStockQty);
 		stock.setPickQty(pickQty);
+		stock.setOccupyQty(occupyQty);
 		if (Func.notNull(lastInTime)) {
 			stock.setLastInTime(lastInTime);
 		}
@@ -386,6 +387,20 @@ public class StockDaoImpl
 	}
 
 	@Override
+	public List<Stock> getEnableStockBySkuLotAndExcludeLoc(Long skuId,
+			List<Long> excludeLocId, SkuLotBaseEntity skuLot) {
+		AssertUtil.notNull(skuId, "查询库存失败，skuid参数为空");
+
+		LambdaQueryWrapper<Stock> stockQuery = getStockQuery();
+		stockQuery.eq(Stock::getSkuId, skuId);
+		if (Func.isNotEmpty(excludeLocId)) {
+			stockQuery.notIn(Stock::getLocId, excludeLocId);
+		}
+		SkuLotUtil.applySql(stockQuery, skuLot);
+		return super.list(stockQuery);
+	}
+
+	@Override
 	public Page<StockBySerialPageResponse> page(IPage<?> page, StockBySerialPageQuery stockBySerialPageQuery) {
 		return super.baseMapper.getSerialPage(page, stockBySerialPageQuery);
 	}
@@ -411,6 +426,20 @@ public class StockDaoImpl
 	}
 
 	@Override
+	public void upateOccupyQty(Stock stock) {
+		AssertUtil.notNull(stock, "更新占用失败,stock参数为空");
+		Stock newStock = new Stock();
+		newStock.setStockId(stock.getStockId());
+		newStock.setOccupyQty(stock.getOccupyQty());
+
+		UpdateWrapper<Stock> updateWrapper = Wrappers.update();
+		updateWrapper.lambda().eq(Stock::getStockId, stock.getStockId());
+		if (!super.update(stock, updateWrapper)) {
+			throw new ServiceException("更新占用失败,请再次重试");
+		}
+	}
+
+	@Override
 	public List<Stock> getStockByDropId(Long dropId) {
 		AssertUtil.notNull(dropId, "根据任务id查询库存失败,taskId不能为空");
 
@@ -420,9 +449,9 @@ public class StockDaoImpl
 	}
 
 	@Override
-	public List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode) {
+	public List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode, String boxCode, String skuCode) {
 		AssertUtil.notEmpty(locCode, "根据库位查询库存数据失败，locCode不能为空");
-		return super.baseMapper.getStockCountByLocCode(locCode);
+		return super.baseMapper.getStockCountByLocCode(locCode, boxCode, skuCode);
 	}
 
 }

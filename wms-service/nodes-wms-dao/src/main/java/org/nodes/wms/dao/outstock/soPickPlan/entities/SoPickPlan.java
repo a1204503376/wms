@@ -10,10 +10,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 
 import lombok.Data;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 /**
  * 拣货计划实体类
- * 
+ *
  * @author nodesc
  **/
 @Data
@@ -41,7 +42,7 @@ public class SoPickPlan extends BaseSkuLotEntity {
 	/**
 	 * 出库单id
 	 */
-	private String soBillId;
+	private Long soBillId;
 
 	/**
 	 * 出库单编码(多个用逗号分隔)
@@ -89,9 +90,9 @@ public class SoPickPlan extends BaseSkuLotEntity {
 	private String lpnCode;
 
 	/**
-	 * 库存状态(0正常,1冻结)
+	 * 库存状态
 	 */
-	private String stockStatus;
+	private StockStatusEnum stockStatus;
 
 	/**
 	 * 物品ID
@@ -168,4 +169,12 @@ public class SoPickPlan extends BaseSkuLotEntity {
 	 */
 	@Version
 	private Integer version;
+
+	/**
+	 * 获取剩余可拣量
+	 * @return
+	 */
+	public BigDecimal getSurplusQty(){
+		return pickPlanQty.subtract(pickRealQty);
+	}
 }

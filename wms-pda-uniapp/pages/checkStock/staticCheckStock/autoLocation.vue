@@ -107,12 +107,12 @@
 		},
 		methods: {
 			submit() {
-				//采集当前差异的数据然后生成差异报告
+				//采集当前差异的数据然后生成盘点记录
 				let params = {};
 				params.beChangedList = this.receiveList.pdaBoxQtyResponseList;
 				params.defaultList = this.defaultList.pdaBoxQtyResponseList;
 				staticCheckStock.generateCountReportByAutoLocation(params).then(data => {
-					console.log(data.data)
+					this.esc();
 				})
 
 			},
@@ -169,7 +169,7 @@
 			},
 			esc() {
 				uni.navigateBack({
-					delta: 1
+					delta: 2
 				});
 			},
 			getReceiveList() {

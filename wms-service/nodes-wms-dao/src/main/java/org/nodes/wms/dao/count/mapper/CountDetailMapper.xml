@@ -34,6 +34,8 @@
         on s.loc_id = l.loc_id
         left join wms_count_header ch on cd.count_bill_no = ch.count_bill_no
         <where>
+            s.stay_stock_qty + s.stock_qty > s.pick_qty
+            AND s.is_deleted = 0
             <if test="param.skuLot2 != null and param.skuLot2 != ''">
                 AND s.sku_lot2 = #{param.skuLot2}
             </if>
@@ -44,7 +46,6 @@
                 </foreach>
             </if>
         </where>
-        GROUP BY s.loc_code, s.box_code, s.sku_code
         ORDER BY s.box_code desc
     </select>
 

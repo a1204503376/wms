@@ -201,7 +201,9 @@ public class CountHeaderController extends BladeController {
 	@ApiOperationSupport(order = 10)
 	@ApiOperation(value = "生成差异报告", notes = "传入countBillId")
 	public R differenceReport(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
-		return R.status(countHeaderService.differenceReport(ids));
+//		return R.status(countHeaderService.differenceReport(ids));
+		return R.status(countHeaderService.generateDifference(ids));
+
 	}
 
 	/**
