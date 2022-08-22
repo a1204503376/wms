@@ -233,7 +233,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	public List<OutboundAccessAreaLocationQueryResponse> findLocOfAgvPickTo(
 		FindLocOfAgvPickToRequest request) {
 		Zone zone = zoneBiz.findByCode(WmsAppConstant.ZONE_CODE_AGV_SHIPMENT_CONNECTION_AREA);
-		List<Location> locationList = locationBiz.getLocationByZoneType(zone.getZoneType());
+		List<Location> locationList = locationBiz.findLocationByZoneId(zone.getZoneId());
 		return BeanUtil.copy(locationList, OutboundAccessAreaLocationQueryResponse.class);
 	}
 
