@@ -83,7 +83,7 @@ public class WmsTaskFactory {
 		wmsTask.setTaskId(IdWorker.getId());
 		wmsTask.setLot(soPickPlanList.get(0).getSkuLot1());
 		wmsTask.setBillId(soHeader.getSoBillId());
-		if (procType.equals(WmsTaskProcTypeEnum.BY_PCS) || procType.equals(WmsTaskProcTypeEnum.BY_PCS_AGV){
+		if (procType.equals(WmsTaskProcTypeEnum.BY_PCS) || procType.equals(WmsTaskProcTypeEnum.BY_PCS_AGV)) {
 			wmsTask.setBillDetailId(soPickPlanList.get(0).getSoDetailId());
 		}
 		wmsTask.setTaskProcType(procType);
@@ -94,10 +94,10 @@ public class WmsTaskFactory {
 		wmsTask.setUmCode("");
 		wmsTask.setFromLocId(soPickPlanList.get(0).getLocId());
 		wmsTask.setFromLocCode(soPickPlanList.get(0).getLocCode());
-		if (Func.isNotEmpty(soPickPlanList.get(0).getBoxCode())){
+		if (Func.isNotEmpty(soPickPlanList.get(0).getBoxCode())) {
 			wmsTask.setBoxCode(soPickPlanList.get(0).getBoxCode());
 		}
-		if (Func.isNotEmpty(soPickPlanList.get(0).getLpnCode())){
+		if (Func.isNotEmpty(soPickPlanList.get(0).getLpnCode())) {
 			wmsTask.setLpnCode(soPickPlanList.get(0).getLpnCode());
 		}
 		wmsTask.setTtpId(soPickPlanList.get(0).getPickPlanId());
