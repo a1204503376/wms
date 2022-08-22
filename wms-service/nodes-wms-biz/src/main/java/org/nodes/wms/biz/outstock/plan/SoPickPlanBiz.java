@@ -1,10 +1,15 @@
 package org.nodes.wms.biz.outstock.plan;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.intput.SoPickPlanPageQuery;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
+import org.springblade.core.mp.support.Query;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -39,7 +44,7 @@ public interface SoPickPlanBiz {
 	 * @param existPickPlans 已经存在的拣货计划
 	 * @return 运行的信息，如果全部分配成功则返回分配成功
 	 */
-	String runByPickStrategy(SoHeader soHeader, List<SoDetail> soDetials, List<SoPickPlan> existPickPlans);
+	String runPickStrategy(SoHeader soHeader, List<SoDetail> soDetials, List<SoPickPlan> existPickPlans);
 
 	/**
 	 * 根据拣货计划ID修改拣货计划数量
@@ -69,6 +74,31 @@ public interface SoPickPlanBiz {
 	 * @return 拣货计划
 	 */
 	List<SoPickPlan> findPickByTaskId(Long taskId);
+
+	/**
+	 * 取消分配
+	 *
+	 * @param soPickPlanList 需要取消分配的拣货计划
+	 * @param soHeader       发货单
+	 */
+	void cancelPickPlan(List<SoPickPlan> soPickPlanList, SoHeader soHeader);
+
+	/**
+	 * 获取分配记录分页
+	 *
+	 * @param query               分页条件
+	 * @param soPickPlanPageQuery 查询条件
+	 * @return 分页对象
+	 */
+	Page<SoPickPlanPageResponse> page(Query query, SoPickPlanPageQuery soPickPlanPageQuery);
+
+	/**
+	 * 导出分配记录
+	 *
+	 * @param soPickPlanPageQuery 查询条件
+	 * @param response            响应对象
+	 */
+	void export(SoPickPlanPageQuery soPickPlanPageQuery, HttpServletResponse response);
 
 	/**
 	 * 根据库存id查询拣货计划

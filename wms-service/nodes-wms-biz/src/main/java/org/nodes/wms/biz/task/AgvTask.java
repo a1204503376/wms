@@ -147,7 +147,7 @@ public class AgvTask {
 	 * @param so       出库单信息
 	 * @param soDetail 出库单明细信息
 	 */
-	public void pickToSchedule(Long locId, SoHeader so, SoDetail soDetail) {
+	public WmsTask pickToSchedule(Long locId, SoHeader so, SoDetail soDetail) {
 		AssertUtil.notNull(locId, "AGV拣货任务下发失败,locId为空");
 		AssertUtil.notNull(so, "AGV拣货任务下发失败,so为空");
 		AssertUtil.notNull(soDetail, "AGV拣货任务下发失败,soDetail为空");
@@ -159,6 +159,7 @@ public class AgvTask {
 		}
 		stockBiz.freezeStockByDropId(sourceStock, pickTask.getTaskId());
 		wmsTaskDao.save(pickTask);
+		return pickTask;
 	}
 
 	/**

@@ -41,4 +41,84 @@
         </where>
         ORDER BY box_code,zone_code,loc_code,lpn_code
     </select>
+
+    <select id="page" resultType="org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse">
+        select spp.so_bill_no,
+        wbt.bill_type_name,
+        detail.so_line_no,
+        spp.sku_code,
+        spp.sku_name,
+        spp.box_code,
+        spp.pick_real_qty,
+        spp.lpn_code,
+        spp.create_time,
+        user.create_user,
+        spp.sku_lot1,
+        spp.sku_lot2,
+        spp.sku_lot3,
+        spp.sku_lot4,
+        spp.sku_lot5,
+        spp.sku_lot6,
+        spp.sku_lot7,
+        spp.sku_lot8,
+        spp.sku_lot9,
+        spp.sku_lot10,
+        spp.sku_lot11,
+        spp.sku_lot12,
+        spp.sku_lot13,
+        spp.sku_lot14,
+        spp.sku_lot15,
+        spp.sku_lot17,
+        spp.sku_lot18,
+        spp.sku_lot19,
+        spp.sku_lot20,
+        spp.sku_lot21,
+        spp.sku_lot22,
+        spp.sku_lot23,
+        spp.sku_lot24,
+        spp.sku_lot25,
+        spp.sku_lot26,
+        spp.sku_lot27,
+        spp.sku_lot28,
+        spp.sku_lot29,
+        spp.sku_lot30
+        from so_pick_plan spp
+        LEFT JOIN so_header header ON spp.so_bill_id = header.so_bill_id
+        LEFT JOIN wms_bill_type wbt on header.bill_type_cd = wbt.bill_type_cd
+        LEFT JOIN so_detail detail ON spp.so_detail_id = detail.so_detail_id
+        LEFT JOIN blade_user `user` ON spp.create_user = `user`.id
+        <where>
+            spp.is_deleted = 0
+            <if test="param.soBillNo != null and param.soBillNo != ''">
+                AND spp.so_bill_no LIKE CONCAT('%', #{param.soBillNo} ,'%')
+            </if>
+            <if test="param.billTypeCdList != null and param.billTypeCdList.size != 0">
+                AND header.bill_type_cd IN
+                <foreach collection="param.billTypeCdList" close=")" open="(" separator="," item="item">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="param.skuIdList != null and param.skuIdList.size != 0">
+                AND spp.sku_id IN
+                <foreach collection="param.skuIdList" close=")" open="(" separator="," item="item">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="param.boxCode != null and param.boxCode != ''">
+                AND spp.box_code LIKE CONCAT('%', #{param.boxCode} ,'%')
+            </if>
+            <if test="param.lpnCode != null and param.lpnCode != ''">
+                AND spp.lpn_code LIKE CONCAT('%', #{param.lpnCode} ,'%')
+            </if>
+            <if test="param.createTimeBegin != null">
+                AND spp.create_time &gt;= #{param.createTimeBegin}
+            </if>
+            <if test="param.createTimeEnd != null">
+                AND spp.create_time &lt;= #{param.createTimeEnd}
+            </if>
+            <if test="param.createUser != null and param.createUser !=''">
+                AND `user`.real_name LIKE CONCAT('%', #{param.createUser} ,'%')
+            </if>
+        </where>
+    </select>
 </mapper>

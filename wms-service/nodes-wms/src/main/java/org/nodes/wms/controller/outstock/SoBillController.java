@@ -7,6 +7,7 @@ import org.nodes.core.constant.WmsApiPath;
 import org.nodes.core.tool.validation.Update;
 import org.nodes.wms.biz.outstock.OutStockBiz;
 import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
+import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.outstock.so.SoBillBiz;
 import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
@@ -15,7 +16,9 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.*;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.intput.SoPickPlanPageQuery;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
 import org.nodes.wms.dao.stock.dto.output.SerialSelectResponse;
 import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
 import org.springblade.core.log.annotation.ApiLog;
@@ -42,6 +45,7 @@ public class SoBillController {
 	private final LogSoPickBiz logSoPickBiz;
 
 	private final OutStockBiz outStockBiz;
+	private final SoPickPlanBiz soPickPlanBiz;
 
 	/**
 	 * 发货单: 分页查找
@@ -123,7 +127,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/detail_log")
 	public R<Page<LogDetailPageResponse>> logForSoDetail(Query query,
-														  @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
+														 @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		Page<LogDetailPageResponse> pageLog = soBillBiz.pageLogById(Condition.getPage(query), soBillIdRequest.getSoBillId());
 		return R.data(pageLog);
 	}
@@ -273,5 +277,22 @@ public class SoBillController {
 	public R<String> pickByPc(@RequestBody PickByPcRequest pickByPcRequest) {
 		outStockBiz.pickByPcsOnPc(pickByPcRequest);
 		return R.data("操作成功");
+	}
+
+	/**
+	 * 分配记录：分页
+	 */
+	@PostMapping("/getSoPickPlanpage")
+	public R<Page<SoPickPlanPageResponse>> getSoPickPlanpage(Query query, @RequestBody SoPickPlanPageQuery soPickPlanPageQuery) {
+		Page<SoPickPlanPageResponse> soPickPlanPage = soPickPlanBiz.page(query, soPickPlanPageQuery);
+		return R.data(soPickPlanPage);
+	}
+
+	/**
+	 * 分配记录：服务端导出
+	 */
+	@PostMapping("/exportSoPickPlan")
+	public void exportSoPickPlan(@RequestBody SoPickPlanPageQuery soPickPlanPageQuery, HttpServletResponse response) {
+		soPickPlanBiz.export(soPickPlanPageQuery, response);
 	}
 }

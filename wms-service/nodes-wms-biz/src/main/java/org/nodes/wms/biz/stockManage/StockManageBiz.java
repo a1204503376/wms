@@ -155,4 +155,13 @@ public interface StockManageBiz {
 	 * @param boxCode        boxCode
 	 */
 	void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList, String boxCode);
+
+	/**
+	 * 库存移动校验库位的箱型
+	 *
+	 * @param targetLocation targetLocation
+	 * @param sourceLocation sourceLocation
+	 */
+	void canMoveToBoxType(Location targetLocation, Location sourceLocation);
+
 }

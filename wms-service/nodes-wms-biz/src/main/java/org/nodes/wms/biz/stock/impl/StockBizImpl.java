@@ -740,8 +740,7 @@ public class StockBizImpl implements StockBiz {
 		stockId2Qty.forEach((stockId, soPickPlanList) -> {
 			BigDecimal currentOccupy = soPickPlanList.stream()
 				.map(SoPickPlan::getSurplusQty)
-				.reduce(BigDecimal::add)
-				.orElse(BigDecimal.ZERO);
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
 			SoPickPlan soPickPlan = soPickPlanList.get(0);
 			increaseOccupy(soPickPlan.getSoBillId(), soPickPlan.getSoBillNo(), soPickPlan.getSoDetailId(),
 				stockId, currentOccupy);

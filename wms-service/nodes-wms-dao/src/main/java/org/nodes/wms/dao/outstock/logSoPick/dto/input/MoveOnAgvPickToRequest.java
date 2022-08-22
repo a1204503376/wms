@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 接驳区拣货请求
+ * 接驳区移动请求对象
  *
  * @author nodesc
  */
@@ -13,11 +13,22 @@ import java.io.Serializable;
 public class MoveOnAgvPickToRequest implements Serializable {
 	private static final long serialVersionUID = -2835186246027646361L;
 	/**
-	 * 库位ID
+	 * 原库位ID
 	 */
-	private Long locId;
+	private Long sourceLocId;
+
 	/**
-	 * 库位编码
+	 * 原库位编码
 	 */
-	private String locCode;
+	private String sourceLocCode;
+
+	/**
+	 * 目标库位编码
+	 */
+	private String targetLocCode;
+
+	/**
+	 * 库房ID
+	 */
+	private Long whId;
 }
