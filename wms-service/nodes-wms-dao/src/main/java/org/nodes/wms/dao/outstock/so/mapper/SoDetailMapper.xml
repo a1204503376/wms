@@ -115,7 +115,7 @@
                            ON plan.so_detail_id = detail.so_detail_id AND plan.is_deleted = 0
         WHERE detail.is_deleted = 0
           AND detail.so_bill_id = #{soBillId}
-        GROUP BY plan.so_detail_id
+        GROUP BY detail.so_detail_id
     </select>
 
     <sql id="notSoPickPageOrList">
