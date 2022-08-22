@@ -77,7 +77,7 @@ public class WmsTaskFactory {
 		return wmsTask;
 	}
 
-	public WmsTask create(WmsTaskTypeEnum taskType, WmsTaskProcTypeEnum procType,
+	public WmsTask create(WmsTaskStateEnum state, WmsTaskTypeEnum taskType, WmsTaskProcTypeEnum procType,
 			List<SoPickPlan> soPickPlanList, SoHeader soHeader, BigDecimal planQty) {
 		WmsTask wmsTask = new WmsTask();
 		wmsTask.setTaskId(IdWorker.getId());
@@ -87,7 +87,7 @@ public class WmsTaskFactory {
 			wmsTask.setBillDetailId(soPickPlanList.get(0).getSoDetailId());
 		}
 		wmsTask.setTaskProcType(procType);
-		wmsTask.setTaskState(WmsTaskStateEnum.ISSUED);
+		wmsTask.setTaskState(state);
 		wmsTask.setSkuCode(soPickPlanList.get(0).getSkuCode());
 		wmsTask.setTaskQty(planQty);
 		wmsTask.setScanQty(BigDecimal.ZERO);
