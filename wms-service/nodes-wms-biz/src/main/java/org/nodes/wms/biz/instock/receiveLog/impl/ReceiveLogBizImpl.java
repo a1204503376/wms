@@ -79,6 +79,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		ReceiveLog log = createReceiveLog(receiveLog, receiveHeader, detail);
 		log.setSkuLot1(request.getSkuLot1());
 		log.setSkuLot2(request.getSkuLot2());
+		log.setSkuLot4(request.getSkuLot4());
 		log.setSkuLot3(Func.formatDate(new Date()));
 		receiveLogDao.save(log);
 		return log;

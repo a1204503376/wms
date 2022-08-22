@@ -12,6 +12,7 @@ import java.util.List;
  **/
 @Data
 public class PdaByPieceReceiveRequest implements Serializable {
+	private static final long serialVersionUID = -7965410339930351017L;
 	/**
 	 * 收货单id
 	 */
@@ -93,4 +94,8 @@ public class PdaByPieceReceiveRequest implements Serializable {
 	 * 库房id
 	 */
 	private Long whId;
+	/**
+	 * 专用客户
+	 */
+	private String skuLot4;
 }

@@ -30,6 +30,9 @@
 			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model="params.locCode"></u--input>
 			</u-form-item>
+			<u-form-item label="专用客户" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="params.skuLot4"></u--input>
+			</u-form-item>
 		</u--form>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
@@ -59,6 +62,7 @@
 					skuCode: undefined,
 					skuName: undefined,
 					skuLot2: undefined,
+					skuLot4: undefined,
 					surplusQty: undefined,
 					wsuCode: undefined,
 					skuLot1: undefined,
@@ -150,7 +154,8 @@
 					}
 
 					if (tool.isNotEmpty(paramsData.skuLot2) && tool.isNotEmpty(paramsData.locCode) && tool
-						.isNotEmpty(paramsData.boxCode) && tool.isNotEmpty(_this.params.boxCode) && tool.isNotEmpty(paramsData.skuLot1) && paramsData
+						.isNotEmpty(paramsData.boxCode) && tool.isNotEmpty(_this.params.boxCode) && tool
+						.isNotEmpty(paramsData.skuLot1) && paramsData
 						.surplusQty > 0) {
 						receive.submitReceiptByPcs(paramsData).then(data => {
 							if (data.data.allReceivieIsAccomplish && data.data
@@ -181,7 +186,7 @@
 						});
 						_this.$u.func.refreshPage()
 					} else {
-						_this.$u.func.showToast({ 
+						_this.$u.func.showToast({
 							title: '请输入必填字段',
 						});
 						_this.params.locCode = 'STAGE'
@@ -200,6 +205,7 @@
 					this.params.surplusQty = data.data.surplusQty;
 					this.params.wsuCode = data.data.wsuCode;
 					this.params.skuLot1 = data.data.skuLot1;
+					this.params.skuLot4 = data.data.skuLot4;
 					this.params.boxCode = data.data.boxCode;
 					this.params.isSn = data.data.isSn;
 				})
