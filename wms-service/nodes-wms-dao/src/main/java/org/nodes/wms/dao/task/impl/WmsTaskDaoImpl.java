@@ -75,18 +75,19 @@ public class WmsTaskDaoImpl
 			.eq(WmsTask::getBoxCode, boxCode)
 			.eq(WmsTask::getTaskTypeCd, WmsTaskTypeEnum.PICKING)
 			.in(WmsTask::getTaskState, WmsTaskStateEnum.NOT_ISSUED, WmsTaskStateEnum.ISSUED, WmsTaskStateEnum.START_EXECUTION, WmsTaskStateEnum.ABNORMAL)
-			.last("task_qty <> scan_qty");
+			.apply("task_qty <> scan_qty");
 		if (Func.isEmpty(taskProcTypeEnum)) {
 			lambdaQuery.in(WmsTask::getTaskProcType, WmsTaskProcTypeEnum.BY_LOC,
 				WmsTaskProcTypeEnum.BY_BOX, WmsTaskProcTypeEnum.BY_PCS, WmsTaskProcTypeEnum.BY_LPN);
 		} else {
 			lambdaQuery.eq(WmsTask::getTaskProcType, taskProcTypeEnum);
 		}
-		AssertUtil.notNull(boxCode, "根据箱码获取任务失败，任务为空");
+		AssertUtil.notNull(boxCode, "根据箱码获取任务失败，箱码为空");
 
 		List<WmsTask> wmsTaskList = lambdaQuery.list();
-		if (wmsTaskList.size() > 1) {
-			throw new ServiceException("根据箱码获取任务失败，查询出多个任务，请检查任务后重试");
+		AssertUtil.notNull(wmsTaskList, "根据箱码获取任务失败，此箱码不存在任务");
+		if (wmsTaskList.size() > 1 || wmsTaskList.size() == 0) {
+			throw new ServiceException("根据箱码获取任务失败，查询出多个任务，或查询不到跟此箱码相关的任务");
 		}
 		return wmsTaskList.get(0);
 	}

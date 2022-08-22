@@ -138,6 +138,7 @@ public class OutStockBizImpl implements OutStockBiz {
 
 
 	private void canPick(SoHeader soHeader) {
+		AssertUtil.notNull(soHeader.getSoBillState(), "拣货失败,收货单状态为空");
 		if (soHeader.getSoBillState().equals(SoBillStateEnum.COMPLETED)
 			|| soHeader.getSoBillState().equals(SoBillStateEnum.ALL_OUT_STOCK)
 			|| soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED)) {
@@ -205,6 +206,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		//1、根据箱码查询任务
 		WmsTask task = wmsTaskBiz.findEnableTaskByBoxCode(request.getBoxCode(), taskProcTypeEnum);
 		SoHeader soHeader = soBillBiz.getSoHeaderById(task.getBillId());
+		AssertUtil.notNull(soHeader, "根据任务存在的发货单头表信息查询发货单失败");
 		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
 
 		//2、参数校验 头表
@@ -347,7 +349,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		// 记录日志
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, soBillId, soHeader.getSoBillNo(), "执行自动分配:" + result);
 
-		if (Func.isEmpty(result)){
+		if (Func.isEmpty(result)) {
 			result = "分配成功";
 		}
 		return result;
@@ -375,7 +377,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public boolean issued(Long soBillId) {
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findBySoHeaderId(soBillId);
-		if (Func.isEmpty(soPickPlanList)){
+		if (Func.isEmpty(soPickPlanList)) {
 			throw ExceptionUtil.mpe("取消分配失败,当前单据尚未执行分配");
 		}
 
@@ -383,14 +385,14 @@ public class OutStockBizImpl implements OutStockBiz {
 		SoHeader soHeader = soBillBiz.getSoHeaderById(soBillId);
 		Map<Long, List<SoPickPlan>> locId2SoPickPlan = soPickPlanList.stream()
 			.collect(Collectors.groupingBy(SoPickPlan::getLocId, Collectors.toList()));
-		locId2SoPickPlan.forEach((locId, value)->{
+		locId2SoPickPlan.forEach((locId, value) -> {
 			Zone zone = zoneBiz.findById(value.get(0).getZoneId());
-			if (WmsAppConstant.ZONE_CODE_AGV.equals(zone.getZoneCode())){
-				if (Func.isEmpty(value.get(0).getTaskId())){
+			if (WmsAppConstant.ZONE_CODE_AGV.equals(zone.getZoneCode())) {
+				if (Func.isEmpty(value.get(0).getTaskId())) {
 					WmsTask task = agvTask.pickToSchedule(locId, soHeader, null);
 					soPickPlanDao.updateTask(value, task.getTaskId());
 				}
-			}else{
+			} else {
 				// TODO
 			}
 		});
