@@ -114,6 +114,7 @@ public class ReceiveLogFactory {
 			receiveLog.setWhCode(warehouse.getWhCode());
 			receiveLog.setWoId(owner.getWoId());
 			receiveLog.setOwnerCode(owner.getOwnerCode());
+			receiveLog.setStockStatus(StockStatusEnum.NORMAL);
 			receiveLogList.add(receiveLog);
 		}
 		return receiveLogList;
@@ -156,6 +157,11 @@ public class ReceiveLogFactory {
 		receiveLog.setWhCode(receiveDetail.getWhCode());
 		receiveLog.setWoId(receiveHeader.getWoId());
 		receiveLog.setOwnerCode(receiveHeader.getOwnerCode());
+		receiveLog.setBoxCode(request.getBoxCode());
+		if (Func.isEmpty(request.getLpnCode())){
+			receiveLog.setLpnCode(request.getBoxCode());
+		}
+		receiveLog.setStockStatus(StockStatusEnum.NORMAL);
 		SkuLotUtil.setAllSkuLot(request, receiveLog);
 		receiveLog.setSkuLot3(Func.formatDate(new Date()));
 		return receiveLog;
