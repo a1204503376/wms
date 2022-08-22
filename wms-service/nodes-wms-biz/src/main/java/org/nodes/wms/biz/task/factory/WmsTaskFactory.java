@@ -14,6 +14,7 @@ import org.nodes.wms.dao.task.enums.WmsTaskTypeEnum;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,7 +41,7 @@ public class WmsTaskFactory {
 	/**
 	 * 创建AGV库内移位任务
 	 *
-	 * @param sourceStock 库存
+	 * @param sourceStock    库存
 	 * @param targetLocation 目标库位
 	 * @return 库内移位任务
 	 */
@@ -67,7 +68,7 @@ public class WmsTaskFactory {
 		// 单据id、编码，明细id
 		wmsTask.setBillId(so.getSoBillId());
 		wmsTask.setBillNo(so.getSoBillNo());
-		if (Func.notNull(soDetail)){
+		if (Func.notNull(soDetail)) {
 			wmsTask.setBillDetailId(soDetail.getSoDetailId());
 		}
 
@@ -76,19 +77,41 @@ public class WmsTaskFactory {
 		return wmsTask;
 	}
 
-	public WmsTask create(WmsTaskTypeEnum taskType, WmsTaskProcTypeEnum procType, List<SoPickPlan> soPickPlanList){
-		// TODO
-		return null;
+	public WmsTask create(WmsTaskTypeEnum taskType, WmsTaskProcTypeEnum procType,
+			List<SoPickPlan> soPickPlanList, SoHeader soHeader, BigDecimal planQty) {
+		WmsTask wmsTask = new WmsTask();
+		wmsTask.setTaskId(IdWorker.getId());
+		wmsTask.setLot(soPickPlanList.get(0).getSkuLot1());
+		wmsTask.setBillId(soHeader.getSoBillId());
+		if (procType.equals(WmsTaskProcTypeEnum.BY_PCS) || procType.equals(WmsTaskProcTypeEnum.BY_PCS_AGV){
+			wmsTask.setBillDetailId(soPickPlanList.get(0).getSoDetailId());
+		}
+		wmsTask.setTaskProcType(procType);
+		wmsTask.setTaskState(WmsTaskStateEnum.ISSUED);
+		wmsTask.setSkuCode(soPickPlanList.get(0).getSkuCode());
+		wmsTask.setTaskQty(planQty);
+		wmsTask.setScanQty(BigDecimal.ZERO);
+		wmsTask.setUmCode("");
+		wmsTask.setFromLocId(soPickPlanList.get(0).getLocId());
+		wmsTask.setFromLocCode(soPickPlanList.get(0).getLocCode());
+		if (Func.isNotEmpty(soPickPlanList.get(0).getBoxCode())){
+			wmsTask.setBoxCode(soPickPlanList.get(0).getBoxCode());
+		}
+		if (Func.isNotEmpty(soPickPlanList.get(0).getLpnCode())){
+			wmsTask.setLpnCode(soPickPlanList.get(0).getLpnCode());
+		}
+		wmsTask.setTtpId(soPickPlanList.get(0).getPickPlanId());
+		wmsTask.setWhId(soHeader.getWhId());
+		wmsTask.setWwaId(0L);
+		wmsTask.setAllotTime(LocalDateTime.now());
+		return wmsTask;
 	}
 
-	/**
-	 * 赋值
-	 */
 	private WmsTask createWmsTask(List<Stock> stockList, WmsTaskProcTypeEnum proc) {
 		WmsTask wmsTask = new WmsTask();
 		// 任务id
 		wmsTask.setTaskId(IdWorker.getId());
-		//批次号
+		// 批次号
 		wmsTask.setLot(stockList.get(0).getSkuLot1());
 		// 关联单据id
 		wmsTask.setBillId(stockList.get(0).getStockId());
@@ -103,18 +126,18 @@ public class WmsTaskFactory {
 		// 数量
 		wmsTask.setTaskQty(StockUtil.getStockBalance(stockList));
 		// 实际数量
-		wmsTask.setScanQty(StockUtil.getStockBalance(stockList));
+		wmsTask.setScanQty(BigDecimal.ZERO);
 		// 计量单位编码
 		wmsTask.setUmCode(stockList.get(0).getWsuCode());
-		//来源库位ID
+		// 来源库位ID
 		wmsTask.setFromLocId(stockList.get(0).getLocId());
-		//来源库位编码
+		// 来源库位编码
 		wmsTask.setFromLocCode(stockList.get(0).getLocCode());
-		//批次号
+		// 批次号
 		wmsTask.setLot(stockList.get(0).getSkuLot1());
 		// 箱码
 		List<String> boxCodes = stockList.stream()
-			.map(Stock::getBoxCode).distinct().collect(Collectors.toList());
+				.map(Stock::getBoxCode).distinct().collect(Collectors.toList());
 		wmsTask.setBoxCode(String.join(",", boxCodes));
 		// 工作任务包ID
 		wmsTask.setTtpId(stockList.get(0).getStockId());

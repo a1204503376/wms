@@ -7,7 +7,10 @@ import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.task.AgvTask;
 import org.nodes.wms.biz.task.WmsTaskBiz;
+import org.nodes.wms.biz.task.factory.WmsTaskFactory;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
+import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.task.TaskDetailDao;
 import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
@@ -18,6 +21,7 @@ import org.nodes.wms.dao.task.entities.TaskDetail;
 import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
+import org.nodes.wms.dao.task.enums.WmsTaskTypeEnum;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -29,7 +33,6 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
-
 @Service
 @RequiredArgsConstructor
 public class WmsTaskBizImpl implements WmsTaskBiz {
@@ -37,7 +40,7 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 	private final WmsTaskDao wmsTaskDao;
 	private final AgvTask agvTask;
 	private final LogBiz logBiz;
-
+	private final WmsTaskFactory wmsTaskFactory;
 
 	@Override
 	public Page<TaskPageResponse> page(TaskPageQuery taskPageQuery, Query query) {
@@ -104,11 +107,11 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 	@Override
 	public void log(WmsTask wmsTask) {
 		logBiz.auditLog(AuditLogType.CRON_TASK,
-			wmsTask.getTaskId(),
-			wmsTask.getBillNo(),
-			String.format("任务ID[%s]:单据号[%s]来源库位[%s]目标库位[%s]任务编码[%s]任务状态[%s]",
-				wmsTask.getTaskId(), wmsTask.getBillNo(), wmsTask.getFromLocId()
-				, wmsTask.getToLocId(), wmsTask.getTaskTypeCd().getCode(), wmsTask.getTaskState().getCode()));
+				wmsTask.getTaskId(),
+				wmsTask.getBillNo(),
+				String.format("任务ID[%s]:单据号[%s]来源库位[%s]目标库位[%s]任务编码[%s]任务状态[%s]",
+						wmsTask.getTaskId(), wmsTask.getBillNo(), wmsTask.getFromLocId(), wmsTask.getToLocId(),
+						wmsTask.getTaskTypeCd().getCode(), wmsTask.getTaskState().getCode()));
 	}
 
 	@Override
@@ -127,6 +130,20 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 	@Override
 	public WmsTask findEnableTaskBySoBillId(Long soBillId, Long soDetailId) {
 		return wmsTaskDao.getEnableTaskBySoBillId(soBillId, soDetailId);
+	}
+
+	@Override
+	public WmsTask create(WmsTaskTypeEnum taskType, WmsTaskProcTypeEnum procType,
+			List<SoPickPlan> soPickPlanList, SoHeader soHeader) {
+		BigDecimal planQty = soPickPlanList.stream()
+				.map(SoPickPlan::getPickPlanQty)
+				.reduce(BigDecimal.ZERO, BigDecimal::add));
+		WmsTask wmsTask = wmsTaskFactory.create(taskType, procType, soPickPlanList, soHeader, planQty);
+		if (!wmsTaskDao.save(wmsTask)){
+			throw new ServiceException("任务下发失败，保存任务失败");
+		}
+
+		return wmsTask;
 	}
 
 }
