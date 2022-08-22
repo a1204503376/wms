@@ -137,9 +137,9 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 			List<SoPickPlan> soPickPlanList, SoHeader soHeader) {
 		BigDecimal planQty = soPickPlanList.stream()
 				.map(SoPickPlan::getPickPlanQty)
-				.reduce(BigDecimal.ZERO, BigDecimal::add));
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
 		WmsTask wmsTask = wmsTaskFactory.create(taskType, procType, soPickPlanList, soHeader, planQty);
-		if (!wmsTaskDao.save(wmsTask)){
+		if (!wmsTaskDao.save(wmsTask)) {
 			throw new ServiceException("任务下发失败，保存任务失败");
 		}
 
