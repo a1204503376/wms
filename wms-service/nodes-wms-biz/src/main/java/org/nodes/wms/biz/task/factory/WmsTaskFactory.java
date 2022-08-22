@@ -5,6 +5,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
@@ -22,7 +23,6 @@ import java.util.stream.Collectors;
  */
 @Service
 public class WmsTaskFactory {
-
 
 	/**
 	 * 创建AGV上架任务
@@ -74,6 +74,11 @@ public class WmsTaskFactory {
 		// 任务类型： AGV拣货
 		wmsTask.setTaskTypeCd(WmsTaskTypeEnum.AGV_PICKING);
 		return wmsTask;
+	}
+
+	public WmsTask create(WmsTaskTypeEnum taskType, WmsTaskProcTypeEnum procType, List<SoPickPlan> soPickPlanList){
+		// TODO
+		return null;
 	}
 
 	/**

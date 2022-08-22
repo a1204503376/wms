@@ -116,7 +116,7 @@ public interface OutStockBiz {
 	boolean cancelDistribute(Long soBillId);
 
 	/**
-	 * 分配：确认下发
+	 * 分配（天宜相关）：确认下发
 	 *
 	 * @param soBillId 发货单id
 	 * @return true：确认下发成功 false：确认下发失败

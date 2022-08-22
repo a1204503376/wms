@@ -55,6 +55,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -383,24 +384,86 @@ public class OutStockBizImpl implements OutStockBiz {
 			throw ExceptionUtil.mpe("取消分配失败,当前单据尚未执行分配");
 		}
 
-		// 已经下发过的不用重复下发，自动区的按库位下发任务到agv，人工区的下发按件拣货任务
+		// 已经下发过的不用重复下发，自动区的按库位下发任务到agv，人工区的按照实际情况分为按箱和按件任务
 		SoHeader soHeader = soBillBiz.getSoHeaderById(soBillId);
 		Map<Long, List<SoPickPlan>> locId2SoPickPlan = soPickPlanList.stream()
 			.collect(Collectors.groupingBy(SoPickPlan::getLocId, Collectors.toList()));
-		locId2SoPickPlan.forEach((locId, value)->{
-			Zone zone = zoneBiz.findById(value.get(0).getZoneId());
+		locId2SoPickPlan.forEach((locId, soPickPlanOfLoc)->{
+			Zone zone = zoneBiz.findById(soPickPlanOfLoc.get(0).getZoneId());
 			if (WmsAppConstant.ZONE_CODE_AGV.equals(zone.getZoneCode())){
-				if (Func.isEmpty(value.get(0).getTaskId())){
-					WmsTask task = agvTask.pickToSchedule(locId, soHeader, null);
-					soPickPlanDao.updateTask(value, task.getTaskId());
-				}
+				issuedAgvTask(soPickPlanOfLoc, locId, soHeader);
 			}else{
-				// TODO
+				issuedManualTask(soPickPlanOfLoc, locId, soHeader);
 			}
 		});
 
 		return true;
 	}
+
+	private void issuedAgvTask(List<SoPickPlan> soPickPlanOfLoc, Long locId, SoHeader soHeader){
+		if (Func.isEmpty(soPickPlanOfLoc.get(0).getTaskId())){
+			WmsTask task = agvTask.pickToSchedule(locId, soHeader, null);
+			soPickPlanDao.updateTask(soPickPlanOfLoc, task.getTaskId());
+		}
+	}
+
+	private void issuedManualTask(List<SoPickPlan> soPickPlanOfLoc, Long locId, SoHeader soHeader){
+		List<String> issuedBoxCode = new ArrayList<>();
+		for (SoPickPlan soPickPlan : soPickPlanOfLoc){
+			if (Func.isNotEmpty(soPickPlan.getTaskId())){
+				continue;
+			}
+			if (Func.isNotEmpty(soPickPlan.getBoxCode()) && issuedBoxCode.contains(soPickPlan.getBoxCode())){
+				continue;
+			}
+
+			WmsTask wmsTask;
+			if (isFullBoxOutStock(soPickPlan, soPickPlanOfLoc)){
+				wmsTask = issuedFullBoxOutStockTask();
+				issuedBoxCode.add(soPickPlan.getBoxCode());
+				// TODO
+			}else{
+				wmsTask = issuedPcsOutStockTask();
+				soPickPlanDao.updateTask(Collections.singletonList(soPickPlan), wmsTask.getTaskId());
+			}
+		}
+	}
+
+	private WmsTask issuedPcsOutStockTask() {
+		// TODO
+		return null;
+	}
+
+	private WmsTask issuedFullBoxOutStockTask() {
+		// TODO
+		return null;
+	}
+
+	private boolean isFullBoxOutStock(SoPickPlan currentPlan, List<SoPickPlan> soPickPlanList) {
+		// 判断是否整箱拣货，如果返回true表示是整箱拣货
+		if (Func.isEmpty(currentPlan.getBoxCode())){
+			return false;
+		}
+
+		String boxCode = currentPlan.getBoxCode();
+		List<Stock> stockOfBox = stockQueryBiz.findEnableStockByBoxCode(boxCode);
+		if (Func.isEmpty(stockOfBox)){
+			return false;
+		}
+
+		for (Stock stock : stockOfBox){
+			BigDecimal planQty = soPickPlanList.stream()
+				.filter(v -> v.getStockId().equals(stock.getStockId()))
+				.map(v -> v.getPickPlanQty().subtract(v.getPickRealQty()))
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+			if (BigDecimalUtil.ne(planQty, stock.getStockBalance())){
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 
 	@Override
 	public List<StockSoPickPlanResponse> getEnableStockBySkuCode(String skuCode) {
