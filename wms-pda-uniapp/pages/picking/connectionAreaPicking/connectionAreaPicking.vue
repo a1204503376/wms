@@ -106,10 +106,17 @@
 			},
 
 			submit() {
-				this.$u.func.showToast({
-					title: '接驳区拣货成功'
-				})
-				uni.$u.func.routeNavigateTo('/pages/picking/connectionAreaPicking/connectionAreaMove');
+				var _this = this;
+				uni.$u.throttle(function() {
+					pick.connectionAreaPicking(_this.param).then(data => {
+						console.log(data.data)
+						_this.$u.func.showToast({
+							title: '接驳区拣货成功'
+						})
+						uni.$u.func.routeNavigateTo(
+							'/pages/picking/connectionAreaPicking/connectionAreaMove');
+					})
+				}, 1000)
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)

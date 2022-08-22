@@ -44,8 +44,8 @@ public class ConnectionAreaPickingController {
 	 */
 	@ApiLog("接驳区拣货")
 	@PostMapping("/ConnectionAreaPicking")
-	public void connectionAreaPicking(@RequestBody OnAgvPickToRequest request) {
-		outStockBiz.pickOnAgvPickTo(request);
+	public R<Boolean> connectionAreaPicking(@RequestBody OnAgvPickToRequest request) {
+		return R.data(outStockBiz.pickOnAgvPickTo(request));
 	}
 
 
