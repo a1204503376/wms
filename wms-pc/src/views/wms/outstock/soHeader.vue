@@ -362,6 +362,10 @@ export default {
             })
         },
         onDistribute(row) {
+            if(row.soBillState === '已关闭' || row.soBillState === '已取消'){
+                this.$message.warning(`${row.soBillState}的发货单不能分配`);
+                return
+            }
             this.$router.push({
                 name: '分配',
                 params: {
