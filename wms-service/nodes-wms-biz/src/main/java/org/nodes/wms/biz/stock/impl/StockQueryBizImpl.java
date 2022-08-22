@@ -222,7 +222,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	@Override
 	public boolean isEmptyLocation(Long locationId) {
 		List<Stock> stocks = findStockByLocation(locationId);
-		return Func.isEmpty(stocks);
+		return Func.isEmpty(stocks) || stocks.size() == 0;
 	}
 
 	@Override

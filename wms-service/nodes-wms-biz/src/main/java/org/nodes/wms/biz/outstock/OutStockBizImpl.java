@@ -242,8 +242,8 @@ public class OutStockBizImpl implements OutStockBiz {
 	public Boolean pickOnAgvPickTo(OnAgvPickToRequest request) {
 		//1、判断库位是否有库存
 		boolean emptyLocation = stockQueryBiz.isEmptyLocation(request.getLocId());
-		if (!emptyLocation) {
-			throw new ServiceException("查询不到当前库位的库存");
+		if (emptyLocation) {
+			throw new ServiceException(String.format("查询不到%s的库存", request.getLocCodeView()));
 		}
 
 		//2、根据库位查询库存
@@ -258,7 +258,8 @@ public class OutStockBizImpl implements OutStockBiz {
 		//4、如果没有超拣则执行按箱的流---直接走按箱的流程
 		WmsTask task = wmsTaskBiz.findEnableTaskByBoxCode(stockList.get(0).getBoxCode(), WmsTaskProcTypeEnum.BY_LOC);
 		SoDetail soDetail = soBillBiz.getSoDetailById(task.getBillDetailId());
-		//2、参数校验
+		AssertUtil.notNull(soDetail, "接驳区拣货失败，根据任务查询不到对应的发货单详情");
+		//2、 TODO  参数校验暂时还未验证
 		if (BigDecimalUtil.gt(task.getTaskQty().subtract(task.getScanQty()), soDetail.getSurplusQty())) {
 			return false;
 		}

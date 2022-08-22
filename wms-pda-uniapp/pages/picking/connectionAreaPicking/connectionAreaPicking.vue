@@ -73,12 +73,18 @@
 			}
 		},
 		onLoad: function(option) {
-			let params = {
-				whId: uni.getStorageSync('warehouse').whId
-			};
-			pick.getConnectionAreaLocation(params).then(data => {
-				this.locList = data.data
-			})
+			let pickToLocList = uni.getStorageSync('pickToLocList');
+			if (tool.isEmpty(pickToLocList)) {
+				let params = {
+					whId: uni.getStorageSync('warehouse').whId
+				};
+				pick.getConnectionAreaLocation(params).then(data => {
+					this.locList = data.data;
+					uni.setStorageSync('pickToLocList', data.data);
+				})
+			} else {
+				this.locList = pickToLocList
+			}
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -106,10 +112,17 @@
 			},
 
 			submit() {
-				this.$u.func.showToast({
-					title: '接驳区拣货成功'
-				})
-				uni.$u.func.routeNavigateTo('/pages/picking/connectionAreaPicking/connectionAreaMove');
+				var _this = this;
+				uni.$u.throttle(function() {
+					pick.connectionAreaPicking(_this.param).then(data => {
+						console.log(data.data)
+						_this.$u.func.showToast({
+							title: '接驳区拣货成功'
+						})
+						uni.$u.func.routeNavigateTo(
+							'/pages/picking/connectionAreaPicking/connectionAreaMove');
+					})
+				}, 1000)
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)
