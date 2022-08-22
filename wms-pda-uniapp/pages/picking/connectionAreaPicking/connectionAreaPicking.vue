@@ -4,26 +4,41 @@
 			:bgColor="navigationBarBackgroundColor" title="接驳区拣货" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
-		<u-divider></u-divider>
 		<u--form labelPosition="left">
-			<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">出库接驳库位</h4>
+			<u-form-item label="当前选择" :required="true" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="param.locCodeView" disabled></u--input>
+			</u-form-item>
 		</u--form>
 
-		<view style="margin-top: 5%;">
+		<view>
 			<u-row>
 				<template v-for="(item, index) in locList">
-					<u-col span="3" v-if="item.isEmpty">
-						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" @click="change(item)">
+					<u-col span="3" v-if="index>=0 && index<4">
+						<u-button style="height: 60px;font-size: 40rpx;" @click="change(item)">
 							{{item.locCodeView}}
-						</u-button>
-					</u-col>
-					<u-col span="3" v-if="!item.isEmpty">
-						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" disabled>{{item.locCodeView}}
 						</u-button>
 					</u-col>
 				</template>
 			</u-row>
-			<u-divider></u-divider>
+
+			<u-row>
+				<template v-for="(item, index) in locList">
+					<u-col span="3" v-if="index>=4 && index<8">
+						<u-button style="height: 60px;font-size: 40rpx;" @click="change(item)">
+							{{item.locCodeView}}
+						</u-button>
+					</u-col>
+				</template>
+			</u-row>
+			<u-row>
+				<template v-for="(item, index) in locList">
+					<u-col span="3" v-if="index>=8 && index<12">
+						<u-button style="height: 60px;font-size: 40rpx;" @click="change(item)">
+							{{item.locCodeView}}
+						</u-button>
+					</u-col>
+				</template>
+			</u-row>
 		</view>
 
 		<view class="footer">
@@ -40,16 +55,17 @@
 <script>
 	import barCodeService from '@/common/barcodeFunc.js'
 	import setting from '@/common/setting'
+	import pick from '@/api/picking/connectionAreaPicking.js'
 	import tool from '@/utils/tool.js'
 	export default {
-		components: {
-		},
+		components: {},
 		data() {
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				param: {
-					lpnType: '',
-					whId: 0,
+					locId: undefined,
+					locCodeView: '',
+					locCode: ''
 				},
 				lpnItem: '',
 				locCode: '',
@@ -57,15 +73,18 @@
 			}
 		},
 		onLoad: function(option) {
-
-			// var parse = JSON.parse(option.param)
-			// this.lpnItem = parse
-			// this.param.lpnType = this.lpnItem.lpnType
-			// this.param.whId = uni.getStorageSync('warehouse').whId
-			// putWay.findLocByLpnType(this.param).then(res => {
-			// 	this.locList = res.data
-			// })
-			// this.lpnItem['locId'] = 0
+			let pickToLocList = uni.getStorageSync('pickToLocList');
+			if (tool.isEmpty(pickToLocList)) {
+				let params = {
+					whId: uni.getStorageSync('warehouse').whId
+				};
+				pick.getConnectionAreaLocation(params).then(data => {
+					this.locList = data.data;
+					uni.setStorageSync('pickToLocList', data.data);
+				})
+			} else {
+				this.locList = pickToLocList
+			}
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -89,15 +108,21 @@
 				});
 			},
 			change(item) {
-				this.locCode = item.locCode
-				this.lpnItem.locId = item.locId
+				this.param = item;
 			},
 
 			submit() {
-				this.$u.func.showToast({
-					title: '接驳区拣货成功'
-				})
-				uni.$u.func.routeNavigateTo('/pages/picking/connectionAreaPicking/connectionAreaMove');
+				var _this = this;
+				uni.$u.throttle(function() {
+					pick.connectionAreaPicking(_this.param).then(data => {
+						console.log(data.data)
+						_this.$u.func.showToast({
+							title: '接驳区拣货成功'
+						})
+						uni.$u.func.routeNavigateTo(
+							'/pages/picking/connectionAreaPicking/connectionAreaMove');
+					})
+				}, 1000)
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)

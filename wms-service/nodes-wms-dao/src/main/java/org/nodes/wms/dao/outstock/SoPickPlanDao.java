@@ -73,4 +73,12 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 	 * @return 分页对象
 	 */
 	Page<SoPickPlanPageResponse> getPage(IPage<Object> page, SoPickPlanPageQuery soPickPlanPageQuery);
+
+	/**
+	 * 根据库存id查询拣货计划
+	 *
+	 * @param stockIdList 库存id
+	 * @return 拣货计划
+	 */
+	List<SoPickPlan> getByStockIds(List<Long> stockIdList);
 }

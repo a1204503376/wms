@@ -86,4 +86,9 @@ public class SoPickPlanDaoImpl
 	public Page<SoPickPlanPageResponse> getPage(IPage<Object> page, SoPickPlanPageQuery soPickPlanPageQuery) {
 		return super.baseMapper.page(page, soPickPlanPageQuery);
 	}
+
+	@Override
+	public List<SoPickPlan> getByStockIds(List<Long> stockIdList) {
+		return super.lambdaQuery().in(SoPickPlan::getStockId, stockIdList).list();
+	}
 }

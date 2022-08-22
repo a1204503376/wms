@@ -99,4 +99,12 @@ public interface SoPickPlanBiz {
 	 * @param response            响应对象
 	 */
 	void export(SoPickPlanPageQuery soPickPlanPageQuery, HttpServletResponse response);
+
+	/**
+	 * 根据库存id查询拣货计划
+	 *
+	 * @param stockIdList 库存id
+	 * @return 拣货计划
+	 */
+	List<SoPickPlan> findByStockIds(List<Long> stockIdList);
 }

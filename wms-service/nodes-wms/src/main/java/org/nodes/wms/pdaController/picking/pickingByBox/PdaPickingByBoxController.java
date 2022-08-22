@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(WmsApiPath.WMS_PDA_API + "/pickingByBox")
+@RequestMapping(WmsApiPath.WMS_PDA_API + "/pickByBox")
 public class PdaPickingByBoxController {
 	private final OutStockBiz outStockBiz;
 
@@ -29,8 +29,8 @@ public class PdaPickingByBoxController {
 	 * @return 按箱拣货响应对象
 	 */
 	@ApiLog("PDA按箱拣货")
-	@PostMapping("/pickingByBox")
-	public R<String> pickingByBox(@RequestBody PickByBoxCodeRequest request) {
+	@PostMapping("/pickByBox")
+	public R<String> pickByBox(@RequestBody PickByBoxCodeRequest request) {
 		outStockBiz.pickByBox(request, WmsTaskProcTypeEnum.BY_BOX);
 		return R.success("PDA按箱拣货成功");
 	}

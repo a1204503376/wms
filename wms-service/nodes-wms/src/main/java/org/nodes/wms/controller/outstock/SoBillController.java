@@ -9,7 +9,6 @@ import org.nodes.wms.biz.outstock.OutStockBiz;
 import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.outstock.so.SoBillBiz;
-import org.nodes.wms.dao.basics.sku.dto.input.FindSkuByCodeRequest;
 import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPickForSoDetailResponse;
@@ -203,7 +202,7 @@ public class SoBillController {
 	}
 
 	/**
-	 * 分配：根据发货单id和发货明细获取拣货计划信息
+	 * 分配：根据发货单id和发货明细获取分配信息
 	 */
 	@PostMapping("/getSoPickPlan")
 	public R<List<SoPickPlanForDistributionResponse>> getSoPickPlan(
@@ -217,8 +216,7 @@ public class SoBillController {
 	@ApiLog("发货单管理-自动分配")
 	@PostMapping("/automaticAssign")
 	public R<String> automaticAssign(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		outStockBiz.autoDistribute(soBillIdRequest.getSoBillId());
-		return R.data("分配成功");
+		return R.success(outStockBiz.autoDistribute(soBillIdRequest.getSoBillId()));
 	}
 
 	/**
@@ -244,9 +242,12 @@ public class SoBillController {
 	/**
 	 * 分配调整：根据物品id查找物品可分配库存信息
 	 */
-	@PostMapping("/getEnableStockBySkuId")
-	public R<List<StockSoPickPlanResponse>> getEnableStockBySkuId(@Valid @RequestBody FindSkuByCodeRequest findSkuByCodeRequest) {
-		return R.data(outStockBiz.getEnableStockBySkuCode(findSkuByCodeRequest.getNo()));
+	@PostMapping("/getStockByDistributeAdjust")
+	public R<List<StockSoPickPlanResponse>> getStockByDistributeAdjust(@Valid @RequestBody DistributeAdjustRequest DistributeAdjustRequest) {
+		return R.data(outStockBiz.getStockByDistributeAdjust(
+			DistributeAdjustRequest.getSkuId(),
+			DistributeAdjustRequest.getSkuLot1(),
+			DistributeAdjustRequest.getSkuLot4()));
 	}
 
 	/**

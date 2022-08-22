@@ -123,7 +123,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	}
 
 	private void checkPickByPlan(SoPickPlan pickPlan, BigDecimal pickQty, List<String> serialNoList, Stock stock) {
-		if (BigDecimalUtil.ge(pickQty, BigDecimal.ZERO)) {
+		if (BigDecimalUtil.ge(BigDecimal.ZERO, pickQty)) {
 			throw ExceptionUtil.mpe("按拣货计划拣货失败,拣货数量必须大于0");
 		}
 
@@ -197,6 +197,11 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		page.setSize(100000);
 		List<SoPickPlanPageResponse> soPickPlanPageResponseList = soPickPlanDao.getPage(page, soPickPlanPageQuery).getRecords();
 		ExcelUtil.export(response, "分配记录", "分配记录数据表", soPickPlanPageResponseList, SoPickPlanPageResponse.class);
+	}
+
+	@Override
+	public List<SoPickPlan> findByStockIds(List<Long> stockIdList) {
+		return soPickPlanDao.getByStockIds(stockIdList);
 	}
 
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlan, SoDetail detail, String result) {
