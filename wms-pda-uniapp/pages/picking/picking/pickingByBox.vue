@@ -6,7 +6,7 @@
 		</u-navbar>
 		<u--form>
 			<u-form-item label="箱码" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuCode" ></u--input>
+				<u--input v-model="params.boxCode"></u--input>
 			</u-form-item>
 		</u--form>
 		<view class="footer">
@@ -22,7 +22,7 @@
 
 <script>
 	import setting from '@/common/setting'
-	import receive from '@/api/inStock/receiveByPcs.js'
+	import picking from '@/api/picking/picking.js'
 	import uniSelect from '@/components/uni-select.vue'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
@@ -34,15 +34,7 @@
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
-					skuCode: undefined,
-					skuName: undefined,
-					skuLot2: undefined,
-					surplusQty: undefined,
-					wsuCode: undefined,
-					skuLot1: undefined,
-					boxCode: undefined,
-					locCode: 'STAGE',
-					isSn: ''
+					boxCode: ''
 				},
 				receiveDetailId: '',
 				receiveId: '',
@@ -72,19 +64,6 @@
 			// #endif
 		},
 		methods: {
-			getStockByBoxCode() {
-				let params = {
-					boxCode: this.params.boxCode,
-				};
-				receive.getStockByBoxCode(params).then(data => {
-					if (tool.isEmpty(data.data[0])) {
-						return;
-					}
-					this.params.locCode = data.data[0].locCode;
-					this.locCode = data.data[0].locCode;
-					this.boxCode = data.data[0].boxCode;
-				})
-			},
 			analysisCode(code) {
 				var barcode = barcodeFunc.parseBarcode(code);
 				var barcodeType = barcodeFunc.BarcodeType;
@@ -105,18 +84,19 @@
 			},
 			submit() {
 				var _this = this;
-				_this.params.isSn = true;
 				uni.$u.throttle(function() {
-					if (_this.params.isSn) {
+					let params = {
+						whId: uni.getStorageSync('warehouse').whId,
+						boxCode: _this.params.boxCode
+					};
+					picking.pickByBox(params).then(data => {
+						console.log(data.data)
 						_this.$u.func.showToast({
-							title: '有序列号'
+							title: '拣货完成'
 						});
-						uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingSerialNumber');
-						return;
-					}
-					_this.$u.func.showToast({
-						title: '拣货完成'
-					});
+            _this.params.boxCode = '';
+					})
+
 				}, 1000)
 
 			},
