@@ -54,7 +54,7 @@ export default {
     },
     methods: {
         setDefaultByProps() {
-            if (this.isEdit) {
+            if (!this.isEdit) {
                 return;
             }
             let currentSku = this.data.find(item => item.skuId === this.selectVal.skuId);
