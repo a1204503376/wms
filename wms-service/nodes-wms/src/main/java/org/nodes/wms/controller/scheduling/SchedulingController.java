@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * 天宜定制：提供给调度系统的接口
+ *
  * @author nodesc
  */
 @RestController
@@ -66,12 +67,15 @@ public class SchedulingController {
 	/**
 	 * 成品打包程序: 生成箱码
 	 *
-	 * @param lpnTypeCode
+	 * @param lpnTypeCode 容器类别编码
+	 * @param skuName     物品名称
+	 * @param spec        物品型号
 	 * @return
 	 */
 	@GetMapping("generateBoxCode")
-	public R<String> generateBoxCode(@RequestParam("lpnTypeCode") String lpnTypeCode) {
-		String boxCode = lpnTypeBiz.generateLpnCode(lpnTypeCode);
+	public R<String> generateBoxCode(@RequestParam("lpnTypeCode") String lpnTypeCode,
+									 @RequestParam("skuName") String skuName, @RequestParam("spec") String spec) {
+		String boxCode = lpnTypeBiz.generateLpnCode(lpnTypeCode, skuName, spec);
 		return R.data(boxCode);
 	}
 

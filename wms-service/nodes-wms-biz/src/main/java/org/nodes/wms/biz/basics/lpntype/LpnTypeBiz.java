@@ -119,10 +119,12 @@ public interface LpnTypeBiz {
 	/**
 	 * 根据容器类别生成编码
 	 *
-	 * @param lpnTypeCode 容器类别编码
+	 * @param lpnTypeCode 容器类别编码,必填
+	 * @param skuName     物品名称，非必填，有序列号物品需要该参数
+	 * @param spec        型号，非必填，有序列号物品需要该参数
 	 * @return 容器编码
 	 */
-	String generateLpnCode(String lpnTypeCode);
+	String generateLpnCode(String lpnTypeCode, String skuName, String spec);
 
 	/**
 	 * 根据容器类别获取容器信息
