@@ -81,4 +81,12 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 	 * @return 拣货计划
 	 */
 	List<SoPickPlan> getByStockIds(List<Long> stockIdList);
+
+	/**
+	 * 根据分配记录id集合查找分配记录
+	 * 
+	 * @param soPickPlanIdList 分配id集合
+	 * @return List<SoPickPlan>
+	 */
+	List<SoPickPlan> getByPickPlanIds(List<Long> soPickPlanIdList);
 }

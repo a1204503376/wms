@@ -65,7 +65,7 @@ public interface SoPickPlanBiz {
 	 * @return 拣货记录
 	 */
 	LogSoPick pickByPlan(SoDetail soDetail, SoPickPlan pickPlan,
-						 BigDecimal pickQty, List<String> serialNoList);
+			BigDecimal pickQty, List<String> serialNoList);
 
 	/**
 	 * 根据任务ID查询跟当前任务相关联的拣货计划
@@ -82,6 +82,21 @@ public interface SoPickPlanBiz {
 	 * @param soHeader       发货单
 	 */
 	void cancelPickPlan(List<SoPickPlan> soPickPlanList, SoHeader soHeader);
+
+	/**
+	 * 取消分配
+	 * 
+	 * @param soPickPlanIdList 需要取消分配的拣货计划
+	 * @param soHeader         发货单
+	 */
+	void cancelPickPlan(SoHeader soHeader, List<Long> soPickPlanIdList);
+
+	/**
+	 * 根据分配计划占用库存并保存分配计划
+	 * 
+	 * @param soPickPlanList 分配计划
+	 */
+	void pickPlanAndSave(List<SoPickPlan> soPickPlanList);
 
 	/**
 	 * 获取分配记录分页
