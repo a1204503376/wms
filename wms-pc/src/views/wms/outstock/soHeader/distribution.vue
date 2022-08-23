@@ -26,37 +26,37 @@
                         </el-col>
                         <el-col :span="12">
                             <el-row :gutter="10" justify="end" type="flex">
-                                <el-col :span="4">
+                                <el-col :span="4.8">
                                     <el-button class="top_button" size="medium"
                                                type="primary" @click="onRefresh">
                                         刷新
                                     </el-button>
                                 </el-col>
-                                <el-col :span="4">
+                                <el-col :span="4.8">
                                     <el-button class="top_button" size="medium"
-                                               type="primary" @click="onAssign()">
+                                               type="primary" @click="onAssign">
                                         自动分配
                                     </el-button>
                                 </el-col>
-                                <el-col :span="4">
+                                <el-col :span="4.8">
                                     <el-button class="top_button" size="medium"
-                                               type="primary" @close="onCancelAll">
+                                               type="primary" @click="onCancelAll">
                                         全部取消
                                     </el-button>
                                 </el-col>
-                                <el-col :span="4">
-                                    <el-button class="top_button" size="medium"
-                                               type="primary" @close="onCancel">
-                                        取消分配
-                                    </el-button>
-                                </el-col>
-                                <el-col :span="4">
+<!--                                <el-col :span="4.8">-->
+<!--                                    <el-button class="top_button" size="medium"-->
+<!--                                               type="primary" @click="onCancel">-->
+<!--                                        取消分配-->
+<!--                                    </el-button>-->
+<!--                                </el-col>-->
+                                <el-col :span="4.8">
                                     <el-button class="top_button" size="medium"
                                                type="primary" @click="onIssued">
                                         确认下发
                                     </el-button>
                                 </el-col>
-                                <el-col :span="4">
+                                <el-col :span="4.8">
                                     <el-button class="top_button"
                                                size="medium" @click="onClose">关 闭
                                     </el-button>
@@ -88,7 +88,7 @@
                                         </template>
                                         <el-table-column align="center" fixed="right" label="操作" width="100">
                                             <template v-slot="{row}">
-                                                <el-button size="small" type="text" @click="onAdjust(row)">
+                                                <el-button size="small" type="text" @click.stop="onAdjust(row)">
                                                     调整
                                                 </el-button>
                                             </template>
@@ -113,13 +113,14 @@
                                             border
                                             highlight-current-row
                                             size="mini">
-                                            <el-table-column fixed type="selection" width="50">
+                                            <el-table-column v-if="false" fixed type="selection" width="50">
                                             </el-table-column>
                                             <template v-for="(column,index) in table.soPickPlanColumnList">
                                                 <el-table-column
                                                     :key="index"
                                                     show-overflow-tooltip
-                                                    v-bind="column">
+                                                    v-bind="column"
+                                                    width="100">
                                                 </el-table-column>
                                             </template>
                                         </el-table>
@@ -148,10 +149,11 @@
                 border
                 highlight-current-row
                 show-summary>
-                <div style="margin-top: 10px">
-                    <el-table-column label="库位" width="120" prop="locCode"></el-table-column>
-                    <el-table-column label="箱码" width="120" prop="boxCode"></el-table-column>
-                    <el-table-column label="库区" width="120" prop="zoneCode"></el-table-column>
+                <template style="margin-top: 10px">
+                    <el-table-column label="箱码" prop="boxCode" width="120"></el-table-column>
+                    <el-table-column label="LPN" prop="lpnCode" width="120"></el-table-column>
+                    <el-table-column label="库位" prop="locCode" width="120"></el-table-column>
+                    <el-table-column label="库区" prop="zoneCode" width="120"></el-table-column>
                     <el-table-column label="余额" prop="stockBalance"></el-table-column>
                     <el-table-column label="可用量" prop="stockEnable"></el-table-column>
                     <el-table-column label="本次分配量" prop="pickRealQty" width="150">
@@ -162,23 +164,23 @@
                                 oninput="value=value.replace(/[^\d]/g,'')"
                                 placeholder="请输入分配数量"
                                 size="medium"
-                                style="width: 100%">
+                                style="width: 100%"
+                                @change="changePickRealQty">
                             </el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column label="LPN" width="120" prop="lpnCode"></el-table-column>
-                    <el-table-column label="物品编码" prop="skuCode"></el-table-column>
-                    <el-table-column label="批次" prop="lotNumber"></el-table-column>
-                    <el-table-column label="状态" prop="stockStatus"></el-table-column>
-                    <el-table-column label="生产批次" width="120" prop="skuLot1"></el-table-column>
+                    <el-table-column label="物品编码" prop="skuCode" width="120"></el-table-column>
+                    <el-table-column label="批次号" prop="lotNumber"></el-table-column>
+                    <el-table-column label="库存状态" prop="stockStatus"></el-table-column>
+                    <el-table-column label="生产批次" prop="skuLot1" width="120"></el-table-column>
                     <el-table-column label="规格型号" prop="skuLot2"></el-table-column>
-                    <el-table-column label="收货日期" width="120"  prop="skuLot3"></el-table-column>
+                    <el-table-column label="收货日期" prop="skuLot3" width="120"></el-table-column>
                     <el-table-column label="专用客户" prop="skuLot4"></el-table-column>
                     <el-table-column label="钢背批次" prop="skuLot5"></el-table-column>
                     <el-table-column label="摩擦快批次" prop="skuLot6" width="150"></el-table-column>
                     <el-table-column label="产品标识代码" prop="skuLot7" width="150"></el-table-column>
                     <el-table-column label="是否CRCC验证" prop="skuLot8" width="150"></el-table-column>
-                </div>
+                </template>
             </el-table>
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="onAdjustSubmit()">确 定</el-button>
@@ -285,7 +287,7 @@ export default {
                     },
                     {
                         prop: 'pickPlanQty',
-                        label: '计划量'
+                        label: '计划分配量'
                     },
                     {
                         prop: 'pickRealQty',
@@ -304,7 +306,7 @@ export default {
                         label: '批次号'
                     },
                     {
-                        prop: 'stockStatusValue',
+                        prop: 'stockStatus',
                         label: '库存状态'
                     },
                     {
@@ -353,6 +355,7 @@ export default {
             dialog: {
                 dialogTableVisible: false,
                 title: "",
+                currentSkuId: '',
                 unDistributeQty: 0,
                 dialogTableHeight: 0,
                 dialogData: [
@@ -462,6 +465,7 @@ export default {
         async getSoPickPlanData(soBillId, soDetailId) {
             await getSoPickPlanData(soBillId, soDetailId).then((res) => {
                 this.table.soPickPlanData = res.data.data;
+                this.handleRefreshTable();
             })
             this.merge(this.table.soPickPlanData);
         },
@@ -475,8 +479,7 @@ export default {
                 }
                 const values = data.map(item => Number(item[column.property]));
                 if (column.property === 'pickPlanQty'
-                    || column.property === 'stockBalance'
-                    || column.property === 'stockEnable') {
+                    || column.property === 'pickRealQty') {
                     sums[index] = values.reduce((prev, curr) => {
                         const value = Number(curr);
                         if (!isNaN(value)) {
@@ -519,46 +522,55 @@ export default {
         },
         onAssign() {
             automaticAssign(this.soHeader.soBillId).then((res) => {
-                this.$message.success(res);
+                this.$message.success(res.data.msg);
+                this.getSoPickPlanData(this.soHeader.soBillId);
             })
         },
         onIssued() {
             issued(this.soHeader.soBillId).then((res) => {
-
+                this.$message.success(res.data.msg);
             })
         },
         onCancelAll() {
             cancelAll(this.soHeader.soBillId).then((res) => {
-
+                this.$message.success(res.data.msg);
+                this.getSoPickPlanData(this.soHeader.soBillId);
             })
         },
-        onCancel() {
-            let rows = this.$refs.soPickPlanTable.selection;
-            if (func.isEmpty(rows)) {
-                this.$message.warning("请选择一条分配记录");
-                return
-            }
-        },
+        // onCancel() {
+        //     let rows = this.$refs.soPickPlanTable.selection;
+        //     if (func.isEmpty(rows)) {
+        //         this.$message.warning("请选择一条分配记录");
+        //         return
+        //     }
+        // },
         async onAdjust(row) {
             this.dialog.soDetailId = row.soDetailId;
-            this.dialog.title = `当前物品：${row.skuCode}${row.skuName}     未分配：${this.dialog.unDistributeQty}`
             await getStockByDistributeAdjust(row.skuId, row.skuLot1, row.skuLot4).then((res) => {
                 this.dialog.dialogData = res.data.data;
             })
-            debugger
             if (func.isNotEmpty(this.dialog.dialogData)) {
-                let currentSkuPickPlanQty = this.dialog.dialogData.filter(x => {
-                    if (x.skuId === row.skuId) {
-                        return x.pickRealQty;
-                    }
-                }).reduce((previousValue, currentValue) => previousValue + currentValue, 0)
+                let currentSkuPickPlanQty = this.dialog.dialogData
+                    .filter(x => x.skuId === row.skuId)
+                    .map(y => y.pickRealQty)
+                    .reduce((previousValue, currentValue) => previousValue + currentValue, 0)
                 this.dialog.unDistributeQty = row.surplusQty - currentSkuPickPlanQty;
             } else {
                 this.dialog.unDistributeQty = row.surplusQty
             }
-            // 重置拣货计划的合并数据,并重新赋值
+            this.dialog.title = `当前物品：${row.skuCode}${row.skuName}     未分配：${this.dialog.unDistributeQty}`
+            this.dialog.currentSkuId = row.skuId;
+            // 重置Dialog中的合并数据,并重新赋值
             this.resetMerge(this.dialog.dialogData);
             this.dialog.dialogTableVisible = true;
+        },
+        changePickRealQty(qty) {
+            debugger
+            let currentSkuPickPlanQty = this.dialog.dialogData
+                .filter(x => x.skuId === this.dialog.currentSkuId)
+                .map(y => y.pickRealQty)
+                .reduce((previousValue, currentValue) => previousValue + currentValue, 0)
+            this.dialog.unDistributeQty = this.dialog.unDistributeQty - Number(currentSkuPickPlanQty);
         },
         onAdjustSubmit() {
             let data = this.dialog.dialogData.filter(item => this.filterRowBySoPickPlan(item));
@@ -571,8 +583,17 @@ export default {
             let stockIdAndSoPickPlanQtyList = data.map(item => {
                 return Object.assign({}, {'stockId': item.stockId, 'soPickPlanQty': item.soPickPlanQty})
             })
-            saveAssign(this.soHeader.soBillId, this.dialog.soDetailId, stockIdAndSoPickPlanQtyList).then((res) => {
-                this.resetMerge(this.getSoPickPlanData());
+            let soPickPlanList = [];
+            if (func.isNotEmpty(this.dialog.dialogData)){
+                this.dialog.dialogData.map(item => item.soPickPlanList).forEach(value => {
+                    soPickPlanList.push(value);
+                })
+            }
+            saveAssign(this.soHeader.soBillId,
+                this.dialog.soDetailId,
+                soPickPlanList,
+                stockIdAndSoPickPlanQtyList).then((res) => {
+                this.resetMerge(this.getSoPickPlanData(this.soHeader.soBillId));
             })
 
         },
@@ -586,17 +607,17 @@ export default {
             columns.forEach((column, index) => {
                 const values = data.map(item => Number(item[column.property]));
                 if (!values.every(value => isNaN(value))) {
-                    if(column.property === 'stockBalance'
+                    if (column.property === 'stockBalance'
                         || column.property === 'stockEnable'
                         || column.property === 'pickRealQty')
-                    sums[index] = values.reduce((prev, curr) => {
-                        const value = Number(curr);
-                        if (!isNaN(value)) {
-                            return prev + curr;
-                        } else {
-                            return prev;
-                        }
-                    }, 0);
+                        sums[index] = values.reduce((prev, curr) => {
+                            const value = Number(curr);
+                            if (!isNaN(value)) {
+                                return prev + curr;
+                            } else {
+                                return prev;
+                            }
+                        }, 0);
                 }
             });
             return sums;
@@ -609,6 +630,9 @@ export default {
             this.$nextTick(() => {
                 if (this.$refs.table && this.$refs.table.doLayout) {
                     this.$refs.table.doLayout();
+                }
+                if (this.$refs.soPickPlanTable && this.$refs.soPickPlanTable.doLayout) {
+                    this.$refs.soPickPlanTable.doLayout();
                 }
             });
         },
