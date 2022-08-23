@@ -8,6 +8,7 @@ import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 发货单分配页面可分配库存响应类
@@ -95,4 +96,9 @@ public class StockSoPickPlanResponse extends BaseSkuLot implements Serializable 
 	 * 库存状态
 	 */
 	private StockStatusEnum stockStatus;
+
+	/**
+	 * 拣货计划id
+	 */
+	private List<Long> soPickPlanList;
 }
