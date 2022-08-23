@@ -44,12 +44,12 @@
                                         全部取消
                                     </el-button>
                                 </el-col>
-<!--                                <el-col :span="4.8">-->
-<!--                                    <el-button class="top_button" size="medium"-->
-<!--                                               type="primary" @click="onCancel">-->
-<!--                                        取消分配-->
-<!--                                    </el-button>-->
-<!--                                </el-col>-->
+                                <!--                                <el-col :span="4.8">-->
+                                <!--                                    <el-button class="top_button" size="medium"-->
+                                <!--                                               type="primary" @click="onCancel">-->
+                                <!--                                        取消分配-->
+                                <!--                                    </el-button>-->
+                                <!--                                </el-col>-->
                                 <el-col :span="4.8">
                                     <el-button class="top_button" size="medium"
                                                type="primary" @click="onIssued">
@@ -139,7 +139,7 @@
             :title="dialog.title"
             :visible.sync="dialog.dialogTableVisible"
             custom-class="dialogClass"
-            @close="refreshData">
+            @close="closeDialog">
             <el-table
                 ref="dialogTable"
                 :data="dialog.dialogData"
@@ -165,7 +165,7 @@
                                 placeholder="请输入分配数量"
                                 size="medium"
                                 style="width: 100%"
-                                @change="changePickQty">
+                                @input="changePickQty">
                             </el-input>
                         </template>
                     </el-table-column>
@@ -370,9 +370,13 @@ export default {
                         skuLot1: '',
                     }
                 ],
-                soDetailId: '',
-                currentSkuId: '',
-                surplusQty: '',
+                currentRow: {
+                    skuId: '',
+                    skuCode: '',
+                    skuName: '',
+                    soDetailId: '',
+                    surplusQty: '',
+                }
             },
         }
     },
@@ -407,7 +411,8 @@ export default {
             };
             this.merge(data);
         },
-        refreshData() {
+        closeDialog() {
+            // 重置mergedCell对象,并重新赋值
             this.resetMerge(this.table.soPickPlanData);
         },
         objectSpanMethod({row, column, rowIndex, columnIndex}) {
@@ -546,34 +551,41 @@ export default {
         //     }
         // },
         async onAdjust(row) {
-            this.dialog.soDetailId = row.soDetailId;
-            this.dialog.surplusQty = row.surplusQty;
-            await getStockByDistributeAdjust(row.skuId, row.skuLot1, row.skuLot4, this.soHeader.soBillId).then((res) => {
-                this.dialog.dialogData = res.data.data;
-            })
-            if (func.isNotEmpty(this.dialog.dialogData)) {
-                let currentSkuPickPlanQty = this.dialog.dialogData
-                    .filter(x => x.skuId === row.skuId)
-                    .map(y => y.pickQty)
-                    .reduce((previousValue, currentValue) => previousValue + currentValue, 0)
-                this.dialog.unDistributeQty = row.surplusQty - currentSkuPickPlanQty;
-            } else {
-                this.dialog.unDistributeQty = row.surplusQty
+            this.dialog.currentRow = {
+                soDetailId: row.soDetailId,
+                skuId: row.skuId,
+                skuCode: row.skuCode,
+                skuName: row.skuName,
+                surplusQty: row.surplusQty
             }
-            this.dialog.title = `当前物品：${row.skuCode}${row.skuName}     未分配：${this.dialog.unDistributeQty}`
-            this.dialog.currentSkuId = row.skuId;
-            // 重置Dialog中的合并数据,并重新赋值
+            await getStockByDistributeAdjust(row.skuId, row.skuLot1, row.skuLot4, this.soHeader.soBillId)
+                .then((res) => {
+                    this.dialog.dialogData = res.data.data;
+                })
+            this.computeUnDistributeQty();
+            this.setDialogTitle()
+            // 重置mergedCell对象,并重新赋值
             this.resetMerge(this.dialog.dialogData);
             this.dialog.dialogTableVisible = true;
         },
-        changePickQty(qty) {
-            debugger
-            this.dialog.unDistributeQty = this.dialog.surplusQty;
-            let currentSkuPickPlanQty = this.dialog.dialogData
-                .filter(x => x.skuId === this.dialog.currentSkuId)
-                .map(y => Number(y.pickQty))
-                .reduce((pre, cur) => pre + cur, 0)
-            this.dialog.unDistributeQty -= currentSkuPickPlanQty;
+        computeUnDistributeQty() {
+            if (func.isNotEmpty(this.dialog.dialogData)) {
+                let currentSkuPickPlanQty = this.dialog.dialogData
+                    .filter(x => x.skuId === this.dialog.currentRow.skuId)
+                    .map(y => Number(y.pickQty))
+                    .reduce((pre, cur) => pre + cur, 0)
+                this.dialog.unDistributeQty = this.dialog.currentRow.surplusQty - currentSkuPickPlanQty;
+            } else {
+                this.dialog.unDistributeQty = this.dialog.currentRow.surplusQty
+            }
+        },
+        changePickQty() {
+            this.computeUnDistributeQty();
+            this.setDialogTitle()
+        },
+        setDialogTitle() {
+            this.dialog.title =
+                `当前物品：${this.dialog.currentRow.skuCode} ${this.dialog.currentRow.skuName}        未分配：${this.dialog.unDistributeQty}`
         },
         onAdjustSubmit() {
             let data = this.dialog.dialogData.filter(item => this.filterRowBySoPickPlan(item));
@@ -587,7 +599,7 @@ export default {
                 return Object.assign({}, {'stockId': item.stockId, 'soPickPlanQty': item.soPickPlanQty})
             })
             let soPickPlanList = [];
-            if (func.isNotEmpty(this.dialog.dialogData)){
+            if (func.isNotEmpty(this.dialog.dialogData)) {
                 this.dialog.dialogData.map(item => item.soPickPlanList).forEach(value => {
                     soPickPlanList.push(value);
                 })
