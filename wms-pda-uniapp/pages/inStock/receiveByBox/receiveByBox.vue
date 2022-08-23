@@ -16,9 +16,14 @@
 				<u--input v-model="param.skuLot1" @focus="focus(2)" @confirm="change" @blur="blur(2)"
 					:focus="this.focusNum == 2"></u--input>
 			</u-form-item>
-			<u-form-item label="LPN" :required="false" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="param.lpnCode" @focus="focus(3)" @blur="blur(3)" @confirm="change"
+			<u-form-item label="专用客户" :required="false" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="param.skuLot4" @focus="focus(3)" @blur="blur(3)" @confirm="change"
 					:focus="this.focusNum == 3"></u--input>
+			</u-form-item>
+			
+			<u-form-item label="LPN" :required="false" class="left-text-one-line" labelWidth="100">
+				<u--input v-model="param.lpnCode" @focus="focus(4)" @blur="blur(4)" @confirm="change"
+					:focus="this.focusNum == 4"></u--input>
 			</u-form-item>
 
 			<u-form-item label="型号" class="left-text-one-line" labelWidth="100">
@@ -69,6 +74,7 @@
 					lpnCode: '',
 					skuLot1: '',
 					skuLot2: '',
+					skuLot4:'',
 					num: '',
 					receiveDetailLpnItemDtoList: [],
 				},
@@ -121,7 +127,7 @@
 				}
 			},
 			change() {
-				if (this.focusNum != 3) {
+				if (this.focusNum != 4) {
 					this.focusNum = this.focusNum + 1;
 				} else {
 					this.submit()

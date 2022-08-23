@@ -298,11 +298,17 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			throw new ServiceException("没有搜索到该箱码");
 		}
 		ReceiveDetailLpnPdaResponse receiveDetailLpnPdaResponse = new ReceiveDetailLpnPdaResponse();
+		if (receiveDetailLpnList.get(0).getReceiveDetailId() != 0) {
+			List<Long> DetailIdList = receiveDetailLpnList.stream().map(ReceiveDetailLpn::getReceiveDetailId).collect(Collectors.toList());
+			ReceiveDetail receiveDetail = receiveDetailDao.getDetailByReceiveDetailId(DetailIdList.get(0));
+			receiveDetailLpnPdaResponse.setSkuLot4(receiveDetail.getSkuLot4());
+		} else {
+			receiveDetailLpnPdaResponse.setSkuLot4(receiveDetailLpnList.get(0).getSkuLot4());
+		}
 		BigDecimal totalPlanQty = BigDecimal.ZERO;
 
 		// 是否对批属性2进行过赋值操作
 		boolean skuSpecFlag = true;
-
 		List<ReceiveDetailLpnItemDto> receiveDetailLpnItemDtoList = new ArrayList<>();
 		ReceiveDetailLpn receiveDetailLpn = receiveDetailLpnList.get(0);
 		receiveDetailLpnPdaResponse.setLpnCode(receiveDetailLpn.getLpnCode());
@@ -330,6 +336,9 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		receiveDetailLpnPdaResponse.setReceiveDetailLpnItemDtoList(receiveDetailLpnItemDtoList);
 		//设置总数
 		receiveDetailLpnPdaResponse.setNum(totalPlanQty);
+		if (Func.isNotEmpty(receiveDetailLpnList.get(0).getReceiveDetailId())) {
+
+		}
 		return receiveDetailLpnPdaResponse;
 	}
 

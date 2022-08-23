@@ -65,4 +65,12 @@ public interface ReceiveDetailDao {
 	 * @param receiveByPcQuery 查询参数
 	 */
 	ReceiveDetailByPcResponse getReceiveDetailByPcResponse(ReceiveByPcQuery receiveByPcQuery);
+
+	/**
+	 * 根据明细id集合获取明细集合
+	 *
+	 * @param detailIdList 明细id集合
+	 * @return 明细实体集合
+	 */
+	List<ReceiveDetail> findByIDList(List<Long> detailIdList);
 }
