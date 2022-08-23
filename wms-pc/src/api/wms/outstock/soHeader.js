@@ -184,7 +184,7 @@ export const issued = (soBillId) => {
     })
 }
 
-export const getStockByDistributeAdjust = (skuId, skuLot1, skuLot4) => {
+export const getStockByDistributeAdjust = (skuId, skuLot1, skuLot4, soBillId) => {
     return request({
         url: '/api/wms/outstock/soBill/getStockByDistributeAdjust',
         method: 'post',
@@ -192,6 +192,7 @@ export const getStockByDistributeAdjust = (skuId, skuLot1, skuLot4) => {
             skuId: skuId,
             skuLot1: skuLot1,
             skuLot4: skuLot4,
+            soBillId: soBillId
         }
     })
 }

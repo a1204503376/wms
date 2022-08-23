@@ -220,13 +220,13 @@ public class SoBillController {
 	}
 
 	/**
-	 * 分配：取消分配
+	 * 分配：全部取消
 	 */
 	@ApiLog("发货单管理-取消分配")
 	@PostMapping("/cancelAll")
 	public R<String> cancelAll(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		outStockBiz.cancelDistribute(soBillIdRequest.getSoBillId());
-		return R.data("取消分配成功");
+		return R.success("取消分配成功");
 	}
 
 	/**
@@ -236,18 +236,20 @@ public class SoBillController {
 	@PostMapping("/issued")
 	public R<String> issued(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		outStockBiz.issued(soBillIdRequest.getSoBillId());
-		return R.data("确认下发成功");
+		return R.success("确认下发成功");
 	}
 
 	/**
 	 * 分配调整：根据物品id查找物品可分配库存信息
 	 */
 	@PostMapping("/getStockByDistributeAdjust")
-	public R<List<StockSoPickPlanResponse>> getStockByDistributeAdjust(@Valid @RequestBody DistributeAdjustRequest DistributeAdjustRequest) {
+	public R<List<StockSoPickPlanResponse>> getStockByDistributeAdjust(
+							@Valid @RequestBody DistributeAdjustRequest distributeAdjustRequest) {
 		return R.data(outStockBiz.getStockByDistributeAdjust(
-			DistributeAdjustRequest.getSkuId(),
-			DistributeAdjustRequest.getSkuLot1(),
-			DistributeAdjustRequest.getSkuLot4()));
+			distributeAdjustRequest.getSkuId(),
+			distributeAdjustRequest.getSkuLot1(),
+			distributeAdjustRequest.getSkuLot4(),
+			distributeAdjustRequest.getSoBillId()));
 	}
 
 	/**

@@ -217,8 +217,8 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	}
 
 	@Override
-	public List<SoPickPlan> findByStockIds(List<Long> stockIdList) {
-		return soPickPlanDao.getByStockIds(stockIdList);
+	public List<SoPickPlan> findByStockIdsAndSoBillId(List<Long> stockIdList, Long soBillId) {
+		return soPickPlanDao.getByStockIdsAndSoBillId(stockIdList, soBillId);
 	}
 
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlan, SoDetail detail, String result) {

@@ -156,16 +156,16 @@
                     <el-table-column label="库区" prop="zoneCode" width="120"></el-table-column>
                     <el-table-column label="余额" prop="stockBalance"></el-table-column>
                     <el-table-column label="可用量" prop="stockEnable"></el-table-column>
-                    <el-table-column label="本次分配量" prop="pickRealQty" width="150">
+                    <el-table-column label="本次分配量" prop="pickQty" width="150">
                         <template v-slot="{row}">
                             <el-input
-                                v-model="row.pickRealQty"
+                                v-model="row.pickQty"
                                 maxlength="9"
                                 oninput="value=value.replace(/[^\d]/g,'')"
                                 placeholder="请输入分配数量"
                                 size="medium"
                                 style="width: 100%"
-                                @change="changePickRealQty">
+                                @change="changePickQty">
                             </el-input>
                         </template>
                     </el-table-column>
@@ -355,7 +355,6 @@ export default {
             dialog: {
                 dialogTableVisible: false,
                 title: "",
-                currentSkuId: '',
                 unDistributeQty: 0,
                 dialogTableHeight: 0,
                 dialogData: [
@@ -372,6 +371,8 @@ export default {
                     }
                 ],
                 soDetailId: '',
+                currentSkuId: '',
+                surplusQty: '',
             },
         }
     },
@@ -546,13 +547,14 @@ export default {
         // },
         async onAdjust(row) {
             this.dialog.soDetailId = row.soDetailId;
-            await getStockByDistributeAdjust(row.skuId, row.skuLot1, row.skuLot4).then((res) => {
+            this.dialog.surplusQty = row.surplusQty;
+            await getStockByDistributeAdjust(row.skuId, row.skuLot1, row.skuLot4, this.soHeader.soBillId).then((res) => {
                 this.dialog.dialogData = res.data.data;
             })
             if (func.isNotEmpty(this.dialog.dialogData)) {
                 let currentSkuPickPlanQty = this.dialog.dialogData
                     .filter(x => x.skuId === row.skuId)
-                    .map(y => y.pickRealQty)
+                    .map(y => y.pickQty)
                     .reduce((previousValue, currentValue) => previousValue + currentValue, 0)
                 this.dialog.unDistributeQty = row.surplusQty - currentSkuPickPlanQty;
             } else {
@@ -564,13 +566,14 @@ export default {
             this.resetMerge(this.dialog.dialogData);
             this.dialog.dialogTableVisible = true;
         },
-        changePickRealQty(qty) {
+        changePickQty(qty) {
             debugger
+            this.dialog.unDistributeQty = this.dialog.surplusQty;
             let currentSkuPickPlanQty = this.dialog.dialogData
                 .filter(x => x.skuId === this.dialog.currentSkuId)
-                .map(y => y.pickRealQty)
-                .reduce((previousValue, currentValue) => previousValue + currentValue, 0)
-            this.dialog.unDistributeQty = this.dialog.unDistributeQty - Number(currentSkuPickPlanQty);
+                .map(y => Number(y.pickQty))
+                .reduce((pre, cur) => pre + cur, 0)
+            this.dialog.unDistributeQty -= currentSkuPickPlanQty;
         },
         onAdjustSubmit() {
             let data = this.dialog.dialogData.filter(item => this.filterRowBySoPickPlan(item));
