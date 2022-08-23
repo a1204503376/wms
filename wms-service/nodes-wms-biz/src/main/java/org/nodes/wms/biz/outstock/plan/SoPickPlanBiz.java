@@ -92,6 +92,13 @@ public interface SoPickPlanBiz {
 	void cancelPickPlan(SoHeader soHeader, List<Long> soPickPlanIdList);
 
 	/**
+	 * 关闭单据的时候取消未执行完毕的分配记录
+	 * 
+	 * @param soHeader 发货单
+	 */
+	void cancelPickPlanByClose(SoHeader soHeader);
+
+	/**
 	 * 根据分配计划占用库存并保存分配计划
 	 * 
 	 * @param soPickPlanList 分配计划
@@ -119,7 +126,7 @@ public interface SoPickPlanBiz {
 	 * 根据库存id和发货单id查询拣货计划
 	 *
 	 * @param stockIdList 库存id
-	 * @param soBillId 发货单id
+	 * @param soBillId    发货单id
 	 * @return 拣货计划
 	 */
 	List<SoPickPlan> findByStockIdsAndSoBillId(List<Long> stockIdList, Long soBillId);

@@ -202,6 +202,15 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public void cancelPickPlanByClose(SoHeader soHeader) {
+		List<SoPickPlan> soPickPlan = soPickPlanDao.findBySoHeaderId(soHeader.getSoBillId());
+		if (Func.isNotEmpty(soPickPlan)) {
+			cancelPickPlan(soPickPlan, soHeader);
+		}
+	}
+
+	@Override
 	public Page<SoPickPlanPageResponse> page(Query query, SoPickPlanPageQuery soPickPlanPageQuery) {
 		return soPickPlanDao.getPage(Condition.getPage(query), soPickPlanPageQuery);
 	}
