@@ -6,7 +6,7 @@
 		</u-navbar>
 		<u--form>
 			<u-form-item label="目标LOC" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.locCode"></u--input>
+				<u--input v-model="params.targetLocCode"></u--input>
 			</u-form-item>
 
 		</u--form>
@@ -23,7 +23,7 @@
 
 <script>
 	import setting from '@/common/setting'
-	import receive from '@/api/inStock/receiveByPcs.js'
+	import pick from '@/api/picking/connectionAreaPicking.js'
 	import uniSelect from '@/components/uni-select.vue'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
@@ -35,15 +35,10 @@
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
-					skuCode: undefined,
-					skuName: undefined,
-					skuLot2: undefined,
-					surplusQty: undefined,
-					wsuCode: undefined,
-					skuLot1: undefined,
-					boxCode: undefined,
-					locCode: 'STAGE',
-					isSn: ''
+					sourceLocId: undefined,
+					sourceLocCode: '',
+					targetLocCode: '',
+					whId: uni.getStorageSync('warehouse').whId
 				},
 				receiveDetailId: '',
 				receiveId: '',
@@ -53,10 +48,9 @@
 			}
 		},
 		onLoad: function(option) {
-			// var parse = JSON.parse(option.param)
-			// this.receiveDetailId = parse.receiveDetailId;
-			// this.receiveId = parse.receiveId;
-			// this.getDetailByDetailId();
+			var parse = JSON.parse(option.param)
+			this.params.sourceLocId = parse.locId;
+			this.params.sourceLocCode = parse.locCode;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -91,11 +85,7 @@
 				var barcodeType = barcodeFunc.BarcodeType;
 				switch (barcode.type) {
 					case barcodeType.Loc:
-						this.params.locCode = barcode.content;
-						break;
-					case barcodeType.Lpn:
-						this.params.boxCode = barcode.content;
-						this.getStockByBoxCode();
+						this.params.targetLocCode = barcode.content;
 						break;
 					default:
 						this.$u.func.showToast({
@@ -108,9 +98,14 @@
 				var _this = this;
 				_this.params.isSn = true;
 				uni.$u.throttle(function() {
-					_this.$u.func.showToast({
-						title: '移动成功'
-					});
+					if(_this.params.targetLocCode){
+						pick.connectionAreaMove(_this.params).then(data => {
+							console.log(data.data)
+							_this.$u.func.showToast({
+								title: '移动成功'
+							});
+						})
+					}
 				}, 1000)
 
 			},
