@@ -297,10 +297,7 @@ public class StockDaoImpl
 	@Override
 	public Stock getStockById(Long stockId) {
 		AssertUtil.notNull(stockId, "库存查询失败，stockId不能为空");
-
-		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
-		queryWrapper.eq(Stock::getStockId, stockId);
-		return super.getOne(queryWrapper);
+		return super.getById(stockId);
 	}
 
 	@Override
