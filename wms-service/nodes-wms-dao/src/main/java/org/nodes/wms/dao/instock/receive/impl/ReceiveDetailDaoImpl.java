@@ -97,4 +97,9 @@ public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, R
 		return super.baseMapper.selectReceiveDetailByPcResponse(receiveByPcQuery);
 	}
 
+	@Override
+	public List<ReceiveDetail> findByIDList(List<Long> detailIdList) {
+		return super.listByIds(detailIdList);
+	}
+
 }

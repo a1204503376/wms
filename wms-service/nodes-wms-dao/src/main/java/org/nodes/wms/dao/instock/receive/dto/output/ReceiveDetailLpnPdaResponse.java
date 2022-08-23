@@ -23,9 +23,9 @@ public class ReceiveDetailLpnPdaResponse {
 	/**
 	 * 箱码
 	 */
-	private String  boxCode;
+	private String boxCode;
 	/**
-	 *  lpn
+	 * lpn
 	 */
 	private String lpnCode;
 	/**
@@ -40,6 +40,10 @@ public class ReceiveDetailLpnPdaResponse {
 	 * 型号
 	 */
 	private String skuLot2;
+	/**
+	 * 专用客户
+	 */
+	private String skuLot4;
 	/**
 	 * 库位编码
 	 */
