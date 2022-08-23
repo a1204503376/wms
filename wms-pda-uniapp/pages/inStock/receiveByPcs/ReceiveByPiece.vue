@@ -132,8 +132,8 @@
 			},
 			submit() {
 				var _this = this;
-				var paramsData = {};
 				uni.$u.throttle(function() {
+					var paramsData = {};
 					paramsData = _this.params;
 					paramsData.locCode = uni.$u.func.parseLocCode(paramsData.locCode);
 					paramsData.receiveDetailId = _this.receiveDetailId;
@@ -152,11 +152,9 @@
 							.params);
 						return;
 					}
-
 					if (tool.isNotEmpty(paramsData.skuLot2) && tool.isNotEmpty(paramsData.locCode) && tool
 						.isNotEmpty(paramsData.boxCode) && tool.isNotEmpty(_this.params.boxCode) && tool
-						.isNotEmpty(paramsData.skuLot1) && paramsData
-						.surplusQty > 0) {
+						.isNotEmpty(paramsData.skuLot1) && tool.isInteger(paramsData.surplusQty)) {
 						receive.submitReceiptByPcs(paramsData).then(data => {
 							if (data.data.allReceivieIsAccomplish && data.data
 								.currentReceivieIsAccomplish) {
@@ -187,7 +185,7 @@
 						_this.$u.func.refreshPage()
 					} else {
 						_this.$u.func.showToast({
-							title: '请输入必填字段',
+							title: '收货失败,请输入必填字段或收货数量请输入正整数',
 						});
 						_this.params.locCode = 'STAGE'
 					}
