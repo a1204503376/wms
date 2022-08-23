@@ -28,4 +28,10 @@ public class DistributeAdjustRequest implements Serializable {
 	 * 专用客户
 	 */
 	private String skuLot4;
+
+	/**
+	 * 发货单id
+	 */
+	@NotNull(message = "参数 soBillId 不能为空")
+	private Long soBillId;
 }

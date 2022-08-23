@@ -25,8 +25,8 @@ import java.util.List;
  **/
 @Repository
 public class SoPickPlanDaoImpl
-	extends BaseServiceImpl<SoPickPlanMapper, SoPickPlan>
-	implements SoPickPlanDao {
+		extends BaseServiceImpl<SoPickPlanMapper, SoPickPlan>
+		implements SoPickPlanDao {
 
 	@Override
 	public List<SoPickPlanForDistributionResponse> getBySoBillIdAndSoDetailId(Long soBillId, Long soDetailId) {
@@ -37,23 +37,23 @@ public class SoPickPlanDaoImpl
 	public boolean hasEnablePickPlan(Long soBillId) {
 		AssertUtil.notNull(soBillId, "判断是否有分配中的计划失败，出库单ID为空");
 		return super.lambdaQuery()
-			.eq(SoPickPlan::getSoBillId, soBillId)
-			.count() > 0;
+				.eq(SoPickPlan::getSoBillId, soBillId)
+				.count() > 0;
 	}
 
 	@Override
 	public List<SoPickPlan> findBySoHeaderId(Long soBillId) {
 		AssertUtil.notNull(soBillId, "判断是否有分配中的计划失败，出库单ID为空");
 		return super.lambdaQuery()
-			.eq(SoPickPlan::getSoBillId, soBillId)
-			.list();
+				.eq(SoPickPlan::getSoBillId, soBillId)
+				.list();
 	}
 
 	@Override
 	public void updatePickRealQty(Long pickPlanId, BigDecimal pickRealQty) {
 		UpdateWrapper<SoPickPlan> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
-			.eq(SoPickPlan::getPickPlanId, pickPlanId);
+				.eq(SoPickPlan::getPickPlanId, pickPlanId);
 		SoPickPlan soPickPlan = new SoPickPlan();
 		soPickPlan.setPickRealQty(pickRealQty);
 		if (!super.update(soPickPlan, updateWrapper)) {
@@ -65,8 +65,8 @@ public class SoPickPlanDaoImpl
 	public List<SoPickPlan> getPickByTaskId(Long taskId) {
 		AssertUtil.notNull(taskId, "根据任务查询关联的拣货计划失败，任务ID为空");
 		return super.lambdaQuery()
-			.eq(SoPickPlan::getTaskId, taskId)
-			.list();
+				.eq(SoPickPlan::getTaskId, taskId)
+				.list();
 	}
 
 	@Override
@@ -88,7 +88,17 @@ public class SoPickPlanDaoImpl
 	}
 
 	@Override
-	public List<SoPickPlan> getByStockIds(List<Long> stockIdList) {
-		return super.lambdaQuery().in(SoPickPlan::getStockId, stockIdList).list();
+	public List<SoPickPlan> getByStockIdsAndSoBillId(List<Long> stockIdList, Long soBillId) {
+		return super.lambdaQuery()
+			.in(SoPickPlan::getStockId, stockIdList)
+			.eq(SoPickPlan::getSoBillId, soBillId)
+			.list();
 	}
+
+	@Override
+	public List<SoPickPlan> getByPickPlanIds(List<Long> soPickPlanIdList) {
+		AssertUtil.notEmpty(soPickPlanIdList, "soPickPlanIdList must not be empty");
+		return super.lambdaQuery().in(SoPickPlan::getPickPlanId, soPickPlanIdList).list();
+	}
+
 }

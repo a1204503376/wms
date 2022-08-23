@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 /**
  * 拆箱相关业务
- * 
+ *
  * @author admin
  */
 @Service
@@ -72,6 +72,19 @@ public class DevanningBizImpl implements DevanningBiz {
 		return response;
 	}
 
+	private String generateNewBoxCode(DevanningSubmitRequest request){
+		LpnTypeCodeEnum lpnTypeCodeEnum = lpnTypeBiz.tryParseBoxCode(request.getBoxCode());
+		String skuName = null;
+		String spec = null;
+		if (request.getIsSn()){
+			Stock stock = stockQueryBiz.findStockById(request.getStockList().get(0).getStockId());
+			skuName = stock.getSkuName();
+			spec = stock.getSkuLot2();
+		}
+
+		return lpnTypeBiz.generateLpnCode(lpnTypeCodeEnum.getCode(), skuName, spec);
+	}
+
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void devanning(DevanningSubmitRequest request) {
@@ -79,8 +92,7 @@ public class DevanningBizImpl implements DevanningBiz {
 		Location location = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
 		// 是否生成新箱码 是true进入下面方法生成新箱码
 		if (request.getNewBoxCode()) {
-			LpnTypeCodeEnum lpnTypeCodeEnum = lpnTypeBiz.tryParseBoxCode(request.getBoxCode());
-			request.setBoxCode(lpnTypeBiz.generateLpnCode(lpnTypeCodeEnum.getCode()));
+			request.setBoxCode(generateNewBoxCode(request));
 		}
 
 		// 首先判断是否序列号管理执行序列号拆箱

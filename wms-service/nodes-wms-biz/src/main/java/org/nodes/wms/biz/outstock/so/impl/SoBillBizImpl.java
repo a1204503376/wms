@@ -1,10 +1,16 @@
 package org.nodes.wms.biz.outstock.so.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import lombok.RequiredArgsConstructor;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.common.log.LogBiz;
+import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.outstock.so.SoBillBiz;
 import org.nodes.wms.biz.outstock.so.modular.SoBillFactory;
 import org.nodes.wms.biz.stock.StockQueryBiz;
@@ -12,7 +18,6 @@ import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
-import org.nodes.wms.dao.outstock.SoPickPlanDao;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
@@ -24,7 +29,17 @@ import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
-import org.nodes.wms.dao.outstock.so.dto.output.*;
+import org.nodes.wms.dao.outstock.so.dto.output.LineNoAndSkuSelectResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.PickByPcSoDetailResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.PickByPcSoHeaderResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoBillDistributedResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoBillEditResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoDetailAndStockResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDistResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderExcelResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderForDetailResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
@@ -42,12 +57,10 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletResponse;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * 发货单业务接口实现类
@@ -62,7 +75,7 @@ public class SoBillBizImpl implements SoBillBiz {
 	private final SoDetailDao soDetailDao;
 	private final StockQueryBiz stockQueryBiz;
 	private final SoBillFactory soBillFactory;
-	private final SoPickPlanDao soPickPlanDao;
+	private final SoPickPlanBiz soPickPlanBiz;
 	private final LogBiz logBiz;
 
 	@Override
@@ -84,7 +97,7 @@ public class SoBillBizImpl implements SoBillBiz {
 			throw new ServiceException("新增发货单头表信息失败，请稍后再试");
 		}
 		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader,
-			soBillAddOrEditRequest.getSoDetailList());
+				soBillAddOrEditRequest.getSoDetailList());
 		if (!soDetailDao.saveOrUpdateBatch(soDetailList)) {
 			throw new ServiceException("新增发货单明细信息失败，请稍后再试");
 		}
@@ -112,12 +125,12 @@ public class SoBillBizImpl implements SoBillBiz {
 			throw new ServiceException("编辑发货单头表信息失败，请稍后再试");
 		}
 		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader,
-			soBillAddOrEditRequest.getSoDetailList());
+				soBillAddOrEditRequest.getSoDetailList());
 		if (!soDetailDao.saveOrUpdateBatch(soDetailList)) {
 			throw new ServiceException("编辑发货单明细信息失败，请稍后再试");
 		}
 		if (Func.isNotEmpty(soBillAddOrEditRequest.getRemoveIdList())
-			&& !soDetailDao.removeByIdList(soBillAddOrEditRequest.getRemoveIdList())) {
+				&& !soDetailDao.removeByIdList(soBillAddOrEditRequest.getRemoveIdList())) {
 			throw new ServiceException("编辑发货单明细信息失败，请稍后再试");
 		}
 		logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), soHeader.getSoBillNo(), "编辑发货单");
@@ -146,6 +159,8 @@ public class SoBillBizImpl implements SoBillBiz {
 		if (!soHeaderDao.updateSoHeaderById(soHeader)) {
 			throw new ServiceException("关闭发货单失败，请稍后再试");
 		}
+
+		soPickPlanBiz.cancelPickPlanByClose(soHeader);
 		logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), soHeader.getSoBillNo(), "关闭发货单");
 	}
 
@@ -187,20 +202,21 @@ public class SoBillBizImpl implements SoBillBiz {
 
 	@Override
 	public SoDetailAndStockResponse getSoDetailAndStock(SoDetailAndStockRequest soDetailAndStockRequest) {
-		//new一个返回对象
+		// new一个返回对象
 		SoDetailAndStockResponse soDetailAndStockResponse = new SoDetailAndStockResponse();
-		//获取明细行的返回对象
+		// 获取明细行的返回对象
 		PickByPcSoDetailResponse pickByPcSoDetailResponse = soDetailDao.getPickByPcDetail(soDetailAndStockRequest);
 		soDetailAndStockResponse.setPickByPcSoDetailResponse(pickByPcSoDetailResponse);
-		//创建库存返回对象集合
+		// 创建库存返回对象集合
 		List<PickByPcStockDto> stockResponseList = new ArrayList<>();
-		//构造查询库存集合条件
+		// 构造查询库存集合条件
 		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
 		SkuLotUtil.setAllSkuLot(pickByPcSoDetailResponse, skuLot);
 		skuLot.setSkuLot1(pickByPcSoDetailResponse.getSkuLot1());
-		//根据查询条件获取库存集合
-		List<Stock> stockList = stockQueryBiz.findEnableStockByZoneAndSkuLot(soDetailAndStockRequest.getWhId(), pickByPcSoDetailResponse.getSkuId(),
-			StockStatusEnum.NORMAL, null, skuLot);
+		// 根据查询条件获取库存集合
+		List<Stock> stockList = stockQueryBiz.findEnableStockByZoneAndSkuLot(soDetailAndStockRequest.getWhId(),
+				pickByPcSoDetailResponse.getSkuId(),
+				StockStatusEnum.NORMAL, null, skuLot);
 		for (Stock stock : stockList) {
 			BigDecimal stockEnableQty = stock.getStockEnable();
 			if (stockEnableQty.compareTo(BigDecimal.ZERO) == -1) {
@@ -257,7 +273,7 @@ public class SoBillBizImpl implements SoBillBiz {
 
 	@Override
 	public Page<SoDetailForDetailResponse> pageSoDetailForDetailBySoBillId(Query query,
-																		   SoBillIdRequest soBillIdRequest) {
+			SoBillIdRequest soBillIdRequest) {
 		return soDetailDao.pageForSoDetailBySoBillId(Condition.getPage(query), soBillIdRequest.getSoBillId());
 	}
 
@@ -327,8 +343,8 @@ public class SoBillBizImpl implements SoBillBiz {
 	@Override
 	public boolean isFinish(SoHeader soHeader) {
 		return SoBillStateEnum.COMPLETED.equals(soHeader.getSoBillState())
-			|| SoBillStateEnum.ALL_OUT_STOCK.equals(soHeader.getSoBillState())
-			|| SoBillStateEnum.CANCELED.equals(soHeader.getSoBillState());
+				|| SoBillStateEnum.ALL_OUT_STOCK.equals(soHeader.getSoBillState())
+				|| SoBillStateEnum.CANCELED.equals(soHeader.getSoBillState());
 	}
 
 	@Override

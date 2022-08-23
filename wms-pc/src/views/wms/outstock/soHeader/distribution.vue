@@ -44,12 +44,12 @@
                                         全部取消
                                     </el-button>
                                 </el-col>
-<!--                                <el-col :span="4.8">-->
-<!--                                    <el-button class="top_button" size="medium"-->
-<!--                                               type="primary" @click="onCancel">-->
-<!--                                        取消分配-->
-<!--                                    </el-button>-->
-<!--                                </el-col>-->
+                                <!--                                <el-col :span="4.8">-->
+                                <!--                                    <el-button class="top_button" size="medium"-->
+                                <!--                                               type="primary" @click="onCancel">-->
+                                <!--                                        取消分配-->
+                                <!--                                    </el-button>-->
+                                <!--                                </el-col>-->
                                 <el-col :span="4.8">
                                     <el-button class="top_button" size="medium"
                                                type="primary" @click="onIssued">
@@ -139,7 +139,7 @@
             :title="dialog.title"
             :visible.sync="dialog.dialogTableVisible"
             custom-class="dialogClass"
-            @close="refreshData">
+            @close="closeDialog">
             <el-table
                 ref="dialogTable"
                 :data="dialog.dialogData"
@@ -156,16 +156,16 @@
                     <el-table-column label="库区" prop="zoneCode" width="120"></el-table-column>
                     <el-table-column label="余额" prop="stockBalance"></el-table-column>
                     <el-table-column label="可用量" prop="stockEnable"></el-table-column>
-                    <el-table-column label="本次分配量" prop="pickRealQty" width="150">
+                    <el-table-column label="本次分配量" prop="pickQty" width="150">
                         <template v-slot="{row}">
                             <el-input
-                                v-model="row.pickRealQty"
+                                v-model="row.pickQty"
                                 maxlength="9"
                                 oninput="value=value.replace(/[^\d]/g,'')"
                                 placeholder="请输入分配数量"
                                 size="medium"
                                 style="width: 100%"
-                                @change="changePickRealQty">
+                                @input="val=>changePickQty(val,row)">
                             </el-input>
                         </template>
                     </el-table-column>
@@ -355,7 +355,6 @@ export default {
             dialog: {
                 dialogTableVisible: false,
                 title: "",
-                currentSkuId: '',
                 unDistributeQty: 0,
                 dialogTableHeight: 0,
                 dialogData: [
@@ -364,14 +363,20 @@ export default {
                         location: '',
                         stockBalance: 0,
                         stockEnable: 0,
-                        pickRealQty: 0,
+                        pickQty: 0,
                         lpn: '',
                         skuCode: '',
                         stockState: '',
                         skuLot1: '',
                     }
                 ],
-                soDetailId: '',
+                currentRow: {
+                    skuId: '',
+                    skuCode: '',
+                    skuName: '',
+                    soDetailId: '',
+                    surplusQty: '',
+                }
             },
         }
     },
@@ -406,7 +411,8 @@ export default {
             };
             this.merge(data);
         },
-        refreshData() {
+        closeDialog() {
+            // 重置mergedCell对象,并重新赋值
             this.resetMerge(this.table.soPickPlanData);
         },
         objectSpanMethod({row, column, rowIndex, columnIndex}) {
@@ -534,7 +540,7 @@ export default {
         onCancelAll() {
             cancelAll(this.soHeader.soBillId).then((res) => {
                 this.$message.success(res.data.msg);
-                this.getSoPickPlanData(this.soHeader.soBillId);
+                this.getTableData()
             })
         },
         // onCancel() {
@@ -545,61 +551,92 @@ export default {
         //     }
         // },
         async onAdjust(row) {
-            this.dialog.soDetailId = row.soDetailId;
-            await getStockByDistributeAdjust(row.skuId, row.skuLot1, row.skuLot4).then((res) => {
-                this.dialog.dialogData = res.data.data;
-            })
-            if (func.isNotEmpty(this.dialog.dialogData)) {
-                let currentSkuPickPlanQty = this.dialog.dialogData
-                    .filter(x => x.skuId === row.skuId)
-                    .map(y => y.pickRealQty)
-                    .reduce((previousValue, currentValue) => previousValue + currentValue, 0)
-                this.dialog.unDistributeQty = row.surplusQty - currentSkuPickPlanQty;
-            } else {
-                this.dialog.unDistributeQty = row.surplusQty
+            this.dialog.currentRow = {
+                soDetailId: row.soDetailId,
+                skuId: row.skuId,
+                skuCode: row.skuCode,
+                skuName: row.skuName,
+                surplusQty: row.surplusQty
             }
-            this.dialog.title = `当前物品：${row.skuCode}${row.skuName}     未分配：${this.dialog.unDistributeQty}`
-            this.dialog.currentSkuId = row.skuId;
-            // 重置Dialog中的合并数据,并重新赋值
+            await getStockByDistributeAdjust(row.skuId, row.skuLot1, row.skuLot4, this.soHeader.soBillId)
+                .then((res) => {
+                    this.dialog.dialogData = res.data.data;
+                    this.dialog.dialogData.forEach(item =>{
+                        item.oldStockEnable = item.stockEnable;
+                        item.oldPickQty = item.pickQty
+                    })
+                })
+            this.computeUnDistributeQty();
+            this.setDialogTitle()
+            // 重置mergedCell对象,并重新赋值
             this.resetMerge(this.dialog.dialogData);
             this.dialog.dialogTableVisible = true;
         },
-        changePickRealQty(qty) {
-            debugger
-            let currentSkuPickPlanQty = this.dialog.dialogData
-                .filter(x => x.skuId === this.dialog.currentSkuId)
-                .map(y => y.pickRealQty)
-                .reduce((previousValue, currentValue) => previousValue + currentValue, 0)
-            this.dialog.unDistributeQty = this.dialog.unDistributeQty - Number(currentSkuPickPlanQty);
+        computeUnDistributeQty() {
+            if (func.isNotEmpty(this.dialog.dialogData)) {
+                let currentSkuPickPlanQty = this.dialog.dialogData
+                    .filter(x => x.skuId === this.dialog.currentRow.skuId)
+                    .map(y => Number(y.pickQty))
+                    .reduce((pre, cur) => pre + cur, 0)
+                this.dialog.unDistributeQty = this.dialog.currentRow.surplusQty - currentSkuPickPlanQty;
+            } else {
+                this.dialog.unDistributeQty = this.dialog.currentRow.surplusQty
+            }
+        },
+        changePickQty(val, row) {
+            console.log(val);
+            console.log(row);
+            if (val > row.oldStockEnable){
+                this.$message.warning("分配量不能大于可用量");
+                row.pickQty = row.oldPickQty;
+            }
+
+            this.computeUnDistributeQty();
+            this.setDialogTitle()
+        },
+        setDialogTitle() {
+            this.dialog.title =
+                `当前物品：${this.dialog.currentRow.skuCode} ${this.dialog.currentRow.skuName}        未分配：${this.dialog.unDistributeQty}`
         },
         onAdjustSubmit() {
+            let dialogData = this.dialog.dialogData;
+            if(func.isEmpty(dialogData)){
+                this.$message.warning("没有可保存的数据");
+                this.dialog.dialogTableVisible = false;
+                return;
+            }
             let data = this.dialog.dialogData.filter(item => this.filterRowBySoPickPlan(item));
             for (const i in data) {
-                if (data[i].soPickPlanQty > data[i].stockEnable) {
-                    this.$message.warning(`物品 ${data[i].skuCode}，批次${data[i].skuLot1} 的分配量不能大于可用量`)
+                if (data[i].pickQty > data[i].stockEnable) {
+                    this.$message.warning(`第${i}行，物品 ${data[i].skuCode}，批次${data[i].skuLot1} 的分配量不能大于可用量`)
                     return;
                 }
             }
             let stockIdAndSoPickPlanQtyList = data.map(item => {
-                return Object.assign({}, {'stockId': item.stockId, 'soPickPlanQty': item.soPickPlanQty})
+                return Object.assign({}, {'stockId': item.stockId, 'soPickPlanQty': item.planQty})
             })
             let soPickPlanList = [];
-            if (func.isNotEmpty(this.dialog.dialogData)){
+            if (func.isNotEmpty(this.dialog.dialogData)) {
                 this.dialog.dialogData.map(item => item.soPickPlanList).forEach(value => {
-                    soPickPlanList.push(value);
+                    if (func.isNotEmpty(value)) {
+                        value.forEach(x => {
+                            if (func.isNotEmpty(x)) {
+                                soPickPlanList.push(x);
+                            }
+                        })
+                    }
                 })
             }
-            saveAssign(this.soHeader.soBillId,
-                this.dialog.soDetailId,
-                soPickPlanList,
-                stockIdAndSoPickPlanQtyList).then((res) => {
-                this.resetMerge(this.getSoPickPlanData(this.soHeader.soBillId));
-            })
-
+            saveAssign(this.soHeader.soBillId, this.dialog.currentRow.soDetailId, soPickPlanList, stockIdAndSoPickPlanQtyList)
+                .then((res) => {
+                    this.$message.success(res.data.msg)
+                    this.resetMerge(this.getSoPickPlanData(this.soHeader.soBillId));
+                    this.dialog.dialogTableVisible = false;
+                })
         },
         // 过滤未填写本次分配量的行
         filterRowBySoPickPlan(row) {
-            return !(row.soPickPlanQty === 0 || func.isEmpty(row.soPickPlanQty));
+            return !(row.pickQty === 0 || func.isEmpty(row.pickQty));
         },
         getSummaries(param) {
             const {columns, data} = param;

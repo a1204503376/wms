@@ -88,9 +88,9 @@ public class StockSoPickPlanResponse extends BaseSkuLot implements Serializable 
 	private BigDecimal stockBalance;
 
 	/**
-	 * 分配量
+	 * 分配量（计划减去实际的和）
 	 */
-	private BigDecimal pickRealQty;
+	private BigDecimal pickQty;
 
 	/**
 	 * 库存状态

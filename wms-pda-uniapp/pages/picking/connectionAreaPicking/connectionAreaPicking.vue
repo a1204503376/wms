@@ -114,16 +114,24 @@
 			submit() {
 				var _this = this;
 				uni.$u.throttle(function() {
-					pick.connectionAreaPicking(_this.param).then(data => {
-						if (data.data) {
-							_this.$u.func.showToast({
-								title: '接驳区拣货成功'
-							})
-						} else {
-							uni.$u.func.routeNavigateTo(
-								'/pages/picking/connectionAreaPicking/connectionAreaMove', _this.param);
-						}
-					})
+					if (tool.isNotEmpty(_this.param.locCode) && tool.isNotEmpty(_this.param.locId) && tool
+						.isNotEmpty(_this.param.locCodeView)) {
+						pick.connectionAreaPicking(_this.param).then(data => {
+							if (data.data) {
+								_this.$u.func.showToast({
+									title: '接驳区拣货成功'
+								})
+							} else {
+								uni.$u.func.routeNavigateTo(
+									'/pages/picking/connectionAreaPicking/connectionAreaMove', _this
+									.param);
+							}
+						})
+					} else {
+						_this.$u.func.showToast({
+							title: '请选择你要拣货的库位'
+						})
+					}
 				}, 1000)
 			},
 			scannerCallback(no) {

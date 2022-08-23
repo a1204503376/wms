@@ -43,12 +43,7 @@
 				boxCode: ''
 			}
 		},
-		onLoad: function(option) {
-			// var parse = JSON.parse(option.param)
-			// this.receiveDetailId = parse.receiveDetailId;
-			// this.receiveId = parse.receiveId;
-			// this.getDetailByDetailId();
-		},
+		onLoad: function(option) {},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
 		},
@@ -94,7 +89,7 @@
 						_this.$u.func.showToast({
 							title: '拣货完成'
 						});
-            _this.params.boxCode = '';
+						_this.params.boxCode = '';
 					})
 
 				}, 1000)
