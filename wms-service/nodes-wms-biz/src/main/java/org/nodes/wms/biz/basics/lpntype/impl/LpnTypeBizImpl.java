@@ -16,10 +16,12 @@ import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeSelectResponse;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.putway.dto.modular.LpnTypeFactory;
+import org.nodes.wms.dao.tianyi.skubox.SkuBoxDao;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +39,7 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 	private final LpnTypeFactory lpnTypeFactory;
 	private final CodeGenerator codeGenerator;
 	private final WMSAppConfig wmsAppConfig;
+	private final SkuBoxDao skuBoxDao;
 
 	/**
 	 * @param query            分页参数
@@ -160,11 +163,15 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 	}
 
 	@Override
-	public String generateLpnCode(String lpnTypeCode) {
+	public String generateLpnCode(String lpnTypeCode, String skuName, String spec) {
 		LpnType lpnType = lpnTypeDao.getLpnTypeByCode(lpnTypeCode);
 		AssertUtil.notEmpty(lpnType.getLpnNoRule(), "容器编码生成失败，没有配置编码生成规则");
+		String prefixNo = lpnTypeCode;
+		if (Func.isNotEmpty(skuName)){
+			prefixNo = prefixNo + skuBoxDao.getBoxId(skuName, spec);
+		}
 		return codeGenerator.generateCode(wmsAppConfig.getProjectName(),
-			"LPN", lpnTypeCode, lpnType.getLpnNoRule());
+			"LPN", prefixNo, lpnType.getLpnNoRule());
 	}
 
 	@Override

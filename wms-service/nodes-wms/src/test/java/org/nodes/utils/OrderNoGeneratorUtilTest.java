@@ -39,10 +39,10 @@ public class OrderNoGeneratorUtilTest {
 		System.out.println(orderNoGeneratorUtil.createSaleBillNo());
 		System.out.println(orderNoGeneratorUtil.createSoBillNo());
 		System.out.println(orderNoGeneratorUtil.createShipBillNo());
-		System.out.println(lpnTypeBiz.generateLpnCode("A"));
-		System.out.println(lpnTypeBiz.generateLpnCode("B"));
-		System.out.println(lpnTypeBiz.generateLpnCode("C"));
-		System.out.println(lpnTypeBiz.generateLpnCode("D"));
+		System.out.println(lpnTypeBiz.generateLpnCode("A", "试验品成品", "TS122"));
+		System.out.println(lpnTypeBiz.generateLpnCode("B", null, null));
+		System.out.println(lpnTypeBiz.generateLpnCode("C", null, null));
+		System.out.println(lpnTypeBiz.generateLpnCode("D", null, null));
 	}
 
 	@Test

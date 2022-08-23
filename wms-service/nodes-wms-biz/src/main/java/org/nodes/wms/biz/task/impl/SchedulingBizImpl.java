@@ -17,7 +17,6 @@ import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.log.dto.input.NoticeMessageRequest;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
-import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.dto.QueryAndFrozenEnableOutboundRequest;
 import org.nodes.wms.dao.task.dto.SchedulingBroadcastNotificationRequest;
