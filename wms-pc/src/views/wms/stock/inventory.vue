@@ -645,6 +645,11 @@ export default {
                         sortable: "custom"
                     },
                     {
+                        prop: "zoneCode",
+                        label: "库区编码",
+                        sortable: "custom"
+                    },
+                    {
                         prop: "boxCode",
                         label: "箱码",
                         sortable: "custom"

@@ -1,6 +1,9 @@
 package org.nodes.wms.biz.task;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
 import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
 import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
@@ -9,6 +12,7 @@ import org.nodes.wms.dao.task.entities.TaskDetail;
 import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
+import org.nodes.wms.dao.task.enums.WmsTaskTypeEnum;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -86,7 +90,8 @@ public interface WmsTaskBiz {
 	/**
 	 * 根据箱码查询可用的任务
 	 *
-	 * @param boxCode 箱码
+	 * @param boxCode          箱码
+	 * @param taskProcTypeEnum 任务执行方式
 	 * @return 任务
 	 */
 	WmsTask findEnableTaskByBoxCode(String boxCode, WmsTaskProcTypeEnum taskProcTypeEnum);
@@ -108,4 +113,16 @@ public interface WmsTaskBiz {
 	 * @return 可用的任务
 	 */
 	WmsTask findEnableTaskBySoBillId(Long soBillId, Long soDetailId);
+
+	/**
+	 * 创建任务
+	 * 
+	 * @param taskType       任务类型
+	 * @param procType       任务执行方式
+	 * @param soPickPlanList 拣货记录明细
+	 * @param soHeader       发货单
+	 * @return WmsTask
+	 */
+	WmsTask create(WmsTaskTypeEnum taskType, WmsTaskProcTypeEnum procType,
+			List<SoPickPlan> soPickPlanList, SoHeader soHeader);
 }

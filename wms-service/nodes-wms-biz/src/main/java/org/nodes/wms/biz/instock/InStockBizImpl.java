@@ -1,21 +1,26 @@
 package org.nodes.wms.biz.instock;
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.utils.BigDecimalUtil;
+import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
+import org.nodes.wms.biz.instock.receiveLog.modular.ReceiveLogFactory;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.AgvTask;
-import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
-import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaMultiRequest;
-import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
+import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
+import org.nodes.wms.dao.instock.receive.ReceiveDetailDao;
+import org.nodes.wms.dao.instock.receive.ReceiveHeaderDao;
+import org.nodes.wms.dao.instock.receive.dto.input.*;
 import org.nodes.wms.dao.instock.receive.dto.output.PdaByPcsReceiveResponse;
 import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnItemDto;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
+import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
@@ -26,9 +31,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+/**
+ * @author nodesc
+ */
 @Service
 @RequiredArgsConstructor
 public class InStockBizImpl implements InStockBiz {
@@ -38,6 +49,10 @@ public class InStockBizImpl implements InStockBiz {
 	private final ReceiveLogBiz receiveLogBiz;
 	private final StockQueryBiz stockQueryBiz;
 	private final AgvTask agvTask;
+	private final LogBiz logBiz;
+	private final ReceiveLogFactory receiveLogFactory;
+	private final ReceiveHeaderDao receiveHeaderDao;
+	private final ReceiveDetailDao receiveDetailDao;
 
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	@Override
@@ -49,7 +64,7 @@ public class InStockBizImpl implements InStockBiz {
 				throw new ServiceException("LPN[" + request.getLpnCode() + "]已存在库存数据！");
 			}
 		}
-		ReceiveHeader receiveHeader = new ReceiveHeader();
+		ReceiveHeader receiveHeader;
 		// 判断业务参数（无单收货除外），是否可以正常收货、超收
 		if (hasReceiveHeaderId) {
 			for (ReceiveDetailLpnItemDto item : request.getReceiveDetailLpnItemDtoList()) {
@@ -119,7 +134,7 @@ public class InStockBizImpl implements InStockBiz {
 				// 更新收货单明细状态（for end：一条执行一次）
 				receiveBiz.updateReceiveDetail(detail, item.getPlanQty());
 				// 更新收货单状态
-				receiveBiz.updateReciveHeader(header, detail);
+				receiveBiz.updateReceiveHeader(header, detail);
 			}
 			// 记录业务日志
 			if (Func.isEmpty(logType)) {
@@ -153,7 +168,7 @@ public class InStockBizImpl implements InStockBiz {
 		// 更新收货单明细状态
 		receiveBiz.updateReceiveDetail(detail, request.getSurplusQty());
 		// 更新收货单状态
-		receiveBiz.updateReciveHeader(receiveHeader, detail);
+		receiveBiz.updateReceiveHeader(receiveHeader, detail);
 		// 记录业务日志
 		receiveBiz.log(StockLogTypeEnum.INSTOCK_BY_PCS.getDesc(), receiveHeader, detail, receiveLog);
 		//检查收货是否完成 并返回
@@ -180,7 +195,6 @@ public class InStockBizImpl implements InStockBiz {
 			item.setSkuLot1(receiveDetailLpnPdaMultiRequest.getSkuLot1());
 			item.setSkuLot2(receiveDetailLpnPdaMultiRequest.getSkuLot2());
 			item.setWhId(receiveDetailLpnPdaMultiRequest.getWhId());
-//			receiveByBoxCode(item, StockLogTypeEnum.INSTOCK_BY_MULTI_BOX.getDesc());
 			receiveByDuoBoxCode(item, StockLogTypeEnum.INSTOCK_BY_MULTI_BOX.getDesc());
 		}
 
@@ -191,7 +205,7 @@ public class InStockBizImpl implements InStockBiz {
 	@Override
 	public void receiveByDuoBoxCode(ReceiveDetailLpnPdaRequest request, String logType) {
 		boolean hasReceiveHeaderId = Func.isNotEmpty(request.getReceiveHeaderId());
-		ReceiveHeader receiveHeader = new ReceiveHeader();
+		ReceiveHeader receiveHeader;
 		// 判断业务参数（无单收货除外），是否可以正常收货、超收
 		if (hasReceiveHeaderId) {
 			for (ReceiveDetailLpnItemDto item : request.getReceiveDetailLpnItemDtoList()) {
@@ -261,7 +275,7 @@ public class InStockBizImpl implements InStockBiz {
 				// 更新收货单明细状态（for end：一条执行一次）
 				receiveBiz.updateReceiveDetail(detail, item.getPlanQty());
 				// 更新收货单状态
-				receiveBiz.updateReciveHeader(header, detail);
+				receiveBiz.updateReceiveHeader(header, detail);
 			}
 			// 记录业务日志
 			if (Func.isEmpty(logType)) {
@@ -291,9 +305,61 @@ public class InStockBizImpl implements InStockBiz {
 			receiveBiz.updateReceiveDetail(receiveDetail, item.getQty());
 			// 更新收货单头表信息
 			ReceiveHeader receiveHeader = receiveBiz.getReceiveHeaderById(item.getReceiveId());
-			receiveBiz.updateReciveHeader(receiveHeader, receiveDetail);
+			receiveBiz.updateReceiveHeader(receiveHeader, receiveDetail);
 			// 生成业务日志
 			receiveBiz.log(StockLogTypeEnum.OUTSTOCK_BY_CANCEL_RECEIVE.getDesc(), receiveHeader, receiveDetail, item);
 		});
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public String receiveByPc(ReceiveByPcRequest receiveByPcRequest) {
+		//根据id获取头表信息
+		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(receiveByPcRequest.getReceiveId());
+		List<ReceiveByPcDetailRequest> detailList = receiveByPcRequest.getDetailRequestList();
+		//前端传入明细集合按明细id分组
+		Map<Long, List<ReceiveByPcDetailRequest>> detailMap = detailList.stream().collect(Collectors.groupingBy(ReceiveByPcDetailRequest::getReceiveDetailId));
+		//所有明细全部完成收货标志
+		boolean isCompleted = true;
+		for (Map.Entry<Long, List<ReceiveByPcDetailRequest>> entry : detailMap.entrySet()) {
+			//获取每个分组的明细对象
+			ReceiveDetail receiveDetail = receiveDetailDao.getDetailByReceiveDetailId(entry.getKey());
+			//获取每个分组的集合
+			List<ReceiveByPcDetailRequest> detailRequestList = entry.getValue();
+			//统计总数
+			BigDecimal sum = new BigDecimal(0);
+			for (ReceiveByPcDetailRequest detailRequest : detailRequestList) {
+				//参数校验
+				receiveBiz.canReceive(receiveHeader, receiveDetail, detailRequest.getScanQty());
+				//生成清点记录
+				ReceiveLog receiveLog = receiveLogFactory.createReceiveLog(detailRequest, receiveHeader, receiveDetail);
+				receiveLogBiz.saveReceiveLog(receiveLog);
+				//调用库存函数
+				stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PC, receiveLog);
+				//总数累加
+				sum = sum.add(detailRequest.getScanQty());
+			}
+			//修改收货单明细状态和剩余数量
+			receiveDetail.setSurplusQty(receiveDetail.getSurplusQty().subtract(sum));
+			receiveDetail.setScanQty(receiveDetail.getScanQty().add(sum));
+			if (BigDecimalUtil.gt(receiveDetail.getSurplusQty(), BigDecimal.ZERO)) {
+				receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.PART);
+				isCompleted = false;
+			} else {
+				receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.COMPLETED);
+			}
+			receiveDetailDao.updateReceiveDetail(receiveDetail);
+
+		}
+		//更新头表状态
+		receiveHeader.setBillState(isCompleted
+			? ReceiveHeaderStateEnum.COMPLETED
+			: ReceiveHeaderStateEnum.PART);
+
+		receiveHeaderDao.updateReceive(receiveHeader);
+
+		//记录日志
+		logBiz.auditLog(AuditLogType.INSTOCK, receiveHeader.getReceiveId(), receiveHeader.getReceiveNo(), "PC收货");
+		return receiveHeader.getReceiveNo();
 	}
 }

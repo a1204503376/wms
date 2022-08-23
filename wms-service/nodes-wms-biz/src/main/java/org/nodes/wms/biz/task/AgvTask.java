@@ -96,7 +96,7 @@ public class AgvTask {
 		String url = systemParamBiz.findScheduleUrl().concat(POST_JOB_API);
 
 		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
-			url, publishJobFactory.createPublishJobRequestList(wmsTasks));
+				url, publishJobFactory.createPublishJobRequestList(wmsTasks));
 		if (schedulingGlobalResponse.hasException()) {
 			log.error("调用API（{}）异常：{}", url, schedulingGlobalResponse.getMsg());
 			return false;
@@ -109,7 +109,7 @@ public class AgvTask {
 	 * AGV库内移动,只有原和目标库位都是agv存储区的才有效
 	 * 一次只能移动一个库位的库存，否则抛异常
 	 *
-	 * @param sourceStock 移动的原库存
+	 * @param sourceStock    移动的原库存
 	 * @param targetLocation 目标库位
 	 */
 	public void moveStockToSchedule(List<Stock> sourceStock, Location targetLocation) {
@@ -117,9 +117,9 @@ public class AgvTask {
 		AssertUtil.notNull(targetLocation, "AGV库内移动任务下发失败,目标库位为空");
 
 		List<Long> sourceLocIds = sourceStock.stream()
-			.map(Stock::getLocId)
-			.distinct()
-			.collect(Collectors.toList());
+				.map(Stock::getLocId)
+				.distinct()
+				.collect(Collectors.toList());
 
 		for (Long locId : sourceLocIds) {
 			if (!locationBiz.isAgvZone(locId) || !locationBiz.isAgvZone(locId)) {
@@ -128,8 +128,8 @@ public class AgvTask {
 			}
 
 			List<Stock> stockOfLoc = sourceStock.stream()
-				.filter(item -> locId.equals(item.getLocId()))
-				.collect(Collectors.toList());
+					.filter(item -> locId.equals(item.getLocId()))
+					.collect(Collectors.toList());
 			WmsTask moveTask = wmsTaskFactory.createMoveTask(stockOfLoc, targetLocation);
 			if (sendToSchedule(Collections.singletonList(moveTask))) {
 				moveTask.setTaskState(WmsTaskStateEnum.ISSUED);
@@ -143,16 +143,16 @@ public class AgvTask {
 	/**
 	 * 拣货任务到agv，按库位下发
 	 *
-	 * @param locId    库位id
-	 * @param so       出库单信息
-	 * @param soDetail 出库单明细信息
+	 * @param fromLocId 库位id
+	 * @param so        出库单信息
+	 * @param soDetail  出库单明细信息
 	 */
-	public WmsTask pickToSchedule(Long locId, SoHeader so, SoDetail soDetail) {
-		AssertUtil.notNull(locId, "AGV拣货任务下发失败,locId为空");
+	public WmsTask pickToSchedule(Long fromLocId, SoHeader so, SoDetail soDetail) {
+		AssertUtil.notNull(fromLocId, "AGV拣货任务下发失败,locId为空");
 		AssertUtil.notNull(so, "AGV拣货任务下发失败,so为空");
 		AssertUtil.notNull(soDetail, "AGV拣货任务下发失败,soDetail为空");
 
-		List<Stock> sourceStock = stockQueryBiz.findStockByLocation(locId);
+		List<Stock> sourceStock = stockQueryBiz.findStockByLocation(fromLocId);
 		WmsTask pickTask = wmsTaskFactory.createPickTask(sourceStock, so, soDetail);
 		if (sendToSchedule(Collections.singletonList(pickTask))) {
 			pickTask.setTaskState(WmsTaskStateEnum.ISSUED);
@@ -168,7 +168,7 @@ public class AgvTask {
 	public void continueTask(List<WmsTask> tasks) {
 		String url = systemParamBiz.findScheduleUrl().concat(POST_CONTINUE_JOB_API);
 		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
-			url, publishJobFactory.createContinueJobRequest(tasks));
+				url, publishJobFactory.createContinueJobRequest(tasks));
 		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
 		if (schedulingResponse.hasFailed()) {
 			throw new ServiceException("继续任务失败，" + schedulingResponse.getMsg());
@@ -181,7 +181,7 @@ public class AgvTask {
 	public void cancel() {
 		String url = systemParamBiz.findScheduleUrl().concat(POST_CANCEL_JOB_API);
 		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
-			url, publishJobFactory.createCancelJobRequest());
+				url, publishJobFactory.createCancelJobRequest());
 		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
 		if (schedulingResponse.hasFailed()) {
 			throw new ServiceException("取消任务失败，" + schedulingResponse.getMsg());

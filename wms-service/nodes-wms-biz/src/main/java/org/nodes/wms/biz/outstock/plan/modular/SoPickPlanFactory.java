@@ -1,17 +1,16 @@
 package org.nodes.wms.biz.outstock.plan.modular;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Component;
 
-import lombok.RequiredArgsConstructor;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author nodesc
@@ -48,6 +47,7 @@ public class SoPickPlanFactory {
 		if (Func.notNull(soDetail)){
 			soPickPlan.setSoDetailId(soDetail.getSoDetailId());
 		}
+		soPickPlan.setLotNumber(stock.getSkuLot1());
 		soPickPlan.setWellenId(0L);
 		soPickPlan.setSoBillId(soHeaderId);
 		soPickPlan.setPickPlanQty(planQty);
