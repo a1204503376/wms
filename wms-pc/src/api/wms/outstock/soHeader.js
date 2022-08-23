@@ -213,10 +213,11 @@ export const pickByPc = (data) => {
     })
 }
 
-export const saveAssign = (soBillId, soDetailId, stockIdAndSoPickPlanQtyList) => {
+export const saveAssign = (soBillId, soDetailId, soPickPlanList, stockIdAndSoPickPlanQtyList) => {
     let soBillDistributedRequest = {
         soBillId: soBillId,
         soDetailId: soDetailId,
+        soPickPlanList: soPickPlanList,
         stockIdAndSoPickPlanQtyList: stockIdAndSoPickPlanQtyList
     }
     return request({
