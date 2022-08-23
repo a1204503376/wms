@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.instock;
 
 import org.nodes.wms.dao.instock.receive.dto.input.PdaByPieceReceiveRequest;
+import org.nodes.wms.dao.instock.receive.dto.input.ReceiveByPcRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaMultiRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
 import org.nodes.wms.dao.instock.receive.dto.output.PdaByPcsReceiveResponse;
@@ -9,20 +10,23 @@ import java.util.List;
 
 /**
  * 收货相关业务
+ *
+ * @author nodesc
  */
 public interface InStockBiz {
 
 	/**
 	 * 按箱收货,支持无单收货
 	 *
-	 * @param request
+	 * @param request 请求参数
+	 * @param logType StockLogTypeEnum的描述
 	 */
-	void receiveByBoxCode(ReceiveDetailLpnPdaRequest request,String logType);
+	void receiveByBoxCode(ReceiveDetailLpnPdaRequest request, String logType);
 
 	/**
 	 * 按件收货
 	 *
-	 * @param request
+	 * @param request 请求参数
 	 */
 	PdaByPcsReceiveResponse receiptByPcs(PdaByPieceReceiveRequest request);
 
@@ -36,9 +40,10 @@ public interface InStockBiz {
 	/**
 	 * 按箱收货,支持无单收货(多箱收货调用)
 	 *
-	 * @param request
+	 * @param request 请求参数
+	 * @param logType StockLogTypeEnum的描述
 	 */
-	void receiveByDuoBoxCode(ReceiveDetailLpnPdaRequest request,String logType);
+	void receiveByDuoBoxCode(ReceiveDetailLpnPdaRequest request, String logType);
 
 	/**
 	 * 撤销收货
@@ -47,4 +52,11 @@ public interface InStockBiz {
 	 */
 	void cancelReceive(List<Long> receiveIdList);
 
+	/**
+	 * PC收货
+	 *
+	 * @param receiveByPcRequest 前端传入参数
+	 * @return 单号
+	 */
+	String receiveByPc(ReceiveByPcRequest receiveByPcRequest);
 }
