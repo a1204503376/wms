@@ -259,7 +259,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		WmsTask task = wmsTaskBiz.findEnableTaskByBoxCode(stockList.get(0).getBoxCode(), WmsTaskProcTypeEnum.BY_LOC);
 		SoDetail soDetail = soBillBiz.getSoDetailById(task.getBillDetailId());
 		AssertUtil.notNull(soDetail, "接驳区拣货失败，根据任务查询不到对应的发货单详情");
-		//2、 TODO  参数校验暂时还未验证
+		//2、参数校验
 		if (BigDecimalUtil.gt(task.getTaskQty().subtract(task.getScanQty()), soDetail.getSurplusQty())) {
 			return false;
 		}
