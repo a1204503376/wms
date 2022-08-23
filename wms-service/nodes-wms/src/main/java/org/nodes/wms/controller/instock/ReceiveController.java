@@ -28,6 +28,8 @@ import java.util.List;
 
 /**
  * 收货管理API
+ *
+ * @author nodesc
  */
 @RestController
 @RequiredArgsConstructor
@@ -201,7 +203,7 @@ public class ReceiveController {
 	 */
 	@PostMapping("/receiveByPc")
 	public R<String> receiveByPc(@Valid @RequestBody ReceiveByPcRequest request) {
-		String receiveNo = receiveBiz.receiveByPc(request);
+		String receiveNo = inStockBiz.receiveByPc(request);
 		return R.success("单号:" + receiveNo + "收货成功");
 	}
 }

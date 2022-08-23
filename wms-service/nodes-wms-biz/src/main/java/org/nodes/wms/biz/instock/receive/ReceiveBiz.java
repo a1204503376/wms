@@ -17,6 +17,8 @@ import java.util.List;
 
 /**
  * 收货单业务层接口
+ *
+ * @author nodesc
  */
 public interface ReceiveBiz {
 
@@ -145,7 +147,7 @@ public interface ReceiveBiz {
 	 * @param receiveHeader
 	 * @param detail
 	 */
-	void updateReciveHeader(ReceiveHeader receiveHeader, ReceiveDetail detail);
+	void updateReceiveHeader(ReceiveHeader receiveHeader, ReceiveDetail detail);
 
 	/**
 	 * 记录收货的业务日志，日志格式：[行号]收货[qty],批次[skuLotNumber]
@@ -266,12 +268,4 @@ public interface ReceiveBiz {
 	 * @param receiveByPcQuery 查询参数
 	 */
 	ReceiveDetailByPcResponse getReceiveDetailByPcResponse(ReceiveByPcQuery receiveByPcQuery);
-
-	/**
-	 * PC收货
-	 *
-	 * @param receiveByPcRequest 前端传入参数
-	 * @return 单号
-	 */
-	String receiveByPc(ReceiveByPcRequest receiveByPcRequest);
 }

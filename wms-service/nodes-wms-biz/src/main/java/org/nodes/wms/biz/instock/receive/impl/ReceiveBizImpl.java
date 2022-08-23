@@ -9,9 +9,6 @@ import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
-import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
-import org.nodes.wms.biz.instock.receiveLog.modular.ReceiveLogFactory;
-import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.sku.SkuDao;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
@@ -29,7 +26,6 @@ import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.stock.entities.Stock;
-import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -44,12 +40,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
  * 收货单管理业务类
+ *
+ * @author nodesc
  */
 @Service
 @RequiredArgsConstructor
@@ -61,9 +58,6 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	private final StockQueryBiz stockQueryBiz;
 	private final LogBiz logBiz;
 	private final ReceiveDetailLpnDao receiveDetailLpnDao;
-	private final StockBiz stockBiz;
-	private final ReceiveLogFactory receiveLogFactory;
-	private final ReceiveLogBiz receiveLogBiz;
 
 
 	@Override
@@ -234,7 +228,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		//查询收货单头表实体
 		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(editReceiveRequest.getEditReceiveHeaderRequest().getReceiveId());
 		//判断当前收货单实体的收货状态
-		if (receiveHeader.getBillState().getCode() != 10) {
+		if (!ReceiveHeaderStateEnum.NOT_RECEIPT.equals(receiveHeader.getBillState())) {
 			throw new ServiceException("编辑失败，该收货单已进行收货");
 		}
 		String receiveNo = receiveHeader.getReceiveNo();
@@ -425,7 +419,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	}
 
 	@Override
-	public void updateReciveHeader(ReceiveHeader receiveHeader, ReceiveDetail detail) {
+	public void updateReceiveHeader(ReceiveHeader receiveHeader, ReceiveDetail detail) {
 		List<ReceiveDetail> details = receiveDetailDao.selectReceiveDetailById(detail.getReceiveId());
 		List<ReceiveDetail> completed = details.stream()
 			.filter(item -> item.getDetailStatus().getCode().equals(ReceiveHeaderStateEnum.COMPLETED.getCode()))
@@ -497,55 +491,5 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		return receiveDetailDao.getReceiveDetailByPcResponse(receiveByPcQuery);
 	}
 
-	@Override
-	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public String receiveByPc(ReceiveByPcRequest receiveByPcRequest) {
-		//根据id获取头表信息
-		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(receiveByPcRequest.getReceiveId());
-		List<ReceiveByPcDetailRequest> detailList = receiveByPcRequest.getDetailRequestList();
-		//前端传入明细集合按明细id分组
-		Map<Long, List<ReceiveByPcDetailRequest>> detailMap = detailList.stream().collect(Collectors.groupingBy(ReceiveByPcDetailRequest::getReceiveDetailId));
-		//所有明细全部完成收货标志
-		boolean isCompleted = true;
-		for (Map.Entry<Long, List<ReceiveByPcDetailRequest>> entry : detailMap.entrySet()) {
-			//获取每个分组的明细对象
-			ReceiveDetail receiveDetail = receiveDetailDao.getDetailByReceiveDetailId(entry.getKey());
-			//获取每个分组的集合
-			List<ReceiveByPcDetailRequest> detailRequestList = entry.getValue();
-			//统计总数
-			BigDecimal sum = new BigDecimal(0);
-			for (ReceiveByPcDetailRequest detailRequest : detailRequestList) {
-				//参数校验
-				canReceive(receiveHeader, receiveDetail, detailRequest.getScanQty());
-				//生成清点记录
-				ReceiveLog receiveLog = receiveLogFactory.createReceiveLog(detailRequest, receiveHeader, receiveDetail);
-				receiveLogBiz.saveReceiveLog(receiveLog);
-				//调用库存函数
-				stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PC, receiveLog);
-				//总数累加
-				sum = sum.add(detailRequest.getScanQty());
-			}
-			//修改收货单明细状态和剩余数量
-			receiveDetail.setSurplusQty(receiveDetail.getSurplusQty().subtract(sum));
-			receiveDetail.setScanQty(receiveDetail.getScanQty().add(sum));
-			if (BigDecimalUtil.gt(receiveDetail.getSurplusQty(), BigDecimal.ZERO)) {
-				receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.PART);
-				isCompleted = false;
-			} else {
-				receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.COMPLETED);
-			}
-			receiveDetailDao.updateReceiveDetail(receiveDetail);
 
-		}
-		//更新头表状态
-		receiveHeader.setBillState(isCompleted
-			? ReceiveHeaderStateEnum.COMPLETED
-			: ReceiveHeaderStateEnum.PART);
-
-		receiveHeaderDao.updateReceive(receiveHeader);
-
-		//记录日志
-		logBiz.auditLog(AuditLogType.INSTOCK, receiveHeader.getReceiveId(), receiveHeader.getReceiveNo(), "PC收货");
-		return receiveHeader.getReceiveNo();
-	}
 }
