@@ -461,12 +461,12 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public List<StockSoPickPlanResponse> getStockByDistributeAdjust(Long skuId, String skuLot1, String skuLot4) {
-		SkuLotBaseEntity sku = new SkuLotBaseEntity();
-		sku.setSkuLot1(skuLot1);
-		sku.setSkuLot4(skuLot4);
+	public List<StockSoPickPlanResponse> getStockByDistributeAdjust(Long skuId, String skuLot1, String skuLot4, Long soBillId) {
+		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
+		skuLot.setSkuLot1(skuLot1);
+		skuLot.setSkuLot4(skuLot4);
 		// 获取可分配的库存
-		List<Stock> stockList = stockQueryBiz.findEnableStockBySkuAndSkuLot(skuId, sku);
+		List<Stock> stockList = stockQueryBiz.findEnableStockBySkuAndSkuLot(skuId, skuLot);
 		if (Func.isEmpty(stockList)) {
 			throw ExceptionUtil.mpe("该物品没有可分配的库存");
 		}
@@ -496,26 +496,35 @@ public class OutStockBizImpl implements OutStockBiz {
 			.map(Stock::getStockId)
 			.collect(Collectors.toList());
 
-		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findByStockIds(stockIdList);
+		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findByStockIdsAndSoBillId(stockIdList, soBillId);
 
 		List<StockSoPickPlanResponse> stockSoPickPlanList = Func.copy(allStock, StockSoPickPlanResponse.class);
 
 		if (Func.isNotEmpty(soPickPlanList)) {
-			// 拣货计划中根据stockId分组 统计每个stock对应的所有拣货计划拣货量总数
+			// 拣货计划中根据stockId分组 统计每个stock对应的所有拣货计划分配量总数
 			Map<Long, List<SoPickPlan>> planListMap = soPickPlanList.stream()
 				.collect(Collectors.groupingBy(SoPickPlan::getStockId));
 			planListMap.forEach((stockId, planList) -> {
 
-				BigDecimal pickRealQty = planList.stream()
-					.map(SoPickPlan::getPickRealQty)
-					.reduce(BigDecimal.ZERO, BigDecimal::add);
+				// 分配量求和(计划分配量减去实际分配量)
+				BigDecimal pickQty = planList.stream()
+					.reduce(BigDecimal.ZERO, (temp, plan) ->
+						plan.getPickPlanQty().subtract(plan.getPickRealQty()),BigDecimal::add);
+
+				// 获取拣货计划id
+				List<Long> planIdList = planList.stream().map(SoPickPlan::getPickPlanId).collect(Collectors.toList());
 
 				for (StockSoPickPlanResponse stockSoPickPlan : stockSoPickPlanList) {
 					if (stockSoPickPlan.getStockId().equals(stockId)) {
-						stockSoPickPlan.setPickRealQty(pickRealQty);
+						stockSoPickPlan.setPickQty(pickQty);
+						stockSoPickPlan.setSoPickPlanList(planIdList);
 						break;
 					}
 				}
+			});
+		}else {
+			stockSoPickPlanList.forEach(stockPlan -> {
+				stockPlan.setPickQty(BigDecimal.ZERO);
 			});
 		}
 		return stockSoPickPlanList;

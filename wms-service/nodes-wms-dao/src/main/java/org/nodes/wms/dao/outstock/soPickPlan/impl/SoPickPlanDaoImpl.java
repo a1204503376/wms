@@ -88,7 +88,10 @@ public class SoPickPlanDaoImpl
 	}
 
 	@Override
-	public List<SoPickPlan> getByStockIds(List<Long> stockIdList) {
-		return super.lambdaQuery().in(SoPickPlan::getStockId, stockIdList).list();
+	public List<SoPickPlan> getByStockIdsAndSoBillId(List<Long> stockIdList, Long soBillId) {
+		return super.lambdaQuery()
+			.in(SoPickPlan::getStockId, stockIdList)
+			.eq(SoPickPlan::getSoBillId, soBillId)
+			.list();
 	}
 }

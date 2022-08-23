@@ -78,7 +78,8 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 	 * 根据库存id查询拣货计划
 	 *
 	 * @param stockIdList 库存id
+	 * @param soBillId 发货单id
 	 * @return 拣货计划
 	 */
-	List<SoPickPlan> getByStockIds(List<Long> stockIdList);
+	List<SoPickPlan> getByStockIdsAndSoBillId(List<Long> stockIdList, Long soBillId);
 }

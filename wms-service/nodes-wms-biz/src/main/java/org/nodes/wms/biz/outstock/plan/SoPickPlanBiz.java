@@ -101,10 +101,11 @@ public interface SoPickPlanBiz {
 	void export(SoPickPlanPageQuery soPickPlanPageQuery, HttpServletResponse response);
 
 	/**
-	 * 根据库存id查询拣货计划
+	 * 根据库存id和发货单id查询拣货计划
 	 *
 	 * @param stockIdList 库存id
+	 * @param soBillId 发货单id
 	 * @return 拣货计划
 	 */
-	List<SoPickPlan> findByStockIds(List<Long> stockIdList);
+	List<SoPickPlan> findByStockIdsAndSoBillId(List<Long> stockIdList, Long soBillId);
 }
