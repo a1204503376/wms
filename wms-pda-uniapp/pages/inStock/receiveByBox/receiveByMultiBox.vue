@@ -18,6 +18,10 @@
 				<u--input v-model="param.skuLot1" @focus="focus(3)" @confirm="change" @blur="blur(3)"
 					:focus="this.focusNum == 3"></u--input>
 			</u-form-item>
+			<u-form-item label="专用客户"  class="left-text-one-line" labelWidth="100">
+				<u--input v-model="param.skuLot4" @focus="focus(4)" @confirm="change" @blur="blur(4)"
+					:focus="this.focusNum == 4"></u--input>
+			</u-form-item>
 
 
 			<u-form-item label="型号" class="left-text-one-line" labelWidth="100">
@@ -59,6 +63,7 @@
 					lpnCode: '',
 					skuLot1: '',
 					skuLot2: '',
+					skuLot4:'',
 				},
 			}
 		},
@@ -74,6 +79,9 @@
 				}
 				if (tool.isNotEmpty(item.skuLot2)) {
 					this.param.skuLot2 = item.skuLot2
+				}
+				if (tool.isNotEmpty(item.skuLot4)) {
+					this.param.skuLot4 = item.skuLot4
 				}
 			}
 			this.param['locCode'] = 'STAGE'
@@ -112,7 +120,7 @@
 				}
 			},
 			change() {
-				if (this.focusNum != 3) {
+				if (this.focusNum != 4) {
 					this.focusNum = this.focusNum + 1;
 				} else {
 					this.submit()
