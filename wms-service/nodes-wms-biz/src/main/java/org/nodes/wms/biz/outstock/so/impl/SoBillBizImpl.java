@@ -1,13 +1,8 @@
 package org.nodes.wms.biz.outstock.so.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.common.log.LogBiz;
@@ -21,7 +16,6 @@ import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
-import org.nodes.wms.dao.outstock.logSoPick.LogSoPickDao;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
@@ -34,17 +28,7 @@ import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
-import org.nodes.wms.dao.outstock.so.dto.output.LineNoAndSkuSelectResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.PickByPcSoDetailResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.PickByPcSoHeaderResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoBillDistributedResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoBillEditResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoDetailAndStockResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDistResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderExcelResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderForDetailResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
@@ -62,10 +46,10 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-
-import lombok.RequiredArgsConstructor;
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 发货单业务接口实现类
@@ -165,7 +149,7 @@ public class SoBillBizImpl implements SoBillBiz {
 		AssertUtil.notNull(soHeader, "关闭单据失败,发货单不存在");
 		soPickPlanBiz.cancelPickPlanByClose(soHeader);
 		List<LogSoPick> logSoPicks = logSoPickBiz.findEnableBySoHeaderId(soBillId);
-		if (Func.isNotEmpty(logSoPicks)){
+		if (Func.isNotEmpty(logSoPicks)) {
 			stockBiz.outStockByCloseBill(logSoPicks);
 		}
 

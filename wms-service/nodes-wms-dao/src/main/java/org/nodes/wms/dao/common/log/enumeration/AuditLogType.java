@@ -27,7 +27,8 @@ public enum AuditLogType implements IPairs<Integer, String, AuditLogType> {
 	ASN_BILL(108, "ASN单单据操作"),
 	STOCK_TYPE(109, "库存状态操作"),
 	AGV_TASK(110, "AGV任务"),
-	DISTRIBUTE_STRATEGY(112, "分配");
+	DISTRIBUTE_STRATEGY(112, "分配"),
+	MOVE_STOCK(113, "移动操作"),;
 
 	@EnumValue
 	Integer index;

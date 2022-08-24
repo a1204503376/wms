@@ -824,7 +824,7 @@ public class StockBizImpl implements StockBiz {
 			Long stockId, BigDecimal currentUnOccupy) {
 		Stock stock = stockDao.getStockById(stockId);
 		if (BigDecimalUtil.gt(currentUnOccupy, stock.getOccupyQty())) {
-			throw new ServiceException(String.format("释放占用库存失败,[%d][%s]当前余额[%d]占用[%d],当前释放量[%d]超过占用量",
+			throw new ServiceException(String.format("释放占用库存失败,[%d][%s]当前余额[%f]占用[%f],当前释放量[%f]超过占用量",
 					stockId, stock.getSkuCode(), stock.getStockBalance(), stock.getOccupyQty(), currentUnOccupy));
 		}
 
