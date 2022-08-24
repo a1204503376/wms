@@ -55,7 +55,7 @@ public class SoPickPlanDaoImpl
 		updateWrapper.lambda()
 				.eq(SoPickPlan::getPickPlanId, pickPlanId);
 		SoPickPlan soPickPlan = new SoPickPlan();
-		soPickPlan.setPickRealQty(pickRealQty);
+		soPickPlan.setPickRealQty(soPickPlan.getPickRealQty().add(pickRealQty));
 		if (!super.update(soPickPlan, updateWrapper)) {
 			throw new ServiceException("修改拣货计划失败,请再次重试");
 		}
