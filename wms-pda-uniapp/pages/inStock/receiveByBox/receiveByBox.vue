@@ -7,22 +7,22 @@
 		<!-- 	<v-for="(item,index) in Data"></v-for="(item,index)> -->
 		<u--form>
 			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="param.boxCode" border="0" disabled></u--input>
+				<u--input v-model.trim="param.boxCode" border="0" disabled></u--input>
 			</u-form-item>
 			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="param.locCode" @focus="focus(1)" @blur="blur(1)" @confirm="change"></u--input>
+				<u--input v-model.trim="param.locCode" @focus="focus(1)" @blur="blur(1)" @confirm="change"></u--input>
 			</u-form-item>
 			<u-form-item label="生产批次" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="param.skuLot1" @focus="focus(2)" @confirm="change" @blur="blur(2)"
+				<u--input v-model.trim="param.skuLot1" @focus="focus(2)" @confirm="change" @blur="blur(2)"
 					:focus="this.focusNum == 2"></u--input>
 			</u-form-item>
 			<u-form-item label="专用客户" :required="false" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="param.skuLot4" @focus="focus(3)" @blur="blur(3)" @confirm="change"
+				<u--input v-model.trim="param.skuLot4" @focus="focus(3)" @blur="blur(3)" @confirm="change"
 					:focus="this.focusNum == 3"></u--input>
 			</u-form-item>
 			
 			<u-form-item label="LPN" :required="false" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="param.lpnCode" @focus="focus(4)" @blur="blur(4)" @confirm="change"
+				<u--input v-model.trim="param.lpnCode" @focus="focus(4)" @blur="blur(4)" @confirm="change"
 					:focus="this.focusNum == 4"></u--input>
 			</u-form-item>
 
@@ -33,10 +33,10 @@
 			<u-list>
 				<u-list-item v-for="(item, index) in skuList" :key="index">
 					<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
-						<u--input v-model="item.skuCode" border="0" disabled></u--input>
+						<u--input v-model.trim="item.skuCode" border="0" disabled></u--input>
 					</u-form-item>
 					<u-form-item label="数量" class="left-text-one-line" labelWidth="100">
-						<u--input v-model="item.planQty" border="0" disabled></u--input>
+						<u--input v-model.trim="item.planQty" border="0" disabled></u--input>
 					</u-form-item>
 				</u-list-item>
 			</u-list>

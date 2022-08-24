@@ -6,16 +6,16 @@
 		</u-navbar>
 		<u--form>
 			<u-form-item label="物品" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuCode"></u--input>
+				<u--input v-model.trim="params.skuCode"></u--input>
 			</u-form-item>
 			<u-form-item label="批次" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.lotNumber"></u--input>
+				<u--input v-model.trim="params.lotNumber"></u--input>
 			</u-form-item>
 			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.locCode"></u--input>
+				<u--input v-model.trim="params.locCode"></u--input>
 			</u-form-item>
 			<u-form-item label="数量" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.qty"></u--input>
+				<u--input v-model.trim="params.qty"></u--input>
 			</u-form-item>
 		</u--form>
 		<view class="footer">

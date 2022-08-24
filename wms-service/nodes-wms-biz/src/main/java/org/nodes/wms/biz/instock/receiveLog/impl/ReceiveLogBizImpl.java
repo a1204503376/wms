@@ -64,7 +64,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setReceiveId(request.getReceiveId());
 		receiveLog.setReceiveDetailId(request.getReceiveDetailId());
 		receiveLog.setBoxCode(request.getBoxCode());
-		if (request.getIsSn()) {
+		if (request.getIsSn() && Func.isNotEmpty(request.getSerialNumberList())) {
 			receiveLog.setSnCode(String.join(",", request.getSerialNumberList()));
 		}
 		receiveLog.setWhCode(request.getWhCode());

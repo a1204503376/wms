@@ -5,7 +5,7 @@
 			style="color:#ffffff;font-size:21px;z-index: 999;">
 		</u-navbar>
 		<template>
-			<u-search placeholder="请输入收货单编码/上游编码" v-model="params.no" :show-action="false" @custom="search"
+			<u-search placeholder="请输入收货单编码/上游编码" v-model.trim="params.no" :show-action="false" @custom="search"
 				@search="search" class="font-in-page" style="margin: 12rpx">
 			</u-search>
 		</template>

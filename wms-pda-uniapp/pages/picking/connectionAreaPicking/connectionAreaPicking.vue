@@ -6,7 +6,7 @@
 		</u-navbar>
 		<u--form labelPosition="left">
 			<u-form-item label="当前选择" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="param.locCodeView" disabled></u--input>
+				<u--input v-model.trim="param.locCodeView" disabled></u--input>
 			</u-form-item>
 		</u--form>
 

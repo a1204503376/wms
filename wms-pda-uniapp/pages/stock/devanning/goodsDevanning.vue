@@ -7,16 +7,16 @@
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
 		<u--form labelPosition="left" :model="paramsView">
 			<u-form-item label="物品" borderBottom class="left-text-one-line font-in-page" labelWidth="100">
-				<u--input v-model="paramsView.skuCode"></u--input>
+				<u--input v-model.trim="paramsView.skuCode"></u--input>
 			</u-form-item>
 			<u-form-item label="批次" borderBottom class="left-text-one-line font-in-page" labelWidth="100">
-				<u--input v-model="paramsView.skuLot1"></u--input>
+				<u--input v-model.trim="paramsView.skuLot1"></u--input>
 			</u-form-item>
 			<u-form-item label="余额" borderBottom class="left-text-one-line font-in-page" labelWidth="100">
-				<u--input v-model="paramsView.stockBalance"></u--input>
+				<u--input v-model.trim="paramsView.stockBalance"></u--input>
 			</u-form-item>
 			<u-form-item label="拆数量" borderBottom class="left-text-one-line font-in-page" labelWidth="100">
-				<u--input v-model="paramsView.splitQty"></u--input>
+				<u--input v-model.trim="paramsView.splitQty"></u--input>
 			</u-form-item>
 		</u--form>
 		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>

@@ -6,32 +6,32 @@
 		</u-navbar>
 		<u--form>
 			<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuCode" border="0" disabled></u--input>
+				<u--input v-model.trim="params.skuCode" border="0" disabled></u--input>
 			</u-form-item>
 			<u-form-item label="名称" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuName" border="0" disabled></u--input>
+				<u--input v-model.trim="params.skuName" border="0" disabled></u--input>
 			</u-form-item>
 			<u-form-item label="型号" :required="true" class="left-text-one-line" labelWidth="100">
 				<uni-select v-model="params.skuLot2"></uni-select>
 			</u-form-item>
 			<u-form-item label="数量" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.surplusQty"></u--input>
+				<u--input v-model.trim="params.surplusQty"></u--input>
 				<!-- <u-number-box v-model="params.skuCode" @change="valChange"></u-number-box> -->
 			</u-form-item>
 			<u-form-item label="UOM" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.wsuCode" border="0" disabled></u--input>
+				<u--input v-model.trim="params.wsuCode" border="0" disabled></u--input>
 			</u-form-item>
 			<u-form-item label="生产批次" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuLot1"></u--input>
+				<u--input v-model.trim="params.skuLot1"></u--input>
 			</u-form-item>
 			<u-form-item label="箱码" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.boxCode"></u--input>
+				<u--input v-model.trim="params.boxCode"></u--input>
 			</u-form-item>
 			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.locCode"></u--input>
+				<u--input v-model.trim="params.locCode"></u--input>
 			</u-form-item>
 			<u-form-item label="专用客户" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuLot4"></u--input>
+				<u--input v-model.trim="params.skuLot4"></u--input>
 			</u-form-item>
 		</u--form>
 		<view class="footer">
@@ -150,12 +150,12 @@
 					if (tool.isNotEmpty(paramsData.skuLot2) && tool.isNotEmpty(paramsData.locCode) && tool
 						.isNotEmpty(paramsData.boxCode) && tool.isNotEmpty(_this.params.boxCode) && tool
 						.isNotEmpty(paramsData.skuLot1) && tool.isInteger(paramsData.surplusQty)) {
+						if (_this.params.isSn) {
+							uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/collectionSerialNumber', _this
+								.params);
+							return;
+						}
 						receive.submitReceiptByPcs(paramsData).then(data => {
-							if (_this.params.isSn) {
-								uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/collectionSerialNumber', _this
-									.params);
-								return;
-							}
 							if (data.data.allReceivieIsAccomplish && data.data
 								.currentReceivieIsAccomplish) {
 								//当前收货单收货收货完毕

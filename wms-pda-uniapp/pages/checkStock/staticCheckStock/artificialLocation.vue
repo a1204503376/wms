@@ -12,7 +12,7 @@
 					<u--text class="demo-layout bg-purple-light" v-text="'箱号'"></u--text>
 				</u-col>
 				<u-col span="10">
-					<u-input v-model="params.boxCode"></u-input>
+					<u-input v-model.trim="params.boxCode"></u-input>
 				</u-col>
 			</u-row>
 			<u-row>
@@ -22,7 +22,7 @@
 					</view>
 				</u-col>
 				<u-col span="10">
-					<u-input v-model="params.locCode"></u-input>
+					<u-input v-model.trim="params.locCode"></u-input>
 				</u-col>
 			</u-row>
 			<view v-for="(item, index) in receiveList.pdaBoxQtyResponseList" :key="index">

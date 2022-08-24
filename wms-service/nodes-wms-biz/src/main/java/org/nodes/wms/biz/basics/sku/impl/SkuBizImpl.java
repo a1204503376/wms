@@ -14,10 +14,12 @@ import org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.*;
 import org.nodes.wms.dao.basics.skuType.SkuTypeDao;
 import org.nodes.wms.dao.basics.skuType.entities.SkuType;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -149,4 +151,21 @@ public class SkuBizImpl implements SkuBiz {
 	public List<Sku> selectSkuListByNo(String no) {
 		return skuDao.getSkuListByNo(no);
 	}
+
+    @Override
+    public List<String> findSkuSpecSelectListBySkuId(Long skuId) {
+		List<String> skuSpecList = new ArrayList<>();
+		Sku sku = skuDao.getById(skuId);
+		if(Func.isEmpty(sku)){
+			throw new ServiceException("查询物品规格失败，该物品不存在");
+		}
+		if(Func.isNotEmpty(sku.getSkuSpec())){
+			skuSpecList.add(sku.getSkuSpec());
+		}else {
+			List<String> specList = skuDao.getSkuList().stream()
+				.map(Sku::getSkuSpec).sorted().collect(Collectors.toList());
+			skuSpecList.addAll(specList);
+		}
+		return skuSpecList;
+    }
 }

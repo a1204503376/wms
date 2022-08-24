@@ -32,7 +32,7 @@ export const editMixin = {
                 this.submitFormDebounce();
             }
         },
-        // 提交表单节流，10s内只执行一次
+        // 提交表单节流，2s内只执行一次
         submitFormDebounce: throttle(function () {
             this.loading = true;
             this.submitFormParams().then(res => {
@@ -43,7 +43,7 @@ export const editMixin = {
                 }
             });
             this.loading = false;
-        }, 10000, {leading: true, trailing: false}),
+        }, 2000, {leading: true, trailing: false}),
         /**
          * 提交表单参数到后台程序，处理成功之后需要返回一个对象，包含两个属性：msg和router
          * @returns {msg: string, router: Object}

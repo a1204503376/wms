@@ -144,7 +144,6 @@ export default {
             }
             let valueList = value.split("");
             let valueListLength = 0;
-            debugger
             for (let i = 0; i < valueList.length; i++) {
                 if (valueList[i] === 'Y' || valueList[i] === 'M' || valueList[i] === 'D' || valueList[i] === 'y' || valueList[i] === 'm' || valueList[i] === 'd' || valueList[i] === 'X') {
                     // else必须写，否则校验规则通过后的代码不会执行
