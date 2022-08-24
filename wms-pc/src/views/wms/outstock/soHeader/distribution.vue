@@ -291,7 +291,7 @@ export default {
                     },
                     {
                         prop: 'pickRealQty',
-                        label: '分配量'
+                        label: '实际分配量'
                     },
                     {
                         prop: 'skuCode',
