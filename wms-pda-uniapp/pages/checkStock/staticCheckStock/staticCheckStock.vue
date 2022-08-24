@@ -5,7 +5,7 @@
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<template>
-			<u-search placeholder="盘点单号" v-model="params.countBillNo" :show-action="false" @custom="search"
+			<u-search placeholder="盘点单号" v-model.trim="params.countBillNo" :show-action="false" @custom="search"
 				@search="search" class="font-in-page" style="margin: 12rpx">
 			</u-search>
 		</template>

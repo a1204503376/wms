@@ -7,7 +7,7 @@
 		<view class="cell">
 				<u--form>
 					<u-form-item label="地址" borderBottom>
-						<u--input v-model="address" border="none"></u--input>
+						<u--input v-model.trim="address" border="none"></u--input>
 					</u-form-item>
 				</u--form>
 		</view>

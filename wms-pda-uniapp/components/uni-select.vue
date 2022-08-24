@@ -4,13 +4,13 @@
 			<picker style="width: 100%;height: 100%;" v-model="dataSource" v-if="isSkuDropDownBox" :range="columns"
 				value="index" @change="bindPickerChange">
 				<view class="uni-input-input" style="width: 100%;">
-					<u--input style="margin-top: 0rpx; z-index: 99999;" v-model="dataSource"></u--input>
+					<u--input style="margin-top: 0rpx; z-index: 99999;" v-model.trim="dataSource"></u--input>
 				</view>
 			</picker>
 			<picker style="width: 100%;height: 100%;" v-model="dataSource" v-if="isSkuByCode" :range="columns"
 				value="index" @change="bindPickerChange" :disabled="isSkuByCode">
 				<view class="uni-input-input" style="width: 100%;">
-					<u--input style="margin-top: 0rpx; z-index: 99999;" v-model="dataSource" :disabled="isSkuByCode">
+					<u--input style="margin-top: 0rpx; z-index: 99999;" v-model.trim="dataSource" :disabled="isSkuByCode">
 					</u--input>
 				</view>
 			</picker>

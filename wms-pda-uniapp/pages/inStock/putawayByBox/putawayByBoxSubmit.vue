@@ -6,19 +6,19 @@
 		</u-navbar>
 		<u--form>
 			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.boxCode" border="0" disabled></u--input>
+				<u--input v-model.trim="params.boxCode" border="0" disabled></u--input>
 			</u-form-item>
 			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.locCode"></u--input>
+				<u--input v-model.trim="params.locCode"></u--input>
 			</u-form-item>
 			<u-form-item label="总数" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.qty" border="0" disabled></u--input>
+				<u--input v-model.trim="params.qty" border="0" disabled></u--input>
 			</u-form-item>
 			<u-form-item label="整托上架" :required="true" class="left-text-one-line" labelWidth="100">
 				<picker style="width: 100%;height: 100%;" v-model="dataSource" :range="isAllLpnPutawayList"
 					range-key="name" value="index" @change="bindPickerChange">
 					<view class="uni-input-input" style="width: 100%;">
-						<u--input style="margin-top: 0rpx; z-index: 99999;" v-model="dataSource"></u--input>
+						<u--input style="margin-top: 0rpx; z-index: 99999;" v-model.trim="dataSource"></u--input>
 					</view>
 				</picker>
 			</u-form-item>

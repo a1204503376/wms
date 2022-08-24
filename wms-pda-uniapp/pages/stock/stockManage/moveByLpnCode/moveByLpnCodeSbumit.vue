@@ -6,10 +6,10 @@
 		</u-navbar>
 		<u--form>
 			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.targetLocCode"></u--input>
+				<u--input v-model.trim="params.targetLocCode"></u--input>
 			</u-form-item>
 			<u-form-item label="LPN" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.targetLpnCode"></u--input>
+				<u--input v-model.trim="params.targetLpnCode"></u--input>
 			</u-form-item>
 		</u--form>
 		<view class="footer">
