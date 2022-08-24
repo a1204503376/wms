@@ -179,6 +179,9 @@ import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 
 export default {
     name: "stockLog",
+    props: {
+        stockId: {type: String, default: () => ''}
+    },
     components: {
         NodesWarehouse,
         NodesZone,
@@ -296,11 +299,6 @@ export default {
                         sortable: "custom"
                     },
                     {
-                        prop: "whName",
-                        label: "库房名称",
-                        sortable: "custom"
-                    },
-                    {
                         prop: "ownerName",
                         label: "货主",
                         sortable: "custom"
@@ -368,6 +366,7 @@ export default {
         };
     },
     created() {
+
         this.getTableData();
     },
     methods: {

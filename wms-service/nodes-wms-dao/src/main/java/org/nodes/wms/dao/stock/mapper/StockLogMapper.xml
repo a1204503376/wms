@@ -20,7 +20,6 @@
         lpn_code,
         loc_code,
         zone_code,
-        wh_name,
         o.owner_name,
         `user`.name as createUser,
         sl.create_time,
@@ -52,12 +51,6 @@
             <if test="param.zoneIdList != null and param.zoneIdList.size > 0">
                 AND sl.zone_id IN
                 <foreach collection="param.zoneIdList" item="item" separator="," open="(" close=")">
-                    #{item}
-                </foreach>
-            </if>
-            <if test="param.whIdList != null and param.whIdList.size > 0">
-                AND sl.wh_id IN
-                <foreach collection="param.whIdList" item="item" separator="," open="(" close=")">
                     #{item}
                 </foreach>
             </if>
