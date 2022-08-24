@@ -108,7 +108,7 @@ public class LogSoPickFactory {
 		logSoPick.setSoLineNo(soDetail.getSoLineNo());
 		logSoPick.setWhId(stock.getWhId());
 		StringBuilder serailNumber = new StringBuilder();
-		if (request.getSerailList().size() > 0) {
+		if (Func.isNotEmpty(request.getSerailList()) && request.getSerailList().size() > 0) {
 			for (String serailNum : request.getSerailList()) {
 				serailNumber.append(serailNum);
 				serailNumber.append(",");
@@ -145,7 +145,7 @@ public class LogSoPickFactory {
 		logSoPick.setSoLineNo(soDetail.getSoLineNo());
 		logSoPick.setWhId(stock.getWhId());
 		StringBuilder serialNumber = new StringBuilder();
-		if (Func.isNotEmpty(serialNoList)&&serialNoList.size() > 0) {
+		if (Func.isNotEmpty(serialNoList) && serialNoList.size() > 0) {
 			for (String serailNum : serialNoList) {
 				serialNumber.append(serailNum);
 				serialNumber.append(",");

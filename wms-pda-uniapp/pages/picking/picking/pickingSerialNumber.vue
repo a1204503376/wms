@@ -10,7 +10,7 @@
 			</u-form-item>
 		</u--form>
 		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">
-			序列号列表({{serialNumberList.length}}/{{params.surplusQty}})</h4>
+			序列号列表({{serialNumberList.length}}/{{params.qty}})</h4>
 		<!-- ${index + 1} -->
 		<u-list style="height: 650rpx;">
 			<u-list-item v-for="(item, index) in serialNumberList" :key="index" :style="item.backgroundColor">
@@ -71,10 +71,8 @@
 			}
 		},
 		onLoad: function(option) {
-			// var parse = JSON.parse(option.param)
-			// this.receiveDetailId = parse.receiveDetailId;
-			// this.receiveId = parse.receiveId;
-			// this.params = parse;
+			var parse = JSON.parse(option.param)
+			this.params = parse;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -125,24 +123,11 @@
 							_this.params.serialNumberList = serialList;
 							_this.params.whCode = uni.getStorageSync('warehouse').whCode;
 							_this.params.whId = uni.getStorageSync('warehouse').whId;
-							receive.submitReceiptByPcs(_this.params).then(data => {
-								if (data.data.allReceivieIsAccomplish && data.data
-									.currentReceivieIsAccomplish) {
-									//当前收货单收货收货完毕
-									_this.clearEmitKeyDown();
-									_this.$u.func.navigateBackTo(3);
-									return;
-								} else if (data.data.currentReceivieIsAccomplish) {
-									//当前收货单详情收货收货完毕
-									_this.clearEmitKeyDown();
-									_this.$u.func.navigateBackTo(2);
-									return;
-								} else {
-									//当前收货单详情收货部分收货,返回收货单收货页面
-									_this.clearEmitKeyDown();
-									_this.esc();
-								}
-
+							pick.pickByPcs(_this.params).then(data => {
+								_this.$u.func.showToast({
+									title: '拣货完成'
+								});
+								this.esc();
 							});
 						} else {
 							_this.$u.func.showToast({
@@ -199,7 +184,7 @@
 				});
 			},
 			clearEmitKeyDown() {
-				this.emitKeyDown = function(){};
+				this.emitKeyDown = function() {};
 			},
 			emitKeyDown(e) {
 				if (e.key == 'Enter') {

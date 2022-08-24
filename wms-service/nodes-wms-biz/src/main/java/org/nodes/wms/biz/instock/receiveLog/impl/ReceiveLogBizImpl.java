@@ -64,7 +64,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setReceiveId(request.getReceiveId());
 		receiveLog.setReceiveDetailId(request.getReceiveDetailId());
 		receiveLog.setBoxCode(request.getBoxCode());
-		if (request.getIsSn()) {
+		if (request.getIsSn() && Func.isNotEmpty(request.getSerialNumberList())) {
 			receiveLog.setSnCode(String.join(",", request.getSerialNumberList()));
 		}
 		receiveLog.setWhCode(request.getWhCode());
@@ -145,6 +145,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setSkuLot1(request.getSkuLot1());
 		receiveLog.setSkuLot2(request.getSkuLot2());
 		receiveLog.setSkuLot3(Func.formatDate(new Date()));
+		receiveLog.setSkuLot4(request.getSkuLot4());
 		receiveLogDao.save(receiveLog);
 		return receiveLog;
 	}

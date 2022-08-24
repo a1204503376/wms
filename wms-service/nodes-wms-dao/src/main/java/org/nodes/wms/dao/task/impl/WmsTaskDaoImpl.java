@@ -85,6 +85,9 @@ public class WmsTaskDaoImpl
 		AssertUtil.notNull(boxCode, "根据箱码获取任务失败，箱码为空");
 
 		List<WmsTask> wmsTaskList = lambdaQuery.list();
+		if (Func.isEmpty(taskProcTypeEnum) && wmsTaskList.size() == 0) {
+			return null;
+		}
 		AssertUtil.notNull(wmsTaskList, "根据箱码获取任务失败，此箱码不存在任务");
 		if (wmsTaskList.size() > 1 || wmsTaskList.size() == 0) {
 			throw new ServiceException("根据箱码获取任务失败，查询出多个任务，或查询不到跟此箱码相关的任务");

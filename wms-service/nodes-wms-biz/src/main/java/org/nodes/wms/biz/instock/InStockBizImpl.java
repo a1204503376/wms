@@ -194,6 +194,7 @@ public class InStockBizImpl implements InStockBiz {
 			item.setLocCode(receiveDetailLpnPdaMultiRequest.getLocCode());
 			item.setSkuLot1(receiveDetailLpnPdaMultiRequest.getSkuLot1());
 			item.setSkuLot2(receiveDetailLpnPdaMultiRequest.getSkuLot2());
+			item.setSkuLot4(receiveDetailLpnPdaMultiRequest.getSkuLot4());
 			item.setWhId(receiveDetailLpnPdaMultiRequest.getWhId());
 			receiveByDuoBoxCode(item, StockLogTypeEnum.INSTOCK_BY_MULTI_BOX.getDesc());
 		}
