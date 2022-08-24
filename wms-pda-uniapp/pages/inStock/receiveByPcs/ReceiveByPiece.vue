@@ -150,12 +150,12 @@
 					if (tool.isNotEmpty(paramsData.skuLot2) && tool.isNotEmpty(paramsData.locCode) && tool
 						.isNotEmpty(paramsData.boxCode) && tool.isNotEmpty(_this.params.boxCode) && tool
 						.isNotEmpty(paramsData.skuLot1) && tool.isInteger(paramsData.surplusQty)) {
+						if (_this.params.isSn) {
+							uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/collectionSerialNumber', _this
+								.params);
+							return;
+						}
 						receive.submitReceiptByPcs(paramsData).then(data => {
-							if (_this.params.isSn) {
-								uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/collectionSerialNumber', _this
-									.params);
-								return;
-							}
 							if (data.data.allReceivieIsAccomplish && data.data
 								.currentReceivieIsAccomplish) {
 								//当前收货单收货收货完毕
