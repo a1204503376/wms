@@ -20,12 +20,12 @@ import java.util.stream.Collectors;
 public class SoPickPlanFactory {
 
 	public List<SoPickPlan> createOnAgvArea(SoDetail soDetail, List<SoDetail> soDetailList,
-											Stock stock, List<Stock> stockOfLoc){
+											Stock stock, List<Stock> stockOfLoc) {
 		List<SoPickPlan> result = new ArrayList<>();
 		result.add(create(soDetail.getSoBillId(), soDetail, stock, stock.getStockEnable()));
 
-		for (Stock item : stockOfLoc){
-			if (item.getStockId().equals(stock.getStockId())){
+		for (Stock item : stockOfLoc) {
+			if (item.getStockId().equals(stock.getStockId())) {
 				continue;
 			}
 
@@ -33,7 +33,7 @@ public class SoPickPlanFactory {
 				.filter(soDetailItem -> item.getSkuId().equals(soDetailItem.getSkuId()))
 				.collect(Collectors.toList());
 			SoDetail currentSoDetail = null;
-			if (Func.isNotEmpty(soDetailOfSku)){
+			if (Func.isNotEmpty(soDetailOfSku)) {
 				currentSoDetail = soDetailOfSku.get(0);
 			}
 			result.add(create(soDetail.getSoBillId(), currentSoDetail, item, item.getStockEnable()));
@@ -42,14 +42,15 @@ public class SoPickPlanFactory {
 		return result;
 	}
 
-	public SoPickPlan create(Long soHeaderId, SoDetail soDetail, Stock stock, BigDecimal planQty){
+	public SoPickPlan create(Long soHeaderId, SoDetail soDetail, Stock stock, BigDecimal planQty) {
 		SoPickPlan soPickPlan = Func.copy(stock, SoPickPlan.class);
-		if (Func.notNull(soDetail)){
+		if (Func.notNull(soDetail)) {
 			soPickPlan.setSoDetailId(soDetail.getSoDetailId());
 		}
 		soPickPlan.setLotNumber(stock.getSkuLot1());
 		soPickPlan.setWellenId(0L);
 		soPickPlan.setSoBillId(soHeaderId);
+		soPickPlan.setSoBillNo(soDetail.getSoBillNo());
 		soPickPlan.setPickPlanQty(planQty);
 		soPickPlan.setPickRealQty(BigDecimal.ZERO);
 		return soPickPlan;
