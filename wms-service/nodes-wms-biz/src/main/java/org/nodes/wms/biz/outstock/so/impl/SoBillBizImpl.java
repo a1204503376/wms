@@ -8,21 +8,26 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.common.log.LogBiz;
+import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.outstock.so.SoBillBiz;
 import org.nodes.wms.biz.outstock.so.modular.SoBillFactory;
+import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.common.log.dto.output.LogDetailPageResponse;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
+import org.nodes.wms.dao.outstock.logSoPick.LogSoPickDao;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.NotSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickExcelResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
+import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.outstock.so.SoDetailDao;
 import org.nodes.wms.dao.outstock.so.SoHeaderDao;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
@@ -77,6 +82,8 @@ public class SoBillBizImpl implements SoBillBiz {
 	private final SoBillFactory soBillFactory;
 	private final SoPickPlanBiz soPickPlanBiz;
 	private final LogBiz logBiz;
+	private final StockBiz stockBiz;
+	private final LogSoPickBiz logSoPickBiz;
 
 	@Override
 	public Page<SoHeaderPageResponse> getPage(Query query, SoHeaderPageQuery soHeaderPageQuery) {
@@ -151,16 +158,17 @@ public class SoBillBizImpl implements SoBillBiz {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void closeById(Long soBillId) {
-		Map<String, Object> soHeaderMap = new HashMap<String, Object>();
-		soHeaderMap.put("soBillId", soBillId);
-		soHeaderMap.put("soBillState", SoBillStateEnum.COMPLETED.getCode());
-		SoHeader soHeader = soBillFactory.createSoHeaderByCustom(soHeaderMap);
-		if (!soHeaderDao.updateSoHeaderById(soHeader)) {
-			throw new ServiceException("关闭发货单失败，请稍后再试");
+		soHeaderDao.updateStateBySoBillId(soBillId, SoBillStateEnum.COMPLETED);
+		SoHeader soHeader = soHeaderDao.getById(soBillId);
+		AssertUtil.notNull(soHeader, "关闭单据失败,发货单不存在");
+		soPickPlanBiz.cancelPickPlanByClose(soHeader);
+		List<LogSoPick> logSoPicks = logSoPickBiz.findEnableBySoHeaderId(soBillId);
+		if (Func.isNotEmpty(logSoPicks)){
+			stockBiz.outStockByCloseBill(logSoPicks);
 		}
 
-		soPickPlanBiz.cancelPickPlanByClose(soHeader);
 		logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), soHeader.getSoBillNo(), "关闭发货单");
 	}
 
