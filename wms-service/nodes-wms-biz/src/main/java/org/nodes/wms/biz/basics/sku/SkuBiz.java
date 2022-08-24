@@ -150,4 +150,12 @@ public interface SkuBiz {
 	 * @return SKU集合
 	 */
 	List<Sku> selectSkuListByNo(String no);
+
+	/**
+	 * 根据物品id获取所有物品规格
+	 *
+	 * @param skuId 物品id
+	 * @return 物品规格下拉数据
+	 */
+	List<String> findSkuSpecSelectListBySkuId(Long skuId);
 }
