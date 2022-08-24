@@ -81,13 +81,18 @@ public class LogSoPickBizImpl implements LogSoPickBiz {
 		}
 
 		// 正向的拣货记录
-		List<LogSoPick> enablePickLogs = allPickLog.stream()
+		List<LogSoPick> result = allPickLog.stream()
 				.filter(item -> BigDecimalUtil.gt(item.getPickRealQty(), BigDecimal.ZERO))
 				.collect(Collectors.toList());
-		List<LogSoPick> result = new ArrayList<LogSoPick>();
-		for (LogSoPick logSoPick : enablePickLogs) {
+		for (LogSoPick logSoPickOfCancel : cancelPickLogs) {
 			// 从正向拣货记录中排除撤销的记录
-			result.add(logSoPick);
+			for (LogSoPick item : result) {
+				if (SkuLotUtil.compareAllSkuLot(item, logSoPickOfCancel)
+						&& item.getSoDetailId().equals(logSoPickOfCancel.getSoDetailId())) {
+					result.remove(item);
+					break;
+				}
+			}
 		}
 		return result;
 	}
