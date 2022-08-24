@@ -1,13 +1,8 @@
 package org.nodes.wms.biz.outstock.so.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
@@ -29,17 +24,7 @@ import org.nodes.wms.dao.outstock.so.dto.input.SoBillAddOrEditRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillIdRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoHeaderPageQuery;
-import org.nodes.wms.dao.outstock.so.dto.output.LineNoAndSkuSelectResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.PickByPcSoDetailResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.PickByPcSoHeaderResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoBillDistributedResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoBillEditResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoDetailAndStockResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDetailResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoDetailForDistResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderExcelResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderForDetailResponse;
-import org.nodes.wms.dao.outstock.so.dto.output.SoHeaderPageResponse;
+import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
@@ -57,10 +42,12 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-
-import lombok.RequiredArgsConstructor;
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 发货单业务接口实现类
@@ -154,7 +141,7 @@ public class SoBillBizImpl implements SoBillBiz {
 	public void closeById(Long soBillId) {
 		Map<String, Object> soHeaderMap = new HashMap<String, Object>();
 		soHeaderMap.put("soBillId", soBillId);
-		soHeaderMap.put("soBillState", SoBillStateEnum.COMPLETED.getCode());
+		soHeaderMap.put("soBillState", SoBillStateEnum.COMPLETED);
 		SoHeader soHeader = soBillFactory.createSoHeaderByCustom(soHeaderMap);
 		if (!soHeaderDao.updateSoHeaderById(soHeader)) {
 			throw new ServiceException("关闭发货单失败，请稍后再试");
