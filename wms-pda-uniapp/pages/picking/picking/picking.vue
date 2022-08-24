@@ -6,7 +6,7 @@
 		</u-navbar>
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
 		<u--form labelPosition="left" :model="params">
-			<u-search placeholder="请输入发货单编码/上游编码/任务号" v-model="params.no" :show-action="false"
+			<u-search placeholder="请输入发货单编码/上游编码/任务号" v-model.trim="params.no" :show-action="false"
 				@custom="getReceiveDetailList" @search="getReceiveDetailList" class="font-in-page"
 				style="margin: 12rpx">
 			</u-search>

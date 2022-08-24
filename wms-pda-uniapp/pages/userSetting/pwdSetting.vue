@@ -7,15 +7,15 @@
 		<view style="margin-top: 5%;margin-left:5%;margin-right: 5%;">
 			<u--form labelPosition="left" :model="form" :rules="rules" ref="uForm">
 				<u-form-item prop="userInfo.oldPassword" borderBottom ref="item1">
-					<u--input v-model="form.userInfo.oldPassword" :focus="oldPwdFocus" border="none"
+					<u--input v-model.trim="form.userInfo.oldPassword" :focus="oldPwdFocus" border="none"
 						placeholder="请输入原始密码" @confirm="oldPwd"></u--input>
 				</u-form-item>
 				<u-form-item prop="userInfo.newPassword" borderBottom ref="item1">
-					<u--input v-model="form.userInfo.newPassword" :focus="newPwdFocus" border="none"
+					<u--input v-model.trim="form.userInfo.newPassword" :focus="newPwdFocus" border="none"
 						placeholder="请输入新密码" @confirm="newPwd"></u--input>
 				</u-form-item>
 				<u-form-item prop="userInfo.newPassword1" borderBottom ref="item1">
-					<u--input v-model="form.userInfo.newPassword1" border="none" :focus="newPwd1Focus"
+					<u--input v-model.trim="form.userInfo.newPassword1" border="none" :focus="newPwd1Focus"
 						placeholder="请输入确认密码" @confirm="submit"></u--input>
 				</u-form-item>
 			</u--form>

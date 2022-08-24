@@ -6,13 +6,13 @@
 		</u-navbar>
 		<u--form>
 			<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuCode" border="0" disabled></u--input>
+				<u--input v-model.trim="params.skuCode" border="0" disabled></u--input>
 			</u-form-item>
 			<u-form-item label="名称" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuName" border="0" disabled></u--input>
+				<u--input v-model.trim="params.skuName" border="0" disabled></u--input>
 			</u-form-item>
 			<u-form-item label="序列号" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.serialNumber"></u--input>
+				<u--input v-model.trim="params.serialNumber"></u--input>
 			</u-form-item>
 		</u--form>
 		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">

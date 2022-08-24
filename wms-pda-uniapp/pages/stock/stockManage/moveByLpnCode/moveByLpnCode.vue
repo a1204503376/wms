@@ -6,7 +6,7 @@
 		</u-navbar>
 		<u--form>
 			<u-form-item label="LPN" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.lpnCode"></u--input>
+				<u--input v-model.trim="params.lpnCode"></u--input>
 			</u-form-item>
 		</u--form>
 		<view class="footer">

@@ -6,30 +6,30 @@
 		</u-navbar>
 		<u--form>
 			<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuCode"  disabled></u--input>
+				<u--input v-model.trim="params.skuCode"  disabled></u--input>
 			</u-form-item>
 			<u-form-item label="可用" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.stockEnable" disabled></u--input>
+				<u--input v-model.trim="params.stockEnable" disabled></u--input>
 				<u--text slot="right" class="font-in-page" v-text="params.wsuCode"></u--text>
 			</u-form-item>
 			<u-form-item label="余额" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.stockBalance" disabled></u--input>
+				<u--input v-model.trim="params.stockBalance" disabled></u--input>
 				<u--text slot="right" class="font-in-page" v-text="params.wsuCode"></u--text>
 			</u-form-item>
 			<u-form-item label="LOC" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.locCode" disabled></u--input>
+				<u--input v-model.trim="params.locCode" disabled></u--input>
 			</u-form-item>
 			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.boxCode" disabled></u--input>
+				<u--input v-model.trim="params.boxCode" disabled></u--input>
 			</u-form-item>
 			<u-form-item label="LPN" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.lpnCode" disabled></u--input>
+				<u--input v-model.trim="params.lpnCode" disabled></u--input>
 			</u-form-item>
 			<u-form-item label="状态" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.stockStatus" disabled></u--input>
+				<u--input v-model.trim="params.stockStatus" disabled></u--input>
 			</u-form-item>
 			<u-form-item label="货主" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.ownerName"  disabled></u--input>
+				<u--input v-model.trim="params.ownerName"  disabled></u--input>
 			</u-form-item>
 			<sku-lot-view v-model="params"></sku-lot-view>
 			<u-form-item class="left-text-one-line" labelWidth="100">

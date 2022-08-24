@@ -7,7 +7,7 @@
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
 		<u--form labelPosition="left">
 			<u-form-item label="箱码" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="param.boxCode"  @confirm="getReceiveDetailList"></u--input>
+				<u--input v-model.trim="param.boxCode"  @confirm="getReceiveDetailList"></u--input>
 			</u-form-item>
 		</u--form>
 <h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">未收货列表</h4>

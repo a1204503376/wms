@@ -6,16 +6,16 @@
 		</u-navbar>
 		<u--form>
 			<u-form-item label="箱码1" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.boxCodeList[0].boxCode"></u--input>
+				<u--input v-model.trim="params.boxCodeList[0].boxCode"></u--input>
 			</u-form-item>
 			<u-form-item label="箱码2" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.boxCodeList[1].boxCode"></u--input>
+				<u--input v-model.trim="params.boxCodeList[1].boxCode"></u--input>
 			</u-form-item>
 			<u-form-item label="箱码3" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.boxCodeList[2].boxCode"></u--input>
+				<u--input v-model.trim="params.boxCodeList[2].boxCode"></u--input>
 			</u-form-item>
 			<u-form-item label="箱码4" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.boxCodeList[3].boxCode"></u--input>
+				<u--input v-model.trim="params.boxCodeList[3].boxCode"></u--input>
 			</u-form-item>
 		</u--form>
 		<view class="footer">

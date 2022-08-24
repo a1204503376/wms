@@ -7,7 +7,7 @@
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
 		<u--form labelPosition="left" :model="params">
 			<u-form-item label="箱码" borderBottom class="left-text-one-line font-in-page" labelWidth="100">
-				<u--input v-model="params.boxCode"></u--input>
+				<u--input v-model.trim="params.boxCode"></u--input>
 			</u-form-item>
 		</u--form>
 		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>

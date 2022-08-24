@@ -6,7 +6,7 @@
 		</u-navbar>
 		<u--form>
 			<u-form-item label="箱码" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.boxCode"></u--input>
+				<u--input v-model.trim="params.boxCode"></u--input>
 			</u-form-item>
 		</u--form>
 		<view class="footer">
