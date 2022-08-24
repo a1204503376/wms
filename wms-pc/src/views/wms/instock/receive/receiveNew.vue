@@ -32,7 +32,7 @@
                                 </nodes-bill-type>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8" >
+                        <el-col :span="8">
                             <el-form-item
                                 :label="form.params.newReceiveHeaderRequest.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN ? '供应商' : '归还人'"
                                 :prop="form.params.newReceiveHeaderRequest.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN ? 'supplier' : 'supplierContact'">
@@ -345,7 +345,7 @@ export default {
         }
     },
     methods: {
-        billTypeChange(row){
+        billTypeChange(row) {
             console.log(row)
         },
         // 过滤空白行
@@ -410,7 +410,14 @@ export default {
         },
 
         onChangeSku(row) {
-
+            if (row.sku.skuCode !== undefined) {
+                let skuCodeList = this.table.data.map((item) => item.sku.skuCode);
+                let skuCode = row.sku.skuCode;
+                if (skuCodeList.indexOf(skuCode) != skuCodeList.lastIndexOf(skuCode)) {
+                    row.sku = {},
+                        this.$message.error('物料编码' + skuCode + '重复');
+                }
+            }
         },
         submitFormParams() {
             this.form.params.newReceiveDetailRequestList = this.table.postData

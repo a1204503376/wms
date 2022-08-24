@@ -349,7 +349,7 @@ public class ReceiveFactory {
 		//设置仓库编码
 		receiveHeader.setWhCode(warehouse.getWhCode());
 		//设置单据类型
-		receiveHeader.setBillTypeCd("OR");
+		receiveHeader.setBillTypeCd("TR");
 		//设置入库方式
 		receiveHeader.setInStoreType(20);
 		//获取第一条货主信息
