@@ -89,6 +89,9 @@
         LEFT JOIN blade_user `user` ON spp.create_user = `user`.id
         <where>
             spp.is_deleted = 0
+            <if test="param.stockId != null and param.stockId != ''">
+                AND spp.stock_id = #{param.stockId}
+            </if>
             <if test="param.soBillNo != null and param.soBillNo != ''">
                 AND spp.so_bill_no LIKE CONCAT('%', #{param.soBillNo} ,'%')
             </if>

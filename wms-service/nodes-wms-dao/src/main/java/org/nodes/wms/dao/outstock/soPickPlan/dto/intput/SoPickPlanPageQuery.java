@@ -14,6 +14,11 @@ public class SoPickPlanPageQuery implements Serializable {
 	private static final long serialVersionUID = -4352510917899908388L;
 
 	/**
+	 * 库存ID
+	 */
+	private Long stockId;
+
+	/**
 	 * 发货单编码
 	 */
 	private String soBillNo;
