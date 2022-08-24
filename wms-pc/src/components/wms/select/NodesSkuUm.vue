@@ -1,14 +1,14 @@
 <template>
     <el-select
         v-model="val"
+        :clearable="true"
+        :disabled="disabled"
+        :size="size"
         collapse-tags
         placeholder="请选择"
-        :clearable="true"
         @change="onChange"
         @visible-change="onFocus"
-        :size="size"
-        :disabled="disabled"
-           >
+    >
         <el-option
             v-for="item in dataSource"
             :key="item.wsuId"
@@ -37,7 +37,7 @@ export default {
     props: {
         selectVal: [String],
         //物料编码,新增和编辑时将其设置为当前行的sku对象
-        sku:{type: Object, required: false},
+        sku: {type: Object, required: false},
         // 组件大小，默认为mini, 支持 medium/small/mini
         size: {type: String, required: false, default: () => "mini"},
         // 是否禁用 默认为 false不禁用
@@ -45,21 +45,24 @@ export default {
     },
     data() {
         return {
-            val:this.selectVal,
+            val: this.selectVal,
             dataSource: []
         }
     },
-    watch:{
-        sku: async function(){
-            await this.getDataSource(this.sku.skuId);
-            if(this.dataSource.length>0) {
-                this.val = this.dataSource[0].wsuCode;
-                this.onChange(this.val);
-            }else {
-                this.onChange('');
+    watch: {
+        sku: async function (newVal, oldVal) {
+            // sku != {} （空对象）时, 才进行查询
+            if (Object.keys(newVal).length !== 0) {
+                await this.getDataSource(this.sku.skuId);
+                if (this.dataSource.length > 0) {
+                    this.val = this.dataSource[0].wsuCode;
+                    this.onChange(this.val);
+                } else {
+                    this.onChange('');
+                }
             }
         },
-        selectVal(newVal){
+        selectVal(newVal) {
             this.val = newVal;
         }
     },
@@ -77,10 +80,10 @@ export default {
         /**
          * 编辑的时候获取所有的计量单位
          */
-        onFocus(){
-          if(func.isEmpty(this.dataSource) && func.isNotEmpty(this.sku.id)){
-              this.getDataSource(this.sku.id);
-          }
+        onFocus() {
+            if (func.isEmpty(this.dataSource) && func.isNotEmpty(this.sku.id)) {
+                this.getDataSource(this.sku.id);
+            }
         }
 
     }
