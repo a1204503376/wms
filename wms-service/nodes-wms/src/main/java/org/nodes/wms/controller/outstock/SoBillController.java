@@ -34,7 +34,7 @@ import java.util.List;
 
 /**
  * 发货单API
- * 
+ *
  * @author nodesc
  */
 @RestController
@@ -265,7 +265,7 @@ public class SoBillController {
 	@PostMapping("/saveAssign")
 	public R<String> saveAssign(@Valid @RequestBody SoBillDistributedRequest soBillDistributedRequest) {
 		outStockBiz.manualDistribute(soBillDistributedRequest);
-		return R.data("调整成功");
+		return R.success("调整成功");
 	}
 
 	/**
