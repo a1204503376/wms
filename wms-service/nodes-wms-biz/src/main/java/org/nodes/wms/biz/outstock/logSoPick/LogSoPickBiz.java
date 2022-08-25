@@ -58,4 +58,11 @@ public interface LogSoPickBiz {
 	 */
 	List<LogSoPick> findByIds(List<Long> lsopIdList);
 
+	/**
+	 * 查询发货单中有效的拣货记录，排除撤销的记录
+	 *
+	 * @param soBillId 发货单id
+	 * @return 有效的拣货记录
+	 */
+    List<LogSoPick> findEnableBySoHeaderId(Long soBillId);
 }

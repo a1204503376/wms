@@ -1,6 +1,8 @@
 package org.nodes.wms.dao.outstock.logSoPick.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.outstock.logSoPick.LogSoPickDao;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.LogSoPickPageQuery;
@@ -18,6 +20,8 @@ import java.util.List;
 
 /**
  * 拣货记录日志Dao接口实现类
+ *
+ * @author nodesc
  **/
 @Repository
 public class LogSoPickDaoImpl extends BaseServiceImpl<LogSoPickMapper, LogSoPick> implements LogSoPickDao {
@@ -53,4 +57,11 @@ public class LogSoPickDaoImpl extends BaseServiceImpl<LogSoPickMapper, LogSoPick
 			throw new ServiceException("保存拣货记录失败");
 		}
 	}
+
+    @Override
+    public List<LogSoPick> findBySoHeaderId(Long soBillId) {
+		LambdaQueryWrapper<LogSoPick> queryWrapper = Wrappers.lambdaQuery(LogSoPick.class);
+		queryWrapper.eq(LogSoPick::getSoBillId, soBillId);
+		return super.list(queryWrapper);
+    }
 }

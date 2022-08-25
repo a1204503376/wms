@@ -60,12 +60,12 @@ public class StockLogPageQuery implements Serializable {
 	private List<Long> zoneIdList;
 
 	/**
-	 * 库房id集合
-	 */
-	private List<Long> whIdList;
-
-	/**
 	 * 生产批次
 	 */
 	private String skuLot1;
+
+	/**
+	 * 库存id，可以为空
+	 */
+	private Long stockId;
 }

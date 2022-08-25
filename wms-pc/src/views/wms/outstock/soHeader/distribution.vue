@@ -160,6 +160,7 @@
                         <template v-slot="{row}">
                             <el-input
                                 v-model="row.pickQty"
+                                :disabled="row.zoneCode === $commonConst.ZONE_AGV"
                                 maxlength="9"
                                 oninput="value=value.replace(/[^\d]/g,'')"
                                 placeholder="请输入分配数量"
@@ -291,7 +292,7 @@ export default {
                     },
                     {
                         prop: 'pickRealQty',
-                        label: '分配量'
+                        label: '实际分配量'
                     },
                     {
                         prop: 'skuCode',
@@ -561,7 +562,7 @@ export default {
             await getStockByDistributeAdjust(row.skuId, row.skuLot1, row.skuLot4, this.soHeader.soBillId)
                 .then((res) => {
                     this.dialog.dialogData = res.data.data;
-                    this.dialog.dialogData.forEach(item =>{
+                    this.dialog.dialogData.forEach(item => {
                         item.oldStockEnable = item.stockEnable;
                         item.oldPickQty = item.pickQty
                     })
@@ -584,9 +585,7 @@ export default {
             }
         },
         changePickQty(val, row) {
-            console.log(val);
-            console.log(row);
-            if (val > row.oldStockEnable){
+            if (val > row.oldStockEnable) {
                 this.$message.warning("分配量不能大于可用量");
                 row.pickQty = row.oldPickQty;
             }
@@ -600,7 +599,7 @@ export default {
         },
         onAdjustSubmit() {
             let dialogData = this.dialog.dialogData;
-            if(func.isEmpty(dialogData)){
+            if (func.isEmpty(dialogData)) {
                 this.$message.warning("没有可保存的数据");
                 this.dialog.dialogTableVisible = false;
                 return;
@@ -609,6 +608,11 @@ export default {
             for (const i in data) {
                 if (data[i].pickQty > data[i].stockEnable) {
                     this.$message.warning(`第${i}行，物品 ${data[i].skuCode}，批次${data[i].skuLot1} 的分配量不能大于可用量`)
+                    return;
+                }
+                if (data[i].zoneCode === this.$commonConst.ZONE_AGV
+                    && data[i].pickQty !== data[i].stockEnable) {
+                    this.$message.warning(`第${i}行，自动区库存分配量必须等于可用量`)
                     return;
                 }
             }

@@ -345,7 +345,7 @@ export default {
         },
         onEdit(row) {
             if (row.soBillState.trim() !== '单据创建') {
-                this.$message.warning("操作失败，该发货单正在处理中");
+                this.$message.warning(`操作失败，该发货单不能编辑，[${row.soBillState}]`);
                 return;
             }
             this.$router.push({

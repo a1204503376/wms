@@ -46,7 +46,8 @@ public enum StockLogTypeEnum {
 	OUTSTOCK_BY_PC_PDA(304, "按件拣货-手持"),
 	OUTSTOCK_BY_BOX_PDA(305, "按箱拣货-手持"),
 	OUTSTOCK_BY_PICK_TO_PDA(306, "接驳区拣货-手持"),
-	OUTSTOCK_BY_PICK_PLAN(307, "按拣货计划拣货")
+	OUTSTOCK_BY_PICK_PLAN(307, "按拣货计划拣货"),
+	OUTSTOCK_CLOSE_BILL(308, "单据关闭")
 	;
 
 

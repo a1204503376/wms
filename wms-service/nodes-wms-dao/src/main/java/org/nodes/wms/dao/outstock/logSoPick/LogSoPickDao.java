@@ -64,4 +64,12 @@ public interface LogSoPickDao extends BaseService<LogSoPick> {
 	 * @param logSoPick 拣货记录实体
 	 */
 	void saveLogSoPick(LogSoPick logSoPick);
+
+	/**
+	 * 根据发货单查询正常拣货记录，包含撤销的记录
+	 *
+	 * @param soBillId 发货单id
+	 * @return LogSoPick集合
+	 */
+    List<LogSoPick> findBySoHeaderId(Long soBillId);
 }
