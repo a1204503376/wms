@@ -149,7 +149,7 @@ public class TianyiPickStrategy {
 	private boolean isNotCondition(List<Stock> stockList, List<Long> skuIdsOfSoDetail){
 		// 判断自动区的中物品的库存是否全部在对应的出库明细中
 		List<Long> skuIdOfStock = stockList.stream()
-			.map(Stock::getStockId)
+			.map(Stock::getSkuId)
 			.collect(Collectors.toList());
 
 		return !skuIdsOfSoDetail.containsAll(skuIdOfStock);
