@@ -159,8 +159,7 @@
                     <el-table-column label="本次分配量" prop="pickQty" width="150">
                         <template v-slot="{row}">
                             <el-input
-                                v-model="row.pickQty"
-                                :disabled="row.zoneCode === $commonConst.ZONE_AGV"
+                                v-model.number="row.pickQty"
                                 maxlength="9"
                                 oninput="value=value.replace(/[^\d]/g,'')"
                                 placeholder="请输入分配数量"
@@ -607,17 +606,18 @@ export default {
             let data = this.dialog.dialogData.filter(item => this.filterRowBySoPickPlan(item));
             for (const i in data) {
                 if (data[i].pickQty > data[i].stockEnable) {
-                    this.$message.warning(`第${i}行，物品 ${data[i].skuCode}，批次${data[i].skuLot1} 的分配量不能大于可用量`)
+                    this.$message.warning(`第${Number(i) + 1}行，物品 ${data[i].skuCode}，批次${data[i].skuLot1} 的分配量不能大于可用量`);
                     return;
                 }
                 if (data[i].zoneCode === this.$commonConst.ZONE_AGV
+                    && data[i].pickQty > 0
                     && data[i].pickQty !== data[i].stockEnable) {
-                    this.$message.warning(`第${i}行，自动区库存分配量必须等于可用量`)
+                    this.$message.warning(`第${Number(i) + 1}行，自动区库存必须全部整箱分配`);
                     return;
                 }
             }
             let stockIdAndSoPickPlanQtyList = data.map(item => {
-                return Object.assign({}, {'stockId': item.stockId, 'soPickPlanQty': item.planQty})
+                return Object.assign({}, {'stockId': item.stockId, 'soPickPlanQty': item.pickQty})
             })
             let soPickPlanList = [];
             if (func.isNotEmpty(this.dialog.dialogData)) {
@@ -640,7 +640,7 @@ export default {
         },
         // 过滤未填写本次分配量的行
         filterRowBySoPickPlan(row) {
-            return !(row.pickQty === 0 || func.isEmpty(row.pickQty));
+            return !(func.isEmpty(row.pickQty));
         },
         getSummaries(param) {
             const {columns, data} = param;
