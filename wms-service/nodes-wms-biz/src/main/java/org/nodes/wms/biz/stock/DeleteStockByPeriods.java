@@ -25,6 +25,6 @@ public class DeleteStockByPeriods {
 	@Transactional(rollbackFor = Exception.class)
 	public void clearInvalidStock() {
 		stockDao.deleteStockByStockIdList();
-		logBiz.auditLog(AuditLogType.CRON_TASK, "定时任务定时执行删除库存完成");
+		logBiz.auditLog(AuditLogType.CRON_TASK, "定时任务定时执行删除无效库存完成");
 	}
 }
