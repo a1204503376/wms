@@ -88,7 +88,7 @@ public class SoBillBizImpl implements SoBillBiz {
 			throw new ServiceException("新增发货单头表信息失败，请稍后再试");
 		}
 		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader,
-				soBillAddOrEditRequest.getSoDetailList());
+			soBillAddOrEditRequest.getSoDetailList());
 		if (!soDetailDao.saveOrUpdateBatch(soDetailList)) {
 			throw new ServiceException("新增发货单明细信息失败，请稍后再试");
 		}
@@ -116,12 +116,12 @@ public class SoBillBizImpl implements SoBillBiz {
 			throw new ServiceException("编辑发货单头表信息失败，请稍后再试");
 		}
 		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader,
-				soBillAddOrEditRequest.getSoDetailList());
+			soBillAddOrEditRequest.getSoDetailList());
 		if (!soDetailDao.saveOrUpdateBatch(soDetailList)) {
 			throw new ServiceException("编辑发货单明细信息失败，请稍后再试");
 		}
 		if (Func.isNotEmpty(soBillAddOrEditRequest.getRemoveIdList())
-				&& !soDetailDao.removeByIdList(soBillAddOrEditRequest.getRemoveIdList())) {
+			&& !soDetailDao.removeByIdList(soBillAddOrEditRequest.getRemoveIdList())) {
 			throw new ServiceException("编辑发货单明细信息失败，请稍后再试");
 		}
 		logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), soHeader.getSoBillNo(), "编辑发货单");
@@ -207,8 +207,8 @@ public class SoBillBizImpl implements SoBillBiz {
 		skuLot.setSkuLot1(pickByPcSoDetailResponse.getSkuLot1());
 		// 根据查询条件获取库存集合
 		List<Stock> stockList = stockQueryBiz.findEnableStockByZoneAndSkuLot(soDetailAndStockRequest.getWhId(),
-				pickByPcSoDetailResponse.getSkuId(),
-				StockStatusEnum.NORMAL, null, skuLot);
+			pickByPcSoDetailResponse.getSkuId(),
+			StockStatusEnum.NORMAL, null, skuLot);
 		for (Stock stock : stockList) {
 			BigDecimal stockEnableQty = stock.getStockEnable();
 			if (stockEnableQty.compareTo(BigDecimal.ZERO) == -1) {
@@ -265,7 +265,7 @@ public class SoBillBizImpl implements SoBillBiz {
 
 	@Override
 	public Page<SoDetailForDetailResponse> pageSoDetailForDetailBySoBillId(Query query,
-			SoBillIdRequest soBillIdRequest) {
+																		   SoBillIdRequest soBillIdRequest) {
 		return soDetailDao.pageForSoDetailBySoBillId(Condition.getPage(query), soBillIdRequest.getSoBillId());
 	}
 
@@ -335,13 +335,18 @@ public class SoBillBizImpl implements SoBillBiz {
 	@Override
 	public boolean isFinish(SoHeader soHeader) {
 		return SoBillStateEnum.COMPLETED.equals(soHeader.getSoBillState())
-				|| SoBillStateEnum.ALL_OUT_STOCK.equals(soHeader.getSoBillState())
-				|| SoBillStateEnum.CANCELED.equals(soHeader.getSoBillState());
+			|| SoBillStateEnum.ALL_OUT_STOCK.equals(soHeader.getSoBillState())
+			|| SoBillStateEnum.CANCELED.equals(soHeader.getSoBillState());
 	}
 
 	@Override
 	public void updateState(Long soBillId, SoBillStateEnum soBillStateEnum) {
 		soHeaderDao.updateStateBySoBillId(soBillId, soBillStateEnum);
+	}
+
+	@Override
+	public SoDetail findSoDetailByHeaderIdAndSkuCode(Long soBillId, String skuCode) {
+		return soDetailDao.getSoDetailByHeaderIdAndSkuCode(soBillId, skuCode);
 	}
 
 }

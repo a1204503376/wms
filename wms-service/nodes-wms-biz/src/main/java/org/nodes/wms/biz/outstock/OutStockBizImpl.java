@@ -169,6 +169,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		List<SoBillStateEnum> soBillStateEnums = new ArrayList<>();
 		soBillStateEnums.add(SoBillStateEnum.EXECUTING);
 		soBillStateEnums.add(SoBillStateEnum.PART);
+		soBillStateEnums.add(SoBillStateEnum.CREATE);
 		request.setSoBillState(soBillStateEnums);
 		return soBillBiz.getAllPickingByNo(Condition.getPage(query), request);
 	}
@@ -177,7 +178,12 @@ public class OutStockBizImpl implements OutStockBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public Boolean pickByPcs(PickByPcsRequest request) {
 		SoHeader soHeader = soBillBiz.getSoHeaderById(request.getSoBillId());
-		SoDetail soDetail = soBillBiz.getSoDetailById(request.getSoDetailId());
+		SoDetail soDetail;
+		if (Func.isNotEmpty(request.getSoDetailId())) {
+			soDetail = soBillBiz.getSoDetailById(request.getSoDetailId());
+		} else {
+			soDetail = soBillBiz.findSoDetailByHeaderIdAndSkuCode(request.getSoBillId(), request.getSkuCode());
+		}
 		List<Stock> stockLists = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
 		List<Stock> stockList = stockLists.stream()
 			.filter(stock -> Objects.equals(stock.getBoxCode(), request.getBoxCode())
@@ -707,6 +713,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		soBillBiz.updateSoBillState(soHeader);
 		// 6 记录业务日志
 		logBiz.auditLog(AuditLogType.OUTSTOCK, soHeader.getSoBillId(), soHeader.getSoBillNo(),
-			spliceLog(WmsTaskProcTypeEnum.BY_PCS, stockList));
+			String.format("PDA%s 箱码:[%s] SKU[%s]批次[%s]数量[%s] ", WmsTaskProcTypeEnum.BY_PCS.getDesc(), stockList.get(0).getBoxCode(), request.getSkuCode(), request.getSkuLot1(),
+				request.getQty()));
 	}
 }

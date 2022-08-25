@@ -109,4 +109,20 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 			.in(SoDetail::getBillDetailState, SoDetailStateEnum.AllocWellen, SoDetailStateEnum.Allocated, SoDetailStateEnum.NORMAL, SoDetailStateEnum.PART)
 			.list();
 	}
+
+	@Override
+	public SoDetail getSoDetailByHeaderIdAndSkuCode(Long soBillId, String skuCode) {
+		AssertUtil.notNull(soBillId, "根据发货单ID物品编码查询发货单明细失败,发货单ID为空");
+		AssertUtil.notNull(skuCode, "根据发货单ID物品编码查询发货单明细失败,物品编码为空");
+		List<SoDetail> soDetails = super.lambdaQuery()
+			.eq(SoDetail::getSoBillId, soBillId)
+			.eq(SoDetail::getSkuCode, skuCode)
+			.in(SoDetail::getBillDetailState, SoDetailStateEnum.AllocWellen, SoDetailStateEnum.Allocated, SoDetailStateEnum.NORMAL, SoDetailStateEnum.PART)
+			.list();
+		AssertUtil.notNull(soDetails, "根据发货单ID物品编码查询发货单明细失败,暂无跟您输入的数据有关的数据");
+		if (soDetails.size() > 1) {
+			throw new ServiceException("据发货单ID物品编码查询发货单明细失败,查询出多条明细");
+		}
+		return soDetails.get(0);
+	}
 }
