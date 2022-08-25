@@ -57,9 +57,13 @@ export default {
                 } else {
                     this.onChange('');
                 }
+            }else {
+                this.onChange('');
+                this.dataSource = [];
             }
         },
         selectVal(newVal) {
+            console.log("进入监听"+ newVal);
             this.val = newVal;
         }
     },
