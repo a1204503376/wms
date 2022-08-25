@@ -50,12 +50,12 @@ public class SoPickPlanDaoImpl
 	}
 
 	@Override
-	public void updatePickRealQty(Long pickPlanId, BigDecimal pickRealQty) {
+	public void updatePickRealQty(Long pickPlanId, BigDecimal pickRealTotalQty) {
 		UpdateWrapper<SoPickPlan> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
 				.eq(SoPickPlan::getPickPlanId, pickPlanId);
 		SoPickPlan soPickPlan = new SoPickPlan();
-		soPickPlan.setPickRealQty(soPickPlan.getPickRealQty().add(pickRealQty));
+		soPickPlan.setPickRealQty(pickRealTotalQty);
 		if (!super.update(soPickPlan, updateWrapper)) {
 			throw new ServiceException("修改拣货计划失败,请再次重试");
 		}
