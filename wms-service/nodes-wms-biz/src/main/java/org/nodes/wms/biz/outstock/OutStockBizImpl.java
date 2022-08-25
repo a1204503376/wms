@@ -178,7 +178,12 @@ public class OutStockBizImpl implements OutStockBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public Boolean pickByPcs(PickByPcsRequest request) {
 		SoHeader soHeader = soBillBiz.getSoHeaderById(request.getSoBillId());
-		SoDetail soDetail = soBillBiz.getSoDetailById(request.getSoDetailId());
+		SoDetail soDetail;
+		if (Func.isNotEmpty(request.getSoDetailId())) {
+			soDetail = soBillBiz.getSoDetailById(request.getSoDetailId());
+		} else {
+			soDetail = soBillBiz.findSoDetailByHeaderIdAndSkuCode(request.getSoBillId(), request.getSkuCode());
+		}
 		List<Stock> stockLists = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
 		List<Stock> stockList = stockLists.stream()
 			.filter(stock -> Objects.equals(stock.getBoxCode(), request.getBoxCode())

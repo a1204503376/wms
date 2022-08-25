@@ -247,4 +247,12 @@ public interface SoBillBiz {
 	void updateState(Long soBillId, SoBillStateEnum soBillStateEnum);
 
 
+	/**
+	 * 根据发货单ID和物品编码查询发货单详情
+	 *
+	 * @param soBillId 发货单id
+	 * @param skuCode  物品编码
+	 * @return 发货单详情
+	 */
+	SoDetail findSoDetailByHeaderIdAndSkuCode(Long soBillId, String skuCode);
 }

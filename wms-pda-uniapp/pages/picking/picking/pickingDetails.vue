@@ -14,7 +14,7 @@
 						</u-col>
 						<u-col span="4">
 							<view class="demo-layout bg-purple font-in-page">
-							{{item.soLineNo}}
+								{{item.soLineNo}}
 							</view>
 						</u-col>
 					</u-row>
@@ -24,7 +24,7 @@
 						</u-col>
 						<u-col span="4">
 							<view class="demo-layout bg-purple font-in-page">
-							{{item.skuCode}}
+								{{item.skuCode}}
 							</view>
 						</u-col>
 					</u-row>
