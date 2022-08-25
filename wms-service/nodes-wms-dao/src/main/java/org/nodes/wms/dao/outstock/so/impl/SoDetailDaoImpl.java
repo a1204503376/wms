@@ -79,7 +79,7 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 		AssertUtil.notEmpty(String.valueOf(soBillId), "发货单ID不能为空");
 		LambdaQueryWrapper<SoDetail> queryWrapper = Wrappers.lambdaQuery();
 		queryWrapper.eq(SoDetail::getSoBillId, soBillId)
-			.in(SoDetail::getBillDetailState, SoDetailStateEnum.Allocated, SoDetailStateEnum.PART);
+			.in(SoDetail::getBillDetailState, SoDetailStateEnum.UnAlloc, SoDetailStateEnum.AllocWellen, SoDetailStateEnum.NORMAL, SoDetailStateEnum.Allocated, SoDetailStateEnum.PART);
 		return super.baseMapper.selectPage(page, queryWrapper);
 	}
 
