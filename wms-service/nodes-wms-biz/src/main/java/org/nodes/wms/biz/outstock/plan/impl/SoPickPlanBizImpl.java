@@ -96,10 +96,10 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	}
 
 	@Override
-	public void updatePickRealQty(Long pickPlanId, BigDecimal pickRealQty) {
+	public void updatePickRealQty(Long pickPlanId, BigDecimal pickRealTotalQty) {
 		AssertUtil.notNull(pickPlanId, "修改拣货计划失败,拣货计划ID为空");
-		AssertUtil.notNull(pickRealQty, "修改拣货计划失败,拣货量为空");
-		soPickPlanDao.updatePickRealQty(pickPlanId, pickRealQty);
+		AssertUtil.notNull(pickRealTotalQty, "修改拣货计划失败,拣货量为空");
+		soPickPlanDao.updatePickRealQty(pickPlanId, pickRealTotalQty);
 	}
 
 	@Override
