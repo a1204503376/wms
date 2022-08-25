@@ -142,6 +142,8 @@ public class LogSoPickFactory {
 		logSoPick.setSoBillId(pickPlan.getSoBillId());
 		logSoPick.setSoBillNo(pickPlan.getSoBillNo());
 		logSoPick.setSoDetailId(pickPlan.getSoDetailId());
+		logSoPick.setTaskId(pickPlan.getTaskId());
+		logSoPick.setPickPlanId(pickPlan.getPickPlanId());
 		logSoPick.setSoLineNo(soDetail.getSoLineNo());
 		logSoPick.setWhId(stock.getWhId());
 		StringBuilder serialNumber = new StringBuilder();
