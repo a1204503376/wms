@@ -78,6 +78,9 @@
             <if test="param.createTimeEnd != null">
                 AND sl.create_time &lt;= #{param.createTimeEnd}
             </if>
+            <if test="param.stockId != null and param.stockId != ''">
+                AND sl.stock_id = #{param.stockId}
+            </if>
         </where>
     </sql>
 
