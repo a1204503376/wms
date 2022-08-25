@@ -92,14 +92,12 @@
                         </el-col>
                     </el-row>
                     <el-row type="flex">
-                        <el-col :span="8">
+                        <el-col :span="24" style="width: 91%;">
                             <el-form-item label="备注" prop="soBillRemark">
                                 <el-input
                                     v-model="form.params.soBillRemark"
-                                    size="medium"
                                     :rows=2
                                     placeholder="请输入内容"
-                                    style="width: 1171px"
                                     type="textarea">
                                 </el-input>
                             </el-form-item>
