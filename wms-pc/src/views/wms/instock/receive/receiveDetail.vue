@@ -214,7 +214,7 @@ export default {
                     label: '数量',
                 },
                 {
-                    prop: 'ipnCode',
+                    prop: 'lpnCode',
                     label: 'lpn编码',
                 },
                 {
