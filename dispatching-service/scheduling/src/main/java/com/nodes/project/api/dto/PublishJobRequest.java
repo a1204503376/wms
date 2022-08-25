@@ -31,19 +31,16 @@ public class PublishJobRequest {
     /**
      * WMS单据编码
      */
-    @NotBlank(message = "WMS单据编码不能为空")
     private String wmsBillNo;
 
     /**
      * WMS单据类型
      */
-    @NotBlank(message = "WMS单据类型不能为空")
     private String wmsBillType;
 
     /**
      * WMS单据行号
      */
-    @NotBlank(message = "WMS单据行号不能为空")
     private String wmsLineNo;
 
     /**

@@ -1,0 +1,90 @@
+# 数据源配置
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    druid:
+      # 主库数据源
+      master:
+        url: jdbc:mysql://192.168.41.172:3306/scheduling-product?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: Nodes@2022#
+      # 从库数据源
+      slave:
+        # 从数据源开关/默认关闭
+        enabled: false
+        url:
+        username:
+        password:
+      # 初始连接数
+      initialSize: 5
+      # 最小连接池数量
+      minIdle: 10
+      # 最大连接池数量
+      maxActive: 20
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      # 配置一个连接在池中最大生存的时间，单位是毫秒
+      maxEvictableIdleTimeMillis: 900000
+      # 配置检测连接是否有效
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      webStatFilter:
+        enabled: true
+      statViewServlet:
+        enabled: true
+        # 设置白名单，不填则允许所有访问
+        allow:
+        url-pattern: /druid/*
+        # 控制台管理用户名和密码
+        login-username: nodes
+        login-password: Nodes@2022@
+      filter:
+        stat:
+          enabled: true
+          # 慢SQL记录
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
+# 项目相关配置
+scheduling:
+  # 名称
+  name: Scheduling
+  # 版本
+  version: 1.0.0
+  # 版权年份
+  copyrightYear: 2022
+  # 实例演示开关
+  demoEnabled: true
+  # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
+  profile: /home/scheduling/product/uploadPath
+  # 获取ip地址开关
+  addressEnabled: false
+  wmsUrl: http://192.168.41.171:8088/wms/scheduling
+  agvUrl: http://192.168.41.170:55200/v1
+  #JOB超时（单位：分钟）
+  jobTimeout: 20
+# powerJob 配置
+powerjob:
+  worker:
+    # akka 工作端口，可选，默认 27777
+    akka-port: 27777
+    # 接入应用名称，用于分组隔离，推荐填写 本 Java 项目名称
+    app-name: typroduct-worker
+    # 调度服务器地址，IP:Port 或 域名，多值逗号分隔
+    server-address: 192.168.41.171:7700
+    # 持久化方式，可选，默认 disk
+    store-strategy: disk
+    # 任务返回结果信息的最大长度，超过这个长度的信息会被截断，默认值 8192
+    max-result-length: 8192
+    # 单个任务追加的工作流上下文最大长度，超过这个长度的会被直接丢弃，默认值 8192
+    max-appended-wf-context-length: 8192

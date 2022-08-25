@@ -9,8 +9,10 @@ import com.nodes.project.api.dto.wms.WmsResponse;
 import com.nodes.project.api.service.CallApiDataService;
 import com.nodes.project.api.service.CallApiService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import tech.powerjob.common.serialize.JsonUtils;
 
 import javax.annotation.Resource;
 
@@ -28,9 +30,10 @@ public class CallApiServiceImpl implements CallApiService {
 
     @Override
     public WmsGlobalResponse postWms(String url, Object request) {
+        url = nodesConfig.getWmsUrl() + url;
         try {
             WmsResponse wmsResponse = restTemplate.postForObject(
-                    nodesConfig.getWmsUrl() + url,
+                    url,
                     request,
                     WmsResponse.class);
             callApiDataService.saveCallApiLog(url, request, wmsResponse, null);
@@ -45,11 +48,11 @@ public class CallApiServiceImpl implements CallApiService {
 
     @Override
     public AgvGlobalResponse postAgv(String url, Object request) {
+        url = nodesConfig.getAgvUrl() + url;
         try {
-            AgvResponse agvResponse = restTemplate.postForObject(
-                    nodesConfig.getAgvUrl() + url,
-                    request,
-                    AgvResponse.class);
+            ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity(url, request, String.class);
+            String body = stringResponseEntity.getBody();
+            AgvResponse agvResponse = JsonUtils.parseObject(body, AgvResponse.class);
             callApiDataService.saveCallApiLog(url, request, agvResponse, null);
             return AgvGlobalResponse.success(agvResponse);
         } catch (Exception e) {

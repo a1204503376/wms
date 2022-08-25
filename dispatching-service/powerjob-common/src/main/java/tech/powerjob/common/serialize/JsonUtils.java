@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import tech.powerjob.common.exception.PowerJobException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import tech.powerjob.common.exception.PowerJobException;
+
+import java.util.TimeZone;
 
 /**
  * JSON工具类
@@ -18,13 +20,15 @@ public class JsonUtils {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     static {
+        objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+        objectMapper.findAndRegisterModules();
     }
 
     public static String toJSONString(Object obj) {
         try {
             return objectMapper.writeValueAsString(obj);
-        }catch (Exception ignore) {
+        } catch (Exception ignore) {
         }
         return null;
     }
@@ -32,7 +36,7 @@ public class JsonUtils {
     public static String toJSONStringUnsafe(Object obj) {
         try {
             return objectMapper.writeValueAsString(obj);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new PowerJobException(e);
         }
     }
@@ -40,7 +44,7 @@ public class JsonUtils {
     public static byte[] toBytes(Object obj) {
         try {
             return objectMapper.writeValueAsBytes(obj);
-        }catch (Exception ignore) {
+        } catch (Exception ignore) {
         }
         return null;
     }
@@ -60,7 +64,7 @@ public class JsonUtils {
     public static <T> T parseObjectUnsafe(String json, Class<T> clz) {
         try {
             return objectMapper.readValue(json, clz);
-        }catch (Exception e) {
+        } catch (Exception e) {
             ExceptionUtils.rethrow(e);
         }
         throw new PowerJobException("impossible");

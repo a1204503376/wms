@@ -1,7 +1,6 @@
 package com.nodes.processor;
 
-import com.nodes.project.api.enums.ProcessorEnum;
-import com.nodes.project.api.service.ProcessorService;
+import com.nodes.project.api.service.JobQueueService;
 import org.springframework.stereotype.Component;
 import tech.powerjob.worker.core.processor.ProcessResult;
 import tech.powerjob.worker.core.processor.TaskContext;
@@ -10,17 +9,17 @@ import tech.powerjob.worker.core.processor.sdk.BasicProcessor;
 import javax.annotation.Resource;
 
 /**
- * 入库和库内 处理器
+ * 清理已结束的任务到历史表
  */
 @Component
-public class NonOutboundProcessor implements BasicProcessor {
+public class ClearJobFinishedProcessor implements BasicProcessor {
 
     @Resource
-    private ProcessorService processorService;
-
+    private JobQueueService jobQueueService;
 
     @Override
     public ProcessResult process(TaskContext context) throws Exception {
-        return processorService.selectJobQueue(context, ProcessorEnum.NON_OUTBOUND);
+        jobQueueService.batchDeleteJobCopyToHistory();
+        return ProcessResultUtils.success("成功移动");
     }
 }
