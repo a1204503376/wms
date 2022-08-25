@@ -44,10 +44,10 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 	/**
 	 * 根据拣货计划ID修改拣货计划数量
 	 *
-	 * @param pickPlanId  拣货计划ID
-	 * @param pickRealQty 拣货实际数量
+	 * @param pickPlanId       拣货计划ID
+	 * @param pickRealTotalQty 拣货总实际数量，含之前的拣货数量
 	 */
-	void updatePickRealQty(Long pickPlanId, BigDecimal pickRealQty);
+	void updatePickRealQty(Long pickPlanId, BigDecimal pickRealTotalQty);
 
 	/**
 	 * 根据任务ID查询拣货计划
@@ -85,7 +85,7 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 
 	/**
 	 * 根据分配记录id集合查找分配记录
-	 * 
+	 *
 	 * @param soPickPlanIdList 分配id集合
 	 * @return List<SoPickPlan>
 	 */

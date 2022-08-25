@@ -13,7 +13,6 @@ import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.outstock.soPickPlan.mapper.SoPickPlanMapper;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
-import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -51,17 +50,12 @@ public class SoPickPlanDaoImpl
 	}
 
 	@Override
-	public void updatePickRealQty(Long pickPlanId, BigDecimal pickRealQty) {
+	public void updatePickRealQty(Long pickPlanId, BigDecimal pickRealTotalQty) {
 		UpdateWrapper<SoPickPlan> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
 			.eq(SoPickPlan::getPickPlanId, pickPlanId);
 		SoPickPlan soPickPlan = new SoPickPlan();
-		if (Func.isEmpty(soPickPlan.getPickRealQty())) {
-			soPickPlan.setPickRealQty(pickRealQty);
-		} else {
-			soPickPlan.setPickRealQty(soPickPlan.getPickRealQty().add(pickRealQty));
-		}
-
+		soPickPlan.setPickRealQty(pickRealTotalQty);
 		if (!super.update(soPickPlan, updateWrapper)) {
 			throw new ServiceException("修改拣货计划失败,请再次重试");
 		}
