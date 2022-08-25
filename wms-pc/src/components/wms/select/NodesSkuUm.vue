@@ -60,6 +60,9 @@ export default {
                 } else {
                     this.onChange('');
                 }
+            }else {
+                this.dataSource = [];
+                this.onChange('');
             }
         },
         selectVal(newVal) {
