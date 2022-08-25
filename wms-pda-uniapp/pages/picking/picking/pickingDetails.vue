@@ -55,9 +55,6 @@
 			<view class="btn-cancle" @click="esc()">
 				返回
 			</view>
-			<view class="btn-submit" @click="submit()">
-				确定
-			</view>
 		</view>
 	</view>
 </template>
@@ -108,11 +105,6 @@
 			// #endif
 		},
 		methods: {
-			submit() {
-				//TODO 等页面测试通过之后删除
-				this.clearEmitKeyDown();
-				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingByPcs');
-			},
 			analysisCode(code) {
 				var barcode = barcodeFunc.parseBarcode(code);
 				var barcodeType = barcodeFunc.BarcodeType;
