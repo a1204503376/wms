@@ -80,15 +80,13 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row type="flex">
-                        <el-col :span="8">
+                    <el-row style="width: 91%;" type="flex">
+                        <el-col :span="24">
                             <el-form-item label="备注" prop="soBillRemark">
                                 <el-input
                                     v-model="form.params.soBillRemark"
                                     :rows=2
                                     placeholder="请输入内容"
-                                    size="medium"
-                                    style="width: 1171px"
                                     type="textarea">
                                 </el-input>
                             </el-form-item>
@@ -129,7 +127,6 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    align="left"
                                     prop="sku"
                                     width="200">
                                     <template slot="header">
@@ -142,11 +139,10 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    :align="'left'"
                                     prop="skuName"
                                     width="200">
                                     <template slot="header">
-                                        <span>物品名称</span>
+                                        <span class="d-table-header-required">物品名称</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input

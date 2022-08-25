@@ -2,8 +2,9 @@ package org.nodes.wms.dao.stock.dto.output;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.nodes.wms.dao.common.esayExcel.EnumConverter;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -55,8 +56,8 @@ public class StockLogExcelResponse implements Serializable {
 	 * 库存状态
 	 */
 	@ColumnWidth(15)
-	@ExcelProperty("库存状态")
-	private String stockStatus;
+	@ExcelProperty(value = "库存状态", converter = EnumConverter.class)
+	private StockStatusEnum stockStatus;
 
 	/**
 	 * 层级
@@ -134,13 +135,6 @@ public class StockLogExcelResponse implements Serializable {
 	@ColumnWidth(15)
 	@ExcelProperty("库区编码")
 	private String zoneCode;
-
-	/**
-	 * 库房名称
-	 */
-	@ColumnWidth(15)
-	@ExcelProperty("库房名称")
-	private String whName;
 
 	/**
 	 * 货主

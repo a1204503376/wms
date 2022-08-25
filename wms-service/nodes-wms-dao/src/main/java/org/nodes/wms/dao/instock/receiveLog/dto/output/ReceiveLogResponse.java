@@ -1,6 +1,5 @@
 package org.nodes.wms.dao.instock.receiveLog.dto.output;
 
-import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -21,7 +20,7 @@ public class ReceiveLogResponse implements Serializable {
 	/**
 	 * lpn编码
 	 */
-	private String ipnCode;
+	private String lpnCode;
 	/**
 	 * 箱码
 	 */

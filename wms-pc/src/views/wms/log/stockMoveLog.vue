@@ -61,15 +61,6 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="库房" label-width="90px">
-                            <nodes-warehouse
-                                :multiple="true"
-                                class="search-input"
-                                v-model="form.params.whIdList">
-                            </nodes-warehouse>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
                         <el-form-item label="生产批次" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.skuLot1"
@@ -79,8 +70,6 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="创建人" label-width="90px">
                             <el-input
@@ -91,6 +80,8 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
+                </el-row>
+                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="创建日期" label-width="90px">
                             <nodes-date-range
@@ -205,7 +196,8 @@ export default {
                     zoneIdList: [],
                     whIdList: [],
                     boxCode: "",
-                    skuLot1: ""
+                    skuLot1: "",
+                    stockId: '',
                 },
             },
             table: {
@@ -296,11 +288,6 @@ export default {
                         sortable: "custom"
                     },
                     {
-                        prop: "whName",
-                        label: "库房名称",
-                        sortable: "custom"
-                    },
-                    {
                         prop: "ownerName",
                         label: "货主",
                         sortable: "custom"
@@ -364,7 +351,7 @@ export default {
             },
             fileUpload: {
                 visible: false,
-            }
+            },
         };
     },
     created() {
@@ -372,6 +359,7 @@ export default {
     },
     methods: {
         getTableData() {
+            this.form.params.stockId = this.$route.query.stockId;
             page(this.page, this.form.params)
                 .then((res) => {
                     let pageObj = res.data.data;
@@ -394,7 +382,8 @@ export default {
                 zoneIdList: [],
                 whIdList: [],
                 boxCode: "",
-                skuLot1: ""
+                skuLot1: "",
+                stockId: '',
             }
         },
         exportData() {

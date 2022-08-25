@@ -49,13 +49,16 @@ public class StockManagerController {
 
 	private final SerialBiz serialBiz;
 
+	/**
+	 * 库存余额：分页
+	 */
 	@PostMapping("/page")
 	public R<IPage<StockPageResponse>> page(Query query, @RequestBody StockPageQuery stockPageQuery) {
 		return R.data(stockQueryBiz.getStockPage(query, stockPageQuery));
 	}
 
 	/**
-	 * 导出
+	 * 库存余额：导出
 	 */
 	@PostMapping("export")
 	public void export(@RequestBody StockPageQuery stockPageQuery, HttpServletResponse response) {
@@ -63,7 +66,7 @@ public class StockManagerController {
 	}
 
 	/**
-	 * 导入模板
+	 * 库存余额：导入模板
 	 */
 	@GetMapping("/export-template")
 	public void exportTemplate(HttpServletResponse response) {
@@ -190,11 +193,17 @@ public class StockManagerController {
 		lendReturnBiz.exportNoReturn(lendReturnQuery, response);
 	}
 
+	/**
+	 * 序列号：分页查询
+	 */
 	@PostMapping("/pageSerial")
 	public R<Page<SerialPageResponse>> pageSerial(@RequestBody @Valid SerialPageQuery serialPageQuery, Query query){
 		return R.data(serialBiz.page(serialPageQuery, query));
 	}
 
+	/**
+	 * 序列号：服务端导出
+	 */
 	@PostMapping("/exportSerial")
 	public void exportSerial(@RequestBody @Valid SerialPageQuery serialPageQuery, HttpServletResponse response){
 		serialBiz.export(serialPageQuery, response);

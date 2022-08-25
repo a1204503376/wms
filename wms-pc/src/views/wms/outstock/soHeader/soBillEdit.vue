@@ -10,11 +10,11 @@
                          size="medium"
                          style="margin-left:10px;margin-right:10px;">
                     <el-row>
-                        <h3>出库单编辑</h3>
+                        <h3>发货单编辑</h3>
                     </el-row>
                     <el-row type="flex">
                         <el-col :span="8">
-                            <el-form-item label="出库单编码" prop="soBillNo">
+                            <el-form-item label="发货单编码" prop="soBillNo">
                                 <el-input v-model="form.params.soBillNo"
                                           :disabled="true"
                                           size="medium"
@@ -92,14 +92,12 @@
                         </el-col>
                     </el-row>
                     <el-row type="flex">
-                        <el-col :span="8">
+                        <el-col :span="24" style="width: 91%;">
                             <el-form-item label="备注" prop="soBillRemark">
                                 <el-input
                                     v-model="form.params.soBillRemark"
-                                    size="medium"
                                     :rows=2
                                     placeholder="请输入内容"
-                                    style="width: 1171px"
                                     type="textarea">
                                 </el-input>
                             </el-form-item>

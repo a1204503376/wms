@@ -89,5 +89,10 @@ public interface StockMapper extends BaseMapper<Stock> {
 	 * @return PdaBoxQtyResponse
 	 */
 	List<PdaBoxQtyResponse> getStockCountByLocCode(String locCode, String boxCode, String skuCode);
+
+	/**
+	 * 物理删除无效库存
+	 */
+	void deleteStockByStockIdList();
 }
 

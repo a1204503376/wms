@@ -69,13 +69,12 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row>
-                        <el-col :span="8">
+                    <el-row style="width: 91%">
+                        <el-col :span="24">
                             <el-form-item label="备注">
                                 <el-input
+                                    placeholder="请输入内容"
                                     v-model="form.params.editReceiveHeaderRequest.remark"
-                                    size="medium"
-                                    style="width: 1172px"
                                     type="textarea">
                                 </el-input>
                             </el-form-item>

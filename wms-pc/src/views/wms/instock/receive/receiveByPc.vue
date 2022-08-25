@@ -7,11 +7,9 @@
                          label-position="right"
                          label-width="120px"
                          size="mini"
-                         style="margin-left:10px;margin-right:10px;"
-                >
+                         style="margin-left:10px;margin-right:10px;">
                     <el-row>
                         <el-col :span="8">
-
                             收货单编码: {{ form.params.receiveNo }}
                         </el-col>
                         <el-col :span="8">
@@ -21,7 +19,6 @@
                             仓库编码:{{ form.params.whCode }}
                         </el-col>
                     </el-row>
-
                     <el-row>
                         <h3>明细</h3>
                     </el-row>
@@ -33,8 +30,7 @@
                                 border
                                 size="mini">
                                 <el-table-column
-                                    width="53"
-                                >
+                                    width="53">
                                     <template slot="header">
                                         <el-button circle
                                                    icon="el-icon-plus"
@@ -44,7 +40,7 @@
                                         </el-button>
                                     </template>
                                     <template v-slot="{row}">
-                                        <el-button @click="onReset(row)" type="text" size="small">清空</el-button>
+                                        <el-button size="small" type="text" @click="onReset(row)">清空</el-button>
                                     </template>
                                 </el-table-column>
                                 <el-table-column width="100">
@@ -53,31 +49,27 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.lineNumber"
+                                            size=mini
                                             @blur="getDetailData(row)"
                                             @focus="getFocus(row)"
-                                            @keyup.enter.native="getDetailData(row)"
-                                        >
+                                            @keyup.enter.native="getDetailData(row)">
                                         </el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
                                     :align="'left'"
                                     prop="skuCode"
-                                    width="195"
-                                >
-
+                                    width="195">
                                     <template slot="header">
                                         <span class="d-table-header-required">物品编码</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.skuCode"
-                                            :disabled="true">
+                                            :disabled="true"
+                                            size=mini>
                                         </el-input>
-
                                     </template>
                                 </el-table-column>
                                 <el-table-column width="130">
@@ -86,19 +78,15 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.skuLot2"
                                             :disabled="row.skuLot2Exist"
-                                        >
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
-
-
                                 <el-table-column
                                     prop="planQty"
-                                    width="160"
-                                >
+                                    width="160">
                                     <template slot="header">
                                         <span class="d-table-header-required">本次收货量</span>
                                     </template>
@@ -106,11 +94,11 @@
                                         <el-input-number
                                             v-model="row.scanQty"
                                             :disabled="exist(row)"
-                                            style="width:130px"
-                                            :min="0"
                                             :max="row.surplusQty+row.scanQty"
+                                            :min="0"
                                             controls-position="right"
                                             size="mini"
+                                            style="width:130px"
                                             @change="(val,oldValue)=>onChange(val,oldValue,row)">
                                             >
                                         </el-input-number>
@@ -119,44 +107,37 @@
                                 <el-table-column
                                     :align="'left'"
                                     prop="skuCode"
-                                    width="150"
-                                >
-
+                                    width="150">
                                     <template slot="header">
                                         <span class="d-table-header-required">剩余数量</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.surplusQty"
-                                            :disabled="true">
+                                            :disabled="true"
+                                            size=mini>
                                         </el-input>
-
                                     </template>
                                 </el-table-column>
-
                                 <el-table-column
                                     :align="'left'"
                                     prop="skuCode"
-                                    width="110"
-                                >
+                                    width="110">
                                     <template slot="header">
                                         <span class="d-table-header-required">计量单位</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.umCode"
-                                            :disabled="true">
+                                            :disabled="true"
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
-
                                 <el-table-column
                                     :align="'left'"
                                     prop="skuCode"
-                                    width="180"
-                                >
+                                    width="180">
                                     <template slot="header">
                                         <span class="d-table-header-required">库位编码</span>
                                     </template>
@@ -170,9 +151,8 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.boxCode"
-                                        >
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -182,9 +162,8 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.lpnCode"
-                                        >
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -194,9 +173,8 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.snCode"
-                                        >
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -206,9 +184,8 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.skuLot1"
-                                        >
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -218,9 +195,8 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.skuLot4"
-                                        >
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -230,9 +206,8 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.skuLot5"
-                                        >
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -242,9 +217,8 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.skuLot6"
-                                        >
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -254,14 +228,11 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            size=mini
                                             v-model="row.skuLot8"
-                                        >
+                                            size=mini>
                                         </el-input>
                                     </template>
                                 </el-table-column>
-
-
                             </el-table>
                         </el-col>
                     </el-row>
@@ -272,14 +243,12 @@
                     <el-button
                         :loading="loading"
                         type="primary"
-                        @click="onSubmit"
-                    >
+                        @click="onSubmit">
                         保 存
                     </el-button>
                     <el-button
                         :loading="loading"
-                        @click="onClose"
-                    >
+                        @click="onClose">
                         关 闭
                     </el-button>
                 </el-row>
@@ -343,10 +312,7 @@ export default {
             this.rowObject.scanQty = row.scanQty
         },
         exist(row) {
-            if (func.isEmpty(row.lineNumber)) {
-                return true
-            }
-            return false
+            return func.isEmpty(row.lineNumber);
         },
         onChange(val, oldVal, row) {
             let data = this.table.data
@@ -362,10 +328,8 @@ export default {
                 if (u.lineNo === row.lineNumber) {
                     u.surplusQty = row.surplusQty
                 }
-
             });
         },
-
         // 过滤空白行
         filterBlankRow(row) {
             return !(
@@ -386,8 +350,7 @@ export default {
                     return u
                 }
             });
-
-            if (func.isNotEmpty(this.rowObject) && row.lineNumber != this.rowObject.lineNumber) {
+            if (func.isNotEmpty(this.rowObject) && row.lineNumber !== this.rowObject.lineNumber) {
                 let data = this.table.data
                 data.find(u => {
                     if (u.lineNumber === this.rowObject.lineNumber) {
@@ -396,9 +359,7 @@ export default {
                 });
                 this.rowObject.lineNumber = row.lineNumber
                 this.rowObject.scanQty = 0
-
             }
-
             if (func.isNotEmpty(column)) {
                 if (column.surplusQty === 0) {
                     this.$message.error('该行号剩余数量为0');
@@ -411,19 +372,17 @@ export default {
                 row.umCode = column.umCode
                 row.skuLot1 = column.skuLot1
                 row.skuLot2 = column.skuLot2
-                row.skuLot4 = column.skulot4
+                row.skuLot4 = column.skuLot4
                 row.skuLot5 = column.skuLot5
                 row.skuLot6 = column.skuLot6
                 row.skuLot8 = column.skuLot8
                 row.skuLot2Exist = column.skuLot2Exist
                 return
             }
-
             let skuUmSelectQuery = {
                 lineNumber: row.lineNumber,
                 receiveId: this.receiveId
             };
-
             getReceiveDetailByPc(skuUmSelectQuery)
                 .then((res) => {
                     let item = res.data.data
@@ -454,7 +413,6 @@ export default {
 
                     this.rowData.push(item)
                 })
-
         },
         getTableData() {
             let skuUmSelectQuery = {
@@ -471,7 +429,6 @@ export default {
                 if (u.lineNo === row.lineNumber) {
                     u.surplusQty = u.surplusQty + row.scanQty
                 }
-
             });
             let data = this.table.data
             data.find(u => {
@@ -513,7 +470,6 @@ export default {
                 skuLot2Exist: false
             }
         },
-
         submitFormParams() {
             let detailRequestList = this.table.postData
             let receiveByPcRequest = {receiveId: this.receiveId, detailRequestList}
@@ -530,7 +486,6 @@ export default {
                     };
                 });
         },
-
     }
 }
 </script>

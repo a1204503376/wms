@@ -37,6 +37,10 @@ public class DetailReceiveHeaderResponse implements Serializable {
 	 */
 	private String ownerCode;
 	/**
+	 * 货主名称
+	 */
+	private String ownerName;
+	/**
 	 * 入库方式
 	 */
 	private InStorageTypeEnum inStoreType;
