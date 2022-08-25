@@ -88,6 +88,8 @@ public class LogSoPickBizImpl implements LogSoPickBiz {
 			// 从正向拣货记录中排除撤销的记录
 			for (LogSoPick item : result) {
 				if (SkuLotUtil.compareAllSkuLot(item, logSoPickOfCancel)
+						&& BigDecimalUtil
+								.eq(item.getPickRealQty().add(logSoPickOfCancel.getPickRealQty()), BigDecimal.ZERO)
 						&& item.getSoDetailId().equals(logSoPickOfCancel.getSoDetailId())) {
 					result.remove(item);
 					break;
