@@ -21,7 +21,7 @@
         LEFT JOIN wms_warehouse wh ON sh.wh_id = wh.wh_id
         LEFT JOIN basics_customers c ON sh.customer_code = c.code
         <where>
-            sh.is_bed = 0
+            sh.is_deleted = 0
             <if test="params.soBillNo != null and params.soBillNo != ''">
                 AND sh.so_bill_no LIKE CONCAT('%', #{params.soBillNo}, '%')
             </if>
