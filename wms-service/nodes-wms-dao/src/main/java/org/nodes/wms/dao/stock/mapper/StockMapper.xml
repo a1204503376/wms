@@ -123,6 +123,12 @@
 
         </where>
     </sql>
+    <delete id="deleteStockByStockIdList">
+        delete
+        from wms_stock
+        where stock_qty = pick_qty
+          and TO_DAYS(NOW()) - TO_DAYS(update_time) >= 30
+    </delete>
     <select id="selectStockQtyByLocIdList" resultType="java.util.HashMap">
         SELECT SUM(stock_qty-pick_qty) AS skuQty, MAX( TIMESTAMPDIFF(DAY, last_in_time, now()) ) AS skuStoreDay
         FROM wms_stock
@@ -369,7 +375,8 @@
     </select>
 
     <select id="getStockCountByLocCode" resultType="org.nodes.wms.dao.count.dto.output.PdaBoxQtyResponse">
-        select stock_id,stock_qty,wh_id,loc_code,box_code,sum(stock_qty-pick_qty) total_qty,sku_id,wsp_id,sku_level,sku_code,sku_name,wsu_code,sku_lot1,sku_lot2,sku_lot3 from wms_stock
+        select stock_id,stock_qty,wh_id,loc_code,box_code,sum(stock_qty-pick_qty)
+        total_qty,sku_id,wsp_id,sku_level,sku_code,sku_name,wsu_code,sku_lot1,sku_lot2,sku_lot3 from wms_stock
         <where>
             <if test="locCode!=null and locCode != ''">
                 AND loc_code = #{locCode}
