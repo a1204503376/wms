@@ -3,6 +3,7 @@ package org.nodes.wms.dao.stock.dto.output;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
+import org.nodes.core.tool.jackson.LongArray2StringSerialize;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
@@ -100,5 +101,6 @@ public class StockSoPickPlanResponse extends BaseSkuLot implements Serializable 
 	/**
 	 * 拣货计划id
 	 */
+	@JsonSerialize(using = LongArray2StringSerialize.class)
 	private List<Long> soPickPlanList;
 }
