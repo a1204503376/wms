@@ -707,6 +707,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		soBillBiz.updateSoBillState(soHeader);
 		// 6 记录业务日志
 		logBiz.auditLog(AuditLogType.OUTSTOCK, soHeader.getSoBillId(), soHeader.getSoBillNo(),
-			spliceLog(WmsTaskProcTypeEnum.BY_PCS, stockList));
+			String.format("PDA%s 箱码:[%s] SKU[%s]批次[%s]数量[%s] ", WmsTaskProcTypeEnum.BY_PCS.getDesc(), stockList.get(0).getBoxCode(), request.getSkuCode(), request.getSkuLot1(),
+				request.getQty()));
 	}
 }
