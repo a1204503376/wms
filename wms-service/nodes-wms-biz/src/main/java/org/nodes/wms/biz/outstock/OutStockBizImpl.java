@@ -169,6 +169,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		List<SoBillStateEnum> soBillStateEnums = new ArrayList<>();
 		soBillStateEnums.add(SoBillStateEnum.EXECUTING);
 		soBillStateEnums.add(SoBillStateEnum.PART);
+		soBillStateEnums.add(SoBillStateEnum.CREATE);
 		request.setSoBillState(soBillStateEnums);
 		return soBillBiz.getAllPickingByNo(Condition.getPage(query), request);
 	}
