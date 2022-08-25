@@ -88,7 +88,7 @@
         FROM so_header header
                  LEFT JOIN basics_customers customer ON customer.code = header.customer_code
         WHERE header.so_bill_id = #{soBillId}
-          AND header.is_deleted = 0
+          AND header.is_bed = 0
     </select>
 
     <resultMap id="soHeaderMap" type="org.nodes.wms.dao.outstock.so.dto.output.SoHeaderEditResponse">

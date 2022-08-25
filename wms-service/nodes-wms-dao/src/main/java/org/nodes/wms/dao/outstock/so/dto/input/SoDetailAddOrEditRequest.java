@@ -1,6 +1,5 @@
 package org.nodes.wms.dao.outstock.so.dto.input;
 
-import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 import org.nodes.core.tool.validation.Update;
 
@@ -37,6 +36,11 @@ public class SoDetailAddOrEditRequest implements Serializable {
 	 * 计量单位编码
 	 */
 	private String umCode;
+
+	/**
+	 * 物品规格
+	 */
+	private String skuSpec;
 
 	/**
 	 * 计划数量

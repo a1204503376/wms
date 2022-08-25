@@ -34,6 +34,8 @@ import java.util.List;
 
 /**
  * 发货单API
+ *
+ * @author nodesc
  */
 @RestController
 @RequiredArgsConstructor
@@ -107,8 +109,9 @@ public class SoBillController {
 	 */
 	@PostMapping("/detail_detail")
 	public R<Page<SoDetailForDetailResponse>> detailForDetail(Query query,
-															  @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		Page<SoDetailForDetailResponse> pageSoDetail = soBillBiz.pageSoDetailForDetailBySoBillId(query, soBillIdRequest);
+			@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
+		Page<SoDetailForDetailResponse> pageSoDetail = soBillBiz.pageSoDetailForDetailBySoBillId(query,
+				soBillIdRequest);
 		return R.data(pageSoDetail);
 	}
 
@@ -117,8 +120,9 @@ public class SoBillController {
 	 */
 	@PostMapping("/detail_logSoPick")
 	public R<Page<LogSoPickForSoDetailResponse>> logSoPickForSoDetail(Query query,
-																	  @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		Page<LogSoPickForSoDetailResponse> pageLogSoPick = logSoPickBiz.pageLogSoPickForSoDetailBySoBillId(query, soBillIdRequest);
+			@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
+		Page<LogSoPickForSoDetailResponse> pageLogSoPick = logSoPickBiz.pageLogSoPickForSoDetailBySoBillId(query,
+				soBillIdRequest);
 		return R.data(pageLogSoPick);
 	}
 
@@ -127,8 +131,9 @@ public class SoBillController {
 	 */
 	@PostMapping("/detail_log")
 	public R<Page<LogDetailPageResponse>> logForSoDetail(Query query,
-														 @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
-		Page<LogDetailPageResponse> pageLog = soBillBiz.pageLogById(Condition.getPage(query), soBillIdRequest.getSoBillId());
+			@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
+		Page<LogDetailPageResponse> pageLog = soBillBiz.pageLogById(Condition.getPage(query),
+				soBillIdRequest.getSoBillId());
 		return R.data(pageLog);
 	}
 
@@ -155,7 +160,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/pageNotSoPick")
 	public R<IPage<NotSoPickPageResponse>> pageNotLogSoPick(
-		Query query, @RequestBody NotSoPickPageQuery notSoPickPageQuery) {
+			Query query, @RequestBody NotSoPickPageQuery notSoPickPageQuery) {
 		return R.data(soBillBiz.pageNotSoPick(query, notSoPickPageQuery));
 	}
 
@@ -164,7 +169,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/exportNotSoPick")
 	public void exportNotSoPick(
-		@RequestBody NotSoPickPageQuery notSoPickPageQuery, HttpServletResponse response) {
+			@RequestBody NotSoPickPageQuery notSoPickPageQuery, HttpServletResponse response) {
 		soBillBiz.exportNotSoPick(notSoPickPageQuery, response);
 	}
 
@@ -188,7 +193,8 @@ public class SoBillController {
 	 * 分配：获取分配页面发货单头表和明细信息
 	 */
 	@PostMapping("/getSoBillDataByDistribution")
-	public R<SoBillDistributedResponse> getSoBillDataByDistribution(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
+	public R<SoBillDistributedResponse> getSoBillDataByDistribution(
+			@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		return R.data(soBillBiz.findSoBillForDistributeBySoBillId(soBillIdRequest.getSoBillId()));
 	}
 
@@ -196,8 +202,8 @@ public class SoBillController {
 	 * PC拣货：根据明细行号获取明细和对应的可用库存
 	 */
 	@PostMapping("/getSoDetailAndStock")
-	public R<SoDetailAndStockResponse> getSoDetailAndStock(@Valid @RequestBody
-														   SoDetailAndStockRequest soDetailAndStockRequest) {
+	public R<SoDetailAndStockResponse> getSoDetailAndStock(
+			@Valid @RequestBody SoDetailAndStockRequest soDetailAndStockRequest) {
 		return R.data(soBillBiz.getSoDetailAndStock(soDetailAndStockRequest));
 	}
 
@@ -206,7 +212,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/getSoPickPlan")
 	public R<List<SoPickPlanForDistributionResponse>> getSoPickPlan(
-		@Valid @RequestBody SoBillIdAndSoDetailIdRequest request) {
+			@Valid @RequestBody SoBillIdAndSoDetailIdRequest request) {
 		return R.data(outStockBiz.getSoPickPlanBySoBillIdAndSoDetailId(request.getSoBillId(), request.getSoDetailId()));
 	}
 
@@ -244,12 +250,12 @@ public class SoBillController {
 	 */
 	@PostMapping("/getStockByDistributeAdjust")
 	public R<List<StockSoPickPlanResponse>> getStockByDistributeAdjust(
-							@Valid @RequestBody DistributeAdjustRequest distributeAdjustRequest) {
+			@Valid @RequestBody DistributeAdjustRequest distributeAdjustRequest) {
 		return R.data(outStockBiz.getStockByDistributeAdjust(
-			distributeAdjustRequest.getSkuId(),
-			distributeAdjustRequest.getSkuLot1(),
-			distributeAdjustRequest.getSkuLot4(),
-			distributeAdjustRequest.getSoBillId()));
+				distributeAdjustRequest.getSkuId(),
+				distributeAdjustRequest.getSkuLot1(),
+				distributeAdjustRequest.getSkuLot4(),
+				distributeAdjustRequest.getSoBillId()));
 	}
 
 	/**
@@ -259,7 +265,7 @@ public class SoBillController {
 	@PostMapping("/saveAssign")
 	public R<String> saveAssign(@Valid @RequestBody SoBillDistributedRequest soBillDistributedRequest) {
 		outStockBiz.manualDistribute(soBillDistributedRequest);
-		return R.data("调整成功");
+		return R.success("调整成功");
 	}
 
 	/**
@@ -285,7 +291,8 @@ public class SoBillController {
 	 * 分配记录：分页
 	 */
 	@PostMapping("/getSoPickPlanpage")
-	public R<Page<SoPickPlanPageResponse>> getSoPickPlanpage(Query query, @RequestBody SoPickPlanPageQuery soPickPlanPageQuery) {
+	public R<Page<SoPickPlanPageResponse>> getSoPickPlanpage(Query query,
+			@RequestBody SoPickPlanPageQuery soPickPlanPageQuery) {
 		Page<SoPickPlanPageResponse> soPickPlanPage = soPickPlanBiz.page(query, soPickPlanPageQuery);
 		return R.data(soPickPlanPage);
 	}

@@ -80,15 +80,13 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row type="flex">
-                        <el-col :span="8">
+                    <el-row style="width: 91%;" type="flex">
+                        <el-col :span="24">
                             <el-form-item label="备注" prop="soBillRemark">
                                 <el-input
                                     v-model="form.params.soBillRemark"
                                     :rows=2
                                     placeholder="请输入内容"
-                                    size="medium"
-                                    style="width: 1171px"
                                     type="textarea">
                                 </el-input>
                             </el-form-item>
@@ -129,7 +127,6 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    :align="'left'"
                                     prop="sku"
                                     width="200">
                                     <template slot="header">
@@ -142,11 +139,10 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    :align="'left'"
                                     prop="skuName"
                                     width="200">
                                     <template slot="header">
-                                        <span>物品名称</span>
+                                        <span class="d-table-header-required">物品名称</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
@@ -164,8 +160,20 @@
                                         <nodes-sku-um
                                             v-model="row.umCode"
                                             :sku="row.sku"
-                                            style="width: 100px"
-                                        ></nodes-sku-um>
+                                            style="width: 100px">
+                                        </nodes-sku-um>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="skuSpec" width="122">
+                                    <template slot="header">
+                                        <span>物品规格</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <nodes-sku-spec
+                                            v-model="row.skuSpec"
+                                            :sku="row.sku"
+                                            style="width: 100px">
+                                        </nodes-sku-spec>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="planQty" width="152">
@@ -177,7 +185,8 @@
                                             v-model="row.planQty"
                                             :min="0"
                                             controls-position="right"
-                                            size="mini"></el-input-number>
+                                            size="mini">
+                                        </el-input-number>
                                     </template>
                                 </el-table-column>
                                 <el-table-column :align="'left'" prop="生产批次">
@@ -245,6 +254,7 @@
 </template>
 
 <script>
+
 import NodesSku from "@/components/wms/select/NodesSku";
 import NodesLineNumber from "@/components/wms/table/NodesLineNumber";
 import {editDetailMixin} from "@/mixins/editDetail";
@@ -253,17 +263,15 @@ import NodesBillType from "@/components/wms/select/NodesBillType";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import {add} from '@/api/wms/outstock/soHeader';
 import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
+import NodesSkuSpec from "@/components/wms/select/NodesSkuSpec";
 import NodesOwner from "@/components/wms/select/NodesOwner";
 import NodesCustomer from "@/components/wms/select/NodesCustomer";
 import NodesDictionary from "@/components/wms/select/NodesDictionary";
 
 export default {
-    name: "edit",
+    name: "soBillAdd",
     components: {
-        NodesDictionary,
-        NodesCustomer,
-        NodesOwner,
-        NodesSkuUm,
+        NodesDictionary, NodesCustomer, NodesOwner, NodesSkuUm, NodesSkuSpec,
         NodesWarehouse, NodesBillType, NodesLineNumber, NodesSku
     },
     mixins: [editDetailMixin],

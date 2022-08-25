@@ -17,14 +17,14 @@
 						<u-form-item>
 							<template>
 								<u-icon size="40" name="account-fill"></u-icon>
-								<u--input placeholder="请输入账号" v-model="username" border="none" :focus="userNameFocus"
+								<u--input placeholder="请输入账号" v-model.trim="username" border="none" :focus="userNameFocus"
 									@confirm="nextFocusToPassword"></u--input>
 							</template>
 						</u-form-item>
 						<u-form-item>
 							<template>
 								<u-icon size="40" name="lock-fill"></u-icon>
-								<u--input placeholder="请输入密码" type="password" v-model="password" border="none"
+								<u--input placeholder="请输入密码" type="password" v-model.trim="password" border="none"
 									:focus="passwordFocus" @confirm="submit()"></u--input>
 							</template>
 						</u-form-item>

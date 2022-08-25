@@ -1,8 +1,8 @@
 package org.nodes.wms.biz.outstock.logSoPick.modular;
 
-import lombok.RequiredArgsConstructor;
-import org.nodes.wms.biz.basics.sku.SkuBiz;
-import org.nodes.wms.biz.stock.StockQueryBiz;
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.PickByPcsRequest;
@@ -15,8 +15,7 @@ import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 /**
  * 拣货记录工厂
@@ -26,8 +25,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class LogSoPickFactory {
-	private final StockQueryBiz stockQueryBiz;
-	private final SkuBiz skuBiz;
 
 	/**
 	 * PC拣货根据前端传入的参数生成拣货记录
@@ -38,7 +35,8 @@ public class LogSoPickFactory {
 	 * @param stock            stock
 	 * @return 拣货记录实体
 	 */
-	public LogSoPick createLogSoPick(PickByPcStockDto pickByPcStockDto, SoHeader soHeader, SoDetail soDetail, Stock stock) {
+	public LogSoPick createLogSoPick(PickByPcStockDto pickByPcStockDto, SoHeader soHeader, SoDetail soDetail,
+			Stock stock) {
 		LogSoPick logSoPick = new LogSoPick();
 		logSoPick.setLocId(pickByPcStockDto.getLocId());
 		logSoPick.setLocCode(pickByPcStockDto.getLocCode());
@@ -85,7 +83,8 @@ public class LogSoPickFactory {
 	 * @param location 库位
 	 * @return 拣货记录实体
 	 */
-	public LogSoPick createLogSoPick(PickByPcsRequest request, SoHeader soHeader, SoDetail soDetail, Stock stock, Location location) {
+	public LogSoPick createLogSoPick(PickByPcsRequest request, SoHeader soHeader, SoDetail soDetail, Stock stock,
+			Location location) {
 		LogSoPick logSoPick = new LogSoPick();
 		logSoPick.setLocId(location.getLocId());
 		logSoPick.setLocCode(location.getLocCode());
@@ -122,7 +121,8 @@ public class LogSoPickFactory {
 		return logSoPick;
 	}
 
-	public LogSoPick create(SoDetail soDetail, SoPickPlan pickPlan, BigDecimal pickQty, List<String> serialNoList, Stock stock) {
+	public LogSoPick create(SoDetail soDetail, SoPickPlan pickPlan, BigDecimal pickQty, List<String> serialNoList,
+			Stock stock) {
 		LogSoPick logSoPick = new LogSoPick();
 		logSoPick.setLocId(stock.getLocId());
 		logSoPick.setLocCode(stock.getLocCode());
@@ -142,6 +142,8 @@ public class LogSoPickFactory {
 		logSoPick.setSoBillId(pickPlan.getSoBillId());
 		logSoPick.setSoBillNo(pickPlan.getSoBillNo());
 		logSoPick.setSoDetailId(pickPlan.getSoDetailId());
+		logSoPick.setTaskId(pickPlan.getTaskId());
+		logSoPick.setPickPlanId(pickPlan.getPickPlanId());
 		logSoPick.setSoLineNo(soDetail.getSoLineNo());
 		logSoPick.setWhId(stock.getWhId());
 		StringBuilder serialNumber = new StringBuilder();

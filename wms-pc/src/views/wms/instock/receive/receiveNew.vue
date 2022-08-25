@@ -8,8 +8,7 @@
                          label-position="right"
                          label-width="120px"
                          size="medium"
-                         style="margin-left:10px;margin-right:10px;"
-                >
+                         style="margin-left:10px;margin-right:10px;">
                     <el-row>
                         <h3>收货单-{{ isEdit ? '编辑' : '新增' }}</h3>
                     </el-row>
@@ -32,22 +31,22 @@
                                 </nodes-bill-type>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8" >
+                        <el-col :span="8">
                             <el-form-item
                                 :label="form.params.newReceiveHeaderRequest.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN ? '供应商' : '归还人'"
                                 :prop="form.params.newReceiveHeaderRequest.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN ? 'supplier' : 'supplierContact'">
                                 <nodes-supplier
-                                    v-model="form.params.newReceiveHeaderRequest.supplier"
                                     v-if="form.params.newReceiveHeaderRequest.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN"
+                                    v-model="form.params.newReceiveHeaderRequest.supplier"
                                     size="medium">
                                 </nodes-supplier>
                                 <el-input
-                                    style="width: 210px"
-                                    placeholder="请输入归还人"
-                                    :clearable="true"
-                                    v-model="form.params.newReceiveHeaderRequest.supplierContact"
                                     v-if="form.params.newReceiveHeaderRequest.billTypeCd === this.$commonConst.BILL_TYPE_RETURN"
-                                    size="medium">
+                                    v-model="form.params.newReceiveHeaderRequest.supplierContact"
+                                    :clearable="true"
+                                    placeholder="请输入归还人"
+                                    size="medium"
+                                    style="width: 210px">
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -72,12 +71,13 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row>
-                        <el-col :span="8">
+                    <el-row style="width: 91%">
+                        <el-col :span="24">
                             <el-form-item label="备注">
-                                <el-input v-model="form.params.newReceiveHeaderRequest.remark"
-                                          style="width: 1172px"
-                                          type="textarea">
+                                <el-input
+                                    placeholder="请输入内容"
+                                    v-model="form.params.newReceiveHeaderRequest.remark"
+                                    type="textarea">
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -239,7 +239,7 @@
                                 </el-table-column>
                                 <el-table-column width="130">
                                     <template slot="header">
-                                        <span class="d-table-header-required">备注</span>
+                                        <span>备注</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input v-model="row.remark" size="mini"></el-input>
@@ -247,7 +247,7 @@
                                 </el-table-column>
                                 <el-table-column width="100">
                                     <template slot="header">
-                                        <span class="d-table-header-required">操作</span>
+                                        <span>操作</span>
                                     </template>
                                     <template v-slot="scope">
                                         <el-button
@@ -345,7 +345,7 @@ export default {
         }
     },
     methods: {
-        billTypeChange(row){
+        billTypeChange(row) {
             console.log(row)
         },
         // 过滤空白行
@@ -410,7 +410,14 @@ export default {
         },
 
         onChangeSku(row) {
-
+            if (row.sku.skuCode !== undefined) {
+                let skuCodeList = this.table.data.map((item) => item.sku.skuCode);
+                let skuCode = row.sku.skuCode;
+                if (skuCodeList.indexOf(skuCode) != skuCodeList.lastIndexOf(skuCode)) {
+                    row.sku = {},
+                        this.$message.error('物料编码' + skuCode + '重复');
+                }
+            }
         },
         submitFormParams() {
             this.form.params.newReceiveDetailRequestList = this.table.postData

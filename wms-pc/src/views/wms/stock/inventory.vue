@@ -296,15 +296,34 @@
                             show-overflow-tooltip
                             v-bind="column"
                             width="130">
-                            <template v-if="column.prop === 'hasSerial'" v-slot="scope">
+                            <template v-if="column.prop === 'hasSerial' ||
+                                            column.prop === 'stockBalance' ||
+                                            column.prop === 'occupyQty'"
+                                      v-slot="scope">
                                 <el-link
-                                    v-if="scope.row.hasSerial === 1"
+                                    v-if="column.prop === 'hasSerial' && scope.row.hasSerial === 1"
                                     :underline="false"
                                     target="_blank"
                                     type="primary"
                                     @click="showHasSerialView(scope.row.stockId)">是
                                 </el-link>
-                                {{ scope.row.hasSerial !== 1 ? '否' : '' }}
+                                {{ column.prop === 'hasSerial' && scope.row.hasSerial !== 1 ? '否' : '' }}
+                                <el-link
+                                    v-if="column.prop === 'occupyQty'"
+                                    :underline="false"
+                                    target="_blank"
+                                    type="primary"
+                                    @click="onViewOccupyQty(scope.row.stockId)">
+                                    {{ scope.row.occupyQty }}
+                                </el-link>
+                                <el-link
+                                    v-if="column.prop === 'stockBalance'"
+                                    :underline="false"
+                                    target="_blank"
+                                    type="primary"
+                                    @click="onViewStockBalance(scope.row.stockId)">
+                                    {{ scope.row.stockBalance }}
+                                </el-link>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -335,8 +354,8 @@
                     background
                     layout="total, sizes, prev, pager, next, jumper"
                     v-bind="page"
-                    @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
+                    @size-change="handleSizeChange"
                 >
                 </el-pagination>
             </template>
@@ -710,11 +729,6 @@ export default {
                         sortable: "custom"
                     },
                     {
-                        prop: "createUserName",
-                        label: "收货人",
-                        sortable: "custom"
-                    },
-                    {
                         prop: "lastInTime",
                         label: "入库时间",
                         sortable: "custom"
@@ -777,6 +791,14 @@ export default {
         }
     },
     methods: {
+        onViewOccupyQty(stockId) {
+            this.$router.push({
+                name: '分配记录',
+                query: {
+                    stockId: stockId.toString()
+                }
+            });
+        },
         getTableData() {
             page(this.page, this.form.params)
                 .then((res) => {
@@ -1226,6 +1248,14 @@ export default {
                 name: '序列号',
                 params: {
                     stockId: stockId
+                }
+            });
+        },
+        onViewStockBalance(stockId) {
+            this.$router.push({
+                name: '库存异动日志',
+                query: {
+                    stockId: stockId.toString()
                 }
             });
         }

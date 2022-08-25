@@ -78,7 +78,7 @@ public class WmsTaskFactory {
 	}
 
 	public WmsTask create(WmsTaskStateEnum state, WmsTaskTypeEnum taskType, WmsTaskProcTypeEnum procType,
-			List<SoPickPlan> soPickPlanList, SoHeader soHeader, BigDecimal planQty) {
+						  List<SoPickPlan> soPickPlanList, SoHeader soHeader, BigDecimal planQty) {
 		WmsTask wmsTask = new WmsTask();
 		wmsTask.setTaskId(IdWorker.getId());
 		wmsTask.setLot(soPickPlanList.get(0).getSkuLot1());
@@ -86,6 +86,8 @@ public class WmsTaskFactory {
 		if (procType.equals(WmsTaskProcTypeEnum.BY_PCS) || procType.equals(WmsTaskProcTypeEnum.BY_PCS_AGV)) {
 			wmsTask.setBillDetailId(soPickPlanList.get(0).getSoDetailId());
 		}
+		// 任务类型： 拣货
+		wmsTask.setTaskTypeCd(taskType);
 		wmsTask.setTaskProcType(procType);
 		wmsTask.setTaskState(state);
 		wmsTask.setSkuCode(soPickPlanList.get(0).getSkuCode());
@@ -137,7 +139,7 @@ public class WmsTaskFactory {
 		wmsTask.setLot(stockList.get(0).getSkuLot1());
 		// 箱码
 		List<String> boxCodes = stockList.stream()
-				.map(Stock::getBoxCode).distinct().collect(Collectors.toList());
+			.map(Stock::getBoxCode).distinct().collect(Collectors.toList());
 		wmsTask.setBoxCode(String.join(",", boxCodes));
 		// 工作任务包ID
 		wmsTask.setTtpId(stockList.get(0).getStockId());

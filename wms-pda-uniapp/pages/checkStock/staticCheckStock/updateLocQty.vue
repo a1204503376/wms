@@ -15,7 +15,7 @@
 						<u--text class="demo-layout bg-purple-light" v-text="'箱号'"></u--text>
 					</u-col>
 					<u-col span="8" class="font-in-page">
-						<u-input v-model="item.boxCode"></u-input>
+						<u-input v-model.trim="item.boxCode"></u-input>
 					</u-col>
 				</u-row>
 				<u-row customStyle="margin-bottom: 10px">
@@ -25,7 +25,7 @@
 						</view>
 					</u-col>
 					<u-col span="8" class="font-in-page">
-						<u-input v-model="item.locCode"></u-input>
+						<u-input v-model.trim="item.locCode"></u-input>
 					</u-col>
 				</u-row>
 				<u-row customStyle="margin-bottom: 10px">
@@ -33,7 +33,7 @@
 						<u--text class="demo-layout bg-purple-light" v-text="'物品编码'"></u--text>
 					</u-col>
 					<u-col span="8" class="font-in-page">
-						<u-input v-model="item.skuCode" border="0" disabled></u-input>
+						<u-input v-model.trim="item.skuCode" border="0" disabled></u-input>
 					</u-col>
 				</u-row>
 				<u-row customStyle="margin-bottom: 10px">
@@ -43,7 +43,7 @@
 						</view>
 					</u-col>
 					<u-col span="8" class="font-in-page">
-						<u-input v-model="item.stockBalance"></u-input>
+						<u-input v-model.trim="item.stockBalance"></u-input>
 					</u-col>
 				</u-row>
 				<u-divider text=""></u-divider>

@@ -10,11 +10,11 @@
                          size="medium"
                          style="margin-left:10px;margin-right:10px;">
                     <el-row>
-                        <h3>出库单编辑</h3>
+                        <h3>发货单编辑</h3>
                     </el-row>
                     <el-row type="flex">
                         <el-col :span="8">
-                            <el-form-item label="出库单编码" prop="soBillNo">
+                            <el-form-item label="发货单编码" prop="soBillNo">
                                 <el-input v-model="form.params.soBillNo"
                                           :disabled="true"
                                           size="medium"
@@ -92,14 +92,12 @@
                         </el-col>
                     </el-row>
                     <el-row type="flex">
-                        <el-col :span="8">
+                        <el-col :span="24" style="width: 91%;">
                             <el-form-item label="备注" prop="soBillRemark">
                                 <el-input
                                     v-model="form.params.soBillRemark"
-                                    size="medium"
                                     :rows=2
                                     placeholder="请输入内容"
-                                    style="width: 1171px"
                                     type="textarea">
                                 </el-input>
                             </el-form-item>
@@ -174,9 +172,20 @@
                                     <template v-slot="{row}">
                                         <nodes-sku-um
                                             v-model="row.umCode"
+                                            :sku="row.sku">
+                                        </nodes-sku-um>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="skuSpec" width="122">
+                                    <template slot="header">
+                                        <span>物品规格</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <nodes-sku-spec
+                                            v-model="row.skuSpec"
                                             :sku="row.sku"
-                                            style="width: 100px"
-                                        ></nodes-sku-um>
+                                            style="width: 100px">
+                                        </nodes-sku-spec>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="planQty" width="152">
@@ -257,6 +266,7 @@
 </template>
 
 <script>
+
 import NodesSku from "@/components/wms/select/NodesSku";
 import NodesLineNumber from "@/components/wms/table/NodesLineNumber";
 import {editDetailMixin} from "@/mixins/editDetail";
@@ -267,13 +277,14 @@ import NodesCustomer from "@/components/wms/select/NodesCustomer";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesOwner from "@/components/wms/select/NodesOwner";
 import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
+import NodesSkuSpec from "@/components/wms/select/NodesSkuSpec";
 import NodesDictionary from "@/components/wms/select/NodesDictionary";
 
 export default {
     name: "edit",
     components: {
         NodesSkuUm, NodesOwner, NodesWarehouse,
-        NodesCustomer, NodesDictionary,
+        NodesCustomer, NodesDictionary, NodesSkuSpec,
         NodesBillType, NodesLineNumber, NodesSku,
     },
     mixins: [editDetailMixin],

@@ -163,6 +163,11 @@ public class StockManageBizImpl implements StockManageBiz {
 
 		//库存移动
 		stockBiz.moveStock(stockList.get(0), request.getSerialNumberList(), request.getQty(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_PCS_PDA, null, null, null);
+		//业务日志
+		logBiz.auditLog(AuditLogType.MOVE_STOCK,
+			String.format("%s 库存[%s]由[%s]移动数量[%s]到[%s]", StockLogTypeEnum.STOCK_MOVE_BY_PCS_PDA.getDesc(),
+				stockList.get(0).getStockId(), stockList.get(0).getLocCode(), request.getQty(),
+				targetLocation.getLocCode()));
 	}
 
 	@Override
@@ -181,6 +186,10 @@ public class StockManageBizImpl implements StockManageBiz {
 		}
 
 		stockBiz.moveStockByLpnCode(request.getLpnCode(), request.getTargetLpnCode(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_LPN_PDA, null, null, null);
+		//业务日志
+		logBiz.auditLog(AuditLogType.MOVE_STOCK,
+			String.format("%s LPN为[%s]移动到LPN为[%s]的库位[%s]", StockLogTypeEnum.STOCK_MOVE_BY_PCS_PDA.getDesc(),
+				request.getLpnCode(), request.getTargetLpnCode(), targetLocation.getLocCode()));
 	}
 
 	@Override
@@ -204,20 +213,24 @@ public class StockManageBizImpl implements StockManageBiz {
 		}
 		//根据传过来的多个箱码集合查询出多个库存
 		List<String> boxCodeList = request.getBoxCodeList().stream().filter(Func::isNotEmpty).collect(Collectors.toList());
-		for(String boxCode:boxCodeList){
-				List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(boxCode);
-				AssertUtil.notNull(stockList, "PDA库存管理:按箱移动失败，根据箱码查询不到对应库存");
-				Location location = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
-				//判断库存是否可以移动
-				canMove(location, targetLocation, stockList, boxCode);
-				if (locationBiz.isAgvLocation(targetLocation)) {
-					//AGV移动任务生成
-					agvTask.moveStockToSchedule(stockList, targetLocation);
-					break;
-				}
-				stockBiz.moveStockByBoxCode(boxCode, boxCode, request.getLpnCode(),
-					targetLocation, stockLogTypeEnum, null, null, null);
+		for (String boxCode : boxCodeList) {
+			List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(boxCode);
+			AssertUtil.notNull(stockList, "PDA库存管理:按箱移动失败，根据箱码查询不到对应库存");
+			Location location = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
+			//判断库存是否可以移动
+			canMove(location, targetLocation, stockList, boxCode);
+			if (locationBiz.isAgvLocation(targetLocation)) {
+				//AGV移动任务生成
+				agvTask.moveStockToSchedule(stockList, targetLocation);
+				break;
 			}
+			stockBiz.moveStockByBoxCode(boxCode, boxCode, request.getLpnCode(),
+				targetLocation, stockLogTypeEnum, null, null, null);
+			//业务日志
+			logBiz.auditLog(AuditLogType.MOVE_STOCK,
+				String.format("%s 箱码为[%s]移动到箱码为[%s]的库位[%s]", StockLogTypeEnum.STOCK_MOVE_BY_PCS_PDA.getDesc(),
+					boxCode, boxCode, targetLocation.getLocCode()));
+		}
 	}
 
 	@Override
@@ -377,7 +390,7 @@ public class StockManageBizImpl implements StockManageBiz {
 
 	@Override
 	public void canMoveToBoxType(Location targetLocation, Location sourceLocation) {
-		if (Func.isNotEmpty(targetLocation.getLpnTypeId())&&Func.isNotEmpty(sourceLocation.getLpnTypeId())) {
+		if (Func.isNotEmpty(targetLocation.getLpnTypeId()) && Func.isNotEmpty(sourceLocation.getLpnTypeId())) {
 			LpnType sourceLpnType = lpnTypeBiz.findLpnTypeById(sourceLocation.getLpnTypeId());
 			AssertUtil.notNull(sourceLpnType, "获取当前箱子箱型失败");
 			LpnType targetLpnType = lpnTypeBiz.findLpnTypeById(targetLocation.getLpnTypeId());

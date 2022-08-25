@@ -70,7 +70,7 @@
                             </template>
                             {{ form.params.inStoreTypeDesc }}
                         </el-descriptions-item>
-                        <el-descriptions-item
+                        <el-descriptions-item v-if="false"
                             label-class-name="descriptions-label"
                             content-class-name="descriptions-content"
                             :label-style="{'text-align': 'right'}">
@@ -214,7 +214,7 @@ export default {
                     label: '数量',
                 },
                 {
-                    prop: 'ipnCode',
+                    prop: 'lpnCode',
                     label: 'lpn编码',
                 },
                 {

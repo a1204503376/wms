@@ -345,7 +345,7 @@ export default {
         },
         onEdit(row) {
             if (row.soBillState.trim() !== '单据创建') {
-                this.$message.warning("操作失败，该发货单正在处理中");
+                this.$message.warning(`操作失败，该发货单不能编辑，[${row.soBillState}]`);
                 return;
             }
             this.$router.push({
@@ -362,7 +362,7 @@ export default {
             })
         },
         onDistribute(row) {
-            if(row.soBillState === '已关闭' || row.soBillState === '已取消'){
+            if(row.soBillState === '已关闭' || row.soBillState === '已取消' || row.soBillState === '全部出库'){
                 this.$message.warning(`${row.soBillState}的发货单不能分配`);
                 return
             }
@@ -382,6 +382,10 @@ export default {
             })
         },
         onPick(row) {
+            if(row.soBillState === '已关闭' || row.soBillState === '已取消' || row.soBillState === '全部出库'){
+                this.$message.warning(`${row.soBillState}的发货单不能拣货`);
+                return
+            }
             this.$router.push({
                 name: 'PC拣货',
                 params: {

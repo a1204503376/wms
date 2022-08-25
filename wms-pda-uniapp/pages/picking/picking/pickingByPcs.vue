@@ -6,19 +6,19 @@
 		</u-navbar>
 		<u--form>
 			<u-form-item label="物品" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuCode"></u--input>
+				<u--input v-model.trim="params.skuCode"></u--input>
 			</u-form-item>
 			<u-form-item label="批次" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.skuLot1"></u--input>
+				<u--input v-model.trim="params.skuLot1"></u--input>
 			</u-form-item>
 			<u-form-item label="箱码" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.boxCode"></u--input>
+				<u--input v-model.trim="params.boxCode"></u--input>
 			</u-form-item>
 			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.locCode"></u--input>
+				<u--input v-model.trim="params.locCode"></u--input>
 			</u-form-item>
 			<u-form-item label="数量" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params.qty"></u--input>
+				<u--input v-model.trim="params.qty"></u--input>
 			</u-form-item>
 
 		</u--form>
@@ -62,6 +62,19 @@
 					soDetailId: undefined,
 					whId: uni.getStorageSync('warehouse').whId
 				},
+				defaultParams: {
+					skuCode: undefined,
+					skuLot1: undefined,
+					boxCode: undefined,
+					locCode: undefined,
+					isSn: undefined,
+					qty: undefined,
+					billTypeCd: undefined,
+					soBillId: undefined,
+					soBillNo: undefined,
+					soDetailId: undefined,
+					whId: uni.getStorageSync('warehouse').whId
+				},
 				soBillId: ''
 			}
 		},
@@ -81,6 +94,13 @@
 			this.params.boxCode = undefined;
 			this.params.locCode = undefined;
 			this.params.qty = undefined;
+
+			this.defaultParams.skuCode = undefined;
+			this.defaultParams.skuLot1 = undefined;
+			this.defaultParams.boxCode = undefined;
+			this.defaultParams.locCode = undefined;
+			this.defaultParams.qty = undefined;
+
 			uni.$u.func.registerScanner(this.scannerCallback);
 			var soDetail = uni.getStorageSync('soDetail');
 			if (tool.isNotEmpty(soDetail)) {
@@ -88,6 +108,11 @@
 				this.params.qty = soDetail.surplusQty;
 				this.params.skuLot1 = soDetail.skuLot1;
 				this.params.soDetailId = soDetail.soDetailId;
+				
+				this.defaultParams.skuCode = soDetail.skuCode;
+				this.defaultParams.qty = soDetail.surplusQty;
+				this.defaultParams.skuLot1 = soDetail.skuLot1;
+				this.defaultParams.soDetailId = soDetail.soDetailId;
 			}
 		},
 		onBackPress(event) {
@@ -142,6 +167,9 @@
 								.params);
 							return;
 						} else {
+							if(_this.params.skuCode != _this.defaultParams.skuCode){
+								_this.params.soDetailId=undefined;
+							}
 							pick.pickByPcs(_this.params).then(data => {
 								_this.$u.func.showToast({
 									title: '拣货完成'

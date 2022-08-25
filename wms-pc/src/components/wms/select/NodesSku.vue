@@ -63,13 +63,13 @@ export default {
             }
             this.val = this.selectVal.skuCode;
         },
-        // 输入值后失去焦点
+        // 值变化后失去焦点触发
         onChange(val) {
             if (!this.data.map((item) => item.skuCode).includes(this.val)) {
-                this.val = '';
-                this.$emit('selectValChange', {});
+                this.val = '';                                  // 清空物品编码
+                this.$emit('selectValChange', {});  // 回传空对象，清空外面其他组件
+                this.data = []
             }
-
             for (let i = 0; i < this.data.length; i++) {
                 if (this.data[i].skuCode === val) {
                     this.$emit('selectValChange', this.data[i]);
@@ -77,7 +77,7 @@ export default {
                 }
             }
         },
-        // 异步请求下拉数据
+        // 输入建议数据准备好时通过 cb(data) 返回到 autocomplete 组件中
         async querySearchAsync(queryString, cb) {
             if (queryString === '') {
                 cb([]);
@@ -98,22 +98,22 @@ export default {
 }
 </script>
 <style>
-.popper-auto {
-    width: auto!important ;
-    li {
-        line-height: normal!important;
-        padding: 7px;
-        .name {
-            text-overflow: ellipsis;
-            overflow: hidden;
-        }
-        .addr {
-            font-size: 12px;
-            color: #b4b4b4;
-        }
-        .highlighted .addr {
-            color: #ddd;
-        }
-    }
-}
+/*.popper-auto {*/
+/*    width: auto!important ;*/
+/*    li {*/
+/*        line-height: normal!important;*/
+/*        padding: 7px;*/
+/*        .name {*/
+/*            text-overflow: ellipsis;*/
+/*            overflow: hidden;*/
+/*        }*/
+/*        .addr {*/
+/*            font-size: 12px;*/
+/*            color: #b4b4b4;*/
+/*        }*/
+/*        .highlighted .addr {*/
+/*            color: #ddd;*/
+/*        }*/
+/*    }*/
+/*}*/
 </style>

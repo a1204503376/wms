@@ -2,12 +2,12 @@
 	<view>
 		<view v-for="item of numberOfOpen" v-if="onLineSkuLot">
 			<u-form-item :label="skuParams['skuLot'+item]" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params['skuLot'+item]" disabled></u--input>
+				<u--input v-model.trim="params['skuLot'+item]" disabled></u--input>
 			</u-form-item>
 		</view>
 		<view v-for="item of numberOfOpen" v-if="defaultSkuLot">
 			<u-form-item :label="'批属性'+item" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="params['skuLot'+item]" disabled></u--input>
+				<u--input v-model.trim="params['skuLot'+item]" disabled></u--input>
 			</u-form-item>
 		</view>
 

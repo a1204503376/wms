@@ -2,6 +2,7 @@ package org.nodes.wms.dao.stock.dto.output;
 
 import lombok.Data;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -43,7 +44,7 @@ public class StockLogPageResponse extends BaseSkuLot implements Serializable {
 	/**
 	 * 库存状态
 	 */
-	private String stockStatus;
+	private StockStatusEnum stockStatus;
 
 	/**
 	 * 层级

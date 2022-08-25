@@ -7,19 +7,19 @@
 		<!-- 	<v-for="(item,index) in Data"></v-for="(item,index)> -->
 		<u--form>
 			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="param.locCode" @focus="focus(1)" @blur="blur(1)" @confirm="change"></u--input>
+				<u--input v-model.trim="param.locCode" @focus="focus(1)" @blur="blur(1)" @confirm="change"></u--input>
 			</u-form-item>
 			<u-form-item label="LPN"  class="left-text-one-line" labelWidth="100">
-				<u--input v-model="param.lpnCode" @focus="focus(2)" @blur="blur(2)" @confirm="change"
+				<u--input v-model.trim="param.lpnCode" @focus="focus(2)" @blur="blur(2)" @confirm="change"
 					:focus="this.focusNum == 2"></u--input>
 			</u-form-item>
 
 			<u-form-item label="生产批次" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model="param.skuLot1" @focus="focus(3)" @confirm="change" @blur="blur(3)"
+				<u--input v-model.trim="param.skuLot1" @focus="focus(3)" @confirm="change" @blur="blur(3)"
 					:focus="this.focusNum == 3"></u--input>
 			</u-form-item>
 			<u-form-item label="专用客户"  class="left-text-one-line" labelWidth="100">
-				<u--input v-model="param.skuLot4" @focus="focus(4)" @confirm="change" @blur="blur(4)"
+				<u--input v-model.trim="param.skuLot4" @focus="focus(4)" @confirm="change" @blur="blur(4)"
 					:focus="this.focusNum == 4"></u--input>
 			</u-form-item>
 

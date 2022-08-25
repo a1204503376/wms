@@ -14,7 +14,7 @@
 						</u-col>
 						<u-col span="4">
 							<view class="demo-layout bg-purple font-in-page">
-							{{item.soLineNo}}
+								{{item.soLineNo}}
 							</view>
 						</u-col>
 					</u-row>
@@ -24,7 +24,7 @@
 						</u-col>
 						<u-col span="4">
 							<view class="demo-layout bg-purple font-in-page">
-							{{item.skuCode}}
+								{{item.skuCode}}
 							</view>
 						</u-col>
 					</u-row>
@@ -54,9 +54,6 @@
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
 				返回
-			</view>
-			<view class="btn-submit" @click="submit()">
-				确定
 			</view>
 		</view>
 	</view>
@@ -108,11 +105,6 @@
 			// #endif
 		},
 		methods: {
-			submit() {
-				//TODO 等页面测试通过之后删除
-				this.clearEmitKeyDown();
-				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingByPcs');
-			},
 			analysisCode(code) {
 				var barcode = barcodeFunc.parseBarcode(code);
 				var barcodeType = barcodeFunc.BarcodeType;

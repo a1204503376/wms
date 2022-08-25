@@ -8,15 +8,16 @@ import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.modules.wms.basedata.service.ISkuService;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.core.basedata.dto.SkuDTO;
-import org.nodes.wms.dao.basics.sku.dto.input.SkuAddOrEditRequest;
-import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.nodes.wms.core.basedata.excel.SkuExcel;
 import org.nodes.wms.core.basedata.vo.SkuVO;
 import org.nodes.wms.core.basedata.wrapper.SkuWrapper;
+import org.nodes.wms.dao.basics.sku.dto.input.SkuAddOrEditRequest;
 import org.nodes.wms.dao.basics.sku.dto.input.SkuSelectQuery;
-import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
+import org.nodes.wms.dao.basics.sku.dto.input.SkuSpecSelectQuery;
 import org.nodes.wms.dao.basics.sku.dto.input.SkuUmSelectQuery;
+import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
@@ -144,6 +145,14 @@ public class SkuController {
 		return R.data(skuService.importData(dataVerifyList));
 	}
 
+	@ApiLog("物品管理-新增或修改")
+	@PostMapping("/save")
+	public R<String> save(@Valid @RequestBody SkuAddOrEditRequest skuAddOrEditRequest) {
+		Sku sku = skuBiz.save(skuAddOrEditRequest);
+		return R.success(String.format("[%s]成功，物品编码：[%s]"
+			, (Func.isEmpty(skuAddOrEditRequest.getSkuId()) ? "新增" : "修改"), sku.getSkuCode()));
+	}
+
 	/**
 	 * 计量单位下拉组件数据源: 根据物品id查询所有计量单位
 	 */
@@ -153,11 +162,11 @@ public class SkuController {
 		return R.data(umList);
 	}
 
-	@ApiLog("物品管理-新增或修改")
-	@PostMapping("/save")
-	public R<String> save(@Valid @RequestBody SkuAddOrEditRequest skuAddOrEditRequest) {
-		Sku sku = skuBiz.save(skuAddOrEditRequest);
-		return R.success(String.format("[%s]成功，物品编码：[%s]"
-			, (Func.isEmpty(skuAddOrEditRequest.getSkuId()) ? "新增" : "修改"), sku.getSkuCode()));
+	/**
+	 * 规格型号下拉组件数据源: 根据物品id查询所有规格型号
+	 */
+	@PostMapping("/findSkuSpecSelectListBySkuId")
+	public R<List<String>> findSkuSpecSelectListBySkuId(@Valid @RequestBody SkuSpecSelectQuery skuSpecSelectQuery){
+		return R.data(skuBiz.findSkuSpecSelectListBySkuId(skuSpecSelectQuery.getSkuId()));
 	}
 }

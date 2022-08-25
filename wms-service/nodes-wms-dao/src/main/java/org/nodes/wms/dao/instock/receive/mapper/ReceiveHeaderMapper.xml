@@ -77,7 +77,8 @@
                rh.asn_bill_no,
                rh.bill_state,
                rh.wh_code,
-               rh.owner_code,
+               owner.owner_code,
+               owner.owner_name,
                rh.bill_type_cd,
                wbt.bill_type_name,
                rh.in_store_type,
@@ -86,10 +87,10 @@
                rh.supplier_name,
                rh.supplier_contact,
                rh.remark
-        from receive_header rh,
-             wms_bill_type wbt
-        where rh.bill_type_cd = wbt.bill_type_cd
-          and receive_id = #{id}
+        from receive_header rh
+             left join wms_bill_type wbt on rh.bill_type_cd = wbt.bill_type_cd
+             left join wms_owner owner on rh.wo_id = owner.wo_id
+        where receive_id = #{id}
     </select>
     <select id="getReceiveHeaderResponseByQuery"
             resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse">
