@@ -304,6 +304,7 @@
             and s.box_code !='')
             and s.stay_stock_qty + s.stock_qty > s.pick_qty
             AND s.is_deleted ='0'
+            AND s.zone_id not in (select zone_id from wms_zone where zone_code = 'WH1-PICKTO')
             order by s.box_code
         </if>
         <if test="query.isShowByLpn !=null and 'true'.toString() == query.isShowByLpn.toString()">
