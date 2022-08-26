@@ -383,6 +383,7 @@ export default {
     created() {
         window.addEventListener('resize', this.autoTableHeight);
         this.getTableData();
+        this.getSoPickPlanData(this.soBillId);
     },
     watch: {
         soBillId() {
@@ -456,6 +457,7 @@ export default {
         },
         refreshTable() {
             this.getTableData();
+            this.getSoPickPlanData(this.soBillId);
         },
         getTableData() {
             getSoBillDataByDistribution(this.soBillId).then((res) => {
@@ -466,7 +468,6 @@ export default {
                 this.table.soDetailData = data.soDetailList;
                 this.handleRefreshTable();
             })
-            this.getSoPickPlanData(this.soBillId);
         },
         async getSoPickPlanData(soBillId, soDetailId) {
             await getSoPickPlanData(soBillId, soDetailId).then((res) => {
@@ -633,7 +634,8 @@ export default {
             }
             saveAssign(this.soHeader.soBillId, this.dialog.currentRow.soDetailId, soPickPlanList, stockIdAndSoPickPlanQtyList)
                 .then((res) => {
-                    this.$message.success(res.data.msg)
+                    this.$message.success(res.data.msg);
+                    this.getTableData();
                     this.resetMerge(this.getSoPickPlanData(this.soHeader.soBillId));
                     this.dialog.dialogTableVisible = false;
                 })
