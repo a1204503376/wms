@@ -1,5 +1,6 @@
 package com.nodes.project.api.dto.agv;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.nodes.project.api.enums.AgvTypeEnum;
 import lombok.Data;
 
@@ -22,6 +23,7 @@ public class AgvSyncOrderRequest {
      * AGV类型
      */
     @NotNull(message = "AGV类型不能为空")
+    @JSONField(serializeUsing = AgvTypeEnumSerializer.class)
     private AgvTypeEnum agvType;
 
     /**

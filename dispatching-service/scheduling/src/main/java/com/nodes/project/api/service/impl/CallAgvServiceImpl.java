@@ -17,8 +17,8 @@ import java.util.List;
 @Slf4j
 @Service
 public class CallAgvServiceImpl implements CallAgvService {
-    private static final String url_transportOrders = "/transportOrders/{jobId}";
-    private static final String url_withdrawal = url_transportOrders + "/withdrawal";
+    private static final String URL_TRANSPORT_ORDERS = "/transportOrders/{}";
+    private static final String URL_WITHDRAWAL = URL_TRANSPORT_ORDERS + "/withdrawal";
 
     @Resource
     private CallApiService callApiService;
@@ -26,7 +26,7 @@ public class CallAgvServiceImpl implements CallAgvService {
     @Override
     public AgvGlobalResponse transportOrders(JobQueue jobQueue) {
         AgvTransportOrderRequest agvTransportOrderRequest = getAgvTransportOrderRequest(jobQueue);
-        return callApiService.postAgv(url_transportOrders, agvTransportOrderRequest);
+        return callApiService.postAgv(StringUtils.format(URL_TRANSPORT_ORDERS, jobQueue.getId()), agvTransportOrderRequest);
     }
 
     @NotNull
@@ -56,7 +56,6 @@ public class CallAgvServiceImpl implements CallAgvService {
     public AgvGlobalResponse withdrawal(JobQueue jobQueue) {
         AgvWithdrawalRequest agvWithdrawalRequest = new AgvWithdrawalRequest();
         agvWithdrawalRequest.setName(jobQueue.getId());
-        String url = StringUtils.format(url_withdrawal, jobQueue);
-        return callApiService.postAgv(url, agvWithdrawalRequest);
+        return callApiService.postAgv(StringUtils.format(URL_WITHDRAWAL, jobQueue.getId()), agvWithdrawalRequest);
     }
 }

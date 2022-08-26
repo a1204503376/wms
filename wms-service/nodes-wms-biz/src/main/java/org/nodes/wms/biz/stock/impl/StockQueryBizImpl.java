@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.DictKVConstant;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
@@ -278,6 +279,15 @@ public class StockQueryBizImpl implements StockQueryBiz {
 			page.setTotal(stockPageResponseList.size());
 			return page;
 		}
+		if (Func.isNotEmpty(stockPageQuery.getZoneIdList())) {
+			Zone zone = zoneBiz.findByCode(WmsAppConstant.ZONE_CODE_LOC_PICKTO);
+			for (Long zoneId : stockPageQuery.getZoneIdList()) {
+				if (Func.equals(zone.getZoneId(), zoneId)) {
+					throw new ServiceException("查询库存余额时不能选择出库集货区");
+				}
+			}
+		}
+
 		return stockDao.page(Condition.getPage(query), stockPageQuery);
 	}
 

@@ -13,9 +13,9 @@ scheduling:
   # 获取ip地址开关
   addressEnabled: false
   wmsUrl: http://10.168.3.136:6001/wms/scheduling
-  agvUrl: http://localhost:55200
+  agvUrl: http://192.168.1.178:55200/v1
   #JOB超时（单位：分钟）
-  jobTimeout: 20
+  jobTimeout: 2000
 
 # 开发环境配置
 server:
@@ -144,7 +144,7 @@ xss:
 # 代码生成
 gen:
   # 作者
-  author: ruoyi
+  author: node
   # 默认生成包路径 system 需改成自己的模块名称 如 system monitor tool
   packageName: com.nodes.project.system
   # 自动去除表前缀，默认是true

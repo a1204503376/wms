@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.nodes.framework.web.domain.SimpleEntity;
 import com.nodes.project.api.enums.JobFlagSyncWmsEnum;
+import com.nodes.project.api.enums.JobStatusEnum;
+import com.nodes.project.api.enums.JobTypeEnum;
 import com.nodes.project.api.enums.WmsBoxTypeEnum;
 import lombok.Data;
 
@@ -91,12 +93,12 @@ public class JobTimeout extends SimpleEntity {
     /**
      * 类型编码
      */
-    private String typeCode;
+    private JobTypeEnum typeCode;
 
     /**
      * 状态
      */
-    private Integer status;
+    private JobStatusEnum status;
 
     /**
      * 开始时间

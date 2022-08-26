@@ -1,11 +1,11 @@
 package tech.powerjob.worker.core.processor;
 
-import tech.powerjob.common.WorkflowContextConstant;
-import tech.powerjob.common.serialize.JsonUtils;
 import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import tech.powerjob.common.WorkflowContextConstant;
+import tech.powerjob.common.serialize.JsonUtils;
 
 import java.util.Map;
 
@@ -21,7 +21,7 @@ public class WorkflowContext {
     /**
      * 工作流实例 ID
      */
-    private final Long  wfInstanceId;
+    private final Long wfInstanceId;
     /**
      * 当前工作流上下文数据
      * 这里的 data 实际上等价于 {@link TaskContext} 中的 instanceParams
@@ -63,20 +63,20 @@ public class WorkflowContext {
      * 往工作流上下文添加数据
      * 注意：如果 key 在当前上下文中已存在，那么会直接覆盖
      */
-    public void appendData2WfContext(String key, Object value) {
+    public void appendData2WfContext(String key, String value) {
         if (wfInstanceId == null) {
             // 非工作流中的任务，直接忽略
             return;
         }
-        String finalValue;
-        try {
-            // 这里不限制长度，完成任务之后上报至 TaskTracker 时再校验
-            finalValue = JsonUtils.toJSONStringUnsafe(value);
-        } catch (Exception e) {
-            log.warn("[WorkflowContext-{}] fail to append data to workflow context, key : {}", wfInstanceId, key);
-            return;
-        }
-        appendedContextData.put(key, finalValue);
+//        String finalValue;
+//        try {
+//            // 这里不限制长度，完成任务之后上报至 TaskTracker 时再校验
+//            finalValue = JSON.toJSONString(value);
+//        } catch (Exception e) {
+//            log.warn("[WorkflowContext-{}] fail to append data to workflow context, key : {}", wfInstanceId, key);
+//            return;
+//        }
+        appendedContextData.put(key, value);
     }
 
 

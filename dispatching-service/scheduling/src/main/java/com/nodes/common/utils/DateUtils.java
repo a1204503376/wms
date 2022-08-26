@@ -123,8 +123,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 计算与当前时间相差的分钟数
      */
-    public static long differenceMinutes(LocalDateTime begin, LocalDateTime end) {
-        Duration duration = Duration.between(begin, end);
+    public static long differenceMinutes(Date begin, Date end) {
+        LocalDateTime localDateTimeBegin = begin.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime localDateTimeEnd = end.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        Duration duration = Duration.between(localDateTimeBegin, localDateTimeEnd);
         return Math.abs(duration.toMinutes());
     }
 
