@@ -157,7 +157,7 @@ public class StockManageBizImpl implements StockManageBiz {
 		//判断原库存是否是入库暂存区，原库存移动时不允许暂存区
 		canMoveToSourceLocIsStageLocation(sourceLocation);
 		//判断库存是否可以移动
-		canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode());
+		canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode(), true);
 		//判断库存移动时：移动数量是否超过库存数量
 		canMoveIsExceedSend(request.getQty(), stockList.get(0).getStockEnable());
 		if (locationBiz.isAgvLocation(targetLocation)) {
@@ -185,7 +185,7 @@ public class StockManageBizImpl implements StockManageBiz {
 		Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
 		//判断原库存是否是入库暂存区，原库存移动时不允许暂存区
 		canMoveToSourceLocIsStageLocation(sourceLocation);
-		canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode());
+		canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode(), true);
 		if (locationBiz.isAgvLocation(targetLocation)) {
 			//AGV移动任务生成
 			agvTask.moveStockToSchedule(stockList, targetLocation);
@@ -227,7 +227,7 @@ public class StockManageBizImpl implements StockManageBiz {
 			//判断原库存是否是入库暂存区，原库存移动时不允许暂存区
 			canMoveToSourceLocIsStageLocation(sourceLocation);
 			//判断库存是否可以移动
-			canMove(sourceLocation, targetLocation, stockList, boxCode);
+			canMove(sourceLocation, targetLocation, stockList, boxCode, true);
 			if (locationBiz.isAgvLocation(targetLocation)) {
 				//AGV移动任务生成
 				agvTask.moveStockToSchedule(stockList, targetLocation);
@@ -376,7 +376,7 @@ public class StockManageBizImpl implements StockManageBiz {
 	 * @param boxCode        boxCode
 	 */
 	@Override
-	public void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList, String boxCode) {
+	public void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList, String boxCode, Boolean checkLocType) {
 		AssertUtil.notNull(sourceLocation, "校验库存移动失败当前库位为空");
 		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
 		AssertUtil.notNull(stockList, "校验库存移动失败库存为空");
@@ -391,8 +391,10 @@ public class StockManageBizImpl implements StockManageBiz {
 		//2. 如果是自动区则要求目标库位必须是空库位（库位上没有库存）
 		canMoveToLocAuto(sourceLocation, targetLocation);
 
-		//3. 只能是同类型（自动与人工区）的库区之间移动
-		canMoveToLocType(sourceLocation, targetLocation);
+		if (checkLocType) {
+			//3. 只能是同类型（自动与人工区）的库区之间移动
+			canMoveToLocType(sourceLocation, targetLocation);
+		}
 
 		//4. 校验目标库位的箱型
 		canMoveToBoxType(targetLocation, boxCode);

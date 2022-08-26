@@ -276,8 +276,11 @@ public class OutStockBizImpl implements OutStockBiz {
 		// 3、判断是不是超拣---直接走按箱的流程
 		// 4、如果没有超拣则执行按箱的流---直接走按箱的流程
 		WmsTask task = wmsTaskBiz.findEnableTaskByBoxCode(stockList.get(0).getBoxCode(), WmsTaskProcTypeEnum.BY_LOC);
-		SoDetail soDetail = soBillBiz.getSoDetailById(task.getBillDetailId());
-		AssertUtil.notNull(soDetail, "接驳区拣货失败，根据任务查询不到对应的发货单详情");
+		// 3、根据拣货计划生成拣货记录,根据任务id从拣货计划中查找
+		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(task.getTaskId());
+		AssertUtil.notNull(soPickPlanList, "接驳区拣货失败，根据任务查询不到对应的拣货计划");
+		SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlanList.get(0).getSoDetailId());
+		AssertUtil.notNull(soDetail, "接驳区拣货失败，根据拣货计划查询不到对应的发货单详情");
 		// 2、参数校验
 		if (BigDecimalUtil.gt(task.getTaskQty().subtract(task.getScanQty()), soDetail.getSurplusQty())) {
 			return false;
@@ -313,7 +316,7 @@ public class OutStockBizImpl implements OutStockBiz {
 
 		// 校验是否超发
 		canPick(soPickPlanList, stockList);
-
+		stockManageBiz.canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode(), false);
 		// 按LPN移动
 		stockBiz.moveStockByLpnCode(stockList.get(0).getLpnCode(), stockList.get(0).getLpnCode(),
 			targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_LPN_PDA, null, null, null);
@@ -331,10 +334,6 @@ public class OutStockBizImpl implements OutStockBiz {
 			Stock stock = stockQueryBiz.findStockById(pickPlan.getStockId());
 			SoDetail soDetail = soBillBiz.getSoDetailById(pickPlan.getSoDetailId());
 			soPickPlanBiz.updatePickRealQty(pickPlan.getPickPlanId(), pickPlan.getPickPlanQty());
-			// 4.生产并保存拣货记录
-			LogSoPick logSoPick = logSoPickFactory.create(soDetail, pickPlan, pickPlan.getPickPlanQty(),
-				serialNumberList, stock);
-			logSoPickDao.save(logSoPick);
 		}
 
 		// 5、更新出库单信息
@@ -344,8 +343,8 @@ public class OutStockBizImpl implements OutStockBiz {
 		wmsTaskBiz.updateWmsTaskStateByTaskId(task.getTaskId(), WmsTaskStateEnum.COMPLETED, task.getTaskQty());
 
 		// 7、记录业务日志
-		logBiz.auditLog(AuditLogType.OUTSTOCK, soHeader.getSoBillId(),
-			soHeader.getSoBillNo(), spliceLog(WmsTaskProcTypeEnum.BY_LOC, stockList));
+		logBiz.auditLog(AuditLogType.MOVE_STOCK, soHeader.getSoBillId(),
+			soHeader.getSoBillNo(), spliceLog(WmsTaskProcTypeEnum.BY_LPN, stockList));
 	}
 
 	@Override
