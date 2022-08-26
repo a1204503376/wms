@@ -42,6 +42,16 @@ public class StockLogPageResponse extends BaseSkuLot implements Serializable {
 	private BigDecimal currentPickQty;
 
 	/**
+	 * 本次操作占用量
+	 */
+	private BigDecimal currentOccupyQty;
+
+	/**
+	 * 占用量
+	 */
+	private BigDecimal occupyQty;
+
+	/**
 	 * 库存状态
 	 */
 	private StockStatusEnum stockStatus;
