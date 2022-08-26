@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.DictKVConstant;
-import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
@@ -271,6 +270,17 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public Page<StockPageResponse> getStockPage(Query query, StockPageQuery stockPageQuery) {
+		if (Func.isNotEmpty(stockPageQuery.getZoneIdList())) {
+			for (Long zoneId : stockPageQuery.getZoneIdList()) {
+				List<Location> locationList = locationBiz.findLocationByZoneId(zoneId);
+				for (Location location : locationList) {
+					if (locationBiz.isPickToLocation(location)) {
+						throw new ServiceException("查询库存余额时不能选择出库集货区");
+					}
+				}
+			}
+		}
+
 		// 按箱显示或按lpn显示
 		if (Func.isNotEmpty(stockPageQuery.getIsShowByBox()) || Func.isNotEmpty(stockPageQuery.getIsShowByLpn())) {
 			List<StockPageResponse> stockPageResponseList = stockDao.getStockResponseByBoxOrByLpn(stockPageQuery);
@@ -279,15 +289,6 @@ public class StockQueryBizImpl implements StockQueryBiz {
 			page.setTotal(stockPageResponseList.size());
 			return page;
 		}
-		if (Func.isNotEmpty(stockPageQuery.getZoneIdList())) {
-			Zone zone = zoneBiz.findByCode(WmsAppConstant.ZONE_CODE_LOC_PICKTO);
-			for (Long zoneId : stockPageQuery.getZoneIdList()) {
-				if (Func.equals(zone.getZoneId(), zoneId)) {
-					throw new ServiceException("查询库存余额时不能选择出库集货区");
-				}
-			}
-		}
-
 		return stockDao.page(Condition.getPage(query), stockPageQuery);
 	}
 
