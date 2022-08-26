@@ -3,6 +3,7 @@ package org.nodes.wms.biz.stockManage.impl;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.DictKVConstant;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -156,7 +158,8 @@ public class StockManageBizImpl implements StockManageBiz {
 		canMoveToSourceLocIsStageLocation(sourceLocation);
 		//判断库存是否可以移动
 		canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode());
-
+		//判断库存移动时：移动数量是否超过库存数量
+		canMoveIsExceedSend(request.getQty(), stockList.get(0).getStockEnable());
 		if (locationBiz.isAgvLocation(targetLocation)) {
 			//AGV移动任务生成
 			agvTask.moveStockToSchedule(stockList, targetLocation);
@@ -502,6 +505,18 @@ public class StockManageBizImpl implements StockManageBiz {
 	private void canMoveByIsNotOverweight(Location targetLocation, List<Stock> stockList) {
 		if (!tianYiPutwayStrategy.isNotOverweight(stockList, targetLocation)) {
 			throw new ServiceException("要移动的库存超过了最大载重");
+		}
+	}
+
+	/**
+	 * 根据要移动的数量判断库存是否可以移动
+	 *
+	 * @param moveNumber 移动数量
+	 * @param stockQty   库存数量
+	 */
+	private void canMoveIsExceedSend(BigDecimal moveNumber, BigDecimal stockQty) {
+		if (BigDecimalUtil.gt(moveNumber, stockQty)) {
+			throw new ServiceException("库存移动失败，要移动的数量超过了库存数量");
 		}
 	}
 }
