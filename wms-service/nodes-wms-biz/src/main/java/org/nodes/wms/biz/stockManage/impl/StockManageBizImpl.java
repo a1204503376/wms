@@ -140,9 +140,9 @@ public class StockManageBizImpl implements StockManageBiz {
 		//根据skuCode获取SKU对象
 		Sku sku = skuBiz.findByCode(request.getSkuCode());
 		//根据locCode获取Location对象
-		Location location = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
+		Location sourceLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
 		List<Long> locationIdList = new ArrayList<>();
-		locationIdList.add(location.getLocId());
+		locationIdList.add(sourceLocation.getLocId());
 		//根据目标locCode获取Location对象
 		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getTargetLocCode());
 		//批属性赋值
@@ -152,8 +152,10 @@ public class StockManageBizImpl implements StockManageBiz {
 		List<Stock> stockList = stockQueryBiz.findEnableStockByLocationAndSkuLot(request.getWhId(), sku.getSkuId(), null, locationIdList, skuLot);
 		//断言stockList
 		AssertUtil.notNull(stockList, "根据您输入的数据查询不到对应的库存，请重新输入后重试");
+		//判断原库存是否是入库暂存区，原库存移动时不允许暂存区
+		canMoveToSourceLocIsStageLocation(sourceLocation);
 		//判断库存是否可以移动
-		canMove(location, targetLocation, stockList, stockList.get(0).getBoxCode());
+		canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode());
 
 		if (locationBiz.isAgvLocation(targetLocation)) {
 			//AGV移动任务生成
@@ -178,6 +180,8 @@ public class StockManageBizImpl implements StockManageBiz {
 		List<Stock> stockList = stockQueryBiz.findStockByLpnCode(request.getLpnCode());
 		AssertUtil.notNull(stockList, "LPN移动失败，根据LPN获取库存集合为空");
 		Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
+		//判断原库存是否是入库暂存区，原库存移动时不允许暂存区
+		canMoveToSourceLocIsStageLocation(sourceLocation);
 		canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode());
 		if (locationBiz.isAgvLocation(targetLocation)) {
 			//AGV移动任务生成
@@ -216,9 +220,11 @@ public class StockManageBizImpl implements StockManageBiz {
 		for (String boxCode : boxCodeList) {
 			List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(boxCode);
 			AssertUtil.notNull(stockList, "PDA库存管理:按箱移动失败，根据箱码查询不到对应库存");
-			Location location = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
+			Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
+			//判断原库存是否是入库暂存区，原库存移动时不允许暂存区
+			canMoveToSourceLocIsStageLocation(sourceLocation);
 			//判断库存是否可以移动
-			canMove(location, targetLocation, stockList, boxCode);
+			canMove(sourceLocation, targetLocation, stockList, boxCode);
 			if (locationBiz.isAgvLocation(targetLocation)) {
 				//AGV移动任务生成
 				agvTask.moveStockToSchedule(stockList, targetLocation);
@@ -371,6 +377,10 @@ public class StockManageBizImpl implements StockManageBiz {
 		AssertUtil.notNull(sourceLocation, "校验库存移动失败当前库位为空");
 		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
 		AssertUtil.notNull(stockList, "校验库存移动失败库存为空");
+		AssertUtil.notNull(boxCode, "校验库存移动失败箱码为空");
+		if (stockList.size() < 1) {
+			throw new ServiceException("校验库存移动失败库存为空");
+		}
 
 		//1. 不能移动到出库集货区和虚拟库区
 		canMoveToLoc(targetLocation);
@@ -439,6 +449,17 @@ public class StockManageBizImpl implements StockManageBiz {
 			if (!stockQueryBiz.isEmptyLocation(targetLocation.getLocId())) {
 				throw new ServiceException("库存移动失败，自动区目标库位存在库存");
 			}
+		}
+	}
+
+	/**
+	 * 移动时无法移动到出库暂存区
+	 *
+	 * @param sourceLocation sourceLocation
+	 */
+	private void canMoveToSourceLocIsStageLocation(Location sourceLocation) {
+		if (locationBiz.isStageLocation(sourceLocation)) {
+			throw new ServiceException("库存移动时原库存不能是入库暂存区");
 		}
 	}
 
