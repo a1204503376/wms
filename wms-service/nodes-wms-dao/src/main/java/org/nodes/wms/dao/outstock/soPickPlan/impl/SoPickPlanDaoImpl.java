@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.outstock.SoPickPlanDao;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.intput.SoPickPlanPageQuery;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
@@ -101,4 +103,19 @@ public class SoPickPlanDaoImpl
 		return super.lambdaQuery().in(SoPickPlan::getPickPlanId, soPickPlanIdList).list();
 	}
 
+	@Override
+	public void updatePickByPartParam(Long pickPlanId, Long stockId, Location location, Zone zone) {
+		UpdateWrapper<SoPickPlan> updateWrapper = Wrappers.update();
+		updateWrapper.lambda()
+			.eq(SoPickPlan::getPickPlanId, pickPlanId);
+		SoPickPlan soPickPlan = new SoPickPlan();
+		soPickPlan.setStockId(stockId);
+		soPickPlan.setLocId(location.getLocId());
+		soPickPlan.setLocCode(location.getLocCode());
+		soPickPlan.setZoneId(zone.getZoneId());
+		soPickPlan.setZoneCode(zone.getZoneCode());
+		if (!super.update(soPickPlan, updateWrapper)) {
+			throw new ServiceException("修改拣货计划失败,请再次重试");
+		}
+	}
 }
