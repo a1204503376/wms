@@ -3,6 +3,7 @@ package org.nodes.wms.biz.stockManage.impl;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.DictKVConstant;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -140,9 +142,9 @@ public class StockManageBizImpl implements StockManageBiz {
 		//根据skuCode获取SKU对象
 		Sku sku = skuBiz.findByCode(request.getSkuCode());
 		//根据locCode获取Location对象
-		Location location = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
+		Location sourceLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
 		List<Long> locationIdList = new ArrayList<>();
-		locationIdList.add(location.getLocId());
+		locationIdList.add(sourceLocation.getLocId());
 		//根据目标locCode获取Location对象
 		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getTargetLocCode());
 		//批属性赋值
@@ -152,9 +154,12 @@ public class StockManageBizImpl implements StockManageBiz {
 		List<Stock> stockList = stockQueryBiz.findEnableStockByLocationAndSkuLot(request.getWhId(), sku.getSkuId(), null, locationIdList, skuLot);
 		//断言stockList
 		AssertUtil.notNull(stockList, "根据您输入的数据查询不到对应的库存，请重新输入后重试");
+		//判断原库存是否是入库暂存区，原库存移动时不允许暂存区
+		canMoveToSourceLocIsStageLocation(sourceLocation);
 		//判断库存是否可以移动
-		canMove(location, targetLocation, stockList, stockList.get(0).getBoxCode());
-
+		canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode());
+		//判断库存移动时：移动数量是否超过库存数量
+		canMoveIsExceedSend(request.getQty(), stockList.get(0).getStockEnable());
 		if (locationBiz.isAgvLocation(targetLocation)) {
 			//AGV移动任务生成
 			agvTask.moveStockToSchedule(stockList, targetLocation);
@@ -178,6 +183,8 @@ public class StockManageBizImpl implements StockManageBiz {
 		List<Stock> stockList = stockQueryBiz.findStockByLpnCode(request.getLpnCode());
 		AssertUtil.notNull(stockList, "LPN移动失败，根据LPN获取库存集合为空");
 		Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
+		//判断原库存是否是入库暂存区，原库存移动时不允许暂存区
+		canMoveToSourceLocIsStageLocation(sourceLocation);
 		canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode());
 		if (locationBiz.isAgvLocation(targetLocation)) {
 			//AGV移动任务生成
@@ -216,9 +223,11 @@ public class StockManageBizImpl implements StockManageBiz {
 		for (String boxCode : boxCodeList) {
 			List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(boxCode);
 			AssertUtil.notNull(stockList, "PDA库存管理:按箱移动失败，根据箱码查询不到对应库存");
-			Location location = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
+			Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
+			//判断原库存是否是入库暂存区，原库存移动时不允许暂存区
+			canMoveToSourceLocIsStageLocation(sourceLocation);
 			//判断库存是否可以移动
-			canMove(location, targetLocation, stockList, boxCode);
+			canMove(sourceLocation, targetLocation, stockList, boxCode);
 			if (locationBiz.isAgvLocation(targetLocation)) {
 				//AGV移动任务生成
 				agvTask.moveStockToSchedule(stockList, targetLocation);
@@ -371,6 +380,10 @@ public class StockManageBizImpl implements StockManageBiz {
 		AssertUtil.notNull(sourceLocation, "校验库存移动失败当前库位为空");
 		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
 		AssertUtil.notNull(stockList, "校验库存移动失败库存为空");
+		AssertUtil.notNull(boxCode, "校验库存移动失败箱码为空");
+		if (stockList.size() < 1) {
+			throw new ServiceException("校验库存移动失败库存为空");
+		}
 
 		//1. 不能移动到出库集货区和虚拟库区
 		canMoveToLoc(targetLocation);
@@ -443,6 +456,17 @@ public class StockManageBizImpl implements StockManageBiz {
 	}
 
 	/**
+	 * 移动时无法移动到出库暂存区
+	 *
+	 * @param sourceLocation sourceLocation
+	 */
+	private void canMoveToSourceLocIsStageLocation(Location sourceLocation) {
+		if (locationBiz.isStageLocation(sourceLocation)) {
+			throw new ServiceException("库存移动时原库存不能是入库暂存区");
+		}
+	}
+
+	/**
 	 * 只能是同类型（自动与人工区）的库区之间移动
 	 *
 	 * @param sourceLocation sourceLocation
@@ -481,6 +505,18 @@ public class StockManageBizImpl implements StockManageBiz {
 	private void canMoveByIsNotOverweight(Location targetLocation, List<Stock> stockList) {
 		if (!tianYiPutwayStrategy.isNotOverweight(stockList, targetLocation)) {
 			throw new ServiceException("要移动的库存超过了最大载重");
+		}
+	}
+
+	/**
+	 * 根据要移动的数量判断库存是否可以移动
+	 *
+	 * @param moveNumber 移动数量
+	 * @param stockQty   库存数量
+	 */
+	private void canMoveIsExceedSend(BigDecimal moveNumber, BigDecimal stockQty) {
+		if (BigDecimalUtil.gt(moveNumber, stockQty)) {
+			throw new ServiceException("库存移动失败，要移动的数量超过了库存数量");
 		}
 	}
 }
