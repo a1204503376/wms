@@ -2,6 +2,7 @@ package org.nodes.wms.biz.instock;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.BigDecimalUtil;
+import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
@@ -10,6 +11,7 @@ import org.nodes.wms.biz.instock.receiveLog.modular.ReceiveLogFactory;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.AgvTask;
+import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.instock.receive.ReceiveDetailDao;
 import org.nodes.wms.dao.instock.receive.ReceiveHeaderDao;
@@ -53,6 +55,7 @@ public class InStockBizImpl implements InStockBiz {
 	private final ReceiveLogFactory receiveLogFactory;
 	private final ReceiveHeaderDao receiveHeaderDao;
 	private final ReceiveDetailDao receiveDetailDao;
+	private final LocationBiz locationBiz;
 
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	@Override
@@ -71,6 +74,8 @@ public class InStockBizImpl implements InStockBiz {
 				ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(item.getReceiveDetailId());
 				ReceiveHeader header = receiveBiz.selectReceiveHeaderById(detail.getReceiveId());
 				receiveBiz.canReceive(header, detail, item.getPlanQty());
+				//查询收货库位，如果是发货接驳区或者出库集货区则抛异常
+				canReceiveByLocation(request.getWhId(), request.getLocCode());
 			}
 		} else {
 			// 是否无单收货：判断当前用户是否有无单收货且未关闭的单据，如果有则用这个收货单（如果多个取最后一个）并新建收货单明细
@@ -161,6 +166,8 @@ public class InStockBizImpl implements InStockBiz {
 		ReceiveHeader receiveHeader = receiveBiz.selectReceiveHeaderById(request.getReceiveId());
 		// 判断业务参数，是否可以正常收货、超收
 		receiveBiz.canReceive(receiveHeader, detail, request.getSurplusQty());
+		//查询收货库位，如果是发货接驳区或者出库集货区则抛异常
+		canReceiveByLocation(request.getWhId(), request.getLocCode());
 		// 生成清点记录
 		ReceiveLog receiveLog = receiveLogBiz.newReceiveLog(request, receiveHeader, detail);
 		// 调用库存函数
@@ -178,6 +185,8 @@ public class InStockBizImpl implements InStockBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void receiveByMultiBoxCode(ReceiveDetailLpnPdaMultiRequest receiveDetailLpnPdaMultiRequest) {
+		//查询收货库位，如果是发货接驳区或者出库集货区则抛异常
+		canReceiveByLocation(receiveDetailLpnPdaMultiRequest.getWhId(), receiveDetailLpnPdaMultiRequest.getLocCode());
 		if (Func.isNotEmpty(receiveDetailLpnPdaMultiRequest.getLpnCode())) {
 			List<Stock> stocks = stockQueryBiz.findStockByLpnCode(receiveDetailLpnPdaMultiRequest.getLpnCode());
 			if (Func.notNull(stocks) && stocks.size() > 0) {
@@ -213,6 +222,8 @@ public class InStockBizImpl implements InStockBiz {
 				ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(item.getReceiveDetailId());
 				ReceiveHeader header = receiveBiz.selectReceiveHeaderById(detail.getReceiveId());
 				receiveBiz.canReceive(header, detail, item.getPlanQty());
+				//查询收货库位，如果是发货接驳区或者出库集货区则抛异常
+				canReceiveByLocation(request.getWhId(), request.getLocCode());
 			}
 		} else {
 			// 是否无单收货：判断当前用户是否有无单收货且未关闭的单据，如果有则用这个收货单（如果多个取最后一个）并新建收货单明细
@@ -332,6 +343,9 @@ public class InStockBizImpl implements InStockBiz {
 			for (ReceiveByPcDetailRequest detailRequest : detailRequestList) {
 				//参数校验
 				receiveBiz.canReceive(receiveHeader, receiveDetail, detailRequest.getScanQty());
+				Location targetLocation = locationBiz.findByLocId(detailRequest.getLocId());
+				//查询收货库位，如果是发货接驳区或者出库集货区则抛异常
+				canReceiveByLocation(targetLocation.getWhId(), targetLocation.getLocCode());
 				//生成清点记录
 				ReceiveLog receiveLog = receiveLogFactory.createReceiveLog(detailRequest, receiveHeader, receiveDetail);
 				receiveLogBiz.saveReceiveLog(receiveLog);
@@ -362,5 +376,20 @@ public class InStockBizImpl implements InStockBiz {
 		//记录日志
 		logBiz.auditLog(AuditLogType.INSTOCK, receiveHeader.getReceiveId(), receiveHeader.getReceiveNo(), "PC收货");
 		return receiveHeader.getReceiveNo();
+	}
+
+	/**
+	 * 查询收货库位，如果是发货接驳区或者出库集货区则抛异常
+	 *
+	 * @param targetLocCode targetLocCode
+	 */
+	private void canReceiveByLocation(Long whId, String targetLocCode) {
+		Location targetLocation = locationBiz.findLocationByLocCode(whId, targetLocCode);
+		if (locationBiz.isPickToLocation(targetLocation)) {
+			throw new ServiceException("收货失败，收货不能收到发货接驳区");
+		}
+		if (locationBiz.isAgvTempOfZoneType(targetLocation.getLocId())) {
+			throw new ServiceException("收货失败，收货不能收到出库集货区");
+		}
 	}
 }
