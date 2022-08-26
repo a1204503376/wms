@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
 import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
@@ -117,5 +118,19 @@ public class WmsTaskDaoImpl
 			.in(WmsTask::getTaskState, WmsTaskStateEnum.NOT_ISSUED, WmsTaskStateEnum.ISSUED, WmsTaskStateEnum.START_EXECUTION, WmsTaskStateEnum.ABNORMAL)
 			.last("limit 1")
 			.one();
+	}
+
+	@Override
+	public void updateWmsTaskByPartParam(Long taskId, WmsTaskProcTypeEnum taskProcTypeEnum, Location fromLocation) {
+		UpdateWrapper<WmsTask> updateWrapper = Wrappers.update();
+		updateWrapper.lambda()
+			.eq(WmsTask::getTaskId, taskId);
+		WmsTask wmsTask = new WmsTask();
+		wmsTask.setTaskProcType(taskProcTypeEnum);
+		wmsTask.setFromLocId(fromLocation.getLocId());
+		wmsTask.setFromLocCode(fromLocation.getLocCode());
+		if (!super.update(wmsTask, updateWrapper)) {
+			throw new ServiceException("任务更新失败,请再次重试");
+		}
 	}
 }

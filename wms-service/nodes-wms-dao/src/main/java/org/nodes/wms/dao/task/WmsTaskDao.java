@@ -2,6 +2,7 @@ package org.nodes.wms.dao.task;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
 import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.nodes.wms.dao.task.entities.WmsTask;
@@ -76,5 +77,14 @@ public interface WmsTaskDao extends BaseService<WmsTask> {
 	 * @return 可用的任务
 	 */
 	WmsTask getEnableTaskBySoBillId(Long soBillId, Long soDetailId);
+
+	/**
+	 * 根据任务ID和其他参数修改任务
+	 *
+	 * @param taskId           任务ID
+	 * @param taskProcTypeEnum 任务状态
+	 * @param fromLocation     目标库位
+	 */
+	void updateWmsTaskByPartParam(Long taskId, WmsTaskProcTypeEnum taskProcTypeEnum, Location fromLocation);
 
 }

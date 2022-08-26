@@ -8,6 +8,7 @@ import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.task.AgvTask;
 import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.biz.task.factory.WmsTaskFactory;
+import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
@@ -107,11 +108,11 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 	@Override
 	public void log(WmsTask wmsTask) {
 		logBiz.auditLog(AuditLogType.CRON_TASK,
-				wmsTask.getTaskId(),
-				wmsTask.getBillNo(),
-				String.format("任务ID[%s]:单据号[%s]来源库位[%s]目标库位[%s]任务编码[%s]任务状态[%s]",
-						wmsTask.getTaskId(), wmsTask.getBillNo(), wmsTask.getFromLocId(), wmsTask.getToLocId(),
-						wmsTask.getTaskTypeCd().getCode(), wmsTask.getTaskState().getCode()));
+			wmsTask.getTaskId(),
+			wmsTask.getBillNo(),
+			String.format("任务ID[%s]:单据号[%s]来源库位[%s]目标库位[%s]任务编码[%s]任务状态[%s]",
+				wmsTask.getTaskId(), wmsTask.getBillNo(), wmsTask.getFromLocId(), wmsTask.getToLocId(),
+				wmsTask.getTaskTypeCd().getCode(), wmsTask.getTaskState().getCode()));
 	}
 
 	@Override
@@ -134,17 +135,25 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 
 	@Override
 	public WmsTask create(WmsTaskTypeEnum taskType, WmsTaskProcTypeEnum procType,
-			List<SoPickPlan> soPickPlanList, SoHeader soHeader) {
+						  List<SoPickPlan> soPickPlanList, SoHeader soHeader) {
 		BigDecimal planQty = soPickPlanList.stream()
-				.map(SoPickPlan::getPickPlanQty)
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
+			.map(SoPickPlan::getPickPlanQty)
+			.reduce(BigDecimal.ZERO, BigDecimal::add);
 		WmsTask wmsTask = wmsTaskFactory.create(WmsTaskStateEnum.ISSUED, taskType, procType,
-				soPickPlanList, soHeader, planQty);
+			soPickPlanList, soHeader, planQty);
 		if (!wmsTaskDao.save(wmsTask)) {
 			throw new ServiceException("任务下发失败，保存任务失败");
 		}
 
 		return wmsTask;
+	}
+
+	@Override
+	public void updateWmsTaskByPartParam(Long taskId, WmsTaskProcTypeEnum taskProcTypeEnum, Location fromLocation) {
+		AssertUtil.notNull(taskId, "更新任务失败，任务ID为空");
+		AssertUtil.notNull(taskProcTypeEnum, "更新任务失败，任务执行方式为空");
+		AssertUtil.notNull(fromLocation, "更新任务失败， 来源库位为空");
+		wmsTaskDao.updateWmsTaskByPartParam(taskId, taskProcTypeEnum, fromLocation);
 	}
 
 }
