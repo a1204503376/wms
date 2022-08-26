@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.outstock.so.modular;
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.customer.CustomerBiz;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
@@ -50,6 +51,7 @@ public class SoBillFactory {
 
 		if (Func.isNotEmpty(soBillAddOrEditRequest.getCustomerId())) {
 			BasicsCustomer customer = customerBiz.findCustomerById(soBillAddOrEditRequest.getCustomerId());
+			AssertUtil.notNull(customer,"该客户不存在，请稍后再试");
 			// 客户编码和名称
 			soHeader.setCustomerCode(customer.getCode());
 			soHeader.setCustomerName(customer.getName());

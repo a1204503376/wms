@@ -1,7 +1,7 @@
 package org.nodes.wms.dao.outstock.so.dto.input;
 
 import lombok.Data;
-import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
+import org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -38,7 +38,7 @@ public class SoHeaderPageQuery implements Serializable {
 	/**
 	 * 客户
 	 */
-	private List<Long> customerIdList;
+	private List<CustomerSelectResponse> customerList;
 
 	/**
 	 * 库房名称

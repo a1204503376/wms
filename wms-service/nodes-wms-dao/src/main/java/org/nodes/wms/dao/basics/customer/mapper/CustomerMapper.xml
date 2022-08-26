@@ -35,16 +35,16 @@
                 AND c.simple_name LIKE concat('%',#{query.simpleName},'%')
             </if>
             <if test="query.createTimeBegin!=null">
-                AND c.create_time  &gt;= #{query.createTimeBegin}
+                AND c.create_time &gt;= #{query.createTimeBegin}
             </if>
             <if test="query.createTimeEnd!=null">
-                AND c.create_time  &lt;= #{query.createTimeEnd}
+                AND c.create_time &lt;= #{query.createTimeEnd}
             </if>
             <if test="query.updateTimeBegin!=null">
-                AND c.update_time  &gt;= #{query.updateTimeBegin}
+                AND c.update_time &gt;= #{query.updateTimeBegin}
             </if>
             <if test="query.updateTimeEnd!=null">
-                AND c.update_time  &lt;= #{query.updateTimeEnd}
+                AND c.update_time &lt;= #{query.updateTimeEnd}
             </if>
             AND c.is_deleted = '0'
         </where>
@@ -62,17 +62,15 @@
     </select>
     <select id="listTop10ByCodName"
             resultType="org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse">
-
         SELECT id,
                code,
                name
         FROM basics_customers
-        WHERE code LIKE CONCAT('%', #{code}, '%')
-           OR name LIKE CONCAT('%', #{name}, '%')
+        WHERE is_deleted = 0
+          AND (code LIKE CONCAT('%', #{code}, '%')
+            OR name LIKE CONCAT('%', #{name}, '%'))
         ORDER BY update_time DESC
         LIMIT 10
-
-
     </select>
 
 </mapper>

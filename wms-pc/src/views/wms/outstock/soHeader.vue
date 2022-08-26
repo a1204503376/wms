@@ -36,8 +36,10 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="单据状态" label-width="90px">
-                            <nodes-so-bill-state v-model="form.params.soBillStateList"
-                                                 class="search-input"></nodes-so-bill-state>
+                            <nodes-so-bill-state
+                                v-model="form.params.soBillStateList"
+                                class="search-input">
+                            </nodes-so-bill-state>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -45,7 +47,7 @@
                     <el-col :span="6">
                         <el-form-item label="客户" label-width="90px">
                             <nodes-customer
-                                v-model.trim="form.params.customerIdList"
+                                v-model="form.params.customerList"
                                 :multiple="true"
                                 class="search-input"
                                 placeholder="请输入客户编码或名称">
@@ -103,17 +105,17 @@
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table" :height="table.height" :data="table.data" border highlight-current-row
+                <el-table ref="table" :data="table.data" :height="table.height" border highlight-current-row
                           size="mini" @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column
                             v-if="!column.hide" :key="index"
+                            min-width="150"
                             show-overflow-tooltip
-                            v-bind="column"
-                            min-width="150">
-                            <template v-slot="scope" v-if="column.prop === 'soBillNo'">
+                            v-bind="column">
+                            <template v-if="column.prop === 'soBillNo'" v-slot="scope">
                                 <el-link
                                     :underline="false"
                                     target="_blank"
@@ -125,10 +127,18 @@
                     </template>
                     <el-table-column align="center" fixed="right" label="操作" width="180">
                         <template v-slot="scope">
-                            <el-button v-if="permissionObj.edit" size="small" type="text" @click="onEdit(scope.row)">编辑</el-button>
-                            <el-button v-if="permissionObj.close" size="small" type="text" @click="onClose(scope.row)">关闭</el-button>
-                            <el-button v-if="permissionObj.pick" size="small" type="text" @click="onPick(scope.row)">PC拣货</el-button>
-                            <el-button v-if="permissionObj.distribute" size="small" type="text" @click="onDistribute(scope.row)">分配</el-button>
+                            <el-button v-if="permissionObj.edit" size="small" type="text" @click="onEdit(scope.row)">
+                                编辑
+                            </el-button>
+                            <el-button v-if="permissionObj.close" size="small" type="text" @click="onClose(scope.row)">
+                                关闭
+                            </el-button>
+                            <el-button v-if="permissionObj.pick" size="small" type="text" @click="onPick(scope.row)">
+                                PC拣货
+                            </el-button>
+                            <el-button v-if="permissionObj.distribute" size="small" type="text"
+                                       @click="onDistribute(scope.row)">分配
+                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -184,7 +194,7 @@ export default {
                     orderNo: '',
                     billTypeCdList: [],
                     soBillStateList: [],
-                    customerIdList: [],
+                    customerList: [],
                     whIdList: [],
                     createTimeDateRange: ['', ''],
                     createUser: ''
@@ -326,7 +336,7 @@ export default {
                 orderNo: '',
                 billTypeCdList: [],
                 soBillStateList: [],
-                customerIdList: [],
+                customerList: [],
                 whIdList: [],
                 createTimeDateRange: ['', ''],
                 createUser: ''
@@ -362,7 +372,7 @@ export default {
             })
         },
         onDistribute(row) {
-            if(row.soBillState === '已关闭' || row.soBillState === '已取消' || row.soBillState === '全部出库'){
+            if (row.soBillState === '已关闭' || row.soBillState === '已取消' || row.soBillState === '全部出库') {
                 this.$message.warning(`${row.soBillState}的发货单不能分配`);
                 return
             }
@@ -382,7 +392,7 @@ export default {
             })
         },
         onPick(row) {
-            if(row.soBillState === '已关闭' || row.soBillState === '已取消' || row.soBillState === '全部出库'){
+            if (row.soBillState === '已关闭' || row.soBillState === '已取消' || row.soBillState === '全部出库') {
                 this.$message.warning(`${row.soBillState}的发货单不能拣货`);
                 return
             }
@@ -392,7 +402,6 @@ export default {
                     soBillId: row.soBillId
                 }
             })
-
         },
     }
 }
