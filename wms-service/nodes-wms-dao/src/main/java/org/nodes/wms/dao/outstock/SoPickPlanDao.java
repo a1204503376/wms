@@ -2,6 +2,8 @@ package org.nodes.wms.dao.outstock;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.intput.SoPickPlanPageQuery;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
@@ -90,4 +92,14 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 	 * @return List<SoPickPlan>
 	 */
 	List<SoPickPlan> getByPickPlanIds(List<Long> soPickPlanIdList);
+
+	/**
+	 * 根据拣货计划ID修改拣货计划
+	 *
+	 * @param pickPlanId 拣货计划ID
+	 * @param stockId    库存ID
+	 * @param location   库位
+	 * @param zone       库区
+	 */
+	void updatePickByPartParam(Long pickPlanId, Long stockId, Location location, Zone zone);
 }

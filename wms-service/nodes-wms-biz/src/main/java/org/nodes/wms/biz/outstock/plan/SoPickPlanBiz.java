@@ -1,6 +1,8 @@
 package org.nodes.wms.biz.outstock.plan;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
@@ -65,7 +67,7 @@ public interface SoPickPlanBiz {
 	 * @return 拣货记录
 	 */
 	LogSoPick pickByPlan(SoDetail soDetail, SoPickPlan pickPlan,
-			BigDecimal pickQty, List<String> serialNoList);
+						 BigDecimal pickQty, List<String> serialNoList);
 
 	/**
 	 * 根据任务ID查询跟当前任务相关联的拣货计划
@@ -85,7 +87,7 @@ public interface SoPickPlanBiz {
 
 	/**
 	 * 取消分配
-	 * 
+	 *
 	 * @param soPickPlanIdList 需要取消分配的拣货计划
 	 * @param soHeader         发货单
 	 */
@@ -93,14 +95,14 @@ public interface SoPickPlanBiz {
 
 	/**
 	 * 关闭单据的时候取消未执行完毕的分配记录
-	 * 
+	 *
 	 * @param soHeader 发货单
 	 */
 	void cancelPickPlanByClose(SoHeader soHeader);
 
 	/**
 	 * 根据分配计划占用库存并保存分配计划
-	 * 
+	 *
 	 * @param soPickPlanList 分配计划
 	 */
 	void pickPlanAndSave(List<SoPickPlan> soPickPlanList);
@@ -130,4 +132,14 @@ public interface SoPickPlanBiz {
 	 * @return 拣货计划
 	 */
 	List<SoPickPlan> findByStockIdsAndSoBillId(List<Long> stockIdList, Long soBillId);
+
+	/**
+	 * 根据拣货计划ID修改拣货计划
+	 *
+	 * @param pickPlanId 拣货计划ID
+	 * @param stockId    库存ID
+	 * @param location   库位
+	 * @param zone       库区
+	 */
+	void updatePickByPartParam(Long pickPlanId, Long stockId, Location location, Zone zone);
 }
