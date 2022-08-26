@@ -1,6 +1,7 @@
 package com.nodes.project.api.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.collect.Lists;
 import com.nodes.common.enums.IPairs;
 import lombok.Getter;
@@ -79,6 +80,7 @@ public enum JobStatusEnum implements IPairs<Integer, String, JobStatusEnum> {
     ;
 
     @EnumValue
+    @JsonValue
     private final Integer code;
 
     private final String desc;

@@ -1,5 +1,6 @@
 package com.nodes.common.utils;
 
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.io.PrintWriter;
@@ -15,6 +16,9 @@ public class ExceptionUtil {
      * 获取exception的详细错误信息。
      */
     public static String getExceptionMessage(Throwable e) {
+        if (e == null) {
+            return StringPool.EMPTY;
+        }
         StringWriter sw = new StringWriter();
         e.printStackTrace(new PrintWriter(sw, true));
         return sw.toString();

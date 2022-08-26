@@ -61,6 +61,8 @@ public class AgvSyncServiceImpl extends ServiceImpl<AgvSyncMapper, AgvSync>
                     throw new ServiceException(StringUtils.format("保存AGV_SYNC失败，参数：{}", agvSync));
                 }
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + agvSyncOrderRequest.getAgvType());
         }
 
         // 异步通知WMS

@@ -14,6 +14,7 @@ import com.nodes.project.api.dto.JobActionRequest;
 import com.nodes.project.api.dto.PublishJobRequest;
 import com.nodes.project.api.dto.agv.AgvGlobalResponse;
 import com.nodes.project.api.dto.agv.AgvResponse;
+import com.nodes.project.api.enums.JobFlagSyncWmsEnum;
 import com.nodes.project.api.enums.JobStatusEnum;
 import com.nodes.project.api.enums.JobTypeEnum;
 import com.nodes.project.api.enums.WmsBoxTypeEnum;
@@ -150,8 +151,8 @@ public class JobQueueServiceImpl extends ServiceImpl<JobQueueMapper, JobQueue>
     /**
      * 将当前JOB移出队列表，放入JOB历史表
      */
-    @Transactional(rollbackFor = Exception.class)
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteJobCopyToHistory(JobQueue jobQueue) {
         JobHistory jobHistory = new JobHistory();
         BeanUtils.copyProperties(jobQueue, jobHistory);
@@ -167,22 +168,43 @@ public class JobQueueServiceImpl extends ServiceImpl<JobQueueMapper, JobQueue>
     }
 
     /**
+     * 批量将已结束的JOB移动到历史表
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void batchDeleteJobCopyToHistory() {
+        List<JobQueue> jobQueueList = super.lambdaQuery()
+                .eq(JobQueue::getStatus, JobStatusEnum.AGV_END)
+                .list();
+        List<JobHistory> jobHistoryList = new ArrayList<>();
+        for (JobQueue jobQueue : jobQueueList) {
+            JobHistory jobHistory = new JobHistory();
+            BeanUtils.copyProperties(jobQueue, jobHistory);
+            jobHistoryList.add(jobHistory);
+        }
+        jobHistoryService.saveBatch(jobHistoryList);
+        removeByIds(jobQueueList);
+    }
+
+    /**
      * 将当前JOB移出队列表，放入JOB 超时表
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean deleteJobCopyToTimeout(JobQueue jobQueue) {
+    public void deleteJobCopyToTimeout(JobQueue jobQueue) {
         JobTimeout jobTimeout = new JobTimeout();
+        jobTimeout.setFlagSyncWms(JobFlagSyncWmsEnum.NOT_SYNCHRONIZED);
         BeanUtils.copyProperties(jobQueue, jobTimeout);
 
-        return removeById(jobQueue) &&
-                jobTimeoutService.save(jobTimeout);
+        if (removeById(jobQueue)) {
+            jobTimeoutService.save(jobTimeout);
+        }
     }
 
     @Override
     public Optional<JobQueue> findNonOutbound() {
-        return getWrapperForStatus()
-                .ne(JobQueue::getTypeCode, JobTypeEnum.OUTBOUND)
+        return setOnlyWrapper(getWrapperForStatus()
+                .ne(JobQueue::getTypeCode, JobTypeEnum.OUTBOUND))
                 .oneOpt();
     }
 
@@ -223,9 +245,9 @@ public class JobQueueServiceImpl extends ServiceImpl<JobQueueMapper, JobQueue>
 
 
     private Optional<JobQueue> findOutbound(WmsBoxTypeEnum wmsBoxTypeEnum) {
-        return getWrapperForStatus()
+        return setOnlyWrapper(getWrapperForStatus()
                 .eq(JobQueue::getTypeCode, JobTypeEnum.OUTBOUND)
-                .eq(JobQueue::getWmsBoxType, wmsBoxTypeEnum)
+                .eq(JobQueue::getWmsBoxType, wmsBoxTypeEnum))
                 .oneOpt();
     }
 

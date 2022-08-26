@@ -1,5 +1,6 @@
 package com.nodes.project.api.dto.agv;
 
+import com.nodes.common.utils.ExceptionUtil;
 import lombok.Data;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.util.Assert;
@@ -26,7 +27,7 @@ public class AgvGlobalResponse {
     public static AgvGlobalResponse error(Exception e) {
         AgvGlobalResponse agvGlobalResponse = new AgvGlobalResponse();
         agvGlobalResponse.setFlagException(Boolean.TRUE);
-        agvGlobalResponse.setMsg(e.getMessage());
+        agvGlobalResponse.setMsg(ExceptionUtil.getRootErrorMessage(e));
         return agvGlobalResponse;
     }
 

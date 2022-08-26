@@ -1,6 +1,6 @@
 package com.nodes.project.api.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.alibaba.fastjson2.JSON;
 import com.nodes.common.constant.JobConstants;
 import com.nodes.common.utils.DateUtils;
 import com.nodes.common.utils.StringUtils;
@@ -18,14 +18,13 @@ import com.nodes.project.api.enums.ProcessorEnum;
 import com.nodes.project.api.service.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import tech.powerjob.common.serialize.JsonUtils;
 import tech.powerjob.worker.core.processor.ProcessResult;
 import tech.powerjob.worker.core.processor.TaskContext;
 import tech.powerjob.worker.core.processor.WorkflowContext;
 import tech.powerjob.worker.log.OmsLogger;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -52,7 +51,7 @@ public class ProcessorServiceImpl implements ProcessorService {
         OmsLogger omsLogger = context.getOmsLogger();
 
         omsLogger.debug("开始获取JOB");
-        Optional<JobQueue> optionalJobQueue = Optional.empty();
+        Optional<JobQueue> optionalJobQueue;
         switch (processorEnum) {
             case OUTBOUND_A:
                 optionalJobQueue = jobQueueService.findOutboundA();
@@ -69,17 +68,19 @@ public class ProcessorServiceImpl implements ProcessorService {
             case NON_OUTBOUND:
                 optionalJobQueue = jobQueueService.findNonOutbound();
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + processorEnum);
         }
 
         if (!optionalJobQueue.isPresent()) {
-            return ProcessResultUtils.success("JOB队列为空，退出执行");
+            return ProcessResultUtils.failed("JOB队列为空，退出执行");
         }
 
         JobQueue jobQueue = optionalJobQueue.get();
         omsLogger.debug("获取JOB成功：{}", jobQueue);
 
         // 如果同一个JOB的执行时间超过配置的超时时间，记录日常，并由其他线程通知WMS
-        LocalDateTime now = LocalDateTime.now();
+        Date now = DateUtils.getNowDate();
         if (hasJobTimeout(jobQueue, now)) {
             omsLogger.debug("JOB从开始({})到现在({})的分钟差超过允许的：{}", jobQueue.getBeginTime(), now, nodesConfig.getJobTimeout());
             jobQueueService.deleteJobCopyToTimeout(jobQueue);
@@ -87,13 +88,16 @@ public class ProcessorServiceImpl implements ProcessorService {
         }
 
         WorkflowContext workflowContext = context.getWorkflowContext();
-        workflowContext.appendData2WfContext(JobConstants.WORKFLOW_JOB_QUEUE_KEY, jobQueue);
-        omsLogger.debug("推送JOB到工作流上下文成功,{}：{}", JobConstants.WORKFLOW_JOB_QUEUE_KEY, jobQueue);
+        String jsonString = JSON.toJSONString(jobQueue);
+        omsLogger.debug("JOB to JSON：{}", jsonString);
+        workflowContext.appendData2WfContext(JobConstants.WORKFLOW_JOB_QUEUE_KEY, jsonString);
+        omsLogger.debug("推送JOB到工作流上下文：成功,{}", jobQueue);
 
         jobQueue.setStatus(JobStatusEnum.WORKFLOW_OCCUPY);
         jobQueue.setBeginTime(now);
         boolean flag = jobQueueService.updateStatusAndBeginTime(jobQueue);
-        String msg = StringUtils.format("更新JOB状态和开始时间：{}", flag ? "成功" : "失败");
+        String msg = StringUtils.format("更新JOB状态为：{}，{}",
+                JobStatusEnum.WORKFLOW_OCCUPY, flag ? "成功" : "失败");
         omsLogger.debug(msg);
 
         return ProcessResultUtils.common(flag, msg);
@@ -156,7 +160,7 @@ public class ProcessorServiceImpl implements ProcessorService {
 
         Optional<JobQueue> optionalJobQueue = findByWorkflowMap(context);
         if (!optionalJobQueue.isPresent()) {
-            return ProcessResultUtils.failed("找不到JOB");
+            return ProcessResultUtils.failed("在工作流上下文内找不到JOB");
         }
 
         OmsLogger omsLogger = context.getOmsLogger();
@@ -231,17 +235,24 @@ public class ProcessorServiceImpl implements ProcessorService {
     }
 
     private Optional<JobQueue> findByWorkflowMap(TaskContext context) {
+        OmsLogger omsLogger = context.getOmsLogger();
         try {
-            JobQueue jobQueue = JsonUtils.parseObject(context.getWorkflowContext().fetchWorkflowContext().get(JobConstants.WORKFLOW_JOB_QUEUE_KEY), JobQueue.class);
+            String jsonString = context.getWorkflowContext().fetchWorkflowContext().get(JobConstants.WORKFLOW_JOB_QUEUE_KEY);
+            omsLogger.debug("从工作流上下文取得JSON：{}", jsonString);
+            JobQueue jobQueue = JSON.parseObject(jsonString, JobQueue.class);
+            if (jobQueue == null) {
+                omsLogger.debug("JSON TO BEAN IS NULL");
+                return Optional.empty();
+            }
+            omsLogger.debug("拿到JSON转为JOB后：{}", JSON.toJSONString(jobQueue));
             return Optional.of(jobQueue);
-        } catch (JsonProcessingException e) {
-            OmsLogger omsLogger = context.getOmsLogger();
+        } catch (Exception e) {
             omsLogger.error("转换JSON 字符串到 JobQueue对象异常：{}", e);
         }
         return Optional.empty();
     }
 
-    private boolean hasJobTimeout(JobQueue jobQueue, LocalDateTime now) {
+    private boolean hasJobTimeout(JobQueue jobQueue, Date now) {
         return jobQueue.getBeginTime() != null
                 && DateUtils.differenceMinutes(jobQueue.getBeginTime(), now) > nodesConfig.getJobTimeout();
     }

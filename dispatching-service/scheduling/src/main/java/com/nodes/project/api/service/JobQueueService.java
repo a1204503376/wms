@@ -1,5 +1,6 @@
 package com.nodes.project.api.service;
 
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.nodes.framework.web.domain.AjaxResult;
 import com.nodes.project.api.domain.JobQueue;
@@ -15,6 +16,13 @@ import java.util.Optional;
  */
 public interface JobQueueService extends IService<JobQueue> {
 
+    /**
+     * 仅有一条数据
+     */
+    default LambdaQueryChainWrapper<JobQueue> setOnlyWrapper(LambdaQueryChainWrapper<JobQueue> wrapper) {
+        return wrapper.last("limit 1");
+    }
+
     AjaxResult publishJob(List<PublishJobRequest> publishJobRequestList);
 
     AjaxResult continueJob(JobActionRequest jobActionRequest);
@@ -25,7 +33,9 @@ public interface JobQueueService extends IService<JobQueue> {
 
     void deleteJobCopyToHistory(JobQueue jobQueue);
 
-    boolean deleteJobCopyToTimeout(JobQueue jobQueue);
+    void batchDeleteJobCopyToHistory();
+
+    void deleteJobCopyToTimeout(JobQueue jobQueue);
 
     Optional<JobQueue> findNonOutbound();
 

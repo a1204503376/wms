@@ -7,11 +7,9 @@
                          label-position="right"
                          label-width="120px"
                          size="mini"
-                         style="margin-left:10px;margin-right:10px;"
-                >
+                         style="margin-left:10px;margin-right:10px;">
                     <el-row>
                         <el-col :span="8">
-
                             发货单编码: {{ form.params.soBillNo }}
                         </el-col>
                         <el-col :span="8">
@@ -59,19 +57,16 @@
                                     label="剩余量">
                                 </el-table-column>
                                 <el-table-column
-                                    prop="wsuCode"
+                                    prop="umCode"
                                     label="计量单位">
-
                                 </el-table-column>
                                 <el-table-column
                                     prop="skuLot1"
                                     label="批次号">
-
                                 </el-table-column>
                                 <el-table-column
-                                    prop="skuLot2"
+                                    prop="skuLot4"
                                     label="专用客户">
-
                                 </el-table-column>
                             </el-table>
                         </template>
@@ -89,10 +84,7 @@
                                     highlight-current-row
                                     size="mini">
                                     <el-table-column
-                                        :align="'left'"
-                                        width="160"
-                                    >
-
+                                        width="160">
                                         <template slot="header">
                                             <span>本次出库</span>
                                         </template>
@@ -105,7 +97,6 @@
                                                 controls-position="right"
                                                 size="mini"
                                                 @change="(val,oldValue)=>onChange(val,oldValue,row)">
-                                                >
                                             </el-input-number>
                                         </template>
                                     </el-table-column>
@@ -118,9 +109,7 @@
                                         </el-table-column>
                                     </template>
                                     <el-table-column
-                                        :align="'left'"
-                                        width="200"
-                                    >
+                                        width="200">
                                         <template slot="header">
                                             <span class="d-table-header-required">序列号</span>
                                         </template>
@@ -140,14 +129,12 @@
                     <el-button
                         :loading="loading"
                         type="primary"
-                        @click="onSubmit"
-                    >
+                        @click="onSubmit">
                         保 存
                     </el-button>
                     <el-button
                         :loading="loading"
-                        @click="onClose"
-                    >
+                        @click="onClose">
                         关 闭
                     </el-button>
                 </el-row>
@@ -223,8 +210,6 @@ export default {
 
                 ]
             },
-
-
             detailData: [],
             stockData: [],
             lineNo: '',
@@ -241,7 +226,6 @@ export default {
                     orderNo: '',
                     whCode: ''
                 },
-
             }
         }
     },
@@ -250,7 +234,6 @@ export default {
             if (func.isNotEmpty(newVal)) {
                 this.getDetailData(newVal)
             }
-
         }
     },
     created() {
@@ -261,7 +244,6 @@ export default {
             return {};
         },
         handleClick() {
-
         },
         getMax(row) {
             if (this.detailData[0].surplusQty + row.outStockQty < row.stockBalance + row.outStockQty) {

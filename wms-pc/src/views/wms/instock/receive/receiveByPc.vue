@@ -400,7 +400,7 @@ export default {
                     row.scanQty = 0
                     row.skuLot1 = item.skuLot1
                     row.skuLot2 = item.skuLot2
-                    row.skuLot4 = item.skulot4
+                    row.skuLot4 = item.skuLot4
                     row.skuLot5 = item.skuLot5
                     row.skuLot6 = item.skuLot6
                     row.skuLot8 = item.skuLot8

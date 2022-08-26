@@ -3,14 +3,18 @@ package com.nodes.project.api.domain;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nodes.framework.web.domain.SimpleEntity;
 import com.nodes.project.api.enums.JobStatusEnum;
 import com.nodes.project.api.enums.JobTypeEnum;
 import com.nodes.project.api.enums.WmsBoxTypeEnum;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 作业队列
@@ -18,7 +22,10 @@ import java.time.LocalDateTime;
  */
 @TableName(value = "job_queue")
 @Data
-public class JobQueue extends SimpleEntity {
+@XmlRootElement
+public class JobQueue extends SimpleEntity implements Serializable {
+
+    private static final long serialVersionUID = -8959443772258439794L;
 
     /**
      * 主键
@@ -105,12 +112,16 @@ public class JobQueue extends SimpleEntity {
     /**
      * 开始时间
      */
-    private LocalDateTime beginTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date beginTime;
 
     /**
      * 结束时间
      */
-    private LocalDateTime endTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date endTime;
 
     /**
      * 位置起点(库位)
