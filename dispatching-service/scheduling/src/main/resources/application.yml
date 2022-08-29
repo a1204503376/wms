@@ -160,7 +160,7 @@ powerjob:
     # 接入应用名称，用于分组隔离，推荐填写 本 Java 项目名称
     app-name: nodes-worker
     # 调度服务器地址，IP:Port 或 域名，多值逗号分隔
-    server-address: 127.0.0.1:7700,127.0.0.1:7701
+    server-address: 10.168.3.136:7700
     # 持久化方式，可选，默认 disk
     store-strategy: disk
     # 任务返回结果信息的最大长度，超过这个长度的信息会被截断，默认值 8192
