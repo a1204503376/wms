@@ -2,6 +2,7 @@ package org.nodes.wms.biz.task;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
@@ -116,7 +117,7 @@ public interface WmsTaskBiz {
 
 	/**
 	 * 创建任务
-	 * 
+	 *
 	 * @param taskType       任务类型
 	 * @param procType       任务执行方式
 	 * @param soPickPlanList 拣货记录明细
@@ -125,4 +126,13 @@ public interface WmsTaskBiz {
 	 */
 	WmsTask create(WmsTaskTypeEnum taskType, WmsTaskProcTypeEnum procType,
 			List<SoPickPlan> soPickPlanList, SoHeader soHeader);
+
+	/**
+	 * 根据任务ID和其他参数修改任务
+	 *
+	 * @param taskId           任务ID
+	 * @param taskProcTypeEnum 任务状态
+	 * @param fromLocation     目标库位
+	 */
+	void updateWmsTaskByPartParam(Long taskId, WmsTaskProcTypeEnum taskProcTypeEnum, Location fromLocation);
 }

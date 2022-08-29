@@ -58,7 +58,7 @@
                                 </el-col>
                                 <el-col :span="4.8">
                                     <el-button class="top_button"
-                                               size="medium" @click="onClose">关 闭
+                                               size="medium" @click="onCloseDistribution">关 闭
                                     </el-button>
                                 </el-col>
                             </el-row>
@@ -528,9 +528,11 @@ export default {
             this.getSoPickPlanData(this.soHeader.soBillId);
         },
         onAssign() {
-            automaticAssign(this.soHeader.soBillId).then((res) => {
+            let soBillId = this.soHeader.soBillId;
+            automaticAssign(soBillId).then((res) => {
                 this.$message.success(res.data.msg);
-                this.getSoPickPlanData(this.soHeader.soBillId);
+                this.getTableData();
+                this.getSoPickPlanData(soBillId);
             })
         },
         onIssued() {
@@ -539,9 +541,11 @@ export default {
             })
         },
         onCancelAll() {
-            cancelAll(this.soHeader.soBillId).then((res) => {
+            let soBillId = this.soHeader.soBillId;
+            cancelAll(soBillId).then((res) => {
                 this.$message.success(res.data.msg);
-                this.getTableData()
+                this.getTableData();
+                this.getSoPickPlanData(soBillId);
             })
         },
         // onCancel() {
@@ -664,6 +668,15 @@ export default {
                 }
             });
             return sums;
+        },
+        onCloseDistribution (){
+          this.onClose();
+          this.$router.push({
+              path: '/wms/outstock/soHeader',
+              query: {
+                  isRefresh: 'true'
+              }
+          })
         },
         createRowObj() {
             // 覆盖混入的方法

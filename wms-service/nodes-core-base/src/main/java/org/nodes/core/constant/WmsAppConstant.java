@@ -163,8 +163,4 @@ public interface WmsAppConstant {
 	 * agv拣货区
 	 */
 	String ZONE_CODE_AGV = "WH1-AGV";
-	/**
-	 * agv发货接驳区(天宜定制)
-	 */
-	String ZONE_CODE_LOC_PICKTO = "WH1-PICKTO";
 }

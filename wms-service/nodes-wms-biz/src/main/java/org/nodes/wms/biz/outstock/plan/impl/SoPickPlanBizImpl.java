@@ -14,6 +14,7 @@ import org.nodes.wms.biz.outstock.strategy.TianyiPickStrategy;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.outstock.SoPickPlanDao;
 import org.nodes.wms.dao.outstock.logSoPick.LogSoPickDao;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
@@ -73,8 +74,8 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 			pickPlanOfSoDetail = null;
 			if (Func.notNull(existPickPlans)) {
 				pickPlanOfSoDetail = existPickPlans.stream()
-						.filter(soPickPlan -> detail.getSoDetailId().equals(soPickPlan.getSoDetailId()))
-						.collect(Collectors.toList());
+					.filter(soPickPlan -> detail.getSoDetailId().equals(soPickPlan.getSoDetailId()))
+					.collect(Collectors.toList());
 			}
 			List<SoPickPlan> newPickPlan = tianyiPickStrategy.run(soHeader, detail, soDetials, pickPlanOfSoDetail);
 			result = createResultByRunPickStrategy(newPickPlan, detail, result);
@@ -118,9 +119,9 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		stock.setOccupyQty(stock.getOccupyQty().subtract(pickQty));
 		// 2.移动库存到出库暂存区
 		Location pickToLocation = locationBiz.getLocationByZoneType(
-				pickPlan.getWhId(), DictKVConstant.ZONE_TYPE_PICK_TO).get(0);
+			pickPlan.getWhId(), DictKVConstant.ZONE_TYPE_PICK_TO).get(0);
 		stockBiz.moveStock(stock, serialNoList, pickQty, pickToLocation, StockLogTypeEnum.OUTSTOCK_BY_PICK_PLAN,
-				pickPlan.getSoBillId(), pickPlan.getSoBillNo(), soDetail.getSoLineNo());
+			pickPlan.getSoBillId(), pickPlan.getSoBillNo(), soDetail.getSoLineNo());
 		// 3.更新拣货计划
 		updatePickRealQty(pickPlan.getPickPlanId(), pickPlan.getPickRealQty().add(pickQty));
 		// 4.生产并保存拣货记录
@@ -148,7 +149,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 
 		if (BigDecimalUtil.gt(pickQty, stock.getOccupyQty())) {
 			throw ExceptionUtil.mpe("按拣货计划拣货失败,拣货量[%f]超过库存[%d]的占用量[%f]",
-					pickQty, stock.getStockId(), stock.getOccupyQty());
+				pickQty, stock.getStockId(), stock.getOccupyQty());
 		}
 
 		List<Serial> serialOfStock = stockQueryBiz.findSerialByStock(stock.getStockId());
@@ -158,8 +159,8 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 
 		if (Func.isNotEmpty(serialOfStock) && Func.isNotEmpty(serialNoList)) {
 			List<String> serianNoOfStock = serialOfStock.stream()
-					.map(Serial::getSerialNumber)
-					.collect(Collectors.toList());
+				.map(Serial::getSerialNumber)
+				.collect(Collectors.toList());
 			if (!serialNoList.containsAll(serialNoList)) {
 				throw ExceptionUtil.mpe("按拣货计划拣货失败, 存在无效的拣货序列号");
 			}
@@ -182,13 +183,13 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 
 		// 删除拣货计划
 		List<Long> soPickPlanIdList = soPickPlanList.stream()
-				.map(SoPickPlan::getPickPlanId)
-				.collect(Collectors.toList());
+			.map(SoPickPlan::getPickPlanId)
+			.collect(Collectors.toList());
 		soPickPlanDao.removeByIds(soPickPlanIdList);
 		// 释放库存占用
 		for (SoPickPlan soPickPlan : soPickPlanList) {
 			stockBiz.reduceOccupy(soHeader.getSoBillId(), soHeader.getSoBillNo(),
-					soPickPlan.getSoDetailId(), soPickPlan.getStockId(), soPickPlan.getSurplusQty());
+				soPickPlan.getSoDetailId(), soPickPlan.getStockId(), soPickPlan.getSurplusQty());
 		}
 	}
 
@@ -221,7 +222,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		page.setCurrent(1);
 		page.setSize(100000);
 		List<SoPickPlanPageResponse> soPickPlanPageResponseList = soPickPlanDao.getPage(page, soPickPlanPageQuery)
-				.getRecords();
+			.getRecords();
 		ExcelUtil.export(response, "分配记录", "分配记录数据表", soPickPlanPageResponseList, SoPickPlanPageResponse.class);
 	}
 
@@ -230,15 +231,24 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		return soPickPlanDao.getByStockIdsAndSoBillId(stockIdList, soBillId);
 	}
 
+	@Override
+	public void updatePickByPartParam(Long pickPlanId, Long stockId, Location location, Zone zone) {
+		AssertUtil.notNull(pickPlanId, "修改拣货计划失败，拣货计划ID为空");
+		AssertUtil.notNull(stockId, "修改拣货计划失败，库存ID为空");
+		AssertUtil.notNull(location, "修改拣货计划失败，库位为空");
+		AssertUtil.notNull(pickPlanId, "修改拣货计划失败，库区为空");
+		soPickPlanDao.updatePickByPartParam(pickPlanId, stockId, location, zone);
+	}
+
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlan, SoDetail detail, String result) {
 		if (Func.isEmpty(newPickPlan)) {
 			return String.format("%s %s行库存不足未分配", result, detail.getSoLineNo());
 		}
 
 		BigDecimal occupy = newPickPlan.stream()
-				.filter(item -> item.getSoDetailId().equals(detail.getSoDetailId()))
-				.map(SoPickPlan::getSurplusQty)
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
+			.filter(item -> item.getSoDetailId().equals(detail.getSoDetailId()))
+			.map(SoPickPlan::getSurplusQty)
+			.reduce(BigDecimal.ZERO, BigDecimal::add);
 		if (BigDecimalUtil.ne(occupy, detail.getSurplusQty())) {
 			return String.format("%s %s行库存不足,部分分配", result, detail.getSoLineNo());
 		}
