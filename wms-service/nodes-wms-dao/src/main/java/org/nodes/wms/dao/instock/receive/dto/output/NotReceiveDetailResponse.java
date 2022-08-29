@@ -108,7 +108,7 @@ public class NotReceiveDetailResponse implements Serializable {
 	private String skuLot7;
 
 	/**
-	 * 是否CRCC验证
+	 * 适用速度等级
 	 */
 	private String skuLot8;
 

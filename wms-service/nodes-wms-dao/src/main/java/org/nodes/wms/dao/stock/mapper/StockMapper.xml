@@ -3,6 +3,7 @@
 <mapper namespace="org.nodes.wms.dao.stock.mapper.StockMapper">
     <sql id="stock">
         select s.stock_id,
+               s.sku_name,
                s.sku_code,
                s.stock_status,
                s.sku_lot1,

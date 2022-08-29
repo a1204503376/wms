@@ -203,9 +203,9 @@ public class TaskDetailExcelResponse implements Serializable {
 	@ExcelProperty({"产品标识代码"})
 	private String skuLot7;
 	/**
-	 * CRCC
+	 * 适用速度等级
 	 */
 	@ColumnWidth(15)
-	@ExcelProperty({"CRCC"})
+	@ExcelProperty({"适用速度等级"})
 	private String skuLot8;
 }

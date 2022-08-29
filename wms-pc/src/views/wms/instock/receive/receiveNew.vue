@@ -228,7 +228,7 @@
                                 </el-table-column>
                                 <el-table-column width="130">
                                     <template slot="header">
-                                        <span>CRCC</span>
+                                        <span>适用速度等级</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
