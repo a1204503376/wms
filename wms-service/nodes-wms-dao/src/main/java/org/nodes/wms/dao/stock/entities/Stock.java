@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.Version;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
@@ -167,5 +168,15 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	@JsonSerialize
 	public BigDecimal getStockEnable() {
 		return getStockQty().subtract(getPickQty()).subtract(getOccupyQty());
+	}
+
+	@JsonSerialize
+	public boolean isSerial() {
+		return WmsAppConstant.TRUE_DEFAULT.equals(this.hasSerial);
+	}
+
+	@JsonSerialize
+	public String getHasSerialString() {
+		return WmsAppConstant.TRUE_DEFAULT.equals(this.hasSerial) ? "是" : "否";
 	}
 }

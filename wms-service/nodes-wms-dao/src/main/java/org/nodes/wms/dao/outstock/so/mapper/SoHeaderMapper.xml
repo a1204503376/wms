@@ -40,10 +40,10 @@
                     #{item}
                 </foreach>
             </if>
-            <if test="params.customerIdList != null and params.customerIdList.size >0">
+            <if test="params.customerList != null and params.customerList.size >0">
                 AND c.id IN
-                <foreach collection="params.customerIdList" open="(" close=")" separator="," item="item">
-                    #{item}
+                <foreach collection="params.customerList" open="(" close=")" separator="," item="item">
+                    #{item.id}
                 </foreach>
             </if>
             <if test="params.whIdList != null and params.whIdList.size >0">
@@ -88,7 +88,7 @@
         FROM so_header header
                  LEFT JOIN basics_customers customer ON customer.code = header.customer_code
         WHERE header.so_bill_id = #{soBillId}
-          AND header.is_bed = 0
+          AND header.is_deleted = 0
     </select>
 
     <resultMap id="soHeaderMap" type="org.nodes.wms.dao.outstock.so.dto.output.SoHeaderEditResponse">

@@ -8,6 +8,8 @@
         current_stay_stock_qty,
         current_stock_qty,
         current_pick_qty,
+        current_occupy_qty,
+        occupy_qty,
         stock_status,
         sku_level,
         wsp_name,

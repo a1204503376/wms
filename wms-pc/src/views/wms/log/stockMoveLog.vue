@@ -228,6 +228,16 @@ export default {
                         sortable: "custom"
                     },
                     {
+                        prop: "currentOccupyQty",
+                        label: "本次占用数量",
+                        sortable: "custom"
+                    },
+                    {
+                        prop: "occupyQty",
+                        label: "占用数量",
+                        sortable: "custom"
+                    },
+                    {
                         prop: "stockStatus",
                         label: "库存状态",
                         sortable: "custom"
