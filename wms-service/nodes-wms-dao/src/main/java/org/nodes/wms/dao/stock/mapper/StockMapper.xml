@@ -214,7 +214,9 @@
             <if test="query.skuLot1!=null and query.skuLot1 != ''">
                 AND s.sku_lot1 LIKE concat('%',#{query.skuLot1},'%')
             </if>
-
+            <if test="query.hasSerial != null">
+                AND s.has_serial = #{query.hasSerial}
+            </if>
             <if test="query.stockStatusList != null and query.stockStatusList.size() > 0">
                 AND s.stock_status in
                 <foreach collection="query.stockStatusList" item="item" open="(" close=")" separator=",">
