@@ -156,7 +156,7 @@ public class ReceiveFactory {
 		receiveDetail.setSkuLot5(newReceiveDetailRequest.getSkuLot5());
 		//设置摩擦块批次
 		receiveDetail.setSkuLot6(newReceiveDetailRequest.getSkuLot6());
-		//设置CRCC
+		//设置适用速度等级
 		receiveDetail.setSkuLot8(newReceiveDetailRequest.getSkuLot8());
 		return receiveDetail;
 	}
