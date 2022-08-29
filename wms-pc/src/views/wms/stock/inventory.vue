@@ -291,7 +291,7 @@
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column
-                            v-if="!column.hide && index !==1"
+                            v-if="!column.hide && index !==2"
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column"
@@ -327,7 +327,7 @@
                             </template>
                         </el-table-column>
                         <el-table-column
-                            v-if="!column.hide && index===1"
+                            v-if="!column.hide && index===2"
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column"
@@ -621,6 +621,11 @@ export default {
                     {
                         prop: "skuCode",
                         label: "物品编码",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "skuName",
+                        label: "物品名称",
                         sortable: "custom",
                     },
                     {
@@ -945,7 +950,7 @@ export default {
             } else {
                 type = 'batch'
             }
-            let url = "http://10.168.3.136:6480/box.aspx";
+            let url = "http://192.168.41.174:8099/box.aspx";
             url = url + '?' + 'BoxCodes=' + boxCodeList + '&' + 'BoxType=' + type + '&' + 'UserName=' + userName;
             window.open(url);
         },

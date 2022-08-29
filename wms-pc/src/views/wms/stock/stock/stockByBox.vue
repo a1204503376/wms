@@ -302,6 +302,11 @@ export default {
                         label: "物品编码"
                     },
                     {
+                        prop: "skuName",
+                        label: "物品名称",
+                        sortable: "custom",
+                    },
+                    {
                         prop: "stockStatus",
                         label: "库存状态"
                     },

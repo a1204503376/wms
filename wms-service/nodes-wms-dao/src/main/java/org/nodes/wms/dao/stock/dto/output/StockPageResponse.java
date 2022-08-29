@@ -31,6 +31,12 @@ public class StockPageResponse implements Serializable {
 	@ExcelProperty({"库存信息", "物料编码"})
 	private String skuCode;
 	/**
+	 * 物品名称
+	 */
+	@ColumnWidth(15)
+	@ExcelProperty({"库存信息", "物料名称"})
+	private String skuName;
+	/**
 	 * 库存状态
 	 */
 	@ExcelIgnore
