@@ -376,10 +376,6 @@ export default {
                         label: "货主名称"
                     },
                     {
-                        prop: "createUserName",
-                        label: "收货人"
-                    },
-                    {
                         prop: "taskId",
                         label: "任务号"
                     },
