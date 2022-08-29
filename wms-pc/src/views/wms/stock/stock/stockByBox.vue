@@ -302,6 +302,11 @@ export default {
                         label: "物品编码"
                     },
                     {
+                        prop: "skuName",
+                        label: "物品名称",
+                        sortable: "custom",
+                    },
+                    {
                         prop: "stockStatus",
                         label: "库存状态"
                     },
@@ -374,10 +379,6 @@ export default {
                     {
                         prop: "ownerName",
                         label: "货主名称"
-                    },
-                    {
-                        prop: "createUserName",
-                        label: "收货人"
                     },
                     {
                         prop: "taskId",

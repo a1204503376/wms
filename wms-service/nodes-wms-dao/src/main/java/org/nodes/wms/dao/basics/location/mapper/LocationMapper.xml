@@ -153,7 +153,7 @@
                  left join wms_zone wz on wl.zone_id = wz.zone_id
                  left join wms_lpn_type wt on wl.lpn_type_id = wt.id
         where wl.wh_id = #{param.whId}
-          and wz.zone_code = 'WH1-AGV-PICKTO'
+          and wz.zone_code = 'WH1-RECE'
           and wt.code = #{param.lpnType}
     </select>
 

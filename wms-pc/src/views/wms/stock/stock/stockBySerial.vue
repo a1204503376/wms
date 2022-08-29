@@ -229,6 +229,11 @@ export default {
                         sortable: "custom",
                     },
                     {
+                        prop: "skuName",
+                        label: "物品名称",
+                        sortable: "custom",
+                    },
+                    {
                         prop: "stockStatus",
                         label: "库存状态",
                         sortable: "custom"
