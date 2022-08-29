@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.outstock.strategy;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.nodes.core.constant.DictKVConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TianyiPickStrategy {
 
 	private final StockQueryBiz stockQueryBiz;
@@ -86,6 +88,8 @@ public class TianyiPickStrategy {
 		for (Stock stock : agvStockList){
 			List<Stock> stockOfLoc = stockQueryBiz.findStockByLocation(stock.getLocId());
 			if (Func.isEmpty(stockOfLoc) || isNotCondition(stockOfLoc, skuIdsOfSoDetail)){
+				log.warn("[自动分配]单据:%s明细:%s分配的自动区库位:%s存在不出库的库存", soHeader.getSoBillNo(),
+					soDetail.getSoLineNo(), stock.getLocCode());
 				continue;
 			}
 
