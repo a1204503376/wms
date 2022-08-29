@@ -179,7 +179,7 @@
                     <el-table-column label="钢背批次" prop="skuLot5"></el-table-column>
                     <el-table-column label="摩擦快批次" prop="skuLot6" width="150"></el-table-column>
                     <el-table-column label="产品标识代码" prop="skuLot7" width="150"></el-table-column>
-                    <el-table-column label="是否CRCC验证" prop="skuLot8" width="150"></el-table-column>
+                    <el-table-column label="适用速度等级" prop="skuLot8" width="150"></el-table-column>
                 </template>
             </el-table>
             <div slot="footer" class="dialog-footer">
@@ -342,7 +342,7 @@ export default {
                     {
                         prop: 'skuLot8',
                         width: 100,
-                        label: '是否CRCC校验'
+                        label: '适用速度等级'
                     },
                 ],
                 soPickPlanData: [],
