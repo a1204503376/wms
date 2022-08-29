@@ -303,6 +303,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		if (!locationBiz.isPickLocation(targetLocation)) {
 			throw new ServiceException("接驳区移动失败，目标库位不是人工拣货区,请输入或扫描人工拣货区库位后重试");
 		}
+		Zone zone = zoneBiz.findById(targetLocation.getZoneId());
 		Location sourceLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getSourceLocCode());
 
 		// 校验目标库位箱型
@@ -318,29 +319,23 @@ public class OutStockBizImpl implements OutStockBiz {
 		canPick(soPickPlanList, stockList);
 		stockManageBiz.canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode(), false);
 		// 按LPN移动
-		stockBiz.moveStockByLpnCode(stockList.get(0).getLpnCode(), stockList.get(0).getLpnCode(),
+		List<Stock> stocks = stockBiz.moveStockByLpnCode(stockList.get(0).getLpnCode(), stockList.get(0).getLpnCode(),
 			targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_LPN_PDA, null, null, null);
 
 		// 更新拣货计划
 		for (SoPickPlan pickPlan : soPickPlanList) {
-			List<Serial> serialList = stockQueryBiz.findSerialByStock(pickPlan.getStockId());
-			List<String> serialNumberList = new ArrayList<>();
-			if (Func.isNotEmpty(serialList)) {
-				serialNumberList = serialList
-					.stream()
-					.map(Serial::getSerialNumber)
-					.collect(Collectors.toList());
+			for (Stock stock : stocks) {
+				if (Func.equals(pickPlan.getBoxCode(), stock.getBoxCode())
+					&& Func.equals(pickPlan.getPickPlanQty(), stock.getStockBalance())
+					&& Func.equals(pickPlan.getSkuCode(), stock.getSkuCode())
+					&& Func.equals(pickPlan.getLotNumber(), stock.getLotNumber())) {
+					soPickPlanBiz.updatePickByPartParam(pickPlan.getPickPlanId(), stock.getStockId(), targetLocation, zone);
+				}
 			}
-			Stock stock = stockQueryBiz.findStockById(pickPlan.getStockId());
-			SoDetail soDetail = soBillBiz.getSoDetailById(pickPlan.getSoDetailId());
-			soPickPlanBiz.updatePickRealQty(pickPlan.getPickPlanId(), pickPlan.getPickPlanQty());
 		}
-
-		// 5、更新出库单信息
-		soBillBiz.updateSoBillState(soHeader);
-
+		
 		// 6、更新任务
-		wmsTaskBiz.updateWmsTaskStateByTaskId(task.getTaskId(), WmsTaskStateEnum.COMPLETED, task.getTaskQty());
+		wmsTaskBiz.updateWmsTaskByPartParam(task.getTaskId(), WmsTaskProcTypeEnum.BY_BOX, targetLocation);
 
 		// 7、记录业务日志
 		logBiz.auditLog(AuditLogType.MOVE_STOCK, soHeader.getSoBillId(),

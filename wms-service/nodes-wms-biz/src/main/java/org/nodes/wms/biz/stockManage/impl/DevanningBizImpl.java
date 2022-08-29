@@ -18,6 +18,7 @@ import org.nodes.wms.dao.stock.dto.output.FindAllSerialNumberManageResponse;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,9 @@ public class DevanningBizImpl implements DevanningBiz {
 		FindAllSerialNumberManageResponse response = new FindAllSerialNumberManageResponse();
 		// 根据箱码查询库存
 		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
+		if (Func.isNull(stockList) || stockList.size() == 0) {
+			throw new ServiceException("拆箱失败，拆箱根据箱码查询库存失败");
+		}
 		// 返回是否是序列号管理----根据序列号列表是否为空进行判断，如果不是则需要查询出所有跟当前托盘有关的库存进行返回
 		List<String> serialNumberList = new ArrayList<>();
 		for (Stock stock : stockList) {
@@ -72,11 +76,11 @@ public class DevanningBizImpl implements DevanningBiz {
 		return response;
 	}
 
-	private String generateNewBoxCode(DevanningSubmitRequest request){
+	private String generateNewBoxCode(DevanningSubmitRequest request) {
 		LpnTypeCodeEnum lpnTypeCodeEnum = lpnTypeBiz.tryParseBoxCode(request.getBoxCode());
 		String skuName = null;
 		String spec = null;
-		if (request.getIsSn()){
+		if (request.getIsSn()) {
 			Stock stock = stockQueryBiz.findStockById(request.getStockList().get(0).getStockId());
 			skuName = stock.getSkuName();
 			spec = stock.getSkuLot2();
@@ -90,6 +94,7 @@ public class DevanningBizImpl implements DevanningBiz {
 	public void devanning(DevanningSubmitRequest request) {
 		// 根据前端输入的locCod查询出对应的目标库位
 		Location location = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
+		String oldBoxCode = request.getBoxCode();
 		// 是否生成新箱码 是true进入下面方法生成新箱码
 		if (request.getNewBoxCode()) {
 			request.setBoxCode(generateNewBoxCode(request));
@@ -111,7 +116,7 @@ public class DevanningBizImpl implements DevanningBiz {
 			stockList.forEach(stock -> {
 				AssertUtil.notNull(stock, "根据序列号拆箱时,根据序列号集合找不到对应库存");
 				// 库存移动
-				stockBiz.moveStock(stock, serialNumberList, stock.getStockBalance() , request.getBoxCode(), location.getLocCode(),
+				stockBiz.moveStock(stock, serialNumberList, stock.getStockBalance(), request.getBoxCode(), location.getLocCode(),
 					location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
 			});
 		} else {
