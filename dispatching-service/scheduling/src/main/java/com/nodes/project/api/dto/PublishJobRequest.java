@@ -90,6 +90,5 @@ public class PublishJobRequest {
     /**
      * 位置终点(库位)
      */
-    @NotBlank(message = "位置终点(库位)不能为空")
     private String locationNameTo;
 }
