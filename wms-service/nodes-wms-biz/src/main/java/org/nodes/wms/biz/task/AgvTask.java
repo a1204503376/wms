@@ -145,12 +145,11 @@ public class AgvTask {
 	 *
 	 * @param fromLocId 库位id
 	 * @param so        出库单信息
-	 * @param soDetail  出库单明细信息
+	 * @param soDetail  出库单明细信息,自动区任务时可以为空
 	 */
 	public WmsTask pickToSchedule(Long fromLocId, SoHeader so, SoDetail soDetail) {
 		AssertUtil.notNull(fromLocId, "AGV拣货任务下发失败,locId为空");
 		AssertUtil.notNull(so, "AGV拣货任务下发失败,so为空");
-		AssertUtil.notNull(soDetail, "AGV拣货任务下发失败,soDetail为空");
 
 		List<Stock> sourceStock = stockQueryBiz.findStockByLocation(fromLocId);
 		WmsTask pickTask = wmsTaskFactory.createPickTask(sourceStock, so, soDetail);
