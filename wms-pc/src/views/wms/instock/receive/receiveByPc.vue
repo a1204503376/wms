@@ -32,11 +32,12 @@
                                 <el-table-column
                                     width="53">
                                     <template slot="header">
-                                        <el-button circle
-                                                   icon="el-icon-plus"
-                                                   size="mini"
-                                                   type="primary"
-                                                   @click="onAddBatchRow">
+                                        <el-button
+                                            circle
+                                            icon="el-icon-plus"
+                                            size="mini"
+                                            type="primary"
+                                            @click="onAddBatchRow">
                                         </el-button>
                                     </template>
                                     <template v-slot="{row}">
@@ -58,7 +59,6 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    :align="'left'"
                                     prop="skuCode"
                                     width="195">
                                     <template slot="header">
@@ -78,7 +78,7 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            v-model="row.skuLot2"
+                                            v-model.trim="row.skuLot2"
                                             :disabled="row.skuLot2Exist"
                                             size=mini>
                                         </el-input>
@@ -113,7 +113,7 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            v-model="row.surplusQty"
+                                            v-model.trim="row.surplusQty"
                                             :disabled="true"
                                             size=mini>
                                         </el-input>
@@ -128,7 +128,7 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            v-model="row.umCode"
+                                            v-model.trim="row.umCode"
                                             :disabled="true"
                                             size=mini>
                                         </el-input>
@@ -151,7 +151,7 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            v-model="row.boxCode"
+                                            v-model.trim="row.boxCode"
                                             size=mini>
                                         </el-input>
                                     </template>
@@ -162,7 +162,7 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            v-model="row.lpnCode"
+                                            v-model.trim="row.lpnCode"
                                             size=mini>
                                         </el-input>
                                     </template>
@@ -173,7 +173,7 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            v-model="row.snCode"
+                                            v-model.trim="row.snCode"
                                             size=mini>
                                         </el-input>
                                     </template>
@@ -184,7 +184,7 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            v-model="row.skuLot1"
+                                            v-model.trim="row.skuLot1"
                                             size=mini>
                                         </el-input>
                                     </template>
@@ -195,7 +195,7 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            v-model="row.skuLot4"
+                                            v-model.trim="row.skuLot4"
                                             size=mini>
                                         </el-input>
                                     </template>
@@ -206,7 +206,7 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            v-model="row.skuLot5"
+                                            v-model.trim="row.skuLot5"
                                             size=mini>
                                         </el-input>
                                     </template>
@@ -217,7 +217,7 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            v-model="row.skuLot6"
+                                            v-model.trim="row.skuLot6"
                                             size=mini>
                                         </el-input>
                                     </template>
@@ -228,7 +228,7 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
-                                            v-model="row.skuLot8"
+                                            v-model.trim="row.skuLot8"
                                             size=mini>
                                         </el-input>
                                     </template>
