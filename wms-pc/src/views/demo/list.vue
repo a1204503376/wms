@@ -2,7 +2,7 @@
     <div id="list">
         <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
-                <el-row type="flex">
+                <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
                             <el-input
@@ -35,7 +35,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="状态" label-width="90px">
                             <nodes-lpn-type-state
@@ -60,7 +60,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="创建日期" label-width="90px">
                             <nodes-date-range v-model="form.params.createDateRange"></nodes-date-range>

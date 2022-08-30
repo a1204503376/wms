@@ -2,7 +2,7 @@
     <div id="soHeader">
         <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
-                <el-row type="flex">
+                <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="发货单编码" label-width="90px">
                             <el-input
