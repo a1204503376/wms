@@ -125,7 +125,7 @@ public interface WmsTaskBiz {
 	 * @return WmsTask
 	 */
 	WmsTask create(WmsTaskTypeEnum taskType, WmsTaskProcTypeEnum procType,
-			List<SoPickPlan> soPickPlanList, SoHeader soHeader);
+				   List<SoPickPlan> soPickPlanList, SoHeader soHeader);
 
 	/**
 	 * 根据任务ID和其他参数修改任务
@@ -135,4 +135,19 @@ public interface WmsTaskBiz {
 	 * @param fromLocation     目标库位
 	 */
 	void updateWmsTaskByPartParam(Long taskId, WmsTaskProcTypeEnum taskProcTypeEnum, Location fromLocation);
+
+	/**
+	 * 根据任务ID获取任务
+	 *
+	 * @param taskId 任务ID
+	 * @return 任务
+	 */
+	WmsTask findByTaskId(Long taskId);
+
+	/**
+	 * 更改任务状态为未下发状态
+	 *
+	 * @param taskId 任务ID
+	 */
+	void updateTaskStateToIssued(Long taskId);
 }

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.systemParam.SystemParamBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
+import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.putway.PutwayStrategyActuator;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
@@ -14,6 +15,7 @@ import org.nodes.wms.biz.task.util.SendToScheduleUtil;
 import org.nodes.wms.dao.application.dto.scheduling.SchedulingGlobalResponse;
 import org.nodes.wms.dao.application.dto.scheduling.SchedulingResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.stock.entities.Stock;
@@ -53,6 +55,7 @@ public class AgvTask {
 	private final SystemParamBiz systemParamBiz;
 	private final SendToScheduleUtil sendToScheduleUtil;
 	private final StockQueryBiz stockQueryBiz;
+	private final LogBiz logBiz;
 
 	/**
 	 * 生成AGV上架任务
@@ -96,7 +99,7 @@ public class AgvTask {
 		String url = systemParamBiz.findScheduleUrl().concat(POST_JOB_API);
 
 		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
-				url, publishJobFactory.createPublishJobRequestList(wmsTasks));
+			url, publishJobFactory.createPublishJobRequestList(wmsTasks));
 		if (schedulingGlobalResponse.hasException()) {
 			log.error("调用API（{}）异常：{}", url, schedulingGlobalResponse.getMsg());
 			return false;
@@ -117,9 +120,9 @@ public class AgvTask {
 		AssertUtil.notNull(targetLocation, "AGV库内移动任务下发失败,目标库位为空");
 
 		List<Long> sourceLocIds = sourceStock.stream()
-				.map(Stock::getLocId)
-				.distinct()
-				.collect(Collectors.toList());
+			.map(Stock::getLocId)
+			.distinct()
+			.collect(Collectors.toList());
 
 		for (Long locId : sourceLocIds) {
 			if (!locationBiz.isAgvZone(locId) || !locationBiz.isAgvZone(locId)) {
@@ -128,8 +131,8 @@ public class AgvTask {
 			}
 
 			List<Stock> stockOfLoc = sourceStock.stream()
-					.filter(item -> locId.equals(item.getLocId()))
-					.collect(Collectors.toList());
+				.filter(item -> locId.equals(item.getLocId()))
+				.collect(Collectors.toList());
 			WmsTask moveTask = wmsTaskFactory.createMoveTask(stockOfLoc, targetLocation);
 			if (sendToSchedule(Collections.singletonList(moveTask))) {
 				moveTask.setTaskState(WmsTaskStateEnum.ISSUED);
@@ -153,12 +156,19 @@ public class AgvTask {
 
 		List<Stock> sourceStock = stockQueryBiz.findStockByLocation(fromLocId);
 		WmsTask pickTask = wmsTaskFactory.createPickTask(sourceStock, so, soDetail);
-		if (sendToSchedule(Collections.singletonList(pickTask))) {
-			pickTask.setTaskState(WmsTaskStateEnum.ISSUED);
-		}
+		sendPickToSchedule(pickTask, so);
 		stockBiz.freezeStockByDropId(sourceStock, pickTask.getTaskId());
 		wmsTaskDao.save(pickTask);
 		return pickTask;
+	}
+
+	public void sendPickToSchedule(WmsTask pickTask, SoHeader so){
+		if (sendToSchedule(Collections.singletonList(pickTask))) {
+			pickTask.setTaskState(WmsTaskStateEnum.ISSUED);
+		} else {
+			logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, so.getSoBillId(),
+				so.getSoBillNo(), "AGV拣货任务下发失败");
+		}
 	}
 
 	/**
@@ -167,7 +177,7 @@ public class AgvTask {
 	public void continueTask(List<WmsTask> tasks) {
 		String url = systemParamBiz.findScheduleUrl().concat(POST_CONTINUE_JOB_API);
 		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
-				url, publishJobFactory.createContinueJobRequest(tasks));
+			url, publishJobFactory.createContinueJobRequest(tasks));
 		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
 		if (schedulingResponse.hasFailed()) {
 			throw new ServiceException("继续任务失败，" + schedulingResponse.getMsg());
@@ -180,7 +190,7 @@ public class AgvTask {
 	public void cancel() {
 		String url = systemParamBiz.findScheduleUrl().concat(POST_CANCEL_JOB_API);
 		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
-				url, publishJobFactory.createCancelJobRequest());
+			url, publishJobFactory.createCancelJobRequest());
 		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
 		if (schedulingResponse.hasFailed()) {
 			throw new ServiceException("取消任务失败，" + schedulingResponse.getMsg());

@@ -333,7 +333,7 @@ public class OutStockBizImpl implements OutStockBiz {
 				}
 			}
 		}
-		
+
 		// 6、更新任务
 		wmsTaskBiz.updateWmsTaskByPartParam(task.getTaskId(), WmsTaskProcTypeEnum.BY_BOX, targetLocation);
 
@@ -409,7 +409,8 @@ public class OutStockBizImpl implements OutStockBiz {
 			}
 		});
 
-		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, soBillId, soHeader.getSoBillNo(), "执行拣货任务下发");
+		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY,
+			soBillId, soHeader.getSoBillNo(), "执行拣货任务下发成功");
 		return true;
 	}
 
@@ -417,6 +418,14 @@ public class OutStockBizImpl implements OutStockBiz {
 		if (Func.isEmpty(soPickPlanOfLoc.get(0).getTaskId())) {
 			WmsTask task = agvTask.pickToSchedule(fromLocId, soHeader, null);
 			soPickPlanDao.updateTask(soPickPlanOfLoc, task.getTaskId());
+		} else {
+			WmsTask task = wmsTaskBiz.findByTaskId(soPickPlanOfLoc.get(0).getTaskId());
+			if (WmsTaskStateEnum.NOT_ISSUED.equals(task.getTaskState())) {
+				agvTask.sendPickToSchedule(task, soHeader);
+				wmsTaskBiz.updateTaskStateToIssued(task.getTaskId());
+			} else {
+				throw new ServiceException("任务下发失败，该任务已经下发完成");
+			}
 		}
 	}
 

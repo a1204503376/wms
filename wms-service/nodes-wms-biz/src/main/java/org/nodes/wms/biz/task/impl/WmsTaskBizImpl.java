@@ -156,4 +156,16 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 		wmsTaskDao.updateWmsTaskByPartParam(taskId, taskProcTypeEnum, fromLocation);
 	}
 
+	@Override
+	public WmsTask findByTaskId(Long taskId) {
+		AssertUtil.notNull(taskId, "下发任务失败，任务ID为空");
+		return wmsTaskDao.getById(taskId);
+	}
+
+	@Override
+	public void updateTaskStateToIssued(Long taskId) {
+		AssertUtil.notNull(taskId, "下发任务失败，修改任务状态时任务ID为空");
+		wmsTaskDao.updateState(taskId, WmsTaskStateEnum.ISSUED);
+	}
+
 }

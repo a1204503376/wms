@@ -75,7 +75,8 @@ public class SoPickPlanDaoImpl
 	public void updateTask(List<SoPickPlan> soPickPlanList, Long taskId) {
 		for (SoPickPlan soPickPlan : soPickPlanList) {
 			UpdateWrapper<SoPickPlan> updateWrapper = Wrappers.update();
-			updateWrapper.lambda().eq(SoPickPlan::getPickPlanId, soPickPlan.getPickPlanId());
+			updateWrapper.lambda()
+				.eq(SoPickPlan::getPickPlanId, soPickPlan.getPickPlanId());
 			SoPickPlan saveDto = new SoPickPlan();
 			saveDto.setTaskId(taskId);
 			if (!super.update(saveDto, updateWrapper)) {
