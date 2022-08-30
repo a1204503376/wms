@@ -339,7 +339,7 @@ export default {
                     },
                     {
                         prop: "skuLot8",
-                        label: "是否CRCC验证",
+                        label: "适用速度等级",
                         sortable: "custom"
                     },
                     {

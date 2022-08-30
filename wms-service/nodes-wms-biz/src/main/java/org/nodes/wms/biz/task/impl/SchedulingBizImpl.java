@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
@@ -112,6 +113,8 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			onSuccess(wmsTask);
 		} else if (AGV_TASK_STATE_EXCEPTION.equals(request.getState())) {
 			onException(wmsTask);
+		} else {
+			throw ExceptionUtil.mpe("同步AGV任务状态失败，未知的任务状态");
 		}
 
 		log.info("接收调度系统任务状态变更通知,状态:%d,任务:%d",
@@ -126,7 +129,9 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	 * @param wmsTask 任务
 	 */
 	private void onStart(WmsTask wmsTask) {
-		if (!WmsTaskStateEnum.ISSUED.equals(wmsTask.getTaskState())){
+		boolean checkTaskState = WmsTaskStateEnum.ISSUED.equals(wmsTask.getTaskState())
+			|| WmsTaskStateEnum.ABNORMAL.equals(wmsTask.getTaskState());
+		if (!checkTaskState){
 			throw new ServiceException("状态更新失败,只有已下发的任务才可以执行");
 		}
 		// 修改任务状态
@@ -150,7 +155,9 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	 * @param wmsTask 任务
 	 */
 	private void onSuccess(WmsTask wmsTask) {
-		if (WmsTaskStateEnum.ISSUED.equals(wmsTask.getTaskState())) {
+		boolean checkTaskState = WmsTaskStateEnum.START_EXECUTION.equals(wmsTask.getTaskState())
+			|| WmsTaskStateEnum.ABNORMAL.equals(wmsTask.getTaskState());
+		if (!checkTaskState) {
 			throw new ServiceException(String.format(
 					"任务执行完毕状态更新失败,任务[%d]当前状态[%s]不是开始执行状态",
 					wmsTask.getTaskId(), wmsTask.getTaskState().getDesc()));
@@ -174,7 +181,9 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	}
 
 	private void onException(WmsTask wmsTask) {
-		if (WmsTaskStateEnum.COMPLETED.equals(wmsTask.getTaskState())){
+		boolean checkTaskState = WmsTaskStateEnum.COMPLETED.equals(wmsTask.getTaskState())
+			|| WmsTaskStateEnum.CANCELED.equals(wmsTask.getTaskState());
+		if (!checkTaskState){
 			throw new ServiceException("状态更新失败,任务已经完成");
 		}
 		// 修改任务状态

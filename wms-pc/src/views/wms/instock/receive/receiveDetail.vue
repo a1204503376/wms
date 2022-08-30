@@ -342,7 +342,7 @@ export default {
                 {
                     prop: 'skuLot8',
                     width: 120,
-                    label: 'CRCC'
+                    label: '适用速度等级'
                 },
                 {
                     prop: 'remark',

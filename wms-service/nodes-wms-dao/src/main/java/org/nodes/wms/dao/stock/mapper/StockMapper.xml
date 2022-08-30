@@ -3,6 +3,7 @@
 <mapper namespace="org.nodes.wms.dao.stock.mapper.StockMapper">
     <sql id="stock">
         select s.stock_id,
+               s.sku_name,
                s.sku_code,
                s.stock_status,
                s.sku_lot1,
@@ -214,7 +215,9 @@
             <if test="query.skuLot1!=null and query.skuLot1 != ''">
                 AND s.sku_lot1 LIKE concat('%',#{query.skuLot1},'%')
             </if>
-
+            <if test="query.hasSerial != null">
+                AND s.has_serial = #{query.hasSerial}
+            </if>
             <if test="query.stockStatusList != null and query.stockStatusList.size() > 0">
                 AND s.stock_status in
                 <foreach collection="query.stockStatusList" item="item" open="(" close=")" separator=",">

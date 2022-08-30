@@ -53,7 +53,7 @@ public class ReceiveDetailByPcResponse {
 	 */
 	private String skuLot6;
 	/**
-	 * CRCC
+	 * 适用速度等级
 	 */
 	private String skuLot8;
 }

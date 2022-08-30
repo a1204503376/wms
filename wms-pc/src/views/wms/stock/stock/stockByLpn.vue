@@ -16,7 +16,7 @@ import fileDownload from "js-file-download";
                         <el-form-item label="生产批次" label-width="90px">
                             <el-input
                                 class="search-input" placeholder="请输入生产批次" v-model.trim="form.params.skuLot1"
-                                      :clearable="true">
+                                :clearable="true">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -48,7 +48,7 @@ import fileDownload from "js-file-download";
                         <el-form-item label="箱号" label-width="90px">
                             <el-input
                                 class="search-input" placeholder="请输入箱号" v-model.trim="form.params.boxCode"
-                                      :clearable="true">
+                                :clearable="true">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -56,7 +56,7 @@ import fileDownload from "js-file-download";
                         <el-form-item label="lpn" label-width="90px">
                             <el-input
                                 class="search-input" placeholder="请输入lpn" v-model.trim="form.params.lpnCode"
-                                      :clearable="true">
+                                :clearable="true">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -80,7 +80,7 @@ import fileDownload from "js-file-download";
                         <el-form-item label="专用客户" label-width="90px">
                             <el-input
                                 class="search-input" placeholder="请输入专用客户" v-model.trim="form.params.skuLot4"
-                                      :clearable="true">
+                                :clearable="true">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -88,7 +88,7 @@ import fileDownload from "js-file-download";
                         <el-form-item label="钢背批次" label-width="90px">
                             <el-input
                                 class="search-input" placeholder="请输入钢背批次" v-model.trim="form.params.skuLot5"
-                                      :clearable="true">
+                                :clearable="true">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -298,6 +298,11 @@ export default {
                         label: "物品编码"
                     },
                     {
+                        prop: "skuName",
+                        label: "物品名称",
+                        sortable: "custom",
+                    },
+                    {
                         prop: "stockStatus",
                         label: "库存状态"
                     },
@@ -353,7 +358,7 @@ export default {
                     },
                     {
                         prop: "skuLot8",
-                        label: "是否CRCC验证"
+                        label: "适用速度等级"
                     },
                     {
                         prop: "whCode",

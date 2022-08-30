@@ -109,10 +109,10 @@ public class StockBySerialPageResponse implements Serializable {
 	@ExcelProperty({"库存信息", "产品标识"})
 	private String skuLot7;
 	/**
-	 * CRCC
+	 * 适用速度等级
 	 */
 	@ColumnWidth(15)
-	@ExcelProperty({"库存信息", "CRCC"})
+	@ExcelProperty({"库存信息", "适用速度等级"})
 	private String skuLot8;
 	/**
 	 * 库房编码
