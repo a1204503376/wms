@@ -1,6 +1,6 @@
 <template>
     <el-date-picker
-        style="width: 200px"
+        style="width: 100%"
         v-model="value"
         @change="onChange"
         type="daterange"

@@ -7,12 +7,12 @@
                         <el-form-item label="序列号" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.serialNumberBegin" :clearable="true"
-                                style="width: 78px;">
+                                style="width: 42%;">
                             </el-input>
                             -
                             <el-input
                                 v-model.trim="form.params.serialNumberEnd" :clearable="true"
-                                style="width: 78px;">
+                                style="width: 42%;">
                             </el-input>
                             <el-tooltip placement="top">
                                 <div slot="content">

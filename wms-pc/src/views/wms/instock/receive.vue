@@ -2,7 +2,7 @@
     <div id="list">
         <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
-                <el-row type="flex">
+                <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="收货单编码" label-width="90px">
                             <el-input
@@ -101,8 +101,7 @@
                     class="item"
                     content="刷新"
                     effect="dark"
-                    placement="top"
-                >
+                    placement="top">
                     <el-button circle icon="el-icon-refresh" size="mini" @click="onRefresh"></el-button>
                 </el-tooltip>
                 <el-tooltip
@@ -110,8 +109,7 @@
                     class="item"
                     content="显隐"
                     effect="dark"
-                    placement="top"
-                >
+                    placement="top">
                     <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
                 </el-tooltip>
                 <el-tooltip
@@ -119,8 +117,7 @@
                     class="item"
                     content="服务端导出"
                     effect="dark"
-                    placement="top"
-                >
+                    placement="top">
                     <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">

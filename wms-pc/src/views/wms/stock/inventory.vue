@@ -2,7 +2,7 @@
     <div id='inventory'>
         <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
-                <el-row type="flex">
+                <el-row class="search-elRow" type="flex">
                     <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
                             <nodes-sku
@@ -36,7 +36,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row type="flex">
+                <el-row class="search-elRow" type="flex">
                     <el-col :span="6">
                         <el-form-item label="库区" label-width="90px">
                             <nodes-zone
@@ -72,7 +72,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row type="flex">
+                <el-row class="search-elRow" type="flex">
                     <el-col :span="6">
                         <el-form-item label="收货时间" label-width="90px">
                             <nodes-date-range v-model="form.params.receiveTimeDateRange">
@@ -89,9 +89,10 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="钢背批次" label-width="90px">
-                            <el-input v-model.trim="form.params.skuLot5"
-                                      :clearable="true" class="search-input"
-                                      placeholder="请输入钢背批次">
+                            <el-input
+                                v-model.trim="form.params.skuLot5"
+                                :clearable="true" class="search-input"
+                                placeholder="请输入钢背批次">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -105,7 +106,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row type="flex">
+                <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="库房" label-width="90px">
                             <nodes-warehouse
@@ -170,12 +171,12 @@
                         <el-form-item label="批次号" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.lotNumberBegin" :clearable="true"
-                                style="width: 78px;">
+                                style="width: 42%;">
                             </el-input>
                             -
                             <el-input
                                 v-model.trim="form.params.lotNumberEnd" :clearable="true"
-                                style="width: 78px;">
+                                style="width: 42%;">
                             </el-input>
                             <el-tooltip placement="top">
                                 <div slot="content">
