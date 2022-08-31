@@ -84,7 +84,17 @@ public class JobQueueServiceImpl extends ServiceImpl<JobQueueMapper, JobQueue>
             jobQueue.setTypeCode(JobTypeEnum.getByKey(publishJobRequest.getJobTypeCode()));
             jobQueue.setName(schedulingJobTypeMap.get(publishJobRequest.getJobTypeCode()));
             jobQueue.setStatus(JobStatusEnum.NOT_STARTED);
-
+            if (ObjectUtils.isNotEmpty(publishJobRequest.getBoxCode())) {
+                if (WmsBoxTypeEnum.A.getCode().equals(publishJobRequest.getBoxCode().substring(0, 1))) {
+                    jobQueue.setWmsBoxType(WmsBoxTypeEnum.A);
+                } else if (WmsBoxTypeEnum.B.getCode().equals(publishJobRequest.getBoxCode().substring(0, 1))) {
+                    jobQueue.setWmsBoxType(WmsBoxTypeEnum.B);
+                } else if (WmsBoxTypeEnum.C.getCode().equals(publishJobRequest.getBoxCode().substring(0, 1))) {
+                    jobQueue.setWmsBoxType(WmsBoxTypeEnum.C);
+                } else if (WmsBoxTypeEnum.D.getCode().equals(publishJobRequest.getBoxCode().substring(0, 1))) {
+                    jobQueue.setWmsBoxType(WmsBoxTypeEnum.D);
+                }
+            }
             jobQueueList.add(jobQueue);
         }
 
