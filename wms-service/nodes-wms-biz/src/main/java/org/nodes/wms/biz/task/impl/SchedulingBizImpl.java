@@ -85,7 +85,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 				// 更新任务信息
 				WmsTask wmsTask = wmsTaskDao.getById(request.getTaskDetailId());
 				if (Func.isNotEmpty(wmsTask.getToLocCode())) {
-					throw new ServiceException("同步任务状态失败，该任务已经存在目标库位");
+					throw new ServiceException("查询可用的出库接驳区库位失败，该任务已经存在目标库位");
 				}
 				wmsTask.setToLocId(location.getLocId());
 				wmsTask.setToLocCode(location.getLocCode());
