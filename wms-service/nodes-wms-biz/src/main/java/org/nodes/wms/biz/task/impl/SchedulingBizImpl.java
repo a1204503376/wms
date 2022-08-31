@@ -2,7 +2,6 @@ package org.nodes.wms.biz.task.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
@@ -26,6 +25,7 @@ import org.nodes.wms.dao.task.dto.SchedulingBroadcastNotificationRequest;
 import org.nodes.wms.dao.task.dto.SyncTaskStateRequest;
 import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
+import org.nodes.wms.dao.task.enums.WmsTaskTypeEnum;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
@@ -145,14 +145,17 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		// 将原库位库存移动到中间库位
 		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
 		for (Stock stock : stockList) {
-			List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(wmsTask.getTaskId(), stock.getStockId());
 			Stock middleStock = stockBiz.moveToInTransitByDropId(stock, wmsTask.getTaskId().toString(),
 				StockLogTypeEnum.STOCK_AGV_MOVE);
-			Location location = locationBiz.findByLocId(middleStock.getLocId());
-			Zone zone = zoneBiz.findById(location.getZoneId());
-			for (SoPickPlan soPickPlan : soPickPlanList) {
-				soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), middleStock.getStockId(), location, zone);
+			if (WmsTaskTypeEnum.AGV_PICKING.equals(wmsTask.getTaskTypeCd())) {
+				List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(wmsTask.getTaskId(), stock.getStockId());
+				Location location = locationBiz.findByLocId(middleStock.getLocId());
+				Zone zone = zoneBiz.findById(location.getZoneId());
+				for (SoPickPlan soPickPlan : soPickPlanList) {
+					soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), middleStock.getStockId(), location, zone);
+				}
 			}
+
 		}
 
 		log.info("agv任务开始[%d]-[%s]", wmsTask.getTaskId(), wmsTask);
@@ -186,11 +189,13 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			Stock targetStock = stockBiz.moveAllStockFromDropId(stock, targetLoc, wmsTask.getTaskId().toString(),
 				StockLogTypeEnum.STOCK_AGV_MOVE);
 			targetStockList.add(targetStock);
-			Location location = locationBiz.findByLocId(targetStock.getLocId());
-			Zone zone = zoneBiz.findById(location.getZoneId());
-			List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(wmsTask.getTaskId(), stock.getStockId());
-			for (SoPickPlan soPickPlan : soPickPlanList) {
-				soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), targetStock.getStockId(), location, zone);
+			if (WmsTaskTypeEnum.AGV_PICKING.equals(wmsTask.getTaskTypeCd())) {
+				Location location = locationBiz.findByLocId(targetStock.getLocId());
+				Zone zone = zoneBiz.findById(location.getZoneId());
+				List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(wmsTask.getTaskId(), stock.getStockId());
+				for (SoPickPlan soPickPlan : soPickPlanList) {
+					soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), targetStock.getStockId(), location, zone);
+				}
 			}
 		}
 

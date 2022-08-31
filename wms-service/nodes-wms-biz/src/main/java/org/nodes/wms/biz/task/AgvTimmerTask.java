@@ -164,6 +164,6 @@ public class AgvTimmerTask {
 
 		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(url, publishJobFactory.createPublishJobRequestList(putwayTask));
 		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
-		return schedulingResponse.hasFailed();
+		return !schedulingResponse.hasFailed();
 	}
 }
