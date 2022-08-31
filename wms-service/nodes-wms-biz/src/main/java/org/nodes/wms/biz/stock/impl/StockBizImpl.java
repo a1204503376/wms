@@ -595,7 +595,7 @@ public class StockBizImpl implements StockBiz {
 		canMoveStock(sourceStock, serialNoList, sourceStock.getStockEnable(), inTransitLocation);
 		checkQtyOfSerial(sourceStock, serialNoList, sourceStock.getStockEnable());
 
-		return runMoveStockByDropId(sourceStock, serialNoList, inTransitLocation, dropId, type);
+		return runMoveStockByDropId(sourceStock, serialNoList, inTransitLocation, dropId, type, false);
 	}
 
 	@Override
@@ -609,11 +609,11 @@ public class StockBizImpl implements StockBiz {
 		List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
 		canMoveStock(sourceStock, serialNoList, sourceStock.getStockEnable(), targetLocation);
 		checkQtyOfSerial(sourceStock, serialNoList, sourceStock.getStockEnable());
-		return runMoveStockByDropId(sourceStock, serialNoList, targetLocation, dropId, type);
+		return runMoveStockByDropId(sourceStock, serialNoList, targetLocation, dropId, type, true);
 	}
 
 	private Stock runMoveStockByDropId(Stock sourceStock, List<String> serialNoList,
-									   Location targetLoc, String dropId, StockLogTypeEnum type) {
+									   Location targetLoc, String dropId, StockLogTypeEnum type, boolean cleanDropId) {
 		Stock tempTargetStock = stockMergeStrategy.newExpectedStock(sourceStock, targetLoc,
 			sourceStock.getBoxCode(), sourceStock.getLpnCode(), dropId);
 		Stock targetStock = stockMergeStrategy.matchCanMergeStock(tempTargetStock);
@@ -622,12 +622,18 @@ public class StockBizImpl implements StockBiz {
 			targetStock = stockFactory.create(sourceStock, targetLoc, sourceStock.getLpnCode(),
 				sourceStock.getBoxCode(), sourceStock.getStockBalance(), serialNoList);
 			targetStock.setOccupyQty(sourceStock.getOccupyQty());
+			if (cleanDropId){
+				targetStock.setDropId(null);
+			}
 			stockDao.saveNewStock(targetStock);
 			targetStockLog = createAndSaveStockLog(true, targetStock, sourceStock.getStockBalance(),
 				type, null, dropId, null, "按DropId移动库存-新库存");
 		} else {
 			StockUtil.addQty(targetStock, sourceStock.getStockBalance());
 			targetStock.setOccupyQty(targetStock.getOccupyQty().add(sourceStock.getOccupyQty()));
+			if (cleanDropId){
+				targetStock.setDropId(null);
+			}
 			stockDao.updateStock(targetStock);
 			targetStockLog = createAndSaveStockLog(true, targetStock, sourceStock.getStockBalance(),
 				type, null, dropId, null, "按DropId移动库存-合并");
