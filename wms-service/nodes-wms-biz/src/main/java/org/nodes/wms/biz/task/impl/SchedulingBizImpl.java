@@ -13,7 +13,6 @@ import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.SchedulingBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
-import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.log.dto.input.NoticeMessageRequest;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
@@ -92,9 +91,12 @@ public class SchedulingBizImpl implements SchedulingBiz {
 				wmsTask.setToLocId(location.getLocId());
 				wmsTask.setToLocCode(location.getLocCode());
 				wmsTaskDao.updateById(wmsTask);
+				log.info("调度系统,AGV拣货任务{}成功冻结目标库位{}", request.getTaskDetailId(), location.getLocCode());
 				return location.getLocCode();
 			}
 		}
+
+		log.warn("调度系统,AGV拣货任务{}未查询到可用的目标库位", request.getTaskDetailId());
 		return "";
 	}
 
@@ -125,8 +127,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			throw ExceptionUtil.mpe("同步AGV任务状态失败，未知的任务状态");
 		}
 
-		log.info("接收调度系统任务状态变更通知,状态:%d,任务:%d",
-			request.getState(), request.getTaskDetailId());
+		log.info("接收调度系统任务状态变更通知,状态:{},任务:{}", request.getState(), request.getTaskDetailId());
 	}
 
 	/**
@@ -160,7 +161,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 
 		}
 
-		log.info("agv任务开始[%d]-[%s]", wmsTask.getTaskId(), wmsTask);
+		log.info("agv任务开始[{}]-[{}]", wmsTask.getTaskId(), wmsTask);
 	}
 
 	/**
@@ -186,7 +187,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		// 将中间库位的库存移动到目标库位
 		Location targetLoc = locationBiz.findByLocId(wmsTask.getToLocId());
 		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
-		List<Stock> targetStockList = new ArrayList<Stock>();
+		List<Stock> targetStockList = new ArrayList<>();
 		for (Stock stock : stockList) {
 			Stock targetStock = stockBiz.moveAllStockFromDropId(stock, targetLoc, wmsTask.getTaskId().toString(),
 				StockLogTypeEnum.STOCK_AGV_MOVE);
@@ -203,7 +204,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 
 		stockBiz.unfreezeStockByDropId(targetStockList, wmsTask.getTaskId());
 
-		log.info("agv任务结束[%d]-[%s]", wmsTask.getTaskId(), wmsTask);
+		log.info("agv任务结束[{}]-[{}]", wmsTask.getTaskId(), wmsTask);
 	}
 
 	private void onException(WmsTask wmsTask) {
@@ -215,6 +216,6 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		// 修改任务状态
 		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.ABNORMAL);
 
-		log.info("agv任务异常[%d]-[%s]", wmsTask.getTaskId(), wmsTask);
+		log.info("agv任务异常[{}]-[{}]", wmsTask.getTaskId(), wmsTask);
 	}
 }
