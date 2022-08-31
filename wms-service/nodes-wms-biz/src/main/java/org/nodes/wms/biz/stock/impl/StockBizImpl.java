@@ -587,28 +587,50 @@ public class StockBizImpl implements StockBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public Stock moveToInTransitByDropId(Stock sourceStock, String dropId, StockLogTypeEnum type) {
 		// 将库存移动到中间库存，原库存的占用需要释放并下架，生成的中间库存需要重新占用
+		if (BigDecimalUtil.le(sourceStock.getStockBalance(), BigDecimal.ZERO)) {
+			throw ExceptionUtil.mpe("按DropId[%s]移动库存,原库存[%d]已全部下架", dropId, sourceStock.getStockId());
+		}
 		List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
-		Location dropIdLoc = locationBiz.getInTransitLocation(sourceStock.getWhId());
-		canMoveStock(sourceStock, serialNoList, sourceStock.getStockEnable(), dropIdLoc);
+		Location inTransitLocation = locationBiz.getInTransitLocation(sourceStock.getWhId());
+		canMoveStock(sourceStock, serialNoList, sourceStock.getStockEnable(), inTransitLocation);
 		checkQtyOfSerial(sourceStock, serialNoList, sourceStock.getStockEnable());
 
-		Stock tempTargetStock = stockMergeStrategy.newExpectedStock(sourceStock, dropIdLoc,
+		return runMoveStockByDropId(sourceStock, serialNoList, inTransitLocation, dropId, type);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public Stock moveAllStockFromDropId(Stock sourceStock, Location targetLocation, String dropId,
+										StockLogTypeEnum type) {
+		// 中间库存的占用需要释放并下架，生成的目标库存需要重新占用
+		if (BigDecimalUtil.le(sourceStock.getStockBalance(), BigDecimal.ZERO)) {
+			throw ExceptionUtil.mpe("按DropId[%s]移动库存,原库存[%d]已全部下架", dropId, sourceStock.getStockId());
+		}
+		List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
+		canMoveStock(sourceStock, serialNoList, sourceStock.getStockEnable(), targetLocation);
+		checkQtyOfSerial(sourceStock, serialNoList, sourceStock.getStockEnable());
+		return runMoveStockByDropId(sourceStock, serialNoList, targetLocation, dropId, type);
+	}
+
+	private Stock runMoveStockByDropId(Stock sourceStock, List<String> serialNoList,
+									   Location targetLoc, String dropId, StockLogTypeEnum type) {
+		Stock tempTargetStock = stockMergeStrategy.newExpectedStock(sourceStock, targetLoc,
 			sourceStock.getBoxCode(), sourceStock.getLpnCode(), dropId);
 		Stock targetStock = stockMergeStrategy.matchCanMergeStock(tempTargetStock);
 		StockLog targetStockLog;
 		if (Func.isNull(targetStock)) {
-			targetStock = stockFactory.create(sourceStock, dropIdLoc, sourceStock.getLpnCode(),
+			targetStock = stockFactory.create(sourceStock, targetLoc, sourceStock.getLpnCode(),
 				sourceStock.getBoxCode(), sourceStock.getStockBalance(), serialNoList);
 			targetStock.setOccupyQty(sourceStock.getOccupyQty());
 			stockDao.saveNewStock(targetStock);
 			targetStockLog = createAndSaveStockLog(true, targetStock, sourceStock.getStockBalance(),
-				type, null, dropId, null, "库存移动到中间库位-新库存");
+				type, null, dropId, null, "按DropId移动库存-新库存");
 		} else {
 			StockUtil.addQty(targetStock, sourceStock.getStockBalance());
 			targetStock.setOccupyQty(targetStock.getOccupyQty().add(sourceStock.getOccupyQty()));
 			stockDao.updateStock(targetStock);
 			targetStockLog = createAndSaveStockLog(true, targetStock, sourceStock.getStockBalance(),
-				type, null, dropId, null, "库存移动到中间库位-合并");
+				type, null, dropId, null, "按DropId移动库存-合并");
 		}
 
 		// 下架原库存并释放占用
@@ -618,7 +640,7 @@ public class StockBizImpl implements StockBiz {
 			sourceStock.getPickQty(), sourceStock.getOccupyQty(), null, LocalDateTime.now());
 		// 生成库存日志
 		createAndSaveStockLog(false, sourceStock, sourceStock.getStockBalance(), type, null, dropId,
-			null, "库存移动到中间库位下架");
+			null, "按DropId移动库存下架");
 		// 更新序列号和库存的关联关系
 		if (Func.isNotEmpty(serialNoList)) {
 			SerialStateEnum serialStateEnum = SerialStateEnum.IN_STOCK;
@@ -626,18 +648,6 @@ public class StockBizImpl implements StockBiz {
 		}
 
 		return targetStock;
-	}
-
-	@Override
-	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public Stock moveAllStockFromDropId(Stock sourceStock, Location targetLocation, String dropId,
-										StockLogTypeEnum type) {
-
-		List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
-		canMoveStock(sourceStock, serialNoList, sourceStock.getStockEnable(), targetLocation);
-		checkQtyOfSerial(sourceStock, serialNoList, sourceStock.getStockEnable());
-		return runMoveStock(sourceStock, serialNoList, sourceStock.getStockEnable(), sourceStock.getBoxCode(),
-			sourceStock.getLpnCode(), targetLocation, type, "", null, dropId, null);
 	}
 
 	@Override
