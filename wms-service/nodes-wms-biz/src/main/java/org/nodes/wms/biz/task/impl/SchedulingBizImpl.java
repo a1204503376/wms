@@ -13,7 +13,6 @@ import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.SchedulingBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
-import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.log.dto.input.NoticeMessageRequest;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
@@ -69,12 +68,18 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public String selectAndFrozenEnableOutbound(QueryAndFrozenEnableOutboundRequest request) {
-		// 根据箱型（ABC）获取出库接驳区的库位/D箱人工拣货区库位
-		String area = WmsAppConstant.ZONE_CODE_AGV_SHIPMENT_CONNECTION_AREA;
-		if (Func.equals(request.getLpnTypeCode(), LpnTypeCodeEnum.D)) {
-			area = WmsAppConstant.ZONE_CODE_D_PICK_AREA;
+		WmsTask wmsTask = wmsTaskDao.getById(request.getTaskDetailId());
+		AssertUtil.notNull(wmsTask, "任务在WMS系统中不存在");
+		if (Func.isNotEmpty(wmsTask.getToLocCode())) {
+			throw ExceptionUtil.mpe("任务已经存在目标库位[{}]", wmsTask.getToLocCode());
 		}
-		Zone zone = zoneBiz.findByCode(area);
+
+		// 根据箱型（ABC）获取出库接驳区的库位/D箱人工拣货区库位
+		String zoneCode = WmsAppConstant.ZONE_CODE_AGV_SHIPMENT_CONNECTION_AREA;
+		if (Func.equals(request.getLpnTypeCode(), WmsAppConstant.BOX_TYPE_D)) {
+			zoneCode = WmsAppConstant.ZONE_CODE_D_PICK_AREA;
+		}
+		Zone zone = zoneBiz.findByCode(zoneCode);
 		List<Location> locationList = locationBiz.findLocationByZoneId(zone.getZoneId());
 
 		for (Location location : locationList) {
@@ -83,16 +88,15 @@ public class SchedulingBizImpl implements SchedulingBiz {
 				// 如果没有库存则冻结库位
 				locationBiz.freezeLocByTask(location.getLocId(), request.getTaskDetailId().toString());
 				// 更新任务信息
-				WmsTask wmsTask = wmsTaskDao.getById(request.getTaskDetailId());
-				if (Func.isNotEmpty(wmsTask.getToLocCode())) {
-					throw new ServiceException("查询可用的出库接驳区库位失败，该任务已经存在目标库位");
-				}
 				wmsTask.setToLocId(location.getLocId());
 				wmsTask.setToLocCode(location.getLocCode());
 				wmsTaskDao.updateById(wmsTask);
+				log.info("调度系统,AGV拣货任务{}成功冻结目标库位{}", request.getTaskDetailId(), location.getLocCode());
 				return location.getLocCode();
 			}
 		}
+
+		log.warn("调度系统,AGV拣货任务{}未查询到可用的目标库位", request.getTaskDetailId());
 		return "";
 	}
 
@@ -123,8 +127,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			throw ExceptionUtil.mpe("同步AGV任务状态失败，未知的任务状态");
 		}
 
-		log.info("接收调度系统任务状态变更通知,状态:%d,任务:%d",
-			request.getState(), request.getTaskDetailId());
+		log.info("接收调度系统任务状态变更通知,状态:{},任务:{}", request.getState(), request.getTaskDetailId());
 	}
 
 	/**
@@ -158,7 +161,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 
 		}
 
-		log.info("agv任务开始[%d]-[%s]", wmsTask.getTaskId(), wmsTask);
+		log.info("agv任务开始[{}]-[{}]", wmsTask.getTaskId(), wmsTask);
 	}
 
 	/**
@@ -184,7 +187,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		// 将中间库位的库存移动到目标库位
 		Location targetLoc = locationBiz.findByLocId(wmsTask.getToLocId());
 		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
-		List<Stock> targetStockList = new ArrayList<Stock>();
+		List<Stock> targetStockList = new ArrayList<>();
 		for (Stock stock : stockList) {
 			Stock targetStock = stockBiz.moveAllStockFromDropId(stock, targetLoc, wmsTask.getTaskId().toString(),
 				StockLogTypeEnum.STOCK_AGV_MOVE);
@@ -201,7 +204,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 
 		stockBiz.unfreezeStockByDropId(targetStockList, wmsTask.getTaskId());
 
-		log.info("agv任务结束[%d]-[%s]", wmsTask.getTaskId(), wmsTask);
+		log.info("agv任务结束[{}]-[{}]", wmsTask.getTaskId(), wmsTask);
 	}
 
 	private void onException(WmsTask wmsTask) {
@@ -213,6 +216,6 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		// 修改任务状态
 		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.ABNORMAL);
 
-		log.info("agv任务异常[%d]-[%s]", wmsTask.getTaskId(), wmsTask);
+		log.info("agv任务异常[{}]-[{}]", wmsTask.getTaskId(), wmsTask);
 	}
 }

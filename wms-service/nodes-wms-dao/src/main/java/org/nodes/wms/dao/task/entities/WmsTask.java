@@ -173,6 +173,11 @@ public class WmsTask extends TenantEntity {
 	 */
 	private LocalDateTime closeTime;
 
+	/**
+	 * 任务说明
+	 */
+	private String remark;
+
 	@Version
 	private Integer version;
 }
