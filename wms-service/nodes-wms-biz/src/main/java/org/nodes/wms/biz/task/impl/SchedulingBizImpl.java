@@ -182,9 +182,15 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
 		List<Stock> targetStockList = new ArrayList<Stock>();
 		for (Stock stock : stockList) {
+			List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(wmsTask.getTaskId(), stock.getStockId());
 			Stock targetStock = stockBiz.moveAllStockFromDropId(stock, targetLoc, wmsTask.getTaskId().toString(),
 				StockLogTypeEnum.STOCK_AGV_MOVE);
 			targetStockList.add(targetStock);
+			Location location = locationBiz.findByLocId(targetStock.getLocId());
+			Zone zone = zoneBiz.findById(location.getZoneId());
+			for (SoPickPlan soPickPlan : soPickPlanList) {
+				soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), targetStock.getStockId(), location, zone);
+			}
 		}
 
 		stockBiz.unfreezeStockByDropId(targetStockList, wmsTask.getTaskId());
