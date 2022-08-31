@@ -173,14 +173,14 @@ public interface StockBiz {
 			Long billId, String billNo, String lineNo);
 
 	/**
-	 * 移动库存到落放id，不检验库存状态
+	 * 移动库存到落放id，不检验库存状态，该操作是整体移动
 	 *
 	 * @param sourceStock 源库存
 	 * @param dropId      落放id
 	 * @param type        库存操作类型
 	 * @return 目标库存
 	 */
-	Stock moveAllStockToDropId(Stock sourceStock, String dropId, StockLogTypeEnum type);
+	Stock moveToInTransitByDropId(Stock sourceStock, String dropId, StockLogTypeEnum type);
 
 	/**
 	 * 从落放id全部移动到目标库位，不检验库存状态

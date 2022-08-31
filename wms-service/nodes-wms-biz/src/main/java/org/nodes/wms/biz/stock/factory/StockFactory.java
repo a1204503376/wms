@@ -97,7 +97,6 @@ public class StockFactory {
 		Zone zone = zoneBiz.findById(targetLocation.getZoneId());
 		targetStock.setZoneCode(zone.getZoneCode());
 		targetStock.setLastInTime(LocalDateTime.now());
-		targetStock.setStockStatus(targetLocation.defaultStockStatus());
 
 		if (Func.isNotEmpty(serialNoList)) {
 			targetStock.setHasSerial(WmsAppConstant.TRUE_DEFAULT);
