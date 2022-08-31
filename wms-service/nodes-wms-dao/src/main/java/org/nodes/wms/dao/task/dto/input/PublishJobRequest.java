@@ -22,4 +22,5 @@ public class PublishJobRequest {
 	private Integer jobTypeCode;
 	private String locationNameFrom;
 	private String locationNameTo;
+	private String boxCode;
 }
