@@ -130,8 +130,8 @@ public class StockBizImpl implements StockBiz {
 			List<String> serialNoList = Arrays.asList(Func.split(receiveLog.getSnCode(), ","));
 			if (serialNoList.size() != receiveLog.getQty().intValue()) {
 				throw new ServiceException(
-					String.format("入库失败,采集的序列号个数[%d]与收货数量[%d]不一致",
-						serialNoList.size(), receiveLog.getQty().intValue()));
+					String.format("入库失败,采集的序列号个数[%d]与收货数量[%s]不一致",
+						serialNoList.size(), receiveLog.getQty().toString()));
 			}
 
 			return serialNoList;
@@ -208,9 +208,6 @@ public class StockBizImpl implements StockBiz {
 		for (LogSoPick pickLog : logSoPicks) {
 			Stock stock = stockQueryBiz.findStockOnPickTo(pickLog);
 			if (Func.isNull(stock)) {
-				// throw ExceptionUtil.mpe(
-				// "撤销拣货失败，出库集货区无此库存[物品编码:{},生产批次:{}]", pickLog.getSkuCode(),
-				// pickLog.getSkuLot1());
 				continue;
 			}
 
@@ -236,7 +233,8 @@ public class StockBizImpl implements StockBiz {
 		Stock stock = stockQueryBiz.findStockOnPickTo(pickLog);
 		if (Func.isNull(stock)) {
 			throw ExceptionUtil.mpe(
-				"撤销拣货失败，出库集货区无此库存[物品编码:{},生产批次:{}]", pickLog.getSkuCode(), pickLog.getSkuLot1());
+				"撤销拣货失败，出库集货区无此库存[物品编码:{},生产批次:{}]",
+				pickLog.getSkuCode(), pickLog.getSkuLot1());
 		}
 		// 将库存移动到原库位上
 		List<String> serialNoList = null;
@@ -379,8 +377,7 @@ public class StockBizImpl implements StockBiz {
 			targetBoxCode, targetLpnCode, targetLocation, type, billId, billNo, lineNo);
 	}
 
-	private void canMoveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
-							  Location targetLocation) {
+	private void canMoveStock(Stock sourceStock, BigDecimal qty, Location targetLocation) {
 		AssertUtil.notNull(targetLocation, "库存移动失败，目标库位为空");
 
 		StockUtil.assertPick(sourceStock, qty, "库存移动失败");
@@ -398,7 +395,7 @@ public class StockBizImpl implements StockBiz {
 		}
 	}
 
-	private void checkQtyOfSerial(Stock stock, List<String> serialNoList, BigDecimal moveQty) {
+	private void checkQtyOfSerial(List<String> serialNoList, BigDecimal moveQty) {
 		if (Func.isNotEmpty(serialNoList)) {
 			List<String> serialNos = serialNoList.stream()
 				.distinct()
@@ -472,9 +469,9 @@ public class StockBizImpl implements StockBiz {
 						   Location targetLocation, StockLogTypeEnum type, String dropId,
 						   Long billId, String billNo, String lineNo) {
 
-		canMoveStock(sourceStock, serialNoList, qty, targetLocation);
+		canMoveStock(sourceStock, qty, targetLocation);
 		checkStockStatus(sourceStock);
-		checkQtyOfSerial(sourceStock, serialNoList, qty);
+		checkQtyOfSerial(serialNoList, qty);
 		checkSerialOnStock(sourceStock, serialNoList);
 
 		return runMoveStock(sourceStock, serialNoList, qty, targetBoxCode, targetLpnCode,
@@ -592,8 +589,8 @@ public class StockBizImpl implements StockBiz {
 		}
 		List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
 		Location inTransitLocation = locationBiz.getInTransitLocation(sourceStock.getWhId());
-		canMoveStock(sourceStock, serialNoList, sourceStock.getStockEnable(), inTransitLocation);
-		checkQtyOfSerial(sourceStock, serialNoList, sourceStock.getStockEnable());
+		canMoveStock(sourceStock, sourceStock.getStockEnable(), inTransitLocation);
+		checkQtyOfSerial(serialNoList, sourceStock.getStockEnable());
 
 		return runMoveStockByDropId(sourceStock, serialNoList, inTransitLocation, dropId, type, false);
 	}
@@ -607,8 +604,8 @@ public class StockBizImpl implements StockBiz {
 			throw ExceptionUtil.mpe("按DropId[%s]移动库存,原库存[%d]已全部下架", dropId, sourceStock.getStockId());
 		}
 		List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
-		canMoveStock(sourceStock, serialNoList, sourceStock.getStockEnable(), targetLocation);
-		checkQtyOfSerial(sourceStock, serialNoList, sourceStock.getStockEnable());
+		canMoveStock(sourceStock, sourceStock.getStockEnable(), targetLocation);
+		checkQtyOfSerial(serialNoList, sourceStock.getStockEnable());
 		return runMoveStockByDropId(sourceStock, serialNoList, targetLocation, dropId, type, true);
 	}
 
@@ -622,7 +619,7 @@ public class StockBizImpl implements StockBiz {
 			targetStock = stockFactory.create(sourceStock, targetLoc, sourceStock.getLpnCode(),
 				sourceStock.getBoxCode(), sourceStock.getStockBalance(), serialNoList);
 			targetStock.setOccupyQty(sourceStock.getOccupyQty());
-			if (cleanDropId){
+			if (cleanDropId) {
 				targetStock.setDropId(null);
 			}
 			stockDao.saveNewStock(targetStock);
@@ -631,7 +628,7 @@ public class StockBizImpl implements StockBiz {
 		} else {
 			StockUtil.addQty(targetStock, sourceStock.getStockBalance());
 			targetStock.setOccupyQty(targetStock.getOccupyQty().add(sourceStock.getOccupyQty()));
-			if (cleanDropId){
+			if (cleanDropId) {
 				targetStock.setDropId(null);
 			}
 			stockDao.updateStock(targetStock);
@@ -823,7 +820,8 @@ public class StockBizImpl implements StockBiz {
 		page.setSize(100000);
 		List<StockBySerialPageResponse> stockBySerialPageResponseList = stockDao.page(page, stockBySerialPageQuery)
 			.getRecords();
-		ExcelUtil.export(response, "库存余额", "库存余额数据表", stockBySerialPageResponseList, StockBySerialPageResponse.class);
+		ExcelUtil.export(response, "库存余额", "库存余额数据表",
+			stockBySerialPageResponseList, StockBySerialPageResponse.class);
 	}
 
 	@Override
@@ -849,8 +847,9 @@ public class StockBizImpl implements StockBiz {
 								Long stockId, BigDecimal currentOccupy) {
 		Stock stock = stockDao.getStockById(stockId);
 		if (BigDecimalUtil.gt(currentOccupy, stock.getStockEnable())) {
-			throw new ServiceException(String.format("占用库存失败,[%d][%s]当前余额[%d]可用[%d],当前占用量[%d]超过可用量",
-				stockId, stock.getSkuCode(), stock.getStockBalance(), stock.getStockEnable(), currentOccupy));
+			throw new ServiceException(String.format("占用库存失败,[%d][%s]当前余额[%s]可用[%s],当前占用量[%s]超过可用量",
+				stockId, stock.getSkuCode(), stock.getStockBalance().toString(),
+				stock.getStockEnable().toString(), currentOccupy.toString()));
 		}
 
 		stock.setOccupyQty(stock.getOccupyQty().add(currentOccupy));
@@ -867,8 +866,9 @@ public class StockBizImpl implements StockBiz {
 							  Long stockId, BigDecimal currentUnOccupy) {
 		Stock stock = stockDao.getStockById(stockId);
 		if (BigDecimalUtil.gt(currentUnOccupy, stock.getOccupyQty())) {
-			throw new ServiceException(String.format("释放占用库存失败,[%d][%s]当前余额[%f]占用[%f],当前释放量[%f]超过占用量",
-				stockId, stock.getSkuCode(), stock.getStockBalance(), stock.getOccupyQty(), currentUnOccupy));
+			throw new ServiceException(String.format("释放占用库存失败,[%d][%s]当前余额[%s]占用[%s],当前释放量[%s]超过占用量",
+				stockId, stock.getSkuCode(), stock.getStockBalance().toString(),
+				stock.getOccupyQty().toString(), currentUnOccupy.toString()));
 		}
 
 		stock.setOccupyQty(stock.getOccupyQty().subtract(currentUnOccupy));
