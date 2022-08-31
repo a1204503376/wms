@@ -81,6 +81,9 @@ public class SchedulingBizImpl implements SchedulingBiz {
 				locationBiz.freezeLocByTask(location.getLocId(), request.getTaskDetailId().toString());
 				// 更新任务信息
 				WmsTask wmsTask = wmsTaskDao.getById(request.getTaskDetailId());
+				if (Func.isNotEmpty(wmsTask.getToLocCode())) {
+					throw new ServiceException("同步任务状态失败，该任务已经存在目标库位");
+				}
 				wmsTask.setToLocId(location.getLocId());
 				wmsTask.setToLocCode(location.getLocCode());
 				wmsTaskDao.updateById(wmsTask);
@@ -96,7 +99,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		for (SchedulingBroadcastNotificationRequest notificationRequest : request) {
 			NoticeMessageRequest message = new NoticeMessageRequest();
 			message.setLog(String.format("任务[%s]：[%s]",
-					notificationRequest.getTaskDetailId(), notificationRequest.getMsg()));
+				notificationRequest.getTaskDetailId(), notificationRequest.getMsg()));
 			logBiz.noticeMesssage(message);
 		}
 	}
@@ -118,7 +121,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		}
 
 		log.info("接收调度系统任务状态变更通知,状态:%d,任务:%d",
-				request.getState(), request.getTaskDetailId());
+			request.getState(), request.getTaskDetailId());
 	}
 
 	/**
@@ -131,7 +134,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	private void onStart(WmsTask wmsTask) {
 		boolean checkTaskState = WmsTaskStateEnum.ISSUED.equals(wmsTask.getTaskState())
 			|| WmsTaskStateEnum.ABNORMAL.equals(wmsTask.getTaskState());
-		if (!checkTaskState){
+		if (!checkTaskState) {
 			throw new ServiceException("状态更新失败,只有已下发的任务才可以执行");
 		}
 		// 修改任务状态
@@ -159,8 +162,8 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			|| WmsTaskStateEnum.ABNORMAL.equals(wmsTask.getTaskState());
 		if (!checkTaskState) {
 			throw new ServiceException(String.format(
-					"任务执行完毕状态更新失败,任务[%d]当前状态[%s]不是开始执行状态",
-					wmsTask.getTaskId(), wmsTask.getTaskState().getDesc()));
+				"任务执行完毕状态更新失败,任务[%d]当前状态[%s]不是开始执行状态",
+				wmsTask.getTaskId(), wmsTask.getTaskState().getDesc()));
 		}
 		// 修改任务状态
 		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.COMPLETED);
@@ -171,7 +174,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		List<Stock> targetStockList = new ArrayList<Stock>();
 		for (Stock stock : stockList) {
 			Stock targetStock = stockBiz.moveAllStockFromDropId(stock, targetLoc, wmsTask.getTaskId().toString(),
-					StockLogTypeEnum.STOCK_AGV_MOVE);
+				StockLogTypeEnum.STOCK_AGV_MOVE);
 			targetStockList.add(targetStock);
 		}
 
@@ -183,7 +186,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	private void onException(WmsTask wmsTask) {
 		boolean checkTaskState = WmsTaskStateEnum.COMPLETED.equals(wmsTask.getTaskState())
 			|| WmsTaskStateEnum.CANCELED.equals(wmsTask.getTaskState());
-		if (!checkTaskState){
+		if (!checkTaskState) {
 			throw new ServiceException("状态更新失败,任务已经完成");
 		}
 		// 修改任务状态
