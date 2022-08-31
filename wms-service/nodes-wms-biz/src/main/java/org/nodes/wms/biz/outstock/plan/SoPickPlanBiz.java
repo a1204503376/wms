@@ -142,4 +142,13 @@ public interface SoPickPlanBiz {
 	 * @param zone       库区
 	 */
 	void updatePickByPartParam(Long pickPlanId, Long stockId, Location location, Zone zone);
+
+	/**
+	 * 根据任务ID库存ID查询跟当前任务相关联的拣货计划
+	 *
+	 * @param taskId  任务ID
+	 * @param stockId 库存ID
+	 * @return 拣货计划
+	 */
+	List<SoPickPlan> findPickByTaskId(Long taskId, Long stockId);
 }

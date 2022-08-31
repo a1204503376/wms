@@ -9,6 +9,7 @@ import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
+import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.SchedulingBiz;
@@ -16,6 +17,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.log.dto.input.NoticeMessageRequest;
+import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.nodes.wms.dao.task.WmsTaskDao;
@@ -62,6 +64,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	private final StockQueryBiz stockQueryBiz;
 	private final StockBiz stockBiz;
 	private final WmsTaskDao wmsTaskDao;
+	private final SoPickPlanBiz soPickPlanBiz;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -142,7 +145,13 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		// 将原库位库存移动到中间库位
 		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
 		for (Stock stock : stockList) {
-			stockBiz.moveAllStockToDropId(stock, wmsTask.getTaskId().toString(), StockLogTypeEnum.STOCK_AGV_MOVE);
+			List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(wmsTask.getTaskId(), stock.getStockId());
+			Stock middleStock = stockBiz.moveAllStockToDropId(stock, wmsTask.getTaskId().toString(), StockLogTypeEnum.STOCK_AGV_MOVE);
+			Location location = locationBiz.findByLocId(middleStock.getLocId());
+			Zone zone = zoneBiz.findById(location.getZoneId());
+			for (SoPickPlan soPickPlan : soPickPlanList) {
+				soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), middleStock.getStockId(), location, zone);
+			}
 		}
 
 		log.info("agv任务开始[%d]-[%s]", wmsTask.getTaskId(), wmsTask);

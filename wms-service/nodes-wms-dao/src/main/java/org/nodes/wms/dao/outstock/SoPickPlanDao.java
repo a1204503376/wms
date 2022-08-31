@@ -102,4 +102,13 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 	 * @param zone       库区
 	 */
 	void updatePickByPartParam(Long pickPlanId, Long stockId, Location location, Zone zone);
+
+	/**
+	 * 根据任务和库存ID查询对应的拣货计划
+	 *
+	 * @param taskId  任务ID
+	 * @param stockId 库存ID
+	 * @return 对应的拣货计划
+	 */
+	List<SoPickPlan> getPickByTaskIdAndStockId(Long taskId, Long stockId);
 }
