@@ -91,4 +91,9 @@ public class PublishJobRequest {
      * 位置终点(库位)
      */
     private String locationNameTo;
+
+    /**
+     * 箱码
+     */
+    private String boxCode;
 }
