@@ -34,4 +34,17 @@ public interface StockMergeStrategy {
 	 * @return 和清点记录相同的库存
 	 */
 	Stock matchSameStock(LogSoPick pickLog, Location pickToLoc);
+
+	/**
+	 * 生成预期待合并的库存
+	 *
+	 * @param sourceStock    原库存
+	 * @param targetLocation 目标库位
+	 * @param targetBoxCode  目标箱码
+	 * @param targetLpnCode  目标LPN
+	 * @param dropId         dropId
+	 * @return 预期库存
+	 */
+	Stock newExpectedStock(Stock sourceStock, Location targetLocation, String targetBoxCode,
+						   String targetLpnCode, String dropId);
 }

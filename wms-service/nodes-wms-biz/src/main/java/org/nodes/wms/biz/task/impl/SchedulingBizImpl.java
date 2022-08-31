@@ -146,7 +146,8 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
 		for (Stock stock : stockList) {
 			List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(wmsTask.getTaskId(), stock.getStockId());
-			Stock middleStock = stockBiz.moveAllStockToDropId(stock, wmsTask.getTaskId().toString(), StockLogTypeEnum.STOCK_AGV_MOVE);
+			Stock middleStock = stockBiz.moveToInTransitByDropId(stock, wmsTask.getTaskId().toString(),
+				StockLogTypeEnum.STOCK_AGV_MOVE);
 			Location location = locationBiz.findByLocId(middleStock.getLocId());
 			Zone zone = zoneBiz.findById(location.getZoneId());
 			for (SoPickPlan soPickPlan : soPickPlanList) {
