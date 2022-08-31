@@ -2,6 +2,7 @@ package com.nodes.processor;
 
 import com.nodes.project.api.enums.ProcessorEnum;
 import com.nodes.project.api.service.ProcessorService;
+import org.springframework.stereotype.Component;
 import tech.powerjob.worker.core.processor.ProcessResult;
 import tech.powerjob.worker.core.processor.TaskContext;
 import tech.powerjob.worker.core.processor.sdk.BasicProcessor;
@@ -11,6 +12,7 @@ import javax.annotation.Resource;
 /**
  * C箱出库
  */
+@Component
 public class OutboundCProcessor implements BasicProcessor {
 
     @Resource

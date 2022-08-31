@@ -1,6 +1,7 @@
 package com.nodes.project.api.service.impl;
 
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.nodes.common.constant.JobConstants;
 import com.nodes.common.exception.ServiceException;
@@ -25,6 +26,7 @@ import com.nodes.project.api.service.JobQueueService;
 import com.nodes.project.api.service.JobTimeoutService;
 import com.nodes.project.system.dict.utils.DictUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -267,6 +269,22 @@ public class JobQueueServiceImpl extends ServiceImpl<JobQueueMapper, JobQueue>
                 .set(JobQueue::getBeginTime, jobQueue.getBeginTime())
                 .eq(JobQueue::getId, jobQueue.getId())
                 .update();
+    }
+
+    @Override
+    public void updateLocationNameToById(String id, String locationNameTo) {
+        if (ObjectUtils.isEmpty(id)) {
+            throw new ServiceException("更新任务目标库位失败,任务ID为空");
+        }
+        if (ObjectUtils.isEmpty(locationNameTo)) {
+            throw new ServiceException("更新任务目标库位失败,目标库位为空");
+        }
+        LambdaUpdateChainWrapper<JobQueue> wrapper = super.lambdaUpdate()
+                .set(JobQueue::getLocationNameTo, locationNameTo)
+                .eq(JobQueue::getId, id);
+        if (!wrapper.update()) {
+            throw new ServiceException("更新任务目标库位失败");
+        }
     }
 
     private String validStatusErrorMsg(JobQueue jobQueue, JobActionRequest jobActionRequest, String validMsg) {

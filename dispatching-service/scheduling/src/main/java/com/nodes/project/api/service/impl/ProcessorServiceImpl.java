@@ -136,16 +136,20 @@ public class ProcessorServiceImpl implements ProcessorService {
 
         JobQueue jobQueue = optionalJobQueue.get();
         // 调用WMS API 判定库位是否可用
-        WmsGlobalResponse wmsGlobalResponse = callWmsService.queryAndFrozenEnableOutbound(jobQueue);
-        if (WmsGlobalResponse.hasException(wmsGlobalResponse)) {
-            omsLogger.debug("呼叫WMS异常：{}", wmsGlobalResponse.getMsg());
-            return ProcessResultUtils.failed();
-        }
+        if (jobQueue.getLocationNameTo() == null
+                || jobQueue.getLocationNameTo().equals("")) {
+            WmsGlobalResponse wmsGlobalResponse = callWmsService.queryAndFrozenEnableOutbound(jobQueue);
+            if (WmsGlobalResponse.hasException(wmsGlobalResponse)) {
+                omsLogger.debug("呼叫WMS异常：{}", wmsGlobalResponse.getMsg());
+                return ProcessResultUtils.failed();
+            }
 
-        WmsResponse wmsResponse = wmsGlobalResponse.getWmsResponse();
-        if (WmsResponse.isFailed(wmsResponse)) {
-            omsLogger.debug("WMS返回失败，原因：{}", wmsResponse.getMsg());
-            return ProcessResultUtils.failed();
+            WmsResponse wmsResponse = wmsGlobalResponse.getWmsResponse();
+            if (WmsResponse.isFailed(wmsResponse)) {
+                omsLogger.debug("WMS返回失败，原因：{}", wmsResponse.getMsg());
+                return ProcessResultUtils.failed();
+            }
+            jobQueueService.updateLocationNameToById(jobQueue.getId(), wmsResponse.getData().toString());
         }
 
         return ProcessResultUtils.success();
