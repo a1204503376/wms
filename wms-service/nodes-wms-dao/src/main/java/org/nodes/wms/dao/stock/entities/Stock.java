@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.nodes.core.constant.WmsAppConstant;
+import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
@@ -178,5 +179,9 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	@JsonSerialize
 	public String getHasSerialString() {
 		return WmsAppConstant.TRUE_DEFAULT.equals(this.hasSerial) ? "是" : "否";
+	}
+
+	public boolean isEmptyStock(){
+		return BigDecimalUtil.eq(getStockBalance(), BigDecimal.ZERO);
 	}
 }

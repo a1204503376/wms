@@ -97,7 +97,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		}
 
 		log.warn("调度系统,AGV拣货任务{}未查询到可用的目标库位", request.getTaskDetailId());
-		return "";
+		throw ExceptionUtil.mpe("未查询到可用的目标库位");
 	}
 
 	@Override

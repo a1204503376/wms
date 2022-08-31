@@ -1,6 +1,8 @@
 package org.nodes.wms.biz.outstock.plan.modular;
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.utils.BigDecimalUtil;
+import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.entities.Stock;
@@ -43,6 +45,10 @@ public class SoPickPlanFactory {
 	}
 
 	public SoPickPlan create(Long soHeaderId, SoDetail soDetail, Stock stock, BigDecimal planQty) {
+		if (BigDecimalUtil.le(planQty, BigDecimal.ZERO)){
+			throw ExceptionUtil.mpe("创建拣货计划失败,计划数量不能小于等于0");
+		}
+
 		SoPickPlan soPickPlan = Func.copy(stock, SoPickPlan.class);
 		if (Func.notNull(soDetail)) {
 			soPickPlan.setSoDetailId(soDetail.getSoDetailId());

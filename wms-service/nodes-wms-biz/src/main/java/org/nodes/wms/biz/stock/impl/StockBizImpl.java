@@ -587,12 +587,9 @@ public class StockBizImpl implements StockBiz {
 		if (BigDecimalUtil.le(sourceStock.getStockBalance(), BigDecimal.ZERO)) {
 			throw ExceptionUtil.mpe("按DropId[%s]移动库存,原库存[%d]已全部下架", dropId, sourceStock.getStockId());
 		}
-		List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
-		Location inTransitLocation = locationBiz.getInTransitLocation(sourceStock.getWhId());
-		canMoveStock(sourceStock, sourceStock.getStockEnable(), inTransitLocation);
-		checkQtyOfSerial(serialNoList, sourceStock.getStockEnable());
 
-		return runMoveStockByDropId(sourceStock, serialNoList, inTransitLocation, dropId, type, false);
+		Location inTransitLocation = locationBiz.getInTransitLocation(sourceStock.getWhId());
+		return runMoveStockByDropId(sourceStock, inTransitLocation, dropId, type, false);
 	}
 
 	@Override
@@ -603,14 +600,18 @@ public class StockBizImpl implements StockBiz {
 		if (BigDecimalUtil.le(sourceStock.getStockBalance(), BigDecimal.ZERO)) {
 			throw ExceptionUtil.mpe("按DropId[%s]移动库存,原库存[%d]已全部下架", dropId, sourceStock.getStockId());
 		}
-		List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
-		canMoveStock(sourceStock, sourceStock.getStockEnable(), targetLocation);
-		checkQtyOfSerial(serialNoList, sourceStock.getStockEnable());
-		return runMoveStockByDropId(sourceStock, serialNoList, targetLocation, dropId, type, true);
+
+		return runMoveStockByDropId(sourceStock, targetLocation, dropId, type, true);
 	}
 
-	private Stock runMoveStockByDropId(Stock sourceStock, List<String> serialNoList,
-									   Location targetLoc, String dropId, StockLogTypeEnum type, boolean cleanDropId) {
+	private Stock runMoveStockByDropId(Stock sourceStock, Location targetLoc,
+									   String dropId, StockLogTypeEnum type, boolean cleanDropId) {
+		List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
+		if (sourceStock.isEmptyStock()){
+			throw ExceptionUtil.mpe("按dropId移动库存失败,库存[{}]已经全部下架", sourceStock.getStockId());
+		}
+		checkQtyOfSerial(serialNoList, sourceStock.getStockBalance());
+
 		Stock tempTargetStock = stockMergeStrategy.newExpectedStock(sourceStock, targetLoc,
 			sourceStock.getBoxCode(), sourceStock.getLpnCode(), dropId);
 		Stock targetStock = stockMergeStrategy.matchCanMergeStock(tempTargetStock);
