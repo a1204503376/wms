@@ -45,7 +45,7 @@ public class SoPickPlanFactory {
 	}
 
 	public SoPickPlan create(Long soHeaderId, SoDetail soDetail, Stock stock, BigDecimal planQty) {
-		if (BigDecimalUtil.le(planQty, BigDecimal.ZERO)){
+		if (BigDecimalUtil.le(planQty, BigDecimal.ZERO)) {
 			throw ExceptionUtil.mpe("创建拣货计划失败,计划数量不能小于等于0");
 		}
 

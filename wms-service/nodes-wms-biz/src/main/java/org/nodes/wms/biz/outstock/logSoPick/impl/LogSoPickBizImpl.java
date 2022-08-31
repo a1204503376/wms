@@ -1,11 +1,7 @@
 package org.nodes.wms.biz.outstock.logSoPick.impl;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
@@ -23,13 +19,14 @@ import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-
-import lombok.RequiredArgsConstructor;
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 拣货记录日志接口实现类
- * 
+ *
  * @author nodesc
  **/
 @Service
@@ -45,7 +42,7 @@ public class LogSoPickBizImpl implements LogSoPickBiz {
 
 	@Override
 	public Page<LogSoPickForSoDetailResponse> pageLogSoPickForSoDetailBySoBillId(Query query,
-			SoBillIdRequest soBillIdRequest) {
+																				 SoBillIdRequest soBillIdRequest) {
 		return logSoPickDao.pageForSoDetailBySoBillId(Condition.getPage(query), soBillIdRequest.getSoBillId());
 	}
 
@@ -74,23 +71,23 @@ public class LogSoPickBizImpl implements LogSoPickBiz {
 
 		// 排除撤销的记录
 		List<LogSoPick> cancelPickLogs = allPickLog.stream()
-				.filter(item -> BigDecimalUtil.le(item.getPickRealQty(), BigDecimal.ZERO))
-				.collect(Collectors.toList());
+			.filter(item -> BigDecimalUtil.le(item.getPickRealQty(), BigDecimal.ZERO))
+			.collect(Collectors.toList());
 		if (Func.isEmpty(cancelPickLogs)) {
 			return allPickLog;
 		}
 
 		// 正向的拣货记录
 		List<LogSoPick> result = allPickLog.stream()
-				.filter(item -> BigDecimalUtil.gt(item.getPickRealQty(), BigDecimal.ZERO))
-				.collect(Collectors.toList());
+			.filter(item -> BigDecimalUtil.gt(item.getPickRealQty(), BigDecimal.ZERO))
+			.collect(Collectors.toList());
 		for (LogSoPick logSoPickOfCancel : cancelPickLogs) {
 			// 从正向拣货记录中排除撤销的记录
 			for (LogSoPick item : result) {
 				if (SkuLotUtil.compareAllSkuLot(item, logSoPickOfCancel)
-						&& BigDecimalUtil
-								.eq(item.getPickRealQty().add(logSoPickOfCancel.getPickRealQty()), BigDecimal.ZERO)
-						&& item.getSoDetailId().equals(logSoPickOfCancel.getSoDetailId())) {
+					&& BigDecimalUtil
+					.eq(item.getPickRealQty().add(logSoPickOfCancel.getPickRealQty()), BigDecimal.ZERO)
+					&& item.getSoDetailId().equals(logSoPickOfCancel.getSoDetailId())) {
 					result.remove(item);
 					break;
 				}

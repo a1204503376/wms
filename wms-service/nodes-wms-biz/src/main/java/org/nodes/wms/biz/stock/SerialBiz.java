@@ -53,7 +53,7 @@ public interface SerialBiz {
 	 * 序列号：导出
 	 *
 	 * @param serialPageQuery 条件参数
-	 * @param response 响应对象
+	 * @param response        响应对象
 	 */
 	void export(SerialPageQuery serialPageQuery, HttpServletResponse response);
 }

@@ -1,7 +1,6 @@
 package org.nodes.wms.biz.stock.factory;
 
 import lombok.RequiredArgsConstructor;
-
 import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
@@ -13,7 +12,6 @@ import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.common.stock.StockUtil;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.stock.entities.Stock;
-import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Component;
@@ -79,7 +77,7 @@ public class StockFactory {
 	}
 
 	public Stock create(Stock sourceStock, Location targetLocation,
-			String targetLpnCode, String targetBoxCode, BigDecimal qty, List<String> serialNoList) {
+						String targetLpnCode, String targetBoxCode, BigDecimal qty, List<String> serialNoList) {
 		AssertUtil.notNull(sourceStock, "创建库存失败，原库存为空");
 		AssertUtil.notNull(targetLocation, "创建库存失败，目标库位为空");
 		AssertUtil.notNull(qty, "创建库存失败，数量为空");

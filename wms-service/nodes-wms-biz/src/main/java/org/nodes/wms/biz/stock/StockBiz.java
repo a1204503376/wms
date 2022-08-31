@@ -1,10 +1,5 @@
 package org.nodes.wms.biz.stock;
 
-import java.math.BigDecimal;
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
@@ -16,6 +11,10 @@ import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
+
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 库存业务接口
@@ -74,8 +73,8 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
-			Location targetLocation, StockLogTypeEnum type,
-			Long billId, String billNo, String lineNo);
+					Location targetLocation, StockLogTypeEnum type,
+					Long billId, String billNo, String lineNo);
 
 	/**
 	 * 整库存移动,自动计算关联序列号
@@ -91,7 +90,7 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	Stock moveAllStock(Stock sourceStock, String targetBoxCode, String targetLpnCode,
-			Location targetLocation, StockLogTypeEnum type, Long billId, String billNo, String lineNo);
+					   Location targetLocation, StockLogTypeEnum type, Long billId, String billNo, String lineNo);
 
 	/**
 	 * 库存移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -111,9 +110,9 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
-			String targetBoxCode, String targetLpnCode,
-			Location targetLocation, StockLogTypeEnum type,
-			Long billId, String billNo, String lineNo);
+					String targetBoxCode, String targetLpnCode,
+					Location targetLocation, StockLogTypeEnum type,
+					Long billId, String billNo, String lineNo);
 
 	/**
 	 * 库存移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -134,9 +133,9 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
-			String targetBoxCode, String targetLpnCode,
-			Location targetLocation, StockLogTypeEnum type, String dropId,
-			Long billId, String billNo, String lineNo);
+					String targetBoxCode, String targetLpnCode,
+					Location targetLocation, StockLogTypeEnum type, String dropId,
+					Long billId, String billNo, String lineNo);
 
 	/**
 	 * 整箱移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -153,8 +152,8 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	List<Stock> moveStockByBoxCode(String boxCode, String targetBoxCode, String targetLpnCode,
-			Location targetLocation, StockLogTypeEnum type,
-			Long billId, String billNo, String lineNo);
+								   Location targetLocation, StockLogTypeEnum type,
+								   Long billId, String billNo, String lineNo);
 
 	/**
 	 * 整托移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -170,7 +169,7 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	List<Stock> moveStockByLpnCode(String lpnCode, String targetLpnCode, Location targetLocation, StockLogTypeEnum type,
-			Long billId, String billNo, String lineNo);
+								   Long billId, String billNo, String lineNo);
 
 	/**
 	 * 移动库存到落放id，不检验库存状态，该操作是整体移动
@@ -344,7 +343,7 @@ public interface StockBiz {
 	 * @return 更新之后的stock
 	 */
 	Stock increaseOccupy(Long soBillId, String soBillNo, Long soDetailId,
-			Long stockId, BigDecimal currentOccupy);
+						 Long stockId, BigDecimal currentOccupy);
 
 	/**
 	 * 减少占用量,更新之后的占用量等于原占用量减本次的currentOccupy。如果不用减则会抛异常
@@ -357,5 +356,5 @@ public interface StockBiz {
 	 * @return 更新之后的stock
 	 */
 	Stock reduceOccupy(Long soBillId, String soBillNo, Long soDetailId,
-			Long stockId, BigDecimal currentUnOccupy);
+					   Long stockId, BigDecimal currentUnOccupy);
 }

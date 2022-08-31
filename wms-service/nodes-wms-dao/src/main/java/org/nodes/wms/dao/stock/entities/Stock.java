@@ -181,7 +181,7 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 		return WmsAppConstant.TRUE_DEFAULT.equals(this.hasSerial) ? "是" : "否";
 	}
 
-	public boolean isEmptyStock(){
+	public boolean isEmptyStock() {
 		return BigDecimalUtil.eq(getStockBalance(), BigDecimal.ZERO);
 	}
 }

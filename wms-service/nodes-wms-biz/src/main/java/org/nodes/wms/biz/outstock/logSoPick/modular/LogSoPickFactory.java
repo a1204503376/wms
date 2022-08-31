@@ -1,8 +1,6 @@
 package org.nodes.wms.biz.outstock.logSoPick.modular;
 
-import java.math.BigDecimal;
-import java.util.List;
-
+import lombok.RequiredArgsConstructor;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.PickByPcsRequest;
@@ -15,7 +13,8 @@ import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Component;
 
-import lombok.RequiredArgsConstructor;
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 拣货记录工厂
@@ -36,7 +35,7 @@ public class LogSoPickFactory {
 	 * @return 拣货记录实体
 	 */
 	public LogSoPick createLogSoPick(PickByPcStockDto pickByPcStockDto, SoHeader soHeader, SoDetail soDetail,
-			Stock stock) {
+									 Stock stock) {
 		LogSoPick logSoPick = new LogSoPick();
 		logSoPick.setLocId(pickByPcStockDto.getLocId());
 		logSoPick.setLocCode(pickByPcStockDto.getLocCode());
@@ -84,7 +83,7 @@ public class LogSoPickFactory {
 	 * @return 拣货记录实体
 	 */
 	public LogSoPick createLogSoPick(PickByPcsRequest request, SoHeader soHeader, SoDetail soDetail, Stock stock,
-			Location location) {
+									 Location location) {
 		LogSoPick logSoPick = new LogSoPick();
 		logSoPick.setLocId(location.getLocId());
 		logSoPick.setLocCode(location.getLocCode());
@@ -122,7 +121,7 @@ public class LogSoPickFactory {
 	}
 
 	public LogSoPick create(SoDetail soDetail, SoPickPlan pickPlan, BigDecimal pickQty, List<String> serialNoList,
-			Stock stock) {
+							Stock stock) {
 		LogSoPick logSoPick = new LogSoPick();
 		logSoPick.setLocId(stock.getLocId());
 		logSoPick.setLocCode(stock.getLocCode());

@@ -46,7 +46,7 @@ public interface LogSoPickBiz {
 	 * 导出
 	 *
 	 * @param logSoPickPageQuery: 导出时条件参数
-	 * @param response 响应对象
+	 * @param response            响应对象
 	 */
 	void export(LogSoPickPageQuery logSoPickPageQuery, HttpServletResponse response);
 
@@ -64,5 +64,5 @@ public interface LogSoPickBiz {
 	 * @param soBillId 发货单id
 	 * @return 有效的拣货记录
 	 */
-    List<LogSoPick> findEnableBySoHeaderId(Long soBillId);
+	List<LogSoPick> findEnableBySoHeaderId(Long soBillId);
 }

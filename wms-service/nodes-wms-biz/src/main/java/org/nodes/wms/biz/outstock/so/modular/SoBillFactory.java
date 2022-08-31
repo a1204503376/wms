@@ -51,7 +51,7 @@ public class SoBillFactory {
 
 		if (Func.isNotEmpty(soBillAddOrEditRequest.getCustomerId())) {
 			BasicsCustomer customer = customerBiz.findCustomerById(soBillAddOrEditRequest.getCustomerId());
-			AssertUtil.notNull(customer,"该客户不存在，请稍后再试");
+			AssertUtil.notNull(customer, "该客户不存在，请稍后再试");
 			// 客户编码和名称
 			soHeader.setCustomerCode(customer.getCode());
 			soHeader.setCustomerName(customer.getName());

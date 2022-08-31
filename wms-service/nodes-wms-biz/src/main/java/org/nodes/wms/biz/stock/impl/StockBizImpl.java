@@ -607,7 +607,7 @@ public class StockBizImpl implements StockBiz {
 	private Stock runMoveStockByDropId(Stock sourceStock, Location targetLoc,
 									   String dropId, StockLogTypeEnum type, boolean cleanDropId) {
 		List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
-		if (sourceStock.isEmptyStock()){
+		if (sourceStock.isEmptyStock()) {
 			throw ExceptionUtil.mpe("按dropId移动库存失败,库存[{}]已经全部下架", sourceStock.getStockId());
 		}
 		checkQtyOfSerial(serialNoList, sourceStock.getStockBalance());
