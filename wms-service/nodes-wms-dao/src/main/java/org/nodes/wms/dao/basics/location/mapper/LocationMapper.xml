@@ -8,8 +8,7 @@
                loc_code
         FROM wms_location
         WHERE loc_code LIKE CONCAT('%', #{locCode}, '%')
-        ORDER BY update_time DESC
-        LIMIT 10
+        ORDER BY update_time DESC LIMIT 10
     </select>
 
     <sql id="tableList">
@@ -169,6 +168,7 @@
                 and z.zone_type=#{zoneType}
             </if>
             AND l.loc_status = 1
+            AND (l.loc_flag is null or l.loc_flag = 1)
         </where>
         ORDER BY l.put_order
     </select>
@@ -231,7 +231,7 @@
         SELECT zone.zone_type
         FROM wms_location loc
                  LEFT JOIN wms_zone zone
-                           ON zone.zone_id = loc.zone_id
+        ON zone.zone_id = loc.zone_id
         WHERE loc.loc_id = #{locId}
     </select>
 </mapper>
