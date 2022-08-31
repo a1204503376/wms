@@ -69,12 +69,18 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public String selectAndFrozenEnableOutbound(QueryAndFrozenEnableOutboundRequest request) {
-		// 根据箱型（ABC）获取出库接驳区的库位/D箱人工拣货区库位
-		String area = WmsAppConstant.ZONE_CODE_AGV_SHIPMENT_CONNECTION_AREA;
-		if (Func.equals(request.getLpnTypeCode(), LpnTypeCodeEnum.D)) {
-			area = WmsAppConstant.ZONE_CODE_D_PICK_AREA;
+		WmsTask wmsTask = wmsTaskDao.getById(request.getTaskDetailId());
+		AssertUtil.notNull(wmsTask, "任务在WMS系统中不存在");
+		if (Func.isNotEmpty(wmsTask.getToLocCode())) {
+			throw ExceptionUtil.mpe("任务已经存在目标库位[{}]", wmsTask.getToLocCode());
 		}
-		Zone zone = zoneBiz.findByCode(area);
+
+		// 根据箱型（ABC）获取出库接驳区的库位/D箱人工拣货区库位
+		String zoneCode = WmsAppConstant.ZONE_CODE_AGV_SHIPMENT_CONNECTION_AREA;
+		if (Func.equals(request.getLpnTypeCode(), WmsAppConstant.BOX_TYPE_D)) {
+			zoneCode = WmsAppConstant.ZONE_CODE_D_PICK_AREA;
+		}
+		Zone zone = zoneBiz.findByCode(zoneCode);
 		List<Location> locationList = locationBiz.findLocationByZoneId(zone.getZoneId());
 
 		for (Location location : locationList) {
@@ -83,10 +89,6 @@ public class SchedulingBizImpl implements SchedulingBiz {
 				// 如果没有库存则冻结库位
 				locationBiz.freezeLocByTask(location.getLocId(), request.getTaskDetailId().toString());
 				// 更新任务信息
-				WmsTask wmsTask = wmsTaskDao.getById(request.getTaskDetailId());
-				if (Func.isNotEmpty(wmsTask.getToLocCode())) {
-					throw new ServiceException("查询可用的出库接驳区库位失败，该任务已经存在目标库位");
-				}
 				wmsTask.setToLocId(location.getLocId());
 				wmsTask.setToLocCode(location.getLocCode());
 				wmsTaskDao.updateById(wmsTask);
