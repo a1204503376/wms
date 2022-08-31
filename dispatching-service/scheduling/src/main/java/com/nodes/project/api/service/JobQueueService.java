@@ -50,4 +50,12 @@ public interface JobQueueService extends IService<JobQueue> {
     boolean updateStatus(JobQueue jobQueue);
 
     boolean updateStatusAndBeginTime(JobQueue jobQueue);
+
+    /**
+     * 根据任务ID修改目标库位
+     *
+     * @param id             任务ID
+     * @param locationNameTo 目标库位
+     */
+    void updateLocationNameToById(String id, String locationNameTo);
 }
