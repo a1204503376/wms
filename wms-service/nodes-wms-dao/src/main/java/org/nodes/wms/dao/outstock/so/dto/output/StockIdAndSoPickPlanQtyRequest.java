@@ -3,6 +3,7 @@ package org.nodes.wms.dao.outstock.so.dto.output;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * 库存id和分配数量请求类
@@ -20,5 +21,5 @@ public class StockIdAndSoPickPlanQtyRequest implements Serializable {
 	/**
 	 * 计划数量
 	 */
-	private Long soPickPlanQty;
+	private BigDecimal soPickPlanQty;
 }

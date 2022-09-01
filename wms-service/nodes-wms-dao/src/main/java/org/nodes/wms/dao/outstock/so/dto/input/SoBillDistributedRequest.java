@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * 发货单分配信息请求类
- * 
+ *
  * @author nodesc
  **/
 @Data
@@ -27,7 +27,7 @@ public class SoBillDistributedRequest implements Serializable {
 	private Long soDetailId;
 
 	/**
-	 * 原拣货计划id
+	 * 原拣货计划id TODO oldSoPickPlanList
 	 */
 	private List<Long> soPickPlanList;
 

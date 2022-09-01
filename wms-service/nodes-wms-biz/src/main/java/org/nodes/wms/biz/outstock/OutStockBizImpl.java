@@ -569,9 +569,13 @@ public class OutStockBizImpl implements OutStockBiz {
 			List<SoPickPlan> soPickPlanList = new ArrayList<SoPickPlan>();
 			SoDetail soDetail = soBillBiz.getSoDetailById(request.getSoDetailId());
 			for (StockIdAndSoPickPlanQtyRequest item : request.getStockIdAndSoPickPlanQtyList()) {
+				if (BigDecimalUtil.le(item.getSoPickPlanQty(), BigDecimal.ZERO)){
+					continue;
+				}
+
 				Stock stock = stockQueryBiz.findStockById(item.getStockId());
 				SoPickPlan soPickPlan = soPickPlanFactory.create(request.getSoBillId(), soDetail,
-					stock, BigDecimal.valueOf(item.getSoPickPlanQty()));
+					stock, item.getSoPickPlanQty());
 				soPickPlanList.add(soPickPlan);
 			}
 			soPickPlanBiz.pickPlanAndSave(soPickPlanList);
