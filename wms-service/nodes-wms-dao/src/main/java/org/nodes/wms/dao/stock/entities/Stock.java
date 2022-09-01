@@ -181,7 +181,22 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 		return WmsAppConstant.TRUE_DEFAULT.equals(this.hasSerial) ? "是" : "否";
 	}
 
+	/**
+	 * 判断是否是空库存，空库存是指上架量和下架量相等
+	 *
+	 * @return true：空库存
+	 */
 	public boolean isEmptyStock() {
-		return BigDecimalUtil.eq(getStockBalance(), BigDecimal.ZERO);
+		return BigDecimalUtil.eq(stockQty, pickQty);
+	}
+
+	/**
+	 * 判断是否有可用的库存，库存余额大于0，但库存可用等于0
+	 *
+	 * @return true：没有可用的库存
+	 */
+	public boolean isnotEnable() {
+		return BigDecimalUtil.gt(stockQty, pickQty)
+			&& BigDecimalUtil.eq(getStockEnable(), BigDecimal.ZERO);
 	}
 }

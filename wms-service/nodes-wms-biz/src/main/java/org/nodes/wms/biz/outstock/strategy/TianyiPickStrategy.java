@@ -86,6 +86,10 @@ public class TianyiPickStrategy {
 		List<Long> skuIdsOfSoDetail = getAllSkuIdFromSoDetail(soDetailList);
 		boolean needUnpackStock = false;
 		for (Stock stock : agvStockList) {
+			if (stock.isnotEnable()){
+				continue;
+			}
+
 			List<Stock> stockOfLoc = stockQueryBiz.findStockByLocation(stock.getLocId());
 			if (Func.isEmpty(stockOfLoc) || isNotCondition(stockOfLoc, skuIdsOfSoDetail)) {
 				log.warn("[自动分配]单据:{}明细:{}分配的自动区库位:{}存在不出库的库存",
@@ -116,6 +120,9 @@ public class TianyiPickStrategy {
 			for (Stock stock : manualStockList) {
 				if (BigDecimalUtil.le(surplusQty, BigDecimal.ZERO)) {
 					break;
+				}
+				if (stock.isnotEnable()){
+					continue;
 				}
 
 				BigDecimal planQty = BigDecimalUtil.ge(surplusQty, stock.getStockEnable()) ? stock.getStockEnable() : surplusQty;
