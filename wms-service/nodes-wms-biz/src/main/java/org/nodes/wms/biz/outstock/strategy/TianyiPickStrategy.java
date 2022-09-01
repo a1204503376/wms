@@ -82,10 +82,9 @@ public class TianyiPickStrategy {
 			return null;
 		}
 
-
-		LpnTypeCodeEnum lpnTypeCodeEnum =lpnTypeBiz.tryParseBoxCode(Func.isNotEmpty(agvStockList) ?
+		LpnTypeCodeEnum lpnTypeCodeEnum = lpnTypeBiz.tryParseBoxCode(Func.isNotEmpty(agvStockList) ?
 			agvStockList.get(0).getBoxCode() : manualStockList.get(0).getBoxCode());
-		if (LpnTypeCodeEnum.D.equals(lpnTypeCodeEnum)){
+		if (LpnTypeCodeEnum.D.equals(lpnTypeCodeEnum)) {
 			return plan(soHeader, soDetail, soDetailList, pickPlanOfSoDetail, manualStockList, agvStockList);
 		} else {
 			return plan(soHeader, soDetail, soDetailList, pickPlanOfSoDetail, agvStockList, manualStockList);
@@ -93,8 +92,8 @@ public class TianyiPickStrategy {
 	}
 
 	private List<SoPickPlan> plan(SoHeader soHeader, SoDetail soDetail,
-					  List<SoDetail> soDetailList, List<SoPickPlan> pickPlanOfSoDetail,
-					  List<Stock> firstStockList, List<Stock> secondStockList){
+								  List<SoDetail> soDetailList, List<SoPickPlan> pickPlanOfSoDetail,
+								  List<Stock> firstStockList, List<Stock> secondStockList) {
 		List<SoPickPlan> newPickPlanList = new ArrayList<>();
 		// 注意如果自动区的箱中存在不需要出的库存则不应该分配该箱
 		// 如果是自动区的则需要根据箱码中生成其它物品的拣货计划
@@ -102,7 +101,7 @@ public class TianyiPickStrategy {
 		List<Long> skuIdsOfSoDetail = getAllSkuIdFromSoDetail(soDetailList);
 		boolean needUnpackStock = false;
 		for (Stock stock : firstStockList) {
-			if (stock.isnotEnable()){
+			if (stock.isnotEnable()) {
 				continue;
 			}
 
@@ -137,7 +136,7 @@ public class TianyiPickStrategy {
 				if (BigDecimalUtil.le(surplusQty, BigDecimal.ZERO)) {
 					break;
 				}
-				if (stock.isnotEnable()){
+				if (stock.isnotEnable()) {
 					continue;
 				}
 
