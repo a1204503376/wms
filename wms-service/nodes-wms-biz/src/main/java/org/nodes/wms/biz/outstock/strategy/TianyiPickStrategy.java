@@ -88,8 +88,8 @@ public class TianyiPickStrategy {
 		for (Stock stock : agvStockList) {
 			List<Stock> stockOfLoc = stockQueryBiz.findStockByLocation(stock.getLocId());
 			if (Func.isEmpty(stockOfLoc) || isNotCondition(stockOfLoc, skuIdsOfSoDetail)) {
-				log.warn("[自动分配]单据:%s明细:%s分配的自动区库位:%s存在不出库的库存", soHeader.getSoBillNo(),
-					soDetail.getSoLineNo(), stock.getLocCode());
+				log.warn("[自动分配]单据:{}明细:{}分配的自动区库位:{}存在不出库的库存",
+					soHeader.getSoBillNo(), soDetail.getSoLineNo(), stock.getLocCode());
 				continue;
 			}
 

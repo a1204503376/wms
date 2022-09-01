@@ -53,7 +53,6 @@ public class ZoneController {
 	/**
 	 * 详情
 	 */
-	@ApiLog("库区-详情")
 	@GetMapping("/detail")
 	@ApiOperation(value = "详情", notes = "传入zone")
 	@ApiImplicitParams({
@@ -67,7 +66,6 @@ public class ZoneController {
 	/**
 	 * 列表
 	 */
-	@ApiLog("库区-列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "列表", notes = "传入zone")
 	public R<List<ZoneVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
@@ -76,7 +74,6 @@ public class ZoneController {
 		return R.data(ZoneWrapper.build().listVO(list));
 	}
 
-	@ApiLog("库区-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "分页查询所有库区（包括系统隐藏库区）")
 	public R<IPage<ZoneVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
@@ -110,7 +107,6 @@ public class ZoneController {
 	/**
 	 * 导出
 	 */
-	@ApiLog("库区-导出")
 	@GetMapping("export")
 	@ApiOperation(value = "导出", notes = "查询条件")
 	public void export(@ApiIgnore @RequestParam HashMap<String, Object> params, HttpServletResponse response) {
@@ -120,7 +116,6 @@ public class ZoneController {
 	/**
 	 * 导出模板
 	 */
-	@ApiLog("库区-导出模板")
 	@GetMapping("export-template")
 	@ApiOperation(value = "导出模板")
 	public void exportTemplate(HttpServletResponse response) {

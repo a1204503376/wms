@@ -54,7 +54,6 @@ public class SkuTypeController extends BladeController {
 	/**
 	 * 详情
 	 */
-	@ApiLog("物品分类-详情")
 	@GetMapping("/detail")
 	@ApiOperation(value = "详情", notes = "传入skuType")
 	public R<SkuTypeVO> detail(SkuType skuType) {
@@ -66,7 +65,6 @@ public class SkuTypeController extends BladeController {
 	/**
 	 * 列表
 	 */
-	@ApiLog("物品分类-列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "树形列表", notes = "树形列表")
 	public R<List<SkuTypeVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
@@ -92,7 +90,6 @@ public class SkuTypeController extends BladeController {
 	 * @author wanglei
 	 * @create 20191128
 	 */
-	@ApiLog("物品分类-分页")
 	@GetMapping("/page")
 	public R<IPage<SkuTypeVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
 		IPage<SkuType> page = skuTypeService.page(Condition.getPage(query), Condition.getQueryWrapper(params, SkuType.class)
@@ -116,7 +113,6 @@ public class SkuTypeController extends BladeController {
 	/**
 	 * 树形列表
 	 */
-	@ApiLog("物品分类-树形列表")
 	@GetMapping("/tree")
 	@ApiOperation(value = "树形列表", notes = "树形列表")
 	public R<List<SkuTypeVO>> tree(SkuType skuType) {
@@ -150,7 +146,6 @@ public class SkuTypeController extends BladeController {
 	/**
 	 * 导出
 	 */
-	@ApiLog("物品分类管理-导出")
 	@GetMapping("export")
 	@ApiOperation(value = "导出", notes = "查询条件")
 	public void export(@ApiIgnore @RequestParam HashMap<String, Object> params, HttpServletResponse response) {
@@ -160,7 +155,6 @@ public class SkuTypeController extends BladeController {
 	/**
 	 * 导出模板
 	 */
-	@ApiLog("物品分类管理-导出模板")
 	@GetMapping("export-template")
 	@ApiOperation(value = "导出模板")
 	public void exportTemplate(HttpServletResponse response) {

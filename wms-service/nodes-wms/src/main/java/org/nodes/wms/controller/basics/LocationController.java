@@ -76,6 +76,7 @@ public class LocationController {
 	/**
 	 * 库位编辑：根据库位id获取库位信息
 	 */
+	@ApiLog("库位-编辑")
 	@GetMapping("/detailByEdit")
 	public R<LocationEditResponse> detailByEdit(@RequestParam Long locId){
 		return R.data(locationBiz.findLocationById(locId));
@@ -111,6 +112,7 @@ public class LocationController {
 	/**
 	 * 库位：导入
 	 */
+	@ApiLog("库位-导入")
 	@PostMapping("import-data")
 	public R<String> importData(MultipartFile file) {
 		return locationBiz.importData(file) ? R.success("导入成功") : R.fail("导入失败");

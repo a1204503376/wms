@@ -48,7 +48,6 @@ public class BillTypeController extends BladeController {
 	/**
 	 * 详情
 	 */
-	@ApiLog("单据类型接口-详情")
 	@GetMapping("/detail")
 	@ApiOperation(value = "详情", notes = "传入billType")
 	public R<BillTypeVo> detail(BillType billType) {
@@ -59,7 +58,6 @@ public class BillTypeController extends BladeController {
 	/**
 	 * 分页 单据类型
 	 */
-	@ApiLog("单据类型接口-分页")
 	@GetMapping("/list")
 	@ApiOperation(value = "分页", notes = "传入billType")
 	public R<List<BillType>> list(BillType billType) {
@@ -69,7 +67,6 @@ public class BillTypeController extends BladeController {
 	/**
 	 * 自定义分页 单据类型
 	 */
-	@ApiLog("单据类型接口-自定义分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "分页", notes = "传入billType")
 	public R<IPage<BillTypeVo>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
