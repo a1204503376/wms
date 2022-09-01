@@ -149,6 +149,10 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 
 	@Override
 	public LpnTypeCodeEnum tryParseBoxCode(String boxCode) {
+		if (Func.isEmpty(boxCode)){
+			return LpnTypeCodeEnum.UNKNOWN;
+		}
+
 		try {
 			return parseBoxCode(boxCode);
 		} catch (Throwable throwable) {
