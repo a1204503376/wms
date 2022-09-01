@@ -108,7 +108,7 @@
 				this.params.qty = soDetail.surplusQty;
 				this.params.skuLot1 = soDetail.skuLot1;
 				this.params.soDetailId = soDetail.soDetailId;
-				
+
 				this.defaultParams.skuCode = soDetail.skuCode;
 				this.defaultParams.qty = soDetail.surplusQty;
 				this.defaultParams.skuLot1 = soDetail.skuLot1;
@@ -167,23 +167,35 @@
 								.params);
 							return;
 						} else {
-							if(_this.params.skuCode != _this.defaultParams.skuCode){
-								_this.params.soDetailId=undefined;
+							if (_this.params.skuCode != _this.defaultParams.skuCode) {
+								_this.params.soDetailId = undefined;
 							}
-							pick.pickByPcs(_this.params).then(data => {
-								_this.$u.func.showToast({
-									title: '拣货完成'
+							if (tool.isNotEmpty(_this.params.skuCode) &&
+								tool.isNotEmpty(_this.params.skuLot1) &&
+								tool.isNotEmpty(_this.params.boxCode) &&
+								tool.isNotEmpty(_this.params.locCode) &&
+								tool.isNotEmpty(_this.params.qty) &&
+								tool.isInteger(_this.params.qty)
+							) {
+								pick.pickByPcs(_this.params).then(data => {
+									_this.$u.func.showToast({
+										title: '拣货完成'
+									});
+									if (data.data) {
+										_this.esc();
+									} else {
+										_this.params.skuCode = undefined;
+										_this.params.skuLot1 = undefined;
+										_this.params.boxCode = undefined;
+										_this.params.locCode = undefined;
+										_this.params.qty = undefined;
+									}
 								});
-								if (data.data) {
-									this.esc();
-								} else {
-									this.params.skuCode = undefined;
-									this.params.skuLot1 = undefined;
-									this.params.boxCode = undefined;
-									this.params.locCode = undefined;
-									this.params.qty = undefined;
-								}
-							});
+							} else {
+								_this.$u.func.showToast({
+									title: '请按照要求输入必填属性'
+								});
+							}
 						}
 					})
 
