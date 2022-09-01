@@ -123,7 +123,7 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	 */
 	private LocalDateTime lastOutTime;
 	/**
-	 * 批次号
+	 * 批次号,不再使用
 	 */
 	private String lotNumber;
 	/**

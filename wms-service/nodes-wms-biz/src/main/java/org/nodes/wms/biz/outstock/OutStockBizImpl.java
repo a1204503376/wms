@@ -402,6 +402,7 @@ public class OutStockBizImpl implements OutStockBiz {
 			.collect(Collectors.groupingBy(SoPickPlan::getLocId, Collectors.toList()));
 		locId2SoPickPlan.forEach((locId, soPickPlanOfLoc) -> {
 			Zone zone = zoneBiz.findById(soPickPlanOfLoc.get(0).getZoneId());
+			AssertUtil.notNull(zone, "下发任务失败,库区{}不存在", soPickPlanOfLoc.get(0).getZoneId());
 			if (WmsAppConstant.ZONE_CODE_AGV.equals(zone.getZoneCode())) {
 				issuedAgvTask(soPickPlanOfLoc, locId, soHeader);
 			} else {
