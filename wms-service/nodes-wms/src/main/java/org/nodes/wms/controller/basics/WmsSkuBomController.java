@@ -49,7 +49,6 @@ public class WmsSkuBomController {
 	/**
 	 * 物料清单导出
 	 */
-	@ApiLog("物料清单-导出物料清单")
 	@PostMapping("/excel")
 	public void excel(@ApiIgnore @RequestBody HashMap<String, Object> params, HttpServletResponse response) {
 		skuBomBiz.exportExcel(params, response);
@@ -82,7 +81,6 @@ public class WmsSkuBomController {
 	 * @param request 物料清单ById查询请求对象
 	 * @return 是否成功
 	 */
-	@ApiLog("物品清单管理-查询详情")
 	@PostMapping("/selectSkuBomById")
 	public R<SkuBom> selectSkuBomById(@RequestBody FindSkuBomByIdRequset request) {
 		return R.data(skuBomBiz.findSkuBomById(request.getId()));

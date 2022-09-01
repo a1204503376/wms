@@ -6,6 +6,7 @@ import org.nodes.wms.biz.stockManage.DevanningBiz;
 import org.nodes.wms.dao.stock.dto.input.DevanningSubmitRequest;
 import org.nodes.wms.dao.stock.dto.input.FindAllSerialNumberManageRequest;
 import org.nodes.wms.dao.stock.dto.output.FindAllSerialNumberManageResponse;
+import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +39,7 @@ public class DevanningController {
 	 * @param request 包含序列号集合 目标库位编码/物品集合 箱码 是否整箱上架
 	 * @return 是否成功
 	 */
+	@ApiLog("PDA拆箱")
 	@PostMapping("/devanningSubmit")
 	public R<String> devanningSubmit(@RequestBody DevanningSubmitRequest request) {
 		devanningBiz.devanning(request);

@@ -60,7 +60,6 @@ public class OwnerController extends BladeController {
 	 * @author zhugx
 	 * @create 20191205
 	 */
-	@ApiLog("货主管理-详情")
 	@GetMapping("/detail")
 	@ApiOperation(value = "详情", notes = "传入owner的主键ID")
 	public R<OwnerVO> detail(Long woId) {
@@ -71,7 +70,6 @@ public class OwnerController extends BladeController {
 	/**
 	 * 列表
 	 */
-	@ApiLog("货主管理-列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "列表", notes = "传入owner")
 	public R<List<OwnerVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
@@ -80,7 +78,6 @@ public class OwnerController extends BladeController {
 	/**
 	 * 下拉数据源
 	 */
-	@ApiLog("货主管理-下拉数据源")
 	@GetMapping("/select")
 	@ApiOperation(value = "下拉数据源", notes = "传入woId")
 	public R<List<Owner>> select(Owner owner) {
@@ -91,7 +88,6 @@ public class OwnerController extends BladeController {
 	/**
 	 * 分页
 	 */
-	@ApiLog("货主管理-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "分页", notes = "传入owner")
 	public R<IPage<OwnerVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
@@ -122,7 +118,6 @@ public class OwnerController extends BladeController {
 	/**
 	 * 导出
 	 */
-	@ApiLog("货主管理-导出")
 	@GetMapping("export")
 	@ApiOperation(value = "导出", notes = "查询条件")
 	public void export(@ApiIgnore @RequestParam HashMap<String, Object> params, HttpServletResponse response) {
@@ -132,7 +127,6 @@ public class OwnerController extends BladeController {
 	/**
 	 * 导出模板
 	 */
-	@ApiLog("货主管理-导出模板")
 	@GetMapping("export-template")
 	@ApiOperation(value = "导出模板")
 	public void exportTemplate(HttpServletResponse response) {

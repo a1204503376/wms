@@ -58,7 +58,6 @@ public class LpnTypeController {
 	/**
 	 * 容器导出
 	 */
-	@ApiLog("容器管理-导出容器管理")
 	@PostMapping("/excel")
 	public void excel(@ApiIgnore @RequestBody HashMap<String, Object> params, HttpServletResponse response) {
 		lpnTypeBiz.exportExcel(params,response);
@@ -76,7 +75,6 @@ public class LpnTypeController {
 	/**
 	 * 容器管理查找
 	 */
-	@ApiLog("容器管理-查找容器")
 	@PostMapping("/getLpnTypeById")
 	public R<LpnTypeByIdResponse> getLpnTypeById(@RequestBody LpnTypeByIdRequest lpnTypeRequest) {
 		return R.data(lpnTypeBiz.getLpnTypeById(lpnTypeRequest));
