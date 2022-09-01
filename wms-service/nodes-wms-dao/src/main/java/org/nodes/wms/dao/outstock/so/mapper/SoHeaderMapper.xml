@@ -166,7 +166,6 @@
                 </foreach>
             </if>
         </where>
-        group by h.so_bill_no
     </select>
 </mapper>
 

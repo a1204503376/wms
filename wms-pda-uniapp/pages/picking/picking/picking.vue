@@ -30,9 +30,6 @@
 			<view class="btn-cancle" @click="esc()">
 				返回
 			</view>
-			<view class="btn-submit" @click="submit()">
-				确定
-			</view>
 		</view>
 	</view>
 </template>
