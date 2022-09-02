@@ -81,11 +81,6 @@ public class SoPickPlanForDistributionResponse extends BaseSkuLot implements Ser
 	private String skuName;
 
 	/**
-	 * 批次号
-	 */
-	private String lotNumber;
-
-	/**
 	 * 库存状态
 	 */
 	private StockStatusEnum stockStatus;
