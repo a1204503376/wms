@@ -195,7 +195,7 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	 *
 	 * @return true：没有可用的库存
 	 */
-	public boolean isnotEnable() {
+	public boolean isNotEnable() {
 		return BigDecimalUtil.gt(stockQty, pickQty)
 			&& BigDecimalUtil.eq(getStockEnable(), BigDecimal.ZERO);
 	}

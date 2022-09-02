@@ -30,6 +30,8 @@ import java.util.Map;
 
 /**
  * 发货单头表工厂类
+ *
+ * @author nodesc
  **/
 @Service
 @RequiredArgsConstructor

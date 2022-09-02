@@ -372,7 +372,7 @@ public class OutStockBizImpl implements OutStockBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public boolean cancelDistribute(Long soBillId) {
+	public void cancelDistribute(Long soBillId) {
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findBySoHeaderId(soBillId);
 		if (Func.isEmpty(soPickPlanList)) {
 			throw ExceptionUtil.mpe("取消分配失败,当前单据尚未执行分配");
@@ -385,12 +385,11 @@ public class OutStockBizImpl implements OutStockBiz {
 		soPickPlanBiz.cancelPickPlan(soPickPlanList, soHeader);
 
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, soBillId, soHeader.getSoBillNo(), "全部取消分配");
-		return false;
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public boolean issued(Long soBillId) {
+	public void issued(Long soBillId) {
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findBySoHeaderId(soBillId);
 		if (Func.isEmpty(soPickPlanList)) {
 			throw ExceptionUtil.mpe("取消分配失败,当前单据尚未执行分配");
@@ -412,7 +411,6 @@ public class OutStockBizImpl implements OutStockBiz {
 
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY,
 			soBillId, soHeader.getSoBillNo(), "执行拣货任务下发成功");
-		return true;
 	}
 
 	private void issuedAgvTask(List<SoPickPlan> soPickPlanOfLoc, Long fromLocId, SoHeader soHeader) {
@@ -548,16 +546,16 @@ public class OutStockBizImpl implements OutStockBiz {
 				}
 			});
 		} else {
-			stockSoPickPlanList.forEach(stockPlan -> {
+			for (StockSoPickPlanResponse stockPlan : stockSoPickPlanList) {
 				stockPlan.setPickQty(BigDecimal.ZERO);
-			});
+			}
 		}
 		return stockSoPickPlanList;
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public boolean manualDistribute(SoBillDistributedRequest request) {
+	public void manualDistribute(SoBillDistributedRequest request) {
 		AssertUtil.notNull(request, "调整分配失败，请求参数为空");
 		SoHeader soHeader = soBillBiz.getSoHeaderById(request.getSoBillId());
 		AssertUtil.notNull(request, "调整分配失败，发货单已经删除无法执行分配调整");
@@ -567,7 +565,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		}
 		// 按照用户输入信息重新形成分配记录
 		if (Func.isNotEmpty(request.getStockIdAndSoPickPlanQtyList())) {
-			List<SoPickPlan> soPickPlanList = new ArrayList<SoPickPlan>();
+			List<SoPickPlan> soPickPlanList = new ArrayList<>();
 			SoDetail soDetail = soBillBiz.getSoDetailById(request.getSoDetailId());
 			for (StockIdAndSoPickPlanQtyRequest item : request.getStockIdAndSoPickPlanQtyList()) {
 				if (BigDecimalUtil.le(item.getSoPickPlanQty(), BigDecimal.ZERO)){
@@ -584,7 +582,6 @@ public class OutStockBizImpl implements OutStockBiz {
 
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, request.getSoBillId(),
 			soHeader.getSoBillNo(), "执行调整分配");
-		return false;
 	}
 
 	@Override
