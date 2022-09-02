@@ -22,6 +22,7 @@ import org.nodes.wms.dao.stock.dto.input.*;
 import org.nodes.wms.dao.stock.dto.output.EstimateStockMoveResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
@@ -182,6 +183,12 @@ public class StockManageBizImpl implements StockManageBiz {
 		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getTargetLocCode());
 		List<Stock> stockList = stockQueryBiz.findStockByLpnCode(request.getLpnCode());
 		AssertUtil.notNull(stockList, "LPN移动失败，根据LPN获取库存集合为空");
+		for (Stock stock : stockList) {
+			if (StockStatusEnum.SYSTEM_FREEZE.equals(stock.getStockStatus())) {
+				throw new ServiceException(String.format("按箱移动失败，箱码[%s]的库存状态是系统冻结状态,不允许移动", stock.getBoxCode()));
+			}
+		}
+
 		Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
 		//判断原库存是否是入库暂存区，原库存移动时不允许暂存区
 		canMoveToSourceLocIsStageLocation(sourceLocation);
@@ -202,6 +209,15 @@ public class StockManageBizImpl implements StockManageBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void stockMoveByBox(StockMoveByBoxCodeRequest request) {
+		AssertUtil.notNull(request.getBoxCodeList(), "按箱移动失败，请输入箱码");
+		if (Func.isNotEmpty(request.getBoxCodeList())) {
+			List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCodeList());
+			for (Stock stock : stockList) {
+				if (StockStatusEnum.SYSTEM_FREEZE.equals(stock.getStockStatus())) {
+					throw new ServiceException(String.format("按箱移动失败，箱码[%s]的库存状态是系统冻结状态,不允许移动", stock.getBoxCode()));
+				}
+			}
+		}
 		//根据前端传过来的LocCode
 		Location targetLocation;
 		StockLogTypeEnum stockLogTypeEnum;
