@@ -816,7 +816,7 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public void exportBySerial(StockBySerialPageQuery stockBySerialPageQuery, HttpServletResponse response) {
-		IPage<?> page = new Page();
+		IPage<?> page = new Page<>();
 		page.setCurrent(1);
 		page.setSize(100000);
 		List<StockBySerialPageResponse> stockBySerialPageResponseList = stockDao.page(page, stockBySerialPageQuery)

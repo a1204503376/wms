@@ -57,6 +57,7 @@ public interface OutStockBiz {
 	 * 按件拣货动作
 	 *
 	 * @param request 请求对象
+	 * @return true:全部拣货 false:部分拣货
 	 */
 	Boolean pickByPcs(PickByPcsRequest request);
 
@@ -89,7 +90,7 @@ public interface OutStockBiz {
 	 * 接驳区拣货动作
 	 *
 	 * @param request 请求参数
-	 * @return
+	 * @return false：拣货数量超过了剩余数量，需要调用接驳区移动
 	 */
 	Boolean pickOnAgvPickTo(OnAgvPickToRequest request);
 
@@ -112,17 +113,15 @@ public interface OutStockBiz {
 	 * 分配：取消分配
 	 *
 	 * @param soBillId 发货单id
-	 * @return true：取消分配成功 false：取消分配失败
 	 */
-	boolean cancelDistribute(Long soBillId);
+	void cancelDistribute(Long soBillId);
 
 	/**
 	 * 分配（天宜相关）：确认下发
 	 *
 	 * @param soBillId 发货单id
-	 * @return true：确认下发成功 false：确认下发失败
 	 */
-	boolean issued(Long soBillId);
+	void issued(Long soBillId);
 
 	/**
 	 * 分配：分配调整-根据物品id、生产批次、专用客户、发货单id获取可分配的物品库存信息
@@ -139,7 +138,6 @@ public interface OutStockBiz {
 	 * 分配：分配手动调整-保存调整后的信息
 	 *
 	 * @param soBillDistributedRequest:
-	 * @return true：保存成功 false：保存失败
 	 */
-	boolean manualDistribute(SoBillDistributedRequest soBillDistributedRequest);
+	void manualDistribute(SoBillDistributedRequest soBillDistributedRequest);
 }

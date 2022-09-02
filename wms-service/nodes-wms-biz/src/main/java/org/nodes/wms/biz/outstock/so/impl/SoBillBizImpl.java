@@ -159,10 +159,11 @@ public class SoBillBizImpl implements SoBillBiz {
 	@Override
 	public void export(SoHeaderPageQuery soHeaderPageQuery, HttpServletResponse response) {
 		List<SoHeaderExcelResponse> soHeaderExcelList = soHeaderDao.listByQuery(soHeaderPageQuery);
-		soHeaderExcelList.forEach(soHeader -> {
+		for (SoHeaderExcelResponse soHeader : soHeaderExcelList) {
 			soHeader.setSoBillStateValue(soHeader.getSoBillState().getDesc());
-		});
-		ExcelUtil.export(response, "", "", soHeaderExcelList, SoHeaderExcelResponse.class);
+		}
+		ExcelUtil.export(response, "", "", soHeaderExcelList,
+			SoHeaderExcelResponse.class);
 	}
 
 	@Override
@@ -210,10 +211,10 @@ public class SoBillBizImpl implements SoBillBiz {
 			pickByPcSoDetailResponse.getSkuId(),
 			StockStatusEnum.NORMAL, null, skuLot);
 		for (Stock stock : stockList) {
-			BigDecimal stockEnableQty = stock.getStockEnable();
-			if (stockEnableQty.compareTo(BigDecimal.ZERO) == -1) {
+			if (stock.isNotEnable()){
 				continue;
 			}
+			BigDecimal stockEnableQty = stock.getStockEnable();
 			BigDecimal stockBalanceQty = stock.getStockBalance();
 			PickByPcStockDto pickByPcStockDto = new PickByPcStockDto();
 			Func.copy(stock, pickByPcStockDto);

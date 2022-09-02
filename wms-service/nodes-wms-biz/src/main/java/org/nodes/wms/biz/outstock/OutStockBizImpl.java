@@ -372,7 +372,7 @@ public class OutStockBizImpl implements OutStockBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public boolean cancelDistribute(Long soBillId) {
+	public void cancelDistribute(Long soBillId) {
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findBySoHeaderId(soBillId);
 		if (Func.isEmpty(soPickPlanList)) {
 			throw ExceptionUtil.mpe("取消分配失败,当前单据尚未执行分配");
@@ -385,12 +385,11 @@ public class OutStockBizImpl implements OutStockBiz {
 		soPickPlanBiz.cancelPickPlan(soPickPlanList, soHeader);
 
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, soBillId, soHeader.getSoBillNo(), "全部取消分配");
-		return false;
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public boolean issued(Long soBillId) {
+	public void issued(Long soBillId) {
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findBySoHeaderId(soBillId);
 		if (Func.isEmpty(soPickPlanList)) {
 			throw ExceptionUtil.mpe("取消分配失败,当前单据尚未执行分配");
@@ -400,23 +399,25 @@ public class OutStockBizImpl implements OutStockBiz {
 		SoHeader soHeader = soBillBiz.getSoHeaderById(soBillId);
 		Map<Long, List<SoPickPlan>> locId2SoPickPlan = soPickPlanList.stream()
 			.collect(Collectors.groupingBy(SoPickPlan::getLocId, Collectors.toList()));
-		locId2SoPickPlan.forEach((locId, soPickPlanOfLoc) -> {
+		for (Map.Entry<Long, List<SoPickPlan>> entry : locId2SoPickPlan.entrySet()) {
+			Long locId = entry.getKey();
+			List<SoPickPlan> soPickPlanOfLoc = entry.getValue();
 			Zone zone = zoneBiz.findById(soPickPlanOfLoc.get(0).getZoneId());
+			AssertUtil.notNull(zone, "下发任务失败,库区{}不存在", soPickPlanOfLoc.get(0).getZoneId());
 			if (WmsAppConstant.ZONE_CODE_AGV.equals(zone.getZoneCode())) {
-				issuedAgvTask(soPickPlanOfLoc, locId, soHeader);
+				issuedAgvTask(soPickPlanOfLoc, soHeader);
 			} else {
-				issuedManualTask(soPickPlanOfLoc, locId, soHeader);
+				issuedManualTask(soPickPlanOfLoc, soHeader);
 			}
-		});
+		}
 
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY,
 			soBillId, soHeader.getSoBillNo(), "执行拣货任务下发成功");
-		return true;
 	}
 
-	private void issuedAgvTask(List<SoPickPlan> soPickPlanOfLoc, Long fromLocId, SoHeader soHeader) {
+	private void issuedAgvTask(List<SoPickPlan> soPickPlanOfLoc, SoHeader soHeader) {
 		if (Func.isEmpty(soPickPlanOfLoc.get(0).getTaskId())) {
-			WmsTask task = agvTask.pickToSchedule(fromLocId, soHeader, null);
+			WmsTask task = agvTask.pickToSchedule(soPickPlanOfLoc, soHeader, null);
 			soPickPlanDao.updateTask(soPickPlanOfLoc, task.getTaskId());
 		} else {
 			WmsTask task = wmsTaskBiz.findByTaskId(soPickPlanOfLoc.get(0).getTaskId());
@@ -429,7 +430,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		}
 	}
 
-	private void issuedManualTask(List<SoPickPlan> soPickPlanOfLoc, Long fromLocId, SoHeader soHeader) {
+	private void issuedManualTask(List<SoPickPlan> soPickPlanOfLoc, SoHeader soHeader) {
 		List<String> issuedBoxCode = new ArrayList<>();
 		for (SoPickPlan soPickPlan : soPickPlanOfLoc) {
 			if (Func.isNotEmpty(soPickPlan.getTaskId())) {
@@ -547,16 +548,16 @@ public class OutStockBizImpl implements OutStockBiz {
 				}
 			});
 		} else {
-			stockSoPickPlanList.forEach(stockPlan -> {
+			for (StockSoPickPlanResponse stockPlan : stockSoPickPlanList) {
 				stockPlan.setPickQty(BigDecimal.ZERO);
-			});
+			}
 		}
 		return stockSoPickPlanList;
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public boolean manualDistribute(SoBillDistributedRequest request) {
+	public void manualDistribute(SoBillDistributedRequest request) {
 		AssertUtil.notNull(request, "调整分配失败，请求参数为空");
 		SoHeader soHeader = soBillBiz.getSoHeaderById(request.getSoBillId());
 		AssertUtil.notNull(request, "调整分配失败，发货单已经删除无法执行分配调整");
@@ -566,20 +567,23 @@ public class OutStockBizImpl implements OutStockBiz {
 		}
 		// 按照用户输入信息重新形成分配记录
 		if (Func.isNotEmpty(request.getStockIdAndSoPickPlanQtyList())) {
-			List<SoPickPlan> soPickPlanList = new ArrayList<SoPickPlan>();
+			List<SoPickPlan> soPickPlanList = new ArrayList<>();
 			SoDetail soDetail = soBillBiz.getSoDetailById(request.getSoDetailId());
 			for (StockIdAndSoPickPlanQtyRequest item : request.getStockIdAndSoPickPlanQtyList()) {
+				if (BigDecimalUtil.le(item.getSoPickPlanQty(), BigDecimal.ZERO)){
+					continue;
+				}
+
 				Stock stock = stockQueryBiz.findStockById(item.getStockId());
 				SoPickPlan soPickPlan = soPickPlanFactory.create(request.getSoBillId(), soDetail,
-					stock, BigDecimal.valueOf(item.getSoPickPlanQty()));
+					stock, item.getSoPickPlanQty());
 				soPickPlanList.add(soPickPlan);
 			}
-			soPickPlanBiz.pickPlanAndSave(soPickPlanList);
+			soPickPlanBiz.occupyStockAndSavePlan(soPickPlanList);
 		}
 
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, request.getSoBillId(),
 			soHeader.getSoBillNo(), "执行调整分配");
-		return false;
 	}
 
 	@Override
@@ -685,6 +689,9 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	void pickByPcsByStock(PickByPcsRequest request, SoHeader soHeader, SoDetail soDetail, List<Stock> stockList) {
+		AssertUtil.notNull(soHeader, "PDA拣货失败，发货单参数为空");
+		AssertUtil.notNull(soDetail, "PDA拣货失败，发货单明细参数为空");
+		AssertUtil.notNull(stockList, "PDA拣货失败，库存参数为空");
 
 		Location sourceLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
 		// 1 业务判断：

@@ -150,6 +150,12 @@ public class ProcessorServiceImpl implements ProcessorService {
                 return ProcessResultUtils.failed();
             }
             jobQueueService.updateLocationNameToById(jobQueue.getId(), wmsResponse.getData().toString());
+            jobQueue.setLocationNameTo(wmsResponse.getData().toString());
+            WorkflowContext workflowContext = context.getWorkflowContext();
+            String jsonString = JSON.toJSONString(jobQueue);
+            omsLogger.debug("JOB to JSON：{}", jsonString);
+            workflowContext.appendData2WfContext(JobConstants.WORKFLOW_JOB_QUEUE_KEY, jsonString);
+            omsLogger.debug("推送JOB到工作流上下文：成功,{}", jobQueue);
         }
 
         return ProcessResultUtils.success();

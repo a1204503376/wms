@@ -5,8 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.nodes.core.constant.DictKVConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
+import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.outstock.plan.modular.SoPickPlanFactory;
 import org.nodes.wms.biz.stock.StockQueryBiz;
+import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
@@ -36,6 +38,7 @@ public class TianyiPickStrategy {
 
 	private final StockQueryBiz stockQueryBiz;
 	private final SoPickPlanFactory soPickPlanFactory;
+	private final LpnTypeBiz lpnTypeBiz;
 
 	/**
 	 * 自动化拣货区,自动化备货区,自动化存储区
@@ -64,7 +67,6 @@ public class TianyiPickStrategy {
 	 */
 	public List<SoPickPlan> run(SoHeader soHeader, SoDetail soDetail,
 								List<SoDetail> soDetailList, List<SoPickPlan> pickPlanOfSoDetail) {
-		List<SoPickPlan> newPickPlanList = new ArrayList<>();
 		// 根据发货单明细中的批属性分别查询人工区和自动区的库存，并分别进行按入库日期进行排序
 		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
 		SkuLotUtil.setAllSkuLot(soDetail, skuLot);
@@ -80,12 +82,29 @@ public class TianyiPickStrategy {
 			return null;
 		}
 
+		LpnTypeCodeEnum lpnTypeCodeEnum = lpnTypeBiz.tryParseBoxCode(Func.isNotEmpty(agvStockList) ?
+			agvStockList.get(0).getBoxCode() : manualStockList.get(0).getBoxCode());
+		if (LpnTypeCodeEnum.D.equals(lpnTypeCodeEnum)) {
+			return plan(soHeader, soDetail, soDetailList, pickPlanOfSoDetail, manualStockList, agvStockList);
+		} else {
+			return plan(soHeader, soDetail, soDetailList, pickPlanOfSoDetail, agvStockList, manualStockList);
+		}
+	}
+
+	private List<SoPickPlan> plan(SoHeader soHeader, SoDetail soDetail,
+								  List<SoDetail> soDetailList, List<SoPickPlan> pickPlanOfSoDetail,
+								  List<Stock> firstStockList, List<Stock> secondStockList) {
+		List<SoPickPlan> newPickPlanList = new ArrayList<>();
 		// 注意如果自动区的箱中存在不需要出的库存则不应该分配该箱
 		// 如果是自动区的则需要根据箱码中生成其它物品的拣货计划
 		BigDecimal surplusQty = getSurplusQty(soDetail, pickPlanOfSoDetail);
 		List<Long> skuIdsOfSoDetail = getAllSkuIdFromSoDetail(soDetailList);
 		boolean needUnpackStock = false;
-		for (Stock stock : agvStockList) {
+		for (Stock stock : firstStockList) {
+			if (stock.isNotEnable()) {
+				continue;
+			}
+
 			List<Stock> stockOfLoc = stockQueryBiz.findStockByLocation(stock.getLocId());
 			if (Func.isEmpty(stockOfLoc) || isNotCondition(stockOfLoc, skuIdsOfSoDetail)) {
 				log.warn("[自动分配]单据:{}明细:{}分配的自动区库位:{}存在不出库的库存",
@@ -100,7 +119,7 @@ public class TianyiPickStrategy {
 				newPickPlanList.addAll(pickPlans);
 			} else {
 				// 需要拆箱的库存，如果人工区没有库存或库存数量不足，就只能进行分配需要拆箱的库存，否则从人工区分配
-				if (canPlanFromManualZone(manualStockList, surplusQty)) {
+				if (canPlanFromManualZone(secondStockList, surplusQty)) {
 					needUnpackStock = true;
 				} else {
 					surplusQty = surplusQty.subtract(stock.getStockEnable());
@@ -113,9 +132,12 @@ public class TianyiPickStrategy {
 		}
 
 		if (needUnpackStock || BigDecimalUtil.gt(surplusQty, BigDecimal.ZERO)) {
-			for (Stock stock : manualStockList) {
+			for (Stock stock : secondStockList) {
 				if (BigDecimalUtil.le(surplusQty, BigDecimal.ZERO)) {
 					break;
+				}
+				if (stock.isNotEnable()) {
+					continue;
 				}
 
 				BigDecimal planQty = BigDecimalUtil.ge(surplusQty, stock.getStockEnable()) ? stock.getStockEnable() : surplusQty;
