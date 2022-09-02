@@ -56,6 +56,7 @@ public class AgvSyncServiceImpl extends ServiceImpl<AgvSyncMapper, AgvSync>
                 jobQueue.setStatus(JobStatusEnum.AGV_EXCEPTION);
                 AgvSync agvSync = new AgvSync();
                 BeanUtils.copyProperties(agvSyncOrderRequest, agvSync);
+                agvSync.setAgvType(agvSyncOrderRequest.getAgvType().getDesc());
                 flag = save(agvSync);
                 if (!flag) {
                     throw new ServiceException(StringUtils.format("保存AGV_SYNC失败，参数：{}", agvSync));

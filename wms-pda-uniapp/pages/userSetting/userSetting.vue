@@ -7,7 +7,7 @@
 		<u-row customStyle="margin-bottom: 10px;margin-top:30px">
 			<u-col span="4">
 				<view class="demo-layout img">
-					<u--image shape="circle" width="80px" height="80px" src="/static/images/login.png"></u--image>
+					<u--image shape="circle" width="80px" height="80px" src="/static/images/tyicon.png"></u--image>
 				</view>
 			</u-col>
 			<u-col span="4">

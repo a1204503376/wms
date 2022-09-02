@@ -90,7 +90,7 @@ public interface SoHeaderDao {
 	PickByPcSoHeaderResponse getSoHeaderResponseById(Long soBillId);
 
 	/**
-	 * 根据发货单编码/上游编码/任务号
+	 * 根据发货单编码/上游编码
 	 *
 	 * @param page    分页对象
 	 * @param request 请求条件 包含no

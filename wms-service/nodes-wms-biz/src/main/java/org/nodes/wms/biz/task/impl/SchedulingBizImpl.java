@@ -210,7 +210,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	private void onException(WmsTask wmsTask) {
 		boolean checkTaskState = WmsTaskStateEnum.COMPLETED.equals(wmsTask.getTaskState())
 			|| WmsTaskStateEnum.CANCELED.equals(wmsTask.getTaskState());
-		if (!checkTaskState) {
+		if (checkTaskState) {
 			throw new ServiceException("状态更新失败,任务已经完成");
 		}
 		// 修改任务状态

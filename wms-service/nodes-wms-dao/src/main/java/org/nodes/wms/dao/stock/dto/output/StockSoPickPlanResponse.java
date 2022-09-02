@@ -74,11 +74,6 @@ public class StockSoPickPlanResponse extends BaseSkuLot implements Serializable 
 	private String skuName;
 
 	/**
-	 * 批次号
-	 */
-	private String lotNumber;
-
-	/**
 	 * 可用量
 	 */
 	private BigDecimal stockEnable;

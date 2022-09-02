@@ -27,9 +27,9 @@ public class SoBillDistributedRequest implements Serializable {
 	private Long soDetailId;
 
 	/**
-	 * 原拣货计划id TODO oldSoPickPlanList
+	 * 原拣货计划id
 	 */
-	private List<Long> soPickPlanList;
+	private List<Long> oldSoPickPlanList;
 
 	/**
 	 * 库存id和分配数量集合
