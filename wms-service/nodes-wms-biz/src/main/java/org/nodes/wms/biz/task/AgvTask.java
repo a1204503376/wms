@@ -18,6 +18,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.entities.WmsTask;
@@ -146,15 +147,19 @@ public class AgvTask {
 	/**
 	 * 拣货任务到agv，按库位下发
 	 *
-	 * @param fromLocId 库位id
-	 * @param so        出库单信息
-	 * @param soDetail  出库单明细信息,自动区任务时可以为空
+	 * @param soPickPlanOfLoc 库位关联的拣货计划
+	 * @param so              出库单信息
+	 * @param soDetail        出库单明细信息,自动区任务时可以为空
 	 */
-	public WmsTask pickToSchedule(Long fromLocId, SoHeader so, SoDetail soDetail) {
-		AssertUtil.notNull(fromLocId, "AGV拣货任务下发失败,locId为空");
+	public WmsTask pickToSchedule(List<SoPickPlan> soPickPlanOfLoc, SoHeader so, SoDetail soDetail) {
+		AssertUtil.notNull(soPickPlanOfLoc, "AGV拣货任务下发失败,locId为空");
 		AssertUtil.notNull(so, "AGV拣货任务下发失败,so为空");
 
-		List<Stock> sourceStock = stockQueryBiz.findStockByLocation(fromLocId);
+		List<Long> stockIdList = soPickPlanOfLoc.stream()
+			.map(SoPickPlan::getStockId)
+			.distinct()
+			.collect(Collectors.toList());
+		List<Stock> sourceStock = stockQueryBiz.findStockById(stockIdList);
 		WmsTask pickTask = wmsTaskFactory.createPickTask(sourceStock, so, soDetail);
 		sendPickToSchedule(pickTask, so);
 		stockBiz.freezeStockByDropId(sourceStock, pickTask.getTaskId());
@@ -162,7 +167,7 @@ public class AgvTask {
 		return pickTask;
 	}
 
-	public void sendPickToSchedule(WmsTask pickTask, SoHeader so){
+	public void sendPickToSchedule(WmsTask pickTask, SoHeader so) {
 		if (sendToSchedule(Collections.singletonList(pickTask))) {
 			pickTask.setTaskState(WmsTaskStateEnum.ISSUED);
 		} else {

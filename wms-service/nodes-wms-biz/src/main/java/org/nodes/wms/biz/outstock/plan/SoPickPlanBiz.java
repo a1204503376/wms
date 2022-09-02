@@ -105,7 +105,7 @@ public interface SoPickPlanBiz {
 	 *
 	 * @param soPickPlanList 分配计划
 	 */
-	void pickPlanAndSave(List<SoPickPlan> soPickPlanList);
+	void occupyStockAndSavePlan(List<SoPickPlan> soPickPlanList);
 
 	/**
 	 * 获取分配记录分页

@@ -80,7 +80,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 			List<SoPickPlan> newPickPlan = tianyiPickStrategy.run(soHeader, detail, soDetails, pickPlanOfSoDetail);
 			result = createResultByRunPickStrategy(newPickPlan, detail, result);
 			if (Func.isNotEmpty(newPickPlan)) {
-				pickPlanAndSave(newPickPlan);
+				occupyStockAndSavePlan(newPickPlan);
 				existPickPlans.addAll(newPickPlan);
 			}
 		}
@@ -89,7 +89,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	}
 
 	@Override
-	public void pickPlanAndSave(List<SoPickPlan> soPickPlanList) {
+	public void occupyStockAndSavePlan(List<SoPickPlan> soPickPlanList) {
 		AssertUtil.notEmpty(soPickPlanList, "分配失败,拣货计划参数不能为空");
 
 		stockBiz.occupyStock(soPickPlanList);

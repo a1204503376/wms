@@ -399,23 +399,25 @@ public class OutStockBizImpl implements OutStockBiz {
 		SoHeader soHeader = soBillBiz.getSoHeaderById(soBillId);
 		Map<Long, List<SoPickPlan>> locId2SoPickPlan = soPickPlanList.stream()
 			.collect(Collectors.groupingBy(SoPickPlan::getLocId, Collectors.toList()));
-		locId2SoPickPlan.forEach((locId, soPickPlanOfLoc) -> {
+		for (Map.Entry<Long, List<SoPickPlan>> entry : locId2SoPickPlan.entrySet()) {
+			Long locId = entry.getKey();
+			List<SoPickPlan> soPickPlanOfLoc = entry.getValue();
 			Zone zone = zoneBiz.findById(soPickPlanOfLoc.get(0).getZoneId());
 			AssertUtil.notNull(zone, "下发任务失败,库区{}不存在", soPickPlanOfLoc.get(0).getZoneId());
 			if (WmsAppConstant.ZONE_CODE_AGV.equals(zone.getZoneCode())) {
-				issuedAgvTask(soPickPlanOfLoc, locId, soHeader);
+				issuedAgvTask(soPickPlanOfLoc, soHeader);
 			} else {
 				issuedManualTask(soPickPlanOfLoc, locId, soHeader);
 			}
-		});
+		}
 
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY,
 			soBillId, soHeader.getSoBillNo(), "执行拣货任务下发成功");
 	}
 
-	private void issuedAgvTask(List<SoPickPlan> soPickPlanOfLoc, Long fromLocId, SoHeader soHeader) {
+	private void issuedAgvTask(List<SoPickPlan> soPickPlanOfLoc, SoHeader soHeader) {
 		if (Func.isEmpty(soPickPlanOfLoc.get(0).getTaskId())) {
-			WmsTask task = agvTask.pickToSchedule(fromLocId, soHeader, null);
+			WmsTask task = agvTask.pickToSchedule(soPickPlanOfLoc, soHeader, null);
 			soPickPlanDao.updateTask(soPickPlanOfLoc, task.getTaskId());
 		} else {
 			WmsTask task = wmsTaskBiz.findByTaskId(soPickPlanOfLoc.get(0).getTaskId());
@@ -577,7 +579,7 @@ public class OutStockBizImpl implements OutStockBiz {
 					stock, item.getSoPickPlanQty());
 				soPickPlanList.add(soPickPlan);
 			}
-			soPickPlanBiz.pickPlanAndSave(soPickPlanList);
+			soPickPlanBiz.occupyStockAndSavePlan(soPickPlanList);
 		}
 
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, request.getSoBillId(),
