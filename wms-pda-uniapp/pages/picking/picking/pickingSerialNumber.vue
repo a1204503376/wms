@@ -51,7 +51,7 @@
 	import setting from '@/common/setting'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	import barcodeFunc from '@/common/barcodeFunc.js'
-	import receive from '@/api/inStock/receiveByPcs.js'
+	import pick from '@/api/picking/picking.js'
 	import tool from '@/utils/tool.js'
 	export default {
 		components: {
@@ -66,8 +66,6 @@
 				params: {},
 				serialNumberList: [],
 				serialNumberLists: ['1', '11', '111', '1111', '001', '11111', '111111'],
-				receiveDetailId: '',
-				receiveId: ''
 			}
 		},
 		onLoad: function(option) {
@@ -105,6 +103,15 @@
 				});
 			},
 			submit() {
+				console.log(this.serialNumberList.length)
+				console.log(this.params.qty)
+				if (this.serialNumberList.length != this.params.qty){
+					this.$u.func.showToast({
+						title: '拣货失败，请输入对应数量的序列号'
+					});
+					return;
+				}
+				
 				var _this = this;
 				uni.$u.throttle(function() {
 					var serialList = [];
@@ -114,35 +121,21 @@
 					let params = {
 						serialNumberList: serialList
 					}
-					receive.getSerialNumberList(params).then(data => {
-						if (tool.isEmpty(data.data)) {
-							var serialList = [];
-							_this.serialNumberList.forEach((serialNumbers, index) => {
-								serialList.push(serialNumbers.serialNumber)
-							})
-							_this.params.serialNumberList = serialList;
-							_this.params.whCode = uni.getStorageSync('warehouse').whCode;
-							_this.params.whId = uni.getStorageSync('warehouse').whId;
-							pick.pickByPcs(_this.params).then(data => {
-								_this.$u.func.showToast({
-									title: '拣货完成'
-								});
-								this.esc();
-							});
-						} else {
-							_this.$u.func.showToast({
-								title: '序列号已存在'
-							});
-							_this.serialNumberList.forEach((serialNumber, index) => {
-								data.data.forEach((serialNumbers, index) => {
-									if (serialNumber.serialNumber ==
-										serialNumbers) {
-										serialNumber.backgroundColor =
-											"background-color: #DD524D;"
-									}
-								});
-							});
-						}
+					var serialList = [];
+					_this.serialNumberList.forEach((serialNumbers, index) => {
+						serialList.push(serialNumbers.serialNumber)
+					})
+					_this.params.serailList = serialList;
+					_this.params.whCode = uni.getStorageSync('warehouse').whCode;
+					_this.params.whId = uni.getStorageSync('warehouse').whId;
+					pick.pickByPcs(_this.params).then(data => {
+						_this.$u.func.showToast({
+							title: '拣货完成'
+						});
+						_this.clearEmitKeyDown();
+						uni.navigateBack({
+							delta: 2
+						});
 					});
 				}, 1000)
 			},
