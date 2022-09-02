@@ -28,8 +28,8 @@
 			android:allowBackup="true"
 			android:allowClearUserData="true"
 			android:label="@string/app_name"
-			android:icon="@drawable/login"
-			android:roundIcon="@drawable/login"
+			android:icon="@drawable/tyicon"
+			android:roundIcon="@drawable/tyicon"
 			android:supportsRtl="true"
 			android:fullBackupContent="true"
 			tools:replace="android:label">
