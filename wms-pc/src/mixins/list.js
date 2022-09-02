@@ -55,7 +55,7 @@ export const listMixin = {
         }
     },
     watch: {
-        $route(){
+        $route() {
             this.handleRefreshTable();
         }
     },
@@ -64,10 +64,10 @@ export const listMixin = {
         this.copyInitialValue();
     },
     methods: {
-        handleRefreshTable(){
+        handleRefreshTable() {
             // 解决固定列错位的问题
             this.$nextTick(() => {
-                if (this.$refs.table && this.$refs.table.doLayout){
+                if (this.$refs.table && this.$refs.table.doLayout) {
                     this.$refs.table.doLayout();
                 }
             });
@@ -78,6 +78,7 @@ export const listMixin = {
         getTableData() {
         },
         onSearch() {
+            this.page.current = 1;
             this.getTableData();
         },
         onReset() {
@@ -90,8 +91,8 @@ export const listMixin = {
             this.getTableData();
         },
         handleTableHeightChange(data) {
-          this.table.height = data;
-          this.handleRefreshTable();
+            this.table.height = data;
+            this.handleRefreshTable();
         },
         onSortChange(column) {
             let prop = column.prop;
