@@ -135,10 +135,11 @@
         <el-dialog
             :append-to-body="true"
             :close-on-click-modal="false"
+            :fullscreen="true"
             :show-close="true"
             :title="dialog.title"
             :visible.sync="dialog.dialogTableVisible"
-            custom-class="dialogClass"
+            top="0"
             @close="closeDialog">
             <el-table
                 ref="dialogTable"
@@ -170,7 +171,6 @@
                         </template>
                     </el-table-column>
                     <el-table-column label="物品编码" prop="skuCode" width="120"></el-table-column>
-                    <el-table-column label="批次号" prop="lotNumber"></el-table-column>
                     <el-table-column label="库存状态" prop="stockStatus"></el-table-column>
                     <el-table-column label="生产批次" prop="skuLot1" width="120"></el-table-column>
                     <el-table-column label="规格型号" prop="skuLot2"></el-table-column>
@@ -302,10 +302,6 @@ export default {
                         label: '物品名称'
                     },
                     {
-                        prop: 'lotNumber',
-                        label: '批次号'
-                    },
-                    {
                         prop: 'stockStatus',
                         label: '库存状态'
                     },
@@ -401,7 +397,7 @@ export default {
                 let tableHeight = height - 350;
                 this.table.soDetailHeight = tableHeight * 0.4;
                 this.table.soPickPlanHeight = tableHeight * 0.6;
-                this.dialog.dialogTableHeight = height - 260;
+                this.dialog.dialogTableHeight = height;
             })
             this.handleRefreshTable();
         },
@@ -644,9 +640,9 @@ export default {
                     this.dialog.dialogTableVisible = false;
                 })
         },
-        // 过滤未填写本次分配量的行
+        // 过滤未填写本次分配量的行和分配量为0的行
         filterRowBySoPickPlan(row) {
-            return !(func.isEmpty(row.pickQty));
+            return !(func.isEmpty(row.pickQty) || row.pickQty === 0);
         },
         getSummaries(param) {
             const {columns, data} = param;
@@ -669,14 +665,14 @@ export default {
             });
             return sums;
         },
-        onCloseDistribution (){
-          this.onClose();
-          this.$router.push({
-              path: '/wms/outstock/soHeader',
-              query: {
-                  isRefresh: 'true'
-              }
-          })
+        onCloseDistribution() {
+            this.onClose();
+            this.$router.push({
+                path: '/wms/outstock/soHeader',
+                query: {
+                    isRefresh: 'true'
+                }
+            })
         },
         createRowObj() {
             // 覆盖混入的方法
@@ -702,9 +698,7 @@ export default {
     float: right;
 }
 
-/deep/ .dialogClass {
-    margin-right: 13px;
-    width: 88%;
-    margin-top: 14vh !important;
+/deep/ .el-dialog__body {
+    max-height: 82% !important;
 }
 </style>

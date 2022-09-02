@@ -398,7 +398,9 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
+                this.removeIdList.push(rows[index].soDetailId);
                 rows.splice(index, 1)
+                console.log(this.removeIdList);
             })
         },
         getDataSource() {
