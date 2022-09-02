@@ -44,6 +44,7 @@ import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
@@ -483,21 +484,25 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public List<StockSoPickPlanResponse> getStockByDistributeAdjust(Long skuId, String skuLot1, String skuLot4,
-																	Long soBillId) {
+	public List<StockSoPickPlanResponse> getStockByDistributeAdjust(
+		Long skuId, String skuLot1, String skuLot4, Long soBillId) {
 		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
 		skuLot.setSkuLot1(skuLot1);
 		skuLot.setSkuLot4(skuLot4);
 		// 获取可分配的库存
 		List<Stock> stockList = stockQueryBiz.findEnableStockBySkuAndSkuLot(skuId, skuLot);
-		if (Func.isEmpty(stockList)) {
+		// 只要库存状态为正常的库存
+		List<Stock> normalStockList = stockList.stream()
+			.filter(stock -> stock.getStockStatus().equals(StockStatusEnum.NORMAL))
+			.collect(Collectors.toList());
+		if (Func.isEmpty(normalStockList)) {
 			throw ExceptionUtil.mpe("该物品没有可分配的库存");
 		}
 		// 总库存（有箱码的库存加无箱码的库存）
 		List<Stock> allStock = new ArrayList<>();
 
 		// 查找出有箱码的库存，追加到总的库存中
-		List<String> boxCodeList = stockList.stream()
+		List<String> boxCodeList = normalStockList.stream()
 			.map(Stock::getBoxCode)
 			.filter(Func::isNotEmpty)
 			.collect(Collectors.toList());
@@ -508,7 +513,7 @@ public class OutStockBizImpl implements OutStockBiz {
 			}
 		}
 		// 查找出箱码为空的库存，追加到总的库存中
-		List<Stock> stockOfNonBoxCode = stockList.stream()
+		List<Stock> stockOfNonBoxCode = normalStockList.stream()
 			.filter(item -> Func.isEmpty(item.getBoxCode()))
 			.collect(Collectors.toList());
 		if (Func.isNotEmpty(stockOfNonBoxCode)) {
@@ -562,8 +567,8 @@ public class OutStockBizImpl implements OutStockBiz {
 		SoHeader soHeader = soBillBiz.getSoHeaderById(request.getSoBillId());
 		AssertUtil.notNull(request, "调整分配失败，发货单已经删除无法执行分配调整");
 		// 删除原有的分配记录和释放库存占用
-		if (Func.isNotEmpty(request.getSoPickPlanList())) {
-			soPickPlanBiz.cancelPickPlan(soHeader, request.getSoPickPlanList());
+		if (Func.isNotEmpty(request.getOldSoPickPlanList())) {
+			soPickPlanBiz.cancelPickPlan(soHeader, request.getOldSoPickPlanList());
 		}
 		// 按照用户输入信息重新形成分配记录
 		if (Func.isNotEmpty(request.getStockIdAndSoPickPlanQtyList())) {
