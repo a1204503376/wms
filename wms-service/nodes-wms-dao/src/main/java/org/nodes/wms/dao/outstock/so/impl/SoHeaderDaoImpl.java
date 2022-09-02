@@ -63,7 +63,7 @@ public class SoHeaderDaoImpl extends BaseServiceImpl<SoHeaderMapper, SoHeader> i
 
 	@Override
 	public IPage<FindAllPickingResponse> getAllPickingPage(IPage<?> page, findSoHeaderByNoRequest request) {
-		AssertUtil.notEmpty(request.getNo(), "发货单编码/上游编码/任务号不能为空");
+		AssertUtil.notEmpty(request.getNo(), "发货单编码/上游编码不能为空");
 		AssertUtil.notEmpty(request.getWhId(), "库房编码不能为空");
 		AssertUtil.notNull(request.getSoBillState(), "单据状态不能为空");
 		return super.baseMapper.getAllPickPage(page, request);
