@@ -182,7 +182,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 				wmsTask.getTaskId(), wmsTask.getTaskState().getDesc()));
 		}
 		// 修改任务状态
-		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.COMPLETED);
+		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.AGV_COMPLETED);
 		locationBiz.unfreezeLocByTask(wmsTask.getTaskId().toString());
 		// 将中间库位的库存移动到目标库位
 		Location targetLoc = locationBiz.findByLocId(wmsTask.getToLocId());

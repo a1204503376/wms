@@ -95,7 +95,7 @@ public interface WmsTaskBiz {
 	 * @param taskProcTypeEnum 任务执行方式
 	 * @return 任务
 	 */
-	WmsTask findEnableTaskByBoxCode(String boxCode, WmsTaskProcTypeEnum taskProcTypeEnum);
+	WmsTask findPickTaskByBoxCode(String boxCode, WmsTaskProcTypeEnum taskProcTypeEnum);
 
 	/**
 	 * 根据任务ID修改任务状态，以及实际量

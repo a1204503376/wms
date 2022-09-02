@@ -71,19 +71,18 @@ public class WmsTaskDaoImpl
 	}
 
 	@Override
-	public WmsTask findTaskByBoxCode(String boxCode, WmsTaskProcTypeEnum taskProcTypeEnum) {
+	public WmsTask findPickTaskByBoxCode(String boxCode, WmsTaskProcTypeEnum taskProcTypeEnum) {
+		AssertUtil.notNull(boxCode, "根据箱码获取任务失败，箱码为空");
+
 		LambdaQueryChainWrapper<WmsTask> lambdaQuery = super.lambdaQuery()
 			.eq(WmsTask::getBoxCode, boxCode)
-			.eq(WmsTask::getTaskTypeCd, WmsTaskTypeEnum.PICKING)
-			.in(WmsTask::getTaskState, WmsTaskStateEnum.NOT_ISSUED, WmsTaskStateEnum.ISSUED, WmsTaskStateEnum.START_EXECUTION, WmsTaskStateEnum.ABNORMAL)
+			.in(WmsTask::getTaskTypeCd, WmsTaskTypeEnum.PICKING, WmsTaskTypeEnum.AGV_PICKING)
+			.in(WmsTask::getTaskState, WmsTaskStateEnum.NOT_ISSUED, WmsTaskStateEnum.ISSUED,
+				WmsTaskStateEnum.START_EXECUTION, WmsTaskStateEnum.ABNORMAL, WmsTaskStateEnum.AGV_COMPLETED)
 			.apply("task_qty <> scan_qty");
-		if (Func.isEmpty(taskProcTypeEnum)) {
-			lambdaQuery.in(WmsTask::getTaskProcType, WmsTaskProcTypeEnum.BY_LOC,
-				WmsTaskProcTypeEnum.BY_BOX, WmsTaskProcTypeEnum.BY_PCS, WmsTaskProcTypeEnum.BY_LPN);
-		} else {
+		if (Func.isNotEmpty(taskProcTypeEnum)) {
 			lambdaQuery.eq(WmsTask::getTaskProcType, taskProcTypeEnum);
 		}
-		AssertUtil.notNull(boxCode, "根据箱码获取任务失败，箱码为空");
 
 		List<WmsTask> wmsTaskList = lambdaQuery.list();
 		if (Func.isEmpty(taskProcTypeEnum) && wmsTaskList.size() == 0) {

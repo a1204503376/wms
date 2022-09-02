@@ -116,8 +116,8 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 	}
 
 	@Override
-	public WmsTask findEnableTaskByBoxCode(String boxCode, WmsTaskProcTypeEnum taskProcTypeEnum) {
-		return wmsTaskDao.findTaskByBoxCode(boxCode, taskProcTypeEnum);
+	public WmsTask findPickTaskByBoxCode(String boxCode, WmsTaskProcTypeEnum taskProcTypeEnum) {
+		return wmsTaskDao.findPickTaskByBoxCode(boxCode, taskProcTypeEnum);
 	}
 
 	@Override

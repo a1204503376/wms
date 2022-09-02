@@ -155,7 +155,8 @@ public interface StockManageBiz {
 	 * @param boxCode        boxCode
 	 * @param checkLocType   是否校验同类型库位移动，True则校验，false则不校验
 	 */
-	void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList, String boxCode, Boolean checkLocType);
+	void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList,
+				 String boxCode, Boolean checkLocType);
 
 	/**
 	 * 库存移动校验库位的箱型

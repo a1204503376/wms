@@ -376,7 +376,8 @@ public class StockManageBizImpl implements StockManageBiz {
 	 * @param boxCode        boxCode
 	 */
 	@Override
-	public void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList, String boxCode, Boolean checkLocType) {
+	public void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList,
+						String boxCode, Boolean checkLocType) {
 		AssertUtil.notNull(sourceLocation, "校验库存移动失败当前库位为空");
 		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
 		AssertUtil.notNull(stockList, "校验库存移动失败库存为空");
