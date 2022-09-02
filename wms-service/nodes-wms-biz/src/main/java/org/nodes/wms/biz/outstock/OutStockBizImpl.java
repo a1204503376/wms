@@ -407,7 +407,7 @@ public class OutStockBizImpl implements OutStockBiz {
 			if (WmsAppConstant.ZONE_CODE_AGV.equals(zone.getZoneCode())) {
 				issuedAgvTask(soPickPlanOfLoc, soHeader);
 			} else {
-				issuedManualTask(soPickPlanOfLoc, locId, soHeader);
+				issuedManualTask(soPickPlanOfLoc, soHeader);
 			}
 		}
 
@@ -430,7 +430,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		}
 	}
 
-	private void issuedManualTask(List<SoPickPlan> soPickPlanOfLoc, Long fromLocId, SoHeader soHeader) {
+	private void issuedManualTask(List<SoPickPlan> soPickPlanOfLoc, SoHeader soHeader) {
 		List<String> issuedBoxCode = new ArrayList<>();
 		for (SoPickPlan soPickPlan : soPickPlanOfLoc) {
 			if (Func.isNotEmpty(soPickPlan.getTaskId())) {
@@ -689,6 +689,9 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	void pickByPcsByStock(PickByPcsRequest request, SoHeader soHeader, SoDetail soDetail, List<Stock> stockList) {
+		AssertUtil.notNull(soHeader, "PDA拣货失败，发货单参数为空");
+		AssertUtil.notNull(soDetail, "PDA拣货失败，发货单明细参数为空");
+		AssertUtil.notNull(stockList, "PDA拣货失败，库存参数为空");
 
 		Location sourceLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
 		// 1 业务判断：

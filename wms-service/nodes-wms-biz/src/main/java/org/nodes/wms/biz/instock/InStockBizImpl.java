@@ -149,7 +149,7 @@ public class InStockBizImpl implements InStockBiz {
 			receiveBiz.log(logType, header, detail, receiveLog);
 
 		}
-		agvTask.putwayToSchedule(stockList);
+		agvTask.putawayToSchedule(stockList);
 
 	}
 
@@ -297,7 +297,7 @@ public class InStockBizImpl implements InStockBiz {
 			receiveBiz.log(logType, header, detail, receiveLog);
 
 		}
-		agvTask.putwayToSchedule(stockList);
+		agvTask.putawayToSchedule(stockList);
 
 	}
 
