@@ -67,20 +67,20 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	}
 
 	@Override
-	public String runPickStrategy(SoHeader soHeader, List<SoDetail> soDetials, List<SoPickPlan> existPickPlans) {
+	public String runPickStrategy(SoHeader soHeader, List<SoDetail> soDetails, List<SoPickPlan> existPickPlans) {
 		String result = "";
-		List<SoPickPlan> pickPlanOfSoDetail = null;
-		for (SoDetail detail : soDetials) {
+		List<SoPickPlan> pickPlanOfSoDetail;
+		for (SoDetail detail : soDetails) {
 			pickPlanOfSoDetail = null;
 			if (Func.notNull(existPickPlans)) {
 				pickPlanOfSoDetail = existPickPlans.stream()
 					.filter(soPickPlan -> detail.getSoDetailId().equals(soPickPlan.getSoDetailId()))
 					.collect(Collectors.toList());
 			}
-			List<SoPickPlan> newPickPlan = tianyiPickStrategy.run(soHeader, detail, soDetials, pickPlanOfSoDetail);
+			List<SoPickPlan> newPickPlan = tianyiPickStrategy.run(soHeader, detail, soDetails, pickPlanOfSoDetail);
 			result = createResultByRunPickStrategy(newPickPlan, detail, result);
 			if (Func.isNotEmpty(newPickPlan)) {
-				pickPlanAndSave(newPickPlan);
+				occupyStockAndSavePlan(newPickPlan);
 				existPickPlans.addAll(newPickPlan);
 			}
 		}
@@ -89,7 +89,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	}
 
 	@Override
-	public void pickPlanAndSave(List<SoPickPlan> soPickPlanList) {
+	public void occupyStockAndSavePlan(List<SoPickPlan> soPickPlanList) {
 		AssertUtil.notEmpty(soPickPlanList, "分配失败,拣货计划参数不能为空");
 
 		stockBiz.occupyStock(soPickPlanList);
@@ -158,10 +158,10 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		}
 
 		if (Func.isNotEmpty(serialOfStock) && Func.isNotEmpty(serialNoList)) {
-			List<String> serianNoOfStock = serialOfStock.stream()
+			List<String> serialNoOfStock = serialOfStock.stream()
 				.map(Serial::getSerialNumber)
 				.collect(Collectors.toList());
-			if (!serialNoList.containsAll(serialNoList)) {
+			if (!serialNoOfStock.containsAll(serialNoList)) {
 				throw ExceptionUtil.mpe("按拣货计划拣货失败, 存在无效的拣货序列号");
 			}
 		}
@@ -218,7 +218,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 
 	@Override
 	public void export(SoPickPlanPageQuery soPickPlanPageQuery, HttpServletResponse response) {
-		IPage<Object> page = new Page();
+		IPage<Object> page = new Page<>();
 		page.setCurrent(1);
 		page.setSize(100000);
 		List<SoPickPlanPageResponse> soPickPlanPageResponseList = soPickPlanDao.getPage(page, soPickPlanPageQuery)

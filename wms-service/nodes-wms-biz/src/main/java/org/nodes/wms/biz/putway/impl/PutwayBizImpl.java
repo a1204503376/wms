@@ -147,7 +147,7 @@ public class PutwayBizImpl implements PutwayBiz {
 				putawayLogDao.save(putawayLog);
 			}
 		}
-		agvTask.putwayToSchedule(targetStockList);
+		agvTask.putawayToSchedule(targetStockList);
 
 
 	}

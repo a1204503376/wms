@@ -71,13 +71,13 @@ public class DefaultStockMergeStrategy implements StockMergeStrategy {
 	}
 
 	private <T> Stock match(StockStatusEnum stockStatus, Long woId, Long locId,
-							Long skuId, String boxCode, String lpnCode, String dorpId, T source) {
+							Long skuId, String boxCode, String lpnCode, String dropId, T source) {
 		if (!SkuLotUtil.hasSkuLot(source)) {
 			throw new ServiceException("库存匹配失败,匹配原对象没有批属性信息");
 		}
 
 		List<Stock> existStockList = stockDao.matchStock(stockStatus, woId, locId,
-			skuId, boxCode, lpnCode, dorpId);
+			skuId, boxCode, lpnCode, dropId);
 		if (Func.isEmpty(existStockList)) {
 			return null;
 		}

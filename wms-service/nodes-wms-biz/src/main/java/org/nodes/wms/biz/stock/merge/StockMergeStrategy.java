@@ -7,6 +7,8 @@ import org.nodes.wms.dao.stock.entities.Stock;
 
 /**
  * 库存合并策略
+ *
+ * @author nodesc
  */
 public interface StockMergeStrategy {
 

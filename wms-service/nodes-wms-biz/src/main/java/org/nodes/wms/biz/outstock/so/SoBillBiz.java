@@ -24,6 +24,8 @@ import java.util.List;
 
 /**
  * 发货单业务接口
+ *
+ * @author nodesc
  **/
 public interface SoBillBiz {
 

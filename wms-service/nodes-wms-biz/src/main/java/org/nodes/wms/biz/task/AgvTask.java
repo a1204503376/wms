@@ -18,6 +18,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.entities.WmsTask;
@@ -63,30 +64,30 @@ public class AgvTask {
 	 * @param stocks 需要上架的库存
 	 */
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public void putwayToSchedule(List<Stock> stocks) {
+	public void putawayToSchedule(List<Stock> stocks) {
 		// 判断是否是库位是否是自动化临时区，如果是则生成上架任务
 		if (!locationBiz.isAgvTempOfZoneType(stocks.get(0).getLocId())) {
 			return;
 		}
 
-		WmsTask putwayTask = wmsTaskFactory.createPutwayTask(stocks);
-		wmsTaskDao.save(putwayTask);
+		WmsTask putawayTask = wmsTaskFactory.createPutwayTask(stocks);
+		wmsTaskDao.save(putawayTask);
 		// 调用上架策略生成目标库位，并把目标库位保存到任务表中
 		Location targetLoc = putwayStrategyActuator.run(BigDecimal.ZERO, stocks);
 		if (!targetLoc.getLocId().equals(locationBiz.getUnknowLocation(stocks.get(0).getWhId()).getLocId())) {
-			putwayTask.setToLocId(targetLoc.getLocId());
-			putwayTask.setToLocCode(targetLoc.getLocCode());
+			putawayTask.setToLocId(targetLoc.getLocId());
+			putawayTask.setToLocCode(targetLoc.getLocCode());
 			// 如果计算得到了目标库位，则发送到调度系统
-			if (sendToSchedule(Collections.singletonList(putwayTask))) {
-				putwayTask.setTaskState(WmsTaskStateEnum.ISSUED);
+			if (sendToSchedule(Collections.singletonList(putawayTask))) {
+				putawayTask.setTaskState(WmsTaskStateEnum.ISSUED);
 			}
 			// 调度系统接收成功之后冻结目标库位和冻结原库位的库存
-			locationBiz.freezeLocByTask(targetLoc.getLocId(), putwayTask.getTaskId().toString());
-			stockBiz.freezeStockByDropId(stocks, putwayTask.getTaskId());
+			locationBiz.freezeLocByTask(targetLoc.getLocId(), putawayTask.getTaskId().toString());
+			stockBiz.freezeStockByDropId(stocks, putawayTask.getTaskId());
 		}
 
 		// 更新任务
-		wmsTaskDao.updateById(putwayTask);
+		wmsTaskDao.updateById(putawayTask);
 	}
 
 	/**
@@ -146,15 +147,19 @@ public class AgvTask {
 	/**
 	 * 拣货任务到agv，按库位下发
 	 *
-	 * @param fromLocId 库位id
-	 * @param so        出库单信息
-	 * @param soDetail  出库单明细信息,自动区任务时可以为空
+	 * @param soPickPlanOfLoc 库位关联的拣货计划
+	 * @param so              出库单信息
+	 * @param soDetail        出库单明细信息,自动区任务时可以为空
 	 */
-	public WmsTask pickToSchedule(Long fromLocId, SoHeader so, SoDetail soDetail) {
-		AssertUtil.notNull(fromLocId, "AGV拣货任务下发失败,locId为空");
+	public WmsTask pickToSchedule(List<SoPickPlan> soPickPlanOfLoc, SoHeader so, SoDetail soDetail) {
+		AssertUtil.notNull(soPickPlanOfLoc, "AGV拣货任务下发失败,locId为空");
 		AssertUtil.notNull(so, "AGV拣货任务下发失败,so为空");
 
-		List<Stock> sourceStock = stockQueryBiz.findStockByLocation(fromLocId);
+		List<Long> stockIdList = soPickPlanOfLoc.stream()
+			.map(SoPickPlan::getStockId)
+			.distinct()
+			.collect(Collectors.toList());
+		List<Stock> sourceStock = stockQueryBiz.findStockById(stockIdList);
 		WmsTask pickTask = wmsTaskFactory.createPickTask(sourceStock, so, soDetail);
 		sendPickToSchedule(pickTask, so);
 		stockBiz.freezeStockByDropId(sourceStock, pickTask.getTaskId());
@@ -162,7 +167,7 @@ public class AgvTask {
 		return pickTask;
 	}
 
-	public void sendPickToSchedule(WmsTask pickTask, SoHeader so){
+	public void sendPickToSchedule(WmsTask pickTask, SoHeader so) {
 		if (sendToSchedule(Collections.singletonList(pickTask))) {
 			pickTask.setTaskState(WmsTaskStateEnum.ISSUED);
 		} else {

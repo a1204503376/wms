@@ -101,7 +101,7 @@ public class TianyiPickStrategy {
 		List<Long> skuIdsOfSoDetail = getAllSkuIdFromSoDetail(soDetailList);
 		boolean needUnpackStock = false;
 		for (Stock stock : firstStockList) {
-			if (stock.isnotEnable()) {
+			if (stock.isNotEnable()) {
 				continue;
 			}
 
@@ -136,7 +136,7 @@ public class TianyiPickStrategy {
 				if (BigDecimalUtil.le(surplusQty, BigDecimal.ZERO)) {
 					break;
 				}
-				if (stock.isnotEnable()) {
+				if (stock.isNotEnable()) {
 					continue;
 				}
 
