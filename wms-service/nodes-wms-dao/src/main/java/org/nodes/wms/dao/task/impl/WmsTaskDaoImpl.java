@@ -90,8 +90,10 @@ public class WmsTaskDaoImpl
 			return null;
 		}
 		AssertUtil.notNull(wmsTaskList, "根据箱码获取任务失败，此箱码不存在任务");
-		if (wmsTaskList.size() > 1 || wmsTaskList.size() == 0) {
-			throw new ServiceException("根据箱码获取任务失败，查询出多个任务，或查询不到跟此箱码相关的任务");
+		if (wmsTaskList.size() > 1) {
+			throw new ServiceException("根据箱码获取任务失败，查询出多个任务");
+		} else if (wmsTaskList.size() == 0) {
+			throw new ServiceException("根据箱码获取任务失败，查询不到任务");
 		}
 		return wmsTaskList.get(0);
 	}
