@@ -5,7 +5,7 @@ module.exports = {
 	// 应用名
 	name: 'WMS3.3',
 	// 应用logo，支持本地路径和网络路径
-	logo: '/static/images/login.png',
+	logo: '/static/images/tyicon.png',
 	// 版本号
 	version: '1.0.0',
 	// 租户

@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="logodiv">
-			<image src="/static/images/login.png" style="width: 100px;height: 100px;" mode="widthFix"></image>
+			<image src="/static/images/tyicon.png" style="width: 100px;height: 100px;" mode="widthFix"></image>
 		</view>
 		
 		<view class="cell">
