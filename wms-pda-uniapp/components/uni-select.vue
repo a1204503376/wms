@@ -77,9 +77,11 @@
 					this.isSkuByCode = true;
 					this.columns = data.data;
 					this.dataSource = data.data[0]
-					if (tool.isEmpty(data.data[0])) {
+					this.$emit('selectValChange', data.data[0]);
+          if (tool.isEmpty(data.data[0])) {
 						this.getDataSource();
 					}
+					
 				})
 			},
 			bindPickerChange: function(e) {

@@ -195,6 +195,14 @@ public interface LocationBiz {
 	boolean isStageLocation(Location location);
 
 	/**
+	 * 判断库位是否为收货接驳区，发货接驳区
+	 *
+	 * @param location location
+	 * @return true：是收货接驳区，发货接驳区
+	 */
+	boolean isAgvTemporaryLocation(Location location);
+
+	/**
 	 * 判断是否是AGV库位
 	 *
 	 * @param location location

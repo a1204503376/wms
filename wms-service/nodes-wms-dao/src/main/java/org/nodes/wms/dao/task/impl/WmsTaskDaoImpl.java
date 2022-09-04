@@ -89,7 +89,7 @@ public class WmsTaskDaoImpl
 		}
 
 		List<WmsTask> wmsTaskList = lambdaQuery.list();
-		if (Func.isEmpty(taskProcTypeEnum) && wmsTaskList.size() == 0 && taskProcTypeEnum == WmsTaskProcTypeEnum.BY_PCS) {
+		if (Func.isNotEmpty(taskProcTypeEnum) && wmsTaskList.size() == 0 && taskProcTypeEnum == WmsTaskProcTypeEnum.BY_PCS) {
 			return null;
 		}
 		AssertUtil.notNull(wmsTaskList, "根据箱码获取任务失败，此箱码不存在任务");

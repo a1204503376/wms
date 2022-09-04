@@ -156,12 +156,6 @@ public class InStockBizImpl implements InStockBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public PdaByPcsReceiveResponse receiptByPcs(PdaByPieceReceiveRequest request) {
-		if (Func.isNotEmpty(request.getBoxCode())) {
-			List<Stock> stocks = stockQueryBiz.findStockByLpnCode(request.getBoxCode());
-			if (Func.notNull(stocks) && stocks.size() > 0) {
-				throw new ServiceException("箱码[" + request.getBoxCode() + "]已存在库存数据！");
-			}
-		}
 		ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(request.getReceiveDetailId());
 		ReceiveHeader receiveHeader = receiveBiz.selectReceiveHeaderById(request.getReceiveId());
 		// 判断业务参数，是否可以正常收货、超收
