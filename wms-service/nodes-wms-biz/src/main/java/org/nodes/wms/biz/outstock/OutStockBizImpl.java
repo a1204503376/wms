@@ -317,18 +317,15 @@ public class OutStockBizImpl implements OutStockBiz {
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(task.getTaskId());
 
 		stockManageBiz.canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode(), false);
-		// 按LPN移动
-		List<Stock> stocks = stockBiz.moveStockByLpnCode(stockList.get(0).getLpnCode(), stockList.get(0).getLpnCode(),
-			targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_LPN_PDA, null, null, null);
 
-		// 任务id和stockID更新拣货计划中的stockID和库位信息 TODO
+		// 任务id和stockID更新拣货计划中的stockID和库位信息
 		for (SoPickPlan pickPlan : soPickPlanList) {
-			for (Stock stock : stocks) {
-				if (Func.equals(pickPlan.getBoxCode(), stock.getBoxCode())
-					&& Func.equals(pickPlan.getPickPlanQty(), stock.getStockBalance())
-					&& Func.equals(pickPlan.getSkuCode(), stock.getSkuCode())
-					&& Func.equals(pickPlan.getLotNumber(), stock.getLotNumber())) {
-					soPickPlanBiz.updatePickByPartParam(pickPlan.getPickPlanId(), stock.getStockId(), targetLocation, zone);
+			for (Stock stock : stockList) {
+				if (Func.equals(pickPlan.getStockId(), stock.getStockId())) {
+					Stock targetStock = stockBiz.moveAllStock(stock, stock.getBoxCode(), stock.getLpnCode(), targetLocation,
+						StockLogTypeEnum.STOCK_MOVE_BY_LPN_PDA, null, null, null);
+					soPickPlanBiz.updatePickByTaskIdAndStockId(pickPlan.getTaskId(), stock.getStockId(),
+						targetStock.getStockId(), targetLocation, zone);
 				}
 			}
 		}
@@ -573,7 +570,7 @@ public class OutStockBizImpl implements OutStockBiz {
 			List<SoPickPlan> soPickPlanList = new ArrayList<>();
 			SoDetail soDetail = soBillBiz.getSoDetailById(request.getSoDetailId());
 			for (StockIdAndSoPickPlanQtyRequest item : request.getStockIdAndSoPickPlanQtyList()) {
-				if (BigDecimalUtil.le(item.getSoPickPlanQty(), BigDecimal.ZERO)){
+				if (BigDecimalUtil.le(item.getSoPickPlanQty(), BigDecimal.ZERO)) {
 					continue;
 				}
 

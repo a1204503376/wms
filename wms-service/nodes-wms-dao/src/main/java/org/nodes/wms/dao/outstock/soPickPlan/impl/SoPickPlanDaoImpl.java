@@ -129,4 +129,21 @@ public class SoPickPlanDaoImpl
 			.eq(SoPickPlan::getStockId, stockId)
 			.list();
 	}
+
+	@Override
+	public void updatePickByTaskIdAndStockId(Long taskId, Long sourceStockId, Long targetStockId, Location location, Zone zone) {
+		UpdateWrapper<SoPickPlan> updateWrapper = Wrappers.update();
+		updateWrapper.lambda()
+			.eq(SoPickPlan::getTaskId, taskId)
+			.eq(SoPickPlan::getStockId, sourceStockId);
+		SoPickPlan soPickPlan = new SoPickPlan();
+		soPickPlan.setStockId(targetStockId);
+		soPickPlan.setLocId(location.getLocId());
+		soPickPlan.setLocCode(location.getLocCode());
+		soPickPlan.setZoneId(zone.getZoneId());
+		soPickPlan.setZoneCode(zone.getZoneCode());
+		if (!super.update(soPickPlan, updateWrapper)) {
+			throw new ServiceException("修改拣货计划失败,请再次重试");
+		}
+	}
 }
