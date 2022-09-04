@@ -67,7 +67,7 @@ public class AgvSyncServiceImpl extends ServiceImpl<AgvSyncMapper, AgvSync>
         }
 
         // 异步通知WMS
-        callWmsService.syncTaskState(jobQueue);
+        callWmsService.syncTaskState(jobQueue, agvSyncOrderRequest.getMsg());
 
         flag = SqlHelper.retBool(jobQueueMapper.updateById(jobQueue));
         if (!flag) {

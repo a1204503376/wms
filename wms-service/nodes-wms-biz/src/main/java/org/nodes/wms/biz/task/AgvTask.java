@@ -24,6 +24,7 @@ import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
 import org.springblade.core.log.exception.ServiceException;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,6 +85,8 @@ public class AgvTask {
 			// 调度系统接收成功之后冻结目标库位和冻结原库位的库存
 			locationBiz.freezeLocByTask(targetLoc.getLocId(), putawayTask.getTaskId().toString());
 			stockBiz.freezeStockByDropId(stocks, putawayTask.getTaskId());
+		} else {
+			putawayTask.setRemark("未查询到合适的上架库位");
 		}
 
 		// 更新任务
@@ -103,10 +106,26 @@ public class AgvTask {
 			url, publishJobFactory.createPublishJobRequestList(wmsTasks));
 		if (schedulingGlobalResponse.hasException()) {
 			log.error("调用API（{}）异常：{}", url, schedulingGlobalResponse.getMsg());
+			setAgvTaskRemark(wmsTasks, schedulingGlobalResponse.getMsg());
 			return false;
 		}
+		
 		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
+		if (schedulingResponse.hasFailed()){
+			setAgvTaskRemark(wmsTasks, schedulingResponse.getMsg());
+			log.warn("发送agv任务{}失败,{}", url, schedulingGlobalResponse.getMsg());
+		}
 		return !schedulingResponse.hasFailed();
+	}
+
+	private void setAgvTaskRemark(List<WmsTask> wmsTasks, String msg){
+		if (Func.isEmpty(msg)){
+			return;
+		}
+
+		for (WmsTask task : wmsTasks){
+			task.setRemark(msg);
+		}
 	}
 
 	/**

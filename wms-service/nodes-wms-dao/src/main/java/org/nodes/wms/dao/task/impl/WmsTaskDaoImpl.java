@@ -35,23 +35,27 @@ public class WmsTaskDaoImpl
 	implements WmsTaskDao {
 
 	@Override
-	public void updateState(Long taskId, WmsTaskStateEnum state) {
+	public void updateState(Long taskId, WmsTaskStateEnum state, String msg) {
 		UpdateWrapper<WmsTask> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
-			.eq(WmsTask::getTaskId, taskId)
-			.set(WmsTask::getTaskState, state.getCode());
+			.eq(WmsTask::getTaskId, taskId);
 
+		WmsTask wmsTask = new WmsTask();
+		wmsTask.setTaskState(state);
+		if (Func.isNotEmpty(msg)){
+			wmsTask.setRemark(msg);
+		}
 		if (WmsTaskStateEnum.COMPLETED.equals(state)
 			|| WmsTaskStateEnum.CANCELED.equals(state)) {
-			updateWrapper.lambda().set(WmsTask::getCloseTime, LocalDateTime.now());
+			wmsTask.setCloseTime(LocalDateTime.now());
 		} else if (WmsTaskStateEnum.ISSUED.equals(state)) {
-			updateWrapper.lambda().set(WmsTask::getAllotTime, LocalDateTime.now());
+			wmsTask.setAllotTime(LocalDateTime.now());
 		} else if (WmsTaskStateEnum.START_EXECUTION.equals(state)) {
-			updateWrapper.lambda().set(WmsTask::getBeginTime, LocalDateTime.now());
+			wmsTask.setBeginTime(LocalDateTime.now());
 		}
 
-		if (!super.update(updateWrapper)) {
-			throw new ServiceException("更新任务状态失败");
+		if (!super.update(wmsTask, updateWrapper)) {
+			throw new ServiceException("更新任务状态失败,请再次重试");
 		}
 	}
 
@@ -130,6 +134,21 @@ public class WmsTaskDaoImpl
 		wmsTask.setTaskProcType(taskProcTypeEnum);
 		wmsTask.setFromLocId(fromLocation.getLocId());
 		wmsTask.setFromLocCode(fromLocation.getLocCode());
+		if (!super.update(wmsTask, updateWrapper)) {
+			throw new ServiceException("任务更新失败,请再次重试");
+		}
+	}
+
+	@Override
+	public void updateRemark(Long taskId, String remark) {
+		if (Func.isEmpty(remark)){
+			remark = "";
+		}
+		UpdateWrapper<WmsTask> updateWrapper = Wrappers.update();
+		updateWrapper.lambda()
+			.eq(WmsTask::getTaskId, taskId);
+		WmsTask wmsTask = new WmsTask();
+		wmsTask.setRemark(remark);
 		if (!super.update(wmsTask, updateWrapper)) {
 			throw new ServiceException("任务更新失败,请再次重试");
 		}
