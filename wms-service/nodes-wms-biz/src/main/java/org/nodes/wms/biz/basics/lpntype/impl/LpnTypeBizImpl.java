@@ -15,7 +15,7 @@ import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypePageResponse;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeSelectResponse;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
-import org.nodes.wms.dao.putaway.dto.modular.LpnTypeFactory;
+import org.nodes.wms.biz.basics.lpntype.factory.LpnTypeFactory;
 import org.nodes.wms.dao.tianyi.skubox.SkuBoxDao;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
