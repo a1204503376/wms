@@ -109,6 +109,11 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			message.setLog(String.format("任务[%s]：[%s]",
 				notificationRequest.getTaskDetailId(), notificationRequest.getMsg()));
 			logBiz.noticeMesssage(message);
+
+			WmsTask wmsTask = wmsTaskDao.getById(notificationRequest.getTaskDetailId());
+			if (Func.notNull(wmsTask)){
+				wmsTaskDao.updateRemark(wmsTask.getTaskId(), notificationRequest.getMsg());
+			}
 		}
 	}
 
