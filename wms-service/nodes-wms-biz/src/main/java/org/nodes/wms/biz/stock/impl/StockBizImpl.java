@@ -320,10 +320,13 @@ public class StockBizImpl implements StockBiz {
 		}
 
 		// 针对不存在的序列号则新增序列号
+		List<String> newSerialNoList = serialNoList;
 		if (Func.isNotEmpty(outBoundSerialNoList)) {
-			serialNoList.removeAll(outBoundSerialNoList);
+			newSerialNoList = serialNoList.stream()
+				.filter(item -> !outBoundSerialNoList.contains(item))
+				.collect(Collectors.toList());
 		}
-		for (String serialNo : serialNoList) {
+		for (String serialNo : newSerialNoList) {
 			Serial stockSerial = new Serial();
 			stockSerial.setSerialNumber(serialNo);
 			updateSerialAndSaveLog(stockSerial, stock, 1);
@@ -560,7 +563,7 @@ public class StockBizImpl implements StockBiz {
 		List<Stock> targetStockList = new ArrayList<>();
 		for (Stock sourceStock : sourceStockList) {
 			Stock targetStock = runMoveStockOfOccupy(sourceStock, targetLocation, sourceStock.getBoxCode(),
-				targetLpnCode, type,false, null, billId, billNo, lineNo);
+				targetLpnCode, type, false, null, billId, billNo, lineNo);
 			targetStockList.add(targetStock);
 		}
 
@@ -635,7 +638,7 @@ public class StockBizImpl implements StockBiz {
 
 		Location inTransitLocation = locationBiz.getInTransitLocation(sourceStock.getWhId());
 		return runMoveStockOfOccupy(sourceStock, inTransitLocation, sourceStock.getBoxCode(), sourceStock.getLpnCode(),
-			type,false, dropId, null, null, null);
+			type, false, dropId, null, null, null);
 	}
 
 	@Override
@@ -648,7 +651,7 @@ public class StockBizImpl implements StockBiz {
 		}
 
 		return runMoveStockOfOccupy(sourceStock, targetLocation, sourceStock.getBoxCode(), sourceStock.getLpnCode(),
-			type,true, dropId, null, null, null);
+			type, true, dropId, null, null, null);
 	}
 
 	private Stock runMoveStockOfOccupy(Stock sourceStock, Location targetLoc, String targetBoxCode,
@@ -661,7 +664,7 @@ public class StockBizImpl implements StockBiz {
 
 		checkQtyOfSerial(serialNoList, sourceStock.getStockBalance());
 
-		if (Func.isEmpty(dropId)){
+		if (Func.isEmpty(dropId)) {
 			dropId = "";
 		}
 		Stock tempTargetStock = stockMergeStrategy.newExpectedStock(sourceStock, targetLoc,
