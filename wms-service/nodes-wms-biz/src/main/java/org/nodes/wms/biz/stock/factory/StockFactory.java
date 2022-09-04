@@ -3,6 +3,7 @@ package org.nodes.wms.biz.stock.factory;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
@@ -29,6 +30,9 @@ public class StockFactory {
 	public Stock create(ReceiveLog receiveLog, Location location) {
 		AssertUtil.notNull(receiveLog, "创建库存失败，清点记录为空");
 		AssertUtil.notNull(location, "创建库存失败，目标为空");
+		if (Func.isNull(receiveLog.getStockStatus())){
+			throw ExceptionUtil.mpe("生成库存失败,库存状态不能为空");
+		}
 
 		Stock stock = new Stock();
 		SkuLotUtil.setAllSkuLot(receiveLog, stock);
