@@ -21,10 +21,11 @@ public interface WmsTaskDao extends BaseService<WmsTask> {
 	/**
 	 * 修改任务状态
 	 *
-	 * @param taskId 任务id
-	 * @param state  状态
+	 * @param taskId 任务id，必填
+	 * @param state  状态，必填
+	 * @param remark 消息，非必填
 	 */
-	void updateState(Long taskId, WmsTaskStateEnum state);
+	void updateState(Long taskId, WmsTaskStateEnum state, String remark);
 
 	/**
 	 * 获取工作任务分页
@@ -87,4 +88,10 @@ public interface WmsTaskDao extends BaseService<WmsTask> {
 	 */
 	void updateWmsTaskByPartParam(Long taskId, WmsTaskProcTypeEnum taskProcTypeEnum, Location fromLocation);
 
+	/**
+	 * 更新消息
+	 * @param taskId 任务ID
+	 * @param msg    消息
+	 */
+	void updateRemark(Long taskId, String msg);
 }

@@ -29,16 +29,30 @@ public class CallWmsServiceImpl implements CallWmsService {
     @Resource
     private CallApiService callApiService;
 
+    @Override
+    public void syncExceptionMsgOfCallAgv(JobQueue jobQueue, String msg) {
+        WmsSyncTaskStateRequest wmsSyncTaskStateRequest = new WmsSyncTaskStateRequest();
+        wmsSyncTaskStateRequest.setTaskHeaderId(jobQueue.getWmsTaskId());
+        wmsSyncTaskStateRequest.setTaskDetailId(jobQueue.getWmsTaskDetailId());
+        if (msg != null) {
+            wmsSyncTaskStateRequest.setMsg(msg);
+        }
+        callApiService.postWms(url_syncTaskSate, wmsSyncTaskStateRequest);
+    }
+
     /**
      * 同步AGV执行状态给WMS
      */
     @Async
     @Override
-    public void syncTaskState(JobQueue jobQueue) {
+    public void syncTaskState(JobQueue jobQueue, String msg) {
         WmsSyncTaskStateRequest wmsSyncTaskStateRequest = new WmsSyncTaskStateRequest();
         wmsSyncTaskStateRequest.setTaskHeaderId(jobQueue.getWmsTaskId());
         wmsSyncTaskStateRequest.setTaskDetailId(jobQueue.getWmsTaskDetailId());
         wmsSyncTaskStateRequest.setState(jobQueue.getStatus());
+        if (msg != null) {
+            wmsSyncTaskStateRequest.setMsg(msg);
+        }
         callApiService.postWms(url_syncTaskSate, wmsSyncTaskStateRequest);
     }
 
