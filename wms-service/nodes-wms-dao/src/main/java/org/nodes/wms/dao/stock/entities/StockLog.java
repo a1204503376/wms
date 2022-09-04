@@ -177,4 +177,8 @@ public class StockLog extends BaseSkuLotEntity {
 	 * 计量单位编码
 	 */
 	private String wsuCode;
+	/**
+	 * 落放id
+	 */
+	private String dropId;
 }
