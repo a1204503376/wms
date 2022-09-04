@@ -5,7 +5,7 @@ import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.putaway.PutawayBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.common.stock.StockUtil;
-import org.nodes.wms.dao.putaway.dto.input.PutawayByBoxRequest;
+import org.nodes.wms.dao.putaway.dto.input.FindPutawayDataByBoxCodeRequest;
 import org.nodes.wms.dao.putaway.dto.input.PutwayByBoxRequest;
 import org.nodes.wms.dao.putaway.dto.output.PutawayByBoxResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
@@ -40,7 +40,7 @@ public class PutawayByBoxController {
 	 * @return 上架信息
 	 */
 	@PostMapping("/findPutawayDataByBoxCode")
-	public R<PutawayByBoxResponse> findPutawayDataByBoxCode(@RequestBody PutawayByBoxRequest request) {
+	public R<PutawayByBoxResponse> findPutawayDataByBoxCode(@RequestBody FindPutawayDataByBoxCodeRequest request) {
 		List<Stock> stockList = stockQueryBiz.findStockOnStageByBoxCode(request.getWhId(), request.getBoxCode());
 		if (Func.isEmpty(stockList)) {
 			throw new ServiceException("按箱上架失败,该箱不在入库暂存区无法上架");

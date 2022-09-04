@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 按箱上架请求对象
  **/
 @Data
-public class PutawayByBoxRequest implements Serializable {
+public class FindPutawayDataByBoxCodeRequest implements Serializable {
 
 	private static final long serialVersionUID = 5278548007801352620L;
 	/**
