@@ -297,6 +297,11 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
+	public boolean isAgvTemporaryLocation(Location location) {
+		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_AGV_TEMPORARY);
+	}
+
+	@Override
 	public boolean isAgvLocation(Location location) {
 		if (getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_AGV_STORAGE)
 			|| getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_AGV_PICK)
