@@ -674,6 +674,10 @@ public class OutStockBizImpl implements OutStockBiz {
 		// 校验是否超发
 		canPick(soPickPlanList, stockList);
 
+		for (Stock stock : stockList) {
+			canPickLocation(stock.getLocId());
+		}
+
 		// 拣货、更新拣货计划
 		updateSoPickPlan(soPickPlanList);
 
@@ -705,6 +709,7 @@ public class OutStockBizImpl implements OutStockBiz {
 				&& Func.equals(stockParam.getSkuLot1(), request.getSkuLot1())
 				&& Func.equals(stockParam.getLocCode(), request.getLocCode()))
 			.findFirst().orElse(null);
+		canPickLocation(stock.getLocId());
 		AssertUtil.notNull(stockList, "PDA拣货失败，根据您输入的条件找不到对应的库存");
 		AssertUtil.notNull(stock, "PDA拣货失败，根据您输入的条件找不到对应的库存");
 		LogSoPick logSoPick = logSoPickFactory.createLogSoPick(request, soHeader, soDetail, stock, sourceLocation);
@@ -726,4 +731,21 @@ public class OutStockBizImpl implements OutStockBiz {
 			String.format("PDA%s 箱码:[%s] SKU[%s]批次[%s]数量[%s] ", WmsTaskProcTypeEnum.BY_PCS.getDesc(), stockList.get(0).getBoxCode(), request.getSkuCode(), request.getSkuLot1(),
 				request.getQty()));
 	}
+
+	/**
+	 * 判断库位是否是 出库暂存区，收货接驳区，发货接驳区库位
+	 * 是则抛异常
+	 *
+	 * @param locId locId
+	 */
+	void canPickLocation(Long locId) {
+		Location originalLocation = locationBiz.findByLocId(locId);
+		if (locationBiz.isPickToLocation(originalLocation)) {
+			throw new ServiceException("拣货失败，原库位不能是出库暂存区库位");
+		}
+		if (locationBiz.isAgvTemporaryLocation(originalLocation)) {
+			throw new ServiceException("拣货失败，原库位不能是收货接驳区库位/发货接驳区库位");
+		}
+	}
+
 }
