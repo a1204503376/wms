@@ -8,7 +8,7 @@ import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
-import org.nodes.wms.biz.putway.strategy.TianYiPutwayStrategy;
+import org.nodes.wms.biz.putaway.strategy.TianYiPutawayStrategy;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.stockManage.StockManageBiz;
@@ -46,7 +46,7 @@ public class StockManageBizImpl implements StockManageBiz {
 	private final SkuBiz skuBiz;
 	private final LogBiz logBiz;
 	private final LpnTypeBiz lpnTypeBiz;
-	private final TianYiPutwayStrategy tianYiPutwayStrategy;
+	private final TianYiPutawayStrategy tianYiPutawayStrategy;
 	private final AgvTask agvTask;
 
 	@Override
@@ -522,7 +522,7 @@ public class StockManageBizImpl implements StockManageBiz {
 	 * @param stockList      库存集合
 	 */
 	private void canMoveByIsNotOverweight(Location targetLocation, List<Stock> stockList) {
-		if (!tianYiPutwayStrategy.isNotOverweight(stockList, targetLocation)) {
+		if (!tianYiPutawayStrategy.isNotOverweight(stockList, targetLocation)) {
 			throw new ServiceException("要移动的库存超过了最大载重");
 		}
 	}

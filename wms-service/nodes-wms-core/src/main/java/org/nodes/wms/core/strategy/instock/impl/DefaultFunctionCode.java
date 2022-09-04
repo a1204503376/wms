@@ -1,7 +1,7 @@
 package org.nodes.wms.core.strategy.instock.impl;
 
 import org.nodes.wms.dao.stock.entities.Stock;
-import org.nodes.wms.dao.putway.entities.StInstockDetail;
+import org.nodes.wms.dao.putaway.entities.StInstockDetail;
 import org.nodes.wms.core.strategy.instock.FunctionCodeBase;
 import org.nodes.wms.core.strategy.instock.IFunctionCode;
 import org.nodes.wms.core.strategy.vo.InstockExecuteVO;

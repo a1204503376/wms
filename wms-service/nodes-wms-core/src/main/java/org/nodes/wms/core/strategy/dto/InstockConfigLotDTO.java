@@ -2,7 +2,7 @@ package org.nodes.wms.core.strategy.dto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.dao.putway.entities.StInstockConfigLot;
+import org.nodes.wms.dao.putaway.entities.StInstockConfigLot;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

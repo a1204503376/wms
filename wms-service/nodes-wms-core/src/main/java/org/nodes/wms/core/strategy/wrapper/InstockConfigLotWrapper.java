@@ -1,7 +1,7 @@
 package org.nodes.wms.core.strategy.wrapper;
 
 import org.nodes.core.base.cache.DictCache;
-import org.nodes.wms.dao.putway.entities.StInstockConfigLot;
+import org.nodes.wms.dao.putaway.entities.StInstockConfigLot;
 import org.nodes.wms.core.strategy.vo.InstockConfigLotVO;
 import org.springblade.core.mp.support.BaseEntityWrapper;
 import org.springblade.core.tool.utils.*;

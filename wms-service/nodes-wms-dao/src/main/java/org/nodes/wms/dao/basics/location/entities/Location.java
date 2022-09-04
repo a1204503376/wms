@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.nodes.core.constant.DictKVConstant;
-import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.tenant.mp.TenantEntity;
 import org.springblade.core.tool.utils.Func;
 
@@ -342,21 +341,7 @@ public class Location extends TenantEntity {
 	 */
 	public boolean enableStock() {
 		return Func.isNull(locFlag)
-				|| DictKVConstant.LOC_FLAG_NORMAL.equals(locFlag)
-				|| DictKVConstant.LOC_FLAG_FORZEN.equals(locFlag);
-	}
-
-	/**
-	 * 获取该库位库存默认状态
-	 *
-	 * @return 库存状态
-	 */
-	public StockStatusEnum defaultStockStatus() {
-		if (DictKVConstant.LOC_FLAG_FORZEN.equals(locFlag)) {
-			return StockStatusEnum.FREEZE;
-		}
-
-		return StockStatusEnum.NORMAL;
+			|| DictKVConstant.LOC_FLAG_NORMAL.equals(locFlag);
 	}
 
 }

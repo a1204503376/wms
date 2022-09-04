@@ -63,9 +63,6 @@ public class DefaultStockMergeStrategy implements StockMergeStrategy {
 		tempTargetStock.setLpnCode(targetLpnCode);
 		tempTargetStock.setBoxCode(targetBoxCode);
 		tempTargetStock.setDropId(dropId);
-		if (StockStatusEnum.FREEZE.equals(targetLocation.defaultStockStatus())) {
-			tempTargetStock.setStockStatus(StockStatusEnum.FREEZE);
-		}
 
 		return tempTargetStock;
 	}

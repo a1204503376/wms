@@ -1,6 +1,6 @@
 package org.nodes.wms.core.strategy.wrapper;
 
-import org.nodes.wms.dao.putway.entities.StInstock;
+import org.nodes.wms.dao.putaway.entities.StInstock;
 import org.nodes.wms.core.strategy.vo.InstockVO;
 import org.nodes.wms.core.warehouse.cache.WarehouseCache;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;

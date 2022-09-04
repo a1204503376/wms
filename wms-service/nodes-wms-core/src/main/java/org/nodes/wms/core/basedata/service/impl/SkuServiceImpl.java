@@ -40,7 +40,7 @@ import org.nodes.wms.core.basedata.entity.SkuInstock;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLot;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotVal;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
-import org.nodes.wms.dao.putway.entities.StInstock;
+import org.nodes.wms.dao.putaway.entities.StInstock;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;

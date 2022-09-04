@@ -70,7 +70,7 @@ public interface DictKVConstant {
 	 */
 	Integer LOC_FLAG_DAMAGED = 10;
 	/**
-	 * 库位使用状态(loc_flag)：冻结 可以上架库存，但库存状态为冻结
+	 * 库位使用状态(loc_flag)：冻结 不能上架库存到该库位
 	 */
 	Integer LOC_FLAG_FORZEN = 20;
 	/**

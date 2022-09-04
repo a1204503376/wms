@@ -10,7 +10,7 @@ import org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse;
 import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
-import org.nodes.wms.dao.putway.dto.input.LpnTypeRequest;
+import org.nodes.wms.dao.putaway.dto.input.LpnTypeRequest;
 import org.springblade.core.mp.support.Query;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.nodes.modules.wms.log.vo.InstockLogVO;
 import org.nodes.modules.wms.log.wrapper.InstockLogWrapper;
-import org.nodes.wms.dao.putway.entities.StInstockLog;
+import org.nodes.wms.dao.putaway.entities.StInstockLog;
 import org.nodes.wms.core.strategy.service.IInstockLogService;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.log.annotation.ApiLog;

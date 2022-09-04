@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.dao.putway.entities.StInstockDetail;
+import org.nodes.wms.dao.putaway.entities.StInstockDetail;
 
 import java.util.List;
 

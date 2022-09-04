@@ -1,7 +1,7 @@
 
 package org.nodes.wms.core.strategy.service;
 
-import org.nodes.wms.dao.putway.entities.StInstockConfig;
+import org.nodes.wms.dao.putaway.entities.StInstockConfig;
 import org.springblade.core.mp.base.BaseService;
 
 /**

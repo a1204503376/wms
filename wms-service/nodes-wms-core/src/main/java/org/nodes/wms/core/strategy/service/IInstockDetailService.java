@@ -3,8 +3,8 @@ package org.nodes.wms.core.strategy.service;
 
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.core.strategy.dto.InstockDetailDTO;
-import org.nodes.wms.dao.putway.entities.StInstock;
-import org.nodes.wms.dao.putway.entities.StInstockDetail;
+import org.nodes.wms.dao.putaway.entities.StInstock;
+import org.nodes.wms.dao.putaway.entities.StInstockDetail;
 import org.springblade.core.mp.base.BaseService;
 
 import javax.validation.constraints.NotNull;

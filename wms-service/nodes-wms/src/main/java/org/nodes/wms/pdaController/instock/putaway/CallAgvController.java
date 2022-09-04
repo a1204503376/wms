@@ -2,13 +2,13 @@ package org.nodes.wms.pdaController.instock.putaway;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
-import org.nodes.wms.biz.putway.PutwayBiz;
+import org.nodes.wms.biz.putaway.PutawayBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
-import org.nodes.wms.dao.putway.dto.input.CallAgvRequest;
-import org.nodes.wms.dao.putway.dto.input.LpnTypeRequest;
-import org.nodes.wms.dao.putway.dto.input.PutawayByBoxRequest;
-import org.nodes.wms.dao.putway.dto.output.CallAgvResponse;
-import org.nodes.wms.dao.putway.dto.output.LocResponse;
+import org.nodes.wms.dao.putaway.dto.input.CallAgvRequest;
+import org.nodes.wms.dao.putaway.dto.input.LpnTypeRequest;
+import org.nodes.wms.dao.putaway.dto.input.PutawayByBoxRequest;
+import org.nodes.wms.dao.putaway.dto.output.CallAgvResponse;
+import org.nodes.wms.dao.putaway.dto.output.LocResponse;
 import org.springblade.core.tool.api.R;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_PDA_API + "/putaway")
 public class CallAgvController {
-	private final PutwayBiz putwayBiz;
+	private final PutawayBiz putawayBiz;
 	private final StockQueryBiz stockQueryBiz;
 
 
@@ -47,7 +47,7 @@ public class CallAgvController {
 	 */
 	@PostMapping("/findLocByLpnType")
 	public R<List<LocResponse>> findLocByLpnType(@RequestBody LpnTypeRequest request) {
-		return R.data(putwayBiz.findLocByLpnType(request));
+		return R.data(putawayBiz.findLocByLpnType(request));
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class CallAgvController {
 	 */
 	@PostMapping("/callAgv")
 	public String callAgv(@RequestBody CallAgvRequest request) {
-		putwayBiz.callAgv(request);
+		putawayBiz.callAgv(request);
 		return "操作成功";
 	}
 

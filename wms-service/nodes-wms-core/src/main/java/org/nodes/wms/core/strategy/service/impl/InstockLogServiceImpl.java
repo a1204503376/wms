@@ -1,7 +1,7 @@
 package org.nodes.wms.core.strategy.service.impl;
 
-import org.nodes.wms.dao.putway.entities.StInstockLog;
-import org.nodes.wms.dao.putway.mapper.StInstockLogMapper;
+import org.nodes.wms.dao.putaway.entities.StInstockLog;
+import org.nodes.wms.dao.putaway.mapper.StInstockLogMapper;
 import org.nodes.wms.core.strategy.service.IInstockLogService;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.context.annotation.Primary;

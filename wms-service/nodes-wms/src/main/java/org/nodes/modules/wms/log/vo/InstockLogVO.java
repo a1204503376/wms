@@ -3,7 +3,7 @@ package org.nodes.modules.wms.log.vo;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.dao.putway.entities.StInstockLog;
+import org.nodes.wms.dao.putaway.entities.StInstockLog;
 
 /**
  * 上架记录视图实体类

@@ -33,13 +33,7 @@ public class StockFactory {
 		Stock stock = new Stock();
 		SkuLotUtil.setAllSkuLot(receiveLog, stock);
 		stock.setLastInTime(LocalDateTime.now());
-
-		if (Func.isNull(receiveLog.getStockStatus())) {
-			stock.setStockStatus(location.defaultStockStatus());
-		} else {
-			stock.setStockStatus(receiveLog.getStockStatus());
-		}
-
+		stock.setStockStatus(receiveLog.getStockStatus());
 		stock.setSkuLevel(receiveLog.getSkuLevel());
 		stock.setWsuCode(receiveLog.getWsuCode());
 		Sku sku = skuBiz.findById(receiveLog.getSkuId());

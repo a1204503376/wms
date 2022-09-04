@@ -4,7 +4,7 @@ package org.nodes.wms.core.strategy.service;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.strategy.dto.InstockDTO;
-import org.nodes.wms.dao.putway.entities.StInstock;
+import org.nodes.wms.dao.putaway.entities.StInstock;
 import org.nodes.wms.core.strategy.vo.InstockExecuteVO;
 import org.nodes.wms.core.strategy.vo.InstockVO;
 import org.springblade.core.mp.base.BaseService;

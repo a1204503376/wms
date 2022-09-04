@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.nodes.wms.core.strategy.dto.InstockDTO;
-import org.nodes.wms.dao.putway.entities.StInstock;
+import org.nodes.wms.dao.putaway.entities.StInstock;
 import org.nodes.wms.core.strategy.service.IInstockService;
 import org.nodes.wms.core.strategy.vo.InstockVO;
 import org.nodes.wms.core.strategy.wrapper.InstockWrapper;

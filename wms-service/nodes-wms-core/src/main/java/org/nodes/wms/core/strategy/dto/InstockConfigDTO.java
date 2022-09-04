@@ -3,7 +3,7 @@ package org.nodes.wms.core.strategy.dto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.dao.putway.entities.StInstockConfig;
+import org.nodes.wms.dao.putaway.entities.StInstockConfig;
 
 /**
  * 上架策略执行条件数据传输对象实体类

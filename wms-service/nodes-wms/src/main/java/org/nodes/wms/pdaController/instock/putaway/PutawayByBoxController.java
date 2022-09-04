@@ -2,12 +2,12 @@ package org.nodes.wms.pdaController.instock.putaway;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
-import org.nodes.wms.biz.putway.PutwayBiz;
+import org.nodes.wms.biz.putaway.PutawayBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.common.stock.StockUtil;
-import org.nodes.wms.dao.putway.dto.input.PutawayByBoxRequest;
-import org.nodes.wms.dao.putway.dto.input.PutwayByBoxRequest;
-import org.nodes.wms.dao.putway.dto.output.PutawayByBoxResponse;
+import org.nodes.wms.dao.putaway.dto.input.PutawayByBoxRequest;
+import org.nodes.wms.dao.putaway.dto.input.PutwayByBoxRequest;
+import org.nodes.wms.dao.putaway.dto.output.PutawayByBoxResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.log.exception.ServiceException;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @RequestMapping(WmsApiPath.WMS_PDA_API + "/putaway")
 public class PutawayByBoxController {
 	private final StockQueryBiz stockQueryBiz;
-	private final PutwayBiz putwayBiz;
+	private final PutawayBiz putawayBiz;
 
 	/**
 	 * PDA按箱上架：根据箱码查询库存
@@ -69,7 +69,7 @@ public class PutawayByBoxController {
 	@ApiLog("PDA按箱上架")
 	@PostMapping("/submitPutawayByBox")
 	public void submitPutawayByBox(@RequestBody PutwayByBoxRequest request) {
-		putwayBiz.putwayByBox(request);
+		putawayBiz.putawayByBox(request);
 	}
 
 }

@@ -6,7 +6,7 @@ import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.basics.systemParam.SystemParamBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
-import org.nodes.wms.biz.putway.PutwayStrategyActuator;
+import org.nodes.wms.biz.putaway.PutawayStrategyActuator;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.factory.PublishJobFactory;
@@ -49,7 +49,7 @@ public class AgvTask {
 
 	private final LocationBiz locationBiz;
 	private final WmsTaskFactory wmsTaskFactory;
-	private final PutwayStrategyActuator putwayStrategyActuator;
+	private final PutawayStrategyActuator putawayStrategyActuator;
 	private final WmsTaskDao wmsTaskDao;
 	private final StockBiz stockBiz;
 	private final PublishJobFactory publishJobFactory;
@@ -73,7 +73,7 @@ public class AgvTask {
 		WmsTask putawayTask = wmsTaskFactory.createPutwayTask(stocks);
 		wmsTaskDao.save(putawayTask);
 		// 调用上架策略生成目标库位，并把目标库位保存到任务表中
-		Location targetLoc = putwayStrategyActuator.run(BigDecimal.ZERO, stocks);
+		Location targetLoc = putawayStrategyActuator.run(BigDecimal.ZERO, stocks);
 		if (!targetLoc.getLocId().equals(locationBiz.getUnknowLocation(stocks.get(0).getWhId()).getLocId())) {
 			putawayTask.setToLocId(targetLoc.getLocId());
 			putawayTask.setToLocCode(targetLoc.getLocCode());

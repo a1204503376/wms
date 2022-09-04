@@ -3,7 +3,7 @@ package org.nodes.wms.biz.task;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.systemParam.SystemParamBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
-import org.nodes.wms.biz.putway.PutwayStrategyActuator;
+import org.nodes.wms.biz.putaway.PutawayStrategyActuator;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.factory.PublishJobFactory;
@@ -44,7 +44,7 @@ public class AgvTimmerTask {
 	private final PublishJobFactory publishJobFactory;
 	private final StockBiz stockBiz;
 	private final StockQueryBiz stockQueryBiz;
-	private final PutwayStrategyActuator putwayStrategyActuator;
+	private final PutawayStrategyActuator putawayStrategyActuator;
 
 	protected static Logger logger = LoggerFactory.getLogger(AgvTimmerTask.class);
 	private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -99,7 +99,7 @@ public class AgvTimmerTask {
 			else {
 				logger.info("定时任务启动,预计启动AGV上架任务开始2=任务ID:"+wmsTask.getTaskId()+";库存条数:"+stocks.size()+"; time="+sdf.format(new Date()));
 				// 调用上架策略生成目标库位，并把目标库位保存到任务表中
-				Location targetLoc = putwayStrategyActuator.run(BigDecimal.ZERO, stocks);
+				Location targetLoc = putawayStrategyActuator.run(BigDecimal.ZERO, stocks);
 				if (targetLoc != null && !targetLoc.getLocId().equals(locationBiz.getUnknowLocation(stocks.get(0).getWhId()).getLocId())) {
 					wmsTask.setToLocId(targetLoc.getLocId());
 					wmsTask.setToLocCode(targetLoc.getLocCode());
