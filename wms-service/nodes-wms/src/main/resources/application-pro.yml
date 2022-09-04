@@ -4,7 +4,7 @@ spring:
     host: 192.168.41.171
     port: 6379
     password:
-    database: 1
+    database: 2
     ssl: false
   datasource:
     url: jdbc:mysql://192.168.41.172:3306/pro_wms?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
