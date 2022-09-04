@@ -37,7 +37,6 @@ public class SoPickController extends BladeController {
 	/**
 	 * 自定义分页 拣货记录日志
 	 */
-	@ApiLog("拣货记录日志接口-拣货记录分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "拣货记录分页", notes = "传入soPick")
 	public R<IPage<SoPickVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
@@ -49,7 +48,6 @@ public class SoPickController extends BladeController {
 	/**
 	 * 根据波次ID和单据ID获取拣货计划列表
 	 */
-	@ApiLog("拣货记录日志接口-列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "拣货记录列表", notes = "传参SoPick根据前端订单ID或者波次ID封装来查询")
 	public R<List<SoPick>> list(SoPick soPick) {

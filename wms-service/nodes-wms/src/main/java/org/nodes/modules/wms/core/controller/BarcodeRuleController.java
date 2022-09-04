@@ -42,7 +42,6 @@ public class BarcodeRuleController extends BladeController {
 	/**
 	 * 条码规则详情
 	 */
-	@ApiLog("条码规则-条码规则详情")
 	@GetMapping("/detail")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "sbrId",value = "条码规则定义ID", paramType = "query", dataType = "string")
@@ -60,7 +59,6 @@ public class BarcodeRuleController extends BladeController {
 	 *
 	 * @author zx
 	 */
-	@ApiLog("条码规则-条码规则列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "条码规则列表", notes = "传入barcodeRule")
 	public R<List<BarcodeRuleVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
@@ -71,7 +69,6 @@ public class BarcodeRuleController extends BladeController {
 	/**
 	 * 条码规则分页查询
 	 */
-	@ApiLog("条码规则-条码规则分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "条码规则分页", notes = "传入barcodeRule")
 	public R<IPage<BarcodeRuleVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

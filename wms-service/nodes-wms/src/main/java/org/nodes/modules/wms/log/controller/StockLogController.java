@@ -40,7 +40,6 @@ public class StockLogController extends BladeController {
 	/**
 	 * 分页 库存日志
 	 */
-	@ApiLog("库存日志接口-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "分页", notes = "传入stockLog")
 	public R<IPage<StockLogVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
