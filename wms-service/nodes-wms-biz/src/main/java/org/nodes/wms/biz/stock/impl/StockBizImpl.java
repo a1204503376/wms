@@ -377,6 +377,11 @@ public class StockBizImpl implements StockBiz {
 			targetBoxCode, targetLpnCode, targetLocation, type, billId, billNo, lineNo);
 	}
 
+	@Override
+	public Stock moveAllStockOfOccupy(Stock sourceStock, String targetBoxCode, String targetLpnCode, Location targetLocation, StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+		return null;
+	}
+
 	private void canMoveStock(Stock sourceStock, BigDecimal qty, Location targetLocation) {
 		AssertUtil.notNull(targetLocation, "库存移动失败，目标库位为空");
 
@@ -413,7 +418,6 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public void checkSerialOnStock(Stock stock, List<String> serialNoList) {
-
 		List<String> serialNosOfStock = serialDao.getSerialNoByStockId(stock.getStockId());
 		if (Func.isNotEmpty(serialNosOfStock)) {
 			if (Func.isEmpty(serialNoList)) {
@@ -501,6 +505,11 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
+	public List<Stock> moveStockByBoxCodeOfOccupy(String boxCode, String targetBoxCode, String targetLpnCode, Location targetLocation, StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+		return null;
+	}
+
+	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public List<Stock> moveStockByLpnCode(String lpnCode, String targetLpnCode, Location targetLocation,
 										  StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
@@ -519,6 +528,11 @@ public class StockBizImpl implements StockBiz {
 		}
 
 		return targetStockList;
+	}
+
+	@Override
+	public List<Stock> moveStockByLpnCodeOfOccupy(String lpnCode, String targetLpnCode, Location targetLocation, StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+		return null;
 	}
 
 	/**

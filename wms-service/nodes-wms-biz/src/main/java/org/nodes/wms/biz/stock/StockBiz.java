@@ -90,7 +90,25 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	Stock moveAllStock(Stock sourceStock, String targetBoxCode, String targetLpnCode,
-					   Location targetLocation, StockLogTypeEnum type, Long billId, String billNo, String lineNo);
+					   Location targetLocation, StockLogTypeEnum type, Long billId,
+					   String billNo, String lineNo);
+
+	/**
+	 * 整库存移动,自动计算关联序列号。和moveAllStock的区别是如果原库存有冻结数量则目标库存也将会冻结
+	 *
+	 * @param sourceStock    需要移动的库存,必填
+	 * @param targetBoxCode  目标箱码
+	 * @param targetLpnCode  目标LPN编码
+	 * @param targetLocation 目标库位,必填
+	 * @param type           库存移动类型,必填
+	 * @param billId         操作单id，可为空
+	 * @param billNo         操作单编码，可为空
+	 * @param lineNo         操作单行号，可为空
+	 * @return 目标库存
+	 */
+	Stock moveAllStockOfOccupy(Stock sourceStock, String targetBoxCode, String targetLpnCode,
+							   Location targetLocation, StockLogTypeEnum type, Long billId,
+							   String billNo, String lineNo);
 
 	/**
 	 * 库存移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -156,6 +174,25 @@ public interface StockBiz {
 								   Long billId, String billNo, String lineNo);
 
 	/**
+	 * 整箱移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
+	 * 原库存状态为系统冻结在移动时抛异常；目标库位状态(locFlag)如果不是正常或冻结时抛异常
+	 * 和moveStockByBoxCode的区别是如果原库存有冻结数量则目标库存也将会冻结
+	 *
+	 * @param boxCode        需要移动的箱码，必填
+	 * @param targetBoxCode  目标箱码，必填
+	 * @param targetLpnCode  目标托盘号
+	 * @param targetLocation 目标库位 必填
+	 * @param type           移动类型 必填
+	 * @param billId         单据id
+	 * @param billNo         单据编码
+	 * @param lineNo         单据明细行号
+	 * @return 目标库存
+	 */
+	List<Stock> moveStockByBoxCodeOfOccupy(String boxCode, String targetBoxCode, String targetLpnCode,
+								   Location targetLocation, StockLogTypeEnum type,
+								   Long billId, String billNo, String lineNo);
+
+	/**
 	 * 整托移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
 	 * 原库存状态为系统冻结在移动时抛异常；目标库位状态(locFlag)如果不是正常或冻结时抛异常
 	 *
@@ -169,6 +206,23 @@ public interface StockBiz {
 	 * @return 目标库存
 	 */
 	List<Stock> moveStockByLpnCode(String lpnCode, String targetLpnCode, Location targetLocation, StockLogTypeEnum type,
+								   Long billId, String billNo, String lineNo);
+
+	/**
+	 * 整托移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
+	 * 原库存状态为系统冻结在移动时抛异常；目标库位状态(locFlag)如果不是正常或冻结时抛异常
+	 * 和moveStockByLpnCode的区别是如果原库存有冻结数量则目标库存也将会冻结
+	 *
+	 * @param lpnCode        需要移动的托盘号，必填
+	 * @param targetLpnCode  目标托盘号，必填
+	 * @param targetLocation 目标库位 必填
+	 * @param type           移动类型 必填
+	 * @param billId         单据id
+	 * @param billNo         单据编码
+	 * @param lineNo         单据明细行号
+	 * @return 目标库存
+	 */
+	List<Stock> moveStockByLpnCodeOfOccupy(String lpnCode, String targetLpnCode, Location targetLocation, StockLogTypeEnum type,
 								   Long billId, String billNo, String lineNo);
 
 	/**
