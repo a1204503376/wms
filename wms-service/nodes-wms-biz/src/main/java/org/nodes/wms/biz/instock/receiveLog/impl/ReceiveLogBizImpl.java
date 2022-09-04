@@ -22,6 +22,7 @@ import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -76,6 +77,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setSkuSpec(request.getSkuLot2());
 		receiveLog.setWhId(request.getWhId());
 		receiveLog.setWsuCode(request.getWsuCode());
+		receiveLog.setStockStatus(StockStatusEnum.NORMAL);
 		ReceiveLog log = createReceiveLog(receiveLog, receiveHeader, detail);
 		log.setSkuLot1(request.getSkuLot1());
 		log.setSkuLot2(request.getSkuLot2());
@@ -97,6 +99,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setSkuId(detail.getSkuId());
 		receiveLog.setWspId(detail.getWspId());
 		receiveLog.setSkuLevel(detail.getSkuLevel());
+		receiveLog.setStockStatus(StockStatusEnum.NORMAL);
 		Owner owner;
 		if (Func.isNotEmpty(detail.getWoId())) {
 			owner = ownerBiz.findById(detail.getWoId());
