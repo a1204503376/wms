@@ -57,7 +57,7 @@ public class LogNoReturnDaoImpl
 
 		SkuLotUtil.applySql(queryWrapper,lendReturnQuery);
 
-		IPage<LogNoReturn> logNoReturnPage = page(page, queryWrapper);
+		IPage<LogNoReturn> logNoReturnPage = super.baseMapper.selectPage(page, queryWrapper);
 
 		return new Page<NoReturnResponse>(logNoReturnPage.getCurrent(), logNoReturnPage.getSize(), logNoReturnPage.getTotal())
 			.setRecords(Func.copy(logNoReturnPage.getRecords(), NoReturnResponse.class));
