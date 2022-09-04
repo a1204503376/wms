@@ -236,13 +236,23 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		AssertUtil.notNull(pickPlanId, "修改拣货计划失败，拣货计划ID为空");
 		AssertUtil.notNull(stockId, "修改拣货计划失败，库存ID为空");
 		AssertUtil.notNull(location, "修改拣货计划失败，库位为空");
-		AssertUtil.notNull(pickPlanId, "修改拣货计划失败，库区为空");
+		AssertUtil.notNull(zone, "修改拣货计划失败，库区为空");
 		soPickPlanDao.updatePickByPartParam(pickPlanId, stockId, location, zone);
 	}
 
 	@Override
 	public List<SoPickPlan> findPickByTaskId(Long taskId, Long stockId) {
 		return soPickPlanDao.getPickByTaskIdAndStockId(taskId, stockId);
+	}
+
+	@Override
+	public void updatePickByTaskIdAndStockId(Long taskId, Long sourceStockId, Long targetStockId, Location location, Zone zone) {
+		AssertUtil.notNull(taskId, "修改拣货计划失败，任务ID为空");
+		AssertUtil.notNull(sourceStockId, "修改拣货计划失败，原库存ID为空");
+		AssertUtil.notNull(targetStockId, "修改拣货计划失败，目标库存ID为空");
+		AssertUtil.notNull(location, "修改拣货计划失败，库位为空");
+		AssertUtil.notNull(zone, "修改拣货计划失败，库区为空");
+		soPickPlanDao.updatePickByTaskIdAndStockId(taskId, sourceStockId, targetStockId, location, zone);
 	}
 
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlan, SoDetail detail, String result) {
