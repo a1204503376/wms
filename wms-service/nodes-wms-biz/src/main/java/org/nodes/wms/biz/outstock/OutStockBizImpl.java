@@ -193,7 +193,7 @@ public class OutStockBizImpl implements OutStockBiz {
 			.distinct()
 			.collect(Collectors.toList());
 		AssertUtil.notNull(stockList, "PDA拣货失败，根据箱码获取库存失败");
-		WmsTask task = wmsTaskBiz.findPickTaskByBoxCode(request.getBoxCode(), null);
+		WmsTask task = wmsTaskBiz.findPickTaskByBoxCode(request.getBoxCode(), WmsTaskProcTypeEnum.BY_PCS);
 		if (Func.isNotEmpty(task)) {
 			if (!Func.equals(task.getTaskProcType(), WmsTaskProcTypeEnum.BY_PCS)) {
 				throw new ServiceException("PDA按件拣货失败，存在任务，但不是按件拣货的任务");
