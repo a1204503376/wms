@@ -5,6 +5,7 @@ import org.nodes.wms.dao.stock.dto.input.SerialLogPageQuery;
 import org.nodes.wms.dao.stock.dto.input.SerialPageQuery;
 import org.nodes.wms.dao.stock.dto.output.SerialLogPageResponse;
 import org.nodes.wms.dao.stock.dto.output.SerialPageResponse;
+import org.nodes.wms.dao.stock.entities.Serial;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -56,4 +57,12 @@ public interface SerialBiz {
 	 * @param response        响应对象
 	 */
 	void export(SerialPageQuery serialPageQuery, HttpServletResponse response);
+
+	/**
+	 * 根据序列号查询对应的序列号对象
+	 *
+	 * @param serialNo 序列号
+	 * @return Serial
+	 */
+	Serial findSerialSerialNo(String serialNo);
 }
