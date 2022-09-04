@@ -6,7 +6,7 @@ import org.nodes.wms.biz.putaway.PutawayBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.putaway.dto.input.CallAgvRequest;
 import org.nodes.wms.dao.putaway.dto.input.LpnTypeRequest;
-import org.nodes.wms.dao.putaway.dto.input.PutawayByBoxRequest;
+import org.nodes.wms.dao.putaway.dto.input.FindPutawayDataByBoxCodeRequest;
 import org.nodes.wms.dao.putaway.dto.output.CallAgvResponse;
 import org.nodes.wms.dao.putaway.dto.output.LocResponse;
 import org.springblade.core.tool.api.R;
@@ -35,7 +35,7 @@ public class CallAgvController {
 	 * @return 上架信息
 	 */
 	@PostMapping("/findStockByBoxCode")
-	public R<List<CallAgvResponse>> findStockByBoxCode(@RequestBody PutawayByBoxRequest request) {
+	public R<List<CallAgvResponse>> findStockByBoxCode(@RequestBody FindPutawayDataByBoxCodeRequest request) {
 		return R.data(stockQueryBiz.findLpnStockOnStageLeftByCallAgv(request.getWhId(), request.getBoxCode()));
 	}
 
