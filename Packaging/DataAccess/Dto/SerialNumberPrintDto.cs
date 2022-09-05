@@ -1,20 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using DataAccess.Enitiies;
 
 namespace DataAccess.Dto
 {
     public class SerialNumberPrintDto
     {
+        /// <summary>
+        /// 每页序列号分组数量
+        /// </summary>
+        public static readonly int SerialGroupNumber = 6;
+
         public string BoxType { get; set; }
+        public long SkuId { get; set; }
+        public string SkuCode { get; set; }
         public string SkuName { get; set; }
+        public string SkuNameS { get; set; }
         public string Model { get; set; }
         public string PrintDate { get; set; } = DateTime.Now.ToString("yyMMdd");
         public string UserName { get; set; }
         public string SpeedClass { get; set; } = "";
-        public string Qty { get; set; }
+        public decimal Qty { get; set; }
+
+        public string QtyLabel
+        {
+            get
+            {
+                return $"{Qty:#########} {WspName}/箱";
+            }
+        }
+
         public string BoxNumber { get; set; }
         public string BoxNumberLabel
         {
@@ -55,84 +71,53 @@ namespace DataAccess.Dto
         public List<ReceiveDetailLpn> ReceiveDetailLpns { get; set; }
         public short Copies { get; set; }
 
+        public List<PackingSerialDetail> SerialDetails { get; set; }
+        public string ProductionPlan { get; set; }
+        public string PoCode { get; set; }
+        public string WoCode { get; set; }
+        public string WspName { get; set; }
+        public string AssemblePeople { get; set; }
 
-        public static void SetSerialNumberRanges(SerialNumberPrintDto serialNumberPrintDto,
-            List<string> serialNumberList)
+        public void SetSerial(IReadOnlyList<SerialNumberRange> serialNumberRanges)
         {
-            Dictionary<string, List<string>> serialNumberDictionary = new Dictionary<string, List<string>>();
-            foreach (var serialNumber in serialNumberList)
-            {
-                if (serialNumber.Length < 7)
-                {
-                    continue;
-                }
-                var key = serialNumber.Substring(0, 6);
-                var value = serialNumber.Replace(key, string.Empty);
-                if (serialNumberDictionary.ContainsKey(key))
-                {
-                    serialNumberDictionary[key].Add(value);
-                }
-                else
-                {
-                    serialNumberDictionary.Add(key, new List<string>
-                    {
-                        value
-                    });
-                }
-            }
+            var length = serialNumberRanges.Count < SerialGroupNumber
+                ? serialNumberRanges.Count
+                : SerialGroupNumber;
 
-            var serialNumberRanges = new List<SerialNumberRange>();
-            foreach (var pair in serialNumberDictionary)
-            {
-                pair.Value.Sort();
-                var serialNumberRange = new SerialNumberRange
-                {
-                    Key = pair.Key,
-                    Begin = pair.Value.First(),
-                    End = pair.Value.Last()
-                };
-                serialNumberRanges.Add(serialNumberRange);
-            }
-            SetSerial(serialNumberPrintDto, serialNumberRanges);
-            serialNumberPrintDto.SerialNumberRanges = serialNumberRanges;
-        }
-
-        private static void SetSerial(SerialNumberPrintDto serialNumberPrintDto, List<SerialNumberRange> serialNumberRanges)
-        {
-            for (var i = 0; i < serialNumberRanges.Count; i++)
+            for (var i = 0; i < length; i++)
             {
                 var serialNumberRange = serialNumberRanges[i];
                 switch (i)
                 {
                     case 0:
-                        serialNumberPrintDto.SerialKey1 = serialNumberRange.Key;
-                        serialNumberPrintDto.SerialBegin1 = serialNumberRange.Begin;
-                        serialNumberPrintDto.SerialEnd1 = serialNumberRange.End;
+                        SerialKey1 = serialNumberRange.Key;
+                        SerialBegin1 = serialNumberRange.Begin;
+                        SerialEnd1 = serialNumberRange.End;
                         break;
                     case 1:
-                        serialNumberPrintDto.SerialKey2 = serialNumberRange.Key;
-                        serialNumberPrintDto.SerialBegin2 = serialNumberRange.Begin;
-                        serialNumberPrintDto.SerialEnd2 = serialNumberRange.End;
+                        SerialKey2 = serialNumberRange.Key;
+                        SerialBegin2 = serialNumberRange.Begin;
+                        SerialEnd2 = serialNumberRange.End;
                         break;
                     case 2:
-                        serialNumberPrintDto.SerialKey3 = serialNumberRange.Key;
-                        serialNumberPrintDto.SerialBegin3 = serialNumberRange.Begin;
-                        serialNumberPrintDto.SerialEnd3 = serialNumberRange.End;
+                        SerialKey3 = serialNumberRange.Key;
+                        SerialBegin3 = serialNumberRange.Begin;
+                        SerialEnd3 = serialNumberRange.End;
                         break;
                     case 3:
-                        serialNumberPrintDto.SerialKey4 = serialNumberRange.Key;
-                        serialNumberPrintDto.SerialBegin4 = serialNumberRange.Begin;
-                        serialNumberPrintDto.SerialEnd4 = serialNumberRange.End;
+                        SerialKey4 = serialNumberRange.Key;
+                        SerialBegin4 = serialNumberRange.Begin;
+                        SerialEnd4 = serialNumberRange.End;
                         break;
                     case 4:
-                        serialNumberPrintDto.SerialKey5 = serialNumberRange.Key;
-                        serialNumberPrintDto.SerialBegin5 = serialNumberRange.Begin;
-                        serialNumberPrintDto.SerialEnd5 = serialNumberRange.End;
+                        SerialKey5 = serialNumberRange.Key;
+                        SerialBegin5 = serialNumberRange.Begin;
+                        SerialEnd5 = serialNumberRange.End;
                         break;
                     case 5:
-                        serialNumberPrintDto.SerialKey6 = serialNumberRange.Key;
-                        serialNumberPrintDto.SerialBegin6 = serialNumberRange.Begin;
-                        serialNumberPrintDto.SerialEnd6 = serialNumberRange.End;
+                        SerialKey6 = serialNumberRange.Key;
+                        SerialBegin6 = serialNumberRange.Begin;
+                        SerialEnd6 = serialNumberRange.End;
                         break;
                 }
             }

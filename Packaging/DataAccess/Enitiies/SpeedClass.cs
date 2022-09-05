@@ -1,11 +1,4 @@
-﻿using FreeSql.DataAnnotations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataAccess.Enitiies
+﻿namespace DataAccess.Enitiies
 {
     public class PackingSpeedClass:BaseEntity<long>
     {

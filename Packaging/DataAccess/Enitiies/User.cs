@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using FreeSql.DataAnnotations;
-
-namespace DataAccess.Enitiies
+﻿namespace DataAccess.Enitiies
 {
     public class User : BaseEntity<long>
     {

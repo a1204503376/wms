@@ -194,7 +194,7 @@
             this.lbRangeKey6.Multiline = true;
             this.lbRangeKey6.Name = "lbRangeKey6";
             this.lbRangeKey6.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeKey6.SizeF = new System.Drawing.SizeF(120.492F, 23.00002F);
+            this.lbRangeKey6.SizeF = new System.Drawing.SizeF(68.72F, 23.00002F);
             this.lbRangeKey6.StylePriority.UseBorders = false;
             this.lbRangeKey6.StylePriority.UseFont = false;
             // 
@@ -206,11 +206,11 @@
             this.lbRangeBegin6.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialBegin6]")});
             this.lbRangeBegin6.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeBegin6.LocationFloat = new DevExpress.Utils.PointFloat(808.9787F, 325.6864F);
+            this.lbRangeBegin6.LocationFloat = new DevExpress.Utils.PointFloat(760.6453F, 325.6864F);
             this.lbRangeBegin6.Multiline = true;
             this.lbRangeBegin6.Name = "lbRangeBegin6";
             this.lbRangeBegin6.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeBegin6.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeBegin6.SizeF = new System.Drawing.SizeF(92.88F, 23.00003F);
             this.lbRangeBegin6.StylePriority.UseBorders = false;
             this.lbRangeBegin6.StylePriority.UseFont = false;
             // 
@@ -239,7 +239,7 @@
             this.lbRangeEnd6.Multiline = true;
             this.lbRangeEnd6.Name = "lbRangeEnd6";
             this.lbRangeEnd6.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeEnd6.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeEnd6.SizeF = new System.Drawing.SizeF(92.88F, 23.00002F);
             this.lbRangeEnd6.StylePriority.UseBorders = false;
             this.lbRangeEnd6.StylePriority.UseFont = false;
             // 
@@ -255,7 +255,7 @@
             this.lbRangeKey3.Multiline = true;
             this.lbRangeKey3.Name = "lbRangeKey3";
             this.lbRangeKey3.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeKey3.SizeF = new System.Drawing.SizeF(120.492F, 23.00002F);
+            this.lbRangeKey3.SizeF = new System.Drawing.SizeF(68.71698F, 23.00003F);
             this.lbRangeKey3.StylePriority.UseBorders = false;
             this.lbRangeKey3.StylePriority.UseFont = false;
             // 
@@ -267,11 +267,11 @@
             this.lbRangeBegin3.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialBegin3]")});
             this.lbRangeBegin3.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeBegin3.LocationFloat = new DevExpress.Utils.PointFloat(314.4374F, 291.0197F);
+            this.lbRangeBegin3.LocationFloat = new DevExpress.Utils.PointFloat(270.1695F, 291.0197F);
             this.lbRangeBegin3.Multiline = true;
             this.lbRangeBegin3.Name = "lbRangeBegin3";
             this.lbRangeBegin3.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeBegin3.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeBegin3.SizeF = new System.Drawing.SizeF(92.879F, 23.00003F);
             this.lbRangeBegin3.StylePriority.UseBorders = false;
             this.lbRangeBegin3.StylePriority.UseFont = false;
             // 
@@ -300,7 +300,7 @@
             this.lbRangeEnd3.Multiline = true;
             this.lbRangeEnd3.Name = "lbRangeEnd3";
             this.lbRangeEnd3.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeEnd3.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeEnd3.SizeF = new System.Drawing.SizeF(92.88F, 23.00002F);
             this.lbRangeEnd3.StylePriority.UseBorders = false;
             this.lbRangeEnd3.StylePriority.UseFont = false;
             // 
@@ -316,7 +316,7 @@
             this.lbRangeKey5.Multiline = true;
             this.lbRangeKey5.Name = "lbRangeKey5";
             this.lbRangeKey5.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeKey5.SizeF = new System.Drawing.SizeF(120.492F, 23.00002F);
+            this.lbRangeKey5.SizeF = new System.Drawing.SizeF(68.71698F, 23.00003F);
             this.lbRangeKey5.StylePriority.UseBorders = false;
             this.lbRangeKey5.StylePriority.UseFont = false;
             // 
@@ -328,11 +328,11 @@
             this.lbRangeBegin5.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialBegin5]")});
             this.lbRangeBegin5.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeBegin5.LocationFloat = new DevExpress.Utils.PointFloat(314.4374F, 325.6864F);
+            this.lbRangeBegin5.LocationFloat = new DevExpress.Utils.PointFloat(270.1695F, 325.6864F);
             this.lbRangeBegin5.Multiline = true;
             this.lbRangeBegin5.Name = "lbRangeBegin5";
             this.lbRangeBegin5.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeBegin5.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeBegin5.SizeF = new System.Drawing.SizeF(92.879F, 23.00003F);
             this.lbRangeBegin5.StylePriority.UseBorders = false;
             this.lbRangeBegin5.StylePriority.UseFont = false;
             // 
@@ -360,7 +360,7 @@
             this.lbRangeEnd5.Multiline = true;
             this.lbRangeEnd5.Name = "lbRangeEnd5";
             this.lbRangeEnd5.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeEnd5.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeEnd5.SizeF = new System.Drawing.SizeF(92.88F, 23.00002F);
             this.lbRangeEnd5.StylePriority.UseBorders = false;
             this.lbRangeEnd5.StylePriority.UseFont = false;
             // 
@@ -376,7 +376,7 @@
             this.lbRangeKey2.Multiline = true;
             this.lbRangeKey2.Name = "lbRangeKey2";
             this.lbRangeKey2.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeKey2.SizeF = new System.Drawing.SizeF(120.492F, 23.00002F);
+            this.lbRangeKey2.SizeF = new System.Drawing.SizeF(68.72F, 23.00002F);
             this.lbRangeKey2.StylePriority.UseBorders = false;
             this.lbRangeKey2.StylePriority.UseFont = false;
             // 
@@ -388,11 +388,11 @@
             this.lbRangeBegin2.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialBegin2]")});
             this.lbRangeBegin2.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeBegin2.LocationFloat = new DevExpress.Utils.PointFloat(808.9786F, 255.5196F);
+            this.lbRangeBegin2.LocationFloat = new DevExpress.Utils.PointFloat(760.6453F, 255.5196F);
             this.lbRangeBegin2.Multiline = true;
             this.lbRangeBegin2.Name = "lbRangeBegin2";
             this.lbRangeBegin2.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeBegin2.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeBegin2.SizeF = new System.Drawing.SizeF(92.88F, 23.00002F);
             this.lbRangeBegin2.StylePriority.UseBorders = false;
             this.lbRangeBegin2.StylePriority.UseFont = false;
             // 
@@ -421,7 +421,7 @@
             this.lbRangeEnd2.Multiline = true;
             this.lbRangeEnd2.Name = "lbRangeEnd2";
             this.lbRangeEnd2.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeEnd2.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeEnd2.SizeF = new System.Drawing.SizeF(92.88F, 23.00002F);
             this.lbRangeEnd2.StylePriority.UseBorders = false;
             this.lbRangeEnd2.StylePriority.UseFont = false;
             // 
@@ -437,7 +437,7 @@
             this.lbRangeKey4.Multiline = true;
             this.lbRangeKey4.Name = "lbRangeKey4";
             this.lbRangeKey4.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeKey4.SizeF = new System.Drawing.SizeF(120.492F, 23.00002F);
+            this.lbRangeKey4.SizeF = new System.Drawing.SizeF(68.72F, 23.00002F);
             this.lbRangeKey4.StylePriority.UseBorders = false;
             this.lbRangeKey4.StylePriority.UseFont = false;
             // 
@@ -449,11 +449,11 @@
             this.lbRangeBegin4.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialBegin4]")});
             this.lbRangeBegin4.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeBegin4.LocationFloat = new DevExpress.Utils.PointFloat(808.9786F, 291.0195F);
+            this.lbRangeBegin4.LocationFloat = new DevExpress.Utils.PointFloat(760.6453F, 291.0195F);
             this.lbRangeBegin4.Multiline = true;
             this.lbRangeBegin4.Name = "lbRangeBegin4";
             this.lbRangeBegin4.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeBegin4.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeBegin4.SizeF = new System.Drawing.SizeF(92.88F, 23.00003F);
             this.lbRangeBegin4.StylePriority.UseBorders = false;
             this.lbRangeBegin4.StylePriority.UseFont = false;
             // 
@@ -482,7 +482,7 @@
             this.lbRangeEnd4.Multiline = true;
             this.lbRangeEnd4.Name = "lbRangeEnd4";
             this.lbRangeEnd4.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeEnd4.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeEnd4.SizeF = new System.Drawing.SizeF(92.88F, 23.00002F);
             this.lbRangeEnd4.StylePriority.UseBorders = false;
             this.lbRangeEnd4.StylePriority.UseFont = false;
             // 
@@ -498,7 +498,7 @@
             this.lbRangeEnd1.Multiline = true;
             this.lbRangeEnd1.Name = "lbRangeEnd1";
             this.lbRangeEnd1.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeEnd1.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeEnd1.SizeF = new System.Drawing.SizeF(92.88F, 23.00003F);
             this.lbRangeEnd1.StylePriority.UseBorders = false;
             this.lbRangeEnd1.StylePriority.UseFont = false;
             // 
@@ -523,11 +523,11 @@
             this.lbRangeBegin1.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialBegin1]")});
             this.lbRangeBegin1.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeBegin1.LocationFloat = new DevExpress.Utils.PointFloat(314.4374F, 255.5197F);
+            this.lbRangeBegin1.LocationFloat = new DevExpress.Utils.PointFloat(270.1695F, 255.5197F);
             this.lbRangeBegin1.Multiline = true;
             this.lbRangeBegin1.Name = "lbRangeBegin1";
             this.lbRangeBegin1.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeBegin1.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeBegin1.SizeF = new System.Drawing.SizeF(92.879F, 23.00003F);
             this.lbRangeBegin1.StylePriority.UseBorders = false;
             this.lbRangeBegin1.StylePriority.UseFont = false;
             // 
@@ -543,7 +543,7 @@
             this.lbRangeKey1.Multiline = true;
             this.lbRangeKey1.Name = "lbRangeKey1";
             this.lbRangeKey1.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeKey1.SizeF = new System.Drawing.SizeF(120.492F, 23.00002F);
+            this.lbRangeKey1.SizeF = new System.Drawing.SizeF(68.71698F, 23.00003F);
             this.lbRangeKey1.StylePriority.UseBorders = false;
             this.lbRangeKey1.StylePriority.UseFont = false;
             // 
@@ -616,6 +616,7 @@
             this.bcBoxNumber.Padding = new DevExpress.XtraPrinting.PaddingInfo(10, 10, 0, 0, 100F);
             this.bcBoxNumber.ShowText = false;
             this.bcBoxNumber.SizeF = new System.Drawing.SizeF(192.6525F, 137.3612F);
+            qrCodeGenerator1.CompactionMode = DevExpress.XtraPrinting.BarCode.QRCodeCompactionMode.Byte;
             qrCodeGenerator1.Version = DevExpress.XtraPrinting.BarCode.QRCodeVersion.Version1;
             this.bcBoxNumber.Symbology = qrCodeGenerator1;
             // 
@@ -636,13 +637,13 @@
             // lbSkuName
             // 
             this.lbSkuName.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
-            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SkuName]")});
+            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SkuNameS]")});
             this.lbSkuName.Font = new System.Drawing.Font("微软雅黑", 42F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbSkuName.LocationFloat = new DevExpress.Utils.PointFloat(377.9732F, 29.16667F);
+            this.lbSkuName.LocationFloat = new DevExpress.Utils.PointFloat(289.1859F, 29.16668F);
             this.lbSkuName.Multiline = true;
             this.lbSkuName.Name = "lbSkuName";
             this.lbSkuName.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbSkuName.SizeF = new System.Drawing.SizeF(464.8118F, 74.23611F);
+            this.lbSkuName.SizeF = new System.Drawing.SizeF(659.1616F, 74.23611F);
             this.lbSkuName.StylePriority.UseFont = false;
             this.lbSkuName.StylePriority.UseTextAlignment = false;
             this.lbSkuName.Text = "物料名称";
@@ -722,7 +723,7 @@
             // lbQty
             // 
             this.lbQty.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
-            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[Qty]")});
+            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[QtyLabel]")});
             this.lbQty.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbQty.LocationFloat = new DevExpress.Utils.PointFloat(112.6082F, 210.3056F);
             this.lbQty.Multiline = true;
@@ -785,6 +786,10 @@
             this.PageHeight = 827;
             this.PageWidth = 1169;
             this.PaperKind = System.Drawing.Printing.PaperKind.A4;
+            this.Scripts.OnParametersRequestValueChanged = "SerialNumberReport_ParametersRequestValueChanged";
+            this.ScriptsSource = "\r\nprivate void SerialNumberReport_ParametersRequestValueChanged(object sender, De" +
+    "vExpress.XtraReports.Parameters.ParametersRequestValueChangedEventArgs e) {\r\n   " +
+    " \r\n}\r\n";
             this.ShowPrintMarginsWarning = false;
             this.Version = "21.2";
             this.BeforePrint += new System.Drawing.Printing.PrintEventHandler(this.SerialNumberReport_BeforePrint);

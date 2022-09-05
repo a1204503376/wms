@@ -4,14 +4,11 @@ using System.Data;
 using DataAccess.Encasement;
 using DataAccess.Enitiies;
 using DevExpress.DataAccess.Excel;
-using DevExpress.XtraGrid;
 using Packaging.Common;
-using Packaging.Settings;
 using Packaging.Utility;
 
 namespace Packaging.Encasement
 {
-    [ModuleDefine(moduleId: 104)]
     public partial class ImportForm : DevExpress.XtraEditors.XtraForm
     {
         private ExcelDataSource _excelDataSource;
@@ -80,9 +77,9 @@ namespace Packaging.Encasement
                 return;
             }
         
-            var packingAutoIdentifications = ModelConvertHelper<PackingAutoIdentification>.ConvertToModel(dataTable);
+            var packingAutoIdentifications = ModelConvertHelper<PackingSerialDetail>.ConvertToModel(dataTable);
 
-            var flag = AutoIdentificationDal.SaveImportExcel(packingAutoIdentifications);
+            var flag = PackingSerialDal.SaveImportExcel(packingAutoIdentifications);
             if (!flag)
             {
                 CustomMessageBox.Warning("保存失败");

@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using DataAccess.Enitiies;
-using DevExpress.DataAccess.ObjectBinding;
 
 namespace DataAccess.Dto
 {
     public class BatchPrintDto
     {
         public string SkuNames => string.Join("、", 
-            SkuDetails.Select(d => d.Sku.SkuName));
+            SkuDetails.Select(d => d.Sku.SkuNameS).Distinct());
 
         public string Model => SkuDetails.First(d=>
             !string.IsNullOrWhiteSpace(d.SkuSpec)).SkuSpec;
@@ -35,6 +31,9 @@ namespace DataAccess.Dto
             get => BoxNumber.Substring(BoxNumber.Length - 4, 4);
         }
         public short Copies { get; set; }
+        public string ProductionPlan { get; set; }
+        public string PoCode { get; set; }
+        public string WoCode { get; set; }
         public string SpecialCustomer { get; set; }
         public List<SkuDetail> SkuDetails { get; set; }
         public string Qty1 { get; set; }
@@ -45,10 +44,18 @@ namespace DataAccess.Dto
 
         public static void SetQty(BatchPrintDto batchPrintDto)
         {
-            var oneFlag = batchPrintDto.SkuDetails.Count == 1;
-            for (var i = 0; i < batchPrintDto.SkuDetails.Count; i++)
+            // 相关物品的数量进行合并后打印箱贴
+            var skuDetails = batchPrintDto.SkuDetails.GroupBy(d => d.Sku)
+                .Select(g => new SkuDetail()
+                {
+                    Sku=g.Key,
+                    PlanQty = g.Sum(p=>p.PlanQty)
+                }).ToList();
+
+            var oneFlag = skuDetails.Count == 1;
+            for (var i = 0; i < skuDetails.Count; i++)
             {
-                var skuDetail = batchPrintDto.SkuDetails[i];
+                var skuDetail = skuDetails[i];
                 var qty = $@"{(!oneFlag ? skuDetail.Sku.SkuName + " " : "")}{skuDetail.PlanQty:#########} {skuDetail.Sku.WspName}/箱";
                 switch (i)
                 {
@@ -71,10 +78,13 @@ namespace DataAccess.Dto
 
     public class SkuDetail
     {
-        public Sku Sku { get; set; }
+        public string SkuName { get; set; }
         public string SkuCode { get; set; }
         public string SkuSpec { get; set; }
         public decimal PlanQty { get; set; }
         public string SkuLot1 { get; set; }
+        public string TrackingNumber { get; set; }
+        public Sku Sku { get; set; }
+        public bool IsExcelVaildateOk { get; set; }
     }
 }

@@ -79,6 +79,7 @@
             // userNameEdit
             // 
             this.userNameEdit.EditValue = "";
+            this.userNameEdit.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.userNameEdit.Location = new System.Drawing.Point(159, 41);
             this.userNameEdit.Name = "userNameEdit";
             this.userNameEdit.Properties.Appearance.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -240,7 +241,7 @@
             this.Controls.Add(this.layoutControl1);
             this.Name = "LoginForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "系统登录";
+            this.Text = "成品下线打包";
             this.Load += new System.EventHandler(this.LoginForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using DataAccess.Enitiies;
 
 namespace DataAccess.Wms

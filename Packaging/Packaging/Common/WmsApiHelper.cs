@@ -45,10 +45,20 @@ namespace Packaging.Common
             throw new ApplicationException("登录WMS失败");
         }
 
-        public static string GetBoxNumber(string lpnCode)
+        public static string GetBoxNumber(string lpnTypeCode)
+        {
+            return GetBoxNumber(lpnTypeCode, string.Empty, string.Empty);
+        }
+
+        public static string GetBoxNumber(string lpnTypeCode, string skuName, string spec)
         {
             var result = $"{WmsUrl}/wms/scheduling/generateBoxCode"
-                .SetQueryParam("lpnTypeCode", lpnCode)
+                .SetQueryParams(new
+                {
+                    lpnTypeCode,
+                    skuName,
+                    spec
+                })
                 .GetAsync()
                 .ReceiveJson()
                 .Result;
@@ -60,7 +70,6 @@ namespace Packaging.Common
             var msg = $"获取箱号时，WMS返回失败：{result.msg}";
             Serilog.Log.Warning(msg);
             throw new Exception(msg);
-
         }
 
         private static string WmsUrl => ConfigurationManager.AppSettings["WmsUrl"];

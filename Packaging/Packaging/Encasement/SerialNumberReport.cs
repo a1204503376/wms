@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using DataAccess.Dto;
 using DataAccess.Encasement;
-using DataAccess.Enitiies;
 using DataAccess.Wms;
-using Newtonsoft.Json;
 using Packaging.Common;
 using Packaging.Utility;
 
@@ -30,14 +28,14 @@ namespace Packaging.Encasement
 
         }
 
-        private SerialNumberReport(List<SerialNumberPrintDto> serialNumberPrintDtoList) : this()
+        public SerialNumberReport(List<SerialNumberPrintDto> serialNumberPrintDtoList) : this()
         {
-            var packingReportItem = PackingReportItemDal.GetByName("SerialNumberReport");
-            if (packingReportItem != null)
-            {
-                using MemoryStream ms = new MemoryStream(packingReportItem.LayoutData);
-                this.LoadLayout(ms);
-            }
+            // var packingReportItem = PackingReportItemDal.GetByName("SerialNumberReport");
+            // if (packingReportItem != null)
+            // {
+            //     using MemoryStream ms = new MemoryStream(packingReportItem.LayoutData);
+            //     this.LoadLayout(ms);
+            // }
 
             _serialNumberPrintDtoList = serialNumberPrintDtoList;
             this.objectDataSource1.DataSource = _serialNumberPrintDtoList;
@@ -71,14 +69,16 @@ namespace Packaging.Encasement
             {
                 return;
             }
-            // 多个序列号合并成一条记录
-            var receiveDetailLpns = _serialNumberPrintDtoList.First().ReceiveDetailLpns;
-            var receiveDetailLpn = JsonConvert.DeserializeObject<ReceiveDetailLpn>(
-                JsonConvert.SerializeObject(receiveDetailLpns.First()));
-            receiveDetailLpn.SnCode = string.Join(",", receiveDetailLpns.Select(d => d.SnCode).ToList());
-            receiveDetailLpn.PlanQty = receiveDetailLpns.Count;
+            var serialNumberPrintDto = _serialNumberPrintDtoList.First();
+            // 重新打印箱贴的业务场景
+            // 1.生产车间重新打印
+            // 2.库房内的重新打印（WMS走出库，再入库流程）
+            ReceiveDetailLpnDal.Save(serialNumberPrintDto.BoxNumber, serialNumberPrintDto.ReceiveDetailLpns);
 
-            ReceiveDetailLpnDal.Save(receiveDetailLpn);
+            Task.Run(() =>
+            {
+                PackingSerialDal.SaveSerialData(serialNumberPrintDto);
+            });
         }
 
         private void SerialNumberReport_BeforePrint(object sender, System.Drawing.Printing.PrintEventArgs e)
@@ -86,10 +86,11 @@ namespace Packaging.Encasement
             var serialNumberDto = _serialNumberPrintDtoList.First();
             if (serialNumberDto.BoxNumber != Constants.DefaulutBoxNumber)
             {
+                e.Cancel = !SavePrintPreView();
                 return;
             }
 
-            var boxNumber = WmsApiHelper.GetBoxNumber(serialNumberDto.BoxType);
+            var boxNumber = WmsApiHelper.GetBoxNumber(serialNumberDto.BoxType,serialNumberDto.SkuName,serialNumberDto.Model);
 
             foreach (var item in _serialNumberPrintDtoList)
             {
@@ -103,26 +104,28 @@ namespace Packaging.Encasement
 
             serialNumberDto.ReceiveDetailLpns.ForEach(d => { d.BoxCode = boxNumber; });
 
-            SavePrintPreView();
+            e.Cancel = !SavePrintPreView();
         }
 
-        private void SavePrintPreView()
+        private bool SavePrintPreView()
         {
             bool savePrintPreviewFlag = Convert.ToBoolean(ConfigurationManager.AppSettings["SavePrintPreviewFlag"]);
             if (!savePrintPreviewFlag)
             {
-                return;
+                return false;
             }
 
             try
             {
                 SaveData();
                 _isSave = true;
+                return true;
             }
             catch (Exception ex)
             {
                 Serilog.Log.Fatal("序列号打印前入库保存异常:{}", ex);
                 CustomMessageBox.Exception($"序列号打印前入库保存异常:{ex.GetOriginalException().Message}");
+                return false;
             }
         }
     }
