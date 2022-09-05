@@ -18,7 +18,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class Application {
 
 	public static void main(String[] args) {
-		BladeApplication.run("WMS v3.2", Application.class, args);
+		BladeApplication.run("WMS v3.3", Application.class, args);
 	}
 }
 

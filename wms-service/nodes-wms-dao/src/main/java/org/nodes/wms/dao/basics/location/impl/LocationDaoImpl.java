@@ -192,9 +192,7 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 			.set(Location::getLocFlag, locFlag)
 			.set(isResetLocFlagDesc, Location::getLocFlagDesc, "");
 
-		if (!super.update(updateWrapper)) {
-			throw new ServiceException(String.format("根据taskId:[%d]更新库位使用状态失败", taskId));
-		}
+		super.update(updateWrapper);
 	}
 
 	@Override
