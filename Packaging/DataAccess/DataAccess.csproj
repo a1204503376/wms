@@ -32,6 +32,15 @@
     <WarningLevel>4</WarningLevel>
     <LangVersion>8</LangVersion>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TianYI_Qa|AnyCPU'">
+    <OutputPath>bin\TianYI_Qa\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>8</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>..\packages\BouncyCastle.1.8.5\lib\BouncyCastle.Crypto.dll</HintPath>
@@ -96,17 +105,25 @@
     <Compile Include="Common\PrintHelper.cs" />
     <Compile Include="DB.cs" />
     <Compile Include="Dto\BatchPrintDto.cs" />
+    <Compile Include="Dto\ReportBatchDto.cs" />
+    <Compile Include="Dto\ReportSerialDto.cs" />
     <Compile Include="Dto\SerialNumberPrintDto.cs" />
-    <Compile Include="Encasement\AutoIdentificationDal.cs" />
+    <Compile Include="Encasement\PackingSerialDal.cs" />
     <Compile Include="Encasement\PackingReportItemDal.cs" />
+    <Compile Include="Enitiies\BladeDict.cs" />
+    <Compile Include="Enitiies\PackingBatchDetail.cs" />
+    <Compile Include="Enitiies\PackingBatchHeader.cs" />
     <Compile Include="Enitiies\PackingReportItem.cs" />
+    <Compile Include="Enitiies\PackingSerialHeader.cs" />
     <Compile Include="Enitiies\WmsSerial.cs" />
     <Compile Include="Enitiies\WmsStock.cs" />
+    <Compile Include="Wms\BladeDictDal.cs" />
+    <Compile Include="Encasement\PackingBatchDal.cs" />
     <Compile Include="Wms\ReceiveDetailLpnDal.cs" />
     <Compile Include="Wms\SkuDal.cs" />
     <Compile Include="Encasement\SpeedClassDal.cs" />
     <Compile Include="Enitiies\BaseEntity.cs" />
-    <Compile Include="Enitiies\PackingAutoIdentification.cs" />
+    <Compile Include="Enitiies\PackingSerialDetail.cs" />
     <Compile Include="Enitiies\ReceiveDetailLpn.cs" />
     <Compile Include="Enitiies\Sku.cs" />
     <Compile Include="Enitiies\SpeedClass.cs" />

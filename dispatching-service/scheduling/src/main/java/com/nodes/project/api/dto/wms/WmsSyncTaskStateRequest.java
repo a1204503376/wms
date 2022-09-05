@@ -23,4 +23,9 @@ public class WmsSyncTaskStateRequest {
      * WMS的任务头表ID
      */
     private Long taskHeaderId;
+
+    /**
+     * 消息或异常信息
+     */
+    private String msg;
 }

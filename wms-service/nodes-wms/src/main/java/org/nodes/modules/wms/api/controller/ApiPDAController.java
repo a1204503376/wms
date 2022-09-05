@@ -130,7 +130,6 @@ public class ApiPDAController extends BladeController {
 
 	@PostMapping("/Warehouseselect")
 	@ApiOperationSupport(order = 1)
-	@ApiLog("PDA-仓库列表框数据源")
 	@ApiOperation(value = "下拉数据源", notes = "传入whId")
 	public R<List<Warehouse>> Warehouseselect(Warehouse warehouse) {
 		QueryWrapper<Warehouse> queryWrapper = Condition.getQueryWrapper(warehouse);

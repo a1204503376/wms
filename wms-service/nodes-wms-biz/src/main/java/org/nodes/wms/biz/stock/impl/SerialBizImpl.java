@@ -11,6 +11,7 @@ import org.nodes.wms.dao.stock.dto.output.SerialExcelResponse;
 import org.nodes.wms.dao.stock.dto.output.SerialLogExcelResponse;
 import org.nodes.wms.dao.stock.dto.output.SerialLogPageResponse;
 import org.nodes.wms.dao.stock.dto.output.SerialPageResponse;
+import org.nodes.wms.dao.stock.entities.Serial;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -51,5 +52,10 @@ public class SerialBizImpl implements SerialBiz {
 	public void export(SerialPageQuery serialPageQuery, HttpServletResponse response) {
 		List<SerialExcelResponse> serialList = serialDao.listByQuery(serialPageQuery);
 		ExcelUtil.export(response, "", "", serialList, SerialExcelResponse.class);
+	}
+
+	@Override
+	public Serial findSerialSerialNo(String serialNo) {
+		return serialDao.getSerialSerialNo(serialNo);
 	}
 }

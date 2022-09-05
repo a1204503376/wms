@@ -27,4 +27,9 @@ public class SyncTaskStateRequest {
 	@ApiModelProperty(value = "任务状态：5开始执行6执行结束51异常中断", required = true)
 	private Integer state;
 
+	/**
+	 * 消息
+	 */
+	@ApiModelProperty(value = "消息")
+	private String msg;
 }

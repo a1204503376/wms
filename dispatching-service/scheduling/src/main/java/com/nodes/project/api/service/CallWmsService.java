@@ -11,7 +11,14 @@ import java.util.List;
  */
 public interface CallWmsService {
 
-    void syncTaskState(JobQueue jobQueue);
+    /**
+     * 调用agv异常时，将异常信息同步到WMS
+     * @param jobQueue jobQueue
+     * @param msg 异常信息
+     */
+    void syncExceptionMsgOfCallAgv(JobQueue jobQueue, String msg);
+
+    void syncTaskState(JobQueue jobQueue, String msg);
 
     WmsGlobalResponse queryAndFrozenEnableOutbound(JobQueue jobQueue);
 

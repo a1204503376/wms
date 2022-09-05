@@ -50,7 +50,6 @@ public class SystemProcController extends BladeController {
 	/**
 	 * 详情
 	 */
-	@ApiLog("系统日志接口-系统日志详情")
 	@GetMapping("/detail")
 	@ApiOperation(value = "系统日志详情", notes = "传入systemProc")
 	public R<SystemProcVO> detail(SystemProc systemProc) {
@@ -95,7 +94,6 @@ public class SystemProcController extends BladeController {
 	/**
 	 * 分页 系统日志
 	 */
-	@ApiLog("系统日志接口-系统日志分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "系统日志分页", notes = "传入systemProc")
 	public R<IPage<SystemProcVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

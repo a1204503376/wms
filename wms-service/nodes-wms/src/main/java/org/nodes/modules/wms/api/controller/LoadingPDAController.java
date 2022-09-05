@@ -53,7 +53,6 @@ public class LoadingPDAController extends BladeController {
 	/**
 	 * 查询收货单头表列表getTruckHeader
 	 */
-	@ApiLog("PDA-根据车次编码查询车次信息")
 	@GetMapping("/getTruckHeader")
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "根据车次编码查询车次信息", notes = "传入truckCode")

@@ -90,6 +90,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 				// 更新任务信息
 				wmsTask.setToLocId(location.getLocId());
 				wmsTask.setToLocCode(location.getLocCode());
+				wmsTask.setRemark("更新并冻结目标库位");
 				wmsTaskDao.updateById(wmsTask);
 				log.info("调度系统,AGV拣货任务{}成功冻结目标库位{}", request.getTaskDetailId(), location.getLocCode());
 				return location.getLocCode();
@@ -108,6 +109,11 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			message.setLog(String.format("任务[%s]：[%s]",
 				notificationRequest.getTaskDetailId(), notificationRequest.getMsg()));
 			logBiz.noticeMesssage(message);
+
+			WmsTask wmsTask = wmsTaskDao.getById(notificationRequest.getTaskDetailId());
+			if (Func.notNull(wmsTask)){
+				wmsTaskDao.updateRemark(wmsTask.getTaskId(), notificationRequest.getMsg());
+			}
 		}
 	}
 
@@ -122,12 +128,16 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		} else if (AGV_TASK_STATE_END.equals(request.getState())) {
 			onSuccess(wmsTask);
 		} else if (AGV_TASK_STATE_EXCEPTION.equals(request.getState())) {
-			onException(wmsTask);
+			onException(wmsTask, request.getMsg());
 		} else {
-			throw ExceptionUtil.mpe("同步AGV任务状态失败，未知的任务状态");
+			onOtherHandle(wmsTask, request);
 		}
 
 		log.info("接收调度系统任务状态变更通知,状态:{},任务:{}", request.getState(), request.getTaskDetailId());
+	}
+
+	private void onOtherHandle(WmsTask wmsTask, SyncTaskStateRequest request) {
+		wmsTaskDao.updateRemark(wmsTask.getTaskId(), request.getMsg());
 	}
 
 	/**
@@ -144,7 +154,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			throw new ServiceException("状态更新失败,只有已下发的任务才可以执行");
 		}
 		// 修改任务状态
-		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.START_EXECUTION);
+		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.START_EXECUTION, "开始执行");
 		// 将原库位库存移动到中间库位
 		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
 		for (Stock stock : stockList) {
@@ -182,7 +192,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 				wmsTask.getTaskId(), wmsTask.getTaskState().getDesc()));
 		}
 		// 修改任务状态
-		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.AGV_COMPLETED);
+		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.AGV_COMPLETED, "执行完毕");
 		locationBiz.unfreezeLocByTask(wmsTask.getTaskId().toString());
 		// 将中间库位的库存移动到目标库位
 		Location targetLoc = locationBiz.findByLocId(wmsTask.getToLocId());
@@ -207,14 +217,14 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		log.info("agv任务结束[{}]-[{}]", wmsTask.getTaskId(), wmsTask);
 	}
 
-	private void onException(WmsTask wmsTask) {
+	private void onException(WmsTask wmsTask, String msg) {
 		boolean checkTaskState = WmsTaskStateEnum.COMPLETED.equals(wmsTask.getTaskState())
 			|| WmsTaskStateEnum.CANCELED.equals(wmsTask.getTaskState());
 		if (checkTaskState) {
 			throw new ServiceException("状态更新失败,任务已经完成");
 		}
 		// 修改任务状态
-		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.ABNORMAL);
+		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.ABNORMAL, msg);
 
 		log.info("agv任务异常[{}]-[{}]", wmsTask.getTaskId(), wmsTask);
 	}

@@ -116,6 +116,17 @@ public class SerialDaoImpl extends BaseServiceImpl<SerialMapper, Serial> impleme
 		return super.baseMapper.listByQuery(serialPageQuery);
 	}
 
+	@Override
+	public Serial getSerialSerialNo(String serialNo) {
+		return super.lambdaQuery()
+			.like(Serial::getSerialNumber, serialNo)
+			.eq(Serial::getSerialState,SerialStateEnum.IN_STOCK)
+			.or()
+			.eq(Serial::getSerialNumber, serialNo)
+			.eq(Serial::getSerialState,SerialStateEnum.IN_STOCK)
+			.one();
+	}
+
 	private LambdaQueryWrapper<Serial> getLambdaQuery() {
 		return Wrappers.lambdaQuery(Serial.class);
 	}

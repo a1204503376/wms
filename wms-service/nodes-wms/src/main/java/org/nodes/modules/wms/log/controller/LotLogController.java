@@ -55,7 +55,6 @@ public class LotLogController extends BladeController {
 	/**
 	 * 分页 批次号日志
 	 */
-	@ApiLog("批次号日志接口-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "分页", notes = "传入lotLog")
 	public R<IPage<LotLogVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

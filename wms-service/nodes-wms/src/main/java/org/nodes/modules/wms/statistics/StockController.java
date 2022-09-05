@@ -46,7 +46,6 @@ public class StockController extends BladeController {
 	/**
 	 * 临期品预警分页
 	 */
-	@ApiLog("库存统计-临期品预警分页")
 	@GetMapping("/near-time/page")
 	@ApiOperation(value = "临期品预警分页", notes = "传入stockPack")
 	public R<IPage<StockVO>> page(StockDTO stock, Query query) {

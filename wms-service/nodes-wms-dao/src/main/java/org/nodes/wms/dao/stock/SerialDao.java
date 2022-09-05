@@ -69,7 +69,7 @@ public interface SerialDao extends BaseService<Serial> {
 	 * 分页查询序列号
 	 *
 	 * @param serialPageQuery 条件参数
-	 * @param page           分页参数
+	 * @param page            分页参数
 	 * @return 序列号分页对象
 	 */
 	Page<SerialPageResponse> getPage(SerialPageQuery serialPageQuery, IPage<?> page);
@@ -81,4 +81,12 @@ public interface SerialDao extends BaseService<Serial> {
 	 * @return 序列号
 	 */
 	List<SerialExcelResponse> listByQuery(SerialPageQuery serialPageQuery);
+
+	/**
+	 * 根据序列号查询对应的序列号对象
+	 *
+	 * @param serialNo 序列号
+	 * @return Serial
+	 */
+	Serial getSerialSerialNo(String serialNo);
 }

@@ -380,10 +380,10 @@ public class InStockBizImpl implements InStockBiz {
 	private void canReceiveByLocation(Long whId, String targetLocCode) {
 		Location targetLocation = locationBiz.findLocationByLocCode(whId, targetLocCode);
 		if (locationBiz.isPickToLocation(targetLocation)) {
-			throw new ServiceException("收货失败，收货不能收到发货接驳区");
+			throw new ServiceException("收货失败，收货不能收到出库集货区");
 		}
 		if (locationBiz.isAgvTempOfZoneType(targetLocation.getLocId())) {
-			throw new ServiceException("收货失败，收货不能收到出库集货区");
+			throw new ServiceException("收货失败，收货不能收到发货接驳区");
 		}
 	}
 }

@@ -21,7 +21,7 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DisableProgramGroupPage=yes
-OutputBaseFilename=TianYingPacking
+OutputBaseFilename=TianYiPacking
 SetupIconFile=ty.ico
 Compression=lzma
 SolidCompression=yes
@@ -46,6 +46,7 @@ Source: "..\Packaging\Packaging\bin\Release\DevExpress.DataAccess.v21.2.dll"; De
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.DataAccess.v21.2.UI.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.DataVisualization.v21.2.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.Diagram.v21.2.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Packaging\Packaging\bin\Release\DevExpress.Dialogs.v21.2.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.Images.v21.2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.Office.v21.2.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.Pdf.v21.2.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -55,13 +56,17 @@ Source: "..\Packaging\Packaging\bin\Release\DevExpress.Printing.v21.2.Core.dll";
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.RichEdit.v21.2.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.RichEdit.v21.2.Export.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.Sparkline.v21.2.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Packaging\Packaging\bin\Release\DevExpress.Spreadsheet.v21.2.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Packaging\Packaging\bin\Release\DevExpress.TreeMap.v21.2.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.Utils.v21.2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.Utils.v21.2.UI.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Packaging\Packaging\bin\Release\DevExpress.Xpo.v21.2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.XtraBars.v21.2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.XtraCharts.v21.2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.XtraCharts.v21.2.Extensions.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.XtraCharts.v21.2.Wizard.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.XtraDiagram.v21.2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Packaging\Packaging\bin\Release\DevExpress.XtraDialogs.v21.2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.XtraEditors.v21.2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.XtraGauges.v21.2.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.XtraGrid.v21.2.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -72,19 +77,29 @@ Source: "..\Packaging\Packaging\bin\Release\DevExpress.XtraPrinting.v21.2.dll"; 
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.XtraReports.v21.2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.XtraReports.v21.2.Extensions.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.XtraRichEdit.v21.2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Packaging\Packaging\bin\Release\DevExpress.XtraSpreadsheet.v21.2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.XtraTreeList.v21.2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Packaging\Packaging\bin\Release\DevExpress.XtraTreeMap.v21.2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\DevExpress.XtraVerticalGrid.v21.2.dll"; DestDir: "{app}"; Flags: ignoreversion
 
+Source: "..\Packaging\Packaging\bin\Release\DotNetZip.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Packaging\Packaging\bin\Release\DotNetZip.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\Flurl.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\Flurl.Http.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\FreeSql.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\FreeSql.Provider.MySql.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\Google.Protobuf.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Packaging\Packaging\bin\Release\ICSharpCode.SharpZipLib.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\K4os.Compression.LZ4.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\K4os.Compression.LZ4.Streams.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\K4os.Hash.xxHash.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Packaging\Packaging\bin\Release\manifest.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\MySql.Data.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Packaging\Packaging\bin\Release\NPOI.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Packaging\Packaging\bin\Release\NPOI.OOXML.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Packaging\Packaging\bin\Release\NPOI.OpenXml4Net.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Packaging\Packaging\bin\Release\NPOI.OpenXmlFormats.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\Serilog.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\Serilog.Sinks.File.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\System.Buffers.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -101,7 +116,9 @@ Source: "..\Packaging\Packaging\bin\Release\tclient.xml"; DestDir: "{app}"; Flag
 Source: "..\Packaging\Packaging\bin\Release\Packaging.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Packaging\Packaging\bin\Release\Packaging.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 
+Source: "..\Packaging\Packaging\bin\Release\Sound\*"; DestDir: "{app}\Sound"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\Packaging\zh-CN\*"; DestDir: "{app}\zh-CN"; Flags: ignoreversion recursesubdirs createallsubdirs
+
 
 Source: "ty.ico"; DestDir: "{app}"; Flags: ignoreversion
 

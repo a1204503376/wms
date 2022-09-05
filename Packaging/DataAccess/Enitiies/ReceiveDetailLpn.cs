@@ -4,8 +4,10 @@ using FreeSql.DataAnnotations;
 
 namespace DataAccess.Enitiies
 {
-    public class ReceiveDetailLpn:BaseEntity<long>
+    public class ReceiveDetailLpn
     {
+        [Column(IsPrimary = true)]
+        public long Id { get; set; }
         /// <summary>
         /// 收货单头表id
         /// </summary>
@@ -291,5 +293,8 @@ namespace DataAccess.Enitiies
 
         public long CreateUser{ get; set; }
         public long CreateDept{ get; set; }
+
+        public DateTime? CreateTime { get; set; } = DateTime.Now;
+        public DateTime? UpdateTime { get; set; } = DateTime.Now;
     }
 }

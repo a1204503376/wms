@@ -53,7 +53,6 @@ public class UserOnlineController extends BladeController {
 	/**
 	 * 获取在线用户列表
 	 */
-	@ApiLog("在线用户接口-列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "列表", notes = "传入userOnline")
 	public R<List<UserOnlineVO>> list(UserOnline userOnline) {

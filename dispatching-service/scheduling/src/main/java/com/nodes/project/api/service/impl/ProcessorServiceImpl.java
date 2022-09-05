@@ -184,6 +184,7 @@ public class ProcessorServiceImpl implements ProcessorService {
 
         if (AgvGlobalResponse.isException(agvGlobalResponse)) {
             setStatusCallAgvException(jobQueue, omsLogger);
+            callWmsService.syncExceptionMsgOfCallAgv(jobQueue, agvGlobalResponse.getMsg());
             omsLogger.debug("呼叫AGV异常：{}", agvGlobalResponse.getMsg());
             return ProcessResultUtils.failed("呼叫AGV异常：" + agvGlobalResponse.getMsg());
         }
@@ -191,6 +192,7 @@ public class ProcessorServiceImpl implements ProcessorService {
         AgvResponse agvResponse = agvGlobalResponse.getAgvResponse();
         if (AgvResponse.isFailed(agvResponse)) {
             setStatusAgvReturnFailed(jobQueue, omsLogger);
+            callWmsService.syncExceptionMsgOfCallAgv(jobQueue, agvResponse.getReason());
             omsLogger.debug("AGV返回失败，原因：{}", agvResponse.getReason());
             return ProcessResultUtils.failed("AGV返回失败，原因：{}" + agvResponse.getReason());
         }

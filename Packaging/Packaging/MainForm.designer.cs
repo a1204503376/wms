@@ -47,12 +47,15 @@
             this.barSubItem1 = new DevExpress.XtraBars.BarSubItem();
             this.barSubItem2 = new DevExpress.XtraBars.BarSubItem();
             this.barSubItem3 = new DevExpress.XtraBars.BarSubItem();
-            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
+            this.barSubItem5 = new DevExpress.XtraBars.BarSubItem();
             this.bar8 = new DevExpress.XtraBars.Bar();
             this.barDockControl2 = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
+            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
+            this.barSubItem4 = new DevExpress.XtraBars.BarSubItem();
             this.bar6 = new DevExpress.XtraBars.Bar();
             ((System.ComponentModel.ISupportInitialize)(this.documentManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabbedView1)).BeginInit();
@@ -164,9 +167,12 @@
             this.barSubItem1,
             this.barSubItem2,
             this.barSubItem3,
-            this.barButtonItem1});
+            this.barButtonItem1,
+            this.barButtonItem2,
+            this.barSubItem4,
+            this.barSubItem5});
             this.barManager1.MainMenu = this.mainBar;
-            this.barManager1.MaxItemId = 6;
+            this.barManager1.MaxItemId = 9;
             this.barManager1.StatusBar = this.bar8;
             this.barManager1.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barManager_ItemClick);
             // 
@@ -180,43 +186,43 @@
             new DevExpress.XtraBars.LinkPersistInfo(this.barSubItem1),
             new DevExpress.XtraBars.LinkPersistInfo(this.barSubItem2),
             new DevExpress.XtraBars.LinkPersistInfo(this.barSubItem3),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem1)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.barSubItem5)});
             this.mainBar.OptionsBar.MultiLine = true;
             this.mainBar.OptionsBar.UseWholeRow = true;
             this.mainBar.Text = "Main menu";
             // 
             // barSubItem1
             // 
-            this.barSubItem1.Caption = "序列号装箱(A)";
+            this.barSubItem1.Caption = "序列号装箱(X)";
             this.barSubItem1.Id = 0;
-            this.barSubItem1.ItemShortcut = new DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A));
+            this.barSubItem1.ItemShortcut = new DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X));
             this.barSubItem1.Name = "barSubItem1";
             this.barSubItem1.Tag = 101;
             // 
             // barSubItem2
             // 
-            this.barSubItem2.Caption = "批次号装箱(B)";
+            this.barSubItem2.Caption = "批次号装箱(P)";
             this.barSubItem2.Id = 1;
-            this.barSubItem2.ItemShortcut = new DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B));
+            this.barSubItem2.ItemShortcut = new DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P));
             this.barSubItem2.Name = "barSubItem2";
             this.barSubItem2.Tag = 102;
             // 
             // barSubItem3
             // 
-            this.barSubItem3.Caption = "适用速度等级(C)";
+            this.barSubItem3.Caption = "适用速度等级(S)";
             this.barSubItem3.Id = 2;
-            this.barSubItem3.ItemShortcut = new DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C));
+            this.barSubItem3.ItemShortcut = new DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S));
             this.barSubItem3.Name = "barSubItem3";
             this.barSubItem3.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
             this.barSubItem3.Tag = 103;
             // 
-            // barButtonItem1
+            // barSubItem5
             // 
-            this.barButtonItem1.Caption = "导入自动标识系统信息(D)";
-            this.barButtonItem1.Id = 4;
-            this.barButtonItem1.ItemShortcut = new DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D));
-            this.barButtonItem1.Name = "barButtonItem1";
-            this.barButtonItem1.Tag = 104;
+            this.barSubItem5.Caption = "报表导出(R)";
+            this.barSubItem5.Id = 8;
+            this.barSubItem5.ItemShortcut = new DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R));
+            this.barSubItem5.Name = "barSubItem5";
+            this.barSubItem5.Tag = 104;
             // 
             // bar8
             // 
@@ -265,6 +271,27 @@
             this.barDockControlRight.Manager = this.barManager1;
             this.barDockControlRight.Margin = new System.Windows.Forms.Padding(4);
             this.barDockControlRight.Size = new System.Drawing.Size(0, 337);
+            // 
+            // barButtonItem1
+            // 
+            this.barButtonItem1.Caption = "导入自动标识系统信息(D)";
+            this.barButtonItem1.Id = 4;
+            this.barButtonItem1.ItemShortcut = new DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D));
+            this.barButtonItem1.Name = "barButtonItem1";
+            this.barButtonItem1.Tag = 104;
+            // 
+            // barButtonItem2
+            // 
+            this.barButtonItem2.Caption = "箱标重打";
+            this.barButtonItem2.Id = 6;
+            this.barButtonItem2.Name = "barButtonItem2";
+            // 
+            // barSubItem4
+            // 
+            this.barSubItem4.Caption = "箱标重打";
+            this.barSubItem4.Id = 7;
+            this.barSubItem4.ItemShortcut = new DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P));
+            this.barSubItem4.Name = "barSubItem4";
             // 
             // bar6
             // 
@@ -326,6 +353,9 @@
         private DevExpress.XtraBars.BarDockControl barDockControlRight;
         private DevExpress.XtraSplashScreen.SplashScreenManager splashScreenManager1;
         private DevExpress.XtraBars.BarButtonItem barButtonItem1;
+        private DevExpress.XtraBars.BarSubItem barSubItem4;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem2;
+        private DevExpress.XtraBars.BarSubItem barSubItem5;
     }
 }
 

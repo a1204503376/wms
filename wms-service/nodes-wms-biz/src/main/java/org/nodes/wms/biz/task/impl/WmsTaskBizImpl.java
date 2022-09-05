@@ -71,7 +71,7 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 		agvTask.cancel();
 		// 更新任务状态、记录日志
 		wmsTaskList.forEach(task -> {
-			wmsTaskDao.updateState(task.getTaskId(), WmsTaskStateEnum.CANCELED);
+			wmsTaskDao.updateState(task.getTaskId(), WmsTaskStateEnum.CANCELED, null);
 			logBiz.auditLog(AuditLogType.AGV_TASK, task.getBillId(), task.getBillNo(), "取消AGV任务");
 		});
 	}
@@ -165,7 +165,7 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 	@Override
 	public void updateTaskStateToIssued(Long taskId) {
 		AssertUtil.notNull(taskId, "下发任务失败，修改任务状态时任务ID为空");
-		wmsTaskDao.updateState(taskId, WmsTaskStateEnum.ISSUED);
+		wmsTaskDao.updateState(taskId, WmsTaskStateEnum.ISSUED, null);
 	}
 
 }
