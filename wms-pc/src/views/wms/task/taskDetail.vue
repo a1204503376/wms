@@ -241,6 +241,11 @@ export default {
                         sortable: "custom",
                     },
                     {
+                        prop: 'remark',
+                        label: '备注',
+                        sortable: "custom",
+                    },
+                    {
                         prop: 'beginTime',
                         label: '开始执行时间',
                         sortable: "custom",
