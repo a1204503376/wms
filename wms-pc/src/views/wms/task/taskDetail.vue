@@ -4,36 +4,29 @@
             <template v-slot:searchFrom>
                 <el-row type="flex">
                     <el-col :span="6">
-                        <el-form-item
-                            label="任务id" label-width="90px">
-                            <el-input
-                                placeholder="请输入任务id"
-                                :clearable="true"
-                                class="search-input" v-model.trim="form.params.taskId">
+                        <el-form-item label="任务id" label-width="90px">
+                            <el-input placeholder="请输入任务id" :clearable="true" class="search-input"
+                                v-model.trim="form.params.taskId">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="单据编码" label-width="90px">
-                            <el-input
-                                placeholder="请输入单据编码"
-                                :clearable="true"
-                                class="search-input" v-model.trim="form.params.billNo">
+                            <el-input placeholder="请输入单据编码" :clearable="true" class="search-input"
+                                v-model.trim="form.params.billNo">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="任务类型" label-width="90px">
-                            <nodes-task-type class="search-input" v-model="form.params.taskTypeCdList" :multiple="true"></nodes-task-type>
+                            <nodes-task-type class="search-input" v-model="form.params.taskTypeCdList" :multiple="true">
+                            </nodes-task-type>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="任务状态" label-width="90px">
-                            <nodes-task-state
-                                class="search-input"
-                                :default-value="true"
-                                v-model="form.params.taskStateList"
-                                :multiple="true">
+                            <nodes-task-state class="search-input" :default-value="true"
+                                v-model="form.params.taskStateList" :multiple="true">
                             </nodes-task-state>
                         </el-form-item>
                     </el-col>
@@ -41,7 +34,8 @@
                 <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
-                            <nodes-sku-by-query class="search-input" v-model="form.params.skuIdList"></nodes-sku-by-query>
+                            <nodes-sku-by-query class="search-input" v-model="form.params.skuIdList">
+                            </nodes-sku-by-query>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -71,31 +65,17 @@
                 </el-button>
             </template>
             <template v-slot:table>
-                <el-table
-                    ref="table"
-                    :data="table.data"
-                    :height="table.height"
-                    border
-                    highlight-current-row
-                    size="mini"
-                    style="width: 100%"
-                    @sort-change="onSortChange">
+                <el-table ref="table" :data="table.data" :height="table.height" border highlight-current-row size="mini"
+                    style="width: 100%" @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
-                    <el-table-column
-                        fixed
-                        width="50"
-                        type="index">
+                    <el-table-column fixed width="50" type="index">
                         <template slot="header">
                             #
                         </template>
                     </el-table-column>
-                    <template v-for="(column,index) in table.columnList">
-                        <el-table-column
-                            v-if="!column.hide"
-                            :key="index"
-                            show-overflow-tooltip
-                            v-bind="column"
+                    <template v-for="(column, index) in table.columnList">
+                        <el-table-column v-if="!column.hide" :key="index" show-overflow-tooltip v-bind="column"
                             width="150">
                             <template v-if="column.prop === 'taskState'" v-slot="scope">
                                 <el-tag v-if="scope.row.taskState === '已下发' || scope.row.taskState === '开始执行'"
@@ -106,6 +86,7 @@
                                 </el-tag>
                                 <el-tag v-if="scope.row.taskState === '异常中断中'" type="danger">{{ scope.row.taskState }}
                                 </el-tag>
+                                <el-tag v-else type="info">{{ scope.row.taskState }}</el-tag>
                             </template>
                         </el-table-column>
                     </template>
@@ -119,9 +100,7 @@
             </template>
         </nodes-master-page>
         <div v-if="columnShowHide.visible">
-            <dialog-column
-                v-bind="columnShowHide"
-                @close="onColumnShowHide">
+            <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
             </dialog-column>
         </div>
     </div>
@@ -144,7 +123,7 @@ import NodesTaskType from "@/components/wms/select/NodesTaskType";
 import NodesTaskState from "@/components/wms/select/NodesTaskState";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import func from "@/util/func";
-import {nowDateFormat} from "@/util/date";
+import { nowDateFormat } from "@/util/date";
 
 export default {
     name: "carrier",
