@@ -9,5 +9,10 @@
         public const string WhCode = "WH1";
         public const long WoId= 1544584337992851457;
         public const string OwnerCode = "tianyi";
+
+        public const int SerialFormId = 101;
+        public const int BatchFormId = 102;
+        public const int SpeedClassFormId = 103;
+        public const int ReportFormId = 104;
     }
 }

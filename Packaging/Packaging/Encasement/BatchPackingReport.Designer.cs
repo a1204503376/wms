@@ -178,6 +178,7 @@
             this.bcBoxNumber.Padding = new DevExpress.XtraPrinting.PaddingInfo(10, 10, 0, 0, 100F);
             this.bcBoxNumber.ShowText = false;
             this.bcBoxNumber.SizeF = new System.Drawing.SizeF(192.6525F, 137.3612F);
+            qrCodeGenerator1.CompactionMode = DevExpress.XtraPrinting.BarCode.QRCodeCompactionMode.Byte;
             qrCodeGenerator1.Version = DevExpress.XtraPrinting.BarCode.QRCodeVersion.Version1;
             this.bcBoxNumber.Symbology = qrCodeGenerator1;
             // 
@@ -198,7 +199,7 @@
             // lbSkuName
             // 
             this.lbSkuName.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
-            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SkuNames]")});
+            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SkuNameS]")});
             this.lbSkuName.Font = new System.Drawing.Font("微软雅黑", 42F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbSkuName.LocationFloat = new DevExpress.Utils.PointFloat(289.1859F, 29.16668F);
             this.lbSkuName.Multiline = true;

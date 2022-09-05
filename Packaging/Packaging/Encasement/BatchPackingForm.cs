@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using DataAccess.Dto;
 using DataAccess.Enitiies;
 using DataAccess.Enums;
 using DataAccess.Wms;
-using DevExpress.XtraEditors;
-using DevExpress.XtraEditors.Controls;
-using DevExpress.XtraGrid.Columns;
+using DevExpress.XtraPrinting;
 using DevExpress.XtraReports.UI;
 using Packaging.Common;
 using Packaging.Settings;
@@ -17,12 +17,13 @@ using Packaging.Utility;
 
 namespace Packaging.Encasement
 {
-    [ModuleDefine(moduleId: 102)]
+    [ModuleDefine(moduleId: Constants.BatchFormId)]
     public partial class BatchPackingForm : DevExpress.XtraEditors.XtraForm
     {
+        private string _boxNumber;
         private BindingList<SkuDetail> _skuDetails;
-        private List<Sku> _sluSkuDataSource;
-        private bool _flagSkuDataSource = false;
+        private List<Sku> _skus;
+        private readonly Dictionary<string, List<string>> _skuCodeSkuSpecListDict = new Dictionary<string, List<string>>();
 
         public BatchPackingForm()
         {
@@ -32,23 +33,46 @@ namespace Packaging.Encasement
         private void BatchPackingForm_Load(object sender, System.EventArgs e)
         {
             SetSluSkuDataSource();
-            SetLuModelDataSource();
+            SetLuModelDataSource(_skus.Select(d => d.SkuSpec)
+                .Where(d => !string.IsNullOrWhiteSpace(d))
+                .Distinct().ToList());
             InitializeSkuDetails();
         }
 
         private void SetSluSkuDataSource()
         {
-            _sluSkuDataSource = SkuDal.GetAll();
+            _skus = SkuDal.GetAll();
             sluSku.DisplayMember = "SkuName";
             sluSku.KeyMember = "SkuId";
-            sluSku.DataSource = _sluSkuDataSource;
+            SetFilterSkuDataSource();
+            SetSkuSpecEmptyDataSource();
         }
 
-        private void SetLuModelDataSource()
+        private void SetSkuSpecEmptyDataSource()
         {
-            var skuSpecList = _sluSkuDataSource.Select(d => d.SkuSpec)
-                .Distinct()
-                .Where(d => !string.IsNullOrWhiteSpace(d))
+            var dictKeys = new Dictionary<string, string>();
+            var skuSpecEmptyList = _skus.Where(d => string.IsNullOrWhiteSpace(d.SkuSpec)).ToList();
+            foreach (var sku in skuSpecEmptyList)
+            {
+                if (!ConfigurationManager.AppSettings.AllKeys.Contains(sku.SkuCode))
+                {
+                    continue;
+                }
+
+                dictKeys.Add(ConfigurationManager.AppSettings[sku.SkuCode], sku.SkuCode);
+            }
+
+            var skuSpecDict = BladeDictDal.GetSkuSpecList(dictKeys.Keys.ToList());
+
+            foreach (var keyValuePair in dictKeys.Where(keyValuePair => skuSpecDict.ContainsKey(keyValuePair.Key)))
+            {
+                _skuCodeSkuSpecListDict.Add(keyValuePair.Value, skuSpecDict[keyValuePair.Key]);
+            }
+        }
+
+        private void SetLuModelDataSource(IReadOnlyCollection<string> skuSpecList)
+        {
+            var skuList = skuSpecList
                 .Select(skuSpec =>
                     new Sku
                     {
@@ -57,7 +81,7 @@ namespace Packaging.Encasement
 
             if (skuSpecList.Count > 1)
             {
-                skuSpecList.Insert(0, new Sku
+                skuList.Insert(0, new Sku
                 {
                     SkuSpec = string.Empty
                 });
@@ -65,7 +89,7 @@ namespace Packaging.Encasement
 
             luModel.DisplayMember = "SkuSpec";
             luModel.ValueMember = "SkuSpec";
-            luModel.DataSource = skuSpecList;
+            luModel.DataSource = skuList;
         }
 
         private void InitializeSkuDetails()
@@ -80,22 +104,6 @@ namespace Packaging.Encasement
             gridControl1.DataSource = _skuDetails;
         }
 
-        private void gridView1_CellValueChanged(object sender, DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs e)
-        {
-            if (e.Column.FieldName != "Sku")
-            {
-                return;
-            }
-
-            if (!(gridView1.GetFocusedRowCellValue(e.Column.FieldName) is Sku sku))
-            {
-                return;
-            }
-
-            gridView1.SetRowCellValue(e.RowHandle, gridView1.Columns["SkuCode"], sku.SkuName);
-            gridView1.SetRowCellValue(e.RowHandle, "SkuSpec", sku.SkuSpec);
-        }
-
         private void btnSavePrint_Click(object sender, System.EventArgs e)
         {
             if (_skuDetails.Count == 0)
@@ -105,7 +113,8 @@ namespace Packaging.Encasement
             }
 
             var batchPackingReport = GetBatchPackingReport();
-            batchPackingReport.Print();
+            batchPackingReport?.Print();
+            ResetReprint();
         }
 
         private BatchPrintDto GetBatchPrintDto()
@@ -113,12 +122,21 @@ namespace Packaging.Encasement
             var batchPrintDto = new BatchPrintDto
             {
                 BoxType = cbxBox.Text,
+                ProductionPlan = txtProductPlan.Text,
+                PoCode = txtPo.Text,
+                WoCode = txtWo.Text,
                 SpecialCustomer = txtSpecialCustomer.Text,
                 BoxNumber = Constants.DefaulutBoxNumber,
                 Copies = Convert.ToInt16(txtPrintNumber.Text),
                 UserName = GlobalSettings.UserName,
-                SkuDetails = _skuDetails.ToList()
+                SkuDetails = GetGridDataSource()
             };
+
+            if (!string.IsNullOrWhiteSpace(_boxNumber) && !NomatcBoxType())
+            {
+                batchPrintDto.BoxNumber = _boxNumber;
+            }
+
             var receiveDetailLpns = (from skuDetail in batchPrintDto.SkuDetails
                 let sku = skuDetail.Sku
                 let wmsSkuPackageDetail = WmsSkuPackageDetailDal.GetFirst(sku.WspId)
@@ -129,7 +147,7 @@ namespace Packaging.Encasement
                     SkuId = sku.SkuId,
                     SkuCode = sku.SkuCode,
                     SkuName = sku.SkuName,
-                    SkuSpec = sku.SkuSpec,
+                    SkuSpec = string.IsNullOrWhiteSpace(sku.SkuSpec) ? skuDetail.SkuSpec : sku.SkuSpec,
                     WspId = sku.WspId,
                     PlanQty = skuDetail.PlanQty,
                     ScanQty = 0,
@@ -144,7 +162,7 @@ namespace Packaging.Encasement
                     WoId = Constants.WoId,
                     OwnerCode = Constants.OwnerCode,
                     SkuLot1 = skuDetail.SkuLot1,
-                    SkuLot2 = batchPrintDto.Model,
+                    SkuLot2 = string.IsNullOrWhiteSpace(sku.SkuSpec) ? skuDetail.SkuSpec : sku.SkuSpec,
                     SkuLot4 = batchPrintDto.SpecialCustomer,
                     Udf1 = txtProductPlan.Text,
                     Udf2 = txtPo.Text,
@@ -157,7 +175,7 @@ namespace Packaging.Encasement
 
             BatchPrintDto.SetQty(batchPrintDto);
 
-            return  batchPrintDto;
+            return batchPrintDto;
         }
 
         private void gridView1_KeyDown(object sender, KeyEventArgs e)
@@ -177,13 +195,12 @@ namespace Packaging.Encasement
             if (_skuDetails.Count==0
                 || _skuDetails.All(d=>string.IsNullOrWhiteSpace(d.SkuSpec)))
             {
-                sluSku.DataSource = _sluSkuDataSource;
+                sluSku.DataSource = _skus;
             }
         }
 
         private void gridView1_ValidateRow(object sender, DevExpress.XtraGrid.Views.Base.ValidateRowEventArgs e)
         {
-            var colSku = gridView1.Columns["Sku"];
             if (!(gridView1.GetRowCellValue(e.RowHandle, colSku) is Sku sku))
             {
                 e.Valid = false;
@@ -191,7 +208,6 @@ namespace Packaging.Encasement
                 return;
             }
 
-            var colSkuSpec = gridView1.Columns["SkuSpec"];
             var skuSpec = gridView1.GetRowCellValue(e.RowHandle, colSkuSpec);
             if (skuSpec==null || string.IsNullOrWhiteSpace(skuSpec.ToString()))
             {
@@ -200,7 +216,6 @@ namespace Packaging.Encasement
                 return;
             }
 
-            var colSkuLot1 = gridView1.Columns["SkuLot1"];
             var skuLot1 = gridView1.GetRowCellValue(e.RowHandle, colSkuLot1);
             if (skuLot1==null || string.IsNullOrWhiteSpace(skuLot1.ToString()))
             {
@@ -209,7 +224,6 @@ namespace Packaging.Encasement
                 return;
             }
 
-            var colPlanQty = gridView1.Columns["PlanQty"];
             var planQty = gridView1.GetRowCellValue(e.RowHandle, colPlanQty);
             if (planQty==null 
                 || !decimal.TryParse(planQty.ToString(),out decimal qty)
@@ -224,13 +238,17 @@ namespace Packaging.Encasement
             {
                 return;
             }
-            _flagSkuDataSource = true;
-            sluSku.DataSource = _sluSkuDataSource.Where(d => string.IsNullOrWhiteSpace(d.SkuSpec) || d.SkuSpec == sku.SkuSpec)
-                .ToList();
+            ResetPrintEnable();
         }
 
         private void btnResetAll_Click(object sender, EventArgs e)
         {
+            var dialogResult = CustomMessageBox.Confirm("确定清空所有？");
+            if (dialogResult == DialogResult.No)
+            {
+                return;
+            }
+
             cbxBox.SelectedIndex = 0;
             txtSpecialCustomer.EditValue = null;
             txtPrintNumber.EditValue = 2;
@@ -238,28 +256,270 @@ namespace Packaging.Encasement
             txtPo.EditValue = null;
             txtWo.EditValue = null;
 
-            _skuDetails = new BindingList<SkuDetail>();
-            gridControl1.DataSource = _skuDetails;
+            SetFilterSkuDataSource();
+            ResetReprint();
+            ResetDetail();
+        }
 
-            if (_flagSkuDataSource)
-            {
-                sluSku.DataSource = _sluSkuDataSource;
-                _flagSkuDataSource = false;
-            }
+        private void ResetReprint()
+        {
+            btnReprint.Text = @"箱标重打";
+            _boxNumber = string.Empty;
         }
 
         private void btnPreviewPrint_Click(object sender, EventArgs e)
         {
             var batchPackingReport = GetBatchPackingReport();
-            batchPackingReport.ShowPreview();
+            batchPackingReport?.ShowPreview();
         }
 
         private BatchPackingReport GetBatchPackingReport()
         {
             var batchPrintDto = GetBatchPrintDto();
-
+            if (batchPrintDto.SkuDetails.Select(d=>d.SkuSpec).Distinct().Count()!=1)
+            {
+                CustomMessageBox.Warning("只允许同一个型号进行装箱，请检查物品的型号是否一致！");
+                return null;
+            }
             var batchPackingReport = new BatchPackingReport(batchPrintDto);
             return batchPackingReport;
+        }
+
+        private void cbxBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetFilterSkuDataSource();
+            if (NomatcBoxType())
+            {
+                CustomMessageBox.Information($"当前选择的箱型[{cbxBox.Text}]与重打的箱号[{_boxNumber}]不匹配，系统将生成新的箱号!");
+            }
+            // 切换箱型之后，重置明细
+            ResetDetail();
+        }
+
+        private bool NomatcBoxType()
+        {
+            if (string.IsNullOrWhiteSpace(_boxNumber))
+            {
+                return false;
+            }
+
+            var boxType = _boxNumber.Substring(0, 1);
+            return cbxBox.Text != boxType;
+        }
+
+        /// <summary>
+        /// 据箱型对应的箱号过滤物品列表
+        /// </summary>
+        /// <returns></returns>
+        private void SetFilterSkuDataSource()
+        {
+            List<Sku> dataSource;
+            if (new List<string> { "A", "B", "C" }.Contains(cbxBox.Text))
+            {
+                dataSource = _skus.Where(d => d.Udf1 == cbxBox.Text).ToList();
+            }
+            else
+            {
+                dataSource = _skus.Where(d => d.Udf1 == cbxBox.Text
+                                              || _skuCodeSkuSpecListDict.ContainsKey(d.SkuCode)).ToList();
+            }
+
+            sluSku.DataSource = dataSource;
+        }
+
+        public void SetReprintDataSource(PackingBatchHeader packingBatchHeader,List<PackingBatchDetail> packingBatchDetailList)
+        {
+            cbxBox.EditValue = packingBatchHeader.BoxType;
+            txtSpecialCustomer.EditValue = packingBatchHeader.SpecialCustomer;
+            txtProductPlan.EditValue = packingBatchHeader.ProductionPlan;
+            txtPo.EditValue = packingBatchHeader.PoCode;
+            txtWo.EditValue = packingBatchHeader.WoCode;
+
+            ResetGridDataSource(() =>
+            {
+                foreach (var batchDetail in packingBatchDetailList)
+                {
+                    _skuDetails.Add(new SkuDetail()
+                    {
+                        Sku = _skus.FirstOrDefault(d => d.SkuId == batchDetail.SkuId),
+                        SkuCode = batchDetail.SkuCode,
+                        SkuSpec = batchDetail.Model,
+                        PlanQty = batchDetail.Qty,
+                        SkuLot1 = batchDetail.SkuLot1,
+                        TrackingNumber = batchDetail.TrackingNumber
+                    });
+                }
+            });
+            _boxNumber = packingBatchHeader.BoxNumber;
+            btnReprint.Text = $@"箱标重打({packingBatchHeader.BoxNumber})";
+            ResetPrintEnable();
+        }
+
+        private void ResetPrintEnable()
+        {
+            btnSavePrint.Enabled = true;
+            btnPreviewPrint.Enabled = true;
+        }
+
+        private void btnReprint_Click(object sender, EventArgs e)
+        {
+            var cartonLabelForm = new CartonLabelForm("Batch", this);
+            cartonLabelForm.ShowDialog();
+        }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            var skuDetails = GetGridDataSource();
+            if (skuDetails.Count == 0)
+            {
+                CustomMessageBox.Warning("没有序列号数据可以导出");
+                return;
+            }
+
+            var dialogResult = xtraFolderBrowserDialog1.ShowDialog();
+            if (dialogResult != DialogResult.OK)
+            {
+                return;
+            }
+            var skuDetail = skuDetails.First();
+            var curSku = skuDetail.Sku;
+            var fileName = Path.Combine(xtraFolderBrowserDialog1.SelectedPath,
+                $"{curSku.SkuSpec}_{curSku.SkuNameS}_{DateTime.Now:yyyy-MM-dd}_{GlobalSettings.UserName}.xlsx");
+            if (File.Exists(fileName)
+                && CustomMessageBox.Confirm("该文件名已存在，是否覆盖？") != DialogResult.Yes)
+            {
+                return;
+            }
+
+            try
+            {
+                gridView1.ExportToXlsx(fileName, new XlsxExportOptions
+                {
+                    TextExportMode = TextExportMode.Value,
+                });
+                CustomMessageBox.Information("数据导出成功！");
+            }
+            catch (Exception ex)
+            {
+                CustomMessageBox.Warning(ex.Message.Contains("正由另一进程使用")
+                    ? "数据导出失败！文件正由另一个程序占用！"
+                    : ex.Message);
+            }
+        }
+
+        private List<SkuDetail> GetGridDataSource()
+        {
+            if (!(gridControl1.DataSource is BindingList<SkuDetail> gridControl1DataSource))
+            {
+                throw new Exception("Grid绑定的数据类型错误！");
+            }
+
+            return gridControl1DataSource.ToList<SkuDetail>();
+        }
+
+        private void btnImportDetail_Click(object sender, EventArgs e)
+        {
+            xtraOpenFileDialog1.Filter = @"Excel File|*.xlsx;*.xls";
+            xtraOpenFileDialog1.Title = @"导入批次装箱明细";
+            xtraOpenFileDialog1.Multiselect = false;
+
+            xtraOpenFileDialog1.ShowDialog();
+        }
+
+        private void btnResetSerialNumber_Click(object sender, EventArgs e)
+        {
+            var dialogResult = CustomMessageBox.Confirm("确定清空所有明细？");
+            if (dialogResult == DialogResult.No)
+            {
+                return;
+            }
+            ResetDetail();
+        }
+
+        private void ResetDetail()
+        {
+            ResetGridDataSource(null);
+            btnSavePrint.Enabled = false;
+            btnPreviewPrint.Enabled = false;
+        }
+
+        private void ResetGridDataSource(Action action)
+        {
+            _skuDetails.Clear();
+            action?.Invoke();
+            gridView1.RefreshData();
+        }
+
+        private void xtraOpenFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            var filePath = xtraOpenFileDialog1.FileName;
+            var skuDetails = ExcelHelper.ImportBatchDetail(filePath);
+            foreach (var skuDetail in skuDetails)
+            {
+                skuDetail.Sku = _skus.FirstOrDefault(d => d.SkuCode == skuDetail.SkuCode);
+            }
+            ResetGridDataSource(() =>
+            {
+                foreach (var skuDetail in skuDetails)
+                {
+                    _skuDetails.Add(skuDetail);
+                }
+            });
+            ResetPrintEnable();
+        }
+
+        private void sluSku_EditValueChanged(object sender, EventArgs e)
+        {
+            // if (!(sender is SearchLookUpEdit searchLookUpEdit))
+            // {
+            //     return;
+            // }
+            //
+            // if (!(searchLookUpEdit.EditValue is Sku sku))
+            // {
+            //     return;
+            // }
+            //
+            // gridView1.SetRowCellValue(gridView1.FocusedRowHandle, colSkuCode, sku.SkuCode);
+            // var gridDataSource = GetGridDataSource();
+            // var skuSpec = sku.SkuSpec;
+            // if (string.IsNullOrWhiteSpace(sku.SkuSpec) && gridDataSource.Count > 1)
+            // {
+            //     skuSpec = gridDataSource.First().SkuSpec;
+            // }
+            //
+            // if (_skuCodeSkuSpecListDict.ContainsKey(sku.SkuCode))
+            // {
+            //     SetLuModelDataSource(_skuCodeSkuSpecListDict[sku.SkuCode]);
+            // }
+            //
+            // gridView1.SetRowCellValue(gridView1.FocusedRowHandle, colSkuSpec, skuSpec);
+        }
+
+        private void gridView1_CellValueChanged(object sender, DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs e)
+        {
+            if (e.Column!=colSku)
+            {
+                return;
+            }
+            var sku = gridView1.GetRowCellValue(e.RowHandle, e.Column) as Sku;
+            if (sku == null)
+            {
+                return;
+            }
+            var gridDataSource = GetGridDataSource();
+            var skuSpec = sku.SkuSpec;
+            if (string.IsNullOrWhiteSpace(sku.SkuSpec) && gridDataSource.Count > 1)
+            {
+                skuSpec = gridDataSource.First().SkuSpec;
+            }
+            
+            if (_skuCodeSkuSpecListDict.ContainsKey(sku.SkuCode))
+            {
+                SetLuModelDataSource(_skuCodeSkuSpecListDict[sku.SkuCode]);
+            }
+            gridView1.SetRowCellValue(e.RowHandle, colSkuCode, sku.SkuCode);
+            gridView1.SetRowCellValue(e.RowHandle, colSkuSpec, skuSpec);
         }
     }
 }

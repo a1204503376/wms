@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using DataAccess.Dto;
 using DataAccess.Encasement;
 using DataAccess.Wms;
@@ -28,12 +29,12 @@ namespace Packaging.Encasement
 
         private BatchPackingReport(IReadOnlyCollection<BatchPrintDto> batchPrintDtoList) : this()
         {
-            var packingReportItem = PackingReportItemDal.GetByName("BatchPackingReport");
-            if (packingReportItem!=null)
-            {
-                using MemoryStream ms = new MemoryStream(packingReportItem.LayoutData);
-                this.LoadLayout(ms);
-            }
+            // var packingReportItem = PackingReportItemDal.GetByName("BatchPackingReport");
+            // if (packingReportItem!=null)
+            // {
+            //     using MemoryStream ms = new MemoryStream(packingReportItem.LayoutData);
+            //     this.LoadLayout(ms);
+            // }
 
             _batchPrintDtoList = batchPrintDtoList;
             this.objectDataSource1.DataSource = batchPrintDtoList;
@@ -64,7 +65,13 @@ namespace Packaging.Encasement
 
         private void SaveData()
         {
-            ReceiveDetailLpnDal.Save(_batchPrintDtoList.First().ReceiveDetailLpns);
+            var batchPrintDto = _batchPrintDtoList.First();
+            ReceiveDetailLpnDal.Save(batchPrintDto.BoxNumber, batchPrintDto.ReceiveDetailLpns);
+
+            Task.Run(() =>
+            {
+                PackingBatchDal.SaveBatchData(batchPrintDto);
+            });
         }
 
         private void SerialNumberReport_BeforePrint(object sender, System.Drawing.Printing.PrintEventArgs e)

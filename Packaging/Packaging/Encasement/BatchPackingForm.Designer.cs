@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BatchPackingForm));
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             this.cbxBox = new DevExpress.XtraEditors.ComboBoxEdit();
@@ -46,29 +47,40 @@
             this.layoutControl2 = new DevExpress.XtraLayout.LayoutControl();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.gridColumn1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colSku = new DevExpress.XtraGrid.Columns.GridColumn();
             this.sluSku = new DevExpress.XtraEditors.Repository.RepositoryItemSearchLookUpEdit();
             this.repositoryItemSearchLookUpEdit1View = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumn6 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn7 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn8 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn9 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn3 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colSkuCode = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colSkuSpec = new DevExpress.XtraGrid.Columns.GridColumn();
             this.luModel = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
-            this.gridColumn4 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn5 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colSkuLot1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colPlanQty = new DevExpress.XtraGrid.Columns.GridColumn();
             this.txtspPlanQty = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
+            this.colTrackingNumber = new DevExpress.XtraGrid.Columns.GridColumn();
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControl3 = new DevExpress.XtraLayout.LayoutControl();
+            this.btnResetSerialNumber = new DevExpress.XtraEditors.SimpleButton();
+            this.btnExport = new DevExpress.XtraEditors.SimpleButton();
+            this.btnImportDetail = new DevExpress.XtraEditors.SimpleButton();
             this.btnSavePrint = new DevExpress.XtraEditors.SimpleButton();
             this.btnResetAll = new DevExpress.XtraEditors.SimpleButton();
             this.btnPreviewPrint = new DevExpress.XtraEditors.SimpleButton();
+            this.btnReprint = new DevExpress.XtraEditors.SimpleButton();
             this.layoutControlGroup2 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem15 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem13 = new DevExpress.XtraLayout.LayoutControlItem();
             this.emptySpaceItem2 = new DevExpress.XtraLayout.EmptySpaceItem();
             this.layoutControlItem16 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem8 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem10 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem11 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.xtraFolderBrowserDialog1 = new DevExpress.XtraEditors.XtraFolderBrowserDialog(this.components);
+            this.xtraOpenFileDialog1 = new DevExpress.XtraEditors.XtraOpenFileDialog(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cbxBox.Properties)).BeginInit();
@@ -101,6 +113,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem13)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem16)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem10)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem11)).BeginInit();
             this.SuspendLayout();
             // 
             // layoutControl1
@@ -136,6 +152,7 @@
             this.cbxBox.Size = new System.Drawing.Size(304, 24);
             this.cbxBox.StyleController = this.layoutControl1;
             this.cbxBox.TabIndex = 4;
+            this.cbxBox.SelectedIndexChanged += new System.EventHandler(this.cbxBox_SelectedIndexChanged);
             // 
             // txtProductPlan
             // 
@@ -325,11 +342,12 @@
             // gridView1
             // 
             this.gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
-            this.gridColumn1,
-            this.gridColumn9,
-            this.gridColumn3,
-            this.gridColumn4,
-            this.gridColumn5});
+            this.colSku,
+            this.colSkuCode,
+            this.colSkuSpec,
+            this.colSkuLot1,
+            this.colPlanQty,
+            this.colTrackingNumber});
             this.gridView1.GridControl = this.gridControl1;
             this.gridView1.Name = "gridView1";
             this.gridView1.OptionsView.NewItemRowPosition = DevExpress.XtraGrid.Views.Grid.NewItemRowPosition.Top;
@@ -337,16 +355,16 @@
             this.gridView1.ValidateRow += new DevExpress.XtraGrid.Views.Base.ValidateRowEventHandler(this.gridView1_ValidateRow);
             this.gridView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridView1_KeyDown);
             // 
-            // gridColumn1
+            // colSku
             // 
-            this.gridColumn1.Caption = "物品名称";
-            this.gridColumn1.ColumnEdit = this.sluSku;
-            this.gridColumn1.FieldName = "Sku";
-            this.gridColumn1.MinWidth = 25;
-            this.gridColumn1.Name = "gridColumn1";
-            this.gridColumn1.Visible = true;
-            this.gridColumn1.VisibleIndex = 0;
-            this.gridColumn1.Width = 94;
+            this.colSku.Caption = "物品名称";
+            this.colSku.ColumnEdit = this.sluSku;
+            this.colSku.FieldName = "Sku";
+            this.colSku.MinWidth = 25;
+            this.colSku.Name = "colSku";
+            this.colSku.Visible = true;
+            this.colSku.VisibleIndex = 0;
+            this.colSku.Width = 94;
             // 
             // sluSku
             // 
@@ -356,6 +374,7 @@
             this.sluSku.KeyMember = "SkuId";
             this.sluSku.Name = "sluSku";
             this.sluSku.PopupView = this.repositoryItemSearchLookUpEdit1View;
+            this.sluSku.EditValueChanged += new System.EventHandler(this.sluSku_EditValueChanged);
             // 
             // repositoryItemSearchLookUpEdit1View
             // 
@@ -392,27 +411,27 @@
             this.gridColumn8.Visible = true;
             this.gridColumn8.VisibleIndex = 2;
             // 
-            // gridColumn9
+            // colSkuCode
             // 
-            this.gridColumn9.Caption = "物品编码";
-            this.gridColumn9.FieldName = "SkuCode";
-            this.gridColumn9.MinWidth = 25;
-            this.gridColumn9.Name = "gridColumn9";
-            this.gridColumn9.OptionsColumn.ReadOnly = true;
-            this.gridColumn9.Visible = true;
-            this.gridColumn9.VisibleIndex = 1;
-            this.gridColumn9.Width = 94;
+            this.colSkuCode.Caption = "物品编码";
+            this.colSkuCode.FieldName = "SkuCode";
+            this.colSkuCode.MinWidth = 25;
+            this.colSkuCode.Name = "colSkuCode";
+            this.colSkuCode.OptionsColumn.ReadOnly = true;
+            this.colSkuCode.Visible = true;
+            this.colSkuCode.VisibleIndex = 1;
+            this.colSkuCode.Width = 94;
             // 
-            // gridColumn3
+            // colSkuSpec
             // 
-            this.gridColumn3.Caption = "型号";
-            this.gridColumn3.ColumnEdit = this.luModel;
-            this.gridColumn3.FieldName = "SkuSpec";
-            this.gridColumn3.MinWidth = 25;
-            this.gridColumn3.Name = "gridColumn3";
-            this.gridColumn3.Visible = true;
-            this.gridColumn3.VisibleIndex = 2;
-            this.gridColumn3.Width = 94;
+            this.colSkuSpec.Caption = "型号";
+            this.colSkuSpec.ColumnEdit = this.luModel;
+            this.colSkuSpec.FieldName = "SkuSpec";
+            this.colSkuSpec.MinWidth = 25;
+            this.colSkuSpec.Name = "colSkuSpec";
+            this.colSkuSpec.Visible = true;
+            this.colSkuSpec.VisibleIndex = 2;
+            this.colSkuSpec.Width = 94;
             // 
             // luModel
             // 
@@ -422,27 +441,29 @@
             this.luModel.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] {
             new DevExpress.XtraEditors.Controls.LookUpColumnInfo("SkuSpec", "型号")});
             this.luModel.Name = "luModel";
+            this.luModel.PopupFilterMode = DevExpress.XtraEditors.PopupFilterMode.Contains;
+            this.luModel.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.Standard;
             // 
-            // gridColumn4
+            // colSkuLot1
             // 
-            this.gridColumn4.Caption = "批次";
-            this.gridColumn4.FieldName = "SkuLot1";
-            this.gridColumn4.MinWidth = 25;
-            this.gridColumn4.Name = "gridColumn4";
-            this.gridColumn4.Visible = true;
-            this.gridColumn4.VisibleIndex = 3;
-            this.gridColumn4.Width = 94;
+            this.colSkuLot1.Caption = "批次";
+            this.colSkuLot1.FieldName = "SkuLot1";
+            this.colSkuLot1.MinWidth = 25;
+            this.colSkuLot1.Name = "colSkuLot1";
+            this.colSkuLot1.Visible = true;
+            this.colSkuLot1.VisibleIndex = 3;
+            this.colSkuLot1.Width = 94;
             // 
-            // gridColumn5
+            // colPlanQty
             // 
-            this.gridColumn5.Caption = "数量";
-            this.gridColumn5.ColumnEdit = this.txtspPlanQty;
-            this.gridColumn5.FieldName = "PlanQty";
-            this.gridColumn5.MinWidth = 25;
-            this.gridColumn5.Name = "gridColumn5";
-            this.gridColumn5.Visible = true;
-            this.gridColumn5.VisibleIndex = 4;
-            this.gridColumn5.Width = 94;
+            this.colPlanQty.Caption = "数量";
+            this.colPlanQty.ColumnEdit = this.txtspPlanQty;
+            this.colPlanQty.FieldName = "PlanQty";
+            this.colPlanQty.MinWidth = 25;
+            this.colPlanQty.Name = "colPlanQty";
+            this.colPlanQty.Visible = true;
+            this.colPlanQty.VisibleIndex = 4;
+            this.colPlanQty.Width = 94;
             // 
             // txtspPlanQty
             // 
@@ -450,6 +471,16 @@
             this.txtspPlanQty.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.txtspPlanQty.Name = "txtspPlanQty";
+            // 
+            // colTrackingNumber
+            // 
+            this.colTrackingNumber.Caption = "追踪号";
+            this.colTrackingNumber.FieldName = "TrackingNumber";
+            this.colTrackingNumber.MinWidth = 25;
+            this.colTrackingNumber.Name = "colTrackingNumber";
+            this.colTrackingNumber.Visible = true;
+            this.colTrackingNumber.VisibleIndex = 5;
+            this.colTrackingNumber.Width = 94;
             // 
             // layoutControlGroup1
             // 
@@ -472,22 +503,59 @@
             // 
             // layoutControl3
             // 
+            this.layoutControl3.Controls.Add(this.btnResetSerialNumber);
+            this.layoutControl3.Controls.Add(this.btnExport);
+            this.layoutControl3.Controls.Add(this.btnImportDetail);
             this.layoutControl3.Controls.Add(this.btnSavePrint);
             this.layoutControl3.Controls.Add(this.btnResetAll);
             this.layoutControl3.Controls.Add(this.btnPreviewPrint);
+            this.layoutControl3.Controls.Add(this.btnReprint);
             this.layoutControl3.Dock = System.Windows.Forms.DockStyle.Top;
             this.layoutControl3.Location = new System.Drawing.Point(0, 81);
             this.layoutControl3.Name = "layoutControl3";
-            this.layoutControl3.OptionsCustomizationForm.DesignTimeCustomizationFormPositionAndSize = new System.Drawing.Rectangle(827, 307, 812, 500);
+            this.layoutControl3.OptionsCustomizationForm.DesignTimeCustomizationFormPositionAndSize = new System.Drawing.Rectangle(900, 418, 812, 500);
             this.layoutControl3.Root = this.layoutControlGroup2;
             this.layoutControl3.Size = new System.Drawing.Size(1190, 54);
             this.layoutControl3.TabIndex = 2;
             this.layoutControl3.Text = "layoutControl3";
             // 
+            // btnResetSerialNumber
+            // 
+            this.btnResetSerialNumber.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnResetSerialNumber.ImageOptions.Image")));
+            this.btnResetSerialNumber.Location = new System.Drawing.Point(912, 12);
+            this.btnResetSerialNumber.Name = "btnResetSerialNumber";
+            this.btnResetSerialNumber.Size = new System.Drawing.Size(86, 27);
+            this.btnResetSerialNumber.StyleController = this.layoutControl3;
+            this.btnResetSerialNumber.TabIndex = 12;
+            this.btnResetSerialNumber.Text = "重置明细";
+            this.btnResetSerialNumber.Click += new System.EventHandler(this.btnResetSerialNumber_Click);
+            // 
+            // btnExport
+            // 
+            this.btnExport.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnExport.ImageOptions.Image")));
+            this.btnExport.Location = new System.Drawing.Point(102, 12);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(86, 27);
+            this.btnExport.StyleController = this.layoutControl3;
+            this.btnExport.TabIndex = 10;
+            this.btnExport.Text = "明细导出";
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
+            // btnImportDetail
+            // 
+            this.btnImportDetail.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnImportDetail.ImageOptions.Image")));
+            this.btnImportDetail.Location = new System.Drawing.Point(192, 12);
+            this.btnImportDetail.Name = "btnImportDetail";
+            this.btnImportDetail.Size = new System.Drawing.Size(86, 27);
+            this.btnImportDetail.StyleController = this.layoutControl3;
+            this.btnImportDetail.TabIndex = 11;
+            this.btnImportDetail.Text = "明细导入";
+            this.btnImportDetail.Click += new System.EventHandler(this.btnImportDetail_Click);
+            // 
             // btnSavePrint
             // 
             this.btnSavePrint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnSavePrint.ImageOptions.Image")));
-            this.btnSavePrint.Location = new System.Drawing.Point(912, 12);
+            this.btnSavePrint.Location = new System.Drawing.Point(822, 12);
             this.btnSavePrint.Name = "btnSavePrint";
             this.btnSavePrint.Size = new System.Drawing.Size(86, 27);
             this.btnSavePrint.StyleController = this.layoutControl3;
@@ -517,6 +585,17 @@
             this.btnPreviewPrint.Text = "预览打印";
             this.btnPreviewPrint.Click += new System.EventHandler(this.btnPreviewPrint_Click);
             // 
+            // btnReprint
+            // 
+            this.btnReprint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnReprint.ImageOptions.Image")));
+            this.btnReprint.Location = new System.Drawing.Point(12, 12);
+            this.btnReprint.Name = "btnReprint";
+            this.btnReprint.Size = new System.Drawing.Size(86, 27);
+            this.btnReprint.StyleController = this.layoutControl3;
+            this.btnReprint.TabIndex = 8;
+            this.btnReprint.Text = "箱标重打";
+            this.btnReprint.Click += new System.EventHandler(this.btnReprint_Click);
+            // 
             // layoutControlGroup2
             // 
             this.layoutControlGroup2.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
@@ -525,7 +604,11 @@
             this.layoutControlItem15,
             this.layoutControlItem13,
             this.emptySpaceItem2,
-            this.layoutControlItem16});
+            this.layoutControlItem16,
+            this.layoutControlItem3,
+            this.layoutControlItem8,
+            this.layoutControlItem10,
+            this.layoutControlItem11});
             this.layoutControlGroup2.Name = "Root";
             this.layoutControlGroup2.Size = new System.Drawing.Size(1190, 54);
             this.layoutControlGroup2.TextVisible = false;
@@ -542,7 +625,7 @@
             // layoutControlItem13
             // 
             this.layoutControlItem13.Control = this.btnSavePrint;
-            this.layoutControlItem13.Location = new System.Drawing.Point(900, 0);
+            this.layoutControlItem13.Location = new System.Drawing.Point(810, 0);
             this.layoutControlItem13.Name = "layoutControlItem13";
             this.layoutControlItem13.Size = new System.Drawing.Size(90, 34);
             this.layoutControlItem13.TextSize = new System.Drawing.Size(0, 0);
@@ -551,9 +634,9 @@
             // emptySpaceItem2
             // 
             this.emptySpaceItem2.AllowHotTrack = false;
-            this.emptySpaceItem2.Location = new System.Drawing.Point(0, 0);
+            this.emptySpaceItem2.Location = new System.Drawing.Point(270, 0);
             this.emptySpaceItem2.Name = "emptySpaceItem1";
-            this.emptySpaceItem2.Size = new System.Drawing.Size(900, 34);
+            this.emptySpaceItem2.Size = new System.Drawing.Size(540, 34);
             this.emptySpaceItem2.TextSize = new System.Drawing.Size(0, 0);
             // 
             // layoutControlItem16
@@ -564,6 +647,51 @@
             this.layoutControlItem16.Size = new System.Drawing.Size(90, 34);
             this.layoutControlItem16.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem16.TextVisible = false;
+            // 
+            // layoutControlItem3
+            // 
+            this.layoutControlItem3.Control = this.btnReprint;
+            this.layoutControlItem3.Location = new System.Drawing.Point(0, 0);
+            this.layoutControlItem3.Name = "layoutControlItem3";
+            this.layoutControlItem3.Size = new System.Drawing.Size(90, 34);
+            this.layoutControlItem3.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem3.TextVisible = false;
+            // 
+            // layoutControlItem8
+            // 
+            this.layoutControlItem8.Control = this.btnExport;
+            this.layoutControlItem8.Location = new System.Drawing.Point(90, 0);
+            this.layoutControlItem8.Name = "layoutControlItem8";
+            this.layoutControlItem8.Size = new System.Drawing.Size(90, 34);
+            this.layoutControlItem8.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem8.TextVisible = false;
+            // 
+            // layoutControlItem10
+            // 
+            this.layoutControlItem10.Control = this.btnImportDetail;
+            this.layoutControlItem10.Location = new System.Drawing.Point(180, 0);
+            this.layoutControlItem10.Name = "layoutControlItem10";
+            this.layoutControlItem10.Size = new System.Drawing.Size(90, 34);
+            this.layoutControlItem10.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem10.TextVisible = false;
+            // 
+            // layoutControlItem11
+            // 
+            this.layoutControlItem11.Control = this.btnResetSerialNumber;
+            this.layoutControlItem11.Location = new System.Drawing.Point(900, 0);
+            this.layoutControlItem11.Name = "layoutControlItem11";
+            this.layoutControlItem11.Size = new System.Drawing.Size(90, 34);
+            this.layoutControlItem11.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem11.TextVisible = false;
+            // 
+            // xtraFolderBrowserDialog1
+            // 
+            this.xtraFolderBrowserDialog1.SelectedPath = "xtraFolderBrowserDialog1";
+            // 
+            // xtraOpenFileDialog1
+            // 
+            this.xtraOpenFileDialog1.FileName = "xtraOpenFileDialog1";
+            this.xtraOpenFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.xtraOpenFileDialog1_FileOk);
             // 
             // BatchPackingForm
             // 
@@ -608,6 +736,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem13)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem16)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem10)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem11)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -633,11 +765,11 @@
         private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
         private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroup1;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem2;
-        private DevExpress.XtraGrid.Columns.GridColumn gridColumn1;
+        private DevExpress.XtraGrid.Columns.GridColumn colSku;
         private DevExpress.XtraEditors.Repository.RepositoryItemSearchLookUpEdit sluSku;
         private DevExpress.XtraGrid.Views.Grid.GridView repositoryItemSearchLookUpEdit1View;
-        private DevExpress.XtraGrid.Columns.GridColumn gridColumn4;
-        private DevExpress.XtraGrid.Columns.GridColumn gridColumn5;
+        private DevExpress.XtraGrid.Columns.GridColumn colSkuLot1;
+        private DevExpress.XtraGrid.Columns.GridColumn colPlanQty;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn6;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn7;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn8;
@@ -650,9 +782,20 @@
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem13;
         private DevExpress.XtraLayout.EmptySpaceItem emptySpaceItem2;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem16;
-        private DevExpress.XtraGrid.Columns.GridColumn gridColumn9;
-        private DevExpress.XtraGrid.Columns.GridColumn gridColumn3;
+        private DevExpress.XtraGrid.Columns.GridColumn colSkuCode;
+        private DevExpress.XtraGrid.Columns.GridColumn colSkuSpec;
         private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit txtspPlanQty;
         private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit luModel;
+        private DevExpress.XtraEditors.SimpleButton btnReprint;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem3;
+        private DevExpress.XtraGrid.Columns.GridColumn colTrackingNumber;
+        private DevExpress.XtraEditors.SimpleButton btnExport;
+        private DevExpress.XtraEditors.SimpleButton btnImportDetail;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem8;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem10;
+        private DevExpress.XtraEditors.XtraFolderBrowserDialog xtraFolderBrowserDialog1;
+        private DevExpress.XtraEditors.SimpleButton btnResetSerialNumber;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem11;
+        private DevExpress.XtraEditors.XtraOpenFileDialog xtraOpenFileDialog1;
     }
 }

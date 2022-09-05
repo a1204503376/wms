@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using Packaging.Utility;
 using Serilog;
 
 namespace Packaging
@@ -119,12 +120,12 @@ namespace Packaging
         /// <param name="e"></param>
         private static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
-            MessageBox.Show(e.Exception.Message);//throw new NotImplementedException();
+            CustomMessageBox.Warning(e.Exception.GetBaseException().Message);//throw new NotImplementedException();
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            MessageBox.Show(e.ExceptionObject.ToString());
+            CustomMessageBox.Warning(e.ExceptionObject.ToString());
         }
 
 

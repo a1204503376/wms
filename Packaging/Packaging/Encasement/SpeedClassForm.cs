@@ -7,7 +7,7 @@ using Packaging.Utility;
 
 namespace Packaging.Encasement
 {
-    [ModuleDefine(moduleId: 103)]
+    [ModuleDefine(moduleId: Constants.SpeedClassFormId)]
     public partial class SpeedClassForm : DevExpress.XtraEditors.XtraForm
     {
         public SpeedClassForm()

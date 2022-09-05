@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows.Forms;
 using Packaging.Common;
 using Packaging.Settings;
@@ -14,10 +13,6 @@ namespace Packaging
         private readonly System.ComponentModel.BackgroundWorker _backgroundWorkerLogon;
         private readonly LoginForm _logonDialog;
         private string _userName = string.Empty;
-        private string _updateUrl = string.Empty;
-        private string _tempUpdatePath = string.Empty;
-        private XmlFiles _xmlUpdater = null;
-        private int _availableUpdate = 0;
 
         /// <summary>
         /// 获取主应用程序是否应该启动
