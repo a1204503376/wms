@@ -218,7 +218,7 @@ export const saveAssign = (soBillId, soDetailId, soPickPlanList, stockIdAndSoPic
     let soBillDistributedRequest = {
         soBillId: soBillId,
         soDetailId: soDetailId,
-        soPickPlanList: soPickPlanList,
+        oldSoPickPlanList: soPickPlanList,
         stockIdAndSoPickPlanQtyList: stockIdAndSoPickPlanQtyList
     }
     return request({

@@ -264,7 +264,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 			.filter(item -> item.getSoDetailId().equals(detail.getSoDetailId()))
 			.map(SoPickPlan::getSurplusQty)
 			.reduce(BigDecimal.ZERO, BigDecimal::add);
-		if (BigDecimalUtil.le(occupy, detail.getSurplusQty())) {
+		if (BigDecimalUtil.lt(occupy, detail.getSurplusQty())) {
 			return String.format("%s %s行库存不足,部分分配", result, detail.getSoLineNo());
 		}
 
