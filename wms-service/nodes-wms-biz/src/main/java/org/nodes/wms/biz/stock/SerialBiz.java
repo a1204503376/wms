@@ -65,4 +65,13 @@ public interface SerialBiz {
 	 * @return Serial
 	 */
 	Serial findSerialSerialNo(String serialNo);
+
+	/**
+	 * 根据库存ID修改对应库存ID
+	 *
+	 * @param sourceStockId 原库存ID
+	 * @param sourceStockId 原库存ID
+	 * @param serialNo      序列号
+	 */
+	void updateSerialStockIdBySerialNo(Long sourceStockId, Long targetStockId, String serialNo);
 }

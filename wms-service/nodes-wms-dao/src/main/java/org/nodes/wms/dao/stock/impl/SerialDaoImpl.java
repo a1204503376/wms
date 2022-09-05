@@ -120,11 +120,27 @@ public class SerialDaoImpl extends BaseServiceImpl<SerialMapper, Serial> impleme
 	public Serial getSerialSerialNo(String serialNo) {
 		return super.lambdaQuery()
 			.like(Serial::getSerialNumber, serialNo)
-			.eq(Serial::getSerialState,SerialStateEnum.IN_STOCK)
+			.eq(Serial::getSerialState, SerialStateEnum.IN_STOCK)
 			.or()
 			.eq(Serial::getSerialNumber, serialNo)
-			.eq(Serial::getSerialState,SerialStateEnum.IN_STOCK)
+			.eq(Serial::getSerialState, SerialStateEnum.IN_STOCK)
 			.one();
+	}
+
+	@Override
+	public void updateSerialStockIdBySerialNo(Long sourceStockId, Long targetStockId, String serialNo) {
+		AssertUtil.notNull(sourceStockId, "更新序列号失败，原库存ID为空");
+		AssertUtil.notNull(targetStockId, "更新序列号失败，目标库存ID为空");
+		AssertUtil.notNull(serialNo, "更新序列号失败，序列号为空");
+		UpdateWrapper<Serial> updateWrapper = Wrappers.update();
+		updateWrapper.lambda()
+			.eq(Serial::getSerialNumber, serialNo)
+			.eq(Serial::getStockId, sourceStockId);
+		Serial serial = new Serial();
+		serial.setStockId(targetStockId);
+		if (super.baseMapper.update(serial, updateWrapper) < 0) {
+			throw new ServiceException("更新序列号状态失败");
+		}
 	}
 
 	private LambdaQueryWrapper<Serial> getLambdaQuery() {

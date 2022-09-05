@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -115,12 +116,28 @@ public class DevanningBizImpl implements DevanningBiz {
 				.collect(Collectors.toList());
 			List<Stock> stockList = stockQueryBiz.findStockById(stockIds);
 			AssertUtil.notNull(stockList, "采集的序列号找不到对应库存");
+			AtomicInteger serialNumberListSize = new AtomicInteger(serialNumberList.size());
 			stockList.forEach(stock -> {
-				AssertUtil.notNull(stock, "根据序列号拆箱时,根据序列号集合找不到对应库存");
-				// 库存移动
-				stockBiz.moveStock(stock, serialNumberList, stock.getStockBalance(), request.getBoxCode(), location.getLocCode(),
-					location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
+				serialList.forEach(serial -> {
+					if (Func.equals(stock.getStockId(), serial.getStockId())) {
+						AssertUtil.notNull(stock, "根据序列号拆箱时,根据序列号集合找不到对应库存");
+						serialNumberListSize.set(serialNumberListSize.get() - stock.getStockBalance().intValue());
+						if (serialNumberListSize.get() >= 0) {
+							// 库存移动
+							Stock targetStock = stockBiz.moveStock(stock, serialNumberList, stock.getStockBalance(), request.getBoxCode(), location.getLocCode(),
+								location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
+							serialBiz.updateSerialStockIdBySerialNo(stock.getStockId(), targetStock.getStockId(), serial.getSerialNumber());
+						} else {
+							// 库存移动
+							Stock targetStock = stockBiz.moveStock(stock, serialNumberList, new BigDecimal(serialNumberList.size()), request.getBoxCode(), location.getLocCode(),
+								location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
+							serialBiz.updateSerialStockIdBySerialNo(stock.getStockId(), targetStock.getStockId(), serial.getSerialNumber());
+						}
+					}
+				});
+
 			});
+
 		} else {
 			AssertUtil.notNull(request.getStockList(), "根据物品拆箱时,未选择物品");
 			// 如果序列号不为空执行 按库存拆箱

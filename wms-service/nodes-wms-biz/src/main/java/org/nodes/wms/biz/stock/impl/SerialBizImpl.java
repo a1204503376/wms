@@ -58,4 +58,9 @@ public class SerialBizImpl implements SerialBiz {
 	public Serial findSerialSerialNo(String serialNo) {
 		return serialDao.getSerialSerialNo(serialNo);
 	}
+
+	@Override
+	public void updateSerialStockIdBySerialNo(Long sourceStockId, Long targetStockId, String serialNo) {
+		serialDao.updateSerialStockIdBySerialNo(sourceStockId, targetStockId, serialNo);
+	}
 }
