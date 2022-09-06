@@ -921,6 +921,7 @@ public class StockBizImpl implements StockBiz {
 	public Stock reduceOccupy(Long soBillId, String soBillNo, Long soDetailId,
 							  Long stockId, BigDecimal currentUnOccupy) {
 		Stock stock = stockDao.getStockById(stockId);
+		AssertUtil.notNull(stock, "释放库存占用失败,库存[{}]不存在", stockId);
 		if (BigDecimalUtil.gt(currentUnOccupy, stock.getOccupyQty())) {
 			throw new ServiceException(String.format("释放占用库存失败,[%d][%s]当前余额[%s]占用[%s],当前释放量[%s]超过占用量",
 				stockId, stock.getSkuCode(), stock.getStockBalance().toString(),
@@ -985,7 +986,7 @@ public class StockBizImpl implements StockBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public List<Stock> unfreezeStockByDropId(List<Stock> stocks, Long dropId) {
-		AssertUtil.notEmpty(stocks, "根据任务解冻库存失败,没有任务[%d]关联的库存", dropId);
+		AssertUtil.notEmpty(stocks, "根据任务解冻库存失败,没有任务[{}]关联的库存", dropId);
 
 		stockDao.updateStockByDropId(stocks, StockStatusEnum.NORMAL, "");
 

@@ -145,7 +145,7 @@ public class TianYiPutawayStrategy {
 				.collect(Collectors.groupingBy(lpnTypeBiz::tryParseBoxCode));
 		for (Map.Entry<LpnTypeCodeEnum, List<String>> entry : lpnType2BoxCodes.entrySet()) {
 			LpnType lpnType = lpnTypeBiz.findLpnType(entry.getKey());
-			AssertUtil.notNull(lpnType, String.format("计算重量失败,容器类别[%s]没有配置重量", entry.getKey().getCode()));
+			AssertUtil.notNull(lpnType, "计算重量失败,容器类别[{}}]没有配置重量", entry.getKey().getCode());
 			result = result.add(lpnType.getWeight().multiply(BigDecimal.valueOf(entry.getValue().size())));
 		}
 
