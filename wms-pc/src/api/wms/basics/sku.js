@@ -9,7 +9,6 @@ export const getSkuSelectResponseTop10List = (data) => {
 }
 
 export const findSkuSpecSelectListBySkuId = (skuId) => {
-    console.log(skuId);
     return request({
         url: '/api/wms/basedata/sku/findSkuSpecSelectListBySkuId',
         method: 'post',
