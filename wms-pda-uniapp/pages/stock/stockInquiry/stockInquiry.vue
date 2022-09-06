@@ -17,11 +17,11 @@
 					<u-col span="3" class="left-text-one-line font-in-page">
 						<u--text class="demo-layout bg-purple-light" v-text="item.balance"></u--text>
 					</u-col>
-					<u-col span="7">
+					<u-col span="6">
 						<u--text class="demo-layout bg-purple  font-in-page"
 							v-text="item.stockEnable+'/'+item.stockBalance+' '+item.wsuCode"></u--text>
 					</u-col>
-					<u-col span="2">
+					<u-col span="3">
 						<view>
 							<uni-tag text="正常" inverted="true" type="success" v-if="item.stockStatus=='正常'"
 								:circle="true">
@@ -29,6 +29,10 @@
 						</view>
 						<view>
 							<uni-tag text="冻结" inverted="true" type="error" v-if="item.stockStatus=='冻结'"
+								:circle="true"></uni-tag>
+						</view>
+						<view>
+							<uni-tag text="系统冻结" inverted="true" type="error" v-if="item.stockStatus=='系统冻结'"
 								:circle="true"></uni-tag>
 						</view>
 					</u-col>
@@ -55,6 +59,22 @@
 					</u-col>
 					<u-col span="9">
 						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.skuCode"></u--text>
+					</u-col>
+				</u-row>
+				<u-row customStyle="margin-bottom: 10px">
+					<u-col span="3" class="left-text-one-line font-in-page">
+						<u--text class="demo-layout bg-purple-light" v-text="item.goodsName"></u--text>
+					</u-col>
+					<u-col span="9">
+						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.skuName"></u--text>
+					</u-col>
+				</u-row>
+				<u-row customStyle="margin-bottom: 10px">
+					<u-col span="3" class="left-text-one-line font-in-page">
+						<u--text class="demo-layout bg-purple-light" v-text="item.specs"></u--text>
+					</u-col>
+					<u-col span="9">
+						<u--text class="demo-layout bg-purple  font-in-page" v-text="item.skuLot2"></u--text>
 					</u-col>
 				</u-row>
 				<u-divider text=""></u-divider>

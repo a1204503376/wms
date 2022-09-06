@@ -20,6 +20,10 @@ public class FindAllStockByNoResponse extends BaseSkuLot implements Serializable
 	 */
 	private String skuCode;
 	/**
+	 * 物品名称
+	 */
+	private String skuName;
+	/**
 	 * 可用余额(单位)
 	 */
 	private BigDecimal qty;
@@ -68,6 +72,8 @@ public class FindAllStockByNoResponse extends BaseSkuLot implements Serializable
 	private String storageLocation = "库位";
 	private String lot = "批次";
 	private String goods = "物品";
+	private String goodsName = "名称";
+	private String specs = "规格型号";
 	/**
 	 * 可用
 	 */
