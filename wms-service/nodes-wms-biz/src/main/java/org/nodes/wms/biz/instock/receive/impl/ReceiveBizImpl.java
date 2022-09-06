@@ -326,8 +326,11 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			receiveDetailLpnItemDto.setSkuName(item.getSkuName());
 			receiveDetailLpnItemDto.setPlanQty(item.getPlanQty());
 			receiveDetailLpnItemDto.setReceiveDetailId(item.getReceiveDetailId());
-			receiveDetailLpnItemDto.setSkuId(item.getSkuId());
 			receiveDetailLpnItemDto.setReceiveDetailLpnId(item.getId());
+			receiveDetailLpnItemDto.setSkuId(item.getSkuId());
+			receiveDetailLpnItemDto.setSkuSpec(item.getSkuSpec());
+			receiveDetailLpnItemDto.setSkuLot1(item.getSkuLot1());
+			receiveDetailLpnItemDto.setSkuLot1(item.getSkuLot1());
 			receiveDetailLpnItemDtoList.add(receiveDetailLpnItemDto);
 			//设置总数
 			totalPlanQty = totalPlanQty.add(item.getPlanQty());
