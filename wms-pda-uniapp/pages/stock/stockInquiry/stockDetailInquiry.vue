@@ -8,6 +8,9 @@
 			<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
 				<u--input v-model.trim="params.skuCode"  disabled></u--input>
 			</u-form-item>
+			<u-form-item label="名称" class="left-text-one-line" labelWidth="100">
+				<u--input v-model.trim="params.skuName"  disabled></u--input>
+			</u-form-item>
 			<u-form-item label="可用" class="left-text-one-line" labelWidth="100">
 				<u--input v-model.trim="params.stockEnable" disabled></u--input>
 				<u--text slot="right" class="font-in-page" v-text="params.wsuCode"></u--text>
