@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 发货单头表工厂类
@@ -96,7 +95,7 @@ public class SoBillFactory {
 			// 物品
 			detail.setSkuCode(sku.getSkuCode());
 			detail.setSkuName(sku.getSkuName());
-			detail.setSkuSpec(sku.getSkuSpec());
+			detail.setSkuSpec(detail.getSkuSpec());
 			// 包装id，层级，换算倍率
 			detail.setWspId(skuPackageDetail.getWspId());
 			detail.setSkuLevel(skuPackageDetail.getSkuLevel());
@@ -109,7 +108,7 @@ public class SoBillFactory {
 			detail.setBaseUmName(baseSkuPackageDetail.getWsuName());
 			// 实收数量
 			detail.setScanQty(BigDecimal.ZERO);
-			//剩余数量
+			// 剩余数量
 			detail.setSurplusQty(detail.getPlanQty().subtract(detail.getScanQty()));
 			// 发货库房
 			detail.setPickWhCode(soHeader.getWhCode());
@@ -121,14 +120,9 @@ public class SoBillFactory {
 					null : detail.getDetailPrice().multiply(detail.getPlanQty()));
 			//单据状态
 			detail.setBillDetailState(SoDetailStateEnum.NORMAL);
-			// 批属性 生产批次、专用客户
+			// 批属性 SkuLot2 物品规格
+			detail.setSkuLot2(detail.getSkuSpec());
 		});
 		return soDetailListResult;
-	}
-
-	public SoHeader createSoHeaderByCustom(Map<String, Object> soHeaderMap) {
-		SoHeader soHeader = new SoHeader();
-		BeanUtil.copy(soHeaderMap, soHeader);
-		return soHeader;
 	}
 }

@@ -24,6 +24,7 @@
         <id column="so_detail_id" property="soDetailId"/>
         <result column="so_line_no" property="soLineNo"/>
         <result column="um_code" property="umCode"/>
+        <result column="sku_spec" property="skuSpec"/>
         <result column="plan_qty" property="planQty"/>
         <result column="sku_lot1" property="skuLot1"/>
         <result column="sku_lot4" property="skuLot4"/>
@@ -32,7 +33,6 @@
             <id column="sku_id" property="skuId"/>
             <result column="sku_code" property="skuCode"/>
             <result column="sku_name" property="skuName"/>
-            <result column="sku_spec" property="skuSpec"/>
         </association>
     </resultMap>
 

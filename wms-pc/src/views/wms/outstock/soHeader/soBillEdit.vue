@@ -178,7 +178,7 @@
                                 </el-table-column>
                                 <el-table-column prop="skuSpec" width="122">
                                     <template slot="header">
-                                        <span>物品规格</span>
+                                        <span class="d-table-header-required">物品规格</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <nodes-sku-spec
@@ -366,10 +366,12 @@ export default {
         // 过滤空白行
         filterBlankRow(row) {
             return !(
-                (func.isEmpty(row.sku.skuId)
-                    && func.isEmpty(row.sku.skuCode)
-                    && func.isEmpty(row.sku.skuName))
-                && row.planQty === 0
+                func.isEmpty(row.sku.skuId) &&
+                func.isEmpty(row.sku.skuCode) &&
+                func.isEmpty(row.sku.skuName) &&
+                func.isEmpty(row.skuSpec) &&
+                row.planQty === 0 &&
+                func.isEmpty(row.umCode)
             );
         },
         getDescriptor() {
@@ -383,6 +385,16 @@ export default {
                         skuCode: {required: true, message: skuErrorMsg},
                         skuName: {required: true, message: skuErrorMsg},
                     }
+                },
+                skuSpec: {
+                    type: 'string',
+                    required: true,
+                    message: '物品规格不能为空'
+                },
+                umCode: {
+                    type: 'string',
+                    required: true,
+                    message: '计量单位不能为空'
                 },
                 planQty: {
                     required: true,
@@ -400,7 +412,6 @@ export default {
             }).then(() => {
                 this.removeIdList.push(rows[index].soDetailId);
                 rows.splice(index, 1)
-                console.log(this.removeIdList);
             })
         },
         getDataSource() {
@@ -411,21 +422,20 @@ export default {
                 .then((res) => {
                     let data = res.data.data;
                     this.form.params = data.soHeader
-                    let newSoDetailData = [];
-                    data.soDetailList.forEach((value) => {
-                            let detail = {
-                                soDetailId: value.soDetailId,
-                                lineNumber: value.soLineNo,
-                                sku: value.sku,
-                                planQty: value.planQty,
-                                skuLot1: value.skuLot1,
-                                skuLot4: value.skuLot4,
-                                remark: value.remark
-                            }
-                            newSoDetailData.push(detail);
+                    data.soDetailList.map(item => {
+                        return {
+                            soDetailId: item.soDetailId,
+                            lineNumber: item.soLineNo,
+                            sku: item.sku,
+                            umCode: item.umCode,
+                            skuSpec: item.skuSpec,
+                            planQty: item.planQty,
+                            skuLot1: item.skuLot1,
+                            skuLot4: item.skuLot4,
+                            remark: item.remark
                         }
-                    )
-                    this.table.data = newSoDetailData;
+                    })
+                    this.table.data = data.soDetailList;
                 })
         },
         createRowObj() {
@@ -434,6 +444,7 @@ export default {
                 lineNumber: '',
                 sku: {},
                 umCode: '',
+                skuSpec: '',
                 planQty: 0,
                 skuLot1: '',
                 skuLot4: '',
@@ -444,19 +455,19 @@ export default {
             this.getDataSource();
         },
         submitFormParams() {
-            let soDetailList = [];
             let params = this.form.params;
-            this.table.postData.forEach((value) => {
-                soDetailList.push({
+            let soDetailList = this.table.postData.map((value) => {
+                return {
                     soDetailId: value.soDetailId,
                     soLineNo: value.lineNumber,
                     skuId: value.sku.skuId,
+                    skuSpec: value.skuSpec,
                     umCode: value.umCode,
                     planQty: value.planQty,
                     skuLot1: value.skuLot1,
                     skuLot4: value.skuLot4,
                     remark: value.remark,
-                })
+                }
             })
             let data = {
                 soBillId: params.soBillId,
