@@ -16,6 +16,7 @@ import org.nodes.wms.dao.outstock.so.enums.SoDetailStateEnum;
 import org.nodes.wms.dao.outstock.so.mapper.SoDetailMapper;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -91,7 +92,11 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 	@Override
 	public SoDetail getSoDetailById(Long soDetailId) {
 		AssertUtil.notNull(soDetailId, "根据出库单明细ID获取出库单明细失败，出库单明细ID为空");
-		return super.getById(soDetailId);
+		SoDetail soDetail = super.getById(soDetailId);
+		if (Func.isEmpty(soDetail)) {
+			throw new ServiceException("根据出库单明细ID获取出库单明细失败，查询不到对应出库单");
+		}
+		return soDetail;
 	}
 
 	@Override
@@ -120,7 +125,9 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 			.in(SoDetail::getBillDetailState, SoDetailStateEnum.AllocWellen, SoDetailStateEnum.Allocated, SoDetailStateEnum.NORMAL, SoDetailStateEnum.PART)
 			.list();
 		AssertUtil.notNull(soDetails, "根据发货单ID物品编码查询发货单明细失败,暂无跟您输入的数据有关的数据");
-		if (soDetails.size() > 1) {
+		if (soDetails.size() == 0) {
+			throw new ServiceException("据发货单ID物品编码查询发货单明细失败,查询不到对应明细");
+		} else if (soDetails.size() > 1) {
 			throw new ServiceException("据发货单ID物品编码查询发货单明细失败,查询出多条明细");
 		}
 		return soDetails.get(0);

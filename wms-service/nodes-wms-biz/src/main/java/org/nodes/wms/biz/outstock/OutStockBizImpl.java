@@ -186,24 +186,18 @@ public class OutStockBizImpl implements OutStockBiz {
 			soDetail = soBillBiz.findSoDetailByHeaderIdAndSkuCode(request.getSoBillId(), request.getSkuCode());
 		}
 		List<Stock> stockLists = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
-		List<Stock> stockList = stockLists.stream()
-			.filter(stock -> Objects.equals(stock.getBoxCode(), request.getBoxCode())
-				&& Objects.equals(stock.getLocCode(), request.getLocCode())
-				&& Objects.equals(stock.getSkuCode(), request.getSkuCode()))
-			.distinct()
-			.collect(Collectors.toList());
-		AssertUtil.notNull(stockList, "PDA拣货失败，根据箱码获取库存失败");
+		AssertUtil.notNull(stockLists, "PDA拣货失败，根据箱码获取库存失败");
 		WmsTask task = wmsTaskBiz.findPickTaskByBoxCode(request.getBoxCode(), WmsTaskProcTypeEnum.BY_PCS);
 		if (Func.isNotEmpty(task)) {
 			if (!Func.equals(task.getTaskProcType(), WmsTaskProcTypeEnum.BY_PCS)) {
 				throw new ServiceException("PDA按件拣货失败，存在任务，但不是按件拣货的任务");
 			}
 			// 按照任务执行方式进行执行
-			pickByPcsByTask(task, stockList, soHeader);
+			pickByPcsByTask(task, stockLists, soHeader);
 			return soHeaderSoBillState(request.getSoBillId());
 		}
 		// 按照库存的方法执行
-		pickByPcsByStock(request, soHeader, soDetail, stockList);
+		pickByPcsByStock(request, soHeader, soDetail, stockLists);
 		return soHeaderSoBillState(request.getSoBillId());
 	}
 
@@ -709,9 +703,10 @@ public class OutStockBizImpl implements OutStockBiz {
 				&& Func.equals(stockParam.getSkuLot1(), request.getSkuLot1())
 				&& Func.equals(stockParam.getLocCode(), request.getLocCode()))
 			.findFirst().orElse(null);
-		canPickLocation(stock.getLocId());
 		AssertUtil.notNull(stockList, "PDA拣货失败，根据您输入的条件找不到对应的库存");
 		AssertUtil.notNull(stock, "PDA拣货失败，根据您输入的条件找不到对应的库存");
+		canPickLocation(stock.getLocId());
+
 		LogSoPick logSoPick = logSoPickFactory.createLogSoPick(request, soHeader, soDetail, stock, sourceLocation);
 		logSoPickDao.saveLogSoPick(logSoPick);
 
