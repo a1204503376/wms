@@ -80,7 +80,7 @@
                             <template v-if="column.prop === 'taskState'" v-slot="scope">
                                 <el-tag v-if="scope.row.taskState === '已下发' || scope.row.taskState === '开始执行'"
                                     type="success">{{ scope.row.taskState }}</el-tag>
-                                <el-tag v-else-if="scope.row.taskState === '已完成' || scope.row.taskState === '已取消'"
+                                <el-tag v-else-if="scope.row.taskState === '已完成' ||scope.row.taskState === 'AGV完成' || scope.row.taskState === '已取消'"
                                     type="info">{{ scope.row.taskState }}</el-tag>
                                 <el-tag v-else-if="scope.row.taskState === '未下发'" type="warning">{{ scope.row.taskState }}
                                 </el-tag>
