@@ -19,14 +19,14 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="任务类型" label-width="90px">
-                            <nodes-task-type class="search-input" v-model="form.params.taskTypeCdList" :multiple="true">
+                            <nodes-task-type class="search-input" v-model.trim="form.params.taskTypeCdList" :multiple="true">
                             </nodes-task-type>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="任务状态" label-width="90px">
                             <nodes-task-state class="search-input" :default-value="true"
-                                v-model="form.params.taskStateList" :multiple="true">
+                                v-model.trim="form.params.taskStateList" :multiple="true">
                             </nodes-task-state>
                         </el-form-item>
                     </el-col>
@@ -34,8 +34,26 @@
                 <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
-                            <nodes-sku-by-query class="search-input" v-model="form.params.skuIdList">
+                            <nodes-sku-by-query class="search-input" v-model.trim="form.params.skuIdList">
                             </nodes-sku-by-query>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="来源库位" label-width="90px">
+                            <el-input class="search-input" v-model.trim="form.params.fromLocCode">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="目标库位" label-width="90px">
+                            <el-input class="search-input" v-model.trim="form.params.toLocCode">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="箱号" label-width="90px">
+                            <el-input class="search-input" v-model.trim="form.params.boxCode">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -147,6 +165,9 @@ export default {
                 params: {
                     taskId: '',
                     billNo: '',
+                    fromLocCode: '',
+                    toLocCode: '',
+                    boxCode: '',
                     taskTypeCdList: [],
                     taskStateList: [1, 2, 3, 4], // 默认未下发、已下发、开始执行、异常中断中
                     skuIdList: [],

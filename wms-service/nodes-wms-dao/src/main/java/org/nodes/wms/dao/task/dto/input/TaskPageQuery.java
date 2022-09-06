@@ -30,4 +30,17 @@ public class TaskPageQuery {
 	 * 物品编码
 	 */
 	private List<Long> skuIdList;
+	/**
+	 * 来源库位编码
+	 */
+	private String fromLocCode;
+	/**
+	 * 目标库位code
+	 */
+	private String toLocCode;
+	/**
+	 * 箱码
+	 */
+	private String boxCode;
+
 }

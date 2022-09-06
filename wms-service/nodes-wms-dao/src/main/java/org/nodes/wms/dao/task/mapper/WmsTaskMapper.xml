@@ -27,6 +27,15 @@
             <if test="query.billNo != null and query.billNo != ''">
                 AND bill_no LIKE concat('%',#{query.billNo},'%')
             </if>
+            <if test="query.fromLocCode != null and query.fromLocCode != ''">
+                AND from_loc_code LIKE concat('%',#{query.fromLocCode},'%')
+            </if>
+            <if test="query.toLocCode != null and query.toLocCode != ''">
+                AND to_loc_code LIKE concat('%',#{query.toLocCode},'%')
+            </if>
+            <if test="query.boxCode != null and query.boxCode != ''">
+                AND box_code LIKE concat('%',#{query.boxCode},'%')
+            </if>
             <if test="query.taskTypeCdList != null and query.taskTypeCdList.size()>0">
                 AND task_type_cd in
                 <foreach collection="query.taskTypeCdList" item="item" open="(" close=")" separator=",">
