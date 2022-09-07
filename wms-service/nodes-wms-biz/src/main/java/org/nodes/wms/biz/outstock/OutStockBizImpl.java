@@ -325,7 +325,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		}
 
 		// 6、更新任务
-		wmsTaskBiz.updateWmsTaskByPartParam(task.getTaskId(), WmsTaskProcTypeEnum.BY_BOX, targetLocation);
+		wmsTaskBiz.updateWmsTaskByPartParam(task.getTaskId(), WmsTaskProcTypeEnum.BY_BOX, targetLocation, null);
 
 		// 7、记录业务日志
 		logBiz.auditLog(AuditLogType.MOVE_STOCK, soHeader.getSoBillId(),
