@@ -321,18 +321,16 @@ export default {
         this.initializeData();
     },
     watch: {
-        logSoPicks(){
+        logSoPicks() {
             this.initializeData();
         }
     },
     methods: {
         // 过滤空白行
         filterBlankRow(row) {
-            return !(
-                (func.isEmpty(row.sku.skuId)
-                    && func.isEmpty(row.sku.skuCode)
-                    && func.isEmpty(row.sku.skuName)
-                    && func.isEmpty(row.sku.skuSpec))
+            return !(func.isEmpty(row.sku.skuId)
+                && func.isEmpty(row.sku.skuCode)
+                && func.isEmpty(row.sku.skuName)
                 && row.planQty === 0
             );
         },
@@ -345,12 +343,10 @@ export default {
                     fields: {
                         skuId: {required: true, message: skuErrorMsg},
                         skuCode: {required: true, message: skuErrorMsg},
-                        skuName: {required: true, message: skuErrorMsg},
-                        skuSpec: {required: true, message: skuErrorMsg},
+                        skuName: {required: true, message: skuErrorMsg}
                     }
                 },
                 planQty: {type: 'Number', validator: (rule, value) => value > 0, message: '计划数量不能为0'}
-
             };
         },
         initializeData() {
@@ -399,7 +395,7 @@ export default {
         },
         submitFormParams() {
             this.form.params.newReceiveDetailRequestList = this.table.postData
-             return addReceive(this.form.params)
+            return addReceive(this.form.params)
                 .then(res => {
                     return {
                         msg: res.data.msg,

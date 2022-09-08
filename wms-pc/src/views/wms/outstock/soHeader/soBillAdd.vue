@@ -405,7 +405,6 @@ export default {
         submitFormParams() {
             let postData = this.table.postData;
             let params = this.form.params;
-            debugger
             let soDetailList = postData.map(value => {
                 return {
                     soLineNo: value.lineNumber,

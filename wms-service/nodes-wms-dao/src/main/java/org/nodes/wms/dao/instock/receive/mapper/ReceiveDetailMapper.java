@@ -37,4 +37,12 @@ public interface ReceiveDetailMapper extends BaseMapper<ReceiveDetail> {
 	 * pc收货查询返回前端明细对象
 	 */
 	ReceiveDetailByPcResponse selectReceiveDetailByPcResponse(@Param("query") ReceiveByPcQuery receiveByPcQuery);
+
+	/**
+	 * 根据id删除收货明细
+	 *
+	 * @param id:
+	 * @return true: 删除成功，false: 删除失败
+	 */
+    boolean deleteByDetailId(Long id);
 }
