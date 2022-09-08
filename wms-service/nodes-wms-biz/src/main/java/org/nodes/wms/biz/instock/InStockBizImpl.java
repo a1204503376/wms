@@ -298,6 +298,7 @@ public class InStockBizImpl implements InStockBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void cancelReceive(List<Long> receiveIdList) {
+		List<Long> removeReceiveBillId = new ArrayList<>();
 		// 是否可以撤销
 		List<ReceiveLog> receiveLogList = receiveLogBiz.canCancelReceive(receiveIdList);
 		// 生成撤销的清点记录
@@ -312,9 +313,30 @@ public class InStockBizImpl implements InStockBiz {
 			// 更新收货单头表信息
 			ReceiveHeader receiveHeader = receiveBiz.getReceiveHeaderById(item.getReceiveId());
 			receiveBiz.updateReceiveHeader(receiveHeader, receiveDetail);
+			// 如果receiveId在receive_detail_lpn中存在，则需要更新收货单LPN明细表
+			ReceiveDetailLpn receiveDetailLpn = receiveBiz.getReceiveDetailLpnByDetailId(item.getReceiveDetailId());
+			if (Func.isNotEmpty(receiveDetailLpn)) {
+				if(!receiveBiz.updateReceiveDetailLpnForCancelReceive(receiveDetailLpn)){
+					throw new ServiceException("更新收货LPN明细失败，请稍后再试");
+				}
+				// 删除按箱、多箱收货所创建的收货明细
+				if(!receiveDetailDao.deleteById(item.getReceiveDetailId())){
+					throw new ServiceException("撤销收货失败，删除发货单明细时失败，请稍后再试");
+				}
+				// 根据发货单id查询明细，如果结果为空，则删除该发货单
+				List<ReceiveDetail> receiveDetails = receiveDetailDao.selectReceiveDetailById(item.getReceiveId());
+				if (Func.isEmpty(receiveDetails)){
+					removeReceiveBillId.add(item.getReceiveId());
+				}
+			}
 			// 生成业务日志
 			receiveBiz.log(StockLogTypeEnum.OUTSTOCK_BY_CANCEL_RECEIVE.getDesc(), receiveHeader, receiveDetail, item);
 		});
+		if (Func.isNotEmpty(removeReceiveBillId)){
+			if(!receiveBiz.remove(removeReceiveBillId)){
+				throw new ServiceException("撤销收货失败，删除发货单时失败，请稍后再试");
+			}
+		}
 	}
 
 	@Override

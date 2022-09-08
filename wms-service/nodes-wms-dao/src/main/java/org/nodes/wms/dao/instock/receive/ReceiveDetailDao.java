@@ -73,4 +73,12 @@ public interface ReceiveDetailDao {
 	 * @return 明细实体集合
 	 */
 	List<ReceiveDetail> findByIDList(List<Long> detailIdList);
+
+	/**
+	 * 根据id删除收货明细
+	 *
+	 * @param id: 收货明细id
+	 * @return true: 删除成功，false: 删除失败
+	 */
+    boolean deleteById(Long id);
 }

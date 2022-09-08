@@ -1,12 +1,16 @@
 package org.nodes.wms.dao.instock.receive.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.nodes.wms.dao.instock.receive.ReceiveDetailLpnDao;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
+import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
 import org.nodes.wms.dao.instock.receive.mapper.ReceiveDetailLpnMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -30,4 +34,23 @@ public class ReceiveDetailLpnDaoImpl extends BaseServiceImpl<ReceiveDetailLpnMap
     public void updateReceiveDetailLpn(ReceiveDetailLpn lpn) {
         super.updateById(lpn);
     }
+
+    @Override
+    public ReceiveDetailLpn selectByReceiveDetailId(Long receiveDetailId) {
+		LambdaQueryWrapper<ReceiveDetailLpn> queryWrapper = Wrappers.lambdaQuery(ReceiveDetailLpn.class);
+		queryWrapper.eq(ReceiveDetailLpn::getReceiveDetailId, receiveDetailId);
+        return super.getOne(queryWrapper);
+    }
+
+	@Override
+	public boolean updateForCancelReceive(ReceiveDetailLpn receiveDetailLpn) {
+		LambdaUpdateWrapper<ReceiveDetailLpn> updateWrapper = Wrappers.lambdaUpdate(ReceiveDetailLpn.class);
+		updateWrapper
+			.eq(ReceiveDetailLpn::getReceiveDetailId, receiveDetailLpn.getReceiveDetailId())
+			.set(ReceiveDetailLpn::getDetailStatus,ReceiveDetailStatusEnum.NOT_RECEIPT)
+			.set(ReceiveDetailLpn::getScanQty, BigDecimal.ZERO)
+			.set(ReceiveDetailLpn::getReceiveHeaderId,"0")
+			.set(ReceiveDetailLpn::getReceiveDetailId,"0");
+		return super.update(updateWrapper);
+	}
 }
