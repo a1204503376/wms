@@ -5,12 +5,12 @@ namespace DataAccess.Wms
 {
     public class WmsStockDal
     {
-        public static List<WmsStock> GetByBoxCode(List<string> boxCodeList)
+        public static List<WmsStock> GetWmsStockList(string boxCode)
         {
             return Db.FreeSql.Select<WmsStock>()
-                .Where(d => boxCodeList.Contains(d.BoxCode)
-                && d.StockQty>d.PickQty
-                && d.IsDeleted==0)
+                .Where(d => d.BoxCode == boxCode
+                            && d.StockQty > d.PickQty
+                            && d.IsDeleted == 0)
                 .ToList();
         }
     }

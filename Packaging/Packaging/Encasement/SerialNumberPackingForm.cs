@@ -59,7 +59,7 @@ namespace Packaging.Encasement
 
         private void SetSluSkuDataSource()
         {
-            _skus = SkuDal.GetAll();
+            _skus = WmsSkuDal.GetAll();
             sluSku.Properties.DisplayMember = "SkuName";
             sluSku.Properties.KeyMember = "SkuId";
             SetFilterSkuDataSource();
@@ -197,16 +197,11 @@ namespace Packaging.Encasement
 
         private void txtSerialNumber_Leave(object sender, EventArgs e)
         {
-            if (!(sender is TextEdit textEdit))
-            {
-                return;
-            }
-
             if (string.IsNullOrWhiteSpace(luModel.Text)
-                || string.IsNullOrWhiteSpace(textEdit.Text))
+                || string.IsNullOrWhiteSpace(txtSerialNumber.Text))
             {
-                Serilog.Log.Warning($"二维码内容({textEdit.Text})或者型号({luModel.Text})为空");
-                ResetSerialNumberFocus(textEdit);
+                Serilog.Log.Warning($"二维码内容({txtSerialNumber.Text})或者型号({luModel.Text})为空");
+                ResetSerialNumberFocus(txtSerialNumber);
                 return;
             }
 
@@ -219,10 +214,10 @@ namespace Packaging.Encasement
             {
                 qrCodeSeparatorCharArray[i] = Convert.ToChar(qrCodeSeparatorList[i]);
             }
-            var qrCodeArray = textEdit.Text.Split(qrCodeSeparatorCharArray);
+            var qrCodeArray = txtSerialNumber.Text.Split(qrCodeSeparatorCharArray);
             if (qrCodeArray.Length==1)
             {
-                Serilog.Log.Warning($"二维码分割长度只有一个， QR CODE:{textEdit.Text}");
+                Serilog.Log.Warning($"二维码分割长度只有一个， QR CODE:{txtSerialNumber.Text}");
                 return;
             }
             // 产品标识代码 和 产品辅助代码
@@ -257,18 +252,10 @@ namespace Packaging.Encasement
                     && d.ProductIdentificationCode == productIdentificationCode) > -1)
             {
                 SoundPlayerHelper.Duplicate();
-                ResetSerialNumberFocus(textEdit);
+                ResetSerialNumberFocus(txtSerialNumber);
                 return;
             }
 
-            // var bySerialNumberAndModel
-            //     = PackingSerialDal.GetBySerialNumberAndModel(luModel.Text, productSupportCode, productIdentificationCode);
-            //
-            // if (bySerialNumberAndModel == null)
-            // {
-            //     ResetSerialNumberFocus(textEdit);
-            //     return;
-            // }
             var packingAutoIdentification = new PackingSerialDetail
             {
                 ProductIdentificationCode = productIdentificationCode,
@@ -280,7 +267,7 @@ namespace Packaging.Encasement
 
             gridControl1.RefreshDataSource();
 
-            ResetSerialNumberFocus(textEdit);
+            ResetSerialNumberFocus(txtSerialNumber);
         }
 
         private List<PackingSerialDetail> GetGridDataSource()
@@ -380,7 +367,7 @@ namespace Packaging.Encasement
                 return;
             }
             var serialNumberReport = GetSerialNumberReport();
-            serialNumberReport.Print();
+            serialNumberReport.PrintDialog();
             ResetReprint();
         }
 
@@ -406,9 +393,9 @@ namespace Packaging.Encasement
             }
             var serialNumberPrintDtos = new List<SerialNumberPrintDto>();
             // 辅助代码6个一组，多一组多打印一张
-            var serialNumberRanges = GetSerialNumberRanges(packingSerialDetails.Select(d => d.ProductSupportCode).ToList());
-            var copies = (int)Math.Ceiling((double)serialNumberRanges.Count / SerialNumberPrintDto.SerialGroupNumber);
-            for (int i = 0; i < copies; i++)
+            var serialNumberRanges = SerialNumberPrintDto.GetSerialNumberRanges(packingSerialDetails.Select(d => d.ProductSupportCode).ToList());
+            var groupSerialNumber = (int)Math.Ceiling((double)serialNumberRanges.Count / SerialNumberPrintDto.SerialGroupNumber);
+            for (int i = 0; i < groupSerialNumber; i++)
             {
                 var serialNumberPrintDto = new SerialNumberPrintDto
                 {
@@ -444,7 +431,7 @@ namespace Packaging.Encasement
                 {
                     count = serialNumberRanges.Count;
                 }
-                else if ((i+1)==copies && (serialNumberRanges.Count - index) < SerialNumberPrintDto.SerialGroupNumber)
+                else if ((i+1)==groupSerialNumber && (serialNumberRanges.Count - index) < SerialNumberPrintDto.SerialGroupNumber)
                 {
                     count = serialNumberRanges.Count - index;
                 }
@@ -460,10 +447,7 @@ namespace Packaging.Encasement
             var serialNumberPrintDtoFirst = serialNumberPrintDtos.First();
             // 组装给WMS的入库数据
             // 物品型号是指定的成对物品，并且使用2个序列号时，WMS保存奇数，过滤掉偶数的
-            if (_packingSequenctNumberPairs != null
-                && _packingSequenctNumberPairs.Count > 0
-                && _packingSequenctNumberPairs.Contains(serialNumberPrintDtoFirst.Model)
-                && serialNumberPrintDtoFirst.SkuName.Contains("闸片"))
+            if (SerialNumberPrintDto.IsDobuleSerialNumber(_packingSequenctNumberPairs,serialNumberPrintDtoFirst))
             {
                 packingSerialDetails = _packingSerialDetails.OrderBy(d => d.ProductSupportCode)
                     .Where(d=>d.ProductSupportCode%2!=0)
@@ -542,50 +526,6 @@ namespace Packaging.Encasement
             }
 
             return sku;
-        }
-
-        private static List<SerialNumberRange> GetSerialNumberRanges(List<int> serialNumberList)
-        {
-            Dictionary<string, List<string>> serialNumberDictionary = new Dictionary<string, List<string>>();
-            serialNumberList.Sort();
-            foreach (var item in serialNumberList)
-            {
-                var serialNumber = item.ToString();
-                if (serialNumber.Length != 9)
-                {
-                    continue;
-                }
-                // 前4位：yyMM
-                // 后五位：序列号
-                var key = serialNumber.Substring(0, 4);
-                var value = serialNumber.Replace(key, string.Empty);
-                if (serialNumberDictionary.ContainsKey(key))
-                {
-                    serialNumberDictionary[key].Add(value);
-                }
-                else
-                {
-                    serialNumberDictionary.Add(key, new List<string>
-                    {
-                        value
-                    });
-                }
-            }
-
-            var serialNumberRanges = new List<SerialNumberRange>();
-            foreach (var pair in serialNumberDictionary)
-            {
-                pair.Value.Sort();
-                var serialNumberRange = new SerialNumberRange
-                {
-                    Key = pair.Key,
-                    Begin = pair.Value.First(),
-                    End = pair.Value.Last()
-                };
-                serialNumberRanges.Add(serialNumberRange);
-            }
-
-            return serialNumberRanges;
         }
 
         private static void SetSnCodePlanQty(IReadOnlyList<int> serialNumberList,

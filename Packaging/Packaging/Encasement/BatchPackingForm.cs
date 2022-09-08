@@ -41,7 +41,7 @@ namespace Packaging.Encasement
 
         private void SetSluSkuDataSource()
         {
-            _skus = SkuDal.GetAll();
+            _skus = WmsSkuDal.GetAll();
             sluSku.DisplayMember = "SkuName";
             sluSku.KeyMember = "SkuId";
             SetFilterSkuDataSource();
@@ -113,7 +113,7 @@ namespace Packaging.Encasement
             }
 
             var batchPackingReport = GetBatchPackingReport();
-            batchPackingReport?.Print();
+            batchPackingReport?.PrintDialog();
             ResetReprint();
         }
 
@@ -173,7 +173,7 @@ namespace Packaging.Encasement
 
             batchPrintDto.ReceiveDetailLpns = receiveDetailLpns;
 
-            BatchPrintDto.SetQty(batchPrintDto);
+            batchPrintDto.SetQty();
 
             return batchPrintDto;
         }
@@ -234,10 +234,6 @@ namespace Packaging.Encasement
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(sku.SkuSpec))
-            {
-                return;
-            }
             ResetPrintEnable();
         }
 

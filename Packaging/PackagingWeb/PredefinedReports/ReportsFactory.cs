@@ -8,7 +8,6 @@ namespace PackagingWeb.PredefinedReports
     {
         static ReportsFactory ()
         {
-            Reports.Add("TestReport", () => new TestReport());
             Reports.Add("BatchPackingReport", () => new BatchPackingReport());
             Reports.Add("SerialNumberReport", () => new SerialNumberReport());
         }

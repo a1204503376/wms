@@ -155,7 +155,7 @@ namespace PackagingWeb.PredefinedReports
             this.xrLabel11.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[BoxNumberSuffix]")});
             this.xrLabel11.Font = new System.Drawing.Font("微软雅黑", 72F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.xrLabel11.LocationFloat = new DevExpress.Utils.PointFloat(288.4259F, 611.7145F);
+            this.xrLabel11.LocationFloat = new DevExpress.Utils.PointFloat(289.1859F, 631.9722F);
             this.xrLabel11.Multiline = true;
             this.xrLabel11.Name = "xrLabel11";
             this.xrLabel11.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
@@ -169,17 +169,17 @@ namespace PackagingWeb.PredefinedReports
             this.xrLabel10.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SpecialCustomer]")});
             this.xrLabel10.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.xrLabel10.LocationFloat = new DevExpress.Utils.PointFloat(966.9586F, 471.3242F);
+            this.xrLabel10.LocationFloat = new DevExpress.Utils.PointFloat(981.9588F, 485.4909F);
             this.xrLabel10.Multiline = true;
             this.xrLabel10.Name = "xrLabel10";
             this.xrLabel10.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.xrLabel10.SizeF = new System.Drawing.SizeF(140.2544F, 39.52774F);
+            this.xrLabel10.SizeF = new System.Drawing.SizeF(106.9211F, 39.52774F);
             this.xrLabel10.StylePriority.UseFont = false;
             // 
             // xrPictureBox1
             // 
             this.xrPictureBox1.ImageSource = new DevExpress.XtraPrinting.Drawing.ImageSource("img", resources.GetString("xrPictureBox1.ImageSource"));
-            this.xrPictureBox1.LocationFloat = new DevExpress.Utils.PointFloat(112.6082F, 374.9258F);
+            this.xrPictureBox1.LocationFloat = new DevExpress.Utils.PointFloat(127.6082F, 395.1833F);
             this.xrPictureBox1.Name = "xrPictureBox1";
             this.xrPictureBox1.SizeF = new System.Drawing.SizeF(854.3506F, 236.7888F);
             this.xrPictureBox1.Sizing = DevExpress.XtraPrinting.ImageSizeMode.ZoomImage;
@@ -192,11 +192,11 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeKey6.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialKey6]")});
             this.lbRangeKey6.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeKey6.LocationFloat = new DevExpress.Utils.PointFloat(668.8654F, 325.6864F);
+            this.lbRangeKey6.LocationFloat = new DevExpress.Utils.PointFloat(668.8654F, 348.5103F);
             this.lbRangeKey6.Multiline = true;
             this.lbRangeKey6.Name = "lbRangeKey6";
             this.lbRangeKey6.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeKey6.SizeF = new System.Drawing.SizeF(120.492F, 23.00002F);
+            this.lbRangeKey6.SizeF = new System.Drawing.SizeF(68.72F, 35F);
             this.lbRangeKey6.StylePriority.UseBorders = false;
             this.lbRangeKey6.StylePriority.UseFont = false;
             // 
@@ -208,22 +208,22 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeBegin6.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialBegin6]")});
             this.lbRangeBegin6.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeBegin6.LocationFloat = new DevExpress.Utils.PointFloat(808.9787F, 325.6864F);
+            this.lbRangeBegin6.LocationFloat = new DevExpress.Utils.PointFloat(760.6453F, 348.5103F);
             this.lbRangeBegin6.Multiline = true;
             this.lbRangeBegin6.Name = "lbRangeBegin6";
             this.lbRangeBegin6.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeBegin6.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeBegin6.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeBegin6.StylePriority.UseBorders = false;
             this.lbRangeBegin6.StylePriority.UseFont = false;
             // 
             // xrLabel29
             // 
-            this.xrLabel29.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.xrLabel29.LocationFloat = new DevExpress.Utils.PointFloat(857.5897F, 325.6864F);
+            this.xrLabel29.Font = new System.Drawing.Font("微软雅黑", 17.95F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.xrLabel29.LocationFloat = new DevExpress.Utils.PointFloat(855.6271F, 348.5103F);
             this.xrLabel29.Multiline = true;
             this.xrLabel29.Name = "xrLabel29";
             this.xrLabel29.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.xrLabel29.SizeF = new System.Drawing.SizeF(14.92465F, 23.00002F);
+            this.xrLabel29.SizeF = new System.Drawing.SizeF(14.78549F, 34.98728F);
             this.xrLabel29.StylePriority.UseFont = false;
             this.xrLabel29.StylePriority.UseTextAlignment = false;
             this.xrLabel29.Text = "-";
@@ -237,11 +237,11 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeEnd6.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialEnd6]")});
             this.lbRangeEnd6.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeEnd6.LocationFloat = new DevExpress.Utils.PointFloat(872.5143F, 325.6864F);
+            this.lbRangeEnd6.LocationFloat = new DevExpress.Utils.PointFloat(872.5142F, 348.5103F);
             this.lbRangeEnd6.Multiline = true;
             this.lbRangeEnd6.Name = "lbRangeEnd6";
             this.lbRangeEnd6.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeEnd6.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeEnd6.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeEnd6.StylePriority.UseBorders = false;
             this.lbRangeEnd6.StylePriority.UseFont = false;
             // 
@@ -253,11 +253,11 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeKey3.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialKey3]")});
             this.lbRangeKey3.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeKey3.LocationFloat = new DevExpress.Utils.PointFloat(182.9496F, 291.0197F);
+            this.lbRangeKey3.LocationFloat = new DevExpress.Utils.PointFloat(182.9496F, 301.0334F);
             this.lbRangeKey3.Multiline = true;
             this.lbRangeKey3.Name = "lbRangeKey3";
             this.lbRangeKey3.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeKey3.SizeF = new System.Drawing.SizeF(120.492F, 23.00002F);
+            this.lbRangeKey3.SizeF = new System.Drawing.SizeF(68.71698F, 35F);
             this.lbRangeKey3.StylePriority.UseBorders = false;
             this.lbRangeKey3.StylePriority.UseFont = false;
             // 
@@ -269,22 +269,22 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeBegin3.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialBegin3]")});
             this.lbRangeBegin3.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeBegin3.LocationFloat = new DevExpress.Utils.PointFloat(314.4374F, 291.0197F);
+            this.lbRangeBegin3.LocationFloat = new DevExpress.Utils.PointFloat(270.1695F, 300.686F);
             this.lbRangeBegin3.Multiline = true;
             this.lbRangeBegin3.Name = "lbRangeBegin3";
             this.lbRangeBegin3.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeBegin3.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeBegin3.SizeF = new System.Drawing.SizeF(92.879F, 35F);
             this.lbRangeBegin3.StylePriority.UseBorders = false;
             this.lbRangeBegin3.StylePriority.UseFont = false;
             // 
             // xrLabel25
             // 
-            this.xrLabel25.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.xrLabel25.LocationFloat = new DevExpress.Utils.PointFloat(363.0486F, 291.0197F);
+            this.xrLabel25.Font = new System.Drawing.Font("微软雅黑", 17.76F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.xrLabel25.LocationFloat = new DevExpress.Utils.PointFloat(363.1753F, 301.0334F);
             this.xrLabel25.Multiline = true;
             this.xrLabel25.Name = "xrLabel25";
             this.xrLabel25.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.xrLabel25.SizeF = new System.Drawing.SizeF(14.92465F, 23.00002F);
+            this.xrLabel25.SizeF = new System.Drawing.SizeF(14.67132F, 34.63899F);
             this.xrLabel25.StylePriority.UseFont = false;
             this.xrLabel25.StylePriority.UseTextAlignment = false;
             this.xrLabel25.Text = "-";
@@ -298,11 +298,11 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeEnd3.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialEnd3]")});
             this.lbRangeEnd3.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeEnd3.LocationFloat = new DevExpress.Utils.PointFloat(377.9733F, 291.0195F);
+            this.lbRangeEnd3.LocationFloat = new DevExpress.Utils.PointFloat(377.9733F, 300.6858F);
             this.lbRangeEnd3.Multiline = true;
             this.lbRangeEnd3.Name = "lbRangeEnd3";
             this.lbRangeEnd3.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeEnd3.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeEnd3.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeEnd3.StylePriority.UseBorders = false;
             this.lbRangeEnd3.StylePriority.UseFont = false;
             // 
@@ -314,11 +314,11 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeKey5.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialKey5]")});
             this.lbRangeKey5.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeKey5.LocationFloat = new DevExpress.Utils.PointFloat(182.9496F, 325.6864F);
+            this.lbRangeKey5.LocationFloat = new DevExpress.Utils.PointFloat(182.9495F, 348.5167F);
             this.lbRangeKey5.Multiline = true;
             this.lbRangeKey5.Name = "lbRangeKey5";
             this.lbRangeKey5.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeKey5.SizeF = new System.Drawing.SizeF(120.492F, 23.00002F);
+            this.lbRangeKey5.SizeF = new System.Drawing.SizeF(68.71698F, 35F);
             this.lbRangeKey5.StylePriority.UseBorders = false;
             this.lbRangeKey5.StylePriority.UseFont = false;
             // 
@@ -330,21 +330,21 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeBegin5.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialBegin5]")});
             this.lbRangeBegin5.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeBegin5.LocationFloat = new DevExpress.Utils.PointFloat(314.4374F, 325.6864F);
+            this.lbRangeBegin5.LocationFloat = new DevExpress.Utils.PointFloat(270.1694F, 348.5103F);
             this.lbRangeBegin5.Multiline = true;
             this.lbRangeBegin5.Name = "lbRangeBegin5";
             this.lbRangeBegin5.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeBegin5.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeBegin5.SizeF = new System.Drawing.SizeF(92.879F, 35F);
             this.lbRangeBegin5.StylePriority.UseBorders = false;
             this.lbRangeBegin5.StylePriority.UseFont = false;
             // 
             // xrLabel21
             // 
-            this.xrLabel21.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.xrLabel21.LocationFloat = new DevExpress.Utils.PointFloat(857.5897F, 255.5196F);
+            this.xrLabel21.Font = new System.Drawing.Font("微软雅黑", 17.95F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.xrLabel21.LocationFloat = new DevExpress.Utils.PointFloat(855.6271F, 255.5196F);
             this.xrLabel21.Name = "xrLabel21";
             this.xrLabel21.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.xrLabel21.SizeF = new System.Drawing.SizeF(14.92465F, 23.00002F);
+            this.xrLabel21.SizeF = new System.Drawing.SizeF(14.78549F, 34.98728F);
             this.xrLabel21.StylePriority.UseFont = false;
             this.xrLabel21.StylePriority.UseTextAlignment = false;
             this.xrLabel21.Text = "-";
@@ -358,11 +358,11 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeEnd5.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialEnd5]")});
             this.lbRangeEnd5.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeEnd5.LocationFloat = new DevExpress.Utils.PointFloat(377.9733F, 325.6864F);
+            this.lbRangeEnd5.LocationFloat = new DevExpress.Utils.PointFloat(377.9732F, 348.5103F);
             this.lbRangeEnd5.Multiline = true;
             this.lbRangeEnd5.Name = "lbRangeEnd5";
             this.lbRangeEnd5.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeEnd5.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeEnd5.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeEnd5.StylePriority.UseBorders = false;
             this.lbRangeEnd5.StylePriority.UseFont = false;
             // 
@@ -378,7 +378,7 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeKey2.Multiline = true;
             this.lbRangeKey2.Name = "lbRangeKey2";
             this.lbRangeKey2.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeKey2.SizeF = new System.Drawing.SizeF(120.492F, 23.00002F);
+            this.lbRangeKey2.SizeF = new System.Drawing.SizeF(68.72F, 35F);
             this.lbRangeKey2.StylePriority.UseBorders = false;
             this.lbRangeKey2.StylePriority.UseFont = false;
             // 
@@ -390,22 +390,22 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeBegin2.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialBegin2]")});
             this.lbRangeBegin2.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeBegin2.LocationFloat = new DevExpress.Utils.PointFloat(808.9786F, 255.5196F);
+            this.lbRangeBegin2.LocationFloat = new DevExpress.Utils.PointFloat(760.6453F, 255.5196F);
             this.lbRangeBegin2.Multiline = true;
             this.lbRangeBegin2.Name = "lbRangeBegin2";
             this.lbRangeBegin2.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeBegin2.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeBegin2.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeBegin2.StylePriority.UseBorders = false;
             this.lbRangeBegin2.StylePriority.UseFont = false;
             // 
             // xrLabel17
             // 
-            this.xrLabel17.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.xrLabel17.LocationFloat = new DevExpress.Utils.PointFloat(363.0486F, 325.6864F);
+            this.xrLabel17.Font = new System.Drawing.Font("微软雅黑", 17.95F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.xrLabel17.LocationFloat = new DevExpress.Utils.PointFloat(363.1182F, 348.5167F);
             this.xrLabel17.Multiline = true;
             this.xrLabel17.Name = "xrLabel17";
             this.xrLabel17.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.xrLabel17.SizeF = new System.Drawing.SizeF(14.92465F, 23.00002F);
+            this.xrLabel17.SizeF = new System.Drawing.SizeF(14.78549F, 34.98728F);
             this.xrLabel17.StylePriority.UseFont = false;
             this.xrLabel17.StylePriority.UseTextAlignment = false;
             this.xrLabel17.Text = "-";
@@ -423,7 +423,7 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeEnd2.Multiline = true;
             this.lbRangeEnd2.Name = "lbRangeEnd2";
             this.lbRangeEnd2.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeEnd2.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeEnd2.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeEnd2.StylePriority.UseBorders = false;
             this.lbRangeEnd2.StylePriority.UseFont = false;
             // 
@@ -435,11 +435,11 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeKey4.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialKey4]")});
             this.lbRangeKey4.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeKey4.LocationFloat = new DevExpress.Utils.PointFloat(668.8654F, 291.0195F);
+            this.lbRangeKey4.LocationFloat = new DevExpress.Utils.PointFloat(668.8654F, 300.686F);
             this.lbRangeKey4.Multiline = true;
             this.lbRangeKey4.Name = "lbRangeKey4";
             this.lbRangeKey4.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeKey4.SizeF = new System.Drawing.SizeF(120.492F, 23.00002F);
+            this.lbRangeKey4.SizeF = new System.Drawing.SizeF(68.72F, 35F);
             this.lbRangeKey4.StylePriority.UseBorders = false;
             this.lbRangeKey4.StylePriority.UseFont = false;
             // 
@@ -451,22 +451,22 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeBegin4.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialBegin4]")});
             this.lbRangeBegin4.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeBegin4.LocationFloat = new DevExpress.Utils.PointFloat(808.9786F, 291.0195F);
+            this.lbRangeBegin4.LocationFloat = new DevExpress.Utils.PointFloat(760.6453F, 300.686F);
             this.lbRangeBegin4.Multiline = true;
             this.lbRangeBegin4.Name = "lbRangeBegin4";
             this.lbRangeBegin4.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeBegin4.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeBegin4.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeBegin4.StylePriority.UseBorders = false;
             this.lbRangeBegin4.StylePriority.UseFont = false;
             // 
             // xrlabel189
             // 
-            this.xrlabel189.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.xrlabel189.LocationFloat = new DevExpress.Utils.PointFloat(857.5897F, 291.0195F);
+            this.xrlabel189.Font = new System.Drawing.Font("微软雅黑", 17.76F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.xrlabel189.LocationFloat = new DevExpress.Utils.PointFloat(855.6842F, 301.0332F);
             this.xrlabel189.Multiline = true;
             this.xrlabel189.Name = "xrlabel189";
             this.xrlabel189.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.xrlabel189.SizeF = new System.Drawing.SizeF(14.92465F, 23.00002F);
+            this.xrlabel189.SizeF = new System.Drawing.SizeF(14.67132F, 34.63899F);
             this.xrlabel189.StylePriority.UseFont = false;
             this.xrlabel189.StylePriority.UseTextAlignment = false;
             this.xrlabel189.Text = "-";
@@ -480,11 +480,11 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeEnd4.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialEnd4]")});
             this.lbRangeEnd4.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeEnd4.LocationFloat = new DevExpress.Utils.PointFloat(872.5143F, 291.0195F);
+            this.lbRangeEnd4.LocationFloat = new DevExpress.Utils.PointFloat(872.5142F, 300.686F);
             this.lbRangeEnd4.Multiline = true;
             this.lbRangeEnd4.Name = "lbRangeEnd4";
             this.lbRangeEnd4.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeEnd4.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeEnd4.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeEnd4.StylePriority.UseBorders = false;
             this.lbRangeEnd4.StylePriority.UseFont = false;
             // 
@@ -500,18 +500,18 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeEnd1.Multiline = true;
             this.lbRangeEnd1.Name = "lbRangeEnd1";
             this.lbRangeEnd1.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeEnd1.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeEnd1.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeEnd1.StylePriority.UseBorders = false;
             this.lbRangeEnd1.StylePriority.UseFont = false;
             // 
             // xrLabel12
             // 
-            this.xrLabel12.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.xrLabel12.LocationFloat = new DevExpress.Utils.PointFloat(363.0486F, 255.5196F);
+            this.xrLabel12.Font = new System.Drawing.Font("微软雅黑", 17.95F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.xrLabel12.LocationFloat = new DevExpress.Utils.PointFloat(363.1182F, 255.5259F);
             this.xrLabel12.Multiline = true;
             this.xrLabel12.Name = "xrLabel12";
             this.xrLabel12.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.xrLabel12.SizeF = new System.Drawing.SizeF(14.92465F, 23.00002F);
+            this.xrLabel12.SizeF = new System.Drawing.SizeF(14.78549F, 34.98728F);
             this.xrLabel12.StylePriority.UseFont = false;
             this.xrLabel12.StylePriority.UseTextAlignment = false;
             this.xrLabel12.Text = "-";
@@ -525,11 +525,11 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeBegin1.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SerialBegin1]")});
             this.lbRangeBegin1.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbRangeBegin1.LocationFloat = new DevExpress.Utils.PointFloat(314.4374F, 255.5197F);
+            this.lbRangeBegin1.LocationFloat = new DevExpress.Utils.PointFloat(270.1695F, 255.5197F);
             this.lbRangeBegin1.Multiline = true;
             this.lbRangeBegin1.Name = "lbRangeBegin1";
             this.lbRangeBegin1.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeBegin1.SizeF = new System.Drawing.SizeF(48.61107F, 23.00002F);
+            this.lbRangeBegin1.SizeF = new System.Drawing.SizeF(92.879F, 35F);
             this.lbRangeBegin1.StylePriority.UseBorders = false;
             this.lbRangeBegin1.StylePriority.UseFont = false;
             // 
@@ -545,7 +545,7 @@ namespace PackagingWeb.PredefinedReports
             this.lbRangeKey1.Multiline = true;
             this.lbRangeKey1.Name = "lbRangeKey1";
             this.lbRangeKey1.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbRangeKey1.SizeF = new System.Drawing.SizeF(120.492F, 23.00002F);
+            this.lbRangeKey1.SizeF = new System.Drawing.SizeF(68.71698F, 35F);
             this.lbRangeKey1.StylePriority.UseBorders = false;
             this.lbRangeKey1.StylePriority.UseFont = false;
             // 
@@ -618,6 +618,7 @@ namespace PackagingWeb.PredefinedReports
             this.bcBoxNumber.Padding = new DevExpress.XtraPrinting.PaddingInfo(10, 10, 0, 0, 100F);
             this.bcBoxNumber.ShowText = false;
             this.bcBoxNumber.SizeF = new System.Drawing.SizeF(192.6525F, 137.3612F);
+            qrCodeGenerator1.CompactionMode = DevExpress.XtraPrinting.BarCode.QRCodeCompactionMode.Byte;
             qrCodeGenerator1.Version = DevExpress.XtraPrinting.BarCode.QRCodeVersion.Version1;
             this.bcBoxNumber.Symbology = qrCodeGenerator1;
             // 
@@ -638,13 +639,13 @@ namespace PackagingWeb.PredefinedReports
             // lbSkuName
             // 
             this.lbSkuName.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
-            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SkuName]")});
+            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SkuNameS]")});
             this.lbSkuName.Font = new System.Drawing.Font("微软雅黑", 42F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbSkuName.LocationFloat = new DevExpress.Utils.PointFloat(377.9732F, 29.16667F);
+            this.lbSkuName.LocationFloat = new DevExpress.Utils.PointFloat(289.1859F, 29.16668F);
             this.lbSkuName.Multiline = true;
             this.lbSkuName.Name = "lbSkuName";
             this.lbSkuName.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbSkuName.SizeF = new System.Drawing.SizeF(464.8118F, 74.23611F);
+            this.lbSkuName.SizeF = new System.Drawing.SizeF(659.1616F, 74.23611F);
             this.lbSkuName.StylePriority.UseFont = false;
             this.lbSkuName.StylePriority.UseTextAlignment = false;
             this.lbSkuName.Text = "物料名称";
@@ -680,21 +681,21 @@ namespace PackagingWeb.PredefinedReports
             this.lbDate.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[PrintDate]")});
             this.lbDate.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbDate.LocationFloat = new DevExpress.Utils.PointFloat(351.0689F, 159.0556F);
+            this.lbDate.LocationFloat = new DevExpress.Utils.PointFloat(372.3517F, 159.0556F);
             this.lbDate.Multiline = true;
             this.lbDate.Name = "lbDate";
             this.lbDate.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbDate.SizeF = new System.Drawing.SizeF(155.2848F, 34.66666F);
+            this.lbDate.SizeF = new System.Drawing.SizeF(134.002F, 34.66663F);
             this.lbDate.StylePriority.UseFont = false;
             // 
             // xrLabel1
             // 
             this.xrLabel1.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.xrLabel1.LocationFloat = new DevExpress.Utils.PointFloat(270.1695F, 159.0556F);
+            this.xrLabel1.LocationFloat = new DevExpress.Utils.PointFloat(297.074F, 159.0556F);
             this.xrLabel1.Multiline = true;
             this.xrLabel1.Name = "xrLabel1";
             this.xrLabel1.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.xrLabel1.SizeF = new System.Drawing.SizeF(80.89931F, 34.66667F);
+            this.xrLabel1.SizeF = new System.Drawing.SizeF(75.27777F, 34.66666F);
             this.xrLabel1.StylePriority.UseFont = false;
             this.xrLabel1.Text = "日期：";
             // 
@@ -724,13 +725,13 @@ namespace PackagingWeb.PredefinedReports
             // lbQty
             // 
             this.lbQty.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
-            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[Qty]")});
+            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[QtyLabel]")});
             this.lbQty.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbQty.LocationFloat = new DevExpress.Utils.PointFloat(112.6082F, 210.3056F);
             this.lbQty.Multiline = true;
             this.lbQty.Name = "lbQty";
             this.lbQty.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbQty.SizeF = new System.Drawing.SizeF(238.4606F, 31.19443F);
+            this.lbQty.SizeF = new System.Drawing.SizeF(176.5777F, 31.19443F);
             this.lbQty.StylePriority.UseFont = false;
             // 
             // xrLabel4
@@ -749,17 +750,17 @@ namespace PackagingWeb.PredefinedReports
             this.lbBoxNumber.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[BoxNumber]")});
             this.lbBoxNumber.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbBoxNumber.LocationFloat = new DevExpress.Utils.PointFloat(493.8136F, 210.3055F);
+            this.lbBoxNumber.LocationFloat = new DevExpress.Utils.PointFloat(372.3517F, 210.3055F);
             this.lbBoxNumber.Multiline = true;
             this.lbBoxNumber.Name = "lbBoxNumber";
             this.lbBoxNumber.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbBoxNumber.SizeF = new System.Drawing.SizeF(181.6667F, 31.19441F);
+            this.lbBoxNumber.SizeF = new System.Drawing.SizeF(222.7581F, 31.19443F);
             this.lbBoxNumber.StylePriority.UseFont = false;
             // 
             // xrLabel5
             // 
             this.xrLabel5.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.xrLabel5.LocationFloat = new DevExpress.Utils.PointFloat(418.5358F, 210.3055F);
+            this.xrLabel5.LocationFloat = new DevExpress.Utils.PointFloat(297.074F, 210.3055F);
             this.xrLabel5.Multiline = true;
             this.xrLabel5.Name = "xrLabel5";
             this.xrLabel5.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
@@ -787,6 +788,10 @@ namespace PackagingWeb.PredefinedReports
             this.PageHeight = 827;
             this.PageWidth = 1169;
             this.PaperKind = System.Drawing.Printing.PaperKind.A4;
+            this.Scripts.OnParametersRequestValueChanged = "SerialNumberReport_ParametersRequestValueChanged";
+            this.ScriptsSource = "\r\nprivate void SerialNumberReport_ParametersRequestValueChanged(object sender, De" +
+    "vExpress.XtraReports.Parameters.ParametersRequestValueChangedEventArgs e) {\r\n   " +
+    " \r\n}\r\n";
             this.ShowPrintMarginsWarning = false;
             this.Version = "21.2";
             ((System.ComponentModel.ISupportInitialize)(this.objectDataSource1)).EndInit();
@@ -795,24 +800,13 @@ namespace PackagingWeb.PredefinedReports
         }
 
         #endregion
-
+        private System.Windows.Forms.BindingSource bindingSource1;
         private DevExpress.XtraReports.UI.TopMarginBand TopMargin;
         private DevExpress.XtraReports.UI.BottomMarginBand BottomMargin;
         private DevExpress.XtraReports.UI.DetailBand Detail;
-        private DevExpress.XtraReports.UI.XRBarCode bcBoxNumber;
-        private DevExpress.XtraReports.UI.XRPictureBox xrPictureBox2;
-        private DevExpress.XtraReports.UI.XRPictureBox xrPictureBox3;
-        private DevExpress.XtraReports.UI.XRLabel lbSkuName;
-        private DevExpress.XtraReports.UI.XRLabel xrLabel2;
-        private DevExpress.XtraReports.UI.XRLabel lbModel;
-        private DevExpress.XtraReports.UI.XRLabel lbDate;
-        private DevExpress.XtraReports.UI.XRLabel xrLabel1;
-        private DevExpress.XtraReports.UI.XRLabel lbUserName;
-        private DevExpress.XtraReports.UI.XRLabel xrLabel3;
-        private DevExpress.XtraReports.UI.XRLabel lbQty;
-        private DevExpress.XtraReports.UI.XRLabel xrLabel4;
-        private DevExpress.XtraReports.UI.XRLabel lbBoxNumber;
-        private DevExpress.XtraReports.UI.XRLabel xrLabel5;
+        private DevExpress.XtraReports.UI.XRLabel xrLabel11;
+        private DevExpress.XtraReports.UI.XRLabel xrLabel10;
+        private DevExpress.XtraReports.UI.XRPictureBox xrPictureBox1;
         private DevExpress.XtraReports.UI.XRLabel lbRangeKey6;
         private DevExpress.XtraReports.UI.XRLabel lbRangeBegin6;
         private DevExpress.XtraReports.UI.XRLabel xrLabel29;
@@ -842,10 +836,20 @@ namespace PackagingWeb.PredefinedReports
         private DevExpress.XtraReports.UI.XRLabel xrLabel8;
         private DevExpress.XtraReports.UI.XRLabel xrLabel6;
         private DevExpress.XtraReports.UI.XRLabel lbSpeedClass;
-        private System.Windows.Forms.BindingSource bindingSource1;
-        private DevExpress.XtraReports.UI.XRPictureBox xrPictureBox1;
-        private DevExpress.XtraReports.UI.XRLabel xrLabel10;
-        private DevExpress.XtraReports.UI.XRLabel xrLabel11;
+        private DevExpress.XtraReports.UI.XRBarCode bcBoxNumber;
+        private DevExpress.XtraReports.UI.XRPictureBox xrPictureBox2;
+        private DevExpress.XtraReports.UI.XRPictureBox xrPictureBox3;
+        private DevExpress.XtraReports.UI.XRLabel lbSkuName;
+        private DevExpress.XtraReports.UI.XRLabel xrLabel2;
+        private DevExpress.XtraReports.UI.XRLabel lbModel;
+        private DevExpress.XtraReports.UI.XRLabel lbDate;
+        private DevExpress.XtraReports.UI.XRLabel xrLabel1;
+        private DevExpress.XtraReports.UI.XRLabel lbUserName;
+        private DevExpress.XtraReports.UI.XRLabel xrLabel3;
+        private DevExpress.XtraReports.UI.XRLabel lbQty;
+        private DevExpress.XtraReports.UI.XRLabel xrLabel4;
+        private DevExpress.XtraReports.UI.XRLabel lbBoxNumber;
+        private DevExpress.XtraReports.UI.XRLabel xrLabel5;
         private DevExpress.DataAccess.ObjectBinding.ObjectDataSource objectDataSource1;
     }
 }

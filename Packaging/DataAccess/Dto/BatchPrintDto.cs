@@ -42,10 +42,10 @@ namespace DataAccess.Dto
         public string Qty4 { get; set; }
         public List<ReceiveDetailLpn> ReceiveDetailLpns { get; set; }
 
-        public static void SetQty(BatchPrintDto batchPrintDto)
+        public void SetQty()
         {
             // 相关物品的数量进行合并后打印箱贴
-            var skuDetails = batchPrintDto.SkuDetails.GroupBy(d => d.Sku)
+            var skuDetails = SkuDetails.GroupBy(d => d.Sku)
                 .Select(g => new SkuDetail()
                 {
                     Sku=g.Key,
@@ -60,16 +60,16 @@ namespace DataAccess.Dto
                 switch (i)
                 {
                     case 0:
-                        batchPrintDto.Qty1 = qty;
+                        Qty1 = qty;
                         break;
                     case 1:
-                        batchPrintDto.Qty2 = qty;
+                        Qty2 = qty;
                         break;
                     case 2:
-                        batchPrintDto.Qty3 = qty;
+                        Qty3 = qty;
                         break;
                     case 3:
-                        batchPrintDto.Qty4 = qty;
+                        Qty4 = qty;
                         break;
                 }
             }
