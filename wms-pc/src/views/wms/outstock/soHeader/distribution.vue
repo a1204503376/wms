@@ -470,7 +470,7 @@ export default {
                 this.table.soPickPlanData = res.data.data;
                 this.handleRefreshTable();
             })
-            this.merge(this.table.soPickPlanData);
+            this.resetMerge(this.table.soPickPlanData);
         },
         summarySoPickPlan(param) {
             const {columns, data} = param;
@@ -604,19 +604,19 @@ export default {
                 this.dialog.dialogTableVisible = false;
                 return;
             }
-            let data = this.dialog.dialogData.filter(item => this.filterRowBySoPickPlan(item));
-            for (const i in data) {
-                if (data[i].pickQty > data[i].stockEnable) {
-                    this.$message.warning(`第${Number(i) + 1}行，物品 ${data[i].skuCode}，批次${data[i].skuLot1} 的分配量不能大于可用量`);
+            for (const i in dialogData) {
+                if (dialogData[i].pickQty > dialogData[i].stockEnable) {
+                    this.$message.warning(`第${Number(i) + 1}行，物品 ${dialogData[i].skuCode}，批次${dialogData[i].skuLot1} 的分配量不能大于可用量`);
                     return;
                 }
-                if (data[i].zoneCode === this.$commonConst.ZONE_AGV
-                    && data[i].pickQty > 0
-                    && data[i].pickQty !== data[i].stockEnable) {
+                if (dialogData[i].zoneCode === this.$commonConst.ZONE_AGV
+                    && dialogData[i].pickQty > 0
+                    && dialogData[i].pickQty !== dialogData[i].stockEnable) {
                     this.$message.warning(`第${Number(i) + 1}行，自动区库存必须全部整箱分配`);
                     return;
                 }
             }
+            let data = this.dialog.dialogData.filter(item => this.filterRowBySoPickPlan(item));
             let stockIdAndSoPickPlanQtyList = data.map(item => {
                 return Object.assign({}, {'stockId': item.stockId, 'soPickPlanQty': item.pickQty})
             })
@@ -636,7 +636,7 @@ export default {
                 .then((res) => {
                     this.$message.success(res.data.msg);
                     this.getTableData();
-                    this.resetMerge(this.getSoPickPlanData(this.soHeader.soBillId));
+                    this.getSoPickPlanData(this.soHeader.soBillId)
                     this.dialog.dialogTableVisible = false;
                 })
         },
