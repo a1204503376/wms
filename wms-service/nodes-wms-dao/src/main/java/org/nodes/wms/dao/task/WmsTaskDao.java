@@ -84,12 +84,14 @@ public interface WmsTaskDao extends BaseService<WmsTask> {
 	 *
 	 * @param taskId           任务ID
 	 * @param taskProcTypeEnum 任务状态
-	 * @param fromLocation     目标库位
+	 * @param toLocation       目标库位
+	 * @param boxCode          箱码 可为空
 	 */
-	void updateWmsTaskByPartParam(Long taskId, WmsTaskProcTypeEnum taskProcTypeEnum, Location fromLocation);
+	void updateWmsTaskByPartParam(Long taskId, WmsTaskProcTypeEnum taskProcTypeEnum, Location toLocation, String boxCode);
 
 	/**
 	 * 更新消息
+	 *
 	 * @param taskId 任务ID
 	 * @param msg    消息
 	 */

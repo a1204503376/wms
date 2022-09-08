@@ -149,11 +149,11 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 	}
 
 	@Override
-	public void updateWmsTaskByPartParam(Long taskId, WmsTaskProcTypeEnum taskProcTypeEnum, Location fromLocation) {
+	public void updateWmsTaskByPartParam(Long taskId, WmsTaskProcTypeEnum taskProcTypeEnum, Location toLocation, String boxCode) {
 		AssertUtil.notNull(taskId, "更新任务失败，任务ID为空");
 		AssertUtil.notNull(taskProcTypeEnum, "更新任务失败，任务执行方式为空");
-		AssertUtil.notNull(fromLocation, "更新任务失败， 来源库位为空");
-		wmsTaskDao.updateWmsTaskByPartParam(taskId, taskProcTypeEnum, fromLocation);
+		AssertUtil.notNull(toLocation, "更新任务失败， 来源库位为空");
+		wmsTaskDao.updateWmsTaskByPartParam(taskId, taskProcTypeEnum, toLocation, boxCode);
 	}
 
 	@Override

@@ -306,26 +306,37 @@ public class OutStockBizImpl implements OutStockBiz {
 
 		List<Stock> stockList = stockQueryBiz.findStockByLocation(sourceLocation.getLocId());
 		AssertUtil.notNull(stockList, "接驳区移动失败，根据原库位查询不到相应库存");
+		if (stockList.size() == 0) {
+			throw new ServiceException("接驳区移动失败，根据原库位查询不到相应库存");
+		}
 		WmsTask task = wmsTaskBiz.findPickTaskByBoxCode(stockList.get(0).getBoxCode(), WmsTaskProcTypeEnum.BY_BOX);
 		SoHeader soHeader = soBillBiz.getSoHeaderById(task.getBillId());
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(task.getTaskId());
-
+		SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlanList.get(0).getSoDetailId());
 		stockManageBiz.canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode(), false);
 
+		List<Stock> stocks = stockBiz.moveStockByBoxCodeOfOccupy(stockList.get(0).getBoxCode(), stockList.get(0).getBoxCode(),
+			stockList.get(0).getLpnCode(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_BOX_PDA,
+			soDetail.getSoBillId(), soDetail.getSoBillNo(), soDetail.getSoLineNo());
 		// 任务id和stockID更新拣货计划中的stockID和库位信息
 		for (SoPickPlan pickPlan : soPickPlanList) {
 			for (Stock stock : stockList) {
-				if (Func.equals(pickPlan.getStockId(), stock.getStockId())) {
-					Stock targetStock = stockBiz.moveAllStock(stock, stock.getBoxCode(), stock.getLpnCode(), targetLocation,
-						StockLogTypeEnum.STOCK_MOVE_BY_LPN_PDA, null, null, null);
-					soPickPlanBiz.updatePickByTaskIdAndStockId(pickPlan.getTaskId(), stock.getStockId(),
-						targetStock.getStockId(), targetLocation, zone);
+				for (Stock targetStock : stocks) {
+					if (Func.equals(pickPlan.getStockId(), stock.getStockId())
+						&& targetStock.getBoxCode().equals(stock.getBoxCode())
+						&& targetStock.getLpnCode().equals(stock.getLpnCode())
+						&& targetStock.getSkuLot1().equals(stock.getSkuLot1())
+						&& targetStock.getStockBalance().equals(stock.getStockBalance())
+					) {
+						soPickPlanBiz.updatePickByTaskIdAndStockId(pickPlan.getTaskId(), stock.getStockId(),
+							targetStock.getStockId(), targetLocation, zone);
+					}
 				}
 			}
 		}
 
 		// 6、更新任务
-		wmsTaskBiz.updateWmsTaskByPartParam(task.getTaskId(), WmsTaskProcTypeEnum.BY_BOX, targetLocation);
+		wmsTaskBiz.updateWmsTaskByPartParam(task.getTaskId(), WmsTaskProcTypeEnum.BY_BOX, targetLocation, null);
 
 		// 7、记录业务日志
 		logBiz.auditLog(AuditLogType.MOVE_STOCK, soHeader.getSoBillId(),

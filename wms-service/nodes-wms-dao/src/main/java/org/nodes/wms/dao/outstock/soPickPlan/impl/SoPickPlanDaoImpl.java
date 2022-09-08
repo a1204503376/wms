@@ -15,6 +15,7 @@ import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.outstock.soPickPlan.mapper.SoPickPlanMapper;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -105,7 +106,7 @@ public class SoPickPlanDaoImpl
 	}
 
 	@Override
-	public void updatePickByPartParam(Long pickPlanId, Long stockId, Location location, Zone zone) {
+	public void updatePickByPartParam(Long pickPlanId, Long stockId, Location location, Zone zone, String boxCode) {
 		UpdateWrapper<SoPickPlan> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
 			.eq(SoPickPlan::getPickPlanId, pickPlanId);
@@ -115,6 +116,9 @@ public class SoPickPlanDaoImpl
 		soPickPlan.setLocCode(location.getLocCode());
 		soPickPlan.setZoneId(zone.getZoneId());
 		soPickPlan.setZoneCode(zone.getZoneCode());
+		if (Func.isNotEmpty(boxCode)) {
+			soPickPlan.setBoxCode(boxCode);
+		}
 		if (!super.update(soPickPlan, updateWrapper)) {
 			throw new ServiceException("修改拣货计划失败,请再次重试");
 		}
