@@ -133,11 +133,10 @@ public class DevanningBizImpl implements DevanningBiz {
 			BigDecimal sumSplitQty = stockList.stream()
 				.map(Stock::getStockBalance)
 				.reduce(BigDecimal.ZERO, BigDecimal::add);
-			BigDecimal maxSumSplitQty = BigDecimal.ZERO;
-			for (DevanningStockResponse devanningStock : request.getStockList()) {
-				Stock stock = stockQueryBiz.findStockById(devanningStock.getStockId());
-				maxSumSplitQty.add(stock.getStockBalance());
-			}
+			List<Stock> oldStockList = stockQueryBiz.findEnableStockByBoxCode(oldBoxCode);
+			BigDecimal maxSumSplitQty = oldStockList.stream()
+				.map(Stock::getStockBalance)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
 			stockList.forEach(stock -> {
 				serialList.forEach(serial -> {
 					if (Func.equals(stock.getStockId(), serial.getStockId())) {
@@ -146,7 +145,7 @@ public class DevanningBizImpl implements DevanningBiz {
 						if (serialNumberListSize.get() >= 0) {
 							if (BigDecimalUtil.gt(stock.getOccupyQty(), BigDecimal.ZERO)) {
 								//有任务的拆箱
-								taskDevanning(oldBoxCode, stock, location, sumSplitQty, maxSumSplitQty, request, stock.getStockBalance());
+								taskDevanning(oldBoxCode, stock, location, sumSplitQty, maxSumSplitQty, request, stock.getStockBalance(), request.getSerialNumberList());
 							} else {
 								// 库存移动
 								Stock targetStock = stockBiz.moveStock(stock, serialNumberList, stock.getStockBalance(), request.getBoxCode(), location.getLocCode(),
@@ -157,7 +156,7 @@ public class DevanningBizImpl implements DevanningBiz {
 						} else {
 							if (BigDecimalUtil.gt(stock.getOccupyQty(), BigDecimal.ZERO)) {
 								//有任务的拆箱
-								taskDevanning(oldBoxCode, stock, location, sumSplitQty, maxSumSplitQty, request, stock.getStockBalance());
+								taskDevanning(oldBoxCode, stock, location, sumSplitQty, maxSumSplitQty, request, stock.getStockBalance(), request.getSerialNumberList());
 							} else {
 								// 库存移动
 								Stock targetStock = stockBiz.moveStock(stock, serialNumberList, new BigDecimal(serialNumberList.size()), request.getBoxCode(), location.getLocCode(),
@@ -190,7 +189,7 @@ public class DevanningBizImpl implements DevanningBiz {
 				if (BigDecimalUtil.gt(stockDeva.getSplitQty(), BigDecimal.ZERO)) {
 					if (BigDecimalUtil.gt(stock.getOccupyQty(), BigDecimal.ZERO)) {
 						//有任务的拆箱
-						taskDevanning(oldBoxCode, stock, location, sumSplitQty, maxSumSplitQty, request, stockDeva.getSplitQty());
+						taskDevanning(oldBoxCode, stock, location, sumSplitQty, maxSumSplitQty, request, stockDeva.getSplitQty(), null);
 					} else {
 						//不是库存占用直接拆箱
 						stockBiz.moveStock(stock, null, stockDeva.getSplitQty(), request.getBoxCode(), location.getLocCode(),
@@ -206,7 +205,7 @@ public class DevanningBizImpl implements DevanningBiz {
 
 	private void taskDevanning(String oldBoxCode, Stock stock, Location location, BigDecimal sumSplitQty,
 							   BigDecimal maxSumSplitQty, DevanningSubmitRequest request,
-							   BigDecimal splitQty) {
+							   BigDecimal splitQty, List<String> serialNoList) {
 		Zone zone = zoneBiz.findById(location.getZoneId());
 		//是库存占用
 		WmsTask task = wmsTaskBiz.findPickTaskByBoxCode(oldBoxCode, null);
@@ -226,7 +225,7 @@ public class DevanningBizImpl implements DevanningBiz {
 		}
 		//清除库存占用
 		stock.setOccupyQty(BigDecimal.ZERO);
-		Stock moveStock = stockBiz.moveStock(stock, null, splitQty, request.getBoxCode(), location.getLocCode(),
+		Stock moveStock = stockBiz.moveStock(stock, serialNoList, splitQty, request.getBoxCode(), location.getLocCode(),
 			location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
 		wmsTaskBiz.updateWmsTaskByPartParam(task.getTaskId(), WmsTaskProcTypeEnum.BY_BOX, location, oldBoxCode);
 		for (SoPickPlan soPickPlan : soPickPlanList) {
