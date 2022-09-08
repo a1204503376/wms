@@ -18,6 +18,7 @@ import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
+import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.dto.input.DevanningSubmitRequest;
 import org.nodes.wms.dao.stock.dto.input.FindAllSerialNumberManageRequest;
 import org.nodes.wms.dao.stock.dto.output.DevanningStockResponse;
@@ -57,6 +58,7 @@ public class DevanningBizImpl implements DevanningBiz {
 	private final SoPickPlanBiz soPickPlanBiz;
 	private final SoBillBiz soBillBiz;
 	private final ZoneBiz zoneBiz;
+	private final StockDao stockDao;
 
 	@Override
 	public FindAllSerialNumberManageResponse getAllSerialNumberManage(FindAllSerialNumberManageRequest request) {
@@ -227,6 +229,8 @@ public class DevanningBizImpl implements DevanningBiz {
 		stock.setOccupyQty(BigDecimal.ZERO);
 		Stock moveStock = stockBiz.moveStock(stock, serialNoList, splitQty, request.getBoxCode(), location.getLocCode(),
 			location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
+		moveStock.setOccupyQty(moveStock.getStockBalance());
+		stockDao.upateOccupyQty(moveStock);
 		wmsTaskBiz.updateWmsTaskByPartParam(task.getTaskId(), WmsTaskProcTypeEnum.BY_BOX, location, oldBoxCode);
 		for (SoPickPlan soPickPlan : soPickPlanList) {
 			soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), moveStock.getStockId(), location, zone, oldBoxCode);
