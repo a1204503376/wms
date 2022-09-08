@@ -164,4 +164,10 @@ public interface SoPickPlanBiz {
 	 */
 	void updatePickByTaskIdAndStockId(Long taskId, Long sourceStockId, Long targetStockId, Location location, Zone zone);
 
+	/**
+	 * 根据拣货计划ID软删除拣货计划
+	 *
+	 * @param pickPlanId 拣货计划ID
+	 */
+	void deletePickByPickPlanId(Long pickPlanId);
 }
