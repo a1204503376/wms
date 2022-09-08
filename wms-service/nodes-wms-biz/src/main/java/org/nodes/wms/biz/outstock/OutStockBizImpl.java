@@ -222,7 +222,9 @@ public class OutStockBizImpl implements OutStockBiz {
 		SoHeader soHeader = soBillBiz.getSoHeaderById(task.getBillId());
 		AssertUtil.notNull(soHeader, "根据任务存在的发货单头表信息查询发货单失败");
 		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
-
+		if (stockList.size() == 0) {
+			throw new ServiceException("按箱拣货失败，根据箱码查询不到对应库存");
+		}
 		// 2、参数校验 头表
 		canPick(soHeader);
 
