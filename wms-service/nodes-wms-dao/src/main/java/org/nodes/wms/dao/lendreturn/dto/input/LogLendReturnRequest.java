@@ -99,7 +99,7 @@ public class LogLendReturnRequest extends SkuLotDto
 	/**
 	 * 货主
 	 */
-	private String woId;
+	private Long woId;
 
 	/**
 	 * 库房id
