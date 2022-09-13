@@ -48,14 +48,14 @@
 				},
 				dataSource: "",
 				isAllLpnPutawayList: [{
-						id: 2,
-						name: "是",
-						isAllLpnPutaway: true
-					},
-					{
 						id: 1,
 						name: "否",
 						isAllLpnPutaway: false
+					},
+					{
+						id: 2,
+						name: "是",
+						isAllLpnPutaway: true
 					},
 				]
 			}
@@ -63,8 +63,8 @@
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
 			this.params = parse;
-			this.dataSource = this.isAllLpnPutawayList[0].name;
-			this.params.newBoxCode = this.isAllLpnPutawayList[0].isAllLpnPutaway;
+			this.dataSource = this.isAllLpnPutawayList[1].name;
+			this.params.newBoxCode = this.isAllLpnPutawayList[1].isAllLpnPutaway;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();

@@ -131,42 +131,26 @@ public class DevanningBizImpl implements DevanningBiz {
 				.collect(Collectors.toList());
 			List<Stock> stockList = stockQueryBiz.findStockById(stockIds);
 			AssertUtil.notNull(stockList, "采集的序列号找不到对应库存");
+			AtomicInteger serialNumberListNum = new AtomicInteger(serialNumberList.size());
 			AtomicInteger serialNumberListSize = new AtomicInteger(serialNumberList.size());
 			List<Stock> oldStockList = stockQueryBiz.findEnableStockByBoxCode(oldBoxCode);
 			BigDecimal maxSumSplitQty = oldStockList.stream()
 				.map(Stock::getStockBalance)
 				.reduce(BigDecimal.ZERO, BigDecimal::add);
 			stockList.forEach(stock -> {
-				serialList.forEach(serial -> {
-					if (Func.equals(stock.getStockId(), serial.getStockId())) {
-						AssertUtil.notNull(stock, "根据序列号拆箱时,根据序列号集合找不到对应库存");
-						serialNumberListSize.set(serialNumberListSize.get() - stock.getStockBalance().intValue());
-						if (serialNumberListSize.get() >= 0) {
-							if (BigDecimalUtil.gt(stock.getOccupyQty(), BigDecimal.ZERO)) {
-								//有任务的拆箱
-								taskDevanning(oldBoxCode, stock, location, maxSumSplitQty, request, stock.getStockBalance(), request.getSerialNumberList());
-							} else {
-								// 库存移动
-								Stock targetStock = stockBiz.moveStock(stock, serialNumberList, stock.getStockBalance(), request.getBoxCode(), location.getLocCode(),
-									location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
-								serialBiz.updateSerialStockIdBySerialNo(stock.getStockId(), targetStock.getStockId(), serial.getSerialNumber());
-
-							}
-						} else {
-							if (BigDecimalUtil.gt(stock.getOccupyQty(), BigDecimal.ZERO)) {
-								//有任务的拆箱
-								taskDevanning(oldBoxCode, stock, location, maxSumSplitQty, request, stock.getStockBalance(), request.getSerialNumberList());
-							} else {
-								// 库存移动
-								Stock targetStock = stockBiz.moveStock(stock, serialNumberList, new BigDecimal(serialNumberList.size()), request.getBoxCode(), location.getLocCode(),
-									location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
-								serialBiz.updateSerialStockIdBySerialNo(stock.getStockId(), targetStock.getStockId(), serial.getSerialNumber());
-
-							}
-						}
+				AssertUtil.notNull(stock, "根据序列号拆箱时,根据序列号集合找不到对应库存");
+				serialNumberListSize.set(serialNumberListSize.get() - stock.getStockBalance().intValue());
+				if (BigDecimalUtil.gt(stock.getOccupyQty(), BigDecimal.ZERO)) {
+					//有任务的拆箱
+					taskDevanning(oldBoxCode, stock, location, maxSumSplitQty, request, new BigDecimal(String.valueOf(serialNumberListNum)), serialNumberList);
+				} else {
+					// 库存移动
+					Stock targetStock = stockBiz.moveStock(stock, serialNumberList, new BigDecimal(String.valueOf(serialNumberListNum)), request.getBoxCode(), location.getLocCode(),
+						location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
+					for (String serialNumber : serialNumberList) {
+						serialBiz.updateSerialStockIdBySerialNo(stock.getStockId(), targetStock.getStockId(), serialNumber);
 					}
-				});
-
+				}
 			});
 
 		} else {
@@ -213,8 +197,7 @@ public class DevanningBizImpl implements DevanningBiz {
 			.reduce(BigDecimal.ZERO, BigDecimal::add);
 
 		SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlanList.get(0).getSoDetailId());
-		if (BigDecimalUtil.ne(soDetail.getSurplusQty(), sumSplitQty) ||
-			BigDecimalUtil.gt(soDetail.getSurplusQty(), task.getTaskQty().subtract(task.getScanQty()).subtract(maxSumSplitQty))) {
+		if (!BigDecimalUtil.eq(soDetail.getSurplusQty().subtract(splitQty), BigDecimal.ZERO)) {
 			throw new ServiceException("拆箱失败,拣货数量和发货单不匹配");
 		}
 		Stock moveStock;
@@ -223,7 +206,7 @@ public class DevanningBizImpl implements DevanningBiz {
 		String newBoxCode = request.getBoxCode();
 
 		//发货单详情等于页面要拣货数量
-		if (BigDecimalUtil.le(soDetail.getSurplusQty().subtract(sumSplitQty), soDetail.getSurplusQty().subtract(maxSumSplitQty))) {
+		if (BigDecimalUtil.ge(soDetail.getSurplusQty().subtract(splitQty), BigDecimal.ZERO)) {
 			String temporaryBoxCode = tmpBoxCode;
 			tmpBoxCode = request.getBoxCode();
 			newBoxCode = temporaryBoxCode;
