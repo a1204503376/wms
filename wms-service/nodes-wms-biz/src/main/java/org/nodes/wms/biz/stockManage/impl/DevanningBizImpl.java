@@ -131,83 +131,58 @@ public class DevanningBizImpl implements DevanningBiz {
 				.collect(Collectors.toList());
 			List<Stock> stockList = stockQueryBiz.findStockById(stockIds);
 			AssertUtil.notNull(stockList, "采集的序列号找不到对应库存");
+			AtomicInteger serialNumberListNum = new AtomicInteger(serialNumberList.size());
 			AtomicInteger serialNumberListSize = new AtomicInteger(serialNumberList.size());
-			BigDecimal sumSplitQty = stockList.stream()
-				.map(Stock::getStockBalance)
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
 			List<Stock> oldStockList = stockQueryBiz.findEnableStockByBoxCode(oldBoxCode);
 			BigDecimal maxSumSplitQty = oldStockList.stream()
 				.map(Stock::getStockBalance)
 				.reduce(BigDecimal.ZERO, BigDecimal::add);
 			stockList.forEach(stock -> {
-				serialList.forEach(serial -> {
-					if (Func.equals(stock.getStockId(), serial.getStockId())) {
-						AssertUtil.notNull(stock, "根据序列号拆箱时,根据序列号集合找不到对应库存");
-						serialNumberListSize.set(serialNumberListSize.get() - stock.getStockBalance().intValue());
-						if (serialNumberListSize.get() >= 0) {
-							if (BigDecimalUtil.gt(stock.getOccupyQty(), BigDecimal.ZERO)) {
-								//有任务的拆箱
-								taskDevanning(oldBoxCode, stock, location, sumSplitQty, maxSumSplitQty, request, stock.getStockBalance(), request.getSerialNumberList());
-							} else {
-								// 库存移动
-								Stock targetStock = stockBiz.moveStock(stock, serialNumberList, stock.getStockBalance(), request.getBoxCode(), location.getLocCode(),
-									location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
-								serialBiz.updateSerialStockIdBySerialNo(stock.getStockId(), targetStock.getStockId(), serial.getSerialNumber());
-
-							}
-						} else {
-							if (BigDecimalUtil.gt(stock.getOccupyQty(), BigDecimal.ZERO)) {
-								//有任务的拆箱
-								taskDevanning(oldBoxCode, stock, location, sumSplitQty, maxSumSplitQty, request, stock.getStockBalance(), request.getSerialNumberList());
-							} else {
-								// 库存移动
-								Stock targetStock = stockBiz.moveStock(stock, serialNumberList, new BigDecimal(serialNumberList.size()), request.getBoxCode(), location.getLocCode(),
-									location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
-								serialBiz.updateSerialStockIdBySerialNo(stock.getStockId(), targetStock.getStockId(), serial.getSerialNumber());
-
-							}
-						}
+				AssertUtil.notNull(stock, "根据序列号拆箱时,根据序列号集合找不到对应库存");
+				serialNumberListSize.set(serialNumberListSize.get() - stock.getStockBalance().intValue());
+				if (BigDecimalUtil.gt(stock.getOccupyQty(), BigDecimal.ZERO)) {
+					//有任务的拆箱
+					taskDevanning(oldBoxCode, stock, location, maxSumSplitQty, request, new BigDecimal(String.valueOf(serialNumberListNum)), serialNumberList);
+				} else {
+					// 库存移动
+					Stock targetStock = stockBiz.moveStock(stock, serialNumberList, new BigDecimal(String.valueOf(serialNumberListNum)), request.getBoxCode(), location.getLocCode(),
+						location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
+					for (String serialNumber : serialNumberList) {
+						serialBiz.updateSerialStockIdBySerialNo(stock.getStockId(), targetStock.getStockId(), serialNumber);
 					}
-				});
-
+				}
 			});
 
 		} else {
 			BigDecimal sumSplitQty = request.getStockList().stream()
 				.map(DevanningStockResponse::getSplitQty)
 				.reduce(BigDecimal.ZERO, BigDecimal::add);
-			BigDecimal maxSumSplitQty = BigDecimal.ZERO;
-			for (DevanningStockResponse devanningStock : request.getStockList()) {
-				Stock stock = stockQueryBiz.findStockById(devanningStock.getStockId());
-				maxSumSplitQty.add(stock.getStockBalance());
-			}
 			AssertUtil.notNull(request.getStockList(), "根据物品拆箱时,未选择物品");
 			// 如果序列号不为空执行 按库存拆箱
-			request.getStockList().forEach(stockDeva -> {
+			for (DevanningStockResponse stockDeva : request.getStockList()) {
 				// 根据每一个库位id获取库位
 				Stock stock = stockQueryBiz.findStockById(stockDeva.getStockId());
 				AssertUtil.notNull(stock, "根据物品拆箱时,找不到对应库存");
 				// 如果用户输入的数量大于0则进行拆箱
 				if (BigDecimalUtil.gt(stockDeva.getSplitQty(), BigDecimal.ZERO)) {
-					if (BigDecimalUtil.gt(stock.getOccupyQty(), BigDecimal.ZERO)) {
-						//有任务的拆箱
-						taskDevanning(oldBoxCode, stock, location, sumSplitQty, maxSumSplitQty, request, stockDeva.getSplitQty(), null);
-					} else {
+					if (BigDecimalUtil.eq(stock.getOccupyQty(), BigDecimal.ZERO)) {
 						//不是库存占用直接拆箱
 						stockBiz.moveStock(stock, null, stockDeva.getSplitQty(), request.getBoxCode(), location.getLocCode(),
 							location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
+					} else {
+						//有任务的拆箱
+						taskDevanning(oldBoxCode, stock, location, sumSplitQty, request, stockDeva.getSplitQty(), null);
 					}
 
 				}
-			});
+			}
 		}
 
 	}
 
 
-	private void taskDevanning(String oldBoxCode, Stock stock, Location location, BigDecimal sumSplitQty,
-							   BigDecimal maxSumSplitQty, DevanningSubmitRequest request,
-							   BigDecimal splitQty, List<String> serialNoList) {
+	private void taskDevanning(String oldBoxCode, Stock stock, Location location, BigDecimal sumSplitQty
+		, DevanningSubmitRequest request, BigDecimal splitQty, List<String> serialNoList) {
 		Zone zone = zoneBiz.findById(location.getZoneId());
 		//是库存占用
 		WmsTask task = wmsTaskBiz.findPickTaskByBoxCode(oldBoxCode, null);
@@ -216,24 +191,53 @@ public class DevanningBizImpl implements DevanningBiz {
 		if (soPickPlanList.size() < 1) {
 			throw new ServiceException("拆箱失败,根据任务查询拣货计划失败");
 		}
+		BigDecimal maxSumSplitQty = soPickPlanList.stream()
+			.filter(soPickPlan -> !soPickPlan.getStockId().equals(stock.getStockId()))
+			.map(SoPickPlan::getSurplusQty)
+			.reduce(BigDecimal.ZERO, BigDecimal::add);
+
 		SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlanList.get(0).getSoDetailId());
-		if (BigDecimalUtil.ne(soDetail.getSurplusQty(), sumSplitQty) ||
-			BigDecimalUtil.ne(soDetail.getSurplusQty(), maxSumSplitQty.subtract(sumSplitQty))) {
+		if (!BigDecimalUtil.eq(soDetail.getSurplusQty().subtract(splitQty), BigDecimal.ZERO)) {
 			throw new ServiceException("拆箱失败,拣货数量和发货单不匹配");
 		}
-		//发货单详情等于页面要拣货数量
-		if (BigDecimalUtil.eq(soDetail.getSurplusQty(), sumSplitQty)) {
-			oldBoxCode = request.getBoxCode();
-		}
-		//清除库存占用
+		Stock moveStock;
 		stock.setOccupyQty(BigDecimal.ZERO);
-		Stock moveStock = stockBiz.moveStock(stock, serialNoList, splitQty, request.getBoxCode(), location.getLocCode(),
+		String tmpBoxCode = oldBoxCode;
+		String newBoxCode = request.getBoxCode();
+
+		//发货单详情等于页面要拣货数量
+		if (BigDecimalUtil.ge(soDetail.getSurplusQty().subtract(splitQty), BigDecimal.ZERO)) {
+			String temporaryBoxCode = tmpBoxCode;
+			tmpBoxCode = request.getBoxCode();
+			newBoxCode = temporaryBoxCode;
+		}
+		moveStock = stockBiz.moveStock(stock, serialNoList, splitQty, newBoxCode, location.getLocCode(),
 			location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
+
 		moveStock.setOccupyQty(moveStock.getStockBalance());
 		stockDao.upateOccupyQty(moveStock);
-		wmsTaskBiz.updateWmsTaskByPartParam(task.getTaskId(), WmsTaskProcTypeEnum.BY_BOX, location, oldBoxCode);
+		wmsTaskBiz.updateWmsTaskByPartParam(task.getTaskId(), WmsTaskProcTypeEnum.BY_BOX, location, newBoxCode);
+		boolean isSerialNoManage = true;
 		for (SoPickPlan soPickPlan : soPickPlanList) {
-			soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), moveStock.getStockId(), location, zone, oldBoxCode);
+			if (soPickPlan.getStockId().equals(stock.getStockId())) {
+				soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), moveStock.getStockId(), location, zone, newBoxCode, moveStock.getStockBalance());
+			} else {
+				isSerialNoManage = false;
+				Stock stockById = stockQueryBiz.findStockById(soPickPlan.getStockId());
+				stockById.setOccupyQty(BigDecimal.ZERO);
+				stockDao.upateOccupyQty(stockById);
+				stockById.setBoxCode(tmpBoxCode);
+				stockDao.updateStock(stockById);
+				soPickPlanBiz.deletePickByPickPlanId(soPickPlan.getPickPlanId());
+			}
+		}
+
+		if (isSerialNoManage) {
+			Stock stockById = stockQueryBiz.findStockById(stock.getStockId());
+			stockById.setOccupyQty(BigDecimal.ZERO);
+			stockDao.upateOccupyQty(stockById);
+			stockById.setBoxCode(tmpBoxCode);
+			stockDao.updateStock(stockById);
 		}
 	}
 

@@ -180,6 +180,7 @@ namespace PackagingWeb.PredefinedReports
             this.bcBoxNumber.Padding = new DevExpress.XtraPrinting.PaddingInfo(10, 10, 0, 0, 100F);
             this.bcBoxNumber.ShowText = false;
             this.bcBoxNumber.SizeF = new System.Drawing.SizeF(192.6525F, 137.3612F);
+            qrCodeGenerator1.CompactionMode = DevExpress.XtraPrinting.BarCode.QRCodeCompactionMode.Byte;
             qrCodeGenerator1.Version = DevExpress.XtraPrinting.BarCode.QRCodeVersion.Version1;
             this.bcBoxNumber.Symbology = qrCodeGenerator1;
             // 
@@ -200,7 +201,7 @@ namespace PackagingWeb.PredefinedReports
             // lbSkuName
             // 
             this.lbSkuName.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
-            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SkuNames]")});
+            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SkuNameS]")});
             this.lbSkuName.Font = new System.Drawing.Font("微软雅黑", 42F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbSkuName.LocationFloat = new DevExpress.Utils.PointFloat(289.1859F, 29.16668F);
             this.lbSkuName.Multiline = true;
@@ -361,6 +362,12 @@ namespace PackagingWeb.PredefinedReports
         private DevExpress.XtraReports.UI.TopMarginBand TopMargin;
         private DevExpress.XtraReports.UI.BottomMarginBand BottomMargin;
         private DevExpress.XtraReports.UI.DetailBand Detail;
+        private DevExpress.XtraReports.UI.XRLabel lbQty4;
+        private DevExpress.XtraReports.UI.XRLabel lbQty3;
+        private DevExpress.XtraReports.UI.XRLabel lbQty2;
+        private DevExpress.XtraReports.UI.XRLabel xrLabel11;
+        private DevExpress.XtraReports.UI.XRLabel xrLabel10;
+        private DevExpress.XtraReports.UI.XRPictureBox xrPictureBox1;
         private DevExpress.XtraReports.UI.XRBarCode bcBoxNumber;
         private DevExpress.XtraReports.UI.XRPictureBox xrPictureBox2;
         private DevExpress.XtraReports.UI.XRPictureBox xrPictureBox3;
@@ -375,12 +382,6 @@ namespace PackagingWeb.PredefinedReports
         private DevExpress.XtraReports.UI.XRLabel xrLabel4;
         private DevExpress.XtraReports.UI.XRLabel lbBoxNumber;
         private DevExpress.XtraReports.UI.XRLabel xrLabel5;
-        private DevExpress.XtraReports.UI.XRPictureBox xrPictureBox1;
-        private DevExpress.XtraReports.UI.XRLabel xrLabel10;
-        private DevExpress.XtraReports.UI.XRLabel xrLabel11;
-        private DevExpress.XtraReports.UI.XRLabel lbQty4;
-        private DevExpress.XtraReports.UI.XRLabel lbQty3;
-        private DevExpress.XtraReports.UI.XRLabel lbQty2;
         private DevExpress.DataAccess.ObjectBinding.ObjectDataSource objectDataSource1;
     }
 }

@@ -66,7 +66,7 @@ namespace PackagingWeb.Services
 
         public override Dictionary<string, string> GetUrls() {
             // Returns a dictionary that contains the report names (URLs) and display names. 
-            // The Report Designer uses this method to populate the Open Report and Save Report dialogs.
+            // The Report Designer uses this method to populate the Open Report and SaveBatchData Report dialogs.
             
             return Directory.GetFiles(reportDirectory, "*" + FileExtension)
                                      .Select(Path.GetFileNameWithoutExtension)

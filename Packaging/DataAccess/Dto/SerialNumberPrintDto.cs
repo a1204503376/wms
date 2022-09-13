@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using DataAccess.Enitiies;
 
 namespace DataAccess.Dto
@@ -10,7 +11,7 @@ namespace DataAccess.Dto
         /// <summary>
         /// 每页序列号分组数量
         /// </summary>
-        public static readonly int SerialGroupNumber = 6;
+        public const int SerialGroupNumber = 6;
 
         public string BoxType { get; set; }
         public long SkuId { get; set; }
@@ -121,6 +122,202 @@ namespace DataAccess.Dto
                         break;
                 }
             }
+        }
+        public static List<SerialNumberRange> GetSerialNumberRanges(List<int> serialNumberList)
+        {
+            Dictionary<string, List<string>> serialNumberDictionary = new Dictionary<string, List<string>>();
+            serialNumberList.Sort();
+            foreach (var item in serialNumberList)
+            {
+                var serialNumber = item.ToString();
+                if (serialNumber.Length != 9)
+                {
+                    continue;
+                }
+                // 前4位：yyMM
+                // 后五位：序列号
+                var key = serialNumber.Substring(0, 4);
+                var value = serialNumber.Replace(key, string.Empty);
+                if (serialNumberDictionary.ContainsKey(key))
+                {
+                    serialNumberDictionary[key].Add(value);
+                }
+                else
+                {
+                    serialNumberDictionary.Add(key, new List<string>
+                    {
+                        value
+                    });
+                }
+            }
+
+            var serialNumberRanges = new List<SerialNumberRange>();
+            foreach (var pair in serialNumberDictionary)
+            {
+                pair.Value.Sort();
+                var serialNumberRange = new SerialNumberRange
+                {
+                    Key = pair.Key,
+                    Begin = pair.Value.First(),
+                    End = pair.Value.Last()
+                };
+                serialNumberRanges.Add(serialNumberRange);
+            }
+
+            return serialNumberRanges;
+        }
+
+        public static List<SerialNumberRange> GetDoubleSerialNumberRanges(List<int> serialNumberList)
+        {
+            Dictionary<string, List<int>> serialNumberDictionary = new Dictionary<string, List<int>>();
+            serialNumberList.Sort();
+            foreach (var item in serialNumberList)
+            {
+                var serialNumber = item.ToString();
+                if (serialNumber.Length != 9)
+                {
+                    continue;
+                }
+                // 前4位：yyMM
+                // 后五位：序列号
+                var key = serialNumber.Substring(0, 4);
+                var flag = int.TryParse(serialNumber.Replace(key, string.Empty),out var value);
+                if (!flag)
+                {
+                    continue;
+                }
+
+                if (serialNumberDictionary.ContainsKey(key))
+                {
+                    serialNumberDictionary[key].Add(value);
+                }
+                else
+                {
+                    serialNumberDictionary.Add(key, new List<int>
+                    {
+                        value
+                    });
+                }
+            }
+
+            var serialNumberRanges = new List<SerialNumberRange>();
+            foreach (var pair in serialNumberDictionary)
+            {
+                pair.Value.Sort();
+                var continusFind = ContinusFind(pair.Value.ToArray());
+                if (continusFind.Count == 0)
+                {
+                    var serialNumberRange = new SerialNumberRange
+                    {
+                        Key = pair.Key,
+                        Begin = GetSerialPadLeft(pair.Value.First()),
+                        End = GetSerialPadLeft(pair.Value.Last())
+                    };
+                    serialNumberRanges.Add(serialNumberRange);
+                }
+                else
+                {
+                    foreach (var ints in continusFind)
+                    {
+                        var serialNumberRange = new SerialNumberRange
+                        {
+                            Key = pair.Key,
+                            Begin = GetSerialPadLeft(ints.First()),
+                            End = GetSerialPadLeft(ints.Last())
+                        };
+                        serialNumberRanges.Add(serialNumberRange);
+                    }
+                }
+            }
+
+            return serialNumberRanges;
+        }
+
+        private static string GetSerialPadLeft(int serial)
+        {
+            return serial.ToString().PadLeft(5, '0');
+        }
+
+        /// <summary>
+        /// 计算给定的数组内连续的序列和独立的值
+        /// </summary>
+        /// <returns></returns>
+        private static List<List<int>> ContinusFind(int[] numList)
+        {
+            Array.Sort(numList);
+
+            var s = 1;
+            var length = numList.Length;
+            var findList = new List<List<int>>();
+
+            switch (length)
+            {
+                case 1:
+                    findList.Add(new List<int>() { numList[s - 1] });
+                    return findList;
+                case 2:
+                    {
+                        if (numList[s] - numList[s - 1] != 1)
+                        {
+                            findList.Add(new List<int>() { numList[s - 1] });
+                            findList.Add(new List<int>() { numList[s] });
+                        }
+                        else
+                        {
+                            findList.Add(new List<int>() { numList[s - 1], numList[s] });
+                        }
+
+                        return findList;
+                    }
+            }
+
+            while (s <= length - 1)
+            {
+                var firstAloneFlag = s - 1 == 0 && numList[s] - numList[s - 1] != 1;
+                var middleAloneFlag = s + 1 < length && numList[s] - numList[s - 1] != 1 && numList[s + 1] - numList[s] != 1;
+                var lastAloneFlag = s + 1 == length && numList[s] - numList[s - 1] != 1;
+                if (firstAloneFlag || middleAloneFlag || lastAloneFlag)
+                {
+                    var val = firstAloneFlag ? numList[s - 1] : numList[s];
+                    findList.Add(new List<int> { val });
+                    s += 1;
+                    continue;
+                }
+
+                if (numList[s] - numList[s - 1] == 1)
+                {
+                    var index = s - 1;
+                    var count = 1;
+                    while (s <= length - 1 && numList[s] - numList[s - 1] == 1)
+                    {
+                        s += 1;
+                        count++;
+                    }
+
+                    findList.Add(numList.ToList().GetRange(index, count));
+                }
+                else
+                {
+
+                    s += 1;
+                }
+            }
+
+            return findList;
+        }
+
+        public static bool IsDobuleSerialNumber(List<string> packingSequenctNumberPairs,SerialNumberPrintDto serialNumberPrintDto)
+        {
+            return IsDobuleSerialNumber(packingSequenctNumberPairs, serialNumberPrintDto.Model,
+                serialNumberPrintDto.SkuName);
+        }
+
+        public static bool IsDobuleSerialNumber(List<string> packingSequenctNumberPairs,string model,string skuName)
+        {
+            return packingSequenctNumberPairs != null
+                   && packingSequenctNumberPairs.Count > 0
+                   && packingSequenctNumberPairs.Contains(model)
+                   && skuName.Contains("闸片");
         }
     }
 

@@ -136,13 +136,14 @@ public interface SoPickPlanBiz {
 	/**
 	 * 根据拣货计划ID修改拣货计划
 	 *
-	 * @param pickPlanId 拣货计划ID
-	 * @param stockId    库存ID
-	 * @param location   库位
-	 * @param zone       库区
-	 * @param boxCode    箱码-可为空
+	 * @param pickPlanId   拣货计划ID
+	 * @param stockId      库存ID
+	 * @param location     库位
+	 * @param zone         库区
+	 * @param boxCode      箱码-可为空
+	 * @param stockBalance 库存余额-可为空
 	 */
-	void updatePickByPartParam(Long pickPlanId, Long stockId, Location location, Zone zone, String boxCode);
+	void updatePickByPartParam(Long pickPlanId, Long stockId, Location location, Zone zone, String boxCode, BigDecimal stockBalance);
 
 	/**
 	 * 根据任务ID库存ID查询跟当前任务相关联的拣货计划
@@ -164,4 +165,10 @@ public interface SoPickPlanBiz {
 	 */
 	void updatePickByTaskIdAndStockId(Long taskId, Long sourceStockId, Long targetStockId, Location location, Zone zone);
 
+	/**
+	 * 根据拣货计划ID软删除拣货计划
+	 *
+	 * @param pickPlanId 拣货计划ID
+	 */
+	void deletePickByPickPlanId(Long pickPlanId);
 }

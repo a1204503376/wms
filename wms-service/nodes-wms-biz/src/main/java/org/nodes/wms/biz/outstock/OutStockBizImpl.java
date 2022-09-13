@@ -197,7 +197,9 @@ public class OutStockBizImpl implements OutStockBiz {
 			soDetail = soBillBiz.findSoDetailByHeaderIdAndSkuCode(request.getSoBillId(), request.getSkuCode());
 		}
 		List<Stock> stockLists = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
-		AssertUtil.notNull(stockLists, "PDA拣货失败，根据箱码获取库存失败");
+		if (stockLists.size() == 0) {
+			throw new ServiceException("PDA拣货失败，根据箱码获取库存失败");
+		}
 		WmsTask task = wmsTaskBiz.findPickTaskByBoxCode(request.getBoxCode(), WmsTaskProcTypeEnum.BY_PCS);
 		if (Func.isNotEmpty(task)) {
 			if (!Func.equals(task.getTaskProcType(), WmsTaskProcTypeEnum.BY_PCS)) {
@@ -233,7 +235,9 @@ public class OutStockBizImpl implements OutStockBiz {
 		SoHeader soHeader = soBillBiz.getSoHeaderById(task.getBillId());
 		AssertUtil.notNull(soHeader, "根据任务存在的发货单头表信息查询发货单失败");
 		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
-
+		if (stockList.size() == 0) {
+			throw new ServiceException("按箱拣货失败，根据箱码查询不到对应库存");
+		}
 		// 2、参数校验 头表
 		canPick(soHeader);
 
