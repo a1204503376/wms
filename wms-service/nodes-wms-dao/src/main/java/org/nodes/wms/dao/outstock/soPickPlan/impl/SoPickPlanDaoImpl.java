@@ -106,7 +106,7 @@ public class SoPickPlanDaoImpl
 	}
 
 	@Override
-	public void updatePickByPartParam(Long pickPlanId, Long stockId, Location location, Zone zone, String boxCode) {
+	public void updatePickByPartParam(Long pickPlanId, Long stockId, Location location, Zone zone, String boxCode, BigDecimal stockBalance) {
 		UpdateWrapper<SoPickPlan> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
 			.eq(SoPickPlan::getPickPlanId, pickPlanId);
@@ -118,6 +118,9 @@ public class SoPickPlanDaoImpl
 		soPickPlan.setZoneCode(zone.getZoneCode());
 		if (Func.isNotEmpty(boxCode)) {
 			soPickPlan.setBoxCode(boxCode);
+		}
+		if (Func.isNotEmpty(stockBalance)) {
+			soPickPlan.setPickPlanQty(stockBalance);
 		}
 		if (!super.update(soPickPlan, updateWrapper)) {
 			throw new ServiceException("修改拣货计划失败,请再次重试");

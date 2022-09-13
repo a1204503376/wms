@@ -214,33 +214,34 @@ public class DevanningBizImpl implements DevanningBiz {
 
 		SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlanList.get(0).getSoDetailId());
 		if (BigDecimalUtil.ne(soDetail.getSurplusQty(), sumSplitQty) ||
-			BigDecimalUtil.ne(soDetail.getSurplusQty(), task.getTaskQty().subtract(task.getScanQty()).subtract(maxSumSplitQty))) {
+			BigDecimalUtil.gt(soDetail.getSurplusQty(), task.getTaskQty().subtract(task.getScanQty()).subtract(maxSumSplitQty))) {
 			throw new ServiceException("拆箱失败,拣货数量和发货单不匹配");
 		}
-		//发货单详情等于页面要拣货数量
+		Stock moveStock;
+		stock.setOccupyQty(BigDecimal.ZERO);
+		String tmpBoxCode = oldBoxCode;
 		String newBoxCode = request.getBoxCode();
-		if (BigDecimalUtil.eq(soDetail.getSurplusQty(), task.getTaskQty().subtract(task.getScanQty()).subtract(maxSumSplitQty))) {
-			String temporaryBoxCode = oldBoxCode;
-			oldBoxCode = request.getBoxCode();
+
+		//发货单详情等于页面要拣货数量
+		if (BigDecimalUtil.le(soDetail.getSurplusQty().subtract(sumSplitQty), soDetail.getSurplusQty().subtract(maxSumSplitQty))) {
+			String temporaryBoxCode = tmpBoxCode;
+			tmpBoxCode = request.getBoxCode();
 			newBoxCode = temporaryBoxCode;
 		}
-		//清除库存占用
-		stock.setOccupyQty(BigDecimal.ZERO);
-		Stock moveStock = stockBiz.moveStock(stock, serialNoList, splitQty, oldBoxCode, location.getLocCode(),
+		moveStock = stockBiz.moveStock(stock, serialNoList, splitQty, newBoxCode, location.getLocCode(),
 			location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
+
 		moveStock.setOccupyQty(moveStock.getStockBalance());
 		stockDao.upateOccupyQty(moveStock);
-
-		List<Stock> oldStockList = stockQueryBiz.findEnableStockByBoxCode(newBoxCode);
-		for (Stock oldStock : oldStockList) {
-			oldStock.setBoxCode(newBoxCode);
-			stockDao.updateStock(oldStock);
-		}
-		wmsTaskBiz.updateWmsTaskByPartParam(task.getTaskId(), WmsTaskProcTypeEnum.BY_BOX, location, oldBoxCode);
+		wmsTaskBiz.updateWmsTaskByPartParam(task.getTaskId(), WmsTaskProcTypeEnum.BY_BOX, location, newBoxCode);
 		for (SoPickPlan soPickPlan : soPickPlanList) {
 			if (soPickPlan.getStockId().equals(stock.getStockId())) {
-				soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), moveStock.getStockId(), location, zone, oldBoxCode);
+				soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), moveStock.getStockId(), location, zone, newBoxCode, moveStock.getStockBalance());
 			} else {
+				Stock stockById = stockQueryBiz.findStockById(soPickPlan.getStockId());
+				stockById.setOccupyQty(BigDecimal.ZERO);
+				stockById.setBoxCode(tmpBoxCode);
+				stockDao.upateOccupyQty(stockById);
 				soPickPlanBiz.deletePickByPickPlanId(soPickPlan.getPickPlanId());
 			}
 		}

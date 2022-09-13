@@ -48,14 +48,14 @@
 				},
 				dataSource: "",
 				isAllLpnPutawayList: [{
-						id: 1,
-						name: "否",
-						isAllLpnPutaway: false
-					},
-					{
 						id: 2,
 						name: "是",
 						isAllLpnPutaway: true
+					},
+					{
+						id: 1,
+						name: "否",
+						isAllLpnPutaway: false
 					},
 				]
 			}
