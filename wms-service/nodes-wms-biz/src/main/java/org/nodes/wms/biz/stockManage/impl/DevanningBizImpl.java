@@ -181,13 +181,13 @@ public class DevanningBizImpl implements DevanningBiz {
 				AssertUtil.notNull(stock, "根据物品拆箱时,找不到对应库存");
 				// 如果用户输入的数量大于0则进行拆箱
 				if (BigDecimalUtil.gt(stockDeva.getSplitQty(), BigDecimal.ZERO)) {
-					if (BigDecimalUtil.gt(stock.getOccupyQty(), BigDecimal.ZERO)) {
-						//有任务的拆箱
-						taskDevanning(oldBoxCode, stock, location, sumSplitQty, request, stockDeva.getSplitQty(), null);
-					} else {
+					if (BigDecimalUtil.eq(stock.getOccupyQty(), BigDecimal.ZERO)) {
 						//不是库存占用直接拆箱
 						stockBiz.moveStock(stock, null, stockDeva.getSplitQty(), request.getBoxCode(), location.getLocCode(),
 							location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
+					} else {
+						//有任务的拆箱
+						taskDevanning(oldBoxCode, stock, location, sumSplitQty, request, stockDeva.getSplitQty(), null);
 					}
 
 				}
