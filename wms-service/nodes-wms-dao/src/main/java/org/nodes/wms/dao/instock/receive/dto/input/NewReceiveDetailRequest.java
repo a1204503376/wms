@@ -38,7 +38,7 @@ public class NewReceiveDetailRequest implements Serializable {
 	/**
 	 * 规格
 	 */
-	private BigDecimal skuSpec;
+	private String skuSpec;
 	/**
 	 * 备注
 	 */
