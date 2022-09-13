@@ -12,6 +12,7 @@ namespace DataAccess.Wms
                 .Where(d => stockiDList.Contains(d.StockId)
                             && d.SerialState == 0
                             && d.IsDeleted == 0)
+                .OrderBy(d=>d.SerialNumber)
                 .ToList(d=>Convert.ToInt32(d.SerialNumber));
         }
     }

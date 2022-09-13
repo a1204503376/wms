@@ -72,10 +72,18 @@ namespace Packaging
         /// <returns>结果 true-更新 false-不更新</returns>
         private static bool CheckUpdate()
         {
-            var mainAppExecutablePath = Application.ExecutablePath;
-            var appVersionManager = new TUpdater.Updater.AppVersionManager();
-            var updateService = new TUpdater.Updater.UpdateService(appVersionManager);
-            return updateService.NeedUpdate(mainAppExecutablePath);
+            try
+            {
+                var mainAppExecutablePath = Application.ExecutablePath;
+                var appVersionManager = new TUpdater.Updater.AppVersionManager();
+                var updateService = new TUpdater.Updater.UpdateService(appVersionManager);
+                return updateService.NeedUpdate(mainAppExecutablePath);
+            }
+            catch (Exception ex)
+            {
+                Serilog.Log.Fatal(ex,"检查更新异常");
+                return false;
+            }
         }
 
         private static Process RunningInstance()

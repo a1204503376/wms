@@ -5,6 +5,7 @@ namespace DataAccess.Enitiies
     [Table(Name = "wms_sku")]
     public class Sku
     {
+        [Column(IsPrimary = true)]
         public long SkuId { get; set; }
         public string SkuCode { get; set; }
         public string SkuName { get; set; }

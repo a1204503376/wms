@@ -120,7 +120,7 @@
     <Compile Include="Wms\BladeDictDal.cs" />
     <Compile Include="Encasement\PackingBatchDal.cs" />
     <Compile Include="Wms\ReceiveDetailLpnDal.cs" />
-    <Compile Include="Wms\SkuDal.cs" />
+    <Compile Include="Wms\WmsSkuDal.cs" />
     <Compile Include="Encasement\SpeedClassDal.cs" />
     <Compile Include="Enitiies\BaseEntity.cs" />
     <Compile Include="Enitiies\PackingSerialDetail.cs" />

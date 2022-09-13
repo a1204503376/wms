@@ -47,6 +47,7 @@
             this.cbxBox = new DevExpress.XtraEditors.ComboBoxEdit();
             this.txtPrintNumber = new DevExpress.XtraEditors.SpinEdit();
             this.luModel = new DevExpress.XtraEditors.LookUpEdit();
+            this.txtAssemblePeople = new DevExpress.XtraEditors.TextEdit();
             this.Root = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
@@ -57,6 +58,7 @@
             this.layoutControlItem7 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem8 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem9 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem20 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControl2 = new DevExpress.XtraLayout.LayoutControl();
             this.btnSavePrint = new DevExpress.XtraEditors.SimpleButton();
             this.txtSerialNumber = new DevExpress.XtraEditors.TextEdit();
@@ -94,8 +96,6 @@
             this.layoutControlItem12 = new DevExpress.XtraLayout.LayoutControlItem();
             this.xtraFolderBrowserDialog1 = new DevExpress.XtraEditors.XtraFolderBrowserDialog(this.components);
             this.xtraOpenFileDialog1 = new DevExpress.XtraEditors.XtraOpenFileDialog(this.components);
-            this.txtAssemblePeople = new DevExpress.XtraEditors.TextEdit();
-            this.layoutControlItem20 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtProductPlan.Properties)).BeginInit();
@@ -109,6 +109,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.cbxBox.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPrintNumber.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.luModel.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAssemblePeople.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Root)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).BeginInit();
@@ -119,6 +120,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem20)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl2)).BeginInit();
             this.layoutControl2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtSerialNumber.Properties)).BeginInit();
@@ -139,8 +141,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.gvSerialNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem12)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAssemblePeople.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem20)).BeginInit();
             this.SuspendLayout();
             // 
             // layoutControl1
@@ -346,6 +346,14 @@
             this.luModel.StyleController = this.layoutControl1;
             this.luModel.TabIndex = 6;
             // 
+            // txtAssemblePeople
+            // 
+            this.txtAssemblePeople.Location = new System.Drawing.Point(349, 12);
+            this.txtAssemblePeople.Name = "txtAssemblePeople";
+            this.txtAssemblePeople.Size = new System.Drawing.Size(114, 24);
+            this.txtAssemblePeople.StyleController = this.layoutControl1;
+            this.txtAssemblePeople.TabIndex = 13;
+            // 
             // Root
             // 
             this.Root.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
@@ -491,6 +499,15 @@
             this.layoutControlItem9.TextLocation = DevExpress.Utils.Locations.Left;
             this.layoutControlItem9.TextSize = new System.Drawing.Size(98, 17);
             // 
+            // layoutControlItem20
+            // 
+            this.layoutControlItem20.Control = this.txtAssemblePeople;
+            this.layoutControlItem20.Location = new System.Drawing.Point(227, 0);
+            this.layoutControlItem20.Name = "layoutControlItem20";
+            this.layoutControlItem20.Size = new System.Drawing.Size(228, 28);
+            this.layoutControlItem20.Text = "组装人：";
+            this.layoutControlItem20.TextSize = new System.Drawing.Size(98, 18);
+            // 
             // layoutControl2
             // 
             this.layoutControl2.Controls.Add(this.btnSavePrint);
@@ -526,7 +543,7 @@
             // txtSerialNumber
             // 
             this.txtSerialNumber.Enabled = false;
-            this.txtSerialNumber.ImeMode = System.Windows.Forms.ImeMode.Off;
+            this.txtSerialNumber.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.txtSerialNumber.Location = new System.Drawing.Point(114, 12);
             this.txtSerialNumber.Name = "txtSerialNumber";
             this.txtSerialNumber.Size = new System.Drawing.Size(224, 24);
@@ -886,23 +903,6 @@
             this.xtraOpenFileDialog1.FileName = "xtraOpenFileDialog1";
             this.xtraOpenFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.xtraOpenFileDialog1_FileOk);
             // 
-            // txtAssemblePeople
-            // 
-            this.txtAssemblePeople.Location = new System.Drawing.Point(349, 12);
-            this.txtAssemblePeople.Name = "txtAssemblePeople";
-            this.txtAssemblePeople.Size = new System.Drawing.Size(114, 24);
-            this.txtAssemblePeople.StyleController = this.layoutControl1;
-            this.txtAssemblePeople.TabIndex = 13;
-            // 
-            // layoutControlItem20
-            // 
-            this.layoutControlItem20.Control = this.txtAssemblePeople;
-            this.layoutControlItem20.Location = new System.Drawing.Point(227, 0);
-            this.layoutControlItem20.Name = "layoutControlItem20";
-            this.layoutControlItem20.Size = new System.Drawing.Size(228, 28);
-            this.layoutControlItem20.Text = "组装人：";
-            this.layoutControlItem20.TextSize = new System.Drawing.Size(98, 18);
-            // 
             // SerialNumberPackingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
@@ -927,6 +927,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.cbxBox.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPrintNumber.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.luModel.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAssemblePeople.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Root)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).EndInit();
@@ -937,6 +938,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem20)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl2)).EndInit();
             this.layoutControl2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.txtSerialNumber.Properties)).EndInit();
@@ -957,8 +959,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.gvSerialNumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem12)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAssemblePeople.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem20)).EndInit();
             this.ResumeLayout(false);
 
         }
