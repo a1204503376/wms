@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.lendreturn.dto.output;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.nodes.wms.dao.stock.dto.SkuLotDto;
 
@@ -20,6 +21,7 @@ public class NoReturnResponse extends SkuLotDto {
 	/**
 	 * 物品id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long skuId;
 
 	/**
