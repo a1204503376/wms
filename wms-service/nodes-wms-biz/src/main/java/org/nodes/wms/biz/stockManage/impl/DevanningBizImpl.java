@@ -217,16 +217,27 @@ public class DevanningBizImpl implements DevanningBiz {
 		moveStock.setOccupyQty(moveStock.getStockBalance());
 		stockDao.upateOccupyQty(moveStock);
 		wmsTaskBiz.updateWmsTaskByPartParam(task.getTaskId(), WmsTaskProcTypeEnum.BY_BOX, location, newBoxCode);
+		boolean isSerialNoManage = true;
 		for (SoPickPlan soPickPlan : soPickPlanList) {
 			if (soPickPlan.getStockId().equals(stock.getStockId())) {
 				soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), moveStock.getStockId(), location, zone, newBoxCode, moveStock.getStockBalance());
 			} else {
+				isSerialNoManage = false;
 				Stock stockById = stockQueryBiz.findStockById(soPickPlan.getStockId());
 				stockById.setOccupyQty(BigDecimal.ZERO);
-				stockById.setBoxCode(tmpBoxCode);
 				stockDao.upateOccupyQty(stockById);
+				stockById.setBoxCode(tmpBoxCode);
+				stockDao.updateStock(stockById);
 				soPickPlanBiz.deletePickByPickPlanId(soPickPlan.getPickPlanId());
 			}
+		}
+
+		if (isSerialNoManage) {
+			Stock stockById = stockQueryBiz.findStockById(stock.getStockId());
+			stockById.setOccupyQty(BigDecimal.ZERO);
+			stockDao.upateOccupyQty(stockById);
+			stockById.setBoxCode(tmpBoxCode);
+			stockDao.updateStock(stockById);
 		}
 	}
 

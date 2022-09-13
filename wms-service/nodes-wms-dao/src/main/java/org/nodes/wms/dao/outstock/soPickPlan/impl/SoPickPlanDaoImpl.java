@@ -130,7 +130,7 @@ public class SoPickPlanDaoImpl
 	@Override
 	public List<SoPickPlan> getPickByTaskIdAndStockId(Long taskId, Long stockId) {
 		AssertUtil.notNull(taskId, "根据任务和库存ID查询关联的拣货计划失败，任务ID为空");
-		AssertUtil.notNull(taskId, "根据任务和库存ID查询关联的拣货计划失败，库存ID为空");
+		AssertUtil.notNull(stockId, "根据任务和库存ID查询关联的拣货计划失败，库存ID为空");
 		return super.lambdaQuery()
 			.eq(SoPickPlan::getTaskId, taskId)
 			.eq(SoPickPlan::getStockId, stockId)
