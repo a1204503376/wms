@@ -186,7 +186,9 @@ public class OutStockBizImpl implements OutStockBiz {
 			soDetail = soBillBiz.findSoDetailByHeaderIdAndSkuCode(request.getSoBillId(), request.getSkuCode());
 		}
 		List<Stock> stockLists = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
-		AssertUtil.notNull(stockLists, "PDA拣货失败，根据箱码获取库存失败");
+		if (stockLists.size() == 0) {
+			throw new ServiceException("PDA拣货失败，根据箱码获取库存失败");
+		}
 		WmsTask task = wmsTaskBiz.findPickTaskByBoxCode(request.getBoxCode(), WmsTaskProcTypeEnum.BY_PCS);
 		if (Func.isNotEmpty(task)) {
 			if (!Func.equals(task.getTaskProcType(), WmsTaskProcTypeEnum.BY_PCS)) {

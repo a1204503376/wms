@@ -177,21 +177,22 @@
 									_this
 									.params);
 								return;
-							}
-							pick.pickByPcs(_this.params).then(data => {
-								_this.$u.func.showToast({
-									title: '拣货完成'
+							} else {
+								pick.pickByPcs(_this.params).then(data => {
+									_this.$u.func.showToast({
+										title: '拣货完成'
+									});
+									if (data.data) {
+										_this.esc();
+									} else {
+										_this.params.skuCode = undefined;
+										_this.params.skuLot1 = undefined;
+										_this.params.boxCode = undefined;
+										_this.params.locCode = undefined;
+										_this.params.qty = undefined;
+									}
 								});
-								if (data.data) {
-									_this.esc();
-								} else {
-									_this.params.skuCode = undefined;
-									_this.params.skuLot1 = undefined;
-									_this.params.boxCode = undefined;
-									_this.params.locCode = undefined;
-									_this.params.qty = undefined;
-								}
-							});
+							}
 						} else {
 							_this.$u.func.showToast({
 								title: '请按照要求输入必填属性'
