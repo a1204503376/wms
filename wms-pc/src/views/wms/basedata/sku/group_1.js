@@ -134,11 +134,18 @@ export const group = {
             show:['abcName']
         },
         {
-            prop: "attribute2",
-            label: "箱号",
+            prop: "udf1",
+            label: "箱型",
             disabled: false,
             clearable: true,
             maxlength: 100
+        },
+        {
+            prop: "skuSpec",
+            label: "型号",
+            disabled: false,
+            clearable: true,
+            maxlength: 10
         },
         {
             prop: "skuVolume",
