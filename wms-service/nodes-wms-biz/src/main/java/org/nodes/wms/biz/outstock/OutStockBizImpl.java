@@ -10,6 +10,8 @@ import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
+import org.nodes.wms.biz.lendreturn.LendReturnBiz;
+import org.nodes.wms.biz.lendreturn.modular.LogLendReturnFactory;
 import org.nodes.wms.biz.outstock.logSoPick.modular.LogSoPickFactory;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.outstock.plan.modular.SoPickPlanFactory;
@@ -85,6 +87,8 @@ public class OutStockBizImpl implements OutStockBiz {
 	private final ZoneBiz zoneBiz;
 	private final AgvTask agvTask;
 	private final SoPickPlanFactory soPickPlanFactory;
+	private final LogLendReturnFactory logLendReturnFactory;
+	private final LendReturnBiz lendReturnBiz;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -104,6 +108,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		canPick(soHeader, soDetail, pickQty);
 
 		List<PickByPcStockDto> pickByPcStockDtoList = request.getPickByPcStockDtoList();
+		List<LogSoPick> logSoPickList = new ArrayList<>();
 		// 2 生成拣货记录，需要注意序列号（log_so_pick)
 		for (PickByPcStockDto pickByPcStockDto : pickByPcStockDtoList) {
 			Stock stock = stockQueryBiz.findStockById(pickByPcStockDto.getStockId());
@@ -115,11 +120,17 @@ public class OutStockBizImpl implements OutStockBiz {
 			stockBiz.moveStock(stock, pickByPcStockDto.getSerailList(), pickByPcStockDto.getOutStockQty(),
 				location, StockLogTypeEnum.OUTSTOCK_BY_PC, soHeader.getSoBillId(), soHeader.getSoBillNo(),
 				soDetail.getSoLineNo());
+			//
+			logSoPickList.add(logSoPick);
 		}
 		// 4 更新出库单明细中的状态和数量
 		soBillBiz.updateSoDetailStatus(soDetail, pickQty);
 		// 5 更新发货单状态
 		soBillBiz.updateSoBillState(soHeader);
+		// 判断是否是借出单
+		if (WmsAppConstant.BILL_TYPE_LEND.equals(soHeader.getBillTypeCd())){
+			lendReturnBiz.saveLog(logLendReturnFactory.createLendRequest(logSoPickList));
+		}
 		// 6 记录业务日志
 		logBiz.auditLog(AuditLogType.OUTSTOCK, "PC拣货");
 	}

@@ -261,6 +261,18 @@ export default [
         ]
     },
     {
+        path: '/unReturned',
+        component: Layout,
+        children: [
+            {
+                path: 'createSoBill/:unReturnedData',
+                name: '创建归还单',
+                props: true,
+                component: () => import('@/views/wms/instock/receive/receiveNewForUnReturned')
+            }
+        ]
+    },
+    {
         path: '/stock',
         component: Layout,
         children: [

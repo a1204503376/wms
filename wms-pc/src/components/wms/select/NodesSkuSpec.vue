@@ -39,7 +39,7 @@ export default {
     },
     data() {
         return {
-            val: '',
+            val: this.selectVal,
             dataSource: []
         }
     },
