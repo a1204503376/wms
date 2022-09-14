@@ -157,6 +157,20 @@ export default {
                         placeholder: '支持模糊查询',
                     },
                     {
+                        prop: "skuNameS",
+                        label: "物品简称",
+                        search: true,
+                        sortable: true,
+                        placeholder: '支持模糊查询',
+                    },
+                    {
+                        prop: "skuSpec",
+                        label: "物品型号",
+                        search: true,
+                        sortable: true,
+                        placeholder: '支持模糊查询',
+                    },
+                    {
                         prop: "wspName",
                         label: "包装",
                         search: true,
