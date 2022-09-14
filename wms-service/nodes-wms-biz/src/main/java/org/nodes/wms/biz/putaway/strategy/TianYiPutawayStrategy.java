@@ -113,6 +113,10 @@ public class TianYiPutawayStrategy {
 	private BigDecimal staticsLoadWeightByColumn(Location location) {
 		// 获取同列的所有库位
 		List<Location> locationList = locationBiz.getLocationByColumn(location);
+		if (Func.isEmpty(locationList)){
+			return BigDecimal.ZERO;
+		}
+
 		// 虚拟库位不参与计算
 		if (locationBiz.isVirtualLocation(locationList)) {
 			throw new ServiceException("虚拟库位不存在载重计算");
