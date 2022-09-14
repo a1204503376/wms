@@ -134,9 +134,10 @@ public interface LocationDao {
 	 * 根据当前货架列获取同一列的库位
 	 *
 	 * @param locColumn 货架列
+	 * @param locBank 货架排
 	 * @return 同一列的库位
 	 */
-	List<Location> getLocationByLocColumn(String locColumn);
+	List<Location> getLocationByLocColumn(String locColumn, String locBank);
 
 	/**
 	 * 查找库位列表中指定类型的库位

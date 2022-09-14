@@ -230,7 +230,11 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public List<Location> getLocationByColumn(Location location) {
-		return locationDao.getLocationByLocColumn(location.getLocColumn());
+		if (Func.isEmpty(location.getLocColumn()) || Func.isEmpty(location.getLocBank())){
+			return null;
+		}
+
+		return locationDao.getLocationByLocColumn(location.getLocColumn(), location.getLocBank());
 	}
 
 	@Override
