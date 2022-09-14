@@ -85,22 +85,24 @@ public class TianyiPickStrategy {
 		LpnTypeCodeEnum lpnTypeCodeEnum = lpnTypeBiz.tryParseBoxCode(Func.isNotEmpty(agvStockList) ?
 			agvStockList.get(0).getBoxCode() : manualStockList.get(0).getBoxCode());
 		if (LpnTypeCodeEnum.D.equals(lpnTypeCodeEnum)) {
-			return plan(soHeader, soDetail, soDetailList, pickPlanOfSoDetail, manualStockList, agvStockList);
+			return firstPlanManaul(soHeader, soDetail, soDetailList, pickPlanOfSoDetail, manualStockList, agvStockList);
 		} else {
-			return plan(soHeader, soDetail, soDetailList, pickPlanOfSoDetail, agvStockList, manualStockList);
+			return firstPlanAgv(soHeader, soDetail, soDetailList, pickPlanOfSoDetail, agvStockList, manualStockList);
 		}
 	}
 
-	private List<SoPickPlan> plan(SoHeader soHeader, SoDetail soDetail,
-								  List<SoDetail> soDetailList, List<SoPickPlan> pickPlanOfSoDetail,
-								  List<Stock> firstStockList, List<Stock> secondStockList) {
-		List<SoPickPlan> newPickPlanList = new ArrayList<>();
-		// 注意如果自动区的箱中存在不需要出的库存则不应该分配该箱
-		// 如果是自动区的则需要根据箱码中生成其它物品的拣货计划
+	private List<SoPickPlan> firstPlanAgv(SoHeader soHeader, SoDetail soDetail,
+										  List<SoDetail> soDetailList, List<SoPickPlan> pickPlanOfSoDetail,
+										  List<Stock> agvStockList, List<Stock> manualStockList) {
+		// 注意如果自动区的箱中存在不需要出的库存则不应该分配该箱 如果是自动区的则需要根据箱码中生成其它物品的拣货计划
 		BigDecimal surplusQty = getSurplusQty(soDetail, pickPlanOfSoDetail);
+		if (BigDecimalUtil.le(surplusQty, BigDecimal.ZERO)){
+			return null;
+		}
+		List<SoPickPlan> newPickPlanList = new ArrayList<>();
 		List<Long> skuIdsOfSoDetail = getAllSkuIdFromSoDetail(soDetailList);
-		boolean needUnpackStock = false;
-		for (Stock stock : firstStockList) {
+		boolean needPlanFromManual = false;
+		for (Stock stock : agvStockList) {
 			if (stock.isNotEnable()) {
 				continue;
 			}
@@ -119,8 +121,8 @@ public class TianyiPickStrategy {
 				newPickPlanList.addAll(pickPlans);
 			} else {
 				// 需要拆箱的库存，如果人工区没有库存或库存数量不足，就只能进行分配需要拆箱的库存，否则从人工区分配
-				if (canPlanFromManualZone(secondStockList, surplusQty)) {
-					needUnpackStock = true;
+				if (canPlanFromManualZone(manualStockList, surplusQty)) {
+					needPlanFromManual = true;
 				} else {
 					surplusQty = surplusQty.subtract(stock.getStockEnable());
 					List<SoPickPlan> pickPlans = soPickPlanFactory.createOnAgvArea(soDetail, soDetailList, stock, stockOfLoc);
@@ -131,8 +133,8 @@ public class TianyiPickStrategy {
 			}
 		}
 
-		if (needUnpackStock || BigDecimalUtil.gt(surplusQty, BigDecimal.ZERO)) {
-			for (Stock stock : secondStockList) {
+		if (needPlanFromManual || BigDecimalUtil.gt(surplusQty, BigDecimal.ZERO)) {
+			for (Stock stock : manualStockList) {
 				if (BigDecimalUtil.le(surplusQty, BigDecimal.ZERO)) {
 					break;
 				}
@@ -144,6 +146,54 @@ public class TianyiPickStrategy {
 				SoPickPlan soPickPlan = soPickPlanFactory.create(soDetail.getSoBillId(), soDetail, stock, planQty);
 				newPickPlanList.add(soPickPlan);
 				surplusQty = surplusQty.subtract(planQty);
+			}
+		}
+
+		return newPickPlanList;
+	}
+
+	private List<SoPickPlan> firstPlanManaul(SoHeader soHeader, SoDetail soDetail,
+										  List<SoDetail> soDetailList, List<SoPickPlan> pickPlanOfSoDetail,
+										  List<Stock> manualStockList, List<Stock> agvStockList) {
+		BigDecimal surplusQty = getSurplusQty(soDetail, pickPlanOfSoDetail);
+		if (BigDecimalUtil.le(surplusQty, BigDecimal.ZERO)){
+			return null;
+		}
+
+		List<SoPickPlan> newPickPlanList = new ArrayList<>();
+		for (Stock stock : manualStockList) {
+			if (stock.isNotEnable()) {
+				continue;
+			}
+
+			BigDecimal planQty = BigDecimalUtil.ge(surplusQty, stock.getStockEnable())
+				? stock.getStockEnable() : surplusQty;
+			SoPickPlan soPickPlan = soPickPlanFactory.create(soDetail.getSoBillId(), soDetail, stock, planQty);
+			newPickPlanList.add(soPickPlan);
+			surplusQty = surplusQty.subtract(planQty);
+		}
+
+		if (BigDecimalUtil.gt(surplusQty, BigDecimal.ZERO)){
+			List<Long> skuIdsOfSoDetail = getAllSkuIdFromSoDetail(soDetailList);
+			for (Stock stock : agvStockList) {
+				if (BigDecimalUtil.le(surplusQty, BigDecimal.ZERO)){
+					break;
+				}
+
+				if (stock.isNotEnable()) {
+					continue;
+				}
+
+				List<Stock> stockOfLoc = stockQueryBiz.findStockByLocation(stock.getLocId());
+				if (Func.isEmpty(stockOfLoc) || isNotCondition(stockOfLoc, skuIdsOfSoDetail)) {
+					log.warn("[自动分配]单据:{}明细:{}分配的自动区库位:{}存在不出库的库存",
+						soHeader.getSoBillNo(), soDetail.getSoLineNo(), stock.getLocCode());
+					continue;
+				}
+
+				List<SoPickPlan> pickPlans = soPickPlanFactory.createOnAgvArea(soDetail, soDetailList, stock, stockOfLoc);
+				newPickPlanList.addAll(pickPlans);
+				surplusQty = surplusQty.subtract(stock.getStockEnable());
 			}
 		}
 
