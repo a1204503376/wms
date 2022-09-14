@@ -407,6 +407,8 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 			if (Func.isNotEmpty(sku)) {
 				throw new ServiceException("系统中已经存在该物品编码！");
 			}
+			SkuPackage skuPackage = skuPackageService.getById(entity.getWspId());
+			entity.setWspName(skuPackage.getWspName());
 			return this.save(entity);
 		} else {
 			Sku sku = getOne(Wrappers.lambdaQuery(Sku.class)
@@ -415,6 +417,8 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 			if (Func.isNotEmpty(sku)) {
 				throw new ServiceException("系统中已经存在该物品编码！");
 			}
+			SkuPackage skuPackage = skuPackageService.getById(entity.getWspId());
+			entity.setWspName(skuPackage.getWspName());
 			return this.updateById(entity);
 		}
 	}
