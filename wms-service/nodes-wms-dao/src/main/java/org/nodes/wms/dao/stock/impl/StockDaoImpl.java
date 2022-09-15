@@ -308,6 +308,11 @@ public class StockDaoImpl
 		return baseMapper.getList(request, page);
 	}
 
+	@Override
+	public List<StockPageResponse> getStockListCount(StockPageQuery stockPageQuery) {
+		return baseMapper.getStockCountList(stockPageQuery);
+	}
+
 	private LambdaQueryWrapper<Stock> getStockQuery() {
 		LambdaQueryWrapper<Stock> queryWrapper = Wrappers.lambdaQuery(Stock.class);
 		queryWrapper.apply("stay_stock_qty + stock_qty > pick_qty");

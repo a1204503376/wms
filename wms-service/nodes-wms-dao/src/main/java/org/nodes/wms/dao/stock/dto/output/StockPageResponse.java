@@ -66,7 +66,7 @@ public class StockPageResponse implements Serializable {
 	/**
 	 * 占用数量
 	 */
-	@ExcelProperty
+	@ExcelProperty({"库存信息", "库存占用"})
 	private BigDecimal occupyQty;
 	/**
 	 * 库存余额

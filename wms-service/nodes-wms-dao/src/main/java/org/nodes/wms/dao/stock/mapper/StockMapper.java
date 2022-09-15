@@ -57,6 +57,14 @@ public interface StockMapper extends BaseMapper<Stock> {
 	Page<StockPageResponse> getPage(IPage<StockPageResponse> page, @Param("query") StockPageQuery stockPageQuery);
 
 	/**
+	 * 获取库存统计列表
+	 *
+	 * @param stockPageQuery 查询参数
+	 * @return 库存统计列表
+	 */
+	List<StockPageResponse> getStockCountList(@Param("query") StockPageQuery stockPageQuery);
+
+	/**
 	 * 获取导出数据集合
 	 *
 	 * @param stockPageQuery 查询参数

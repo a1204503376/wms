@@ -221,6 +221,14 @@ public interface StockDao {
 	IPage<FindAllStockByNoResponse> getStockList(FindAllStockByNoRequest request, IPage<Stock> page);
 
 	/**
+	 * 获取库存统计列表
+	 *
+	 * @param stockPageQuery 查询参数
+	 * @return 库存统计列表
+	 */
+	List<StockPageResponse> getStockListCount(StockPageQuery stockPageQuery);
+
+	/**
 	 * 获取库存分页 --pc端
 	 *
 	 * @param page           分页参数
