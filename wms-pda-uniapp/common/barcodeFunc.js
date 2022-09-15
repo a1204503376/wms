@@ -12,7 +12,6 @@ const BarcodeType = {
 	Sku: 30, // 物品
 	Serial: 40, // 序列号
 	LotNumber: 50, // 批次号
-	Box: 60, //箱码
 }
 
 // 解析条码, 返回条码对象，属性：type，content
@@ -63,6 +62,14 @@ const parseBarcodeByType = (barcodeType, barcode) => {
 		case 10:
 			return parseLocBarcode(barcode);
 		case 20:
+			return parseLpnBarcode(barcode);
+		case 30:
+			return parseLocBarcode(barcode);
+		case 40:
+			return parseLpnBarcode(barcode);
+		case 50:
+			return parseLpnBarcode(barcode);
+		case 60:
 			return parseLpnBarcode(barcode);
 		default:
 			return barcode;

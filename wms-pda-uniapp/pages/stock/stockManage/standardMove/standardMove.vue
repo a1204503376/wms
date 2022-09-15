@@ -45,7 +45,8 @@
 				params: {
 					locCode: '',
 					skuCode: '',
-					lotNumber: ''
+					lotNumber: '',
+					qty: undefined
 				}
 			}
 		},
@@ -72,21 +73,44 @@
 				uni.$u.throttle(function() {
 					if (_this.params.qty > 0 && tool.isNotEmpty(_this.params.locCode) && tool.isNotEmpty(_this
 							.params.lotNumber) && tool.isNotEmpty(_this.params.skuCode)) {
-						uni.$u.func.routeNavigateTo('/pages/stock/stockManage/standardMove/standardMoveSubmit', _this.params);
+						uni.$u.func.routeNavigateTo('/pages/stock/stockManage/standardMove/standardMoveSubmit',
+							_this.params);
 						return;
 					}
-          _this.$u.func.showToast({
-            title: '标准移动失败，请输入必填字段'
-          });
+					_this.$u.func.showToast({
+						title: '标准移动失败，请输入必填字段'
+					});
 					return;
 				}, 1000)
-
 			},
 			esc() {
 				uni.navigateBack({
 					delta: 1
 				});
-			}
+			},
+			scannerCallback(no) {
+				this.analysisCode(no);
+			},
+			analysisCode(code) {
+				var barcode = barcodeFunc.parseBarcode(code);
+				var barcodeType = barcodeFunc.BarcodeType;
+				switch (barcode.type) {
+					case barcodeType.Loc:
+						this.params.locCode = barcode.content;
+						break;
+					case barcodeType.Sku:
+						this.params.skuCode = barcode.content;
+						break;
+					case barcodeType.LotNumber:
+						this.params.lotNumber = barcode.content;
+						break;
+					default:
+						this.$u.func.showToast({
+							title: '条码识别失败,不支持的条码类型'
+						});
+						break;
+				}
+			},
 		}
 	}
 </script>

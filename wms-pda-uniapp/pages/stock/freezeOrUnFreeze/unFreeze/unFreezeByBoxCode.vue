@@ -77,7 +77,24 @@
 				uni.navigateBack({
 					delta: 1
 				});
-			}
+			},
+			scannerCallback(no) {
+				this.analysisCode(no);
+			},
+			analysisCode(code) {
+				var barcode = barcodeFunc.parseBarcode(code);
+				var barcodeType = barcodeFunc.BarcodeType;
+				switch (barcode.type) {
+					case barcodeType.Lpn:
+						this.params.boxCode = barcode.content;
+						break;
+					default:
+						this.$u.func.showToast({
+							title: '条码识别失败,不支持的条码类型'
+						});
+						break;
+				}
+			},
 		}
 	}
 </script>
