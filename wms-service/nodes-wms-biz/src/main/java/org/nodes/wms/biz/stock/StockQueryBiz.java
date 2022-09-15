@@ -18,6 +18,7 @@ import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.mp.support.Query;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -228,6 +229,14 @@ public interface StockQueryBiz {
 	 * @return 分页对象
 	 */
 	Page<StockPageResponse> getStockPage(Query query, StockPageQuery stockPageQuery);
+
+	/**
+	 * 获取库存统计列表
+	 *
+	 * @param stockPageQuery 查询参数
+	 * @param response       响应对象
+	 */
+	void getStockListCount(StockPageQuery stockPageQuery, HttpServletResponse response);
 
 	/**
 	 * 库存日志分页查询

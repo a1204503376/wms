@@ -31,6 +31,7 @@ import org.nodes.wms.dao.stock.dto.output.*;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
+import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -38,6 +39,7 @@ import org.springblade.core.tool.utils.ConvertUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -290,6 +292,22 @@ public class StockQueryBizImpl implements StockQueryBiz {
 			return page;
 		}
 		return stockDao.page(Condition.getPage(query), stockPageQuery);
+	}
+
+	@Override
+	public void getStockListCount(StockPageQuery stockPageQuery, HttpServletResponse response) {
+		List<StockPageResponse> stockListCount = stockDao.getStockListCount(stockPageQuery);
+		for (StockPageResponse stockPageResponse : stockListCount) {
+			String stockStatus = stockPageResponse.getStockStatus().getDesc();
+			stockPageResponse.setStockStatusDesc(stockStatus);
+//			// 设置库存可用量
+//			stockPageResponse.setStockEnable(stockPageResponse.getStockQty()
+//				.add(stockPageResponse.getPickQty().subtract(stockPageResponse.getOccupyQty())));
+//			// 设置库存余额
+//			stockPageResponse.setStockBalance(stockPageResponse.getStockQty().subtract(stockPageResponse.getPickQty()));
+		}
+		ExcelUtil.export(response, "库存统计", "库存统计数据表", stockListCount, StockPageResponse.class);
+
 	}
 
 	@Override

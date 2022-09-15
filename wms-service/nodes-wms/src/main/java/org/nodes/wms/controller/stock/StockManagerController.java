@@ -58,6 +58,14 @@ public class StockManagerController {
 	}
 
 	/**
+	 * 库存统计：导出
+	 */
+	@PostMapping("exportStockListCount")
+	public void exportStockListCount(@RequestBody StockPageQuery stockPageQuery, HttpServletResponse response) {
+		stockQueryBiz.getStockListCount(stockPageQuery, response);
+	}
+
+	/**
 	 * 库存余额：导出
 	 */
 	@PostMapping("export")
@@ -180,8 +188,8 @@ public class StockManagerController {
 	 * 未归还列表：分页查询
 	 */
 	@PostMapping("/pageUnReturned")
-	public R<Page<NoReturnResponse>> pageUnReturned(Query query, @RequestBody LendReturnQuery lendReturnQuery){
-		Page<NoReturnResponse> noReturnResponsePage = lendReturnBiz.pageNoReturn((Page)Condition.getPage(query), lendReturnQuery);
+	public R<Page<NoReturnResponse>> pageUnReturned(Query query, @RequestBody LendReturnQuery lendReturnQuery) {
+		Page<NoReturnResponse> noReturnResponsePage = lendReturnBiz.pageNoReturn((Page) Condition.getPage(query), lendReturnQuery);
 		return R.data(noReturnResponsePage);
 	}
 
@@ -189,7 +197,7 @@ public class StockManagerController {
 	 * 未归还列表：服务端导出
 	 */
 	@PostMapping("/exportUnReturned")
-	public void pageUnReturned(@RequestBody LendReturnQuery lendReturnQuery,HttpServletResponse response){
+	public void pageUnReturned(@RequestBody LendReturnQuery lendReturnQuery, HttpServletResponse response) {
 		lendReturnBiz.exportNoReturn(lendReturnQuery, response);
 	}
 
@@ -197,7 +205,7 @@ public class StockManagerController {
 	 * 序列号：分页查询
 	 */
 	@PostMapping("/pageSerial")
-	public R<Page<SerialPageResponse>> pageSerial(@RequestBody @Valid SerialPageQuery serialPageQuery, Query query){
+	public R<Page<SerialPageResponse>> pageSerial(@RequestBody @Valid SerialPageQuery serialPageQuery, Query query) {
 		return R.data(serialBiz.page(serialPageQuery, query));
 	}
 
@@ -205,7 +213,7 @@ public class StockManagerController {
 	 * 序列号：服务端导出
 	 */
 	@PostMapping("/exportSerial")
-	public void exportSerial(@RequestBody @Valid SerialPageQuery serialPageQuery, HttpServletResponse response){
+	public void exportSerial(@RequestBody @Valid SerialPageQuery serialPageQuery, HttpServletResponse response) {
 		serialBiz.export(serialPageQuery, response);
 	}
 }

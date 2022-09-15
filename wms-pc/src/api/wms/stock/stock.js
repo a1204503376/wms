@@ -22,6 +22,15 @@ export const exportFile = (data) => {
         responseType: 'blob'
     })
 }
+export const exportStockListCount = (data) => {
+    return request({
+        url: '/api/wms/stock/exportStockListCount',
+        method: 'post',
+        data: data,
+        responseType: 'blob'
+    })
+}
+
 
 export const importFile = (data) => {
     return request({
