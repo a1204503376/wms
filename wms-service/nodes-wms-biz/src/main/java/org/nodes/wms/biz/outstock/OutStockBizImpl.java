@@ -128,7 +128,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		// 5 更新发货单状态
 		soBillBiz.updateSoBillState(soHeader);
 		// 判断是否是借出单
-		if (WmsAppConstant.BILL_TYPE_LEND.equals(soHeader.getBillTypeCd())){
+		if (WmsAppConstant.BILL_TYPE_LEND.equals(soHeader.getBillTypeCd())) {
 			lendReturnBiz.saveLog(logLendReturnFactory.createLendRequest(logSoPickList));
 		}
 		// 6 记录业务日志
@@ -206,7 +206,7 @@ public class OutStockBizImpl implements OutStockBiz {
 				throw new ServiceException("PDA按件拣货失败，存在任务，但不是按件拣货的任务");
 			}
 			// 按照任务执行方式进行执行
-			pickByPcsByTask(task, stockLists, soHeader);
+			pickByPcsByTask(task, stockLists, soHeader, request.getQty());
 			return soHeaderSoBillState(request.getSoBillId());
 		}
 		// 按照库存的方法执行
@@ -660,7 +660,23 @@ public class OutStockBizImpl implements OutStockBiz {
 		for (Stock stock : stockList) {
 			pickQty = pickQty.add(stock.getStockBalance());
 		}
-		if (BigDecimalUtil.gt(pickQty, surplusQty)) {
+		if (BigDecimalUtil.gt(surplusQty, pickQty)) {
+			throw new ServiceException("拣货失败,发货数量大于剩余数量");
+		}
+	}
+
+	private void canPick(BigDecimal surplusQty, List<SoPickPlan> soPickPlanList, List<Stock> stockList) {
+		List<SoDetail> soDetailList = new ArrayList<>();
+		for (SoPickPlan soPickPlan : soPickPlanList) {
+			SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlan.getSoDetailId());
+			soDetailList.add(soDetail);
+		}
+		BigDecimal pickQty = BigDecimal.ZERO;
+
+		for (Stock stock : stockList) {
+			pickQty = pickQty.add(stock.getStockBalance());
+		}
+		if (BigDecimalUtil.gt(surplusQty, pickQty)) {
 			throw new ServiceException("拣货失败,发货数量大于剩余数量");
 		}
 	}
@@ -682,17 +698,17 @@ public class OutStockBizImpl implements OutStockBiz {
 					.collect(Collectors.toList());
 			}
 			SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlan.getSoDetailId());
-			soPickPlanBiz.pickByPlan(soDetail, soPickPlan, soPickPlan.getPickPlanQty(), serialNumberList);
-			soBillBiz.updateSoDetailStatus(soDetail, soDetail.getPlanQty());
+			soPickPlanBiz.pickByPlan(soDetail, soPickPlan, soPickPlan.getSurplusQty(), serialNumberList);
+			soBillBiz.updateSoDetailStatus(soDetail, soPickPlan.getSurplusQty());
 		}
 	}
 
-	void pickByPcsByTask(WmsTask task, List<Stock> stockList, SoHeader soHeader) {
+	void pickByPcsByTask(WmsTask task, List<Stock> stockList, SoHeader soHeader, BigDecimal qty) {
 		// 根据任务ID拣货计划
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(task.getTaskId());
 
 		// 校验是否超发
-		canPick(soPickPlanList, stockList);
+		canPick(qty, soPickPlanList, stockList);
 
 		for (Stock stock : stockList) {
 			canPickLocation(stock.getLocId());
