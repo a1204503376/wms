@@ -9,6 +9,7 @@
 				<u--input v-model.trim="params.boxCode"></u--input>
 			</u-form-item>
 		</u--form>
+		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
 				返回
@@ -26,9 +27,11 @@
 	import uniSelect from '@/components/uni-select.vue'
 	import barcodeFunc from '@/common/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
+	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {
 		components: {
-			uniSelect
+			uniSelect,
+			keyboardListener
 		},
 		data() {
 			return {
@@ -49,6 +52,12 @@
 		},
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
+			var that = this;
+			that.emitKeyDown = function(e) {
+				if (e.key == 'Enter') {
+					that.submit();
+				}
+			};
 		},
 		onBackPress(event) {
 			// #ifdef APP-PLUS
@@ -63,12 +72,11 @@
 				var barcode = barcodeFunc.parseBarcode(code);
 				var barcodeType = barcodeFunc.BarcodeType;
 				switch (barcode.type) {
-					case barcodeType.Loc:
-						this.params.locCode = barcode.content;
+					case barcodeType.UnKnow:
+						this.params.boxCode = barcode.content;
 						break;
 					case barcodeType.Lpn:
 						this.params.boxCode = barcode.content;
-						this.getStockByBoxCode();
 						break;
 					default:
 						this.$u.func.showToast({
@@ -110,12 +118,21 @@
 				})
 			},
 			esc() {
+				this.clearEmitKeyDown();
 				uni.navigateBack({
 					delta: 1
 				});
 			},
+			clearEmitKeyDown() {
+				this.emitKeyDown = function() {};
+			},
 			scannerCallback(no) {
 				this.analysisCode(no);
+			},
+			emitKeyDown(e) {
+				if (e.key == 'Enter') {
+					this.submit();
+				}
 			}
 		}
 	}

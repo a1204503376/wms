@@ -39,7 +39,6 @@ public class ReceiveFactory {
 	private final WarehouseBiz warehouseBiz;
 	private final OwnerBiz ownerBiz;
 	private final OrderNoGeneratorUtil orderNoGeneratorUtil;
-
 	private final SkuBiz skuBiz;
 
 
@@ -64,12 +63,14 @@ public class ReceiveFactory {
 		receiveHeader.setWoId(owner.getWoId());
 		//设置货主编码
 		receiveHeader.setOwnerCode(owner.getOwnerCode());
-		//设置供应商id
-		receiveHeader.setSupplierId(newReceiveHeaderRequest.getSupplier().getId());
-		//设置供应商编码
-		receiveHeader.setSupplierCode(newReceiveHeaderRequest.getSupplier().getCode());
-		//设置供应商名称
-		receiveHeader.setSupplierName(newReceiveHeaderRequest.getSupplier().getName());
+		if (Func.isNotEmpty(newReceiveHeaderRequest.getSupplier())){
+			//设置供应商id
+			receiveHeader.setSupplierId(newReceiveHeaderRequest.getSupplier().getId());
+			//设置供应商编码
+			receiveHeader.setSupplierCode(newReceiveHeaderRequest.getSupplier().getCode());
+			//设置供应商名称
+			receiveHeader.setSupplierName(newReceiveHeaderRequest.getSupplier().getName());
+		}
 		//设置归还人
 		receiveHeader.setSupplierContact(newReceiveHeaderRequest.getSupplierContact());
 		//设置单据类型

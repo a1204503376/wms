@@ -13,22 +13,13 @@
 				<u--input v-model.trim="param.lpnCode" @focus="focus(2)" @blur="blur(2)" @confirm="change"
 					:focus="this.focusNum == 2"></u--input>
 			</u-form-item>
-
-			<u-form-item label="生产批次" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model.trim="param.skuLot1" @focus="focus(3)" @confirm="change" @blur="blur(3)"
-					:focus="this.focusNum == 3"></u--input>
-			</u-form-item>
 			<u-form-item label="专用客户"  class="left-text-one-line" labelWidth="100">
 				<u--input v-model.trim="param.skuLot4" @focus="focus(4)" @confirm="change" @blur="blur(4)"
 					:focus="this.focusNum == 4"></u--input>
 			</u-form-item>
-
-
 			<u-form-item label="型号" class="left-text-one-line" labelWidth="100">
 				<uni-select v-model="param.skuLot2"></uni-select>
 			</u-form-item>
-
-
 		</u--form>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
@@ -73,9 +64,6 @@
 			for (let item of this.param.receiveDetailLpnPdaRequestList) {
 				if (tool.isNotEmpty(item.lpnCode)) {
 					this.param.lpnCode = item.lpnCode
-				}
-				if (tool.isNotEmpty(item.skuLot1)) {
-					this.param.skuLot1 = item.skuLot1
 				}
 				if (tool.isNotEmpty(item.skuLot2)) {
 					this.param.skuLot2 = item.skuLot2

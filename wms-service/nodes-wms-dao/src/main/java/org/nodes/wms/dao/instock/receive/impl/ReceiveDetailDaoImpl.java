@@ -3,6 +3,7 @@ package org.nodes.wms.dao.instock.receive.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.instock.receive.ReceiveDetailDao;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveByPcQuery;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailPdaQuery;
@@ -102,4 +103,9 @@ public class ReceiveDetailDaoImpl extends BaseServiceImpl<ReceiveDetailMapper, R
 		return super.listByIds(detailIdList);
 	}
 
+    @Override
+    public boolean deleteById(Long id) {
+		AssertUtil.notNull(id, "删除收货明细失败，明细id为空");
+        return super.baseMapper.deleteByDetailId(id);
+    }
 }

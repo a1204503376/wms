@@ -90,7 +90,7 @@
         from receive_header rh
              left join wms_bill_type wbt on rh.bill_type_cd = wbt.bill_type_cd
              left join wms_owner owner on rh.wo_id = owner.wo_id
-        where receive_id = #{id}
+        where receive_id = #{id} AND rh.is_deleted = 0
     </select>
     <select id="getReceiveHeaderResponseByQuery"
             resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse">

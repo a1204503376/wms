@@ -3,6 +3,7 @@
         v-model="val"
         :clearable="true"
         :debounce="800"
+        :disabled="disabled"
         :fetch-suggestions="querySearchAsync"
         :hide-loading="true"
         :highlight-first-item="true"
@@ -10,7 +11,6 @@
         placeholder="请输入物品编码或名称"
         popper-class="popper-auto"
         size="mini"
-        :disabled="disabled"
         @change="onChange"
         @select="handleSelect">
         <template v-slot="{ item }">
@@ -31,7 +31,7 @@ export default {
         event: 'selectValChange'
     },
     props: {
-        selectVal: [Array, String, Object],
+        selectVal: [Object],
         // 单选多选切换，默认为false
         multiple: {type: Boolean, required: false, default: false},
         // 是否禁用 默认为 false不禁用
@@ -40,7 +40,7 @@ export default {
     data() {
         return {
             val: '',
-            isEdit: func.isNotEmpty(this.selectVal),
+            isEdit: false,
             data: []
         }
     },
@@ -54,6 +54,7 @@ export default {
     },
     methods: {
         setDefaultByProps() {
+            this.isEdit = func.isNotEmpty(this.selectVal.skuId)
             if (!this.isEdit) {
                 return;
             }
@@ -68,7 +69,7 @@ export default {
             if (!this.data.map((item) => item.skuCode).includes(this.val)) {
                 this.val = '';                                  // 清空物品编码
                 this.$emit('selectValChange', {});  // 回传空对象，清空外面其他组件
-                this.data = []
+                this.data = []                                 // 清空下拉数组，使其再次获得焦点后不会有下拉数据
             }
             for (let i = 0; i < this.data.length; i++) {
                 if (this.data[i].skuCode === val) {
@@ -98,22 +99,4 @@ export default {
 }
 </script>
 <style>
-/*.popper-auto {*/
-/*    width: auto!important ;*/
-/*    li {*/
-/*        line-height: normal!important;*/
-/*        padding: 7px;*/
-/*        .name {*/
-/*            text-overflow: ellipsis;*/
-/*            overflow: hidden;*/
-/*        }*/
-/*        .addr {*/
-/*            font-size: 12px;*/
-/*            color: #b4b4b4;*/
-/*        }*/
-/*        .highlighted .addr {*/
-/*            color: #ddd;*/
-/*        }*/
-/*    }*/
-/*}*/
 </style>

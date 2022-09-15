@@ -4,9 +4,9 @@
         :clearable="true"
         :collapse-tags="true"
         :disabled="disabled"
+        :filterable="true"
         :size="size"
         placeholder="请选择"
-        :filterable="true"
         @change="onChange">
         <el-option
             v-for="item in dataSource"
@@ -20,11 +20,8 @@
 <script>
 
 import {findSkuSpecSelectListBySkuId} from "@/api/wms/basics/sku";
+import func from "@/util/func";
 
-/**
- * 新建时，根据skuId获取所有的物品规格并默认显示第一个
- * 编辑的时候默认绑定物品规格编码，获得焦点的时候获取该物料的所有物品规格
- */
 export default {
     name: "NodesSkuSpec",
     model: {
@@ -42,28 +39,28 @@ export default {
     },
     data() {
         return {
-            val: '',
+            val: this.selectVal,
             dataSource: []
         }
     },
     watch: {
         sku: async function (newVal, oldVal) {
-            // sku != {} （空对象）时, 才进行查询
-            if (Object.keys(newVal).length !== 0){
+            // sku != {} （空对象）时, 才进行查询 ,为{}时, 清空组件
+            if (Object.keys(newVal).length !== 0) {
                 await this.getDataSource(newVal.skuId);
-                if (this.dataSource.length > 0) {
+                // 物品规格数据大于0的话取第一个作为默认规格
+                if (this.dataSource.length > 0 && func.isEmpty(this.selectVal)) {
                     this.val = this.dataSource[0];
-                    this.onChange(this.val);
                 } else {
-                    this.onChange('');
+                    this.val = this.selectVal;
                 }
-            }else {
+                this.onChange(this.val);
+            } else {
                 this.onChange('');
                 this.dataSource = [];
             }
         },
         selectVal(newVal) {
-            console.log("进入监听"+ newVal);
             this.val = newVal;
         }
     },

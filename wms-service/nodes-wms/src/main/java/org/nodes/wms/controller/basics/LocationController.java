@@ -2,10 +2,14 @@
 package org.nodes.wms.controller.basics;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
 import org.nodes.core.tool.validation.Update;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
+import org.nodes.wms.core.warehouse.service.ILocationService;
+import org.nodes.wms.core.warehouse.vo.LocationVO;
+import org.nodes.wms.core.warehouse.wrapper.LocationWrapper;
 import org.nodes.wms.dao.basics.location.dto.input.*;
 import org.nodes.wms.dao.basics.location.dto.output.LocationDetailResponse;
 import org.nodes.wms.dao.basics.location.dto.output.LocationEditResponse;
@@ -14,15 +18,18 @@ import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
+import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -34,6 +41,16 @@ import java.util.List;
 public class LocationController {
 
 	private final LocationBiz locationBiz;
+	private final ILocationService locationService;
+
+	/**
+	 * 物品管理-出入库设置-库位列表
+	 */
+	@GetMapping("/list")
+	public R<List<LocationVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
+		List<org.nodes.wms.core.warehouse.entity.Location> list = locationService.list(Condition.getQueryWrapper(params, org.nodes.wms.core.warehouse.entity.Location.class));
+		return R.data(LocationWrapper.build().listVO(list));
+	}
 
 	/**
 	 * 库位：分页

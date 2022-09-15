@@ -127,12 +127,14 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	}
 
 	@Override
-	public List<Location> getLocationByLocColumn(String locColumn) {
-		if (Func.isEmpty(locColumn)) {
-			throw new NullArgumentException("LocationDaoImpl.getLocationByLocColumn方法的参数为空");
+	public List<Location> getLocationByLocColumn(String locColumn, String locBank) {
+		if (Func.isEmpty(locColumn) || Func.isEmpty(locBank)) {
+			throw new NullArgumentException("根据列获取货位失败,货架的排或列编码不能位空");
 		}
+
 		LambdaQueryWrapper<Location> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-		lambdaQueryWrapper.eq(Location::getLocColumn, locColumn);
+		lambdaQueryWrapper.eq(Location::getLocColumn, locColumn)
+			.eq(Location::getLocBank, locBank);
 		return super.list(lambdaQueryWrapper);
 	}
 

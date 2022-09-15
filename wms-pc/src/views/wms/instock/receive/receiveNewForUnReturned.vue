@@ -1,15 +1,15 @@
 <template>
     <basic-container>
         <el-container id="container" v-loading="loading">
-            <el-main style="overflow: hidden;overflow-y: scroll;">
+            <el-main
+                style="overflow: hidden; overflow-y: scroll; height: 100%">
                 <el-form ref="form"
                          :model="form.params.newReceiveHeaderRequest"
                          :rules="form.rules"
                          label-position="right"
                          label-width="120px"
                          size="medium"
-                         style="margin-left:10px;margin-right:10px;"
-                >
+                         style="margin-left:10px;margin-right:10px;">
                     <el-row>
                         <h3>收货单新增</h3>
                     </el-row>
@@ -27,17 +27,23 @@
                             <el-form-item label="单据类型" prop="billTypeCd">
                                 <nodes-bill-type
                                     v-model="form.params.newReceiveHeaderRequest.billTypeCd"
-                                    io-type="I"
+                                    :disabled="true"
+                                    io-type="i"
                                     size="medium">
                                 </nodes-bill-type>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="供应商">
-                                <nodes-supplier
-                                    v-model="form.params.newReceiveHeaderRequest.supplier"
-                                    size="medium">
-                                </nodes-supplier>
+                            <el-form-item
+                                label="归还人"
+                                prop="supplierContact">
+                                <el-input
+                                    v-model="form.params.newReceiveHeaderRequest.supplierContact"
+                                    :clearable="true"
+                                    placeholder="请输入归还人"
+                                    size="medium"
+                                    style="width: 210px">
+                                </el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -47,8 +53,7 @@
                                 <nodes-in-store-mode
                                     v-model="form.params.newReceiveHeaderRequest.inStoreType"
                                     :default-value="true"
-                                    :multiple="false"
-                                    size="medium">
+                                    :multiple="false" size="medium">
                                 </nodes-in-store-mode>
                             </el-form-item>
                         </el-col>
@@ -62,11 +67,13 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row>
-                        <el-col :span="8">
+                    <el-row style="width: 91%">
+                        <el-col :span="24">
                             <el-form-item label="备注">
-                                <el-input v-model="form.params.newReceiveHeaderRequest.remark" style="width: 1070px"
-                                          type="textarea">
+                                <el-input
+                                    v-model="form.params.newReceiveHeaderRequest.remark"
+                                    placeholder="请输入内容"
+                                    type="textarea">
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -79,22 +86,22 @@
                             <el-table
                                 ref="table"
                                 :data="table.data"
+                                :height="tableHeight"
                                 border
                                 size="mini">
                                 <el-table-column
+                                    fixed="left"
                                     label="行号"
-                                    show-overflow-tooltip
                                     type="index"
                                     width="60">
                                     <template v-slot="scope">
                                         <nodes-line-number
                                             :index="scope.$index"
-                                            @change="(val)=>{ scope.row.lineNumber = val; }">
+                                            @change="(val)=>{ scope.row.lineNumber = val;}">
                                         </nodes-line-number>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    :align="'left'"
                                     prop="skuCode"
                                     width="195">
                                     <template slot="header">
@@ -103,7 +110,8 @@
                                     <template v-slot="{row}">
                                         <nodes-sku
                                             v-model="row.sku"
-                                            :disabled="true">
+                                            :disabled="true"
+                                            style="width: 170px;">
                                         </nodes-sku>
                                     </template>
                                 </el-table-column>
@@ -121,7 +129,7 @@
                                 </el-table-column>
                                 <el-table-column
                                     prop="planQty"
-                                    width="152">
+                                    width="160">
                                     <template slot="header">
                                         <span class="d-table-header-required">计划数量</span>
                                     </template>
@@ -131,11 +139,11 @@
                                             :min="0"
                                             controls-position="right"
                                             size="mini"
-                                        ></el-input-number>
+                                            style="width: 100%">
+                                        </el-input-number>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    :align="'left'"
                                     prop="skuCode"
                                     width="110">
                                     <template slot="header">
@@ -144,22 +152,23 @@
                                     <template v-slot="{row}">
                                         <nodes-sku-um
                                             v-model="row.umCode"
-                                            :disabled="true">
+                                            :disabled="true"
+                                            :sku="row.sku">
                                         </nodes-sku-um>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    :align="'left'"
-                                    prop="skuSpec">
+                                    prop="skuCode"
+                                    width="120">
                                     <template slot="header">
                                         <span class="d-table-header-required">规格</span>
                                     </template>
                                     <template v-slot="{row}">
-                                        <el-input
-                                            v-model="row.sku.skuSpec"
+                                        <nodes-sku-spec
+                                            v-model="row.skuSpec"
                                             :disabled="true"
-                                            size=mini>
-                                        </el-input>
+                                            :sku="row.sku">
+                                        </nodes-sku-spec>
                                     </template>
                                 </el-table-column>
                                 <el-table-column width="130">
@@ -176,7 +185,7 @@
                                 </el-table-column>
                                 <el-table-column width="130">
                                     <template slot="header">
-                                        <span>专属客户</span>
+                                        <span>客户</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input
@@ -230,10 +239,10 @@
                                         <el-input v-model="row.remark" size="mini"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column width="100">
-                                    <template slot="header">
-                                        <span>操作</span>
-                                    </template>
+                                <el-table-column
+                                    fixed="right"
+                                    label="操作"
+                                    width="100">
                                     <template v-slot="scope">
                                         <el-button
                                             size="small"
@@ -249,15 +258,20 @@
                 </el-form>
             </el-main>
             <el-footer>
-                <el-row style="margin-top: 10px;line-height:60px;text-align:right;">
+                <el-row
+                    style="margin-top: 10px;
+                    line-height:60px;
+                    text-align:right;">
                     <el-button
                         :loading="loading"
                         type="primary"
-                        @click="onSubmit">保 存
+                        @click="onSubmit">
+                        保 存
                     </el-button>
                     <el-button
                         :loading="loading"
-                        @click="onClose">关 闭
+                        @click="onClose">
+                        关 闭
                     </el-button>
                 </el-row>
             </el-footer>
@@ -266,6 +280,7 @@
 </template>
 
 <script>
+
 import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
 import NodesInStoreType from "@/components/wms/select/NodesInStoreType";
 import NodesSku from "@/components/wms/select/NodesSku";
@@ -278,61 +293,90 @@ import NodesSupplier from "@/components/wms/select/NodesSupplier";
 import NodesOwner from "@/components/wms/select/NodesOwner";
 import {addReceive} from "@/api/wms/instock/receive";
 import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
+import NodesSkuSpec from "@/components/wms/select/NodesSkuSpec";
 
 export default {
-    name: "new",
+    name: "edit",
     components: {
+        NodesSkuSpec,
         NodesSkuUm, NodesOwner, NodesSupplier,
         NodesBillType, NodesWarehouse, NodesLineNumber,
         NodesSku, NodesInStoreType, NodesInStoreMode
     },
     mixins: [editDetailMixin],
     props: {
-        logSoPicks: {type: String},
+        unReturnedData: {type: String}
     },
     data() {
         return {
+            tableHeight: 0,
             refresh: true,
             form: {
                 params: {
                     newReceiveHeaderRequest: {
                         inStoreType: null,
-                        billTypeCd: '',
+                        billTypeCd: 'RR',
                         whId: '',
-                        supplier: {},
+                        supplierContact: null,
                         woId: '',
                         remark: '',
                     },
                     newReceiveDetailRequestList: []
                 },
                 rules: {
-                    billTypeCd: [
+                    supplierContact: [
                         {
                             required: true,
-                            message: '请选择单据类型',
-                            trigger: 'change'
+                            message: '请输入归还人',
+                            trigger: 'blur'
                         }
                     ],
                 }
             }
         }
     },
-    created() {
-        this.initializeData();
-    },
     watch: {
-        logSoPicks() {
+        unReturnedData() {
             this.initializeData();
         }
     },
+    created() {
+        this.initializeData();
+    },
     methods: {
+        initializeData() {
+            let data = JSON.parse(this.unReturnedData);
+            let i = 1;
+            data.forEach(row => {
+                row.lineNumber = i * 10;
+                row.sku = {
+                    skuId: row.skuId,
+                    skuCode: row.skuCode,
+                    skuName: row.skuName,
+                };
+                row.skuSpec = row.skuLot2;
+                row.planQty = row.noReturnQty;
+                row.umCode = row.wsuCode;
+                i++;
+            })
+            this.table.data = data;
+        },
+        autoTableHeight() {
+            this.$nextTick(() => {
+                let height = window.innerHeight;
+                console.log(height);
+                document.getElementById('container').style.height = `${height - 155}px`;
+                this.tableHeight = height - 520;
+            })
+            // this.handleRefreshTable();
+        },
         // 过滤空白行
         filterBlankRow(row) {
             return !(func.isEmpty(row.sku.skuId)
                 && func.isEmpty(row.sku.skuCode)
                 && func.isEmpty(row.sku.skuName)
-                && row.planQty === 0
-            );
+                && func.isEmpty(row.skuSpec)
+                && row.planQty === 0);
         },
         getDescriptor() {
             const skuErrorMsg = '请选择物品编码';
@@ -343,27 +387,25 @@ export default {
                     fields: {
                         skuId: {required: true, message: skuErrorMsg},
                         skuCode: {required: true, message: skuErrorMsg},
-                        skuName: {required: true, message: skuErrorMsg}
+                        skuName: {required: true, message: skuErrorMsg},
                     }
                 },
-                planQty: {type: 'Number', validator: (rule, value) => value > 0, message: '计划数量不能为0'}
+                skuSpec: {
+                    type: 'string',
+                    required: true,
+                    message: '物品规格不能为空'
+                },
+                umCode: {
+                    type: 'string',
+                    required: true,
+                    message: '计量单位不能为空'
+                },
+                planQty: {
+                    type: 'Number',
+                    validator: (rule, value) => value > 0,
+                    message: '计划数量不能为0'
+                }
             };
-        },
-        initializeData() {
-            this.table.data = JSON.parse(this.logSoPicks);
-            let i = 1;
-            this.table.data.forEach(row => {
-                row.lineNumber = i * 10;
-                row.sku = {
-                    skuId: row.skuId,
-                    skuCode: row.skuCode,
-                    skuName: row.skuName,
-                    skuSpec: row.skuLot2,
-                };
-                row.planQty = row.pickRealQty;
-                row.umCode = row.wsuCode;
-                i++;
-            })
         },
         createRowObj() {
             return {
@@ -372,11 +414,11 @@ export default {
                     skuId: '',
                     skuCode: '',
                     skuName: '',
-                    skuSpec: ''
                 },
                 umCode: '',
                 planQty: 0,
                 remark: '',
+                skuSpec: '',
                 skuLot1: '',
                 skuLot4: '',
                 skuLot5: '',
@@ -400,7 +442,7 @@ export default {
                     return {
                         msg: res.data.msg,
                         router: {
-                            path: '/wms/outstock/logSoPick',
+                            path: '/wms/instock/receive',
                             query: {
                                 isRefresh: 'true'
                             }
@@ -408,7 +450,6 @@ export default {
                     };
                 });
         },
-
     }
 }
 </script>

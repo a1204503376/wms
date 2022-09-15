@@ -14,6 +14,7 @@
             :before-open="beforeOpen"
             @on-multi-del="onMultiDel"
             @selection-change="selectionChange"
+            @menu-command="menuCommand"
         >
         </nodes-crud>
     </basic-container>
@@ -62,6 +63,7 @@ export default {
                         label: "区域编号",
                         prop: "code",
                         search: true,
+                        width: 160,
                         view: true,
                         placeholder: "支持模糊查询",
                         sortable: true,
@@ -204,7 +206,7 @@ export default {
                         this.$set(this.$refs.table.$refs.table.store.states.lazyTreeNodeMap, parentCode, []);
                         this.loadList(tree, treeNode, resolve)
                     }
-                    ;
+
 
                     loading();
                     this.$refs.table.onLoad();
@@ -217,7 +219,7 @@ export default {
         },
         beforeOpen(done, type, finish) {
             if (["edit", "view"].includes(type)) {
-                getDetail(this.form.id)
+                getDetail(this.form.code)
                     .then(res => {
                         this.form = res.data.data;
                     })
@@ -232,7 +234,7 @@ export default {
                 cancelButtonText: "取消",
                 type: "warning"
             }).then(() => {
-                remove(row.id).then(() => {
+                remove(row.code).then(() => {
                     this.$refs.table.onLoad();
                     this.$message({
                         type: "success",
@@ -246,6 +248,13 @@ export default {
                     }
                 });
             });
+        },
+        menuCommand(cmd, row, index) {
+            switch (cmd) {
+                case 1:
+                    this.addChild(row);
+                    break;
+            }
         },
         onMultiDel() {
             if (!this.selectionList || this.selectionList.length == 0) {

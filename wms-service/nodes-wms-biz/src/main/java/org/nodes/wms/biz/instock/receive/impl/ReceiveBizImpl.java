@@ -100,6 +100,9 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	public ReceiveResponse getReceiveDetail(Long receiveId) {
 		//查询收货单头表
 		DetailReceiveHeaderResponse detailReceiveHeaderResponse = receiveHeaderDao.selectHeaderById(receiveId);
+		if (Func.isNull(detailReceiveHeaderResponse)){
+			throw new ServiceException("查看明细失败，改收货单已不存在");
+		}
 		//设置单据状态描述
 		detailReceiveHeaderResponse.setBillStateDesc(detailReceiveHeaderResponse.getBillState().getDesc());
 		//设置入库方式描述
@@ -326,8 +329,11 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			receiveDetailLpnItemDto.setSkuName(item.getSkuName());
 			receiveDetailLpnItemDto.setPlanQty(item.getPlanQty());
 			receiveDetailLpnItemDto.setReceiveDetailId(item.getReceiveDetailId());
-			receiveDetailLpnItemDto.setSkuId(item.getSkuId());
 			receiveDetailLpnItemDto.setReceiveDetailLpnId(item.getId());
+			receiveDetailLpnItemDto.setSkuId(item.getSkuId());
+			receiveDetailLpnItemDto.setSkuSpec(item.getSkuSpec());
+			receiveDetailLpnItemDto.setSkuLot1(item.getSkuLot1());
+			receiveDetailLpnItemDto.setSkuLot1(item.getSkuLot1());
 			receiveDetailLpnItemDtoList.add(receiveDetailLpnItemDto);
 			//设置总数
 			totalPlanQty = totalPlanQty.add(item.getPlanQty());
@@ -500,5 +506,13 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		return receiveDetailDao.getReceiveDetailByPcResponse(receiveByPcQuery);
 	}
 
+	@Override
+	public ReceiveDetailLpn getReceiveDetailLpnByDetailId(Long receiveDetailId) {
+		return receiveDetailLpnDao.selectByReceiveDetailId(receiveDetailId);
+	}
 
+	@Override
+	public boolean updateReceiveDetailLpnForCancelReceive(ReceiveDetailLpn receiveDetailLpn) {
+		return receiveDetailLpnDao.updateForCancelReceive(receiveDetailLpn);
+	}
 }

@@ -42,7 +42,7 @@ public class WmsTaskDaoImpl
 
 		WmsTask wmsTask = new WmsTask();
 		wmsTask.setTaskState(state);
-		if (Func.isNotEmpty(msg)){
+		if (Func.isNotEmpty(msg)) {
 			wmsTask.setRemark(msg);
 		}
 		if (WmsTaskStateEnum.COMPLETED.equals(state)
@@ -86,6 +86,9 @@ public class WmsTaskDaoImpl
 			.apply("task_qty <> scan_qty");
 		if (Func.isNotEmpty(taskProcTypeEnum)) {
 			lambdaQuery.eq(WmsTask::getTaskProcType, taskProcTypeEnum);
+		} else {
+			lambdaQuery.in(WmsTask::getTaskProcType, WmsTaskProcTypeEnum.BY_PCS,
+				WmsTaskProcTypeEnum.BY_BOX, WmsTaskProcTypeEnum.BY_LPN, WmsTaskProcTypeEnum.BY_LOC);
 		}
 
 		List<WmsTask> wmsTaskList = lambdaQuery.list();
@@ -126,14 +129,17 @@ public class WmsTaskDaoImpl
 	}
 
 	@Override
-	public void updateWmsTaskByPartParam(Long taskId, WmsTaskProcTypeEnum taskProcTypeEnum, Location fromLocation) {
+	public void updateWmsTaskByPartParam(Long taskId, WmsTaskProcTypeEnum taskProcTypeEnum, Location toLocation, String boxCode) {
 		UpdateWrapper<WmsTask> updateWrapper = Wrappers.update();
 		updateWrapper.lambda()
 			.eq(WmsTask::getTaskId, taskId);
 		WmsTask wmsTask = new WmsTask();
 		wmsTask.setTaskProcType(taskProcTypeEnum);
-		wmsTask.setFromLocId(fromLocation.getLocId());
-		wmsTask.setFromLocCode(fromLocation.getLocCode());
+		wmsTask.setToLocId(toLocation.getLocId());
+		wmsTask.setToLocCode(toLocation.getLocCode());
+		if (Func.isNotEmpty(boxCode)) {
+			wmsTask.setBoxCode(boxCode);
+		}
 		if (!super.update(wmsTask, updateWrapper)) {
 			throw new ServiceException("任务更新失败,请再次重试");
 		}
@@ -141,7 +147,7 @@ public class WmsTaskDaoImpl
 
 	@Override
 	public void updateRemark(Long taskId, String remark) {
-		if (Func.isEmpty(remark)){
+		if (Func.isEmpty(remark)) {
 			remark = "";
 		}
 		UpdateWrapper<WmsTask> updateWrapper = Wrappers.update();

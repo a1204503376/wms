@@ -166,7 +166,7 @@
                                 </el-table-column>
                                 <el-table-column prop="skuSpec" width="122">
                                     <template slot="header">
-                                        <span>物品规格</span>
+                                        <span class="d-table-header-required">物品规格</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <nodes-sku-spec
@@ -342,6 +342,7 @@ export default {
                 func.isEmpty(row.sku.skuId) &&
                 func.isEmpty(row.sku.skuCode) &&
                 func.isEmpty(row.sku.skuName) &&
+                func.isEmpty(row.skuSpec) &&
                 row.planQty === 0 &&
                 func.isEmpty(row.umCode)
             );
@@ -358,6 +359,16 @@ export default {
                         skuName: {required: true, message: skuErrorMsg},
                     }
                 },
+                skuSpec: {
+                    type: 'string',
+                    required: true,
+                    message: '物品规格不能为空'
+                },
+                umCode: {
+                    type: 'string',
+                    required: true,
+                    message: '计量单位不能为空'
+                },
                 planQty: {
                     required: true,
                     type: 'Number',
@@ -372,9 +383,10 @@ export default {
                 sku: {
                     skuId: '',
                     skuCode: '',
-                    skuName: '',
+                    skuName: ''
                 },
                 umCode: '',
+                skuSpec: '',
                 planQty: 0,
                 skuLot1: '',
                 skuLot4: '',
@@ -391,20 +403,19 @@ export default {
             })
         },
         submitFormParams() {
-            let soDetailList = [];
             let postData = this.table.postData;
             let params = this.form.params;
-            postData.forEach((value) => {
-                soDetailList.push(
-                    {
-                        soLineNo: value.lineNumber,
-                        skuId: value.sku.skuId,
-                        umCode: value.umCode,
-                        planQty: value.planQty,
-                        skuLot1: value.skuLot1,
-                        skuLot4: value.skuLot4,
-                        remark: value.remark,
-                    })
+            let soDetailList = postData.map(value => {
+                return {
+                    soLineNo: value.lineNumber,
+                    skuId: value.sku.skuId,
+                    skuSpec: value.skuSpec,
+                    umCode: value.umCode,
+                    planQty: value.planQty,
+                    skuLot1: value.skuLot1,
+                    skuLot4: value.skuLot4,
+                    remark: value.remark,
+                }
             })
             let data = {
                 billTypeCd: params.billTypeCd,

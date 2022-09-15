@@ -104,6 +104,14 @@ namespace DataAccess.Encasement
                 .ToList();
         }
 
+        public static List<int> GetSerialNumberList(string boxNumber)
+        {
+            return Db.FreeSql.Select<PackingSerialHeader, PackingSerialDetail>()
+                .InnerJoin(d => d.t1.Id == d.t2.HeaderId)
+                .Where(d => d.t1.BoxNumber == boxNumber)
+                .ToList(d => d.t2.ProductSupportCode);
+        }
+
         public static List<PackingBatchDetail> GetPackingBatchDetails(long headerId)
         {
             return Db.FreeSql.Select<PackingBatchDetail>()

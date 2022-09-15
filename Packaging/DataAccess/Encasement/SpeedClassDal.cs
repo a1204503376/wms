@@ -21,7 +21,8 @@ namespace DataAccess.Encasement
 
         public static void Remove(long id)
         {
-            Db.FreeSql.Delete<PackingSpeedClass>(id);
+            Db.FreeSql.Delete<PackingSpeedClass>(id)
+                .ExecuteAffrows();
         }
 
         public static PackingSpeedClass GetSpeedClass(long id)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.Dto;
@@ -17,7 +16,7 @@ namespace Packaging.Encasement
         private readonly List<SerialNumberPrintDto> _serialNumberPrintDtoList;
         private bool _isSave = false;
 
-        private SerialNumberReport()
+        public SerialNumberReport()
         {
             InitializeComponent();
         }
@@ -112,7 +111,7 @@ namespace Packaging.Encasement
             bool savePrintPreviewFlag = Convert.ToBoolean(ConfigurationManager.AppSettings["SavePrintPreviewFlag"]);
             if (!savePrintPreviewFlag)
             {
-                return false;
+                return true;
             }
 
             try

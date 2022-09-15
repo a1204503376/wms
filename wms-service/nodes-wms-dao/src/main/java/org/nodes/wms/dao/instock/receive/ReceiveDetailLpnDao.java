@@ -28,4 +28,20 @@ public interface ReceiveDetailLpnDao {
  	 * @param lpn lpn实体
 	 */
 	void updateReceiveDetailLpn(ReceiveDetailLpn lpn);
+
+	/**
+	 * 根据收货明细id查询收货单LPN明细
+	 *
+	 * @param receiveDetailId 收货明细id
+	 * @return ReceiveDetailLpn 收货单LPN明细实体
+	 */
+    ReceiveDetailLpn selectByReceiveDetailId(Long receiveDetailId);
+
+	/**
+	 * 撤销收货时更新receive_detail_lpn
+	 *
+	 * @param receiveDetailLpn 收货单LPN明细
+	 * @return true：更新成功，false: 更新失败
+	 */
+	boolean updateForCancelReceive(ReceiveDetailLpn receiveDetailLpn);
 }

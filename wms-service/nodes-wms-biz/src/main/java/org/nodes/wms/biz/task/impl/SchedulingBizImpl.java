@@ -111,7 +111,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			logBiz.noticeMesssage(message);
 
 			WmsTask wmsTask = wmsTaskDao.getById(notificationRequest.getTaskDetailId());
-			if (Func.notNull(wmsTask)){
+			if (Func.notNull(wmsTask)) {
 				wmsTaskDao.updateRemark(wmsTask.getTaskId(), notificationRequest.getMsg());
 			}
 		}
@@ -165,7 +165,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 				Location location = locationBiz.findByLocId(middleStock.getLocId());
 				Zone zone = zoneBiz.findById(location.getZoneId());
 				for (SoPickPlan soPickPlan : soPickPlanList) {
-					soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), middleStock.getStockId(), location, zone);
+					soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), middleStock.getStockId(), location, zone, null, null);
 				}
 			}
 
@@ -207,7 +207,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 				Zone zone = zoneBiz.findById(location.getZoneId());
 				List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(wmsTask.getTaskId(), stock.getStockId());
 				for (SoPickPlan soPickPlan : soPickPlanList) {
-					soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), targetStock.getStockId(), location, zone);
+					soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), targetStock.getStockId(), location, zone, null, null);
 				}
 			}
 		}

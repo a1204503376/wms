@@ -132,9 +132,9 @@ public interface WmsTaskBiz {
 	 *
 	 * @param taskId           任务ID
 	 * @param taskProcTypeEnum 任务状态
-	 * @param fromLocation     目标库位
+	 * @param toLocation       目标库位
 	 */
-	void updateWmsTaskByPartParam(Long taskId, WmsTaskProcTypeEnum taskProcTypeEnum, Location fromLocation);
+	void updateWmsTaskByPartParam(Long taskId, WmsTaskProcTypeEnum taskProcTypeEnum, Location toLocation, String boxCode);
 
 	/**
 	 * 根据任务ID获取任务

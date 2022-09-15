@@ -127,8 +127,8 @@ public class RegionController extends BladeController {
 	@ApiLog("区域-删除")
 	@PostMapping("/remove")
 	@ApiOperation(value = "删除",notes = "传入codes")
-	public R remove (@ApiParam(value = "主键集合",required = true) @RequestParam String ids){
-		return R.status(regionService.removeByIds(Func.toStrList(ids)));
+	public R remove (@ApiParam(value = "主键集合",required = true) @RequestParam String codes){
+		return R.status(regionService.removeByIds(Func.toStrList(codes)));
 	}
 
 }

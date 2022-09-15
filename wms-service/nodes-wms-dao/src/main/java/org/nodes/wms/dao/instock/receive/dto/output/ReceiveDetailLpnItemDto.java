@@ -20,6 +20,10 @@ public class ReceiveDetailLpnItemDto {
 	 */
 	private String skuName;
 	/**
+	 * 物品规格
+	 */
+	private String skuSpec;
+	/**
 	 * 物料id
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
@@ -39,4 +43,9 @@ public class ReceiveDetailLpnItemDto {
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long receiveDetailLpnId;
+	/**
+	 * 批次
+	 */
+	private String skuLot1;
+
 }

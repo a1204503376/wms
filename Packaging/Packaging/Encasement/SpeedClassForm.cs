@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using DataAccess.Encasement;
 using DataAccess.Enitiies;
 using Packaging.Common;
@@ -47,6 +48,11 @@ namespace Packaging.Encasement
 
         private void Remove()
         {
+            var dialogResult = CustomMessageBox.Confirm("确认删除？");
+            if (dialogResult!= DialogResult.Yes)
+            {
+                return;
+            }
             if (GetCurRow(out var focusedRow))
             {
                 return;

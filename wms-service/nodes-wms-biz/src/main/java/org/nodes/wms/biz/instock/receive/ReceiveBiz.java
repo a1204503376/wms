@@ -268,4 +268,20 @@ public interface ReceiveBiz {
 	 * @param receiveByPcQuery 查询参数
 	 */
 	ReceiveDetailByPcResponse getReceiveDetailByPcResponse(ReceiveByPcQuery receiveByPcQuery);
+
+	/**
+	 * 根据收货明细id查询收货单LPN明细
+	 *
+	 * @param receiveDetailId 收货明细id
+	 * @return ReceiveDetailLpn 收货单LPN明细实体
+	 */
+	ReceiveDetailLpn getReceiveDetailLpnByDetailId(Long receiveDetailId);
+
+	/**
+	 * 撤销收货：人工区、入库暂存区的库存撤销，更新收货单LPN明细
+	 *
+	 * @param receiveDetailLpn 收货单LPN明细
+	 * @return true: 更新成功，false: 更新失败
+	 */
+	boolean updateReceiveDetailLpnForCancelReceive(ReceiveDetailLpn receiveDetailLpn);
 }

@@ -231,14 +231,20 @@ public class StockManageBizImpl implements StockManageBiz {
 			stockLogTypeEnum = StockLogTypeEnum.STOCK_MOVE_BY_BOX;
 			AssertUtil.notNull(targetLocation, "获取库位失败,请更换库位ID后重试");
 		}
-		if (Func.isEmpty(request.getLpnCode())) {
-			request.setLpnCode(targetLocation.getLocCode());
-		}
+		boolean replaceBoxCode = true;
 		//根据传过来的多个箱码集合查询出多个库存
 		List<String> boxCodeList = request.getBoxCodeList().stream().filter(Func::isNotEmpty).collect(Collectors.toList());
 		for (String boxCode : boxCodeList) {
+
 			List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(boxCode);
 			AssertUtil.notNull(stockList, "PDA库存管理:按箱移动失败，根据箱码查询不到对应库存");
+			if (stockList.size() == 0) {
+				throw new ServiceException("PDA库存管理:按箱移动失败，根据箱码查询不到对应库存");
+			}
+			if (Func.isEmpty(request.getLpnCode()) && replaceBoxCode) {
+				request.setLpnCode(stockList.get(0).getLpnCode());
+				replaceBoxCode = false;
+			}
 			Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
 			//判断原库存是否是入库暂存区，原库存移动时不允许暂存区
 			canMoveToSourceLocIsStageLocation(sourceLocation);
@@ -249,6 +255,7 @@ public class StockManageBizImpl implements StockManageBiz {
 				agvTask.moveStockToSchedule(stockList, targetLocation);
 				break;
 			}
+
 			stockBiz.moveStockByBoxCode(boxCode, boxCode, request.getLpnCode(),
 				targetLocation, stockLogTypeEnum, null, null, null);
 			//业务日志
@@ -422,13 +429,15 @@ public class StockManageBizImpl implements StockManageBiz {
 
 	@Override
 	public void canMoveToBoxType(Location targetLocation, Location sourceLocation) {
-		if (Func.isNotEmpty(targetLocation.getLpnTypeId()) && Func.isNotEmpty(sourceLocation.getLpnTypeId())) {
-			LpnType sourceLpnType = lpnTypeBiz.findLpnTypeById(sourceLocation.getLpnTypeId());
-			AssertUtil.notNull(sourceLpnType, "获取当前箱子箱型失败");
-			LpnType targetLpnType = lpnTypeBiz.findLpnTypeById(targetLocation.getLpnTypeId());
-			AssertUtil.notNull(targetLpnType, "获取目标库位箱型失败");
-			if (Func.isNotEmpty(targetLpnType.getCode()) && !Func.equals(sourceLpnType.getCode(), targetLpnType.getCode())) {
-				throw new ServiceException("库存移动时当前库存和目标库位所存储的箱型不一致");
+		if (!locationBiz.isAgvTemporaryLocation(sourceLocation) && !locationBiz.isAgvTemporaryLocation(targetLocation)) {
+			if (Func.isNotEmpty(targetLocation.getLpnTypeId()) && Func.isNotEmpty(sourceLocation.getLpnTypeId())) {
+				LpnType sourceLpnType = lpnTypeBiz.findLpnTypeById(sourceLocation.getLpnTypeId());
+				AssertUtil.notNull(sourceLpnType, "获取当前箱子箱型失败");
+				LpnType targetLpnType = lpnTypeBiz.findLpnTypeById(targetLocation.getLpnTypeId());
+				AssertUtil.notNull(targetLpnType, "获取目标库位箱型失败");
+				if (Func.isNotEmpty(targetLpnType.getCode()) && !Func.equals(sourceLpnType.getCode(), targetLpnType.getCode())) {
+					throw new ServiceException("库存移动时当前库存和目标库位所存储的箱型不一致");
+				}
 			}
 		}
 	}

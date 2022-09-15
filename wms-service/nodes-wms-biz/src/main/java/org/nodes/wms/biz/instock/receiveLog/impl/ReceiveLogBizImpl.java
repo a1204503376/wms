@@ -145,7 +145,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		receiveLog.setWhId(request.getWhId());
 		receiveLog = createReceiveLog(receiveLog, receiveHeader, detail);
 		receiveLog.setWsuCode(detail.getUmCode());
-		receiveLog.setSkuLot1(request.getSkuLot1());
+		receiveLog.setSkuLot1(item.getSkuLot1());
 		receiveLog.setSkuLot2(request.getSkuLot2());
 		receiveLog.setSkuLot3(Func.formatDate(new Date()));
 		receiveLog.setSkuLot4(request.getSkuLot4());

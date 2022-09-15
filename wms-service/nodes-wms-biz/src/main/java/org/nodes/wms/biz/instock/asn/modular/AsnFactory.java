@@ -126,7 +126,6 @@ public class AsnFactory {
 			skuSelectResponse.setSkuId(item.getSkuId());
 			skuSelectResponse.setSkuCode(item.getSkuCode());
 			skuSelectResponse.setSkuName(item.getSkuName());
-			skuSelectResponse.setSkuSpec(item.getSkuSpec());
 
 			detailResponse.setAsnDetailId(item.getAsnDetailId());
 			detailResponse.setAsnLineNo(item.getAsnLineNo());
