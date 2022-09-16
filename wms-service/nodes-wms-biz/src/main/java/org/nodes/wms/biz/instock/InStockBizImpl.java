@@ -10,6 +10,7 @@ import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.biz.instock.receiveLog.modular.ReceiveLogFactory;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
+import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.biz.task.AgvTask;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
@@ -56,6 +57,7 @@ public class InStockBizImpl implements InStockBiz {
 	private final ReceiveHeaderDao receiveHeaderDao;
 	private final ReceiveDetailDao receiveDetailDao;
 	private final LocationBiz locationBiz;
+	private final StockManageBiz stockManageBiz;
 
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	@Override
@@ -162,10 +164,20 @@ public class InStockBizImpl implements InStockBiz {
 		receiveBiz.canReceive(receiveHeader, detail, request.getSurplusQty());
 		//查询收货库位，如果是发货接驳区或者出库集货区则抛异常
 		canReceiveByLocation(request.getWhId(), request.getLocCode());
+		//获取目标库位
+		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
 		// 生成清点记录
 		ReceiveLog receiveLog = receiveLogBiz.newReceiveLog(request, receiveHeader, detail);
+		//校验目标库位是否是自动区 是自动区的话目标库位必须为空
+		stockManageBiz.canMoveToLocAuto(targetLocation);
+		//校验目标库位箱型，必须跟输入的箱码是一致的类型
+		stockManageBiz.canMoveToBoxType(targetLocation, request.getBoxCode());
 		// 调用库存函数
-		stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PCS, receiveLog);
+		Stock stock = stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PCS, receiveLog);
+		List<Stock> stockList = new ArrayList<>();
+		stockList.add(stock);
+		//校验载重
+		stockManageBiz.canMoveByIsNotOverweight(targetLocation, stockList);
 		// 更新收货单明细状态
 		receiveBiz.updateReceiveDetail(detail, request.getSurplusQty());
 		// 更新收货单状态
@@ -316,24 +328,24 @@ public class InStockBizImpl implements InStockBiz {
 			// 如果receiveId在receive_detail_lpn中存在，则需要更新收货单LPN明细表
 			ReceiveDetailLpn receiveDetailLpn = receiveBiz.getReceiveDetailLpnByDetailId(item.getReceiveDetailId());
 			if (Func.isNotEmpty(receiveDetailLpn)) {
-				if(!receiveBiz.updateReceiveDetailLpnForCancelReceive(receiveDetailLpn)){
+				if (!receiveBiz.updateReceiveDetailLpnForCancelReceive(receiveDetailLpn)) {
 					throw new ServiceException("更新收货LPN明细失败，请稍后再试");
 				}
 				// 删除按箱、多箱收货所创建的收货明细
-				if(!receiveDetailDao.deleteById(item.getReceiveDetailId())){
+				if (!receiveDetailDao.deleteById(item.getReceiveDetailId())) {
 					throw new ServiceException("撤销收货失败，删除发货单明细时失败，请稍后再试");
 				}
 				// 根据发货单id查询明细，如果结果为空，则删除该发货单
 				List<ReceiveDetail> receiveDetails = receiveDetailDao.selectReceiveDetailById(item.getReceiveId());
-				if (Func.isEmpty(receiveDetails)){
+				if (Func.isEmpty(receiveDetails)) {
 					removeReceiveBillId.add(item.getReceiveId());
 				}
 			}
 			// 生成业务日志
 			receiveBiz.log(StockLogTypeEnum.OUTSTOCK_BY_CANCEL_RECEIVE.getDesc(), receiveHeader, receiveDetail, item);
 		});
-		if (Func.isNotEmpty(removeReceiveBillId)){
-			if(!receiveBiz.remove(removeReceiveBillId)){
+		if (Func.isNotEmpty(removeReceiveBillId)) {
+			if (!receiveBiz.remove(removeReceiveBillId)) {
 				throw new ServiceException("撤销收货失败，删除发货单时失败，请稍后再试");
 			}
 		}
