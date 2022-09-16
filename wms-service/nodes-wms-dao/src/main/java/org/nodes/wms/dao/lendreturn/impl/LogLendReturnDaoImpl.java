@@ -40,4 +40,9 @@ public class LogLendReturnDaoImpl
 		return new Page<LendReturnResponse>(logLendReturnPage.getCurrent(), logLendReturnPage.getSize(), logLendReturnPage.getTotal())
 			.setRecords(Func.copy(logLendReturnPage.getRecords(), LendReturnResponse.class));
     }
+
+    @Override
+    public boolean deleteBySoDetailId(Long soDetailId) {
+        return super.baseMapper.deleteBySoDetailId(soDetailId);
+    }
 }

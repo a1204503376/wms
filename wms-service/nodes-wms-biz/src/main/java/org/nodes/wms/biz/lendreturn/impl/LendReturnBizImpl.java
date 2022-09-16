@@ -25,7 +25,6 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -133,7 +132,12 @@ public class LendReturnBizImpl implements LendReturnBiz {
 		ExcelUtil.export(response,"","",Func.copy(logNoReturnList, NoReturnExcelResponse.class),NoReturnExcelResponse.class);
 	}
 
-	private static void setQtyAndSnCode(boolean lendFlag, LogLendReturnRequest logLendReturnRequest, LogNoReturn logNoReturn) {
+    @Override
+    public boolean removeBySoDetailId(Long soDetailId) {
+        return logLendReturnDao.deleteBySoDetailId(soDetailId) && logNoReturnDao.deleteBySoDetailId(soDetailId);
+    }
+
+    private static void setQtyAndSnCode(boolean lendFlag, LogLendReturnRequest logLendReturnRequest, LogNoReturn logNoReturn) {
 		if (lendFlag) {
 			logNoReturn.setLendQty(logNoReturn.getLendQty().add(logLendReturnRequest.getQty()));
 		}else {

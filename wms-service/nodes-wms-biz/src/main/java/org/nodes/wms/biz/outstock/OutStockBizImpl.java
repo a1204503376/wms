@@ -611,15 +611,29 @@ public class OutStockBizImpl implements OutStockBiz {
 	public void cancelOutStock(List<Long> logSoPickIdList) {
 		// 根据拣货记录id查找所有的拣货记录
 		List<LogSoPick> logSoPickList = logSoPickDao.getByIds(logSoPickIdList);
+		// 判断发货单状态是否为已关闭，关闭的发货单不允许撤销拣货
+		List<Long> soPickIdList = logSoPickList.stream()
+			.map(LogSoPick::getSoBillId).
+			distinct().collect(Collectors.toList());
+		soPickIdList.forEach(id -> {
+			SoHeader soHeader = soBillBiz.getSoHeaderById(id);
+			if (SoBillStateEnum.COMPLETED.equals(soHeader.getSoBillState())) {
+				throw ExceptionUtil.mpe("撤销拣货失败，发货单[编码：{}]已关闭", soHeader.getSoBillNo());
+			}
+		});
 		logSoPickList.forEach(logSoPick -> {
-			// 判断发货单状态是否为已关闭，关闭的发货单不允许撤销拣货
-
+			// 判断该拣货记录是否已经撤销过了
+			if (Func.isNotBlank(logSoPick.getCancelLogId())) {
+				throw ExceptionUtil.mpe("撤销拣货失败，发货记录[id:{}]已撤销", logSoPick.getLsopId());
+			}
 			// 判断发货记录中是否存在撤销数量为负数的，有就抛异常
 			if (BigDecimalUtil.lt(logSoPick.getPickRealQty(), BigDecimal.ZERO)) {
-				throw new ServiceException("撤销失败，选择的记录中不允许有已撤销的记录");
+				throw new ServiceException("撤销拣货失败，选择的记录中不允许有已撤销的记录");
 			}
 			// 根据拣货记录下架库存
 			stockBiz.moveStockByCancelPick(StockLogTypeEnum.INSTOCK_BY_CANCEL_PICK, logSoPick);
+			// 将该拣货记录标记为已撤销
+			logSoPickDao.setCancelPick(logSoPick.getLsopId());
 			// 生成一笔反向的拣货记录
 			logSoPick.setLsopId(null);
 			logSoPick.setPickRealQty(logSoPick.getPickRealQty().negate());
@@ -630,12 +644,12 @@ public class OutStockBizImpl implements OutStockBiz {
 			// 更新发货单头表状态
 			SoHeader soHeader = soBillBiz.getSoHeaderById(logSoPick.getSoBillId());
 			soBillBiz.updateSoBillState(soHeader);
-			// 如果是借出单撤销发货，则需要删除借出记录(物理)
-//			if (WmsAppConstant.BILL_TYPE_LEND.equals(soHeader.getBillTypeCd())){
-//				if(!lendReturnBiz.removeBySoDetailId(logSoPick.getSoDetailId())){
-//					throw new ServiceException("删除借出记录失败，请稍后再试");
-//				}
-//			}
+			// 如果是借出单撤销发货，则需要删除借出记录和未归还记录(物理删除)
+			if (WmsAppConstant.BILL_TYPE_LEND.equals(soHeader.getBillTypeCd())) {
+				if (!lendReturnBiz.removeBySoDetailId(logSoPick.getSoDetailId())) {
+					throw new ServiceException("删除借出记录或未归还记录失败，请稍后再试");
+				}
+			}
 			// 记录业务日志
 			logBiz.auditLog(AuditLogType.OUTSTOCK, soHeader.getSoBillId(), soHeader.getSoBillNo(), "撤销发货");
 		});
