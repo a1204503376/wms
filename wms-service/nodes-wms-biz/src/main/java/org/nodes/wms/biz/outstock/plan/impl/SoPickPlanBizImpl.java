@@ -136,25 +136,25 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		}
 
 		if (BigDecimalUtil.gt(pickQty, pickPlan.getSurplusQty())) {
-			throw ExceptionUtil.mpe("按拣货计划拣货失败,拣货数量超过计划量[%f]", pickPlan.getSurplusQty());
+			throw ExceptionUtil.mpe("按拣货计划拣货失败,拣货数量超过计划量[{}]", pickPlan.getSurplusQty());
 		}
 
 		if (Func.isNotEmpty(serialNoList) && serialNoList.size() != pickQty.intValue()) {
-			throw ExceptionUtil.mpe("按拣货计划拣货失败,拣货数量[%f]与拣货序列号个数[%d]不符", pickQty, serialNoList.size());
+			throw ExceptionUtil.mpe("按拣货计划拣货失败,拣货数量[{}]与拣货序列号个数[{}]不符", pickQty, serialNoList.size());
 		}
 
 		if (BigDecimalUtil.gt(pickQty, stock.getStockBalance())) {
-			throw ExceptionUtil.mpe("按拣货计划拣货失败,拣货量超过库存[%d]的余额[%f]", stock.getStockId(), stock.getStockBalance());
+			throw ExceptionUtil.mpe("按拣货计划拣货失败,拣货量超过库存[{}]的余额[{}]", stock.getStockId(), stock.getStockBalance());
 		}
 
 		if (BigDecimalUtil.gt(pickQty, stock.getOccupyQty())) {
-			throw ExceptionUtil.mpe("按拣货计划拣货失败,拣货量[%f]超过库存[%d]的占用量[%f]",
+			throw ExceptionUtil.mpe("按拣货计划拣货失败,拣货量[{}]超过库存[{}]的占用量[{}]",
 				pickQty, stock.getStockId(), stock.getOccupyQty());
 		}
 
 		List<Serial> serialOfStock = stockQueryBiz.findSerialByStock(stock.getStockId());
 		if (Func.isNotEmpty(serialOfStock) && Func.isEmpty(serialNoList)) {
-			throw ExceptionUtil.mpe("按拣货计划拣货失败,库存[%s]是按序列号管理的,请采集出库的序列号", stock.getStockId());
+			throw ExceptionUtil.mpe("按拣货计划拣货失败,库存[{}]是按序列号管理的,请采集出库的序列号", stock.getStockId());
 		}
 
 		if (Func.isNotEmpty(serialOfStock) && Func.isNotEmpty(serialNoList)) {
@@ -167,7 +167,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		}
 
 		if (Func.isEmpty(serialOfStock) && Func.isNotEmpty(serialNoList)) {
-			throw ExceptionUtil.mpe("按拣货计划拣货失败,库存[%s]不是按序列号管理的,序列号无效", stock.getStockId());
+			throw ExceptionUtil.mpe("按拣货计划拣货失败,库存[{}]不是按序列号管理的,序列号无效", stock.getStockId());
 		}
 	}
 
