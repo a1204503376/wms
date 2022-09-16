@@ -72,4 +72,11 @@ public interface LogSoPickDao extends BaseService<LogSoPick> {
 	 * @return LogSoPick集合
 	 */
     List<LogSoPick> findBySoHeaderId(Long soBillId);
+
+	/**
+	 * 设置拣货记录为已拣货
+	 *
+	 * @param lsopId 拣货记录id
+	 */
+    void setCancelPick(Long lsopId);
 }
