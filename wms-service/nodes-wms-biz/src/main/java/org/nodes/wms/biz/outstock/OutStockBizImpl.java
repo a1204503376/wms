@@ -206,7 +206,7 @@ public class OutStockBizImpl implements OutStockBiz {
 				throw new ServiceException("PDA按件拣货失败，存在任务，但不是按件拣货的任务");
 			}
 			// 按照任务执行方式进行执行
-			pickByPcsByTask(task, stockLists, soHeader, request.getQty());
+			pickByPcsByTask(task, stockLists, soHeader, request, request.getQty());
 			return soHeaderSoBillState(request.getSoBillId());
 		}
 		// 按照库存的方法执行
@@ -666,18 +666,19 @@ public class OutStockBizImpl implements OutStockBiz {
 
 	private void canPick(List<SoPickPlan> soPickPlanList, List<Stock> stockList) {
 		List<SoDetail> soDetailList = new ArrayList<>();
+		BigDecimal surplusQty = BigDecimal.ZERO;
 		for (SoPickPlan soPickPlan : soPickPlanList) {
+			surplusQty = surplusQty.add(soPickPlan.getPickPlanQty());
 			SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlan.getSoDetailId());
 			soDetailList.add(soDetail);
 		}
-		BigDecimal surplusQty = BigDecimal.ZERO;
+
 		BigDecimal pickQty = BigDecimal.ZERO;
 		for (SoDetail soDetail : soDetailList) {
 			if (soDetail.getBillDetailState().equals(SoDetailStateEnum.DELETED)
 				|| soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
 				throw new ServiceException("拣货失败,发货单明细状态为" + soDetail.getBillDetailState() + "不能进行拣货");
 			}
-			surplusQty = surplusQty.add(soDetail.getSurplusQty());
 		}
 		for (Stock stock : stockList) {
 			pickQty = pickQty.add(stock.getStockBalance());
@@ -725,7 +726,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		}
 	}
 
-	void pickByPcsByTask(WmsTask task, List<Stock> stockList, SoHeader soHeader, BigDecimal qty) {
+	void pickByPcsByTask(WmsTask task, List<Stock> stockList, SoHeader soHeader, PickByPcsRequest request, BigDecimal qty) {
 		// 根据任务ID拣货计划
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(task.getTaskId());
 
@@ -737,7 +738,9 @@ public class OutStockBizImpl implements OutStockBiz {
 		}
 
 		// 拣货、更新拣货计划
-		updateSoPickPlan(soPickPlanList);
+		SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlanList.get(0).getSoDetailId());
+		soPickPlanBiz.pickByPlan(soDetail, soPickPlanList.get(0), soPickPlanList.get(0).getSurplusQty(), request.getSerailList());
+		soBillBiz.updateSoDetailStatus(soDetail, soPickPlanList.get(0).getSurplusQty());
 
 		// 5、更新出库单信息
 		soBillBiz.updateSoBillState(soHeader);
