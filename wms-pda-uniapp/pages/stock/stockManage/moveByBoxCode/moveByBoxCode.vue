@@ -79,50 +79,38 @@
 					if (tool.isNotEmpty(_this.params.boxCodeList[0].boxCode) || tool.isNotEmpty(_this.params
 							.boxCodeList[1].boxCode) || tool.isNotEmpty(_this.params.boxCodeList[2].boxCode) ||
 						tool.isNotEmpty(_this.params.boxCodeList[3].boxCode)) {
-						if ((
-								_this.params.boxCodeList[0].boxCode.substring(0, 1) == 'A' &&
-								_this.params.boxCodeList[1].boxCode.substring(0, 1) == 'A' &&
-								_this.params.boxCodeList[2].boxCode.substring(0, 1) == 'A' &&
-								_this.params.boxCodeList[3].boxCode.substring(0, 1) == 'A'
-							) ||
-							(
-								_this.params.boxCodeList[0].boxCode.substring(0, 1) == 'B' &&
-								_this.params.boxCodeList[1].boxCode.substring(0, 1) == 'B' &&
-								_this.params.boxCodeList[2].boxCode.substring(0, 1) == 'B' &&
-								_this.params.boxCodeList[3].boxCode.substring(0, 1) == 'B'
-							) ||
-							(
-								_this.params.boxCodeList[0].boxCode.substring(0, 1) == 'C' &&
-								_this.params.boxCodeList[1].boxCode.substring(0, 1) == 'C' &&
-								_this.params.boxCodeList[2].boxCode.substring(0, 1) == 'C' &&
-								_this.params.boxCodeList[3].boxCode.substring(0, 1) == 'C'
-							) ||
-							(
-								_this.params.boxCodeList[0].boxCode.substring(0, 1) == 'D' &&
-								_this.params.boxCodeList[1].boxCode.substring(0, 1) == 'D' &&
-								_this.params.boxCodeList[2].boxCode.substring(0, 1) == 'D' &&
-								_this.params.boxCodeList[3].boxCode.substring(0, 1) == 'D'
-							)
-						) {
-							var params = {};
-							var boxCodeList = [];
-							boxCodeList.push(_this.params.boxCodeList[0].boxCode);
-							boxCodeList.push(_this.params.boxCodeList[1].boxCode);
-							boxCodeList.push(_this.params.boxCodeList[2].boxCode);
-							boxCodeList.push(_this.params.boxCodeList[3].boxCode);
-							params.boxCodeList = boxCodeList;
-							uni.$u.func.routeNavigateTo(
-								'/pages/stock/stockManage/moveByBoxCode/moveByBoxCodeSubmit',
-								params);
-							return;
-						} else {
-							uni.$u.func.showToast({
-								title: '只能移动同一种箱子',
-							})
-							return;
+						var boxCode = '';
+						var boxCodeIsequal = true;
+						for (let i = 0; i < _this.params.boxCodeList.length; i++) {
+							if (tool.isEmpty(boxCode) && tool.isNotEmpty(_this.params.boxCodeList[i].boxCode
+									.substring(0, 1))) {
+								boxCode = _this.params.boxCodeList[i].boxCode.substring(0, 1)
+							}
+							if (tool.isNotEmpty(boxCode) && tool.isNotEmpty(_this.params.boxCodeList[i].boxCode) &&
+								tool.isNotEmpty(_this.params.boxCodeList[i].boxCode
+									.substring(0, 1))) {
+								if (boxCode == _this.params.boxCodeList[i].boxCode
+									.substring(0, 1)) {
+
+								} else {
+									uni.$u.func.showToast({
+										title: '只能移动同一种箱子',
+									})
+									return;
+								}
+							}
 						}
-
-
+						var params = {};
+						var boxCodeList = [];
+						boxCodeList.push(_this.params.boxCodeList[0].boxCode);
+						boxCodeList.push(_this.params.boxCodeList[1].boxCode);
+						boxCodeList.push(_this.params.boxCodeList[2].boxCode);
+						boxCodeList.push(_this.params.boxCodeList[3].boxCode);
+						params.boxCodeList = boxCodeList;
+						uni.$u.func.routeNavigateTo(
+							'/pages/stock/stockManage/moveByBoxCode/moveByBoxCodeSubmit',
+							params);
+						return;
 					}
 					uni.$u.func.showToast({
 						title: '至少输入一个箱码',

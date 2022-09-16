@@ -80,6 +80,9 @@
 					that.getReceiveDetailList();
 				}
 			};
+			if(tool.isNotEmpty(that.params.no)){
+				that.getReceiveDetailList();
+			}
 		},
 		onBackPress(event) {
 			// #ifdef APP-PLUS
