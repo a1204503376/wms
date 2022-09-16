@@ -636,7 +636,7 @@ public class StockBizImpl implements StockBiz {
 	public Stock moveToInTransitByDropId(Stock sourceStock, String dropId, StockLogTypeEnum type) {
 		// 将库存移动到中间库存，原库存的占用需要释放并下架，生成的中间库存需要重新占用
 		if (BigDecimalUtil.le(sourceStock.getStockBalance(), BigDecimal.ZERO)) {
-			throw ExceptionUtil.mpe("按DropId[%s]移动库存,原库存[%d]已全部下架", dropId, sourceStock.getStockId());
+			throw ExceptionUtil.mpe("按DropId[{}]移动库存,原库存[{}]已全部下架", dropId, sourceStock.getStockId());
 		}
 
 		Location inTransitLocation = locationBiz.getInTransitLocation(sourceStock.getWhId());
@@ -650,7 +650,7 @@ public class StockBizImpl implements StockBiz {
 										StockLogTypeEnum type) {
 		// 中间库存的占用需要释放并下架，生成的目标库存需要重新占用
 		if (BigDecimalUtil.le(sourceStock.getStockBalance(), BigDecimal.ZERO)) {
-			throw ExceptionUtil.mpe("按DropId[%s]移动库存,原库存[%d]已全部下架", dropId, sourceStock.getStockId());
+			throw ExceptionUtil.mpe("按DropId[{}]移动库存,原库存[{}]已全部下架", dropId, sourceStock.getStockId());
 		}
 
 		return runMoveStockOfOccupy(sourceStock, targetLocation, sourceStock.getBoxCode(), sourceStock.getLpnCode(),
