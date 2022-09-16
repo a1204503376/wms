@@ -242,8 +242,11 @@ public class StockBizImpl implements StockBiz {
 			serialNoList = Arrays.asList(Func.split(pickLog.getSnCode(), ","));
 		}
 		Location loc = locationBiz.findByLocId(pickLog.getLocId());
-		moveStock(stock, serialNoList, pickLog.getPickRealQty(), loc, StockLogTypeEnum.INSTOCK_BY_CANCEL_PICK,
-			pickLog.getSoBillId(), pickLog.getSoBillNo(), pickLog.getSoDetailId().toString());
+
+		checkQtyOfSerial(serialNoList, pickLog.getPickRealQty());
+		runMoveStock(stock, serialNoList, pickLog.getPickRealQty(), stock.getBoxCode(), stock.getLpnCode(),
+			loc, StockLogTypeEnum.INSTOCK_BY_CANCEL_PICK, null,
+			pickLog.getSoBillId(), pickLog.getSoBillNo(), pickLog.getSoLineNo());
 	}
 
 	private void updateSerialAndSaveLog(List<String> serialNoList, SerialStateEnum state, Long stockId,
