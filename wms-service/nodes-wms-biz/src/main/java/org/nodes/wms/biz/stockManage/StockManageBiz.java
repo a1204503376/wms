@@ -166,4 +166,25 @@ public interface StockManageBiz {
 	 */
 	void canMoveToBoxType(Location targetLocation, Location sourceLocation);
 
+	/**
+	 * 如果是自动区则要求目标库位必须是空库位（库位上没有库存）
+	 *
+	 * @param targetLocation targetLocation
+	 */
+	void canMoveToLocAuto(Location targetLocation);
+	/**
+	 * 校验目标库位的箱型
+	 *
+	 * @param targetLocation targetLocation
+	 * @param boxCode        boxCode
+	 */
+	void canMoveToBoxType(Location targetLocation, String boxCode);
+
+	/**
+	 * 校验载重
+	 *
+	 * @param targetLocation 目标库存
+	 * @param stockList      库存集合
+	 */
+	void canMoveByIsNotOverweight(Location targetLocation, List<Stock> stockList);
 }

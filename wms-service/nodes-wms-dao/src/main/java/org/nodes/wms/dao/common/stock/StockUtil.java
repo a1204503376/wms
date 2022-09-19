@@ -27,7 +27,7 @@ public class StockUtil {
 	public static BigDecimal getStockBalance(Stock stock) {
 		BigDecimal qty = stock.getStockQty().subtract(stock.getPickQty());
 		if (BigDecimalUtil.lt(qty, BigDecimal.ZERO)) {
-			throw ExceptionUtil.mpe("计算库存余额异常，[%d]余额为负数", stock.getStockId());
+			throw ExceptionUtil.mpe("计算库存余额异常，[{}]余额为负数", stock.getStockId());
 		}
 		return qty;
 	}
@@ -43,13 +43,13 @@ public class StockUtil {
 		BigDecimal totalBalance = BigDecimal.ZERO;
 		for (Stock stock : stockList) {
 			if (!Func.equals(stockList.get(0).getSkuLevel(), stock.getSkuLevel())) {
-				throw ExceptionUtil.mpe("计算库存余额异常，[%d][%d]包装层级不一致",
+				throw ExceptionUtil.mpe("计算库存余额异常，[{}][{}]包装层级不一致",
 					stockList.get(0).getStockId(), stock.getStockId());
 			}
 
 			BigDecimal balance = stock.getStockQty().subtract(stock.getPickQty());
 			if (BigDecimalUtil.lt(balance, BigDecimal.ZERO)) {
-				throw ExceptionUtil.mpe("计算库存余额异常，[%d]余额为负数", stock.getStockId());
+				throw ExceptionUtil.mpe("计算库存余额异常，[{}]余额为负数", stock.getStockId());
 			}
 
 			totalBalance = totalBalance.add(balance);
@@ -67,7 +67,7 @@ public class StockUtil {
 	public static BigDecimal getStockEnable(Stock stock) {
 		BigDecimal qty = stock.getStockQty().subtract(stock.getPickQty()).subtract(stock.getOccupyQty());
 		if (BigDecimalUtil.lt(qty, BigDecimal.ZERO)) {
-			throw ExceptionUtil.mpe("计算库存可用量异常，[%d]可用为负数", stock.getStockId());
+			throw ExceptionUtil.mpe("计算库存可用量异常，[{}]可用为负数", stock.getStockId());
 		}
 
 		return qty;
@@ -84,13 +84,13 @@ public class StockUtil {
 		BigDecimal totalEnable = BigDecimal.ZERO;
 		for (Stock stock : stockList) {
 			if (!Func.equals(stockList.get(0).getSkuLevel(), stock.getSkuLevel())) {
-				throw ExceptionUtil.mpe("计算库存可用量异常，[%d][%d]包装层级不一致",
+				throw ExceptionUtil.mpe("计算库存可用量异常，[{}][{}]包装层级不一致",
 					stockList.get(0).getStockId(), stock.getStockId());
 			}
 
 			BigDecimal enable = stock.getStockQty().subtract(stock.getPickQty()).subtract(stock.getOccupyQty());
 			if (BigDecimalUtil.lt(enable, BigDecimal.ZERO)) {
-				throw ExceptionUtil.mpe("计算库存可用量异常，[%d]可用为负数", stock.getStockId());
+				throw ExceptionUtil.mpe("计算库存可用量异常，[{}]可用为负数", stock.getStockId());
 			}
 
 			totalEnable = totalEnable.add(enable);

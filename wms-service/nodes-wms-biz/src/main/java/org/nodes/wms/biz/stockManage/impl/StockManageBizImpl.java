@@ -483,6 +483,16 @@ public class StockManageBizImpl implements StockManageBiz {
 		}
 	}
 
+
+	@Override
+	public void canMoveToLocAuto(Location targetLocation) {
+		if (locationBiz.isAgvLocation(targetLocation)) {
+			if (!stockQueryBiz.isEmptyLocation(targetLocation.getLocId())) {
+				throw new ServiceException("库存移动失败，自动区目标库位存在库存");
+			}
+		}
+	}
+
 	/**
 	 * 移动时无法移动到出库暂存区
 	 *
@@ -512,7 +522,8 @@ public class StockManageBizImpl implements StockManageBiz {
 	 * @param targetLocation targetLocation
 	 * @param boxCode        boxCode
 	 */
-	private void canMoveToBoxType(Location targetLocation, String boxCode) {
+	@Override
+	public void canMoveToBoxType(Location targetLocation, String boxCode) {
 		if (Func.isNotEmpty(targetLocation.getLpnTypeId())) {
 			LpnType sourceLpnType = lpnTypeBiz.findLpnTypeByBoxCode(boxCode);
 			AssertUtil.notNull(sourceLpnType, "获取当前箱子箱型失败");
@@ -530,7 +541,8 @@ public class StockManageBizImpl implements StockManageBiz {
 	 * @param targetLocation 目标库存
 	 * @param stockList      库存集合
 	 */
-	private void canMoveByIsNotOverweight(Location targetLocation, List<Stock> stockList) {
+	@Override
+	public void canMoveByIsNotOverweight(Location targetLocation, List<Stock> stockList) {
 		if (!tianYiPutawayStrategy.isNotOverweight(stockList, targetLocation)) {
 			throw new ServiceException("要移动的库存超过了最大载重");
 		}

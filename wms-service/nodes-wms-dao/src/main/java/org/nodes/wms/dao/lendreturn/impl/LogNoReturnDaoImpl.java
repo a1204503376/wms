@@ -74,4 +74,9 @@ public class LogNoReturnDaoImpl
 		SkuLotUtil.applySql(queryWrapper,lendReturnQuery);
 		return super.list(queryWrapper);
 	}
+
+    @Override
+    public boolean deleteBySoDetailId(Long soDetailId) {
+        return super.baseMapper.deleteBySoDetailId(soDetailId);
+    }
 }

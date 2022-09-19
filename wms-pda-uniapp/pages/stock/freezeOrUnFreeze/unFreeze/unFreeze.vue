@@ -9,9 +9,9 @@
 				<u-cell title="1.按库位解冻" isLink url="/pages/stock/freezeOrUnFreeze/unFreeze/unFreezeByLocCode"></u-cell>
 				<u-cell title="2.按批次号解冻" isLink url="/pages/stock/freezeOrUnFreeze/unFreeze/unFreezeByLotNumber">
 				</u-cell>
-				<u-cell title="3.按序列号解冻" isLink url="/pages/stock/freezeOrUnFreeze/unFreeze/unFreezeBySerialNumber">
-				</u-cell>
-				<u-cell title="4.按箱码解冻" isLink url="/pages/stock/freezeOrUnFreeze/unFreeze/unFreezeByBoxCode">
+		<!-- 		<u-cell title="3.按序列号解冻" isLink url="/pages/stock/freezeOrUnFreeze/unFreeze/unFreezeBySerialNumber">
+				</u-cell> -->
+				<u-cell title="3.按箱码解冻" isLink url="/pages/stock/freezeOrUnFreeze/unFreeze/unFreezeByBoxCode">
 				</u-cell>
 			</u-cell-group>
 		</view>

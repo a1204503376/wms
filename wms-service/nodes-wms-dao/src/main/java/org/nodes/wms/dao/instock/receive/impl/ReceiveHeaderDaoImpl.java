@@ -19,6 +19,7 @@ import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -106,8 +107,11 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 		return super.list(new LambdaQueryWrapper<ReceiveHeader>()
 			.eq(ReceiveHeader::getCreateUser, userId)
 			.eq(ReceiveHeader::getInStoreType, 20)
+				.ge(ReceiveHeader::getCreateTime,Func.formatDate(new Date()))
 			.in(ReceiveHeader::getBillState,
-				ReceiveHeaderStateEnum.NOT_RECEIPT.getCode(), ReceiveHeaderStateEnum.PART.getCode()));
+				ReceiveHeaderStateEnum.NOT_RECEIPT.getCode(),
+				ReceiveHeaderStateEnum.PART.getCode(),
+				ReceiveHeaderStateEnum.COMPLETED.getCode()));
 	}
 
 	@Override
@@ -132,9 +136,9 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 		return super.baseMapper.selectReceiveByPcResponse(receiveId);
 	}
 
-    @Override
-    public Page<ReceiveHeaderResponse> getReceiveHeaderForDetailByAsnBillId(IPage<?> page, Long asnBillId) {
-        return super.baseMapper.selectReceiveHeaderForDetailByAsnBillId(page, asnBillId);
-    }
+	@Override
+	public Page<ReceiveHeaderResponse> getReceiveHeaderForDetailByAsnBillId(IPage<?> page, Long asnBillId) {
+		return super.baseMapper.selectReceiveHeaderForDetailByAsnBillId(page, asnBillId);
+	}
 
 }

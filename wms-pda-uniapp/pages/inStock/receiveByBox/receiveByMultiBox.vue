@@ -96,7 +96,9 @@
 					this.$u.func.showToast({
 						title: '操作成功'
 					})
-					this.esc()
+					uni.navigateBack({
+						delta: 2
+					});
 				})
 			},
 			focus(num) {

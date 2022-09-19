@@ -36,7 +36,7 @@
 						<u--input v-model.trim="item.skuCode" border="0" disabled></u--input>
 					</u-form-item>
 					<u-form-item label="数量" class="left-text-one-line" labelWidth="100">
-						<u--input v-model.trim="item.planQty" border="0" disabled></u--input>
+						<u--input v-model.trim="item.qty" border="0" disabled></u--input>
 					</u-form-item>
 				</u-list-item>
 			</u-list>
@@ -89,8 +89,9 @@
 				let hasValue = total.findIndex(current => {
 					return current.skuCode === cur.skuCode;
 				});
+				cur.qty=cur.planQty;
 				hasValue === -1 && total.push(cur);
-				hasValue !== -1 && (total[hasValue].planQty = total[hasValue].planQty + cur.planQty);
+				hasValue !== -1 && (total[hasValue].qty = total[hasValue].qty + cur.planQty);
 				return total;
 			}, []);
 		},

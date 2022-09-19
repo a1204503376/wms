@@ -14,15 +14,15 @@
 		<!-- ${index + 1} -->
 		<u-list style="height: 900rpx;" @scrolltolower="scrolltolower">
 			<view v-for="(item, index) in receiveDetailList" :key="index" @click="clickItem(item)">
-					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="8" class="left-text-one-line">
-							<view class="demo-layout bg-purple-light font-in-page">{{item.soBillNo}}</view>
-						</u-col>
-						<u-col span="4">
-							<view class="demo-layout bg-purple font-in-page">{{item.billTypeName}}</view>
-						</u-col>
-					</u-row>
-					<u-divider text=""></u-divider>
+				<u-row customStyle="margin-bottom: 10px">
+					<u-col span="8" class="left-text-one-line">
+						<view class="demo-layout bg-purple-light font-in-page">{{item.soBillNo}}</view>
+					</u-col>
+					<u-col span="4">
+						<view class="demo-layout bg-purple font-in-page">{{item.billTypeName}}</view>
+					</u-col>
+				</u-row>
+				<u-divider text=""></u-divider>
 			</view>
 		</u-list>
 		<keyboard-listener @keydown="emitKeyDown"></keyboard-listener>
@@ -80,6 +80,9 @@
 					that.getReceiveDetailList();
 				}
 			};
+			if (tool.isNotEmpty(that.params.no)) {
+				that.getReceiveDetailList();
+			}
 		},
 		onBackPress(event) {
 			// #ifdef APP-PLUS
@@ -134,6 +137,10 @@
 					this.receiveDetailList = data.data.records;
 					if (this.receiveDetailList.length < this.page.size) {
 						this.loadmore = false;
+					}
+					if (data.data.records.length == 1) {
+						this.params.no = 0;
+						this.clickItem(data.data.records[0]);
 					}
 				})
 			},
