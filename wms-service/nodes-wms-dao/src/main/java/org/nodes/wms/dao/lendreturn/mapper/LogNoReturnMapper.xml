@@ -5,4 +5,11 @@
     <delete id="deleteBySoDetailId">
         DELETE FROM log_no_return WHERE detail_id = #{soDetailId}
     </delete>
+
+    <delete id="deleteByIds">
+        DELETE FROM log_no_return WHERE id IN
+        <foreach collection="ids" separator="," close=")" open="(" item="item">
+            #{item}
+        </foreach>
+    </delete>
 </mapper>
