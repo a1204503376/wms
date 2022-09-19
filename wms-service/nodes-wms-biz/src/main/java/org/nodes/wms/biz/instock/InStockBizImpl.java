@@ -118,6 +118,12 @@ public class InStockBizImpl implements InStockBiz {
 			}
 
 		}
+		//获取目标库位
+		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
+		//校验目标库位是否是自动区 是自动区的话目标库位必须为空
+		stockManageBiz.canMoveToLocAuto(targetLocation);
+		//校验目标库位箱型，必须跟输入的箱码是一致的类型
+		stockManageBiz.canMoveToBoxType(targetLocation, request.getBoxCode());
 		List<Stock> stockList = new ArrayList<>();
 		for (ReceiveDetailLpnItemDto item : request.getReceiveDetailLpnItemDtoList()) {
 			ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(item.getReceiveDetailId());
@@ -151,6 +157,8 @@ public class InStockBizImpl implements InStockBiz {
 			receiveBiz.log(logType, header, detail, receiveLog);
 
 		}
+		//校验载重
+		stockManageBiz.canMoveByIsNotOverweight(targetLocation, stockList);
 		agvTask.putawayToSchedule(stockList);
 
 	}
@@ -203,7 +211,7 @@ public class InStockBizImpl implements InStockBiz {
 		if (Func.isEmpty(receiveDetailLpnPdaMultiRequest.getLpnCode())) {
 			receiveDetailLpnPdaMultiRequest.setLpnCode(receiveDetailLpnPdaMultiRequest.getReceiveDetailLpnPdaRequestList().get(0).getBoxCode());
 		}
-		// 循环调用按箱收货业务方法
+		// 循环调用自定义--按箱收货业务方法（此按箱收货非PDA页面上的按箱收货）
 		for (ReceiveDetailLpnPdaRequest item : receiveDetailLpnPdaMultiRequest.getReceiveDetailLpnPdaRequestList()) {
 			item.setLpnCode(receiveDetailLpnPdaMultiRequest.getLpnCode());
 			item.setLocCode(receiveDetailLpnPdaMultiRequest.getLocCode());
