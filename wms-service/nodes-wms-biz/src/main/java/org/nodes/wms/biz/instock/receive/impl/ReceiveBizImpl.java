@@ -59,6 +59,42 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	private final LogBiz logBiz;
 	private final ReceiveDetailLpnDao receiveDetailLpnDao;
 
+	/**
+	 * 实收量 == 计划量
+	 * 并且，当前状态是部分收货或者未收货时
+	 * 将状态变更为：已完成
+	 */
+	private static boolean validPartNotReceipt(ReceiveDetail detail) {
+		System.out.println(BigDecimalUtil.eq(detail.getScanQty(), detail.getPlanQty()));
+		return BigDecimalUtil.eq(detail.getScanQty(), detail.getPlanQty())
+			&& (ReceiveDetailStatusEnum.PART == detail.getDetailStatus()
+			|| ReceiveDetailStatusEnum.NOT_RECEIPT == detail.getDetailStatus());
+	}
+
+	/**
+	 * 实际量 < 计划量
+	 * 并且，当前状态是未收货、部分收货或者已完成时
+	 * 将状态变更为：部分收货
+	 */
+	private static boolean validPartNotReceiptCompleted(ReceiveDetail detail) {
+		System.out.println(BigDecimalUtil.le(detail.getScanQty(), detail.getPlanQty()));
+		return BigDecimalUtil.le(detail.getScanQty(), detail.getPlanQty())
+			&& (ReceiveDetailStatusEnum.PART == detail.getDetailStatus()
+			|| ReceiveDetailStatusEnum.NOT_RECEIPT == detail.getDetailStatus()
+			|| ReceiveDetailStatusEnum.COMPLETED == detail.getDetailStatus());
+	}
+
+	/**
+	 * 剩余量 == 计划量
+	 * 并且，当前状态是部分收货、已完成时
+	 * 将状态变更为：未收货
+	 */
+	private static boolean validPartCompleted(ReceiveDetail detail) {
+		System.out.println(BigDecimalUtil.eq(detail.getSurplusQty(), detail.getPlanQty()));
+		return BigDecimalUtil.eq(detail.getSurplusQty(), detail.getPlanQty())
+			&& (ReceiveDetailStatusEnum.PART == detail.getDetailStatus()
+			|| ReceiveDetailStatusEnum.COMPLETED == detail.getDetailStatus());
+	}
 
 	@Override
 	public IPage<ReceiveHeaderResponse> getPage(ReceivePageQuery receivePageQuery, Query query) {
@@ -75,7 +111,6 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		responsePage.setRecords(receiveHeaderResponseList);
 		return responsePage;
 	}
-
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -95,12 +130,11 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		return receiveHeaderDao.delete(receiveIdList);
 	}
 
-
 	@Override
 	public ReceiveResponse getReceiveDetail(Long receiveId) {
 		//查询收货单头表
 		DetailReceiveHeaderResponse detailReceiveHeaderResponse = receiveHeaderDao.selectHeaderById(receiveId);
-		if (Func.isNull(detailReceiveHeaderResponse)){
+		if (Func.isNull(detailReceiveHeaderResponse)) {
 			throw new ServiceException("查看明细失败，改收货单已不存在");
 		}
 		//设置单据状态描述
@@ -359,6 +393,9 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			&& receiveHeader.getBillState() != ReceiveHeaderStateEnum.PART) {
 			throw new ServiceException("该单不可以收货，原因收货单已经收货完成");
 		}
+		if (receiveHeader.getBillState() == ReceiveHeaderStateEnum.CLOSURE) {
+			throw new ServiceException("该单不可以收货，原因收货单已经关闭");
+		}
 		if (detail.getDetailStatus() != ReceiveDetailStatusEnum.NOT_RECEIPT
 			&& detail.getDetailStatus() != ReceiveDetailStatusEnum.PART) {
 			throw new ServiceException("该单不可以收货，原因收货单明细已经收货完成");
@@ -394,43 +431,6 @@ public class ReceiveBizImpl implements ReceiveBiz {
 
 		detail.setDetailStatus(find);
 		receiveDetailDao.updateReceiveDetail(detail);
-	}
-
-	/**
-	 * 实收量 == 计划量
-	 * 并且，当前状态是部分收货或者未收货时
-	 * 将状态变更为：已完成
-	 */
-	private static boolean validPartNotReceipt(ReceiveDetail detail) {
-		System.out.println(BigDecimalUtil.eq(detail.getScanQty(), detail.getPlanQty()));
-		return BigDecimalUtil.eq(detail.getScanQty(), detail.getPlanQty())
-			&& (ReceiveDetailStatusEnum.PART == detail.getDetailStatus()
-			|| ReceiveDetailStatusEnum.NOT_RECEIPT == detail.getDetailStatus());
-	}
-
-	/**
-	 * 实际量 < 计划量
-	 * 并且，当前状态是未收货、部分收货或者已完成时
-	 * 将状态变更为：部分收货
-	 */
-	private static boolean validPartNotReceiptCompleted(ReceiveDetail detail) {
-		System.out.println(BigDecimalUtil.le(detail.getScanQty(), detail.getPlanQty()));
-		return BigDecimalUtil.le(detail.getScanQty(), detail.getPlanQty())
-			&& (ReceiveDetailStatusEnum.PART == detail.getDetailStatus()
-			|| ReceiveDetailStatusEnum.NOT_RECEIPT == detail.getDetailStatus()
-			|| ReceiveDetailStatusEnum.COMPLETED == detail.getDetailStatus());
-	}
-
-	/**
-	 * 剩余量 == 计划量
-	 * 并且，当前状态是部分收货、已完成时
-	 * 将状态变更为：未收货
-	 */
-	private static boolean validPartCompleted(ReceiveDetail detail) {
-		System.out.println(BigDecimalUtil.eq(detail.getSurplusQty(), detail.getPlanQty()));
-		return BigDecimalUtil.eq(detail.getSurplusQty(), detail.getPlanQty())
-			&& (ReceiveDetailStatusEnum.PART == detail.getDetailStatus()
-			|| ReceiveDetailStatusEnum.COMPLETED == detail.getDetailStatus());
 	}
 
 	@Override
