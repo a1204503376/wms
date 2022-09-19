@@ -93,9 +93,10 @@ public class LendReturnBizImpl implements LendReturnBiz {
 
 	private void saveLogData(List<LogNoReturn> logNoReturnList, List<LogLendReturn> logLendReturnList) {
 		// 如果借出量 == 归还量，物理删除记录
-		List<LogNoReturn> deleteList = logNoReturnList.stream()
+		List<Long> deleteIdList = logNoReturnList.stream()
 			.filter(d -> Func.notNull(d.getId())
 				&& BigDecimalUtil.eq(d.getLendQty(), d.getReturnQty()))
+			.map(LogNoReturn::getId)
 			.collect(Collectors.toList());
 		List<LogNoReturn> insertList = logNoReturnList.stream()
 			.filter(d -> Func.isNull(d.getId()))
@@ -104,8 +105,8 @@ public class LendReturnBizImpl implements LendReturnBiz {
 			.filter(d -> Func.notNull(d.getId()))
 			.collect(Collectors.toList());
 
-		if (Func.isNotEmpty(deleteList)) {
-			logNoReturnDao.removeByIds(deleteList);
+ 		if (Func.isNotEmpty(deleteIdList)) {
+			logNoReturnDao.deleteByIdList(deleteIdList);
 		}
 		if (Func.isNotEmpty(insertList)) {
 			logNoReturnDao.saveBatch(insertList, insertList.size());

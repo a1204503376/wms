@@ -1,13 +1,16 @@
 package org.nodes.wms.biz.instock;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.utils.BigDecimalUtil;
+import org.nodes.core.constant.WmsAppConstant;
+import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.biz.instock.receiveLog.modular.ReceiveLogFactory;
+import org.nodes.wms.biz.lendreturn.LendReturnBiz;
+import org.nodes.wms.biz.lendreturn.modular.LogLendReturnFactory;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.stockManage.StockManageBiz;
@@ -34,11 +37,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author nodesc
@@ -58,6 +58,8 @@ public class InStockBizImpl implements InStockBiz {
 	private final ReceiveDetailDao receiveDetailDao;
 	private final LocationBiz locationBiz;
 	private final StockManageBiz stockManageBiz;
+	private final LendReturnBiz lendReturnBiz;
+	private final LogLendReturnFactory logLendReturnFactory;
 
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	@Override
@@ -372,52 +374,38 @@ public class InStockBizImpl implements InStockBiz {
 	public String receiveByPc(ReceiveByPcRequest receiveByPcRequest) {
 		//根据id获取头表信息
 		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(receiveByPcRequest.getReceiveId());
-		List<ReceiveByPcDetailRequest> detailList = receiveByPcRequest.getDetailRequestList();
-		//前端传入明细集合按明细id分组
-		Map<Long, List<ReceiveByPcDetailRequest>> detailMap = detailList.stream().collect(Collectors.groupingBy(ReceiveByPcDetailRequest::getReceiveDetailId));
-		//所有明细全部完成收货标志
-		boolean isCompleted = true;
-		for (Map.Entry<Long, List<ReceiveByPcDetailRequest>> entry : detailMap.entrySet()) {
-			//获取每个分组的明细对象
-			ReceiveDetail receiveDetail = receiveDetailDao.getDetailByReceiveDetailId(entry.getKey());
-			//获取每个分组的集合
-			List<ReceiveByPcDetailRequest> detailRequestList = entry.getValue();
-			//统计总数
-			BigDecimal sum = new BigDecimal(0);
-			for (ReceiveByPcDetailRequest detailRequest : detailRequestList) {
-				//参数校验
-				receiveBiz.canReceive(receiveHeader, receiveDetail, detailRequest.getScanQty());
-				Location targetLocation = locationBiz.findByLocId(detailRequest.getLocId());
-				//查询收货库位，如果是发货接驳区或者出库集货区则抛异常
-				canReceiveByLocation(targetLocation.getWhId(), targetLocation.getLocCode());
-				//生成清点记录
-				ReceiveLog receiveLog = receiveLogFactory.createReceiveLog(detailRequest, receiveHeader, receiveDetail);
-				receiveLogBiz.saveReceiveLog(receiveLog);
-				//调用库存函数
-				stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PC, receiveLog);
-				//总数累加
-				sum = sum.add(detailRequest.getScanQty());
-			}
-			//修改收货单明细状态和剩余数量
-			receiveDetail.setSurplusQty(receiveDetail.getSurplusQty().subtract(sum));
-			receiveDetail.setScanQty(receiveDetail.getScanQty().add(sum));
-			if (BigDecimalUtil.gt(receiveDetail.getSurplusQty(), BigDecimal.ZERO)) {
-				receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.PART);
-				isCompleted = false;
-			} else {
-				receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.COMPLETED);
-			}
-			receiveDetailDao.updateReceiveDetail(receiveDetail);
-
+		// 关闭的单据不能撤销
+		if (ReceiveHeaderStateEnum.CLOSURE.equals(receiveHeader.getBillState())) {
+			throw ExceptionUtil.mpe("撤销收货失败，单据[编码:{}]已关闭", receiveHeader.getReceiveNo());
 		}
-		//更新头表状态
-		receiveHeader.setBillState(isCompleted
-			? ReceiveHeaderStateEnum.COMPLETED
-			: ReceiveHeaderStateEnum.PART);
-
-		receiveHeaderDao.updateReceive(receiveHeader);
-
-		//记录日志
+		// 明细信息
+		List<ReceiveByPcDetailRequest> receiveDetailByPcList = receiveByPcRequest.getDetailRequestList();
+		// 生成的清点记录集合
+		List<ReceiveLog> receiveLogList = new ArrayList<>();
+		receiveDetailByPcList.forEach(receiveDetailByPc -> {
+			//获取每个分组的明细对象
+			ReceiveDetail receiveDetail = receiveDetailDao.getDetailByReceiveDetailId(receiveDetailByPc.getReceiveDetailId());
+			//参数校验
+			receiveBiz.canReceive(receiveHeader, receiveDetail, receiveDetailByPc.getScanQty());
+			Location targetLocation = locationBiz.findByLocId(receiveDetailByPc.getLocId());
+			//查询收货库位，如果是发货接驳区或者出库集货区则抛异常
+			canReceiveByLocation(targetLocation.getWhId(), targetLocation.getLocCode());
+			//生成清点记录
+			ReceiveLog receiveLog = receiveLogFactory.createReceiveLog(receiveDetailByPc, receiveHeader, receiveDetail);
+			receiveLogBiz.saveReceiveLog(receiveLog);
+			receiveLogList.add(receiveLog);
+			//调用库存函数
+			stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PC, receiveLog);
+			//修改收货单明细状态和剩余数量
+			receiveBiz.updateReceiveDetail(receiveDetail, receiveDetailByPc.getScanQty());
+			// 修改收货单明细状态
+			receiveBiz.updateReceiveHeader(receiveHeader, receiveDetail);
+		});
+		// 判断单据类型，归还入库需要保存归还记录
+		if (WmsAppConstant.BILL_TYPE_RETURN.equals(receiveHeader.getBillTypeCd())) {
+			lendReturnBiz.saveLog(logLendReturnFactory.createReturnRequest(receiveLogList));
+		}
+		// 记录日志
 		logBiz.auditLog(AuditLogType.INSTOCK, receiveHeader.getReceiveId(), receiveHeader.getReceiveNo(), "PC收货");
 		return receiveHeader.getReceiveNo();
 	}
