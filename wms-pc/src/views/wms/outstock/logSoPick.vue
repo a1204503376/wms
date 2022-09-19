@@ -342,6 +342,11 @@ export default {
                         prop: "createTime",
                         label: "拣货时间",
                         sortable: "custom"
+                    },
+                    {
+                        prop: "cancelLogId",
+                        label: "撤销拣货记录id",
+                        sortable: "custom"
                     }
                 ],
             },

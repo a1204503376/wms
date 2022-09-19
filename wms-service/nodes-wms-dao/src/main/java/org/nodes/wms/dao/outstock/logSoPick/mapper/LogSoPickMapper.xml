@@ -53,6 +53,7 @@
         lsp.sn_code,
         lsp.create_time,
         `user`.real_name as createUserName,
+        cancel_log_id,
         lsp.sku_lot1,
         lsp.sku_lot2,
         lsp.sku_lot3,
