@@ -29,6 +29,16 @@ public class LogNoReturn  extends SkuLotBaseEntity {
 	private String lendReturnName;
 
 	/**
+	 * 库位id
+	 */
+	private Long locId;
+
+	/**
+	 * 库位编码
+	 */
+	private String locCode;
+
+	/**
 	 * 物品id
 	 */
 	private Long skuId;
@@ -64,10 +74,30 @@ public class LogNoReturn  extends SkuLotBaseEntity {
 	private String wsuName;
 
 	/**
+	 * 箱码
+	 */
+	private String boxCode;
+
+	/**
 	 * 序列号
 	 * 多个，英文逗号分割
 	 */
 	private String snCode;
+
+	/**
+	 * 单据id
+	 */
+	private Long billId;
+
+	/**
+	 * 单据编码
+	 */
+	private String billNo;
+
+	/**
+	 * 明细id
+	 */
+	private Long detailId;
 
 	/**
 	 * 货主

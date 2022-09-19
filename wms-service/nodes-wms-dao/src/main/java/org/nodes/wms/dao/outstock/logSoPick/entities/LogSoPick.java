@@ -174,4 +174,9 @@ public class LogSoPick extends SkuLotBaseEntity {
 	 * 货主id
 	 */
 	private Long woId;
+
+	/**
+	 * 撤销记录id
+	 */
+	private String cancelLogId;
 }

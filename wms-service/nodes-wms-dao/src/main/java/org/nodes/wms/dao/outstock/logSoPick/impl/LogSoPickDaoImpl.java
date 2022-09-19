@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.outstock.logSoPick.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -63,5 +64,14 @@ public class LogSoPickDaoImpl extends BaseServiceImpl<LogSoPickMapper, LogSoPick
 		LambdaQueryWrapper<LogSoPick> queryWrapper = Wrappers.lambdaQuery(LogSoPick.class);
 		queryWrapper.eq(LogSoPick::getSoBillId, soBillId);
 		return super.list(queryWrapper);
+    }
+
+    @Override
+    public void setCancelPick(Long lsopId) {
+		LambdaUpdateWrapper<LogSoPick> updateWrapper = Wrappers.lambdaUpdate();
+		updateWrapper
+			.eq(LogSoPick::getLsopId, lsopId)
+			.set(LogSoPick::getCancelLogId, lsopId);
+        super.update(updateWrapper);
     }
 }

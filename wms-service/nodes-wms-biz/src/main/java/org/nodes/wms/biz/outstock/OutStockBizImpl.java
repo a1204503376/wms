@@ -98,7 +98,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		// 1 业务判断：
 		// 1.1 如果单据有拣货计划则不能使用PC拣货
 		if (soPickPlanBiz.hasEnablePickPlan(request.getSoBillId())) {
-			throw new ServiceException("拣货失败,收货单已存在拣货计划");
+			throw new ServiceException("拣货失败,发货单已存在拣货计划");
 		}
 		// 1.2 单据和单据明细行的状态如果为终结状态，则不能进行拣货
 		// 1.3 拣货数量是否超过剩余数量
@@ -139,33 +139,33 @@ public class OutStockBizImpl implements OutStockBiz {
 		if (soHeader.getSoBillState().equals(SoBillStateEnum.COMPLETED)
 			|| soHeader.getSoBillState().equals(SoBillStateEnum.ALL_OUT_STOCK)
 			|| soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED)) {
-			throw new ServiceException("拣货失败,收货单状态为" + soHeader.getSoBillState() + "不能进行拣货");
+			throw new ServiceException("拣货失败,发货单状态为" + soHeader.getSoBillState() + "不能进行拣货");
 		}
 		if (soDetail.getBillDetailState().equals(SoDetailStateEnum.DELETED)
 			|| soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
-			throw new ServiceException("拣货失败,收货单明细状态为" + soDetail.getBillDetailState() + "不能进行拣货");
+			throw new ServiceException("拣货失败,发货单明细状态为" + soDetail.getBillDetailState() + "不能进行拣货");
 		}
 		if (BigDecimalUtil.gt(pickQty, soDetail.getSurplusQty())) {
-			throw new ServiceException("拣货失败,收货数量大于剩余数量");
+			throw new ServiceException("拣货失败,拣货数量大于剩余数量");
 		}
 	}
 
 	private void canPick(SoHeader soHeader) {
-		AssertUtil.notNull(soHeader.getSoBillState(), "拣货失败,收货单状态为空");
+		AssertUtil.notNull(soHeader.getSoBillState(), "拣货失败,发货单状态为空");
 		if (soHeader.getSoBillState().equals(SoBillStateEnum.COMPLETED)
 			|| soHeader.getSoBillState().equals(SoBillStateEnum.ALL_OUT_STOCK)
 			|| soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED)) {
-			throw new ServiceException("拣货失败,收货单状态为" + soHeader.getSoBillState() + "不能进行拣货");
+			throw new ServiceException("拣货失败,发货单状态为" + soHeader.getSoBillState() + "不能进行拣货");
 		}
 	}
 
 	private void canPick(SoDetail soDetail, BigDecimal pickQty) {
 		if (soDetail.getBillDetailState().equals(SoDetailStateEnum.DELETED)
 			|| soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
-			throw new ServiceException("拣货失败,收货单明细状态为" + soDetail.getBillDetailState() + "不能进行拣货");
+			throw new ServiceException("拣货失败,发货单明细状态为" + soDetail.getBillDetailState() + "不能进行拣货");
 		}
 		if (BigDecimalUtil.gt(pickQty, soDetail.getSurplusQty())) {
-			throw new ServiceException("拣货失败,收货数量大于剩余数量");
+			throw new ServiceException("拣货失败,发货数量大于剩余数量");
 		}
 	}
 
@@ -611,13 +611,29 @@ public class OutStockBizImpl implements OutStockBiz {
 	public void cancelOutStock(List<Long> logSoPickIdList) {
 		// 根据拣货记录id查找所有的拣货记录
 		List<LogSoPick> logSoPickList = logSoPickDao.getByIds(logSoPickIdList);
+		// 判断发货单状态是否为已关闭，关闭的发货单不允许撤销拣货
+		List<Long> soPickIdList = logSoPickList.stream()
+			.map(LogSoPick::getSoBillId).
+			distinct().collect(Collectors.toList());
+		soPickIdList.forEach(id -> {
+			SoHeader soHeader = soBillBiz.getSoHeaderById(id);
+			if (SoBillStateEnum.COMPLETED.equals(soHeader.getSoBillState())) {
+				throw ExceptionUtil.mpe("撤销拣货失败，发货单[编码：{}]已关闭", soHeader.getSoBillNo());
+			}
+		});
 		logSoPickList.forEach(logSoPick -> {
-			// 判断收货记录中是否存在撤销数为负数的，有就抛异常
+			// 判断该拣货记录是否已经撤销过了
+			if (Func.isNotBlank(logSoPick.getCancelLogId())) {
+				throw ExceptionUtil.mpe("撤销拣货失败，发货记录[id:{}]已撤销", logSoPick.getLsopId());
+			}
+			// 判断发货记录中是否存在撤销数量为负数的，有就抛异常
 			if (BigDecimalUtil.lt(logSoPick.getPickRealQty(), BigDecimal.ZERO)) {
-				throw new ServiceException("撤销失败，选择的记录中不允许有已撤销的记录");
+				throw new ServiceException("撤销拣货失败，选择的记录中不允许有已撤销的记录");
 			}
 			// 根据拣货记录下架库存
 			stockBiz.moveStockByCancelPick(StockLogTypeEnum.INSTOCK_BY_CANCEL_PICK, logSoPick);
+			// 将该拣货记录标记为已撤销
+			logSoPickDao.setCancelPick(logSoPick.getLsopId());
 			// 生成一笔反向的拣货记录
 			logSoPick.setLsopId(null);
 			logSoPick.setPickRealQty(logSoPick.getPickRealQty().negate());
@@ -628,8 +644,14 @@ public class OutStockBizImpl implements OutStockBiz {
 			// 更新发货单头表状态
 			SoHeader soHeader = soBillBiz.getSoHeaderById(logSoPick.getSoBillId());
 			soBillBiz.updateSoBillState(soHeader);
+			// 如果是借出单撤销发货，则需要删除借出记录和未归还记录(物理删除)
+			if (WmsAppConstant.BILL_TYPE_LEND.equals(soHeader.getBillTypeCd())) {
+				if (!lendReturnBiz.removeBySoDetailId(logSoPick.getSoDetailId())) {
+					throw new ServiceException("删除借出记录或未归还记录失败，请稍后再试");
+				}
+			}
 			// 记录业务日志
-			logBiz.auditLog(AuditLogType.OUTSTOCK, soHeader.getSoBillId(), soHeader.getSoBillNo(), "撤销收货");
+			logBiz.auditLog(AuditLogType.OUTSTOCK, soHeader.getSoBillId(), soHeader.getSoBillNo(), "撤销发货");
 		});
 	}
 

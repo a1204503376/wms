@@ -16,4 +16,12 @@ public interface LogLendReturnDao extends BaseService<LogLendReturn> {
 	 * 分页查询借出归还记录
 	 */
 	Page<LendReturnResponse> selectPage(IPage<LogLendReturn> page, LendReturnQuery lendReturnQuery);
+
+	/**
+	 * 根据发货明细id删除借出归还记录
+	 *
+	 * @param soDetailId: 发货明细id
+	 * @return true: 删除成功 false: 删除失败
+	 */
+    boolean deleteBySoDetailId(Long soDetailId);
 }

@@ -38,4 +38,12 @@ public interface LendReturnBiz {
 	 * @param response 响应对象
 	 */
 	void exportNoReturn(LendReturnQuery lendReturnQuery, HttpServletResponse response);
+
+	/**
+	 * 根据发货明细id删除借出归还记录和未归还记录
+	 *
+	 * @param soDetailId 发货明细id
+	 * @return true: 删除成功，false: 删除失败
+	 */
+    boolean removeBySoDetailId(Long soDetailId);
 }

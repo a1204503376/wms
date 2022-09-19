@@ -3,8 +3,11 @@ package org.nodes.wms.dao.common.skuLot;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.nodes.core.constant.WmsAppConstant;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
+import org.nodes.wms.dao.basics.skulot.SkuLotDao;
 import org.nodes.wms.dao.basics.skulot.SkuLotValDao;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLot;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotVal;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.Func;
@@ -148,11 +151,41 @@ public class SkuLotUtil {
 				propertyName = String.format("%s%d", WmsAppConstant.SKU_LOT_FIELD_PREFIX, i + 1);
 				Property skuLotProperty = ReflectUtil.getProperty(skuLotObject.getClass(), propertyName);
 				if (isEmpty(skuLotProperty, skuLotObject)) {
-					throw new ServiceException(
-						String.format("批属性校验失败,批属性%d不能为空", i + 1));
+					throw new ServiceException(String.format(
+						"批属性校验失败,批属性%d[%s]不能为空", i + 1, getSkuLotLabelName(woId, i + 1)));
 				}
 			}
 		}
+	}
+
+	/**
+	 * 获取指定批属性的标签名称
+	 *
+	 * @param woId  货主id，必填
+	 * @param index 批属性序号
+	 * @return 标签名称
+	 */
+	public static String getSkuLotLabelName(Long woId, int index) {
+		AssertUtil.notNull(woId, "获取批属性标签名称失败,货主id参数不能为空");
+
+		SkuLotDao skuLotDao = SpringUtil.getBean(SkuLotDao.class);
+		SkuLot skuLot = skuLotDao.getSkuLotByWoId(woId);
+		if (Func.isNull(skuLot)) {
+			return "";
+		}
+		String propertyName = String.format("%s%d", WmsAppConstant.SKU_LOT_FIELD_PREFIX, index);
+		Property skuLotProperty = ReflectUtil.getProperty(SkuLot.class, propertyName);
+		if (Func.notNull(skuLotProperty) && Func.notNull(skuLotProperty.getReadMethod())) {
+			String labelName = "";
+			try {
+				labelName = (String) (skuLotProperty.getReadMethod().invoke(skuLot));
+			} catch (IllegalAccessException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			return labelName;
+		}
+
+		return "";
 	}
 
 	private static <T> boolean isEmpty(Property skuLotProperty, T skuLotObject) {
