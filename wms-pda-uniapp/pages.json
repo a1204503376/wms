@@ -196,42 +196,42 @@
 			}
 
 		}, {
-			"path": "pages/picking/picking/picking",
+			"path": "pages/picking/pickToByPcs/picking",
 			"style": {
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
 
 		}, {
-			"path": "pages/picking/connectionAreaPicking/connectionAreaPicking",
+			"path": "pages/picking/agvPickto/agvPickto",
 			"style": {
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
 
 		}, {
-			"path": "pages/picking/picking/pickingByBox",
+			"path": "pages/picking/pickToByBox/pickToByBox",
 			"style": {
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
 
 		}, {
-			"path": "pages/picking/picking/pickingByPcs",
+			"path": "pages/picking/pickToByPcs/pickToByPcs",
 			"style": {
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
 
 		}, {
-			"path": "pages/picking/picking/pickingSerialNumber",
+			"path": "pages/picking/pickToByPcs/pickingSerialNumber",
 			"style": {
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
 
 		}, {
-			"path": "pages/picking/connectionAreaPicking/connectionAreaMove",
+			"path": "pages/picking/agvPickto/agvPicktoMove",
 			"style": {
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
@@ -350,7 +350,7 @@
 			}
 
 		}, {
-			"path": "pages/picking/picking/pickingDetails",
+			"path": "pages/picking/pickToByPcs/pickingDetails",
 			"style": {
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"

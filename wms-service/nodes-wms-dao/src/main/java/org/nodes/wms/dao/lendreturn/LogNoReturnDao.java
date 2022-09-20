@@ -39,4 +39,12 @@ public interface LogNoReturnDao extends BaseService<LogNoReturn> {
 	 * @return true: 删除成功 false: 删除失败
 	 */
     boolean deleteBySoDetailId(Long soDetailId);
+
+	/**
+	 * 根据发货
+	 *
+	 * @param noReturnIdList 为归还明细id
+	 * @return true: 删除成功，false: 删除失败
+	 */
+	boolean deleteByIdList(List<Long> noReturnIdList);
 }

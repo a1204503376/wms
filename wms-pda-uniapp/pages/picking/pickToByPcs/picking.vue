@@ -93,11 +93,6 @@
 			// #endif
 		},
 		methods: {
-			submit() {
-				//TODO 等页面测试通过之后删除
-				this.clearEmitKeyDown();
-				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingByPcs');
-			},
 			analysisCode(code) {
 				var barcode = barcodeFunc.parseBarcode(code);
 				var barcodeType = barcodeFunc.BarcodeType;
@@ -147,7 +142,7 @@
 			clickItem(row) {
 				this.clearEmitKeyDown();
 				uni.setStorageSync('soDetail', '');
-				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingByPcs', row);
+				uni.$u.func.routeNavigateTo('/pages/picking/pickToByPcs/pickToByPcs', row);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

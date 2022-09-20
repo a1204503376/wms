@@ -3,6 +3,7 @@ package org.nodes.wms.biz.lendreturn.modular;
 import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
+import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.lendreturn.dto.input.LendReturnRequest;
 import org.nodes.wms.dao.lendreturn.dto.input.LogLendReturnRequest;
 import org.nodes.wms.dao.lendreturn.entities.LogLendReturn;
@@ -45,7 +46,6 @@ public class LogLendReturnFactory {
 	}
 
 	public LendReturnRequest createLendRequest(List<LogSoPick> logSoPickList) {
-//		List<LogLendReturnRequest> logLendReturnList = Func.copy(logSoPick, LogLendReturnRequest.class);
 		List<LogLendReturnRequest> logLendReturnList = new ArrayList<>();
 		logSoPickList.forEach(item -> {
 			LogLendReturnRequest logLendReturnRequest = new LogLendReturnRequest();
@@ -73,6 +73,37 @@ public class LogLendReturnFactory {
 		lendReturnRequest.setType(LendReturnTypeEnum.LEND);
 		lendReturnRequest.setLogLendReturnRequestList(logLendReturnList);
 		lendReturnRequest.setBillTypeCd(WmsAppConstant.BILL_TYPE_LEND);
+		return lendReturnRequest;
+	}
+
+	public LendReturnRequest createReturnRequest(List<ReceiveLog> receiveLogList) {
+		List<LogLendReturnRequest> logLendReturnList = new ArrayList<>();
+		receiveLogList.forEach(item -> {
+			LogLendReturnRequest logLendReturnRequest = new LogLendReturnRequest();
+			logLendReturnRequest.setType(LendReturnTypeEnum.RETURN);
+			logLendReturnRequest.setLendReturnName(AuthUtil.getUserName());
+			logLendReturnRequest.setLocId(item.getLocId());
+			logLendReturnRequest.setLocCode(item.getLocCode());
+			logLendReturnRequest.setSkuId(item.getSkuId());
+			logLendReturnRequest.setSkuCode(item.getSkuCode());
+			logLendReturnRequest.setSkuName(item.getSkuName());
+			logLendReturnRequest.setQty(item.getQty());
+			logLendReturnRequest.setWsuCode(item.getWsuCode());
+//			logLendReturnRequest.setWsuName(item.getWsuName());
+			logLendReturnRequest.setBoxCode(item.getBoxCode());
+			logLendReturnRequest.setSnCode(item.getSnCode());
+			logLendReturnRequest.setBillId(item.getReceiveId());
+			logLendReturnRequest.setBillNo(item.getReceiveNo());
+			logLendReturnRequest.setDetailId(item.getReceiveDetailId());
+			logLendReturnRequest.setWoId(item.getWoId());
+			logLendReturnRequest.setWhId(item.getWhId());
+			SkuLotUtil.setAllSkuLot(item, logLendReturnRequest);
+			logLendReturnList.add(logLendReturnRequest);
+		});
+		LendReturnRequest lendReturnRequest = new LendReturnRequest();
+		lendReturnRequest.setType(LendReturnTypeEnum.RETURN);
+		lendReturnRequest.setLogLendReturnRequestList(logLendReturnList);
+		lendReturnRequest.setBillTypeCd(WmsAppConstant.BILL_TYPE_RETURN);
 		return lendReturnRequest;
 	}
 }

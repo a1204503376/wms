@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.lendreturn.LogNoReturnDao;
 import org.nodes.wms.dao.lendreturn.dto.input.LendReturnQuery;
@@ -77,6 +78,13 @@ public class LogNoReturnDaoImpl
 
     @Override
     public boolean deleteBySoDetailId(Long soDetailId) {
-        return super.baseMapper.deleteBySoDetailId(soDetailId);
+		AssertUtil.notNull(soDetailId, "参数soDetailId为空");
+		return super.baseMapper.deleteBySoDetailId(soDetailId);
     }
+
+	@Override
+	public boolean deleteByIdList(List<Long> noReturnIdList) {
+		AssertUtil.notEmpty(noReturnIdList, "参数noReturnIdList为空");
+		return super.baseMapper.deleteByIds(noReturnIdList);
+	}
 }
