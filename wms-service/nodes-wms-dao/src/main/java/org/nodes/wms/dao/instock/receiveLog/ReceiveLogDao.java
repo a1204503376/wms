@@ -25,14 +25,6 @@ public interface ReceiveLogDao extends BaseService<ReceiveLog> {
 	List<ReceiveLogResponse> getReceiveLogList(Long receiveId);
 
 	/**
-	 * 根据id集合获取收货记录集合
-	 *
-	 * @param idList: id集合
-	 * @return 收货记录集合
-	 */
-	List<ReceiveLog> getReceiveLogListByIdList(List<Long> idList);
-
-	/**
 	 * 获取7天内入库量前10的物品
 	 *
 	 * @return List<ReceiveLogIndexResponse>
@@ -70,4 +62,12 @@ public interface ReceiveLogDao extends BaseService<ReceiveLog> {
 	 * @return true保存成功，false保存失败
 	 */
 	boolean saveBatch(List<ReceiveLog> receiveLogList);
+
+	/**
+	 * 根据id集合获取收货记录集合
+	 *
+	 * @param idList: id集合
+	 * @return 收货记录集合
+	 */
+	List<ReceiveLog> getByIds(List<Long> idList);
 }

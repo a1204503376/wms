@@ -2,7 +2,6 @@ package org.nodes.wms.biz.instock;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsAppConstant;
-import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
@@ -26,7 +25,6 @@ import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
-import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.lendreturn.dto.input.LendReturnRequest;
 import org.nodes.wms.dao.stock.entities.Stock;
@@ -40,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author nodesc
@@ -194,7 +193,7 @@ public class InStockBizImpl implements InStockBiz {
 		// 更新收货单状态
 		receiveBiz.updateReceiveHeader(receiveHeader, detail);
 		// 如果是归还单，则保存归还记录
-		if (WmsAppConstant.BILL_TYPE_RETURN.equals(receiveHeader.getBillTypeCd())){
+		if (WmsAppConstant.BILL_TYPE_RETURN.equals(receiveHeader.getBillTypeCd())) {
 			List<ReceiveLog> receiveLogList = new ArrayList<>();
 			receiveLogList.add(receiveLog);
 			LendReturnRequest returnRequest = logLendReturnFactory.createReturnRequest(receiveLogList);
@@ -337,10 +336,15 @@ public class InStockBizImpl implements InStockBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void cancelReceive(List<Long> receiveIdList) {
 		List<Long> removeReceiveBillId = new ArrayList<>();
+		List<ReceiveHeader> receiveHeaderList = new ArrayList<>();
+		// 获取清点记录
+		List<ReceiveLog> receiveLogList = receiveLogBiz.findReceiveLogsByIds(receiveIdList);
 		// 是否可以撤销
-		List<ReceiveLog> receiveLogList = receiveLogBiz.canCancelReceive(receiveIdList);
+		receiveLogBiz.canCancelReceive(receiveLogList, receiveHeaderList);
+		// 合并清点记录
+		List<ReceiveLog> mergeReceiveLogList = receiveLogBiz.mergeReceiveLog(receiveLogList);
 		// 生成撤销的清点记录
-		List<ReceiveLog> newReceiveLogList = receiveLogBiz.newReceiveLog(receiveLogList);
+		List<ReceiveLog> newReceiveLogList = receiveLogBiz.newReceiveLog(mergeReceiveLogList);
 		newReceiveLogList.forEach(item -> {
 			// 下架库存
 			Stock stock = stockQueryBiz.findStockOnStage(item);
@@ -374,6 +378,24 @@ public class InStockBizImpl implements InStockBiz {
 			if (!receiveBiz.remove(removeReceiveBillId)) {
 				throw new ServiceException("撤销收货失败，删除发货单时失败，请稍后再试");
 			}
+		}
+		// 获取所有归还单
+		List<ReceiveHeader> returnReceiveList = receiveHeaderList.stream()
+			.filter(item -> WmsAppConstant.BILL_TYPE_RETURN.equals(item.getBillTypeCd()))
+			.collect(Collectors.toList());
+		// 获取属于归还单的清点记录
+		List<ReceiveLog> returnReceiveLogList = receiveLogList.stream()
+			.filter(item -> {
+				List<Long> returnIdList = returnReceiveList.stream()
+					.map(ReceiveHeader::getReceiveId)
+					.collect(Collectors.toList());
+				return returnIdList.contains(item.getReceiveId());
+			})
+			.collect(Collectors.toList());
+		// 保存归还记录
+		if (Func.isNotEmpty(returnReceiveLogList)) {
+			LendReturnRequest returnRequest = logLendReturnFactory.createReturnRequest(returnReceiveLogList);
+			lendReturnBiz.saveLog(returnRequest);
 		}
 	}
 

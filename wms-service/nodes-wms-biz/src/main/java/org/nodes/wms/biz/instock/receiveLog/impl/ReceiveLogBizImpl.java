@@ -3,8 +3,10 @@ package org.nodes.wms.biz.instock.receiveLog.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.BigDecimalUtil;
+import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
+import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
@@ -15,6 +17,7 @@ import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnItemDto;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
+import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 import org.nodes.wms.dao.instock.receiveLog.ReceiveLogDao;
 import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageQuery;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogExcelResponse;
@@ -47,6 +50,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	private final ReceiveLogDao receiveLogDao;
 	private final LocationBiz locationBiz;
 	private final OwnerBiz ownerBiz;
+	private final ReceiveBiz receiveBiz;
 
 
 	@Override
@@ -154,14 +158,28 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	}
 
 	@Override
-	public List<ReceiveLog> canCancelReceive(List<Long> receiveIdList) {
-		List<ReceiveLog> receiveLogList = receiveLogDao.getReceiveLogListByIdList(receiveIdList);
+	public void canCancelReceive(List<ReceiveLog> receiveLogList, List<ReceiveHeader> receiveHeaderList) {
+		// 判断收货记录对应的收货单状态是否已关闭，关闭不允许撤销
+		List<Long> receiveHeaderIdList = receiveLogList.stream()
+			.map(ReceiveLog::getReceiveId)
+			.distinct()
+			.collect(Collectors.toList());
+		receiveHeaderIdList.forEach(id -> {
+			ReceiveHeader header = receiveBiz.getReceiveHeaderById(id);
+			if (ReceiveHeaderStateEnum.CLOSURE.equals(header.getBillState())) {
+				throw ExceptionUtil.mpe("撤销收货失败，收货单[编码：{}]已关闭", header.getReceiveNo());
+			}
+			receiveHeaderList.add(header);
+		});
 		receiveLogList.forEach(item -> {
 			// 判断收货记录中是否存在撤销数为负数的，有就抛异常
 			if (BigDecimalUtil.lt(item.getQty(), BigDecimal.ZERO)) {
 				throw new ServiceException("撤销失败，选择的记录中不允许有已撤销的记录");
 			}
 		});
+	}
+
+	public List<ReceiveLog> mergeReceiveLog(List<ReceiveLog> receiveLogList) {
 		//货主、物品、库位、状态、箱码、LPNCode、30个批属性相同的才合并
 		Map<String, List<ReceiveLog>> collect = receiveLogList.stream().collect(Collectors.groupingBy(item -> item.getWhId() + "_" + item.getSkuId() + "_" + item.getLocId() + "_" + item.getBoxCode() + "_" + item.getLpnCode()));
 		List<ReceiveLog> finalReceiveLogList = new ArrayList<>();
@@ -187,7 +205,6 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 				finalReceiveLogList.add(value.get(i));
 			}
 		}
-
 		return finalReceiveLogList;
 	}
 
@@ -205,13 +222,12 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	}
 
 	@Override
-	public List<ReceiveLog> findReceiveLog(List<Long> receiveIdList) {
-		return null;
-	}
-
-
-	@Override
 	public void saveReceiveLog(ReceiveLog receiveLog) {
 		receiveLogDao.save(receiveLog);
+	}
+
+	@Override
+	public List<ReceiveLog> findReceiveLogsByIds(List<Long> receiveLogIdList) {
+		return receiveLogDao.getByIds(receiveLogIdList);
 	}
 }

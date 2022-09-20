@@ -414,15 +414,13 @@ export default {
                 }
             });
         },
-        onRemove() {
+        onRemove: function () {
             this.$confirm("确定删除当前数据？", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning",
             }).then(() => {
-                this.$refs.table.selection.forEach(e => {
-                    this.nums.receiveIdList.push(e.receiveId)
-                })
+                this.nums.receiveIdList = this.$refs.table.selection.map(e => e.receiveId)
                 remove(this.nums).then(() => {
                     this.$message.success('删除成功');
                     this.getTableData();
