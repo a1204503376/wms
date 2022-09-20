@@ -48,6 +48,10 @@ public class NewReceiveDetailRequest implements Serializable {
 	 */
 	private String skuLot1;
 	/**
+	 * 入库日期 （归还单的明细需要）
+	 */
+	private String skuLot3;
+	/**
 	 * 客户
 	 */
 	private String skuLot4;

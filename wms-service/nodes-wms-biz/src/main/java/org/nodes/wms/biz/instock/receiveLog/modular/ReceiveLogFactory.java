@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.instock.receiveLog.modular;
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.suppliers.SupplierBiz;
@@ -163,7 +164,12 @@ public class ReceiveLogFactory {
 		}
 		receiveLog.setStockStatus(StockStatusEnum.NORMAL);
 		SkuLotUtil.setAllSkuLot(request, receiveLog);
-		receiveLog.setSkuLot3(Func.formatDate(new Date()));
+		// 归还单，不设置当前日期为入库日期
+		if (WmsAppConstant.BILL_TYPE_RETURN.equals(receiveHeader.getBillTypeCd())){
+			receiveLog.setSkuLot3(receiveDetail.getSkuLot3());
+		} else {
+			receiveLog.setSkuLot3(Func.formatDate(new Date()));
+		}
 		return receiveLog;
 	}
 }

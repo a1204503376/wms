@@ -2,6 +2,7 @@ package org.nodes.wms.biz.instock.receive.modular;
 
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
@@ -63,7 +64,7 @@ public class ReceiveFactory {
 		receiveHeader.setWoId(owner.getWoId());
 		//设置货主编码
 		receiveHeader.setOwnerCode(owner.getOwnerCode());
-		if (Func.isNotEmpty(newReceiveHeaderRequest.getSupplier())){
+		if (Func.isNotEmpty(newReceiveHeaderRequest.getSupplier())) {
 			//设置供应商id
 			receiveHeader.setSupplierId(newReceiveHeaderRequest.getSupplier().getId());
 			//设置供应商编码
@@ -151,6 +152,12 @@ public class ReceiveFactory {
 		receiveDetail.setDetailStatus(ReceiveDetailStatusEnum.NOT_RECEIPT);
 		//设置生产批次
 		receiveDetail.setSkuLot1(newReceiveDetailRequest.getSkuLot1());
+		// 设置规格
+		receiveDetail.setSkuLot2(newReceiveDetailRequest.getSkuSpec());
+		// 归还单需要设置入库日期
+		if (WmsAppConstant.BILL_TYPE_RETURN.equals(receiveHeader.getBillTypeCd())) {
+			receiveDetail.setSkuLot3(newReceiveDetailRequest.getSkuLot3());
+		}
 		//设置客户
 		receiveDetail.setSkuLot4(newReceiveDetailRequest.getSkuLot4());
 		//设置钢背批次
