@@ -13,10 +13,10 @@ import java.util.List;
  */
 public enum ZoneVirtualTypeEnum {
 
-	Move(70, "移动暂存区"),
-	Pack(72, "包装暂存区"),
-	Stage(73, "入库暂存区"),
-	Pick(74, "出库暂存区"),
+	MOVE(70, "移动暂存区"),
+	PACK(72, "包装暂存区"),
+	STAGE(73, "入库暂存区"),
+	PICK(74, "出库暂存区"),
 	QC(76, "入库质检区");
 
 	private Integer index;
@@ -38,20 +38,20 @@ public enum ZoneVirtualTypeEnum {
 			return false;
 		}
 		List<String> virtualList = new ArrayList() {{
-			add(ZoneVirtualTypeEnum.Move.toString().toLowerCase());
-			add(ZoneVirtualTypeEnum.Pack.toString().toLowerCase());
-			add(ZoneVirtualTypeEnum.Stage.toString().toLowerCase());
-			add(ZoneVirtualTypeEnum.Pick.toString().toLowerCase());
+			add(ZoneVirtualTypeEnum.MOVE.toString().toLowerCase());
+			add(ZoneVirtualTypeEnum.PACK.toString().toLowerCase());
+			add(ZoneVirtualTypeEnum.STAGE.toString().toLowerCase());
+			add(ZoneVirtualTypeEnum.PICK.toString().toLowerCase());
 		}};
 		return virtualList.stream().filter(u -> locCode.toLowerCase().startsWith(u)).count() > 0;
 	}
 
 	public static List<Integer> list() {
 		List<Integer> list = new ArrayList() {{
-			add(ZoneVirtualTypeEnum.Move.getIndex());
-			add(ZoneVirtualTypeEnum.Pack.getIndex());
-			add(ZoneVirtualTypeEnum.Stage.getIndex());
-			add(ZoneVirtualTypeEnum.Pick.getIndex());
+			add(ZoneVirtualTypeEnum.MOVE.getIndex());
+			add(ZoneVirtualTypeEnum.PACK.getIndex());
+			add(ZoneVirtualTypeEnum.STAGE.getIndex());
+			add(ZoneVirtualTypeEnum.PICK.getIndex());
 		}};
 		return list;
 	}

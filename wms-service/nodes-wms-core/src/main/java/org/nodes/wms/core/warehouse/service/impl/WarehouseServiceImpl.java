@@ -184,20 +184,20 @@ public class WarehouseServiceImpl<M extends WarehouseMapper, T extends Warehouse
 		//更新暂存区库位编码
 		//入库
 		if (Func.isNotEmpty(whDTO.getStage())) {
-			updateLocation(whDTO, whDTO.getStage(), ZoneVirtualTypeEnum.Stage + whDTO.getWhCode());
+			updateLocation(whDTO, whDTO.getStage(), whDTO.getWhCode() + "-" + ZoneVirtualTypeEnum.STAGE);
 		}
 		//出库
 		if (Func.isNotEmpty(whDTO.getPick())) {
-			updateLocation(whDTO, whDTO.getPick(), ZoneVirtualTypeEnum.Pick + whDTO.getWhCode());
+			updateLocation(whDTO, whDTO.getPick(), whDTO.getWhCode() + "-" + ZoneVirtualTypeEnum.PICK);
 		}
-		//包装
-		if (Func.isNotEmpty(whDTO.getPack())) {
-			updateLocation(whDTO, whDTO.getPack(), ZoneVirtualTypeEnum.Pack + whDTO.getWhCode());
-		}
-		//移动
-		if (Func.isNotEmpty(whDTO.getMove())) {
-			updateLocation(whDTO, whDTO.getMove(), ZoneVirtualTypeEnum.Move + whDTO.getWhCode());
-		}
+//		//包装
+//		if (Func.isNotEmpty(whDTO.getPack())) {
+//			updateLocation(whDTO, whDTO.getPack(), ZoneVirtualTypeEnum.PACK + whDTO.getWhCode());
+//		}
+//		//移动
+//		if (Func.isNotEmpty(whDTO.getMove())) {
+//			updateLocation(whDTO, whDTO.getMove(), ZoneVirtualTypeEnum.MOVE + whDTO.getWhCode());
+//		}
 
 		if (super.updateById(whDTO)) {
 			//WarehouseCache.saveOrUpdate(whDTO);

@@ -90,7 +90,8 @@
                 </el-row>
             </template>
             <template v-slot:batchBtn>
-                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增</el-button>
+                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
+                </el-button>
                 <el-button v-if="permissionObj.delete" :plain="true" icon="el-icon-delete" size="mini" type="danger"
                            @click="onRemove">删除
                 </el-button>
@@ -165,9 +166,15 @@
                         label="操作"
                         width="150">
                         <template v-slot="scope">
-                            <el-button v-if="permissionObj.edit" size="small" type="text" @click="handleClick(scope.row)">编辑</el-button>
-                            <el-button v-if="permissionObj.close" size="small" type="text" @click="onClose(scope.row)">关闭</el-button>
-                            <el-button v-if="permissionObj.receive" size="small" type="text" @click="onReceive(scope.row)">PC收货</el-button>
+                            <el-button v-if="permissionObj.edit" size="small" type="text"
+                                       @click="handleClick(scope.row)">编辑
+                            </el-button>
+                            <el-button v-if="permissionObj.close" size="small" type="text" @click="onClose(scope.row)">
+                                关闭
+                            </el-button>
+                            <el-button v-if="permissionObj.receive" size="small" type="text"
+                                       @click="onReceive(scope.row)">PC收货
+                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -417,9 +424,9 @@ export default {
                     this.nums.receiveIdList.push(e.receiveId)
                 })
                 remove(this.nums).then(() => {
-                        this.$message.success('删除成功');
-                        this.getTableData();
-                    })
+                    this.$message.success('删除成功');
+                    this.getTableData();
+                })
             })
         },
         onClose(row) {
@@ -433,12 +440,6 @@ export default {
                     this.$message.error('该收货单已关闭，请勿重复点击');
                     throw new Error('该收货单已关闭，请勿重复点击');
                 }
-
-                if (state !== "全部收货") {
-                    this.$message.error('关闭失败,请先完成收货');
-                    throw new Error('关闭失败,请先完成收货');
-                }
-
                 this.nums.receiveId = row.receiveId;
                 close(this.nums)
                     .then(() => {
