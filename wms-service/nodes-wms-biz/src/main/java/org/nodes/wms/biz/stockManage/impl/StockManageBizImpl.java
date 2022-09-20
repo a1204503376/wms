@@ -525,6 +525,7 @@ public class StockManageBizImpl implements StockManageBiz {
 	@Override
 	public void canMoveToBoxType(Location targetLocation, String boxCode) {
 		if (Func.isNotEmpty(targetLocation.getLpnTypeId())) {
+			AssertUtil.notEmpty(boxCode, "校验箱型失败，箱码为空");
 			LpnType sourceLpnType = lpnTypeBiz.findLpnTypeByBoxCode(boxCode);
 			AssertUtil.notNull(sourceLpnType, "获取当前箱子箱型失败");
 			LpnType targetLpnType = lpnTypeBiz.findLpnTypeById(targetLocation.getLpnTypeId());
