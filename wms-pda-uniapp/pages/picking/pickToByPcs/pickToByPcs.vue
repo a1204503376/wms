@@ -173,7 +173,7 @@
 								_this.params.soDetailId = undefined;
 							}
 							if (data.data) {
-								uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingSerialNumber',
+								uni.$u.func.routeNavigateTo('/pages/picking/pickToByPcs/pickingSerialNumber',
 									_this
 									.params);
 								return;
@@ -224,7 +224,7 @@
 				});
 			},
 			gotoDetails() {
-				uni.$u.func.routeNavigateTo('/pages/picking/picking/pickingDetails', this.params);
+				uni.$u.func.routeNavigateTo('/pages/picking/pickToByPcs/pickingDetails', this.params);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

@@ -123,7 +123,7 @@
 								})
 							} else {
 								uni.$u.func.routeNavigateTo(
-									'/pages/picking/connectionAreaPicking/connectionAreaMove', _this
+									'/pages/picking/agvPickto/agvPicktoMove', _this
 									.param);
 							}
 						})
