@@ -447,6 +447,27 @@
 				"navigationStyle": "custom"
 			}
 
+		}, {
+			"path": "pages/picking/bulkPick/bulkPick",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/picking/bulkPick/bulkPickByPcs",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+			
+		}, {
+			"path": "pages/picking/bulkPick/bulkPickDetails",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+			
 		}
 	],
 	"globalStyle": {
