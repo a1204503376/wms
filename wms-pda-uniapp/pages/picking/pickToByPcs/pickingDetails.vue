@@ -9,40 +9,40 @@
 			<u-list-item v-for="(item, index) in receiveDetailList" :key="index">
 				<view @click="clickItem(item)">
 					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="8" class="left-text-one-line">
-							<view class="demo-layout bg-purple-light font-in-page">{{'行号'}}</view>
+						<u-col span="4" class="left-text-one-line">
+							<view class="demo-layout bg-purple-light font-in-page" style="text-align: left;">{{'行号'}}</view>
 						</u-col>
-						<u-col span="4">
-							<view class="demo-layout bg-purple font-in-page">
+						<u-col span="8">
+							<view class="demo-layout bg-purple font-in-page" style="text-align: right;margin-right: 30rpx;">
 								{{item.soLineNo}}
 							</view>
 						</u-col>
 					</u-row>
 					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="8" class="left-text-one-line">
-							<view class="demo-layout bg-purple-light font-in-page">{{'物品编码'}}</view>
+						<u-col span="4" class="left-text-one-line">
+							<view class="demo-layout bg-purple-light font-in-page" style="text-align: left;">{{'物品编码'}}</view>
 						</u-col>
-						<u-col span="4">
-							<view class="demo-layout bg-purple font-in-page">
+						<u-col span="8">
+							<view class="demo-layout bg-purple font-in-page" style="text-align: right;margin-right: 30rpx;">
 								{{item.skuCode}}
 							</view>
 						</u-col>
 					</u-row>
 					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="8" class="left-text-one-line">
-							<view class="demo-layout bg-purple-light font-in-page">{{'实际数量'}}</view>
+						<u-col span="4" class="left-text-one-line">
+							<view class="demo-layout bg-purple-light font-in-page" style="text-align: left;">{{'实际数量'}}</view>
 						</u-col>
-						<u-col span="4">
-							<view class="demo-layout bg-purple font-in-page">{{item.scanQty}}/{{item.baseUmName}}
+						<u-col span="8">
+							<view class="demo-layout bg-purple font-in-page" style="text-align: right;margin-right: 30rpx;">{{item.scanQty}}/{{item.baseUmName}}
 							</view>
 						</u-col>
 					</u-row>
 					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="8" class="left-text-one-line">
-							<view class="demo-layout bg-purple-light font-in-page">{{'计划数量'}}</view>
+						<u-col span="4" class="left-text-one-line">
+							<view class="demo-layout bg-purple-light font-in-page" style="text-align: left;">{{'计划数量'}}</view>
 						</u-col>
-						<u-col span="4">
-							<view class="demo-layout bg-purple font-in-page">{{item.planQty}}/{{item.baseUmName}}
+						<u-col span="8">
+							<view class="demo-layout bg-purple font-in-page" style="text-align: right;margin-right: 30rpx;">{{item.planQty}}/{{item.baseUmName}}
 							</view>
 						</u-col>
 					</u-row>

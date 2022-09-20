@@ -173,7 +173,8 @@
 								_this.params.soDetailId = undefined;
 							}
 							if (data.data) {
-								uni.$u.func.routeNavigateTo('/pages/picking/pickToByPcs/pickingSerialNumber',
+								uni.$u.func.routeNavigateTo(
+									'/pages/picking/pickToByPcs/pickingSerialNumber',
 									_this
 									.params);
 								return;
