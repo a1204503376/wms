@@ -1,8 +1,6 @@
 package org.nodes.wms.dao.instock.receiveLog.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
@@ -33,14 +31,7 @@ public class ReceiveLogDaoImpl
 		return super.baseMapper.selectReceiveLogList(receiveId);
 	}
 
-    @Override
-    public List<ReceiveLog> getReceiveLogListByIdList(List<Long> idList) {
-		LambdaQueryWrapper<ReceiveLog> queryWrapper = Wrappers.lambdaQuery();
-		queryWrapper.in(ReceiveLog::getId,idList);
-        return super.list(queryWrapper);
-    }
-
-    @Override
+	@Override
 	public List<ReceiveLogIndexResponse> getReceiveSkuQtyTop10() {
 		return super.baseMapper.selectReceiveSkuQtyTop10();
 	}
@@ -53,20 +44,25 @@ public class ReceiveLogDaoImpl
 
 	@Override
 	public List<ReceiveLogExcelResponse> getReceiveLogListByQuery(
-			ReceiveLogPageQuery receiveLogPageQuery) {
+		ReceiveLogPageQuery receiveLogPageQuery) {
 		return super.baseMapper.selectReceiveLogListByQuery(receiveLogPageQuery);
 	}
 
 	@Override
 	public boolean save(ReceiveLog receiveLog) {
-		if(Func.isEmpty(receiveLog)){
+		if (Func.isEmpty(receiveLog)) {
 			throw new NullArgumentException("ReceiveLogDaoImpl.save方法的参数为空");
 		}
 		return super.save(receiveLog);
 	}
 
-    @Override
-    public boolean saveBatch(List<ReceiveLog> receiveLogList) {
+	@Override
+	public boolean saveBatch(List<ReceiveLog> receiveLogList) {
 		return super.saveBatch(receiveLogList);
+	}
+
+	@Override
+	public List<ReceiveLog> getByIds(List<Long> idList) {
+		return super.listByIds(idList);
 	}
 }

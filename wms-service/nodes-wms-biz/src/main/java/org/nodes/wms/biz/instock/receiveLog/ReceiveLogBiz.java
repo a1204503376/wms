@@ -73,10 +73,18 @@ public interface ReceiveLogBiz {
 	/**
 	 * 是否可以撤销
 	 *
-	 * @param receiveIdList: 清点记录id
-	 * @return List<ReceiveLog> 清点记录
+	 * @param receiveLogList 清点记录
+	 * @param receiveHeaderList: 清点记录对应的收货单
 	 */
-	List<ReceiveLog> canCancelReceive(List<Long> receiveIdList);
+	void canCancelReceive(List<ReceiveLog> receiveLogList, List<ReceiveHeader> receiveHeaderList);
+
+	/**
+	 * 合并收货记录
+	 *
+	 * @param receiveLogList 收货记录
+	 * @return 合并后的收货记录
+	 */
+	List<ReceiveLog> mergeReceiveLog(List<ReceiveLog> receiveLogList);
 
 	/**
 	 * 生成清点记录
@@ -86,13 +94,18 @@ public interface ReceiveLogBiz {
 	 */
 	List<ReceiveLog> newReceiveLog(List<ReceiveLog> receiveLogList);
 
-	List<ReceiveLog> findReceiveLog(List<Long> receiveIdList);
-
-
 	/**
 	 * 保存清点记录
 	 *
 	 * @param receiveLog 清点记录实体
 	 */
 	void saveReceiveLog(ReceiveLog receiveLog);
+
+	/**
+	 * 根据收货记录id查询收货记录
+	 *
+	 * @param receiveLogIdList 收货记录id
+	 * @return 收货记录
+	 */
+	List<ReceiveLog> findReceiveLogsByIds(List<Long> receiveLogIdList);
 }
