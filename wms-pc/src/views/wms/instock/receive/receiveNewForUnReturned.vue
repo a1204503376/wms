@@ -360,11 +360,11 @@ export default {
                 i++;
             })
             this.table.data = data;
+            console.log(this.table.data);
         },
         autoTableHeight() {
             this.$nextTick(() => {
                 let height = window.innerHeight;
-                console.log(height);
                 document.getElementById('container').style.height = `${height - 155}px`;
                 this.tableHeight = height - 520;
             })
