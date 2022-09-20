@@ -171,4 +171,12 @@ public interface SoPickPlanBiz {
 	 * @param pickPlanId 拣货计划ID
 	 */
 	void deletePickByPickPlanId(Long pickPlanId);
+
+	/**
+	 * 根据发货单详情ID查询对应的拣货计划
+	 *
+	 * @param soDetailId 发货单详情ID
+	 * @return 拣货计划
+	 */
+	List<SoPickPlan> findPickBySoDetailId(Long soDetailId);
 }
