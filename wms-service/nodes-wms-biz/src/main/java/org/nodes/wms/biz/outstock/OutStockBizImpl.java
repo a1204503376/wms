@@ -29,6 +29,7 @@ import org.nodes.wms.dao.outstock.SoPickPlanDao;
 import org.nodes.wms.dao.outstock.logSoPick.LogSoPickDao;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.*;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
+import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindPickToSoPickPlanResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindPickingBySoBillIdResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.OutboundAccessAreaLocationQueryResponse;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
@@ -604,6 +605,19 @@ public class OutStockBizImpl implements OutStockBiz {
 
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, request.getSoBillId(),
 			soHeader.getSoBillNo(), "执行调整分配");
+	}
+
+	@Override
+	public IPage<FindPickingBySoBillIdResponse> findPickPlanBySoBillId(FindOpenSoDetailRequest request, Query query) {
+		IPage<SoDetail> page = soBillBiz.getPickingBySoBillId(request.getSoBillId(), query);
+		AssertUtil.notNull(page, "查询结果为空");
+		return page.convert(soDetail -> {
+			List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickBySoDetailId(soDetail.getSoDetailId());
+			FindPickingBySoBillIdResponse detail = BeanUtil.copy(soDetail, FindPickingBySoBillIdResponse.class);
+			List<FindPickToSoPickPlanResponse> pickPlanResponseList = BeanUtil.copy(soPickPlanList, FindPickToSoPickPlanResponse.class);
+			detail.setSoPickPlanList(pickPlanResponseList);
+			return detail;
+		});
 	}
 
 	@Override

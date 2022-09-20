@@ -140,4 +140,14 @@ public interface OutStockBiz {
 	 * @param soBillDistributedRequest:
 	 */
 	void manualDistribute(SoBillDistributedRequest soBillDistributedRequest);
+
+	/**
+	 * Pda根据发货单ID查询可以拣货的出库单明细
+	 *
+	 * @param request 请求对象-发货单ID
+	 * @param query   分页参数
+	 * @return 实现的分页
+	 */
+	IPage<FindPickingBySoBillIdResponse> findPickPlanBySoBillId(FindOpenSoDetailRequest request, Query query);
+
 }
