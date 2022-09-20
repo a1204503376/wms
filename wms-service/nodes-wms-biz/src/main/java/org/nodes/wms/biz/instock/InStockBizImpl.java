@@ -28,6 +28,7 @@ import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.lendreturn.dto.input.LendReturnRequest;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.log.exception.ServiceException;
@@ -192,6 +193,13 @@ public class InStockBizImpl implements InStockBiz {
 		receiveBiz.updateReceiveDetail(detail, request.getSurplusQty());
 		// 更新收货单状态
 		receiveBiz.updateReceiveHeader(receiveHeader, detail);
+		// 如果是归还单，则保存归还记录
+		if (WmsAppConstant.BILL_TYPE_RETURN.equals(receiveHeader.getBillTypeCd())){
+			List<ReceiveLog> receiveLogList = new ArrayList<>();
+			receiveLogList.add(receiveLog);
+			LendReturnRequest returnRequest = logLendReturnFactory.createReturnRequest(receiveLogList);
+			lendReturnBiz.saveLog(returnRequest);
+		}
 		// 记录业务日志
 		receiveBiz.log(StockLogTypeEnum.INSTOCK_BY_PCS.getDesc(), receiveHeader, detail, receiveLog);
 		//检查收货是否完成 并返回
@@ -374,16 +382,12 @@ public class InStockBizImpl implements InStockBiz {
 	public String receiveByPc(ReceiveByPcRequest receiveByPcRequest) {
 		//根据id获取头表信息
 		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(receiveByPcRequest.getReceiveId());
-		// 关闭的单据不能撤销
-		if (ReceiveHeaderStateEnum.CLOSURE.equals(receiveHeader.getBillState())) {
-			throw ExceptionUtil.mpe("撤销收货失败，单据[编码:{}]已关闭", receiveHeader.getReceiveNo());
-		}
 		// 明细信息
 		List<ReceiveByPcDetailRequest> receiveDetailByPcList = receiveByPcRequest.getDetailRequestList();
 		// 生成的清点记录集合
 		List<ReceiveLog> receiveLogList = new ArrayList<>();
 		receiveDetailByPcList.forEach(receiveDetailByPc -> {
-			//获取每个分组的明细对象
+			//获取明细对象
 			ReceiveDetail receiveDetail = receiveDetailDao.getDetailByReceiveDetailId(receiveDetailByPc.getReceiveDetailId());
 			//参数校验
 			receiveBiz.canReceive(receiveHeader, receiveDetail, receiveDetailByPc.getScanQty());

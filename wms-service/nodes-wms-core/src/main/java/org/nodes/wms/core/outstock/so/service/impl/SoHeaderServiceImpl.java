@@ -1,4 +1,3 @@
-
 package org.nodes.wms.core.outstock.so.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -29,8 +28,6 @@ import org.nodes.wms.core.outstock.so.entity.SoDetail;
 import org.nodes.wms.core.outstock.so.entity.SoHeader;
 import org.nodes.wms.core.outstock.so.entity.WellenDetail;
 import org.nodes.wms.core.outstock.so.enums.ShipStateEnum;
-import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
-import org.nodes.wms.dao.outstock.so.enums.SyncStateEnum;
 import org.nodes.wms.core.outstock.so.mapper.SoHeaderMapper;
 import org.nodes.wms.core.outstock.so.service.ISoDetailService;
 import org.nodes.wms.core.outstock.so.service.ISoHeaderService;
@@ -40,7 +37,6 @@ import org.nodes.wms.core.outstock.so.wrapper.SoDetailWrapper;
 import org.nodes.wms.core.outstock.so.wrapper.SoHeaderWrapper;
 import org.nodes.wms.core.stock.core.dto.StockOccupySubtractDTO;
 import org.nodes.wms.core.stock.core.dto.StockSubtractDTO;
-import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.entity.StockDetail;
 import org.nodes.wms.core.stock.core.entity.StockOccupy;
 import org.nodes.wms.core.stock.core.enums.EventTypeEnum;
@@ -58,6 +54,9 @@ import org.nodes.wms.core.warehouse.service.IZoneService;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
+import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
+import org.nodes.wms.dao.outstock.so.enums.SyncStateEnum;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
@@ -292,7 +291,7 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 			}
 			if (!SoBillStateEnum.CREATE.getCode().equals(soHeader.getSoBillState())) {
 				throw new ServiceException(String.format("单据[%s]为%s状态不可删除",
-					soHeader.getSoBillNo(), DictCache.getValue(DictCodeConstant.SO_BILL_STATE,soHeader.getSoBillState())));
+					soHeader.getSoBillNo(), DictCache.getValue(DictCodeConstant.SO_BILL_STATE, soHeader.getSoBillState())));
 			}
 			if (soHeader.getBillTypeCd().equals("209")) {
 				throw new ServiceException("调拨发货单不可删除! ");
@@ -338,8 +337,8 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 					//Zone pickZone = ZoneCache.getByCode(ZoneVirtualTypeEnum.Pick.toString() + soHeader.getWhCode());
 					IZoneService zoneService = SpringUtil.getBean(IZoneService.class);
 					Zone pickZone = zoneService.list(Condition.getQueryWrapper(new Zone())
-					.lambda()
-					.eq(Zone::getZoneCode,ZoneVirtualTypeEnum.Pick.toString() + soHeader.getWhCode())
+						.lambda()
+						.eq(Zone::getZoneCode, ZoneVirtualTypeEnum.PICK.toString() + soHeader.getWhCode())
 					).stream().findFirst().orElse(null);
 
 					for (SoDetail soDetail : soDetailList) {
@@ -562,7 +561,7 @@ public class SoHeaderServiceImpl<M extends SoHeaderMapper, T extends SoHeader>
 		// 获取与当前订单有关联的库存占用信息
 		IStockOccupyService stockOccupyService = SpringUtil.getBean(IStockOccupyService.class);
 		List<StockOccupy> stockOccupyList = stockOccupyService.list(Condition.getQueryWrapper(new StockOccupy())
-			.lambda()
+				.lambda()
 //			.in(StockOccupy::getSoBillId, idList)
 		);
 		// 获取订单对应的库存

@@ -93,7 +93,7 @@
                             v-if="!column.hide"
                             :key="index"
                             show-overflow-tooltip
-                            v-bind="column" width="150">
+                            v-bind="column">
                         </el-table-column>
                     </template>
                 </el-table>
