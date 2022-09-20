@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.nodes.core.base.cache.ParamCache;
 import org.nodes.core.base.enums.ParamEnum;
-import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.NodesUtil;
 import org.nodes.wms.core.allot.enums.AllotBillStateEnum;
@@ -14,8 +13,6 @@ import org.nodes.wms.core.allot.service.IAllotHeaderService;
 import org.nodes.wms.core.basedata.cache.SkuCache;
 import org.nodes.wms.core.basedata.cache.SkuPackageDetailCache;
 import org.nodes.wms.core.basedata.dto.SkuLogDTO;
-import org.nodes.wms.dao.basics.sku.entities.Sku;
-import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.core.basedata.service.ISkuLogService;
 import org.nodes.wms.core.basedata.service.ISkuPackageDetailService;
 import org.nodes.wms.core.basedata.service.ISkuReplaceService;
@@ -37,8 +34,6 @@ import org.nodes.wms.core.outstock.so.dto.PickPlanDTO;
 import org.nodes.wms.core.outstock.so.dto.SavePickPlanDTO;
 import org.nodes.wms.core.outstock.so.dto.SavePickPlanDetailDTO;
 import org.nodes.wms.core.outstock.so.entity.*;
-import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
-import org.nodes.wms.dao.outstock.so.enums.SoDetailStateEnum;
 import org.nodes.wms.core.outstock.so.enums.WellenStateEnum;
 import org.nodes.wms.core.outstock.so.mapper.PickPlanMapper;
 import org.nodes.wms.core.outstock.so.mapper.SoDetailMapper;
@@ -48,7 +43,6 @@ import org.nodes.wms.core.outstock.so.vo.*;
 import org.nodes.wms.core.outstock.so.wrapper.PickPlanWrapper;
 import org.nodes.wms.core.stock.core.dto.StockMoveDTO;
 import org.nodes.wms.core.stock.core.dto.StockOccupyDTO;
-import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.core.stock.core.entity.StockDetail;
 import org.nodes.wms.core.stock.core.entity.StockOccupy;
 import org.nodes.wms.core.stock.core.enums.EventTypeEnum;
@@ -73,10 +67,16 @@ import org.nodes.wms.core.warehouse.entity.Location;
 import org.nodes.wms.core.warehouse.enums.ZoneVirtualTypeEnum;
 import org.nodes.wms.core.warehouse.service.ILocationService;
 import org.nodes.wms.core.warehouse.service.IZoneService;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
+import org.nodes.wms.dao.basics.sku.entities.SkuPackageDetail;
 import org.nodes.wms.dao.basics.sku.enums.SkuLevelEnum;
 import org.nodes.wms.dao.basics.sku.enums.SkuLogTypeEnum;
+import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
+import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
+import org.nodes.wms.dao.outstock.so.enums.SoDetailStateEnum;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.mp.support.Condition;
@@ -987,7 +987,7 @@ public class PickPlanServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 	public LpnItemVo getInfoByLpnCode(String lpnCode, String pickPlanId, BigDecimal count) {
 		IZoneService zoneService = SpringUtil.getBean(IZoneService.class);
 		List<Zone> zoneList = zoneService.list(Wrappers.lambdaQuery(Zone.class)
-			.eq(Zone::getZoneType, ZoneVirtualTypeEnum.Pick.getIndex()));
+			.eq(Zone::getZoneType, ZoneVirtualTypeEnum.PICK.getIndex()));
 
 		IPickPlanService pickPlanService = SpringUtil.getBean(IPickPlanService.class);
 		PickPlan pickPlan = pickPlanService.getById(pickPlanId);
@@ -1044,6 +1044,7 @@ public class PickPlanServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 
 	/**
 	 * 按托拣货
+	 *
 	 * @param detail
 	 * @return
 	 */
@@ -1099,7 +1100,7 @@ public class PickPlanServiceImpl<M extends PickPlanMapper, T extends PickPlan>
 		}
 		IZoneService zoneService = SpringUtil.getBean(IZoneService.class);
 		List<Zone> zoneList = zoneService.list(Wrappers.lambdaQuery(Zone.class)
-			.eq(Zone::getZoneType, ZoneVirtualTypeEnum.Pick.getIndex()));
+			.eq(Zone::getZoneType, ZoneVirtualTypeEnum.PICK.getIndex()));
 		List<StockDetail> stockDetails = stockDetailService.list(Wrappers.lambdaQuery(StockDetail.class)
 			.notIn(StockDetail::getZoneId, NodesUtil.toList(zoneList, Zone::getZoneId))
 			.in(StockDetail::getStockId, NodesUtil.toList(pickPlans1, PickPlan::getStockId))
