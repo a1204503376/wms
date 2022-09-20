@@ -390,12 +390,20 @@ public class InStockBizImpl implements InStockBiz {
 			Location targetLocation = locationBiz.findByLocId(receiveDetailByPc.getLocId());
 			//查询收货库位，如果是发货接驳区或者出库集货区则抛异常
 			canReceiveByLocation(targetLocation.getWhId(), targetLocation.getLocCode());
+			//校验目标库位是否是自动区 是自动区的话目标库位必须为空
+			stockManageBiz.canMoveToLocAuto(targetLocation);
+			//校验目标库位箱型，必须跟输入的箱码是一致的类型
+			stockManageBiz.canMoveToBoxType(targetLocation, receiveDetailByPc.getBoxCode());
 			//生成清点记录
 			ReceiveLog receiveLog = receiveLogFactory.createReceiveLog(receiveDetailByPc, receiveHeader, receiveDetail);
 			receiveLogBiz.saveReceiveLog(receiveLog);
 			receiveLogList.add(receiveLog);
 			//调用库存函数
-			stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PC, receiveLog);
+			Stock stock = stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PC, receiveLog);
+			List<Stock> stockList = new ArrayList<>();
+			stockList.add(stock);
+			//校验载重
+			stockManageBiz.canMoveByIsNotOverweight(targetLocation, stockList);
 			//修改收货单明细状态和剩余数量
 			receiveBiz.updateReceiveDetail(receiveDetail, receiveDetailByPc.getScanQty());
 			// 修改收货单明细状态
