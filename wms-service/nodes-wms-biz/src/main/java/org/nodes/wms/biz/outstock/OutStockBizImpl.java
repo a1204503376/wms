@@ -646,9 +646,7 @@ public class OutStockBizImpl implements OutStockBiz {
 			soBillBiz.updateSoBillState(soHeader);
 			// 如果是借出单撤销发货，则需要删除借出记录和未归还记录(物理删除)
 			if (WmsAppConstant.BILL_TYPE_LEND.equals(soHeader.getBillTypeCd())) {
-				if (!lendReturnBiz.removeBySoDetailId(logSoPick.getSoDetailId())) {
-					throw new ServiceException("删除借出记录或未归还记录失败，请稍后再试");
-				}
+				lendReturnBiz.removeBySoDetailId(logSoPick.getSoDetailId());
 			}
 			// 记录业务日志
 			logBiz.auditLog(AuditLogType.OUTSTOCK, soHeader.getSoBillId(), soHeader.getSoBillNo(), "撤销发货");
