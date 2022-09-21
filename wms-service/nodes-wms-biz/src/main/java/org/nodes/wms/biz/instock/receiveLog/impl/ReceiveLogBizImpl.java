@@ -2,6 +2,7 @@ package org.nodes.wms.biz.instock.receiveLog.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
@@ -86,7 +87,11 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		log.setSkuLot1(request.getSkuLot1());
 		log.setSkuLot2(request.getSkuLot2());
 		log.setSkuLot4(request.getSkuLot4());
-		log.setSkuLot3(Func.formatDate(new Date()));
+		if (WmsAppConstant.BILL_TYPE_RETURN.equals(receiveHeader.getBillTypeCd())){
+			log.setSkuLot3(detail.getSkuLot3());
+		} else {
+			log.setSkuLot3(Func.formatDate(new Date()));
+		}
 		receiveLogDao.save(log);
 		return log;
 	}
