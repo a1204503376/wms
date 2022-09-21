@@ -65,6 +65,17 @@ public class PdaPickingController {
 	}
 
 	/**
+	 * PDA拣货：拣货详情查看包含拣货计划详情
+	 *
+	 * @param request Pda根据发货单ID查询出库单明细-请求对象
+	 * @param query   分页参数
+	 * @return 拣货详情响应对象
+	 */
+	@PostMapping("/findPickPlanBySoBillId")
+	public R<IPage<FindPickingBySoBillIdResponse>> findPickPlanBySoBillId(@RequestBody FindOpenSoDetailRequest request, Query query) {
+		return R.data(outStockBiz.findPickPlanBySoBillId(request, query));
+	}
+	/**
 	 * 判断当前物品是否是序列号管理
 	 *
 	 * @param request 判断当前物品是否是序列号管理请求对象

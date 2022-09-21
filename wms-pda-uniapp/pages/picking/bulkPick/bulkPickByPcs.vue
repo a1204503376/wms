@@ -1,26 +1,13 @@
 <template>
 	<view>
 		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false" rightIcon="order"
-			rightIconColor="#fff" @rightClick="gotoDetails" :bgColor="navigationBarBackgroundColor" title="按件拣货"
+			rightIconColor="#fff" @rightClick="gotoDetails" :bgColor="navigationBarBackgroundColor" title="零散拣货"
 			titleStyle="color:#ffffff;font-size:21px" style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u--form>
-			<u-form-item label="物品" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model.trim="params.skuCode"></u--input>
-			</u-form-item>
-			<u-form-item label="批次" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model.trim="params.skuLot1"></u--input>
-			</u-form-item>
 			<u-form-item label="箱码" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model.trim="params.boxCode"></u--input>
 			</u-form-item>
-			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model.trim="params.locCode"></u--input>
-			</u-form-item>
-			<u-form-item label="数量" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model.trim="params.qty"></u--input>
-			</u-form-item>
-
 		</u--form>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
@@ -205,27 +192,13 @@
 				}, 1000)
 
 			},
-			getDetailByDetailId() {
-				let params = {
-					receiveDetailId: this.receiveDetailId
-				};
-				receive.getDetailByDetailId(params).then(data => {
-					this.params.skuCode = data.data.skuCode;
-					this.params.skuName = data.data.skuName;
-					this.params.surplusQty = data.data.surplusQty;
-					this.params.wsuCode = data.data.wsuCode;
-					this.params.skuLot1 = data.data.skuLot1;
-					this.params.boxCode = data.data.boxCode;
-					this.params.isSn = data.data.isSn;
-				})
-			},
 			esc() {
 				uni.navigateBack({
 					delta: 1
 				});
 			},
 			gotoDetails() {
-				uni.$u.func.routeNavigateTo('/pages/picking/pickToByPcs/pickingDetails', this.params);
+				uni.$u.func.routeNavigateTo('/pages/picking/bulkPick/bulkPickDetails', this.params);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

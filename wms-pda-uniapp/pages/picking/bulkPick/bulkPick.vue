@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
-			:bgColor="navigationBarBackgroundColor" title="按件拣货" titleStyle="color:#ffffff;font-size:21px"
+			:bgColor="navigationBarBackgroundColor" title="零散拣货" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
@@ -142,7 +142,7 @@
 			clickItem(row) {
 				this.clearEmitKeyDown();
 				uni.setStorageSync('soDetail', '');
-				uni.$u.func.routeNavigateTo('/pages/picking/pickToByPcs/pickToByPcs', row);
+				uni.$u.func.routeNavigateTo('/pages/picking/bulkPick/bulkPickByPcs', row);
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

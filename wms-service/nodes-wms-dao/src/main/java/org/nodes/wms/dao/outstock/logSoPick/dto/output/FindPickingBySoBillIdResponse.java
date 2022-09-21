@@ -7,6 +7,7 @@ import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Pda根据发货单ID查询出库单明细-响应对象
@@ -55,5 +56,10 @@ public class FindPickingBySoBillIdResponse extends BaseSkuLotEntity implements S
 	 * 物品编码
 	 */
 	private String skuCode;
+
+	/**
+	 * 拣货计划响应对象
+	 */
+	private List<FindPickToSoPickPlanResponse> soPickPlanList;
 
 }

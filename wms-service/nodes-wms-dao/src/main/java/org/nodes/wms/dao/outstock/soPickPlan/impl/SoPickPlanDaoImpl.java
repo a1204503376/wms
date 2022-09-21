@@ -153,4 +153,11 @@ public class SoPickPlanDaoImpl
 			throw new ServiceException("修改拣货计划失败,请再次重试");
 		}
 	}
+
+	@Override
+	public List<SoPickPlan> selectPickBySoDetailId(Long soDetailId) {
+		return super.lambdaQuery()
+			.eq(SoPickPlan::getSoDetailId, soDetailId)
+			.list();
+	}
 }
