@@ -75,8 +75,8 @@
                         <el-col :span="24">
                             <el-form-item label="备注">
                                 <el-input
-                                    placeholder="请输入内容"
                                     v-model="form.params.newReceiveHeaderRequest.remark"
+                                    placeholder="请输入内容"
                                     type="textarea">
                                 </el-input>
                             </el-form-item>
@@ -93,18 +93,21 @@
                                 border
                                 size="mini">
                                 <el-table-column
+                                    fixed="left"
                                     width="53">
                                     <template slot="header">
                                         <el-button
                                             circle
-                                                   icon="el-icon-plus"
-                                                   size="mini"
-                                                   type="primary"
-                                                   @click="onAddBatchRow">
+                                            icon="el-icon-plus"
+                                            size="mini"
+                                            type="primary"
+                                            @click="onAddBatchRow">
                                         </el-button>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
+                                    align="center"
+                                    fixed="left"
                                     label="行号"
                                     show-overflow-tooltip
                                     type="index"
@@ -155,7 +158,8 @@
                                             :min="0"
                                             controls-position="right"
                                             size="mini"
-                                            style="width: 130px"></el-input-number>
+                                            style="width: 130px">
+                                        </el-input-number>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -169,16 +173,16 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    width="120"
-                                    prop="skuSpec">
+                                    prop="skuSpec"
+                                    width="120">
                                     <template slot="header">
                                         <span class="d-table-header-required">规格</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <nodes-sku-spec
                                             v-model="row.skuSpec"
-                                            :sku="row.sku"
                                             :disabled="true"
+                                            :sku="row.sku"
                                             size=mini>
                                         </nodes-sku-spec>
                                     </template>
@@ -246,7 +250,10 @@
                                         <el-input v-model="row.remark" size="mini"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column width="100">
+                                <el-table-column
+                                    align="center"
+                                    fixed="right"
+                                    width="100">
                                     <template slot="header">
                                         <span>操作</span>
                                     </template>
