@@ -95,7 +95,8 @@
                                 <el-table-column
                                     width="53">
                                     <template slot="header">
-                                        <el-button circle
+                                        <el-button
+                                            circle
                                                    icon="el-icon-plus"
                                                    size="mini"
                                                    type="primary"
@@ -158,8 +159,7 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    :align="'left'"
-                                    prop="skuCode"
+                                    prop="umCode"
                                     width="110">
                                     <template slot="header">
                                         <span class="d-table-header-required">计量单位</span>
@@ -169,17 +169,18 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    :align="'left'"
-                                    prop="skuCode">
+                                    width="120"
+                                    prop="skuSpec">
                                     <template slot="header">
                                         <span class="d-table-header-required">规格</span>
                                     </template>
                                     <template v-slot="{row}">
-                                        <el-input
-                                            v-model="row.sku.skuSpec"
+                                        <nodes-sku-spec
+                                            v-model="row.skuSpec"
+                                            :sku="row.sku"
                                             :disabled="true"
                                             size=mini>
-                                        </el-input>
+                                        </nodes-sku-spec>
                                     </template>
                                 </el-table-column>
                                 <el-table-column width="130">
@@ -295,10 +296,12 @@ import NodesSupplier from "@/components/wms/select/NodesSupplier";
 import NodesOwner from "@/components/wms/select/NodesOwner";
 import {addReceive} from "@/api/wms/instock/receive";
 import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
+import NodesSkuSpec from "@/components/wms/select/NodesSkuSpec";
 
 export default {
     name: "edit",
     components: {
+        NodesSkuSpec,
         NodesSkuUm,
         NodesOwner,
         NodesSupplier,
@@ -345,9 +348,6 @@ export default {
         }
     },
     methods: {
-        billTypeChange(row) {
-            console.log(row)
-        },
         // 过滤空白行
         filterBlankRow(row) {
             return !(
@@ -367,7 +367,6 @@ export default {
                         skuId: {required: true, message: skuErrorMsg},
                         skuCode: {required: true, message: skuErrorMsg},
                         skuName: {required: true, message: skuErrorMsg},
-
                     }
                 },
                 planQty: {type: 'Number', validator: (rule, value) => value > 0, message: '计划数量不能为0'}
@@ -381,7 +380,6 @@ export default {
                     skuId: '',
                     skuCode: '',
                     skuName: '',
-                    skuSpec: ''
                 },
                 umCode: '',
                 planQty: 0,
@@ -408,7 +406,6 @@ export default {
             })
 
         },
-
         onChangeSku(row) {
             if (row.sku.skuCode !== undefined) {
                 let skuCodeList = this.table.data.map((item) => item.sku.skuCode);
