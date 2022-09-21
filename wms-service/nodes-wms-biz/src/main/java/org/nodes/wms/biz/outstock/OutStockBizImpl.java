@@ -25,6 +25,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
+import org.nodes.wms.dao.lendreturn.dto.input.LendReturnRequest;
 import org.nodes.wms.dao.outstock.SoPickPlanDao;
 import org.nodes.wms.dao.outstock.logSoPick.LogSoPickDao;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.*;
@@ -786,6 +787,13 @@ public class OutStockBizImpl implements OutStockBiz {
 		soBillBiz.updateSoDetailStatus(soDetail, request.getQty());
 		// 5 更新发货单状态
 		soBillBiz.updateSoBillState(soHeader);
+		// 如果单据类型是借出出库
+		if (WmsAppConstant.BILL_TYPE_LEND.equals(soHeader.getBillTypeCd())){
+			List<LogSoPick> logSoPickList = new ArrayList<>();
+			logSoPickList.add(logSoPick);
+			LendReturnRequest lendRequest = logLendReturnFactory.createLendRequest(logSoPickList);
+			lendReturnBiz.saveLog(lendRequest);
+		}
 		// 6 记录业务日志
 		logBiz.auditLog(AuditLogType.OUTSTOCK, soHeader.getSoBillId(), soHeader.getSoBillNo(),
 			String.format("PDA%s 箱码:[%s] SKU[%s]批次[%s]数量[%s] ", WmsTaskProcTypeEnum.BY_PCS.getDesc(), stockList.get(0).getBoxCode(), request.getSkuCode(), request.getSkuLot1(),
