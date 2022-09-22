@@ -114,7 +114,7 @@
 				this.param.locCode = this.$u.func.parseLocCode(this.param.locCode)
 				receive.receiveByCode(this.param).then(res => {
 					this.$u.func.showToast({
-						title: '操作成功'
+						title: this.param.boxCode+'收货成功'
 					})
 					this.esc()
 				})

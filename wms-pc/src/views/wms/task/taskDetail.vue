@@ -19,7 +19,8 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="任务类型" label-width="90px">
-                            <nodes-task-type class="search-input" v-model.trim="form.params.taskTypeCdList" :multiple="true">
+                            <nodes-task-type class="search-input" v-model.trim="form.params.taskTypeCdList"
+                                :multiple="true">
                             </nodes-task-type>
                         </el-form-item>
                     </el-col>
@@ -98,11 +99,14 @@
                             <template v-if="column.prop === 'taskState'" v-slot="scope">
                                 <el-tag v-if="scope.row.taskState === '已下发' || scope.row.taskState === '开始执行'"
                                     type="success">{{ scope.row.taskState }}</el-tag>
-                                <el-tag v-else-if="scope.row.taskState === '已完成' ||scope.row.taskState === 'AGV完成' || scope.row.taskState === '已取消'"
+                                <el-tag
+                                    v-else-if="scope.row.taskState === '已完成' ||scope.row.taskState === 'AGV完成' || scope.row.taskState === '已取消'"
                                     type="info">{{ scope.row.taskState }}</el-tag>
-                                <el-tag v-else-if="scope.row.taskState === '未下发'" type="warning">{{ scope.row.taskState }}
+                                <el-tag v-else-if="scope.row.taskState === '未下发'" type="warning">{{ scope.row.taskState
+                                }}
                                 </el-tag>
-                                <el-tag v-else-if="scope.row.taskState === '异常中断中'" type="danger">{{ scope.row.taskState }}
+                                <el-tag v-else-if="scope.row.taskState === '异常中断中'" type="danger">{{ scope.row.taskState
+                                }}
                                 </el-tag>
                                 <el-tag v-else type="info">{{ scope.row.taskState }}</el-tag>
                             </template>
@@ -196,6 +200,26 @@ export default {
                         sortable: "custom",
                     },
                     {
+                        prop: 'fromLocCode',
+                        label: '来源库位',
+                        sortable: "custom",
+                    },
+                    {
+                        prop: 'toLocCode',
+                        label: '目标库位',
+                        sortable: "custom",
+                    },
+                    {
+                        prop: 'boxCode',
+                        label: '箱号',
+                        sortable: "custom",
+                    },
+                    {
+                        prop: 'remark',
+                        label: '备注',
+                        sortable: "custom",
+                    },
+                    {
                         prop: 'skuCode',
                         label: '物品编码',
                         sortable: "custom",
@@ -221,28 +245,8 @@ export default {
                         sortable: "custom",
                     },
                     {
-                        prop: 'fromLocCode',
-                        label: '来源库位',
-                        sortable: "custom",
-                    },
-                    {
-                        prop: 'toLocCode',
-                        label: '目标库位',
-                        sortable: "custom",
-                    },
-                    {
-                        prop: 'boxCode',
-                        label: '箱号',
-                        sortable: "custom",
-                    },
-                    {
                         prop: 'lpnCode',
                         label: '托盘号',
-                        sortable: "custom",
-                    },
-                    {
-                        prop: 'remark',
-                        label: '备注',
                         sortable: "custom",
                     },
                     {

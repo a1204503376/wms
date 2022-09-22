@@ -62,7 +62,8 @@ export default {
                 ioType: this.ioTypeVal
             };
             let {data: {data}} = await getBillTypeSelectResponseList(billTypeSelectQuery);
-            this.options = data;
+            // 屏蔽归还入库类型
+            this.options = data.filter(value => value.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN)
             this.loading = false;
         },
         onChange(val) {

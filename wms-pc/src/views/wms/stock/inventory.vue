@@ -401,6 +401,7 @@ import NodesZone from "@/components/wms/select/NodesZone";
 import NodesDictionary from "@/components/wms/select/NodesDictionary";
 import { nowDateFormat } from "@/util/date";
 import { getParamValue } from "@/util/param";
+import { getStore } from "@/util/store";
 
 export default {
     name: "customer",
@@ -796,7 +797,7 @@ export default {
                 return
             }
 
-            let userName = localStorage.getItem('userName');
+            let userName = getStore({ name: "userInfo" }).account;
             let type = '';
             if (rows[0].hasSerial === 1) {
                 type = 'sn'

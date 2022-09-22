@@ -83,6 +83,7 @@
                                 size="mini">
                                 <el-table-column
                                     label="行号"
+                                    fixed="left"
                                     show-overflow-tooltip
                                     type="index"
                                     width="60">
@@ -94,7 +95,6 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    :align="'left'"
                                     prop="skuCode"
                                     width="195">
                                     <template slot="header">
@@ -135,8 +135,7 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    :align="'left'"
-                                    prop="skuCode"
+                                    prop="umCode"
                                     width="110">
                                     <template slot="header">
                                         <span class="d-table-header-required">计量单位</span>
@@ -149,17 +148,17 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    :align="'left'"
                                     prop="skuSpec">
                                     <template slot="header">
                                         <span class="d-table-header-required">规格</span>
                                     </template>
                                     <template v-slot="{row}">
-                                        <el-input
-                                            v-model="row.sku.skuSpec"
+                                        <nodes-sku-spec
+                                            v-model="row.skuSpec"
+                                            :sku="row.sku"
                                             :disabled="true"
                                             size=mini>
-                                        </el-input>
+                                        </nodes-sku-spec>
                                     </template>
                                 </el-table-column>
                                 <el-table-column width="130">
@@ -230,7 +229,9 @@
                                         <el-input v-model="row.remark" size="mini"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column width="100">
+                                <el-table-column
+                                    fixed="right"
+                                    width="100">
                                     <template slot="header">
                                         <span>操作</span>
                                     </template>
@@ -278,10 +279,12 @@ import NodesSupplier from "@/components/wms/select/NodesSupplier";
 import NodesOwner from "@/components/wms/select/NodesOwner";
 import {addReceive} from "@/api/wms/instock/receive";
 import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
+import NodesSkuSpec from "@/components/wms/select/NodesSkuSpec";
 
 export default {
     name: "new",
     components: {
+        NodesSkuSpec,
         NodesSkuUm, NodesOwner, NodesSupplier,
         NodesBillType, NodesWarehouse, NodesLineNumber,
         NodesSku, NodesInStoreType, NodesInStoreMode
@@ -358,8 +361,8 @@ export default {
                     skuId: row.skuId,
                     skuCode: row.skuCode,
                     skuName: row.skuName,
-                    skuSpec: row.skuLot2,
                 };
+                row.skuSpec = row.skuLot2,
                 row.planQty = row.pickRealQty;
                 row.umCode = row.wsuCode;
                 i++;
@@ -372,9 +375,9 @@ export default {
                     skuId: '',
                     skuCode: '',
                     skuName: '',
-                    skuSpec: ''
                 },
                 umCode: '',
+                skuSpec: '',
                 planQty: 0,
                 remark: '',
                 skuLot1: '',

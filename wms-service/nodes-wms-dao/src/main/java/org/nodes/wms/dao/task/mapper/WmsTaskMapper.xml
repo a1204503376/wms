@@ -18,7 +18,8 @@
         lpn_code,
         begin_time,
         close_time,
-        allot_time
+        allot_time,
+        remark
         from tsk_task
         <where>
             <if test="query.taskId != null and query.taskId != ''">
