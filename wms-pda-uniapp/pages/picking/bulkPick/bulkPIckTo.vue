@@ -18,7 +18,7 @@
 				<u--input v-model.trim="params.locCode" disabled></u--input>
 			</u-form-item>
 			<u-form-item label="数量" :required="true" class="left-text-one-line" labelWidth="100">
-				<u--input v-model.trim="params.qty" ></u--input>
+				<u--input v-model.trim="params.qty"></u--input>
 			</u-form-item>
 
 		</u--form>
@@ -77,18 +77,7 @@
 			uni.$u.func.unRegisterScanner();
 		},
 		onShow() {
-			pick.getPickPlanBySoBillIdAndBoxCode(this.defaultParams).then(data => {
-				console.log(data.data.length)
-				if (data.data.length > 0) {
-					this.params = data.data[0];
-					this.params.skuLot1 = data.data[0].lotNumber;
-					this.params.qty = data.data[0].surplusQty;
-				} else {
-					_this.$u.func.showToast({
-						title: '拣货完成'
-					});
-				}
-			});
+			this.getPickPlanBySoBillIdAndBoxCode();
 		},
 		onBackPress(event) {
 			// #ifdef APP-PLUS
@@ -99,6 +88,20 @@
 			// #endif
 		},
 		methods: {
+			getPickPlanBySoBillIdAndBoxCode() {
+				pick.getPickPlanBySoBillIdAndBoxCode(this.defaultParams).then(data => {
+					console.log(data.data.length)
+					if (data.data.length > 0) {
+						this.params = data.data[0];
+						this.params.skuLot1 = data.data[0].lotNumber;
+						this.params.qty = data.data[0].surplusQty;
+					} else {
+						_this.$u.func.showToast({
+							title: '拣货完成'
+						});
+					}
+				});
+			},
 			getStockByBoxCode() {
 				let params = {
 					boxCode: this.params.boxCode,
@@ -144,9 +147,6 @@
 							tool.isNotEmpty(_this.params.qty) &&
 							tool.isInteger(_this.params.qty)
 						) {
-							if (_this.params.skuCode != _this.defaultParams.skuCode) {
-								_this.params.soDetailId = undefined;
-							}
 							if (data.data) {
 								uni.$u.func.routeNavigateTo(
 									'/pages/picking/pickToByPcs/pickingSerialNumber',
@@ -159,7 +159,8 @@
 									_this.$u.func.showToast({
 										title: '拣货完成'
 									});
-								
+									_this.getPickPlanBySoBillIdAndBoxCode();
+
 								});
 							}
 						} else {
