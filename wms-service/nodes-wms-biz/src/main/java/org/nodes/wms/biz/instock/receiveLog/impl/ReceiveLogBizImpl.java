@@ -54,7 +54,12 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	private final ReceiveBiz receiveBiz;
 
 
-	@Override
+    @Override
+    public List<ReceiveLog> findReceiveLogList(Long receiveId) {
+        return receiveLogDao.getByReceiveId(receiveId);
+    }
+
+    @Override
 	public List<ReceiveLogResponse> getReceiveLogList(Long receiveId) {
 		return receiveLogDao.getReceiveLogList(receiveId);
 	}
