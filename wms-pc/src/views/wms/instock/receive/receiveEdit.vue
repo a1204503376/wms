@@ -35,17 +35,17 @@
                                 :label="form.params.editReceiveHeaderRequest.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN ? '供应商' : '归还人'"
                                 :prop="form.params.editReceiveHeaderRequest.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN ? 'supplier' : 'supplierContact'">
                                 <nodes-supplier
-                                    v-model="form.params.editReceiveHeaderRequest.supplier"
                                     v-if="form.params.editReceiveHeaderRequest.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN"
+                                    v-model="form.params.editReceiveHeaderRequest.supplier"
                                     size="medium">
                                 </nodes-supplier>
                                 <el-input
-                                    style="width: 210px"
-                                    placeholder="请输入归还人"
-                                    :clearable="true"
-                                    v-model="form.params.editReceiveHeaderRequest.supplierContact"
                                     v-if="form.params.editReceiveHeaderRequest.billTypeCd === this.$commonConst.BILL_TYPE_RETURN"
-                                    size="medium">
+                                    v-model="form.params.editReceiveHeaderRequest.supplierContact"
+                                    :clearable="true"
+                                    placeholder="请输入归还人"
+                                    size="medium"
+                                    style="width: 210px">
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -73,8 +73,8 @@
                         <el-col :span="24">
                             <el-form-item label="备注">
                                 <el-input
-                                    placeholder="请输入内容"
                                     v-model="form.params.editReceiveHeaderRequest.remark"
+                                    placeholder="请输入内容"
                                     type="textarea">
                                 </el-input>
                             </el-form-item>
@@ -90,17 +90,22 @@
                                 :data="table.data"
                                 border
                                 size="mini">
-                                <el-table-column width="53">
+                                <el-table-column
+                                    fixed="left"
+                                    width="53">
                                     <template slot="header">
-                                        <el-button circle
-                                                   icon="el-icon-plus"
-                                                   size="mini"
-                                                   type="primary"
-                                                   @click="onAddBatchRow">
+                                        <el-button
+                                            circle
+                                            icon="el-icon-plus"
+                                            size="mini"
+                                            type="primary"
+                                            @click="onAddBatchRow">
                                         </el-button>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
+                                    align="center"
+                                    fixed="left"
                                     label="行号"
                                     prop="lineNumber"
                                     show-overflow-tooltip
@@ -114,7 +119,6 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    :align="'left'"
                                     prop="skuCode"
                                     width="200">
                                     <template slot="header">
@@ -141,16 +145,17 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column :align="'left'" width="100">
+                                <el-table-column width="120">
                                     <template slot="header">
                                         <span class="d-table-header-required">规格</span>
                                     </template>
                                     <template v-slot="{row}">
-                                        <el-input
-                                            v-model="row.sku.skuSpec"
+                                        <nodes-sku-spec
+                                            v-model="row.skuSpec"
                                             :disabled="true"
+                                            :sku="row.sku"
                                             size=mini>
-                                        </el-input>
+                                        </nodes-sku-spec>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="planQty" width="130">
@@ -177,7 +182,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column :align="'left'" prop="skuCode" width="100">
+                                <el-table-column prop="umCode" width="100">
                                     <template slot="header">
                                         <span class="d-table-header-required">计量单位</span>
                                     </template>
@@ -233,7 +238,10 @@
                                         <el-input v-model.trim="row.remark" size="mini"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column width="100">
+                                <el-table-column
+                                    align="center"
+                                    fixed="right"
+                                    width="100">
                                     <template slot="header">
                                         <span>操作</span>
                                     </template>
@@ -283,6 +291,7 @@ import NodesSupplier from "@/components/wms/select/NodesSupplier";
 import NodesOwner from "@/components/wms/select/NodesOwner";
 import {editReceive, getEditReceiveById} from "@/api/wms/instock/receive";
 import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
+import NodesSkuSpec from "@/components/wms/select/NodesSkuSpec";
 
 export default {
     props: {
@@ -290,6 +299,7 @@ export default {
     },
     name: "edit",
     components: {
+        NodesSkuSpec,
         NodesSkuUm,
         NodesOwner,
         NodesSupplier,
@@ -372,7 +382,6 @@ export default {
             const skuErrorMsg = '请选择物品编码';
             return {
                 sku: {required: true, message: skuErrorMsg}
-
             };
         },
         createRowObj() {
@@ -382,9 +391,9 @@ export default {
                     skuId: '',
                     skuCode: '',
                     skuName: '',
-                    skuSpec: ''
                 },
                 umCode: '',
+                skuSpec: '',
                 receiveDetailId: '',
                 planQty: 0,
                 scanQty: '',
@@ -426,7 +435,6 @@ export default {
                     };
                 });
         },
-
     }
 }
 </script>
