@@ -3,11 +3,13 @@ package org.nodes.wms.biz.lendreturn.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsAppConstant;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.core.tool.utils.StringPool;
 import org.nodes.wms.biz.lendreturn.LendReturnBiz;
 import org.nodes.wms.biz.lendreturn.modular.LogLendReturnFactory;
+import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.lendreturn.LogLendReturnDao;
 import org.nodes.wms.dao.lendreturn.LogNoReturnDao;
 import org.nodes.wms.dao.lendreturn.dto.input.LendReturnQuery;
@@ -19,6 +21,7 @@ import org.nodes.wms.dao.lendreturn.dto.output.NoReturnResponse;
 import org.nodes.wms.dao.lendreturn.entities.LogLendReturn;
 import org.nodes.wms.dao.lendreturn.entities.LogNoReturn;
 import org.nodes.wms.dao.lendreturn.enums.LendReturnTypeEnum;
+import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.tool.api.ResultCode;
 import org.springblade.core.tool.utils.Func;
@@ -169,5 +172,25 @@ public class LendReturnBizImpl implements LendReturnBiz {
 			.filter(d -> Func.notNull(d.getId())
 				&& Func.equals(d.getId(), finalLogNoReturn.getId()))
 			.findFirst().orElse(null);
+	}
+
+	@Override
+	public void saveReturnLog(String billType, List<ReceiveLog> receiveLogList) {
+		AssertUtil.notEmpty(billType, "单据类型编码不能为空");
+		AssertUtil.notEmpty(billType, "清点记录不能为空");
+		if (WmsAppConstant.BILL_TYPE_RETURN.equals(billType)){
+			LendReturnRequest returnRequest = logLendReturnFactory.createReturnRequest(receiveLogList);
+			saveLog(returnRequest);
+		}
+	}
+
+	@Override
+	public void saveLendLog(String billType, List<LogSoPick> logSoPickList) {
+		AssertUtil.notEmpty(billType, "单据类型编码不能为空");
+		AssertUtil.notEmpty(billType, "拣货记录不能为空");
+		if (WmsAppConstant.BILL_TYPE_LEND.equals(billType)){
+			LendReturnRequest lendRequest = logLendReturnFactory.createLendRequest(logSoPickList);
+			saveLog(lendRequest);
+		}
 	}
 }
