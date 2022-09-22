@@ -7,6 +7,8 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindPickingBySoBillIdResp
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.OutboundAccessAreaLocationQueryResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.PickByPcRequest;
 import org.nodes.wms.dao.outstock.so.dto.input.SoBillDistributedRequest;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.input.FindPickPlanBySoBillIdAndBoxCodeRequest;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.output.FindPickPlanBySoBillIdAndBoxCodeResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
 import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
 import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
@@ -150,4 +152,19 @@ public interface OutStockBiz {
 	 */
 	IPage<FindPickingBySoBillIdResponse> findPickPlanBySoBillId(FindOpenSoDetailRequest request, Query query);
 
+	/**
+	 * 根据发货单和箱码查询对应拣货计划数据
+	 *
+	 * @param request 请求对象
+	 * @return 拣货计划数据
+	 */
+	List<FindPickPlanBySoBillIdAndBoxCodeResponse> getPickPlanBySoBillIdAndBoxCode(FindPickPlanBySoBillIdAndBoxCodeRequest request);
+
+	/**
+	 * 零散拣货
+	 *
+	 * @param request 请求对象
+	 * @return true:全部拣货 false:部分拣货
+	 */
+	Boolean bulkPick(BulkPickRequest request);
 }
