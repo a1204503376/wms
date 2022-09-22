@@ -7,45 +7,109 @@
 		<!-- ${index + 1} -->
 		<u-list style="height: 960rpx;">
 			<u-list-item v-for="(item, index) in receiveDetailList" :key="index">
-				<view @click="clickItem(item)">
+				<view>
 					<u-row customStyle="margin-bottom: 10px">
 						<u-col span="4" class="left-text-one-line">
-							<view class="demo-layout bg-purple-light font-in-page" style="text-align: left;">{{'行号'}}</view>
+							<view class="demo-layout bg-purple-light font-in-page" style="text-align: left;">{{'行号'}}
+							</view>
 						</u-col>
 						<u-col span="8">
-							<view class="demo-layout bg-purple font-in-page" style="text-align: right;margin-right: 30rpx;">
+							<view class="demo-layout bg-purple font-in-page"
+								style="text-align: right;margin-right: 30rpx;">
 								{{item.soLineNo}}
 							</view>
 						</u-col>
 					</u-row>
 					<u-row customStyle="margin-bottom: 10px">
 						<u-col span="4" class="left-text-one-line">
-							<view class="demo-layout bg-purple-light font-in-page" style="text-align: left;">{{'物品编码'}}</view>
+							<view class="demo-layout bg-purple-light font-in-page" style="text-align: left;">{{'物品编码'}}
+							</view>
 						</u-col>
 						<u-col span="8">
-							<view class="demo-layout bg-purple font-in-page" style="text-align: right;margin-right: 30rpx;">
+							<view class="demo-layout bg-purple font-in-page"
+								style="text-align: right;margin-right: 30rpx;">
 								{{item.skuCode}}
 							</view>
 						</u-col>
 					</u-row>
 					<u-row customStyle="margin-bottom: 10px">
 						<u-col span="4" class="left-text-one-line">
-							<view class="demo-layout bg-purple-light font-in-page" style="text-align: left;">{{'实际数量'}}</view>
+							<view class="demo-layout bg-purple-light font-in-page" style="text-align: left;">{{'实际数量'}}
+							</view>
 						</u-col>
 						<u-col span="8">
-							<view class="demo-layout bg-purple font-in-page" style="text-align: right;margin-right: 30rpx;">{{item.scanQty}}/{{item.baseUmName}}
+							<view class="demo-layout bg-purple font-in-page"
+								style="text-align: right;margin-right: 30rpx;">{{item.scanQty}}/{{item.baseUmName}}
 							</view>
 						</u-col>
 					</u-row>
 					<u-row customStyle="margin-bottom: 10px">
 						<u-col span="4" class="left-text-one-line">
-							<view class="demo-layout bg-purple-light font-in-page" style="text-align: left;">{{'计划数量'}}</view>
+							<view class="demo-layout bg-purple-light font-in-page" style="text-align: left;">{{'计划数量'}}
+							</view>
 						</u-col>
 						<u-col span="8">
-							<view class="demo-layout bg-purple font-in-page" style="text-align: right;margin-right: 30rpx;">{{item.planQty}}/{{item.baseUmName}}
+							<view class="demo-layout bg-purple font-in-page"
+								style="text-align: right;margin-right: 30rpx;">{{item.planQty}}/{{item.baseUmName}}
 							</view>
 						</u-col>
 					</u-row>
+					<u-row customStyle="margin-bottom: 10px">
+					</u-row>
+					<view v-for="(soPick, index) in item.soPickPlanList" :key="index">
+						<u-row customStyle="margin-bottom: 10px">
+							<u-col span="4" class="left-text-one-line">
+								<view class="demo-layout bg-purple-light font-in-page" style="text-align: left;">
+									{{'库区'}}
+								</view>
+							</u-col>
+							<u-col span="8">
+								<view class="demo-layout bg-purple font-in-page"
+									style="text-align: right;margin-right: 30rpx;">
+									{{soPick.zoneCode}}
+								</view>
+							</u-col>
+						</u-row>
+<!-- 						<u-row customStyle="margin-bottom: 10px">
+							<u-col span="4" class="left-text-one-line">
+								<view class="demo-layout bg-purple-light font-in-page" style="text-align: left;">
+									{{'库位'}}
+								</view>
+							</u-col>
+							<u-col span="8">
+								<view class="demo-layout bg-purple font-in-page"
+									style="text-align: right;margin-right: 30rpx;">
+									{{soPick.locCode}}
+								</view>
+							</u-col>
+						</u-row> -->
+						<u-row customStyle="margin-bottom: 10px">
+							<u-col span="4" class="left-text-one-line">
+								<view class="demo-layout bg-purple-light font-in-page" style="text-align: left;">
+									{{'箱码'}}
+								</view>
+							</u-col>
+							<u-col span="8">
+								<view class="demo-layout bg-purple font-in-page"
+									style="text-align: right;margin-right: 30rpx;">
+									{{soPick.boxCode}}
+								</view>
+							</u-col>
+						</u-row>
+						<u-row customStyle="margin-bottom: 10px">
+							<u-col span="4" class="left-text-one-line">
+								<view class="demo-layout bg-purple-light font-in-page" style="text-align: left;">
+									{{'剩余量'}}
+								</view>
+							</u-col>
+							<u-col span="8">
+								<view class="demo-layout bg-purple font-in-page"
+									style="text-align: right;margin-right: 30rpx;">
+									{{soPick.surplusQty}}
+								</view>
+							</u-col>
+						</u-row>
+					</view>
 					<u-divider text=""></u-divider>
 				</view>
 			</u-list-item>
@@ -130,7 +194,7 @@
 			},
 			getReceiveDetailList() {
 				this.params.whId = uni.getStorageSync('warehouse').whId;
-				picking.getPickingBySoBillId(this.params).then(data => {
+				picking.getPickPlanBySoBillId(this.params).then(data => {
 					this.receiveDetailList = data.data.records;
 					console.log(data.data.records)
 					//TODO
@@ -140,15 +204,15 @@
 					// }
 				})
 			},
-			clickItem(row) {
-				this.params.skuName = row.skuName;
-				this.params.baseUmName = row.baseUmName;
-				this.params.planQty = row.planQty;
-				this.params.scanQty = row.scanQty;
-				this.clearEmitKeyDown();
-				uni.setStorageSync('soDetail', row);
-				this.esc();
-			},
+			// clickItem(row) {
+			// 	this.params.skuName = row.skuName;
+			// 	this.params.baseUmName = row.baseUmName;
+			// 	this.params.planQty = row.planQty;
+			// 	this.params.scanQty = row.scanQty;
+			// 	this.clearEmitKeyDown();
+			// 	uni.setStorageSync('soDetail', row);
+			// 	this.esc();
+			// },
 			scannerCallback(no) {
 				this.analysisCode(no);
 				this.getReceiveDetailList();
