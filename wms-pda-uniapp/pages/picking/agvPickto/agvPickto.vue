@@ -53,7 +53,7 @@
 </template>
 
 <script>
-	import barCodeService from '@/common/barcodeFunc.js'
+	import barCodeService from '@/utils/barcodeFunc.js'
 	import setting from '@/common/setting'
 	import pick from '@/api/picking/connectionAreaPicking.js'
 	import tool from '@/utils/tool.js'

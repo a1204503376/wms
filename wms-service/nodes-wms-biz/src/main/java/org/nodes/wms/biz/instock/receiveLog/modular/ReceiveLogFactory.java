@@ -33,7 +33,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReceiveLogFactory {
 	private final SkuBiz skuBiz;
-	private final ZoneBiz zoneBiz;
 	private final LocationBiz locationBiz;
 	private final WarehouseBiz warehouseBiz;
 	private final OwnerBiz ownerBiz;

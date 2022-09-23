@@ -38,7 +38,7 @@
 <script>
 	import setting from '@/common/setting'
 	import putawayByBoxs from '@/api/inStock/putawayByBox.js'
-	import barcodeFunc from '@/common/barcodeFunc.js'
+	import barcodeFunc from '@/utils/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {

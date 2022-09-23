@@ -54,7 +54,7 @@
 
 <script>
 	import receive from '@/api/inStock/receiveByBox.js'
-	import barCodeService from '@/common/barcodeFunc.js'
+	import barCodeService from '@/utils/barcodeFunc.js'
 	import setting from '@/common/setting'
 	import tool from '@/utils/tool.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'

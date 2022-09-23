@@ -360,7 +360,6 @@ export default {
                 i++;
             })
             this.table.data = data;
-            console.log(this.table.data);
         },
         autoTableHeight() {
             this.$nextTick(() => {
