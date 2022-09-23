@@ -38,7 +38,7 @@
 	import setting from '@/common/setting'
 	import picking from '@/api/picking/picking.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
-	import barcodeFunc from '@/common/barcodeFunc.js'
+	import barcodeFunc from '@/utils/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
 	export default {
 		components: {

@@ -49,7 +49,7 @@
 	import setting from '@/common/setting'
 	import receive from '@/api/inStock/receiveByPcs.js'
 	import uniSelect from '@/components/uni-select.vue'
-	import barcodeFunc from '@/common/barcodeFunc.js'
+	import barcodeFunc from '@/utils/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
 	export default {
 		components: {

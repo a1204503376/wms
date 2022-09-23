@@ -51,10 +51,13 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	private final ReceiveLogDao receiveLogDao;
 	private final LocationBiz locationBiz;
 	private final OwnerBiz ownerBiz;
-	private final ReceiveBiz receiveBiz;
 
+    @Override
+    public List<ReceiveLog> findReceiveLogList(Long receiveId) {
+        return receiveLogDao.getByReceiveId(receiveId);
+    }
 
-	@Override
+    @Override
 	public List<ReceiveLogResponse> getReceiveLogList(Long receiveId) {
 		return receiveLogDao.getReceiveLogList(receiveId);
 	}
@@ -163,23 +166,15 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	}
 
 	@Override
-	public void canCancelReceive(List<ReceiveLog> receiveLogList, List<ReceiveHeader> receiveHeaderList) {
-		// 判断收货记录对应的收货单状态是否已关闭，关闭不允许撤销
-		List<Long> receiveHeaderIdList = receiveLogList.stream()
-			.map(ReceiveLog::getReceiveId)
-			.distinct()
-			.collect(Collectors.toList());
-		receiveHeaderIdList.forEach(id -> {
-			ReceiveHeader header = receiveBiz.getReceiveHeaderById(id);
-			if (ReceiveHeaderStateEnum.CLOSURE.equals(header.getBillState())) {
-				throw ExceptionUtil.mpe("撤销收货失败，收货单[编码：{}]已关闭", header.getReceiveNo());
-			}
-			receiveHeaderList.add(header);
-		});
+	public void canCancelReceive(List<ReceiveLog> receiveLogList) {
 		receiveLogList.forEach(item -> {
+			// 判断是否撤销过
+			if (Func.isNotBlank(item.getCancelLogId())){
+				throw ExceptionUtil.mpe("撤销收货失败，收货记录[id:{}]已撤销过", item.getId());
+			}
 			// 判断收货记录中是否存在撤销数为负数的，有就抛异常
 			if (BigDecimalUtil.lt(item.getQty(), BigDecimal.ZERO)) {
-				throw new ServiceException("撤销失败，选择的记录中不允许有已撤销的记录");
+				throw new ServiceException("撤销收货失败，收货记录[id:{}]是撤销的记录");
 			}
 		});
 	}
@@ -234,5 +229,10 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	@Override
 	public List<ReceiveLog> findReceiveLogsByIds(List<Long> receiveLogIdList) {
 		return receiveLogDao.getByIds(receiveLogIdList);
+	}
+
+	@Override
+	public void setCanceled(List<ReceiveLog> receiveLogList) {
+		receiveLogList.forEach(receiveLogDao::setCanceled);
 	}
 }

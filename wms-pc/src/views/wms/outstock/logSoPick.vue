@@ -5,37 +5,27 @@
                 <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="发货单编码" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.soBillNo" :clearable="true"
-                                class="search-input"
+                            <el-input v-model.trim="form.params.soBillNo" :clearable="true" class="search-input"
                                 placeholder="请输入发货单编码">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="单据类型" label-width="90px">
-                            <nodes-bill-type
-                                v-model="form.params.billTypeCdList"
-                                :multiple="true"
-                                class="search-input"
+                            <nodes-bill-type v-model="form.params.billTypeCdList" :multiple="true" class="search-input"
                                 io-type="O">
                             </nodes-bill-type>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
-                            <nodes-sku
-                                v-model="form.params.skuIdList"
-                                class="search-input">
+                            <nodes-sku v-model="form.params.skuIdList" class="search-input">
                             </nodes-sku>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="箱号" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.boxCode"
-                                :clearable="true"
-                                class="search-input"
+                            <el-input v-model.trim="form.params.boxCode" :clearable="true" class="search-input"
                                 placeholder="请输入箱号">
                             </el-input>
                         </el-form-item>
@@ -44,27 +34,21 @@
                 <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="LPN" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.lpnCode"
-                                :clearable="true" class="search-input"
+                            <el-input v-model.trim="form.params.lpnCode" :clearable="true" class="search-input"
                                 placeholder="请输入LPN">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="序列号" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.snCode"
-                                :clearable="true" class="search-input"
+                            <el-input v-model.trim="form.params.snCode" :clearable="true" class="search-input"
                                 placeholder="请输入序列号">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="拣货人" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.createUser"
-                                :clearable="true" class="search-input"
+                            <el-input v-model.trim="form.params.createUser" :clearable="true" class="search-input"
                                 placeholder="请输入拣货人">
                             </el-input>
                         </el-form-item>
@@ -78,13 +62,10 @@
                 </el-row>
             </template>
             <template v-slot:batchBtn>
-                <el-button v-if="permissionObj.createReceiveBill"
-                           size="mini" type="primary"
-                           @click="createReceiveBill">创建收货单
+                <el-button v-if="permissionObj.createReceiveBill" size="mini" type="primary" @click="createReceiveBill">
+                    创建收货单
                 </el-button>
-                <el-button v-if="permissionObj.cancelOutstock"
-                           size="mini" type="primary"
-                           @click="cancelOutstock">撤销拣货
+                <el-button v-if="permissionObj.cancelOutstock" size="mini" type="primary" @click="cancelOutstock">撤销拣货
                 </el-button>
             </template>
             <template v-slot:tableTool>
@@ -99,56 +80,31 @@
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                                  style="display: inline-block;margin-left: 10px">
-                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData"/>
+                        style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData" />
                     </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table"
-                          :cell-style="cellStyle"
-                          :data="table.data"
-                          :height="table.height"
-                          border
-                          highlight-current-row
-                          size="mini"
-                          style="width: 100%"
-                          @sort-change="onSortChange">
-                    <el-table-column
-                        fixed
-                        type="selection"
-                        width="50">
+                <el-table ref="table" :cell-style="cellStyle" :data="table.data" :height="table.height" border
+                    highlight-current-row size="mini" style="width: 100%" @sort-change="onSortChange">
+                    <el-table-column fixed type="selection" width="50">
                     </el-table-column>
-                    <el-table-column
-                        fixed
-                        width="50"
-                        type="index">
+                    <el-table-column fixed width="50" type="index">
                         <template slot="header">
                             #
                         </template>
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
-                        <el-table-column
-                            v-if="!column.hide "
-                            :key="index"
-                            show-overflow-tooltip
-                            v-bind="column"
+                        <el-table-column v-if="!column.hide " :key="index" show-overflow-tooltip v-bind="column"
                             min-width="150">
-                            <template v-if="column.prop === 'snCode' || column.prop === 'soBillNo'"
-                                      v-slot="scope">
-                                <el-link
-                                    v-if="column.prop === 'snCode'"
-                                    :underline="false"
-                                    type="primary"
+                            <template v-if="column.prop === 'snCode' || column.prop === 'soBillNo'" v-slot="scope">
+                                <el-link v-if="column.prop === 'snCode'" :underline="false" type="primary"
                                     @click="openDialog(scope.row.snCode)">
                                     {{ scope.row.snCode }}
                                 </el-link>
-                                <el-link
-                                    v-if="column.prop === 'soBillNo'"
-                                    :underline="false"
-                                    target="_blank"
-                                    type="primary"
-                                    @click="onDetail(scope.row.soBillId)">{{ scope.row.soBillNo }}
+                                <el-link v-if="column.prop === 'soBillNo'" :underline="false" target="_blank"
+                                    type="primary" @click="onDetail(scope.row.soBillId)">{{ scope.row.soBillNo }}
                                 </el-link>
                             </template>
                         </el-table-column>
@@ -157,22 +113,14 @@
             </template>
             <template v-slot:page>
                 <el-pagination :current-page="page.current" :page-size="page.size" :page-sizes="[20, 50, 100]"
-                               :total="page.total" background layout="total, sizes, prev, pager, next, jumper"
-                               v-bind="page"
-                               @size-change="handleSizeChange" @current-change="handleCurrentChange">
+                    :total="page.total" background layout="total, sizes, prev, pager, next, jumper" v-bind="page"
+                    @size-change="handleSizeChange" @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>
         <template>
-            <el-dialog
-                :append-to-body="true"
-                :visible.sync="snCodeDialog"
-                title="序列号列表"
-                width="250px">
-                <el-table
-                    :border="true"
-                    :data="snCodeList"
-                    max-height="500">
+            <el-dialog :append-to-body="true" :visible.sync="snCodeDialog" title="序列号列表" width="250px">
+                <el-table :border="true" :data="snCodeList" max-height="500">
                     <el-table-column align="center" fixed type="index">
                         <template slot="header">
                             #
@@ -190,9 +138,7 @@
             </el-dialog>
         </template>
         <div v-if="columnShowHide.visible">
-            <dialog-column
-                v-bind="columnShowHide"
-                @close="onColumnShowHide">
+            <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
             </dialog-column>
         </div>
     </div>
@@ -204,11 +150,11 @@ import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
-import {listMixin} from "@/mixins/list";
-import {cancelOutstock, exportExcel, getPage} from "@/api/wms/outstock/logSoPick"
+import { listMixin } from "@/mixins/list";
+import { cancelOutstock, exportExcel, getPage } from "@/api/wms/outstock/logSoPick"
 import fileDownload from "js-file-download";
-import {ExcelExport} from 'pikaz-excel-js'
-import {nowDateFormat} from "@/util/date";
+import { ExcelExport } from 'pikaz-excel-js'
+import { nowDateFormat } from "@/util/date";
 import func from "@/util/func";
 import NodesSku from "@/components/wms/select/NodesSkuByQuery";
 import NodesBillType from "@/components/wms/select/NodesBillType";
@@ -453,9 +399,11 @@ export default {
                 }
             })
         },
-        cellStyle({row, column}) {
+        cellStyle({ row, column }) {
             if (row.pickRealQty < 0 && column.property === 'pickRealQty') {
-                return "background-color: #FF6666"
+                return "background-color: #F0DAD2"
+            } else if (row.pickRealQty >= 0 && column.property === 'pickRealQty'){
+                return "background-color: #D7FFF0";
             }
         },
         onDetail(soBillId) {

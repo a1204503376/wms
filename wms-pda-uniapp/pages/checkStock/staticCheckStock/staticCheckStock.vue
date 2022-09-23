@@ -52,7 +52,7 @@
 <script>
 	import setting from '@/common/setting'
 	import staticCheckStock from '@/api/checkStock/staticCheckStock.js'
-	import barcodeFunc from '@/common/barcodeFunc.js'
+	import barcodeFunc from '@/utils/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
 	export default {
 		data() {

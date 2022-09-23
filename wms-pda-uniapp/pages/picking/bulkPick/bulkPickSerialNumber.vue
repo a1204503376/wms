@@ -1,35 +1,19 @@
 <template>
 	<view>
 		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
-			:bgColor="navigationBarBackgroundColor" title="按件收货" titleStyle="color:#ffffff;font-size:21px"
+			:bgColor="navigationBarBackgroundColor" title="零散拣货" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
 		<u--form>
-			<u-form-item label="物品" class="left-text-one-line" labelWidth="100">
-				<u--input v-model.trim="params.skuCode" border="0" disabled></u--input>
-			</u-form-item>
-			<u-form-item label="名称" class="left-text-one-line" labelWidth="100">
-				<u--input v-model.trim="params.skuName" border="0" disabled></u--input>
-			</u-form-item>
-			<u-form-item label="序列号" class="left-text-one-line" labelWidth="100">
+			<u-form-item label="序列号" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model.trim="params.serialNumber"></u--input>
 			</u-form-item>
 		</u--form>
 		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">
-			序列号列表({{serialNumberList.length}}/{{params.surplusQty}})</h4>
+			序列号列表({{serialNumberList.length}}/{{params.qty}})</h4>
 		<!-- ${index + 1} -->
 		<u-list style="height: 650rpx;">
 			<u-list-item v-for="(item, index) in serialNumberList" :key="index" :style="item.backgroundColor">
-				<!-- 	<u-cell :title="item.serialNumber">
-					<u-row customStyle="margin-bottom: 10px">
-						<u-col span="10" class="left-text-one-line">
-							<view class="demo-layout bg-purple-light font-in-page">{{item.serialNumber}}</view>
-						</u-col>
-						<u-col span="2">
-							<view class="demo-layout bg-purple font-in-page" @click="remove(index)">删除</view>
-						</u-col>
-					</u-row>
-				</u-cell> -->
 				<u-swipe-action>
 					<u-swipe-action-item :options="buttenName" @click="remove(index)">
 						<view class="swipe-action u-border-top u-border-bottom" :style="item.backgroundColor">
@@ -56,8 +40,8 @@
 <script>
 	import setting from '@/common/setting'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
-	import barcodeFunc from '@/utils/barcodeFunc.js'
-	import receive from '@/api/inStock/receiveByPcs.js'
+	import barcodeFunc from '@/common/barcodeFunc.js'
+	import pick from '@/api/picking/picking.js'
 	import tool from '@/utils/tool.js'
 	export default {
 		components: {
@@ -72,14 +56,10 @@
 				params: {},
 				serialNumberList: [],
 				serialNumberLists: ['1', '11', '111', '1111', '001', '11111', '111111'],
-				receiveDetailId: '',
-				receiveId: ''
 			}
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
-			this.receiveDetailId = parse.receiveDetailId;
-			this.receiveId = parse.receiveId;
 			this.params = parse;
 		},
 		onUnload() {
@@ -113,77 +93,40 @@
 				});
 			},
 			submit() {
+				console.log(this.serialNumberList.length)
+				console.log(this.params.qty)
+				if (this.serialNumberList.length != this.params.qty){
+					this.$u.func.showToast({
+						title: '拣货失败，请输入对应数量的序列号'
+					});
+					return;
+				}
+				
 				var _this = this;
 				uni.$u.throttle(function() {
-					if (_this.serialNumberList.length == _this.params.surplusQty) {
-						var serialList = [];
-						_this.serialNumberList.forEach((serialNumbers, index) => {
-							serialList.push(serialNumbers.serialNumber)
-						})
-						let params = {
-							serialNumberList: serialList
-						}
-						receive.getSerialNumberList(params).then(data => {
-							if (tool.isEmpty(data.data)) {
-								var serialList = [];
-								_this.serialNumberList.forEach((serialNumbers, index) => {
-									serialList.push(serialNumbers.serialNumber)
-								})
-								_this.params.serialNumberList = serialList;
-								_this.params.whCode = uni.getStorageSync('warehouse').whCode;
-								_this.params.whId = uni.getStorageSync('warehouse').whId;
-								receive.submitReceiptByPcs(_this.params).then(data => {
-									if (data.data.allReceivieIsAccomplish && data.data
-										.currentReceivieIsAccomplish) {
-										//当前收货单收货收货完毕
-										_this.clearEmitKeyDown();
-										_this.$u.func.showToast({
-											title: '当前收货单收货收货完毕'
-										});
-										uni.navigateBack({
-											delta: 3
-										});
-										return;
-									} else if (data.data.currentReceivieIsAccomplish) {
-										//当前收货单详情收货收货完毕
-										_this.clearEmitKeyDown();
-										_this.$u.func.showToast({
-											title: '当前收货单详情收货收货完毕'
-										});
-										uni.navigateBack({
-											delta: 2
-										});
-										return;
-									} else {
-										//当前收货单详情收货部分收货,返回收货单收货页面
-										_this.clearEmitKeyDown();
-										_this.$u.func.showToast({
-											title: '当前收货单详情部分收货'
-										});
-										_this.esc();
-									}
-
-								});
-							} else {
-								_this.$u.func.showToast({
-									title: '序列号已存在'
-								});
-								_this.serialNumberList.forEach((serialNumber, index) => {
-									data.data.forEach((serialNumbers, index) => {
-										if (serialNumber.serialNumber ==
-											serialNumbers) {
-											serialNumber.backgroundColor =
-												"background-color: #DD524D;"
-										}
-									});
-								});
-							}
-						});
-					}else{
-						_this.$u.func.showToast({
-							title: '序列号应与收货数量相同,请采集序列号'
-						});
+					var serialList = [];
+					_this.serialNumberList.forEach((serialNumbers, index) => {
+						serialList.push(serialNumbers.serialNumber)
+					})
+					let params = {
+						serialNumberList: serialList
 					}
+					var serialList = [];
+					_this.serialNumberList.forEach((serialNumbers, index) => {
+						serialList.push(serialNumbers.serialNumber)
+					})
+					_this.params.serailList = serialList;
+					_this.params.whCode = uni.getStorageSync('warehouse').whCode;
+					_this.params.whId = uni.getStorageSync('warehouse').whId;
+					pick.bulkPick(_this.params).then(data => {
+						_this.$u.func.showToast({
+							title: '拣货完成'
+						});
+						_this.clearEmitKeyDown();
+						uni.navigateBack({
+							delta: 2
+						});
+					});
 				}, 1000)
 			},
 			analysisCode(code) {

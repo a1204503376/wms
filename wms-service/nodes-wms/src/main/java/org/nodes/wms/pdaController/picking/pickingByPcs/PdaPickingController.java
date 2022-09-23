@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.outstock.OutStockBiz;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.EsitSerialNumberRequest;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.FindOpenSoDetailRequest;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.PickByPcsRequest;
-import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
+import org.nodes.wms.dao.outstock.logSoPick.dto.input.*;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.EsitSerialNumberResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindPickingBySoBillIdResponse;
@@ -90,6 +87,17 @@ public class PdaPickingController {
 	@PostMapping("/findPickPlanBySoBillIdAndBoxCode")
 	public R<List<FindPickPlanBySoBillIdAndBoxCodeResponse>> findPickPlanBySoBillIdAndBoxCode(@RequestBody FindPickPlanBySoBillIdAndBoxCodeRequest request) {
 		return R.data(outStockBiz.getPickPlanBySoBillIdAndBoxCode(request));
+	}
+
+	/**
+	 * 零散拣货
+	 *
+	 * @param request 请求对象
+	 * @return true:全部拣货 false:部分拣货
+	 */
+	@PostMapping("/bulkPick")
+	public R<Boolean> bulkPick(@RequestBody BulkPickRequest request) {
+		return R.data(outStockBiz.bulkPick(request));
 	}
 
 	/**

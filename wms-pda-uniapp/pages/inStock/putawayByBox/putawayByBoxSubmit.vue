@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
+		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
 			:bgColor="navigationBarBackgroundColor" title="按箱上架" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
@@ -38,7 +38,7 @@
 <script>
 	import setting from '@/common/setting'
 	import putawayByBoxs from '@/api/inStock/putawayByBox.js'
-	import barcodeFunc from '@/common/barcodeFunc.js'
+	import barcodeFunc from '@/utils/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {

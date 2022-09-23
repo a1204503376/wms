@@ -21,6 +21,15 @@ import java.util.List;
  * 清点记录业务层接口
  */
 public interface ReceiveLogBiz {
+
+	/**
+	 * 根据收货单id获取清点记录集合
+	 *
+	 * @param receiveId 收货单id
+	 * @return 清点记录集合
+	 */
+	List<ReceiveLog> findReceiveLogList(Long receiveId);
+
 	/**
 	 * 根据收货单id获取清点记录集合
 	 *
@@ -74,9 +83,8 @@ public interface ReceiveLogBiz {
 	 * 是否可以撤销
 	 *
 	 * @param receiveLogList 清点记录
-	 * @param receiveHeaderList: 清点记录对应的收货单
 	 */
-	void canCancelReceive(List<ReceiveLog> receiveLogList, List<ReceiveHeader> receiveHeaderList);
+	void canCancelReceive(List<ReceiveLog> receiveLogList);
 
 	/**
 	 * 合并收货记录
@@ -108,4 +116,11 @@ public interface ReceiveLogBiz {
 	 * @return 收货记录
 	 */
 	List<ReceiveLog> findReceiveLogsByIds(List<Long> receiveLogIdList);
+
+	/**
+	 * 标记收货记录为已撤销
+	 *
+	 * @param receiveLogList 收货记录
+	 */
+	void setCanceled(List<ReceiveLog> receiveLogList);
 }

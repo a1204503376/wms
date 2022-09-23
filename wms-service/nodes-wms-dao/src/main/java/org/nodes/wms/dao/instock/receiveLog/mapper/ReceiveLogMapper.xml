@@ -55,6 +55,7 @@
         rl.sn_code,
         `user`.real_name as createUserName,
         rl.create_time,
+        rl.cancel_log_id,
         rl.sku_lot1,
         rl.sku_lot2,
         rl.sku_lot3,

@@ -28,6 +28,7 @@ public class FindPickPlanBySoBillIdAndBoxCodeResponse {
 	/**
 	 * 出库单id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long soBillId;
 
 	/**
@@ -48,6 +49,7 @@ public class FindPickPlanBySoBillIdAndBoxCodeResponse {
 	/**
 	 * 库位ID
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long locId;
 
 	/**
@@ -58,6 +60,7 @@ public class FindPickPlanBySoBillIdAndBoxCodeResponse {
 	/**
 	 * 库区id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long zoneId;
 
 	/**
@@ -83,6 +86,7 @@ public class FindPickPlanBySoBillIdAndBoxCodeResponse {
 	/**
 	 * 物品ID
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long skuId;
 
 	/**
@@ -98,6 +102,7 @@ public class FindPickPlanBySoBillIdAndBoxCodeResponse {
 	/**
 	 * 被替代物品ID
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long repSkuId;
 
 	/**
