@@ -178,4 +178,11 @@ public class ReceiveLogExcelResponse implements Serializable {
 	@ExcelProperty("收货时间")
 	@ColumnWidth(15)
 	private Date createTime;
+
+	/**
+	 * 撤销收货记录id
+	 */
+	@ExcelProperty("撤销收货记录id")
+	@ColumnWidth(15)
+	private String cancelLogId;
 }
