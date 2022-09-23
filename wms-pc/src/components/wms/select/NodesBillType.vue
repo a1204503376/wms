@@ -39,19 +39,20 @@ export default {
         // 组件大小，默认为mini, 支持 medium/small/mini
         size: {type: String, required: false, default: () => "mini"},
         // 是否禁用 默认为 false不禁用
-        disabled: {type: Boolean, required: false, default: () => false}
+        disabled: {type: Boolean, required: false, default: () => false},
+        // 过滤掉的单据类型
+        filterTypes: {type: Array, required: false, default: () => []},
     },
     data() {
         return {
             options: [this.selectVal],
             val: this.selectVal,
-            ioTypeVal: this.ioType,
         }
     },
     watch: {
         selectVal(newVal) {
             this.val = newVal;
-        }
+        },
     },
     created() {
         this.getDataSource();
@@ -59,11 +60,11 @@ export default {
     methods: {
         async getDataSource() {
             let billTypeSelectQuery = {
-                ioType: this.ioTypeVal
+                ioType: this.ioType
             };
             let {data: {data}} = await getBillTypeSelectResponseList(billTypeSelectQuery);
             // 屏蔽归还入库类型
-            this.options = data.filter(value => value.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN)
+            this.options = data.filter(value => !this.filterTypes.includes(value.billTypeCd))
             this.loading = false;
         },
         onChange(val) {
