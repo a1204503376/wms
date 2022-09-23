@@ -50,6 +50,14 @@ const getPickPlanBySoBillIdAndBoxCode = (data) => {
 	})
 }
 
+const bulkPick = (data) => {
+	return http.request({
+		url: '/api/ApiPDA/pickByPcs/bulkPick',
+		method: 'POST',
+		data: data
+	})
+}
+
 
 export default {
 	findAllPickingByNo,
@@ -57,5 +65,6 @@ export default {
 	pickByBox,
 	getPickingBySoBillId,
 	getPickPlanBySoBillId,
-	getPickPlanBySoBillIdAndBoxCode
+	getPickPlanBySoBillIdAndBoxCode,
+	bulkPick
 }

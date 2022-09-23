@@ -185,7 +185,7 @@ public class DevanningBizImpl implements DevanningBiz {
 		, DevanningSubmitRequest request, BigDecimal splitQty, List<String> serialNoList) {
 		Zone zone = zoneBiz.findById(location.getZoneId());
 		//是库存占用
-		WmsTask task = wmsTaskBiz.findPickTaskByBoxCode(oldBoxCode, null);
+		WmsTask task = wmsTaskBiz.findPickTaskByBoxCode(oldBoxCode, null, null);
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(task.getTaskId());
 		AssertUtil.notNull(soPickPlanList, "拆箱失败,根据任务查询拣货计划失败");
 		if (soPickPlanList.size() < 1) {

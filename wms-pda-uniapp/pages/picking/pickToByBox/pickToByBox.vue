@@ -25,7 +25,7 @@
 	import setting from '@/common/setting'
 	import picking from '@/api/picking/picking.js'
 	import uniSelect from '@/components/uni-select.vue'
-	import barcodeFunc from '@/common/barcodeFunc.js'
+	import barcodeFunc from '@/utils/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
 	export default {

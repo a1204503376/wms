@@ -5,38 +5,27 @@
                 <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="收货单编码" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.receiveNo"
-                                :clearable="true"
-                                class="search-input"
+                            <el-input v-model.trim="form.params.receiveNo" :clearable="true" class="search-input"
                                 placeholder="请输入收货单编码">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
-                            <nodes-sku
-                                v-model="form.params.skuIdList"
-                                class="search-input">
+                            <nodes-sku v-model="form.params.skuIdList" class="search-input">
                             </nodes-sku>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="箱号" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.boxCode"
-                                :clearable="true"
-                                class="search-input"
+                            <el-input v-model.trim="form.params.boxCode" :clearable="true" class="search-input"
                                 placeholder="请输入箱号">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="LPN" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.lpnCode"
-                                :clearable="true"
-                                class="search-input"
+                            <el-input v-model.trim="form.params.lpnCode" :clearable="true" class="search-input"
                                 placeholder="请输入LPN">
                             </el-input>
                         </el-form-item>
@@ -45,36 +34,27 @@
                 <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="序列号" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.snCode"
-                                :clearable="true"
-                                class="search-input"
+                            <el-input v-model.trim="form.params.snCode" :clearable="true" class="search-input"
                                 placeholder="请输入序列号">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="收货人" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.createUser"
-                                :clearable="true"
-                                class="search-input"
+                            <el-input v-model.trim="form.params.createUser" :clearable="true" class="search-input"
                                 placeholder="请输入收货人">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="收货时间" label-width="90px">
-                            <nodes-date-range
-                                v-model="form.params.createTimeDateRange">
+                            <nodes-date-range v-model="form.params.createTimeDateRange">
                             </nodes-date-range>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库位" label-width="90px">
-                            <nodes-location
-                                v-model="form.params.locIdList"
-                                class="search-input">
+                            <nodes-location v-model="form.params.locIdList" class="search-input">
                             </nodes-location>
                         </el-form-item>
                     </el-col>
@@ -82,31 +62,22 @@
                 <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="库房" label-width="90px">
-                            <nodes-warehouse
-                                v-model="form.params.whIdList"
-                                :multiple="true"
-                                class="search-input">
+                            <nodes-warehouse v-model="form.params.whIdList" :multiple="true" class="search-input">
                             </nodes-warehouse>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="货主" label-width="90px">
-                            <nodes-owner
-                                v-model="form.params.woId"
-                                class="search-input">
+                            <nodes-owner v-model="form.params.woId" class="search-input">
                             </nodes-owner>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </template>
             <template v-slot:batchBtn>
-                <el-button v-if="permissionObj.createSoBill"
-                           size="mini" type="primary"
-                           @click="createSoBill">创建发货单
+                <el-button v-if="permissionObj.createSoBill" size="mini" type="primary" @click="createSoBill">创建发货单
                 </el-button>
-                <el-button v-if="permissionObj.cancelReceive"
-                           size="mini" type="primary"
-                           @click="cancelReceive">撤销收货
+                <el-button v-if="permissionObj.cancelReceive" size="mini" type="primary" @click="cancelReceive">撤销收货
                 </el-button>
             </template>
             <template v-slot:tableTool>
@@ -121,54 +92,30 @@
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                                  style="display: inline-block;margin-left: 10px">
-                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData"/>
+                        style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData" />
                     </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table"
-                          :cell-style="cellStyle"
-                          :data="table.data"
-                          :height="table.height"
-                          border
-                          highlight-current-row
-                          size="mini"
-                          style="width: 100%"
-                          @sort-change="onSortChange">
-                    <el-table-column
-                        fixed
-                        type="selection"
-                        width="50">
+                <el-table ref="table" :cell-style="cellStyle" :data="table.data" :height="table.height" border
+                    highlight-current-row size="mini" style="width: 100%" @sort-change="onSortChange">
+                    <el-table-column fixed type="selection" width="50">
                     </el-table-column>
-                    <el-table-column
-                        fixed
-                        type="index"
-                        width="50">
+                    <el-table-column fixed type="index" width="50">
                         <template slot="header">
                             #
                         </template>
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
-                        <el-table-column
-                            v-if="!column.hide"
-                            :key="index"
-                            min-width="150"
-                            show-overflow-tooltip
+                        <el-table-column v-if="!column.hide" :key="index" min-width="150" show-overflow-tooltip
                             v-bind="column">
                             <template v-if="column.prop === 'receiveNo' || column.prop === 'snCode'" v-slot="scope">
-                                <el-link
-                                    v-if="column.prop === 'receiveNo'"
-                                    :underline="false"
-                                    target="_blank"
-                                    type="primary"
-                                    @click="onView(scope.row)">
+                                <el-link v-if="column.prop === 'receiveNo'" :underline="false" target="_blank"
+                                    type="primary" @click="onView(scope.row)">
                                     {{ scope.row.receiveNo }}
                                 </el-link>
-                                <el-link
-                                    v-if="column.prop === 'snCode'"
-                                    :underline="false"
-                                    type="primary"
+                                <el-link v-if="column.prop === 'snCode'" :underline="false" type="primary"
                                     @click="openDialog(scope.row.snCode)">
                                     {{ scope.row.snCode }}
                                 </el-link>
@@ -179,22 +126,14 @@
             </template>
             <template v-slot:page>
                 <el-pagination :current-page="page.current" :page-size="page.size" :page-sizes="[20, 50, 100]"
-                               :total="page.total" background layout="total, sizes, prev, pager, next, jumper"
-                               v-bind="page"
-                               @size-change="handleSizeChange" @current-change="handleCurrentChange">
+                    :total="page.total" background layout="total, sizes, prev, pager, next, jumper" v-bind="page"
+                    @size-change="handleSizeChange" @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>
         <template>
-            <el-dialog
-                :append-to-body="true"
-                :visible.sync="snCodeDialog"
-                title="序列号列表"
-                width="250px">
-                <el-table
-                    :border="true"
-                    :data="snCodeList"
-                    max-height="500">
+            <el-dialog :append-to-body="true" :visible.sync="snCodeDialog" title="序列号列表" width="250px">
+                <el-table :border="true" :data="snCodeList" max-height="500">
                     <el-table-column align="center" fixed type="index">
                         <template slot="header">
                             #
@@ -212,9 +151,7 @@
             </el-dialog>
         </template>
         <div v-if="columnShowHide.visible">
-            <dialog-column
-                v-bind="columnShowHide"
-                @close="onColumnShowHide">
+            <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
             </dialog-column>
         </div>
     </div>
@@ -225,14 +162,14 @@ import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
-import {listMixin} from "@/mixins/list";
+import { listMixin } from "@/mixins/list";
 import NodesLocation from "@/components/wms/select/NodesLocation";
 import NodesOwner from "@/components/wms/select/NodesOwner";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
-import {cancelReceive, exportExcel, getPage} from "@/api/wms/instock/receiveLog"
+import { cancelReceive, exportExcel, getPage } from "@/api/wms/instock/receiveLog"
 import fileDownload from "js-file-download";
-import {ExcelExport} from 'pikaz-excel-js'
-import {nowDateFormat} from "@/util/date";
+import { ExcelExport } from 'pikaz-excel-js'
+import { nowDateFormat } from "@/util/date";
 import func from "@/util/func";
 import NodesSku from "@/components/wms/select/NodesSkuByQuery";
 
@@ -493,9 +430,11 @@ export default {
                 })
             });
         },
-        cellStyle({row, column}) {
+        cellStyle({ row, column }) {
             if (row.qty < 0 && column.property === 'qty') {
-                return "background-color: #FF6666"
+                return "background-color: #F0DAD2"
+            } else if (row.qty >= 0 && column.property === 'qty') {
+                return "background-color: #D7FFF0"
             }
         },
         onView(row) {
