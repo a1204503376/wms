@@ -7,8 +7,14 @@ import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.core.tool.utils.StringPool;
+import org.nodes.wms.biz.instock.receive.ReceiveBiz;
+import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.biz.lendreturn.LendReturnBiz;
 import org.nodes.wms.biz.lendreturn.modular.LogLendReturnFactory;
+import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
+import org.nodes.wms.dao.basics.sku.entities.Sku;
+import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
+import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.lendreturn.LogLendReturnDao;
 import org.nodes.wms.dao.lendreturn.LogNoReturnDao;
@@ -22,16 +28,17 @@ import org.nodes.wms.dao.lendreturn.entities.LogLendReturn;
 import org.nodes.wms.dao.lendreturn.entities.LogNoReturn;
 import org.nodes.wms.dao.lendreturn.enums.LendReturnTypeEnum;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
+import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.tool.api.ResultCode;
 import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.SpringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -44,6 +51,8 @@ public class LendReturnBizImpl implements LendReturnBiz {
 	private final LogLendReturnFactory logLendReturnFactory;
 	private final LogLendReturnDao logLendReturnDao;
 	private final LogNoReturnDao logNoReturnDao;
+	private final ReceiveLogBiz receiveLogBiz;
+	private final LogSoPickBiz logSoPickBiz;
 
 	/**
 	 * 保存借出归还记录
@@ -175,22 +184,60 @@ public class LendReturnBizImpl implements LendReturnBiz {
 	}
 
 	@Override
-	public void saveReturnLog(String billType, List<ReceiveLog> receiveLogList) {
-		AssertUtil.notEmpty(billType, "单据类型编码不能为空");
-		AssertUtil.notEmpty(billType, "清点记录不能为空");
-		if (WmsAppConstant.BILL_TYPE_RETURN.equals(billType)){
-			LendReturnRequest returnRequest = logLendReturnFactory.createReturnRequest(receiveLogList);
+	public void saveReturnLog(ReceiveHeader receiveHeader) {
+		AssertUtil.notNull(receiveHeader, "收货单头表为null");
+		// 归还单关单时，保存归还记录
+		if (WmsAppConstant.BILL_TYPE_RETURN.equals(receiveHeader.getBillTypeCd())) {
+			List<ReceiveLog> receiveLogList = receiveLogBiz.findReceiveLogList(receiveHeader.getReceiveId());
+			List<ReceiveLog> finalReceiveLogList = receiveLogList.stream()
+				.filter(log -> BigDecimalUtil.gt(log.getQty(), BigDecimal.ZERO)
+					&& (Func.isEmpty(log.getCancelLogId()) || Func.isBlank(log.getCancelLogId())))
+				.collect(Collectors.toList());
+			LendReturnRequest returnRequest = logLendReturnFactory.createReturnRequest(finalReceiveLogList);
 			saveLog(returnRequest);
 		}
 	}
 
 	@Override
-	public void saveLendLog(String billType, List<LogSoPick> logSoPickList) {
-		AssertUtil.notEmpty(billType, "单据类型编码不能为空");
-		AssertUtil.notEmpty(billType, "拣货记录不能为空");
-		if (WmsAppConstant.BILL_TYPE_LEND.equals(billType)){
-			LendReturnRequest lendRequest = logLendReturnFactory.createLendRequest(logSoPickList);
-			saveLog(lendRequest);
+	public void saveLendLog(SoHeader soHeader) {
+		AssertUtil.notNull(soHeader, "发货单头表为null");
+		// 借出单关单时，保存借出记录
+		if (WmsAppConstant.BILL_TYPE_LEND.equals(soHeader.getBillTypeCd())) {
+			// 发货单的全部拣货记录
+			List<LogSoPick> logSoPickList = logSoPickBiz.findBySoHeaderId(soHeader.getSoBillId());
+			// 有效的拣货记录
+			List<LogSoPick> enableLogSoPickList = logSoPickList.stream()
+				.filter(log -> BigDecimalUtil.gt(log.getPickRealQty(), BigDecimal.ZERO)
+					&& (Func.isEmpty(log.getCancelLogId()) || Func.isBlank(log.getCancelLogId())))
+				.collect(Collectors.toList());
+			// 根据SkuId、批属性合并拣货记录
+			List<LogSoPick> finalLogSoPickList = mergeLogSoPick(enableLogSoPickList);
+			LendReturnRequest returnRequest = logLendReturnFactory.createLendRequest(finalLogSoPickList);
+			saveLog(returnRequest);
 		}
+	}
+
+	public List<LogSoPick> mergeLogSoPick(List<LogSoPick> enableLogSoPickList){
+		List<LogSoPick> logSoPickList = new ArrayList<>();
+		Map<Long, List<LogSoPick>> logSoPickMap = new HashMap<>();
+		enableLogSoPickList.forEach(x -> {
+			List<LogSoPick> logSoPicks = enableLogSoPickList.stream()
+				.filter(y -> y.getSkuId().equals(x.getSkuId()) && SkuLotUtil.compareAllSkuLot(x, y))
+				.collect(Collectors.toList());
+			logSoPickMap.put(x.getSkuId(), logSoPicks);
+		});
+
+		for (Map.Entry<Long, List<LogSoPick>> entry : logSoPickMap.entrySet()) {
+			List<LogSoPick> value = entry.getValue();
+			LogSoPick logSoPick = value.stream().findFirst().orElse(null);
+			if (Func.isNull(logSoPick)){
+				continue;
+			}
+			BigDecimal pickSum = value.stream().map(LogSoPick::getPickRealQty)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+			logSoPick.setPickRealQty(pickSum);
+			logSoPickList.add(logSoPick);
+		}
+		return logSoPickList;
 	}
 }

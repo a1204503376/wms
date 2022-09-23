@@ -25,7 +25,6 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
-import org.nodes.wms.dao.lendreturn.dto.input.LendReturnRequest;
 import org.nodes.wms.dao.outstock.SoPickPlanDao;
 import org.nodes.wms.dao.outstock.logSoPick.LogSoPickDao;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.*;
@@ -91,7 +90,6 @@ public class OutStockBizImpl implements OutStockBiz {
 	private final ZoneBiz zoneBiz;
 	private final AgvTask agvTask;
 	private final SoPickPlanFactory soPickPlanFactory;
-	private final LogLendReturnFactory logLendReturnFactory;
 	private final LendReturnBiz lendReturnBiz;
 
 	@Override
@@ -112,7 +110,6 @@ public class OutStockBizImpl implements OutStockBiz {
 		canPick(soHeader, soDetail, pickQty);
 
 		List<PickByPcStockDto> pickByPcStockDtoList = request.getPickByPcStockDtoList();
-		List<LogSoPick> logSoPickList = new ArrayList<>();
 		// 2 生成拣货记录，需要注意序列号（log_so_pick)
 		for (PickByPcStockDto pickByPcStockDto : pickByPcStockDtoList) {
 			Stock stock = stockQueryBiz.findStockById(pickByPcStockDto.getStockId());
@@ -124,17 +121,11 @@ public class OutStockBizImpl implements OutStockBiz {
 			stockBiz.moveStock(stock, pickByPcStockDto.getSerailList(), pickByPcStockDto.getOutStockQty(),
 				location, StockLogTypeEnum.OUTSTOCK_BY_PC, soHeader.getSoBillId(), soHeader.getSoBillNo(),
 				soDetail.getSoLineNo());
-			//
-			logSoPickList.add(logSoPick);
 		}
 		// 4 更新出库单明细中的状态和数量
 		soBillBiz.updateSoDetailStatus(soDetail, pickQty);
 		// 5 更新发货单状态
 		soBillBiz.updateSoBillState(soHeader);
-		// 判断是否是借出单
-		if (WmsAppConstant.BILL_TYPE_LEND.equals(soHeader.getBillTypeCd())) {
-			lendReturnBiz.saveLog(logLendReturnFactory.createLendRequest(logSoPickList));
-		}
 		// 6 记录业务日志
 		logBiz.auditLog(AuditLogType.OUTSTOCK, "PC拣货");
 	}
@@ -652,7 +643,6 @@ public class OutStockBizImpl implements OutStockBiz {
 			// 按照库存的方法执行
 			bulkPickByStock(request, soHeader, soDetail, stockLists);
 		}
-
 		return soHeaderSoBillState(request.getSoBillId());
 	}
 
@@ -671,6 +661,7 @@ public class OutStockBizImpl implements OutStockBiz {
 				throw ExceptionUtil.mpe("撤销拣货失败，发货单[编码：{}]已关闭", soHeader.getSoBillNo());
 			}
 		});
+
 		logSoPickList.forEach(logSoPick -> {
 			// 判断该拣货记录是否已经撤销过了
 			if (Func.isNotBlank(logSoPick.getCancelLogId())) {
@@ -678,7 +669,7 @@ public class OutStockBizImpl implements OutStockBiz {
 			}
 			// 判断发货记录中是否存在撤销数量为负数的，有就抛异常
 			if (BigDecimalUtil.lt(logSoPick.getPickRealQty(), BigDecimal.ZERO)) {
-				throw new ServiceException("撤销拣货失败，选择的记录中不允许有已撤销的记录");
+				throw new ServiceException("撤销拣货失败，选择的记录中不允许有撤销的记录");
 			}
 			// 根据拣货记录下架库存
 			stockBiz.moveStockByCancelPick(StockLogTypeEnum.INSTOCK_BY_CANCEL_PICK, logSoPick);
@@ -694,10 +685,6 @@ public class OutStockBizImpl implements OutStockBiz {
 			// 更新发货单头表状态
 			SoHeader soHeader = soBillBiz.getSoHeaderById(logSoPick.getSoBillId());
 			soBillBiz.updateSoBillState(soHeader);
-			// 如果是借出单撤销发货，则需要删除借出记录和未归还记录(物理删除)
-			if (WmsAppConstant.BILL_TYPE_LEND.equals(soHeader.getBillTypeCd())) {
-				lendReturnBiz.removeBySoDetailId(logSoPick.getSoDetailId());
-			}
 			// 记录业务日志
 			logBiz.auditLog(AuditLogType.OUTSTOCK, soHeader.getSoBillId(), soHeader.getSoBillNo(), "撤销发货");
 		});
@@ -870,13 +857,6 @@ public class OutStockBizImpl implements OutStockBiz {
 		soBillBiz.updateSoDetailStatus(soDetail, request.getQty());
 		// 5 更新发货单状态
 		soBillBiz.updateSoBillState(soHeader);
-		// 如果单据类型是借出出库
-		if (WmsAppConstant.BILL_TYPE_LEND.equals(soHeader.getBillTypeCd())) {
-			List<LogSoPick> logSoPickList = new ArrayList<>();
-			logSoPickList.add(logSoPick);
-			LendReturnRequest lendRequest = logLendReturnFactory.createLendRequest(logSoPickList);
-			lendReturnBiz.saveLog(lendRequest);
-		}
 		// 6 记录业务日志
 		logBiz.auditLog(AuditLogType.OUTSTOCK, soHeader.getSoBillId(), soHeader.getSoBillNo(),
 			String.format("PDA%s 箱码:[%s] SKU[%s]批次[%s]数量[%s] ", WmsTaskProcTypeEnum.BY_PCS.getDesc(), stockList.get(0).getBoxCode(), request.getSkuCode(), request.getSkuLot1(),

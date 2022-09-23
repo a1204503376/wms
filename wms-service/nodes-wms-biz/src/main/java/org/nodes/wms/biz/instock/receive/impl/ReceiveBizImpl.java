@@ -9,6 +9,7 @@ import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
+import org.nodes.wms.biz.lendreturn.LendReturnBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.sku.SkuDao;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
@@ -53,11 +54,12 @@ import java.util.stream.Collectors;
 public class ReceiveBizImpl implements ReceiveBiz {
 	private final ReceiveHeaderDao receiveHeaderDao;
 	private final ReceiveDetailDao receiveDetailDao;
-	private final SkuDao skuDao;
+	private final ReceiveDetailLpnDao receiveDetailLpnDao;
 	private final ReceiveFactory receiveFactory;
+	private final SkuDao skuDao;
 	private final StockQueryBiz stockQueryBiz;
 	private final LogBiz logBiz;
-	private final ReceiveDetailLpnDao receiveDetailLpnDao;
+	private final LendReturnBiz lendReturnBiz;
 
 	/**
 	 * 实收量 == 计划量
@@ -153,6 +155,8 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	@Override
 	public boolean editBillState(Long receiveId) {
 		receiveHeaderDao.updateBillStateById(receiveId);
+		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(receiveId);
+		lendReturnBiz.saveReturnLog(receiveHeader);
 		logBiz.auditLog(AuditLogType.RECEIVE_BILL, receiveId, "关闭收货单");
 		return true;
 	}

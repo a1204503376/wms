@@ -40,7 +40,7 @@
 <script>
 	import setting from '@/common/setting'
 	import keyboardListener from '@/components/keyboard-listener/keyboard-listener'
-	import barcodeFunc from '@/common/barcodeFunc.js'
+	import barcodeFunc from '@/utils/barcodeFunc.js'
 	import pick from '@/api/picking/picking.js'
 	import tool from '@/utils/tool.js'
 	export default {

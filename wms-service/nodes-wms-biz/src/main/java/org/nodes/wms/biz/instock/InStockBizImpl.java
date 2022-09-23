@@ -1,15 +1,13 @@
 package org.nodes.wms.biz.instock;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.constant.WmsAppConstant;
+import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receive.modular.ReceiveFactory;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.biz.instock.receiveLog.modular.ReceiveLogFactory;
-import org.nodes.wms.biz.lendreturn.LendReturnBiz;
-import org.nodes.wms.biz.lendreturn.modular.LogLendReturnFactory;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.stockManage.StockManageBiz;
@@ -25,8 +23,8 @@ import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
+import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
-import org.nodes.wms.dao.lendreturn.dto.input.LendReturnRequest;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.log.exception.ServiceException;
@@ -58,8 +56,6 @@ public class InStockBizImpl implements InStockBiz {
 	private final ReceiveDetailDao receiveDetailDao;
 	private final LocationBiz locationBiz;
 	private final StockManageBiz stockManageBiz;
-	private final LendReturnBiz lendReturnBiz;
-	private final LogLendReturnFactory logLendReturnFactory;
 
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	@Override
@@ -192,13 +188,6 @@ public class InStockBizImpl implements InStockBiz {
 		receiveBiz.updateReceiveDetail(detail, request.getSurplusQty());
 		// 更新收货单状态
 		receiveBiz.updateReceiveHeader(receiveHeader, detail);
-		// 如果是归还单，则保存归还记录
-		if (WmsAppConstant.BILL_TYPE_RETURN.equals(receiveHeader.getBillTypeCd())) {
-			List<ReceiveLog> receiveLogList = new ArrayList<>();
-			receiveLogList.add(receiveLog);
-			LendReturnRequest returnRequest = logLendReturnFactory.createReturnRequest(receiveLogList);
-			lendReturnBiz.saveLog(returnRequest);
-		}
 		// 记录业务日志
 		receiveBiz.log(StockLogTypeEnum.INSTOCK_BY_PCS.getDesc(), receiveHeader, detail, receiveLog);
 		//检查收货是否完成 并返回
@@ -336,11 +325,23 @@ public class InStockBizImpl implements InStockBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void cancelReceive(List<Long> receiveIdList) {
 		List<Long> removeReceiveBillId = new ArrayList<>();
-		List<ReceiveHeader> receiveHeaderList = new ArrayList<>();
 		// 获取清点记录
 		List<ReceiveLog> receiveLogList = receiveLogBiz.findReceiveLogsByIds(receiveIdList);
 		// 是否可以撤销
-		receiveLogBiz.canCancelReceive(receiveLogList, receiveHeaderList);
+		receiveLogBiz.canCancelReceive(receiveLogList);
+		// 判断收货记录对应的收货单状态是否已关闭，关闭不允许撤销
+		List<Long> receiveHeaderIdList = receiveLogList.stream()
+			.map(ReceiveLog::getReceiveId)
+			.distinct()
+			.collect(Collectors.toList());
+		receiveHeaderIdList.forEach(id -> {
+			ReceiveHeader header = receiveBiz.getReceiveHeaderById(id);
+			if (ReceiveHeaderStateEnum.CLOSURE.equals(header.getBillState())) {
+				throw ExceptionUtil.mpe("撤销收货失败，收货单[编码：{}]已关闭", header.getReceiveNo());
+			}
+		});
+		// 标记清点记录为已撤销状态
+		receiveLogBiz.setCanceled(receiveLogList);
 		// 合并清点记录
 		List<ReceiveLog> mergeReceiveLogList = receiveLogBiz.mergeReceiveLog(receiveLogList);
 		// 生成撤销的清点记录
@@ -379,24 +380,6 @@ public class InStockBizImpl implements InStockBiz {
 				throw new ServiceException("撤销收货失败，删除发货单时失败，请稍后再试");
 			}
 		}
-		// 获取所有归还单
-		List<ReceiveHeader> returnReceiveList = receiveHeaderList.stream()
-			.filter(item -> WmsAppConstant.BILL_TYPE_RETURN.equals(item.getBillTypeCd()))
-			.collect(Collectors.toList());
-		// 获取属于归还单的清点记录
-		List<ReceiveLog> returnReceiveLogList = receiveLogList.stream()
-			.filter(item -> {
-				List<Long> returnIdList = returnReceiveList.stream()
-					.map(ReceiveHeader::getReceiveId)
-					.collect(Collectors.toList());
-				return returnIdList.contains(item.getReceiveId());
-			})
-			.collect(Collectors.toList());
-		// 保存归还记录
-		if (Func.isNotEmpty(returnReceiveLogList)) {
-			LendReturnRequest returnRequest = logLendReturnFactory.createReturnRequest(returnReceiveLogList);
-			lendReturnBiz.saveLog(returnRequest);
-		}
 	}
 
 	@Override
@@ -406,8 +389,6 @@ public class InStockBizImpl implements InStockBiz {
 		ReceiveHeader receiveHeader = receiveHeaderDao.selectReceiveHeaderById(receiveByPcRequest.getReceiveId());
 		// 明细信息
 		List<ReceiveByPcDetailRequest> receiveDetailByPcList = receiveByPcRequest.getDetailRequestList();
-		// 生成的清点记录集合
-		List<ReceiveLog> receiveLogList = new ArrayList<>();
 		receiveDetailByPcList.forEach(receiveDetailByPc -> {
 			//获取明细对象
 			ReceiveDetail receiveDetail = receiveDetailDao.getDetailByReceiveDetailId(receiveDetailByPc.getReceiveDetailId());
@@ -423,7 +404,6 @@ public class InStockBizImpl implements InStockBiz {
 			//生成清点记录
 			ReceiveLog receiveLog = receiveLogFactory.createReceiveLog(receiveDetailByPc, receiveHeader, receiveDetail);
 			receiveLogBiz.saveReceiveLog(receiveLog);
-			receiveLogList.add(receiveLog);
 			//调用库存函数
 			Stock stock = stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PC, receiveLog);
 			List<Stock> stockList = new ArrayList<>();
@@ -435,10 +415,6 @@ public class InStockBizImpl implements InStockBiz {
 			// 修改收货单明细状态
 			receiveBiz.updateReceiveHeader(receiveHeader, receiveDetail);
 		});
-		// 判断单据类型，归还入库需要保存归还记录
-		if (WmsAppConstant.BILL_TYPE_RETURN.equals(receiveHeader.getBillTypeCd())) {
-			lendReturnBiz.saveLog(logLendReturnFactory.createReturnRequest(receiveLogList));
-		}
 		// 记录日志
 		logBiz.auditLog(AuditLogType.INSTOCK, receiveHeader.getReceiveId(), receiveHeader.getReceiveNo(), "PC收货");
 		return receiveHeader.getReceiveNo();
