@@ -8,7 +8,7 @@
 			<u-form-item label="TOLOC" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model.trim="params.locCode"></u--input>
 			</u-form-item>
-			<u-form-item label="LPN"  class="left-text-one-line" labelWidth="100">
+			<u-form-item label="LPN" class="left-text-one-line" labelWidth="100">
 				<u--input v-model.trim="params.lpnCode"></u--input>
 			</u-form-item>
 		</u--form>
@@ -39,13 +39,14 @@
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
 					locCode: '',
-					lpnCode: ''
+					lpnCode: '',
+					boxCodeList: []
 				}
 			}
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
-			this.params= parse;
+			this.params.boxCodeList = parse.boxCodeList;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
