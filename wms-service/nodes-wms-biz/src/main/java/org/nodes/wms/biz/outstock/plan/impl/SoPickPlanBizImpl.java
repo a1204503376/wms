@@ -266,6 +266,16 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		return soPickPlanDao.selectPickBySoDetailId(soDetailId);
 	}
 
+	@Override
+	public List<SoPickPlan> findSoPickPlanByBoxCode(Long soBillId, String boxCode) {
+		return soPickPlanDao.selectSoPickPlanByBoxCode(soBillId, boxCode);
+	}
+
+	@Override
+	public SoPickPlan findSoPickPlanById(Long pickPlanId) {
+		return soPickPlanDao.selectSoPickPlanById(pickPlanId);
+	}
+
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlan, SoDetail detail, String result) {
 		if (Func.isEmpty(newPickPlan)) {
 			return String.format("%s %s行库存不足未分配", result, detail.getSoLineNo());

@@ -109,4 +109,9 @@ public class ReceiveLogPageResponse extends BaseSkuLot implements Serializable {
 	 * 收货时间
 	 */
 	private Date createTime;
+
+	/**
+	 * 撤销收货记录id
+	 */
+	private String cancelLogId;
 }

@@ -121,5 +121,9 @@ public class ReceiveLog extends BaseSkuLotEntity {
 	 * 库存状态
 	 */
 	private StockStatusEnum stockStatus;
+	/**
+	 * 清点记录id
+	 */
+	private String cancelLogId;
 }
 

@@ -33,9 +33,29 @@ const getPickingBySoBillId = (data) => {
 	})
 }
 
+const getPickPlanBySoBillId = (data, params) => {
+	return http.request({
+		url: '/api/ApiPDA/pickByPcs/findPickPlanBySoBillId',
+		method: 'POST',
+		data: data,
+		params: params
+	})
+}
+
+const getPickPlanBySoBillIdAndBoxCode = (data) => {
+	return http.request({
+		url: '/api/ApiPDA/pickByPcs/findPickPlanBySoBillIdAndBoxCode',
+		method: 'POST',
+		data: data
+	})
+}
+
+
 export default {
 	findAllPickingByNo,
 	pickByPcs,
 	pickByBox,
-	getPickingBySoBillId
+	getPickingBySoBillId,
+	getPickPlanBySoBillId,
+	getPickPlanBySoBillIdAndBoxCode
 }

@@ -1,30 +1,18 @@
-package org.nodes.wms.dao.outstock.soPickPlan.entities;
+package org.nodes.wms.dao.outstock.soPickPlan.dto.output;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.Version;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
-import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 import java.math.BigDecimal;
 
-/**
- * 拣货计划实体类
- *
- * @author nodesc
- **/
 @Data
-@TableName("so_pick_plan")
-public class SoPickPlan extends BaseSkuLotEntity {
-
-	private static final long serialVersionUID = -4706292026022708402L;
-
+public class FindPickPlanBySoBillIdAndBoxCodeResponse {
 	/**
 	 * 拣货计划ID
 	 */
-	@TableId(value = "pick_plan_id", type = IdType.ASSIGN_ID)
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long pickPlanId;
 
 	/**
@@ -128,16 +116,6 @@ public class SoPickPlan extends BaseSkuLotEntity {
 	private String lotNumber;
 
 	/**
-	 * 包装ID
-	 */
-	private Long wspId;
-
-	/**
-	 * 层级
-	 */
-	private Integer skuLevel;
-
-	/**
 	 * 计划量
 	 */
 	private BigDecimal pickPlanQty;
@@ -146,33 +124,17 @@ public class SoPickPlan extends BaseSkuLotEntity {
 	 * 拣货量
 	 */
 	private BigDecimal pickRealQty;
-
 	/**
-	 * 任务ID
+	 * 当前对象是否不为空
 	 */
-	private Long taskId;
-
-	/**
-	 * 库房ID
-	 */
-	private Long whId;
-
-	/**
-	 * 货主ID
-	 */
-	private Long woId;
-
-	/**
-	 * 乐观锁
-	 */
-	@Version
-	private Integer version;
+	private Boolean isNotEmpty;
 
 	/**
 	 * 获取剩余可拣量
+	 *
 	 * @return
 	 */
-	public BigDecimal getSurplusQty(){
+	public BigDecimal getSurplusQty() {
 		return pickPlanQty.subtract(pickRealQty);
 	}
 }

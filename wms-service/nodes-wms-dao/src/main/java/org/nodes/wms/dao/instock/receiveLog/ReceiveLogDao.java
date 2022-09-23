@@ -8,9 +8,7 @@ import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogIndexResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
-import org.nodes.wms.dao.instock.receiveLog.mapper.ReceiveLogMapper;
 import org.springblade.core.mp.base.BaseService;
-import org.springblade.core.mp.base.BaseServiceImpl;
 
 import java.util.List;
 
@@ -70,4 +68,19 @@ public interface ReceiveLogDao extends BaseService<ReceiveLog> {
 	 * @return 收货记录集合
 	 */
 	List<ReceiveLog> getByIds(List<Long> idList);
+
+	/**
+	 * 根据收货单id查询清点记录
+	 *
+	 * @param receiveId 收货单头表id
+	 * @return 清点记录集合
+	 */
+    List<ReceiveLog> getByReceiveId(Long receiveId);
+
+	/**
+	 * 标记收货记录为已撤销
+	 *
+	 * @param receiveLog 收货记录
+	 */
+	void setCanceled(ReceiveLog receiveLog);
 }

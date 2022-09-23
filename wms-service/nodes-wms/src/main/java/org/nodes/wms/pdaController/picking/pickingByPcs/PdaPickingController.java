@@ -11,6 +11,8 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.input.findSoHeaderByNoRequest;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.EsitSerialNumberResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindPickingBySoBillIdResponse;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.input.FindPickPlanBySoBillIdAndBoxCodeRequest;
+import org.nodes.wms.dao.outstock.soPickPlan.dto.output.FindPickPlanBySoBillIdAndBoxCodeResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 /**
@@ -65,7 +69,7 @@ public class PdaPickingController {
 	}
 
 	/**
-	 * PDA拣货：拣货详情查看包含拣货计划详情
+	 * PDA零散拣货：拣货详情查看包含拣货计划详情
 	 *
 	 * @param request Pda根据发货单ID查询出库单明细-请求对象
 	 * @param query   分页参数
@@ -75,6 +79,19 @@ public class PdaPickingController {
 	public R<IPage<FindPickingBySoBillIdResponse>> findPickPlanBySoBillId(@RequestBody FindOpenSoDetailRequest request, Query query) {
 		return R.data(outStockBiz.findPickPlanBySoBillId(request, query));
 	}
+
+
+	/**
+	 * PDA零散拣货：根据发货单和箱码查询对应拣货计划数据
+	 *
+	 * @param request 根据发货单和箱码查询对应数据-请求对象
+	 * @return 拣货计划详情响应对象
+	 */
+	@PostMapping("/findPickPlanBySoBillIdAndBoxCode")
+	public R<List<FindPickPlanBySoBillIdAndBoxCodeResponse>> findPickPlanBySoBillIdAndBoxCode(@RequestBody FindPickPlanBySoBillIdAndBoxCodeRequest request) {
+		return R.data(outStockBiz.getPickPlanBySoBillIdAndBoxCode(request));
+	}
+
 	/**
 	 * 判断当前物品是否是序列号管理
 	 *
