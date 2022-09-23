@@ -55,11 +55,12 @@ public interface WmsTaskDao extends BaseService<WmsTask> {
 	/**
 	 * 根据箱码获取任务
 	 *
-	 * @param boxCode          箱码
-	 * @param taskProcTypeEnum 任务执行方式
+	 * @param boxCode          箱码 不可为空
+	 * @param taskProcTypeEnum 任务执行方式 可为空
+	 * @param lot              批次号  可为空
 	 * @return 任务
 	 */
-	WmsTask findPickTaskByBoxCode(String boxCode, WmsTaskProcTypeEnum taskProcTypeEnum);
+	WmsTask findPickTaskByBoxCode(String boxCode, WmsTaskProcTypeEnum taskProcTypeEnum, String lot);
 
 	/**
 	 * 根据任务ID修改任务状态，以及实际量

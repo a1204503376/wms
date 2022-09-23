@@ -120,7 +120,6 @@
 			},
 			submit() {
 				var _this = this;
-				// _this.params.isSn = true;
 				uni.$u.throttle(function() {
 					uni.$u.func.routeNavigateTo('/pages/picking/bulkPick/bulkPIckTo', _this.params);
 				}, 1000)

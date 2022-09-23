@@ -168,6 +168,7 @@ public class SoPickPlanDaoImpl
 		return super.lambdaQuery()
 			.eq(SoPickPlan::getSoBillId, soBillId)
 			.eq(SoPickPlan::getBoxCode, boxCode)
+			.apply("pick_plan_qty != pick_real_qty")
 			.list();
 	}
 
