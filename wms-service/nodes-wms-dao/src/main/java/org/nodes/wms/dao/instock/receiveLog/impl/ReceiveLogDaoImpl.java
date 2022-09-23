@@ -1,7 +1,7 @@
 package org.nodes.wms.dao.instock.receiveLog.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -69,10 +69,19 @@ public class ReceiveLogDaoImpl
 		return super.listByIds(idList);
 	}
 
-    @Override
-    public List<ReceiveLog> getByReceiveId(Long receiveId) {
+	@Override
+	public List<ReceiveLog> getByReceiveId(Long receiveId) {
 		LambdaQueryWrapper<ReceiveLog> queryWrapper = Wrappers.lambdaQuery(ReceiveLog.class);
 		queryWrapper.eq(ReceiveLog::getReceiveId, receiveId);
-        return list(queryWrapper);
-    }
+		return list(queryWrapper);
+	}
+
+	@Override
+	public void setCanceled(ReceiveLog receiveLog) {
+		LambdaUpdateWrapper<ReceiveLog> updateWrapper = Wrappers.lambdaUpdate();
+		updateWrapper
+			.eq(ReceiveLog::getId, receiveLog.getId())
+			.set(ReceiveLog::getCancelLogId, receiveLog.getReceiveId());
+		super.update(updateWrapper);
+	}
 }

@@ -76,4 +76,11 @@ public interface ReceiveLogDao extends BaseService<ReceiveLog> {
 	 * @return 清点记录集合
 	 */
     List<ReceiveLog> getByReceiveId(Long receiveId);
+
+	/**
+	 * 标记收货记录为已撤销
+	 *
+	 * @param receiveLog 收货记录
+	 */
+	void setCanceled(ReceiveLog receiveLog);
 }
