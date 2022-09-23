@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<u-navbar leftIconColor="#fff" @leftClick="esc" :fixed="false" :autoBack="false"
+		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
 			:bgColor="navigationBarBackgroundColor" title="按箱上架" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
@@ -91,7 +91,9 @@
 			},
 			esc() {
 				this.clearEmitKeyDown();
-				uni.$u.func.navigateBackTo(1);
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);
