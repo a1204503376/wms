@@ -1,10 +1,10 @@
 <template>
 	<view>
 		<u-navbar leftIconColor="#fff" @leftClick="esc()" :fixed="false" :autoBack="false"
-			:bgColor="navigationBarBackgroundColor" title="按件拣货" titleStyle="color:#ffffff;font-size:21px"
+			:bgColor="navigationBarBackgroundColor" title="零散拣货" titleStyle="color:#ffffff;font-size:21px"
 			style="color:#ffffff;font-size:21px">
 		</u-navbar>
-		<u--form>
+		<u--form v-if="formDisabled">
 			<u-form-item label="箱码" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model.trim="params.boxCode" disabled></u--input>
 			</u-form-item>
@@ -20,7 +20,23 @@
 			<u-form-item label="数量" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model.trim="params.qty"></u--input>
 			</u-form-item>
-
+		</u--form>
+		<u--form v-if="!formDisabled">
+			<u-form-item label="箱码" :required="true" class="left-text-one-line" labelWidth="100">
+				<u--input v-model.trim="params.boxCode"></u--input>
+			</u-form-item>
+			<u-form-item label="物品" :required="true" class="left-text-one-line" labelWidth="100">
+				<u--input v-model.trim="params.skuCode"></u--input>
+			</u-form-item>
+			<u-form-item label="批次" :required="true" class="left-text-one-line" labelWidth="100">
+				<u--input v-model.trim="params.skuLot1"></u--input>
+			</u-form-item>
+			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
+				<u--input v-model.trim="params.locCode"></u--input>
+			</u-form-item>
+			<u-form-item label="数量" :required="true" class="left-text-one-line" labelWidth="100">
+				<u--input v-model.trim="params.qty"></u--input>
+			</u-form-item>
 		</u--form>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
@@ -65,7 +81,8 @@
 					boxCode: undefined,
 					whId: uni.getStorageSync('warehouse').whId
 				},
-				soBillId: ''
+				soBillId: '',
+				formDisabled: false
 			}
 		},
 		onLoad: function(option) {
@@ -90,14 +107,31 @@
 		methods: {
 			getPickPlanBySoBillIdAndBoxCode() {
 				pick.getPickPlanBySoBillIdAndBoxCode(this.defaultParams).then(data => {
-					console.log(data.data.length)
 					if (data.data.length > 0) {
+						this.formDisabled = true;
 						this.params = data.data[0];
 						this.params.skuLot1 = data.data[0].lotNumber;
 						this.params.qty = data.data[0].surplusQty;
 					} else {
-						_this.$u.func.showToast({
-							title: '拣货完成'
+						this.formDisabled = false;
+						this.params.boxCode = this.defaultParams.boxCode;
+						this.params.soBillId = this.defaultParams.soBillId;
+					}
+				});
+			},
+			getPickPlan() {
+				pick.getPickPlanBySoBillIdAndBoxCode(this.defaultParams).then(data => {
+					if (data.data.length > 0) {
+						this.formDisabled = true;
+						this.params = data.data[0];
+						this.params.skuLot1 = data.data[0].lotNumber;
+						this.params.qty = data.data[0].surplusQty;
+					} else {
+						this.formDisabled = false;
+						this.params.boxCode = this.defaultParams.boxCode;
+						this.params.soBillId = this.defaultParams.soBillId;
+						uni.navigateBack({
+							delta: 2
 						});
 					}
 				});
@@ -149,17 +183,17 @@
 						) {
 							if (data.data) {
 								uni.$u.func.routeNavigateTo(
-									'/pages/picking/pickToByPcs/pickingSerialNumber',
+									'/pages/picking/bulkPick/bulkPickSerialNumber',
 									_this
 									.params);
 								return;
 							} else {
-								_this.params.soBillId = _this.defaultParams.soBillId;
-								pick.pickByPcs(_this.params).then(data => {
+								// _this.params.soBillId = _this.defaultParams.soBillId;
+								pick.bulkPick(_this.params).then(data => {
 									_this.$u.func.showToast({
 										title: '拣货完成'
 									});
-									_this.getPickPlanBySoBillIdAndBoxCode();
+									_this.getPickPlan();
 
 								});
 							}
