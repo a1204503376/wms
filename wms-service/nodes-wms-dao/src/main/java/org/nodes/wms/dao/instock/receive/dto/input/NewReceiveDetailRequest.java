@@ -64,6 +64,10 @@ public class NewReceiveDetailRequest implements Serializable {
 	 */
 	private String  skuLot6;
 	/**
+	 * 摩擦块批次
+	 */
+	private String  skuLot7;
+	/**
 	 * 适用速度等级
 	 */
 	private String skuLot8;
