@@ -17,7 +17,8 @@
 				<template v-for="(item, index) in locList">
 					<u-col span="3" v-if="item.isEmpty">
 						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" @click="change(item)">
-							{{item.locCodeView}}</u-button>
+							{{item.locCodeView}}
+						</u-button>
 					</u-col>
 					<u-col span="3" v-if="!item.isEmpty">
 						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" disabled>{{item.locCodeView}}
@@ -29,7 +30,8 @@
 				<template v-for="(item, index) in locList">
 					<u-col span="3" v-if="item.isEmpty && index>3">
 						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" @click="change(item)">
-							{{item.locCodeView}}</u-button>
+							{{item.locCodeView}}
+						</u-button>
 					</u-col>
 					<u-col span="3" v-if="!item.isEmpty && index">
 						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" disabled>{{item.locCodeView}}
@@ -127,15 +129,19 @@
 			},
 
 			clickItem() {
+				var _this = this;
+				uni.$u.throttle(function() {
+					_this.submit()
+				}, 1000)
+			},
+			submit() {
 				var that = this
 				putWay.callAgv(this.lpnItem).then(res => {
 					that.$u.func.showToast({
 						title: '操作成功'
 					})
 					this.esc()
-
 				})
-
 			},
 			scannerCallback(no) {
 				let item = barCodeService.parseBarcode(no)
