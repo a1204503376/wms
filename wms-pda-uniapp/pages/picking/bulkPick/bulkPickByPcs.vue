@@ -24,7 +24,7 @@
 	import setting from '@/common/setting'
 	import pick from '@/api/picking/picking.js'
 	import uniSelect from '@/components/uni-select.vue'
-	import barcodeFunc from '@/common/barcodeFunc.js'
+	import barcodeFunc from '@/utils/barcodeFunc.js'
 	import tool from '@/utils/tool.js'
 	import picking from '@/api/picking/picking.js'
 	import sku from '@/api/sku.js';

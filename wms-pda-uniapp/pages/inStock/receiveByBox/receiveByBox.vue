@@ -54,7 +54,7 @@
 
 <script>
 	import receive from '@/api/inStock/receiveByBox.js'
-	import barCodeService from '@/common/barcodeFunc.js'
+	import barCodeService from '@/utils/barcodeFunc.js'
 	import uniSelect from '@/components/uni-select.vue'
 	import setting from '@/common/setting'
 	export default {
