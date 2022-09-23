@@ -469,7 +469,16 @@
 			}
 			
 		}
-	],
+	    ,{
+            "path" : "pages/picking/bulkPick/bulkPIckTo",
+            "style" :                                                                                    
+            {
+              "enablePullDownRefresh": false,
+              "navigationStyle": "custom"
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#33cbcc"
 	}

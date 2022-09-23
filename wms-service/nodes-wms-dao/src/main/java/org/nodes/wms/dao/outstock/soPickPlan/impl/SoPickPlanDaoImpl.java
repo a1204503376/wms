@@ -160,4 +160,22 @@ public class SoPickPlanDaoImpl
 			.eq(SoPickPlan::getSoDetailId, soDetailId)
 			.list();
 	}
+
+	@Override
+	public List<SoPickPlan> selectSoPickPlanByBoxCode(Long soBillId, String boxCode) {
+		AssertUtil.notNull(soBillId, "查询拣货计划失败,发货单ID为空");
+		AssertUtil.notEmpty(boxCode, "查询拣货计划失败,箱码为空");
+		return super.lambdaQuery()
+			.eq(SoPickPlan::getSoBillId, soBillId)
+			.eq(SoPickPlan::getBoxCode, boxCode)
+			.list();
+	}
+
+	@Override
+	public SoPickPlan selectSoPickPlanById(Long pickPlanId) {
+		AssertUtil.notNull(pickPlanId, "查询拣货计划失败,拣货计划ID为空");
+		return super.lambdaQuery()
+			.eq(SoPickPlan::getPickPlanId, pickPlanId)
+			.one();
+	}
 }

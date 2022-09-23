@@ -133,4 +133,21 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 	 * @return 拣货计划
 	 */
 	List<SoPickPlan> selectPickBySoDetailId(Long soDetailId);
+
+	/**
+	 * 根据发货单ID和箱码查询拣货计划
+	 *
+	 * @param soBillId 发货单ID
+	 * @param boxCode  箱码
+	 * @return 拣货计划
+	 */
+	List<SoPickPlan> selectSoPickPlanByBoxCode(Long soBillId, String boxCode);
+
+	/**
+	 * 根据拣货计划ID查询拣货计划
+	 *
+	 * @param pickPlanId 拣货计划ID
+	 * @return 拣货计划
+	 */
+	SoPickPlan selectSoPickPlanById(Long pickPlanId);
 }
