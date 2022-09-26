@@ -168,9 +168,11 @@ public class TianyiPickStrategy {
 
 			BigDecimal planQty = BigDecimalUtil.ge(surplusQty, stock.getStockEnable())
 				? stock.getStockEnable() : surplusQty;
-			SoPickPlan soPickPlan = soPickPlanFactory.create(soDetail.getSoBillId(), soDetail, stock, planQty);
-			newPickPlanList.add(soPickPlan);
-			surplusQty = surplusQty.subtract(planQty);
+			if (BigDecimalUtil.gt(planQty, BigDecimal.ZERO)) {
+				SoPickPlan soPickPlan = soPickPlanFactory.create(soDetail.getSoBillId(), soDetail, stock, planQty);
+				newPickPlanList.add(soPickPlan);
+				surplusQty = surplusQty.subtract(planQty);
+			}
 		}
 
 		if (BigDecimalUtil.gt(surplusQty, BigDecimal.ZERO)){
