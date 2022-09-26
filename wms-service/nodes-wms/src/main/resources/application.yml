@@ -173,6 +173,7 @@ blade:
     skip-url:
       - /blade-test/**
       - /blade-system/resource/**
+      - /api/ApiPDA/UpdateVerDetail
     #授权认证配置
     auth:
       - method: ALL

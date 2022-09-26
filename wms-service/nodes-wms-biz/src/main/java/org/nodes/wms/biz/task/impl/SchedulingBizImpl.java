@@ -153,6 +153,9 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		if (!checkTaskState) {
 			throw new ServiceException("状态更新失败,只有已下发的任务才可以执行");
 		}
+		if (Func.isEmpty(wmsTask.getToLocCode()) || Func.isEmpty(wmsTask.getToLocId())) {
+			throw new ServiceException("状态更新失败,只有以及获取目标库位的任务才可以执行");
+		}
 		// 修改任务状态
 		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.START_EXECUTION, "开始执行");
 		// 将原库位库存移动到中间库位

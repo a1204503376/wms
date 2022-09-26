@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.task.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -11,12 +13,14 @@ public class SyncTaskStateRequest {
 	 * 任务头表id
 	 */
 	@ApiModelProperty(value = "任务头表id")
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long taskHeaderId;
 
 	/**
 	 * 任务的明细id
 	 */
 	@NotNull(message = "任务明细ID不能为空")
+	@JsonSerialize(using = ToStringSerializer.class)
 	@ApiModelProperty(value = "任务的明细id", required = true)
 	private Long taskDetailId;
 
