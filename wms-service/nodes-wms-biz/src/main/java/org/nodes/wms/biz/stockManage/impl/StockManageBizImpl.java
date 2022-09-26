@@ -544,8 +544,10 @@ public class StockManageBizImpl implements StockManageBiz {
 	 */
 	@Override
 	public void canMoveByIsNotOverweight(Location targetLocation, List<Stock> stockList) {
-		if (!tianYiPutawayStrategy.isNotOverweight(stockList, targetLocation)) {
-			throw new ServiceException("要移动的库存超过了最大载重");
+		if (locationBiz.isAgvLocation(targetLocation)) {
+			if (!tianYiPutawayStrategy.isNotOverweight(stockList, targetLocation)) {
+				throw new ServiceException("要移动的库存超过了最大载重");
+			}
 		}
 	}
 

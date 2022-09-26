@@ -43,7 +43,7 @@ public class TianYiPutawayStrategy {
 		LpnType lpnType = lpnTypeBiz.findLpnTypeByBoxCode(stocks.get(0).getBoxCode());
 		// 根据箱型查询所有可以上架的空库位(自动存储区的)，要按照上架顺序排序,
 		List<Location> locationList = locationBiz.findEnableAgvLocation(lpnType,
-				dictionaryBiz.findZoneTypeOfAutoStore().getDictKey().toString());
+			dictionaryBiz.findZoneTypeOfAutoStore().getDictKey().toString());
 		// 获取列的最大载重
 		BigDecimal maxLoadWeight = systemParamBiz.findMaxLoadWeightOfColumn();
 		// 计算当前库存的载重
@@ -93,14 +93,17 @@ public class TianYiPutawayStrategy {
 	 * @return 当前库存的载重
 	 */
 	private BigDecimal staticsLoadWeightByStock(List<Stock> stockList, LpnType lpnType) {
+		if (Func.isEmpty(lpnType)) {
+			throw new ServiceException("收货失败，收货到AGV自动区箱码不能为空");
+		}
 		if (Func.isEmpty(stockList)) {
 			return BigDecimal.ZERO;
 		}
 
 		List<String> boxCodes = stockList.stream()
-				.map(Stock::getBoxCode)
-				.distinct()
-				.collect(Collectors.toList());
+			.map(Stock::getBoxCode)
+			.distinct()
+			.collect(Collectors.toList());
 		return lpnType.getWeight().multiply(BigDecimal.valueOf(boxCodes.size()));
 	}
 
@@ -113,7 +116,7 @@ public class TianYiPutawayStrategy {
 	private BigDecimal staticsLoadWeightByColumn(Location location) {
 		// 获取同列的所有库位
 		List<Location> locationList = locationBiz.getLocationByColumn(location);
-		if (Func.isEmpty(locationList)){
+		if (Func.isEmpty(locationList)) {
 			return BigDecimal.ZERO;
 		}
 
@@ -139,14 +142,14 @@ public class TianYiPutawayStrategy {
 
 		// 获取所有的箱号
 		List<String> boxCodes = stockList.stream()
-				.filter(stock -> Func.isNotEmpty(stock.getBoxCode()))
-				.map(Stock::getBoxCode)
-				.distinct()
-				.collect(Collectors.toList());
+			.filter(stock -> Func.isNotEmpty(stock.getBoxCode()))
+			.map(Stock::getBoxCode)
+			.distinct()
+			.collect(Collectors.toList());
 		// 根据箱号计算重量
 		BigDecimal result = BigDecimal.ZERO;
 		Map<LpnTypeCodeEnum, List<String>> lpnType2BoxCodes = boxCodes.stream()
-				.collect(Collectors.groupingBy(lpnTypeBiz::tryParseBoxCode));
+			.collect(Collectors.groupingBy(lpnTypeBiz::tryParseBoxCode));
 		for (Map.Entry<LpnTypeCodeEnum, List<String>> entry : lpnType2BoxCodes.entrySet()) {
 			LpnType lpnType = lpnTypeBiz.findLpnType(entry.getKey());
 			AssertUtil.notNull(lpnType, "计算重量失败,容器类别[{}}]没有配置重量", entry.getKey().getCode());
