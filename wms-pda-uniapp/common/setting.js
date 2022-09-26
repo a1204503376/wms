@@ -7,10 +7,10 @@ module.exports = {
 	// 应用logo，支持本地路径和网络路径
 	logo: '/static/images/tyicon.png',
 	// 版本号
-	version: '1.0.0',
+	version: '1.1.0',
 	// 租户
 	tenantId: '000000',
-	// api请求地址url
+	// api请求默认地址url
 	apiUrl: 'http://10.168.3.136:6001',
 	// 后端数据的接收方式application/json;charset=UTF-8或者application/x-www-form-urlencoded;charset=UTF-8
 	contentType: 'application/json;charset=UTF-8',
