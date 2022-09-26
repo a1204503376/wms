@@ -8,8 +8,7 @@
                          label-position="right"
                          label-width="120px"
                          size="medium"
-                         style="margin-left:10px;margin-right:10px;"
-                >
+                         style="margin-left:10px;margin-right:10px;">
                     <el-row>
                         <h3>常规</h3>
                     </el-row>
@@ -17,27 +16,27 @@
                         <el-col :span="8">
                             <el-form-item label="库位编码" prop="locCode">
                                 <el-input
-                                    size="medium"
                                     v-model="form.params.locCode"
                                     placeholder="请输入内容"
-                                    type="text"
-                                ></el-input>
+                                    size="medium"
+                                    type="text">
+                                </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="库房" prop="whId">
                                 <nodes-warehouse
-                                    size="medium"
                                     v-model="form.params.whId"
-                                ></nodes-warehouse>
+                                    size="medium">
+                                </nodes-warehouse>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="库区" prop="zoneId">
                                 <nodes-zone
-                                    size="medium"
                                     v-model="form.params.zoneId"
-                                ></nodes-zone>
+                                    size="medium">
+                                </nodes-zone>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -47,8 +46,8 @@
                                 <nodes-dictionary
                                     v-model="form.params.locType"
                                     code="loc_type"
-                                    size="medium"
-                                ></nodes-dictionary>
+                                    size="medium">
+                                </nodes-dictionary>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -56,8 +55,8 @@
                                 <nodes-dictionary
                                     v-model="form.params.locCategory"
                                     code="loc_category"
-                                    size="medium"
-                                ></nodes-dictionary>
+                                    size="medium">
+                                </nodes-dictionary>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -65,8 +64,8 @@
                                 <nodes-dictionary
                                     v-model="form.params.locHandling"
                                     code="loc_handling"
-                                    size="medium"
-                                ></nodes-dictionary>
+                                    size="medium">
+                                </nodes-dictionary>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -78,9 +77,8 @@
                                     maxlength="50"
                                     placeholder="请输入内容"
                                     show-word-limit
-                                    type="text"
                                     size="medium"
-                                >
+                                    type="text">
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -90,23 +88,20 @@
                                     v-model="form.params.logicAllocation"
                                     :min="0"
                                     controls-position="right"
-                                    size="medium"></el-input-number>
+                                    size="medium">
+                                </el-input-number>
                             </el-form-item>
                         </el-col>
                         <el-tooltip placement="top">
                             <div slot="content">破损:不能上架库存<br/>冻结:可以上架库存，但库存状态为冻结<br/>业务系统冻结:不能上架库存到该库位</div>
                             <el-col :span="8">
-
-
                                 <el-form-item label="库位状态" prop="locFlag">
-
                                     <nodes-dictionary
                                         v-model="form.params.locFlag"
                                         code="loc_flag"
                                         size="medium">
                                     </nodes-dictionary>
                                 </el-form-item>
-
                             </el-col>
                         </el-tooltip>
                     </el-row>
@@ -116,7 +111,8 @@
                                 <nodes-dictionary
                                     v-model="form.params.abc"
                                     code="abc"
-                                    size="medium"></nodes-dictionary>
+                                    size="medium">
+                                </nodes-dictionary>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -131,8 +127,8 @@
                         <el-col :span="8">
                             <el-form-item label="容器类别" prop="lpnTypeId">
                                 <nodes-lpn-type
-                                    size="medium"
-                                    v-model="form.params.lpnTypeId">
+                                    v-model="form.params.lpnTypeId"
+                                    size="medium">
                                 </nodes-lpn-type>
                             </el-form-item>
                         </el-col>
@@ -143,30 +139,33 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="长度" prop="locLength">
-                                <el-input v-model="form.params.locLength"
-                                          oninput="value=value.replace(/[^\d]/g,'')"
-                                          maxLength="10"
-                                          size="medium" placeholder="请输入内容">
+                                <el-input
+                                    v-model="form.params.locLength"
+                                    maxLength="10"
+                                    oninput="value=value.replace(/[^\d]/g,'')"
+                                    placeholder="请输入内容" size="medium">
                                     <template slot="append">mm</template>
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="高度" prop="locHigh">
-                                <el-input v-model="form.params.locHigh"
-                                          oninput="value=value.replace(/[^\d]/g,'')"
-                                          maxLength="10"
-                                          size="medium" placeholder="请输入内容">
+                                <el-input
+                                    v-model="form.params.locHigh"
+                                    maxLength="10"
+                                    oninput="value=value.replace(/[^\d]/g,'')"
+                                    placeholder="请输入内容" size="medium">
                                     <template slot="append">mm</template>
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="宽度" prop="locWide">
-                                <el-input v-model="form.params.locWide"
-                                          oninput="value=value.replace(/[^\d]/g,'')"
-                                          maxLength="10"
-                                          size="medium" placeholder="请输入内容">
+                                <el-input
+                                    v-model="form.params.locWide"
+                                    maxLength="10"
+                                    oninput="value=value.replace(/[^\d]/g,'')"
+                                    placeholder="请输入内容" size="medium">
                                     <template slot="append">mm</template>
                                 </el-input>
                             </el-form-item>
@@ -180,8 +179,8 @@
                                     maxlength="50"
                                     placeholder="请输入内容"
                                     show-word-limit
-                                    type="text"
-                                    size="medium">
+                                    size="medium"
+                                    type="text">
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -192,8 +191,8 @@
                                     maxlength="50"
                                     placeholder="请输入内容"
                                     show-word-limit
-                                    type="text"
-                                    size="medium">
+                                    size="medium"
+                                    type="text">
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -204,8 +203,8 @@
                                     maxlength="50"
                                     placeholder="请输入内容"
                                     show-word-limit
-                                    type="text"
-                                    size="medium">
+                                    size="medium"
+                                    type="text">
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -214,19 +213,20 @@
                         <el-col :span="8">
                             <el-form-item label="容量" prop="capacity">
                                 <el-input v-model="form.params.capacity"
-                                          oninput="value=value.replace(/[^\d]/g,'')"
                                           maxLength="10"
-                                          size="medium" placeholder="请输入内容">
+                                          oninput="value=value.replace(/[^\d]/g,'')"
+                                          placeholder="请输入内容" size="medium">
                                     <template slot="append">mm³</template>
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="载重量" prop="loadWeight">
-                                <el-input v-model="form.params.loadWeight"
-                                          oninput="value=value.replace(/[^\d]/g,'')"
-                                          maxLength="10"
-                                          size="medium" placeholder="请输入内容">
+                                <el-input
+                                    v-model="form.params.loadWeight"
+                                    maxLength="10"
+                                    oninput="value=value.replace(/[^\d]/g,'')"
+                                    placeholder="请输入内容" size="medium">
                                     <template slot="append">kg</template>
                                 </el-input>
                             </el-form-item>

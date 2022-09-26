@@ -82,7 +82,7 @@ public class LocationBizImpl implements LocationBiz {
 		}
 
 		Location location = locationFactory.createLocation(locationAddOrEditRequest);
-		locationDao.saveOrUpdateLocation(location);
+		locationDao.saveLocation(location);
 		return location;
 	}
 
@@ -102,8 +102,7 @@ public class LocationBizImpl implements LocationBiz {
 		AssertUtil.notNull(locationAddOrEditRequest.getLocId(), "编辑库位失败,库位主键为空");
 
 		Location location = locationDao.getLocationById(locationAddOrEditRequest.getLocId());
-		Func.copy(locationAddOrEditRequest, location);
-		locationDao.saveOrUpdateLocation(location);
+		locationDao.updateLocation(Func.copy(locationAddOrEditRequest, Location.class));
 		return location;
 	}
 

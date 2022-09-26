@@ -2,6 +2,7 @@ package org.nodes.wms.dao.basics.location.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -18,6 +19,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.mapper.LocationMapper;
 import org.nodes.wms.dao.putaway.dto.input.LpnTypeRequest;
 import org.springblade.core.log.exception.ServiceException;
+import org.springblade.core.mp.base.BaseEntity;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
@@ -62,8 +64,25 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	}
 
 	@Override
-	public void saveOrUpdateLocation(Location location) {
-		super.saveOrUpdate(location);
+	public void saveLocation(Location location) {
+		super.save(location);
+	}
+
+	@Override
+	public void updateLocation(Location location) {
+		UpdateWrapper<Location> updateWrapper = Wrappers.update();
+		updateWrapper.lambda()
+			.eq(Location::getLocId, location.getLocId())
+			.set(Location::getLpnTypeId, location.getLpnTypeId())
+			.set(Location::getLocType, location.getLocType())
+			.set(Location::getLocCategory, location.getLocCategory())
+			.set(Location::getLocHandling, location.getLocHandling())
+			.set(Location::getLocFlag, location.getLocFlag())
+			.set(Location::getLocSkuMix, location.getLocSkuMix())
+			.set(Location::getLocLotNoMix, location.getLocLotNoMix());
+		if (!super.update(location, updateWrapper)) {
+			throw new ServiceException("更新库位失败,请再次重试");
+		}
 	}
 
 	@Override
@@ -201,5 +220,4 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 	public Integer getZoneTypeByLocId(Long locId) {
 		return super.baseMapper.selectZoneTypeByLocId(locId);
 	}
-
 }
