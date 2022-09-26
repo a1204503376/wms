@@ -71,6 +71,7 @@
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
 			this.params.boxCode = parse.boxCode;
+			this.params.stockId = parse.stockId;
 			this.params.qty = parse.qty;
 			this.dataSource = this.isAllLpnPutawayList[1].name;
 			this.params.isAllLpnPutaway = this.isAllLpnPutawayList[1].isAllLpnPutaway;
