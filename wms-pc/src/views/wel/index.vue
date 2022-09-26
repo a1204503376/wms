@@ -122,6 +122,7 @@ export default {
     created() {
     },
     mounted() {
+        window.addEventListener('resize', this.autoEcharsWidth);
         this.barInStockSku = this.$echarts.init(document.getElementById('barInStockSku'));
         this.barOutStockSku = this.$echarts.init(document.getElementById('barOutStockSku'));
         this.drawLine();
@@ -138,8 +139,8 @@ export default {
 
             // 柱状图：一周内发货频率最高的前十个SKU
             getOutStockRate().then(res => {
-                let data = [];//['曲轴', '调速弹簧', '上壳体', '活塞销', '连杆总成', '中间轴', '挺柱', '进气门', '飞轮', '链条'];
-                let value = [];//[1500, 1749, 2938, 4737, 5013, 5380, 7530, 7739, 7839, 8374];
+                let data = [];
+                let value = [];
                 res.data.data.forEach(item => {
                     data.push(item.skuCode);
                     value.push(item.pickRealQty);
@@ -229,7 +230,12 @@ export default {
                     }]
                 });
             });
-        }
+        },
+        autoEcharsWidth() {
+            console.log(12333);
+            this.barOutStockSku.resize();
+            this.barInStockSku.resize();
+        },
     }
 };
 </script>
