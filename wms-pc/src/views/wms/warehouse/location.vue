@@ -117,20 +117,28 @@
                 </el-row>
             </template>
             <template v-slot:batchBtn>
-                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
+                <el-button
+                    v-if="permissionObj.add"
+                    icon="el-icon-plus" size="mini"
+                    type="primary" @click="onAdd">新增
                 </el-button>
-                <el-button v-if="permissionObj.delete" icon="el-icon-delete" plain size="mini" type="danger"
-                           @click="onRemove">删除
+                <el-button
+                    v-if="permissionObj.delete"
+                    icon="el-icon-delete" plain
+                    size="mini" type="danger"
+                    @click="onRemove">删除
                 </el-button>
-                <el-button v-if="permissionObj.import" icon="el-icon-upload2" plain size="mini"
-                           @click="onUpload">导入
+                <el-button
+                    v-if="permissionObj.import"
+                    icon="el-icon-upload2" plain size="mini"
+                    @click="onUpload">导入
                 </el-button>
                 <file-upload
                     :visible="fileUpload.visible"
                     file-name="库位"
                     template-url="/api/wms/warehouse/location/export-template"
-                    @callback="callbackFileUpload"
-                ></file-upload>
+                    @callback="callbackFileUpload">
+                </file-upload>
             </template>
             <template v-slot:tableTool>
                 <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
@@ -166,6 +174,7 @@
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column
+                            v-if="!column.hide"
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column"
