@@ -5,7 +5,7 @@
 		onLaunch: function() {
 			// #ifdef APP-PLUS
 			//App自动跟新判断
-			api.CheckUpdate().then(data => {
+			api.UpdateVerDetail().then(data => {
 				if (data.data.verName != setting.version) {
 					uni.showModal({
 						//提醒用户更新  
@@ -22,15 +22,13 @@
 			})
 			// #endif
 		},
-		onShow: function() {
-		},
-		onHide: function() {
-		}
+		onShow: function() {},
+		onHide: function() {}
 	}
 </script>
 
 <style lang="scss">
 	/* 注意要写在第一行，同时给style标签加入lang="scss"属性 */
 	@import "@/uni_modules/uview-ui/index.scss";
-	@import url("./static/icon/iconfont.scss");	
+	@import url("./static/icon/iconfont.scss");
 </style>
