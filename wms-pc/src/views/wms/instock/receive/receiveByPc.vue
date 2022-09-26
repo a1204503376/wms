@@ -180,7 +180,7 @@
                                 </el-table-column>
                                 <el-table-column width="130">
                                     <template slot="header">
-                                        <span>生产批次</span>
+                                        <span class="d-table-header-required">生产批次</span>
                                     </template>
                                     <template v-slot="{row}">
                                         <el-input

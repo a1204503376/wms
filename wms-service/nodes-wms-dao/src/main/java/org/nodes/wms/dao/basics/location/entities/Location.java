@@ -64,7 +64,7 @@ public class Location extends TenantEntity {
 	private String allocationZone;
 
 	/**
-	 * 使用状态
+	 * 使用状态,值参考字典中的LOC_FLAG
 	 */
 	private Integer locFlag;
 
