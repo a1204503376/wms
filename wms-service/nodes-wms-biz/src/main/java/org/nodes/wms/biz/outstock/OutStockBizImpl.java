@@ -90,7 +90,6 @@ public class OutStockBizImpl implements OutStockBiz {
 	private final ZoneBiz zoneBiz;
 	private final AgvTask agvTask;
 	private final SoPickPlanFactory soPickPlanFactory;
-	private final LendReturnBiz lendReturnBiz;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
