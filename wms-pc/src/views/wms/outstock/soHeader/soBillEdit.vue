@@ -26,18 +26,17 @@
                             <el-form-item label="单据类型" prop="billTypeCd">
                                 <nodes-bill-type
                                     v-model="form.params.billTypeCd"
-                                    :default-value="true"
                                     io-type="O"
-                                    size="medium"
-                                ></nodes-bill-type>
+                                    size="medium">
+                                </nodes-bill-type>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="所属库房" prop="whId">
                                 <nodes-warehouse
                                     v-model="form.params.whId"
-                                    size="medium"
-                                ></nodes-warehouse>
+                                    size="medium">
+                                </nodes-warehouse>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -294,6 +293,7 @@ export default {
     data() {
         return {
             removeIdList: [],
+            filterTypes: ['RR'],
             form: {
                 params: {
                     soBillId: '',

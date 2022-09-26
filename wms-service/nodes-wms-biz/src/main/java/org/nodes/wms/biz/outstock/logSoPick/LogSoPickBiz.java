@@ -65,4 +65,12 @@ public interface LogSoPickBiz {
 	 * @return 有效的拣货记录
 	 */
 	List<LogSoPick> findEnableBySoHeaderId(Long soBillId);
+
+	/**
+	 * 查询发货单中所有的拣货记录
+	 *
+	 * @param soBillId 发货单id
+	 * @return 拣货记录
+	 */
+	List<LogSoPick> findBySoHeaderId(Long soBillId);
 }

@@ -77,7 +77,10 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 					.filter(soPickPlan -> detail.getSoDetailId().equals(soPickPlan.getSoDetailId()))
 					.collect(Collectors.toList());
 			}
-			List<SoPickPlan> newPickPlan = tianyiPickStrategy.run(soHeader, detail, soDetails, pickPlanOfSoDetail);
+			List<SoPickPlan> pickPlan = tianyiPickStrategy.run(soHeader, detail, soDetails, pickPlanOfSoDetail);
+			List<SoPickPlan> newPickPlan = pickPlan.stream()
+				.distinct()
+				.collect(Collectors.toList());
 			result = createResultByRunPickStrategy(newPickPlan, detail, result);
 			if (Func.isNotEmpty(newPickPlan)) {
 				occupyStockAndSavePlan(newPickPlan);

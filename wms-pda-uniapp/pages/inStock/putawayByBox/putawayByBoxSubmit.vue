@@ -48,7 +48,12 @@
 		data() {
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
-				params: {},
+				params: {
+					boxCode:'',
+					locCode:'',
+					qty:'',
+					isAllLpnPutaway:undefined
+				},
 				dataSource: "",
 				isAllLpnPutawayList: [{
 						id: 1,
@@ -65,7 +70,7 @@
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
-			this.params = parse;
+			this.params.boxCode = parse.boxCode;
 			this.dataSource = this.isAllLpnPutawayList[1].name;
 			this.params.isAllLpnPutaway = this.isAllLpnPutawayList[1].isAllLpnPutaway;
 		},
@@ -126,7 +131,9 @@
 			},
 			esc() {
 				this.clearEmitKeyDown();
-				uni.$u.func.navigateBackTo(1);
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

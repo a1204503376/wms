@@ -887,8 +887,8 @@ public class StockBizImpl implements StockBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void occupyStock(List<SoPickPlan> newPickPlan) {
 		AssertUtil.notEmpty(newPickPlan, "更新库存占用失败, 拣货计划为空无法更新");
-
 		Map<Long, List<SoPickPlan>> stockId2Qty = newPickPlan.stream()
+			.distinct()
 			.collect(Collectors.groupingBy(SoPickPlan::getStockId, Collectors.toList()));
 		stockId2Qty.forEach((stockId, soPickPlanList) -> {
 			BigDecimal currentOccupy = soPickPlanList.stream()

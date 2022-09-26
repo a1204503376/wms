@@ -164,6 +164,8 @@ public class ReceiveFactory {
 		receiveDetail.setSkuLot5(newReceiveDetailRequest.getSkuLot5());
 		//设置摩擦块批次
 		receiveDetail.setSkuLot6(newReceiveDetailRequest.getSkuLot6());
+		// 产品标识代码
+		receiveDetail.setSkuLot7(newReceiveDetailRequest.getSkuLot7());
 		//设置适用速度等级
 		receiveDetail.setSkuLot8(newReceiveDetailRequest.getSkuLot8());
 		return receiveDetail;
@@ -231,6 +233,7 @@ public class ReceiveFactory {
 		editReceiveDetailResponse.setSkuLot4(receiveDetail.getSkuLot4());
 		editReceiveDetailResponse.setSkuLot5(receiveDetail.getSkuLot5());
 		editReceiveDetailResponse.setSkuLot6(receiveDetail.getSkuLot6());
+		editReceiveDetailResponse.setSkuLot7(receiveDetail.getSkuLot7());
 		editReceiveDetailResponse.setSkuLot8(receiveDetail.getSkuLot8());
 		return editReceiveDetailResponse;
 	}

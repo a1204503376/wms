@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.common.log.LogBiz;
+import org.nodes.wms.biz.lendreturn.LendReturnBiz;
 import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.outstock.so.SoBillBiz;
@@ -68,6 +69,7 @@ public class SoBillBizImpl implements SoBillBiz {
 	private final LogBiz logBiz;
 	private final StockBiz stockBiz;
 	private final LogSoPickBiz logSoPickBiz;
+	private final LendReturnBiz lendReturnBiz;
 
 	@Override
 	public Page<SoHeaderPageResponse> getPage(Query query, SoHeaderPageQuery soHeaderPageQuery) {
@@ -152,6 +154,8 @@ public class SoBillBizImpl implements SoBillBiz {
 		if (Func.isNotEmpty(logSoPicks)) {
 			stockBiz.outStockByCloseBill(logSoPicks);
 		}
+		// 借出单关闭，保存借出记录
+		lendReturnBiz.saveLendLog(soHeader);
 
 		logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soHeader.getSoBillId(), soHeader.getSoBillNo(), "关闭发货单");
 	}
