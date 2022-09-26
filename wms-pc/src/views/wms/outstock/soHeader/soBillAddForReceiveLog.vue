@@ -94,17 +94,6 @@
                                 :data="table.data"
                                 border
                                 size="mini">
-                                <el-table-column width="53">
-                                    <template slot="header">
-                                        <el-button
-                                            circle
-                                            icon="el-icon-plus"
-                                            size="mini"
-                                            type="primary"
-                                            @click="onAddBatchRow">
-                                        </el-button>
-                                    </template>
-                                </el-table-column>
                                 <el-table-column
                                     label="行号"
                                     prop="lineNumber"
@@ -156,8 +145,21 @@
                                             v-model="row.umCode"
                                             :disabled="true"
                                             :sku="row.sku"
-                                            style="width: 100px"
-                                        ></nodes-sku-um>
+                                            style="width: 100px">
+                                        </nodes-sku-um>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="skuSpec" width="122">
+                                    <template slot="header">
+                                        <span class="d-table-header-required">物品规格</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <nodes-sku-spec
+                                            :disabled="true"
+                                            v-model="row.skuSpec"
+                                            :sku="row.sku"
+                                            style="width: 100px">
+                                        </nodes-sku-spec>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="planQty" width="152">
@@ -248,11 +250,12 @@ import NodesBillType from "@/components/wms/select/NodesBillType";
 import NodesOwner from "@/components/wms/select/NodesOwner";
 import {add} from "@/api/wms/outstock/soHeader";
 import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
+import NodesSkuSpec from "@/components/wms/select/NodesSkuSpec";
 
 export default {
     name: "new",
     components: {
-        NodesSkuUm, NodesOwner, NodesCustomer,
+        NodesSkuUm, NodesOwner, NodesCustomer, NodesSkuSpec,
         NodesBillType, NodesWarehouse, NodesLineNumber,
         NodesSku, NodesDictionary
     },
@@ -355,6 +358,7 @@ export default {
         },
         initializeData: function () {
             this.table.data = JSON.parse(this.receiveLogs);
+            console.log(this.table.data);
             let i = 1;
             this.table.data.forEach(row => {
                 row.lineNumber = i * 10;
@@ -366,6 +370,7 @@ export default {
                 };
                 row.planQty = row.qty;
                 row.umCode = row.wsuCode;
+                row.skuSpec = row.skuLot2;
                 i++;
             })
         },
@@ -374,6 +379,7 @@ export default {
                 lineNumber: '',
                 sku: {},
                 umCode: '',
+                skuSpec: '',
                 planQty: 0,
                 remark: '',
                 skuLot1: '',

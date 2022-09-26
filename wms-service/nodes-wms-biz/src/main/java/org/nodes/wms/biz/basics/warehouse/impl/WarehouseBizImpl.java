@@ -121,7 +121,7 @@ public class WarehouseBizImpl implements WarehouseBiz {
 		location.setLocFlag(DictKVConstant.LOC_FLAG_NORMAL);
 		location.setLocCode(warehouse.getWhCode() + "-" + locCodeSuffix);
 		location.setCreateDept(warehouse.getDeptId());
-		locationDao.saveOrUpdateLocation(location);
+		locationDao.saveLocation(location);
 		return location;
 	}
 

@@ -71,6 +71,7 @@ export default {
             } else {
                 this.val = this.dataSource.map(e => e.serialNumber)
             }
+            this.$emit('selectValChange', this.val);
         },
     }
 }

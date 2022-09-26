@@ -249,7 +249,7 @@ export default {
             if (this.detailData[0].surplusQty + row.outStockQty < row.stockBalance + row.outStockQty) {
                 return this.detailData[0].surplusQty + row.outStockQty
             }
-            return row.stockEnable + row.outStockQty
+            return Number(row.stockEnable + row.outStockQty)
         },
 
         onChange(val, oldVal, row) {
@@ -278,6 +278,7 @@ export default {
                 }
                 if (row.outStockQty !== row.serailList.length) {
                     this.$message.warning("出库数量与序列号选择数量不一致");
+                    console.log(row.serailList);
                     return false;
                 }
             }

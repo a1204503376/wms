@@ -16,6 +16,13 @@ import java.util.List;
  * 库位管理 Dao接口
  */
 public interface LocationDao {
+
+	/**
+	 * 根据库位编码获取前十个库位
+	 *
+	 * @param code: 库位编码
+	 * @return 库位
+	 */
 	List<LocationSelectResponse> listTop10ByCode(String code);
 
 	/**
@@ -54,9 +61,16 @@ public interface LocationDao {
 	/**
 	 * 保存
 	 *
-	 * @param location: 库位对象
+	 * @param location 库位对象
 	 */
-	void saveOrUpdateLocation(Location location);
+	void saveLocation(Location location);
+
+	/**
+	 * 更新库位
+	 *
+	 * @param location 库位
+	 */
+	void updateLocation(Location location);
 
 	/**
 	 * 根据id查找库位信息
@@ -92,6 +106,8 @@ public interface LocationDao {
 	/**
 	 * 根据库位编码获取库位
 	 *
+	 *
+	 * @param whId 库房id
 	 * @param locCode 库位编码
 	 * @return 库位信息
 	 */
