@@ -281,7 +281,7 @@ public class StockManageBizImpl implements StockManageBiz {
 			.filter(stocks -> request.getLotNumber().equals(stocks.getSkuLot1()))
 			.findFirst()
 			.orElse(null);
-		AssertUtil.notNull(stock, "查询库存是否序列号管理失败，找不到对应库存");
+		AssertUtil.notNull(stock, "查询失败，找不到对应库存,请确认数据正确后重试");
 		EstimateStockMoveResponse response = new EstimateStockMoveResponse();
 		response.setIsSn(stock.isSerial());
 		return response;
