@@ -25,9 +25,18 @@ const findSkuIsSnBySkuCode=(params)=>{
 }
 
 
+const findIsSnByStockId=(params)=>{
+	return http.request({
+		url:'/api/ApiPDA/sku/findIsSnByStockId',
+		method: 'GET',
+		data:params
+	})
+}
+
 
 export default {
 	getSkuDropDownBox,
 	getSkuByCode,
-	findSkuIsSnBySkuCode
+	findSkuIsSnBySkuCode,
+	findIsSnByStockId
 }

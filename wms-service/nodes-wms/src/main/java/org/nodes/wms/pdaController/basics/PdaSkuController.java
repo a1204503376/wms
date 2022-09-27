@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
 import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.sku.dto.input.FindSkuByCodeRequest;
 import org.nodes.wms.dao.basics.sku.dto.input.FindSkuIsSnBySkuCodeRequest;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
+import org.nodes.wms.dao.stock.dto.input.FindIsSnByStockIdRequest;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 @RequestMapping(WmsApiPath.WMS_PDA_API + "/sku")
 public class PdaSkuController {
 	private final SkuBiz skuBiz;
+	private final StockQueryBiz stockQueryBiz;
 
 	/**
 	 * PDA查询型号下拉框组件
@@ -68,5 +72,17 @@ public class PdaSkuController {
 		}
 		return R.data(true);
 	}
+
+	/**
+	 * PDA查询当前物品是否序列号管理
+	 *
+	 * @return 当前物品是否序列号
+	 */
+	@GetMapping("/findIsSnByStockId")
+	public R<Boolean> findIsSnByStockId(FindIsSnByStockIdRequest request) {
+		Stock stock = stockQueryBiz.findStockById(request.getStockId());
+		return R.data(stock.isSerial());
+	}
+
 
 }
