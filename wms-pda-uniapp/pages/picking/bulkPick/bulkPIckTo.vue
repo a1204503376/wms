@@ -172,8 +172,8 @@
 				_this.params.isSn = true;
 				uni.$u.throttle(function() {
 					let params = {}
-					params.skuCode = _this.params.skuCode;
-					sku.findSkuIsSnBySkuCode(params).then(data => {
+					params.stockId = _this.params.stockId;
+					sku.findIsSnByStockId(params).then(data => {
 						if (tool.isNotEmpty(_this.params.skuCode) &&
 							tool.isNotEmpty(_this.params.skuLot1) &&
 							tool.isNotEmpty(_this.params.boxCode) &&

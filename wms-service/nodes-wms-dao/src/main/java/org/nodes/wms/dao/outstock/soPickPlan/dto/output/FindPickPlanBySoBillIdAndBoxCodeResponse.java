@@ -39,11 +39,13 @@ public class FindPickPlanBySoBillIdAndBoxCodeResponse {
 	/**
 	 * 出库单明细id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long soDetailId;
 
 	/**
 	 * 库存ID
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long stockId;
 
 	/**
