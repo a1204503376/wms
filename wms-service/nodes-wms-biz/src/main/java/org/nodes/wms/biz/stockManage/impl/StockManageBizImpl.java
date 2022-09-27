@@ -269,8 +269,21 @@ public class StockManageBizImpl implements StockManageBiz {
 	public EstimateStockMoveResponse skuIsSn(EstimateStockMoveRequest request) {
 		//根据skuCode获取SKU对象
 		Sku sku = skuBiz.findByCode(request.getSkuCode());
+		//根据locCode获取Location对象
+		Location sourceLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
+		List<Long> locationIdList = new ArrayList<>();
+		locationIdList.add(sourceLocation.getLocId());
+		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
+		skuLot.setSkuLot1(request.getLotNumber());
+		//根据库房ID SKU_ID 库位 和批属性1查询对应库存
+		List<Stock> stockList = stockQueryBiz.findEnableStockByLocationAndSkuLot(request.getWhId(), sku.getSkuId(), null, locationIdList, skuLot);
+		Stock stock = stockList.stream()
+			.filter(stocks -> request.getLotNumber().equals(stocks.getSkuLot1()))
+			.findFirst()
+			.orElse(null);
+		AssertUtil.notNull(stock, "查询库存是否序列号管理失败，找不到对应库存");
 		EstimateStockMoveResponse response = new EstimateStockMoveResponse();
-		response.setIsSn(sku.getIsSn() > 0);
+		response.setIsSn(stock.isSerial());
 		return response;
 	}
 
