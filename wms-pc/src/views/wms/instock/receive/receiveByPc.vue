@@ -169,17 +169,6 @@
                                 </el-table-column>
                                 <el-table-column width="130">
                                     <template slot="header">
-                                        <span>序列号</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <el-input
-                                            v-model.trim="row.snCode"
-                                            size=mini>
-                                        </el-input>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column width="130">
-                                    <template slot="header">
                                         <span class="d-table-header-required">生产批次</span>
                                     </template>
                                     <template v-slot="{row}">
@@ -229,6 +218,17 @@
                                     <template v-slot="{row}">
                                         <el-input
                                             v-model.trim="row.skuLot8"
+                                            size=mini>
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column width="700">
+                                    <template slot="header">
+                                        <span>序列号</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-input
+                                            v-model.trim="row.snCode"
                                             size=mini>
                                         </el-input>
                                     </template>
