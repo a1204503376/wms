@@ -7,11 +7,10 @@ import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
+import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
-import org.nodes.wms.biz.lendreturn.LendReturnBiz;
-import org.nodes.wms.biz.lendreturn.modular.LogLendReturnFactory;
 import org.nodes.wms.biz.outstock.logSoPick.modular.LogSoPickFactory;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.outstock.plan.modular.SoPickPlanFactory;
@@ -22,6 +21,7 @@ import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.biz.task.AgvTask;
 import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
@@ -90,6 +90,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	private final ZoneBiz zoneBiz;
 	private final AgvTask agvTask;
 	private final SoPickPlanFactory soPickPlanFactory;
+	private final LpnTypeBiz lpnTypeBiz;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -234,7 +235,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		}
 		// 2、参数校验 头表
 		canPick(soHeader);
-
+		boxCodeCanPick(request, task, soHeader);
 		// 3、根据拣货计划生成拣货记录,根据任务id从拣货计划中查找
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(task.getTaskId());
 		canPick(soPickPlanList, stockList);
@@ -251,6 +252,36 @@ public class OutStockBizImpl implements OutStockBiz {
 		// 7、记录业务日志
 		logBiz.auditLog(AuditLogType.OUTSTOCK, soHeader.getSoBillId(), soHeader.getSoBillNo(),
 			spliceLog(taskProcTypeEnum, stockList));
+	}
+
+	void boxCodeCanPick(PickByBoxCodeRequest request, WmsTask task, SoHeader soHeader) {
+		LpnTypeCodeEnum lpnTypeCodeEnum = lpnTypeBiz.parseBoxCode(request.getBoxCode());
+		//如果是D箱进行拦截判断，如果数量有问题则抛异常让用户去拆箱
+		if (LpnTypeCodeEnum.D.equals(lpnTypeCodeEnum)) {
+			//判断他是不是D箱人工拣货区，如果是则判断数量
+			Zone zone = zoneBiz.findByCode(WmsAppConstant.ZONE_CODE_D_PICK_AREA);
+			Location location = null;
+			if (Func.isNotEmpty(task.getToLocCode())) {
+				location = locationBiz.findLocationByLocCode(request.getWhId(), task.getToLocCode());
+			} else {
+				location = locationBiz.findLocationByLocCode(request.getWhId(), task.getFromLocCode());
+			}
+			if (zone.getZoneId().equals(location.getZoneId())) {
+				BigDecimal soDetailSurplusQty = BigDecimal.ZERO;
+				BigDecimal soPickPlanSurplusQty = BigDecimal.ZERO;
+				List<SoDetail> soDetailList = soBillBiz.getEnableSoDetailBySoHeaderId(soHeader.getSoBillId());
+				for (SoDetail soDetail : soDetailList) {
+					soDetailSurplusQty = soDetailSurplusQty.add(soDetail.getSurplusQty());
+				}
+				List<SoPickPlan> soPickPlans = soPickPlanBiz.findBySoHeaderId(soHeader.getSoBillId());
+				for (SoPickPlan soPickPlan : soPickPlans) {
+					soPickPlanSurplusQty = soPickPlanSurplusQty.add(soPickPlan.getSurplusQty());
+				}
+				if (BigDecimalUtil.gt(soPickPlanSurplusQty, soDetailSurplusQty)) {
+					throw new ServiceException("D箱拣货失败，请先拆箱");
+				}
+			}
+		}
 	}
 
 	@Override
