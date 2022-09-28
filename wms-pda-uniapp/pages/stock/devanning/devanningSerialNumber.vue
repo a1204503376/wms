@@ -115,6 +115,7 @@
 						var params = {};
 						params = _this.params;
 						params.serialNumberList = serialNumberList;
+						params.isSn = true;
 						uni.$u.func.routeNavigateTo('/pages/stock/devanning/devanningSubmit', params);
 					} else {
 						_this.$u.func.showToast({

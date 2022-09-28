@@ -10,9 +10,10 @@
 			</u-form-item>
 			<u-form-item label="新箱码" :required="true" class="left-text-one-line" labelWidth="100">
 				<picker style="width: 100%;height: 100%;" v-model="dataSource" :range="isAllLpnPutawayList"
-					range-key="name" value="index" @change="bindPickerChange">
+					range-key="name" value="index" @change="bindPickerChange" disabled>
 					<view class="uni-input-input" style="width: 100%;">
-						<u--input style="margin-top: 0rpx; z-index: 99999;" v-model.trim="dataSource"></u--input>
+						<u--input style="margin-top: 0rpx; z-index: 99999;" v-model.trim="dataSource" disabled>
+						</u--input>
 					</view>
 				</picker>
 			</u-form-item>
@@ -62,7 +63,11 @@
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
-			this.params = parse;
+			this.params.boxCode = parse.boxCode;
+			this.params.whId = parse.whId;
+			this.params.isSn = parse.isSn;
+			this.params.serialNumberList = parse.serialNumberList;
+			this.params.stockList = parse.stockList;
 			this.dataSource = this.isAllLpnPutawayList[1].name;
 			this.params.newBoxCode = this.isAllLpnPutawayList[1].isAllLpnPutaway;
 		},
