@@ -86,6 +86,26 @@
 			// #endif
 		},
 		methods: {
+			analysisCode(code) {
+				var barcode = barcodeFunc.parseBarcode(code);
+				var barcodeType = barcodeFunc.BarcodeType;
+				switch (barcode.type) {
+					case barcodeType.Loc:
+						this.params.locCode = barcode.content;
+						break;
+					case barcodeType.UnKnow:
+						this.params.locCode = barcode.content;
+						break;
+					default:
+						this.$u.func.showToast({
+							title: '条码识别失败,不支持的条码类型'
+						});
+						break;
+				}
+			},
+			scannerCallback(no) {
+				this.analysisCode(no);
+			},
 			bindPickerChange: function(e) {
 				this.index = e.detail.value
 				this.dataSource = this.isAllLpnPutawayList[e.detail.value].name;
