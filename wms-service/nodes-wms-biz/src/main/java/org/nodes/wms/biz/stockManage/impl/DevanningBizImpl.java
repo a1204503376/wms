@@ -96,7 +96,7 @@ public class DevanningBizImpl implements DevanningBiz {
 		LpnTypeCodeEnum lpnTypeCodeEnum = lpnTypeBiz.tryParseBoxCode(request.getBoxCode());
 		String skuName = null;
 		String spec = null;
-		if (request.getIsSn()) {
+		if (Func.isNotEmpty(request.getIsSn()) && request.getIsSn()) {
 			Serial serial = serialBiz.findSerialSerialNo(request.getSerialNumberList().get(0));
 			Stock stock = stockQueryBiz.findStockById(serial.getStockId());
 			skuName = stock.getSkuName();
@@ -114,7 +114,6 @@ public class DevanningBizImpl implements DevanningBiz {
 		String oldBoxCode = request.getBoxCode();
 		// 是否生成新箱码 是true进入下面方法生成新箱码
 		if (request.getNewBoxCode()) {
-			generateNewBoxCode(request);
 			request.setBoxCode(generateNewBoxCode(request));
 		}
 

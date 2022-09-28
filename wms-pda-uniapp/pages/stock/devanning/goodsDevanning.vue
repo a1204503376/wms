@@ -85,7 +85,7 @@
 					this.params.stockList[this.params.page].splitQty=this.paramsView.splitQty;
 					uni.$u.func.routeNavigateTo('/pages/stock/devanning/goodsDevanning', this.params);
 				} else {
-					debugger
+					this.params.isSn = false;
 					uni.$u.func.routeNavigateTo('/pages/stock/devanning/devanningSubmit', this
 						.params);
 				}
