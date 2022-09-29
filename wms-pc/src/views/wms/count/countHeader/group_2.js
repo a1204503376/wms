@@ -1,5 +1,5 @@
-import {selectLocation} from "@/api/wms/warehouse/location";
-import {searchSku} from "@/api/wms/count/countheader.js";
+import { selectLocation } from "@/api/wms/warehouse/location";
+import { searchSku } from "@/api/wms/count/countheader.js";
 
 // let dialogType = 'new';
 
@@ -20,7 +20,7 @@ export const group = {
             type: 'input',
             view: false,
             rules: [
-                {required: true, message: "请输入规格型号！", trigger: "blur"}
+                { required: true, message: "请输入规格型号！", trigger: "blur" }
             ]
         },
         // {
@@ -157,9 +157,9 @@ export const group = {
             prop: 'changeType',
             type: 'checkGroup',
             dicData: [
-                {value: 0, label: '入库'},
-                {value: 1, label: '出库'},
-                {value: 2, label: '移动'},
+                { value: 0, label: '入库' },
+                { value: 1, label: '出库' },
+                { value: 2, label: '移动' },
             ],
             default: [],
             span: 24,
@@ -191,7 +191,7 @@ export const group = {
             type: 'check',
             text: '空库位',
             dicData: [
-                {value: 0, label: '空库位'},
+                { value: 0, label: '空库位' },
             ],
             view: false,
             hide: function (form, type) {
