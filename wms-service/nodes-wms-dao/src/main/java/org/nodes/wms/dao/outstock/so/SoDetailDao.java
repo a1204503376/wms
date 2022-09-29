@@ -8,6 +8,7 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.output.NotSoPickPageResponse;
 import org.nodes.wms.dao.outstock.so.dto.input.SoDetailAndStockRequest;
 import org.nodes.wms.dao.outstock.so.dto.output.*;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
+import org.nodes.wms.dao.outstock.so.enums.SoDetailStateEnum;
 
 import java.util.List;
 
@@ -138,4 +139,13 @@ public interface SoDetailDao {
 	 * @return 发货单详情
 	 */
 	SoDetail getSoDetailByHeaderIdAndSkuCode(Long soBillId, String skuCode);
+
+	/**
+	 * 根据发货单id和发货明细状态获取发货明细
+	 *
+	 * @param soBillId 发货单id
+	 * @param soDetailStateEnumList 发货明细状态
+	 * @return 发货单明细
+	 */
+	List<SoDetail> getSoDetailBySoBillId(Long soBillId, List<SoDetailStateEnum> soDetailStateEnumList);
 }
