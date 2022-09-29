@@ -210,7 +210,7 @@ public class DevanningBizImpl implements DevanningBiz {
 //			tmpBoxCode = request.getBoxCode();
 //			newBoxCode = temporaryBoxCode;
 //		}
-		moveStock = stockBiz.moveStock(stock, serialNoList, splitQty, newBoxCode, location.getLocCode(),
+		moveStock = stockBiz.moveStock(stock, serialNoList, splitQty, newBoxCode, newBoxCode,
 			location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
 
 		moveStock.setOccupyQty(moveStock.getStockBalance());
