@@ -173,6 +173,11 @@
 				uni.$u.throttle(function() {
 					let params = {}
 					params.stockId = _this.params.stockId;
+					params.boxCode = _this.params.boxCode;
+					params.locCode = _this.params.locCode;
+					params.skuCode = _this.params.skuCode;
+					params.skuLot1 = _this.params.skuLot1;
+					params.qty = _this.params.qty;
 					sku.findIsSnByStockId(params).then(data => {
 						if (tool.isNotEmpty(_this.params.skuCode) &&
 							tool.isNotEmpty(_this.params.skuLot1) &&
@@ -188,7 +193,8 @@
 									.params);
 								return;
 							} else {
-								// _this.params.soBillId = _this.defaultParams.soBillId;
+								// _this.params.soBillId = _this.defaultParams.soBillId; 
+								_this.params.whId = uni.getStorageSync('warehouse').whId
 								pick.bulkPick(_this.params).then(data => {
 									_this.$u.func.showToast({
 										title: '拣货完成'
@@ -204,7 +210,6 @@
 						}
 
 					})
-
 				}, 1000)
 
 			},

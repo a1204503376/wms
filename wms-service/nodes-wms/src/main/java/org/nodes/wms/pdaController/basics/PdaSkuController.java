@@ -3,6 +3,7 @@ package org.nodes.wms.pdaController.basics;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
@@ -24,6 +25,8 @@ import java.util.stream.Collectors;
 
 /**
  * 收货管理API
+ *
+ * @author nodesc
  */
 @RestController
 @RequiredArgsConstructor
@@ -54,8 +57,8 @@ public class PdaSkuController {
 	public R<List<String>> findSkuByCode(@RequestBody FindSkuByCodeRequest request) {
 		List<Sku> skus = skuBiz.selectSkuListByNo(request.getNo());
 		List<String> skuList = skus.stream()
-			.filter(sku -> Func.isNotEmpty(sku.getSkuSpec()))
 			.map(Sku::getSkuSpec)
+			.filter(Func::isNotEmpty)
 			.distinct()
 			.collect(Collectors.toList());
 		return R.data(skuList);
@@ -83,6 +86,7 @@ public class PdaSkuController {
 			.findFirst()
 			.orElse(null);
 		AssertUtil.notNull(stock, "查询失败，找不到对应库存,请确认数据正确后重试");
+		assert stock != null;
 		return R.data(stock.isSerial());
 	}
 
@@ -93,7 +97,22 @@ public class PdaSkuController {
 	 */
 	@GetMapping("/findIsSnByStockId")
 	public R<Boolean> findIsSnByStockId(FindIsSnByStockIdRequest request) {
-		Stock stock = stockQueryBiz.findStockById(request.getStockId());
+		Stock stock;
+		if (Func.isEmpty(request.getStockId())) {
+			List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
+			stock = stockList.stream()
+				.filter(stocks -> request.getSkuLot1().equals(stocks.getSkuLot1())
+					&& request.getLocCode().equals(stocks.getLocCode())
+					&& request.getSkuCode().equals(stocks.getSkuCode())
+					&& BigDecimalUtil.gt(stocks.getStockBalance(), request.getQty()))
+				.findFirst()
+				.orElse(null);
+
+		} else {
+			stock = stockQueryBiz.findStockById(request.getStockId());
+		}
+		AssertUtil.notNull(stock, "根据您输入的数据匹配不到对应库存，请检查您输入的数据后重试");
+		assert stock != null;
 		return R.data(stock.isSerial());
 	}
 
