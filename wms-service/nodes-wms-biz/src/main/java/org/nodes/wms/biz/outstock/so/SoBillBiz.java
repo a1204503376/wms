@@ -257,4 +257,20 @@ public interface SoBillBiz {
 	 * @return 发货单详情
 	 */
 	SoDetail findSoDetailByHeaderIdAndSkuCode(Long soBillId, String skuCode);
+
+	/**
+	 * 根据发货单id查询所有发货单明细
+	 *
+	 * @param soBillId 发货单id
+	 * @return 发货单明细
+	 */
+	List<SoDetail> findSoDetailBySoHeaderId(Long soBillId);
+
+	/**
+	 * 根据发货单id获取发货明细，排除未拣货状态的
+	 *
+	 * @param soBillId 发货单id
+	 * @return List<SoDetail> 发货明细
+	 */
+	List<SoDetail> findSoDetailExcludeNormal(Long soBillId);
 }

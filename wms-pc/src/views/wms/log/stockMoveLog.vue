@@ -127,6 +127,7 @@
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column
+                            v-if="!column.hide"
                             width="170"
                             :key="index"
                             show-overflow-tooltip

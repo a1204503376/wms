@@ -132,4 +132,12 @@ public class SoDetailDaoImpl extends BaseServiceImpl<SoDetailMapper, SoDetail> i
 		}
 		return soDetails.get(0);
 	}
+
+	@Override
+	public List<SoDetail> getSoDetailBySoBillId(Long soBillId, List<SoDetailStateEnum> soDetailStateEnumList) {
+		LambdaQueryWrapper<SoDetail> queryWrapper = Wrappers.lambdaQuery();
+		queryWrapper.eq(SoDetail::getSoBillId, soBillId)
+			.in(SoDetail::getBillDetailState, soDetailStateEnumList);
+		return super.list(queryWrapper);
+	}
 }
