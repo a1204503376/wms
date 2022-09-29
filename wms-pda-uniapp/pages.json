@@ -483,7 +483,25 @@
 			}
 
 		}
-	],
+	    ,{
+            "path" : "pages/picking/review/review",
+            "style" :                                                                                    
+            {
+               "enablePullDownRefresh": false,
+               "navigationStyle": "custom"
+            }
+            
+        }
+		,{
+		    "path" : "pages/picking/review/outstockCheckout",
+		    "style" :                                                                                    
+		    {
+		       "enablePullDownRefresh": false,
+		       "navigationStyle": "custom"
+		    }
+		    
+		}
+    ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#33cbcc"
 	}

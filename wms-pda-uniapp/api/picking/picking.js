@@ -58,6 +58,23 @@ const bulkPick = (data) => {
 	})
 }
 
+const outStockCheckoutFindSoBill = (data, page) => {
+	return http.request({
+			url: '/api/ApiPDA/pickByPcs/outStockCheckoutFindSoBill',
+			method: 'POST',
+			data: data,
+			params: page
+		})
+}
+
+const outStockCheckout = (data) => {
+	return http.request({
+			url: '/api/ApiPDA/pickByPcs/outStockCheckout',
+			method: 'POST',
+			data: data
+		})
+}
+
 
 export default {
 	findAllPickingByNo,
@@ -66,5 +83,7 @@ export default {
 	getPickingBySoBillId,
 	getPickPlanBySoBillId,
 	getPickPlanBySoBillIdAndBoxCode,
+	outStockCheckoutFindSoBill,
+	outStockCheckout,
 	bulkPick
 }
