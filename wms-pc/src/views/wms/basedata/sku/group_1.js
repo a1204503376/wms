@@ -1,5 +1,5 @@
-import {getTree as getSkuTypeTree} from "@/api/wms/basedata/skutype";
-import {getList as getSkuLotList} from "@/api/wms/basedata/skulot";
+import { getTree as getSkuTypeTree } from "@/api/wms/basedata/skutype";
+import { getList as getSkuLotList } from "@/api/wms/basedata/skulot";
 
 export const group = {
     label: '常规',
@@ -8,14 +8,14 @@ export const group = {
             prop: "skuCode",
             label: "物品编码",
             disabled: false,   //是否置灰
-            rules: [{required: true, message: "物品编码不能为空", trigger: "blur", pattern: /\S/,}],
+            rules: [{ required: true, message: "物品编码不能为空", trigger: "blur", pattern: /\S/, }],
             maxlength: 50
         },
         {
             prop: "skuName",
             label: "物品名称",
             disabled: false,  //是否置灰
-            rules: [{required: true, message: "物品名称不能为空", trigger: "blur", pattern: /\S/,}],
+            rules: [{ required: true, message: "物品名称不能为空", trigger: "blur", pattern: /\S/, }],
             maxlength: 200
         },
         {
@@ -34,13 +34,13 @@ export const group = {
                 value: "woId"
             },
             cascaderItem: ['skuTypeId', "wslId", "skuIncList"],
-            rules: [{required: true, message: "货主不能为空", trigger: "blur"}],
+            rules: [{ required: true, message: "货主不能为空", trigger: "blur" }],
             disabled: function (data) {
                 return data && data.skuReplaceList && data.skuReplaceList.length > 0;
             },
             change: (val, obj, col, data) => {
                 if (val) {
-                    getSkuTypeTree({woId: val}).then(res => {
+                    getSkuTypeTree({ woId: val }).then(res => {
                         if (col.cascader) {
                             col.cascader.forEach(item => {
                                 if (item.prop === 'skuTypeId') {
@@ -49,7 +49,7 @@ export const group = {
                             });
                         }
                     });
-                    getSkuLotList({woId: val}).then(res => {
+                    getSkuLotList({ woId: val }).then(res => {
                         if (col.cascader) {
                             col.cascader.forEach(item => {
                                 if (item.prop === 'wslId') {
@@ -59,7 +59,7 @@ export const group = {
                         }
                     });
                 } else {
-                    col.cascader.forEach(item=>{
+                    col.cascader.forEach(item => {
                         item.dicData = [];
                     });
                 }
@@ -70,7 +70,7 @@ export const group = {
             label: "物品分类",
             disabled: false,  //是否置灰
             type: "select-tree",
-            show:['typeName'],
+            show: ['typeName'],
             dicUrl: "/api/wms/basedata/skutype/tree",
             props: {
                 label: "title",
@@ -78,7 +78,7 @@ export const group = {
                 children: "children"
             },
             clearable: true,
-            rules: [{required: true, message: "物品分类不能为空", trigger: "blur"}],
+            rules: [{ required: true, message: "物品分类不能为空", trigger: "blur" }],
         },
         {
             prop: "wspId",
@@ -105,8 +105,8 @@ export const group = {
                 label: "skuLotName",
                 value: "wslId"
             },
-            show:['skuLotName'],
-            rules: [{required: true, message: "批属性设置不能为空", trigger: "blur"}],
+            show: ['skuLotName'],
+            rules: [{ required: true, message: "批属性设置不能为空", trigger: "blur" }],
         },
         {
             prop: "wslvId",
@@ -119,8 +119,8 @@ export const group = {
                 label: "skuLotValName",
                 value: "wslvId"
             },
-            show:['skuLotValName'],
-            rules: [{required: true, message: "批属性验证不能为空", trigger: "blur"}],
+            show: ['skuLotValName'],
+            rules: [{ required: true, message: "批属性验证不能为空", trigger: "blur" }],
         },
         {
             prop: 'abc',
@@ -131,7 +131,7 @@ export const group = {
                 label: 'dictValue',
                 value: 'dictKey'
             },
-            show:['abcName']
+            show: ['abcName']
         },
         {
             prop: "udf1",
@@ -142,7 +142,7 @@ export const group = {
         },
         {
             prop: "skuSpec",
-            label: "型号",
+            label: "规格型号",
             disabled: false,
             clearable: true,
             maxlength: 10
@@ -181,7 +181,7 @@ export const group = {
                     label: "否"
                 }
             ],
-            show:['isSnDesc'],
+            show: ['isSnDesc'],
             default: 0
         },
         {
@@ -193,7 +193,7 @@ export const group = {
                 value: 'dictKey',
                 label: 'dictValue'
             },
-            show:['inventoryTypeDesc']
+            show: ['inventoryTypeDesc']
         },
         {
             prop: "skuRemark",

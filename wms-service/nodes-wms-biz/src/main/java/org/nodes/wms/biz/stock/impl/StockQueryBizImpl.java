@@ -141,7 +141,12 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		return stockMergeStrategy.matchSameStock(pickLog, pickToLoc.get(0));
 	}
 
-	@Override
+    @Override
+    public List<Stock> findStockOnPickTo(String boxCode) {
+        return null;
+    }
+
+    @Override
 	public List<Stock> findStockByLpnCode(String lpnCode) {
 		return stockDao.getStockByLpnCode(lpnCode, null);
 	}

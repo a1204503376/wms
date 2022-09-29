@@ -1,22 +1,9 @@
 <template>
     <basic-container>
-        <nodes-crud
-            ref="table"
-            :option="option"
-            :data="data"
-            v-model="form"
-            :table-loading="loading"
-            :permission="permissionList"
-            @on-load="onLoad"
-            @on-del="onDel"
-            @row-save="rowSave"
-            @on-multi-del="onMultiDel"
-            @selection-change="selectionChange"
-            @menu-command="menuCommand"
-            @search-change="searchChange"
-            :menuWidth="option.menuWidth"
-            :before-open="beforeOpen"
-        >
+        <nodes-crud ref="table" :option="option" :data="data" v-model="form" :table-loading="loading"
+            :permission="permissionList" @on-load="onLoad" @on-del="onDel" @row-save="rowSave"
+            @on-multi-del="onMultiDel" @selection-change="selectionChange" @menu-command="menuCommand"
+            @search-change="searchChange" :menuWidth="option.menuWidth" :before-open="beforeOpen">
             <template slot="menuLeft">
                 <el-dropdown trigger="click" @command="handleCommand">
                     <el-button type="primary" size="mini">
@@ -25,40 +12,23 @@
                         <i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item v-if="permission.sku_import" command="1" icon="el-icon-upload2"
-                        >导入
+                        <el-dropdown-item v-if="permission.sku_import" command="1" icon="el-icon-upload2">导入
                         </el-dropdown-item>
-                        <el-dropdown-item v-if="permission.sku_export" command="2" icon="el-icon-download"
-                        >导出
+                        <el-dropdown-item v-if="permission.sku_export" command="2" icon="el-icon-download">导出
                         </el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </template>
         </nodes-crud>
-        <sku-outstock
-            :visible="skuOutstock.visible"
-            :dataSource="skuOutstock.dataSource"
-            @callback="callbackSkuOutstock"
-        ></sku-outstock>
-        <instock
-            :visible="instock.visible"
-            :dataSource="instock.dataSource"
-            @callback="callbackInstock"
-        ></instock>
+        <sku-outstock :visible="skuOutstock.visible" :dataSource="skuOutstock.dataSource"
+            @callback="callbackSkuOutstock"></sku-outstock>
+        <instock :visible="instock.visible" :dataSource="instock.dataSource" @callback="callbackInstock"></instock>
 
-        <file-upload
-            :visible="fileUpload.visible"
-            template-url="/api/wms/basedata/sku/export-template"
-            file-name="物品"
-            @callback="callbackFileUpload"
-        ></file-upload>
-        <data-verify
-            :visible="dataVerify.visible"
-            :dataSource="dataVerify.dataSource"
-            uploadUrl="/api/wms/basedata/sku/import-data"
-            dataVerifyUrl="/api/wms/basedata/sku/import-valid"
-            @callback="callbackDataVerify"
-        ></data-verify>
+        <file-upload :visible="fileUpload.visible" template-url="/api/wms/basedata/sku/export-template" file-name="物品"
+            @callback="callbackFileUpload"></file-upload>
+        <data-verify :visible="dataVerify.visible" :dataSource="dataVerify.dataSource"
+            uploadUrl="/api/wms/basedata/sku/import-data" dataVerifyUrl="/api/wms/basedata/sku/import-valid"
+            @callback="callbackDataVerify"></data-verify>
     </basic-container>
 </template>
 
@@ -72,16 +42,16 @@ import {
     addsku,
     canEdit,
 } from "@/api/wms/basedata/sku";
-import {group as group_1} from "./sku/group_1.js";
-import {group as group_2} from "./sku/group_2.js";
-import {group as group_3} from "./sku/group_3.js";
-import {group as group_4} from "./sku/group_4.js";
+import { group as group_1 } from "./sku/group_1.js";
+import { group as group_2 } from "./sku/group_2.js";
+import { group as group_3 } from "./sku/group_3.js";
+import { group as group_4 } from "./sku/group_4.js";
 import skuOutstock from "./sku/skuOustock";
 import instock from "./sku/skuInstock";
 import fileUpload from "@/components/nodes/fileUpload";
 import dataVerify from "@/components/nodes/dataVerify";
 import fileDownload from "js-file-download";
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
     name: "sku",
@@ -165,7 +135,7 @@ export default {
                     },
                     {
                         prop: "skuSpec",
-                        label: "物品型号",
+                        label: "规格型号",
                         search: true,
                         sortable: true,
                         placeholder: '支持模糊查询',
@@ -220,9 +190,9 @@ export default {
                             value: "woId"
                         }
                     },
-                    {prop: "skuVolume", label: "体积"},
-                    {prop: "skuNetWeight", label: "净重(g)"},
-                    {prop: "skuGrossWeight", label: "毛重(g)"},
+                    { prop: "skuVolume", label: "体积" },
+                    { prop: "skuNetWeight", label: "净重(g)" },
+                    { prop: "skuGrossWeight", label: "毛重(g)" },
                     // {prop: "qualityType", label: "效期管理"},
                     // {
                     //   prop: "qualityDateTypeCd",
@@ -484,4 +454,5 @@ export default {
 };
 </script>
 <style lang="scss">
+
 </style>
