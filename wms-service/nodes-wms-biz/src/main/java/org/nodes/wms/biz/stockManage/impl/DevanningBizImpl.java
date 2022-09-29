@@ -36,7 +36,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -204,13 +203,13 @@ public class DevanningBizImpl implements DevanningBiz {
 		stock.setOccupyQty(BigDecimal.ZERO);
 		String tmpBoxCode = oldBoxCode;
 		String newBoxCode = request.getBoxCode();
-		BigDecimal divide = stock.getStockBalance().divide(BigDecimal.valueOf(2), 2, RoundingMode.HALF_UP);
-		//发货单详情等于页面要拣货数量
-		if (BigDecimalUtil.ge(splitQty, divide)) {
-			String temporaryBoxCode = tmpBoxCode;
-			tmpBoxCode = request.getBoxCode();
-			newBoxCode = temporaryBoxCode;
-		}
+//		BigDecimal divide = stock.getStockBalance().divide(BigDecimal.valueOf(2), 2, RoundingMode.HALF_UP);
+//		//发货单详情等于页面要拣货数量
+//		if (BigDecimalUtil.ge(splitQty, divide)) {
+//			String temporaryBoxCode = tmpBoxCode;
+//			tmpBoxCode = request.getBoxCode();
+//			newBoxCode = temporaryBoxCode;
+//		}
 		moveStock = stockBiz.moveStock(stock, serialNoList, splitQty, newBoxCode, location.getLocCode(),
 			location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
 
