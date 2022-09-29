@@ -118,10 +118,14 @@
                     @current-change="handleCurrentChange"
                 >
                 </el-pagination>
-                <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
-                </dialog-column>
             </template>
         </nodes-master-page>
+        <div v-if="columnShowHide.visible">
+            <dialog-column
+                v-bind="columnShowHide"
+                @close="onColumnShowHide">
+            </dialog-column>
+        </div>
     </div>
 </template>
 
