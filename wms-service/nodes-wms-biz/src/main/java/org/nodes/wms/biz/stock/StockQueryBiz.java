@@ -61,6 +61,14 @@ public interface StockQueryBiz {
 	Stock findStockOnPickTo(LogSoPick pickLog);
 
 	/**
+	 * 根据箱码从出库暂存区中查询库存
+	 *
+	 * @param boxCode 箱码
+	 * @return 库存集合
+	 */
+	List<Stock> findStockOnPickTo(String boxCode);
+
+	/**
 	 * 根据落放id获取库存
 	 *
 	 * @param dropId 落放id
