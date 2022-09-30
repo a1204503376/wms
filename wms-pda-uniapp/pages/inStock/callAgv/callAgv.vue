@@ -33,7 +33,7 @@
 							{{item.locCodeView}}
 						</u-button>
 					</u-col>
-					<u-col span="3" v-if="!item.isEmpty && index">
+					<u-col span="3" v-if="!item.isEmpty && index>3">
 						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" disabled>{{item.locCodeView}}
 						</u-button>
 					</u-col>
