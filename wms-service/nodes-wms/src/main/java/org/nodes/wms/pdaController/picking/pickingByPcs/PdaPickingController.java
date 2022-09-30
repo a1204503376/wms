@@ -77,7 +77,6 @@ public class PdaPickingController {
 		return R.data(outStockBiz.findPickPlanBySoBillId(request, query));
 	}
 
-
 	/**
 	 * PDA零散拣货：根据发货单和箱码查询对应拣货计划数据
 	 *
@@ -111,5 +110,24 @@ public class PdaPickingController {
 		return null;
 	}
 
+	/**
+	 * PDA复核: 查询发货单
+	 *
+	 * @param request Pda根据编码查询库存-请求对象
+	 * @param query   分页条件
+	 * @return 库存响应对象
+	 */
+	@PostMapping("/outStockCheckoutFindSoBill")
+	public R<IPage<FindAllPickingResponse>> outStockCheckoutFindSoBill(@RequestBody findSoHeaderByNoRequest request, Query query) {
+		return R.data(outStockBiz.outStockCheckoutFindSoBill(request, query));
+	}
 
+	/**
+	 * 出库复核
+	 */
+	@PostMapping("/outStockCheckout")
+	public R<String> outStockCheckout(@RequestBody OutStockCheckoutRequest request){
+		outStockBiz.outStockCheckout(request.getSoBillId(), request.getBoxCode(), request.getBoxCodeList());
+		return R.data(request.getBoxCode());
+	}
 }

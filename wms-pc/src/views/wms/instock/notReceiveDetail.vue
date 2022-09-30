@@ -75,7 +75,9 @@
                         </template>
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
-                        <el-table-column :key="index" min-width="150" show-overflow-tooltip v-bind="column">
+                        <el-table-column
+                            v-if="!column.hide"
+                            :key="index" min-width="150" show-overflow-tooltip v-bind="column">
                         </el-table-column>
                     </template>
                 </el-table>

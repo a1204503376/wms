@@ -94,6 +94,7 @@
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column
+                            v-if="!column.hide"
                             :key="index"
                             show-overflow-tooltip
                             v-bind="column"

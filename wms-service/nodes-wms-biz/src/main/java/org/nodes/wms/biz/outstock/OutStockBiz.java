@@ -167,4 +167,22 @@ public interface OutStockBiz {
 	 * @return true:全部拣货 false:部分拣货
 	 */
 	Boolean bulkPick(BulkPickRequest request);
+
+	/**
+	 * 出库复核：根据发货单号查询发货单
+	 *
+	 * @param request 查询条件
+	 * @param query   分页参数
+	 * @return 返回多个能按件拣货的对象
+	 */
+	IPage<FindAllPickingResponse> outStockCheckoutFindSoBill(findSoHeaderByNoRequest request, Query query);
+
+	/**
+	 * 出库复核
+	 *
+	 * @param soBillId 发货单单据Id
+	 * @param boxCode 箱码
+	 * @param boxCodeList 已复核的箱码
+	 */
+    void outStockCheckout(Long soBillId, String boxCode, List<String> boxCodeList);
 }

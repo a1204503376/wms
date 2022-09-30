@@ -66,6 +66,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 出库业务实现类
@@ -950,4 +951,80 @@ public class OutStockBizImpl implements OutStockBiz {
 		}
 	}
 
+	@Override
+	public IPage<FindAllPickingResponse> outStockCheckoutFindSoBill(findSoHeaderByNoRequest request, Query query) {
+		List<SoBillStateEnum> soBillStateEnums = new ArrayList<>();
+		soBillStateEnums.add(SoBillStateEnum.EXECUTING);
+		soBillStateEnums.add(SoBillStateEnum.PART);
+		soBillStateEnums.add(SoBillStateEnum.ALL_OUT_STOCK);
+		request.setSoBillState(soBillStateEnums);
+		return soBillBiz.getAllPickingByNo(Condition.getPage(query), request);
+	}
+
+	@Override
+	public void outStockCheckout(Long soBillId, String boxCode, List<String> boxCodeList) {
+		// 获取明细，排除未收货的
+		List<SoDetail> soDetailList = soBillBiz.findSoDetailExcludeNormal(soBillId);
+		// 获取扫码箱子中的库存
+		List<Stock> currentBoxStockList = stockQueryBiz.findStockOnPickTo(boxCode);
+		// 获取已复核箱子中的库存
+		List<Stock> checkedStockList = new ArrayList<>();
+		if (Func.isNotEmpty(boxCodeList)) {
+			boxCodeList.forEach(item -> {
+				List<Stock> checkedStock = stockQueryBiz.findStockOnPickTo(item);
+				checkedStockList.addAll(checkedStock);
+			});
+		}
+		// 标记 该箱存储的物品、批次、专用客户和物品明细中的是否一致
+		boolean flag = false;
+		for (SoDetail soDetail : soDetailList) {
+			if (flag) {
+				continue;
+			}
+			for (Stock currentStock : currentBoxStockList) {
+				// 在已复核过的箱中找出和明细相同的物品
+				List<Stock> filterCheckedStockList = checkedStockList.stream()
+					.filter(x -> (x.getSkuLot2().equals(currentStock.getSkuLot2())
+						&& x.getSkuId().equals(currentStock.getSkuId())))
+					.collect(Collectors.toList());
+				// skuLot1 为空，可以是任意批次的，不为空，则只能是指定批次的
+				if (Func.isNotEmpty(soDetail.getSkuLot1())) {
+					if (soDetail.getSkuLot1().equals(currentStock.getSkuLot1())) {
+						filterCheckedStockList.stream()
+							.filter(x -> x.getSkuLot1().equals(currentStock.getSkuLot1()));
+					} else {
+						continue;
+					}
+				}
+				// skuLot4 为空，可以是任意客户的
+				if (Func.isNotEmpty(soDetail.getSkuLot4())) {
+					if (soDetail.getSkuLot4().equals(currentStock.getSkuLot4())) {
+						filterCheckedStockList.stream()
+							.filter(x -> x.getSkuLot4().equals(currentStock.getSkuLot4()));
+					} else {
+						continue;
+					}
+				}
+				if (soDetail.getSkuLot2().equals(currentStock.getSkuLot2())
+					&& soDetail.getSkuId().equals(currentStock.getSkuId())) {
+					BigDecimal checkedQty = filterCheckedStockList.stream()
+						.map(Stock::getStockEnable)
+						.reduce(BigDecimal.ZERO, BigDecimal::add);
+
+					if (BigDecimalUtil.gt(checkedQty, BigDecimal.ZERO)) {
+						if (BigDecimalUtil.gt((checkedQty.add(currentStock.getStockEnable())), soDetail.getScanQty())) {
+							throw ExceptionUtil.mpe("复核失败，原因：" +
+									"物品[{}]在当前箱中数量为{}，在已核过数量为{}，实际发货数量为{}",
+								currentStock.getSkuCode(), currentStock.getStockEnable(), checkedQty, soDetail.getScanQty());
+						}
+					}
+
+					flag = true;
+				}
+			}
+		}
+		if (!flag) {
+			throw ExceptionUtil.mpe("复核失败，原因：该箱中不存在发货单[{}]明细中的物品", soBillId);
+		}
+	}
 }

@@ -9,11 +9,11 @@
 			<u-form-item label="LOC" :required="true" class="left-text-one-line" labelWidth="100">
 				<u--input v-model.trim="param.locCode" @focus="focus(1)" @blur="blur(1)" @confirm="change"></u--input>
 			</u-form-item>
-			<u-form-item label="LPN"  class="left-text-one-line" labelWidth="100">
+			<u-form-item label="LPN" class="left-text-one-line" labelWidth="100">
 				<u--input v-model.trim="param.lpnCode" @focus="focus(2)" @blur="blur(2)" @confirm="change"
 					:focus="this.focusNum == 2"></u--input>
 			</u-form-item>
-			<u-form-item label="专用客户"  class="left-text-one-line" labelWidth="100">
+			<u-form-item label="专用客户" class="left-text-one-line" labelWidth="100">
 				<u--input v-model.trim="param.skuLot4" @focus="focus(4)" @confirm="change" @blur="blur(4)"
 					:focus="this.focusNum == 4"></u--input>
 			</u-form-item>
@@ -54,7 +54,7 @@
 					lpnCode: '',
 					skuLot1: '',
 					skuLot2: '',
-					skuLot4:'',
+					skuLot4: '',
 				},
 			}
 		},
@@ -91,15 +91,18 @@
 		},
 		methods: {
 			submit() {
-				this.param.locCode = this.$u.func.parseLocCode(this.param.locCode)
-				receive.receiveByMultiBox(this.param).then(res => {
-					this.$u.func.showToast({
-						title: '操作成功'
+				var _this = this;
+				uni.$u.throttle(function() {
+					_this.param.locCode = _this.$u.func.parseLocCode(_this.param.locCode)
+					receive.receiveByMultiBox(_this.param).then(res => {
+						_this.$u.func.showToast({
+							title: '操作成功'
+						})
+						uni.navigateBack({
+							delta: 2
+						});
 					})
-					uni.navigateBack({
-						delta: 2
-					});
-				})
+				}, 1000)
 			},
 			focus(num) {
 				this.focusNum = num

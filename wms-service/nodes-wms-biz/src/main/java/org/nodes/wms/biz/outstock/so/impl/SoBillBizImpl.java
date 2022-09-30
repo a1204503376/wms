@@ -354,4 +354,19 @@ public class SoBillBizImpl implements SoBillBiz {
 		return soDetailDao.getSoDetailByHeaderIdAndSkuCode(soBillId, skuCode);
 	}
 
+	@Override
+	public List<SoDetail> findSoDetailBySoHeaderId(Long soBillId) {
+		return soDetailDao.getSoDetailBySoHeaderId(soBillId);
+	}
+
+	@Override
+	public List<SoDetail> findSoDetailExcludeNormal(Long soBillId) {
+		List<SoDetailStateEnum> soDetailStateEnumList = new ArrayList<>();
+		soDetailStateEnumList.add(SoDetailStateEnum.PART);
+		soDetailStateEnumList.add(SoDetailStateEnum.ALL_OUT_STOCK);
+		soDetailStateEnumList.add(SoDetailStateEnum.Allocated);
+		soDetailStateEnumList.add(SoDetailStateEnum.UnAlloc);
+		soDetailStateEnumList.add(SoDetailStateEnum.AllocWellen);
+		return soDetailDao.getSoDetailBySoBillId(soBillId, soDetailStateEnumList);
+	}
 }
