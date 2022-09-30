@@ -243,7 +243,7 @@
                     <el-button
                         :loading="loading"
                         type="primary"
-                        @click="onSubmit">
+                        @click="onSave">
                         保 存
                     </el-button>
                     <el-button
@@ -470,8 +470,20 @@ export default {
                 skuLot2Exist: false
             }
         },
-        submitFormParams() {
+        onSave() {
             let detailRequestList = this.table.postData
+            for (const key in detailRequestList) {
+                let filterList = detailRequestList
+                    .filter(x => x.boxCode === detailRequestList[key].boxCode && x.locId !== detailRequestList[key].locId);
+                if (filterList.length > 0){
+                    this.$message.warning("相箱码同只能放在同一库位上");
+                    return
+                }
+            }
+            this.onSubmit();
+        },
+        submitFormParams() {
+            let detailRequestList = this.table.postData;
             let receiveByPcRequest = {receiveId: this.receiveId, detailRequestList}
             return ReceiveByPc(receiveByPcRequest)
                 .then(res => {
