@@ -164,7 +164,7 @@ public class PutawayBizImpl implements PutawayBiz {
 			String locCode = location.getLocCode();
 			locResponse.setLocCode(locCode);
 			//设置前端显示的库位编码 从第二次出现“-”的位置后的第一个位置截取到最后一位
-			locResponse.setLocCodeView(locCode.substring(locCode.indexOf("-", locCode.indexOf("-") + 1) + 1));
+			locResponse.setLocCodeView(locCode.substring(9));
 			// 库位是否为空
 			locResponse.setIsEmpty(stockBiz.judgeEnableOnLocation(location));
 			locResponseList.add(locResponse);
