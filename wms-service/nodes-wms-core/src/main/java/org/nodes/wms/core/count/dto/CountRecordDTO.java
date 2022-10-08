@@ -21,6 +21,7 @@ public class CountRecordDTO extends CountRecord {
 	 * @param index 批属性索引
 	 * @param value 值
 	 */
+	@Override
 	public void skuLotSet(int index, String value) {
 		switch (index) {
 			case 1:super.setSkuLot1(value); break;
