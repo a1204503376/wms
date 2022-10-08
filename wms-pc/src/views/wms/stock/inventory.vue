@@ -170,15 +170,6 @@
                 <el-button @click="thaw" size="mini" type="primary" v-if="permissionObj.thaw">
                     库存解冻
                 </el-button>
-                <el-button @click="showByBox" icon="el-icon-plus" size="mini" type="primary"
-                    v-if="permissionObj.showByBox">按箱显示
-                </el-button>
-                <el-button @click="showByLpn" icon="el-icon-plus" size="mini" type="primary"
-                    v-if="permissionObj.showByLpn">按LPN显示
-                </el-button>
-                <el-button @click="showBySerial" icon="el-icon-plus" size="mini" type="primary"
-                    v-if="permissionObj.showBySerial">按序列号显示
-                </el-button>
                 <el-button @click="print" size="mini" type="primary" v-if="permissionObj.print">
                     箱贴打印
                 </el-button>
@@ -424,8 +415,6 @@ export default {
     mixins: [listMixin],
     data() {
         return {
-            dialogFormVisible: false,
-            woId: "",
             form: {
                 params: {
                     skuIds: [],
@@ -457,9 +446,6 @@ export default {
                 freezeShow: false,
                 stockType: "",
                 remark: ""
-            },
-            deleteCustomerRequest: {
-                ids: [],
             },
             pageSize: [20, 50, 100],
             table: {
@@ -623,9 +609,6 @@ export default {
                 moveByBox: this.vaildData(this.permission.inventory_moveByBox, false),
                 freeze: this.vaildData(this.permission.inventory_freeze, false),
                 thaw: this.vaildData(this.permission.inventory_thaw, false),
-                showByBox: this.vaildData(this.permission.inventory_showByBox, false),
-                showByLpn: this.vaildData(this.permission.inventory_showByLpn, false),
-                showBySerial: this.vaildData(this.permission.inventory_showBySerial, false),
                 print: this.vaildData(this.permission.inventory_print, false),
                 upload: this.vaildData(this.permission.inventory_upload, false),
             }
