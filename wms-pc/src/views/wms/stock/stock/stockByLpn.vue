@@ -257,7 +257,6 @@ export default {
     mixins: [listMixin],
     data() {
         return {
-            woId: "",
             form: {
                 params: {
                     skuIds: [],
@@ -279,15 +278,13 @@ export default {
                     isShowByLpn: true
                 }
             },
-            deleteCustomerRequest: {
-                ids: [],
-            },
             pageSize: [20, 50, 100],
             table: {
                 columnList: [
                     {
                         prop: "lpnCode",
-                        label: "LPN"
+                        label: "LPN",
+                        sortable: "custom",
                     },
                     {
                         prop: "boxCode",
@@ -295,7 +292,8 @@ export default {
                     },
                     {
                         prop: "skuCode",
-                        label: "物品编码"
+                        label: "物品编码",
+                        sortable: "custom",
                     },
                     {
                         prop: "skuName",
@@ -304,89 +302,109 @@ export default {
                     },
                     {
                         prop: "stockStatus",
-                        label: "库存状态"
+                        label: "库存状态",
+                        sortable: "custom",
                     },
                     {
                         prop: "skuLot1",
-                        label: "生产批次"
+                        label: "生产批次",
+                        sortable: "custom",
                     },
                     {
                         prop: "stockBalance",
-                        label: "库存余额"
+                        label: "库存余额",
+                        sortable: "custom",
                     },
                     {
                         prop: "stockEnable",
-                        label: "库存可用"
+                        label: "库存可用",
+                        sortable: "custom",
                     },
                     {
                         prop: "occupyQty",
-                        label: "库存占用"
+                        label: "库存占用",
+                        sortable: "custom",
                     },
 
                     {
                         prop: "wsuCode",
-                        label: "计量单位"
+                        label: "计量单位",
+                        sortable: "custom",
                     },
                     {
                         prop: "locCode",
-                        label: "库位编码"
+                        label: "库位编码",
+                        sortable: "custom",
                     },
                     {
                         prop: "skuLot2",
-                        label: "规格型号"
+                        label: "规格型号",
+                        sortable: "custom",
                     },
                     {
                         prop: "skuLot3",
-                        label: "收货日期"
+                        label: "收货日期",
+                        sortable: "custom",
                     },
                     {
                         prop: "skuLot4",
-                        label: "专用客户"
+                        label: "专用客户",
+                        sortable: "custom",
                     },
                     {
                         prop: "skuLot5",
-                        label: "钢背批次"
+                        label: "钢背批次",
+                        sortable: "custom",
                     },
                     {
                         prop: "skuLot6",
                         label: "摩擦块批次",
-                        sortable: "custom"
+                        sortable: "custom",
                     },
                     {
                         prop: "skuLot7",
-                        label: "产品标识代码"
+                        label: "产品标识代码",
+                        sortable: "custom",
                     },
                     {
                         prop: "skuLot8",
-                        label: "适用速度等级"
+                        label: "适用速度等级",
+                        sortable: "custom",
                     },
                     {
                         prop: "whCode",
-                        label: "库房"
+                        label: "库房",
+                        sortable: "custom",
                     },
                     {
                         prop: "ownerCode",
-                        label: "货主编码"
+                        label: "货主编码",
+                        sortable: "custom",
                     },
                     {
                         prop: "ownerName",
-                        label: "货主名称"
+                        label: "货主名称",
+                        sortable: "custom",
                     },
                     {
                         prop: "createUserName",
-                        label: "收货人"
+                        label: "收货人",
+                        sortable: "custom",
                     },
                     {
                         prop: "taskId",
-                        label: "任务号"
+                        label: "任务号",
+                        sortable: "custom",
                     },
                     {
                         prop: "lastInTime",
-                        label: "入库时间"
+                        label: "入库时间",
+                        sortable: "custom",
                     },
                     {
                         prop: "lastOutTime",
-                        label: "出库时间"
+                        label: "出库时间",
+                        sortable: "custom",
                     },
                 ],
             },

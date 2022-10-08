@@ -5,9 +5,9 @@
                 <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
                     <el-button circle icon="el-icon-refresh" size="mini" @click="onRefresh"></el-button>
                 </el-tooltip>
-                <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">
-                    <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
-                </el-tooltip>
+<!--                <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">-->
+<!--                    <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>-->
+<!--                </el-tooltip>-->
                 <el-tooltip :enterable="false" class="item" content="服务端导出" effect="dark" placement="top">
                     <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
                 </el-tooltip>
@@ -21,6 +21,7 @@
             <template v-slot:table>
                 <el-table ref="table"
                           :data="table.data"
+                          :height="table.height"
                           border
                           highlight-current-row
                           size="mini"
@@ -44,12 +45,15 @@
                 </el-pagination>
             </template>
         </nodes-master-page>
-        <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
-        </dialog-column>
+<!--        <div v-if="columnShowHide.visible">-->
+<!--            <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">-->
+<!--            </dialog-column>-->
+<!--        </div>-->
     </div>
 </template>
 
 <script>
+
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import {listMixin} from "@/mixins/list";
@@ -58,7 +62,6 @@ import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js'
 import fileUpload from "@/components/nodes/fileUpload";
 import {nowDateFormat} from "@/util/date";
-
 
 export default {
     name: "serial",
@@ -155,6 +158,7 @@ export default {
         onExportLocalData() {
             this.exportCurrentDataToExcel("序列号", "序列号")
         },
+        // 覆盖混入list.js中的方法
         getCrudColumnList() {
 
         }

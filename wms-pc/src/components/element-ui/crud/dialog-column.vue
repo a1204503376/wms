@@ -165,6 +165,8 @@ export default {
     },
     destroyed() {
         console.log('destroyed');
+        this.$parent.handleRefreshTable();
+        // this.$emit("handleRefreshTable");
     },
     methods: {
         rowDrop() {
@@ -276,7 +278,7 @@ export default {
         },
         beforeClose(column) {
             this.$emit('close', column);
-        }
+        },
     }
 }
 </script>
