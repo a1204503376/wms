@@ -734,8 +734,8 @@ public class OutStockBizImpl implements OutStockBiz {
 		List<SoDetail> soDetailList = new ArrayList<>();
 		BigDecimal surplusQty = BigDecimal.ZERO;
 		for (SoPickPlan soPickPlan : soPickPlanList) {
-			surplusQty = surplusQty.add(soPickPlan.getPickPlanQty());
 			SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlan.getSoDetailId());
+			surplusQty = surplusQty.add(soDetail.getSurplusQty());
 			soDetailList.add(soDetail);
 		}
 
@@ -749,8 +749,8 @@ public class OutStockBizImpl implements OutStockBiz {
 		for (Stock stock : stockList) {
 			pickQty = pickQty.add(stock.getStockBalance());
 		}
-		if (BigDecimalUtil.gt(surplusQty, pickQty)) {
-			throw new ServiceException("拣货失败,发货数量大于剩余数量");
+		if (BigDecimalUtil.gt(pickQty, surplusQty)) {
+			throw new ServiceException("拣货失败,发货数量大于剩余数量,请拆箱之后再进行拣货");
 		}
 	}
 
