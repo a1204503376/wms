@@ -1018,13 +1018,12 @@ public class OutStockBizImpl implements OutStockBiz {
 								currentStock.getSkuCode(), currentStock.getStockEnable(), checkedQty, soDetail.getScanQty());
 						}
 					}
-
 					flag = true;
 				}
 			}
 		}
 		if (!flag) {
-			throw ExceptionUtil.mpe("复核失败，原因：该箱中不存在发货单[{}]明细中的物品", soBillId);
+			throw ExceptionUtil.mpe("复核失败，原因：该箱中不存在发货单[{}]明细中的物品", soDetailList.get(0).getSoBillNo());
 		}
 	}
 }
