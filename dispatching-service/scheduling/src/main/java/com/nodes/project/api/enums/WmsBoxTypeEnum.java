@@ -49,4 +49,13 @@ public enum WmsBoxTypeEnum implements IPairs<String, String, WmsBoxTypeEnum> {
     public String value() {
         return desc;
     }
+
+    public static WmsBoxTypeEnum getByKey(String key) {
+        for (WmsBoxTypeEnum value : values()) {
+            if (value.key().equals(key)) {
+                return value;
+            }
+        }
+        return null;
+    }
 }

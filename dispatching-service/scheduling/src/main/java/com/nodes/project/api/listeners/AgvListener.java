@@ -19,11 +19,16 @@ public class AgvListener {
 
     @EventListener
     public void alreadyStorage(AlreadyStorageEvent event) {
-        String jobId = event.getJobId();
-        if (StringUtils.isEmpty(jobId)) {
-            return;
+        try {
+            String jobId = event.getJobId();
+            if (StringUtils.isEmpty(jobId)) {
+                return;
+            }
+            JobQueue jobQueue = jobQueueService.getById(jobId);
+            // 调用WMSAPI 计算新的目标库位
+            // 组装参数 调用AGV新增接口:vehicleWithdrawal
+        } catch (Exception ex) {
+
         }
-        JobQueue jobQueue = jobQueueService.getById(jobId);
-        
     }
 }

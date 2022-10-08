@@ -89,6 +89,13 @@ public class JobQueue extends SimpleEntity implements Serializable {
     private WmsBoxTypeEnum wmsBoxType;
 
     /**
+     * 用于区分C1,C2箱码的标志
+     * 1:C1
+     * 2:C2
+     */
+    private Integer wmsCBifurcate;
+
+    /**
      * 名称
      */
     private String name;

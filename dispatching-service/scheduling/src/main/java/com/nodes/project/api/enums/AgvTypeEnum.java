@@ -24,6 +24,14 @@ public enum AgvTypeEnum implements IPairs<Integer, String, AgvTypeEnum> {
      * 异常中断
      */
     EXCEPTION(3, "异常中断"),
+    /**
+     * 人工终止
+     */
+    MANUAL_TERMINATION(31, "人工终止"),
+    /**
+     * 双重入库
+     */
+    DOUBLE_WAREHOUSING(40, "双重入库"),
     ;
 
     @EnumValue

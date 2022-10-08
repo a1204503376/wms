@@ -13,8 +13,9 @@ public interface CallWmsService {
 
     /**
      * 调用agv异常时，将异常信息同步到WMS
+     *
      * @param jobQueue jobQueue
-     * @param msg 异常信息
+     * @param msg      异常信息
      */
     void syncExceptionMsgOfCallAgv(JobQueue jobQueue, String msg);
 
@@ -23,4 +24,9 @@ public interface CallWmsService {
     WmsGlobalResponse queryAndFrozenEnableOutbound(JobQueue jobQueue);
 
     WmsGlobalResponse syncTimoutMsg(List<JobTimeout> jobTimeoutList);
+
+    /**
+     * 重新获取WMS的目标库位
+     */
+    WmsGlobalResponse resetStorage(JobQueue jobQueue);
 }
