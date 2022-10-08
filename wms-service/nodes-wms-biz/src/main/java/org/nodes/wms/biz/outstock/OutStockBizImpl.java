@@ -66,7 +66,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * 出库业务实现类
@@ -266,6 +265,7 @@ public class OutStockBizImpl implements OutStockBiz {
 				location = locationBiz.findLocationByLocCode(request.getWhId(), task.getToLocCode());
 			} else {
 				location = locationBiz.findLocationByLocCode(request.getWhId(), task.getFromLocCode());
+				location.setZoneId(-1L);
 			}
 			if (zone.getZoneId().equals(location.getZoneId())) {
 				BigDecimal soDetailSurplusQty = BigDecimal.ZERO;
