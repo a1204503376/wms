@@ -9,12 +9,14 @@ import com.nodes.project.api.domain.AgvSync;
 import com.nodes.project.api.domain.JobQueue;
 import com.nodes.project.api.dto.agv.AgvSyncOrderRequest;
 import com.nodes.project.api.enums.JobStatusEnum;
+import com.nodes.project.api.events.AlreadyStorageEvent;
 import com.nodes.project.api.mapper.AgvSyncMapper;
 import com.nodes.project.api.mapper.JobQueueMapper;
 import com.nodes.project.api.service.AgvSyncService;
 import com.nodes.project.api.service.CallWmsService;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,11 +28,12 @@ import javax.annotation.Resource;
 @Service
 public class AgvSyncServiceImpl extends ServiceImpl<AgvSyncMapper, AgvSync>
         implements AgvSyncService {
-
     @Resource
     private CallWmsService callWmsService;
     @Resource
     private JobQueueMapper jobQueueMapper;
+    @Resource
+    private ApplicationContext applicationContext;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -61,6 +64,9 @@ public class AgvSyncServiceImpl extends ServiceImpl<AgvSyncMapper, AgvSync>
                 if (!flag) {
                     throw new ServiceException(StringUtils.format("保存AGV_SYNC失败，参数：{}", agvSync));
                 }
+                break;
+            case DOUBLE_WAREHOUSING:
+                applicationContext.publishEvent(new AlreadyStorageEvent(this, agvSyncOrderRequest.getJobId()));
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + agvSyncOrderRequest.getAgvType());

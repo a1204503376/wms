@@ -74,33 +74,36 @@ public class JobQueueServiceImpl extends ServiceImpl<JobQueueMapper, JobQueue>
             jobQueue = new JobQueue();
             BeanUtils.copyProperties(publishJobRequest, jobQueue);
 
-            // 2.优先级默认根据类型确定
-            int priority = JobConstants.DEFAULT_PRIORITY;
-            if (schedulingJobPriorityMap.containsKey(publishJobRequest.getJobTypeCode())) {
-                priority = NumberUtils.toInt(schedulingJobPriorityMap.get(publishJobRequest.getJobTypeCode()), priority);
+            if (ObjectUtils.isNotEmpty(publishJobRequest.getBoxCode())) {
+                String boxCodePre = publishJobRequest.getBoxCode().substring(0, 1).toUpperCase();
+                jobQueue.setWmsBoxType(WmsBoxTypeEnum.getByKey(boxCodePre));
             }
 
-            jobQueue.setPriority(priority);
+            // 2.优先级默认根据类型确定
+            setPriority(schedulingJobPriorityMap, jobQueue, publishJobRequest);
             jobQueue.setTypeCode(JobTypeEnum.getByKey(publishJobRequest.getJobTypeCode()));
             jobQueue.setName(schedulingJobTypeMap.get(publishJobRequest.getJobTypeCode()));
             jobQueue.setStatus(JobStatusEnum.NOT_STARTED);
-            if (ObjectUtils.isNotEmpty(publishJobRequest.getBoxCode())) {
-                if (WmsBoxTypeEnum.A.getCode().equals(publishJobRequest.getBoxCode().substring(0, 1))) {
-                    jobQueue.setWmsBoxType(WmsBoxTypeEnum.A);
-                } else if (WmsBoxTypeEnum.B.getCode().equals(publishJobRequest.getBoxCode().substring(0, 1))) {
-                    jobQueue.setWmsBoxType(WmsBoxTypeEnum.B);
-                } else if (WmsBoxTypeEnum.C.getCode().equals(publishJobRequest.getBoxCode().substring(0, 1))) {
-                    jobQueue.setWmsBoxType(WmsBoxTypeEnum.C);
-                } else if (WmsBoxTypeEnum.D.getCode().equals(publishJobRequest.getBoxCode().substring(0, 1))) {
-                    jobQueue.setWmsBoxType(WmsBoxTypeEnum.D);
-                }
-            }
+            jobQueue.setWmsCBifurcate(publishJobRequest.getCBifurcate());
+
             jobQueueList.add(jobQueue);
         }
 
         return saveOrUpdateBatch(jobQueueList)
                 ? AjaxResult.success()
                 : AjaxResult.warn("批量保存JOB失败");
+    }
+
+    private static void setPriority(Map<String, String> schedulingJobPriorityMap, JobQueue jobQueue, PublishJobRequest publishJobRequest) {
+        int priority = JobConstants.DEFAULT_PRIORITY;
+        if (schedulingJobPriorityMap.containsKey(publishJobRequest.getJobTypeCode())) {
+            priority = NumberUtils.toInt(schedulingJobPriorityMap.get(publishJobRequest.getJobTypeCode()), priority);
+        }
+        // A箱上架优先级最高
+        if (jobQueue.getWmsBoxType() == WmsBoxTypeEnum.A) {
+            priority -= 10;
+        }
+        jobQueue.setPriority(priority);
     }
 
     @Override

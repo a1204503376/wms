@@ -77,4 +77,10 @@ public class CallWmsServiceImpl implements CallWmsService {
         }
         return callApiService.postWms(url_broadcastNotification, wmsSyncJobTimeoutRequestList);
     }
+
+    @Override
+    public WmsGlobalResponse resetStorage(JobQueue jobQueue) {
+
+        return new WmsGlobalResponse();
+    }
 }

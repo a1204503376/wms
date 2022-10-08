@@ -36,4 +36,9 @@ public class AgvSyncOrderRequest {
      * 消息
      */
     private String msg;
+
+    /**
+     * 代码
+     */
+    private String code;
 }

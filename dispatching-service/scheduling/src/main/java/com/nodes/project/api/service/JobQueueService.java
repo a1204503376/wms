@@ -10,10 +10,6 @@ import com.nodes.project.api.dto.PublishJobRequest;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * 针对表【job_queue(作业队列
- * 存放待处理的作业，处理完成移动到作业历史表)】的数据库操作Service
- */
 public interface JobQueueService extends IService<JobQueue> {
 
     /**

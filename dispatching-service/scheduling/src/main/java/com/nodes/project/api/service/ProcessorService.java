@@ -5,7 +5,7 @@ import tech.powerjob.worker.core.processor.ProcessResult;
 import tech.powerjob.worker.core.processor.TaskContext;
 
 /**
- * 执行器通用操作
+ * 执行器业务
  */
 public interface ProcessorService {
 

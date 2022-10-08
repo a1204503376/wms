@@ -94,6 +94,14 @@ public class PublishJobRequest {
 
     /**
      * 箱码
+     * WMS侧给的格式：A1001,B1001,C1001,D1001
      */
     private String boxCode;
+
+    /**
+     * 用于区分C1,C2箱码的标志
+     * 1:C1
+     * 2:C2
+     */
+    private Integer cBifurcate;
 }

@@ -44,7 +44,7 @@ public class AjaxResult extends HashMap<String, Object> {
          */
         ERROR(400),
         /**
-         * 错误
+         * 异常
          */
         EXCEPTION(500);
         private final int value;

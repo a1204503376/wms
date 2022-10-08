@@ -24,4 +24,11 @@ public class JobConstants {
      * 传送给AGV的订单属性key
      */
     public static final String AGV_PROPERTY_JOB_ID = "jobId";
+
+    /**
+     * 传送给AGV用于区分C1,C2箱型的属性key
+     */
+    public static final String AGV_C_BIFURCATE = "boxType";
+    public static final String AGV_C1 = "C1";
+    public static final String AGV_C2 = "C2";
 }

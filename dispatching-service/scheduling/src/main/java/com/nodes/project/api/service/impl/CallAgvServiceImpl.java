@@ -7,6 +7,7 @@ import com.nodes.project.api.dto.agv.*;
 import com.nodes.project.api.service.CallAgvService;
 import com.nodes.project.api.service.CallApiService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
@@ -48,8 +49,25 @@ public class CallAgvServiceImpl implements CallAgvService {
         property.setKey(JobConstants.AGV_PROPERTY_JOB_ID);
         property.setValue(jobQueue.getId());
         properties.add(property);
+
+        setBifurcate(jobQueue, properties);
+
         agvTransportOrderRequest.setProperties(properties);
+
         return agvTransportOrderRequest;
+    }
+
+    private static void setBifurcate(JobQueue jobQueue, List<Property> properties) {
+        // 创建C箱的job时，在properties属性中新增一个key：boxType，value:C1或C2
+        boolean cBifurcateFlag = ObjectUtils.isEmpty(jobQueue.getWmsCBifurcate());
+        if (cBifurcateFlag) {
+            return;
+        }
+        boolean c1Flag = jobQueue.getWmsCBifurcate().equals(1);
+        Property property = new Property();
+        property.setKey(JobConstants.AGV_C_BIFURCATE);
+        property.setValue(c1Flag ? JobConstants.AGV_C1 : JobConstants.AGV_C2);
+        properties.add(property);
     }
 
     @Override

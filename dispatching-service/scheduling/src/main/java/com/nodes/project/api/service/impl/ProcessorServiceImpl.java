@@ -66,6 +66,7 @@ public class ProcessorServiceImpl implements ProcessorService {
                 optionalJobQueue = jobQueueService.findOutboundD();
                 break;
             case NON_OUTBOUND:
+                // A箱上架优先级最高
                 optionalJobQueue = jobQueueService.findNonOutbound();
                 break;
             default:
@@ -136,8 +137,7 @@ public class ProcessorServiceImpl implements ProcessorService {
 
         JobQueue jobQueue = optionalJobQueue.get();
         // 调用WMS API 判定库位是否可用
-        if (jobQueue.getLocationNameTo() == null
-                || jobQueue.getLocationNameTo().equals("")) {
+        if (StringUtils.isBlank(jobQueue.getLocationNameTo())) {
             WmsGlobalResponse wmsGlobalResponse = callWmsService.queryAndFrozenEnableOutbound(jobQueue);
             if (WmsGlobalResponse.hasException(wmsGlobalResponse)) {
                 omsLogger.debug("呼叫WMS异常：{}", wmsGlobalResponse.getMsg());
@@ -149,8 +149,9 @@ public class ProcessorServiceImpl implements ProcessorService {
                 omsLogger.debug("WMS返回失败，原因：{}", wmsResponse.getMsg());
                 return ProcessResultUtils.failed();
             }
-            jobQueueService.updateLocationNameToById(jobQueue.getId(), wmsResponse.getData().toString());
-            jobQueue.setLocationNameTo(wmsResponse.getData().toString());
+            String toLocation = wmsResponse.getData().toString();
+            jobQueueService.updateLocationNameToById(jobQueue.getId(), toLocation);
+            jobQueue.setLocationNameTo(toLocation);
             WorkflowContext workflowContext = context.getWorkflowContext();
             String jsonString = JSON.toJSONString(jobQueue);
             omsLogger.debug("JOB to JSON：{}", jsonString);
