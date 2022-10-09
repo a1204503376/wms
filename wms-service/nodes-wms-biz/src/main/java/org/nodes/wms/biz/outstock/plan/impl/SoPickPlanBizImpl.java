@@ -27,7 +27,6 @@ import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.excel.util.ExcelUtil;
-import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.Func;
@@ -79,8 +78,8 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 					.collect(Collectors.toList());
 			}
 			List<SoPickPlan> pickPlan = tianyiPickStrategy.run(soHeader, detail, soDetails, pickPlanOfSoDetail);
-			if (Func.isEmpty(pickPlan) || pickPlan.size() == 0) {
-				throw new ServiceException("分配失败,暂无库存");
+			if (Func.isEmpty(pickPlan) || pickPlan == null) {
+				return null;
 			}
 			List<SoPickPlan> newPickPlan = pickPlan.stream()
 				.distinct()

@@ -735,16 +735,19 @@ public class OutStockBizImpl implements OutStockBiz {
 		BigDecimal surplusQty = BigDecimal.ZERO;
 		for (SoPickPlan soPickPlan : soPickPlanList) {
 			SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlan.getSoDetailId());
-			surplusQty = surplusQty.add(soDetail.getSurplusQty());
 			soDetailList.add(soDetail);
 		}
-
+		List<SoDetail> soDetails = soDetailList.stream()
+			.distinct()
+			.collect(Collectors.toList());
 		BigDecimal pickQty = BigDecimal.ZERO;
-		for (SoDetail soDetail : soDetailList) {
+
+		for (SoDetail soDetail : soDetails) {
 			if (soDetail.getBillDetailState().equals(SoDetailStateEnum.DELETED)
 				|| soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
 				throw new ServiceException("拣货失败,发货单明细状态为" + soDetail.getBillDetailState() + "不能进行拣货");
 			}
+			surplusQty = surplusQty.add(soDetail.getSurplusQty());
 		}
 		for (Stock stock : stockList) {
 			pickQty = pickQty.add(stock.getStockBalance());
