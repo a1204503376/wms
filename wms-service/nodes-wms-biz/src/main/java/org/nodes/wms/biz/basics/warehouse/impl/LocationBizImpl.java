@@ -7,10 +7,12 @@ import org.nodes.core.base.entity.Dict;
 import org.nodes.core.constant.DictKVConstant;
 import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.biz.basics.warehouse.modular.LocationFactory;
+import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.location.LocationDao;
 import org.nodes.wms.dao.basics.location.dto.input.LocationAddOrEditRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationExcelRequest;
@@ -22,11 +24,13 @@ import org.nodes.wms.dao.basics.location.enums.LocTypeEnum;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.nodes.wms.dao.putaway.dto.input.LpnTypeRequest;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.SpringUtil;
 import org.springblade.core.tool.utils.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -77,7 +81,7 @@ public class LocationBizImpl implements LocationBiz {
 	@Override
 	public Location add(LocationAddOrEditRequest locationAddOrEditRequest) {
 		if (Func.notNull(locationDao.getLocationByLocCode(locationAddOrEditRequest.getWhId(),
-			locationAddOrEditRequest.getLocCode()))){
+			locationAddOrEditRequest.getLocCode()))) {
 			throw new ServiceException("新增库位失败，该库位在当前库房已经存在");
 		}
 
@@ -102,8 +106,27 @@ public class LocationBizImpl implements LocationBiz {
 		AssertUtil.notNull(locationAddOrEditRequest.getLocId(), "编辑库位失败,库位主键为空");
 
 		Location location = locationDao.getLocationById(locationAddOrEditRequest.getLocId());
+		// 容器类别改变了，需要判断是否可以保存
+		if (Func.isNotEmpty(location.getLpnTypeId())) {
+			if (!location.getLpnTypeId().equals(locationAddOrEditRequest.getLpnTypeId())) {
+				canEdit(locationAddOrEditRequest, location);
+			}
+		}
 		locationDao.updateLocation(Func.copy(locationAddOrEditRequest, Location.class));
 		return location;
+	}
+
+	public void canEdit(LocationAddOrEditRequest editLocation, Location location) {
+		// 库位上有库存不可编辑
+		StockQueryBiz stockQueryBiz = SpringUtil.getBean(StockQueryBiz.class);
+		List<Stock> stock = stockQueryBiz.findStockByLocation(location.getLocId());
+		if (Func.isNotEmpty(stock)) {
+			throw ExceptionUtil.mpe("编辑失败，该库位上存在库存");
+		}
+		// 库位状态为业务系统冻结不可编辑
+		if (DictKVConstant.LOC_FLAG_SYSTEM_FORZEN.equals(editLocation.getLocFlag())) {
+			throw ExceptionUtil.mpe("编辑失败，系统冻结状态的库位不可修改容器类别");
+		}
 	}
 
 	@Override
@@ -229,7 +252,7 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public List<Location> getLocationByColumn(Location location) {
-		if (Func.isEmpty(location.getLocColumn()) || Func.isEmpty(location.getLocBank())){
+		if (Func.isEmpty(location.getLocColumn()) || Func.isEmpty(location.getLocBank())) {
 			return null;
 		}
 

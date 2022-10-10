@@ -99,6 +99,7 @@
                             <el-form-item label="库位状态" prop="locFlag">
                                 <nodes-dictionary
                                     v-model="form.params.locFlag"
+                                    :disabled="form.locFlagDisabled"
                                     code="loc_flag"
                                     size="medium">
                                 </nodes-dictionary>
@@ -325,7 +326,7 @@ import func from "@/util/func";
 import NodesLpnType from "@/components/wms/select/NodesLpnType";
 
 export default {
-    name: "add",
+    name: "locEdit",
     components: {NodesDictionary, NodesZone, NodesWarehouse, NodesLpnType},
     mixins: [editMixin],
     props: {
@@ -392,7 +393,8 @@ export default {
                         label: '不允许',
                         value: "0"
                     }
-                ]
+                ],
+                locFlagDisabled: true
             },
         }
     },
@@ -415,6 +417,7 @@ export default {
             detailByEdit(this.locId)
                 .then((res) => {
                     this.form.params = res.data.data
+                    this.form.locFlagDisabled = this.form.params.locFlag === 40;
                 })
         },
         submitFormParams() {

@@ -3,6 +3,7 @@
         v-model="val"
         :code="code"
         :clearable="true"
+        :disabled="disabled"
         :multiple="multiple"
         collapse-tags
         :size="size"
@@ -30,10 +31,12 @@ export default {
     },
     props: {
         selectVal: [Array, Number, String],
-        //是否有默认值 true:有默认值  默认为false 编辑时将其设置为true
+        //是否有默认值 true:有默认值  默认为false
         defaultValue: {type: Boolean, required: false, default: () => false},
         // 单选多选切换，默认为false
         multiple: {type: Boolean, required: false, default: false},
+        // 是否只读
+        disabled: {type: Boolean, required: false, default: () => false},
         // 字典码 必填
         code: {type: String, required: true},
         // 组件大小，默认为mini, 支持 medium/small/mini
