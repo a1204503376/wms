@@ -7,6 +7,7 @@ import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
+import org.nodes.core.udf.UdfEntity;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receiveLog.modular.ReceiveLogFactory;
@@ -140,9 +141,30 @@ public class StockBizImpl implements StockBiz {
 		return null;
 	}
 
+	private void updateStockUdf(Stock stock, UdfEntity udf){
+		if (Func.isNull(udf)){
+			return;
+		}
+		if (Func.notNull(udf.getUdf1())){
+			stock.setUdf1(udf.getUdf1());
+		}
+		if (Func.notNull(udf.getUdf2())){
+			stock.setUdf2(udf.getUdf2());
+		}
+		if (Func.notNull(udf.getUdf3())){
+			stock.setUdf3(udf.getUdf3());
+		}
+		if (Func.notNull(udf.getUdf4())){
+			stock.setUdf4(udf.getUdf4());
+		}
+		if (Func.notNull(udf.getUdf5())){
+			stock.setUdf5(udf.getUdf5());
+		}
+	}
+
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public Stock inStock(StockLogTypeEnum type, ReceiveLog receiveLog) {
+	public Stock inStock(StockLogTypeEnum type, ReceiveLog receiveLog, UdfEntity udf) {
 		List<String> serialNoList = checkSerialOnInStock(receiveLog);
 		Location location = locationBiz.findByLocId(receiveLog.getLocId());
 		canInStock(location, receiveLog.getSkuId(), receiveLog);
@@ -156,11 +178,13 @@ public class StockBizImpl implements StockBiz {
 		StockLog stockLog;
 		if (Func.isNull(existStock)) {
 			// 新建库存
+			updateStockUdf(stock, udf);
 			finalStock = stockDao.saveNewStock(stock);
 			stockLog = createAndSaveStockLog(type, finalStock, receiveLog, "新建库存");
 		} else {
 			// 合并库存
 			mergeStock(stock, existStock);
+			updateStockUdf(existStock, udf);
 			finalStock = stockDao.updateStock(existStock);
 			stockLog = createAndSaveStockLog(type, finalStock, receiveLog, "合并库存");
 		}
@@ -222,7 +246,7 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public void moveStockByCancelPick(StockLogTypeEnum type, LogSoPick pickLog) {
+	public void moveStockByCancelPick(StockLogTypeEnum type, LogSoPick pickLog, UdfEntity udf) {
 		AssertUtil.notNull(pickLog, "撤销拣货失败，原拣货记录为空");
 
 		if (BigDecimalUtil.le(pickLog.getPickRealQty(), BigDecimal.ZERO)) {
@@ -246,7 +270,7 @@ public class StockBizImpl implements StockBiz {
 		checkQtyOfSerial(serialNoList, pickLog.getPickRealQty());
 		runMoveStock(stock, serialNoList, pickLog.getPickRealQty(), stock.getBoxCode(), stock.getLpnCode(),
 			loc, StockLogTypeEnum.INSTOCK_BY_CANCEL_PICK, null,
-			pickLog.getSoBillId(), pickLog.getSoBillNo(), pickLog.getSoLineNo());
+			pickLog.getSoBillId(), pickLog.getSoBillNo(), pickLog.getSoLineNo(), udf);
 	}
 
 	private void updateSerialAndSaveLog(List<String> serialNoList, SerialStateEnum state, Long stockId,
@@ -368,27 +392,28 @@ public class StockBizImpl implements StockBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public Stock moveStock(Stock sourceStock, List<String> serialNoList,
 						   BigDecimal qty, Location targetLocation, StockLogTypeEnum type,
-						   Long billId, String billNo, String lineNo) {
+						   Long billId, String billNo, String lineNo, UdfEntity udf) {
 		return moveStock(sourceStock, serialNoList, qty, sourceStock.getBoxCode(),
-			sourceStock.getLpnCode(), targetLocation, type, billId, billNo, lineNo);
+			sourceStock.getLpnCode(), targetLocation, type, billId, billNo, lineNo, udf);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public Stock moveAllStock(Stock sourceStock, String targetBoxCode, String targetLpnCode,
-							  Location targetLocation, StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+							  Location targetLocation, StockLogTypeEnum type, Long billId,
+							  String billNo, String lineNo, UdfEntity udf) {
 		List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
 
 		return moveStock(sourceStock, serialNoList, sourceStock.getStockEnable(),
-			targetBoxCode, targetLpnCode, targetLocation, type, billId, billNo, lineNo);
+			targetBoxCode, targetLpnCode, targetLocation, type, billId, billNo, lineNo, udf);
 	}
 
 	@Override
 	public Stock moveAllStockOfOccupy(Stock sourceStock, String targetBoxCode, String targetLpnCode,
 									  Location targetLocation, StockLogTypeEnum type, Long billId,
-									  String billNo, String lineNo) {
+									  String billNo, String lineNo, UdfEntity udf) {
 		return runMoveStockOfOccupy(sourceStock, targetLocation, targetBoxCode, targetLpnCode,
-			type, false, null, billId, billNo, lineNo);
+			type, false, null, billId, billNo, lineNo, udf);
 	}
 
 	private void canMoveStock(Stock sourceStock, BigDecimal qty, Location targetLocation) {
@@ -470,9 +495,9 @@ public class StockBizImpl implements StockBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
 						   String targetBoxCode, String targetLpnCode, Location targetLocation,
-						   StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+						   StockLogTypeEnum type, Long billId, String billNo, String lineNo, UdfEntity udf) {
 		return moveStock(sourceStock, serialNoList, qty, targetBoxCode,
-			targetLpnCode, targetLocation, type, null, billId, billNo, lineNo);
+			targetLpnCode, targetLocation, type, null, billId, billNo, lineNo, udf);
 	}
 
 	@Override
@@ -480,7 +505,7 @@ public class StockBizImpl implements StockBiz {
 	public Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
 						   String targetBoxCode, String targetLpnCode,
 						   Location targetLocation, StockLogTypeEnum type, String dropId,
-						   Long billId, String billNo, String lineNo) {
+						   Long billId, String billNo, String lineNo, UdfEntity udf) {
 
 		canMoveStock(sourceStock, qty, targetLocation);
 		checkStockStatus(sourceStock);
@@ -488,14 +513,14 @@ public class StockBizImpl implements StockBiz {
 		checkSerialOnStock(sourceStock, serialNoList);
 
 		return runMoveStock(sourceStock, serialNoList, qty, targetBoxCode, targetLpnCode,
-			targetLocation, type, dropId, billId, billNo, lineNo);
+			targetLocation, type, dropId, billId, billNo, lineNo, udf);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public List<Stock> moveStockByBoxCode(String boxCode, String targetBoxCode, String targetLpnCode,
 										  Location targetLocation, StockLogTypeEnum type, Long billId,
-										  String billNo, String lineNo) {
+										  String billNo, String lineNo, UdfEntity udf) {
 		AssertUtil.notEmpty(boxCode, "库存按BOX移动失败,原BOX不能为空");
 		AssertUtil.notEmpty(targetBoxCode, "库存按BOX移动失败,目标BOX不能为空");
 		AssertUtil.notNull(targetLocation, "库存按BOX移动失败,目标LOC不能为空");
@@ -506,7 +531,7 @@ public class StockBizImpl implements StockBiz {
 		for (Stock sourceStock : sourceStockList) {
 			List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
 			Stock targetStock = moveStock(sourceStock, serialNoList, StockUtil.getStockBalance(sourceStock),
-				targetBoxCode, targetLpnCode, targetLocation, type, billId, billNo, lineNo);
+				targetBoxCode, targetLpnCode, targetLocation, type, billId, billNo, lineNo, udf);
 			targetStockList.add(targetStock);
 		}
 
@@ -514,9 +539,9 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
-	public List<Stock> moveStockByBoxCodeOfOccupy(String boxCode, String targetBoxCode,
-												  String targetLpnCode, Location targetLocation,
-												  StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+	public List<Stock> moveStockByBoxCodeOfOccupy(String boxCode, String targetBoxCode, String targetLpnCode,
+												  Location targetLocation, StockLogTypeEnum type, Long billId,
+												  String billNo, String lineNo, UdfEntity udf) {
 		AssertUtil.notEmpty(boxCode, "库存按BOX移动(带占用)失败,原BOX不能为空");
 		AssertUtil.notEmpty(targetBoxCode, "库存按BOX移动(带占用)失败,目标BOX不能为空");
 		AssertUtil.notNull(targetLocation, "库存按BOX移动(带占用)失败,目标LOC不能为空");
@@ -526,7 +551,7 @@ public class StockBizImpl implements StockBiz {
 		List<Stock> targetStockList = new ArrayList<>();
 		for (Stock sourceStock : sourceStockList) {
 			Stock targetStock = runMoveStockOfOccupy(sourceStock, targetLocation, targetBoxCode, targetLpnCode,
-				type, false, null, billId, billNo, lineNo);
+				type, false, null, billId, billNo, lineNo, udf);
 			targetStockList.add(targetStock);
 		}
 
@@ -536,7 +561,7 @@ public class StockBizImpl implements StockBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public List<Stock> moveStockByLpnCode(String lpnCode, String targetLpnCode, Location targetLocation,
-										  StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+										  StockLogTypeEnum type, Long billId, String billNo, String lineNo, UdfEntity udf) {
 		AssertUtil.notEmpty(lpnCode, "库存按LPN移动失败,原LPN不能为空");
 		AssertUtil.notEmpty(targetLpnCode, "库存按LPN移动失败,目标LPN不能为空");
 		AssertUtil.notNull(targetLocation, "库存按LPN移动失败,目标LOC不能为空");
@@ -547,7 +572,7 @@ public class StockBizImpl implements StockBiz {
 		for (Stock sourceStock : sourceStockList) {
 			List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
 			Stock targetStock = moveStock(sourceStock, serialNoList, StockUtil.getStockBalance(sourceStock),
-				sourceStock.getBoxCode(), targetLpnCode, targetLocation, type, billId, billNo, lineNo);
+				sourceStock.getBoxCode(), targetLpnCode, targetLocation, type, billId, billNo, lineNo, udf);
 			targetStockList.add(targetStock);
 		}
 
@@ -556,7 +581,8 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	public List<Stock> moveStockByLpnCodeOfOccupy(String lpnCode, String targetLpnCode, Location targetLocation,
-												  StockLogTypeEnum type, Long billId, String billNo, String lineNo) {
+												  StockLogTypeEnum type, Long billId, String billNo,
+												  String lineNo, UdfEntity udf) {
 		AssertUtil.notEmpty(lpnCode, "库存按LPN移动(带占用)失败,原LPN不能为空");
 		AssertUtil.notEmpty(targetLpnCode, "库存按LPN移动(带占用)失败,目标LPN不能为空");
 		AssertUtil.notNull(targetLocation, "库存按LPN移动(带占用)失败,目标LOC不能为空");
@@ -566,7 +592,7 @@ public class StockBizImpl implements StockBiz {
 		List<Stock> targetStockList = new ArrayList<>();
 		for (Stock sourceStock : sourceStockList) {
 			Stock targetStock = runMoveStockOfOccupy(sourceStock, targetLocation, sourceStock.getBoxCode(),
-				targetLpnCode, type, false, null, billId, billNo, lineNo);
+				targetLpnCode, type, false, null, billId, billNo, lineNo, udf);
 			targetStockList.add(targetStock);
 		}
 
@@ -590,9 +616,9 @@ public class StockBizImpl implements StockBiz {
 		return stockLog;
 	}
 
-	private Stock runMoveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
-							   String targetBoxCode, String targetLpnCode, Location targetLocation,
-							   StockLogTypeEnum type, String dropId, Long billId, String billNo, String lineNo) {
+	private Stock runMoveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty, String targetBoxCode,
+							   String targetLpnCode, Location targetLocation, StockLogTypeEnum type, String dropId,
+							   Long billId, String billNo, String lineNo, UdfEntity udf) {
 		if (Func.isNull(dropId)) {
 			dropId = "";
 		}
@@ -604,11 +630,13 @@ public class StockBizImpl implements StockBiz {
 		if (Func.isNull(targetStock)) {
 			targetStock = stockFactory.create(sourceStock, targetLocation, targetLpnCode, targetBoxCode, qty,
 				serialNoList);
+			updateStockUdf(targetStock, udf);
 			stockDao.saveNewStock(targetStock);
 			targetStockLog = createAndSaveStockLog(true, targetStock, qty,
 				type, billId, billNo, lineNo, "库存移动-新库存");
 		} else {
 			StockUtil.addQty(targetStock, qty);
+			updateStockUdf(targetStock, udf);
 			stockDao.updateStock(targetStock);
 			targetStockLog = createAndSaveStockLog(true, targetStock, qty,
 				type, billId, billNo, lineNo, "库存移动-合并");
@@ -633,7 +661,7 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public Stock moveToInTransitByDropId(Stock sourceStock, String dropId, StockLogTypeEnum type) {
+	public Stock moveToInTransitByDropId(Stock sourceStock, String dropId, StockLogTypeEnum type, UdfEntity udf) {
 		// 将库存移动到中间库存，原库存的占用需要释放并下架，生成的中间库存需要重新占用
 		if (BigDecimalUtil.le(sourceStock.getStockBalance(), BigDecimal.ZERO)) {
 			throw ExceptionUtil.mpe("按DropId[{}]移动库存,原库存[{}]已全部下架", dropId, sourceStock.getStockId());
@@ -641,25 +669,25 @@ public class StockBizImpl implements StockBiz {
 
 		Location inTransitLocation = locationBiz.getInTransitLocation(sourceStock.getWhId());
 		return runMoveStockOfOccupy(sourceStock, inTransitLocation, sourceStock.getBoxCode(), sourceStock.getLpnCode(),
-			type, false, dropId, null, null, null);
+			type, false, dropId, null, null, null, udf);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public Stock moveAllStockFromDropId(Stock sourceStock, Location targetLocation, String dropId,
-										StockLogTypeEnum type) {
+										StockLogTypeEnum type, UdfEntity udf) {
 		// 中间库存的占用需要释放并下架，生成的目标库存需要重新占用
 		if (BigDecimalUtil.le(sourceStock.getStockBalance(), BigDecimal.ZERO)) {
 			throw ExceptionUtil.mpe("按DropId[{}]移动库存,原库存[{}]已全部下架", dropId, sourceStock.getStockId());
 		}
 
 		return runMoveStockOfOccupy(sourceStock, targetLocation, sourceStock.getBoxCode(), sourceStock.getLpnCode(),
-			type, true, dropId, null, null, null);
+			type, true, dropId, null, null, null, udf);
 	}
 
 	private Stock runMoveStockOfOccupy(Stock sourceStock, Location targetLoc, String targetBoxCode,
 									   String targetLpnCode, StockLogTypeEnum type, boolean cleanDropId,
-									   String dropId, Long billId, String billNo, String lineNo) {
+									   String dropId, Long billId, String billNo, String lineNo, UdfEntity udf) {
 		List<String> serialNoList = serialDao.getSerialNoByStockId(sourceStock.getStockId());
 		if (sourceStock.isEmptyStock()) {
 			throw ExceptionUtil.mpe("库存移动(带占用),库存[{}]已经全部下架", sourceStock.getStockId());
@@ -681,6 +709,7 @@ public class StockBizImpl implements StockBiz {
 			if (cleanDropId) {
 				targetStock.setDropId("");
 			}
+			updateStockUdf(targetStock, udf);
 			stockDao.saveNewStock(targetStock);
 			targetStockLog = createAndSaveStockLog(true, targetStock, sourceStock.getStockBalance(),
 				type, billId, billNo, lineNo, "库存移动(带占用)-新库存");
@@ -690,6 +719,7 @@ public class StockBizImpl implements StockBiz {
 			if (cleanDropId) {
 				targetStock.setDropId("");
 			}
+			updateStockUdf(targetStock, udf);
 			stockDao.updateStock(targetStock);
 			targetStockLog = createAndSaveStockLog(true, targetStock, sourceStock.getStockBalance(),
 				type, billId, billNo, lineNo, "库存移动(带占用)-合并");
@@ -1004,6 +1034,30 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
+	public List<Stock> unfreezeAndReduceOccupy(List<Stock> stocks, Long dropId) {
+		AssertUtil.notEmpty(stocks, "根据任务解冻库存失败,没有任务[{}]关联的库存", dropId);
+
+//		stockDao.updateStockByDropId(stocks, StockStatusEnum.NORMAL, "");
+
+		BigDecimal currentUnOccupy = BigDecimal.ZERO;
+		for (Stock item : stocks) {
+			if (item.getStockStatus().equals(StockStatusEnum.SYSTEM_FREEZE)) {
+				currentUnOccupy = item.getOccupyQty();
+
+				item.setStockStatus(StockStatusEnum.NORMAL);
+				item.setDropId("");
+				item.setOccupyQty(BigDecimal.ZERO);
+
+				stockDao.updateStockByCancelAgvTask(item);
+				createAndSaveOccupyStockLog(item, dropId, dropId.toString(), dropId, currentUnOccupy,
+					StockLogTypeEnum.STOCK_CANCEL_OCCUPY, "agv任务取消时解冻和释放中间库位库存");
+			}
+		}
+
+		return stocks;
+	}
+
+	@Override
 	public boolean judgeEnableOnLocation(Location location) {
 		List<Stock> stock = stockDao.getStockByLocId(location.getLocId());
 		if (Func.isNotEmpty(stock)
@@ -1039,7 +1093,7 @@ public class StockBizImpl implements StockBiz {
 		List<ReceiveLog> receiveLogList = receiveLogFactory.createReceiveLogListForImport(importDataList);
 		for (ReceiveLog receiveLog : receiveLogList) {
 			// 调用入库方法
-			inStock(StockLogTypeEnum.INSTOCK_BY_Import, receiveLog);
+			inStock(StockLogTypeEnum.INSTOCK_BY_Import, receiveLog, null);
 		}
 		// 保存清点记录
 		receiveLogDao.saveBatch(receiveLogList);

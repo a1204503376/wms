@@ -78,10 +78,34 @@ public class Sku extends TenantEntity {
 	@Length(max = 100, message = "字符长度不能超过100")
 	private String skuNameS;
 	/**
-	 * 箱型
+	 * 自定义字段1 (天宜：箱型)
 	 */
-	@Length(max = 10, message = "字符长度不能超过10")
+	@Length(max = 255, message = "字符长度不能超过255")
 	private String udf1;
+
+	/**
+	 * 自定义字段2
+	 */
+	@Length(max = 255, message = "字符长度不能超过255")
+	private String udf2;
+
+	/**
+	 * 自定义字段3
+	 */
+	@Length(max = 255, message = "字符长度不能超过255")
+	private String udf3;
+
+	/**
+	 * 自定义字段4
+	 */
+	@Length(max = 255, message = "字符长度不能超过255")
+	private String udf4;
+
+	/**
+	 * 自定义字段5
+	 */
+	@Length(max = 255, message = "字符长度不能超过255")
+	private String udf5;
 	/**
 	 * 物品规格型号
 	 */

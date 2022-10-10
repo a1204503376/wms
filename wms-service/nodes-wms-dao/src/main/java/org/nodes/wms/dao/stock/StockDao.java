@@ -349,4 +349,10 @@ public interface StockDao {
 	 * 物理删除无效库存
 	 */
 	void deleteStockByStockIdList();
+
+	/**
+	 * 天宜定制：agv任务取消时更新中间库存（状态：正常，占用量：0，dropId：空）
+	 * @param item
+	 */
+	void updateStockByCancelAgvTask(Stock item);
 }
