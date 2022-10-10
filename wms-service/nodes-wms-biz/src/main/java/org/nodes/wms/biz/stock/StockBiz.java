@@ -1,5 +1,6 @@
 package org.nodes.wms.biz.stock;
 
+import org.nodes.core.udf.UdfEntity;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
@@ -28,9 +29,10 @@ public interface StockBiz {
 	 *
 	 * @param type       入库来源
 	 * @param receiveLog 清点记录
+	 * @param udf        自定义字段，非必填
 	 * @return 目标库存
 	 */
-	Stock inStock(StockLogTypeEnum type, ReceiveLog receiveLog);
+	Stock inStock(StockLogTypeEnum type, ReceiveLog receiveLog, UdfEntity udf);
 
 	/**
 	 * 撤销收货时下架库存
@@ -53,9 +55,10 @@ public interface StockBiz {
 	 * 撤销拣货时库存操作，如果已经发运（出库集货区没有对应的库存）则会抛异常
 	 *
 	 * @param type          移动类型 必填
+	 * @param udf           自定义字段，非必填
 	 * @param cancelPickLog 撤销的拣货记录，qty必须是负数
 	 */
-	void moveStockByCancelPick(StockLogTypeEnum type, LogSoPick cancelPickLog);
+	void moveStockByCancelPick(StockLogTypeEnum type, LogSoPick cancelPickLog, UdfEntity udf);
 
 	/**
 	 * 库存移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -70,11 +73,12 @@ public interface StockBiz {
 	 * @param billId         操作单id，可为空
 	 * @param billNo         操作单编码，可为空
 	 * @param lineNo         操作单行号，可为空
+	 * @param udf            自定义字段，非必填
 	 * @return 目标库存
 	 */
 	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
 					Location targetLocation, StockLogTypeEnum type,
-					Long billId, String billNo, String lineNo);
+					Long billId, String billNo, String lineNo, UdfEntity udf);
 
 	/**
 	 * 库存移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -91,12 +95,13 @@ public interface StockBiz {
 	 * @param billId         操作单id，可为空
 	 * @param billNo         操作单编码，可为空
 	 * @param lineNo         操作单行号，可为空
+	 * @param udf            自定义字段，非必填
 	 * @return 目标库存
 	 */
 	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
 					String targetBoxCode, String targetLpnCode,
 					Location targetLocation, StockLogTypeEnum type,
-					Long billId, String billNo, String lineNo);
+					Long billId, String billNo, String lineNo, UdfEntity udf);
 
 	/**
 	 * 库存移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -114,12 +119,13 @@ public interface StockBiz {
 	 * @param billId         操作单id，可为空
 	 * @param billNo         操作单编码，可为空
 	 * @param lineNo         操作单行号，可为空
+	 * @param udf            自定义字段，非必填
 	 * @return 目标库存
 	 */
 	Stock moveStock(Stock sourceStock, List<String> serialNoList, BigDecimal qty,
 					String targetBoxCode, String targetLpnCode,
 					Location targetLocation, StockLogTypeEnum type, String dropId,
-					Long billId, String billNo, String lineNo);
+					Long billId, String billNo, String lineNo, UdfEntity udf);
 
 	/**
 	 * 整库存移动,自动计算关联序列号
@@ -132,11 +138,12 @@ public interface StockBiz {
 	 * @param billId         操作单id，可为空
 	 * @param billNo         操作单编码，可为空
 	 * @param lineNo         操作单行号，可为空
+	 * @param udf            自定义字段，非必填
 	 * @return 目标库存
 	 */
 	Stock moveAllStock(Stock sourceStock, String targetBoxCode, String targetLpnCode,
 					   Location targetLocation, StockLogTypeEnum type, Long billId,
-					   String billNo, String lineNo);
+					   String billNo, String lineNo, UdfEntity udf);
 
 	/**
 	 * 整库存移动,自动计算关联序列号。和moveAllStock的区别是如果原库存有冻结数量则目标库存也将会冻结
@@ -149,11 +156,12 @@ public interface StockBiz {
 	 * @param billId         操作单id，可为空
 	 * @param billNo         操作单编码，可为空
 	 * @param lineNo         操作单行号，可为空
+	 * @param udf            自定义字段，非必填
 	 * @return 目标库存
 	 */
 	Stock moveAllStockOfOccupy(Stock sourceStock, String targetBoxCode, String targetLpnCode,
 							   Location targetLocation, StockLogTypeEnum type, Long billId,
-							   String billNo, String lineNo);
+							   String billNo, String lineNo, UdfEntity udf);
 
 	/**
 	 * 整箱移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -167,11 +175,12 @@ public interface StockBiz {
 	 * @param billId         单据id
 	 * @param billNo         单据编码
 	 * @param lineNo         单据明细行号
+	 * @param udf            自定义字段，非必填
 	 * @return 目标库存
 	 */
 	List<Stock> moveStockByBoxCode(String boxCode, String targetBoxCode, String targetLpnCode,
 								   Location targetLocation, StockLogTypeEnum type,
-								   Long billId, String billNo, String lineNo);
+								   Long billId, String billNo, String lineNo, UdfEntity udf);
 
 	/**
 	 * 整箱移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -186,11 +195,12 @@ public interface StockBiz {
 	 * @param billId         单据id
 	 * @param billNo         单据编码
 	 * @param lineNo         单据明细行号
+	 * @param udf            自定义字段，非必填
 	 * @return 目标库存
 	 */
 	List<Stock> moveStockByBoxCodeOfOccupy(String boxCode, String targetBoxCode, String targetLpnCode,
-								   Location targetLocation, StockLogTypeEnum type,
-								   Long billId, String billNo, String lineNo);
+										   Location targetLocation, StockLogTypeEnum type,
+										   Long billId, String billNo, String lineNo, UdfEntity udf);
 
 	/**
 	 * 整托移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -203,10 +213,11 @@ public interface StockBiz {
 	 * @param billId         单据id
 	 * @param billNo         单据编码
 	 * @param lineNo         单据明细行号
+	 * @param udf            自定义字段，非必填
 	 * @return 目标库存
 	 */
 	List<Stock> moveStockByLpnCode(String lpnCode, String targetLpnCode, Location targetLocation, StockLogTypeEnum type,
-								   Long billId, String billNo, String lineNo);
+								   Long billId, String billNo, String lineNo, UdfEntity udf);
 
 	/**
 	 * 整托移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
@@ -220,10 +231,11 @@ public interface StockBiz {
 	 * @param billId         单据id
 	 * @param billNo         单据编码
 	 * @param lineNo         单据明细行号
+	 * @param udf            自定义字段，非必填
 	 * @return 目标库存
 	 */
 	List<Stock> moveStockByLpnCodeOfOccupy(String lpnCode, String targetLpnCode, Location targetLocation, StockLogTypeEnum type,
-								   Long billId, String billNo, String lineNo);
+										   Long billId, String billNo, String lineNo, UdfEntity udf);
 
 	/**
 	 * 移动库存到落放id，不检验库存状态，该操作是整体移动
@@ -231,9 +243,10 @@ public interface StockBiz {
 	 * @param sourceStock 源库存
 	 * @param dropId      落放id
 	 * @param type        库存操作类型
+	 * @param udf         自定义字段，非必填
 	 * @return 目标库存
 	 */
-	Stock moveToInTransitByDropId(Stock sourceStock, String dropId, StockLogTypeEnum type);
+	Stock moveToInTransitByDropId(Stock sourceStock, String dropId, StockLogTypeEnum type, UdfEntity udf);
 
 	/**
 	 * 从落放id全部移动到目标库位，不检验库存状态
@@ -242,9 +255,11 @@ public interface StockBiz {
 	 * @param targetLocation 目标库位
 	 * @param dropId         落放id
 	 * @param type           库存操作类型
+	 * @param udf            自定义字段，非必填
 	 * @return 目标库存
 	 */
-	Stock moveAllStockFromDropId(Stock sourceStock, Location targetLocation, String dropId, StockLogTypeEnum type);
+	Stock moveAllStockFromDropId(Stock sourceStock, Location targetLocation, String dropId,
+								 StockLogTypeEnum type, UdfEntity udf);
 
 	/**
 	 * 冻结

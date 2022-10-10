@@ -169,7 +169,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
 		for (Stock stock : stockList) {
 			Stock middleStock = stockBiz.moveToInTransitByDropId(stock, wmsTask.getTaskId().toString(),
-				StockLogTypeEnum.STOCK_AGV_MOVE);
+				StockLogTypeEnum.STOCK_AGV_MOVE, null);
 			if (WmsTaskTypeEnum.AGV_PICKING.equals(wmsTask.getTaskTypeCd())) {
 				List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(wmsTask.getTaskId(), stock.getStockId());
 				Location location = locationBiz.findByLocId(middleStock.getLocId());
@@ -210,7 +210,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		List<Stock> targetStockList = new ArrayList<>();
 		for (Stock stock : stockList) {
 			Stock targetStock = stockBiz.moveAllStockFromDropId(stock, targetLoc, wmsTask.getTaskId().toString(),
-				StockLogTypeEnum.STOCK_AGV_MOVE);
+				StockLogTypeEnum.STOCK_AGV_MOVE, null);
 			targetStockList.add(targetStock);
 			if (WmsTaskTypeEnum.AGV_PICKING.equals(wmsTask.getTaskTypeCd())) {
 				Location location = locationBiz.findByLocId(targetStock.getLocId());

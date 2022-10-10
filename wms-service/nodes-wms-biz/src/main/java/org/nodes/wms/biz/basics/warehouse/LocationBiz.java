@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.basics.warehouse;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.core.udf.UdfEntity;
 import org.nodes.wms.dao.basics.location.dto.input.LocationAddOrEditRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
 import org.nodes.wms.dao.basics.location.dto.input.LocationSelectQuery;
@@ -319,6 +320,6 @@ public interface LocationBiz {
 	 * @param location 库位，必填
 	 * @return C1或C2或空白字符
 	 */
-	String judgeBoxTypeOfC(Location location);
+	UdfEntity judgeBoxTypeOfC(Location location);
 
 }

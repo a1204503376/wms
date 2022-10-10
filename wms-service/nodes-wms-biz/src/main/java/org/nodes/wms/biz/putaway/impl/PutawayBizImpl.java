@@ -2,6 +2,7 @@ package org.nodes.wms.biz.putaway.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.core.udf.UdfEntity;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.putaway.PutawayBiz;
 import org.nodes.wms.biz.putaway.modular.PutawayFactory;
@@ -74,6 +75,7 @@ public class PutawayBizImpl implements PutawayBiz {
 			if (!pickLocation) {
 				throw new ServiceException("按箱上架失败，目标库位不是拣货区/人工区的库位");
 			}
+			UdfEntity udf = locationBiz.judgeBoxTypeOfC(targetLocation);
 			Location sourceLocation = locationBiz.findLocationByLocCode(sourceStockList.get(0).getWhId(), sourceStockList.get(0).getLocCode());
 			stockManageBiz.canMove(sourceLocation, targetLocation, sourceStockList, request.getBoxCode(), true);
 			if (locationBiz.isAgvLocation(targetLocation)) {
@@ -81,7 +83,8 @@ public class PutawayBizImpl implements PutawayBiz {
 				agvTask.moveStockToSchedule(sourceStockList, targetLocation);
 				return;
 			}
-			stockBiz.moveStockByLpnCode(sourceStockList.get(0).getLpnCode(), sourceStockList.get(0).getLpnCode(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY_PDA, null, null, null);
+			stockBiz.moveStockByLpnCode(sourceStockList.get(0).getLpnCode(), sourceStockList.get(0).getLpnCode(),
+				targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY_PDA, null, null, null, udf);
 			// 生成上架记录
 			sourceStockList.forEach(stock -> {
 				PutawayLog putawayLog = putawayFactory.create(request, stock, targetLocation);
@@ -105,7 +108,8 @@ public class PutawayBizImpl implements PutawayBiz {
 			agvTask.moveStockToSchedule(stockList, targetLocation);
 			return;
 		}
-		stockBiz.moveStockByBoxCode(request.getBoxCode(), request.getBoxCode(), sourceStock.getLpnCode(), targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY_PDA, null, null, null);
+		stockBiz.moveStockByBoxCode(request.getBoxCode(), request.getBoxCode(), sourceStock.getLpnCode(),
+			targetLocation, StockLogTypeEnum.INSTOCK_BY_PUTAWAY_PDA, null, null, null, null);
 		// 生成上架记录
 		PutawayLog putawayLog = putawayFactory.create(request, sourceStock, targetLocation);
 		putawayLogDao.save(putawayLog);
@@ -117,6 +121,7 @@ public class PutawayBizImpl implements PutawayBiz {
 	public void callAgv(CallAgvRequest request) {
 		//获取目标库位信息
 		Location targetLocation = locationBiz.findByLocId(request.getLocId());
+		UdfEntity udf = locationBiz.judgeBoxTypeOfC(targetLocation);
 		List<BoxDto> boxDtoList = request.getBoxList();
 		List<Stock> targetStockList = new ArrayList<>();
 		for (BoxDto boxDto : boxDtoList) {
@@ -135,7 +140,8 @@ public class PutawayBizImpl implements PutawayBiz {
 						.collect(Collectors.toList());
 				}
 				// 调用库存移动
-				Stock targetStock = stockBiz.moveStock(stock, serialNoList, qty, targetLocation, StockLogTypeEnum.STOCK_TO_INSTOCK_RECE, null, null, null);
+				Stock targetStock = stockBiz.moveStock(stock, serialNoList, qty, targetLocation,
+					StockLogTypeEnum.STOCK_TO_INSTOCK_RECE, null, null, null, udf);
 				targetStockList.add(targetStock);
 				// 生成上架记录
 				PutawayLog putawayLog = new PutawayLog();
@@ -149,8 +155,6 @@ public class PutawayBizImpl implements PutawayBiz {
 			}
 		}
 		agvTask.putawayToSchedule(targetStockList);
-
-
 	}
 
 	@Override

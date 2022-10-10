@@ -145,7 +145,7 @@ public class DevanningBizImpl implements DevanningBiz {
 				} else {
 					// 库存移动
 					Stock targetStock = stockBiz.moveStock(stock, serialNumberList, new BigDecimal(String.valueOf(serialNumberListNum)), request.getBoxCode(), location.getLocCode(),
-						location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
+						location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null, null);
 					for (String serialNumber : serialNumberList) {
 						serialBiz.updateSerialStockIdBySerialNo(stock.getStockId(), targetStock.getStockId(), serialNumber);
 					}
@@ -167,7 +167,7 @@ public class DevanningBizImpl implements DevanningBiz {
 					if (BigDecimalUtil.eq(stock.getOccupyQty(), BigDecimal.ZERO)) {
 						//不是库存占用直接拆箱
 						stockBiz.moveStock(stock, null, stockDeva.getSplitQty(), request.getBoxCode(), location.getLocCode(),
-							location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
+							location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null, null);
 					} else {
 						//有任务的拆箱
 						taskDevanning(oldBoxCode, stock, location, sumSplitQty, request, stockDeva.getSplitQty(), null);
@@ -211,7 +211,7 @@ public class DevanningBizImpl implements DevanningBiz {
 //			newBoxCode = temporaryBoxCode;
 //		}
 		moveStock = stockBiz.moveStock(stock, serialNoList, splitQty, newBoxCode, newBoxCode,
-			location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null);
+			location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null, null);
 
 		moveStock.setOccupyQty(moveStock.getStockBalance());
 		stockDao.upateOccupyQty(moveStock);
