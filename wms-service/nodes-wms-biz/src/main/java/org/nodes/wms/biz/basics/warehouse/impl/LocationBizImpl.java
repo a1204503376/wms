@@ -77,7 +77,7 @@ public class LocationBizImpl implements LocationBiz {
 	@Override
 	public Location add(LocationAddOrEditRequest locationAddOrEditRequest) {
 		if (Func.notNull(locationDao.getLocationByLocCode(locationAddOrEditRequest.getWhId(),
-			locationAddOrEditRequest.getLocCode()))){
+			locationAddOrEditRequest.getLocCode()))) {
 			throw new ServiceException("新增库位失败，该库位在当前库房已经存在");
 		}
 
@@ -229,7 +229,7 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public List<Location> getLocationByColumn(Location location) {
-		if (Func.isEmpty(location.getLocColumn()) || Func.isEmpty(location.getLocBank())){
+		if (Func.isEmpty(location.getLocColumn()) || Func.isEmpty(location.getLocBank())) {
 			return null;
 		}
 
@@ -261,6 +261,24 @@ public class LocationBizImpl implements LocationBiz {
 	@Override
 	public void unfreezeLocByTask(String taskId) {
 		locationDao.updateLocFlag(taskId, DictKVConstant.LOC_FLAG_NORMAL, true);
+	}
+
+	@Override
+	public String judgeBoxTypeOfC(Location location) {
+		AssertUtil.notNull(location, "判断C箱类别失败，库位参数不能为空");
+		//（C1:WH1-R-02-33-01,WH1-R-02-34-01 C2:WH1-R-02-28-02 WH1-R-02-28-01 WH1-R-02-27-02 WH1-R-02-27-01)
+
+		if ("WH1-R-02-33-01".equals(location.getLocCode())
+			|| "WH1-R-02-34-01".equals(location.getLocCode())) {
+			return "C1";
+		} else if ("WH1-R-02-28-02".equals(location.getLocCode())
+			|| "WH1-R-02-28-01".equals(location.getLocCode())
+			|| "WH1-R-02-27-02".equals(location.getLocCode())
+			|| "WH1-R-02-27-01".equals(location.getLocCode())) {
+			return "C2";
+		} else {
+			return "";
+		}
 	}
 
 	@Override
