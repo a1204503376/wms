@@ -89,7 +89,7 @@
 				});
 			},
 			submit() {
-			
+				this.esc();
 			},
 			analysisCode(code) {
 				var barcode = barcodeFunc.parseBarcode(code);

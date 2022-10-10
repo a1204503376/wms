@@ -143,7 +143,15 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
     @Override
     public List<Stock> findStockOnPickTo(String boxCode) {
-        return null;
+		AssertUtil.notEmpty(boxCode, "按箱码查询出库暂存区的库存失败,箱码不能为空");
+
+		List<Location> allPickToLocation = locationBiz.getLocationByZoneType(DictKVConstant.ZONE_TYPE_PICK_TO);
+		AssertUtil.notEmpty(allPickToLocation, "按箱码查询出库暂存区的库存失败,没有获取到出库暂存区的库位信息");
+
+		List<Long> allPickToLocIds = allPickToLocation.stream()
+			.map(Location::getLocId)
+			.collect(Collectors.toList());
+        return stockDao.getStockByBoxCode(boxCode, allPickToLocIds);
     }
 
     @Override

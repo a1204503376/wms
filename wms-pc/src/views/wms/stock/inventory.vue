@@ -5,27 +5,27 @@
                 <el-row class="search-elRow" type="flex">
                     <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
-                            <nodes-sku class="search-input" v-model="form.params.skuIds">
+                            <nodes-sku v-model="form.params.skuIds" class="search-input">
                             </nodes-sku>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="生产批次" label-width="90px">
-                            <el-input :clearable="true" class="search-input" placeholder="请输入生产批次"
-                                v-model.trim="form.params.skuLot1">
+                            <el-input v-model.trim="form.params.skuLot1" :clearable="true" class="search-input"
+                                      placeholder="请输入生产批次">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库位" label-width="90px">
-                            <nodes-location :multiple="true" class="search-input" v-model="form.params.locIdList">
+                            <nodes-location v-model="form.params.locIdList" :multiple="true" class="search-input">
                             </nodes-location>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库存状态" label-width="90px">
-                            <NodesStockStatus :multiple="true" class="search-input"
-                                v-model="form.params.stockStatusList">
+                            <NodesStockStatus v-model="form.params.stockStatusList" :multiple="true"
+                                              class="search-input">
                             </NodesStockStatus>
                         </el-form-item>
                     </el-col>
@@ -33,28 +33,28 @@
                 <el-row class="search-elRow" type="flex">
                     <el-col :span="6">
                         <el-form-item label="库区" label-width="90px">
-                            <nodes-zone :multiple="true" class="search-input" v-model="form.params.zoneIdList">
+                            <nodes-zone v-model="form.params.zoneIdList" :multiple="true" class="search-input">
                             </nodes-zone>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="箱号" label-width="90px">
-                            <el-input :clearable="true" class="search-input" placeholder="请输入箱号"
-                                v-model.trim="form.params.boxCode">
+                            <el-input v-model.trim="form.params.boxCode" :clearable="true" class="search-input"
+                                      placeholder="请输入箱号">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="lpn" label-width="90px">
-                            <el-input :clearable="true" class="search-input" placeholder="请输入lpn"
-                                v-model.trim="form.params.lpnCode">
+                            <el-input v-model.trim="form.params.lpnCode" :clearable="true" class="search-input"
+                                      placeholder="请输入lpn">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="规格型号" label-width="90px">
-                            <el-input :clearable="true" class="search-input" placeholder="请输入规格型号"
-                                v-model.trim="form.params.skuLot2">
+                            <el-input v-model.trim="form.params.skuLot2" :clearable="true" class="search-input"
+                                      placeholder="请输入规格型号">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -68,22 +68,22 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="专用客户" label-width="90px">
-                            <el-input :clearable="true" class="search-input" placeholder="请输入专用客户"
-                                v-model.trim="form.params.skuLot4">
+                            <el-input v-model.trim="form.params.skuLot4" :clearable="true" class="search-input"
+                                      placeholder="请输入专用客户">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="钢背批次" label-width="90px">
-                            <el-input :clearable="true" class="search-input" placeholder="请输入钢背批次"
-                                v-model.trim="form.params.skuLot5">
+                            <el-input v-model.trim="form.params.skuLot5" :clearable="true" class="search-input"
+                                      placeholder="请输入钢背批次">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="摩擦块批次" label-width="90px">
-                            <el-input :clearable="true" class="search-input" placeholder="请输入摩擦块批次"
-                                v-model.trim="form.params.skuLot6">
+                            <el-input v-model.trim="form.params.skuLot6" :clearable="true" class="search-input"
+                                      placeholder="请输入摩擦块批次">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -91,26 +91,26 @@
                 <el-row class="search-elRow" type="flex">
                     <el-col :span="6">
                         <el-form-item label="库房" label-width="90px">
-                            <nodes-warehouse :multiple="true" class="search-input" v-model="form.params.whIdList">
+                            <nodes-warehouse v-model="form.params.whIdList" :multiple="true" class="search-input">
                             </nodes-warehouse>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="货主" label-width="90px">
-                            <nodes-owner class="search-input" v-model="form.params.woId">
+                            <nodes-owner v-model="form.params.woId" class="search-input">
                             </nodes-owner>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="货架列" label-width="90px">
-                            <el-input class="search-input" placeholder="请输入货架列" v-model="form.params.locColumn">
+                            <el-input v-model="form.params.locColumn" class="search-input" placeholder="请输入货架列">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库区类型" label-width="90px">
-                            <nodes-dictionary :clearable="true" :multiple="true" class="search-input" code="zone_type"
-                                v-model="form.params.zoneTypeList">
+                            <nodes-dictionary v-model="form.params.zoneTypeList" :clearable="true" :multiple="true" class="search-input"
+                                              code="zone_type">
                             </nodes-dictionary>
                         </el-form-item>
                     </el-col>
@@ -118,9 +118,9 @@
                 <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="是否序列号" label-width="90px">
-                            <el-select :clearable="true" class="search-input" v-model="form.params.hasSerial">
-                                <el-option :key="item.value" :label="item.label" :value="item.value"
-                                    v-for="item in [{label: '是',value: 1},{label: '否',value: 0}]">
+                            <el-select v-model="form.params.hasSerial" :clearable="true" class="search-input">
+                                <el-option v-for="item in [{label: '是',value: 1},{label: '否',value: 0}]" :key="item.value" :label="item.label"
+                                           :value="item.value">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -139,10 +139,10 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="批次号" label-width="90px">
-                            <el-input :clearable="true" style="width: 42%;" v-model.trim="form.params.lotNumberBegin">
+                            <el-input v-model.trim="form.params.lotNumberBegin" :clearable="true" style="width: 42%;">
                             </el-input>
                             -
-                            <el-input :clearable="true" style="width: 42%;" v-model.trim="form.params.lotNumberEnd">
+                            <el-input v-model.trim="form.params.lotNumberEnd" :clearable="true" style="width: 42%;">
                             </el-input>
                             <el-tooltip placement="top">
                                 <div slot="content">
@@ -158,94 +158,85 @@
                 </el-row>
             </template>
             <template v-slot:batchBtn>
-                <el-button @click="moveByPiece" size="mini" type="primary" v-if="permissionObj.moveByPiece">
+                <el-button v-if="permissionObj.moveByPiece" size="mini" type="primary" @click="moveByPiece">
                     按件移动
                 </el-button>
-                <el-button @click="moveByBox" size="mini" type="primary" v-if="permissionObj.moveByBox">
+                <el-button v-if="permissionObj.moveByBox" size="mini" type="primary" @click="moveByBox">
                     按箱移动
                 </el-button>
-                <el-button @click="freeze" size="mini" type="primary" v-if="permissionObj.freeze">
+                <el-button v-if="permissionObj.freeze" size="mini" type="primary" @click="freeze">
                     库存冻结
                 </el-button>
-                <el-button @click="thaw" size="mini" type="primary" v-if="permissionObj.thaw">
+                <el-button v-if="permissionObj.thaw" size="mini" type="primary" @click="thaw">
                     库存解冻
                 </el-button>
-                <el-button @click="showByBox" icon="el-icon-plus" size="mini" type="primary"
-                    v-if="permissionObj.showByBox">按箱显示
-                </el-button>
-                <el-button @click="showByLpn" icon="el-icon-plus" size="mini" type="primary"
-                    v-if="permissionObj.showByLpn">按LPN显示
-                </el-button>
-                <el-button @click="showBySerial" icon="el-icon-plus" size="mini" type="primary"
-                    v-if="permissionObj.showBySerial">按序列号显示
-                </el-button>
-                <el-button @click="print" size="mini" type="primary" v-if="permissionObj.print">
+                <el-button v-if="permissionObj.print" size="mini" type="primary" @click="print">
                     箱贴打印
                 </el-button>
-                <el-button @click="onUpload" icon="el-icon-upload2" plain size="mini" v-if="permissionObj.upload">导入
+                <el-button v-if="permissionObj.upload" icon="el-icon-upload2" plain size="mini" @click="onUpload">导入
                 </el-button>
-                <file-upload :visible="fileUpload.visible" @callback="callbackFileUpload" file-name="库存"
-                    template-url="/api/wms/stock/export-template">
+                <file-upload :visible="fileUpload.visible" file-name="库存" template-url="/api/wms/stock/export-template"
+                             @callback="callbackFileUpload">
                 </file-upload>
             </template>
             <template v-slot:tableTool>
                 <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
-                    <el-button @click="onRefresh" circle icon="el-icon-refresh" size="mini"></el-button>
+                    <el-button circle icon="el-icon-refresh" size="mini" @click="onRefresh"></el-button>
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">
-                    <el-button @click="onColumnShowHide" circle icon="el-icon-s-operation" size="mini"></el-button>
+                    <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="库存统计导出" effect="dark" placement="top">
-                    <el-button @click="exportStockListCount" circle icon="el-icon-download" size="mini"></el-button>
+                    <el-button circle icon="el-icon-download" size="mini" @click="exportStockListCount"></el-button>
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="服务端导出" effect="dark" placement="top">
-                    <el-button @click="exportData" circle icon="el-icon-download" size="mini"></el-button>
+                    <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                        style="display: inline-block;margin-left: 10px">
-                        <el-button @click="onExportLocalData" circle icon="el-icon-bottom" size="mini">
+                                  style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
                         </el-button>
                     </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table :data="table.data" :height="table.height" :summary-method="getSummaries"
-                    @sort-change="onSortChange" border highlight-current-row ref="table" row-key="id" show-summary
-                    size="mini" style="width: 100%">
+                <el-table ref="table" :data="table.data" :height="table.height"
+                          :summary-method="getSummaries" border highlight-current-row row-key="id" show-summary size="mini"
+                          style="width: 100%" @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50"></el-table-column>
                     <el-table-column fixed type="index" width="50">
                         <template slot="header"> #</template>
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
-                        <el-table-column :key="index" show-overflow-tooltip v-bind="column"
-                            v-if="!column.hide && index !==2" width="130">
+                        <el-table-column v-if="!column.hide && index !==2" :key="index" show-overflow-tooltip
+                                         v-bind="column" width="130">
                             <template v-if="column.prop === 'hasSerial' ||
                             column.prop === 'stockBalance' ||
                             column.prop === 'occupyQty'" v-slot="scope">
-                                <el-link :underline="false" @click="showHasSerialView(scope.row.stockId)"
-                                    target="_blank" type="primary"
-                                    v-if="column.prop === 'hasSerial' && scope.row.hasSerial === 1">是
+                                <el-link v-if="column.prop === 'hasSerial' && scope.row.hasSerial === 1" :underline="false"
+                                         target="_blank" type="primary"
+                                         @click="showHasSerialView(scope.row.stockId)">是
                                 </el-link>
                                 {{ column.prop === 'hasSerial' && scope.row.hasSerial !== 1 ? '否' : '' }}
-                                <el-link :underline="false" @click="onViewOccupyQty(scope.row.stockId)" target="_blank"
-                                    type="primary" v-if="column.prop === 'occupyQty'">
+                                <el-link v-if="column.prop === 'occupyQty'" :underline="false" target="_blank"
+                                         type="primary" @click="onViewOccupyQty(scope.row.stockId)">
                                     {{ scope.row.occupyQty }}
                                 </el-link>
-                                <el-link :underline="false" @click="onViewStockBalance(scope.row.stockId)"
-                                    target="_blank" type="primary" v-if="column.prop === 'stockBalance'">
+                                <el-link v-if="column.prop === 'stockBalance'" :underline="false"
+                                         target="_blank" type="primary" @click="onViewStockBalance(scope.row.stockId)">
                                     {{ scope.row.stockBalance }}
                                 </el-link>
                             </template>
                         </el-table-column>
-                        <el-table-column :key="index" show-overflow-tooltip v-bind="column"
-                            v-if="!column.hide && index===2" width="130">
+                        <el-table-column v-if="!column.hide && index===2" :key="index" show-overflow-tooltip
+                                         v-bind="column" width="130">
                             <template v-slot="scope">
-                                <el-tag type="danger"
-                                    v-if="scope.row.stockStatus === '系统冻结' || scope.row.stockStatus === '冻结'">
+                                <el-tag v-if="scope.row.stockStatus === '系统冻结' || scope.row.stockStatus === '冻结'"
+                                        type="danger">
                                     {{ scope.row.stockStatus }}
                                 </el-tag>
-                                <el-tag type="success" v-else>
+                                <el-tag v-else type="success">
                                     {{ scope.row.stockStatus }}
                                 </el-tag>
                             </template>
@@ -254,22 +245,26 @@
                 </el-table>
             </template>
             <template v-slot:page>
-                <el-pagination :page-sizes="pageSize" @current-change="handleCurrentChange"
-                    @size-change="handleSizeChange" background layout="total, sizes, prev, pager, next, jumper"
-                    v-bind="page">
+                <el-pagination :page-sizes="pageSize" background
+                               layout="total, sizes, prev, pager, next, jumper" v-bind="page"
+                               @current-change="handleCurrentChange"
+                               @size-change="handleSizeChange">
                 </el-pagination>
             </template>
         </nodes-master-page>
-        <dialog-column @close="onColumnShowHide" v-bind="columnShowHide"></dialog-column>
+        <div v-if="columnShowHide.visible">
+            <dialog-column v-bind="columnShowHide" @close="onColumnShowHide"></dialog-column>
+        </div>
         <template>
             <el-dialog :append-to-body="true" :close-on-click-modal="false" :custom-class="'maxDialog'"
-                :show-close="true" :title="dialog.title" :visible.sync="dialog.showDialog" @close="onClose">
+                       :show-close="true" :title="dialog.title" :visible.sync="dialog.showDialog" @close="onClose">
                 <div style="margin-top: 10px;">
-                    <el-table :data="dialog.gridData" :header-cell-style="{'background-color': '#fafafa'}"
-                        :height="dialog.isMoveByBox ? 390 : 'auto'" :max-height="dialog.isMoveByBox ? 400 : 'auto'"
-                        :span-method="dialogGridDataSpanMethod" border element-loading-spinner="el-icon-loading"
-                        element-loading-text="数据正在加载中" highlight-current-row overflow="auto" ref="multipleTable"
-                        style="font-size: 14px" v-loading="dialog.loading" width="100%">
+                    <el-table ref="multipleTable" v-loading="dialog.loading"
+                              :data="dialog.gridData"
+                              :header-cell-style="{'background-color': '#fafafa'}"
+                              :height="dialog.isMoveByBox ? 390 : 'auto'" :max-height="dialog.isMoveByBox ? 400 : 'auto'" :span-method="dialogGridDataSpanMethod"
+                              border element-loading-spinner="el-icon-loading" element-loading-text="数据正在加载中" highlight-current-row
+                              overflow="auto" style="font-size: 14px" width="100%">
                         <el-table-column label="箱码" property="boxCode" show-overflow-tooltip></el-table-column>
                         <el-table-column label="物品编码" property="skuCode" show-overflow-tooltip></el-table-column>
                         <el-table-column label="物品名称" property="skuName" show-overflow-tooltip></el-table-column>
@@ -280,88 +275,88 @@
                         <el-table-column label="库位编码" property="locCode" show-overflow-tooltip></el-table-column>
                     </el-table>
                     <el-table :data="dialog.childrenData" :height="dialog.isMoveByBox ? 120 : 435"
-                        :max-height="dialog.isMoveByBox ? 120 : 420" border size="medium">
+                              :max-height="dialog.isMoveByBox ? 120 : 420" border size="medium">
                         <el-table-column v-if="!dialog.isMoveByBox" width="50">
                             <template slot="header">
-                                <el-button @click="rowAdd" circle icon="el-icon-plus" style="padding: 4px"
-                                    type="primary">
+                                <el-button circle icon="el-icon-plus" style="padding: 4px" type="primary"
+                                           @click="rowAdd">
                                 </el-button>
                             </template>
                         </el-table-column>
-                        <el-table-column label="转移数量" v-if="!dialog.isMoveByBox" width="160px">
+                        <el-table-column v-if="!dialog.isMoveByBox" label="转移数量" width="160px">
                             <template v-slot="scope">
-                                <el-input-number :max="dialog.children.max" :min="dialog.children.min"
-                                    @change="qtyChange(scope.row)" size="medium" style="width: 100%"
-                                    v-model="scope.row['qty']">
+                                <el-input-number v-model="scope.row['qty']" :max="dialog.children.max"
+                                                 :min="dialog.children.min" size="medium" style="width: 100%"
+                                                 @change="qtyChange(scope.row)">
                                 </el-input-number>
                             </template>
                         </el-table-column>
-                        <el-table-column label="序列号" v-if="!dialog.isMoveByBox">
+                        <el-table-column v-if="!dialog.isMoveByBox" label="序列号">
                             <template v-slot="scope">
-                                <nodes-serial :collapse="false" :stock-id="dialog.gridData[0].stockId" size="medium"
-                                    style="width: 100%" v-model="scope.row['serials']"
-                                    v-on:getSerialDataSource="getSerialDataSource">
+                                <nodes-serial v-model="scope.row['serials']" :collapse="false" :stock-id="dialog.gridData[0].stockId"
+                                              size="medium" style="width: 100%"
+                                              v-on:getSerialDataSource="getSerialDataSource">
                                 </nodes-serial>
                             </template>
                         </el-table-column>
-                        <el-table-column label="库位" v-if="!dialog.isMoveByBox" width="180">
+                        <el-table-column v-if="!dialog.isMoveByBox" label="库位" width="180">
                             <template v-slot="scope">
-                                <nodes-location :source-loc-code="dialog.gridData[0].locCode" size="medium"
-                                    v-model="scope.row['locId']">
+                                <nodes-location v-model="scope.row['locId']" :source-loc-code="dialog.gridData[0].locCode"
+                                                size="medium">
                                 </nodes-location>
                             </template>
                         </el-table-column>
-                        <el-table-column label="目标库位" v-if="dialog.isMoveByBox">
+                        <el-table-column v-if="dialog.isMoveByBox" label="目标库位">
                             <template v-slot="scope">
-                                <nodes-location size="medium" style="width: 100%;" v-model="scope.row['targetLocId']">
+                                <nodes-location v-model="scope.row['targetLocId']" size="medium" style="width: 100%;">
                                 </nodes-location>
                             </template>
                         </el-table-column>
-                        <el-table-column label="目标LPN" v-if="dialog.isMoveByBox">
+                        <el-table-column v-if="dialog.isMoveByBox" label="目标LPN">
                             <template v-slot="scope">
-                                <el-input placeholder="请输入目标LPN" size="medium" v-model="scope.row['targetLpnCode']">
+                                <el-input v-model="scope.row['targetLpnCode']" placeholder="请输入目标LPN" size="medium">
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column label="操作" v-if="!dialog.isMoveByBox" width="80">
+                        <el-table-column v-if="!dialog.isMoveByBox" label="操作" width="80">
                             <template v-slot="scope">
-                                <el-button @click="dialogHandleRemove(scope.$index, scope.row)" size="mini"
-                                    type="danger">删除
+                                <el-button size="mini" type="danger"
+                                           @click="dialogHandleRemove(scope.$index, scope.row)">删除
                                 </el-button>
                             </template>
                         </el-table-column>
                     </el-table>
                 </div>
-                <div class="dialog-footer" slot="footer">
-                    <el-button @click="onSubmit" type="primary">确定</el-button>
-                    <el-button @click="dialog.showDialog = false" style="margin-left: 15px;">关 闭</el-button>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="onSubmit">确定</el-button>
+                    <el-button style="margin-left: 15px;" @click="dialog.showDialog = false">关 闭</el-button>
                 </div>
             </el-dialog>
         </template>
         <template>
             <el-dialog :visible.sync="form1.popShow" append-to-body title="选择类型" width="800px">
                 <el-form :model="form1">
-                    <el-form-item label="解冻类型" label-width="120px" v-if="form1.thawShow">
-                        <el-select placeholder="请选择解冻类型" v-model="form1.stockType">
+                    <el-form-item v-if="form1.thawShow" label="解冻类型" label-width="120px">
+                        <el-select v-model="form1.stockType" placeholder="请选择解冻类型">
                             <el-option label="整批次解冻" value="byBatch"></el-option>
                             <el-option label="库位解冻" value="byLoc"></el-option>
                             <el-option label="按箱解冻" value="byBox"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="冻结类型" label-width="120px" v-if="form1.freezeShow">
-                        <el-select placeholder="请选择冻结类型" v-model="form1.stockType">
+                    <el-form-item v-if="form1.freezeShow" label="冻结类型" label-width="120px">
+                        <el-select v-model="form1.stockType" placeholder="请选择冻结类型">
                             <el-option label="整批次冻结" value="byBatch"></el-option>
                             <el-option label="库位冻结" value="byLoc"></el-option>
                             <el-option label="按箱冻结" value="byBox"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="备注" label-width="120px">
-                        <el-input style="width: 600px" type="textarea" v-model="form1.remark"></el-input>
+                        <el-input v-model="form1.remark" style="width: 600px" type="textarea"></el-input>
                     </el-form-item>
                 </el-form>
-                <div class="dialog-footer" slot="footer">
+                <div slot="footer" class="dialog-footer">
                     <el-button @click="cancel">取 消</el-button>
-                    <el-button @click="submit" type="primary">确 定</el-button>
+                    <el-button type="primary" @click="submit">确 定</el-button>
                 </div>
             </el-dialog>
         </template>
@@ -373,7 +368,7 @@ import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
-import { listMixin } from "@/mixins/list";
+import {listMixin} from "@/mixins/list";
 import {
     exportFile,
     exportStockListCount,
@@ -387,7 +382,7 @@ import {
     stockUnFrozen
 } from "@/api/wms/stock/stock";
 import fileDownload from "js-file-download";
-import { ExcelExport } from 'pikaz-excel-js';
+import {ExcelExport} from 'pikaz-excel-js';
 import fileUpload from "@/components/nodes/fileUpload";
 import NodesSku from "@/components/wms/select/NodesSkuByQuery";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
@@ -399,9 +394,9 @@ import "../../../../public/cdn/iconfont/avue/iconfont.css"
 import NodesSerial from "@/components/wms/select/NodesSerial";
 import NodesZone from "@/components/wms/select/NodesZone";
 import NodesDictionary from "@/components/wms/select/NodesDictionary";
-import { nowDateFormat } from "@/util/date";
-import { getParamValue } from "@/util/param";
-import { getStore } from "@/util/store";
+import {nowDateFormat} from "@/util/date";
+import {getParamValue} from "@/util/param";
+import {getStore} from "@/util/store";
 
 export default {
     name: "customer",
@@ -424,8 +419,6 @@ export default {
     mixins: [listMixin],
     data() {
         return {
-            dialogFormVisible: false,
-            woId: "",
             form: {
                 params: {
                     skuIds: [],
@@ -457,9 +450,6 @@ export default {
                 freezeShow: false,
                 stockType: "",
                 remark: ""
-            },
-            deleteCustomerRequest: {
-                ids: [],
             },
             pageSize: [20, 50, 100],
             table: {
@@ -623,9 +613,6 @@ export default {
                 moveByBox: this.vaildData(this.permission.inventory_moveByBox, false),
                 freeze: this.vaildData(this.permission.inventory_freeze, false),
                 thaw: this.vaildData(this.permission.inventory_thaw, false),
-                showByBox: this.vaildData(this.permission.inventory_showByBox, false),
-                showByLpn: this.vaildData(this.permission.inventory_showByLpn, false),
-                showBySerial: this.vaildData(this.permission.inventory_showBySerial, false),
                 print: this.vaildData(this.permission.inventory_print, false),
                 upload: this.vaildData(this.permission.inventory_upload, false),
             }
@@ -720,12 +707,12 @@ export default {
                     this.$message.warning("所选记录批次为空,请选择其他类型")
                     return;
                 }
-                StockThawAndFrozenDto = { skuLot1List, remark }
+                StockThawAndFrozenDto = {skuLot1List, remark}
             } else if (this.form1.stockType === 'byLoc') {
                 let locIdList = this.$refs.table.selection.map((row) => {
                     return row.locId;
                 });
-                StockThawAndFrozenDto = { locIdList, remark }
+                StockThawAndFrozenDto = {locIdList, remark}
             } else if (this.form1.stockType === 'byBox') {
                 let boxCodeList = this.$refs.table.selection.map((row) => {
                     return row.boxCode;
@@ -735,7 +722,7 @@ export default {
                     this.$message.warning("所选记录箱码为空,请选择其他类型")
                     return;
                 }
-                StockThawAndFrozenDto = { boxCodeList, remark }
+                StockThawAndFrozenDto = {boxCodeList, remark}
             }
             if (this.form1.freezeShow) {
                 this.cancel()
@@ -797,7 +784,7 @@ export default {
                 return
             }
 
-            let userName = getStore({ name: "userInfo" }).account;
+            let userName = getStore({name: "userInfo"}).account;
             let type = '';
             if (rows[0].hasSerial === 1) {
                 type = 'sn'
@@ -845,7 +832,7 @@ export default {
             });
         },
         getSummaries(param) {
-            const { columns, data } = param;
+            const {columns, data} = param;
             const sums = [];
             columns.forEach((column, index) => {
                 if (index === 0) {
@@ -921,7 +908,7 @@ export default {
                     this.dialog.gridData = res.data.data;
                 })
                 this.merge(this.dialog.gridData);
-                this.dialog.childrenData.push({ id: 1, targetLocId: [], targetLpnCode: '' });
+                this.dialog.childrenData.push({id: 1, targetLocId: [], targetLpnCode: ''});
             } else {
                 this.dialog.title = '按件移动';
                 await getStockDataByStockId(rows[0].stockId).then((res) => {
@@ -931,7 +918,7 @@ export default {
             }
         },
         // ==========================已下是 dialog 中的方法=================================
-        dialogGridDataSpanMethod({ row, column, rowIndex, columnIndex }) {
+        dialogGridDataSpanMethod({row, column, rowIndex, columnIndex}) {
             if (this.dialog.merge.mergedArray.length > 0) {
                 if (column.label === '箱码') {
                     const _row = this.dialog.merge.mergedArray[rowIndex];
@@ -981,7 +968,7 @@ export default {
                 return;
             }
             this.qtyChange();
-            this.dialog.childrenData.push({ id: id, qty: this.dialog.children.actualQty, serials: [], locId: '' });
+            this.dialog.childrenData.push({id: id, qty: this.dialog.children.actualQty, serials: [], locId: ''});
 
         },
         getSerialDataSource(data) {

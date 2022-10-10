@@ -16,12 +16,12 @@
                         <el-form-item label="序列号范围" label-width="90px">
                             <el-input
                                 v-model.trim="form.params.serialBegin" :clearable="true"
-                                style="width:84px">
+                                style="width:98px">
                             </el-input>
                             -
                             <el-input
                                 v-model.trim="form.params.serialEnd" :clearable="true"
-                                style="width:84px">
+                                style="width:98px">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -180,7 +180,7 @@ import func from "@/util/func";
 
 
 export default {
-    name: "customer",
+    name: "stockBySerial",
     components: {
         NodesZone,
         NodesSerial,
@@ -200,7 +200,6 @@ export default {
     data() {
         return {
             dialogFormVisible: false,
-            woId: "",
             form: {
                 params: {
                     skuIds: [],
@@ -211,9 +210,6 @@ export default {
                     serialBegin: "",
                     serialEnd: "",
                 }
-            },
-            deleteCustomerRequest: {
-                ids: [],
             },
             pageSize: [20, 50, 100],
             table: {
@@ -387,7 +383,6 @@ export default {
                 createTimeDateRange: "",
             }
             this.onChange(null);
-            console.log('重置表单');
         },
     },
 };
@@ -401,17 +396,5 @@ export default {
     line-height: 22px;
     margin-right: 22px;
     font-size: 16px;
-}
-
-/deep/ .maxDialog {
-    margin-right: 19px;
-    width: 87.5%;
-    margin-top: 14vh !important;
-    height: 79%;
-}
-
-//:class="dialog.isFullScreen ? 'children_maxTable': 'children_minTable'"
-/deep/ .maxDialog .el-dialog__body {
-    max-height: 82% !important;
 }
 </style>
