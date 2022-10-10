@@ -66,7 +66,8 @@ public class AgvSyncServiceImpl extends ServiceImpl<AgvSyncMapper, AgvSync>
                 }
                 break;
             case DOUBLE_WAREHOUSING:
-                applicationContext.publishEvent(new AlreadyStorageEvent(this, agvSyncOrderRequest.getJobId()));
+                AlreadyStorageEvent alreadyStorageEvent = new AlreadyStorageEvent(this, agvSyncOrderRequest);
+                applicationContext.publishEvent(alreadyStorageEvent);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + agvSyncOrderRequest.getAgvType());

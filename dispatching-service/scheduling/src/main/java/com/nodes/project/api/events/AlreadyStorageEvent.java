@@ -1,5 +1,6 @@
 package com.nodes.project.api.events;
 
+import com.nodes.project.api.dto.agv.AgvSyncOrderRequest;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.ApplicationEvent;
@@ -10,10 +11,10 @@ import org.springframework.context.ApplicationEvent;
 public class AlreadyStorageEvent extends ApplicationEvent {
     @Getter
     @Setter
-    private String jobId;
+    private AgvSyncOrderRequest agvSyncOrderRequest;
 
-    public AlreadyStorageEvent(Object source, String jobId) {
+    public AlreadyStorageEvent(Object source, AgvSyncOrderRequest agvSyncOrderRequest) {
         super(source);
-        this.jobId = jobId;
+        this.agvSyncOrderRequest = agvSyncOrderRequest;
     }
 }

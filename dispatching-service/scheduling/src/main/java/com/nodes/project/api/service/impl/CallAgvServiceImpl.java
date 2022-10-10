@@ -20,6 +20,7 @@ import java.util.List;
 public class CallAgvServiceImpl implements CallAgvService {
     private static final String URL_TRANSPORT_ORDERS = "/transportOrders/{}";
     private static final String URL_WITHDRAWAL = URL_TRANSPORT_ORDERS + "/withdrawal";
+    private static final String url_vehicleWithdrawal = "/vehicleWithdrawal/{}/unload/{}";
 
     @Resource
     private CallApiService callApiService;
@@ -59,7 +60,7 @@ public class CallAgvServiceImpl implements CallAgvService {
 
     private static void setBifurcate(JobQueue jobQueue, List<Property> properties) {
         // 创建C箱的job时，在properties属性中新增一个key：boxType，value:C1或C2
-        boolean cBifurcateFlag = ObjectUtils.isEmpty(jobQueue.getWmsCBifurcate());
+        boolean cBifurcateFlag = ObjectUtils.isEmpty(jobQueue.getWmsCBifurcate()) || jobQueue.getWmsCBifurcate().equals(0);
         if (cBifurcateFlag) {
             return;
         }
@@ -75,5 +76,11 @@ public class CallAgvServiceImpl implements CallAgvService {
         AgvWithdrawalRequest agvWithdrawalRequest = new AgvWithdrawalRequest();
         agvWithdrawalRequest.setName(jobQueue.getId());
         return callApiService.postAgv(StringUtils.format(URL_WITHDRAWAL, jobQueue.getId()), agvWithdrawalRequest);
+    }
+
+    @Override
+    public AgvOtherGlobalResponse vehicleWithdrawal(String vehicle, String location) {
+        String url = StringUtils.format(url_vehicleWithdrawal, vehicle, location);
+        return callApiService.postOtherAgv(url);
     }
 }

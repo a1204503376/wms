@@ -14,4 +14,6 @@ public class AgvConstants {
      * API返回结果：失败
      */
     public static final String API_RESULT_FAILED = "failed";
+
+    public static final String API_OTHER_RESULT_SUCCESS = "200";
 }
