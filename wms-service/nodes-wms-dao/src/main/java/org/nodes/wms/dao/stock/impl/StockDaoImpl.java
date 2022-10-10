@@ -447,6 +447,22 @@ public class StockDaoImpl
 	}
 
 	@Override
+	public void updateStockByCancelAgvTask(Stock item) {
+		Stock stock = new Stock();
+		stock.setStockStatus(item.getStockStatus());
+		stock.setDropId(item.getDropId());
+		stock.setOccupyQty(item.getOccupyQty());
+
+		UpdateWrapper<Stock> updateWrapper = Wrappers.update();
+		updateWrapper.lambda()
+			.eq(Stock::getStockId, item.getStockId());
+
+		if (!super.update(stock, updateWrapper)) {
+			throw new ServiceException("agv任务取消时更新中间库存失败,请再次重试");
+		}
+	}
+
+	@Override
 	public List<Stock> getStockByDropId(Long dropId) {
 		AssertUtil.notNull(dropId, "根据任务id查询库存失败,taskId不能为空");
 

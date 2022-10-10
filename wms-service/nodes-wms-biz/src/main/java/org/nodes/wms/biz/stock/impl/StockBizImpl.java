@@ -1004,6 +1004,30 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
+	public List<Stock> unfreezeAndReduceOccupy(List<Stock> stocks, Long dropId) {
+		AssertUtil.notEmpty(stocks, "根据任务解冻库存失败,没有任务[{}]关联的库存", dropId);
+
+//		stockDao.updateStockByDropId(stocks, StockStatusEnum.NORMAL, "");
+
+		BigDecimal currentUnOccupy = BigDecimal.ZERO;
+		for (Stock item : stocks) {
+			if (item.getStockStatus().equals(StockStatusEnum.SYSTEM_FREEZE)) {
+				currentUnOccupy = item.getOccupyQty();
+
+				item.setStockStatus(StockStatusEnum.NORMAL);
+				item.setDropId("");
+				item.setOccupyQty(BigDecimal.ZERO);
+
+				stockDao.updateStockByCancelAgvTask(item);
+				createAndSaveOccupyStockLog(item, dropId, dropId.toString(), dropId, currentUnOccupy,
+					StockLogTypeEnum.STOCK_CANCEL_OCCUPY, "agv任务取消时解冻和释放中间库位库存");
+			}
+		}
+
+		return stocks;
+	}
+
+	@Override
 	public boolean judgeEnableOnLocation(Location location) {
 		List<Stock> stock = stockDao.getStockByLocId(location.getLocId());
 		if (Func.isNotEmpty(stock)
