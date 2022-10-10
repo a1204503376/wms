@@ -33,6 +33,10 @@ public class ReceiveDetailByPcResponse {
 	 */
 	private String umCode;
 	/**
+	 * 规格型号
+	 */
+	private String skuSpec;
+	/**
 	 * 生产批次
 	 */
 	private String skuLot1;

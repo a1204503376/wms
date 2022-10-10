@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
+import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
@@ -13,6 +14,8 @@ import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.SchedulingBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
+import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.log.dto.input.NoticeMessageRequest;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
@@ -64,6 +67,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	private final StockBiz stockBiz;
 	private final WmsTaskDao wmsTaskDao;
 	private final SoPickPlanBiz soPickPlanBiz;
+	private final LpnTypeBiz lpnTypeBiz;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -83,8 +87,11 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		List<Location> locationList = locationBiz.findLocationByZoneId(zone.getZoneId());
 
 		for (Location location : locationList) {
+			LpnType locLpnType = lpnTypeBiz.findLpnTypeById(location.getLpnTypeId());
+			LpnTypeCodeEnum requestParseBoxCode = lpnTypeBiz.parseBoxCode(request.getLpnTypeCode());
 			// 判断库位是否有库存
-			if (location.enableStock() && stockQueryBiz.isEmptyLocation(location.getLocId())) {
+			if (location.enableStock() && stockQueryBiz.isEmptyLocation(location.getLocId())
+				&&locLpnType.getCode().equals(requestParseBoxCode.getCode())) {
 				// 如果没有库存则冻结库位
 				locationBiz.freezeLocByTask(location.getLocId(), request.getTaskDetailId().toString());
 				// 更新任务信息

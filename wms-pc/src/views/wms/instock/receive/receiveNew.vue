@@ -182,7 +182,6 @@
                                     <template v-slot="{row}">
                                         <nodes-sku-spec
                                             v-model="row.skuSpec"
-                                            :disabled="true"
                                             :sku="row.sku"
                                             size=mini>
                                         </nodes-sku-spec>
@@ -309,11 +308,9 @@ import NodesSkuSpec from "@/components/wms/select/NodesSkuSpec";
 export default {
     name: "edit",
     components: {
-        NodesSkuSpec,
-        NodesSkuUm,
-        NodesOwner,
-        NodesSupplier,
-        NodesBillType, NodesWarehouse, NodesLineNumber, NodesSku, NodesInStoreType, NodesInStoreMode
+        NodesSkuSpec, NodesSkuUm, NodesOwner, NodesSupplier,
+        NodesBillType, NodesWarehouse, NodesLineNumber,
+        NodesSku, NodesInStoreType, NodesInStoreMode
     },
     mixins: [editDetailMixin],
     data() {

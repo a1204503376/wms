@@ -153,7 +153,6 @@
                                     <template v-slot="{row}">
                                         <nodes-sku-spec
                                             v-model="row.skuSpec"
-                                            :disabled="true"
                                             :sku="row.sku"
                                             size=mini>
                                         </nodes-sku-spec>

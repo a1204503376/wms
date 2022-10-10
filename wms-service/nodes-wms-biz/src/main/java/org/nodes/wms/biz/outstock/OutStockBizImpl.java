@@ -734,23 +734,26 @@ public class OutStockBizImpl implements OutStockBiz {
 		List<SoDetail> soDetailList = new ArrayList<>();
 		BigDecimal surplusQty = BigDecimal.ZERO;
 		for (SoPickPlan soPickPlan : soPickPlanList) {
-			surplusQty = surplusQty.add(soPickPlan.getPickPlanQty());
 			SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlan.getSoDetailId());
 			soDetailList.add(soDetail);
 		}
-
+		List<SoDetail> soDetails = soDetailList.stream()
+			.distinct()
+			.collect(Collectors.toList());
 		BigDecimal pickQty = BigDecimal.ZERO;
-		for (SoDetail soDetail : soDetailList) {
+
+		for (SoDetail soDetail : soDetails) {
 			if (soDetail.getBillDetailState().equals(SoDetailStateEnum.DELETED)
 				|| soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
 				throw new ServiceException("拣货失败,发货单明细状态为" + soDetail.getBillDetailState() + "不能进行拣货");
 			}
+			surplusQty = surplusQty.add(soDetail.getSurplusQty());
 		}
 		for (Stock stock : stockList) {
 			pickQty = pickQty.add(stock.getStockBalance());
 		}
-		if (BigDecimalUtil.gt(surplusQty, pickQty)) {
-			throw new ServiceException("拣货失败,发货数量大于剩余数量");
+		if (BigDecimalUtil.gt(pickQty, surplusQty)) {
+			throw new ServiceException("拣货失败,发货数量大于剩余数量,请拆箱之后再进行拣货");
 		}
 	}
 
@@ -1018,13 +1021,12 @@ public class OutStockBizImpl implements OutStockBiz {
 								currentStock.getSkuCode(), currentStock.getStockEnable(), checkedQty, soDetail.getScanQty());
 						}
 					}
-
 					flag = true;
 				}
 			}
 		}
 		if (!flag) {
-			throw ExceptionUtil.mpe("复核失败，原因：该箱中不存在发货单[{}]明细中的物品", soBillId);
+			throw ExceptionUtil.mpe("复核失败，原因：该箱中不存在发货单[{}]明细中的物品", soDetailList.get(0).getSoBillNo());
 		}
 	}
 }

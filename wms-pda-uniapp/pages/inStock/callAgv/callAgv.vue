@@ -29,7 +29,7 @@
 			</u-row>
 			<u-row  v-if="param.lpnType == 'C'" >
 				<template v-for="(item, index) in locList">
-					<u-col span="3" v-if="item.isEmpty  && (item.locCodeView == '34-01' || item.locCodeView == '33-01')">
+					<u-col span="3" v-if="item.isEmpty  && (item.locCodeView == '34-02' || item.locCodeView == '33-02')">
 						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" @click="change(item)">
 							{{item.locCodeView}}
 						</u-button>
