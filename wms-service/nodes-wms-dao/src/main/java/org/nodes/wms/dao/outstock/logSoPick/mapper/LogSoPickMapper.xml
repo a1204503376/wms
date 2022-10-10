@@ -137,6 +137,14 @@
         <if test="page.orders == null or page.orders.size == 0">
             ORDER BY lsp.create_time DESC
         </if>
+        <if test="page.orders != null and page.orders.size != 0 and page.orders[0].column == 'so_line_no'">
+            <if test="page.orders[0].asc == true">
+                ORDER BY CAST(detail.so_line_no AS SIGNED)
+            </if>
+            <if test="page.orders[0].asc == false">
+                ORDER BY CAST(detail.so_line_no AS SIGNED) DESC
+            </if>
+        </if>
     </select>
 
     <select id="listByQuery"
