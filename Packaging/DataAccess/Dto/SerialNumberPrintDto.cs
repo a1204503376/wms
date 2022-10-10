@@ -137,7 +137,7 @@ namespace DataAccess.Dto
                 // 前4位：yyMM
                 // 后五位：序列号
                 var key = serialNumber.Substring(0, 4);
-                var value = serialNumber.Replace(key, string.Empty);
+                var value = serialNumber.Substring(key.Length);
                 if (serialNumberDictionary.ContainsKey(key))
                 {
                     serialNumberDictionary[key].Add(value);

@@ -60,7 +60,7 @@ namespace PackagingWeb
 
             // 同个箱号可能存在多条相同物品的记录，打印时合并处理
             var skuGroup = wmsStockList.GroupBy(d => d.SkuId);
-            var skuDetails = new List<SkuDetail>();
+            var skuDetails = new List<SkuDetailDto>();
             foreach (var wmsStockGroup in skuGroup)
             {
                 var planQty = wmsStockGroup.Sum(d => d.StockQty - d.PickQty);
@@ -71,7 +71,7 @@ namespace PackagingWeb
 
                 WmsStock wmsStock = wmsStockGroup.First();
                 var sku = WmsSkuDal.GetById(wmsStock.SkuId);
-                skuDetails.Add(new SkuDetail
+                skuDetails.Add(new SkuDetailDto
                 {
                     Sku = new Sku
                     {
