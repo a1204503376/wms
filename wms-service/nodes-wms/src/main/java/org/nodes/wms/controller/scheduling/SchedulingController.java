@@ -8,6 +8,7 @@ import org.nodes.wms.biz.task.SchedulingBiz;
 import org.nodes.wms.dao.task.dto.QueryAndFrozenEnableOutboundRequest;
 import org.nodes.wms.dao.task.dto.SchedulingBroadcastNotificationRequest;
 import org.nodes.wms.dao.task.dto.SyncTaskStateRequest;
+import org.nodes.wms.dao.task.dto.input.NewLocationOnDoubleWarehousingRequest;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.api.ResultCode;
@@ -57,6 +58,19 @@ public class SchedulingController {
 	}
 
 	/**
+	 * 调度系统：推荐新的库位
+	 *
+	 * @param request 请求参数
+	 * @return 新的目标库位
+	 */
+	@PostMapping("newLocationOnDoubleWarehousing")
+	@ApiLog("调度系统-多重入库推荐新库位")
+	@ApiOperation(value = "多重入库推荐新库位")
+	public R<String> newLocationOnDoubleWarehousing(@Valid @RequestBody NewLocationOnDoubleWarehousingRequest request){
+		return R.data(schedulingBiz.newLocationOnDoubleWarehousing(request));
+	}
+
+	/**
 	 * 调度系统：广播通知
 	 *
 	 * @param request 通知对象集合
@@ -82,5 +96,7 @@ public class SchedulingController {
 		String boxCode = lpnTypeBiz.generateLpnCode(lpnTypeCode, skuName, spec);
 		return R.data(boxCode);
 	}
+
+
 
 }

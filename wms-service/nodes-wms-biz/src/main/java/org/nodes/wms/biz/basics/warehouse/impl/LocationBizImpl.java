@@ -265,6 +265,11 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
+	public void freezeLoc(Long locId) {
+		locationDao.updateLocFlag(locId, DictKVConstant.LOC_FLAG_FORZEN, null);
+	}
+
+	@Override
 	public UdfEntity judgeBoxTypeOfC(Location location) {
 		AssertUtil.notNull(location, "判断C箱类别失败，库位参数不能为空");
 		//（C1:WH1-R-02-33-01,WH1-R-02-34-01 C2:WH1-R-02-28-02 WH1-R-02-28-01 WH1-R-02-27-02 WH1-R-02-27-01)

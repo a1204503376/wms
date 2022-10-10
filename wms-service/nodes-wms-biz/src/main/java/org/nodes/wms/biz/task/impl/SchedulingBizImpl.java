@@ -10,6 +10,7 @@ import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
+import org.nodes.wms.biz.putaway.PutawayStrategyActuator;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.SchedulingBiz;
@@ -25,6 +26,7 @@ import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.dto.QueryAndFrozenEnableOutboundRequest;
 import org.nodes.wms.dao.task.dto.SchedulingBroadcastNotificationRequest;
 import org.nodes.wms.dao.task.dto.SyncTaskStateRequest;
+import org.nodes.wms.dao.task.dto.input.NewLocationOnDoubleWarehousingRequest;
 import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
 import org.nodes.wms.dao.task.enums.WmsTaskTypeEnum;
@@ -72,6 +74,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	private final WmsTaskDao wmsTaskDao;
 	private final SoPickPlanBiz soPickPlanBiz;
 	private final LpnTypeBiz lpnTypeBiz;
+	private final PutawayStrategyActuator putawayStrategyActuator;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -147,6 +150,46 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		}
 
 		log.info("接收调度系统任务状态变更通知,状态:{},任务:{}", request.getState(), request.getTaskDetailId());
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public String newLocationOnDoubleWarehousing(NewLocationOnDoubleWarehousingRequest request) {
+		WmsTask wmsTask = wmsTaskDao.getById(request.getTaskId());
+		AssertUtil.notNull(wmsTask, "推荐新的库位失败,查不到对应的任务");
+
+		if (wmsTask.getTaskState().equals(WmsTaskStateEnum.AGV_COMPLETED)
+			|| wmsTask.getTaskState().equals(WmsTaskStateEnum.COMPLETED)
+			|| wmsTask.getTaskState().equals(WmsTaskStateEnum.CANCELED)) {
+			throw new ServiceException("推荐新的库位失败,任务状态已完结不支持推荐新的库位");
+		}
+
+		// 1. 原来的目标库位使用状态有系统业务冻结改为冻结，并清空loc_flag_desc
+		Long oldLocId = wmsTask.getToLocId();
+		String oldLocCode = wmsTask.getToLocCode();
+		locationBiz.unfreezeLocByTask(request.getTaskId());
+		locationBiz.freezeLoc(oldLocId);
+
+		// 2. 生成新的目标库位，并冻结目标库位
+		List<Stock> stocks = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
+		AssertUtil.notEmpty(stocks, "推荐新的库位失败,没有查询到该任务的库存");
+		Location newLocation = putawayStrategyActuator.run(null, stocks);
+		AssertUtil.notNull(newLocation, "推荐新的库位失败,没有可推荐的新库位");
+		locationBiz.freezeLocByTask(newLocation.getLocId(), wmsTask.getTaskId().toString());
+
+		// 3. 更新任务中的目标库位和消息
+		wmsTask.setToLocCode(newLocation.getLocCode());
+		wmsTask.setToLocId(newLocation.getLocId());
+		wmsTask.setRemark(String.format("多重入库,目标库位由{}变为{}", oldLocCode, wmsTask.getToLocCode()));
+		wmsTaskDao.updateById(wmsTask);
+
+		// 4. 发送通知消息
+		NoticeMessageRequest message = new NoticeMessageRequest();
+		message.setLog(String.format("任务[%s]执行了多重入库,新的库位[%s],请检查原库位[%s]的状态，如没问题请在库位编辑中修改使用状态为正常",
+			wmsTask.getTaskId(), wmsTask.getToLocCode(), oldLocCode));
+		logBiz.noticeMesssage(message);
+
+		return newLocation.getLocCode();
 	}
 
 	private void onOtherHandle(WmsTask wmsTask, SyncTaskStateRequest request) {
@@ -258,7 +301,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		stockBiz.unfreezeAndReduceOccupy(stockList, wmsTask.getTaskId());
 
 		//如果目标库位不为空则把目标库位进行解冻
-		if (Func.isNotEmpty(wmsTask.getToLocId())){
+		if (Func.isNotEmpty(wmsTask.getToLocId())) {
 			locationBiz.unfreezeLocByTask(wmsTask.getTaskId().toString());
 		}
 
