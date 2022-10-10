@@ -3,6 +3,7 @@ package org.nodes.wms.biz.stockManage.impl;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
+import org.nodes.core.udf.UdfEntity;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
@@ -143,9 +144,11 @@ public class DevanningBizImpl implements DevanningBiz {
 					//有任务的拆箱
 					taskDevanning(oldBoxCode, stock, location, maxSumSplitQty, request, new BigDecimal(String.valueOf(serialNumberListNum)), serialNumberList);
 				} else {
+					UdfEntity udfEntity = new UdfEntity();
+					udfEntity.setUdf2(stock.getBoxCode());
 					// 库存移动
 					Stock targetStock = stockBiz.moveStock(stock, serialNumberList, new BigDecimal(String.valueOf(serialNumberListNum)), request.getBoxCode(), location.getLocCode(),
-						location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null, null);
+						location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null, udfEntity);
 					for (String serialNumber : serialNumberList) {
 						serialBiz.updateSerialStockIdBySerialNo(stock.getStockId(), targetStock.getStockId(), serialNumber);
 					}
@@ -166,8 +169,10 @@ public class DevanningBizImpl implements DevanningBiz {
 				if (BigDecimalUtil.gt(stockDeva.getSplitQty(), BigDecimal.ZERO)) {
 					if (BigDecimalUtil.eq(stock.getOccupyQty(), BigDecimal.ZERO)) {
 						//不是库存占用直接拆箱
+						UdfEntity udfEntity = new UdfEntity();
+						udfEntity.setUdf2(stock.getBoxCode());
 						stockBiz.moveStock(stock, null, stockDeva.getSplitQty(), request.getBoxCode(), location.getLocCode(),
-							location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null, null);
+							location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null, udfEntity);
 					} else {
 						//有任务的拆箱
 						taskDevanning(oldBoxCode, stock, location, sumSplitQty, request, stockDeva.getSplitQty(), null);
@@ -210,8 +215,10 @@ public class DevanningBizImpl implements DevanningBiz {
 //			tmpBoxCode = request.getBoxCode();
 //			newBoxCode = temporaryBoxCode;
 //		}
+		UdfEntity udfEntity = new UdfEntity();
+		udfEntity.setUdf2(stock.getBoxCode());
 		moveStock = stockBiz.moveStock(stock, serialNoList, splitQty, newBoxCode, newBoxCode,
-			location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null, null);
+			location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null, udfEntity);
 
 		moveStock.setOccupyQty(moveStock.getStockBalance());
 		stockDao.upateOccupyQty(moveStock);
