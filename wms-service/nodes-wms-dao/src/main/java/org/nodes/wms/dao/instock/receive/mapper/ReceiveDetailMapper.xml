@@ -79,16 +79,15 @@
                rd.sku_code,
                rd.surplus_qty,
                rd.um_code,
+               rd.sku_spec,
                rd.sku_lot1,
-               ws.sku_spec skulot2,
+               rd.sku_lot2,
                rd.sku_lot4,
                rd.sku_lot5,
                rd.sku_lot6,
                rd.sku_lot8
-        FROM receive_detail rd,
-             wms_sku ws
-        WHERE rd.sku_code = ws.sku_code
-          and line_no = #{query.lineNumber}
+        FROM receive_detail rd
+        WHERE line_no = #{query.lineNumber}
           and receive_id = #{query.receiveId}
           and detail_status in ('10', '20')
     </select>

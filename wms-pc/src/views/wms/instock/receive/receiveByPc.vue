@@ -79,7 +79,7 @@
                                     <template v-slot="{row}">
                                         <el-input
                                             v-model.trim="row.skuLot2"
-                                            :disabled="row.skuLot2Exist"
+                                            :disabled="true"
                                             size=mini>
                                         </el-input>
                                     </template>
@@ -376,7 +376,7 @@ export default {
                 row.skuLot5 = column.skuLot5
                 row.skuLot6 = column.skuLot6
                 row.skuLot8 = column.skuLot8
-                row.skuLot2Exist = column.skuLot2Exist
+                // row.skuLot2Exist = column.skuLot2Exist
                 return
             }
             let skuUmSelectQuery = {
@@ -404,12 +404,12 @@ export default {
                     row.skuLot5 = item.skuLot5
                     row.skuLot6 = item.skuLot6
                     row.skuLot8 = item.skuLot8
-                    if (func.isNotEmpty(item.skuLot2)) {
-                        row.skuLot2Exist = true
-                        item['skuLot2Exist'] = true
-                    } else {
-                        item['skuLot2Exist'] = false
-                    }
+                    // if (func.isNotEmpty(item.skuLot2)) {
+                    //     row.skuLot2Exist = true
+                    //     item['skuLot2Exist'] = true
+                    // } else {
+                    //     item['skuLot2Exist'] = false
+                    // }
 
                     this.rowData.push(item)
                 })
@@ -467,7 +467,7 @@ export default {
                 skuLot5: '',
                 skuLot6: '',
                 skuLot8: '',
-                skuLot2Exist: false
+                // skuLot2Exist: false
             }
         },
         onSave() {
