@@ -25,6 +25,9 @@ import java.util.stream.Collectors;
 @Service
 public class WmsTaskFactory {
 
+	private static final String BOX_TYPE_C1 = "C1";
+	private static final String BOX_TYPE_C2 = "C2";
+
 	/**
 	 * 创建AGV上架任务
 	 *
@@ -156,6 +159,15 @@ public class WmsTaskFactory {
 		// 任务描述为空
 		// 任务分派时间
 		wmsTask.setAllotTime(LocalDateTime.now());
+		String boxType = stockList.get(0).getUdf1();
+		if (BOX_TYPE_C1.equals(boxType)){
+			wmsTask.setCBifurcate(1);
+		} else if (BOX_TYPE_C2.equals(boxType)){
+			wmsTask.setCBifurcate(2);
+		} else {
+			wmsTask.setCBifurcate(0);
+		}
+
 		// 任务优先时间为空
 		// 任务开始执行事件为空
 		// 任务关闭时间为空
