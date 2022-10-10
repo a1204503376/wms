@@ -16,6 +16,8 @@
                s.loc_id,
                s.zone_code,
                s.box_code,
+               s.udf2,
+               s.udf1,
                s.lpn_code,
                s.sku_lot2,
                s.sku_lot3,
@@ -34,6 +36,7 @@
                  left join wms_zone wz on s.zone_id = wz.zone_id
                  left join wms_location loc on loc.loc_id = s.loc_id
     </sql>
+
     <sql id="stock1">
         <where>
             <if test="query.skuIds != null and query.skuIds.size()>0">
@@ -124,12 +127,14 @@
 
         </where>
     </sql>
+
     <delete id="deleteStockByStockIdList">
         delete
         from wms_stock
         where stock_qty = pick_qty
           and TO_DAYS(NOW()) - TO_DAYS(update_time) >= 30
     </delete>
+
     <select id="selectStockQtyByLocIdList" resultType="java.util.HashMap">
         SELECT SUM(stock_qty-pick_qty) AS skuQty, MAX( TIMESTAMPDIFF(DAY, last_in_time, now()) ) AS skuStoreDay
         FROM wms_stock
@@ -184,6 +189,7 @@
         </where>
         GROUP BY s.stock_id
     </select>
+
     <select id="getPage" resultType="org.nodes.wms.dao.stock.dto.output.StockPageResponse">
         <include refid="stock"/>
         <where>
@@ -396,6 +402,7 @@
         </where>
         ORDER BY s.create_time
     </select>
+
     <select id="getStockResponseByQuery" resultType="org.nodes.wms.dao.stock.dto.output.StockPageResponse">
         <include refid="stock"/>
         <include refid="stock1"/>
@@ -425,6 +432,7 @@
             order by s.lpn_code,s.box_code
         </if>
     </select>
+
     <select id="getSerialPage" resultType="org.nodes.wms.dao.stock.dto.output.StockBySerialPageResponse">
         select ws.serial_number,
         s.sku_code,

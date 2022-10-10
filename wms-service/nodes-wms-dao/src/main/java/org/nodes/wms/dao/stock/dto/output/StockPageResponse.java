@@ -115,6 +115,18 @@ public class StockPageResponse implements Serializable {
 	@ExcelProperty({"库存信息", "箱码"})
 	private String boxCode;
 	/**
+	 * 旧箱码
+	 */
+	@ColumnWidth(15)
+	@ExcelProperty({"库存信息", "旧箱码"})
+	private String udf2;
+	/**
+	 * C箱类别
+	 */
+	@ColumnWidth(15)
+	@ExcelProperty({"库存信息", "C箱类别"})
+	private String udf1;
+	/**
 	 * 托盘号
 	 */
 	@ColumnWidth(15)

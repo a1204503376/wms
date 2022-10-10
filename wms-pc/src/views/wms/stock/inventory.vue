@@ -515,6 +515,16 @@ export default {
                         sortable: "custom"
                     },
                     {
+                        prop: "udf2",
+                        label: "旧箱码",
+                        sortable: "custom"
+                    },
+                    {
+                        prop: "udf1",
+                        label: "C箱类别",
+                        sortable: "custom"
+                    },
+                    {
                         prop: "lpnCode",
                         label: "LPN",
                         sortable: "custom"
