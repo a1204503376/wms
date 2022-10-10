@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using DataAccess.Enitiies;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System.Text.RegularExpressions;
 using DataAccess.Dto;
+using System.Reflection;
+using NPOI.SS.Formula.Functions;
+using DevExpress.ClipboardSource.SpreadsheetML;
+using System.Data;
 
 namespace Packaging.Common
 {
@@ -27,7 +32,7 @@ namespace Packaging.Common
         private static List<T> ExcelToEntityList<T>(Dictionary<string, string> cellHeader, string filePath,
             out StringBuilder errorMsg, int startIndex = 1) where T : new()
         {
-            List<T> enlist = new List<T>();
+            var enlist = new List<T>();
             errorMsg = new StringBuilder();
             try
             {
@@ -60,24 +65,24 @@ namespace Packaging.Common
             out StringBuilder errorMsg, int startIndex = 1) where T : new()
         {
             errorMsg = new StringBuilder(); // 错误信息,Excel转换到实体对象时，会有格式的错误信息
-            List<T> enlist = new List<T>(); // 转换后的集合
+            var enlist = new List<T>(); // 转换后的集合
             try
             {
-                using (FileStream fs = File.OpenRead(filePath))
+                using (var fs = File.OpenRead(filePath))
                 {
-                    HSSFWorkbook workbook = new HSSFWorkbook(fs);
-                    HSSFSheet sheet = (HSSFSheet)workbook.GetSheetAt(0); // 获取此文件第一个Sheet页
-                    for (int rowIndex = startIndex; rowIndex <= sheet.LastRowNum; rowIndex++)
+                    var workbook = new HSSFWorkbook(fs);
+                    var sheet = (HSSFSheet)workbook.GetSheetAt(0); // 获取此文件第一个Sheet页
+                    for (var rowIndex = startIndex; rowIndex <= sheet.LastRowNum; rowIndex++)
                     {
                         // 1.判断当前行是否空行，若空行就不在进行读取下一行操作，结束Excel读取操作
-                        IRow row = sheet.GetRow(rowIndex);
+                        var row = sheet.GetRow(rowIndex);
                         if (row == null)
                         {
                             break;
                         }
 
                         // 2.每一个Excel row转换为一个实体对象
-                        T en = new T();
+                        var en = new T();
                         ExcelRowToEntity<T>(cellHeader, row, rowIndex, en, ref errorMsg);
 
                         enlist.Add(en);
@@ -104,24 +109,24 @@ namespace Packaging.Common
             out StringBuilder errorMsg, int startIndex = 1) where T : new()
         {
             errorMsg = new StringBuilder(); // 错误信息,Excel转换到实体对象时，会有格式的错误信息
-            List<T> enlist = new List<T>(); // 转换后的集合
+            var enlist = new List<T>(); // 转换后的集合
             try
             {
-                using (FileStream fs = File.OpenRead(filePath))
+                using (var fs = File.OpenRead(filePath))
                 {
-                    XSSFWorkbook workbook = new XSSFWorkbook(fs);
-                    XSSFSheet sheet = (XSSFSheet)workbook.GetSheetAt(0); // 获取此文件第一个Sheet页
-                    for (int rowIndex = startIndex; rowIndex <= sheet.LastRowNum; rowIndex++)
+                    var workbook = new XSSFWorkbook(fs);
+                    var sheet = (XSSFSheet)workbook.GetSheetAt(0); // 获取此文件第一个Sheet页
+                    for (var rowIndex = startIndex; rowIndex <= sheet.LastRowNum; rowIndex++)
                     {
                         // 1.判断当前行是否空行，若空行就不在进行读取下一行操作，结束Excel读取操作
-                        IRow row = sheet.GetRow(rowIndex);
+                        var row = sheet.GetRow(rowIndex);
                         if (row == null)
                         {
                             break;
                         }
 
                         // 2.每一个Excel row转换为一个实体对象
-                        T en = new T();
+                        var en = new T();
                         ExcelRowToEntity<T>(cellHeader, row, rowIndex, en, ref errorMsg);
                         enlist.Add(en);
                     }
@@ -151,19 +156,19 @@ namespace Packaging.Common
         private static void ExcelRowToEntity<T>(Dictionary<string, string> cellHeader, IRow row, int rowIndex, T en,
             ref StringBuilder errorMsg)
         {
-            List<string> keys = cellHeader.Keys.ToList(); // 要赋值的实体对象属性名称
-            string errStr = ""; // 当前行转换时，是否有错误信息，格式为：第1行数据转换异常：XXX列；
-            for (int i = 0; i < keys.Count; i++)
+            var keys = cellHeader.Keys.ToList(); // 要赋值的实体对象属性名称
+            var errStr = ""; // 当前行转换时，是否有错误信息，格式为：第1行数据转换异常：XXX列；
+            for (var i = 0; i < keys.Count; i++)
             {
                 // 1.若属性头的名称包含'.',就表示是子类里的属性，那么就要遍历子类，eg：UserEn.TrueName
                 if (keys[i].IndexOf(".", StringComparison.Ordinal) >= 0)
                 {
                     // 1)解析子类属性
-                    string[] properotyArray =
+                    var properotyArray =
                         keys[i].Split(new string[] { "." }, StringSplitOptions.RemoveEmptyEntries);
-                    string subClassName = properotyArray[0]; // '.'前面的为子类的名称
-                    string subClassProperotyName = properotyArray[1]; // '.'后面的为子类的属性名称
-                    System.Reflection.PropertyInfo subClassInfo = en.GetType().GetProperty(subClassName); // 获取子类的类型
+                    var subClassName = properotyArray[0]; // '.'前面的为子类的名称
+                    var subClassProperotyName = properotyArray[1]; // '.'后面的为子类的属性名称
+                    var subClassInfo = en.GetType().GetProperty(subClassName); // 获取子类的类型
                     if (subClassInfo == null)
                     {
                         continue;
@@ -172,7 +177,7 @@ namespace Packaging.Common
                     // 2)获取子类的实例
                     var subClassEn = en.GetType().GetProperty(subClassName)?.GetValue(en, null);
                     // 3)根据属性名称获取子类里的属性信息
-                    System.Reflection.PropertyInfo properotyInfo =
+                    var properotyInfo =
                         subClassInfo.PropertyType.GetProperty(subClassProperotyName);
                     if (properotyInfo != null)
                     {
@@ -197,7 +202,7 @@ namespace Packaging.Common
                 else
                 {
                     // 2.给指定的属性赋值
-                    System.Reflection.PropertyInfo properotyInfo = en.GetType().GetProperty(keys[i]);
+                    var properotyInfo = en.GetType().GetProperty(keys[i]);
                     if (properotyInfo == null)
                     {
                         continue;
@@ -235,7 +240,7 @@ namespace Packaging.Common
         /// <param name="sourceCell">对象属性的值</param>
         private static Object GetExcelCellToProperty(Type distanceType, ICell sourceCell)
         {
-            object rs = distanceType.IsValueType ? Activator.CreateInstance(distanceType) : null;
+            var rs = distanceType.IsValueType ? Activator.CreateInstance(distanceType) : null;
 
             // 1.判断传递的单元格是否为空
             if (sourceCell == null || string.IsNullOrEmpty(sourceCell.ToString()))
@@ -274,7 +279,7 @@ namespace Packaging.Common
                     break;
             }
 
-            string valueDataType = distanceType.Name;
+            var valueDataType = distanceType.Name;
 
             // 在这里进行特定类型的处理
             switch (valueDataType.ToLower()) // 以防出错，全部小写
@@ -307,13 +312,250 @@ namespace Packaging.Common
 
         #endregion
 
+        #region Excel导出
 
-        public static List<SkuDetail> ImportBatchDetail(string filePath)
+        /// <summary>
+        /// 泛型列表List导出到Excel文件
+        /// </summary>
+        /// <param name="list">源List表</param>
+        /// <param name="strHeaderText">标题信息</param>
+        /// <param name="strFileName">保存路径</param>
+        /// <param name="titles">列名</param>
+        private static void ExportToFile<T>(List<T> list, string strHeaderText, string strFileName,
+            string[] titles = null)
+        {
+            //转换数据源
+            DataTable dtSource = ListToDataTable(list, titles);
+            //开始导出
+            Export(dtSource, strHeaderText, strFileName);
+        }
+
+        /// <summary>
+        /// DataTable导出到Excel文件
+        /// </summary>
+        /// <param name="dtSource">源DataTable</param>
+        /// <param name="strHeaderText">标题信息</param>
+        /// <param name="strFileName">保存路径</param>
+        private static void Export(DataTable dtSource, string strHeaderText, string strFileName)
+        {
+            using MemoryStream ms = Export(dtSource, strHeaderText);
+            using FileStream fs = new FileStream(strFileName, FileMode.Create, FileAccess.Write);
+            byte[] data = ms.ToArray();
+            fs.Write(data, 0, data.Length);
+            fs.Flush();
+        }
+
+        /// <summary>
+        /// DataTable导出到Excel的MemoryStream
+        /// </summary>
+        /// <param name="dtSource">源DataTable</param>
+        /// <param name="strHeaderText">标题信息</param>
+        private static MemoryStream Export(DataTable dtSource, string strHeaderText)
+        {
+            var workbook = new XSSFWorkbook();
+            ISheet sheet = workbook.CreateSheet(strHeaderText);
+            ICellStyle dateStyle = workbook.CreateCellStyle();
+            IDataFormat format = workbook.CreateDataFormat();
+            dateStyle.DataFormat = format.GetFormat("yyyy-mm-dd");
+
+            //取得列宽
+            int[] arrColWidth = new int[dtSource.Columns.Count];
+            foreach (DataColumn item in dtSource.Columns)
+            {
+                arrColWidth[item.Ordinal] = Encoding.GetEncoding(936).GetBytes(item.ColumnName.ToString()).Length;
+            }
+            for (int i = 0; i < dtSource.Rows.Count; i++)
+            {
+                for (int j = 0; j < dtSource.Columns.Count; j++)
+                {
+                    int intTemp = Encoding.GetEncoding(936).GetBytes(dtSource.Rows[i][j].ToString()).Length;
+                    if (intTemp > arrColWidth[j])
+                    {
+                        arrColWidth[j] = intTemp;
+                    }
+                }
+            }
+            int rowIndex = 0;
+            foreach (DataRow row in dtSource.Rows)
+            {
+                #region 新建表，填充表头，填充列头，样式
+                if (rowIndex == 65535 || rowIndex == 0)
+                {
+                    if (rowIndex != 0)
+                    {
+                        sheet = workbook.CreateSheet();
+                    }
+
+                    #region 表头及样式
+                    // {
+                    //     IRow headerRow = sheet.CreateRow(0);
+                    //     headerRow.HeightInPoints = 25;
+                    //     headerRow.CreateCell(0).SetCellValue(strHeaderText);
+                    //
+                    //     ICellStyle headStyle = workbook.CreateCellStyle();
+                    //     headStyle.Alignment = HorizontalAlignment.Center;
+                    //     IFont font = workbook.CreateFont();
+                    //     font.FontHeightInPoints = 20;
+                    //     font.IsBold = true;
+                    //     headStyle.SetFont(font);
+                    //     headerRow.GetCell(0).CellStyle = headStyle;
+                    //     //CellRangeAddress四个参数为：起始行，结束行，起始列，结束列
+                    //     sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(0, 0, 0, dtSource.Columns.Count - 1));
+                    // }
+                    #endregion
+
+                    #region 列头及样式
+                    {
+                        IRow headerRow = sheet.CreateRow(0);
+                        // ICellStyle headStyle = workbook.CreateCellStyle();
+                        // headStyle.Alignment = HorizontalAlignment.Center;
+                        // IFont font = workbook.CreateFont();
+                        // font.FontHeightInPoints = 10;
+                        // font.IsBold = true;
+                        // headStyle.SetFont(font);
+                        foreach (DataColumn column in dtSource.Columns)
+                        {
+                            headerRow.CreateCell(column.Ordinal).SetCellValue(column.ColumnName);
+                            // headerRow.GetCell(column.Ordinal).CellStyle = headStyle;
+                            //设置列宽
+                            //sheet.SetColumnWidth(column.Ordinal, (arrColWidth[column.Ordinal] + 1) * 256);
+                            sheet.SetColumnWidth(column.Ordinal, 15 * 256);
+                        }
+                    }
+                    #endregion
+
+                    rowIndex = 1;
+                }
+                #endregion
+
+                #region 填充内容
+                IRow dataRow = sheet.CreateRow(rowIndex);
+                foreach (DataColumn column in dtSource.Columns)
+                {
+                    ICell newCell = dataRow.CreateCell(column.Ordinal);
+                    string drValue = row[column].ToString();
+                    switch (column.DataType.ToString())
+                    {
+                        case "System.String"://字符串类型
+                            newCell.SetCellValue(drValue);
+                            break;
+                        case "System.DateTime"://日期类型
+                            DateTime.TryParse(drValue, out DateTime dateV);
+                            newCell.SetCellValue(dateV);
+                            newCell.CellStyle = dateStyle;//格式化显示
+                            break;
+                        case "System.Boolean"://布尔型
+                            bool.TryParse(drValue, out bool boolV);
+                            newCell.SetCellValue(boolV);
+                            break;
+                        case "System.Int16"://整型
+                        case "System.Int32":
+                        case "System.Int64":
+                        case "System.Byte":
+                            int.TryParse(drValue, out int intV);
+                            newCell.SetCellValue(intV);
+                            break;
+                        case "System.Decimal"://浮点型
+                        case "System.Double":
+                            double.TryParse(drValue, out double doubV);
+                            newCell.SetCellValue(doubV);
+                            break;
+                        case "System.DBNull"://空值处理
+                            newCell.SetCellValue("");
+                            break;
+                        default:
+                            newCell.SetCellValue("");
+                            break;
+                    }
+                }
+                #endregion
+
+                rowIndex++;
+            }
+
+            using MemoryStream ms = new MemoryStream();
+            workbook.Write(ms);
+            return ms;
+        }
+
+        /// <summary>
+        /// 泛型列表List转换为DataTable
+        /// </summary>
+        /// <typeparam name="T">泛型实体</typeparam>
+        /// <param name="list">要转换的列表</param>
+        /// <param name="titles">标题</param>
+        /// <returns></returns>
+        private static DataTable ListToDataTable<T>(List<T> list, string[] titles)
+        {
+            DataTable dt = new DataTable();
+            Type listType = typeof(T);
+            PropertyInfo[] properties = listType.GetProperties();
+            var piList = new List<PropertyInfo>();
+            foreach (var property in properties)
+            {
+                var displayName = property.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName;
+                if (string.IsNullOrWhiteSpace(displayName))
+                {
+                    continue;
+                }
+
+                dt.Columns.Add(new DataColumn(displayName, property.PropertyType));
+                piList.Add(property);
+            }
+            
+            //内容行
+            foreach (T item in list)
+            {
+                DataRow dr = dt.NewRow();
+                for (int i = 0; i < dt.Columns.Count; i++)
+                {
+                    dr[i] = piList[i].GetValue(item, null);
+                }
+                dt.Rows.Add(dr);
+            }
+            return dt;
+        }
+
+        #endregion
+
+        public static void ExportBatchDetail(IEnumerable<SkuDetailDto> skuDetailDtos, string url)
+        {
+            var skuDetailExportDtos = skuDetailDtos.Select(skuDetailDto => new SkuDetailExportDto
+                {
+                    SkuName = skuDetailDto.Sku.SkuName,
+                    SkuCode = skuDetailDto.Sku.SkuCode,
+                    SkuSpec = skuDetailDto.SkuSpec,
+                    SkuLot1 = skuDetailDto.SkuLot1,
+                    PlanQty = skuDetailDto.PlanQty,
+                    TrackingNumber = skuDetailDto.TrackingNumber
+                }).ToList();
+
+            ExportToFile(skuDetailExportDtos, "sheet1", url);
+        }
+
+        public static void ExportSerialNumber(IEnumerable<PackingSerialDetail> skuDetailDtos, string url)
+        {
+            var serialNumberExportDtos = skuDetailDtos.Select(d => new SerialNumberExportDto
+            {
+                ProductIdentificationCode = d.ProductIdentificationCode,
+                ProductSupportCode = d.ProductSupportCode,
+                FrictionBlockBatch=d.FrictionBlockBatch,
+                SteelBackBatch = d.SteelBackBatch,
+                AssembleDate = d.AssembleDate,
+                TrackingNumber = d.TrackingNumber,
+                SpringBatch = d.SpringBatch,
+                ElasticElementBatch = d.ElasticElementBatch,
+                Remark = d.Remark
+            }).ToList();
+            ExportToFile(serialNumberExportDtos, "sheet1", url);
+        }
+
+        public static List<SkuDetailDto> ImportBatchDetail(string filePath)
         {
             // 单元格抬头
             // key：实体对象属性名称，可通过反射获取值
             // value：属性对应的中文注解
-            Dictionary<string, string> cellheader = new Dictionary<string, string>
+            var cellheader = new Dictionary<string, string>
             {
                 { "SkuName", "物品名称"},
                 { "SkuCode", "物品编码" },
@@ -323,18 +565,18 @@ namespace Packaging.Common
                 { "TrackingNumber", "追踪号" }
             };
 
-            var skuDetails = ExcelToEntityList<SkuDetail>(cellheader, filePath, out var sb);
+            var skuDetails = ExcelToEntityList<SkuDetailDto>(cellheader, filePath, out var sb);
             var errorMsg = sb.ToString();
             if (!string.IsNullOrWhiteSpace(errorMsg))
             {
                 throw new Exception(errorMsg);
             }
 
-            for (int i = 0; i < skuDetails.Count; i++)
+            for (var i = 0; i < skuDetails.Count; i++)
             {
                 var en = skuDetails[i];
-                string errorMsgStr = "第" + (i + 1) + "行数据检测异常：";
-                bool isHaveNoInputValue = false; // 是否含有未输入项
+                var errorMsgStr = "第" + (i + 1) + "行数据检测异常：";
+                var isHaveNoInputValue = false; // 是否含有未输入项
                 if (string.IsNullOrEmpty(en.SkuCode))
                 {
                     errorMsgStr += "【物品编码】列不能为空！";
@@ -362,7 +604,7 @@ namespace Packaging.Common
             // 单元格抬头
             // key：实体对象属性名称，可通过反射获取值
             // value：属性对应的中文注解
-            Dictionary<string, string> cellheader = new Dictionary<string, string>
+            var cellheader = new Dictionary<string, string>
             {
                 { "ProductIdentificationCode", "产品标识代码" },
                 { "ProductSupportCode", "产品辅助代码" },
@@ -382,11 +624,11 @@ namespace Packaging.Common
                 throw new Exception(errorMsg);
             }
 
-            for (int i = 0; i < packingSerialDetails.Count; i++)
+            for (var i = 0; i < packingSerialDetails.Count; i++)
             {
                 var en = packingSerialDetails[i];
-                string errorMsgStr = "第" + (i + 1) + "行数据检测异常：";
-                bool isHaveNoInputValue = false; // 是否含有未输入项
+                var errorMsgStr = "第" + (i + 1) + "行数据检测异常：";
+                var isHaveNoInputValue = false; // 是否含有未输入项
                 if (string.IsNullOrEmpty(en.ProductIdentificationCode))
                 {
                     errorMsgStr += "【产品标识代码】列不能为空！";

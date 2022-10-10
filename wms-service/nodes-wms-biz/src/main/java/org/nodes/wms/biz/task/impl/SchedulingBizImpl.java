@@ -59,6 +59,10 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	 * AGV异常中断
 	 */
 	private final Integer AGV_TASK_STATE_EXCEPTION = 51;
+	/**
+	 * 已取消
+	 */
+	private final Integer AGV_TASK_STATE_COMPLETED = 31;
 
 	private final LocationBiz locationBiz;
 	private final ZoneBiz zoneBiz;
@@ -91,7 +95,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			LpnTypeCodeEnum requestParseBoxCode = lpnTypeBiz.parseBoxCode(request.getLpnTypeCode());
 			// 判断库位是否有库存
 			if (location.enableStock() && stockQueryBiz.isEmptyLocation(location.getLocId())
-				&&locLpnType.getCode().equals(requestParseBoxCode.getCode())) {
+				&& locLpnType.getCode().equals(requestParseBoxCode.getCode())) {
 				// 如果没有库存则冻结库位
 				locationBiz.freezeLocByTask(location.getLocId(), request.getTaskDetailId().toString());
 				// 更新任务信息
@@ -136,6 +140,8 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			onSuccess(wmsTask);
 		} else if (AGV_TASK_STATE_EXCEPTION.equals(request.getState())) {
 			onException(wmsTask, request.getMsg());
+		} else if (AGV_TASK_STATE_COMPLETED.equals(request.getState())) {
+			onCompleted(wmsTask, request.getMsg());
 		} else {
 			onOtherHandle(wmsTask, request);
 		}
@@ -236,6 +242,28 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		// 修改任务状态
 		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.ABNORMAL, msg);
 
+		log.info("agv任务异常[{}]-[{}]", wmsTask.getTaskId(), wmsTask);
+	}
+
+	private void onCompleted(WmsTask wmsTask, String msg) {
+		boolean checkTaskState = WmsTaskStateEnum.COMPLETED.equals(wmsTask.getTaskState())
+			|| WmsTaskStateEnum.AGV_COMPLETED.equals(wmsTask.getTaskState());
+		if (checkTaskState) {
+			throw new ServiceException("状态更新失败,任务已经完成");
+		}
+
+		//中间库位库存
+		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
+		//解冻中间库位库存
+		stockBiz.unfreezeAndReduceOccupy(stockList, wmsTask.getTaskId());
+
+		//如果目标库位不为空则把目标库位进行解冻
+		if (Func.isNotEmpty(wmsTask.getToLocId())){
+			locationBiz.unfreezeLocByTask(wmsTask.getTaskId().toString());
+		}
+
+		// 修改任务状态
+		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.CANCELED, msg);
 		log.info("agv任务异常[{}]-[{}]", wmsTask.getTaskId(), wmsTask);
 	}
 }

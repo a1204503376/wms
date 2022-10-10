@@ -197,6 +197,8 @@
             this.lbRangeKey6.SizeF = new System.Drawing.SizeF(68.72F, 35F);
             this.lbRangeKey6.StylePriority.UseBorders = false;
             this.lbRangeKey6.StylePriority.UseFont = false;
+            this.lbRangeKey6.StylePriority.UseTextAlignment = false;
+            this.lbRangeKey6.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // lbRangeBegin6
             // 
@@ -213,6 +215,8 @@
             this.lbRangeBegin6.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeBegin6.StylePriority.UseBorders = false;
             this.lbRangeBegin6.StylePriority.UseFont = false;
+            this.lbRangeBegin6.StylePriority.UseTextAlignment = false;
+            this.lbRangeBegin6.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // xrLabel29
             // 
@@ -242,6 +246,8 @@
             this.lbRangeEnd6.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeEnd6.StylePriority.UseBorders = false;
             this.lbRangeEnd6.StylePriority.UseFont = false;
+            this.lbRangeEnd6.StylePriority.UseTextAlignment = false;
+            this.lbRangeEnd6.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // lbRangeKey3
             // 
@@ -258,6 +264,8 @@
             this.lbRangeKey3.SizeF = new System.Drawing.SizeF(68.71698F, 35F);
             this.lbRangeKey3.StylePriority.UseBorders = false;
             this.lbRangeKey3.StylePriority.UseFont = false;
+            this.lbRangeKey3.StylePriority.UseTextAlignment = false;
+            this.lbRangeKey3.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // lbRangeBegin3
             // 
@@ -274,6 +282,8 @@
             this.lbRangeBegin3.SizeF = new System.Drawing.SizeF(92.879F, 35F);
             this.lbRangeBegin3.StylePriority.UseBorders = false;
             this.lbRangeBegin3.StylePriority.UseFont = false;
+            this.lbRangeBegin3.StylePriority.UseTextAlignment = false;
+            this.lbRangeBegin3.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // xrLabel25
             // 
@@ -303,6 +313,8 @@
             this.lbRangeEnd3.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeEnd3.StylePriority.UseBorders = false;
             this.lbRangeEnd3.StylePriority.UseFont = false;
+            this.lbRangeEnd3.StylePriority.UseTextAlignment = false;
+            this.lbRangeEnd3.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // lbRangeKey5
             // 
@@ -319,6 +331,8 @@
             this.lbRangeKey5.SizeF = new System.Drawing.SizeF(68.71698F, 35F);
             this.lbRangeKey5.StylePriority.UseBorders = false;
             this.lbRangeKey5.StylePriority.UseFont = false;
+            this.lbRangeKey5.StylePriority.UseTextAlignment = false;
+            this.lbRangeKey5.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // lbRangeBegin5
             // 
@@ -335,6 +349,8 @@
             this.lbRangeBegin5.SizeF = new System.Drawing.SizeF(92.879F, 35F);
             this.lbRangeBegin5.StylePriority.UseBorders = false;
             this.lbRangeBegin5.StylePriority.UseFont = false;
+            this.lbRangeBegin5.StylePriority.UseTextAlignment = false;
+            this.lbRangeBegin5.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // xrLabel21
             // 
@@ -363,6 +379,8 @@
             this.lbRangeEnd5.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeEnd5.StylePriority.UseBorders = false;
             this.lbRangeEnd5.StylePriority.UseFont = false;
+            this.lbRangeEnd5.StylePriority.UseTextAlignment = false;
+            this.lbRangeEnd5.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // lbRangeKey2
             // 
@@ -379,6 +397,8 @@
             this.lbRangeKey2.SizeF = new System.Drawing.SizeF(68.72F, 35F);
             this.lbRangeKey2.StylePriority.UseBorders = false;
             this.lbRangeKey2.StylePriority.UseFont = false;
+            this.lbRangeKey2.StylePriority.UseTextAlignment = false;
+            this.lbRangeKey2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // lbRangeBegin2
             // 
@@ -395,6 +415,8 @@
             this.lbRangeBegin2.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeBegin2.StylePriority.UseBorders = false;
             this.lbRangeBegin2.StylePriority.UseFont = false;
+            this.lbRangeBegin2.StylePriority.UseTextAlignment = false;
+            this.lbRangeBegin2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // xrLabel17
             // 
@@ -424,6 +446,8 @@
             this.lbRangeEnd2.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeEnd2.StylePriority.UseBorders = false;
             this.lbRangeEnd2.StylePriority.UseFont = false;
+            this.lbRangeEnd2.StylePriority.UseTextAlignment = false;
+            this.lbRangeEnd2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // lbRangeKey4
             // 
@@ -440,6 +464,8 @@
             this.lbRangeKey4.SizeF = new System.Drawing.SizeF(68.72F, 35F);
             this.lbRangeKey4.StylePriority.UseBorders = false;
             this.lbRangeKey4.StylePriority.UseFont = false;
+            this.lbRangeKey4.StylePriority.UseTextAlignment = false;
+            this.lbRangeKey4.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // lbRangeBegin4
             // 
@@ -456,6 +482,8 @@
             this.lbRangeBegin4.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeBegin4.StylePriority.UseBorders = false;
             this.lbRangeBegin4.StylePriority.UseFont = false;
+            this.lbRangeBegin4.StylePriority.UseTextAlignment = false;
+            this.lbRangeBegin4.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // xrlabel189
             // 
@@ -485,6 +513,8 @@
             this.lbRangeEnd4.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeEnd4.StylePriority.UseBorders = false;
             this.lbRangeEnd4.StylePriority.UseFont = false;
+            this.lbRangeEnd4.StylePriority.UseTextAlignment = false;
+            this.lbRangeEnd4.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // lbRangeEnd1
             // 
@@ -501,6 +531,8 @@
             this.lbRangeEnd1.SizeF = new System.Drawing.SizeF(92.88F, 35F);
             this.lbRangeEnd1.StylePriority.UseBorders = false;
             this.lbRangeEnd1.StylePriority.UseFont = false;
+            this.lbRangeEnd1.StylePriority.UseTextAlignment = false;
+            this.lbRangeEnd1.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // xrLabel12
             // 
@@ -530,6 +562,8 @@
             this.lbRangeBegin1.SizeF = new System.Drawing.SizeF(92.879F, 35F);
             this.lbRangeBegin1.StylePriority.UseBorders = false;
             this.lbRangeBegin1.StylePriority.UseFont = false;
+            this.lbRangeBegin1.StylePriority.UseTextAlignment = false;
+            this.lbRangeBegin1.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // lbRangeKey1
             // 
@@ -546,6 +580,8 @@
             this.lbRangeKey1.SizeF = new System.Drawing.SizeF(68.71698F, 35F);
             this.lbRangeKey1.StylePriority.UseBorders = false;
             this.lbRangeKey1.StylePriority.UseFont = false;
+            this.lbRangeKey1.StylePriority.UseTextAlignment = false;
+            this.lbRangeKey1.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // xrLabel9
             // 

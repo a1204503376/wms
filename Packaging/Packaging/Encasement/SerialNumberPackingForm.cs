@@ -387,6 +387,7 @@ namespace Packaging.Encasement
         private List<SerialNumberPrintDto> GetSerialNumberPrintDtos()
         {
             Sku sku = GetCurSku();
+
             if (!(gridControl1.DataSource is List<PackingSerialDetail> packingSerialDetails))
             {
                 return null;
@@ -447,15 +448,18 @@ namespace Packaging.Encasement
             var serialNumberPrintDtoFirst = serialNumberPrintDtos.First();
             // 组装给WMS的入库数据
             // 物品型号是指定的成对物品，并且使用2个序列号时，WMS保存奇数，过滤掉偶数的
-            if (SerialNumberPrintDto.IsDobuleSerialNumber(_packingSequenctNumberPairs,serialNumberPrintDtoFirst))
+            if (SerialNumberPrintDto.IsDobuleSerialNumber(_packingSequenctNumberPairs, serialNumberPrintDtoFirst)
+                && packingSerialDetails.Count >= 2
+                && packingSerialDetails.Any(d => d.ProductSupportCode % 2 != 0))
             {
-                packingSerialDetails = _packingSerialDetails.OrderBy(d => d.ProductSupportCode)
-                    .Where(d=>d.ProductSupportCode%2!=0)
+                packingSerialDetails = packingSerialDetails.OrderBy(d => d.ProductSupportCode)
+                    .Where(d => d.ProductSupportCode % 2 != 0)
                     .ToList();
 
                 // 箱标显示的数量重新赋值
-                serialNumberPrintDtos.ForEach(d=>d.Qty = packingSerialDetails.Count);
+                serialNumberPrintDtos.ForEach(d => d.Qty = packingSerialDetails.Count);
             }
+
             // WMS要求根据钢背批次和摩擦块批次进行分组管理
             var groupBy =
                 packingSerialDetails.GroupBy(d =>
@@ -477,7 +481,7 @@ namespace Packaging.Encasement
                     SkuId = sku.SkuId,
                     SkuCode = sku.SkuCode,
                     SkuName = sku.SkuName,
-                    SkuSpec = sku.SkuSpec,
+                    SkuSpec = serialNumberPrintDtoFirst.Model,
                     WspId = sku.WspId,
                     BoxCode = serialNumberPrintDtoFirst.BoxNumber,
                     ScanQty = 0,
@@ -707,10 +711,11 @@ namespace Packaging.Encasement
 
             try
             {
-                gvSerialNumber.ExportToXlsx(fileName, new XlsxExportOptions
-                {
-                    TextExportMode = TextExportMode.Value,
-                });
+                // gvSerialNumber.ExportToXlsx(fileName, new XlsxExportOptions
+                // {
+                //     TextExportMode = TextExportMode.Value,
+                // });
+                ExcelHelper.ExportSerialNumber(packingAutoIdentifications,fileName);
                 CustomMessageBox.Information("数据导出成功！");
             }
             catch (Exception ex)

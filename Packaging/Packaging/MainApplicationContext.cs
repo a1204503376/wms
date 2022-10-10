@@ -15,7 +15,7 @@ namespace Packaging
         private string _userName = string.Empty;
 
         /// <summary>
-        /// 获取主应用程序是否应该启动
+        /// 锟斤拷取锟斤拷应锟矫筹拷锟斤拷锟角凤拷应锟斤拷锟斤拷锟斤拷
         /// </summary>
         public bool ShouldRun { get; } = true;
 
@@ -72,7 +72,7 @@ namespace Packaging
 
                     if (validateUser == null)
                     {
-                        CustomMessageBox.Warning("账户名或密码错误");
+                        CustomMessageBox.Warning("鐢ㄦ埛鍚嶆垨瀵嗙爜閿欒");
                         return;
                     }
 
@@ -128,13 +128,14 @@ namespace Packaging
             }
         }
         /// <summary>
-        /// 退出时结束进程
+        /// 锟剿筹拷时锟斤拷锟斤拷锟斤拷锟斤拷
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void formMain_FormClosed(object sender, System.EventArgs e)
         {
-            this.ExitThread();
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
+            System.Environment.Exit(0);
         }
     }
 

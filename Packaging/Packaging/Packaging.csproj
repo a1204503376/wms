@@ -147,6 +147,7 @@
     <Compile Include="Common\ExceptionExtensions.cs" />
     <Compile Include="Common\Md5Helper.cs" />
     <Compile Include="Common\ModelConvertHelper.cs" />
+    <Compile Include="Common\NativeMethods.cs" />
     <Compile Include="Common\SnowflakeIds.cs" />
     <Compile Include="Common\SoundPlayerHelper.cs" />
     <Compile Include="Common\UiTags.cs" />

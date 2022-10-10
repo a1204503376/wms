@@ -387,6 +387,15 @@ public interface StockBiz {
 	List<Stock> unfreezeStockByDropId(List<Stock> stocks, Long dropId);
 
 	/**
+	 * 根据落放id解冻库存，同时会将库存的DropId清空并释放占用数量
+	 *
+	 * @param stocks
+	 * @param dropId
+	 * @return
+	 */
+	List<Stock> unfreezeAndReduceOccupy(List<Stock> stocks, Long dropId);
+
+	/**
 	 * 按序列号显示库存导出
 	 *
 	 * @param stockBySerialPageQuery 查询对象
