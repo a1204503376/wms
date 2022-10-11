@@ -43,7 +43,7 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 
 	@Override
 	public boolean importData(List<Location> locationList) {
-		return super.saveBatch(locationList);
+		return super.saveOrUpdateBatch(locationList);
 	}
 
 	@Override

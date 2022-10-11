@@ -13,6 +13,7 @@ import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.springblade.core.log.exception.ServiceException;
+import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
@@ -56,16 +57,6 @@ public class LocationFactory {
 					location.setWhId(warehouse.getWhId());
 				}
 			}
-			// 判断库位编码是否已存在
-			List<Location> locations = locationDao.getLocationByWhId(location.getWhId());
-			List<String> locCodeList = locations.stream().map(Location::getLocCode).collect(Collectors.toList());
-			if (Func.isNotEmpty(locCodeList) && locCodeList.contains(data.getLocCode())) {
-				throw new ServiceException(
-						String.format(
-								"导入失败，库房[编码：%s]中的库位[编码：%s]已存在",
-								data.getWhCode(), data.getLocCode()
-						));
-			}
 			// 根据库区编码查询库区信息
 			if (Func.isNotEmpty(data.getZoneCode())) {
 				Zone zone = zoneBiz.findByCode(data.getZoneCode());
@@ -74,6 +65,16 @@ public class LocationFactory {
 				} else {
 					location.setZoneId(zone.getZoneId());
 				}
+			}
+
+			// 判断库位编码是否已存在，存在则更新库位信息
+			List<Location> locations = locationDao.getLocationByWhId(location.getWhId());
+			List<String> locCodeList = locations.stream()
+				.map(Location::getLocCode)
+				.collect(Collectors.toList());
+			if (Func.isNotEmpty(locCodeList) && locCodeList.contains(location.getLocCode())) {
+				Location locationByLocCode = locationDao.getLocationByLocCode(location.getWhId(), location.getLocCode());
+				location.setLocId(locationByLocCode.getLocId());
 			}
 
 			//判断容器类别
