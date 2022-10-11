@@ -214,6 +214,10 @@ public class InStockBizImpl implements InStockBiz {
 		//获取目标库位
 		Location targetLocation = locationBiz.findLocationByLocCode(receiveDetailLpnPdaMultiRequest.getWhId(), receiveDetailLpnPdaMultiRequest.getLocCode());
 		//校验目标库位是否是自动区 是自动区的话目标库位必须为空
+		if (locationBiz.isAgvTemporaryLocation(targetLocation)) {
+			throw new ServiceException("多箱收货失败；不能收到入库接驳区或出库接驳区");
+		}
+		//校验目标库位是否是自动区 是自动区的话目标库位必须为空
 		stockManageBiz.canMoveToLocAuto(targetLocation);
 		List<Stock> stockAgvTaskList = new ArrayList<>();
 		// 循环调用自定义--按箱收货业务方法（此按箱收货非PDA页面上的按箱收货）
