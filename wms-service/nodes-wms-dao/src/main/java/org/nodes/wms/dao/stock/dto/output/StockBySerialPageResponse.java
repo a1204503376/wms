@@ -28,13 +28,17 @@ public class StockBySerialPageResponse implements Serializable {
 	@ExcelProperty({"库存信息", "物品编码"})
 	private String skuCode;
 	/**
+	 * 物品名称
+	 */
+	@ColumnWidth(15)
+	@ExcelProperty({"库存信息", "物品名称"})
+	private String skuName;
+	/**
 	 * 库存状态
 	 */
 	@ColumnWidth(15)
 	@ExcelProperty(value = {"库存信息", "库存状态"}, converter = EnumConverter.class)
 	private StockStatusEnum stockStatus;
-
-
 	/**
 	 * 生产批次
 	 */
