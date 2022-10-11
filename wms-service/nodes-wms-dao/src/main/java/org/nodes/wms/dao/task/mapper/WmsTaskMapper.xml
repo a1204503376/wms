@@ -49,8 +49,10 @@
                     #{item}
                 </foreach>
             </if>
-
         </where>
+        <if test="page.orders == null or page.orders.size == 0">
+            ORDER BY create_time DESC
+        </if>
     </select>
 
     <select id="getTaskByState" resultType="org.nodes.wms.dao.task.entities.WmsTask">
