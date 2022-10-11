@@ -62,9 +62,9 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	 */
 	private final Integer AGV_TASK_STATE_EXCEPTION = 51;
 	/**
-	 * 已取消
+	 * 已取消 （人工取消）
 	 */
-	private final Integer AGV_TASK_STATE_COMPLETED = 31;
+	private final Integer AGV_TASK_STATE_COMPLETED = 0;
 
 	private final LocationBiz locationBiz;
 	private final ZoneBiz zoneBiz;
