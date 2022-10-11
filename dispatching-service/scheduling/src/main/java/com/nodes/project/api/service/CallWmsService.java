@@ -28,5 +28,5 @@ public interface CallWmsService {
     /**
      * 重新获取WMS的目标库位
      */
-    WmsGlobalResponse resetStorage(JobQueue jobQueue);
+    WmsGlobalResponse newLocationOnDoubleWarehousing(JobQueue jobQueue);
 }

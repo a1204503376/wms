@@ -134,7 +134,7 @@ public class JobQueueServiceImpl extends ServiceImpl<JobQueueMapper, JobQueue>
         }
         if (flagAgvReturnSuccessful) {
             AgvGlobalResponse agvGlobalResponse = callAgvService.withdrawal(jobQueue);
-            if (AgvGlobalResponse.isException(agvGlobalResponse)) {
+            if (agvGlobalResponse.hasException()) {
                 return AjaxResult.errorParams("呼叫AGV异常：{}", agvGlobalResponse.getMsg());
             }
             AgvResponse agvResponse = agvGlobalResponse.getAgvResponse();

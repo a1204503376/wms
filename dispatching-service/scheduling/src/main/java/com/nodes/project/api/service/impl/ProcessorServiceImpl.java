@@ -139,7 +139,7 @@ public class ProcessorServiceImpl implements ProcessorService {
         // 调用WMS API 判定库位是否可用
         if (StringUtils.isBlank(jobQueue.getLocationNameTo())) {
             WmsGlobalResponse wmsGlobalResponse = callWmsService.queryAndFrozenEnableOutbound(jobQueue);
-            if (WmsGlobalResponse.hasException(wmsGlobalResponse)) {
+            if (wmsGlobalResponse.hasException()) {
                 omsLogger.debug("呼叫WMS异常：{}", wmsGlobalResponse.getMsg());
                 return ProcessResultUtils.failed();
             }
@@ -183,7 +183,7 @@ public class ProcessorServiceImpl implements ProcessorService {
         omsLogger.debug("开始呼叫AGV：{}", jobQueue);
         AgvGlobalResponse agvGlobalResponse = callAgvService.transportOrders(jobQueue);
 
-        if (AgvGlobalResponse.isException(agvGlobalResponse)) {
+        if (agvGlobalResponse.hasException()) {
             setStatusCallAgvException(jobQueue, omsLogger);
             callWmsService.syncExceptionMsgOfCallAgv(jobQueue, agvGlobalResponse.getMsg());
             omsLogger.debug("呼叫AGV异常：{}", agvGlobalResponse.getMsg());
@@ -221,7 +221,7 @@ public class ProcessorServiceImpl implements ProcessorService {
         omsLogger.debug("保存同步消息");
         String syncMsg = "同步成功";
         JobFlagSyncWmsEnum jobFlagSyncWmsEnum = JobFlagSyncWmsEnum.SYNCHRONIZATION_SUCCESSFUL;
-        if (WmsGlobalResponse.hasException(wmsGlobalResponse)) {
+        if (wmsGlobalResponse.hasException()) {
             syncMsg = wmsGlobalResponse.getMsg();
             jobFlagSyncWmsEnum = JobFlagSyncWmsEnum.SYNCHRONIZATION_FAILED;
         } else {
