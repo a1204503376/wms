@@ -107,6 +107,7 @@
     <Compile Include="Dto\BatchPrintDto.cs" />
     <Compile Include="Dto\ReportBatchDto.cs" />
     <Compile Include="Dto\ReportSerialDto.cs" />
+    <Compile Include="Dto\SerialNumberExportDto.cs" />
     <Compile Include="Dto\SerialNumberPrintDto.cs" />
     <Compile Include="Encasement\PackingSerialDal.cs" />
     <Compile Include="Encasement\PackingReportItemDal.cs" />

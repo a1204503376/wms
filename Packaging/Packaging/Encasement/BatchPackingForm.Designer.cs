@@ -513,7 +513,7 @@
             this.layoutControl3.Dock = System.Windows.Forms.DockStyle.Top;
             this.layoutControl3.Location = new System.Drawing.Point(0, 81);
             this.layoutControl3.Name = "layoutControl3";
-            this.layoutControl3.OptionsCustomizationForm.DesignTimeCustomizationFormPositionAndSize = new System.Drawing.Rectangle(900, 418, 812, 500);
+            this.layoutControl3.OptionsCustomizationForm.DesignTimeCustomizationFormPositionAndSize = new System.Drawing.Rectangle(869, 221, 812, 500);
             this.layoutControl3.Root = this.layoutControlGroup2;
             this.layoutControl3.Size = new System.Drawing.Size(1190, 54);
             this.layoutControl3.TabIndex = 2;
@@ -522,9 +522,9 @@
             // btnResetSerialNumber
             // 
             this.btnResetSerialNumber.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnResetSerialNumber.ImageOptions.Image")));
-            this.btnResetSerialNumber.Location = new System.Drawing.Point(912, 12);
+            this.btnResetSerialNumber.Location = new System.Drawing.Point(823, 12);
             this.btnResetSerialNumber.Name = "btnResetSerialNumber";
-            this.btnResetSerialNumber.Size = new System.Drawing.Size(86, 27);
+            this.btnResetSerialNumber.Size = new System.Drawing.Size(116, 27);
             this.btnResetSerialNumber.StyleController = this.layoutControl3;
             this.btnResetSerialNumber.TabIndex = 12;
             this.btnResetSerialNumber.Text = "重置明细";
@@ -555,9 +555,9 @@
             // btnSavePrint
             // 
             this.btnSavePrint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnSavePrint.ImageOptions.Image")));
-            this.btnSavePrint.Location = new System.Drawing.Point(822, 12);
+            this.btnSavePrint.Location = new System.Drawing.Point(704, 12);
             this.btnSavePrint.Name = "btnSavePrint";
-            this.btnSavePrint.Size = new System.Drawing.Size(86, 27);
+            this.btnSavePrint.Size = new System.Drawing.Size(115, 27);
             this.btnSavePrint.StyleController = this.layoutControl3;
             this.btnSavePrint.TabIndex = 4;
             this.btnSavePrint.Text = "立即打印";
@@ -566,9 +566,9 @@
             // btnResetAll
             // 
             this.btnResetAll.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnResetAll.ImageOptions.Image")));
-            this.btnResetAll.Location = new System.Drawing.Point(1002, 12);
+            this.btnResetAll.Location = new System.Drawing.Point(943, 12);
             this.btnResetAll.Name = "btnResetAll";
-            this.btnResetAll.Size = new System.Drawing.Size(86, 27);
+            this.btnResetAll.Size = new System.Drawing.Size(115, 27);
             this.btnResetAll.StyleController = this.layoutControl3;
             this.btnResetAll.TabIndex = 6;
             this.btnResetAll.Text = "重置全部";
@@ -577,9 +577,9 @@
             // btnPreviewPrint
             // 
             this.btnPreviewPrint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnPreviewPrint.ImageOptions.Image")));
-            this.btnPreviewPrint.Location = new System.Drawing.Point(1092, 12);
+            this.btnPreviewPrint.Location = new System.Drawing.Point(1062, 12);
             this.btnPreviewPrint.Name = "btnPreviewPrint";
-            this.btnPreviewPrint.Size = new System.Drawing.Size(86, 27);
+            this.btnPreviewPrint.Size = new System.Drawing.Size(116, 27);
             this.btnPreviewPrint.StyleController = this.layoutControl3;
             this.btnPreviewPrint.TabIndex = 7;
             this.btnPreviewPrint.Text = "预览打印";
@@ -616,18 +616,18 @@
             // layoutControlItem15
             // 
             this.layoutControlItem15.Control = this.btnResetAll;
-            this.layoutControlItem15.Location = new System.Drawing.Point(990, 0);
+            this.layoutControlItem15.Location = new System.Drawing.Point(931, 0);
             this.layoutControlItem15.Name = "layoutControlItem15";
-            this.layoutControlItem15.Size = new System.Drawing.Size(90, 34);
+            this.layoutControlItem15.Size = new System.Drawing.Size(119, 34);
             this.layoutControlItem15.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem15.TextVisible = false;
             // 
             // layoutControlItem13
             // 
             this.layoutControlItem13.Control = this.btnSavePrint;
-            this.layoutControlItem13.Location = new System.Drawing.Point(810, 0);
+            this.layoutControlItem13.Location = new System.Drawing.Point(692, 0);
             this.layoutControlItem13.Name = "layoutControlItem13";
-            this.layoutControlItem13.Size = new System.Drawing.Size(90, 34);
+            this.layoutControlItem13.Size = new System.Drawing.Size(119, 34);
             this.layoutControlItem13.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem13.TextVisible = false;
             // 
@@ -636,15 +636,15 @@
             this.emptySpaceItem2.AllowHotTrack = false;
             this.emptySpaceItem2.Location = new System.Drawing.Point(270, 0);
             this.emptySpaceItem2.Name = "emptySpaceItem1";
-            this.emptySpaceItem2.Size = new System.Drawing.Size(540, 34);
+            this.emptySpaceItem2.Size = new System.Drawing.Size(422, 34);
             this.emptySpaceItem2.TextSize = new System.Drawing.Size(0, 0);
             // 
             // layoutControlItem16
             // 
             this.layoutControlItem16.Control = this.btnPreviewPrint;
-            this.layoutControlItem16.Location = new System.Drawing.Point(1080, 0);
+            this.layoutControlItem16.Location = new System.Drawing.Point(1050, 0);
             this.layoutControlItem16.Name = "layoutControlItem16";
-            this.layoutControlItem16.Size = new System.Drawing.Size(90, 34);
+            this.layoutControlItem16.Size = new System.Drawing.Size(120, 34);
             this.layoutControlItem16.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem16.TextVisible = false;
             // 
@@ -678,9 +678,9 @@
             // layoutControlItem11
             // 
             this.layoutControlItem11.Control = this.btnResetSerialNumber;
-            this.layoutControlItem11.Location = new System.Drawing.Point(900, 0);
+            this.layoutControlItem11.Location = new System.Drawing.Point(811, 0);
             this.layoutControlItem11.Name = "layoutControlItem11";
-            this.layoutControlItem11.Size = new System.Drawing.Size(90, 34);
+            this.layoutControlItem11.Size = new System.Drawing.Size(120, 34);
             this.layoutControlItem11.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem11.TextVisible = false;
             // 

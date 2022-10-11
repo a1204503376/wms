@@ -120,7 +120,7 @@ public class OutStockBizImpl implements OutStockBiz {
 			// 3 移动库存到出库集货区
 			stockBiz.moveStock(stock, pickByPcStockDto.getSerailList(), pickByPcStockDto.getOutStockQty(),
 				location, StockLogTypeEnum.OUTSTOCK_BY_PC, soHeader.getSoBillId(), soHeader.getSoBillNo(),
-				soDetail.getSoLineNo());
+				soDetail.getSoLineNo(), null);
 		}
 		// 4 更新出库单明细中的状态和数量
 		soBillBiz.updateSoDetailStatus(soDetail, pickQty);
@@ -358,7 +358,7 @@ public class OutStockBizImpl implements OutStockBiz {
 
 		List<Stock> stocks = stockBiz.moveStockByBoxCodeOfOccupy(stockList.get(0).getBoxCode(), stockList.get(0).getBoxCode(),
 			stockList.get(0).getLpnCode(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_BOX_PDA,
-			soDetail.getSoBillId(), soDetail.getSoBillNo(), soDetail.getSoLineNo());
+			soDetail.getSoBillId(), soDetail.getSoBillNo(), soDetail.getSoLineNo(), null);
 		// 任务id和stockID更新拣货计划中的stockID和库位信息
 		for (SoPickPlan pickPlan : soPickPlanList) {
 			for (Stock stock : stockList) {
@@ -703,7 +703,7 @@ public class OutStockBizImpl implements OutStockBiz {
 				throw new ServiceException("撤销拣货失败，选择的记录中不允许有撤销的记录");
 			}
 			// 根据拣货记录下架库存
-			stockBiz.moveStockByCancelPick(StockLogTypeEnum.INSTOCK_BY_CANCEL_PICK, logSoPick);
+			stockBiz.moveStockByCancelPick(StockLogTypeEnum.INSTOCK_BY_CANCEL_PICK, logSoPick, null);
 			// 将该拣货记录标记为已撤销
 			logSoPickDao.setCancelPick(logSoPick.getLsopId());
 			// 生成一笔反向的拣货记录
@@ -886,7 +886,7 @@ public class OutStockBizImpl implements OutStockBiz {
 			.getLocationByZoneType(request.getWhId(), DictKVConstant.ZONE_TYPE_PICK_TO).get(0);
 		stockBiz.moveStock(stock, request.getSerailList(), request.getQty(),
 			location, StockLogTypeEnum.OUTSTOCK_BY_PC_PDA, soHeader.getSoBillId(), soHeader.getSoBillNo(),
-			soDetail.getSoLineNo());
+			soDetail.getSoLineNo(), null);
 		// 4 更新出库单明细中的状态和数量
 		soBillBiz.updateSoDetailStatus(soDetail, request.getQty());
 		// 5 更新发货单状态
@@ -927,7 +927,7 @@ public class OutStockBizImpl implements OutStockBiz {
 			.getLocationByZoneType(request.getWhId(), DictKVConstant.ZONE_TYPE_PICK_TO).get(0);
 		stockBiz.moveStock(stock, request.getSerailList(), request.getQty(),
 			location, StockLogTypeEnum.OUTSTOCK_BY_PC_PDA, soHeader.getSoBillId(), soHeader.getSoBillNo(),
-			soDetail.getSoLineNo());
+			soDetail.getSoLineNo(), null);
 		// 4 更新出库单明细中的状态和数量
 		soBillBiz.updateSoDetailStatus(soDetail, request.getQty());
 		// 5 更新发货单状态

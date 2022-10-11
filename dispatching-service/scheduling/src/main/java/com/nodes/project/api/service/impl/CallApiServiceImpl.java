@@ -3,6 +3,8 @@ package com.nodes.project.api.service.impl;
 import com.nodes.common.utils.StringUtils;
 import com.nodes.framework.config.NodesConfig;
 import com.nodes.project.api.dto.agv.AgvGlobalResponse;
+import com.nodes.project.api.dto.agv.AgvOtherGlobalResponse;
+import com.nodes.project.api.dto.agv.AgvOtherResponse;
 import com.nodes.project.api.dto.agv.AgvResponse;
 import com.nodes.project.api.dto.wms.WmsGlobalResponse;
 import com.nodes.project.api.dto.wms.WmsResponse;
@@ -60,6 +62,23 @@ public class CallApiServiceImpl implements CallApiService {
             log.error(msg, e);
             callApiDataService.saveCallApiLog(url, request, null, e);
             return AgvGlobalResponse.error(e);
+        }
+    }
+
+    @Override
+    public AgvOtherGlobalResponse postOtherAgv(String url) {
+        url = nodesConfig.getAgvUrl() + url;
+        try {
+            ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity(url, null, String.class);
+            String body = stringResponseEntity.getBody();
+            AgvOtherResponse agvResponse = JsonUtils.parseObject(body, AgvOtherResponse.class);
+            callApiDataService.saveCallApiLog(url, null, agvResponse, null);
+            return AgvOtherGlobalResponse.success(agvResponse);
+        } catch (Exception e) {
+            String msg = StringUtils.format("呼叫AGV异常，URL：{}", url);
+            log.error(msg, e);
+            callApiDataService.saveCallApiLog(url, null, null, e);
+            return AgvOtherGlobalResponse.error(e);
         }
     }
 }

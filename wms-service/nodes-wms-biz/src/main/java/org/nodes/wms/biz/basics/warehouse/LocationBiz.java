@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.basics.warehouse;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.core.udf.UdfEntity;
 import org.nodes.wms.dao.basics.location.dto.input.LocationAddOrEditRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
 import org.nodes.wms.dao.basics.location.dto.input.LocationSelectQuery;
@@ -313,5 +314,19 @@ public interface LocationBiz {
 	 * @param taskId 必填
 	 */
 	void unfreezeLocByTask(String taskId);
+
+	/**
+	 * 冻结库位
+	 *
+	 * @param locId 库位id
+	 */
+	void freezeLoc(Long locId);
+
+	/**
+	 * 天宜定制：判断C箱类别（C1:WH1-R-02-33-01,WH1-R-02-34-01 C2:WH1-R-02-28-02 WH1-R-02-28-01 WH1-R-02-27-02 WH1-R-02-27-01)
+	 * @param location 库位，必填
+	 * @return C1或C2或空白字符
+	 */
+	UdfEntity judgeBoxTypeOfC(Location location);
 
 }

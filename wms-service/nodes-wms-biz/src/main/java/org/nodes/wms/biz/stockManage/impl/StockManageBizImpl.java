@@ -168,7 +168,8 @@ public class StockManageBizImpl implements StockManageBiz {
 		}
 
 		//库存移动
-		stockBiz.moveStock(stockList.get(0), request.getSerialNumberList(), request.getQty(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_PCS_PDA, null, null, null);
+		stockBiz.moveStock(stockList.get(0), request.getSerialNumberList(), request.getQty(),
+			targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_PCS_PDA, null, null, null, null);
 		//业务日志
 		logBiz.auditLog(AuditLogType.MOVE_STOCK,
 			String.format("%s 库存[%s]由[%s]移动数量[%s]到[%s]", StockLogTypeEnum.STOCK_MOVE_BY_PCS_PDA.getDesc(),
@@ -199,7 +200,8 @@ public class StockManageBizImpl implements StockManageBiz {
 			return;
 		}
 
-		stockBiz.moveStockByLpnCode(request.getLpnCode(), request.getTargetLpnCode(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_LPN_PDA, null, null, null);
+		stockBiz.moveStockByLpnCode(request.getLpnCode(), request.getTargetLpnCode(), targetLocation,
+			StockLogTypeEnum.STOCK_MOVE_BY_LPN_PDA, null, null, null, null);
 		//业务日志
 		logBiz.auditLog(AuditLogType.MOVE_STOCK,
 			String.format("%s LPN为[%s]移动到LPN为[%s]的库位[%s]", StockLogTypeEnum.STOCK_MOVE_BY_PCS_PDA.getDesc(),
@@ -257,7 +259,7 @@ public class StockManageBizImpl implements StockManageBiz {
 			}
 
 			stockBiz.moveStockByBoxCode(boxCode, boxCode, request.getLpnCode(),
-				targetLocation, stockLogTypeEnum, null, null, null);
+				targetLocation, stockLogTypeEnum, null, null, null, null);
 			//业务日志
 			logBiz.auditLog(AuditLogType.MOVE_STOCK,
 				String.format("%s 箱码为[%s]移动到箱码为[%s]的库位[%s]", StockLogTypeEnum.STOCK_MOVE_BY_PCS_PDA.getDesc(),
@@ -394,7 +396,7 @@ public class StockManageBizImpl implements StockManageBiz {
 			Location location = locationBiz.findByLocId(move.getLocId());
 			canMoveToLoc(location);
 			stockBiz.moveStock(stock, move.getSerials(), move.getQty(), location,
-				StockLogTypeEnum.STOCK_MOVE_BY_PCS, null, null, null);
+				StockLogTypeEnum.STOCK_MOVE_BY_PCS, null, null, null, null);
 		});
 	}
 

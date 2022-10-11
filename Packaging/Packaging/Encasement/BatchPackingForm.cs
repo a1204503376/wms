@@ -9,6 +9,8 @@ using DataAccess.Dto;
 using DataAccess.Enitiies;
 using DataAccess.Enums;
 using DataAccess.Wms;
+using DevExpress.XtraGrid.Columns;
+using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraPrinting;
 using DevExpress.XtraReports.UI;
 using Packaging.Common;
@@ -21,7 +23,7 @@ namespace Packaging.Encasement
     public partial class BatchPackingForm : DevExpress.XtraEditors.XtraForm
     {
         private string _boxNumber;
-        private BindingList<SkuDetail> _skuDetails;
+        private BindingList<SkuDetailDto> _skuDetails;
         private List<Sku> _skus;
         private readonly Dictionary<string, List<string>> _skuCodeSkuSpecListDict = new Dictionary<string, List<string>>();
 
@@ -94,7 +96,7 @@ namespace Packaging.Encasement
 
         private void InitializeSkuDetails()
         {
-            _skuDetails = new BindingList<SkuDetail>()
+            _skuDetails = new BindingList<SkuDetailDto>()
             {
                 AllowEdit = true,
                 AllowNew = true,
@@ -233,6 +235,14 @@ namespace Packaging.Encasement
                 e.ErrorText = "请输入大于0的数量";
                 return;
             }
+            
+            var gridDataSource = GetGridDataSource();
+            if (gridDataSource.Count(d => d.Sku.SkuId == sku.SkuId && d.SkuLot1 == skuLot1.ToString())>1)
+            {
+                e.Valid = false;
+                e.ErrorText = "当前输入的物品批次已存在";
+                return;
+            }
 
             ResetPrintEnable();
         }
@@ -335,7 +345,7 @@ namespace Packaging.Encasement
             {
                 foreach (var batchDetail in packingBatchDetailList)
                 {
-                    _skuDetails.Add(new SkuDetail()
+                    _skuDetails.Add(new SkuDetailDto()
                     {
                         Sku = _skus.FirstOrDefault(d => d.SkuId == batchDetail.SkuId),
                         SkuCode = batchDetail.SkuCode,
@@ -389,10 +399,11 @@ namespace Packaging.Encasement
 
             try
             {
-                gridView1.ExportToXlsx(fileName, new XlsxExportOptions
-                {
-                    TextExportMode = TextExportMode.Value,
-                });
+                // gridView1.ExportToXlsx(fileName, new XlsxExportOptions
+                // {
+                //     TextExportMode = TextExportMode.Value,
+                // });
+                ExcelHelper.ExportBatchDetail(skuDetails,fileName);
                 CustomMessageBox.Information("数据导出成功！");
             }
             catch (Exception ex)
@@ -403,14 +414,14 @@ namespace Packaging.Encasement
             }
         }
 
-        private List<SkuDetail> GetGridDataSource()
+        private List<SkuDetailDto> GetGridDataSource()
         {
-            if (!(gridControl1.DataSource is BindingList<SkuDetail> gridControl1DataSource))
+            if (!(gridControl1.DataSource is BindingList<SkuDetailDto> gridControl1DataSource))
             {
                 throw new Exception("Grid绑定的数据类型错误！");
             }
 
-            return gridControl1DataSource.ToList<SkuDetail>();
+            return gridControl1DataSource.ToList<SkuDetailDto>();
         }
 
         private void btnImportDetail_Click(object sender, EventArgs e)

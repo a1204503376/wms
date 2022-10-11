@@ -8,6 +8,7 @@ import org.nodes.core.constant.DictKVConstant;
 import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
+import org.nodes.core.udf.UdfEntity;
 import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
@@ -284,6 +285,33 @@ public class LocationBizImpl implements LocationBiz {
 	@Override
 	public void unfreezeLocByTask(String taskId) {
 		locationDao.updateLocFlag(taskId, DictKVConstant.LOC_FLAG_NORMAL, true);
+	}
+
+	@Override
+	public void freezeLoc(Long locId) {
+		locationDao.updateLocFlag(locId, DictKVConstant.LOC_FLAG_FORZEN, null);
+	}
+
+	@Override
+	public UdfEntity judgeBoxTypeOfC(Location location) {
+		AssertUtil.notNull(location, "判断C箱类别失败，库位参数不能为空");
+		//（C1:WH1-R-02-33-01,WH1-R-02-34-01 C2:WH1-R-02-28-02 WH1-R-02-28-01 WH1-R-02-27-02 WH1-R-02-27-01)
+
+		if ("WH1-R-02-33-01".equals(location.getLocCode())
+			|| "WH1-R-02-34-01".equals(location.getLocCode())) {
+			UdfEntity result = new UdfEntity();
+			result.setUdf1("C1");
+			return result;
+		} else if ("WH1-R-02-28-02".equals(location.getLocCode())
+			|| "WH1-R-02-28-01".equals(location.getLocCode())
+			|| "WH1-R-02-27-02".equals(location.getLocCode())
+			|| "WH1-R-02-27-01".equals(location.getLocCode())) {
+			UdfEntity result = new UdfEntity();
+			result.setUdf1("C2");
+			return result;
+		} else {
+			return null;
+		}
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package org.nodes.wms.biz.instock;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.ExceptionUtil;
+import org.nodes.core.udf.UdfEntity;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.instock.receive.ReceiveBiz;
@@ -122,6 +123,7 @@ public class InStockBizImpl implements InStockBiz {
 		stockManageBiz.canMoveToLocAuto(targetLocation);
 		//校验目标库位箱型，必须跟输入的箱码是一致的类型
 		stockManageBiz.canMoveToBoxType(targetLocation, request.getBoxCode());
+		UdfEntity udf = locationBiz.judgeBoxTypeOfC(targetLocation);
 		List<Stock> stockList = new ArrayList<>();
 		for (ReceiveDetailLpnItemDto item : request.getReceiveDetailLpnItemDtoList()) {
 			ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(item.getReceiveDetailId());
@@ -139,7 +141,7 @@ public class InStockBizImpl implements InStockBiz {
 			// 生成清点记录
 			ReceiveLog receiveLog = receiveLogBiz.newReceiveLog(request, item, lpn, header, detail);
 			// 调用库存函数（for begin：一条执行一次）
-			stockList.add(stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_BOX, receiveLog));
+			stockList.add(stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_BOX, receiveLog, udf));
 			//有单收货更新头表和明细信息
 			if (hasReceiveHeaderId) {
 				// 更新收货单明细状态（for end：一条执行一次）
@@ -179,7 +181,7 @@ public class InStockBizImpl implements InStockBiz {
 		//校验目标库位箱型，必须跟输入的箱码是一致的类型
 		stockManageBiz.canMoveToBoxType(targetLocation, request.getBoxCode());
 		// 调用库存函数
-		Stock stock = stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PCS, receiveLog);
+		Stock stock = stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PCS, receiveLog, null);
 		List<Stock> stockList = new ArrayList<>();
 		stockList.add(stock);
 		//校验载重
@@ -213,6 +215,7 @@ public class InStockBizImpl implements InStockBiz {
 		Location targetLocation = locationBiz.findLocationByLocCode(receiveDetailLpnPdaMultiRequest.getWhId(), receiveDetailLpnPdaMultiRequest.getLocCode());
 		//校验目标库位是否是自动区 是自动区的话目标库位必须为空
 		stockManageBiz.canMoveToLocAuto(targetLocation);
+		List<Stock> stockAgvTaskList = new ArrayList<>();
 		// 循环调用自定义--按箱收货业务方法（此按箱收货非PDA页面上的按箱收货）
 		for (ReceiveDetailLpnPdaRequest item : receiveDetailLpnPdaMultiRequest.getReceiveDetailLpnPdaRequestList()) {
 			item.setLpnCode(receiveDetailLpnPdaMultiRequest.getLpnCode());
@@ -221,15 +224,19 @@ public class InStockBizImpl implements InStockBiz {
 			item.setSkuLot2(receiveDetailLpnPdaMultiRequest.getSkuLot2());
 			item.setSkuLot4(receiveDetailLpnPdaMultiRequest.getSkuLot4());
 			item.setWhId(receiveDetailLpnPdaMultiRequest.getWhId());
-			receiveByDuoBoxCode(item, StockLogTypeEnum.INSTOCK_BY_MULTI_BOX.getDesc());
+			List<Stock> stockList = receiveByDuoBoxCode(item, StockLogTypeEnum.INSTOCK_BY_MULTI_BOX.getDesc());
+			stockAgvTaskList.addAll(stockList);
 		}
-
+		stockAgvTaskList = stockAgvTaskList.stream()
+			.distinct()
+			.collect(Collectors.toList());
+		agvTask.putawayToSchedule(stockAgvTaskList);
 
 	}
 
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	@Override
-	public void receiveByDuoBoxCode(ReceiveDetailLpnPdaRequest request, String logType) {
+	public List<Stock> receiveByDuoBoxCode(ReceiveDetailLpnPdaRequest request, String logType) {
 		boolean hasReceiveHeaderId = Func.isNotEmpty(request.getReceiveHeaderId());
 		ReceiveHeader receiveHeader;
 		// 判断业务参数（无单收货除外），是否可以正常收货、超收
@@ -284,6 +291,7 @@ public class InStockBizImpl implements InStockBiz {
 		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
 		//校验目标库位箱型，必须跟输入的箱码是一致的类型
 		stockManageBiz.canMoveToBoxType(targetLocation, request.getBoxCode());
+		UdfEntity udf = locationBiz.judgeBoxTypeOfC(targetLocation);
 		List<Stock> stockList = new ArrayList<>();
 		for (ReceiveDetailLpnItemDto item : request.getReceiveDetailLpnItemDtoList()) {
 			ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(item.getReceiveDetailId());
@@ -301,7 +309,7 @@ public class InStockBizImpl implements InStockBiz {
 			// 生成清点记录
 			ReceiveLog receiveLog = receiveLogBiz.newReceiveLog(request, item, lpn, header, detail);
 			// 调用库存函数（for begin：一条执行一次）
-			stockList.add(stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_BOX, receiveLog));
+			stockList.add(stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_BOX, receiveLog, udf));
 			//有单收货更新头表和明细信息
 			if (hasReceiveHeaderId) {
 				// 更新收货单明细状态（for end：一条执行一次）
@@ -319,8 +327,7 @@ public class InStockBizImpl implements InStockBiz {
 		}
 		//校验载重
 		stockManageBiz.canMoveByIsNotOverweight(targetLocation, stockList);
-		agvTask.putawayToSchedule(stockList);
-
+		return stockList;
 	}
 
 	@Override
@@ -407,7 +414,7 @@ public class InStockBizImpl implements InStockBiz {
 			ReceiveLog receiveLog = receiveLogFactory.createReceiveLog(receiveDetailByPc, receiveHeader, receiveDetail);
 			receiveLogBiz.saveReceiveLog(receiveLog);
 			//调用库存函数
-			Stock stock = stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PC, receiveLog);
+			Stock stock = stockBiz.inStock(StockLogTypeEnum.INSTOCK_BY_PC, receiveLog, null);
 			List<Stock> stockList = new ArrayList<>();
 			stockList.add(stock);
 			//校验载重
