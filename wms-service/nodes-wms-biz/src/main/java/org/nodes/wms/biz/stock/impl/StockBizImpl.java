@@ -1019,11 +1019,11 @@ public class StockBizImpl implements StockBiz {
 		for (StockPageResponse stockPageResponse : stockPageResponseList) {
 			String stockStatus = stockPageResponse.getStockStatus().getDesc();
 			stockPageResponse.setStockStatusDesc(stockStatus);
-			// 设置库存可用量
-			stockPageResponse.setStockEnable(stockPageResponse.getStockQty()
-				.add(stockPageResponse.getPickQty().subtract(stockPageResponse.getOccupyQty())));
-			// 设置库存余额
-			stockPageResponse.setStockBalance(stockPageResponse.getStockQty().subtract(stockPageResponse.getPickQty()));
+//			// 设置库存可用量
+//			stockPageResponse.setStockEnable(stockPageResponse.getStockQty()
+//				.add(stockPageResponse.getPickQty().subtract(stockPageResponse.getOccupyQty())));
+//			// 设置库存余额
+//			stockPageResponse.setStockBalance(stockPageResponse.getStockQty().subtract(stockPageResponse.getPickQty()));
 		}
 		ExcelUtil.export(response, "库存余额", "库存余额数据表", stockPageResponseList, StockPageResponse.class);
 	}

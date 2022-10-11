@@ -39,6 +39,9 @@
 
     <sql id="stock1">
         <where>
+            s.is_deleted = 0
+            AND s.stay_stock_qty + s.stock_qty > s.pick_qty
+            AND s.zone_id not in (select zone_id from wms_zone where zone_code = 'WH1-PICKTO')
             <if test="query.skuIds != null and query.skuIds.size()>0">
                 AND s.sku_id in
                 <foreach collection="query.skuIds" item="item" open="(" close=")" separator=",">
@@ -69,7 +72,6 @@
             <if test="query.skuLot1!=null and query.skuLot1 != ''">
                 AND s.sku_lot1 LIKE concat('%',#{query.skuLot1},'%')
             </if>
-
             <if test="query.stockStatusList != null and query.stockStatusList.size() > 0">
                 AND s.stock_status in
                 <foreach collection="query.stockStatusList" item="item" open="(" close=")" separator=",">
@@ -406,7 +408,6 @@
     <select id="getStockResponseByQuery" resultType="org.nodes.wms.dao.stock.dto.output.StockPageResponse">
         <include refid="stock"/>
         <include refid="stock1"/>
-        AND s.is_deleted ='0'
         ORDER BY s.create_time
     </select>
 
@@ -417,9 +418,6 @@
             (SELECT distinct box_code from wms_stock s
             <include refid="stock1"/>
             and s.box_code !='')
-            and s.stay_stock_qty + s.stock_qty > s.pick_qty
-            AND s.is_deleted ='0'
-            AND s.zone_id not in (select zone_id from wms_zone where zone_code = 'WH1-PICKTO')
             order by s.box_code
         </if>
         <if test="query.isShowByLpn !=null and 'true'.toString() == query.isShowByLpn.toString()">
@@ -427,8 +425,6 @@
             (SELECT distinct lpn_code from wms_stock s
             <include refid="stock1"/>
             and s.lpn_code !='' and s.box_code !='')
-            and s.stay_stock_qty + s.stock_qty > s.pick_qty
-            AND s.is_deleted ='0'
             order by s.lpn_code,s.box_code
         </if>
     </select>

@@ -89,6 +89,8 @@ public class StockPageResponse implements Serializable {
 	/**
 	 * 是否有序列号(1:有序列号)
 	 */
+	@ColumnWidth(15)
+	@ExcelProperty({"库存信息", "是否有序列号"})
 	private Integer hasSerial;
 	/**
 	 * 库位编码
