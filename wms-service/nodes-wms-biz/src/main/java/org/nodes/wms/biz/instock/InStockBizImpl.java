@@ -215,6 +215,7 @@ public class InStockBizImpl implements InStockBiz {
 		Location targetLocation = locationBiz.findLocationByLocCode(receiveDetailLpnPdaMultiRequest.getWhId(), receiveDetailLpnPdaMultiRequest.getLocCode());
 		//校验目标库位是否是自动区 是自动区的话目标库位必须为空
 		stockManageBiz.canMoveToLocAuto(targetLocation);
+		List<Stock> stockAgvTaskList = new ArrayList<>();
 		// 循环调用自定义--按箱收货业务方法（此按箱收货非PDA页面上的按箱收货）
 		for (ReceiveDetailLpnPdaRequest item : receiveDetailLpnPdaMultiRequest.getReceiveDetailLpnPdaRequestList()) {
 			item.setLpnCode(receiveDetailLpnPdaMultiRequest.getLpnCode());
@@ -223,15 +224,19 @@ public class InStockBizImpl implements InStockBiz {
 			item.setSkuLot2(receiveDetailLpnPdaMultiRequest.getSkuLot2());
 			item.setSkuLot4(receiveDetailLpnPdaMultiRequest.getSkuLot4());
 			item.setWhId(receiveDetailLpnPdaMultiRequest.getWhId());
-			receiveByDuoBoxCode(item, StockLogTypeEnum.INSTOCK_BY_MULTI_BOX.getDesc());
+			List<Stock> stockList = receiveByDuoBoxCode(item, StockLogTypeEnum.INSTOCK_BY_MULTI_BOX.getDesc());
+			stockAgvTaskList.addAll(stockList);
 		}
-
+		stockAgvTaskList = stockAgvTaskList.stream()
+			.distinct()
+			.collect(Collectors.toList());
+		agvTask.putawayToSchedule(stockAgvTaskList);
 
 	}
 
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	@Override
-	public void receiveByDuoBoxCode(ReceiveDetailLpnPdaRequest request, String logType) {
+	public List<Stock> receiveByDuoBoxCode(ReceiveDetailLpnPdaRequest request, String logType) {
 		boolean hasReceiveHeaderId = Func.isNotEmpty(request.getReceiveHeaderId());
 		ReceiveHeader receiveHeader;
 		// 判断业务参数（无单收货除外），是否可以正常收货、超收
@@ -322,8 +327,7 @@ public class InStockBizImpl implements InStockBiz {
 		}
 		//校验载重
 		stockManageBiz.canMoveByIsNotOverweight(targetLocation, stockList);
-		agvTask.putawayToSchedule(stockList);
-
+		return stockList;
 	}
 
 	@Override

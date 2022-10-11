@@ -5,6 +5,7 @@ import org.nodes.wms.dao.instock.receive.dto.input.ReceiveByPcRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaMultiRequest;
 import org.nodes.wms.dao.instock.receive.dto.input.ReceiveDetailLpnPdaRequest;
 import org.nodes.wms.dao.instock.receive.dto.output.PdaByPcsReceiveResponse;
+import org.nodes.wms.dao.stock.entities.Stock;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public interface InStockBiz {
 	 * @param request 请求参数
 	 * @param logType StockLogTypeEnum的描述
 	 */
-	void receiveByDuoBoxCode(ReceiveDetailLpnPdaRequest request, String logType);
+	List<Stock> receiveByDuoBoxCode(ReceiveDetailLpnPdaRequest request, String logType);
 
 	/**
 	 * 撤销收货
