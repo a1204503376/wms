@@ -1,5 +1,6 @@
 package org.nodes.wms.biz.putaway.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.udf.UdfEntity;
@@ -15,6 +16,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.putaway.PutawayLogDao;
 import org.nodes.wms.dao.putaway.dto.input.CallAgvRequest;
 import org.nodes.wms.dao.putaway.dto.input.LpnTypeRequest;
+import org.nodes.wms.dao.putaway.dto.input.PutawayPageQuery;
 import org.nodes.wms.dao.putaway.dto.input.PutwayByBoxRequest;
 import org.nodes.wms.dao.putaway.dto.output.BoxDto;
 import org.nodes.wms.dao.putaway.dto.output.LocResponse;
@@ -23,6 +25,8 @@ import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.log.exception.ServiceException;
+import org.springblade.core.mp.support.Condition;
+import org.springblade.core.mp.support.Query;
 import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
@@ -175,5 +179,10 @@ public class PutawayBizImpl implements PutawayBiz {
 		}
 		return locResponseList;
 
+	}
+
+	@Override
+	public IPage<PutawayLog> getPutawayLogPage(Query query, PutawayPageQuery putawayPageQuery) {
+		return putawayLogDao.getPPage(Condition.getPage(query), putawayPageQuery);
 	}
 }

@@ -9,7 +9,7 @@ import org.apache.commons.lang3.BooleanUtils;
  */
 @Data
 public class AgvOtherGlobalResponse {
-    private Boolean flagException;
+    private Boolean exceptionFlag;
 
     private String msg;
 
@@ -18,18 +18,18 @@ public class AgvOtherGlobalResponse {
     public static AgvOtherGlobalResponse success(AgvOtherResponse agvResponse) {
         AgvOtherGlobalResponse agvGlobalResponse = new AgvOtherGlobalResponse();
         agvGlobalResponse.setAgvOtherResponse(agvResponse);
-        agvGlobalResponse.setFlagException(Boolean.FALSE);
+        agvGlobalResponse.setExceptionFlag(Boolean.FALSE);
         return agvGlobalResponse;
     }
 
     public static AgvOtherGlobalResponse error(Exception e) {
         AgvOtherGlobalResponse agvGlobalResponse = new AgvOtherGlobalResponse();
-        agvGlobalResponse.setFlagException(Boolean.TRUE);
+        agvGlobalResponse.setExceptionFlag(Boolean.TRUE);
         agvGlobalResponse.setMsg(ExceptionUtil.getRootErrorMessage(e));
         return agvGlobalResponse;
     }
 
-    public boolean isException() {
-        return BooleanUtils.isTrue(flagException);
+    public boolean hasException() {
+        return BooleanUtils.isTrue(exceptionFlag);
     }
 }

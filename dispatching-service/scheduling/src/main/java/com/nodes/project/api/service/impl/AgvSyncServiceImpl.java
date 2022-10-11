@@ -8,6 +8,7 @@ import com.nodes.framework.web.domain.AjaxResult;
 import com.nodes.project.api.domain.AgvSync;
 import com.nodes.project.api.domain.JobQueue;
 import com.nodes.project.api.dto.agv.AgvSyncOrderRequest;
+import com.nodes.project.api.enums.AgvTypeEnum;
 import com.nodes.project.api.enums.JobStatusEnum;
 import com.nodes.project.api.events.AlreadyStorageEvent;
 import com.nodes.project.api.mapper.AgvSyncMapper;
@@ -48,7 +49,8 @@ public class AgvSyncServiceImpl extends ServiceImpl<AgvSyncMapper, AgvSync>
         }
 
         boolean flag;
-        switch (agvSyncOrderRequest.getAgvType()) {
+        AgvTypeEnum agvType = agvSyncOrderRequest.getAgvType();
+        switch (agvType) {
             case BEGIN:
                 jobQueue.setStatus(JobStatusEnum.AGV_BEGIN);
                 break;
@@ -59,22 +61,27 @@ public class AgvSyncServiceImpl extends ServiceImpl<AgvSyncMapper, AgvSync>
                 jobQueue.setStatus(JobStatusEnum.AGV_EXCEPTION);
                 AgvSync agvSync = new AgvSync();
                 BeanUtils.copyProperties(agvSyncOrderRequest, agvSync);
-                agvSync.setAgvType(agvSyncOrderRequest.getAgvType().getDesc());
+                agvSync.setAgvType(agvType.getDesc());
                 flag = save(agvSync);
                 if (!flag) {
                     throw new ServiceException(StringUtils.format("保存AGV_SYNC失败，参数：{}", agvSync));
                 }
+                break;
+            case MANUAL_TERMINATION:
+                jobQueue.setStatus(JobStatusEnum.CANCEL);
                 break;
             case DOUBLE_WAREHOUSING:
                 AlreadyStorageEvent alreadyStorageEvent = new AlreadyStorageEvent(this, agvSyncOrderRequest);
                 applicationContext.publishEvent(alreadyStorageEvent);
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + agvSyncOrderRequest.getAgvType());
+                throw new IllegalStateException("Unexpected value: " + agvType);
         }
 
-        // 异步通知WMS
-        callWmsService.syncTaskState(jobQueue, agvSyncOrderRequest.getMsg());
+        if (agvType != AgvTypeEnum.DOUBLE_WAREHOUSING) {
+            // 异步通知WMS
+            callWmsService.syncTaskState(jobQueue, agvSyncOrderRequest.getMsg());
+        }
 
         flag = SqlHelper.retBool(jobQueueMapper.updateById(jobQueue));
         if (!flag) {
