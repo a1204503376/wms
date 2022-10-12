@@ -45,7 +45,7 @@ public class PublishJobFactory {
 			publishJob.setLocationNameFrom(task.getFromLocCode());
 			publishJob.setLocationNameTo(task.getToLocCode());
 			publishJob.setBoxCode(task.getBoxCode());
-
+			publishJob.setCBifurcate(task.getCBifurcate());
 			publishJobRequestList.add(publishJob);
 		});
 		return publishJobRequestList;
