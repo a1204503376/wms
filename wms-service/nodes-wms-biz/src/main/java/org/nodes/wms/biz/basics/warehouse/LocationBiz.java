@@ -323,10 +323,13 @@ public interface LocationBiz {
 	void freezeLoc(Long locId);
 
 	/**
-	 * 天宜定制：判断C箱类别（C1:WH1-R-02-33-01,WH1-R-02-34-01 C2:WH1-R-02-28-02 WH1-R-02-28-01 WH1-R-02-27-02 WH1-R-02-27-01)
+	 * 天宜定制：判断C箱类别
+	 * （C1:WH1-R-02-33-01,WH1-R-02-34-01
+	 *  C2:WH1-R-02-28-02 WH1-R-02-28-01 WH1-R-02-27-02 WH1-R-02-27-01)
+	 * @param boxCode  箱码，必填
 	 * @param location 库位，必填
 	 * @return C1或C2或空白字符
 	 */
-	UdfEntity judgeBoxTypeOfC(Location location);
+	UdfEntity judgeBoxTypeOfC(String boxCode, Location location);
 
 }

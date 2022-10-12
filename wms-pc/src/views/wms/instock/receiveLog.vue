@@ -54,7 +54,10 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库位" label-width="90px">
-                            <nodes-location v-model="form.params.locIdList" class="search-input">
+                            <nodes-location
+                                v-model="form.params.locIdList"
+                                :multiple="true"
+                                class="search-input">
                             </nodes-location>
                         </el-form-item>
                     </el-col>
