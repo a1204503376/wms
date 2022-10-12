@@ -413,17 +413,13 @@
     <select id="getStockResponseByBoxOrByLpn" resultType="org.nodes.wms.dao.stock.dto.output.StockPageResponse">
         <include refid="stock"/>
         <if test="query.isShowByBox !=null and 'true'.toString() == query.isShowByBox.toString()">
-            where s.box_code in
-            (SELECT distinct box_code from wms_stock s
             <include refid="stock1"/>
-            and s.box_code !='')
+            and s.box_code !=''
             order by s.box_code
         </if>
         <if test="query.isShowByLpn !=null and 'true'.toString() == query.isShowByLpn.toString()">
-            where s.lpn_code in
-            (SELECT distinct lpn_code from wms_stock s
             <include refid="stock1"/>
-            and s.lpn_code !='' and s.box_code !='')
+            and s.lpn_code !='' and s.box_code !=''
             order by s.lpn_code,s.box_code
         </if>
     </select>
