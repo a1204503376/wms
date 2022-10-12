@@ -20,8 +20,29 @@ export const group = {
         },
         {
             prop: "skuNameS",
-            label: "物品简称",
+            label: "箱标名称",
             disabled: false,  //是否置灰
+            maxlength: 100
+        },
+        {
+            prop: "udf1",
+            label: "箱型",
+            disabled: false,
+            clearable: true,
+            maxlength: 1
+        },
+        {
+            prop: "skuRemark",
+            label: "适用速度等级",
+            disabled: false,
+            clearable: true,
+            maxlength: 100
+        },
+        {
+            prop: "skuBarcodeList",
+            label: "产品标识代码",
+            disabled: false,
+            clearable: true,
             maxlength: 100
         },
         {
@@ -134,13 +155,6 @@ export const group = {
             show: ['abcName']
         },
         {
-            prop: "udf1",
-            label: "箱型",
-            disabled: false,
-            clearable: true,
-            maxlength: 100
-        },
-        {
             prop: "skuSpec",
             label: "规格型号",
             disabled: false,
@@ -194,13 +208,6 @@ export const group = {
                 label: 'dictValue'
             },
             show: ['inventoryTypeDesc']
-        },
-        {
-            prop: "skuRemark",
-            label: "说明",
-            type: "textarea",
-            span: 16,
-            maxlength: 200
         },
         {
             prop: "skuBarcodeList",
