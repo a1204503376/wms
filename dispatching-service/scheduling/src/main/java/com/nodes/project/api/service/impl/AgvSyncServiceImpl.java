@@ -13,6 +13,7 @@ import com.nodes.project.api.enums.JobStatusEnum;
 import com.nodes.project.api.events.AlreadyStorageEvent;
 import com.nodes.project.api.mapper.AgvSyncMapper;
 import com.nodes.project.api.mapper.JobQueueMapper;
+import com.nodes.project.api.service.AgvDoubleService;
 import com.nodes.project.api.service.AgvSyncService;
 import com.nodes.project.api.service.CallWmsService;
 import org.apache.commons.lang3.ObjectUtils;
@@ -35,6 +36,8 @@ public class AgvSyncServiceImpl extends ServiceImpl<AgvSyncMapper, AgvSync>
     private JobQueueMapper jobQueueMapper;
     @Resource
     private ApplicationContext applicationContext;
+    @Resource
+    private AgvDoubleService agvDoubleService;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -71,8 +74,13 @@ public class AgvSyncServiceImpl extends ServiceImpl<AgvSyncMapper, AgvSync>
                 jobQueue.setStatus(JobStatusEnum.CANCEL);
                 break;
             case DOUBLE_WAREHOUSING:
-                AlreadyStorageEvent alreadyStorageEvent = new AlreadyStorageEvent(this, agvSyncOrderRequest);
-                applicationContext.publishEvent(alreadyStorageEvent);
+                // AGV方可能重复发送
+                boolean existsJobFlag = agvDoubleService.existsJob(jobQueue.getId());
+                if (!existsJobFlag) {
+                    agvDoubleService.saveJob(agvSyncOrderRequest);
+                    AlreadyStorageEvent alreadyStorageEvent = new AlreadyStorageEvent(this, agvSyncOrderRequest);
+                    applicationContext.publishEvent(alreadyStorageEvent);
+                }
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + agvType);
