@@ -280,7 +280,7 @@ export default {
                     },
                     {
                         prop: "boxCode",
-                        label: "箱号",
+                        label: "箱码",
                         sortable: "custom"
                     },
                     {

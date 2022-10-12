@@ -52,7 +52,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="箱号" label-width="90px">
+                        <el-form-item label="箱码" label-width="90px">
                             <el-input class="search-input" v-model.trim="form.params.boxCode">
                             </el-input>
                         </el-form-item>
@@ -211,7 +211,7 @@ export default {
                     },
                     {
                         prop: 'boxCode',
-                        label: '箱号',
+                        label: '箱码',
                         sortable: "custom",
                     },
                     {

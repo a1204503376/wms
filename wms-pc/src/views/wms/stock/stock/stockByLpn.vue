@@ -45,9 +45,9 @@ import fileDownload from "js-file-download";
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="箱号" label-width="90px">
+                        <el-form-item label="箱码" label-width="90px">
                             <el-input
-                                class="search-input" placeholder="请输入箱号" v-model.trim="form.params.boxCode"
+                                class="search-input" placeholder="请输入箱码" v-model.trim="form.params.boxCode"
                                 :clearable="true">
                             </el-input>
                         </el-form-item>
