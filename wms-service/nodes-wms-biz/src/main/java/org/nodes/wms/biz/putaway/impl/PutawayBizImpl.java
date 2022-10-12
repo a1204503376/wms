@@ -173,6 +173,12 @@ public class PutawayBizImpl implements PutawayBiz {
 			locResponse.setLocCode(locCode);
 			//设置前端显示的库位编码 从第二次出现“-”的位置后的第一个位置截取到最后一位
 			locResponse.setLocCodeView(locCode.substring(9));
+			if (locCode.substring(9, 11).equals("34")
+				|| locCode.substring(9, 11).equals("33")) {
+				locResponse.setIsCBifurcate(1);
+			} else {
+				locResponse.setIsCBifurcate(2);
+			}
 			// 库位是否为空
 			locResponse.setIsEmpty(stockBiz.judgeEnableOnLocation(location));
 			locResponseList.add(locResponse);
