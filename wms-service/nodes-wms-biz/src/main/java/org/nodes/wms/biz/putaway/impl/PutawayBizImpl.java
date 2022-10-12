@@ -79,7 +79,7 @@ public class PutawayBizImpl implements PutawayBiz {
 			if (!pickLocation) {
 				throw new ServiceException("按箱上架失败，目标库位不是拣货区/人工区的库位");
 			}
-			UdfEntity udf = locationBiz.judgeBoxTypeOfC(targetLocation);
+			UdfEntity udf = locationBiz.judgeBoxTypeOfC(request.getBoxCode(), targetLocation);
 			Location sourceLocation = locationBiz.findLocationByLocCode(sourceStockList.get(0).getWhId(), sourceStockList.get(0).getLocCode());
 			stockManageBiz.canMove(sourceLocation, targetLocation, sourceStockList, request.getBoxCode(), true);
 			if (locationBiz.isAgvLocation(targetLocation)) {
@@ -125,7 +125,7 @@ public class PutawayBizImpl implements PutawayBiz {
 	public void callAgv(CallAgvRequest request) {
 		//获取目标库位信息
 		Location targetLocation = locationBiz.findByLocId(request.getLocId());
-		UdfEntity udf = locationBiz.judgeBoxTypeOfC(targetLocation);
+		UdfEntity udf = locationBiz.judgeBoxTypeOfC(request.getBoxList().get(0).getBoxCode(), targetLocation);
 		List<BoxDto> boxDtoList = request.getBoxList();
 		List<Stock> targetStockList = new ArrayList<>();
 		for (BoxDto boxDto : boxDtoList) {

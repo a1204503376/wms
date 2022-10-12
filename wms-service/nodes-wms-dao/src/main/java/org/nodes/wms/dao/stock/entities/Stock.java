@@ -1,9 +1,6 @@
 package org.nodes.wms.dao.stock.entities;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.Version;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -154,26 +151,31 @@ public class Stock extends SkuLotBaseEntity implements Serializable {
 	/**
 	 * 自定义字段1
 	 */
+	@TableField(value = "udf1")
 	private String udf1;
 
 	/**
 	 * 自定义字段2
 	 */
+	@TableField(value = "udf2")
 	private String udf2;
 
 	/**
 	 * 自定义字段3
 	 */
+	@TableField(value = "udf3")
 	private String udf3;
 
 	/**
 	 * 自定义字段4
 	 */
+	@TableField(value = "udf4")
 	private String udf4;
 
 	/**
 	 * 自定义字段5
 	 */
+	@TableField(value = "udf5")
 	private String udf5;
 
 	/**
