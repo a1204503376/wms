@@ -23,4 +23,10 @@ public class PublishJobRequest {
 	private String locationNameFrom;
 	private String locationNameTo;
 	private String boxCode;
+	/**
+	 * 用于区分C1,C2箱码的标志
+	 * 1:C1
+	 * 2:C2
+	 */
+	private Integer cBifurcate;
 }
