@@ -308,10 +308,10 @@ public class LocationBizImpl implements LocationBiz {
 		}
 
 		AssertUtil.notNull(location, "判断C箱类别失败，库位参数不能为空");
-		//（C1:WH1-R-02-33-01,WH1-R-02-34-01 C2:WH1-R-02-28-02 WH1-R-02-28-01 WH1-R-02-27-02 WH1-R-02-27-01)
+		//（C1:WH1-R-02-33-02,WH1-R-02-34-02 C2:WH1-R-02-28-02 WH1-R-02-28-01 WH1-R-02-27-02 WH1-R-02-27-01)
 
-		if ("WH1-R-02-33-01".equals(location.getLocCode())
-			|| "WH1-R-02-34-01".equals(location.getLocCode())) {
+		if ("WH1-R-02-33-02".equals(location.getLocCode())
+			|| "WH1-R-02-34-02".equals(location.getLocCode())) {
 			UdfEntity result = new UdfEntity();
 			result.setUdf1("C1");
 			return result;

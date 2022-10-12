@@ -128,7 +128,7 @@ export default {
                     },
                     {
                         prop: "skuNameS",
-                        label: "物品简称",
+                        label: "箱标名称",
                         search: true,
                         sortable: true,
                         placeholder: '支持模糊查询',
