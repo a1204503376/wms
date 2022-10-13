@@ -27,14 +27,12 @@ import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
-import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -147,15 +145,6 @@ public class PutawayBizImpl implements PutawayBiz {
 				Stock targetStock = stockBiz.moveStock(stock, serialNoList, qty, targetLocation,
 					StockLogTypeEnum.STOCK_TO_INSTOCK_RECE, null, null, null, udf);
 				targetStockList.add(targetStock);
-				// 生成上架记录
-				PutawayLog putawayLog = new PutawayLog();
-				putawayLog.setLpnCode(stock.getLpnCode());
-				putawayLog.setTargetLocCode(targetLocation.getLocCode());
-				putawayLog.setWhId(request.getWhId());
-				putawayLog.setUserName(AuthUtil.getUserName());
-				putawayLog.setUserCode(AuthUtil.getUserAccount());
-				putawayLog.setAplTime(LocalDateTime.now());
-				putawayLogDao.save(putawayLog);
 			}
 		}
 		agvTask.putawayToSchedule(targetStockList);

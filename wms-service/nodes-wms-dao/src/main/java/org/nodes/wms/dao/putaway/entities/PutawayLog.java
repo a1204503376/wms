@@ -4,13 +4,14 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import org.springblade.core.tenant.mp.TenantEntity;
+import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @TableName("putaway_log")
-public class PutawayLog extends TenantEntity {
+public class PutawayLog extends BaseSkuLotEntity {
 	/**
 	 * 主键id
 	 */
@@ -73,5 +74,83 @@ public class PutawayLog extends TenantEntity {
 	 */
 	private Integer isSuccess;
 
+	/**
+	 * 箱码
+	 */
+	private String boxCode;
 
+	/**
+	 * 物品编号
+	 */
+	private Long skuId;
+
+	/**
+	 * 物品编码
+	 */
+	private String skuCode;
+
+	/**
+	 * 物品编码
+	 */
+	private String skuName;
+
+	/**
+	 * 数量
+	 */
+	private BigDecimal qty;
+
+	/**
+	 * 包装ID
+	 */
+	private Long wspId;
+
+	/**
+	 * 层级
+	 */
+	private Integer skuLevel;
+
+	/**
+	 * 规格
+	 */
+	private String skuSpec;
+
+	/**
+	 * 换算倍率
+	 */
+	private Integer convertQty;
+
+	/**
+	 * 计量单位编码
+	 */
+	private String umCode;
+
+	/**
+	 * 计量单位名称
+	 */
+	private String umName;
+
+	/**
+	 * 基础计量单位编码
+	 */
+	private String baseUmCode;
+
+	/**
+	 * 基础计量单位名称
+	 */
+	private String baseUmName;
+
+	/**
+	 * 库房编码
+	 */
+	private String whCode;
+
+	/**
+	 * 货主ID
+	 */
+	private Long woId;
+
+	/**
+	 * 货主编码
+	 */
+	private String ownerCode;
 }
