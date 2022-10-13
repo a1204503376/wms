@@ -37,6 +37,8 @@ import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;
 import org.springblade.core.tool.utils.StringUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -155,6 +157,30 @@ public class LocationBizImpl implements LocationBiz {
 			}
 		}
 		return locationDao.removeByIdList(idList);
+	}
+
+    @Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public void freezeBatch(List<Long> locIdList) {
+		locIdList.forEach(id -> {
+			Location location = findByLocId(id);
+			if (!DictKVConstant.LOC_FLAG_NORMAL.equals(location.getLocFlag())){
+				throw ExceptionUtil.mpe("冻结失败，库位[编码：{}]的使用状态为[{}]", location.getLocCode(), location.getLocFlag());
+			}
+			freezeLoc(id);
+		});
+    }
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public void thawBatch(List<Long> locIdList) {
+		locIdList.forEach(id -> {
+			Location location = findByLocId(id);
+			if (!DictKVConstant.LOC_FLAG_FORZEN.equals(location.getLocFlag())){
+				throw ExceptionUtil.mpe("解冻失败，库位[编码：{}]的使用状态为[{}]", location.getLocCode(), location.getLocFlag());
+			}
+			thawLoc(id);
+		});
 	}
 
 	private List<String> getLocCodeOfSystemCreated(String systemCreateCode) {
@@ -294,6 +320,10 @@ public class LocationBizImpl implements LocationBiz {
 	@Override
 	public void freezeLoc(Long locId) {
 		locationDao.updateLocFlag(locId, DictKVConstant.LOC_FLAG_FORZEN, null);
+	}
+
+	public void thawLoc(Long locId) {
+		locationDao.updateLocFlag(locId, DictKVConstant.LOC_FLAG_NORMAL, null);
 	}
 
 	@Override

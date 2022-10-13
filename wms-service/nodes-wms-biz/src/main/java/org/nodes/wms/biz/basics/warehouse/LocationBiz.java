@@ -83,6 +83,20 @@ public interface LocationBiz {
 	boolean remove(List<Long> idList);
 
 	/**
+	 * 冻结
+	 *
+	 * @param locIdList 库位id
+	 */
+	void freezeBatch(List<Long> locIdList);
+
+	/**
+	 * 冻结
+	 *
+	 * @param locIdList 库位id
+	 */
+	void thawBatch(List<Long> locIdList);
+
+	/**
 	 * 查看详情
 	 *
 	 * @param locId: 库位id
