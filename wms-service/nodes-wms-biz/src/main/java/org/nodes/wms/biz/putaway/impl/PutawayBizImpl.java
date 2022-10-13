@@ -79,7 +79,7 @@ public class PutawayBizImpl implements PutawayBiz {
 			if (!pickLocation) {
 				throw new ServiceException("按箱上架失败，目标库位不是拣货区/人工区的库位");
 			}
-			UdfEntity udf = locationBiz.judgeBoxTypeOfC(targetLocation);
+			UdfEntity udf = locationBiz.judgeBoxTypeOfC(request.getBoxCode(), targetLocation);
 			Location sourceLocation = locationBiz.findLocationByLocCode(sourceStockList.get(0).getWhId(), sourceStockList.get(0).getLocCode());
 			stockManageBiz.canMove(sourceLocation, targetLocation, sourceStockList, request.getBoxCode(), true);
 			if (locationBiz.isAgvLocation(targetLocation)) {
@@ -125,7 +125,7 @@ public class PutawayBizImpl implements PutawayBiz {
 	public void callAgv(CallAgvRequest request) {
 		//获取目标库位信息
 		Location targetLocation = locationBiz.findByLocId(request.getLocId());
-		UdfEntity udf = locationBiz.judgeBoxTypeOfC(targetLocation);
+		UdfEntity udf = locationBiz.judgeBoxTypeOfC(request.getBoxList().get(0).getBoxCode(), targetLocation);
 		List<BoxDto> boxDtoList = request.getBoxList();
 		List<Stock> targetStockList = new ArrayList<>();
 		for (BoxDto boxDto : boxDtoList) {
@@ -173,6 +173,12 @@ public class PutawayBizImpl implements PutawayBiz {
 			locResponse.setLocCode(locCode);
 			//设置前端显示的库位编码 从第二次出现“-”的位置后的第一个位置截取到最后一位
 			locResponse.setLocCodeView(locCode.substring(9));
+			if (locCode.substring(9, 11).equals("34")
+				|| locCode.substring(9, 11).equals("33")) {
+				locResponse.setIsCBifurcate(1);
+			} else {
+				locResponse.setIsCBifurcate(2);
+			}
 			// 库位是否为空
 			locResponse.setIsEmpty(stockBiz.judgeEnableOnLocation(location));
 			locResponseList.add(locResponse);

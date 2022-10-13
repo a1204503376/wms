@@ -627,7 +627,10 @@ public class OutStockBizImpl implements OutStockBiz {
 			}
 			soPickPlanBiz.occupyStockAndSavePlan(soPickPlanList);
 		}
-
+		// 更新发货单状态
+		if (SoBillStateEnum.CREATE.equals(soHeader.getSoBillState())) {
+			soBillBiz.updateState(request.getSoBillId(), SoBillStateEnum.EXECUTING);
+		}
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, request.getSoBillId(),
 			soHeader.getSoBillNo(), "执行调整分配");
 	}

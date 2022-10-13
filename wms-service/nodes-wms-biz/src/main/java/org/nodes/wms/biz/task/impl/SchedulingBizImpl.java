@@ -64,7 +64,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	/**
 	 * 已取消 （人工取消）
 	 */
-	private final Integer AGV_TASK_STATE_COMPLETED = 0;
+	private final Integer AGV_TASK_STATE_CANCEL_BY_AGV = 0;
 
 	private final LocationBiz locationBiz;
 	private final ZoneBiz zoneBiz;
@@ -143,8 +143,8 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			onSuccess(wmsTask);
 		} else if (AGV_TASK_STATE_EXCEPTION.equals(request.getState())) {
 			onException(wmsTask, request.getMsg());
-		} else if (AGV_TASK_STATE_COMPLETED.equals(request.getState())) {
-			onCompleted(wmsTask, request.getMsg());
+		} else if (AGV_TASK_STATE_CANCEL_BY_AGV.equals(request.getState())) {
+			onCancelByAgv(wmsTask, request.getMsg());
 		} else {
 			onOtherHandle(wmsTask, request);
 		}
@@ -288,7 +288,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		log.info("agv任务异常[{}]-[{}]", wmsTask.getTaskId(), wmsTask);
 	}
 
-	private void onCompleted(WmsTask wmsTask, String msg) {
+	private void onCancelByAgv(WmsTask wmsTask, String msg) {
 		boolean checkTaskState = WmsTaskStateEnum.COMPLETED.equals(wmsTask.getTaskState())
 			|| WmsTaskStateEnum.AGV_COMPLETED.equals(wmsTask.getTaskState());
 		if (checkTaskState) {

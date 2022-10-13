@@ -123,7 +123,7 @@ public class InStockBizImpl implements InStockBiz {
 		stockManageBiz.canMoveToLocAuto(targetLocation);
 		//校验目标库位箱型，必须跟输入的箱码是一致的类型
 		stockManageBiz.canMoveToBoxType(targetLocation, request.getBoxCode());
-		UdfEntity udf = locationBiz.judgeBoxTypeOfC(targetLocation);
+		UdfEntity udf = locationBiz.judgeBoxTypeOfC(request.getBoxCode(), targetLocation);
 		List<Stock> stockList = new ArrayList<>();
 		for (ReceiveDetailLpnItemDto item : request.getReceiveDetailLpnItemDtoList()) {
 			ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(item.getReceiveDetailId());
@@ -295,7 +295,7 @@ public class InStockBizImpl implements InStockBiz {
 		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
 		//校验目标库位箱型，必须跟输入的箱码是一致的类型
 		stockManageBiz.canMoveToBoxType(targetLocation, request.getBoxCode());
-		UdfEntity udf = locationBiz.judgeBoxTypeOfC(targetLocation);
+		UdfEntity udf = locationBiz.judgeBoxTypeOfC(request.getBoxCode(), targetLocation);
 		List<Stock> stockList = new ArrayList<>();
 		for (ReceiveDetailLpnItemDto item : request.getReceiveDetailLpnItemDtoList()) {
 			ReceiveDetail detail = receiveBiz.getDetailByReceiveDetailId(item.getReceiveDetailId());

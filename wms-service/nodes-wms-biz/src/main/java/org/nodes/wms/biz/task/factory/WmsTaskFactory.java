@@ -159,10 +159,21 @@ public class WmsTaskFactory {
 		// 任务描述为空
 		// 任务分派时间
 		wmsTask.setAllotTime(LocalDateTime.now());
-		String boxType = stockList.get(0).getUdf1();
-		if (BOX_TYPE_C1.equals(boxType)){
+		// 区分C1C2
+		if (Func.isEmpty(stockList.get(0).getUdf1())) {
+			wmsTask.setCBifurcate(0);
+		} else if (stockList.get(0).getUdf1().equals("C1")) {
 			wmsTask.setCBifurcate(1);
-		} else if (BOX_TYPE_C2.equals(boxType)){
+		} else if (stockList.get(0).getUdf1().equals("C2")) {
+			wmsTask.setCBifurcate(2);
+		} else {
+			wmsTask.setCBifurcate(0);
+		}
+
+		String boxType = stockList.get(0).getUdf1();
+		if (BOX_TYPE_C1.equals(boxType)) {
+			wmsTask.setCBifurcate(1);
+		} else if (BOX_TYPE_C2.equals(boxType)) {
 			wmsTask.setCBifurcate(2);
 		} else {
 			wmsTask.setCBifurcate(0);

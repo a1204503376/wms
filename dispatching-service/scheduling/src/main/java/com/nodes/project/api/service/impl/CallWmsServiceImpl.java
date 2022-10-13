@@ -29,9 +29,14 @@ public class CallWmsServiceImpl implements CallWmsService {
 
     @Override
     public void syncExceptionMsgOfCallAgv(JobQueue jobQueue, String msg) {
+        syncFailedMsgToWms(jobQueue, msg);
+    }
+
+    private void syncFailedMsgToWms(JobQueue jobQueue, String msg) {
         WmsSyncTaskStateRequest wmsSyncTaskStateRequest = new WmsSyncTaskStateRequest();
         wmsSyncTaskStateRequest.setTaskHeaderId(jobQueue.getWmsTaskId());
         wmsSyncTaskStateRequest.setTaskDetailId(jobQueue.getWmsTaskDetailId());
+        wmsSyncTaskStateRequest.setState(jobQueue.getStatus());
         if (msg != null) {
             wmsSyncTaskStateRequest.setMsg(msg);
         }
@@ -44,14 +49,7 @@ public class CallWmsServiceImpl implements CallWmsService {
     @Async
     @Override
     public void syncTaskState(JobQueue jobQueue, String msg) {
-        WmsSyncTaskStateRequest wmsSyncTaskStateRequest = new WmsSyncTaskStateRequest();
-        wmsSyncTaskStateRequest.setTaskHeaderId(jobQueue.getWmsTaskId());
-        wmsSyncTaskStateRequest.setTaskDetailId(jobQueue.getWmsTaskDetailId());
-        wmsSyncTaskStateRequest.setState(jobQueue.getStatus());
-        if (msg != null) {
-            wmsSyncTaskStateRequest.setMsg(msg);
-        }
-        callApiService.postWms(url_syncTaskSate, wmsSyncTaskStateRequest);
+        syncFailedMsgToWms(jobQueue, msg);
     }
 
     @Override

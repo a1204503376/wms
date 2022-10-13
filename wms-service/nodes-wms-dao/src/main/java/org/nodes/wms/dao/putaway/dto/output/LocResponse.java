@@ -27,4 +27,11 @@ public class LocResponse {
 	 * 库位是否为空
 	 */
 	private Boolean isEmpty;
+
+	/**
+	 * C1 C2标识字段
+	 * isCBifurcate = 1 为C1库位
+	 * isCBifurcate = 2 为C2库位
+	 */
+	private Integer isCBifurcate;
 }

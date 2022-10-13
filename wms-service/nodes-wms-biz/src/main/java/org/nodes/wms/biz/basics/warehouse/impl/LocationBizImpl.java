@@ -10,6 +10,7 @@ import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.core.udf.UdfEntity;
 import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
+import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
 import org.nodes.wms.biz.basics.warehouse.modular.LocationFactory;
@@ -23,6 +24,8 @@ import org.nodes.wms.dao.basics.location.dto.output.*;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.enums.LocTypeEnum;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
+import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
+import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeEnum;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.nodes.wms.dao.putaway.dto.input.LpnTypeRequest;
 import org.nodes.wms.dao.stock.entities.Stock;
@@ -52,6 +55,7 @@ public class LocationBizImpl implements LocationBiz {
 	private final LocationDao locationDao;
 	private final LocationFactory locationFactory;
 	private final DictionaryBiz dictionaryBiz;
+	private final LpnTypeBiz lpnTypeBiz;
 
 	@Override
 	public List<LocationSelectResponse> getLocationSelectResponseTop10List(LocationSelectQuery locationSelectQuery) {
@@ -293,12 +297,21 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
-	public UdfEntity judgeBoxTypeOfC(Location location) {
-		AssertUtil.notNull(location, "判断C箱类别失败，库位参数不能为空");
-		//（C1:WH1-R-02-33-01,WH1-R-02-34-01 C2:WH1-R-02-28-02 WH1-R-02-28-01 WH1-R-02-27-02 WH1-R-02-27-01)
+	public UdfEntity judgeBoxTypeOfC(String boxCode, Location location) {
+		if (Func.isEmpty(boxCode)){
+			return null;
+		}
 
-		if ("WH1-R-02-33-01".equals(location.getLocCode())
-			|| "WH1-R-02-34-01".equals(location.getLocCode())) {
+		LpnTypeCodeEnum lpnTypeCodeEnum = lpnTypeBiz.parseBoxCode(boxCode);
+		if (!LpnTypeCodeEnum.C.equals(lpnTypeCodeEnum) || !isAgvTempOfZoneType(location.getLocId())){
+			return null;
+		}
+
+		AssertUtil.notNull(location, "判断C箱类别失败，库位参数不能为空");
+		//（C1:WH1-R-02-33-02,WH1-R-02-34-02 C2:WH1-R-02-28-02 WH1-R-02-28-01 WH1-R-02-27-02 WH1-R-02-27-01)
+
+		if ("WH1-R-02-33-02".equals(location.getLocCode())
+			|| "WH1-R-02-34-02".equals(location.getLocCode())) {
 			UdfEntity result = new UdfEntity();
 			result.setUdf1("C1");
 			return result;
@@ -310,7 +323,7 @@ public class LocationBizImpl implements LocationBiz {
 			result.setUdf1("C2");
 			return result;
 		} else {
-			return null;
+			throw ExceptionUtil.mpe("操作失败,库位：{}不能放C箱，请联系软件方进行修改", location.getLocCode());
 		}
 	}
 

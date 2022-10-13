@@ -10,45 +10,48 @@
 				<u--input v-model.trim="locCode" readonly></u--input>
 			</u-form-item>
 		</u--form>
-		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page" v-if="param.lpnType != 'C'">库位信息</h4>
-		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page" v-if="param.lpnType == 'C'">C1箱库位信息</h4>
+		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page"
+			v-if="param.lpnType != 'C'">库位信息</h4>
+		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page"
+			v-if="param.lpnType == 'C'">C1箱库位信息</h4>
 
 		<view style="margin-top: 5%;">
-			<u-row  v-if="param.lpnType != 'C'">
-				<template v-for="(item, index) in locList">
-					<u-col span="3" v-if="item.isEmpty">
-						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" @click="change(item)">
-							{{item.locCodeView}}
-						</u-button>
-					</u-col>
-					<u-col span="3" v-if="!item.isEmpty">
-						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" disabled>{{item.locCodeView}}
-						</u-button>
-					</u-col>
-				</template>
-			</u-row>
-			<u-row  v-if="param.lpnType == 'C'" >
-				<template v-for="(item, index) in locList">
-					<u-col span="3" v-if="item.isEmpty  && (item.locCodeView == '34-02' || item.locCodeView == '33-02')">
-						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" @click="change(item)">
-							{{item.locCodeView}}
-						</u-button>
-					</u-col>
-					<u-col span="3" v-if="!item.isEmpty && (item.locCodeView == '34-01' || item.locCodeView == '33-01')" >
-						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" disabled>{{item.locCodeView}}
-						</u-button>
-					</u-col>
-				</template>
-			</u-row>
-			<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page" v-if="param.lpnType == 'C'">C2箱库位信息</h4>
 			<u-row v-if="param.lpnType != 'C'">
 				<template v-for="(item, index) in locList">
-					<u-col span="3" v-if="item.isEmpty && index>3">
+					<u-col span="3" v-if="item.isEmpty && item.isCBifurcate == 1">
 						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" @click="change(item)">
 							{{item.locCodeView}}
 						</u-button>
 					</u-col>
-					<u-col span="3" v-if="!item.isEmpty && index>3">
+					<u-col span="3" v-if="!item.isEmpty && item.isCBifurcate == 1">
+						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" disabled>{{item.locCodeView}}
+						</u-button>
+					</u-col>
+				</template>
+			</u-row>
+			<u-row v-if="param.lpnType == 'C'">
+				<template v-for="(item, index) in locList">
+					<u-col span="3" v-if="item.isEmpty  && item.isCBifurcate == 1">
+						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" @click="change(item)">
+							{{item.locCodeView}}
+						</u-button>
+					</u-col>
+					<u-col span="3" v-if="!item.isEmpty  && item.isCBifurcate == 1">
+						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" disabled>{{item.locCodeView}}
+						</u-button>
+					</u-col>
+				</template>
+			</u-row>
+			<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page"
+				v-if="param.lpnType == 'C'">C2箱库位信息</h4>
+			<u-row v-if="param.lpnType != 'C'">
+				<template v-for="(item, index) in locList">
+					<u-col span="3" v-if="item.isEmpty  && item.isCBifurcate == 2">
+						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" @click="change(item)">
+							{{item.locCodeView}}
+						</u-button>
+					</u-col>
+					<u-col span="3" v-if="!item.isEmpty  && item.isCBifurcate == 2">
 						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" disabled>{{item.locCodeView}}
 						</u-button>
 					</u-col>
@@ -56,12 +59,14 @@
 			</u-row>
 			<u-row v-if="param.lpnType == 'C' ">
 				<template v-for="(item, index) in locList">
-					<u-col span="3" v-if="item.isEmpty &&  (item.locCodeView != '34-01' && item.locCodeView != '33-01')">
+					<u-col span="3"
+						v-if="item.isEmpty  && item.isCBifurcate == 2">
 						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" @click="change(item)">
 							{{item.locCodeView}}
 						</u-button>
 					</u-col>
-					<u-col span="3" v-if="!item.isEmpty && (item.locCodeView != '34-01' && item.locCodeView != '33-01')">
+					<u-col span="3"
+						v-if="!item.isEmpty  && item.isCBifurcate == 2">
 						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" disabled>
 							{{item.locCodeView}}
 						</u-button>
