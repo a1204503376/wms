@@ -129,13 +129,13 @@
                     @click="onRemove">删除
                 </el-button>
                 <el-button
-                    v-if="permissionObj.delete"
+                    v-if="permissionObj.freeze"
                     icon="el-icon-delete"
                     size="mini" type="primary"
                     @click="onFreeze">冻结
                 </el-button>
                 <el-button
-                    v-if="permissionObj.delete"
+                    v-if="permissionObj.thaw"
                     icon="el-icon-delete"
                     size="mini" type="primary"
                     @click="onThaw">解冻
@@ -385,7 +385,9 @@ export default {
                 add: this.vaildData(this.permission.location_add, false),
                 delete: this.vaildData(this.permission.location_delete, false),
                 edit: this.vaildData(this.permission.location_edit, false),
-                import: this.vaildData(this.permission.location_import, false)
+                import: this.vaildData(this.permission.location_import, false),
+                freeze: this.vaildData(this.permission.location_freeze, false),
+                thaw: this.vaildData(this.permission.location_thaw, false)
             }
         }
     },
