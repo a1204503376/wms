@@ -129,6 +129,18 @@
                     @click="onRemove">删除
                 </el-button>
                 <el-button
+                    v-if="permissionObj.delete"
+                    icon="el-icon-delete"
+                    size="mini" type="primary"
+                    @click="onFreeze">冻结
+                </el-button>
+                <el-button
+                    v-if="permissionObj.delete"
+                    icon="el-icon-delete"
+                    size="mini" type="primary"
+                    @click="onThaw">解冻
+                </el-button>
+                <el-button
                     v-if="permissionObj.import"
                     icon="el-icon-upload2" plain size="mini"
                     @click="onUpload">导入
@@ -227,12 +239,13 @@
 </template>
 
 <script>
+
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import {listMixin} from "@/mixins/list";
-import {exportFile, getPage, importFile, remove} from "@/api/wms/basics/location";
+import {exportFile, getPage, importFile, remove, freeze, thaw} from "@/api/wms/basics/location";
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js'
 import fileUpload from "@/components/nodes/fileUpload";
@@ -407,6 +420,32 @@ export default {
                 locHandlingList: [],
             }
         },
+        onFreeze() {
+            let rows = this.$refs.table.selection;
+            for (let i in rows) {
+                if (rows[i].locFlag !== "正常"){
+                    this.$message.warning(`所选择的库位使用状态必须是正常状态的，库位[${rows[i].locCode}]状态为[${rows[i].locFlag}]`);
+                    return;
+                }
+            }
+            freeze(rows.map(x => x.locId)).then(res => {
+                this.$message.success(res.data.msg);
+                this.refreshTable();
+            })
+        },
+        onThaw() {
+            let rows = this.$refs.table.selection;
+            for (let i in rows) {
+                if (rows[i].locFlag !== "冻结"){
+                    this.$message.warning(`所选择的库位使用状态必须是冻结状态的，库位[${rows[i].locCode}]状态为[${rows[i].locFlag}]`);
+                    return;
+                }
+            }
+            thaw(rows.map(x => x.locId)).then(res => {
+                this.$message.success(res.data.msg);
+                this.refreshTable();
+            })
+        },
         onRemove() {
             let rows = this.$refs.table.selection;
             if (rows.length <= 0) {
@@ -425,8 +464,7 @@ export default {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning",
-            })
-                .then(() => {
+            }).then(() => {
                     let removeObj = {
                         idList: []
                     };

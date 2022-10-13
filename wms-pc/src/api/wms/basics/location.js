@@ -35,6 +35,26 @@ export const detailByEdit = (locId) => {
     })
 }
 
+export const freeze = (data) => {
+    return request({
+        url: '/api/wms/warehouse/location/freeze',
+        method: 'post',
+        data: {
+            locIdList: data
+        }
+    })
+}
+
+export const thaw = (data) => {
+    return request({
+        url: '/api/wms/warehouse/location/thaw',
+        method: 'post',
+        data: {
+            locIdList: data
+        }
+    })
+}
+
 export const detail = (locId) => {
     return request({
         url: '/api/wms/warehouse/location/detail',
