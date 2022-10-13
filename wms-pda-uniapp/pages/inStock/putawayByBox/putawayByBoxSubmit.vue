@@ -16,9 +16,10 @@
 			</u-form-item>
 			<u-form-item label="整托上架" :required="true" class="left-text-one-line" labelWidth="100">
 				<picker style="width: 100%;height: 100%;" v-model="dataSource" :range="isAllLpnPutawayList"
-					range-key="name" value="index" @change="bindPickerChange" >
+					range-key="name" value="index" @change="bindPickerChange">
 					<view class="uni-input-input" style="width: 100%;">
-						<u--input style="margin-top: 0rpx; z-index: 99999;" v-model.trim="dataSource" disabled></u--input>
+						<u--input style="margin-top: 0rpx; z-index: 99999;" v-model.trim="dataSource" disabled>
+						</u--input>
 					</view>
 				</picker>
 			</u-form-item>
@@ -49,10 +50,10 @@
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
-					boxCode:'',
-					locCode:'',
-					qty:'',
-					isAllLpnPutaway:undefined
+					boxCode: '',
+					locCode: '',
+					qty: '',
+					isAllLpnPutaway: undefined
 				},
 				dataSource: "",
 				isAllLpnPutawayList: [{
@@ -128,6 +129,9 @@
 			submitPutawayByBox() {
 				this.params.whId = uni.getStorageSync('warehouse').whId
 				putawayByBoxs.submitPutawayByBox(this.params).then(data => {
+					this.$u.func.showToast({
+						title: '上架成功'
+					});
 					this.esc();
 				})
 			},
