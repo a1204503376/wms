@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.tianyi.skubox.dto.input.SkuBoxPageQuery;
 import org.nodes.wms.dao.tianyi.skubox.dto.output.SkuBoxPageResponse;
 import org.nodes.wms.dao.tianyi.skubox.entities.SkuBox;
@@ -13,12 +14,15 @@ import org.nodes.wms.dao.tianyi.skubox.mapper.SkuBoxMapper;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.StringUtil;
 import org.springframework.stereotype.Repository;
 
 import java.text.NumberFormat;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author caiyun
@@ -37,9 +41,15 @@ public class SkuBoxDao extends BaseServiceImpl<SkuBoxMapper, SkuBox> {
 	 * @param spec    型号
 	 * @return 两位的数字
 	 */
-	public String getBoxId(String skuName, String spec) {
+	public String getBoxId(String skuName, String spec, String lpnTypeCode) {
 		AssertUtil.notEmpty(skuName, "生成箱码失败,物品名称参数为空");
 		AssertUtil.notEmpty(spec, "生成箱码失败,物品型号参数为空");
+		if (lpnTypeCode.equals(LpnTypeCodeEnum.D.getCode())) {
+			String[] skuNameList = skuName.replace("检修", "").split(",");
+			String[] specList = spec.split(",");
+			skuName = StringUtil.join(Arrays.stream(skuNameList).sorted(String::compareTo).collect(Collectors.toList()), ",");
+			spec = StringUtil.join(Arrays.stream(specList).sorted(String::compareTo).collect(Collectors.toList()), ",");
+		}
 
 		SkuBox skuBox = getFromLocal(skuName, spec);
 		if (Func.notNull(skuBox)) {
