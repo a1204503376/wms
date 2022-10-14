@@ -43,8 +43,8 @@ public class PutawayFactory {
 		putawayLog.setBoxCode(stock.getBoxCode());
 		putawayLog.setTargetLocCode(targetLoc.getLocCode());
 		putawayLog.setWhId(targetLoc.getWhId());
-		putawayLog.setUserName(AuthUtil.getUserName());
-		putawayLog.setUserCode(AuthUtil.getUserAccount());
+		putawayLog.setUserName("AGV");
+		putawayLog.setUserCode("AGV");
 		putawayLog.setAplTime(LocalDateTime.now());
 		putawayLog.setSkuId(stock.getSkuId());
 		putawayLog.setSkuCode(stock.getSkuCode());

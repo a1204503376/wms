@@ -14,12 +14,18 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class PutawayLogDaoImpl
-	extends BaseServiceImpl<PutawayLogMapper,PutawayLog> implements PutawayLogDao {
+	extends BaseServiceImpl<PutawayLogMapper, PutawayLog> implements PutawayLogDao {
 
 	@Override
-	public IPage<PutawayLog> getPPage(IPage<PutawayLog> page, PutawayPageQuery putawayPageQuery) {
+	public IPage<PutawayLog> getPage(IPage<PutawayLog> page, PutawayPageQuery putawayPageQuery) {
 		LambdaQueryWrapper<PutawayLog> queryWrapper = Wrappers.lambdaQuery();
-        // TODO 查询条件还没写完
-		return super.baseMapper.selectPage(page,queryWrapper);
+
+			queryWrapper.like(PutawayLog::getBoxCode, putawayPageQuery.getBoxCode())
+				.like(PutawayLog::getLpnCode, putawayPageQuery.getLpnCode())
+				.like(PutawayLog::getSkuCode, putawayPageQuery.getSkuCode())
+				.like(PutawayLog::getTargetLocCode, putawayPageQuery.getTargetLocCode())
+				.like(PutawayLog::getSkuLot1, putawayPageQuery.getSkuLot1())
+				.like(PutawayLog::getSkuLot2, putawayPageQuery.getSkuLot2());
+		return super.baseMapper.selectPage(page, queryWrapper);
 	}
 }

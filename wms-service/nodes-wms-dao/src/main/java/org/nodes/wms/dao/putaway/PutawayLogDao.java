@@ -18,5 +18,5 @@ public interface PutawayLogDao extends BaseService<PutawayLog> {
 	 * @param putawayPageQuery 条件
 	 * @return
 	 */
-	IPage<PutawayLog> getPPage(IPage<PutawayLog> page, PutawayPageQuery putawayPageQuery);
+	IPage<PutawayLog> getPage(IPage<PutawayLog> page, PutawayPageQuery putawayPageQuery);
 }

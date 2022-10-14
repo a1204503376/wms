@@ -20,6 +20,7 @@ import org.nodes.wms.dao.putaway.dto.input.PutawayPageQuery;
 import org.nodes.wms.dao.putaway.dto.input.PutwayByBoxRequest;
 import org.nodes.wms.dao.putaway.dto.output.BoxDto;
 import org.nodes.wms.dao.putaway.dto.output.LocResponse;
+import org.nodes.wms.dao.putaway.dto.output.PutawayLogResponse;
 import org.nodes.wms.dao.putaway.entities.PutawayLog;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
@@ -27,6 +28,7 @@ import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -177,7 +179,11 @@ public class PutawayBizImpl implements PutawayBiz {
 	}
 
 	@Override
-	public IPage<PutawayLog> getPutawayLogPage(Query query, PutawayPageQuery putawayPageQuery) {
-		return putawayLogDao.getPPage(Condition.getPage(query), putawayPageQuery);
+	public IPage<PutawayLogResponse> getPutawayLogPage(Query query, PutawayPageQuery putawayPageQuery) {
+		IPage<PutawayLog> page = putawayLogDao.getPage(Condition.getPage(query), putawayPageQuery);
+		return page.convert(log ->
+		{
+			return BeanUtil.copy(log, PutawayLogResponse.class);
+		});
 	}
 }
