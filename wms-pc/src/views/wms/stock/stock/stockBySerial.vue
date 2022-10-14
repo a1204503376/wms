@@ -118,8 +118,7 @@
                     row-key="id"
                     size="mini"
                     style="width: 100%"
-                    @sort-change="onSortChange"
-                >
+                    @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50"></el-table-column>
                     <el-table-column fixed type="index">
                         <template slot="header"> #</template>
@@ -128,13 +127,17 @@
                         <el-table-column
                             v-if="!column.hide"
                             :key="index"
-                            show-overflow-tooltip
-                            v-bind="column"
-                            width="130"
-                        >
+                            :show-overflow-tooltip="true"
+                            v-bind="column" width="130">
+                            <!--  库存状态  -->
+                            <template v-if="column.prop === 'stockStatus'" v-slot="{row}">
+                                <el-tag
+                                    :type="(row.stockStatus === '系统冻结' || row.stockStatus === '冻结') ? 'danger' : 'success'">
+                                    {{ row.stockStatus }}
+                                </el-tag>
+                            </template>
                         </el-table-column>
                     </template>
-
                 </el-table>
             </template>
             <template v-slot:page>
