@@ -42,6 +42,7 @@
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
 			this.params = parse;
+			this.params.whId = uni.getStorageSync('warehouse').whId;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -69,7 +70,6 @@
 									'/pages/stock/stockManage/standardMove/standardMoveSerialNumber',
 									_this.params);
 							} else {
-								_this.params.whId = uni.getStorageSync('warehouse').whId;
 								stockManage.stockMove(_this.params).then(data => {
 									_this.$u.func.showToast({
 										title: '标准移动成功'
