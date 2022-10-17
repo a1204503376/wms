@@ -32,6 +32,11 @@ public class CallWmsServiceImpl implements CallWmsService {
         syncFailedMsgToWms(jobQueue, msg);
     }
 
+    @Override
+    public void syncSuccessfulMsgOfCallAgv(JobQueue jobQueue, String msg) {
+        syncFailedMsgToWms(jobQueue, msg);
+    }
+
     private void syncFailedMsgToWms(JobQueue jobQueue, String msg) {
         WmsSyncTaskStateRequest wmsSyncTaskStateRequest = new WmsSyncTaskStateRequest();
         wmsSyncTaskStateRequest.setTaskHeaderId(jobQueue.getWmsTaskId());
