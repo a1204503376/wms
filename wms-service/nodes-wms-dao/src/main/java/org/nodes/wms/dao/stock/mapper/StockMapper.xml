@@ -41,7 +41,6 @@
         <where>
             s.is_deleted = 0
             AND s.stay_stock_qty + s.stock_qty > s.pick_qty
-            AND s.zone_id not in (select zone_id from wms_zone where zone_code = 'WH1-PICKTO')
             <if test="query.skuIds != null and query.skuIds.size()>0">
                 AND s.sku_id in
                 <foreach collection="query.skuIds" item="item" open="(" close=")" separator=",">
@@ -194,7 +193,6 @@
     <select id="getPage" resultType="org.nodes.wms.dao.stock.dto.output.StockPageResponse">
         <include refid="stock"/>
         <where>
-            AND s.zone_id not in (select zone_id from wms_zone where zone_code = 'WH1-PICKTO')
             <if test="query.skuIds != null and query.skuIds.size()>0">
                 AND s.sku_id in
                 <foreach collection="query.skuIds" item="item" open="(" close=")" separator=",">
@@ -302,7 +300,6 @@
     <select id="getStockCountList" resultType="org.nodes.wms.dao.stock.dto.output.StockPageResponse">
         <include refid="stock"/>
         <where>
-            AND s.zone_id not in (select zone_id from wms_zone where zone_code = 'WH1-PICKTO')
             <if test="query.skuIds != null and query.skuIds.size()>0">
                 AND s.sku_id in
                 <foreach collection="query.skuIds" item="item" open="(" close=")" separator=",">
@@ -481,7 +478,6 @@
             </if>
             and s.stay_stock_qty + s.stock_qty > s.pick_qty
             and ws.is_deleted = 0
-            AND s.zone_id not in (select zone_id from wms_zone where zone_code = 'WH1-PICKTO')
         </where>
     </select>
 
