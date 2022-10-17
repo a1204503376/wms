@@ -185,12 +185,12 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		// 3. 更新任务中的目标库位和消息
 		wmsTask.setToLocCode(newLocation.getLocCode());
 		wmsTask.setToLocId(newLocation.getLocId());
-		wmsTask.setRemark(String.format("多重入库,目标库位由{}变为{}", oldLocCode, wmsTask.getToLocCode()));
+		wmsTask.setRemark(String.format("双重入库,目标库位由[%s]变为[%s]", oldLocCode, wmsTask.getToLocCode()));
 		wmsTaskDao.updateById(wmsTask);
 
 		// 4. 发送通知消息
 		NoticeMessageRequest message = new NoticeMessageRequest();
-		message.setLog(String.format("任务[%s]执行了多重入库,新的库位[%s],请检查原库位[%s]的状态，如没问题请在库位编辑中修改使用状态为正常",
+		message.setLog(String.format("任务[%s]执行了双重入库,新的库位[%s],请检查原库位[%s]的状态，如没问题请在库位编辑中修改使用状态为正常",
 			wmsTask.getTaskId(), wmsTask.getToLocCode(), oldLocCode));
 		logBiz.noticeMesssage(message);
 
