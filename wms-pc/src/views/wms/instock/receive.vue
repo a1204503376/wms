@@ -261,7 +261,7 @@ export default {
                         sortable: 'custom'
                     },
                     {
-                        prop: 'billStateDesc',
+                        prop: 'billState',
                         label: '单据状态',
                         sortable: 'custom',
                     },
@@ -446,7 +446,6 @@ export default {
                     })
             })
         },
-
         exportData() {
             this.loading = true;
             exportFile(this.form.params)
