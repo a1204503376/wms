@@ -49,6 +49,7 @@ public class SoPickPlanDaoImpl
 		AssertUtil.notNull(soBillId, "判断是否有分配中的计划失败，出库单ID为空");
 		return super.lambdaQuery()
 			.eq(SoPickPlan::getSoBillId, soBillId)
+			.apply("pick_plan_qty != pick_real_qty")
 			.list();
 	}
 

@@ -25,8 +25,20 @@ public class SoPickPlanFactory {
 		List<SoPickPlan> result = new ArrayList<>();
 		for (Stock item : stockOfLoc) {
 			SoDetail currentSoDetail = soDetailList.stream()
-				.filter(soDetailItem -> item.getSkuId().equals(soDetailItem.getSkuId())
-					&& BigDecimalUtil.gt(soDetailItem.getSurplusQty(), BigDecimal.ZERO))
+				.filter(soDetailItem -> {
+					if (Func.isNotEmpty(soDetailItem.getSkuLot1()) && !soDetailItem.getSkuLot1().equals(item.getSkuLot1())){
+						return false;
+					}
+					if (Func.isNotEmpty(soDetailItem.getSkuLot2()) && !soDetailItem.getSkuLot2().equals(item.getSkuLot2())){
+						return false;
+					}
+					if ((Func.isNotEmpty(soDetailItem.getSkuLot4()) && !soDetailItem.getSkuLot4().equals(item.getSkuLot4()))){
+						return false;
+					}
+
+					return item.getSkuId().equals(soDetailItem.getSkuId())
+						&& BigDecimalUtil.gt(soDetailItem.getSurplusQty(), BigDecimal.ZERO);
+				})
 				.findFirst()
 				.orElse(null);
 			SoPickPlan soPickPlan = create(soDetail.getSoBillId(), currentSoDetail, item, item.getStockEnable());

@@ -46,9 +46,7 @@ public class SkuBoxDao extends BaseServiceImpl<SkuBoxMapper, SkuBox> {
 		AssertUtil.notEmpty(spec, "生成箱码失败,物品型号参数为空");
 		if (lpnTypeCode.equals(LpnTypeCodeEnum.D.getCode())) {
 			String[] skuNameList = skuName.replace("检修", "").split(",");
-			String[] specList = spec.split(",");
 			skuName = StringUtil.join(Arrays.stream(skuNameList).sorted(String::compareTo).collect(Collectors.toList()), ",");
-			spec = StringUtil.join(Arrays.stream(specList).sorted(String::compareTo).collect(Collectors.toList()), ",");
 		}
 
 		SkuBox skuBox = getFromLocal(skuName, spec);

@@ -25,7 +25,7 @@
                             <el-row :gutter="10" justify="end" type="flex">
                                 <el-col :span="4.8">
                                     <el-button class="top_button" size="medium" type="primary" @click="onRefresh">
-                                        刷新
+                                        刷新显示整单分配情况
                                     </el-button>
                                 </el-col>
                                 <el-col :span="4.8">
