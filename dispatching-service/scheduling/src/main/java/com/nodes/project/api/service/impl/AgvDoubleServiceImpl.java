@@ -6,12 +6,14 @@ import com.nodes.project.api.domain.AgvDouble;
 import com.nodes.project.api.dto.agv.AgvSyncOrderRequest;
 import com.nodes.project.api.mapper.AgvDoubleMapper;
 import com.nodes.project.api.service.AgvDoubleService;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 /**
  *
  */
+@Service
 public class AgvDoubleServiceImpl extends ServiceImpl<AgvDoubleMapper, AgvDouble>
         implements AgvDoubleService {
 
