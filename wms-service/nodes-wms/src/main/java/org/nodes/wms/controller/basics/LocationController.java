@@ -90,6 +90,20 @@ public class LocationController {
 		return remove ? R.success("删除成功") : R.fail("删除失败");
 	}
 
+	@ApiLog("库位-冻结")
+	@PostMapping("/freeze")
+	public R<String> freeze(@Valid @RequestBody LocationFreezeThawRequest locationFreezeThawRequest){
+		locationBiz.freezeBatch(locationFreezeThawRequest.getLocIdList());
+		return R.success("冻结成功");
+	}
+
+	@ApiLog("库位-解冻")
+	@PostMapping("/thaw")
+	public R<String> thaw(@Valid @RequestBody LocationFreezeThawRequest locationFreezeThawRequest){
+		locationBiz.thawBatch(locationFreezeThawRequest.getLocIdList());
+		return R.success("解冻成功");
+	}
+
 	/**
 	 * 库位编辑：根据库位id获取库位信息
 	 */

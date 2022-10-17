@@ -473,15 +473,6 @@ public class StockManageBizImpl implements StockManageBiz {
 		if (Func.isNotEmpty(outStockShippingLocation)) {
 			throw new ServiceException("库存移动时不能移动到出库集货区");
 		}
-
-		List<Location> virtualLocationList = locationBiz.getLocationByZoneType(DictKVConstant.ZONE_TYPE_VIRTUAL);
-		Location virtualLocation = virtualLocationList.stream()
-			.filter(location -> Func.equals(location.getLocId(), targetLocation.getLocId()))
-			.findFirst()
-			.orElse(null);
-		if (Func.isNotEmpty(virtualLocation)) {
-			throw new ServiceException("库存移动时不能移动到虚拟区");
-		}
 	}
 
 	/**
@@ -526,9 +517,13 @@ public class StockManageBizImpl implements StockManageBiz {
 	 * @param targetLocation targetLocation
 	 */
 	private void canMoveToLocType(Location sourceLocation, Location targetLocation) {
-		if (!Func.equals(sourceLocation.getZoneId(), targetLocation.getZoneId()) && !locationBiz.isStageLocation(sourceLocation)) {
+		if (locationBiz.isVirtualLocation(sourceLocation) || locationBiz.isVirtualLocation(targetLocation)) {
+			return;
+		}
+		if (!Func.equals(sourceLocation.getZoneId(), targetLocation.getZoneId())) {
 			throw new ServiceException("库存移动时不能跨区移动");
 		}
+
 	}
 
 	/**

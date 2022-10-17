@@ -315,11 +315,29 @@ public class OutStockBizImpl implements OutStockBiz {
 		// 3、根据拣货计划生成拣货记录,根据任务id从拣货计划中查找
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(task.getTaskId());
 		AssertUtil.notNull(soPickPlanList, "接驳区拣货失败，根据任务查询不到对应的拣货计划");
-		SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlanList.get(0).getSoDetailId());
-		AssertUtil.notNull(soDetail, "接驳区拣货失败，根据拣货计划查询不到对应的发货单详情");
-		// 2、参数校验
-		if (BigDecimalUtil.gt(task.getTaskQty().subtract(task.getScanQty()), soDetail.getSurplusQty())) {
-			return false;
+		List<SoDetail> soDetailList = soBillBiz.getEnableSoDetailBySoHeaderId(soPickPlanList.get(0).getSoBillId());
+		AssertUtil.notNull(soDetailList, "接驳区拣货失败，根据拣货计划查询不到对应的发货单详情");
+		Boolean stockGtSoDetail = true;
+		Boolean moveAgvPickTo = false;
+		for (Stock stock : stockList) {
+			for (SoDetail soDetail : soDetailList) {
+				if (Func.isNotEmpty(soDetail.getSkuLot1()) && !soDetail.getSkuLot1().equals(stock.getSkuLot1())) {
+					continue;
+				}
+				if (Func.isNotEmpty(soDetail.getSkuLot2()) && !soDetail.getSkuLot2().equals(stock.getSkuLot2())) {
+					continue;
+				}
+				if (Func.isNotEmpty(soDetail.getSkuLot4()) && !soDetail.getSkuLot4().equals(stock.getSkuLot4())) {
+					continue;
+				}
+				if (BigDecimalUtil.gt(stock.getStockBalance(), soDetail.getSurplusQty())) {
+					stockGtSoDetail = false;
+					moveAgvPickTo = true;
+				}
+			}
+		}
+		if (moveAgvPickTo) {
+			return stockGtSoDetail;
 		}
 
 		// 5、如果超了则返回

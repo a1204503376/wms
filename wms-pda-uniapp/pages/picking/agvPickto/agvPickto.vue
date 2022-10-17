@@ -39,6 +39,51 @@
 					</u-col>
 				</template>
 			</u-row>
+			<u-row>
+				<template v-for="(item, index) in locList">
+					<u-col span="3" v-if="index>=12 && index<16">
+						<u-button style="height: 60px;font-size: 40rpx;" @click="change(item)">
+							{{item.locCodeView}}
+						</u-button>
+					</u-col>
+				</template>
+			</u-row>
+			<u-row>
+				<template v-for="(item, index) in locList">
+					<u-col span="3" v-if="index>=16 && index<20">
+						<u-button style="height: 60px;font-size: 40rpx;" @click="change(item)">
+							{{item.locCodeView}}
+						</u-button>
+					</u-col>
+				</template>
+			</u-row>
+			<u-row>
+				<template v-for="(item, index) in locList">
+					<u-col span="3" v-if="index>=20 && index<24">
+						<u-button style="height: 60px;font-size: 40rpx;" @click="change(item)">
+							{{item.locCodeView}}
+						</u-button>
+					</u-col>
+				</template>
+			</u-row>
+			<u-row>
+				<template v-for="(item, index) in locList">
+					<u-col span="3" v-if="index>=24 && index<28">
+						<u-button style="height: 60px;font-size: 40rpx;" @click="change(item)">
+							{{item.locCodeView}}
+						</u-button>
+					</u-col>
+				</template>
+			</u-row>
+			<u-row>
+				<template v-for="(item, index) in locList">
+					<u-col span="3" v-if="index>=28 && index<32">
+						<u-button style="height: 60px;font-size: 40rpx;" @click="change(item)">
+							{{item.locCodeView}}
+						</u-button>
+					</u-col>
+				</template>
+			</u-row>
 		</view>
 
 		<view class="footer">

@@ -36,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,18 +78,17 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 					.filter(soPickPlan -> detail.getSoDetailId().equals(soPickPlan.getSoDetailId()))
 					.collect(Collectors.toList());
 			}
+
 			List<SoPickPlan> pickPlan = tianyiPickStrategy.run(soHeader, detail, soDetails, pickPlanOfSoDetail);
-			if (Func.isEmpty(pickPlan) || pickPlan == null) {
-				return null;
-			}
-			List<SoPickPlan> newPickPlan = pickPlan.stream()
-				.distinct()
-				.collect(Collectors.toList());
-			result = createResultByRunPickStrategy(newPickPlan, detail, result);
-			if (Func.isNotEmpty(newPickPlan)) {
+			if (Func.isNotEmpty(pickPlan)) {
+				List<SoPickPlan> newPickPlan = pickPlan.stream()
+					.distinct()
+					.collect(Collectors.toList());
 				occupyStockAndSavePlan(newPickPlan);
 				existPickPlans.addAll(newPickPlan);
 			}
+
+			result = createResultByRunPickStrategy(pickPlan, pickPlanOfSoDetail, detail, result);
 		}
 
 		return result;
@@ -282,12 +282,21 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		return soPickPlanDao.selectSoPickPlanById(pickPlanId);
 	}
 
-	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlan, SoDetail detail, String result) {
-		if (Func.isEmpty(newPickPlan)) {
+	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlans,
+												 List<SoPickPlan> oldPickPlans,
+												 SoDetail detail, String result) {
+		List<SoPickPlan> allPickPlans = new ArrayList<>();
+		if (Func.isNotEmpty(newPickPlans)){
+			allPickPlans.addAll(newPickPlans);
+		}
+		if (Func.isNotEmpty(oldPickPlans)){
+			allPickPlans.addAll(oldPickPlans);
+		}
+		if (Func.isEmpty(allPickPlans)) {
 			return String.format("%s %s行库存不足未分配", result, detail.getSoLineNo());
 		}
 
-		BigDecimal occupy = newPickPlan.stream()
+		BigDecimal occupy = allPickPlans.stream()
 			.filter(item -> item.getSoDetailId().equals(detail.getSoDetailId()))
 			.map(SoPickPlan::getSurplusQty)
 			.reduce(BigDecimal.ZERO, BigDecimal::add);

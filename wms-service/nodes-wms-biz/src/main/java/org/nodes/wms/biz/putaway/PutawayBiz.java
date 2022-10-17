@@ -6,7 +6,7 @@ import org.nodes.wms.dao.putaway.dto.input.LpnTypeRequest;
 import org.nodes.wms.dao.putaway.dto.input.PutawayPageQuery;
 import org.nodes.wms.dao.putaway.dto.input.PutwayByBoxRequest;
 import org.nodes.wms.dao.putaway.dto.output.LocResponse;
-import org.nodes.wms.dao.putaway.entities.PutawayLog;
+import org.nodes.wms.dao.putaway.dto.output.PutawayLogResponse;
 import org.springblade.core.mp.support.Query;
 
 import java.util.List;
@@ -40,6 +40,6 @@ public interface PutawayBiz {
 	 * @param putawayPageQuery 条件
 	 * @return
 	 */
-	IPage<PutawayLog> getPutawayLogPage(Query query, PutawayPageQuery putawayPageQuery);
+	IPage<PutawayLogResponse> getPutawayLogPage(Query query, PutawayPageQuery putawayPageQuery);
 
 }

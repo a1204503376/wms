@@ -11,6 +11,7 @@ import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.putaway.PutawayStrategyActuator;
+import org.nodes.wms.biz.putaway.modular.PutawayFactory;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.SchedulingBiz;
@@ -20,6 +21,8 @@ import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.log.dto.input.NoticeMessageRequest;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
+import org.nodes.wms.dao.putaway.PutawayLogDao;
+import org.nodes.wms.dao.putaway.entities.PutawayLog;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.nodes.wms.dao.task.WmsTaskDao;
@@ -75,6 +78,8 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	private final SoPickPlanBiz soPickPlanBiz;
 	private final LpnTypeBiz lpnTypeBiz;
 	private final PutawayStrategyActuator putawayStrategyActuator;
+	private final PutawayFactory putawayFactory;
+	private final PutawayLogDao putawayLogDao;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -268,6 +273,10 @@ public class SchedulingBizImpl implements SchedulingBiz {
 				for (SoPickPlan soPickPlan : soPickPlanList) {
 					soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), targetStock.getStockId(), location, zone, null, null);
 				}
+			} else if (WmsTaskTypeEnum.AGV_PUTAWAY.equals(wmsTask.getTaskTypeCd())) {
+				// 生成上架记录
+				PutawayLog putawayLog = putawayFactory.create(stock, targetLoc);
+				putawayLogDao.save(putawayLog);
 			}
 		}
 

@@ -149,7 +149,7 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 
 	@Override
 	public LpnTypeCodeEnum tryParseBoxCode(String boxCode) {
-		if (Func.isEmpty(boxCode)){
+		if (Func.isEmpty(boxCode)) {
 			return LpnTypeCodeEnum.UNKNOWN;
 		}
 
@@ -171,8 +171,8 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 		LpnType lpnType = lpnTypeDao.getLpnTypeByCode(lpnTypeCode);
 		AssertUtil.notEmpty(lpnType.getLpnNoRule(), "容器编码生成失败，没有配置编码生成规则");
 		String prefixNo = lpnTypeCode;
-		if (Func.isNotEmpty(skuName)){
-			prefixNo = prefixNo + skuBoxDao.getBoxId(skuName, spec);
+		if (Func.isNotEmpty(skuName)) {
+			prefixNo = prefixNo + skuBoxDao.getBoxId(skuName, spec, lpnTypeCode);
 		}
 		return codeGenerator.generateCode(wmsAppConfig.getProjectName(),
 			"LPN", prefixNo, lpnType.getLpnNoRule());

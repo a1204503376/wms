@@ -1,21 +1,24 @@
-package org.nodes.wms.dao.putaway.entities;
+package org.nodes.wms.dao.putaway.dto.output;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import org.nodes.wms.dao.common.skuLot.BaseSkuLotEntity;
+import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * 上级记录查询响应对象
+ *
+ * @author Nodesc
+ */
 @Data
-@TableName("putaway_log")
-public class PutawayLog extends BaseSkuLotEntity {
+public class PutawayLogResponse extends BaseSkuLot implements Serializable {
+	private static final long serialVersionUID = 5159886679981287066L;
+
 	/**
 	 * 主键id
 	 */
-	@TableId(type = IdType.ASSIGN_ID)
 	private Long aplId;
 	/**
 	 * 容器编码

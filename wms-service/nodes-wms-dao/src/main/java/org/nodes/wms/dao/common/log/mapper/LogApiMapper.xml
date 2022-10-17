@@ -14,7 +14,7 @@
         `data`,
         create_by,
         create_time
-        FROM blade_log_Api
+        FROM blade_log_api
         <where>
             <if test="param.title != null and param.title != ''">
                 AND title LIKE concat('%',#{param.title},'%')

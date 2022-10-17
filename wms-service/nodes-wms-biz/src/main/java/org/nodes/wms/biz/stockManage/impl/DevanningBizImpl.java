@@ -160,6 +160,7 @@ public class DevanningBizImpl implements DevanningBiz {
 				.map(DevanningStockResponse::getSplitQty)
 				.reduce(BigDecimal.ZERO, BigDecimal::add);
 			AssertUtil.notNull(request.getStockList(), "根据物品拆箱时,未选择物品");
+			WmsTask task = new WmsTask();
 			// 如果序列号不为空执行 按库存拆箱
 			for (DevanningStockResponse stockDeva : request.getStockList()) {
 				// 根据每一个库位id获取库位
@@ -174,12 +175,17 @@ public class DevanningBizImpl implements DevanningBiz {
 						stockBiz.moveStock(stock, null, stockDeva.getSplitQty(), request.getBoxCode(), location.getLocCode(),
 							location, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null, udfEntity);
 					} else {
+						task = wmsTaskBiz.findPickTaskByBoxCode(oldBoxCode, null, null);
 						//有任务的拆箱
 						taskDevanning(oldBoxCode, stock, location, sumSplitQty, request, stockDeva.getSplitQty(), null);
 					}
 
 				}
 			}
+			if (Func.isNotEmpty(task)){
+				wmsTaskBiz.updateWmsTaskByPartParam(task.getTaskId(), WmsTaskProcTypeEnum.BY_BOX, location, request.getBoxCode());
+			}
+
 		}
 
 	}
@@ -222,19 +228,19 @@ public class DevanningBizImpl implements DevanningBiz {
 
 		moveStock.setOccupyQty(moveStock.getStockBalance());
 		stockDao.upateOccupyQty(moveStock);
-		wmsTaskBiz.updateWmsTaskByPartParam(task.getTaskId(), WmsTaskProcTypeEnum.BY_BOX, location, newBoxCode);
 		boolean isSerialNoManage = true;
 		for (SoPickPlan soPickPlan : soPickPlanList) {
 			if (soPickPlan.getStockId().equals(stock.getStockId())) {
 				soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), moveStock.getStockId(), location, zone, newBoxCode, moveStock.getStockBalance());
 			} else {
-				isSerialNoManage = false;
-				Stock stockById = stockQueryBiz.findStockById(soPickPlan.getStockId());
-				stockById.setOccupyQty(BigDecimal.ZERO);
-				stockDao.upateOccupyQty(stockById);
-				stockById.setBoxCode(tmpBoxCode);
-				stockDao.updateStock(stockById);
-				soPickPlanBiz.deletePickByPickPlanId(soPickPlan.getPickPlanId());
+				continue;
+//				isSerialNoManage = false;
+//				Stock stockById = stockQueryBiz.findStockById(soPickPlan.getStockId());
+//				stockById.setOccupyQty(BigDecimal.ZERO);
+//				stockDao.upateOccupyQty(stockById);
+//				stockById.setBoxCode(tmpBoxCode);
+//				stockDao.updateStock(stockById);
+//				soPickPlanBiz.deletePickByPickPlanId(soPickPlan.getPickPlanId());
 			}
 		}
 
