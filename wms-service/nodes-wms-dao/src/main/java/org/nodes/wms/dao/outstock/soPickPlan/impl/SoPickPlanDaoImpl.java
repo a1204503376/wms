@@ -49,6 +49,7 @@ public class SoPickPlanDaoImpl
 		AssertUtil.notNull(soBillId, "判断是否有分配中的计划失败，出库单ID为空");
 		return super.lambdaQuery()
 			.eq(SoPickPlan::getSoBillId, soBillId)
+			.apply("pick_plan_qty != pick_real_qty")
 			.list();
 	}
 
@@ -178,5 +179,14 @@ public class SoPickPlanDaoImpl
 		return super.lambdaQuery()
 			.eq(SoPickPlan::getPickPlanId, pickPlanId)
 			.one();
+	}
+
+	@Override
+	public List<SoPickPlan> selectSoPickPlansByBoxCode(String boxCode) {
+		AssertUtil.notEmpty(boxCode, "查询拣货计划失败,箱码为空");
+		return super.lambdaQuery()
+			.eq(SoPickPlan::getBoxCode, boxCode)
+			.apply("pick_plan_qty != pick_real_qty")
+			.list();
 	}
 }

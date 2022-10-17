@@ -49,8 +49,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 发货单业务接口实现类
@@ -91,6 +91,24 @@ public class SoBillBizImpl implements SoBillBiz {
 		}
 		List<SoDetail> soDetailList = soBillFactory.createSoDetailList(soHeader,
 			soBillAddOrEditRequest.getSoDetailList());
+
+		List<String> countSoDetailList = new ArrayList<>();
+		for (SoDetail soDetail : soDetailList) {
+			String countSoDetail = String.format("%s%s%s%s", soDetail.getSkuId(), soDetail.getSkuLot1(), soDetail.getSkuLot2()
+				, soDetail.getSkuLot4());
+			countSoDetailList.add(countSoDetail);
+		}
+		Map<Boolean, Map<String, Long>> booleanMapMap = countSoDetailList.stream()
+			.collect(Collectors.groupingBy(Objects::nonNull, Collectors.groupingBy(s -> s, Collectors.counting())));
+		Map<String, Long> map = booleanMapMap.get(true);
+		Collection<Long> values = map.values();
+		Iterator<Long> iterator = values.iterator();
+		while (iterator.hasNext()) {
+			if (iterator.next().intValue() > 1) {
+				throw new ServiceException("新增发货单明细信息失败，请检查您输入的数据是否规格型号专用客户是否重复");
+			}
+		}
+
 		if (!soDetailDao.saveOrUpdateBatch(soDetailList)) {
 			throw new ServiceException("新增发货单明细信息失败，请稍后再试");
 		}
@@ -215,7 +233,7 @@ public class SoBillBizImpl implements SoBillBiz {
 			pickByPcSoDetailResponse.getSkuId(),
 			StockStatusEnum.NORMAL, null, skuLot);
 		for (Stock stock : stockList) {
-			if (stock.isNotEnable()){
+			if (stock.isNotEnable()) {
 				continue;
 			}
 			BigDecimal stockEnableQty = stock.getStockEnable();
