@@ -201,7 +201,7 @@ public class ProcessorServiceImpl implements ProcessorService {
         omsLogger.debug("AGV返回成功，原因：{}", agvResponse.getReason());
         setStatusAgvResultSuccessful(jobQueue, omsLogger);
         // 呼叫AGV成功同步给WMS，由WMS判断是否第一次成功
-        callWmsService.syncSuccessfulMsgOfCallAgv(jobQueue,agvResponse.getReason());
+        callWmsService.syncSuccessfulMsgOfCallAgv(jobQueue, agvResponse.getReason());
 
         return ProcessResultUtils.success("呼叫AGV成功");
     }
