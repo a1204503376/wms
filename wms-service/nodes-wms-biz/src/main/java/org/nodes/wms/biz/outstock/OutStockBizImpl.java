@@ -11,6 +11,7 @@ import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
+import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
 import org.nodes.wms.biz.outstock.logSoPick.modular.LogSoPickFactory;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.outstock.plan.modular.SoPickPlanFactory;
@@ -91,6 +92,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	private final AgvTask agvTask;
 	private final SoPickPlanFactory soPickPlanFactory;
 	private final LpnTypeBiz lpnTypeBiz;
+	private final LogSoPickBiz logSoPickBiz;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -253,7 +255,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		if (BigDecimalUtil.ge(task.getScanQty(), task.getTaskQty())) {
 			// 6、更新任务
 			wmsTaskBiz.updateWmsTaskStateByTaskId(task.getTaskId(), WmsTaskStateEnum.COMPLETED, task.getScanQty());
-		}else {
+		} else {
 			// 6、更新任务
 			wmsTaskBiz.updateWmsTaskStateByTaskId(task.getTaskId(), WmsTaskStateEnum.START_EXECUTION, task.getScanQty());
 		}
@@ -1065,5 +1067,10 @@ public class OutStockBizImpl implements OutStockBiz {
 		if (!flag) {
 			throw ExceptionUtil.mpe("复核失败，原因：该箱中不存在发货单[{}]明细中的物品", soDetailList.get(0).getSoBillNo());
 		}
+	}
+
+	@Override
+	public Integer findBoxCountBySoHeaderId(Long soBillId) {
+		return logSoPickBiz.findBoxCountBySoHeaderId(soBillId);
 	}
 }

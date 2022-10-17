@@ -10,7 +10,7 @@
 			</u-form-item>
 		</u--form>
 		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">
-			已核列表({{boxCodeList.length}}箱)</h4>
+			已核列表({{boxs}}/{{boxCodeList.length}}箱)</h4>
 		<!-- ${index + 1} -->
 		<u-list style="height: 650rpx;">
 			<u-list-item v-for="(item, index) in boxCodeList" :key="index" :style="item.backgroundColor">
@@ -50,13 +50,20 @@
 		data() {
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
-				params: {},
+				params: {
+					boxCode: '',
+					soBillId: undefined
+				},
 				boxCodeList: [],
+				boxs: 0
 			}
 		},
 		onLoad: function(option) {
 			var parse = JSON.parse(option.param)
 			this.params.soBillId = parse.soBillId;
+			pick.findBoxCountBySoHeaderId(this.params).then(res => {
+				this.boxs = res.data
+			})
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -111,7 +118,7 @@
 					});
 					return;
 				}
-				this.params.boxCode = code;
+				this.params.boxCode = barcode.content;
 				pick.outStockCheckout(this.params).then(res => {
 					this.$u.func.showToast({
 						title: '复核完成'
@@ -121,6 +128,11 @@
 						boxCode: boxCode,
 						backgroundColor: "background-color: #fff;"
 					});
+					if (this.boxCodeList.length == this.boxs) {
+                      pick.closes(this.params).then(res => {
+						  console.log(res)
+					  })
+					}
 					console.log(this.boxCodeList)
 				})
 			},

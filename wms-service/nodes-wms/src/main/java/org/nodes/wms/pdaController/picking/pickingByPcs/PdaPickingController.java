@@ -126,8 +126,17 @@ public class PdaPickingController {
 	 * 出库复核
 	 */
 	@PostMapping("/outStockCheckout")
-	public R<String> outStockCheckout(@RequestBody OutStockCheckoutRequest request){
+	public R<String> outStockCheckout(@RequestBody OutStockCheckoutRequest request) {
 		outStockBiz.outStockCheckout(request.getSoBillId(), request.getBoxCode(), request.getBoxCodeList());
 		return R.data(request.getBoxCode());
 	}
+
+	/**
+	 * 出库复核查询箱子有几个的接口
+	 */
+	@PostMapping("/selectBoxCountBySoHeaderId")
+	public R<Integer> selectBoxCountBySoHeaderId(@RequestBody FindBoxCountBySoHeaderIdRequest request) {
+		return R.data(outStockBiz.findBoxCountBySoHeaderId(request.getSoBillId()));
+	}
+
 }
