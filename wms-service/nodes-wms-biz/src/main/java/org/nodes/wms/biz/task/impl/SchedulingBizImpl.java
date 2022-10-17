@@ -39,6 +39,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +69,10 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	 * 已取消 （人工取消）
 	 */
 	private final Integer AGV_TASK_STATE_CANCEL_BY_AGV = 0;
+	/**
+	 * 调度系统发送到agv成功
+	 */
+	private final Integer SEND_AGV_RETURN_SUCCESS = 4;
 
 	private final LocationBiz locationBiz;
 	private final ZoneBiz zoneBiz;
@@ -150,11 +155,22 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			onException(wmsTask, request.getMsg());
 		} else if (AGV_TASK_STATE_CANCEL_BY_AGV.equals(request.getState())) {
 			onCancelByAgv(wmsTask, request.getMsg());
+		} else if (SEND_AGV_RETURN_SUCCESS.equals(request.getState())) {
+			onSuccessForSendAgv(wmsTask);
 		} else {
 			onOtherHandle(wmsTask, request);
 		}
 
 		log.info("接收调度系统任务状态变更通知,状态:{},任务:{}", request.getState(), request.getTaskDetailId());
+	}
+
+	private void onSuccessForSendAgv(WmsTask wmsTask) {
+		if (Func.isNotEmpty(wmsTask.getConfirmDate())){
+			return;
+		}
+
+		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.AGV_RECEIVED, "AGV系统收到任务");
+		log.info("接收调度系统任务状态变更通知, agv系统接收到任务[{}]", wmsTask.getTaskId());
 	}
 
 	@Override
@@ -185,12 +201,12 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		// 3. 更新任务中的目标库位和消息
 		wmsTask.setToLocCode(newLocation.getLocCode());
 		wmsTask.setToLocId(newLocation.getLocId());
-		wmsTask.setRemark(String.format("多重入库,目标库位由{}变为{}", oldLocCode, wmsTask.getToLocCode()));
+		wmsTask.setRemark(String.format("双重入库,目标库位由[%s]变为[%s]", oldLocCode, wmsTask.getToLocCode()));
 		wmsTaskDao.updateById(wmsTask);
 
 		// 4. 发送通知消息
 		NoticeMessageRequest message = new NoticeMessageRequest();
-		message.setLog(String.format("任务[%s]执行了多重入库,新的库位[%s],请检查原库位[%s]的状态，如没问题请在库位编辑中修改使用状态为正常",
+		message.setLog(String.format("任务[%s]执行了双重入库,新的库位[%s],请检查原库位[%s]的状态，如没问题请在库位编辑中修改使用状态为正常",
 			wmsTask.getTaskId(), wmsTask.getToLocCode(), oldLocCode));
 		logBiz.noticeMesssage(message);
 
