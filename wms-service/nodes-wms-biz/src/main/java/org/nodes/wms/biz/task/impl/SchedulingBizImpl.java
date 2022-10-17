@@ -226,7 +226,8 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	 */
 	private void onStart(WmsTask wmsTask) {
 		boolean checkTaskState = WmsTaskStateEnum.ISSUED.equals(wmsTask.getTaskState())
-			|| WmsTaskStateEnum.ABNORMAL.equals(wmsTask.getTaskState());
+			|| WmsTaskStateEnum.ABNORMAL.equals(wmsTask.getTaskState())
+			|| WmsTaskStateEnum.AGV_RECEIVED.equals(wmsTask.getTaskState());
 		if (!checkTaskState) {
 			throw new ServiceException("状态更新失败,只有已下发的任务才可以执行");
 		}
