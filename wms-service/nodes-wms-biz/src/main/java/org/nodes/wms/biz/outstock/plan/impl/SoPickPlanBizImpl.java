@@ -282,6 +282,11 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		return soPickPlanDao.selectSoPickPlanById(pickPlanId);
 	}
 
+	@Override
+	public List<SoPickPlan> findSoPickPlanByBoxCode(String boxCode) {
+		return soPickPlanDao.selectSoPickPlansByBoxCode(boxCode);
+	}
+
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlans,
 												 List<SoPickPlan> oldPickPlans,
 												 SoDetail detail, String result) {
