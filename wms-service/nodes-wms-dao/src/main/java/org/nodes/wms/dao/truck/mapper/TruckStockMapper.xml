@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.nodes.wms.core.outstock.loading.mapper.TruckStockMapper">
+<mapper namespace="org.nodes.wms.dao.truck.mapper.TruckStockMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="truckStockResultMap" type="org.nodes.wms.core.outstock.loading.entity.TruckStock">
+    <resultMap id="truckStockResultMap" type="org.nodes.wms.dao.truck.entities.TruckStock">
         <id column="lts_id" property="ltsId"/>
         <result column="status" property="status"/>
         <result column="create_time" property="createTime"/>

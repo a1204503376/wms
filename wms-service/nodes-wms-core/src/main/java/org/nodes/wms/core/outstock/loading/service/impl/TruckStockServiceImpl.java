@@ -1,7 +1,7 @@
 package org.nodes.wms.core.outstock.loading.service.impl;
 
-import org.nodes.wms.core.outstock.loading.entity.TruckStock;
-import org.nodes.wms.core.outstock.loading.mapper.TruckStockMapper;
+import org.nodes.wms.dao.truck.entities.TruckStock;
+import org.nodes.wms.dao.truck.mapper.TruckStockMapper;
 import org.nodes.wms.core.outstock.loading.service.ITruckStockService;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.context.annotation.Primary;

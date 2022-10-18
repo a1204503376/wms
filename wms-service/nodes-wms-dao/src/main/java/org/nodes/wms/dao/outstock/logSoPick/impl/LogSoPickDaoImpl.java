@@ -19,7 +19,6 @@ import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 拣货记录日志Dao接口实现类
@@ -78,19 +77,11 @@ public class LogSoPickDaoImpl extends BaseServiceImpl<LogSoPickMapper, LogSoPick
 	}
 
 	@Override
-	public Integer getBoxCountBySoHeaderId(Long soBillId) {
+	public List<LogSoPick> getBoxCountBySoHeaderId(Long soBillId) {
 		AssertUtil.notNull(soBillId, "发货单ID不能为空");
 		LambdaQueryWrapper<LogSoPick> queryWrapper = Wrappers.lambdaQuery(LogSoPick.class);
 		queryWrapper
 			.apply(String.format("so_bill_id =%s and cancel_log_id is null or so_bill_id =%s and  cancel_log_id = ''", soBillId, soBillId));
-		List<LogSoPick> soPickList = super.list(queryWrapper);
-		if (soPickList.size() == 0) {
-			return 0;
-		}
-		List<String> boxCodeList = soPickList.stream()
-			.map(LogSoPick::getBoxCode)
-			.distinct()
-			.collect(Collectors.toList());
-		return boxCodeList.size();
+		return super.list(queryWrapper);
 	}
 }

@@ -1,6 +1,6 @@
 package org.nodes.wms.core.outstock.loading.service;
 
-import org.nodes.wms.core.outstock.loading.entity.TruckStock;
+import org.nodes.wms.dao.truck.entities.TruckStock;
 import org.springblade.core.mp.base.BaseService;
 
 /**
