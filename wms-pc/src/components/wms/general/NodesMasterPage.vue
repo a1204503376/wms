@@ -2,13 +2,8 @@
     <basic-container id="container" overflow-y:hidden style="position: relative;height: 100%;">
         <!-- 顶部搜索框布局 -->
         <div :class="expandMore ? 'top_search_expand': 'top_search_shrink'">
-            <el-form ref="searchForm"
-                     :class="expandMore ? 'top_expand_form_expand' : ''"
-                     :inline="false"
-                     label-position="right"
-                     label-width="60"
-                     size="mini"
-                     @submit.native.prevent>
+            <el-form ref="searchForm" :class="expandMore ? 'top_expand_form_expand' : ''" :inline="false"
+                label-position="right" label-width="60" size="mini" @submit.native.prevent>
 
                 <!-- 顶部搜索框布局:常用搜索框 -->
                 <el-row v-if="showSearchForm" type="flex">
@@ -20,14 +15,13 @@
                         <div class="d-div-right">
                             <el-form-item>
                                 <slot name="searchBtn"></slot>
-                                <el-button native-type="submit" type="primary"
-                                           @click="onSearch">
+                                <el-button native-type="submit" type="primary" @click="onSearch">
                                     查找
                                 </el-button>
                                 <el-button @click="onReset">重置</el-button>
                                 <el-button v-if="showExpandBtn"
-                                           :icon="expandMore ? 'el-icon-arrow-up' : 'el-icon-arrow-down'" type="text"
-                                           @click="expandMore = !expandMore">{{ expandMore ? '收起' : '展开' }}
+                                    :icon="expandMore ? 'el-icon-arrow-up' : 'el-icon-arrow-down'" type="text"
+                                    @click="expandMore = !expandMore">{{ expandMore ? '收起' : '展开' }}
                                 </el-button>
                             </el-form-item>
                         </div>
@@ -79,9 +73,9 @@
 export default {
     name: "NodesMasterPage",
     props: {
-        showExpandBtn: {type: Boolean, required: false, default: () => true},
-        showPage: {type: Boolean, required: false, default: () => true},
-        showSearchForm: {type: Boolean, required: false, default: () => true}
+        showExpandBtn: { type: Boolean, required: false, default: () => true },
+        showPage: { type: Boolean, required: false, default: () => true },
+        showSearchForm: { type: Boolean, required: false, default: () => true }
     },
     data() {
         return {
@@ -91,7 +85,7 @@ export default {
     created() {
         this.autoTableHeight();
         window.addEventListener('resize', this.autoTableHeight);
-        window.addEventListener('keydown', this.handlerKeyCode, true)//开启监听键盘按下事件
+        // window.addEventListener('keydown', this.handlerKeyCode, true)//开启监听键盘按下事件
     },
     methods: {
         autoTableHeight() {
@@ -107,7 +101,7 @@ export default {
             })
         },
         onSearch() {
-            if (this.expandMore){
+            if (this.expandMore) {
                 this.expandMore = false;
             }
             this.$emit('search');
