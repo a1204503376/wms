@@ -21,6 +21,7 @@ import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.biz.task.AgvTask;
 import org.nodes.wms.biz.task.WmsTaskBiz;
+import org.nodes.wms.biz.tuck.TruckStockBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.basics.skulot.entities.SkuLotBaseEntity;
@@ -55,6 +56,7 @@ import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
 import org.nodes.wms.dao.task.enums.WmsTaskStateEnum;
 import org.nodes.wms.dao.task.enums.WmsTaskTypeEnum;
+import org.nodes.wms.dao.truck.entities.TruckStock;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -93,6 +95,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	private final SoPickPlanFactory soPickPlanFactory;
 	private final LpnTypeBiz lpnTypeBiz;
 	private final LogSoPickBiz logSoPickBiz;
+	private final TruckStockBiz truckStockBiz;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -243,9 +246,8 @@ public class OutStockBizImpl implements OutStockBiz {
 		canPick(soHeader);
 		boxCodeCanPick(request, task, soHeader);
 		// 3、根据拣货计划生成拣货记录,根据任务id从拣货计划中查找
-//		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(task.getTaskId());
+		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(task.getTaskId());
 		canPick(soPickPlans, stockList);
-
 		// 拣货、更新拣货计划
 		BigDecimal soPickPlanSurplusQty = updateSoPickPlan(soPickPlans);
 
@@ -1064,13 +1066,40 @@ public class OutStockBizImpl implements OutStockBiz {
 				}
 			}
 		}
-		if (!flag) {
+		if (flag) {
+			TruckStock truckStock = new TruckStock();
+			truckStock.setBoxCode(boxCode);
+			truckStock.setBillHeaderId(soBillId);
+			truckStockBiz.insert(truckStock);
+			SoHeader soHeader = soBillBiz.getSoHeaderById(soBillId);
+			if (SoBillStateEnum.ALL_OUT_STOCK.equals(soHeader.getSoBillState()) && findBoxCountBySoHeaderId(soBillId) == 0) {
+				//单据状态为全部收货并且收货记录和发运记录箱子数量相等，进行自动关单
+				soBillBiz.closeById(soBillId);
+			}
+		} else {
 			throw ExceptionUtil.mpe("复核失败，原因：该箱中不存在发货单[{}]明细中的物品", soDetailList.get(0).getSoBillNo());
 		}
 	}
 
 	@Override
 	public Integer findBoxCountBySoHeaderId(Long soBillId) {
-		return logSoPickBiz.findBoxCountBySoHeaderId(soBillId);
+		List<String> boxCodeList = new ArrayList<>();
+		List<LogSoPick> logSoPickList = logSoPickBiz.findBoxCountBySoHeaderId(soBillId);
+		if (Func.isNotEmpty(logSoPickList)) {
+			List<String> logSoPickBoxCodeList = logSoPickList.stream()
+				.map(LogSoPick::getBoxCode)
+				.distinct()
+				.collect(Collectors.toList());
+			boxCodeList.addAll(logSoPickBoxCodeList);
+		}
+		List<TruckStock> truckStockList = truckStockBiz.findList(soBillId);
+		if (Func.isNotEmpty(truckStockList)) {
+			List<String> truckStockBoxCodeList = truckStockList.stream()
+				.map(TruckStock::getBoxCode)
+				.distinct()
+				.collect(Collectors.toList());
+			boxCodeList.removeAll(truckStockBoxCodeList);
+		}
+		return boxCodeList.size();
 	}
 }

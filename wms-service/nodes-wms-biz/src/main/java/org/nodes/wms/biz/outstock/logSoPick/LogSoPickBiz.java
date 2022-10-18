@@ -80,5 +80,5 @@ public interface LogSoPickBiz {
 	 * @param soBillId 发货单id
 	 * @return 箱子数量
 	 */
-	Integer findBoxCountBySoHeaderId(Long soBillId);
+	List<LogSoPick> findBoxCountBySoHeaderId(Long soBillId);
 }

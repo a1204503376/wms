@@ -285,5 +285,5 @@ public class TruckStock extends TenantEntity implements Serializable {
 	/**
 	 * 单据头表id
 	 */
-	private String billHeaderId;
+	private Long billHeaderId;
 }
