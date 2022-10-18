@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.nodes.wms.core.outstock.loading.entity.TruckStock;
+import org.nodes.wms.dao.truck.entities.TruckStock;
 import org.nodes.wms.core.outstock.loading.service.ITruckStockService;
 import org.nodes.wms.core.outstock.loading.vo.TruckStockVO;
 import org.nodes.wms.core.outstock.loading.wrapper.TruckStockWrapper;

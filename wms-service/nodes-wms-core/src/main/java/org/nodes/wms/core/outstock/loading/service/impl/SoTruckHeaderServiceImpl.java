@@ -13,7 +13,7 @@ import org.nodes.wms.core.log.system.service.ISystemProcService;
 import org.nodes.wms.core.outstock.loading.entity.SoTruckDetail;
 import org.nodes.wms.core.outstock.loading.entity.SoTruckHeader;
 import org.nodes.wms.core.outstock.loading.entity.TruckSerial;
-import org.nodes.wms.core.outstock.loading.entity.TruckStock;
+import org.nodes.wms.dao.truck.entities.TruckStock;
 import org.nodes.wms.core.outstock.loading.mapper.SoTruckHeaderMapper;
 import org.nodes.wms.core.outstock.loading.service.ISoTruckDetailService;
 import org.nodes.wms.core.outstock.loading.service.ISoTruckHeaderService;

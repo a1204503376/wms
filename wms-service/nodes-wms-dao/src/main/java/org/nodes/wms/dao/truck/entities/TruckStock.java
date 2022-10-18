@@ -1,4 +1,4 @@
-package org.nodes.wms.core.outstock.loading.entity;
+package org.nodes.wms.dao.truck.entities;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -278,6 +278,12 @@ public class TruckStock extends TenantEntity implements Serializable {
 	 */
 	@ApiModelProperty(value = "物品批属性30")
 	private String skuLot30;
-
-
+	/**
+	 * 箱码
+	 */
+	private String boxCode;
+	/**
+	 * 单据头表id
+	 */
+	private String billHeaderId;
 }

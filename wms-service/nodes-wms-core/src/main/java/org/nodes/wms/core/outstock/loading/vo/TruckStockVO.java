@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nodes.wms.core.outstock.loading.entity.TruckStock;
+import org.nodes.wms.dao.truck.entities.TruckStock;
 
 /**
  * 视图实体类
