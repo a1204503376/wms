@@ -16,6 +16,8 @@
         from_loc_code,
         to_loc_code,
         lpn_code,
+        create_time,
+        confirm_date,
         begin_time,
         close_time,
         allot_time,

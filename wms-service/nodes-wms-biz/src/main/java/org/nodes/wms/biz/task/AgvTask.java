@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -81,6 +82,7 @@ public class AgvTask {
 			// 如果计算得到了目标库位，则发送到调度系统
 			if (sendToSchedule(Collections.singletonList(putawayTask))) {
 				putawayTask.setTaskState(WmsTaskStateEnum.ISSUED);
+				putawayTask.setAllotTime(LocalDateTime.now());
 			}
 			// 调度系统接收成功之后冻结目标库位和冻结原库位的库存
 			locationBiz.freezeLocByTask(targetLoc.getLocId(), putawayTask.getTaskId().toString());
@@ -109,7 +111,7 @@ public class AgvTask {
 			setAgvTaskRemark(wmsTasks, schedulingGlobalResponse.getMsg());
 			return false;
 		}
-		
+
 		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
 		if (schedulingResponse.hasFailed()){
 			setAgvTaskRemark(wmsTasks, schedulingResponse.getMsg());
@@ -156,6 +158,7 @@ public class AgvTask {
 			WmsTask moveTask = wmsTaskFactory.createMoveTask(stockOfLoc, targetLocation);
 			if (sendToSchedule(Collections.singletonList(moveTask))) {
 				moveTask.setTaskState(WmsTaskStateEnum.ISSUED);
+				moveTask.setAllotTime(LocalDateTime.now());
 			}
 			locationBiz.freezeLocByTask(targetLocation.getLocId(), moveTask.getTaskId().toString());
 			stockBiz.freezeStockByDropId(stockOfLoc, moveTask.getTaskId());
@@ -189,6 +192,7 @@ public class AgvTask {
 	public void sendPickToSchedule(WmsTask pickTask, SoHeader so) {
 		if (sendToSchedule(Collections.singletonList(pickTask))) {
 			pickTask.setTaskState(WmsTaskStateEnum.ISSUED);
+			pickTask.setAllotTime(LocalDateTime.now());
 		} else {
 			logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, so.getSoBillId(),
 				so.getSoBillNo(), "AGV拣货任务下发失败");

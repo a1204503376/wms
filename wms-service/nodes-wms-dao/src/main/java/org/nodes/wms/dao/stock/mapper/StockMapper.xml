@@ -41,7 +41,6 @@
         <where>
             s.is_deleted = 0
             AND s.stay_stock_qty + s.stock_qty > s.pick_qty
-            AND s.zone_id not in (select zone_id from wms_zone where zone_code = 'WH1-PICKTO')
             <if test="query.skuIds != null and query.skuIds.size()>0">
                 AND s.sku_id in
                 <foreach collection="query.skuIds" item="item" open="(" close=")" separator=",">
@@ -194,7 +193,6 @@
     <select id="getPage" resultType="org.nodes.wms.dao.stock.dto.output.StockPageResponse">
         <include refid="stock"/>
         <where>
-            AND s.zone_id not in (select zone_id from wms_zone where zone_code = 'WH1-PICKTO')
             <if test="query.skuIds != null and query.skuIds.size()>0">
                 AND s.sku_id in
                 <foreach collection="query.skuIds" item="item" open="(" close=")" separator=",">
@@ -249,6 +247,9 @@
             <if test="query.skuLot6!=null and query.skuLot6 != ''">
                 AND s.sku_lot6 LIKE concat('%',#{query.skuLot6},'%')
             </if>
+            <if test="query.udf3!=null and query.udf3 != ''">
+                AND s.udf3 = #{query.udf3}
+            </if>
             <if test="query.woId!=null and query.woId != ''">
                 AND s.wo_id = #{query.woId}
             </if>
@@ -302,7 +303,6 @@
     <select id="getStockCountList" resultType="org.nodes.wms.dao.stock.dto.output.StockPageResponse">
         <include refid="stock"/>
         <where>
-            AND s.zone_id not in (select zone_id from wms_zone where zone_code = 'WH1-PICKTO')
             <if test="query.skuIds != null and query.skuIds.size()>0">
                 AND s.sku_id in
                 <foreach collection="query.skuIds" item="item" open="(" close=")" separator=",">
@@ -481,7 +481,6 @@
             </if>
             and s.stay_stock_qty + s.stock_qty > s.pick_qty
             and ws.is_deleted = 0
-            AND s.zone_id not in (select zone_id from wms_zone where zone_code = 'WH1-PICKTO')
         </where>
     </select>
 

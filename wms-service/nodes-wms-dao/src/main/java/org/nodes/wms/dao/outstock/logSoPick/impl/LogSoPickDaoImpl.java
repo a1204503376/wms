@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.outstock.logSoPick.LogSoPickDao;
 import org.nodes.wms.dao.outstock.logSoPick.dto.input.LogSoPickPageQuery;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPicExcelResponse;
@@ -59,19 +60,28 @@ public class LogSoPickDaoImpl extends BaseServiceImpl<LogSoPickMapper, LogSoPick
 		}
 	}
 
-    @Override
-    public List<LogSoPick> findBySoHeaderId(Long soBillId) {
+	@Override
+	public List<LogSoPick> findBySoHeaderId(Long soBillId) {
 		LambdaQueryWrapper<LogSoPick> queryWrapper = Wrappers.lambdaQuery(LogSoPick.class);
 		queryWrapper.eq(LogSoPick::getSoBillId, soBillId);
 		return super.list(queryWrapper);
-    }
+	}
 
-    @Override
-    public void setCancelPick(Long lsopId) {
+	@Override
+	public void setCancelPick(Long lsopId) {
 		LambdaUpdateWrapper<LogSoPick> updateWrapper = Wrappers.lambdaUpdate();
 		updateWrapper
 			.eq(LogSoPick::getLsopId, lsopId)
 			.set(LogSoPick::getCancelLogId, lsopId);
-        super.update(updateWrapper);
-    }
+		super.update(updateWrapper);
+	}
+
+	@Override
+	public List<LogSoPick> getBoxCountBySoHeaderId(Long soBillId) {
+		AssertUtil.notNull(soBillId, "发货单ID不能为空");
+		LambdaQueryWrapper<LogSoPick> queryWrapper = Wrappers.lambdaQuery(LogSoPick.class);
+		queryWrapper
+			.apply(String.format("so_bill_id =%s and cancel_log_id is null or so_bill_id =%s and  cancel_log_id = ''", soBillId, soBillId));
+		return super.list(queryWrapper);
+	}
 }

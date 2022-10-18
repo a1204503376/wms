@@ -33,7 +33,10 @@
                 <el-row class="search-elRow" type="flex">
                     <el-col :span="6">
                         <el-form-item label="库区" label-width="90px">
-                            <nodes-zone v-model="form.params.zoneIdList" :multiple="true" class="search-input">
+                            <nodes-zone
+                                v-model="form.params.zoneIdList"
+                                :notSelectName="notSelectName"
+                                :multiple="true" class="search-input">
                             </nodes-zone>
                         </el-form-item>
                     </el-col>
@@ -109,8 +112,11 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库区类型" label-width="90px">
-                            <nodes-dictionary v-model="form.params.zoneTypeList" :clearable="true" :multiple="true" class="search-input"
-                                              code="zone_type">
+                            <nodes-dictionary
+                                v-model="form.params.zoneTypeList"
+                                :clearable="true" :multiple="true"
+                                class="search-input"
+                                code="zone_type">
                             </nodes-dictionary>
                         </el-form-item>
                     </el-col>
@@ -153,6 +159,14 @@
                                 </div>
                                 <i class="el-icon-question" style="margin-left: 5px;height: 28px;line-height: 28px"></i>
                             </el-tooltip>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row type="flex">
+                    <el-col :span="6">
+                        <el-form-item label="拣货撤销" label-width="90px">
+                            <el-input v-model.trim="form.params.udf3" :clearable="true" style="width: 42%;">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -425,7 +439,7 @@ export default {
                     locIdList: [],
                     skuLot1: "",
                     stockStatusList: [],
-                    zoneIdList: [],
+                    zoneIdList:[],
                     boxCode: "",
                     lpnCode: "",
                     skuLot2: "",
@@ -442,6 +456,7 @@ export default {
                     lastOutTimeDateRange: "",
                     lotNumberBegin: '',
                     lotNumberEnd: '',
+                    udf3:''
                 }
             },
             form1: {
@@ -451,6 +466,7 @@ export default {
                 stockType: "",
                 remark: ""
             },
+            notSelectName: ['出库集货区', '出库暂存区'],
             pageSize: [20, 50, 100],
             table: {
                 columnList: [

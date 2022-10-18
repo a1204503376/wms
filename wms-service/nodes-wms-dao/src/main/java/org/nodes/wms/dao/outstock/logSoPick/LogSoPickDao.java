@@ -79,4 +79,13 @@ public interface LogSoPickDao extends BaseService<LogSoPick> {
 	 * @param lsopId 拣货记录id
 	 */
     void setCancelPick(Long lsopId);
+
+	/**
+	 * 根据发货单查询正常拣货记录的条数，不包含撤销的记录
+	 *
+	 * @param soBillId 发货单id
+	 * @return 发货单记录
+	 */
+	List<LogSoPick> getBoxCountBySoHeaderId(Long soBillId);
+
 }

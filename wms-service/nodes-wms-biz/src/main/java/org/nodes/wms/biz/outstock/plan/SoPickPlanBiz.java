@@ -196,4 +196,12 @@ public interface SoPickPlanBiz {
 	 * @return 拣货计划
 	 */
 	SoPickPlan findSoPickPlanById(Long pickPlanId);
+
+	/**
+	 * 根据箱码查询对应拣货计划
+	 *
+	 * @param boxCode 箱码
+	 * @return 拣货计划
+	 */
+	List<SoPickPlan> findSoPickPlanByBoxCode(String boxCode);
 }

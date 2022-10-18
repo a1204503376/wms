@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -82,6 +83,7 @@ public class AgvTimmerTask {
 			// 如果计算得到了目标库位，则发送到调度系统
 			if (sendToSchedule(Collections.singletonList(wmsTask))) {
 				wmsTask.setTaskState(WmsTaskStateEnum.ISSUED);
+				wmsTask.setAllotTime(LocalDateTime.now());
 			}
 			// 更新任务
 			wmsTaskDao.updateById(wmsTask);
@@ -106,6 +108,7 @@ public class AgvTimmerTask {
 					// 如果计算得到了目标库位，则发送到调度系统
 					if (sendToSchedule(Collections.singletonList(wmsTask))) {
 						wmsTask.setTaskState(WmsTaskStateEnum.ISSUED);
+						wmsTask.setAllotTime(LocalDateTime.now());
 					}
 					// 调度系统接收成功之后冻结目标库位和冻结原库位的库存
 					locationBiz.freezeLocByTask(targetLoc.getLocId(), wmsTask.getTaskId().toString());
@@ -129,6 +132,7 @@ public class AgvTimmerTask {
 		// 如果计算得到了目标库位，则发送到调度系统
 		if (sendToSchedule(Collections.singletonList(wmsTask))) {
 			wmsTask.setTaskState(WmsTaskStateEnum.ISSUED);
+			wmsTask.setAllotTime(LocalDateTime.now());
 		}
 		// 更新任务
 		wmsTaskDao.updateById(wmsTask);
@@ -145,6 +149,7 @@ public class AgvTimmerTask {
 		// 如果计算得到了目标库位，则发送到调度系统
 		if (sendToSchedule(Collections.singletonList(wmsTask))) {
 			wmsTask.setTaskState(WmsTaskStateEnum.ISSUED);
+			wmsTask.setAllotTime(LocalDateTime.now());
 		}
 		// 更新任务
 		wmsTaskDao.updateById(wmsTask);

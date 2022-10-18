@@ -97,7 +97,8 @@
                         <el-table-column v-if="!column.hide" :key="index" show-overflow-tooltip v-bind="column"
                             width="150">
                             <template v-if="column.prop === 'taskState'" v-slot="scope">
-                                <el-tag v-if="scope.row.taskState === '已下发' || scope.row.taskState === '开始执行'"
+                                <el-tag
+                                    v-if="scope.row.taskState === '已下发' || scope.row.taskState === '开始执行' || scope.row.taskState === 'AGV已接收'"
                                     type="success">{{ scope.row.taskState }}</el-tag>
                                 <el-tag
                                     v-else-if="scope.row.taskState === '已完成' ||scope.row.taskState === 'AGV完成' || scope.row.taskState === '已取消'"
@@ -173,7 +174,7 @@ export default {
                     toLocCode: '',
                     boxCode: '',
                     taskTypeCdList: [],
-                    taskStateList: [1, 2, 3, 4], // 默认未下发、已下发、开始执行、异常中断中
+                    taskStateList: [1, 2, 3, 4, 8], // 默认未下发、已下发、开始执行、异常中断中、AGV已接收
                     skuIdList: [],
                 }
             },
@@ -250,6 +251,21 @@ export default {
                         sortable: "custom",
                     },
                     {
+                        prop: 'createTime',
+                        label: '创建时间',
+                        sortable: "custom",
+                    },
+                    {
+                        prop: 'confirmDate',
+                        label: 'AGV接收时间',
+                        sortable: "custom",
+                    },
+                    {
+                        prop: 'allotTime',
+                        label: '任务下发时间',
+                        sortable: "custom",
+                    },
+                    {
                         prop: 'beginTime',
                         label: '开始执行时间',
                         sortable: "custom",
@@ -259,11 +275,7 @@ export default {
                         label: '结束执行时间',
                         sortable: "custom",
                     },
-                    {
-                        prop: 'allotTime',
-                        label: '任务下发时间',
-                        sortable: "custom",
-                    }
+
                 ]
             },
         }

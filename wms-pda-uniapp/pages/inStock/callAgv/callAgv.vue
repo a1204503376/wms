@@ -189,12 +189,12 @@
 					}
 
 					for (let i = 0; i < this.locList.length; i++) {
-						if (locList[i].locCode == item.content) {
-							this.lpnItem.locId = locList[i].locId
-							this.lpnItem.locCode = locList[i].locCode
+						if (this.locList[i].locCode == item.content) {
+							this.lpnItem.locId = this.locList[i].locId
+							this.lpnItem.locCode = this.locList[i].locCode
 						}
 					}
-					if (tool.isEmpty(this.lpnItem.locId) && tool.isEmpty(this.lpnItem.locCode)) {
+					if (tool.isEmpty(this.lpnItem.locId)) {
 						this.$u.func.showToast({
 							title: '扫描错误,请重新扫描库位'
 						})

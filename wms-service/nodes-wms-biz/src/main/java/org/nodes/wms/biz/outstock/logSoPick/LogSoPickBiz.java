@@ -73,4 +73,12 @@ public interface LogSoPickBiz {
 	 * @return 拣货记录
 	 */
 	List<LogSoPick> findBySoHeaderId(Long soBillId);
+
+	/**
+	 * 根据发货单查询正常拣货记录的条数，不包含撤销的记录
+	 *
+	 * @param soBillId 发货单id
+	 * @return 箱子数量
+	 */
+	List<LogSoPick> findBoxCountBySoHeaderId(Long soBillId);
 }

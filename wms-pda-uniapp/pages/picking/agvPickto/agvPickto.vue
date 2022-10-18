@@ -130,6 +130,7 @@
 			} else {
 				this.locList = pickToLocList
 			}
+			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -144,7 +145,7 @@
 		},
 
 		onShow() {
-			uni.$u.func.registerScanner(this.scannerCallback);
+			
 		},
 		methods: {
 			esc() {
@@ -153,7 +154,9 @@
 				});
 			},
 			change(item) {
-				this.param = item;
+				this.param.locId = item.locId;
+				this.param.locCodeView = item.locCodeView;
+				this.param.locCode = item.locCode;
 			},
 
 			submit() {
@@ -180,24 +183,36 @@
 				}, 1000)
 			},
 			scannerCallback(no) {
-				let item = barCodeService.parseBarcode(no)
-				if (item.type == barCodeService.BarcodeType.Loc) {
-					let param = this.locList.find(u => u.locCode === item.content);
-					if (tool.isEmpty(param)) {
+				this.analysisCode(no);
+			},
+			analysisCode(code) {
+				var barcode = barCodeService.parseBarcode(code);
+				var barcodeType = barCodeService.BarcodeType;
+				switch (barcode.type) {
+					case barcodeType.UnKnow:
+						for (let i = 0; i < this.locList.length; i++) {
+							if (this.locList[i].locCode == barcode.content) {
+								this.param.locId = this.locList[i].locId
+								this.param.locCode = this.locList[i].locCode
+								this.param.locCodeView = this.locList[i].locCodeView
+							}
+						}
+						break;
+					case barcodeType.Loc:
+						for (let i = 0; i < this.locList.length; i++) {
+							if (this.locList[i].locCode == barcode.content) {
+								this.param.locId = this.locList[i].locId
+								this.param.locCode = this.locList[i].locCode
+								this.param.locCodeView = this.locList[i].locCodeView
+							}
+						}
+						break;
+					default:
 						this.$u.func.showToast({
-							title: '扫描错误,库位信息不符'
-						})
-					}
-					if (tool.isNotEmpty(param)) {
-						this.locCode = item.content;
-					}
-				} else {
-					this.$u.func.showToast({
-						title: '无法识别,不支持的条码类型'
-					})
-					return
+							title: '条码识别失败,不支持的条码类型'
+						});
+						break;
 				}
-
 			},
 		}
 	}

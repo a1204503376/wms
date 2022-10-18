@@ -32,6 +32,7 @@ import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,13 +96,38 @@ public class DevanningBizImpl implements DevanningBiz {
 
 	private String generateNewBoxCode(DevanningSubmitRequest request) {
 		LpnTypeCodeEnum lpnTypeCodeEnum = lpnTypeBiz.tryParseBoxCode(request.getBoxCode());
+		if (LpnTypeCodeEnum.UNKNOWN.equals(lpnTypeCodeEnum)){
+			throw new ServiceException(String.format("拆箱时生成新箱码错误,箱码[%s]没有对应的箱型", request.getBoxCode()));
+		}
+
 		String skuName = null;
 		String spec = null;
-		if (Func.isNotEmpty(request.getIsSn()) && request.getIsSn()) {
+		if (request.getIsSn()){
+			if (request.getSerialNumberList().size() <= 0){
+				throw new ServiceException(String.format(
+					"拆箱时生成新箱码错误,箱码[%s]对应的库存有序列号但没有采集到需拆箱的序列号", request.getBoxCode()));
+			}
+			// 天宜：带序列号的库存箱子中只对应一个物品
 			Serial serial = serialBiz.findSerialSerialNo(request.getSerialNumberList().get(0));
 			Stock stock = stockQueryBiz.findStockById(serial.getStockId());
 			skuName = stock.getSkuName();
 			spec = stock.getSkuLot2();
+		} else {
+			if (request.getStockList().size() <= 0){
+				throw new ServiceException(String.format("拆箱时生成新箱码错误,箱码[%s]请求参数为空", request.getBoxCode()));
+			}
+			// 根据skuCode获取sku，获取skuName
+			List<Stock> stockList = new ArrayList<>();
+			for (DevanningStockResponse stockRequestItem : request.getStockList()){
+				Stock stock = stockQueryBiz.findStockById(stockRequestItem.getStockId());
+				if (Func.isNull(stock)){
+					throw new ServiceException(String.format("拆箱时生成新箱码错误,箱码[%s]stockID[%d]查询不到库存",
+						request.getBoxCode(), stockRequestItem.getStockId()));
+				}
+				stockList.add(stock);
+			}
+			skuName = StringUtil.join(stockList.stream().map(Stock::getSkuName).distinct().collect(Collectors.toList()), ",");
+			spec = stockList.get(0).getSkuLot2();
 		}
 
 		return lpnTypeBiz.generateLpnCode(lpnTypeCodeEnum.getCode(), skuName, spec);

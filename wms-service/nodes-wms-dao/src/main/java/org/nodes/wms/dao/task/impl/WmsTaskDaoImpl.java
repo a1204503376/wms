@@ -53,6 +53,8 @@ public class WmsTaskDaoImpl
 			wmsTask.setAllotTime(LocalDateTime.now());
 		} else if (WmsTaskStateEnum.START_EXECUTION.equals(state)) {
 			wmsTask.setBeginTime(LocalDateTime.now());
+		} else if (WmsTaskStateEnum.AGV_RECEIVED.equals(state)){
+			wmsTask.setConfirmDate(LocalDateTime.now());
 		}
 
 		if (!super.update(wmsTask, updateWrapper)) {

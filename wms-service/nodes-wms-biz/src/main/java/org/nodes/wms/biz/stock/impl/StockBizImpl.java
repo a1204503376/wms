@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
+import org.nodes.core.constant.DictKVConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
@@ -141,23 +142,23 @@ public class StockBizImpl implements StockBiz {
 		return null;
 	}
 
-	private void updateStockUdf(Stock stock, UdfEntity udf){
-		if (Func.isNull(udf)){
+	private void updateStockUdf(Stock stock, UdfEntity udf) {
+		if (Func.isNull(udf)) {
 			return;
 		}
-		if (Func.notNull(udf.getUdf1())){
+		if (Func.notNull(udf.getUdf1())) {
 			stock.setUdf1(udf.getUdf1());
 		}
-		if (Func.notNull(udf.getUdf2())){
+		if (Func.notNull(udf.getUdf2())) {
 			stock.setUdf2(udf.getUdf2());
 		}
-		if (Func.notNull(udf.getUdf3())){
+		if (Func.notNull(udf.getUdf3())) {
 			stock.setUdf3(udf.getUdf3());
 		}
-		if (Func.notNull(udf.getUdf4())){
+		if (Func.notNull(udf.getUdf4())) {
 			stock.setUdf4(udf.getUdf4());
 		}
-		if (Func.notNull(udf.getUdf5())){
+		if (Func.notNull(udf.getUdf5())) {
 			stock.setUdf5(udf.getUdf5());
 		}
 	}
@@ -265,11 +266,11 @@ public class StockBizImpl implements StockBiz {
 		if (Func.isNotEmpty(pickLog.getSnCode())) {
 			serialNoList = Arrays.asList(Func.split(pickLog.getSnCode(), ","));
 		}
-		Location loc = locationBiz.findByLocId(pickLog.getLocId());
-
+		List<Location> locationList = locationBiz.getLocationByZoneType(stock.getWhId(), DictKVConstant.ZONE_TYPE_VIRTUAL);
+		stock.setUdf3("是");
 		checkQtyOfSerial(serialNoList, pickLog.getPickRealQty());
 		runMoveStock(stock, serialNoList, pickLog.getPickRealQty(), stock.getBoxCode(), stock.getLpnCode(),
-			loc, StockLogTypeEnum.INSTOCK_BY_CANCEL_PICK, null,
+			locationList.get(0), StockLogTypeEnum.INSTOCK_BY_CANCEL_PICK, null,
 			pickLog.getSoBillId(), pickLog.getSoBillNo(), pickLog.getSoLineNo(), udf);
 	}
 

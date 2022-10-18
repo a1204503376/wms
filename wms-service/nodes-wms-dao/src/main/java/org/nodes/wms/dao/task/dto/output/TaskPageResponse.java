@@ -97,6 +97,18 @@ public class TaskPageResponse {
 	@ExcelProperty("LPN")
 	private String lpnCode;
 	/**
+	 * 创建时间
+	 */
+	@ColumnWidth(15)
+	@ExcelProperty("创建时间")
+	private LocalDateTime createTime;
+	/**
+	 * 任务开始执行的时间
+	 */
+	@ColumnWidth(15)
+	@ExcelProperty("AGV接收时间")
+	private LocalDateTime confirmDate;
+	/**
 	 * 任务开始执行的时间
 	 */
 	@ColumnWidth(15)
@@ -114,7 +126,6 @@ public class TaskPageResponse {
 	@ColumnWidth(15)
 	@ExcelProperty("任务下发时间")
 	private LocalDateTime allotTime;
-
 	@ColumnWidth(50)
 	@ExcelProperty("备注")
 	private String remark;

@@ -119,4 +119,8 @@ public class StockPageQuery implements Serializable {
 	 * 批次号-结束
 	 */
 	private String lotNumberEnd;
+	/**
+	 * 拣货撤销
+	 */
+	private String udf3;
 }
