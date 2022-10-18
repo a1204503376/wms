@@ -34,6 +34,7 @@ import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.secure.utils.SecureUtil;
 import org.springblade.core.tool.api.R;
+import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;
 import org.springframework.cache.annotation.CacheEvict;
@@ -64,6 +65,9 @@ public class DictController extends BladeController {
 	@GetMapping("/detail")
 	@ApiOperation(value = "详情", notes = "传入dict")
 	public R<DictVO> detail(Dict dict) {
+		if (Func.isNull(dict.getId())){
+			return R.data(null);
+		}
 		return R.data(DictWrapper.build().entityVO(dictService.getOne(Condition.getQueryWrapper(dict))));
 	}
 

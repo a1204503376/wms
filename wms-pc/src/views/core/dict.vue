@@ -219,9 +219,9 @@ export default {
         form: {
             handler(val, oldVal) {
                 if (val.parentId) {
-                    this.option.group[0].column[0].disabled = true
+                    // this.option.group[0].column[0].disabled = true
                 } else {
-                    this.option.group[0].column[0].disabled = false
+                    // this.option.group[0].column[0].disabled = false
                 }
             },
             deep: true //true 深度监听
@@ -286,7 +286,7 @@ export default {
                     const {tree, treeNode, resolve} = this.maps.get(row.parentId);
                     this.$set(this.$refs.table.$refs.table.store.states.lazyTreeNodeMap, row.parentId, []);
                     this.loadList(tree, treeNode, resolve)
-                };
+                }
                 this.$refs.table.onLoad();
                 this.$message.success("操作成功！");
                 loading();
@@ -394,7 +394,7 @@ export default {
                                 this.$set(this.$refs.table.$refs.table.store.states.lazyTreeNodeMap, row.parentId, []);
                                 this.loadList(tree, treeNode, resolve)
                             }
-                            ;
+
                             this.$message({
                                 type: "success",
                                 message: "操作成功!"

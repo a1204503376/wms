@@ -251,6 +251,21 @@ export default {
                         sortable: "custom",
                     },
                     {
+                        prop: 'createTime',
+                        label: '创建时间',
+                        sortable: "custom",
+                    },
+                    {
+                        prop: 'confirmDate',
+                        label: 'AGV接收时间',
+                        sortable: "custom",
+                    },
+                    {
+                        prop: 'allotTime',
+                        label: '任务下发时间',
+                        sortable: "custom",
+                    },
+                    {
                         prop: 'beginTime',
                         label: '开始执行时间',
                         sortable: "custom",
@@ -260,11 +275,7 @@ export default {
                         label: '结束执行时间',
                         sortable: "custom",
                     },
-                    {
-                        prop: 'allotTime',
-                        label: '任务下发时间',
-                        sortable: "custom",
-                    }
+
                 ]
             },
         }

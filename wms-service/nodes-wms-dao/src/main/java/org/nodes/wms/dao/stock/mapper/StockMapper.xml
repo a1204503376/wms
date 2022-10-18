@@ -247,6 +247,9 @@
             <if test="query.skuLot6!=null and query.skuLot6 != ''">
                 AND s.sku_lot6 LIKE concat('%',#{query.skuLot6},'%')
             </if>
+            <if test='query.udf3 == "是"'>
+                AND s.udf3 = #{query.udf3}
+            </if>
             <if test="query.woId!=null and query.woId != ''">
                 AND s.wo_id = #{query.woId}
             </if>
