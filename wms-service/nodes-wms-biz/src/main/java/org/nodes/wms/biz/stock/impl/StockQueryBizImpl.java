@@ -285,16 +285,16 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public Page<StockPageResponse> getStockPage(Query query, StockPageQuery stockPageQuery) {
-		if (Func.isNotEmpty(stockPageQuery.getZoneIdList())) {
-			for (Long zoneId : stockPageQuery.getZoneIdList()) {
-				List<Location> locationList = locationBiz.findLocationByZoneId(zoneId);
-				for (Location location : locationList) {
-					if (locationBiz.isPickToLocation(location)) {
-						throw new ServiceException("查询库存余额时不能选择出库集货区");
-					}
-				}
-			}
-		}
+//		if (Func.isNotEmpty(stockPageQuery.getZoneIdList())) {
+//			for (Long zoneId : stockPageQuery.getZoneIdList()) {
+//				List<Location> locationList = locationBiz.findLocationByZoneId(zoneId);
+//				for (Location location : locationList) {
+//					if (locationBiz.isPickToLocation(location)) {
+//						throw new ServiceException("查询库存余额时不能选择出库集货区");
+//					}
+//				}
+//			}
+//		}
 
 		// 按箱显示或按lpn显示
 		if (Func.isNotEmpty(stockPageQuery.getIsShowByBox()) || Func.isNotEmpty(stockPageQuery.getIsShowByLpn())) {

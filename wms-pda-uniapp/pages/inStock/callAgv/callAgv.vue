@@ -59,14 +59,12 @@
 			</u-row>
 			<u-row v-if="param.lpnType == 'C' ">
 				<template v-for="(item, index) in locList">
-					<u-col span="3"
-						v-if="item.isEmpty  && item.isCBifurcate == 2">
+					<u-col span="3" v-if="item.isEmpty  && item.isCBifurcate == 2">
 						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" @click="change(item)">
 							{{item.locCodeView}}
 						</u-button>
 					</u-col>
-					<u-col span="3"
-						v-if="!item.isEmpty  && item.isCBifurcate == 2">
+					<u-col span="3" v-if="!item.isEmpty  && item.isCBifurcate == 2">
 						<u-button style="height: 60px;width: 95%;font-size: 40rpx;" disabled>
 							{{item.locCodeView}}
 						</u-button>
@@ -189,6 +187,19 @@
 					if (tool.isNotEmpty(param)) {
 						this.locCode = item.content;
 					}
+
+					for (let i = 0; i < this.locList.length; i++) {
+						if (this.locList[i].locCode == item.content) {
+							this.lpnItem.locId = this.locList[i].locId
+							this.lpnItem.locCode = this.locList[i].locCode
+						}
+					}
+					if (tool.isEmpty(this.lpnItem.locId)) {
+						this.$u.func.showToast({
+							title: '扫描错误,请重新扫描库位'
+						})
+					}
+
 				} else {
 					this.$u.func.showToast({
 						title: '无法识别,不支持的条码类型'

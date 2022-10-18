@@ -185,4 +185,12 @@ public interface OutStockBiz {
 	 * @param boxCodeList 已复核的箱码
 	 */
     void outStockCheckout(Long soBillId, String boxCode, List<String> boxCodeList);
+
+	/**
+	 * 根据发货单查询正常拣货记录的条数，不包含撤销的记录
+	 *
+	 * @param soBillId 发货单id
+	 * @return 箱子数量
+	 */
+	Integer findBoxCountBySoHeaderId(Long soBillId);
 }

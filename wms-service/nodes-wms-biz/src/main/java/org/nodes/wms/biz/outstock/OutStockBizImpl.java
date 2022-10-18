@@ -11,6 +11,7 @@ import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
+import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
 import org.nodes.wms.biz.outstock.logSoPick.modular.LogSoPickFactory;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.outstock.plan.modular.SoPickPlanFactory;
@@ -91,6 +92,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	private final AgvTask agvTask;
 	private final SoPickPlanFactory soPickPlanFactory;
 	private final LpnTypeBiz lpnTypeBiz;
+	private final LogSoPickBiz logSoPickBiz;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -225,8 +227,12 @@ public class OutStockBizImpl implements OutStockBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void pickByBox(PickByBoxCodeRequest request, WmsTaskProcTypeEnum taskProcTypeEnum) {
+		List<SoPickPlan> soPickPlans = soPickPlanBiz.findSoPickPlanByBoxCode(request.getBoxCode());
+		if (soPickPlans.size() == 0) {
+			throw new ServiceException("按箱拣货失败，根据箱码查询不到对应拣货计划");
+		}
+		WmsTask task = wmsTaskBiz.findByTaskId(soPickPlans.get(0).getTaskId());
 		// 1、根据箱码查询任务
-		WmsTask task = wmsTaskBiz.findPickTaskByBoxCode(request.getBoxCode(), taskProcTypeEnum, null);
 		SoHeader soHeader = soBillBiz.getSoHeaderById(task.getBillId());
 		AssertUtil.notNull(soHeader, "根据任务存在的发货单头表信息查询发货单失败");
 		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
@@ -237,17 +243,22 @@ public class OutStockBizImpl implements OutStockBiz {
 		canPick(soHeader);
 		boxCodeCanPick(request, task, soHeader);
 		// 3、根据拣货计划生成拣货记录,根据任务id从拣货计划中查找
-		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(task.getTaskId());
-		canPick(soPickPlanList, stockList);
+//		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(task.getTaskId());
+		canPick(soPickPlans, stockList);
 
 		// 拣货、更新拣货计划
-		updateSoPickPlan(soPickPlanList);
+		BigDecimal soPickPlanSurplusQty = updateSoPickPlan(soPickPlans);
 
 		// 5、更新出库单信息
 		soBillBiz.updateSoBillState(soHeader);
-
-		// 6、更新任务
-		wmsTaskBiz.updateWmsTaskStateByTaskId(task.getTaskId(), WmsTaskStateEnum.COMPLETED, task.getTaskQty());
+		task.setScanQty(task.getScanQty().add(soPickPlanSurplusQty));
+		if (BigDecimalUtil.ge(task.getScanQty(), task.getTaskQty())) {
+			// 6、更新任务
+			wmsTaskBiz.updateWmsTaskStateByTaskId(task.getTaskId(), WmsTaskStateEnum.COMPLETED, task.getScanQty());
+		} else {
+			// 6、更新任务
+			wmsTaskBiz.updateWmsTaskStateByTaskId(task.getTaskId(), WmsTaskStateEnum.START_EXECUTION, task.getScanQty());
+		}
 
 		// 7、记录业务日志
 		logBiz.auditLog(AuditLogType.OUTSTOCK, soHeader.getSoBillId(), soHeader.getSoBillNo(),
@@ -311,15 +322,37 @@ public class OutStockBizImpl implements OutStockBiz {
 
 		// 3、判断是不是超拣---直接走按箱的流程
 		// 4、如果没有超拣则执行按箱的流---直接走按箱的流程
-		WmsTask task = wmsTaskBiz.findPickTaskByBoxCode(stockList.get(0).getBoxCode(), WmsTaskProcTypeEnum.BY_BOX, null);
+		List<SoPickPlan> soPickPlans = soPickPlanBiz.findSoPickPlanByBoxCode(boxCodeList.get(0));
+		if (soPickPlans.size() == 0) {
+			throw new ServiceException("按箱拣货失败，根据箱码查询不到对应拣货计划");
+		}
+		WmsTask task = wmsTaskBiz.findByTaskId(soPickPlans.get(0).getTaskId());
 		// 3、根据拣货计划生成拣货记录,根据任务id从拣货计划中查找
-		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(task.getTaskId());
-		AssertUtil.notNull(soPickPlanList, "接驳区拣货失败，根据任务查询不到对应的拣货计划");
-		SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlanList.get(0).getSoDetailId());
-		AssertUtil.notNull(soDetail, "接驳区拣货失败，根据拣货计划查询不到对应的发货单详情");
-		// 2、参数校验
-		if (BigDecimalUtil.gt(task.getTaskQty().subtract(task.getScanQty()), soDetail.getSurplusQty())) {
-			return false;
+//		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(task.getTaskId());
+		AssertUtil.notNull(soPickPlans, "接驳区拣货失败，根据任务查询不到对应的拣货计划");
+		List<SoDetail> soDetailList = soBillBiz.getEnableSoDetailBySoHeaderId(soPickPlans.get(0).getSoBillId());
+		AssertUtil.notNull(soDetailList, "接驳区拣货失败，根据拣货计划查询不到对应的发货单详情");
+		Boolean stockGtSoDetail = true;
+		Boolean moveAgvPickTo = false;
+		for (Stock stock : stockList) {
+			for (SoDetail soDetail : soDetailList) {
+				if (Func.isNotEmpty(soDetail.getSkuLot1()) && !soDetail.getSkuLot1().equals(stock.getSkuLot1())) {
+					continue;
+				}
+				if (Func.isNotEmpty(soDetail.getSkuLot2()) && !soDetail.getSkuLot2().equals(stock.getSkuLot2())) {
+					continue;
+				}
+				if (Func.isNotEmpty(soDetail.getSkuLot4()) && !soDetail.getSkuLot4().equals(stock.getSkuLot4())) {
+					continue;
+				}
+				if (BigDecimalUtil.gt(stock.getStockBalance(), soDetail.getSurplusQty())) {
+					stockGtSoDetail = false;
+					moveAgvPickTo = true;
+				}
+			}
+		}
+		if (moveAgvPickTo) {
+			return stockGtSoDetail;
 		}
 
 		// 5、如果超了则返回
@@ -782,7 +815,8 @@ public class OutStockBizImpl implements OutStockBiz {
 	 *
 	 * @param soPickPlanList 拣货计划
 	 */
-	private void updateSoPickPlan(List<SoPickPlan> soPickPlanList) {
+	private BigDecimal updateSoPickPlan(List<SoPickPlan> soPickPlanList) {
+		BigDecimal surplusQty = BigDecimal.ZERO;
 		for (SoPickPlan soPickPlan : soPickPlanList) {
 			List<Serial> serialList = stockQueryBiz.findSerialByStock(soPickPlan.getStockId());
 			List<String> serialNumberList = null;
@@ -795,7 +829,9 @@ public class OutStockBizImpl implements OutStockBiz {
 			SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlan.getSoDetailId());
 			soPickPlanBiz.pickByPlan(soDetail, soPickPlan, soPickPlan.getSurplusQty(), serialNumberList);
 			soBillBiz.updateSoDetailStatus(soDetail, soPickPlan.getSurplusQty());
+			surplusQty = surplusQty.add(soPickPlan.getSurplusQty());
 		}
+		return surplusQty;
 	}
 
 	void pickByPcsByTask(WmsTask task, List<Stock> stockList, SoHeader soHeader, PickByPcsRequest request, BigDecimal qty) {
@@ -1031,5 +1067,10 @@ public class OutStockBizImpl implements OutStockBiz {
 		if (!flag) {
 			throw ExceptionUtil.mpe("复核失败，原因：该箱中不存在发货单[{}]明细中的物品", soDetailList.get(0).getSoBillNo());
 		}
+	}
+
+	@Override
+	public Integer findBoxCountBySoHeaderId(Long soBillId) {
+		return logSoPickBiz.findBoxCountBySoHeaderId(soBillId);
 	}
 }

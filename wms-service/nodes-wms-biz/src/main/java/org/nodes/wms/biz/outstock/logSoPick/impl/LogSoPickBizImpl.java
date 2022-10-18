@@ -100,4 +100,9 @@ public class LogSoPickBizImpl implements LogSoPickBiz {
 	public List<LogSoPick> findBySoHeaderId(Long soBillId) {
 		return logSoPickDao.findBySoHeaderId(soBillId);
 	}
+
+	@Override
+	public Integer findBoxCountBySoHeaderId(Long soBillId) {
+		return logSoPickDao.getBoxCountBySoHeaderId(soBillId);
+	}
 }
