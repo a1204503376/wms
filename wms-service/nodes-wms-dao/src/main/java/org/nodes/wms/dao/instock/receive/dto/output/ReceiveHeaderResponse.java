@@ -5,10 +5,12 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
+import org.nodes.wms.dao.common.esayExcel.EnumConverter;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 收货单列表页面收货单头表 返回前端视图类
  **/
@@ -39,14 +41,8 @@ public class ReceiveHeaderResponse implements Serializable {
 	/**
 	 * 单据状态枚举
 	 */
-	@ExcelIgnore
+	@ExcelProperty(value = "单据状态", converter = EnumConverter.class)
 	private ReceiveHeaderStateEnum billState;
-	/**
-	 * 单据状态描述
-	 */
-	@ExcelProperty("单据状态")
-	private String billStateDesc;
-
 	/**
 	 * 货主编码
 	 */
@@ -62,7 +58,6 @@ public class ReceiveHeaderResponse implements Serializable {
 	 */
 	@ExcelProperty("WMS备注")
 	private String remark;
-
 	/**
 	 * 供应商编码
 	 */
@@ -83,13 +78,11 @@ public class ReceiveHeaderResponse implements Serializable {
 	 */
 	@ExcelProperty("上位系统单编号")
 	private String externalOrderNo;
-
 	/**
 	 * 上位系统订单创建时间
 	 */
 	@ExcelProperty("上位系统订单创建时间")
 	private Date externalPreCreateDate;
-
 	/**
 	 * 上位系统单据创建人
 	 */
@@ -100,7 +93,6 @@ public class ReceiveHeaderResponse implements Serializable {
 	 */
 	@ExcelProperty("创建人")
 	private String createUser;
-
 	/**
 	 * 创建时间
 	 */

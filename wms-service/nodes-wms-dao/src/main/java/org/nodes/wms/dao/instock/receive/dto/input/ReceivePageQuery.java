@@ -36,7 +36,6 @@ public class ReceivePageQuery implements Serializable {
 	 * 库房id
 	 */
 	private List<Long> whIds;
-
 	/**
 	 * 创建时间开始
 	 */
