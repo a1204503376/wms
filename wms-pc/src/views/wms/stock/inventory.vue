@@ -162,6 +162,14 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+                <el-row type="flex">
+                    <el-col :span="6">
+                        <el-form-item label="拣货撤销" label-width="90px">
+                            <el-input v-model.trim="form.params.udf3" :clearable="true" style="width: 42%;">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </template>
             <template v-slot:batchBtn>
                 <el-button v-if="permissionObj.moveByPiece" size="mini" type="primary" @click="moveByPiece">
@@ -448,6 +456,7 @@ export default {
                     lastOutTimeDateRange: "",
                     lotNumberBegin: '',
                     lotNumberEnd: '',
+                    udf3:''
                 }
             },
             form1: {
