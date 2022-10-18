@@ -97,7 +97,6 @@ export const listMixin = {
         onSortChange(column) {
             let prop = column.prop;
             let order = column.order;
-            console.log(column);
             if (order === "ascending") {
                 this.page.ascs = prop;
                 this.page.descs = "";
@@ -179,9 +178,7 @@ export const listMixin = {
         },
         // 本地导出
         exportCurrentDataToExcel(sheetName, filename) {
-            if (func.isEmpty(this.table.data)) {
-                return;
-            }
+            this.exportExcelSheet[0].cellStyle = [];
             this.exportExcelSheet[0].tHeader = this.table.columnList.map((item) => {
                 return item.label;
             }).join(",").split(",");
@@ -193,9 +190,21 @@ export const listMixin = {
             let localStr = nowDateFormat("yyyyMMddhhmm")
             this.exportExcelName = filename + localStr || localStr;
             this.exportExcelSheet[0].tHeader.forEach((value, index) => {
-                let s = String.fromCharCode("A".charCodeAt(0) + index);
+                let result = "";
+                let num = index <= 0 ? 1 : index + 1;//小于等于0是输出A
+                while(num > 0){
+                    let m = num % 26;
+                    if(m === 0){
+                        m = 26;
+                    }
+                    result = String.fromCharCode(m + 64) + result;
+                    num = (num-m)/26;
+                    if (index === 27){
+                        debugger;
+                    }
+                }
                 let cell = {
-                    cell: s + 1,
+                    cell: result + '1', //表头 A1、B1、C1、D1......AA1、AB1、AC1、AD1......BA1、BB1......
                     font: {
                         name: '宋体',
                         sz: 14,
