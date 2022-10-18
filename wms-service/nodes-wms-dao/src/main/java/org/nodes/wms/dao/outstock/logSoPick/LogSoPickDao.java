@@ -84,8 +84,8 @@ public interface LogSoPickDao extends BaseService<LogSoPick> {
 	 * 根据发货单查询正常拣货记录的条数，不包含撤销的记录
 	 *
 	 * @param soBillId 发货单id
-	 * @return 箱子数量
+	 * @return 发货单记录
 	 */
-	Integer getBoxCountBySoHeaderId(Long soBillId);
+	List<LogSoPick> getBoxCountBySoHeaderId(Long soBillId);
 
 }

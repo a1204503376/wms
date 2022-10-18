@@ -33,7 +33,10 @@
                 <el-row class="search-elRow" type="flex">
                     <el-col :span="6">
                         <el-form-item label="库区" label-width="90px">
-                            <nodes-zone v-model="form.params.zoneIdList" :multiple="true" class="search-input">
+                            <nodes-zone
+                                v-model="form.params.zoneIdList"
+                                :notSelectName="notSelectName"
+                                :multiple="true" class="search-input">
                             </nodes-zone>
                         </el-form-item>
                     </el-col>
@@ -109,8 +112,11 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库区类型" label-width="90px">
-                            <nodes-dictionary v-model="form.params.zoneTypeList" :clearable="true" :multiple="true" class="search-input"
-                                              code="zone_type">
+                            <nodes-dictionary
+                                v-model="form.params.zoneTypeList"
+                                :clearable="true" :multiple="true"
+                                class="search-input"
+                                code="zone_type">
                             </nodes-dictionary>
                         </el-form-item>
                     </el-col>
@@ -425,17 +431,7 @@ export default {
                     locIdList: [],
                     skuLot1: "",
                     stockStatusList: [],
-                    zoneIdList:
-                        [
-                            "1559801454250815489",
-                            "1559801126864416770",
-                            "1559800813935783937",
-                            "1559799953541427202",
-                            "1559799682576805889",
-                            "1559799284449275905",
-                            "1559799284457664514",
-                            "1559799284466053122",
-                        ],
+                    zoneIdList:[],
                     boxCode: "",
                     lpnCode: "",
                     skuLot2: "",
@@ -461,6 +457,7 @@ export default {
                 stockType: "",
                 remark: ""
             },
+            notSelectName: ['出库集货区', '出库暂存区'],
             pageSize: [20, 50, 100],
             table: {
                 columnList: [

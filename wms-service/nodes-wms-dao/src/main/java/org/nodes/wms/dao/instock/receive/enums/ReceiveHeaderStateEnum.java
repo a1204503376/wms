@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.enums.BaseEnum;
 import org.nodes.core.tool.enums.IPairs;
 import org.nodes.wms.dao.application.dto.output.ReceiveBillStateResponse;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.List;
 @Getter
 @RequiredArgsConstructor
 public enum ReceiveHeaderStateEnum
-	implements IPairs<Integer,String, ReceiveHeaderStateEnum> {
+	implements BaseEnum, IPairs<Integer,String, ReceiveHeaderStateEnum> {
 
 	/**
 	 *未收货

@@ -128,12 +128,6 @@
 						boxCode: boxCode,
 						backgroundColor: "background-color: #fff;"
 					});
-					if (this.boxCodeList.length == this.boxs) {
-                      pick.closes(this.params).then(res => {
-						  console.log(res)
-					  })
-					}
-					console.log(this.boxCodeList)
 				})
 			},
 			clearEmitKeyDown() {

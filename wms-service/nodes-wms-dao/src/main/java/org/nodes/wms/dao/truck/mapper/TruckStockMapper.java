@@ -1,7 +1,7 @@
-package org.nodes.wms.core.outstock.loading.mapper;
+package org.nodes.wms.dao.truck.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.nodes.wms.core.outstock.loading.entity.TruckStock;
+import org.nodes.wms.dao.truck.entities.TruckStock;
 import org.springframework.context.annotation.Primary;
 
 /**

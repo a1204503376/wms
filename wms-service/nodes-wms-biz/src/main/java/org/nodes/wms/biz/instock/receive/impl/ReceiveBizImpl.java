@@ -101,17 +101,7 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	@Override
 	public IPage<ReceiveHeaderResponse> getPage(ReceivePageQuery receivePageQuery, Query query) {
 		IPage<ReceiveHeaderResponse> page = Condition.getPage(query);
-		IPage<ReceiveHeaderResponse> responsePage = receiveHeaderDao.selectPage(page, receivePageQuery);
-		List<ReceiveHeaderResponse> receiveHeaderResponseList = responsePage.getRecords();
-
-		for (ReceiveHeaderResponse receiveHeaderResponse : receiveHeaderResponseList) {
-			ReceiveHeaderStateEnum billState = receiveHeaderResponse.getBillState();
-			String billStateDesc = billState.getDesc();
-			receiveHeaderResponse.setBillStateDesc(billStateDesc);
-		}
-
-		responsePage.setRecords(receiveHeaderResponseList);
-		return responsePage;
+		return receiveHeaderDao.selectPage(page, receivePageQuery);
 	}
 
 	@Override
@@ -235,10 +225,6 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	@Override
 	public void exportExcel(ReceivePageQuery receivePageQuery, HttpServletResponse response) {
 		List<ReceiveHeaderResponse> receiveHeaderResponseList = receiveHeaderDao.getReceiveHeaderResponseByQuery(receivePageQuery);
-		for (ReceiveHeaderResponse receiveHeaderResponse : receiveHeaderResponseList) {
-			String billState = receiveHeaderResponse.getBillState().getDesc();
-			receiveHeaderResponse.setBillStateDesc(billState);
-		}
 		ExcelUtil.export(response, "收货单", "收货单数据表", receiveHeaderResponseList, ReceiveHeaderResponse.class);
 	}
 

@@ -40,7 +40,10 @@ import fileDownload from "js-file-download";
                     <el-col :span="6">
                         <el-form-item label="库区" label-width="90px">
                             <nodes-zone
-                                class="search-input" v-model="form.params.zoneIdList" :multiple="true">
+                                class="search-input"
+                                v-model="form.params.zoneIdList"
+                                :notSelectName="notSelectName"
+                                :multiple="true">
                             </nodes-zone>
                         </el-form-item>
                     </el-col>
@@ -188,16 +191,65 @@ import fileDownload from "js-file-download";
                     row-key="id"
                     size="mini"
                     style="width: 100%"
-                    @sort-change="onSortChange"
-                >
+                    @sort-change="onSortChange">
                     <template v-for="(column, index) in table.columnList">
+                        <!--  库存余额  -->
                         <el-table-column
-                            v-if="!column.hide"
                             :key="index"
-                            show-overflow-tooltip
-                            v-bind="column"
-                            width="130"
-                        >
+                            :show-overflow-tooltip="true"
+                            v-bind="column" width="130"
+                            v-if="column.prop === 'stockBalance'">
+                            <template v-slot="{row}">
+                                <el-link
+                                    v-if="!row.hideStyle"
+                                    :underline="false"
+                                    target="_blank" type="primary" @click="onViewStockBalance(row.stockId)">
+                                    {{ row.stockBalance }}
+                                </el-link>
+                                <div v-else>
+                                    {{ row.stockBalance }}
+                                </div>
+                            </template>
+                        </el-table-column>
+                        <!--  库存占用  -->
+                        <el-table-column
+                            :key="index"
+                            :show-overflow-tooltip="true"
+                            v-bind="column" width="130"
+                            v-else-if="column.prop === 'occupyQty'">
+                            <template v-slot="{row}">
+                                <el-link
+                                    v-if="!row.hideStyle && row.occupyQty > 0" :underline="false" target="_blank"
+                                    type="primary" @click="onViewOccupyQty(row.stockId)">
+                                    {{ row.occupyQty }}
+                                </el-link>
+                                <div v-else>
+                                    {{ row.occupyQty }}
+                                </div>
+                            </template>
+                        </el-table-column>
+                        <!--  库存状态  -->
+                        <el-table-column
+                            :key="index"
+                            :show-overflow-tooltip="true"
+                            v-bind="column" width="130"
+                            v-else-if="column.prop === 'stockStatus'">
+                            <template v-slot="{row}">
+                                <el-tag
+                                    v-if="!row.hideStyle"
+                                    :type="(row.stockStatus === '系统冻结' || row.stockStatus === '冻结') ? 'danger' : 'success'">
+                                    {{ row.stockStatus }}
+                                </el-tag>
+                                <div v-else>
+                                    {{ row.stockStatus }}
+                                </div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            v-else
+                            :key="index"
+                            :show-overflow-tooltip="true"
+                            v-bind="column" width="130">
                         </el-table-column>
                     </template>
                 </el-table>
@@ -279,6 +331,7 @@ export default {
                 }
             },
             pageSize: [20, 50, 100],
+            notSelectName: ['出库集货区', '出库暂存区'],
             table: {
                 columnList: [
                     {
@@ -458,6 +511,7 @@ export default {
                             if (item.lpnCode != arr[index + 1].lpnCode) {
                                 let a = {
                                     lpnCode: '合计',
+                                    hideStyle: true,
                                     stockBalance: balanceSum,
                                     stockEnable: enableSum,
                                     occupyQty: occupySum
@@ -470,6 +524,7 @@ export default {
                         } else {
                             let a = {
                                 lpnCode: '合计',
+                                hideStyle: true,
                                 stockBalance: balanceSum,
                                 stockEnable: enableSum,
                                 occupyQty: occupySum
@@ -531,6 +586,22 @@ export default {
             if (row.lpnCode === '合计') {
                 return 'success-row';
             }
+        },
+        onViewStockBalance(stockId) {
+            this.$router.push({
+                name: '库存异动日志',
+                query: {
+                    stockId: stockId.toString()
+                }
+            });
+        },
+        onViewOccupyQty(stockId) {
+            this.$router.push({
+                name: '分配记录',
+                query: {
+                    stockId: stockId.toString()
+                }
+            });
         },
         getSpanArr(arr, type) {
             if (arr) {
