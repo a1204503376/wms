@@ -25,6 +25,7 @@
                         <el-col :span="8">
                             <el-form-item label="所属库房" prop="whId">
                                 <nodes-warehouse
+                                    :default-value="true"
                                     v-model="form.params.whId"
                                     size="medium"
                                 ></nodes-warehouse>
@@ -63,6 +64,7 @@
                         <el-col :span="8">
                             <el-form-item label="出库方式" prop="outstockType">
                                 <nodes-dictionary
+                                    :default-value="true"
                                     v-model="form.params.outstockType"
                                     code="outstore_type"
                                     size="medium">
@@ -72,6 +74,7 @@
                         <el-col :span="8">
                             <el-form-item label="发货方式" prop="transportCode">
                                 <nodes-dictionary
+                                    :default-value="true"
                                     v-model="form.params.transportCode"
                                     code="so_transport_code"
                                     size="medium">

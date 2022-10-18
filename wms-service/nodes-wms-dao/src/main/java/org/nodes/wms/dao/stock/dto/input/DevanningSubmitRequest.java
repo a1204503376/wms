@@ -32,7 +32,7 @@ public class DevanningSubmitRequest implements Serializable {
 	 */
 	private Boolean newBoxCode;
 	/**
-	 * 序列号集合
+	 * 序列号集合,库存有序列号的时候才有值
 	 */
 	private List<String> serialNumberList;
 	/**
@@ -40,7 +40,7 @@ public class DevanningSubmitRequest implements Serializable {
 	 */
 	private String locCode;
 	/**
-	 * 拆箱库存响应对象/请求过来
+	 * 拆箱批次库存请求参数，如果库存中有序列号此值为空，需要根据serialNumberList获取物品信息
 	 */
 	private List<DevanningStockResponse> stockList;
 }
