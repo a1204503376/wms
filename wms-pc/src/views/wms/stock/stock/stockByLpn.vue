@@ -40,7 +40,10 @@ import fileDownload from "js-file-download";
                     <el-col :span="6">
                         <el-form-item label="库区" label-width="90px">
                             <nodes-zone
-                                class="search-input" v-model="form.params.zoneIdList" :multiple="true">
+                                class="search-input"
+                                v-model="form.params.zoneIdList"
+                                :notSelectName="notSelectName"
+                                :multiple="true">
                             </nodes-zone>
                         </el-form-item>
                     </el-col>
@@ -328,6 +331,7 @@ export default {
                 }
             },
             pageSize: [20, 50, 100],
+            notSelectName: ['出库集货区', '出库暂存区'],
             table: {
                 columnList: [
                     {

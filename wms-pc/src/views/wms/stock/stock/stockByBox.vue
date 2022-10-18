@@ -41,6 +41,7 @@
                         <el-form-item label="库区" label-width="90px">
                             <nodes-zone
                                 v-model="form.params.zoneIdList"
+                                :notSelectName="notSelectName"
                                 :multiple="true" class="search-input">
                             </nodes-zone>
                         </el-form-item>
@@ -314,6 +315,7 @@ export default {
     mixins: [listMixin],
     data() {
         return {
+            notSelectName: ['出库集货区', '出库暂存区'],
             form: {
                 params: {
                     skuIds: [],

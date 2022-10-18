@@ -173,14 +173,10 @@ import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js';
 import fileUpload from "@/components/nodes/fileUpload";
 import NodesSku from "@/components/wms/select/NodesSkuByQuery";
-import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
-import NodesOwner from "@/components/wms/select/NodesOwner";
-import NodesStockStatus from "@/components/wms/select/NodesStockStatus";
 import NodesLocation from "@/components/wms/select/NodesLocation";
 import NodesSerial from "@/components/wms/select/NodesSerial";
 import NodesZone from "@/components/wms/select/NodesZone";
 import func from "@/util/func";
-
 
 export default {
     name: "stockBySerial",
@@ -189,12 +185,9 @@ export default {
         NodesSerial,
         NodesLocation,
         DialogColumn,
-        NodesOwner,
         NodesSearchInput,
-        NodesStockStatus,
         NodesMasterPage,
         NodesDateRange,
-        NodesWarehouse,
         NodesSku,
         ExcelExport,
         fileUpload,
