@@ -61,7 +61,6 @@ export default {
         }
         // 根据名称判断 默认勾选除 notSelectName 中的值以外的库区
         let notSelectId = []
-        debugger;
         if (func.isNotEmpty(this.notSelectName)) {
             this.dataSource.forEach(value => {
                 if (!this.notSelectName.includes(value.zoneName)) {
