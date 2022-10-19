@@ -177,12 +177,16 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public String newLocationOnDoubleWarehousing(NewLocationOnDoubleWarehousingRequest request) {
 		WmsTask wmsTask = wmsTaskDao.getById(request.getTaskId());
-		AssertUtil.notNull(wmsTask, "推荐新的库位失败,查不到对应的任务");
+		AssertUtil.notNull(wmsTask, "双重入库推荐新的库位失败,查不到对应的任务");
+
+		if (!WmsTaskTypeEnum.AGV_PUTAWAY.equals(wmsTask.getTaskTypeCd())){
+			throw new ServiceException(String.format("双重入库推荐库位失败，任务[%d]不是上架任务", wmsTask.getTaskId()));
+		}
 
 		if (wmsTask.getTaskState().equals(WmsTaskStateEnum.AGV_COMPLETED)
 			|| wmsTask.getTaskState().equals(WmsTaskStateEnum.COMPLETED)
 			|| wmsTask.getTaskState().equals(WmsTaskStateEnum.CANCELED)) {
-			throw new ServiceException("推荐新的库位失败,任务状态已完结不支持推荐新的库位");
+			throw new ServiceException(String.format("双重入库推荐新的库位失败,任务状态已完结不支持推荐新的库位", wmsTask.getTaskId()));
 		}
 
 		// 1. 原来的目标库位使用状态有系统业务冻结改为冻结，并清空loc_flag_desc
