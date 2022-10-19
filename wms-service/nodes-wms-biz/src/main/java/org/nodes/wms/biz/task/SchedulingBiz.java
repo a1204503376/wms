@@ -35,7 +35,7 @@ public interface SchedulingBiz {
 	void synchronizeTaskStatus(SyncTaskStateRequest request);
 
 	/**
-	 * 推荐新的库位。
+	 * 双重入库推荐新的库位。
 	 * 1. 原来的目标库位使用状态有系统业务冻结改为冻结，并清空loc_flag_desc
 	 * 2. 生成新的目标库位，并冻结目标库位
 	 * 3. 更新任务中的目标库位和消息
