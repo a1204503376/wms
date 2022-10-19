@@ -475,6 +475,9 @@ export default {
             }
         }
     },
+    mounted() {
+        this.initSelectZoneIds = this.form.params.zoneIdList;
+    },
     methods: {
         getTableData() {
             let hasNoQuery = true
@@ -562,7 +565,28 @@ export default {
         },
         onReset() {
             this.form.params = {
-                createTimeDateRange: "",
+                skuIds: [],
+                locIdList: [],
+                skuLot1: "",
+                stockStatusList: [],
+                zoneIdList: this.initSelectZoneIds,
+                boxCode: "",
+                lpnCode: "",
+                skuLot2: "",
+                skuLot4: "",
+                skuLot5: "",
+                skuLot6: "",
+                whIdList: [],
+                woId: "",
+                locColumn: '',
+                hasSerial: '',
+                zoneTypeList: [],
+                receiveTimeDateRange: [],
+                lastInTimeDateRange: [],
+                lastOutTimeDateRange: [],
+                lotNumberBegin: '',
+                lotNumberEnd: '',
+                udf3:''
             }
             this.onChange(null);
         },

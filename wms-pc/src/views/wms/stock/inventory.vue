@@ -451,9 +451,9 @@ export default {
                     locColumn: '',
                     hasSerial: '',
                     zoneTypeList: [],
-                    receiveTimeDateRange: "",
-                    lastInTimeDateRange: "",
-                    lastOutTimeDateRange: "",
+                    receiveTimeDateRange: [],
+                    lastInTimeDateRange: [],
+                    lastOutTimeDateRange: [],
                     lotNumberBegin: '',
                     lotNumberEnd: '',
                     udf3:''
@@ -467,6 +467,7 @@ export default {
                 remark: ""
             },
             notSelectName: ['出库集货区', '出库暂存区'],
+            initSelectZoneIds: [], //记录页面初始化后，默认勾选的库区id
             pageSize: [20, 50, 100],
             table: {
                 columnList: [
@@ -647,6 +648,9 @@ export default {
     created() {
         this.getTableData();
     },
+    mounted() {
+        this.initSelectZoneIds = this.form.params.zoneIdList;
+    },
     watch: {
         $route(to) {
             if (to.query && to.query.isRefresh === 'true') {
@@ -713,7 +717,28 @@ export default {
         },
         onReset() {
             this.form.params = {
-                createTimeDateRange: "",
+                skuIds: [],
+                locIdList: [],
+                skuLot1: "",
+                stockStatusList: [],
+                zoneIdList: this.initSelectZoneIds,
+                boxCode: "",
+                lpnCode: "",
+                skuLot2: "",
+                skuLot4: "",
+                skuLot5: "",
+                skuLot6: "",
+                whIdList: [],
+                woId: "",
+                locColumn: '',
+                hasSerial: '',
+                zoneTypeList: [],
+                receiveTimeDateRange: [],
+                lastInTimeDateRange: [],
+                lastOutTimeDateRange: [],
+                lotNumberBegin: '',
+                lotNumberEnd: '',
+                udf3:''
             }
             this.onChange(null);
         },
@@ -838,7 +863,6 @@ export default {
         onChange(val) {
             if (val == null) {
                 this.dateRange = [];
-
             }
             this.$emit('dateRangeChange', val);
         },

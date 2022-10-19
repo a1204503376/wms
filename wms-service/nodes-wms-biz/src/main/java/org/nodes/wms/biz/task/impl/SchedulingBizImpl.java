@@ -2,6 +2,8 @@ package org.nodes.wms.biz.task.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nodes.core.base.entity.Param;
+import org.nodes.core.constant.SystemParamConstant;
 import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
@@ -18,6 +20,7 @@ import org.nodes.wms.biz.task.SchedulingBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
+import org.nodes.wms.dao.basics.systemParam.SystemParamDao;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.common.log.dto.input.NoticeMessageRequest;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
@@ -39,7 +42,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,6 +87,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	private final PutawayStrategyActuator putawayStrategyActuator;
 	private final PutawayFactory putawayFactory;
 	private final PutawayLogDao putawayLogDao;
+	private final SystemParamDao systemParamDao;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -165,7 +168,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	}
 
 	private void onSuccessForSendAgv(WmsTask wmsTask) {
-		if (Func.isNotEmpty(wmsTask.getConfirmDate())){
+		if (Func.isNotEmpty(wmsTask.getConfirmDate())) {
 			return;
 		}
 
@@ -179,7 +182,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		WmsTask wmsTask = wmsTaskDao.getById(request.getTaskId());
 		AssertUtil.notNull(wmsTask, "双重入库推荐新的库位失败,查不到对应的任务");
 
-		if (!WmsTaskTypeEnum.AGV_PUTAWAY.equals(wmsTask.getTaskTypeCd())){
+		if (!WmsTaskTypeEnum.AGV_PUTAWAY.equals(wmsTask.getTaskTypeCd())) {
 			throw new ServiceException(String.format("双重入库推荐库位失败，任务[%d]不是上架任务", wmsTask.getTaskId()));
 		}
 
@@ -194,14 +197,9 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		String oldLocCode = wmsTask.getToLocCode();
 		locationBiz.unfreezeLocByTask(request.getTaskId());
 		locationBiz.freezeLoc(oldLocId);
-
-		// 2. 生成新的目标库位，并冻结目标库位
-		List<Stock> stocks = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
-		AssertUtil.notEmpty(stocks, "推荐新的库位失败,没有查询到该任务的库存");
-		Location newLocation = putawayStrategyActuator.run(null, stocks);
-		AssertUtil.notNull(newLocation, "推荐新的库位失败,没有可推荐的新库位");
-		locationBiz.freezeLocByTask(newLocation.getLocId(), wmsTask.getTaskId().toString());
-
+		//天宜定制：推荐库位
+		Location newLocation = nominateNewLocation(wmsTask);
+		AssertUtil.notNull(newLocation, "推荐新的库位失败，没有合适的库位");
 		// 3. 更新任务中的目标库位和消息
 		wmsTask.setToLocCode(newLocation.getLocCode());
 		wmsTask.setToLocId(newLocation.getLocId());
@@ -215,6 +213,47 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		logBiz.noticeMesssage(message);
 
 		return newLocation.getLocCode();
+	}
+
+	private Location nominateNewLocation(WmsTask wmsTask) {
+		Location newLocation;
+		LpnTypeCodeEnum lpnTypeCodeEnum = lpnTypeBiz.tryParseBoxCode(wmsTask.getBoxCode());
+		if (LpnTypeCodeEnum.UNKNOWN.equals(lpnTypeCodeEnum)) {
+			throw new ServiceException(String.format("推荐新的库位失败,箱码[%s]没有对应的箱型", wmsTask.getBoxCode()));
+		}
+		if (LpnTypeCodeEnum.A.equals(lpnTypeCodeEnum) || LpnTypeCodeEnum.D.equals(lpnTypeCodeEnum)) {
+			//天宜定制：判断箱型是AD箱就走-推荐一个新的目标库位
+			// 2. 生成新的目标库位，并冻结目标库位
+			List<Stock> stocks = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
+			AssertUtil.notEmpty(stocks, "推荐新的库位失败,没有查询到该任务的库存");
+			newLocation = putawayStrategyActuator.run(null, stocks);
+			Location unknownLocation = locationBiz.getUnknowLocation(newLocation.getWhId());
+			if (Func.isEmpty(newLocation) || Func.equals(unknownLocation, newLocation)
+				|| !newLocation.enableStock()) {
+				NoticeMessageRequest messageRequest = new NoticeMessageRequest();
+				messageRequest.setLog(String.format("任务[%s]执行了双重入库,推荐新的库位失败，没有可推荐的新库位",
+					wmsTask.getTaskId()));
+				logBiz.noticeMesssage(messageRequest);
+				throw new ServiceException("推荐新的库位失败,没有可推荐的新库位");
+			}
+			locationBiz.freezeLocByTask(newLocation.getLocId(), wmsTask.getTaskId().toString());
+		} else {
+			//天宜定制：判断箱型是BC箱就获取系统临时库位，并推荐
+			Param param = systemParamDao.selectByKey(SystemParamConstant.SYSTEM_TEMP_LOC);
+			String systemTempLocCode = param.getParamValue();
+			AssertUtil.notEmpty(systemTempLocCode, "系统错误，没有配置系统临时库位的参数");
+			newLocation = locationBiz.findLocationByLocCode(wmsTask.getWhId(), systemTempLocCode);
+			// 1、判断库位是否有库存
+			boolean emptyLocation = stockQueryBiz.isEmptyLocation(newLocation.getLocId());
+			if (!emptyLocation || !newLocation.enableStock()) {
+				NoticeMessageRequest messageRequest = new NoticeMessageRequest();
+				messageRequest.setLog(String.format("任务[%s]执行了双重入库,推荐新的库位失败，系统临时库位[%s]存在库存",
+					wmsTask.getTaskId(), newLocation.getLocCode()));
+				logBiz.noticeMesssage(messageRequest);
+				throw new ServiceException("推荐新的库位失败，系统临时库位存在库存");
+			}
+		}
+		return newLocation;
 	}
 
 	private void onOtherHandle(WmsTask wmsTask, SyncTaskStateRequest request) {
@@ -232,6 +271,9 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		boolean checkTaskState = WmsTaskStateEnum.ISSUED.equals(wmsTask.getTaskState())
 			|| WmsTaskStateEnum.ABNORMAL.equals(wmsTask.getTaskState())
 			|| WmsTaskStateEnum.AGV_RECEIVED.equals(wmsTask.getTaskState());
+		if (WmsTaskStateEnum.START_EXECUTION.equals(wmsTask.getTaskState())) {
+			return;
+		}
 		if (!checkTaskState) {
 			throw new ServiceException("状态更新失败,只有已下发的任务才可以执行");
 		}
