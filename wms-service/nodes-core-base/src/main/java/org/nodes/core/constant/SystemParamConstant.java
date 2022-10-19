@@ -20,4 +20,9 @@ public class SystemParamConstant {
 	 * 天宜定制：调度系统接口地址
 	 */
 	public static final String SCHEDULE_URL = "tianyi:schedule_url";
+
+	/**
+	 * 天宜定制：系统临时库位
+	 */
+	public static final String SYSTEM_TEMP_LOC = "tianyi_temp_loc";
 }
