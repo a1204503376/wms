@@ -49,7 +49,7 @@
                 if (Object.keys(newVal).length !== 0) {
                     await this.getDataSource(newVal.skuId);
                     // 物品规格数据大于0的话取第一个作为默认规格
-                    if (this.dataSource.length > 0 && func.isEmpty(this.selectVal)) {
+                    if (this.dataSource !== undefined && this.dataSource.length > 0 && func.isEmpty(this.selectVal)) {
                         this.val = this.dataSource[0];
                     } else {
                         this.val = this.selectVal;
