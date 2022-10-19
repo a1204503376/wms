@@ -1,8 +1,6 @@
 package org.nodes.wms.biz.stockManage.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.nodes.core.tool.utils.AssertUtil;
-import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.core.udf.UdfEntity;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
@@ -19,8 +17,6 @@ import org.nodes.wms.biz.stockManage.module.DevanningActionFactory;
 import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
-import org.nodes.wms.dao.basics.zone.entities.Zone;
-import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.dto.input.DevanningSubmitRequest;
@@ -45,7 +41,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -102,14 +97,14 @@ public class DevanningBizImpl implements DevanningBiz {
 
 	private String generateNewBoxCode(DevanningSubmitRequest request) {
 		LpnTypeCodeEnum lpnTypeCodeEnum = lpnTypeBiz.tryParseBoxCode(request.getBoxCode());
-		if (LpnTypeCodeEnum.UNKNOWN.equals(lpnTypeCodeEnum)){
+		if (LpnTypeCodeEnum.UNKNOWN.equals(lpnTypeCodeEnum)) {
 			throw new ServiceException(String.format("拆箱时生成新箱码错误,箱码[%s]没有对应的箱型", request.getBoxCode()));
 		}
 
 		String skuName = null;
 		String spec = null;
-		if (request.getIsSn()){
-			if (request.getSerialNumberList().size() <= 0){
+		if (request.getIsSn()) {
+			if (request.getSerialNumberList().size() <= 0) {
 				throw new ServiceException(String.format(
 					"拆箱时生成新箱码错误,箱码[%s]对应的库存有序列号但没有采集到需拆箱的序列号", request.getBoxCode()));
 			}
@@ -119,14 +114,14 @@ public class DevanningBizImpl implements DevanningBiz {
 			skuName = stock.getSkuName();
 			spec = stock.getSkuLot2();
 		} else {
-			if (request.getStockList().size() <= 0){
+			if (request.getStockList().size() <= 0) {
 				throw new ServiceException(String.format("拆箱时生成新箱码错误,箱码[%s]请求参数为空", request.getBoxCode()));
 			}
 			// 根据skuCode获取sku，获取skuName
 			List<Stock> stockList = new ArrayList<>();
-			for (DevanningStockResponse stockRequestItem : request.getStockList()){
+			for (DevanningStockResponse stockRequestItem : request.getStockList()) {
 				Stock stock = stockQueryBiz.findStockById(stockRequestItem.getStockId());
-				if (Func.isNull(stock)){
+				if (Func.isNull(stock)) {
 					throw new ServiceException(String.format("拆箱时生成新箱码错误,箱码[%s]stockID[%d]查询不到库存",
 						request.getBoxCode(), stockRequestItem.getStockId()));
 				}
@@ -144,12 +139,14 @@ public class DevanningBizImpl implements DevanningBiz {
 	public void devanning(DevanningSubmitRequest request) {
 		// 校验目标库位是否正常；如果是序列号的需要校验参数是否争取
 		Location targetLoc = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
-		if (!targetLoc.enableStock()){
+		if (!targetLoc.enableStock()) {
 			throw ExceptionUtil.mpe("拆箱失败,目标库位[{}]不能上架库存,请检查目标库位状态", request.getLocCode());
 		}
-
+		if (locationBiz.isAgvLocation(targetLoc)) {
+			throw ExceptionUtil.mpe("拆箱失败,目标库位[{}]不能是自动区库位", request.getLocCode());
+		}
 		// 将旧库存拆成新库存
-		List<DevanningAction> devanningActions =devanningActionFactory.create(request);
+		List<DevanningAction> devanningActions = devanningActionFactory.create(request);
 		String newBoxCode = null;
 		if (request.getNewBoxCode()) {
 			newBoxCode = generateNewBoxCode(request);
@@ -160,18 +157,36 @@ public class DevanningBizImpl implements DevanningBiz {
 		udfEntity.setUdf2(request.getBoxCode());
 
 		Map<Long, Stock> oldStockId2NewStock = new HashMap<>();
-		for (DevanningAction item : devanningActions){
+		Map<Long, BigDecimal> oldStockId2Qty = new HashMap<>();
+		for (DevanningAction item : devanningActions) {
+			Location sourceLoc = locationBiz.findByLocId(item.getStock().getLocId());
+			if (locationBiz.isAgvLocation(sourceLoc)) {
+				throw ExceptionUtil.mpe("拆箱失败,原库存库位[{}]不能是自动区库位", sourceLoc.getLocCode());
+			}
+			item.getStock().setOccupyQty(BigDecimal.ZERO);
 			Stock newStock = stockBiz.moveStock(item.getStock(), item.getSerialNoList(), item.getQty(), newBoxCode, newLpnCode,
 				targetLoc, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null, udfEntity);
+			newStock.setOccupyQty(newStock.getStockBalance());
+			stockDao.upateOccupyQty(newStock);
 			oldStockId2NewStock.put(item.getStock().getStockId(), newStock);
+			oldStockId2Qty.put(item.getStock().getStockId(), item.getQty());
 		}
 		// 判断就库存是否有关联拣货计划，如果有需要更新原拣货计划
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findSoPickPlanByBoxCode(request.getBoxCode());
-		if (Func.isNotEmpty(soPickPlanList)){
-			// TODO
-			//soPickPlanBiz.updatePickByPartParam(soPickPlan.getPickPlanId(), moveStock.getStockId(), location, zone, newBoxCode, moveStock.getStockBalance());
-			//wmsTaskBiz.updateWmsTaskByPartParam(task.getTaskId(), WmsTaskProcTypeEnum.BY_BOX, location, request.getBoxCode());
+		if (Func.isNotEmpty(soPickPlanList)) {
+			updateDevaBySoPickPlan(soPickPlanList, oldStockId2NewStock, oldStockId2Qty);
 		}
 	}
 
+	private void updateDevaBySoPickPlan(List<SoPickPlan> soPickPlanList, Map<Long, Stock> oldStockId2NewStock, Map<Long, BigDecimal> oldStockId2Qty) {
+		for (SoPickPlan soPickPlan : soPickPlanList) {
+			Stock newStock = oldStockId2NewStock.get(soPickPlan.getStockId());
+			BigDecimal qty = oldStockId2Qty.get(soPickPlan.getStockId());
+			soPickPlan.setPickRealQty(soPickPlan.getPickRealQty().add(qty));
+			soPickPlanBiz.updateDevanning(soPickPlan.getPickPlanId(), newStock, soPickPlan.getPickRealQty());
+			WmsTask task = wmsTaskBiz.findByTaskId(soPickPlan.getTaskId());
+			task.setScanQty(task.getScanQty().add(qty));
+			wmsTaskBiz.updateDevanning(task, WmsTaskProcTypeEnum.BY_BOX, newStock);
+		}
+	}
 }

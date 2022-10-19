@@ -12,6 +12,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.task.TaskDetailDao;
 import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
@@ -154,6 +155,14 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 		AssertUtil.notNull(taskProcTypeEnum, "更新任务失败，任务执行方式为空");
 		AssertUtil.notNull(toLocation, "更新任务失败， 来源库位为空");
 		wmsTaskDao.updateWmsTaskByPartParam(taskId, taskProcTypeEnum, toLocation, boxCode);
+	}
+
+	@Override
+	public void updateDevanning(WmsTask task, WmsTaskProcTypeEnum taskProcTypeEnum, Stock newStock) {
+		AssertUtil.notNull(task, "更新任务失败，任务为空");
+		AssertUtil.notNull(taskProcTypeEnum, "更新任务失败，任务执行方式为空");
+		AssertUtil.notNull(newStock, "更新任务失败， 来源库存为空");
+		wmsTaskDao.updateDeva(task, taskProcTypeEnum, newStock);
 	}
 
 	@Override

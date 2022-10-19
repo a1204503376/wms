@@ -9,6 +9,7 @@ import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.intput.SoPickPlanPageQuery;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -144,6 +145,15 @@ public interface SoPickPlanBiz {
 	 * @param stockBalance 库存余额-可为空
 	 */
 	void updatePickByPartParam(Long pickPlanId, Long stockId, Location location, Zone zone, String boxCode, BigDecimal stockBalance);
+
+	/**
+	 * 根据拣货计划ID修改拣货计划
+	 *
+	 * @param pickPlanId  拣货计划ID
+	 * @param newStock    库存
+	 * @param pickRealQty 拣货计划已拣货数量
+	 */
+	void updateDevanning(Long pickPlanId, Stock newStock, BigDecimal pickRealQty);
 
 	/**
 	 * 根据任务ID库存ID查询跟当前任务相关联的拣货计划
