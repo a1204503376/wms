@@ -266,11 +266,19 @@ public class StockBizImpl implements StockBiz {
 		if (Func.isNotEmpty(pickLog.getSnCode())) {
 			serialNoList = Arrays.asList(Func.split(pickLog.getSnCode(), ","));
 		}
-		List<Location> locationList = locationBiz.getLocationByZoneType(stock.getWhId(), DictKVConstant.ZONE_TYPE_VIRTUAL);
-		stock.setUdf3("是");
+
+		// 天宜：撤销拣货默认回到中间库位
+		Location loc = locationBiz.getInTransitLocation(stock.getWhId());
+		AssertUtil.notNull(loc, "撤销拣货失败，中间库存不存在，请核对是否存在InTransit库位");
+		// 天宜：撤销拣货时标记目标库存是由撤销拣货创建的，udf3字段为是
+		if (Func.isNull(udf)){
+			udf = new UdfEntity();
+		}
+		udf.setUdf3("是");
+
 		checkQtyOfSerial(serialNoList, pickLog.getPickRealQty());
 		runMoveStock(stock, serialNoList, pickLog.getPickRealQty(), stock.getBoxCode(), stock.getLpnCode(),
-			locationList.get(0), StockLogTypeEnum.INSTOCK_BY_CANCEL_PICK, null,
+			loc, StockLogTypeEnum.INSTOCK_BY_CANCEL_PICK, null,
 			pickLog.getSoBillId(), pickLog.getSoBillNo(), pickLog.getSoLineNo(), udf);
 	}
 
