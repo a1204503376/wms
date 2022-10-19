@@ -51,23 +51,26 @@ public class CallAgvServiceImpl implements CallAgvService {
         property.setValue(jobQueue.getId());
         properties.add(property);
 
-        setBifurcate(jobQueue, properties);
+        setBoxTypeProperty(jobQueue, properties);
 
         agvTransportOrderRequest.setProperties(properties);
 
         return agvTransportOrderRequest;
     }
 
-    private static void setBifurcate(JobQueue jobQueue, List<Property> properties) {
-        // 创建C箱的job时，在properties属性中新增一个key：boxType，value:C1或C2
-        boolean cBifurcateFlag = ObjectUtils.isEmpty(jobQueue.getWmsCBifurcate()) || jobQueue.getWmsCBifurcate().equals(0);
-        if (cBifurcateFlag) {
-            return;
-        }
-        boolean c1Flag = jobQueue.getWmsCBifurcate().equals(1);
+    private static void setBoxTypeProperty(JobQueue jobQueue, List<Property> properties) {
         Property property = new Property();
         property.setKey(JobConstants.AGV_C_BIFURCATE);
-        property.setValue(c1Flag ? JobConstants.AGV_C1 : JobConstants.AGV_C2);
+        // 创建C箱的job时，在properties属性中新增一个key：boxType，value:C1或C2
+        boolean cBifurcateFlag = ObjectUtils.isEmpty(jobQueue.getWmsCBifurcate()) || jobQueue.getWmsCBifurcate().equals(0);
+        String value;
+        if (cBifurcateFlag) {
+            // A,B,D也需要传给AGV
+            value = jobQueue.getWmsBillType();
+        }else{
+            value = jobQueue.getWmsCBifurcate().equals(1) ? JobConstants.AGV_C1 : JobConstants.AGV_C2;
+        }
+        property.setValue(value);
         properties.add(property);
     }
 

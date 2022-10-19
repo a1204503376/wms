@@ -358,10 +358,16 @@ public class OutStockBizImpl implements OutStockBiz {
 		}
 
 		// 5、如果超了则返回
-		for (String boxCode : boxCodeList) {
-			PickByBoxCodeRequest boxCodeRequest = new PickByBoxCodeRequest();
-			boxCodeRequest.setBoxCode(boxCode);
-			pickByBox(boxCodeRequest, WmsTaskProcTypeEnum.BY_BOX);
+		try {
+			for (String boxCode : boxCodeList) {
+				PickByBoxCodeRequest boxCodeRequest = new PickByBoxCodeRequest();
+				boxCodeRequest.setBoxCode(boxCode);
+				pickByBox(boxCodeRequest, WmsTaskProcTypeEnum.BY_BOX);
+			}
+		} catch (ServiceException exception) {
+			if (exception.getMessage().equals("拣货失败,发货数量大于剩余数量,请拆箱之后再进行拣货")) {
+				return false;
+			}
 		}
 		return true;
 	}

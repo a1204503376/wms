@@ -56,6 +56,9 @@ export default {
         setDefaultByProps() {
             this.isEdit = func.isNotEmpty(this.selectVal.skuId)
             if (!this.isEdit) {
+                this.data = undefined;
+                this.item = undefined;
+                this.val = undefined;
                 return;
             }
             let currentSku = this.data.find(item => item.skuId === this.selectVal.skuId);
