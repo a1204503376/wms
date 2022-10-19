@@ -66,7 +66,7 @@ public class CallAgvServiceImpl implements CallAgvService {
         String value;
         if (cBifurcateFlag) {
             // A,B,D也需要传给AGV
-            value = jobQueue.getWmsBillType();
+            value = jobQueue.getWmsBoxType().getCode();
         }else{
             value = jobQueue.getWmsCBifurcate().equals(1) ? JobConstants.AGV_C1 : JobConstants.AGV_C2;
         }
