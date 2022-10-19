@@ -89,9 +89,6 @@ public class WmsTaskDaoImpl
 			.apply("task_qty <> scan_qty");
 		if (Func.isNotEmpty(taskProcTypeEnum)) {
 			lambdaQuery.eq(WmsTask::getTaskProcType, taskProcTypeEnum);
-		} else {
-			lambdaQuery.in(WmsTask::getTaskProcType, WmsTaskProcTypeEnum.BY_PCS,
-				WmsTaskProcTypeEnum.BY_BOX, WmsTaskProcTypeEnum.BY_LPN, WmsTaskProcTypeEnum.BY_LOC);
 		}
 		if (Func.isNotEmpty(lot)) {
 			lambdaQuery.eq(WmsTask::getLot, lot);

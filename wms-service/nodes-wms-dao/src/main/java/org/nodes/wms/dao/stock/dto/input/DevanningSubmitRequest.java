@@ -19,7 +19,7 @@ public class DevanningSubmitRequest implements Serializable {
 	 */
 	private Boolean isSn;
 	/**
-	 * 箱码
+	 * 箱码(原箱码)
 	 */
 	private String boxCode;
 	/**
