@@ -13,6 +13,7 @@ import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributio
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.outstock.soPickPlan.mapper.SoPickPlanMapper;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springblade.core.tool.utils.Func;
@@ -123,6 +124,25 @@ public class SoPickPlanDaoImpl
 		if (Func.isNotEmpty(stockBalance)) {
 			soPickPlan.setPickPlanQty(stockBalance);
 		}
+		if (!super.update(soPickPlan, updateWrapper)) {
+			throw new ServiceException("修改拣货计划失败,请再次重试");
+		}
+	}
+
+	@Override
+	public void updateDeva(Long pickPlanId, Stock newStock, BigDecimal pickRealQty) {
+		UpdateWrapper<SoPickPlan> updateWrapper = Wrappers.update();
+		updateWrapper.lambda()
+			.eq(SoPickPlan::getPickPlanId, pickPlanId);
+		SoPickPlan soPickPlan = new SoPickPlan();
+		soPickPlan.setStockId(newStock.getStockId());
+		soPickPlan.setLocId(newStock.getLocId());
+		soPickPlan.setLocCode(newStock.getLocCode());
+		soPickPlan.setZoneId(newStock.getZoneId());
+		soPickPlan.setZoneCode(newStock.getZoneCode());
+		soPickPlan.setBoxCode(newStock.getBoxCode());
+		soPickPlan.setLpnCode(newStock.getLpnCode());
+		soPickPlan.setPickPlanQty(pickRealQty);
 		if (!super.update(soPickPlan, updateWrapper)) {
 			throw new ServiceException("修改拣货计划失败,请再次重试");
 		}

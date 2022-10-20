@@ -247,6 +247,14 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	}
 
 	@Override
+	public void updateDevanning(Long pickPlanId, Stock newStock, BigDecimal pickRealQty) {
+		AssertUtil.notNull(pickPlanId, "修改拣货计划失败，拣货计划ID为空");
+		AssertUtil.notNull(newStock, "修改拣货计划失败，库存为空");
+		AssertUtil.notNull(pickRealQty, "修改拣货计划失败，拣货计划拣货量为空");
+		soPickPlanDao.updateDeva(pickPlanId, newStock, pickRealQty);
+	}
+
+	@Override
 	public List<SoPickPlan> findPickByTaskId(Long taskId, Long stockId) {
 		return soPickPlanDao.getPickByTaskIdAndStockId(taskId, stockId);
 	}
@@ -291,10 +299,10 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 												 List<SoPickPlan> oldPickPlans,
 												 SoDetail detail, String result) {
 		List<SoPickPlan> allPickPlans = new ArrayList<>();
-		if (Func.isNotEmpty(newPickPlans)){
+		if (Func.isNotEmpty(newPickPlans)) {
 			allPickPlans.addAll(newPickPlans);
 		}
-		if (Func.isNotEmpty(oldPickPlans)){
+		if (Func.isNotEmpty(oldPickPlans)) {
 			allPickPlans.addAll(oldPickPlans);
 		}
 		if (Func.isEmpty(allPickPlans)) {

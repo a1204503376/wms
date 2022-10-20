@@ -7,7 +7,9 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
+import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
 import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
@@ -53,7 +55,7 @@ public class WmsTaskDaoImpl
 			wmsTask.setAllotTime(LocalDateTime.now());
 		} else if (WmsTaskStateEnum.START_EXECUTION.equals(state)) {
 			wmsTask.setBeginTime(LocalDateTime.now());
-		} else if (WmsTaskStateEnum.AGV_RECEIVED.equals(state)){
+		} else if (WmsTaskStateEnum.AGV_RECEIVED.equals(state)) {
 			wmsTask.setConfirmDate(LocalDateTime.now());
 		}
 
@@ -89,9 +91,6 @@ public class WmsTaskDaoImpl
 			.apply("task_qty <> scan_qty");
 		if (Func.isNotEmpty(taskProcTypeEnum)) {
 			lambdaQuery.eq(WmsTask::getTaskProcType, taskProcTypeEnum);
-		} else {
-			lambdaQuery.in(WmsTask::getTaskProcType, WmsTaskProcTypeEnum.BY_PCS,
-				WmsTaskProcTypeEnum.BY_BOX, WmsTaskProcTypeEnum.BY_LPN, WmsTaskProcTypeEnum.BY_LOC);
 		}
 		if (Func.isNotEmpty(lot)) {
 			lambdaQuery.eq(WmsTask::getLot, lot);
@@ -162,6 +161,26 @@ public class WmsTaskDaoImpl
 			.eq(WmsTask::getTaskId, taskId);
 		WmsTask wmsTask = new WmsTask();
 		wmsTask.setRemark(remark);
+		if (!super.update(wmsTask, updateWrapper)) {
+			throw new ServiceException("任务更新失败,请再次重试");
+		}
+	}
+
+	@Override
+	public void updateDeva(WmsTask task, WmsTaskProcTypeEnum taskProcTypeEnum, Stock newStock) {
+		UpdateWrapper<WmsTask> updateWrapper = Wrappers.update();
+		updateWrapper.lambda()
+			.eq(WmsTask::getTaskId, task.getTaskId());
+		WmsTask wmsTask = new WmsTask();
+		wmsTask.setTaskProcType(taskProcTypeEnum);
+		wmsTask.setScanQty(task.getScanQty());
+		wmsTask.setToLocId(newStock.getLocId());
+		wmsTask.setToLocCode(newStock.getLocCode());
+		wmsTask.setBoxCode(newStock.getBoxCode());
+		wmsTask.setLpnCode(newStock.getLpnCode());
+		if (BigDecimalUtil.eq(task.getScanQty(), task.getTaskQty())) {
+			wmsTask.setTaskState(WmsTaskStateEnum.COMPLETED);
+		}
 		if (!super.update(wmsTask, updateWrapper)) {
 			throw new ServiceException("任务更新失败,请再次重试");
 		}

@@ -1,10 +1,10 @@
 package org.nodes.wms.biz.task;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
 import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
 import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
@@ -136,6 +136,13 @@ public interface WmsTaskBiz {
 	 * @param toLocation       目标库位
 	 */
 	void updateWmsTaskByPartParam(Long taskId, WmsTaskProcTypeEnum taskProcTypeEnum, Location toLocation, String boxCode);
+
+	/**
+	 * @param task             任务
+	 * @param taskProcTypeEnum 任务状态
+	 * @param newStock         新库存
+	 */
+	void updateDevanning(WmsTask task, WmsTaskProcTypeEnum taskProcTypeEnum, Stock newStock);
 
 	/**
 	 * 根据任务ID获取任务
