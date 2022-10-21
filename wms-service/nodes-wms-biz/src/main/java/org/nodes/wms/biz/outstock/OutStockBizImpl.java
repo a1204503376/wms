@@ -1078,6 +1078,7 @@ public class OutStockBizImpl implements OutStockBiz {
 			truckStock.setBillHeaderId(soBillId);
 			truckStockBiz.insert(truckStock);
 			SoHeader soHeader = soBillBiz.getSoHeaderById(soBillId);
+			logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soBillId, soHeader.getSoBillNo(), String.format("PDA出库复核 箱码:[%s]", boxCode));
 			if (SoBillStateEnum.ALL_OUT_STOCK.equals(soHeader.getSoBillState()) && findBoxCountBySoHeaderId(soBillId) == 0) {
 				//单据状态为全部收货并且收货记录和发运记录箱子数量相等，进行自动关单
 				soBillBiz.closeById(soBillId);
