@@ -47,6 +47,7 @@ import org.nodes.wms.dao.outstock.soPickPlan.dto.output.FindPickPlanBySoBillIdAn
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.dto.output.PickByPcStockDto;
+import org.nodes.wms.dao.stock.dto.output.StockAgvAndPickResponse;
 import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
@@ -640,6 +641,41 @@ public class OutStockBizImpl implements OutStockBiz {
 			}
 		}
 		return stockSoPickPlanList;
+	}
+
+	@Override
+	public StockAgvAndPickResponse getStockAgvPick(Long skuId, String skuLot1, String skuLot4, Long soBillId) {
+		List<StockSoPickPlanResponse> stockSoPickPlanList = getStockByDistributeAdjust(skuId, skuLot1, skuLot4, soBillId);
+		Map<String, BigDecimal> map = new HashMap<>();
+		for (StockSoPickPlanResponse stockSoPickPlan : stockSoPickPlanList) {
+			BigDecimal stockBalance = map.get(stockSoPickPlan.getZoneCode());
+			if (Func.isEmpty(stockBalance)) {
+				map.put(stockSoPickPlan.getZoneCode(), stockSoPickPlan.getStockEnable());
+			} else {
+				map.put(stockSoPickPlan.getZoneCode(), stockSoPickPlan.getStockBalance().add(stockBalance));
+			}
+		}
+		StockAgvAndPickResponse response = new StockAgvAndPickResponse();
+		Iterator<Map.Entry<String, BigDecimal>> iterator = map.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Map.Entry<String, BigDecimal> ppEntry = iterator.next();
+			Zone zone = zoneBiz.findByCode(ppEntry.getKey());
+			if (DictKVConstant.ZONE_TYPE_AGV_STORAGE.intValue() == zone.getZoneType().intValue()) {
+				BigDecimal agvStockBalance = response.getAgvStockBalance();
+				if (Func.isEmpty(agvStockBalance)) {
+					agvStockBalance = BigDecimal.ZERO;
+				}
+				response.setAgvStockBalance(agvStockBalance.add(ppEntry.getValue()));
+			} else {
+				BigDecimal pickStockBalance = response.getPickStockBalance();
+				if (Func.isEmpty(pickStockBalance)) {
+					pickStockBalance = BigDecimal.ZERO;
+				}
+				response.setPickStockBalance(pickStockBalance.add(ppEntry.getValue()));
+			}
+		}
+
+		return response;
 	}
 
 	@Override
