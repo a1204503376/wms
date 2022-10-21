@@ -43,7 +43,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 天宜定制 调度系统
@@ -105,6 +107,12 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		}
 		Zone zone = zoneBiz.findByCode(zoneCode);
 		List<Location> locationList = locationBiz.findLocationByZoneId(zone.getZoneId());
+		if (Func.equals(request.getLpnTypeCode(), WmsAppConstant.BOX_TYPE_D)){
+			locationList = locationList.stream()
+				.sorted(Comparator.comparing(Location::getPutOrder))
+				.collect(Collectors.toList());
+		}
+
 
 		for (Location location : locationList) {
 			LpnType locLpnType = lpnTypeBiz.findLpnTypeById(location.getLpnTypeId());
