@@ -240,6 +240,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		} else {
 			//天宜定制：判断箱型是BC箱就获取系统临时库位，并推荐
 			Param param = systemParamDao.selectByKey(SystemParamConstant.SYSTEM_TEMP_LOC);
+			AssertUtil.notNull(param, "系统错误，没有配置系统临时库位的参数");
 			String systemTempLocCode = param.getParamValue();
 			AssertUtil.notEmpty(systemTempLocCode, "系统错误，没有配置系统临时库位的参数");
 			newLocation = locationBiz.findLocationByLocCode(wmsTask.getWhId(), systemTempLocCode);
