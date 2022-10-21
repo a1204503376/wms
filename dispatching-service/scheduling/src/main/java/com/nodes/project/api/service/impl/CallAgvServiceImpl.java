@@ -20,7 +20,7 @@ import java.util.List;
 public class CallAgvServiceImpl implements CallAgvService {
     private static final String URL_TRANSPORT_ORDERS = "/transportOrders/{}";
     private static final String URL_WITHDRAWAL = URL_TRANSPORT_ORDERS + "/withdrawal";
-    private static final String url_vehicleWithdrawal = "/vehicleWithdrawal/{}/unload/{}";
+    private static final String url_vehicleWithdrawal = "/vehiclesWithdrawal/{}/unload/{}";
 
     @Resource
     private CallApiService callApiService;
