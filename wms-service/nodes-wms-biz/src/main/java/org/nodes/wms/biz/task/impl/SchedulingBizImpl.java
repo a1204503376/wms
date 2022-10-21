@@ -200,6 +200,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		//天宜定制：推荐库位
 		Location newLocation = nominateNewLocation(wmsTask);
 		AssertUtil.notNull(newLocation, "推荐新的库位失败，没有合适的库位");
+		locationBiz.freezeLocByTask(newLocation.getLocId(), wmsTask.getTaskId().toString());
 		// 3. 更新任务中的目标库位和消息
 		wmsTask.setToLocCode(newLocation.getLocCode());
 		wmsTask.setToLocId(newLocation.getLocId());
@@ -228,7 +229,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			AssertUtil.notEmpty(stocks, "推荐新的库位失败,没有查询到该任务的库存");
 			newLocation = putawayStrategyActuator.run(null, stocks);
 			Location unknownLocation = locationBiz.getUnknowLocation(newLocation.getWhId());
-			if (Func.isEmpty(newLocation) || Func.equals(unknownLocation, newLocation)
+			if (Func.isEmpty(newLocation) || Func.equals(unknownLocation.getLocId(), newLocation.getLocId())
 				|| !newLocation.enableStock()) {
 				NoticeMessageRequest messageRequest = new NoticeMessageRequest();
 				messageRequest.setLog(String.format("任务[%s]执行了双重入库,推荐新的库位失败，没有可推荐的新库位",
@@ -236,7 +237,6 @@ public class SchedulingBizImpl implements SchedulingBiz {
 				logBiz.noticeMesssage(messageRequest);
 				throw new ServiceException("推荐新的库位失败,没有可推荐的新库位");
 			}
-			locationBiz.freezeLocByTask(newLocation.getLocId(), wmsTask.getTaskId().toString());
 		} else {
 			//天宜定制：判断箱型是BC箱就获取系统临时库位，并推荐
 			Param param = systemParamDao.selectByKey(SystemParamConstant.SYSTEM_TEMP_LOC);
