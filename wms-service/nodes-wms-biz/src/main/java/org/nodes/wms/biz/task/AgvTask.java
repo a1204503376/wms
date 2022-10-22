@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -184,7 +185,25 @@ public class AgvTask {
 		List<Stock> sourceStock = stockQueryBiz.findStockById(stockIdList);
 		WmsTask pickTask = wmsTaskFactory.createPickTask(sourceStock, so, soDetail);
 		sendPickToSchedule(pickTask, so);
-		stockBiz.freezeStockByDropId(sourceStock, pickTask.getTaskId());
+
+		// 拣货任务是按库位移动，所有需要冻结库位上所有的库存
+		List<Stock> needFreezeStocks = new ArrayList<>();
+		for (Stock stock : sourceStock){
+			if (needFreezeStocks.stream().anyMatch(item -> item.getLocId().equals(stock.getLocId()))){
+				continue;
+			}
+			List<Stock> stockOfLoc = stockQueryBiz.findStockByLocation(stock.getLocId());
+			if (Func.isNotEmpty(stockOfLoc)){
+				needFreezeStocks.addAll(stockOfLoc);
+			}
+		}
+		List<Long> needFreezeStockIds = needFreezeStocks.stream()
+			.map(Stock::getStockId)
+			.distinct()
+			.collect(Collectors.toList());
+		needFreezeStocks = stockQueryBiz.findStockById(needFreezeStockIds);
+		stockBiz.freezeStockByDropId(needFreezeStocks, pickTask.getTaskId());
+
 		wmsTaskDao.save(pickTask);
 		return pickTask;
 	}

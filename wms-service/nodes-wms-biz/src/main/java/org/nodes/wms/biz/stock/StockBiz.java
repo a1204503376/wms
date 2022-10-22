@@ -183,7 +183,7 @@ public interface StockBiz {
 								   Long billId, String billNo, String lineNo, UdfEntity udf);
 
 	/**
-	 * 整箱移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
+	 * 整箱移动,可能会发生库存合并
 	 * 原库存状态为系统冻结在移动时抛异常；目标库位状态(locFlag)如果不是正常或冻结时抛异常
 	 * 和moveStockByBoxCode的区别是如果原库存有冻结数量则目标库存也将会冻结
 	 *
@@ -316,6 +316,22 @@ public interface StockBiz {
 	 * @param lpnCodes 必填
 	 */
 	void unfreezeStockByLpnCode(List<String> lpnCodes);
+
+	/**
+	 * 将库位设置为系统冻结
+	 *
+	 * @param stockId stockId，必填
+	 * @param msg     消息，非必填
+	 */
+	void systemFreeze(Long stockId, String msg);
+
+	/**
+	 * 解除系统冻结
+	 *
+	 * @param stockId sockId
+	 * @param msg     消息，非必填
+	 */
+	void unfreezeOnSystemFreezed(Long stockId, String msg);
 
 	/**
 	 * 校验库存的序列号

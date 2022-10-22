@@ -158,14 +158,6 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 	}
 
 	@Override
-	public void updateDevanning(WmsTask task, WmsTaskProcTypeEnum taskProcTypeEnum, Stock newStock) {
-		AssertUtil.notNull(task, "更新任务失败，任务为空");
-		AssertUtil.notNull(taskProcTypeEnum, "更新任务失败，任务执行方式为空");
-		AssertUtil.notNull(newStock, "更新任务失败， 来源库存为空");
-		wmsTaskDao.updateDeva(task, taskProcTypeEnum, newStock);
-	}
-
-	@Override
 	public WmsTask findByTaskId(Long taskId) {
 		AssertUtil.notNull(taskId, "下发任务失败，任务ID为空");
 		return wmsTaskDao.getById(taskId);

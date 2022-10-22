@@ -55,10 +55,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -869,6 +866,16 @@ public class StockBizImpl implements StockBiz {
 		for (Stock stock : stocks) {
 			createAndSaveStockLog(StockLogTypeEnum.STOCK_UNFREEZE, stock, "按lpnCode解冻");
 		}
+	}
+
+	@Override
+	public void systemFreeze(Long stockId, String msg) {
+		stockDao.updateStock(Collections.singletonList(stockId), StockStatusEnum.SYSTEM_FREEZE);
+	}
+
+	@Override
+	public void unfreezeOnSystemFreezed(Long stockId, String msg) {
+		stockDao.updateStock(Collections.singletonList(stockId), StockStatusEnum.NORMAL);
 	}
 
 	/**

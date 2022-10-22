@@ -107,15 +107,6 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 	void updatePickByPartParam(Long pickPlanId, Long stockId, Location location, Zone zone, String boxCode, BigDecimal stockBalance);
 
 	/**
-	 * 根据拣货计划ID修改拣货计划
-	 *
-	 * @param pickPlanId  拣货计划ID
-	 * @param newStock    库存
-	 * @param pickRealQty 拣货计划已拣货数量
-	 */
-	void updateDeva(Long pickPlanId, Stock newStock, BigDecimal pickRealQty);
-
-	/**
 	 * 根据任务和库存ID查询对应的拣货计划
 	 *
 	 * @param taskId  任务ID
@@ -168,4 +159,12 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 	 * @return 拣货计划
 	 */
 	List<SoPickPlan> selectSoPickPlansByBoxCode(String boxCode);
+
+	/**
+	 * 更新拣货计划中的库存信息
+	 *
+	 * @param soPickPlan 拣货计划
+	 * @param newStock 新的库存
+	 */
+	void updatePlanOfStock(SoPickPlan soPickPlan, Stock newStock);
 }

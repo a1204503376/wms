@@ -3,6 +3,7 @@ package org.nodes.wms.biz.outstock.plan.modular;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
+import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.dao.outstock.so.entities.SoDetail;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.entities.Stock;
@@ -20,10 +21,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SoPickPlanFactory {
 
+	private final StockBiz stockBiz;
+
 	public List<SoPickPlan> createOnAgvArea(SoDetail soDetail, List<SoDetail> soDetailList,
-											Stock stock, List<Stock> stockOfLoc) {
+											Stock stock, List<Stock> stockOfLoc, BigDecimal planQty) {
+		// 自动区分配的时候不能超分配
 		List<SoPickPlan> result = new ArrayList<>();
+		String msg = String.format("分配冻结[%s]", soDetail.getSoBillNo());
 		for (Stock item : stockOfLoc) {
+			// 创建拣货计划
 			SoDetail currentSoDetail = soDetailList.stream()
 				.filter(soDetailItem -> {
 					if (Func.isNotEmpty(soDetailItem.getSkuLot1()) && !soDetailItem.getSkuLot1().equals(item.getSkuLot1())){
@@ -41,7 +47,11 @@ public class SoPickPlanFactory {
 				})
 				.findFirst()
 				.orElse(null);
-			SoPickPlan soPickPlan = create(soDetail.getSoBillId(), currentSoDetail, item, item.getStockEnable());
+			if (Func.isNull(currentSoDetail)){
+				continue;
+			}
+
+			SoPickPlan soPickPlan = create(soDetail.getSoBillId(), currentSoDetail, item, planQty);
 			result.add(soPickPlan);
 		}
 

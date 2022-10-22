@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.stockManage.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.core.udf.UdfEntity;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
@@ -17,6 +18,8 @@ import org.nodes.wms.biz.stockManage.module.DevanningActionFactory;
 import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
+import org.nodes.wms.dao.outstock.so.entities.SoDetail;
+import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.dto.input.DevanningSubmitRequest;
@@ -28,6 +31,7 @@ import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
 import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
+import org.nodes.wms.dao.task.enums.WmsTaskTypeEnum;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
@@ -36,7 +40,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -145,48 +148,57 @@ public class DevanningBizImpl implements DevanningBiz {
 		if (locationBiz.isAgvLocation(targetLoc)) {
 			throw ExceptionUtil.mpe("拆箱失败,目标库位[{}]不能是自动区库位", request.getLocCode());
 		}
+
 		// 将旧库存拆成新库存
 		List<DevanningAction> devanningActions = devanningActionFactory.create(request);
 		String newBoxCode = null;
 		if (request.getNewBoxCode()) {
 			newBoxCode = generateNewBoxCode(request);
 		}
-
 		String newLpnCode = newBoxCode;
 		UdfEntity udfEntity = new UdfEntity();
 		udfEntity.setUdf2(request.getBoxCode());
 
-		Map<Long, Stock> oldStockId2NewStock = new HashMap<>();
-		Map<Long, BigDecimal> oldStockId2Qty = new HashMap<>();
+		Map<Stock, Stock> oldStock2NewStock = new HashMap<>();
 		for (DevanningAction item : devanningActions) {
 			Location sourceLoc = locationBiz.findByLocId(item.getStock().getLocId());
 			if (locationBiz.isAgvLocation(sourceLoc)) {
 				throw ExceptionUtil.mpe("拆箱失败,原库存库位[{}]不能是自动区库位", sourceLoc.getLocCode());
 			}
-			item.getStock().setOccupyQty(BigDecimal.ZERO);
 			Stock newStock = stockBiz.moveStock(item.getStock(), item.getSerialNoList(), item.getQty(), newBoxCode, newLpnCode,
 				targetLoc, StockLogTypeEnum.STOCK_DEVANNING_BY_PDA, null, null, null, udfEntity);
-			newStock.setOccupyQty(newStock.getStockBalance());
-			stockDao.upateOccupyQty(newStock);
-			oldStockId2NewStock.put(item.getStock().getStockId(), newStock);
-			oldStockId2Qty.put(item.getStock().getStockId(), item.getQty());
+			oldStock2NewStock.put(item.getStock(), newStock);
 		}
-		// 判断就库存是否有关联拣货计划，如果有需要更新原拣货计划
+
+		// 判断就库存是否有关联拣货计划，如果有需要重新分配
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findSoPickPlanByBoxCode(request.getBoxCode());
 		if (Func.isNotEmpty(soPickPlanList)) {
-			updateDevaBySoPickPlan(soPickPlanList, oldStockId2NewStock, oldStockId2Qty);
+			updateSoPickPlanAndTaskOnDevanning(soPickPlanList, oldStock2NewStock);
 		}
 	}
 
-	private void updateDevaBySoPickPlan(List<SoPickPlan> soPickPlanList, Map<Long, Stock> oldStockId2NewStock, Map<Long, BigDecimal> oldStockId2Qty) {
-		for (SoPickPlan soPickPlan : soPickPlanList) {
-			Stock newStock = oldStockId2NewStock.get(soPickPlan.getStockId());
-			BigDecimal qty = oldStockId2Qty.get(soPickPlan.getStockId());
-			soPickPlan.setPickRealQty(soPickPlan.getPickRealQty().add(qty));
-			soPickPlanBiz.updateDevanning(soPickPlan.getPickPlanId(), newStock, soPickPlan.getPickRealQty());
-			WmsTask task = wmsTaskBiz.findByTaskId(soPickPlan.getTaskId());
-			task.setScanQty(task.getScanQty().add(qty));
-			wmsTaskBiz.updateDevanning(task, WmsTaskProcTypeEnum.BY_BOX, newStock);
+	private void updateSoPickPlanAndTaskOnDevanning(List<SoPickPlan> soPickPlanList,
+													Map<Stock, Stock> oldStock2NewStock) {
+		for (SoPickPlan soPickPlanItem : soPickPlanList) {
+			SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlanItem.getSoDetailId());
+			Stock oldStock = oldStock2NewStock.keySet().stream()
+				.filter(item -> item.getStockId().equals(soPickPlanItem.getStockId()))
+				.findFirst().orElse(null);
+			if (Func.isNull(oldStock)) {
+				continue;
+			}
+			Stock newStock = oldStock2NewStock.get(oldStock);
+
+			if (BigDecimalUtil.le(newStock.getStockBalance(), soDetail.getSurplusQty())
+				&& BigDecimalUtil.gt(oldStock.getStockBalance(), soDetail.getSurplusQty())) {
+				soPickPlanBiz.updatePlanOfStock(soPickPlanItem, newStock, oldStock);
+			}
 		}
+
+		SoHeader soHeader = soBillBiz.getSoHeaderById(soPickPlanList.get(0).getSoBillId());
+		WmsTask wmsTask = wmsTaskBiz.create(WmsTaskTypeEnum.PICKING, WmsTaskProcTypeEnum.BY_BOX, soPickPlanList, soHeader);
+		soPickPlanBiz.setTaskId(soPickPlanList, wmsTask.getTaskId());
 	}
+
+
 }

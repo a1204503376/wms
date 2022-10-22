@@ -99,10 +99,4 @@ public interface WmsTaskDao extends BaseService<WmsTask> {
 	 */
 	void updateRemark(Long taskId, String msg);
 
-	/**
-	 * @param task             任务
-	 * @param taskProcTypeEnum 任务状态
-	 * @param newStock         新库存
-	 */
-	void updateDeva(WmsTask task, WmsTaskProcTypeEnum taskProcTypeEnum, Stock newStock);
 }
