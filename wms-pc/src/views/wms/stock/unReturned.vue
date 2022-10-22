@@ -5,20 +5,14 @@
                 <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="借出人姓名" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.lendReturnName"
-                                :clearable="true"
-                                class="search-input"
+                            <el-input v-model.trim="form.params.lendReturnName" :clearable="true" class="search-input"
                                 placeholder="请输入借出人姓名">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="物品" label-width="90px">
-                            <nodes-sku
-                                v-model="form.params.skuIdList"
-                                :multiple="true"
-                                class="search-input"
+                            <nodes-sku v-model="form.params.skuIdList" :multiple="true" class="search-input"
                                 placeholder="请选择">
                             </nodes-sku>
                         </el-form-item>
@@ -30,10 +24,7 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="生产批次" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.skuLot1"
-                                :clearable="true"
-                                class="search-input"
+                            <el-input v-model.trim="form.params.skuLot1" :clearable="true" class="search-input"
                                 placeholder="请输入生产批次">
                             </el-input>
                         </el-form-item>
@@ -42,10 +33,7 @@
                 <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="规格型号" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.skuLot2"
-                                :clearable="true"
-                                class="search-input"
+                            <el-input v-model.trim="form.params.skuLot2" :clearable="true" class="search-input"
                                 placeholder="请输入规格型号">
                             </el-input>
                         </el-form-item>
@@ -53,10 +41,7 @@
                 </el-row>
             </template>
             <template v-slot:batchBtn>
-                <el-button
-                    v-if="permissionObj.createReturnBill"
-                    icon="el-icon-plus"
-                    size="mini" type="primary"
+                <el-button v-if="permissionObj.createReturnBill" icon="el-icon-plus" size="mini" type="primary"
                     @click="createReturnBill">创建归还单
                 </el-button>
             </template>
@@ -67,42 +52,30 @@
                 <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">
                     <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
                 </el-tooltip>
-                <el-tooltip :enterable="false" class="item" content="服务端导出" effect="dark" placement="top">
+                <el-tooltip :enterable="false" class="item" content="全量导出" effect="dark" placement="top">
                     <el-button circle icon="el-icon-download" size="mini" @click="onExportData"></el-button>
                 </el-tooltip>
-                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
+                <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                                  style="display: inline-block;margin-left: 10px">
-                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData"/>
+                        style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData" />
                     </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table
-                    ref="table"
-                    :data="table.data"
-                    :height="table.height" border highlight-current-row
-                    size="mini" @sort-change="onSortChange">
-                    <el-table-column
-                        fixed
-                        type="selection"
-                        width="50">
+                <el-table ref="table" :data="table.data" :height="table.height" border highlight-current-row size="mini"
+                    @sort-change="onSortChange">
+                    <el-table-column fixed type="selection" width="50">
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
-                        <el-table-column
-                            v-if="!column.hide"
-                            :key="index"
-                            show-overflow-tooltip
-                            v-bind="column">
+                        <el-table-column v-if="!column.hide" :key="index" show-overflow-tooltip v-bind="column">
                         </el-table-column>
                     </template>
                 </el-table>
             </template>
             <template v-slot:page>
-                <el-pagination
-                    :current-page="page.current" :page-size="page.size" :page-sizes="[20, 50, 100]"
-                    :total="page.total" background layout="total, sizes, prev, pager, next, jumper"
-                    v-bind="page"
+                <el-pagination :current-page="page.current" :page-size="page.size" :page-sizes="[20, 50, 100]"
+                    :total="page.total" background layout="total, sizes, prev, pager, next, jumper" v-bind="page"
                     @size-change="handleSizeChange" @current-change="handleCurrentChange">
                 </el-pagination>
             </template>

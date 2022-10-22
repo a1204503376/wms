@@ -176,7 +176,7 @@ export const listMixin = {
             }
             this.setColumnList(this.table.columnList, columnObj.columnList);
         },
-        // 本地导出
+        // 当前页导出
         exportCurrentDataToExcel(sheetName, filename) {
             this.exportExcelSheet[0].cellStyle = [];
             this.exportExcelSheet[0].tHeader = this.table.columnList.map((item) => {

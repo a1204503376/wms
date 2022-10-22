@@ -5,32 +5,25 @@
                 <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.skuCode"
-                                class="search-input">
+                            <el-input v-model.trim="form.params.skuCode" class="search-input">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="a.b" label-width="90px">
-                            <el-input
-                                v-model="form.params.a.b" class="search-input">
+                            <el-input v-model="form.params.a.b" class="search-input">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="ASN单状态" label-width="90px">
-                            <nodes-asn-bill-state
-                                v-model="form.params.asnState"
-                                class="search-input">
+                            <nodes-asn-bill-state v-model="form.params.asnState" class="search-input">
                             </nodes-asn-bill-state>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="入库方式" label-width="90px">
-                            <nodes-in-store-mode
-                                v-model="form.params.inStorageType"
-                                class="search-input">
+                            <nodes-in-store-mode v-model="form.params.inStorageType" class="search-input">
                             </nodes-in-store-mode>
                         </el-form-item>
                     </el-col>
@@ -38,9 +31,7 @@
                 <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="状态" label-width="90px">
-                            <nodes-lpn-type-state
-                                v-model="form.params.lpnTypeState"
-                                class="search-input">
+                            <nodes-lpn-type-state v-model="form.params.lpnTypeState" class="search-input">
                             </nodes-lpn-type-state>
                         </el-form-item>
                     </el-col>
@@ -88,102 +79,51 @@
                 <el-button size="mini" type="primary">冻结</el-button>
             </template>
             <template v-slot:tableTool>
-                <el-tooltip
-                    :enterable="false"
-                    class="item"
-                    content="刷新"
-                    effect="dark"
-                    placement="top"
-                >
+                <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
                     <el-button circle icon="el-icon-refresh" size="mini" @click="onRefresh"></el-button>
                 </el-tooltip>
-                <el-tooltip
-                    :enterable="false"
-                    class="item"
-                    content="显隐"
-                    effect="dark"
-                    placement="top"
-                >
+                <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">
                     <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
                 </el-tooltip>
-                <el-tooltip
-                    :enterable="false"
-                    class="item"
-                    content="本地导出"
-                    effect="dark"
-                    placement="top"
-                >
+                <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
                     <el-button circle icon="el-icon-bottom" size="mini"></el-button>
                 </el-tooltip>
-                <el-tooltip
-                    :enterable="false"
-                    class="item"
-                    content="服务端导出"
-                    effect="dark"
-                    placement="top"
-                >
+                <el-tooltip :enterable="false" class="item" content="全量导出" effect="dark" placement="top">
                     <el-button circle icon="el-icon-download" size="mini"></el-button>
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table
-                    ref="table"
-                    :data="table.data"
-                    :height="table.height"
-                    :summary-method="getSummaries"
-                    border
-                    highlight-current-row
-                    show-summary
-                    size="mini"
-                    @sort-change="onSortChange">
-                    <el-table-column
-                        fixed
-                        type="selection"
-                        width="50">
+                <el-table ref="table" :data="table.data" :height="table.height" :summary-method="getSummaries" border
+                    highlight-current-row show-summary size="mini" @sort-change="onSortChange">
+                    <el-table-column fixed type="selection" width="50">
                     </el-table-column>
-                    <el-table-column
-                        fixed
-                        type="index"
-                        width="50">
+                    <el-table-column fixed type="index" width="50">
                         <template slot="header">
                             #
                         </template>
                     </el-table-column>
                     <template v-for="(column,index) in table.columnList">
-                        <el-table-column
-                            v-if="!column.hide"
-                            :key="index"
-                            show-overflow-tooltip
-                            width="150"
+                        <el-table-column v-if="!column.hide" :key="index" show-overflow-tooltip width="150"
                             v-bind="column">
                         </el-table-column>
                     </template>
-                    <el-table-column
-                        fixed="right"
-                        label="操作"
-                        width="120">
+                    <el-table-column fixed="right" label="操作" width="120">
                         <template v-slot="{row}">
-                            <el-button v-if="permissionObj.add" size="mini" type="text" @click="onEdit(row)">编辑</el-button>
+                            <el-button v-if="permissionObj.add" size="mini" type="text" @click="onEdit(row)">编辑
+                            </el-button>
                             <el-button size="mini" type="text" @click="onViewDetails(row)">查看详情</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
             </template>
             <template v-slot:page>
-                <el-pagination
-                    :page-sizes="[20, 50, 100]"
-                    background
-                    layout="total, sizes, prev, pager, next, jumper"
-                    v-bind="page"
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange">
+                <el-pagination :page-sizes="[20, 50, 100]" background layout="total, sizes, prev, pager, next, jumper"
+                    v-bind="page" @size-change="handleSizeChange" @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>
         <div v-if="columnShowHide.visible">
-            <dialog-column
-                v-bind="columnShowHide"
-                @close="onColumnShowHide">
+            <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
             </dialog-column>
         </div>
     </div>
