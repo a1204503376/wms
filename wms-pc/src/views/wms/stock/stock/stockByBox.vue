@@ -12,7 +12,7 @@
                     <el-col :span="6">
                         <el-form-item label="生产批次" label-width="90px">
                             <el-input v-model.trim="form.params.skuLot1" :clearable="true" class="search-input"
-                                placeholder="请输入生产批次">
+                                      placeholder="请输入生产批次">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -25,7 +25,7 @@
                     <el-col :span="6">
                         <el-form-item label="库存状态" label-width="90px">
                             <NodesStockStatus v-model="form.params.stockStatusList" :multiple="true"
-                                class="search-input">
+                                              class="search-input">
                             </NodesStockStatus>
                         </el-form-item>
                     </el-col>
@@ -34,28 +34,28 @@
                     <el-col :span="6">
                         <el-form-item label="库区" label-width="90px">
                             <nodes-zone v-model="form.params.zoneIdList" :notSelectName="notSelectName" :multiple="true"
-                                class="search-input">
+                                        class="search-input">
                             </nodes-zone>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="箱码" label-width="90px">
                             <el-input v-model.trim="form.params.boxCode" :clearable="true" class="search-input"
-                                placeholder="请输入箱码">
+                                      placeholder="请输入箱码">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="lpn" label-width="90px">
                             <el-input v-model.trim="form.params.lpnCode" :clearable="true" class="search-input"
-                                placeholder="请输入lpn">
+                                      placeholder="请输入lpn">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="规格型号" label-width="90px">
                             <el-input v-model.trim="form.params.skuLot2" :clearable="true" class="search-input"
-                                placeholder="请输入规格型号">
+                                      placeholder="请输入规格型号">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -70,21 +70,21 @@
                     <el-col :span="6">
                         <el-form-item label="专用客户" label-width="90px">
                             <el-input v-model.trim="form.params.skuLot4" :clearable="true" class="search-input"
-                                placeholder="请输入专用客户">
+                                      placeholder="请输入专用客户">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="钢背批次" label-width="90px">
                             <el-input v-model.trim="form.params.skuLot5" :clearable="true" class="search-input"
-                                placeholder="请输入钢背批次">
+                                      placeholder="请输入钢背批次">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="摩擦块批次" label-width="90px">
                             <el-input v-model.trim="form.params.skuLot6" :clearable="true" class="search-input"
-                                placeholder="请输入摩擦块批次">
+                                      placeholder="请输入摩擦块批次">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -128,7 +128,7 @@
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                        style="display: inline-block;margin-left: 10px">
+                                  style="display: inline-block;margin-left: 10px">
                         <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
                         </el-button>
                     </excel-export>
@@ -136,15 +136,15 @@
             </template>
             <template v-slot:table>
                 <el-table ref="table" :data="table.data" :height="table.height" :row-class-name="tableRowClassName"
-                    :span-method="arraySpanMethod" border highlight-current-row row-key="id" size="mini"
-                    style="width: 100%" @sort-change="onSortChange">
+                          :span-method="arraySpanMethod" border highlight-current-row row-key="id" size="mini"
+                          style="width: 100%" @sort-change="onSortChange">
                     <template v-for="(column, index) in table.columnList">
                         <!--  库存余额  -->
                         <el-table-column :key="index" :show-overflow-tooltip="true" v-bind="column" width="130"
-                            v-if="column.prop === 'stockBalance'">
+                                         v-if="column.prop === 'stockBalance'">
                             <template v-slot="{row}">
                                 <el-link v-if="!row.hideStyle" :underline="false" target="_blank" type="primary"
-                                    @click="onViewStockBalance(row.stockId)">
+                                         @click="onViewStockBalance(row.stockId)">
                                     {{ row.stockBalance }}
                                 </el-link>
                                 <div v-else>
@@ -154,10 +154,10 @@
                         </el-table-column>
                         <!--  库存占用  -->
                         <el-table-column :key="index" :show-overflow-tooltip="true" v-bind="column" width="130"
-                            v-else-if="column.prop === 'occupyQty'">
+                                         v-else-if="column.prop === 'occupyQty'">
                             <template v-slot="{row}">
                                 <el-link v-if="!row.hideStyle && row.occupyQty > 0" :underline="false" target="_blank"
-                                    type="primary" @click="onViewOccupyQty(row.stockId)">
+                                         type="primary" @click="onViewOccupyQty(row.stockId)">
                                     {{ row.occupyQty }}
                                 </el-link>
                                 <div v-else>
@@ -167,10 +167,10 @@
                         </el-table-column>
                         <!--  库存状态  -->
                         <el-table-column :key="index" :show-overflow-tooltip="true" v-bind="column" width="130"
-                            v-else-if="column.prop === 'stockStatus'">
+                                         v-else-if="column.prop === 'stockStatus'">
                             <template v-slot="{row}">
                                 <el-tag v-if="!row.hideStyle"
-                                    :type="(row.stockStatus === '系统冻结' || row.stockStatus === '冻结') ? 'danger' : 'success'">
+                                        :type="(row.stockStatus === '系统冻结' || row.stockStatus === '冻结') ? 'danger' : 'success'">
                                     {{ row.stockStatus }}
                                 </el-tag>
                                 <div v-else>
@@ -184,6 +184,7 @@
                 </el-table>
             </template>
         </nodes-master-page>
+
         <div v-if="columnShowHide.visible">
             <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
             </dialog-column>
@@ -424,6 +425,7 @@ export default {
                     let balanceSum = 0
                     let enableSum = 0
                     let occupySum = 0
+                    let boxSum = 0
                     arr.forEach((item, index) => {
                         this.table.data.push(item)
                         balanceSum += item.stockBalance
@@ -440,7 +442,8 @@ export default {
                                 }
                                 balanceSum = 0,
                                     enableSum = 0,
-                                    occupySum = 0
+                                    occupySum = 0,
+                                    boxSum++
                                 this.table.data.push(a)
                             }
                         } else {
@@ -451,10 +454,18 @@ export default {
                                 stockEnable: enableSum,
                                 occupyQty: occupySum
                             }
+                            let b = {
+                                boxCode: '总箱数:' + boxSum,
+                                hideStyle: true,
+                            }
+
                             balanceSum = 0,
                                 enableSum = 0,
-                                occupySum = 0
+                                occupySum = 0,
+                                boxSum++
+
                             this.table.data.push(a)
+                            this.table.data.push(b)
                         }
                     })
                 });
@@ -505,7 +516,7 @@ export default {
                 lastOutTimeDateRange: [],
                 lotNumberBegin: '',
                 lotNumberEnd: '',
-                udf3:''
+                udf3: ''
             }
             this.onChange(null);
         },
