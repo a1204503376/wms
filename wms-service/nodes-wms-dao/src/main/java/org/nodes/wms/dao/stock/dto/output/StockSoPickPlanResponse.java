@@ -31,6 +31,12 @@ public class StockSoPickPlanResponse extends BaseSkuLot implements Serializable 
 	private String boxCode;
 
 	/**
+	 * 库房id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long whId;
+
+	/**
 	 * 库位id
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
