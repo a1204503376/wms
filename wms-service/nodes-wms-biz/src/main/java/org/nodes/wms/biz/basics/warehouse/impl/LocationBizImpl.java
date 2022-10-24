@@ -25,7 +25,6 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.enums.LocTypeEnum;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
-import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeEnum;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
 import org.nodes.wms.dao.putaway.dto.input.LpnTypeRequest;
 import org.nodes.wms.dao.stock.entities.Stock;
@@ -42,6 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -159,24 +159,24 @@ public class LocationBizImpl implements LocationBiz {
 		return locationDao.removeByIdList(idList);
 	}
 
-    @Override
+	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void freezeBatch(List<Long> locIdList) {
 		locIdList.forEach(id -> {
 			Location location = findByLocId(id);
-			if (!DictKVConstant.LOC_FLAG_NORMAL.equals(location.getLocFlag())){
+			if (!DictKVConstant.LOC_FLAG_NORMAL.equals(location.getLocFlag())) {
 				throw ExceptionUtil.mpe("冻结失败，库位[编码：{}]的使用状态为[{}]", location.getLocCode(), location.getLocFlag());
 			}
 			freezeLoc(id);
 		});
-    }
+	}
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void thawBatch(List<Long> locIdList) {
 		locIdList.forEach(id -> {
 			Location location = findByLocId(id);
-			if (!DictKVConstant.LOC_FLAG_FORZEN.equals(location.getLocFlag())){
+			if (!DictKVConstant.LOC_FLAG_FORZEN.equals(location.getLocFlag())) {
 				throw ExceptionUtil.mpe("解冻失败，库位[编码：{}]的使用状态为[{}]", location.getLocCode(), location.getLocFlag());
 			}
 			thawLoc(id);
@@ -278,7 +278,11 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public List<Location> findEnableAgvLocation(LpnType lpnType, String zoneType) {
-		return locationDao.getLocationByLpnTypeId(lpnType.getId(), zoneType);
+		List<Location> locationList = locationDao.getLocationByLpnTypeId(lpnType.getId(), zoneType);
+		List<Location> putOrderLocationList = locationList.stream()
+			.sorted(Comparator.comparing(Location::getPutOrder))
+			.collect(Collectors.toList());
+		return putOrderLocationList;
 	}
 
 	@Override
@@ -328,12 +332,12 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public UdfEntity judgeBoxTypeOfC(String boxCode, Location location) {
-		if (Func.isEmpty(boxCode)){
+		if (Func.isEmpty(boxCode)) {
 			return null;
 		}
 
 		LpnTypeCodeEnum lpnTypeCodeEnum = lpnTypeBiz.parseBoxCode(boxCode);
-		if (!LpnTypeCodeEnum.C.equals(lpnTypeCodeEnum) || !isAgvTempOfZoneType(location.getLocId())){
+		if (!LpnTypeCodeEnum.C.equals(lpnTypeCodeEnum) || !isAgvTempOfZoneType(location.getLocId())) {
 			return null;
 		}
 
