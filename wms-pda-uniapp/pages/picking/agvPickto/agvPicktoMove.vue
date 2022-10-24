@@ -98,11 +98,13 @@
 				var _this = this;
 				_this.params.isSn = true;
 				uni.$u.throttle(function() {
-					if(_this.params.targetLocCode){
+					if (_this.params.targetLocCode) {
 						pick.connectionAreaMove(_this.params).then(data => {
-							console.log(data.data)
 							_this.$u.func.showToast({
 								title: '移动成功'
+							});
+							uni.navigateBack({
+								delta: 1
 							});
 						})
 					}
