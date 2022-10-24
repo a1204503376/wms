@@ -11,7 +11,7 @@
 			</u-form-item>
 		</u--form>
 		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">未收货列表</h4>
-		<u-list style="height: 500rpx;">
+		<u-list style="height: 850rpx;">
 			<view style="margin-top: 5%;" v-for="(item, index) in detailLpnList">
 				<u-row>
 					<u-col span="5">
@@ -41,15 +41,15 @@
 					</u-row>
 				</view>
 			</view>
-	</view>
-	<view class="footer">
-		<view class="btn-cancle" @click="esc()">
-			返回
+		</u-list>
+		<view class="footer">
+			<view class="btn-cancle" @click="esc()">
+				返回
+			</view>
+			<view class="btn-submit" @click="clickItem()">
+				确定
+			</view>
 		</view>
-		<view class="btn-submit" @click="clickItem()">
-			确定
-		</view>
-	</view>
 	</view>
 </template>
 
