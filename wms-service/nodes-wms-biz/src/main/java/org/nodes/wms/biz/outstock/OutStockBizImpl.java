@@ -48,6 +48,7 @@ import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributio
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.dto.output.PickByPcStockDto;
 import org.nodes.wms.dao.stock.dto.output.StockAgvAndPickResponse;
+import org.nodes.wms.dao.stock.dto.output.StockDistributeAdjustResponse;
 import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
@@ -581,35 +582,22 @@ public class OutStockBizImpl implements OutStockBiz {
 		if (Func.isEmpty(normalStockList)) {
 			throw ExceptionUtil.mpe("该物品没有可分配的库存");
 		}
-		// 总库存（有箱码的库存加无箱码的库存）
-		List<Stock> allStock = new ArrayList<>();
 
-		// 查找出有箱码的库存，追加到总的库存中
-		List<String> boxCodeList = normalStockList.stream()
-			.map(Stock::getBoxCode)
-			.filter(Func::isNotEmpty)
-			.collect(Collectors.toList());
-		if (Func.isNotEmpty(boxCodeList)) {
-			List<Stock> stockOfBoxCodes = stockQueryBiz.findEnableStockByBoxCode(boxCodeList);
-			if (Func.isNotEmpty(stockOfBoxCodes)) {
-				allStock.addAll(stockOfBoxCodes);
-			}
-		}
-		// 查找出箱码为空的库存，追加到总的库存中
-		List<Stock> stockOfNonBoxCode = normalStockList.stream()
-			.filter(item -> Func.isEmpty(item.getBoxCode()))
-			.collect(Collectors.toList());
-		if (Func.isNotEmpty(stockOfNonBoxCode)) {
-			allStock.addAll(stockOfNonBoxCode);
-		}
-
-		List<Long> stockIdList = allStock.stream()
+		List<Long> stockIdList = stockList.stream()
 			.map(Stock::getStockId)
 			.collect(Collectors.toList());
 
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findByStockIdsAndSoBillId(stockIdList, soBillId);
 
-		List<StockSoPickPlanResponse> stockSoPickPlanList = Func.copy(allStock, StockSoPickPlanResponse.class);
+		// 获取被分配的箱码
+		List<String> boxCodeList = soPickPlanList.stream().map(SoPickPlan::getBoxCode).collect(Collectors.toList());
+
+		// 在可分配库存中过滤出被分配箱子中的库存
+		List<Stock> finalStock = stockList.stream()
+			.filter(stock -> boxCodeList.contains(stock.getBoxCode()))
+			.collect(Collectors.toList());
+
+		List<StockSoPickPlanResponse> stockSoPickPlanList = Func.copy(finalStock, StockSoPickPlanResponse.class);
 
 		if (Func.isNotEmpty(soPickPlanList)) {
 			// 拣货计划中根据stockId分组 统计每个stock对应的所有拣货计划分配量总数
@@ -1144,5 +1132,20 @@ public class OutStockBizImpl implements OutStockBiz {
 			boxCodeList.removeAll(truckStockBoxCodeList);
 		}
 		return boxCodeList.size();
+	}
+
+	@Override
+	public List<StockDistributeAdjustResponse> getDistributeAdjustStockByBoxCoeOrLocCode(
+			String boxCode, Long whId, String locCode) {
+		if (Func.isNotEmpty(boxCode)){
+			List<Stock> stock = stockQueryBiz.findEnableStockByBoxCode(boxCode);
+			return Func.copy(stock, StockDistributeAdjustResponse.class);
+		}else if (Func.isNotEmpty(locCode)){
+			Location location = locationBiz.findLocationByLocCode(whId, locCode);
+			List<Stock> stock = stockQueryBiz.findStockByLocation(location.getLocId());
+			return Func.copy(stock,StockDistributeAdjustResponse.class);
+		}else {
+			throw ExceptionUtil.mpe("查找失败，参数错误");
+		}
 	}
 }

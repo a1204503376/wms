@@ -11,6 +11,7 @@ import org.nodes.wms.dao.outstock.soPickPlan.dto.input.FindPickPlanBySoBillIdAnd
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.FindPickPlanBySoBillIdAndBoxCodeResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
 import org.nodes.wms.dao.stock.dto.output.StockAgvAndPickResponse;
+import org.nodes.wms.dao.stock.dto.output.StockDistributeAdjustResponse;
 import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
 import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
 import org.springblade.core.mp.support.Query;
@@ -205,4 +206,15 @@ public interface OutStockBiz {
 	 * @return 箱子数量
 	 */
 	Integer findBoxCountBySoHeaderId(Long soBillId);
+
+	/**
+	 * 根据箱码或库位编码 查找分配调整页面的库存信息
+	 *
+	 * @param boxCode 箱码
+	 * @param whId 库房id
+	 * @param locCode 库位编码
+	 * @return 库存信息
+	 */
+	List<StockDistributeAdjustResponse> getDistributeAdjustStockByBoxCoeOrLocCode(
+		String boxCode, Long whId, String locCode);
 }
