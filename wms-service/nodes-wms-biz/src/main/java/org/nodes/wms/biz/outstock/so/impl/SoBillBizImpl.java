@@ -387,4 +387,9 @@ public class SoBillBizImpl implements SoBillBiz {
 		soDetailStateEnumList.add(SoDetailStateEnum.AllocWellen);
 		return soDetailDao.getSoDetailBySoBillId(soBillId, soDetailStateEnumList);
 	}
+
+	@Override
+	public void updateSoHeader(SoHeader soHeader) {
+		soHeaderDao.saveOrUpdateSoHeader(soHeader);
+	}
 }
