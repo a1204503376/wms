@@ -5,59 +5,55 @@
                 <el-row type="flex">
                     <el-col :span="8">
                         <el-form-item label="ASN单编码" label-width="90px">
-                            <el-input v-model.trim="form.params.asnBillNo"
-                                      :clearable="true"
-                                      class="search-input"
-                                      placeholder="请输入ASN单编码">
+                            <el-input v-model.trim="form.params.asnBillNo" :clearable="true" class="search-input"
+                                placeholder="请输入ASN单编码">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="物品编码" label-width="90px">
-                            <nodes-sku-by-query v-model="form.params.skuIdList" :multiple="true"
-                                                class="search-input"></nodes-sku-by-query>
+                            <nodes-sku-by-query v-model="form.params.skuIdList" :multiple="true" class="search-input">
+                            </nodes-sku-by-query>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="状态" label-width="90px">
-                            <nodes-asn-bill-state v-model="form.params.asnBillStateList"
-                                                  class="search-input"></nodes-asn-bill-state>
+                            <nodes-asn-bill-state v-model="form.params.asnBillStateList" class="search-input">
+                            </nodes-asn-bill-state>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="创建日期" label-width="90px">
-                            <nodes-date-range v-model="form.params.createTimeDateRange"
-                                              class="search-input"></nodes-date-range>
+                            <nodes-date-range v-model="form.params.createTimeDateRange" class="search-input">
+                            </nodes-date-range>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="供应商" label-width="90px">
-                            <el-input v-model.trim="form.params.supplier" :clearable="true"
-                                      class="search-input" placeholder="请输入供应商编码或名称">
+                            <el-input v-model.trim="form.params.supplier" :clearable="true" class="search-input"
+                                placeholder="请输入供应商编码或名称">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="上游编码" label-width="90px">
-                            <el-input v-model.trim="form.params.externalOrderNo" :clearable="true"
-                                      class="search-input" placeholder="请输入上游编码">
+                            <el-input v-model.trim="form.params.externalOrderNo" :clearable="true" class="search-input"
+                                placeholder="请输入上游编码">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="上游创建人" label-width="90px">
                             <el-input v-model.trim="form.params.externalCreateUser" :clearable="true"
-                                      class="search-input" placeholder="请输入上游创建人">
+                                class="search-input" placeholder="请输入上游创建人">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="仓库" label-width="90px">
-                            <nodes-warehouse
-                                v-model="form.params.whIdList"
-                                :multiple="true" class="search-input">
+                            <nodes-warehouse v-model="form.params.whIdList" :multiple="true" class="search-input">
                             </nodes-warehouse>
                         </el-form-item>
                     </el-col>
@@ -67,7 +63,7 @@
                 <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
                 </el-button>
                 <el-button v-if="permissionObj.delete" icon="el-icon-delete" plain size="mini" type="danger"
-                           @click="onRemove">删除
+                    @click="onRemove">删除
                 </el-button>
             </template>
             <template v-slot:tableTool>
@@ -77,54 +73,43 @@
                 <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">
                     <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
                 </el-tooltip>
-                <el-tooltip :enterable="false" class="item" content="服务端导出" effect="dark" placement="top">
+                <el-tooltip :enterable="false" class="item" content="全量导出" effect="dark" placement="top">
                     <el-button circle icon="el-icon-download" size="mini" @click="onExportData"></el-button>
                 </el-tooltip>
-                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
+                <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                                  style="display: inline-block;margin-left: 10px">
-                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData"/>
+                        style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData" />
                     </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table
-                    ref="table"
-                    :data="table.data"
-                    :height="table.height"
-                    border
-                    highlight-current-row
-                    size="mini"
+                <el-table ref="table" :data="table.data" :height="table.height" border highlight-current-row size="mini"
                     @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
-                        <el-table-column
-                            v-if="!column.hide" :key="index"
-                            show-overflow-tooltip
-                            v-bind="column" width="130">
+                        <el-table-column v-if="!column.hide" :key="index" show-overflow-tooltip v-bind="column"
+                            width="130">
                             <template v-if="column.prop === 'asnBillNo'" v-slot="scope">
-                                <el-link
-                                    :underline="false"
-                                    target="_blank"
-                                    type="primary"
-                                    @click="onView(scope.row)">{{ scope.row.asnBillNo }}
+                                <el-link :underline="false" target="_blank" type="primary" @click="onView(scope.row)">{{
+                                scope.row.asnBillNo }}
                                 </el-link>
                             </template>
                         </el-table-column>
                     </template>
                     <el-table-column align="center" fixed="right" label="操作" width="100">
                         <template v-slot="scope">
-                            <el-button v-if="permissionObj.edit" size="small" type="text" @click="onEdit(scope.row)">编辑</el-button>
+                            <el-button v-if="permissionObj.edit" size="small" type="text" @click="onEdit(scope.row)">编辑
+                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
             </template>
             <template v-slot:page>
                 <el-pagination :current-page="page.current" :page-size="page.size" :page-sizes="[20, 50, 100]"
-                               :total="page.total" background layout="total, sizes, prev, pager, next, jumper"
-                               v-bind="page"
-                               @size-change="handleSizeChange" @current-change="handleCurrentChange">
+                    :total="page.total" background layout="total, sizes, prev, pager, next, jumper" v-bind="page"
+                    @size-change="handleSizeChange" @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>

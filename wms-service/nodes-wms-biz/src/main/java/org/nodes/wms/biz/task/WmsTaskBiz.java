@@ -138,13 +138,6 @@ public interface WmsTaskBiz {
 	void updateWmsTaskByPartParam(Long taskId, WmsTaskProcTypeEnum taskProcTypeEnum, Location toLocation, String boxCode);
 
 	/**
-	 * @param task             任务
-	 * @param taskProcTypeEnum 任务状态
-	 * @param newStock         新库存
-	 */
-	void updateDevanning(WmsTask task, WmsTaskProcTypeEnum taskProcTypeEnum, Stock newStock);
-
-	/**
 	 * 根据任务ID获取任务
 	 *
 	 * @param taskId 任务ID

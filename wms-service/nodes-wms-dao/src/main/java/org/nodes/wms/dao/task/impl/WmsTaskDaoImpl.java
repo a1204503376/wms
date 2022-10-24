@@ -166,23 +166,4 @@ public class WmsTaskDaoImpl
 		}
 	}
 
-	@Override
-	public void updateDeva(WmsTask task, WmsTaskProcTypeEnum taskProcTypeEnum, Stock newStock) {
-		UpdateWrapper<WmsTask> updateWrapper = Wrappers.update();
-		updateWrapper.lambda()
-			.eq(WmsTask::getTaskId, task.getTaskId());
-		WmsTask wmsTask = new WmsTask();
-		wmsTask.setTaskProcType(taskProcTypeEnum);
-		wmsTask.setScanQty(task.getScanQty());
-		wmsTask.setToLocId(newStock.getLocId());
-		wmsTask.setToLocCode(newStock.getLocCode());
-		wmsTask.setBoxCode(newStock.getBoxCode());
-		wmsTask.setLpnCode(newStock.getLpnCode());
-		if (BigDecimalUtil.eq(task.getScanQty(), task.getTaskQty())) {
-			wmsTask.setTaskState(WmsTaskStateEnum.COMPLETED);
-		}
-		if (!super.update(wmsTask, updateWrapper)) {
-			throw new ServiceException("任务更新失败,请再次重试");
-		}
-	}
 }

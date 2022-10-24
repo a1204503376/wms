@@ -6,32 +6,27 @@ import fileDownload from "js-file-download";
                 <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
-                            <nodes-sku
-                                class="search-input"
-                                v-model="form.params.skuIds">
+                            <nodes-sku class="search-input" v-model="form.params.skuIds">
                             </nodes-sku>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="生产批次" label-width="90px">
-                            <el-input
-                                class="search-input" placeholder="请输入生产批次" v-model.trim="form.params.skuLot1"
+                            <el-input class="search-input" placeholder="请输入生产批次" v-model.trim="form.params.skuLot1"
                                 :clearable="true">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库位" label-width="90px">
-                            <nodes-location
-                                class="search-input" v-model="form.params.locIdList" :multiple="true">
+                            <nodes-location class="search-input" v-model="form.params.locIdList" :multiple="true">
                             </nodes-location>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库存状态" label-width="90px">
-                            <NodesStockStatus
-                                class="search-input"
-                                v-model="form.params.stockStatusList" :multiple="true">
+                            <NodesStockStatus class="search-input" v-model="form.params.stockStatusList"
+                                :multiple="true">
                             </NodesStockStatus>
                         </el-form-item>
                     </el-col>
@@ -39,34 +34,28 @@ import fileDownload from "js-file-download";
                 <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="库区" label-width="90px">
-                            <nodes-zone
-                                class="search-input"
-                                v-model="form.params.zoneIdList"
-                                :notSelectName="notSelectName"
-                                :multiple="true">
+                            <nodes-zone class="search-input" v-model="form.params.zoneIdList"
+                                :notSelectName="notSelectName" :multiple="true">
                             </nodes-zone>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="箱码" label-width="90px">
-                            <el-input
-                                class="search-input" placeholder="请输入箱码" v-model.trim="form.params.boxCode"
+                            <el-input class="search-input" placeholder="请输入箱码" v-model.trim="form.params.boxCode"
                                 :clearable="true">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="lpn" label-width="90px">
-                            <el-input
-                                class="search-input" placeholder="请输入lpn" v-model.trim="form.params.lpnCode"
+                            <el-input class="search-input" placeholder="请输入lpn" v-model.trim="form.params.lpnCode"
                                 :clearable="true">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="规格型号" label-width="90px">
-                            <el-input
-                                class="search-input" placeholder="请输入规格型号" v-model.trim="form.params.skuLot2"
+                            <el-input class="search-input" placeholder="请输入规格型号" v-model.trim="form.params.skuLot2"
                                 :clearable="true">
                             </el-input>
                         </el-form-item>
@@ -81,24 +70,21 @@ import fileDownload from "js-file-download";
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="专用客户" label-width="90px">
-                            <el-input
-                                class="search-input" placeholder="请输入专用客户" v-model.trim="form.params.skuLot4"
+                            <el-input class="search-input" placeholder="请输入专用客户" v-model.trim="form.params.skuLot4"
                                 :clearable="true">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="钢背批次" label-width="90px">
-                            <el-input
-                                class="search-input" placeholder="请输入钢背批次" v-model.trim="form.params.skuLot5"
+                            <el-input class="search-input" placeholder="请输入钢背批次" v-model.trim="form.params.skuLot5"
                                 :clearable="true">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="摩擦块批次" label-width="90px">
-                            <el-input
-                                class="search-input" placeholder="请输入摩擦块批次" v-model.trim="form.params.skuLot6"
+                            <el-input class="search-input" placeholder="请输入摩擦块批次" v-model.trim="form.params.skuLot6"
                                 :clearable="true">
                             </el-input>
                         </el-form-item>
@@ -107,15 +93,13 @@ import fileDownload from "js-file-download";
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="库房" label-width="90px">
-                            <nodes-warehouse
-                                class="search-input" v-model="form.params.whIdList" :multiple="true">
+                            <nodes-warehouse class="search-input" v-model="form.params.whIdList" :multiple="true">
                             </nodes-warehouse>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="货主" label-width="90px">
-                            <nodes-owner
-                                class="search-input" v-model="form.params.woId">
+                            <nodes-owner class="search-input" v-model="form.params.woId">
                             </nodes-owner>
                         </el-form-item>
                     </el-col>
@@ -134,76 +118,34 @@ import fileDownload from "js-file-download";
                 </el-row>
             </template>
             <template v-slot:tableTool>
-                <el-tooltip
-                    :enterable="false"
-                    class="item"
-                    content="刷新"
-                    effect="dark"
-                    placement="top"
-                >
-                    <el-button
-                        circle
-                        icon="el-icon-refresh"
-                        size="mini"
-                        @click="onRefresh"
-                    ></el-button>
+                <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
+                    <el-button circle icon="el-icon-refresh" size="mini" @click="onRefresh"></el-button>
                 </el-tooltip>
-                <el-tooltip
-                    :enterable="false"
-                    class="item"
-                    content="显隐"
-                    effect="dark"
-                    placement="top"
-                >
-                    <el-button
-                        circle
-                        icon="el-icon-s-operation"
-                        size="mini"
-                        @click="onColumnShowHide"
-                    ></el-button>
+                <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">
+                    <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
                 </el-tooltip>
-                <el-tooltip
-                    :enterable="false"
-                    class="item"
-                    content="服务端导出"
-                    effect="dark"
-                    placement="top"
-                >
+                <el-tooltip :enterable="false" class="item" content="全量导出" effect="dark" placement="top">
                     <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
                 </el-tooltip>
-                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
+                <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                                  style="display: inline-block;margin-left: 10px">
+                        style="display: inline-block;margin-left: 10px">
                         <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
                         </el-button>
                     </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table
-                    ref="table"
-                    :data="table.data"
-                    :height="table.height"
-                    :row-class-name="tableRowClassName"
-                    :span-method="arraySpanMethod"
-                    border
-                    highlight-current-row
-                    row-key="id"
-                    size="mini"
-                    style="width: 100%"
-                    @sort-change="onSortChange">
+                <el-table ref="table" :data="table.data" :height="table.height" :row-class-name="tableRowClassName"
+                    :span-method="arraySpanMethod" border highlight-current-row row-key="id" size="mini"
+                    style="width: 100%" @sort-change="onSortChange">
                     <template v-for="(column, index) in table.columnList">
                         <!--  库存余额  -->
-                        <el-table-column
-                            :key="index"
-                            :show-overflow-tooltip="true"
-                            v-bind="column" width="130"
+                        <el-table-column :key="index" :show-overflow-tooltip="true" v-bind="column" width="130"
                             v-if="column.prop === 'stockBalance'">
                             <template v-slot="{row}">
-                                <el-link
-                                    v-if="!row.hideStyle"
-                                    :underline="false"
-                                    target="_blank" type="primary" @click="onViewStockBalance(row.stockId)">
+                                <el-link v-if="!row.hideStyle" :underline="false" target="_blank" type="primary"
+                                    @click="onViewStockBalance(row.stockId)">
                                     {{ row.stockBalance }}
                                 </el-link>
                                 <div v-else>
@@ -212,14 +154,10 @@ import fileDownload from "js-file-download";
                             </template>
                         </el-table-column>
                         <!--  库存占用  -->
-                        <el-table-column
-                            :key="index"
-                            :show-overflow-tooltip="true"
-                            v-bind="column" width="130"
+                        <el-table-column :key="index" :show-overflow-tooltip="true" v-bind="column" width="130"
                             v-else-if="column.prop === 'occupyQty'">
                             <template v-slot="{row}">
-                                <el-link
-                                    v-if="!row.hideStyle && row.occupyQty > 0" :underline="false" target="_blank"
+                                <el-link v-if="!row.hideStyle && row.occupyQty > 0" :underline="false" target="_blank"
                                     type="primary" @click="onViewOccupyQty(row.stockId)">
                                     {{ row.occupyQty }}
                                 </el-link>
@@ -229,14 +167,10 @@ import fileDownload from "js-file-download";
                             </template>
                         </el-table-column>
                         <!--  库存状态  -->
-                        <el-table-column
-                            :key="index"
-                            :show-overflow-tooltip="true"
-                            v-bind="column" width="130"
+                        <el-table-column :key="index" :show-overflow-tooltip="true" v-bind="column" width="130"
                             v-else-if="column.prop === 'stockStatus'">
                             <template v-slot="{row}">
-                                <el-tag
-                                    v-if="!row.hideStyle"
+                                <el-tag v-if="!row.hideStyle"
                                     :type="(row.stockStatus === '系统冻结' || row.stockStatus === '冻结') ? 'danger' : 'success'">
                                     {{ row.stockStatus }}
                                 </el-tag>
@@ -245,20 +179,14 @@ import fileDownload from "js-file-download";
                                 </div>
                             </template>
                         </el-table-column>
-                        <el-table-column
-                            v-else
-                            :key="index"
-                            :show-overflow-tooltip="true"
-                            v-bind="column" width="130">
+                        <el-table-column v-else :key="index" :show-overflow-tooltip="true" v-bind="column" width="130">
                         </el-table-column>
                     </template>
                 </el-table>
             </template>
         </nodes-master-page>
         <div v-if="columnShowHide.visible">
-            <dialog-column
-                v-bind="columnShowHide"
-                @close="onColumnShowHide">
+            <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
             </dialog-column>
         </div>
     </div>

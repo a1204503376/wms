@@ -54,10 +54,7 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库位" label-width="90px">
-                            <nodes-location
-                                v-model="form.params.locIdList"
-                                :multiple="true"
-                                class="search-input">
+                            <nodes-location v-model="form.params.locIdList" :multiple="true" class="search-input">
                             </nodes-location>
                         </el-form-item>
                     </el-col>
@@ -90,10 +87,10 @@
                 <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">
                     <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
                 </el-tooltip>
-                <el-tooltip :enterable="false" class="item" content="服务端导出" effect="dark" placement="top">
+                <el-tooltip :enterable="false" class="item" content="全量导出" effect="dark" placement="top">
                     <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
                 </el-tooltip>
-                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
+                <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
                         style="display: inline-block;margin-left: 10px">
                         <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData" />

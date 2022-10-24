@@ -37,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -247,14 +248,6 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	}
 
 	@Override
-	public void updateDevanning(Long pickPlanId, Stock newStock, BigDecimal pickRealQty) {
-		AssertUtil.notNull(pickPlanId, "修改拣货计划失败，拣货计划ID为空");
-		AssertUtil.notNull(newStock, "修改拣货计划失败，库存为空");
-		AssertUtil.notNull(pickRealQty, "修改拣货计划失败，拣货计划拣货量为空");
-		soPickPlanDao.updateDeva(pickPlanId, newStock, pickRealQty);
-	}
-
-	@Override
 	public List<SoPickPlan> findPickByTaskId(Long taskId, Long stockId) {
 		return soPickPlanDao.getPickByTaskIdAndStockId(taskId, stockId);
 	}
@@ -293,6 +286,27 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	@Override
 	public List<SoPickPlan> findSoPickPlanByBoxCode(String boxCode) {
 		return soPickPlanDao.selectSoPickPlansByBoxCode(boxCode);
+	}
+
+	@Override
+	public void setTaskId(List<SoPickPlan> soPickPlanList, Long taskId) {
+		AssertUtil.notEmpty(soPickPlanList, "更新拣货计划中的任务id失败,拣货计划集合参数为空");
+		soPickPlanDao.updateTask(soPickPlanList, taskId);
+	}
+
+	@Override
+	public void updatePlanOfStock(SoPickPlan soPickPlan, Stock newStock, Stock oldStock) {
+		AssertUtil.notNull(soPickPlan, "更新拣货计划中的库存失败,拣货计划参数为空");
+		AssertUtil.notNull(newStock, "更新拣货计划中的库存失败,新库存参数为空");
+		AssertUtil.notNull(oldStock, "更新拣货计划中的库存失败,旧库存参数为空");
+
+		// 释放原库存中的占用量
+		stockBiz.reduceOccupy(soPickPlan.getSoBillId(), soPickPlan.getSoBillNo(),
+			soPickPlan.getSoDetailId(), oldStock.getStockId(), soPickPlan.getSurplusQty());
+		// 更新拣货计划
+		soPickPlanDao.updatePlanOfStock(soPickPlan, newStock);
+		// 占用新的库存
+		stockBiz.occupyStock(Collections.singletonList(soPickPlan));
 	}
 
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlans,

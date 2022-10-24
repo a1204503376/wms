@@ -147,15 +147,6 @@ public interface SoPickPlanBiz {
 	void updatePickByPartParam(Long pickPlanId, Long stockId, Location location, Zone zone, String boxCode, BigDecimal stockBalance);
 
 	/**
-	 * 根据拣货计划ID修改拣货计划
-	 *
-	 * @param pickPlanId  拣货计划ID
-	 * @param newStock    库存
-	 * @param pickRealQty 拣货计划已拣货数量
-	 */
-	void updateDevanning(Long pickPlanId, Stock newStock, BigDecimal pickRealQty);
-
-	/**
 	 * 根据任务ID库存ID查询跟当前任务相关联的拣货计划
 	 *
 	 * @param taskId  任务ID
@@ -214,4 +205,21 @@ public interface SoPickPlanBiz {
 	 * @return 拣货计划
 	 */
 	List<SoPickPlan> findSoPickPlanByBoxCode(String boxCode);
+
+	/**
+	 * 更新拣货计划中的任务id
+	 *
+	 * @param soPickPlanList 拣货计划集合，必填
+	 * @param taskId         任务id，必填
+	 */
+	void setTaskId(List<SoPickPlan> soPickPlanList, Long taskId);
+
+	/**
+	 * 更新拣货计划中原有的分配的库存
+	 *
+	 * @param soPickPlan 拣货计划，必填
+	 * @param newStock   分配新的库存，必填
+	 * @param oldStock   旧的库存，必填
+	 */
+	void updatePlanOfStock(SoPickPlan soPickPlan, Stock newStock, Stock oldStock);
 }

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
+import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
 import org.nodes.wms.dao.outstock.SoPickPlanDao;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.intput.SoPickPlanPageQuery;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
@@ -82,6 +83,7 @@ public class SoPickPlanDaoImpl
 				.eq(SoPickPlan::getPickPlanId, soPickPlan.getPickPlanId());
 			SoPickPlan saveDto = new SoPickPlan();
 			saveDto.setTaskId(taskId);
+			soPickPlan.setTaskId(taskId);
 			if (!super.update(saveDto, updateWrapper)) {
 				throw new ServiceException("更新拣货计划的任务id失败,请再次重试");
 			}
@@ -124,25 +126,6 @@ public class SoPickPlanDaoImpl
 		if (Func.isNotEmpty(stockBalance)) {
 			soPickPlan.setPickPlanQty(stockBalance);
 		}
-		if (!super.update(soPickPlan, updateWrapper)) {
-			throw new ServiceException("修改拣货计划失败,请再次重试");
-		}
-	}
-
-	@Override
-	public void updateDeva(Long pickPlanId, Stock newStock, BigDecimal pickRealQty) {
-		UpdateWrapper<SoPickPlan> updateWrapper = Wrappers.update();
-		updateWrapper.lambda()
-			.eq(SoPickPlan::getPickPlanId, pickPlanId);
-		SoPickPlan soPickPlan = new SoPickPlan();
-		soPickPlan.setStockId(newStock.getStockId());
-		soPickPlan.setLocId(newStock.getLocId());
-		soPickPlan.setLocCode(newStock.getLocCode());
-		soPickPlan.setZoneId(newStock.getZoneId());
-		soPickPlan.setZoneCode(newStock.getZoneCode());
-		soPickPlan.setBoxCode(newStock.getBoxCode());
-		soPickPlan.setLpnCode(newStock.getLpnCode());
-		soPickPlan.setPickPlanQty(pickRealQty);
 		if (!super.update(soPickPlan, updateWrapper)) {
 			throw new ServiceException("修改拣货计划失败,请再次重试");
 		}
@@ -208,5 +191,23 @@ public class SoPickPlanDaoImpl
 			.eq(SoPickPlan::getBoxCode, boxCode)
 			.apply("pick_plan_qty != pick_real_qty")
 			.list();
+	}
+
+	@Override
+	public void updatePlanOfStock(SoPickPlan soPickPlan, Stock newStock) {
+		soPickPlan.setStockId(newStock.getStockId());
+		soPickPlan.setLocId(newStock.getLocId());
+		soPickPlan.setLocCode(newStock.getLocCode());
+		soPickPlan.setZoneId(newStock.getZoneId());
+		soPickPlan.setZoneCode(newStock.getZoneCode());
+		soPickPlan.setBoxCode(newStock.getBoxCode());
+		soPickPlan.setLpnCode(newStock.getLpnCode());
+		soPickPlan.setStockStatus(newStock.getStockStatus());
+		soPickPlan.setPickRealQty(BigDecimal.ZERO);
+		SkuLotUtil.setAllSkuLot(newStock, soPickPlan);
+
+		if (!super.updateById(soPickPlan)) {
+			throw new ServiceException("修改拣货计划失败,请再次重试");
+		}
 	}
 }
