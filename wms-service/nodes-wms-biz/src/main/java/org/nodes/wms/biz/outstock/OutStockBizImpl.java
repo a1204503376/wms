@@ -466,11 +466,8 @@ public class OutStockBizImpl implements OutStockBiz {
 		}
 
 		SoHeader soHeader = soBillBiz.getSoHeaderById(soBillId);
-		soHeader.setSoBillState(SoBillStateEnum.CREATE);
-		soBillBiz.updateSoHeader(soHeader);
+		soBillBiz.updateSoBillState(soHeader);
 		soPickPlanBiz.cancelPickPlan(soPickPlanList, soHeader);
-
-
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, soBillId, soHeader.getSoBillNo(), "全部取消分配");
 	}
 
