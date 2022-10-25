@@ -481,6 +481,7 @@
                 this.getSoPickPlanData(this.soHeader.soBillId, row.soDetailId)
             },
             onRefresh() {
+                this.getTableData();
                 this.getSoPickPlanData(this.soHeader.soBillId);
             },
             onAssign() {
