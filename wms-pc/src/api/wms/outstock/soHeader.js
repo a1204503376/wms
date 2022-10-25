@@ -243,6 +243,18 @@ export const saveAssign = (soBillId, soDetailId, soPickPlanList, stockIdAndSoPic
     })
 }
 
+// 根据箱码查看库存
+export const getAssignDistributeStock = (boxCode, whId, locCode) => {
+    return request({
+        url: '/api/wms/outstock/soBill/showDistributeAdjustStock',
+        method: 'post',
+        data: {
+            boxCode: boxCode,
+            whId: whId,
+            locCode: locCode
+        }
+    })
+}
 
 
 

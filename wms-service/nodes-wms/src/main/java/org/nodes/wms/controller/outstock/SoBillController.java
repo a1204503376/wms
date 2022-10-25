@@ -21,6 +21,7 @@ import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributio
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
 import org.nodes.wms.dao.stock.dto.output.SerialSelectResponse;
 import org.nodes.wms.dao.stock.dto.output.StockAgvAndPickResponse;
+import org.nodes.wms.dao.stock.dto.output.StockDistributeAdjustResponse;
 import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
@@ -280,6 +281,16 @@ public class SoBillController {
 	public R<String> saveAssign(@Valid @RequestBody SoBillDistributedRequest soBillDistributedRequest) {
 		outStockBiz.manualDistribute(soBillDistributedRequest);
 		return R.success("调整成功");
+	}
+
+	/**
+	 * 分配调整: 查看某箱或者某库位上的库存
+	 */
+	@PostMapping("/showDistributeAdjustStock")
+	public R<List<StockDistributeAdjustResponse>> getDistributeAdjustStock(
+		@Valid @RequestBody ShowDistributeAdjustStockRequest request) {
+		return R.data(outStockBiz.getDistributeAdjustStockByBoxCoeOrLocCode(
+			request.getBoxCode(), request.getWhId(), request.getLocCode()));
 	}
 
 	/**
