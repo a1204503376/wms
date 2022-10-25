@@ -160,7 +160,7 @@
                 <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="拣货撤销" label-width="90px">
-                            <el-input v-model.trim="form.params.udf3" :clearable="true" style="width: 42%;">
+                            <el-input v-model.trim="form.params.udf3" :clearable="true" class="search-input">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -448,7 +448,7 @@ export default {
                     lastOutTimeDateRange: [],
                     lotNumberBegin: '',
                     lotNumberEnd: '',
-                    udf3:''
+                    udf3: null
                 }
             },
             form1: {
@@ -730,7 +730,7 @@ export default {
                 lastOutTimeDateRange: [],
                 lotNumberBegin: '',
                 lotNumberEnd: '',
-                udf3:''
+                udf3: null
             }
             this.onChange(null);
         },
