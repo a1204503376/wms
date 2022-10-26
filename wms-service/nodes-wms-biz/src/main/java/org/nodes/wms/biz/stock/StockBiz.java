@@ -396,20 +396,22 @@ public interface StockBiz {
 	/**
 	 * 根据落放id解冻库存，同时会将库存的DropId清空
 	 *
-	 * @param stocks stocks
-	 * @param dropId 落放id
+	 * @param stocks        stocks
+	 * @param dropId        落放id
+	 * @param isCleanDropId true:需要清空原dropId，false：保留原dropId
 	 * @return 解冻之后的库存
 	 */
-	List<Stock> unfreezeStockByDropId(List<Stock> stocks, Long dropId);
+	List<Stock> unfreezeStockByDropId(List<Stock> stocks, Long dropId, boolean isCleanDropId);
 
 	/**
 	 * 根据落放id解冻库存，同时会将库存的DropId清空并释放占用数量
 	 *
 	 * @param stocks
 	 * @param dropId
+	 * @param isCleanDropId true:需要清空原dropId，false：保留原dropId
 	 * @return
 	 */
-	List<Stock> unfreezeAndReduceOccupy(List<Stock> stocks, Long dropId);
+	List<Stock> unfreezeAndReduceOccupy(List<Stock> stocks, Long dropId, boolean isCleanDropId);
 
 	/**
 	 * 按序列号显示库存导出
