@@ -132,22 +132,25 @@ public interface OutStockBiz {
 	 *
 	 * @param skuId    物品id
 	 * @param skuLot1  生产批次
+	 * @param skuLot2  规格型号
 	 * @param skuLot4  专用客户
 	 * @param soBillId 发货单id
 	 * @return 可分配物品库存信息
 	 */
-	List<StockSoPickPlanResponse> getStockByDistributeAdjust(Long skuId, String skuLot1, String skuLot4, Long soBillId);
+	List<StockSoPickPlanResponse> getStockByDistributeAdjust(Long skuId,
+															 String skuLot1, String skuLot2, String skuLot4, Long soBillId);
 
 	/**
 	 * 获取 人工区库存和自动区库存统计余额
 	 *
 	 * @param skuId    物品id
 	 * @param skuLot1  生产批次
+	 * @param skuLot2  规格型号
 	 * @param skuLot4  专用客户
 	 * @param soBillId 发货单id
 	 * @return 人工区库存和自动区库存统计余额
 	 */
-	StockAgvAndPickResponse getStockAgvPick(Long skuId, String skuLot1, String skuLot4, Long soBillId);
+	StockAgvAndPickResponse getStockAgvPick(Long skuId, String skuLot1, String skuLot2, String skuLot4, Long soBillId);
 
 	/**
 	 * 分配：分配手动调整-保存调整后的信息
@@ -211,7 +214,7 @@ public interface OutStockBiz {
 	 * 根据箱码或库位编码 查找分配调整页面的库存信息
 	 *
 	 * @param boxCode 箱码
-	 * @param whId 库房id
+	 * @param whId    库房id
 	 * @param locCode 库位编码
 	 * @return 库存信息
 	 */

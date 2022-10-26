@@ -569,9 +569,10 @@ public class OutStockBizImpl implements OutStockBiz {
 
 	@Override
 	public List<StockSoPickPlanResponse> getStockByDistributeAdjust(
-		Long skuId, String skuLot1, String skuLot4, Long soBillId) {
+		Long skuId, String skuLot1, String skuLot2, String skuLot4, Long soBillId) {
 		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
 		skuLot.setSkuLot1(skuLot1);
+		skuLot.setSkuLot2(skuLot2);
 		skuLot.setSkuLot4(skuLot4);
 		// 获取可分配的库存
 		List<Stock> stockList = stockQueryBiz.findEnableStockBySkuAndSkuLot(skuId, skuLot);
@@ -596,9 +597,8 @@ public class OutStockBizImpl implements OutStockBiz {
 			Map<Long, List<SoPickPlan>> planListMap = soPickPlanList.stream()
 				.collect(Collectors.groupingBy(SoPickPlan::getStockId));
 			planListMap.forEach((stockId, planList) -> {
-
 				// 分配量求和(计划分配量减去实际分配量)
-				BigDecimal pickQty = planList.stream()
+				BigDecimal pickPlanQty = planList.stream()
 					.reduce(BigDecimal.ZERO, (temp, plan) -> plan.getPickPlanQty().subtract(plan.getPickRealQty()),
 						BigDecimal::add);
 
@@ -607,25 +607,23 @@ public class OutStockBizImpl implements OutStockBiz {
 
 				for (StockSoPickPlanResponse stockSoPickPlan : stockSoPickPlanList) {
 					if (stockSoPickPlan.getStockId().equals(stockId)) {
-						stockSoPickPlan.setPickQty(pickQty);
+						stockSoPickPlan.setPickQty(pickPlanQty);
 						stockSoPickPlan.setSoPickPlanList(planIdList);
 						// 赋值 可用量( 表里的数据 + 分配量 )
-						stockSoPickPlan.setStockEnable(stockSoPickPlan.getStockEnable().add(pickQty));
+						stockSoPickPlan.setStockEnable(stockSoPickPlan.getStockEnable().add(pickPlanQty));
 						break;
 					}
 				}
 			});
-		} else {
-			for (StockSoPickPlanResponse stockPlan : stockSoPickPlanList) {
-				stockPlan.setPickQty(BigDecimal.ZERO);
-			}
 		}
+
+		//TODO  StockAgvAndPickResponse
 		return stockSoPickPlanList;
 	}
 
 	@Override
-	public StockAgvAndPickResponse getStockAgvPick(Long skuId, String skuLot1, String skuLot4, Long soBillId) {
-		List<StockSoPickPlanResponse> stockSoPickPlanList = getStockByDistributeAdjust(skuId, skuLot1, skuLot4, soBillId);
+	public StockAgvAndPickResponse getStockAgvPick(Long skuId, String skuLot1, String skuLot2, String skuLot4, Long soBillId) {
+		List<StockSoPickPlanResponse> stockSoPickPlanList = getStockByDistributeAdjust(skuId, skuLot1, skuLot2, skuLot4, soBillId);
 		Map<String, BigDecimal> map = new HashMap<>();
 		for (StockSoPickPlanResponse stockSoPickPlan : stockSoPickPlanList) {
 			BigDecimal stockBalance = map.get(stockSoPickPlan.getZoneCode());
@@ -1128,15 +1126,15 @@ public class OutStockBizImpl implements OutStockBiz {
 
 	@Override
 	public List<StockDistributeAdjustResponse> getDistributeAdjustStockByBoxCoeOrLocCode(
-			String boxCode, Long whId, String locCode) {
-		if (Func.isNotEmpty(boxCode)){
+		String boxCode, Long whId, String locCode) {
+		if (Func.isNotEmpty(boxCode)) {
 			List<Stock> stock = stockQueryBiz.findEnableStockByBoxCode(boxCode);
 			return Func.copy(stock, StockDistributeAdjustResponse.class);
-		}else if (Func.isNotEmpty(locCode)){
+		} else if (Func.isNotEmpty(locCode)) {
 			Location location = locationBiz.findLocationByLocCode(whId, locCode);
 			List<Stock> stock = stockQueryBiz.findStockByLocation(location.getLocId());
-			return Func.copy(stock,StockDistributeAdjustResponse.class);
-		}else {
+			return Func.copy(stock, StockDistributeAdjustResponse.class);
+		} else {
 			throw ExceptionUtil.mpe("查找失败，参数错误");
 		}
 	}

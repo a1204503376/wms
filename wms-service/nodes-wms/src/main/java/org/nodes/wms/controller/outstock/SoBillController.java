@@ -256,6 +256,7 @@ public class SoBillController {
 		return R.data(outStockBiz.getStockByDistributeAdjust(
 			distributeAdjustRequest.getSkuId(),
 			distributeAdjustRequest.getSkuLot1(),
+			distributeAdjustRequest.getSkuLot2(),
 			distributeAdjustRequest.getSkuLot4(),
 			distributeAdjustRequest.getSoBillId()));
 	}
@@ -269,6 +270,7 @@ public class SoBillController {
 		return R.data(outStockBiz.getStockAgvPick(
 			distributeAdjustRequest.getSkuId(),
 			distributeAdjustRequest.getSkuLot1(),
+			distributeAdjustRequest.getSkuLot2(),
 			distributeAdjustRequest.getSkuLot4(),
 			distributeAdjustRequest.getSoBillId()));
 	}
