@@ -47,7 +47,7 @@ import org.nodes.wms.dao.outstock.soPickPlan.dto.output.FindPickPlanBySoBillIdAn
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.dto.output.PickByPcStockDto;
-import org.nodes.wms.dao.stock.dto.output.StockAgvAndPickResponse;
+import org.nodes.wms.dao.stock.dto.output.GetStockByDistributeAdjustResponse;
 import org.nodes.wms.dao.stock.dto.output.StockDistributeAdjustResponse;
 import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
 import org.nodes.wms.dao.stock.entities.Serial;
@@ -572,7 +572,7 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public List<StockSoPickPlanResponse> getStockByDistributeAdjust(
+	public GetStockByDistributeAdjustResponse getStockByDistributeAdjust(
 		Long skuId, String skuLot1, String skuLot2, String skuLot4, Long soBillId) {
 		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
 		skuLot.setSkuLot1(skuLot1);
@@ -620,14 +620,10 @@ public class OutStockBizImpl implements OutStockBiz {
 				}
 			});
 		}
+		GetStockByDistributeAdjustResponse response = new GetStockByDistributeAdjustResponse();
+		response.setStockSoPickPlanList(stockSoPickPlanList);
 
-		//TODO  StockAgvAndPickResponse
-		return stockSoPickPlanList;
-	}
-
-	@Override
-	public StockAgvAndPickResponse getStockAgvPick(Long skuId, String skuLot1, String skuLot2, String skuLot4, Long soBillId) {
-		List<StockSoPickPlanResponse> stockSoPickPlanList = getStockByDistributeAdjust(skuId, skuLot1, skuLot2, skuLot4, soBillId);
+		//人工区库存和自动区库存统计余额
 		Map<String, BigDecimal> map = new HashMap<>();
 		for (StockSoPickPlanResponse stockSoPickPlan : stockSoPickPlanList) {
 			BigDecimal stockBalance = map.get(stockSoPickPlan.getZoneCode());
@@ -637,7 +633,6 @@ public class OutStockBizImpl implements OutStockBiz {
 				map.put(stockSoPickPlan.getZoneCode(), stockSoPickPlan.getStockBalance().add(stockBalance));
 			}
 		}
-		StockAgvAndPickResponse response = new StockAgvAndPickResponse();
 		Iterator<Map.Entry<String, BigDecimal>> iterator = map.entrySet().iterator();
 		while (iterator.hasNext()) {
 			Map.Entry<String, BigDecimal> ppEntry = iterator.next();

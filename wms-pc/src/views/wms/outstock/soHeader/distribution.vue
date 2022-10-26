@@ -60,7 +60,8 @@
                         <el-col>
                             <el-tabs>
                                 <el-tab-pane label="发货明细">
-                                    <el-table :data="table.soDetailData" :height="table.soDetailHeight" :show-summary="true"
+                                    <el-table :data="table.soDetailData" :height="table.soDetailHeight"
+                                              :show-summary="true"
                                               :summary-method="summarySoDetail" @row-click="onRowClick" border
                                               highlight-current-row ref="table" size="mini">
                                         <template v-for="(column, index) in table.soDetailColumnList">
@@ -133,7 +134,8 @@
                 <el-table-column label="可用量" prop="stockEnable"></el-table-column>
                 <el-table-column label="本次分配量" prop="pickQty" width="150">
                     <template v-slot="{ row }">
-                        <el-input @input="val => changePickQty(val, row)" maxlength="9" oninput="value=value.replace(/[^\d]/g,'')"
+                        <el-input @input="val => changePickQty(val, row)" maxlength="9"
+                                  oninput="value=value.replace(/[^\d]/g,'')"
                                   placeholder="请输入分配数量" size="medium" style="width: 100%"
                                   v-model.number="row.pickQty">
                         </el-input>
@@ -604,16 +606,22 @@
                 }
                 await getStockByDistributeAdjust(row.skuId, row.skuLot1, row.skuLot2, row.skuLot4, this.soHeader.soBillId)
                     .then((res) => {
-                        this.dialog.dialogData = res.data.data;
+                        this.dialog.dialogData = res.data.data.stockSoPickPlanList;
                         this.dialog.dialogData.forEach(item => {
                             item.oldStockEnable = item.stockEnable;
                             item.oldPickQty = item.pickQty
                         })
-                    })
-                await getStockAgvAndPick(row.skuId, row.skuLot1, row.skuLot2, row.skuLot4, this.soHeader.soBillId)
-                    .then((res) => {
-                        this.dialog.pickStockBalance = res.data.data.pickStockBalance;
-                        this.dialog.agvStockBalance = res.data.data.agvStockBalance;
+                        if (res.data.data.pickStockBalance > 0) {
+                            this.dialog.pickStockBalance = res.data.data.pickStockBalance;
+                        } else {
+                            this.dialog.pickStockBalance = 0;
+                        }
+                        if (res.data.data.agvStockBalance > 0) {
+                            this.dialog.agvStockBalance = res.data.data.agvStockBalance;
+                        } else {
+                            this.dialog.agvStockBalance = 0;
+                        }
+
                     })
                 this.computeUnDistributeQty();
                 this.setDialogTitle()
