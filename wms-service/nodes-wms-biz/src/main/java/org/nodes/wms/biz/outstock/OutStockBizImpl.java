@@ -589,15 +589,7 @@ public class OutStockBizImpl implements OutStockBiz {
 
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findByStockIdsAndSoBillId(stockIdList, soBillId);
 
-		// 获取被分配的箱码
-		List<String> boxCodeList = soPickPlanList.stream().map(SoPickPlan::getBoxCode).collect(Collectors.toList());
-
-		// 在可分配库存中过滤出被分配箱子中的库存
-		List<Stock> finalStock = stockList.stream()
-			.filter(stock -> boxCodeList.contains(stock.getBoxCode()))
-			.collect(Collectors.toList());
-
-		List<StockSoPickPlanResponse> stockSoPickPlanList = Func.copy(finalStock, StockSoPickPlanResponse.class);
+		List<StockSoPickPlanResponse> stockSoPickPlanList = Func.copy(normalStockList, StockSoPickPlanResponse.class);
 
 		if (Func.isNotEmpty(soPickPlanList)) {
 			// 拣货计划中根据stockId分组 统计每个stock对应的所有拣货计划分配量总数
