@@ -1034,14 +1034,16 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public List<Stock> unfreezeStockByDropId(List<Stock> stocks, Long dropId) {
+	public List<Stock> unfreezeStockByDropId(List<Stock> stocks, Long dropId, boolean isCleanDropId) {
 		AssertUtil.notEmpty(stocks, "根据任务解冻库存失败,没有任务[{}]关联的库存", dropId);
 
 		stockDao.updateStockByDropId(stocks, StockStatusEnum.NORMAL, "");
 
 		for (Stock item : stocks) {
 			item.setStockStatus(StockStatusEnum.NORMAL);
-			item.setDropId("");
+			if (isCleanDropId){
+				item.setDropId("");
+			}
 
 			createAndSaveStockLog(StockLogTypeEnum.STOCK_UNFREEZE, item, String.format("系统解结 by %d", dropId));
 		}
@@ -1050,19 +1052,18 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
-	public List<Stock> unfreezeAndReduceOccupy(List<Stock> stocks, Long dropId) {
+	public List<Stock> unfreezeAndReduceOccupy(List<Stock> stocks, Long dropId, boolean isCleanDropId) {
 		AssertUtil.notEmpty(stocks, "根据任务解冻库存失败,没有任务[{}]关联的库存", dropId);
-
-//		stockDao.updateStockByDropId(stocks, StockStatusEnum.NORMAL, "");
 
 		BigDecimal currentUnOccupy = BigDecimal.ZERO;
 		for (Stock item : stocks) {
 			if (item.getStockStatus().equals(StockStatusEnum.SYSTEM_FREEZE)) {
 				currentUnOccupy = item.getOccupyQty();
-
 				item.setStockStatus(StockStatusEnum.NORMAL);
-				item.setDropId("");
 				item.setOccupyQty(BigDecimal.ZERO);
+				if (isCleanDropId){
+					item.setDropId("");
+				}
 
 				stockDao.updateStockByCancelAgvTask(item);
 				createAndSaveOccupyStockLog(item, dropId, dropId.toString(), dropId, currentUnOccupy,

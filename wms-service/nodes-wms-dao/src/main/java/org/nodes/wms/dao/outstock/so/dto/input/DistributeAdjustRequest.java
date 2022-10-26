@@ -25,7 +25,7 @@ public class DistributeAdjustRequest implements Serializable {
 	private String skuLot1;
 
 	/**
-	 * 生产批次
+	 * 型号
 	 */
 	private String skuLot2;
 

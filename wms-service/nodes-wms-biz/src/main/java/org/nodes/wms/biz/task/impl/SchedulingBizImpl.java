@@ -195,10 +195,15 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		}
 
 		if (wmsTask.getTaskState().equals(WmsTaskStateEnum.AGV_COMPLETED)
-			|| wmsTask.getTaskState().equals(WmsTaskStateEnum.COMPLETED)
-			|| wmsTask.getTaskState().equals(WmsTaskStateEnum.CANCELED)) {
+			|| wmsTask.getTaskState().equals(WmsTaskStateEnum.COMPLETED)) {
 			throw new ServiceException(String.format("双重入库推荐新的库位失败,任务状态已完结不支持推荐新的库位", wmsTask.getTaskId()));
 		}
+		// 由于双重入库通知前会发送取消订单的通知，所以双重入库中需要更新任务状态，并再次冻结中间库位的库存
+		if (wmsTask.getTaskState().equals(WmsTaskStateEnum.CANCELED)){
+			wmsTask.setTaskState(WmsTaskStateEnum.START_EXECUTION);
+		}
+		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
+		stockBiz.freezeStockByDropId(stockList, wmsTask.getTaskId());
 
 		// 1. 原来的目标库位使用状态有系统业务冻结改为冻结，并清空loc_flag_desc
 		Long oldLocId = wmsTask.getToLocId();
@@ -352,7 +357,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			}
 		}
 
-		stockBiz.unfreezeStockByDropId(targetStockList, wmsTask.getTaskId());
+		stockBiz.unfreezeStockByDropId(targetStockList, wmsTask.getTaskId(), true);
 
 		log.info("agv任务结束[{}]-[{}]", wmsTask.getTaskId(), wmsTask);
 	}
@@ -376,10 +381,9 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			throw new ServiceException("状态更新失败,任务已经完成");
 		}
 
-		//中间库位库存
-		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
 		//解冻中间库位库存
-		stockBiz.unfreezeAndReduceOccupy(stockList, wmsTask.getTaskId());
+		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
+		stockBiz.unfreezeStockByDropId(stockList, wmsTask.getTaskId(), false);
 
 		//如果目标库位不为空则把目标库位进行解冻
 		if (Func.isNotEmpty(wmsTask.getToLocId())) {
