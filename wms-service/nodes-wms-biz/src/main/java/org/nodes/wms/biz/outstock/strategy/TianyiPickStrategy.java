@@ -103,6 +103,9 @@ public class TianyiPickStrategy {
 		List<Long> skuIdsOfSoDetail = getAllSkuIdFromSoDetail(soDetailList);
 		boolean needPlanFromManual = false;
 		for (Stock stock : agvStockList) {
+			if (BigDecimalUtil.le(surplusQty, BigDecimal.ZERO)) {
+				break;
+			}
 			if (stock.isNotEnable()) {
 				continue;
 			}
