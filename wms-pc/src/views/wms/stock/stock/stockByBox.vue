@@ -454,15 +454,14 @@ export default {
                                 stockEnable: enableSum,
                                 occupyQty: occupySum
                             }
-                            let b = {
-                                boxCode: '总箱数:' + boxSum,
-                                hideStyle: true,
-                            }
-
                             balanceSum = 0,
                                 enableSum = 0,
                                 occupySum = 0,
                                 boxSum++
+                            let b = {
+                                boxCode: '总箱数:' + boxSum,
+                                hideStyle: true,
+                            }
 
                             this.table.data.push(a)
                             this.table.data.push(b)
