@@ -130,6 +130,7 @@
                                     <template v-slot="{row}">
                                         <nodes-sku
                                             v-model="row.sku"
+                                            placement="top"
                                             style="width: 170px;"
                                             @selectValChange="onChangeSku(row)">
                                         </nodes-sku>

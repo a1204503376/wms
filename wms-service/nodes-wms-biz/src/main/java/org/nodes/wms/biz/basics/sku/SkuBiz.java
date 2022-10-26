@@ -1,11 +1,13 @@
 package org.nodes.wms.biz.basics.sku;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.sku.dto.input.SkuAddOrEditRequest;
 import org.nodes.wms.dao.basics.sku.dto.input.SkuSelectQuery;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.*;
 import org.nodes.wms.dao.basics.skuType.entities.SkuType;
+import org.springblade.core.mp.support.Query;
 
 import java.util.List;
 
@@ -15,13 +17,13 @@ import java.util.List;
 public interface SkuBiz {
 
 	/**
-	 * 根据关键词获取最近10个物品信息
-	 * 根据修改时间倒序
+	 * 根据物品编码或物品名称或规格 分页查找物品信息
 	 *
+	 * @param query 分页参数
 	 * @param skuSelectQuery 关键词对象
-	 * @return List<SkuSelectResponse>
+	 * @return 物品下拉组件分页数据
 	 */
-	List<SkuSelectResponse> getSkuSelectResponseTop10List(SkuSelectQuery skuSelectQuery);
+	Page<SkuSelectResponse> getSkuSelectByPage(Query query, SkuSelectQuery skuSelectQuery);
 
 	/**
 	 * 根据id查询物品信息

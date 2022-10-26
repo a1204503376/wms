@@ -1,5 +1,7 @@
 package org.nodes.wms.biz.basics.sku.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.sku.modular.SkuFactory;
@@ -15,6 +17,8 @@ import org.nodes.wms.dao.basics.sku.entities.*;
 import org.nodes.wms.dao.basics.skuType.SkuTypeDao;
 import org.nodes.wms.dao.basics.skuType.entities.SkuType;
 import org.springblade.core.log.exception.ServiceException;
+import org.springblade.core.mp.support.Condition;
+import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,16 +37,14 @@ public class SkuBizImpl implements SkuBiz {
 	private final SkuDao skuDao;
 	private final SkuTypeDao skuTypeDao;
 	private final SkuUmDao skuUmDao;
-
 	private final SkuReplaceDao skuReplaceDao;
-
 	private final SkuIncDao skuIncDao;
 
 	private final SkuFactory skuFactory;
 
 	@Override
-	public List<SkuSelectResponse> getSkuSelectResponseTop10List(SkuSelectQuery skuSelectQuery) {
-		return skuDao.listTop10BySkuCodeSkuName(skuSelectQuery.getKey(), skuSelectQuery.getKey());
+	public Page<SkuSelectResponse> getSkuSelectByPage(Query query, SkuSelectQuery skuSelectQuery) {
+		return skuDao.getSkuSelectPage(Condition.getPage(query), skuSelectQuery.getKey());
 	}
 
 	@Override

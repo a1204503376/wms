@@ -128,7 +128,7 @@
                                     <template v-slot="{row}">
                                         <nodes-sku
                                             v-model="row.sku"
-                                            :sku-object="row.sku"
+                                            placement="top"
                                             style="width: 170px;"
                                             @selectValChange="onChangeSku(row)">
                                         </nodes-sku>
@@ -152,7 +152,7 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <nodes-sku-spec
-                                            v-model="row.skuSpec"
+                                            v-model="row.sku.skuSpec"
                                             :sku="row.sku"
                                             size=mini>
                                         </nodes-sku-spec>
@@ -167,7 +167,8 @@
                                             v-model="row.planQty"
                                             controls-position="right"
                                             size="mini"
-                                            style="width: 100px"></el-input-number>
+                                            style="width: 100px">
+                                        </el-input-number>
                                     </template>
                                 </el-table-column>
                                 <el-table-column>
@@ -299,11 +300,9 @@ export default {
     },
     name: "edit",
     components: {
-        NodesSkuSpec,
-        NodesSkuUm,
-        NodesOwner,
-        NodesSupplier,
-        NodesBillType, NodesWarehouse, NodesLineNumber, NodesSku, NodesInStoreType, NodesInStoreMode
+        NodesSkuSpec, NodesSkuUm, NodesOwner,
+        NodesSupplier, NodesBillType, NodesWarehouse,
+        NodesLineNumber, NodesSku, NodesInStoreType, NodesInStoreMode
     },
     mixins: [editDetailMixin],
     data() {
@@ -360,7 +359,8 @@ export default {
             return !(
                 (func.isEmpty(row.sku.skuId)
                     && func.isEmpty(row.sku.skuCode)
-                    && func.isEmpty(row.sku.skuName))
+                    && func.isEmpty(row.sku.skuName)
+                    && func.isEmpty(row.sku.skuSpec))
                 && row.planQty === 0
             );
         },
@@ -391,6 +391,7 @@ export default {
                     skuId: '',
                     skuCode: '',
                     skuName: '',
+                    skuSpec: '',
                 },
                 umCode: '',
                 skuSpec: '',
