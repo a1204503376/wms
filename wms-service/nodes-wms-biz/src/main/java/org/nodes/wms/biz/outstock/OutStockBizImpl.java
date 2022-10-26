@@ -240,7 +240,11 @@ public class OutStockBizImpl implements OutStockBiz {
 		// 1、根据箱码查询任务
 		SoHeader soHeader = soBillBiz.getSoHeaderById(task.getBillId());
 		AssertUtil.notNull(soHeader, "根据任务存在的发货单头表信息查询发货单失败");
-		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
+		List<Long> stockIdList = soPickPlans.stream()
+			.map(SoPickPlan::getStockId)
+			.distinct()
+			.collect(Collectors.toList());
+		List<Stock> stockList = stockQueryBiz.findStockById(stockIdList);
 		if (stockList.size() == 0) {
 			throw new ServiceException("按箱拣货失败，根据箱码查询不到对应库存");
 		}
