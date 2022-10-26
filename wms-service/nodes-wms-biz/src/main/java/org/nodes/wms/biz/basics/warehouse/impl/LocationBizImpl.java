@@ -41,7 +41,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -278,11 +277,7 @@ public class LocationBizImpl implements LocationBiz {
 
 	@Override
 	public List<Location> findEnableAgvLocation(LpnType lpnType, String zoneType) {
-		List<Location> locationList = locationDao.getLocationByLpnTypeId(lpnType.getId(), zoneType);
-		List<Location> putOrderLocationList = locationList.stream()
-			.sorted(Comparator.comparing(Location::getPutOrder))
-			.collect(Collectors.toList());
-		return putOrderLocationList;
+		return locationDao.getLocationByLpnTypeId(lpnType.getId(), zoneType);
 	}
 
 	@Override
