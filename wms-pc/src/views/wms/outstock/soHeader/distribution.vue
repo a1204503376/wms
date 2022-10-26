@@ -3,7 +3,7 @@
         <el-container id="container" v-loading="loading">
             <el-main style="overflow: hidden;overflow-y: scroll;height: 100%">
                 <el-form ref="form" label-position="right" label-width="120px" size="mini"
-                    style="margin-left:10px;margin-right:10px;">
+                         style="margin-left:10px;margin-right:10px;">
                     <el-row>
                         <el-col :span="6">
                             <el-row :gutter="10" justify="end" type="flex">
@@ -61,11 +61,11 @@
                             <el-tabs>
                                 <el-tab-pane label="发货明细">
                                     <el-table ref="table" :data="table.soDetailData" :height="table.soDetailHeight"
-                                        :show-summary="true" :summary-method="summarySoDetail" border
-                                        highlight-current-row size="mini" @row-click="onRowClick">
+                                              :show-summary="true" :summary-method="summarySoDetail" border
+                                              highlight-current-row size="mini" @row-click="onRowClick">
                                         <template v-for="(column, index) in table.soDetailColumnList">
                                             <el-table-column v-if="!column.hide" :key="index" show-overflow-tooltip
-                                                v-bind="column">
+                                                             v-bind="column">
                                             </el-table-column>
                                         </template>
                                         <el-table-column align="center" fixed="right" label="操作" width="100">
@@ -86,14 +86,15 @@
                                 <el-tabs type="border-card">
                                     <el-tab-pane label="分配记录">
                                         <el-table ref="soPickPlanTable" :data="table.soPickPlanData"
-                                            :height="table.soPickPlanHeight" :show-summary="true"
-                                            :span-method="objectSpanMethod" :summary-method="summarySoPickPlan" border
-                                            highlight-current-row size="mini">
+                                                  :height="table.soPickPlanHeight" :show-summary="true"
+                                                  :span-method="objectSpanMethod" :summary-method="summarySoPickPlan"
+                                                  border
+                                                  highlight-current-row size="mini">
                                             <el-table-column v-if="false" fixed type="selection" width="50">
                                             </el-table-column>
                                             <template v-for="(column, index) in table.soPickPlanColumnList">
                                                 <el-table-column :key="index" show-overflow-tooltip v-bind="column"
-                                                    width="100">
+                                                                 width="100">
                                                 </el-table-column>
                                             </template>
                                         </el-table>
@@ -106,15 +107,15 @@
             </el-main>
         </el-container>
         <el-dialog :append-to-body="true" :close-on-click-modal="false" :fullscreen="true" :show-close="true"
-            :title="dialog.title" :visible.sync="dialog.dialogTableVisible" top="0" @close="closeDialog">
+                   :title="dialog.title" :visible.sync="dialog.dialogTableVisible" top="0" @close="closeDialog">
             <el-table ref="dialogTable" :data="dialog.dialogData" :height="dialog.dialogTableHeight"
-                :span-method="objectSpanMethod" :summary-method="getSummaries" border highlight-current-row
-                show-summary>
+                      :span-method="objectSpanMethod" :summary-method="getSummaries" border highlight-current-row
+                      show-summary>
                 <el-table-column label="箱码" prop="boxCode" width="120">
                     <template v-slot="{ row }">
                         <el-link :underline="false" target="_blank" type="primary" @click="onShowBoxStock(row)">{{
                                 row.boxCode
-                        }}
+                            }}
                         </el-link>
                     </template>
                 </el-table-column>
@@ -123,7 +124,7 @@
                     <template v-slot="{ row }">
                         <el-link :underline="false" target="_blank" type="primary" @click="onShowLocStock(row)">{{
                                 row.locCode
-                        }}
+                            }}
                         </el-link>
                     </template>
                 </el-table-column>
@@ -133,8 +134,8 @@
                 <el-table-column label="本次分配量" prop="pickQty" width="150">
                     <template v-slot="{ row }">
                         <el-input v-model.number="row.pickQty" maxlength="9" oninput="value=value.replace(/[^\d]/g,'')"
-                            placeholder="请输入分配数量" size="medium" style="width: 100%"
-                            @input="val => changePickQty(val, row)">
+                                  placeholder="请输入分配数量" size="medium" style="width: 100%"
+                                  @input="val => changePickQty(val, row)">
                         </el-input>
                     </template>
                 </el-table-column>
@@ -155,9 +156,10 @@
             </div>
             <!--      内层dialog      -->
             <el-dialog :append-to-body="true" :title="innerDialog.title" :visible.sync="innerDialog.showInnerDialog"
-                width="80%">
+                       width="80%">
                 <el-table ref="dialogTable" :data="innerDialog.tableData" :height="innerDialog.tableHeight"
-                    :summary-method="getSummaries" border highlight-current-row show-overflow-tooltip show-summary>
+                          :summary-method="getSummaries" border highlight-current-row show-overflow-tooltip
+                          show-summary>
                     <template v-for="(column, index) in innerDialog.columnList">
                         <el-table-column :key="index" show-overflow-tooltip v-bind="column">
                         </el-table-column>
@@ -173,7 +175,7 @@
 </template>
 
 <script>
-import { editMixin } from "@/mixins/edit";
+import {editMixin} from "@/mixins/edit";
 import {
     automaticAssign,
     cancelAll,
@@ -191,7 +193,7 @@ export default {
     name: "distribution",
     mixins: [editMixin],
     props: {
-        soBillId: { type: String, required: true },
+        soBillId: {type: String, required: true},
     },
     data() {
         return {
@@ -453,7 +455,7 @@ export default {
             // 重置mergedCell对象,并重新赋值
             this.resetMerge(this.table.soPickPlanData);
         },
-        objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+        objectSpanMethod({row, column, rowIndex, columnIndex}) {
             if (this.mergedCell.mergedArray.length > 0) {
                 if (
                     column.label === '箱码' || column.label === '库位' ||
@@ -514,7 +516,7 @@ export default {
             this.resetMerge(this.table.soPickPlanData);
         },
         summarySoPickPlan(param) {
-            const { columns, data } = param;
+            const {columns, data} = param;
             const sums = [];
             columns.forEach((column, index) => {
                 if (index === 0) {
@@ -537,7 +539,7 @@ export default {
             return sums;
         },
         summarySoDetail(param) {
-            const { columns, data } = param;
+            const {columns, data} = param;
             const sums = [];
             columns.forEach((column, index) => {
                 if (index === 0) {
@@ -655,16 +657,11 @@ export default {
                     this.$message.warning(`第${Number(i) + 1}行，物品 ${dialogData[i].skuCode}，批次${dialogData[i].skuLot1} 的分配量不能大于可用量`);
                     return;
                 }
-                if (dialogData[i].zoneCode === this.$commonConst.ZONE_AGV
-                    && dialogData[i].pickQty > 0
-                    && dialogData[i].pickQty !== dialogData[i].stockEnable) {
-                    this.$message.warning(`第${Number(i) + 1}行，自动区库存必须全部整箱分配`);
-                    return;
-                }
+
             }
             let data = this.dialog.dialogData.filter(item => this.filterRowBySoPickPlan(item));
             let stockIdAndSoPickPlanQtyList = data.map(item => {
-                return Object.assign({}, { 'stockId': item.stockId, 'soPickPlanQty': item.pickQty })
+                return Object.assign({}, {'stockId': item.stockId, 'soPickPlanQty': item.pickQty})
             })
             let soPickPlanList = [];
             if (func.isNotEmpty(this.dialog.dialogData)) {
@@ -691,7 +688,7 @@ export default {
             return !(func.isEmpty(row.pickQty) || row.pickQty === 0);
         },
         getSummaries(param) {
-            const { columns, data } = param;
+            const {columns, data} = param;
             const sums = [];
             columns.forEach((column, index) => {
                 const values = data.map(item => Number(item[column.property]));
