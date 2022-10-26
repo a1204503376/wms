@@ -201,9 +201,9 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		// 由于双重入库通知前会发送取消订单的通知，所以双重入库中需要更新任务状态，并再次冻结中间库位的库存
 		if (wmsTask.getTaskState().equals(WmsTaskStateEnum.CANCELED)){
 			wmsTask.setTaskState(WmsTaskStateEnum.START_EXECUTION);
+			List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
+			stockBiz.freezeStockByDropId(stockList, wmsTask.getTaskId());
 		}
-		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
-		stockBiz.freezeStockByDropId(stockList, wmsTask.getTaskId());
 
 		// 1. 原来的目标库位使用状态有系统业务冻结改为冻结，并清空loc_flag_desc
 		Long oldLocId = wmsTask.getToLocId();
