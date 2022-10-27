@@ -62,6 +62,8 @@ public class ReceiveFactory {
 		receiveHeader.setWhCode(warehouse.getWhCode());
 		//设置货主id
 		receiveHeader.setWoId(owner.getWoId());
+		//设置文件编码
+		receiveHeader.setUdf1(newReceiveHeaderRequest.getUdf1());
 		//设置货主编码
 		receiveHeader.setOwnerCode(owner.getOwnerCode());
 		if (Func.isNotEmpty(newReceiveHeaderRequest.getSupplier())) {
@@ -196,6 +198,8 @@ public class ReceiveFactory {
 		receiveHeaderEditResponse.setInStoreType(receiveHeader.getInStoreType());
 		//设置货主id
 		receiveHeaderEditResponse.setWoId(receiveHeader.getWoId());
+		//设置文件编码
+		receiveHeaderEditResponse.setUdf1(receiveHeader.getUdf1());
 		//设置备注
 		receiveHeaderEditResponse.setRemark(receiveHeader.getRemark());
 		return receiveHeaderEditResponse;
@@ -268,6 +272,8 @@ public class ReceiveFactory {
 		receiveHeader.setBillTypeCd(editReceiveHeaderRequest.getBillTypeCd());
 		//设置入库方式
 		receiveHeader.setInStoreType(editReceiveHeaderRequest.getInStoreType());
+		//设置文件编码
+		receiveHeader.setUdf1(editReceiveHeaderRequest.getUdf1());
 		//设置备注
 		receiveHeader.setRemark(editReceiveHeaderRequest.getRemark());
 		return receiveHeader;

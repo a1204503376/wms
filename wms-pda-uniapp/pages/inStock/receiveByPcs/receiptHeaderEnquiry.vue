@@ -127,6 +127,12 @@
 				uni.$u.throttle(this.getReceiveList(), 1000)
 			},
 			clickItem(item) {
+				if (item.billTypeName === '销售退回' && tool.isEmpty(item.udf1)){
+					this.$u.func.showToast({
+						title: '该销售退回单文件编码为空，不能进行收货'
+					});
+					return;
+				}
 				uni.$u.func.routeNavigateTo('/pages/inStock/receiveByPcs/receiptDetailEnquiry', item);
 			},
 			scannerCallback(no) {

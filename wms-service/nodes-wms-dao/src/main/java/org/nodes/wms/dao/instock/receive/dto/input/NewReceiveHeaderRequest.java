@@ -42,7 +42,10 @@ public class NewReceiveHeaderRequest implements Serializable {
 	 * 货主id
 	 */
 	private Long woId;
-
+	/**
+	 * 文件编码
+	 */
+	private String udf1;
 	/**
 	 * 备注
 	 */

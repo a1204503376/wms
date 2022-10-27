@@ -8,6 +8,8 @@
         h.asn_bill_no,
         h.wh_code,
         h.bill_state,
+        billType.bill_type_name as bill_type_cd,
+        h.udf1,
         h.supplier_code,
         h.supplier_name,
         h.external_order_no,
@@ -21,6 +23,7 @@
         LEFT JOIN blade_user user1 ON user1.id = h.create_user
         LEFT JOIN blade_user user2 ON user2.id = h.update_user
         LEFT JOIN receive_detail d on h.receive_id = d.receive_id
+        LEFT JOIN wms_bill_type billType ON h.bill_type_cd = billType.bill_type_cd
         <where>
             AND h.is_deleted = '0'
             <if test="query.receiveNo != null and query.receiveNo != ''">
@@ -86,6 +89,7 @@
                rh.supplier_code,
                rh.supplier_name,
                rh.supplier_contact,
+               rh.udf1,
                rh.remark
         from receive_header rh
              left join wms_bill_type wbt on rh.bill_type_cd = wbt.bill_type_cd
@@ -102,7 +106,8 @@
         h.receive_id,
         h.receive_no,
         h.supplier_name,
-        b.bill_type_name
+        b.bill_type_name,
+        h.udf1
         from receive_header h
         LEFT JOIN wms_bill_type b ON h.bill_type_cd = b.bill_type_cd
         LEFT JOIN receive_detail d on h.receive_id= d.receive_id

@@ -379,6 +379,10 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		if (Func.isEmpty(receiveQty) || receiveQty.equals(BigDecimal.ZERO)) {
 			throw new ServiceException("请输入数量");
 		}
+		if (WmsAppConstant.BILL_TYPE_SALE_RETURN.equals(receiveHeader.getBillTypeCd())
+			&& Func.isEmpty(receiveHeader.getUdf1())) {
+			throw new ServiceException("该单不可以收货，原因销售退回单的文件编码为空");
+		}
 		if (receiveHeader.getBillState() != ReceiveHeaderStateEnum.NOT_RECEIPT
 			&& receiveHeader.getBillState() != ReceiveHeaderStateEnum.PART) {
 			throw new ServiceException("该单不可以收货，原因收货单已经收货完成");
