@@ -100,6 +100,7 @@ public class SoPickPlanDaoImpl
 		return super.lambdaQuery()
 			.in(SoPickPlan::getStockId, stockIdList)
 			.eq(SoPickPlan::getSoBillId, soBillId)
+			.apply("pick_plan_qty > pick_real_qty")
 			.list();
 	}
 

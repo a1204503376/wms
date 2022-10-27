@@ -10,9 +10,8 @@ import org.nodes.wms.dao.outstock.so.dto.input.SoBillDistributedRequest;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.input.FindPickPlanBySoBillIdAndBoxCodeRequest;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.FindPickPlanBySoBillIdAndBoxCodeResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
-import org.nodes.wms.dao.stock.dto.output.StockAgvAndPickResponse;
+import org.nodes.wms.dao.stock.dto.output.GetStockByDistributeAdjustResponse;
 import org.nodes.wms.dao.stock.dto.output.StockDistributeAdjustResponse;
-import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
 import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
 import org.springblade.core.mp.support.Query;
 
@@ -132,22 +131,14 @@ public interface OutStockBiz {
 	 *
 	 * @param skuId    物品id
 	 * @param skuLot1  生产批次
+	 * @param skuLot2  规格型号
 	 * @param skuLot4  专用客户
 	 * @param soBillId 发货单id
-	 * @return 可分配物品库存信息
+	 * @return 可分配物品库存信息 以及人工区库存和自动区库存统计余额
 	 */
-	List<StockSoPickPlanResponse> getStockByDistributeAdjust(Long skuId, String skuLot1, String skuLot4, Long soBillId);
+	GetStockByDistributeAdjustResponse getStockByDistributeAdjust(Long skuId,
+															 String skuLot1, String skuLot2, String skuLot4, Long soBillId);
 
-	/**
-	 * 获取 人工区库存和自动区库存统计余额
-	 *
-	 * @param skuId    物品id
-	 * @param skuLot1  生产批次
-	 * @param skuLot4  专用客户
-	 * @param soBillId 发货单id
-	 * @return 人工区库存和自动区库存统计余额
-	 */
-	StockAgvAndPickResponse getStockAgvPick(Long skuId, String skuLot1, String skuLot4, Long soBillId);
 
 	/**
 	 * 分配：分配手动调整-保存调整后的信息
@@ -211,7 +202,7 @@ public interface OutStockBiz {
 	 * 根据箱码或库位编码 查找分配调整页面的库存信息
 	 *
 	 * @param boxCode 箱码
-	 * @param whId 库房id
+	 * @param whId    库房id
 	 * @param locCode 库位编码
 	 * @return 库存信息
 	 */

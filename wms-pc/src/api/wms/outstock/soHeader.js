@@ -184,27 +184,14 @@ export const issued = (soBillId) => {
     })
 }
 
-export const getStockByDistributeAdjust = (skuId, skuLot1, skuLot4, soBillId) => {
+export const getStockByDistributeAdjust = (skuId, skuLot1, skuLot2, skuLot4, soBillId) => {
     return request({
         url: '/api/wms/outstock/soBill/getStockByDistributeAdjust',
         method: 'post',
         data: {
             skuId: skuId,
             skuLot1: skuLot1,
-            skuLot4: skuLot4,
-            soBillId: soBillId
-        }
-    })
-}
-
-
-export const getStockAgvAndPick = (skuId, skuLot1, skuLot4, soBillId) => {
-    return request({
-        url: '/api/wms/outstock/soBill/getStockAgvAndPick',
-        method: 'post',
-        data: {
-            skuId: skuId,
-            skuLot1: skuLot1,
+            skuLot2: skuLot2,
             skuLot4: skuLot4,
             soBillId: soBillId
         }

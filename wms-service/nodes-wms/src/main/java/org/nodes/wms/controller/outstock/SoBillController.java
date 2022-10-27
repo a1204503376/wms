@@ -19,10 +19,9 @@ import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.intput.SoPickPlanPageQuery;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
+import org.nodes.wms.dao.stock.dto.output.GetStockByDistributeAdjustResponse;
 import org.nodes.wms.dao.stock.dto.output.SerialSelectResponse;
-import org.nodes.wms.dao.stock.dto.output.StockAgvAndPickResponse;
 import org.nodes.wms.dao.stock.dto.output.StockDistributeAdjustResponse;
-import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -251,24 +250,12 @@ public class SoBillController {
 	 * 分配调整：根据物品id查找物品可分配库存信息
 	 */
 	@PostMapping("/getStockByDistributeAdjust")
-	public R<List<StockSoPickPlanResponse>> getStockByDistributeAdjust(
+	public R<GetStockByDistributeAdjustResponse> getStockByDistributeAdjust(
 		@Valid @RequestBody DistributeAdjustRequest distributeAdjustRequest) {
 		return R.data(outStockBiz.getStockByDistributeAdjust(
 			distributeAdjustRequest.getSkuId(),
 			distributeAdjustRequest.getSkuLot1(),
-			distributeAdjustRequest.getSkuLot4(),
-			distributeAdjustRequest.getSoBillId()));
-	}
-
-	/**
-	 * 分配调整：根据物品id查找物品可分配库存信息
-	 */
-	@PostMapping("/getStockAgvAndPick")
-	public R<StockAgvAndPickResponse> getStockAgvAndPick(
-		@Valid @RequestBody DistributeAdjustRequest distributeAdjustRequest) {
-		return R.data(outStockBiz.getStockAgvPick(
-			distributeAdjustRequest.getSkuId(),
-			distributeAdjustRequest.getSkuLot1(),
+			distributeAdjustRequest.getSkuLot2(),
 			distributeAdjustRequest.getSkuLot4(),
 			distributeAdjustRequest.getSoBillId()));
 	}
