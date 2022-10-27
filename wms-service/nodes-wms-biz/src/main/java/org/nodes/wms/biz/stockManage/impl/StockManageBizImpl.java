@@ -182,7 +182,7 @@ public class StockManageBizImpl implements StockManageBiz {
 	public void stockMoveByLpn(StockMoveByLpnRequest request) {
 		//根据前端传过来的LocCode
 		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getTargetLocCode());
-		List<Stock> stockList = stockQueryBiz.findStockByLpnCode(request.getLpnCode());
+		List<Stock> stockList = stockQueryBiz.findStockByLpnCodeOnStore(request.getLpnCode());
 		AssertUtil.notNull(stockList, "LPN移动失败，根据LPN获取库存集合为空");
 		for (Stock stock : stockList) {
 			if (StockStatusEnum.SYSTEM_FREEZE.equals(stock.getStockStatus())) {
