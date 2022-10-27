@@ -153,7 +153,7 @@ public interface LocationBiz {
 	/**
 	 * 根据类型获取对应库区数据
 	 *
-	 * @param zoneType 库区类型 必填，具体参考DictCodeConstant中的常量
+	 * @param zoneType 库区类型 必填，具体参考DictKVConstant中的常量
 	 * @return 库位集合
 	 */
 	List<Location> getLocationByZoneType(Integer zoneType);

@@ -159,7 +159,18 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		return stockDao.getStockByLpnCode(lpnCode, null);
 	}
 
-	@Override
+    @Override
+    public List<Stock> findStockByLpnCodeOnStore(String lpnCode) {
+		List<Location> pickToLocs = locationBiz.getLocationByZoneType(DictKVConstant.ZONE_TYPE_PICK_TO);
+		List<Long> pickToLocIds = null;
+		if (Func.isNotEmpty(pickToLocs)){
+			pickToLocIds = pickToLocs.stream().map(Location::getLocId).collect(Collectors.toList());
+		}
+
+		return stockDao.getStockByLpnCodeExcludeLoc(lpnCode, pickToLocIds);
+    }
+
+    @Override
 	public StockIndexResponse staticsStockDataOnIndexPage() {
 		// 获取所有入库暂存区库位
 		List<Location> allStageList = locationBiz.getLocationByZoneType(DictKVConstant.ZONE_TYPE_STAGE);
