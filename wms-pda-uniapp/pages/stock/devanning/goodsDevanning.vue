@@ -61,13 +61,12 @@
 				this.params.page = 0;
 				this.paramsView = this.params.stockList[this.params.page]
 			}
-			console.log(this.paramsView)
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
 		},
 		onShow() {
-			this.paramsView.splitQty=0;
+			this.paramsView.splitQty = 0;
 			uni.$u.func.registerScanner(this.scannerCallback);
 			var that = this;
 			that.emitKeyDown = function(e) {
@@ -82,7 +81,7 @@
 			next() {
 				this.params.page++;
 				if (this.params.stockList.length > this.params.page) {
-					this.params.stockList[this.params.page].splitQty=this.paramsView.splitQty;
+					this.params.stockList[this.params.page].splitQty = this.paramsView.splitQty;
 					uni.$u.func.routeNavigateTo('/pages/stock/devanning/goodsDevanning', this.params);
 				} else {
 					this.params.isSn = false;
