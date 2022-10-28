@@ -20,15 +20,6 @@ import java.util.List;
 public interface SkuMapper extends BaseMapper<Sku> {
 
 	/**
-	 * 根据物品编码或者物品名称查询前10个物品信息
-	 *
-	 * @param skuCode 物品编码
-	 * @param skuName 物品名称
-	 * @return List<SkuSelectResponse>
-	 */
-	List<SkuSelectResponse> listTop10BySkuCodeSkuName(@Param("skuCode") String skuCode, @Param("skuName") String skuName);
-
-	/**
 	 * 根据物品id查询所有的计量单位
 	 *
 	 * @param skuId: 物品id
