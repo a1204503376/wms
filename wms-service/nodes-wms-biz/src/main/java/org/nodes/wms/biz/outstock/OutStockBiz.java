@@ -41,6 +41,14 @@ public interface OutStockBiz {
 	List<SoPickPlanForDistributionResponse> getSoPickPlanBySoBillIdAndSoDetailId(Long soBillId, Long soDetailId);
 
 	/**
+	 * 根据发货单id和发货单明细id查询拣货计划
+	 *
+	 * @param soBillId 发货单id 必填
+	 * @return 拣货计划信息
+	 */
+	List<SoPickPlanForDistributionResponse> getSoPickPlanBySoBillIdAndSoDetailId(Long soBillId);
+
+	/**
 	 * 撤销拣货
 	 *
 	 * @param logSoPickIdList 拣货记录id
@@ -137,7 +145,7 @@ public interface OutStockBiz {
 	 * @return 可分配物品库存信息 以及人工区库存和自动区库存统计余额
 	 */
 	GetStockByDistributeAdjustResponse getStockByDistributeAdjust(Long skuId,
-															 String skuLot1, String skuLot2, String skuLot4, Long soBillId);
+																  String skuLot1, String skuLot2, String skuLot4, Long soBillId);
 
 
 	/**

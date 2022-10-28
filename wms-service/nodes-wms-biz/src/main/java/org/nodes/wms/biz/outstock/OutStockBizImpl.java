@@ -179,6 +179,13 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
+	public List<SoPickPlanForDistributionResponse> getSoPickPlanBySoBillIdAndSoDetailId(Long soBillId) {
+		AssertUtil.notNull(soBillId, "查询拣货计划失败，发货单id为空");
+		List<SoPickPlan> soPickPlanList = soPickPlanDao.getSoPickPlanForDistribution(soBillId);
+		return BeanUtil.copy(soPickPlanList, SoPickPlanForDistributionResponse.class);
+	}
+
+	@Override
 	public IPage<FindAllPickingResponse> findSoHeaderByNo(findSoHeaderByNoRequest request, Query query) {
 		List<SoBillStateEnum> soBillStateEnums = new ArrayList<>();
 		soBillStateEnums.add(SoBillStateEnum.EXECUTING);

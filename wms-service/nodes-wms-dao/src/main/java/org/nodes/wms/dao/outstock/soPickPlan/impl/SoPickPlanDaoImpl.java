@@ -39,6 +39,13 @@ public class SoPickPlanDaoImpl
 	}
 
 	@Override
+	public List<SoPickPlan> getSoPickPlanForDistribution(Long soBillId) {
+		return super.lambdaQuery()
+			.eq(SoPickPlan::getSoBillId, soBillId)
+			.list();
+	}
+
+	@Override
 	public boolean hasEnablePickPlan(Long soBillId) {
 		AssertUtil.notNull(soBillId, "判断是否有分配中的计划失败，出库单ID为空");
 		return super.lambdaQuery()
