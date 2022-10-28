@@ -50,7 +50,8 @@
 				params: {
 					locCode: '',
 					newBoxCode: '',
-					targetBoxCode: ''
+					targetBoxCode: '',
+					page: 0
 				},
 				dataSource: "",
 				isAllLpnPutawayList: [{
@@ -71,6 +72,7 @@
 			this.params.boxCode = parse.boxCode;
 			this.params.whId = parse.whId;
 			this.params.isSn = parse.isSn;
+			this.params.page = parse .page;
 			this.params.serialNumberList = parse.serialNumberList;
 			this.params.stockList = parse.stockList;
 			this.dataSource = this.isAllLpnPutawayList[0].name;
