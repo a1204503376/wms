@@ -23,6 +23,10 @@ public class DevanningSubmitRequest implements Serializable {
 	 */
 	private String boxCode;
 	/**
+	 * 目标箱码
+	 */
+	private String targetBoxCode;
+	/**
 	 * 库房ID
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
