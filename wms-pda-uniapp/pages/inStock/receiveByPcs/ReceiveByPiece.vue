@@ -147,7 +147,7 @@
 					//提交表单数据 收货
 					paramsData.whCode = uni.getStorageSync('warehouse').whCode;
 					paramsData.whId = uni.getStorageSync('warehouse').whId;
-					if (tool.isNotEmpty(paramsData.skuLot2) && tool.isNotEmpty(paramsData.locCode) && tool
+					if (tool.isNotEmpty(paramsData.skuLot2)&& paramsData.skuLot2!= paramsData.skuCode&& tool.isNotEmpty(paramsData.locCode) && tool
 						.isNotEmpty(paramsData.boxCode) && tool.isNotEmpty(_this.params.boxCode) && tool
 						.isNotEmpty(paramsData.skuLot1) && tool.isInteger(paramsData.surplusQty)) {
 						if (_this.params.isSn) {
@@ -185,7 +185,7 @@
 						_this.$u.func.refreshPage()
 					} else {
 						_this.$u.func.showToast({
-							title: '收货失败,请输入必填字段或收货数量请输入正整数',
+							title: '收货失败,请输入必填字段',
 						});
 						_this.params.locCode = 'STAGE'
 					}
