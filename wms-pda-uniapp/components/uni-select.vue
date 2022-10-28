@@ -10,7 +10,8 @@
 			<picker style="width: 100%;height: 100%;" v-model="dataSource" v-if="isSkuByCode" :range="columns"
 				value="index" @change="bindPickerChange" :disabled="isSkuByCode">
 				<view class="uni-input-input" style="width: 100%;">
-					<u--input style="margin-top: 0rpx; z-index: 99999;" v-model.trim="dataSource" :disabled="isSkuByCode">
+					<u--input style="margin-top: 0rpx; z-index: 99999;" v-model.trim="dataSource"
+						:disabled="isSkuByCode">
 					</u--input>
 				</view>
 			</picker>
@@ -33,17 +34,6 @@
 		watch: {
 			selectVal: {
 				handler(selectVal) {
-					this.isTwoInto++;
-					if (this.isTwoInto<=2) {
-						this.dataSource = this.selectVal;
-						if (tool.isNotEmpty(this.selectVal)) {
-							this.params.no = this.selectVal;
-							this.getDataSoueceDefault();
-						} else {
-							this.getDataSource();
-						}
-					}
-
 				},
 				immediate: true,
 				deep: true
@@ -62,13 +52,21 @@
 				isSkuByCode: false
 			};
 		},
+		created() {
+			this.dataSource = this.selectVal;
+			if (tool.isNotEmpty(this.selectVal)) {
+				this.params.no = this.selectVal;
+				this.getDataSoueceDefault();
+			} else {
+				this.getDataSource();
+			}
+		},
 		methods: {
 			getDataSource() {
 				sku.getSkuDropDownBox().then(data => {
 					this.isSkuDropDownBox = true;
 					this.isSkuByCode = false;
 					this.columns = data.data;
-					this.dataSource = data.data[0];
 				})
 			},
 			getDataSoueceDefault() {
@@ -78,10 +76,10 @@
 					this.columns = data.data;
 					this.dataSource = data.data[0]
 					this.$emit('selectValChange', data.data[0]);
-          if (tool.isEmpty(data.data[0])) {
+					if (tool.isEmpty(data.data[0])) {
 						this.getDataSource();
 					}
-					
+
 				})
 			},
 			bindPickerChange: function(e) {

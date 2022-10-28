@@ -574,6 +574,10 @@ public class OutStockBizImpl implements OutStockBiz {
 	@Override
 	public GetStockByDistributeAdjustResponse getStockByDistributeAdjust(
 		Long skuId, String skuLot1, String skuLot2, String skuLot4, Long soBillId) {
+		SoHeader soHeader = soBillBiz.getSoHeaderById(soBillId);
+		if (soHeader.getSoBillState().equals(SoBillStateEnum.ALL_OUT_STOCK) || soHeader.getSoBillState().equals(SoBillStateEnum.COMPLETED) || soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED)) {
+			throw new ServiceException("调整分配失败,请检查当前发货单状态");
+		}
 		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
 		skuLot.setSkuLot1(skuLot1);
 		skuLot.setSkuLot2(skuLot2);
@@ -660,6 +664,9 @@ public class OutStockBizImpl implements OutStockBiz {
 	public void manualDistribute(SoBillDistributedRequest request) {
 		AssertUtil.notNull(request, "调整分配失败，请求参数为空");
 		SoHeader soHeader = soBillBiz.getSoHeaderById(request.getSoBillId());
+		if (soHeader.getSoBillState().equals(SoBillStateEnum.ALL_OUT_STOCK) || soHeader.getSoBillState().equals(SoBillStateEnum.COMPLETED) || soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED)) {
+			throw new ServiceException("调整分配失败,请检查当前发货单状态");
+		}
 		AssertUtil.notNull(request, "调整分配失败，发货单已经删除无法执行分配调整");
 		// 删除原有的分配记录和释放库存占用
 		if (Func.isNotEmpty(request.getOldSoPickPlanList())) {

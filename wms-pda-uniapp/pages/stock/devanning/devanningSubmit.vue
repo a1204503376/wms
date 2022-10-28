@@ -10,12 +10,16 @@
 			</u-form-item>
 			<u-form-item label="新箱码" :required="true" class="left-text-one-line" labelWidth="100">
 				<picker style="width: 100%;height: 100%;" v-model="dataSource" :range="isAllLpnPutawayList"
-					range-key="name" value="index" @change="bindPickerChange" disabled>
+					range-key="name" value="index" @change="bindPickerChange">
 					<view class="uni-input-input" style="width: 100%;">
 						<u--input style="margin-top: 0rpx; z-index: 99999;" v-model.trim="dataSource" disabled>
 						</u--input>
 					</view>
 				</picker>
+			</u-form-item>
+			<u-form-item label="目标箱码" v-if="this.params.newBoxCode == false" :required="true" class="left-text-one-line"
+				labelWidth="100">
+				<u--input v-model.trim="params.targetBoxCode"></u--input>
 			</u-form-item>
 		</u--form>
 		<view class="footer">
@@ -45,19 +49,20 @@
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				params: {
 					locCode: '',
-					newBoxCode: ''
+					newBoxCode: '',
+					targetBoxCode: ''
 				},
 				dataSource: "",
 				isAllLpnPutawayList: [{
+						id: 2,
+						name: "是",
+						isAllLpnPutaway: true
+					}, {
 						id: 1,
 						name: "否",
 						isAllLpnPutaway: false
 					},
-					{
-						id: 2,
-						name: "是",
-						isAllLpnPutaway: true
-					},
+
 				]
 			}
 		},
@@ -68,8 +73,8 @@
 			this.params.isSn = parse.isSn;
 			this.params.serialNumberList = parse.serialNumberList;
 			this.params.stockList = parse.stockList;
-			this.dataSource = this.isAllLpnPutawayList[1].name;
-			this.params.newBoxCode = this.isAllLpnPutawayList[1].isAllLpnPutaway;
+			this.dataSource = this.isAllLpnPutawayList[0].name;
+			this.params.newBoxCode = this.isAllLpnPutawayList[0].isAllLpnPutaway;
 		},
 		onUnload() {
 			uni.$u.func.unRegisterScanner();
@@ -110,12 +115,19 @@
 				this.index = e.detail.value
 				this.dataSource = this.isAllLpnPutawayList[e.detail.value].name;
 				this.params.newBoxCode = this.isAllLpnPutawayList[e.detail.value].isAllLpnPutaway;
-				console.log(this.params.newBoxCode)
 			},
 			submit() {
 				var _this = this;
 				uni.$u.throttle(function() {
 					if (tool.isNotEmpty(_this.params.locCode)) {
+						if (_this.params.newBoxCode == false) {
+							if (tool.isEmpty(_this.params.targetBoxCode)) {
+								uni.$u.func.showToast({
+									title: '拆箱失败,请输入目标箱码'
+								});
+								return;
+							}
+						}
 						devanning.devanningSubmit(_this.params).then(data => {
 							uni.$u.func.showToast({
 								title: '拆箱成功'
@@ -125,7 +137,7 @@
 						return;
 					} else {
 						uni.$u.func.showToast({
-							title: '拆箱失败'
+							title: '拆箱失败,请输入目标LOC'
 						});
 					}
 				}, 1000)

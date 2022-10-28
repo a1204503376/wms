@@ -152,10 +152,21 @@ public class DevanningBizImpl implements DevanningBiz {
 		// 将旧库存拆成新库存
 		List<DevanningAction> devanningActions = devanningActionFactory.create(request);
 		String newBoxCode = null;
+		String newLpnCode = null;
 		if (request.getNewBoxCode()) {
 			newBoxCode = generateNewBoxCode(request);
+			newLpnCode = newBoxCode;
+		} else {
+			newBoxCode = request.getTargetBoxCode();
+			List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(newBoxCode);
+			if (Func.isEmpty(stockList)) {
+				newBoxCode = generateNewBoxCode(request);
+				newLpnCode = newBoxCode;
+			} else {
+				newLpnCode = stockList.get(0).getLpnCode();
+			}
 		}
-		String newLpnCode = newBoxCode;
+
 		UdfEntity udfEntity = new UdfEntity();
 		udfEntity.setUdf2(request.getBoxCode());
 
