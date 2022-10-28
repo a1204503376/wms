@@ -127,7 +127,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		// 2.移动库存到出库暂存区
 		Location pickToLocation = locationBiz.getLocationByZoneType(
 			pickPlan.getWhId(), DictKVConstant.ZONE_TYPE_PICK_TO).get(0);
-		stockBiz.moveStock(stock, serialNoList, pickQty, pickToLocation, StockLogTypeEnum.OUTSTOCK_BY_PICK_PLAN,
+		stockBiz.moveStock(stock, serialNoList, pickQty, stock.getBoxCode(), stock.getBoxCode(), pickToLocation, StockLogTypeEnum.OUTSTOCK_BY_PICK_PLAN,
 			pickPlan.getSoBillId(), pickPlan.getSoBillNo(), soDetail.getSoLineNo(), null);
 		// 3.更新拣货计划
 		updatePickRealQty(pickPlan.getPickPlanId(), pickPlan.getPickRealQty().add(pickQty));

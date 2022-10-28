@@ -30,6 +30,11 @@ public interface WmsAppConstant {
 	String FALSE_DEFAULT_STRING = "0";
 
 	/**
+	 * 单据类型：销售退回
+	 */
+	String BILL_TYPE_SALE_RETURN = "SR";
+
+	/**
 	 * 单据类型：归还入库
 	 */
 	String BILL_TYPE_RETURN = "RR";

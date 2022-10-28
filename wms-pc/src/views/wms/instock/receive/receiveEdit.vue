@@ -69,6 +69,17 @@
                                 </nodes-owner>
                             </el-form-item>
                         </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="文件编码">
+                                <el-input
+                                    style="max-width: 206px"
+                                    placeholder="请输入文件编码"
+                                    :clearable="true"
+                                    v-model="form.params.editReceiveHeaderRequest.udf1"
+                                    size="medium">
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
                     </el-row>
                     <el-row style="width: 91%">
                         <el-col :span="24">
@@ -322,7 +333,8 @@ export default {
                         },
                         supplierContact: '',
                         woId: '',
-                        remark: '',
+                        udf1: null,
+                        remark: null,
                         receiveDetailIdList: []
                     },
                     editReceiveDetailRequestList: []
@@ -397,7 +409,7 @@ export default {
                 receiveDetailId: '',
                 planQty: 0,
                 scanQty: '',
-                remark: '',
+                remark: null,
                 skuLot1: '',
                 skuLot4: '',
                 skuLot5: '',

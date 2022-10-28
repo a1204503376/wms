@@ -72,4 +72,8 @@ public class DetailReceiveHeaderResponse implements Serializable {
 	 * 单据类型名称
 	 */
 	private String billTypeName;
+	/**
+	 * 文件编码
+	 */
+	private String udf1;
 }

@@ -11,7 +11,9 @@ import java.util.List;
 
 @Data
 public class EditReceiveHeaderResponse implements Serializable {
+
 	private static final long serialVersionUID = -9050702110418702134L;
+
 	/**
 	 * 收货单主键id
 	 */
@@ -23,22 +25,18 @@ public class EditReceiveHeaderResponse implements Serializable {
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long whId;
-
 	/**
 	 * 单据类型
 	 */
 	 private String billTypeCd;
-
 	/**
 	 * 供应商下拉返回对象
 	 */
 	private SupplierSelectResponse supplier;
-
 	/**
 	 * 归还人
 	 */
 	private String supplierContact;
-
 	/**
 	 * 入库方式
 	 */
@@ -48,7 +46,10 @@ public class EditReceiveHeaderResponse implements Serializable {
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long woId;
-
+	/**
+	 * 文件编码
+	 */
+	private String udf1;
 	/**
 	 * 备注
 	 */

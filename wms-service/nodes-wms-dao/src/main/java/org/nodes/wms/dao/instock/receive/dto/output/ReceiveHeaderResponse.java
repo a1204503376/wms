@@ -54,6 +54,11 @@ public class ReceiveHeaderResponse implements Serializable {
 	@ExcelProperty("入库方式")
 	private Integer inStoreType;
 	/**
+	 * 库房编码
+	 */
+	@ExcelIgnore
+	private String udf1;
+	/**
 	 * WMS备注
 	 */
 	@ExcelProperty("WMS备注")

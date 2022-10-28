@@ -149,6 +149,7 @@ import NodesReceiveBillState from "../../../components/wms/select/NodesReceiveBi
 import NodesSkuByQuery from "@/components/wms/select/NodesSkuByQuery";
 import {ExcelExport} from 'pikaz-excel-js';
 import {nowDateFormat} from "@/util/date";
+import func from "@/util/func";
 
 
 export default {
@@ -206,6 +207,11 @@ export default {
                     {
                         prop: 'externalOrderNo',
                         label: '上游编码',
+                        sortable: 'custom',
+                    },
+                    {
+                        prop: 'billTypeCd',
+                        label: '单据类型',
                         sortable: 'custom',
                     },
                     {
@@ -309,7 +315,10 @@ export default {
                 this.$message.error('该收货单已取消，不能进行收货');
                 return
             }
-
+            if (row.billTypeCd === "销售退回" && func.isEmpty(row.udf1)) {
+                this.$message.error('该销售退还单的文件编码为空，不能进行收货');
+                return
+            }
             this.$router.push({
                 name: 'PC收货',
                 params: {
