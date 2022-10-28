@@ -218,6 +218,15 @@ public class SoBillController {
 	}
 
 	/**
+	 * 分配：根据发货单id获取已经分配的拣货计划信息
+	 */
+	@PostMapping("/getHistorySoPickPlan")
+	public R<List<SoPickPlanForDistributionResponse>> getHistorySoPickPlan(
+		@Valid @RequestBody SoBillIdAndSoDetailIdRequest request) {
+		return R.data(outStockBiz.getSoPickPlanBySoBillIdAndSoDetailId(request.getSoBillId()));
+	}
+
+	/**
 	 * 分配：自动分配
 	 */
 	@ApiLog("发货单管理-自动分配")

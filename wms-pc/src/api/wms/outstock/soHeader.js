@@ -136,6 +136,17 @@ export const getSoPickPlanData = (soBillId, soDetailId) => {
     })
 }
 
+export const getHistorySoPickPlanData = (soBillId, soDetailId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/getHistorySoPickPlan',
+        method: 'post',
+        data: {
+            soBillId: soBillId,
+            soDetailId: soDetailId
+        }
+    })
+}
+
 export const getSoDetailAndStock = (data) => {
     return request({
         url: '/api/wms/outstock/soBill/getSoDetailAndStock',

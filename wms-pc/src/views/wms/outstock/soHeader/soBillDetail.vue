@@ -164,7 +164,7 @@ import {
     getHeaderForDetail,
     getLogSoPickForDetail,
     getSoLogForDetail,
-    getSoPickPlanData,
+    getHistorySoPickPlanData,
 } from "@/api/wms/outstock/soHeader"
 import func from "@/util/func";
 
@@ -489,7 +489,7 @@ export default {
             if (func.isEmpty(this.soBillId)) {
                 return;
             }
-            getSoPickPlanData(this.soBillId, null).then((res) => {
+            getHistorySoPickPlanData(this.soBillId).then((res) => {
                 this.publicTable.data = res.data.data;
                 this.page.total = res.data.data.length;
                 this.tableLoading = false;

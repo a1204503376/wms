@@ -29,6 +29,14 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 	List<SoPickPlanForDistributionResponse> getBySoBillIdAndSoDetailId(Long soBillId, Long soDetailId);
 
 	/**
+	 * 根据发货单id和发货单明细id查询拣货计划信息 包含已经拣货的
+	 *
+	 * @param soBillId 查询参数
+	 * @return 拣货计划
+	 */
+	List<SoPickPlan> getSoPickPlanForDistribution(Long soBillId);
+
+	/**
 	 * 判断是否有分配中的计划
 	 *
 	 * @param soBillId 出库单id
@@ -164,7 +172,7 @@ public interface SoPickPlanDao extends BaseService<SoPickPlan> {
 	 * 更新拣货计划中的库存信息
 	 *
 	 * @param soPickPlan 拣货计划
-	 * @param newStock 新的库存
+	 * @param newStock   新的库存
 	 */
 	void updatePlanOfStock(SoPickPlan soPickPlan, Stock newStock);
 }
