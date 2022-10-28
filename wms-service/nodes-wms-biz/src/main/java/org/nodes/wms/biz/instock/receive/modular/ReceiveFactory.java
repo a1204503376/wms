@@ -334,7 +334,7 @@ public class ReceiveFactory {
 		//设置层级
 		receiveDetail.setSkuLevel(skuPackageDetail.getSkuLevel());
 		//设置规格
-		receiveDetail.setSkuSpec(sku.getSkuSpec());
+		receiveDetail.setSkuSpec(editReceiveDetailRequest.getSku().getSkuSpec());
 		//设置库房id
 		receiveDetail.setWhId(receiveHeader.getWhId());
 		//设置库房编码
@@ -343,6 +343,7 @@ public class ReceiveFactory {
 		receiveDetail.setWoId(receiveHeader.getWoId());
 		//设置批属性信息
 		receiveDetail.setSkuLot1(editReceiveDetailRequest.getSkuLot1());
+		receiveDetail.setSkuLot2(editReceiveDetailRequest.getSku().getSkuSpec());
 		receiveDetail.setSkuLot4(editReceiveDetailRequest.getSkuLot4());
 		receiveDetail.setSkuLot5(editReceiveDetailRequest.getSkuLot5());
 		receiveDetail.setSkuLot6(editReceiveDetailRequest.getSkuLot6());

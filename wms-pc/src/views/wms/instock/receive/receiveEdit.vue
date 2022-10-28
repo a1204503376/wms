@@ -406,7 +406,6 @@ export default {
                     skuSpec: '',
                 },
                 umCode: '',
-                skuSpec: '',
                 receiveDetailId: '',
                 planQty: 0,
                 scanQty: '',

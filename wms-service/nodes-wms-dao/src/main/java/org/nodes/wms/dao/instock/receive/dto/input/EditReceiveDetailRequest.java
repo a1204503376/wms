@@ -35,10 +35,6 @@ public class EditReceiveDetailRequest extends BaseSkuLot {
 	 */
 	private String umCode;
 	/**
-	 * 规格
-	 */
-	private String skuSpec;
-	/**
 	 * 备注
 	 */
 	private String remark;
@@ -46,24 +42,4 @@ public class EditReceiveDetailRequest extends BaseSkuLot {
 	 * 行号
 	 */
 	private  String lineNumber;
-	/**
-	 * 生产批次
-	 */
-//	private String skuLot1;
-	/**
-	 * 客户
-	 */
-//	private String skuLot4;
-	/**
-	 * 钢背批次
-	 */
-//	private String skuLot5;
-	/**
-	 * 摩擦块批次
-	 */
-//	private String  skuLot6;
-	/**
-	 * 适用速度等级
-	 */
-//	private String skuLot8;
 }
