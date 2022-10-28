@@ -124,10 +124,6 @@
 						if (this.receiveDetailList.length < this.page.size) {
 							this.loadmore = false;
 						}
-						if (data.data.records.length == 1) {
-							this.params.no = '0';
-							this.clickItem(data.data.records[0]);
-						}
 					})
 			},
 			clickItem(row) {
