@@ -24,4 +24,9 @@ public class SkuSelectRequest implements Serializable {
 	 * 物品名称
 	 */
 	private String skuName;
+
+	/**
+	 * 物品规格
+	 */
+	private String skuSpec;
 }
