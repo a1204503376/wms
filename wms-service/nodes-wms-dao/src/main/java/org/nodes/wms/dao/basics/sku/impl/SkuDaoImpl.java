@@ -2,13 +2,19 @@ package org.nodes.wms.dao.basics.sku.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.basics.sku.SkuDao;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.*;
 import org.nodes.wms.dao.basics.sku.mapper.SkuMapper;
+import org.nodes.wms.dao.tianyi.skubox.dto.output.SkuBoxPageResponse;
 import org.springblade.core.mp.base.BaseServiceImpl;
+import org.springblade.core.tool.utils.BeanUtil;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,8 +28,16 @@ public class SkuDaoImpl
 	implements SkuDao {
 
 	@Override
-	public List<SkuSelectResponse> listTop10BySkuCodeSkuName(String skuCode, String skuName) {
-		return super.baseMapper.listTop10BySkuCodeSkuName(skuCode, skuName);
+	public Page<SkuSelectResponse> getSkuSelectPage(IPage<Sku> page, String key) {
+		LambdaQueryWrapper<Sku> queryWrapper = Wrappers.lambdaQuery();
+		queryWrapper
+			.select(Sku::getSkuId, Sku::getSkuCode, Sku::getSkuName, Sku::getSkuSpec)
+			.like(Sku::getSkuCode, key)
+			.or().like(Sku::getSkuName, key)
+			.or().like(Sku::getSkuSpec, key);
+		IPage<Sku> skuPage = super.baseMapper.selectPage(page, queryWrapper);
+		return new Page<SkuSelectResponse>(skuPage.getCurrent(), skuPage.getSize(), skuPage.getTotal())
+			.setRecords(Func.copy(skuPage.getRecords(), SkuSelectResponse.class));
 	}
 
 	@Override

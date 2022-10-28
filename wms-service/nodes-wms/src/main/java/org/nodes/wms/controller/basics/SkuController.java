@@ -1,6 +1,7 @@
 package org.nodes.wms.controller.basics;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
@@ -50,12 +51,12 @@ public class SkuController {
 	private final ISkuService skuService;
 
 	/**
-	 * 物品选择下拉框
-	 * 展示最近10个物品
+	 * 物品下拉组件数据
+	 *
 	 */
-	@PostMapping("getSkuSelectResponseTop10List")
-	public R<List<SkuSelectResponse>> getSkuSelectResponseTop10List(@RequestBody SkuSelectQuery skuSelectQuery) {
-		return R.data(skuBiz.getSkuSelectResponseTop10List(skuSelectQuery));
+	@PostMapping("getSkuSelectByPage")
+	public R<Page<SkuSelectResponse>> getSkuSelectByPage(Query query, @RequestBody SkuSelectQuery skuSelectQuery) {
+		return R.data(skuBiz.getSkuSelectByPage(query, skuSelectQuery));
 	}
 
 

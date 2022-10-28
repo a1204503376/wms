@@ -2,18 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.basics.sku.mapper.SkuMapper">
 
-    <select id="listTop10BySkuCodeSkuName" resultType="org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse">
-        SELECT sku_id,
-               sku_code,
-               sku_name,
-               sku_spec
-        FROM wms_sku
-        WHERE sku_code LIKE CONCAT('%', #{skuCode}, '%')
-           OR sku_name LIKE CONCAT('%', #{skuName}, '%')
-        ORDER BY update_time DESC
-        LIMIT 10
-    </select>
-
     <select id="listSkuUmBySkuId" resultType="org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse">
         SELECT temp2.sku_level,
                s.sku_type_id,
@@ -129,7 +117,7 @@
         <id column="wsp_id" property="id"/>
         <association property="skuPackage" javaType="org.nodes.wms.dao.basics.sku.entities.SkuPackage">
             <id column="wsp_id" property="wspId"/>
-            <result column="wh_id" property="whId"/>
+<!--            <result column="wh_id" property="whId"/>-->
             <result column="wsp_name" property="wspName"/>
             <result column="spec" property="spec"/>
             <result column="online_package" property="onlinePackage"/>

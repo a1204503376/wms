@@ -218,6 +218,7 @@ public class ReceiveFactory {
 		editReceiveDetailResponse.getSku().setSkuId(receiveDetail.getSkuId());
 		editReceiveDetailResponse.getSku().setSkuCode(receiveDetail.getSkuCode());
 		editReceiveDetailResponse.getSku().setSkuName(receiveDetail.getSkuName());
+		editReceiveDetailResponse.getSku().setSkuSpec(receiveDetail.getSkuSpec());
 		//设置行号
 		editReceiveDetailResponse.setLineNumber(receiveDetail.getLineNo());
 		//设置计划数量

@@ -1,10 +1,13 @@
 import request from '@/router/axios';
 
-export const getSkuSelectResponseTop10List = (data) => {
+export const getSkuSelectByPage = (page, query) => {
     return request({
-        url: '/api/wms/basedata/sku/getSkuSelectResponseTop10List',
+        url: '/api/wms/basedata/sku/getSkuSelectByPage',
         method: 'post',
-        data: data
+        data: {
+            key: query
+        },
+        params: page
     })
 }
 

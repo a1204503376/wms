@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.basics.sku;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuSelectResponse;
 import org.nodes.wms.dao.basics.sku.dto.output.SkuUmSelectResponse;
 import org.nodes.wms.dao.basics.sku.entities.*;
@@ -12,13 +14,13 @@ import java.util.List;
 public interface SkuDao {
 
 	/**
-	 * 根据物品编码或者物品名称查询前10个物品信息
+	 * 根据物品编码或物品名称或规格 模糊搜索物品
 	 *
-	 * @param skuCode 物品编码
-	 * @param skuName 物品名称
-	 * @return List<SkuSelectResponse>
+	 * @param page 分页参数
+	 * @param key 物品编码或物品名称或规格
+	 * @return 物品组件下拉分页数据
 	 */
-	List<SkuSelectResponse> listTop10BySkuCodeSkuName(String skuCode, String skuName);
+	Page<SkuSelectResponse> getSkuSelectPage(IPage<Sku> page, String key);
 
 	/**
 	 * 根据id查找物品信息
