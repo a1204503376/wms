@@ -98,6 +98,9 @@
 					case barcodeType.Loc:
 						this.params.locCode = barcode.content;
 						break;
+					case barcodeType.Lpn:
+						this.params.targetBoxCode = barcode.content;
+						break;
 					case barcodeType.UnKnow:
 						this.params.locCode = barcode.content;
 						break;
