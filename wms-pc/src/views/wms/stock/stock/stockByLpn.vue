@@ -143,7 +143,7 @@ import fileDownload from "js-file-download";
                         <!--  库存余额  -->
                         <el-table-column :key="index" :show-overflow-tooltip="true" v-bind="column" width="130"
                             v-if="column.prop === 'stockBalance'">
-                            <template v-slot="{row}">
+                            <template v-slot="{ row }">
                                 <el-link v-if="!row.hideStyle" :underline="false" target="_blank" type="primary"
                                     @click="onViewStockBalance(row.stockId)">
                                     {{ row.stockBalance }}
@@ -156,7 +156,7 @@ import fileDownload from "js-file-download";
                         <!--  库存占用  -->
                         <el-table-column :key="index" :show-overflow-tooltip="true" v-bind="column" width="130"
                             v-else-if="column.prop === 'occupyQty'">
-                            <template v-slot="{row}">
+                            <template v-slot="{ row }">
                                 <el-link v-if="!row.hideStyle && row.occupyQty > 0" :underline="false" target="_blank"
                                     type="primary" @click="onViewOccupyQty(row.stockId)">
                                     {{ row.occupyQty }}
@@ -169,7 +169,7 @@ import fileDownload from "js-file-download";
                         <!--  库存状态  -->
                         <el-table-column :key="index" :show-overflow-tooltip="true" v-bind="column" width="130"
                             v-else-if="column.prop === 'stockStatus'">
-                            <template v-slot="{row}">
+                            <template v-slot="{ row }">
                                 <el-tag v-if="!row.hideStyle"
                                     :type="(row.stockStatus === '系统冻结' || row.stockStatus === '冻结') ? 'danger' : 'success'">
                                     {{ row.stockStatus }}
@@ -203,10 +203,10 @@ import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
-import {listMixin} from "@/mixins/list";
-import {exportFile, page} from "@/api/wms/stock/stock";
+import { listMixin } from "@/mixins/list";
+import { exportFile, page } from "@/api/wms/stock/stock";
 import fileDownload from "js-file-download";
-import {ExcelExport} from 'pikaz-excel-js';
+import { ExcelExport } from 'pikaz-excel-js';
 import fileUpload from "@/components/nodes/fileUpload";
 import NodesSku from "@/components/wms/select/NodesSkuByQuery";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
@@ -215,7 +215,7 @@ import NodesStockStatus from "@/components/wms/select/NodesStockStatus";
 import NodesLocation from "@/components/wms/select/NodesLocation";
 import NodesZone from "@/components/wms/select/NodesZone";
 import func from "@/util/func";
-import {nowDateFormat} from "@/util/date";
+import { nowDateFormat } from "@/util/date";
 
 
 export default {
@@ -514,7 +514,7 @@ export default {
                 lastOutTimeDateRange: [],
                 lotNumberBegin: '',
                 lotNumberEnd: '',
-                udf3:''
+                udf3: ''
             }
             this.onChange(null);
         },
@@ -524,7 +524,7 @@ export default {
             }
             this.$emit('dateRangeChange', val);
         },
-        arraySpanMethod({row, column, rowIndex, columnIndex}) {
+        arraySpanMethod({ row, column, rowIndex, columnIndex }) {
             if (columnIndex === 0 || columnIndex === 1) {
                 const _row = this.getSpanArr(this.table.data, columnIndex).one[rowIndex]
                 const _col = _row > 0 ? 1 : 0
@@ -534,14 +534,14 @@ export default {
                 }
             }
         },
-        tableRowClassName({row}) {
+        tableRowClassName({ row }) {
             if (row.lpnCode === '合计') {
                 return 'success-row';
             }
         },
         onViewStockBalance(stockId) {
             this.$router.push({
-                name: '库存异动日志',
+                name: '库存日志',
                 query: {
                     stockId: stockId.toString()
                 }
@@ -583,7 +583,7 @@ export default {
                         }
                     }
                 })
-                return {one: spanOneArr}
+                return { one: spanOneArr }
             }
         },
     },

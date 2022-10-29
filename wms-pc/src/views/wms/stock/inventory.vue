@@ -120,7 +120,7 @@
                     <el-col :span="6">
                         <el-form-item label="是否序列号" label-width="90px">
                             <el-select v-model="form.params.hasSerial" :clearable="true" class="search-input">
-                                <el-option v-for="item in [{label: '是',value: 1},{label: '否',value: 0}]"
+                                <el-option v-for="item in [{ label: '是', value: 1 }, { label: '否', value: 0 }]"
                                     :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
@@ -218,7 +218,7 @@
                         <template slot="header"> #</template>
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
-                        <el-table-column v-if="!column.hide && index !==2" :key="index" show-overflow-tooltip
+                        <el-table-column v-if="!column.hide && index !== 2" :key="index" show-overflow-tooltip
                             v-bind="column" width="130">
                             <template v-if="column.prop === 'hasSerial' ||
                             column.prop === 'stockBalance' ||
@@ -238,7 +238,7 @@
                                 </el-link>
                             </template>
                         </el-table-column>
-                        <el-table-column v-if="!column.hide && index===2" :key="index" show-overflow-tooltip
+                        <el-table-column v-if="!column.hide && index === 2" :key="index" show-overflow-tooltip
                             v-bind="column" width="130">
                             <template v-slot="scope">
                                 <el-tag v-if="scope.row.stockStatus === '系统冻结' || scope.row.stockStatus === '冻结'"
@@ -267,10 +267,11 @@
                 :show-close="true" :title="dialog.title" :visible.sync="dialog.showDialog" @close="onClose">
                 <div style="margin-top: 10px;">
                     <el-table ref="multipleTable" v-loading="dialog.loading" :data="dialog.gridData"
-                        :header-cell-style="{'background-color': '#fafafa'}" :height="dialog.isMoveByBox ? 390 : 'auto'"
-                        :max-height="dialog.isMoveByBox ? 400 : 'auto'" :span-method="dialogGridDataSpanMethod" border
-                        element-loading-spinner="el-icon-loading" element-loading-text="数据正在加载中" highlight-current-row
-                        overflow="auto" style="font-size: 14px" width="100%">
+                        :header-cell-style="{ 'background-color': '#fafafa' }"
+                        :height="dialog.isMoveByBox ? 390 : 'auto'" :max-height="dialog.isMoveByBox ? 400 : 'auto'"
+                        :span-method="dialogGridDataSpanMethod" border element-loading-spinner="el-icon-loading"
+                        element-loading-text="数据正在加载中" highlight-current-row overflow="auto" style="font-size: 14px"
+                        width="100%">
                         <el-table-column label="箱码" property="boxCode" show-overflow-tooltip></el-table-column>
                         <el-table-column label="物品编码" property="skuCode" show-overflow-tooltip></el-table-column>
                         <el-table-column label="物品名称" property="skuName" show-overflow-tooltip></el-table-column>
@@ -374,7 +375,7 @@ import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
-import {listMixin} from "@/mixins/list";
+import { listMixin } from "@/mixins/list";
 import {
     exportFile,
     exportStockListCount,
@@ -388,7 +389,7 @@ import {
     stockUnFrozen
 } from "@/api/wms/stock/stock";
 import fileDownload from "js-file-download";
-import {ExcelExport} from 'pikaz-excel-js';
+import { ExcelExport } from 'pikaz-excel-js';
 import fileUpload from "@/components/nodes/fileUpload";
 import NodesSku from "@/components/wms/select/NodesSkuByQuery";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
@@ -400,9 +401,9 @@ import "../../../../public/cdn/iconfont/avue/iconfont.css"
 import NodesSerial from "@/components/wms/select/NodesSerial";
 import NodesZone from "@/components/wms/select/NodesZone";
 import NodesDictionary from "@/components/wms/select/NodesDictionary";
-import {nowDateFormat} from "@/util/date";
-import {getParamValue} from "@/util/param";
-import {getStore} from "@/util/store";
+import { nowDateFormat } from "@/util/date";
+import { getParamValue } from "@/util/param";
+import { getStore } from "@/util/store";
 
 export default {
     name: "customer",
@@ -431,7 +432,7 @@ export default {
                     locIdList: [],
                     skuLot1: "",
                     stockStatusList: [],
-                    zoneIdList:[],
+                    zoneIdList: [],
                     boxCode: "",
                     lpnCode: "",
                     skuLot2: "",
@@ -750,12 +751,12 @@ export default {
                     this.$message.warning("所选记录批次为空,请选择其他类型")
                     return;
                 }
-                StockThawAndFrozenDto = {skuLot1List, remark}
+                StockThawAndFrozenDto = { skuLot1List, remark }
             } else if (this.form1.stockType === 'byLoc') {
                 let locIdList = this.$refs.table.selection.map((row) => {
                     return row.locId;
                 });
-                StockThawAndFrozenDto = {locIdList, remark}
+                StockThawAndFrozenDto = { locIdList, remark }
             } else if (this.form1.stockType === 'byBox') {
                 let boxCodeList = this.$refs.table.selection.map((row) => {
                     return row.boxCode;
@@ -765,7 +766,7 @@ export default {
                     this.$message.warning("所选记录箱码为空,请选择其他类型")
                     return;
                 }
-                StockThawAndFrozenDto = {boxCodeList, remark}
+                StockThawAndFrozenDto = { boxCodeList, remark }
             }
             if (this.form1.freezeShow) {
                 this.cancel()
@@ -827,7 +828,7 @@ export default {
                 return
             }
 
-            let userName = getStore({name: "userInfo"}).account;
+            let userName = getStore({ name: "userInfo" }).account;
             let type = '';
             if (rows[0].hasSerial === 1) {
                 type = 'sn'
@@ -874,7 +875,7 @@ export default {
             });
         },
         getSummaries(param) {
-            const {columns, data} = param;
+            const { columns, data } = param;
             const sums = [];
             columns.forEach((column, index) => {
                 if (index === 0) {
@@ -950,7 +951,7 @@ export default {
                     this.dialog.gridData = res.data.data;
                 })
                 this.merge(this.dialog.gridData);
-                this.dialog.childrenData.push({id: 1, targetLocId: [], targetLpnCode: ''});
+                this.dialog.childrenData.push({ id: 1, targetLocId: [], targetLpnCode: '' });
             } else {
                 this.dialog.title = '按件移动';
                 await getStockDataByStockId(rows[0].stockId).then((res) => {
@@ -960,7 +961,7 @@ export default {
             }
         },
         // ==========================已下是 dialog 中的方法=================================
-        dialogGridDataSpanMethod({row, column, rowIndex, columnIndex}) {
+        dialogGridDataSpanMethod({ row, column, rowIndex, columnIndex }) {
             if (this.dialog.merge.mergedArray.length > 0) {
                 if (column.label === '箱码') {
                     const _row = this.dialog.merge.mergedArray[rowIndex];
@@ -1010,7 +1011,7 @@ export default {
                 return;
             }
             this.qtyChange();
-            this.dialog.childrenData.push({id: id, qty: this.dialog.children.actualQty, serials: [], locId: ''});
+            this.dialog.childrenData.push({ id: id, qty: this.dialog.children.actualQty, serials: [], locId: '' });
 
         },
         getSerialDataSource(data) {
@@ -1145,7 +1146,7 @@ export default {
         },
         onViewStockBalance(stockId) {
             this.$router.push({
-                name: '库存异动日志',
+                name: '库存日志',
                 query: {
                     stockId: stockId.toString()
                 }
