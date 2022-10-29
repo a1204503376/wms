@@ -66,7 +66,6 @@
                 AND h.supplier_code LIKE concat('%',#{query.sCode},'%')
             </if>
         </where>
-        group by h.receive_id
     </sql>
 
     <select id="getPage" resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse">
@@ -115,7 +114,6 @@
             h.receive_no LIKE concat('%',#{query.no},'%') AND h.is_deleted=0 AND h.wh_id=#{query.whId} and  d.surplus_qty&gt;0
             OR h.external_order_no LIKE concat('%',#{query.no},'%') AND h.wh_id=#{query.whId} AND h.is_deleted=0 and  d.surplus_qty&gt;0
         </where>
-        group by h.receive_id,b.bill_type_name
         order by h.create_time
     </select>
 
