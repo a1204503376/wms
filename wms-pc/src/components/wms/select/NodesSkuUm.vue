@@ -51,8 +51,7 @@
         },
         watch: {
             sku: async function (newVal, oldVal) {
-                // sku != {} （空对象）时, 才进行查询
-                if (Object.keys(newVal).length !== 0) {
+                if (func.isNotEmpty(this.sku.skuId)) {
                     await this.getDataSource(this.sku.skuId);
                     if (this.dataSource.length > 0) {
                         this.val = this.dataSource[0].wsuCode;
