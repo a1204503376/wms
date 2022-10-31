@@ -126,7 +126,12 @@ public class TaskPageResponse {
 	@ColumnWidth(15)
 	@ExcelProperty("任务下发时间")
 	private LocalDateTime allotTime;
+
 	@ColumnWidth(50)
 	@ExcelProperty("备注")
 	private String remark;
+
+	@ColumnWidth(50)
+	@ExcelProperty("AGV指派时间")
+	private String udf1;
 }
