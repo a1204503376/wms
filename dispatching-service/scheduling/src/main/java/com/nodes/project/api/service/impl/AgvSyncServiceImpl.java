@@ -87,8 +87,9 @@ public class AgvSyncServiceImpl extends ServiceImpl<AgvSyncMapper, AgvSync>
         }
 
         if (agvType != AgvTypeEnum.DOUBLE_WAREHOUSING) {
-            // 异步通知WMS
-            callWmsService.syncTaskState(jobQueue, agvSyncOrderRequest.getMsg());
+            // 调度系统向WMS系统发送“AGV已分配任务给车辆”通知时需要新增agvName（用msg字段）
+            String msg = agvType == AgvTypeEnum.DISTRIBUTION ? agvSyncOrderRequest.getAgvName() : agvSyncOrderRequest.getMsg();
+            callWmsService.syncTaskState(jobQueue, msg);
         }
 
         flag = SqlHelper.retBool(jobQueueMapper.updateById(jobQueue));
