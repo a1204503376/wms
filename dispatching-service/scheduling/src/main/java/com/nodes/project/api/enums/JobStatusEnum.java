@@ -37,6 +37,11 @@ public enum JobStatusEnum implements IPairs<Integer, String, JobStatusEnum> {
     AGV_RETURN_SUCCESSFUL(4, "AGV返回成功"),
 
     /**
+     * AGV已分配任务给车辆
+     */
+    AGV_ASSIGNED_CAR(11, "AGV已分配任务给车辆"),
+
+    /**
      * AGV开始执行
      */
     AGV_BEGIN(5, "AGV开始执行"),

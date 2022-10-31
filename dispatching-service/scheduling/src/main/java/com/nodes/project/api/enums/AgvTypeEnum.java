@@ -17,6 +17,10 @@ public enum AgvTypeEnum implements IPairs<Integer, String, AgvTypeEnum> {
      */
     BEGIN(1, "开始执行"),
     /**
+     * 已分配任务给车俩
+     */
+    DISTRIBUTION(11, "已分配任务给AGV"),
+    /**
      * 结束执行
      */
     END(2, "结束执行"),

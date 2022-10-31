@@ -43,9 +43,6 @@ public class AgvSyncServiceImpl extends ServiceImpl<AgvSyncMapper, AgvSync>
     @Transactional(rollbackFor = Exception.class)
     @Override
     public AjaxResult syncOrder(AgvSyncOrderRequest agvSyncOrderRequest) {
-        // 订单开始，更新JOB状态，转发WMS
-        // 订单结束(正常),更新JOB状态，转发WMS
-        // 订单异常：返回AGV名称,记录AGV名称，用于下一次WMS发起异常重试
         JobQueue jobQueue = jobQueueMapper.selectById(agvSyncOrderRequest.getJobId());
         if (ObjectUtils.isEmpty(jobQueue)) {
             throw new ServiceException(StringUtils.format("JOB为空，参数：{}", agvSyncOrderRequest));
@@ -56,6 +53,9 @@ public class AgvSyncServiceImpl extends ServiceImpl<AgvSyncMapper, AgvSync>
         switch (agvType) {
             case BEGIN:
                 jobQueue.setStatus(JobStatusEnum.AGV_BEGIN);
+                break;
+            case DISTRIBUTION:
+                jobQueue.setStatus(JobStatusEnum.AGV_ASSIGNED_CAR);
                 break;
             case END:
                 jobQueue.setStatus(JobStatusEnum.AGV_END);

@@ -20,9 +20,9 @@ public class AgvSyncOrderRequest {
     private String jobId;
 
     /**
-     * AGV类型
+     * AGV通知类型
      */
-    @NotNull(message = "AGV类型不能为空")
+    @NotNull(message = "AGV通知类型不能为空")
     @JSONField(serializeUsing = AgvTypeEnumSerializer.class)
     private AgvTypeEnum agvType;
 
