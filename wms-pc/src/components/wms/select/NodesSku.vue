@@ -61,7 +61,7 @@
     import func from "@/util/func";
 
     export default {
-        name: "NodesSkuQuery",
+        name: "NodesSku",
         model: {
             prop: 'selectVal',
             event: 'selectValChange'
@@ -122,9 +122,6 @@
                     this.tableData = [];
                     this.page.total = undefined;
                     this.options = [];
-                    this.$emit('selectValChange', undefined); // 回传sku对象
-                    this.$refs.select.blur(); //使组件去焦点，收起下拉选项
-                    return;
                 }
             }
         },
