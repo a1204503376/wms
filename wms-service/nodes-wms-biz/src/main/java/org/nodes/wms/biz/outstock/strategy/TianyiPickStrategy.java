@@ -103,6 +103,9 @@ public class TianyiPickStrategy {
 		List<Long> skuIdsOfSoDetail = getAllSkuIdFromSoDetail(soDetailList);
 		boolean needPlanFromManual = false;
 		for (Stock stock : agvStockList) {
+			if (BigDecimalUtil.le(surplusQty, BigDecimal.ZERO)) {
+				break;
+			}
 			if (stock.isNotEnable()) {
 				continue;
 			}
@@ -115,18 +118,17 @@ public class TianyiPickStrategy {
 			}
 
 			if (BigDecimalUtil.ge(surplusQty, stock.getStockEnable())) {
-				// 分配该库存
-				surplusQty = surplusQty.subtract(stock.getStockEnable());
-				List<SoPickPlan> pickPlans = soPickPlanFactory.createOnAgvArea(soDetail, soDetailList, stock, stockOfLoc);
+				List<SoPickPlan> pickPlans = soPickPlanFactory.createOnAgvArea(soDetail, soDetailList, stock, stockOfLoc, stock.getStockEnable());
 				newPickPlanList.addAll(pickPlans);
+				surplusQty = surplusQty.subtract(stock.getStockEnable());
 			} else {
 				// 需要拆箱的库存，如果人工区没有库存或库存数量不足，就只能进行分配需要拆箱的库存，否则从人工区分配
 				if (canPlanFromManualZone(manualStockList, surplusQty)) {
 					needPlanFromManual = true;
 				} else {
-					surplusQty = surplusQty.subtract(stock.getStockEnable());
-					List<SoPickPlan> pickPlans = soPickPlanFactory.createOnAgvArea(soDetail, soDetailList, stock, stockOfLoc);
+					List<SoPickPlan> pickPlans = soPickPlanFactory.createOnAgvArea(soDetail, soDetailList, stock, stockOfLoc, surplusQty);
 					newPickPlanList.addAll(pickPlans);
+					surplusQty = surplusQty.subtract(stock.getStockEnable());
 				}
 
 				break;
@@ -193,9 +195,11 @@ public class TianyiPickStrategy {
 					continue;
 				}
 
-				List<SoPickPlan> pickPlans = soPickPlanFactory.createOnAgvArea(soDetail, soDetailList, stock, stockOfLoc);
+				BigDecimal planQty = BigDecimalUtil.ge(surplusQty, stock.getStockEnable())
+					? stock.getStockEnable() : surplusQty;
+				List<SoPickPlan> pickPlans = soPickPlanFactory.createOnAgvArea(soDetail, soDetailList, stock, stockOfLoc, planQty);
 				newPickPlanList.addAll(pickPlans);
-				surplusQty = surplusQty.subtract(stock.getStockEnable());
+				surplusQty = surplusQty.subtract(planQty);
 			}
 		}
 

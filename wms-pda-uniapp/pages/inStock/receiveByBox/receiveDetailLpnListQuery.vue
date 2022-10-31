@@ -11,36 +11,37 @@
 			</u-form-item>
 		</u--form>
 		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">未收货列表</h4>
-
-		<view style="margin-top: 5%;" v-for="(item, index) in detailLpnList">
-			<u-row>
-				<u-col span="5">
-					<view class="demo-layout bg-purple-light">箱码:{{item.boxCode}}</view>
-				</u-col>
-				<u-col span="4">
-					<view class="demo-layout bg-purple">总数:{{item.num}}</view>
-				</u-col>
-				<u-col span="3">
-					<u-button text="删除" :hairline="true" @click="deleteItem(index)"></u-button>
-				</u-col>
-			</u-row>
-
-			<view style="margin-top: 5%;" v-for="(items, indexs) in item.receiveDetailLpnItemDtoList">
+		<u-list style="height: 850rpx;">
+			<view style="margin-top: 5%;" v-for="(item, index) in detailLpnList">
 				<u-row>
 					<u-col span="5">
-						<view class="demo-layout bg-purple-light" style="margin-left: 30rpx;">{{items.skuName}}
-							{{items.skuSpec}}
-						</view>
+						<view class="demo-layout bg-purple-light">箱码:{{item.boxCode}}</view>
 					</u-col>
 					<u-col span="4">
-						<view class="demo-layout bg-purple">批次:{{items.skuLot1}}</view>
+						<view class="demo-layout bg-purple">总数:{{item.num}}</view>
 					</u-col>
 					<u-col span="3">
-						<view class="demo-layout bg-purple">量:{{items.planQty}}</view>
+						<u-button text="删除" :hairline="true" @click="deleteItem(index)"></u-button>
 					</u-col>
 				</u-row>
+
+				<view style="margin-top: 5%;" v-for="(items, indexs) in item.receiveDetailLpnItemDtoList">
+					<u-row>
+						<u-col span="5">
+							<view class="demo-layout bg-purple-light" style="margin-left: 30rpx;">{{items.skuName}}
+								{{items.skuSpec}}
+							</view>
+						</u-col>
+						<u-col span="4">
+							<view class="demo-layout bg-purple">批次:{{items.skuLot1}}</view>
+						</u-col>
+						<u-col span="3">
+							<view class="demo-layout bg-purple">量:{{items.planQty}}</view>
+						</u-col>
+					</u-row>
+				</view>
 			</view>
-		</view>
+		</u-list>
 		<view class="footer">
 			<view class="btn-cancle" @click="esc()">
 				返回
@@ -116,8 +117,9 @@
 						})
 						return
 					}
-					if (tool.isNotEmpty(this.detailLpnList)&&this.detailLpnList[0].receiveDetailLpnItemDtoList[0].skuSpec 
-					!= param.receiveDetailLpnItemDtoList[0].skuSpec
+					if (tool.isNotEmpty(this.detailLpnList) && this.detailLpnList[0].receiveDetailLpnItemDtoList[0]
+						.skuSpec !=
+					 param.receiveDetailLpnItemDtoList[0].skuSpec
 					) {
 						this.$u.func.showToast({
 							title: '多箱收货只能收同种规格的物品'

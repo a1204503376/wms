@@ -81,7 +81,7 @@ public class PutawayBizImpl implements PutawayBiz {
 			}
 			UdfEntity udf = locationBiz.judgeBoxTypeOfC(request.getBoxCode(), targetLocation);
 			Location sourceLocation = locationBiz.findLocationByLocCode(sourceStockList.get(0).getWhId(), sourceStockList.get(0).getLocCode());
-			stockManageBiz.canMove(sourceLocation, targetLocation, sourceStockList, request.getBoxCode(), true);
+			stockManageBiz.canMove(sourceLocation, targetLocation, sourceStockList, request.getBoxCode(), false);
 			if (locationBiz.isAgvLocation(targetLocation)) {
 				//AGV移动任务生成
 				agvTask.moveStockToSchedule(sourceStockList, targetLocation);

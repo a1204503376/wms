@@ -8,8 +8,7 @@
                          label-position="right"
                          label-width="120px"
                          size="medium"
-                         style="margin-left:10px;margin-right:10px;"
-                >
+                         style="margin-left:10px;margin-right:10px;">
                     <el-row>
                         <h3>发货单新增</h3>
                     </el-row>
@@ -20,16 +19,17 @@
                                     v-model="form.params.billTypeCd"
                                     :default-value="true"
                                     io-type="O"
-                                    size="medium"
-                                ></nodes-bill-type>
+                                    size="medium">
+                                </nodes-bill-type>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="所属库房" prop="whId">
                                 <nodes-warehouse
+                                    :default-value="true"
                                     v-model="form.params.whId"
-                                    size="medium"
-                                ></nodes-warehouse>
+                                    size="medium">
+                                </nodes-warehouse>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -37,8 +37,8 @@
                                 <nodes-owner
                                     v-model="form.params.woId"
                                     :default-value="true"
-                                    size="medium"
-                                ></nodes-owner>
+                                    size="medium">
+                                </nodes-owner>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -54,6 +54,7 @@
                         <el-col :span="8">
                             <el-form-item label="出库方式" prop="outstockType">
                                 <nodes-dictionary
+                                    :default-value="true"
                                     v-model="form.params.outstockType"
                                     code="outstore_type"
                                     size="medium">
@@ -63,6 +64,7 @@
                         <el-col :span="8">
                             <el-form-item label="发货方式" prop="transportCode">
                                 <nodes-dictionary
+                                    :default-value="true"
                                     v-model="form.params.transportCode"
                                     code="so_transport_code"
                                     size="medium">
@@ -210,9 +212,9 @@
                                     <template slot="header">
                                         <span>操作</span>
                                     </template>
-                                    <template v-slot="{row}">
+                                    <template v-slot="scope">
                                         <el-link type="primary"
-                                                 @click.native.prevent="deleteRow(row.$index, table.data)">删除
+                                                 @click.native.prevent="deleteRow(scope.$index, table.data)">删除
                                         </el-link>
                                     </template>
                                 </el-table-column>

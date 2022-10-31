@@ -10,7 +10,8 @@ import org.nodes.wms.dao.outstock.so.dto.input.SoBillDistributedRequest;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.input.FindPickPlanBySoBillIdAndBoxCodeRequest;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.FindPickPlanBySoBillIdAndBoxCodeResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
-import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
+import org.nodes.wms.dao.stock.dto.output.GetStockByDistributeAdjustResponse;
+import org.nodes.wms.dao.stock.dto.output.StockDistributeAdjustResponse;
 import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
 import org.springblade.core.mp.support.Query;
 
@@ -38,6 +39,14 @@ public interface OutStockBiz {
 	 * @return 拣货计划信息
 	 */
 	List<SoPickPlanForDistributionResponse> getSoPickPlanBySoBillIdAndSoDetailId(Long soBillId, Long soDetailId);
+
+	/**
+	 * 根据发货单id和发货单明细id查询拣货计划
+	 *
+	 * @param soBillId 发货单id 必填
+	 * @return 拣货计划信息
+	 */
+	List<SoPickPlanForDistributionResponse> getSoPickPlanBySoBillIdAndSoDetailId(Long soBillId);
 
 	/**
 	 * 撤销拣货
@@ -130,11 +139,14 @@ public interface OutStockBiz {
 	 *
 	 * @param skuId    物品id
 	 * @param skuLot1  生产批次
+	 * @param skuLot2  规格型号
 	 * @param skuLot4  专用客户
 	 * @param soBillId 发货单id
-	 * @return 可分配物品库存信息
+	 * @return 可分配物品库存信息 以及人工区库存和自动区库存统计余额
 	 */
-	List<StockSoPickPlanResponse> getStockByDistributeAdjust(Long skuId, String skuLot1, String skuLot4, Long soBillId);
+	GetStockByDistributeAdjustResponse getStockByDistributeAdjust(Long skuId,
+																  String skuLot1, String skuLot2, String skuLot4, Long soBillId);
+
 
 	/**
 	 * 分配：分配手动调整-保存调整后的信息
@@ -180,11 +192,11 @@ public interface OutStockBiz {
 	/**
 	 * 出库复核
 	 *
-	 * @param soBillId 发货单单据Id
-	 * @param boxCode 箱码
+	 * @param soBillId    发货单单据Id
+	 * @param boxCode     箱码
 	 * @param boxCodeList 已复核的箱码
 	 */
-    void outStockCheckout(Long soBillId, String boxCode, List<String> boxCodeList);
+	void outStockCheckout(Long soBillId, String boxCode, List<String> boxCodeList);
 
 	/**
 	 * 根据发货单查询正常拣货记录的条数，不包含撤销的记录
@@ -193,4 +205,15 @@ public interface OutStockBiz {
 	 * @return 箱子数量
 	 */
 	Integer findBoxCountBySoHeaderId(Long soBillId);
+
+	/**
+	 * 根据箱码或库位编码 查找分配调整页面的库存信息
+	 *
+	 * @param boxCode 箱码
+	 * @param whId    库房id
+	 * @param locCode 库位编码
+	 * @return 库存信息
+	 */
+	List<StockDistributeAdjustResponse> getDistributeAdjustStockByBoxCoeOrLocCode(
+		String boxCode, Long whId, String locCode);
 }

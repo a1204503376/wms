@@ -163,7 +163,8 @@ import {
     getDetailForDetail,
     getHeaderForDetail,
     getLogSoPickForDetail,
-    getSoLogForDetail
+    getSoLogForDetail,
+    getHistorySoPickPlanData,
 } from "@/api/wms/outstock/soHeader"
 import func from "@/util/func";
 
@@ -193,6 +194,7 @@ export default {
             tabList: [
                 {lable: '出库单明细', name: 'soDetail'},
                 {lable: '拣货记录', name: 'soRecord'},
+                {lable: '分配记录', name: 'soPickPlan'},
                 {lable: '日志', name: 'soLog'},
             ],
             activeName: 'soDetail',
@@ -313,25 +315,111 @@ export default {
                 {
                     prop: 'userAccount',
                     label: '操作人员账号',
-                    align: 'center',
                     sortable: 'custom',
                 },
                 {
                     prop: 'userRealName',
                     label: '操作人员姓名',
-                    align: 'center',
                     sortable: 'custom',
                 },
                 {
                     prop: 'log',
                     label: '操作内容',
-                    align: 'center',
                     sortable: 'custom',
                 },
                 {
                     prop: 'createTime',
                     label: '操作时间',
-                    align: 'center',
+                    sortable: 'custom',
+                },
+            ],
+            soPickPlanColumnList: [
+                {
+                    prop: 'boxCode',
+                    label: '箱码',
+                    sortable: 'custom',
+                },
+                {
+                    prop: 'zoneCode',
+                    label: '库区',
+                    sortable: 'custom',
+                },
+                {
+                    prop: 'locCode',
+                    label: '库位',
+                    sortable: 'custom',
+                },
+                {
+                    prop: 'lpnCode',
+                    label: 'LPN',
+                    sortable: 'custom',
+                },
+                {
+                    prop: 'pickPlanQty',
+                    label: '计划分配量',
+                    sortable: 'custom',
+                },
+                {
+                    prop: 'pickRealQty',
+                    label: '已拣量',
+                    sortable: 'custom',
+                },
+                {
+                    prop: 'skuCode',
+                    label: '物品编码',
+                    sortable: 'custom',
+                },
+                {
+                    prop: 'skuName',
+                    label: '物品名称',
+                    sortable: 'custom',
+                },
+                {
+                    prop: 'stockStatus',
+                    label: '库存状态',
+                    sortable: 'custom',
+                },
+                {
+                    prop: 'skuLot1',
+                    label: '生产批次',
+                    sortable: 'custom',
+                },
+                {
+                    prop: 'skuLot2',
+                    label: '规格型号',
+                    sortable: 'custom',
+                },
+                {
+                    prop: 'skuLot3',
+                    label: '收货日期',
+                    sortable: 'custom',
+                },
+                {
+                    prop: 'skuLot4',
+                    label: '专用客户',
+                    sortable: 'custom',
+                },
+                {
+                    prop: 'skuLot5',
+                    label: '钢背批次',
+                    sortable: 'custom',
+                },
+                {
+                    prop: 'skuLot6',
+                    width: 100,
+                    label: '摩擦快批次',
+                    sortable: 'custom',
+                },
+                {
+                    prop: 'skuLot7',
+                    width: 100,
+                    label: '产品标识代码',
+                    sortable: 'custom',
+                },
+                {
+                    prop: 'skuLot8',
+                    width: 100,
+                    label: '适用速度等级',
                     sortable: 'custom',
                 },
             ],
@@ -395,6 +483,18 @@ export default {
                     this.tableLoading = false;
                 })
         },
+        getSoPickPlanList(){
+            this.tableLoading = true;
+            this.publicTable.columnList = this.soPickPlanColumnList;
+            if (func.isEmpty(this.soBillId)) {
+                return;
+            }
+            getHistorySoPickPlanData(this.soBillId).then((res) => {
+                this.publicTable.data = res.data.data;
+                this.page.total = res.data.data.length;
+                this.tableLoading = false;
+            })
+        },
         //点击Tab的时候进行判断，然后获取对应数据及行对象
         handleClick(tab) {
             this.form.activeName = tab.name;
@@ -421,7 +521,9 @@ export default {
                 this.getSoRecord();
             } else if (this.form.activeName === 'soLog') {
                 this.getSoLog();
-            } else {
+            } else if(this.form.activeName === 'soPickPlan'){
+                this.getSoPickPlanList();
+            }else {
                 this.getDetail();
             }
         }

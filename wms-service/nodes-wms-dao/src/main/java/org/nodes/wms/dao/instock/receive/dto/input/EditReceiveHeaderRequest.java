@@ -50,7 +50,10 @@ public class EditReceiveHeaderRequest implements Serializable {
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long woId;
-
+	/**
+	 * 文件编码
+	 */
+	private String udf1;
 	/**
 	 * 备注
 	 */

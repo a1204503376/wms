@@ -216,6 +216,7 @@ public interface SoBillBiz {
 	 */
 	void update(SoDetail soDetail);
 
+
 	/**
 	 * 修改发货单明细状态和剩余数量
 	 *
@@ -273,4 +274,11 @@ public interface SoBillBiz {
 	 * @return List<SoDetail> 发货明细
 	 */
 	List<SoDetail> findSoDetailExcludeNormal(Long soBillId);
+
+	/**
+	 * 修改发货单头表
+	 *
+	 * @param soHeader 发货单头表实体
+	 */
+	void updateSoHeader(SoHeader soHeader);
 }

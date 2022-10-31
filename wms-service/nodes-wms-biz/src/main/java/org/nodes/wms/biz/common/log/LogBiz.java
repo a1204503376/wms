@@ -7,6 +7,8 @@ import org.nodes.wms.dao.common.log.dto.output.*;
 import org.nodes.wms.dao.common.log.entities.LogAction;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.springblade.core.mp.support.Query;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -23,6 +25,7 @@ public interface LogBiz {
 	 *
 	 * @param noticeMessageRequest 参数
 	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 	void noticeMesssage(NoticeMessageRequest noticeMessageRequest);
 
 	/**
@@ -31,6 +34,7 @@ public interface LogBiz {
 	 * @param type 日志类型
 	 * @param log  日志
 	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 	void auditLog(AuditLogType type, String log);
 
 	/**
@@ -41,6 +45,7 @@ public interface LogBiz {
 	 * @param billNo 单据编码
 	 * @param log    日志
 	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 	void auditLog(AuditLogType type, Long billId, String billNo, String log);
 
 	/**
@@ -50,6 +55,7 @@ public interface LogBiz {
 	 * @param billId 单据id
 	 * @param log    日志
 	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 	void auditLog(AuditLogType type, Long billId, String log);
 
 	/**
@@ -57,6 +63,7 @@ public interface LogBiz {
 	 *
 	 * @param auditLogRequest 参数
 	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 	void auditLog(AuditLogRequest auditLogRequest);
 
 	/**
@@ -75,6 +82,7 @@ public interface LogBiz {
 	 * @param id       任务id
 	 * @param log      日志内容
 	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 	void auditLog(String UserName, AuditLogType cronTask, Long id, String log);
 
 	/**

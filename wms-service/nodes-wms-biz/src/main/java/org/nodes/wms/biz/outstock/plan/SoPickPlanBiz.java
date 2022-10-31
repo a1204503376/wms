@@ -9,6 +9,7 @@ import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.intput.SoPickPlanPageQuery;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -204,4 +205,21 @@ public interface SoPickPlanBiz {
 	 * @return 拣货计划
 	 */
 	List<SoPickPlan> findSoPickPlanByBoxCode(String boxCode);
+
+	/**
+	 * 更新拣货计划中的任务id
+	 *
+	 * @param soPickPlanList 拣货计划集合，必填
+	 * @param taskId         任务id，必填
+	 */
+	void setTaskId(List<SoPickPlan> soPickPlanList, Long taskId);
+
+	/**
+	 * 更新拣货计划中原有的分配的库存
+	 *
+	 * @param soPickPlan 拣货计划，必填
+	 * @param newStock   分配新的库存，必填
+	 * @param oldStock   旧的库存，必填
+	 */
+	void updatePlanOfStock(SoPickPlan soPickPlan, Stock newStock, Stock oldStock);
 }

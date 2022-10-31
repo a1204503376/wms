@@ -20,7 +20,7 @@ import java.util.List;
 public class CallAgvServiceImpl implements CallAgvService {
     private static final String URL_TRANSPORT_ORDERS = "/transportOrders/{}";
     private static final String URL_WITHDRAWAL = URL_TRANSPORT_ORDERS + "/withdrawal";
-    private static final String url_vehicleWithdrawal = "/vehicleWithdrawal/{}/unload/{}";
+    private static final String url_vehicleWithdrawal = "/vehiclesWithdrawal/{}/unload/{}";
 
     @Resource
     private CallApiService callApiService;
@@ -66,8 +66,8 @@ public class CallAgvServiceImpl implements CallAgvService {
         String value;
         if (cBifurcateFlag) {
             // A,B,D也需要传给AGV
-            value = jobQueue.getWmsBillType();
-        } else {
+            value = jobQueue.getWmsBoxType().getCode();
+        }else{
             value = jobQueue.getWmsCBifurcate().equals(1) ? JobConstants.AGV_C1 : JobConstants.AGV_C2;
         }
         property.setValue(value);

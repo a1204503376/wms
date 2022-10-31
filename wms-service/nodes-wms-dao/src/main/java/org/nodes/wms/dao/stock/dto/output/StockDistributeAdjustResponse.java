@@ -12,13 +12,12 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * 发货单分配页面可分配库存响应类
+ * 分配调整页面中库存信息响应类
  **/
 @Data
-public class StockSoPickPlanResponse extends BaseSkuLot implements Serializable {
+public class StockDistributeAdjustResponse extends BaseSkuLot implements Serializable {
 
-	private static final long serialVersionUID = -829789935189414879L;
-
+	private static final long serialVersionUID = -5450975727225912361L;
 	/**
 	 * 库存id
 	 */
@@ -29,12 +28,6 @@ public class StockSoPickPlanResponse extends BaseSkuLot implements Serializable 
 	 * 箱码
 	 */
 	private String boxCode;
-
-	/**
-	 * 库房id
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long whId;
 
 	/**
 	 * 库位id
@@ -90,18 +83,8 @@ public class StockSoPickPlanResponse extends BaseSkuLot implements Serializable 
 	private BigDecimal stockBalance;
 
 	/**
-	 * 分配量（计划减去实际的和）
+	 * 占用量
 	 */
-	private BigDecimal pickQty;
+	private BigDecimal occupyQty;
 
-	/**
-	 * 库存状态
-	 */
-	private StockStatusEnum stockStatus;
-
-	/**
-	 * 拣货计划id
-	 */
-	@JsonSerialize(using = LongArray2StringSerialize.class)
-	private List<Long> soPickPlanList;
 }

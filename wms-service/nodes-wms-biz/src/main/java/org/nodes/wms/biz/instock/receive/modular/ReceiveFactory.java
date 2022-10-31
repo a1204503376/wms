@@ -62,6 +62,8 @@ public class ReceiveFactory {
 		receiveHeader.setWhCode(warehouse.getWhCode());
 		//设置货主id
 		receiveHeader.setWoId(owner.getWoId());
+		//设置文件编码
+		receiveHeader.setUdf1(newReceiveHeaderRequest.getUdf1());
 		//设置货主编码
 		receiveHeader.setOwnerCode(owner.getOwnerCode());
 		if (Func.isNotEmpty(newReceiveHeaderRequest.getSupplier())) {
@@ -196,6 +198,8 @@ public class ReceiveFactory {
 		receiveHeaderEditResponse.setInStoreType(receiveHeader.getInStoreType());
 		//设置货主id
 		receiveHeaderEditResponse.setWoId(receiveHeader.getWoId());
+		//设置文件编码
+		receiveHeaderEditResponse.setUdf1(receiveHeader.getUdf1());
 		//设置备注
 		receiveHeaderEditResponse.setRemark(receiveHeader.getRemark());
 		return receiveHeaderEditResponse;
@@ -214,6 +218,7 @@ public class ReceiveFactory {
 		editReceiveDetailResponse.getSku().setSkuId(receiveDetail.getSkuId());
 		editReceiveDetailResponse.getSku().setSkuCode(receiveDetail.getSkuCode());
 		editReceiveDetailResponse.getSku().setSkuName(receiveDetail.getSkuName());
+		editReceiveDetailResponse.getSku().setSkuSpec(receiveDetail.getSkuSpec());
 		//设置行号
 		editReceiveDetailResponse.setLineNumber(receiveDetail.getLineNo());
 		//设置计划数量
@@ -268,6 +273,8 @@ public class ReceiveFactory {
 		receiveHeader.setBillTypeCd(editReceiveHeaderRequest.getBillTypeCd());
 		//设置入库方式
 		receiveHeader.setInStoreType(editReceiveHeaderRequest.getInStoreType());
+		//设置文件编码
+		receiveHeader.setUdf1(editReceiveHeaderRequest.getUdf1());
 		//设置备注
 		receiveHeader.setRemark(editReceiveHeaderRequest.getRemark());
 		return receiveHeader;
@@ -327,7 +334,7 @@ public class ReceiveFactory {
 		//设置层级
 		receiveDetail.setSkuLevel(skuPackageDetail.getSkuLevel());
 		//设置规格
-		receiveDetail.setSkuSpec(sku.getSkuSpec());
+		receiveDetail.setSkuSpec(editReceiveDetailRequest.getSku().getSkuSpec());
 		//设置库房id
 		receiveDetail.setWhId(receiveHeader.getWhId());
 		//设置库房编码
@@ -336,6 +343,7 @@ public class ReceiveFactory {
 		receiveDetail.setWoId(receiveHeader.getWoId());
 		//设置批属性信息
 		receiveDetail.setSkuLot1(editReceiveDetailRequest.getSkuLot1());
+		receiveDetail.setSkuLot2(editReceiveDetailRequest.getSku().getSkuSpec());
 		receiveDetail.setSkuLot4(editReceiveDetailRequest.getSkuLot4());
 		receiveDetail.setSkuLot5(editReceiveDetailRequest.getSkuLot5());
 		receiveDetail.setSkuLot6(editReceiveDetailRequest.getSkuLot6());

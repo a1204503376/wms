@@ -136,6 +136,17 @@ export const getSoPickPlanData = (soBillId, soDetailId) => {
     })
 }
 
+export const getHistorySoPickPlanData = (soBillId, soDetailId) => {
+    return request({
+        url: '/api/wms/outstock/soBill/getHistorySoPickPlan',
+        method: 'post',
+        data: {
+            soBillId: soBillId,
+            soDetailId: soDetailId
+        }
+    })
+}
+
 export const getSoDetailAndStock = (data) => {
     return request({
         url: '/api/wms/outstock/soBill/getSoDetailAndStock',
@@ -184,18 +195,20 @@ export const issued = (soBillId) => {
     })
 }
 
-export const getStockByDistributeAdjust = (skuId, skuLot1, skuLot4, soBillId) => {
+export const getStockByDistributeAdjust = (skuId, skuLot1, skuLot2, skuLot4, soBillId) => {
     return request({
         url: '/api/wms/outstock/soBill/getStockByDistributeAdjust',
         method: 'post',
         data: {
             skuId: skuId,
             skuLot1: skuLot1,
+            skuLot2: skuLot2,
             skuLot4: skuLot4,
             soBillId: soBillId
         }
     })
 }
+
 export const getSerialSelectResponseList = (stockId) => {
     return request({
         url: '/api/wms/outstock/soBill/getSerialSelectResponseList',
@@ -228,6 +241,18 @@ export const saveAssign = (soBillId, soDetailId, soPickPlanList, stockIdAndSoPic
     })
 }
 
+// 根据箱码查看库存
+export const getAssignDistributeStock = (boxCode, whId, locCode) => {
+    return request({
+        url: '/api/wms/outstock/soBill/showDistributeAdjustStock',
+        method: 'post',
+        data: {
+            boxCode: boxCode,
+            whId: whId,
+            locCode: locCode
+        }
+    })
+}
 
 
 

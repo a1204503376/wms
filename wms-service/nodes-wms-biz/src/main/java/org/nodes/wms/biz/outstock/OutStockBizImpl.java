@@ -47,6 +47,8 @@ import org.nodes.wms.dao.outstock.soPickPlan.dto.output.FindPickPlanBySoBillIdAn
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.dto.output.PickByPcStockDto;
+import org.nodes.wms.dao.stock.dto.output.GetStockByDistributeAdjustResponse;
+import org.nodes.wms.dao.stock.dto.output.StockDistributeAdjustResponse;
 import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
@@ -177,6 +179,13 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
+	public List<SoPickPlanForDistributionResponse> getSoPickPlanBySoBillIdAndSoDetailId(Long soBillId) {
+		AssertUtil.notNull(soBillId, "查询拣货计划失败，发货单id为空");
+		List<SoPickPlan> soPickPlanList = soPickPlanDao.getSoPickPlanForDistribution(soBillId);
+		return BeanUtil.copy(soPickPlanList, SoPickPlanForDistributionResponse.class);
+	}
+
+	@Override
 	public IPage<FindAllPickingResponse> findSoHeaderByNo(findSoHeaderByNoRequest request, Query query) {
 		List<SoBillStateEnum> soBillStateEnums = new ArrayList<>();
 		soBillStateEnums.add(SoBillStateEnum.EXECUTING);
@@ -238,7 +247,11 @@ public class OutStockBizImpl implements OutStockBiz {
 		// 1、根据箱码查询任务
 		SoHeader soHeader = soBillBiz.getSoHeaderById(task.getBillId());
 		AssertUtil.notNull(soHeader, "根据任务存在的发货单头表信息查询发货单失败");
-		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
+		List<Long> stockIdList = soPickPlans.stream()
+			.map(SoPickPlan::getStockId)
+			.distinct()
+			.collect(Collectors.toList());
+		List<Stock> stockList = stockQueryBiz.findStockById(stockIdList);
 		if (stockList.size() == 0) {
 			throw new ServiceException("按箱拣货失败，根据箱码查询不到对应库存");
 		}
@@ -465,8 +478,8 @@ public class OutStockBizImpl implements OutStockBiz {
 		}
 
 		SoHeader soHeader = soBillBiz.getSoHeaderById(soBillId);
+		soBillBiz.updateSoBillState(soHeader);
 		soPickPlanBiz.cancelPickPlan(soPickPlanList, soHeader);
-
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, soBillId, soHeader.getSoBillNo(), "全部取消分配");
 	}
 
@@ -566,10 +579,15 @@ public class OutStockBizImpl implements OutStockBiz {
 	}
 
 	@Override
-	public List<StockSoPickPlanResponse> getStockByDistributeAdjust(
-		Long skuId, String skuLot1, String skuLot4, Long soBillId) {
+	public GetStockByDistributeAdjustResponse getStockByDistributeAdjust(
+		Long skuId, String skuLot1, String skuLot2, String skuLot4, Long soBillId) {
+		SoHeader soHeader = soBillBiz.getSoHeaderById(soBillId);
+		if (soHeader.getSoBillState().equals(SoBillStateEnum.ALL_OUT_STOCK) || soHeader.getSoBillState().equals(SoBillStateEnum.COMPLETED) || soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED)) {
+			throw new ServiceException("调整分配失败,请检查当前发货单状态");
+		}
 		SkuLotBaseEntity skuLot = new SkuLotBaseEntity();
 		skuLot.setSkuLot1(skuLot1);
+		skuLot.setSkuLot2(skuLot2);
 		skuLot.setSkuLot4(skuLot4);
 		// 获取可分配的库存
 		List<Stock> stockList = stockQueryBiz.findEnableStockBySkuAndSkuLot(skuId, skuLot);
@@ -580,44 +598,22 @@ public class OutStockBizImpl implements OutStockBiz {
 		if (Func.isEmpty(normalStockList)) {
 			throw ExceptionUtil.mpe("该物品没有可分配的库存");
 		}
-		// 总库存（有箱码的库存加无箱码的库存）
-		List<Stock> allStock = new ArrayList<>();
 
-		// 查找出有箱码的库存，追加到总的库存中
-		List<String> boxCodeList = normalStockList.stream()
-			.map(Stock::getBoxCode)
-			.filter(Func::isNotEmpty)
-			.collect(Collectors.toList());
-		if (Func.isNotEmpty(boxCodeList)) {
-			List<Stock> stockOfBoxCodes = stockQueryBiz.findEnableStockByBoxCode(boxCodeList);
-			if (Func.isNotEmpty(stockOfBoxCodes)) {
-				allStock.addAll(stockOfBoxCodes);
-			}
-		}
-		// 查找出箱码为空的库存，追加到总的库存中
-		List<Stock> stockOfNonBoxCode = normalStockList.stream()
-			.filter(item -> Func.isEmpty(item.getBoxCode()))
-			.collect(Collectors.toList());
-		if (Func.isNotEmpty(stockOfNonBoxCode)) {
-			allStock.addAll(stockOfNonBoxCode);
-		}
-
-		List<Long> stockIdList = allStock.stream()
+		List<Long> stockIdList = stockList.stream()
 			.map(Stock::getStockId)
 			.collect(Collectors.toList());
 
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findByStockIdsAndSoBillId(stockIdList, soBillId);
 
-		List<StockSoPickPlanResponse> stockSoPickPlanList = Func.copy(allStock, StockSoPickPlanResponse.class);
+		List<StockSoPickPlanResponse> stockSoPickPlanList = Func.copy(normalStockList, StockSoPickPlanResponse.class);
 
 		if (Func.isNotEmpty(soPickPlanList)) {
 			// 拣货计划中根据stockId分组 统计每个stock对应的所有拣货计划分配量总数
 			Map<Long, List<SoPickPlan>> planListMap = soPickPlanList.stream()
 				.collect(Collectors.groupingBy(SoPickPlan::getStockId));
 			planListMap.forEach((stockId, planList) -> {
-
 				// 分配量求和(计划分配量减去实际分配量)
-				BigDecimal pickQty = planList.stream()
+				BigDecimal pickPlanQty = planList.stream()
 					.reduce(BigDecimal.ZERO, (temp, plan) -> plan.getPickPlanQty().subtract(plan.getPickRealQty()),
 						BigDecimal::add);
 
@@ -626,20 +622,48 @@ public class OutStockBizImpl implements OutStockBiz {
 
 				for (StockSoPickPlanResponse stockSoPickPlan : stockSoPickPlanList) {
 					if (stockSoPickPlan.getStockId().equals(stockId)) {
-						stockSoPickPlan.setPickQty(pickQty);
+						stockSoPickPlan.setPickQty(pickPlanQty);
 						stockSoPickPlan.setSoPickPlanList(planIdList);
 						// 赋值 可用量( 表里的数据 + 分配量 )
-						stockSoPickPlan.setStockEnable(stockSoPickPlan.getStockEnable().add(pickQty));
+						stockSoPickPlan.setStockEnable(stockSoPickPlan.getStockEnable().add(pickPlanQty));
 						break;
 					}
 				}
 			});
-		} else {
-			for (StockSoPickPlanResponse stockPlan : stockSoPickPlanList) {
-				stockPlan.setPickQty(BigDecimal.ZERO);
+		}
+		GetStockByDistributeAdjustResponse response = new GetStockByDistributeAdjustResponse();
+		response.setStockSoPickPlanList(stockSoPickPlanList);
+
+		//人工区库存和自动区库存统计余额
+		Map<String, BigDecimal> map = new HashMap<>();
+		for (StockSoPickPlanResponse stockSoPickPlan : stockSoPickPlanList) {
+			BigDecimal stockBalance = map.get(stockSoPickPlan.getZoneCode());
+			if (Func.isEmpty(stockBalance)) {
+				map.put(stockSoPickPlan.getZoneCode(), stockSoPickPlan.getStockEnable());
+			} else {
+				map.put(stockSoPickPlan.getZoneCode(), stockSoPickPlan.getStockBalance().add(stockBalance));
 			}
 		}
-		return stockSoPickPlanList;
+		Iterator<Map.Entry<String, BigDecimal>> iterator = map.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Map.Entry<String, BigDecimal> ppEntry = iterator.next();
+			Zone zone = zoneBiz.findByCode(ppEntry.getKey());
+			if (DictKVConstant.ZONE_TYPE_AGV_STORAGE.intValue() == zone.getZoneType().intValue()) {
+				BigDecimal agvStockBalance = response.getAgvStockBalance();
+				if (Func.isEmpty(agvStockBalance)) {
+					agvStockBalance = BigDecimal.ZERO;
+				}
+				response.setAgvStockBalance(agvStockBalance.add(ppEntry.getValue()));
+			} else {
+				BigDecimal pickStockBalance = response.getPickStockBalance();
+				if (Func.isEmpty(pickStockBalance)) {
+					pickStockBalance = BigDecimal.ZERO;
+				}
+				response.setPickStockBalance(pickStockBalance.add(ppEntry.getValue()));
+			}
+		}
+
+		return response;
 	}
 
 	@Override
@@ -647,6 +671,9 @@ public class OutStockBizImpl implements OutStockBiz {
 	public void manualDistribute(SoBillDistributedRequest request) {
 		AssertUtil.notNull(request, "调整分配失败，请求参数为空");
 		SoHeader soHeader = soBillBiz.getSoHeaderById(request.getSoBillId());
+		if (soHeader.getSoBillState().equals(SoBillStateEnum.ALL_OUT_STOCK) || soHeader.getSoBillState().equals(SoBillStateEnum.COMPLETED) || soHeader.getSoBillState().equals(SoBillStateEnum.CANCELED)) {
+			throw new ServiceException("调整分配失败,请检查当前发货单状态");
+		}
 		AssertUtil.notNull(request, "调整分配失败，发货单已经删除无法执行分配调整");
 		// 删除原有的分配记录和释放库存占用
 		if (Func.isNotEmpty(request.getOldSoPickPlanList())) {
@@ -1078,6 +1105,7 @@ public class OutStockBizImpl implements OutStockBiz {
 			truckStock.setBillHeaderId(soBillId);
 			truckStockBiz.insert(truckStock);
 			SoHeader soHeader = soBillBiz.getSoHeaderById(soBillId);
+			logBiz.auditLog(AuditLogType.OUTSTOCK_BILL, soBillId, soHeader.getSoBillNo(), String.format("PDA出库复核 箱码:[%s]", boxCode));
 			if (SoBillStateEnum.ALL_OUT_STOCK.equals(soHeader.getSoBillState()) && findBoxCountBySoHeaderId(soBillId) == 0) {
 				//单据状态为全部收货并且收货记录和发运记录箱子数量相等，进行自动关单
 				soBillBiz.closeById(soBillId);
@@ -1107,5 +1135,20 @@ public class OutStockBizImpl implements OutStockBiz {
 			boxCodeList.removeAll(truckStockBoxCodeList);
 		}
 		return boxCodeList.size();
+	}
+
+	@Override
+	public List<StockDistributeAdjustResponse> getDistributeAdjustStockByBoxCoeOrLocCode(
+		String boxCode, Long whId, String locCode) {
+		if (Func.isNotEmpty(boxCode)) {
+			List<Stock> stock = stockQueryBiz.findEnableStockByBoxCode(boxCode);
+			return Func.copy(stock, StockDistributeAdjustResponse.class);
+		} else if (Func.isNotEmpty(locCode)) {
+			Location location = locationBiz.findLocationByLocCode(whId, locCode);
+			List<Stock> stock = stockQueryBiz.findStockByLocation(location.getLocId());
+			return Func.copy(stock, StockDistributeAdjustResponse.class);
+		} else {
+			throw ExceptionUtil.mpe("查找失败，参数错误");
+		}
 	}
 }

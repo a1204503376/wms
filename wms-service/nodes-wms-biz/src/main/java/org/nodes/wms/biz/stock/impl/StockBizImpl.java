@@ -55,10 +55,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -266,11 +263,19 @@ public class StockBizImpl implements StockBiz {
 		if (Func.isNotEmpty(pickLog.getSnCode())) {
 			serialNoList = Arrays.asList(Func.split(pickLog.getSnCode(), ","));
 		}
-		List<Location> locationList = locationBiz.getLocationByZoneType(stock.getWhId(), DictKVConstant.ZONE_TYPE_VIRTUAL);
-		stock.setUdf3("是");
+
+		// 天宜：撤销拣货默认回到中间库位
+		Location loc = locationBiz.getInTransitLocation(stock.getWhId());
+		AssertUtil.notNull(loc, "撤销拣货失败，中间库存不存在，请核对是否存在InTransit库位");
+		// 天宜：撤销拣货时标记目标库存是由撤销拣货创建的，udf3字段为是
+		if (Func.isNull(udf)){
+			udf = new UdfEntity();
+		}
+		udf.setUdf3("是");
+
 		checkQtyOfSerial(serialNoList, pickLog.getPickRealQty());
 		runMoveStock(stock, serialNoList, pickLog.getPickRealQty(), stock.getBoxCode(), stock.getLpnCode(),
-			locationList.get(0), StockLogTypeEnum.INSTOCK_BY_CANCEL_PICK, null,
+			loc, StockLogTypeEnum.INSTOCK_BY_CANCEL_PICK, null,
 			pickLog.getSoBillId(), pickLog.getSoBillNo(), pickLog.getSoLineNo(), udf);
 	}
 
@@ -863,6 +868,16 @@ public class StockBizImpl implements StockBiz {
 		}
 	}
 
+	@Override
+	public void systemFreeze(Long stockId, String msg) {
+		stockDao.updateStock(Collections.singletonList(stockId), StockStatusEnum.SYSTEM_FREEZE);
+	}
+
+	@Override
+	public void unfreezeOnSystemFreezed(Long stockId, String msg) {
+		stockDao.updateStock(Collections.singletonList(stockId), StockStatusEnum.NORMAL);
+	}
+
 	/**
 	 * 适用场景：有执行上架或下架时生成库存日志
 	 *
@@ -1019,14 +1034,16 @@ public class StockBizImpl implements StockBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public List<Stock> unfreezeStockByDropId(List<Stock> stocks, Long dropId) {
+	public List<Stock> unfreezeStockByDropId(List<Stock> stocks, Long dropId, boolean isCleanDropId) {
 		AssertUtil.notEmpty(stocks, "根据任务解冻库存失败,没有任务[{}]关联的库存", dropId);
 
 		stockDao.updateStockByDropId(stocks, StockStatusEnum.NORMAL, "");
 
 		for (Stock item : stocks) {
 			item.setStockStatus(StockStatusEnum.NORMAL);
-			item.setDropId("");
+			if (isCleanDropId){
+				item.setDropId("");
+			}
 
 			createAndSaveStockLog(StockLogTypeEnum.STOCK_UNFREEZE, item, String.format("系统解结 by %d", dropId));
 		}
@@ -1035,19 +1052,18 @@ public class StockBizImpl implements StockBiz {
 	}
 
 	@Override
-	public List<Stock> unfreezeAndReduceOccupy(List<Stock> stocks, Long dropId) {
+	public List<Stock> unfreezeAndReduceOccupy(List<Stock> stocks, Long dropId, boolean isCleanDropId) {
 		AssertUtil.notEmpty(stocks, "根据任务解冻库存失败,没有任务[{}]关联的库存", dropId);
-
-//		stockDao.updateStockByDropId(stocks, StockStatusEnum.NORMAL, "");
 
 		BigDecimal currentUnOccupy = BigDecimal.ZERO;
 		for (Stock item : stocks) {
 			if (item.getStockStatus().equals(StockStatusEnum.SYSTEM_FREEZE)) {
 				currentUnOccupy = item.getOccupyQty();
-
 				item.setStockStatus(StockStatusEnum.NORMAL);
-				item.setDropId("");
 				item.setOccupyQty(BigDecimal.ZERO);
+				if (isCleanDropId){
+					item.setDropId("");
+				}
 
 				stockDao.updateStockByCancelAgvTask(item);
 				createAndSaveOccupyStockLog(item, dropId, dropId.toString(), dropId, currentUnOccupy,

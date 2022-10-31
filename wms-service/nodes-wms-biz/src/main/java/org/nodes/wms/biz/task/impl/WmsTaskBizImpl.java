@@ -12,6 +12,7 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.task.TaskDetailDao;
 import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.dto.input.StopTaskRequest;

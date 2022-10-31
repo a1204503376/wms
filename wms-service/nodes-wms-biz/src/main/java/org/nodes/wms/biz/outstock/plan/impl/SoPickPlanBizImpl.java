@@ -37,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -126,7 +127,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		// 2.移动库存到出库暂存区
 		Location pickToLocation = locationBiz.getLocationByZoneType(
 			pickPlan.getWhId(), DictKVConstant.ZONE_TYPE_PICK_TO).get(0);
-		stockBiz.moveStock(stock, serialNoList, pickQty, pickToLocation, StockLogTypeEnum.OUTSTOCK_BY_PICK_PLAN,
+		stockBiz.moveStock(stock, serialNoList, pickQty, stock.getBoxCode(), stock.getBoxCode(), pickToLocation, StockLogTypeEnum.OUTSTOCK_BY_PICK_PLAN,
 			pickPlan.getSoBillId(), pickPlan.getSoBillNo(), soDetail.getSoLineNo(), null);
 		// 3.更新拣货计划
 		updatePickRealQty(pickPlan.getPickPlanId(), pickPlan.getPickRealQty().add(pickQty));
@@ -287,14 +288,35 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 		return soPickPlanDao.selectSoPickPlansByBoxCode(boxCode);
 	}
 
+	@Override
+	public void setTaskId(List<SoPickPlan> soPickPlanList, Long taskId) {
+		AssertUtil.notEmpty(soPickPlanList, "更新拣货计划中的任务id失败,拣货计划集合参数为空");
+		soPickPlanDao.updateTask(soPickPlanList, taskId);
+	}
+
+	@Override
+	public void updatePlanOfStock(SoPickPlan soPickPlan, Stock newStock, Stock oldStock) {
+		AssertUtil.notNull(soPickPlan, "更新拣货计划中的库存失败,拣货计划参数为空");
+		AssertUtil.notNull(newStock, "更新拣货计划中的库存失败,新库存参数为空");
+		AssertUtil.notNull(oldStock, "更新拣货计划中的库存失败,旧库存参数为空");
+
+		// 释放原库存中的占用量
+		stockBiz.reduceOccupy(soPickPlan.getSoBillId(), soPickPlan.getSoBillNo(),
+			soPickPlan.getSoDetailId(), oldStock.getStockId(), soPickPlan.getSurplusQty());
+		// 更新拣货计划
+		soPickPlanDao.updatePlanOfStock(soPickPlan, newStock);
+		// 占用新的库存
+		stockBiz.occupyStock(Collections.singletonList(soPickPlan));
+	}
+
 	private String createResultByRunPickStrategy(List<SoPickPlan> newPickPlans,
 												 List<SoPickPlan> oldPickPlans,
 												 SoDetail detail, String result) {
 		List<SoPickPlan> allPickPlans = new ArrayList<>();
-		if (Func.isNotEmpty(newPickPlans)){
+		if (Func.isNotEmpty(newPickPlans)) {
 			allPickPlans.addAll(newPickPlans);
 		}
-		if (Func.isNotEmpty(oldPickPlans)){
+		if (Func.isNotEmpty(oldPickPlans)) {
 			allPickPlans.addAll(oldPickPlans);
 		}
 		if (Func.isEmpty(allPickPlans)) {

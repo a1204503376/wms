@@ -183,7 +183,7 @@ public interface StockBiz {
 								   Long billId, String billNo, String lineNo, UdfEntity udf);
 
 	/**
-	 * 整箱移动,可能会发生库存合并;如果目标库位为冻结状态，则目标库存会自动变为冻结状态
+	 * 整箱移动,可能会发生库存合并
 	 * 原库存状态为系统冻结在移动时抛异常；目标库位状态(locFlag)如果不是正常或冻结时抛异常
 	 * 和moveStockByBoxCode的区别是如果原库存有冻结数量则目标库存也将会冻结
 	 *
@@ -318,6 +318,22 @@ public interface StockBiz {
 	void unfreezeStockByLpnCode(List<String> lpnCodes);
 
 	/**
+	 * 将库位设置为系统冻结
+	 *
+	 * @param stockId stockId，必填
+	 * @param msg     消息，非必填
+	 */
+	void systemFreeze(Long stockId, String msg);
+
+	/**
+	 * 解除系统冻结
+	 *
+	 * @param stockId sockId
+	 * @param msg     消息，非必填
+	 */
+	void unfreezeOnSystemFreezed(Long stockId, String msg);
+
+	/**
 	 * 校验库存的序列号
 	 * 如果库存有关联序列号，但serialNoList为空，则抛异常
 	 * 如果库存有关联序列号，则要求serialNoList的序列号必须是该库存的，否则抛异常
@@ -380,20 +396,22 @@ public interface StockBiz {
 	/**
 	 * 根据落放id解冻库存，同时会将库存的DropId清空
 	 *
-	 * @param stocks stocks
-	 * @param dropId 落放id
+	 * @param stocks        stocks
+	 * @param dropId        落放id
+	 * @param isCleanDropId true:需要清空原dropId，false：保留原dropId
 	 * @return 解冻之后的库存
 	 */
-	List<Stock> unfreezeStockByDropId(List<Stock> stocks, Long dropId);
+	List<Stock> unfreezeStockByDropId(List<Stock> stocks, Long dropId, boolean isCleanDropId);
 
 	/**
 	 * 根据落放id解冻库存，同时会将库存的DropId清空并释放占用数量
 	 *
 	 * @param stocks
 	 * @param dropId
+	 * @param isCleanDropId true:需要清空原dropId，false：保留原dropId
 	 * @return
 	 */
-	List<Stock> unfreezeAndReduceOccupy(List<Stock> stocks, Long dropId);
+	List<Stock> unfreezeAndReduceOccupy(List<Stock> stocks, Long dropId, boolean isCleanDropId);
 
 	/**
 	 * 按序列号显示库存导出

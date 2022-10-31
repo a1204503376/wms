@@ -121,6 +121,12 @@
 			submit() {
 				var _this = this;
 				uni.$u.throttle(function() {
+					if(tool.isEmpty(_this.params.boxCode)){
+						_this.$u.func.showToast({
+							title: '请输入箱码'
+						});
+						return;
+					}
 					uni.$u.func.routeNavigateTo('/pages/picking/bulkPick/bulkPIckTo', _this.params);
 				}, 1000)
 

@@ -71,6 +71,17 @@
                                 </nodes-owner>
                             </el-form-item>
                         </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="文件编码">
+                                <el-input
+                                    style="max-width: 206px"
+                                    placeholder="请输入文件编码"
+                                    :clearable="true"
+                                    v-model="form.params.newReceiveHeaderRequest.udf1"
+                                    size="medium">
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
                     </el-row>
                     <el-row style="width: 91%">
                         <el-col :span="24">
@@ -130,6 +141,7 @@
                                     <template v-slot="{row}">
                                         <nodes-sku
                                             v-model="row.sku"
+                                            placement="top"
                                             style="width: 170px;"
                                             @selectValChange="onChangeSku(row)">
                                         </nodes-sku>
@@ -329,6 +341,7 @@ export default {
                         },
                         supplierContact: null,
                         woId: '',
+                        udf1: null,
                         remark: '',
                     },
                     newReceiveDetailRequestList: []
@@ -359,6 +372,7 @@ export default {
                 (func.isEmpty(row.sku.skuId)
                     && func.isEmpty(row.sku.skuCode)
                     && func.isEmpty(row.sku.skuName))
+                    // && func.isEmpty(row.sku.skuSpec))
                 && row.planQty === 0
             );
         },
@@ -372,10 +386,10 @@ export default {
                         skuId: {required: true, message: skuErrorMsg},
                         skuCode: {required: true, message: skuErrorMsg},
                         skuName: {required: true, message: skuErrorMsg},
+                        // skuSpec: {required: true, message: skuErrorMsg},
                     }
                 },
                 planQty: {type: 'Number', validator: (rule, value) => value > 0, message: '计划数量不能为0'}
-
             };
         },
         createRowObj() {

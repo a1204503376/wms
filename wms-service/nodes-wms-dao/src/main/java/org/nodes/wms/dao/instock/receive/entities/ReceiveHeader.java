@@ -175,6 +175,12 @@ public class ReceiveHeader extends TenantEntity {
 	 * WMS备注
 	 */
 	private String remark;
+
+	/**
+	* 文件编码
+	*/
+	private String udf1;
+
 	/**
 	 * 租户id
 	 */

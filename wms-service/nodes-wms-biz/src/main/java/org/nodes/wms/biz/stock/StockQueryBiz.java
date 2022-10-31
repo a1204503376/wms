@@ -109,6 +109,14 @@ public interface StockQueryBiz {
 	List<Stock> findStockByLpnCode(String lpnCode);
 
 	/**
+	 * 根据lpn code查询库存，不含出库暂存区的
+	 *
+	 * @param lpnCode 必填
+	 * @return Stock集合
+	 */
+	List<Stock> findStockByLpnCodeOnStore(String lpnCode);
+
+	/**
 	 * 根据箱码查询库存,排除出库暂存区
 	 *
 	 * @param boxCode 箱码，必填

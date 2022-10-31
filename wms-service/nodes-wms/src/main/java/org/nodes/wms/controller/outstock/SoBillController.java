@@ -19,8 +19,9 @@ import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.intput.SoPickPlanPageQuery;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
+import org.nodes.wms.dao.stock.dto.output.GetStockByDistributeAdjustResponse;
 import org.nodes.wms.dao.stock.dto.output.SerialSelectResponse;
-import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
+import org.nodes.wms.dao.stock.dto.output.StockDistributeAdjustResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -109,9 +110,9 @@ public class SoBillController {
 	 */
 	@PostMapping("/detail_detail")
 	public R<Page<SoDetailForDetailResponse>> detailForDetail(Query query,
-			@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
+															  @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		Page<SoDetailForDetailResponse> pageSoDetail = soBillBiz.pageSoDetailForDetailBySoBillId(query,
-				soBillIdRequest);
+			soBillIdRequest);
 		return R.data(pageSoDetail);
 	}
 
@@ -120,9 +121,9 @@ public class SoBillController {
 	 */
 	@PostMapping("/detail_logSoPick")
 	public R<Page<LogSoPickForSoDetailResponse>> logSoPickForSoDetail(Query query,
-			@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
+																	  @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		Page<LogSoPickForSoDetailResponse> pageLogSoPick = logSoPickBiz.pageLogSoPickForSoDetailBySoBillId(query,
-				soBillIdRequest);
+			soBillIdRequest);
 		return R.data(pageLogSoPick);
 	}
 
@@ -131,9 +132,9 @@ public class SoBillController {
 	 */
 	@PostMapping("/detail_log")
 	public R<Page<LogDetailPageResponse>> logForSoDetail(Query query,
-			@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
+														 @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		Page<LogDetailPageResponse> pageLog = soBillBiz.pageLogById(Condition.getPage(query),
-				soBillIdRequest.getSoBillId());
+			soBillIdRequest.getSoBillId());
 		return R.data(pageLog);
 	}
 
@@ -160,7 +161,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/pageNotSoPick")
 	public R<IPage<NotSoPickPageResponse>> pageNotLogSoPick(
-			Query query, @RequestBody NotSoPickPageQuery notSoPickPageQuery) {
+		Query query, @RequestBody NotSoPickPageQuery notSoPickPageQuery) {
 		return R.data(soBillBiz.pageNotSoPick(query, notSoPickPageQuery));
 	}
 
@@ -169,7 +170,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/exportNotSoPick")
 	public void exportNotSoPick(
-			@RequestBody NotSoPickPageQuery notSoPickPageQuery, HttpServletResponse response) {
+		@RequestBody NotSoPickPageQuery notSoPickPageQuery, HttpServletResponse response) {
 		soBillBiz.exportNotSoPick(notSoPickPageQuery, response);
 	}
 
@@ -194,7 +195,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/getSoBillDataByDistribution")
 	public R<SoBillDistributedResponse> getSoBillDataByDistribution(
-			@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
+		@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		return R.data(soBillBiz.findSoBillForDistributeBySoBillId(soBillIdRequest.getSoBillId()));
 	}
 
@@ -203,7 +204,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/getSoDetailAndStock")
 	public R<SoDetailAndStockResponse> getSoDetailAndStock(
-			@Valid @RequestBody SoDetailAndStockRequest soDetailAndStockRequest) {
+		@Valid @RequestBody SoDetailAndStockRequest soDetailAndStockRequest) {
 		return R.data(soBillBiz.getSoDetailAndStock(soDetailAndStockRequest));
 	}
 
@@ -212,8 +213,17 @@ public class SoBillController {
 	 */
 	@PostMapping("/getSoPickPlan")
 	public R<List<SoPickPlanForDistributionResponse>> getSoPickPlan(
-			@Valid @RequestBody SoBillIdAndSoDetailIdRequest request) {
+		@Valid @RequestBody SoBillIdAndSoDetailIdRequest request) {
 		return R.data(outStockBiz.getSoPickPlanBySoBillIdAndSoDetailId(request.getSoBillId(), request.getSoDetailId()));
+	}
+
+	/**
+	 * 分配：根据发货单id获取已经分配的拣货计划信息
+	 */
+	@PostMapping("/getHistorySoPickPlan")
+	public R<List<SoPickPlanForDistributionResponse>> getHistorySoPickPlan(
+		@Valid @RequestBody SoBillIdAndSoDetailIdRequest request) {
+		return R.data(outStockBiz.getSoPickPlanBySoBillIdAndSoDetailId(request.getSoBillId()));
 	}
 
 	/**
@@ -249,13 +259,14 @@ public class SoBillController {
 	 * 分配调整：根据物品id查找物品可分配库存信息
 	 */
 	@PostMapping("/getStockByDistributeAdjust")
-	public R<List<StockSoPickPlanResponse>> getStockByDistributeAdjust(
-			@Valid @RequestBody DistributeAdjustRequest distributeAdjustRequest) {
+	public R<GetStockByDistributeAdjustResponse> getStockByDistributeAdjust(
+		@Valid @RequestBody DistributeAdjustRequest distributeAdjustRequest) {
 		return R.data(outStockBiz.getStockByDistributeAdjust(
-				distributeAdjustRequest.getSkuId(),
-				distributeAdjustRequest.getSkuLot1(),
-				distributeAdjustRequest.getSkuLot4(),
-				distributeAdjustRequest.getSoBillId()));
+			distributeAdjustRequest.getSkuId(),
+			distributeAdjustRequest.getSkuLot1(),
+			distributeAdjustRequest.getSkuLot2(),
+			distributeAdjustRequest.getSkuLot4(),
+			distributeAdjustRequest.getSoBillId()));
 	}
 
 	/**
@@ -266,6 +277,16 @@ public class SoBillController {
 	public R<String> saveAssign(@Valid @RequestBody SoBillDistributedRequest soBillDistributedRequest) {
 		outStockBiz.manualDistribute(soBillDistributedRequest);
 		return R.success("调整成功");
+	}
+
+	/**
+	 * 分配调整: 查看某箱或者某库位上的库存
+	 */
+	@PostMapping("/showDistributeAdjustStock")
+	public R<List<StockDistributeAdjustResponse>> getDistributeAdjustStock(
+		@Valid @RequestBody ShowDistributeAdjustStockRequest request) {
+		return R.data(outStockBiz.getDistributeAdjustStockByBoxCoeOrLocCode(
+			request.getBoxCode(), request.getWhId(), request.getLocCode()));
 	}
 
 	/**
@@ -292,7 +313,7 @@ public class SoBillController {
 	 */
 	@PostMapping("/getSoPickPlanpage")
 	public R<Page<SoPickPlanPageResponse>> getSoPickPlanpage(Query query,
-			@RequestBody SoPickPlanPageQuery soPickPlanPageQuery) {
+															 @RequestBody SoPickPlanPageQuery soPickPlanPageQuery) {
 		Page<SoPickPlanPageResponse> soPickPlanPage = soPickPlanBiz.page(query, soPickPlanPageQuery);
 		return R.data(soPickPlanPage);
 	}

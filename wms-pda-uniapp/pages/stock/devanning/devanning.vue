@@ -44,6 +44,7 @@
 		},
 		onShow() {
 			uni.$u.func.registerScanner(this.scannerCallback);
+			this.params.boxCode = undefined;
 			var that = this;
 			that.emitKeyDown = function(e) {
 				if (e.key == 'Enter') {

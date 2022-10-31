@@ -6,28 +6,28 @@
                     <el-col :span="6">
                         <el-form-item label="箱码" label-width="90px">
                             <el-input :clearable="true" class="search-input" placeholder="请输入箱码"
-                                      v-model.trim="form.params.boxCode">
+                                v-model.trim="form.params.boxCode">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="容器编码" label-width="90px">
                             <el-input :clearable="true" class="search-input" placeholder="请输入容器编码"
-                                      v-model.trim="form.params.lpnCode">
+                                v-model.trim="form.params.lpnCode">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
                             <el-input :clearable="true" class="search-input" placeholder="请输入物品编码"
-                                      v-model.trim="form.params.skuCode">
+                                v-model.trim="form.params.skuCode">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="目标库位" label-width="90px">
                             <el-input class="search-input" placeholder="请输入目标库位"
-                                      v-model.trim="form.params.targetLocCode">
+                                v-model.trim="form.params.targetLocCode">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -55,12 +55,12 @@
                 <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">
                     <el-button @click="onColumnShowHide" circle icon="el-icon-s-operation" size="mini"></el-button>
                 </el-tooltip>
-                <el-tooltip :enterable="false" class="item" content="服务端导出" effect="dark" placement="top">
+                <el-tooltip :enterable="false" class="item" content="全量导出" effect="dark" placement="top">
                     <el-button @click="exportData" circle icon="el-icon-download" size="mini"></el-button>
                 </el-tooltip>
-                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
+                <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                                  style="display: inline-block;margin-left: 10px">
+                        style="display: inline-block;margin-left: 10px">
                         <el-button @click="onExportLocalData" circle icon="el-icon-bottom" size="mini">
                         </el-button>
                     </excel-export>
@@ -68,8 +68,7 @@
             </template>
             <template v-slot:table>
                 <el-table :data="table.data" :height="table.height" @sort-change="onSortChange" border
-                          highlight-current-row ref="table"
-                          size="mini" style="width: 100%">
+                    highlight-current-row ref="table" size="mini" style="width: 100%">
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
                     <el-table-column fixed type="index" width="50">
@@ -79,22 +78,21 @@
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column :key="index" show-overflow-tooltip v-bind="column" v-if="!column.hide"
-                                         width="150">
+                            width="150">
                             <template v-if="column.prop === 'taskState'" v-slot="scope">
                                 <el-tag type="success"
-                                        v-if="scope.row.taskState === '已下发' || scope.row.taskState === '开始执行'">{{
+                                    v-if="scope.row.taskState === '已下发' || scope.row.taskState === '开始执行'">{{
                                     scope.row.taskState }}
                                 </el-tag>
-                                <el-tag
-                                    type="info"
+                                <el-tag type="info"
                                     v-else-if="scope.row.taskState === '已完成' ||scope.row.taskState === 'AGV完成' || scope.row.taskState === '已取消'">
                                     {{ scope.row.taskState }}
                                 </el-tag>
                                 <el-tag type="warning" v-else-if="scope.row.taskState === '未下发'">{{ scope.row.taskState
-                                    }}
+                                }}
                                 </el-tag>
                                 <el-tag type="danger" v-else-if="scope.row.taskState === '异常中断中'">{{ scope.row.taskState
-                                    }}
+                                }}
                                 </el-tag>
                                 <el-tag type="info" v-else>{{ scope.row.taskState }}</el-tag>
                             </template>
@@ -104,9 +102,8 @@
             </template>
             <template v-slot:page>
                 <el-pagination :page-size="page.size" :page-sizes="[20, 50, 100]" :total="page.total"
-                               @current-change="handleCurrentChange"
-                               @size-change="handleSizeChange" background
-                               layout="total, sizes, prev, pager, next, jumper">
+                    @current-change="handleCurrentChange" @size-change="handleSizeChange" background
+                    layout="total, sizes, prev, pager, next, jumper">
                 </el-pagination>
             </template>
         </nodes-master-page>

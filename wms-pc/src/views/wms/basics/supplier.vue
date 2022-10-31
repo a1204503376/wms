@@ -5,69 +5,43 @@
                 <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="供应商编码" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.code"
-                                :clearable="true"
-                                class="search-input"
+                            <el-input v-model.trim="form.params.code" :clearable="true" class="search-input"
                                 placeholder="请输入供应商编码">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="供应商名称" label-width="90px">
-                            <el-input
-                                v-model.trim="form.params.name"
-                                :clearable="true"
-                                class="search-input"
+                            <el-input v-model.trim="form.params.name" :clearable="true" class="search-input"
                                 placeholder="请输入供应商名称">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="创建日期" label-width="90px">
-                            <nodes-date-range
-                                v-model="form.params.createTimeDateRange">
+                            <nodes-date-range v-model="form.params.createTimeDateRange">
                             </nodes-date-range>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="更新日期" label-width="90px">
-                            <nodes-date-range
-                                v-model="form.params.updateTimeDateRange">
+                            <nodes-date-range v-model="form.params.updateTimeDateRange">
                             </nodes-date-range>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </template>
             <template v-slot:batchBtn>
-                <el-button
-                    v-if="permissionObj.add"
-                    icon="el-icon-plus"
-                    size="mini"
-                    type="primary"
-                    @click="onAdd">新增
+                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
                 </el-button>
-                <el-button
-                    v-if="permissionObj.delete"
-                    :plain="true"
-                    icon="el-icon-delete"
-                    size="mini"
-                    type="danger"
+                <el-button v-if="permissionObj.delete" :plain="true" icon="el-icon-delete" size="mini" type="danger"
                     @click="onRemove">删除
                 </el-button>
-                <el-button
-                    v-if="permissionObj.import"
-                    :plain="true"
-                    icon="el-icon-upload2"
-                    size="mini"
+                <el-button v-if="permissionObj.import" :plain="true" icon="el-icon-upload2" size="mini"
                     @click="onUpload">导入
                 </el-button>
-                <file-upload
-                    :visible="fileUpload.visible"
-                    file-name="供应商"
-                    template-url="/api/wms/supplier/export-template"
-                    @callback="callbackFileUpload"
-                ></file-upload>
+                <file-upload :visible="fileUpload.visible" file-name="供应商"
+                    template-url="/api/wms/supplier/export-template" @callback="callbackFileUpload"></file-upload>
             </template>
             <template v-slot:tableTool>
                 <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
@@ -76,52 +50,32 @@
                 <el-tooltip :enterable="false" class="item" content="显隐" effect="dark" placement="top">
                     <el-button circle icon="el-icon-s-operation" size="mini" @click="onColumnShowHide"></el-button>
                 </el-tooltip>
-                <el-tooltip :enterable="false" class="item" content="服务端导出" effect="dark" placement="top">
+                <el-tooltip :enterable="false" class="item" content="全量导出" effect="dark" placement="top">
                     <el-button circle icon="el-icon-download" size="mini" @click="exportData"></el-button>
                 </el-tooltip>
-                <el-tooltip :enterable="false" class="item" content="本地导出" effect="dark" placement="top">
+                <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                                  style="display: inline-block;margin-left: 10px">
-                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData"/>
+                        style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData" />
                     </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table
-                    ref="table"
-                    :data="table.data"
-                    :height="table.height"
-                    border
-                    highlight-current-row
-                    size="mini"
-                    style="width: 100%"
-                    @sort-change="onSortChange">
-                    <el-table-column
-                        fixed
-                        type="selection"
-                        width="50">
+                <el-table ref="table" :data="table.data" :height="table.height" border highlight-current-row size="mini"
+                    style="width: 100%" @sort-change="onSortChange">
+                    <el-table-column fixed type="selection" width="50">
                     </el-table-column>
-                    <el-table-column
-                        fixed
-                        type="index"
-                    width="50">
+                    <el-table-column fixed type="index" width="50">
                         <template slot="header">
                             #
                         </template>
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
-                        <el-table-column
-                            v-if="!column.hide"
-                            :key="index"
-                            :show-overflow-tooltip="true"
-                            v-bind="column"
+                        <el-table-column v-if="!column.hide" :key="index" :show-overflow-tooltip="true" v-bind="column"
                             width="150">
                         </el-table-column>
                     </template>
-                    <el-table-column
-                        label="启用"
-                        prop="status"
-                        width="80">
+                    <el-table-column label="启用" prop="status" width="80">
                         <template v-slot="{row}">
                             <el-tag :type="row.status === 1 ? 'success' : 'danger'">
                                 {{ row.status === 1 ? '是' : '否' }}
@@ -132,16 +86,13 @@
             </template>
             <template v-slot:page>
                 <el-pagination :current-page="page.current" :page-size="page.size" :page-sizes="[20, 50, 100]"
-                               :total="page.total" background layout="total, sizes, prev, pager, next, jumper"
-                               v-bind="page"
-                               @size-change="handleSizeChange" @current-change="handleCurrentChange">
+                    :total="page.total" background layout="total, sizes, prev, pager, next, jumper" v-bind="page"
+                    @size-change="handleSizeChange" @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>
         <div v-if="columnShowHide.visible">
-            <dialog-column
-                v-bind="columnShowHide"
-                @close="onColumnShowHide">
+            <dialog-column v-bind="columnShowHide" @close="onColumnShowHide">
             </dialog-column>
         </div>
     </div>

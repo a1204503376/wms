@@ -3,6 +3,7 @@ package org.nodes.wms.dao.task;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
 import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.nodes.wms.dao.task.entities.WmsTask;
@@ -97,4 +98,5 @@ public interface WmsTaskDao extends BaseService<WmsTask> {
 	 * @param msg    消息
 	 */
 	void updateRemark(Long taskId, String msg);
+
 }

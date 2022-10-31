@@ -110,6 +110,16 @@
                             {{ form.params.supplierContact }}
                         </el-descriptions-item>
                         <el-descriptions-item
+                            :span="4"
+                            label-class-name="descriptions-label"
+                            content-class-name="descriptions-content"
+                            :label-style="{'text-align': 'right'}">
+                            <template slot="label">
+                                文件编码
+                            </template>
+                            {{ form.params.udf1 }}
+                        </el-descriptions-item>
+                        <el-descriptions-item
                             label-class-name="descriptions-label"
                             content-class-name="descriptions-content"
                             :label-style="{'text-align': 'right'}">
@@ -191,6 +201,7 @@ export default {
                     supplierName: '',
                     billTypeCd: '',
                     billTypeName: '',
+                    udf1: null,
                     supplierContact: '',
                 }
             },
