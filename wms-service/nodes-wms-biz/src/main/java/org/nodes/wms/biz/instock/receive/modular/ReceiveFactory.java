@@ -170,6 +170,8 @@ public class ReceiveFactory {
 		receiveDetail.setSkuLot7(newReceiveDetailRequest.getSkuLot7());
 		//设置适用速度等级
 		receiveDetail.setSkuLot8(newReceiveDetailRequest.getSkuLot8());
+		//设置序列号
+		receiveDetail.setSnCode(newReceiveDetailRequest.getSnCode());
 		return receiveDetail;
 	}
 
@@ -450,5 +452,14 @@ public class ReceiveFactory {
 		receiveDetail.setSkuLot1(request.getSkuLot1());
 		receiveDetail.setSkuLot2(request.getSkuLot2());
 		return receiveDetail;
+	}
+
+	public ReceiveDetailLpn createReceiveDetailLpn(ReceiveDetail receiveDetail, NewReceiveDetailRequest newReceiveDetailRequest) {
+		ReceiveDetailLpn receiveDetailLpn = new ReceiveDetailLpn();
+		Func.copy(receiveDetail, receiveDetailLpn);
+		receiveDetailLpn.setDetailStatus(ReceiveDetailStatusEnum.NOT_RECEIPT);
+		receiveDetailLpn.setBoxCode(newReceiveDetailRequest.getBoxCode());
+		receiveDetailLpn.setLpnCode(newReceiveDetailRequest.getLpnCode());
+		return receiveDetailLpn;
 	}
 }

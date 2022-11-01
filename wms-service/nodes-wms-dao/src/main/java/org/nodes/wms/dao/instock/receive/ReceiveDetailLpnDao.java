@@ -18,14 +18,16 @@ public interface ReceiveDetailLpnDao {
 
 	/**
 	 * 根据id获取lpn实体
+	 *
 	 * @param receiveDetailLpnId id
 	 * @return lpn实体
 	 */
-    ReceiveDetailLpn selectReceiveDetailLpnById(Long receiveDetailLpnId);
+	ReceiveDetailLpn selectReceiveDetailLpnById(Long receiveDetailLpnId);
 
 	/**
 	 * 修改lpn
- 	 * @param lpn lpn实体
+	 *
+	 * @param lpn lpn实体
 	 */
 	void updateReceiveDetailLpn(ReceiveDetailLpn lpn);
 
@@ -35,7 +37,7 @@ public interface ReceiveDetailLpnDao {
 	 * @param receiveDetailId 收货明细id
 	 * @return ReceiveDetailLpn 收货单LPN明细实体
 	 */
-    ReceiveDetailLpn selectByReceiveDetailId(Long receiveDetailId);
+	ReceiveDetailLpn selectByReceiveDetailId(Long receiveDetailId);
 
 	/**
 	 * 撤销收货时更新receive_detail_lpn
@@ -44,4 +46,11 @@ public interface ReceiveDetailLpnDao {
 	 * @return true：更新成功，false: 更新失败
 	 */
 	boolean updateForCancelReceive(ReceiveDetailLpn receiveDetailLpn);
+
+	/**
+	 * 保存receiveDetailLpn
+	 *
+	 * @param receiveDetailLpn 实体对象
+	 */
+	void insert(ReceiveDetailLpn receiveDetailLpn);
 }

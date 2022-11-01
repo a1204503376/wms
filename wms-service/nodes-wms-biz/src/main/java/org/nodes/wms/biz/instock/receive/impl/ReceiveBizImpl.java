@@ -54,6 +54,7 @@ import java.util.stream.Collectors;
 public class ReceiveBizImpl implements ReceiveBiz {
 	private final ReceiveHeaderDao receiveHeaderDao;
 	private final ReceiveDetailDao receiveDetailDao;
+
 	private final ReceiveDetailLpnDao receiveDetailLpnDao;
 	private final ReceiveFactory receiveFactory;
 	private final SkuDao skuDao;
@@ -218,6 +219,12 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		for (NewReceiveDetailRequest newReceiveDetailRequest : newReceiveDetailRequestList) {
 			ReceiveDetail receiveDetail = receiveFactory.createReceiveDetail(newReceiveDetailRequest, receiveHeader);
 			receiveDetailDao.insert(receiveDetail);
+			if (newReceiveRequest.isFromLogSoPickOrLogNoReturn()) {
+				if (Func.isEmpty(stockQueryBiz.findEnableStockByBoxCode(newReceiveDetailRequest.getBoxCode()))) {
+					ReceiveDetailLpn receiveDetailLpn = receiveFactory.createReceiveDetailLpn(receiveDetail, newReceiveDetailRequest);
+					receiveDetailLpnDao.insert(receiveDetailLpn);
+				}
+			}
 		}
 		return receiveHeader;
 	}

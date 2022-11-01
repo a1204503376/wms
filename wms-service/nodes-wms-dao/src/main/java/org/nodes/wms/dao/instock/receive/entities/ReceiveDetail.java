@@ -36,7 +36,7 @@ public class ReceiveDetail extends BaseSkuLotEntity {
 	/**
 	 * 订单行号
 	 */
-	private String  lineNo;
+	private String lineNo;
 	/**
 	 * 接收状态
 	 */
@@ -44,15 +44,15 @@ public class ReceiveDetail extends BaseSkuLotEntity {
 	/**
 	 * 物品ID
 	 */
-	private Long  skuId;
+	private Long skuId;
 	/**
 	 * 物品编码
 	 */
-	private String  skuCode;
+	private String skuCode;
 	/**
 	 * 物品名称
 	 */
-	private String  skuName;
+	private String skuName;
 	/**
 	 * 计划数量
 	 */
@@ -72,7 +72,7 @@ public class ReceiveDetail extends BaseSkuLotEntity {
 	/**
 	 * 包装id
 	 */
-	private  Long  wspId;
+	private Long wspId;
 	/**
 	 * 层级
 	 */
@@ -94,21 +94,21 @@ public class ReceiveDetail extends BaseSkuLotEntity {
 	 */
 	private String umName;
 	/**
-	 *  基础计量单位编码
+	 * 基础计量单位编码
 	 */
 	private String baseUmCode;
 	/**
 	 * 基础计量单位名称
 	 */
-	private  String baseUmName;
+	private String baseUmName;
 	/**
 	 * 库房ID
 	 */
 	private Long whId;
 	/**
-	 *  库房编码
+	 * 库房编码
 	 */
-	private  String whCode;
+	private String whCode;
 	/**
 	 * 货主ID
 	 */
@@ -116,21 +116,25 @@ public class ReceiveDetail extends BaseSkuLotEntity {
 	/**
 	 * 货主编码
 	 */
-	private String	ownerCode;
+	private String ownerCode;
 	/**
 	 * 供应商id
 	 */
 	private long supplierId;
 	/**
-	 *  单价
+	 * 单价
 	 */
 	private BigDecimal detailPrice;
 	/**
 	 * 明细总金额
 	 */
-	private BigDecimal	detailAmount;
+	private BigDecimal detailAmount;
 	/**
 	 * 序列号导入状态  Y:已导入N：未导入
 	 */
 	private String importSn;
+	/**
+	 * 序列号
+	 */
+	private String snCode;
 }
