@@ -385,27 +385,6 @@ export default {
                 sku: {required: true, message: skuErrorMsg}
             };
         },
-        createRowObj() {
-            return {
-                lineNumber: '',
-                sku: {
-                    skuId: '',
-                    skuCode: '',
-                    skuName: '',
-                    skuSpec: '',
-                },
-                umCode: '',
-                receiveDetailId: '',
-                planQty: 0,
-                scanQty: '',
-                remark: null,
-                skuLot1: '',
-                skuLot4: '',
-                skuLot5: '',
-                skuLot6: '',
-                skuLot8: '',
-            }
-        },
         deleteRow(index, rows) {
             this.$confirm("确定删除当前行？", {
                 confirmButtonText: "确定",
