@@ -902,6 +902,7 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 			skuExportDTO.setSkuCode(sku.getSkuCode());
 			skuExportDTO.setSkuName(sku.getSkuName());
 			skuExportDTO.setSkuNameS(sku.getSkuNameS());
+			skuExportDTO.setSkuSpec(sku.getSkuSpec());
 			// 物品导出空指针异常
 			skuExportDTO.setAbc(DictCache.getValue(DictCodeConstant.LOC_ABC, sku.getAbc()));
 //			skuExportDTO.setSkuGrossWeight(sku.getSkuGrossWeight().stripTrailingZeros().toPlainString());
@@ -952,7 +953,7 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 				skuExportDTO.setSkuLotVal(skuLotVal.getSkuLotValName());
 			}
 			// 是否序列号物品
-			skuExportDTO.setIsSn(SnEnum.YES.getIndex() == sku.getIsSn() ? SnEnum.YES.getName() : SnEnum.NO.getName());
+			skuExportDTO.setIsSn(SnEnum.YES.getIndex().equals(sku.getIsSn()) ? SnEnum.YES.getName() : SnEnum.NO.getName());
 
 			// 替代物品与供应商集合的最大长度
 			int maxLength = 1;
