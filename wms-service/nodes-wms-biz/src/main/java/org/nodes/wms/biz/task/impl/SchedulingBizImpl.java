@@ -42,6 +42,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -77,6 +78,10 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	 * 调度系统发送到agv成功
 	 */
 	private final Integer SEND_AGV_RETURN_SUCCESS = 4;
+	/**
+	 * AGV已分配任务给车辆
+	 */
+	private final Integer AGV_ASSIGNED_CAR = 11;
 
 	private final LocationBiz locationBiz;
 	private final ZoneBiz zoneBiz;
@@ -107,7 +112,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		}
 		Zone zone = zoneBiz.findByCode(zoneCode);
 		List<Location> locationList = locationBiz.findLocationByZoneId(zone.getZoneId());
-		if (Func.equals(request.getLpnTypeCode(), WmsAppConstant.BOX_TYPE_D)){
+		if (Func.equals(request.getLpnTypeCode(), WmsAppConstant.BOX_TYPE_D)) {
 			locationList = locationList.stream()
 				.sorted(Comparator.comparing(Location::getPutOrder))
 				.collect(Collectors.toList());
@@ -168,11 +173,25 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			onCancelByAgv(wmsTask, request.getMsg());
 		} else if (SEND_AGV_RETURN_SUCCESS.equals(request.getState())) {
 			onSuccessForSendAgv(wmsTask);
+		} else if (AGV_ASSIGNED_CAR.equals(request.getState())) {
+			onAgvAssigned(wmsTask, request.getMsg());
 		} else {
 			onOtherHandle(wmsTask, request);
 		}
 
 		log.info("接收调度系统任务状态变更通知,状态:{},任务:{}", request.getState(), request.getTaskDetailId());
+	}
+
+	private void onAgvAssigned(WmsTask wmsTask, String msg) {
+		if (Func.isNull(msg)) {
+			msg = "";
+		}
+
+		wmsTask.setTaskState(WmsTaskStateEnum.AGV_ASSIGNED);
+		wmsTask.setUserName(msg);
+		wmsTask.setRemark("AGV已指派" + msg + "执行");
+		wmsTask.setUdf1(Func.formatDateTime(LocalDateTime.now()));
+		wmsTaskDao.updateById(wmsTask);
 	}
 
 	private void onSuccessForSendAgv(WmsTask wmsTask) {
@@ -199,7 +218,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			throw new ServiceException(String.format("双重入库推荐新的库位失败,任务状态已完结不支持推荐新的库位", wmsTask.getTaskId()));
 		}
 		// 由于双重入库通知前会发送取消订单的通知，所以双重入库中需要更新任务状态，并再次冻结中间库位的库存
-		if (wmsTask.getTaskState().equals(WmsTaskStateEnum.CANCELED)){
+		if (wmsTask.getTaskState().equals(WmsTaskStateEnum.CANCELED)) {
 			wmsTask.setTaskState(WmsTaskStateEnum.START_EXECUTION);
 			List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
 			stockBiz.freezeStockByDropId(stockList, wmsTask.getTaskId());
@@ -284,12 +303,13 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	private void onStart(WmsTask wmsTask) {
 		boolean checkTaskState = WmsTaskStateEnum.ISSUED.equals(wmsTask.getTaskState())
 			|| WmsTaskStateEnum.ABNORMAL.equals(wmsTask.getTaskState())
-			|| WmsTaskStateEnum.AGV_RECEIVED.equals(wmsTask.getTaskState());
+			|| WmsTaskStateEnum.AGV_RECEIVED.equals(wmsTask.getTaskState())
+			|| WmsTaskStateEnum.AGV_ASSIGNED.equals(wmsTask.getTaskState());
 		if (WmsTaskStateEnum.START_EXECUTION.equals(wmsTask.getTaskState())) {
 			return;
 		}
 		if (!checkTaskState) {
-			throw new ServiceException("状态更新失败,只有已下发的任务才可以执行");
+			throw new ServiceException("状态更新失败,当前状态无法执行开始执行的通知");
 		}
 		if (Func.isEmpty(wmsTask.getToLocCode()) || Func.isEmpty(wmsTask.getToLocId())) {
 			throw new ServiceException("状态更新失败,只有以及获取目标库位的任务才可以执行");

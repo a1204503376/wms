@@ -904,14 +904,14 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 			skuExportDTO.setSkuNameS(sku.getSkuNameS());
 			// 物品导出空指针异常
 			skuExportDTO.setAbc(DictCache.getValue(DictCodeConstant.LOC_ABC, sku.getAbc()));
-			skuExportDTO.setSkuGrossWeight(sku.getSkuGrossWeight().stripTrailingZeros().toPlainString());
-			skuExportDTO.setSkuNetWeight(sku.getSkuNetWeight().stripTrailingZeros().toPlainString());
-			skuExportDTO.setSkuTareWeight(sku.getSkuTareWeight().stripTrailingZeros().toPlainString());
-			skuExportDTO.setSkuVolume(sku.getSkuVolume().stripTrailingZeros().toPlainString());
-			skuExportDTO.setStorageType(DictCache.getValue(DictCodeConstant.INVENTORY_TYPE, sku.getSkuStorageType()));
+//			skuExportDTO.setSkuGrossWeight(sku.getSkuGrossWeight().stripTrailingZeros().toPlainString());
+//			skuExportDTO.setSkuNetWeight(sku.getSkuNetWeight().stripTrailingZeros().toPlainString());
+//			skuExportDTO.setSkuTareWeight(sku.getSkuTareWeight().stripTrailingZeros().toPlainString());
+//			skuExportDTO.setSkuVolume(sku.getSkuVolume().stripTrailingZeros().toPlainString());
+//			skuExportDTO.setStorageType(DictCache.getValue(DictCodeConstant.INVENTORY_TYPE, sku.getSkuStorageType()));
 			skuExportDTO.setRemarks(sku.getSkuRemark());
 			skuExportDTO.setSkuBarcodeList(sku.getSkuBarcodeList());
-			skuExportDTO.setShelfLife(sku.getQualityHours().toString());
+//			skuExportDTO.setShelfLife(sku.getQualityHours().toString());
 			// 当前物品的替代物品集合
 			List<SkuReplace> skuReplaces = skuReplaceList.stream()
 					.filter(skuReplace -> skuReplace.getSkuId().equals(sku.getSkuId())).collect(Collectors.toList());
