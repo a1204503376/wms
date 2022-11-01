@@ -16,11 +16,11 @@ spring:
     #  commandTimeout: 5000
   #数据源配置
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/wms_dev?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://127.0.0.1:3306/qa_wms?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
     #MySQL账号
     username: root
     #MySQL密码
-    password: 123456
+    password: 1234
 
 #blade配置
 blade:
