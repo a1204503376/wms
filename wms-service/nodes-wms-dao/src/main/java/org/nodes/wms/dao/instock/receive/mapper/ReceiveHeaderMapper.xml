@@ -3,6 +3,7 @@
 <mapper namespace="org.nodes.wms.dao.instock.receive.mapper.ReceiveHeaderMapper">
     <sql id="ReceiveHeader">
         select
+        distinct
         h.receive_id,
         h.receive_no,
         h.asn_bill_no,
@@ -91,9 +92,10 @@
                rh.udf1,
                rh.remark
         from receive_header rh
-             left join wms_bill_type wbt on rh.bill_type_cd = wbt.bill_type_cd
-             left join wms_owner owner on rh.wo_id = owner.wo_id
-        where receive_id = #{id} AND rh.is_deleted = 0
+                 left join wms_bill_type wbt on rh.bill_type_cd = wbt.bill_type_cd
+                 left join wms_owner owner on rh.wo_id = owner.wo_id
+        where receive_id = #{id}
+          AND rh.is_deleted = 0
     </select>
     <select id="getReceiveHeaderResponseByQuery"
             resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse">
@@ -111,8 +113,9 @@
         LEFT JOIN wms_bill_type b ON h.bill_type_cd = b.bill_type_cd
         LEFT JOIN receive_detail d on h.receive_id= d.receive_id
         <where>
-            h.receive_no LIKE concat('%',#{query.no},'%') AND h.is_deleted=0 AND h.wh_id=#{query.whId} and  d.surplus_qty&gt;0
-            OR h.external_order_no LIKE concat('%',#{query.no},'%') AND h.wh_id=#{query.whId} AND h.is_deleted=0 and  d.surplus_qty&gt;0
+            h.receive_no LIKE concat('%',#{query.no},'%') AND h.is_deleted=0 AND h.wh_id=#{query.whId} and d.surplus_qty&gt;0
+            OR h.external_order_no LIKE concat('%',#{query.no},'%') AND h.wh_id=#{query.whId} AND h.is_deleted=0 and
+            d.surplus_qty&gt;0
         </where>
         order by h.create_time
     </select>
@@ -145,7 +148,7 @@
         LEFT JOIN wms_bill_type billType ON header.bill_type_cd = billType.bill_type_cd
         LEFT JOIN blade_user `user` ON header.create_user = `user`.id
         <where>
-             detail.is_deleted = 0 AND
+            detail.is_deleted = 0 AND
             detail.plan_qty > detail.scan_qty
             AND detail.detail_status IN
             <foreach collection="detailStateList" item="item" separator="," open="(" close=")">
@@ -207,13 +210,13 @@
     <select id="selectReceiveHeaderForDetailByAsnBillId"
             resultType="org.nodes.wms.dao.instock.receive.dto.output.ReceiveHeaderResponse">
         SELECT
-            h.receive_no,
-            h.bill_state,
-            h.remark,
-            `user1`.real_name as create_user,
-            h.create_time,
-            `user2`.real_name as update_user,
-            h.update_time
+        h.receive_no,
+        h.bill_state,
+        h.remark,
+        `user1`.real_name as create_user,
+        h.create_time,
+        `user2`.real_name as update_user,
+        h.update_time
         FROM receive_header h
         LEFT JOIN blade_user `user1` ON h.create_user = `user1`.id
         LEFT JOIN blade_user `user2` ON h.update_user = `user2`.id
