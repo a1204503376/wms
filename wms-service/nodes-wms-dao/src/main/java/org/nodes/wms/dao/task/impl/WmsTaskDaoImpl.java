@@ -47,9 +47,7 @@ public class WmsTaskDaoImpl
 		if (Func.isNotEmpty(msg)) {
 			wmsTask.setRemark(msg);
 		}
-		if (WmsTaskStateEnum.COMPLETED.equals(state)
-			|| WmsTaskStateEnum.CANCELED.equals(state)
-			|| WmsTaskStateEnum.AGV_COMPLETED.equals(state)) {
+		if (WmsTaskStateEnum.AGV_COMPLETED.equals(state)) {
 			wmsTask.setCloseTime(LocalDateTime.now());
 		} else if (WmsTaskStateEnum.ISSUED.equals(state)) {
 			wmsTask.setAllotTime(LocalDateTime.now());
@@ -116,7 +114,6 @@ public class WmsTaskDaoImpl
 			.eq(WmsTask::getTaskId, taskId);
 		WmsTask wmsTask = new WmsTask();
 		wmsTask.setTaskState(taskStateEnum);
-		wmsTask.setCloseTime(LocalDateTime.now());
 		wmsTask.setScanQty(scanQty);
 		if (!super.update(wmsTask, updateWrapper)) {
 			throw new ServiceException("任务更新失败,请再次重试");
