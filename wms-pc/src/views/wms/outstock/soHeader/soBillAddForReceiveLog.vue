@@ -73,14 +73,12 @@
                         </el-col>
                     </el-row>
                     <el-row type="flex">
-                        <el-col :span="8">
+                        <el-col :span="24" style="width: 91%;">
                             <el-form-item label="备注" prop="soBillRemark">
                                 <el-input
                                     v-model="form.params.soBillRemark"
                                     :rows=2
                                     placeholder="请输入内容"
-                                    size="medium"
-                                    style="width: 1171px"
                                     type="textarea">
                                 </el-input>
                             </el-form-item>
@@ -171,12 +169,13 @@
                                     <template v-slot="{row}">
                                         <el-input-number
                                             v-model="row.planQty"
-                                            :min="0"
                                             controls-position="right"
-                                            size="mini"></el-input-number>
+                                            :min="0"
+                                            size="mini">
+                                        </el-input-number>
                                     </template>
                                 </el-table-column>
-                                <el-table-column :align="'left'" prop="生产批次">
+                                <el-table-column width="152" :align="'left'" prop="生产批次">
                                     <template slot="header">
                                         <span>生产批次</span>
                                     </template>
@@ -267,6 +266,7 @@ export default {
     },
     data() {
         return {
+            planQty: 0,
             form: {
                 params: {
                     billTypeCd: '',
@@ -359,9 +359,10 @@ export default {
             };
         },
         initializeData: function () {
-            this.table.data = JSON.parse(this.receiveLogs);
+            let data = JSON.parse(this.receiveLogs);
+            console.log(this.table.data);
             let i = 1;
-            this.table.data.forEach(row => {
+            data.forEach(row => {
                 row.soLineNo = i++ * 10;
                 row.sku = {
                     skuId: row.skuId,
@@ -372,8 +373,10 @@ export default {
                 row.planQty = row.qty;
                 row.umCode = row.wsuCode;
             })
+            this.table.data = data;
         },
         createRowObj() {
+            console.log("创建了");
             return {
                 lineNumber: '',
                 sku: {},
