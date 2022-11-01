@@ -99,6 +99,7 @@
                         <el-col>
                             <el-table
                                 ref="table"
+                                v-loading="tableLoding"
                                 :data="table.data"
                                 border
                                 size="mini">
@@ -139,9 +140,7 @@
                                     <template v-slot="{row}">
                                         <nodes-sku
                                             v-model="row.sku"
-                                            placement="top"
-                                            style="width: 170px;"
-                                            @selectValChange="onChangeSku(row)">
+                                            style="width: 170px;">
                                         </nodes-sku>
                                     </template>
                                 </el-table-column>
@@ -257,7 +256,7 @@
                                     <template slot="header">
                                         <span>操作</span>
                                     </template>
-                                    <template slot-scope="scope">
+                                    <template v-slot="scope">
                                         <el-button
                                             size="small"
                                             type="text"
@@ -306,9 +305,6 @@ import NodesSkuUm from "@/components/wms/select/NodesSkuUm";
 import NodesSkuSpec from "@/components/wms/select/NodesSkuSpec";
 
 export default {
-    props: {
-        receiveId: {type: String},
-    },
     name: "edit",
     components: {
         NodesSkuSpec, NodesSkuUm, NodesOwner,
@@ -318,7 +314,6 @@ export default {
     mixins: [editDetailMixin],
     data() {
         return {
-            refresh: true,
             form: {
                 params: {
                     editReceiveHeaderRequest: {
@@ -354,16 +349,9 @@ export default {
                         }
                     ],
                 }
-            }
+            },
+            tableLoding: false,
         }
-    },
-    watch: {
-        receiveId() {
-            this.getTableData()
-        }
-    },
-    created() {
-        this.getTableData();
     },
     methods: {
         // 过滤空白行
@@ -376,19 +364,20 @@ export default {
                 && row.planQty === 0
             );
         },
-        getTableData() {
-            if (func.isEmpty(this.receiveId)) {
+        async initTableData() {
+            if (func.isEmpty(this.id)) {
                 return;
             }
             let skuUmSelectQuery = {
-                receiveId: this.receiveId
+                receiveId: this.id
             };
-            getEditReceiveById(skuUmSelectQuery)
-                .then((res) => {
-                    let pageObj = res.data.data;
-                    this.form.params.editReceiveHeaderRequest = pageObj.receiveHeaderResponse;
-                    this.table.data = pageObj.receiveDetailResponseList;
-                })
+            this.tableLoding = true;
+            await getEditReceiveById(skuUmSelectQuery).then((res) => {
+                let pageObj = res.data.data;
+                this.form.params.editReceiveHeaderRequest = pageObj.receiveHeaderResponse;
+                this.table.data = pageObj.receiveDetailResponseList;
+            })
+            this.tableLoding = false;
         },
         getDescriptor() {
             const skuErrorMsg = '请选择物品编码';
@@ -416,9 +405,6 @@ export default {
                 skuLot6: '',
                 skuLot8: '',
             }
-        },
-        onChangeSku(row) {
-
         },
         deleteRow(index, rows) {
             this.$confirm("确定删除当前行？", {

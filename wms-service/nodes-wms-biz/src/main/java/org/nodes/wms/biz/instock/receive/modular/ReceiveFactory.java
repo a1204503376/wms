@@ -110,7 +110,7 @@ public class ReceiveFactory {
 		ReceiveDetail receiveDetail = new ReceiveDetail();
 		//设置明细表收货单id
 		receiveDetail.setReceiveId(receiveHeader.getReceiveId());
-		//  设置订单行号
+		// 设置订单行号
 		receiveDetail.setLineNo(newReceiveDetailRequest.getLineNumber());
 		//设置物料id
 		receiveDetail.setSkuId(sku.getSkuId());
@@ -143,7 +143,7 @@ public class ReceiveFactory {
 		//设置层级
 		receiveDetail.setSkuLevel(skuPackageDetail.getSkuLevel());
 		//设置规格
-		receiveDetail.setSkuSpec(sku.getSkuSpec());
+		receiveDetail.setSkuSpec(newReceiveDetailRequest.getSku().getSkuSpec());
 		//设置库房id
 		receiveDetail.setWhId(receiveHeader.getWhId());
 		//设置库房编码
@@ -155,7 +155,7 @@ public class ReceiveFactory {
 		//设置生产批次
 		receiveDetail.setSkuLot1(newReceiveDetailRequest.getSkuLot1());
 		// 设置规格
-		receiveDetail.setSkuLot2(newReceiveDetailRequest.getSkuSpec());
+		receiveDetail.setSkuLot2(newReceiveDetailRequest.getSku().getSkuSpec());
 		// 归还单需要设置入库日期
 		if (WmsAppConstant.BILL_TYPE_RETURN.equals(receiveHeader.getBillTypeCd())) {
 			receiveDetail.setSkuLot3(newReceiveDetailRequest.getSkuLot3());

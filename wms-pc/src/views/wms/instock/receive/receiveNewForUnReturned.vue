@@ -165,7 +165,7 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <nodes-sku-spec
-                                            v-model="row.skuSpec"
+                                            v-model="row.sku.skuSpec"
                                             :disabled="true"
                                             :sku="row.sku">
                                         </nodes-sku-spec>
@@ -346,18 +346,15 @@ export default {
     methods: {
         initializeData() {
             let data = JSON.parse(this.unReturnedData);
-            let i = 1;
             data.forEach(row => {
-                row.lineNumber = i * 10;
                 row.sku = {
                     skuId: row.skuId,
                     skuCode: row.skuCode,
                     skuName: row.skuName,
+                    skuSpec: row.skuLot2
                 };
-                row.skuSpec = row.skuLot2;
                 row.planQty = row.noReturnQty;
                 row.umCode = row.wsuCode;
-                i++;
             })
             this.table.data = data;
         },
@@ -374,7 +371,7 @@ export default {
             return !(func.isEmpty(row.sku.skuId)
                 && func.isEmpty(row.sku.skuCode)
                 && func.isEmpty(row.sku.skuName)
-                && func.isEmpty(row.skuSpec)
+                && func.isEmpty(row.sku.skuSpec)
                 && row.planQty === 0);
         },
         getDescriptor() {
@@ -387,12 +384,8 @@ export default {
                         skuId: {required: true, message: skuErrorMsg},
                         skuCode: {required: true, message: skuErrorMsg},
                         skuName: {required: true, message: skuErrorMsg},
+                        skuSpec: {required: true, message: skuErrorMsg},
                     }
-                },
-                skuSpec: {
-                    type: 'string',
-                    required: true,
-                    message: '物品规格不能为空'
                 },
                 umCode: {
                     type: 'string',
@@ -413,11 +406,11 @@ export default {
                     skuId: '',
                     skuCode: '',
                     skuName: '',
+                    skuSpec: '',
                 },
                 umCode: '',
                 planQty: 0,
                 remark: '',
-                skuSpec: '',
                 skuLot1: '',
                 skuLot4: '',
                 skuLot5: '',

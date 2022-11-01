@@ -100,7 +100,7 @@ export default [
                 component: () => import('@/views/wms/instock/receive/receiveNew')
             },
             {
-                path: 'edit/:receiveId',
+                path: 'edit/:id',
                 name: '编辑收货单',
                 props: true,
                 component: () => import('@/views/wms/instock/receive/receiveEdit')

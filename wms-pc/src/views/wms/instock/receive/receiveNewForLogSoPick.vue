@@ -120,6 +120,21 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
+                                    width="125"
+                                    prop="skuSpec">
+                                    <template slot="header">
+                                        <span class="d-table-header-required">规格</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <nodes-sku-spec
+                                            v-model="row.sku.skuSpec"
+                                            :sku="row.sku"
+                                            :disabled="true"
+                                            size=mini>
+                                        </nodes-sku-spec>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
                                     prop="planQty"
                                     width="152">
                                     <template slot="header">
@@ -130,8 +145,8 @@
                                             v-model="row.planQty"
                                             :min="0"
                                             controls-position="right"
-                                            size="mini"
-                                        ></el-input-number>
+                                            size="mini">
+                                        </el-input-number>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -145,20 +160,6 @@
                                             v-model="row.umCode"
                                             :disabled="true">
                                         </nodes-sku-um>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    prop="skuSpec">
-                                    <template slot="header">
-                                        <span class="d-table-header-required">规格</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <nodes-sku-spec
-                                            v-model="row.skuSpec"
-                                            :sku="row.sku"
-                                            :disabled="true"
-                                            size=mini>
-                                        </nodes-sku-spec>
                                     </template>
                                 </el-table-column>
                                 <el-table-column width="130">
@@ -320,7 +321,7 @@ export default {
             }
         }
     },
-    created() {
+    mounted() {
         this.initializeData();
     },
     watch: {
@@ -334,6 +335,7 @@ export default {
             return !(func.isEmpty(row.sku.skuId)
                 && func.isEmpty(row.sku.skuCode)
                 && func.isEmpty(row.sku.skuName)
+                && func.isEmpty(row.sku.skuSpec)
                 && row.planQty === 0
             );
         },
@@ -346,7 +348,8 @@ export default {
                     fields: {
                         skuId: {required: true, message: skuErrorMsg},
                         skuCode: {required: true, message: skuErrorMsg},
-                        skuName: {required: true, message: skuErrorMsg}
+                        skuName: {required: true, message: skuErrorMsg},
+                        skuSpec: {required: true, message: skuErrorMsg}
                     }
                 },
                 planQty: {type: 'Number', validator: (rule, value) => value > 0, message: '计划数量不能为0'}
@@ -354,18 +357,15 @@ export default {
         },
         initializeData() {
             this.table.data = JSON.parse(this.logSoPicks);
-            let i = 1;
             this.table.data.forEach(row => {
-                row.lineNumber = i * 10;
                 row.sku = {
                     skuId: row.skuId,
                     skuCode: row.skuCode,
                     skuName: row.skuName,
+                    skuSpec: row.skuLot2,
                 };
-                row.skuSpec = row.skuLot2,
                 row.planQty = row.pickRealQty;
                 row.umCode = row.wsuCode;
-                i++;
             })
         },
         createRowObj() {
@@ -375,9 +375,9 @@ export default {
                     skuId: '',
                     skuCode: '',
                     skuName: '',
+                    skuSpec: '',
                 },
                 umCode: '',
-                skuSpec: '',
                 planQty: 0,
                 remark: '',
                 skuLot1: '',
@@ -411,7 +411,6 @@ export default {
                     };
                 });
         },
-
     }
 }
 </script>
