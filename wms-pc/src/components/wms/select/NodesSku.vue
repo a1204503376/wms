@@ -4,6 +4,7 @@
         :collapse-tags="true"
         :filterable="true"
         :remote="true"
+        :disabled="disabled"
         :remote-method="remoteMethod"
         :size="size"
         placeholder="请输入关键词"
@@ -61,7 +62,7 @@ import {getSkuSelectByPage} from "@/api/wms/basics/sku";
 import func from "@/util/func";
 
 export default {
-    name: "NodesSkuQuery",
+    name: "NodesSku",
     model: {
         prop: 'selectVal',
         event: 'selectValChange'
@@ -111,9 +112,12 @@ export default {
             key: '',
         }
     },
+    created() {
+
+    },
     watch: {
         // 1、监听外部给的默认值。 或者 2、手动选择后，赋选中(下面回传的sku对象)的值。
-        selectVal(selectVal) {
+        selectVal(selectVal, oldVal) {
             if (func.isNotEmpty(selectVal.skuCode)) {
                 this.val = selectVal.skuCode;
             } else {
@@ -122,9 +126,6 @@ export default {
                 this.tableData = [];
                 this.page.total = undefined;
                 this.options = [];
-                this.$emit('selectValChange', undefined); // 回传sku对象
-                this.$refs.select.blur(); //使组件去焦点，收起下拉选项
-                return;
             }
         }
     },
