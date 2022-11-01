@@ -19,6 +19,11 @@ export const editMixin = {
             return func.isStr(this.id) && func.isNotEmpty(this.id) && this.id !== '0';
         }
     },
+    watch: {
+        id() {
+            this.initTableData();
+        }
+    },
     created() {
         this.autoTableHeight();
         window.addEventListener('resize', this.autoTableHeight);
