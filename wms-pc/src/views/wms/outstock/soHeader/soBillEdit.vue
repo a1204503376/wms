@@ -15,10 +15,11 @@
                     <el-row type="flex">
                         <el-col :span="8">
                             <el-form-item label="发货单编码" prop="soBillNo">
-                                <el-input v-model="form.params.soBillNo"
-                                          :disabled="true"
-                                          size="medium"
-                                          style="width: 210px">
+                                <el-input
+                                    v-model="form.params.soBillNo"
+                                    :disabled="true"
+                                    size="medium"
+                                    style="width: 210px">
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -46,8 +47,8 @@
                                 <nodes-owner
                                     v-model="form.params.woId"
                                     :default-value="true"
-                                    size="medium"
-                                ></nodes-owner>
+                                    size="medium">
+                                </nodes-owner>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -114,11 +115,12 @@
                                 size="mini">
                                 <el-table-column width="53">
                                     <template slot="header">
-                                        <el-button circle
-                                                   icon="el-icon-plus"
-                                                   size="mini"
-                                                   type="primary"
-                                                   @click="onAddBatchRow">
+                                        <el-button
+                                            circle
+                                            icon="el-icon-plus"
+                                            size="mini"
+                                            type="primary"
+                                            @click="onAddBatchRow">
                                         </el-button>
                                     </template>
                                 </el-table-column>
@@ -131,8 +133,7 @@
                                     <template v-slot="scope">
                                         <nodes-line-number
                                             :index="scope.$index"
-                                            @change="(val)=>{ scope.row.lineNumber = val; }"
-                                        >
+                                            @change="(val)=>{ scope.row.lineNumber = val; }">
                                         </nodes-line-number>
                                     </template>
                                 </el-table-column>
@@ -196,8 +197,8 @@
                                             v-model="row.planQty"
                                             :min="0"
                                             controls-position="right"
-                                            size="mini"
-                                        ></el-input-number>
+                                            size="mini">
+                                        </el-input-number>
                                     </template>
                                 </el-table-column>
                                 <el-table-column :align="'left'" prop="skuLot1">
@@ -250,13 +251,11 @@
                     <el-button
                         :loading="loading"
                         type="primary"
-                        @click="onSubmit"
-                    >保 存
+                        @click="onSubmit">保 存
                     </el-button>
                     <el-button
                         :loading="loading"
-                        @click="onClose"
-                    >关 闭
+                        @click="onClose">关 闭
                     </el-button>
                 </el-row>
             </el-footer>
@@ -424,23 +423,6 @@ export default {
                 })
                 this.table.data = data.soDetailList;
             })
-        },
-        createRowObj() {
-            return {
-                soDetailId: '',
-                lineNumber: '',
-                sku: {
-                    skuId: '',
-                    skuCode: '',
-                    skuName: '',
-                    skuSpec: '',
-                },
-                umCode: '',
-                planQty: 0,
-                skuLot1: '',
-                skuLot4: '',
-                remark: '',
-            }
         },
         refreshTable() {
             this.initTableData();

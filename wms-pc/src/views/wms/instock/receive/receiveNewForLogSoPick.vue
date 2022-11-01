@@ -143,8 +143,8 @@
                                     <template v-slot="{row}">
                                         <el-input-number
                                             v-model="row.planQty"
-                                            :min="0"
                                             controls-position="right"
+                                            :min="0"
                                             size="mini">
                                         </el-input-number>
                                     </template>
@@ -356,8 +356,8 @@ export default {
             };
         },
         initializeData() {
-            this.table.data = JSON.parse(this.logSoPicks);
-            this.table.data.forEach(row => {
+            let data = JSON.parse(this.logSoPicks);
+            data.forEach(row => {
                 row.sku = {
                     skuId: row.skuId,
                     skuCode: row.skuCode,
@@ -367,6 +367,7 @@ export default {
                 row.planQty = row.pickRealQty;
                 row.umCode = row.wsuCode;
             })
+            this.table.data = data
         },
         createRowObj() {
             return {
