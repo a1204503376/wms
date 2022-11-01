@@ -206,13 +206,13 @@ export default [
         component: Layout,
         children: [
             {
-                path: 'add/:soBillId',
+                path: 'add/:id',
                 name: '新增发货单',
                 props: true,
                 component: () => import('@/views/wms/outstock/soHeader/soBillAdd')
             },
             {
-                path: 'edit/:soBillId',
+                path: 'edit/:id',
                 name: '编辑发货单',
                 props: true,
                 component: () => import('@/views/wms/outstock/soHeader/soBillEdit')

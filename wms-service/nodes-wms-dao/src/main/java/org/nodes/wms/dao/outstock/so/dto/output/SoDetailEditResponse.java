@@ -40,11 +40,6 @@ public class SoDetailEditResponse implements Serializable {
 	private String umCode;
 
 	/**
-	 * 物品规格
-	 */
-	private String skuSpec;
-
-	/**
 	 * 计划数量
 	 */
 	private BigDecimal planQty;

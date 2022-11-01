@@ -158,7 +158,7 @@
                                     <template v-slot="{row}">
                                         <nodes-sku-spec
                                             :disabled="true"
-                                            v-model="row.skuSpec"
+                                            v-model="row.sku.skuSpec"
                                             :sku="row.sku"
                                             style="width: 100px">
                                         </nodes-sku-spec>
@@ -267,7 +267,6 @@ export default {
     },
     data() {
         return {
-            refresh: true,
             form: {
                 params: {
                     billTypeCd: '',
@@ -333,12 +332,13 @@ export default {
             return !(
                 (func.isEmpty(row.sku.skuId)
                     && func.isEmpty(row.sku.skuCode)
-                    && func.isEmpty(row.sku.skuName))
+                    && func.isEmpty(row.sku.skuName)
+                    && func.isEmpty(row.sku.skuSpec))
                 && row.planQty === 0
             );
         },
         getDescriptor() {
-            const skuErrorMsg = '请选择物品编码';
+            const skuErrorMsg = '请选择物品';
             return {
                 sku: {
                     type: 'object',
@@ -347,6 +347,7 @@ export default {
                         skuId: {required: true, message: skuErrorMsg},
                         skuCode: {required: true, message: skuErrorMsg},
                         skuName: {required: true, message: skuErrorMsg},
+                        skuSpec: {required: true, message: skuErrorMsg},
                     }
                 },
                 planQty: {
@@ -355,25 +356,21 @@ export default {
                     validator: (rule, value) => value > 0, message: '计划数量不能为0',
                     trigger: 'blur'
                 }
-
             };
         },
         initializeData: function () {
             this.table.data = JSON.parse(this.receiveLogs);
-            console.log(this.table.data);
             let i = 1;
             this.table.data.forEach(row => {
-                row.lineNumber = i * 10;
-                row.soLineNo = i * 10;
+                row.soLineNo = i++ * 10;
                 row.sku = {
                     skuId: row.skuId,
                     skuCode: row.skuCode,
-                    skuName: row.skuName
+                    skuName: row.skuName,
+                    skuSpec: row.skuLot2
                 };
                 row.planQty = row.qty;
                 row.umCode = row.wsuCode;
-                row.skuSpec = row.skuLot2;
-                i++;
             })
         },
         createRowObj() {
@@ -381,7 +378,6 @@ export default {
                 lineNumber: '',
                 sku: {},
                 umCode: '',
-                skuSpec: '',
                 planQty: 0,
                 remark: '',
                 skuLot1: '',
@@ -401,10 +397,22 @@ export default {
             })
         },
         submitFormParams() {
-            let parmas = this.form.params;
-            parmas.soDetailList = this.table.postData
-            parmas.customerId = parmas.customer.id;
-            return add(parmas)
+            let params = this.form.params;
+            params.soDetailList = this.table.postData.map((value) => {
+                return {
+                    soDetailId: value.soDetailId,
+                    soLineNo: value.lineNumber,
+                    skuId: value.sku.skuId,
+                    skuSpec: value.sku.skuSpec,
+                    umCode: value.umCode,
+                    planQty: value.planQty,
+                    skuLot1: value.skuLot1,
+                    skuLot4: value.skuLot4,
+                    remark: value.remark,
+                }
+            })
+            params.customerId = params.customer.id;
+            return add(params)
                 .then(res => {
                     return {
                         msg: res.data.msg,
