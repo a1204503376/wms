@@ -92,8 +92,8 @@
                         <el-table-column v-if="!column.hide" :key="index" min-width="150" show-overflow-tooltip
                             v-bind="column">
                             <template v-if="column.prop === 'soBillNo'" v-slot="scope">
-                                <el-link :underline="false" target="_blank" type="primary" @click="onView(scope.row)">{{
-                                scope.row.soBillNo }}
+                                <el-link :underline="false" target="_blank" type="primary" @click="onView(scope.row)">
+                                    {{ scope.row.soBillNo }}
                                 </el-link>
                             </template>
                         </el-table-column>
