@@ -26,6 +26,7 @@
                         <el-col :span="8">
                             <el-form-item label="单据类型" prop="billTypeCd">
                                 <nodes-bill-type
+                                    :filter-types="['RR']"
                                     v-model="form.params.newReceiveHeaderRequest.billTypeCd"
                                     io-type="I"
                                     size="medium">
