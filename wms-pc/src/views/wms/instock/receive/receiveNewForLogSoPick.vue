@@ -307,7 +307,8 @@ export default {
                         woId: '',
                         remark: '',
                     },
-                    newReceiveDetailRequestList: []
+                    newReceiveDetailRequestList: [],
+                    isFromLogSoPickOrLogNoReturn: true
                 },
                 rules: {
                     billTypeCd: [
