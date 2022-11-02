@@ -268,6 +268,10 @@ public class ProcessorServiceImpl implements ProcessorService {
     }
 
     private boolean hasJobTimeout(JobQueue jobQueue, Date now) {
+        if (nodesConfig.getJobTimeout() <= 0){
+            return false;
+        }
+
         return jobQueue.getBeginTime() != null
                 && DateUtils.differenceMinutes(jobQueue.getBeginTime(), now) > nodesConfig.getJobTimeout();
     }
