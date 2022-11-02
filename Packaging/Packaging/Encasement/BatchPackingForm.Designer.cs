@@ -138,15 +138,13 @@
             // 
             // cbxBox
             // 
-            this.cbxBox.EditValue = "A";
+            this.cbxBox.EditValue = "B";
             this.cbxBox.Location = new System.Drawing.Point(94, 12);
             this.cbxBox.Name = "cbxBox";
             this.cbxBox.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.cbxBox.Properties.Items.AddRange(new object[] {
-            "A",
             "B",
-            "C",
             "D"});
             this.cbxBox.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             this.cbxBox.Size = new System.Drawing.Size(304, 24);
@@ -189,7 +187,7 @@
             // txtPrintNumber
             // 
             this.txtPrintNumber.EditValue = new decimal(new int[] {
-            2,
+            3,
             0,
             0,
             0});

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using Flurl;
@@ -45,19 +46,25 @@ namespace Packaging.Common
             throw new ApplicationException("登录WMS失败");
         }
 
-        public static string GetBoxNumber(string lpnTypeCode)
+        public static string GetBoxNumber(string lpnTypeCode,IEnumerable<string> skuNameList,string skuSpec)
         {
-            return GetBoxNumber(lpnTypeCode, string.Empty, string.Empty);
+            // 批次号装箱，多个物品名称用英文逗号拼接发送给wms
+            var skuNameListStr = string.Join(Constants.DefaultSeparator, skuNameList);
+            Serilog.Log.Debug("批次号装箱请求WMS获取箱号参数，lpnTypeCode={lpnTypeCode},skuNames={skuNameListStr},skuSpec={skuSpec}",
+                lpnTypeCode,
+                skuNameListStr, 
+                skuSpec);
+            return GetBoxNumber(lpnTypeCode, skuNameListStr, skuSpec);
         }
 
-        public static string GetBoxNumber(string lpnTypeCode, string skuName, string spec)
+        public static string GetBoxNumber(string lpnTypeCode, string skuName, string skuSpec)
         {
             var result = $"{WmsUrl}/wms/scheduling/generateBoxCode"
                 .SetQueryParams(new
                 {
                     lpnTypeCode,
                     skuName,
-                    spec
+                    spec = skuSpec
                 })
                 .GetAsync()
                 .ReceiveJson()

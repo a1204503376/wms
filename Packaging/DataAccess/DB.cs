@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Configuration;
 using System.Diagnostics;
+using System.Text;
+using DataAccess.Common;
 using FreeSql;
 using FreeSql.Aop;
 using FreeSql.Internal;
+using NLog;
 
 namespace DataAccess
 {
@@ -11,23 +14,25 @@ namespace DataAccess
     {
         private static readonly Lazy<IFreeSql> MySqlLazy = new Lazy<IFreeSql>(() =>
         {
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+
             var freeSql = new FreeSqlBuilder()
                 .UseConnectionString(DataType.SqlServer,
                     ConfigurationManager.ConnectionStrings["MySqlConnectionString"].ConnectionString,
                     typeof(FreeSql.MySql.MySqlProvider<>))
-                .UseAutoSyncStructure(Convert.ToBoolean(ConfigurationManager.AppSettings["UseAutoSyncStructure"]))
+                .UseAutoSyncStructure(false)
                 .UseNameConvert(NameConvertType.PascalCaseToUnderscoreWithLower)
                 .UseMonitorCommand(
                     //监听SQL命令对象，在执行前
                     cmd =>
                     {
-                        Trace.WriteLine(cmd.CommandText);
-                        // LoggerHelper.Info(cmd.CommandText);
+                        // Trace.WriteLine(cmd.CommandText);
+                        logger.Info(cmd.CommandText);
                     },
                     //监听SQL命令对象，在执行后
                     (cmd, traceLog) =>
                     {
-                        Console.WriteLine(traceLog);
+                        logger.Info(traceLog);
                     })
                 .UseLazyLoading(false)
                 .Build();

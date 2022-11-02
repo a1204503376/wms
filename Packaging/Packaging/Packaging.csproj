@@ -158,6 +158,7 @@
     <Compile Include="Encasement\CartonLabelForm.Designer.cs">
       <DependentUpon>CartonLabelForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Encasement\BatchCommandHandler.cs" />
     <Compile Include="Encasement\ImportForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -291,9 +291,7 @@
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.cbxBox.Properties.Items.AddRange(new object[] {
             "A",
-            "B",
-            "C",
-            "D"});
+            "C"});
             this.cbxBox.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             this.cbxBox.Size = new System.Drawing.Size(113, 24);
             this.cbxBox.StyleController = this.layoutControl1;
@@ -303,7 +301,7 @@
             // txtPrintNumber
             // 
             this.txtPrintNumber.EditValue = new decimal(new int[] {
-            2,
+            0,
             0,
             0,
             0});
@@ -913,6 +911,7 @@
             this.Controls.Add(this.layoutControl1);
             this.Name = "SerialNumberPackingForm";
             this.Text = "按序列号装箱";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SerialNumberPackingForm_FormClosing);
             this.Load += new System.EventHandler(this.SerialNumberPackingForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
