@@ -235,14 +235,6 @@ namespace Packaging.Encasement
                 e.ErrorText = "请输入大于0的数量";
                 return;
             }
-            
-            var gridDataSource = GetGridDataSource();
-            if (gridDataSource.Count(d => d.Sku.SkuId == sku.SkuId && d.SkuLot1 == skuLot1.ToString())>1)
-            {
-                e.Valid = false;
-                e.ErrorText = "当前输入的物品批次已存在";
-                return;
-            }
 
             ResetPrintEnable();
         }

@@ -81,7 +81,9 @@ namespace Packaging.Encasement
                 return;
             }
 
-            var boxNumber = WmsApiHelper.GetBoxNumber(printDto.BoxType);
+            var skuNameList = printDto.SkuDetails.Select(d => d.SkuName).Distinct().ToList();
+
+            var boxNumber = WmsApiHelper.GetBoxNumber(printDto.BoxType, skuNameList,printDto.Model);
 
             foreach (var item in _batchPrintDtoList)
             {

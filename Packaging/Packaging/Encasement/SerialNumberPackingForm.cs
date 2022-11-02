@@ -24,6 +24,7 @@ namespace Packaging.Encasement
     [ModuleDefine(moduleId:Constants.SerialFormId)]
     public partial class SerialNumberPackingForm : XtraForm
     {
+        private bool _closeingFlag = false;
         private string _boxNumber;
         private bool _flagCollect;
         private List<string> _packingSequenctNumberPairs;
@@ -42,6 +43,7 @@ namespace Packaging.Encasement
             SetSluSpeedClassDataSource();
             GetSequenceNumberPairsData();
             gridControl1.DataSource = _packingSerialDetails;
+            txtPrintNumber.EditValue = ConfigurationManager.AppSettings["Copies"];
         }
 
         private void GetSequenceNumberPairsData()
@@ -197,6 +199,10 @@ namespace Packaging.Encasement
 
         private void txtSerialNumber_Leave(object sender, EventArgs e)
         {
+            if (_closeingFlag)
+            {
+                return;
+            }
             if (string.IsNullOrWhiteSpace(luModel.Text)
                 || string.IsNullOrWhiteSpace(txtSerialNumber.Text))
             {
@@ -853,6 +859,11 @@ namespace Packaging.Encasement
         {
             _packingSerialDetails = packingSerialDetails;
             gridControl1.DataSource = _packingSerialDetails;
+        }
+
+        private void SerialNumberPackingForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _closeingFlag = true;
         }
     }
 }
