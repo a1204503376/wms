@@ -97,12 +97,14 @@
                         <el-table-column v-if="!column.hide" :key="index" show-overflow-tooltip v-bind="column"
                             width="150">
                             <template v-if="column.prop === 'taskState'" v-slot="scope">
-                                <el-tag
-                                    v-if="scope.row.taskState === '已下发' || scope.row.taskState === '开始执行' || scope.row.taskState === 'AGV已接收'"
-                                    type="success">{{ scope.row.taskState }}</el-tag>
-                                <el-tag
-                                    v-else-if="scope.row.taskState === '已完成' ||scope.row.taskState === 'AGV完成' || scope.row.taskState === '已取消'"
-                                    type="info">{{ scope.row.taskState }}</el-tag>
+                                <el-tag v-if="scope.row.taskState === '已下发'
+                                || scope.row.taskState === '开始执行'
+                                || scope.row.taskState === 'AGV已接收'
+                                || scope.row.taskState === 'AGV已指派'" type="success">{{ scope.row.taskState }}
+                                </el-tag>
+                                <el-tag v-else-if="scope.row.taskState === '已完成'
+                                || scope.row.taskState === 'AGV完成'
+                                || scope.row.taskState === '已取消'" type="info">{{ scope.row.taskState }}</el-tag>
                                 <el-tag v-else-if="scope.row.taskState === '未下发'" type="warning">{{ scope.row.taskState
                                 }}
                                 </el-tag>
@@ -174,7 +176,7 @@ export default {
                     toLocCode: '',
                     boxCode: '',
                     taskTypeCdList: [],
-                    taskStateList: [1, 2, 3, 4, 8], // 默认未下发、已下发、开始执行、异常中断中、AGV已接收
+                    taskStateList: [1, 2, 3, 4, 8, 9], // 默认未下发、已下发、开始执行、异常中断中、AGV已接收、AGV已指派
                     skuIdList: [],
                 }
             },
@@ -256,13 +258,18 @@ export default {
                         sortable: "custom",
                     },
                     {
+                        prop: 'allotTime',
+                        label: '任务下发到调度',
+                        sortable: "custom",
+                    },
+                    {
                         prop: 'confirmDate',
                         label: 'AGV接收时间',
                         sortable: "custom",
                     },
                     {
-                        prop: 'allotTime',
-                        label: '任务下发时间',
+                        prop: 'udf1',
+                        label: 'AGV指派时间',
                         sortable: "custom",
                     },
                     {

@@ -16,7 +16,7 @@ public class NewReceiveDetailRequest implements Serializable {
 	/**
 	 * 订单行号
 	 */
-	private String  lineNumber;
+	private String lineNumber;
 	/**
 	 * 物品下拉框对象
 	 */
@@ -62,13 +62,25 @@ public class NewReceiveDetailRequest implements Serializable {
 	/**
 	 * 摩擦块批次
 	 */
-	private String  skuLot6;
+	private String skuLot6;
 	/**
 	 * 摩擦块批次
 	 */
-	private String  skuLot7;
+	private String skuLot7;
 	/**
 	 * 适用速度等级
 	 */
 	private String skuLot8;
+	/**
+	 * 箱码
+	 */
+	private String boxCode;
+	/**
+	 * Lpn
+	 */
+	private String lpnCode;
+	/**
+	 * 序列号
+	 */
+	private String snCode;
 }

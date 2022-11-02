@@ -141,9 +141,7 @@
                                     <template v-slot="{row}">
                                         <nodes-sku
                                             v-model="row.sku"
-                                            placement="top"
-                                            style="width: 170px;"
-                                            @selectValChange="onChangeSku(row)">
+                                            style="width: 170px;">
                                         </nodes-sku>
                                     </template>
                                 </el-table-column>
@@ -193,7 +191,7 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <nodes-sku-spec
-                                            v-model="row.skuSpec"
+                                            v-model="row.sku.skuSpec"
                                             :sku="row.sku"
                                             size=mini>
                                         </nodes-sku-spec>
@@ -371,8 +369,8 @@ export default {
             return !(
                 (func.isEmpty(row.sku.skuId)
                     && func.isEmpty(row.sku.skuCode)
-                    && func.isEmpty(row.sku.skuName))
-                    // && func.isEmpty(row.sku.skuSpec))
+                    && func.isEmpty(row.sku.skuName)
+                    && func.isEmpty(row.sku.skuSpec))
                 && row.planQty === 0
             );
         },
@@ -386,7 +384,7 @@ export default {
                         skuId: {required: true, message: skuErrorMsg},
                         skuCode: {required: true, message: skuErrorMsg},
                         skuName: {required: true, message: skuErrorMsg},
-                        // skuSpec: {required: true, message: skuErrorMsg},
+                        skuSpec: {required: true, message: skuErrorMsg},
                     }
                 },
                 planQty: {type: 'Number', validator: (rule, value) => value > 0, message: '计划数量不能为0'}
@@ -399,11 +397,11 @@ export default {
                     skuId: '',
                     skuCode: '',
                     skuName: '',
+                    skuSpec: '',
                 },
                 umCode: '',
                 planQty: 0,
                 remark: '',
-                skuSpec: '',
                 skuLot1: '',
                 skuLot4: '',
                 skuLot5: '',
@@ -418,22 +416,7 @@ export default {
                 type: "warning",
             }).then(() => {
                 rows.splice(index, 1);
-                let a;
-                // for(a=index;a<rows.length;a++){
-                //     rows[a].lineNumber = rows[a].lineNumber -10
-                // }
             })
-
-        },
-        onChangeSku(row) {
-            if (row.sku.skuCode !== undefined) {
-                let skuCodeList = this.table.data.map((item) => item.sku.skuCode);
-                let skuCode = row.sku.skuCode;
-                if (skuCodeList.indexOf(skuCode) != skuCodeList.lastIndexOf(skuCode)) {
-                    row.sku = {},
-                        this.$message.error('物料编码' + skuCode + '重复');
-                }
-            }
         },
         submitFormParams() {
             this.form.params.newReceiveDetailRequestList = this.table.postData
@@ -450,7 +433,6 @@ export default {
                     };
                 });
         },
-
     }
 }
 </script>

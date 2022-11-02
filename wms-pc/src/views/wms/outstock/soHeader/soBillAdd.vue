@@ -154,6 +154,18 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
+                                <el-table-column prop="skuSpec" width="122">
+                                    <template slot="header">
+                                        <span class="d-table-header-required">物品规格</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <nodes-sku-spec
+                                            v-model="row.sku.skuSpec"
+                                            :sku="row.sku"
+                                            style="width: 100px">
+                                        </nodes-sku-spec>
+                                    </template>
+                                </el-table-column>
                                 <el-table-column prop="umCode" width="122">
                                     <template slot="header">
                                         <span class="d-table-header-required">计量单位</span>
@@ -164,18 +176,6 @@
                                             :sku="row.sku"
                                             style="width: 100px">
                                         </nodes-sku-um>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column prop="skuSpec" width="122">
-                                    <template slot="header">
-                                        <span class="d-table-header-required">物品规格</span>
-                                    </template>
-                                    <template v-slot="{row}">
-                                        <nodes-sku-spec
-                                            v-model="row.skuSpec"
-                                            :sku="row.sku"
-                                            style="width: 100px">
-                                        </nodes-sku-spec>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="planQty" width="152">
@@ -344,7 +344,7 @@ export default {
                 func.isEmpty(row.sku.skuId) &&
                 func.isEmpty(row.sku.skuCode) &&
                 func.isEmpty(row.sku.skuName) &&
-                func.isEmpty(row.skuSpec) &&
+                func.isEmpty(row.sku.skuSpec) &&
                 row.planQty === 0 &&
                 func.isEmpty(row.umCode)
             );
@@ -359,12 +359,8 @@ export default {
                         skuId: {required: true, message: skuErrorMsg},
                         skuCode: {required: true, message: skuErrorMsg},
                         skuName: {required: true, message: skuErrorMsg},
+                        skuSpec: {required: true, message: skuErrorMsg},
                     }
-                },
-                skuSpec: {
-                    type: 'string',
-                    required: true,
-                    message: '物品规格不能为空'
                 },
                 umCode: {
                     type: 'string',
@@ -385,10 +381,10 @@ export default {
                 sku: {
                     skuId: '',
                     skuCode: '',
-                    skuName: ''
+                    skuName: '',
+                    skuSpec: '',
                 },
                 umCode: '',
-                skuSpec: '',
                 planQty: 0,
                 skuLot1: '',
                 skuLot4: '',
@@ -411,7 +407,7 @@ export default {
                 return {
                     soLineNo: value.lineNumber,
                     skuId: value.sku.skuId,
-                    skuSpec: value.skuSpec,
+                    skuSpec: value.sku.skuSpec,
                     umCode: value.umCode,
                     planQty: value.planQty,
                     skuLot1: value.skuLot1,

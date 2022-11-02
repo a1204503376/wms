@@ -1,5 +1,6 @@
 package org.nodes.wms.dao.instock.receive.dto.input;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,4 +14,6 @@ public class NewReceiveRequest implements Serializable {
 	private static final long serialVersionUID = 676133696090864158L;
 	private NewReceiveHeaderRequest newReceiveHeaderRequest;
 	private List<NewReceiveDetailRequest> newReceiveDetailRequestList;
+	@JsonProperty("isFromLogSoPickOrLogNoReturn")
+	private boolean isFromLogSoPickOrLogNoReturn;
 }

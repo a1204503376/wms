@@ -15,10 +15,11 @@
                     <el-row type="flex">
                         <el-col :span="8">
                             <el-form-item label="发货单编码" prop="soBillNo">
-                                <el-input v-model="form.params.soBillNo"
-                                          :disabled="true"
-                                          size="medium"
-                                          style="width: 210px">
+                                <el-input
+                                    v-model="form.params.soBillNo"
+                                    :disabled="true"
+                                    size="medium"
+                                    style="width: 210px">
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -46,8 +47,8 @@
                                 <nodes-owner
                                     v-model="form.params.woId"
                                     :default-value="true"
-                                    size="medium"
-                                ></nodes-owner>
+                                    size="medium">
+                                </nodes-owner>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -114,11 +115,12 @@
                                 size="mini">
                                 <el-table-column width="53">
                                     <template slot="header">
-                                        <el-button circle
-                                                   icon="el-icon-plus"
-                                                   size="mini"
-                                                   type="primary"
-                                                   @click="onAddBatchRow">
+                                        <el-button
+                                            circle
+                                            icon="el-icon-plus"
+                                            size="mini"
+                                            type="primary"
+                                            @click="onAddBatchRow">
                                         </el-button>
                                     </template>
                                 </el-table-column>
@@ -131,8 +133,7 @@
                                     <template v-slot="scope">
                                         <nodes-line-number
                                             :index="scope.$index"
-                                            @change="(val)=>{ scope.row.lineNumber = val; }"
-                                        >
+                                            @change="(val)=>{ scope.row.lineNumber = val; }">
                                         </nodes-line-number>
                                     </template>
                                 </el-table-column>
@@ -181,7 +182,7 @@
                                     </template>
                                     <template v-slot="{row}">
                                         <nodes-sku-spec
-                                            v-model="row.skuSpec"
+                                            v-model="row.sku.skuSpec"
                                             :sku="row.sku"
                                             style="width: 100px">
                                         </nodes-sku-spec>
@@ -196,8 +197,8 @@
                                             v-model="row.planQty"
                                             :min="0"
                                             controls-position="right"
-                                            size="mini"
-                                        ></el-input-number>
+                                            size="mini">
+                                        </el-input-number>
                                     </template>
                                 </el-table-column>
                                 <el-table-column :align="'left'" prop="skuLot1">
@@ -250,13 +251,11 @@
                     <el-button
                         :loading="loading"
                         type="primary"
-                        @click="onSubmit"
-                    >保 存
+                        @click="onSubmit">保 存
                     </el-button>
                     <el-button
                         :loading="loading"
-                        @click="onClose"
-                    >关 闭
+                        @click="onClose">关 闭
                     </el-button>
                 </el-row>
             </el-footer>
@@ -287,13 +286,9 @@ export default {
         NodesBillType, NodesLineNumber, NodesSku,
     },
     mixins: [editDetailMixin],
-    props: {
-        soBillId: {type: String, required: true},
-    },
     data() {
         return {
             removeIdList: [],
-            filterTypes: ['RR'],
             form: {
                 params: {
                     soBillId: '',
@@ -354,11 +349,8 @@ export default {
             }
         }
     },
-    created() {
-        this.getDataSource();
-    },
     watch: {
-        soBillId() {
+        id() {
             this.refreshTable();
         }
     },
@@ -369,13 +361,13 @@ export default {
                 func.isEmpty(row.sku.skuId) &&
                 func.isEmpty(row.sku.skuCode) &&
                 func.isEmpty(row.sku.skuName) &&
-                func.isEmpty(row.skuSpec) &&
+                func.isEmpty(row.sku.skuSpec) &&
                 row.planQty === 0 &&
                 func.isEmpty(row.umCode)
             );
         },
         getDescriptor() {
-            const skuErrorMsg = '请选择物料';
+            const skuErrorMsg = '请选择物物品';
             return {
                 sku: {
                     type: 'object',
@@ -384,12 +376,8 @@ export default {
                         skuId: {required: true, message: skuErrorMsg},
                         skuCode: {required: true, message: skuErrorMsg},
                         skuName: {required: true, message: skuErrorMsg},
+                        skuSpec: {required: true, message: skuErrorMsg},
                     }
-                },
-                skuSpec: {
-                    type: 'string',
-                    required: true,
-                    message: '物品规格不能为空'
                 },
                 umCode: {
                     type: 'string',
@@ -414,45 +402,30 @@ export default {
                 rows.splice(index, 1)
             })
         },
-        getDataSource() {
-            if (func.isEmpty(this.soBillId)) {
+        initTableData() {
+            if (func.isEmpty(this.id)) {
                 return;
             }
-            detailByEdit(this.soBillId)
-                .then((res) => {
-                    let data = res.data.data;
-                    this.form.params = data.soHeader
-                    data.soDetailList.map(item => {
-                        return {
-                            soDetailId: item.soDetailId,
-                            lineNumber: item.soLineNo,
-                            sku: item.sku,
-                            umCode: item.umCode,
-                            skuSpec: item.skuSpec,
-                            planQty: item.planQty,
-                            skuLot1: item.skuLot1,
-                            skuLot4: item.skuLot4,
-                            remark: item.remark
-                        }
-                    })
-                    this.table.data = data.soDetailList;
+            detailByEdit(this.id).then((res) => {
+                let data = res.data.data;
+                this.form.params = data.soHeader
+                data.soDetailList.map(item => {
+                    return {
+                        soDetailId: item.soDetailId,
+                        lineNumber: item.soLineNo,
+                        sku: item.sku,
+                        umCode: item.umCode,
+                        planQty: item.planQty,
+                        skuLot1: item.skuLot1,
+                        skuLot4: item.skuLot4,
+                        remark: item.remark
+                    }
                 })
-        },
-        createRowObj() {
-            return {
-                soDetailId: '',
-                lineNumber: '',
-                sku: {},
-                umCode: '',
-                skuSpec: '',
-                planQty: 0,
-                skuLot1: '',
-                skuLot4: '',
-                remark: '',
-            }
+                this.table.data = data.soDetailList;
+            })
         },
         refreshTable() {
-            this.getDataSource();
+            this.initTableData();
         },
         submitFormParams() {
             let params = this.form.params;
@@ -461,7 +434,7 @@ export default {
                     soDetailId: value.soDetailId,
                     soLineNo: value.lineNumber,
                     skuId: value.sku.skuId,
-                    skuSpec: value.skuSpec,
+                    skuSpec: value.sku.skuSpec,
                     umCode: value.umCode,
                     planQty: value.planQty,
                     skuLot1: value.skuLot1,
@@ -469,21 +442,9 @@ export default {
                     remark: value.remark,
                 }
             })
-            let data = {
-                soBillId: params.soBillId,
-                soBillNo: params.soBillNo,
-                billTypeCd: params.billTypeCd,
-                whId: params.whId,
-                woId: params.woId,
-                customerId: params.customer.id,
-                contact: params.contact,
-                transportCode: params.transportCode,
-                soBillRemark: params.soBillRemark,
-                outstockType: params.outstockType,
-                removeIdList: this.removeIdList,
-                soDetailList: soDetailList,
-            }
-            return edit(data)
+            params.removeIdList = this.removeIdList;
+            params.soDetailList = soDetailList;
+            return edit(params)
                 .then(res => {
                     return {
                         msg: res.data.msg,

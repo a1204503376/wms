@@ -192,16 +192,13 @@ export const listMixin = {
             this.exportExcelSheet[0].tHeader.forEach((value, index) => {
                 let result = "";
                 let num = index <= 0 ? 1 : index + 1;//小于等于0是输出A
-                while(num > 0){
+                while (num > 0) {
                     let m = num % 26;
-                    if(m === 0){
+                    if (m === 0) {
                         m = 26;
                     }
                     result = String.fromCharCode(m + 64) + result;
-                    num = (num-m)/26;
-                    if (index === 27){
-                        debugger;
-                    }
+                    num = (num - m) / 26;
                 }
                 let cell = {
                     cell: result + '1', //表头 A1、B1、C1、D1......AA1、AB1、AC1、AD1......BA1、BB1......

@@ -25,7 +25,8 @@ public enum WmsTaskStateEnum implements BaseEnum {
 	AGV_COMPLETED(5, "AGV完成"),
 	COMPLETED(6, "已完成"),
 	CANCELED(7, "已取消"),
-	AGV_RECEIVED(8, "AGV已接收");
+	AGV_RECEIVED(8, "AGV已接收"),
+	AGV_ASSIGNED(9, "AGV已指派");
 
 	@EnumValue
 	private final Integer code;

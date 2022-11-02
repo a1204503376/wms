@@ -902,16 +902,17 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 			skuExportDTO.setSkuCode(sku.getSkuCode());
 			skuExportDTO.setSkuName(sku.getSkuName());
 			skuExportDTO.setSkuNameS(sku.getSkuNameS());
+			skuExportDTO.setSkuSpec(sku.getSkuSpec());
 			// 物品导出空指针异常
 			skuExportDTO.setAbc(DictCache.getValue(DictCodeConstant.LOC_ABC, sku.getAbc()));
-			skuExportDTO.setSkuGrossWeight(sku.getSkuGrossWeight().stripTrailingZeros().toPlainString());
-			skuExportDTO.setSkuNetWeight(sku.getSkuNetWeight().stripTrailingZeros().toPlainString());
-			skuExportDTO.setSkuTareWeight(sku.getSkuTareWeight().stripTrailingZeros().toPlainString());
-			skuExportDTO.setSkuVolume(sku.getSkuVolume().stripTrailingZeros().toPlainString());
-			skuExportDTO.setStorageType(DictCache.getValue(DictCodeConstant.INVENTORY_TYPE, sku.getSkuStorageType()));
+//			skuExportDTO.setSkuGrossWeight(sku.getSkuGrossWeight().stripTrailingZeros().toPlainString());
+//			skuExportDTO.setSkuNetWeight(sku.getSkuNetWeight().stripTrailingZeros().toPlainString());
+//			skuExportDTO.setSkuTareWeight(sku.getSkuTareWeight().stripTrailingZeros().toPlainString());
+//			skuExportDTO.setSkuVolume(sku.getSkuVolume().stripTrailingZeros().toPlainString());
+//			skuExportDTO.setStorageType(DictCache.getValue(DictCodeConstant.INVENTORY_TYPE, sku.getSkuStorageType()));
 			skuExportDTO.setRemarks(sku.getSkuRemark());
 			skuExportDTO.setSkuBarcodeList(sku.getSkuBarcodeList());
-			skuExportDTO.setShelfLife(sku.getQualityHours().toString());
+//			skuExportDTO.setShelfLife(sku.getQualityHours().toString());
 			// 当前物品的替代物品集合
 			List<SkuReplace> skuReplaces = skuReplaceList.stream()
 					.filter(skuReplace -> skuReplace.getSkuId().equals(sku.getSkuId())).collect(Collectors.toList());
@@ -952,7 +953,7 @@ public class SkuServiceImpl<M extends SkuMapper, T extends Sku>
 				skuExportDTO.setSkuLotVal(skuLotVal.getSkuLotValName());
 			}
 			// 是否序列号物品
-			skuExportDTO.setIsSn(SnEnum.YES.getIndex() == sku.getIsSn() ? SnEnum.YES.getName() : SnEnum.NO.getName());
+			skuExportDTO.setIsSn(SnEnum.YES.getIndex().equals(sku.getIsSn()) ? SnEnum.YES.getName() : SnEnum.NO.getName());
 
 			// 替代物品与供应商集合的最大长度
 			int maxLength = 1;

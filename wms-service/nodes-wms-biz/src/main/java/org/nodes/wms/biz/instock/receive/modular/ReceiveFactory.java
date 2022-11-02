@@ -110,7 +110,7 @@ public class ReceiveFactory {
 		ReceiveDetail receiveDetail = new ReceiveDetail();
 		//设置明细表收货单id
 		receiveDetail.setReceiveId(receiveHeader.getReceiveId());
-		//  设置订单行号
+		// 设置订单行号
 		receiveDetail.setLineNo(newReceiveDetailRequest.getLineNumber());
 		//设置物料id
 		receiveDetail.setSkuId(sku.getSkuId());
@@ -143,7 +143,7 @@ public class ReceiveFactory {
 		//设置层级
 		receiveDetail.setSkuLevel(skuPackageDetail.getSkuLevel());
 		//设置规格
-		receiveDetail.setSkuSpec(sku.getSkuSpec());
+		receiveDetail.setSkuSpec(newReceiveDetailRequest.getSku().getSkuSpec());
 		//设置库房id
 		receiveDetail.setWhId(receiveHeader.getWhId());
 		//设置库房编码
@@ -155,7 +155,7 @@ public class ReceiveFactory {
 		//设置生产批次
 		receiveDetail.setSkuLot1(newReceiveDetailRequest.getSkuLot1());
 		// 设置规格
-		receiveDetail.setSkuLot2(newReceiveDetailRequest.getSkuSpec());
+		receiveDetail.setSkuLot2(newReceiveDetailRequest.getSku().getSkuSpec());
 		// 归还单需要设置入库日期
 		if (WmsAppConstant.BILL_TYPE_RETURN.equals(receiveHeader.getBillTypeCd())) {
 			receiveDetail.setSkuLot3(newReceiveDetailRequest.getSkuLot3());
@@ -170,6 +170,8 @@ public class ReceiveFactory {
 		receiveDetail.setSkuLot7(newReceiveDetailRequest.getSkuLot7());
 		//设置适用速度等级
 		receiveDetail.setSkuLot8(newReceiveDetailRequest.getSkuLot8());
+		//设置序列号
+		receiveDetail.setSnCode(newReceiveDetailRequest.getSnCode());
 		return receiveDetail;
 	}
 
@@ -450,5 +452,14 @@ public class ReceiveFactory {
 		receiveDetail.setSkuLot1(request.getSkuLot1());
 		receiveDetail.setSkuLot2(request.getSkuLot2());
 		return receiveDetail;
+	}
+
+	public ReceiveDetailLpn createReceiveDetailLpn(ReceiveDetail receiveDetail, NewReceiveDetailRequest newReceiveDetailRequest) {
+		ReceiveDetailLpn receiveDetailLpn = new ReceiveDetailLpn();
+		Func.copy(receiveDetail, receiveDetailLpn);
+		receiveDetailLpn.setDetailStatus(ReceiveDetailStatusEnum.NOT_RECEIPT);
+		receiveDetailLpn.setBoxCode(newReceiveDetailRequest.getBoxCode());
+		receiveDetailLpn.setLpnCode(newReceiveDetailRequest.getLpnCode());
+		return receiveDetailLpn;
 	}
 }
