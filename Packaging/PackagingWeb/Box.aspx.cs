@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using DataAccess.Common;
@@ -9,6 +10,8 @@ using DataAccess.Wms;
 using DevExpress.XtraPrinting;
 using DevExpress.XtraReports.UI;
 using PackagingWeb.PredefinedReports;
+using System.Web.Hosting;
+
 
 namespace PackagingWeb
 {
@@ -80,7 +83,7 @@ namespace PackagingWeb
                         SkuName = sku.SkuName,
                         SkuNameS = sku.SkuNameS,
                         SkuSpec = sku.SkuSpec,
-                        WspName = wmsStock.WsuCode
+                        WspName = sku.WspName
                     },
                     SkuSpec = wmsStock.SkuLot2,
                     SkuLot1 = wmsStock.SkuLot1,
@@ -228,7 +231,7 @@ namespace PackagingWeb
             if (string.IsNullOrWhiteSpace(copies)
                 || !int.TryParse(copies, out var _))
             {
-                copies = "2";
+                copies = ConfigurationManager.AppSettings["Copies"];
             }
 
             var boxPrintRequest = new BoxPrintRequest

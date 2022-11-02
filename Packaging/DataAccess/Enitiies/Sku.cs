@@ -19,7 +19,7 @@ namespace DataAccess.Enitiies
         /// </summary>
         public string WspName { get; set; }
         /// <summary>
-        /// 产品序列号
+        /// 产品标识代码
         /// </summary>
         public string SkuBarcodeList { get; set; }
         /// <summary>
