@@ -208,7 +208,7 @@ public class StockBizImpl implements StockBiz {
 		BigDecimal cancelQty = cancelReceiveLog.getQty().abs();
 		StockUtil.pickQty(stock, cancelQty, "撤销收货下架库存");
 		stockDao.updateStock(stock.getStockId(), stock.getStockQty(),
-			stock.getStayStockQty(), stock.getPickQty(), stock.getOccupyQty(), null, null);
+			stock.getStayStockQty(), stock.getPickQty(), stock.getOccupyQty(), null, stock.getLastOutTime());
 		// 生成库存日志
 		StockLog stockLog = createAndSaveStockLog(type, stock, cancelReceiveLog, "撤销收货");
 		// 修改序列号状态和生成序列号日志
@@ -733,6 +733,7 @@ public class StockBizImpl implements StockBiz {
 
 		// 下架原库存并释放占用
 		sourceStock.setPickQty(sourceStock.getStockQty());
+		sourceStock.setLastOutTime(LocalDateTime.now());
 		sourceStock.setOccupyQty(BigDecimal.ZERO);
 		stockDao.updateStock(sourceStock.getStockId(), sourceStock.getStockQty(), sourceStock.getStayStockQty(),
 			sourceStock.getPickQty(), sourceStock.getOccupyQty(), null, LocalDateTime.now());
