@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  */
 @Data
 @TableName("log_lend_return")
-public class LogLendReturn  extends SkuLotBaseEntity {
+public class LogLendReturn extends SkuLotBaseEntity {
 
 	private static final long serialVersionUID = 8582461649474119326L;
 
@@ -102,7 +102,7 @@ public class LogLendReturn  extends SkuLotBaseEntity {
 	/**
 	 * 货主
 	 */
-	private String woId;
+	private Long woId;
 
 	/**
 	 * 库房id
