@@ -44,11 +44,22 @@
                     </el-row>
                     <el-row type="flex">
                         <el-col :span="8">
-                            <el-form-item label="客户" prop="customer">
+                            <el-form-item
+                                :label="isLend ? '借用人' : '客户'"
+                                :prop="isLend ? 'contact' : 'customer'">
                                 <nodes-customer
+                                    v-if="!isLend"
                                     v-model="form.params.customer"
                                     size="medium">
                                 </nodes-customer>
+                                <el-input
+                                    v-else
+                                    v-model="form.params.contact"
+                                    :clearable="true"
+                                    placeholder="请输入借用人"
+                                    size="medium"
+                                    style="width: 210px">
+                                </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -266,13 +277,13 @@ export default {
     },
     data() {
         return {
-            planQty: 0,
             form: {
                 params: {
                     billTypeCd: '',
                     whId: '',
                     woId: '',
-                    customer: {},
+                    customer: null,
+                    contact: null,
                     transportCode: '',
                     outstockType: '',
                     soBillRemark: '',
@@ -300,6 +311,13 @@ export default {
                             trigger: 'change'
                         }
                     ],
+                    contact: [
+                        {
+                            required: true,
+                            message: '请输入借用人',
+                            trigger: 'blur'
+                        }
+                    ],
                     transportCode: [
                         {
                             required: true,
@@ -314,8 +332,9 @@ export default {
                             trigger: 'change'
                         }
                     ],
-                }
-            }
+                },
+            },
+            isLend: false,
         }
     },
     created() {
@@ -324,6 +343,15 @@ export default {
     watch: {
         receiveLogs() {
             this.initializeData();
+        },
+        'form.params.billTypeCd'() {
+            let isLend = this.form.params.billTypeCd === this.$commonConst.BILL_TYPE_LEND;
+            if (isLend) {
+                this.form.params.customer = null;
+            } else {
+                this.form.params.contact = null;
+            }
+            this.isLend = isLend;
         }
     },
     methods: {
@@ -360,7 +388,6 @@ export default {
         },
         initializeData: function () {
             let data = JSON.parse(this.receiveLogs);
-            console.log(this.table.data);
             let i = 1;
             data.forEach(row => {
                 row.soLineNo = i++ * 10;
@@ -376,7 +403,6 @@ export default {
             this.table.data = data;
         },
         createRowObj() {
-            console.log("创建了");
             return {
                 lineNumber: '',
                 sku: {},
@@ -414,21 +440,21 @@ export default {
                     remark: value.remark,
                 }
             })
-            params.customerId = params.customer.id;
-            return add(params)
-                .then(res => {
-                    return {
-                        msg: res.data.msg,
-                        router: {
-                            path: '/wms/instock/receiveLog',
-                            query: {
-                                isRefresh: 'true'
-                            }
+            if (func.isNotEmpty(params.customer)) {
+                params.customerId = params.customer.id;
+            }
+            return add(params).then(res => {
+                return {
+                    msg: res.data.msg,
+                    router: {
+                        path: '/wms/instock/receiveLog',
+                        query: {
+                            isRefresh: 'true'
                         }
-                    };
-                });
+                    }
+                };
+            });
         },
-
     }
 }
 </script>
