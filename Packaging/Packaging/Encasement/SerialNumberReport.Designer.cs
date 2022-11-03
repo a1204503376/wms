@@ -823,12 +823,8 @@
             this.PageWidth = 1169;
             this.PaperKind = System.Drawing.Printing.PaperKind.A4;
             this.Scripts.OnParametersRequestValueChanged = "SerialNumberReport_ParametersRequestValueChanged";
-            this.ScriptsSource = "\r\nprivate void SerialNumberReport_ParametersRequestValueChanged(object sender, De" +
-    "vExpress.XtraReports.Parameters.ParametersRequestValueChangedEventArgs e) {\r\n   " +
-    " \r\n}\r\n";
             this.ShowPrintMarginsWarning = false;
             this.Version = "21.2";
-            this.BeforePrint += new System.Drawing.Printing.PrintEventHandler(this.SerialNumberReport_BeforePrint);
             ((System.ComponentModel.ISupportInitialize)(this.objectDataSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 
