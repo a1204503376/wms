@@ -25,7 +25,7 @@
                         <el-col :span="8">
                             <el-form-item label="单据类型" prop="billTypeCd">
                                 <nodes-bill-type
-                                    :filter-types="['RR']"
+                                    :filter-types="filterBillType"
                                     v-model="form.params.newReceiveHeaderRequest.billTypeCd"
                                     io-type="i"
                                     size="medium">
@@ -34,21 +34,12 @@
                         </el-col>
                         <el-col :span="8">
                             <el-form-item
-                                :label="form.params.newReceiveHeaderRequest.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN ? '供应商' : '归还人'"
-                                :prop="form.params.newReceiveHeaderRequest.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN ? 'supplier' : 'supplierContact'">
+                                label="供应商"
+                                prop="supplier">
                                 <nodes-supplier
-                                    v-if="form.params.newReceiveHeaderRequest.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN"
                                     v-model="form.params.newReceiveHeaderRequest.supplier"
                                     size="medium">
                                 </nodes-supplier>
-                                <el-input
-                                    v-if="form.params.newReceiveHeaderRequest.billTypeCd === this.$commonConst.BILL_TYPE_RETURN"
-                                    v-model="form.params.newReceiveHeaderRequest.supplierContact"
-                                    :clearable="true"
-                                    placeholder="请输入归还人"
-                                    size="medium"
-                                    style="width: 210px">
-                                </el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -325,7 +316,7 @@ export default {
     mixins: [editDetailMixin],
     data() {
         return {
-            refresh: true,
+            filterBillType: [this.$commonConst.BILL_TYPE_RETURN],
             form: {
                 params: {
                     newReceiveHeaderRequest: {
@@ -337,7 +328,6 @@ export default {
                             code: '',
                             name: ''
                         },
-                        supplierContact: null,
                         woId: '',
                         udf1: null,
                         remark: '',
@@ -352,15 +342,8 @@ export default {
                             trigger: 'change'
                         }
                     ],
-                    supplierContact: [
-                        {
-                            required: true,
-                            message: '请输入归还人',
-                            trigger: 'blur'
-                        }
-                    ]
                 }
-            }
+            },
         }
     },
     methods: {
@@ -375,7 +358,7 @@ export default {
             );
         },
         getDescriptor() {
-            const skuErrorMsg = '请选择物品编码';
+            const skuErrorMsg = '请选择物品';
             return {
                 sku: {
                     type: 'object',
@@ -420,18 +403,17 @@ export default {
         },
         submitFormParams() {
             this.form.params.newReceiveDetailRequestList = this.table.postData
-            return addReceive(this.form.params)
-                .then(res => {
-                    return {
-                        msg: res.data.msg,
-                        router: {
-                            path: '/wms/instock/receive',
-                            query: {
-                                isRefresh: 'true'
-                            }
+            return addReceive(this.form.params).then(res => {
+                return {
+                    msg: res.data.msg,
+                    router: {
+                        path: '/wms/instock/receive',
+                        query: {
+                            isRefresh: 'true'
                         }
-                    };
-                });
+                    }
+                };
+            });
         },
     }
 }

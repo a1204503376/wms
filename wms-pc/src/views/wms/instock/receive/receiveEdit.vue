@@ -24,7 +24,8 @@
                         <el-col :span="8">
                             <el-form-item label="单据类型" prop="billTypeCd">
                                 <nodes-bill-type
-                                    :filter-types="['RR']"
+                                    :filter-types="filterBillType"
+                                    :disabled="billTypeDisable"
                                     v-model="form.params.editReceiveHeaderRequest.billTypeCd"
                                     io-type="i"
                                     size="medium">
@@ -33,15 +34,15 @@
                         </el-col>
                         <el-col :span="8">
                             <el-form-item
-                                :label="form.params.editReceiveHeaderRequest.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN ? '供应商' : '归还人'"
-                                :prop="form.params.editReceiveHeaderRequest.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN ? 'supplier' : 'supplierContact'">
+                                :label="isReturn ? '归还人' : '供应商'"
+                                :prop="isReturn ? 'supplierContact' : 'supplier'">
                                 <nodes-supplier
-                                    v-if="form.params.editReceiveHeaderRequest.billTypeCd !== this.$commonConst.BILL_TYPE_RETURN"
+                                    v-if="!isReturn"
                                     v-model="form.params.editReceiveHeaderRequest.supplier"
                                     size="medium">
                                 </nodes-supplier>
                                 <el-input
-                                    v-if="form.params.editReceiveHeaderRequest.billTypeCd === this.$commonConst.BILL_TYPE_RETURN"
+                                    v-if="isReturn"
                                     v-model="form.params.editReceiveHeaderRequest.supplierContact"
                                     :clearable="true"
                                     placeholder="请输入归还人"
@@ -99,7 +100,7 @@
                         <el-col>
                             <el-table
                                 ref="table"
-                                v-loading="tableLoding"
+                                v-loading="tableLoading"
                                 :data="table.data"
                                 border
                                 size="mini">
@@ -314,6 +315,9 @@ export default {
     mixins: [editDetailMixin],
     data() {
         return {
+            billTypeDisable: false,
+            filterBillType: [],
+            isReturn: false,
             form: {
                 params: {
                     editReceiveHeaderRequest: {
@@ -350,7 +354,7 @@ export default {
                     ],
                 }
             },
-            tableLoding: false,
+            tableLoading: false,
         }
     },
     methods: {
@@ -371,13 +375,24 @@ export default {
             let skuUmSelectQuery = {
                 receiveId: this.id
             };
-            this.tableLoding = true;
+            this.tableLoading = true;
             await getEditReceiveById(skuUmSelectQuery).then((res) => {
                 let pageObj = res.data.data;
                 this.form.params.editReceiveHeaderRequest = pageObj.receiveHeaderResponse;
                 this.table.data = pageObj.receiveDetailResponseList;
+
+                this.isReturn = this.$commonConst.BILL_TYPE_RETURN === this.form.params.editReceiveHeaderRequest.billTypeCd
+                // 初始化时 是归还单，则不允许编辑单据类型，且不过滤单据类型组件选项
+                //        不是归还单， 允许编辑单据类型， 过滤掉归还单选项
+                if (this.isReturn) {
+                    this.billTypeDisable = true;
+                    this.filterBillType = [];
+                } else {
+                    this.billTypeDisable = false;
+                    this.filterBillType = [this.$commonConst.BILL_TYPE_RETURN];
+                }
             })
-            this.tableLoding = false;
+            this.tableLoading = false;
         },
         getDescriptor() {
             const skuErrorMsg = '请选择物品编码';
@@ -399,18 +414,17 @@ export default {
         },
         submitFormParams() {
             this.form.params.editReceiveDetailRequestList = this.table.postData
-            return editReceive(this.form.params)
-                .then(res => {
-                    return {
-                        msg: res.data.msg,
-                        router: {
-                            path: '/wms/instock/receive',
-                            query: {
-                                isRefresh: 'true'
-                            }
+            return editReceive(this.form.params).then(res => {
+                return {
+                    msg: res.data.msg,
+                    router: {
+                        path: '/wms/instock/receive',
+                        query: {
+                            isRefresh: 'true'
                         }
-                    };
-                });
+                    }
+                };
+            });
         },
     }
 }
