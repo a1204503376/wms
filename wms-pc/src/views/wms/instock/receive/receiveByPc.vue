@@ -437,7 +437,7 @@ export default {
                 scanQty: {type: 'Number', validator: (rule, value) => value > 0, message: '本次收货数量不能为0'},
                 locId: {required: true, message: '库位不能为空'},
                 skuLot2: {required: true, message: '规格不能为空'}
-            };
+            }
         },
         createRowObj() {
             return {
