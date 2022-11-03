@@ -94,13 +94,12 @@
                                         <el-input-number
                                             v-model="row.scanQty"
                                             :disabled="exist(row)"
-                                            :max="row.surplusQty+row.scanQty"
+                                            :max="Number(row.surplusQty+row.scanQty)"
                                             :min="0"
                                             controls-position="right"
                                             size="mini"
                                             style="width:130px"
                                             @change="(val,oldValue)=>onChange(val,oldValue,row)">
-                                            >
                                         </el-input-number>
                                     </template>
                                 </el-table-column>
@@ -376,7 +375,6 @@ export default {
                 row.skuLot5 = column.skuLot5
                 row.skuLot6 = column.skuLot6
                 row.skuLot8 = column.skuLot8
-                // row.skuLot2Exist = column.skuLot2Exist
                 return
             }
             let skuUmSelectQuery = {
@@ -404,13 +402,6 @@ export default {
                     row.skuLot5 = item.skuLot5
                     row.skuLot6 = item.skuLot6
                     row.skuLot8 = item.skuLot8
-                    // if (func.isNotEmpty(item.skuLot2)) {
-                    //     row.skuLot2Exist = true
-                    //     item['skuLot2Exist'] = true
-                    // } else {
-                    //     item['skuLot2Exist'] = false
-                    // }
-
                     this.rowData.push(item)
                 })
         },
@@ -420,8 +411,7 @@ export default {
             };
             getReceiveByPc(skuUmSelectQuery)
                 .then((res) => {
-                    let pageObj = res.data.data;
-                    this.form.params = pageObj
+                    this.form.params = res.data.data
                 })
         },
         onReset(row) {
@@ -444,7 +434,7 @@ export default {
         },
         getDescriptor() {
             return {
-                scanQty: {type: 'Number', validator: (rule, value) => value > 0, message: '计划数量不能为0'},
+                scanQty: {type: 'Number', validator: (rule, value) => value > 0, message: '本次收货数量不能为0'},
                 locId: {required: true, message: '库位不能为空'},
                 skuLot2: {required: true, message: '规格不能为空'}
             };
@@ -467,7 +457,6 @@ export default {
                 skuLot5: '',
                 skuLot6: '',
                 skuLot8: '',
-                // skuLot2Exist: false
             }
         },
         onSave() {
@@ -475,7 +464,7 @@ export default {
             for (const key in detailList) {
                 let filterList = detailList
                     .filter(x => x.boxCode === detailList[key].boxCode && x.locId !== detailList[key].locId);
-                if (filterList.length > 0){
+                if (filterList.length > 0) {
                     this.$message.warning("相同箱码只能放在同一库位上");
                     return
                 }
@@ -485,18 +474,17 @@ export default {
         submitFormParams() {
             let detailRequestList = this.table.postData;
             let receiveByPcRequest = {receiveId: this.receiveId, detailRequestList}
-            return ReceiveByPc(receiveByPcRequest)
-                .then(res => {
-                    return {
-                        msg: res.data.msg,
-                        router: {
-                            path: '/wms/instock/receive',
-                            query: {
-                                isRefresh: 'true'
-                            }
+            return ReceiveByPc(receiveByPcRequest).then(res => {
+                return {
+                    msg: res.data.msg,
+                    router: {
+                        path: '/wms/instock/receive',
+                        query: {
+                            isRefresh: 'true'
                         }
-                    };
-                });
+                    }
+                };
+            });
         },
     }
 }
