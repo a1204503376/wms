@@ -136,28 +136,34 @@ public class ProcessorServiceImpl implements ProcessorService {
         }
 
         JobQueue jobQueue = optionalJobQueue.get();
-        // 调用WMS API 判定库位是否可用
-        if (StringUtils.isBlank(jobQueue.getLocationNameTo())) {
-            WmsGlobalResponse wmsGlobalResponse = callWmsService.queryAndFrozenEnableOutbound(jobQueue);
-            if (wmsGlobalResponse.hasException()) {
-                omsLogger.debug("呼叫WMS异常：{}", wmsGlobalResponse.getMsg());
-                return ProcessResultUtils.failed();
-            }
 
-            WmsResponse wmsResponse = wmsGlobalResponse.getWmsResponse();
-            if (WmsResponse.isFailed(wmsResponse)) {
-                omsLogger.debug("WMS返回失败，原因：{}", wmsResponse.getMsg());
-                return ProcessResultUtils.failed();
-            }
-            String toLocation = wmsResponse.getData().toString();
-            jobQueueService.updateLocationNameToById(jobQueue.getId(), toLocation);
-            jobQueue.setLocationNameTo(toLocation);
-            WorkflowContext workflowContext = context.getWorkflowContext();
-            String jsonString = JSON.toJSONString(jobQueue);
-            omsLogger.debug("JOB to JSON：{}", jsonString);
-            workflowContext.appendData2WfContext(JobConstants.WORKFLOW_JOB_QUEUE_KEY, jsonString);
-            omsLogger.debug("推送JOB到工作流上下文：成功,{}", jobQueue);
+        if (!StringUtils.isBlank(jobQueue.getLocationNameTo())) {
+            return ProcessResultUtils.success();
         }
+
+        // 目标库位为空时，调用WMS API 判定库位是否可用
+        WmsGlobalResponse wmsGlobalResponse = callWmsService.queryAndFrozenEnableOutbound(jobQueue);
+        if (wmsGlobalResponse.hasException() || wmsGlobalResponse.getWmsResponse().isFailed()) {
+            omsLogger.debug("呼叫WMS失败：{}", wmsGlobalResponse.hasException()
+                    ? wmsGlobalResponse.getMsg()
+                    : wmsGlobalResponse.getWmsResponse().getMsg());
+
+            jobQueue.setStatus(JobStatusEnum.NOT_STARTED);
+            jobQueueService.updateStatus(jobQueue);
+
+            return ProcessResultUtils.failed();
+        }
+
+        String toLocation = wmsGlobalResponse.getWmsResponse().getData().toString();
+        jobQueueService.updateLocationNameToById(jobQueue.getId(), toLocation);
+        jobQueue.setLocationNameTo(toLocation);
+
+        WorkflowContext workflowContext = context.getWorkflowContext();
+        String jsonString = JSON.toJSONString(jobQueue);
+        omsLogger.debug("JOB to JSON：{}", jsonString);
+        
+        workflowContext.appendData2WfContext(JobConstants.WORKFLOW_JOB_QUEUE_KEY, jsonString);
+        omsLogger.debug("推送JOB到工作流上下文：成功,{}", jobQueue);
 
         return ProcessResultUtils.success();
     }
@@ -228,7 +234,7 @@ public class ProcessorServiceImpl implements ProcessorService {
             jobFlagSyncWmsEnum = JobFlagSyncWmsEnum.SYNCHRONIZATION_FAILED;
         } else {
             WmsResponse wmsResponse = wmsGlobalResponse.getWmsResponse();
-            if (WmsResponse.isFailed(wmsResponse)) {
+            if (wmsResponse.isFailed()) {
                 syncMsg = wmsResponse.getMsg();
                 jobFlagSyncWmsEnum = JobFlagSyncWmsEnum.SYNCHRONIZATION_FAILED;
             }
@@ -268,7 +274,7 @@ public class ProcessorServiceImpl implements ProcessorService {
     }
 
     private boolean hasJobTimeout(JobQueue jobQueue, Date now) {
-        if (nodesConfig.getJobTimeout() <= 0){
+        if (nodesConfig.getJobTimeout() <= 0) {
             return false;
         }
 
