@@ -163,7 +163,6 @@ namespace Packaging.Encasement
             sluSpeedClass.ReadOnly = true;
             txtPrintNumber.ReadOnly = true;
 
-            btnSavePrint.Enabled = false;
             btnResetAll.Enabled = false;
             btnResetSerialNumber.Enabled = false;
             btnPreviewPrint.Enabled = false;
@@ -188,8 +187,6 @@ namespace Packaging.Encasement
             var packingAutoIdentifications = GetGridDataSource();
             if (packingAutoIdentifications.Count != 0)
             {
-                btnSavePrint.Enabled = true;
-                btnSavePrint.Focus();
                 btnPreviewPrint.Enabled = true;
                 btnExport.Enabled = true;
             }
@@ -340,7 +337,6 @@ namespace Packaging.Encasement
         {
             _packingSerialDetails = new List<PackingSerialDetail>();
             gridControl1.DataSource = _packingSerialDetails;
-            btnSavePrint.Enabled = false;
             btnCollect.Focus();
         }
 
@@ -363,17 +359,6 @@ namespace Packaging.Encasement
             sluSpeedClass.EditValue = null;
             txtPrintNumber.EditValue = 2;
             cbxBox.Focus();
-            ResetReprint();
-        }
-
-        private void btnSavePrint_Click(object sender, EventArgs e)
-        {
-            if (!ValidList())
-            {
-                return;
-            }
-            var serialNumberReport = GetSerialNumberReport();
-            serialNumberReport.PrintDialog();
             ResetReprint();
         }
 
@@ -554,6 +539,8 @@ namespace Packaging.Encasement
             }
 
             var serialNumberReport = GetSerialNumberReport();
+            var reportPrintTool = new ReportPrintTool(serialNumberReport);
+            reportPrintTool.PrintingSystem.AddCommandHandler(new SerialCommandHandler(serialNumberReport,reportPrintTool));
             serialNumberReport.ShowPreviewDialog();
         }
 

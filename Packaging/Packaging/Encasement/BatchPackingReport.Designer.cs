@@ -185,14 +185,14 @@
             // xrPictureBox2
             // 
             this.xrPictureBox2.ImageSource = new DevExpress.XtraPrinting.Drawing.ImageSource("img", resources.GetString("xrPictureBox2.ImageSource"));
-            this.xrPictureBox2.LocationFloat = new DevExpress.Utils.PointFloat(112.3456F, 10F);
+            this.xrPictureBox2.LocationFloat = new DevExpress.Utils.PointFloat(112.3456F, 18.4028F);
             this.xrPictureBox2.Name = "xrPictureBox2";
             this.xrPictureBox2.SizeF = new System.Drawing.SizeF(96.73611F, 60.06944F);
             // 
             // xrPictureBox3
             // 
             this.xrPictureBox3.ImageSource = new DevExpress.XtraPrinting.Drawing.ImageSource("img", resources.GetString("xrPictureBox3.ImageSource"));
-            this.xrPictureBox3.LocationFloat = new DevExpress.Utils.PointFloat(32.24149F, 72.50002F);
+            this.xrPictureBox3.LocationFloat = new DevExpress.Utils.PointFloat(32.24149F, 80.90285F);
             this.xrPictureBox3.Name = "xrPictureBox3";
             this.xrPictureBox3.SizeF = new System.Drawing.SizeF(256.9444F, 48.95835F);
             // 
@@ -201,7 +201,7 @@
             this.lbSkuName.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[SkuNameS]")});
             this.lbSkuName.Font = new System.Drawing.Font("微软雅黑", 42F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbSkuName.LocationFloat = new DevExpress.Utils.PointFloat(289.1859F, 29.16668F);
+            this.lbSkuName.LocationFloat = new DevExpress.Utils.PointFloat(289.186F, 40.06952F);
             this.lbSkuName.Multiline = true;
             this.lbSkuName.Name = "lbSkuName";
             this.lbSkuName.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
@@ -350,7 +350,6 @@
             this.PaperKind = System.Drawing.Printing.PaperKind.A4;
             this.ShowPrintMarginsWarning = false;
             this.Version = "21.2";
-            this.BeforePrint += new System.Drawing.Printing.PrintEventHandler(this.SerialNumberReport_BeforePrint);
             ((System.ComponentModel.ISupportInitialize)(this.objectDataSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 
