@@ -54,6 +54,12 @@ public class LendReturnBizImpl implements LendReturnBiz {
 	private static void setQtyAndSnCode(boolean lendFlag, LogLendReturnRequest logLendReturnRequest, LogNoReturn logNoReturn) {
 		if (lendFlag) {
 			logNoReturn.setLendQty(logNoReturn.getLendQty().add(logLendReturnRequest.getQty()));
+			List<String> noReturnSnCodeList = Arrays.asList(Func.splitTrim(logNoReturn.getSnCode(), StringPool.COMMA));
+			List<String> requestSnCodeList = Arrays.asList(Func.splitTrim(logLendReturnRequest.getSnCode(), StringPool.COMMA));
+			List<String> newNoReturnSnCodeList = new ArrayList<>();
+			newNoReturnSnCodeList.addAll(noReturnSnCodeList);
+			newNoReturnSnCodeList.addAll(requestSnCodeList);
+			logNoReturn.setSnCode(String.join(",", newNoReturnSnCodeList));
 		} else {
 			logNoReturn.setReturnQty(logNoReturn.getReturnQty().add(logLendReturnRequest.getQty()));
 			if (Func.isNotBlank(logLendReturnRequest.getSnCode())) {

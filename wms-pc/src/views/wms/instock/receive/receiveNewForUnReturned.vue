@@ -315,7 +315,7 @@ export default {
                 params: {
                     newReceiveHeaderRequest: {
                         inStoreType: null,
-                        billTypeCd: 'RR',
+                        billTypeCd: this.$commonConst.BILL_TYPE_RETURN,
                         whId: '',
                         supplierContact: null,
                         woId: '',

@@ -44,15 +44,15 @@
                     <el-row type="flex">
                         <el-col :span="8">
                             <el-form-item
-                                :label="form.params.billTypeCd !== this.$commonConst.BILL_TYPE_LEND ? '客户' : '借用人'"
-                                :prop="form.params.billTypeCd !== this.$commonConst.BILL_TYPE_LEND ? 'customer' : 'contact'">
+                                :label="isLend ? '借用人' : '客户'"
+                                :prop="isLend ? 'contact' : 'customer'">
                                 <nodes-customer
-                                    v-if="form.params.billTypeCd !== this.$commonConst.BILL_TYPE_LEND"
+                                    v-if="!isLend"
                                     v-model="form.params.customer"
                                     size="medium">
                                 </nodes-customer>
                                 <el-input
-                                    v-if="form.params.billTypeCd === this.$commonConst.BILL_TYPE_LEND"
+                                    v-else
                                     v-model="form.params.contact"
                                     :clearable="true"
                                     placeholder="请输入借用人"
@@ -284,8 +284,8 @@ export default {
                     billTypeCd: '',
                     whId: '',
                     woId: '',
-                    customer: {},
-                    contact: '',
+                    customer: null,
+                    contact: null,
                     transportCode: '',
                     outstockType: '',
                     soBillRemark: '',
@@ -335,6 +335,18 @@ export default {
                     ],
                 }
             },
+            isLend: false,
+        }
+    },
+    watch: {
+        'form.params.billTypeCd'() {
+            let isLend = this.form.params.billTypeCd === this.$commonConst.BILL_TYPE_LEND;
+            if (isLend) {
+                this.form.params.customer = null;
+            } else {
+                this.form.params.contact = null;
+            }
+            this.form.isLend = isLend;
         }
     },
     methods: {
@@ -401,10 +413,10 @@ export default {
             })
         },
         submitFormParams() {
-            let postData = this.table.postData;
             let params = this.form.params;
-            let soDetailList = postData.map(value => {
+            params.soDetailList = this.table.postData.map((value) => {
                 return {
+                    soDetailId: value.soDetailId,
                     soLineNo: value.lineNumber,
                     skuId: value.sku.skuId,
                     skuSpec: value.sku.skuSpec,
@@ -415,18 +427,10 @@ export default {
                     remark: value.remark,
                 }
             })
-            let data = {
-                billTypeCd: params.billTypeCd,
-                whId: params.whId,
-                woId: params.woId,
-                customerId: params.customer.id,
-                contact: params.contact,
-                transportCode: params.transportCode,
-                outstockType: params.outstockType,
-                soBillRemark: params.soBillRemark,
-                soDetailList: soDetailList,
+            if (func.isNotEmpty(params.customer)) {
+                params.customerId = params.customer.id;
             }
-            return add(data).then(res => {
+            return add(params).then(res => {
                 return {
                     msg: res.data.msg,
                     router: {
