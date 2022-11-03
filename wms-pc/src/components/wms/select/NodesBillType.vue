@@ -23,7 +23,6 @@
 
 <script>
 import {getBillTypeSelectResponseList} from "@/api/wms/basics/billType";
-import func from "@/util/func";
 
 export default {
     name: "NodesBillType",
@@ -63,13 +62,10 @@ export default {
             let billTypeSelectQuery = {
                 ioType: this.ioType
             };
-            let {data: {data}} = await getBillTypeSelectResponseList(billTypeSelectQuery);
-            // 新增：屏蔽归还入库类型 , 编辑：不屏蔽
-            if (func.isNotEmpty(this.selectVal)) {
-                this.options = data
-            } else {
+            await getBillTypeSelectResponseList(billTypeSelectQuery).then(res => {
+                let data = res.data.data;
                 this.options = data.filter(value => !this.filterTypes.includes(value.billTypeCd))
-            }
+            });
         },
         onChange(val) {
             this.$emit('selectValChange', val);

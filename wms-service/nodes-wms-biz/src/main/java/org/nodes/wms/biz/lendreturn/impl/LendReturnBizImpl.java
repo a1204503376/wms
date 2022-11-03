@@ -190,7 +190,7 @@ public class LendReturnBizImpl implements LendReturnBiz {
 				.filter(log -> BigDecimalUtil.gt(log.getQty(), BigDecimal.ZERO)
 					&& (Func.isEmpty(log.getCancelLogId()) || Func.isBlank(log.getCancelLogId())))
 				.collect(Collectors.toList());
-			LendReturnRequest returnRequest = logLendReturnFactory.createReturnRequest(finalReceiveLogList);
+			LendReturnRequest returnRequest = logLendReturnFactory.createReturnRequest(receiveHeader, finalReceiveLogList);
 			saveLog(returnRequest);
 		}
 	}
@@ -209,7 +209,7 @@ public class LendReturnBizImpl implements LendReturnBiz {
 				.collect(Collectors.toList());
 			// 根据SkuId、批属性合并拣货记录
 			List<LogSoPick> finalLogSoPickList = mergeLogSoPick(enableLogSoPickList);
-			LendReturnRequest returnRequest = logLendReturnFactory.createLendRequest(finalLogSoPickList);
+			LendReturnRequest returnRequest = logLendReturnFactory.createLendRequest(soHeader, finalLogSoPickList);
 			saveLog(returnRequest);
 		}
 	}

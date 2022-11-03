@@ -102,7 +102,7 @@ public class LogNoReturn  extends SkuLotBaseEntity {
 	/**
 	 * 货主
 	 */
-	private String woId;
+	private Long woId;
 
 	/**
 	 * 库房id

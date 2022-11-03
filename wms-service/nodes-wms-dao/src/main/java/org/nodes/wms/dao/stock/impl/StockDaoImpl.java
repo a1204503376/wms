@@ -17,6 +17,8 @@ import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
 import org.nodes.wms.dao.stock.dto.output.StockBySerialPageResponse;
 import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
+import org.nodes.wms.dao.stock.dto.report.ReportCountStockDto;
+import org.nodes.wms.dao.stock.dto.report.ReportStockDto;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.nodes.wms.dao.stock.mapper.StockMapper;
@@ -463,6 +465,16 @@ public class StockDaoImpl
 	}
 
 	@Override
+	public List<ReportCountStockDto> getStockBalanceTotalByReportParams(List<Long> excludeZoneIdList, Map<String, Object> parameters) {
+		return super.baseMapper.getStockBalanceTotalByReportParams(excludeZoneIdList, parameters);
+	}
+
+    @Override
+    public List<ReportStockDto> getCurrentTimeStockByReportParams(List<Long> allPickToLocId, Map<String, Object> parameters) {
+        return super.baseMapper.getCurrentTimeStockByReportParams(allPickToLocId, parameters);
+    }
+
+    @Override
 	public List<Stock> getStockByDropId(Long dropId) {
 		AssertUtil.notNull(dropId, "根据任务id查询库存失败,taskId不能为空");
 

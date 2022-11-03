@@ -502,4 +502,55 @@
         </where>
         GROUP BY loc_code,box_code,sku_code
     </select>
+
+    <select id="getStockBalanceTotalByReportParams"
+            resultType="org.nodes.wms.dao.stock.dto.report.ReportCountStockDto">
+        SELECT loc_code, sku_name, sku_lot2, SUM(stock_qty - pick_qty) AS stockBalanceTotal FROM wms_stock
+        <where>
+            stay_stock_qty + stock_qty > pick_qty
+            AND is_deleted = 0
+            <if test="excludeZoneIdList !=null and excludeZoneIdList.size !=0">
+                AND zone_id NOT IN
+                <foreach collection="excludeZoneIdList" close=")" item="item" open="(" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="params != null and params.size !=0">
+                <if test="params.skuLot2 != null and params.skuLot2 != ''">
+                    AND sku_lot2 LIKE CONCAT('%', #{params.skuLot2}, '%')
+                </if>
+            </if>
+        </where>
+        GROUP BY loc_code, sku_name, sku_lot2
+    </select>
+
+    <select id="getCurrentTimeStockByReportParams"
+            resultType="org.nodes.wms.dao.stock.dto.report.ReportStockDto">
+        SELECT sku_name, sku_lot2, um.wsu_name, sku_lot4,
+        SUM(occupy_qty) AS occupyQtySum,
+        SUM(stock_qty - pick_qty - occupy_qty) as stockEnableSum,
+        SUM(IF(stock_status = 0, (stock_qty - pick_qty), 0)) as normalStockSum,
+        SUM(IF(stock_status = 1, (stock_qty - pick_qty), 0)) as freezeStockSum
+        FROM wms_stock
+        LEFT JOIN wms_sku_um um ON um.wsu_code = wms_stock.wsu_code
+        <where>
+            stay_stock_qty + stock_qty > pick_qty
+            AND wms_stock.is_deleted = 0
+            <if test="excludeZoneIdList !=null and excludeZoneIdList.size !=0">
+                AND zone_id NOT IN
+                <foreach collection="excludeZoneIdList" close=")" item="item" open="(" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="params != null and params.size != 0">
+                <if test="params.skuLot2 != null and params.skuLot2 != ''">
+                    AND sku_lot2 LIKE CONCAT('%', #{params.skuLot2}, '%')
+                </if>
+                <if test="params.skuLot4 != null and params.skuLot4 != ''">
+                    AND sku_lot4 LIKE CONCAT('%', #{params.skuLot4}, '%')
+                </if>
+            </if>
+            GROUP BY sku_name, sku_lot2, um.wsu_code, sku_lot4
+        </where>
+    </select>
 </mapper>

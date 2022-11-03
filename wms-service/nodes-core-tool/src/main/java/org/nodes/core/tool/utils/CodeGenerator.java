@@ -22,7 +22,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class CodeGenerator {
 	private final NumberFormat numberFormat = NumberFormat.getNumberInstance();
-	private static final String DEFAULT_RULE = "YYYYMMXXXXX";
+	private static final String DEFAULT_RULE = "yyyyMMXXXXX";
 	private static final String DEFAULT_PROJECT_NAME = "WMS";
 	private static final String SERIAL_PLACEHOLDER = "X";
 	private final RedisUtil redisUtil;

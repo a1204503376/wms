@@ -3,13 +3,14 @@ package org.nodes.wms.biz.lendreturn.modular;
 import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.common.skuLot.SkuLotUtil;
+import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.lendreturn.dto.input.LendReturnRequest;
 import org.nodes.wms.dao.lendreturn.dto.input.LogLendReturnRequest;
 import org.nodes.wms.dao.lendreturn.entities.LogLendReturn;
 import org.nodes.wms.dao.lendreturn.enums.LendReturnTypeEnum;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
-import org.springblade.core.secure.utils.AuthUtil;
+import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 
@@ -45,12 +46,12 @@ public class LogLendReturnFactory {
 		logLendReturn.setType(LendReturnTypeEnum.LEND);
 	}
 
-	public LendReturnRequest createLendRequest(List<LogSoPick> logSoPickList) {
+	public LendReturnRequest createLendRequest(SoHeader soHeader, List<LogSoPick> logSoPickList) {
 		List<LogLendReturnRequest> logLendReturnList = new ArrayList<>();
 		logSoPickList.forEach(item -> {
 			LogLendReturnRequest logLendReturnRequest = new LogLendReturnRequest();
 			logLendReturnRequest.setType(LendReturnTypeEnum.LEND);
-			logLendReturnRequest.setLendReturnName(AuthUtil.getUserName());
+			logLendReturnRequest.setLendReturnName(soHeader.getContact());
 			logLendReturnRequest.setLocId(item.getLocId());
 			logLendReturnRequest.setLocCode(item.getLocCode());
 			logLendReturnRequest.setSkuId(item.getSkuId());
@@ -76,12 +77,12 @@ public class LogLendReturnFactory {
 		return lendReturnRequest;
 	}
 
-	public LendReturnRequest createReturnRequest(List<ReceiveLog> receiveLogList) {
+	public LendReturnRequest createReturnRequest(ReceiveHeader receiveHeader, List<ReceiveLog> receiveLogList) {
 		List<LogLendReturnRequest> logLendReturnList = new ArrayList<>();
 		receiveLogList.forEach(item -> {
 			LogLendReturnRequest logLendReturnRequest = new LogLendReturnRequest();
 			logLendReturnRequest.setType(LendReturnTypeEnum.RETURN);
-			logLendReturnRequest.setLendReturnName(AuthUtil.getUserName());
+			logLendReturnRequest.setLendReturnName(receiveHeader.getSupplierContact());
 			logLendReturnRequest.setLocId(item.getLocId());
 			logLendReturnRequest.setLocCode(item.getLocCode());
 			logLendReturnRequest.setSkuId(item.getSkuId());
