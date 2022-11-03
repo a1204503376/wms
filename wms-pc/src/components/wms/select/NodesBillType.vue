@@ -23,6 +23,7 @@
 
 <script>
 import {getBillTypeSelectResponseList} from "@/api/wms/basics/billType";
+import func from "@/util/func";
 
 export default {
     name: "NodesBillType",
@@ -47,14 +48,22 @@ export default {
         return {
             options: [this.selectVal],
             val: this.selectVal,
+            initOptions: [],
         }
     },
     watch: {
         selectVal(newVal) {
             this.val = newVal;
         },
+        filterTypes(newFilterArr) {
+            if (func.isNotEmpty(newFilterArr)) {
+                this.options = this.options.filter(value => !this.filterTypes.includes(value.billTypeCd))
+            } else {
+                this.options = this.initOptions
+            }
+        }
     },
-    created() {
+    mounted() {
         this.getDataSource();
     },
     methods: {
@@ -62,10 +71,11 @@ export default {
             let billTypeSelectQuery = {
                 ioType: this.ioType
             };
-            await getBillTypeSelectResponseList(billTypeSelectQuery).then(res => {
-                let data = res.data.data;
-                this.options = data.filter(value => !this.filterTypes.includes(value.billTypeCd))
-            });
+            let {data: {data}} = await getBillTypeSelectResponseList(billTypeSelectQuery)
+            this.options = data;
+            this.initOptions = data;
+
+            this.options = this.options.filter(value => !this.filterTypes.includes(value.billTypeCd))
         },
         onChange(val) {
             this.$emit('selectValChange', val);
