@@ -550,7 +550,7 @@
                     AND sku_lot4 LIKE CONCAT('%', #{params.skuLot4}, '%')
                 </if>
             </if>
-            GROUP BY sku_name, sku_lot2, um.wsu_code, sku_lot4
+            GROUP BY sku_name, sku_lot2, um.wsu_name, sku_lot4
         </where>
     </select>
 </mapper>
