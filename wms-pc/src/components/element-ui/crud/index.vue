@@ -142,6 +142,7 @@ import selectTableUser from "../select/select-table-user";
 import selectTree from "../select/select-tree";
 import dialogView from "./dialog-view";
 import nodesDialog from "../dialog/index"
+import func from "@/util/func";
 
 export default {
     name: "nodes-crud",
@@ -334,6 +335,14 @@ export default {
                 }
             });
         }
+        //  配置按钮权限
+        this.option.newBtn = this.permission.add;
+        this.option.multiDelBtn = this.permission.view;
+        this.option.delBtn = this.permission.delete;
+        this.option.multiDelBtn = this.permission.delete;
+        this.option.editBtn = this.permission.edit;
+        this.option.导出 = this.permission.导出;
+        this.option.导入 = this.permission.导入;
     },
     activated() {
         this.doLayout();
@@ -767,7 +776,7 @@ export default {
                 if (u.children && u.children.length > 0) {
                     result = this.getArrayValue(row, column, u.children) !== undefined;
                 } else {
-                    if (!row[column.prop] instanceof String) {
+                    if (!(row[column.prop] instanceof String)) {
                         let arr = row[column.prop].split();
                         let value = '';
                         arr.forEach(item => {
@@ -799,6 +808,9 @@ export default {
         },
         onCellDblClick(row, column, cell, event) {
             let col = this.option.column.find(u => u.prop == column.property);
+            if (func.isEmpty(col)) {
+                return;
+            }
             let content = this.handleDetail(row, col);
             if (content && content.length > 0) {
                 this.$Clipboard({
