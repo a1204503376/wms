@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using DataAccess.Common;
 using DataAccess.Enitiies;
 
 namespace DataAccess.Dto
@@ -123,10 +124,14 @@ namespace DataAccess.Dto
                 }
             }
         }
-        public static List<SerialNumberRange> GetSerialNumberRanges(List<int> serialNumberList)
+
+
+        private static IEnumerable<SerialNumberRange> GetSerialNumberRanges(List<int> serialNumberList)
         {
             Dictionary<string, List<string>> serialNumberDictionary = new Dictionary<string, List<string>>();
+            
             serialNumberList.Sort();
+
             foreach (var item in serialNumberList)
             {
                 var serialNumber = item.ToString();
@@ -167,6 +172,39 @@ namespace DataAccess.Dto
             return serialNumberRanges;
         }
 
+        public static List<SerialNumberRange> GetContinuousRanges(List<int> serialNumberList)
+        {
+            var continuousSerialNumbersList = PrintHelper.ContinusFind(serialNumberList.ToArray());
+
+            var numberRanges = new List<SerialNumberRange>();
+            foreach (var list in continuousSerialNumbersList)
+            {
+               numberRanges.AddRange(GetSerialNumberRanges(list));
+            }
+
+            return numberRanges;
+        }
+
+        private static List<int> GetContinuousList(int[] serialNumberArray, ref int index)
+        {
+            var continuousSerialNumberList = new List<int>();
+            for (int i = index, l = serialNumberArray.Length; i < l; i++)
+            {
+                if (i+1<l && serialNumberArray[i] + 1 == serialNumberArray[i + 1])
+                {
+                    continuousSerialNumberList.Add(serialNumberArray[i]);
+                }
+                else
+                {
+                    continuousSerialNumberList.Add(serialNumberArray[i]);
+                    index = i + 1;
+                    break;
+                }
+            }
+
+            return continuousSerialNumberList;
+        }
+
         public static List<SerialNumberRange> GetDoubleSerialNumberRanges(List<int> serialNumberList)
         {
             Dictionary<string, List<int>> serialNumberDictionary = new Dictionary<string, List<int>>();
@@ -204,7 +242,7 @@ namespace DataAccess.Dto
             foreach (var pair in serialNumberDictionary)
             {
                 pair.Value.Sort();
-                var continusFind = ContinusFind(pair.Value.ToArray());
+                var continusFind = PrintHelper.ContinusFind(pair.Value.ToArray());
                 if (continusFind.Count == 0)
                 {
                     var serialNumberRange = new SerialNumberRange
@@ -236,74 +274,6 @@ namespace DataAccess.Dto
         private static string GetSerialPadLeft(int serial)
         {
             return serial.ToString().PadLeft(5, '0');
-        }
-
-        /// <summary>
-        /// 计算给定的数组内连续的序列和独立的值
-        /// </summary>
-        /// <returns></returns>
-        private static List<List<int>> ContinusFind(int[] numList)
-        {
-            Array.Sort(numList);
-
-            var s = 1;
-            var length = numList.Length;
-            var findList = new List<List<int>>();
-
-            switch (length)
-            {
-                case 1:
-                    findList.Add(new List<int>() { numList[s - 1] });
-                    return findList;
-                case 2:
-                    {
-                        if (numList[s] - numList[s - 1] != 1)
-                        {
-                            findList.Add(new List<int>() { numList[s - 1] });
-                            findList.Add(new List<int>() { numList[s] });
-                        }
-                        else
-                        {
-                            findList.Add(new List<int>() { numList[s - 1], numList[s] });
-                        }
-
-                        return findList;
-                    }
-            }
-
-            while (s <= length - 1)
-            {
-                var firstAloneFlag = s - 1 == 0 && numList[s] - numList[s - 1] != 1;
-                var middleAloneFlag = s + 1 < length && numList[s] - numList[s - 1] != 1 && numList[s + 1] - numList[s] != 1;
-                var lastAloneFlag = s + 1 == length && numList[s] - numList[s - 1] != 1;
-                if (firstAloneFlag || middleAloneFlag || lastAloneFlag)
-                {
-                    var val = firstAloneFlag ? numList[s - 1] : numList[s];
-                    findList.Add(new List<int> { val });
-                    s += 1;
-                    continue;
-                }
-
-                if (numList[s] - numList[s - 1] == 1)
-                {
-                    var index = s - 1;
-                    var count = 1;
-                    while (s <= length - 1 && numList[s] - numList[s - 1] == 1)
-                    {
-                        s += 1;
-                        count++;
-                    }
-
-                    findList.Add(numList.ToList().GetRange(index, count));
-                }
-                else
-                {
-
-                    s += 1;
-                }
-            }
-
-            return findList;
         }
 
         public static bool IsDobuleSerialNumber(List<string> packingSequenctNumberPairs,SerialNumberPrintDto serialNumberPrintDto)

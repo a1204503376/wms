@@ -134,7 +134,7 @@ namespace PackagingWeb
             }
             else
             {
-                serialNumberRanges = SerialNumberPrintDto.GetSerialNumberRanges(serialNumberList);
+                serialNumberRanges = SerialNumberPrintDto.GetContinuousRanges(serialNumberList);
             }
 
             var groupSerialNumber =

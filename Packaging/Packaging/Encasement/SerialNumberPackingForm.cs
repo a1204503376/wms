@@ -385,7 +385,7 @@ namespace Packaging.Encasement
             }
             var serialNumberPrintDtos = new List<SerialNumberPrintDto>();
             // 辅助代码6个一组，多一组多打印一张
-            var serialNumberRanges = SerialNumberPrintDto.GetSerialNumberRanges(packingSerialDetails.Select(d => d.ProductSupportCode).ToList());
+            var serialNumberRanges = SerialNumberPrintDto.GetContinuousRanges(packingSerialDetails.Select(d => d.ProductSupportCode).ToList());
             var groupSerialNumber = (int)Math.Ceiling((double)serialNumberRanges.Count / SerialNumberPrintDto.SerialGroupNumber);
             for (int i = 0; i < groupSerialNumber; i++)
             {

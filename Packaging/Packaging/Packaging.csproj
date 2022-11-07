@@ -177,6 +177,7 @@
     <Compile Include="Encasement\ReportForm.Designer.cs">
       <DependentUpon>ReportForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Encasement\SerialCommandHandler.cs" />
     <Compile Include="Encasement\SerialNumberReport.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -6,7 +6,6 @@ using DataAccess.Common;
 using FreeSql;
 using FreeSql.Aop;
 using FreeSql.Internal;
-using NLog;
 
 namespace DataAccess
 {
@@ -14,8 +13,6 @@ namespace DataAccess
     {
         private static readonly Lazy<IFreeSql> MySqlLazy = new Lazy<IFreeSql>(() =>
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-
             var freeSql = new FreeSqlBuilder()
                 .UseConnectionString(DataType.SqlServer,
                     ConfigurationManager.ConnectionStrings["MySqlConnectionString"].ConnectionString,
@@ -27,12 +24,10 @@ namespace DataAccess
                     cmd =>
                     {
                         // Trace.WriteLine(cmd.CommandText);
-                        logger.Info(cmd.CommandText);
                     },
                     //监听SQL命令对象，在执行后
                     (cmd, traceLog) =>
                     {
-                        logger.Info(traceLog);
                     })
                 .UseLazyLoading(false)
                 .Build();

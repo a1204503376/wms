@@ -3,15 +3,12 @@ using System.Text;
 using DataAccess.Common;
 using DevExpress.CodeParser.Diagnostics;
 using DevExpress.XtraReports.Web;
-using NLog;
 using PackagingWeb.Services;
 
 namespace PackagingWeb {
     public class Global_asax : System.Web.HttpApplication {
         void Application_Start(object sender, EventArgs e)
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-
             System.Web.Routing.RouteTable.Routes.MapPageRoute("defaultRoute", "", "~/Default.aspx");
             DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.Expressions;
             DevExpress.XtraReports.Web.WebDocumentViewer.Native.WebDocumentViewerBootstrapper.SessionState = System.Web.SessionState.SessionStateBehavior.Default;
@@ -26,7 +23,7 @@ namespace PackagingWeb {
             DevExpress.XtraReports.Web.ClientControls.LoggerService.Initialize(
                 (ex, message) =>
                 {
-                    logger.Fatal(ex, $"[{DateTime.Now}]: Exception occurred. Message: '{message}'. ");
+                    // logger.Fatal(ex, $"[{DateTime.Now}]: Exception occurred. Message: '{message}'. ");
                 });
 
             DevExpress.Web.ASPxWebControl.CallbackError += new EventHandler(Application_Error);
