@@ -105,7 +105,7 @@
                             </template>
                         </el-table-column>
                     </template>
-                    <el-table-column fixed="right" label="操作" width="150">
+                    <el-table-column v-if="showActionBar" align="center" fixed="right" label="操作" width="150">
                         <template v-slot="scope">
                             <el-button v-if="permissionObj.edit" size="small" type="text"
                                        @click="handleClick(scope.row)">编辑
@@ -278,6 +278,11 @@ export default {
                 close: this.vaildData(this.permission.receive_close, false),
                 receive: this.vaildData(this.permission.receive_receive, false),
             }
+        },
+        showActionBar() {
+            return this.vaildData(this.permission.receive_edit, false)
+                || this.vaildData(this.permission.receive_close, false)
+                || this.vaildData(this.permission.receive_receive, false)
         }
     },
     watch: {
