@@ -34,6 +34,13 @@
 		watch: {
 			selectVal: {
 				handler(selectVal) {
+					this.dataSource = this.selectVal;
+					if (tool.isNotEmpty(this.selectVal)) {
+						this.params.no = this.selectVal;
+						this.getDataSoueceDefault();
+					} else {
+						this.getDataSource();
+					}
 				},
 				immediate: true,
 				deep: true
@@ -53,13 +60,7 @@
 			};
 		},
 		created() {
-			this.dataSource = this.selectVal;
-			if (tool.isNotEmpty(this.selectVal)) {
-				this.params.no = this.selectVal;
-				this.getDataSoueceDefault();
-			} else {
-				this.getDataSource();
-			}
+
 		},
 		methods: {
 			getDataSource() {

@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.instock;
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.constant.DictKVConstant;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.core.udf.UdfEntity;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
@@ -61,6 +62,12 @@ public class InStockBizImpl implements InStockBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	@Override
 	public void receiveByBoxCode(ReceiveDetailLpnPdaRequest request, String logType) {
+		//获取目标库位
+		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
+		//如果库区是属于AGV自动存储区，不能进行收货
+		if (locationBiz.getLocationByZoneType(targetLocation.getWhId(), targetLocation.getLocId(), DictKVConstant.ZONE_TYPE_AGV_STORAGE)) {
+			throw new ServiceException("收货失败，不能选择自动区库位");
+		}
 		boolean hasReceiveHeaderId = Func.isNotEmpty(request.getReceiveHeaderId());
 		if (Func.isNotEmpty(request.getLpnCode())) {
 			List<Stock> stocks = stockQueryBiz.findStockByLpnCode(request.getLpnCode());
@@ -117,12 +124,10 @@ public class InStockBizImpl implements InStockBiz {
 			}
 
 		}
-		//获取目标库位
-		Location targetLocation = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
-		//校验目标库位是否是自动区 是自动区的话目标库位必须为空
-		stockManageBiz.canMoveToLocAuto(targetLocation);
 		//校验目标库位箱型，必须跟输入的箱码是一致的类型
 		stockManageBiz.canMoveToBoxType(targetLocation, request.getBoxCode());
+		//校验目标库位是否是自动区 是自动区的话目标库位必须为空
+		stockManageBiz.canMoveToLocAuto(targetLocation);
 		UdfEntity udf = locationBiz.judgeBoxTypeOfC(request.getBoxCode(), targetLocation);
 		List<Stock> stockList = new ArrayList<>();
 		for (ReceiveDetailLpnItemDto item : request.getReceiveDetailLpnItemDtoList()) {
