@@ -48,14 +48,22 @@ export default {
         return {
             options: [this.selectVal],
             val: this.selectVal,
+            initOptions: [],
         }
     },
     watch: {
         selectVal(newVal) {
             this.val = newVal;
         },
+        filterTypes(newFilterArr) {
+            if (func.isNotEmpty(newFilterArr)) {
+                this.options = this.options.filter(value => !this.filterTypes.includes(value.billTypeCd))
+            } else {
+                this.options = this.initOptions
+            }
+        }
     },
-    created() {
+    mounted() {
         this.getDataSource();
     },
     methods: {
@@ -63,13 +71,11 @@ export default {
             let billTypeSelectQuery = {
                 ioType: this.ioType
             };
-            let {data: {data}} = await getBillTypeSelectResponseList(billTypeSelectQuery);
-            // 新增：屏蔽归还入库类型 , 编辑：不屏蔽
-            if (func.isNotEmpty(this.selectVal)) {
-                this.options = data
-            } else {
-                this.options = data.filter(value => !this.filterTypes.includes(value.billTypeCd))
-            }
+            let {data: {data}} = await getBillTypeSelectResponseList(billTypeSelectQuery)
+            this.options = data;
+            this.initOptions = data;
+
+            this.options = this.options.filter(value => !this.filterTypes.includes(value.billTypeCd))
         },
         onChange(val) {
             this.$emit('selectValChange', val);

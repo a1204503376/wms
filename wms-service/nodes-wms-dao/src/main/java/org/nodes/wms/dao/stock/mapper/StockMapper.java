@@ -11,11 +11,14 @@ import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
 import org.nodes.wms.dao.stock.dto.output.StockBySerialPageResponse;
 import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
+import org.nodes.wms.dao.stock.dto.report.ReportCountStockDto;
+import org.nodes.wms.dao.stock.dto.report.ReportStockDto;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 库存mapper接口
@@ -102,5 +105,23 @@ public interface StockMapper extends BaseMapper<Stock> {
 	 * 物理删除无效库存
 	 */
 	void deleteStockByStockIdList();
+
+	/**
+	 * 报表:盘点表,根据库位、型号、产品进行数量汇总
+	 *
+	 * @param excludeZoneIdList 排除的库区id
+	 * @param parameters 搜索条件
+	 * @return 盘点报表数据
+	 **/
+    List<ReportCountStockDto> getStockBalanceTotalByReportParams(@Param("excludeZoneIdList") List<Long> excludeZoneIdList, @Param("params") Map<String, Object> parameters);
+
+	/**
+	 * 报表: 实时库存
+	 *
+	 * @param excludeZoneIdList 排除的库区id
+	 * @param parameters 搜索条件
+	 * @return 实时库存数据
+	 */
+	List<ReportStockDto> getCurrentTimeStockByReportParams(@Param("excludeZoneIdList") List<Long> excludeZoneIdList, @Param("params") Map<String, Object> parameters);
 }
 

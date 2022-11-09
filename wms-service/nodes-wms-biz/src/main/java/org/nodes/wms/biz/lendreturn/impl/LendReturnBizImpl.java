@@ -54,6 +54,12 @@ public class LendReturnBizImpl implements LendReturnBiz {
 	private static void setQtyAndSnCode(boolean lendFlag, LogLendReturnRequest logLendReturnRequest, LogNoReturn logNoReturn) {
 		if (lendFlag) {
 			logNoReturn.setLendQty(logNoReturn.getLendQty().add(logLendReturnRequest.getQty()));
+			List<String> noReturnSnCodeList = Arrays.asList(Func.splitTrim(logNoReturn.getSnCode(), StringPool.COMMA));
+			List<String> requestSnCodeList = Arrays.asList(Func.splitTrim(logLendReturnRequest.getSnCode(), StringPool.COMMA));
+			List<String> newNoReturnSnCodeList = new ArrayList<>();
+			newNoReturnSnCodeList.addAll(noReturnSnCodeList);
+			newNoReturnSnCodeList.addAll(requestSnCodeList);
+			logNoReturn.setSnCode(String.join(",", newNoReturnSnCodeList));
 		} else {
 			logNoReturn.setReturnQty(logNoReturn.getReturnQty().add(logLendReturnRequest.getQty()));
 			if (Func.isNotBlank(logLendReturnRequest.getSnCode())) {
@@ -190,7 +196,7 @@ public class LendReturnBizImpl implements LendReturnBiz {
 				.filter(log -> BigDecimalUtil.gt(log.getQty(), BigDecimal.ZERO)
 					&& (Func.isEmpty(log.getCancelLogId()) || Func.isBlank(log.getCancelLogId())))
 				.collect(Collectors.toList());
-			LendReturnRequest returnRequest = logLendReturnFactory.createReturnRequest(finalReceiveLogList);
+			LendReturnRequest returnRequest = logLendReturnFactory.createReturnRequest(receiveHeader, finalReceiveLogList);
 			saveLog(returnRequest);
 		}
 	}
@@ -209,7 +215,7 @@ public class LendReturnBizImpl implements LendReturnBiz {
 				.collect(Collectors.toList());
 			// 根据SkuId、批属性合并拣货记录
 			List<LogSoPick> finalLogSoPickList = mergeLogSoPick(enableLogSoPickList);
-			LendReturnRequest returnRequest = logLendReturnFactory.createLendRequest(finalLogSoPickList);
+			LendReturnRequest returnRequest = logLendReturnFactory.createLendRequest(soHeader, finalLogSoPickList);
 			saveLog(returnRequest);
 		}
 	}

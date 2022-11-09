@@ -12,6 +12,7 @@ using DataAccess.Wms;
 using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraPrinting;
+using DevExpress.XtraPrinting.Preview;
 using DevExpress.XtraReports.UI;
 using Packaging.Common;
 using Packaging.Settings;
@@ -104,19 +105,6 @@ namespace Packaging.Encasement
                 RaiseListChangedEvents = true
             };
             gridControl1.DataSource = _skuDetails;
-        }
-
-        private void btnSavePrint_Click(object sender, System.EventArgs e)
-        {
-            if (_skuDetails.Count == 0)
-            {
-                CustomMessageBox.Warning("请输入物品信息");
-                return;
-            }
-
-            var batchPackingReport = GetBatchPackingReport();
-            batchPackingReport?.PrintDialog();
-            ResetReprint();
         }
 
         private BatchPrintDto GetBatchPrintDto()
@@ -235,14 +223,6 @@ namespace Packaging.Encasement
                 e.ErrorText = "请输入大于0的数量";
                 return;
             }
-            
-            var gridDataSource = GetGridDataSource();
-            if (gridDataSource.Count(d => d.Sku.SkuId == sku.SkuId && d.SkuLot1 == skuLot1.ToString())>1)
-            {
-                e.Valid = false;
-                e.ErrorText = "当前输入的物品批次已存在";
-                return;
-            }
 
             ResetPrintEnable();
         }
@@ -276,7 +256,10 @@ namespace Packaging.Encasement
         private void btnPreviewPrint_Click(object sender, EventArgs e)
         {
             var batchPackingReport = GetBatchPackingReport();
-            batchPackingReport?.ShowPreview();
+
+            ReportPrintTool reportPrintTool = new ReportPrintTool(batchPackingReport);
+            reportPrintTool.PrintingSystem.AddCommandHandler(new BatchCommandHandler(batchPackingReport,reportPrintTool));
+            reportPrintTool.ShowPreviewDialog();
         }
 
         private BatchPackingReport GetBatchPackingReport()
@@ -363,7 +346,6 @@ namespace Packaging.Encasement
 
         private void ResetPrintEnable()
         {
-            btnSavePrint.Enabled = true;
             btnPreviewPrint.Enabled = true;
         }
 
@@ -446,7 +428,6 @@ namespace Packaging.Encasement
         private void ResetDetail()
         {
             ResetGridDataSource(null);
-            btnSavePrint.Enabled = false;
             btnPreviewPrint.Enabled = false;
         }
 

@@ -22,7 +22,7 @@ namespace DataAccess.Wms
         }
 
         /// <summary>
-        /// 序列号成对对应的型号
+        /// 获取序列号成对的型号配置
         /// </summary>
         /// <returns></returns>
         public static List<string> GetPackingSequenctNumberPairs()
@@ -31,7 +31,7 @@ namespace DataAccess.Wms
         }
 
         /// <summary>
-        /// 序列号成对对应的型号
+        /// 获取通用件可用型号配置
         /// </summary>
         /// <returns></returns>
         public static Dictionary<string, List<string>> GetSkuSpecList(List<string> codesList)

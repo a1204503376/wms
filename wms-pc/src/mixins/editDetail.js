@@ -28,12 +28,13 @@ export const editDetailMixin = {
                     this.initTableData();
                 }
             }
+        },
+        id(id) {
+            this.initTableData();
         }
     },
     methods: {
         async submitFormParams() {
-            console.log('提交表单数据', this.form.params);
-            console.log('提交表格数据', this.table.postData);
             this.$message.success('提交成功');
         },
         checkDetails() {

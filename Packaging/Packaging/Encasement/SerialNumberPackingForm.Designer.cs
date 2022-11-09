@@ -60,7 +60,6 @@
             this.layoutControlItem9 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem20 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControl2 = new DevExpress.XtraLayout.LayoutControl();
-            this.btnSavePrint = new DevExpress.XtraEditors.SimpleButton();
             this.txtSerialNumber = new DevExpress.XtraEditors.TextEdit();
             this.btnResetSerialNumber = new DevExpress.XtraEditors.SimpleButton();
             this.btnCollect = new DevExpress.XtraEditors.SimpleButton();
@@ -72,7 +71,6 @@
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem15 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem14 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem13 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem10 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem11 = new DevExpress.XtraLayout.LayoutControlItem();
             this.emptySpaceItem1 = new DevExpress.XtraLayout.EmptySpaceItem();
@@ -127,7 +125,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem15)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem14)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem13)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem10)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem11)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem1)).BeginInit();
@@ -291,9 +288,7 @@
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.cbxBox.Properties.Items.AddRange(new object[] {
             "A",
-            "B",
-            "C",
-            "D"});
+            "C"});
             this.cbxBox.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             this.cbxBox.Size = new System.Drawing.Size(113, 24);
             this.cbxBox.StyleController = this.layoutControl1;
@@ -303,7 +298,7 @@
             // txtPrintNumber
             // 
             this.txtPrintNumber.EditValue = new decimal(new int[] {
-            2,
+            0,
             0,
             0,
             0});
@@ -510,7 +505,6 @@
             // 
             // layoutControl2
             // 
-            this.layoutControl2.Controls.Add(this.btnSavePrint);
             this.layoutControl2.Controls.Add(this.txtSerialNumber);
             this.layoutControl2.Controls.Add(this.btnResetSerialNumber);
             this.layoutControl2.Controls.Add(this.btnCollect);
@@ -528,25 +522,13 @@
             this.layoutControl2.TabIndex = 1;
             this.layoutControl2.Text = "layoutControl2";
             // 
-            // btnSavePrint
-            // 
-            this.btnSavePrint.Enabled = false;
-            this.btnSavePrint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnSavePrint.ImageOptions.Image")));
-            this.btnSavePrint.Location = new System.Drawing.Point(986, 12);
-            this.btnSavePrint.Name = "btnSavePrint";
-            this.btnSavePrint.Size = new System.Drawing.Size(86, 27);
-            this.btnSavePrint.StyleController = this.layoutControl2;
-            this.btnSavePrint.TabIndex = 4;
-            this.btnSavePrint.Text = "立即打印";
-            this.btnSavePrint.Click += new System.EventHandler(this.btnSavePrint_Click);
-            // 
             // txtSerialNumber
             // 
             this.txtSerialNumber.Enabled = false;
             this.txtSerialNumber.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.txtSerialNumber.Location = new System.Drawing.Point(114, 12);
             this.txtSerialNumber.Name = "txtSerialNumber";
-            this.txtSerialNumber.Size = new System.Drawing.Size(224, 24);
+            this.txtSerialNumber.Size = new System.Drawing.Size(197, 24);
             this.txtSerialNumber.StyleController = this.layoutControl2;
             this.txtSerialNumber.TabIndex = 4;
             this.txtSerialNumber.Leave += new System.EventHandler(this.txtSerialNumber_Leave);
@@ -565,7 +547,7 @@
             // btnCollect
             // 
             this.btnCollect.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnCollect.ImageOptions.Image")));
-            this.btnCollect.Location = new System.Drawing.Point(342, 12);
+            this.btnCollect.Location = new System.Drawing.Point(315, 12);
             this.btnCollect.Name = "btnCollect";
             this.btnCollect.Size = new System.Drawing.Size(92, 27);
             this.btnCollect.StyleController = this.layoutControl2;
@@ -593,13 +575,13 @@
             this.btnPreviewPrint.Size = new System.Drawing.Size(86, 27);
             this.btnPreviewPrint.StyleController = this.layoutControl2;
             this.btnPreviewPrint.TabIndex = 7;
-            this.btnPreviewPrint.Text = "预览打印";
+            this.btnPreviewPrint.Text = "打印";
             this.btnPreviewPrint.Click += new System.EventHandler(this.btnPreviewPrint_Click);
             // 
             // btnExport
             // 
             this.btnExport.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnExport.ImageOptions.Image")));
-            this.btnExport.Location = new System.Drawing.Point(438, 12);
+            this.btnExport.Location = new System.Drawing.Point(411, 12);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(86, 27);
             this.btnExport.StyleController = this.layoutControl2;
@@ -610,7 +592,7 @@
             // btnImportDetail
             // 
             this.btnImportDetail.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnImportDetail.ImageOptions.Image")));
-            this.btnImportDetail.Location = new System.Drawing.Point(528, 12);
+            this.btnImportDetail.Location = new System.Drawing.Point(501, 12);
             this.btnImportDetail.Name = "btnImportDetail";
             this.btnImportDetail.Size = new System.Drawing.Size(89, 27);
             this.btnImportDetail.StyleController = this.layoutControl2;
@@ -621,7 +603,7 @@
             // btnReprint
             // 
             this.btnReprint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnReprint.ImageOptions.Image")));
-            this.btnReprint.Location = new System.Drawing.Point(621, 12);
+            this.btnReprint.Location = new System.Drawing.Point(594, 12);
             this.btnReprint.Name = "btnReprint";
             this.btnReprint.Size = new System.Drawing.Size(88, 27);
             this.btnReprint.StyleController = this.layoutControl2;
@@ -636,7 +618,6 @@
             this.layoutControlGroup1.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
             this.layoutControlItem15,
             this.layoutControlItem14,
-            this.layoutControlItem13,
             this.layoutControlItem10,
             this.layoutControlItem11,
             this.emptySpaceItem1,
@@ -666,28 +647,19 @@
             this.layoutControlItem14.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem14.TextVisible = false;
             // 
-            // layoutControlItem13
-            // 
-            this.layoutControlItem13.Control = this.btnSavePrint;
-            this.layoutControlItem13.Location = new System.Drawing.Point(974, 0);
-            this.layoutControlItem13.Name = "layoutControlItem13";
-            this.layoutControlItem13.Size = new System.Drawing.Size(90, 32);
-            this.layoutControlItem13.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem13.TextVisible = false;
-            // 
             // layoutControlItem10
             // 
             this.layoutControlItem10.Control = this.txtSerialNumber;
             this.layoutControlItem10.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem10.Name = "layoutControlItem10";
-            this.layoutControlItem10.Size = new System.Drawing.Size(330, 32);
+            this.layoutControlItem10.Size = new System.Drawing.Size(303, 32);
             this.layoutControlItem10.Text = "物品二维码：";
             this.layoutControlItem10.TextSize = new System.Drawing.Size(90, 18);
             // 
             // layoutControlItem11
             // 
             this.layoutControlItem11.Control = this.btnCollect;
-            this.layoutControlItem11.Location = new System.Drawing.Point(330, 0);
+            this.layoutControlItem11.Location = new System.Drawing.Point(303, 0);
             this.layoutControlItem11.Name = "layoutControlItem11";
             this.layoutControlItem11.Size = new System.Drawing.Size(96, 32);
             this.layoutControlItem11.TextSize = new System.Drawing.Size(0, 0);
@@ -696,9 +668,9 @@
             // emptySpaceItem1
             // 
             this.emptySpaceItem1.AllowHotTrack = false;
-            this.emptySpaceItem1.Location = new System.Drawing.Point(701, 0);
+            this.emptySpaceItem1.Location = new System.Drawing.Point(674, 0);
             this.emptySpaceItem1.Name = "emptySpaceItem1";
-            this.emptySpaceItem1.Size = new System.Drawing.Size(273, 32);
+            this.emptySpaceItem1.Size = new System.Drawing.Size(390, 32);
             this.emptySpaceItem1.TextSize = new System.Drawing.Size(0, 0);
             // 
             // layoutControlItem16
@@ -713,7 +685,7 @@
             // layoutControlItem17
             // 
             this.layoutControlItem17.Control = this.btnExport;
-            this.layoutControlItem17.Location = new System.Drawing.Point(426, 0);
+            this.layoutControlItem17.Location = new System.Drawing.Point(399, 0);
             this.layoutControlItem17.Name = "layoutControlItem17";
             this.layoutControlItem17.Size = new System.Drawing.Size(90, 32);
             this.layoutControlItem17.TextSize = new System.Drawing.Size(0, 0);
@@ -722,7 +694,7 @@
             // layoutControlItem18
             // 
             this.layoutControlItem18.Control = this.btnImportDetail;
-            this.layoutControlItem18.Location = new System.Drawing.Point(516, 0);
+            this.layoutControlItem18.Location = new System.Drawing.Point(489, 0);
             this.layoutControlItem18.Name = "layoutControlItem18";
             this.layoutControlItem18.Size = new System.Drawing.Size(93, 32);
             this.layoutControlItem18.TextSize = new System.Drawing.Size(0, 0);
@@ -731,7 +703,7 @@
             // layoutControlItem19
             // 
             this.layoutControlItem19.Control = this.btnReprint;
-            this.layoutControlItem19.Location = new System.Drawing.Point(609, 0);
+            this.layoutControlItem19.Location = new System.Drawing.Point(582, 0);
             this.layoutControlItem19.Name = "layoutControlItem19";
             this.layoutControlItem19.Size = new System.Drawing.Size(92, 32);
             this.layoutControlItem19.TextSize = new System.Drawing.Size(0, 0);
@@ -913,6 +885,7 @@
             this.Controls.Add(this.layoutControl1);
             this.Name = "SerialNumberPackingForm";
             this.Text = "按序列号装箱";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SerialNumberPackingForm_FormClosing);
             this.Load += new System.EventHandler(this.SerialNumberPackingForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
@@ -945,7 +918,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem15)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem14)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem13)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem10)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem11)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem1)).EndInit();
@@ -1004,7 +976,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn5;
         private DevExpress.XtraEditors.SpinEdit txtPrintNumber;
         private DevExpress.XtraEditors.LookUpEdit luModel;
-        private DevExpress.XtraEditors.SimpleButton btnSavePrint;
         private DevExpress.XtraEditors.SimpleButton btnResetSerialNumber;
         private DevExpress.XtraEditors.SimpleButton btnResetAll;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn6;
@@ -1014,7 +985,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn colRemark;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem15;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem14;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem13;
         private DevExpress.XtraEditors.SimpleButton btnPreviewPrint;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem16;
         private DevExpress.XtraGrid.Columns.GridColumn colAssembleDate;

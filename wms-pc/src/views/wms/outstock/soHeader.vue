@@ -98,7 +98,7 @@
                             </template>
                         </el-table-column>
                     </template>
-                    <el-table-column align="center" fixed="right" label="操作" width="180">
+                    <el-table-column v-if="showActionBar" align="center" fixed="right" label="操作" width="180">
                         <template v-slot="scope">
                             <el-button v-if="permissionObj.edit" size="small" type="text" @click="onEdit(scope.row)">
                                 编辑
@@ -249,6 +249,11 @@ export default {
                 pick: this.vaildData(this.permission.soHeader_pick, false),
                 distribute: this.vaildData(this.permission.soHeader_distribute, false)
             }
+        },
+        showActionBar() {
+            return this.vaildData(this.permission.receive_edit, false)
+                || this.vaildData(this.permission.receive_close, false)
+                || this.vaildData(this.permission.receive_receive, false)
         }
     },
     methods: {
@@ -339,9 +344,15 @@ export default {
             })
         },
         onClose(row) {
-            closeSoBill(row.soBillId).then((res) => {
-                this.$message.success(res.data.msg);
-                this.refreshTable();
+            this.$confirm("确定关闭该发货单吗?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+            }).then(() => {
+                closeSoBill(row.soBillId).then((res) => {
+                    this.$message.success(res.data.msg);
+                    this.refreshTable();
+                })
             })
         },
         onDistribute(row) {

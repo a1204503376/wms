@@ -26,6 +26,8 @@
                         <el-col :span="8">
                             <el-form-item label="单据类型" prop="billTypeCd">
                                 <nodes-bill-type
+                                    :disabled="billTypeDisable"
+                                    :filter-types="filterBillType"
                                     v-model="form.params.billTypeCd"
                                     io-type="O"
                                     size="medium">
@@ -53,15 +55,15 @@
                         </el-col>
                         <el-col :span="8">
                             <el-form-item
-                                :label="form.params.billTypeCd !== this.$commonConst.BILL_TYPE_LEND ? '客户' : '借用人'"
-                                :prop="form.params.billTypeCd !== this.$commonConst.BILL_TYPE_LEND ? 'customer' : 'contact'">
+                                :label="isLend ? '借用人' : '客户'"
+                                :prop="isLend ? 'contact' : 'customer'">
                                 <nodes-customer
-                                    v-if="form.params.billTypeCd !== this.$commonConst.BILL_TYPE_LEND"
+                                    v-if="!isLend"
                                     v-model="form.params.customer"
                                     size="medium">
                                 </nodes-customer>
                                 <el-input
-                                    v-if="form.params.billTypeCd === this.$commonConst.BILL_TYPE_LEND"
+                                    v-else
                                     v-model="form.params.contact"
                                     :clearable="true"
                                     placeholder="请输入借用人"
@@ -289,6 +291,9 @@ export default {
     data() {
         return {
             removeIdList: [],
+            billTypeDisable: false,
+            filterBillType: [], //默认没有过滤的选项
+            isLend: false,
             form: {
                 params: {
                     soBillId: '',
@@ -296,8 +301,8 @@ export default {
                     billTypeCd: '',
                     whId: '',
                     woId: '',
-                    customer: {},
-                    contact: '',
+                    customer: null,
+                    contact: null,
                     outstockType: '',
                     transportCode: '',
                     soBillRemark: ''
@@ -345,13 +350,8 @@ export default {
                             trigger: 'change'
                         }
                     ],
-                }
+                },
             }
-        }
-    },
-    watch: {
-        id() {
-            this.refreshTable();
         }
     },
     methods: {
@@ -402,13 +402,13 @@ export default {
                 rows.splice(index, 1)
             })
         },
-        initTableData() {
+        async initTableData() {
             if (func.isEmpty(this.id)) {
                 return;
             }
-            detailByEdit(this.id).then((res) => {
+            await detailByEdit(this.id).then((res) => {
                 let data = res.data.data;
-                this.form.params = data.soHeader
+                this.form.params = data.soHeader;
                 data.soDetailList.map(item => {
                     return {
                         soDetailId: item.soDetailId,
@@ -422,10 +422,16 @@ export default {
                     }
                 })
                 this.table.data = data.soDetailList;
+                this.isLend = this.form.params.billTypeCd === this.$commonConst.BILL_TYPE_LEND;
+                // 当初始化时，单据类型不为借用出入，则过滤掉组件中的借用出库选项。是借用出库，则禁用组件
+                if (!this.isLend) {
+                    this.filterBillType = [this.$commonConst.BILL_TYPE_LEND]
+                    this.billTypeDisable = false
+                } else {
+                    this.filterBillType = []
+                    this.billTypeDisable = true
+                }
             })
-        },
-        refreshTable() {
-            this.initTableData();
         },
         submitFormParams() {
             let params = this.form.params;
@@ -444,18 +450,17 @@ export default {
             })
             params.removeIdList = this.removeIdList;
             params.soDetailList = soDetailList;
-            return edit(params)
-                .then(res => {
-                    return {
-                        msg: res.data.msg,
-                        router: {
-                            path: '/wms/outstock/soHeader',
-                            query: {
-                                isRefresh: 'true'
-                            }
+            return edit(params).then(res => {
+                return {
+                    msg: res.data.msg,
+                    router: {
+                        path: '/wms/outstock/soHeader',
+                        query: {
+                            isRefresh: 'true'
                         }
                     }
-                })
+                }
+            })
         }
     }
 }

@@ -232,7 +232,6 @@ export default {
             });
         },
         autoEcharsWidth() {
-            console.log(12333);
             this.barOutStockSku.resize();
             this.barInStockSku.resize();
         },

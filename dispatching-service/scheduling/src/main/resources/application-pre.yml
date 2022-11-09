@@ -71,8 +71,8 @@ scheduling:
   addressEnabled: false
   wmsUrl: http://192.168.41.173:8088/wms/scheduling
   agvUrl: http://192.168.41.170:55200/v1
-  #JOB超时（单位：分钟）
-  jobTimeout: 200
+  #JOB超时,负数表示不限制（单位：分钟）
+  jobTimeout: -1
 # powerJob 配置
 powerjob:
   worker:

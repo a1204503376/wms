@@ -44,16 +44,12 @@
   <ItemGroup>
     <Reference Include="DevExpress.Data.v21.2, Version=21.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.2.10.0\lib\net46\Serilog.dll</HintPath>
-    </Reference>
-    <Reference Include="Serilog.Sinks.File, Version=5.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Sinks.File.5.0.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -105,7 +101,6 @@
   <ItemGroup>
     <Content Include="Web.config" />
     <Content Include="Reports\Report.repx" />
-    <None Include="packages.config" />
     <Content Include="Reports\BatchPackingReport.repx" />
     <Content Include="Reports\SerialNumberReport.repx" />
     <None Include="Web.Debug.config">
@@ -116,6 +111,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Code\SerilogConfig.cs" />
     <Compile Include="Box.aspx.cs">
       <DependentUpon>Box.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

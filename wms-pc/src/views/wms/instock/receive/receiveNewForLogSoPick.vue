@@ -26,6 +26,7 @@
                         <el-col :span="8">
                             <el-form-item label="单据类型" prop="billTypeCd">
                                 <nodes-bill-type
+                                    :filter-types="filterBillType"
                                     v-model="form.params.newReceiveHeaderRequest.billTypeCd"
                                     io-type="I"
                                     size="medium">
@@ -296,7 +297,7 @@ export default {
     },
     data() {
         return {
-            refresh: true,
+            filterBillType: [this.$commonConst.BILL_TYPE_RETURN],
             form: {
                 params: {
                     newReceiveHeaderRequest: {
@@ -400,18 +401,17 @@ export default {
         },
         submitFormParams() {
             this.form.params.newReceiveDetailRequestList = this.table.postData
-            return addReceive(this.form.params)
-                .then(res => {
-                    return {
-                        msg: res.data.msg,
-                        router: {
-                            path: '/wms/outstock/logSoPick',
-                            query: {
-                                isRefresh: 'true'
-                            }
+            return addReceive(this.form.params).then(res => {
+                return {
+                    msg: res.data.msg,
+                    router: {
+                        path: '/wms/outstock/logSoPick',
+                        query: {
+                            isRefresh: 'true'
                         }
-                    };
-                });
+                    }
+                };
+            });
         },
     }
 }

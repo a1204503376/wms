@@ -158,6 +158,7 @@
     <Compile Include="Encasement\CartonLabelForm.Designer.cs">
       <DependentUpon>CartonLabelForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Encasement\BatchCommandHandler.cs" />
     <Compile Include="Encasement\ImportForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -176,6 +177,7 @@
     <Compile Include="Encasement\ReportForm.Designer.cs">
       <DependentUpon>ReportForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Encasement\SerialCommandHandler.cs" />
     <Compile Include="Encasement\SerialNumberReport.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -24,6 +24,7 @@ namespace Packaging.Encasement
     [ModuleDefine(moduleId:Constants.SerialFormId)]
     public partial class SerialNumberPackingForm : XtraForm
     {
+        private bool _closeingFlag = false;
         private string _boxNumber;
         private bool _flagCollect;
         private List<string> _packingSequenctNumberPairs;
@@ -42,6 +43,7 @@ namespace Packaging.Encasement
             SetSluSpeedClassDataSource();
             GetSequenceNumberPairsData();
             gridControl1.DataSource = _packingSerialDetails;
+            txtPrintNumber.EditValue = ConfigurationManager.AppSettings["Copies"];
         }
 
         private void GetSequenceNumberPairsData()
@@ -161,7 +163,6 @@ namespace Packaging.Encasement
             sluSpeedClass.ReadOnly = true;
             txtPrintNumber.ReadOnly = true;
 
-            btnSavePrint.Enabled = false;
             btnResetAll.Enabled = false;
             btnResetSerialNumber.Enabled = false;
             btnPreviewPrint.Enabled = false;
@@ -186,8 +187,6 @@ namespace Packaging.Encasement
             var packingAutoIdentifications = GetGridDataSource();
             if (packingAutoIdentifications.Count != 0)
             {
-                btnSavePrint.Enabled = true;
-                btnSavePrint.Focus();
                 btnPreviewPrint.Enabled = true;
                 btnExport.Enabled = true;
             }
@@ -197,6 +196,10 @@ namespace Packaging.Encasement
 
         private void txtSerialNumber_Leave(object sender, EventArgs e)
         {
+            if (_closeingFlag)
+            {
+                return;
+            }
             if (string.IsNullOrWhiteSpace(luModel.Text)
                 || string.IsNullOrWhiteSpace(txtSerialNumber.Text))
             {
@@ -334,7 +337,6 @@ namespace Packaging.Encasement
         {
             _packingSerialDetails = new List<PackingSerialDetail>();
             gridControl1.DataSource = _packingSerialDetails;
-            btnSavePrint.Enabled = false;
             btnCollect.Focus();
         }
 
@@ -357,17 +359,6 @@ namespace Packaging.Encasement
             sluSpeedClass.EditValue = null;
             txtPrintNumber.EditValue = 2;
             cbxBox.Focus();
-            ResetReprint();
-        }
-
-        private void btnSavePrint_Click(object sender, EventArgs e)
-        {
-            if (!ValidList())
-            {
-                return;
-            }
-            var serialNumberReport = GetSerialNumberReport();
-            serialNumberReport.PrintDialog();
             ResetReprint();
         }
 
@@ -394,7 +385,7 @@ namespace Packaging.Encasement
             }
             var serialNumberPrintDtos = new List<SerialNumberPrintDto>();
             // 辅助代码6个一组，多一组多打印一张
-            var serialNumberRanges = SerialNumberPrintDto.GetSerialNumberRanges(packingSerialDetails.Select(d => d.ProductSupportCode).ToList());
+            var serialNumberRanges = SerialNumberPrintDto.GetContinuousRanges(packingSerialDetails.Select(d => d.ProductSupportCode).ToList());
             var groupSerialNumber = (int)Math.Ceiling((double)serialNumberRanges.Count / SerialNumberPrintDto.SerialGroupNumber);
             for (int i = 0; i < groupSerialNumber; i++)
             {
@@ -548,6 +539,8 @@ namespace Packaging.Encasement
             }
 
             var serialNumberReport = GetSerialNumberReport();
+            var reportPrintTool = new ReportPrintTool(serialNumberReport);
+            reportPrintTool.PrintingSystem.AddCommandHandler(new SerialCommandHandler(serialNumberReport,reportPrintTool));
             serialNumberReport.ShowPreviewDialog();
         }
 
@@ -853,6 +846,11 @@ namespace Packaging.Encasement
         {
             _packingSerialDetails = packingSerialDetails;
             gridControl1.DataSource = _packingSerialDetails;
+        }
+
+        private void SerialNumberPackingForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _closeingFlag = true;
         }
     }
 }
