@@ -135,6 +135,12 @@ public class StockPageResponse implements Serializable {
 	@ExcelProperty({"库存信息", "托盘号"})
 	private String lpnCode;
 	/**
+	 * 批次号 (导出时需要)
+	 */
+	@ColumnWidth(45)
+	@ExcelProperty({"库存信息", "序列号(以,分割)"})
+	private String snCode;
+	/**
 	 * 规格型号
 	 */
 	@ColumnWidth(15)
@@ -216,4 +222,5 @@ public class StockPageResponse implements Serializable {
 	@ColumnWidth(15)
 	@ExcelProperty({"库存信息", "出库时间"})
 	private Date lastOutTime;
+
 }

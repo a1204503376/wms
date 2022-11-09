@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.NullArgumentException;
-import org.nodes.core.constant.DictKVConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
@@ -268,7 +267,7 @@ public class StockBizImpl implements StockBiz {
 		Location loc = locationBiz.getInTransitLocation(stock.getWhId());
 		AssertUtil.notNull(loc, "撤销拣货失败，中间库存不存在，请核对是否存在InTransit库位");
 		// 天宜：撤销拣货时标记目标库存是由撤销拣货创建的，udf3字段为是
-		if (Func.isNull(udf)){
+		if (Func.isNull(udf)) {
 			udf = new UdfEntity();
 		}
 		udf.setUdf3("是");
@@ -1042,7 +1041,7 @@ public class StockBizImpl implements StockBiz {
 
 		for (Stock item : stocks) {
 			item.setStockStatus(StockStatusEnum.NORMAL);
-			if (isCleanDropId){
+			if (isCleanDropId) {
 				item.setDropId("");
 			}
 
@@ -1062,7 +1061,7 @@ public class StockBizImpl implements StockBiz {
 				currentUnOccupy = item.getOccupyQty();
 				item.setStockStatus(StockStatusEnum.NORMAL);
 				item.setOccupyQty(BigDecimal.ZERO);
-				if (isCleanDropId){
+				if (isCleanDropId) {
 					item.setDropId("");
 				}
 
@@ -1091,6 +1090,11 @@ public class StockBizImpl implements StockBiz {
 		for (StockPageResponse stockPageResponse : stockPageResponseList) {
 			String stockStatus = stockPageResponse.getStockStatus().getDesc();
 			stockPageResponse.setStockStatusDesc(stockStatus);
+			// 导出序列号，以,分割
+			List<String> serialList = serialDao.getSerialNoByStockId(stockPageResponse.getStockId());
+			if (Func.isNotEmpty(serialList)) {
+				stockPageResponse.setSnCode(String.join(",", serialList));
+			}
 //			// 设置库存可用量
 //			stockPageResponse.setStockEnable(stockPageResponse.getStockQty()
 //				.add(stockPageResponse.getPickQty().subtract(stockPageResponse.getOccupyQty())));
