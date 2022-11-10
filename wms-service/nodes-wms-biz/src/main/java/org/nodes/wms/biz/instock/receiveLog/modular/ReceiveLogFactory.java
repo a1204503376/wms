@@ -89,10 +89,13 @@ public class ReceiveLogFactory {
 			if (Func.isEmpty(packageDetail)) {
 				throw new ServiceException("导入失败,物料" + sku.getSkuName() + "下不存在计量单位编码" + stockImportRequest.getWsuCode());
 			}
-			if (stockImportRequest.getStockQty().intValue() != Func.split(stockImportRequest.getSnCode(),",").length){
-				throw ExceptionUtil.mpe("导入失败,物料[{}]库存数量[{}]与序列号[{}]数量不一致",
-											stockImportRequest.getSkuCode(), stockImportRequest.getStockQty(), stockImportRequest.getSnCode());
+			if (Func.isNotEmpty(stockImportRequest.getSnCode())){
+				if (stockImportRequest.getStockQty().intValue() != Func.split(stockImportRequest.getSnCode(),",").length){
+					throw ExceptionUtil.mpe("导入失败,物料[{}]库存数量[{}]与序列号[{}]数量不一致",
+						stockImportRequest.getSkuCode(), stockImportRequest.getStockQty(), stockImportRequest.getSnCode());
+				}
 			}
+
 			ReceiveLog receiveLog = new ReceiveLog();
 			SkuLotUtil.setAllSkuLot(stockImportRequest, receiveLog);
 			if (Func.isEmpty(stockImportRequest.getStockStatus()) || stockImportRequest.getStockStatus().equals(0)) {

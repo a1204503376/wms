@@ -336,13 +336,25 @@ export default {
             });
         }
         //  配置按钮权限
-        this.option.newBtn = this.permission.add;
-        this.option.multiDelBtn = this.permission.view;
-        this.option.delBtn = this.permission.delete;
-        this.option.multiDelBtn = this.permission.delete;
-        this.option.editBtn = this.permission.edit;
-        this.option.导出 = this.permission.导出;
-        this.option.导入 = this.permission.导入;
+        if (func.isNotEmpty(this.permission.add)) {
+            this.option.newBtn = this.permission.add;
+        }
+        if (func.isNotEmpty(this.permission.view)) {
+            this.option.viewBtn = this.permission.view;
+        }
+        if (func.isNotEmpty(this.permission.delete)) {
+            this.option.delBtn = this.permission.delete;
+            this.option.multiDelBtn = this.permission.delete;
+        }
+        if (func.isNotEmpty(this.permission.edit)) {
+            this.option.editBtn = this.permission.edit;
+        }
+        if (func.isNotEmpty(this.permission.导出)) {
+            this.option.导出 = this.permission.导出;
+        }
+        if (func.isNotEmpty(this.permission.导入)) {
+            this.option.导入 = this.permission.导入;
+        }
     },
     activated() {
         this.doLayout();

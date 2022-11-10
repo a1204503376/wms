@@ -74,9 +74,9 @@ export default {
         ...mapGetters(["permission"]),
         permissionList() {
             return {
-                add: this.vaildData(this.permission.addBtn, false),
-                view: this.vaildData(this.permission.viewBtn, false),
-                delete: this.vaildData(this.permission.viewBtn, false),
+                //     add: this.vaildData(this.permission.reportList_add, false),
+                //     view: this.vaildData(this.permission.reportList_view, false),
+                //     delete: this.vaildData(this.permission.reportList_delete, false),
             };
         },
         ids() {

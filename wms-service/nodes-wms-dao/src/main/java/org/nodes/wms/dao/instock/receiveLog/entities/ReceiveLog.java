@@ -62,7 +62,7 @@ public class ReceiveLog extends BaseSkuLotEntity {
 	 */
 	private String boxCode;
 	/**
-	 * 序列号
+	 * 序列号,多个序列号，分割
 	 */
 	private String snCode;
 	/**
