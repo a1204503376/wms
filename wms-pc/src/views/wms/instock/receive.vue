@@ -328,7 +328,8 @@ export default {
             this.$router.push({
                 name: 'PC收货',
                 params: {
-                    receiveId: row.receiveId
+                    receiveId: row.receiveId,
+                    billTypeCd: row.billTypeCd
                 }
             });
         },

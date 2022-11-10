@@ -16,6 +16,7 @@ import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveCancelRequest;
 import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageQuery;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogPageResponse;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogResponse;
+import org.nodes.wms.dao.stock.dto.output.SerialSelectResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
@@ -205,5 +206,14 @@ public class ReceiveController {
 	public R<String> receiveByPc(@Valid @RequestBody ReceiveByPcRequest request) {
 		String receiveNo = inStockBiz.receiveByPc(request);
 		return R.success("单号:" + receiveNo + "收货成功");
+	}
+
+	/**
+	 * pc收货:获取序列号下拉列表集合
+	 */
+	@GetMapping("/getSerialListByReceiveDetailId")
+	public R<List<SerialSelectResponse>> getSerialListByReceiveDetailId(Long receiveDetailId) {
+		List<SerialSelectResponse> serialList = receiveBiz.getSerialListByReceiveDetailId(receiveDetailId);
+		return R.data(serialList);
 	}
 }

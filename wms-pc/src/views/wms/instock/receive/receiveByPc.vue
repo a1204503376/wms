@@ -226,12 +226,18 @@
                                         <span>序列号</span>
                                     </template>
                                     <template v-slot="{row}">
-                                        <el-input
-                                            v-model.trim="row.snCode"
-                                            size=mini>
+
+                                        <el-input v-model.trim="row.snCode"
+                                                  size=mini v-if="billTypeCd !=='归还入库' || row.snNumber===''">
                                         </el-input>
+
+                                        <nodes-serial-query v-model="row.snCodeList"
+                                                            :receiveDetailId="row.receiveDetailId"
+                                                            v-if="billTypeCd ==='归还入库' && row.snNumber!==''">
+                                        </nodes-serial-query>
                                     </template>
                                 </el-table-column>
+
                             </el-table>
                         </el-col>
                     </el-row>
@@ -261,14 +267,17 @@ import {editDetailMixin} from "@/mixins/editDetail";
 import func from "@/util/func";
 import {getReceiveByPc, getReceiveDetailByPc, ReceiveByPc} from "@/api/wms/instock/receive";
 import NodesLocation from "@/components/wms/select/NodesLocation";
+import NodesSerialQuery from "@/components/wms/select/NodesSerialQuery";
 
 export default {
     props: {
         receiveId: {type: String},
+        billTypeCd: {type: String}
     },
     name: "edit",
     components: {
         NodesLocation,
+        NodesSerialQuery
     },
     mixins: [editDetailMixin],
     data() {
@@ -287,7 +296,8 @@ export default {
                     whCode: ''
                 },
 
-            }
+            },
+            rowLineArr: [],
         }
     },
     created() {
@@ -331,6 +341,9 @@ export default {
         },
         // 过滤空白行
         filterBlankRow(row) {
+            if (row.snCodeList.length > 0) {
+                row.snCode = row.snCodeList.join(',')
+            }
             return !(
                 func.isEmpty(row.lineNumber)
             );
@@ -369,12 +382,14 @@ export default {
                 row.skuCode = column.skuCode
                 row.surplusQty = column.surplusQty
                 row.umCode = column.umCode
+                row.snNumber = column.snNumber
                 row.skuLot1 = column.skuLot1
                 row.skuLot2 = column.skuLot2
                 row.skuLot4 = column.skuLot4
                 row.skuLot5 = column.skuLot5
                 row.skuLot6 = column.skuLot6
                 row.skuLot8 = column.skuLot8
+                row.snCodeList = []
                 return
             }
             let skuUmSelectQuery = {
@@ -396,12 +411,14 @@ export default {
                     row.surplusQty = item.surplusQty
                     row.umCode = item.umCode
                     row.scanQty = 0
+                    row.snNumber = item.snNumber
                     row.skuLot1 = item.skuLot1
                     row.skuLot2 = item.skuLot2
                     row.skuLot4 = item.skuLot4
                     row.skuLot5 = item.skuLot5
                     row.skuLot6 = item.skuLot6
                     row.skuLot8 = item.skuLot8
+                    row.snCodeList = []
                     this.rowData.push(item)
                 })
         },
@@ -451,6 +468,8 @@ export default {
                 boxCode: '',
                 lpnCode: '',
                 snCode: '',
+                snNumber: '',
+                snCodeList: [],
                 skuLot1: '',
                 skuLot2: '',
                 skuLot4: '',
@@ -469,10 +488,31 @@ export default {
                     return
                 }
             }
+            debugger
+            let detailRequestList = detailList
+            for (let y = 0; y < detailRequestList.length; y++) {
+                if (detailRequestList[y].snCodeList.length != detailRequestList[y].scanQty) {
+                    this.$message.warning("行号" + detailRequestList[y].lineNumber + "序列号选择数量与收货数量不一致");
+                    return
+                }
+                if (this.rowLineArr.indexOf(detailRequestList[y].lineNumber) == -1) {
+                    let b = []
+                    b = detailList.filter(x => x.lineNumber === detailRequestList[y].lineNumber)
+                        .map(item => item.snCodeList).reduce(function (a, b) {
+                            return a.concat(b)
+                        });
+                    if (new Set(b).size != b.length) {
+                        this.$message.warning("行号" + detailRequestList[y].lineNumber + "序列号重复");
+                        return
+                    }
+
+                }
+                this.rowLineArr.push(detailRequestList[y].lineNumber)
+            }
             this.onSubmit();
         },
         submitFormParams() {
-            let detailRequestList = this.table.postData;
+            let detailRequestList = this.table.postData
             let receiveByPcRequest = {receiveId: this.receiveId, detailRequestList}
             return ReceiveByPc(receiveByPcRequest).then(res => {
                 return {

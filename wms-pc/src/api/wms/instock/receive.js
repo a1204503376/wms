@@ -124,3 +124,13 @@ export const ReceiveByPc = (data) => {
         data: data,
     })
 }
+
+export const getSerialListByReceiveDetailId = (receiveDetailId) => {
+    return request({
+        url: '/api/wms/receive/getSerialListByReceiveDetailId',
+        method: 'get',
+        params: {
+            receiveDetailId
+        }
+    })
+}
