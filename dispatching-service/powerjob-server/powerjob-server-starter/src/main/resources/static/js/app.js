@@ -485,7 +485,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("module.exports = __webpack_require__.p + \"img/powerjob-console-logo.ac01c44b.png\";\n\n//# sourceURL=webpack:///./src/assets/powerjob-console-logo.png?");
+eval("module.exports = __webpack_require__.p + \"img/nodes-logo.png\";\n\n//# sourceURL=webpack:///./src/assets/powerjob-console-logo.png?");
 
 /***/ }),
 
