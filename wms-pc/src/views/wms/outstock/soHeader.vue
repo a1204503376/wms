@@ -356,7 +356,7 @@ export default {
             })
         },
         onDistribute(row) {
-            if (row.soBillState === '已关闭' || row.soBillState === '已取消' || row.soBillState === '全部出库') {
+            if (row.soBillState === '已关闭' || row.soBillState === '已取消' || row.soBillState === '全部拣货') {
                 this.$message.warning(`${row.soBillState}的发货单不能分配`);
                 return
             }
@@ -376,7 +376,7 @@ export default {
             })
         },
         onPick(row) {
-            if (row.soBillState === '已关闭' || row.soBillState === '已取消' || row.soBillState === '全部出库') {
+            if (row.soBillState === '已关闭' || row.soBillState === '已取消' || row.soBillState === '全部拣货') {
                 this.$message.warning(`${row.soBillState}的发货单不能拣货`);
                 return
             }
