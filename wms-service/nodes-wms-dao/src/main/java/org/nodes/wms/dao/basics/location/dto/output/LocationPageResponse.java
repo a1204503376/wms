@@ -108,6 +108,22 @@ public class LocationPageResponse implements Serializable {
 	 */
 	@ExcelProperty("适用的容器类型")
 	private String lpnTypeCode;
+	/**
+	 * AGV库位编码
+	 */
+	@ExcelProperty("AGV库位编码")
+	private String agvLocation;
+
+	/**
+	 * AGV 层高
+	 */
+	@ExcelProperty("AGV层高")
+	private String agvLevel;
+	/**
+	 * AGV编码点
+	 */
+	@ExcelProperty("AGV编码点")
+	private String agvPoint;
 
 	/**
 	 * 是否启用
