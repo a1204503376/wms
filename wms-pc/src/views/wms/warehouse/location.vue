@@ -82,25 +82,25 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="AGV库位编码" label-width="100px">
+                        <el-form-item label="模型编码" label-width="90px">
                             <el-input v-model.trim="form.params.agvLocation" :clearable="true" class="search-input"
-                                      placeholder="请输入AGV库位编码">
+                                      placeholder="请输入模型编码">
                             </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row type="flex">
                     <el-col :span="6">
-                        <el-form-item label="AGV层高" label-width="90px">
+                        <el-form-item label="层高编码" label-width="90px">
                             <el-input v-model.trim="form.params.agvLevel" :clearable="true" class="search-input"
-                                      placeholder="请输入AGV层高">
+                                      placeholder="请输入层高编码">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="AGV编码点" label-width="90px">
+                        <el-form-item label="点位编码" label-width="90px">
                             <el-input v-model.trim="form.params.agvPoint" :clearable="true" class="search-input"
-                                      placeholder="请输入AGV编码点">
+                                      placeholder="请输入点位编码">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -309,17 +309,17 @@ export default {
                     },
                     {
                         prop: "agvLocation",
-                        label: "AGV库位编码",
+                        label: "模型编码",
                         sortable: "custom",
                     },
                     {
                         prop: "agvLevel",
-                        label: "AGV层高",
+                        label: "层高编码",
                         sortable: "custom",
                     },
                     {
                         prop: "agvPoint",
-                        label: "AGV编码点",
+                        label: "点位编码",
                         sortable: "custom",
                     },
                     {
