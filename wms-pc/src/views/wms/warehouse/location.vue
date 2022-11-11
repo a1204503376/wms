@@ -6,7 +6,7 @@
                     <el-col :span="6">
                         <el-form-item label="库位编码" label-width="90px">
                             <el-input v-model.trim="form.params.locCode" :clearable="true" class="search-input"
-                                placeholder="请输入库位编码">
+                                      placeholder="请输入库位编码">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -33,28 +33,28 @@
                     <el-col :span="6">
                         <el-form-item label="库位状态" label-width="90px">
                             <nodes-dictionary v-model="form.params.locFlagList" :multiple="true" class="search-input"
-                                code="loc_flag">
+                                              code="loc_flag">
                             </nodes-dictionary>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库位类型" label-width="90px">
                             <nodes-dictionary v-model="form.params.locTypeList" :multiple="true" class="search-input"
-                                code="loc_type">
+                                              code="loc_type">
                             </nodes-dictionary>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="货架层" label-width="90px">
                             <el-input v-model.trim="form.params.locLevel" :clearable="true" class="search-input"
-                                placeholder="请输入货架层">
+                                      placeholder="请输入货架层">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="货架排" label-width="90px">
                             <el-input v-model.trim="form.params.locBank" :clearable="true" class="search-input"
-                                placeholder="请输入货架排">
+                                      placeholder="请输入货架排">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -63,22 +63,45 @@
                     <el-col :span="6">
                         <el-form-item label="货架列" label-width="90px">
                             <el-input v-model.trim="form.params.locColumn" :clearable="true" class="search-input"
-                                placeholder="请输入货架列">
+                                      placeholder="请输入货架列">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库位种类" label-width="90px">
                             <nodes-dictionary v-model="form.params.locCategoryList" :multiple="true"
-                                class="search-input" code="loc_category">
+                                              class="search-input" code="loc_category">
                             </nodes-dictionary>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="库位处理" label-width="90px">
                             <nodes-dictionary v-model="form.params.locHandlingList" :multiple="true"
-                                class="search-input" code="loc_handling">
+                                              class="search-input" code="loc_handling">
                             </nodes-dictionary>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="AGV库位编码" label-width="100px">
+                            <el-input v-model.trim="form.params.agvLocation" :clearable="true" class="search-input"
+                                      placeholder="请输入AGV库位编码">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row type="flex">
+                    <el-col :span="6">
+                        <el-form-item label="AGV层高" label-width="90px">
+                            <el-input v-model.trim="form.params.agvLevel" :clearable="true" class="search-input"
+                                      placeholder="请输入AGV层高">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="AGV编码点" label-width="90px">
+                            <el-input v-model.trim="form.params.agvPoint" :clearable="true" class="search-input"
+                                      placeholder="请输入AGV编码点">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -87,17 +110,17 @@
                 <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
                 </el-button>
                 <el-button v-if="permissionObj.delete" icon="el-icon-delete" plain size="mini" type="danger"
-                    @click="onRemove">删除
+                           @click="onRemove">删除
                 </el-button>
                 <el-button v-if="permissionObj.freeze" icon="el-icon-delete" size="mini" type="primary"
-                    @click="onFreeze">冻结
+                           @click="onFreeze">冻结
                 </el-button>
                 <el-button v-if="permissionObj.thaw" icon="el-icon-delete" size="mini" type="primary" @click="onThaw">解冻
                 </el-button>
                 <el-button v-if="permissionObj.import" icon="el-icon-upload2" plain size="mini" @click="onUpload">导入
                 </el-button>
                 <file-upload :visible="fileUpload.visible" file-name="库位"
-                    template-url="/api/wms/warehouse/location/export-template" @callback="callbackFileUpload">
+                             template-url="/api/wms/warehouse/location/export-template" @callback="callbackFileUpload">
                 </file-upload>
             </template>
             <template v-slot:tableTool>
@@ -112,25 +135,25 @@
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                        style="display: inline-block;margin-left: 10px">
-                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData" />
+                                  style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData"/>
                     </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
                 <el-table ref="table" :data="table.data" :height="table.height" border highlight-current-row size="mini"
-                    style="width: 100%" @sort-change="onSortChange">
+                          style="width: 100%" @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column v-if="!column.hide" :key="index" show-overflow-tooltip v-bind="column"
-                            width="120px">
+                                         width="120px">
                             <template v-slot="scope" v-if="column.prop === 'locCode' || column.prop === 'status'">
                                 <el-link v-if="column.prop === 'locCode'" :underline="false" target="_blank"
-                                    type="primary" @click="onView(scope.row)">{{ scope.row.locCode }}
+                                         type="primary" @click="onView(scope.row)">{{ scope.row.locCode }}
                                 </el-link>
                                 <el-tag v-if="column.prop === 'status'"
-                                    :type="scope.row.status === '是' ? 'success' : 'danger'">
+                                        :type="scope.row.status === '是' ? 'success' : 'danger'">
                                     {{ scope.row.status }}
                                 </el-tag>
                             </template>
@@ -146,8 +169,9 @@
             </template>
             <template v-slot:page>
                 <el-pagination :current-page="page.current" :page-size="page.size" :page-sizes="[20, 50, 100]"
-                    :total="page.total" background layout="total, sizes, prev, pager, next, jumper" v-bind="page"
-                    @size-change="handleSizeChange" @current-change="handleCurrentChange">
+                               :total="page.total" background layout="total, sizes, prev, pager, next, jumper"
+                               v-bind="page"
+                               @size-change="handleSizeChange" @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>
@@ -164,15 +188,15 @@ import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
-import { listMixin } from "@/mixins/list";
-import { exportFile, getPage, importFile, remove, freeze, thaw } from "@/api/wms/basics/location";
+import {listMixin} from "@/mixins/list";
+import {exportFile, freeze, getPage, importFile, remove, thaw} from "@/api/wms/basics/location";
 import fileDownload from "js-file-download";
-import { ExcelExport } from 'pikaz-excel-js'
+import {ExcelExport} from 'pikaz-excel-js'
 import fileUpload from "@/components/nodes/fileUpload";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesZone from "@/components/wms/select/NodesZone";
 import NodesDictionary from "@/components/wms/select/NodesDictionary";
-import { nowDateFormat } from "@/util/date";
+import {nowDateFormat} from "@/util/date";
 import NodesLpnType from "@/components/wms/select/NodesLpnType";
 
 export default {
@@ -202,6 +226,9 @@ export default {
                     locLevel: '',
                     locBank: '',
                     locColumn: '',
+                    agvLocation: '',
+                    agvPoint: '',
+                    agvLevel: '',
                     locTypeList: [],
                     locCategoryList: [],
                     locHandlingList: [],
@@ -249,6 +276,7 @@ export default {
                         label: "货架列",
                         sortable: "custom",
                     },
+
                     {
                         prop: "locType",
                         label: "库位类型",
@@ -277,6 +305,21 @@ export default {
                     {
                         prop: "putOrder",
                         label: "上架顺序",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "agvLocation",
+                        label: "AGV库位编码",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "agvLevel",
+                        label: "AGV层高",
+                        sortable: "custom",
+                    },
+                    {
+                        prop: "agvPoint",
+                        label: "AGV编码点",
                         sortable: "custom",
                     },
                     {

@@ -8,13 +8,17 @@
                loc_code
         FROM wms_location
         WHERE loc_code LIKE CONCAT('%', #{locCode}, '%')
-        ORDER BY update_time DESC LIMIT 10
+        ORDER BY update_time DESC
+        LIMIT 10
     </select>
 
     <sql id="tableList">
         SELECT
         l.loc_id,
         l.loc_code,
+        l.agv_location,
+        l.agv_level,
+        l.agv_point,
         w.wh_name as whName,
         z.zone_name as zoneName,
         d1.dict_value as locType,
@@ -51,6 +55,15 @@
             </if>
             <if test=" param.locColumn != null and param.locColumn !='' ">
                 AND l.loc_column LIKE CONCAT('%', #{param.locColumn}, '%')
+            </if>
+            <if test=" param.agvLocation != null and param.agvLocation !='' ">
+                AND l.agv_location LIKE CONCAT('%', #{param.agvLocation}, '%')
+            </if>
+            <if test=" param.agvLevel != null and param.agvLevel !='' ">
+                AND l.agv_level LIKE CONCAT('%', #{param.agvLevel}, '%')
+            </if>
+            <if test=" param.agvPoint != null and param.agvPoint !='' ">
+                AND l.agv_point LIKE CONCAT('%', #{param.agvPoint}, '%')
             </if>
             <if test=" param.whIdList != null and param.whIdList.size > 0 ">
                 AND l.wh_id IN
@@ -231,7 +244,7 @@
         SELECT zone.zone_type
         FROM wms_location loc
                  LEFT JOIN wms_zone zone
-        ON zone.zone_id = loc.zone_id
+                           ON zone.zone_id = loc.zone_id
         WHERE loc.loc_id = #{locId}
     </select>
 </mapper>
