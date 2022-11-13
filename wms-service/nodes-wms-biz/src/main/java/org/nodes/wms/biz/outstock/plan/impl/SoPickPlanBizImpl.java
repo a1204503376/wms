@@ -10,9 +10,11 @@ import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.outstock.logSoPick.modular.LogSoPickFactory;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
+import org.nodes.wms.biz.outstock.so.SoBillBiz;
 import org.nodes.wms.biz.outstock.strategy.TianyiPickStrategy;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
+import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.outstock.SoPickPlanDao;
@@ -26,6 +28,7 @@ import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
+import org.nodes.wms.dao.task.entities.WmsTask;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -57,6 +60,8 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	private final StockQueryBiz stockQueryBiz;
 	private final LogSoPickFactory logSoPickFactory;
 	private final LogSoPickDao logSoPickDao;
+	private final WmsTaskBiz wmsTaskBiz;
+	private final SoBillBiz soBillBiz;
 
 	@Override
 	public boolean hasEnablePickPlan(Long soBillId) {
@@ -207,6 +212,14 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 
 		List<SoPickPlan> soPickPlan = soPickPlanDao.getByPickPlanIds(soPickPlanIdList);
 		cancelPickPlan(soPickPlan, soHeader);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public void cancelPickPlan(WmsTask task) {
+		SoHeader soHeader = soBillBiz.getSoHeaderById(task.getBillId());
+		List<SoPickPlan> soPickPlanList = soPickPlanDao.getPickByTaskId(task.getBillId());
+		cancelPickPlan(soPickPlanList, soHeader);
 	}
 
 	@Override

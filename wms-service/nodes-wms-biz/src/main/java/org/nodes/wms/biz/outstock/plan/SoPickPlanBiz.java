@@ -10,6 +10,7 @@ import org.nodes.wms.dao.outstock.soPickPlan.dto.intput.SoPickPlanPageQuery;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanPageResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.entities.Stock;
+import org.nodes.wms.dao.task.entities.WmsTask;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -93,6 +94,13 @@ public interface SoPickPlanBiz {
 	 * @param soHeader         发货单
 	 */
 	void cancelPickPlan(SoHeader soHeader, List<Long> soPickPlanIdList);
+
+	/**
+	 * 根据工作任务取消拣货计划
+	 *
+	 * @param task 任务id
+	 */
+	void cancelPickPlan(WmsTask task);
 
 	/**
 	 * 关闭单据的时候取消未执行完毕的分配记录

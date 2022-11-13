@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
-import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
 import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
 import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
@@ -57,6 +56,13 @@ public interface WmsTaskBiz {
 	 * @param taskIdList 任务id
 	 */
 	void cancel(List<Long> taskIdList);
+
+	/**
+	 * 取消任务判断任务类型，如果拣货任务取消分配
+	 *
+	 * @param task 工作任务实体
+	 */
+	void cancel(WmsTask task);
 
 	/**
 	 * 继续执行任务的动作
