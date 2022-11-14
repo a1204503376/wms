@@ -21,6 +21,10 @@ namespace DataAccess.Enitiies
         public string SkuLot6 { get; set; }
         public string SkuLot7 { get; set; }
         public string SkuLot8 { get; set; }
+        /// <summary>
+        /// 旧箱号
+        /// </summary>
+        public string Udf2 { get; set; }
         public int IsDeleted { get; set; }
     }
 }

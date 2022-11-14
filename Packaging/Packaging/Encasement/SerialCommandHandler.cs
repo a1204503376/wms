@@ -3,10 +3,10 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DataAccess.Dto;
 using DataAccess.Encasement;
 using DataAccess.Wms;
 using DevExpress.XtraPrinting;
-using DevExpress.XtraPrinting.Native;
 using DevExpress.XtraReports.UI;
 using Packaging.Common;
 using Packaging.Utility;
@@ -81,16 +81,21 @@ namespace Packaging.Encasement
 
         private static void PrintBeforeHandler(SerialNumberReport serialNumberReport, ReportPrintTool reportPrintTool)
         {
-            var serialNumberDto = serialNumberReport.SerialNumberPrintDtoList.First();
-            if (serialNumberDto.BoxNumber != Constants.DefaulutBoxNumber)
+            var serialNumberPrintDto = serialNumberReport.SerialNumberPrintDtoList.First();
+            if (serialNumberPrintDto.BoxNumber != Constants.DefaulutBoxNumber)
             {
+                // 如果是箱标重打，重新保存数据
+                if (serialNumberPrintDto.AgainPrintFlag)
+                {
+                    SaveSerialNumberData(serialNumberPrintDto);
+                }
                 // 打开的预览页面没有关闭是，只生成一次箱码，只保存一次数据
-                reportPrintTool.Print();
+                Print(reportPrintTool);
                 return;
             }
 
             //只有用户正式点击预览打印页面的打印按钮时才生成箱码
-            var boxNumber = WmsApiHelper.GetBoxNumber(serialNumberDto.BoxType, serialNumberDto.SkuName, serialNumberDto.Model);
+            var boxNumber = WmsApiHelper.GetBoxNumber(serialNumberPrintDto.BoxType, serialNumberPrintDto.SkuName, serialNumberPrintDto.Model);
 
             foreach (var item in serialNumberReport.SerialNumberPrintDtoList)
             {
@@ -102,7 +107,7 @@ namespace Packaging.Encasement
                 item.BoxNumber = boxNumber;
             }
 
-            serialNumberDto.ReceiveDetailLpns.ForEach(d => { d.BoxCode = boxNumber; });
+            serialNumberPrintDto.ReceiveDetailLpns.ForEach(d => { d.BoxCode = boxNumber; });
 
             try
             {
@@ -115,6 +120,11 @@ namespace Packaging.Encasement
             }
 
             serialNumberReport.CreateDocument();
+            Print(reportPrintTool);
+        }
+
+        private static void Print(ReportPrintTool reportPrintTool)
+        {
             bool savePrintPreviewFlag = Convert.ToBoolean(ConfigurationManager.AppSettings["SavePrintPreviewFlag"]);
             if (!savePrintPreviewFlag)
             {
@@ -130,10 +140,12 @@ namespace Packaging.Encasement
             // 2.库房内的重新打印（WMS走出库，再入库流程）
             ReceiveDetailLpnDal.Save(serialNumberPrintDto.BoxNumber, serialNumberPrintDto.ReceiveDetailLpns);
 
-            Task.Run(() =>
-            {
-                PackingSerialDal.SaveSerialData(serialNumberPrintDto);
-            });
+            SaveSerialNumberData(serialNumberPrintDto);
+        }
+
+        private static void SaveSerialNumberData(SerialNumberPrintDto serialNumberPrintDto)
+        {
+            Task.Run(() => { PackingSerialDal.SaveSerialData(serialNumberPrintDto); });
         }
     }
 }

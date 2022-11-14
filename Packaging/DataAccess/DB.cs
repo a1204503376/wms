@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Diagnostics;
-using System.Text;
-using DataAccess.Common;
 using FreeSql;
 using FreeSql.Aop;
 using FreeSql.Internal;

@@ -10,7 +10,6 @@ using DataAccess.Wms;
 using DevExpress.XtraPrinting;
 using DevExpress.XtraReports.UI;
 using PackagingWeb.PredefinedReports;
-using System.Web.Hosting;
 
 
 namespace PackagingWeb
@@ -25,6 +24,12 @@ namespace PackagingWeb
             if (wmsStockList == null || wmsStockList.Count==0)
             {
                 throw new Exception("箱号对应的库存为空");
+            }
+
+            // 是否打印UDF2（旧箱号）
+            if (!boxPrintRequest.PrintUdf2Flag)
+            {
+                wmsStockList.ForEach(d=>d.Udf2=string.Empty);
             }
 
             var serialFlag = boxPrintRequest.BoxType.ToLower() != "batch";
@@ -91,6 +96,7 @@ namespace PackagingWeb
                     PlanQty = planQty
                 });
                 batchPrintDto.SpecialCustomer = wmsStock.SkuLot4;
+                batchPrintDto.Udf2 = wmsStock.Udf2;
             }
 
             batchPrintDto.SkuDetails = skuDetails;
@@ -158,7 +164,8 @@ namespace PackagingWeb
                     Qty = qty,
                     WspName = wmsStock.WsuCode,
                     BoxNumber = wmsStock.BoxCode,
-                    SpecialCustomer = wmsStock.SkuLot4
+                    SpecialCustomer = wmsStock.SkuLot4,
+                    Udf2 = wmsStock.Udf2
                 };
 
                 int index = (i * SerialNumberPrintDto.SerialGroupNumber);
@@ -209,29 +216,36 @@ namespace PackagingWeb
 
         private BoxPrintRequest GetBoxPrintRequest()
         {
-            var boxCode = Request.Params["BoxCode"];
+            var boxCode = Request.QueryString["BoxCode"];
             if (string.IsNullOrWhiteSpace(boxCode))
             {
                 throw new Exception("箱号为空");
             }
 
-            var boxType = Request.Params["BoxType"];
+            var boxType = Request.QueryString["BoxType"];
             if (string.IsNullOrWhiteSpace(boxType))
             {
                 throw new Exception("箱号类型为空");
             }
 
-            var userName = Request.Params["UserName"];
+            var userName = Request.QueryString["UserName"];
             if (string.IsNullOrWhiteSpace(userName))
             {
                 throw new Exception("工号为空");
             }
 
-            var copies = Request.Params["Copies"];
+            var copies = Request.QueryString["Copies"];
             if (string.IsNullOrWhiteSpace(copies)
                 || !int.TryParse(copies, out var _))
             {
                 copies = ConfigurationManager.AppSettings["Copies"];
+            }
+
+            var printUdf2Flag= Request.QueryString["PrintUdf2Flag"];
+            if (string.IsNullOrWhiteSpace(printUdf2Flag)
+                || !bool.TryParse(printUdf2Flag, out var _)) 
+            {
+                printUdf2Flag = ConfigurationManager.AppSettings["PrintUdf2Flag"];
             }
 
             var boxPrintRequest = new BoxPrintRequest
@@ -239,7 +253,8 @@ namespace PackagingWeb
                 BoxType = boxType,
                 BoxCode = boxCode,
                 Copies = Convert.ToInt16(copies),
-                UserName = userName
+                UserName = userName,
+                PrintUdf2Flag = Convert.ToBoolean(printUdf2Flag)
             };
             return boxPrintRequest;
         }
@@ -289,6 +304,6 @@ namespace PackagingWeb
         public string BoxCode { get; set; }
         public string UserName { get; set; }
         public short Copies { get; set; }
-
+        public bool PrintUdf2Flag { get; set; }
     }
 }

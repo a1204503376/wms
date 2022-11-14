@@ -18,6 +18,11 @@ namespace Packaging.Encasement
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            Search();
+        }
+
+        private void Search()
+        {
             if (!dxValidationProvider1.Validate())
             {
                 return;
@@ -106,6 +111,14 @@ namespace Packaging.Encasement
             }
 
             batchPackingForm.SetReprintDataSource(packingBatchHeader, packingBatchDetails);
+        }
+
+        private void txtBoxNumber_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (int)Keys.Enter)
+            {
+                Search();
+            }
         }
     }
 }

@@ -29,19 +29,19 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule2 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
+            DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule1 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CartonLabelForm));
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
-            this.Root = new DevExpress.XtraLayout.LayoutControlGroup();
             this.txtBoxNumber = new DevExpress.XtraEditors.TextEdit();
-            this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             this.btnSearch = new DevExpress.XtraEditors.SimpleButton();
+            this.Root = new DevExpress.XtraLayout.LayoutControlGroup();
+            this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.dxValidationProvider1 = new DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Root)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtBoxNumber.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Root)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dxValidationProvider1)).BeginInit();
@@ -60,6 +60,29 @@
             this.layoutControl1.TabIndex = 0;
             this.layoutControl1.Text = "layoutControl1";
             // 
+            // txtBoxNumber
+            // 
+            this.txtBoxNumber.Location = new System.Drawing.Point(69, 12);
+            this.txtBoxNumber.Name = "txtBoxNumber";
+            this.txtBoxNumber.Size = new System.Drawing.Size(219, 24);
+            this.txtBoxNumber.StyleController = this.layoutControl1;
+            this.txtBoxNumber.TabIndex = 4;
+            conditionValidationRule1.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule1.ErrorText = "请输入箱号";
+            this.dxValidationProvider1.SetValidationRule(this.txtBoxNumber, conditionValidationRule1);
+            this.txtBoxNumber.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtBoxNumber_KeyPress);
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnSearch.ImageOptions.Image")));
+            this.btnSearch.Location = new System.Drawing.Point(292, 12);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(90, 27);
+            this.btnSearch.StyleController = this.layoutControl1;
+            this.btnSearch.TabIndex = 5;
+            this.btnSearch.Text = "搜索";
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
             // Root
             // 
             this.Root.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
@@ -71,17 +94,6 @@
             this.Root.Size = new System.Drawing.Size(394, 51);
             this.Root.TextVisible = false;
             // 
-            // txtBoxNumber
-            // 
-            this.txtBoxNumber.Location = new System.Drawing.Point(69, 12);
-            this.txtBoxNumber.Name = "txtBoxNumber";
-            this.txtBoxNumber.Size = new System.Drawing.Size(219, 24);
-            this.txtBoxNumber.StyleController = this.layoutControl1;
-            this.txtBoxNumber.TabIndex = 4;
-            conditionValidationRule2.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule2.ErrorText = "请输入箱号";
-            this.dxValidationProvider1.SetValidationRule(this.txtBoxNumber, conditionValidationRule2);
-            // 
             // layoutControlItem1
             // 
             this.layoutControlItem1.Control = this.txtBoxNumber;
@@ -90,17 +102,6 @@
             this.layoutControlItem1.Size = new System.Drawing.Size(280, 31);
             this.layoutControlItem1.Text = "箱号：";
             this.layoutControlItem1.TextSize = new System.Drawing.Size(45, 18);
-            // 
-            // btnSearch
-            // 
-            this.btnSearch.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton1.ImageOptions.Image")));
-            this.btnSearch.Location = new System.Drawing.Point(292, 12);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(90, 27);
-            this.btnSearch.StyleController = this.layoutControl1;
-            this.btnSearch.TabIndex = 5;
-            this.btnSearch.Text = "搜索";
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // layoutControlItem2
             // 
@@ -125,8 +126,8 @@
             this.Text = "箱标重打";
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Root)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtBoxNumber.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Root)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dxValidationProvider1)).EndInit();

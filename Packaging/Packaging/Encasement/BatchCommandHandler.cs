@@ -9,6 +9,7 @@ using Packaging.Utility;
 using System.Configuration;
 using System;
 using System.Windows.Forms;
+using DataAccess.Dto;
 
 namespace Packaging.Encasement
 {
@@ -80,17 +81,23 @@ namespace Packaging.Encasement
 
         private static void PrintBeforeHandler(BatchPackingReport batchPackingReport, ReportPrintTool reportPrintTool)
         {
-            var printDto = batchPackingReport.BatchPrintDtoList.First();
-            if (printDto.BoxNumber != Constants.DefaulutBoxNumber)
+            var batchPrintDto = batchPackingReport.BatchPrintDtoList.First();
+            if (batchPrintDto.BoxNumber != Constants.DefaulutBoxNumber)
             {
-                // 打开的预览页面没有关闭是，只生成一次箱码，只保存一次数据
-                reportPrintTool.Print();
+                // 如果是箱标重打，重新保存一份数据
+                if (batchPrintDto.AgainPrintFlag)
+                {
+                    SaveBatchData(batchPrintDto);
+                }
+
+                // 打开的预览页面没有关闭时，只生成一次箱码，只保存一次数据
+                Print(reportPrintTool);
                 return;
             }
 
             //只有用户正式点击预览打印页面的打印按钮时才生成箱码
-            var skuNameList = printDto.SkuDetails.Select(d => d.Sku.SkuName).Distinct().ToList();
-            var boxNumber = WmsApiHelper.GetBoxNumber(printDto.BoxType, skuNameList, printDto.Model);
+            var skuNameList = batchPrintDto.SkuDetails.Select(d => d.Sku.SkuName).Distinct().ToList();
+            var boxNumber = WmsApiHelper.GetBoxNumber(batchPrintDto.BoxType, skuNameList, batchPrintDto.Model);
 
             foreach (var item in batchPackingReport.BatchPrintDtoList)
             {
@@ -102,10 +109,25 @@ namespace Packaging.Encasement
                 item.BoxNumber = boxNumber;
             }
 
-            printDto.ReceiveDetailLpns.ForEach(d => { d.BoxCode = boxNumber; });
+            batchPrintDto.ReceiveDetailLpns.ForEach(d => { d.BoxCode = boxNumber; });
 
-            
+            Save(batchPackingReport);
 
+            batchPackingReport.CreateDocument();
+            Print(reportPrintTool);
+        }
+
+        private static void Print(PrintToolBase reportPrintTool)
+        {
+            bool savePrintPreviewFlag = Convert.ToBoolean(ConfigurationManager.AppSettings["SavePrintPreviewFlag"]);
+            if (!savePrintPreviewFlag)
+            {
+                reportPrintTool.Print();
+            }
+        }
+
+        private static void Save(BatchPackingReport batchPackingReport)
+        {
             try
             {
                 SaveData(batchPackingReport);
@@ -115,13 +137,6 @@ namespace Packaging.Encasement
                 Serilog.Log.Fatal("打印前入库保存异常：{}", ex);
                 CustomMessageBox.Exception($"打印前入库保存异常:{ex.GetOriginalException().Message}");
             }
-
-            batchPackingReport.CreateDocument();
-            bool savePrintPreviewFlag = Convert.ToBoolean(ConfigurationManager.AppSettings["SavePrintPreviewFlag"]);
-            if (!savePrintPreviewFlag)
-            {
-                reportPrintTool.Print();
-            }
         }
 
         private static void SaveData(BatchPackingReport batchPackingReport)
@@ -129,10 +144,12 @@ namespace Packaging.Encasement
             var batchPrintDto = batchPackingReport.BatchPrintDtoList.First();
             ReceiveDetailLpnDal.Save(batchPrintDto.BoxNumber, batchPrintDto.ReceiveDetailLpns);
 
-            Task.Run(() =>
-            {
-                PackingBatchDal.SaveBatchData(batchPrintDto);
-            });
+            SaveBatchData(batchPrintDto);
+        }
+
+        private static void SaveBatchData(BatchPrintDto batchPrintDto)
+        {
+            Task.Run(() => { PackingBatchDal.SaveBatchData(batchPrintDto); });
         }
     }
 }

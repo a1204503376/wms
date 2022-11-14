@@ -42,7 +42,16 @@ namespace DataAccess.Dto
         public string Qty3 { get; set; }
         public string Qty4 { get; set; }
         public List<ReceiveDetailLpn> ReceiveDetailLpns { get; set; }
-
+        /// <summary>
+        /// 旧箱号
+        /// 库内打印使用
+        /// </summary>
+        public string Udf2 { get; set; }
+        /// <summary>
+        /// 箱标重打标志
+        /// true:重打，false：第一次打印
+        /// </summary>
+        public bool AgainPrintFlag { get; set; }
         public void SetQty()
         {
             // 相关物品的数量进行合并后打印箱贴

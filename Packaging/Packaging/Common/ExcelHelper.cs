@@ -11,8 +11,6 @@ using NPOI.XSSF.UserModel;
 using System.Text.RegularExpressions;
 using DataAccess.Dto;
 using System.Reflection;
-using NPOI.SS.Formula.Functions;
-using DevExpress.ClipboardSource.SpreadsheetML;
 using System.Data;
 
 namespace Packaging.Common

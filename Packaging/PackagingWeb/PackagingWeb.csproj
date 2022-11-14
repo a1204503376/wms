@@ -111,7 +111,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Code\SerilogConfig.cs" />
     <Compile Include="Box.aspx.cs">
       <DependentUpon>Box.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -186,6 +185,7 @@
     <EmbeddedResource Include="Properties\licenses.licx" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Code\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>

@@ -56,6 +56,7 @@ namespace DataAccess.Encasement
                         SkuLot1 = skuDetail.SkuLot1,
                         Qty = skuDetail.PlanQty,
                         Model = batchPrintDto.Model,
+                        TrackingNumber=skuDetail.TrackingNumber
                     };
                     packingBatches.Add(packingBatch);
                 }
