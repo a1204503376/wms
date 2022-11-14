@@ -341,41 +341,12 @@ public class OutStockBizImpl implements OutStockBiz {
 		if (soPickPlans.size() == 0) {
 			throw new ServiceException("按箱拣货失败，根据箱码查询不到对应拣货计划");
 		}
-		WmsTask task = wmsTaskBiz.findByTaskId(soPickPlans.get(0).getTaskId());
-		// 3、根据拣货计划生成拣货记录,根据任务id从拣货计划中查找
-//		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(task.getTaskId());
-		AssertUtil.notNull(soPickPlans, "接驳区拣货失败，根据任务查询不到对应的拣货计划");
-		List<SoDetail> soDetailList = soBillBiz.getEnableSoDetailBySoHeaderId(soPickPlans.get(0).getSoBillId());
-		AssertUtil.notNull(soDetailList, "接驳区拣货失败，根据拣货计划查询不到对应的发货单详情");
-		Boolean stockGtSoDetail = true;
-		Boolean moveAgvPickTo = false;
-		for (Stock stock : stockList) {
-			for (SoDetail soDetail : soDetailList) {
-				if (Func.isNotEmpty(soDetail.getSkuLot1()) && !soDetail.getSkuLot1().equals(stock.getSkuLot1())) {
-					continue;
-				}
-				if (Func.isNotEmpty(soDetail.getSkuLot2()) && !soDetail.getSkuLot2().equals(stock.getSkuLot2())) {
-					continue;
-				}
-				if (Func.isNotEmpty(soDetail.getSkuLot4()) && !soDetail.getSkuLot4().equals(stock.getSkuLot4())) {
-					continue;
-				}
-				if (BigDecimalUtil.gt(stock.getStockBalance(), soDetail.getSurplusQty())) {
-					stockGtSoDetail = false;
-					moveAgvPickTo = true;
-				}
-			}
-		}
-		if (moveAgvPickTo) {
-			return stockGtSoDetail;
-		}
-
 		// 5、如果超了则返回
 		try {
 			for (String boxCode : boxCodeList) {
 				PickByBoxCodeRequest boxCodeRequest = new PickByBoxCodeRequest();
 				boxCodeRequest.setBoxCode(boxCode);
-				pickByBox(boxCodeRequest, WmsTaskProcTypeEnum.BY_BOX);
+				pickByAgvPickTo(boxCodeRequest, WmsTaskProcTypeEnum.BY_BOX);
 			}
 		} catch (ServiceException exception) {
 			if (exception.getMessage().equals("拣货失败,发货数量大于剩余数量,请拆箱之后再进行拣货")) {
@@ -383,6 +354,42 @@ public class OutStockBizImpl implements OutStockBiz {
 			}
 		}
 		return true;
+	}
+
+	public void pickByAgvPickTo(PickByBoxCodeRequest request, WmsTaskProcTypeEnum taskProcTypeEnum) {
+		WmsTask task = wmsTaskBiz.findPickTaskByBoxCode(request.getBoxCode(), taskProcTypeEnum, null);
+		// 1、根据箱码查询任务
+		SoHeader soHeader = soBillBiz.getSoHeaderById(task.getBillId());
+		AssertUtil.notNull(soHeader, "根据任务存在的发货单头表信息查询发货单失败");
+		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
+		if (stockList.size() == 0) {
+			throw new ServiceException("按箱拣货失败，根据箱码查询不到对应库存");
+		}
+
+		// 2、参数校验 头表
+		canPick(soHeader);
+		boxCodeCanPick(request, task, soHeader);
+		// 3、根据拣货计划生成拣货记录,根据任务id从拣货计划中查找
+		List<SoPickPlan> soPickPlans = soPickPlanBiz.findPickByTaskId(task.getTaskId());
+
+		canPick(soPickPlans, stockList);
+		// 拣货、更新拣货计划
+		BigDecimal soPickPlanSurplusQty = updateSoPickPlan(soPickPlans);
+
+		// 5、更新出库单信息
+		soBillBiz.updateSoBillState(soHeader);
+		task.setScanQty(task.getScanQty().add(soPickPlanSurplusQty));
+		if (BigDecimalUtil.ge(task.getScanQty(), task.getTaskQty())) {
+			// 6、更新任务
+			wmsTaskBiz.updateWmsTaskStateByTaskId(task.getTaskId(), WmsTaskStateEnum.COMPLETED, task.getScanQty());
+		} else {
+			// 6、更新任务
+			wmsTaskBiz.updateWmsTaskStateByTaskId(task.getTaskId(), WmsTaskStateEnum.START_EXECUTION, task.getScanQty());
+		}
+
+		// 7、记录业务日志
+		logBiz.auditLog(AuditLogType.OUTSTOCK, soHeader.getSoBillId(), soHeader.getSoBillNo(),
+			spliceLog(taskProcTypeEnum, stockList));
 	}
 
 	@Override
@@ -792,6 +799,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		});
 	}
 
+	//拼接业务日志信息
 	private String spliceLog(WmsTaskProcTypeEnum taskProcTypeEnum, List<Stock> stockList) {
 		StringBuilder logString = new StringBuilder();
 		for (Stock stock : stockList) {
@@ -801,33 +809,30 @@ public class OutStockBizImpl implements OutStockBiz {
 		return String.format("PDA%s 箱码:[%s]%s", taskProcTypeEnum.getDesc(), stockList.get(0).getBoxCode(), logString);
 	}
 
+	//按箱接驳区拣货判断是否可以拣货
 	private void canPick(List<SoPickPlan> soPickPlanList, List<Stock> stockList) {
-		List<SoDetail> soDetailList = new ArrayList<>();
 		BigDecimal surplusQty = BigDecimal.ZERO;
-		for (SoPickPlan soPickPlan : soPickPlanList) {
-			SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlan.getSoDetailId());
-			soDetailList.add(soDetail);
-		}
-		List<SoDetail> soDetails = soDetailList.stream()
+		BigDecimal pickQty = BigDecimal.ZERO;
+		List<Long> soDetailIdList = soPickPlanList.stream()
+			.map(SoPickPlan::getSoDetailId)
 			.distinct()
 			.collect(Collectors.toList());
-		BigDecimal pickQty = BigDecimal.ZERO;
 
-		for (SoDetail soDetail : soDetails) {
-			if (soDetail.getBillDetailState().equals(SoDetailStateEnum.DELETED)
-				|| soDetail.getBillDetailState().equals(SoDetailStateEnum.ALL_OUT_STOCK)) {
-				throw new ServiceException("拣货失败,发货单明细状态为" + soDetail.getBillDetailState() + "不能进行拣货");
-			}
+		for (Long soDetailId : soDetailIdList) {
+			SoDetail soDetail = soBillBiz.getSoDetailById(soDetailId);
 			surplusQty = surplusQty.add(soDetail.getSurplusQty());
 		}
+
 		for (Stock stock : stockList) {
 			pickQty = pickQty.add(stock.getStockBalance());
 		}
+
 		if (BigDecimalUtil.gt(pickQty, surplusQty)) {
 			throw new ServiceException("拣货失败,发货数量大于剩余数量,请拆箱之后再进行拣货");
 		}
 	}
 
+	//根据拣货计划进行拣货的判断限制
 	private void canPick(BigDecimal surplusQty, List<SoPickPlan> soPickPlanList, List<Stock> stockList) {
 		List<SoDetail> soDetailList = new ArrayList<>();
 		for (SoPickPlan soPickPlan : soPickPlanList) {
