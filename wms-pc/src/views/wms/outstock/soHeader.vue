@@ -65,6 +65,12 @@
                 <el-button v-if="permissionObj.delete" icon="el-icon-delete" plain size="mini" type="danger"
                            @click="onRemove">删除
                 </el-button>
+                <el-button v-if="permissionObj.exportLotLot" size="mini" type="primary"
+                           @click="onExportLotLot">导出发货批次（批次）
+                </el-button>
+                <el-button v-if="permissionObj.exportLotSerial" size="mini" type="primary"
+                           @click="onExportLotSerial">导出发货批次（序列号）
+                </el-button>
             </template>
             <template v-slot:tableTool>
                 <el-tooltip :enterable="false" class="item" content="刷新" effect="dark" placement="top">
@@ -247,7 +253,9 @@ export default {
                 edit: this.vaildData(this.permission.soHeader_edit, false),
                 close: this.vaildData(this.permission.soHeader_close, false),
                 pick: this.vaildData(this.permission.soHeader_pick, false),
-                distribute: this.vaildData(this.permission.soHeader_distribute, false)
+                distribute: this.vaildData(this.permission.soHeader_distribute, false),
+                exportLotLot: this.vaildData(this.permission.export_lot_lot, false),
+                exportLotSerial: this.vaildData(this.permission.export_lot_serial, false)
             }
         },
         showActionBar() {
@@ -284,15 +292,62 @@ export default {
                 type: "warning",
             }).then(() => {
                 let soBillIdList = rows.map(item => item.soBillId);
-                remove(soBillIdList)
-                    .then((res) => {
-                        this.$message({
-                            type: "success",
-                            message: res.data.msg,
-                        });
-                        this.getTableData();
-                    })
+                remove(soBillIdList).then((res) => {
+                    this.$message({
+                        type: "success",
+                        message: res.data.msg,
+                    });
+                    this.getTableData();
+                })
             })
+        },
+        onExportLotLot() {
+            let checkedRows = this.$refs.table.selection;
+            if (checkedRows[0].soBillState === '单据创建') {
+                this.$message.warning("无法导出，请分配或全部拣货之后再导出")
+                return;
+            }
+            if (checkedRows[0].soBillState === '部分拣货') {
+                this.$message.warning("无法导出，不支持部分拣货的单据导出")
+                return;
+            }
+            switch (checkedRows.length) {
+                case 0:
+                    this.$message.warning("请选中一条数据导出");
+                    return
+                case 1:
+                    this.$router.push({
+                        path: `/myiframe/urlPath?name=销售发货记录表（批次）.ureport.xml&src=${this.website.reportUrl}/preview?_u=nodes-销售发货记录表（批次）.ureport.xml${escape("&")}soBillId=${checkedRows[0].soBillId}`
+                    });
+                    break;
+                default:
+                    this.$message.warning("只能选中一条数据导出");
+                    return;
+            }
+        },
+        onExportLotSerial() {
+            let checkedRows = this.$refs.table.selection;
+            if (checkedRows[0].soBillState === '单据创建') {
+                this.$message.warning("无法导出，请分配或全部拣货之后再导出")
+                return;
+            }
+            if (checkedRows[0].soBillState === '部分拣货') {
+                this.$message.warning("无法导出，不支持部分拣货的单据导出")
+                return;
+            }
+            switch (checkedRows.length) {
+                case 0:
+                    this.$message.warning("请选中一条数据导出");
+                    return
+                case 1:
+                    this.$router.push({
+                        path: `/myiframe/urlPath?name=销售发货批次记录表（序列号）.ureport.xml&src=${this.website.reportUrl}/preview?_u=nodes-销售发货批次记录表（序列号）.ureport.xml${escape("&")}soBillId=${checkedRows[0].soBillId}`
+                    });
+                    break;
+                default:
+                    this.$message.warning("只能选中一条数据导出");
+                    return;
+            }
         },
         onExportData() {
             this.loading = true;
@@ -333,7 +388,10 @@ export default {
         },
         onEdit(row) {
             if (row.soBillState.trim() !== '单据创建') {
-                this.$message.warning(`操作失败，该发货单不能编辑，[${row.soBillState}]`);
+                this.$message.warning(
+                    `
+                    操作失败，该发货单不能编辑，[${row.soBillState}]`
+                );
                 return;
             }
             this.$router.push({
@@ -357,7 +415,10 @@ export default {
         },
         onDistribute(row) {
             if (row.soBillState === '已关闭' || row.soBillState === '已取消' || row.soBillState === '全部拣货') {
-                this.$message.warning(`${row.soBillState}的发货单不能分配`);
+                this.$message.warning(
+                    `${row.soBillState}
+                    的发货单不能分配`
+                );
                 return
             }
             this.$router.push({
@@ -377,7 +438,10 @@ export default {
         },
         onPick(row) {
             if (row.soBillState === '已关闭' || row.soBillState === '已取消' || row.soBillState === '全部拣货') {
-                this.$message.warning(`${row.soBillState}的发货单不能拣货`);
+                this.$message.warning(
+                    `${row.soBillState}
+                    的发货单不能拣货`
+                );
                 return
             }
             this.$router.push({
