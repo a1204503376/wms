@@ -26,6 +26,7 @@ import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveDetailStatusEnum;
 import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.stock.dto.output.SerialSelectResponse;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
@@ -515,5 +516,18 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	@Override
 	public boolean updateReceiveDetailLpnForCancelReceive(ReceiveDetailLpn receiveDetailLpn) {
 		return receiveDetailLpnDao.updateForCancelReceive(receiveDetailLpn);
+	}
+
+	@Override
+	public List<SerialSelectResponse> getSerialListByReceiveDetailId(Long receiveDetailId) {
+		List<SerialSelectResponse> serialSelectResponseList = new ArrayList<>();
+		String snCodes = receiveDetailDao.getDetailByReceiveDetailId(receiveDetailId).getSnCode();
+		String[] snCodeArray = snCodes.split(",");
+		for (String snCode : snCodeArray) {
+			SerialSelectResponse serialSelectResponse = new SerialSelectResponse();
+			serialSelectResponse.setSerialNumber(snCode);
+			serialSelectResponseList.add(serialSelectResponse);
+		}
+		return serialSelectResponseList;
 	}
 }

@@ -2,12 +2,12 @@ package org.nodes.wms.biz.instock.receiveLog.modular;
 
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsAppConstant;
+import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.suppliers.SupplierBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
-import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
 import org.nodes.wms.dao.basics.sku.entities.Sku;
@@ -89,11 +89,17 @@ public class ReceiveLogFactory {
 			if (Func.isEmpty(packageDetail)) {
 				throw new ServiceException("导入失败,物料" + sku.getSkuName() + "下不存在计量单位编码" + stockImportRequest.getWsuCode());
 			}
+			if (Func.isNotEmpty(stockImportRequest.getSnCode())){
+				if (stockImportRequest.getStockQty().intValue() != Func.split(stockImportRequest.getSnCode(),",").length){
+					throw ExceptionUtil.mpe("导入失败,物料[{}]库存数量[{}]与序列号[{}]数量不一致",
+						stockImportRequest.getSkuCode(), stockImportRequest.getStockQty(), stockImportRequest.getSnCode());
+				}
+			}
+
 			ReceiveLog receiveLog = new ReceiveLog();
 			SkuLotUtil.setAllSkuLot(stockImportRequest, receiveLog);
 			if (Func.isEmpty(stockImportRequest.getStockStatus()) || stockImportRequest.getStockStatus().equals(0)) {
 				receiveLog.setStockStatus(StockStatusEnum.NORMAL);
-
 			} else {
 				receiveLog.setStockStatus(StockStatusEnum.FREEZE);
 			}
@@ -106,7 +112,7 @@ public class ReceiveLogFactory {
 			receiveLog.setSkuId(sku.getSkuId());
 			receiveLog.setSkuCode(sku.getSkuCode());
 			receiveLog.setSkuName(sku.getSkuName());
-			receiveLog.setSkuSpec(sku.getSkuSpec());
+			receiveLog.setSkuSpec(stockImportRequest.getSkuLot2());
 			receiveLog.setWsuCode(stockImportRequest.getWsuCode());
 			receiveLog.setWspId(sku.getWspId());
 			receiveLog.setSkuLevel(packageDetail.getSkuLevel());
@@ -114,7 +120,7 @@ public class ReceiveLogFactory {
 			receiveLog.setWhCode(warehouse.getWhCode());
 			receiveLog.setWoId(owner.getWoId());
 			receiveLog.setOwnerCode(owner.getOwnerCode());
-			receiveLog.setStockStatus(StockStatusEnum.NORMAL);
+			receiveLog.setSnCode(stockImportRequest.getSnCode());
 			receiveLogList.add(receiveLog);
 		}
 		return receiveLogList;

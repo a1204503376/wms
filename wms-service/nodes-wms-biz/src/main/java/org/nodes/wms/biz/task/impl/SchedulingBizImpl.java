@@ -17,6 +17,7 @@ import org.nodes.wms.biz.putaway.modular.PutawayFactory;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.task.SchedulingBiz;
+import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
@@ -95,6 +96,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	private final PutawayFactory putawayFactory;
 	private final PutawayLogDao putawayLogDao;
 	private final SystemParamDao systemParamDao;
+	private final WmsTaskBiz wmsTaskBiz;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -409,9 +411,10 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		if (Func.isNotEmpty(wmsTask.getToLocId())) {
 			locationBiz.unfreezeLocByTask(wmsTask.getTaskId().toString());
 		}
-
 		// 修改任务状态
 		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.CANCELED, msg);
+		// 如果是AGV拣货任务取消分配
+		wmsTaskBiz.cancel(wmsTask);
 		log.info("agv任务异常[{}]-[{}]", wmsTask.getTaskId(), wmsTask);
 	}
 }

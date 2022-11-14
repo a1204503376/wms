@@ -27,8 +27,8 @@ public enum SoDetailStateEnum {
 	 */
 	Allocated("已分配", 30),
 	NORMAL("正常", 0),
-	PART("部分出库", 50),
-	ALL_OUT_STOCK("全部出库", 60),
+	PART("部分拣货", 50),
+	ALL_OUT_STOCK("全部拣货", 60),
 	DELETED("已删除", 40);
 
 	@JsonValue

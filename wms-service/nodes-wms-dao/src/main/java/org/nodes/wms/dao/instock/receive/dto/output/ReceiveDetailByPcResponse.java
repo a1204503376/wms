@@ -60,4 +60,8 @@ public class ReceiveDetailByPcResponse {
 	 * 适用速度等级
 	 */
 	private String skuLot8;
+	/**
+	 * 序列号
+	 */
+	private String snNumber;
 }

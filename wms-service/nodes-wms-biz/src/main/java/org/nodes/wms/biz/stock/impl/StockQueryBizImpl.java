@@ -324,6 +324,11 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		for (StockPageResponse stockPageResponse : stockListCount) {
 			String stockStatus = stockPageResponse.getStockStatus().getDesc();
 			stockPageResponse.setStockStatusDesc(stockStatus);
+			// 导出序列号，以,分割
+			List<String> serialList = serialDao.getSerialNoByStockId(stockPageResponse.getStockId());
+			if (Func.isNotEmpty(serialList)) {
+				stockPageResponse.setSnCode(String.join(",", serialList));
+			}
 //			// 设置库存可用量
 //			stockPageResponse.setStockEnable(stockPageResponse.getStockQty()
 //				.add(stockPageResponse.getPickQty().subtract(stockPageResponse.getOccupyQty())));

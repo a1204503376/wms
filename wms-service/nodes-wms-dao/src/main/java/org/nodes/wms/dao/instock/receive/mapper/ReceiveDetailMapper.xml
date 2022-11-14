@@ -3,7 +3,9 @@
 <mapper namespace="org.nodes.wms.dao.instock.receive.mapper.ReceiveDetailMapper">
 
     <delete id="deleteByDetailId">
-        DELETE FROM receive_detail WHERE receive_detail_id = #{id}
+        DELETE
+        FROM receive_detail
+        WHERE receive_detail_id = #{id}
     </delete>
 
     <select id="selectDetailById" resultType="org.nodes.wms.dao.instock.receive.dto.output.DetailReceiveDetailResponse">
@@ -77,6 +79,7 @@
         SELECT rd.receive_detail_id,
                rd.line_no,
                rd.sku_code,
+               rd.sn_code snNumber,
                rd.surplus_qty,
                rd.um_code,
                rd.sku_spec,

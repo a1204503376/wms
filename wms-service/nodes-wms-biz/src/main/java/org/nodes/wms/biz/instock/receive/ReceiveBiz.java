@@ -9,6 +9,7 @@ import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
 import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
+import org.nodes.wms.dao.stock.dto.output.SerialSelectResponse;
 import org.springblade.core.mp.support.Query;
 
 import javax.servlet.http.HttpServletResponse;
@@ -284,4 +285,12 @@ public interface ReceiveBiz {
 	 * @return true: 更新成功，false: 更新失败
 	 */
 	boolean updateReceiveDetailLpnForCancelReceive(ReceiveDetailLpn receiveDetailLpn);
+
+	/**
+	 * 根据收货单明细Id查询序列号
+	 *
+	 * @param receiveDetailId
+	 * @return
+	 */
+	List<SerialSelectResponse> getSerialListByReceiveDetailId(Long receiveDetailId);
 }

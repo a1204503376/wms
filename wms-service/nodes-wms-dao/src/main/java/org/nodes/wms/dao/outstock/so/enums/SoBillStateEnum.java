@@ -20,8 +20,8 @@ import java.util.List;
 public enum SoBillStateEnum {
 	CREATE("单据创建", 10),
 	EXECUTING("已分配", 20),
-	PART("部分出库", 30),
-	ALL_OUT_STOCK("全部出库", 35),
+	PART("部分拣货", 30),
+	ALL_OUT_STOCK("全部拣货", 35),
 	COMPLETED("已关闭", 40),
 	CANCELED("已取消", 90);
 

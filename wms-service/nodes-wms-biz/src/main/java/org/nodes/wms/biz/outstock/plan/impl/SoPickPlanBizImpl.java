@@ -26,6 +26,7 @@ import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
+import org.nodes.wms.dao.task.entities.WmsTask;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -207,6 +208,13 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 
 		List<SoPickPlan> soPickPlan = soPickPlanDao.getByPickPlanIds(soPickPlanIdList);
 		cancelPickPlan(soPickPlan, soHeader);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public void cancelPickPlan(WmsTask task, SoHeader soHeader) {
+		List<SoPickPlan> soPickPlanList = soPickPlanDao.getPickByTaskId(task.getBillId());
+		cancelPickPlan(soPickPlanList, soHeader);
 	}
 
 	@Override

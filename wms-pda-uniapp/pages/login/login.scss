@@ -5,10 +5,7 @@ span {
 	text-align: center;
 	display: block;
 	flex-wrap: wrap;
-	position: fixed;
-	margin-left: 23%;
-	bottom: 0;
-	
+	margin-top: 20rpx;
 }
 .logodiv {
 	text-align: center;
@@ -16,12 +13,12 @@ span {
 	flex-wrap: wrap;
 	margin-top: 0.5rem;
 	h3 {
-		font-size: 20px;
+		font-size: 40rpx;
 		font-weight: 900;
 	}
 
 	h5 {
-		font-size: 14px;
+		font-size: 28rpx;
 	}
 }
 
@@ -100,7 +97,7 @@ span {
 				font-family: Source Han Sans CN;
 				font-weight: 400;
 				color: #3e4a59;
-				line-height: 30px;
+				line-height: 60rpx;
 				opacity: 0.45;
 			}
 		}
@@ -149,6 +146,7 @@ span {
 	.quit {
 		background-color: #ADADAD;
 		color: #ffffff;
+		margin-top: 30rpx;
 	}
 
 	.tip {
@@ -185,7 +183,7 @@ span {
 			content: '';
 			display: block;
 			width: 160rpx;
-			height: 1px;
+			height: 2rpx;
 			background: #d8d8d8;
 			opacity: 0.86;
 		}
@@ -194,21 +192,9 @@ span {
 			content: '';
 			display: block;
 			width: 160rpx;
-			height: 1px;
+			height: 2rpx;
 			background: #d8d8d8;
 			opacity: 0.86;
-		}
-	}
-
-	.chat-arr {
-		margin-top: 50rpx;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-
-		.icon {
-			width: 73rpx;
-			height: 73rpx;
 		}
 	}
 }
