@@ -390,7 +390,7 @@ export default {
             let data = JSON.parse(this.receiveLogs);
             let i = 1;
             data.forEach(row => {
-                row.soLineNo = i++ * 10;
+                row.lineNumber = i++ * 10;
                 row.sku = {
                     skuId: row.skuId,
                     skuCode: row.skuCode,
@@ -402,20 +402,20 @@ export default {
             })
             this.table.data = data;
         },
-        createRowObj() {
-            return {
-                lineNumber: '',
-                sku: {},
-                umCode: '',
-                planQty: 0,
-                remark: '',
-                skuLot1: '',
-                skuLot4: '',
-                skuLot5: '',
-                skuLot6: '',
-                skuLot8: '',
-            }
-        },
+        // createRowObj() {
+        //     return {
+        //         lineNumber: '',
+        //         sku: {},
+        //         umCode: '',
+        //         planQty: 0,
+        //         remark: '',
+        //         skuLot1: '',
+        //         skuLot4: '',
+        //         skuLot5: '',
+        //         skuLot6: '',
+        //         skuLot8: '',
+        //     }
+        // },
         deleteRow(index, rows) {
             this.$confirm("确定删除当前行？", {
                 confirmButtonText: "确定",
