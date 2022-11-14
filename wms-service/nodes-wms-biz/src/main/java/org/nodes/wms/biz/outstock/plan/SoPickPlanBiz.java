@@ -98,9 +98,10 @@ public interface SoPickPlanBiz {
 	/**
 	 * 根据工作任务取消拣货计划
 	 *
-	 * @param task 任务id
+	 * @param task     任务id
+	 * @param soHeader
 	 */
-	void cancelPickPlan(WmsTask task);
+	void cancelPickPlan(WmsTask task, SoHeader soHeader);
 
 	/**
 	 * 关闭单据的时候取消未执行完毕的分配记录

@@ -10,11 +10,9 @@ import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.outstock.logSoPick.modular.LogSoPickFactory;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
-import org.nodes.wms.biz.outstock.so.SoBillBiz;
 import org.nodes.wms.biz.outstock.strategy.TianyiPickStrategy;
 import org.nodes.wms.biz.stock.StockBiz;
 import org.nodes.wms.biz.stock.StockQueryBiz;
-import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.outstock.SoPickPlanDao;
@@ -60,8 +58,6 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	private final StockQueryBiz stockQueryBiz;
 	private final LogSoPickFactory logSoPickFactory;
 	private final LogSoPickDao logSoPickDao;
-	private final WmsTaskBiz wmsTaskBiz;
-	private final SoBillBiz soBillBiz;
 
 	@Override
 	public boolean hasEnablePickPlan(Long soBillId) {
@@ -216,8 +212,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public void cancelPickPlan(WmsTask task) {
-		SoHeader soHeader = soBillBiz.getSoHeaderById(task.getBillId());
+	public void cancelPickPlan(WmsTask task, SoHeader soHeader) {
 		List<SoPickPlan> soPickPlanList = soPickPlanDao.getPickByTaskId(task.getBillId());
 		cancelPickPlan(soPickPlanList, soHeader);
 	}

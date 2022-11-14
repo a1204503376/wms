@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
+import org.nodes.wms.biz.outstock.so.SoBillBiz;
 import org.nodes.wms.biz.task.AgvTask;
 import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.biz.task.factory.WmsTaskFactory;
@@ -46,6 +47,7 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 	private final LogBiz logBiz;
 	private final WmsTaskFactory wmsTaskFactory;
 	private final SoPickPlanBiz soPickPlanBiz;
+	private final SoBillBiz soBillBiz;
 
 	@Override
 	public Page<TaskPageResponse> page(TaskPageQuery taskPageQuery, Query query) {
@@ -72,6 +74,7 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 			}
 			// 取消任务
 			agvTask.cancel(task);
+			cancel(task);
 			wmsTaskDao.updateState(task.getTaskId(), WmsTaskStateEnum.CANCELED, null);
 			logBiz.auditLog(AuditLogType.AGV_TASK, task.getBillId(), task.getBillNo(), "取消AGV任务");
 		});
@@ -81,7 +84,8 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 	@Override
 	public void cancel(WmsTask task) {
 		if (task.getTaskTypeCd().equals(WmsTaskTypeEnum.AGV_PICKING)) {
-			soPickPlanBiz.cancelPickPlan(task);
+			SoHeader soHeader = soBillBiz.getSoHeaderById(task.getBillId());
+			soPickPlanBiz.cancelPickPlan(task, soHeader);
 		}
 	}
 
