@@ -13,5 +13,17 @@ namespace DataAccess.Wms
                             && d.IsDeleted == 0)
                 .ToList();
         }
+
+        public static List<WmsStock> GetStagingAreaList()
+        {
+            // 入库暂存区
+            var zoneId = Db.FreeSql.Select<WmsZone>()
+                .Where(d => d.ZoneCode == "WH1-STAGE")
+                .ToOne(d => d.ZoneId);
+
+            return Db.FreeSql.Select<WmsStock>()
+                .Where(d=>d.ZoneId ==zoneId && !string.IsNullOrWhiteSpace(d.Udf2))
+                .ToList();
+        }
     }
 }

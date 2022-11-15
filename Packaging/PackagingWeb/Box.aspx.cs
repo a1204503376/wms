@@ -165,7 +165,9 @@ namespace PackagingWeb
                     WspName = wmsStock.WsuCode,
                     BoxNumber = wmsStock.BoxCode,
                     SpecialCustomer = wmsStock.SkuLot4,
-                    Udf2 = wmsStock.Udf2
+                    Udf2 = wmsStock.Udf2,
+                    SpeedClass = sku.SkuRemark,
+                    ProductIdentificationCode = sku.SkuBarcodeList
                 };
 
                 int index = (i * SerialNumberPrintDto.SerialGroupNumber);
