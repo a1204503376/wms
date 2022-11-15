@@ -460,9 +460,11 @@ public class OutStockBizImpl implements OutStockBiz {
 		// 自动生成拣货计划,即使有的明细因为库存不足导致无法全部分配，也可以部分分配成功
 		List<SoDetail> soDetails = soBillBiz.getEnableSoDetailBySoHeaderId(soBillId);
 		String result = soPickPlanBiz.runPickStrategy(soHeader, soDetails, pickPlans);
-		// 更新发货单状态
-		if (SoBillStateEnum.CREATE.equals(soHeader.getSoBillState())) {
-			soBillBiz.updateState(soBillId, SoBillStateEnum.EXECUTING);
+		// 如果存在真实拣货计划，更新发货单状态
+		if (pickPlans.size()>0) {
+			if (SoBillStateEnum.CREATE.equals(soHeader.getSoBillState())) {
+				soBillBiz.updateState(soBillId, SoBillStateEnum.EXECUTING);
+			}
 		}
 		// 记录日志
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, soBillId, soHeader.getSoBillNo(), "执行自动分配:" + result);
@@ -701,11 +703,12 @@ public class OutStockBizImpl implements OutStockBiz {
 				soPickPlanList.add(soPickPlan);
 			}
 			soPickPlanBiz.occupyStockAndSavePlan(soPickPlanList);
+			// 更新发货单状态
+			if (SoBillStateEnum.CREATE.equals(soHeader.getSoBillState())) {
+				soBillBiz.updateState(request.getSoBillId(), SoBillStateEnum.EXECUTING);
+			}
 		}
-		// 更新发货单状态
-		if (SoBillStateEnum.CREATE.equals(soHeader.getSoBillState())) {
-			soBillBiz.updateState(request.getSoBillId(), SoBillStateEnum.EXECUTING);
-		}
+
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, request.getSoBillId(),
 			soHeader.getSoBillNo(), "执行调整分配");
 	}
