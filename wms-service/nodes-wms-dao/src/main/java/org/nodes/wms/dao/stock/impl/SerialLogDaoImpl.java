@@ -19,10 +19,10 @@ import java.util.List;
 @Repository
 public class SerialLogDaoImpl
 	extends BaseServiceImpl<SerialLogMapper, SerialLog> implements SerialLogDao {
-    @Override
-    public Page<SerialLogPageResponse> page(IPage<Object> page, SerialLogPageQuery serialLogPageQuery) {
-        return super.baseMapper.page(page, serialLogPageQuery);
-    }
+	@Override
+	public Page<SerialLogPageResponse> page(IPage<Object> page, SerialLogPageQuery serialLogPageQuery) {
+		return super.baseMapper.page(page, serialLogPageQuery);
+	}
 
 	@Override
 	public List<SerialLogExcelResponse> listByQuery(SerialLogPageQuery serialLogPageQuery) {

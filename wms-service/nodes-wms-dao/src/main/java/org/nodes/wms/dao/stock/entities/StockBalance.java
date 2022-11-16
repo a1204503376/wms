@@ -9,6 +9,7 @@ import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 库存结存实体
@@ -61,7 +62,7 @@ public class StockBalance extends SkuLotBaseEntity implements Serializable {
 	/**
 	 * 结存日期
 	 */
-	private Data balanceDate;
+	private Date balanceDate;
 	/**
 	 * 入库数量
 	 */
@@ -110,4 +111,12 @@ public class StockBalance extends SkuLotBaseEntity implements Serializable {
 	 * 自定义字段5
 	 */
 	private String udf5;
+	/**
+	 * 是否有序列号
+	 */
+	private Integer has_serial;
+	/**
+	 * 是否启用
+	 */
+	private Integer state;
 }

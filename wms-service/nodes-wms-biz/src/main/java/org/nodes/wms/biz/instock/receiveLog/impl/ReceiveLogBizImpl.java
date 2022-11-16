@@ -235,7 +235,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	}
 
 	@Override
-	public void getReceiveLogList(String startTime, String endTime) {
-
+	public List<ReceiveLog> getReceiveLogList(String startTime, String endTime) {
+		return receiveLogDao.getReceiveLogList(startTime, endTime);
 	}
 }

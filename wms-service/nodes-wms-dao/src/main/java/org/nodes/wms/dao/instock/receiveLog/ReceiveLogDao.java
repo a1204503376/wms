@@ -18,6 +18,7 @@ import java.util.List;
 public interface ReceiveLogDao extends BaseService<ReceiveLog> {
 	/**
 	 * 根据收货单id获取清点记录
+	 *
 	 * @param receiveId 收货单id
 	 */
 	List<ReceiveLogResponse> getReceiveLogList(Long receiveId);
@@ -27,16 +28,16 @@ public interface ReceiveLogDao extends BaseService<ReceiveLog> {
 	 *
 	 * @return List<ReceiveLogIndexResponse>
 	 */
-    List<ReceiveLogIndexResponse> getReceiveSkuQtyTop10();
+	List<ReceiveLogIndexResponse> getReceiveSkuQtyTop10();
 
 	/**
 	 * 分页查询
 	 *
-	 * @param page: 分页参数
+	 * @param page:                分页参数
 	 * @param receiveLogPageQuery: 分页查询条件参数
 	 * @return Page<ReceiveLogPageResponse>
 	 */
-    Page<ReceiveLogPageResponse> page(IPage<?> page, ReceiveLogPageQuery receiveLogPageQuery);
+	Page<ReceiveLogPageResponse> page(IPage<?> page, ReceiveLogPageQuery receiveLogPageQuery);
 
 	/**
 	 * 根据若干条件查询库位信息
@@ -44,10 +45,11 @@ public interface ReceiveLogDao extends BaseService<ReceiveLog> {
 	 * @param receiveLogPageQuery: 查询条件
 	 * @return List<ReceiveLogExcelResponse>
 	 */
-	 List<ReceiveLogExcelResponse> getReceiveLogListByQuery(ReceiveLogPageQuery receiveLogPageQuery);
+	List<ReceiveLogExcelResponse> getReceiveLogListByQuery(ReceiveLogPageQuery receiveLogPageQuery);
 
 	/**
 	 * 生成清点记录
+	 *
 	 * @param receiveLog 清点记录
 	 * @return 是否成功
 	 */
@@ -75,7 +77,7 @@ public interface ReceiveLogDao extends BaseService<ReceiveLog> {
 	 * @param receiveId 收货单头表id
 	 * @return 清点记录集合
 	 */
-    List<ReceiveLog> getByReceiveId(Long receiveId);
+	List<ReceiveLog> getByReceiveId(Long receiveId);
 
 	/**
 	 * 标记收货记录为已撤销
@@ -83,4 +85,14 @@ public interface ReceiveLogDao extends BaseService<ReceiveLog> {
 	 * @param receiveLog 收货记录
 	 */
 	void setCanceled(ReceiveLog receiveLog);
+
+	/**
+	 * 根据时间范围获取收货记录集合
+	 *
+	 * @param startTime 开始时间
+	 * @param endTime   结束时间
+	 * @return 收货记录集合
+	 */
+
+	List<ReceiveLog> getReceiveLogList(String startTime, String endTime);
 }

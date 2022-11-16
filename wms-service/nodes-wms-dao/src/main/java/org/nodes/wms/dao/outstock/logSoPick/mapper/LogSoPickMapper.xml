@@ -85,13 +85,13 @@
         lsp.sku_lot30
         FROM log_so_pick lsp
         LEFT JOIN (
-            SELECT
-            so_header.so_bill_id,
-            so_header.so_bill_state,
-            wms_bill_type.bill_type_cd,
-            wms_bill_type.bill_type_name
-            FROM so_header
-            LEFT JOIN wms_bill_type ON wms_bill_type.bill_type_cd = so_header.bill_type_cd
+        SELECT
+        so_header.so_bill_id,
+        so_header.so_bill_state,
+        wms_bill_type.bill_type_cd,
+        wms_bill_type.bill_type_name
+        FROM so_header
+        LEFT JOIN wms_bill_type ON wms_bill_type.bill_type_cd = so_header.bill_type_cd
         )as header ON header.so_bill_id = lsp.so_bill_id
         LEFT JOIN so_detail detail ON detail.so_detail_id = lsp.so_detail_id
         LEFT JOIN blade_user `user` ON `user`.id = lsp.create_user
@@ -150,5 +150,62 @@
     <select id="listByQuery"
             resultType="org.nodes.wms.dao.outstock.logSoPick.dto.output.LogSoPicExcelResponse">
         <include refid="pageOrList"/>
+    </select>
+    <select id="selectLogSoPickList" resultType="org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick">
+        select sku_level,
+               wsp_id,
+               sku_id,
+               sku_code,
+               sku_name,
+               wsu_code,
+               wh_id,
+               wo_id,
+               stock_status,
+               sum(pick_real_qty) as pickRealQty,
+               sku_lot1,
+               sku_lot2,
+               sku_lot3,
+               sku_lot4,
+               sku_lot5,
+               sku_lot6,
+               sku_lot7,
+               sku_lot8,
+               sku_lot9,
+               sku_lot10,
+               sku_lot11,
+               sku_lot12,
+               sku_lot13,
+               sku_lot14,
+               sku_lot15,
+               sku_lot16,
+               sku_lot17,
+               sku_lot18,
+               sku_lot19,
+               sku_lot20,
+               sku_lot21,
+               sku_lot22,
+               sku_lot23,
+               sku_lot24,
+               sku_lot25,
+               sku_lot26,
+               sku_lot27,
+               sku_lot28,
+               sku_lot29,
+               sku_lot30
+        from log_so_pick
+        where create_time &gt;= #{startTime}
+          and create_time &lt; #{endTime}
+        group by sku_id, wh_id, wo_id, wsp_id,
+                 sku_level, stock_status,
+                 sku_lot1, sku_lot2, sku_lot3,
+                 sku_lot4, sku_lot5, sku_lot6,
+                 sku_lot7, sku_lot8, sku_lot9,
+                 sku_lot10, sku_lot11, sku_lot12,
+                 sku_lot13, sku_lot14, sku_lot15,
+                 sku_lot16, sku_lot17, sku_lot18,
+                 sku_lot19, sku_lot20, sku_lot21,
+                 sku_lot22, sku_lot23, sku_lot24,
+                 sku_lot25, sku_lot26, sku_lot27,
+                 sku_lot28, sku_lot29, sku_lot30
     </select>
 </mapper>

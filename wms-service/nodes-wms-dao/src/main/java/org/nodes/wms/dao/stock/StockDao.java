@@ -354,6 +354,7 @@ public interface StockDao {
 
 	/**
 	 * 天宜定制：agv任务取消时更新中间库存（状态：正常，占用量：0，dropId：空）
+	 *
 	 * @param item
 	 */
 	void updateStockByCancelAgvTask(Stock item);
@@ -362,16 +363,16 @@ public interface StockDao {
 	 * 报表:盘点表,根据库位、型号、产品进行数量汇总
 	 *
 	 * @param excludeZoneIdList 排除的库区id
-	 * @param parameters 搜索条件
+	 * @param parameters        搜索条件
 	 * @return 盘点报表数据
 	 **/
-	List<ReportCountStockDto> getStockBalanceTotalByReportParams(List<Long> excludeZoneIdList, Map<String,Object> parameters);
+	List<ReportCountStockDto> getStockBalanceTotalByReportParams(List<Long> excludeZoneIdList, Map<String, Object> parameters);
 
 	/**
 	 * 报表: 实时库存
 	 *
 	 * @param excludeZoneIdList 排除的库区id
-	 * @param parameters 搜索条件
+	 * @param parameters        搜索条件
 	 * @return 实时库存数据
 	 */
 	List<ReportStockDto> getCurrentTimeStockByReportParams(List<Long> excludeZoneIdList, Map<String, Object> parameters);

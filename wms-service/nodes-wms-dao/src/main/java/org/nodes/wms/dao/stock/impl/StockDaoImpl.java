@@ -469,12 +469,12 @@ public class StockDaoImpl
 		return super.baseMapper.getStockBalanceTotalByReportParams(excludeZoneIdList, parameters);
 	}
 
-    @Override
-    public List<ReportStockDto> getCurrentTimeStockByReportParams(List<Long> allPickToLocId, Map<String, Object> parameters) {
-        return super.baseMapper.getCurrentTimeStockByReportParams(allPickToLocId, parameters);
-    }
+	@Override
+	public List<ReportStockDto> getCurrentTimeStockByReportParams(List<Long> allPickToLocId, Map<String, Object> parameters) {
+		return super.baseMapper.getCurrentTimeStockByReportParams(allPickToLocId, parameters);
+	}
 
-    @Override
+	@Override
 	public List<Stock> getStockByDropId(Long dropId) {
 		AssertUtil.notNull(dropId, "根据任务id查询库存失败,taskId不能为空");
 

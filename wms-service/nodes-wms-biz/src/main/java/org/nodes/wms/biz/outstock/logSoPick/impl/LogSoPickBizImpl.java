@@ -105,4 +105,9 @@ public class LogSoPickBizImpl implements LogSoPickBiz {
 	public List<LogSoPick> findBoxCountBySoHeaderId(Long soBillId) {
 		return logSoPickDao.getBoxCountBySoHeaderId(soBillId);
 	}
+
+	@Override
+	public List<LogSoPick> getLogSoPickList(String startTime, String endTime) {
+		return logSoPickDao.getLogSoPickLiat(startTime, endTime);
+	}
 }

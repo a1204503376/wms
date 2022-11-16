@@ -110,18 +110,19 @@ public interface StockMapper extends BaseMapper<Stock> {
 	 * 报表:盘点表,根据库位、型号、产品进行数量汇总
 	 *
 	 * @param excludeZoneIdList 排除的库区id
-	 * @param parameters 搜索条件
+	 * @param parameters        搜索条件
 	 * @return 盘点报表数据
 	 **/
-    List<ReportCountStockDto> getStockBalanceTotalByReportParams(@Param("excludeZoneIdList") List<Long> excludeZoneIdList, @Param("params") Map<String, Object> parameters);
+	List<ReportCountStockDto> getStockBalanceTotalByReportParams(@Param("excludeZoneIdList") List<Long> excludeZoneIdList, @Param("params") Map<String, Object> parameters);
 
 	/**
 	 * 报表: 实时库存
 	 *
 	 * @param excludeZoneIdList 排除的库区id
-	 * @param parameters 搜索条件
+	 * @param parameters        搜索条件
 	 * @return 实时库存数据
 	 */
 	List<ReportStockDto> getCurrentTimeStockByReportParams(@Param("excludeZoneIdList") List<Long> excludeZoneIdList, @Param("params") Map<String, Object> parameters);
+
 }
 
