@@ -76,7 +76,6 @@ public class RoleController extends BladeController {
 	/**
 	 * 列表
 	 */
-	@ApiLog("角色-列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "列表", notes = "传入role")
 	public R<List<RoleVO>> list(@ApiIgnore @RequestParam Map<String, Object> params) {

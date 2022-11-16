@@ -44,7 +44,6 @@ public class CountRecordController extends BladeController {
 	/**
 	 * 自定义分页 盘点单记录表
 	 */
-	@ApiLog("盘点单记录表接口-自定义分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "自定义分页 盘点单记录表", notes = "传入countRecord")
 	public R<IPage<CountRecordVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

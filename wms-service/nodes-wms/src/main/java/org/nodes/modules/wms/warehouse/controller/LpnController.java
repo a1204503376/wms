@@ -60,7 +60,6 @@ public class LpnController extends BladeController {
 	/**
 	 * 列表
 	 */
-	@ApiLog("容器-列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "容器列表", notes = "传入lpn")
 	public R<List<LpnVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
@@ -71,7 +70,6 @@ public class LpnController extends BladeController {
 	/**
 	 * 分页
 	 */
-	@ApiLog("容器-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "容器分页", notes = "传入lpn")
 	public R<IPage<LpnVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

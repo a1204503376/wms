@@ -43,7 +43,6 @@ public class ReplenishmentController extends BladeController {
 	/**
 	 * 分页查询补货单据列表
 	 */
-	@ApiLog("补货接口-分页查询补货单据列表")
 	@GetMapping("/page")
 	@ApiOperation(value = "库存分页", notes = "传入stock")
 	public R<IPage<RelHeaderVo>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

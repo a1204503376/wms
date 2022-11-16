@@ -53,7 +53,6 @@ public class PoHeaderController extends BladeController {
     /**
      * 采购单头表列表
      */
-	@ApiLog("采购单-列表")
     @GetMapping("/list")
     @ApiOperation(value = "采购单头表列表", notes = "传入poHeader")
     public R<List<PoHeaderVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
@@ -64,7 +63,6 @@ public class PoHeaderController extends BladeController {
 	/**
 	 * 采购单头表分页
 	 */
-	@ApiLog("采购单-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "采购单头表分页", notes = "传入poHeader")
 	public R<IPage<PoHeaderVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

@@ -57,7 +57,6 @@ public class SkuUmController extends BladeController {
 	/**
 	 * 列表
 	 */
-	@ApiLog("计量单位-列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "列表", notes = "传入skuUm")
 	public R<List<SkuUmVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
@@ -68,7 +67,6 @@ public class SkuUmController extends BladeController {
 	/**
 	 * 分页
 	 */
-	@ApiLog("计量单位-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "分页", notes = "传入skuUm")
 	public R<IPage<SkuUmVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

@@ -39,7 +39,6 @@ public class TaskHistoryController extends BladeController {
 	/**
 	 * 任务履历分页
 	 */
-	@ApiLog("任务履历接口-任务履历分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "任务履历分页", notes = "传入taskHistory")
 	public R<IPage<TaskHistoryVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

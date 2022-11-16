@@ -70,7 +70,6 @@ public class AsnHeaderController extends BladeController {
 	/**
 	 * 分页查询 收货单头表
 	 */
-	@ApiLog("收货单头表接口-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "分页", notes = "传入入库单查询条件,分页信息")
 	public R<IPage<AsnHeaderVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
@@ -94,7 +93,6 @@ public class AsnHeaderController extends BladeController {
 	/**
 	 * 查询收货单头表列表
 	 */
-	@ApiLog("收货单头表接口-收货单头表列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "收货单头表列表", notes = "传入入库单查询条件")
 	public R<List<AsnHeaderVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {

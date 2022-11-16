@@ -33,7 +33,6 @@ public class SerialController extends BladeController {
 	/**
 	 * 自定义分页 序列号
 	 */
-	@ApiLog("序列号接口-序列号分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "序列号分页", notes = "传入serial")
 	@ApiIgnore

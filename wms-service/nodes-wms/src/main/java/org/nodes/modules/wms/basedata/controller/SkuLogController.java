@@ -38,7 +38,6 @@ public class SkuLogController extends BladeController {
 	/**
 	 * 物品操作记录表列表
 	 */
-	@ApiLog("物品操作记录表接口-物品操作记录表列表")
 	@GetMapping("/list")
 	@ApiOperationSupport(order = 1)
 	public R<List<SkuLogVO>> list() {

@@ -61,7 +61,6 @@ public class SkuLotController extends BladeController {
 	/**
 	 * 列表查询数据 物品批属性
 	 */
-	@ApiLog("物品批属性接口-列表查询数据")
 	@GetMapping("/list")
 	@ApiOperation(value = "列表查询数据", notes = "传入物品批属性skuLot")
 	public R<List<SkuLotVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
@@ -72,7 +71,6 @@ public class SkuLotController extends BladeController {
 	/**
 	 * 分页查询数据 物品批属性
 	 */
-	@ApiLog("物品批属性接口-分页查询数据")
 	@GetMapping("/page")
 	@ApiOperation(value = "分页查询数据", notes = "传入物品批属性skuLot")
 	public R<IPage<SkuLotVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

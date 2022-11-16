@@ -54,7 +54,6 @@ public class RelenishmentController extends BladeController {
 	/**
 	 * 获取补货策略列表
 	 */
-	@ApiLog("补货策略-获取补货策略列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "补货策略分页", notes = "传入instock")
 	public R<List<Relenishment>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
@@ -65,7 +64,6 @@ public class RelenishmentController extends BladeController {
 	/**
 	 * 补货策略自定义分页
 	 */
-	@ApiLog("补货策略-补货策略自定义分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "补货策略分页", notes = "传入instock")
 	public R<IPage<RelenishmentVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

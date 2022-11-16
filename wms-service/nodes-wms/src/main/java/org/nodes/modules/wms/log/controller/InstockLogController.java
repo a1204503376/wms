@@ -35,7 +35,6 @@ public class InstockLogController extends BladeController {
 	/**
 	 * 上架记录分页
 	 */
-	@ApiLog("上架记录接口-上架记录分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "上架记录分页", notes = "传入putawayLog")
 	public R<IPage<InstockLogVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
