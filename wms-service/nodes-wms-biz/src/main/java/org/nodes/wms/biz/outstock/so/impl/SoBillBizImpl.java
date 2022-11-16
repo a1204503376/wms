@@ -280,6 +280,8 @@ public class SoBillBizImpl implements SoBillBiz {
 			soHeader.setSoBillState(SoBillStateEnum.CREATE);
 		} else if (allOutStock + deleted == soDetailList.size()) {
 			soHeader.setSoBillState(SoBillStateEnum.ALL_OUT_STOCK);
+		} else if (allOutStock > 0 && allOutStock + deleted < soDetailList.size()) {
+			soHeader.setSoBillState(SoBillStateEnum.PART);
 		}
 		if (!soHeader.getSoBillState().equals(soBillStateEnum)) {
 			soHeaderDao.saveOrUpdateSoHeader(soHeader);

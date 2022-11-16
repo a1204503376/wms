@@ -36,7 +36,7 @@ export default {
         size: {type: String, required: false, default: () => "mini"},
         stockId: {String},
         // 多选时是否将选中值按文字的形式展示
-        collapse: {type:Boolean, require: false, default: () => true}
+        collapse: {type: Boolean, require: false, default: () => true}
     },
     data() {
         return {
@@ -51,13 +51,16 @@ export default {
     watch: {
         selectVal(newVal) {
             this.val = newVal;
+        },
+        stockId() {
+            this.getDataSource()
         }
     },
     methods: {
         async getDataSource() {
             const response = await getSerialSelectResponseList(this.stockId);
             this.dataSource = response.data.data;
-            this.$emit("getSerialDataSource",this.dataSource)
+            this.$emit("getSerialDataSource", this.dataSource)
             if (this.dataSource.length === 0) {
                 this.msg = "该批次没有序列号"
             }

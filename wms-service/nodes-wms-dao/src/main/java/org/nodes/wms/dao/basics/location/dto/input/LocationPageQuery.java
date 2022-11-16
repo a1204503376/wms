@@ -67,4 +67,17 @@ public class LocationPageQuery implements Serializable {
 	 * 货架列
 	 */
 	private String locColumn;
+	/**
+	 * AGV库位编码
+	 */
+	private String agvLocation;
+
+	/**
+	 * AGV 层高
+	 */
+	private String agvLevel;
+	/**
+	 * AGV编码点
+	 */
+	private String agvPoint;
 }

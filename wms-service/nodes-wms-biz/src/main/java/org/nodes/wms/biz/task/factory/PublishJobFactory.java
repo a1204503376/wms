@@ -54,25 +54,25 @@ public class PublishJobFactory {
 	/**
 	 * 创建AGV任务请求对象
 	 *
-	 * @param tasks AGV任务
+	 * @param task 工作任务实体
 	 * @return AGV继续执行任务请求对象
 	 */
-	public AgvJobRequest createContinueJobRequest(List<WmsTask> tasks) {
+	public AgvJobRequest createContinueJobRequest(WmsTask task) {
 		AgvJobRequest agvJobRequest = new AgvJobRequest();
-		agvJobRequest.setWmsTaskId(tasks.get(0).getTaskId());
-		agvJobRequest.setWmsTaskDetailId(tasks.get(0).getTaskId());
+		agvJobRequest.setWmsTaskId(task.getTaskId());
+		agvJobRequest.setWmsTaskDetailId(task.getTaskId());
 		return agvJobRequest;
 	}
 
+
 	/**
-	 * 创建AGV取消任务请求对象
-	 *
+	 * @param task 工作任务实体
 	 * @return AGV取消任务请求对象
 	 */
-	public AgvJobRequest createCancelJobRequest() {
+	public AgvJobRequest createCancelJobRequest(WmsTask task) {
 		AgvJobRequest agvJobRequest = new AgvJobRequest();
-		agvJobRequest.setWmsTaskId(0L);
-		agvJobRequest.setWmsTaskDetailId(0L);
+		agvJobRequest.setWmsTaskId(task.getTaskId());
+		agvJobRequest.setWmsTaskDetailId(task.getTaskId());
 		return agvJobRequest;
 	}
 }

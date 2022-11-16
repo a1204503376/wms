@@ -226,7 +226,6 @@
                                         <span>序列号</span>
                                     </template>
                                     <template v-slot="{row}">
-
                                         <el-input v-model.trim="row.snCode"
                                                   size=mini v-if="billTypeCd !=='归还入库' || row.snNumber===''">
                                         </el-input>
@@ -488,24 +487,24 @@ export default {
                     return
                 }
             }
-            debugger
             let detailRequestList = detailList
             for (let y = 0; y < detailRequestList.length; y++) {
-                if (detailRequestList[y].snCodeList.length != detailRequestList[y].scanQty) {
-                    this.$message.warning("行号" + detailRequestList[y].lineNumber + "序列号选择数量与收货数量不一致");
-                    return
-                }
-                if (this.rowLineArr.indexOf(detailRequestList[y].lineNumber) == -1) {
-                    let b = []
-                    b = detailList.filter(x => x.lineNumber === detailRequestList[y].lineNumber)
-                        .map(item => item.snCodeList).reduce(function (a, b) {
-                            return a.concat(b)
-                        });
-                    if (new Set(b).size != b.length) {
-                        this.$message.warning("行号" + detailRequestList[y].lineNumber + "序列号重复");
+                if (this.billTypeCd === '归还入库' && detailRequestList[y].snNumber !== '') {
+                    if (detailRequestList[y].snCodeList.length != detailRequestList[y].scanQty) {
+                        this.$message.warning("行号" + detailRequestList[y].lineNumber + "序列号选择数量与收货数量不一致");
                         return
                     }
-
+                    if (this.rowLineArr.indexOf(detailRequestList[y].lineNumber) == -1) {
+                        let b = []
+                        b = detailList.filter(x => x.lineNumber === detailRequestList[y].lineNumber)
+                            .map(item => item.snCodeList).reduce(function (a, b) {
+                                return a.concat(b)
+                            });
+                        if (new Set(b).size != b.length) {
+                            this.$message.warning("行号" + detailRequestList[y].lineNumber + "序列号重复");
+                            return
+                        }
+                    }
                 }
                 this.rowLineArr.push(detailRequestList[y].lineNumber)
             }

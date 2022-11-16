@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.common.log.LogBiz;
+import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
+import org.nodes.wms.biz.outstock.so.SoBillBiz;
 import org.nodes.wms.biz.task.AgvTask;
 import org.nodes.wms.biz.task.WmsTaskBiz;
 import org.nodes.wms.biz.task.factory.WmsTaskFactory;
@@ -12,7 +14,6 @@ import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
-import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.task.TaskDetailDao;
 import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
@@ -29,6 +30,8 @@ import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
@@ -43,6 +46,8 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 	private final AgvTask agvTask;
 	private final LogBiz logBiz;
 	private final WmsTaskFactory wmsTaskFactory;
+	private final SoPickPlanBiz soPickPlanBiz;
+	private final SoBillBiz soBillBiz;
 
 	@Override
 	public Page<TaskPageResponse> page(TaskPageQuery taskPageQuery, Query query) {
@@ -60,24 +65,33 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void cancel(List<Long> taskIdList) {
 		List<WmsTask> wmsTaskList = wmsTaskDao.getTaskByIds(taskIdList);
-		// 校验任务状态是否为异常中断，否则抛异常
 		wmsTaskList.forEach(task -> {
 			if (!WmsTaskStateEnum.ABNORMAL.getCode().equals(task.getTaskState().getCode())) {
-				throw new ServiceException("继续执行任务失败，任务状态只能是：异常中断中");
+				throw new ServiceException("取消任务失败，任务状态只能是：异常中断中");
 			}
-		});
-		// 取消任务
-		agvTask.cancel();
-		// 更新任务状态、记录日志
-		wmsTaskList.forEach(task -> {
+			// 取消任务
+			agvTask.cancel(task);
+			cancel(task);
 			wmsTaskDao.updateState(task.getTaskId(), WmsTaskStateEnum.CANCELED, null);
 			logBiz.auditLog(AuditLogType.AGV_TASK, task.getBillId(), task.getBillNo(), "取消AGV任务");
 		});
+
 	}
 
 	@Override
+	public void cancel(WmsTask task) {
+		if (task.getTaskTypeCd().equals(WmsTaskTypeEnum.AGV_PICKING)) {
+			SoHeader soHeader = soBillBiz.getSoHeaderById(task.getBillId());
+			soPickPlanBiz.cancelPickPlan(task, soHeader);
+		}
+	}
+
+
+	@Override
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void continueTask(List<Long> taskIdList) {
 		List<WmsTask> wmsTaskList = wmsTaskDao.getTaskByIds(taskIdList);
 		// 校验任务状态是否为异常中断，否则抛异常
@@ -85,12 +99,11 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 			if (!WmsTaskStateEnum.ABNORMAL.getCode().equals(task.getTaskState().getCode())) {
 				throw new ServiceException("继续执行任务失败，任务状态只能是：异常中断中");
 			}
-		});
-		agvTask.continueTask(wmsTaskList);
-		wmsTaskList.forEach(task -> {
+			agvTask.continueTask(task);
 			logBiz.auditLog(AuditLogType.AGV_TASK, task.getBillId(), task.getBillNo(), "继续执行AGV任务");
 		});
 	}
+
 
 	@Override
 	public Boolean updateTaskState(TaskDetail taskDetail) {

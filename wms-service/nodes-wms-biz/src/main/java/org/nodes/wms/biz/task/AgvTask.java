@@ -114,19 +114,19 @@ public class AgvTask {
 		}
 
 		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
-		if (schedulingResponse.hasFailed()){
+		if (schedulingResponse.hasFailed()) {
 			setAgvTaskRemark(wmsTasks, schedulingResponse.getMsg());
 			log.warn("发送agv任务{}失败,{}", url, schedulingGlobalResponse.getMsg());
 		}
 		return !schedulingResponse.hasFailed();
 	}
 
-	private void setAgvTaskRemark(List<WmsTask> wmsTasks, String msg){
-		if (Func.isEmpty(msg)){
+	private void setAgvTaskRemark(List<WmsTask> wmsTasks, String msg) {
+		if (Func.isEmpty(msg)) {
 			return;
 		}
 
-		for (WmsTask task : wmsTasks){
+		for (WmsTask task : wmsTasks) {
 			task.setRemark(msg);
 		}
 	}
@@ -188,12 +188,12 @@ public class AgvTask {
 
 		// 拣货任务是按库位移动，所有需要冻结库位上所有的库存
 		List<Stock> needFreezeStocks = new ArrayList<>();
-		for (Stock stock : sourceStock){
-			if (needFreezeStocks.stream().anyMatch(item -> item.getLocId().equals(stock.getLocId()))){
+		for (Stock stock : sourceStock) {
+			if (needFreezeStocks.stream().anyMatch(item -> item.getLocId().equals(stock.getLocId()))) {
 				continue;
 			}
 			List<Stock> stockOfLoc = stockQueryBiz.findStockByLocation(stock.getLocId());
-			if (Func.isNotEmpty(stockOfLoc)){
+			if (Func.isNotEmpty(stockOfLoc)) {
 				needFreezeStocks.addAll(stockOfLoc);
 			}
 		}
@@ -221,10 +221,10 @@ public class AgvTask {
 	/**
 	 * 继续执行任务
 	 */
-	public void continueTask(List<WmsTask> tasks) {
+	public void continueTask(WmsTask task) {
 		String url = systemParamBiz.findScheduleUrl().concat(POST_CONTINUE_JOB_API);
 		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
-			url, publishJobFactory.createContinueJobRequest(tasks));
+			url, publishJobFactory.createContinueJobRequest(task));
 		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
 		if (schedulingResponse.hasFailed()) {
 			throw new ServiceException("继续任务失败，" + schedulingResponse.getMsg());
@@ -234,10 +234,10 @@ public class AgvTask {
 	/**
 	 * 取消任务
 	 */
-	public void cancel() {
+	public void cancel(WmsTask task) {
 		String url = systemParamBiz.findScheduleUrl().concat(POST_CANCEL_JOB_API);
 		SchedulingGlobalResponse schedulingGlobalResponse = sendToScheduleUtil.sendPost(
-			url, publishJobFactory.createCancelJobRequest());
+			url, publishJobFactory.createCancelJobRequest(task));
 		SchedulingResponse schedulingResponse = schedulingGlobalResponse.getSchedulingResponse();
 		if (schedulingResponse.hasFailed()) {
 			throw new ServiceException("取消任务失败，" + schedulingResponse.getMsg());

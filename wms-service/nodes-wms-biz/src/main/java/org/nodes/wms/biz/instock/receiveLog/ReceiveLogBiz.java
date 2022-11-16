@@ -123,4 +123,12 @@ public interface ReceiveLogBiz {
 	 * @param receiveLogList 收货记录
 	 */
 	void setCanceled(List<ReceiveLog> receiveLogList);
+
+	/**
+	 * 根据时间范围获取收货记录集合
+	 *
+	 * @param startTime 开始时间
+	 * @param endTime   结束时间
+	 */
+	void getReceiveLogList(String startTime, String endTime);
 }

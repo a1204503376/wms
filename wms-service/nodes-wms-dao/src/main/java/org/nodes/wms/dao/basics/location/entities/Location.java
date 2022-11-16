@@ -333,6 +333,19 @@ public class Location extends TenantEntity {
 	 * 系统自动冻结时关联的信息
 	 */
 	private String locFlagDesc;
+	/**
+	 * AGV库位编码
+	 */
+	private String agvLocation;
+
+	/**
+	 * AGV 层高
+	 */
+	private String agvLevel;
+	/**
+	 * AGV编码点
+	 */
+	private String agvPoint;
 
 	/**
 	 * 判断库位是否可以上架库存
