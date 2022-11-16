@@ -40,7 +40,6 @@ public class ContainerLogController extends BladeController {
 	/**
 	 * 分页 清点记录
 	 */
-	@ApiLog("清点记录接口-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "分页", notes = "传入containerLog")
 	public R<IPage<ContainerLogVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

@@ -32,7 +32,6 @@ public class SoWellenController extends BladeController {
 	/**
 	 * 波次划分分页
 	 */
-	@ApiLog("波次划分-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "波次划分分页", notes = "传入soWellen")
 	public R<IPage<Wellen>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
@@ -53,7 +52,6 @@ public class SoWellenController extends BladeController {
 	/**
 	 * 波次划分列表
 	 */
-	@ApiLog("波次划分-列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "波次策略列表", notes = "传入wellen")
 	public R<List<Wellen>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {

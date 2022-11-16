@@ -38,7 +38,6 @@ public class TruckStockController extends BladeController {
 	/**
 	 * 分页
 	 */
-	@ApiLog("车次接口-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "分页", notes = "传入truckStock")
 	public R<IPage<TruckStockVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

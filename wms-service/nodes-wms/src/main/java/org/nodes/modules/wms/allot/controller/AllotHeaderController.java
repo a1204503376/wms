@@ -51,7 +51,6 @@ public class AllotHeaderController extends BladeController {
 	/**
 	 * 自定义分页 调拨单头表
 	 */
-	@ApiLog("调拨单头表接口-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "分页", notes = "传入allotHeader")
 	public R<IPage<AllotHeaderVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

@@ -74,7 +74,6 @@ public class EnterpriseController extends BladeController {
 	 * @param params 查询条件
 	 * @return
 	 */
-	@ApiLog("来往企业接口-来往企业列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "来往企业列表", notes = "传入enterprise")
 	public R<List<EnterpriseVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
@@ -86,7 +85,6 @@ public class EnterpriseController extends BladeController {
 	/**
 	 * 自定义分页 来往企业
 	 */
-	@ApiLog("来往企业接口-自定义分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "来往企业分页", notes = "传入enterprise")
 	public R<IPage<EnterpriseVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

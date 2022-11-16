@@ -65,7 +65,6 @@ public class LogErrorController {
 	/**
 	 * 查询多条(分页)
 	 */
-	@ApiLog("错误日志-获取多条分页")
 	@GetMapping("/list")
 	public R<IPage<LogErrorVo>> list(@ApiIgnore @RequestParam Map<String, Object> logError, Query query) {
 		IPage<LogError> pages = errorLogService.page(Condition.getPage(query.setDescs("create_time")), Condition.getQueryWrapper(logError, LogError.class));

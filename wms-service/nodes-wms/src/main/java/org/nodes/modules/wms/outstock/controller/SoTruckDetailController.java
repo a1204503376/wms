@@ -52,7 +52,6 @@ public class SoTruckDetailController extends BladeController {
 	/**
 	 * 通过头表id获取所有明细
 	 */
-	@ApiLog("车次明细接口详细")
 	@GetMapping("/list")
 	@ApiOperation(value = "分页", notes = "传入头表id")
 	public R<List<SoTruckDetailVO>> list(@ApiParam(value = "头表主键", required = true) @RequestParam String truckId) {

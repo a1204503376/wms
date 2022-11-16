@@ -96,7 +96,6 @@ public class PickPlanController extends BladeController {
 	/**
 	 * 分页 拣货计划表
 	 */
-	@ApiLog("拣货计划-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "拣货计划查看", notes = "传入pickPlan")
 	public R<IPage<PickPlanVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

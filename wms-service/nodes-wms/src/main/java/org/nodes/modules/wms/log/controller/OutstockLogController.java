@@ -46,7 +46,6 @@ public class OutstockLogController extends BladeController {
 	/**
 	 * 分配记录分页
 	 */
-	@ApiLog("分配记录接口-分配记录分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "分配记录分页", notes = "传入outstockLog")
 	public R<IPage<OutstockLogVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

@@ -63,7 +63,6 @@ public class SkuPackageController extends BladeController {
 	/**
 	 * 包装列表
 	 */
-	@ApiLog("包装接口-包装列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "包装列表", notes = "传入skuPackage")
 	public R<List<SkuPackageVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
@@ -74,7 +73,6 @@ public class SkuPackageController extends BladeController {
 	/**
 	 * 包装分页
 	 */
-	@ApiLog("包装接口-包装分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "包装分页", notes = "传入SkuPackageDTO")
 	public R<IPage<SkuPackageVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
