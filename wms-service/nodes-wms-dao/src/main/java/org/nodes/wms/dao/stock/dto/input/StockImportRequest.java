@@ -46,6 +46,9 @@ public class StockImportRequest implements Serializable {
 	@HeadFontStyle(color = 2)
 	@ExcelProperty({"*库房编码"})
 	private String whCode;
+	@ColumnWidth(15)
+	@ExcelProperty({"是否撤销拣货"})
+	private String udf3;
 	@ColumnWidth(45)
 	@ExcelProperty({"序列号(以,分割)"})
 	private String snCode;

@@ -1114,8 +1114,10 @@ public class StockBizImpl implements StockBiz {
 		// 校验参数并生成清点记录
 		List<ReceiveLog> receiveLogList = receiveLogFactory.createReceiveLogListForImport(importDataList);
 		for (ReceiveLog receiveLog : receiveLogList) {
+			UdfEntity udf = new UdfEntity();
+			udf.setUdf3(receiveLog.getUdf3());
 			// 调用入库方法
-			inStock(StockLogTypeEnum.INSTOCK_BY_Import, receiveLog, null);
+			inStock(StockLogTypeEnum.INSTOCK_BY_Import, receiveLog, udf);
 		}
 		// 保存清点记录
 		receiveLogDao.saveBatch(receiveLogList);

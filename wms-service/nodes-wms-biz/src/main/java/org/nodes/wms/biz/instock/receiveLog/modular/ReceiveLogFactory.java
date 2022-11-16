@@ -121,6 +121,7 @@ public class ReceiveLogFactory {
 			receiveLog.setWoId(owner.getWoId());
 			receiveLog.setOwnerCode(owner.getOwnerCode());
 			receiveLog.setSnCode(stockImportRequest.getSnCode());
+			receiveLog.setUdf3(stockImportRequest.getUdf3());
 			receiveLogList.add(receiveLog);
 		}
 		return receiveLogList;
