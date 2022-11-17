@@ -87,7 +87,6 @@ public class UserController {
 	/**
 	 * 用户列表
 	 */
-	@ApiLog("用户-用户列表")
 	@GetMapping("/list")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "account", value = "账号名", paramType = "query", dataType = "string"),
@@ -108,7 +107,6 @@ public class UserController {
 	/**
 	 * 用户分页
 	 */
-	@ApiLog("用户-用户分页")
 	@GetMapping("/page")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "account", value = "账号名", paramType = "query", dataType = "string"),

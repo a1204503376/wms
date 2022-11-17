@@ -66,7 +66,6 @@ public class ApiScopeController extends BladeController {
 	/**
 	 * 分页
 	 */
-	@ApiLog("接口权限-列表分页")
 	@GetMapping("/list")
 	@ApiOperation(value = "分页", notes = "传入dataScope")
 	public R<IPage<ApiScopeVO>> list(ApiScope dataScope, Query query) {

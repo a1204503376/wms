@@ -61,7 +61,6 @@ public class PlatformInfoController extends BladeController {
 	/**
 	 * 列表
 	 */
-	@ApiLog("月台-列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "月台管理分页", notes = "传入platformInfo")
 	public R<List<PlatformInfoVO>> list(PlatformInfoDTO platformInfo) {
@@ -91,7 +90,6 @@ public class PlatformInfoController extends BladeController {
 	/**
 	 * 分页
 	 */
-	@ApiLog("月台-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "月台管理分页", notes = "传入platformInfo")
 	public R<IPage<PlatformInfoVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

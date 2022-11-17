@@ -50,7 +50,6 @@ public class SoRegisterController extends BladeController {
 	/**
 	 * 装车登记列表
 	 */
-	@ApiLog("装车登记接口-装车登记列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "装车登记列表", notes = "传入register")
 	public R<List<SoRegister>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
@@ -61,7 +60,6 @@ public class SoRegisterController extends BladeController {
 	/**
 	 * 装车登记分页
 	 */
-	@ApiLog("装车登记接口-装车登记分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "装车登记分页", notes = "传入register")
 	public R<IPage<SoRegisterVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

@@ -64,7 +64,6 @@ public class CountDetailController extends BladeController {
 	/**
 	 * 分页 盘点单明细表
 	 */
-	@ApiLog("盘点单明细表接口-盘点单明细表分页")
 	@GetMapping("/list")
 	@ApiOperationSupport(order = 2)
 	@ApiOperation(value = "盘点单明细表分页", notes = "传入countDetail")
@@ -76,7 +75,6 @@ public class CountDetailController extends BladeController {
 	/**
 	 * 自定义分页 盘点单明细表
 	 */
-	@ApiLog("盘点单明细表接口-自定义分页盘点单明细表分页")
 	@GetMapping("/page")
 	@ApiOperationSupport(order = 3)
 	@ApiOperation(value = "自定义分页盘点单明细表分页", notes = "传入countDetail")

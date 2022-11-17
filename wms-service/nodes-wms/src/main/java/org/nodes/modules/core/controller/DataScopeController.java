@@ -67,7 +67,6 @@ public class DataScopeController extends BladeController {
 	/**
 	 * 分页
 	 */
-	@ApiLog("数据权限-分页")
 	@GetMapping("/list")
 	@ApiOperation(value = "分页", notes = "传入dataScope")
 	public R<List<DataScopeVO>> list(DataScope dataScope) {

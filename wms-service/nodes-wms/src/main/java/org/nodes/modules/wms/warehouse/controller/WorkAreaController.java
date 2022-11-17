@@ -53,7 +53,6 @@ public class WorkAreaController extends BladeController {
 	/**
 	 * 列表
 	 */
-	@ApiLog("工作区-列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "工作区分页", notes = "传入workArea")
 	public R<List<WorkAreaVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
@@ -64,7 +63,6 @@ public class WorkAreaController extends BladeController {
 	/**
 	 * 自定义分页
 	 */
-	@ApiLog("工作区-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "工作区分页", notes = "传入workArea")
 	public R<IPage<WorkAreaVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

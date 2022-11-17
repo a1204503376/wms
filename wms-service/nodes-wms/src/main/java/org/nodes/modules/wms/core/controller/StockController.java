@@ -53,7 +53,6 @@ public class StockController extends BladeController {
 	/**
 	 * 分页查询库存
 	 */
-	@ApiLog("库存接口-库存分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "库存分页", notes = "传入stock")
 	public R<IPage<StockVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

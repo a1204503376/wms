@@ -58,7 +58,6 @@ public class CountHeaderController extends BladeController {
 	/**
 	 * 分页 盘点单头表
 	 */
-	@ApiLog("盘点单头表接口-分页")
 	@GetMapping("/list")
 	@ApiOperationSupport(order = 2)
 	@ApiOperation(value = "分页 盘点单头表", notes = "传入countHeader")
@@ -71,7 +70,6 @@ public class CountHeaderController extends BladeController {
 	/**
 	 * 自定义分页 盘点单头表
 	 */
-	@ApiLog("盘点单头表接口-自定义分页")
 	@GetMapping("/page")
 	@ApiOperationSupport(order = 3)
 	@ApiOperation(value = "自定义分页 盘点单头表", notes = "传入countHeader")

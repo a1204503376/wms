@@ -65,7 +65,6 @@ public class LogApiController {
 	/**
 	 * 查询多条(分页)
 	 */
-	@ApiLog("日志-获取多条分页")
 	@GetMapping("/list")
 	public R<IPage<LogApiVo>> list(@ApiIgnore @RequestParam Map<String, Object> log, Query query) {
 		IPage<LogApi> pages = logService.page(Condition.getPage(query.setDescs("create_time")), Condition.getQueryWrapper(log, LogApi.class));

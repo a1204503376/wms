@@ -7,7 +7,6 @@ import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.owner.OwnerBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
-import org.nodes.wms.biz.instock.receive.ReceiveBiz;
 import org.nodes.wms.biz.instock.receiveLog.ReceiveLogBiz;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.owner.entities.Owner;
@@ -18,7 +17,6 @@ import org.nodes.wms.dao.instock.receive.dto.output.ReceiveDetailLpnItemDto;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetail;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveDetailLpn;
 import org.nodes.wms.dao.instock.receive.entities.ReceiveHeader;
-import org.nodes.wms.dao.instock.receive.enums.ReceiveHeaderStateEnum;
 import org.nodes.wms.dao.instock.receiveLog.ReceiveLogDao;
 import org.nodes.wms.dao.instock.receiveLog.dto.input.ReceiveLogPageQuery;
 import org.nodes.wms.dao.instock.receiveLog.dto.output.ReceiveLogExcelResponse;
@@ -52,12 +50,12 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	private final LocationBiz locationBiz;
 	private final OwnerBiz ownerBiz;
 
-    @Override
-    public List<ReceiveLog> findReceiveLogList(Long receiveId) {
-        return receiveLogDao.getByReceiveId(receiveId);
-    }
+	@Override
+	public List<ReceiveLog> findReceiveLogList(Long receiveId) {
+		return receiveLogDao.getByReceiveId(receiveId);
+	}
 
-    @Override
+	@Override
 	public List<ReceiveLogResponse> getReceiveLogList(Long receiveId) {
 		return receiveLogDao.getReceiveLogList(receiveId);
 	}
@@ -90,7 +88,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 		log.setSkuLot1(request.getSkuLot1());
 		log.setSkuLot2(request.getSkuLot2());
 		log.setSkuLot4(request.getSkuLot4());
-		if (WmsAppConstant.BILL_TYPE_RETURN.equals(receiveHeader.getBillTypeCd())){
+		if (WmsAppConstant.BILL_TYPE_RETURN.equals(receiveHeader.getBillTypeCd())) {
 			log.setSkuLot3(detail.getSkuLot3());
 		} else {
 			log.setSkuLot3(Func.formatDate(new Date()));
@@ -169,7 +167,7 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	public void canCancelReceive(List<ReceiveLog> receiveLogList) {
 		receiveLogList.forEach(item -> {
 			// 判断是否撤销过
-			if (Func.isNotBlank(item.getCancelLogId())){
+			if (Func.isNotBlank(item.getCancelLogId())) {
 				throw ExceptionUtil.mpe("撤销收货失败，收货记录[id:{}]已撤销过", item.getId());
 			}
 			// 判断收货记录中是否存在撤销数为负数的，有就抛异常
@@ -234,5 +232,10 @@ public class ReceiveLogBizImpl implements ReceiveLogBiz {
 	@Override
 	public void setCanceled(List<ReceiveLog> receiveLogList) {
 		receiveLogList.forEach(receiveLogDao::setCanceled);
+	}
+
+	@Override
+	public void getReceiveLogList(String startTime, String endTime) {
+
 	}
 }

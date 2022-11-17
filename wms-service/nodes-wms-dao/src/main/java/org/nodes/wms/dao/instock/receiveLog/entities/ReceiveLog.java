@@ -125,5 +125,25 @@ public class ReceiveLog extends BaseSkuLotEntity {
 	 * 清点记录id
 	 */
 	private String cancelLogId;
+	/**
+	 * 自定义字段1
+	 */
+	private String udf1;
+	/**
+	 * 自定义字段2
+	 */
+	private String udf2;
+	/**
+	 * 自定义字段3：标记库存是否撤销收货
+	 */
+	private String udf3;
+	/**
+	 * 自定义字段4
+	 */
+	private String udf4;
+	/**
+	 * 自定义字段5
+	 */
+	private String udf5;
 }
 

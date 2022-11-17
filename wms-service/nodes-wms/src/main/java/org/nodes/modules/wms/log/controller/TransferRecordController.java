@@ -37,7 +37,6 @@ public class TransferRecordController extends BladeController {
 	/**
 	 * 自定义分页 移动记录表
 	 */
-	@ApiLog("移动记录自定义分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "移动记录自定义分页", notes = "传入transferRecordVO")
 	public R<IPage<TransferRecordVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

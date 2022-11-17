@@ -40,7 +40,6 @@ public class TaskPDAController {
 	/**
 	 * 获取任务集合
 	 */
-	@ApiLog("PDA-获取任务集合")
 	@GetMapping("/list")
 	@ApiOperationSupport(order = 2)
 	@ApiOperation(value = "获取任务集合", notes = "传入task查询条件")
