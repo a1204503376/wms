@@ -17,13 +17,14 @@ using Packaging.Utility;
 using System.Configuration;
 using System.IO;
 using DevExpress.Utils.Extensions;
-using DevExpress.XtraPrinting;
 
 namespace Packaging.Encasement
 {
     [ModuleDefine(moduleId:Constants.SerialFormId)]
     public partial class SerialNumberPackingForm : XtraForm
     {
+        private string _againPrintDate;
+        private bool _againPrintFlag = false;
         private bool _closeingFlag = false;
         private string _boxNumber;
         private bool _flagCollect;
@@ -366,6 +367,8 @@ namespace Packaging.Encasement
         {
             btnReprint.Text = @$"箱标重打";
             _boxNumber = string.Empty;
+            _againPrintFlag = false;
+            _againPrintDate = string.Empty;
         }
 
         private SerialNumberReport GetSerialNumberReport()
@@ -409,7 +412,11 @@ namespace Packaging.Encasement
                     SpecialCustomer = txtSpecialCustomer.Text,
                     Copies = Convert.ToInt16(txtPrintNumber.EditValue),
                     BoxNumber = Constants.DefaulutBoxNumber,
-                    SerialDetails = packingSerialDetails
+                    SerialDetails = packingSerialDetails,
+                    AgainPrintFlag = _againPrintFlag,
+                    PrintDate = (_againPrintFlag && !string.IsNullOrWhiteSpace(_againPrintDate))
+                        ? _againPrintDate
+                        : DateTime.Now.ToString("yyMMdd")
                 };
 
                 if (!string.IsNullOrWhiteSpace(_boxNumber) && !NomatcBoxType())
@@ -493,6 +500,7 @@ namespace Packaging.Encasement
                     SkuLot6 = frictionBlockBatch,
                     SkuLot7 = pair.First().ProductIdentificationCode,
                     SkuLot8 = serialNumberPrintDtoFirst.SpeedClass,
+                    SkuLot9 = DateTime.Now.ToString("yyMMdd"),
                     Udf1 = txtProductPlan.Text,
                     Udf2 = txtPo.Text,
                     Udf3 = txtWo.Text,
@@ -547,6 +555,7 @@ namespace Packaging.Encasement
         private bool ValidList()
         {
             var packingAutoIdentifications = GetGridDataSource();
+
             var packingAutoIdentification = packingAutoIdentifications.Find(
                 d => string.IsNullOrWhiteSpace(d.FrictionBlockBatch)
                      || string.IsNullOrWhiteSpace(d.SteelBackBatch));
@@ -839,6 +848,8 @@ namespace Packaging.Encasement
             SetSerialDetailDataSource(packingSerialDetails);
             _boxNumber = packingSerialHeader.BoxNumber;
             btnReprint.Text = @$"箱标重打({packingSerialHeader.BoxNumber})";
+            _againPrintFlag = true;
+            _againPrintDate = packingSerialHeader.PrintDate;
             SetReadOnlyFalse();
         }
 
@@ -851,6 +862,28 @@ namespace Packaging.Encasement
         private void SerialNumberPackingForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             _closeingFlag = true;
+        }
+
+        private void sluSku_Properties_EditValueChanged(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void sluSku_Properties_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
+        {
+            if (GetGridDataSource().Count <= 0)
+            {
+                return;
+            }
+            
+            var dialogResult = CustomMessageBox.Confirm("当前存在明细数据，切换物品时将清空明细？");
+            if (dialogResult == DialogResult.No)
+            {
+                e.Cancel = true;
+                return;
+            }
+            
+            ResetSerialNumber();
         }
     }
 }

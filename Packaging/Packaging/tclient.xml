@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<!--天宜客户端更新地址-->
-	<baseUrl>http://192.168.41.174/tianyi</baseUrl>
+	<!-- <baseUrl>http://192.168.41.174/tianyi</baseUrl> -->
 	<!--内部客户端更新地址-->
-	<!-- <baseUrl>http://10.168.3.136/tianyi</baseUrl> -->
+	<baseUrl>http://10.168.3.136/tianyi</baseUrl>
 	<name>Packaging</name>
 	<version>1.0</version>
 </root>

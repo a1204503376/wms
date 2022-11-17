@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.IO;
 using DataAccess.Dto;
 using DataAccess.Encasement;
-using DataAccess.Wms;
-using Packaging.Common;
-using Packaging.Utility;
 
 namespace Packaging.Encasement
 {
@@ -28,6 +22,13 @@ namespace Packaging.Encasement
 
         private BatchPackingReport(IReadOnlyCollection<BatchPrintDto> batchPrintDtoList) : this()
         {
+            var reportItem = PackingReportItemDal.GetByName("BatchPackingReport");
+            if (reportItem!=null)
+            {
+                using MemoryStream ms = new MemoryStream(reportItem.LayoutData);
+                LoadLayout(ms);
+            }
+
             BatchPrintDtoList = batchPrintDtoList;
             objectDataSource1.DataSource = batchPrintDtoList;
         }

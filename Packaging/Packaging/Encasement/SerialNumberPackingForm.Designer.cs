@@ -239,6 +239,8 @@
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.sluSku.Properties.NullText = "";
             this.sluSku.Properties.PopupView = this.gridView1;
+            this.sluSku.Properties.EditValueChanged += new System.EventHandler(this.sluSku_Properties_EditValueChanged);
+            this.sluSku.Properties.EditValueChanging += new DevExpress.XtraEditors.Controls.ChangingEventHandler(this.sluSku_Properties_EditValueChanging);
             this.sluSku.Size = new System.Drawing.Size(334, 24);
             this.sluSku.StyleController = this.layoutControl1;
             this.sluSku.TabIndex = 5;

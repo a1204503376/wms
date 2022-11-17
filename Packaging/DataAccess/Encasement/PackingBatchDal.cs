@@ -33,7 +33,8 @@ namespace DataAccess.Encasement
                     PoCode = batchPrintDto.PoCode,
                     WoCode = batchPrintDto.WoCode,
                     SpecialCustomer = batchPrintDto.SpecialCustomer,
-                    UserName = batchPrintDto.UserName
+                    UserName = batchPrintDto.UserName,
+                    PrintDate = batchPrintDto.PrintDate
                 };
 
                 headerId = Db.FreeSql.Insert(packingBatchHeader)
@@ -56,6 +57,7 @@ namespace DataAccess.Encasement
                         SkuLot1 = skuDetail.SkuLot1,
                         Qty = skuDetail.PlanQty,
                         Model = batchPrintDto.Model,
+                        TrackingNumber=skuDetail.TrackingNumber
                     };
                     packingBatches.Add(packingBatch);
                 }

@@ -32,5 +32,6 @@
         public string UserName { get; set; }
 
         public string AssemblePeople { get; set; }
+        public string PrintDate { get; set; }
     }
 }

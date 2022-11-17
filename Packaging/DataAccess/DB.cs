@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.Diagnostics;
-using System.Text;
-using DataAccess.Common;
 using FreeSql;
 using FreeSql.Aop;
 using FreeSql.Internal;
@@ -23,11 +21,12 @@ namespace DataAccess
                     //监听SQL命令对象，在执行前
                     cmd =>
                     {
-                        // Trace.WriteLine(cmd.CommandText);
+                        Trace.WriteLine(cmd.CommandText);
                     },
                     //监听SQL命令对象，在执行后
                     (cmd, traceLog) =>
                     {
+                        // Trace.WriteLine(cmd.CommandText);
                     })
                 .UseLazyLoading(false)
                 .Build();

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using DataAccess.Dto;
 
 namespace DataAccess.Common
@@ -9,7 +8,7 @@ namespace DataAccess.Common
     {
         public static List<BatchPrintDto> AddCopiesForBatch(BatchPrintDto batchPrintDto, short copies)
         {
-            return AddCopiesForBatch(new List<BatchPrintDto>{ batchPrintDto}, copies);
+            return AddCopiesForBatch(new List<BatchPrintDto> { batchPrintDto }, copies);
         }
 
         public static List<BatchPrintDto> AddCopiesForBatch(List<BatchPrintDto> batchPrintDtos, short copies)
@@ -50,67 +49,37 @@ namespace DataAccess.Common
         /// 计算给定的数组内连续的序列和独立的值
         /// </summary>
         /// <returns></returns>
-        public static List<List<int>> ContinusFind(int[] numList)
+        public static List<List<int>> ContinusFind(int[] serialNumberArray)
         {
-            Array.Sort(numList);
-
-            var s = 1;
-            var length = numList.Length;
-            var findList = new List<List<int>>();
-
-            switch (length)
+            Array.Sort(serialNumberArray);
+            var index = 0;
+            var continuousList = new List<List<int>>();
+            while (index< serialNumberArray.Length)
             {
-                case 1:
-                    findList.Add(new List<int>() { numList[s - 1] });
-                    return findList;
-                case 2:
-                    {
-                        if (numList[s] - numList[s - 1] != 1)
-                        {
-                            findList.Add(new List<int>() { numList[s - 1] });
-                            findList.Add(new List<int>() { numList[s] });
-                        }
-                        else
-                        {
-                            findList.Add(new List<int>() { numList[s - 1], numList[s] });
-                        }
-
-                        return findList;
-                    }
+                continuousList.Add(GetContinuousList(serialNumberArray, ref index));
             }
 
-            while (s <= length - 1)
+            return continuousList;
+        }
+
+        private static List<int> GetContinuousList(IReadOnlyList<int> serialNumberArray, ref int index)
+        {
+            var continuousSerialNumberList = new List<int>();
+            for (int i = index, l = serialNumberArray.Count; i < l; i++)
             {
-                var firstAloneFlag = s - 1 == 0 && numList[s] - numList[s - 1] != 1;
-                var middleAloneFlag = s + 1 < length && numList[s] - numList[s - 1] != 1 && numList[s + 1] - numList[s] != 1;
-                var lastAloneFlag = s + 1 == length && numList[s] - numList[s - 1] != 1;
-                if (firstAloneFlag || middleAloneFlag || lastAloneFlag)
+                if (i + 1 < l && serialNumberArray[i] + 1 == serialNumberArray[i + 1])
                 {
-                    var val = firstAloneFlag ? numList[s - 1] : numList[s];
-                    findList.Add(new List<int> { val });
-                    s += 1;
-                    continue;
-                }
-
-                if (numList[s] - numList[s - 1] == 1)
-                {
-                    var index = s - 1;
-                    var count = 1;
-                    while (s <= length - 1 && numList[s] - numList[s - 1] == 1)
-                    {
-                        s += 1;
-                        count++;
-                    }
-
-                    findList.Add(numList.ToList().GetRange(index, count));
+                    continuousSerialNumberList.Add(serialNumberArray[i]);
                 }
                 else
                 {
-                    s += 1;
+                    continuousSerialNumberList.Add(serialNumberArray[i]);
+                    index = i + 1;
+                    break;
                 }
             }
 
-            return findList;
+            return continuousSerialNumberList;
         }
     }
 }

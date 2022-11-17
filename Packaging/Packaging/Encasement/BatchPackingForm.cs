@@ -9,10 +9,6 @@ using DataAccess.Dto;
 using DataAccess.Enitiies;
 using DataAccess.Enums;
 using DataAccess.Wms;
-using DevExpress.XtraGrid.Columns;
-using DevExpress.XtraGrid.Views.Grid;
-using DevExpress.XtraPrinting;
-using DevExpress.XtraPrinting.Preview;
 using DevExpress.XtraReports.UI;
 using Packaging.Common;
 using Packaging.Settings;
@@ -23,6 +19,8 @@ namespace Packaging.Encasement
     [ModuleDefine(moduleId: Constants.BatchFormId)]
     public partial class BatchPackingForm : DevExpress.XtraEditors.XtraForm
     {
+        private string _againPrintDate;
+        private bool _againPrintFlag;
         private string _boxNumber;
         private BindingList<SkuDetailDto> _skuDetails;
         private List<Sku> _skus;
@@ -40,6 +38,7 @@ namespace Packaging.Encasement
                 .Where(d => !string.IsNullOrWhiteSpace(d))
                 .Distinct().ToList());
             InitializeSkuDetails();
+            txtPrintNumber.EditValue = ConfigurationManager.AppSettings["Copies"];
         }
 
         private void SetSluSkuDataSource()
@@ -119,8 +118,14 @@ namespace Packaging.Encasement
                 BoxNumber = Constants.DefaulutBoxNumber,
                 Copies = Convert.ToInt16(txtPrintNumber.Text),
                 UserName = GlobalSettings.UserName,
-                SkuDetails = GetGridDataSource()
+                SkuDetails = GetGridDataSource(),
+                AgainPrintFlag = _againPrintFlag
             };
+
+            if (_againPrintFlag && !string.IsNullOrWhiteSpace(_againPrintDate))
+            {
+                batchPrintDto.PrintDate = _againPrintDate;
+            }
 
             if (!string.IsNullOrWhiteSpace(_boxNumber) && !NomatcBoxType())
             {
@@ -154,6 +159,7 @@ namespace Packaging.Encasement
                     SkuLot1 = skuDetail.SkuLot1,
                     SkuLot2 = string.IsNullOrWhiteSpace(sku.SkuSpec) ? skuDetail.SkuSpec : sku.SkuSpec,
                     SkuLot4 = batchPrintDto.SpecialCustomer,
+                    SkuLot9 = batchPrintDto.PrintDate,
                     Udf1 = txtProductPlan.Text,
                     Udf2 = txtPo.Text,
                     Udf3 = txtWo.Text,
@@ -251,12 +257,17 @@ namespace Packaging.Encasement
         {
             btnReprint.Text = @"箱标重打";
             _boxNumber = string.Empty;
+            _againPrintFlag = false;
+            _againPrintDate = string.Empty;
         }
 
         private void btnPreviewPrint_Click(object sender, EventArgs e)
         {
             var batchPackingReport = GetBatchPackingReport();
-
+            if (batchPackingReport==null)
+            {
+                return;
+            }
             ReportPrintTool reportPrintTool = new ReportPrintTool(batchPackingReport);
             reportPrintTool.PrintingSystem.AddCommandHandler(new BatchCommandHandler(batchPackingReport,reportPrintTool));
             reportPrintTool.ShowPreviewDialog();
@@ -265,6 +276,11 @@ namespace Packaging.Encasement
         private BatchPackingReport GetBatchPackingReport()
         {
             var batchPrintDto = GetBatchPrintDto();
+            if (cbxBox.Text == @"B" && batchPrintDto.SkuDetails.GroupBy(d => d.Sku.SkuId).Count() > 1)
+            {
+                CustomMessageBox.Warning("B箱不允许装不同物品，请检查！");
+                return null;
+            }
             if (batchPrintDto.SkuDetails.Select(d=>d.SkuSpec).Distinct().Count()!=1)
             {
                 CustomMessageBox.Warning("只允许同一个型号进行装箱，请检查物品的型号是否一致！");
@@ -341,6 +357,8 @@ namespace Packaging.Encasement
             });
             _boxNumber = packingBatchHeader.BoxNumber;
             btnReprint.Text = $@"箱标重打({packingBatchHeader.BoxNumber})";
+            _againPrintFlag = true;
+            _againPrintDate = packingBatchHeader.PrintDate;
             ResetPrintEnable();
         }
 

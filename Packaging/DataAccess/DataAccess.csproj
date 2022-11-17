@@ -119,6 +119,7 @@
     <Compile Include="Enitiies\PackingSerialHeader.cs" />
     <Compile Include="Enitiies\WmsSerial.cs" />
     <Compile Include="Enitiies\WmsStock.cs" />
+    <Compile Include="Enitiies\WmsZone.cs" />
     <Compile Include="Wms\BladeDictDal.cs" />
     <Compile Include="Encasement\PackingBatchDal.cs" />
     <Compile Include="Wms\ReceiveDetailLpnDal.cs" />

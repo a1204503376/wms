@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="6ntXlfQb4JJzMHi7W_C5" name="入库">
-        <mxGraphModel dx="990" dy="541" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="990" dy="566" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -268,7 +268,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="E1MS9h4JJX1XQuQ40dY7" name="JOB状态">
-        <mxGraphModel dx="990" dy="541" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="990" dy="566" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="g2Ghr9Cz09gb15pzuSp5-0"/>
                 <mxCell id="g2Ghr9Cz09gb15pzuSp5-1" parent="g2Ghr9Cz09gb15pzuSp5-0"/>

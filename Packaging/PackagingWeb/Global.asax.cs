@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Text;
-using DataAccess.Common;
-using DevExpress.CodeParser.Diagnostics;
 using DevExpress.XtraReports.Web;
 using PackagingWeb.Services;
 

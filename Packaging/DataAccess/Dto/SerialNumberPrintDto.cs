@@ -24,7 +24,15 @@ namespace DataAccess.Dto
         public string UserName { get; set; }
         public string SpeedClass { get; set; } = "";
         public decimal Qty { get; set; }
-
+        /// <summary>
+        /// 旧箱号
+        /// 库内打印使用
+        /// </summary>
+        public string Udf2 { get; set; }
+        /// <summary>
+        /// 箱标重打标志
+        /// </summary>
+        public bool AgainPrintFlag { get; set; }
         public string QtyLabel
         {
             get
@@ -125,7 +133,6 @@ namespace DataAccess.Dto
             }
         }
 
-
         private static IEnumerable<SerialNumberRange> GetSerialNumberRanges(List<int> serialNumberList)
         {
             Dictionary<string, List<string>> serialNumberDictionary = new Dictionary<string, List<string>>();
@@ -183,26 +190,6 @@ namespace DataAccess.Dto
             }
 
             return numberRanges;
-        }
-
-        private static List<int> GetContinuousList(int[] serialNumberArray, ref int index)
-        {
-            var continuousSerialNumberList = new List<int>();
-            for (int i = index, l = serialNumberArray.Length; i < l; i++)
-            {
-                if (i+1<l && serialNumberArray[i] + 1 == serialNumberArray[i + 1])
-                {
-                    continuousSerialNumberList.Add(serialNumberArray[i]);
-                }
-                else
-                {
-                    continuousSerialNumberList.Add(serialNumberArray[i]);
-                    index = i + 1;
-                    break;
-                }
-            }
-
-            return continuousSerialNumberList;
         }
 
         public static List<SerialNumberRange> GetDoubleSerialNumberRanges(List<int> serialNumberList)
