@@ -1,4 +1,5 @@
-﻿using FreeSql.DataAnnotations;
+﻿using System;
+using FreeSql.DataAnnotations;
 
 namespace DataAccess.Enitiies
 {
@@ -15,15 +16,15 @@ namespace DataAccess.Enitiies
         public string BoxCode { get; set; }
         public string SkuLot1 { get; set; }
         public string SkuLot2 { get; set; }
-        /// <summary>
-        /// 打印日期
-        /// </summary>
-        public string SkuLot3 { get; set; }
         public string SkuLot4 { get; set; }
         public string SkuLot5 { get; set; }
         public string SkuLot6 { get; set; }
         public string SkuLot7 { get; set; }
         public string SkuLot8 { get; set; }
+        /// <summary>
+        /// 打印日期
+        /// </summary>
+        public string SkuLot9 { get; set; }
         /// <summary>
         /// 旧箱号
         /// 显示：删除前6位，保留剩余的
@@ -37,5 +38,6 @@ namespace DataAccess.Enitiies
         public long ZoneId { get; set; }
 
         public bool HasSerial { get; set; }
+        public DateTime CreateTime { get; set; }
     }
 }

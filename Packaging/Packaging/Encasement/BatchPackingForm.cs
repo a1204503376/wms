@@ -19,6 +19,7 @@ namespace Packaging.Encasement
     [ModuleDefine(moduleId: Constants.BatchFormId)]
     public partial class BatchPackingForm : DevExpress.XtraEditors.XtraForm
     {
+        private string _againPrintDate;
         private bool _againPrintFlag;
         private string _boxNumber;
         private BindingList<SkuDetailDto> _skuDetails;
@@ -121,6 +122,11 @@ namespace Packaging.Encasement
                 AgainPrintFlag = _againPrintFlag
             };
 
+            if (_againPrintFlag && !string.IsNullOrWhiteSpace(_againPrintDate))
+            {
+                batchPrintDto.PrintDate = _againPrintDate;
+            }
+
             if (!string.IsNullOrWhiteSpace(_boxNumber) && !NomatcBoxType())
             {
                 batchPrintDto.BoxNumber = _boxNumber;
@@ -153,6 +159,7 @@ namespace Packaging.Encasement
                     SkuLot1 = skuDetail.SkuLot1,
                     SkuLot2 = string.IsNullOrWhiteSpace(sku.SkuSpec) ? skuDetail.SkuSpec : sku.SkuSpec,
                     SkuLot4 = batchPrintDto.SpecialCustomer,
+                    SkuLot9 = batchPrintDto.PrintDate,
                     Udf1 = txtProductPlan.Text,
                     Udf2 = txtPo.Text,
                     Udf3 = txtWo.Text,
@@ -251,6 +258,7 @@ namespace Packaging.Encasement
             btnReprint.Text = @"箱标重打";
             _boxNumber = string.Empty;
             _againPrintFlag = false;
+            _againPrintDate = string.Empty;
         }
 
         private void btnPreviewPrint_Click(object sender, EventArgs e)
@@ -350,6 +358,7 @@ namespace Packaging.Encasement
             _boxNumber = packingBatchHeader.BoxNumber;
             btnReprint.Text = $@"箱标重打({packingBatchHeader.BoxNumber})";
             _againPrintFlag = true;
+            _againPrintDate = packingBatchHeader.PrintDate;
             ResetPrintEnable();
         }
 

@@ -105,6 +105,7 @@
     <Content Include="Default.aspx" />
     <Content Include="Designer.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="SerialNumberExport.aspx" />
     <Content Include="Viewer.aspx" />
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +174,13 @@
     </Compile>
     <Compile Include="PredefinedReports\TestReport.Designer.cs">
       <DependentUpon>TestReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SerialNumberExport.aspx.cs">
+      <DependentUpon>SerialNumberExport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SerialNumberExport.aspx.designer.cs">
+      <DependentUpon>SerialNumberExport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Services\BatchDataSource.cs" />
     <Compile Include="Services\CustomReportStorageWebExtension.cs" />

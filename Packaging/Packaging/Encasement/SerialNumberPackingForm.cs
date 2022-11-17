@@ -23,6 +23,7 @@ namespace Packaging.Encasement
     [ModuleDefine(moduleId:Constants.SerialFormId)]
     public partial class SerialNumberPackingForm : XtraForm
     {
+        private string _againPrintDate;
         private bool _againPrintFlag = false;
         private bool _closeingFlag = false;
         private string _boxNumber;
@@ -367,6 +368,7 @@ namespace Packaging.Encasement
             btnReprint.Text = @$"箱标重打";
             _boxNumber = string.Empty;
             _againPrintFlag = false;
+            _againPrintDate = string.Empty;
         }
 
         private SerialNumberReport GetSerialNumberReport()
@@ -411,7 +413,10 @@ namespace Packaging.Encasement
                     Copies = Convert.ToInt16(txtPrintNumber.EditValue),
                     BoxNumber = Constants.DefaulutBoxNumber,
                     SerialDetails = packingSerialDetails,
-                    AgainPrintFlag = _againPrintFlag
+                    AgainPrintFlag = _againPrintFlag,
+                    PrintDate = (_againPrintFlag && !string.IsNullOrWhiteSpace(_againPrintDate))
+                        ? _againPrintDate
+                        : DateTime.Now.ToString("yyMMdd")
                 };
 
                 if (!string.IsNullOrWhiteSpace(_boxNumber) && !NomatcBoxType())
@@ -495,6 +500,7 @@ namespace Packaging.Encasement
                     SkuLot6 = frictionBlockBatch,
                     SkuLot7 = pair.First().ProductIdentificationCode,
                     SkuLot8 = serialNumberPrintDtoFirst.SpeedClass,
+                    SkuLot9 = DateTime.Now.ToString("yyMMdd"),
                     Udf1 = txtProductPlan.Text,
                     Udf2 = txtPo.Text,
                     Udf3 = txtWo.Text,
@@ -843,6 +849,7 @@ namespace Packaging.Encasement
             _boxNumber = packingSerialHeader.BoxNumber;
             btnReprint.Text = @$"箱标重打({packingSerialHeader.BoxNumber})";
             _againPrintFlag = true;
+            _againPrintDate = packingSerialHeader.PrintDate;
             SetReadOnlyFalse();
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DataAccess.Enitiies;
 
 namespace DataAccess.Wms
@@ -14,7 +15,7 @@ namespace DataAccess.Wms
                 .ToList();
         }
 
-        public static List<WmsStock> GetStagingAreaList()
+        public static List<WmsStock> GetStagingAreaList(DateTime? startDate,DateTime? endDate,bool hasSerial)
         {
             // 入库暂存区
             var zoneId = Db.FreeSql.Select<WmsZone>()
@@ -22,7 +23,9 @@ namespace DataAccess.Wms
                 .ToOne(d => d.ZoneId);
 
             return Db.FreeSql.Select<WmsStock>()
-                .Where(d=>d.ZoneId ==zoneId && !string.IsNullOrWhiteSpace(d.Udf2))
+                .Where(d=>d.ZoneId ==zoneId && !string.IsNullOrWhiteSpace(d.Udf2) && d.HasSerial == hasSerial)
+                .WhereIf(startDate.HasValue, d => d.CreateTime >= startDate.Value)
+                .WhereIf(endDate.HasValue, d => d.CreateTime <= endDate.Value)
                 .ToList();
         }
     }

@@ -97,6 +97,7 @@ namespace PackagingWeb
                 });
                 batchPrintDto.SpecialCustomer = wmsStock.SkuLot4;
                 batchPrintDto.Udf2 = wmsStock.Udf2;
+                batchPrintDto.PrintDate = wmsStock.SkuLot9;
             }
 
             batchPrintDto.SkuDetails = skuDetails;
@@ -167,7 +168,8 @@ namespace PackagingWeb
                     SpecialCustomer = wmsStock.SkuLot4,
                     Udf2 = wmsStock.Udf2,
                     SpeedClass = sku.SkuRemark,
-                    ProductIdentificationCode = sku.SkuBarcodeList
+                    ProductIdentificationCode = sku.SkuBarcodeList,
+                    PrintDate = wmsStock.SkuLot9
                 };
 
                 int index = (i * SerialNumberPrintDto.SerialGroupNumber);

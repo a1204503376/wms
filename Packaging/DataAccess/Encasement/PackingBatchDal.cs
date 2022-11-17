@@ -33,7 +33,8 @@ namespace DataAccess.Encasement
                     PoCode = batchPrintDto.PoCode,
                     WoCode = batchPrintDto.WoCode,
                     SpecialCustomer = batchPrintDto.SpecialCustomer,
-                    UserName = batchPrintDto.UserName
+                    UserName = batchPrintDto.UserName,
+                    PrintDate = batchPrintDto.PrintDate
                 };
 
                 headerId = Db.FreeSql.Insert(packingBatchHeader)

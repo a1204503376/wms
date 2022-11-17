@@ -47,7 +47,8 @@ namespace DataAccess.Encasement
                     SpeedClass = serialNumberPrintDto.SpeedClass,
                     AssemblePeople = serialNumberPrintDto.AssemblePeople,
                     UserName = serialNumberPrintDto.UserName,
-                    BoxNumber = serialNumberPrintDto.BoxNumber
+                    BoxNumber = serialNumberPrintDto.BoxNumber,
+                    PrintDate = serialNumberPrintDto.PrintDate
                 };
                 headerId = Db.FreeSql.Insert<PackingSerialHeader>(packingSerialHeader)
                     .ExecuteIdentity();
