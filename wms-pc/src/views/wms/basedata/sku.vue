@@ -326,18 +326,7 @@ export default {
         beforeOpen(done, type, finish) {
             if (["edit", "view"].includes(type)) {
                 if (["edit"].includes(type)) {
-                    canEdit(this.form.skuId)
-                        .then(res => {
-                            if (res.data.data) {
-                                this.getSkuDetail(done, type);
-                            } else {
-                                this.$message.warning("当前物品不允许编辑！");
-                                finish();
-                            }
-                        })
-                        .catch(() => {
-                            finish();
-                        })
+                    this.getSkuDetail(done, type);
                 } else {
                     this.getSkuDetail(done, type);
                 }

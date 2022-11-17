@@ -1,3 +1,5 @@
+import {baseUrl} from "@/config/env";
+
 /**
  * 全局配置文件
  */
@@ -45,5 +47,5 @@ export default {
     // 流程设计器地址
     flowDesignUrl: 'http://localhost:9999',
     // 报表设计器地址(cloud端口为8108,boot端口为80)
-    reportUrl: 'http://localhost:8088/ureport',
+    reportUrl: baseUrl+'/ureport',
 }
