@@ -15,6 +15,7 @@ import org.nodes.wms.dao.instock.receiveLog.entities.ReceiveLog;
 import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.entities.StockBalance;
+import org.nodes.wms.dao.stock.enums.StockStatusEnum;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -133,6 +135,8 @@ public class StockFactory {
 			stockBalance.setInStockQty(BigDecimal.ZERO);
 			stockBalance.setOutStockQty(logSoPick.getPickRealQty());
 		}
+		stockBalance.setStockStatus(StockStatusEnum.NORMAL);
+		stockBalance.setBalanceDate(new Date());
 		stockBalance.setOpeningQty(BigDecimal.ZERO);
 		stockBalance.setBalanceQty(stockBalance.getInStockQty().subtract(stockBalance.getOutStockQty()));
 		return stockBalance;
@@ -141,6 +145,9 @@ public class StockFactory {
 	public static void AssigntoArray(List<ReceiveLog> receiveLogList, List<ReceiveLog> receiveLogList1,
 									 List<LogSoPick> logSoPickList, List<LogSoPick> logSoPickList1,
 									 List<StockBalance> stockBalanceList1) {
+		if (logSoPickList.size() == 0) {
+			receiveLogList1.addAll(receiveLogList);
+		}
 		for (int i = 0; i < receiveLogList.size(); i++) {
 			for (int j = 0; j < logSoPickList.size(); j++) {
 				if (compare(receiveLogList.get(i), logSoPickList.get(j))) {
@@ -165,6 +172,9 @@ public class StockFactory {
 	}
 
 	public static List<StockBalance> createStockBalanceList(List<StockBalance> stockBalanceList, List<StockBalance> stockBalanceList1) {
+		if (stockBalanceList.size() == 0) {
+			return stockBalanceList1;
+		}
 		List<StockBalance> stockBalanceList2 = new ArrayList<>(stockBalanceList);
 		List<StockBalance> stockBalanceList3 = new ArrayList<>();
 		for (int i = 0; i < stockBalanceList1.size(); i++) {

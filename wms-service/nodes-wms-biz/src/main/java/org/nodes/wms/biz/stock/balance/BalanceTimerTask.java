@@ -9,6 +9,8 @@ import org.nodes.wms.dao.outstock.logSoPick.entities.LogSoPick;
 import org.nodes.wms.dao.stock.StockBalanceDao;
 import org.nodes.wms.dao.stock.entities.StockBalance;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ public class BalanceTimerTask {
 	private final LogSoPickBiz logSoPickBiz;
 	private final StockBalanceDao stockBalanceDao;
 
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void run() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR_OF_DAY, 0);

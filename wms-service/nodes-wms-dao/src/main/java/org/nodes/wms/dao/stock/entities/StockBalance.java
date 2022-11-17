@@ -15,7 +15,7 @@ import java.util.Date;
  * 库存结存实体
  */
 @Data
-@TableName("stock_balance")
+@TableName("wms_stock_balance")
 public class StockBalance extends SkuLotBaseEntity implements Serializable {
 	private static final long serialVersionUID = 4781570401404803872L;
 	/**
