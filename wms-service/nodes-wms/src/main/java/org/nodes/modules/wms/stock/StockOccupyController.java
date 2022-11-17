@@ -34,7 +34,6 @@ public class StockOccupyController extends BladeController {
 	/**
 	 * 分页 库存占表
 	 */
-	@ApiLog("库存占表接口-库存占表分页")
 	@GetMapping("/list")
 	@ApiOperationSupport(order = 2)
 	@ApiOperation(value = "库存占表分页", notes = "传入stockOccupy")

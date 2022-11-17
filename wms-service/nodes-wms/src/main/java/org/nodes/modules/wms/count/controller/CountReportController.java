@@ -51,7 +51,6 @@ public class CountReportController extends BladeController {
 	/**
 	 * 分页 盘点差异报告表
 	 */
-	@ApiLog("盘点差异报告表接口-分页")
 	@GetMapping("/list")
 	@ApiOperationSupport(order = 2)
 	@ApiOperation(value = "盘点差异报告表分页", notes = "传入countReport")
@@ -63,7 +62,6 @@ public class CountReportController extends BladeController {
 	/**
 	 * 自定义分页 盘点差异报告表
 	 */
-	@ApiLog("盘点差异报告表接口-自定义分页")
 	@GetMapping("/page")
 	@ApiOperationSupport(order = 3)
 	@ApiOperation(value = "自定义分页盘点差异报告表", notes = "传入countReport")

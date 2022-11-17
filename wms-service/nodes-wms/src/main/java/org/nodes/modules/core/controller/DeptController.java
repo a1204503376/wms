@@ -63,7 +63,6 @@ public class DeptController extends BladeController {
 	/**
 	 * 列表
 	 */
-	@ApiLog("机构-列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "列表", notes = "传入dept")
 	public R<List<DeptVO>> list(@ApiIgnore @RequestParam Map<String, Object> params) {
@@ -89,7 +88,6 @@ public class DeptController extends BladeController {
 		return R.data(deptVOList);
 	}
 
-	@ApiLog("机构-分页")
 	@GetMapping("/page")
 	public R<IPage<DeptVO>> page(@ApiIgnore @RequestParam Map<String, Object> params, Query query) {
 		IPage<Dept> basePage = deptService.page(Condition.getPage(query), Condition.getQueryWrapper(params, Dept.class)

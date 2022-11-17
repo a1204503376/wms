@@ -50,7 +50,6 @@ public class SoTruckHeaderController extends BladeController {
 	/**
 	 * 分页 车次头表
 	 */
-	@ApiLog("车次头表接口-分页")
 	@GetMapping("/list")
 	@ApiOperation(value = "分页", notes = "传入soTruckHeader")
 	public R<List<SoTruckHeaderVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
@@ -61,7 +60,6 @@ public class SoTruckHeaderController extends BladeController {
 	/**
 	 * 自定义分页 车次头表
 	 */
-	@ApiLog("车次头表接口-自定义分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "分页", notes = "传入soTruckHeader")
 	public R<IPage<SoTruckHeaderVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

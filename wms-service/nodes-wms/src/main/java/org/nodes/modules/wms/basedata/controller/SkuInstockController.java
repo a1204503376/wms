@@ -37,7 +37,6 @@ public class SkuInstockController {
 	 * @param skuInstock
 	 * @return
 	 */
-	@ApiLog("物品入库设置接口-列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "列表", notes = "传入skuInstock")
 	public R<List<SkuInstockVO>> list(SkuInstock skuInstock) {

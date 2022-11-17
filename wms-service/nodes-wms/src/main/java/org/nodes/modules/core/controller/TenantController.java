@@ -78,7 +78,6 @@ public class TenantController extends BladeController {
 	/**
 	 * 分页
 	 */
-	@ApiLog("租户管理-分页")
 	@GetMapping("/list")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "tenantId", value = "参数名称", paramType = "query", dataType = "string"),
@@ -107,7 +106,6 @@ public class TenantController extends BladeController {
 	/**
 	 * 自定义分页
 	 */
-	@ApiLog("租户管理-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "分页", notes = "传入tenant")
 	public R<IPage<Tenant>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

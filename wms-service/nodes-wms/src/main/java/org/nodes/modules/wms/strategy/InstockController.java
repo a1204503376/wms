@@ -50,7 +50,6 @@ public class InstockController extends BladeController {
 	/**
 	 * 获取上架策略列表
 	 */
-	@ApiLog("上架策略-获取上架策略列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "上架策略分页", notes = "传入instock")
 	public R<List<StInstock>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
@@ -61,7 +60,6 @@ public class InstockController extends BladeController {
 	/**
 	 * 上架策略自定义分页
 	 */
-	@ApiLog("上架策略-上架策略自定义分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "上架策略分页", notes = "传入instock")
 	public R<IPage<InstockVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

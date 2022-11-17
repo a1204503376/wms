@@ -50,7 +50,6 @@ public class OutstockController extends BladeController {
 	/**
 	 * 列表
 	 */
-	@ApiLog("分配策略-列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "分页", notes = "传入outstock")
 	public R<List<OutstockVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
@@ -61,7 +60,6 @@ public class OutstockController extends BladeController {
 	/**
 	 * 分页
 	 */
-	@ApiLog("分配策略-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "分页", notes = "传入outstock")
 	public R<IPage<OutstockVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

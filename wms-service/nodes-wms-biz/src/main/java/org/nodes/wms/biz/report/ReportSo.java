@@ -1,6 +1,7 @@
 package org.nodes.wms.biz.report;
 
 import lombok.RequiredArgsConstructor;
+import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
@@ -113,7 +114,7 @@ public class ReportSo {
 		Map<String, List<ReportSoPickLotDto>> listGroupByBoxCode = reportSoPickLotDtoList.stream().collect(Collectors.groupingBy(ReportSoPickLotDto::getBoxCode));
 		for (Map.Entry<String, List<ReportSoPickLotDto>> entry : listGroupByBoxCode.entrySet()) {
 			for (int i = 0; i < entry.getValue().size(); i++) {
-				if (i != 0){
+				if (i != 0) {
 					entry.getValue().get(i).setBoxCode(null);
 				}
 			}
@@ -132,7 +133,11 @@ public class ReportSo {
 	}
 
 	public List<LogSoPick> getLogSoPickList(Long soBillId) {
-		return logSoPickBiz.findBySoHeaderId(soBillId);
+		List<LogSoPick> logSoPickList = logSoPickBiz.findBySoHeaderId(soBillId);
+		// 过滤掉已撤销的记录和撤销记录
+		return logSoPickList.stream()
+			.filter(x -> Func.isEmpty(x.getCancelLogId()) && BigDecimalUtil.gt(x.getPickRealQty(), BigDecimal.ZERO))
+			.collect(Collectors.toList());
 	}
 
 	public String getWsuName(Long skuId) {
@@ -206,9 +211,11 @@ public class ReportSo {
 	 * 根据 logSoPick 封装 销售发货记录表(序列号) 列表数据集的数据
 	 */
 	public void setReportSoPickSerialDtoList(LogSoPick logSoPick, List<ReportSoPickSerialDto> reportSoPickSerialDtoList) {
-		List<Map<String, Object>> mapList = getProcessedSerialAndQty(logSoPick.getSnCode());
-		packagingData(mapList, logSoPick.getSkuLot3(), logSoPick.getBoxCode(), logSoPick.getSkuLot5(),
-			logSoPick.getSoBillId(), reportSoPickSerialDtoList);
+		if (Func.isNotEmpty(logSoPick.getSnCode())) {
+			List<Map<String, Object>> mapList = getProcessedSerialAndQty(logSoPick.getSnCode());
+			packagingData(mapList, logSoPick.getSkuLot3(), logSoPick.getBoxCode(), logSoPick.getSkuLot5(),
+				logSoPick.getSoBillId(), reportSoPickSerialDtoList);
+		}
 	}
 
 	/**
@@ -296,7 +303,7 @@ public class ReportSo {
 		Map<String, List<ReportSoPickSerialDto>> listGroupByBoxCode = reportSoPickSerialDtoList.stream().collect(Collectors.groupingBy(ReportSoPickSerialDto::getBoxCode));
 		for (Map.Entry<String, List<ReportSoPickSerialDto>> entry : listGroupByBoxCode.entrySet()) {
 			for (int i = 0; i < entry.getValue().size(); i++) {
-				if (i != 0){
+				if (i != 0) {
 					entry.getValue().get(i).setBoxCode(null);
 				}
 			}

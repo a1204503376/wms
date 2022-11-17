@@ -31,7 +31,6 @@ public class SnController extends BladeController {
 	/**
 	 * 分页 入库货品序列号
 	 */
-	@ApiLog("入库货品序列号接口-分页")
 	@GetMapping("/list")
 	@ApiOperation(value = "分页", notes = "传入sn")
 	public R<List<String>> list(Sn sn) {

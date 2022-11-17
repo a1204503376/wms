@@ -76,7 +76,6 @@ public class TaskController extends BladeController {
 	/**
 	 * 自定义分页
 	 */
-	@ApiLog("任务接口-自定义分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "分页", notes = "传入task")
 	public R<IPage<TaskVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

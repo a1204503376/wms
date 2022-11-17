@@ -63,7 +63,6 @@ public class SkuLotValController extends BladeController {
 	/**
 	 * 分页 批属性验证
 	 */
-	@ApiLog("批属性验证接口-列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "列表", notes = "传入skuLotVal")
 	public R<List<SkuLotValVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
@@ -74,7 +73,6 @@ public class SkuLotValController extends BladeController {
 	/**
 	 * 自定义分页 批属性验证
 	 */
-	@ApiLog("批属性验证接口-自定义分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "分页", notes = "传入skuLotVal")
 	public R<IPage<SkuLotValVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

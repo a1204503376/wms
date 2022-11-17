@@ -39,7 +39,6 @@ public class SerialLogController2 extends BladeController {
 	/**
 	 * 分页 序列号日志
 	 */
-	@ApiLog("序列号日志接口-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "序列号日志分页", notes = "传入serialLog")
 	public R<IPage<SerialLogVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

@@ -66,7 +66,6 @@ public class AsnLpnDetailController extends BladeController {
 	/**
 	 * 入库容器明细列表，传回AsnLpnDetail列表
 	 */
-	@ApiLog("入库容器接口-入库容器明细列表，传回AsnLpnDetail列表")
 	@GetMapping("/list")
 	@ApiOperationSupport(order = 2)
 	@ApiOperation(value = "分页", notes = "传入lpnDetail")
@@ -78,7 +77,6 @@ public class AsnLpnDetailController extends BladeController {
 	/**
 	 * 入库容器明细自定义分页，传回AsnLpnDetailVO 列表
 	 */
-	@ApiLog("入库容器接口-入库容器明细自定义分页，传回AsnLpnDetailVO 列表")
 	@GetMapping("/page")
 	@ApiOperationSupport(order = 3)
 	@ApiOperation(value = "分页", notes = "传入lpnDetail")

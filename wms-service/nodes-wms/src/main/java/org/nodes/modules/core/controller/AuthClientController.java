@@ -63,7 +63,6 @@ public class AuthClientController extends BladeController {
 	/**
 	* 分页
 	*/
-	@ApiLog("应用管理-分页")
 	@GetMapping("/list")
 	@ApiOperation(value = "分页", notes = "传入client")
 	public R<IPage<AuthClient>> list(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

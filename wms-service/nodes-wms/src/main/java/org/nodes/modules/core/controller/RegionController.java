@@ -55,7 +55,6 @@ public class RegionController extends BladeController {
 	 * @param params
 	 * @return
 	 */
-	@ApiLog("区域-获取区域列表")
 	@GetMapping("/list")
 	@ApiOperation(value = "列表",notes = "传入区域")
 	public R<List<RegionVO>> list(@ApiIgnore @RequestParam Map<String, Object> params){
@@ -76,7 +75,6 @@ public class RegionController extends BladeController {
 	/**
 	 * 分页
 	 */
-	@ApiLog("区域-分页")
 	@GetMapping("/page")
 	public R<IPage<RegionVO>> page(@ApiIgnore @RequestParam Map<String, Object> params, Query query){
 		IPage<Region> pages = regionService.page(Condition.getPage(query),Condition.getQueryWrapper(params,Region.class));

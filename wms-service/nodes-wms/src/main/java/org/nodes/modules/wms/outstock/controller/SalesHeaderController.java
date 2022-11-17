@@ -54,7 +54,6 @@ public class SalesHeaderController extends BladeController {
     /**
      * 销售单主表列表
      */
-	@ApiLog("销售单-列表")
     @GetMapping("/list")
     @ApiOperation(value = "销售单主表列表", notes = "传入salesHeader")
     public R<List<SalesHeaderVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
@@ -65,7 +64,6 @@ public class SalesHeaderController extends BladeController {
 	/**
 	 * 销售单主表分页
 	 */
-	@ApiLog("销售单-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "销售单主表分页", notes = "传入salesHeader")
 	public R<IPage<SalesHeaderVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {

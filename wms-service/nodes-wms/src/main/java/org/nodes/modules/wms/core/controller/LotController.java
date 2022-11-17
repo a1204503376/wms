@@ -40,7 +40,6 @@ public class LotController extends BladeController {
 	/**
 	 * 分页
 	 */
-	@ApiLog("批次号-分页")
 	@GetMapping("/page")
 	@ApiOperation(value = "批次号分页查询", notes = "传入条件、hasStock")
 	@ApiImplicitParam(value = "hasStock", name = "hasStock为0时查询有库存， !=0查询无库存")

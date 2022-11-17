@@ -71,7 +71,6 @@ public class TopMenuController extends BladeController {
 	/**
 	 * 分页 顶部菜单表
 	 */
-	@ApiLog("顶部菜单-分页")
 	@GetMapping("/list")
 	@ApiOperation(value = "分页", notes = "传入topMenu")
 	public R<IPage<TopMenu>> list(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
