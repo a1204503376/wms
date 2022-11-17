@@ -141,8 +141,8 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		return stockMergeStrategy.matchSameStock(pickLog, pickToLoc.get(0));
 	}
 
-    @Override
-    public List<Stock> findStockOnPickTo(String boxCode) {
+	@Override
+	public List<Stock> findStockOnPickTo(String boxCode) {
 		AssertUtil.notEmpty(boxCode, "按箱码查询出库暂存区的库存失败,箱码不能为空");
 
 		List<Location> allPickToLocation = locationBiz.getLocationByZoneType(DictKVConstant.ZONE_TYPE_PICK_TO);
@@ -151,26 +151,26 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		List<Long> allPickToLocIds = allPickToLocation.stream()
 			.map(Location::getLocId)
 			.collect(Collectors.toList());
-        return stockDao.getStockByBoxCode(boxCode, allPickToLocIds);
-    }
+		return stockDao.getStockByBoxCode(boxCode, allPickToLocIds);
+	}
 
-    @Override
+	@Override
 	public List<Stock> findStockByLpnCode(String lpnCode) {
 		return stockDao.getStockByLpnCode(lpnCode, null);
 	}
 
-    @Override
-    public List<Stock> findStockByLpnCodeOnStore(String lpnCode) {
+	@Override
+	public List<Stock> findStockByLpnCodeOnStore(String lpnCode) {
 		List<Location> pickToLocs = locationBiz.getLocationByZoneType(DictKVConstant.ZONE_TYPE_PICK_TO);
 		List<Long> pickToLocIds = null;
-		if (Func.isNotEmpty(pickToLocs)){
+		if (Func.isNotEmpty(pickToLocs)) {
 			pickToLocIds = pickToLocs.stream().map(Location::getLocId).collect(Collectors.toList());
 		}
 
 		return stockDao.getStockByLpnCodeExcludeLoc(lpnCode, pickToLocIds);
-    }
+	}
 
-    @Override
+	@Override
 	public StockIndexResponse staticsStockDataOnIndexPage() {
 		// 获取所有入库暂存区库位
 		List<Location> allStageList = locationBiz.getLocationByZoneType(DictKVConstant.ZONE_TYPE_STAGE);
@@ -432,7 +432,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 
 	@Override
 	public List<Stock> findStockByDropId(Long dropId) {
-		return stockDao.getStockByDropId(dropId);
+		return stockDao.getStockByDropId(dropId.toString());
 	}
 
 	@Override

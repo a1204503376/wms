@@ -415,6 +415,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			locationBiz.unfreezeLocByTask(wmsTask.getTaskId().toString());
 		}
 		// 修改任务状态
+		wmsTask.setTaskState(WmsTaskStateEnum.CANCELED);
 		wmsTaskDao.updateById(wmsTask);
 		// 如果是AGV拣货任务取消分配
 		wmsTaskBiz.cancel(wmsTask);
