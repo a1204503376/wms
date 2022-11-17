@@ -18,10 +18,6 @@ public class ReportSoPickSerialDto {
 	 */
 	private String boxCode;
 	/**
-	 * 生产日期(入库日期)
-	 */
-	private String skuLot3;
-	/**
 	 * 数量
 	 */
 	private BigDecimal qty;
@@ -33,4 +29,8 @@ public class ReportSoPickSerialDto {
 	 * 钢背
 	 */
 	private String skuLot5;
+	/**
+	 * 生产日期(入库日期)
+	 */
+	private String skuLot9;
 }
