@@ -53,31 +53,37 @@ export default {
             this.val = newVal;
         },
     },
-    async created() {
-        await this.getDataSource()
-        if (this.defaultValue) {
-            this.val = this.dataSource[0].zoneId
-            this.onChange(this.val);
-        }
-        // 根据名称判断 默认勾选除 notSelectName 中的值以外的库区
-        let notSelectId = []
-        if (func.isNotEmpty(this.notSelectName)) {
-            this.dataSource.forEach(value => {
-                if (!this.notSelectName.includes(value.zoneName)) {
-                    notSelectId.push(value.zoneId);
-                }
-            })
-        }
-        if (func.isNotEmpty(notSelectId)) {
-            notSelectId.forEach(value => {
-                this.val.push(value)
-            })
-        }
+    created() {
+    },
+    async mounted() {
+        await this.getDataSource();
     },
     methods: {
         async getDataSource() {
-            let {data: {data}} = await getZoneSelectResponse(this.whIdList)
-            this.dataSource = data;
+            let res = await getZoneSelectResponse(this.whIdList);
+            this.dataSource = res.data.data;
+            this.processingData();
+        },
+        processingData() {
+            if (this.defaultValue) {
+                this.val = this.dataSource[0].zoneId
+                this.onChange(this.val);
+            }
+            // 根据名称判断 默认勾选除 notSelectName 中的值以外的库区
+            let notSelectId = []
+            if (func.isNotEmpty(this.notSelectName)) {
+                this.dataSource.forEach(value => {
+                    if (!this.notSelectName.includes(value.zoneName)) {
+                        notSelectId.push(value.zoneId);
+                    }
+                })
+            }
+            if (func.isNotEmpty(notSelectId)) {
+                notSelectId.forEach(value => {
+                    this.val.push(value)
+                })
+            }
+            this.$emit('initZoneParams', this.val);
         },
         onChange(val) {
             this.$emit('selectValChange', val);
