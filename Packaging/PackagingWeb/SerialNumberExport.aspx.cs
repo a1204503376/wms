@@ -3,15 +3,11 @@ using DataAccess.Dto;
 using DataAccess.Enitiies;
 using DataAccess.Wms;
 using DevExpress.XtraPrinting;
-using DevExpress.XtraReports.UI;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using PackagingWeb.PredefinedReports;
 
 namespace PackagingWeb
@@ -38,15 +34,18 @@ namespace PackagingWeb
             var numberPrintDtos = new List<SerialNumberPrintDto>();
             wmsStockList = wmsStockList
                 .OrderBy(d => d.SkuLot2)
-                .ThenBy(d => d.BoxCode).ToList();
-            foreach (var wmsStock in wmsStockList)
+                .ThenBy(d => d.BoxCode)
+                .ToList();
+
+            var groupBy = wmsStockList.GroupBy(d => d.BoxCode).ToList();
+
+            foreach (var wmsStock in groupBy)
             {
-                var serialNumberPrintDtos = GetSerialPrintDtos(new[] { wmsStock }, boxPrintRequest);
+                var serialNumberPrintDtos = GetSerialPrintDtos(wmsStock.ToList(), boxPrintRequest);
                 numberPrintDtos.AddRange(PrintHelper.AddCopiesForSerial(serialNumberPrintDtos, boxPrintRequest.Copies));
             }
 
             var report = new SerialNumberReport(numberPrintDtos);
-
 
             using MemoryStream ms = new MemoryStream();
             report.ExportToPdf(ms, new PdfExportOptions() { ShowPrintDialogOnOpen = true });
@@ -78,7 +77,6 @@ namespace PackagingWeb
 
             // 数量计算，同一个物品不同批属性合并序列号数量
             var qty = wmsStockList.Select(d => d.StockQty - d.PickQty).Sum();
-
 
             var serialNumberPrintDtos = new List<SerialNumberPrintDto>();
             for (int i = 0; i < groupSerialNumber; i++)
