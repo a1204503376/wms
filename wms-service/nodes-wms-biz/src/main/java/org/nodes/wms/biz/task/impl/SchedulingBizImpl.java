@@ -8,6 +8,7 @@ import org.nodes.core.constant.WmsAppConstant;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.ExceptionUtil;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
+import org.nodes.wms.biz.basics.systemParam.SystemParamBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
@@ -97,6 +98,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	private final PutawayLogDao putawayLogDao;
 	private final SystemParamDao systemParamDao;
 	private final WmsTaskBiz wmsTaskBiz;
+	private final SystemParamBiz paramBiz;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -120,22 +122,30 @@ public class SchedulingBizImpl implements SchedulingBiz {
 				.collect(Collectors.toList());
 		}
 
+		LpnTypeCodeEnum requestParseBoxCode = lpnTypeBiz.parseBoxCode(request.getLpnTypeCode());
+		Param param = paramBiz.selectByKey(WmsAppConstant.BC_ON_AGV_PICK);
+		if (Func.isEmpty(param)) {
+			param.setParamKey(WmsAppConstant.BC_ON_AGV_PICK);
+			param.setParamValue("0");
+		}
 
 		for (Location location : locationList) {
 			LpnType locLpnType = lpnTypeBiz.findLpnTypeById(location.getLpnTypeId());
-			LpnTypeCodeEnum requestParseBoxCode = lpnTypeBiz.parseBoxCode(request.getLpnTypeCode());
+
 			// 判断库位是否有库存
-			if (location.enableStock() && stockQueryBiz.isEmptyLocation(location.getLocId())
-				&& locLpnType.getCode().equals(requestParseBoxCode.getCode())) {
-				// 如果没有库存则冻结库位
-				locationBiz.freezeLocByTask(location.getLocId(), request.getTaskDetailId().toString());
-				// 更新任务信息
-				wmsTask.setToLocId(location.getLocId());
-				wmsTask.setToLocCode(location.getLocCode());
-				wmsTask.setRemark("更新并冻结目标库位");
-				wmsTaskDao.updateById(wmsTask);
-				log.info("调度系统,AGV拣货任务{}成功冻结目标库位{}", request.getTaskDetailId(), location.getLocCode());
-				return location.getLocCode();
+			if (location.enableStock() && stockQueryBiz.isEmptyLocation(location.getLocId())) {
+				//判断当前库位是否是BC箱，并且系统参数BC箱是否是通用箱型
+				if ((Integer.parseInt(param.getParamValue()) > 0 && LpnTypeCodeEnum.B.getCode().equals(locLpnType.getCode()) && LpnTypeCodeEnum.B.getCode().equals(requestParseBoxCode.getCode()))
+					|| (Integer.parseInt(param.getParamValue()) > 0 && LpnTypeCodeEnum.C.getCode().equals(locLpnType.getCode()) && LpnTypeCodeEnum.C.getCode().equals(requestParseBoxCode.getCode()))) {
+					// 更新并冻结目标库位
+					return updateAndFreezeTargetLocation(wmsTask, location, request);
+				} else {
+					//判断当前库位的箱型是否跟请求参数传输过来的一致
+					if (locLpnType.getCode().equals(requestParseBoxCode.getCode())) {
+						// 更新并冻结目标库位
+						return updateAndFreezeTargetLocation(wmsTask, location, request);
+					}
+				}
 			}
 		}
 
@@ -248,6 +258,18 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		logBiz.noticeMesssage(message);
 
 		return newLocation.getLocCode();
+	}
+
+	private String updateAndFreezeTargetLocation(WmsTask wmsTask, Location location, QueryAndFrozenEnableOutboundRequest request) {
+		// 如果没有库存则冻结库位
+		locationBiz.freezeLocByTask(location.getLocId(), request.getTaskDetailId().toString());
+		// 更新任务信息
+		wmsTask.setToLocId(location.getLocId());
+		wmsTask.setToLocCode(location.getLocCode());
+		wmsTask.setRemark("更新并冻结目标库位");
+		wmsTaskDao.updateById(wmsTask);
+		log.info("调度系统,AGV拣货任务{}成功冻结目标库位{}", request.getTaskDetailId(), location.getLocCode());
+		return location.getLocCode();
 	}
 
 	private Location nominateNewLocation(WmsTask wmsTask) {

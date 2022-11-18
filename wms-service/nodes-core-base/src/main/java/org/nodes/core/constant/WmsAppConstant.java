@@ -172,4 +172,8 @@ public interface WmsAppConstant {
 	 * D箱编码(天宜定制)
 	 */
 	String BOX_TYPE_D = "D";
+	/**
+	 * BC箱是否通用键值
+	 */
+	String BC_ON_AGV_PICK = "bc_on_agv_pick";
 }
