@@ -8,7 +8,6 @@ using DataAccess.Dto;
 using DataAccess.Enitiies;
 using DataAccess.Wms;
 using DevExpress.XtraPrinting;
-using DevExpress.XtraReports.UI;
 using PackagingWeb.PredefinedReports;
 
 namespace PackagingWeb
