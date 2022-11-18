@@ -376,4 +376,13 @@ public interface StockDao {
 	 * @return 实时库存数据
 	 */
 	List<ReportStockDto> getCurrentTimeStockByReportParams(List<Long> excludeZoneIdList, Map<String, Object> parameters);
+
+	/**
+	 * 根据库房、箱码和库区集合获取库存集合
+	 *
+	 * @param whId    库房id
+	 * @param boxCode 箱码
+	 * @return 库存集合
+	 */
+	List<Stock> getStockByZoneTypeList(Long whId, String boxCode);
 }

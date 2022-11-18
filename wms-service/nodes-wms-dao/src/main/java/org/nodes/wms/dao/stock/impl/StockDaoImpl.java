@@ -475,6 +475,11 @@ public class StockDaoImpl
 	}
 
 	@Override
+	public List<Stock> getStockByZoneTypeList(Long whId, String boxCode) {
+		return super.baseMapper.selectListByZoneTypeList(whId, boxCode);
+	}
+
+	@Override
 	public List<Stock> getStockByDropId(String dropId) {
 		AssertUtil.notNull(dropId, "根据任务id查询库存失败,taskId不能为空");
 

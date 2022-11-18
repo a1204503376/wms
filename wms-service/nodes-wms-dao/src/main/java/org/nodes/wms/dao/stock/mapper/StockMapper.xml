@@ -555,4 +555,20 @@
             GROUP BY sku_name, sku_lot2, um.wsu_name, sku_lot4
         </where>
     </select>
+    <select id="selectListByZoneTypeList" resultType="org.nodes.wms.dao.stock.entities.Stock">
+        select * from wms_stock
+        <where>
+            <if test="whId!=null and whId != ''">
+                AND wh_id = #{whId}
+            </if>
+            <if test="boxCode!=null and boxCode != ''">
+                AND box_code = #{boxCode}
+            </if>
+            and zone_code in('WH1-AGV-PICKTO','WH1-STAGE','WH1-RG')
+            and stock_qty>pick_qty
+            and occupy_qty = 0
+        </where>
+
+
+    </select>
 </mapper>

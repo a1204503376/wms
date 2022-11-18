@@ -101,13 +101,11 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	public List<CallAgvResponse> findLpnStockOnStageLeftByCallAgv(Long whId, String boxCode) {
 		// 创建返回集合
 		List<CallAgvResponse> callAgvResponseList = new ArrayList<>();
-		// 根据仓库id获取入库暂存区库位
-		List<Location> stage = locationBiz.getLocationByZoneType(whId, DictKVConstant.ZONE_TYPE_STAGE);
-		if (Func.isEmpty(stage)) {
-			throw new ServiceException("查询失败,该库房没有配置入库暂存区");
+		// 根据箱码获取库存集合
+		List<Stock> stockList = findStockByCallAgv(whId, boxCode);
+		if (Func.isEmpty(stockList)) {
+			throw new ServiceException("根据箱码查询库存失败，没有该箱码的库存或该箱库存占用量大于0");
 		}
-		// 根据箱码和库房id获取入库暂存区库存
-		List<Stock> stockList = findLpnStockOnStageLeft(whId, boxCode, stage.get(0));
 		// 按lpn编码对查询出的集合进行分组
 		Map<String, List<Stock>> stockMap = stockList.stream().collect(Collectors.groupingBy(Stock::getLpnCode));
 		// 遍历分组后的map
@@ -120,7 +118,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 			if (lpnType.equals(LpnTypeCodeEnum.D.getCode())) {
 				// 根据lpnCoe获取同一托盘的所有库存
 				stocks = stockDao.getStockByLpnCode(stocks.get(0).getLpnCode(),
-					Collections.singletonList(stage.get(0).getLocId()));
+					Collections.singletonList(stocks.get(0).getLocId()));
 			}
 			// 创建返回对象并添加到集合中
 			CallAgvResponse callAgvResponse = createCallAgvResponse(stocks, lpnType);
@@ -128,6 +126,11 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		}
 		return callAgvResponseList;
 	}
+
+	private List<Stock> findStockByCallAgv(Long whId, String boxCode) {
+		return stockDao.getStockByZoneTypeList(whId, boxCode);
+	}
+
 
 	@Override
 	public Stock findStockOnStage(ReceiveLog receiveLog) {
@@ -360,10 +363,10 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		return serialDao.getSerialCountByStockId(stockId);
 	}
 
-	private List<Stock> findLpnStockOnStageLeft(Long whId, String boxCode, Location stage) {
+	private List<Stock> findStockByLocIdList(Long whId, String boxCode, List<Long> locIdList) {
 		// 根据箱码和库位查询入库暂存区的库存
-		List<Stock> stockList = stockDao.getStockLeftLikeByBoxCode(boxCode,
-			Collections.singletonList(stage.getLocId()));
+		List<Stock> stockList = stockDao.getStockLeftLikeByBoxCode(boxCode, locIdList);
+
 		if (Func.isEmpty(stockList)) {
 			throw new ServiceException("没有查询到相关库存信息");
 		}
