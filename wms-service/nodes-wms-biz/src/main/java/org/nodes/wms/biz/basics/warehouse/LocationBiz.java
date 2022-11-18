@@ -201,6 +201,7 @@ public interface LocationBiz {
 	 */
 	boolean isPickLocation(Location location);
 
+
 	/**
 	 * 判断是否是入库暂存区库位
 	 *
@@ -216,6 +217,14 @@ public interface LocationBiz {
 	 * @return true：是收货接驳区，发货接驳区
 	 */
 	boolean isAgvTemporaryLocation(Location location);
+
+	/**
+	 * 判断库位是否为发货接驳区
+	 *
+	 * @param location 库位实体
+	 * @return true：是发货接驳区
+	 */
+	boolean isAgvTemporaryOutLocation(Location location);
 
 	/**
 	 * 判断是否是AGV库位
@@ -339,11 +348,19 @@ public interface LocationBiz {
 	/**
 	 * 天宜定制：判断C箱类别
 	 * （C1:WH1-R-02-33-01,WH1-R-02-34-01
-	 *  C2:WH1-R-02-28-02 WH1-R-02-28-01 WH1-R-02-27-02 WH1-R-02-27-01)
+	 * C2:WH1-R-02-28-02 WH1-R-02-28-01 WH1-R-02-27-02 WH1-R-02-27-01)
+	 *
 	 * @param boxCode  箱码，必填
 	 * @param location 库位，必填
 	 * @return C1或C2或空白字符
 	 */
 	UdfEntity judgeBoxTypeOfC(String boxCode, Location location);
 
+	/**
+	 * 根据库位Id获取库区类型
+	 *
+	 * @param locId 库位Id
+	 * @return 库区类型
+	 */
+	Integer getZoneTypeByLocId(Long locId);
 }

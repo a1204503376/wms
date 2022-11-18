@@ -106,8 +106,7 @@ public interface LocationDao {
 	/**
 	 * 根据库位编码获取库位
 	 *
-	 *
-	 * @param whId 库房id
+	 * @param whId    库房id
 	 * @param locCode 库位编码
 	 * @return 库位信息
 	 */
@@ -150,7 +149,7 @@ public interface LocationDao {
 	 * 根据当前货架列获取同一列的库位
 	 *
 	 * @param locColumn 货架列
-	 * @param locBank 货架排
+	 * @param locBank   货架排
 	 * @return 同一列的库位
 	 */
 	List<Location> getLocationByLocColumn(String locColumn, String locBank);
@@ -218,4 +217,6 @@ public interface LocationDao {
 	 * @return String
 	 */
 	Integer getZoneTypeByLocId(Long locId);
+
+
 }

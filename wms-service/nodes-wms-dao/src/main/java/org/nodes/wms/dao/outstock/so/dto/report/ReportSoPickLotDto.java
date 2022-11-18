@@ -24,7 +24,7 @@ public class ReportSoPickLotDto {
 	/**
 	 * 生产日期/批次
 	 */
-	private String skuLot3;
+	private String skuLot9;
 	/**
 	 * 单位
 	 */

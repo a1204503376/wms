@@ -81,7 +81,7 @@ public class PutawayBizImpl implements PutawayBiz {
 			}
 			UdfEntity udf = locationBiz.judgeBoxTypeOfC(request.getBoxCode(), targetLocation);
 			Location sourceLocation = locationBiz.findLocationByLocCode(sourceStockList.get(0).getWhId(), sourceStockList.get(0).getLocCode());
-			stockManageBiz.canMove(sourceLocation, targetLocation, sourceStockList, request.getBoxCode(), false);
+			stockManageBiz.canMove(sourceLocation, targetLocation, sourceStockList, request.getBoxCode());
 			if (locationBiz.isAgvLocation(targetLocation)) {
 				//AGV移动任务生成
 				agvTask.moveStockToSchedule(sourceStockList, targetLocation);
@@ -106,7 +106,7 @@ public class PutawayBizImpl implements PutawayBiz {
 		List<Stock> stockList = stockQueryBiz.findEnableStockByBoxCode(request.getBoxCode());
 		AssertUtil.notNull(stockList, "按箱上架失败，根据箱码查询不到对应库存");
 		Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
-		stockManageBiz.canMove(sourceLocation, targetLocation, stockList, request.getBoxCode(), true);
+		stockManageBiz.canMove(sourceLocation, targetLocation, stockList, request.getBoxCode());
 		if (locationBiz.isAgvLocation(targetLocation)) {
 			//AGV移动任务生成
 			agvTask.moveStockToSchedule(stockList, targetLocation);

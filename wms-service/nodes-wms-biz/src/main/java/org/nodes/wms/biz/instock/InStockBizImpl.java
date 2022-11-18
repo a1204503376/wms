@@ -415,8 +415,10 @@ public class InStockBizImpl implements InStockBiz {
 			Location targetLocation = locationBiz.findByLocId(receiveDetailByPc.getLocId());
 			//查询收货库位，如果是发货接驳区或者出库集货区则抛异常
 			canReceiveByLocation(targetLocation.getWhId(), targetLocation.getLocCode());
-			//校验目标库位是否是自动区 是自动区的话目标库位必须为空
-			stockManageBiz.canMoveToLocAuto(targetLocation);
+			//目标库位不能是自动区
+			if (locationBiz.isAgvLocation(targetLocation)) {
+				throw new ServiceException("PC收货不允许移动到自动区");
+			}
 			//校验目标库位箱型，必须跟输入的箱码是一致的类型
 			stockManageBiz.canMoveToBoxType(targetLocation, receiveDetailByPc.getBoxCode());
 			//生成清点记录

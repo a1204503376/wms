@@ -13,6 +13,7 @@ import org.nodes.wms.biz.basics.dictionary.DictionaryBiz;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
 import org.nodes.wms.biz.basics.warehouse.WarehouseBiz;
+import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.basics.warehouse.modular.LocationFactory;
 import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.dao.basics.location.LocationDao;
@@ -57,6 +58,7 @@ public class LocationBizImpl implements LocationBiz {
 	private final LocationFactory locationFactory;
 	private final DictionaryBiz dictionaryBiz;
 	private final LpnTypeBiz lpnTypeBiz;
+	private final ZoneBiz zoneBiz;
 
 	@Override
 	public List<LocationSelectResponse> getLocationSelectResponseTop10List(LocationSelectQuery locationSelectQuery) {
@@ -357,6 +359,11 @@ public class LocationBizImpl implements LocationBiz {
 	}
 
 	@Override
+	public Integer getZoneTypeByLocId(Long locId) {
+		return locationDao.getZoneTypeByLocId(locId);
+	}
+
+	@Override
 	public boolean isAgvTempOfZoneType(Long locId) {
 		Integer zoneType = locationDao.getZoneTypeByLocId(locId);
 		return DictKVConstant.ZONE_TYPE_AGV_TEMPORARY.equals(zoneType);
@@ -395,6 +402,14 @@ public class LocationBizImpl implements LocationBiz {
 	@Override
 	public boolean isAgvTemporaryLocation(Location location) {
 		return getLocationByZoneType(location.getWhId(), location.getLocId(), DictKVConstant.ZONE_TYPE_AGV_TEMPORARY);
+	}
+
+	@Override
+	public boolean isAgvTemporaryOutLocation(Location location) {
+		if (zoneBiz.findById(location.getZoneId()).getZoneCode().equals("WH1-AGV-PICKTO")) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
