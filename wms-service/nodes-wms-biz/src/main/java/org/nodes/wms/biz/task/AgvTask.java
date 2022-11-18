@@ -61,6 +61,7 @@ public class AgvTask {
 	private final StockQueryBiz stockQueryBiz;
 	private final LogBiz logBiz;
 
+
 	/**
 	 * 生成AGV上架任务
 	 *
@@ -148,9 +149,8 @@ public class AgvTask {
 			.collect(Collectors.toList());
 
 		for (Long locId : sourceLocIds) {
-			if (!locationBiz.isAgvZone(locId) || !locationBiz.isAgvZone(locId)) {
-				log.info("AGV库内移动任务下发失败，AGV只能移动自动区的库存");
-				continue;
+			if (locId != sourceLocIds.get(0)) {
+				throw new ServiceException("按箱移动失败,库存必须在一个库位上");
 			}
 
 			List<Stock> stockOfLoc = sourceStock.stream()

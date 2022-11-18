@@ -7,6 +7,7 @@ import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
 import org.nodes.wms.biz.basics.sku.SkuBiz;
 import org.nodes.wms.biz.basics.warehouse.LocationBiz;
+import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
 import org.nodes.wms.biz.common.log.LogBiz;
 import org.nodes.wms.biz.putaway.strategy.TianYiPutawayStrategy;
 import org.nodes.wms.biz.stock.StockBiz;
@@ -48,6 +49,7 @@ public class StockManageBizImpl implements StockManageBiz {
 	private final LpnTypeBiz lpnTypeBiz;
 	private final TianYiPutawayStrategy tianYiPutawayStrategy;
 	private final AgvTask agvTask;
+	private final ZoneBiz zoneBiz;
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
@@ -158,7 +160,7 @@ public class StockManageBizImpl implements StockManageBiz {
 		//判断原库存是否是入库暂存区，原库存移动时不允许暂存区
 		canMoveToSourceLocIsStageLocation(sourceLocation);
 		//判断库存是否可以移动
-		canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode(), true);
+		canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode());
 		//判断库存移动时：移动数量是否超过库存数量
 		canMoveIsExceedSend(request.getQty(), stockList.get(0).getStockEnable());
 		if (locationBiz.isAgvLocation(targetLocation)) {
@@ -193,7 +195,7 @@ public class StockManageBizImpl implements StockManageBiz {
 		Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
 		//判断原库存是否是入库暂存区，原库存移动时不允许暂存区
 		canMoveToSourceLocIsStageLocation(sourceLocation);
-		canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode(), true);
+		canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode());
 		if (locationBiz.isAgvLocation(targetLocation)) {
 			//AGV移动任务生成
 			agvTask.moveStockToSchedule(stockList, targetLocation);
@@ -248,11 +250,9 @@ public class StockManageBizImpl implements StockManageBiz {
 				replaceBoxCode = false;
 			}
 			Location sourceLocation = locationBiz.findLocationByLocCode(stockList.get(0).getWhId(), stockList.get(0).getLocCode());
-			//判断原库存是否是入库暂存区，原库存移动时不允许暂存区
-			canMoveToSourceLocIsStageLocation(sourceLocation);
 			//判断库存是否可以移动
-			canMove(sourceLocation, targetLocation, stockList, boxCode, true);
-			if (locationBiz.isAgvLocation(targetLocation)) {
+			canMove(sourceLocation, targetLocation, stockList, boxCode);
+			if (zoneBiz.findById(sourceLocation.getZoneId()).getZoneType() == DictKVConstant.ZONE_TYPE_AGV_STORAGE) {
 				//AGV移动任务生成
 				agvTask.moveStockToSchedule(stockList, targetLocation);
 				break;
@@ -415,7 +415,7 @@ public class StockManageBizImpl implements StockManageBiz {
 	 */
 	@Override
 	public void canMove(Location sourceLocation, Location targetLocation, List<Stock> stockList,
-						String boxCode, Boolean checkLocType) {
+						String boxCode) {
 		AssertUtil.notNull(sourceLocation, "校验库存移动失败当前库位为空");
 		AssertUtil.notNull(targetLocation, "校验库存移动失败目标库位为空");
 		AssertUtil.notNull(stockList, "校验库存移动失败库存为空");
@@ -424,22 +424,42 @@ public class StockManageBizImpl implements StockManageBiz {
 			throw new ServiceException("校验库存移动失败库存为空");
 		}
 
-		//1. 不能移动到出库集货区和虚拟库区
-		canMoveToLoc(targetLocation);
-
-		//2. 如果是自动区则要求目标库位必须是空库位（库位上没有库存）
+		//1. 获取来源库位和目标库位库区类型
+		Integer soucreZoneType = locationBiz.getZoneTypeByLocId(sourceLocation.getLocId());
+		Integer targetZoneType = locationBiz.getZoneTypeByLocId(targetLocation.getLocId());
+		//2. 判断是否可以移动到目标库位
+		checkTargetZoneType(soucreZoneType, targetZoneType, sourceLocation, targetLocation);
+		//3. 如果是自动区则要求目标库位必须是空库位（库位上没有库存）
 		canMoveToLocAuto(sourceLocation, targetLocation);
-
-		if (checkLocType) {
-			//3. 只能是同类型（自动与人工区）的库区之间移动
-			canMoveToLocType(sourceLocation, targetLocation);
-		}
-
 		//4. 校验目标库位的箱型
 		canMoveToBoxType(targetLocation, boxCode);
-
 		// 5. 校验载重
 		canMoveByIsNotOverweight(targetLocation, stockList);
+	}
+
+	private void checkTargetZoneType(Integer soucreZoneType, Integer targetZoneType, Location sourceLocation, Location targetLocation) {
+		// 来源库位为AGV自动区只能移动到出库接驳区、D箱人工拣货区、AGV自动区
+		if (soucreZoneType == DictKVConstant.ZONE_TYPE_AGV_STORAGE) {
+			if (!(locationBiz.isAgvTemporaryOutLocation(targetLocation) || locationBiz.isAgvLocation(targetLocation))) {
+				throw new ServiceException("库存移动失败,来源库位不允许移动到目标库位");
+			}
+		}
+		// 来源库位为出库接驳区，只能移动到入库暂存区
+		else if (locationBiz.isAgvTemporaryOutLocation(sourceLocation)) {
+			if (!(targetZoneType == DictKVConstant.ZONE_TYPE_STAGE
+				|| targetZoneType == DictKVConstant.ZONE_TYPE_PICK
+				|| targetZoneType == DictKVConstant.ZONE_TYPE_AGV_PICK)) {
+				throw new ServiceException("库存移动失败，来源库位不允许移动到目标库位");
+			}
+		}
+		// 来源库位为人工区或D箱人工区只能移动到人工区或D箱人工区
+		else if (soucreZoneType == DictKVConstant.ZONE_TYPE_AGV_PICK || soucreZoneType == DictKVConstant.ZONE_TYPE_PICK) {
+			if (!(targetZoneType == DictKVConstant.ZONE_TYPE_AGV_PICK || targetZoneType == DictKVConstant.ZONE_TYPE_PICK)) {
+				throw new ServiceException("库存移动失败,来源库位不允许移动到目标库位");
+			}
+		} else {
+			throw new ServiceException("库存移动失败，来源库位不允许移动");
+		}
 	}
 
 	@Override

@@ -46,8 +46,8 @@ import org.nodes.wms.dao.outstock.soPickPlan.dto.input.FindPickPlanBySoBillIdAnd
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.FindPickPlanBySoBillIdAndBoxCodeResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
-import org.nodes.wms.dao.stock.dto.output.PickByPcStockDto;
 import org.nodes.wms.dao.stock.dto.output.GetStockByDistributeAdjustResponse;
+import org.nodes.wms.dao.stock.dto.output.PickByPcStockDto;
 import org.nodes.wms.dao.stock.dto.output.StockDistributeAdjustResponse;
 import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
 import org.nodes.wms.dao.stock.entities.Serial;
@@ -415,7 +415,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		SoHeader soHeader = soBillBiz.getSoHeaderById(task.getBillId());
 		List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(task.getTaskId());
 		SoDetail soDetail = soBillBiz.getSoDetailById(soPickPlanList.get(0).getSoDetailId());
-		stockManageBiz.canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode(), false);
+		stockManageBiz.canMove(sourceLocation, targetLocation, stockList, stockList.get(0).getBoxCode());
 
 		List<Stock> stocks = stockBiz.moveStockByBoxCodeOfOccupy(stockList.get(0).getBoxCode(), stockList.get(0).getBoxCode(),
 			stockList.get(0).getLpnCode(), targetLocation, StockLogTypeEnum.STOCK_MOVE_BY_BOX_PDA,
@@ -461,7 +461,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		List<SoDetail> soDetails = soBillBiz.getEnableSoDetailBySoHeaderId(soBillId);
 		String result = soPickPlanBiz.runPickStrategy(soHeader, soDetails, pickPlans);
 		// 如果存在真实拣货计划，更新发货单状态
-		if (pickPlans.size()>0) {
+		if (pickPlans.size() > 0) {
 			if (SoBillStateEnum.CREATE.equals(soHeader.getSoBillState())) {
 				soBillBiz.updateState(soBillId, SoBillStateEnum.EXECUTING);
 			}
