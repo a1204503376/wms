@@ -47,5 +47,5 @@ export default {
     // 流程设计器地址
     flowDesignUrl: 'http://localhost:9999',
     // 报表设计器地址(cloud端口为8108,boot端口为80)
-    reportUrl: baseUrl+'/ureport',
+    reportUrl: baseUrl + 'ureport',
 }

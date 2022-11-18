@@ -184,7 +184,8 @@
                 </el-button>
                 <el-button v-if="permissionObj.upload" icon="el-icon-upload2" plain size="mini" @click="onUpload">导入
                 </el-button>
-                <file-upload :visible="fileUpload.visible" file-name="库存" template-url="/api/wms/stock/export-template"
+                <file-upload :visible="fileUpload.visible" file-name="库存"
+                             template-url="/api/wms/stock/export-template"
                              @callback="callbackFileUpload">
                 </file-upload>
             </template>
@@ -278,7 +279,8 @@
                         <el-table-column label="物品编码" property="skuCode" show-overflow-tooltip></el-table-column>
                         <el-table-column label="物品名称" property="skuName" show-overflow-tooltip></el-table-column>
                         <el-table-column label="批次号" property="lotNumber" show-overflow-tooltip></el-table-column>
-                        <el-table-column label="可用库存" property="stockEnable" show-overflow-tooltip></el-table-column>
+                        <el-table-column label="可用库存" property="stockEnable"
+                                         show-overflow-tooltip></el-table-column>
                         <el-table-column label="LPN" property="lpnCode" show-overflow-tooltip></el-table-column>
                         <el-table-column label="库区" property="zoneCode" show-overflow-tooltip></el-table-column>
                         <el-table-column label="库位编码" property="locCode" show-overflow-tooltip></el-table-column>
@@ -323,7 +325,8 @@
                         </el-table-column>
                         <el-table-column v-if="dialog.isMoveByBox" label="目标LPN">
                             <template v-slot="scope">
-                                <el-input v-model="scope.row['targetLpnCode']" placeholder="请输入目标LPN" size="medium">
+                                <el-input v-model="scope.row['targetLpnCode']" placeholder="请输入目标LPN"
+                                          size="medium">
                                 </el-input>
                             </template>
                         </el-table-column>
@@ -591,6 +594,11 @@ export default {
                     {
                         prop: "skuLot8",
                         label: "适用速度等级",
+                        sortable: "custom"
+                    },
+                    {
+                        prop: "skuLot9",
+                        label: "生产日期",
                         sortable: "custom"
                     },
                     {

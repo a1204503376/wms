@@ -89,7 +89,7 @@ public class ReportSo {
 				ReportSoPickLotDto reportSoPickLotDto = new ReportSoPickLotDto();
 				reportSoPickLotDto.setBoxCode(soPickPlan.getBoxCode());
 				reportSoPickLotDto.setSkuName(soPickPlan.getSkuName());
-				reportSoPickLotDto.setSkuLot3(soPickPlan.getSkuLot3());
+				reportSoPickLotDto.setSkuLot9(soPickPlan.getSkuLot9());
 				reportSoPickLotDto.setSkuLot5(soPickPlan.getSkuLot5());
 				reportSoPickLotDto.setQty(soPickPlan.getPickPlanQty());
 				reportSoPickLotDto.setWsuName(getWsuName(soPickPlan.getSkuId()));
@@ -101,7 +101,7 @@ public class ReportSo {
 				ReportSoPickLotDto reportSoPickLotDto = new ReportSoPickLotDto();
 				reportSoPickLotDto.setBoxCode(logSoPick.getBoxCode());
 				reportSoPickLotDto.setSkuName(logSoPick.getSkuName());
-				reportSoPickLotDto.setSkuLot3(logSoPick.getSkuLot3());
+				reportSoPickLotDto.setSkuLot9(logSoPick.getSkuLot9());
 				reportSoPickLotDto.setSkuLot5(logSoPick.getSkuLot5());
 				reportSoPickLotDto.setQty(logSoPick.getPickRealQty());
 				reportSoPickLotDto.setWsuName(getWsuName(logSoPick.getSkuId()));
@@ -213,7 +213,7 @@ public class ReportSo {
 	public void setReportSoPickSerialDtoList(LogSoPick logSoPick, List<ReportSoPickSerialDto> reportSoPickSerialDtoList) {
 		if (Func.isNotEmpty(logSoPick.getSnCode())) {
 			List<Map<String, Object>> mapList = getProcessedSerialAndQty(logSoPick.getSnCode());
-			packagingData(mapList, logSoPick.getSkuLot3(), logSoPick.getBoxCode(), logSoPick.getSkuLot5(),
+			packagingData(mapList, logSoPick.getSkuLot9(), logSoPick.getBoxCode(), logSoPick.getSkuLot5(),
 				logSoPick.getSoBillId(), reportSoPickSerialDtoList);
 		}
 	}
@@ -225,21 +225,21 @@ public class ReportSo {
 		List<String> serialList = getSerial(soPickPlan.getStockId());
 		String sbCodeStr = String.join(",", serialList);
 		List<Map<String, Object>> mapList = getProcessedSerialAndQty(sbCodeStr);
-		packagingData(mapList, soPickPlan.getSkuLot3(), soPickPlan.getBoxCode(), soPickPlan.getSkuLot5(),
+		packagingData(mapList, soPickPlan.getSkuLot9(), soPickPlan.getBoxCode(), soPickPlan.getSkuLot5(),
 			soPickPlan.getSoBillId(), reportSoPickSerialDtoList);
 	}
 
 	/**
 	 * 封装数据
 	 */
-	private void packagingData(List<Map<String, Object>> mapList, String skuLot3, String boxCode, String skuLot5, Long soBillId,
+	private void packagingData(List<Map<String, Object>> mapList, String skuLot9, String boxCode, String skuLot5, Long soBillId,
 							   List<ReportSoPickSerialDto> reportSoPickSerialDtoList) {
 		for (Map<String, Object> stringObjectMap : mapList) {
 			ReportSoPickSerialDto reportSoPickSerialDto = new ReportSoPickSerialDto();
 			reportSoPickSerialDto.setBoxCode(boxCode);
 			reportSoPickSerialDto.setSnCode(ConvertUtil.convert(stringObjectMap.get("snCode"), String.class));
 			reportSoPickSerialDto.setQty(ConvertUtil.convert(stringObjectMap.get("qty"), BigDecimal.class));
-			reportSoPickSerialDto.setSkuLot3(skuLot3);
+			reportSoPickSerialDto.setSkuLot9(skuLot9);
 			reportSoPickSerialDto.setSkuLot5(skuLot5);
 			reportSoPickSerialDto.setSoBillId(soBillId);
 			reportSoPickSerialDtoList.add(reportSoPickSerialDto);

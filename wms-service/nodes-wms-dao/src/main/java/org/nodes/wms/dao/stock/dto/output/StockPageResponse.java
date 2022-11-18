@@ -183,6 +183,12 @@ public class StockPageResponse implements Serializable {
 	@ExcelProperty({"库存信息", "适用速度等级"})
 	private String skuLot8;
 	/**
+	 * 生产日期
+	 */
+	@ColumnWidth(15)
+	@ExcelProperty({"库存信息", "生产日期"})
+	private String skuLot9;
+	/**
 	 * 库房ID
 	 */
 	@ExcelIgnore
