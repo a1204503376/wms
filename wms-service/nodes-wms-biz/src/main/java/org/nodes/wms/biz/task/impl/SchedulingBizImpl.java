@@ -427,14 +427,18 @@ public class SchedulingBizImpl implements SchedulingBiz {
 
 		//解冻中间库位库存
 		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
-		stockBiz.unfreezeStockByDropId(stockList, wmsTask.getTaskId(), false);
-
+		try {
+			stockBiz.unfreezeStockByDropId(stockList, wmsTask.getTaskId(), false);
+		} catch (Exception e) {
+			wmsTask.setRemark("根据任务解冻库存失败,没有任务" + wmsTask.getTaskId() + "关联的库存");
+		}
 		//如果目标库位不为空则把目标库位进行解冻
 		if (Func.isNotEmpty(wmsTask.getToLocId())) {
 			locationBiz.unfreezeLocByTask(wmsTask.getTaskId().toString());
 		}
 		// 修改任务状态
-		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.CANCELED, msg);
+		wmsTask.setTaskState(WmsTaskStateEnum.CANCELED);
+		wmsTaskDao.updateById(wmsTask);
 		// 如果是AGV拣货任务取消分配
 		wmsTaskBiz.cancel(wmsTask);
 		log.info("agv任务异常[{}]-[{}]", wmsTask.getTaskId(), wmsTask);

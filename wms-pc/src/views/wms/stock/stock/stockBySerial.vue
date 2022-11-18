@@ -6,7 +6,7 @@
                     <el-col :span="6">
                         <el-form-item label="序列号" label-width="90px">
                             <el-input v-model.trim="form.params.serial" :clearable="true" class="search-input"
-                                placeholder="请输入序列号">
+                                      placeholder="请输入序列号">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -28,7 +28,7 @@
                     <el-col :span="6">
                         <el-form-item label="箱码" label-width="90px">
                             <el-input v-model.trim="form.params.boxCode" :clearable="true" class="search-input"
-                                placeholder="请输入箱码">
+                                      placeholder="请输入箱码">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -37,7 +37,7 @@
                     <el-col :span="6">
                         <el-form-item label="生产批次" label-width="90px">
                             <el-input v-model.trim="form.params.skuLot1" :clearable="true" class="search-input"
-                                placeholder="请输入生产批次">
+                                      placeholder="请输入生产批次">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -61,7 +61,7 @@
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                        style="display: inline-block;margin-left: 10px">
+                                  style="display: inline-block;margin-left: 10px">
                         <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
                         </el-button>
                     </excel-export>
@@ -69,14 +69,14 @@
             </template>
             <template v-slot:table>
                 <el-table ref="table" :data="table.data" :height="table.height" border highlight-current-row
-                    row-key="id" size="mini" style="width: 100%" @sort-change="onSortChange">
+                          row-key="id" size="mini" style="width: 100%" @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50"></el-table-column>
                     <el-table-column fixed type="index">
                         <template slot="header"> #</template>
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column v-if="!column.hide" :key="index" :show-overflow-tooltip="true" v-bind="column"
-                            width="130">
+                                         width="130">
                             <!--  库存状态  -->
                             <template v-if="column.prop === 'stockStatus'" v-slot="{row}">
                                 <el-tag
@@ -90,7 +90,7 @@
             </template>
             <template v-slot:page>
                 <el-pagination :page-sizes="pageSize" background layout="total, sizes, prev, pager, next, jumper"
-                    v-bind="page" @size-change="handleSizeChange" @current-change="handleCurrentChange">
+                               v-bind="page" @size-change="handleSizeChange" @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>
@@ -228,6 +228,11 @@ export default {
                     {
                         prop: "skuLot8",
                         label: "适用速度等级",
+                        sortable: "custom"
+                    },
+                    {
+                        prop: "skuLot9",
+                        label: "生产日期",
                         sortable: "custom"
                     },
                     {

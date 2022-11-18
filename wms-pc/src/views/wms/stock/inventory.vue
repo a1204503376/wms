@@ -33,7 +33,10 @@
                 <el-row class="search-elRow" type="flex">
                     <el-col :span="6">
                         <el-form-item label="库区" label-width="90px">
-                            <nodes-zone v-model="form.params.zoneIdList" :notSelectName="notSelectName" :multiple="true"
+                            <nodes-zone v-model="form.params.zoneIdList"
+                                        :notSelectName="notSelectName"
+                                        :multiple="true"
+                                        @initZoneParams="initZoneParams"
                                         class="search-input">
                             </nodes-zone>
                         </el-form-item>
@@ -184,7 +187,8 @@
                 </el-button>
                 <el-button v-if="permissionObj.upload" icon="el-icon-upload2" plain size="mini" @click="onUpload">导入
                 </el-button>
-                <file-upload :visible="fileUpload.visible" file-name="库存" template-url="/api/wms/stock/export-template"
+                <file-upload :visible="fileUpload.visible" file-name="库存"
+                             template-url="/api/wms/stock/export-template"
                              @callback="callbackFileUpload">
                 </file-upload>
             </template>
@@ -278,7 +282,8 @@
                         <el-table-column label="物品编码" property="skuCode" show-overflow-tooltip></el-table-column>
                         <el-table-column label="物品名称" property="skuName" show-overflow-tooltip></el-table-column>
                         <el-table-column label="批次号" property="lotNumber" show-overflow-tooltip></el-table-column>
-                        <el-table-column label="可用库存" property="stockEnable" show-overflow-tooltip></el-table-column>
+                        <el-table-column label="可用库存" property="stockEnable"
+                                         show-overflow-tooltip></el-table-column>
                         <el-table-column label="LPN" property="lpnCode" show-overflow-tooltip></el-table-column>
                         <el-table-column label="库区" property="zoneCode" show-overflow-tooltip></el-table-column>
                         <el-table-column label="库位编码" property="locCode" show-overflow-tooltip></el-table-column>
@@ -323,7 +328,8 @@
                         </el-table-column>
                         <el-table-column v-if="dialog.isMoveByBox" label="目标LPN">
                             <template v-slot="scope">
-                                <el-input v-model="scope.row['targetLpnCode']" placeholder="请输入目标LPN" size="medium">
+                                <el-input v-model="scope.row['targetLpnCode']" placeholder="请输入目标LPN"
+                                          size="medium">
                                 </el-input>
                             </template>
                         </el-table-column>
@@ -594,6 +600,11 @@ export default {
                         sortable: "custom"
                     },
                     {
+                        prop: "skuLot9",
+                        label: "生产日期",
+                        sortable: "custom"
+                    },
+                    {
                         prop: "whCode",
                         label: "库房",
                         sortable: "custom"
@@ -658,10 +669,12 @@ export default {
         }
     },
     created() {
-        this.getTableData();
     },
     mounted() {
-        this.initSelectZoneIds = this.form.params.zoneIdList;
+        let that = this;
+        setTimeout(function () {
+            that.getTableData();
+        }, 2000);
     },
     watch: {
         $route(to) {
@@ -680,18 +693,18 @@ export default {
             });
         },
         getTableData() {
-            page(this.page, this.form.params)
-                .then((res) => {
-                    let pageObj = res.data.data;
-                    this.table.data = pageObj.records;
-                    this.page.total = pageObj.total;
+            let that = this;
+            page(that.page, that.form.params).then((res) => {
+                let pageObj = res.data.data;
+                that.table.data = pageObj.records;
+                that.page.total = pageObj.total;
 
-                    let currentSku = this.pageSize.indexOf(pageObj.total)
-                    if (currentSku === -1) {
-                        this.pageSize.push(pageObj.total)
-                    }
-                    this.handleRefreshTable();
-                });
+                let currentSku = that.pageSize.indexOf(pageObj.total)
+                if (currentSku === -1) {
+                    that.pageSize.push(pageObj.total)
+                }
+                that.handleRefreshTable();
+            })
         },
         refreshTable() {
             this.getTableData();
@@ -1179,6 +1192,10 @@ export default {
                     stockId: stockId.toString()
                 }
             });
+        },
+        initZoneParams(zoneIdList) {
+            this.form.params.zoneIdList = zoneIdList;
+            this.initSelectZoneIds = zoneIdList;
         }
     },
 };
