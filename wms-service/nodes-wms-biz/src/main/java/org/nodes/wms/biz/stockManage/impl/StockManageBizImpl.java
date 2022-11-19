@@ -429,12 +429,21 @@ public class StockManageBizImpl implements StockManageBiz {
 		Integer targetZoneType = locationBiz.getZoneTypeByLocId(targetLocation.getLocId());
 		//2. 判断是否可以移动到目标库位
 		checkTargetZoneType(soucreZoneType, targetZoneType, sourceLocation, targetLocation);
-		//3. 如果是自动区则要求目标库位必须是空库位（库位上没有库存）
-		canMoveToLocAuto(sourceLocation, targetLocation);
+		//3. 如果是自动区、出库接驳区则要求目标库位必须是空库位（库位上没有库存）
+		canMove(targetLocation);
 		//4. 校验目标库位的箱型
 		canMoveToBoxType(targetLocation, boxCode);
 		// 5. 校验载重
 		canMoveByIsNotOverweight(targetLocation, stockList);
+	}
+
+	private void canMove(Location targetLocation) {
+		if (locationBiz.isAgvLocation(targetLocation) || locationBiz.isAgvTemporaryOutLocation(targetLocation)) {
+			if (!stockQueryBiz.isEmptyLocation(targetLocation.getLocId())) {
+				throw new ServiceException("库存移动失败，目标库位存在库存");
+			}
+		}
+
 	}
 
 	private void checkTargetZoneType(Integer soucreZoneType, Integer targetZoneType, Location sourceLocation, Location targetLocation) {
@@ -518,6 +527,7 @@ public class StockManageBizImpl implements StockManageBiz {
 			}
 		}
 	}
+
 
 	/**
 	 * 移动时无法移动到出库暂存区
