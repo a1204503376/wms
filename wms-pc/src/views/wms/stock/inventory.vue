@@ -267,13 +267,12 @@
             <dialog-column v-bind="columnShowHide" @close="onColumnShowHide"></dialog-column>
         </div>
         <template>
-            <el-dialog :append-to-body="true" :close-on-click-modal="false" :custom-class="'maxDialog'"
+            <el-dialog :append-to-body="true" :close-on-click-modal="false" id="maxDialog" custom-class="maxDialog"
                        :show-close="true" :title="dialog.title" :visible.sync="dialog.showDialog" @close="onClose">
                 <div style="margin-top: 10px;">
                     <el-table ref="multipleTable" v-loading="dialog.loading" :data="dialog.gridData"
                               :header-cell-style="{ 'background-color': '#fafafa' }"
-                              :height="dialog.isMoveByBox ? 390 : 'auto'"
-                              :max-height="dialog.isMoveByBox ? 400 : 'auto'"
+                              :height="dialog.isMoveByBox ? dialog.tableHeight : 86"
                               :span-method="dialogGridDataSpanMethod" border element-loading-spinner="el-icon-loading"
                               element-loading-text="数据正在加载中" highlight-current-row overflow="auto"
                               style="font-size: 14px"
@@ -281,15 +280,16 @@
                         <el-table-column label="箱码" property="boxCode" show-overflow-tooltip></el-table-column>
                         <el-table-column label="物品编码" property="skuCode" show-overflow-tooltip></el-table-column>
                         <el-table-column label="物品名称" property="skuName" show-overflow-tooltip></el-table-column>
-                        <el-table-column label="批次号" property="lotNumber" show-overflow-tooltip></el-table-column>
+                        <el-table-column label="批次号" property="skuLot1" show-overflow-tooltip></el-table-column>
                         <el-table-column label="可用库存" property="stockEnable"
                                          show-overflow-tooltip></el-table-column>
                         <el-table-column label="LPN" property="lpnCode" show-overflow-tooltip></el-table-column>
                         <el-table-column label="库区" property="zoneCode" show-overflow-tooltip></el-table-column>
                         <el-table-column label="库位编码" property="locCode" show-overflow-tooltip></el-table-column>
                     </el-table>
-                    <el-table :data="dialog.childrenData" :height="dialog.isMoveByBox ? 120 : 435"
-                              :max-height="dialog.isMoveByBox ? 120 : 420" border size="medium">
+                    <el-table :data="dialog.childrenData"
+                              :height="dialog.isMoveByBox ? 82 : dialog.childrenTableHeight"
+                              border size="medium">
                         <el-table-column v-if="!dialog.isMoveByBox" width="50">
                             <template slot="header">
                                 <el-button circle icon="el-icon-plus" style="padding: 4px" type="primary"
@@ -388,7 +388,6 @@
                     <el-button @click="callOff">取 消</el-button>
                     <el-button type="primary" @click="print">确 定</el-button>
                 </div>
-
             </el-dialog>
         </template>
     </div>
@@ -645,8 +644,10 @@ export default {
                     min: 1,
                     max: 0,
                 },
+                tableHeight: 0, //上表格高度
                 isMoveByBox: false, //是否按箱移动，默认为false
                 childrenData: [],
+                childrenTableHeight: 0, //下表格高度
                 serials: [], //序列号组件中所有的序列号
                 //合并对象
                 merge: {
@@ -668,6 +669,9 @@ export default {
             }
         }
     },
+    created() {
+        window.addEventListener('resize', this.autoDialogTableHeight);
+    },
     mounted() {
         let that = this;
         setTimeout(function () {
@@ -682,6 +686,18 @@ export default {
         }
     },
     methods: {
+        autoDialogTableHeight() {
+            if (this.dialog.showDialog) {
+                this.$nextTick(() => {
+                    let maxDialogBody = document.getElementById('maxDialog').getElementsByClassName('el-dialog__body')[0];
+                    let maxDialogHeight = window.getComputedStyle(maxDialogBody).height.slice(0, -2) // aaa.bbbpx -> aaa.bbb
+                    console.log(maxDialogHeight);
+                    this.dialog.childrenTableHeight = `${maxDialogHeight - 96}px`;
+                    this.dialog.tableHeight = `${maxDialogHeight - 92}px`;
+                })
+                this.handleRefreshTable();
+            }
+        },
         onViewOccupyQty(stockId) {
             this.$router.push({
                 name: '分配记录',
@@ -979,6 +995,7 @@ export default {
             }
             this.dialog.showDialog = true;
             this.renderData(isMoveByBox, rows);
+            this.autoDialogTableHeight();
         },
         // 渲染dialog
         async renderData(isMoveByBox, rows) {
@@ -1207,6 +1224,7 @@ export default {
 }
 
 /deep/ .maxDialog .el-dialog__body {
-    max-height: 82% !important;
+    height: 74% !important;
+    max-height: 74% !important;
 }
 </style>
