@@ -235,6 +235,9 @@ public class StockManageBizImpl implements StockManageBiz {
 			stockLogTypeEnum = StockLogTypeEnum.STOCK_MOVE_BY_BOX;
 			AssertUtil.notNull(targetLocation, "获取库位失败,请更换库位ID后重试");
 		}
+		if (!targetLocation.enableStock()) {
+			throw new ServiceException("按箱移动失败，目标库位状态不是正常状态");
+		}
 		boolean replaceBoxCode = true;
 		//根据传过来的多个箱码集合查询出多个库存
 		List<String> boxCodeList = request.getBoxCodeList().stream().filter(Func::isNotEmpty).collect(Collectors.toList());

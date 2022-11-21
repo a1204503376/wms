@@ -562,13 +562,11 @@
                 AND wh_id = #{whId}
             </if>
             <if test="boxCode!=null and boxCode != ''">
-                AND box_code = #{boxCode}
+                AND box_code LIKE concat('%', #{boxCode},'%')
             </if>
             and zone_code in('WH1-AGV-PICKTO','WH1-STAGE','WH1-RG')
             and stock_qty>pick_qty
             and occupy_qty = 0
         </where>
-
-
     </select>
 </mapper>
