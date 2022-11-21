@@ -5,17 +5,20 @@ let iconfontUrl = `//at.alicdn.com/t/font_$key.css`;
 let baseUrl = '';
 let codeUrl = `${baseUrl}/code`
 const env = process.env
+console.log(env.NODE_ENV);
 if (env.NODE_ENV === 'development') {
-  baseUrl = `http://localhost:8088/`; // 开发环境地址
+    baseUrl = `http://localhost:8088/`; // 开发环境地址
 } else if (env.NODE_ENV === 'production') {
-  baseUrl = ``; //生产环境地址
-} else if (env.NODE_ENV === 'test') {
-  baseUrl = `http://10.168.3.136/`; //测试环境地址
+    baseUrl = `http://10.168.3.136:6001/`; // 长沙测试环境地址
+} else if (env.NODE_ENV === 'tianyitest') {
+    baseUrl = `http://192.168.41.173:8088`; // 天宜测试环境地址
+} else if (env.NODE_ENV === 'tianyipro') {
+    baseUrl = `http://192.168.41.171:8088`; // 天宜生产环境地址
 }
 export {
-  baseUrl,
-  iconfontUrl,
-  iconfontVersion,
-  codeUrl,
-  env
+    baseUrl,
+    iconfontUrl,
+    iconfontVersion,
+    codeUrl,
+    env
 }
