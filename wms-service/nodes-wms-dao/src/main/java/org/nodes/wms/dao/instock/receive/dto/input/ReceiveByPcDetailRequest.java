@@ -75,4 +75,8 @@ public class ReceiveByPcDetailRequest {
 	 * 适用速度等级
 	 */
 	private String skuLot8;
+	/**
+	 * 生产日期
+	 */
+	private String skuLot9;
 }
