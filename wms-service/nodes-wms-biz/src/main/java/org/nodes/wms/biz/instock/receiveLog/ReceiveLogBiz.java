@@ -130,5 +130,5 @@ public interface ReceiveLogBiz {
 	 * @param startTime 开始时间
 	 * @param endTime   结束时间
 	 */
-	void getReceiveLogList(String startTime, String endTime);
+	List<ReceiveLog> getReceiveLogList(String startTime, String endTime);
 }

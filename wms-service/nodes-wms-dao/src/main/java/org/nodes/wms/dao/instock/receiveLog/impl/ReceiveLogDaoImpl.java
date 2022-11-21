@@ -84,4 +84,9 @@ public class ReceiveLogDaoImpl
 			.set(ReceiveLog::getCancelLogId, receiveLog.getReceiveId());
 		super.update(updateWrapper);
 	}
+
+	@Override
+	public List<ReceiveLog> getReceiveLogList(String startTime, String endTime) {
+		return super.baseMapper.selectReceiveLogListByTime(startTime, endTime);
+	}
 }

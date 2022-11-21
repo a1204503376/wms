@@ -71,14 +71,14 @@ public interface LogSoPickDao extends BaseService<LogSoPick> {
 	 * @param soBillId 发货单id
 	 * @return LogSoPick集合
 	 */
-    List<LogSoPick> findBySoHeaderId(Long soBillId);
+	List<LogSoPick> findBySoHeaderId(Long soBillId);
 
 	/**
 	 * 设置拣货记录为已拣货
 	 *
 	 * @param lsopId 拣货记录id
 	 */
-    void setCancelPick(Long lsopId);
+	void setCancelPick(Long lsopId);
 
 	/**
 	 * 根据发货单查询正常拣货记录的条数，不包含撤销的记录
@@ -88,4 +88,12 @@ public interface LogSoPickDao extends BaseService<LogSoPick> {
 	 */
 	List<LogSoPick> getBoxCountBySoHeaderId(Long soBillId);
 
+	/**
+	 * 根据时间范围查询发货记录
+	 *
+	 * @param startTime 开始时间
+	 * @param endTime   结束时间
+	 * @return 拣货记录集合
+	 */
+	List<LogSoPick> getLogSoPickLiat(String startTime, String endTime);
 }
