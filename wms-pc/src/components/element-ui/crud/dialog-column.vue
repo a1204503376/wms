@@ -160,11 +160,9 @@ export default {
         }
     },
     created() {
-        console.log('created');
         this.init();
     },
     destroyed() {
-        console.log('destroyed');
         this.$parent.handleRefreshTable();
         // this.$emit("handleRefreshTable");
     },
@@ -217,11 +215,9 @@ export default {
             }
         },
         onOpen() {
-            console.log('onOpen');
             this.init();
         },
         onOpened() {
-            console.log('onOpened');
             this.rowDrop();
         },
         onSave() {
