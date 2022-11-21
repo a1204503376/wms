@@ -23,10 +23,10 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="库存状态" label-width="90px">
-                            <NodesStockStatus v-model="form.params.stockStatusList" :multiple="true"
-                                              class="search-input">
-                            </NodesStockStatus>
+                        <el-form-item label="箱码" label-width="90px">
+                            <el-input v-model.trim="form.params.boxCode" :clearable="true" class="search-input"
+                                      placeholder="请输入箱码">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -42,10 +42,10 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="箱码" label-width="90px">
-                            <el-input v-model.trim="form.params.boxCode" :clearable="true" class="search-input"
-                                      placeholder="请输入箱码">
-                            </el-input>
+                        <el-form-item label="库存状态" label-width="90px">
+                            <NodesStockStatus v-model="form.params.stockStatusList" :multiple="true"
+                                              class="search-input">
+                            </NodesStockStatus>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">

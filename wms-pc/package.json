@@ -7,7 +7,8 @@
         "build": "vue-cli-service build",
         "lint": "vue-cli-service lint",
         "analyz": "npm_config_report=true npm run build",
-        "test":"vue-cli-service build --mode test",
+        "build:tianyitest": "vue-cli-service build --mode tianyitest",
+        "build:tianyipro": "vue-cli-service build --mode tianyipro",
         "test:unit": "vue-cli-service test:unit",
         "test:e2e": "vue-cli-service test:e2e"
     },
