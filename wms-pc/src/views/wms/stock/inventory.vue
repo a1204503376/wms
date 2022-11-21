@@ -668,8 +668,6 @@ export default {
             }
         }
     },
-    created() {
-    },
     mounted() {
         let that = this;
         setTimeout(function () {
@@ -923,7 +921,7 @@ export default {
                     sums[index] = '合计';
                     return;
                 }
-                if (index === 5 || index === 6 || index === 7) {
+                if (column.property === 'stockBalance' || column.property === 'stockEnable' || column.property === 'occupyQty') {
                     const values = data.map(item => Number(item[column.property]));
                     if (!values.every(value => isNaN(value))) {
                         sums[index] = values.reduce((prev, curr) => {
@@ -940,7 +938,6 @@ export default {
                     }
                 }
             });
-
             return sums;
         },
         callbackFileUpload(res) {
