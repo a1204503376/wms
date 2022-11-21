@@ -691,7 +691,6 @@ export default {
                 this.$nextTick(() => {
                     let maxDialogBody = document.getElementById('maxDialog').getElementsByClassName('el-dialog__body')[0];
                     let maxDialogHeight = window.getComputedStyle(maxDialogBody).height.slice(0, -2) // aaa.bbbpx -> aaa.bbb
-                    console.log(maxDialogHeight);
                     this.dialog.childrenTableHeight = `${maxDialogHeight - 96}px`;
                     this.dialog.tableHeight = `${maxDialogHeight - 92}px`;
                 })
