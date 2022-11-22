@@ -4,12 +4,12 @@
             <template v-slot:searchFrom>
                 <el-row class="search-elRow" type="flex">
                     <el-col :span="6">
-                        <el-form-item label="物品编码" label-width="90px">
-                            <nodes-sku v-model="form.params.skuIds" class="search-input">
-                            </nodes-sku>
+                        <el-form-item label="规格型号" label-width="90px">
+                            <el-input v-model.trim="form.params.skuLot2" :clearable="true" class="search-input"
+                                      placeholder="请输入规格型号">
+                            </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6">
                         <el-form-item label="生产批次" label-width="90px">
                             <el-input v-model.trim="form.params.skuLot1" :clearable="true" class="search-input"
                                       placeholder="请输入生产批次">
@@ -17,9 +17,13 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="库位" label-width="90px">
-                            <nodes-location v-model="form.params.locIdList" :multiple="true" class="search-input">
-                            </nodes-location>
+                        <el-form-item label="库区" label-width="90px">
+                            <nodes-zone v-model="form.params.zoneIdList"
+                                        :notSelectName="notSelectName"
+                                        :multiple="true"
+                                        @initZoneParams="initZoneParams"
+                                        class="search-input">
+                            </nodes-zone>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -32,13 +36,9 @@
                 </el-row>
                 <el-row class="search-elRow" type="flex">
                     <el-col :span="6">
-                        <el-form-item label="库区" label-width="90px">
-                            <nodes-zone v-model="form.params.zoneIdList"
-                                        :notSelectName="notSelectName"
-                                        :multiple="true"
-                                        @initZoneParams="initZoneParams"
-                                        class="search-input">
-                            </nodes-zone>
+                        <el-form-item label="库位" label-width="90px">
+                            <nodes-location v-model="form.params.locIdList" :multiple="true" class="search-input">
+                            </nodes-location>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -56,10 +56,9 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="规格型号" label-width="90px">
-                            <el-input v-model.trim="form.params.skuLot2" :clearable="true" class="search-input"
-                                      placeholder="请输入规格型号">
-                            </el-input>
+                        <el-form-item label="物品编码" label-width="90px">
+                            <nodes-sku v-model="form.params.skuIds" class="search-input">
+                            </nodes-sku>
                         </el-form-item>
                     </el-col>
                 </el-row>
