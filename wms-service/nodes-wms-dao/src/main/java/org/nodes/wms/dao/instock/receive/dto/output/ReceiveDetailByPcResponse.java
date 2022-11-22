@@ -61,6 +61,10 @@ public class ReceiveDetailByPcResponse {
 	 */
 	private String skuLot8;
 	/**
+	 * 生产日期
+	 */
+	private String skuLot9;
+	/**
 	 * 序列号
 	 */
 	private String snNumber;

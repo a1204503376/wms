@@ -84,4 +84,9 @@ public class LogSoPickDaoImpl extends BaseServiceImpl<LogSoPickMapper, LogSoPick
 			.apply(String.format("so_bill_id =%s and cancel_log_id is null or so_bill_id =%s and  cancel_log_id = ''", soBillId, soBillId));
 		return super.list(queryWrapper);
 	}
+
+	@Override
+	public List<LogSoPick> getLogSoPickLiat(String startTime, String endTime) {
+		return this.baseMapper.selectLogSoPickList(startTime, endTime);
+	}
 }

@@ -221,7 +221,22 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column width="700">
+                                <el-table-column width="200">
+                                    <template slot="header">
+                                        <span>生产日期</span>
+                                    </template>
+                                    <template v-slot="{row}">
+                                        <el-date-picker
+                                            v-model="row.skuLot9"
+                                            type="date"
+                                            style="width: 150px"
+                                            format="yyyy-MM-dd"
+                                            value-format="yyyy-MM-dd"
+                                            placeholder="选择日期">
+                                        </el-date-picker>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column width="600">
                                     <template slot="header">
                                         <span>序列号</span>
                                     </template>
@@ -388,6 +403,7 @@ export default {
                 row.skuLot5 = column.skuLot5
                 row.skuLot6 = column.skuLot6
                 row.skuLot8 = column.skuLot8
+                row.skuLot9 = column.skuLot9
                 row.snCodeList = []
                 return
             }
@@ -417,6 +433,7 @@ export default {
                     row.skuLot5 = item.skuLot5
                     row.skuLot6 = item.skuLot6
                     row.skuLot8 = item.skuLot8
+                    row.skuLot9 = item.skuLot9
                     row.snCodeList = []
                     this.rowData.push(item)
                 })
@@ -475,6 +492,7 @@ export default {
                 skuLot5: '',
                 skuLot6: '',
                 skuLot8: '',
+                skuLot9: '',
             }
         },
         onSave() {
