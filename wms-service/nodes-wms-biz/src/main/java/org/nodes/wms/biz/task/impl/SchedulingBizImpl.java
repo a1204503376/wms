@@ -122,11 +122,9 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		}
 		Zone zone = zoneBiz.findByCode(zoneCode);
 		List<Location> locationList = locationBiz.findLocationByZoneId(zone.getZoneId());
-		if (Func.equals(request.getLpnTypeCode(), WmsAppConstant.BOX_TYPE_D)) {
-			locationList = locationList.stream()
-				.sorted(Comparator.comparing(Location::getPutOrder))
-				.collect(Collectors.toList());
-		}
+		locationList = locationList.stream()
+			.sorted(Comparator.comparing(Location::getPutOrder))
+			.collect(Collectors.toList());
 
 		LpnTypeCodeEnum requestParseBoxCode = lpnTypeBiz.parseBoxCode(request.getLpnTypeCode());
 		Param paramOfBCMixedUse = paramBiz.selectByKey(WmsAppConstant.BC_ON_AGV_PICK);
