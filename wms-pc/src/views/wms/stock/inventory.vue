@@ -10,6 +10,7 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="6">
                         <el-form-item label="生产批次" label-width="90px">
                             <el-input v-model.trim="form.params.skuLot1" :clearable="true" class="search-input"
                                       placeholder="请输入生产批次">
