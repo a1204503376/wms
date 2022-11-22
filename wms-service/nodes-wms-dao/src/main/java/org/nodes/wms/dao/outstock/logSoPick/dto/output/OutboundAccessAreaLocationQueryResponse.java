@@ -24,6 +24,6 @@ public class OutboundAccessAreaLocationQueryResponse implements Serializable {
 	private String locCode;
 
 	public String getLocCodeView() {
-		return locCode.substring(9);
+		return locCode.substring(locCode.length() - 4);
 	}
 }
