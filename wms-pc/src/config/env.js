@@ -5,7 +5,6 @@ let iconfontUrl = `//at.alicdn.com/t/font_$key.css`;
 let baseUrl = '';
 let codeUrl = `${baseUrl}/code`
 const env = process.env
-console.log(env.NODE_ENV);
 if (env.NODE_ENV === 'development') {
     baseUrl = `http://localhost:8088/`; // 开发环境地址
 } else if (env.NODE_ENV === 'production') {

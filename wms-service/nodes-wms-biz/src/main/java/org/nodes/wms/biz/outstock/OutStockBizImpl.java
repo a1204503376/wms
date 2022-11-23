@@ -631,7 +631,7 @@ public class OutStockBizImpl implements OutStockBiz {
 
 				for (StockSoPickPlanResponse stockSoPickPlan : stockSoPickPlanList) {
 					if (stockSoPickPlan.getStockId().equals(stockId)) {
-						stockSoPickPlan.setPickQty(pickPlanQty);
+						stockSoPickPlan.setDistributeQty(pickPlanQty);
 						stockSoPickPlan.setSoPickPlanList(planIdList);
 						// 赋值 可用量( 表里的数据 + 分配量 )
 						stockSoPickPlan.setStockEnable(stockSoPickPlan.getStockEnable().add(pickPlanQty));
