@@ -26,11 +26,11 @@ public interface ReceiveLogMapper extends BaseMapper<ReceiveLog> {
 	/**
 	 * 分页查询
 	 *
-	 * @param page: 分页参数
+	 * @param page:                分页参数
 	 * @param receiveLogPageQuery: 分页查询条件参数
 	 * @return Page<ReceiveLogPageResponse>
 	 */
-    Page<ReceiveLogPageResponse> page(IPage<?> page, @Param("param") ReceiveLogPageQuery receiveLogPageQuery);
+	Page<ReceiveLogPageResponse> page(IPage<?> page, @Param("param") ReceiveLogPageQuery receiveLogPageQuery);
 
 	/**
 	 * 根据若干条件查询库位信息
@@ -39,4 +39,13 @@ public interface ReceiveLogMapper extends BaseMapper<ReceiveLog> {
 	 * @return List<ReceiveLogPageResponse>
 	 */
 	List<ReceiveLogExcelResponse> selectReceiveLogListByQuery(@Param("param") ReceiveLogPageQuery receiveLogPageQuery);
+
+	/**
+	 * 根据时间范围查询收货记录集合
+	 *
+	 * @param startTime 开始时间
+	 * @param endTime   结束时间
+	 * @return 收货记录集合
+	 */
+	List<ReceiveLog> selectReceiveLogListByTime(@Param("startTime") String startTime, @Param("endTime") String endTime);
 }

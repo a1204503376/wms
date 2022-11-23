@@ -46,6 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,6 +86,11 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	 */
 	private final Integer AGV_ASSIGNED_CAR = 11;
 
+	/**
+	 * BC箱箱码集合
+	 */
+	private final String[] BC_BOX_CODES = {"B", "C"};
+
 	private final LocationBiz locationBiz;
 	private final ZoneBiz zoneBiz;
 	private final LogBiz logBiz;
@@ -116,35 +122,32 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		}
 		Zone zone = zoneBiz.findByCode(zoneCode);
 		List<Location> locationList = locationBiz.findLocationByZoneId(zone.getZoneId());
-		if (Func.equals(request.getLpnTypeCode(), WmsAppConstant.BOX_TYPE_D)) {
-			locationList = locationList.stream()
-				.sorted(Comparator.comparing(Location::getPutOrder))
-				.collect(Collectors.toList());
-		}
+		locationList = locationList.stream()
+			.sorted(Comparator.comparing(Location::getPutOrder))
+			.collect(Collectors.toList());
 
 		LpnTypeCodeEnum requestParseBoxCode = lpnTypeBiz.parseBoxCode(request.getLpnTypeCode());
-		Param param = paramBiz.selectByKey(WmsAppConstant.BC_ON_AGV_PICK);
-		if (Func.isEmpty(param)) {
-			param.setParamKey(WmsAppConstant.BC_ON_AGV_PICK);
-			param.setParamValue("0");
-		}
+		Param paramOfBCMixedUse = paramBiz.selectByKey(WmsAppConstant.BC_ON_AGV_PICK);
 
 		for (Location location : locationList) {
 			LpnType locLpnType = lpnTypeBiz.findLpnTypeById(location.getLpnTypeId());
 
-			// 判断库位是否有库存
-			if (location.enableStock() && stockQueryBiz.isEmptyLocation(location.getLocId())) {
-				//判断当前库位是否是BC箱，并且系统参数BC箱是否是通用箱型
-				if ((Integer.parseInt(param.getParamValue()) > 0 && LpnTypeCodeEnum.B.getCode().equals(locLpnType.getCode()) && LpnTypeCodeEnum.B.getCode().equals(requestParseBoxCode.getCode()))
-					|| (Integer.parseInt(param.getParamValue()) > 0 && LpnTypeCodeEnum.C.getCode().equals(locLpnType.getCode()) && LpnTypeCodeEnum.C.getCode().equals(requestParseBoxCode.getCode()))) {
+			// 判断目标库位正常且是空库位，否则不能选择该库位
+			if (!location.enableStock() || !stockQueryBiz.isEmptyLocation(location.getLocId())){
+				continue;
+			}
+
+			if (Func.notNull(paramOfBCMixedUse)
+				&& WmsAppConstant.TRUE_DEFAULT.toString().equals(paramOfBCMixedUse.getParamValue())){
+				if (Arrays.stream(BC_BOX_CODES).anyMatch(item -> item.equals(locLpnType.getCode()))
+					&& Arrays.stream(BC_BOX_CODES).anyMatch(item -> item.equals(requestParseBoxCode.getCode()))){
 					// 更新并冻结目标库位
 					return updateAndFreezeTargetLocation(wmsTask, location, request);
-				} else {
-					//判断当前库位的箱型是否跟请求参数传输过来的一致
-					if (locLpnType.getCode().equals(requestParseBoxCode.getCode())) {
-						// 更新并冻结目标库位
-						return updateAndFreezeTargetLocation(wmsTask, location, request);
-					}
+				}
+			} else {
+				if (locLpnType.getCode().equals(requestParseBoxCode.getCode())) {
+					// 更新并冻结目标库位
+					return updateAndFreezeTargetLocation(wmsTask, location, request);
 				}
 			}
 		}

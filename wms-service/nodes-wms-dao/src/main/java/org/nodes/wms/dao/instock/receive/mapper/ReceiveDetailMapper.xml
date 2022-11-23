@@ -88,7 +88,8 @@
                rd.sku_lot4,
                rd.sku_lot5,
                rd.sku_lot6,
-               rd.sku_lot8
+               rd.sku_lot8,
+               rd.sku_lot9
         FROM receive_detail rd
         WHERE line_no = #{query.lineNumber}
           and receive_id = #{query.receiveId}

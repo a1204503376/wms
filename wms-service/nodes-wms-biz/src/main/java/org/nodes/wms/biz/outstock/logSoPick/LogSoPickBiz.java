@@ -81,4 +81,13 @@ public interface LogSoPickBiz {
 	 * @return 箱子数量
 	 */
 	List<LogSoPick> findBoxCountBySoHeaderId(Long soBillId);
+
+	/**
+	 * 根据时间范围获取拣货记录集合
+	 *
+	 * @param startTime 开始时间
+	 * @param endTime   结束时间
+	 * @return 拣货记录集合
+	 */
+	List<LogSoPick> getLogSoPickList(String startTime, String endTime);
 }
