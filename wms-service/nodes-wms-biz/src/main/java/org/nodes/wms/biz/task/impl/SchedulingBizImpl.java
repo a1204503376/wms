@@ -133,22 +133,21 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			LpnType locLpnType = lpnTypeBiz.findLpnTypeById(location.getLpnTypeId());
 
 			// 判断目标库位正常且是空库位，否则不能选择该库位
-			if (!location.enableStock() || !stockQueryBiz.isEmptyLocation(location.getLocId())){
+			if (!location.enableStock() || !stockQueryBiz.isEmptyLocation(location.getLocId())) {
 				continue;
 			}
 
 			if (Func.notNull(paramOfBCMixedUse)
-				&& WmsAppConstant.TRUE_DEFAULT.toString().equals(paramOfBCMixedUse.getParamValue())){
-				if (Arrays.stream(BC_BOX_CODES).anyMatch(item -> item.equals(locLpnType.getCode()))
-					&& Arrays.stream(BC_BOX_CODES).anyMatch(item -> item.equals(requestParseBoxCode.getCode()))){
-					// 更新并冻结目标库位
-					return updateAndFreezeTargetLocation(wmsTask, location, request);
-				}
-			} else {
-				if (locLpnType.getCode().equals(requestParseBoxCode.getCode())) {
-					// 更新并冻结目标库位
-					return updateAndFreezeTargetLocation(wmsTask, location, request);
-				}
+				&& WmsAppConstant.TRUE_DEFAULT.toString().equals(paramOfBCMixedUse.getParamValue())
+				&& Arrays.stream(BC_BOX_CODES).anyMatch(item -> item.equals(locLpnType.getCode()))
+				&& Arrays.stream(BC_BOX_CODES).anyMatch(item -> item.equals(requestParseBoxCode.getCode()))) {
+				// 更新并冻结目标库位
+				return updateAndFreezeTargetLocation(wmsTask, location, request);
+			}
+
+			if (locLpnType.getCode().equals(requestParseBoxCode.getCode())) {
+				// 更新并冻结目标库位
+				return updateAndFreezeTargetLocation(wmsTask, location, request);
 			}
 		}
 

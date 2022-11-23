@@ -40,7 +40,7 @@ public class StockMoveResponse implements Serializable {
 	/**
 	 * 批次号
 	 */
-	private String lotNumber;
+	private String skuLot1;
 
 	/**
 	 * 可用库存量
