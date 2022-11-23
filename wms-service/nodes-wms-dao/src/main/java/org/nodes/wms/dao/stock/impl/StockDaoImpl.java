@@ -470,8 +470,8 @@ public class StockDaoImpl
 	}
 
 	@Override
-	public List<ReportStockDto> getCurrentTimeStockByReportParams(List<Long> allPickToLocId, Map<String, Object> parameters) {
-		return super.baseMapper.getCurrentTimeStockByReportParams(allPickToLocId, parameters);
+	public List<ReportStockDto> getCurrentTimeStockByReportParams(List<Long> excludeZoneIdList, Map<String, Object> parameters) {
+		return super.baseMapper.getCurrentTimeStockByReportParams(excludeZoneIdList, parameters);
 	}
 
 	@Override

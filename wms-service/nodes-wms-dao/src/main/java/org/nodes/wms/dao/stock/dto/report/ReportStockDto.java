@@ -26,15 +26,15 @@ public class ReportStockDto {
 	 */
 	private String skuLot4;
 	/**
-	 * 占用数量总数
+	 * 占用库存总数
 	 */
 	private BigDecimal occupyQtySum;
 	/**
-	 * 可用数量总数
+	 * 可发货库存总数
 	 */
 	private BigDecimal stockEnableSum;
 	/**
-	 * 正常库存总数
+	 * 即时库存总数
 	 */
 	private BigDecimal normalStockSum;
 	/**

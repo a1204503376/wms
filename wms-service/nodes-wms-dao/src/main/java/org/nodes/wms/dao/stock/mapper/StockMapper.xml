@@ -531,7 +531,7 @@
         SELECT sku_name, sku_lot2, um.wsu_name, sku_lot4,
         SUM(occupy_qty) AS occupyQtySum,
         SUM(stock_qty - pick_qty - occupy_qty) as stockEnableSum,
-        SUM(IF(stock_status = 0, (stock_qty - pick_qty), 0)) as normalStockSum,
+        SUM(stock_qty - pick_qty) as normalStockSum,
         SUM(IF(stock_status = 1, (stock_qty - pick_qty), 0)) as freezeStockSum
         FROM wms_stock
         LEFT JOIN wms_sku_um um ON um.wsu_code = wms_stock.wsu_code
