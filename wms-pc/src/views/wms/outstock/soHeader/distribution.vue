@@ -132,12 +132,12 @@
                 <el-table-column label="库区" prop="zoneCode" width="120"></el-table-column>
                 <el-table-column label="余额" prop="stockBalance"></el-table-column>
                 <el-table-column label="可用量" prop="stockEnable"></el-table-column>
-                <el-table-column label="本次分配量" prop="pickQty" width="150">
+                <el-table-column label="本次分配量" prop="distributeQty" width="150">
                     <template v-slot="{ row }">
                         <el-input @input="val => changePickQty(val, row)" maxlength="9"
                                   oninput="value=value.replace(/[^\d]/g,'')"
                                   placeholder="请输入分配数量" size="medium" style="width: 100%"
-                                  v-model.number="row.pickQty">
+                                  v-model.number="row.distributeQty">
                         </el-input>
                     </template>
                 </el-table-column>
@@ -347,7 +347,7 @@ export default {
                         location: '',
                         stockBalance: 0,
                         stockEnable: 0,
-                        pickQty: 0,
+                        distributeQty: 0,
                         lpn: '',
                         skuCode: '',
                         stockState: '',
@@ -607,7 +607,7 @@ export default {
                     this.dialog.dialogData = res.data.data.stockSoPickPlanList;
                     this.dialog.dialogData.forEach(item => {
                         item.oldStockEnable = item.stockEnable;
-                        item.oldPickQty = item.pickQty
+                        item.oldPickQty = item.distributeQty
                     })
                     if (res.data.data.pickStockBalance > 0) {
                         this.dialog.pickStockBalance = res.data.data.pickStockBalance;
@@ -631,7 +631,7 @@ export default {
             if (func.isNotEmpty(this.dialog.dialogData)) {
                 let currentSkuPickPlanQty = this.dialog.dialogData
                     .filter(x => x.skuId === this.dialog.currentRow.skuId)
-                    .map(y => Number(y.pickQty))
+                    .map(y => Number(y.distributeQty))
                     .reduce((pre, cur) => pre + cur, 0)
                 this.dialog.unDistributeQty = this.dialog.currentRow.surplusQty - currentSkuPickPlanQty;
             } else {
@@ -641,7 +641,7 @@ export default {
         changePickQty(val, row) {
             if (val > row.oldStockEnable) {
                 this.$message.warning("分配量不能大于可用量");
-                row.pickQty = row.oldPickQty;
+                row.distributeQty = row.oldPickQty;
             }
 
             this.computeUnDistributeQty();
@@ -659,7 +659,7 @@ export default {
                 return;
             }
             for (const i in dialogData) {
-                if (dialogData[i].pickQty > dialogData[i].stockEnable) {
+                if (dialogData[i].distributeQty > dialogData[i].stockEnable) {
                     this.$message.warning(`第${Number(i) + 1}行，物品 ${dialogData[i].skuCode}，批次${dialogData[i].skuLot1} 的分配量不能大于可用量`);
                     return;
                 }
@@ -667,7 +667,7 @@ export default {
             }
             let data = this.dialog.dialogData.filter(item => this.filterRowBySoPickPlan(item));
             let stockIdAndSoPickPlanQtyList = data.map(item => {
-                return Object.assign({}, {'stockId': item.stockId, 'soPickPlanQty': item.pickQty})
+                return Object.assign({}, {'stockId': item.stockId, 'soPickPlanQty': item.distributeQty})
             })
             let soPickPlanList = [];
             if (func.isNotEmpty(this.dialog.dialogData)) {
@@ -691,7 +691,7 @@ export default {
         },
         // 过滤未填写本次分配量的行和分配量为0的行
         filterRowBySoPickPlan(row) {
-            return !(func.isEmpty(row.pickQty) || row.pickQty === 0);
+            return !(func.isEmpty(row.distributeQty) || row.distributeQty === 0);
         },
         getSummaries(param) {
             const {columns, data} = param;
