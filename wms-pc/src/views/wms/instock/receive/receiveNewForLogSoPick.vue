@@ -8,8 +8,7 @@
                          label-position="right"
                          label-width="120px"
                          size="medium"
-                         style="margin-left:10px;margin-right:10px;"
-                >
+                         style="margin-left:10px;margin-right:10px;">
                     <el-row>
                         <h3>收货单新增</h3>
                     </el-row>
@@ -60,6 +59,17 @@
                                     :default-value="true"
                                     size="medium">
                                 </nodes-owner>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="文件编码">
+                                <el-input
+                                    style="max-width: 206px"
+                                    placeholder="请输入文件编码"
+                                    :clearable="true"
+                                    v-model="form.params.newReceiveHeaderRequest.udf1"
+                                    size="medium">
+                                </el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -306,6 +316,7 @@ export default {
                         whId: '',
                         supplier: {},
                         woId: '',
+                        udf1: null,
                         remark: '',
                     },
                     newReceiveDetailRequestList: [],
