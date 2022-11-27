@@ -29,7 +29,6 @@ public class AgvSyncOrderRequest {
     /**
      * AGV车辆名称
      */
-    @NotBlank(message = "AGV车辆名称不能为空")
     private String agvName;
 
     /**

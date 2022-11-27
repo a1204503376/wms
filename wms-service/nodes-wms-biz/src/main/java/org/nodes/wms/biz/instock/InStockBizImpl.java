@@ -15,6 +15,7 @@ import org.nodes.wms.biz.stock.StockQueryBiz;
 import org.nodes.wms.biz.stockManage.StockManageBiz;
 import org.nodes.wms.biz.task.AgvTask;
 import org.nodes.wms.dao.basics.location.entities.Location;
+import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.instock.receive.ReceiveDetailDao;
 import org.nodes.wms.dao.instock.receive.ReceiveHeaderDao;
@@ -58,6 +59,10 @@ public class InStockBizImpl implements InStockBiz {
 	private final ReceiveDetailDao receiveDetailDao;
 	private final LocationBiz locationBiz;
 	private final StockManageBiz stockManageBiz;
+	/**
+	 * D箱多箱收货时必须满足的条件:D箱收货必须是2个或2个以上才能收货
+	 */
+	private final int RECEIVE_BY_MULTI_D = 2;
 
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	@Override
@@ -219,12 +224,23 @@ public class InStockBizImpl implements InStockBiz {
 		//获取目标库位
 		Location targetLocation = locationBiz.findLocationByLocCode(receiveDetailLpnPdaMultiRequest.getWhId(), receiveDetailLpnPdaMultiRequest.getLocCode());
 		//校验目标库位是否是自动区 是自动区的话目标库位必须为空
-		if (locationBiz.isAgvTemporaryLocation(targetLocation)) {
-			throw new ServiceException("多箱收货失败；不能收到入库接驳区或出库接驳区");
-		}
-		//校验目标库位是否是自动区 是自动区的话目标库位必须为空
 		stockManageBiz.canMoveToLocAuto(targetLocation);
 		List<Stock> stockAgvTaskList = new ArrayList<>();
+		String requestBoxCode = receiveDetailLpnPdaMultiRequest.getReceiveDetailLpnPdaRequestList().get(0).getBoxCode();
+		if (Func.isNotEmpty(requestBoxCode)) {
+			if (requestBoxCode.substring(0, 1).equals(LpnTypeCodeEnum.D.getCode())) {
+				List<String> boxCodeList = receiveDetailLpnPdaMultiRequest.getReceiveDetailLpnPdaRequestList()
+					.stream()
+					.map(ReceiveDetailLpnPdaRequest::getBoxCode)
+					.map(s -> s.substring(0, 1))
+					.filter(s -> s.equals(LpnTypeCodeEnum.D.getCode()))
+					.collect(Collectors.toList());
+				if (boxCodeList.size() < RECEIVE_BY_MULTI_D) {
+					throw new ServiceException("多箱收货失败：D箱不允许只收一个箱子，请采集两个或两个以上D箱后重试");
+				}
+			}
+		}
+
 		// 循环调用自定义--按箱收货业务方法（此按箱收货非PDA页面上的按箱收货）
 		for (ReceiveDetailLpnPdaRequest item : receiveDetailLpnPdaMultiRequest.getReceiveDetailLpnPdaRequestList()) {
 			item.setLpnCode(receiveDetailLpnPdaMultiRequest.getLpnCode());

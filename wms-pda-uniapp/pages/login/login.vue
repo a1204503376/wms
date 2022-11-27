@@ -57,7 +57,7 @@
 				tenantId: setting.tenantId,
 				username: this.$store.state.userName || 'admin',
 				// TODO 测试时默认密码,正式需要删除,上面的admin
-				password: '123456',
+				password: 'nodes.wms3',
 				addressDisplay: true,
 				name: setting.name,
 				pdaVersion: setting.version,
