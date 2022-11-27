@@ -336,7 +336,10 @@ public class ReceiveBizImpl implements ReceiveBiz {
 		if (receiveDetailLpnList.get(0).getReceiveDetailId() != 0) {
 			List<Long> DetailIdList = receiveDetailLpnList.stream().map(ReceiveDetailLpn::getReceiveDetailId).collect(Collectors.toList());
 			ReceiveDetail receiveDetail = receiveDetailDao.getDetailByReceiveDetailId(DetailIdList.get(0));
-			receiveDetailLpnPdaResponse.setSkuLot4(receiveDetail.getSkuLot4());
+			if (Func.isNotEmpty(receiveDetail)) {
+				receiveDetailLpnPdaResponse.setSkuLot4(receiveDetail.getSkuLot4());
+			}
+
 		} else {
 			receiveDetailLpnPdaResponse.setSkuLot4(receiveDetailLpnList.get(0).getSkuLot4());
 		}

@@ -460,6 +460,7 @@ public class ReceiveFactory {
 		receiveDetailLpn.setDetailStatus(ReceiveDetailStatusEnum.NOT_RECEIPT);
 		receiveDetailLpn.setBoxCode(newReceiveDetailRequest.getBoxCode());
 		receiveDetailLpn.setLpnCode(newReceiveDetailRequest.getLpnCode());
+		receiveDetailLpn.setReceiveHeaderId(receiveDetail.getReceiveId());
 		return receiveDetailLpn;
 	}
 }
