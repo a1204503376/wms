@@ -180,6 +180,12 @@
                 s.pick_qty or
                 s.box_code LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and
                 s.stay_stock_qty + s.stock_qty >
+                s.pick_qty  or
+                s.sku_lot1 LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and
+                s.stay_stock_qty + s.stock_qty >
+                s.pick_qty  or
+                s.lpn_code LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and
+                s.stay_stock_qty + s.stock_qty >
                 s.pick_qty
             </if>
             <if test="query.no != null and query.no != '' and query.type != null and query.type != ''">
