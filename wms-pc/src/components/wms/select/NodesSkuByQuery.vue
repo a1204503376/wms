@@ -82,6 +82,18 @@ export default {
         // 组件大小，默认为mini, 支持 medium/small/mini
         size: {type: String, required: false, default: () => "mini"},
     },
+    watch: {
+      selectVal(newVal/*, oldVal*/) {
+          // 重置
+          if (func.isEmpty(newVal)){
+              this.val = [];
+              this.$refs.table.clearSelection();
+              this.selectRows = [];
+              // this.tableData = [];
+              // this.options = [];
+          }
+      }
+    },
     data() {
         return {
             // 外层页面上显示的值
