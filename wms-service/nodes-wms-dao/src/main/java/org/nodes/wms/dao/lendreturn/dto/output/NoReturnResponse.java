@@ -8,7 +8,7 @@ import org.nodes.wms.dao.stock.dto.SkuLotDto;
 import java.math.BigDecimal;
 
 /**
- *未归还
+ * 未归还
  */
 @Data
 public class NoReturnResponse extends SkuLotDto {
@@ -66,6 +66,10 @@ public class NoReturnResponse extends SkuLotDto {
 	 * 序列号
 	 */
 	private String snCode;
+	/**
+	 * 箱码
+	 */
+	private String boxCode;
 
 	/**
 	 * 单据编码

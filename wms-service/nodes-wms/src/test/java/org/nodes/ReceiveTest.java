@@ -36,4 +36,10 @@ public class ReceiveTest {
 		list.add(1542459266365423618L);
 		//receiveLogBiz.cancelReceive(list);
 	}
+
+	public static void main(String[] args) {
+		Integer a = 30;
+		Integer b = 30;
+		System.out.print(a == b);
+	}
 }

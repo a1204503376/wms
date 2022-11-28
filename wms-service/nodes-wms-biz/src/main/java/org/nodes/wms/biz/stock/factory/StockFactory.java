@@ -110,8 +110,8 @@ public class StockFactory {
 	}
 
 	public static boolean compare(ReceiveLog receiveLog, LogSoPick logSoPick) {
-		if (receiveLog.getSkuId() == logSoPick.getSkuId() && receiveLog.getWhId() == logSoPick.getWhId()
-			&& receiveLog.getWoId() == logSoPick.getWoId() && receiveLog.getWspId() == logSoPick.getWspId()
+		if (receiveLog.getSkuId().equals(logSoPick.getSkuId()) && receiveLog.getWhId().equals(logSoPick.getWhId())
+			&& receiveLog.getWoId().equals(logSoPick.getWoId()) && receiveLog.getWspId().equals(logSoPick.getWspId())
 			&& receiveLog.getSkuLevel().equals(logSoPick.getSkuLevel()) && SkuLotUtil.compareAllSkuLot(receiveLog, logSoPick)
 		) {
 			return true;
