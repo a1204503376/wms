@@ -64,7 +64,9 @@
 				uni.$u.throttle(function() {
 					if (tool.isNotEmpty(_this.params.locCode)) {
 						freezeOrUnFreeze.unFreezeByLocCode(_this.params).then(data => {
-
+							_this.$u.func.showToast({
+								title: '解冻成功'
+							});
 						})
 						return;
 					}else{

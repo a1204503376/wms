@@ -63,7 +63,9 @@
 				uni.$u.throttle(function() {
 					if (tool.isNotEmpty(_this.params.boxCode)) {
 						freezeOrUnFreeze.unfreezeByBoxCode(_this.params).then(data => {
-							console.log(data)
+							_this.$u.func.showToast({
+								title: '解冻成功'
+							});
 						})
 						return;
 					}
