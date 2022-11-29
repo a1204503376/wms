@@ -62,7 +62,9 @@
 				uni.$u.throttle(function() {
 					if (tool.isNotEmpty(_this.params.lotNumber)) {
 						freezeOrUnFreeze.freezeByLotNumber(_this.params).then(data => {
-							console.log(data)
+							_this.$u.func.showToast({
+								title: '冻结成功'
+							});
 						})
 						return;
 					}

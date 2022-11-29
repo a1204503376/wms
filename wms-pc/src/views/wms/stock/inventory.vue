@@ -58,8 +58,8 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="物品编码" label-width="90px">
-                            <nodes-sku v-model="form.params.skuIds" class="search-input">
-                            </nodes-sku>
+                            <nodes-sku-by-query v-model="form.params.skuIds" class="search-input">
+                            </nodes-sku-by-query>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -414,7 +414,7 @@ import {
 import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js';
 import fileUpload from "@/components/nodes/fileUpload";
-import NodesSku from "@/components/wms/select/NodesSkuByQuery";
+import NodesSkuByQuery from "@/components/wms/select/NodesSkuByQuery";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
 import NodesOwner from "@/components/wms/select/NodesOwner";
 import NodesStockStatus from "@/components/wms/select/NodesStockStatus";
@@ -428,7 +428,7 @@ import {nowDateFormat} from "@/util/date";
 import {getParamValue} from "@/util/param";
 
 export default {
-    name: "customer",
+    name: "inventory",
     components: {
         NodesDictionary,
         NodesZone,
@@ -441,7 +441,7 @@ export default {
         NodesMasterPage,
         NodesDateRange,
         NodesWarehouse,
-        NodesSku,
+        NodesSkuByQuery,
         ExcelExport,
         fileUpload,
     },

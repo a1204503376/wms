@@ -107,7 +107,9 @@
 								serialList.push(serialNumbers.serialNumber)
 							})
 							_this.params.serialNumberList = serialList;
-							console.log('按序列号解冻成功')
+							_this.$u.func.showToast({
+								title: '解冻成功'
+							});
 							// _this.params.whCode = uni.getStorageSync('warehouse').whCode;
 							// _this.params.whId = uni.getStorageSync('warehouse').whId;
 							// receive.submitReceiptByPcs(_this.params).then(data => {
