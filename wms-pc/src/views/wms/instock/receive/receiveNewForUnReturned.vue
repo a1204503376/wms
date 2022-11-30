@@ -313,6 +313,7 @@ export default {
             refresh: true,
             form: {
                 params: {
+                   isFromLogSoPickOrLogNoReturn:true,
                     newReceiveHeaderRequest: {
                         inStoreType: null,
                         billTypeCd: this.$commonConst.BILL_TYPE_RETURN,
