@@ -153,7 +153,7 @@ public class StockFactory {
 				if (compare(receiveLogList.get(i), logSoPickList.get(j))) {
 					StockBalance stockBalance = StockFactory.createStockBalabce(receiveLogList.get(i), logSoPickList.get(j));
 					stockBalanceList1.add(stockBalance);
-					logSoPickList1.remove(j);
+					logSoPickList1.set(j, null);
 					break;
 				}
 				if (j == logSoPickList.size() - 1) {
@@ -166,8 +166,10 @@ public class StockFactory {
 			stockBalanceList1.add(stockBalance);
 		}
 		for (LogSoPick logSoPick : logSoPickList1) {
-			StockBalance stockBalance = StockFactory.createStockBalabce(null, logSoPick);
-			stockBalanceList1.add(stockBalance);
+			if (Func.isNotEmpty(logSoPick)) {
+				StockBalance stockBalance = StockFactory.createStockBalabce(null, logSoPick);
+				stockBalanceList1.add(stockBalance);
+			}
 		}
 	}
 

@@ -17,6 +17,7 @@ import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
 import org.nodes.wms.dao.stock.dto.output.StockBySerialPageResponse;
 import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
+import org.nodes.wms.dao.stock.dto.report.ReportAgeOfInventoryDto;
 import org.nodes.wms.dao.stock.dto.report.ReportCountStockDto;
 import org.nodes.wms.dao.stock.dto.report.ReportStockDto;
 import org.nodes.wms.dao.stock.entities.Stock;
@@ -472,6 +473,11 @@ public class StockDaoImpl
 	@Override
 	public List<ReportStockDto> getCurrentTimeStockByReportParams(List<Long> excludeZoneIdList, Map<String, Object> parameters) {
 		return super.baseMapper.getCurrentTimeStockByReportParams(excludeZoneIdList, parameters);
+	}
+
+	@Override
+	public List<ReportAgeOfInventoryDto> getAgeOfInventory(List<Long> excludeZoneIdList) {
+		return super.baseMapper.getAgeOfInventory(excludeZoneIdList);
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import org.nodes.wms.dao.stock.dto.input.StockPageQuery;
 import org.nodes.wms.dao.stock.dto.output.FindAllStockByNoResponse;
 import org.nodes.wms.dao.stock.dto.output.StockBySerialPageResponse;
 import org.nodes.wms.dao.stock.dto.output.StockPageResponse;
+import org.nodes.wms.dao.stock.dto.report.ReportAgeOfInventoryDto;
 import org.nodes.wms.dao.stock.dto.report.ReportCountStockDto;
 import org.nodes.wms.dao.stock.dto.report.ReportStockDto;
 import org.nodes.wms.dao.stock.entities.Stock;
@@ -124,6 +125,16 @@ public interface StockMapper extends BaseMapper<Stock> {
 	 */
 	List<ReportStockDto> getCurrentTimeStockByReportParams(@Param("excludeZoneIdList") List<Long> excludeZoneIdList, @Param("params") Map<String, Object> parameters);
 
+	/**
+	 * 报表: 库龄
+	 *
+	 * @param excludeZoneIdList 排除的库区id
+	 * @return 库龄数据
+	 */
+	List<ReportAgeOfInventoryDto> getAgeOfInventory(@Param("excludeZoneIdList") List<Long> excludeZoneIdList);
+
 	List<Stock> selectListByZoneTypeList(@Param("whId") Long whId, @Param("boxCode") String boxCode);
+
+
 }
 
