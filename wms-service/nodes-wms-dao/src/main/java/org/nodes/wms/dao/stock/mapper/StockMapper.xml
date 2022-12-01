@@ -180,10 +180,10 @@
                 s.pick_qty or
                 s.box_code LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and
                 s.stay_stock_qty + s.stock_qty >
-                s.pick_qty  or
+                s.pick_qty or
                 s.sku_lot1 LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and
                 s.stay_stock_qty + s.stock_qty >
-                s.pick_qty  or
+                s.pick_qty or
                 s.lpn_code LIKE CONCAT('%', #{query.no} ,'%') and s.wh_id=#{query.whId} and s.is_deleted = 0 and
                 s.stay_stock_qty + s.stock_qty >
                 s.pick_qty
@@ -570,9 +570,10 @@
             <if test="boxCode!=null and boxCode != ''">
                 AND box_code LIKE concat('%', #{boxCode},'%')
             </if>
-            and zone_code in('WH1-AGV-PICKTO','WH1-STAGE','WH1-RG')
+            and zone_code in('WH1-AGV-PICKTO','WH1-STAGE','WH1-RG','WH1-RECE')
             and stock_qty>pick_qty
             and occupy_qty = 0
+            and stock_status = 0
         </where>
     </select>
 </mapper>

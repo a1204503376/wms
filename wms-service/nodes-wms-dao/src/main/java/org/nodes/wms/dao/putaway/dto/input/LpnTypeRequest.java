@@ -15,10 +15,14 @@ public class LpnTypeRequest implements Serializable {
 	/**
 	 * 箱型
 	 */
-	private String lpnType;
+	private String boxCode;
 	/**
 	 * 库房id
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long whId;
+	/**
+	 * 库位编码
+	 */
+	private String locCode;
 }

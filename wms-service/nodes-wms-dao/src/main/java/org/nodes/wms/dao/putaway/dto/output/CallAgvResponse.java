@@ -28,5 +28,9 @@ public class CallAgvResponse implements Serializable {
 	 * 箱码集合
 	 */
 	List<BoxDto> boxList;
+	/**
+	 * 库位编码
+	 */
+	private String locCode;
 
 }

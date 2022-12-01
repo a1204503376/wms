@@ -155,8 +155,15 @@ public class PutawayBizImpl implements PutawayBiz {
 	@Override
 	public List<LocResponse> findLocByLpnType(LpnTypeRequest request) {
 		List<LocResponse> locResponseList = new ArrayList<>();
-		// 根据箱型和库房id获取库位信息
-		List<Location> locationList = locationBiz.findLocationByLpnType(request);
+		List<Location> locationList = new ArrayList<>();
+		if (request.getLocCode().substring(0, 5).equals("WH1-R")) {
+			Location location = locationBiz.findLocationByLocCode(request.getWhId(), request.getLocCode());
+			locationList.add(location);
+		} else {
+			// 根据箱型和库房id获取库位信息
+			locationList = locationBiz.findLocationByLpnType(request);
+		}
+
 		for (Location location : locationList) {
 			LocResponse locResponse = new LocResponse();
 			locResponse.setLocId(location.getLocId());
@@ -171,7 +178,12 @@ public class PutawayBizImpl implements PutawayBiz {
 				locResponse.setIsCBifurcate(2);
 			}
 			// 库位是否为空
-			locResponse.setIsEmpty(stockBiz.judgeEnableOnLocation(location));
+			if (request.getLocCode().substring(0, 5).equals("WH1-R")) {
+				locResponse.setIsEmpty(true);
+			} else {
+				locResponse.setIsEmpty(stockBiz.judgeEnableOnLocation(location));
+			}
+
 			locResponseList.add(locResponse);
 		}
 		return locResponseList;

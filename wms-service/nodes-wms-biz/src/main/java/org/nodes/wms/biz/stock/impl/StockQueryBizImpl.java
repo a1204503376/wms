@@ -421,6 +421,8 @@ public class StockQueryBizImpl implements StockQueryBiz {
 		callAgvResponse.setQty(qty);
 		// 设置箱码对象集合
 		callAgvResponse.setBoxList(boxDtoList);
+		//设置库位编码
+		callAgvResponse.setLocCode(stockList.get(0).getLocCode());
 		return callAgvResponse;
 	}
 
