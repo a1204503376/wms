@@ -469,6 +469,8 @@ public class StockManageBizImpl implements StockManageBiz {
 			if (!(targetZoneType == DictKVConstant.ZONE_TYPE_AGV_PICK || targetZoneType == DictKVConstant.ZONE_TYPE_PICK)) {
 				throw new ServiceException("库存移动失败,来源库位不允许移动到目标库位");
 			}
+		} else if (soucreZoneType == DictKVConstant.ZONE_TYPE_VIRTUAL) {
+			return;
 		} else {
 			throw new ServiceException("库存移动失败，来源库位不允许移动");
 		}
