@@ -28,33 +28,30 @@ public class SoPickPlanFactory {
 		// 自动区分配的时候不能超分配
 		List<SoPickPlan> result = new ArrayList<>();
 		String msg = String.format("分配冻结[%s]", soDetail.getSoBillNo());
-		for (Stock item : stockOfLoc) {
-			// 创建拣货计划
-			SoDetail currentSoDetail = soDetailList.stream()
-				.filter(soDetailItem -> {
-					if (Func.isNotEmpty(soDetailItem.getSkuLot1()) && !soDetailItem.getSkuLot1().equals(item.getSkuLot1())){
-						return false;
-					}
-					if (Func.isNotEmpty(soDetailItem.getSkuLot2()) && !soDetailItem.getSkuLot2().equals(item.getSkuLot2())){
-						return false;
-					}
-					if ((Func.isNotEmpty(soDetailItem.getSkuLot4()) && !soDetailItem.getSkuLot4().equals(item.getSkuLot4()))){
-						return false;
-					}
+		// 创建拣货计划
+		SoDetail currentSoDetail = soDetailList.stream()
+			.filter(soDetailItem -> {
+				if (Func.isNotEmpty(soDetailItem.getSkuLot1()) && !soDetailItem.getSkuLot1().equals(stock.getSkuLot1())) {
+					return false;
+				}
+				if (Func.isNotEmpty(soDetailItem.getSkuLot2()) && !soDetailItem.getSkuLot2().equals(stock.getSkuLot2())) {
+					return false;
+				}
+				if ((Func.isNotEmpty(soDetailItem.getSkuLot4()) && !soDetailItem.getSkuLot4().equals(stock.getSkuLot4()))) {
+					return false;
+				}
 
-					return item.getSkuId().equals(soDetailItem.getSkuId())
-						&& BigDecimalUtil.gt(soDetailItem.getSurplusQty(), BigDecimal.ZERO);
-				})
-				.findFirst()
-				.orElse(null);
-			if (Func.isNull(currentSoDetail)){
-				continue;
-			}
-
-			SoPickPlan soPickPlan = create(soDetail.getSoBillId(), currentSoDetail, item, planQty);
-			result.add(soPickPlan);
+				return stock.getSkuId().equals(soDetailItem.getSkuId())
+					&& BigDecimalUtil.gt(soDetailItem.getSurplusQty(), BigDecimal.ZERO);
+			})
+			.findFirst()
+			.orElse(null);
+		if (Func.isNull(currentSoDetail)) {
+			return null;
 		}
 
+		SoPickPlan soPickPlan = create(soDetail.getSoBillId(), currentSoDetail, stock, planQty);
+		result.add(soPickPlan);
 		return result;
 	}
 
