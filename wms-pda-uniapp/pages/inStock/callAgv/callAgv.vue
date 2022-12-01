@@ -115,8 +115,10 @@
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				param: {
-					lpnType: '',
+					boxCode: '',
 					whId: 0,
+					locCode:'',
+					lpnType:''
 				},
 				lpnItem: '',
 				locCode: '',
@@ -124,10 +126,11 @@
 			}
 		},
 		onLoad: function(option) {
-
 			var parse = JSON.parse(option.param)
 			this.lpnItem = parse
-			this.param.lpnType = this.lpnItem.lpnType                                                                                           
+			this.param.boxCode = this.lpnItem.boxList[0].boxCode   
+			this.param.locCode = this.lpnItem.locCode
+			this.param.lpnType = this.lpnItem.lpnType
 			this.param.whId = uni.getStorageSync('warehouse').whId
 			putWay.findLocByLpnType(this.param).then(res => {
 				this.locList = res.data
