@@ -707,6 +707,9 @@ public class OutStockBizImpl implements OutStockBiz {
 			if (SoBillStateEnum.CREATE.equals(soHeader.getSoBillState())) {
 				soBillBiz.updateState(request.getSoBillId(), SoBillStateEnum.EXECUTING);
 			}
+		} else {
+			// 调整分配量为0时，更新发货单状态
+			soBillBiz.updateState(request.getSoBillId(), SoBillStateEnum.CREATE);
 		}
 
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, request.getSoBillId(),
