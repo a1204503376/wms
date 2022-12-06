@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.outstock.so.dto.report;
 
 import lombok.Data;
+import org.springblade.core.tool.utils.ConvertUtil;
 
 import java.math.BigDecimal;
 
@@ -33,6 +34,9 @@ public class ReportSoPickLotDto {
 	 * 数量
 	 */
 	private BigDecimal qty;
+	public void setQty(BigDecimal qty) {
+		this.qty = ConvertUtil.convert(qty.stripTrailingZeros().toPlainString(), BigDecimal.class);
+	}
 	/**
 	 * 钢背
 	 */

@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.stock.dto.report;
 
 import lombok.Data;
+import org.springblade.core.tool.utils.ConvertUtil;
 
 import java.math.BigDecimal;
 
@@ -25,20 +26,35 @@ public class ReportStockDto {
 	 * 专用客户
 	 */
 	private String skuLot4;
+
 	/**
 	 * 占用库存总数
 	 */
 	private BigDecimal occupyQtySum;
+	public void setOccupyQtySum(BigDecimal occupyQtySum) {
+		this.occupyQtySum = ConvertUtil.convert(occupyQtySum.stripTrailingZeros().toPlainString(), BigDecimal.class) ;
+	}
 	/**
 	 * 可发货库存总数
 	 */
 	private BigDecimal stockEnableSum;
+	public void setStockEnableSum(BigDecimal stockEnableSum) {
+		this.stockEnableSum = ConvertUtil.convert(stockEnableSum.stripTrailingZeros().toPlainString(), BigDecimal.class);
+	}
+
 	/**
 	 * 即时库存总数
 	 */
 	private BigDecimal normalStockSum;
+	public void setNormalStockSum(BigDecimal normalStockSum) {
+		this.normalStockSum = ConvertUtil.convert(normalStockSum.stripTrailingZeros().toPlainString(), BigDecimal.class);
+	}
+
 	/**
 	 * 冻结库存总数
 	 */
 	private BigDecimal freezeStockSum;
+	public void setFreezeStockSum(BigDecimal freezeStockSum) {
+		this.freezeStockSum = ConvertUtil.convert(freezeStockSum.stripTrailingZeros().toPlainString(), BigDecimal.class);
+	}
 }
