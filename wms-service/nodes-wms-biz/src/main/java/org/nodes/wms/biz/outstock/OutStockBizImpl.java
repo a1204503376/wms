@@ -708,8 +708,14 @@ public class OutStockBizImpl implements OutStockBiz {
 				soBillBiz.updateState(request.getSoBillId(), SoBillStateEnum.EXECUTING);
 			}
 		} else {
+			// 查到拣货记录，有正常地拣货记录代表单据是部分拣货
+			List<LogSoPick> logSoPickList = logSoPickBiz.findEnableBySoHeaderId(soHeader.getSoBillId());
 			// 调整分配量为0时，更新发货单状态
-			soBillBiz.updateState(request.getSoBillId(), SoBillStateEnum.CREATE);
+			if (Func.isNotEmpty(logSoPickList)){
+				soBillBiz.updateState(request.getSoBillId(), SoBillStateEnum.PART);
+			} else {
+				soBillBiz.updateState(request.getSoBillId(), SoBillStateEnum.CREATE);
+			}
 		}
 
 		logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, request.getSoBillId(),
