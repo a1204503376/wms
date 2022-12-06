@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.stock.dto.report;
 
 import lombok.Data;
+import org.springblade.core.tool.utils.ConvertUtil;
 
 import java.math.BigDecimal;
 
@@ -29,4 +30,7 @@ public class ReportCountStockDto {
 	 * 库存余额汇总
 	 */
 	private BigDecimal stockBalanceTotal;
+	public void setStockBalanceTotal(BigDecimal stockBalanceTotal) {
+		this.stockBalanceTotal = ConvertUtil.convert(stockBalanceTotal.stripTrailingZeros().toPlainString(), BigDecimal.class);
+	}
 }

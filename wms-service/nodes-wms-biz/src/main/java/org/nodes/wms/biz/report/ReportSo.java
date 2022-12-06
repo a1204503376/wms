@@ -223,8 +223,11 @@ public class ReportSo {
 	 */
 	public void setReportSoPickSerialDtoList(SoPickPlan soPickPlan, List<ReportSoPickSerialDto> reportSoPickSerialDtoList) {
 		List<String> serialList = getSerial(soPickPlan.getStockId());
-		String sbCodeStr = String.join(",", serialList);
-		List<Map<String, Object>> mapList = getProcessedSerialAndQty(sbCodeStr);
+		String sNCodeStr = "";
+		if (Func.isNotEmpty(serialList)){
+			sNCodeStr = String.join(",", serialList);
+		}
+		List<Map<String, Object>> mapList = getProcessedSerialAndQty(sNCodeStr);
 		packagingData(mapList, soPickPlan.getSkuLot9(), soPickPlan.getBoxCode(), soPickPlan.getSkuLot5(),
 			soPickPlan.getSoBillId(), reportSoPickSerialDtoList);
 	}
