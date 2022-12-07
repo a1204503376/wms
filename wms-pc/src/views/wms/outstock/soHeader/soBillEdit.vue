@@ -203,7 +203,7 @@
                                         </el-input-number>
                                     </template>
                                 </el-table-column>
-                                <el-table-column :align="'left'" prop="skuLot1">
+                                <el-table-column :align="'left'" prop="skuLot1" width="132">
                                     <template slot="header">
                                         <span>生产批次</span>
                                     </template>
@@ -461,7 +461,23 @@ export default {
                     }
                 }
             })
-        }
+        },
+        createRowObj() {
+            return {
+                lineNumber: '',
+                sku: {
+                    skuId: '',
+                    skuCode: '',
+                    skuName: '',
+                    skuSpec: '',
+                },
+                umCode: '',
+                planQty: 0,
+                skuLot1: '',
+                skuLot4: '',
+                remark: '',
+            }
+        },
     }
 }
 </script>

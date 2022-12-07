@@ -426,6 +426,27 @@ export default {
                 };
             });
         },
+        createRowObj() {
+            return {
+                lineNumber: '',
+                sku: {
+                    skuId: '',
+                    skuCode: '',
+                    skuName: '',
+                    skuSpec: '',
+                },
+                umCode: '',
+                receiveDetailId: '',
+                planQty: 0,
+                scanQty: '',
+                remark: null,
+                skuLot1: '',
+                skuLot4: '',
+                skuLot5: '',
+                skuLot6: '',
+                skuLot8: '',
+            }
+        },
     }
 }
 </script>
