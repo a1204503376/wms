@@ -141,7 +141,7 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    :align="'left'"
+                                    align="left"
                                     prop="skuCode"
                                     width="200">
                                     <template slot="header">

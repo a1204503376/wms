@@ -192,7 +192,7 @@
                                         </el-input-number>
                                     </template>
                                 </el-table-column>
-                                <el-table-column :align="'left'" prop="生产批次">
+                                <el-table-column align="left" width="132" prop="生产批次">
                                     <template slot="header">
                                         <span>生产批次</span>
                                     </template>
@@ -203,7 +203,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column :align="'left'" prop="专用客户">
+                                <el-table-column align="left" prop="专用客户">
                                     <template slot="header">
                                         <span>专用客户</span>
                                     </template>

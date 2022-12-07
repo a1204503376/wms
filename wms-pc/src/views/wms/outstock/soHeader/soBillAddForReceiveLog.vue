@@ -134,7 +134,7 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    :align="'left'"
+                                    align="left"
                                     prop="skuName"
                                     width="200">
                                     <template slot="header">
@@ -187,7 +187,7 @@
                                         </el-input-number>
                                     </template>
                                 </el-table-column>
-                                <el-table-column width="152" :align="'left'" prop="生产批次">
+                                <el-table-column width="132" align="left" prop="生产批次">
                                     <template slot="header">
                                         <span>生产批次</span>
                                     </template>
@@ -199,7 +199,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column :align="'left'" prop="专用客户">
+                                <el-table-column align="left" prop="专用客户">
                                     <template slot="header">
                                         <span>专用客户</span>
                                     </template>
