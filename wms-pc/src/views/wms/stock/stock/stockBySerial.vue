@@ -12,10 +12,10 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="序列号范围" label-width="90px">
-                            <el-input v-model.trim="form.params.serialBegin" :clearable="true" style="width:98px">
+                            <el-input v-model.trim="form.params.serialBegin" :clearable="true" style="width:45%">
                             </el-input>
                             -
-                            <el-input v-model.trim="form.params.serialEnd" :clearable="true" style="width:98px">
+                            <el-input v-model.trim="form.params.serialEnd" :clearable="true" style="width:45%">
                             </el-input>
                         </el-form-item>
                     </el-col>

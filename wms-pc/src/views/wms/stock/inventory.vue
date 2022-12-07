@@ -143,10 +143,10 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="批次号" label-width="90px">
-                            <el-input v-model.trim="form.params.lotNumberBegin" :clearable="true" style="width: 42%;">
+                            <el-input v-model.trim="form.params.lotNumberBegin" :clearable="true" style="width: 39%;">
                             </el-input>
                             -
-                            <el-input v-model.trim="form.params.lotNumberEnd" :clearable="true" style="width: 42%;">
+                            <el-input v-model.trim="form.params.lotNumberEnd" :clearable="true" style="width: 39%;">
                             </el-input>
                             <el-tooltip placement="top">
                                 <div slot="content">
