@@ -103,6 +103,5 @@ public class LogSoPickPageResponse extends BaseSkuLot implements Serializable {
 	/**
 	 * 撤销拣货记录id
 	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long cancelLogId;
+	private String cancelLogId;
 }
