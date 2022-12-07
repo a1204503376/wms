@@ -115,7 +115,7 @@
                                 :data="table.data"
                                 border
                                 size="mini">
-                                <el-table-column width="53">
+                                <el-table-column  fixed="left" width="53">
                                     <template slot="header">
                                         <el-button
                                             circle
@@ -127,6 +127,7 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
+                                    fixed="left"
                                     label="行号"
                                     prop="lineNumber"
                                     show-overflow-tooltip
@@ -233,7 +234,7 @@
                                         <el-input v-model="row.remark" size="mini"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column align="center" width="100px">
+                                <el-table-column align="center" fixed="right" width="100px">
                                     <template slot="header">
                                         <span>操作</span>
                                     </template>

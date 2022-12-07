@@ -106,6 +106,7 @@
                                 border
                                 size="mini">
                                 <el-table-column
+                                    fixed="left"
                                     label="行号"
                                     prop="lineNumber"
                                     show-overflow-tooltip
@@ -119,7 +120,7 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    :align="'left'"
+                                    align="left"
                                     prop="sku"
                                     width="200">
                                     <template slot="header">
@@ -218,7 +219,7 @@
                                         <el-input v-model.trim="row.remark" size="mini"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column align="center" width="100px">
+                                <el-table-column align="center" fixed="right" width="100px">
                                     <template slot="header">
                                         <span>操作</span>
                                     </template>
