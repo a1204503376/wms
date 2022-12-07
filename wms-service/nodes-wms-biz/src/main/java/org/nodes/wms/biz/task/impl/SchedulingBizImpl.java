@@ -344,9 +344,20 @@ public class SchedulingBizImpl implements SchedulingBiz {
 		wmsTaskDao.updateState(wmsTask.getTaskId(), WmsTaskStateEnum.START_EXECUTION, "开始执行");
 		// 将原库位库存移动到中间库位
 		List<Stock> stockList = stockQueryBiz.findStockByDropId(wmsTask.getTaskId());
+		if (Func.isEmpty(stockList)) {
+			new ServiceException("状态更新失败,查询不到当前库存");
+		}
+		Long locId = stockList.get(0).getLocId();
+		if (Func.isEmpty(locId)) {
+			new ServiceException("状态更新失败,查询不到当前库存的库位");
+		}
+		Location virtualLocation = locationBiz.findByLocId(locId);
 		for (Stock stock : stockList) {
-			Stock middleStock = stockBiz.moveToInTransitByDropId(stock, wmsTask.getTaskId().toString(),
-				StockLogTypeEnum.STOCK_AGV_MOVE, null);
+			Stock middleStock = stock;
+			if (!locationBiz.isVirtualLocation(virtualLocation)) {
+				middleStock = stockBiz.moveToInTransitByDropId(stock, wmsTask.getTaskId().toString(),
+					StockLogTypeEnum.STOCK_AGV_MOVE, null);
+			}
 			if (WmsTaskTypeEnum.AGV_PICKING.equals(wmsTask.getTaskTypeCd())) {
 				List<SoPickPlan> soPickPlanList = soPickPlanBiz.findPickByTaskId(wmsTask.getTaskId(), stock.getStockId());
 				Location location = locationBiz.findByLocId(middleStock.getLocId());
@@ -357,6 +368,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 			}
 
 		}
+
 
 		log.info("agv任务开始[{}]-[{}]", wmsTask.getTaskId(), wmsTask);
 	}
