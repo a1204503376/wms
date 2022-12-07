@@ -115,7 +115,7 @@
                                 :data="table.data"
                                 border
                                 size="mini">
-                                <el-table-column width="53">
+                                <el-table-column  fixed="left" width="53">
                                     <template slot="header">
                                         <el-button
                                             circle
@@ -127,6 +127,7 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
+                                    fixed="left"
                                     label="行号"
                                     prop="lineNumber"
                                     show-overflow-tooltip
@@ -140,7 +141,7 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    :align="'left'"
+                                    align="left"
                                     prop="skuCode"
                                     width="200">
                                     <template slot="header">
@@ -203,7 +204,7 @@
                                         </el-input-number>
                                     </template>
                                 </el-table-column>
-                                <el-table-column :align="'left'" prop="skuLot1">
+                                <el-table-column :align="'left'" prop="skuLot1" width="132">
                                     <template slot="header">
                                         <span>生产批次</span>
                                     </template>
@@ -233,7 +234,7 @@
                                         <el-input v-model="row.remark" size="mini"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column align="center" width="100px">
+                                <el-table-column align="center" fixed="right" width="100px">
                                     <template slot="header">
                                         <span>操作</span>
                                     </template>
@@ -461,7 +462,23 @@ export default {
                     }
                 }
             })
-        }
+        },
+        createRowObj() {
+            return {
+                lineNumber: '',
+                sku: {
+                    skuId: '',
+                    skuCode: '',
+                    skuName: '',
+                    skuSpec: '',
+                },
+                umCode: '',
+                planQty: 0,
+                skuLot1: '',
+                skuLot4: '',
+                remark: '',
+            }
+        },
     }
 }
 </script>

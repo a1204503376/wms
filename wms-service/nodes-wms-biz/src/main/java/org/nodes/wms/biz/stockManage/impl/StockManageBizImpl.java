@@ -468,6 +468,10 @@ public class StockManageBizImpl implements StockManageBiz {
 		else if (soucreZoneType == DictKVConstant.ZONE_TYPE_AGV_PICK || soucreZoneType == DictKVConstant.ZONE_TYPE_PICK) {
 			if (!(targetZoneType == DictKVConstant.ZONE_TYPE_AGV_PICK || targetZoneType == DictKVConstant.ZONE_TYPE_PICK)) {
 				throw new ServiceException("库存移动失败,来源库位不允许移动到目标库位");
+			} else if (soucreZoneType == DictKVConstant.ZONE_TYPE_AGV_TEMPORARY) {
+				if (!targetLocation.getZCode().equals("WH1-RECE")) {
+					throw new ServiceException("库存移动失败,来源库位不允许移动到目标库位");
+				}
 			}
 		} else if (soucreZoneType == DictKVConstant.ZONE_TYPE_VIRTUAL) {
 			return;

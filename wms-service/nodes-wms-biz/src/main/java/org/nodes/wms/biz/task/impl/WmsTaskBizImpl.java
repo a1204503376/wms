@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.biz.common.log.LogBiz;
+import org.nodes.wms.biz.outstock.logSoPick.LogSoPickBiz;
 import org.nodes.wms.biz.outstock.plan.SoPickPlanBiz;
 import org.nodes.wms.biz.outstock.so.SoBillBiz;
 import org.nodes.wms.biz.task.AgvTask;
@@ -13,6 +14,7 @@ import org.nodes.wms.biz.task.factory.WmsTaskFactory;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 import org.nodes.wms.dao.outstock.so.entities.SoHeader;
+import org.nodes.wms.dao.outstock.so.enums.SoBillStateEnum;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
 import org.nodes.wms.dao.task.TaskDetailDao;
 import org.nodes.wms.dao.task.WmsTaskDao;
@@ -29,6 +31,7 @@ import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +50,7 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 	private final LogBiz logBiz;
 	private final WmsTaskFactory wmsTaskFactory;
 	private final SoPickPlanBiz soPickPlanBiz;
+	private final LogSoPickBiz logSoPickBiz;
 	private final SoBillBiz soBillBiz;
 
 	@Override
@@ -86,6 +90,15 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 		if (task.getTaskTypeCd().equals(WmsTaskTypeEnum.AGV_PICKING)) {
 			SoHeader soHeader = soBillBiz.getSoHeaderById(task.getBillId());
 			soPickPlanBiz.cancelPickPlan(task, soHeader);
+
+			// 取消拣货任务或AGV拣货任务时，更新发货单状态
+			if (WmsTaskTypeEnum.PICKING.equals(task.getTaskTypeCd()) || WmsTaskTypeEnum.AGV_PICKING.equals(task.getTaskTypeCd())){
+				if (Func.isNotEmpty(logSoPickBiz.findEnableBySoHeaderId(task.getBillId()))) {
+					soBillBiz.updateState(task.getBillId(), SoBillStateEnum.PART);
+				} else {
+					soBillBiz.updateState(task.getBillId(), SoBillStateEnum.CREATE);
+				}
+			}
 		}
 	}
 

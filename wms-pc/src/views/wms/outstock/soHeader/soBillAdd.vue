@@ -104,7 +104,7 @@
                                 :data="table.data"
                                 border
                                 size="mini">
-                                <el-table-column width="53">
+                                <el-table-column  fixed="left" width="53">
                                     <template slot="header">
                                         <el-button
                                             circle
@@ -117,6 +117,7 @@
                                 </el-table-column>
                                 <el-table-column
                                     label="行号"
+                                    fixed="left"
                                     prop="lineNumber"
                                     show-overflow-tooltip
                                     type="index"
@@ -191,7 +192,7 @@
                                         </el-input-number>
                                     </template>
                                 </el-table-column>
-                                <el-table-column :align="'left'" prop="生产批次">
+                                <el-table-column align="left" width="132" prop="生产批次">
                                     <template slot="header">
                                         <span>生产批次</span>
                                     </template>
@@ -202,7 +203,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column :align="'left'" prop="专用客户">
+                                <el-table-column align="left" prop="专用客户">
                                     <template slot="header">
                                         <span>专用客户</span>
                                     </template>
@@ -221,7 +222,7 @@
                                         <el-input v-model.trim="row.remark" size="mini"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column align="center" width="100px">
+                                <el-table-column align="center" fixed="right" width="100px">
                                     <template slot="header">
                                         <span>操作</span>
                                     </template>

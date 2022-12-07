@@ -213,7 +213,7 @@ public class SoPickPlanBizImpl implements SoPickPlanBiz {
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void cancelPickPlan(WmsTask task, SoHeader soHeader) {
-		List<SoPickPlan> soPickPlanList = soPickPlanDao.getPickByTaskId(task.getBillId());
+		List<SoPickPlan> soPickPlanList = soPickPlanDao.getPickByTaskId(task.getTaskId());
 		cancelPickPlan(soPickPlanList, soHeader);
 	}
 
