@@ -584,13 +584,13 @@
         wsu_name,
         SUM(stock_qty - pick_qty) AS finalBalanceQty,
         SUM(IF(DATEDIFF(now(), sku_lot3) / 365 &lt; 1, (stock_qty - pick_qty), 0)) AS less1yearQty,
-        SUM(IF(DATEDIFF(now(), sku_lot3) / 365 >= 1 and DATEDIFF(sku_lot3, now()) / 365 &lt; 2,
+        SUM(IF(DATEDIFF(now(), sku_lot3) / 365 >= 1 and DATEDIFF(now(), sku_lot3) / 365 &lt; 2,
         (stock_qty - pick_qty), 0)) AS between1and2yearQty,
-        SUM(IF(DATEDIFF(now(), sku_lot3) / 365 >= 2 and DATEDIFF(sku_lot3, now()) / 365 &lt; 3,
+        SUM(IF(DATEDIFF(now(), sku_lot3) / 365 >= 2 and DATEDIFF(now(), sku_lot3) / 365 &lt; 3,
         (stock_qty - pick_qty), 0)) AS between2and3yearQty,
-        SUM(IF(DATEDIFF(now(), sku_lot3) / 365 >= 3 and DATEDIFF(sku_lot3, now()) / 365 &lt; 4,
+        SUM(IF(DATEDIFF(now(), sku_lot3) / 365 >= 3 and DATEDIFF(now(), sku_lot3) / 365 &lt; 4,
         (stock_qty - pick_qty), 0)) AS between3and4yearQty,
-        SUM(IF(DATEDIFF(now(), sku_lot3) / 365 >= 4 and DATEDIFF(sku_lot3, now()) / 365 &lt; 5,
+        SUM(IF(DATEDIFF(now(), sku_lot3) / 365 >= 4 and DATEDIFF(now(), sku_lot3) / 365 &lt; 5,
         (stock_qty - pick_qty), 0)) AS between4and5yearQty,
         SUM(IF(DATEDIFF(now(), sku_lot3) / 365 >= 5, (stock_qty - pick_qty), 0)) AS greater5yearQty
         FROM wms_stock
