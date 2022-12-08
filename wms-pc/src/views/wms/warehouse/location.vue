@@ -59,7 +59,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row type="flex">
+                <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="货架列" label-width="90px">
                             <el-input v-model.trim="form.params.locColumn" :clearable="true" class="search-input"
@@ -148,13 +148,22 @@
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column v-if="!column.hide" :key="index" show-overflow-tooltip v-bind="column"
                                          width="120px">
-                            <template v-slot="scope" v-if="column.prop === 'locCode' || column.prop === 'status'">
+                            <template v-slot="scope"
+                                      v-if="column.prop === 'locCode' ||
+                                       column.prop === 'status' ||
+                                        column.prop === 'locFlag'">
                                 <el-link v-if="column.prop === 'locCode'" :underline="false" target="_blank"
-                                         type="primary" @click="onView(scope.row)">{{ scope.row.locCode }}
+                                         type="primary" @click="onView(scope.row)">
+                                    {{ scope.row.locCode }}
                                 </el-link>
                                 <el-tag v-if="column.prop === 'status'"
                                         :type="scope.row.status === '是' ? 'success' : 'danger'">
                                     {{ scope.row.status }}
+                                </el-tag>
+                                <el-tag v-if="column.prop === 'locFlag'"
+                                        :type="(scope.row.locFlag === '业务系统冻结' || scope.row.locFlag === '冻结') ?
+                                        'danger' : 'success'">
+                                    {{ scope.row.locFlag }}
                                 </el-tag>
                             </template>
                         </el-table-column>
