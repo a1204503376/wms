@@ -507,7 +507,7 @@
             this.layoutControl3.Dock = System.Windows.Forms.DockStyle.Top;
             this.layoutControl3.Location = new System.Drawing.Point(0, 81);
             this.layoutControl3.Name = "layoutControl3";
-            this.layoutControl3.OptionsCustomizationForm.DesignTimeCustomizationFormPositionAndSize = new System.Drawing.Rectangle(869, 221, 812, 500);
+            this.layoutControl3.OptionsCustomizationForm.DesignTimeCustomizationFormPositionAndSize = new System.Drawing.Rectangle(985, 374, 812, 500);
             this.layoutControl3.Root = this.layoutControlGroup2;
             this.layoutControl3.Size = new System.Drawing.Size(1190, 54);
             this.layoutControl3.TabIndex = 2;
@@ -516,9 +516,9 @@
             // btnResetSerialNumber
             // 
             this.btnResetSerialNumber.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnResetSerialNumber.ImageOptions.Image")));
-            this.btnResetSerialNumber.Location = new System.Drawing.Point(912, 12);
+            this.btnResetSerialNumber.Location = new System.Drawing.Point(910, 12);
             this.btnResetSerialNumber.Name = "btnResetSerialNumber";
-            this.btnResetSerialNumber.Size = new System.Drawing.Size(86, 27);
+            this.btnResetSerialNumber.Size = new System.Drawing.Size(87, 27);
             this.btnResetSerialNumber.StyleController = this.layoutControl3;
             this.btnResetSerialNumber.TabIndex = 12;
             this.btnResetSerialNumber.Text = "重置明细";
@@ -527,9 +527,9 @@
             // btnExport
             // 
             this.btnExport.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnExport.ImageOptions.Image")));
-            this.btnExport.Location = new System.Drawing.Point(102, 12);
+            this.btnExport.Location = new System.Drawing.Point(104, 12);
             this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(86, 27);
+            this.btnExport.Size = new System.Drawing.Size(88, 27);
             this.btnExport.StyleController = this.layoutControl3;
             this.btnExport.TabIndex = 10;
             this.btnExport.Text = "明细导出";
@@ -538,9 +538,9 @@
             // btnImportDetail
             // 
             this.btnImportDetail.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnImportDetail.ImageOptions.Image")));
-            this.btnImportDetail.Location = new System.Drawing.Point(192, 12);
+            this.btnImportDetail.Location = new System.Drawing.Point(196, 12);
             this.btnImportDetail.Name = "btnImportDetail";
-            this.btnImportDetail.Size = new System.Drawing.Size(86, 27);
+            this.btnImportDetail.Size = new System.Drawing.Size(88, 27);
             this.btnImportDetail.StyleController = this.layoutControl3;
             this.btnImportDetail.TabIndex = 11;
             this.btnImportDetail.Text = "明细导入";
@@ -549,9 +549,9 @@
             // btnResetAll
             // 
             this.btnResetAll.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnResetAll.ImageOptions.Image")));
-            this.btnResetAll.Location = new System.Drawing.Point(1002, 12);
+            this.btnResetAll.Location = new System.Drawing.Point(1001, 12);
             this.btnResetAll.Name = "btnResetAll";
-            this.btnResetAll.Size = new System.Drawing.Size(86, 27);
+            this.btnResetAll.Size = new System.Drawing.Size(88, 27);
             this.btnResetAll.StyleController = this.layoutControl3;
             this.btnResetAll.TabIndex = 6;
             this.btnResetAll.Text = "重置全部";
@@ -560,9 +560,9 @@
             // btnPreviewPrint
             // 
             this.btnPreviewPrint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnPreviewPrint.ImageOptions.Image")));
-            this.btnPreviewPrint.Location = new System.Drawing.Point(1092, 12);
+            this.btnPreviewPrint.Location = new System.Drawing.Point(1093, 12);
             this.btnPreviewPrint.Name = "btnPreviewPrint";
-            this.btnPreviewPrint.Size = new System.Drawing.Size(86, 27);
+            this.btnPreviewPrint.Size = new System.Drawing.Size(85, 27);
             this.btnPreviewPrint.StyleController = this.layoutControl3;
             this.btnPreviewPrint.TabIndex = 7;
             this.btnPreviewPrint.Text = "打印";
@@ -573,7 +573,7 @@
             this.btnReprint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnReprint.ImageOptions.Image")));
             this.btnReprint.Location = new System.Drawing.Point(12, 12);
             this.btnReprint.Name = "btnReprint";
-            this.btnReprint.Size = new System.Drawing.Size(86, 27);
+            this.btnReprint.Size = new System.Drawing.Size(88, 27);
             this.btnReprint.StyleController = this.layoutControl3;
             this.btnReprint.TabIndex = 8;
             this.btnReprint.Text = "箱标重打";
@@ -598,26 +598,26 @@
             // layoutControlItem15
             // 
             this.layoutControlItem15.Control = this.btnResetAll;
-            this.layoutControlItem15.Location = new System.Drawing.Point(990, 0);
+            this.layoutControlItem15.Location = new System.Drawing.Point(989, 0);
             this.layoutControlItem15.Name = "layoutControlItem15";
-            this.layoutControlItem15.Size = new System.Drawing.Size(90, 34);
+            this.layoutControlItem15.Size = new System.Drawing.Size(92, 34);
             this.layoutControlItem15.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem15.TextVisible = false;
             // 
             // emptySpaceItem2
             // 
             this.emptySpaceItem2.AllowHotTrack = false;
-            this.emptySpaceItem2.Location = new System.Drawing.Point(270, 0);
+            this.emptySpaceItem2.Location = new System.Drawing.Point(276, 0);
             this.emptySpaceItem2.Name = "emptySpaceItem1";
-            this.emptySpaceItem2.Size = new System.Drawing.Size(630, 34);
+            this.emptySpaceItem2.Size = new System.Drawing.Size(622, 34);
             this.emptySpaceItem2.TextSize = new System.Drawing.Size(0, 0);
             // 
             // layoutControlItem16
             // 
             this.layoutControlItem16.Control = this.btnPreviewPrint;
-            this.layoutControlItem16.Location = new System.Drawing.Point(1080, 0);
+            this.layoutControlItem16.Location = new System.Drawing.Point(1081, 0);
             this.layoutControlItem16.Name = "layoutControlItem16";
-            this.layoutControlItem16.Size = new System.Drawing.Size(90, 34);
+            this.layoutControlItem16.Size = new System.Drawing.Size(89, 34);
             this.layoutControlItem16.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem16.TextVisible = false;
             // 
@@ -626,34 +626,34 @@
             this.layoutControlItem3.Control = this.btnReprint;
             this.layoutControlItem3.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem3.Name = "layoutControlItem3";
-            this.layoutControlItem3.Size = new System.Drawing.Size(90, 34);
+            this.layoutControlItem3.Size = new System.Drawing.Size(92, 34);
             this.layoutControlItem3.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem3.TextVisible = false;
             // 
             // layoutControlItem8
             // 
             this.layoutControlItem8.Control = this.btnExport;
-            this.layoutControlItem8.Location = new System.Drawing.Point(90, 0);
+            this.layoutControlItem8.Location = new System.Drawing.Point(92, 0);
             this.layoutControlItem8.Name = "layoutControlItem8";
-            this.layoutControlItem8.Size = new System.Drawing.Size(90, 34);
+            this.layoutControlItem8.Size = new System.Drawing.Size(92, 34);
             this.layoutControlItem8.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem8.TextVisible = false;
             // 
             // layoutControlItem10
             // 
             this.layoutControlItem10.Control = this.btnImportDetail;
-            this.layoutControlItem10.Location = new System.Drawing.Point(180, 0);
+            this.layoutControlItem10.Location = new System.Drawing.Point(184, 0);
             this.layoutControlItem10.Name = "layoutControlItem10";
-            this.layoutControlItem10.Size = new System.Drawing.Size(90, 34);
+            this.layoutControlItem10.Size = new System.Drawing.Size(92, 34);
             this.layoutControlItem10.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem10.TextVisible = false;
             // 
             // layoutControlItem11
             // 
             this.layoutControlItem11.Control = this.btnResetSerialNumber;
-            this.layoutControlItem11.Location = new System.Drawing.Point(900, 0);
+            this.layoutControlItem11.Location = new System.Drawing.Point(898, 0);
             this.layoutControlItem11.Name = "layoutControlItem11";
-            this.layoutControlItem11.Size = new System.Drawing.Size(90, 34);
+            this.layoutControlItem11.Size = new System.Drawing.Size(91, 34);
             this.layoutControlItem11.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem11.TextVisible = false;
             // 

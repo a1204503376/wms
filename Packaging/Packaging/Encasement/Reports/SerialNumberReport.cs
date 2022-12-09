@@ -3,7 +3,7 @@ using System.IO;
 using DataAccess.Dto;
 using DataAccess.Encasement;
 
-namespace Packaging.Encasement
+namespace Packaging.Encasement.Reports
 {
     public partial class SerialNumberReport : DevExpress.XtraReports.UI.XtraReport
     {

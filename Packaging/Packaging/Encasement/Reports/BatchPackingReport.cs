@@ -3,13 +3,13 @@ using System.IO;
 using DataAccess.Dto;
 using DataAccess.Encasement;
 
-namespace Packaging.Encasement
+namespace Packaging.Encasement.Reports
 {
     public partial class BatchPackingReport : DevExpress.XtraReports.UI.XtraReport
     {
-        public readonly IReadOnlyCollection<BatchPrintDto> BatchPrintDtoList;
+        public readonly List<BatchPrintDto> BatchPrintDtoList;
 
-        private BatchPackingReport()
+        public BatchPackingReport()
         {
             InitializeComponent();
         }
@@ -20,7 +20,7 @@ namespace Packaging.Encasement
 
         }
 
-        private BatchPackingReport(IReadOnlyCollection<BatchPrintDto> batchPrintDtoList) : this()
+        private BatchPackingReport(List<BatchPrintDto> batchPrintDtoList) : this()
         {
             var reportItem = PackingReportItemDal.GetByName("BatchPackingReport");
             if (reportItem!=null)

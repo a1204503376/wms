@@ -8,23 +8,44 @@ using Packaging.Common;
 using Packaging.Utility;
 using System.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using DataAccess.Dto;
+using Packaging.Encasement.Reports;
 
 namespace Packaging.Encasement
 {
     public class BatchCommandHandler:ICommandHandler
     {
-        private readonly BatchPackingReport _batchPackingReport;
+        private readonly XtraReport _xtraReport;
+        private readonly List<BatchPrintDto> _batchPrintDtos;
         private readonly ReportPrintTool _reportPrintTool;
         private PrintDialog _printDialog;
         private readonly short _copies;
 
-        public BatchCommandHandler(BatchPackingReport batchPackingReport, ReportPrintTool reportPrintTool)
+        public BatchCommandHandler(XtraReport xtraReport, ReportPrintTool reportPrintTool,bool paperFlag = false)
         {
-            _batchPackingReport = batchPackingReport;
+            if (paperFlag)
+            {
+                if (xtraReport is BatchPaperReport batchPaperReport)
+                {
+                    _batchPrintDtos = batchPaperReport.BatchPrintDtoList;
+                }
+            }
+            else
+            {
+                if (xtraReport is BatchPackingReport batchPackingReport)
+                {
+                    _batchPrintDtos = batchPackingReport.BatchPrintDtoList;
+                }
+            }
+
+            _xtraReport = xtraReport;
             _reportPrintTool = reportPrintTool;
-            _copies = batchPackingReport.BatchPrintDtoList.First().Copies;
+            if (_batchPrintDtos != null)
+            {
+                _copies = _batchPrintDtos.First().Copies;
+            }
         }
 
 
@@ -53,7 +74,7 @@ namespace Packaging.Encasement
             }
 
             _reportPrintTool.PrintingSystem.StartPrint += PrintingSystem_StartPrint;
-            PrintBeforeHandler(_batchPackingReport, _reportPrintTool);
+            PrintBeforeHandler(_batchPrintDtos, _reportPrintTool);
 
             // 防止调用默认打印过程
             handled = true;
@@ -79,9 +100,14 @@ namespace Packaging.Encasement
             return command == PrintingSystemCommand.Print || command == PrintingSystemCommand.PrintDirect;
         }
 
-        private static void PrintBeforeHandler(BatchPackingReport batchPackingReport, ReportPrintTool reportPrintTool)
+        private void PrintBeforeHandler(List<BatchPrintDto> batchPrintDtos, ReportPrintTool reportPrintTool)
         {
-            var batchPrintDto = batchPackingReport.BatchPrintDtoList.First();
+            if (batchPrintDtos == null)
+            {
+                throw new ArgumentNullException(nameof(batchPrintDtos));
+            }
+
+            var batchPrintDto = batchPrintDtos.First();
             if (batchPrintDto.BoxNumber != Constants.DefaulutBoxNumber)
             {
                 // 如果是箱标重打，重新保存一份数据
@@ -99,7 +125,7 @@ namespace Packaging.Encasement
             var skuNameList = batchPrintDto.SkuDetails.Select(d => d.Sku.SkuName).Distinct().ToList();
             var boxNumber = WmsApiHelper.GetBoxNumber(batchPrintDto.BoxType, skuNameList, batchPrintDto.Model);
 
-            foreach (var item in batchPackingReport.BatchPrintDtoList)
+            foreach (var item in batchPrintDtos)
             {
                 if (item.BoxNumber != Constants.DefaulutBoxNumber)
                 {
@@ -111,9 +137,9 @@ namespace Packaging.Encasement
 
             batchPrintDto.ReceiveDetailLpns.ForEach(d => { d.BoxCode = boxNumber; });
 
-            Save(batchPackingReport);
+            Save(batchPrintDtos);
 
-            batchPackingReport.CreateDocument();
+            _xtraReport.CreateDocument();
             Print(reportPrintTool);
         }
 
@@ -126,11 +152,11 @@ namespace Packaging.Encasement
             }
         }
 
-        private static void Save(BatchPackingReport batchPackingReport)
+        private static void Save(IEnumerable<BatchPrintDto> batchPrintDtos)
         {
             try
             {
-                SaveData(batchPackingReport);
+                SaveData(batchPrintDtos);
             }
             catch (Exception ex)
             {
@@ -139,9 +165,9 @@ namespace Packaging.Encasement
             }
         }
 
-        private static void SaveData(BatchPackingReport batchPackingReport)
+        private static void SaveData(IEnumerable<BatchPrintDto> batchPrintDtos)
         {
-            var batchPrintDto = batchPackingReport.BatchPrintDtoList.First();
+            var batchPrintDto = batchPrintDtos.First();
             ReceiveDetailLpnDal.Save(batchPrintDto.BoxNumber, batchPrintDto.ReceiveDetailLpns);
 
             SaveBatchData(batchPrintDto);
