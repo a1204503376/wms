@@ -3,9 +3,11 @@ package com.nodes.project.api.service.impl;
 import com.nodes.common.utils.StringUtils;
 import com.nodes.project.api.domain.JobQueue;
 import com.nodes.project.api.domain.JobTimeout;
+import com.nodes.project.api.domain.SyncWtsExceptionLog;
 import com.nodes.project.api.dto.wms.*;
 import com.nodes.project.api.service.CallApiService;
 import com.nodes.project.api.service.CallWmsService;
+import com.nodes.project.api.service.SyncWtsExceptionLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,9 @@ public class CallWmsServiceImpl implements CallWmsService {
     @Resource
     private CallApiService callApiService;
 
+    @Resource
+    private SyncWtsExceptionLogService syncWtsExceptionLogService;
+
     @Override
     public void syncExceptionMsgOfCallAgv(JobQueue jobQueue, String msg) {
         syncFailedMsgToWms(jobQueue, msg);
@@ -37,7 +42,7 @@ public class CallWmsServiceImpl implements CallWmsService {
         syncFailedMsgToWms(jobQueue, msg);
     }
 
-    private void syncFailedMsgToWms(JobQueue jobQueue, String msg) {
+    public boolean syncFailedMsgToWms(JobQueue jobQueue, String msg) {
         WmsSyncTaskStateRequest wmsSyncTaskStateRequest = new WmsSyncTaskStateRequest();
         wmsSyncTaskStateRequest.setTaskHeaderId(jobQueue.getWmsTaskId());
         wmsSyncTaskStateRequest.setTaskDetailId(jobQueue.getWmsTaskDetailId());
@@ -45,7 +50,16 @@ public class CallWmsServiceImpl implements CallWmsService {
         if (msg != null) {
             wmsSyncTaskStateRequest.setMsg(msg);
         }
-        callApiService.postWms(url_syncTaskSate, wmsSyncTaskStateRequest);
+        WmsGlobalResponse response = callApiService.postWms(url_syncTaskSate, wmsSyncTaskStateRequest);
+        if (response.hasException()){
+            // 同步wms任务状态发生异常时，查询异常日志中是否存在改任务，不存在则保存异常日志
+            SyncWtsExceptionLog exLog = syncWtsExceptionLogService.getByTaskId(jobQueue.getWmsTaskId());
+            if (exLog == null){
+                syncWtsExceptionLogService.save(wmsSyncTaskStateRequest);
+            }
+            return false;
+        }
+        return true;
     }
 
     /**
