@@ -85,7 +85,6 @@ export default {
     created() {
         this.autoTableHeight();
         window.addEventListener('resize', this.autoTableHeight);
-        // window.addEventListener('keydown', this.handlerKeyCode, true)//开启监听键盘按下事件
     },
     methods: {
         autoTableHeight() {
@@ -121,9 +120,16 @@ export default {
             }
         }
     },
+    activated(){
+        window.addEventListener('keydown', this.handlerKeyCode, true)//开启监听键盘按下事件
+    },
+    deactivated() {
+        window.removeEventListener('keydown', this.handlerKeyCode, true)//移除监听键盘按下事件
+    },
     beforeDestroy() {
         window.removeEventListener('resize', this.autoTableHeight)
-    }
+        window.removeEventListener('keydown', this.handlerKeyCode, true)
+    },
 }
 </script>
 

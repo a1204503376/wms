@@ -31,4 +31,13 @@ public interface CallWmsService {
      * 重新获取WMS的目标库位
      */
     WmsGlobalResponse newLocationOnDoubleWarehousing(JobQueue jobQueue);
+
+    /**
+     * 同步失败信息给WMS
+     *
+     * @param jobQueue 任务队列
+     * @param msg 信息
+     * @return true: 同步成功, false: 同步失败
+     */
+    boolean syncFailedMsgToWms(JobQueue jobQueue, String msg);
 }

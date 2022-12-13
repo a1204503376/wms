@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -9,6 +10,7 @@ using DataAccess.Wms;
 using DevExpress.XtraPrinting;
 using DevExpress.XtraReports.UI;
 using Packaging.Common;
+using Packaging.Encasement.Reports;
 using Packaging.Utility;
 using PrintDialog = System.Windows.Forms.PrintDialog;
 
@@ -16,19 +18,41 @@ namespace Packaging.Encasement
 {
     public class SerialCommandHandler : ICommandHandler
     {
-        private readonly SerialNumberReport _serialNumberReport;
+        private readonly XtraReport _xtraReport;
+        private readonly List<SerialNumberPrintDto> _serialNumberPrintDtos;
         private readonly ReportPrintTool _reportPrintTool;
         private readonly short _copies;
         private PrintDialog _printDialog;
+        private readonly bool _paperFlag;
 
-        public SerialCommandHandler(SerialNumberReport serialNumberReport, ReportPrintTool reportPrintTool)
+        public SerialCommandHandler(XtraReport xtraReport, ReportPrintTool reportPrintTool, bool paperFlag = false)
         {
-            _serialNumberReport = serialNumberReport;
+            if (paperFlag)
+            {
+                if (xtraReport is SerialPaperReport serialPaperReport)
+                {
+                    _serialNumberPrintDtos = serialPaperReport.SerialNumberPrintDtoList;
+                }
+            }
+            else
+            {
+                if (xtraReport is SerialNumberReport serialNumberReport)
+                {
+                    _serialNumberPrintDtos = serialNumberReport.SerialNumberPrintDtoList;
+                }
+            }
+
+            _xtraReport = xtraReport;
             _reportPrintTool = reportPrintTool;
-            _copies = serialNumberReport.SerialNumberPrintDtoList.First().Copies;
+            if (_serialNumberPrintDtos != null)
+            {
+                _copies = _serialNumberPrintDtos.First().Copies;
+            }
+            _paperFlag = paperFlag;
         }
 
-        public void HandleCommand(PrintingSystemCommand command, object[] args, IPrintControl printControl, ref bool handled)
+        public void HandleCommand(PrintingSystemCommand command, object[] args, IPrintControl printControl,
+            ref bool handled)
         {
             if (!CanHandleCommand(command, printControl))
             {
@@ -53,7 +77,7 @@ namespace Packaging.Encasement
             }
 
             _reportPrintTool.PrintingSystem.StartPrint += PrintingSystem_StartPrint;
-            PrintBeforeHandler(_serialNumberReport, _reportPrintTool);
+            PrintBeforeHandler();
 
             // 防止调用默认打印过程
             handled = true;
@@ -79,9 +103,9 @@ namespace Packaging.Encasement
                 : _copies;
         }
 
-        private static void PrintBeforeHandler(SerialNumberReport serialNumberReport, ReportPrintTool reportPrintTool)
+        private void PrintBeforeHandler()
         {
-            var serialNumberPrintDto = serialNumberReport.SerialNumberPrintDtoList.First();
+            var serialNumberPrintDto = _serialNumberPrintDtos.First();
             if (serialNumberPrintDto.BoxNumber != Constants.DefaulutBoxNumber)
             {
                 // 如果是箱标重打，重新保存数据
@@ -89,15 +113,21 @@ namespace Packaging.Encasement
                 {
                     SaveSerialNumberData(serialNumberPrintDto);
                 }
-                // 打开的预览页面没有关闭是，只生成一次箱码，只保存一次数据
-                Print(reportPrintTool);
+
+                // 打开的预览页面没有关闭时，只生成一次箱码，只保存一次数据
+                Print();
                 return;
             }
 
             //只有用户正式点击预览打印页面的打印按钮时才生成箱码
-            var boxNumber = WmsApiHelper.GetBoxNumber(serialNumberPrintDto.BoxType, serialNumberPrintDto.SkuName, serialNumberPrintDto.Model);
+            if (_paperFlag)
+            {
+                serialNumberPrintDto.BoxType = "Z";
+            }
+            var boxNumber = WmsApiHelper.GetBoxNumber(serialNumberPrintDto.BoxType, serialNumberPrintDto.SkuName,
+                serialNumberPrintDto.Model);
 
-            foreach (var item in serialNumberReport.SerialNumberPrintDtoList)
+            foreach (var item in _serialNumberPrintDtos)
             {
                 if (item.BoxNumber != Constants.DefaulutBoxNumber)
                 {
@@ -111,7 +141,7 @@ namespace Packaging.Encasement
 
             try
             {
-                SaveData(serialNumberReport);
+                SaveData();
             }
             catch (Exception ex)
             {
@@ -119,22 +149,22 @@ namespace Packaging.Encasement
                 CustomMessageBox.Exception($"打印前入库保存异常:{ex.GetOriginalException().Message}");
             }
 
-            serialNumberReport.CreateDocument();
-            Print(reportPrintTool);
+            _xtraReport.CreateDocument();
+            Print();
         }
 
-        private static void Print(ReportPrintTool reportPrintTool)
+        private void Print()
         {
             bool savePrintPreviewFlag = Convert.ToBoolean(ConfigurationManager.AppSettings["SavePrintPreviewFlag"]);
             if (!savePrintPreviewFlag)
             {
-                reportPrintTool.Print();
+                _reportPrintTool.Print();
             }
         }
 
-        private static void SaveData(SerialNumberReport serialNumberReport)
+        private void SaveData()
         {
-            var serialNumberPrintDto = serialNumberReport.SerialNumberPrintDtoList.First();
+            var serialNumberPrintDto = _serialNumberPrintDtos.First();
             // 重新打印箱贴的业务场景
             // 1.生产车间重新打印
             // 2.库房内的重新打印（WMS走出库，再入库流程）

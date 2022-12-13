@@ -11,6 +11,7 @@ using DataAccess.Enums;
 using DataAccess.Wms;
 using DevExpress.XtraReports.UI;
 using Packaging.Common;
+using Packaging.Encasement.Reports;
 using Packaging.Settings;
 using Packaging.Utility;
 
@@ -273,7 +274,19 @@ namespace Packaging.Encasement
             reportPrintTool.ShowPreviewDialog();
         }
 
-        private BatchPackingReport GetBatchPackingReport()
+        // private void btnPaperPrint_Click(object sender, EventArgs e)
+        // {
+        //     var batchPackingReport = GetBatchPackingReport(true);
+        //     if (batchPackingReport == null)
+        //     {
+        //         return;
+        //     }
+        //     ReportPrintTool reportPrintTool = new ReportPrintTool(batchPackingReport);
+        //     reportPrintTool.PrintingSystem.AddCommandHandler(new BatchCommandHandler(batchPackingReport, reportPrintTool,true));
+        //     reportPrintTool.ShowPreviewDialog();
+        // }
+
+        private XtraReport GetBatchPackingReport(bool paperFlag = false)
         {
             var batchPrintDto = GetBatchPrintDto();
             if (cbxBox.Text == @"B" && batchPrintDto.SkuDetails.GroupBy(d => d.Sku.SkuId).Count() > 1)
@@ -286,8 +299,16 @@ namespace Packaging.Encasement
                 CustomMessageBox.Warning("只允许同一个型号进行装箱，请检查物品的型号是否一致！");
                 return null;
             }
-            var batchPackingReport = new BatchPackingReport(batchPrintDto);
-            return batchPackingReport;
+            XtraReport xtraReport;
+            if (paperFlag)
+            {
+                xtraReport = new BatchPaperReport(batchPrintDto);
+            }
+            else 
+            {
+                xtraReport = new BatchPackingReport(batchPrintDto);
+            }
+            return xtraReport;
         }
 
         private void cbxBox_SelectedIndexChanged(object sender, EventArgs e)
