@@ -17,6 +17,11 @@ public class ReportCountStockDto {
 	private String locCode;
 
 	/**
+	 * 箱号
+	 */
+	private String boxCode;
+
+	/**
 	 * 物品名称
 	 */
 	private String skuName;

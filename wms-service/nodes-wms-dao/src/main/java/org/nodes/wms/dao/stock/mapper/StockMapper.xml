@@ -513,7 +513,7 @@
 
     <select id="getStockBalanceTotalByReportParams"
             resultType="org.nodes.wms.dao.stock.dto.report.ReportCountStockDto">
-        SELECT loc_code, sku_name, sku_lot2, SUM(stock_qty - pick_qty) AS stockBalanceTotal FROM wms_stock
+        SELECT loc_code, box_code, sku_name, sku_lot2, SUM(stock_qty - pick_qty) AS stockBalanceTotal FROM wms_stock
         <where>
             stay_stock_qty + stock_qty > pick_qty
             AND is_deleted = 0
@@ -529,7 +529,7 @@
                 </if>
             </if>
         </where>
-        GROUP BY loc_code, sku_name, sku_lot2
+        GROUP BY loc_code, box_code, sku_name, sku_lot2
     </select>
 
     <select id="getCurrentTimeStockByReportParams"
