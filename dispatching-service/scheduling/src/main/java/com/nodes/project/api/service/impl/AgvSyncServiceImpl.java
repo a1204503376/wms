@@ -1,5 +1,6 @@
 package com.nodes.project.api.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.interfaces.Func;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.nodes.common.exception.ServiceException;
@@ -65,6 +66,9 @@ public class AgvSyncServiceImpl extends ServiceImpl<AgvSyncMapper, AgvSync>
                 AgvSync agvSync = new AgvSync();
                 BeanUtils.copyProperties(agvSyncOrderRequest, agvSync);
                 agvSync.setAgvType(agvType.getDesc());
+                if (ObjectUtils.isEmpty(agvSync.getMsg())) {
+                    agvSync.setMsg(agvSyncOrderRequest.getExceptionMsg());
+                }
                 flag = save(agvSync);
                 if (!flag) {
                     throw new ServiceException(StringUtils.format("保存AGV_SYNC失败，参数：{}", agvSync));
@@ -89,6 +93,9 @@ public class AgvSyncServiceImpl extends ServiceImpl<AgvSyncMapper, AgvSync>
         if (agvType != AgvTypeEnum.DOUBLE_WAREHOUSING) {
             // 调度系统向WMS系统发送“AGV已分配任务给车辆”通知时需要新增agvName（用msg字段）
             String msg = agvType == AgvTypeEnum.DISTRIBUTION ? agvSyncOrderRequest.getAgvName() : agvSyncOrderRequest.getMsg();
+            if (ObjectUtils.isEmpty(agvSyncOrderRequest.getMsg())) {
+                msg = agvType == AgvTypeEnum.DISTRIBUTION ? agvSyncOrderRequest.getAgvName() : agvSyncOrderRequest.getExceptionMsg();
+            }
             callWmsService.syncTaskState(jobQueue, msg);
         }
 
