@@ -40,4 +40,9 @@ public class AgvSyncOrderRequest {
      * 代码
      */
     private String code;
+
+    /**
+     * 消息：同步异常消息时从msg取不到值时取这里面的值
+     */
+    private String exceptionMsg;
 }

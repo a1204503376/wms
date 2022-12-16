@@ -1,4 +1,4 @@
-﻿namespace Packaging.Encasement
+﻿namespace Packaging.Encasement.Reports
 {
     partial class BatchPackingReport
     {

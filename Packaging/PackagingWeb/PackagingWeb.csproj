@@ -169,6 +169,12 @@
     <Compile Include="PredefinedReports\SerialNumberReport.Designer.cs">
       <DependentUpon>SerialNumberReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="PredefinedReports\SerialPaperReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PredefinedReports\SerialPaperReport.Designer.cs">
+      <DependentUpon>SerialPaperReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="PredefinedReports\TestReport.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -206,6 +212,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PredefinedReports\SerialNumberReport.resx">
       <DependentUpon>SerialNumberReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PredefinedReports\SerialPaperReport.resx">
+      <DependentUpon>SerialPaperReport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PredefinedReports\TestReport.resx">
       <DependentUpon>TestReport.cs</DependentUpon>

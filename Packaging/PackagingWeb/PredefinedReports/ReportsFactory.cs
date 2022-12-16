@@ -10,6 +10,7 @@ namespace PackagingWeb.PredefinedReports
         {
             Reports.Add("BatchPackingReport", () => new BatchPackingReport());
             Reports.Add("SerialNumberReport", () => new SerialNumberReport());
+            Reports.Add("SerialPaperReport", () => new SerialPaperReport());
         }
         public static readonly Dictionary<string, Func<XtraReport>> Reports = new Dictionary<string, Func<XtraReport>>();
     }
