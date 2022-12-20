@@ -10,9 +10,9 @@ if (env.NODE_ENV === 'development') {
 } else if (env.NODE_ENV === 'production') {
     baseUrl = `http://10.168.3.136:6001/`; // 长沙测试环境地址
 } else if (env.NODE_ENV === 'tianyitest') {
-    baseUrl = `http://192.168.41.173:8088`; // 天宜测试环境地址
+    baseUrl = `http://192.168.41.173:8088/`; // 天宜测试环境地址
 } else if (env.NODE_ENV === 'tianyipro') {
-    baseUrl = `http://192.168.41.171:8088`; // 天宜生产环境地址
+    baseUrl = `http://192.168.41.171:8088/`; // 天宜生产环境地址
 }
 export {
     baseUrl,
