@@ -20,7 +20,7 @@
     <select id="getPage" resultType="org.nodes.wms.dao.stock.dto.output.SerialPageResponse">
         <include refid="listOrPage"/>
         <if test="page.orders == null or page.orders.size == 0">
-            ORDER BY serial.create_time desc
+            ORDER BY serial.serial_number asc
         </if>
     </select>
 
