@@ -1,11 +1,6 @@
 ﻿using DataAccess.Dto;
 using DataAccess.Encasement;
-using DevExpress.XtraReports.UI;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 
 namespace Packaging.Encasement.Reports

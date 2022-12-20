@@ -536,7 +536,7 @@ namespace Packaging.Encasement
                 // 成对的序列号，WMS保存奇数即可，如：160个序列号，2个一对，箱贴显示：80对/箱，WMS存1，3，5，7... 序列号
                 // 固定指定的成品（闸片）的型号成对时，采用2个序列号
                 SetSnCodePlanQty(pair.OrderBy(d => d.ProductSupportCode)
-                        .Select(d => d.ProductSupportCode).ToList(),
+                        .Select(d => d.ProductIdentificationCode+ d.ProductSupportCode).ToList(),
                     serialNumberPrintDtoFirst,
                     receiveDetailLpn);
                 receiveDetailLpns.Add(receiveDetailLpn);
@@ -557,7 +557,7 @@ namespace Packaging.Encasement
             return sku;
         }
 
-        private static void SetSnCodePlanQty(IReadOnlyList<int> serialNumberList,
+        private static void SetSnCodePlanQty(IReadOnlyCollection<string> serialNumberList,
             SerialNumberPrintDto serialNumberPrintDto,
             ReceiveDetailLpn receiveDetailLpn)
         {

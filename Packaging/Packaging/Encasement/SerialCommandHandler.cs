@@ -137,7 +137,10 @@ namespace Packaging.Encasement
                 item.BoxNumber = boxNumber;
             }
 
-            serialNumberPrintDto.ReceiveDetailLpns.ForEach(d => { d.BoxCode = boxNumber; });
+            serialNumberPrintDto.ReceiveDetailLpns.ForEach(d =>
+            {
+                d.BoxCode = boxNumber;
+            });
 
             try
             {
