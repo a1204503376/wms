@@ -58,12 +58,16 @@ public class ReportSo {
 			throw new ServiceException("无法导出, 请全部拣货之后再导出。");
 		} else if (isExecuting(soHeader.getSoBillState())) {
 			List<SoPickPlan> soPickPlanList = getSoPickPlanList(soHeader.getSoBillId());
-			map.put("skuLot2", soPickPlanList.get(0).getSkuLot2());
-			map.put("wsuName", getWsuName(soPickPlanList.get(0).getSkuId()));
+			if (Func.isNotEmpty(soPickPlanList)) {
+				map.put("skuLot2", soPickPlanList.get(0).getSkuLot2());
+				map.put("wsuName", getWsuName(soPickPlanList.get(0).getSkuId()));
+			}
 		} else if (isAllOutStockOrCompleted(soHeader.getSoBillState())) {
 			List<LogSoPick> logSoPickList = getLogSoPickList(soHeader.getSoBillId());
-			map.put("skuLot2", logSoPickList.get(0).getSkuLot2());
-			map.put("wsuName", getWsuName(logSoPickList.get(0).getSkuId()));
+			if (Func.isNotEmpty(logSoPickList)) {
+				map.put("skuLot2", logSoPickList.get(0).getSkuLot2());
+				map.put("wsuName", getWsuName(logSoPickList.get(0).getSkuId()));
+			}
 		} else {
 			throw new ServiceException("无法导出, 请稍后再试。");
 		}
@@ -172,9 +176,8 @@ public class ReportSo {
 	 */
 	public List<Map<String, Object>> getProcessedSerialAndQty(String snCodeStr) {
 		List<String> snCodeStrList = Arrays.asList(Func.split(snCodeStr, ","));
-		List<Integer> snCodeList = snCodeStrList.stream()
-			.mapToInt(Integer::parseInt)
-			.sorted().boxed().collect(Collectors.toList());
+		List<String> snCodeList = snCodeStrList.stream()
+			.sorted().collect(Collectors.toList());
 		List<Map<String, Object>> mapList = new ArrayList<>();
 		int startIndex = 0;
 		for (int i = 0; i < snCodeList.size(); i++) {
@@ -191,7 +194,7 @@ public class ReportSo {
 				mapList.add(map);
 				break;
 			}
-			if (snCodeList.get(i) + 1 != snCodeList.get(i + 1)) {
+			if (!(snCodeList.get(i) + 1).equals(snCodeList.get(i + 1))) {
 				map = new HashMap<>();
 				if (startIndex == i) {
 					map.put("snCode", snCodeList.get(i));
@@ -223,11 +226,11 @@ public class ReportSo {
 	 */
 	public void setReportSoPickSerialDtoList(SoPickPlan soPickPlan, List<ReportSoPickSerialDto> reportSoPickSerialDtoList) {
 		List<String> serialList = getSerial(soPickPlan.getStockId());
-		String sNCodeStr = "";
-		if (Func.isNotEmpty(serialList)){
-			sNCodeStr = String.join(",", serialList);
+		String snCodeStr = "";
+		if (Func.isNotEmpty(serialList)) {
+			snCodeStr = String.join(",", serialList);
 		}
-		List<Map<String, Object>> mapList = getProcessedSerialAndQty(sNCodeStr);
+		List<Map<String, Object>> mapList = getProcessedSerialAndQty(snCodeStr);
 		packagingData(mapList, soPickPlan.getSkuLot9(), soPickPlan.getBoxCode(), soPickPlan.getSkuLot5(),
 			soPickPlan.getSoBillId(), reportSoPickSerialDtoList);
 	}
