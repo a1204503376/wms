@@ -53,32 +53,6 @@ public class CustomerResponse implements Serializable {
 	@ColumnWidth(15)
 	@ExcelProperty({"客户信息", "货主"})
 	private String ownerName;
-
-	/**
-	 * 国家
-	 */
-	@ExcelIgnore
-	private String  country;
-	/**
-	 * 省
-	 */
-	@ExcelIgnore
-	private String  province;
-	/**
-	 * 城市
-	 */
-	@ExcelIgnore
-	private String  city;
-	/**
-	 * 街道
-	 */
-	@ExcelIgnore
-	private String  address;
-	/**
-	 * 邮编
-	 */
-	@ExcelIgnore
-	private String  zipCode;
 	/**
 	 * 备注
 	 */

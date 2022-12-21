@@ -163,31 +163,6 @@ export default {
                         sortable: "custom",
                     },
                     {
-                        prop: "country",
-                        label: "国家",
-                        sortable: "custom",
-                    },
-                    {
-                        prop: "province",
-                        label: "省",
-                        sortable: "custom",
-                    },
-                    {
-                        prop: "city",
-                        label: "城市",
-                        sortable: "custom",
-                    },
-                    {
-                        prop: "address",
-                        label: "街道",
-                        sortable: "custom",
-                    },
-                    {
-                        prop: "zipCode",
-                        label: "邮编",
-                        sortable: "custom"
-                    },
-                    {
                         prop: "remark",
                         label: "备注",
                         sortable: "custom",
