@@ -104,6 +104,7 @@ import {deleteWmsSkuBom, excel, getWmsSkuBomPage, importData} from "@/api/wms/ba
 import func from "@/util/func";
 import fileUpload from "@/components/nodes/fileUpload";
 import {ExcelExport} from 'pikaz-excel-js';
+import {nowDateFormat} from "@/util/date";
 
 export default {
     name: "carrier",
@@ -270,12 +271,13 @@ export default {
             this.$refs.table.toggleSelection();
         },
         excel() {
-            var that = this;
-            that.excelParams = this.form.params;
-            excel(that.excelParams).then((res) => {
+            excel(this.form.params).then((res) => {
+                 debugger
+                let a  = res.data
                 fileDownload(res.data, `物料清单${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
             });
         },
+
         getTableData() {
             var that = this;
             that.params = this.form.params
