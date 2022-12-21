@@ -20,6 +20,7 @@ import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.ConvertUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.StringPool;
+import org.springblade.core.tool.utils.StringUtil;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -181,9 +182,8 @@ public class ReportSo {
 		List<Map<String, Object>> mapList = new ArrayList<>();
 		int startIndex = 0;
 		for (int i = 0; i < snCodeList.size(); i++) {
-			Map<String, Object> map;
+			Map<String, Object> map = new HashMap<>();
 			if (i == snCodeList.size() - 1) {
-				map = new HashMap<>();
 				if (startIndex == i) {
 					map.put("snCode", snCodeList.get(i));
 					map.put("qty", 1);
@@ -194,8 +194,11 @@ public class ReportSo {
 				mapList.add(map);
 				break;
 			}
-			if (!(snCodeList.get(i) + 1).equals(snCodeList.get(i + 1))) {
-				map = new HashMap<>();
+			// 255987000075221220241  =>  221220241
+			Integer snCode1 = ConvertUtil.convert(StringUtil.sub(snCodeList.get(i),13,snCodeList.get(i).length()), Integer.class);
+			Integer snCode2 = ConvertUtil.convert(StringUtil.sub(snCodeList.get(i + 1),13,snCodeList.get(i).length()), Integer.class);
+
+			if (snCode1 + 1 != snCode2) {
 				if (startIndex == i) {
 					map.put("snCode", snCodeList.get(i));
 					map.put("qty", 1);
