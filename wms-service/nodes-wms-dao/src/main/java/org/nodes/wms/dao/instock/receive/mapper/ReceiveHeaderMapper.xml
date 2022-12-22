@@ -151,7 +151,7 @@
             detail.is_deleted = 0 AND
             detail.plan_qty > detail.scan_qty
             AND detail.detail_status IN
-            <foreach collection="detailStateList" item="item" separator="," open="(" close=")">
+            <foreach collection="detailStatusList" item="item" separator="," open="(" close=")">
                 #{item}
             </foreach>
             <if test="param.receiveNo != null and param.receiveNo != ''">
