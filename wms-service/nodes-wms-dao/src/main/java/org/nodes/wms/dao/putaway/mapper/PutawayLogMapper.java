@@ -14,5 +14,11 @@ import java.util.List;
  */
 public interface PutawayLogMapper extends BaseMapper<PutawayLog> {
 
+	/**
+	 * 根据条件构造器中的条件查询工作任务
+	 *
+	 * @param wrapper 条件构造器
+	 * @return 工作任务
+	 */
     List<PutawayLogExcelResponse> listByWrapper(@Param(Constants.WRAPPER) Wrapper<?> wrapper);
 }

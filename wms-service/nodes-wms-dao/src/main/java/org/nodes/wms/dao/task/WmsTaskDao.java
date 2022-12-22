@@ -3,8 +3,8 @@ package org.nodes.wms.dao.task;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.location.entities.Location;
-import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
+import org.nodes.wms.dao.task.dto.output.TaskExcelResponse;
 import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
@@ -99,4 +99,11 @@ public interface WmsTaskDao extends BaseService<WmsTask> {
 	 */
 	void updateRemark(Long taskId, String msg);
 
+	/**
+	 * 导出：根据查询条件获取工作任务
+	 *
+	 * @param queryParam 查询条件
+	 * @return 工作任务
+	 */
+	List<TaskExcelResponse> getListForExport(TaskPageQuery queryParam);
 }
