@@ -2,5 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.putaway.mapper.PutawayLogMapper">
 
-
+    <select id="listByWrapper" resultType="org.nodes.wms.dao.putaway.dto.output.PutawayLogExcelResponse">
+        SELECT
+            lpn_code,
+            box_code,
+            user_code,
+            user_name,
+            target_loc_code,
+            apl_time,
+            sku_code,
+            qty,
+            sku_lot1,
+            sku_lot2
+        FROM putaway_log
+        ${ew.customSqlSegment}
+    </select>
 </mapper>
