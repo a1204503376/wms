@@ -182,6 +182,8 @@ export default {
         },
         exportActionLists() {
             exportActionLists(this.form.params).then((res) => {
+                debugger
+                let a  = res.data
                 fileDownload(res.data, `业务日志${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
             });
         },
