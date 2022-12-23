@@ -185,25 +185,25 @@ public class ReportSo {
 			Map<String, Object> map = new HashMap<>();
 			if (i == snCodeList.size() - 1) {
 				if (startIndex == i) {
-					map.put("snCode", snCodeList.get(i));
+					map.put("snCode", getInterceptionSnCode(snCodeList.get(i)));
 					map.put("qty", 1);
 				} else {
-					map.put("snCode", snCodeList.get(startIndex) + StringPool.DASH + snCodeList.get(i));
+					map.put("snCode", getInterceptionSnCode(snCodeList.get(startIndex)) + StringPool.DASH + getInterceptionSnCode(snCodeList.get(i)));
 					map.put("qty", i - startIndex + 1);
 				}
 				mapList.add(map);
 				break;
 			}
 			// 255987000075221220241  =>  221220241
-			Integer snCode1 = ConvertUtil.convert(StringUtil.sub(snCodeList.get(i),13,snCodeList.get(i).length()), Integer.class);
-			Integer snCode2 = ConvertUtil.convert(StringUtil.sub(snCodeList.get(i + 1),13,snCodeList.get(i).length()), Integer.class);
+			Integer snCode1 = getInterceptionSnCode(snCodeList.get(i));
+			Integer snCode2 = getInterceptionSnCode(snCodeList.get(i + 1));
 
 			if (snCode1 + 1 != snCode2) {
 				if (startIndex == i) {
-					map.put("snCode", snCodeList.get(i));
+					map.put("snCode", getInterceptionSnCode(snCodeList.get(i)));
 					map.put("qty", 1);
 				} else {
-					map.put("snCode", snCodeList.get(startIndex) + StringPool.DASH + snCodeList.get(i));
+					map.put("snCode", getInterceptionSnCode(snCodeList.get(startIndex)) + StringPool.DASH + getInterceptionSnCode(snCodeList.get(i)));
 					map.put("qty", i - startIndex + 1);
 				}
 				mapList.add(map);
@@ -211,6 +211,10 @@ public class ReportSo {
 			}
 		}
 		return mapList;
+	}
+
+	public Integer getInterceptionSnCode(String snCode){
+		return ConvertUtil.convert(StringUtil.sub(snCode,13,snCode.length()), Integer.class);
 	}
 
 	/**

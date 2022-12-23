@@ -492,8 +492,11 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	@Override
 	public void exportNotReceiveDetail(
 		NotReceiveDetailPageQuery notReceiveDetailPageQuery, HttpServletResponse response) {
+		List<Integer> detailStatusList = new ArrayList<>();
+		detailStatusList.add(ReceiveDetailStatusEnum.NOT_RECEIPT.getCode());
+		detailStatusList.add(ReceiveDetailStatusEnum.PART.getCode());
 		List<NotReceiveDetailExcelResponse> notReceiveDetailList = receiveHeaderDao.getNotReceiveDetailListByQuery(
-			notReceiveDetailPageQuery, ReceiveDetailStatusEnum.NOT_RECEIPT.getCode());
+			notReceiveDetailPageQuery, detailStatusList);
 		ExcelUtil.export(
 			response,
 			"未收货明细",

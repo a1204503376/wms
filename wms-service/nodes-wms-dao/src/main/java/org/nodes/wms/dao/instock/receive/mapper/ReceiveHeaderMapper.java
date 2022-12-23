@@ -27,25 +27,25 @@ public interface ReceiveHeaderMapper extends BaseMapper<ReceiveHeader> {
 	/**
 	 * 未收货明细分页查询
 	 *
-	 * @param page:                      分页参数
-	 * @param notReceiveDetailPageQuery: 未收货明细查询条件
-	 * @param billStateList:             接收状态
+	 * @param page                       分页参数
+	 * @param notReceiveDetailPageQuery  未收货明细查询条件
+	 * @param detailStatusList              接收状态
 	 * @return 未收货明细数据
 	 */
 	IPage<NotReceiveDetailResponse> pageNotReceiveDetail(
 		IPage<?> page,
 		@Param("param") NotReceiveDetailPageQuery notReceiveDetailPageQuery,
-		@Param("detailStateList") List<Integer> billStateList);
+		@Param("detailStatusList") List<Integer> detailStatusList);
 
 	/**
 	 * 根据条件获取未收货明细数据
 	 *
-	 * @param notReceiveDetailPageQuery: 查询条件请求对象
-	 * @param detailStatus:              接收状态：10未收货
+	 * @param notReceiveDetailPageQuery    查询条件请求对象
+	 * @param detailStatusList              接收状态
 	 * @return 未收货明细数据
 	 */
 	List<NotReceiveDetailExcelResponse> listNotReceiveDetailByQuery(
-		@Param("param") NotReceiveDetailPageQuery notReceiveDetailPageQuery, @Param("detailStatus") Integer detailStatus);
+		@Param("param") NotReceiveDetailPageQuery notReceiveDetailPageQuery, @Param("detailStatusList") List<Integer> detailStatusList);
 
 	/**
 	 * pc收货获取头表返回对象

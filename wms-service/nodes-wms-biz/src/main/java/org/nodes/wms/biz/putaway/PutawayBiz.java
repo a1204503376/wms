@@ -9,6 +9,7 @@ import org.nodes.wms.dao.putaway.dto.output.LocResponse;
 import org.nodes.wms.dao.putaway.dto.output.PutawayLogResponse;
 import org.springblade.core.mp.support.Query;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface PutawayBiz {
@@ -42,4 +43,11 @@ public interface PutawayBiz {
 	 */
 	IPage<PutawayLogResponse> getPutawayLogPage(Query query, PutawayPageQuery putawayPageQuery);
 
+	/**
+	 * 导出
+	 *
+	 * @param queryParam 	查询参数
+	 * @param response 		响应对象
+	 */
+	void exportPutawayLog(PutawayPageQuery queryParam, HttpServletResponse response);
 }

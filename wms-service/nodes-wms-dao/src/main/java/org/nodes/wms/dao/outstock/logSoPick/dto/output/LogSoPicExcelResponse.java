@@ -14,6 +14,7 @@ import java.util.Date;
  * 拣货记录日志导出Excel响应类
  **/
 @Data
+@ColumnWidth(15)
 public class LogSoPicExcelResponse implements Serializable {
 
 	private static final long serialVersionUID = -5353512635959427303L;
@@ -103,123 +104,51 @@ public class LogSoPicExcelResponse implements Serializable {
 	@ExcelProperty("拣货时间")
 	private Date createTime;
 
-	@ColumnWidth(15)
-	@ExcelProperty("批属性1")
+	/**
+	 * 生产批次
+	 */
+	@ExcelProperty("生产批次")
 	private String skuLot1;
 
-	@ColumnWidth(15)
-	@ExcelProperty("批属性2")
+	/**
+	 * 规格型号
+	 */
+	@ExcelProperty("规格型号")
 	private String skuLot2;
 
-	@ColumnWidth(15)
-	@ExcelProperty("批属性3")
+	/**
+	 * 发货日期
+	 */
+	@ExcelProperty("发货时间")
 	private String skuLot3;
 
-	@ColumnWidth(15)
-	@ExcelProperty("批属性4")
+	/**
+	 * 专用客户
+	 */
+	@ExcelProperty("专用客户")
 	private String skuLot4;
 
-	@ColumnWidth(15)
-	@ExcelProperty("批属性5")
+	/**
+	 * 钢背批次
+	 */
+	@ExcelProperty("钢背批次")
 	private String skuLot5;
 
-	@ColumnWidth(15)
-	@ExcelProperty("批属性6")
+	/**
+	 * 摩擦快批次
+	 */
+	@ExcelProperty("摩擦块批次")
 	private String skuLot6;
 
-	@ColumnWidth(15)
-	@ExcelProperty("批属性7")
+	/**
+	 * 产品标识代码
+	 */
+	@ExcelProperty("产品标识代码")
 	private String skuLot7;
 
-	@ColumnWidth(15)
-	@ExcelProperty("批属性8")
+	/**
+	 * 适用速度登记
+	 */
+	@ExcelProperty("适用速度等级")
 	private String skuLot8;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性9")
-	private String skuLot9;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性10")
-	private String skuLot10;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性11")
-	private String skuLot11;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性12")
-	private String skuLot12;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性13")
-	private String skuLot13;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性14")
-	private String skuLot14;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性15")
-	private String skuLot15;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性16")
-	private String skuLot16;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性17")
-	private String skuLot17;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性18")
-	private String skuLot18;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性19")
-	private String skuLot19;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性20")
-	private String skuLot20;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性21")
-	private String skuLot21;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性22")
-	private String skuLot22;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性23")
-	private String skuLot23;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性24")
-	private String skuLot24;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性25")
-	private String skuLot25;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性26")
-	private String skuLot26;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性27")
-	private String skuLot27;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性28")
-	private String skuLot28;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性29")
-	private String skuLot29;
-
-	@ColumnWidth(15)
-	@ExcelProperty("批属性30")
-	private String skuLot30;
 }

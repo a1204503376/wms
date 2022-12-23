@@ -127,8 +127,8 @@ public class ReceiveHeaderDaoImpl extends BaseServiceImpl<ReceiveHeaderMapper, R
 
 	@Override
 	public List<NotReceiveDetailExcelResponse> getNotReceiveDetailListByQuery(
-		NotReceiveDetailPageQuery notReceiveDetailPageQuery, Integer billState) {
-		return super.baseMapper.listNotReceiveDetailByQuery(notReceiveDetailPageQuery, billState);
+		NotReceiveDetailPageQuery notReceiveDetailPageQuery, List<Integer> detailStatusList) {
+		return super.baseMapper.listNotReceiveDetailByQuery(notReceiveDetailPageQuery, detailStatusList);
 	}
 
 	@Override

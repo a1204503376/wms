@@ -4,9 +4,10 @@ import lombok.Data;
 import org.nodes.wms.dao.common.skuLot.BaseSkuLot;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
- * 上级记录查询请求对象
+ * 上架记录查询请求对象
  *
  * @author Nodesc
  */
@@ -26,10 +27,20 @@ public class PutawayPageQuery extends BaseSkuLot implements Serializable {
 	/**
 	 * 物品编码
 	 */
-	private String skuCode;
+	private List<Long> skuIdList;
 
 	/**
 	 * 目标库位编码
 	 */
 	private String targetLocCode;
+
+	/**
+	 * 生产批次
+	 */
+	private String skuLot1;
+
+	/**
+	 * 规格型号
+	 */
+	private String skuLot2;
 }

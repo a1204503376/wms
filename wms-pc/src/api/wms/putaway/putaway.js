@@ -8,3 +8,12 @@ export const getPage = (page, params) => {
         data: params
     })
 }
+
+export const exportFile = (data) => {
+    return request({
+        url: '/api/wms/putaway/export',
+        method: 'post',
+        data: data,
+        responseType: 'blob'
+    })
+}

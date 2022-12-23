@@ -2,7 +2,7 @@
     <div id="taskDetail">
         <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
-                <el-row type="flex">
+                <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="任务id" label-width="90px">
                             <el-input placeholder="请输入任务id" :clearable="true" class="search-input"
@@ -282,7 +282,6 @@ export default {
                         label: '结束执行时间',
                         sortable: "custom",
                     },
-
                 ]
             },
         }
