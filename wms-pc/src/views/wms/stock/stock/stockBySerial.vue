@@ -2,7 +2,7 @@
     <div id='inventory'>
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
-                <el-row type="flex">
+                <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="序列号" label-width="90px">
                             <el-input v-model.trim="form.params.serial" :clearable="true" class="search-input"

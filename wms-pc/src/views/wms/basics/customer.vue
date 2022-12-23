@@ -5,19 +5,19 @@
                 <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="客户编码" label-width="90px">
-                            <el-input placeholder="请输入客户编码" v-model.trim="form.params.code" class="search-input">
+                            <el-input :clearable="true" placeholder="请输入客户编码" v-model.trim="form.params.code" class="search-input">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="客户名称" label-width="90px">
-                            <el-input placeholder="请输入客户名称" v-model.trim="form.params.name" class="search-input">
+                            <el-input :clearable="true" placeholder="请输入客户名称" v-model.trim="form.params.name" class="search-input">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="客户简称" label-width="90px">
-                            <el-input placeholder="请输入客户简称" v-model.trim="form.params.simpleName" class="search-input">
+                            <el-input :clearable="true" placeholder="请输入客户简称" v-model.trim="form.params.simpleName" class="search-input">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -99,8 +99,6 @@
 <script>
 
 import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
-import NodesAsnBillState from "@/components/wms/select/NodesAsnBillState";
-import NodesInStoreMode from "@/components/wms/select/NodesInStoreMode";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
@@ -110,14 +108,11 @@ import fileDownload from "js-file-download";
 import {ExcelExport} from 'pikaz-excel-js';
 import fileUpload from "@/components/nodes/fileUpload";
 
-
 export default {
     name: "customer",
     components: {
         DialogColumn,
         NodesSearchInput,
-        NodesInStoreMode,
-        NodesAsnBillState,
         NodesMasterPage,
         NodesDateRange,
         ExcelExport,
@@ -126,7 +121,6 @@ export default {
     mixins: [listMixin],
     data() {
         return {
-            woId: "",
             form: {
                 params: {
                     code: "",
@@ -237,7 +231,6 @@ export default {
         },
         onSubmit() {
             this.getTableData();
-
         },
         onExportLocalData() {
             this.exportCurrentDataToExcel("客户表", "客户表");

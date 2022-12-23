@@ -2,24 +2,24 @@
     <div id="serviceLog">
         <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
-                <el-row type="flex">
+                <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="账号" label-width="90px">
-                            <el-input placeholder="请输入操作人员账号" v-model.trim="form.params.userAccount"
+                            <el-input :clearable="true" placeholder="请输入操作人员账号" v-model.trim="form.params.userAccount"
                                 class="search-input">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="名称" label-width="90px">
-                            <el-input placeholder="请输入操作人员名称" v-model.trim="form.params.userRealName"
+                            <el-input :clearable="true" placeholder="请输入操作人员名称" v-model.trim="form.params.userRealName"
                                 class="search-input">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="单据编码" label-width="90px">
-                            <el-input placeholder="请输入单据编码" v-model.trim="form.params.billNo" class="search-input">
+                            <el-input :clearable="true" placeholder="请输入单据编码" v-model.trim="form.params.billNo" class="search-input">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -50,7 +50,7 @@
                 <el-tooltip :enterable="false" class="item" content="全量导出" effect="dark" placement="top">
                     <el-button circle icon="el-icon-download" size="mini" @click="exportActionLists"></el-button>
                 </el-tooltip>
-       
+
                     <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
                         style="display: inline-block;margin-left: 10px">

@@ -213,8 +213,8 @@ public class ReportSo {
 		return mapList;
 	}
 
-	public Integer getInterceptionSnCode(String snCode){
-		return ConvertUtil.convert(StringUtil.sub(snCode,13,snCode.length()), Integer.class);
+	public Integer getInterceptionSnCode(String snCode) {
+		return ConvertUtil.convert(StringUtil.sub(snCode, 13, snCode.length()), Integer.class);
 	}
 
 	/**
@@ -272,14 +272,18 @@ public class ReportSo {
 			throw new ServiceException("无法导出, 请全部拣货之后再导出。");
 		} else if (isExecuting(soHeader.getSoBillState())) {
 			List<SoPickPlan> soPickPlanList = getSoPickPlanList(soHeader.getSoBillId());
-			map.put("skuLot2", soPickPlanList.get(0).getSkuLot2());
-			map.put("wsuName", getWsuName(soPickPlanList.get(0).getSkuId()));
-			map.put("skuLot7", soPickPlanList.get(0).getSkuLot7());
+			if (Func.isNotEmpty(soPickPlanList)) {
+				map.put("skuLot2", soPickPlanList.get(0).getSkuLot2());
+				map.put("wsuName", getWsuName(soPickPlanList.get(0).getSkuId()));
+				map.put("skuLot7", soPickPlanList.get(0).getSkuLot7());
+			}
 		} else if (isAllOutStockOrCompleted(soHeader.getSoBillState())) {
 			List<LogSoPick> logSoPickList = getLogSoPickList(soHeader.getSoBillId());
-			map.put("skuLot2", logSoPickList.get(0).getSkuLot2());
-			map.put("wsuName", getWsuName(logSoPickList.get(0).getSkuId()));
-			map.put("skuLot7", logSoPickList.get(0).getSkuLot7());
+			if (Func.isNotEmpty(logSoPickList)) {
+				map.put("skuLot2", logSoPickList.get(0).getSkuLot2());
+				map.put("wsuName", getWsuName(logSoPickList.get(0).getSkuId()));
+				map.put("skuLot7", logSoPickList.get(0).getSkuLot7());
+			}
 		} else {
 			throw new ServiceException("无法导出, 请稍后再试。");
 		}

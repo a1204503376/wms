@@ -37,9 +37,14 @@ public class ReportAgeOfInventoryDto {
 	private BigDecimal finalBalanceQty;
 
 	/**
-	 * 小于1年数量
+	 * 小于半年数量
 	 */
-	private BigDecimal less1yearQty;
+	private BigDecimal less05yearQty;
+
+	/**
+	 * 0.5-1年数量
+	 */
+	private BigDecimal between05and1yearQty;
 
 	/**
 	 * 1-2年数量
@@ -70,8 +75,12 @@ public class ReportAgeOfInventoryDto {
 		this.finalBalanceQty = ConvertUtil.convert(finalBalanceQty.stripTrailingZeros().toPlainString(), BigDecimal.class);
 	}
 
-	public void setLess1yearQty(BigDecimal less1yearQty) {
-		this.less1yearQty = ConvertUtil.convert(less1yearQty.stripTrailingZeros().toPlainString(), BigDecimal.class);
+	public void setLess05yearQty(BigDecimal less05yearQty) {
+		this.less05yearQty = ConvertUtil.convert(less05yearQty.stripTrailingZeros().toPlainString(), BigDecimal.class);
+	}
+
+	public void setBetween05and1yearQty(BigDecimal between05and1yearQty) {
+		this.between05and1yearQty = ConvertUtil.convert(between05and1yearQty.stripTrailingZeros().toPlainString(), BigDecimal.class);
 	}
 
 	public void setBetween1and2yearQty(BigDecimal between1and2yearQty) {

@@ -3,7 +3,7 @@ import fileDownload from "js-file-download";
     <div id='stockByLpn'>
         <nodes-master-page :permission="permissionObj" v-on="form.events">
             <template v-slot:searchFrom>
-                <el-row type="flex">
+                <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="规格型号" label-width="90px">
                             <el-input class="search-input" placeholder="请输入规格型号"
@@ -35,7 +35,7 @@ import fileDownload from "js-file-download";
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row type="flex">
+                <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="库位" label-width="90px">
                             <nodes-location class="search-input" v-model="form.params.locIdList" :multiple="true">
@@ -63,10 +63,10 @@ import fileDownload from "js-file-download";
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <el-row class="search-elRow" type="flex">
                     <el-col :span="6">
                         <el-form-item label="收货时间" label-width="90px">
-                            <nodes-date-range v-model="form.params.receiveTimeDateRange" style="width: 200px">
+                            <nodes-date-range v-model="form.params.receiveTimeDateRange">
                             </nodes-date-range>
                         </el-form-item>
                     </el-col>
@@ -95,7 +95,7 @@ import fileDownload from "js-file-download";
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="库房" label-width="90px">
                             <nodes-warehouse class="search-input" v-model="form.params.whIdList" :multiple="true">
