@@ -1,8 +1,8 @@
 <template>
     <div id='stockByBox'>
-        <nodes-master-page :permission="permissionObj" v-on="form.events">
+        <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
-                <el-row type="flex">
+                <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="规格型号" label-width="90px">
                             <el-input v-model.trim="form.params.skuLot2" :clearable="true" class="search-input"
@@ -32,7 +32,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row type="flex">
+                <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="库位" label-width="90px">
                             <nodes-location v-model="form.params.locIdList" :multiple="true" class="search-input">
@@ -60,10 +60,10 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <el-row class="search-elRow" type="flex">
                     <el-col :span="6">
                         <el-form-item label="收货时间" label-width="90px">
-                            <nodes-date-range v-model="form.params.receiveTimeDateRange" style="width: 200px">
+                            <nodes-date-range v-model="form.params.receiveTimeDateRange">
                             </nodes-date-range>
                         </el-form-item>
                     </el-col>
@@ -89,7 +89,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <el-row class="search-elRow" type="flex">
                     <el-col :span="6">
                         <el-form-item label="库房" label-width="90px">
                             <nodes-warehouse v-model="form.params.whIdList" :multiple="true" class="search-input">
@@ -104,13 +104,13 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="入库时间" label-width="90px">
-                            <nodes-date-range v-model="form.params.lastInTimeDateRange" style="width: 200px">
+                            <nodes-date-range v-model="form.params.lastInTimeDateRange">
                             </nodes-date-range>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="出库时间" label-width="90px">
-                            <nodes-date-range v-model="form.params.lastOutTimeDateRange" style="width: 200px">
+                            <nodes-date-range v-model="form.params.lastOutTimeDateRange">
                             </nodes-date-range>
                         </el-form-item>
                     </el-col>

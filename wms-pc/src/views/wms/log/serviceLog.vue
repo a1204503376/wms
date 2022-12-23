@@ -2,7 +2,7 @@
     <div id="serviceLog">
         <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
-                <el-row type="flex">
+                <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="账号" label-width="90px">
                             <el-input :clearable="true" placeholder="请输入操作人员账号" v-model.trim="form.params.userAccount"
