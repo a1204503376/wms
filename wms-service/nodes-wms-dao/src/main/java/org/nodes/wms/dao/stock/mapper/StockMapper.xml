@@ -534,16 +534,17 @@
 
     <select id="getCurrentTimeStockByReportParams"
             resultType="org.nodes.wms.dao.stock.dto.report.ReportStockDto">
-        SELECT sku_name, sku_lot2, um.wsu_name, sku_lot4,
+        SELECT sku.sku_type_id, sku_lot2, stock.sku_name, um.wsu_name, sku_lot4,
         SUM(occupy_qty) AS occupyQtySum,
         SUM(stock_qty - pick_qty - occupy_qty) as stockEnableSum,
         SUM(stock_qty - pick_qty) as normalStockSum,
         SUM(IF(stock_status = 1, (stock_qty - pick_qty), 0)) as freezeStockSum
-        FROM wms_stock
-        LEFT JOIN wms_sku_um um ON um.wsu_code = wms_stock.wsu_code
+        FROM wms_stock stock
+        LEFT JOIN wms_sku sku ON sku.sku_id = stock.sku_id
+        LEFT JOIN wms_sku_um um ON um.wsu_code = stock.wsu_code
         <where>
             stay_stock_qty + stock_qty > pick_qty
-            AND wms_stock.is_deleted = 0
+            AND stock.is_deleted = 0
             <if test="excludeZoneIdList !=null and excludeZoneIdList.size !=0">
                 AND zone_id NOT IN
                 <foreach collection="excludeZoneIdList" close=")" item="item" open="(" separator=",">
@@ -558,7 +559,7 @@
                     AND sku_lot4 LIKE CONCAT('%', #{params.skuLot4}, '%')
                 </if>
             </if>
-            GROUP BY sku_name, sku_lot2, um.wsu_name, sku_lot4
+            GROUP BY sku_type_id, sku_lot2, stock.sku_name, sku_lot2, um.wsu_name, sku_lot4
         </where>
     </select>
     <select id="selectListByZoneTypeList" resultType="org.nodes.wms.dao.stock.entities.Stock">

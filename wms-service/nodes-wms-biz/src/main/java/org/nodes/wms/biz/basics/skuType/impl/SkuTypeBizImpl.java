@@ -10,6 +10,8 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * 物品分类业务接口实现类
  **/
@@ -40,5 +42,15 @@ public class SkuTypeBizImpl implements SkuTypeBiz {
 		}
 		skuTypeDao.updateByTypeId(skuType);
 		return skuType;
+	}
+
+    @Override
+    public SkuType findById(Long id) {
+        return skuTypeDao.getSkuTypeById(id);
+    }
+
+	@Override
+	public List<SkuType> findAll() {
+		return skuTypeDao.getAll();
 	}
 }

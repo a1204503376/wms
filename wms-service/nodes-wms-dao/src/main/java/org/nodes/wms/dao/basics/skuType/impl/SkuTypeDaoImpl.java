@@ -9,6 +9,8 @@ import org.springblade.core.mp.base.BaseEntity;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 物品分类 DAO实现类
  */
@@ -46,4 +48,9 @@ public class SkuTypeDaoImpl extends BaseServiceImpl<SkuTypeMapper, SkuType>
 	public void updateByTypeId(SkuType skuType) {
 		super.updateById(skuType);
 	}
+
+    @Override
+    public List<SkuType> getAll() {
+        return super.list();
+    }
 }

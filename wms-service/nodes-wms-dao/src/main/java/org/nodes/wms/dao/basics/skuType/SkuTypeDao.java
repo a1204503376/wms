@@ -2,6 +2,8 @@ package org.nodes.wms.dao.basics.skuType;
 
 import org.nodes.wms.dao.basics.skuType.entities.SkuType;
 
+import java.util.List;
+
 /**
  * 物品分类 DAO接口
  */
@@ -43,4 +45,11 @@ public interface SkuTypeDao {
 	 * @param skuType: 物品分类对象
 	 */
 	void updateByTypeId(SkuType skuType);
+
+	/**
+	 * 查询所有物品分类
+	 *
+	 * @return 物品分类
+	 */
+    List<SkuType> getAll();
 }
