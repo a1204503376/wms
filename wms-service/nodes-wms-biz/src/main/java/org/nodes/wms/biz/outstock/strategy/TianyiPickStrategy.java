@@ -53,7 +53,8 @@ public class TianyiPickStrategy {
 	private static final List<String> MANUAL_ZONE_TYPE_LIST = Arrays.asList(
 		DictKVConstant.ZONE_TYPE_CHOICE.toString(),
 		DictKVConstant.ZONE_TYPE_PICK.toString(),
-		DictKVConstant.ZONE_TYPE_STORAGE.toString());
+		DictKVConstant.ZONE_TYPE_STORAGE.toString(),
+		DictKVConstant.ZONE_TYPE_STAGE.toString());
 
 	/**
 	 * 策略分配，天宜的策略分配是基于箱分配，如果自动区一个箱中有多个物品时，如果不是全部出库的不应该分配该库存
@@ -96,7 +97,7 @@ public class TianyiPickStrategy {
 										  List<Stock> agvStockList, List<Stock> manualStockList) {
 		// 注意如果自动区的箱中存在不需要出的库存则不应该分配该箱 如果是自动区的则需要根据箱码中生成其它物品的拣货计划
 		BigDecimal surplusQty = getSurplusQty(soDetail, pickPlanOfSoDetail);
-		if (BigDecimalUtil.le(surplusQty, BigDecimal.ZERO)){
+		if (BigDecimalUtil.le(surplusQty, BigDecimal.ZERO)) {
 			return null;
 		}
 		List<SoPickPlan> newPickPlanList = new ArrayList<>();
@@ -155,10 +156,10 @@ public class TianyiPickStrategy {
 	}
 
 	private List<SoPickPlan> firstPlanManaul(SoHeader soHeader, SoDetail soDetail,
-										  List<SoDetail> soDetailList, List<SoPickPlan> pickPlanOfSoDetail,
-										  List<Stock> manualStockList, List<Stock> agvStockList) {
+											 List<SoDetail> soDetailList, List<SoPickPlan> pickPlanOfSoDetail,
+											 List<Stock> manualStockList, List<Stock> agvStockList) {
 		BigDecimal surplusQty = getSurplusQty(soDetail, pickPlanOfSoDetail);
-		if (BigDecimalUtil.le(surplusQty, BigDecimal.ZERO)){
+		if (BigDecimalUtil.le(surplusQty, BigDecimal.ZERO)) {
 			return null;
 		}
 
@@ -177,10 +178,10 @@ public class TianyiPickStrategy {
 			}
 		}
 
-		if (BigDecimalUtil.gt(surplusQty, BigDecimal.ZERO)){
+		if (BigDecimalUtil.gt(surplusQty, BigDecimal.ZERO)) {
 			List<Long> skuIdsOfSoDetail = getAllSkuIdFromSoDetail(soDetailList);
 			for (Stock stock : agvStockList) {
-				if (BigDecimalUtil.le(surplusQty, BigDecimal.ZERO)){
+				if (BigDecimalUtil.le(surplusQty, BigDecimal.ZERO)) {
 					break;
 				}
 

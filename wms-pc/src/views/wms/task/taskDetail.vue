@@ -2,7 +2,7 @@
     <div id="taskDetail">
         <nodes-master-page v-on="form.events">
             <template v-slot:searchFrom>
-                <el-row type="flex">
+                <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="任务id" label-width="90px">
                             <el-input placeholder="请输入任务id" :clearable="true" class="search-input"
@@ -41,19 +41,19 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="来源库位" label-width="90px">
-                            <el-input class="search-input" v-model.trim="form.params.fromLocCode">
+                            <el-input class="search-input" placeholder="请输入来源库位编码" v-model.trim="form.params.fromLocCode">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="目标库位" label-width="90px">
-                            <el-input class="search-input" v-model.trim="form.params.toLocCode">
+                            <el-input class="search-input" placeholder="请输入目标库位编码" v-model.trim="form.params.toLocCode">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="箱码" label-width="90px">
-                            <el-input class="search-input" v-model.trim="form.params.boxCode">
+                            <el-input class="search-input" placeholder="请输入箱码" v-model.trim="form.params.boxCode">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -282,7 +282,6 @@ export default {
                         label: '结束执行时间',
                         sortable: "custom",
                     },
-
                 ]
             },
         }

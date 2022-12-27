@@ -119,7 +119,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row type="flex">
+                <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="是否序列号" label-width="90px">
                             <el-select v-model="form.params.hasSerial" :clearable="true" class="search-input">

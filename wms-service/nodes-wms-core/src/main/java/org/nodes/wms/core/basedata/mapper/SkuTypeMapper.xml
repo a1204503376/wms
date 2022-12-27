@@ -30,7 +30,7 @@
         sku_type_id as "key",
         wo_id
         from wms_sku_type
-        where 1=1
+        where is_deleted = 0
         <if test="skuTypeId != null and skuTypeId != ''">
             and sku_type_id = #{skuTypeId}
         </if>

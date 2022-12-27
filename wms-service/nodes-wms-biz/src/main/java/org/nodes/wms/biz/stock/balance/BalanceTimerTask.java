@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,7 +26,7 @@ public class BalanceTimerTask {
 	private final StockBalanceDao stockBalanceDao;
 
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public void run() {
+	public void run() throws ParseException {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);

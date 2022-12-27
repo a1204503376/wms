@@ -7,14 +7,15 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.nodes.wms.biz.basics.carriers.impl.CarrierBizImpl;
-import org.nodes.wms.dao.basics.carrier.dto.input.DeleteCarriersRequest;
 import org.nodes.wms.dao.basics.carrier.dto.input.CarrierPageQuery;
+import org.nodes.wms.dao.basics.carrier.dto.input.DeleteCarriersRequest;
 import org.nodes.wms.dao.basics.carrier.dto.input.NewCarrierRequest;
 import org.nodes.wms.dao.basics.carrier.dto.output.CarrierResponse;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.test.BladeBootTest;
 import org.springblade.core.test.BladeSpringRunner;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import java.util.List;
 public class CarriersTest {
 	@Autowired
 	private CarrierBizImpl carriersBiz;
+
 	@Test
 	public void test01() throws ParseException {
 		CarrierPageQuery carrierPageQuery = new CarrierPageQuery();
@@ -34,7 +36,7 @@ public class CarriersTest {
 		query.setAscs("updateTime");
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date1 = simpleDateFormat.parse("2022-1-1");
-		Date date2 =  simpleDateFormat.parse("2022-5-1");
+		Date date2 = simpleDateFormat.parse("2022-5-1");
 		carrierPageQuery.setCreateTimeBegin(date1);
 		carrierPageQuery.setCreateTimeEnd(date2);
 		carrierPageQuery.setName("张三");
@@ -57,7 +59,8 @@ public class CarriersTest {
 		list.add(4L);
 		list.add(5L);
 		deleteRequest.setList(list);
-		Assertions.assertEquals(true,carriersBiz.remove(deleteRequest));
+		Assertions.assertEquals(true, carriersBiz.remove(deleteRequest));
 	}
+
 
 }

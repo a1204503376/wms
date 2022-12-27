@@ -1,6 +1,7 @@
 package org.nodes.wms.dao.common.log.dto.output;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.format.NumberFormat;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import lombok.Data;
 
@@ -38,6 +39,7 @@ public class LogActionExcelResponse implements Serializable {
 	 */
 	@ColumnWidth(15)
 	@ExcelProperty({"单据ID"})
+	@NumberFormat(value = "#")
 	private Long billId;
 	/**
 	 * 目标单据编码,可能为空

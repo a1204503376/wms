@@ -65,7 +65,31 @@
             <if test="taskState != null and taskState != ''">
                 AND task_state=#{taskState}
             </if>
-
         </where>
+    </select>
+
+    <select id="listForExport" resultType="org.nodes.wms.dao.task.dto.output.TaskExcelResponse">
+        SELECT
+            bill_no,
+            task_type_cd,
+            task_state,
+            from_loc_code,
+            to_loc_code,
+            box_code,
+            remark,
+            sku_code,
+            task_qty,
+            scan_qty,
+            um_code,
+            lot,
+            lpn_code,
+            create_time,
+            allot_time,
+            confirm_date,
+            begin_time,
+            close_time,
+            udf1
+        FROM tsk_task
+        ${ew.customSqlSegment}
     </select>
 </mapper>

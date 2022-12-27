@@ -84,12 +84,12 @@ public interface ReceiveHeaderDao {
 	/**
 	 * 根据查询条件获取未收货明细数据
 	 *
-	 * @param notReceiveDetailPageQuery: 查询条件对象
-	 * @param detailStatus:              接收状态：10未收货
+	 * @param notReceiveDetailPageQuery 查询条件对象
+	 * @param detailStatusList             接收状态
 	 * @return 未收货明细数据
 	 */
 	List<NotReceiveDetailExcelResponse> getNotReceiveDetailListByQuery(
-		NotReceiveDetailPageQuery notReceiveDetailPageQuery, Integer detailStatus);
+		NotReceiveDetailPageQuery notReceiveDetailPageQuery, List<Integer> detailStatusList);
 
 	/**
 	 * pc收货获取头表返回对象

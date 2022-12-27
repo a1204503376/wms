@@ -1,6 +1,5 @@
 package org.nodes.wms.biz.task.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
@@ -21,6 +20,7 @@ import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.dto.input.StopTaskRequest;
 import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
 import org.nodes.wms.dao.task.dto.output.TaskDetailExcelResponse;
+import org.nodes.wms.dao.task.dto.output.TaskExcelResponse;
 import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.nodes.wms.dao.task.entities.TaskDetail;
 import org.nodes.wms.dao.task.entities.WmsTask;
@@ -125,11 +125,8 @@ public class WmsTaskBizImpl implements WmsTaskBiz {
 
 	@Override
 	public void export(TaskPageQuery taskPageQuery, HttpServletResponse response) {
-		IPage<Object> page = new Page<>();
-		page.setCurrent(1);
-		page.setSize(100000);
-		List<TaskPageResponse> taskPageResponseList = wmsTaskDao.getPage(page, taskPageQuery).getRecords();
-		ExcelUtil.export(response, "工作任务", "工作任务表", taskPageResponseList, TaskPageResponse.class);
+		List<TaskExcelResponse> taskExcelResponses = wmsTaskDao.getListForExport(taskPageQuery);
+		ExcelUtil.export(response, "工作任务", "工作任务表", taskExcelResponses, TaskExcelResponse.class);
 	}
 
 	@Override

@@ -21,9 +21,11 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 @Component
@@ -120,8 +122,14 @@ public class StockFactory {
 
 	}
 
-	public static StockBalance createStockBalabce(ReceiveLog receiveLog, LogSoPick logSoPick) {
+	public static StockBalance createStockBalabce(ReceiveLog receiveLog, LogSoPick logSoPick) throws ParseException {
 		StockBalance stockBalance = new StockBalance();
+		Calendar calendar = Calendar.getInstance();
+		//当前时间减去一个月，即一个月前的时间
+		calendar.add(Calendar.MONTH, -1);
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String balanceDate = simpleDateFormat.format(calendar.getTime());
+		stockBalance.setBalanceDate(simpleDateFormat.parse(balanceDate));
 		if (Func.isNotEmpty(receiveLog) && Func.isNotEmpty(logSoPick)) {
 			Func.copy(receiveLog, stockBalance);
 			stockBalance.setInStockQty(receiveLog.getQty());
@@ -136,7 +144,6 @@ public class StockFactory {
 			stockBalance.setOutStockQty(logSoPick.getPickRealQty());
 		}
 		stockBalance.setStockStatus(StockStatusEnum.NORMAL);
-		stockBalance.setBalanceDate(new Date());
 		stockBalance.setOpeningQty(BigDecimal.ZERO);
 		stockBalance.setBalanceQty(stockBalance.getInStockQty().subtract(stockBalance.getOutStockQty()));
 		return stockBalance;
@@ -144,7 +151,7 @@ public class StockFactory {
 
 	public static void AssigntoArray(List<ReceiveLog> receiveLogList, List<ReceiveLog> receiveLogList1,
 									 List<LogSoPick> logSoPickList, List<LogSoPick> logSoPickList1,
-									 List<StockBalance> stockBalanceList1) {
+									 List<StockBalance> stockBalanceList1) throws ParseException {
 		if (logSoPickList.size() == 0) {
 			receiveLogList1.addAll(receiveLogList);
 		}

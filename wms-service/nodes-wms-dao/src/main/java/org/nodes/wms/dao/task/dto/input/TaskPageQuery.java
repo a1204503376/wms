@@ -29,7 +29,7 @@ public class TaskPageQuery {
 	/**
 	 * 物品编码
 	 */
-	private List<Long> skuIdList;
+	private String skuCode;
 	/**
 	 * 来源库位编码
 	 */

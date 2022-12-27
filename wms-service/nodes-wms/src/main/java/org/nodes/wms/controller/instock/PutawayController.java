@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 上级记录API
  **/
@@ -24,10 +26,15 @@ public class PutawayController {
 	private final PutawayBiz putawayBiz;
 
 	/**
-	 * 上级记录：分页
+	 * 上架记录：分页
 	 */
 	@PostMapping("/page")
 	public R<IPage<PutawayLogResponse>> page(Query query, @RequestBody PutawayPageQuery putawayPageQuery) {
 		return R.data(putawayBiz.getPutawayLogPage(query, putawayPageQuery));
+	}
+
+	@PostMapping("/export")
+	public void export(@RequestBody PutawayPageQuery putawayPageQuery, HttpServletResponse response){
+		putawayBiz.exportPutawayLog(putawayPageQuery, response);
 	}
 }

@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nodes.wms.dao.basics.lpntype.mapper.LpnTypeMapper">
     <select id="getPage" resultType="org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypePageResponse">
-        select l.id, l.wh_id, l.code, l.type, l.lpn_no_rule , l.weight, l.tenant_id, l.create_dept, l.create_time ,l.update_time, l.status, l.is_deleted,
+        select l.id, l.wh_id, l.code, l.type, l.lpn_no_rule , l.weight, l.tenant_id, l.create_dept, l.create_time
+        ,l.update_time, l.status, l.is_deleted,
         user1.real_name create_user,
         user2.real_name update_user
         from wms_lpn_type l
@@ -17,16 +18,16 @@
                 AND l.type = #{query.lpnType}
             </if>
             <if test="query.createTimeBegin!=null">
-                AND l.create_time  &gt;= #{query.createTimeBegin}
+                AND l.create_time &gt;= #{query.createTimeBegin}
             </if>
             <if test="query.createTimeEnd!=null">
-                AND l.create_time  &lt;= #{query.createTimeEnd}
+                AND l.create_time &lt;= #{query.createTimeEnd}
             </if>
             <if test="query.updateTimeBegin!=null">
-                AND l.update_time  &gt;= #{query.updateTimeBegin}
+                AND l.update_time &gt;= #{query.updateTimeBegin}
             </if>
             <if test="query.updateTimeEnd!=null">
-                AND l.update_time  &lt;= #{query.updateTimeEnd}
+                AND l.update_time &lt;= #{query.updateTimeEnd}
             </if>
         </where>
 
@@ -35,8 +36,9 @@
         </if>
     </select>
 
-    <select id="getLpnTypes" resultType="org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypePageResponse">
-        select l.code, l.type, l.lpn_no_rule , l.weight, l.tenant_id, l.create_dept, l.create_time ,l.update_time, l.status, l.is_deleted,
+    <select id="getLpnTypes" resultType="org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeExcelResponse">
+        select l.code, l.type, l.lpn_no_rule , l.weight, l.tenant_id, l.create_dept, l.create_time ,l.update_time,
+        l.status, l.is_deleted,
         user1.real_name create_user,
         user2.real_name update_user
         from wms_lpn_type l
@@ -48,19 +50,19 @@
                 AND l.code LIKE concat('%',#{query.code},'%')
             </if>
             <if test="query.lpnType!=null and query.lpnType!=''">
-                AND l.type =  #{query.lpnType}
+                AND l.type = #{query.lpnType}
             </if>
             <if test="query.createTimeBegin!=null">
-                AND l.create_time  &gt;= #{query.createTimeBegin}
+                AND l.create_time &gt;= #{query.createTimeBegin}
             </if>
             <if test="query.createTimeEnd!=null">
-                AND l.create_time  &lt;= #{query.createTimeEnd}
+                AND l.create_time &lt;= #{query.createTimeEnd}
             </if>
             <if test="query.updateTimeBegin!=null">
-                AND l.update_time  &gt;= #{query.updateTimeBegin}
+                AND l.update_time &gt;= #{query.updateTimeBegin}
             </if>
             <if test="query.updateTimeEnd!=null">
-                AND l.update_time  &lt;= #{query.updateTimeEnd}
+                AND l.update_time &lt;= #{query.updateTimeEnd}
             </if>
         </where>
     </select>

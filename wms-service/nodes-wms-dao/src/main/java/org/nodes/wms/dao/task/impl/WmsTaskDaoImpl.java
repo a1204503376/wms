@@ -1,5 +1,6 @@
 package org.nodes.wms.dao.task.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -7,11 +8,10 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.utils.AssertUtil;
-import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.wms.dao.basics.location.entities.Location;
-import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.task.WmsTaskDao;
 import org.nodes.wms.dao.task.dto.input.TaskPageQuery;
+import org.nodes.wms.dao.task.dto.output.TaskExcelResponse;
 import org.nodes.wms.dao.task.dto.output.TaskPageResponse;
 import org.nodes.wms.dao.task.entities.WmsTask;
 import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
@@ -163,4 +163,19 @@ public class WmsTaskDaoImpl
 		}
 	}
 
+    @Override
+    public List<TaskExcelResponse> getListForExport(TaskPageQuery queryParam) {
+		LambdaQueryWrapper<WmsTask> queryWrapper = Wrappers.lambdaQuery(WmsTask.class);
+		queryWrapper
+				.like(Func.isNotBlank(queryParam.getTaskId()), WmsTask::getTaskId, queryParam.getTaskId())
+				.like(Func.isNotBlank(queryParam.getBillNo()), WmsTask::getBillNo, queryParam.getBillNo())
+				.in(Func.isNotEmpty(queryParam.getTaskTypeCdList()),WmsTask::getTaskTypeCd, queryParam.getTaskTypeCdList())
+				.in(Func.isNotEmpty(queryParam.getTaskStateList()), WmsTask::getTaskState, queryParam.getTaskStateList())
+				.like(Func.isNotBlank(queryParam.getSkuCode()), WmsTask::getSkuCode, queryParam.getSkuCode())
+				.like(Func.isNotBlank(queryParam.getFromLocCode()), WmsTask::getFromLocCode, queryParam.getFromLocCode())
+				.like(Func.isNotBlank(queryParam.getToLocCode()), WmsTask::getToLocCode, queryParam.getToLocCode())
+				.like(Func.isNotBlank(queryParam.getBoxCode()), WmsTask::getBoxCode, queryParam.getBoxCode());
+//				.eq(WmsTask::getIsDeleted, 0);
+        return super.baseMapper.listForExport(queryWrapper);
+    }
 }

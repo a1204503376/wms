@@ -1,5 +1,7 @@
 package org.nodes.wms.dao.common.log.dto.output;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.nodes.wms.dao.common.log.enumeration.AuditLogType;
 
@@ -32,6 +34,7 @@ public class LogActionPageResponse implements Serializable {
 	/**
 	 * 目标单据id,可能为空
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long billId;
 	/**
 	 * 目标单据编码,可能为空

@@ -20,6 +20,7 @@ import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.utils.ConvertUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.StringPool;
+import org.springblade.core.tool.utils.StringUtil;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -181,26 +182,28 @@ public class ReportSo {
 		List<Map<String, Object>> mapList = new ArrayList<>();
 		int startIndex = 0;
 		for (int i = 0; i < snCodeList.size(); i++) {
-			Map<String, Object> map;
+			Map<String, Object> map = new HashMap<>();
 			if (i == snCodeList.size() - 1) {
-				map = new HashMap<>();
 				if (startIndex == i) {
-					map.put("snCode", snCodeList.get(i));
+					map.put("snCode", getInterceptionSnCode(snCodeList.get(i)));
 					map.put("qty", 1);
 				} else {
-					map.put("snCode", snCodeList.get(startIndex) + StringPool.DASH + snCodeList.get(i));
+					map.put("snCode", getInterceptionSnCode(snCodeList.get(startIndex)) + StringPool.DASH + getInterceptionSnCode(snCodeList.get(i)));
 					map.put("qty", i - startIndex + 1);
 				}
 				mapList.add(map);
 				break;
 			}
-			if (!(snCodeList.get(i) + 1).equals(snCodeList.get(i + 1))) {
-				map = new HashMap<>();
+			// 255987000075221220241  =>  221220241
+			Integer snCode1 = getInterceptionSnCode(snCodeList.get(i));
+			Integer snCode2 = getInterceptionSnCode(snCodeList.get(i + 1));
+
+			if (snCode1 + 1 != snCode2) {
 				if (startIndex == i) {
-					map.put("snCode", snCodeList.get(i));
+					map.put("snCode", getInterceptionSnCode(snCodeList.get(i)));
 					map.put("qty", 1);
 				} else {
-					map.put("snCode", snCodeList.get(startIndex) + StringPool.DASH + snCodeList.get(i));
+					map.put("snCode", getInterceptionSnCode(snCodeList.get(startIndex)) + StringPool.DASH + getInterceptionSnCode(snCodeList.get(i)));
 					map.put("qty", i - startIndex + 1);
 				}
 				mapList.add(map);
@@ -208,6 +211,10 @@ public class ReportSo {
 			}
 		}
 		return mapList;
+	}
+
+	public Integer getInterceptionSnCode(String snCode) {
+		return ConvertUtil.convert(StringUtil.sub(snCode, 13, snCode.length()), Integer.class);
 	}
 
 	/**
@@ -265,14 +272,18 @@ public class ReportSo {
 			throw new ServiceException("无法导出, 请全部拣货之后再导出。");
 		} else if (isExecuting(soHeader.getSoBillState())) {
 			List<SoPickPlan> soPickPlanList = getSoPickPlanList(soHeader.getSoBillId());
-			map.put("skuLot2", soPickPlanList.get(0).getSkuLot2());
-			map.put("wsuName", getWsuName(soPickPlanList.get(0).getSkuId()));
-			map.put("skuLot7", soPickPlanList.get(0).getSkuLot7());
+			if (Func.isNotEmpty(soPickPlanList)) {
+				map.put("skuLot2", soPickPlanList.get(0).getSkuLot2());
+				map.put("wsuName", getWsuName(soPickPlanList.get(0).getSkuId()));
+				map.put("skuLot7", soPickPlanList.get(0).getSkuLot7());
+			}
 		} else if (isAllOutStockOrCompleted(soHeader.getSoBillState())) {
 			List<LogSoPick> logSoPickList = getLogSoPickList(soHeader.getSoBillId());
-			map.put("skuLot2", logSoPickList.get(0).getSkuLot2());
-			map.put("wsuName", getWsuName(logSoPickList.get(0).getSkuId()));
-			map.put("skuLot7", logSoPickList.get(0).getSkuLot7());
+			if (Func.isNotEmpty(logSoPickList)) {
+				map.put("skuLot2", logSoPickList.get(0).getSkuLot2());
+				map.put("wsuName", getWsuName(logSoPickList.get(0).getSkuId()));
+				map.put("skuLot7", logSoPickList.get(0).getSkuLot7());
+			}
 		} else {
 			throw new ServiceException("无法导出, 请稍后再试。");
 		}

@@ -5,19 +5,19 @@
                 <el-row type="flex" class="search-elRow">
                     <el-col :span="6">
                         <el-form-item label="承运商编码" label-width="90px">
-                            <el-input v-model="form.params.code" class="search-input" placeholder="请输入承运商编码">
+                            <el-input :clearable="true" v-model="form.params.code" class="search-input" placeholder="请输入承运商编码">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="承运商名称" label-width="90px">
-                            <el-input v-model="form.params.name" class="search-input" placeholder="请输入承运商名称">
+                            <el-input :clearable="true" v-model="form.params.name" class="search-input" placeholder="请输入承运商名称">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="承运商简称" label-width="90px">
-                            <el-input v-model="form.params.simpleName" class="search-input" placeholder="请输入承运商简称">
+                            <el-input :clearable="true" v-model="form.params.simpleName" class="search-input" placeholder="请输入承运商简称">
                             </el-input>
                         </el-form-item>
                     </el-col>
