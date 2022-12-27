@@ -27,4 +27,8 @@ public class FindAllPickingResponse implements Serializable {
 	 */
 	private String billTypeName;
 
+	/**
+	 * 用户名称
+	 */
+	private String userName;
 }
