@@ -141,7 +141,7 @@ public class StockQueryBizImpl implements StockQueryBiz {
 	public Stock findStockOnPickTo(LogSoPick pickLog) {
 		List<Location> pickToLoc = locationBiz.getLocationByZoneType(pickLog.getWhId(),
 			DictKVConstant.ZONE_TYPE_PICK_TO);
-		return stockMergeStrategy.matchSameStock(pickLog, pickToLoc.get(0));
+		return stockMergeStrategy.matchSameStock(pickLog, pickToLoc.get(0), false);
 	}
 
 	@Override

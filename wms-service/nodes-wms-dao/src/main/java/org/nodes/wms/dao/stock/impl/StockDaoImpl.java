@@ -179,19 +179,19 @@ public class StockDaoImpl
 	public List<Stock> getStock(StockStatusEnum status, Long woId,
 								Long locId, Long skuId, String boxCode, String lpnCode) {
 		LambdaQueryWrapper<Stock> queryWrapper = getStockQuery();
-		return getStock(status, woId, locId, skuId, boxCode, lpnCode, null, queryWrapper);
+		return getStock(status, woId, locId, skuId, boxCode, lpnCode, null, queryWrapper, true);
 	}
 
 	@Override
 	public List<Stock> matchStock(StockStatusEnum status, Long woId, Long locId,
-								  Long skuId, String boxCode, String lpnCode, String dropId) {
+								  Long skuId, String boxCode, String lpnCode, String dropId, boolean matchLpnCode) {
 		LambdaQueryWrapper<Stock> queryWrapper = Wrappers.lambdaQuery(Stock.class);
-		return getStock(status, woId, locId, skuId, boxCode, lpnCode, dropId, queryWrapper);
+		return getStock(status, woId, locId, skuId, boxCode, lpnCode, dropId, queryWrapper, matchLpnCode);
 	}
 
 	private List<Stock> getStock(StockStatusEnum status, Long woId,
 								 Long locId, Long skuId, String boxCode, String lpnCode,
-								 String dropId, LambdaQueryWrapper<Stock> queryWrapper) {
+								 String dropId, LambdaQueryWrapper<Stock> queryWrapper, boolean matchLpnCode) {
 		if (Func.isNull(woId) || Func.isNull(skuId) || Func.isNull(locId)) {
 			throw new ServiceException("库存查询失败,缺失必要参数");
 		}
@@ -212,10 +212,12 @@ public class StockDaoImpl
 			queryWrapper.eq(Stock::getBoxCode, boxCode);
 		}
 
-		if (Func.isEmpty(lpnCode)) {
-			queryWrapper.apply("(lpn_code is null or lpn_code = '')");
-		} else {
-			queryWrapper.eq(Stock::getLpnCode, lpnCode);
+		if (matchLpnCode){
+			if (Func.isEmpty(lpnCode)) {
+				queryWrapper.apply("(lpn_code is null or lpn_code = '')");
+			} else {
+				queryWrapper.eq(Stock::getLpnCode, lpnCode);
+			}
 		}
 
 		return super.list(queryWrapper);

@@ -175,7 +175,7 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void synchronizeTaskStatus(SyncTaskStateRequest request) {
 		WmsTask wmsTask = wmsTaskDao.getById(request.getTaskDetailId());
-		if (WmsTaskStateEnum.NOT_ISSUED.equals(wmsTask.getTaskState())){
+		if (WmsTaskStateEnum.NOT_ISSUED.equals(wmsTask.getTaskState())) {
 			throw new ServiceException("同步任务状态失败，当前任务状态处于未下发状态不允许同步任务状态");
 		}
 		AssertUtil.notNull(wmsTask, "任务状态变更通知失败,查不到对应的任务");
@@ -200,6 +200,9 @@ public class SchedulingBizImpl implements SchedulingBiz {
 	}
 
 	private void onAgvAssigned(WmsTask wmsTask, String msg) {
+		if (WmsTaskStateEnum.START_EXECUTION.equals(wmsTask.getTaskState())) {
+			return;
+		}
 		if (Func.isNull(msg)) {
 			msg = "";
 		}
