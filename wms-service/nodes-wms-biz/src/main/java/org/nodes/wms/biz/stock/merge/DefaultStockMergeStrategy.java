@@ -33,7 +33,7 @@ public class DefaultStockMergeStrategy implements StockMergeStrategy {
 	public Stock matchCanMergeStock(Stock newStock) {
 		return match(newStock.getStockStatus(),
 			newStock.getWoId(), newStock.getLocId(), newStock.getSkuId(),
-			newStock.getBoxCode(), newStock.getLpnCode(), newStock.getDropId(), newStock);
+			newStock.getBoxCode(), newStock.getLpnCode(), newStock.getDropId(), newStock, true);
 	}
 
 	@Override
@@ -41,16 +41,16 @@ public class DefaultStockMergeStrategy implements StockMergeStrategy {
 		AssertUtil.notNull(receiveLog, "根据清点记录查询库存失败,清点记录为空");
 		return match(StockStatusEnum.NORMAL, receiveLog.getWoId(),
 			receiveLog.getLocId(), receiveLog.getSkuId(), receiveLog.getBoxCode(),
-			receiveLog.getLpnCode(), null, receiveLog);
+			receiveLog.getLpnCode(), null, receiveLog, true);
 	}
 
 	@Override
-	public Stock matchSameStock(LogSoPick pickLog, Location pickToLoc) {
+	public Stock matchSameStock(LogSoPick pickLog, Location pickToLoc, boolean matchLpnCode) {
 		AssertUtil.notNull(pickLog, "根据清点记录查询库存失败,拣货记录为空");
 		AssertUtil.notNull(pickToLoc, "根据清点记录查询库存失败,出库集货区为空");
 
 		return match(pickLog.getStockStatus(), pickLog.getWoId(), pickToLoc.getLocId(),
-			pickLog.getSkuId(), pickLog.getBoxCode(), pickLog.getLpnCode(), null, pickLog);
+			pickLog.getSkuId(), pickLog.getBoxCode(), pickLog.getLpnCode(), null, pickLog, matchLpnCode);
 	}
 
 	@Override
@@ -68,13 +68,13 @@ public class DefaultStockMergeStrategy implements StockMergeStrategy {
 	}
 
 	private <T> Stock match(StockStatusEnum stockStatus, Long woId, Long locId,
-							Long skuId, String boxCode, String lpnCode, String dropId, T source) {
+							Long skuId, String boxCode, String lpnCode, String dropId, T source, boolean matchLpnCode) {
 		if (!SkuLotUtil.hasSkuLot(source)) {
 			throw new ServiceException("库存匹配失败,匹配原对象没有批属性信息");
 		}
 
 		List<Stock> existStockList = stockDao.matchStock(stockStatus, woId, locId,
-			skuId, boxCode, lpnCode, dropId);
+			skuId, boxCode, lpnCode, dropId, matchLpnCode);
 		if (Func.isEmpty(existStockList)) {
 			return null;
 		}

@@ -33,9 +33,10 @@ public interface StockMergeStrategy {
 	 *
 	 * @param pickLog   拣货记录
 	 * @param pickToLoc 出库集货区
+	 * @param matchLpnCode true表示需要匹配lpnCode，false表示不需要匹配lpnCode
 	 * @return 和清点记录相同的库存
 	 */
-	Stock matchSameStock(LogSoPick pickLog, Location pickToLoc);
+	Stock matchSameStock(LogSoPick pickLog, Location pickToLoc, boolean matchLpnCode);
 
 	/**
 	 * 生成预期待合并的库存
