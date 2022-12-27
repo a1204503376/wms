@@ -27,6 +27,11 @@ public class LogSoPickForSoDetailResponse implements Serializable {
 	private String locCode;
 
 	/**
+	 * 箱码
+	 */
+	private String boxCode;
+
+	/**
 	 * 物品编码
 	 */
 	private String skuCode;

@@ -8,8 +8,7 @@
                          label-position="right"
                          label-width="150px"
                          size="medium"
-                         style="margin-left:10px;margin-right:10px;"
-                >
+                         style="margin-left:10px;margin-right:10px;">
                     <el-descriptions
                         :column="4"
                         border
@@ -269,6 +268,11 @@ export default {
                     prop: 'locCode',
                     sortable: 'custom',
                     label: '库位编码'
+                },
+                {
+                    prop: 'boxCode',
+                    sortable: 'custom',
+                    label: '箱码'
                 },
                 {
                     prop: 'skuCode',

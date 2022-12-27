@@ -19,6 +19,7 @@
         SELECT
         proc_time,
         loc_code,
+        box_code,
         sku_code,
         sku_name,
         lot_number,
