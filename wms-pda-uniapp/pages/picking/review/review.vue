@@ -7,7 +7,7 @@
 		<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
 		<u--form labelPosition="left" :model="params">
 			<u-search placeholder="请输入发货单编码" v-model.trim="params.no" :show-action="false" @custom="getSoBillList"
-				@search="getSoBillList" class="font-in-page" style="margin: 12rpx">
+				@search="getList" class="font-in-page" style="margin: 12rpx">
 			</u-search>
 		</u--form>
 		<!-- ${index + 1} -->
@@ -18,7 +18,7 @@
 						<view class="demo-layout bg-purple-light font-in-page">{{item.soBillNo}}</view>
 					</u-col>
 					<u-col span="4">
-						<view class="demo-layout bg-purple font-in-page">{{item.billTypeName}}</view>
+						<view class="demo-layout bg-purple font-in-page">{{item.userName}}</view>
 					</u-col>
 				</u-row>
 				<u-divider text=""></u-divider>
@@ -48,6 +48,10 @@
 					receiveId: '',
 					no: '',
 				},
+				param: {
+					receiveId: '',
+					no: 'SO',
+				},
 				page: {
 					total: 0,
 					size: 9,
@@ -72,6 +76,8 @@
 			var that = this;
 			if (tool.isNotEmpty(that.params.no)) {
 				that.getSoBillList();
+			}else{
+				that.getDefaultSoBillList();
 			}
 		},
 		// 返回
@@ -84,6 +90,13 @@
 			// #endif
 		},
 		methods: {
+			getList(){
+				if (tool.isNotEmpty(this.params.no)) {
+					this.getSoBillList();
+				}else{
+					this.getDefaultSoBillList();
+				}
+			},
 			analysisCode(code) {
 				var barcode = barcodeFunc.parseBarcode(code);
 				var barcodeType = barcodeFunc.BarcodeType;
@@ -102,6 +115,26 @@
 				uni.navigateBack({
 					delta: 1
 				});
+			},
+			getDefaultSoBillList() {
+				this.page.current = 1;
+				this.param.whId = uni.getStorageSync('warehouse').whId;
+				picking.outStockCheckoutFindSoBill(this.param, this.page)
+					.then(data => {
+						if (data.data.records.length > 0) {
+							this.status = 'loading';
+							this.loadmore = true;
+							this.noData = false;
+						} else {
+							this.status = 'nomore';
+							this.loadmore = false;
+							this.noData = true;
+						}
+						this.receiveDetailList = data.data.records;
+						if (this.receiveDetailList.length < this.page.size) {
+							this.loadmore = false;
+						}
+					})
 			},
 			getSoBillList() {
 				if (tool.isNotEmpty(this.params.no)) {
@@ -139,17 +172,32 @@
 				this.divider = false;
 				this.page.current++;
 				this.params.whId = uni.getStorageSync('warehouse').whId;
-				picking.findAllPickingByNo(this.params, this.page).then(data => {
-					if (data.data.records.length > 0) {
-						this.status = 'loading';
-						data.data.records.forEach((item, index) => { //js遍历数组
-							this.receiveDetailList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
-						});
-					} else {
-						this.status = 'nomore';
-					}
+				if(tool.isEmpty(this.params.no)){
+					picking.findAllPickingByNo(this.param, this.page).then(data => {
+						if (data.data.records.length > 0) {
+							this.status = 'loading';
+							data.data.records.forEach((item, index) => { //js遍历数组
+								this.receiveDetailList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
+							});
+						} else {
+							this.status = 'nomore';
+						}
+					
+					})
+				}else{
+					picking.findAllPickingByNo(this.params, this.page).then(data => {
+						if (data.data.records.length > 0) {
+							this.status = 'loading';
+							data.data.records.forEach((item, index) => { //js遍历数组
+								this.receiveDetailList.push(item) //push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
+							});
+						} else {
+							this.status = 'nomore';
+						}
+					
+					})
+				}
 
-				})
 			}
 		}
 	}

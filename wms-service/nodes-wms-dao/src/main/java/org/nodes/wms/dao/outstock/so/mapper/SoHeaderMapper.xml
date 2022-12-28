@@ -147,9 +147,11 @@
     </select>
 
     <select id="getAllPickPage" resultType="org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse">
-        select h.so_bill_id,h.so_bill_no,b.bill_type_name from so_header h
+        select h.so_bill_id,h.so_bill_no,b.bill_type_name,u.name user_name  from so_header h
         left join wms_bill_type b
         on h.bill_type_cd=b.bill_type_cd
+        left join blade_user u
+        on h.create_user = u.id
         <where>
             <if test="params.no!=null and params.no != '' and params.whId!=null and params.whId != ''">
                 AND h.so_bill_no like concat('%',#{params.no},'%') AND
