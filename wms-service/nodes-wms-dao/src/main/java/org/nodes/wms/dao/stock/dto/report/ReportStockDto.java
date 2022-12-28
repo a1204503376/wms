@@ -30,6 +30,10 @@ public class ReportStockDto {
 	 * 物品分类id
 	 */
 	private Long skuTypeId;
+	/**
+	 * 物品分类名称
+	 */
+	private String typeName;
 
 	/**
 	 * 占用库存总数
