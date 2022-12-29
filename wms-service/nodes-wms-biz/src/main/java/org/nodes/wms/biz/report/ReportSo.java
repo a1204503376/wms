@@ -72,6 +72,7 @@ public class ReportSo {
 		} else {
 			throw new ServiceException("无法导出, 请稍后再试。");
 		}
+		map.put("createTime", soHeader.getCreateTime());
 		map.put("soBillNo", "编码：" + soHeader.getSoBillNo());
 		map.put("customerName", soHeader.getCustomerName());
 		mapList.add(map);
