@@ -97,6 +97,22 @@ public class SchedulingController {
 		return R.data(boxCode);
 	}
 
-
+	/**
+	 * 成品打包程序: 生成箱码
+	 *
+	 * @param lpnTypeCode 容器类别编码
+	 * @param skuName     物品名称
+	 * @param spec        物品型号
+	 * @param year 四位的年
+	 * @param month 两位的月份
+	 * @return
+	 */
+	@GetMapping("generateBoxCode2")
+	public R<String> generateBoxCode2(@RequestParam("lpnTypeCode") String lpnTypeCode,
+									 @RequestParam("skuName") String skuName, @RequestParam("spec") String spec,
+									 @RequestParam("year") String year, @RequestParam("month") String month) {
+		String boxCode = lpnTypeBiz.generateLpnCode(lpnTypeCode, skuName, spec);
+		return R.data(boxCode);
+	}
 
 }
