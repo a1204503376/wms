@@ -3,6 +3,7 @@
  */
 import http from '@/http/api.js'
 import tool from '@/utils/tool.js'
+import func from '@/utils/func.js'
 
 // 条码类型
 const BarcodeType = {
@@ -19,24 +20,30 @@ const parseBarcode = (barcode) => {
 	if (tool.isEmpty(barcode)) {
 		return undefined;
 	}
-
-	let barcodeRules = uni.getStorageSync('barcodeRules');
-	if (tool.isNotEmpty(barcodeRules)) {
-		for (let i = 0; i < barcodeRules.length; i++) {
-			let barcodeRuleDesc = new RegExp(barcodeRules[i].barcodeRule);
-			if (barcodeRuleDesc.test(barcode)) {
-				return {
-					type: barcodeRules[i].barcodeType,
-					content: parseBarcodeByType(barcodeRules[i].barcodeType, barcode)
-				};
+	if (isParseSerial(barcode)) {
+		return {
+			type: BarcodeType.Serial,
+			content: parseBarcodeByType(BarcodeType.Serial, barcode)
+		};
+	} else {
+		let barcodeRules = uni.getStorageSync('barcodeRules');
+		if (tool.isNotEmpty(barcodeRules)) {
+			for (let i = 0; i < barcodeRules.length; i++) {
+				let barcodeRuleDesc = new RegExp(barcodeRules[i].barcodeRule);
+				if (barcodeRuleDesc.test(barcode)) {
+					return {
+						type: barcodeRules[i].barcodeType,
+						content: parseBarcodeByType(barcodeRules[i].barcodeType, barcode)
+					};
+				}
 			}
 		}
-	}
 
-	return {
-		type: BarcodeType.UnKnow,
-		content: barcode
-	};
+		return {
+			type: BarcodeType.UnKnow,
+			content: parseBarcodeByType(BarcodeType.Serial, barcode)
+		};
+	}
 }
 
 const parseLpnBarcode = (barcode) => {
@@ -57,6 +64,20 @@ const parseLocBarcode = (barcode) => {
 	return barcode;
 }
 
+const isParseSerial = (barcode) => {
+	var stuCardReg = /^\d{21};/;
+	return stuCardReg.test(barcode);
+}
+
+
+const parseSerialBarcode = (barcode) => {
+	let scanModel = barcode.split(';');
+	if (scanModel.length > 1) {
+		return scanModel[0];
+	}
+
+	return barcode;
+}
 const parseBarcodeByType = (barcodeType, barcode) => {
 	switch (barcodeType) {
 		case 10:
@@ -66,7 +87,7 @@ const parseBarcodeByType = (barcodeType, barcode) => {
 		case 30:
 			return parseLocBarcode(barcode);
 		case 40:
-			return parseLpnBarcode(barcode);
+			return parseSerialBarcode(barcode);
 		case 50:
 			return parseLpnBarcode(barcode);
 		case 60:
