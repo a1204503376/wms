@@ -17,8 +17,8 @@
 						<u-form-item>
 							<template>
 								<u-icon size="40" name="account-fill"></u-icon>
-								<u--input placeholder="请输入账号" v-model.trim="username" border="none" :focus="userNameFocus"
-									@confirm="nextFocusToPassword"></u--input>
+								<u--input placeholder="请输入账号" v-model.trim="username" border="none"
+									:focus="userNameFocus" @confirm="nextFocusToPassword"></u--input>
 							</template>
 						</u-form-item>
 						<u-form-item>
@@ -49,15 +49,16 @@
 	import md5 from '@/utils/md5.js'
 	import api from '@/api/user.js'
 	import tool from '@/utils/tool.js'
+	import barcodeFunc from '@/utils/barcodeFunc.js'
 
 	export default {
 		data() {
 			return {
 				navigationBarBackgroundColor: setting.customNavigationBarBackgroundColor,
 				tenantId: setting.tenantId,
-				username: this.$store.state.userName || 'admin',
+				username: this.$store.state.userName,
 				// TODO 测试时默认密码,正式需要删除,上面的admin
-				password: 'nodes.wms3',
+				password: '',
 				addressDisplay: true,
 				name: setting.name,
 				pdaVersion: setting.version,
@@ -101,7 +102,8 @@
 					this.username = data
 					return
 				}
-				this.username = userInfoList[0];
+
+                this.username = userInfoList[0];
 				this.password = userInfoList[1];
 			},
 			submit() {
