@@ -1,6 +1,8 @@
 package org.nodes.wms.controller.stock;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.stock.SerialBiz;
@@ -21,15 +23,18 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping(WmsApiPath.WMS_ROOT_URL + "serialLog")
 @RequiredArgsConstructor
+@Api(value = "序列号日志接口",tags = "序列号日志接口")
 public class SerialLogController {
 
 	private final SerialBiz serialBiz;
 
+	@ApiOperation(value = "分页")
 	@PostMapping("/page")
 	public R<Page<SerialLogPageResponse>> page(Query query, @RequestBody SerialLogPageQuery serialLogPageQuery) {
 		return R.data(serialBiz.pageLog(query, serialLogPageQuery));
 	}
 
+	@ApiOperation(value = "导出")
 	@PostMapping("/export")
 	public void export(@RequestBody SerialLogPageQuery serialLogPageQuery, HttpServletResponse response){
 		serialBiz.exportLog(serialLogPageQuery, response);

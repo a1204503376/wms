@@ -2,6 +2,8 @@ package org.nodes.wms.controller.basics;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.basics.bom.WmsSkuBomBiz;
@@ -30,6 +32,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_ROOT_URL + "WmsSkuBom")
+@Api(value = "物料清单", tags = "物料清单接口")
 public class WmsSkuBomController {
 	private final WmsSkuBomBiz skuBomBiz;
 
@@ -40,6 +43,7 @@ public class WmsSkuBomController {
 	 * @param skuBomPageQuery 查询条件
 	 * @return 分页数据
 	 */
+	@ApiOperation(value = "分页")
 	@PostMapping("/findAllWmsSkuBom")
 	public R<IPage<WmsSkuBomResponse>> findAllWmsSkuBom(@RequestBody WmsSkuBomPageQuery skuBomPageQuery, Query query) {
 		Page<WmsSkuBomResponse> skuBomPage = skuBomBiz.getSkuBomPage(query, skuBomPageQuery);
@@ -49,12 +53,14 @@ public class WmsSkuBomController {
 	/**
 	 * 物料清单导出
 	 */
+	@ApiOperation(value = "导出")
 	@PostMapping("/excel")
 	public void excel(@ApiIgnore @RequestBody HashMap<String, Object> params, HttpServletResponse response) {
 		skuBomBiz.exportExcel(params, response);
 	}
 
 	@ApiLog("物品清单管理-新增或修改")
+	@ApiOperation(value = "新增或修改")
 	@PostMapping("/save")
 	public R<String> save(@Valid @RequestBody SkuBomAddOrEditRequest skuBomAddOrEditRequest) {
 		SkuBom skuBom = skuBomBiz.save(skuBomAddOrEditRequest);
@@ -69,6 +75,7 @@ public class WmsSkuBomController {
 	 * @return 是否成功
 	 */
 	@ApiLog("物品清单管理-删除")
+	@ApiOperation(value = "删除")
 	@PostMapping("/delete")
 	public R delete(@RequestBody DeleteSkuBomByIdsRequest request) {
 		return R.status(skuBomBiz.deleteSkuBomByIds(request));
@@ -81,6 +88,7 @@ public class WmsSkuBomController {
 	 * @param request 物料清单ById查询请求对象
 	 * @return 是否成功
 	 */
+	@ApiOperation(value = "详情")
 	@PostMapping("/selectSkuBomById")
 	public R<SkuBom> selectSkuBomById(@RequestBody FindSkuBomByIdRequset request) {
 		return R.data(skuBomBiz.findSkuBomById(request.getId()));
@@ -93,6 +101,7 @@ public class WmsSkuBomController {
 	 * @return 是否成功
 	 */
 	@ApiLog("物品清单管理-导出 导入模板")
+	@ApiOperation(value = "导出Excel模板")
 	@GetMapping("/export-template")
 	public void selectSkuBomById(HttpServletResponse response) {
 		List<WmsSkuBomExcelResponse> excelResponses = new ArrayList<>();
@@ -100,6 +109,7 @@ public class WmsSkuBomController {
 	}
 
 	@ApiLog("客户管理-导入")
+	@ApiOperation(value = "导入")
 	@PostMapping("/import-data")
 	public R<String> importData(MultipartFile file) {
 		List<WmsSkuBomExcelResponse> importDataList = ExcelUtil.read(file, WmsSkuBomExcelResponse.class);

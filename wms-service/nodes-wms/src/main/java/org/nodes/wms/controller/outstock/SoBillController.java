@@ -2,6 +2,8 @@ package org.nodes.wms.controller.outstock;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
 import org.nodes.core.tool.validation.Update;
@@ -41,18 +43,18 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_ROOT_URL + "outstock/soBill")
+@Api(value = "发货接口", tags = "发货接口")
 public class SoBillController {
 
 	private final SoBillBiz soBillBiz;
-
 	private final LogSoPickBiz logSoPickBiz;
-
 	private final OutStockBiz outStockBiz;
 	private final SoPickPlanBiz soPickPlanBiz;
 
 	/**
 	 * 发货单: 分页查找
 	 */
+	@ApiOperation(value = "发货单分页查询")
 	@PostMapping("/page")
 	public R<Page<SoHeaderPageResponse>> page(Query query, @RequestBody SoHeaderPageQuery soHeaderPageQuery) {
 		Page<SoHeaderPageResponse> soHeaderPageList = soBillBiz.getPage(query, soHeaderPageQuery);
@@ -63,6 +65,7 @@ public class SoBillController {
 	 * 发货单：新增
 	 */
 	@ApiLog("发货单管理-新增")
+	@ApiOperation(value = "发货单新增")
 	@PostMapping("/add")
 	public R<String> add(@Valid @RequestBody SoBillAddOrEditRequest soBillAddOrEditRequest) {
 		SoHeader soHeader = soBillBiz.add(soBillAddOrEditRequest);
@@ -73,6 +76,7 @@ public class SoBillController {
 	 * 发货单：删除
 	 */
 	@ApiLog("发货单管理-删除")
+	@ApiOperation(value = "发货单删除")
 	@PostMapping("/remove")
 	public R<String> remove(@Valid @RequestBody SoBillRemoveRequest soBillRemoveRequest) {
 		boolean isRemoveSuccess = soBillBiz.remove(soBillRemoveRequest.getIdList());
@@ -82,6 +86,7 @@ public class SoBillController {
 	/**
 	 * 发货单编辑：根据发货单查找发货单信息
 	 */
+	@ApiOperation(value = "发货单编辑时查询")
 	@PostMapping("/detailByEdit")
 	public R<SoBillEditResponse> detailByEdit(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		return R.data(soBillBiz.findSoBillByEdit(soBillIdRequest.getSoBillId()));
@@ -91,6 +96,7 @@ public class SoBillController {
 	 * 发货单：编辑
 	 */
 	@ApiLog("发货单管理-编辑")
+	@ApiOperation(value = "发货单编辑")
 	@PostMapping("/edit")
 	public R<String> edit(@Validated(Update.class) @RequestBody SoBillAddOrEditRequest soBillAddOrEditRequest) {
 		SoHeader soHeader = soBillBiz.edit(soBillAddOrEditRequest);
@@ -100,6 +106,7 @@ public class SoBillController {
 	/**
 	 * 发货单明细：根据发货单id查找发货单头表信息
 	 */
+	@ApiOperation(value = "发货单查看明细-头表信息")
 	@PostMapping("/detail_header")
 	public R<SoHeaderForDetailResponse> headerForDetail(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		return R.data(soBillBiz.findSoHeaderForDetailBySoBillId(soBillIdRequest.getSoBillId()));
@@ -108,6 +115,7 @@ public class SoBillController {
 	/**
 	 * 发货单明细：根据发货单id查找发货明细信息
 	 */
+	@ApiOperation(value = "发货单查看明细-明细信息")
 	@PostMapping("/detail_detail")
 	public R<Page<SoDetailForDetailResponse>> detailForDetail(Query query,
 															  @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
@@ -119,6 +127,7 @@ public class SoBillController {
 	/**
 	 * 发货单明细：根据发货单id查找发货单拣货记录信息
 	 */
+	@ApiOperation(value = "发货单查看明细-拣货记录")
 	@PostMapping("/detail_logSoPick")
 	public R<Page<LogSoPickForSoDetailResponse>> logSoPickForSoDetail(Query query,
 																	  @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
@@ -130,6 +139,7 @@ public class SoBillController {
 	/**
 	 * 发货单明细：根据发货单id查找发货单审计日志信息
 	 */
+	@ApiOperation(value = "发货单查看明细-操作记录")
 	@PostMapping("/detail_log")
 	public R<Page<LogDetailPageResponse>> logForSoDetail(Query query,
 														 @Valid @RequestBody SoBillIdRequest soBillIdRequest) {
@@ -141,6 +151,7 @@ public class SoBillController {
 	/**
 	 * 发货单导出：服务端导出
 	 */
+	@ApiOperation(value = "发货单导出")
 	@PostMapping("/export")
 	public void export(@RequestBody SoHeaderPageQuery soHeaderPageQuery, HttpServletResponse response) {
 		soBillBiz.export(soHeaderPageQuery, response);
@@ -149,6 +160,7 @@ public class SoBillController {
 	/**
 	 * 发货单关闭：根据发货单id关闭发货单
 	 */
+	@ApiOperation(value = "发货单关闭")
 	@PostMapping("/close")
 	@ApiLog("发货单-关闭")
 	public R<String> close(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
@@ -159,6 +171,7 @@ public class SoBillController {
 	/**
 	 * 未发货记录：分页查找
 	 */
+	@ApiOperation(value = "未发货记录分页查询")
 	@PostMapping("/pageNotSoPick")
 	public R<IPage<NotSoPickPageResponse>> pageNotLogSoPick(
 		Query query, @RequestBody NotSoPickPageQuery notSoPickPageQuery) {
@@ -168,6 +181,7 @@ public class SoBillController {
 	/**
 	 * 未发货记录：服务端导出
 	 */
+	@ApiOperation(value = "未发货记录导出")
 	@PostMapping("/exportNotSoPick")
 	public void exportNotSoPick(
 		@RequestBody NotSoPickPageQuery notSoPickPageQuery, HttpServletResponse response) {
@@ -177,6 +191,7 @@ public class SoBillController {
 	/**
 	 * PC拣货：获取发货单头表信息
 	 */
+	@ApiOperation(value = "PC拣货获取发货单头表信息")
 	@PostMapping("/getSoHeaderByPickPc")
 	public R<PickByPcSoHeaderResponse> getSoHeaderByPickPc(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		return R.data(soBillBiz.getSoHeaderByPickPc(soBillIdRequest));
@@ -185,6 +200,7 @@ public class SoBillController {
 	/**
 	 * PC拣货：获取发货但可用拣货的明细简要信息
 	 */
+	@ApiOperation(value = "PC拣货获取可用拣货的明细信息")
 	@GetMapping("/getLineNoAndSkuSelectList")
 	public R<List<LineNoAndSkuSelectResponse>> getLineNoAndSkuSelectList(Long soBillId) {
 		return R.data(soBillBiz.getLineNoAndSkuSelectList(soBillId));
@@ -193,6 +209,7 @@ public class SoBillController {
 	/**
 	 * 分配：获取分配页面发货单头表和明细信息
 	 */
+	@ApiOperation(value = "分配时获取发货单头表和明细信息")
 	@PostMapping("/getSoBillDataByDistribution")
 	public R<SoBillDistributedResponse> getSoBillDataByDistribution(
 		@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
@@ -202,6 +219,7 @@ public class SoBillController {
 	/**
 	 * PC拣货：根据明细行号获取明细和对应的可用库存
 	 */
+	@ApiOperation(value = "PC拣货根据行号获取明细和对应的可用库存")
 	@PostMapping("/getSoDetailAndStock")
 	public R<SoDetailAndStockResponse> getSoDetailAndStock(
 		@Valid @RequestBody SoDetailAndStockRequest soDetailAndStockRequest) {
@@ -211,6 +229,7 @@ public class SoBillController {
 	/**
 	 * 分配：根据发货单id和发货明细获取分配信息
 	 */
+	@ApiOperation(value = "分配时获取分配信息")
 	@PostMapping("/getSoPickPlan")
 	public R<List<SoPickPlanForDistributionResponse>> getSoPickPlan(
 		@Valid @RequestBody SoBillIdAndSoDetailIdRequest request) {
@@ -220,6 +239,7 @@ public class SoBillController {
 	/**
 	 * 分配：根据发货单id获取已经分配的拣货计划信息
 	 */
+	@ApiOperation(value = "分配时获取已分配的拣货计划")
 	@PostMapping("/getHistorySoPickPlan")
 	public R<List<SoPickPlanForDistributionResponse>> getHistorySoPickPlan(
 		@Valid @RequestBody SoBillIdAndSoDetailIdRequest request) {
@@ -230,6 +250,7 @@ public class SoBillController {
 	 * 分配：自动分配
 	 */
 	@ApiLog("发货单管理-自动分配")
+	@ApiOperation(value = "自动分配")
 	@PostMapping("/automaticAssign")
 	public R<String> automaticAssign(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		return R.success(outStockBiz.autoDistribute(soBillIdRequest.getSoBillId()));
@@ -239,6 +260,7 @@ public class SoBillController {
 	 * 分配：全部取消
 	 */
 	@ApiLog("发货单管理-取消分配")
+	@ApiOperation(value = "取消分配")
 	@PostMapping("/cancelAll")
 	public R<String> cancelAll(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		outStockBiz.cancelDistribute(soBillIdRequest.getSoBillId());
@@ -249,6 +271,7 @@ public class SoBillController {
 	 * 分配：确认下发
 	 */
 	@ApiLog("发货单管理-确认下发")
+	@ApiOperation(value = "确认下发")
 	@PostMapping("/issued")
 	public R<String> issued(@Valid @RequestBody SoBillIdRequest soBillIdRequest) {
 		outStockBiz.issued(soBillIdRequest.getSoBillId());
@@ -258,6 +281,7 @@ public class SoBillController {
 	/**
 	 * 分配调整：根据物品id查找物品可分配库存信息
 	 */
+	@ApiOperation(value = "分配调整-获取可分配的库存信息")
 	@PostMapping("/getStockByDistributeAdjust")
 	public R<GetStockByDistributeAdjustResponse> getStockByDistributeAdjust(
 		@Valid @RequestBody DistributeAdjustRequest distributeAdjustRequest) {
@@ -272,6 +296,7 @@ public class SoBillController {
 	/**
 	 * 分配调整：保存分配信息、更新库存占用数量
 	 */
+	@ApiOperation(value = "分配调整-保存调整后的信息")
 	@ApiLog("发货单管理-分配调整")
 	@PostMapping("/saveAssign")
 	public R<String> saveAssign(@Valid @RequestBody SoBillDistributedRequest soBillDistributedRequest) {
@@ -282,6 +307,7 @@ public class SoBillController {
 	/**
 	 * 分配调整: 查看某箱或者某库位上的库存
 	 */
+	@ApiOperation(value = "分配调整-查看某箱中或某库位上的库存")
 	@PostMapping("/showDistributeAdjustStock")
 	public R<List<StockDistributeAdjustResponse>> getDistributeAdjustStock(
 		@Valid @RequestBody ShowDistributeAdjustStockRequest request) {
@@ -292,6 +318,7 @@ public class SoBillController {
 	/**
 	 * pc拣货: 获取序列号下拉列表
 	 */
+	@ApiOperation(value = "PC拣货-获取序列号下拉列表")
 	@GetMapping("getSerialSelectResponseList")
 	public R<List<SerialSelectResponse>> getSerialSelectResponseList(Long stockId) {
 		List<SerialSelectResponse> serialSelectResponseList = soBillBiz.getSerialSelectResponseList(stockId);
@@ -301,6 +328,7 @@ public class SoBillController {
 	/**
 	 * pc拣货
 	 */
+	@ApiOperation(value = "PC拣货")
 	@ApiLog("pc拣货")
 	@PostMapping("pickByPc")
 	public R<String> pickByPc(@RequestBody PickByPcRequest pickByPcRequest) {
@@ -311,6 +339,7 @@ public class SoBillController {
 	/**
 	 * 分配记录：分页
 	 */
+	@ApiOperation(value = "分配记录分页查询")
 	@PostMapping("/getSoPickPlanpage")
 	public R<Page<SoPickPlanPageResponse>> getSoPickPlanpage(Query query,
 															 @RequestBody SoPickPlanPageQuery soPickPlanPageQuery) {
@@ -321,6 +350,7 @@ public class SoBillController {
 	/**
 	 * 分配记录：服务端导出
 	 */
+	@ApiOperation(value = "分配记录导出")
 	@PostMapping("/exportSoPickPlan")
 	public void exportSoPickPlan(@RequestBody SoPickPlanPageQuery soPickPlanPageQuery, HttpServletResponse response) {
 		soPickPlanBiz.export(soPickPlanPageQuery, response);

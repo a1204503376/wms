@@ -1,6 +1,8 @@
 package org.nodes.wms.controller.basics;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
@@ -35,11 +37,12 @@ import java.util.List;
 import static org.nodes.wms.core.warehouse.cache.WarehouseCache.WAREHOUSE_CACHE;
 
 /**
- * 仓库管理 API
+ * 库房管理 API
  */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_ROOT_URL + "warehouse/warehouse")
+@Api(value = "库房管理", tags = "库房管理接口")
 public class WarehouseController extends BladeController {
 
 	private final IWarehouseService warehouseService;
@@ -48,6 +51,7 @@ public class WarehouseController extends BladeController {
 	/**
 	 * 获取库房下拉框集合
 	 */
+	@ApiOperation(value = "库房组件数据")
 	@GetMapping("getWarehouseSelectResponseList")
 	public R<List<WarehouseResponse>> getWarehouseSelectResponseList() {
 		List<WarehouseResponse> warehouseResponseList = warehouseBiz.getWarehouseSelectResponseList();
@@ -55,8 +59,9 @@ public class WarehouseController extends BladeController {
 	}
 
 	/**
-	 * 通过仓库ID获取详情
+	 * 通过库房ID获取详情
 	 */
+	@ApiOperation(value = "详情")
 	@GetMapping("/detail")
 	public R<WarehouseVO> detail(Long id) {
 		Warehouse warehouse = WarehouseCache.getById(id);
@@ -65,8 +70,9 @@ public class WarehouseController extends BladeController {
 	}
 
 	/**
-	 * 列表 仓库
+	 * 列表 库房
 	 */
+	@ApiOperation(value = "列表")
 	@GetMapping("/list")
 	public R<List<WarehouseVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
 		List<Warehouse> list = warehouseService.list(Condition.getQueryWrapper(params, Warehouse.class).lambda()
@@ -75,8 +81,9 @@ public class WarehouseController extends BladeController {
 	}
 
 	/**
-	 * 自定义分页 仓库
+	 * 自定义分页 库房
 	 */
+	@ApiOperation(value = "自定义分页")
 	@GetMapping("/page")
 	public R<IPage<WarehouseVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
 		IPage<Warehouse> pages = warehouseService.page(Condition.getPage(query), Condition.getQueryWrapper(params, Warehouse.class)
@@ -86,9 +93,10 @@ public class WarehouseController extends BladeController {
 	}
 
 	/**
-	 * 新增或修改 仓库
+	 * 新增或修改 库房
 	 */
 	@ApiLog("库房-提交")
+	@ApiOperation(value = "新增或修改")
 	@PostMapping("/submit")
 	public R submit(@Validated @RequestBody WarehouseDTO warehouseDTO) {
 		CacheUtil.clear(WAREHOUSE_CACHE);
@@ -96,9 +104,10 @@ public class WarehouseController extends BladeController {
 	}
 
 	/**
-	 * 删除 仓库
+	 * 删除 库房
 	 */
 	@ApiLog("库房-删除")
+	@ApiOperation(value = "删除")
 	@PostMapping("/remove")
 	public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
 		CacheUtil.clear(WAREHOUSE_CACHE);
@@ -108,6 +117,7 @@ public class WarehouseController extends BladeController {
 	/**
 	 * 导出
 	 */
+	@ApiOperation(value = "导出")
 	@GetMapping("export")
 	public void export(@ApiIgnore @RequestParam HashMap<String, Object> params, HttpServletResponse response) {
 		warehouseService.exportExcel(params, response);
@@ -116,6 +126,7 @@ public class WarehouseController extends BladeController {
 	/**
 	 * 导出模板
 	 */
+	@ApiOperation(value = "导出Excel模板")
 	@GetMapping("export-template")
 	public void exportTemplate(HttpServletResponse response) {
 		List<WarehouseExcel> warehouseExportList = new ArrayList<>();
@@ -125,6 +136,7 @@ public class WarehouseController extends BladeController {
 	/**
 	 * 导入验证
 	 */
+	@ApiOperation(value = "导入验证")
 	@PostMapping("import-valid")
 	public R<List<DataVerify>> importValid(MultipartFile file) {
 		return R.data(warehouseService.validExcel(ExcelUtil.read(file, WarehouseExcel.class)));
@@ -133,14 +145,16 @@ public class WarehouseController extends BladeController {
 	/**
 	 * 导入验证通过的数据
 	 */
+	@ApiOperation(value = "导入")
 	@PostMapping("import-data")
 	public R<Boolean> importData(@RequestBody List<DataVerify> dataVerifyList) {
 		return R.data(warehouseService.importData(dataVerifyList));
 	}
 
 	/**
-	 * 仓库授权
+	 * 库房授权
 	 */
+	@ApiOperation(value = "库房授权")
 	@GetMapping("/authorization")
 	public void authorization(@RequestParam String authorizationValue) {
 		String encryptValue = warehouseBiz.authorized(authorizationValue);

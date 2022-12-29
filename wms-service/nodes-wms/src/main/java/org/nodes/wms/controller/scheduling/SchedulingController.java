@@ -1,5 +1,6 @@
 package org.nodes.wms.controller.scheduling;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
@@ -25,6 +26,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.SCHEDULING_SYSTEM_API)
+@Api(value = "调度系统接口", tags = "调度系统接口")
 public class SchedulingController {
 
 	private final SchedulingBiz schedulingBiz;
@@ -88,9 +90,9 @@ public class SchedulingController {
 	 * @param lpnTypeCode 容器类别编码
 	 * @param skuName     物品名称
 	 * @param spec        物品型号
-	 * @return
 	 */
 	@GetMapping("generateBoxCode")
+	@ApiOperation(value = "成品打包程序生成箱码")
 	public R<String> generateBoxCode(@RequestParam("lpnTypeCode") String lpnTypeCode,
 									 @RequestParam("skuName") String skuName, @RequestParam("spec") String spec) {
 		String boxCode = lpnTypeBiz.generateLpnCode(lpnTypeCode, skuName, spec);
