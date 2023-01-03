@@ -8,6 +8,8 @@ import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Component;
 
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -34,9 +36,11 @@ public class CodeGenerator {
 	 * @param type        编码类型，必填，存在redis中分类，不参与编码生成，要求编码类型+编码前缀要全局唯一,否则会导致串号
 	 * @param prefix      编码前缀，必填
 	 * @param rule        编码规则，非必填，默认为：YYYYMMXXXXX
+	 * @param year        编码时间：年
+	 * @param month       编码时间：月
 	 * @return 编码
 	 */
-	public String generateCode(String projectName, String type, String prefix, String rule) {
+	public String generateCode(String projectName, String type, String prefix, String rule, String year, String month) {
 		AssertUtil.notEmpty(type, "编码生成失败，编码类型必填，且编码类型+编码前缀要求全局唯一");
 		AssertUtil.notNull(prefix, "编码生成失败，编码前缀必填，且编码类型+编码前缀要求全局唯一");
 		if (!rule.endsWith(SERIAL_PLACEHOLDER)) {
@@ -49,14 +53,30 @@ public class CodeGenerator {
 		if (Func.isEmpty(rule)) {
 			rule = DEFAULT_RULE;
 		}
-
 		// 生成redis中的key=项目名称：编码类型：编码前缀：时间部分
-		String time = parseTime(rule);
+		String time;
+		if (year == null && month == null) {
+			time = parseTime(rule);
+		} else {
+			time = parseTime(rule, year, month);
+		}
 		String redisKey = getRedisKey(projectName, type, prefix, time);
 		// 根据key获取下一个序号
 		Long serialNo = nextSerialNo(redisKey);
 		// 组合编码
 		return generateCodeFormat(rule, prefix, time, serialNo);
+	}
+
+	private String parseTime(String rule, String year, String month) {
+		String timeFormat = rule.substring(0, rule.indexOf(SERIAL_PLACEHOLDER));
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMM");
+		Date date;
+		try {
+			date = simpleDateFormat.parse(year + month);
+		} catch (ParseException e) {
+			throw new ServiceException("字符串转换时间异常, 格式错误！");
+		}
+		return DateUtil.format(date, timeFormat);
 	}
 
 	private String generateCodeFormat(String rule, String prefix, String time, Long serialNo) {

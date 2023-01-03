@@ -6,6 +6,7 @@ import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.core.tool.utils.BigDecimalUtil;
 import org.nodes.core.tool.utils.CodeGenerator;
 import org.nodes.wms.biz.basics.lpntype.LpnTypeBiz;
+import org.nodes.wms.biz.basics.lpntype.factory.LpnTypeFactory;
 import org.nodes.wms.biz.common.config.WMSAppConfig;
 import org.nodes.wms.dao.basics.lpntype.LpnTypeDao;
 import org.nodes.wms.dao.basics.lpntype.dto.input.*;
@@ -15,7 +16,6 @@ import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypePageResponse;
 import org.nodes.wms.dao.basics.lpntype.dto.output.LpnTypeSelectResponse;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
-import org.nodes.wms.biz.basics.lpntype.factory.LpnTypeFactory;
 import org.nodes.wms.dao.tianyi.skubox.SkuBoxDao;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.exception.ServiceException;
@@ -168,6 +168,11 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 
 	@Override
 	public String generateLpnCode(String lpnTypeCode, String skuName, String spec) {
+		return generateLpnCode(lpnTypeCode, skuName, spec, null, null);
+	}
+
+	@Override
+	public String generateLpnCode(String lpnTypeCode, String skuName, String spec, String year, String month) {
 		LpnType lpnType = lpnTypeDao.getLpnTypeByCode(lpnTypeCode);
 		AssertUtil.notEmpty(lpnType.getLpnNoRule(), "容器编码生成失败，没有配置编码生成规则");
 		String prefixNo = lpnTypeCode;
@@ -175,8 +180,9 @@ public class LpnTypeBizImpl implements LpnTypeBiz {
 			prefixNo = prefixNo + skuBoxDao.getBoxId(skuName, spec, lpnTypeCode);
 		}
 		return codeGenerator.generateCode(wmsAppConfig.getProjectName(),
-			"LPN", prefixNo, lpnType.getLpnNoRule());
+			"LPN", prefixNo, lpnType.getLpnNoRule(), year, month);
 	}
+
 
 	@Override
 	public LpnType findLpnType(LpnTypeCodeEnum type) {

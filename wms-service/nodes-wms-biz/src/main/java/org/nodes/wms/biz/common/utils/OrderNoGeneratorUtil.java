@@ -109,7 +109,7 @@ public class OrderNoGeneratorUtil {
 	private String createNo(String prefix, String paramKeyOfRule) {
 		Param param = systemParamBiz.selectByKey(paramKeyOfRule);
 		String rule = Func.isNull(param) ? null : param.getParamValue();
-		return codeGenerator.generateCode(wmsAppConfig.getProjectName(), "ORDER", prefix, rule);
+		return codeGenerator.generateCode(wmsAppConfig.getProjectName(), "ORDER", prefix, rule, null, null);
 	}
 
 

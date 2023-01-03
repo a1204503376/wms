@@ -126,6 +126,8 @@ public interface LpnTypeBiz {
 	 */
 	String generateLpnCode(String lpnTypeCode, String skuName, String spec);
 
+	String generateLpnCode(String lpnTypeCode, String skuName, String spec, String year, String month);
+
 	/**
 	 * 根据容器类别获取容器信息
 	 *
