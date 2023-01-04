@@ -104,33 +104,16 @@
 					let params = {
 						serialNumberList: serialList
 					}
-					receive.getSerialNumberList(params).then(data => {
-						if (tool.isEmpty(data.data)) {
-							var serialList = [];
-							_this.serialNumberList.forEach((serialNumbers, index) => {
-								serialList.push(serialNumbers.serialNumber)
-							})
-							_this.params.serialNumberList = serialList;
-							_this.params.whCode = uni.getStorageSync('warehouse').whCode;
-							_this.params.whId = uni.getStorageSync('warehouse').whId;
-							stockManage.stockMove(_this.params).then(data => {
-								console.log(data)
-							})
-						} else {
-							_this.$u.func.showToast({
-								title: '序列号已存在'
-							});
-							_this.serialNumberList.forEach((serialNumber, index) => {
-								data.data.forEach((serialNumbers, index) => {
-									if (serialNumber.serialNumber ==
-										serialNumbers) {
-										serialNumber.backgroundColor =
-											"background-color: #DD524D;"
-									}
-								});
-							});
-						}
-					});
+					var serialList = [];
+					_this.serialNumberList.forEach((serialNumbers, index) => {
+						serialList.push(serialNumbers.serialNumber)
+					})
+					_this.params.serialNumberList = serialList;
+					_this.params.whCode = uni.getStorageSync('warehouse').whCode;
+					_this.params.whId = uni.getStorageSync('warehouse').whId;
+					stockManage.stockMove(_this.params).then(data => {
+						console.log(data)
+					})
 				}, 1000)
 			},
 			analysisCode(code) {
