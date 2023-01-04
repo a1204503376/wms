@@ -111,7 +111,7 @@ public class SchedulingController {
 	public R<String> generateBoxCode2(@RequestParam("lpnTypeCode") String lpnTypeCode,
 									 @RequestParam("skuName") String skuName, @RequestParam("spec") String spec,
 									 @RequestParam("year") String year, @RequestParam("month") String month) {
-		String boxCode = lpnTypeBiz.generateLpnCode(lpnTypeCode, skuName, spec);
+		String boxCode = lpnTypeBiz.generateLpnCode(lpnTypeCode, skuName, spec, year, month);
 		return R.data(boxCode);
 	}
 
