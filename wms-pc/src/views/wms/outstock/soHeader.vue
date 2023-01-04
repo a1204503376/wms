@@ -217,6 +217,16 @@ export default {
                         sortable: 'custom',
                     },
                     {
+                        prop: 'expressCode',
+                        label: '合同编号',
+                        sortable: 'custom',
+                    },
+                    {
+                        prop: 'address',
+                        label: '收货地址',
+                        sortable: 'custom',
+                    },
+                    {
                         prop: 'createTime',
                         label: '创建时间',
                         sortable: 'custom',
