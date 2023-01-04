@@ -118,6 +118,8 @@
             resultType="org.nodes.wms.dao.outstock.so.dto.output.SoHeaderForDetailResponse">
         SELECT header.so_bill_no,
                header.bill_type_cd,
+               header.address          as address,
+               header.express_code     as express_code,
                billType.bill_type_name as bill_type_name,
                customer.name           as customer_name,
                header.contact,
