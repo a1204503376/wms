@@ -187,7 +187,7 @@ public class StockFactory {
 		List<StockBalance> stockBalanceList2 = new ArrayList<>(stockBalanceList);
 		List<StockBalance> stockBalanceList3 = new ArrayList<>();
 		for (int i = 0; i < stockBalanceList1.size(); i++) {
-			for (int j = 0; j < stockBalanceList.size(); i++) {
+			for (int j = 0; j < stockBalanceList.size(); j++) {
 				StockBalance stockBalance = stockBalanceList1.get(i);
 				if (compare(stockBalanceList1.get(i), stockBalanceList.get(j))) {
 					stockBalance.setOpeningQty(stockBalanceList.get(j).getBalanceQty());
