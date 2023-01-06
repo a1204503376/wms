@@ -180,7 +180,7 @@ public class StockFactory {
 		}
 	}
 
-	public static List<StockBalance> createStockBalanceList(List<StockBalance> stockBalanceList, List<StockBalance> stockBalanceList1) {
+	public static List<StockBalance> createStockBalanceList(List<StockBalance> stockBalanceList, List<StockBalance> stockBalanceList1) throws ParseException {
 		if (stockBalanceList.size() == 0) {
 			return stockBalanceList1;
 		}
@@ -198,11 +198,23 @@ public class StockFactory {
 					break;
 				}
 				if (j == stockBalanceList.size() - 1) {
+					Calendar calendar = Calendar.getInstance();
+					//当前时间减去一个月，即一个月前的时间
+					calendar.add(Calendar.MONTH, -1);
+					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+					String balanceDate = simpleDateFormat.format(calendar.getTime());
+					stockBalance.setBalanceDate(simpleDateFormat.parse(balanceDate));
 					stockBalanceList3.add(stockBalance);
 				}
 			}
 		}
 		for (StockBalance stockBalance : stockBalanceList2) {
+			Calendar calendar = Calendar.getInstance();
+			//当前时间减去一个月，即一个月前的时间
+			calendar.add(Calendar.MONTH, -1);
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			String balanceDate = simpleDateFormat.format(calendar.getTime());
+			stockBalance.setBalanceDate(simpleDateFormat.parse(balanceDate));
 			stockBalance.setOpeningQty(stockBalance.getBalanceQty());
 			stockBalance.setInStockQty(BigDecimal.ZERO);
 			stockBalance.setOutStockQty(BigDecimal.ZERO);
