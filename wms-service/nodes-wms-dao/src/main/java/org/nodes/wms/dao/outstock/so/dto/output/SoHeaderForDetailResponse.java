@@ -61,4 +61,12 @@ public class SoHeaderForDetailResponse implements Serializable {
 	 * 备注
 	 */
 	private String soBillRemark;
+	/**
+	 * 物流编码
+	 */
+	private String expressCode;
+	/**
+	 * 收货人地址
+	 */
+	private String address;
 }

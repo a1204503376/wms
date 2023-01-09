@@ -80,7 +80,6 @@
                             {{ form.params.outstockType }}
                         </el-descriptions-item>
                         <el-descriptions-item
-                            :span="2"
                             content-class-name="descriptions-content"
                             label-class-name="descriptions-label"
                             :label-style="{'text-align': 'right'}">
@@ -88,6 +87,24 @@
                                 发货方式
                             </template>
                             {{ form.params.transportType }}
+                        </el-descriptions-item>
+                         <el-descriptions-item
+                            content-class-name="descriptions-content"
+                            label-class-name="descriptions-label"
+                            :label-style="{'text-align': 'right'}">
+                            <template slot="label">
+                               合同编号
+                            </template>
+                            {{ form.params.expressCode }}
+                        </el-descriptions-item>
+                         <el-descriptions-item
+                            content-class-name="descriptions-content"
+                            label-class-name="descriptions-label"
+                            :label-style="{'text-align': 'right'}">
+                            <template slot="label">
+                               收货地址
+                            </template>
+                            {{ form.params.address }}
                         </el-descriptions-item>
                         <el-descriptions-item
                             content-class-name="descriptions-content"
@@ -184,7 +201,9 @@ export default {
                     customerName: '',
                     outstockType: '',
                     transportType: '',
-                    soBillRemark: ''
+                    soBillRemark: '',
+                    address:'',
+                    expressCode:''
                 }
             },
             table: {

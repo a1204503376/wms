@@ -11,6 +11,8 @@
         sh.so_bill_state,
         sh.customer_code,
         sh.customer_name,
+        sh.express_code,
+        sh.address,
         wh.wh_name,
         sh.create_time,
         u1.real_name as create_user,
@@ -84,7 +86,9 @@
                contact,
                transport_code,
                outstock_type,
-               so_bill_remark
+               so_bill_remark,
+               header.address,
+               header.express_code
         FROM so_header header
                  LEFT JOIN basics_customers customer ON customer.code = header.customer_code
         WHERE header.so_bill_id = #{soBillId}
@@ -101,6 +105,8 @@
         <result property="outstockType" column="outstock_type"/>
         <result property="soBillRemark" column="so_bill_remark"/>
         <result property="contact" column="contact"/>
+        <result property="address" column="address"/>
+        <result property="expressCode" column="express_code"/>
         <association property="customer" javaType="org.nodes.wms.dao.basics.customer.dto.output.CustomerSelectResponse">
             <id column="id" property="id"/>
             <result column="code" property="code"/>
@@ -112,6 +118,8 @@
             resultType="org.nodes.wms.dao.outstock.so.dto.output.SoHeaderForDetailResponse">
         SELECT header.so_bill_no,
                header.bill_type_cd,
+               header.address          as address,
+               header.express_code     as express_code,
                billType.bill_type_name as bill_type_name,
                customer.name           as customer_name,
                header.contact,
@@ -147,7 +155,7 @@
     </select>
 
     <select id="getAllPickPage" resultType="org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse">
-        select h.so_bill_id,h.so_bill_no,b.bill_type_name,u.name user_name  from so_header h
+        select h.so_bill_id,h.so_bill_no,b.bill_type_name,u.name user_name from so_header h
         left join wms_bill_type b
         on h.bill_type_cd=b.bill_type_cd
         left join blade_user u
@@ -168,7 +176,7 @@
                 </foreach>
             </if>
         </where>
-       order by h.create_time desc
+        order by h.create_time desc
     </select>
 </mapper>
 
