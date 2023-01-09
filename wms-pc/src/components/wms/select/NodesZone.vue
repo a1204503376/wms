@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import {getZoneSelectResponse} from "@/api/wms/basics/zone";
+import {getZoneSelectResponse} from "@/api/wms/warehouse/zone";
 import func from "@/util/func";
 
 export default {
