@@ -71,6 +71,14 @@ public class SoBillAddOrEditRequest implements Serializable {
 	 * 发货单备注
 	 */
 	private String soBillRemark;
+	/**
+	 * 物流编码
+	 */
+	private String expressCode;
+	/**
+	 * 收货人地址
+	 */
+	private String address;
 
 	/**
 	 * 发货明细

@@ -92,6 +92,26 @@
                                 </nodes-dictionary>
                             </el-form-item>
                         </el-col>
+                         <el-col :span="8">
+                           <el-form-item label="合同编号">
+                                <el-input
+                                    style="max-width: 206px"
+                                    placeholder="请输入合同编号"
+                                    v-model="form.params.expressCode"
+                                    size="medium">
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                           <el-form-item label="收货地址">
+                                <el-input
+                                    style="max-width: 206px"
+                                    placeholder="请输入收货地址"
+                                    v-model="form.params.address"
+                                    size="medium">
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
                     </el-row>
                     <el-row type="flex">
                         <el-col :span="24" style="width: 91%;">
@@ -306,7 +326,9 @@ export default {
                     contact: null,
                     outstockType: '',
                     transportCode: '',
-                    soBillRemark: ''
+                    soBillRemark: '',
+                    expressCode:'',
+                    address:''
                 },
                 rules: {
                     billTypeCd: [

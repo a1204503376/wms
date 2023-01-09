@@ -74,6 +74,9 @@ public class ReportSo {
 		}
 		map.put("soBillNo", "编码：" + soHeader.getSoBillNo());
 		map.put("customerName", soHeader.getCustomerName());
+		map.put("createTime", soHeader.getCreateTime());
+		map.put("address", soHeader.getAddress());
+		map.put("expressCode", soHeader.getExpressCode());
 		mapList.add(map);
 		return mapList;
 	}
@@ -289,6 +292,9 @@ public class ReportSo {
 		}
 		map.put("soBillNo", "编码：" + soHeader.getSoBillNo());
 		map.put("customerName", soHeader.getCustomerName());
+		map.put("createTime", soHeader.getCreateTime());
+		map.put("address", soHeader.getAddress());
+		map.put("expressCode", soHeader.getExpressCode());
 		mapList.add(map);
 		return mapList;
 	}
