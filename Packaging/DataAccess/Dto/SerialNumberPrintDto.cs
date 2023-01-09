@@ -13,6 +13,11 @@ namespace DataAccess.Dto
         /// 每页序列号分组数量
         /// </summary>
         public const int SerialGroupNumber = 6;
+        /// <summary>
+        /// 纸箱序列号默认数量
+        /// </summary>
+
+        public const int PaperSerialGroupNumber = 4;
 
         public string BoxType { get; set; }
         public long SkuId { get; set; }
@@ -78,6 +83,16 @@ namespace DataAccess.Dto
         public string SerialBegin6 { get; set; }
         public string SerialEnd6 { get; set; }
 
+        //纸箱固定的8个辅助代码
+        public string AuxiliaryCode1 { get; set; }
+        public string AuxiliaryCode2 { get; set; }
+        public string AuxiliaryCode3 { get; set; }
+        public string AuxiliaryCode4 { get; set; }
+        public string AuxiliaryCode5 { get; set; }
+        public string AuxiliaryCode6 { get; set; }
+        public string AuxiliaryCode7 { get; set; }
+        public string AuxiliaryCode8 { get; set; }
+
         public List<ReceiveDetailLpn> ReceiveDetailLpns { get; set; }
         public short Copies { get; set; }
 
@@ -128,6 +143,44 @@ namespace DataAccess.Dto
                         SerialKey6 = serialNumberRange.Key;
                         SerialBegin6 = serialNumberRange.Begin;
                         SerialEnd6 = serialNumberRange.End;
+                        break;
+                }
+            }
+        }
+
+        public void SetPaperSerial(IReadOnlyList<int> serialNumberRanges)
+        {
+            var length = serialNumberRanges.Count < PaperSerialGroupNumber
+                ? serialNumberRanges.Count
+                : PaperSerialGroupNumber;
+
+            for (var i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        AuxiliaryCode1 = serialNumberRanges[i].ToString();
+                        break;
+                    case 1:
+                        AuxiliaryCode2 = serialNumberRanges[i].ToString();
+                        break;
+                    case 2:
+                        AuxiliaryCode3 = serialNumberRanges[i].ToString();
+                        break;
+                    case 3:
+                        AuxiliaryCode4 = serialNumberRanges[i].ToString();
+                        break;
+                    case 4:
+                        AuxiliaryCode5 = serialNumberRanges[i].ToString();
+                        break;
+                    case 5:
+                        AuxiliaryCode6 = serialNumberRanges[i].ToString();
+                        break;
+                    case 6:
+                        AuxiliaryCode7 = serialNumberRanges[i].ToString();
+                        break;
+                    case 7:
+                        AuxiliaryCode8 = serialNumberRanges[i].ToString();
                         break;
                 }
             }
