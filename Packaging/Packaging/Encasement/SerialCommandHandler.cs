@@ -2,10 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using DataAccess.Dto;
-using DataAccess.Encasement;
 using DataAccess.Wms;
 using DevExpress.XtraPrinting;
 using DevExpress.XtraReports.UI;
@@ -24,8 +22,10 @@ namespace Packaging.Encasement
         private readonly short _copies;
         private PrintDialog _printDialog;
         private readonly bool _paperFlag;
+        private DateTime? _printDateTime;
 
-        public SerialCommandHandler(XtraReport xtraReport, ReportPrintTool reportPrintTool, bool paperFlag = false)
+        public SerialCommandHandler(XtraReport xtraReport, ReportPrintTool reportPrintTool,
+            DateTime? printDateTime = null, bool paperFlag = false)
         {
             if (paperFlag)
             {
@@ -42,12 +42,14 @@ namespace Packaging.Encasement
                 }
             }
 
+            _printDateTime = printDateTime;
             _xtraReport = xtraReport;
             _reportPrintTool = reportPrintTool;
             if (_serialNumberPrintDtos != null)
             {
                 _copies = _serialNumberPrintDtos.First().Copies;
             }
+
             _paperFlag = paperFlag;
         }
 
@@ -59,16 +61,12 @@ namespace Packaging.Encasement
                 return;
             }
 
-            DialogResult dialogResult = DialogResult.None;
-            switch (command)
+            DialogResult dialogResult = command switch
             {
-                case PrintingSystemCommand.Print:
-                    dialogResult = CreatePrintDialog();
-                    break;
-                case PrintingSystemCommand.PrintDirect:
-                    dialogResult = DialogResult.OK;
-                    break;
-            }
+                PrintingSystemCommand.Print => CreatePrintDialog(),
+                PrintingSystemCommand.PrintDirect => DialogResult.OK,
+                _ => DialogResult.None
+            };
 
             if (dialogResult != DialogResult.OK)
             {
@@ -111,7 +109,14 @@ namespace Packaging.Encasement
                 // 如果是箱标重打，重新保存数据
                 if (serialNumberPrintDto.AgainPrintFlag)
                 {
-                    SaveSerialNumberData(serialNumberPrintDto);
+                    var validScanQtyGeZero = ReceiveDetailLpnDal.ValidScanQtyGeZero(serialNumberPrintDto.BoxNumber);
+                    if (validScanQtyGeZero)
+                    {
+                        CustomMessageBox.Warning($"该箱号【{serialNumberPrintDto.BoxNumber}】,已经进行过收货处理，不允许重打箱标！");
+                        return;
+                    }
+                    serialNumberPrintDto.ReceiveDetailLpns.ForEach(d => { d.BoxCode = serialNumberPrintDto.BoxNumber; });
+                    SaveData();
                 }
 
                 // 打开的预览页面没有关闭时，只生成一次箱码，只保存一次数据
@@ -124,8 +129,18 @@ namespace Packaging.Encasement
             {
                 serialNumberPrintDto.BoxType = "Z";
             }
-            var boxNumber = WmsApiHelper.GetBoxNumber(serialNumberPrintDto.BoxType, serialNumberPrintDto.SkuName,
-                serialNumberPrintDto.Model);
+
+            string boxNumber;
+            if (_printDateTime.HasValue)
+            {
+                boxNumber = WmsApiHelper.GetBoxNumber(serialNumberPrintDto.BoxType, serialNumberPrintDto.SkuName,
+                    serialNumberPrintDto.Model, _printDateTime.Value);
+            }
+            else
+            {
+                boxNumber = WmsApiHelper.GetBoxNumber(serialNumberPrintDto.BoxType, serialNumberPrintDto.SkuName,
+                    serialNumberPrintDto.Model);
+            }
 
             foreach (var item in _serialNumberPrintDtos)
             {
@@ -137,20 +152,9 @@ namespace Packaging.Encasement
                 item.BoxNumber = boxNumber;
             }
 
-            serialNumberPrintDto.ReceiveDetailLpns.ForEach(d =>
-            {
-                d.BoxCode = boxNumber;
-            });
+            serialNumberPrintDto.ReceiveDetailLpns.ForEach(d => { d.BoxCode = boxNumber; });
 
-            try
-            {
-                SaveData();
-            }
-            catch (Exception ex)
-            {
-                Serilog.Log.Fatal("打印前入库保存异常：{}", ex);
-                CustomMessageBox.Exception($"打印前入库保存异常:{ex.GetOriginalException().Message}");
-            }
+            SaveData();
 
             _xtraReport.CreateDocument();
             Print();
@@ -167,18 +171,19 @@ namespace Packaging.Encasement
 
         private void SaveData()
         {
-            var serialNumberPrintDto = _serialNumberPrintDtos.First();
-            // 重新打印箱贴的业务场景
-            // 1.生产车间重新打印
-            // 2.库房内的重新打印（WMS走出库，再入库流程）
-            ReceiveDetailLpnDal.Save(serialNumberPrintDto.BoxNumber, serialNumberPrintDto.ReceiveDetailLpns);
-
-            SaveSerialNumberData(serialNumberPrintDto);
-        }
-
-        private static void SaveSerialNumberData(SerialNumberPrintDto serialNumberPrintDto)
-        {
-            Task.Run(() => { PackingSerialDal.SaveSerialData(serialNumberPrintDto); });
+            try
+            {
+                var serialNumberPrintDto = _serialNumberPrintDtos.First();
+                // 重新打印箱贴的业务场景
+                // 1.生产车间重新打印
+                // 2.库房内的重新打印（WMS走出库，再入库流程）
+                ReceiveDetailLpnDal.SaveSerial(serialNumberPrintDto);
+            }
+            catch (Exception ex)
+            {
+                Serilog.Log.Fatal("打印前入库保存异常：{}", ex.GetOriginalException().Message);
+                CustomMessageBox.Exception($"打印前入库保存异常:{ex.GetOriginalException().Message}");
+            }
         }
     }
 }
