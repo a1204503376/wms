@@ -4,6 +4,7 @@ import {nowDateFormat} from "@/util/date"
 import {getCrudColumnResponseList} from "@/api/core/column";
 import {deepClone} from "@/util/util";
 import {mapGetters} from "vuex";
+import {getStore, setStore} from '@/util/store';
 
 export const listMixin = {
     mixins: [menuMixin],
@@ -155,11 +156,45 @@ export const listMixin = {
                 return ((x < y) ? -1 : (x > y) ? 1 : 0);
             });
         },
-        getColumnDataSource: function () {
-            return this.table.columnList;
+        async getColumnDataSource() {
+
+            let that = this;
+            let menus = this.getMenu();
+            let menu = {};
+            menus.children.forEach(function (item, index) {
+                if (item.path == that.$route.path) {
+                    menu = item;
+                }
+            });
+            // let crudMenu = {};
+            // let crudColumn = getStore({name: "crudColumn"});
+            // if (func.isNotEmpty(crudColumn)) {
+            //     crudColumn.forEach(function (item, index) {
+            //         if (JSON.stringify(item.menuId) === JSON.stringify(menu.id)) {
+            //             crudMenu = item.columnList;
+            //         }
+            //     });
+            //     debugger
+            //     that.table.columnList = crudMenu
+            // } else {
+            await getCrudColumnResponseList(menu.id)
+                .then(({data: {data}}) => {
+                    that.table.columnList = deepClone(data)
+                });
+            // }
+
+            return that.table.columnList;
+
         },
         getCrudColumnList() {
-            let menu = this.getMenu();
+            let that = this;
+            let menus = this.getMenu();
+            let menu = {};
+            menus.children.forEach(function (item, index) {
+                if (item.path == that.$route.path) {
+                    menu = item;
+                }
+            });
             getCrudColumnResponseList(menu.id)
                 .then(({data: {data}}) => {
                     this.setColumnList(this.table.columnList, data, 'init');
@@ -174,7 +209,7 @@ export const listMixin = {
                 || func.isEmpty(columnObj['columnList'])) {
                 return;
             }
-            this.setColumnList(this.table.columnList, columnObj.columnList);
+            this.setColumnList(this.getColumnDataSource(), columnObj.columnList);
         },
         // 当前页导出
         exportCurrentDataToExcel(sheetName, filename) {

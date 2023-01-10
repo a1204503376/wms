@@ -188,7 +188,7 @@ export default {
             },
 
             table: {
-                columnList: [
+                columnList: this.getColumnDataSource() ||[
                     {
                         prop: 'receiveNo',
                         label: '收货单编码',
