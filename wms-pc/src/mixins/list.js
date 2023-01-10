@@ -61,6 +61,7 @@ export const listMixin = {
         }
     },
     created() {
+        this.getColumnDataSource();
         this.getCrudColumnList();
         this.copyInitialValue();
     },
@@ -73,7 +74,7 @@ export const listMixin = {
                 }
             });
         },
-        copyInitialValue() {
+        async copyInitialValue() {
             this.form.deepCloneParams = deepClone(this.form.params);
         },
         getTableData() {
@@ -131,7 +132,7 @@ export const listMixin = {
                 }
                 Object.assign(d, {
                     aliasName: find.aliasName,
-                    width: func.toInt(find.width, 0),
+                    width: func.toInt(find.width || 120, 0),
                     hide: find.hide,
                     fixed: find.fixed,
                     align: find.align,
@@ -151,10 +152,10 @@ export const listMixin = {
                 });
             });
             func.recursionObject(deepCloneColumnList, this, this.table.columnList);
-            this.table.columnList.sort((a, b) => {
-                let x = a['order'], y = b['order'];
-                return ((x < y) ? -1 : (x > y) ? 1 : 0);
-            });
+            // this.table.columnList.sort((a, b) => {
+            //     let x = a['order'], y = b['order'];
+            //     return ((x < y) ? -1 : (x > y) ? 1 : 0);
+            // });
         },
         async getColumnDataSource() {
 
@@ -174,19 +175,21 @@ export const listMixin = {
             //             crudMenu = item.columnList;
             //         }
             //     });
-            //     debugger
-            //     that.table.columnList = crudMenu
+            //     that.table.columnList = deepClone(crudMenu);
+            //     return deepClone(crudMenu);
             // } else {
             await getCrudColumnResponseList(menu.id)
                 .then(({data: {data}}) => {
-                    that.table.columnList = deepClone(data)
+                    if (data.length != 0) {
+                        that.table.columnList = deepClone(data)
+                        return that.table.columnList;
+                    }
+
                 });
             // }
-
-            return that.table.columnList;
-
+            return that.table.columnList
         },
-        getCrudColumnList() {
+        async getCrudColumnList() {
             let that = this;
             let menus = this.getMenu();
             let menu = {};
@@ -197,7 +200,12 @@ export const listMixin = {
             });
             getCrudColumnResponseList(menu.id)
                 .then(({data: {data}}) => {
-                    this.setColumnList(this.table.columnList, data, 'init');
+                    if (data.length != 0) {
+                        this.setColumnList(this.table.columnList, data);
+                    } else {
+                        this.setColumnList(this.table.columnList, this.table.columnList);
+                    }
+
                 });
         },
         onColumnShowHide(column) {

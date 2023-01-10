@@ -86,10 +86,11 @@
     import func from "@/util/func";
     import {deepClone} from "@/util/util";
     import sortable from "sortablejs";
+    import {listMixin} from "@/mixins/list";
 
     export default {
         name: "dialog-column",
-        mixins: [menuMixin],
+        mixins: [menuMixin,listMixin],
         props: {
             visible: {type: Boolean, default: false},
             dataSource: {
@@ -163,7 +164,9 @@
             }
         },
         created() {
+            this.list = [];
             this.init();
+            console.log(this.dataSource);
             this.$nextTick(function () {
                 this.rowDrop();
             });
@@ -173,23 +176,6 @@
             // this.$emit("handleRefreshTable");
         },
         methods: {
-            getCrudColumnList() {
-                let that = this;
-                let menus = this.getMenu();
-                let menu = {};
-                menus.children.forEach(function (item, index) {
-                    if (item.path == that.$route.path) {
-                        menu = item;
-                    }
-                });
-                let crudColumn = getStore({name: "crudColumn"});
-                crudColumn.forEach(function (item, index) {
-                    if (item.menuId == menu.menuId) {
-                        this.list = item;
-                    }
-                });
-                return [];
-            },
             rowDrop() {
                 const el = document.querySelectorAll(
                     ".dialog-column-table .el-table__body-wrapper > table > tbody"
@@ -310,6 +296,7 @@
             },
             beforeClose(column) {
                 this.$emit('close', column);
+                // location.reload();
             },
         }
     }
