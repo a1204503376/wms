@@ -159,6 +159,12 @@
       <DependentUpon>CartonLabelForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Encasement\BatchCommandHandler.cs" />
+    <Compile Include="Encasement\DatePrintForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Encasement\DatePrintForm.Designer.cs">
+      <DependentUpon>DatePrintForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Encasement\ImportForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -263,6 +269,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Encasement\CartonLabelForm.resx">
       <DependentUpon>CartonLabelForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Encasement\DatePrintForm.resx">
+      <DependentUpon>DatePrintForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Encasement\ImportForm.resx">
       <DependentUpon>ImportForm.cs</DependentUpon>

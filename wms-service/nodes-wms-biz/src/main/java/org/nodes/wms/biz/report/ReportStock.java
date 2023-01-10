@@ -9,14 +9,10 @@ import org.nodes.wms.dao.stock.StockDao;
 import org.nodes.wms.dao.stock.dto.report.ReportAgeOfInventoryDto;
 import org.nodes.wms.dao.stock.dto.report.ReportCountStockDto;
 import org.nodes.wms.dao.stock.dto.report.ReportStockDto;
-import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -77,37 +73,11 @@ public class ReportStock {
 		// 处理套装配件
 		Map<String, List<ReportStockDto>> listMap = tzpjList.stream()
 			.collect(Collectors.groupingBy(ReportStockDto::getSkuLot2));
-
-		for (Map.Entry<String, List<ReportStockDto>> entry: listMap.entrySet()){
+		for (Map.Entry<String ,List<ReportStockDto>> entry : listMap.entrySet()){
 			List<ReportStockDto> value = entry.getValue();
-			ReportStockDto mck = value.stream().filter(x -> "摩擦块".equals(x.getSkuName())).findFirst().orElse(null);
-			ReportStockDto xgb = value.stream().filter(x -> "新钢背".equals(x.getSkuName())).findFirst().orElse(null);
-			ReportStockDto gb = value.stream().filter(x -> "钢背".equals(x.getSkuName())).findFirst().orElse(null);
-			ReportStockDto jxgb = value.stream().filter(x -> "检修钢背".equals(x.getSkuName())).findFirst().orElse(null);
-			ReportStockDto xsjt = value.stream().filter(x -> "新三角托".equals(x.getSkuName())).findFirst().orElse(null);
-			ReportStockDto jxsjt = value.stream().filter(x -> "检修三角托".equals(x.getSkuName())).findFirst().orElse(null);
-			ReportStockDto kh = value.stream().filter(x -> "卡簧".equals(x.getSkuName())).findFirst().orElse(null);
-			if (Func.isNotEmpty(mck)){
-				result.add(mck);
-			}
-			if (Func.isNotEmpty(gb)){
-				result.add(gb);
-			}
-			if (Func.isNotEmpty(xgb)){
-				result.add(xgb);
-			}
-			if (Func.isNotEmpty(jxgb)){
-				result.add(jxgb);
-			}
-			if (Func.isNotEmpty(xsjt)){
-				result.add(xsjt);
-			}
-			if (Func.isNotEmpty(jxsjt)){
-				result.add(jxsjt);
-			}
-			if (Func.isNotEmpty(kh)){
-				result.add(kh);
-			}
+			List<ReportStockDto> sortedValue = value.stream().sorted(Comparator.comparing(ReportStockDto::getUdf3))
+				.collect(Collectors.toList());
+			result.addAll(sortedValue);
 		}
 		return result;
 	}

@@ -60,12 +60,13 @@
             this.layoutControlItem9 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem20 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControl2 = new DevExpress.XtraLayout.LayoutControl();
+            this.btnDatePrint = new DevExpress.XtraEditors.SimpleButton();
             this.btnPaperPrint = new DevExpress.XtraEditors.SimpleButton();
             this.txtSerialNumber = new DevExpress.XtraEditors.TextEdit();
             this.btnResetSerialNumber = new DevExpress.XtraEditors.SimpleButton();
             this.btnCollect = new DevExpress.XtraEditors.SimpleButton();
             this.btnResetAll = new DevExpress.XtraEditors.SimpleButton();
-            this.btnPreviewPrint = new DevExpress.XtraEditors.SimpleButton();
+            this.btnPrint = new DevExpress.XtraEditors.SimpleButton();
             this.btnExport = new DevExpress.XtraEditors.SimpleButton();
             this.btnImportDetail = new DevExpress.XtraEditors.SimpleButton();
             this.btnReprint = new DevExpress.XtraEditors.SimpleButton();
@@ -80,6 +81,7 @@
             this.layoutControlItem18 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem19 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem13 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem21 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControl3 = new DevExpress.XtraLayout.LayoutControl();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
             this.gvSerialNumber = new DevExpress.XtraGrid.Views.Grid.GridView();
@@ -135,6 +137,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem18)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem19)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem13)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem21)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl3)).BeginInit();
             this.layoutControl3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
@@ -242,7 +245,6 @@
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.sluSku.Properties.NullText = "";
             this.sluSku.Properties.PopupView = this.gridView1;
-            this.sluSku.Properties.EditValueChanged += new System.EventHandler(this.sluSku_Properties_EditValueChanged);
             this.sluSku.Properties.EditValueChanging += new DevExpress.XtraEditors.Controls.ChangingEventHandler(this.sluSku_Properties_EditValueChanging);
             this.sluSku.Size = new System.Drawing.Size(334, 24);
             this.sluSku.StyleController = this.layoutControl1;
@@ -511,12 +513,13 @@
             // 
             // layoutControl2
             // 
+            this.layoutControl2.Controls.Add(this.btnDatePrint);
             this.layoutControl2.Controls.Add(this.btnPaperPrint);
             this.layoutControl2.Controls.Add(this.txtSerialNumber);
             this.layoutControl2.Controls.Add(this.btnResetSerialNumber);
             this.layoutControl2.Controls.Add(this.btnCollect);
             this.layoutControl2.Controls.Add(this.btnResetAll);
-            this.layoutControl2.Controls.Add(this.btnPreviewPrint);
+            this.layoutControl2.Controls.Add(this.btnPrint);
             this.layoutControl2.Controls.Add(this.btnExport);
             this.layoutControl2.Controls.Add(this.btnImportDetail);
             this.layoutControl2.Controls.Add(this.btnReprint);
@@ -529,12 +532,25 @@
             this.layoutControl2.TabIndex = 1;
             this.layoutControl2.Text = "layoutControl2";
             // 
+            // btnDatePrint
+            // 
+            this.btnDatePrint.Enabled = false;
+            this.btnDatePrint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnDatePrint.ImageOptions.Image")));
+            this.btnDatePrint.Location = new System.Drawing.Point(878, 12);
+            this.btnDatePrint.Name = "btnDatePrint";
+            this.btnDatePrint.Size = new System.Drawing.Size(116, 27);
+            this.btnDatePrint.StyleController = this.layoutControl2;
+            this.btnDatePrint.TabIndex = 15;
+            this.btnDatePrint.Text = "指定日期打印";
+            this.btnDatePrint.Click += new System.EventHandler(this.btnDatePrint_Click);
+            // 
             // btnPaperPrint
             // 
+            this.btnPaperPrint.Enabled = false;
             this.btnPaperPrint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnPaperPrint.ImageOptions.Image")));
-            this.btnPaperPrint.Location = new System.Drawing.Point(976, 12);
+            this.btnPaperPrint.Location = new System.Drawing.Point(998, 12);
             this.btnPaperPrint.Name = "btnPaperPrint";
-            this.btnPaperPrint.Size = new System.Drawing.Size(95, 27);
+            this.btnPaperPrint.Size = new System.Drawing.Size(89, 27);
             this.btnPaperPrint.StyleController = this.layoutControl2;
             this.btnPaperPrint.TabIndex = 14;
             this.btnPaperPrint.Text = "纸箱打印";
@@ -554,9 +570,9 @@
             // btnResetSerialNumber
             // 
             this.btnResetSerialNumber.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnResetSerialNumber.ImageOptions.Image")));
-            this.btnResetSerialNumber.Location = new System.Drawing.Point(1075, 12);
+            this.btnResetSerialNumber.Location = new System.Drawing.Point(1091, 12);
             this.btnResetSerialNumber.Name = "btnResetSerialNumber";
-            this.btnResetSerialNumber.Size = new System.Drawing.Size(88, 27);
+            this.btnResetSerialNumber.Size = new System.Drawing.Size(86, 27);
             this.btnResetSerialNumber.StyleController = this.layoutControl2;
             this.btnResetSerialNumber.TabIndex = 5;
             this.btnResetSerialNumber.Text = "重置明细";
@@ -576,25 +592,25 @@
             // btnResetAll
             // 
             this.btnResetAll.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnResetAll.ImageOptions.Image")));
-            this.btnResetAll.Location = new System.Drawing.Point(1167, 12);
+            this.btnResetAll.Location = new System.Drawing.Point(1181, 12);
             this.btnResetAll.Name = "btnResetAll";
-            this.btnResetAll.Size = new System.Drawing.Size(88, 27);
+            this.btnResetAll.Size = new System.Drawing.Size(86, 27);
             this.btnResetAll.StyleController = this.layoutControl2;
             this.btnResetAll.TabIndex = 6;
             this.btnResetAll.Text = "重置全部";
             this.btnResetAll.Click += new System.EventHandler(this.btnResetAll_Click);
             // 
-            // btnPreviewPrint
+            // btnPrint
             // 
-            this.btnPreviewPrint.Enabled = false;
-            this.btnPreviewPrint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnPreviewPrint.ImageOptions.Image")));
-            this.btnPreviewPrint.Location = new System.Drawing.Point(1259, 12);
-            this.btnPreviewPrint.Name = "btnPreviewPrint";
-            this.btnPreviewPrint.Size = new System.Drawing.Size(83, 27);
-            this.btnPreviewPrint.StyleController = this.layoutControl2;
-            this.btnPreviewPrint.TabIndex = 7;
-            this.btnPreviewPrint.Text = "打印";
-            this.btnPreviewPrint.Click += new System.EventHandler(this.btnPreviewPrint_Click);
+            this.btnPrint.Enabled = false;
+            this.btnPrint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnPreviewPrint.ImageOptions.Image")));
+            this.btnPrint.Location = new System.Drawing.Point(1271, 12);
+            this.btnPrint.Name = "btnPrint";
+            this.btnPrint.Size = new System.Drawing.Size(71, 27);
+            this.btnPrint.StyleController = this.layoutControl2;
+            this.btnPrint.TabIndex = 7;
+            this.btnPrint.Text = "打印";
+            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
             // 
             // btnExport
             // 
@@ -643,7 +659,8 @@
             this.layoutControlItem17,
             this.layoutControlItem18,
             this.layoutControlItem19,
-            this.layoutControlItem13});
+            this.layoutControlItem13,
+            this.layoutControlItem21});
             this.layoutControlGroup1.Name = "Root";
             this.layoutControlGroup1.Size = new System.Drawing.Size(1354, 52);
             this.layoutControlGroup1.TextVisible = false;
@@ -651,18 +668,18 @@
             // layoutControlItem15
             // 
             this.layoutControlItem15.Control = this.btnResetAll;
-            this.layoutControlItem15.Location = new System.Drawing.Point(1155, 0);
+            this.layoutControlItem15.Location = new System.Drawing.Point(1169, 0);
             this.layoutControlItem15.Name = "layoutControlItem15";
-            this.layoutControlItem15.Size = new System.Drawing.Size(92, 32);
+            this.layoutControlItem15.Size = new System.Drawing.Size(90, 32);
             this.layoutControlItem15.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem15.TextVisible = false;
             // 
             // layoutControlItem14
             // 
             this.layoutControlItem14.Control = this.btnResetSerialNumber;
-            this.layoutControlItem14.Location = new System.Drawing.Point(1063, 0);
+            this.layoutControlItem14.Location = new System.Drawing.Point(1079, 0);
             this.layoutControlItem14.Name = "layoutControlItem14";
-            this.layoutControlItem14.Size = new System.Drawing.Size(92, 32);
+            this.layoutControlItem14.Size = new System.Drawing.Size(90, 32);
             this.layoutControlItem14.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem14.TextVisible = false;
             // 
@@ -689,15 +706,15 @@
             this.emptySpaceItem1.AllowHotTrack = false;
             this.emptySpaceItem1.Location = new System.Drawing.Point(674, 0);
             this.emptySpaceItem1.Name = "emptySpaceItem1";
-            this.emptySpaceItem1.Size = new System.Drawing.Size(290, 32);
+            this.emptySpaceItem1.Size = new System.Drawing.Size(192, 32);
             this.emptySpaceItem1.TextSize = new System.Drawing.Size(0, 0);
             // 
             // layoutControlItem16
             // 
-            this.layoutControlItem16.Control = this.btnPreviewPrint;
-            this.layoutControlItem16.Location = new System.Drawing.Point(1247, 0);
+            this.layoutControlItem16.Control = this.btnPrint;
+            this.layoutControlItem16.Location = new System.Drawing.Point(1259, 0);
             this.layoutControlItem16.Name = "layoutControlItem16";
-            this.layoutControlItem16.Size = new System.Drawing.Size(87, 32);
+            this.layoutControlItem16.Size = new System.Drawing.Size(75, 32);
             this.layoutControlItem16.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem16.TextVisible = false;
             // 
@@ -731,11 +748,20 @@
             // layoutControlItem13
             // 
             this.layoutControlItem13.Control = this.btnPaperPrint;
-            this.layoutControlItem13.Location = new System.Drawing.Point(964, 0);
+            this.layoutControlItem13.Location = new System.Drawing.Point(986, 0);
             this.layoutControlItem13.Name = "layoutControlItem13";
-            this.layoutControlItem13.Size = new System.Drawing.Size(99, 32);
+            this.layoutControlItem13.Size = new System.Drawing.Size(93, 32);
             this.layoutControlItem13.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem13.TextVisible = false;
+            // 
+            // layoutControlItem21
+            // 
+            this.layoutControlItem21.Control = this.btnDatePrint;
+            this.layoutControlItem21.Location = new System.Drawing.Point(866, 0);
+            this.layoutControlItem21.Name = "layoutControlItem21";
+            this.layoutControlItem21.Size = new System.Drawing.Size(120, 32);
+            this.layoutControlItem21.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem21.TextVisible = false;
             // 
             // layoutControl3
             // 
@@ -954,6 +980,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem18)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem19)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem13)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem21)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl3)).EndInit();
             this.layoutControl3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
@@ -1014,7 +1041,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn colRemark;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem15;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem14;
-        private DevExpress.XtraEditors.SimpleButton btnPreviewPrint;
+        private DevExpress.XtraEditors.SimpleButton btnPrint;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem16;
         private DevExpress.XtraGrid.Columns.GridColumn colAssembleDate;
         private DevExpress.XtraGrid.Columns.GridColumn colTrackingNumber;
@@ -1032,5 +1059,7 @@
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem20;
         private DevExpress.XtraEditors.SimpleButton btnPaperPrint;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem13;
+        private DevExpress.XtraEditors.SimpleButton btnDatePrint;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem21;
     }
 }
