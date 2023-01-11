@@ -71,6 +71,9 @@
 						console.log('按箱移动成功')
 						_this.params.whId = uni.getStorageSync('warehouse').whId;
 						stockManage.stockMoveByBoxCode(_this.params).then(data => {
+							uni.$u.func.showToast({
+								title: '移动成功',
+							})
 							uni.$u.func.routeRedirectTo(
 								'/pages/stock/stockManage/moveByBoxCode/moveByBoxCode',
 								_this.params);

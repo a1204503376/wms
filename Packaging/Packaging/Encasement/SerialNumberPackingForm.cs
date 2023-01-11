@@ -171,7 +171,10 @@ namespace Packaging.Encasement
 
             btnResetAll.Enabled = false;
             btnResetSerialNumber.Enabled = false;
-            btnPreviewPrint.Enabled = false;
+            btnPrint.Enabled = false;
+            btnDatePrint.Enabled = false;
+            btnPaperPrint.Enabled = false;
+            
 
             btnExport.Enabled = false;
         }
@@ -193,7 +196,16 @@ namespace Packaging.Encasement
             var packingAutoIdentifications = GetGridDataSource();
             if (packingAutoIdentifications.Count != 0)
             {
-                btnPreviewPrint.Enabled = true;
+                if (cbxBox.Text == CbBoxZ)
+                {
+                    btnPaperPrint.Enabled = true;
+                }
+                else
+                {
+                    btnPrint.Enabled = true;
+                    btnDatePrint.Enabled = true;
+                }
+
                 btnExport.Enabled = true;
             }
 
@@ -384,21 +396,23 @@ namespace Packaging.Encasement
 
         private XtraReport GetSerialNumberReport(bool paperFlag = false)
         {
-            var serialNumberPrintDtos = GetSerialNumberPrintDtos();
+            
             XtraReport xtraReport;
             if (paperFlag)
             {
+                var serialNumberPrintDtos = GetPaperSerialNumberPrintDtos();
                 xtraReport = new SerialPaperReport(serialNumberPrintDtos);
             }
             else
             {
+                var serialNumberPrintDtos = GetSerialNumberPrintDtos();
                 xtraReport = new SerialNumberReport(serialNumberPrintDtos);
             }
 
             return xtraReport;
         }
 
-        private List<SerialNumberPrintDto> GetSerialNumberPrintDtos()
+        private List<SerialNumberPrintDto> GetSerialNumberPrintDtos(bool normal = true)
         {
             Sku sku = GetCurSku();
 
@@ -438,9 +452,7 @@ namespace Packaging.Encasement
                     BoxNumber = Constants.DefaulutBoxNumber,
                     SerialDetails = packingSerialDetails,
                     AgainPrintFlag = _againPrintFlag,
-                    PrintDate = (_againPrintFlag && !string.IsNullOrWhiteSpace(_againPrintDate))
-                        ? _againPrintDate
-                        : DateTime.Now.ToString("yyMMdd")
+                    PrintDate = GetPrintDate()
                 };
 
                 if (!string.IsNullOrWhiteSpace(_boxNumber) && !NomatcBoxType())
@@ -466,6 +478,7 @@ namespace Packaging.Encasement
 
                 var numberRanges = serialNumberRanges.GetRange(index, count);
                 serialNumberPrintDto.SetSerial(numberRanges);
+
                 serialNumberPrintDtos.Add(serialNumberPrintDto);
             }
 
@@ -526,7 +539,7 @@ namespace Packaging.Encasement
                     SkuLot6 = frictionBlockBatch,
                     SkuLot7 = pair.First().ProductIdentificationCode,
                     SkuLot8 = serialNumberPrintDtoFirst.SpeedClass,
-                    SkuLot9 = DateTime.Now.ToString("yyMMdd"),
+                    SkuLot9 = serialNumberPrintDtoFirst.PrintDate,
                     Udf1 = txtProductPlan.Text,
                     Udf2 = txtPo.Text,
                     Udf3 = txtWo.Text,
@@ -536,7 +549,7 @@ namespace Packaging.Encasement
                 // 成对的序列号，WMS保存奇数即可，如：160个序列号，2个一对，箱贴显示：80对/箱，WMS存1，3，5，7... 序列号
                 // 固定指定的成品（闸片）的型号成对时，采用2个序列号
                 SetSnCodePlanQty(pair.OrderBy(d => d.ProductSupportCode)
-                        .Select(d => d.ProductIdentificationCode+ d.ProductSupportCode).ToList(),
+                        .Select(d => d.ProductIdentificationCode + d.ProductSupportCode).ToList(),
                     serialNumberPrintDtoFirst,
                     receiveDetailLpn);
                 receiveDetailLpns.Add(receiveDetailLpn);
@@ -545,6 +558,166 @@ namespace Packaging.Encasement
             serialNumberPrintDtoFirst.ReceiveDetailLpns = receiveDetailLpns;
 
             return serialNumberPrintDtos;
+        }
+
+        private List<SerialNumberPrintDto> GetPaperSerialNumberPrintDtos()
+        {
+            Sku sku = GetCurSku();
+
+            if (!(gridControl1.DataSource is List<PackingSerialDetail> packingSerialDetails))
+            {
+                return null;
+            }
+
+            var serialNumberPrintDtos = new List<SerialNumberPrintDto>();
+            // 纸箱打印，辅助代码默认最多8个，多一个多打印一张
+            var serialNumberRanges = packingSerialDetails.Select(d => d.ProductSupportCode).ToList();
+            var groupSerialNumber =
+                (int)Math.Ceiling((double)packingSerialDetails.Count / SerialNumberPrintDto.PaperSerialGroupNumber);
+            for (int i = 0; i < groupSerialNumber; i++)
+            {
+                var serialNumberPrintDto = new SerialNumberPrintDto
+                {
+                    SkuId = sku.SkuId,
+                    SkuCode = sku.SkuCode,
+                    SkuName = sku.SkuName,
+                    SkuNameS = sku.SkuNameS,
+                    WspName = sku.WspName,
+                    BoxType = cbxBox.Text,
+                    Model = luModel.Text,
+                    ProductionPlan = txtProductPlan.Text,
+                    PoCode = txtPo.Text,
+                    WoCode = txtWo.Text,
+                    AssemblePeople = txtAssemblePeople.Text,
+                    UserName = GlobalSettings.UserName,
+                    Qty = packingSerialDetails.Count,
+                    SpeedClass = sluSpeedClass.Text,
+                    ProductIdentificationCode = _packingSerialDetails.First().ProductIdentificationCode,
+                    SpecialCustomer = txtSpecialCustomer.Text,
+                    Copies = Convert.ToInt16(txtPrintNumber.EditValue),
+                    BoxNumber = Constants.DefaulutBoxNumber,
+                    SerialDetails = packingSerialDetails,
+                    AgainPrintFlag = _againPrintFlag,
+                    PrintDate = GetPrintDate()
+                };
+
+                if (!string.IsNullOrWhiteSpace(_boxNumber) && !NomatcBoxType())
+                {
+                    serialNumberPrintDto.BoxNumber = _boxNumber;
+                }
+
+                int index = (i * SerialNumberPrintDto.PaperSerialGroupNumber);
+                int count;
+                if (i == 0 && serialNumberRanges.Count < SerialNumberPrintDto.PaperSerialGroupNumber)
+                {
+                    count = serialNumberRanges.Count;
+                }
+                else if ((i + 1) == groupSerialNumber &&
+                         (serialNumberRanges.Count - index) < SerialNumberPrintDto.PaperSerialGroupNumber)
+                {
+                    count = serialNumberRanges.Count - index;
+                }
+                else
+                {
+                    count = SerialNumberPrintDto.PaperSerialGroupNumber;
+                }
+
+                var numberRanges = serialNumberRanges.GetRange(index, count);
+                serialNumberPrintDto.SetPaperSerial(numberRanges);
+
+                serialNumberPrintDtos.Add(serialNumberPrintDto);
+            }
+
+            var serialNumberPrintDtoFirst = serialNumberPrintDtos.First();
+            // 组装给WMS的入库数据
+            // 物品型号是指定的成对物品，并且使用2个序列号时，WMS保存奇数，过滤掉偶数的
+            if (SerialNumberPrintDto.IsDobuleSerialNumber(_packingSequenctNumberPairs, serialNumberPrintDtoFirst)
+                && packingSerialDetails.Count >= 2
+                && packingSerialDetails.Any(d => d.ProductSupportCode % 2 != 0))
+            {
+                packingSerialDetails = packingSerialDetails.OrderBy(d => d.ProductSupportCode)
+                    .Where(d => d.ProductSupportCode % 2 != 0)
+                    .ToList();
+
+                // 箱标显示的数量重新赋值
+                serialNumberPrintDtos.ForEach(d => d.Qty = packingSerialDetails.Count);
+            }
+
+            // WMS要求根据钢背批次和摩擦块批次进行分组管理
+            var groupBy =
+                packingSerialDetails.GroupBy(d =>
+                    d.SteelBackBatch + Constants.Underline
+                                     + d.FrictionBlockBatch);
+
+            var wmsSkuPackageDetail = WmsSkuPackageDetailDal.GetFirst(sku.WspId);
+
+            var receiveDetailLpns = new List<ReceiveDetailLpn>();
+            foreach (var pair in groupBy)
+            {
+                var keyArray = pair.Key.Split(Constants.Underline);
+                var steelBackBatch = keyArray[0];
+                var frictionBlockBatch = keyArray[1];
+                var receiveDetailLpn = new ReceiveDetailLpn
+                {
+                    Id = SnowflakeIds.Instance.NextId(),
+                    DetailStatus = ReceiveDetailStatusEnum.NotReceipt,
+                    SkuId = sku.SkuId,
+                    SkuCode = sku.SkuCode,
+                    SkuName = sku.SkuName,
+                    SkuSpec = serialNumberPrintDtoFirst.Model,
+                    WspId = sku.WspId,
+                    BoxCode = serialNumberPrintDtoFirst.BoxNumber,
+                    ScanQty = 0,
+                    SkuLevel = 1,
+                    ConvertQty = 1,
+                    UmCode = wmsSkuPackageDetail.WsuCode,
+                    UmName = wmsSkuPackageDetail.WsuName,
+                    BaseUmCode = wmsSkuPackageDetail.WsuCode,
+                    BaseUmName = wmsSkuPackageDetail.WsuName,
+                    WhId = Constants.WhId,
+                    WhCode = Constants.WhCode,
+                    WoId = Constants.WoId,
+                    OwnerCode = Constants.OwnerCode,
+                    SkuLot1 = frictionBlockBatch,
+                    SkuLot2 = serialNumberPrintDtoFirst.Model,
+                    SkuLot4 = serialNumberPrintDtoFirst.SpecialCustomer,
+                    SkuLot5 = steelBackBatch,
+                    SkuLot6 = frictionBlockBatch,
+                    SkuLot7 = pair.First().ProductIdentificationCode,
+                    SkuLot8 = serialNumberPrintDtoFirst.SpeedClass,
+                    SkuLot9 = serialNumberPrintDtoFirst.PrintDate,
+                    Udf1 = txtProductPlan.Text,
+                    Udf2 = txtPo.Text,
+                    Udf3 = txtWo.Text,
+                    CreateUser = GlobalSettings.UserId,
+                    CreateDept = GlobalSettings.UserDeptId,
+                };
+                // 成对的序列号，WMS保存奇数即可，如：160个序列号，2个一对，箱贴显示：80对/箱，WMS存1，3，5，7... 序列号
+                // 固定指定的成品（闸片）的型号成对时，采用2个序列号
+                SetSnCodePlanQty(pair.OrderBy(d => d.ProductSupportCode)
+                        .Select(d => d.ProductIdentificationCode + d.ProductSupportCode).ToList(),
+                    serialNumberPrintDtoFirst,
+                    receiveDetailLpn);
+                receiveDetailLpns.Add(receiveDetailLpn);
+            }
+
+            serialNumberPrintDtoFirst.ReceiveDetailLpns = receiveDetailLpns;
+
+            return serialNumberPrintDtos;
+        }
+
+        private string GetPrintDate()
+        {
+            if (_againPrintFlag && !string.IsNullOrWhiteSpace(_againPrintDate))
+            {
+                return _againPrintDate;
+            }
+            else
+            {
+                return _printDateTime.HasValue
+                    ? _printDateTime.Value.ToString("yyMMdd")
+                    : DateTime.Now.ToString("yyMMdd");
+            }
         }
 
         private Sku GetCurSku()
@@ -565,19 +738,6 @@ namespace Packaging.Encasement
             receiveDetailLpn.PlanQty = serialNumberList.Count;
         }
 
-        private void btnPreviewPrint_Click(object sender, EventArgs e)
-        {
-            if (!ValidList())
-            {
-                return;
-            }
-
-            var xtraReport = GetSerialNumberReport();
-            var reportPrintTool = new ReportPrintTool(xtraReport);
-            reportPrintTool.PrintingSystem.AddCommandHandler(new SerialCommandHandler(xtraReport, reportPrintTool));
-            xtraReport.ShowPreviewDialog();
-        }
-
         private void btnPaperPrint_Click(object sender, EventArgs e)
         {
             if (cbxBox.Text != CbBoxZ)
@@ -594,7 +754,7 @@ namespace Packaging.Encasement
             var xtraReport = GetSerialNumberReport(true);
             var reportPrintTool = new ReportPrintTool(xtraReport);
             reportPrintTool.PrintingSystem.AddCommandHandler(
-                new SerialCommandHandler(xtraReport, reportPrintTool, true));
+                new SerialCommandHandler(xtraReport, reportPrintTool,null, true));
             xtraReport.ShowPreviewDialog();
         }
 
@@ -782,6 +942,21 @@ namespace Packaging.Encasement
         private void cbxBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetFilterSkuDataSource();
+            if (cbxBox.Text == CbBoxZ)
+            {
+                txtPrintNumber.EditValue = ConfigurationManager.AppSettings["PaperCopies"];
+                btnPaperPrint.Enabled = true;
+                btnPrint.Enabled = false;
+                btnDatePrint.Enabled = false;
+            }
+            else
+            {
+                txtPrintNumber.EditValue = ConfigurationManager.AppSettings["Copies"];
+                btnPaperPrint.Enabled = false;
+                btnPrint.Enabled = true;
+                btnDatePrint.Enabled = true;
+            }
+
             if (NomatcBoxType())
             {
                 CustomMessageBox.Information($"当前选择的箱型[{cbxBox.Text}]与重打的箱号[{_boxNumber}]不匹配，系统将生成新的箱号!");
@@ -796,6 +971,11 @@ namespace Packaging.Encasement
             }
 
             var boxType = _boxNumber.Substring(0, 1);
+            if (boxType == "Z")
+            {
+                return cbxBox.Text != CbBoxZ;
+            }
+
             return cbxBox.Text != boxType;
         }
 
@@ -866,7 +1046,28 @@ namespace Packaging.Encasement
         private void xtraOpenFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var filePath = xtraOpenFileDialog1.FileName;
-            SetSerialDetailDataSource(ExcelHelper.ImportSerialDetail(filePath));
+            if (GetCurSku(out Sku sku))
+            {
+                CustomMessageBox.Warning("请选择物品！");
+                return;
+            }
+
+            var packingSerialDetails = ExcelHelper.ImportSerialDetail(filePath);
+            if (packingSerialDetails == null || packingSerialDetails.Count == 0)
+            {
+                CustomMessageBox.Warning("上传解析后内容为空");
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(sku.SkuBarcodeList)
+                && packingSerialDetails.Any(d => d.ProductIdentificationCode != sku.SkuBarcodeList))
+            {
+                SoundPlayerHelper.ProductIdentificationCodeNotMatch();
+                CustomMessageBox.Warning($"上传的EXCEL内产品标识代码存在与配置[{sku.SkuBarcodeList}]的不匹配情况，请检查!");
+                return;
+            }
+
+            SetSerialDetailDataSource(packingSerialDetails);
         }
 
         private void btnReprint_Click(object sender, EventArgs e)
@@ -895,6 +1096,8 @@ namespace Packaging.Encasement
             _againPrintFlag = true;
             _againPrintDate = packingSerialHeader.PrintDate;
             SetReadOnlyFalse();
+            // 箱标重打和指定日期打印，二选一，防止箱号被重新打印(指定日期打印会生成新的箱号)
+            btnDatePrint.Enabled = false;
         }
 
         private void SetSerialDetailDataSource(List<PackingSerialDetail> packingSerialDetails)
@@ -906,10 +1109,6 @@ namespace Packaging.Encasement
         private void SerialNumberPackingForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             _closeingFlag = true;
-        }
-
-        private void sluSku_Properties_EditValueChanged(object sender, EventArgs e)
-        {
         }
 
         private void sluSku_Properties_EditValueChanging(object sender,
@@ -928,6 +1127,34 @@ namespace Packaging.Encasement
             }
 
             ResetSerialNumber();
+        }
+
+        private void btnDatePrint_Click(object sender, EventArgs e)
+        {
+            var datePrintForm = new DatePrintForm("Serial", this);
+            datePrintForm.ShowDialog();
+        }
+
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+            Print(null);
+        }
+
+        private DateTime? _printDateTime = null;
+
+        public void Print(DateTime? printDateTime)
+        {
+            if (!ValidList())
+            {
+                return;
+            }
+
+            _printDateTime = printDateTime;
+            var xtraReport = GetSerialNumberReport();
+            var reportPrintTool = new ReportPrintTool(xtraReport);
+            reportPrintTool.PrintingSystem.AddCommandHandler(new SerialCommandHandler(xtraReport, reportPrintTool,printDateTime));
+            xtraReport.ShowPreviewDialog();
+            _printDateTime = null;
         }
     }
 }

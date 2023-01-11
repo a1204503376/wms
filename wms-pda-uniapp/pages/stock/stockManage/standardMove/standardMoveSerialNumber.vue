@@ -112,7 +112,12 @@
 					_this.params.whCode = uni.getStorageSync('warehouse').whCode;
 					_this.params.whId = uni.getStorageSync('warehouse').whId;
 					stockManage.stockMove(_this.params).then(data => {
-						console.log(data)
+						uni.$u.func.showToast({
+							title: '移动成功',
+						})
+						uni.navigateBack({
+							delta: 1
+						});
 					})
 				}, 1000)
 			},

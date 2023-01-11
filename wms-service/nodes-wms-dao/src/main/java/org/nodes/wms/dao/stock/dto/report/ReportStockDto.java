@@ -34,7 +34,10 @@ public class ReportStockDto {
 	 * 物品分类名称
 	 */
 	private String typeName;
-
+	/**
+	 * 属于套装配件的物品按udf3排序
+	 */
+	private String udf3;
 	/**
 	 * 占用库存总数
 	 */

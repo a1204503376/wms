@@ -1,7 +1,5 @@
 ﻿using System.Linq;
 using DataAccess.Wms;
-using System.Threading.Tasks;
-using DataAccess.Encasement;
 using DevExpress.XtraPrinting;
 using DevExpress.XtraReports.UI;
 using Packaging.Common;
@@ -15,15 +13,17 @@ using Packaging.Encasement.Reports;
 
 namespace Packaging.Encasement
 {
-    public class BatchCommandHandler:ICommandHandler
+    public class BatchCommandHandler : ICommandHandler
     {
         private readonly XtraReport _xtraReport;
         private readonly List<BatchPrintDto> _batchPrintDtos;
         private readonly ReportPrintTool _reportPrintTool;
         private PrintDialog _printDialog;
         private readonly short _copies;
+        private DateTime? _printDateTime;
 
-        public BatchCommandHandler(XtraReport xtraReport, ReportPrintTool reportPrintTool,bool paperFlag = false)
+        public BatchCommandHandler(XtraReport xtraReport, ReportPrintTool reportPrintTool, DateTime? printDateTime,
+            bool paperFlag = false)
         {
             if (paperFlag)
             {
@@ -40,6 +40,7 @@ namespace Packaging.Encasement
                 }
             }
 
+            _printDateTime = printDateTime;
             _xtraReport = xtraReport;
             _reportPrintTool = reportPrintTool;
             if (_batchPrintDtos != null)
@@ -49,23 +50,20 @@ namespace Packaging.Encasement
         }
 
 
-        public void HandleCommand(PrintingSystemCommand command, object[] args, IPrintControl printControl, ref bool handled)
+        public void HandleCommand(PrintingSystemCommand command, object[] args, IPrintControl printControl,
+            ref bool handled)
         {
             if (!CanHandleCommand(command, printControl))
             {
                 return;
             }
 
-            DialogResult dialogResult = DialogResult.None;
-            switch (command)
+            DialogResult dialogResult = command switch
             {
-                case PrintingSystemCommand.Print:
-                    dialogResult = CreatePrintDialog();
-                    break;
-                case PrintingSystemCommand.PrintDirect:
-                    dialogResult = DialogResult.OK;
-                    break;
-            }
+                PrintingSystemCommand.Print => CreatePrintDialog(),
+                PrintingSystemCommand.PrintDirect => DialogResult.OK,
+                _ => DialogResult.None
+            };
 
             if (dialogResult != DialogResult.OK)
             {
@@ -74,7 +72,7 @@ namespace Packaging.Encasement
             }
 
             _reportPrintTool.PrintingSystem.StartPrint += PrintingSystem_StartPrint;
-            PrintBeforeHandler(_batchPrintDtos, _reportPrintTool);
+            PrintBeforeHandler();
 
             // 防止调用默认打印过程
             handled = true;
@@ -100,32 +98,37 @@ namespace Packaging.Encasement
             return command == PrintingSystemCommand.Print || command == PrintingSystemCommand.PrintDirect;
         }
 
-        private void PrintBeforeHandler(List<BatchPrintDto> batchPrintDtos, ReportPrintTool reportPrintTool)
+        private void PrintBeforeHandler()
         {
-            if (batchPrintDtos == null)
-            {
-                throw new ArgumentNullException(nameof(batchPrintDtos));
-            }
-
-            var batchPrintDto = batchPrintDtos.First();
+            var batchPrintDto = _batchPrintDtos.First();
             if (batchPrintDto.BoxNumber != Constants.DefaulutBoxNumber)
             {
                 // 如果是箱标重打，重新保存一份数据
                 if (batchPrintDto.AgainPrintFlag)
                 {
-                    SaveBatchData(batchPrintDto);
+                    var validScanQtyGeZero = ReceiveDetailLpnDal.ValidScanQtyGeZero(batchPrintDto.BoxNumber);
+                    if (validScanQtyGeZero)
+                    {
+                        CustomMessageBox.Warning($"该箱号【{batchPrintDto.BoxNumber}】,已经进行过收货处理，不允许重打箱标！");
+                        return;
+                    }
+                    batchPrintDto.ReceiveDetailLpns.ForEach(d => { d.BoxCode = batchPrintDto.BoxNumber; });
+                    SaveData();
                 }
 
                 // 打开的预览页面没有关闭时，只生成一次箱码，只保存一次数据
-                Print(reportPrintTool);
+                Print();
                 return;
             }
 
             //只有用户正式点击预览打印页面的打印按钮时才生成箱码
             var skuNameList = batchPrintDto.SkuDetails.Select(d => d.Sku.SkuName).Distinct().ToList();
-            var boxNumber = WmsApiHelper.GetBoxNumber(batchPrintDto.BoxType, skuNameList, batchPrintDto.Model);
+            string boxNumber = _printDateTime.HasValue
+                ? WmsApiHelper.GetBoxNumber(batchPrintDto.BoxType, skuNameList, batchPrintDto.Model,
+                    _printDateTime.Value)
+                : WmsApiHelper.GetBoxNumber(batchPrintDto.BoxType, skuNameList, batchPrintDto.Model);
 
-            foreach (var item in batchPrintDtos)
+            foreach (var item in _batchPrintDtos)
             {
                 if (item.BoxNumber != Constants.DefaulutBoxNumber)
                 {
@@ -137,45 +140,33 @@ namespace Packaging.Encasement
 
             batchPrintDto.ReceiveDetailLpns.ForEach(d => { d.BoxCode = boxNumber; });
 
-            Save(batchPrintDtos);
+            SaveData();
 
             _xtraReport.CreateDocument();
-            Print(reportPrintTool);
+            Print();
         }
 
-        private static void Print(PrintToolBase reportPrintTool)
+        private void Print()
         {
             bool savePrintPreviewFlag = Convert.ToBoolean(ConfigurationManager.AppSettings["SavePrintPreviewFlag"]);
             if (!savePrintPreviewFlag)
             {
-                reportPrintTool.Print();
+                _reportPrintTool.Print();
             }
         }
 
-        private static void Save(IEnumerable<BatchPrintDto> batchPrintDtos)
+        private void SaveData()
         {
             try
             {
-                SaveData(batchPrintDtos);
+                var batchPrintDto = _batchPrintDtos.First();
+                ReceiveDetailLpnDal.SaveBatch(batchPrintDto);
             }
             catch (Exception ex)
             {
                 Serilog.Log.Fatal("打印前入库保存异常：{}", ex);
                 CustomMessageBox.Exception($"打印前入库保存异常:{ex.GetOriginalException().Message}");
             }
-        }
-
-        private static void SaveData(IEnumerable<BatchPrintDto> batchPrintDtos)
-        {
-            var batchPrintDto = batchPrintDtos.First();
-            ReceiveDetailLpnDal.Save(batchPrintDto.BoxNumber, batchPrintDto.ReceiveDetailLpns);
-
-            SaveBatchData(batchPrintDto);
-        }
-
-        private static void SaveBatchData(BatchPrintDto batchPrintDto)
-        {
-            Task.Run(() => { PackingBatchDal.SaveBatchData(batchPrintDto); });
         }
     }
 }

@@ -72,6 +72,9 @@
 						.targetLpnCode)) {
 						_this.params.whId = uni.getStorageSync('warehouse').whId;
 						stockManage.stockMoveByLpn(_this.params).then(data => {
+							uni.$u.func.showToast({
+								title: '移动成功',
+							})
 							uni.$u.func.routeRedirectTo(
 								'/pages/stock/stockManage/moveByLpnCode/moveByLpnCode',
 								_this.params);

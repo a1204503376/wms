@@ -11,70 +11,67 @@ namespace DataAccess.Encasement
         public static bool SaveImportExcel(List<PackingSerialDetail> packingAutoIdentifications)
         {
             return Db.FreeSql.Insert<PackingSerialDetail>(packingAutoIdentifications)
-                .ExecuteAffrows()>0;
+                .ExecuteAffrows() > 0;
         }
 
         public static void SaveSerialData(SerialNumberPrintDto serialNumberPrintDto)
         {
-            Db.FreeSql.Transaction(() =>
+            var headerId = Db.FreeSql.Select<PackingSerialHeader>()
+                .Where(d => d.BoxNumber == serialNumberPrintDto.BoxNumber)
+                .First<long>(d => d.Id);
+            if (headerId > 0)
             {
-                var headerId = Db.FreeSql.Select<PackingSerialHeader>()
-                    .Where(d => d.BoxNumber == serialNumberPrintDto.BoxNumber)
-                    .First<long>(d => d.Id);
-                if (headerId > 0)
-                {
-                    var serialHeaderId = headerId;
-                    Db.FreeSql.Delete<PackingSerialDetail>()
-                        .Where(d => d.HeaderId == serialHeaderId)
-                        .ExecuteAffrows();
-                    Db.FreeSql.Delete<PackingSerialHeader>()
-                        .Where(d => d.Id == serialHeaderId)
-                        .ExecuteAffrows();
-                }
+                var serialHeaderId = headerId;
+                Db.FreeSql.Delete<PackingSerialDetail>()
+                    .Where(d => d.HeaderId == serialHeaderId)
+                    .ExecuteAffrows();
+                Db.FreeSql.Delete<PackingSerialHeader>()
+                    .Where(d => d.Id == serialHeaderId)
+                    .ExecuteAffrows();
+            }
 
-                var packingSerialHeader = new PackingSerialHeader
-                {
-                    BoxType = serialNumberPrintDto.BoxType,
-                    SkuId = serialNumberPrintDto.SkuId,
-                    SkuCode = serialNumberPrintDto.SkuCode,
-                    SkuName = serialNumberPrintDto.SkuName,
-                    SkuNameS = serialNumberPrintDto.SkuNameS,
-                    Model = serialNumberPrintDto.Model,
-                    ProductionPlan = serialNumberPrintDto.ProductionPlan,
-                    PoCode = serialNumberPrintDto.PoCode,
-                    WoCode = serialNumberPrintDto.WoCode,
-                    SpecialCustomer = serialNumberPrintDto.SpecialCustomer,
-                    SpeedClass = serialNumberPrintDto.SpeedClass,
-                    AssemblePeople = serialNumberPrintDto.AssemblePeople,
-                    UserName = serialNumberPrintDto.UserName,
-                    BoxNumber = serialNumberPrintDto.BoxNumber,
-                    PrintDate = serialNumberPrintDto.PrintDate
-                };
-                headerId = Db.FreeSql.Insert<PackingSerialHeader>(packingSerialHeader)
-                    .ExecuteIdentity();
-                if (headerId<=0)
-                {
-                    throw new Exception("保存序列号头表信息失败");
-                }
+            var packingSerialHeader = new PackingSerialHeader
+            {
+                BoxType = serialNumberPrintDto.BoxType,
+                SkuId = serialNumberPrintDto.SkuId,
+                SkuCode = serialNumberPrintDto.SkuCode,
+                SkuName = serialNumberPrintDto.SkuName,
+                SkuNameS = serialNumberPrintDto.SkuNameS,
+                Model = serialNumberPrintDto.Model,
+                ProductionPlan = serialNumberPrintDto.ProductionPlan,
+                PoCode = serialNumberPrintDto.PoCode,
+                WoCode = serialNumberPrintDto.WoCode,
+                SpecialCustomer = serialNumberPrintDto.SpecialCustomer,
+                SpeedClass = serialNumberPrintDto.SpeedClass,
+                AssemblePeople = serialNumberPrintDto.AssemblePeople,
+                UserName = serialNumberPrintDto.UserName,
+                BoxNumber = serialNumberPrintDto.BoxNumber,
+                PrintDate = serialNumberPrintDto.PrintDate
+            };
+            headerId = Db.FreeSql.Insert<PackingSerialHeader>(packingSerialHeader)
+                .ExecuteIdentity();
+            if (headerId <= 0)
+            {
+                throw new Exception("保存序列号头表信息失败");
+            }
 
-                foreach (var detail in serialNumberPrintDto.SerialDetails)
-                {
-                    detail.HeaderId = headerId;
-                }
+            foreach (var detail in serialNumberPrintDto.SerialDetails)
+            {
+                detail.HeaderId = headerId;
+            }
 
-                var packingSerialDetails = serialNumberPrintDto.SerialDetails.OrderBy(d => d.ProductSupportCode).ToList();
-                var flag = Db.FreeSql.Insert<PackingSerialDetail>(packingSerialDetails)
-                    .ExecuteAffrows()>0;
-               if (!flag)
-               {
-                   throw new Exception("保存序列号明细信息失败");
-               }
-            });
+            var packingSerialDetails = serialNumberPrintDto.SerialDetails.OrderBy(d => d.ProductSupportCode).ToList();
+            var flag = Db.FreeSql.Insert<PackingSerialDetail>(packingSerialDetails)
+                .ExecuteAffrows() > 0;
+            if (!flag)
+            {
+                throw new Exception("保存序列号明细信息失败");
+            }
         }
 
         public static bool ExistSerialBoxNumber(string boxNumber)
         {
-           return Db.FreeSql.Select<PackingSerialHeader>()
+            return Db.FreeSql.Select<PackingSerialHeader>()
                 .Any(d => d.BoxNumber == boxNumber);
         }
 
