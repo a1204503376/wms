@@ -166,7 +166,6 @@
         created() {
             this.list = [];
             this.init();
-            console.log(this.dataSource);
             this.$nextTick(function () {
                 this.rowDrop();
             });
