@@ -61,7 +61,6 @@ export const listMixin = {
         }
     },
     created() {
-        this.getColumnDataSource();
         this.getCrudColumnList();
         this.copyInitialValue();
     },
@@ -123,8 +122,8 @@ export const listMixin = {
             if (func.isEmpty(data)) {
                 return;
             }
-            let deepCloneColumnList = deepClone(columnList);
-            // this.columnShowHide.dataSource = this.getColumnDataSource();
+            let deepCloneColumnList = deepClone(data);
+            // this.columnShowHide.dataSource = deepClone(data);
             deepCloneColumnList.forEach(d => {
                 let find = data.find(m => m['prop'] === d['prop']);
                 if (!find) {
@@ -190,6 +189,7 @@ export const listMixin = {
             return that.table.columnList
         },
         async getCrudColumnList() {
+            this.getColumnDataSource();
             let that = this;
             let menus = this.getMenu();
             let menu = {};
