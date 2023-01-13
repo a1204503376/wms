@@ -12410,7 +12410,11 @@
     transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
     width: 100%
 }
+::-webkit-scrollbar{
+    width: 10px !important;
+   height: 10px !important; 
 
+  } 
 .el-input__prefix, .el-input__suffix {
     position: absolute;
     top: 0;

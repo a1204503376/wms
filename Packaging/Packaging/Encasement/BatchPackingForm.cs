@@ -25,7 +25,9 @@ namespace Packaging.Encasement
         private string _boxNumber;
         private BindingList<SkuDetailDto> _skuDetails;
         private List<Sku> _skus;
-        private readonly Dictionary<string, List<string>> _skuCodeSkuSpecListDict = new Dictionary<string, List<string>>();
+
+        private readonly Dictionary<string, List<string>> _skuCodeSkuSpecListDict =
+            new Dictionary<string, List<string>>();
 
         public BatchPackingForm()
         {
@@ -120,13 +122,9 @@ namespace Packaging.Encasement
                 Copies = Convert.ToInt16(txtPrintNumber.Text),
                 UserName = GlobalSettings.UserName,
                 SkuDetails = GetGridDataSource(),
+                PrintDate = GetPrintDate(),
                 AgainPrintFlag = _againPrintFlag
             };
-
-            if (_againPrintFlag && !string.IsNullOrWhiteSpace(_againPrintDate))
-            {
-                batchPrintDto.PrintDate = _againPrintDate;
-            }
 
             if (!string.IsNullOrWhiteSpace(_boxNumber) && !NomatcBoxType())
             {
@@ -175,6 +173,20 @@ namespace Packaging.Encasement
             return batchPrintDto;
         }
 
+        private string GetPrintDate()
+        {
+            if (_againPrintFlag && !string.IsNullOrWhiteSpace(_againPrintDate))
+            {
+                return _againPrintDate;
+            }
+            else
+            {
+                return _printDateTime.HasValue
+                    ? _printDateTime.Value.ToString("yyMMdd")
+                    : DateTime.Now.ToString("yyMMdd");
+            }
+        }
+
         private void gridView1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode != Keys.Delete || e.Modifiers != Keys.Control)
@@ -187,10 +199,11 @@ namespace Packaging.Encasement
             {
                 return;
             }
+
             gridView1.DeleteRow(gridView1.FocusedRowHandle);
 
-            if (_skuDetails.Count==0
-                || _skuDetails.All(d=>string.IsNullOrWhiteSpace(d.SkuSpec)))
+            if (_skuDetails.Count == 0
+                || _skuDetails.All(d => string.IsNullOrWhiteSpace(d.SkuSpec)))
             {
                 sluSku.DataSource = _skus;
             }
@@ -206,7 +219,7 @@ namespace Packaging.Encasement
             }
 
             var skuSpec = gridView1.GetRowCellValue(e.RowHandle, colSkuSpec);
-            if (skuSpec==null || string.IsNullOrWhiteSpace(skuSpec.ToString()))
+            if (skuSpec == null || string.IsNullOrWhiteSpace(skuSpec.ToString()))
             {
                 e.Valid = false;
                 e.ErrorText = "请选择型号";
@@ -214,7 +227,7 @@ namespace Packaging.Encasement
             }
 
             var skuLot1 = gridView1.GetRowCellValue(e.RowHandle, colSkuLot1);
-            if (skuLot1==null || string.IsNullOrWhiteSpace(skuLot1.ToString()))
+            if (skuLot1 == null || string.IsNullOrWhiteSpace(skuLot1.ToString()))
             {
                 e.Valid = false;
                 e.ErrorText = "批次不允许为空";
@@ -222,9 +235,9 @@ namespace Packaging.Encasement
             }
 
             var planQty = gridView1.GetRowCellValue(e.RowHandle, colPlanQty);
-            if (planQty==null 
-                || !decimal.TryParse(planQty.ToString(),out decimal qty)
-                || qty<=0)
+            if (planQty == null
+                || !decimal.TryParse(planQty.ToString(), out decimal qty)
+                || qty <= 0)
             {
                 e.Valid = false;
                 e.ErrorText = "请输入大于0的数量";
@@ -262,30 +275,6 @@ namespace Packaging.Encasement
             _againPrintDate = string.Empty;
         }
 
-        private void btnPreviewPrint_Click(object sender, EventArgs e)
-        {
-            var batchPackingReport = GetBatchPackingReport();
-            if (batchPackingReport==null)
-            {
-                return;
-            }
-            ReportPrintTool reportPrintTool = new ReportPrintTool(batchPackingReport);
-            reportPrintTool.PrintingSystem.AddCommandHandler(new BatchCommandHandler(batchPackingReport,reportPrintTool));
-            reportPrintTool.ShowPreviewDialog();
-        }
-
-        // private void btnPaperPrint_Click(object sender, EventArgs e)
-        // {
-        //     var batchPackingReport = GetBatchPackingReport(true);
-        //     if (batchPackingReport == null)
-        //     {
-        //         return;
-        //     }
-        //     ReportPrintTool reportPrintTool = new ReportPrintTool(batchPackingReport);
-        //     reportPrintTool.PrintingSystem.AddCommandHandler(new BatchCommandHandler(batchPackingReport, reportPrintTool,true));
-        //     reportPrintTool.ShowPreviewDialog();
-        // }
-
         private XtraReport GetBatchPackingReport(bool paperFlag = false)
         {
             var batchPrintDto = GetBatchPrintDto();
@@ -294,20 +283,23 @@ namespace Packaging.Encasement
                 CustomMessageBox.Warning("B箱不允许装不同物品，请检查！");
                 return null;
             }
-            if (batchPrintDto.SkuDetails.Select(d=>d.SkuSpec).Distinct().Count()!=1)
+
+            if (batchPrintDto.SkuDetails.Select(d => d.SkuSpec).Distinct().Count() != 1)
             {
                 CustomMessageBox.Warning("只允许同一个型号进行装箱，请检查物品的型号是否一致！");
                 return null;
             }
+
             XtraReport xtraReport;
             if (paperFlag)
             {
                 xtraReport = new BatchPaperReport(batchPrintDto);
             }
-            else 
+            else
             {
                 xtraReport = new BatchPackingReport(batchPrintDto);
             }
+
             return xtraReport;
         }
 
@@ -318,6 +310,7 @@ namespace Packaging.Encasement
             {
                 CustomMessageBox.Information($"当前选择的箱型[{cbxBox.Text}]与重打的箱号[{_boxNumber}]不匹配，系统将生成新的箱号!");
             }
+
             // 切换箱型之后，重置明细
             ResetDetail();
         }
@@ -353,7 +346,8 @@ namespace Packaging.Encasement
             sluSku.DataSource = dataSource;
         }
 
-        public void SetReprintDataSource(PackingBatchHeader packingBatchHeader,List<PackingBatchDetail> packingBatchDetailList)
+        public void SetReprintDataSource(PackingBatchHeader packingBatchHeader,
+            List<PackingBatchDetail> packingBatchDetailList)
         {
             cbxBox.EditValue = packingBatchHeader.BoxType;
             txtSpecialCustomer.EditValue = packingBatchHeader.SpecialCustomer;
@@ -385,7 +379,8 @@ namespace Packaging.Encasement
 
         private void ResetPrintEnable()
         {
-            btnPreviewPrint.Enabled = true;
+            btnPrint.Enabled = true;
+            btnDatePrint.Enabled = true;
         }
 
         private void btnReprint_Click(object sender, EventArgs e)
@@ -408,6 +403,7 @@ namespace Packaging.Encasement
             {
                 return;
             }
+
             var skuDetail = skuDetails.First();
             var curSku = skuDetail.Sku;
             var fileName = Path.Combine(xtraFolderBrowserDialog1.SelectedPath,
@@ -424,7 +420,7 @@ namespace Packaging.Encasement
                 // {
                 //     TextExportMode = TextExportMode.Value,
                 // });
-                ExcelHelper.ExportBatchDetail(skuDetails,fileName);
+                ExcelHelper.ExportBatchDetail(skuDetails, fileName);
                 CustomMessageBox.Information("数据导出成功！");
             }
             catch (Exception ex)
@@ -461,13 +457,15 @@ namespace Packaging.Encasement
             {
                 return;
             }
+
             ResetDetail();
         }
 
         private void ResetDetail()
         {
             ResetGridDataSource(null);
-            btnPreviewPrint.Enabled = false;
+            btnPrint.Enabled = false;
+            btnDatePrint.Enabled = false;
         }
 
         private void ResetGridDataSource(Action action)
@@ -485,6 +483,7 @@ namespace Packaging.Encasement
             {
                 skuDetail.Sku = _skus.FirstOrDefault(d => d.SkuCode == skuDetail.SkuCode);
             }
+
             ResetGridDataSource(() =>
             {
                 foreach (var skuDetail in skuDetails)
@@ -523,30 +522,63 @@ namespace Packaging.Encasement
             // gridView1.SetRowCellValue(gridView1.FocusedRowHandle, colSkuSpec, skuSpec);
         }
 
-        private void gridView1_CellValueChanged(object sender, DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs e)
+        private void gridView1_CellValueChanged(object sender,
+            DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs e)
         {
-            if (e.Column!=colSku)
+            if (e.Column != colSku)
             {
                 return;
             }
+
             var sku = gridView1.GetRowCellValue(e.RowHandle, e.Column) as Sku;
             if (sku == null)
             {
                 return;
             }
+
             var gridDataSource = GetGridDataSource();
             var skuSpec = sku.SkuSpec;
             if (string.IsNullOrWhiteSpace(sku.SkuSpec) && gridDataSource.Count > 1)
             {
                 skuSpec = gridDataSource.First().SkuSpec;
             }
-            
+
             if (_skuCodeSkuSpecListDict.ContainsKey(sku.SkuCode))
             {
                 SetLuModelDataSource(_skuCodeSkuSpecListDict[sku.SkuCode]);
             }
+
             gridView1.SetRowCellValue(e.RowHandle, colSkuCode, sku.SkuCode);
             gridView1.SetRowCellValue(e.RowHandle, colSkuSpec, skuSpec);
+        }
+
+        private void btnDatePrint_Click(object sender, EventArgs e)
+        {
+            var datePrintForm = new DatePrintForm("Batch", this);
+            datePrintForm.ShowDialog();
+        }
+
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+            Print(null);
+        }
+
+        private DateTime? _printDateTime;
+
+        public void Print(DateTime? printDateTime)
+        {
+            _printDateTime = printDateTime;
+            var batchPackingReport = GetBatchPackingReport();
+            if (batchPackingReport == null)
+            {
+                return;
+            }
+
+            ReportPrintTool reportPrintTool = new ReportPrintTool(batchPackingReport);
+            reportPrintTool.PrintingSystem.AddCommandHandler(new BatchCommandHandler(batchPackingReport,
+                reportPrintTool,printDateTime));
+            reportPrintTool.ShowPreviewDialog();
+            _printDateTime = null;
         }
     }
 }

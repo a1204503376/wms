@@ -19,7 +19,7 @@ namespace Packaging.Common
                 _userName = userName;
                 _hashPassword = Md5Helper.Hash(password);
 
-                return 
+                return
                     $"{WmsUrl}/blade-auth/oauth/token"
                         .SetQueryParams(new
                         {
@@ -27,7 +27,7 @@ namespace Packaging.Common
                             username = _userName,
                             password = _hashPassword,
                             grant_type = "password"
-                        })    
+                        })
                         .WithHeader("Authorization", "Basic c2FiZXI6c2FiZXJfc2VjcmV0")
                         .PostAsync()
                         .ReceiveJson<WmsLogin>()
@@ -40,21 +40,35 @@ namespace Packaging.Common
             }
             catch (FlurlHttpException ex)
             {
-                Serilog.Log.Fatal("登录WMS异常",ex);
+                Serilog.Log.Fatal("登录WMS异常", ex);
             }
 
             throw new ApplicationException("登录WMS失败");
         }
 
-        public static string GetBoxNumber(string lpnTypeCode,IEnumerable<string> skuNameList,string skuSpec)
+        public static string GetBoxNumber(string lpnTypeCode, IEnumerable<string> skuNameList, string skuSpec)
         {
             // 批次号装箱，多个物品名称用英文逗号拼接发送给wms
             var skuNameListStr = string.Join(Constants.DefaultSeparator, skuNameList);
             Serilog.Log.Debug("批次号装箱请求WMS获取箱号参数，lpnTypeCode={lpnTypeCode},skuNames={skuNameListStr},skuSpec={skuSpec}",
                 lpnTypeCode,
-                skuNameListStr, 
+                skuNameListStr,
                 skuSpec);
             return GetBoxNumber(lpnTypeCode, skuNameListStr, skuSpec);
+        }
+
+        public static string GetBoxNumber(string lpnTypeCode, IEnumerable<string> skuNameList, string skuSpec,
+            DateTime printDateTime)
+        {
+            // 批次号装箱，多个物品名称用英文逗号拼接发送给wms
+            var skuNameListStr = string.Join(Constants.DefaultSeparator, skuNameList);
+            Serilog.Log.Debug(
+                "批次号装箱请求WMS获取箱号参数，lpnTypeCode={lpnTypeCode},skuNames={skuNameListStr},skuSpec={skuSpec},printDateTime={printDateTime}",
+                lpnTypeCode,
+                skuNameListStr,
+                skuSpec,
+                printDateTime);
+            return GetBoxNumber(lpnTypeCode, skuNameListStr, skuSpec, printDateTime);
         }
 
         public static string GetBoxNumber(string lpnTypeCode, string skuName, string skuSpec)
@@ -65,6 +79,30 @@ namespace Packaging.Common
                     lpnTypeCode,
                     skuName,
                     spec = skuSpec
+                })
+                .GetAsync()
+                .ReceiveJson()
+                .Result;
+            if (result.success)
+            {
+                return result.data;
+            }
+
+            var msg = $"获取箱号时，WMS返回失败：{result.msg}";
+            Serilog.Log.Warning(msg);
+            throw new Exception(msg);
+        }
+
+        public static string GetBoxNumber(string lpnTypeCode, string skuName, string skuSpec, DateTime printDateTime)
+        {
+            var result = $"{WmsUrl}/wms/scheduling/generateBoxCode2"
+                .SetQueryParams(new
+                {
+                    lpnTypeCode,
+                    skuName,
+                    spec = skuSpec,
+                    year = printDateTime.Year,
+                    month = printDateTime.Month,
                 })
                 .GetAsync()
                 .ReceiveJson()
