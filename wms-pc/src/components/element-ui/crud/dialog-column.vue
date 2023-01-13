@@ -261,7 +261,8 @@
                 // 缓存本地的数据格式
                 let column = {
                     menuId: menu.id,
-                    columnList: columnList
+                    columnList: columnList,
+                    userId: getStore({name: "userInfo"}).user_id
                 }
                 let loadingCount = 0;
 
