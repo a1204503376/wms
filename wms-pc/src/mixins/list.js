@@ -24,6 +24,7 @@ export const listMixin = {
                 data: [],
                 height: 300
             },
+            crudColumn: getStore({name: "crudColumn"}) || [],
             page: {
                 total: 0,
                 size: 20,
@@ -156,57 +157,55 @@ export const listMixin = {
             //     return ((x < y) ? -1 : (x > y) ? 1 : 0);
             // });
         },
-        async getColumnDataSource() {
-
-            let that = this;
-            let menus = this.getMenu();
-            let menu = {};
-            menus.children.forEach(function (item, index) {
-                if (item.path == that.$route.path) {
-                    menu = item;
-                }
-            });
-            // let crudMenu = {};
-            // let crudColumn = getStore({name: "crudColumn"});
-            // if (func.isNotEmpty(crudColumn)) {
-            //     crudColumn.forEach(function (item, index) {
-            //         if (JSON.stringify(item.menuId) === JSON.stringify(menu.id)) {
-            //             crudMenu = item.columnList;
-            //         }
-            //     });
-            //     that.table.columnList = deepClone(crudMenu);
-            //     return deepClone(crudMenu);
-            // } else {
-            await getCrudColumnResponseList(menu.id)
-                .then(({data: {data}}) => {
-                    if (data.length != 0) {
-                        that.table.columnList = deepClone(data)
-                        return that.table.columnList;
-                    }
-
-                });
-            // }
-            return that.table.columnList
-        },
         async getCrudColumnList() {
-            this.getColumnDataSource();
-            let that = this;
+            let self = this;
             let menus = this.getMenu();
             let menu = {};
+            let crudMenu = {};
             menus.children.forEach(function (item, index) {
-                if (item.path == that.$route.path) {
+                if (item.path == self.$route.path) {
                     menu = item;
                 }
             });
-            getCrudColumnResponseList(menu.id)
-                .then(({data: {data}}) => {
-                    if (data.length != 0) {
-                        this.setColumnList(this.table.columnList, data);
-                    } else {
-                        this.setColumnList(this.table.columnList, this.table.columnList);
+            let crudColumn = getStore({name: "crudColumn"});
+            if (func.isNotEmpty(crudColumn)) {
+                crudColumn.forEach(function (item, index) {
+                    if (JSON.stringify(item.menuId) === JSON.stringify(menu.id) && getStore({name: "userInfo"}).user_id === item.userId) {
+                        crudMenu = item.columnList;
+                        self.table.columnList = item.columnList;
                     }
-
                 });
+
+            }
+            if (func.isEmpty(crudMenu.length)) {
+                await getCrudColumnResponseList(menu.id)
+                    .then(({data: {data}}) => {
+                        if (data.length != 0) {
+                            // 缓存本地的数据格式
+                            let column = {
+                                menuId: menu.id,
+                                columnList: data,
+                                userId: getStore({name: "userInfo"}).user_id
+                            }
+                            let index = self.crudColumn.findIndex(u => {
+                                return u.menuId === menu.id && u.userId === getStore({name: "userInfo"}).user_id;
+                            });
+                            if (index < 0) {
+                                self.crudColumn.push(column);
+                            } else {
+                                self.crudColumn.splice(index, 1, column);
+                            }
+                            setStore({name: 'crudColumn', content: self.crudColumn, type: 'session'});
+                            self.loading.content = false;
+                            self.loading.saveBtn = false;
+                            crudMenu = data;
+                        } else {
+                            crudMenu = this.table.columnList;
+                        }
+                    });
+            }
+            this.setColumnList(this.table.columnList, crudMenu);
+            return self.table.columnList;
         },
         onColumnShowHide(column) {
             this.columnShowHide.visible = !this.columnShowHide.visible;
@@ -217,7 +216,7 @@ export const listMixin = {
                 || func.isEmpty(columnObj['columnList'])) {
                 return;
             }
-            this.setColumnList(this.getColumnDataSource(), columnObj.columnList);
+            this.setColumnList(this.getCrudColumnList(), columnObj.columnList);
         },
         // 当前页导出
         exportCurrentDataToExcel(sheetName, filename) {
