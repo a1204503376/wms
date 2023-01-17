@@ -5,6 +5,9 @@ import {getCrudColumnResponseList} from "@/api/core/column";
 import {deepClone} from "@/util/util";
 import {mapGetters} from "vuex";
 import {getStore, setStore} from '@/util/store';
+import {findAllQueryPlan, insertQueryPlan} from '@/api/wms/queryPlan/queryPlan'
+import da from "element-ui/src/locale/lang/da";
+
 
 export const listMixin = {
     mixins: [menuMixin],
@@ -16,7 +19,8 @@ export const listMixin = {
                 events: {
                     search: this.onSearch,
                     reset: this.onReset,
-                    changeTableHeight: this.handleTableHeightChange,
+                    queryConditionEvaluation: this.queryConditionEvaluation,
+                    changeTableHeight: this.handleTableHeightChange
                 }
             },
             table: {
@@ -85,6 +89,12 @@ export const listMixin = {
         },
         onReset() {
             this.restoreDefaults();
+        },
+        queryConditionEvaluation(data) {
+            this.form.params = JSON.parse(data.queryData)
+            if (data.isInitData == 1) {
+                this.getTableData();
+            }
         },
         restoreDefaults() {
             func.recursionObject(deepClone(this.form.deepCloneParams), this, this.form.params);
