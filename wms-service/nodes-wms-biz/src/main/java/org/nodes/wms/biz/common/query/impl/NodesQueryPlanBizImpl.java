@@ -5,6 +5,7 @@ import org.nodes.wms.biz.common.query.NodesQueryPlanBiz;
 import org.nodes.wms.biz.common.query.factory.NodesQueryPlanFactory;
 import org.nodes.wms.dao.common.query.NodesQueryPlanDao;
 import org.nodes.wms.dao.common.query.dto.input.AddNodesQueryPlanRequest;
+import org.nodes.wms.dao.common.query.dto.input.DeleteQueryPlanRequest;
 import org.nodes.wms.dao.common.query.dto.input.FindAllQueryPlan;
 import org.nodes.wms.dao.common.query.dto.input.UpdateQueryPlanRequest;
 import org.nodes.wms.dao.common.query.dto.output.FindAllNodesQueryPlan;
@@ -42,7 +43,7 @@ public class NodesQueryPlanBizImpl implements NodesQueryPlanBiz {
 		if (nodesQueryPlans.size() >= 5) {
 			throw new ServiceException("新增查询方案失败,最多支持5种方案，请删除方案后重试");
 		}
-		if (nodesQueryPlan.getIsDefault() == 1) {
+		if (nodesQueryPlan.getIsDefault() == 1 && nodesQueryPlans.size()>0) {
 			queryPlanDao.update(request.getPageUrl(), 0);
 		}
 		queryPlanDao.insert(nodesQueryPlan);
@@ -50,14 +51,19 @@ public class NodesQueryPlanBizImpl implements NodesQueryPlanBiz {
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public void delete(Long id) {
-		queryPlanDao.delete(id);
+	public void delete(DeleteQueryPlanRequest request) {
+		queryPlanDao.delete(request.getId());
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void update(UpdateQueryPlanRequest request) {
 		queryPlanDao.update(request.getPageUrl(), 0);
-		queryPlanDao.update(request.getId(), request.getIsDefault());
+		queryPlanDao.update(request.getId(), 1);
+	}
+
+	@Override
+	public void cancel(UpdateQueryPlanRequest request) {
+		queryPlanDao.update(request.getPageUrl(), 0);
 	}
 }

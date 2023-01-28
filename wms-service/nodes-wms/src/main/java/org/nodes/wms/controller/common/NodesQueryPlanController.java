@@ -4,11 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.common.query.NodesQueryPlanBiz;
 import org.nodes.wms.dao.common.query.dto.input.AddNodesQueryPlanRequest;
+import org.nodes.wms.dao.common.query.dto.input.DeleteQueryPlanRequest;
 import org.nodes.wms.dao.common.query.dto.input.FindAllQueryPlan;
 import org.nodes.wms.dao.common.query.dto.input.UpdateQueryPlanRequest;
 import org.nodes.wms.dao.common.query.dto.output.FindAllNodesQueryPlan;
 import org.springblade.core.tool.api.R;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -43,22 +47,32 @@ public class NodesQueryPlanController {
 	}
 
 	/**
-	 * 新增查询方案
+	 * 删除查询方案
 	 *
-	 * @param id 新增查询方案请求对象
+	 * @param request 删除查询方案请求对象
 	 */
 	@PostMapping("/delete")
-	public void delete(@RequestBody Long id) {
-		queryPlanBiz.delete(id);
+	public void delete(@RequestBody DeleteQueryPlanRequest request) {
+		queryPlanBiz.delete(request);
 	}
 
 	/**
-	 * 修改默认查询方案
+	 * 设置当前选中的为默认查询方案
 	 *
 	 * @param request 修改默认查询方案请求对象
 	 */
 	@PostMapping("/update")
 	public void update(@RequestBody UpdateQueryPlanRequest request) {
 		queryPlanBiz.update(request);
+	}
+
+	/**
+	 * 取消默认查询方案
+	 *
+	 * @param request 修改默认查询方案请求对象
+	 */
+	@PostMapping("/cancel")
+	public void cancel(@RequestBody UpdateQueryPlanRequest request) {
+		queryPlanBiz.cancel(request);
 	}
 }

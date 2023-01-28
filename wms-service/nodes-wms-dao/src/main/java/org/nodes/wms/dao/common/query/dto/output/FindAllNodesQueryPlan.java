@@ -1,16 +1,23 @@
 package org.nodes.wms.dao.common.query.dto.output;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
 
 /**
  * @author nodes
- * 新增查询方案Dto
+ * 查询 查询方案Dto
  */
 @Data
 public class FindAllNodesQueryPlan implements Serializable {
 	private static final long serialVersionUID = 8902235633059835658L;
+	/**
+	 * id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long id;
 	/**
 	 * 方案名称
 	 */
