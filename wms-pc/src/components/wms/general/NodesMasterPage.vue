@@ -210,28 +210,23 @@
 				} else {
 					this.form.params.isDefault = 0;
 				}
-				this.dialogVisible = false;
 				this.form.params.pageUrl = this.$parent.$route.path;
 				this.form.params.queryData = JSON.stringify(this.$parent.form.params);
-				insertQueryPlan(this.form.params).then(({
-					data: {
-						data
-					}
-				}) => {
+				insertQueryPlan(this.form.params).then(() => {
 					this.$message({
 						type: 'success',
 						message: '保存查询方案成功!'
 					});
 					this.getQueryPlanList();
+                    this.form.params.name = '';
+                    this.form.params.isDefault = 0;
+                    this.form.params.isInitData = 1;
+                    this.form.params.isDefaultState = false;
+                    this.form.params.isInitDataState = true;
+                    this.form.params.pageUrl = '';
+                    this.form.params.queryData = '';
+                    this.dialogVisible = false;
 				})
-
-				this.form.params.name = '';
-				this.form.params.isDefault = 0;
-				this.form.params.isInitData = 1;
-				this.form.params.isDefaultState = false;
-				this.form.params.isInitDataState = true;
-				this.form.params.pageUrl = '';
-				this.form.params.queryData = '';
 			},
 			settingQueryPlan() {
 				console.log(111)
