@@ -43,7 +43,7 @@ public class NodesQueryPlanBizImpl implements NodesQueryPlanBiz {
 		if (nodesQueryPlans.size() >= 5) {
 			throw new ServiceException("新增查询方案失败,最多支持5种方案，请删除方案后重试");
 		}
-		if (nodesQueryPlan.getIsDefault() == 1 && nodesQueryPlans.size()>0) {
+		if (nodesQueryPlan.getIsDefault() == 1 && nodesQueryPlans.size() > 0) {
 			queryPlanDao.update(request.getPageUrl(), 0);
 		}
 		queryPlanDao.insert(nodesQueryPlan);
