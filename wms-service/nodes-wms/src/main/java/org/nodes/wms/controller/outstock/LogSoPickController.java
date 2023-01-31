@@ -1,6 +1,8 @@
 package org.nodes.wms.controller.outstock;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.outstock.OutStockBiz;
@@ -25,6 +27,7 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_ROOT_URL + "outstock/logSoPick")
+@Api(value = "拣货记录接口", tags = "拣货记录接口")
 public class LogSoPickController {
 
 	private final LogSoPickBiz logSoPickBiz;
@@ -34,6 +37,7 @@ public class LogSoPickController {
 	/**
 	 * 拣货记录：分页
 	 */
+	@ApiOperation(value = "分页", notes = "传入query、logSoPickPageQuery")
 	@PostMapping("/page")
 	public R<Page<LogSoPickPageResponse>> page(Query query, @RequestBody LogSoPickPageQuery logSoPickPageQuery) {
 		Page<LogSoPickPageResponse> pageLogSoPick = logSoPickBiz.page(query, logSoPickPageQuery);
@@ -43,6 +47,7 @@ public class LogSoPickController {
 	/**
 	 * 拣货记录：服务端导出
 	 */
+	@ApiOperation(value = "导出", notes = "传入logSoPickPageQuery")
 	@PostMapping("/export")
 	public void export(@RequestBody LogSoPickPageQuery logSoPickPageQuery, HttpServletResponse response) {
 		logSoPickBiz.export(logSoPickPageQuery, response);
@@ -52,6 +57,7 @@ public class LogSoPickController {
 	 * 发货记录：撤销拣货
 	 */
 	@ApiLog("发货记录-撤销拣货")
+	@ApiOperation(value = "撤销拣货", notes = "传入logSoPickIdListRequest")
 	@PostMapping("/cancelOutstock")
 	public R<String> cancelOutstock(@RequestBody @Valid LogSoPickIdListRequest logSoPickIdListRequest) {
 		outStockBiz.cancelOutStock(logSoPickIdListRequest.getLsopIdList());

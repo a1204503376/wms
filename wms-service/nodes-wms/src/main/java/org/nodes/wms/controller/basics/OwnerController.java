@@ -41,13 +41,14 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/wms/basedata/owner")
-@Api(value = "货主管理", tags = "货主管理")
+@Api(value = "货主管理", tags = "货主管理接口")
 public class OwnerController extends BladeController {
 
 	private final IOwnerService ownerService;
 
 	private final OwnerBiz ownerBiz;
 
+	@ApiOperation(value = "货主组件数据")
 	@GetMapping("/ownerSelect")
 	public R<List<OwnerSelectResponse>> getOwnerSelectResponseList(){
 		List<OwnerSelectResponse> ownerSelectResponseList = ownerBiz.getOwnerSelectResponseList();
