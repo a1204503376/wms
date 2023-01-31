@@ -3,10 +3,7 @@ package org.nodes.wms.dao.basics.location;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
-import org.nodes.wms.dao.basics.location.dto.output.LocationDetailResponse;
-import org.nodes.wms.dao.basics.location.dto.output.LocationExcelResponse;
-import org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse;
-import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
+import org.nodes.wms.dao.basics.location.dto.output.*;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.putaway.dto.input.LpnTypeRequest;
 
@@ -218,5 +215,10 @@ public interface LocationDao {
 	 */
 	Integer getZoneTypeByLocId(Long locId);
 
-
+	/**
+	 * 查询所有库位
+	 *
+	 * @return 库位信息
+	 */
+	List<Location> getAll();
 }

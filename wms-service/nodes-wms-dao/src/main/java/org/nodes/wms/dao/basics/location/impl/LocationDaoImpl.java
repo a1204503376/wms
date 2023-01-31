@@ -220,5 +220,8 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 		return super.baseMapper.selectZoneTypeByLocId(locId);
 	}
 
-
+	@Override
+	public List<Location> getAll() {
+		return super.list();
+	}
 }

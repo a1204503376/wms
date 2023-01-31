@@ -27,6 +27,7 @@ import org.nodes.wms.dao.basics.location.enums.LocTypeEnum;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.basics.lpntype.enums.LpnTypeCodeEnum;
 import org.nodes.wms.dao.basics.warehouse.entities.Warehouse;
+import org.nodes.wms.dao.basics.zone.entities.Zone;
 import org.nodes.wms.dao.putaway.dto.input.LpnTypeRequest;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.springblade.core.excel.util.ExcelUtil;
@@ -42,6 +43,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -421,5 +424,27 @@ public class LocationBizImpl implements LocationBiz {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public List<Location3dResponse> getAllLocationFor3d() {
+		// 不查询虚拟库区、入出库暂存区、质检区的库位
+		// 根据 排 列 层 的顺序升序排序
+		List<String> excludeZoneTypeList = new LinkedList<>();
+		excludeZoneTypeList.add(DictKVConstant.ZONE_TYPE_VIRTUAL.toString());
+		excludeZoneTypeList.add(DictKVConstant.ZONE_TYPE_STAGE.toString());
+		excludeZoneTypeList.add(DictKVConstant.ZONE_TYPE_PICK_TO.toString());
+		excludeZoneTypeList.add(DictKVConstant.ZONE_TYPE_INSTOCK_QC.toString());
+
+		List<Zone> excludeZoneList = zoneBiz.findByZoneType(excludeZoneTypeList);
+		List<Long> excludeZoneIdList = excludeZoneList.stream()
+			.map(Zone::getZoneId)
+			.collect(Collectors.toList());
+		List<Location> all = locationDao.getAll();
+		List<Location> collect = all.stream()
+			.filter(x -> !excludeZoneIdList.contains(x.getZoneId()))
+			.sorted(Comparator.comparing(Location::getLocBank).thenComparing(Location::getLocColumn).thenComparing(Location::getLocColumn))
+			.collect(Collectors.toList());
+		return Func.copy(collect, Location3dResponse.class);
 	}
 }

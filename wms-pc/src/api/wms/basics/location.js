@@ -98,4 +98,11 @@ export const importFile = (data) => {
     })
 }
 
+export const getListFor3d = () => {
+    return request({
+        url: '/api/wms/warehouse/location/get3dLocationData',
+        method: 'get'
+    })
+}
+
 

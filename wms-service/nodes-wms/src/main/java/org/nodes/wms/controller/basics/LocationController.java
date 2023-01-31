@@ -171,4 +171,12 @@ public class LocationController {
 	public R<List<LocationSelectResponse>> getLocationSelectResponseTop10List(@RequestBody LocationSelectQuery locationSelectQuery) {
 		return R.data(locationBiz.getLocationSelectResponseTop10List(locationSelectQuery));
 	}
+
+	/**
+	 * 3d库位展示：获取库位信息，排除虚拟库位和入出库暂存区得
+	 */
+	@GetMapping("/get3dLocationData")
+	public R<List<Location3dResponse>> get3dLocationData(){
+		return R.data(locationBiz.getAllLocationFor3d());
+	}
 }
