@@ -718,7 +718,6 @@ export default {
     methods: {
         printSerial(){
             let url = this.urlPrefix+this.serialRadio +this.urlSuffix;
-            console.log(url)
             window.open(url);
         },
         callOffSerial(){
