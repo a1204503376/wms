@@ -1,6 +1,7 @@
 package org.nodes.wms.controller.basics;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/wms/basedata/skutype")
+@Api(value = "物品分类接口", tags = "物品分类接口")
 public class SkuTypeController extends BladeController {
 
 	/**
@@ -91,6 +93,7 @@ public class SkuTypeController extends BladeController {
 	 * @create 20191128
 	 */
 	@GetMapping("/page")
+	@ApiOperation(value = "物品分类分页查询", notes = "传入skuType")
 	public R<IPage<SkuTypeVO>> page(@ApiIgnore @RequestParam HashMap<String, Object> params, Query query) {
 		IPage<SkuType> page = skuTypeService.page(Condition.getPage(query), Condition.getQueryWrapper(params, SkuType.class)
 			.lambda()

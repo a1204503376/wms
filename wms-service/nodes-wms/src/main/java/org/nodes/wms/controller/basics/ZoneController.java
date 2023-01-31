@@ -3,10 +3,7 @@ package org.nodes.wms.controller.basics;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.tool.entity.DataVerify;
 import org.nodes.wms.biz.basics.warehouse.ZoneBiz;
@@ -44,10 +41,10 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/wms/warehouse/zone")
+@Api(value = "库区管理", tags = "库区管理接口")
 public class ZoneController {
 
 	private final IZoneService zoneService;
-
 	private final ZoneBiz zoneBiz;
 
 	/**
@@ -143,6 +140,10 @@ public class ZoneController {
 		return R.data(zoneService.importData(dataVerifyList));
 	}
 
+	/**
+	 * 获取库区组件数据
+	 */
+	@ApiOperation(value = "库区组件数据")
 	@PostMapping("/select")
 	public R<List<ZoneSelectResponse>> getZoneSelectData(@RequestBody ZoneSelectQuery zoneSelectQuery){
 		List<ZoneSelectResponse> zoneSelectResponseList = zoneBiz.getZoneSelectData(zoneSelectQuery.getWhIdList());

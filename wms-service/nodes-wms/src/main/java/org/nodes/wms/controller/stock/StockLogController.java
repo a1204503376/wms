@@ -1,6 +1,8 @@
 package org.nodes.wms.controller.stock;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
 import org.nodes.wms.biz.stock.StockBiz;
@@ -22,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController("StockMoveLogController")
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_ROOT_URL + "stockLog")
+@Api(value = "库存日志接口", tags = "库存日志接口")
 public class StockLogController {
 
 	private final StockBiz stockBiz;
@@ -30,6 +33,7 @@ public class StockLogController {
 	/**
 	 * 库存日志：分页
 	 */
+	@ApiOperation(value = "分页")
 	@PostMapping("/page")
 	public R<IPage<StockLogPageResponse>> page(Query query, @RequestBody StockLogPageQuery stockLogPageQuery) {
 		return R.data(stockQueryBiz.pageStockLog(query, stockLogPageQuery));
@@ -38,6 +42,7 @@ public class StockLogController {
 	/**
 	 * 库存日志：服务端导出
 	 */
+	@ApiOperation(value = "导出")
 	@PostMapping("/export")
 	public void export(@RequestBody StockLogPageQuery stockLogPageQuery, HttpServletResponse response) {
 		stockBiz.exportStockLogToExcel(stockLogPageQuery, response);

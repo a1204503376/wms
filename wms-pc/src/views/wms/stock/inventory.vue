@@ -389,6 +389,32 @@
                     <el-button type="primary" @click="print">确 定</el-button>
                 </div>
             </el-dialog>
+
+            <el-dialog
+                title="打印序列号模板选择"
+                append-to-body
+                :visible.sync="serialDialogVisible"
+                width="30%"
+            >
+                <template>
+
+                    <br/>
+
+                </template>
+                <el-descriptions title="" :column="2" border direction="vertical" size = "mini">
+                    <el-descriptions-item label="模板名称" label-class-name="my-label" content-class-name="my-content"><el-radio v-model="serialRadio" label="serial_common">序列号通用模板</el-radio></el-descriptions-item>
+                    <el-descriptions-item label="模板描述">带有速度等级、产品标识代码的序列号模板</el-descriptions-item>
+
+                    <el-descriptions-item label="" style="height: 0px"> <el-radio v-model="serialRadio" label="serial_special">序列号特殊模板</el-radio></el-descriptions-item>
+                    <el-descriptions-item label="">
+                        不带有速度等级、产品标识代码的序列号模板
+                    </el-descriptions-item>
+                </el-descriptions>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="callOffSerial">取 消</el-button>
+                    <el-button type="primary" @click="printSerial">确 定</el-button>
+                </div>
+            </el-dialog>
         </template>
     </div>
 </template>
@@ -482,6 +508,10 @@ export default {
                 remark: ""
             },
             dialogVisible: false,
+            serialDialogVisible:false,
+            serialRadio:'serial_common',
+            urlPrefix:'',
+            urlSuffix:'',
             userName: "",
             notSelectName: ['出库集货区', '出库暂存区'],
             initSelectZoneIds: [], //记录页面初始化后，默认勾选的库区id
@@ -686,6 +716,13 @@ export default {
         }
     },
     methods: {
+        printSerial(){
+            let url = this.urlPrefix+this.serialRadio +this.urlSuffix;
+            window.open(url);
+        },
+        callOffSerial(){
+            this.serialDialogVisible = false;
+        },
         autoDialogTableHeight() {
             if (this.dialog.showDialog) {
                 this.$nextTick(() => {
@@ -879,17 +916,22 @@ export default {
                 this.$message.error('没有可打印的箱码');
                 return
             }
-            let type = '';
-            if (rows[0].hasSerial === 1) {
-                type = 'sn'
-            } else {
-                type = 'batch'
-            }
             let url = getParamValue("tianyi:package_print_url");
             if (func.isEmpty(url)) {
                 this.$message.error('没有配置箱贴打印程序的url地址,请在参数管理中配置tianyi:package_print_url');
                 return
             }
+            let type = '';
+            if (rows[0].hasSerial === 1) {
+                type = 'sn'
+                this.urlPrefix=url + '?' + 'BoxCode=' + boxCode + '&' + 'BoxType=';
+                this.urlSuffix='&' + 'UserName=' + userName;
+                this.serialDialogVisible = true;
+                return;
+            } else {
+                type = 'batch'
+            }
+
             url = url + '?' + 'BoxCode=' + boxCode + '&' + 'BoxType=' + type + '&' + 'UserName=' + userName;
             window.open(url);
         },

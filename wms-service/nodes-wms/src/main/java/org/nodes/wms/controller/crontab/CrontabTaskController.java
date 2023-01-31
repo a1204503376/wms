@@ -103,13 +103,18 @@ public class CrontabTaskController extends BladeController {
 		CacheUtil.clear(CRONTAB_TASK_CACHE);
 		return R.status(taskService.deleteByIds(ids));
 	}
-    @GetMapping("/detailById")
+    /*@GetMapping("/detailById")
 	public  R<CrontabTaskVO>  detailById(Long id){
 		CrontabTask detail =  taskService.getById(id);
 		return R.data(CrontabTaskWrapper.build().entityVO(detail));
-	}
+	}*/
+
+	/**
+	 * 定时任务日志
+	 */
+	@ApiOperation(value = "定时任务日志分页查询")
 	@PostMapping("/getLogById")
-	public  R<Page<LogTaskResponse>>  getLogById(@RequestBody  LogPageQuery logPageQuery, Query query){
+	public R<Page<LogTaskResponse>> getLogById(@RequestBody LogPageQuery logPageQuery, Query query){
 		return R.data(logBiz.getPage(logPageQuery,query));
 	}
 
