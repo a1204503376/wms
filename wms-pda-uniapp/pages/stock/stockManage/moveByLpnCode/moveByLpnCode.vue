@@ -69,7 +69,7 @@
 					_this.$u.func.showToast({
 						title: '请输入LPN'
 					});
-				}, 1000)
+				}, 10000)
 
 			},
 			esc() {

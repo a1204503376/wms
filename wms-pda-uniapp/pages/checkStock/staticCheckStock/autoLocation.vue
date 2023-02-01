@@ -196,7 +196,7 @@
 				})
 			},
 			search() {
-				uni.$u.throttle(this.getReceiveList(), 1000)
+				uni.$u.throttle(this.getReceiveList(), 10000)
 			},
 			clickItem(item) {
 				if (true) {

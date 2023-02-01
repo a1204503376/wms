@@ -189,7 +189,7 @@
 						});
 						_this.params.locCode = 'STAGE'
 					}
-				}, 1000)
+				}, 10000)
 
 			},
 			getDetailByDetailId() {

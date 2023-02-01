@@ -100,7 +100,7 @@
 						_this.params.boxCode = '';
 					})
 
-				}, 1000)
+				}, 10000)
 
 			},
 			getDetailByDetailId() {

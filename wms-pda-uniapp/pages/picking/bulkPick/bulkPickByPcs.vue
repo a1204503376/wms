@@ -128,7 +128,7 @@
 						return;
 					}
 					uni.$u.func.routeNavigateTo('/pages/picking/bulkPick/bulkPIckTo', _this.params);
-				}, 1000)
+				}, 10000)
 
 			},
 			esc() {
