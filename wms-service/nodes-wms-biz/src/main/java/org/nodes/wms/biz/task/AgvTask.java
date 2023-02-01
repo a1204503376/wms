@@ -75,6 +75,10 @@ public class AgvTask {
 		}
 
 		WmsTask putawayTask = wmsTaskFactory.createPutwayTask(stocks);
+		List<WmsTask> existTaskList = wmsTaskDao.getOldTaskByNewTask(putawayTask);
+		if (existTaskList.size() > 0) {
+			throw new ServiceException("生成任务失败;");
+		}
 		wmsTaskDao.save(putawayTask);
 		// 调用上架策略生成目标库位，并把目标库位保存到任务表中
 		Location targetLoc = putawayStrategyActuator.run(BigDecimal.ZERO, stocks);

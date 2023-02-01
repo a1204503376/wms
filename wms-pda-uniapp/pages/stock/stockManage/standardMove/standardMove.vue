@@ -81,7 +81,7 @@
 						title: '标准移动失败，请输入必填字段'
 					});
 					return;
-				}, 1000)
+				}, 10000)
 			},
 			esc() {
 				uni.navigateBack({

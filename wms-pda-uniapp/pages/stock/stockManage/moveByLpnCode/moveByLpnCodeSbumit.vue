@@ -84,7 +84,7 @@
 					uni.$u.func.showToast({
 						title: '请输入必填字段',
 					})
-				}, 1000)
+				}, 10000)
 
 			},
 			esc() {

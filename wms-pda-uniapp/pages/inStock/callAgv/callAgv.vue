@@ -167,7 +167,7 @@
 				var _this = this;
 				uni.$u.throttle(function() {
 					_this.submit()
-				}, 5000)
+				}, 10000)
 			},
 			submit() {
 				var that = this

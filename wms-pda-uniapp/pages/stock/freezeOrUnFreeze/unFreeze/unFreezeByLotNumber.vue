@@ -72,7 +72,7 @@
 					_this.$u.func.showToast({
 						title: '请输入批次号'
 					});
-				}, 1000)
+				}, 10000)
 
 			},
 			esc() {

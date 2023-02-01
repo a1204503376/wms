@@ -163,19 +163,30 @@ public class WmsTaskDaoImpl
 		}
 	}
 
-    @Override
-    public List<TaskExcelResponse> getListForExport(TaskPageQuery queryParam) {
+	@Override
+	public List<TaskExcelResponse> getListForExport(TaskPageQuery queryParam) {
 		LambdaQueryWrapper<WmsTask> queryWrapper = Wrappers.lambdaQuery(WmsTask.class);
 		queryWrapper
-				.like(Func.isNotBlank(queryParam.getTaskId()), WmsTask::getTaskId, queryParam.getTaskId())
-				.like(Func.isNotBlank(queryParam.getBillNo()), WmsTask::getBillNo, queryParam.getBillNo())
-				.in(Func.isNotEmpty(queryParam.getTaskTypeCdList()),WmsTask::getTaskTypeCd, queryParam.getTaskTypeCdList())
-				.in(Func.isNotEmpty(queryParam.getTaskStateList()), WmsTask::getTaskState, queryParam.getTaskStateList())
-				.like(Func.isNotBlank(queryParam.getSkuCode()), WmsTask::getSkuCode, queryParam.getSkuCode())
-				.like(Func.isNotBlank(queryParam.getFromLocCode()), WmsTask::getFromLocCode, queryParam.getFromLocCode())
-				.like(Func.isNotBlank(queryParam.getToLocCode()), WmsTask::getToLocCode, queryParam.getToLocCode())
-				.like(Func.isNotBlank(queryParam.getBoxCode()), WmsTask::getBoxCode, queryParam.getBoxCode());
+			.like(Func.isNotBlank(queryParam.getTaskId()), WmsTask::getTaskId, queryParam.getTaskId())
+			.like(Func.isNotBlank(queryParam.getBillNo()), WmsTask::getBillNo, queryParam.getBillNo())
+			.in(Func.isNotEmpty(queryParam.getTaskTypeCdList()), WmsTask::getTaskTypeCd, queryParam.getTaskTypeCdList())
+			.in(Func.isNotEmpty(queryParam.getTaskStateList()), WmsTask::getTaskState, queryParam.getTaskStateList())
+			.like(Func.isNotBlank(queryParam.getSkuCode()), WmsTask::getSkuCode, queryParam.getSkuCode())
+			.like(Func.isNotBlank(queryParam.getFromLocCode()), WmsTask::getFromLocCode, queryParam.getFromLocCode())
+			.like(Func.isNotBlank(queryParam.getToLocCode()), WmsTask::getToLocCode, queryParam.getToLocCode())
+			.like(Func.isNotBlank(queryParam.getBoxCode()), WmsTask::getBoxCode, queryParam.getBoxCode());
 //				.eq(WmsTask::getIsDeleted, 0);
-        return super.baseMapper.listForExport(queryWrapper);
-    }
+		return super.baseMapper.listForExport(queryWrapper);
+	}
+
+	@Override
+	public List<WmsTask> getOldTaskByNewTask(WmsTask task) {
+		LambdaQueryChainWrapper<WmsTask> lambdaQuery = super.lambdaQuery()
+			.eq(WmsTask::getBoxCode, task.getBoxCode())
+			.eq(WmsTask::getTaskTypeCd, task.getTaskTypeCd())
+			.in(WmsTask::getTaskState, WmsTaskStateEnum.NOT_ISSUED, WmsTaskStateEnum.ISSUED,
+				WmsTaskStateEnum.START_EXECUTION, WmsTaskStateEnum.AGV_RECEIVED, WmsTaskStateEnum.AGV_ASSIGNED)
+			.apply("task_qty <> scan_qty");
+		return lambdaQuery.list();
+	}
 }

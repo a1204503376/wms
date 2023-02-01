@@ -119,7 +119,7 @@
 							delta: 1
 						});
 					})
-				}, 1000)
+				}, 10000)
 			},
 			analysisCode(code) {
 				var barcode = barcodeFunc.parseBarcode(code);
