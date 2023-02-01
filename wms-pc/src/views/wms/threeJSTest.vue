@@ -9,7 +9,6 @@
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import GUI from "dat.gui/src/dat/gui/GUI"
 import {OutlinePass} from "three/examples/jsm/postprocessing/OutlinePass"
 import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass"
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer"
@@ -19,8 +18,6 @@ import {getList as getZoneList} from "@/api/wms/warehouse/zone";
 import {getListFor3d} from "@/api/wms/basics/location";
 import {page as getStock} from "@/api/wms/stock/stock"
 import func from "@/util/func";
-import jquery from "jquery/src/jquery"
-import colorBox from "jquery-colorbox/jquery.colorbox"
 import Tenant from "@/views/core/tenant.vue";
 import dat from "dat.gui/src/dat";
 
@@ -57,22 +54,6 @@ export default {
             aisleWidth: 200,        // 过道长度
             zoneGeometryList: [],     // 手动创建的库区几何体
             shelfList: [],
-            shelf: {
-                shelfId: undefined,      // 货架id
-                shelfName: undefined,    // 货架名称
-                planeLength: undefined,  // 货架板面长度
-                planeWidth: undefined,   // 货架板面宽度
-                planeHeight: undefined,  // 货架板面高度
-                holderLength: undefined, // 支架长度
-                holderWidth: undefined,  // 支架宽度
-                holderHeight: undefined, // 支架高度
-                layerNum: undefined,     // 货架层数
-                columnNum: undefined,    // 货架每层列数
-                positionX: undefined,    // 货架X轴位置
-                positionY: undefined,    // 货架Y轴位置
-                positionZ: undefined,    // 货架Z轴位置
-                zoneId: undefined,       // 库区id
-            },
             plane: {
                 width: 50,              // 一个货架板在x轴上的长度
                 height: 2,              // 一个货架板在y轴上的长度
@@ -96,24 +77,21 @@ export default {
     activated() {
         window.addEventListener('resize', this.onWindowResize, false);
         window.addEventListener('click', this.onMouseClick);
-        window.addEventListener('dblclick', this.onMouseDblClick);
     },
     deactivated() {
         window.removeEventListener('resize', this.onWindowResize, false);
         window.removeEventListener('click', this.onMouseClick);
-        window.removeEventListener('dblclick', this.onMouseDblClick);
     },
     beforeDestroy() {
         window.removeEventListener('resize', this.onWindowResize, false);
         window.removeEventListener('click', this.onMouseClick);
-        window.removeEventListener('dblclick', this.onMouseDblClick);
     },
     mounted() {
         this.initScene();       // 初始化场景
         this.initCamera();      // 初始化相机
         this.initRenderer();    // 初始化渲染器
         this.initLight();       // 初始化灯光
-        // this.initStats();       // 初始化性能插件
+        this.initStats();       // 初始化性能插件
         this.initControls();    // 初始化控制器
         this.initCompose();
         this.initMat();         // 初始化材质信息
@@ -181,17 +159,17 @@ export default {
         },
         // 更新控件
         update() {
-            // this.stats.update();
+            this.stats.update();
             this.controls.update();
         },
-        /*initStats() {
+        initStats() {
             this.stats = new Stats();
             this.stats.domElement.style.position = 'absolute';
             this.stats.domElement.style.left = '0px';
             this.stats.domElement.style.top = '0px';
             document.getElementById("three").appendChild(this.stats.domElement);
             return this.stats;
-        },*/
+        },
         initControls() {
             this.controls = new OrbitControls(this.camera, this.renderer.domElement);
             // 使动画循环使用时阻尼或自转 意思是否有惯性
@@ -392,9 +370,7 @@ export default {
         },
         //  ************************************ 根据货架配置创建货架并添加到库区中 start ************************************
         createShelf(locationList) {
-            let zoneList = this.zoneList;
             //第一排 人工区拣货区和对应库位， 库区几何对象
-            let rgZone = zoneList.find(x => x.zoneCode.search("WH1-RG") !== -1);
             let bank1LocList = locationList.filter(x => Number(x.locBank) === 1);
             let rgLocationGeometry = this.zoneGeometryList.find(zone => zone.name === "人工拣货区")
             let bank1MaxLocColumn = Math.max.apply(Math, bank1LocList.map(item => item.locColumn))
@@ -449,38 +425,125 @@ export default {
                     this.scene.add(obj1);
                     this.scene.add(obj2);
                 }
-
             }
-            //二排 D箱拣货区、D箱自动存储区、入、出库接驳区 和 对应库位
-            let dZone = zoneList.find(x => x.zoneCode.search("WH1-D") !== -1);
-            let stageZone = zoneList.find(x => x.zoneCode.search("WH1-STAGE") !== -1);
-            let pickToZone = zoneList.find(x => x.zoneCode.search("WH1-PICKTO") !== -1);
-            let bank2LocList = locationList.filter(x => x.locBank === 2);
-            //第三四五六七排 自动区
-            let agvZone = zoneList.find(x => x.zoneCode.search("WH1-AGV") !== -1);
+            //二排 D箱拣货区、D箱自动存储区、入、出库接驳区
+            let bank2LocList = locationList.filter(x => Number(x.locBank) === 2);
+            let bank2LocGeometry = this.zoneGeometryList.find(zone => zone.name === "D箱人工拣货区")
+            let bank2MaxLocColumn = Math.max.apply(Math, bank2LocList.map(item => item.locColumn))
+            let bank2LocPositionZ = bank2LocGeometry.position.z + (bank2MaxLocColumn * this.plane.length) / 2
+            let bank2LocPositionX = bank2LocGeometry.position.x
 
+            let bank2LocPositionY = this.holder.height;
+            for (let j = 0; j < bank2LocList.length; j++) {
+                // 货板
+                let planeLength = this.plane.length / 2;
+                let multiplePlaneLength
+                if (bank2LocList[j].lpnTypeCode === 'A') {
+                    planeLength = planeLength * 2;
+                    multiplePlaneLength = planeLength * Number(bank2LocList[j].locColumn) - planeLength / 4;
+                } else {
+                    if (bank2LocList[j].locCode.indexOf("R") !== -1 || bank2LocList[j].locCode.indexOf("P") !== -1) {
+                        multiplePlaneLength = planeLength * Number(bank2LocList[j].locCode.substring(9, 11));
+                    } else {
+                        multiplePlaneLength = planeLength * Number(bank2LocList[j].locCode.substring(7, 9));
+                    }
+                }
+
+                let plane = new THREE.BoxGeometry(this.plane.width, this.plane.height, planeLength);
+                let obj = new THREE.Mesh(plane, this.mat.rackMat);
+                let planePositionX = bank2LocPositionX;
+                let planePositionY = bank2LocPositionY * Number(bank2LocList[j].locLevel);
+                let planePositionZ = bank2LocPositionZ - multiplePlaneLength;
+                obj.position.set(planePositionX, planePositionY, planePositionZ);
+                obj.name = bank2LocList[j].locCode;
+                this.scene.add(obj);
+
+                let cargoSpaceObj = {
+                    location: bank2LocList[j],
+                    positionX: bank2LocPositionX,
+                    positionY: planePositionY,
+                    positionZ: planePositionZ
+                }
+                this.cargoSpaceList.push(cargoSpaceObj);
+
+                // 柱子
+                let holder = new THREE.BoxGeometry(this.holder.width, this.holder.height, this.holder.length);
+                let holderLeft = new THREE.Mesh(holder, this.mat.rackMat2);
+                let holderRight = new THREE.Mesh(holder, this.mat.rackMat2);
+                let holderPositionZ;
+                if (Number(bank2LocList[j].locColumn) === 1) {
+                    holderPositionZ = bank2LocPositionZ - planeLength / 4;
+                } else {
+                    if (bank2LocList[j].lpnTypeCode === 'A') {
+                        holderPositionZ = bank2LocPositionZ - planeLength / 4 - (this.plane.length * (Number(bank2LocList[j].locColumn - 1)));
+                    } else {
+                        holderPositionZ = bank2LocPositionZ - planeLength / 2 - (this.plane.length * (Number(bank2LocList[j].locColumn - 1)));
+                    }
+                }
+
+                let holderPositionY = this.holder.height * Number(bank2LocList[j].locLevel) - this.holder.height / 2;
+                let holderLeftPositionX = bank2LocPositionX - this.plane.width / 2 + this.holder.width / 2
+                let holderRightPositionX = bank2LocPositionX + this.plane.width / 2 - this.holder.width / 2
+                holderLeft.position.set(holderLeftPositionX, holderPositionY, holderPositionZ);
+                holderRight.position.set(holderRightPositionX, holderPositionY, holderPositionZ);
+                this.scene.add(holderLeft);
+                this.scene.add(holderRight);
+
+                // 在消防通道处和末尾添加柱子
+                if (((Number(bank2LocList[j].locLevel) === 1 || Number(bank2LocList[j].locLevel) === 2)&& (Number(bank2LocList[j].locCode.substring(7, 9)) === 14))
+                    || Number(bank2LocList[j].locCode.substring(7, 9)) === 34 || Number(bank2LocList[j].locCode.substring(9, 11)) === 34
+                    || Number(bank2LocList[j].locCode.substring(7, 9)) === 28 || Number(bank2LocList[j].locCode.substring(9, 11)) === 28
+                    ) {
+                    let obj1 = new THREE.Mesh(holder, this.mat.rackMat2);
+                    let obj2 = new THREE.Mesh(holder, this.mat.rackMat2);
+                    holderPositionY = this.holder.height * Number(bank2LocList[j].locLevel) - this.holder.height / 2;
+                    if (Number(bank2LocList[j].locCode.substring(9, 11)) === 28 || Number(bank2LocList[j].locCode.substring(9, 11)) === 34) {
+                        holderPositionZ = bank2LocPositionZ - planeLength * (Number(bank2LocList[j].locCode.substring(9, 11))) - planeLength / 2;
+                    }else if (Number(bank2LocList[j].locCode.substring(7, 9)) === 28 || Number(bank2LocList[j].locCode.substring(7, 9)) === 28){
+                        holderPositionZ = bank2LocPositionZ - planeLength * (Number(bank2LocList[j].locCode.substring(7, 9))) - planeLength / 2;
+
+                    } else{
+                        holderPositionZ = bank2LocPositionZ - (planeLength * (Number(bank2LocList[j].locCode.substring(7, 9)))) - planeLength / 2;
+                    }
+                    obj1.position.set(holderLeftPositionX, holderPositionY, holderPositionZ);
+                    obj2.position.set(holderRightPositionX, holderPositionY, holderPositionZ);
+                    this.scene.add(obj1);
+                    this.scene.add(obj2);
+                }
+            }
+
+
+            //第三四五六七排 自动区
             let agvLocationGeometry = this.zoneGeometryList.find(zone => zone.name === "AGV自动存储区")
-            console.log(agvLocationGeometry);
-            for (let i = 3; i <= 7 ; i++) {
+            for (let i = 3; i <= 7; i++) {
                 let bank34567LocList = locationList.filter(x => Number(x.locBank) === i);
                 let bank34567MaxLocColumn = Math.max.apply(Math, bank34567LocList.map(item => item.locColumn))
                 let bank34567LocPositionZ = agvLocationGeometry.position.z + (bank34567MaxLocColumn * this.plane.length) / 2
                 let bank34567LocPositionX;
-                if (i === 3 || i === 4){
+                if (i === 3 || i === 4) {
                     bank34567LocPositionX = agvLocationGeometry.position.x - agvLocationGeometry.geometry.parameters.width / 2 + (this.plane.width * i)
-                }else if (i === 5 || i === 6){
+                } else if (i === 5 || i === 6) {
                     bank34567LocPositionX = agvLocationGeometry.position.x - agvLocationGeometry.geometry.parameters.width / 2 + (this.plane.width * i) + this.aisleWidth
-                }else {
+                } else {
                     bank34567LocPositionX = agvLocationGeometry.position.x - agvLocationGeometry.geometry.parameters.width / 2 + (this.plane.width * i) + this.aisleWidth * 2
                 }
                 let bank34567LocPositionY = this.holder.height;
                 for (let j = 0; j < bank34567LocList.length; j++) {
                     // 货板
-                    let plane = new THREE.BoxGeometry(this.plane.width, this.plane.height, this.plane.length);
+                    let planeLength = this.plane.length / 2;
+                    let multiplePlaneLength
+                    if (bank34567LocList[j].lpnTypeCode === 'A') {
+                        planeLength = planeLength * 2;
+                        multiplePlaneLength = planeLength * Number(bank34567LocList[j].locColumn) - planeLength / 4;
+                    } else {
+                        multiplePlaneLength = planeLength * Number(bank34567LocList[j].locCode.substring(7, 9));
+                    }
+                    let plane = new THREE.BoxGeometry(this.plane.width, this.plane.height, planeLength);
                     let obj = new THREE.Mesh(plane, this.mat.rackMat);
                     let planePositionX = bank34567LocPositionX;
                     let planePositionY = bank34567LocPositionY * Number(bank34567LocList[j].locLevel);
-                    let planePositionZ = bank34567LocPositionZ - this.plane.length * Number(locationList[j].locColumn);
+                    let planePositionZ = bank34567LocPositionZ - multiplePlaneLength;
+
                     obj.position.set(planePositionX, planePositionY, planePositionZ);
                     obj.name = bank34567LocList[j].locCode;
                     this.scene.add(obj);
@@ -499,9 +562,13 @@ export default {
                     let holderRight = new THREE.Mesh(holder, this.mat.rackMat2);
                     let holderPositionZ;
                     if (Number(bank34567LocList[j].locColumn) === 1) {
-                        holderPositionZ = bank34567LocPositionZ - this.plane.length / 2;
+                        holderPositionZ = bank34567LocPositionZ - planeLength / 2;
                     } else {
-                        holderPositionZ = (bank34567LocPositionZ - this.plane.length / 2) - (this.plane.length * (Number(bank34567LocList[j].locColumn - 1)));
+                        if (bank34567LocList[j].lpnTypeCode === 'A') {
+                            holderPositionZ = bank34567LocPositionZ - planeLength / 4 - (this.plane.length * (Number(bank34567LocList[j].locColumn - 1)));
+                        } else {
+                            holderPositionZ = bank34567LocPositionZ - planeLength / 2 - (this.plane.length * (Number(bank34567LocList[j].locColumn - 1)));
+                        }
                     }
 
                     let holderPositionY = this.holder.height * Number(bank34567LocList[j].locLevel) - this.holder.height / 2;
@@ -512,10 +579,18 @@ export default {
                     this.scene.add(holderLeft);
                     this.scene.add(holderRight);
 
-                    if (Number(bank34567LocList[j].locColumn) === bank1MaxLocColumn || Number(bank34567LocList[j].locColumn) === 4) {
+                    // 在消防通道处添加柱子
+                    if (((Number(bank34567LocList[j].locLevel) === 1 || Number(bank34567LocList[j].locLevel) === 2)
+                            && (Number(bank34567LocList[j].locCode.substring(7, 9)) === 14)) || Number(bank34567LocList[j].locCode.substring(7, 9)) === 34
+                        || (bank34567LocList[j].lpnTypeCode === 'A' && Number(bank34567LocList[j].locCode.substring(7, 9)) === 33)) {
                         let obj1 = new THREE.Mesh(holder, this.mat.rackMat2);
                         let obj2 = new THREE.Mesh(holder, this.mat.rackMat2);
-                        holderPositionZ = bank34567LocPositionZ - (this.plane.length * (Number(bank34567LocList[j].locColumn))) - this.plane.length / 2;
+                        holderPositionY = this.holder.height * Number(bank34567LocList[j].locLevel) - this.holder.height / 2;
+                        if (bank34567LocList[j].lpnTypeCode === 'A' && Number(bank34567LocList[j].locCode.substring(7, 9)) === 33) {
+                            holderPositionZ = bank34567LocPositionZ - planeLength * (Number(bank34567LocList[j].locColumn)) - planeLength / 4;
+                        } else {
+                            holderPositionZ = bank34567LocPositionZ - (planeLength * (Number(bank34567LocList[j].locCode.substring(7, 9)))) - planeLength / 2;
+                        }
                         obj1.position.set(holderLeftPositionX, holderPositionY, holderPositionZ);
                         obj2.position.set(holderRightPositionX, holderPositionY, holderPositionZ);
                         this.scene.add(obj1);
@@ -618,40 +693,6 @@ export default {
             })
         },
         //  ************************************ 添加侧边栏信息 end ************************************
-        // 鼠标双击事件
-        onMouseDblClick(e) {
-            let x, y;
-            if (e.changedTouches) {
-                x = e.changedTouches[0].pageX;
-                y = e.changedTouches[0].pageY;
-            } else {
-                x = e.clientX;
-                y = e.clientY;
-            }
-            this.mouse.x = (x / window.innerWidth) * 2 - 1;
-            this.mouse.y = -(y / window.innerHeight) * 2 + 1;
-            this.raycaster.setFromCamera(this.mouse, this.camera);
-            let intersects = this.raycaster.intersectObjects([this.scene], true);
-
-            if (intersects.length === 0) {
-                return;
-            }
-
-            let Msg = intersects[0].object.name
-            console.log("双击，msg:", Msg);
-            if (Msg[0] === "货物") {
-                let href = "DispatchAction.do?efFormEname=YMIQ083DP&inqu_status-0-storageUnitId=" + Msg[1];
-                colorBox({
-                    href: href,
-                    title: "货物详情",
-                    innerWidth: '1200px',
-                    innerHeight: '800px',
-                    iframe: true,
-                    scrolling: false,
-                    overlayClose: false
-                });
-            }
-        },
     }
 
 }

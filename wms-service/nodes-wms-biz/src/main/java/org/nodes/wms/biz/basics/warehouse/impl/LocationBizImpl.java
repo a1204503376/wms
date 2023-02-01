@@ -440,11 +440,10 @@ public class LocationBizImpl implements LocationBiz {
 		List<Long> excludeZoneIdList = excludeZoneList.stream()
 			.map(Zone::getZoneId)
 			.collect(Collectors.toList());
-		List<Location> all = locationDao.getAll();
-		List<Location> collect = all.stream()
+		List<Location3dResponse> loc3dData = locationDao.select3dLocData();
+		return loc3dData.stream()
 			.filter(x -> !excludeZoneIdList.contains(x.getZoneId()))
-			.sorted(Comparator.comparing(Location::getLocBank).thenComparing(Location::getLocColumn).thenComparing(Location::getLocColumn))
+			.sorted(Comparator.comparing(Location3dResponse::getLocBank).thenComparing(Location3dResponse::getLocColumn).thenComparing(Location3dResponse::getLocColumn))
 			.collect(Collectors.toList());
-		return Func.copy(collect, Location3dResponse.class);
 	}
 }

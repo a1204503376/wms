@@ -216,9 +216,9 @@ public interface LocationDao {
 	Integer getZoneTypeByLocId(Long locId);
 
 	/**
-	 * 查询所有库位
+	 * 查询3d库位所需的库位数据
 	 *
 	 * @return 库位信息
 	 */
-	List<Location> getAll();
+	List<Location3dResponse> select3dLocData();
 }

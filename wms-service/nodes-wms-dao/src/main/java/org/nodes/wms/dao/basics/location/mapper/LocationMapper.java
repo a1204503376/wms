@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
-import org.nodes.wms.dao.basics.location.dto.output.LocationDetailResponse;
-import org.nodes.wms.dao.basics.location.dto.output.LocationExcelResponse;
-import org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse;
-import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
+import org.nodes.wms.dao.basics.location.dto.output.*;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.putaway.dto.input.LpnTypeRequest;
 import org.springframework.stereotype.Repository;
@@ -95,4 +92,6 @@ public interface LocationMapper extends BaseMapper<Location> {
 	 * @return 库区类型
 	 */
 	Integer selectZoneTypeByLocId(Long locId);
+
+    List<Location3dResponse> select3dLocData();
 }

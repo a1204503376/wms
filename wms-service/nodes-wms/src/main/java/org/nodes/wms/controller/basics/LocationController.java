@@ -172,6 +172,7 @@ public class LocationController {
 	/**
 	 * 3d库位展示：获取库位信息，排除虚拟库位和入出库暂存区得
 	 */
+	@ApiOperation(value = "获取3d库位数据")
 	@GetMapping("/get3dLocationData")
 	public R<List<Location3dResponse>> get3dLocationData(){
 		return R.data(locationBiz.getAllLocationFor3d());

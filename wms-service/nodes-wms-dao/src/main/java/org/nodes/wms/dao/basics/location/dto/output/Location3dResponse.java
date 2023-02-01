@@ -75,11 +75,6 @@ public class Location3dResponse {
 	private Integer locStatus;
 
 	/**
-	 * 路线顺序
-	 */
-	private Integer logicAllocation;
-
-	/**
 	 * 长
 	 */
 	private BigDecimal locLength;
@@ -115,11 +110,6 @@ public class Location3dResponse {
 	private Integer zCode;
 
 	/**
-	 * 校验位数
-	 */
-	private String checkDigit;
-
-	/**
 	 * 货架列
 	 */
 	private String locColumn;
@@ -130,52 +120,12 @@ public class Location3dResponse {
 	private String locBank;
 
 	/**
-	 * 上架顺序
-	 */
-	private Integer putOrder;
-
-	/**
 	 * 适用的容器类型
 	 */
 	private Long lpnTypeId;
 
 	/**
-	 * 定方位
+	 * 适用容器名称
 	 */
-	private String orientation;
-
-	/**
-	 * 容量
-	 */
-	private BigDecimal capacity;
-
-	/**
-	 * 载重量
-	 */
-	private BigDecimal loadWeight;
-
-	/**
-	 * 最大存放件数
-	 */
-	private Integer itemNum;
-
-	/**
-	 * 最大存放托数
-	 */
-	private Integer trayNum;
-
-	/**
-	 * 盘点单编码
-	 */
-	private String countBillNo;
-
-	/**
-	 * 库位共享宽度
-	 */
-	private String shareWidth;
-
-	/**
-	 * 库位共享重量
-	 */
-	private String shareWeight;
+	private String lpnTypeCode;
 }

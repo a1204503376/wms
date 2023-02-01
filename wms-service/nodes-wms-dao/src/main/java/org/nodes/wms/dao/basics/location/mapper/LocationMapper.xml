@@ -247,4 +247,48 @@
                            ON zone.zone_id = loc.zone_id
         WHERE loc.loc_id = #{locId}
     </select>
+
+    <select id="select3dLocData" resultType="org.nodes.wms.dao.basics.location.dto.output.Location3dResponse">
+        select loc.loc_id,
+               loc.zone_id,
+               loc.wh_id,
+               loc.loc_code,
+               loc.loc_type,
+               loc.loc_category,
+               loc.loc_handling,
+               loc.allocation_zone,
+               loc.loc_flag,
+               loc.abc,
+               loc.lock_flag,
+               loc.loc_status,
+               loc.logic_allocation,
+               loc.loc_length,
+               loc.loc_wide,
+               loc.loc_high,
+               loc.loc_level,
+               loc.loc_column,
+               loc.loc_bank,
+               loc.put_order,
+               loc.lpn_type_id,
+               loc.x_code,
+               loc.y_code,
+               loc.z_code,
+               loc.agv_location,
+               loc.agv_level,
+               loc.agv_point,
+               loc.check_digit,
+               loc.orientation,
+               loc.capacity,
+               loc.load_weight,
+               loc.last_cycle_date,
+               loc.last_loc_count_date,
+               loc.count_bill_no,
+               loc.last_change_time,
+               loc.loc_flag_desc,
+               loc.status,
+               type.code as lpnTypeCode
+        FROM wms_location loc
+                 LEFT JOIN wms_lpn_type type ON type.id = loc.lpn_type_id AND type.is_deleted = 0
+        WHERE loc.is_deleted = 0
+    </select>
 </mapper>
