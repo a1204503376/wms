@@ -428,6 +428,7 @@ export default {
                 this.$message.warning("至少输入一个查询条件")
                 return
             }
+            this.form.params.isShowByLpn = true;
             page(this.page, this.form.params)
                 .then((res) => {
                     let pageObj = res.data.data;
