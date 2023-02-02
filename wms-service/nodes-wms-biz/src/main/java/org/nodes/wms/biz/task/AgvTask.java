@@ -212,13 +212,15 @@ public class AgvTask {
 		return pickTask;
 	}
 
-	public void sendPickToSchedule(WmsTask pickTask, SoHeader so) {
+	public Boolean sendPickToSchedule(WmsTask pickTask, SoHeader so) {
 		if (sendToSchedule(Collections.singletonList(pickTask))) {
 			pickTask.setTaskState(WmsTaskStateEnum.ISSUED);
 			pickTask.setAllotTime(LocalDateTime.now());
+			return true;
 		} else {
 			logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, so.getSoBillId(),
 				so.getSoBillNo(), "AGV拣货任务下发失败");
+			return false;
 		}
 	}
 

@@ -527,8 +527,10 @@ public class OutStockBizImpl implements OutStockBiz {
 		} else {
 			WmsTask task = wmsTaskBiz.findByTaskId(soPickPlanOfLoc.get(0).getTaskId());
 			if (WmsTaskStateEnum.NOT_ISSUED.equals(task.getTaskState())) {
-				agvTask.sendPickToSchedule(task, soHeader);
-				wmsTaskBiz.updateTaskStateToIssued(task.getTaskId());
+				Boolean schedule = agvTask.sendPickToSchedule(task, soHeader);
+				if (schedule) {
+					wmsTaskBiz.updateTaskStateToIssued(task.getTaskId());
+				}
 			} else {
 				throw new ServiceException("任务下发失败，该任务已经下发完成");
 			}
@@ -711,7 +713,7 @@ public class OutStockBizImpl implements OutStockBiz {
 			// 查到拣货记录，有正常地拣货记录代表单据是部分拣货
 			List<LogSoPick> logSoPickList = logSoPickBiz.findEnableBySoHeaderId(soHeader.getSoBillId());
 			// 调整分配量为0时，更新发货单状态
-			if (Func.isNotEmpty(logSoPickList)){
+			if (Func.isNotEmpty(logSoPickList)) {
 				soBillBiz.updateState(request.getSoBillId(), SoBillStateEnum.PART);
 			} else {
 				soBillBiz.updateState(request.getSoBillId(), SoBillStateEnum.CREATE);
