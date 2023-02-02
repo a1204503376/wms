@@ -218,7 +218,7 @@ public class ReportSo {
 	}
 
 	public Integer getInterceptionSnCode(String snCode) {
-		return ConvertUtil.convert(StringUtil.sub(snCode, 13, snCode.length()), Integer.class);
+		return ConvertUtil.convert(StringUtil.sub(snCode, 12, snCode.length()), Integer.class);
 	}
 
 	/**
