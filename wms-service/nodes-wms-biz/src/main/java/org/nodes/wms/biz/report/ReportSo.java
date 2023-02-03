@@ -122,14 +122,12 @@ public class ReportSo {
 		List<ReportSoPickLotDto> finalDtoList = new ArrayList<>();
 		Map<String, List<ReportSoPickLotDto>> listGroupByBoxCode = reportSoPickLotDtoList.stream().collect(Collectors.groupingBy(ReportSoPickLotDto::getBoxCode));
 		for (Map.Entry<String, List<ReportSoPickLotDto>> entry : listGroupByBoxCode.entrySet()) {
-			for (int i = 0; i < entry.getValue().size(); i++) {
-				if (i != 0) {
-					entry.getValue().get(i).setBoxCode(null);
-				}
-			}
 			finalDtoList.addAll(entry.getValue());
 		}
-		return finalDtoList;
+		return finalDtoList.stream()
+			.filter(reportSoPickSerialDto ->  Func.isNotEmpty(reportSoPickSerialDto.getBoxCode()))
+			.sorted(Comparator.comparing(ReportSoPickLotDto::getBoxCode))
+			.collect(Collectors.toList());
 	}
 
 	public SoHeader getSoHeader(Map<String, Object> parameters) {
@@ -227,7 +225,7 @@ public class ReportSo {
 	public void setReportSoPickSerialDtoList(LogSoPick logSoPick, List<ReportSoPickSerialDto> reportSoPickSerialDtoList) {
 		if (Func.isNotEmpty(logSoPick.getSnCode())) {
 			List<Map<String, Object>> mapList = getProcessedSerialAndQty(logSoPick.getSnCode());
-			packagingData(mapList, logSoPick.getSkuLot9(), logSoPick.getBoxCode(), logSoPick.getSkuLot5(),
+			packagingData(mapList, logSoPick.getSkuLot6(), logSoPick.getBoxCode(), logSoPick.getSkuLot5(),
 				logSoPick.getSoBillId(), reportSoPickSerialDtoList);
 		}
 	}
@@ -242,21 +240,21 @@ public class ReportSo {
 			snCodeStr = String.join(",", serialList);
 		}
 		List<Map<String, Object>> mapList = getProcessedSerialAndQty(snCodeStr);
-		packagingData(mapList, soPickPlan.getSkuLot9(), soPickPlan.getBoxCode(), soPickPlan.getSkuLot5(),
+		packagingData(mapList, soPickPlan.getSkuLot6(), soPickPlan.getBoxCode(), soPickPlan.getSkuLot5(),
 			soPickPlan.getSoBillId(), reportSoPickSerialDtoList);
 	}
 
 	/**
 	 * 封装数据
 	 */
-	private void packagingData(List<Map<String, Object>> mapList, String skuLot9, String boxCode, String skuLot5, Long soBillId,
+	private void packagingData(List<Map<String, Object>> mapList, String skuLot6, String boxCode, String skuLot5, Long soBillId,
 							   List<ReportSoPickSerialDto> reportSoPickSerialDtoList) {
 		for (Map<String, Object> stringObjectMap : mapList) {
 			ReportSoPickSerialDto reportSoPickSerialDto = new ReportSoPickSerialDto();
 			reportSoPickSerialDto.setBoxCode(boxCode);
 			reportSoPickSerialDto.setSnCode(ConvertUtil.convert(stringObjectMap.get("snCode"), String.class));
 			reportSoPickSerialDto.setQty(ConvertUtil.convert(stringObjectMap.get("qty"), BigDecimal.class));
-			reportSoPickSerialDto.setSkuLot9(skuLot9);
+			reportSoPickSerialDto.setSkuLot6(skuLot6);
 			reportSoPickSerialDto.setSkuLot5(skuLot5);
 			reportSoPickSerialDto.setSoBillId(soBillId);
 			reportSoPickSerialDtoList.add(reportSoPickSerialDto);
@@ -326,13 +324,11 @@ public class ReportSo {
 		List<ReportSoPickSerialDto> finalDtoList = new ArrayList<>();
 		Map<String, List<ReportSoPickSerialDto>> listGroupByBoxCode = reportSoPickSerialDtoList.stream().collect(Collectors.groupingBy(ReportSoPickSerialDto::getBoxCode));
 		for (Map.Entry<String, List<ReportSoPickSerialDto>> entry : listGroupByBoxCode.entrySet()) {
-			for (int i = 0; i < entry.getValue().size(); i++) {
-				if (i != 0) {
-					entry.getValue().get(i).setBoxCode(null);
-				}
-			}
 			finalDtoList.addAll(entry.getValue());
 		}
-		return finalDtoList;
+		return finalDtoList.stream()
+			.filter(reportSoPickSerialDto ->  Func.isNotEmpty(reportSoPickSerialDto.getBoxCode()))
+			.sorted(Comparator.comparing(ReportSoPickSerialDto::getBoxCode).thenComparing(ReportSoPickSerialDto::getSnCode))
+			.collect(Collectors.toList());
 	}
 }
