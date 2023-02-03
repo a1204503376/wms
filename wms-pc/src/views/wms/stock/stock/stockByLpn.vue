@@ -433,6 +433,7 @@ export default {
                 .then((res) => {
                     let pageObj = res.data.data;
                     if (pageObj.records.length === 0) {
+                        this.table.data = []
                         this.$message.warning("没有搜索到符合查询条件的内容")
                         return
                     }
