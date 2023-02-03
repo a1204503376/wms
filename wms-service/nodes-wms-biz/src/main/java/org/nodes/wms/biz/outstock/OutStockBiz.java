@@ -10,6 +10,7 @@ import org.nodes.wms.dao.outstock.so.dto.input.SoBillDistributedRequest;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.input.FindPickPlanBySoBillIdAndBoxCodeRequest;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.FindPickPlanBySoBillIdAndBoxCodeResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
+import org.nodes.wms.dao.stock.dto.output.FindBoxCountResponse;
 import org.nodes.wms.dao.stock.dto.output.GetStockByDistributeAdjustResponse;
 import org.nodes.wms.dao.stock.dto.output.StockDistributeAdjustResponse;
 import org.nodes.wms.dao.task.enums.WmsTaskProcTypeEnum;
@@ -205,6 +206,14 @@ public interface OutStockBiz {
 	 * @return 箱子数量
 	 */
 	Integer findBoxCountBySoHeaderId(Long soBillId);
+	/**
+	 * 根据发货单查询正常拣货记录的条数，不包含撤销的记录
+	 *
+	 * @param soBillId 发货单id
+	 * @return 拣货计划总数/已经拣货量/已经复核量
+	 */
+	FindBoxCountResponse findBoxCountBySoHeaderIds(Long soBillId);
+
 
 	/**
 	 * 根据箱码或库位编码 查找分配调整页面的库存信息

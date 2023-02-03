@@ -9,8 +9,10 @@
 				<u--input v-model.trim="params.boxCode"></u--input>
 			</u-form-item>
 		</u--form>
-		<h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">
-			已核列表({{boxs}}/{{boxCodeList.length}}箱)</h4>
+		<h4  align="center" style='background-color:#33cbcc;height: 50rpx;' class="font-in-page">拣货计划总数:{{boxs.pickPlanQty}}/已拣量{{boxs.pickedQty}}/已复核量{{boxs.reviewedQty}}</h4>
+		<br>
+	    <h4 align="center" style='background-color:#33cbcc;height: 70rpx;' class="font-in-page">
+			已核列表</h4>
 		<!-- ${index + 1} -->
 		<u-list style="height: 650rpx;">
 			<u-list-item v-for="(item, index) in boxCodeList" :key="index" :style="item.backgroundColor">
@@ -55,7 +57,7 @@
 					soBillId: undefined
 				},
 				boxCodeList: [],
-				boxs: 0
+				boxs: {}
 			}
 		},
 		onLoad: function(option) {
@@ -128,6 +130,7 @@
 						boxCode: boxCode,
 						backgroundColor: "background-color: #fff;"
 					});
+					this.boxs.reviewedQty = this.boxs.reviewedQty+1;
 				})
 			},
 			clearEmitKeyDown() {

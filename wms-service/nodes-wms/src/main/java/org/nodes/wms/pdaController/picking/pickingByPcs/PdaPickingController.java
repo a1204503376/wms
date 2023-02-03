@@ -10,6 +10,7 @@ import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindAllPickingResponse;
 import org.nodes.wms.dao.outstock.logSoPick.dto.output.FindPickingBySoBillIdResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.input.FindPickPlanBySoBillIdAndBoxCodeRequest;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.FindPickPlanBySoBillIdAndBoxCodeResponse;
+import org.nodes.wms.dao.stock.dto.output.FindBoxCountResponse;
 import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
@@ -135,8 +136,8 @@ public class PdaPickingController {
 	 * 出库复核查询箱子有几个的接口
 	 */
 	@PostMapping("/selectBoxCountBySoHeaderId")
-	public R<Integer> selectBoxCountBySoHeaderId(@RequestBody FindBoxCountBySoHeaderIdRequest request) {
-		return R.data(outStockBiz.findBoxCountBySoHeaderId(request.getSoBillId()));
+	public R<FindBoxCountResponse> selectBoxCountBySoHeaderId(@RequestBody FindBoxCountBySoHeaderIdRequest request) {
+		return R.data(outStockBiz.findBoxCountBySoHeaderIds(request.getSoBillId()));
 	}
 
 }

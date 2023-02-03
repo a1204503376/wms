@@ -46,10 +46,7 @@ import org.nodes.wms.dao.outstock.soPickPlan.dto.input.FindPickPlanBySoBillIdAnd
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.FindPickPlanBySoBillIdAndBoxCodeResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.dto.output.SoPickPlanForDistributionResponse;
 import org.nodes.wms.dao.outstock.soPickPlan.entities.SoPickPlan;
-import org.nodes.wms.dao.stock.dto.output.GetStockByDistributeAdjustResponse;
-import org.nodes.wms.dao.stock.dto.output.PickByPcStockDto;
-import org.nodes.wms.dao.stock.dto.output.StockDistributeAdjustResponse;
-import org.nodes.wms.dao.stock.dto.output.StockSoPickPlanResponse;
+import org.nodes.wms.dao.stock.dto.output.*;
 import org.nodes.wms.dao.stock.entities.Serial;
 import org.nodes.wms.dao.stock.entities.Stock;
 import org.nodes.wms.dao.stock.enums.StockLogTypeEnum;
@@ -1154,6 +1151,22 @@ public class OutStockBizImpl implements OutStockBiz {
 			boxCodeList.removeAll(truckStockBoxCodeList);
 		}
 		return boxCodeList.size();
+	}
+
+	@Override
+	public FindBoxCountResponse findBoxCountBySoHeaderIds(Long soBillId) {
+		//拣货计划总数
+		List<SoPickPlan> pickPlan = soPickPlanDao.getSoPickPlanForDistribution(soBillId);
+		//已经拣货量
+		List<LogSoPick> picked = logSoPickBiz.findBoxCountBySoHeaderId(soBillId);
+		//已经复核量
+		List<TruckStock> reviewed = truckStockBiz.findList(soBillId);
+
+		FindBoxCountResponse response = new FindBoxCountResponse();
+		response.setPickPlanQty(pickPlan.size());
+		response.setPickedQty(picked.size());
+		response.setReviewedQty(reviewed.size());
+		return response;
 	}
 
 	@Override
