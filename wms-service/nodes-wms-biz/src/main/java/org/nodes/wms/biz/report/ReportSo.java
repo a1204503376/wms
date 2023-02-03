@@ -122,14 +122,12 @@ public class ReportSo {
 		List<ReportSoPickLotDto> finalDtoList = new ArrayList<>();
 		Map<String, List<ReportSoPickLotDto>> listGroupByBoxCode = reportSoPickLotDtoList.stream().collect(Collectors.groupingBy(ReportSoPickLotDto::getBoxCode));
 		for (Map.Entry<String, List<ReportSoPickLotDto>> entry : listGroupByBoxCode.entrySet()) {
-			for (int i = 0; i < entry.getValue().size(); i++) {
-				if (i != 0) {
-					entry.getValue().get(i).setBoxCode(null);
-				}
-			}
 			finalDtoList.addAll(entry.getValue());
 		}
-		return finalDtoList;
+		return finalDtoList.stream()
+			.filter(reportSoPickSerialDto ->  Func.isNotEmpty(reportSoPickSerialDto.getBoxCode()))
+			.sorted(Comparator.comparing(ReportSoPickLotDto::getBoxCode))
+			.collect(Collectors.toList());
 	}
 
 	public SoHeader getSoHeader(Map<String, Object> parameters) {
@@ -330,7 +328,7 @@ public class ReportSo {
 		}
 		return finalDtoList.stream()
 			.filter(reportSoPickSerialDto ->  Func.isNotEmpty(reportSoPickSerialDto.getBoxCode()))
-			.sorted(Comparator.comparing(ReportSoPickSerialDto::getBoxCode))
+			.sorted(Comparator.comparing(ReportSoPickSerialDto::getBoxCode).thenComparing(ReportSoPickSerialDto::getSnCode))
 			.collect(Collectors.toList());
 	}
 }
