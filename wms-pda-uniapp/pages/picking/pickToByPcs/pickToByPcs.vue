@@ -199,7 +199,7 @@
 
 					})
 
-				}, 1000)
+				}, 10000)
 
 			},
 			getDetailByDetailId() {

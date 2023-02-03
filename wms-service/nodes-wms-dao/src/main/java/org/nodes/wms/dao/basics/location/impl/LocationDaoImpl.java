@@ -11,10 +11,7 @@ import org.apache.commons.lang.NullArgumentException;
 import org.nodes.core.tool.utils.AssertUtil;
 import org.nodes.wms.dao.basics.location.LocationDao;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
-import org.nodes.wms.dao.basics.location.dto.output.LocationDetailResponse;
-import org.nodes.wms.dao.basics.location.dto.output.LocationExcelResponse;
-import org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse;
-import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
+import org.nodes.wms.dao.basics.location.dto.output.*;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.location.mapper.LocationMapper;
 import org.nodes.wms.dao.putaway.dto.input.LpnTypeRequest;
@@ -220,5 +217,8 @@ public class LocationDaoImpl extends BaseServiceImpl<LocationMapper, Location> i
 		return super.baseMapper.selectZoneTypeByLocId(locId);
 	}
 
-
+	@Override
+	public List<Location3dResponse> select3dLocData() {
+		return super.baseMapper.select3dLocData();
+	}
 }

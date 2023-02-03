@@ -754,6 +754,15 @@ public class StockBizImpl implements StockBiz {
 		AssertUtil.notEmpty(stockIds, "冻结库存失败，参数为空");
 
 		List<Stock> stocks = stockDao.getStockById(stockIds);
+
+		Stock occupyStock = stocks.stream()
+			.filter(stock -> BigDecimalUtil.gt(stock.getOccupyQty(), BigDecimal.ZERO))
+			.findFirst()
+			.orElse(null);
+		if (Func.isNotEmpty(occupyStock)) {
+			throw new ServiceException("冻结库存失败,当前选择的库存含有被占用的库存");
+		}
+
 		AssertUtil.notEmpty(stocks, "冻结库存失败,没有查询到可用库存");
 		equalStockStatus(stocks, StockStatusEnum.NORMAL, true);
 
@@ -783,6 +792,15 @@ public class StockBizImpl implements StockBiz {
 	public void freezeStockByLoc(List<Long> locIds) {
 		AssertUtil.notEmpty(locIds, "冻结库存失败，参数为空");
 		List<Stock> stocks = stockDao.getStockByLocIdList(locIds);
+
+		Stock occupyStock = stocks.stream()
+			.filter(stock -> BigDecimalUtil.gt(stock.getOccupyQty(), BigDecimal.ZERO))
+			.findFirst()
+			.orElse(null);
+		if (Func.isNotEmpty(occupyStock)) {
+			throw new ServiceException("冻结库存失败,当前选择的库存含有被占用的库存");
+		}
+
 		AssertUtil.notEmpty(stocks, "冻结库存失败,没有查询到可用库存");
 		equalStockStatus(stocks, StockStatusEnum.NORMAL, true);
 
@@ -813,6 +831,15 @@ public class StockBizImpl implements StockBiz {
 	public void freezeStockByBoxCode(List<String> boxCodes) {
 		AssertUtil.notEmpty(boxCodes, "冻结库存失败，参数为空");
 		List<Stock> stocks = stockDao.getStockByBoxCode(boxCodes, null);
+
+		Stock occupyStock = stocks.stream()
+			.filter(stock -> BigDecimalUtil.gt(stock.getOccupyQty(), BigDecimal.ZERO))
+			.findFirst()
+			.orElse(null);
+		if (Func.isNotEmpty(occupyStock)) {
+			throw new ServiceException("冻结库存失败,当前选择的库存含有被占用的库存");
+		}
+
 		AssertUtil.notEmpty(stocks, "冻结库存失败,没有查询到可用库存");
 		equalStockStatus(stocks, StockStatusEnum.NORMAL, true);
 

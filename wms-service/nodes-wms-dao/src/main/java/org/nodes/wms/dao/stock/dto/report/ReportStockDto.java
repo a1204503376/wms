@@ -52,6 +52,9 @@ public class ReportStockDto {
 	public void setStockEnableSum(BigDecimal stockEnableSum) {
 		this.stockEnableSum = ConvertUtil.convert(stockEnableSum.stripTrailingZeros().toPlainString(), BigDecimal.class);
 	}
+	public BigDecimal getStockEnableSum() {
+	    return this.stockEnableSum.subtract(freezeStockSum);
+	}
 
 	/**
 	 * 即时库存总数

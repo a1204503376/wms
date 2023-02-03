@@ -123,7 +123,7 @@
 							title: '请正确输入数据'
 						});
 					}
-				}, 1000)
+				}, 10000)
 
 			},
 			submitPutawayByBox() {

@@ -75,6 +75,10 @@ public class AgvTask {
 		}
 
 		WmsTask putawayTask = wmsTaskFactory.createPutwayTask(stocks);
+		List<WmsTask> existTaskList = wmsTaskDao.getOldTaskByNewTask(putawayTask);
+		if (existTaskList.size() > 0) {
+			throw new ServiceException("生成任务失败;");
+		}
 		wmsTaskDao.save(putawayTask);
 		// 调用上架策略生成目标库位，并把目标库位保存到任务表中
 		Location targetLoc = putawayStrategyActuator.run(BigDecimal.ZERO, stocks);
@@ -208,13 +212,15 @@ public class AgvTask {
 		return pickTask;
 	}
 
-	public void sendPickToSchedule(WmsTask pickTask, SoHeader so) {
+	public Boolean sendPickToSchedule(WmsTask pickTask, SoHeader so) {
 		if (sendToSchedule(Collections.singletonList(pickTask))) {
 			pickTask.setTaskState(WmsTaskStateEnum.ISSUED);
 			pickTask.setAllotTime(LocalDateTime.now());
+			return true;
 		} else {
 			logBiz.auditLog(AuditLogType.DISTRIBUTE_STRATEGY, so.getSoBillId(),
 				so.getSoBillNo(), "AGV拣货任务下发失败");
+			return false;
 		}
 	}
 

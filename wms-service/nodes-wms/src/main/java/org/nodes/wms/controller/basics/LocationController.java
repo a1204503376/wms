@@ -2,6 +2,7 @@
 package org.nodes.wms.controller.basics;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.nodes.core.constant.WmsApiPath;
@@ -11,10 +12,7 @@ import org.nodes.wms.core.warehouse.service.ILocationService;
 import org.nodes.wms.core.warehouse.vo.LocationVO;
 import org.nodes.wms.core.warehouse.wrapper.LocationWrapper;
 import org.nodes.wms.dao.basics.location.dto.input.*;
-import org.nodes.wms.dao.basics.location.dto.output.LocationDetailResponse;
-import org.nodes.wms.dao.basics.location.dto.output.LocationEditResponse;
-import org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse;
-import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
+import org.nodes.wms.dao.basics.location.dto.output.*;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.log.annotation.ApiLog;
@@ -38,6 +36,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(WmsApiPath.WMS_ROOT_URL +"warehouse/location")
+@Api(value = "库位管理", tags = "库位管理接口")
 public class LocationController {
 
 	private final LocationBiz locationBiz;
@@ -46,6 +45,7 @@ public class LocationController {
 	/**
 	 * 物品管理-出入库设置-库位列表
 	 */
+	@ApiOperation(value = "物品管理-出入库设置-库位列表")
 	@GetMapping("/list")
 	public R<List<LocationVO>> list(@ApiIgnore @RequestParam HashMap<String, Object> params) {
 		List<org.nodes.wms.core.warehouse.entity.Location> list = locationService.list(Condition.getQueryWrapper(params, org.nodes.wms.core.warehouse.entity.Location.class));
@@ -55,6 +55,7 @@ public class LocationController {
 	/**
 	 * 库位：分页
 	 */
+	@ApiOperation(value = "分页")
 	@PostMapping("/page")
 	public R<Page<LocationPageResponse>> page(Query query, @RequestBody LocationPageQuery locationPageQuery){
 		Page<LocationPageResponse> pageResponse = locationBiz.page(query, locationPageQuery);
@@ -64,6 +65,7 @@ public class LocationController {
 	/**
 	 * 库位：详情
 	 */
+	@ApiOperation(value = "详情")
 	@GetMapping("/detail")
 	public R<LocationDetailResponse> detail(@RequestParam Long locId){
 		LocationDetailResponse detail = locationBiz.getLocationDetailById(locId);
@@ -74,6 +76,7 @@ public class LocationController {
 	 * 库位：新增
 	 */
 	@ApiLog("库位-新增")
+	@ApiOperation(value = "新增")
 	@PostMapping("/add")
 	public R<String> add(@Valid @RequestBody LocationAddOrEditRequest locationAddOrEditRequest) {
 		Location location = locationBiz.add(locationAddOrEditRequest);
@@ -84,6 +87,7 @@ public class LocationController {
 	 * 库位：删除
 	 */
 	@ApiLog("库位-删除")
+	@ApiOperation(value = "删除")
 	@PostMapping("/remove")
 	public R<String> remove(@Valid @RequestBody LocationRemoveRequest locationRemoveRequest) {
 		boolean remove = locationBiz.remove(locationRemoveRequest.getIdList());
@@ -91,6 +95,7 @@ public class LocationController {
 	}
 
 	@ApiLog("库位-冻结")
+	@ApiOperation(value = "冻结")
 	@PostMapping("/freeze")
 	public R<String> freeze(@Valid @RequestBody LocationFreezeThawRequest locationFreezeThawRequest){
 		locationBiz.freezeBatch(locationFreezeThawRequest.getLocIdList());
@@ -98,6 +103,7 @@ public class LocationController {
 	}
 
 	@ApiLog("库位-解冻")
+	@ApiOperation(value = "解冻")
 	@PostMapping("/thaw")
 	public R<String> thaw(@Valid @RequestBody LocationFreezeThawRequest locationFreezeThawRequest){
 		locationBiz.thawBatch(locationFreezeThawRequest.getLocIdList());
@@ -107,7 +113,8 @@ public class LocationController {
 	/**
 	 * 库位编辑：根据库位id获取库位信息
 	 */
-	@ApiLog("库位-编辑")
+	@ApiLog("库位-编辑-查找")
+	@ApiOperation(value = "编辑时查询")
 	@GetMapping("/detailByEdit")
 	public R<LocationEditResponse> detailByEdit(@RequestParam Long locId){
 		return R.data(locationBiz.findLocationById(locId));
@@ -117,6 +124,7 @@ public class LocationController {
 	 * 库位：编辑
 	 */
 	@ApiLog("库位-编辑")
+	@ApiOperation(value = "编辑")
 	@PostMapping("/edit")
 	public R<String> edit(@Validated({ Update.class }) @RequestBody LocationAddOrEditRequest locationAddOrEditRequest){
 		Location location = locationBiz.edit(locationAddOrEditRequest);
@@ -126,6 +134,7 @@ public class LocationController {
 	/**
 	 * 库位：服务端导出
 	 */
+	@ApiOperation(value = "导出")
 	@PostMapping("/export")
 	public void export(@RequestBody LocationPageQuery locationPageQuery,HttpServletResponse response) {
 		locationBiz.exportExcel(locationPageQuery, response);
@@ -134,6 +143,7 @@ public class LocationController {
 	/**
 	 * 库位：模板导出
 	 */
+	@ApiOperation(value = "导出Excel模板")
 	@GetMapping("export-template")
 	public void exportTemplate(HttpServletResponse response) {
 		List<LocationExcelRequest> locExportList = new ArrayList<>();
@@ -144,6 +154,7 @@ public class LocationController {
 	 * 库位：导入
 	 */
 	@ApiLog("库位-导入")
+	@ApiOperation(value = "导入")
 	@PostMapping("import-data")
 	public R<String> importData(MultipartFile file) {
 		return locationBiz.importData(file) ? R.success("导入成功") : R.fail("导入失败");
@@ -152,8 +163,18 @@ public class LocationController {
 	/**
 	 * 库位组件：根据库位编码或名称获取最近更新的10个库位信息
 	 */
+	@ApiOperation(value = "库位组件数据")
 	@PostMapping("getLocationSelectResponseTop10List")
 	public R<List<LocationSelectResponse>> getLocationSelectResponseTop10List(@RequestBody LocationSelectQuery locationSelectQuery) {
 		return R.data(locationBiz.getLocationSelectResponseTop10List(locationSelectQuery));
+	}
+
+	/**
+	 * 3d库位展示：获取库位信息，排除虚拟库位和入出库暂存区得
+	 */
+	@ApiOperation(value = "获取3d库位数据")
+	@GetMapping("/get3dLocationData")
+	public R<List<Location3dResponse>> get3dLocationData(){
+		return R.data(locationBiz.getAllLocationFor3d());
 	}
 }

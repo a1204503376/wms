@@ -124,7 +124,7 @@
 				})
 			},
 			search() {
-				uni.$u.throttle(this.getReceiveList(), 1000)
+				uni.$u.throttle(this.getReceiveList(), 10000)
 			},
 			clickItem(item) {
 				if (item.billTypeName === '销售退回' && tool.isEmpty(item.udf1)){

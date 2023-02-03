@@ -18,6 +18,7 @@ export function setRefreshToken(token) {
 }
 
 export function removeToken() {
+    Cookies.remove(RefreshTokenKey)
     return Cookies.remove(TokenKey)
 }
 

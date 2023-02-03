@@ -169,7 +169,7 @@
 				});
 			},
 			search() {
-				uni.$u.throttle(this.getReceiveList(), 1000)
+				uni.$u.throttle(this.getReceiveList(), 10000)
 			},
 			scannerCallback(no) {
 				this.search();

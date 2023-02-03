@@ -180,7 +180,7 @@
 							title: '请选择你要拣货的库位'
 						})
 					}
-				}, 1000)
+				}, 10000)
 			},
 			scannerCallback(no) {
 				this.analysisCode(no);

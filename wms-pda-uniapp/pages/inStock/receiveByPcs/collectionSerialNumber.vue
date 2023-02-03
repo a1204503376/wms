@@ -184,7 +184,7 @@
 							title: '序列号应与收货数量相同,请采集序列号'
 						});
 					}
-				}, 1000)
+				}, 10000)
 			},
 			analysisCode(code) {
 				var barcode = barcodeFunc.parseBarcode(code);

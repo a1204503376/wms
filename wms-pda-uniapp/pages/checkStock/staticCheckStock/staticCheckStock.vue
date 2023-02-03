@@ -157,7 +157,7 @@
 				})
 			},
 			search() {
-				uni.$u.throttle(this.getReceiveList(), 1000)
+				uni.$u.throttle(this.getReceiveList(), 10000)
 			},
 			clickItem(item) {
 				uni.$u.func.routeNavigateTo('/pages/checkStock/staticCheckStock/startCheckStock', item);

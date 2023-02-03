@@ -102,7 +102,7 @@
 							delta: 2
 						});
 					})
-				}, 1000)
+				}, 10000)
 			},
 			focus(num) {
 				this.focusNum = num

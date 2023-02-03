@@ -51,7 +51,7 @@
 <script>
 import {mapGetters, mapState} from "vuex";
 import {clearCache} from "@/api/user";
-
+import {removeToken} from '@/util/auth';
 export default {
     name: "tags",
     data() {
@@ -178,6 +178,9 @@ export default {
                 type: "warning"
             }).then(() => {
                 clearCache().then(() => {
+                    window.localStorage.clear();
+                    window.sessionStorage.clear();
+                    removeToken();
                     this.contextmenuFlag = false;
                     this.$message.success('清除完毕');
                 })

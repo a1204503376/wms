@@ -106,4 +106,11 @@ public interface WmsTaskDao extends BaseService<WmsTask> {
 	 * @return 工作任务
 	 */
 	List<TaskExcelResponse> getListForExport(TaskPageQuery queryParam);
+
+
+	/**
+	 * @param task 根据现在创建的任务的箱码和任务类型，查询数据库里面现在是否存在相同的任务
+	 * @return task 现在创建的任务
+	 */
+	List<WmsTask> getOldTaskByNewTask(WmsTask task);
 }

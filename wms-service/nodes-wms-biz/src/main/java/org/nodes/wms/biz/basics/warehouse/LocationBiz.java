@@ -5,10 +5,7 @@ import org.nodes.core.udf.UdfEntity;
 import org.nodes.wms.dao.basics.location.dto.input.LocationAddOrEditRequest;
 import org.nodes.wms.dao.basics.location.dto.input.LocationPageQuery;
 import org.nodes.wms.dao.basics.location.dto.input.LocationSelectQuery;
-import org.nodes.wms.dao.basics.location.dto.output.LocationDetailResponse;
-import org.nodes.wms.dao.basics.location.dto.output.LocationEditResponse;
-import org.nodes.wms.dao.basics.location.dto.output.LocationPageResponse;
-import org.nodes.wms.dao.basics.location.dto.output.LocationSelectResponse;
+import org.nodes.wms.dao.basics.location.dto.output.*;
 import org.nodes.wms.dao.basics.location.entities.Location;
 import org.nodes.wms.dao.basics.lpntype.entities.LpnType;
 import org.nodes.wms.dao.putaway.dto.input.LpnTypeRequest;
@@ -363,4 +360,11 @@ public interface LocationBiz {
 	 * @return 库区类型
 	 */
 	Integer getZoneTypeByLocId(Long locId);
+
+	/**
+	 * 3d库位模型 获取库位数据
+	 *
+	 * @return 库位数据
+	 */
+	List<Location3dResponse> getAllLocationFor3d();
 }
