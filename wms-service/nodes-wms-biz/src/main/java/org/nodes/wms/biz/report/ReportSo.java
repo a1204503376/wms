@@ -305,8 +305,8 @@ public class ReportSo {
 	 */
 	public List<ReportSoPickSerialDto> reportSoPickSerialList(String dsName, String datasetName, Map<String, Object> parameters) {
 		SoHeader soHeader = getSoHeader(parameters);
- 		List<ReportSoPickSerialDto> reportSoPickSerialDtoList = new ArrayList<>();
- 		if (isCreate(soHeader.getSoBillState())) {
+		List<ReportSoPickSerialDto> reportSoPickSerialDtoList = new ArrayList<>();
+		if (isCreate(soHeader.getSoBillState())) {
 			throw new ServiceException("无法导出, 请分配或全部拣货之后再导出。");
 		} else if (isPart(soHeader.getSoBillState())) {
 			throw new ServiceException("无法导出, 请全部拣货之后再导出。");
@@ -326,13 +326,11 @@ public class ReportSo {
 		List<ReportSoPickSerialDto> finalDtoList = new ArrayList<>();
 		Map<String, List<ReportSoPickSerialDto>> listGroupByBoxCode = reportSoPickSerialDtoList.stream().collect(Collectors.groupingBy(ReportSoPickSerialDto::getBoxCode));
 		for (Map.Entry<String, List<ReportSoPickSerialDto>> entry : listGroupByBoxCode.entrySet()) {
-			for (int i = 0; i < entry.getValue().size(); i++) {
-				if (i != 0) {
-					entry.getValue().get(i).setBoxCode(null);
-				}
-			}
 			finalDtoList.addAll(entry.getValue());
 		}
-		return finalDtoList;
+		return finalDtoList.stream()
+			.filter(reportSoPickSerialDto ->  Func.isNotEmpty(reportSoPickSerialDto.getBoxCode()))
+			.sorted(Comparator.comparing(ReportSoPickSerialDto::getBoxCode))
+			.collect(Collectors.toList());
 	}
 }
