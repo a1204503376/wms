@@ -118,5 +118,5 @@ public class StockBalance extends SkuLotBaseEntity implements Serializable {
 	/**
 	 * 是否启用
 	 */
-	private Integer state;
+	private Integer status;
 }

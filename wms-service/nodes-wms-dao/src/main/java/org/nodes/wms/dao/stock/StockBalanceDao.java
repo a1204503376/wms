@@ -26,4 +26,19 @@ public interface StockBalanceDao {
 	 * @param stockBalanceList 收发存库存集合
 	 */
 	void savaStockBalanceBatch(List<StockBalance> stockBalanceList);
+
+	/**
+	 * 根据结存时间删除收发存记录
+	 *
+	 * @param dataTime
+	 */
+	void deleteByDataTime(String dataTime);
+
+	/**
+	 * 根据结存时间查询收发存记录
+	 *
+	 * @param dataTime
+	 * @return
+	 */
+	List<StockBalance> getStockBalanceList(String dataTime);
 }
