@@ -26,7 +26,7 @@ public class BalanceTimerTask {
 	private final StockBalanceDao stockBalanceDao;
 
 	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
-	public void run() throws ParseException {
+	public void oldRun() throws ParseException {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
@@ -48,4 +48,33 @@ public class BalanceTimerTask {
 		stockBalanceDao.savaStockBalanceBatch(stockBalanceList2);
 	}
 
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
+	public void run() throws ParseException {
+		Calendar calendar = Calendar.getInstance();
+		Calendar calendar1 = Calendar.getInstance();
+		calendar.set(Calendar.DATE, 1);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		Calendar calendar2 = Calendar.getInstance();
+		calendar2.set(Calendar.DATE, 1);
+		Calendar calendar3 = (Calendar) calendar2.clone();
+		calendar3.add(Calendar.MONTH, -1);
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String startTime = simpleDateFormat.format(calendar.getTime());
+		String endTime = simpleDateFormat.format(calendar1.getTime());
+		SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+		String dataTime = simpleDateFormat.format(calendar2.getTime());
+		String dataTime1 = simpleDateFormat1.format(calendar3.getTime());
+		stockBalanceDao.deleteByDataTime(dataTime);
+		List<ReceiveLog> receiveLogList = receiveLogBiz.getReceiveLogList(startTime, endTime);
+		List<LogSoPick> logSoPickList = logSoPickBiz.getLogSoPickList(startTime, endTime);
+		List<StockBalance> stockBalanceList = stockBalanceDao.getStockBalanceList(dataTime1);
+		List<ReceiveLog> receiveLogList1 = new ArrayList<>();
+		List<LogSoPick> logSoPickList1 = new ArrayList<>(logSoPickList);
+		List<StockBalance> stockBalanceList1 = new ArrayList<>();
+		StockFactory.AssigntoArray(receiveLogList, receiveLogList1, logSoPickList, logSoPickList1, stockBalanceList1);
+		List<StockBalance> stockBalanceList2 = StockFactory.createStockBalanceList(stockBalanceList, stockBalanceList1);
+		stockBalanceDao.savaStockBalanceBatch(stockBalanceList2);
+	}
 }

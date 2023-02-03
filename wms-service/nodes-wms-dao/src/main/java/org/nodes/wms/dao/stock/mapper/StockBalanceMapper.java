@@ -18,5 +18,7 @@ public interface StockBalanceMapper extends BaseMapper<StockBalance> {
 	 * @return 收发存库存集合
 	 */
 	List<StockBalance> selectStockBalanceList(@Param("startTime") String startTime, @Param("endTime") String endTime);
+
+	void deleteByData(String dataTime);
 }
 

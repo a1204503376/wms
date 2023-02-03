@@ -1,5 +1,6 @@
 package org.nodes.wms.dao.stock.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.nodes.wms.dao.stock.StockBalanceDao;
 import org.nodes.wms.dao.stock.entities.StockBalance;
 import org.nodes.wms.dao.stock.mapper.StockBalanceMapper;
@@ -27,5 +28,15 @@ public class StockBalanceDaoImpl extends BaseServiceImpl<StockBalanceMapper, Sto
 		if (!super.saveBatch(stockBalanceList)) {
 			throw new ServiceException("批量保存收发存库存失败,请检查参数");
 		}
+	}
+
+	@Override
+	public void deleteByDataTime(String dataTime) {
+		super.baseMapper.deleteByData(dataTime);
+	}
+
+	@Override
+	public List<StockBalance> getStockBalanceList(String dataTime) {
+		return super.list(new LambdaQueryWrapper<StockBalance>().eq(StockBalance::getBalanceDate, dataTime));
 	}
 }

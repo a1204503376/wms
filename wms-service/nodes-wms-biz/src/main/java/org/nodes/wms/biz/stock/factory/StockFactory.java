@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -125,8 +126,7 @@ public class StockFactory {
 	public static StockBalance createStockBalabce(ReceiveLog receiveLog, LogSoPick logSoPick) throws ParseException {
 		StockBalance stockBalance = new StockBalance();
 		Calendar calendar = Calendar.getInstance();
-		//当前时间减去一个月，即一个月前的时间
-		calendar.add(Calendar.MONTH, -1);
+		calendar.set(Calendar.DATE, 1);
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String balanceDate = simpleDateFormat.format(calendar.getTime());
 		stockBalance.setBalanceDate(simpleDateFormat.parse(balanceDate));
@@ -184,7 +184,6 @@ public class StockFactory {
 		if (stockBalanceList.size() == 0) {
 			return stockBalanceList1;
 		}
-		List<StockBalance> stockBalanceList2 = new ArrayList<>(stockBalanceList);
 		List<StockBalance> stockBalanceList3 = new ArrayList<>();
 		for (int i = 0; i < stockBalanceList1.size(); i++) {
 			for (int j = 0; j < stockBalanceList.size(); j++) {
@@ -193,14 +192,13 @@ public class StockFactory {
 					stockBalance.setOpeningQty(stockBalanceList.get(j).getBalanceQty());
 					stockBalance.setBalanceQty(stockBalance.getOpeningQty()
 						.add(stockBalance.getInStockQty().subtract(stockBalance.getOutStockQty())));
-					stockBalanceList2.remove(j);
+					stockBalanceList.remove(j);
 					stockBalanceList3.add(stockBalance);
 					break;
 				}
 				if (j == stockBalanceList.size() - 1) {
 					Calendar calendar = Calendar.getInstance();
-					//当前时间减去一个月，即一个月前的时间
-					calendar.add(Calendar.MONTH, -1);
+					calendar.set(Calendar.DATE, 1);
 					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 					String balanceDate = simpleDateFormat.format(calendar.getTime());
 					stockBalance.setBalanceDate(simpleDateFormat.parse(balanceDate));
@@ -208,24 +206,24 @@ public class StockFactory {
 				}
 			}
 		}
-		for (StockBalance stockBalance : stockBalanceList2) {
+		for (StockBalance stockBalance : stockBalanceList) {
 			Calendar calendar = Calendar.getInstance();
-			//当前时间减去一个月，即一个月前的时间
-			calendar.add(Calendar.MONTH, -1);
+			calendar.set(Calendar.DATE, 1);
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			String balanceDate = simpleDateFormat.format(calendar.getTime());
 			stockBalance.setBalanceDate(simpleDateFormat.parse(balanceDate));
 			stockBalance.setOpeningQty(stockBalance.getBalanceQty());
 			stockBalance.setInStockQty(BigDecimal.ZERO);
 			stockBalance.setOutStockQty(BigDecimal.ZERO);
+			stockBalance.setId(null);
 			stockBalanceList3.add(stockBalance);
 		}
 		return stockBalanceList3;
 	}
 
 	private static boolean compare(StockBalance stockBalance, StockBalance stockBalance1) {
-		if (stockBalance.getSkuId() == stockBalance1.getSkuId() && stockBalance.getWhId() == stockBalance1.getWhId()
-			&& stockBalance.getWoId() == stockBalance1.getWoId() && stockBalance.getWspId() == stockBalance1.getWspId()
+		if (Objects.equals(stockBalance.getSkuId(), stockBalance1.getSkuId()) && Objects.equals(stockBalance.getWhId(), stockBalance1.getWhId())
+			&& Objects.equals(stockBalance.getWoId(), stockBalance1.getWoId()) && Objects.equals(stockBalance.getWspId(), stockBalance1.getWspId())
 			&& stockBalance.getSkuLevel().equals(stockBalance1.getSkuLevel()) && SkuLotUtil.compareAllSkuLot(stockBalance, stockBalance1)
 		) {
 			return true;
