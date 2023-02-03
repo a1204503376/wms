@@ -227,7 +227,7 @@ public class ReportSo {
 	public void setReportSoPickSerialDtoList(LogSoPick logSoPick, List<ReportSoPickSerialDto> reportSoPickSerialDtoList) {
 		if (Func.isNotEmpty(logSoPick.getSnCode())) {
 			List<Map<String, Object>> mapList = getProcessedSerialAndQty(logSoPick.getSnCode());
-			packagingData(mapList, logSoPick.getSkuLot9(), logSoPick.getBoxCode(), logSoPick.getSkuLot5(),
+			packagingData(mapList, logSoPick.getSkuLot6(), logSoPick.getBoxCode(), logSoPick.getSkuLot5(),
 				logSoPick.getSoBillId(), reportSoPickSerialDtoList);
 		}
 	}
@@ -242,21 +242,21 @@ public class ReportSo {
 			snCodeStr = String.join(",", serialList);
 		}
 		List<Map<String, Object>> mapList = getProcessedSerialAndQty(snCodeStr);
-		packagingData(mapList, soPickPlan.getSkuLot9(), soPickPlan.getBoxCode(), soPickPlan.getSkuLot5(),
+		packagingData(mapList, soPickPlan.getSkuLot6(), soPickPlan.getBoxCode(), soPickPlan.getSkuLot5(),
 			soPickPlan.getSoBillId(), reportSoPickSerialDtoList);
 	}
 
 	/**
 	 * 封装数据
 	 */
-	private void packagingData(List<Map<String, Object>> mapList, String skuLot9, String boxCode, String skuLot5, Long soBillId,
+	private void packagingData(List<Map<String, Object>> mapList, String skuLot6, String boxCode, String skuLot5, Long soBillId,
 							   List<ReportSoPickSerialDto> reportSoPickSerialDtoList) {
 		for (Map<String, Object> stringObjectMap : mapList) {
 			ReportSoPickSerialDto reportSoPickSerialDto = new ReportSoPickSerialDto();
 			reportSoPickSerialDto.setBoxCode(boxCode);
 			reportSoPickSerialDto.setSnCode(ConvertUtil.convert(stringObjectMap.get("snCode"), String.class));
 			reportSoPickSerialDto.setQty(ConvertUtil.convert(stringObjectMap.get("qty"), BigDecimal.class));
-			reportSoPickSerialDto.setSkuLot9(skuLot9);
+			reportSoPickSerialDto.setSkuLot6(skuLot6);
 			reportSoPickSerialDto.setSkuLot5(skuLot5);
 			reportSoPickSerialDto.setSoBillId(soBillId);
 			reportSoPickSerialDtoList.add(reportSoPickSerialDto);
@@ -305,8 +305,8 @@ public class ReportSo {
 	 */
 	public List<ReportSoPickSerialDto> reportSoPickSerialList(String dsName, String datasetName, Map<String, Object> parameters) {
 		SoHeader soHeader = getSoHeader(parameters);
-		List<ReportSoPickSerialDto> reportSoPickSerialDtoList = new ArrayList<>();
-		if (isCreate(soHeader.getSoBillState())) {
+ 		List<ReportSoPickSerialDto> reportSoPickSerialDtoList = new ArrayList<>();
+ 		if (isCreate(soHeader.getSoBillState())) {
 			throw new ServiceException("无法导出, 请分配或全部拣货之后再导出。");
 		} else if (isPart(soHeader.getSoBillState())) {
 			throw new ServiceException("无法导出, 请全部拣货之后再导出。");

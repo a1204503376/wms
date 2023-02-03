@@ -22,9 +22,6 @@ public class ReportSoPickSerialDto {
 	 * 数量
 	 */
 	private BigDecimal qty;
-	public void setQty(BigDecimal qty) {
-		this.qty = ConvertUtil.convert(qty.stripTrailingZeros().toPlainString(), BigDecimal.class);
-	}
 	/**
 	 * 辅助代码(序列号)
 	 */
@@ -34,7 +31,15 @@ public class ReportSoPickSerialDto {
 	 */
 	private String skuLot5;
 	/**
+	 * 摩擦块批次
+	 */
+	private String skuLot6;
+	/**
 	 * 生产日期(入库日期)
 	 */
 	private String skuLot9;
+
+	public void setQty(BigDecimal qty) {
+		this.qty = ConvertUtil.convert(qty.stripTrailingZeros().toPlainString(), BigDecimal.class);
+	}
 }
