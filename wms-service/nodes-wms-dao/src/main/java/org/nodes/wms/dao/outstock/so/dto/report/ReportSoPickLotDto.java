@@ -41,4 +41,9 @@ public class ReportSoPickLotDto {
 	 * 钢背
 	 */
 	private String skuLot5;
+
+	/**
+	 * 生产日期/生产批次
+	 */
+	private String skuLot1;
 }
