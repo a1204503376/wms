@@ -170,6 +170,8 @@ public class ReceiveFactory {
 		receiveDetail.setSkuLot7(newReceiveDetailRequest.getSkuLot7());
 		//设置适用速度等级
 		receiveDetail.setSkuLot8(newReceiveDetailRequest.getSkuLot8());
+		//设置生产日期
+		receiveDetail.setSkuLot9(newReceiveDetailRequest.getSkuLot9());
 		//设置序列号
 		receiveDetail.setSnCode(newReceiveDetailRequest.getSnCode());
 		return receiveDetail;

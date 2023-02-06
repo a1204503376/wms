@@ -72,6 +72,10 @@ public class NewReceiveDetailRequest implements Serializable {
 	 */
 	private String skuLot8;
 	/**
+	 * 生产日期
+	 */
+	private String skuLot9;
+	/**
 	 * 箱码
 	 */
 	private String boxCode;
