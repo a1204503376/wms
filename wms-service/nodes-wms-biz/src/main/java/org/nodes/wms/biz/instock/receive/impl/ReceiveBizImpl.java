@@ -221,9 +221,12 @@ public class ReceiveBizImpl implements ReceiveBiz {
 			ReceiveDetail receiveDetail = receiveFactory.createReceiveDetail(newReceiveDetailRequest, receiveHeader);
 			receiveDetailDao.insert(receiveDetail);
 			if (newReceiveRequest.isFromLogSoPickOrLogNoReturn()) {
-				if (Func.isEmpty(stockQueryBiz.findEnableStockByBoxCode(newReceiveDetailRequest.getBoxCode()))) {
+				if (Func.isEmpty(stockQueryBiz.findEnableStockByBoxCode(newReceiveDetailRequest.getBoxCode()))
+					&& receiveDetailLpnDao.getReceiveDetailLpnListByBoxCode(newReceiveDetailRequest.getBoxCode()).size() > 0) {
 					ReceiveDetailLpn receiveDetailLpn = receiveFactory.createReceiveDetailLpn(receiveDetail, newReceiveDetailRequest);
 					receiveDetailLpnDao.insert(receiveDetailLpn);
+				} else {
+					throw new ServiceException("创建收货单失败;该箱码已存在库存中或已经在再入库的收货单当中");
 				}
 			}
 		}
