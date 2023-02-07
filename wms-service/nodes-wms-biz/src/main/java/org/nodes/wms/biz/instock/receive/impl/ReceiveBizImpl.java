@@ -210,24 +210,28 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	@Override
 	@Transactional
 	public ReceiveHeader newReceive(NewReceiveRequest newReceiveRequest) {
+		if (Func.isEmpty(newReceiveRequest.getNewReceiveDetailRequestList().get(0).getBoxCode())) {
+			throw new ServiceException("创建收货单失败,参数箱码不存在");
+		}
+
+		if (receiveDetailLpnDao.getReceiveDetailLpnListByBoxCode(newReceiveRequest.getNewReceiveDetailRequestList().get(0).getBoxCode()).size() > 0
+			|| stockQueryBiz.findEnableStockByBoxCode(newReceiveRequest.getNewReceiveDetailRequestList().get(0).getBoxCode()).size() > 0) {
+			throw new ServiceException("创建收货单失败,该箱码已存在库存中或已经在再入库的收货单当中");
+		}
 		//创建保存实体类
 		ReceiveHeader receiveHeader = receiveFactory.createReceiveHeader(newReceiveRequest.getNewReceiveHeaderRequest());
 		receiveHeaderDao.insert(receiveHeader);
 		logBiz.auditLog(AuditLogType.RECEIVE_BILL, receiveHeader.getReceiveId(), "新建收货单");
 		//获取明细集合
 		List<NewReceiveDetailRequest> newReceiveDetailRequestList = newReceiveRequest.getNewReceiveDetailRequestList();
+		int insertReceiveDetailLpn = 0;
 		//遍历保存
 		for (NewReceiveDetailRequest newReceiveDetailRequest : newReceiveDetailRequestList) {
 			ReceiveDetail receiveDetail = receiveFactory.createReceiveDetail(newReceiveDetailRequest, receiveHeader);
 			receiveDetailDao.insert(receiveDetail);
 			if (newReceiveRequest.isFromLogSoPickOrLogNoReturn()) {
-				if (Func.isEmpty(stockQueryBiz.findEnableStockByBoxCode(newReceiveDetailRequest.getBoxCode()))
-					&& receiveDetailLpnDao.getReceiveDetailLpnListByBoxCode(newReceiveDetailRequest.getBoxCode()).size() > 0) {
-					ReceiveDetailLpn receiveDetailLpn = receiveFactory.createReceiveDetailLpn(receiveDetail, newReceiveDetailRequest);
-					receiveDetailLpnDao.insert(receiveDetailLpn);
-				} else {
-					throw new ServiceException("创建收货单失败;该箱码已存在库存中或已经在再入库的收货单当中");
-				}
+				ReceiveDetailLpn receiveDetailLpn = receiveFactory.createReceiveDetailLpn(receiveDetail, newReceiveDetailRequest);
+				receiveDetailLpnDao.insert(receiveDetailLpn);
 			}
 		}
 		return receiveHeader;
