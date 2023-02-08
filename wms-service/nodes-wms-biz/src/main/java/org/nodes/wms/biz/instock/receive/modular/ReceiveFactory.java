@@ -111,7 +111,7 @@ public class ReceiveFactory {
 		//设置明细表收货单id
 		receiveDetail.setReceiveId(receiveHeader.getReceiveId());
 		// 设置订单行号
-		receiveDetail.setLineNo(newReceiveDetailRequest.getLineNumber());
+		receiveDetail.setLineNo(newReceiveDetailRequest.getSoLineNo());
 		//设置物料id
 		receiveDetail.setSkuId(sku.getSkuId());
 		//设置物料编码
@@ -170,6 +170,8 @@ public class ReceiveFactory {
 		receiveDetail.setSkuLot7(newReceiveDetailRequest.getSkuLot7());
 		//设置适用速度等级
 		receiveDetail.setSkuLot8(newReceiveDetailRequest.getSkuLot8());
+		//设置生产日期
+		receiveDetail.setSkuLot9(newReceiveDetailRequest.getSkuLot9());
 		//设置序列号
 		receiveDetail.setSnCode(newReceiveDetailRequest.getSnCode());
 		return receiveDetail;
