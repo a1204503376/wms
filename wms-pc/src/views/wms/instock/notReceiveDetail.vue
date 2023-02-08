@@ -6,7 +6,7 @@
                     <el-col :span="6">
                         <el-form-item label="收货单编码" label-width="90px">
                             <el-input v-model.trim="form.params.receiveNo" :clearable="true" class="search-input"
-                                placeholder="请输入收货单编码">
+                                      placeholder="请输入收货单编码">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -19,14 +19,14 @@
                     <el-col :span="6">
                         <el-form-item label="单据类型" label-width="90px">
                             <nodes-bill-type v-model="form.params.billTypeCdList" :clearable="true" :multiple="true"
-                                class="search-input" io-type="I">
+                                             class="search-input" io-type="I">
                             </nodes-bill-type>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="上游编码" label-width="90px">
                             <el-input v-model.trim="form.params.externalOrderNo" :clearable="true" class="search-input"
-                                placeholder="请输入上游编码">
+                                      placeholder="请输入上游编码">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -35,7 +35,7 @@
                     <el-col :span="6">
                         <el-form-item label="创建人" label-width="90px">
                             <el-input v-model.trim="form.params.createUser" :clearable="true" class="search-input"
-                                placeholder="请输入创建人">
+                                      placeholder="请输入创建人">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -59,14 +59,14 @@
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                        style="display: inline-block;margin-left: 10px">
-                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData" />
+                                  style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData"/>
                     </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table" :data="table.data" :height="table.height" border highlight-current-row size="mini"
-                    style="width: 100%" @sort-change="onSortChange">
+                <el-table ref="table" :data="table.data" :height="height" border highlight-current-row size="mini"
+                          style="width: 100%" @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
                     <el-table-column fixed type="index" width="50">
@@ -76,15 +76,16 @@
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column v-if="!column.hide" :key="index" min-width="150" show-overflow-tooltip
-                            v-bind="column">
+                                         v-bind="column">
                         </el-table-column>
                     </template>
                 </el-table>
             </template>
             <template v-slot:page>
                 <el-pagination :current-page="page.current" :page-size="page.size" :page-sizes="[20, 50, 100]"
-                    :total="page.total" background layout="total, sizes, prev, pager, next, jumper" v-bind="page"
-                    @size-change="handleSizeChange" @current-change="handleCurrentChange">
+                               :total="page.total" background layout="total, sizes, prev, pager, next, jumper"
+                               v-bind="page"
+                               @size-change="handleSizeChange" @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>
@@ -100,14 +101,14 @@ import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesDateRange from "@/components/wms/general/NodesDateRange";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
-import { listMixin } from "@/mixins/list";
+import {listMixin} from "@/mixins/list";
 import NodesLocation from "@/components/wms/select/NodesLocation";
 import NodesOwner from "@/components/wms/select/NodesOwner";
 import NodesWarehouse from "@/components/wms/select/NodesWarehouse";
-import { exportExcel, getPage } from "@/api/wms/instock/notReceiveDetail"
+import {exportExcel, getPage} from "@/api/wms/instock/notReceiveDetail"
 import fileDownload from "js-file-download";
-import { ExcelExport } from 'pikaz-excel-js'
-import { nowDateFormat } from "@/util/date";
+import {ExcelExport} from 'pikaz-excel-js'
+import {nowDateFormat} from "@/util/date";
 import NodesReceiveBillState from "@/components/wms/select/NodesReceiveBillState";
 import NodesBillType from "@/components/wms/select/NodesBillType";
 import NodesSku from "@/components/wms/select/NodesSkuByQuery";

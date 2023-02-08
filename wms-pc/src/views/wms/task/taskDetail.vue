@@ -6,28 +6,28 @@
                     <el-col :span="6">
                         <el-form-item label="任务id" label-width="90px">
                             <el-input placeholder="请输入任务id" :clearable="true" class="search-input"
-                                v-model.trim="form.params.taskId">
+                                      v-model.trim="form.params.taskId">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="单据编码" label-width="90px">
                             <el-input placeholder="请输入单据编码" :clearable="true" class="search-input"
-                                v-model.trim="form.params.billNo">
+                                      v-model.trim="form.params.billNo">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="任务类型" label-width="90px">
                             <nodes-task-type class="search-input" v-model.trim="form.params.taskTypeCdList"
-                                :multiple="true">
+                                             :multiple="true">
                             </nodes-task-type>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="任务状态" label-width="90px">
                             <nodes-task-state class="search-input" :default-value="true"
-                                v-model.trim="form.params.taskStateList" :multiple="true">
+                                              v-model.trim="form.params.taskStateList" :multiple="true">
                             </nodes-task-state>
                         </el-form-item>
                     </el-col>
@@ -41,7 +41,8 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="来源库位" label-width="90px">
-                            <el-input class="search-input" placeholder="请输入来源库位编码" v-model.trim="form.params.fromLocCode">
+                            <el-input class="search-input" placeholder="请输入来源库位编码"
+                                      v-model.trim="form.params.fromLocCode">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -71,7 +72,7 @@
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                        style="display: inline-block;margin-left: 10px">
+                                  style="display: inline-block;margin-left: 10px">
                         <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
                         </el-button>
                     </excel-export>
@@ -84,8 +85,8 @@
                 </el-button>
             </template>
             <template v-slot:table>
-                <el-table ref="table" :data="table.data" :height="table.height" border highlight-current-row size="mini"
-                    style="width: 100%" @sort-change="onSortChange">
+                <el-table ref="table" :data="table.data" :height="height" border highlight-current-row size="mini"
+                          style="width: 100%" @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
                     <el-table-column fixed width="50" type="index">
@@ -95,7 +96,7 @@
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column v-if="!column.hide" :key="index" show-overflow-tooltip v-bind="column"
-                            width="150">
+                                         width="150">
                             <template v-if="column.prop === 'taskState'" v-slot="scope">
                                 <el-tag v-if="scope.row.taskState === '已下发'
                                 || scope.row.taskState === '开始执行'
@@ -104,12 +105,15 @@
                                 </el-tag>
                                 <el-tag v-else-if="scope.row.taskState === '已完成'
                                 || scope.row.taskState === 'AGV完成'
-                                || scope.row.taskState === '已取消'" type="info">{{ scope.row.taskState }}</el-tag>
-                                <el-tag v-else-if="scope.row.taskState === '未下发'" type="warning">{{ scope.row.taskState
-                                }}
+                                || scope.row.taskState === '已取消'" type="info">{{ scope.row.taskState }}
                                 </el-tag>
-                                <el-tag v-else-if="scope.row.taskState === '异常中断中'" type="danger">{{ scope.row.taskState
-                                }}
+                                <el-tag v-else-if="scope.row.taskState === '未下发'" type="warning">{{
+                                        scope.row.taskState
+                                    }}
+                                </el-tag>
+                                <el-tag v-else-if="scope.row.taskState === '异常中断中'" type="danger">{{
+                                        scope.row.taskState
+                                    }}
                                 </el-tag>
                                 <el-tag v-else type="info">{{ scope.row.taskState }}</el-tag>
                             </template>
@@ -119,8 +123,8 @@
             </template>
             <template v-slot:page>
                 <el-pagination :page-size="page.size" :page-sizes="[20, 50, 100]" :total="page.total" background
-                    layout="total, sizes, prev, pager, next, jumper" @current-change="handleCurrentChange"
-                    @size-change="handleSizeChange">
+                               layout="total, sizes, prev, pager, next, jumper" @current-change="handleCurrentChange"
+                               @size-change="handleSizeChange">
                 </el-pagination>
             </template>
         </nodes-master-page>
@@ -139,16 +143,16 @@ import NodesOwner from "@/components/wms/select/NodesOwner";
 import NodesSku from "@/components/wms/select/NodesSku";
 
 import fileDownload from "js-file-download";
-import { listMixin } from "@/mixins/list";
-import { cancelTask, continueTask, exportFile, getPage } from "@/api/wms/task/taskDetail";
+import {listMixin} from "@/mixins/list";
+import {cancelTask, continueTask, exportFile, getPage} from "@/api/wms/task/taskDetail";
 import fileUpload from "@/components/nodes/fileUpload";
-import { ExcelExport } from 'pikaz-excel-js';
+import {ExcelExport} from 'pikaz-excel-js';
 import NodesSkuByQuery from "@/components/wms/select/NodesSkuByQuery";
 import NodesTaskType from "@/components/wms/select/NodesTaskType";
 import NodesTaskState from "@/components/wms/select/NodesTaskState";
 import DialogColumn from "@/components/element-ui/crud/dialog-column";
 import func from "@/util/func";
-import { nowDateFormat } from "@/util/date";
+import {nowDateFormat} from "@/util/date";
 
 export default {
     name: "carrier",

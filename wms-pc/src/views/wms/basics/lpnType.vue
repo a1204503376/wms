@@ -33,7 +33,7 @@
                 <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
                 </el-button>
                 <el-button v-if="permissionObj.delete" :plain="true" icon="el-icon-delete" size="mini" type="danger"
-                    @click="onRemove">删除
+                           @click="onRemove">删除
                 </el-button>
             </template>
             <template v-slot:tableTool>
@@ -48,15 +48,16 @@
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                        style="display: inline-block;margin-left: 10px">
+                                  style="display: inline-block;margin-left: 10px">
                         <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
                         </el-button>
                     </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table" :data="table.data" :height="table.height" border class="table-fixed"
-                    highlight-current-row size="mini" @sort-change="onSortChange" @selection-change="selectionChange">
+                <el-table ref="table" :data="table.data" :height="height" border class="table-fixed"
+                          highlight-current-row size="mini" @sort-change="onSortChange"
+                          @selection-change="selectionChange">
                     <el-table-column fixed="left" type="selection" width="50">
                     </el-table-column>
                     <el-table-column fixed type="index" width="50">
@@ -77,8 +78,8 @@
             </template>
             <template v-slot:page>
                 <el-pagination :page-size="page.size" :page-sizes="[20, 50, 100]" :total="page.total" background
-                    layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange">
+                               layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange"
+                               @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>

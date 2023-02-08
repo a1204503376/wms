@@ -214,7 +214,7 @@
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table" :data="table.data" :height="table.height" :summary-method="getSummaries" border
+                <el-table ref="table" :data="table.data" :height="height" :summary-method="getSummaries" border
                           highlight-current-row row-key="id" show-summary size="mini" style="width: 100%"
                           @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50"></el-table-column>
@@ -401,11 +401,15 @@
                     <br/>
 
                 </template>
-                <el-descriptions title="" :column="2" border direction="vertical" size = "mini">
-                    <el-descriptions-item label="模板名称" label-class-name="my-label" content-class-name="my-content"><el-radio v-model="serialRadio" label="serial_common">序列号通用模板</el-radio></el-descriptions-item>
+                <el-descriptions title="" :column="2" border direction="vertical" size="mini">
+                    <el-descriptions-item label="模板名称" label-class-name="my-label" content-class-name="my-content">
+                        <el-radio v-model="serialRadio" label="serial_common">序列号通用模板</el-radio>
+                    </el-descriptions-item>
                     <el-descriptions-item label="模板描述">带有速度等级、产品标识代码的序列号模板</el-descriptions-item>
 
-                    <el-descriptions-item label="" style="height: 0px"> <el-radio v-model="serialRadio" label="serial_special">序列号特殊模板</el-radio></el-descriptions-item>
+                    <el-descriptions-item label="" style="height: 0px">
+                        <el-radio v-model="serialRadio" label="serial_special">序列号特殊模板</el-radio>
+                    </el-descriptions-item>
                     <el-descriptions-item label="">
                         不带有速度等级、产品标识代码的序列号模板
                     </el-descriptions-item>
@@ -508,10 +512,10 @@ export default {
                 remark: ""
             },
             dialogVisible: false,
-            serialDialogVisible:false,
-            serialRadio:'serial_common',
-            urlPrefix:'',
-            urlSuffix:'',
+            serialDialogVisible: false,
+            serialRadio: 'serial_common',
+            urlPrefix: '',
+            urlSuffix: '',
             userName: "",
             notSelectName: ['出库集货区', '出库暂存区'],
             initSelectZoneIds: [], //记录页面初始化后，默认勾选的库区id
@@ -716,11 +720,11 @@ export default {
         }
     },
     methods: {
-        printSerial(){
-            let url = this.urlPrefix+this.serialRadio +this.urlSuffix;
+        printSerial() {
+            let url = this.urlPrefix + this.serialRadio + this.urlSuffix;
             window.open(url);
         },
-        callOffSerial(){
+        callOffSerial() {
             this.serialDialogVisible = false;
         },
         autoDialogTableHeight() {
@@ -924,8 +928,8 @@ export default {
             let type = '';
             if (rows[0].hasSerial === 1) {
                 type = 'sn'
-                this.urlPrefix=url + '?' + 'BoxCode=' + boxCode + '&' + 'BoxType=';
-                this.urlSuffix='&' + 'UserName=' + userName;
+                this.urlPrefix = url + '?' + 'BoxCode=' + boxCode + '&' + 'BoxType=';
+                this.urlSuffix = '&' + 'UserName=' + userName;
                 this.serialDialogVisible = true;
                 return;
             } else {

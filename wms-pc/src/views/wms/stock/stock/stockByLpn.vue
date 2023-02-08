@@ -141,7 +141,7 @@ import fileDownload from "js-file-download";
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table" :data="table.data" :height="table.height" :row-class-name="tableRowClassName"
+                <el-table ref="table" :data="table.data" :height="height" :row-class-name="tableRowClassName"
                           :span-method="arraySpanMethod" border highlight-current-row row-key="id" size="mini"
                           style="width: 100%" @sort-change="onSortChange">
                     <template v-for="(column, index) in table.columnList">

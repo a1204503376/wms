@@ -68,7 +68,7 @@
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table" :data="table.data" :height="table.height" border highlight-current-row
+                <el-table ref="table" :data="table.data" :height="height" border highlight-current-row
                           row-key="id" size="mini" style="width: 100%" @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50"></el-table-column>
                     <el-table-column fixed type="index">

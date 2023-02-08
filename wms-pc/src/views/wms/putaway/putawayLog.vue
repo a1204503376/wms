@@ -34,13 +34,15 @@
                 <el-row type="flex">
                     <el-col :span="6">
                         <el-form-item label="生产批次" label-width="90px">
-                            <el-input :clearable="true" class="search-input" placeholder="请输入生产批次" v-model.trim="form.params.skuLot1">
+                            <el-input :clearable="true" class="search-input" placeholder="请输入生产批次"
+                                      v-model.trim="form.params.skuLot1">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="规格型号" label-width="90px">
-                            <el-input :clearable="true" class="search-input" placeholder="请输入规格型号" v-model.trim="form.params.skuLot2">
+                            <el-input :clearable="true" class="search-input" placeholder="请输入规格型号"
+                                      v-model.trim="form.params.skuLot2">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -65,7 +67,7 @@
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table :data="table.data" :height="table.height" @sort-change="onSortChange" border
+                <el-table :data="table.data" :height="height" @sort-change="onSortChange" border
                           highlight-current-row ref="table" size="mini" style="width: 100%">
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
@@ -100,7 +102,7 @@ import NodesMasterPage from "@/components/wms/general/NodesMasterPage";
 import NodesSearchInput from "@/components/wms/input/NodesSearchInput";
 import fileDownload from "js-file-download";
 import {listMixin} from "@/mixins/list";
-import {getPage, exportFile} from "@/api/wms/putaway/putaway";
+import {exportFile, getPage} from "@/api/wms/putaway/putaway";
 import fileUpload from "@/components/nodes/fileUpload";
 import {ExcelExport} from 'pikaz-excel-js';
 import NodesSkuByQuery from "@/components/wms/select/NodesSkuByQuery";

@@ -6,27 +6,28 @@
                     <el-col :span="6">
                         <el-form-item label="账号" label-width="90px">
                             <el-input :clearable="true" placeholder="请输入操作人员账号" v-model.trim="form.params.userAccount"
-                                class="search-input">
+                                      class="search-input">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="名称" label-width="90px">
                             <el-input :clearable="true" placeholder="请输入操作人员名称" v-model.trim="form.params.userRealName"
-                                class="search-input">
+                                      class="search-input">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="单据编码" label-width="90px">
-                            <el-input :clearable="true" placeholder="请输入单据编码" v-model.trim="form.params.billNo" class="search-input">
+                            <el-input :clearable="true" placeholder="请输入单据编码" v-model.trim="form.params.billNo"
+                                      class="search-input">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="操作类型" label-width="90px">
                             <nodes-audit-log-type-state class="search-input" v-model="form.params.type"
-                                :multiple="true">
+                                                        :multiple="true">
                             </nodes-audit-log-type-state>
                         </el-form-item>
                     </el-col>
@@ -51,17 +52,17 @@
                     <el-button circle icon="el-icon-download" size="mini" @click="exportActionLists"></el-button>
                 </el-tooltip>
 
-                    <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
+                <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                        style="display: inline-block;margin-left: 10px">
+                                  style="display: inline-block;margin-left: 10px">
                         <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
                         </el-button>
                     </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table" :data="table.data" :height="table.height" border highlight-current-row size="mini"
-                    style="width: 100%" @sort-change="onSortChange">
+                <el-table ref="table" :data="table.data" :height="height" border highlight-current-row size="mini"
+                          style="width: 100%" @sort-change="onSortChange">
                     <el-table-column fixed width="50" type="index">
                         <template slot="header">
                             #
@@ -75,8 +76,8 @@
             </template>
             <template v-slot:page>
                 <el-pagination :page-size="page.size" :page-sizes="[20, 50, 100]" :total="page.total" background
-                    layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange">
+                               layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange"
+                               @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>
@@ -183,7 +184,7 @@ export default {
         exportActionLists() {
             exportActionLists(this.form.params).then((res) => {
                 debugger
-                let a  = res.data
+                let a = res.data
                 fileDownload(res.data, `业务日志${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
             });
         },

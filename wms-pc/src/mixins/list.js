@@ -5,8 +5,6 @@ import {getCrudColumnResponseList} from "@/api/core/column";
 import {deepClone} from "@/util/util";
 import {mapGetters} from "vuex";
 import {getStore, setStore} from '@/util/store';
-import {findAllQueryPlan, insertQueryPlan} from '@/api/wms/queryPlan/queryPlan'
-import da from "element-ui/src/locale/lang/da";
 
 
 export const listMixin = {
@@ -26,8 +24,9 @@ export const listMixin = {
             table: {
                 columnList: [],
                 data: [],
-                height: 300
+                height: 200,
             },
+            height: 450,
             crudColumn: getStore({name: "crudColumn"}) || [],
             page: {
                 total: 0,

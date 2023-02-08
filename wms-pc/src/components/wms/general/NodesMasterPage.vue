@@ -10,12 +10,12 @@
                     <el-form-item label="" style="margin-left: 10px" v-for="(item,index) in queryPlanList">
 						<span v-if="item.isDefault == 1">
 							<el-button @click="queryConditionEvaluation(item)">
-								{{'(默认)' + item.name}}
+								{{ '(默认)' + item.name }}
 							</el-button>
 						</span>
                         <span v-else>
 							<el-button @click="queryConditionEvaluation(item)">
-								{{item.name}}
+								{{ item.name }}
 							</el-button>
 						</span>
 
@@ -129,250 +129,249 @@
 </template>
 
 <script>
-    import {
-        findAllQueryPlan,
-        insertQueryPlan,
-        deleteQueryPlan,
-        updateDefaultQueryPlan,
-        cancelDefaultQueryPlan
-    } from '@/api/wms/queryPlan/queryPlan'
-    import func from "../../../util/func";
+import {
+    cancelDefaultQueryPlan,
+    deleteQueryPlan,
+    findAllQueryPlan,
+    insertQueryPlan,
+    updateDefaultQueryPlan
+} from '@/api/wms/queryPlan/queryPlan'
 
-    export default {
-        name: "NodesMasterPage",
-        props: {
-            showExpandBtn: {
-                type: Boolean,
-                required: false,
-                default: () => true
-            },
-            showPage: {
-                type: Boolean,
-                required: false,
-                default: () => true
-            },
-            showSearchForm: {
-                type: Boolean,
-                required: false,
-                default: () => true
-            }
+export default {
+    name: "NodesMasterPage",
+    props: {
+        showExpandBtn: {
+            type: Boolean,
+            required: false,
+            default: () => true
         },
-        data() {
-            return {
-                expandMore: false,
-                dialogVisible: false,
-                form: {
-                    params: {
-                        name: '',
-                        isDefault: 0,
-                        isInitData: 1,
-                        pageUrl: '',
-                        queryData: '',
-                        isDefaultState: false,
-                        isInitDataState: true,
-                    }
-                },
-                queryPlanList: [],
-                selectedSchemeId: 0
+        showPage: {
+            type: Boolean,
+            required: false,
+            default: () => true
+        },
+        showSearchForm: {
+            type: Boolean,
+            required: false,
+            default: () => true
         }
-        },
-        created() {
-            console.log(this.$parent.form)
-            this.getQueryPlanList();
-            this.autoTableHeight();
-            window.addEventListener('resize', this.autoTableHeight);
-        },
-        mounted() {
-            window.getQueryPlanList = this.getQueryPlanList;
-        },
-        methods: {
-            autoTableHeight() {
-                this.$nextTick(() => {
-                    let height;
-                    if (this.showPage) {
-                        height = window.innerHeight - 100;
-                    } else {
-                        height = window.innerHeight - 50;
-                    }
-                    document.getElementById('container').style.height = `${height}px`;
-                    this.$emit("changeTableHeight", `${height - 180}`);
-                })
-            },
-            onSearch() {
-                if (this.expandMore) {
-                    this.expandMore = false;
+    },
+    data() {
+        return {
+            expandMore: false,
+            dialogVisible: false,
+            form: {
+                params: {
+                    name: '',
+                    isDefault: 0,
+                    isInitData: 1,
+                    pageUrl: '',
+                    queryData: '',
+                    isDefaultState: false,
+                    isInitDataState: true,
                 }
-                this.$emit('search');
             },
-            onReset() {
-                this.$emit('reset');
-            },
-            saveQueryPlan() {
-                if (this.form.params.isInitDataState) {
-                    this.form.params.isInitData = 1;
+            queryPlanList: [],
+            selectedSchemeId: 0
+        }
+    },
+    created() {
+        console.log(this.$parent.form)
+        this.getQueryPlanList();
+        this.autoTableHeight();
+        window.addEventListener('resize', this.autoTableHeight);
+    },
+    mounted() {
+        window.getQueryPlanList = this.getQueryPlanList;
+    },
+    methods: {
+        autoTableHeight() {
+            this.$nextTick(() => {
+                let height;
+                if (this.showPage) {
+                    height = window.innerHeight - 100;
                 } else {
-                    this.form.params.isInitData = 0;
+                    height = window.innerHeight - 50;
                 }
-
-                if (this.form.params.isDefaultState) {
-                    this.form.params.isDefault = 1;
-                } else {
-                    this.form.params.isDefault = 0;
-                }
-                this.form.params.pageUrl = this.$parent.$route.path;
-                this.form.params.queryData = JSON.stringify(this.$parent.form.params);
-                insertQueryPlan(this.form.params).then(() => {
-                    this.$message({
-                        type: 'success',
-                        message: '保存查询方案成功!'
-                    });
-                    this.getQueryPlanList();
-                    this.form.params.name = '';
-                    this.form.params.isDefault = 0;
-                    this.form.params.isInitData = 1;
-                    this.form.params.isDefaultState = false;
-                    this.form.params.isInitDataState = true;
-                    this.form.params.pageUrl = '';
-                    this.form.params.queryData = '';
-                    this.dialogVisible = false;
-                })
-            },
-            deleteQueryPlan(){
-                let params =  {
-                    id : this.selectedSchemeId
-                }
-                deleteQueryPlan(params).then((data) => {
-                    this.getQueryPlanList();
-                })
-            },
-            updateDefaultQueryPlan(){
-                let params =  {
-                    id : this.selectedSchemeId,
-                    pageUrl : this.$parent.$route.path
-                }
-                updateDefaultQueryPlan(params).then((data) => {
-                    this.getQueryPlanList();
-                })
-            },
-            cancelDefaultQueryPlan(){
-                let params =  {
-                    id : this.selectedSchemeId,
-                    pageUrl : this.$parent.$route.path
-                }
-                cancelDefaultQueryPlan(params).then((data) => {
-                    this.getQueryPlanList();
-                })
-            },
-            queryConditionEvaluation(data) {
-                this.selectedSchemeId = data.id;
-                this.$emit('queryConditionEvaluation', data);
-            },
-            getQueryPlanList() {
-                let params = {};
-                params.pageUrl = this.$route.path;
-                findAllQueryPlan(params).then(({
-                                                   data: {
-                                                       data
-                                                   }
-                                               }) => {
-                    this.queryPlanList = data;
-                    if (this.queryPlanList.length == 0) {
-
-                    } else if (this.queryPlanList.length == 1) {
-                        this.queryConditionEvaluation(this.queryPlanList[0]);
-                    } else {
-                        let index = this.queryPlanList.findIndex(item => item.isDefault == 1);
-                        if (index > 0) {
-                            this.queryConditionEvaluation(this.queryPlanList[index]);
-                        }else {
-                            this.queryConditionEvaluation(this.queryPlanList[0]);
-                        }
-                    }
-                })
-
-            },
-            openDialog() {
-                this.dialogVisible = true;
-            },
-            handlerKeyCode(e) {
-                let key;
-                if (event === undefined) {
-                    key = e.keyCode;
-                } else {
-                    key = event.keyCode;
-                }
-                if (key === 13) {
-                    this.onSearch();
-                }
+                document.getElementById('container').style.height = `${height}px`;
+                this.$emit("changeTableHeight", `${height - 180}`);
+            })
+        },
+        onSearch() {
+            if (this.expandMore) {
+                this.expandMore = false;
             }
+            this.$emit('search');
         },
-        activated() {
-            window.addEventListener('keydown', this.handlerKeyCode, true) //开启监听键盘按下事件
+        onReset() {
+            this.$emit('reset');
         },
-        deactivated() {
-            window.removeEventListener('keydown', this.handlerKeyCode, true) //移除监听键盘按下事件
+        saveQueryPlan() {
+            if (this.form.params.isInitDataState) {
+                this.form.params.isInitData = 1;
+            } else {
+                this.form.params.isInitData = 0;
+            }
+
+            if (this.form.params.isDefaultState) {
+                this.form.params.isDefault = 1;
+            } else {
+                this.form.params.isDefault = 0;
+            }
+            this.form.params.pageUrl = this.$parent.$route.path;
+            this.form.params.queryData = JSON.stringify(this.$parent.form.params);
+            insertQueryPlan(this.form.params).then(() => {
+                this.$message({
+                    type: 'success',
+                    message: '保存查询方案成功!'
+                });
+                this.getQueryPlanList();
+                this.form.params.name = '';
+                this.form.params.isDefault = 0;
+                this.form.params.isInitData = 1;
+                this.form.params.isDefaultState = false;
+                this.form.params.isInitDataState = true;
+                this.form.params.pageUrl = '';
+                this.form.params.queryData = '';
+                this.dialogVisible = false;
+            })
         },
-        beforeDestroy() {
-            window.removeEventListener('resize', this.autoTableHeight)
-            window.removeEventListener('keydown', this.handlerKeyCode, true)
+        deleteQueryPlan() {
+            let params = {
+                id: this.selectedSchemeId
+            }
+            deleteQueryPlan(params).then((data) => {
+                this.getQueryPlanList();
+            })
         },
-    }
+        updateDefaultQueryPlan() {
+            let params = {
+                id: this.selectedSchemeId,
+                pageUrl: this.$parent.$route.path
+            }
+            updateDefaultQueryPlan(params).then((data) => {
+                this.getQueryPlanList();
+            })
+        },
+        cancelDefaultQueryPlan() {
+            let params = {
+                id: this.selectedSchemeId,
+                pageUrl: this.$parent.$route.path
+            }
+            cancelDefaultQueryPlan(params).then((data) => {
+                this.getQueryPlanList();
+            })
+        },
+        queryConditionEvaluation(data) {
+            this.selectedSchemeId = data.id;
+            this.$emit('queryConditionEvaluation', data);
+        },
+        getQueryPlanList() {
+            let params = {};
+            params.pageUrl = this.$route.path;
+            findAllQueryPlan(params).then(({
+                                               data: {
+                                                   data
+                                               }
+                                           }) => {
+                this.queryPlanList = data;
+                if (this.queryPlanList.length == 0) {
+
+                } else if (this.queryPlanList.length == 1) {
+                    this.queryConditionEvaluation(this.queryPlanList[0]);
+                } else {
+                    let index = this.queryPlanList.findIndex(item => item.isDefault == 1);
+                    if (index > 0) {
+                        this.queryConditionEvaluation(this.queryPlanList[index]);
+                    } else {
+                        this.queryConditionEvaluation(this.queryPlanList[0]);
+                    }
+                }
+            })
+
+        },
+        openDialog() {
+            this.dialogVisible = true;
+        },
+        handlerKeyCode(e) {
+            let key;
+            if (event === undefined) {
+                key = e.keyCode;
+            } else {
+                key = event.keyCode;
+            }
+            if (key === 13) {
+                this.onSearch();
+            }
+        }
+    },
+    activated() {
+        window.addEventListener('keydown', this.handlerKeyCode, true) //开启监听键盘按下事件
+    },
+    deactivated() {
+        window.removeEventListener('keydown', this.handlerKeyCode, true) //移除监听键盘按下事件
+    },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.autoTableHeight)
+        window.removeEventListener('keydown', this.handlerKeyCode, true)
+    },
+}
 </script>
 
 <style lang="scss">
-    .el-dropdown-link {
-        .el-icon--right {
-            margin-left: 0;
-        }
+.el-dropdown-link {
+    .el-icon--right {
+        margin-left: 0;
     }
+}
 
-    #nodes_form_container {
-        padding-top: 1px;
-        padding-left: 1px;
-        padding-right: 1px;
-        display: flex;
-        height: inherit;
-        background: #fff;
-        flex-direction: column;
-    }
+#nodes_form_container {
+    padding-top: 1px;
+    padding-left: 1px;
+    padding-right: 1px;
+    display: flex;
+    height: inherit;
+    background: #fff;
+    flex-direction: column;
+}
 
-    #nodes_form_container .stockcount {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
+#nodes_form_container .stockcount {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 
-    .myTable-box {
-        position: relative;
-    }
+.myTable-box {
+    position: relative;
+}
 
-    .myTable-box .el-table {
-        overflow: inherit;
-    }
+.myTable-box .el-table {
+    overflow: inherit;
+}
 
-    .top_search_shrink {
-        line-height: 30px;
-        height: 60px;
-        padding: 5px 5px 0 5px;
-        //margin-bottom: 10px;
-        overflow: hidden;
-    }
+.top_search_shrink {
+    line-height: 30px;
+    height: 60px;
+    padding: 5px 5px 0 5px;
+    //margin-bottom: 10px;
+    overflow: hidden;
+}
 
-    .top_search_expand {
-        box-shadow: 0 2px 12px #0000001a;
-        padding: 10px;
-        display: flex;
-        width: calc(100% - 63px);
-        z-index: 100;
-        position: absolute;
-        background-color: #FFFFFF;
-    }
+.top_search_expand {
+    box-shadow: 0 2px 12px #0000001a;
+    padding: 10px;
+    display: flex;
+    width: calc(100% - 63px);
+    z-index: 100;
+    position: absolute;
+    background-color: #FFFFFF;
+}
 
-    .top_expand_form_expand {
-        width: 100%;
-    }
+.top_expand_form_expand {
+    width: 100%;
+}
 
-    .main_body_expand {
-        margin-top: 47px;
-    }
+.main_body_expand {
+    margin-top: 77px;
+}
 </style>

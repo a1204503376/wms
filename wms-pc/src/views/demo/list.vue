@@ -93,8 +93,8 @@
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table" :data="table.data" :height="table.height" :summary-method="getSummaries" border
-                    highlight-current-row show-summary size="mini" @sort-change="onSortChange">
+                <el-table ref="table" :data="table.data" :height="height" :summary-method="getSummaries" border
+                          highlight-current-row show-summary size="mini" @sort-change="onSortChange">
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
                     <el-table-column fixed type="index" width="50">
@@ -104,7 +104,7 @@
                     </el-table-column>
                     <template v-for="(column,index) in table.columnList">
                         <el-table-column v-if="!column.hide" :key="index" show-overflow-tooltip width="150"
-                            v-bind="column">
+                                         v-bind="column">
                         </el-table-column>
                     </template>
                     <el-table-column fixed="right" label="操作" width="120">
@@ -118,7 +118,7 @@
             </template>
             <template v-slot:page>
                 <el-pagination :page-sizes="[20, 50, 100]" background layout="total, sizes, prev, pager, next, jumper"
-                    v-bind="page" @size-change="handleSizeChange" @current-change="handleCurrentChange">
+                               v-bind="page" @size-change="handleSizeChange" @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>

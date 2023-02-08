@@ -23,7 +23,8 @@
                 </el-row>
             </template>
             <template v-slot:batchBtn>
-                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增</el-button>
+                <el-button v-if="permissionObj.add" icon="el-icon-plus" size="mini" type="primary" @click="onAdd">新增
+                </el-button>
                 <el-button v-if="permissionObj.delete" :plain="true" icon="el-icon-delete" size="mini" type="danger"
                            @click="onRemove">删除
                 </el-button>
@@ -33,7 +34,7 @@
                     ref="table"
                     :data="table.data"
                     :header-cell-style="{ 'text-align': 'center' }"
-                    :height="table.height"
+                    :height="height"
                     border
                     highlight-current-row
                     row-key="receiveId"
@@ -66,11 +67,20 @@
                         label="操作"
                         width="250">
                         <template slot-scope="scope">
-                            <el-button v-if="permissionObj.edit" size="small" type="text" @click="handleClick(scope.row)">编辑</el-button>
-                            <el-button v-if="permissionObj.start" size="small" type="text" @click="onStart(scope.row)">启动</el-button>
-                            <el-button v-if="permissionObj.stop" size="small" type="text" @click="onStop(scope.row)">停止</el-button>
-                            <el-button v-if="permissionObj.execute" size="small" type="text" @click="onExecute(scope.row)">执行一次</el-button>
-                            <el-button v-if="permissionObj.log" size="small" type="text" @click="onLog(scope.row)">日志</el-button>
+                            <el-button v-if="permissionObj.edit" size="small" type="text"
+                                       @click="handleClick(scope.row)">编辑
+                            </el-button>
+                            <el-button v-if="permissionObj.start" size="small" type="text" @click="onStart(scope.row)">
+                                启动
+                            </el-button>
+                            <el-button v-if="permissionObj.stop" size="small" type="text" @click="onStop(scope.row)">
+                                停止
+                            </el-button>
+                            <el-button v-if="permissionObj.execute" size="small" type="text"
+                                       @click="onExecute(scope.row)">执行一次
+                            </el-button>
+                            <el-button v-if="permissionObj.log" size="small" type="text" @click="onLog(scope.row)">日志
+                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>

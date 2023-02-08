@@ -12,21 +12,21 @@
                     <el-col :span="6">
                         <el-form-item label="单据编码" label-width="90px">
                             <el-input class="search-input" placeholder="请输入单据编码" v-model.trim="form.params.sourceBillNo"
-                                :clearable="true">
+                                      :clearable="true">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="移动类型" label-width="90px">
                             <nodes-stock-log-type v-model="form.params.logTypeList" class="search-input"
-                                :multiple="true">
+                                                  :multiple="true">
                             </nodes-stock-log-type>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="箱码" label-width="90px">
                             <el-input v-model.trim="form.params.boxCode" :clearable="true" class="search-input"
-                                placeholder="请输入箱码">
+                                      placeholder="请输入箱码">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -47,14 +47,14 @@
                     <el-col :span="6">
                         <el-form-item label="生产批次" label-width="90px">
                             <el-input v-model.trim="form.params.skuLot1" class="search-input" :clearable="true"
-                                placeholder="请输入生产批次">
+                                      placeholder="请输入生产批次">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="创建人" label-width="90px">
                             <el-input class="search-input" v-model.trim="form.params.createUser" :clearable="true"
-                                placeholder="请输入创建人">
+                                      placeholder="请输入创建人">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -80,14 +80,14 @@
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                        style="display: inline-block;margin-left: 10px">
-                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData" />
+                                  style="display: inline-block;margin-left: 10px">
+                        <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData"/>
                     </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table" :data="table.data" :height="table.height" border highlight-current-row size="mini"
-                    style="width: 100%" @sort-change="onSortChange">
+                <el-table ref="table" :data="table.data" :height="height" border highlight-current-row size="mini"
+                          style="width: 100%" @sort-change="onSortChange">
                     <el-table-column fixed width="50" type="index">
                         <template slot="header">
                             #
@@ -95,15 +95,16 @@
                     </el-table-column>
                     <template v-for="(column, index) in table.columnList">
                         <el-table-column v-if="!column.hide" width="170" :key="index" show-overflow-tooltip
-                            v-bind="column">
+                                         v-bind="column">
                         </el-table-column>
                     </template>
                 </el-table>
             </template>
             <template v-slot:page>
                 <el-pagination :current-page="page.current" :page-size="page.size" :page-sizes="[20, 50, 100]"
-                    :total="page.total" background layout="total, sizes, prev, pager, next, jumper" v-bind="page"
-                    @size-change="handleSizeChange" @current-change="handleCurrentChange">
+                               :total="page.total" background layout="total, sizes, prev, pager, next, jumper"
+                               v-bind="page"
+                               @size-change="handleSizeChange" @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>

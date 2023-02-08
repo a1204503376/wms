@@ -34,7 +34,7 @@
                 <el-button v-if="permissionObj.import" icon="el-icon-upload2" plain size="mini" @click="onUpload">导入
                 </el-button>
                 <file-upload :visible="fileUpload.visible" file-name="物料清单"
-                    template-url="/api/wms/WmsSkuBom/export-template" @callback="callbackFileUpload">
+                             template-url="/api/wms/WmsSkuBom/export-template" @callback="callbackFileUpload">
                 </file-upload>
             </template>
             <template v-slot:tableTool>
@@ -49,15 +49,15 @@
                 </el-tooltip>
                 <el-tooltip :enterable="false" class="item" content="当前页导出" effect="dark" placement="top">
                     <excel-export :filename="exportExcelName" :sheet="exportExcelSheet"
-                        style="display: inline-block;margin-left: 10px">
+                                  style="display: inline-block;margin-left: 10px">
                         <el-button circle icon="el-icon-bottom" size="mini" @click="onExportLocalData">
                         </el-button>
                     </excel-export>
                 </el-tooltip>
             </template>
             <template v-slot:table>
-                <el-table ref="table" :data="table.data" :height="table.height" border highlight-current-row size="mini"
-                    style="width: 100%" @sort-change="onSortChange" @selection-change="selectionChange">
+                <el-table ref="table" :data="table.data" :height="height" border highlight-current-row size="mini"
+                          style="width: 100%" @sort-change="onSortChange" @selection-change="selectionChange">
                     <el-table-column fixed type="selection" width="50">
                     </el-table-column>
                     <el-table-column fixed type="index" width="50">
@@ -67,7 +67,7 @@
                     </el-table-column>
                     <template v-for="(column,index) in table.columnList">
                         <el-table-column v-if="!column.hide" :key="index" show-overflow-tooltip v-bind="column"
-                            width="150">
+                                         width="150">
                         </el-table-column>
                     </template>
                     <el-table-column fixed="right" label="操作" width="80">
@@ -79,8 +79,8 @@
             </template>
             <template v-slot:page>
                 <el-pagination :page-size="page.size" :page-sizes="[20, 50, 100]" :total="page.total" background
-                    layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange">
+                               layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange"
+                               @current-change="handleCurrentChange">
                 </el-pagination>
             </template>
         </nodes-master-page>
@@ -272,8 +272,8 @@ export default {
         },
         excel() {
             excel(this.form.params).then((res) => {
-                 debugger
-                let a  = res.data
+                debugger
+                let a = res.data
                 fileDownload(res.data, `物料清单${nowDateFormat("yyyyMMddhhmmss")}.xlsx`);
             });
         },
