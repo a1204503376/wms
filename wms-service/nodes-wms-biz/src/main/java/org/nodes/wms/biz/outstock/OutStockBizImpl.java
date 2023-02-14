@@ -353,6 +353,7 @@ public class OutStockBizImpl implements OutStockBiz {
 		return true;
 	}
 
+	@Transactional(propagation = Propagation.NESTED, rollbackFor = Exception.class)
 	public void pickByAgvPickTo(PickByBoxCodeRequest request, WmsTaskProcTypeEnum taskProcTypeEnum) {
 		WmsTask task = wmsTaskBiz.findPickTaskByBoxCode(request.getBoxCode(), taskProcTypeEnum, null);
 		// 1、根据箱码查询任务
