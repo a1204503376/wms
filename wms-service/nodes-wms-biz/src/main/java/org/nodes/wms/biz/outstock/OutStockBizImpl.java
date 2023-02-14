@@ -1156,16 +1156,30 @@ public class OutStockBizImpl implements OutStockBiz {
 	@Override
 	public FindBoxCountResponse findBoxCountBySoHeaderIds(Long soBillId) {
 		//拣货计划总数
-		List<SoPickPlan> pickPlan = soPickPlanDao.getSoPickPlanForDistribution(soBillId);
+		List<SoPickPlan> pickPlanList = soPickPlanDao.getSoPickPlanForDistribution(soBillId);
+		List<String> pickPlanBoxCodeList = pickPlanList.stream()
+			.filter(soPickPlan -> Func.isNotEmpty(soPickPlan.getBoxCode()))
+			.map(soPickPlan -> soPickPlan.getBoxCode())
+			.distinct()
+			.collect(Collectors.toList());
 		//已经拣货量
-		List<LogSoPick> picked = logSoPickBiz.findBoxCountBySoHeaderId(soBillId);
+		List<LogSoPick> pickedList = logSoPickBiz.findBoxCountBySoHeaderId(soBillId);
+		List<String> pickedBoxCodeList = pickedList.stream()
+			.filter(logSoPick -> Func.isNotEmpty(logSoPick.getBoxCode()))
+			.map(logSoPick -> logSoPick.getBoxCode())
+			.distinct()
+			.collect(Collectors.toList());
 		//已经复核量
-		List<TruckStock> reviewed = truckStockBiz.findList(soBillId);
-
+		List<TruckStock> reviewedList = truckStockBiz.findList(soBillId);
+		List<String> reviewedBoxCodeList = reviewedList.stream()
+			.filter(truckStock -> Func.isNotEmpty(truckStock.getBoxCode()))
+			.map(truckStock -> truckStock.getBoxCode())
+			.distinct()
+			.collect(Collectors.toList());
 		FindBoxCountResponse response = new FindBoxCountResponse();
-		response.setPickPlanQty(pickPlan.size());
-		response.setPickedQty(picked.size());
-		response.setReviewedQty(reviewed.size());
+		response.setPickPlanQty(pickPlanBoxCodeList.size());
+		response.setPickedQty(pickedBoxCodeList.size());
+		response.setReviewedQty(reviewedBoxCodeList.size());
 		return response;
 	}
 
