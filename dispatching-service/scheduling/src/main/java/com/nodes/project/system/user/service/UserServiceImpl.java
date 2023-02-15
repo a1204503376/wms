@@ -40,30 +40,22 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements IUserService {
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
-
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private RoleMapper roleMapper;
-
-    @Autowired
-    private PostMapper postMapper;
-
-    @Autowired
-    private UserPostMapper userPostMapper;
-
-    @Autowired
-    private UserRoleMapper userRoleMapper;
-
-    @Autowired
-    private IConfigService configService;
-
-    @Autowired
-    private PasswordService passwordService;
-
     @Autowired
     protected Validator validator;
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private RoleMapper roleMapper;
+    @Autowired
+    private PostMapper postMapper;
+    @Autowired
+    private UserPostMapper userPostMapper;
+    @Autowired
+    private UserRoleMapper userRoleMapper;
+    @Autowired
+    private IConfigService configService;
+    @Autowired
+    private PasswordService passwordService;
 
     /**
      * 根据条件分页查询用户列表
@@ -502,5 +494,10 @@ public class UserServiceImpl implements IUserService {
     @Override
     public int changeStatus(User user) {
         return userMapper.updateUser(user);
+    }
+
+    @Override
+    public List<User> selectUserListByDeptId(Long deptId) {
+        return userMapper.getUserListByDeptId(deptId);
     }
 }

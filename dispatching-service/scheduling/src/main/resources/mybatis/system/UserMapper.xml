@@ -273,4 +273,9 @@
 		)
 	</insert>
 
+	<select id="getUserListByDeptId" parameterType="String" resultMap="UserResult">
+		<include refid="selectUserVo"/>
+		where u.dept_id = #{deptId} and del_flag = 0 and status = 0
+	</select>
+
 </mapper> 

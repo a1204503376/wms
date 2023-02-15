@@ -210,4 +210,12 @@ public interface IUserService {
      * @return 结果
      */
     public int changeStatus(User user);
+
+    /**
+     * 根据 部门ID获取这个部门下的全部员工
+     *
+     * @param deptId 部门ID
+     * @return 这个部门下的全部用户
+     */
+    public List<User> selectUserListByDeptId(Long deptId);
 }
