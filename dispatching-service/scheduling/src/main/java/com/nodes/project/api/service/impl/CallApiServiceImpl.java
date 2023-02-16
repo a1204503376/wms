@@ -2,10 +2,7 @@ package com.nodes.project.api.service.impl;
 
 import com.nodes.common.utils.StringUtils;
 import com.nodes.framework.config.NodesConfig;
-import com.nodes.project.api.dto.agv.AgvGlobalResponse;
-import com.nodes.project.api.dto.agv.AgvOtherGlobalResponse;
-import com.nodes.project.api.dto.agv.AgvOtherResponse;
-import com.nodes.project.api.dto.agv.AgvResponse;
+import com.nodes.project.api.dto.agv.*;
 import com.nodes.project.api.dto.wms.WmsGlobalResponse;
 import com.nodes.project.api.dto.wms.WmsResponse;
 import com.nodes.project.api.service.CallApiDataService;
@@ -17,6 +14,8 @@ import org.springframework.web.client.RestTemplate;
 import tech.powerjob.common.serialize.JsonUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -79,6 +78,25 @@ public class CallApiServiceImpl implements CallApiService {
             log.error(msg, e);
             callApiDataService.saveCallApiLog(url, null, null, e);
             return AgvOtherGlobalResponse.error(e);
+        }
+    }
+
+    @Override
+    public List<AgvVehiclesResponse> getVehiclesAgv(String url) {
+        url = nodesConfig.getAgvUrl() + url;
+        try {
+            ResponseEntity<String> stringResponseEntity = restTemplate.getForEntity(url, null, String.class);
+            String body = stringResponseEntity.getBody();
+            List<AgvVehiclesResponse> agvVehiclesList = new ArrayList<AgvVehiclesResponse>();
+            agvVehiclesList = JsonUtils.parseObject(body, agvVehiclesList.getClass());
+
+            callApiDataService.saveCallApiLog(url, null, agvVehiclesList, null);
+            return agvVehiclesList;
+        } catch (Exception e) {
+            String msg = StringUtils.format("huoq异常，URL：{}", url);
+            log.error(msg, e);
+            callApiDataService.saveCallApiLog(url, null, null, e);
+            return new ArrayList<>();
         }
     }
 }

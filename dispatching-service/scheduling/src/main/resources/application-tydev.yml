@@ -56,6 +56,17 @@ spring:
         wall:
           config:
             multi-statement-allow: true
+  mail:
+    host: mail.nodes.com.cn  #邮箱服务器 例如QQ邮箱服务器smtp.qq.com
+    username: tysj@nodes.com.cn  #发件人邮箱
+    password: ebu4JqWpP2xds1ej  #授权码
+    protocol: smtp
+    properties.mail.display.sendmail: xiaoMing
+    properties.mail.display.sendname: xiaoming
+    default-encoding: utf-8 #编码格式
+    settings:
+    charset: UTF-8
+    template-loader-path: classpath:/templates/
 # 项目相关配置
 scheduling:
   # 名称

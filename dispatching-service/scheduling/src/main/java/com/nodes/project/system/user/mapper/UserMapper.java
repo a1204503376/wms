@@ -122,4 +122,13 @@ public interface UserMapper extends BaseMapper<User> {
      * @return 结果
      */
     public User checkEmailUnique(String email);
+
+    /**
+     * 根据 部门ID获取这个部门下的全部员工
+     *
+     * @param deptId 部门ID
+     * @return 这个部门下的全部用户
+     */
+    public List<User> getUserListByDeptId(Long deptId);
+
 }

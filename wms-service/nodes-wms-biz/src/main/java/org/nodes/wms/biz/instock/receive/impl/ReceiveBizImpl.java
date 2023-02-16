@@ -210,14 +210,13 @@ public class ReceiveBizImpl implements ReceiveBiz {
 	@Override
 	@Transactional
 	public ReceiveHeader newReceive(NewReceiveRequest newReceiveRequest) {
-		if (Func.isEmpty(newReceiveRequest.getNewReceiveDetailRequestList().get(0).getBoxCode())) {
-			throw new ServiceException("创建收货单失败,参数箱码不存在");
+		if (Func.isNotEmpty(newReceiveRequest.getNewReceiveDetailRequestList().get(0).getBoxCode())) {
+			if (receiveDetailLpnDao.getReceiveDetailLpnListByBoxCode(newReceiveRequest.getNewReceiveDetailRequestList().get(0).getBoxCode()).size() > 0
+				|| stockQueryBiz.findEnableStockByBoxCode(newReceiveRequest.getNewReceiveDetailRequestList().get(0).getBoxCode()).size() > 0) {
+				throw new ServiceException("创建收货单失败,该箱码已存在库存中或已经在再入库的收货单当中");
+			}
 		}
 
-		if (receiveDetailLpnDao.getReceiveDetailLpnListByBoxCode(newReceiveRequest.getNewReceiveDetailRequestList().get(0).getBoxCode()).size() > 0
-			|| stockQueryBiz.findEnableStockByBoxCode(newReceiveRequest.getNewReceiveDetailRequestList().get(0).getBoxCode()).size() > 0) {
-			throw new ServiceException("创建收货单失败,该箱码已存在库存中或已经在再入库的收货单当中");
-		}
 		//创建保存实体类
 		ReceiveHeader receiveHeader = receiveFactory.createReceiveHeader(newReceiveRequest.getNewReceiveHeaderRequest());
 		receiveHeaderDao.insert(receiveHeader);

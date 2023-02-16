@@ -98,7 +98,7 @@ public class ReportSo {
 				ReportSoPickLotDto reportSoPickLotDto = new ReportSoPickLotDto();
 				reportSoPickLotDto.setBoxCode(soPickPlan.getBoxCode());
 				reportSoPickLotDto.setSkuName(soPickPlan.getSkuName());
-				reportSoPickLotDto.setSkuLot9(soPickPlan.getSkuLot9());
+				reportSoPickLotDto.setSkuLot1(soPickPlan.getSkuLot1());
 				reportSoPickLotDto.setSkuLot5(soPickPlan.getSkuLot5());
 				reportSoPickLotDto.setQty(soPickPlan.getPickPlanQty());
 				reportSoPickLotDto.setWsuName(getWsuName(soPickPlan.getSkuId()));
@@ -110,7 +110,7 @@ public class ReportSo {
 				ReportSoPickLotDto reportSoPickLotDto = new ReportSoPickLotDto();
 				reportSoPickLotDto.setBoxCode(logSoPick.getBoxCode());
 				reportSoPickLotDto.setSkuName(logSoPick.getSkuName());
-				reportSoPickLotDto.setSkuLot9(logSoPick.getSkuLot9());
+				reportSoPickLotDto.setSkuLot1(logSoPick.getSkuLot1());
 				reportSoPickLotDto.setSkuLot5(logSoPick.getSkuLot5());
 				reportSoPickLotDto.setQty(logSoPick.getPickRealQty());
 				reportSoPickLotDto.setWsuName(getWsuName(logSoPick.getSkuId()));

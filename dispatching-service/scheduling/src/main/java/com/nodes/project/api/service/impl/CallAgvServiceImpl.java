@@ -1,15 +1,21 @@
 package com.nodes.project.api.service.impl;
 
 import com.nodes.common.constant.JobConstants;
+import com.nodes.common.exception.ServiceException;
 import com.nodes.common.utils.StringUtils;
+import com.nodes.processor.ProcessResultUtils;
 import com.nodes.project.api.domain.JobQueue;
 import com.nodes.project.api.dto.agv.*;
 import com.nodes.project.api.service.CallAgvService;
 import com.nodes.project.api.service.CallApiService;
+import com.nodes.project.api.service.IEmailService;
+import com.nodes.project.system.user.domain.User;
+import com.nodes.project.system.user.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+import tech.powerjob.worker.core.processor.ProcessResult;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -21,9 +27,34 @@ public class CallAgvServiceImpl implements CallAgvService {
     private static final String URL_TRANSPORT_ORDERS = "/transportOrders/{}";
     private static final String URL_WITHDRAWAL = URL_TRANSPORT_ORDERS + "/withdrawal";
     private static final String url_vehicleWithdrawal = "/vehiclesWithdrawal/{}/unload/{}";
+    private static final String URL_VEHICLES = "/vehicles";
+    /**
+     * 天宜仓库部门ID
+     */
+    private static final Long DEPTID = 101L;
 
     @Resource
     private CallApiService callApiService;
+    @Resource
+    private IEmailService emailService;
+    @Resource
+    private IUserService userService;
+
+    private static void setBoxTypeProperty(JobQueue jobQueue, List<Property> properties) {
+        Property property = new Property();
+        property.setKey(JobConstants.AGV_C_BIFURCATE);
+        // 创建C箱的job时，在properties属性中新增一个key：boxType，value:C1或C2
+        boolean cBifurcateFlag = ObjectUtils.isEmpty(jobQueue.getWmsCBifurcate()) || jobQueue.getWmsCBifurcate().equals(0);
+        String value;
+        if (cBifurcateFlag) {
+            // A,B,D也需要传给AGV
+            value = jobQueue.getWmsBoxType().getCode();
+        } else {
+            value = jobQueue.getWmsCBifurcate().equals(1) ? JobConstants.AGV_C1 : JobConstants.AGV_C2;
+        }
+        property.setValue(value);
+        properties.add(property);
+    }
 
     @Override
     public AgvGlobalResponse transportOrders(JobQueue jobQueue) {
@@ -58,22 +89,6 @@ public class CallAgvServiceImpl implements CallAgvService {
         return agvTransportOrderRequest;
     }
 
-    private static void setBoxTypeProperty(JobQueue jobQueue, List<Property> properties) {
-        Property property = new Property();
-        property.setKey(JobConstants.AGV_C_BIFURCATE);
-        // 创建C箱的job时，在properties属性中新增一个key：boxType，value:C1或C2
-        boolean cBifurcateFlag = ObjectUtils.isEmpty(jobQueue.getWmsCBifurcate()) || jobQueue.getWmsCBifurcate().equals(0);
-        String value;
-        if (cBifurcateFlag) {
-            // A,B,D也需要传给AGV
-            value = jobQueue.getWmsBoxType().getCode();
-        }else{
-            value = jobQueue.getWmsCBifurcate().equals(1) ? JobConstants.AGV_C1 : JobConstants.AGV_C2;
-        }
-        property.setValue(value);
-        properties.add(property);
-    }
-
     @Override
     public AgvGlobalResponse withdrawal(JobQueue jobQueue) {
         AgvWithdrawalRequest agvWithdrawalRequest = new AgvWithdrawalRequest();
@@ -85,5 +100,28 @@ public class CallAgvServiceImpl implements CallAgvService {
     public AgvOtherGlobalResponse vehicleWithdrawal(String vehicle, String location) {
         String url = StringUtils.format(url_vehicleWithdrawal, vehicle, location);
         return callApiService.postOtherAgv(url);
+    }
+
+    @Override
+    public ProcessResult agvVehicles() {
+        List<AgvVehiclesResponse> vehiclesAgv = callApiService.getVehiclesAgv(URL_VEHICLES);
+        if (ObjectUtils.isEmpty(vehiclesAgv) || vehiclesAgv.size() == 0) {
+            throw new ServiceException("发送邮件失败;获取AGV状态失败");
+        }
+
+        List<User> userList = userService.selectUserListByDeptId(DEPTID);
+        if (ObjectUtils.isEmpty(vehiclesAgv) || vehiclesAgv.size() == 0) {
+            throw new ServiceException("发送邮件失败;未配置天宜仓库管理员的邮箱");
+        }
+
+        for (AgvVehiclesResponse agvVehicle : vehiclesAgv) {
+            if (ObjectUtils.isNotEmpty(agvVehicle.getEnergyLevel()) && agvVehicle.getEnergyLevel() <= 20) {
+                for (User user : userList) {
+                    emailService.sendSimpleMail(user.getEmail(),
+                            "AGV电量预警提示", "AGV电量已经到达低于阈值20%，请检查AGV状态，并及时充电");
+                }
+            }
+        }
+        return ProcessResultUtils.success("发送邮件成功");
     }
 }

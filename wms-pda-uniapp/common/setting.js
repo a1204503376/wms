@@ -7,7 +7,7 @@ module.exports = {
 	// 应用logo，支持本地路径和网络路径
 	logo: '/static/images/tyicon.png',
 	// 版本号
-	version: '1.4.0',
+	version: '1.5.0',
 	// 租户
 	tenantId: '000000',
 	// api请求默认地址url

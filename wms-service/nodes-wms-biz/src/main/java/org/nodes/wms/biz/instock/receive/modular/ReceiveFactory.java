@@ -111,7 +111,7 @@ public class ReceiveFactory {
 		//设置明细表收货单id
 		receiveDetail.setReceiveId(receiveHeader.getReceiveId());
 		// 设置订单行号
-		receiveDetail.setLineNo(newReceiveDetailRequest.getSoLineNo());
+		receiveDetail.setLineNo(newReceiveDetailRequest.getLineNumber());
 		//设置物料id
 		receiveDetail.setSkuId(sku.getSkuId());
 		//设置物料编码
