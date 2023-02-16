@@ -16,7 +16,7 @@ public class NewReceiveDetailRequest implements Serializable {
 	/**
 	 * 订单行号
 	 */
-	private String soLineNo;
+	private String lineNumber;
 	/**
 	 * 物品下拉框对象
 	 */
