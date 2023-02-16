@@ -7,7 +7,7 @@
                          label-position="right"
                          label-width="120px"
                          size="mini"
-                         style="margin-left:10px;margin-right:10px;" >
+                         style="margin-left:10px;margin-right:10px;">
                     <el-row>
                         <h3>收货订单</h3>
                     </el-row>
@@ -71,9 +71,9 @@
                             {{ form.params.inStoreTypeDesc }}
                         </el-descriptions-item>
                         <el-descriptions-item v-if="false"
-                            label-class-name="descriptions-label"
-                            content-class-name="descriptions-content"
-                            :label-style="{'text-align': 'right'}">
+                                              label-class-name="descriptions-label"
+                                              content-class-name="descriptions-content"
+                                              :label-style="{'text-align': 'right'}">
                             <template slot="label">
                                 ASN编码
                             </template>
@@ -253,8 +253,8 @@ export default {
                     label: '包装层级',
                 },
                 {
-                    prop: 'skuSpec',
-                    label: '规格',
+                    prop: 'skuLot2',
+                    label: '型号',
                 },
                 {
                     prop: 'whCode',
@@ -334,6 +334,11 @@ export default {
                     prop: 'skuLot1',
                     width: 120,
                     label: '生产批次'
+                },
+                {
+                    prop: 'skuLot2',
+                    width: 120,
+                    label: '型号'
                 },
                 {
                     prop: 'skuLot4',
@@ -428,7 +433,7 @@ export default {
             }
 
         },
-        getCrudColumnList(){
+        getCrudColumnList() {
 
         },
     }

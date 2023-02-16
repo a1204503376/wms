@@ -27,6 +27,7 @@
         wsp_name,
         wsu_name,
         sku_lot1,
+        sku_lot2,
         sku_lot4
         FROM log_so_pick
         WHERE so_bill_id = #{soBillId} AND is_deleted = 0

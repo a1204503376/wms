@@ -15,6 +15,7 @@
                rl.sku_level,
                rl.sku_spec,
                rl.wh_code,
+               rl.sku_lot2,
                rl.owner_code,
                user.real_name createUser,
                rl.create_time

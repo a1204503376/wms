@@ -88,21 +88,21 @@
                             </template>
                             {{ form.params.transportType }}
                         </el-descriptions-item>
-                         <el-descriptions-item
+                        <el-descriptions-item
                             content-class-name="descriptions-content"
                             label-class-name="descriptions-label"
                             :label-style="{'text-align': 'right'}">
                             <template slot="label">
-                               合同编号
+                                合同编号
                             </template>
                             {{ form.params.expressCode }}
                         </el-descriptions-item>
-                         <el-descriptions-item
+                        <el-descriptions-item
                             content-class-name="descriptions-content"
                             label-class-name="descriptions-label"
                             :label-style="{'text-align': 'right'}">
                             <template slot="label">
-                               收货地址
+                                收货地址
                             </template>
                             {{ form.params.address }}
                         </el-descriptions-item>
@@ -178,9 +178,9 @@ import {listMixin} from "@/mixins/list";
 import {
     getDetailForDetail,
     getHeaderForDetail,
+    getHistorySoPickPlanData,
     getLogSoPickForDetail,
     getSoLogForDetail,
-    getHistorySoPickPlanData,
 } from "@/api/wms/outstock/soHeader"
 import func from "@/util/func";
 
@@ -202,8 +202,8 @@ export default {
                     outstockType: '',
                     transportType: '',
                     soBillRemark: '',
-                    address:'',
-                    expressCode:''
+                    address: '',
+                    expressCode: ''
                 }
             },
             table: {
@@ -267,6 +267,11 @@ export default {
                     label: '生产批次'
                 },
                 {
+                    prop: 'skuLot2',
+                    sortable: 'custom',
+                    label: '型号'
+                },
+                {
                     prop: 'skuLot4',
                     sortable: 'custom',
                     label: '专用客户'
@@ -327,6 +332,11 @@ export default {
                     prop: 'skuLot1',
                     sortable: 'custom',
                     label: '生产批次'
+                },
+                {
+                    prop: 'skuLot2',
+                    sortable: 'custom',
+                    label: '型号'
                 },
                 {
                     prop: 'skuLot4',
@@ -506,7 +516,7 @@ export default {
                     this.tableLoading = false;
                 })
         },
-        getSoPickPlanList(){
+        getSoPickPlanList() {
             this.tableLoading = true;
             this.publicTable.columnList = this.soPickPlanColumnList;
             if (func.isEmpty(this.soBillId)) {
@@ -544,9 +554,9 @@ export default {
                 this.getSoRecord();
             } else if (this.form.activeName === 'soLog') {
                 this.getSoLog();
-            } else if(this.form.activeName === 'soPickPlan'){
+            } else if (this.form.activeName === 'soPickPlan') {
                 this.getSoPickPlanList();
-            }else {
+            } else {
                 this.getDetail();
             }
         }
@@ -566,7 +576,7 @@ export default {
     text-align: center;
 }
 
-/deep/ .el-descriptions-item__label{
+/deep/ .el-descriptions-item__label {
     text-align: center;
 }
 
