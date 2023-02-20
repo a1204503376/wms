@@ -82,7 +82,7 @@ public class InStockBizImpl implements InStockBiz {
 		}
 		ReceiveHeader receiveHeader;
 		ReceiveDetail details = new ReceiveDetail();
-		if (Func.isNotEmpty(request.getReceiveDetailLpnItemDtoList().get(0).getReceiveDetailId())) {
+		if (Func.isNotEmpty(request.getReceiveDetailLpnItemDtoList().get(0).getReceiveDetailId()) && request.getReceiveDetailLpnItemDtoList().get(0).getReceiveDetailId() != 0) {
 			details = receiveBiz.getDetailByReceiveDetailId(request.getReceiveDetailLpnItemDtoList().get(0).getReceiveDetailId());
 		}
 		// 判断业务参数（无单收货除外），是否可以正常收货、超收
