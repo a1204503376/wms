@@ -27,6 +27,10 @@ public class ReportSoPickSerialDto {
 	 */
 	private String snCode;
 	/**
+	 * 型号
+	 */
+	private String skuLot2;
+	/**
 	 * 钢背
 	 */
 	private String skuLot5;

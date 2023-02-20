@@ -53,6 +53,7 @@ public class ReportSo {
 		List<Map<String, Object>> mapList = new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();
 		SoHeader soHeader = getSoHeader(parameters);
+		StringBuffer skuLot2List = new StringBuffer();
 		if (isCreate(soHeader.getSoBillState())) {
 			throw new ServiceException("无法导出, 请分配或全部拣货之后再导出。");
 		} else if (isPart(soHeader.getSoBillState())) {
@@ -60,13 +61,25 @@ public class ReportSo {
 		} else if (isExecuting(soHeader.getSoBillState())) {
 			List<SoPickPlan> soPickPlanList = getSoPickPlanList(soHeader.getSoBillId());
 			if (Func.isNotEmpty(soPickPlanList)) {
-				map.put("skuLot2", soPickPlanList.get(0).getSkuLot2());
+				for (int i = 0; i < soPickPlanList.size(); i++) {
+					skuLot2List.append(soPickPlanList.get(i).getSkuLot2());
+					if (i != soPickPlanList.size() - 1) {
+						skuLot2List.append(",");
+					}
+				}
+				map.put("skuLot2", skuLot2List);
 				map.put("wsuName", getWsuName(soPickPlanList.get(0).getSkuId()));
 			}
 		} else if (isAllOutStockOrCompleted(soHeader.getSoBillState())) {
 			List<LogSoPick> logSoPickList = getLogSoPickList(soHeader.getSoBillId());
 			if (Func.isNotEmpty(logSoPickList)) {
-				map.put("skuLot2", logSoPickList.get(0).getSkuLot2());
+				for (int i = 0; i < logSoPickList.size(); i++) {
+					skuLot2List.append(logSoPickList.get(i).getSkuLot2());
+					if (i != logSoPickList.size() - 1) {
+						skuLot2List.append(",");
+					}
+				}
+				map.put("skuLot2", skuLot2List);
 				map.put("wsuName", getWsuName(logSoPickList.get(0).getSkuId()));
 			}
 		} else {
@@ -102,6 +115,7 @@ public class ReportSo {
 				reportSoPickLotDto.setSkuLot5(soPickPlan.getSkuLot5());
 				reportSoPickLotDto.setQty(soPickPlan.getPickPlanQty());
 				reportSoPickLotDto.setWsuName(getWsuName(soPickPlan.getSkuId()));
+				reportSoPickLotDto.setSkuLot2(soPickPlan.getSkuLot2());
 				reportSoPickLotDtoList.add(reportSoPickLotDto);
 			}
 		} else if (isAllOutStockOrCompleted(soHeader.getSoBillState())) {
@@ -112,6 +126,7 @@ public class ReportSo {
 				reportSoPickLotDto.setSkuName(logSoPick.getSkuName());
 				reportSoPickLotDto.setSkuLot1(logSoPick.getSkuLot1());
 				reportSoPickLotDto.setSkuLot5(logSoPick.getSkuLot5());
+				reportSoPickLotDto.setSkuLot2(logSoPick.getSkuLot2());
 				reportSoPickLotDto.setQty(logSoPick.getPickRealQty());
 				reportSoPickLotDto.setWsuName(getWsuName(logSoPick.getSkuId()));
 				reportSoPickLotDtoList.add(reportSoPickLotDto);
@@ -125,7 +140,7 @@ public class ReportSo {
 			finalDtoList.addAll(entry.getValue());
 		}
 		return finalDtoList.stream()
-			.filter(reportSoPickSerialDto ->  Func.isNotEmpty(reportSoPickSerialDto.getBoxCode()))
+			.filter(reportSoPickSerialDto -> Func.isNotEmpty(reportSoPickSerialDto.getBoxCode()))
 			.sorted(Comparator.comparing(ReportSoPickLotDto::getBoxCode))
 			.collect(Collectors.toList());
 	}
@@ -226,7 +241,7 @@ public class ReportSo {
 		if (Func.isNotEmpty(logSoPick.getSnCode())) {
 			List<Map<String, Object>> mapList = getProcessedSerialAndQty(logSoPick.getSnCode());
 			packagingData(mapList, logSoPick.getSkuLot6(), logSoPick.getBoxCode(), logSoPick.getSkuLot5(),
-				logSoPick.getSoBillId(), reportSoPickSerialDtoList);
+				logSoPick.getSoBillId(), reportSoPickSerialDtoList, logSoPick.getSkuLot2());
 		}
 	}
 
@@ -241,14 +256,14 @@ public class ReportSo {
 		}
 		List<Map<String, Object>> mapList = getProcessedSerialAndQty(snCodeStr);
 		packagingData(mapList, soPickPlan.getSkuLot6(), soPickPlan.getBoxCode(), soPickPlan.getSkuLot5(),
-			soPickPlan.getSoBillId(), reportSoPickSerialDtoList);
+			soPickPlan.getSoBillId(), reportSoPickSerialDtoList, soPickPlan.getSkuLot2());
 	}
 
 	/**
 	 * 封装数据
 	 */
 	private void packagingData(List<Map<String, Object>> mapList, String skuLot6, String boxCode, String skuLot5, Long soBillId,
-							   List<ReportSoPickSerialDto> reportSoPickSerialDtoList) {
+							   List<ReportSoPickSerialDto> reportSoPickSerialDtoList, String skuLot2) {
 		for (Map<String, Object> stringObjectMap : mapList) {
 			ReportSoPickSerialDto reportSoPickSerialDto = new ReportSoPickSerialDto();
 			reportSoPickSerialDto.setBoxCode(boxCode);
@@ -256,6 +271,7 @@ public class ReportSo {
 			reportSoPickSerialDto.setQty(ConvertUtil.convert(stringObjectMap.get("qty"), BigDecimal.class));
 			reportSoPickSerialDto.setSkuLot6(skuLot6);
 			reportSoPickSerialDto.setSkuLot5(skuLot5);
+			reportSoPickSerialDto.setSkuLot2(skuLot2);
 			reportSoPickSerialDto.setSoBillId(soBillId);
 			reportSoPickSerialDtoList.add(reportSoPickSerialDto);
 		}
@@ -268,6 +284,7 @@ public class ReportSo {
 		List<Map<String, Object>> mapList = new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();
 		SoHeader soHeader = getSoHeader(parameters);
+		StringBuffer skuLot2List = new StringBuffer();
 		if (isCreate(soHeader.getSoBillState())) {
 			throw new ServiceException("无法导出, 请分配或全部拣货之后再导出。");
 		} else if (isPart(soHeader.getSoBillState())) {
@@ -275,14 +292,26 @@ public class ReportSo {
 		} else if (isExecuting(soHeader.getSoBillState())) {
 			List<SoPickPlan> soPickPlanList = getSoPickPlanList(soHeader.getSoBillId());
 			if (Func.isNotEmpty(soPickPlanList)) {
-				map.put("skuLot2", soPickPlanList.get(0).getSkuLot2());
+				for (int i = 0; i < soPickPlanList.size(); i++) {
+					skuLot2List.append(soPickPlanList.get(i));
+					if (i != soPickPlanList.size() - 1) {
+						skuLot2List.append(",");
+					}
+				}
+				map.put("skuLot2", skuLot2List);
 				map.put("wsuName", getWsuName(soPickPlanList.get(0).getSkuId()));
 				map.put("skuLot7", soPickPlanList.get(0).getSkuLot7());
 			}
 		} else if (isAllOutStockOrCompleted(soHeader.getSoBillState())) {
 			List<LogSoPick> logSoPickList = getLogSoPickList(soHeader.getSoBillId());
 			if (Func.isNotEmpty(logSoPickList)) {
-				map.put("skuLot2", logSoPickList.get(0).getSkuLot2());
+				for (int i = 0; i < logSoPickList.size(); i++) {
+					skuLot2List.append(logSoPickList.get(i));
+					if (i != logSoPickList.size() - 1) {
+						skuLot2List.append(",");
+					}
+				}
+				map.put("skuLot2", skuLot2List);
 				map.put("wsuName", getWsuName(logSoPickList.get(0).getSkuId()));
 				map.put("skuLot7", logSoPickList.get(0).getSkuLot7());
 			}
@@ -327,7 +356,7 @@ public class ReportSo {
 			finalDtoList.addAll(entry.getValue());
 		}
 		return finalDtoList.stream()
-			.filter(reportSoPickSerialDto ->  Func.isNotEmpty(reportSoPickSerialDto.getBoxCode()))
+			.filter(reportSoPickSerialDto -> Func.isNotEmpty(reportSoPickSerialDto.getBoxCode()))
 			.sorted(Comparator.comparing(ReportSoPickSerialDto::getBoxCode).thenComparing(ReportSoPickSerialDto::getSnCode))
 			.collect(Collectors.toList());
 	}

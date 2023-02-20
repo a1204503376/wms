@@ -34,9 +34,11 @@ public class ReportSoPickLotDto {
 	 * 数量
 	 */
 	private BigDecimal qty;
+
 	public void setQty(BigDecimal qty) {
 		this.qty = ConvertUtil.convert(qty.stripTrailingZeros().toPlainString(), BigDecimal.class);
 	}
+
 	/**
 	 * 钢背
 	 */
@@ -46,4 +48,8 @@ public class ReportSoPickLotDto {
 	 * 生产批次
 	 */
 	private String skuLot1;
+	/**
+	 * 型号
+	 */
+	private String skuLot2;
 }
