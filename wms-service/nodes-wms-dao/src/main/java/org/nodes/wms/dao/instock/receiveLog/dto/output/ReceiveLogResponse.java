@@ -54,6 +54,10 @@ public class ReceiveLogResponse implements Serializable {
 	 */
 	private String whCode;
 	/**
+	 * 型号
+	 */
+	private String skuLot2;
+	/**
 	 * 货主编码
 	 */
 	private String ownerCode;

@@ -71,9 +71,12 @@ public class LogSoPickForSoDetailResponse implements Serializable {
 	 * 生产批次
 	 */
 	private String skuLot1;
-
 	/**
-	 *专属客户
+	 * 型号
+	 */
+	private String skuLot2;
+	/**
+	 * 专属客户
 	 */
 	private String skuLot4;
 

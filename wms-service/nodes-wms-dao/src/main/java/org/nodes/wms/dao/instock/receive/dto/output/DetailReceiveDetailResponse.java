@@ -59,6 +59,10 @@ public class DetailReceiveDetailResponse implements Serializable {
 	 */
 	private String skuLot1;
 	/**
+	 * 型号
+	 */
+	private String skuLot2;
+	/**
 	 * 客户
 	 */
 	private String skuLot4;
@@ -69,7 +73,7 @@ public class DetailReceiveDetailResponse implements Serializable {
 	/**
 	 * 摩擦块批次
 	 */
-	private String  skuLot6;
+	private String skuLot6;
 	/**
 	 * 适用速度等级
 	 */

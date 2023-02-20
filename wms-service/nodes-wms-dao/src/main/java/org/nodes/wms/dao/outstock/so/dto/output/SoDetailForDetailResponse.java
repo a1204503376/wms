@@ -57,6 +57,11 @@ public class SoDetailForDetailResponse implements Serializable {
 	 * 生产批次
 	 */
 	private String skuLot1;
+	/**
+	 * 型号
+	 */
+	private String skuLot2;
+
 
 	/**
 	 * 专用客户
