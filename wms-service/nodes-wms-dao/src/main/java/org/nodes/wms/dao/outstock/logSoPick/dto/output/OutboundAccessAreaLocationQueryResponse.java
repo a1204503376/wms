@@ -23,6 +23,11 @@ public class OutboundAccessAreaLocationQueryResponse implements Serializable {
 	 */
 	private String locCode;
 
+	/**
+	 * 是否存在货物
+	 */
+	private Boolean stockExist;
+
 	public String getLocCodeView() {
 		return locCode.substring(locCode.length() - 5);
 	}

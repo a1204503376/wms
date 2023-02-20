@@ -11,79 +11,17 @@
 		</u--form>
 
 		<view>
-			<u-row>
-				<template v-for="(item, index) in locList">
-					<u-col span="3" v-if="index>=0 && index<4">
-						<u-button style="height: 60px;font-size: 40rpx;" @click="change(item)">
-							{{item.locCodeView}}
-						</u-button>
-					</u-col>
-				</template>
-			</u-row>
-
-			<u-row>
-				<template v-for="(item, index) in locList">
-					<u-col span="3" v-if="index>=4 && index<8">
-						<u-button style="height: 60px;font-size: 40rpx;" @click="change(item)">
-							{{item.locCodeView}}
-						</u-button>
-					</u-col>
-				</template>
-			</u-row>
-			<u-row>
-				<template v-for="(item, index) in locList">
-					<u-col span="3" v-if="index>=8 && index<12">
-						<u-button style="height: 60px;font-size: 40rpx;" @click="change(item)">
-							{{item.locCodeView}}
-						</u-button>
-					</u-col>
-				</template>
-			</u-row>
-			<u-row>
-				<template v-for="(item, index) in locList">
-					<u-col span="3" v-if="index>=12 && index<16">
-						<u-button style="height: 60px;font-size: 40rpx;" @click="change(item)">
-							{{item.locCodeView}}
-						</u-button>
-					</u-col>
-				</template>
-			</u-row>
-			<u-row>
-				<template v-for="(item, index) in locList">
-					<u-col span="3" v-if="index>=16 && index<20">
-						<u-button style="height: 60px;font-size: 40rpx;" @click="change(item)">
-							{{item.locCodeView}}
-						</u-button>
-					</u-col>
-				</template>
-			</u-row>
-			<u-row>
-				<template v-for="(item, index) in locList">
-					<u-col span="3" v-if="index>=20 && index<24">
-						<u-button style="height: 60px;font-size: 40rpx;" @click="change(item)">
-							{{item.locCodeView}}
-						</u-button>
-					</u-col>
-				</template>
-			</u-row>
-			<u-row>
-				<template v-for="(item, index) in locList">
-					<u-col span="3" v-if="index>=24 && index<28">
-						<u-button style="height: 60px;font-size: 40rpx;" @click="change(item)">
-							{{item.locCodeView}}
-						</u-button>
-					</u-col>
-				</template>
-			</u-row>
-			<u-row>
-				<template v-for="(item, index) in locList">
-					<u-col span="3" v-if="index>=28 && index<32">
-						<u-button style="height: 60px;font-size: 40rpx;" @click="change(item)">
-							{{item.locCodeView}}
-						</u-button>
-					</u-col>
-				</template>
-			</u-row>
+			<template v-for="(item, index) in locList" style="float: left;">
+				<u-button v-if="!item.stockExist" style="float: left;height: 60px;font-size: 40rpx; width: 25%;"
+					@click="change(item)">
+					{{item.locCodeView}}
+				</u-button>
+				<u-button v-if="item.stockExist"
+					style="float: left;height: 60px;font-size: 40rpx; width: 25%;background-color: aquamarine;"
+					@click="change(item)">
+					{{item.locCodeView}}
+				</u-button>
+			</template>
 		</view>
 
 		<view class="footer">
@@ -118,18 +56,7 @@
 			}
 		},
 		onLoad: function(option) {
-			let pickToLocList = uni.getStorageSync('pickToLocList');
-			if (tool.isEmpty(pickToLocList)) {
-				let params = {
-					whId: uni.getStorageSync('warehouse').whId
-				};
-				pick.getConnectionAreaLocation(params).then(data => {
-					this.locList = data.data;
-					uni.setStorageSync('pickToLocList', data.data);
-				})
-			} else {
-				this.locList = pickToLocList
-			}
+            this.refresh();
 			uni.$u.func.registerScanner(this.scannerCallback);
 		},
 		onUnload() {
@@ -145,9 +72,17 @@
 		},
 
 		onShow() {
-			
+
 		},
 		methods: {
+			refresh(){
+				let params = {
+					whId: uni.getStorageSync('warehouse').whId
+				};
+				pick.getConnectionAreaLocation(params).then(data => {
+					this.locList = data.data;
+				})
+			},
 			esc() {
 				uni.navigateBack({
 					delta: 1
@@ -166,9 +101,15 @@
 						.isNotEmpty(_this.param.locCodeView)) {
 						pick.connectionAreaPicking(_this.param).then(data => {
 							if (data.data) {
+
+								var isExist = _this.locList.findIndex(item => item.locCode == _this.param.locCode);
+								if(isExist >= 0){
+									_this.locList[isExist].stockExist = false
+								}
 								_this.$u.func.showToast({
 									title: '接驳区拣货成功'
 								})
+								
 							} else {
 								uni.$u.func.routeNavigateTo(
 									'/pages/picking/agvPickto/agvPicktoMove', _this
