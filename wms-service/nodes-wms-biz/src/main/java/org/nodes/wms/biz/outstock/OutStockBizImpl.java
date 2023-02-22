@@ -312,7 +312,29 @@ public class OutStockBizImpl implements OutStockBiz {
 	public List<OutboundAccessAreaLocationQueryResponse> findLocOfAgvPickTo(FindLocOfAgvPickToRequest request) {
 		Zone zone = zoneBiz.findByCode(WmsAppConstant.ZONE_CODE_AGV_SHIPMENT_CONNECTION_AREA);
 		List<Location> locationList = locationBiz.findLocationByZoneId(zone.getZoneId());
-		return BeanUtil.copy(locationList, OutboundAccessAreaLocationQueryResponse.class);
+		List<Stock> stockList = stockQueryBiz.findStockByLocation(locationList);
+
+		//取出库存中存在库存的locId和locCode转为Map
+		Map<Long, String> locationMap = stockList.stream()
+			.collect(Collectors.toMap(Stock::getLocId, Stock::getLocCode,(k, v) -> k));
+
+
+		List<OutboundAccessAreaLocationQueryResponse> response = BeanUtil.copy(locationList, OutboundAccessAreaLocationQueryResponse.class);
+		response =response.stream()
+			.sorted(Comparator.comparing(OutboundAccessAreaLocationQueryResponse::getLocCode))
+			.collect(Collectors.toList());
+
+		for (OutboundAccessAreaLocationQueryResponse locationView : response) {
+			for (Map.Entry<Long, String> locMap : locationMap.entrySet()) {
+				//判断当前库位存在库存的话就给响应类是否存在货物赋值
+				if (Func.isNotEmpty(locationView.getLocCode())
+					&& locationView.getLocId().equals(locMap.getKey()) && locationView.getLocCode().equals(locMap.getValue())) {
+					locationView.setStockExist(true);
+				}
+			}
+
+		}
+		return response;
 	}
 
 	@Override
