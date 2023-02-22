@@ -1,5 +1,7 @@
 package com.nodes.project.api.service.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nodes.common.utils.StringUtils;
 import com.nodes.framework.config.NodesConfig;
 import com.nodes.project.api.dto.agv.*;
@@ -8,6 +10,7 @@ import com.nodes.project.api.dto.wms.WmsResponse;
 import com.nodes.project.api.service.CallApiDataService;
 import com.nodes.project.api.service.CallApiService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -15,7 +18,9 @@ import tech.powerjob.common.serialize.JsonUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -85,15 +90,16 @@ public class CallApiServiceImpl implements CallApiService {
     public List<AgvVehiclesResponse> getVehiclesAgv(String url) {
         url = nodesConfig.getAgvUrl() + url;
         try {
-            ResponseEntity<String> stringResponseEntity = restTemplate.getForEntity(url, null, String.class);
-            String body = stringResponseEntity.getBody();
+            Map<String, String> vars = Collections.singletonMap("hotel", "1000");
             List<AgvVehiclesResponse> agvVehiclesList = new ArrayList<AgvVehiclesResponse>();
-            agvVehiclesList = JsonUtils.parseObject(body, agvVehiclesList.getClass());
-
+            agvVehiclesList = restTemplate.getForObject(url, agvVehiclesList.getClass(), vars);
             callApiDataService.saveCallApiLog(url, null, agvVehiclesList, null);
+            ObjectMapper mapper = new ObjectMapper();
+            agvVehiclesList = mapper.convertValue(agvVehiclesList, new TypeReference<List<AgvVehiclesResponse>>() {
+            });
             return agvVehiclesList;
         } catch (Exception e) {
-            String msg = StringUtils.format("huoq异常，URL：{}", url);
+            String msg = StringUtils.format("获取AGV接口异常，URL：{}", url);
             log.error(msg, e);
             callApiDataService.saveCallApiLog(url, null, null, e);
             return new ArrayList<>();

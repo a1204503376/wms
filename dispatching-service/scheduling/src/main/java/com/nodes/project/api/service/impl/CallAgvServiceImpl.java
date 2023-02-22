@@ -1,5 +1,7 @@
 package com.nodes.project.api.service.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nodes.common.constant.JobConstants;
 import com.nodes.common.exception.ServiceException;
 import com.nodes.common.utils.StringUtils;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import tech.powerjob.worker.core.processor.ProcessResult;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +34,7 @@ public class CallAgvServiceImpl implements CallAgvService {
     /**
      * 天宜仓库部门ID
      */
-    private static final Long DEPTID = 101L;
+    private static final Long DEPT_ID = 101L;
 
     @Resource
     private CallApiService callApiService;
@@ -104,21 +107,23 @@ public class CallAgvServiceImpl implements CallAgvService {
 
     @Override
     public ProcessResult agvVehicles() {
-        List<AgvVehiclesResponse> vehiclesAgv = callApiService.getVehiclesAgv(URL_VEHICLES);
-        if (ObjectUtils.isEmpty(vehiclesAgv) || vehiclesAgv.size() == 0) {
+        List<AgvVehiclesResponse> vehiclesAgvList = callApiService.getVehiclesAgv(URL_VEHICLES);
+        if (ObjectUtils.isEmpty(vehiclesAgvList) || vehiclesAgvList.size() == 0) {
             throw new ServiceException("发送邮件失败;获取AGV状态失败");
         }
 
-        List<User> userList = userService.selectUserListByDeptId(DEPTID);
-        if (ObjectUtils.isEmpty(vehiclesAgv) || vehiclesAgv.size() == 0) {
+        List<User> userList = userService.selectUserListByDeptId(DEPT_ID);
+        if (ObjectUtils.isEmpty(userList) || userList.size() == 0) {
             throw new ServiceException("发送邮件失败;未配置天宜仓库管理员的邮箱");
         }
 
-        for (AgvVehiclesResponse agvVehicle : vehiclesAgv) {
-            if (ObjectUtils.isNotEmpty(agvVehicle.getEnergyLevel()) && agvVehicle.getEnergyLevel() <= 20) {
+        for (AgvVehiclesResponse agvVehicle : vehiclesAgvList) {
+            if (agvVehicle.getEnergyLevel().intValue() <= 20) {
                 for (User user : userList) {
                     emailService.sendSimpleMail(user.getEmail(),
-                            "AGV电量预警提示", "AGV电量已经到达低于阈值20%，请检查AGV状态，并及时充电");
+                            "AGV电量预警提示",
+                            String.format("系统在[%s]检测到[%s]电量为[%s][%s]低于预期设置的阀值，请检查AGV是否在充电",
+                                    LocalDateTime.now(), agvVehicle.getType(), agvVehicle.getEnergyLevel().intValue(), "%"));
                 }
             }
         }
