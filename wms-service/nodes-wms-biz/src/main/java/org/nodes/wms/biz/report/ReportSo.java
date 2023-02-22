@@ -62,6 +62,12 @@ public class ReportSo {
 			List<SoPickPlan> soPickPlanList = getSoPickPlanList(soHeader.getSoBillId());
 			if (Func.isNotEmpty(soPickPlanList)) {
 				for (int i = 0; i < soPickPlanList.size(); i++) {
+					if (skuLot2List.toString().contains(soPickPlanList.get(i).getSkuLot2())) {
+						if (i == soPickPlanList.size() - 1) {
+							skuLot2List.deleteCharAt(skuLot2List.length() - 1);
+						}
+						continue;
+					}
 					skuLot2List.append(soPickPlanList.get(i).getSkuLot2());
 					if (i != soPickPlanList.size() - 1) {
 						skuLot2List.append(",");
@@ -74,6 +80,12 @@ public class ReportSo {
 			List<LogSoPick> logSoPickList = getLogSoPickList(soHeader.getSoBillId());
 			if (Func.isNotEmpty(logSoPickList)) {
 				for (int i = 0; i < logSoPickList.size(); i++) {
+					if (skuLot2List.toString().contains(logSoPickList.get(i).getSkuLot2())) {
+						if (i == logSoPickList.size() - 1) {
+							skuLot2List.deleteCharAt(skuLot2List.length() - 1);
+						}
+						continue;
+					}
 					skuLot2List.append(logSoPickList.get(i).getSkuLot2());
 					if (i != logSoPickList.size() - 1) {
 						skuLot2List.append(",");
@@ -293,6 +305,12 @@ public class ReportSo {
 			List<SoPickPlan> soPickPlanList = getSoPickPlanList(soHeader.getSoBillId());
 			if (Func.isNotEmpty(soPickPlanList)) {
 				for (int i = 0; i < soPickPlanList.size(); i++) {
+					if (skuLot2List.toString().contains(soPickPlanList.get(i).getSkuLot2())) {
+						if (i == soPickPlanList.size() - 1) {
+							skuLot2List.deleteCharAt(skuLot2List.length() - 1);
+						}
+						continue;
+					}
 					skuLot2List.append(soPickPlanList.get(i));
 					if (i != soPickPlanList.size() - 1) {
 						skuLot2List.append(",");
@@ -306,6 +324,12 @@ public class ReportSo {
 			List<LogSoPick> logSoPickList = getLogSoPickList(soHeader.getSoBillId());
 			if (Func.isNotEmpty(logSoPickList)) {
 				for (int i = 0; i < logSoPickList.size(); i++) {
+					if (skuLot2List.toString().contains(logSoPickList.get(i).getSkuLot2())) {
+						if (i == logSoPickList.size() - 1) {
+							skuLot2List.deleteCharAt(skuLot2List.length() - 1);
+						}
+						continue;
+					}
 					skuLot2List.append(logSoPickList.get(i));
 					if (i != logSoPickList.size() - 1) {
 						skuLot2List.append(",");
