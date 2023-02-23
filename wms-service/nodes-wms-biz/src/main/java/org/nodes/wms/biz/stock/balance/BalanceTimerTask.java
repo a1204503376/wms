@@ -64,7 +64,7 @@ public class BalanceTimerTask {
 		String startTime = simpleDateFormat.format(calendar.getTime());
 		String endTime = simpleDateFormat.format(calendar1.getTime());
 		SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-		String dataTime = simpleDateFormat.format(calendar2.getTime());
+		String dataTime = simpleDateFormat1.format(calendar2.getTime());
 		String dataTime1 = simpleDateFormat1.format(calendar3.getTime());
 		stockBalanceDao.deleteByDataTime(dataTime);
 		List<ReceiveLog> receiveLogList = receiveLogBiz.getReceiveLogList(startTime, endTime);
