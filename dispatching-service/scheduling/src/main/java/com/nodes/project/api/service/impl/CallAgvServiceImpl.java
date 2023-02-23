@@ -118,7 +118,7 @@ public class CallAgvServiceImpl implements CallAgvService {
         }
 
         for (AgvVehiclesResponse agvVehicle : vehiclesAgvList) {
-            if (agvVehicle.getEnergyLevel().intValue() <= 20) {
+            if (agvVehicle.getEnergyLevel().intValue() <= 50) {
                 for (User user : userList) {
                     emailService.sendSimpleMail(user.getEmail(),
                             "AGV电量预警提示",
